@@ -151,9 +151,21 @@ dl.facts dd { margin: 0; font-family: var(--font-data); font-size: 0.92rem; font
 figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
 figure img { width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--rule); background: var(--plate); }
 figcaption { font-size: var(--step--1); color: var(--ink-soft); }
+.toggles { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.mapwrap { position: relative; }
+.searchbox { position: absolute; z-index: 3; left: 10px; top: 10px; width: min(340px, calc(100% - 70px));
+  max-height: calc(100% - 20px); overflow: auto; background: var(--plate); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 10px; display: grid; gap: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); }
+@media (max-width: 760px) { .searchbox { position: static; width: auto; max-height: none; box-shadow: none; margin-bottom: 10px; } }
+.found li { grid-template-columns: 1.6em minmax(0, 1fr) auto; }
+.found .num { font-family: var(--font-data); font-size: var(--step--1); color: var(--ink-soft); }
+.found .meter { grid-column: 2 / -1; }
+.match-key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--step--1); color: var(--ink-soft); align-items: center; }
+.match-key i { display: inline-block; width: 18px; height: 0; border-top: 3px solid #ffd34d; vertical-align: middle; margin-right: 4px; }
+.match-key i.close { border-top: 2px dashed #ffd34d; }
 .find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .find input { font: 400 var(--step-0) var(--font-body); color: var(--ink); background: var(--paper);
-  border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 260px; min-width: 0; }
+  border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 150px; min-width: 0; }
 .find button { font: 500 var(--step--1) var(--font-body); border-radius: 999px; padding: 7px 14px; cursor: pointer;
   border: 1px solid var(--rule); background: var(--chip); color: var(--ink); }
 .find button[type="submit"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
@@ -189,12 +201,27 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     <div class="plate">
       <div class="controls">
         <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
-        <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
+        <div class="toggles">
+          <label class="toggle"><input type="checkbox" id="searchtoggle" checked> Search box</label>
+          <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
+        </div>
+      </div>
+      <div class="mapwrap">
+      <div class="searchbox" id="searchbox">
+        <form id="find-form" class="find" role="search">
+          <label for="find-input" class="sr">Search a town on the map or a real city</label>
+          <input id="find-input" list="cities" placeholder="A town on the map, or a real city…" autocomplete="off">
+          <datalist id="cities"></datalist>
+          <button type="submit">Go</button>
+          <button type="button" id="find-clear" aria-label="Clear search">Clear</button>
+        </form>
+        <p class="note" id="find-msg">Map towns jump to their climate. Real cities light up where on the map feels most like them.</p>
+        <ol class="analogs found" id="find-results"></ol>
       </div>
       <div class="stage" id="stage">
         <div class="viewport" id="viewport">
           <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
-          <canvas id="heat" aria-hidden="true"></canvas>
+          <svg id="matchsvg" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
@@ -204,6 +231,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
           <button type="button" id="zreset" aria-label="Reset view">⤢</button>
         </div>
         <span class="hint" id="hint">Scroll or pinch to zoom · drag to pan · click for a place's climate</span>
+      </div>
       </div>
       <div class="legend" id="legend"></div>
     </div>
@@ -225,20 +253,6 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <ol class="analogs" id="analogs"></ol>
       <p class="note" id="analog-note"></p>
     </div>
-  </section>
-
-  <section class="card" aria-labelledby="find-h">
-    <h2 id="find-h">Where on the map feels like…</h2>
-    <p class="note">Type a real city. The map dims everywhere except the places whose simulated climate is closest to it, and the best-matching named places are listed.</p>
-    <form id="find-form" class="find">
-      <label for="find-input" class="sr">Real city</label>
-      <input id="find-input" list="cities" placeholder="Try Rome, Tbilisi, Phoenix, Kunming…" autocomplete="off">
-      <datalist id="cities"></datalist>
-      <button type="submit">Find</button>
-      <button type="button" id="find-clear">Clear</button>
-    </form>
-    <p class="note" id="find-msg"></p>
-    <ol class="analogs" id="find-results"></ol>
   </section>
 
   <section class="two">
@@ -341,6 +355,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     drawLegend(L);
   }
   $("names").addEventListener("change", (e) => { $("placenames").style.display = e.target.checked ? "" : "none"; });
+  $("searchtoggle").addEventListener("change", (e) => { $("searchbox").hidden = !e.target.checked; });
 
   function drawLegend(L) {
     const el = $("legend");
@@ -349,6 +364,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
         const k = kop.find((x) => x.code === c);
         return `<span title="${esc(k.desc)}"><span class="sw" style="background:${rgb(k.rgb)}"></span><span class="code">${c}</span>${esc(k.desc)}<span class="share">${k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)}%</span></span>`;
       }).join("");
+    } else if (L.kind === "zones") {
+      el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
+        + `<span><span class="sw" style="background:#dbdbdb"></span>Fits none of your zones</span>`
+        + `<span class="note">Each place takes the zone type its simulated climate fits best.</span>`;
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
     } else {
@@ -523,7 +542,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   // ---------------------------------------------------------------- zoom & pan
   const stage = $("stage"), vp = $("viewport");
   const ZMAX = 10;
-  let zs = 1, tx = 0, ty = 0, lastMarker = null;
+  let zs = 1, tx = 0, ty = 0, lastMarker = null, matchSvgReady = false;
   function drawMarker() {
     const svg = $("marker");
     if (!lastMarker) { svg.innerHTML = ""; return; }
@@ -547,6 +566,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     namesSvg.style.fontSize = fontPx / pxPerUnit + "px";
     namesSvg.style.strokeWidth = 2.6 / pxPerUnit + "px";
     drawMarker();
+    if (typeof drawMatches === "function" && matchSvgReady) drawMatches();
     $("zreset").disabled = zs === 1;
     $("zin").disabled = zs >= ZMAX;
     $("zout").disabled = zs <= 1;
@@ -650,9 +670,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${meta.reference.length} real cities (${meta.reference_source}). Southern-hemisphere cities are shifted half a year.`;
   $("analog-note").textContent = `Closest of ${meta.reference.length} real cities by seasonal temperature and rainfall curves (${meta.reference_source}).`;
 
-  // ---------------------------------------------------------------- reverse search
+  // ---------------------------------------------------------------- search: map towns and real cities
   const [, CH, CW] = A.T12.shape;
-  const cellLand = new Uint8Array(CH * CW), cellElev = new Float32Array(CH * CW);
+  const NC = CH * CW;
+  const cellLand = new Uint8Array(NC), cellElev = new Float32Array(NC);
   for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
     const px = Math.min(W - 1, Math.round((ix + 0.5) * meta.cell_px));
     const py = Math.min(H - 1, Math.round((iy + 0.5) * meta.cell_px));
@@ -661,42 +682,89 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     cellElev[iy * CW + ix] = elev.data[q];
   }
   const refLabel = (r) => `${r.n}, ${r.c}`;
-  $("cities").innerHTML = meta.reference.map((r) => `<option value="${esc(refLabel(r))}"></option>`).join("");
-  const heat = $("heat");
-  heat.width = CW; heat.height = CH;
-  function clearHeat() { heat.getContext("2d").clearRect(0, 0, CW, CH); }
-  function findPlace(query) {
-    const q = query.trim().toLowerCase();
-    if (!q) return;
-    const ref = meta.reference.find((r) => refLabel(r).toLowerCase() === q)
-      || meta.reference.find((r) => r.n.toLowerCase() === q)
-      || meta.reference.find((r) => r.n.toLowerCase().startsWith(q))
-      || meta.reference.find((r) => refLabel(r).toLowerCase().includes(q));
-    if (!ref) { $("find-msg").textContent = `No city matching “${query}”. Pick one from the suggestions.`; return; }
-    const n = CH * CW, d = new Float32Array(n).fill(Infinity);
+  $("cities").innerHTML = meta.places.map((p) => `<option value="${esc(p.name)}" label="on the map"></option>`).join("")
+    + meta.reference.map((r) => `<option value="${esc(refLabel(r))}"></option>`).join("");
+  const matchSvg = $("matchsvg");
+  let matchState = null;          // {paths: [d1, d2], pins: [{x, y, i}]}
+
+  function drawMatches() {
+    if (!matchState) { matchSvg.innerHTML = ""; return; }
+    const pxPerUnit = (stage.clientWidth * zs) / 2000;
+    const r = 9 / pxPerUnit, fs = 11 / pxPerUnit;
+    const [d1, d2] = matchState.paths;
+    matchSvg.innerHTML =
+      `<path d="${d2}" fill="none" stroke="#1b1f22" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.55"/>
+       <path d="${d2}" fill="none" stroke="#ffd34d" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+       <path d="${d1}" fill="none" stroke="#1b1f22" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.6"/>
+       <path d="${d1}" fill="none" stroke="#ffd34d" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`
+      + matchState.pins.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="#1b1f22" stroke="#ffd34d" stroke-width="2" vector-effect="non-scaling-stroke"/>
+         <text x="${p.x}" y="${p.y}" fill="#ffd34d" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="500"
+           text-anchor="middle" dominant-baseline="central">${p.i}</text>`).join("");
+  }
+
+  // marching squares: line segments where field f crosses level v (cell-centre grid)
+  function contour(f, v) {
+    const out = [];
+    const P = (ix, iy) => `${((ix + 0.5) * meta.cell_px).toFixed(1)} ${((iy + 0.5) * meta.cell_px).toFixed(1)}`;
+    const lerp = (a, b) => (v - a) / (b - a);
+    for (let iy = 0; iy < CH - 1; iy++) for (let ix = 0; ix < CW - 1; ix++) {
+      const a = f[iy * CW + ix], b = f[iy * CW + ix + 1], c = f[(iy + 1) * CW + ix + 1], d = f[(iy + 1) * CW + ix];
+      const idx = (a < v ? 8 : 0) | (b < v ? 4 : 0) | (c < v ? 2 : 0) | (d < v ? 1 : 0);
+      if (idx === 0 || idx === 15) continue;
+      const top = () => P(ix + lerp(a, b), iy), right = () => P(ix + 1, iy + lerp(b, c));
+      const bottom = () => P(ix + lerp(d, c), iy + 1), left = () => P(ix, iy + lerp(a, d));
+      const seg = (p, q) => out.push(`M${p()}L${q()}`);
+      switch (idx) {
+        case 1: case 14: seg(left, bottom); break;
+        case 2: case 13: seg(bottom, right); break;
+        case 3: case 12: seg(left, right); break;
+        case 4: case 11: seg(top, right); break;
+        case 5: seg(left, top); seg(bottom, right); break;
+        case 6: case 9: seg(top, bottom); break;
+        case 7: case 8: seg(left, top); break;
+        case 10: seg(top, right); seg(left, bottom); break;
+      }
+    }
+    return out.join("");
+  }
+
+  function clearMatches() { matchState = null; drawMatches(); $("find-results").innerHTML = ""; }
+
+  function showReal(ref) {
+    const d = new Float32Array(NC).fill(99);
     let best = Infinity;
-    for (let c = 0; c < n; c++) {
+    for (let c = 0; c < NC; c++) {
       if (!cellLand[c]) continue;
       const lapse = meta.lapse * cellElev[c] / 1000;
       let dt = 0, dp = 0;
       for (let m = 0; m < 12; m++) {
-        const t = A.T12.data[m * n + c] / 10 - lapse;
-        const p = A.P12.data[m * n + c];
+        const t = A.T12.data[m * NC + c] / 10 - lapse;
+        const p = A.P12.data[m * NC + c];
         dt += (t - ref.T[m]) ** 2;
         dp += (Math.sqrt(p) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
       }
       d[c] = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
       if (d[c] < best) best = d[c];
     }
-    // spotlight: dim land that matches poorly
-    const ctx = heat.getContext("2d"), img = ctx.createImageData(CW, CH);
-    for (let c = 0; c < n; c++) {
-      if (!cellLand[c]) continue;
-      const rel = Math.min(1, Math.max(0, (d[c] - best) / (best * 0.9 + 0.6)));
-      img.data[c * 4 + 3] = Math.round(215 * Math.pow(rel, 0.7));
+    // smooth a copy for clean outlines (sea counts as "no match")
+    let f = Float32Array.from(d, (x, c) => (cellLand[c] ? x : best + 3));
+    for (let pass = 0; pass < 2; pass++) {
+      const g = new Float32Array(NC);
+      for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
+        let s = 0, n = 0;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const y = iy + dy, x = ix + dx;
+          if (y < 0 || x < 0 || y >= CH || x >= CW) continue;
+          s += f[y * CW + x]; n++;
+        }
+        g[iy * CW + ix] = s / n;
+      }
+      f = g;
     }
-    ctx.putImageData(img, 0, 0);
-    // best-matching named places
+    let fbest = Infinity;
+    for (let c = 0; c < NC; c++) if (cellLand[c] && f[c] < fbest) fbest = f[c];
+    const l1 = fbest + 0.25, l2 = fbest + 0.6;
+    // best-matching named towns
     const order = Array.from(d.keys()).filter((c) => cellLand[c]).sort((a, b) => d[a] - d[b]);
     const used = new Set(), out = [];
     for (const c of order) {
@@ -706,20 +774,43 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       if (bp && !used.has(bp.name)) { used.add(bp.name); out.push({ p: bp, sim: 100 * Math.exp(-d[c] / 2) }); }
       if (out.length >= 6) break;
     }
-    $("find-msg").textContent = `Closest climates on the map to ${refLabel(ref)} (${ref.k}${ref.a ? ", approximate normals" : ""}). Brighter = closer; click a name to open its climograph.`;
-    $("find-results").innerHTML = out.map((o, i) => `<li><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
+    matchState = { paths: [contour(f, l1), contour(f, l2)], pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
+    drawMatches();
+    const sim = (x) => Math.round(100 * Math.exp(-x / 2));
+    $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.a ? ", approximate normals" : ""}).
+      <span class="match-key"><span><i></i>very close (≥ ${sim(l1)}%)</span><span><i class="close"></i>close (≥ ${sim(l2)}%)</span></span>`;
+    $("find-results").innerHTML = out.map((o, i) => `<li><span class="num">${i + 1}</span><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
       <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
     for (const b of $("find-results").querySelectorAll("button")) {
-      b.addEventListener("click", () => {
-        const o = out[+b.dataset.i];
-        select(o.p.x, o.p.y + 8, o.p.name);
-        focusOn(o.p.x, o.p.y + 8, 3);
-        $("stage").scrollIntoView({ behavior: "smooth", block: "center" });
-      });
+      b.addEventListener("click", () => { const o = out[+b.dataset.i]; select(o.p.x, o.p.y, o.p.name); focusOn(o.p.x, o.p.y, 3); });
     }
   }
-  $("find-form").addEventListener("submit", (e) => { e.preventDefault(); findPlace($("find-input").value); });
-  $("find-clear").addEventListener("click", () => { clearHeat(); $("find-results").innerHTML = ""; $("find-msg").textContent = ""; $("find-input").value = ""; });
+
+  function runSearch(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    const place = meta.places.find((p) => p.name.toLowerCase() === q);
+    const real = meta.reference.find((r) => refLabel(r).toLowerCase() === q) || meta.reference.find((r) => r.n.toLowerCase() === q);
+    const placeLoose = meta.places.find((p) => p.name.toLowerCase().startsWith(q));
+    const realLoose = meta.reference.find((r) => r.n.toLowerCase().startsWith(q)) || meta.reference.find((r) => refLabel(r).toLowerCase().includes(q));
+    const hitPlace = place || (!real && placeLoose);
+    if (hitPlace) {
+      clearMatches();
+      select(hitPlace.x, hitPlace.y, hitPlace.name);
+      focusOn(hitPlace.x, hitPlace.y, 3);
+      $("find-msg").innerHTML = `<b>${esc(hitPlace.name)}</b> is on the map. Its climate card is below the map.`;
+      return;
+    }
+    const ref = real || realLoose;
+    if (!ref) { $("find-msg").textContent = `Nothing called “${query}” on the map or among the real cities. Pick one from the suggestions.`; return; }
+    showReal(ref);
+  }
+  matchSvgReady = true;
+  $("find-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch($("find-input").value); });
+  $("find-clear").addEventListener("click", () => {
+    clearMatches(); $("find-input").value = "";
+    $("find-msg").textContent = "Map towns jump to their climate. Real cities light up where on the map feels most like them.";
+  });
 
   setLayer("koppen");
   const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];

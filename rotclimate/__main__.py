@@ -72,6 +72,8 @@ def cmd_render(a):
     R.koppen_map(fr, out / "koppen.png", f"Köppen-Geiger climates  {sub}")
     R.comparison_map(fr, mem, out / "comparison.png",
                      f"Target vs simulation — score {ev['total']:.2f}, zone accuracy {ev['accuracy']:.0%}")
+    R.zones_map(fr, mem, out / "simulated_zones.png",
+                "The calibrated climate in your simple zones")
     ix = fr._ix
     R.field_map(fr, ix["MAT"], out / "temperature_annual.png", "Mean annual temperature",
                 "turbo", -10, 30, "°C", levels=np.arange(-12, 32, 2))

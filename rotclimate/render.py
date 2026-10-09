@@ -225,6 +225,33 @@ def comparison_map(fr: FullRes, mem, path, title=None):
     plt.close(fig)
 
 
+def zones_map(fr: FullRes, mem, path, title=None):
+    """Your painted zones next to the whole simulated map classified into them."""
+    from .atlas import zone_classes
+
+    z = zone_classes(mem, fr.land)
+    tgt = target_fullres()
+    fig, axs = plt.subplots(1, 2, figsize=(26, 6.8), dpi=80)
+    for ax, cls, ttl in ((axs[0], tgt, "Your painted zones"),
+                         (axs[1], z, "Simulated climate, classified into your zones")):
+        img = np.ones(cls.shape + (3,)) * 0.86
+        for cid, col in TARGET_DRAW_COLORS.items():
+            img[cls == cid] = matplotlib.colors.to_rgb(col)
+        img = shaded_rgb(img, fr, 0.3) if cls is z else img
+        img[~fr.land] = OCEAN_RGB
+        ax.imshow(img)
+        decorate(ax, fr, rivers=False, labels=False)
+        ax.set_title(ttl, fontsize=16)
+    handles = [Patch(color=TARGET_DRAW_COLORS[c], label=TARGET_LABELS[c]) for c in range(1, 8)]
+    handles.append(Patch(color="0.86", label="unpainted / fits none of the zones"))
+    fig.legend(handles=handles, loc="lower center", ncol=8, fontsize=11, frameon=False)
+    if title:
+        fig.suptitle(title, fontsize=18)
+    fig.tight_layout(rect=(0, 0.06, 1, 0.97))
+    fig.savefig(path)
+    plt.close(fig)
+
+
 def fullres_memberships(fr: FullRes):
     from .score import memberships
 
@@ -288,10 +315,13 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
         cmap, vmin, vmax, unit = "turbo", -25, 40, "°C"
     else:
         cmap, vmin, vmax, unit = "YlGnBu", 0, 12, "mm / day"
+    hdr = 1.15                                   # header strip height (inches)
+    map_h = H * scale / 100
+    mf = map_h / (map_h + hdr)                   # fraction of the figure used by the map
     for k in range(0, r.nt, stride):
         day = r.days[k]
-        fig = plt.figure(figsize=(W * scale / 100, H * scale / 100 + 0.9), dpi=100)
-        ax = fig.add_axes([0, 0, 1, H * scale / 100 / (H * scale / 100 + 0.9)])
+        fig = plt.figure(figsize=(W * scale / 100, map_h + hdr), dpi=100)
+        ax = fig.add_axes([0, 0, 1, mf])
         if var == "T":
             f = fr.temperature(r.Tsl[k])
             ax.imshow(f, cmap=cmap, vmin=vmin, vmax=vmax)
@@ -318,18 +348,25 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
                   headwidth=4)
         decorate(ax, fr, rivers=False, labels=False)
         m, d, _ = cal.month_of_day(int(day))
-        tax = fig.add_axes([0, H * scale / 100 / (H * scale / 100 + 0.9), 1, 1 - H * scale / 100 / (H * scale / 100 + 0.9)])
+        tax = fig.add_axes([0, mf, 1, 1 - mf])
+        tax.set_xlim(0, 1)
+        tax.set_ylim(0, 1)
         tax.axis("off")
         name = "Temperature & surface wind" if var == "T" else "Precipitation, snow cover & wind"
-        tax.text(0.01, 0.5, f"{cal.date_label(day)}  ·  {m.season}", fontsize=15, va="center", weight="bold")
-        tax.text(0.99, 0.5, name, fontsize=12, va="center", ha="right")
-        # year progress bar
-        tax.add_patch(plt.Rectangle((0.01, 0.05), 0.98 * day / cal.YEAR_DAYS, 0.1, color="#555"))
+        # line 1: date (left) and what is shown (right)
+        tax.text(0.012, 0.80, cal.date_label(day), fontsize=13, va="center", weight="bold")
+        tax.text(0.988, 0.80, name, fontsize=10.5, va="center", ha="right")
+        # line 2: season (left), unit + colour scale (right)
+        tax.text(0.012, 0.47, m.season.capitalize(), fontsize=10.5, va="center", style="italic",
+                 color="#444")
+        tax.text(0.585, 0.47, unit, fontsize=9, va="center", ha="right", color="#444")
         sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin, vmax))
-        cax = fig.add_axes([0.42, 0.93, 0.2, 0.025])
+        cax = fig.add_axes([0.60, mf + (1 - mf) * 0.36, 0.385, (1 - mf) * 0.16])
         cb = fig.colorbar(sm, cax=cax, orientation="horizontal")
-        cb.set_label(unit, fontsize=8)
-        cb.ax.tick_params(labelsize=7)
+        cb.ax.tick_params(labelsize=7, pad=1, length=2)
+        # line 3: year progress
+        tax.add_patch(plt.Rectangle((0.012, 0.06), 0.976, 0.07, color="#ddd"))
+        tax.add_patch(plt.Rectangle((0.012, 0.06), 0.976 * day / cal.YEAR_DAYS, 0.07, color="#555"))
         frames.append(_fig_to_pil(fig))
         plt.close(fig)
     save_gif(frames, path, ms=ms, colors=128)

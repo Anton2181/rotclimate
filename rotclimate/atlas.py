@@ -95,6 +95,7 @@ def build_hires_layers(result, scale=3, outdir: Path = ATLAS / "data"):
         timg[fr.target == cid] = mc.to_rgb(col)
     _save_webp(_overlay_rivers(timg, fr), outdir / "target.webp")
     agreement_layer(fr, outdir)
+    zones_layer(fr, outdir)
 
 
 def _save_webp(rgb, path, q=88):
@@ -137,23 +138,8 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     k = fr.koppen()
     ix = fr._ix
 
-    # ---------------------------------------------------------------- images
-    _save_webp(_overlay_rivers(shaded_rgb(rgb_image(k).astype(float) / 255.0, fr, 0.42)),
-               outdir / "koppen.webp")
-    _save_webp(_cmap_img(ix["MAT"], "turbo", -10, 30, fr, 20), outdir / "t_annual.webp")
-    _save_webp(_cmap_img(ix["Tcold"], "turbo", -25, 25, fr, 25), outdir / "t_cold.webp")
-    _save_webp(_cmap_img(ix["Thot"], "turbo", 0, 40, fr, 20), outdir / "t_hot.webp")
-    _save_webp(_cmap_img(np.log10(np.maximum(ix["MAP"], 50)), "YlGnBu", np.log10(100),
-                         np.log10(3000), fr, 14), outdir / "precip.webp")
-    tgt = target_fullres()
-    timg = np.ones(tgt.shape + (3,)) * np.array([0.84, 0.89, 0.94])
-    timg[fr.land] = 0.9
-    import matplotlib.colors as mc
-
-    for cid, col in TARGET_DRAW_COLORS.items():
-        timg[tgt == cid] = mc.to_rgb(col)
-    _save_webp(_overlay_rivers(timg), outdir / "target.webp")
-    agreement_layer(fr, outdir)
+    # ---------------------------------------------------------------- images (3x)
+    build_hires_layers(result, scale=3, outdir=outdir)
     # labels overlay (transparent png with a soft halo)
     lab = np.array(Image.open(SOURCE / "labels.webp").convert("RGBA")).astype(float) / 255.0
     a = lab[..., 3]
@@ -266,6 +252,35 @@ def agreement_layer(fr, outdir: Path = ATLAS / "data"):
     _save_webp(_overlay_rivers(rgb, fr), outdir / "agreement.webp")
 
 
+def zone_classes(mem, land, threshold=0.3):
+    """Best-matching painted-zone type per pixel (0 = fits none of them)."""
+    keys = [c[1] for c in TARGET_CLASSES]
+    # "tree" (warm + humid) is the broadest rule: it only wins where no more
+    # specific zone fits nearly as well
+    w = np.array([0.75 if k == "tree" else 1.0 for k in keys], np.float32)[:, None, None]
+    stack = np.stack([mem[k] for k in keys]).astype(np.float32) * w
+    z = (stack.argmax(0) + 1).astype(np.int8)
+    z[stack.max(0) < threshold] = 0
+    z[~land] = -1
+    return z
+
+
+def zones_layer(fr, outdir: Path = ATLAS / "data"):
+    import matplotlib.colors as mc
+
+    from .render import OCEAN_RGB, fullres_memberships, hillshade
+
+    z = zone_classes(fullres_memberships(fr), fr.land)
+    rgb = np.ones(z.shape + (3,), np.float32) * 0.86
+    for cid, col in TARGET_DRAW_COLORS.items():
+        rgb[z == cid] = mc.to_rgb(col)
+    hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
+    rgb = rgb * (0.78 + 0.22 * 1.4 * hs[..., None]).clip(0, 1.1)
+    rgb[~fr.land] = OCEAN_RGB
+    _save_webp(_overlay_rivers(rgb.clip(0, 1), fr), outdir / "zones.webp")
+    return z
+
+
 def _layer_meta():
     import matplotlib.pyplot as plt
     import matplotlib.colors as mc
@@ -277,6 +292,7 @@ def _layer_meta():
     return [
         dict(id="koppen", file="koppen.webp", label="Köppen", kind="koppen"),
         dict(id="target", file="target.webp", label="Your zones", kind="target"),
+        dict(id="zones", file="zones.webp", label="Simulated zones", kind="zones"),
         dict(id="agreement", file="agreement.webp", label="Match accuracy", kind="ramp",
              unit="agreement with your painted zone's rule (grey = unpainted land)",
              vmin=0, vmax=1, stops=stops("RdYlGn")),
