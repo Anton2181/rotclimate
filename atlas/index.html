@@ -280,7 +280,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       </div>
       <div class="readouts" id="readouts"></div>
       <div class="chart" id="chart"></div>
-      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: warmest and coldest week. Dashed line: closest real-world match.</p>
+      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: average daily low to high (the day/night swing, learned from Earth's climate). Dashed lines: the closest real place's daily highs and lows.</p>
     </div>
     <div class="card">
       <h3>Feels like</h3>
@@ -353,7 +353,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   try {
     meta = await (await fetch("data/atlas.json")).json();
     if (meta.reference.length && meta.reference[0].s !== undefined)
-      for (const r of meta.reference) r.T = r.T.map((v) => v / 10);       // tenths of a degree
+      for (const r of meta.reference) {                                   // tenths of a degree
+        r.T = r.T.map((v) => v / 10);
+        r.D = r.D ? r.D.map((v) => v / 10) : null;
+      }
     // packed arrays: published as atlas.wasm (a served binary type), atlas.bin locally
     let res = await fetch("data/atlas.wasm");
     if (!res.ok) res = await fetch("data/atlas.bin");
@@ -460,24 +463,31 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   // Match % = 100 e^(-d/2), d = RMS monthly temperature difference / 2.5 C
   //                          + RMS difference of sqrt(monthly rain) / 2
   // Lists skip a place within 100 km of a better match.
-  function compare(T12, P12, r) {
-    let dt = 0, dp = 0, dmm = 0;
+  // With day/night ranges on both sides the temperature term covers daily
+  // highs and lows: mean of (d high^2 + d low^2)/2 = d mean^2 + d swing^2/4.
+  function compare(T12, P12, r, D12) {
+    const hasD = !!(D12 && r.D);
+    let dt = 0, dhi = 0, dlo = 0, dp = 0, dmm = 0;
     for (let i = 0; i < 12; i++) {
-      dt += (T12[i] - r.T[i]) ** 2;
+      const dm = T12[i] - r.T[i], ds = hasD ? D12[i] - r.D[i] : 0;
+      dt += dm * dm + ds * ds / 4;
+      dhi += (dm + ds / 2) ** 2; dlo += (dm - ds / 2) ** 2;
       dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
       dmm += (P12[i] - r.P[i]) ** 2;
     }
     const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
-    return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12) };
+    return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12),
+             hasD, dHi: Math.sqrt(dhi / 12), dLo: Math.sqrt(dlo / 12) };
   }
   // climate at one map pixel, exactly as its station card shows it
   function climateAt(x, y) {
     const h = elev.data[pixIdx(x, y)], c = cell(x, y), lapse = meta.lapse * h / 1000;
-    return { h, c, lapse, T12: series("T12", c, 12).map((v) => v / 10 - lapse), P12: series("P12", c, 12) };
+    return { h, c, lapse, T12: series("T12", c, 12).map((v) => v / 10 - lapse), P12: series("P12", c, 12),
+             D12: A.D12 ? series("D12", c, 12).map((v) => v / 10) : null };
   }
   let activeRef = null;           // the real place being searched, if any
-  function analogs(T12, P12, k = 5) {
-    const all = meta.reference.map((r) => compare(T12, P12, r)).sort((a, b) => a.d - b.d);
+  function analogs(T12, P12, D12, k = 5) {
+    const all = meta.reference.map((r) => compare(T12, P12, r, D12)).sort((a, b) => a.d - b.d);
     const out = [];
     for (const a of all) {
       if (a.r.y === undefined || out.every((b) => refKm(a.r, b.r) >= 100)) out.push(a);
@@ -485,7 +495,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     }
     return out;
   }
-  const whyText = (a) => `typical month ±${a.dT.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`;
+  const whyText = (a) => (a.hasD
+    ? `typical month: highs ±${a.dHi.toFixed(1)} °C, lows ±${a.dLo.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`
+    : `typical month ±${a.dT.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`);
 
   // ---------------------------------------------------------------- station
   function select(x, y, name) {
@@ -517,10 +529,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const c = cell(x, y);
     const lapse = meta.lapse * h / 1000;
     const Tm = series("Tm", c, 11).map((v) => v / 10 - lapse);
-    const Tlo = series("Tlo", c, 11).map((v) => v / 10 - lapse);
-    const Thi = series("Thi", c, 11).map((v) => v / 10 - lapse);
+    const { T12, P12, D12 } = climateAt(x, y);
+    // shaded band: average daily low to high (day/night range learned from Earth)
+    const Dloc = D12 ? onLocal(D12) : null;
+    const Tlo = Dloc ? Tm.map((v, i) => v - Dloc[i] / 2) : series("Tlo", c, 11).map((v) => v / 10 - lapse);
+    const Thi = Dloc ? Tm.map((v, i) => v + Dloc[i] / 2) : series("Thi", c, 11).map((v) => v / 10 - lapse);
     const P = series("P", c, 11);
-    const { T12, P12 } = climateAt(x, y);
     const K = kop[k];
     $("station-h").textContent = place ? place.name : "Unnamed place";
     $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
@@ -538,8 +552,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       [`${Tm[iMax].toFixed(1)}°C`, `warmest, ${months[iMax].name}`],
       [`${Math.round(total)} mm`, "precipitation / year"],
       [snowy ? "yes" : "no", "lasting winter snow"],
+      ...(Dloc ? [[`${Math.round(Math.min(...Dloc))}–${Math.round(Math.max(...Dloc))} °C`, "day/night swing"]] : []),
     ].map(([v, k]) => `<div class="readout"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join("");
-    const top = analogs(T12, P12);
+    const top = analogs(T12, P12, D12);
     drawChart(Tm, Tlo, Thi, P, top[0]);
     const row = (a, cls = "") => {
       const kk = kop.find((q) => q.code === a.r.k);
@@ -550,12 +565,14 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     };
     // while a real place is being searched, show how this spot compares with it
     const vs = activeRef && !top.some((a) => a.r === activeRef)
-      ? `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef), "vs")}<li class="vs-h">Closest overall</li>` : "";
+      ? `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef, D12), "vs")}<li class="vs-h">Closest overall</li>` : "";
     $("analogs").innerHTML = vs + top.map((a) => row(a, a.r === activeRef ? "vs" : "")).join("");
   }
 
   // map local months onto the solstice-aligned analog bins for the dashed line
-  function analogOnLocal(r) {
+  // 12 solstice-aligned values -> the 11 local months (10 + holy days)
+  const analogOnLocal = (r) => onLocal(r.T);
+  function onLocal(a12) {
     const out = [];
     let start = 0;
     for (const m of meta.months) {
@@ -563,7 +580,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       const phase = ((mid - meta.solstice_day) % 365 + 365) % 365;
       const f = phase / (365 / 12) - 0.5;
       const i0 = ((Math.floor(f) % 12) + 12) % 12, i1 = (i0 + 1) % 12, w = f - Math.floor(f);
-      out.push(r.T[i0] * (1 - w) + r.T[i1] * w);
+      out.push(a12[i0] * (1 - w) + a12[i1] * w);
       start += m.days;
     }
     return out;
@@ -577,8 +594,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const xs = []; let acc = 0;
     for (const d of days) { xs.push({ x0: l + (acc / totalDays) * (w - l - r), x1: l + ((acc + d) / totalDays) * (w - l - r) }); acc += d; }
     const an = best ? analogOnLocal(best.r) : [];
-    const tmin = Math.floor((Math.min(...Tlo, ...an) - 2) / 5) * 5;
-    const tmax = Math.ceil((Math.max(...Thi, ...an) + 2) / 5) * 5;
+    const anD = best && best.r.D ? onLocal(best.r.D) : null;
+    const anLines = anD ? [an.map((v, i) => v + anD[i] / 2), an.map((v, i) => v - anD[i] / 2)] : (an.length ? [an] : []);
+    const tmin = Math.floor((Math.min(...Tlo, ...anLines.flat()) - 2) / 5) * 5;
+    const tmax = Math.ceil((Math.max(...Thi, ...anLines.flat()) + 2) / 5) * 5;
     const pmax = Math.max(100, Math.ceil(Math.max(...P) / 50) * 50);
     const yT = (v) => t + (tmax - v) / (tmax - tmin) * (h - t - b);
     const yP = (v) => h - b - v / pmax * (h - t - b);
@@ -593,12 +612,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     for (let i = 1; i < cx.length; i++) band += `L${cx[i]},${yT(Thi[i])}`;
     for (let i = cx.length - 1; i >= 0; i--) band += `L${cx[i]},${yT(Tlo[i])}`;
     s += `<path class="band" d="${band}Z"/>`;
-    if (an.length) s += `<path class="analog" d="${an.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
+    for (const ln of anLines) s += `<path class="analog" d="${ln.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
     s += `<path class="line" d="${Tm.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
     Tm.forEach((v, i) => { s += `<circle class="dot" cx="${cx[i]}" cy="${yT(v)}" r="3"/>`; });
     months.forEach((m, i) => { s += `<text x="${cx[i]}" y="${h - b + 16}" text-anchor="middle">${m.short}</text>`; });
     s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${h - b}" y2="${h - b}"/>`;
-    if (best) s += `<text x="${l}" y="${h - 6}">dashed: ${esc(best.r.n)}</text>`;
+    if (best) s += `<text x="${l}" y="${h - 6}">${A.D12 ? "band: daily low to high · " : ""}dashed: ${esc(best.r.n)}${anD ? " (daily highs and lows)" : ""}</text>`;
     s += `</svg>`;
     $("chart").innerHTML = s;
   }
@@ -840,7 +859,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${nRef} real places (${meta.reference_source}). Southern-hemisphere places are shifted half a year.`;
   $("analog-note").textContent = `Closest of ${nRef} real places (${meta.reference_source}), no two within 100 km. `
     + `Match % = 100 × e^(−d/2), where d = (typical monthly temperature difference ÷ 2.5 °C) + (typical difference in √rain ÷ 2): `
-    + `100% is identical, and each 2.5 °C off in a typical month multiplies it by 0.61.`;
+    + `100% is identical, and each 2.5 °C off in a typical month multiplies it by 0.61. `
+    + `Temperatures compare daily highs and lows, so a day/night swing 4 °C wider counts like a month 2 °C warmer; `
+    + `the map's swing is learned from Earth (WorldClim highs and lows by rainfall, temperature, elevation, distance from the sea and latitude).`;
 
   // ---------------------------------------------------------------- search: map towns and real cities
   const [, CH, CW] = A.T12.shape;
@@ -1000,10 +1021,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       if (!cellLand[c]) continue;
       const lapse = meta.lapse * cellElev[c] / 1000;
       let dt = 0, dp = 0;
+      const useD = A.D12 && ref.D;
       for (let m = 0; m < 12; m++) {
         const t = A.T12.data[m * NC + c] / 10 - lapse;
         const p = A.P12.data[m * NC + c];
-        dt += (t - ref.T[m]) ** 2;
+        const ds = useD ? A.D12.data[m * NC + c] / 10 - ref.D[m] : 0;
+        dt += (t - ref.T[m]) ** 2 + ds * ds / 4;
         dp += (Math.sqrt(p) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
       }
       d[c] = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
@@ -1035,7 +1058,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     activeRef = ref;
     const out = meta.places
       .filter((p) => cls.data[pixIdx(Math.round(p.x), Math.round(p.y))] !== 255)
-      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref) }; })
+      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref, cl.D12) }; })
       .sort((a, b) => a.d - b.d).slice(0, 6);
     matchState = { fill: spotlight(f, l1, l2), pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
     // frame the very-close areas and the numbered towns

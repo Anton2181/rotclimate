@@ -4,14 +4,15 @@ Cities: GeoNames cities15000 (population >= 50,000, plus every national
 capital), with suburbs folded into a larger city within 15 km.
 Climate: WorldClim 2.1 monthly normals (1970-2000, 5 arc-minutes, ~9 km),
 sampled at each city and corrected to the city's own elevation
-(6.5 C per km between the WorldClim cell and the city).
+(6.5 C per km between the WorldClim cell and the city), plus the monthly
+day/night range (mean daily maximum minus minimum).
 
 Also cross-checks the result against the official WMO station normals
 (data/real_cities_wmo.csv) for cities with a station within 10 km.
 
 Inputs are read from data/cache/ (downloaded separately, see the README):
   geonames/cities15000.zip, geonames/admin1CodesASCII.txt, geonames/countryInfo.txt
-  worldclim/wc2.1_5m_{tavg,prec,elev}.zip
+  worldclim/wc2.1_5m_{tavg,tmin,tmax,prec,elev}.zip
 Output: data/real_cities_worldclim.csv
 
 Run with:  python -I scripts/build_reference.py <repo root>
@@ -141,7 +142,7 @@ def cross_check(rows):
         wmo = list(csv.DictReader(ln for ln in f if not ln.startswith("#")))
     clat = np.radians([r["lat"] for r in rows])
     clon = np.radians([r["lon"] for r in rows])
-    dT, rP = [], []
+    dT, rP, dD = [], [], []
     for w in wmo:
         la, lo = np.radians(float(w["lat"])), np.radians(float(w["lon"]))
         cc = np.sin(la) * np.sin(clat) + np.cos(la) * np.cos(clat) * np.cos(lo - clon)
@@ -153,11 +154,17 @@ def cross_check(rows):
         Pw = np.array([float(w[f"P{m}"]) for m in range(1, 13)])
         dT.append(np.sqrt(np.mean((Tw - rows[i]["T"]) ** 2)))
         rP.append((rows[i]["P"].sum() + 1) / (Pw.sum() + 1))
-    dT, rP = np.array(dT), np.array(rP)
+        if w.get("D1"):
+            Dw = np.array([float(w[f"D{m}"]) for m in range(1, 13)])
+            dD.append(np.mean(rows[i]["D"]) - np.mean(Dw))
+    dT, rP, dD = np.array(dT), np.array(rP), np.array(dD)
     print(f"cross-check with {dT.size} WMO stations within 10 km of a city:")
     print(f"  monthly temperature RMS difference: median {np.median(dT):.2f} C, 90% below {np.percentile(dT, 90):.2f} C")
     print(f"  annual rainfall ratio WorldClim/WMO: median {np.median(rP):.2f}, 80% within "
           f"{np.percentile(rP, 10):.2f}-{np.percentile(rP, 90):.2f}")
+    if dD.size:
+        print(f"  mean day/night range, WorldClim minus WMO ({dD.size} stations): median {np.median(dD):+.2f} C, "
+              f"80% within {np.percentile(dD, 10):+.1f} to {np.percentile(dD, 90):+.1f} C")
 
 
 def main():
@@ -170,11 +177,13 @@ def main():
     elev_cell = sample(read_grid("wc2.1_5m_elev.zip", "wc2.1_5m_elev.tif"), lat, lon)
     T = np.stack([sample(read_grid("wc2.1_5m_tavg.zip", f"wc2.1_5m_tavg_{m:02d}.tif"), lat, lon) for m in range(1, 13)])
     P = np.stack([sample(read_grid("wc2.1_5m_prec.zip", f"wc2.1_5m_prec_{m:02d}.tif"), lat, lon) for m in range(1, 13)])
+    D = np.stack([sample(read_grid("wc2.1_5m_tmax.zip", f"wc2.1_5m_tmax_{m:02d}.tif"), lat, lon)
+                  - sample(read_grid("wc2.1_5m_tmin.zip", f"wc2.1_5m_tmin_{m:02d}.tif"), lat, lon) for m in range(1, 13)])
     city_elev = np.array([c["elev"] if c["elev"] is not None else np.nan for c in cities], float)
     corr = np.where(np.isfinite(city_elev) & np.isfinite(elev_cell),
                     -LAPSE * np.clip(city_elev - elev_cell, -1500, 1500) / 1000.0, 0.0)
     T = T + corr
-    ok = np.isfinite(T).all(0) & np.isfinite(P).all(0)
+    ok = np.isfinite(T).all(0) & np.isfinite(P).all(0) & np.isfinite(D).all(0)
     print(f"{(~ok).sum()} cities dropped (no WorldClim land cell within ~35 km)")
     label_cities(cities)
     # same label twice (two towns of one name in one province): keep the larger
@@ -188,18 +197,19 @@ def main():
     rows = []
     for i, c in enumerate(cities):
         if ok[i]:
-            rows.append(dict(c, T=T[:, i], P=P[:, i], elev_used=city_elev[i] if np.isfinite(city_elev[i]) else elev_cell[i]))
+            rows.append(dict(c, T=T[:, i], P=P[:, i], D=D[:, i], elev_used=city_elev[i] if np.isfinite(city_elev[i]) else elev_cell[i]))
     rows.sort(key=lambda r: (r["country"], r["label"]))
     with open(OUT, "w", encoding="utf-8", newline="") as f:
         f.write("# Monthly normals at GeoNames cities (population >= 50,000 or national capital), sampled from\n"
                 "# WorldClim 2.1 (1970-2000, 5 arc-min) and corrected to city elevation. Built by scripts/build_reference.py\n")
         w = csv.writer(f)
         w.writerow(["name", "region", "country", "lat", "lon", "elev", "population", "period"]
-                   + [f"T{m}" for m in range(1, 13)] + [f"P{m}" for m in range(1, 13)])
+                   + [f"T{m}" for m in range(1, 13)] + [f"P{m}" for m in range(1, 13)]
+                   + [f"D{m}" for m in range(1, 13)])
         for r in rows:
             w.writerow([r["label"], r["region"], r["country"], f"{r['lat']:.3f}", f"{r['lon']:.3f}",
                         "" if not np.isfinite(r["elev_used"]) else int(round(r["elev_used"])), r["pop"], "1970-2000"]
-                       + [f"{v:.1f}" for v in r["T"]] + [f"{v:.0f}" for v in r["P"]])
+                       + [f"{v:.1f}" for v in r["T"]] + [f"{v:.0f}" for v in r["P"]] + [f"{v:.1f}" for v in r["D"]])
     print(f"wrote {len(rows)} cities to {OUT.relative_to(ROOT)}")
     cross_check(rows)
 

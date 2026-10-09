@@ -436,9 +436,19 @@ def climograph_panel(ax, fr: FullRes, x, y, name):
     P = r.P[:, iy, ix]
     groups = cal.month_slices(r.nt)
     Tm = np.array([T[gi].mean() for gi in groups])
-    Tmax = np.array([T[gi].max() for gi in groups])
-    Tmin = np.array([T[gi].min() for gi in groups])
     Pm = np.array([P[gi].sum() * cal.YEAR_DAYS / r.nt for gi in groups])
+    # shaded band: average daily low to high (Earth-trained day/night range)
+    from .diurnal import at_days, available, grid_dtr12
+
+    D12 = grid_dtr12(r)[:, iy, ix] if available() else None
+    if D12 is not None and np.isfinite(D12).all():
+        Ds = at_days(D12, r.days, r.params.winter_solstice_day, r.params.year_days)
+        Dm = np.array([Ds[gi].mean() for gi in groups])
+        Tmin, Tmax = Tm - Dm / 2, Tm + Dm / 2
+    else:
+        D12 = None
+        Tmax = np.array([T[gi].max() for gi in groups])
+        Tmin = np.array([T[gi].min() for gi in groups])
     names = [m.short for m in cal.MONTHS] + [cal.HOLY.short]
     xs = np.arange(len(names))
     widths = [1.0] * 10 + [0.43]
@@ -462,7 +472,7 @@ def climograph_panel(ax, fr: FullRes, x, y, name):
     from .analogs import model_bins, top_analogs
 
     T12, P12 = model_bins(T, P, r.days, r.params.winter_solstice_day, r.params.year_days)
-    an = top_analogs(T12, P12, 3)
+    an = top_analogs(T12, P12, 3, D12=D12)
     ax.text(0.5, -0.36, "feels like: " + ", ".join(a["name"] for a in an),
             transform=ax.transAxes, ha="center", va="top", fontsize=7.5, style="italic",
             color="#333")

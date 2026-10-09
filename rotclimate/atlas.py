@@ -181,6 +181,11 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
 
     T12, P12 = model_bins(Tsl, P, result.days, p.winter_solstice_day, p.year_days)
     T12, P12 = T12[(slice(None),) + sl], P12[(slice(None),) + sl]
+    # day/night range (Earth-trained, rotclimate/diurnal.py) in the same bins
+    from .diurnal import available, grid_dtr12
+
+    D12 = (np.nan_to_num(grid_dtr12(result)[:, fill_iy, fill_ix][(slice(None),) + sl], nan=0.0)
+           if available() else np.zeros_like(T12))
     # thin to <= 260 cells wide to keep the download small
     step = max(1, int(np.ceil(nx_m / 260)))
     if step > 1:
@@ -188,7 +193,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
             n, hh, ww = a.shape
             hh2, ww2 = hh // step * step, ww // step * step
             return a[:, :hh2, :ww2].reshape(n, hh2 // step, step, ww2 // step, step).mean(axis=(2, 4))
-        Tm, Tlo, Thi, Pm, snow, T12, P12 = map(thin, (Tm, Tlo, Thi, Pm, snow, T12, P12))
+        Tm, Tlo, Thi, Pm, snow, T12, P12, D12 = map(thin, (Tm, Tlo, Thi, Pm, snow, T12, P12, D12))
     cell_px = g.f * step
     arrays = {
         "cls": cls, "elev": elev,
@@ -198,6 +203,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         "snow": np.round(np.clip(snow, 0, 65000)).astype(np.uint16),
         "T12": np.round(T12 * 10).astype(np.int16),
         "P12": np.round(np.clip(P12, 0, 65000)).astype(np.uint16),
+        "D12": np.round(D12 * 10).astype(np.int16),
     }
     offsets, blob = {}, bytearray()
     for name, arr in arrays.items():

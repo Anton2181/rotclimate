@@ -86,7 +86,19 @@ Both the map place and each real place are reduced to 12 months aligned on the w
     match % = 100 · e^(−d/2)
 
 so 100% is identical, and every 2.5 °C off in a typical month (or rain off by 2 √mm, e.g. 100 vs
-144 mm) multiplies it by 0.61. The square root makes 10 vs 40 mm count about as much as 100 vs
+144 mm) multiplies it by 0.61. The temperature term compares **daily highs and lows**, not just
+means: RMS(ΔT)² = mean over months of (Δhigh² + Δlow²)/2 = Δmean² + Δswing²/4, so a day/night swing
+4 °C wider counts like a month 2 °C warmer.
+
+**Day/night swings.** The climate model works in daily means, so the map's day/night range is
+learned from Earth: WorldClim monthly mean daily highs minus lows at 100,000 land cells, as a
+function of what the model does compute (monthly and annual rain, monthly temperature and its
+seasonal departure, annual temperature range, elevation, distance from the sea, latitude), by
+nearest-neighbour regression (`rotclimate/diurnal.py`). Tested on whole continents it never saw,
+it explains about half the variation, with a typical error of 1.8 °C in the range (about ±0.9 °C on
+highs and lows): deserts and continental interiors swing 14–18 °C, rainy coasts 5–8 °C. The real
+places' highs and lows come from WorldClim (cities) and the WMO normals (stations), which agree to a
+median of 0.0 °C. In the atlas the climograph's band is the average daily low to high. The square root makes 10 vs 40 mm count about as much as 100 vs
 160 mm. A result list never shows two places within 100 km of each other, and each match shows
 its typical monthly temperature and rain difference in plain units.
 Place names come from your hex-grid list (`data/hex-names.csv`), placed by `scripts/hex_places.py`.
@@ -103,8 +115,9 @@ python -m rotclimate calibrate --physics v4 --objective balanced --seeds 1,2 \
 python -m rotclimate.experiments tilt --params calibration/best_params.json --out output/tilt_sweep.gif
 python scripts/fetch_wmo_normals.py      # official WMO station normals (needs worldweather.wmo.int)
 python -I scripts/build_reference.py .   # city reference set; first download into data/cache/:
+python -I scripts/build_dtr_model.py .   # day/night range model (data/dtr_knn.npz)
 #   geonames/  cities15000.zip, admin1CodesASCII.txt, countryInfo.txt  (download.geonames.org/export/dump/)
-#   worldclim/ wc2.1_5m_tavg.zip, wc2.1_5m_prec.zip, wc2.1_5m_elev.zip   (geodata.ucdavis.edu/climate/worldclim/2_1/base/)
+#   worldclim/ wc2.1_5m_{tavg,tmin,tmax,prec,elev}.zip                   (geodata.ucdavis.edu/climate/worldclim/2_1/base/)
 python -m pytest -q                      # fast checks (calendar, Köppen, solver, hydrology, end-to-end)
 ```
 
@@ -121,6 +134,7 @@ The 28 km grid used for calibration simulates a year in about 1 s.
 | `data/source/` | your five map layers (elevation, rivers, target climate, roads, labels) |
 | `data/places.csv` | place names with their pixel positions (transcribed from the labels layer) |
 | `data/real_cities_worldclim.csv` | 8,468 real cities with monthly normals, the "feels like" reference (`scripts/build_reference.py`) |
+| `data/dtr_knn.npz` | Earth-trained day/night range model (`scripts/build_dtr_model.py`) |
 | `data/real_cities_wmo.csv` | official WMO station normals: remote reference places and the cross-check (`scripts/fetch_wmo_normals.py`) |
 | `rotclimate/geography.py` | layers → model grid, tier elevations, target masks, procedural surroundings |
 | `rotclimate/astronomy.py`, `ebm.py` | sunlight for any tilt; planet-wide seasonal energy balance |

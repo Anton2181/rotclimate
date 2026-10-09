@@ -12,7 +12,11 @@ seasonal clock.  Similarity combines
     d = RMS(dT) / 2.5 C  +  RMS(d sqrt P) / 2.0        similarity = 100 exp(-d / 2)
 
 so a place 2.5 C off in a typical month, or with rain off by 2 sqrt-mm
-(e.g. 100 vs 144 mm), loses a factor e^-0.5 = 0.61 each.
+(e.g. 100 vs 144 mm), loses a factor e^-0.5 = 0.61 each. The temperature
+term compares daily highs and lows, not just means, where both sides have
+them: RMS(dT)^2 = mean over months of (d high^2 + d low^2) / 2
+= d mean^2 + d swing^2 / 4, so a day/night swing 4 C wider counts like a
+2 C warmer month. The simulated swing comes from rotclimate/diurnal.py.
 
 The reference set is data/real_cities_worldclim.csv: every city of 50,000+
 people and every national capital (GeoNames), with WorldClim 2.1 normals
@@ -84,10 +88,14 @@ def load_reference():
         P = np.array([float(r[f"P{i}"]) for i in range(1, 13)])
         lat = float(r["lat"])
         T12, P12 = _align_calendar_months(T, P, lat)
+        D = None
+        if r.get("D1"):
+            D = np.array([float(r[f"D{i}"]) for i in range(1, 13)])
+            D12 = _align_calendar_months(D, P, lat)[0]
         rows.append(dict(name=r["name"], country=_short_country(r["country"]), lat=lat,
                          lon=float(r["lon"]), source=src, period=r.get("period", ""),
                          population=int(r.get("population") or 0),
-                         T=T, P=P, T12=T12, P12=P12))
+                         T=T, P=P, T12=T12, P12=P12, D=D, D12=D12 if D is not None else None))
     _attach_koppen(rows)
     return rows
 
@@ -158,8 +166,12 @@ def model_bins(T_series, P_series, days, winter_solstice_day, year_days=365):
     return T12, P12
 
 
-def distance(T12a, P12a, T12b, P12b, wT=2.5, wP=2.0):
-    dT = np.sqrt(np.mean((T12a - T12b) ** 2, axis=0))
+def distance(T12a, P12a, T12b, P12b, wT=2.5, wP=2.0, D12a=None, D12b=None):
+    """Climate distance; with day/night ranges (NaN = unknown, compared on
+    means only) the temperature term covers daily highs and lows."""
+    dmean = T12a - T12b
+    dswing = 0.0 if D12a is None or D12b is None else np.nan_to_num(D12a - D12b)
+    dT = np.sqrt(np.mean(dmean ** 2 + dswing ** 2 / 4.0, axis=0))
     dP = np.sqrt(np.mean((np.sqrt(np.maximum(P12a, 0)) - np.sqrt(np.maximum(P12b, 0))) ** 2, axis=0))
     return dT / wT + dP / wP, dT, dP
 
@@ -175,21 +187,35 @@ def diverse(order, lat, lon, k, min_km=100.0):
     return picks
 
 
-def top_analogs(T12, P12, k=4, min_km=100.0):
-    """Best k reference places for one place (T12, P12 arrays of length 12),
-    skipping any within min_km of a better match."""
+def _ref_D12(ref):
+    return np.stack([r["D12"] if r["D12"] is not None else np.full(12, np.nan) for r in ref], axis=1)
+
+
+def top_analogs(T12, P12, k=4, min_km=100.0, D12=None):
+    """Best k reference places for one place (T12, P12 and optionally its
+    day/night ranges D12, arrays of length 12), skipping any within min_km
+    of a better match."""
     ref = load_reference()
     RT = np.stack([r["T12"] for r in ref], axis=1)      # [12, n]
     RP = np.stack([r["P12"] for r in ref], axis=1)
-    d, dT, dP = distance(T12[:, None], P12[:, None], RT, RP)
+    RD = _ref_D12(ref) if D12 is not None else None
+    Da = None if D12 is None else np.asarray(D12)[:, None]
+    d, dT, dP = distance(T12[:, None], P12[:, None], RT, RP, D12a=Da, D12b=RD)
     lat = np.array([r["lat"] for r in ref])
     lon = np.array([r["lon"] for r in ref])
     idx = diverse(np.argsort(d)[: 50 * k], lat, lon, k, min_km)
     rain = np.sqrt(np.mean((P12[:, None] - RP) ** 2, axis=0))
-    return [dict(name=ref[i]["name"], country=ref[i]["country"], koppen=ref[i]["koppen"],
-                 source=ref[i]["source"],
-                 score=float(d[i]), dT=float(dT[i]), dP=float(dP[i]), rain_mm=float(rain[i]),
-                 similarity=float(100 * np.exp(-d[i] / 2.0))) for i in idx]
+    out = []
+    for i in idx:
+        a = dict(name=ref[i]["name"], country=ref[i]["country"], koppen=ref[i]["koppen"],
+                 source=ref[i]["source"], score=float(d[i]), dT=float(dT[i]), dP=float(dP[i]),
+                 rain_mm=float(rain[i]), similarity=float(100 * np.exp(-d[i] / 2.0)))
+        if D12 is not None and ref[i]["D12"] is not None:
+            dm, ds = T12 - ref[i]["T12"], np.asarray(D12) - ref[i]["D12"]
+            a["highs"] = float(np.sqrt(np.mean((dm + ds / 2) ** 2)))
+            a["lows"] = float(np.sqrt(np.mean((dm - ds / 2) ** 2)))
+        out.append(a)
+    return out
 
 
 def reference_payload():
@@ -198,4 +224,5 @@ def reference_payload():
     return [dict(n=r["name"], c=r["country"], k=r["koppen"], s=int(r["source"] == "wmo"),
                  y=round(r["lat"], 1), x=round(r["lon"], 1), p=int(round(r["population"] / 1000)),
                  T=[int(round(10 * float(v))) for v in r["T12"]],
+                 D=None if r["D12"] is None else [int(round(10 * float(v))) for v in r["D12"]],
                  P=[int(round(float(v))) for v in r["P12"]]) for r in load_reference()]

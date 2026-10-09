@@ -60,7 +60,7 @@ def parse(country, city, cid):
     months = clim.get("climateMonth") or []
     if len(months) < 12:
         raise ValueError("no monthly climate")
-    T, P = [], []
+    T, P, D = [], [], []
     for m in sorted(months, key=lambda m: int(m["month"]))[:12]:
         mean, hi, lo, pr = (num(m.get(k)) for k in ("meanTemp", "maxTemp", "minTemp", "rainfall"))
         if mean is None and hi is not None and lo is not None:
@@ -69,13 +69,16 @@ def parse(country, city, cid):
             raise ValueError("incomplete months")
         T.append(round(mean, 1))
         P.append(round(pr))
+        D.append(round(hi - lo, 1) if hi is not None and lo is not None and hi >= lo else None)
+    if any(v is None for v in D):              # day/night range only when every month has it
+        D = [""] * 12
     lat, lon = num(d.get("cityLatitude")), num(d.get("cityLongitude"))
     if lat is None or lon is None:
         raise ValueError("no coordinates")
     period = ""
     if clim.get("tempb") and clim.get("tempe"):
         period = f"{clim['tempb']}-{clim['tempe']}"
-    return [d.get("cityName") or city, country, round(lat, 3), round(lon, 3), "", period] + T + P
+    return [d.get("cityName") or city, country, round(lat, 3), round(lon, 3), "", period] + T + P + D
 
 
 def main(limit=None, workers=8):
@@ -108,7 +111,8 @@ def main(limit=None, workers=8):
                 "(worldweather.wmo.int), fetched by scripts/fetch_wmo_normals.py\n")
         w = csv.writer(f)
         w.writerow(["name", "country", "lat", "lon", "elev", "period"]
-                   + [f"T{i}" for i in range(1, 13)] + [f"P{i}" for i in range(1, 13)])
+                   + [f"T{i}" for i in range(1, 13)] + [f"P{i}" for i in range(1, 13)]
+                   + [f"D{i}" for i in range(1, 13)])
         w.writerows(rows)
     print(f"wrote {OUT}: {len(rows)} cities ({skipped} without usable normals)")
 

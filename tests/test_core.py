@@ -131,3 +131,20 @@ def test_coarse_model_run_is_physical():
     assert (r.P >= 0).all()
     ev = evaluate(r)
     assert 0.2 < ev["total"] <= 1.0
+
+
+# ------------------------------------------------------------------ day/night range
+def test_diurnal_range_desert_swings_more_than_rainy_coast():
+    import numpy as np
+
+    from rotclimate.diurnal import available, dtr
+
+    if not available():
+        pytest.skip("data/dtr_knn.npz not built")
+    season = np.cos(np.linspace(0, 2 * np.pi, 12, endpoint=False))
+    T_desert = (24 - 9 * season)[:, None]
+    T_coast = (11 - 4 * season)[:, None]
+    desert = dtr(T_desert, np.full((12, 1), 4.0), 600.0, 600.0, 32.0)
+    coast = dtr(T_coast, np.full((12, 1), 120.0), 20.0, 2.0, 50.0)
+    assert desert.mean() > coast.mean() + 4.0
+    assert 3.0 < coast.mean() < 12.0 and 10.0 < desert.mean() < 24.0
