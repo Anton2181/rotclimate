@@ -102,6 +102,10 @@ def cmd_render(a):
         if v >= 0:
             summary["koppen_share"][CODES[v]] = round(float(c / fr.land.sum()), 4)
     (out / "summary.json").write_text(json.dumps(summary, indent=2, ensure_ascii=False))
+    if a.atlas:
+        from .atlas import build
+
+        build(r, fr, ev)
     p.to_json(out / "params.json")
     print(json.dumps(summary["per_class"], indent=1), summary["score"])
 
@@ -116,6 +120,7 @@ def main(argv=None):
     s.add_argument("--steps", type=int, default=73)
     s.add_argument("--gif-stride", type=int, default=1)
     s.add_argument("--no-gif", action="store_true")
+    s.add_argument("--atlas", action="store_true", help="also export the atlas data")
     s.set_defaults(func=cmd_render)
     s = sub.add_parser("score", help="simulate and print the target score")
     s.add_argument("--params", default=None)

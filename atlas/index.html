@@ -151,6 +151,17 @@ dl.facts dd { margin: 0; font-family: var(--font-data); font-size: 0.92rem; font
 figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
 figure img { width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--rule); background: var(--plate); }
 figcaption { font-size: var(--step--1); color: var(--ink-soft); }
+.find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.find input { font: 400 var(--step-0) var(--font-body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 260px; min-width: 0; }
+.find button { font: 500 var(--step--1) var(--font-body); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--chip); color: var(--ink); }
+.find button[type="submit"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
+.find input:focus-visible, .find button:focus-visible, .analogs button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.analogs button { all: unset; cursor: pointer; font-weight: 700; color: var(--ink); text-decoration: underline;
+  text-decoration-color: var(--rule); text-underline-offset: 3px; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
@@ -171,6 +182,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       </div>
       <div class="stage" id="stage">
         <img id="base" alt="Climate map of the world" src="data/koppen.webp">
+        <canvas id="heat" aria-hidden="true"></canvas>
         <img id="labels" class="labels" alt="" src="data/labels.png">
         <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         <span class="hint" id="hint">Click or tap the map</span>
@@ -195,6 +207,20 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <ol class="analogs" id="analogs"></ol>
       <p class="note" id="analog-note"></p>
     </div>
+  </section>
+
+  <section class="card" aria-labelledby="find-h">
+    <h2 id="find-h">Where on the map feels like…</h2>
+    <p class="note">Type a real city. The map dims everywhere except the places whose simulated climate is closest to it, and the best-matching named places are listed.</p>
+    <form id="find-form" class="find">
+      <label for="find-input" class="sr">Real city</label>
+      <input id="find-input" list="cities" placeholder="Try Rome, Tbilisi, Phoenix, Kunming…" autocomplete="off">
+      <datalist id="cities"></datalist>
+      <button type="submit">Find</button>
+      <button type="button" id="find-clear">Clear</button>
+    </form>
+    <p class="note" id="find-msg"></p>
+    <ol class="analogs" id="find-results"></ol>
   </section>
 
   <section class="two">
@@ -412,7 +438,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     drawChart(Tm, Tlo, Thi, P, top[0]);
     $("analogs").innerHTML = top.map((a) => {
       const kk = kop.find((q) => q.code === a.r.k);
-      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}</span></span>
+      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.a ? " · approx." : ""}</span></span>
         <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
         <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span></li>`;
     }).join("");
@@ -503,6 +529,76 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
 
   $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${meta.reference.length} real cities (${meta.reference_source}). Southern-hemisphere cities are shifted half a year.`;
   $("analog-note").textContent = `Closest of ${meta.reference.length} real cities by seasonal temperature and rainfall curves (${meta.reference_source}).`;
+
+  // ---------------------------------------------------------------- reverse search
+  const [, CH, CW] = A.T12.shape;
+  const cellLand = new Uint8Array(CH * CW), cellElev = new Float32Array(CH * CW);
+  for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
+    const px = Math.min(W - 1, Math.round((ix + 0.5) * meta.cell_px));
+    const py = Math.min(H - 1, Math.round((iy + 0.5) * meta.cell_px));
+    const q = pixIdx(px, py);
+    cellLand[iy * CW + ix] = cls.data[q] !== 255 ? 1 : 0;
+    cellElev[iy * CW + ix] = elev.data[q];
+  }
+  const refLabel = (r) => `${r.n}, ${r.c}`;
+  $("cities").innerHTML = meta.reference.map((r) => `<option value="${esc(refLabel(r))}"></option>`).join("");
+  const heat = $("heat");
+  heat.width = CW; heat.height = CH;
+  function clearHeat() { heat.getContext("2d").clearRect(0, 0, CW, CH); }
+  function findPlace(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    const ref = meta.reference.find((r) => refLabel(r).toLowerCase() === q)
+      || meta.reference.find((r) => r.n.toLowerCase() === q)
+      || meta.reference.find((r) => r.n.toLowerCase().startsWith(q))
+      || meta.reference.find((r) => refLabel(r).toLowerCase().includes(q));
+    if (!ref) { $("find-msg").textContent = `No city matching “${query}”. Pick one from the suggestions.`; return; }
+    const n = CH * CW, d = new Float32Array(n).fill(Infinity);
+    let best = Infinity;
+    for (let c = 0; c < n; c++) {
+      if (!cellLand[c]) continue;
+      const lapse = meta.lapse * cellElev[c] / 1000;
+      let dt = 0, dp = 0;
+      for (let m = 0; m < 12; m++) {
+        const t = A.T12.data[m * n + c] / 10 - lapse;
+        const p = A.P12.data[m * n + c];
+        dt += (t - ref.T[m]) ** 2;
+        dp += (Math.sqrt(p) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
+      }
+      d[c] = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
+      if (d[c] < best) best = d[c];
+    }
+    // spotlight: dim land that matches poorly
+    const ctx = heat.getContext("2d"), img = ctx.createImageData(CW, CH);
+    for (let c = 0; c < n; c++) {
+      if (!cellLand[c]) continue;
+      const rel = Math.min(1, Math.max(0, (d[c] - best) / (best * 0.9 + 0.6)));
+      img.data[c * 4 + 3] = Math.round(215 * Math.pow(rel, 0.7));
+    }
+    ctx.putImageData(img, 0, 0);
+    // best-matching named places
+    const order = Array.from(d.keys()).filter((c) => cellLand[c]).sort((a, b) => d[a] - d[b]);
+    const used = new Set(), out = [];
+    for (const c of order) {
+      const cx = ((c % CW) + 0.5) * meta.cell_px, cy = (Math.floor(c / CW) + 0.5) * meta.cell_px;
+      let bp = null, bd = 70 * 70;
+      for (const p of meta.places) { const dd = (p.x - cx) ** 2 + (p.y - cy) ** 2; if (dd < bd) { bd = dd; bp = p; } }
+      if (bp && !used.has(bp.name)) { used.add(bp.name); out.push({ p: bp, sim: 100 * Math.exp(-d[c] / 2) }); }
+      if (out.length >= 6) break;
+    }
+    $("find-msg").textContent = `Closest climates on the map to ${refLabel(ref)} (${ref.k}${ref.a ? ", approximate normals" : ""}). Brighter = closer; click a name to open its climograph.`;
+    $("find-results").innerHTML = out.map((o, i) => `<li><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
+      <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
+    for (const b of $("find-results").querySelectorAll("button")) {
+      b.addEventListener("click", () => {
+        const o = out[+b.dataset.i];
+        select(o.p.x, o.p.y + 8, o.p.name);
+        $("stage").scrollIntoView({ behavior: "smooth", block: "center" });
+      });
+    }
+  }
+  $("find-form").addEventListener("submit", (e) => { e.preventDefault(); findPlace($("find-input").value); });
+  $("find-clear").addEventListener("click", () => { clearHeat(); $("find-results").innerHTML = ""; $("find-msg").textContent = ""; $("find-input").value = ""; });
 
   setLayer("koppen");
   const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
