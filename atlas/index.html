@@ -162,8 +162,10 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .found .num { font-family: var(--font-data); font-size: var(--step--1); color: var(--ink-soft); }
 .found .meter { grid-column: 2 / -1; }
 .match-key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--step--1); color: var(--ink-soft); align-items: center; }
-.match-key i { display: inline-block; width: 18px; height: 0; border-top: 3px solid #ffd34d; vertical-align: middle; margin-right: 4px; }
-.match-key i.close { border-top: 2px dashed #ffd34d; }
+.match-key i { display: inline-block; width: 16px; height: 11px; vertical-align: -1px; margin-right: 4px; border-radius: 2px;
+  background: linear-gradient(90deg, #b9e84a 0 33%, #f0e400 33% 66%, #2cc7c9 66%); border: 1.3px solid #15181a; }
+.match-key i.close { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.39); }
+.match-key i.far { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.78); }
 .find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
 .find input { font: 400 var(--step-0) var(--font-body); color: var(--ink); background: var(--paper);
   border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 150px; min-width: 0; }
@@ -629,6 +631,16 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     ty = h / 2 - (y / H) * h * zs;
     applyZoom();
   }
+  // show a map rectangle as large as fits beside the search box (zoom 1-4)
+  function fitTo(x0, y0, x1, y1) {
+    const w = stage.clientWidth, h = stage.clientHeight, box = $("searchbox");
+    const left = !box.hidden && getComputedStyle(box).position === "absolute" ? box.offsetWidth + 20 : 0;
+    const pad = 60, bw = Math.max(x1 - x0 + 2 * pad, 200), bh = Math.max(y1 - y0 + 2 * pad, 100);
+    zs = Math.min(4, Math.max(1, Math.min(((w - left) * W) / (bw * w), H / bh)));
+    tx = left + (w - left) / 2 - ((x0 + x1) / 2 / W) * w * zs;
+    ty = h / 2 - ((y0 + y1) / 2 / H) * h * zs;
+    applyZoom();
+  }
   stage.addEventListener("wheel", (e) => {
     e.preventDefault();
     zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
@@ -797,21 +809,69 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   $("cities").innerHTML = meta.places.map((p) => `<option value="${esc(p.name)}" label="on the map"></option>`).join("")
     + meta.reference.map((r) => `<option value="${esc(refLabel(r))}"></option>`).join("");
   const matchSvg = $("matchsvg");
-  let matchState = null;          // {paths: [d1, d2], pins: [{x, y, i}]}
+  let matchState = null;          // {fill: svg markup, pins: [{x, y, i}]}
 
+  // Real-city matches as a spotlight: the map keeps its colour where the
+  // climate feels alike, half-fades where it is close, and washes out
+  // elsewhere; a thin ink edge marks the very-close areas.
   function drawMatches() {
     if (!matchState) { matchSvg.innerHTML = ""; return; }
     const pxPerUnit = (stage.clientWidth * zs) / 2000;
-    const r = 9 / pxPerUnit, fs = 11 / pxPerUnit;
-    const [d1, d2] = matchState.paths;
-    matchSvg.innerHTML =
-      `<path d="${d2}" fill="none" stroke="#1b1f22" stroke-width="4" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.55"/>
-       <path d="${d2}" fill="none" stroke="#ffd34d" stroke-width="2" stroke-dasharray="5 4" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
-       <path d="${d1}" fill="none" stroke="#1b1f22" stroke-width="6" stroke-linecap="round" vector-effect="non-scaling-stroke" opacity="0.6"/>
-       <path d="${d1}" fill="none" stroke="#ffd34d" stroke-width="3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`
-      + matchState.pins.map((p) => `<circle cx="${p.x}" cy="${p.y}" r="${r}" fill="#1b1f22" stroke="#ffd34d" stroke-width="2" vector-effect="non-scaling-stroke"/>
-         <text x="${p.x}" y="${p.y}" fill="#ffd34d" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="500"
+    const r = 8.5 / pxPerUnit, fs = 10.5 / pxPerUnit;
+    // pins sit just above the town's name label, so both stay readable
+    const lift = r + (0.6 * Math.min(13, Math.max(6, 10 * pxPerUnit)) + 2) / pxPerUnit;
+    matchSvg.innerHTML = matchState.fill
+      + matchState.pins.map((p) => `<circle cx="${p.x}" cy="${p.y - lift}" r="${r}" fill="#15181a" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+         <text x="${p.x}" y="${p.y - lift}" fill="#fff" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="600"
            text-anchor="middle" dominant-baseline="central">${p.i}</text>`).join("");
+  }
+  function spotlight(f, l1, l2) {
+    // two black-and-white masks (no grey levels, so no colour-space ambiguity):
+    // 0.39 wash outside "very close", a further 0.64 outside "close" (0.78 total)
+    const mask = (id, d) => `<mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="2000" height="926">
+        <rect width="2000" height="926" fill="#fff"/><path d="${d}" fill="#000"/></mask>`;
+    return `<defs>${mask("match-near", region(f, l1))}${mask("match-close", region(f, l2))}</defs>
+      <rect width="2000" height="926" fill="#eeece6" fill-opacity="0.39" mask="url(#match-near)"/>
+      <rect width="2000" height="926" fill="#eeece6" fill-opacity="0.64" mask="url(#match-close)"/>
+      <path d="${contour(f, l1)}" fill="none" stroke="#15181a" stroke-opacity="0.85" stroke-width="1.3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+  }
+
+  // filled marching squares: one path covering where f < v (cell-centre grid).
+  // Polygons share exact edges and wind the same way, so the single path
+  // fills without seams; saddles split like contour() below.
+  function region(f, v) {
+    const out = [];
+    const X = (ix) => ((ix + 0.5) * meta.cell_px).toFixed(1), Y = (iy) => ((iy + 0.5) * meta.cell_px).toFixed(1);
+    const lerp = (a, b) => (v - a) / (b - a);
+    for (let iy = 0; iy < CH - 1; iy++) {
+      let run = -1;
+      for (let ix = 0; ix < CW; ix++) {
+        const a = f[iy * CW + ix], b = f[iy * CW + ix + 1], c = f[(iy + 1) * CW + ix + 1], d = f[(iy + 1) * CW + ix];
+        const full = ix < CW - 1 && a < v && b < v && c < v && d < v;
+        if (full) { if (run < 0) run = ix; continue; }
+        if (run >= 0) { out.push(`M${X(run)} ${Y(iy)}H${X(ix)}V${Y(iy + 1)}H${X(run)}Z`); run = -1; }
+        if (ix >= CW - 1) continue;
+        const ins = [a < v, b < v, c < v, d < v];
+        if (!ins[0] && !ins[1] && !ins[2] && !ins[3]) continue;
+        const pt = [[ix, iy], [ix + 1, iy], [ix + 1, iy + 1], [ix, iy + 1]], val = [a, b, c, d];
+        const cross = (k) => {            // point where edge k (corner k -> k+1) crosses v
+          const k2 = (k + 1) % 4, t = lerp(val[k], val[k2]);
+          return `${X(pt[k][0] + t * (pt[k2][0] - pt[k][0]))} ${Y(pt[k][1] + t * (pt[k2][1] - pt[k][1]))}`;
+        };
+        const corner = (k) => `${X(pt[k][0])} ${Y(pt[k][1])}`;
+        if (ins[0] === ins[2] && ins[1] === ins[3] && ins[0] !== ins[1]) {   // saddle: separate corners
+          for (let k = ins[0] ? 0 : 1; k < 4; k += 2) out.push(`M${corner(k)}L${cross(k)}L${cross((k + 3) % 4)}Z`);
+          continue;
+        }
+        const poly = [];
+        for (let k = 0; k < 4; k++) {
+          if (ins[k]) poly.push(corner(k));
+          if (ins[k] !== ins[(k + 1) % 4]) poly.push(cross(k));
+        }
+        out.push(`M${poly.join("L")}Z`);
+      }
+    }
+    return out.join("");
   }
 
   // marching squares: line segments where field f crosses level v (cell-centre grid)
@@ -858,21 +918,24 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       d[c] = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
       if (d[c] < best) best = d[c];
     }
-    // smooth a copy for clean outlines (sea counts as "no match")
-    let f = Float32Array.from(d, (x, c) => (cellLand[c] ? x : best + 3));
+    // smooth a copy for clean edges, averaging over land neighbours only (so
+    // coastal matches survive); sea then counts as "no match"
+    let f = Float32Array.from(d);
     for (let pass = 0; pass < 2; pass++) {
       const g = new Float32Array(NC);
       for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
+        if (!cellLand[iy * CW + ix]) continue;
         let s = 0, n = 0;
         for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
           const y = iy + dy, x = ix + dx;
-          if (y < 0 || x < 0 || y >= CH || x >= CW) continue;
+          if (y < 0 || x < 0 || y >= CH || x >= CW || !cellLand[y * CW + x]) continue;
           s += f[y * CW + x]; n++;
         }
         g[iy * CW + ix] = s / n;
       }
       f = g;
     }
+    for (let c = 0; c < NC; c++) if (!cellLand[c]) f[c] = best + 3;
     let fbest = Infinity;
     for (let c = 0; c < NC; c++) if (cellLand[c] && f[c] < fbest) fbest = f[c];
     const l1 = fbest + 0.25, l2 = fbest + 0.6;
@@ -886,11 +949,15 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       if (bp && !used.has(bp.name)) { used.add(bp.name); out.push({ p: bp, sim: 100 * Math.exp(-d[c] / 2) }); }
       if (out.length >= 6) break;
     }
-    matchState = { paths: [contour(f, l1), contour(f, l2)], pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
-    drawMatches();
-    const sim = (x) => Math.round(100 * Math.exp(-x / 2));
+    matchState = { fill: spotlight(f, l1, l2), pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
+    // frame the very-close areas and the numbered towns
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
+    for (let c = 0; c < NC; c++) if (f[c] < l1) grow(((c % CW) + 0.5) * meta.cell_px, (Math.floor(c / CW) + 0.5) * meta.cell_px);
+    for (const o of out) grow(o.p.x, o.p.y);
+    fitTo(x0, y0, x1, y1);
     $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.a ? ", approximate normals" : ""}).
-      <span class="match-key"><span><i></i>very close (≥ ${sim(l1)}%)</span><span><i class="close"></i>close (≥ ${sim(l2)}%)</span></span>`;
+      <span class="match-key"><span><i></i>very close</span><span><i class="close"></i>close</span><span><i class="far"></i>less alike</span></span>`;
     $("find-results").innerHTML = out.map((o, i) => `<li><span class="num">${i + 1}</span><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
       <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
     for (const b of $("find-results").querySelectorAll("button")) {
