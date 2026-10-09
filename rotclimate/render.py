@@ -74,6 +74,14 @@ class FullRes:
         Pm = np.stack([np.maximum(self.up(p), 0) for p in st["Pm"]])
         return Tm, Pm, st["summer"]
 
+    def compact(self):
+        """Keep only the Koppen class map; free the monthly arrays (~0.5 GB)."""
+        self.koppen()
+        for a in ("_Tm", "_Pm", "_ix"):
+            if hasattr(self, a):
+                delattr(self, a)
+        return self
+
     def koppen(self):
         if not hasattr(self, "_k"):
             Tm, Pm, summer = self.monthly()

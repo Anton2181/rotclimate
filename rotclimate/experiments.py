@@ -31,7 +31,7 @@ def tilt_sweep(p: Params, out, tilts=None, res=REF):
     for t in tilts:
         r, ev = _run(p.replace(tilt=float(t), **res))
         star = "  ← calibrated" if abs(t - p.tilt) < 0.6 else ""
-        items.append((FullRes(r), f"axial tilt {t:g}°   score {ev['total']:.2f}{star}"))
+        items.append((FullRes(r).compact(), f"axial tilt {t:g}°   score {ev['total']:.2f}{star}"))
         print(f"tilt {t}: {ev['total']:.3f}")
     koppen_frames_gif(items, out, ms=900)
 
@@ -40,7 +40,7 @@ def spin_flip(p: Params, out, res=REF):
     items = []
     for retro in (p.retrograde, not p.retrograde):
         r, ev = _run(p.replace(retrograde=retro, **res))
-        items.append((FullRes(r), f"{'retrograde' if retro else 'prograde (Earth-like)'} spin   "
+        items.append((FullRes(r).compact(), f"{'retrograde' if retro else 'prograde (Earth-like)'} spin   "
                                   f"score {ev['total']:.2f}"))
         print(retro, ev["total"])
     koppen_frames_gif(items, out, ms=1500)
@@ -50,7 +50,7 @@ def lat_sweep(p: Params, out, res=REF):
     items = []
     for lat in np.arange(p.lat_center - 8, p.lat_center + 8.1, 2.0):
         r, ev = _run(p.replace(lat_center=float(lat), **res))
-        items.append((FullRes(r), f"map centre at {lat:.1f}°   score {ev['total']:.2f}"))
+        items.append((FullRes(r).compact(), f"map centre at {lat:.1f}°   score {ev['total']:.2f}"))
         print(lat, ev["total"])
     koppen_frames_gif(items, out, ms=900)
 
@@ -64,7 +64,7 @@ def snapshot(p: Params, tag: str, title: str, note: str = "", it_dir=REPO / "cal
     it_dir.mkdir(parents=True, exist_ok=True)
     r, ev = _run(p.replace(**res))
     tmp = it_dir / f"{tag}.gif"
-    koppen_frames_gif([(FullRes(r), f"{tag}: {title}   score {ev['total']:.2f}")], tmp, ms=1000)
+    koppen_frames_gif([(FullRes(r).compact(), f"{tag}: {title}   score {ev['total']:.2f}")], tmp, ms=1000)
     from PIL import Image
 
     Image.open(tmp).convert("RGB").save(it_dir / f"{tag}.png")
@@ -120,7 +120,7 @@ def surroundings(p: Params, out, res=REF):
     items = []
     for name, kw in cases:
         r, ev = _run(p.replace(**kw, **res))
-        items.append((FullRes(r), f"{name}   score {ev['total']:.2f}"))
+        items.append((FullRes(r).compact(), f"{name}   score {ev['total']:.2f}"))
         print(name, ev["total"])
     koppen_frames_gif(items, out, ms=1500)
 
