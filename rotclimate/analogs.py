@@ -9,10 +9,18 @@ seasonal clock.  Similarity combines
 * the RMS difference of sqrt(monthly precipitation), so 10 vs 40 mm counts
   about as much as 100 vs 160 mm.
 
-The reference set is data/real_cities_wmo.csv (official WMO normals for ~2,100
-cities, built by scripts/fetch_wmo_normals.py), topped up with entries from
-data/real_cities_approx.csv (approximate values) for well-known cities the WMO
-service has no normals for.
+    d = RMS(dT) / 2.5 C  +  RMS(d sqrt P) / 2.0        similarity = 100 exp(-d / 2)
+
+so a place 2.5 C off in a typical month, or with rain off by 2 sqrt-mm
+(e.g. 100 vs 144 mm), loses a factor e^-0.5 = 0.61 each.
+
+The reference set is data/real_cities_worldclim.csv: every city of 50,000+
+people and every national capital (GeoNames), with WorldClim 2.1 normals
+corrected to the city's elevation (built by scripts/build_reference.py).
+Official WMO station normals (data/real_cities_wmo.csv, from
+scripts/fetch_wmo_normals.py) add the remote places no city covers: stations
+more than 50 km from any listed city. Result lists skip a place within
+100 km of a better match, so near-copies don't crowd them.
 """
 from __future__ import annotations
 
@@ -37,26 +45,39 @@ def _read_csv(path):
 
 def reference_source() -> str:
     ref = load_reference()
+    n_city = sum(r["source"] == "worldclim" for r in ref)
     n_wmo = sum(r["source"] == "wmo" for r in ref)
-    n_apx = len(ref) - n_wmo
-    if n_wmo and n_apx:
-        return f"{n_wmo} cities with official WMO normals + {n_apx} with approximate values"
+    parts = []
+    if n_city:
+        parts.append(f"{n_city:,} cities with WorldClim 1970–2000 normals")
     if n_wmo:
-        return f"{n_wmo} cities with official WMO normals"
-    return f"{n_apx} cities with approximate normals"
+        parts.append(f"{n_wmo:,} {'remote ' if n_city else ''}WMO weather stations")
+    return " + ".join(parts) or "no reference data"
+
+
+def _km(lat1, lon1, lat2, lon2):
+    la1, lo1, la2, lo2 = map(np.radians, (lat1, lon1, lat2, lon2))
+    c = np.sin(la1) * np.sin(la2) + np.cos(la1) * np.cos(la2) * np.cos(lo1 - lo2)
+    return 6371.0 * np.arccos(np.clip(c, -1.0, 1.0))
 
 
 @lru_cache(maxsize=1)
 def load_reference():
-    """Official WMO normals where available, topped up with the approximate
-    table for well-known cities the WMO service has no normals for."""
+    """Cities with WorldClim normals, plus WMO stations far from any of them."""
     raw = []
+    city = DATA / "real_cities_worldclim.csv"
+    if city.exists():
+        raw += [(r, "worldclim") for r in _read_csv(city)]
     wmo = DATA / "real_cities_wmo.csv"
     if wmo.exists():
-        raw += [(r, "wmo") for r in _read_csv(wmo)]
-    have = {r["name"].casefold() for r, _ in raw}
-    raw += [(r, "approx") for r in _read_csv(DATA / "real_cities_approx.csv")
-            if r["name"].casefold() not in have]
+        stations = _read_csv(wmo)
+        if raw:
+            clat = np.array([float(r["lat"]) for r, _ in raw])
+            clon = np.array([float(r["lon"]) for r, _ in raw])
+            stations = [w for w in stations
+                        if _km(float(w["lat"]), float(w["lon"]), clat, clon).min() > 50.0]
+        taken = {(r["name"], _short_country(r["country"])) for r, _ in raw}
+        raw += [(w, "wmo") for w in stations if (w["name"], _short_country(w["country"])) not in taken]
     rows = []
     for r, src in raw:
         T = np.array([float(r[f"T{i}"]) for i in range(1, 13)])
@@ -65,6 +86,7 @@ def load_reference():
         T12, P12 = _align_calendar_months(T, P, lat)
         rows.append(dict(name=r["name"], country=_short_country(r["country"]), lat=lat,
                          lon=float(r["lon"]), source=src, period=r.get("period", ""),
+                         population=int(r.get("population") or 0),
                          T=T, P=P, T12=T12, P12=P12))
     _attach_koppen(rows)
     return rows
@@ -142,21 +164,38 @@ def distance(T12a, P12a, T12b, P12b, wT=2.5, wP=2.0):
     return dT / wT + dP / wP, dT, dP
 
 
-def top_analogs(T12, P12, k=4):
-    """Best k reference cities for one place (T12, P12 arrays of length 12)."""
+def diverse(order, lat, lon, k, min_km=100.0):
+    """First k indices of `order` that are at least min_km from every earlier pick."""
+    picks = []
+    for i in order:
+        if all(_km(lat[i], lon[i], lat[j], lon[j]) >= min_km for j in picks):
+            picks.append(int(i))
+            if len(picks) == k:
+                break
+    return picks
+
+
+def top_analogs(T12, P12, k=4, min_km=100.0):
+    """Best k reference places for one place (T12, P12 arrays of length 12),
+    skipping any within min_km of a better match."""
     ref = load_reference()
     RT = np.stack([r["T12"] for r in ref], axis=1)      # [12, n]
     RP = np.stack([r["P12"] for r in ref], axis=1)
     d, dT, dP = distance(T12[:, None], P12[:, None], RT, RP)
-    idx = np.argsort(d)[:k]
+    lat = np.array([r["lat"] for r in ref])
+    lon = np.array([r["lon"] for r in ref])
+    idx = diverse(np.argsort(d)[: 50 * k], lat, lon, k, min_km)
+    rain = np.sqrt(np.mean((P12[:, None] - RP) ** 2, axis=0))
     return [dict(name=ref[i]["name"], country=ref[i]["country"], koppen=ref[i]["koppen"],
                  source=ref[i]["source"],
-                 score=float(d[i]), dT=float(dT[i]), dP=float(dP[i]),
+                 score=float(d[i]), dT=float(dT[i]), dP=float(dP[i]), rain_mm=float(rain[i]),
                  similarity=float(100 * np.exp(-d[i] / 2.0))) for i in idx]
 
 
 def reference_payload():
     """Compact reference table for the atlas page."""
-    return [dict(n=r["name"], c=r["country"], k=r["koppen"], a=int(r["source"] != "wmo"),
-                 T=[round(float(v), 1) for v in r["T12"]],
-                 P=[round(float(v)) for v in r["P12"]]) for r in load_reference()]
+    # T in tenths of a degree, P in mm, lat/lon to 0.1 degree (for spacing out results)
+    return [dict(n=r["name"], c=r["country"], k=r["koppen"], s=int(r["source"] == "wmo"),
+                 y=round(r["lat"], 1), x=round(r["lon"], 1), p=int(round(r["population"] / 1000)),
+                 T=[int(round(10 * float(v))) for v in r["T12"]],
+                 P=[int(round(float(v))) for v in r["P12"]]) for r in load_reference()]

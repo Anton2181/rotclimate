@@ -23,15 +23,19 @@ def test_season_names_match_the_astronomy():
 
 
 # ------------------------------------------------------------------ koppen
-@pytest.mark.parametrize("city, expected", [
-    ("Moscow", "Dfb"), ("Cairo", "BWh"), ("London", "Cfb"), ("Riyadh", "BWh"),
-    ("Shanghai", "Cfa"), ("Cape Town", "Csb"), ("Ankara", "Csa"), ("Kunming", "Cwb"),
-])
-def test_koppen_classifies_real_cities(city, expected):
+def _city(name, country):
     from rotclimate.analogs import load_reference
 
-    ref = {r["name"]: r for r in load_reference()}
-    assert ref[city]["koppen"] == expected
+    return next(r for r in load_reference() if r["name"] == name and r["country"] == country)
+
+
+@pytest.mark.parametrize("city, country, expected", [
+    ("Moscow", "Russia", "Dfb"), ("Cairo", "Egypt", "BWh"), ("London", "UK", "Cfb"),
+    ("Riyadh", "Saudi Arabia", "BWh"), ("Shanghai", "China", "Cfa"), ("Cape Town", "South Africa", "Csb"),
+    ("Athens", "Greece", "Csa"), ("Kunming", "China", "Cwb"),
+])
+def test_koppen_classifies_real_cities(city, country, expected):
+    assert _city(city, country)["koppen"] == expected
 
 
 # ------------------------------------------------------------------ solver
@@ -88,11 +92,29 @@ def test_hex_grid_fit_is_a_regular_hexagon():
 
 # ------------------------------------------------------------------ analogues
 def test_a_city_is_its_own_best_analogue():
-    from rotclimate.analogs import load_reference, top_analogs
+    from rotclimate.analogs import top_analogs
 
-    r = {x["name"]: x for x in load_reference()}["Tbilisi"]
+    r = _city("Tbilisi", "Georgia")
     best = top_analogs(r["T12"], r["P12"], 1)[0]
     assert best["name"] == "Tbilisi" and best["similarity"] == pytest.approx(100.0)
+
+
+def test_analogues_are_distinct_places():
+    """No duplicate entries, and a result list never shows two places within 100 km."""
+    from collections import Counter
+
+    from rotclimate.analogs import _km, load_reference, top_analogs
+
+    ref = load_reference()
+    dup = [k for k, n in Counter((r["name"], r["country"]) for r in ref).items() if n > 1]
+    assert not dup
+    r = _city("Houston", "USA")
+    top = top_analogs(r["T12"], r["P12"], 6)
+    pos = {(x["name"], x["country"]): x for x in ref}
+    pts = [pos[(a["name"], a["country"])] for a in top]
+    for i in range(len(pts)):
+        for j in range(i):
+            assert _km(pts[i]["lat"], pts[i]["lon"], pts[j]["lat"], pts[j]["lon"]) >= 100.0
 
 
 # ------------------------------------------------------------------ end to end

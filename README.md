@@ -71,8 +71,24 @@ resolution with full-detail terrain. See `docs/ITERATIONS.md`.
 
 ![A year of temperature and wind](output/year_temperature.gif)
 
-Real-world analogues use official WMO climate normals for 2,106 cities
-(`data/real_cities_wmo.csv`), plus approximate values for 42 well-known cities WMO lacks.
+**Real-world analogues ("feels like").** The reference set is every city of 50,000+ people and
+every national capital (GeoNames; suburbs within 15 km folded into the bigger city): 8,468
+cities. Each has monthly normals from WorldClim 2.1 (1970–2000), corrected to the city's own
+elevation. Another 472 official WMO weather stations cover remote places no city does
+(mountains, islands, polar and desert outposts). Checked against the official WMO station
+normals for 1,262 cities with a station within 10 km, the monthly temperatures differ by a median
+of 0.54 °C (90% under 1.24 °C) and annual rainfall agrees to within ±20% for 80% of them.
+
+Both the map place and each real place are reduced to 12 months aligned on the winter solstice
+(southern-hemisphere places shift half a year). Then
+
+    d = RMS(monthly temperature difference) / 2.5 °C + RMS(difference of √monthly rain) / 2
+    match % = 100 · e^(−d/2)
+
+so 100% is identical, and every 2.5 °C off in a typical month (or rain off by 2 √mm, e.g. 100 vs
+144 mm) multiplies it by 0.61. The square root makes 10 vs 40 mm count about as much as 100 vs
+160 mm. A result list never shows two places within 100 km of each other, and each match shows
+its typical monthly temperature and rain difference in plain units.
 Place names come from your hex-grid list (`data/hex-names.csv`), placed by `scripts/hex_places.py`.
 
 ## Quick start
@@ -85,7 +101,10 @@ python -m rotclimate score  --params calibration/best_params.json
 python -m rotclimate calibrate --physics v4 --objective balanced --seeds 1,2 \
        --start calibration/best_params.json --out calibration/my_run --evals 600
 python -m rotclimate.experiments tilt --params calibration/best_params.json --out output/tilt_sweep.gif
-python scripts/fetch_wmo_normals.py      # official city normals for the analogues (needs worldweather.wmo.int)
+python scripts/fetch_wmo_normals.py      # official WMO station normals (needs worldweather.wmo.int)
+python -I scripts/build_reference.py .   # city reference set; first download into data/cache/:
+#   geonames/  cities15000.zip, admin1CodesASCII.txt, countryInfo.txt  (download.geonames.org/export/dump/)
+#   worldclim/ wc2.1_5m_tavg.zip, wc2.1_5m_prec.zip, wc2.1_5m_elev.zip   (geodata.ucdavis.edu/climate/worldclim/2_1/base/)
 python -m pytest -q                      # fast checks (calendar, Köppen, solver, hydrology, end-to-end)
 ```
 
@@ -101,7 +120,8 @@ The 28 km grid used for calibration simulates a year in about 1 s.
 |---|---|
 | `data/source/` | your five map layers (elevation, rivers, target climate, roads, labels) |
 | `data/places.csv` | place names with their pixel positions (transcribed from the labels layer) |
-| `data/real_cities_approx.csv` | approximate climate normals of ~130 real cities, used for the "feels like" analogues |
+| `data/real_cities_worldclim.csv` | 8,468 real cities with monthly normals, the "feels like" reference (`scripts/build_reference.py`) |
+| `data/real_cities_wmo.csv` | official WMO station normals: remote reference places and the cross-check (`scripts/fetch_wmo_normals.py`) |
 | `rotclimate/geography.py` | layers → model grid, tier elevations, target masks, procedural surroundings |
 | `rotclimate/astronomy.py`, `ebm.py` | sunlight for any tilt; planet-wide seasonal energy balance |
 | `rotclimate/model.py`, `solver.py` | the 2-D seasonal model (winds, temperature, moisture, rain, snow) |

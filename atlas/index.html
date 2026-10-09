@@ -116,6 +116,7 @@ section { display: grid; gap: 16px; }
 .analogs .nm { font-weight: 700; }
 .analogs .ct { color: var(--ink-soft); font-weight: 400; }
 .analogs .sim { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--step--1); }
+.analogs .why { grid-column: 1 / -1; font-size: var(--step--1); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .analogs .meter { grid-column: 1 / -1; height: 4px; background: var(--chip); border-radius: 2px; overflow: hidden; }
 .analogs .meter span { display: block; height: 100%; background: var(--brass); }
 .note { font-size: var(--step--1); color: var(--ink-soft); }
@@ -166,7 +167,14 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
   background: linear-gradient(90deg, #b9e84a 0 33%, #f0e400 33% 66%, #2cc7c9 66%); border: 1.3px solid #15181a; }
 .match-key i.close { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.39); }
 .match-key i.far { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.78); }
-.find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; position: relative; }
+.suggest { position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 2px); list-style: none; margin: 0; padding: 4px 0;
+  background: var(--plate); border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  max-height: 300px; overflow: auto; }
+.suggest[hidden] { display: none; }
+.suggest li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 10px; cursor: pointer; }
+.suggest li[aria-selected="true"], .suggest li:hover { background: var(--chip); }
+.suggest .sub { color: var(--ink-soft); font-size: var(--step--1); white-space: nowrap; }
 .find input { font: 400 var(--step-0) var(--font-body); color: var(--ink); background: var(--paper);
   border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 150px; min-width: 0; }
 .find button { font: 500 var(--step--1) var(--font-body); border-radius: 999px; padding: 7px 14px; cursor: pointer;
@@ -222,8 +230,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <div class="searchbox" id="searchbox">
         <form id="find-form" class="find" role="search">
           <label for="find-input" class="sr">Search a town on the map or a real city</label>
-          <input id="find-input" list="cities" placeholder="A town on the map, or a real city…" autocomplete="off">
-          <datalist id="cities"></datalist>
+          <input id="find-input" placeholder="A town on the map, or a real city…" autocomplete="off"
+            role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="find-suggest">
+          <ul class="suggest" id="find-suggest" role="listbox" hidden></ul>
           <button type="submit">Go</button>
           <button type="button" id="find-clear" aria-label="Clear search">Clear</button>
         </form>
@@ -341,6 +350,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   let meta, buf;
   try {
     meta = await (await fetch("data/atlas.json")).json();
+    if (meta.reference.length && meta.reference[0].s !== undefined)
+      for (const r of meta.reference) r.T = r.T.map((v) => v / 10);       // tenths of a degree
     // packed arrays: published as atlas.wasm (a served binary type), atlas.bin locally
     let res = await fetch("data/atlas.wasm");
     if (!res.ok) res = await fetch("data/atlas.bin");
@@ -439,17 +450,33 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     return best;
   }
 
-  function analogs(T12, P12) {
-    return meta.reference.map((r) => {
-      let dt = 0, dp = 0;
+  // great-circle km between two reference places (lat y, lon x)
+  function refKm(a, b) {
+    const r = Math.PI / 180, c = Math.sin(a.y * r) * Math.sin(b.y * r) + Math.cos(a.y * r) * Math.cos(b.y * r) * Math.cos((a.x - b.x) * r);
+    return 6371 * Math.acos(Math.max(-1, Math.min(1, c)));
+  }
+  // Match % = 100 e^(-d/2), d = RMS monthly temperature difference / 2.5 C
+  //                          + RMS difference of sqrt(monthly rain) / 2
+  // Lists skip a place within 100 km of a better match.
+  function analogs(T12, P12, k = 5) {
+    const all = meta.reference.map((r) => {
+      let dt = 0, dp = 0, dmm = 0;
       for (let i = 0; i < 12; i++) {
         dt += (T12[i] - r.T[i]) ** 2;
         dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
+        dmm += (P12[i] - r.P[i]) ** 2;
       }
       const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
-      return { r, d, sim: 100 * Math.exp(-d / 2) };
-    }).sort((a, b) => a.d - b.d).slice(0, 5);
+      return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12) };
+    }).sort((a, b) => a.d - b.d);
+    const out = [];
+    for (const a of all) {
+      if (a.r.y === undefined || out.every((b) => refKm(a.r, b.r) >= 100)) out.push(a);
+      if (out.length >= k) break;
+    }
+    return out;
   }
+  const whyText = (a) => `typical month ±${a.dT.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`;
 
   // ---------------------------------------------------------------- station
   function select(x, y, name) {
@@ -508,8 +535,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     drawChart(Tm, Tlo, Thi, P, top[0]);
     $("analogs").innerHTML = top.map((a) => {
       const kk = kop.find((q) => q.code === a.r.k);
-      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.a ? " · approx." : ""}</span></span>
+      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
         <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
+        <span class="why">${whyText(a)}</span>
         <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span></li>`;
     }).join("");
   }
@@ -796,8 +824,11 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     return html;
   }).join("");
 
-  $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${meta.reference.length} real cities (${meta.reference_source}). Southern-hemisphere cities are shifted half a year.`;
-  $("analog-note").textContent = `Closest of ${meta.reference.length} real cities by seasonal temperature and rainfall curves (${meta.reference_source}).`;
+  const nRef = meta.reference.length.toLocaleString("en");
+  $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${nRef} real places (${meta.reference_source}). Southern-hemisphere places are shifted half a year.`;
+  $("analog-note").textContent = `Closest of ${nRef} real places (${meta.reference_source}), no two within 100 km. `
+    + `Match % = 100 × e^(−d/2), where d = (typical monthly temperature difference ÷ 2.5 °C) + (typical difference in √rain ÷ 2): `
+    + `100% is identical, and each 2.5 °C off in a typical month multiplies it by 0.61.`;
 
   // ---------------------------------------------------------------- search: map towns and real cities
   const [, CH, CW] = A.T12.shape;
@@ -811,8 +842,51 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     cellElev[iy * CW + ix] = elev.data[q];
   }
   const refLabel = (r) => `${r.n}, ${r.c}`;
-  $("cities").innerHTML = meta.places.map((p) => `<option value="${esc(p.name)}" label="on the map"></option>`).join("")
-    + meta.reference.map((r) => `<option value="${esc(refLabel(r))}"></option>`).join("");
+  // suggestions: map towns first, then real places by name prefix (bigger first), then anywhere in the label
+  const fold = (t) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const refIndex = meta.reference.map((r) => ({ r, key: fold(refLabel(r)), name: fold(r.n) }))
+    .sort((a, b) => (b.r.p || 0) - (a.r.p || 0));
+  const placeIndex = meta.places.map((p) => ({ p, key: fold(p.name) }));
+  const sugg = $("find-suggest"), input = $("find-input");
+  let suggItems = [], suggActive = -1;
+  function suggest() {
+    const q = fold(input.value.trim());
+    suggItems = [];
+    if (q) {
+      for (const e of placeIndex) if (e.key.startsWith(q)) suggItems.push({ label: e.p.name, sub: "on the map" });
+      const seen = new Set();
+      const add = (e) => { if (!seen.has(e)) { seen.add(e); suggItems.push({ label: refLabel(e.r), sub: e.r.s ? `${e.r.k} · station` : e.r.k }); } };
+      for (const e of refIndex) { if (suggItems.length >= 10) break; if (e.name.startsWith(q)) add(e); }
+      for (const e of refIndex) { if (suggItems.length >= 10) break; if (e.key.includes(q)) add(e); }
+      suggItems = suggItems.slice(0, 10);
+    }
+    suggActive = -1;
+    sugg.innerHTML = suggItems.map((s, i) => `<li role="option" id="sg${i}" data-i="${i}" aria-selected="false"><span>${esc(s.label)}</span><span class="sub">${esc(s.sub)}</span></li>`).join("");
+    sugg.hidden = !suggItems.length;
+    input.setAttribute("aria-expanded", suggItems.length ? "true" : "false");
+  }
+  function pick(i) {
+    input.value = suggItems[i].label;
+    sugg.hidden = true; input.setAttribute("aria-expanded", "false");
+    runSearch(input.value);
+  }
+  input.addEventListener("input", suggest);
+  input.addEventListener("keydown", (e) => {
+    if (sugg.hidden) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      suggActive = (suggActive + (e.key === "ArrowDown" ? 1 : -1) + suggItems.length) % suggItems.length;
+      for (const li of sugg.children) li.setAttribute("aria-selected", li.dataset.i == suggActive ? "true" : "false");
+      input.setAttribute("aria-activedescendant", `sg${suggActive}`);
+      sugg.children[suggActive].scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter" && suggActive >= 0) {
+      e.preventDefault(); pick(suggActive);
+    } else if (e.key === "Escape") {
+      sugg.hidden = true; input.setAttribute("aria-expanded", "false");
+    }
+  });
+  sugg.addEventListener("mousedown", (e) => { const li = e.target.closest("li"); if (li) { e.preventDefault(); pick(+li.dataset.i); } });
+  input.addEventListener("blur", () => { sugg.hidden = true; input.setAttribute("aria-expanded", "false"); });
   const matchSvg = $("matchsvg");
   let matchState = null;          // {fill: svg markup, pins: [{x, y, i}]}
 
@@ -961,7 +1035,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     for (let c = 0; c < NC; c++) if (f[c] < l1) grow(((c % CW) + 0.5) * meta.cell_px, (Math.floor(c / CW) + 0.5) * meta.cell_px);
     for (const o of out) grow(o.p.x, o.p.y);
     fitTo(x0, y0, x1, y1);
-    $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.a ? ", approximate normals" : ""}).
+    $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.s ? ", weather station" : ""}).
       <span class="match-key"><span><i></i>very close</span><span><i class="close"></i>close</span><span><i class="far"></i>less alike</span></span>`;
     $("find-results").innerHTML = out.map((o, i) => `<li><span class="num">${i + 1}</span><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
       <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
@@ -973,10 +1047,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   function runSearch(query) {
     const q = query.trim().toLowerCase();
     if (!q) return;
+    sugg.hidden = true;
     const place = meta.places.find((p) => p.name.toLowerCase() === q);
-    const real = meta.reference.find((r) => refLabel(r).toLowerCase() === q) || meta.reference.find((r) => r.n.toLowerCase() === q);
+    const fq = fold(q);
+    const real = (refIndex.find((e) => e.key === fq) || refIndex.find((e) => e.name === fq) || {}).r;
     const placeLoose = meta.places.find((p) => p.name.toLowerCase().startsWith(q));
-    const realLoose = meta.reference.find((r) => r.n.toLowerCase().startsWith(q)) || meta.reference.find((r) => refLabel(r).toLowerCase().includes(q));
+    const realLoose = (refIndex.find((e) => e.name.startsWith(fq)) || refIndex.find((e) => e.key.includes(fq)) || {}).r;
     const hitPlace = place || (!real && placeLoose);
     if (hitPlace) {
       clearMatches();

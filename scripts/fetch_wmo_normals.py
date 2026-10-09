@@ -2,8 +2,9 @@
 
 The WMO publishes official climate normals (monthly mean max/min temperature
 and precipitation) for ~3,600 cities as JSON. This script downloads them and
-writes the same CSV format as data/real_cities_approx.csv; once the file
-exists, the analogue matching (rotclimate/analogs.py) uses it automatically.
+writes the CSV the analogue matching (rotclimate/analogs.py) reads: stations far
+from any city in data/real_cities_worldclim.csv become reference places, and
+scripts/build_reference.py uses the rest to cross-check the city normals.
 
     python scripts/fetch_wmo_normals.py            # needs worldweather.wmo.int
 
