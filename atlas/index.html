@@ -116,6 +116,8 @@ section { display: grid; gap: 16px; }
 .analogs .nm { font-weight: 700; }
 .analogs .ct { color: var(--ink-soft); font-weight: 400; }
 .analogs .sim { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--step--1); }
+.analogs li.vs-h { display: block; font-size: var(--step--1); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+.analogs li.vs .nm { text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
 .analogs .why { grid-column: 1 / -1; font-size: var(--step--1); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 .analogs .meter { grid-column: 1 / -1; height: 4px; background: var(--chip); border-radius: 2px; overflow: hidden; }
 .analogs .meter span { display: block; height: 100%; background: var(--brass); }
@@ -458,17 +460,24 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   // Match % = 100 e^(-d/2), d = RMS monthly temperature difference / 2.5 C
   //                          + RMS difference of sqrt(monthly rain) / 2
   // Lists skip a place within 100 km of a better match.
+  function compare(T12, P12, r) {
+    let dt = 0, dp = 0, dmm = 0;
+    for (let i = 0; i < 12; i++) {
+      dt += (T12[i] - r.T[i]) ** 2;
+      dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
+      dmm += (P12[i] - r.P[i]) ** 2;
+    }
+    const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
+    return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12) };
+  }
+  // climate at one map pixel, exactly as its station card shows it
+  function climateAt(x, y) {
+    const h = elev.data[pixIdx(x, y)], c = cell(x, y), lapse = meta.lapse * h / 1000;
+    return { h, c, lapse, T12: series("T12", c, 12).map((v) => v / 10 - lapse), P12: series("P12", c, 12) };
+  }
+  let activeRef = null;           // the real place being searched, if any
   function analogs(T12, P12, k = 5) {
-    const all = meta.reference.map((r) => {
-      let dt = 0, dp = 0, dmm = 0;
-      for (let i = 0; i < 12; i++) {
-        dt += (T12[i] - r.T[i]) ** 2;
-        dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
-        dmm += (P12[i] - r.P[i]) ** 2;
-      }
-      const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
-      return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12) };
-    }).sort((a, b) => a.d - b.d);
+    const all = meta.reference.map((r) => compare(T12, P12, r)).sort((a, b) => a.d - b.d);
     const out = [];
     for (const a of all) {
       if (a.r.y === undefined || out.every((b) => refKm(a.r, b.r) >= 100)) out.push(a);
@@ -511,8 +520,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const Tlo = series("Tlo", c, 11).map((v) => v / 10 - lapse);
     const Thi = series("Thi", c, 11).map((v) => v / 10 - lapse);
     const P = series("P", c, 11);
-    const T12 = series("T12", c, 12).map((v) => v / 10 - lapse);
-    const P12 = series("P12", c, 12);
+    const { T12, P12 } = climateAt(x, y);
     const K = kop[k];
     $("station-h").textContent = place ? place.name : "Unnamed place";
     $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
@@ -533,13 +541,17 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     ].map(([v, k]) => `<div class="readout"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join("");
     const top = analogs(T12, P12);
     drawChart(Tm, Tlo, Thi, P, top[0]);
-    $("analogs").innerHTML = top.map((a) => {
+    const row = (a, cls = "") => {
       const kk = kop.find((q) => q.code === a.r.k);
-      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
+      return `<li class="${cls}"><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
         <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
         <span class="why">${whyText(a)}</span>
         <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span></li>`;
-    }).join("");
+    };
+    // while a real place is being searched, show how this spot compares with it
+    const vs = activeRef && !top.some((a) => a.r === activeRef)
+      ? `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef), "vs")}<li class="vs-h">Closest overall</li>` : "";
+    $("analogs").innerHTML = vs + top.map((a) => row(a, a.r === activeRef ? "vs" : "")).join("");
   }
 
   // map local months onto the solstice-aligned analog bins for the dashed line
@@ -979,7 +991,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     return out.join("");
   }
 
-  function clearMatches() { matchState = null; drawMatches(); $("find-results").innerHTML = ""; }
+  function clearMatches() { matchState = null; activeRef = null; drawMatches(); $("find-results").innerHTML = ""; }
 
   function showReal(ref) {
     const d = new Float32Array(NC).fill(99);
@@ -1018,16 +1030,13 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     let fbest = Infinity;
     for (let c = 0; c < NC; c++) if (cellLand[c] && f[c] < fbest) fbest = f[c];
     const l1 = fbest + 0.25, l2 = fbest + 0.6;
-    // best-matching named towns
-    const order = Array.from(d.keys()).filter((c) => cellLand[c]).sort((a, b) => d[a] - d[b]);
-    const used = new Set(), out = [];
-    for (const c of order) {
-      const cx = ((c % CW) + 0.5) * meta.cell_px, cy = (Math.floor(c / CW) + 0.5) * meta.cell_px;
-      let bp = null, bd = 70 * 70;
-      for (const p of meta.places) { const dd = (p.x - cx) ** 2 + (p.y - cy) ** 2; if (dd < bd) { bd = dd; bp = p; } }
-      if (bp && !used.has(bp.name)) { used.add(bp.name); out.push({ p: bp, sim: 100 * Math.exp(-d[c] / 2) }); }
-      if (out.length >= 6) break;
-    }
+    // best-matching named towns, judged by the climate at each town itself
+    // (the same numbers its station card shows)
+    activeRef = ref;
+    const out = meta.places
+      .filter((p) => cls.data[pixIdx(Math.round(p.x), Math.round(p.y))] !== 255)
+      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref) }; })
+      .sort((a, b) => a.d - b.d).slice(0, 6);
     matchState = { fill: spotlight(f, l1, l2), pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
     // frame the very-close areas and the numbered towns
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
