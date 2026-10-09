@@ -1,7 +1,7 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-A physically based seasonal climate model for a 2200 × 1018 mile hand-drawn
-map. The model reads the map's layers (coast, height tiers, rivers, place
+A physically based seasonal climate model for a 2294 × 1062 mile hand-drawn
+map (pointy-top hexes with 15-mile sides). The model reads the map's layers (coast, height tiers, rivers, place
 names) and runs a year of weather in 73 five-day weeks on the local calendar.
 A calibrator then searches for what the map doesn't say — latitude, axial
 tilt, spin direction, how high the tiers are, and what lies beyond the edges —

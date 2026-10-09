@@ -7,8 +7,9 @@ Layers (all 2000 x 926 px, 1 px = 1.1 mi = 1.77 km):
   roads.webp           roads + settlement dots (drawing only)
   labels.webp          place names (positions transcribed to places.csv)
 
-The map is 2000 x 926 px, so its *long* side (2200.5 mi) runs east-west and
-the short side (1018.5 mi ~ 14.7 deg of latitude) north-south.
+The map is 2000 x 926 px on hexes with 15-mile sides (1.147 mi per px), so its
+*long* side (2293.7 mi) runs east-west and the short side (1062.0 mi ~ 15.4 deg
+of latitude) north-south.
 """
 from __future__ import annotations
 
