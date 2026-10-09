@@ -278,7 +278,7 @@ def _wind_grid(fr, spacing_km=110):
     return sl, X, Y, ok
 
 
-def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.5, ms=110):
+def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
     r = fr.r
     frames = []
     sl, X, Y, ok = _wind_grid(fr)
@@ -332,7 +332,7 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.5, ms=110):
         cb.ax.tick_params(labelsize=7)
         frames.append(_fig_to_pil(fig))
         plt.close(fig)
-    save_gif(frames, path, ms=ms)
+    save_gif(frames, path, ms=ms, colors=128)
 
 
 def koppen_frames_gif(items, path, ms=900, scale=0.5):

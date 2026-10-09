@@ -72,6 +72,8 @@ class Params:
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
     lake_coupling: float = 0.0        # v4: lakes/small seas follow land temp (0 = off)
     land_amplitude: float = 1.0       # v4: scale of the continental seasonal swing
+    storm_asym: float = 0.0           # v5: storm track stronger on the warm-current side
+    storm_reach: float = 0.0          # v5: ... and this many degrees further equatorward
 
     # ---------------------------------------------------------------- winds
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude

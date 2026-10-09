@@ -216,6 +216,13 @@ class ClimateModel:
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
             # peaks in the storm track
             storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
+            if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
+                side = (1.0 if p.retrograde else -1.0) * self.basin_side
+                storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
+                # ... and reach further equatorward there
+                shift = p.storm_reach * np.clip(side, 0, 1)
+                storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
+                                   * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
             eddy = p.eddy_rate * (0.15 + storm) / DAY
             sigE = p.eddy_scale_km / g.cell_km
             if p.eddy_rate > 0:
