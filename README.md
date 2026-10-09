@@ -24,15 +24,15 @@ between the wet and dry zones) or *Transitional* (humid, but between two zones' 
 
 ![Köppen map](output/koppen.png)
 
-### What the world must be like (best calibration, round 7)
+### What the world must be like (best calibration, round 11)
 
 | unknown | best fit |
 |---|---|
 | spin | **retrograde (opposite to Earth)** |
-| latitude | 24.7°N to 39.5°N (centre 32.1°N) |
-| axial tilt | 32.6° (Earth 23.4°) |
-| height tiers | lowland ≤ 277 m, hills ≤ 709 m, upland ≤ 2497 m, peaks to 4984 m |
-| land beyond the map | north 77%, south 99%, west 3%, east 11% |
+| latitude | 26.7°N to 41.5°N (centre 34.1°N) |
+| axial tilt | 26.2° (Earth 23.4°) |
+| height tiers | lowland ≤ 117 m, hills ≤ 651 m, upland ≤ 2357 m, peaks to 5068 m |
+| land beyond the map | north-west 65%, north-east ~100%, west 25%, east 15%, south-west 83%, south-east ~100% |
 
 The strongest result is the spin. With Earth-like spin, no calibration in any round could make
 the south-east hot and dry. A final fairness run with identical physics and budget confirms it:
