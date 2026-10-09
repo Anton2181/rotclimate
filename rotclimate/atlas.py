@@ -281,7 +281,7 @@ def river_segments(result, q_min=15.0):
 # extra display categories for the simulated-zones map (not part of the score)
 ZONE_EXTRAS = [
     (8, "Mountain (cold highland)", "#a3abb3"),
-    (9, "Steppe (semi-dry margin)", "#cdbb88"),
+    (9, "Grassland (semi-dry margin)", "#cdbb88"),
     (10, "Transitional", "#dcdcdc"),
 ]
 

@@ -13,7 +13,12 @@ until the simulated climate reproduces the painted target zones.
 Zoomable map layers (Köppen, your zones, the simulated climate in your zones, match accuracy,
 temperatures, precipitation). Click any place for its climograph in the local calendar and its
 closest real cities. Search a town on the map, or a real city to see outlined where on the map
-feels like it.
+feels like it (the magnifier button shows or hides the search box). The copy button puts the
+current view (zoom, outlines, names and all) on the clipboard as an image.
+
+In the simple-zones map, land that fits none of your seven zones is named for what it is:
+*Mountain* (cold highland: above ~2,200 m or summers below 15 °C), *Grassland* (a semi-dry margin
+between the wet and dry zones) or *Transitional* (humid, but between two zones' rules).
 
 ![The calibrated climate in your simple zones](output/simulated_zones.png)
 
