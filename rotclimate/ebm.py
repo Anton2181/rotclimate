@@ -120,6 +120,9 @@ class ZonalClimate:
     def land(self, lat, day):
         return self._interp(self.Tl, lat, day)
 
+    def land_annual(self, lat):
+        return np.interp(np.asarray(lat, float), self.lat, self.Tl.mean(0))
+
     def ocean(self, lat, day):
         return self._interp(self.To, lat, day)
 

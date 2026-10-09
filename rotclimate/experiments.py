@@ -69,10 +69,14 @@ def snapshot(p: Params, tag: str, title: str, note: str = "", it_dir=REPO / "cal
 
     Image.open(tmp).convert("RGB").save(it_dir / f"{tag}.png")
     tmp.unlink()
+    from .score import objective
+
     meta = dict(tag=tag, title=title, note=note, score=ev["total"], accuracy=ev["accuracy"],
+                balanced=objective(ev, "balanced"), rivers=ev["rivers"], realism=ev["realism"],
                 per_class=ev["per_class"], params=json.loads(json.dumps(p.__dict__)))
     (it_dir / f"{tag}.json").write_text(json.dumps(meta, indent=1, ensure_ascii=False))
-    print(f"{tag}: {ev['total']:.3f}  acc {ev['accuracy']:.3f}  " +
+    print(f"{tag}: {ev['total']:.3f}  balanced {meta['balanced']:.3f}  acc {ev['accuracy']:.3f}  "
+          f"rivers {ev['rivers']['spearman']:.2f}  " +
           " ".join(f"{k}={v:.2f}" for k, v in ev["per_class"].items()))
     return ev
 

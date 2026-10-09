@@ -89,12 +89,17 @@ class ClimateModel:
         self.basin_side = np.clip(gb / max(np.abs(gb).max(), 1e-9) * 2.0, -1, 1)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
+        # small water bodies (lakes, narrow bays): mostly land within ~120 km
+        self.lakeness = np.clip((ndi.gaussian_filter(land, 1.2 * cells_per_100km) - 0.35) / 0.5, 0, 1) * (~g.land)
         # terrain slopes (m/m), east and north components, on a smoothed surface
         hs = ndi.gaussian_filter(g.elev, 0.5 * cells_per_100km)
         self.dhdx = np.gradient(hs, axis=1) / dx
         self.dhdy = -np.gradient(hs, axis=0) / dx
         # wind slow-down over high/rough ground
-        self.drag = 1.0 / (1.0 + p.terrain_drag * (g.elev_max / 1000.0) ** 2)
+        # resolution-independent: highest ground within ~28 km (one calibration cell)
+        emax = ndi.maximum_filter(g.elev_max, size=max(1, int(round(28.0 / g.cell_km))))
+        self.drag = 1.0 / (1.0 + p.terrain_drag * (emax / 1000.0) ** 2)
+        self.conv_sigma = 28.0 / g.cell_km
         self.lat = g.lat
         self.col_sigma = 300.0 / g.cell_km
 
@@ -161,7 +166,11 @@ class ClimateModel:
         band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
-        return To + cur + self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
+        sst = To + cur + self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
+        if p.lake_coupling > 0:     # physics v4: lakes / small seas follow the land
+            sst = sst + p.lake_coupling * self.lakeness * (Tl - sst)
+            sst = np.maximum(sst, -1.8)          # sea water freezes, ice insulates
+        return sst
 
     # ------------------------------------------------------------------ run
     def run(self, steps: int | None = None, spinup: int = 8, progress=None) -> Result:
@@ -186,6 +195,9 @@ class ClimateModel:
             d = days[k]
             s = self.season_index(d)
             Tl = self.z.land(lat, d) + p.land_offset
+            if p.land_amplitude != 1.0:      # v4: continental seasonality
+                Tl_mean = self.z.land_annual(lat) + p.land_offset
+                Tl = Tl_mean + p.land_amplitude * (Tl - Tl_mean)
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
             SST = self.sst(d, To, Tl)
@@ -228,7 +240,7 @@ class ClimateModel:
                 Ws = w_sat(T_col - p.lapse_rate * h_km) * np.exp(-h_km / 6.0)
             W_ocean = p.ocean_rh * w_sat(SST)
             div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
-            conv = np.clip(-ndi.gaussian_filter(div, 1.0) / 2e-6, 0, 3)
+            conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
             up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
             sub = np.exp(-((lat - phi_h) / 6.0) ** 2)
             # subtropical highs sink hardest over the eastern side of ocean

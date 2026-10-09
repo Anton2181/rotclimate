@@ -87,6 +87,8 @@ SPACE_V3 = [g for g in SPACE if g[0] not in _BLOCK_GENES] + [
     ("eddy_rate", 0.0, 2.0),
     ("eddy_scale_km", 200.0, 900.0),
 ]
+# physics v4: lakes and small seas follow the land temperature
+SPACE_V4 = SPACE_V3 + [("lake_coupling", 0.0, 0.95), ("land_amplitude", 0.7, 1.7)]
 
 
 def _set_space(space):
@@ -224,15 +226,17 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     a = ap.parse_args()
     if a.physics == "v3":
         _set_space(SPACE_V3)
+    elif a.physics == "v4":
+        _set_space(SPACE_V4)
     base = Params.from_json(a.start) if a.start else Params()
     base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
-    if a.physics == "v3":
+    if a.physics in ("v3", "v4"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

@@ -1,0 +1,511 @@
+<title>Rotclimate Atlas</title>
+<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one wide map "plate" like an atlas spread, with a station card and
+   instrument-style readouts beneath; quiet slate chrome so the climate colours lead. */
+:root {
+  --paper: #eef1f1;
+  --plate: #f8faf9;
+  --ink: #1b262c;
+  --ink-soft: #4b5a62;
+  --rule: #c9d2d4;
+  --brass: #94641a;
+  --sea: #d6e4f0;
+  --temp: #c8452f;
+  --temp-band: rgba(200, 69, 47, 0.16);
+  --rain: #2f6db3;
+  --chip: #e2e8e9;
+  --font-display: "Spectral SC", "Iowan Old Style", Georgia, serif;
+  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.84rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.55rem;
+  --step-3: 2.3rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7;
+    --rule: #2c3a41; --brass: #d7a64b; --sea: #20303b; --temp: #f0745c;
+    --temp-band: rgba(240, 116, 92, 0.2); --rain: #6aa7ee; --chip: #22303a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7;
+  --rule: #2c3a41; --brass: #d7a64b; --sea: #20303b; --temp: #f0745c;
+  --temp-band: rgba(240, 116, 92, 0.2); --rain: #6aa7ee; --chip: #22303a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--step-0); line-height: 1.5;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); padding-block: 28px 64px;
+  display: grid; gap: 40px; }
+header { display: grid; gap: 8px; max-width: 70ch; }
+.eyebrow { font-family: var(--font-data); font-size: var(--step--1); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--brass); }
+h1, h2 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: 0.01em; }
+h1 { font-size: var(--step-3); line-height: 1.1; }
+h2 { font-size: var(--step-2); line-height: 1.2; }
+h3 { font-size: var(--step-1); margin: 0; font-weight: 700; }
+p { margin: 0; }
+.lede { color: var(--ink-soft); font-size: var(--step-1); }
+section { display: grid; gap: 16px; }
+.section-head { display: grid; gap: 4px; max-width: 70ch; }
+.section-head p { color: var(--ink-soft); }
+
+/* map plate */
+.plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 14px;
+  display: grid; gap: 12px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.layers { display: flex; flex-wrap: wrap; gap: 6px; }
+.layers button {
+  font: 500 var(--step--1) var(--font-body); color: var(--ink); background: var(--chip);
+  border: 1px solid transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer;
+}
+.layers button[aria-pressed="true"] { background: var(--ink); color: var(--plate); }
+.layers button:focus-visible, .toggle input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.toggle { display: flex; align-items: center; gap: 6px; font-size: var(--step--1); color: var(--ink-soft); cursor: pointer; }
+.stage { position: relative; aspect-ratio: 2000 / 926; max-width: 100%; background: var(--sea);
+  border-radius: 3px; overflow: hidden; cursor: crosshair; touch-action: manipulation; }
+.stage img, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage .labels { pointer-events: none; }
+.stage svg { pointer-events: none; overflow: visible; }
+.hint { position: absolute; left: 10px; bottom: 10px; font-size: var(--step--1); background: var(--plate);
+  color: var(--ink-soft); padding: 3px 9px; border-radius: 4px; border: 1px solid var(--rule); pointer-events: none; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--step--1); align-items: center; }
+.legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 5px;
+  vertical-align: -1px; border: 1px solid rgba(0,0,0,0.15); }
+.legend .code { font-family: var(--font-data); font-weight: 500; margin-right: 4px; }
+.legend .share { color: var(--ink-soft); font-family: var(--font-data); margin-left: 4px; }
+.ramp { display: grid; gap: 4px; width: min(420px, 100%); }
+.ramp .bar { height: 12px; border-radius: 2px; }
+.ramp .ticks { display: flex; justify-content: space-between; font-family: var(--font-data); font-size: 0.75rem; color: var(--ink-soft); }
+
+/* station */
+.station { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 860px) { .station { grid-template-columns: 1fr; } }
+.card { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.station-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.station-title h3 { font-family: var(--font-display); font-size: var(--step-2); font-weight: 600; }
+.kchip { font-family: var(--font-data); font-weight: 500; font-size: var(--step--1); padding: 2px 8px; border-radius: 4px; color: #111; }
+.kdesc { color: var(--ink-soft); }
+.readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; }
+.readout { border-top: 2px solid var(--rule); padding-top: 6px; }
+.readout .v { font-family: var(--font-data); font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+.readout .k { font-size: var(--step--1); color: var(--ink-soft); }
+.chart { overflow-x: auto; }
+.chart svg { width: 100%; min-width: 420px; height: auto; display: block; }
+.chart text { fill: var(--ink-soft); font-family: var(--font-data); font-size: 11px; }
+.chart .axis { stroke: var(--rule); stroke-width: 1; }
+.chart .zero { stroke: var(--ink-soft); stroke-width: 0.6; stroke-dasharray: 3 3; }
+.chart .bar { fill: var(--rain); opacity: 0.75; }
+.chart .band { fill: var(--temp-band); }
+.chart .line { fill: none; stroke: var(--temp); stroke-width: 2.4; }
+.chart .dot { fill: var(--temp); }
+.chart .analog { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 4 3; opacity: 0.6; }
+.analogs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.analogs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; }
+.analogs .nm { font-weight: 700; }
+.analogs .ct { color: var(--ink-soft); font-weight: 400; }
+.analogs .sim { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--step--1); }
+.analogs .meter { grid-column: 1 / -1; height: 4px; background: var(--chip); border-radius: 2px; overflow: hidden; }
+.analogs .meter span { display: block; height: 100%; background: var(--brass); }
+.note { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* facts + zones */
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+dl.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 16px; margin: 0; }
+dl.facts dt { color: var(--ink-soft); font-size: var(--step--1); padding-top: 2px; }
+dl.facts dd { margin: 0; font-family: var(--font-data); font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.zones { display: grid; gap: 8px; }
+.zone { display: grid; grid-template-columns: 14px minmax(0, 1fr) 3.5em; gap: 10px; align-items: center; font-size: var(--step--1); }
+.zone .sw { width: 14px; height: 14px; border-radius: 3px; }
+.zone .track { grid-column: 2; height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
+.zone .track span { display: block; height: 100%; background: var(--ink-soft); }
+.zone .val { font-family: var(--font-data); text-align: right; font-variant-numeric: tabular-nums; }
+.zone .lbl { grid-column: 2; }
+
+/* calendar */
+.calendar { display: flex; width: 100%; min-width: 640px; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.cal-wrap { overflow-x: auto; }
+.cal-m { padding: 8px 6px; border-right: 1px solid var(--rule); min-width: 0; position: relative; }
+.cal-m:last-child { border-right: 0; }
+.cal-m b { display: block; font-size: 0.82rem; line-height: 1.2; }
+.cal-m span { display: block; font-size: 0.72rem; color: var(--ink-soft); line-height: 1.2; }
+.cal-m.winter { background: color-mix(in srgb, var(--rain) 12%, var(--plate)); }
+.cal-m.summer { background: color-mix(in srgb, var(--temp) 12%, var(--plate)); }
+.cal-m.mid { background: var(--plate); }
+.cal-ev { font-family: var(--font-data); font-size: 0.68rem; color: var(--brass); margin-top: 4px; display: block; }
+
+/* media */
+.media { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 20px; }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+figure img { width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--rule); background: var(--plate); }
+figcaption { font-size: var(--step--1); color: var(--ink-soft); }
+footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Simulated climate · 73 five-day weeks · calibrated to your painted zones</span>
+    <h1>Rotclimate Atlas</h1>
+    <p class="lede">Click anywhere on land to see its climate through the local year, and which real places feel most alike.</p>
+  </header>
+
+  <section aria-labelledby="map-h">
+    <h2 id="map-h" hidden>Map</h2>
+    <div class="plate">
+      <div class="controls">
+        <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
+        <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
+      </div>
+      <div class="stage" id="stage">
+        <img id="base" alt="Climate map of the world" src="data/koppen.webp">
+        <img id="labels" class="labels" alt="" src="data/labels.png">
+        <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <span class="hint" id="hint">Click or tap the map</span>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="station-h" class="station">
+    <div class="card">
+      <div class="station-title">
+        <h3 id="station-h">—</h3>
+        <span class="kchip" id="kchip"></span>
+        <span class="kdesc" id="kdesc"></span>
+      </div>
+      <div class="readouts" id="readouts"></div>
+      <div class="chart" id="chart"></div>
+      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: warmest and coldest week. Dashed line: closest real-world match.</p>
+    </div>
+    <div class="card">
+      <h3>Feels like</h3>
+      <ol class="analogs" id="analogs"></ol>
+      <p class="note" id="analog-note"></p>
+    </div>
+  </section>
+
+  <section class="two">
+    <div class="card">
+      <h2>What the world must be like</h2>
+      <p class="note">The unknowns the calibration searched for, chosen so the simulated climate best reproduces your painted zones.</p>
+      <dl class="facts" id="facts"></dl>
+    </div>
+    <div class="card">
+      <h2>How close to your painting</h2>
+      <p class="note">How well each painted zone's climate rule is met (1 = everywhere).</p>
+      <div class="zones" id="zones"></div>
+      <p class="note" id="zone-total"></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The local year</h2>
+      <p>Ten months of 35 days plus 15 Holy Days. With the winter solstice on Titian Marigold 23, every month's season name matches the sun.</p>
+    </div>
+    <div class="cal-wrap"><div class="calendar" id="calendar"></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The year in motion</h2>
+      <p>Each frame is one five-day week. Arrows are surface winds.</p>
+    </div>
+    <div class="media">
+      <figure><img src="data/year_temperature.gif" alt="Animated temperature and winds through the year" loading="lazy"><figcaption>Temperature and wind</figcaption></figure>
+      <figure><img src="data/year_precipitation.gif" alt="Animated precipitation and snow through the year" loading="lazy"><figcaption>Rain, snow cover and wind</figcaption></figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>Experiments</h2>
+      <p>What changes if the planet were different. Outlines mark your painted zones.</p>
+    </div>
+    <div class="media">
+      <figure><img src="data/spin_flip.gif" alt="Climate with the planet spinning each way" loading="lazy"><figcaption>Spin direction: retrograde against Earth-like</figcaption></figure>
+      <figure><img src="data/tilt_sweep.gif" alt="Climate across axial tilts" loading="lazy"><figcaption>Axial tilt from 0° to 60°</figcaption></figure>
+      <figure><img src="data/surroundings.gif" alt="Climate with different land beyond the map" loading="lazy"><figcaption>What lies beyond the map edges</figcaption></figure>
+      <figure><img src="data/improvement.gif" alt="Model improvement iterations" loading="lazy"><figcaption>How the model improved, iteration by iteration</figcaption></figure>
+    </div>
+  </section>
+
+  <footer>
+    <p>Physics: a planet-wide seasonal energy balance (tilt and orbit), a 2-D model of winds, sea temperatures, air masses, moisture, rain and snow, and Köppen–Geiger classification. Unknown surroundings are procedurally generated; their land fraction per side is calibrated.</p>
+    <p id="ref-note"></p>
+  </footer>
+</div>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  for (const img of document.querySelectorAll("figure img")) {
+    img.addEventListener("error", () => { img.closest("figure").hidden = true; });
+  }
+
+  let meta, buf;
+  try {
+    meta = await (await fetch("data/atlas.json")).json();
+    buf = await (await fetch("data/atlas.bin")).arrayBuffer();
+  } catch (e) {
+    $("hint").textContent = "Climate data failed to load. Reload the page to try again.";
+    return;
+  }
+  const T = { uint8: Uint8Array, uint16: Uint16Array, int16: Int16Array };
+  const A = {};
+  for (const [k, a] of Object.entries(meta.arrays)) {
+    const n = a.shape.reduce((x, y) => x * y, 1);
+    A[k] = { data: new T[a.dtype](buf, a.offset, n), shape: a.shape };
+  }
+  const W = meta.width, H = meta.height;
+  const cls = A.cls, elev = A.elev;
+  const kop = meta.koppen;
+  const rgb = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+  // ---------------------------------------------------------------- layers
+  let current = "koppen";
+  const layerBtns = $("layers");
+  for (const L of meta.layers) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = L.label; b.id = "layer-" + L.id;
+    b.setAttribute("aria-pressed", L.id === current ? "true" : "false");
+    b.addEventListener("click", () => setLayer(L.id));
+    layerBtns.appendChild(b);
+  }
+  function setLayer(id) {
+    current = id;
+    const L = meta.layers.find((l) => l.id === id);
+    $("base").src = "data/" + L.file;
+    for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
+    drawLegend(L);
+  }
+  $("names").addEventListener("change", (e) => { $("labels").hidden = !e.target.checked; });
+
+  function drawLegend(L) {
+    const el = $("legend");
+    if (L.kind === "koppen") {
+      el.innerHTML = meta.present.map((c) => {
+        const k = kop.find((x) => x.code === c);
+        return `<span title="${esc(k.desc)}"><span class="sw" style="background:${rgb(k.rgb)}"></span><span class="code">${c}</span>${esc(k.desc)}<span class="share">${k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)}%</span></span>`;
+      }).join("");
+    } else if (L.kind === "target") {
+      el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
+    } else {
+      const fmt = (v) => (L.log ? Math.round(v) : v);
+      const ticks = [];
+      for (let i = 0; i <= 4; i++) {
+        const f = i / 4;
+        ticks.push(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, f) : L.vmin + (L.vmax - L.vmin) * f);
+      }
+      el.innerHTML = `<div class="ramp"><div class="bar" style="background:linear-gradient(90deg,${L.stops.join(",")})"></div>
+        <div class="ticks">${ticks.map((t) => `<span>${fmt(Math.round(t / (L.log ? 10 : 1)) * (L.log ? 10 : 1))}</span>`).join("")}</div></div>
+        <span class="note">${esc(L.unit)}</span>`;
+    }
+  }
+
+  // ---------------------------------------------------------------- lookups
+  const halfW = cls.shape[1];
+  const pixIdx = (x, y) => Math.min(cls.shape[0] - 1, y >> 1) * halfW + Math.min(halfW - 1, x >> 1);
+  const cell = (x, y) => {
+    const [, h, w] = A.Tm.shape;
+    const iy = Math.min(h - 1, Math.floor(y / meta.cell_px));
+    const ix = Math.min(w - 1, Math.floor(x / meta.cell_px));
+    return { iy, ix, h, w };
+  };
+  const series = (name, c, n) => {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(A[name].data[(m * c.h + c.iy) * c.w + c.ix]);
+    return out;
+  };
+  const latOf = (y) => meta.lat_center + (H / 2 - y) * meta.mi_per_px * 1.609344 / meta.km_per_deg;
+
+  function nearestPlace(x, y) {
+    let best = null, bd = 45 * 45;
+    for (const p of meta.places) {
+      const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+      if (d < bd) { bd = d; best = p; }
+    }
+    return best;
+  }
+
+  function analogs(T12, P12) {
+    return meta.reference.map((r) => {
+      let dt = 0, dp = 0;
+      for (let i = 0; i < 12; i++) {
+        dt += (T12[i] - r.T[i]) ** 2;
+        dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
+      }
+      const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
+      return { r, d, sim: 100 * Math.exp(-d / 2) };
+    }).sort((a, b) => a.d - b.d).slice(0, 5);
+  }
+
+  // ---------------------------------------------------------------- station
+  function select(x, y, name) {
+    x = Math.max(0, Math.min(W - 1, Math.round(x)));
+    y = Math.max(0, Math.min(H - 1, Math.round(y)));
+    let k = cls.data[pixIdx(x, y)];
+    if (k === 255 && !name) {
+      // snap a click on the sea to the nearest coast within ~40 px
+      let best = null, bd = Infinity;
+      for (let dy = -40; dy <= 40; dy += 2) for (let dx = -40; dx <= 40; dx += 2) {
+        const xx = x + dx, yy = y + dy;
+        if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+        const d = dx * dx + dy * dy;
+        if (d < bd && cls.data[pixIdx(xx, yy)] !== 255) { bd = d; best = [xx, yy]; }
+      }
+      if (best) { [x, y] = best; k = cls.data[pixIdx(x, y)]; }
+    }
+    const svg = $("marker");
+    svg.innerHTML = `<circle cx="${x}" cy="${y}" r="14" fill="none" stroke="#111" stroke-width="5" opacity="0.55"/>
+      <circle cx="${x}" cy="${y}" r="14" fill="none" stroke="#fff" stroke-width="2.5"/>`;
+    if (k === 255) {
+      $("station-h").textContent = "Open sea";
+      $("kchip").textContent = ""; $("kchip").style.background = "transparent";
+      $("kdesc").textContent = "Pick a spot on land to see its climate.";
+      $("readouts").innerHTML = ""; $("chart").innerHTML = ""; $("analogs").innerHTML = "";
+      return;
+    }
+    const place = name ? meta.places.find((p) => p.name === name) : nearestPlace(x, y);
+    const h = elev.data[pixIdx(x, y)];
+    const c = cell(x, y);
+    const lapse = meta.lapse * h / 1000;
+    const Tm = series("Tm", c, 11).map((v) => v / 10 - lapse);
+    const Tlo = series("Tlo", c, 11).map((v) => v / 10 - lapse);
+    const Thi = series("Thi", c, 11).map((v) => v / 10 - lapse);
+    const P = series("P", c, 11);
+    const T12 = series("T12", c, 12).map((v) => v / 10 - lapse);
+    const P12 = series("P12", c, 12);
+    const K = kop[k];
+    $("station-h").textContent = place ? place.name : "Unnamed place";
+    $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
+    $("kdesc").textContent = K.desc;
+    const lat = latOf(y);
+    const months = meta.months;
+    const iMin = Tm.slice(0, 10).indexOf(Math.min(...Tm.slice(0, 10)));
+    const iMax = Tm.slice(0, 10).indexOf(Math.max(...Tm.slice(0, 10)));
+    const total = P.reduce((a, b) => a + b, 0);
+    const snowy = series("snow", c, 11).some((v) => v > 10);
+    $("readouts").innerHTML = [
+      [`${lat.toFixed(1)}°N`, "latitude"],
+      [`${Math.round(h)} m`, "elevation"],
+      [`${Tm[iMin].toFixed(1)}°C`, `coldest, ${months[iMin].name}`],
+      [`${Tm[iMax].toFixed(1)}°C`, `warmest, ${months[iMax].name}`],
+      [`${Math.round(total)} mm`, "precipitation / year"],
+      [snowy ? "yes" : "no", "lasting winter snow"],
+    ].map(([v, k]) => `<div class="readout"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join("");
+    const top = analogs(T12, P12);
+    drawChart(Tm, Tlo, Thi, P, top[0]);
+    $("analogs").innerHTML = top.map((a) => {
+      const kk = kop.find((q) => q.code === a.r.k);
+      return `<li><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}</span></span>
+        <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
+        <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span></li>`;
+    }).join("");
+  }
+
+  // map local months onto the solstice-aligned analog bins for the dashed line
+  function analogOnLocal(r) {
+    const out = [];
+    let start = 0;
+    for (const m of meta.months) {
+      const mid = start + m.days / 2;
+      const phase = ((mid - meta.solstice_day) % 365 + 365) % 365;
+      const f = phase / (365 / 12) - 0.5;
+      const i0 = ((Math.floor(f) % 12) + 12) % 12, i1 = (i0 + 1) % 12, w = f - Math.floor(f);
+      out.push(r.T[i0] * (1 - w) + r.T[i1] * w);
+      start += m.days;
+    }
+    return out;
+  }
+
+  function drawChart(Tm, Tlo, Thi, P, best) {
+    const months = meta.months;
+    const w = 640, h = 280, l = 44, r = 48, t = 14, b = 42;
+    const days = months.map((m) => m.days);
+    const totalDays = days.reduce((a, b) => a + b, 0);
+    const xs = []; let acc = 0;
+    for (const d of days) { xs.push({ x0: l + (acc / totalDays) * (w - l - r), x1: l + ((acc + d) / totalDays) * (w - l - r) }); acc += d; }
+    const an = best ? analogOnLocal(best.r) : [];
+    const tmin = Math.floor((Math.min(...Tlo, ...an) - 2) / 5) * 5;
+    const tmax = Math.ceil((Math.max(...Thi, ...an) + 2) / 5) * 5;
+    const pmax = Math.max(100, Math.ceil(Math.max(...P) / 50) * 50);
+    const yT = (v) => t + (tmax - v) / (tmax - tmin) * (h - t - b);
+    const yP = (v) => h - b - v / pmax * (h - t - b);
+    const cx = xs.map((s) => (s.x0 + s.x1) / 2);
+    let s = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Climograph">`;
+    for (let v = tmin; v <= tmax; v += 5) s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${yT(v)}" y2="${yT(v)}" opacity="0.5"/><text x="${l - 6}" y="${yT(v) + 4}" text-anchor="end">${v}°</text>`;
+    if (tmin < 0 && tmax > 0) s += `<line class="zero" x1="${l}" x2="${w - r}" y1="${yT(0)}" y2="${yT(0)}"/>`;
+    for (let i = 0; i <= 4; i++) { const v = pmax * i / 4; s += `<text x="${w - r + 6}" y="${yP(v) + 4}">${Math.round(v)}</text>`; }
+    s += `<text x="${w - r + 6}" y="${h - b + 16}">mm</text>`;
+    P.forEach((v, i) => { const pad = (xs[i].x1 - xs[i].x0) * 0.16; s += `<rect class="bar" x="${xs[i].x0 + pad}" y="${yP(v)}" width="${xs[i].x1 - xs[i].x0 - 2 * pad}" height="${Math.max(0, h - b - yP(v))}"/>`; });
+    let band = `M${cx[0]},${yT(Thi[0])}`;
+    for (let i = 1; i < cx.length; i++) band += `L${cx[i]},${yT(Thi[i])}`;
+    for (let i = cx.length - 1; i >= 0; i--) band += `L${cx[i]},${yT(Tlo[i])}`;
+    s += `<path class="band" d="${band}Z"/>`;
+    if (an.length) s += `<path class="analog" d="${an.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
+    s += `<path class="line" d="${Tm.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
+    Tm.forEach((v, i) => { s += `<circle class="dot" cx="${cx[i]}" cy="${yT(v)}" r="3"/>`; });
+    months.forEach((m, i) => { s += `<text x="${cx[i]}" y="${h - b + 16}" text-anchor="middle">${m.short}</text>`; });
+    s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${h - b}" y2="${h - b}"/>`;
+    if (best) s += `<text x="${l}" y="${h - 6}">dashed: ${esc(best.r.n)}</text>`;
+    s += `</svg>`;
+    $("chart").innerHTML = s;
+  }
+
+  $("stage").addEventListener("click", (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = (e.clientX - rect.left) / rect.width * W;
+    const y = (e.clientY - rect.top) / rect.height * H;
+    $("hint").hidden = true;
+    select(x, y);
+  });
+
+  // ---------------------------------------------------------------- facts, zones, calendar
+  const wd = meta.world;
+  const facts = [
+    ["Spin", wd.retrograde ? "retrograde (opposite to Earth)" : "prograde (like Earth)"],
+    ["Latitude", `${wd.lat_south.toFixed(1)}°N to ${wd.lat_north.toFixed(1)}°N`],
+    ["Axial tilt", `${wd.tilt.toFixed(1)}° (Earth 23.4°)`],
+    ["Height tiers", `lowland ≤ ${wd.tier_tops[0]} m · hills ≤ ${wd.tier_tops[1]} m · upland ≤ ${wd.tier_tops[2]} m · peaks to ${wd.tier_tops[3]} m`],
+  ];
+  if (wd.beyond) facts.push(["Land beyond the map", ["north", "south", "west", "east"].map((s) => `${s} ${Math.round(wd.beyond[s] * 100)}%`).join(" · ")]);
+  $("facts").innerHTML = facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+  $("zones").innerHTML = meta.zones.map((z) => `<div class="zone"><span class="sw" style="background:${z.color}"></span>
+      <span class="lbl">${esc(z.label)}</span><span class="val">${z.score.toFixed(2)}</span>
+      <span></span><span class="track"><span style="width:${(z.score * 100).toFixed(0)}%"></span></span></div>`).join("");
+  $("zone-total").textContent = `Overall ${meta.score.toFixed(2)}; ${Math.round(meta.accuracy * 100)}% of painted land falls in its own zone's best-matching rule.`;
+
+  const events = { 22: "winter solstice", 113: "spring equinox", 204: "summer solstice", 295: "autumn equinox" };
+  let start = 0;
+  $("calendar").innerHTML = meta.months.map((m) => {
+    const evs = Object.entries(events).filter(([d]) => d >= start && d < start + m.days)
+      .map(([d, n]) => `<span class="cal-ev">${n} · day ${d - start + 1}</span>`).join("");
+    const cl = /winter/.test(m.season) && !/spring/.test(m.season) ? "winter" : (/summer/.test(m.season) && !/fall/.test(m.season) ? "summer" : "mid");
+    const html = `<div class="cal-m ${cl}" style="flex:${m.days}"><b>${esc(m.name)}</b><span>${esc(m.season)}</span>${evs}</div>`;
+    start += m.days;
+    return html;
+  }).join("");
+
+  $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${meta.reference.length} real cities (${meta.reference_source}). Southern-hemisphere cities are shifted half a year.`;
+  $("analog-note").textContent = `Closest of ${meta.reference.length} real cities by seasonal temperature and rainfall curves (${meta.reference_source}).`;
+
+  setLayer("koppen");
+  const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
+  select(start0.x, start0.y + 8, start0.name);
+})();
+</script>

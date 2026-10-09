@@ -69,7 +69,9 @@ class Params:
     current_strength: float = 4.0     # K, boundary current SST anomaly
     sst_offset: float = 0.0           # K, global SST tweak
     land_offset: float = 0.0          # K, global land-column tweak
-    inland_sea_warming: float = 2.0   # K, summer warming of enclosed seas
+    inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
+    lake_coupling: float = 0.0        # v4: lakes/small seas follow land temp (0 = off)
+    land_amplitude: float = 1.0       # v4: scale of the continental seasonal swing
 
     # ---------------------------------------------------------------- winds
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude

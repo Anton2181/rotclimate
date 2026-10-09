@@ -104,6 +104,10 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     Thi = np.stack([Tsl[gi].max(0)[sl] for gi in groups])
     Pm = np.stack([P[gi].sum(0)[sl] * cal.YEAR_DAYS / result.nt for gi in groups])
     snow = np.stack([fr.coarse_fill(result.snow[gi].mean(0))[sl] for gi in groups])
+    from .analogs import model_bins, reference_payload, reference_source
+
+    T12, P12 = model_bins(Tsl, P, result.days, p.winter_solstice_day, p.year_days)
+    T12, P12 = T12[(slice(None),) + sl], P12[(slice(None),) + sl]
     # thin to <= 260 cells wide to keep the download small
     step = max(1, int(np.ceil(nx_m / 260)))
     if step > 1:
@@ -111,7 +115,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
             n, hh, ww = a.shape
             hh2, ww2 = hh // step * step, ww // step * step
             return a[:, :hh2, :ww2].reshape(n, hh2 // step, step, ww2 // step, step).mean(axis=(2, 4))
-        Tm, Tlo, Thi, Pm, snow = map(thin, (Tm, Tlo, Thi, Pm, snow))
+        Tm, Tlo, Thi, Pm, snow, T12, P12 = map(thin, (Tm, Tlo, Thi, Pm, snow, T12, P12))
     cell_px = g.f * step
     arrays = {
         "cls": cls, "elev": elev,
@@ -119,6 +123,8 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         "Thi": np.round(Thi * 10).astype(np.int16),
         "P": np.round(np.clip(Pm, 0, 65000)).astype(np.uint16),
         "snow": np.round(np.clip(snow, 0, 65000)).astype(np.uint16),
+        "T12": np.round(T12 * 10).astype(np.int16),
+        "P12": np.round(np.clip(P12, 0, 65000)).astype(np.uint16),
     }
     offsets, blob = {}, bytearray()
     for name, arr in arrays.items():
@@ -145,6 +151,9 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         zones=[dict(key=key, label=TARGET_LABELS[cid], color=TARGET_DRAW_COLORS[cid],
                     score=ev["per_class"][key]) for cid, key, _, _ in TARGET_CLASSES],
         score=ev["total"], accuracy=ev["accuracy"],
+        layers=_layer_meta(),
+        reference=reference_payload(), reference_source=reference_source(),
+        solstice_day=p.winter_solstice_day,
         world=dict(lat_south=p.lat_center - H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
                    lat_north=p.lat_center + H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
                    tilt=p.tilt, retrograde=p.retrograde, tier_tops=list(p.tier_tops),
@@ -154,6 +163,28 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     )
     (outdir / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))
     return meta
+
+
+def _layer_meta():
+    import matplotlib.pyplot as plt
+    import matplotlib.colors as mc
+
+    def stops(cmap, n=9):
+        cm = plt.get_cmap(cmap)
+        return [mc.to_hex(cm(i / (n - 1))) for i in range(n)]
+
+    return [
+        dict(id="koppen", file="koppen.webp", label="Köppen", kind="koppen"),
+        dict(id="target", file="target.webp", label="Your zones", kind="target"),
+        dict(id="t_annual", file="t_annual.webp", label="Mean temperature", kind="ramp",
+             unit="°C, year mean", vmin=-10, vmax=30, stops=stops("turbo")),
+        dict(id="t_cold", file="t_cold.webp", label="Coldest month", kind="ramp",
+             unit="°C, coldest month", vmin=-25, vmax=25, stops=stops("turbo")),
+        dict(id="t_hot", file="t_hot.webp", label="Warmest month", kind="ramp",
+             unit="°C, warmest month", vmin=0, vmax=40, stops=stops("turbo")),
+        dict(id="precip", file="precip.webp", label="Precipitation", kind="ramp",
+             unit="mm per year", vmin=100, vmax=3000, log=True, stops=stops("YlGnBu")),
+    ]
 
 
 def copy_media(outdir: Path = ATLAS / "data", src: Path = REPO / "output"):
