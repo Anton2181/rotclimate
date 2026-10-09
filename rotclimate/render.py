@@ -402,8 +402,14 @@ def climograph_panel(ax, fr: FullRes, x, y, name):
 
 
 def climographs(fr: FullRes, names, path, ncols=6):
-    places = {p["name"]: p for p in load_places()}
-    sel = [places[n] for n in names if n in places]
+    import unicodedata
+
+    def norm(t):
+        t = unicodedata.normalize("NFKD", t).encode("ascii", "ignore").decode().casefold()
+        return "".join(ch for ch in t if ch.isalnum()).replace("l", "i")
+
+    places = {norm(p["name"]): p for p in load_places()}
+    sel = [places[norm(n)] for n in names if norm(n) in places]
     nrows = int(np.ceil(len(sel) / ncols))
     fig, axs = plt.subplots(nrows, ncols, figsize=(3.3 * ncols, 3.5 * nrows), dpi=100)
     for ax, pl in zip(np.ravel(axs), sel):

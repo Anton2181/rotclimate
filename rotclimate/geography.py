@@ -165,7 +165,7 @@ def load_places():
     rows = []
     with open(DATA / "places.csv", newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
-            rows.append(dict(name=r["name"], x=float(r["x"]), y=float(r["y"]), kind=r["kind"]))
+            rows.append(dict(name=r["name"], x=float(r["x"]), y=float(r["y"]), kind=r.get("kind", "town")))
     return rows
 
 

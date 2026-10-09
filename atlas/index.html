@@ -352,14 +352,16 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
     } else {
-      const fmt = (v) => (L.log ? Math.round(v) : v);
+      const span = L.vmax - L.vmin;
+      const fmt = (v) => L.log ? String(Math.round(v / 10) * 10)
+        : span <= 2 ? String(Math.round(v * 100) / 100) : String(Math.round(v));
       const ticks = [];
       for (let i = 0; i <= 4; i++) {
         const f = i / 4;
-        ticks.push(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, f) : L.vmin + (L.vmax - L.vmin) * f);
+        ticks.push(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, f) : L.vmin + span * f);
       }
       el.innerHTML = `<div class="ramp"><div class="bar" style="background:linear-gradient(90deg,${L.stops.join(",")})"></div>
-        <div class="ticks">${ticks.map((t) => `<span>${fmt(Math.round(t / (L.log ? 10 : 1)) * (L.log ? 10 : 1))}</span>`).join("")}</div></div>
+        <div class="ticks">${ticks.map((t) => `<span>${fmt(t)}</span>`).join("")}</div></div>
         <span class="note">${esc(L.unit)}</span>`;
     }
   }
