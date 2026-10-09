@@ -30,7 +30,7 @@ RULES = {
 }
 
 
-def memberships(ix: dict) -> dict:
+def memberships(ix: dict, floodplain=None) -> dict:
     Tc, Th, MAT, ar = ix["Tcold"], ix["Thot"], ix["MAT"], ix["aridity"]
     lar = np.log(np.maximum(ar, 1e-3))
     humid = lambda a: sig((lar - np.log(a)) / 0.18)
@@ -42,7 +42,8 @@ def memberships(ix: dict) -> dict:
         "cold_dry": cold * arid(1.3),
         "warm_wet": sig((Tc - 1.0) / 2.0) * sig((Th - 20) / 1.5) * humid(1.8) * (1 - summer_dry),
         "med": sig((Th - 22) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
-        "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0) * humid(2.3),
+        "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0)
+        * (humid(2.3) if floodplain is None else np.maximum(humid(2.3), floodplain * humid(1.2))),
         "tree": sig((Tc - 2) / 2.0) * humid(1.6),
         "hot_dry": sig((MAT - 17) / 1.2) * arid(1.0),
     }
@@ -54,6 +55,12 @@ def evaluate(result, land_only=True):
     st = monthly_stats(result.T, result.P, result.days, p.year_days,
                        summer_solstice=p.winter_solstice_day + p.year_days / 2)
     ix = climate_indices(st["Tm"], st["Pm"], st["summer"])
+    from .hydrology import analyse
+
+    hyd = analyse(result)
+    # (a river-floodplain route to "swampy" was tested and rejected: in the
+    # model the painted swamp coast is no more river-fed than other lowland,
+    # so it would only loosen the rule - see docs/ITERATIONS.md)
     mem = memberships(ix)
     valid = g.inmap & (g.land if land_only else True)
     per = {}
@@ -77,7 +84,25 @@ def evaluate(result, land_only=True):
                    share_over_3500=float((MAP > 3500).mean()))
     return dict(total=total, per_class=per, accuracy=acc, confusion=conf,
                 indices=ix, memberships=mem, monthly=st, predicted=pred,
-                rivers=river_check(result, ix), realism=realism)
+                rivers={**river_check(result, ix), **river_network_check(g, hyd)},
+                realism=realism, hydrology=hyd)
+
+
+def river_network_check(g, hyd, q_min=20.0):
+    """Do the simulated big rivers (discharge > q_min m3/s) run where rivers
+    are drawn?  recall = share of drawn-river cells within one cell of a
+    simulated river; precision = the converse."""
+    from scipy import ndimage as ndi
+
+    land = g.inmap & g.land
+    drawn = (g.rivers > 0.002) & land
+    sim = (hyd["discharge"] > q_min) & land
+    if not drawn.any() or not sim.any():
+        return dict(net_recall=np.nan, net_precision=np.nan)
+    k = np.ones((3, 3), bool)
+    recall = float((drawn & ndi.binary_dilation(sim, k)).sum() / drawn.sum())
+    precision = float((sim & ndi.binary_dilation(drawn, k)).sum() / sim.sum())
+    return dict(net_recall=recall, net_precision=precision)
 
 
 def objective(ev, mode="mean"):

@@ -80,6 +80,7 @@ python -m rotclimate calibrate --physics v4 --objective balanced --seeds 1,2 \
        --start calibration/best_params.json --out calibration/my_run --evals 600
 python -m rotclimate.experiments tilt --params calibration/best_params.json --out output/tilt_sweep.gif
 python scripts/fetch_wmo_normals.py      # official city normals for the analogues (needs worldweather.wmo.int)
+python -m pytest -q                      # fast checks (calendar, Köppen, solver, hydrology, end-to-end)
 ```
 
 To view the interactive atlas locally, run `python -m http.server -d atlas` and open
@@ -100,6 +101,8 @@ The 28 km grid used for calibration simulates a year in about 1 s.
 | `rotclimate/model.py`, `solver.py` | the 2-D seasonal model (winds, temperature, moisture, rain, snow) |
 | `rotclimate/koppen.py`, `score.py` | Köppen–Geiger classes; fuzzy scoring against the painted zones; river check |
 | `rotclimate/analogs.py` | real-world "feels like" matching on solstice-aligned seasons |
+| `rotclimate/hydrology.py` | runoff, priority-flood drainage, river discharge (validated against your drawn rivers) |
+| `tests/` | fast automated checks |
 | `rotclimate/calibrate.py` | CMA-ES search over ~45 unknowns |
 | `rotclimate/render.py`, `experiments.py`, `atlas.py` | maps, GIFs, climographs, sweeps, atlas data |
 | `atlas/index.html` | the interactive atlas page |

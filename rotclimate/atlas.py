@@ -213,6 +213,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
                     score=ev["per_class"][key]) for cid, key, _, _ in TARGET_CLASSES],
         score=ev["total"], accuracy=ev["accuracy"],
         layers=_layer_meta(),
+        rivers_sim=river_segments(result),
         reference=reference_payload(), reference_source=reference_source(),
         solstice_day=p.winter_solstice_day,
         world=dict(lat_south=p.lat_center - H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
@@ -250,6 +251,30 @@ def agreement_layer(fr, outdir: Path = ATLAS / "data"):
     rgb[edge & fr.land] *= 0.45
     rgb[~fr.land] = OCEAN_RGB
     _save_webp(_overlay_rivers(rgb, fr), outdir / "agreement.webp")
+
+
+def river_segments(result, q_min=15.0):
+    """Simulated river network as [x1, y1, x2, y2, q] segments in map pixels
+    (cell centre to downstream cell centre, discharge q in m3/s)."""
+    from .hydrology import analyse
+
+    g = result.grid
+    hyd = analyse(result)
+    q = hyd["discharge"]
+    recv = hyd["recv"]
+    ny, nx = q.shape
+    segs = []
+    sel = np.flatnonzero((q.ravel() > q_min) & g.land.ravel() & g.inmap.ravel())
+    for c in sel:
+        r = recv[c]
+        if r < 0:
+            continue
+        i, j = divmod(int(c), nx)
+        ri, rj = divmod(int(r), nx)
+        segs.append([round((j - g.pad + 0.5) * g.f, 1), round((i - g.pad + 0.5) * g.f, 1),
+                     round((rj - g.pad + 0.5) * g.f, 1), round((ri - g.pad + 0.5) * g.f, 1),
+                     round(float(q.ravel()[c]), 1)])
+    return segs
 
 
 def zone_classes(mem, land, threshold=0.3):

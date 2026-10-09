@@ -204,6 +204,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
         <div class="toggles">
           <label class="toggle"><input type="checkbox" id="searchtoggle" checked> Search box</label>
           <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
+          <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
         </div>
       </div>
       <div class="mapwrap">
@@ -221,6 +222,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <div class="stage" id="stage">
         <div class="viewport" id="viewport">
           <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
+          <svg id="simrivers" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
           <svg id="matchsvg" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
@@ -538,6 +540,21 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   const namesSvg = $("placenames");
   namesSvg.innerHTML = meta.places.map((p) =>
     `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central">${esc(p.name)}</text>`).join("");
+
+  // ---------------------------------------------------------------- simulated rivers (vector)
+  const rivSvg = $("simrivers");
+  if (meta.rivers_sim && meta.rivers_sim.length) {
+    const classes = [[15, 50, 0.9], [50, 200, 1.5], [200, 800, 2.3], [800, 1e9, 3.2]];
+    rivSvg.innerHTML = classes.map(([lo, hi, w]) => {
+      const d = meta.rivers_sim.filter((r) => r[4] >= lo && r[4] < hi)
+        .map((r) => `M${r[0]} ${r[1]}L${r[2]} ${r[3]}`).join("");
+      return `<path d="${d}" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="${w + 2}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+        <path d="${d}" fill="none" stroke="#0b3a9c" stroke-width="${w}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+    }).join("");
+  } else {
+    $("rivtoggle").closest("label").hidden = true;
+  }
+  $("rivtoggle").addEventListener("change", (e) => { rivSvg.style.display = e.target.checked ? "" : "none"; });
 
   // ---------------------------------------------------------------- zoom & pan
   const stage = $("stage"), vp = $("viewport");
