@@ -49,6 +49,33 @@ def memberships(ix: dict, floodplain=None) -> dict:
     }
 
 
+# A zone's rule may also hold where a narrower zone is painted: every swampy
+# place is also warm-and-wet and forested, and warm-and-wet places forested.
+BROADER = {"tree": ("swamp", "warm_wet"), "warm_wet": ("swamp",)}
+
+
+def precision_f1(mem, target, valid, coverage, elev=None, high=1500.0):
+    """Per zone: precision = the share of the rule's membership (summed over
+    painted land) that falls inside its own painted zone, or inside a
+    narrower zone it contains; F1 = harmonic mean with coverage (the zone
+    score). Coverage alone never penalises a rule spilling into areas painted
+    as something else. Ground above `high` m is not counted as spill: ridges
+    inside a broadly painted zone are rightly colder and wetter."""
+    prec, f1 = {}, {}
+    for cid, key, _, _ in TARGET_CLASSES:
+        ok_ids = [cid] + [c for c, k, _, _ in TARGET_CLASSES if k in BROADER.get(key, ())]
+        elsewhere = valid & (target > 0) & ~np.isin(target, ok_ids)
+        if elev is not None:
+            elsewhere &= elev <= high
+        own = valid & (target == cid)
+        a = float(mem[key][own].sum())
+        b = float(mem[key][elsewhere].sum())
+        prec[key] = a / (a + b) if a + b > 0 else 0.0
+        s = coverage[key]
+        f1[key] = 2 * s * prec[key] / (s + prec[key]) if s + prec[key] > 0 else 0.0
+    return prec, f1
+
+
 def evaluate(result, land_only=True):
     g = result.grid
     p = result.params
@@ -68,6 +95,7 @@ def evaluate(result, land_only=True):
         m = valid & (g.target == cid)
         per[key] = float(mem[key][m].mean()) if m.any() else np.nan
     total = float(np.nanmean(list(per.values())))
+    prec, f1 = precision_f1(mem, g.target, valid, per, elev=g.elev)
     # hard confusion: best-matching zone per painted cell
     keys = [c[1] for c in TARGET_CLASSES]
     stack = np.stack([mem[k] for k in keys])
@@ -82,7 +110,7 @@ def evaluate(result, land_only=True):
     MAP = ix["MAP"][valid]
     realism = dict(map_median=float(np.median(MAP)), map_p95=float(np.percentile(MAP, 95)),
                    share_over_3500=float((MAP > 3500).mean()))
-    return dict(total=total, per_class=per, accuracy=acc, confusion=conf,
+    return dict(total=total, per_class=per, precision=prec, f1=f1, accuracy=acc, confusion=conf,
                 indices=ix, memberships=mem, monthly=st, predicted=pred,
                 rivers={**river_check(result, ix), **river_network_check(g, hyd)},
                 realism=realism, hydrology=hyd)
@@ -112,10 +140,13 @@ def objective(ev, mode="mean"):
     'balanced'  half mean, half soft-minimum of the zone scores (so no zone
                 can be sacrificed), minus penalties for implausible rainfall
                 (land median above 1300 mm/yr, 95th percentile above 3500).
+    'f1'        as 'balanced' but on each zone's F1 (coverage and precision),
+                so a zone's rule also has to stay out of other painted zones.
     """
     if mode == "mean":
         return ev["total"]
-    sc = np.array([v for v in ev["per_class"].values() if np.isfinite(v)])
+    vals = ev["f1"] if mode == "f1" else ev["per_class"]
+    sc = np.array([v for v in vals.values() if np.isfinite(v)])
     tau = 0.08
     softmin = -tau * np.log(np.mean(np.exp(-sc / tau)))
     r = ev["realism"]

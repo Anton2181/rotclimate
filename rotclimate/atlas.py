@@ -300,7 +300,7 @@ def zone_classes(mem, land, threshold=0.3, ix=None, elev=None):
     """Best-matching painted-zone type per pixel.
 
     With climate indices and elevation, high cold ground becomes "Mountain"
-    (8) and places that fit none of the painted zones become "Steppe" (9, the
+    (8) and places that fit none of the painted zones become "Grassland" (9, the
     semi-dry margins) or "Transitional" (10); otherwise they are 0."""
     keys = [c[1] for c in TARGET_CLASSES]
     # "tree" (warm + humid) is the broadest rule: it only wins where no more

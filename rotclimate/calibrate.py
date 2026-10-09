@@ -153,10 +153,12 @@ def evaluate_params(p: Params, mode="mean", seeds=None) -> dict:
     ev = dict(evs[0])
     ev["per_class"] = {k: float(np.mean([e["per_class"][k] for e in evs])) for k in ev["per_class"]}
     ev["total"] = float(np.nanmean(list(ev["per_class"].values())))
+    for key in ("precision", "f1"):
+        ev[key] = {k: float(np.mean([e[key][k] for e in evs])) for k in ev[key]}
     ev["accuracy"] = float(np.mean([e["accuracy"] for e in evs]))
     ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
     return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"],
-                per_class=ev["per_class"], realism=ev["realism"],
+                per_class=ev["per_class"], f1=ev["f1"], precision=ev["precision"], realism=ev["realism"],
                 spread=float(np.std([e["total"] for e in evs])))
 
 
@@ -211,10 +213,12 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                     Params(**r["params"]).to_json(out_dir / "best_params.json")
             log.flush()
             pc = best[1]["per_class"]
+            f1 = best[1].get("f1", {}) if mode == "f1" else {}
             print(f"[{n:5d} evals, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
-                  + " ".join(f"{k}={v:.2f}" for k, v in pc.items()), flush=True)
+                  + " ".join(f"{k}={v:.2f}" + (f"/F{f1[k]:.2f}" if k in f1 else "") for k, v in pc.items()),
+                  flush=True)
     return best[1]
 
 
@@ -230,7 +234,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced"])
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1"])
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
