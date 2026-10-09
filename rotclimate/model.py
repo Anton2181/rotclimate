@@ -190,6 +190,10 @@ class ClimateModel:
         T_prev = None
         W_prev = None
         soilP = np.full(lat.shape, 1.5)
+        self.t_iterations = []
+        dt_days = p.year_days / nt
+        spinup = max(spinup, int(round(117.0 / dt_days)))      # ~4 months whatever the step
+        soil_keep = np.exp(-dt_days / p.soil_memory_days) if p.soil_memory_days > 0 else 0.75
         order = list(range(nt - spinup, nt)) + list(range(nt))
         for n, k in enumerate(order):
             d = days[k]
@@ -203,34 +207,43 @@ class ClimateModel:
             SST = self.sst(d, To, Tl)
             T_eq = np.where(land, Tl, SST)
 
-            # ---- winds
-            u0, v0, phi_i, phi_h = self.zonal_wind(s)
-            T_anom = (T_prev if T_prev is not None else T_eq) - Tz
-            ut, vt = self.thermal_wind(T_anom)
-            u = (u0 + ut) * self.drag
-            v = (v0 + vt) * self.drag
+            # winds and temperature depend on temperature: iterate within the
+            # step (t_iters > 1) instead of lagging one step behind
+            T_ref = T_prev if T_prev is not None else T_eq
+            for _it in range(max(1, p.t_iters)):
+                # ---- winds
+                u0, v0, phi_i, phi_h = self.zonal_wind(s)
+                T_anom = T_ref - Tz
+                ut, vt = self.thermal_wind(T_anom)
+                u = (u0 + ut) * self.drag
+                v = (v0 + vt) * self.drag
 
-            # ---- temperature (sea-level equivalent), then lapse rate
-            # transient eddies (storms) mix heat and moisture between land and
-            # sea regardless of the mean wind; modelled as exchange with the
-            # surroundings (Gaussian of radius eddy_scale_km) at a rate that
-            # peaks in the storm track
-            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
-            if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
-                side = (1.0 if p.retrograde else -1.0) * self.basin_side
-                storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
-                # ... and reach further equatorward there
-                shift = p.storm_reach * np.clip(side, 0, 1)
-                storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
-                                   * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
-            eddy = p.eddy_rate * (0.15 + storm) / DAY
-            sigE = p.eddy_scale_km / g.cell_km
-            if p.eddy_rate > 0:
-                Tmix = ndi.gaussian_filter(T_prev if T_prev is not None else T_eq, sigE, mode="nearest")
-                Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
-                                        lamT * T_eq + eddy * Tmix, T_eq, guess=T_prev)
-            else:
-                Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_prev)
+                # ---- temperature (sea-level equivalent), then lapse rate
+                # transient eddies (storms) mix heat and moisture between land and
+                # sea regardless of the mean wind; modelled as exchange with the
+                # surroundings (Gaussian of radius eddy_scale_km) at a rate that
+                # peaks in the storm track
+                storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
+                if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
+                    side = (1.0 if p.retrograde else -1.0) * self.basin_side
+                    storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
+                    # ... and reach further equatorward there
+                    shift = p.storm_reach * np.clip(side, 0, 1)
+                    storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
+                                       * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
+                eddy = p.eddy_rate * (0.15 + storm) / DAY
+                sigE = p.eddy_scale_km / g.cell_km
+                if p.eddy_rate > 0:
+                    Tmix = ndi.gaussian_filter(T_ref, sigE, mode="nearest")
+                    Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
+                                            lamT * T_eq + eddy * Tmix, T_eq, guess=T_ref if _it else T_prev)
+                else:
+                    Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_ref if _it else T_prev)
+                done = _it > 0 and float(np.abs(Tsl - T_ref).max()) < 0.05
+                T_ref = Tsl
+                if done:
+                    break
+            self.t_iterations.append(_it + 1)
             T = Tsl - p.lapse_rate * h_km
 
             # ---- moisture
@@ -289,7 +302,7 @@ class ClimateModel:
             lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY) + np.maximum(RH - 1.0, 0) / RH / DAY
             P = lamP * W * DAY
             E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
-            soilP = 0.75 * soilP + 0.25 * P
+            soilP = soil_keep * soilP + (1 - soil_keep) * P
 
             T_prev, W_prev = Tsl, W
             if n >= spinup:

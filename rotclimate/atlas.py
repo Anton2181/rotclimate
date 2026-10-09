@@ -129,6 +129,18 @@ def _overlay_rivers(rgb, fr=None):
     return out
 
 
+def _beyond_facts(p) -> dict:
+    """Land fraction beyond each edge; the north and south edges may be split
+    into west and east halves (physics v6, negative = same as the whole edge)."""
+    b = dict(north=p.beyond_north_land, south=p.beyond_south_land,
+             west=p.beyond_west_land, east=p.beyond_east_land)
+    if p.beyond_northeast_land >= 0:
+        b["northeast"] = p.beyond_northeast_land
+    if p.beyond_southeast_land >= 0:
+        b["southeast"] = p.beyond_southeast_land
+    return b
+
+
 def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     from .render import shaded_rgb
 
@@ -220,9 +232,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         world=dict(lat_south=p.lat_center - H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
                    lat_north=p.lat_center + H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
                    tilt=p.tilt, retrograde=p.retrograde, tier_tops=list(p.tier_tops),
-                   beyond=dict(north=p.beyond_north_land, south=p.beyond_south_land,
-                               west=p.beyond_west_land, east=p.beyond_east_land)
-                   if p.beyond_style == "procedural" else None),
+                   beyond=_beyond_facts(p) if p.beyond_style == "procedural" else None),
     )
     (outdir / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))
     return meta

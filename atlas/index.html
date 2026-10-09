@@ -773,7 +773,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     ["Axial tilt", `${wd.tilt.toFixed(1)}° (Earth 23.4°)`],
     ["Height tiers", `lowland ≤ ${wd.tier_tops[0]} m · hills ≤ ${wd.tier_tops[1]} m · upland ≤ ${wd.tier_tops[2]} m · peaks to ${wd.tier_tops[3]} m`],
   ];
-  if (wd.beyond) facts.push(["Land beyond the map", ["north", "south", "west", "east"].map((s) => `${s} ${Math.round(wd.beyond[s] * 100)}%`).join(" · ")]);
+  if (wd.beyond) {
+    const b = wd.beyond, pc = (v) => `${Math.round(v * 100)}%`;
+    const ns = (side) => (b[side + "east"] !== undefined && Math.abs(b[side + "east"] - b[side]) > 0.02
+      ? [`${side}-west ${pc(b[side])}`, `${side}-east ${pc(b[side + "east"])}`] : [`${side} ${pc(b[side])}`]);
+    facts.push(["Land beyond the map", [...ns("north"), `west ${pc(b.west)}`, `east ${pc(b.east)}`, ...ns("south")].join(" · ")]);
+  }
   $("facts").innerHTML = facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
   $("zones").innerHTML = meta.zones.map((z) => `<div class="zone"><span class="sw" style="background:${z.color}"></span>
       <span class="lbl">${esc(z.label)}</span><span class="val">${z.score.toFixed(2)}</span>

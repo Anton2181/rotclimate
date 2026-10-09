@@ -77,6 +77,11 @@ class Params:
     storm_asym: float = 0.0           # v5: storm track stronger on the warm-current side
     storm_reach: float = 0.0          # v5: ... and this many degrees further equatorward
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
+    # time-step independence: soil-moisture memory in days (0 = the legacy
+    # 0.75-per-step rule) and the most temperature/wind iterations within
+    # each step (stops once nothing moves by 0.05 C; 1 = legacy one-step lag)
+    soil_memory_days: float = 0.0
+    t_iters: int = 1
 
     # ---------------------------------------------------------------- winds
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude

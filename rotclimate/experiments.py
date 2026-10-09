@@ -86,7 +86,9 @@ def history(out, it_dir=REPO / "calibration" / "iterations", ms=1300):
 
     from .render import save_gif
 
-    frames = [Image.open(f).convert("RGB") for f in sorted(Path(it_dir).glob("it*.png"))]
+    # "p" frames (e.g. it07p) are side comparisons, not steps of the improvement
+    frames = [Image.open(f).convert("RGB") for f in sorted(Path(it_dir).glob("it*.png"))
+              if not f.stem.endswith("p")]
     frames += [frames[-1]] * 2          # linger on the final state
     save_gif(frames, out, ms=ms)
 
