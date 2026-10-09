@@ -290,8 +290,16 @@ def _fig_to_pil(fig):
 
 
 def save_gif(frames, path, ms=120, colors=192):
-    pal = [f.quantize(colors=colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE) for f in frames]
-    pal[0].save(path, save_all=True, append_images=pal[1:], duration=ms, loop=0, optimize=True)
+    """Animated GIF with ONE palette shared by every frame, so legends and
+    unchanged areas stay pixel-identical instead of flickering."""
+    w, h = frames[0].size
+    pick = frames[:: max(1, len(frames) // 12)]
+    sample = Image.new("RGB", (w, h * len(pick)))
+    for i, f in enumerate(pick):
+        sample.paste(f.convert("RGB"), (0, i * h))
+    palette = sample.quantize(colors=colors, method=Image.Quantize.MEDIANCUT, dither=Image.Dither.NONE)
+    pal = [f.convert("RGB").quantize(palette=palette, dither=Image.Dither.NONE) for f in frames]
+    pal[0].save(path, save_all=True, append_images=pal[1:], duration=ms, loop=0, optimize=False)
 
 
 def _wind_grid(fr, spacing_km=110):
@@ -373,20 +381,32 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
 
 
 def koppen_frames_gif(items, path, ms=900, scale=0.5):
-    """items: list of (FullRes, caption) -> animated Koppen maps."""
+    """items: list of (FullRes, caption) -> animated Koppen maps with one fixed
+    legend (every class that appears in any frame, same place every frame)."""
     frames = []
-    for fr, caption in items:
-        k = fr.koppen()
+    classes = [fr.koppen() for fr, _ in items]
+    present = [c for c in CODES
+               if any(CODES.index(c) in set(np.unique(k[fr.land]).tolist())
+                      for k, (fr, _) in zip(classes, items))]
+    leg_w = 2.6                                   # inches for the legend column
+    for (fr, caption), k in zip(items, classes):
         rgb = shaded_rgb(rgb_image(k).astype(float) / 255.0, fr, 0.35)
         H, W = fr.H, fr.W
-        fig = plt.figure(figsize=(W * scale / 100, H * scale / 100 + 0.7), dpi=100)
-        ax = fig.add_axes([0, 0, 1, H * scale / 100 / (H * scale / 100 + 0.7)])
+        map_w, map_h = W * scale / 100, H * scale / 100
+        fig = plt.figure(figsize=(map_w + leg_w, map_h + 0.7), dpi=100)
+        ax = fig.add_axes([0, 0, map_w / (map_w + leg_w), map_h / (map_h + 0.7)])
         ax.imshow(rgb, interpolation="nearest")
         tgt = target_fullres()
         for cid, col in TARGET_DRAW_COLORS.items():
             ax.contour(tgt == cid, levels=[0.5], colors=[col], linewidths=1.3)
         decorate(ax, fr, rivers=False, labels=False)
         fig.text(0.01, 0.97, caption, fontsize=12, va="top", weight="bold")
+        lax = fig.add_axes([map_w / (map_w + leg_w), 0, leg_w / (map_w + leg_w), map_h / (map_h + 0.7)])
+        lax.axis("off")
+        handles = [Patch(color=np.array(COLORS[c]) / 255, label=f"{c}  {DESCRIPTIONS[c]}") for c in present]
+        handles.append(Patch(facecolor="none", edgecolor="#555", label="outlines: your zones"))
+        lax.legend(handles=handles, loc="center left", fontsize=6.6, frameon=False,
+                   handlelength=1.2, borderaxespad=0.3, labelspacing=0.35)
         frames.append(_fig_to_pil(fig))
         plt.close(fig)
     save_gif(frames, path, ms=ms)
