@@ -94,6 +94,7 @@ def climate_indices(Tm, Pm, summer):
     Pth = np.maximum(Pth, 0.5)
     return dict(MAT=MAT, MAP=MAP, Tcold=Tcold, Thot=Thot, Tmon10=Tmon10, Pdry=Pdry,
                 Psdry=Psdry, Pwdry=Pwdry, Pswet=Pswet, Pwwet=Pwwet, Pth=Pth,
+                Psum=Psum, Pwin=Pwin,
                 aridity=MAP / (10 * Pth))
 
 
@@ -122,6 +123,10 @@ def classify(Tm, Pm, summer, cd_threshold=0.0):
     # C / D precipitation regime
     s = (x["Psdry"] < 40) & (x["Psdry"] < x["Pwwet"] / 3)
     w = x["Pwdry"] < x["Pswet"] / 10
+    # both can hold (e.g. tropical highlands); the wetter half-year decides
+    both = s & w
+    s = s & ~(both & (x["Psum"] >= x["Pwin"]))
+    w = w & ~s
     reg = np.where(s, "s", np.where(w, "w", "f"))
     t_a = Th >= 22
     t_b = x["Tmon10"] >= 4

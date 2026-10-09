@@ -259,13 +259,115 @@ def _pad_side(a: np.ndarray, p: int, side: str, mode: str, fill_land: float, is_
 
 
 def build_grid(params: Params) -> Grid:
-    beyond = tuple((params_side, getattr(params, f"beyond_{params_side}"),
-                    round(float(getattr(params, f"beyond_{params_side}_gap_km")), 1))
-                   for params_side in ("north", "south", "west", "east"))
+    if params.beyond_style == "procedural":
+        beyond = ("procedural",
+                  tuple(round(float(getattr(params, f"beyond_{s}_land")), 3)
+                        for s in ("north", "south", "west", "east")),
+                  round(float(params.beyond_continuity_km), 1),
+                  round(float(params.beyond_relief_m), 1), int(params.beyond_seed))
+    else:
+        beyond = ("blocks",) + tuple(
+            (side, getattr(params, f"beyond_{side}"),
+             round(float(getattr(params, f"beyond_{side}_gap_km")), 1))
+            for side in ("north", "south", "west", "east"))
     return _build_grid_cached(
         params.downsample, tuple(params.tier_tops), beyond, params.pad_km, params.lat_center,
         params.map_width_mi, params.map_height_mi,
     )._with_params(params)
+
+
+@lru_cache(maxsize=8)
+def _noise(seed: int, scales_km=(45.0, 90.0, 180.0, 360.0, 720.0), weights=(0.12, 0.3, 0.45, 0.7, 1.0),
+           spacing_km=20.0, extent_km=(-2400.0, 4100.0, -2400.0, 6000.0)):
+    """Seeded multi-scale noise on a fixed physical lattice (resolution
+    independent): returns (field, y0, x0, spacing) with unit std."""
+    y0, y1, x0, x1 = extent_km
+    ny, nx = int((y1 - y0) / spacing_km), int((x1 - x0) / spacing_km)
+    rng = np.random.default_rng(seed)
+    out = np.zeros((ny, nx))
+    for sc, w in zip(scales_km, weights):
+        f = ndi.gaussian_filter(rng.standard_normal((ny, nx)), sc / spacing_km, mode="wrap")
+        out += w * f / f.std()
+    return out / out.std(), y0, x0, spacing_km
+
+
+def _noise_at(seed, ykm, xkm):
+    n, y0, x0, sp = _noise(seed)
+    return ndi.map_coordinates(n, [(ykm - y0) / sp, (xkm - x0) / sp], order=1, mode="nearest")
+
+
+def _procedural_offmap(core: dict, p: int, cell_km: float, low_fill: float, spec):
+    """Plausible unknown surroundings for the map.
+
+    * Near the map, whatever touches an edge (sea, coast, a mountain range)
+      continues outward and fades over `continuity_km`.
+    * Farther out, fractal noise makes coastlines, islands, inland seas and low
+      hills; each side's land *fraction* is a free parameter (0 = open ocean,
+      1 = continent).  Corners blend the two neighbouring sides.
+    """
+    from statistics import NormalDist
+
+    _, fracs, cont_km, relief, seed = spec
+    h, w = core["land_frac"].shape
+    H, W = h + 2 * p, w + 2 * p
+    ii, jj = np.mgrid[0:H, 0:W]
+    dy_n, dy_s = np.maximum(p - ii, 0), np.maximum(ii - (p + h - 1), 0)
+    dx_w, dx_e = np.maximum(p - jj, 0), np.maximum(jj - (p + w - 1), 0)
+    dy, dx = dy_n + dy_s, dx_w + dx_e
+    dist = np.hypot(dy, dx) * cell_km
+    inmap = dist == 0
+    ykm = (ii - p + 0.5) * cell_km
+    xkm = (jj - p + 0.5) * cell_km
+    # per-side land fraction, blended by direction in the corners
+    tot = np.maximum(dy + dx, 1e-9)
+    fN, fS, fW, fE = fracs
+    frac = (dy_n * fN + dy_s * fS + dx_w * fW + dx_e * fE) / tot
+    nd = NormalDist()
+    z = np.vectorize(lambda q: nd.inv_cdf(min(max(q, 0.002), 0.998)))(np.round(frac, 3))
+    noise = _noise_at(seed, ykm, xkm)
+
+    # continuation of the edge: the edge profile is blurred more and more with
+    # distance (a coast spreads and dissolves) and its position meanders
+    warp = 0.45 * _noise_at(seed + 500, ykm, xkm) * dist / cell_km
+    ci = np.clip(ii - p + np.where(dx > 0, warp, 0.0), 0, h - 1)
+    cj = np.clip(jj - p + np.where(dy > 0, warp, 0.0), 0, w - 1)
+    sigmas = [0.0, 1.5, 3.0, 6.0, 12.0, 24.0]
+    edge_land = np.zeros((H, W))
+    edge_elev = np.zeros((H, W))
+    edge_emax = np.zeros((H, W))
+    s_need = 0.35 * dist / cell_km
+    wsum = np.zeros((H, W))
+    for k, sg in enumerate(sigmas):
+        # triangular weights in sigma space
+        lo = sigmas[k - 1] if k else -1.0
+        hi = sigmas[k + 1] if k + 1 < len(sigmas) else 1e9
+        wk = np.where(s_need <= sg, np.clip((s_need - lo) / max(sg - lo, 1e-9), 0, 1),
+                      np.clip((hi - s_need) / max(hi - sg, 1e-9), 0, 1))
+        if not wk.any():
+            continue
+        blur = {key: (ndi.gaussian_filter(core[key], sg, mode="nearest") if sg else core[key])
+                for key in ("land_frac", "elev", "elev_max")}
+        for acc, key in ((edge_land, "land_frac"), (edge_elev, "elev"), (edge_emax, "elev_max")):
+            acc += wk * ndi.map_coordinates(blur[key], [ci, cj], order=1, mode="nearest")
+        wsum += wk
+    edge_land /= np.maximum(wsum, 1e-9)
+    edge_elev /= np.maximum(wsum, 1e-9)
+    edge_emax /= np.maximum(wsum, 1e-9)
+
+    wc = np.exp(-dist / max(cont_km, 1.0))
+    Z = (1 - wc) * (noise + z) + wc * (2.2 * (2 * edge_land - 1) + 0.5 * noise)
+    land_frac = np.where(inmap, 0.0, 1 / (1 + np.exp(-4 * Z)))
+    # terrain: edge ranges fade out, plus noise hills
+    hills = np.maximum(_noise_at(seed + 1000, ykm, xkm), 0) * relief
+    we = np.exp(-dist / max(0.6 * cont_km, 1.0))
+    elev = we * edge_elev + (1 - we) * (low_fill + hills)
+    elev_max = we * edge_emax + (1 - we) * (low_fill + 1.3 * hills)
+    out = {}
+    for k, v in (("land_frac", land_frac), ("elev", elev), ("elev_max", elev_max)):
+        full = np.zeros((H, W))
+        full[p:p + h, p:p + w] = core[k]
+        out[k] = np.where(inmap, full, v)
+    return out, inmap
 
 
 @lru_cache(maxsize=8)
@@ -292,27 +394,39 @@ def _build_grid_cached(f, tier_tops, beyond, pad_km, lat_center, width_mi, heigh
 
     p = int(round(pad_km / cell_km))
     low_fill = 0.5 * tier_tops[0]
-    fields = dict(land_frac=land_frac, elev=elev, elev_max=elev_max)
-    for side, mode, gap_km in beyond:
-        gap = int(round(gap_km / cell_km))
-        for k in fields:
-            fields[k] = _pad_side(fields[k], p, side, mode,
-                                  fill_land=(1.0 if k == "land_frac" else low_fill),
-                                  is_land=(k == "land_frac"), gap=gap)
-        tgt = _pad_side(tgt, p, side, "ocean", 0, False).astype(np.int8)
-        rivers = _pad_side(rivers, p, side, "ocean", 0, False)
-        lake = _pad_side(lake, p, side, "ocean", 0, False).astype(bool)
-        inmap = _pad_side(inmap, p, side, "ocean", 0, False).astype(bool)
+    if beyond[0] == "procedural":
+        core = dict(land_frac=land_frac, elev=elev, elev_max=elev_max)
+        fields, inmap = _procedural_offmap(core, p, cell_km, low_fill, beyond)
+        widths = ((p, p), (p, p))
+        tgt = np.pad(tgt, widths).astype(np.int8)
+        rivers = np.pad(rivers, widths)
+        lake = np.pad(lake, widths).astype(bool)
+        land_frac = fields["land_frac"]
+        land = land_frac >= 0.5
+        elev = np.where(land, np.maximum(fields["elev"], 1.0), 0.0)
+        elev_max = np.where(land, np.maximum(fields["elev_max"], elev), 0.0)
+    else:
+        fields = dict(land_frac=land_frac, elev=elev, elev_max=elev_max)
+        for side, mode, gap_km in beyond[1:]:
+            gap = int(round(gap_km / cell_km))
+            for k in fields:
+                fields[k] = _pad_side(fields[k], p, side, mode,
+                                      fill_land=(1.0 if k == "land_frac" else low_fill),
+                                      is_land=(k == "land_frac"), gap=gap)
+            tgt = _pad_side(tgt, p, side, "ocean", 0, False).astype(np.int8)
+            rivers = _pad_side(rivers, p, side, "ocean", 0, False)
+            lake = _pad_side(lake, p, side, "ocean", 0, False).astype(bool)
+            inmap = _pad_side(inmap, p, side, "ocean", 0, False).astype(bool)
 
-    land_frac = fields["land_frac"]
-    land = land_frac >= 0.5
-    # extended terrain relaxes toward a low plain with distance from the map
-    dist = ndi.distance_transform_edt(~inmap) * cell_km
-    relax = np.exp(-dist / 150.0)
-    elev = np.where(inmap, fields["elev"], low_fill + (fields["elev"] - low_fill) * relax)
-    elev_max = np.where(inmap, fields["elev_max"], low_fill + (fields["elev_max"] - low_fill) * relax)
-    elev = np.where(land, np.maximum(elev, 1.0), 0.0)
-    elev_max = np.where(land, np.maximum(elev_max, elev), 0.0)
+        land_frac = fields["land_frac"]
+        land = land_frac >= 0.5
+        # extended terrain relaxes toward a low plain with distance from the map
+        dist = ndi.distance_transform_edt(~inmap) * cell_km
+        relax = np.exp(-dist / 150.0)
+        elev = np.where(inmap, fields["elev"], low_fill + (fields["elev"] - low_fill) * relax)
+        elev_max = np.where(inmap, fields["elev_max"], low_fill + (fields["elev_max"] - low_fill) * relax)
+        elev = np.where(land, np.maximum(elev, 1.0), 0.0)
+        elev_max = np.where(land, np.maximum(elev_max, elev), 0.0)
 
     ny, nx = land.shape
     rows = np.arange(ny) - (p + (L["land"].shape[0] / f) / 2.0 - 0.5)

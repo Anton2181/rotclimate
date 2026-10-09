@@ -199,7 +199,19 @@ class ClimateModel:
             v = (v0 + vt) * self.drag
 
             # ---- temperature (sea-level equivalent), then lapse rate
-            Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_prev)
+            # transient eddies (storms) mix heat and moisture between land and
+            # sea regardless of the mean wind; modelled as exchange with the
+            # surroundings (Gaussian of radius eddy_scale_km) at a rate that
+            # peaks in the storm track
+            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
+            eddy = p.eddy_rate * (0.15 + storm) / DAY
+            sigE = p.eddy_scale_km / g.cell_km
+            if p.eddy_rate > 0:
+                Tmix = ndi.gaussian_filter(T_prev if T_prev is not None else T_eq, sigE, mode="nearest")
+                Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
+                                        lamT * T_eq + eddy * Tmix, T_eq, guess=T_prev)
+            else:
+                Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_prev)
             T = Tsl - p.lapse_rate * h_km
 
             # ---- moisture
@@ -207,12 +219,17 @@ class ClimateModel:
             # which is smoother than the surface (boundary-layer) temperature
             T_col = (0.4 * np.where(land, Tsl, SST)
                      + 0.6 * ndi.gaussian_filter(Tsl, self.col_sigma, mode="nearest"))
-            Ws = w_sat(T_col - p.lapse_rate * h_km) * np.exp(-h_km / 6.0)
+            if p.eddy_rate > 0:      # physics v3
+                # the column over high ground is colder (lapse rate) but the
+                # low-level moisture that cannot climb is diverted around the
+                # mountain rather than squeezed out: compare like with like
+                Ws = w_sat(T_col - 0.5 * p.lapse_rate * h_km)
+            else:
+                Ws = w_sat(T_col - p.lapse_rate * h_km) * np.exp(-h_km / 6.0)
             W_ocean = p.ocean_rh * w_sat(SST)
             div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
             conv = np.clip(-ndi.gaussian_filter(div, 1.0) / 2e-6, 0, 3)
             up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
-            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
             sub = np.exp(-((lat - phi_h) / 6.0) ** 2)
             # subtropical highs sink hardest over the eastern side of ocean
             # basins on a prograde planet (dry west coasts: California,
@@ -231,8 +248,14 @@ class ClimateModel:
                 g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5
                 lamP = A_dyn * g_rh / (p.precip_tau_days * DAY)
                 lamP = lamP + np.maximum(RH - 1.0, 0) / RH / DAY
-                W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP,
-                                          lamE * W_ocean + E_land, bnd, guess=W)
+                if p.eddy_rate > 0:
+                    Wmix = ndi.gaussian_filter(W, sigE, mode="nearest")
+                    eq = eddy * np.exp(-h_km / 2.5)     # eddies carry vapour low down
+                    W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP + eq,
+                                              lamE * W_ocean + E_land + eq * Wmix, bnd, guess=W)
+                else:
+                    W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP,
+                                              lamE * W_ocean + E_land, bnd, guess=W)
                 W = 0.5 * (W + np.maximum(W_new, 0))
             RH = W / Ws
             g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5

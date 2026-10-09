@@ -87,9 +87,44 @@ def history(out, it_dir=REPO / "calibration" / "iterations", ms=1300):
     save_gif(frames, out, ms=ms)
 
 
+def robustness(p: Params, seeds=(1, 2, 3, 4, 5, 6), resolutions=((16, 25), (12, 37), (8, 73))):
+    """Score spread across random surroundings and across grid resolutions."""
+    rows = []
+    for sd in seeds:
+        r, ev = _run(p.replace(beyond_seed=sd, **REF))
+        rows.append(("seed", sd, ev["total"], ev["accuracy"], ev["rivers"]["spearman"]))
+        print(f"seed {sd}: {ev['total']:.3f}")
+    for f, st in resolutions:
+        r, ev = _run(p.replace(downsample=f, steps_per_year=st, picard_iters=2 if f > 8 else 3))
+        rows.append(("res", f"{r.grid.cell_km:.0f} km / {st} steps", ev["total"], ev["accuracy"],
+                     ev["rivers"]["spearman"]))
+        print(f"res {f}: {ev['total']:.3f}")
+    return rows
+
+
+def surroundings(p: Params, out, res=REF):
+    """Animate how the unknown off-map land changes the climate."""
+    cases = [("as calibrated", {}),
+             ("open ocean on every side", dict(beyond_north_land=0.0, beyond_south_land=0.0,
+                                               beyond_west_land=0.0, beyond_east_land=0.0)),
+             ("continent to the west", dict(beyond_west_land=0.95)),
+             ("continent to the east", dict(beyond_east_land=0.95)),
+             ("continent to the north", dict(beyond_north_land=0.95)),
+             ("ocean to the north", dict(beyond_north_land=0.0)),
+             ("land everywhere", dict(beyond_north_land=0.95, beyond_south_land=0.95,
+                                      beyond_west_land=0.95, beyond_east_land=0.95))]
+    items = []
+    for name, kw in cases:
+        r, ev = _run(p.replace(**kw, **res))
+        items.append((FullRes(r), f"{name}   score {ev['total']:.2f}"))
+        print(name, ev["total"])
+    koppen_frames_gif(items, out, ms=1500)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("what", choices=["tilt", "spin", "lat", "history", "snapshot"])
+    ap.add_argument("what", choices=["tilt", "spin", "lat", "history", "snapshot", "robust",
+                                     "surroundings"])
     ap.add_argument("--params", default=None)
     ap.add_argument("--out", default=None)
     ap.add_argument("--tag", default=None)
@@ -105,6 +140,12 @@ def main():
         lat_sweep(p, a.out)
     elif a.what == "snapshot":
         snapshot(p, a.tag, a.title, a.note)
+    elif a.what == "robust":
+        rows = robustness(p)
+        if a.out:
+            Path(a.out).write_text(json.dumps(rows, indent=1))
+    elif a.what == "surroundings":
+        surroundings(p, a.out)
     else:
         history(a.out)
 

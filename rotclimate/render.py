@@ -170,32 +170,32 @@ def koppen_map(fr: FullRes, path, title=None, labels=True):
     plt.close(fig)
 
 
-def comparison_map(fr: FullRes, ev_full, path, title=None):
+def comparison_map(fr: FullRes, mem, path, title=None):
     """Target zones vs. simulated Koppen, plus a per-pixel agreement map."""
     k = fr.koppen()
     tgt = target_fullres()
-    fig, axs = plt.subplots(1, 3, figsize=(30, 5.6), dpi=90)
+    fig = plt.figure(figsize=(26, 13.2), dpi=80)
+    gs = fig.add_gridspec(2, 2, height_ratios=[1, 1], hspace=0.08, wspace=0.03,
+                          left=0.01, right=0.99, top=0.93, bottom=0.01)
+    ax0, ax1, ax2 = fig.add_subplot(gs[0, 0]), fig.add_subplot(gs[0, 1]), fig.add_subplot(gs[1, 0])
+    lax = fig.add_subplot(gs[1, 1])
+    lax.axis("off")
     # target
     img = np.ones(tgt.shape + (3,))
     img[fr.land] = 0.9
     for cid, col in TARGET_DRAW_COLORS.items():
         img[tgt == cid] = matplotlib.colors.to_rgb(col)
-    axs[0].imshow(img)
-    decorate(axs[0], fr, rivers=False, labels=False)
-    axs[0].legend(handles=[Patch(color=TARGET_DRAW_COLORS[c], label=TARGET_LABELS[c]) for c in range(1, 8)],
-                  loc="lower left", fontsize=8)
-    axs[0].set_title("Target (your painted zones)", fontsize=14)
+    ax0.imshow(img)
+    decorate(ax0, fr, rivers=False, labels=False)
+    ax0.set_title("Target (your painted zones)", fontsize=16)
     # model koppen with target outlines
     rgb = shaded_rgb(rgb_image(k).astype(float) / 255.0, fr, 0.35)
-    axs[1].imshow(rgb)
+    ax1.imshow(rgb)
     for cid, col in TARGET_DRAW_COLORS.items():
-        axs[1].contour(tgt == cid, levels=[0.5], colors=[col], linewidths=2.2)
-    decorate(axs[1], fr, rivers=False, labels=False)
-    present = set(CODES[i] for i in np.unique(k[fr.land]) if i >= 0)
-    koppen_legend(axs[1], present, loc="lower left", fontsize=6.5, ncol=2)
-    axs[1].set_title("Simulated Köppen (outlines = target zones)", fontsize=14)
+        ax1.contour(tgt == cid, levels=[0.5], colors=[col], linewidths=2.4)
+    decorate(ax1, fr, rivers=False, labels=False)
+    ax1.set_title("Simulated Köppen (outlines = target zones)", fontsize=16)
     # agreement
-    mem = ev_full
     agree = np.full(tgt.shape, np.nan)
     for cid, key, _, _ in TARGET_CLASSES:
         m = (tgt == cid) & fr.land
@@ -205,14 +205,22 @@ def comparison_map(fr: FullRes, ev_full, path, title=None):
     a_img[fr.land] = 0.88
     ok = ~np.isnan(agree)
     a_img[ok] = cm(agree[ok])[:, :3]
-    axs[2].imshow(a_img)
-    decorate(axs[2], fr, rivers=False, labels=False)
+    ax2.imshow(a_img)
+    decorate(ax2, fr, rivers=False, labels=False)
+    ax2.set_title("Agreement with each zone's rule (green = match, red = miss)", fontsize=16)
+    # legends
+    present = set(CODES[i] for i in np.unique(k[fr.land]) if i >= 0)
+    l1 = lax.legend(handles=[Patch(color=TARGET_DRAW_COLORS[c], label=TARGET_LABELS[c]) for c in range(1, 8)],
+                    loc="upper left", fontsize=12, title="Target zones", title_fontsize=13,
+                    bbox_to_anchor=(0.0, 1.0))
+    lax.add_artist(l1)
+    koppen_legend(lax, present, loc="upper left", fontsize=11, ncol=2,
+                  bbox_to_anchor=(0.0, 0.55), title="Köppen classes present", title_fontsize=13)
     sm = plt.cm.ScalarMappable(cmap=cm, norm=plt.Normalize(0, 1))
-    fig.colorbar(sm, ax=axs[2], fraction=0.025, pad=0.01, label="how well the zone's rule is met")
-    axs[2].set_title("Agreement with the target rule (green = match)", fontsize=14)
+    cax = fig.add_axes([0.52, 0.05, 0.2, 0.018])
+    fig.colorbar(sm, cax=cax, orientation="horizontal", label="agreement with the zone's rule")
     if title:
-        fig.suptitle(title, fontsize=16)
-    fig.tight_layout()
+        fig.suptitle(title, fontsize=19)
     fig.savefig(path)
     plt.close(fig)
 
@@ -384,20 +392,32 @@ def climograph_panel(ax, fr: FullRes, x, y, name):
     code = CODES[k] if k >= 0 else "?"
     ax.set_title(f"{name}  ·  {code}\n{T.mean():.0f}°C · {Pm.sum():.0f} mm · {elev:.0f} m",
                  fontsize=9)
+    from .analogs import model_bins, top_analogs
+
+    T12, P12 = model_bins(T, P, r.days, r.params.winter_solstice_day, r.params.year_days)
+    an = top_analogs(T12, P12, 3)
+    ax.text(0.5, -0.36, "feels like: " + ", ".join(a["name"] for a in an),
+            transform=ax.transAxes, ha="center", va="top", fontsize=7.5, style="italic",
+            color="#333")
 
 
 def climographs(fr: FullRes, names, path, ncols=6):
     places = {p["name"]: p for p in load_places()}
     sel = [places[n] for n in names if n in places]
     nrows = int(np.ceil(len(sel) / ncols))
-    fig, axs = plt.subplots(nrows, ncols, figsize=(3.3 * ncols, 3.2 * nrows), dpi=100)
+    fig, axs = plt.subplots(nrows, ncols, figsize=(3.3 * ncols, 3.5 * nrows), dpi=100)
     for ax, pl in zip(np.ravel(axs), sel):
         climograph_panel(ax, fr, pl["x"], pl["y"], pl["name"])
     for ax in np.ravel(axs)[len(sel):]:
         ax.axis("off")
+    from .analogs import reference_source
+
     fig.suptitle("Climographs in the local calendar  (line: mean temp °C, band: weekly range, "
                  "bars: precipitation mm per month)", fontsize=12)
-    fig.tight_layout()
+    fig.text(0.5, 0.003, f"'feels like' = closest real cities by seasonal temperature and "
+             f"rainfall curves ({reference_source()}, seasons aligned to the solstice)",
+             ha="center", fontsize=8, color="#555")
+    fig.tight_layout(rect=(0, 0.015, 1, 1))
     fig.savefig(path)
     plt.close(fig)
 
@@ -449,6 +469,47 @@ def insolation_chart(params, path):
         ax.axvline(s, color="w", lw=0.4, alpha=0.5)
     ax.set_ylabel("latitude (°N)")
     ax.set_title(f"Sunlight through the local year (axial tilt {params.tilt:.1f}°)")
+    fig.tight_layout()
+    fig.savefig(path)
+    plt.close(fig)
+
+
+def context_map(result, path, title=None):
+    """The whole simulated domain: the map plus the generated surroundings,
+    each coloured by its (coarse) Koppen class, sea shaded by mean SST."""
+    r = result
+    g = r.grid
+    st = monthly_stats(r.T, r.P, r.days, r.params.year_days,
+                       summer_solstice=r.params.winter_solstice_day + r.params.year_days / 2)
+    k = classify(st["Tm"], st["Pm"], st["summer"])
+    rgb = rgb_image(k).astype(float) / 255.0
+    sst = r.Tsl.mean(0)
+    cm = plt.get_cmap("Blues_r")
+    sea = cm(np.clip((sst + 5) / 40.0, 0, 1) * 0.55 + 0.35)[..., :3]
+    img = np.where(g.land[..., None], rgb, sea)
+    img = np.where(g.inmap[..., None], img, img * 0.82 + 0.18 * 0.9)
+    fig, ax = plt.subplots(figsize=(14, 14 * g.ny / g.nx + 0.6), dpi=100)
+    ax.imshow(img, interpolation="nearest")
+    ax.contour(g.land, levels=[0.5], colors="#333", linewidths=0.5)
+    y0, x0 = g.pad - 0.5, g.pad - 0.5
+    h, w = g.inmap.sum(0).max(), g.inmap.sum(1).max()
+    ax.add_patch(plt.Rectangle((x0, y0), w, h, fill=False, ec="red", lw=1.8))
+    ax.text(x0 + 4, y0 + 6, "your map", color="red", fontsize=11, weight="bold", va="top")
+    # wind arrows (annual mean) for orientation
+    step = max(1, int(round(220 / g.cell_km)))
+    yy, xx = np.mgrid[step // 2:g.ny:step, step // 2:g.nx:step]
+    ax.quiver(xx, yy, r.u.mean(0)[yy, xx], -r.v.mean(0)[yy, xx], color="k", alpha=0.45,
+              scale=120, width=0.0018)
+    for lat in range(int(g.lat.min()) + 1, int(g.lat.max()) + 1):
+        if lat % 5 == 0:
+            yrow = np.interp(lat, g.lat[::-1, 0], np.arange(g.ny)[::-1])
+            ax.axhline(yrow, color="k", lw=0.4, alpha=0.4, ls=":")
+            ax.text(g.nx - 2, yrow - 1, f"{lat}°N", ha="right", fontsize=8, alpha=0.7)
+    present = set(CODES[i] for i in np.unique(k[g.land]) if i >= 0)
+    koppen_legend(ax, present, loc="lower left", fontsize=6.5, ncol=2)
+    ax.set_axis_off()
+    ax.set_title(title or "The map in its (unknown, procedurally generated) surroundings — "
+                 "Köppen on land, mean sea temperature offshore, mean surface wind", fontsize=11)
     fig.tight_layout()
     fig.savefig(path)
     plt.close(fig)

@@ -72,9 +72,32 @@ SPACE = [
     ("subsidence", 0.0, 0.95),
     ("subsidence_asym", 0.0, 1.0),
 ]
-NAMES = [s[0] for s in SPACE]
-LO = np.array([s[1] for s in SPACE])
-HI = np.array([s[2] for s in SPACE])
+# physics v3: storm-eddy mixing + procedural surroundings (land fraction per
+# side instead of ocean/land/extend blocks); enabled with --physics v3
+_BLOCK_GENES = {"beyond_north", "beyond_south", "beyond_west", "beyond_east",
+                "beyond_north_gap_km", "beyond_south_gap_km", "beyond_west_gap_km",
+                "beyond_east_gap_km"}
+SPACE_V3 = [g for g in SPACE if g[0] not in _BLOCK_GENES] + [
+    ("beyond_north_land", 0.0, 1.0),
+    ("beyond_south_land", 0.0, 1.0),
+    ("beyond_west_land", 0.0, 1.0),
+    ("beyond_east_land", 0.0, 1.0),
+    ("beyond_continuity_km", 100.0, 700.0),
+    ("beyond_relief_m", 0.0, 1500.0),
+    ("eddy_rate", 0.0, 2.0),
+    ("eddy_scale_km", 200.0, 900.0),
+]
+
+
+def _set_space(space):
+    global SPACE, NAMES, LO, HI
+    SPACE = space
+    NAMES = [s[0] for s in SPACE]
+    LO = np.array([s[1] for s in SPACE])
+    HI = np.array([s[2] for s in SPACE])
+
+
+_set_space(SPACE)
 
 
 def decode(x: np.ndarray, base: Params) -> Params:
@@ -84,7 +107,7 @@ def decode(x: np.ndarray, base: Params) -> Params:
     for k, val in v.items():
         if k == "retrograde":
             kw[k] = bool(val > 0.5)
-        elif k.startswith("beyond_") and not k.endswith("_km"):
+        elif k in ("beyond_north", "beyond_south", "beyond_west", "beyond_east"):
             kw[k] = BEYOND_MODES[int(val)]
         elif k.startswith("tier"):
             continue
@@ -102,36 +125,48 @@ def encode(p: Params) -> np.ndarray:
     v = {k: getattr(p, k) for k in NAMES if hasattr(p, k)}
     v["retrograde"] = 0.75 if p.retrograde else 0.25
     for side in ("north", "south", "west", "east"):
-        v[f"beyond_{side}"] = BEYOND_MODES.index(getattr(p, f"beyond_{side}")) + 0.5
+        if f"beyond_{side}" in NAMES:
+            v[f"beyond_{side}"] = BEYOND_MODES.index(getattr(p, f"beyond_{side}")) + 0.5
     t = p.tier_tops
     v["tier1"], v["tier2_add"], v["tier3_add"], v["tier4_add"] = t[0], t[1] - t[0], t[2] - t[1], t[3] - t[2]
     x = (np.array([v[k] for k in NAMES], float) - LO) / (HI - LO)
     return np.clip(x, 0.0, 1.0)
 
 
-def evaluate_params(p: Params) -> dict:
+def evaluate_params(p: Params, mode="mean", seeds=None) -> dict:
+    """Score a parameter set; with several seeds the unknown surroundings are
+    re-generated for each and the zone scores averaged (ensemble)."""
     from .model import ClimateModel
-    from .score import evaluate
+    from .score import evaluate, objective
 
-    r = ClimateModel(p).run()
-    ev = evaluate(r)
-    return dict(score=ev["total"], accuracy=ev["accuracy"], per_class=ev["per_class"])
+    evs = []
+    for sd in (seeds or [None]):
+        q = p if sd is None else p.replace(beyond_seed=int(sd))
+        evs.append(evaluate(ClimateModel(q).run()))
+    ev = dict(evs[0])
+    ev["per_class"] = {k: float(np.mean([e["per_class"][k] for e in evs])) for k in ev["per_class"]}
+    ev["total"] = float(np.nanmean(list(ev["per_class"].values())))
+    ev["accuracy"] = float(np.mean([e["accuracy"] for e in evs]))
+    ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
+    return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"],
+                per_class=ev["per_class"], realism=ev["realism"],
+                spread=float(np.std([e["total"] for e in evs])))
 
 
 def _worker(args):
-    x, base_dict = args
-    os.environ.setdefault("OMP_NUM_THREADS", "1")
+    x, base_dict, mode, space, seeds = args
+    _set_space(space)
     p = decode(np.asarray(x), Params(**base_dict))
     try:
-        out = evaluate_params(p)
+        out = evaluate_params(p, mode, seeds)
     except Exception as e:  # keep the search alive on numerical failures
-        out = dict(score=0.0, accuracy=0.0, per_class={}, error=repr(e))
+        out = dict(score=-1.0, mean=0.0, accuracy=0.0, per_class={}, error=repr(e))
     out["params"] = asdict(p)
     return out
 
 
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
-              popsize=16, workers=4, seed=1, fixed=None):
+              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None):
     import cma
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -157,7 +192,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                 for i, v in fixed_idx.items():
                     x[i] = v
                 full.append(x)
-            res = pool.map(_worker, [(x, base_dict) for x in full])
+            res = pool.map(_worker, [(x, base_dict, mode, SPACE, seeds) for x in full])
             es.tell(sols, [-r["score"] for r in res])
             for x, r in zip(full, res):
                 n += 1
@@ -169,7 +204,8 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                     Params(**r["params"]).to_json(out_dir / "best_params.json")
             log.flush()
             pc = best[1]["per_class"]
-            print(f"[{n:5d} evals, {time.time() - t0:6.0f}s] best {best[0]:.3f}  gen-mean "
+            print(f"[{n:5d} evals, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
+                  f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
                   + " ".join(f"{k}={v:.2f}" for k, v in pc.items()), flush=True)
     return best[1]
@@ -187,12 +223,23 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3"])
+    ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
+    ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     a = ap.parse_args()
+    if a.physics == "v3":
+        _set_space(SPACE_V3)
     base = Params.from_json(a.start) if a.start else Params()
     base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
+    if a.physics == "v3":
+        base = base.replace(beyond_style="procedural")
+    base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
+                           for k, v in json.loads(a.set).items()})
+    seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
     fixed = json.loads(a.fix)
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
-                     workers=a.workers, seed=a.seed, fixed=fixed)
+                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds)
     print(json.dumps(best["per_class"], indent=1), best["score"])
 
 

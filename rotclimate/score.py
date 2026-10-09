@@ -72,8 +72,71 @@ def evaluate(result, land_only=True):
         conf[cid - 1] = np.bincount(pred[m], minlength=8)
     painted = valid & (g.target > 0)
     acc = float((pred[painted] == g.target[painted]).mean())
+    MAP = ix["MAP"][valid]
+    realism = dict(map_median=float(np.median(MAP)), map_p95=float(np.percentile(MAP, 95)),
+                   share_over_3500=float((MAP > 3500).mean()))
     return dict(total=total, per_class=per, accuracy=acc, confusion=conf,
-                indices=ix, memberships=mem, monthly=st, predicted=pred)
+                indices=ix, memberships=mem, monthly=st, predicted=pred,
+                rivers=river_check(result, ix), realism=realism)
+
+
+def objective(ev, mode="mean"):
+    """Number the calibrator maximises.
+
+    'mean'      plain mean of the zone scores (rounds 1-2)
+    'balanced'  half mean, half soft-minimum of the zone scores (so no zone
+                can be sacrificed), minus penalties for implausible rainfall
+                (land median above 1300 mm/yr, 95th percentile above 3500).
+    """
+    if mode == "mean":
+        return ev["total"]
+    sc = np.array([v for v in ev["per_class"].values() if np.isfinite(v)])
+    tau = 0.08
+    softmin = -tau * np.log(np.mean(np.exp(-sc / tau)))
+    r = ev["realism"]
+    pen = (np.clip((r["map_median"] - 1300) / 800, 0, 1.5)
+           + np.clip((r["map_p95"] - 3500) / 2500, 0, 1.5))
+    return float(0.5 * sc.mean() + 0.5 * softmin - 0.2 * pen)
+
+
+def river_check(result, ix):
+    """Independent validation (never optimised): is the drawn river network
+    densest where the model makes surplus water?
+
+    Rivers integrate water from upstream and the drawing style leaves
+    mountain crests bare, so instead of cell-by-cell matching this compares
+    ~100 km blocks of lowland: river-line density vs. the model's runoff
+    (precipitation minus evaporation, smoothed ~150 km).  Reports the
+    Spearman rank correlation (0 = no skill, 1 = perfect ordering).
+    """
+    from scipy import ndimage as ndi
+
+    g = result.grid
+    land = g.inmap & g.land
+    T = result.T
+    pet_day = np.clip(0.0023 * 17.8 * (T + 17.8) * 1.9, 0.1, None)      # Hargreaves-like
+    runoff = (result.P - np.minimum(result.P, 0.75 * pet_day)).sum(0) * \
+        result.params.year_days / result.nt
+    sig = 75.0 / g.cell_km
+    lw = ndi.gaussian_filter(land.astype(float), sig)
+    ro = ndi.gaussian_filter(np.where(land, runoff, 0.0), sig) / np.maximum(lw, 1e-6)
+    b = max(1, int(round(100.0 / g.cell_km)))
+    ny, nx = (g.ny // b) * b, (g.nx // b) * b
+
+    def blk(a):
+        return a[:ny, :nx].reshape(ny // b, b, nx // b, b).mean(axis=(1, 3))
+
+    lowland = (g.elev < np.percentile(g.elev[land], 85))
+    keep = blk((land & lowland).astype(float)) > 0.7
+    dens = blk(np.where(land, g.rivers, 0.0))[keep]
+    rr = blk(ro)[keep]
+    if dens.size < 10:
+        return dict(spearman=np.nan, blocks=int(dens.size))
+    ra = np.argsort(np.argsort(dens)).astype(float)
+    rb = np.argsort(np.argsort(rr)).astype(float)
+    rho = np.corrcoef(ra, rb)[0, 1]
+    return dict(spearman=float(rho), blocks=int(dens.size),
+                runoff_median=float(np.median(runoff[land])))
 
 
 def format_report(ev) -> str:

@@ -38,10 +38,20 @@ class Params:
     tier_tops: tuple = (350.0, 900.0, 1800.0, 3300.0)
     lapse_rate: float = 6.0           # K / km (environmental)
 
-    # What lies beyond each edge of the map is unknown, so it is a free
-    # choice per side: 'ocean' | 'land' | 'extend' (continue the edge).
-    # For 'land', *_gap_km is the width of open sea between the map edge and
-    # that unknown coast.
+    # What lies beyond each edge of the map is unknown.
+    # beyond_style 'procedural' (default): edge features continue and fade
+    # over beyond_continuity_km, then seeded fractal land/sea with a land
+    # *fraction* per side (0 = open ocean, 1 = continent) and low hills.
+    beyond_style: str = "procedural"
+    beyond_north_land: float = 0.6
+    beyond_south_land: float = 0.6
+    beyond_west_land: float = 0.3
+    beyond_east_land: float = 0.3
+    beyond_continuity_km: float = 300.0
+    beyond_relief_m: float = 400.0
+    beyond_seed: int = 1
+    # legacy 'blocks' style (rounds 0-2): per side 'ocean' | 'land' |
+    # 'extend', with *_gap_km of open sea before the unknown coast.
     beyond_north: str = "extend"
     beyond_south: str = "extend"
     beyond_west: str = "ocean"
@@ -87,6 +97,8 @@ class Params:
     subsidence: float = 0.75          # subtropical-high suppression (0..1)
     subsidence_asym: float = 0.0      # east/west-of-basin asymmetry of the highs
     moisture_diffusion: float = 6.0e4  # m^2/s
+    eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
+    eddy_scale_km: float = 450.0
 
     # ---------------------------------------------------------------- numerics
     downsample: int = 8               # source pixels per model cell
@@ -101,6 +113,7 @@ class Params:
         d = json.loads(Path(path).read_text())
         known = {f.name for f in fields(cls)}
         d = {k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items() if k in known}
+        d.setdefault("beyond_style", "blocks")   # files from before procedural surroundings
         return cls(**d)
 
     def replace(self, **kw) -> "Params":

@@ -87,6 +87,7 @@ def cmd_render(a):
     R.monthly_atlas(fr, out / "atlas_precipitation.png", "P")
     R.climographs(fr, CLIMOGRAPH_CITIES, out / "climographs.png")
     R.insolation_chart(p, out / "insolation.png")
+    R.context_map(r, out / "world_context.png")
     if not a.no_gif:
         t = time.time()
         R.season_gif(fr, out / "year_temperature.gif", "T", stride=a.gif_stride)
