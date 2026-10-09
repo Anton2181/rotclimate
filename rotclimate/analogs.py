@@ -9,9 +9,10 @@ seasonal clock.  Similarity combines
 * the RMS difference of sqrt(monthly precipitation), so 10 vs 40 mm counts
   about as much as 100 vs 160 mm.
 
-The reference set is data/real_cities_wmo.csv (official WMO normals, built by
-scripts/fetch_wmo_normals.py when network access allows) if present,
-otherwise data/real_cities_approx.csv (≈130 cities, approximate values).
+The reference set is data/real_cities_wmo.csv (official WMO normals for ~2,100
+cities, built by scripts/fetch_wmo_normals.py), topped up with entries from
+data/real_cities_approx.csv (approximate values) for well-known cities the WMO
+service has no normals for.
 """
 from __future__ import annotations
 
@@ -28,45 +29,77 @@ NH_SOLSTICE = 354.5      # Dec 21, 0-based day of year
 SH_SOLSTICE = 171.5      # Jun 21
 
 
+def _read_csv(path):
+    with open(path, encoding="utf-8") as f:
+        lines = [ln for ln in f if not ln.startswith("#")]
+    return list(csv.DictReader(lines))
+
+
 def reference_source() -> str:
-    return "WMO normals" if (DATA / "real_cities_wmo.csv").exists() else "approximate built-in normals"
+    ref = load_reference()
+    n_wmo = sum(r["source"] == "wmo" for r in ref)
+    n_apx = len(ref) - n_wmo
+    if n_wmo and n_apx:
+        return f"{n_wmo} cities with official WMO normals + {n_apx} with approximate values"
+    if n_wmo:
+        return f"{n_wmo} cities with official WMO normals"
+    return f"{n_apx} cities with approximate normals"
 
 
 @lru_cache(maxsize=1)
 def load_reference():
-    path = DATA / "real_cities_wmo.csv"
-    if not path.exists():
-        path = DATA / "real_cities_approx.csv"
+    """Official WMO normals where available, topped up with the approximate
+    table for well-known cities the WMO service has no normals for."""
+    raw = []
+    wmo = DATA / "real_cities_wmo.csv"
+    if wmo.exists():
+        raw += [(r, "wmo") for r in _read_csv(wmo)]
+    have = {r["name"].casefold() for r, _ in raw}
+    raw += [(r, "approx") for r in _read_csv(DATA / "real_cities_approx.csv")
+            if r["name"].casefold() not in have]
     rows = []
-    with open(path, encoding="utf-8") as f:
-        lines = [ln for ln in f if not ln.startswith("#")]
-    for r in csv.DictReader(lines):
+    for r, src in raw:
         T = np.array([float(r[f"T{i}"]) for i in range(1, 13)])
         P = np.array([float(r[f"P{i}"]) for i in range(1, 13)])
         lat = float(r["lat"])
         T12, P12 = _align_calendar_months(T, P, lat)
-        rows.append(dict(name=r["name"], country=r["country"], lat=lat, lon=float(r["lon"]),
-                         elev=float(r.get("elev") or 0), T=T, P=P, T12=T12, P12=P12))
-    # Koppen of each reference (on calendar months; classification is
-    # insensitive to the phase shift because summer is chosen by solstice)
+        rows.append(dict(name=r["name"], country=_short_country(r["country"]), lat=lat,
+                         lon=float(r["lon"]), source=src, period=r.get("period", ""),
+                         T=T, P=P, T12=T12, P12=P12))
+    _attach_koppen(rows)
+    return rows
+
+
+_COUNTRY_SHORT = {
+    "United States of America": "USA", "Russian Federation": "Russia",
+    "Iran (Islamic Republic of)": "Iran", "United Kingdom of Great Britain and Northern Ireland": "UK",
+    "Hong Kong, China": "Hong Kong", "Macao, China": "Macao", "Republic of Korea": "South Korea",
+    "Democratic People's Republic of Korea": "North Korea", "Syrian Arab Republic": "Syria",
+    "Viet Nam": "Vietnam", "Lao People's Democratic Republic": "Laos", "Türkiye": "Turkey",
+    "Republic of Moldova": "Moldova", "United Republic of Tanzania": "Tanzania",
+    "Bolivia (Plurinational State of)": "Bolivia", "Venezuela (Bolivarian Republic of)": "Venezuela",
+    "Democratic Republic of the Congo": "DR Congo", "Brunei Darussalam": "Brunei",
+}
+
+
+def _short_country(c):
+    return _COUNTRY_SHORT.get(c, c)
+
+
+def _attach_koppen(rows):
     Tm = np.stack([r["T"] for r in rows], axis=1)
     Pm = np.stack([r["P"] for r in rows], axis=1)
     nh = np.array([r["lat"] >= 0 for r in rows])
-    codes = []
+    kk = np.zeros(len(rows), int)
     for hemi in (True, False):
         sel = nh == hemi
         if sel.any():
             summer = np.array([m in (3, 4, 5, 6, 7, 8) for m in range(12)])
             if not hemi:
                 summer = ~summer
-            k = classify(Tm[:, sel], Pm[:, sel], summer)
-            codes.append((sel, k))
-    kk = np.zeros(len(rows), int)
-    for sel, k in codes:
-        kk[sel] = k
+            kk[sel] = classify(Tm[:, sel], Pm[:, sel], summer)
     for r, c in zip(rows, kk):
         r["koppen"] = CODES[c] if c >= 0 else "?"
-    return rows
 
 
 def _align_calendar_months(T, P, lat):
@@ -117,12 +150,13 @@ def top_analogs(T12, P12, k=4):
     d, dT, dP = distance(T12[:, None], P12[:, None], RT, RP)
     idx = np.argsort(d)[:k]
     return [dict(name=ref[i]["name"], country=ref[i]["country"], koppen=ref[i]["koppen"],
+                 source=ref[i]["source"],
                  score=float(d[i]), dT=float(dT[i]), dP=float(dP[i]),
                  similarity=float(100 * np.exp(-d[i] / 2.0))) for i in idx]
 
 
 def reference_payload():
     """Compact reference table for the atlas page."""
-    return [dict(n=r["name"], c=r["country"], k=r["koppen"],
+    return [dict(n=r["name"], c=r["country"], k=r["koppen"], a=int(r["source"] != "wmo"),
                  T=[round(float(v), 1) for v in r["T12"]],
                  P=[round(float(v)) for v in r["P12"]]) for r in load_reference()]
