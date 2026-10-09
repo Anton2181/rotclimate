@@ -286,7 +286,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   let meta, buf;
   try {
     meta = await (await fetch("data/atlas.json")).json();
-    buf = await (await fetch("data/atlas.bin")).arrayBuffer();
+    // packed arrays: published as atlas.wasm (a served binary type), atlas.bin locally
+    let res = await fetch("data/atlas.wasm");
+    if (!res.ok) res = await fetch("data/atlas.bin");
+    buf = await res.arrayBuffer();
   } catch (e) {
     $("hint").textContent = "Climate data failed to load. Reload the page to try again.";
     return;

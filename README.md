@@ -7,7 +7,61 @@ A calibrator then searches for what the map doesn't say — latitude, axial
 tilt, spin direction, how high the tiers are, and what lies beyond the edges —
 until the simulated climate reproduces the painted target zones.
 
-<!-- RESULTS -->
+## Results
+
+**Interactive atlas:** https://claude.ai/artifact/BMvofWDzswrdCgSBkHnNRf (private until you share it).
+Click any place for its climograph in the local calendar and its closest real-world cities, or
+search a real city to see where on the map feels like it.
+
+![Köppen map](output/koppen.png)
+
+### What the world must be like (best calibration)
+
+| unknown | best fit |
+|---|---|
+| spin | **retrograde (opposite to Earth)** |
+| latitude | 25.9°N to 40.6°N (centre 33.3°N) |
+| axial tilt | 32.3° (Earth 23.4°) |
+| height tiers | lowland ≤ 339 m, hills ≤ 543 m, upland ≤ 2144 m, peaks to 4379 m |
+| land beyond the map | north 97%, south 99%, west 27%, east 28% |
+
+The strongest result is the spin. With Earth-like spin, no calibration in any round could make
+the south-east hot and dry. Reversed spin turns the continent into a mirror-image North America:
+the west coast and south coast play the humid south-east US, the east plays California, the
+south-east plays the dry south-west, and the north-west plays New England. (A southern-hemisphere
+map with south at the top would behave the same way.)
+
+### Match with the painted zones (7 km render)
+
+Overall 0.48; 37% of painted land falls in its own zone's rule
+(it00, the Earth-like first guess: 0.17 and 9%).
+
+| zone | agreement (0–1) |
+|---|---|
+| Cold and wet | 0.74 |
+| Cold and dry | 0.18 |
+| Warm and wet | 0.36 |
+| Mediterranean | 0.65 |
+| Hot and wet, swampy | 0.51 |
+| Tree (forested) | 0.83 |
+| Hot and dry | 0.07 |
+
+Hot-and-dry stays the weakest zone. It sits on the desert threshold and faces the swampy coast
+across a narrow sea, so it is very sensitive. Round 6 (physics v5) was stopped early to fit the
+session's usage window; more calibration with `--physics v5` is the next step.
+
+### Maps and GIFs (`output/`)
+
+`koppen.png` · `comparison.png` · `world_context.png` · `temperature_*.png` · `precipitation_annual.png` ·
+`atlas_temperature.png` · `atlas_precipitation.png` · `climographs.png` (with "feels like" cities) ·
+`insolation.png` · `year_temperature.gif` · `year_precipitation.gif` · `spin_flip.gif` · `tilt_sweep.gif` ·
+`surroundings.gif` · `improvement.gif`
+
+![A year of temperature and wind](output/year_temperature.gif)
+
+Real-world analogues use official WMO climate normals for 2,106 cities
+(`data/real_cities_wmo.csv`), plus approximate values for 42 well-known cities WMO lacks.
+
 
 ## Quick start
 
