@@ -13,16 +13,20 @@ until the simulated climate reproduces the painted target zones.
 
 ```bash
 pip install -r requirements.txt
-python -m rotclimate render --params calibration/best_params.json   # all maps + gifs -> output/
-python -m rotclimate score  --params calibration/best_params.json   # just the target score
-python -m rotclimate calibrate --physics v3 --objective balanced --seeds 1,2,3 \
+scripts/make_all.sh calibration/best_params.json          # every map, GIF, chart + atlas data
+python -m rotclimate render --params calibration/best_params.json --out output
+python -m rotclimate score  --params calibration/best_params.json
+python -m rotclimate calibrate --physics v4 --objective balanced --seeds 1,2 \
        --start calibration/best_params.json --out calibration/my_run --evals 600
 python -m rotclimate.experiments tilt --params calibration/best_params.json --out output/tilt_sweep.gif
+python scripts/fetch_wmo_normals.py      # official city normals for the analogues (needs worldweather.wmo.int)
 ```
 
-A full-resolution render (7 km cells, 73 weeks) takes about 3–5 minutes on 4
-cores. The coarse grid used for calibration (28 km) takes about 1 s per
-simulated year.
+To view the interactive atlas locally, run `python -m http.server -d atlas` and open
+http://localhost:8000.
+
+A full-resolution render (7 km cells, 73 weeks) takes a few minutes on 4 cores.
+The 28 km grid used for calibration simulates a year in about 1 s.
 
 ## Repository layout
 
@@ -30,13 +34,16 @@ simulated year.
 |---|---|
 | `data/source/` | your five map layers (elevation, rivers, target climate, roads, labels) |
 | `data/places.csv` | place names with their pixel positions (transcribed from the labels layer) |
+| `data/real_cities_approx.csv` | approximate climate normals of ~130 real cities, used for the "feels like" analogues |
 | `rotclimate/geography.py` | layers → model grid, tier elevations, target masks, procedural surroundings |
 | `rotclimate/astronomy.py`, `ebm.py` | sunlight for any tilt; planet-wide seasonal energy balance |
 | `rotclimate/model.py`, `solver.py` | the 2-D seasonal model (winds, temperature, moisture, rain, snow) |
-| `rotclimate/koppen.py`, `score.py` | Köppen–Geiger classes; fuzzy scoring against the painted zones |
+| `rotclimate/koppen.py`, `score.py` | Köppen–Geiger classes; fuzzy scoring against the painted zones; river check |
+| `rotclimate/analogs.py` | real-world "feels like" matching on solstice-aligned seasons |
 | `rotclimate/calibrate.py` | CMA-ES search over ~45 unknowns |
-| `rotclimate/render.py`, `experiments.py` | maps, GIFs, climographs, sweeps |
-| `calibration/` | best parameters, iteration snapshots |
+| `rotclimate/render.py`, `experiments.py`, `atlas.py` | maps, GIFs, climographs, sweeps, atlas data |
+| `atlas/index.html` | the interactive atlas page |
+| `calibration/` | best parameters, every round's best, iteration snapshots |
 | `docs/MODEL.md` | how the physics works |
 | `docs/ITERATIONS.md` | the improvement log |
 | `output/` | rendered maps and GIFs |
