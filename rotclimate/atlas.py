@@ -213,6 +213,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
                     score=ev["per_class"][key]) for cid, key, _, _ in TARGET_CLASSES],
         score=ev["total"], accuracy=ev["accuracy"],
         layers=_layer_meta(),
+        zones_extra=[dict(label=lab, color=col) for _, lab, col in ZONE_EXTRAS],
         rivers_sim=river_segments(result),
         reference=reference_payload(), reference_source=reference_source(),
         solstice_day=p.winter_solstice_day,
@@ -277,8 +278,20 @@ def river_segments(result, q_min=15.0):
     return segs
 
 
-def zone_classes(mem, land, threshold=0.3):
-    """Best-matching painted-zone type per pixel (0 = fits none of them)."""
+# extra display categories for the simulated-zones map (not part of the score)
+ZONE_EXTRAS = [
+    (8, "Mountain (cold highland)", "#a3abb3"),
+    (9, "Steppe (semi-dry margin)", "#cdbb88"),
+    (10, "Transitional", "#dcdcdc"),
+]
+
+
+def zone_classes(mem, land, threshold=0.3, ix=None, elev=None):
+    """Best-matching painted-zone type per pixel.
+
+    With climate indices and elevation, high cold ground becomes "Mountain"
+    (8) and places that fit none of the painted zones become "Steppe" (9, the
+    semi-dry margins) or "Transitional" (10); otherwise they are 0."""
     keys = [c[1] for c in TARGET_CLASSES]
     # "tree" (warm + humid) is the broadest rule: it only wins where no more
     # specific zone fits nearly as well
@@ -286,6 +299,11 @@ def zone_classes(mem, land, threshold=0.3):
     stack = np.stack([mem[k] for k in keys]).astype(np.float32) * w
     z = (stack.argmax(0) + 1).astype(np.int8)
     z[stack.max(0) < threshold] = 0
+    if ix is not None and elev is not None:
+        z[(elev > 2200.0) | (ix["Thot"] < 15.0)] = 8
+        left = z == 0
+        z[left & (ix["aridity"] < 1.8)] = 9
+        z[left & (ix["aridity"] >= 1.8)] = 10
     z[~land] = -1
     return z
 
@@ -295,9 +313,10 @@ def zones_layer(fr, outdir: Path = ATLAS / "data"):
 
     from .render import OCEAN_RGB, fullres_memberships, hillshade
 
-    z = zone_classes(fullres_memberships(fr), fr.land)
+    mem = fullres_memberships(fr)
+    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev)
     rgb = np.ones(z.shape + (3,), np.float32) * 0.86
-    for cid, col in TARGET_DRAW_COLORS.items():
+    for cid, col in list(TARGET_DRAW_COLORS.items()) + [(c, col) for c, _, col in ZONE_EXTRAS]:
         rgb[z == cid] = mc.to_rgb(col)
     hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
     rgb = rgb * (0.78 + 0.22 * 1.4 * hs[..., None]).clip(0, 1.1)

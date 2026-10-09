@@ -262,7 +262,9 @@ def build_grid(params: Params) -> Grid:
     if params.beyond_style == "procedural":
         beyond = ("procedural",
                   tuple(round(float(getattr(params, f"beyond_{s}_land")), 3)
-                        for s in ("north", "south", "west", "east")),
+                        for s in ("north", "south", "west", "east"))
+                  + tuple(round(float(v), 3) if v is not None and v >= 0 else -1.0
+                          for v in (params.beyond_southeast_land, params.beyond_northeast_land)),
                   round(float(params.beyond_continuity_km), 1),
                   round(float(params.beyond_relief_m), 1), int(params.beyond_seed))
     else:
@@ -320,8 +322,15 @@ def _procedural_offmap(core: dict, p: int, cell_km: float, low_fill: float, spec
     xkm = (jj - p + 0.5) * cell_km
     # per-side land fraction, blended by direction in the corners
     tot = np.maximum(dy + dx, 1e-9)
-    fN, fS, fW, fE = fracs
-    frac = (dy_n * fN + dy_s * fS + dx_w * fW + dx_e * fE) / tot
+    fN, fS, fW, fE = fracs[:4]
+    # optional separate east halves of the south / north edges (v6); the west
+    # halves keep fS / fN, with a ~300 km blend across the map's middle
+    fSE = fracs[4] if len(fracs) > 4 and fracs[4] >= 0 else fS
+    fNE = fracs[5] if len(fracs) > 5 and fracs[5] >= 0 else fN
+    east = 1 / (1 + np.exp(-(jj - (p + w / 2)) * cell_km / 150.0))
+    fS_x = fS * (1 - east) + fSE * east
+    fN_x = fN * (1 - east) + fNE * east
+    frac = (dy_n * fN_x + dy_s * fS_x + dx_w * fW + dx_e * fE) / tot
     nd = NormalDist()
     z = np.vectorize(lambda q: nd.inv_cdf(min(max(q, 0.002), 0.998)))(np.round(frac, 3))
     noise = _noise_at(seed, ykm, xkm)

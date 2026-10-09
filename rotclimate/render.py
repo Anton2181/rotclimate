@@ -235,15 +235,16 @@ def comparison_map(fr: FullRes, mem, path, title=None):
 
 def zones_map(fr: FullRes, mem, path, title=None):
     """Your painted zones next to the whole simulated map classified into them."""
-    from .atlas import zone_classes
+    from .atlas import ZONE_EXTRAS, zone_classes
 
-    z = zone_classes(mem, fr.land)
+    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev)
     tgt = target_fullres()
     fig, axs = plt.subplots(1, 2, figsize=(26, 6.8), dpi=80)
     for ax, cls, ttl in ((axs[0], tgt, "Your painted zones"),
                          (axs[1], z, "Simulated climate, classified into your zones")):
         img = np.ones(cls.shape + (3,)) * 0.86
-        for cid, col in TARGET_DRAW_COLORS.items():
+        extras = [(c, col) for c, _, col in ZONE_EXTRAS] if cls is z else []
+        for cid, col in list(TARGET_DRAW_COLORS.items()) + extras:
             img[cls == cid] = matplotlib.colors.to_rgb(col)
         img = shaded_rgb(img, fr, 0.3) if cls is z else img
         img[~fr.land] = OCEAN_RGB
@@ -251,11 +252,12 @@ def zones_map(fr: FullRes, mem, path, title=None):
         decorate(ax, fr, rivers=False, labels=False)
         ax.set_title(ttl, fontsize=16)
     handles = [Patch(color=TARGET_DRAW_COLORS[c], label=TARGET_LABELS[c]) for c in range(1, 8)]
-    handles.append(Patch(color="0.86", label="unpainted / fits none of the zones"))
-    fig.legend(handles=handles, loc="lower center", ncol=8, fontsize=11, frameon=False)
+    handles += [Patch(color=col, label=lab) for _, lab, col in ZONE_EXTRAS]
+    handles.append(Patch(color="0.86", label="unpainted (left map)"))
+    fig.legend(handles=handles, loc="lower center", ncol=6, fontsize=11, frameon=False)
     if title:
         fig.suptitle(title, fontsize=18)
-    fig.tight_layout(rect=(0, 0.06, 1, 0.97))
+    fig.tight_layout(rect=(0, 0.1, 1, 0.97))
     fig.savefig(path)
     plt.close(fig)
 

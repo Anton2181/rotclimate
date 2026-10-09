@@ -47,6 +47,8 @@ class Params:
     beyond_south_land: float = 0.6
     beyond_west_land: float = 0.3
     beyond_east_land: float = 0.3
+    beyond_southeast_land: float = -1.0   # v6: east half of the south edge (-1 = same as south)
+    beyond_northeast_land: float = -1.0   # v6: east half of the north edge (-1 = same as north)
     beyond_continuity_km: float = 300.0
     beyond_relief_m: float = 400.0
     beyond_seed: int = 1
@@ -74,6 +76,7 @@ class Params:
     land_amplitude: float = 1.0       # v4: scale of the continental seasonal swing
     storm_asym: float = 0.0           # v5: storm track stronger on the warm-current side
     storm_reach: float = 0.0          # v5: ... and this many degrees further equatorward
+    instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
 
     # ---------------------------------------------------------------- winds
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude

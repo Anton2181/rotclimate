@@ -262,10 +262,18 @@ class ClimateModel:
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             E_land = np.where(land, p.land_recycling * soilP * energy, 0.0) / DAY
+            # v6: hot, moist low-level air is convectively unstable, so it rains
+            # more efficiently than relative humidity alone suggests (gated by
+            # moisture, so hot deserts stay dry)
+            if p.instability > 0:
+                moist = np.clip((W / np.maximum(Ws, 1e-6) - 0.3) / 0.3, 0, 1) if W_prev is not None else 0.0
+                instab = 1.0 + p.instability * np.clip((T - 22.0) / 8.0, 0, 1.5) * moist
+            else:
+                instab = 1.0
             for _ in range(p.picard_iters):
                 RH = W / Ws
                 g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5
-                lamP = A_dyn * g_rh / (p.precip_tau_days * DAY)
+                lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY)
                 lamP = lamP + np.maximum(RH - 1.0, 0) / RH / DAY
                 if p.eddy_rate > 0:
                     Wmix = ndi.gaussian_filter(W, sigE, mode="nearest")
@@ -278,7 +286,7 @@ class ClimateModel:
                 W = 0.5 * (W + np.maximum(W_new, 0))
             RH = W / Ws
             g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5
-            lamP = A_dyn * g_rh / (p.precip_tau_days * DAY) + np.maximum(RH - 1.0, 0) / RH / DAY
+            lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY) + np.maximum(RH - 1.0, 0) / RH / DAY
             P = lamP * W * DAY
             E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
             soilP = 0.75 * soilP + 0.25 * P

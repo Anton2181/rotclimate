@@ -184,6 +184,12 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .zoom button { width: 34px; height: 34px; font: 600 1.05rem var(--font-body); color: var(--ink); background: var(--plate);
   border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; display: grid; place-items: center; }
 .zoom button:disabled { opacity: 0.45; cursor: default; }
+.toast { position: absolute; right: 54px; top: 10px; background: var(--ink); color: var(--plate); font-size: var(--step--1);
+  padding: 6px 10px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+.copy-fallback { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.6); display: grid; place-items: center; padding: 16px; }
+.copy-fallback figure { background: var(--plate); padding: 12px; border-radius: 6px; max-width: min(1100px, 100%); }
+.copy-fallback img { max-height: 70vh; width: auto; }
 .zoom button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
@@ -231,7 +237,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
           <button type="button" id="zin" aria-label="Zoom in">+</button>
           <button type="button" id="zout" aria-label="Zoom out">−</button>
           <button type="button" id="zreset" aria-label="Reset view">⤢</button>
+          <button type="button" id="copyview" aria-label="Copy this view to the clipboard" title="Copy this view to the clipboard">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+              <rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          </button>
         </div>
+        <span class="toast" id="toast" role="status" aria-live="polite"></span>
         <span class="hint" id="hint">Scroll or pinch to zoom · drag to pan · click for a place's climate</span>
       </div>
       </div>
@@ -368,7 +379,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       }).join("");
     } else if (L.kind === "zones") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
-        + `<span><span class="sw" style="background:#dbdbdb"></span>Fits none of your zones</span>`
+        + (meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])
+          .map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
         + `<span class="note">Each place takes the zone type its simulated climate fits best.</span>`;
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
@@ -656,6 +668,73 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   $("zout").addEventListener("click", () => zoomAt(...centre(), 1 / 1.6));
   $("zreset").addEventListener("click", () => { zs = 1; tx = 0; ty = 0; applyZoom(); });
   window.addEventListener("resize", applyZoom);
+
+  // ---------------------------------------------------------------- copy the current view
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+  function loadImage(src) {
+    return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  }
+  async function renderView() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    const k = Math.min(3, Math.max(2, window.devicePixelRatio || 1));      // output pixels per screen pixel
+    const cv = document.createElement("canvas");
+    cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+    const ctx = cv.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
+    ctx.fillStyle = "#d6e4f0";
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    const fullW = w * zs * k, fullH = h * zs * k;              // the whole map at this zoom
+    const base = await loadImage($("base").src);
+    ctx.drawImage(base, tx * k, ty * k, fullW, fullH);
+    // vector overlays that are switched on, rasterised at the same scale
+    const overlays = ["simrivers", "matchsvg", "placenames", "marker"]
+      .map((id) => $(id)).filter((el) => el.style.display !== "none" && el.innerHTML.trim());
+    for (const el of overlays) {
+      const st = el.getAttribute("style") || "";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 926" preserveAspectRatio="none"
+        width="${fullW}" height="${fullH}" style="${st.replace(/display:\s*none;?/, "")}" font-family="sans-serif">
+        <style>text{font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
+        ${el.innerHTML}</svg>`;
+      const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      try { ctx.drawImage(await loadImage(url), tx * k, ty * k, fullW, fullH); } finally { URL.revokeObjectURL(url); }
+    }
+    // caption strip: layer name + scale note
+    const L = meta.layers.find((l) => l.id === current);
+    ctx.font = `${12 * k}px sans-serif`;
+    const cap = `${L ? L.label : ""} · Rotclimate Atlas`;
+    const pad = 6 * k, tw = ctx.measureText(cap).width;
+    ctx.fillStyle = "rgba(255,255,255,0.85)";
+    ctx.fillRect(cv.width - tw - 3 * pad, cv.height - 18 * k - pad, tw + 2 * pad, 18 * k);
+    ctx.fillStyle = "#15181a";
+    ctx.fillText(cap, cv.width - tw - 2 * pad, cv.height - pad - 5 * k);
+    return new Promise((res) => cv.toBlob(res, "image/png"));
+  }
+  function showFallback(blob) {
+    const url = URL.createObjectURL(blob);
+    const wrap = document.createElement("div");
+    wrap.className = "copy-fallback";
+    wrap.innerHTML = `<figure><img src="${url}" alt="Current map view"><figcaption class="note">Your browser blocked clipboard access here.
+      Right-click or long-press the image and choose Copy image. Click outside to close.</figcaption></figure>`;
+    wrap.addEventListener("click", (e) => { if (e.target === wrap) { wrap.remove(); URL.revokeObjectURL(url); } });
+    document.body.appendChild(wrap);
+  }
+  $("copyview").addEventListener("click", async () => {
+    const pending = renderView();
+    try {
+      if (!navigator.clipboard || typeof ClipboardItem === "undefined") throw new Error("no clipboard");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": pending })]);
+      toast("Copied this view");
+    } catch (err) {
+      const blob = await pending;
+      if (blob) showFallback(blob); else toast("Could not copy the view");
+    }
+  });
   applyZoom();
 
   // ---------------------------------------------------------------- facts, zones, calendar
