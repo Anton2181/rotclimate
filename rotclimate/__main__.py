@@ -95,7 +95,10 @@ def cmd_render(a):
         R.season_gif(fr, out / "year_temperature.gif", "T", stride=a.gif_stride)
         R.season_gif(fr, out / "year_precipitation.gif", "P", stride=a.gif_stride)
         print(f"  gifs in {time.time() - t:.0f}s")
+    from .score import objective
+
     summary = dict(score=ev["total"], accuracy=ev["accuracy"], per_class=ev["per_class"],
+                   precision=ev["precision"], f1=ev["f1"], f1_objective=objective(ev, "f1"),
                    koppen_share={})
     from .koppen import CODES
 
