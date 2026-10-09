@@ -162,6 +162,14 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .analogs button { all: unset; cursor: pointer; font-weight: 700; color: var(--ink); text-decoration: underline;
   text-decoration-color: var(--rule); text-underline-offset: 3px; }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.stage { touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+.stage.dragging { cursor: grabbing; }
+.viewport { position: absolute; inset: 0; transform-origin: 0 0; will-change: transform; }
+.zoom { position: absolute; right: 10px; top: 10px; display: grid; gap: 4px; }
+.zoom button { width: 34px; height: 34px; font: 600 1.05rem var(--font-body); color: var(--ink); background: var(--plate);
+  border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; display: grid; place-items: center; }
+.zoom button:disabled { opacity: 0.45; cursor: default; }
+.zoom button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
@@ -181,11 +189,18 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
         <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
       </div>
       <div class="stage" id="stage">
-        <img id="base" alt="Climate map of the world" src="data/koppen.webp">
-        <canvas id="heat" aria-hidden="true"></canvas>
-        <img id="labels" class="labels" alt="" src="data/labels.png">
-        <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
-        <span class="hint" id="hint">Click or tap the map</span>
+        <div class="viewport" id="viewport">
+          <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
+          <canvas id="heat" aria-hidden="true"></canvas>
+          <img id="labels" class="labels" alt="" src="data/labels.png" draggable="false">
+          <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
+        <div class="zoom" role="group" aria-label="Zoom">
+          <button type="button" id="zin" aria-label="Zoom in">+</button>
+          <button type="button" id="zout" aria-label="Zoom out">−</button>
+          <button type="button" id="zreset" aria-label="Reset view">⤢</button>
+        </div>
+        <span class="hint" id="hint">Scroll or pinch to zoom · drag to pan · click for a place's climate</span>
       </div>
       <div class="legend" id="legend"></div>
     </div>
@@ -399,9 +414,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       }
       if (best) { [x, y] = best; k = cls.data[pixIdx(x, y)]; }
     }
-    const svg = $("marker");
-    svg.innerHTML = `<circle cx="${x}" cy="${y}" r="14" fill="none" stroke="#111" stroke-width="5" opacity="0.55"/>
-      <circle cx="${x}" cy="${y}" r="14" fill="none" stroke="#fff" stroke-width="2.5"/>`;
+    lastMarker = { x, y };
+    drawMarker();
     if (k === 255) {
       $("station-h").textContent = "Open sea";
       $("kchip").textContent = ""; $("kchip").style.background = "transparent";
@@ -496,13 +510,97 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     $("chart").innerHTML = s;
   }
 
-  $("stage").addEventListener("click", (e) => {
-    const rect = e.currentTarget.getBoundingClientRect();
-    const x = (e.clientX - rect.left) / rect.width * W;
-    const y = (e.clientY - rect.top) / rect.height * H;
-    $("hint").hidden = true;
-    select(x, y);
+  // ---------------------------------------------------------------- zoom & pan
+  const stage = $("stage"), vp = $("viewport");
+  const ZMAX = 10;
+  let zs = 1, tx = 0, ty = 0, lastMarker = null;
+  function drawMarker() {
+    const svg = $("marker");
+    if (!lastMarker) { svg.innerHTML = ""; return; }
+    const { x, y } = lastMarker, r = 14 / zs;
+    svg.innerHTML = `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#111" stroke-width="${5 / zs}" opacity="0.55"/>
+      <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#fff" stroke-width="${2.5 / zs}"/>`;
+  }
+  function applyZoom() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    zs = Math.min(ZMAX, Math.max(1, zs));
+    tx = Math.min(0, Math.max(w - w * zs, tx));
+    ty = Math.min(0, Math.max(h - h * zs, ty));
+    vp.style.transform = `translate(${tx}px, ${ty}px) scale(${zs})`;
+    drawMarker();
+    $("zreset").disabled = zs === 1;
+    $("zin").disabled = zs >= ZMAX;
+    $("zout").disabled = zs <= 1;
+  }
+  function zoomAt(cx, cy, f) {
+    const r = stage.getBoundingClientRect();
+    const px = cx - r.left, py = cy - r.top;
+    const nz = Math.min(ZMAX, Math.max(1, zs * f));
+    tx = px - (px - tx) * (nz / zs);
+    ty = py - (py - ty) * (nz / zs);
+    zs = nz;
+    applyZoom();
+  }
+  function focusOn(x, y, z) {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    zs = Math.max(zs, z);
+    tx = w / 2 - (x / W) * w * zs;
+    ty = h / 2 - (y / H) * h * zs;
+    applyZoom();
+  }
+  stage.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
+  }, { passive: false });
+  const pts = new Map();
+  let moved = 0, pinch = null;
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".zoom")) return;
+    stage.setPointerCapture(e.pointerId);
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) moved = 0;
+    if (pts.size === 2) {
+      const [a, b] = [...pts.values()];
+      pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      moved = 99;
+    }
   });
+  stage.addEventListener("pointermove", (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const p = pts.get(e.pointerId), dx = e.clientX - p.x, dy = e.clientY - p.y;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) {
+      moved += Math.abs(dx) + Math.abs(dy);
+      if (moved > 5 && zs > 1) { tx += dx; ty += dy; stage.classList.add("dragging"); applyZoom(); }
+    } else if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      tx += mx - pinch.mx; ty += my - pinch.my;
+      zoomAt(mx, my, d / Math.max(pinch.d, 1));
+      pinch = { d, mx, my };
+    }
+  });
+  function endPointer(e) {
+    if (!pts.has(e.pointerId)) return;
+    const single = pts.size === 1;
+    pts.delete(e.pointerId);
+    if (pts.size < 2) pinch = null;
+    stage.classList.remove("dragging");
+    if (single && moved <= 5 && e.type === "pointerup") {
+      const r = vp.getBoundingClientRect();
+      $("hint").hidden = true;
+      select((e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H);
+    }
+  }
+  stage.addEventListener("pointerup", endPointer);
+  stage.addEventListener("pointercancel", endPointer);
+  stage.addEventListener("dblclick", (e) => zoomAt(e.clientX, e.clientY, 2));
+  const centre = () => { const r = stage.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  $("zin").addEventListener("click", () => zoomAt(...centre(), 1.6));
+  $("zout").addEventListener("click", () => zoomAt(...centre(), 1 / 1.6));
+  $("zreset").addEventListener("click", () => { zs = 1; tx = 0; ty = 0; applyZoom(); });
+  window.addEventListener("resize", applyZoom);
+  applyZoom();
 
   // ---------------------------------------------------------------- facts, zones, calendar
   const wd = meta.world;
@@ -596,6 +694,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       b.addEventListener("click", () => {
         const o = out[+b.dataset.i];
         select(o.p.x, o.p.y + 8, o.p.name);
+        focusOn(o.p.x, o.p.y + 8, 3);
         $("stage").scrollIntoView({ behavior: "smooth", block: "center" });
       });
     }

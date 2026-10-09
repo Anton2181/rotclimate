@@ -79,6 +79,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     for cid, col in TARGET_DRAW_COLORS.items():
         timg[tgt == cid] = mc.to_rgb(col)
     _save_webp(_overlay_rivers(timg), outdir / "target.webp")
+    agreement_layer(fr, outdir)
     # labels overlay (transparent png with a soft halo)
     lab = np.array(Image.open(SOURCE / "labels.webp").convert("RGBA")).astype(float) / 255.0
     a = lab[..., 3]
@@ -165,6 +166,31 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     return meta
 
 
+def agreement_layer(fr, outdir: Path = ATLAS / "data"):
+    """Per-pixel agreement with each painted zone's rule (the accuracy map)."""
+    import matplotlib.pyplot as plt
+
+    from .render import OCEAN_RGB, fullres_memberships
+
+    mem = fullres_memberships(fr)
+    tgt = target_fullres()
+    agree = np.full(tgt.shape, np.nan)
+    for cid, key, _, _ in TARGET_CLASSES:
+        m = (tgt == cid) & fr.land
+        agree[m] = mem[key][m]
+    rgb = np.ones(tgt.shape + (3,)) * 0.86
+    ok = ~np.isnan(agree)
+    rgb[ok] = plt.get_cmap("RdYlGn")(agree[ok])[:, :3]
+    # thin dark outlines around the painted zones
+    edge = np.zeros(tgt.shape, bool)
+    for cid in range(1, 8):
+        m = tgt == cid
+        edge |= m & ~ndi.binary_erosion(m, iterations=2)
+    rgb[edge & fr.land] *= 0.45
+    rgb[~fr.land] = OCEAN_RGB
+    _save_webp(_overlay_rivers(rgb), outdir / "agreement.webp")
+
+
 def _layer_meta():
     import matplotlib.pyplot as plt
     import matplotlib.colors as mc
@@ -176,6 +202,9 @@ def _layer_meta():
     return [
         dict(id="koppen", file="koppen.webp", label="Köppen", kind="koppen"),
         dict(id="target", file="target.webp", label="Your zones", kind="target"),
+        dict(id="agreement", file="agreement.webp", label="Match accuracy", kind="ramp",
+             unit="agreement with your painted zone's rule (grey = unpainted land)",
+             vmin=0, vmax=1, stops=stops("RdYlGn")),
         dict(id="t_annual", file="t_annual.webp", label="Mean temperature", kind="ramp",
              unit="°C, year mean", vmin=-10, vmax=30, stops=stops("turbo")),
         dict(id="t_cold", file="t_cold.webp", label="Coldest month", kind="ramp",
