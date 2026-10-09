@@ -156,6 +156,7 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .searchbox { position: absolute; z-index: 3; left: 10px; top: 10px; width: min(340px, calc(100% - 70px));
   max-height: calc(100% - 20px); overflow: auto; background: var(--plate); border: 1px solid var(--rule);
   border-radius: 6px; padding: 10px; display: grid; gap: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12); }
+.searchbox[hidden] { display: none; }
 @media (max-width: 760px) { .searchbox { position: static; width: auto; max-height: none; box-shadow: none; margin-bottom: 10px; } }
 .found li { grid-template-columns: 1.6em minmax(0, 1fr) auto; }
 .found .num { font-family: var(--font-data); font-size: var(--step--1); color: var(--ink-soft); }
@@ -184,6 +185,9 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .zoom button { width: 34px; height: 34px; font: 600 1.05rem var(--font-body); color: var(--ink); background: var(--plate);
   border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; display: grid; place-items: center; }
 .zoom button:disabled { opacity: 0.45; cursor: default; }
+.zoom button svg { position: static; width: 17px; height: 17px; pointer-events: none; }
+.zoom button[aria-pressed="true"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
+.zoom .gap { height: 4px; }
 .toast { position: absolute; right: 54px; top: 10px; background: var(--ink); color: var(--plate); font-size: var(--step--1);
   padding: 6px 10px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
 .toast.show { opacity: 1; }
@@ -208,7 +212,6 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <div class="controls">
         <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
         <div class="toggles">
-          <label class="toggle"><input type="checkbox" id="searchtoggle" checked> Search box</label>
           <label class="toggle"><input type="checkbox" id="names" checked> Place names</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
         </div>
@@ -233,7 +236,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
-        <div class="zoom" role="group" aria-label="Zoom">
+        <div class="zoom" role="group" aria-label="Map tools">
+          <button type="button" id="searchtoggle" aria-pressed="true" aria-controls="searchbox" aria-label="Show or hide the search box" title="Search box">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
+          </button>
+          <span class="gap" aria-hidden="true"></span>
           <button type="button" id="zin" aria-label="Zoom in">+</button>
           <button type="button" id="zout" aria-label="Zoom out">−</button>
           <button type="button" id="zreset" aria-label="Reset view">⤢</button>
@@ -368,7 +376,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     drawLegend(L);
   }
   $("names").addEventListener("change", (e) => { $("placenames").style.display = e.target.checked ? "" : "none"; });
-  $("searchtoggle").addEventListener("change", (e) => { $("searchbox").hidden = !e.target.checked; });
+  $("searchtoggle").addEventListener("click", (e) => {
+    const box = $("searchbox"), show = box.hidden;
+    box.hidden = !show;
+    e.currentTarget.setAttribute("aria-pressed", show ? "true" : "false");
+    if (show) $("find-input").focus();
+  });
 
   function drawLegend(L) {
     const el = $("legend");
@@ -697,10 +710,13 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       .map((id) => $(id)).filter((el) => el.style.display !== "none" && el.innerHTML.trim());
     for (const el of overlays) {
       const st = el.getAttribute("style") || "";
+      // non-scaling strokes are in output pixels: widen them by k to match the screen
+      const body = el.innerHTML.replace(/<[^>]*non-scaling-stroke[^>]*>/g, (tag) =>
+        tag.replace(/stroke-width="([\d.]+)"/, (_, v) => `stroke-width="${(+v * k).toFixed(2)}"`));
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 926" preserveAspectRatio="none"
         width="${fullW}" height="${fullH}" style="${st.replace(/display:\s*none;?/, "")}" font-family="sans-serif">
         <style>text{font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
-        ${el.innerHTML}</svg>`;
+        ${body}</svg>`;
       const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
       try { ctx.drawImage(await loadImage(url), tx * k, ty * k, fullW, fullH); } finally { URL.revokeObjectURL(url); }
     }
