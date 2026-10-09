@@ -83,9 +83,9 @@ class FullRes:
         return self._k
 
 
-def hillshade(elev):
+def hillshade(elev, dx=1770.0):
     ls = LightSource(azdeg=315, altdeg=40)
-    return ls.hillshade(elev, vert_exag=0.02, dx=1770, dy=1770)
+    return ls.hillshade(elev, vert_exag=0.02, dx=dx, dy=dx)
 
 
 def decorate(ax, fr: FullRes, rivers=True, labels=True, roads=False, coast=True):
@@ -118,7 +118,7 @@ def decorate(ax, fr: FullRes, rivers=True, labels=True, roads=False, coast=True)
 
 
 def shaded_rgb(rgb, fr: FullRes, strength=0.45):
-    hs = hillshade(fr.elev)
+    hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
     out = rgb * ((1 - strength) + strength * 1.6 * hs[..., None]).clip(0, 1.25)
     out = out.clip(0, 1)
     out[~fr.land] = OCEAN_RGB

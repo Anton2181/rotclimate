@@ -164,7 +164,10 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .stage { touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
 .stage.dragging { cursor: grabbing; }
-.viewport { position: absolute; inset: 0; transform-origin: 0 0; will-change: transform; }
+.viewport { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+/* place names sit on the map imagery, which looks the same in both themes */
+.names text { font-family: var(--font-body); font-weight: 500; fill: #15181a; stroke: rgba(255, 255, 255, 0.85);
+  paint-order: stroke; stroke-linejoin: round; }
 .zoom { position: absolute; right: 10px; top: 10px; display: grid; gap: 4px; }
 .zoom button { width: 34px; height: 34px; font: 600 1.05rem var(--font-body); color: var(--ink); background: var(--plate);
   border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; display: grid; place-items: center; }
@@ -192,7 +195,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
         <div class="viewport" id="viewport">
           <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
           <canvas id="heat" aria-hidden="true"></canvas>
-          <img id="labels" class="labels" alt="" src="data/labels.png" draggable="false">
+          <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
         <div class="zoom" role="group" aria-label="Zoom">
@@ -337,7 +340,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
   }
-  $("names").addEventListener("change", (e) => { $("labels").hidden = !e.target.checked; });
+  $("names").addEventListener("change", (e) => { $("placenames").style.display = e.target.checked ? "" : "none"; });
 
   function drawLegend(L) {
     const el = $("legend");
@@ -510,6 +513,11 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     $("chart").innerHTML = s;
   }
 
+  // ---------------------------------------------------------------- place names (vector, crisp at any zoom)
+  const namesSvg = $("placenames");
+  namesSvg.innerHTML = meta.places.map((p) =>
+    `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central">${esc(p.name)}</text>`).join("");
+
   // ---------------------------------------------------------------- zoom & pan
   const stage = $("stage"), vp = $("viewport");
   const ZMAX = 10;
@@ -526,7 +534,16 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     zs = Math.min(ZMAX, Math.max(1, zs));
     tx = Math.min(0, Math.max(w - w * zs, tx));
     ty = Math.min(0, Math.max(h - h * zs, ty));
-    vp.style.transform = `translate(${tx}px, ${ty}px) scale(${zs})`;
+    // lay the map out at the zoomed size (the browser re-samples the
+    // high-resolution layers and redraws vectors sharply)
+    vp.style.left = tx + "px";
+    vp.style.top = ty + "px";
+    vp.style.width = zs * 100 + "%";
+    vp.style.height = zs * 100 + "%";
+    const pxPerUnit = (w * zs) / 2000;
+    const fontPx = Math.min(13, Math.max(6, 10 * pxPerUnit));
+    namesSvg.style.fontSize = fontPx / pxPerUnit + "px";
+    namesSvg.style.strokeWidth = 2.6 / pxPerUnit + "px";
     drawMarker();
     $("zreset").disabled = zs === 1;
     $("zin").disabled = zs >= ZMAX;

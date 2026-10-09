@@ -20,9 +20,81 @@ from . import calendar as cal
 from .config import REPO, SOURCE, Params
 from .geography import (TARGET_CLASSES, TARGET_DRAW_COLORS, TARGET_LABELS, load_places,
                         source_layers, target_fullres)
-from .koppen import CODES, COLORS, DESCRIPTIONS, rgb_image
+from .geography import elevation_fullres
+from .koppen import CODES, COLORS, DESCRIPTIONS, monthly_stats, rgb_image
 
 ATLAS = REPO / "atlas"
+
+
+class HiRes:
+    """FullRes at `scale` x the source resolution (smooth coasts, sharp class
+    edges): fields are interpolated from the model grid, temperature is
+    re-cooled with the up-sampled terrain."""
+
+    def __new__(cls, result, scale=3):
+        from .render import FullRes
+
+        class _Hi(FullRes):
+            def __init__(self, r, sc):
+                g = r.grid
+                L = source_layers()
+                H0, W0 = L["land"].shape
+                self.r, self.H, self.W, self.px_m = r, H0 * sc, W0 * sc, 1770.0 / sc
+                yy, xx = np.mgrid[0:self.H, 0:self.W].astype(np.float32)
+                sy, sx = (yy + 0.5) / sc - 0.5, (xx + 0.5) / sc - 0.5
+                del yy, xx
+                up = lambda a, o=1: ndi.map_coordinates(a, [sy, sx], order=o, mode="nearest")
+                self.land = up(ndi.gaussian_filter(L["land"].astype(np.float32), 0.8)) > 0.5
+                self.elev = np.where(self.land, up(elevation_fullres(p_tops(r)).astype(np.float32)), 0)
+                self.rivers = up(ndi.gaussian_filter(L["rivers"].astype(np.float32), 0.6)) > 0.28
+                tgt = target_fullres()
+                stack = np.stack([up(ndi.gaussian_filter((tgt == c).astype(np.float32), 0.8))
+                                  for c in range(8)])
+                self.target = stack.argmax(0).astype(np.int8)
+                del stack
+                self.cy = (sy + 0.5) / g.f - 0.5 + g.pad
+                self.cx = (sx + 0.5) / g.f - 0.5 + g.pad
+                _, (iy, ix) = ndi.distance_transform_edt(~g.land, return_indices=True)
+                self._fill = (iy, ix)
+                self._lapse = r.params.lapse_rate
+
+            def monthly(self):
+                st = monthly_stats(self.r.Tsl, self.r.P, self.r.days, self.r.params.year_days,
+                                   summer_solstice=self.r.params.winter_solstice_day
+                                   + self.r.params.year_days / 2)
+                Tm = np.stack([self.temperature(t).astype(np.float32) for t in st["Tm"]])
+                Pm = np.stack([np.maximum(self.up(q), 0).astype(np.float32) for q in st["Pm"]])
+                return Tm, Pm, st["summer"]
+
+        return _Hi(result, scale)
+
+
+def p_tops(r):
+    return tuple(r.params.tier_tops)
+
+
+def build_hires_layers(result, scale=3, outdir: Path = ATLAS / "data"):
+    """Re-render every map layer at `scale` x resolution (same file names)."""
+    from .render import shaded_rgb
+
+    fr = HiRes(result, scale)
+    k = fr.koppen()
+    ix = fr._ix
+    _save_webp(_overlay_rivers(shaded_rgb(rgb_image(k).astype(float) / 255.0, fr, 0.42), fr),
+               outdir / "koppen.webp")
+    _save_webp(_cmap_img(ix["MAT"], "turbo", -10, 30, fr, 20), outdir / "t_annual.webp")
+    _save_webp(_cmap_img(ix["Tcold"], "turbo", -25, 25, fr, 25), outdir / "t_cold.webp")
+    _save_webp(_cmap_img(ix["Thot"], "turbo", 0, 40, fr, 20), outdir / "t_hot.webp")
+    _save_webp(_cmap_img(np.log10(np.maximum(ix["MAP"], 50)), "YlGnBu", np.log10(100),
+                         np.log10(3000), fr, 14), outdir / "precip.webp")
+    import matplotlib.colors as mc
+
+    timg = np.ones(fr.target.shape + (3,), np.float32) * np.array([0.84, 0.89, 0.94], np.float32)
+    timg[fr.land] = 0.9
+    for cid, col in TARGET_DRAW_COLORS.items():
+        timg[fr.target == cid] = mc.to_rgb(col)
+    _save_webp(_overlay_rivers(timg, fr), outdir / "target.webp")
+    agreement_layer(fr, outdir)
 
 
 def _save_webp(rgb, path, q=88):
@@ -39,17 +111,19 @@ def _cmap_img(field, cmap, vmin, vmax, fr, levels=None):
     if levels is not None:
         x = np.floor(x * levels) / levels + 0.5 / levels
     rgb = plt.get_cmap(cmap)(x)[..., :3]
-    hs = hillshade(fr.elev)
+    hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
     rgb = rgb * (0.72 + 0.28 * 1.4 * hs[..., None]).clip(0, 1.1)
     rgb[~fr.land] = OCEAN_RGB
-    return _overlay_rivers(rgb.clip(0, 1))
+    return _overlay_rivers(rgb.clip(0, 1), fr)
 
 
-def _overlay_rivers(rgb):
+def _overlay_rivers(rgb, fr=None):
     L = source_layers()
+    riv = getattr(fr, "rivers", L["rivers"]) if fr is not None else L["rivers"]
+    land = fr.land if fr is not None else L["land"]
     out = rgb.copy()
-    out[L["rivers"]] = out[L["rivers"]] * 0.35 + np.array([0.1, 0.3, 0.8]) * 0.65
-    edge = ndi.binary_dilation(L["land"]) & ~L["land"]
+    out[riv & land] = out[riv & land] * 0.35 + np.array([0.1, 0.3, 0.8]) * 0.65
+    edge = ndi.binary_dilation(land, iterations=max(1, land.shape[1] // 2000)) & ~land
     out[edge] = out[edge] * 0.4
     return out
 
@@ -173,7 +247,8 @@ def agreement_layer(fr, outdir: Path = ATLAS / "data"):
     from .render import OCEAN_RGB, fullres_memberships
 
     mem = fullres_memberships(fr)
-    tgt = target_fullres()
+    tgt = getattr(fr, "target", None)
+    tgt = target_fullres() if tgt is None else tgt
     agree = np.full(tgt.shape, np.nan)
     for cid, key, _, _ in TARGET_CLASSES:
         m = (tgt == cid) & fr.land
@@ -188,7 +263,7 @@ def agreement_layer(fr, outdir: Path = ATLAS / "data"):
         edge |= m & ~ndi.binary_erosion(m, iterations=2)
     rgb[edge & fr.land] *= 0.45
     rgb[~fr.land] = OCEAN_RGB
-    _save_webp(_overlay_rivers(rgb), outdir / "agreement.webp")
+    _save_webp(_overlay_rivers(rgb, fr), outdir / "agreement.webp")
 
 
 def _layer_meta():
