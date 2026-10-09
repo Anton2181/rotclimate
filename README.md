@@ -30,7 +30,8 @@ feels like it.
 | land beyond the map | north 77%, south 99%, west 3%, east 11% |
 
 The strongest result is the spin. With Earth-like spin, no calibration in any round could make
-the south-east hot and dry. Reversed spin turns the continent into a mirror-image North America:
+the south-east hot and dry. A final fairness run with identical physics and budget confirms it:
+best balanced score 0.336 for Earth-like spin against 0.493 for retrograde, with hot-and-dry at 0.09. Reversed spin turns the continent into a mirror-image North America:
 the west coast and south coast play the humid south-east US, the east plays California, the
 south-east plays the dry south-west, and the north-west plays New England. (A southern-hemisphere
 map with south at the top would behave the same way.)
