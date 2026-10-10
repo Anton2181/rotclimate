@@ -111,6 +111,8 @@ _V7_BOUNDS = {
     "land_amplitude": (0.7, 2.0),
 }
 SPACE_V7 = [(n, *_V7_BOUNDS.get(n, (lo, hi))) for n, lo, hi in SPACE_V6] + [("subsidence_summer", 0.0, 1.0)]
+# physics v8: wet ground evaporates away part of the summer warmth
+SPACE_V8 = SPACE_V7 + [("wet_cooling", 0.0, 0.8)]
 
 
 def _set_space(space):
@@ -260,8 +262,8 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7"])
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -277,9 +279,11 @@ def main():
         _set_space(SPACE_V6)
     elif a.physics == "v7":
         _set_space(SPACE_V7)
+    elif a.physics == "v8":
+        _set_space(SPACE_V8)
     base = Params.from_json(a.start) if a.start else Params()
     base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
-    if a.physics in ("v3", "v4", "v5", "v6", "v7"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

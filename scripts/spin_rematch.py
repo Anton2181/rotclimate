@@ -51,18 +51,21 @@ def finalists(run: Path, k: int) -> list[dict]:
     return out
 
 
+MODE = "f1"
+
+
 def _job(a):
     label, params, seed = a
     p = Params(**{k: (tuple(v) if isinstance(v, list) else v) for k, v in params.items()})
-    r = evaluate_params(p, "f1", [seed])
+    r = evaluate_params(p, MODE, [seed])
     return label, seed, dict(f1=r["f1"], per_class=r["per_class"], realism=r["realism"],
                              acc=r["accuracy"], score=r["score"])
 
 
-def obj(rows):
+def obj(rows, mode=None):
     ev = {key: {k: float(np.mean([r[key][k] for r in rows])) for k in rows[0][key]}
           for key in ("f1", "per_class", "realism")}
-    return objective(ev, "f1")
+    return objective(ev, mode or MODE)
 
 
 def main():
@@ -72,7 +75,10 @@ def main():
     ap.add_argument("--worlds", type=int, default=60)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--out", default="")
+    ap.add_argument("--objective", default="f1", choices=["f1", "f1r"])
     a = ap.parse_args()
+    global MODE
+    MODE = a.objective
     seeds = list(range(FIRST_SEED, FIRST_SEED + a.worlds))
     cands = {}
     for spin, run in zip(("retrograde", "earthlike"), a.runs):
@@ -87,11 +93,13 @@ def main():
     summary = {}
     for lab, r in cands.items():
         rows = [per[lab][s] for s in seeds]
-        summary[lab] = dict(calibration_score=r["score"], fresh_objective=obj(rows),
+        summary[lab] = dict(calibration_score=r["score"], fresh_objective=obj(rows), fresh_f1_objective=obj(rows, "f1"),
+                            fresh_wet_summer_hot=float(np.mean([x["realism"]["wet_summer_hot"] for x in rows])),
                             fresh_correct=float(np.mean([x["acc"] for x in rows])),
                             fresh_f1={k: float(np.mean([x["f1"][k] for x in rows])) for k in rows[0]["f1"]})
         print(f"{lab:13s} calibration {r['score']:.4f}  fresh objective {summary[lab]['fresh_objective']:.4f}  "
-              f"correct {summary[lab]['fresh_correct']:.3f}")
+              f"(zones only {summary[lab]['fresh_f1_objective']:.4f})  correct {summary[lab]['fresh_correct']:.3f}  "
+              f"hot wet summers {summary[lab]['fresh_wet_summer_hot']:.2f}")
     # each spin is represented by its calibration best (#1), declared in advance
     R = [per["retrograde#1"][s] for s in seeds]
     E = [per["earthlike#1"][s] for s in seeds]

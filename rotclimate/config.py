@@ -112,6 +112,7 @@ class Params:
     subsidence: float = 0.75          # subtropical-high suppression (0..1)
     subsidence_asym: float = 0.0      # east/west-of-basin asymmetry of the highs
     subsidence_summer: float = 0.0    # v7: highs sink harder in summer: x (1 + this * season)
+    wet_cooling: float = 0.0          # v8: share of the summer warmth that wet ground evaporates away
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_scale_km: float = 450.0

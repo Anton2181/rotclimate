@@ -3,5 +3,5 @@
 cd "$(dirname "$0")/.."
 until [ -f calibration/r16.done ]; do sleep 30; done
 python3 scripts/spin_rematch.py calibration/r16_retrograde calibration/r16_prograde \
-  --k 3 --worlds 60 --out calibration/r16_rematch.json > calibration/r16_rematch.log 2>&1
+  --k 3 --worlds 60 --objective f1r --out calibration/r16_rematch.json > calibration/r16_rematch.log 2>&1
 echo done > calibration/r16_rematch.done

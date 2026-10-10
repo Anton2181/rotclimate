@@ -240,9 +240,17 @@ class ClimateModel:
             d = days[k]
             s = self.season_index(d)
             Tl = self.z.land(lat, d) + p.land_offset
-            if p.land_amplitude != 1.0:      # v4: continental seasonality
+            if p.land_amplitude != 1.0 or p.wet_cooling > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
+            if p.land_amplitude != 1.0:      # v4: continental seasonality
                 Tl = Tl_mean + p.land_amplitude * (Tl - Tl_mean)
+            if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
+                # on evaporation instead of heating the air (why humid summers
+                # on Earth rarely pass 30 C); wetness = recent rain against a
+                # rough potential evaporation (~6.5 mm/day at 30 C)
+                pet = 0.5 + 0.2 * np.maximum(Tl, 0.0)
+                wet = np.clip(soilP / pet, 0.0, 1.0)
+                Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
             SST = self.sst(d, To, Tl)

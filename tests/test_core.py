@@ -159,3 +159,24 @@ def test_fast_gaussian_matches_scipy():
     a = np.random.default_rng(3).normal(size=(97, 151)).cumsum(1)
     for sigma in (2.0, 8.5, 21.0):
         assert np.abs(gauss(a, sigma) - ndi.gaussian_filter(a, sigma, mode="nearest")).max() < 1e-9
+
+
+# ------------------------------------------------------------------ wet-ground cooling (v8)
+def test_wet_ground_cools_humid_summers_only():
+    from rotclimate.analogs import model_bins
+    from rotclimate.model import ClimateModel
+
+    p = Params.from_json("calibration/best_params.json").replace(downsample=16, steps_per_year=13,
+                                                                 picard_iters=1)
+    runs = [ClimateModel(p.replace(wet_cooling=w)).run() for w in (0.0, 0.6)]
+    land = runs[0].grid.land & runs[0].grid.inmap
+    bins = [model_bins(r.T, r.P, r.days, p.winter_solstice_day, p.year_days) for r in runs]
+    (T0, P0), (T1, _) = bins
+    hot0, hot1 = T0.max(0)[land], T1.max(0)[land]
+    cold0, cold1 = T0.min(0)[land], T1.min(0)[land]
+    wet = P0.sum(0)[land] > 1200
+    dry = P0.sum(0)[land] < 400
+    # summers cool, most where it rains; winters barely change
+    assert (hot0 - hot1)[wet].mean() > 1.0
+    assert (hot0 - hot1)[wet].mean() > (hot0 - hot1)[dry].mean()
+    assert abs((cold0 - cold1).mean()) < 0.6 * (hot0 - hot1).mean()

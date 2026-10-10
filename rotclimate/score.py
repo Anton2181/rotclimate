@@ -149,7 +149,7 @@ def evaluate(result, land_only=True):
     acc = float((pred[painted] == g.target[painted]).mean())
     MAP = ix["MAP"][valid]
     realism = dict(map_median=float(np.median(MAP)), map_p95=float(np.percentile(MAP, 95)),
-                   share_over_3500=float((MAP > 3500).mean()))
+                   share_over_3500=float((MAP > 3500).mean()), **summer_heat(st["Tm"], st["Pm"], g, valid))
     return dict(total=total, per_class=per, precision=prec, f1=f1, accuracy=acc, confusion=conf,
                 indices=ix, memberships=mem, monthly=st, predicted=pred,
                 rivers={**river_check(result, ix), **river_network_check(g, hyd)},
@@ -173,6 +173,29 @@ def river_network_check(g, hyd, q_min=20.0):
     return dict(net_recall=recall, net_precision=precision)
 
 
+# Earth (WorldClim 2.1 lowland below 500 m, 20-50 deg, area-weighted): where
+# the warmest month brings >= 80 mm of rain it passes 30 C on only 2.8% of
+# the land (>= 120 mm: 0.4%) - wet ground and cloud cap humid summers
+WET_SUMMER_MM = 80.0
+WET_SUMMER_HOT_C = 30.0
+EARTH_WET_SUMMER_HOT = 0.028
+
+
+def summer_heat(Tm, Pm, g, valid) -> dict:
+    """Share of the map's lowland whose warmest month is wet (>= 80 mm) and
+    hotter than 30 C; Earth: 2.8%."""
+    m = valid & (g.elev < 500)
+    T, P = Tm[:, m], Pm[:, m]
+    if T.shape[1] == 0:
+        return dict(wet_summer_share=0.0, wet_summer_hot=0.0)
+    iw = T.argmax(0)
+    Pw = P[iw, np.arange(T.shape[1])]
+    wet = Pw >= WET_SUMMER_MM
+    hot = wet & (T.max(0) > WET_SUMMER_HOT_C)
+    return dict(wet_summer_share=float(wet.mean()),
+                wet_summer_hot=float(hot.sum() / max(wet.sum(), 1)))
+
+
 def objective(ev, mode="mean"):
     """Number the calibrator maximises.
 
@@ -182,16 +205,21 @@ def objective(ev, mode="mean"):
                 (land median above 1300 mm/yr, 95th percentile above 3500).
     'f1'        as 'balanced' but on each zone's F1 (coverage and precision),
                 so a zone's rule also has to stay out of other painted zones.
+    'f1r'       as 'f1', and humid summers must be no hotter than Earth's:
+                penalised when more than twice Earth's share (2.8%) of the
+                wet-summer lowland passes 30 C in its warmest month.
     """
     if mode == "mean":
         return ev["total"]
-    vals = ev["f1"] if mode == "f1" else ev["per_class"]
+    vals = ev["f1"] if mode in ("f1", "f1r") else ev["per_class"]
     sc = np.array([v for v in vals.values() if np.isfinite(v)])
     tau = 0.08
     softmin = -tau * np.log(np.mean(np.exp(-sc / tau)))
     r = ev["realism"]
     pen = (np.clip((r["map_median"] - 1300) / 800, 0, 1.5)
            + np.clip((r["map_p95"] - 3500) / 2500, 0, 1.5))
+    if mode == "f1r":        # v8: humid summers as hot as Earth allows, no hotter
+        pen = pen + np.clip((r.get("wet_summer_hot", 0.0) - 2 * EARTH_WET_SUMMER_HOT) / 0.25, 0, 1.5)
     return float(0.5 * sc.mean() + 0.5 * softmin - 0.2 * pen)
 
 
