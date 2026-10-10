@@ -212,6 +212,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         offsets[name] = dict(offset=len(blob), dtype=str(arr.dtype), shape=list(arr.shape))
         blob += np.ascontiguousarray(arr).tobytes()
     (outdir / "atlas.bin").write_bytes(bytes(blob))
+    save_settlements(outdir)
 
     places = [dict(name=pl["name"], x=pl["x"], y=pl["y"], kind=pl["kind"]) for pl in load_places()]
     present = [c for c in CODES if CODES.index(c) in set(np.unique(k[fr.land]).tolist())]
@@ -234,6 +235,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         zones_extra=[dict(label=lab, color=col) for _, lab, col in ZONE_EXTRAS],
         rivers_sim=river_segments(result),
         reference=reference_payload(), reference_source=reference_source(),
+        towns=town_markers(),
         solstice_day=p.winter_solstice_day,
         world=dict(lat_south=p.lat_center - H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
                    lat_north=p.lat_center + H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
@@ -363,6 +365,32 @@ def _layer_meta():
         dict(id="precip", file="precip.webp", label="Precipitation", kind="ramp",
              unit="mm per year", vmin=100, vmax=3000, log=True, stops=stops("YlGnBu")),
     ]
+
+
+SETTLEMENTS = REPO / "data" / "source" / "settlements.webp"
+
+
+def town_markers(path: Path = SETTLEMENTS) -> list:
+    """The pixel-art settlement markers of the map (coloured towns and cities,
+    white villages): [x, y, half-height] of each."""
+    from scipy import ndimage as ndi
+
+    if not path.exists():
+        return []
+    a = np.array(Image.open(path).convert("RGBA"))
+    ink = a[..., 3] > 128
+    lab, n = ndi.label(ndi.binary_dilation(ink, iterations=1))
+    out = []
+    for i, sl in enumerate(ndi.find_objects(lab), 1):
+        cy, cx = ndi.center_of_mass(ink, lab, i)
+        out.append([round(float(cx), 1), round(float(cy), 1), round((sl[0].stop - sl[0].start) / 2 - 1, 1)])
+    return out
+
+
+def save_settlements(outdir: Path = ATLAS / "data"):
+    """Lossless copy of the settlement layer for the atlas (drawn as pixel art)."""
+    if SETTLEMENTS.exists():
+        Image.open(SETTLEMENTS).convert("RGBA").save(outdir / "towns.png", optimize=True)
 
 
 def copy_media(outdir: Path = ATLAS / "data", src: Path = REPO / "output"):
