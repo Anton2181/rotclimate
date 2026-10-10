@@ -308,13 +308,11 @@ def zone_classes(mem, land, threshold=0.3, ix=None, elev=None):
     With climate indices and elevation, high cold ground becomes "Mountain"
     (8) and places that fit none of the painted zones become "Grassland" (9, the
     semi-dry margins) or "Transitional" (10); otherwise they are 0."""
-    keys = [c[1] for c in TARGET_CLASSES]
+    from .score import best_zone
+
     # "tree" (warm + humid) is the broadest rule: it only wins where no more
-    # specific zone fits nearly as well
-    w = np.array([0.75 if k == "tree" else 1.0 for k in keys], np.float32)[:, None, None]
-    stack = np.stack([mem[k] for k in keys]).astype(np.float32) * w
-    z = (stack.argmax(0) + 1).astype(np.int8)
-    z[stack.max(0) < threshold] = 0
+    # specific zone fits nearly as well; the swamp wins wherever it is met
+    z = best_zone(mem, threshold=threshold, weights={"tree": 0.75}).astype(np.int8)
     if ix is not None and elev is not None:
         z[(elev > 2200.0) | (ix["Thot"] < 15.0)] = 8
         left = z == 0

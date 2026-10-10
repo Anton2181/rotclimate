@@ -133,7 +133,7 @@ Each painted zone becomes a fuzzy rule on climate statistics:
 | Cold and dry | coldest month below ~1 °C, semi-arid or arid (below 1.3× threshold) |
 | Warm and wet | coldest month above ~1 °C, warmest above ~20 °C, humid, no summer drought |
 | Mediterranean | warmest month above ~22 °C, coldest above ~0 °C, dry summer and wet winter, not desert |
-| Hot and wet, swampy | warmest month above ~25 °C, coldest above ~4 °C, very wet (≥ 2.3×) |
+| Hot and wet, swampy | warmest month above ~25 °C, coldest above ~4 °C, very wet (≥ 2.0×), **on flat ground** (slope under ~1.5 ‰ over ~15 km): waterlogged. Where this rule is met the place counts as swamp, since every swamp also meets the warm-wet and forest rules |
 | Tree | coldest month above ~2 °C, humid enough for forest (≥ 1.6×) |
 | Hot and dry | mean annual temperature above ~17 °C, arid or semi-arid (< 1×) |
 

@@ -24,13 +24,36 @@ RULES = {
     "cold_dry": "coldest month < ~1 C  AND  semi-arid/arid (precip < 1.3x Koppen threshold)",
     "warm_wet": "coldest month > ~1 C, warmest > ~20 C  AND  humid (>= 1.8x)  AND  no summer drought",
     "med": "warmest month > ~22 C, coldest > ~0 C, dry summer + wet winter (Koppen 's'), not desert",
-    "swamp": "warmest month > ~25 C, coldest > ~4 C  AND  very wet (>= 2.3x threshold)",
+    "swamp": "warmest month > ~25 C, coldest > ~4 C  AND  very wet (>= 2.0x threshold)  AND  flat ground (slope < ~1.5 per mille): waterlogged",
     "tree": "coldest month > ~2 C  AND  humid enough for forest (>= 1.6x threshold)",
     "hot_dry": "mean annual T > ~17 C  AND  arid/semi-arid (< 1.0x threshold)",
 }
 
 
-def memberships(ix: dict, floodplain=None) -> dict:
+# Swamps are wet climates on flat ground, where water cannot drain away. Your
+# painted swamp is ~5x flatter than the equally rainy warm-wet coast and the
+# forested hills (median slope 0.7 vs 3.4 per mille), so flatness is what sets
+# it apart. Slope is measured on a fixed ~15 km scale (grid independent).
+SWAMP_HUMID = 2.0                # flat ground waterlogs with less rain than slopes
+                                 # (Everglades ~1,400 mm, Pantanal ~1,200 mm)
+FLAT_SCALE_KM = 15.0
+
+
+def terrain_slope(g) -> np.ndarray:
+    """Ground slope (per mille) on the model grid, smoothed over ~15 km."""
+    from scipy import ndimage as ndi
+
+    e = ndi.gaussian_filter(g.elev, FLAT_SCALE_KM / g.cell_km)
+    gy, gx = np.gradient(e, g.cell_km * 1000.0)
+    return np.hypot(gy, gx) * 1000.0
+
+
+def flatness(slope):
+    """~1 on plains (slope under ~1 per mille), ~0 on hills (over ~3)."""
+    return sig((np.log(1.5) - np.log(np.maximum(slope, 1e-3))) / 0.35)
+
+
+def memberships(ix: dict, floodplain=None, slope=None) -> dict:
     Tc, Th, MAT, ar = ix["Tcold"], ix["Thot"], ix["MAT"], ix["aridity"]
     lar = np.log(np.maximum(ar, 1e-3))
     humid = lambda a: sig((lar - np.log(a)) / 0.18)
@@ -43,10 +66,24 @@ def memberships(ix: dict, floodplain=None) -> dict:
         "warm_wet": sig((Tc - 1.0) / 2.0) * sig((Th - 20) / 1.5) * humid(1.8) * (1 - summer_dry),
         "med": sig((Th - 22) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
         "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0)
-        * (humid(2.3) if floodplain is None else np.maximum(humid(2.3), floodplain * humid(1.2))),
+        * (humid(SWAMP_HUMID) if floodplain is None else np.maximum(humid(SWAMP_HUMID), floodplain * humid(1.2)))
+        * (1.0 if slope is None else flatness(slope)),
         "tree": sig((Tc - 2) / 2.0) * humid(1.6),
         "hot_dry": sig((MAT - 17) / 1.2) * arid(1.0),
     }
+
+
+def best_zone(mem: dict, threshold=0.3, weights=None) -> np.ndarray:
+    """Single best-fitting painted zone per cell (0 = none above threshold).
+    The swamp rule is the narrowest - every swamp also meets the warm-wet
+    and forest rules - so where it is met (>= 0.5) the cell is a swamp."""
+    keys = [c[1] for c in TARGET_CLASSES]
+    w = np.ones(len(keys)) if weights is None else np.array([weights.get(k, 1.0) for k in keys])
+    stack = np.stack([mem[k] for k in keys]) * w[:, None, None]
+    z = stack.argmax(0) + 1
+    z[stack.max(0) < threshold] = 0
+    z[mem["swamp"] >= 0.5] = keys.index("swamp") + 1
+    return z
 
 
 # A zone's rule may also hold where a narrower zone is painted: every swampy
@@ -88,7 +125,7 @@ def evaluate(result, land_only=True):
     # (a river-floodplain route to "swampy" was tested and rejected: in the
     # model the painted swamp coast is no more river-fed than other lowland,
     # so it would only loosen the rule - see docs/ITERATIONS.md)
-    mem = memberships(ix)
+    mem = memberships(ix, slope=terrain_slope(g))
     valid = g.inmap & (g.land if land_only else True)
     per = {}
     for cid, key, label, _ in TARGET_CLASSES:
@@ -97,10 +134,7 @@ def evaluate(result, land_only=True):
     total = float(np.nanmean(list(per.values())))
     prec, f1 = precision_f1(mem, g.target, valid, per, elev=g.elev)
     # hard confusion: best-matching zone per painted cell
-    keys = [c[1] for c in TARGET_CLASSES]
-    stack = np.stack([mem[k] for k in keys])
-    pred = stack.argmax(0) + 1
-    pred[stack.max(0) < 0.3] = 0
+    pred = best_zone(mem)
     conf = np.zeros((7, 8), int)
     for cid in range(1, 8):
         m = valid & (g.target == cid)

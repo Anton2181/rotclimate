@@ -263,10 +263,10 @@ def zones_map(fr: FullRes, mem, path, title=None):
 
 
 def fullres_memberships(fr: FullRes):
-    from .score import memberships
+    from .score import memberships, terrain_slope
 
     fr.koppen()
-    return memberships(fr._ix)
+    return memberships(fr._ix, slope=fr.up(terrain_slope(fr.r.grid)))
 
 
 def field_map(fr, field, path, title, cmap, vmin, vmax, unit, levels=None, extend="both"):

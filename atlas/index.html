@@ -412,7 +412,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
         + (meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])
           .map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
-        + `<span class="note">Each place takes the zone type its simulated climate fits best.</span>`;
+        + `<span class="note">Each place takes the zone type its simulated climate fits best; a place meeting the swamp rule (hot, very wet, flat ground) counts as swamp.</span>`;
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
     } else {
