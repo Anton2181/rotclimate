@@ -95,8 +95,12 @@ For each of the 73 five-day weeks:
    local surface temperature (sea or land). The relaxation is fast over land
    and slower over sea. Downwind of an ocean you get maritime climates; downwind
    of a continent you get continental ones. Storm eddies also exchange heat with
-   the surrounding ~450 km (physics v3). The result is cooled with height
-   (lapse rate) at full map resolution.
+   the surrounding ~450 km (physics v3). Wet ground keeps summers cooler
+   (physics v8): where recent rain matches the potential evaporation, part of
+   the land's summer warmth goes into evaporating water instead of heating the
+   air, which is why humid summers on Earth rarely pass 30 °C. Winters are
+   untouched. The result is cooled with height (lapse rate) at full map
+   resolution.
 4. **Moisture and rain.** Precipitable water evaporates from the sea toward 80%
    of saturation, is carried by the wind and by storm eddies, and is
    re-evaporated from wet land. Rain-out depends on the column relative
@@ -110,7 +114,9 @@ For each of the 73 five-day weeks:
 
    It is suppressed under the **subtropical high**. That subsidence is stronger
    on one side of each ocean basin (dry west coasts on Earth), and the side
-   flips with retrograde spin.
+   flips with retrograde spin. It can also be stronger in summer than in winter
+   (physics v7), since monsoon heating next door drives the summer sinking
+   (Rodwell & Hoskins 2001).
 5. **Snow.** Snow accumulates when below about 0 °C and melts by degree-days.
 
 Each week's transport equations
@@ -134,7 +140,7 @@ Each painted zone becomes a fuzzy rule on climate statistics:
 | Cold and dry | coldest month below ~1 °C, semi-arid or arid (below 1.3× threshold) |
 | Warm and wet | coldest month above ~1 °C, warmest above ~20 °C, humid, no summer drought |
 | Mediterranean | warmest month above ~22 °C, coldest above ~0 °C, dry summer and wet winter, not desert |
-| Hot and wet, swampy | warmest month above ~25 °C, coldest above ~4 °C, very wet (≥ 2.0×), **on flat ground** (slope under ~1.5 ‰ over ~15 km): waterlogged. Where this rule is met the place counts as swamp, since every swamp also meets the warm-wet and forest rules |
+| Hot and wet, swampy | warmest month above ~25 °C, coldest above ~4 °C, **hot year (mean annual above ~21 °C)**, very wet (≥ 2.0×), **on flat ground** (slope under ~1.5 ‰ over ~15 km): waterlogged. Where this rule is met the place counts as swamp, since every swamp also meets the warm-wet and forest rules |
 | Tree | coldest month above ~2 °C, humid enough for forest (≥ 1.6×) |
 | Hot and dry | mean annual temperature above ~17 °C, arid or semi-arid (< 1×) |
 
@@ -143,7 +149,22 @@ are used:
 
 * **mean**: the plain mean over zones (rounds 1–2);
 * **balanced**: half mean, half soft-minimum over zones (no zone can be
-  sacrificed), minus penalties for implausible rainfall.
+  sacrificed), minus penalties for implausible rainfall;
+* **f1** (rounds 12–15): as balanced, on each zone's F1, which also counts how
+  much of a zone's rule spills into areas painted as something else;
+* **f1r** (round 16 on): as f1, plus a penalty when humid summers are hotter
+  than Earth's. On Earth (WorldClim lowland, 20–50°) only 2.8% of the land
+  whose warmest month brings 80 mm or more of rain passes 30 °C; the penalty
+  starts at twice that share.
+
+The swamp's heat rule comes from your legend ("Hot and wet" against "Warm and
+wet") and from the map itself: among places meeting the rest of the swamp rule,
+mean annual temperature separates painted swamp from the other zones almost
+perfectly (AUC 0.96), while drainage measures from the wetland literature
+(height above the nearest river, wetness index, upstream area) do not, because
+the four flat height tiers leave them no relief to read. About 21 °C keeps it
+within Earth's range: Miami, Tampa and Guangzhou are inside, Houston on the
+edge, New Orleans just below.
 
 An independent check that is never optimised compares the density of your
 hand-drawn **rivers** with the model's runoff.
