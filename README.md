@@ -41,36 +41,40 @@ the west coast and south coast play the humid south-east US, the east plays Cali
 south-east plays the dry south-west, and the north-west plays New England. (A southern-hemisphere
 map with south at the top would behave the same way.)
 
-### Match with the painted zones (14 km render, round 12)
+### Match with the painted zones (14 km render, round 13)
 
 Each zone is judged two ways. **Coverage**: how well the painted area meets the zone's climate
 rule (0–1). **Precision**: how much of the rule's area lies inside its own painted zone, rather
 than spilling into areas painted as something else (ridges above 1,500 m don't count as spill;
 a broader zone may hold inside a narrower one it contains, as forest inside swamp). **F1**
-balances the two. *Correct* is the share of painted land whose single best-fitting zone is its own.
+balances the two. *Correct* is the share of painted land whose single best-fitting zone is its own
+(a place meeting the swamp rule counts as swamp).
+
+The swamp rule asks for a hot, very wet climate **on flat ground**: your painted swamp gets the
+same rain as the warm-wet coast but is about five times flatter (median slope 0.7 vs 3.4 ‰),
+and waterlogged lowland is what makes a swamp (Everglades, Pantanal, Gulf Coast bayous).
 
 | zone | coverage | precision | F1 | correct |
 |---|---|---|---|---|
-| Cold and wet | 0.51 | 0.23 | 0.32 | 68% |
-| Cold and dry | 0.64 | 0.62 | 0.63 | 87% |
-| Warm and wet | 0.41 | 0.45 | 0.43 | 42% |
-| Mediterranean | 0.34 | 0.61 | 0.43 | 42% |
-| Hot and wet, swampy | 0.38 | 0.22 | 0.28 | 0% |
-| Tree (forested) | 0.73 | 0.35 | 0.47 | 46% |
-| Hot and dry | 0.46 | 0.38 | 0.41 | 58% |
-| **overall** | **0.50** | | **0.40** (objective) | **49%** |
+| Cold and wet | 0.44 | 0.28 | 0.35 | 67% |
+| Cold and dry | 0.58 | 0.67 | 0.62 | 82% |
+| Warm and wet | 0.50 | 0.51 | 0.50 | 33% |
+| Mediterranean | 0.38 | 0.58 | 0.46 | 45% |
+| Hot and wet, swampy | 0.31 | 0.26 | 0.28 | 33% |
+| Tree (forested) | 0.74 | 0.34 | 0.46 | 58% |
+| Hot and dry | 0.43 | 0.35 | 0.39 | 57% |
+| **overall** | **0.48** | | **0.41** (objective) | **51%** |
 
 (it00, the Earth-like first guess: coverage 0.17 and 9% correct.)
 
 Where it still falls short:
-* **The swamp** meets its rule over 38% of the painted swamp. But the same climate also covers
-  much of the lowland warm-wet, Mediterranean and tree areas, so the swamp is never the single
-  best fit anywhere (every swampy place is also warm-and-wet and forested by the rules). The
-  model can make the south coast hot and very wet, but not *more* so than its neighbours.
-* **The north-east "warm and wet" coast** comes out too cold in winter (it reads as cold-and-wet),
-  which is also why cold-wet's precision is low.
+* **The swamp** now shows up on the painted south coast (it was never the best fit before round
+  13), but the same hot, wet, flat climate also covers the flat southern end of the warm-wet west
+  coast, so its precision stays low.
+* **Hot-and-dry** spills into the northern edge of the Mediterranean band, and cold-and-wet
+  into hills and the north-east.
 
-The maps are simulated on 14 km cells, the same grid round 12 was calibrated on. Since the
+The maps are simulated on 14 km cells, the same grid rounds 11–13 were calibrated on. Since the
 time-step fix (see `docs/ITERATIONS.md`), the calibration's 25 steps a year and the maps' 73 give
 the same climate. All map layers are drawn at 3× resolution with full-detail terrain.
 
