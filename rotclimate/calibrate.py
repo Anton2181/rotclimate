@@ -140,16 +140,23 @@ def encode(p: Params) -> np.ndarray:
     return np.clip(x, 0.0, 1.0)
 
 
-def evaluate_params(p: Params, mode="mean", seeds=None) -> dict:
+def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     """Score a parameter set; with several seeds the unknown surroundings are
-    re-generated for each and the zone scores averaged (ensemble)."""
+    re-generated for each and the zone scores averaged (ensemble).
+
+    Racing: with a `cutoff`, a candidate whose first world already scores
+    below it skips the remaining worlds (it cannot become the best; the
+    best is always scored on every world)."""
     from .model import ClimateModel
     from .score import evaluate, objective
 
     evs = []
-    for sd in (seeds or [None]):
+    seeds = seeds or [None]
+    for i, sd in enumerate(seeds):
         q = p if sd is None else p.replace(beyond_seed=int(sd))
         evs.append(evaluate(ClimateModel(q).run()))
+        if cutoff is not None and i == 0 and len(seeds) > 1 and objective(evs[0], mode) < cutoff:
+            break
     ev = dict(evs[0])
     ev["per_class"] = {k: float(np.mean([e["per_class"][k] for e in evs])) for k in ev["per_class"]}
     ev["total"] = float(np.nanmean(list(ev["per_class"].values())))
@@ -157,17 +164,17 @@ def evaluate_params(p: Params, mode="mean", seeds=None) -> dict:
         ev[key] = {k: float(np.mean([e[key][k] for e in evs])) for k in ev[key]}
     ev["accuracy"] = float(np.mean([e["accuracy"] for e in evs]))
     ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
-    return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"],
+    return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"], raced=len(evs) < len(seeds),
                 per_class=ev["per_class"], f1=ev["f1"], precision=ev["precision"], realism=ev["realism"],
                 spread=float(np.std([e["total"] for e in evs])))
 
 
 def _worker(args):
-    x, base_dict, mode, space, seeds = args
+    x, base_dict, mode, space, seeds, cutoff = args
     _set_space(space)
     p = decode(np.asarray(x), Params(**base_dict))
     try:
-        out = evaluate_params(p, mode, seeds)
+        out = evaluate_params(p, mode, seeds, cutoff)
     except Exception as e:  # keep the search alive on numerical failures
         out = dict(score=-1.0, mean=0.0, accuracy=0.0, per_class={}, error=repr(e))
     out["params"] = asdict(p)
@@ -175,7 +182,7 @@ def _worker(args):
 
 
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
-              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None):
+              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06):
     import cma
 
     out_dir.mkdir(parents=True, exist_ok=True)
@@ -188,7 +195,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                                   {"bounds": [0, 1], "popsize": popsize, "seed": seed,
                                    "verbose": -9})
     best = (-1, None)
-    n = 0
+    n = n_raced = 0
     t0 = time.time()
     base_dict = asdict(base)
     with mp.get_context("fork").Pool(workers) as pool:
@@ -201,7 +208,9 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                 for i, v in fixed_idx.items():
                     x[i] = v
                 full.append(x)
-            res = pool.map(_worker, [(x, base_dict, mode, SPACE, seeds) for x in full])
+            cutoff = best[0] - race if (race and best[1] is not None) else None
+            res = pool.map(_worker, [(x, base_dict, mode, SPACE, seeds, cutoff) for x in full], chunksize=1)
+            n_raced += sum(bool(r.get("raced")) for r in res)
             es.tell(sols, [-r["score"] for r in res])
             for x, r in zip(full, res):
                 n += 1
@@ -214,7 +223,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
             log.flush()
             pc = best[1]["per_class"]
             f1 = best[1].get("f1", {}) if mode == "f1" else {}
-            print(f"[{n:5d} evals, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
+            print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
                   + " ".join(f"{k}={v:.2f}" + (f"/F{f1[k]:.2f}" if k in f1 else "") for k, v in pc.items()),
@@ -237,6 +246,8 @@ def main():
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1"])
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
+    ap.add_argument("--race", type=float, default=0.06,
+                    help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     a = ap.parse_args()
     if a.physics == "v3":
@@ -256,7 +267,7 @@ def main():
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
     fixed = json.loads(a.fix)
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
-                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds)
+                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race)
     print(json.dumps(best["per_class"], indent=1), best["score"])
 
 

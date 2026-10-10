@@ -23,6 +23,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 
+from functools import lru_cache
+
 import numpy as np
 from scipy import ndimage as ndi
 
@@ -32,6 +34,45 @@ from .geography import Grid, build_grid
 from .solver import AdvectionSolver
 
 DAY = 86400.0
+
+
+@lru_cache(maxsize=64)
+def _gauss_kernel_fft(sigma: float, n: int, radius: int):
+    from scipy import fft as sfft
+
+    x = np.arange(-radius, radius + 1, dtype=float)
+    k = np.exp(-0.5 * (x / sigma) ** 2)
+    k /= k.sum()
+    full = np.zeros(n)
+    full[: radius + 1] = k[radius:]               # kernel centred on index 0 (circular)
+    full[n - radius:] = k[:radius]
+    return sfft.rfft(full)
+
+
+def gauss(a: np.ndarray, sigma: float) -> np.ndarray:
+    """Same result as ndi.gaussian_filter(a, sigma, mode="nearest") (truncate
+    4), computed by FFT for the wide kernels (300-500 km) used every step,
+    which is several times faster than a direct convolution. Edges are
+    extended (as mode="nearest") to an FFT-friendly length; the kernel only
+    reaches `radius` cells, so the extra extension does not change the result."""
+    if sigma < 6.0:
+        return ndi.gaussian_filter(a, sigma, mode="nearest")
+    from scipy import fft as sfft
+
+    radius = int(4.0 * sigma + 0.5)
+    out = np.asarray(a, float)
+    for axis in (0, 1):
+        n0 = out.shape[axis]
+        n = sfft.next_fast_len(n0 + 2 * radius, real=True)
+        pad = [(0, 0), (0, 0)]
+        pad[axis] = (radius, n - n0 - radius)
+        b = np.pad(out, pad, mode="edge")
+        kf = _gauss_kernel_fft(round(float(sigma), 9), n, radius)
+        shape = [1, 1]
+        shape[axis] = -1
+        c = sfft.irfft(sfft.rfft(b, axis=axis) * kf.reshape(shape), n=n, axis=axis)
+        out = c[radius:radius + n0] if axis == 0 else c[:, radius:radius + n0]
+    return out
 
 
 def w_sat(T):
@@ -146,7 +187,7 @@ class ClimateModel:
         """Friction-turned geostrophic wind around thermal highs and lows."""
         p, g = self.p, self.g
         sig = p.monsoon_scale_km / g.cell_km
-        Ta = ndi.gaussian_filter(T_anom, sig, mode="nearest")
+        Ta = gauss(T_anom, sig)
         gx = np.gradient(Ta, axis=1) / g.dx_m          # toward warm = toward low pressure
         gy = -np.gradient(Ta, axis=0) / g.dx_m
         k = p.monsoon_strength * 3.0e5
@@ -187,7 +228,7 @@ class ClimateModel:
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
         lamT = 1.0 / tau
-        T_prev = None
+        T_prev = T_prev2 = None
         W_prev = None
         soilP = np.full(lat.shape, 1.5)
         self.t_iterations = []
@@ -209,32 +250,43 @@ class ClimateModel:
 
             # winds and temperature depend on temperature: iterate within the
             # step (t_iters > 1) instead of lagging one step behind
-            T_ref = T_prev if T_prev is not None else T_eq
+            # ---- parts of the winds and storms that do not depend on temperature
+            u0, v0, phi_i, phi_h = self.zonal_wind(s)
+            # transient eddies (storms) mix heat and moisture between land and
+            # sea regardless of the mean wind; modelled as exchange with the
+            # surroundings (Gaussian of radius eddy_scale_km) at a rate that
+            # peaks in the storm track
+            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
+            if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
+                side = (1.0 if p.retrograde else -1.0) * self.basin_side
+                storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
+                # ... and reach further equatorward there
+                shift = p.storm_reach * np.clip(side, 0, 1)
+                storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
+                                   * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
+            eddy = p.eddy_rate * (0.15 + storm) / DAY
+            sigE = p.eddy_scale_km / g.cell_km
+
+            # winds and temperature depend on temperature: iterate within the
+            # step (t_iters > 1) instead of lagging one step behind
+            # start from the previous step carried along its seasonal trend
+            # (same converged answer, fewer passes)
+            if T_prev is None:
+                T_ref = T_eq
+            elif T_prev2 is not None and p.t_iters > 1:
+                T_ref = T_prev + (T_prev - T_prev2)
+            else:
+                T_ref = T_prev
             for _it in range(max(1, p.t_iters)):
                 # ---- winds
-                u0, v0, phi_i, phi_h = self.zonal_wind(s)
                 T_anom = T_ref - Tz
                 ut, vt = self.thermal_wind(T_anom)
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
 
                 # ---- temperature (sea-level equivalent), then lapse rate
-                # transient eddies (storms) mix heat and moisture between land and
-                # sea regardless of the mean wind; modelled as exchange with the
-                # surroundings (Gaussian of radius eddy_scale_km) at a rate that
-                # peaks in the storm track
-                storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
-                if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
-                    side = (1.0 if p.retrograde else -1.0) * self.basin_side
-                    storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
-                    # ... and reach further equatorward there
-                    shift = p.storm_reach * np.clip(side, 0, 1)
-                    storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
-                                       * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
-                eddy = p.eddy_rate * (0.15 + storm) / DAY
-                sigE = p.eddy_scale_km / g.cell_km
                 if p.eddy_rate > 0:
-                    Tmix = ndi.gaussian_filter(T_ref, sigE, mode="nearest")
+                    Tmix = gauss(T_ref, sigE)
                     Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
                                             lamT * T_eq + eddy * Tmix, T_eq, guess=T_ref if _it else T_prev)
                 else:
@@ -250,7 +302,7 @@ class ClimateModel:
             # saturation is set by the temperature of the whole air column,
             # which is smoother than the surface (boundary-layer) temperature
             T_col = (0.4 * np.where(land, Tsl, SST)
-                     + 0.6 * ndi.gaussian_filter(Tsl, self.col_sigma, mode="nearest"))
+                     + 0.6 * gauss(Tsl, self.col_sigma))
             if p.eddy_rate > 0:      # physics v3
                 # the column over high ground is colder (lapse rate) but the
                 # low-level moisture that cannot climb is diverted around the
@@ -289,7 +341,7 @@ class ClimateModel:
                 lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY)
                 lamP = lamP + np.maximum(RH - 1.0, 0) / RH / DAY
                 if p.eddy_rate > 0:
-                    Wmix = ndi.gaussian_filter(W, sigE, mode="nearest")
+                    Wmix = gauss(W, sigE)
                     eq = eddy * np.exp(-h_km / 2.5)     # eddies carry vapour low down
                     W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP + eq,
                                               lamE * W_ocean + E_land + eq * Wmix, bnd, guess=W)
@@ -304,7 +356,7 @@ class ClimateModel:
             E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
-            T_prev, W_prev = Tsl, W
+            T_prev2, T_prev, W_prev = T_prev, Tsl, W
             if n >= spinup:
                 for key, val in (("T", T), ("Tsl", Tsl), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val

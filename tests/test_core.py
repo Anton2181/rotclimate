@@ -148,3 +148,14 @@ def test_diurnal_range_desert_swings_more_than_rainy_coast():
     coast = dtr(T_coast, np.full((12, 1), 120.0), 20.0, 2.0, 50.0)
     assert desert.mean() > coast.mean() + 4.0
     assert 3.0 < coast.mean() < 12.0 and 10.0 < desert.mean() < 24.0
+
+
+def test_fast_gaussian_matches_scipy():
+    import numpy as np
+    from scipy import ndimage as ndi
+
+    from rotclimate.model import gauss
+
+    a = np.random.default_rng(3).normal(size=(97, 151)).cumsum(1)
+    for sigma in (2.0, 8.5, 21.0):
+        assert np.abs(gauss(a, sigma) - ndi.gaussian_filter(a, sigma, mode="nearest")).max() < 1e-9
