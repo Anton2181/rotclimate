@@ -249,7 +249,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
           <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
           <svg id="simrivers" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
           <svg id="matchsvg" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
-          <img id="towns" src="data/towns.png" alt="" aria-hidden="true" draggable="false">
+          <svg id="towns" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
@@ -402,7 +402,15 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     $("placenames").style.display = show;
     $("towns").style.display = show;
   });
-  $("towns").addEventListener("error", (e) => { e.target.remove(); });      // atlas data without the layer
+  // settlement markers: vector pixel art (each pixel of the layer is a square)
+  fetch("data/towns.svg").then((r) => (r.ok ? r.text() : "")).then((t) => {
+    if (!t) return;
+    const src = new DOMParser().parseFromString(t, "image/svg+xml").documentElement;
+    const el = $("towns");
+    el.setAttribute("viewBox", src.getAttribute("viewBox"));
+    el.innerHTML = src.innerHTML;
+    applyZoom();
+  }).catch(() => {});
   $("searchtoggle").addEventListener("click", (e) => {
     const box = $("searchbox"), show = box.hidden;
     box.hidden = !show;
@@ -694,10 +702,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     namesSvg.style.fontSize = fontPx / pxPerUnit + "px";
     namesSvg.style.strokeWidth = 2.6 / pxPerUnit + "px";
     placeLabels(pxPerUnit, fontPx);
-    // settlement markers are pixel art: hard pixels once shown at or above
-    // their native size, smoothed below it so tiny icons don't lose pixels
-    const townImg = $("towns");
-    if (townImg) townImg.style.imageRendering = pxPerUnit >= 1 ? "pixelated" : "auto";
+    // settlement markers are pixel art: hard edges once a pixel spans a
+    // screen pixel, smoothed below that so tiny icons don't lose pixels
+    const townSvg = $("towns"), vb = townSvg.viewBox.baseVal;
+    townSvg.setAttribute("shape-rendering", vb && vb.width && (w * zs) / vb.width >= 1 ? "crispEdges" : "auto");
     drawMarker();
     if (typeof drawMatches === "function" && matchSvgReady) drawMatches();
     $("zreset").disabled = zs === 1;
@@ -808,19 +816,16 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     ctx.drawImage(base, tx * k, ty * k, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
     const overlays = ["simrivers", "matchsvg", "towns", "placenames", "marker"]
-      .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && (el.tagName === "IMG" || el.innerHTML.trim()));
+      .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
     for (const el of overlays) {
-      if (el.tagName === "IMG") {                                    // pixel-art settlement markers
-        ctx.imageSmoothingEnabled = fullW / 2000 < 1;
-        ctx.drawImage(el, tx * k, ty * k, fullW, fullH);
-        ctx.imageSmoothingEnabled = true;
-        continue;
-      }
       const st = el.getAttribute("style") || "";
       // non-scaling strokes are in output pixels: widen them by k to match the screen
       const body = el.innerHTML.replace(/<[^>]*non-scaling-stroke[^>]*>/g, (tag) =>
         tag.replace(/stroke-width="([\d.]+)"/, (_, v) => `stroke-width="${(+v * k).toFixed(2)}"`));
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2000 926" preserveAspectRatio="none"
+      const vbAttr = el.getAttribute("viewBox") || "0 0 2000 926";
+      const vbW = +vbAttr.split(/\s+/)[2];
+      const crisp = el.id === "towns" && fullW / vbW >= 1 ? ' shape-rendering="crispEdges"' : "";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbAttr}" preserveAspectRatio="none"${crisp}
         width="${fullW}" height="${fullH}" style="${st.replace(/display:\s*none;?/, "")}" font-family="sans-serif">
         <style>text{font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
         ${body}</svg>`;

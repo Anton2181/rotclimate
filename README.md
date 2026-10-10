@@ -14,7 +14,9 @@ Zoomable map layers (Köppen, your zones, the simulated climate in your zones, m
 temperatures, precipitation). Click any place for its climograph in the local calendar and its
 closest real cities. Search a town on the map, or a real city to see outlined where on the map
 feels like it (the magnifier button shows or hides the search box). The copy button puts the
-current view (zoom, outlines, names and all) on the clipboard as an image.
+current view (zoom, outlines, names and all) on the clipboard as an image. Your settlement markers
+(`data/source/settlements.png`, lossless) are drawn as vector pixel art, every pixel an exact square,
+so they stay sharp at any zoom; the "Towns and names" toggle shows them with the place names.
 
 In the simple-zones map, land that fits none of your seven zones is named for what it is:
 *Mountain* (cold highland: above ~2,200 m or summers below 15 °C), *Grassland* (a semi-dry margin

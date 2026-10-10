@@ -367,30 +367,57 @@ def _layer_meta():
     ]
 
 
-SETTLEMENTS = REPO / "data" / "source" / "settlements.webp"
+SETTLEMENTS = REPO / "data" / "source" / "settlements.png"     # lossless, 2.2x the map's pixels
+
+
+def _settlement_pixels(path: Path = SETTLEMENTS):
+    """RGBA array of the settlement layer and its scale (layer px per map px)."""
+    a = np.array(Image.open(path).convert("RGBA"))
+    return a, a.shape[1] / 2000.0, a.shape[0] / 926.0
 
 
 def town_markers(path: Path = SETTLEMENTS) -> list:
     """The pixel-art settlement markers of the map (coloured towns and cities,
-    white villages): [x, y, half-height] of each."""
+    white villages): [x, y, half-height] of each, in map pixels."""
     from scipy import ndimage as ndi
 
     if not path.exists():
         return []
-    a = np.array(Image.open(path).convert("RGBA"))
-    ink = a[..., 3] > 128
+    a, sx, sy = _settlement_pixels(path)
+    ink = a[..., 3] > 0
     lab, n = ndi.label(ndi.binary_dilation(ink, iterations=1))
     out = []
     for i, sl in enumerate(ndi.find_objects(lab), 1):
         cy, cx = ndi.center_of_mass(ink, lab, i)
-        out.append([round(float(cx), 1), round(float(cy), 1), round((sl[0].stop - sl[0].start) / 2 - 1, 1)])
+        out.append([round((cx + 0.5) / sx, 1), round((cy + 0.5) / sy, 1),
+                    round((sl[0].stop - sl[0].start) / 2 / sy, 2)])
     return out
 
 
 def save_settlements(outdir: Path = ATLAS / "data"):
-    """Lossless copy of the settlement layer for the atlas (drawn as pixel art)."""
-    if SETTLEMENTS.exists():
-        Image.open(SETTLEMENTS).convert("RGBA").save(outdir / "towns.png", optimize=True)
+    """The settlement layer as vector pixel art: every pixel becomes an exact
+    square (runs of one colour merged, one path per colour), so it stays
+    sharp at any zoom and keeps its exact colours."""
+    if not SETTLEMENTS.exists():
+        return
+    a, _, _ = _settlement_pixels()
+    h, w = a.shape[:2]
+    on = a[..., 3] > 0
+    key = (a[..., 0].astype(np.int64) << 16) | (a[..., 1].astype(np.int64) << 8) | a[..., 2]
+    paths = {}
+    for y in range(h):
+        xs = np.flatnonzero(on[y])
+        if not xs.size:
+            continue
+        ks = key[y, xs]
+        brk = np.flatnonzero((np.diff(xs) != 1) | (np.diff(ks) != 0)) + 1
+        for seg in np.split(np.arange(xs.size), brk):
+            x0, x1, k = xs[seg[0]], xs[seg[-1]] + 1, int(ks[seg[0]])
+            paths.setdefault(k, []).append(f"M{x0} {y}h{x1 - x0}v1h-{x1 - x0}z")
+    body = "".join(f'<path fill="#{k:06x}" d="{"".join(d)}"/>' for k, d in sorted(paths.items()))
+    (outdir / "towns.svg").write_text(
+        f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" '
+        f'preserveAspectRatio="none" shape-rendering="crispEdges">{body}</svg>')
 
 
 def copy_media(outdir: Path = ATLAS / "data", src: Path = REPO / "output"):
