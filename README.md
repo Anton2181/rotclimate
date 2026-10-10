@@ -47,7 +47,7 @@ ground, and the map scale comes from your hexes. Re-run on those terms, Earth-li
 to 0.427 with 320 more evaluations; Earth-like spin is getting the same 320 now, and this
 section will say which spin the evidence supports.
 
-### Match with the painted zones (14 km render, round 13)
+### Match with the painted zones (14 km render, round 14)
 
 Each zone is judged two ways. **Coverage**: how well the painted area meets the zone's climate
 rule (0–1). **Precision**: how much of the rule's area lies inside its own painted zone, rather
@@ -62,14 +62,14 @@ and waterlogged lowland is what makes a swamp (Everglades, Pantanal, Gulf Coast 
 
 | zone | coverage | precision | F1 | correct |
 |---|---|---|---|---|
-| Cold and wet | 0.44 | 0.28 | 0.35 | 67% |
-| Cold and dry | 0.58 | 0.67 | 0.62 | 82% |
-| Warm and wet | 0.50 | 0.51 | 0.50 | 33% |
-| Mediterranean | 0.38 | 0.58 | 0.46 | 45% |
-| Hot and wet, swampy | 0.31 | 0.26 | 0.28 | 33% |
-| Tree (forested) | 0.74 | 0.34 | 0.46 | 58% |
-| Hot and dry | 0.43 | 0.35 | 0.39 | 57% |
-| **overall** | **0.48** | | **0.41** (objective) | **51%** |
+| Cold and wet | 0.49 | 0.31 | 0.38 | 74% |
+| Cold and dry | 0.50 | 0.71 | 0.59 | 70% |
+| Warm and wet | 0.55 | 0.55 | 0.55 | 35% |
+| Mediterranean | 0.42 | 0.60 | 0.49 | 59% |
+| Hot and wet, swampy | 0.33 | 0.27 | 0.30 | 37% |
+| Tree (forested) | 0.68 | 0.32 | 0.44 | 51% |
+| Hot and dry | 0.53 | 0.35 | 0.42 | 68% |
+| **overall** | **0.50** | | **0.43** (objective) | **54%** |
 
 (it00, the Earth-like first guess: coverage 0.17 and 9% correct.)
 
@@ -77,10 +77,11 @@ Where it still falls short:
 * **The swamp** now shows up on the painted south coast (it was never the best fit before round
   13), but the same hot, wet, flat climate also covers the flat southern end of the warm-wet west
   coast, so its precision stays low.
-* **Hot-and-dry** spills into the northern edge of the Mediterranean band, and cold-and-wet
-  into hills and the north-east.
+* **Hot-and-dry** spills into patches along the northern edge of the Mediterranean band, and
+  cold-and-wet into hills; the swamp climate is a physically fair reading of that flat, rainy
+  west-coast lowland, so no rule should split them.
 
-The maps are simulated on 14 km cells, the same grid rounds 11–13 were calibrated on. Since the
+The maps are simulated on 14 km cells, the same grid rounds 11–14 were calibrated on. Since the
 time-step fix (see `docs/ITERATIONS.md`), the calibration's 25 steps a year and the maps' 73 give
 the same climate. All map layers are drawn at 3× resolution with full-detail terrain.
 
