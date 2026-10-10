@@ -26,22 +26,26 @@ between the wet and dry zones) or *Transitional* (humid, but between two zones' 
 
 ![Köppen map](output/koppen.png)
 
-### What the world must be like (best calibration, round 13)
+### What the world must be like (best calibration, round 14)
 
 | unknown | best fit |
 |---|---|
-| spin | **retrograde (opposite to Earth)** |
-| latitude | 27.6°N to 42.9°N (centre 35.2°N) |
-| axial tilt | 25.5° (Earth 23.4°) |
-| height tiers | lowland ≤ 105 m, hills ≤ 571 m, upland ≤ 2339 m, peaks to 5179 m |
-| land beyond the map | north-west 61%, north-east 90%, west 44%, east 22%, south-west 88%, south-east ~100% |
+| spin | retrograde (opposite to Earth), **under re-test** (see below) |
+| latitude | 26.8°N to 42.1°N (centre 34.4°N) |
+| axial tilt | 25.8° (Earth 23.4°) |
+| height tiers | lowland ≤ 100 m, hills ≤ 497 m, upland ≤ 2297 m, peaks to 4733 m |
+| land beyond the map | north-west 59%, north-east ~100%, west 47%, east 16%, south-west 97%, south-east ~100% |
 
-The strongest result is the spin. With Earth-like spin, no calibration in any round could make
-the south-east hot and dry. A final fairness run with identical physics and budget confirms it:
-best balanced score 0.336 for Earth-like spin against 0.493 for retrograde, with hot-and-dry at 0.09. Reversed spin turns the continent into a mirror-image North America:
-the west coast and south coast play the humid south-east US, the east plays California, the
-south-east plays the dry south-west, and the north-west plays New England. (A southern-hemisphere
-map with south at the top would behave the same way.)
+**The spin question is open again.** Under the physics, scoring and data of rounds 1–8, Earth-like
+spin could never make the south-east hot and dry (a fairness run gave 0.336 against 0.493 for
+retrograde, hot-and-dry 0.09), and reversed spin turned the continent into a mirror-image North
+America: the west and south coasts as the humid south-east US, the east as California, the
+south-east as the dry south-west. Since then the temperature physics was fixed (converged each
+step), the scoring now penalises zones spilling into each other (F1), the swamp rule needs flat
+ground, and the map scale comes from your hexes. Re-run on those terms, Earth-like spin reached
+**0.409**, level with retrograde at the time and still improving. Retrograde has since gone on
+to 0.427 with 320 more evaluations; Earth-like spin is getting the same 320 now, and this
+section will say which spin the evidence supports.
 
 ### Match with the painted zones (14 km render, round 13)
 
