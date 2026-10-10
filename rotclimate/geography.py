@@ -1,15 +1,18 @@
 """Turn the hand-drawn map layers into model grids.
 
 Layers (all 2000 x 926 px, 1 px = 1.1 mi = 1.77 km):
-  elevation.webp       transparent = water, 4 colour tiers of height
-  rivers.webp          river lines (used only for validation / drawing)
-  climate_target.webp  the painted target climate zones
-  roads.webp           roads + settlement dots (drawing only)
+  elevation.png        transparent = water, 4 colour tiers of height
+  rivers.png           river lines (used only for validation / drawing)
+  climate_target.png   the painted target climate zones
+  roads.png            roads + settlement dots (drawing only)
   labels.webp          place names (positions transcribed to places.csv)
 
-The map is 2000 x 926 px on hexes with 15-mile sides (1.147 mi per px), so its
-*long* side (2293.7 mi) runs east-west and the short side (1062.0 mi ~ 15.4 deg
-of latitude) north-south.
+The .png layers are derived from your lossless originals in
+data/source/original/ by scripts/prepare_sources.py.
+
+The map is 2000 x 926 px on hexes with 15-mile sides (1.143 mi per px, measured
+from the hex lines), so its *long* side (2286.8 mi) runs east-west and the short
+side (1058.2 mi ~ 15.3 deg of latitude) north-south.
 """
 from __future__ import annotations
 
@@ -31,7 +34,7 @@ TIER_COLORS = np.array(
 )
 TIER_NAMES = ["lowland", "hills", "upland", "mountain"]
 
-# target classes painted on climate_target.webp
+# target classes painted on climate_target.png
 TARGET_CLASSES = [
     # id, key, label, paint colour (RGB) used on the source image
     (1, "cold_wet", "Cold and wet (forest)", (0, 125, 10)),
@@ -56,7 +59,7 @@ def _rgba(name: str) -> np.ndarray:
 
 @lru_cache(maxsize=1)
 def source_layers():
-    elev = _rgba("elevation.webp")
+    elev = _rgba("elevation.png")
     land = elev[..., 3] > 128
     d = ((elev[..., None, :3].astype(float) - TIER_COLORS[None, None]) ** 2).sum(-1)
     tier = np.where(land, d.argmin(-1) + 1, 0).astype(np.int8)
@@ -71,8 +74,8 @@ def source_layers():
     lab, _ = ndi.label(water)
     border = np.unique(np.concatenate([lab[0], lab[-1], lab[:, 0], lab[:, -1]]))
     lake = water & ~np.isin(lab, border[border > 0])
-    rivers = _rgba("rivers.webp")[..., 3] > 60
-    roads = _rgba("roads.webp")
+    rivers = _rgba("rivers.png")[..., 3] > 60
+    roads = _rgba("roads.png")
     return dict(land=land, tier=tier, lake=lake, rivers=rivers, roads=roads)
 
 
@@ -119,7 +122,7 @@ def target_fullres() -> np.ndarray:
     text and its anti-aliased fringe are then re-filled from the nearest
     paint, and any gap fully enclosed by one class is filled with it.
     """
-    img = Image.open(SOURCE / "climate_target.webp").convert("RGB")
+    img = Image.open(SOURCE / "climate_target.png").convert("RGB")
     img = np.array(img.resize((2000, 926), Image.NEAREST)).astype(int)
     H, W = img.shape[:2]
     paints = []                        # unique paint colours -> provisional ids
@@ -162,11 +165,45 @@ def target_fullres() -> np.ndarray:
     return out
 
 
-def load_places():
+@lru_cache(maxsize=1)
+def settlement_markers() -> np.ndarray:
+    """The map's settlement markers (data/source/settlements.png, lossless,
+    2.2x the map's pixels): rows of [x, y, half-height] in map pixels."""
+    path = SOURCE / "settlements.png"
+    if not path.exists():
+        return np.zeros((0, 3))
+    a = np.array(Image.open(path).convert("RGBA"))
+    sx, sy = a.shape[1] / 2000.0, a.shape[0] / 926.0
+    ink = a[..., 3] > 0
+    lab, n = ndi.label(ndi.binary_dilation(ink, iterations=1))
+    out = []
+    for i, sl in enumerate(ndi.find_objects(lab), 1):
+        cy, cx = ndi.center_of_mass(ink, lab, i)
+        out.append([(cx + 0.5) / sx, (cy + 0.5) / sy, (sl[0].stop - sl[0].start) / 2 / sy])
+    return np.array(out)
+
+
+def load_places(snap_km_px: float = 18.0):
+    """Place names (data/places.csv, on the hex centres of the name list),
+    moved onto their settlement marker - the canonical position of the town -
+    where one lies within ~18 px (nearest pairs first, one name per marker)."""
     rows = []
     with open(DATA / "places.csv", newline="", encoding="utf-8") as f:
         for r in csv.DictReader(f):
             rows.append(dict(name=r["name"], x=float(r["x"]), y=float(r["y"]), kind=r.get("kind", "town")))
+    m = settlement_markers()
+    if len(m) and rows:
+        pl = np.array([[r["x"], r["y"]] for r in rows])
+        d = np.hypot(pl[:, None, 0] - m[None, :, 0], pl[:, None, 1] - m[None, :, 1])
+        used_p, used_m = set(), set()
+        for flat in np.argsort(d, axis=None):
+            i, j = divmod(int(flat), d.shape[1])
+            if d[i, j] > snap_km_px:
+                break
+            if i in used_p or j in used_m:
+                continue
+            used_p.add(i); used_m.add(j)
+            rows[i]["x"], rows[i]["y"] = round(float(m[j, 0]), 1), round(float(m[j, 1]), 1)
     return rows
 
 

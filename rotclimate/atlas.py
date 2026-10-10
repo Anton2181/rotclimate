@@ -376,22 +376,12 @@ def _settlement_pixels(path: Path = SETTLEMENTS):
     return a, a.shape[1] / 2000.0, a.shape[0] / 926.0
 
 
-def town_markers(path: Path = SETTLEMENTS) -> list:
-    """The pixel-art settlement markers of the map (coloured towns and cities,
-    white villages): [x, y, half-height] of each, in map pixels."""
-    from scipy import ndimage as ndi
+def town_markers() -> list:
+    """The pixel-art settlement markers (coloured towns and cities, white
+    villages): [x, y, half-height] of each, in map pixels."""
+    from .geography import settlement_markers
 
-    if not path.exists():
-        return []
-    a, sx, sy = _settlement_pixels(path)
-    ink = a[..., 3] > 0
-    lab, n = ndi.label(ndi.binary_dilation(ink, iterations=1))
-    out = []
-    for i, sl in enumerate(ndi.find_objects(lab), 1):
-        cy, cx = ndi.center_of_mass(ink, lab, i)
-        out.append([round((cx + 0.5) / sx, 1), round((cy + 0.5) / sy, 1),
-                    round((sl[0].stop - sl[0].start) / 2 / sy, 2)])
-    return out
+    return [[round(float(x), 1), round(float(y), 1), round(float(h), 2)] for x, y, h in settlement_markers()]
 
 
 def save_settlements(outdir: Path = ATLAS / "data"):

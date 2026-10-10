@@ -44,6 +44,12 @@ for it in range(4):
     py, *_ = np.linalg.lstsq(ay[keep], Y[keep], rcond=None)
     res = np.hypot(ax @ px - X, ay @ py - Y)
     keep = res < max(3 * np.median(res[keep]), 12)
+# a grid measured from the hex lines (scripts/prepare_sources.py) beats the fit
+grid = json.loads((ROOT / "data" / "hexgrid.json").read_text())
+if "measured" in grid.get("source", ""):
+    px, py = np.array([grid["x0"], grid["dx"]]), np.array([grid["y0"], grid["dy"]])
+    res = np.hypot(ax @ px - X, ay @ py - Y)
+    print("using the hex grid measured from the hex lines")
 print(f"matched {len(pairs)} towns, used {keep.sum()}; x0={px[0]:.2f} dx={px[1]:.3f} "
       f"y0={py[0]:.2f} dy={py[1]:.3f} (dy/dx={py[1]/px[1]:.3f}, hex ideal 0.866); "
       f"median residual {np.median(res[keep]):.1f}px, 90th pct {np.percentile(res[keep], 90):.1f}px")
@@ -81,7 +87,8 @@ with open(ROOT / "data" / "places.csv", "w", newline="", encoding="utf-8") as f:
     w.writerow(["name", "x", "y", "kind", "hex"])
     for o in sorted(out, key=lambda o: o["hex"]):
         w.writerow([o["name"], round(o["x"], 1), round(o["y"], 1), o["kind"], o["hex"]])
-(ROOT / "data" / "hexgrid.json").write_text(json.dumps(dict(ncol=NCOL, x0=px[0], dx=px[1], y0=py[0], dy=py[1])))
+if "measured" not in grid.get("source", ""):
+    (ROOT / "data" / "hexgrid.json").write_text(json.dumps(dict(ncol=NCOL, x0=px[0], dx=px[1], y0=py[0], dy=py[1])))
 # update the atlas in place
 mp = ROOT / "atlas" / "data" / "atlas.json"
 meta = json.loads(mp.read_text())

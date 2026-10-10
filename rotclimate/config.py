@@ -32,10 +32,10 @@ class Params:
 
     # ---------------------------------------------------------------- map
     # the map is drawn on pointy-top hexes with 15-mile sides (30 mi corner
-    # to corner, 26 mi across the flats, ~585 sq mi); the fitted hex grid
-    # (data/hexgrid.json) gives 1.1469 mi per pixel
-    map_width_mi: float = 2293.7
-    map_height_mi: float = 1062.0
+    # to corner, 26 mi across the flats, ~585 sq mi); measured from the hex
+    # lines (scripts/prepare_sources.py): 1.1434 mi/px across, 1.1427 down
+    map_width_mi: float = 2286.8
+    map_height_mi: float = 1058.2
     # unknown terrain tiers -> top elevation of each tier [m]
     # (lowland green, hill cream, upland orange, mountain red)
     tier_tops: tuple = (350.0, 900.0, 1800.0, 3300.0)

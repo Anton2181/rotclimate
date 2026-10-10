@@ -27,10 +27,11 @@ for the combination whose simulated climate best reproduces the painted zones.
 
 * **Scale.** The image is 2000 × 926 px, drawn on pointy-top hexes with
   15-mile sides (30 mi corner to corner, 26 mi across the flats, ~585 sq mi).
-  The hex grid fitted to the hex-names image (`data/hexgrid.json`: columns
-  22.71 px apart, rows 19.57 px) gives 1.147 mi per pixel, so the map is
-  2,293.7 mi east–west by 1,062.0 mi north–south (1 px ≈ 1.85 km) and spans
-  about **15.4° of latitude**. (Rounds 1–11 used 2,200.5 × 1,018.5 mi,
+  Measured from your hex lines (`scripts/prepare_sources.py`: 4,284 hex
+  centres, columns 22.72 px apart, rows 19.68 px, a perfectly regular grid)
+  that is 1.143 mi per pixel, so the map is 2,286.8 mi east–west by
+  1,058.2 mi north–south (1 px ≈ 1.84 km) and spans about **15.3° of
+  latitude**. (Rounds 1–11 used 2,200.5 × 1,018.5 mi,
   i.e. hexes 25 mi across the flats: 4% smaller.)
 * **Elevation.** Each tier is a band between two unknown heights (the
   `tier_tops` parameters). Inside a band, the height ramps smoothly from the
