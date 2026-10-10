@@ -268,6 +268,7 @@ def main():
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
+    ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"sst_offset": [-2, 2]}')
     a = ap.parse_args()
     if a.physics == "v3":
         _set_space(SPACE_V3)
@@ -281,6 +282,9 @@ def main():
         _set_space(SPACE_V7)
     elif a.physics == "v8":
         _set_space(SPACE_V8)
+    bounds = json.loads(a.bounds)
+    if bounds:
+        _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
     base = Params.from_json(a.start) if a.start else Params()
     base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8"):
