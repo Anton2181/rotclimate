@@ -30,22 +30,35 @@ between the wet and dry zones) or *Transitional* (humid, but between two zones' 
 
 | unknown | best fit |
 |---|---|
-| spin | retrograde (opposite to Earth), **under re-test** (see below) |
+| spin | **retrograde (opposite to Earth)**, narrowly (see below) |
 | latitude | 26.8°N to 42.1°N (centre 34.4°N) |
 | axial tilt | 25.8° (Earth 23.4°) |
 | height tiers | lowland ≤ 100 m, hills ≤ 497 m, upland ≤ 2297 m, peaks to 4733 m |
 | land beyond the map | north-west 59%, north-east ~100%, west 47%, east 16%, south-west 97%, south-east ~100% |
 
-**The spin question is open again.** Under the physics, scoring and data of rounds 1–8, Earth-like
-spin could never make the south-east hot and dry (a fairness run gave 0.336 against 0.493 for
-retrograde, hot-and-dry 0.09), and reversed spin turned the continent into a mirror-image North
-America: the west and south coasts as the humid south-east US, the east as California, the
-south-east as the dry south-west. Since then the temperature physics was fixed (converged each
-step), the scoring now penalises zones spilling into each other (F1), the swamp rule needs flat
-ground, and the map scale comes from your hexes. Re-run on those terms, Earth-like spin reached
-**0.409**, level with retrograde at the time and still improving. Retrograde has since gone on
-to 0.427 with 320 more evaluations; Earth-like spin is getting the same 320 now, and this
-section will say which spin the evidence supports.
+**Spin: reversed spin still wins, but narrowly.** The original fairness test (rounds 1–8 physics
+and scoring) was lopsided: 0.336 for Earth-like spin against 0.493 for reversed. Since then the
+temperature physics was fixed (converged each step), the scoring penalises zones spilling into
+each other (F1), the swamp rule needs flat ground, and the scale and layers come from your
+lossless originals. Re-run on exactly those terms, with the same 320-evaluation budget each:
+
+| | reversed spin (round 14) | Earth-like spin |
+|---|---|---|
+| F1 objective | **0.427** | 0.421 |
+| painted land in its own zone | **53.5%** | 48.1% |
+| warm-wet west coast correct | **32%** | 4% |
+| hot-dry south-east correct | **65%** | 35% |
+| Mediterranean correct | 68% | **83%** |
+| swamp correct | 38% | **43%** |
+| world it needs | 26.8–42.1°N, tilt 25.8° | 32.3–47.6°N, tilt 15.6° |
+
+Earth-like spin can match the overall balance by moving the map 5° north and nearly halving the
+tilt, but it still cannot make the big west coast warm and wet or the south-east hot and dry:
+with Earth's spin those are on the wrong sides of the ocean basins. Reversed spin turns the
+continent into a mirror-image North America (west and south coasts as the humid south-east US,
+the east as California, the south-east as the dry south-west). Both searches were still
+improving when their budgets ran out, so this is a clear lean rather than proof. (A
+southern-hemisphere map with south at the top would behave like the reversed spin.)
 
 ### Match with the painted zones (14 km render, round 14)
 
