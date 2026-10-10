@@ -248,8 +248,6 @@ class ClimateModel:
             SST = self.sst(d, To, Tl)
             T_eq = np.where(land, Tl, SST)
 
-            # winds and temperature depend on temperature: iterate within the
-            # step (t_iters > 1) instead of lagging one step behind
             # ---- parts of the winds and storms that do not depend on temperature
             u0, v0, phi_i, phi_h = self.zonal_wind(s)
             # transient eddies (storms) mix heat and moisture between land and
@@ -320,6 +318,10 @@ class ClimateModel:
             # Sahara coast); the asymmetry flips for retrograde spin
             asym = (-1.0 if p.retrograde else 1.0) * p.subsidence_asym * self.basin_side
             sub = sub * np.clip(1.0 + asym, 0.0, 2.0)
+            # v7: the summer highs are the strong ones (monsoon heating next
+            # door drives their sinking: Rodwell & Hoskins 2001)
+            if p.subsidence_summer > 0:
+                sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (1 + p.storm_track * storm + p.convective * conv + p.orographic * up)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)

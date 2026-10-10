@@ -94,6 +94,23 @@ SPACE_V5 = SPACE_V4 + [("storm_asym", 0.0, 1.0), ("storm_reach", 0.0, 10.0)]
 # physics v6: convective instability of hot moist air
 SPACE_V6 = SPACE_V5 + [("instability", 0.0, 3.0), ("beyond_southeast_land", 0.0, 1.0),
                        ("beyond_northeast_land", 0.0, 1.0)]
+# physics v7: summer-strengthened subtropical highs, and the search box set
+# on physical grounds, the same for both spins. Modelling choices that either
+# spin's best fit had pinned (round 14 / 15p) are widened; true limits
+# (land fraction, current strength >= 0, sea-air humidity <= 0.9, surface
+# westerlies >= 2 m/s) stay.
+_V7_BOUNDS = {
+    "tier1": (50.0, 900.0),              # lowland top: coastal plains can be lower
+    "tier3_add": (300.0, 2500.0),
+    "land_tau_days": (0.3, 5.0),
+    "evap_tau_days": (0.3, 5.0),
+    "monsoon_strength": (0.0, 5.0),      # round 15p's 2.95 gives land winds <= 7.5 m/s
+    "monsoon_scale_km": (250.0, 1500.0),  # thermal lows are continent-sized
+    "storm_track": (0.0, 8.0),
+    "beyond_continuity_km": (100.0, 1200.0),
+    "land_amplitude": (0.7, 2.0),
+}
+SPACE_V7 = [(n, *_V7_BOUNDS.get(n, (lo, hi))) for n, lo, hi in SPACE_V6] + [("subsidence_summer", 0.0, 1.0)]
 
 
 def _set_space(space):
@@ -244,7 +261,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -258,9 +275,11 @@ def main():
         _set_space(SPACE_V5)
     elif a.physics == "v6":
         _set_space(SPACE_V6)
+    elif a.physics == "v7":
+        _set_space(SPACE_V7)
     base = Params.from_json(a.start) if a.start else Params()
     base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
-    if a.physics in ("v3", "v4", "v5", "v6"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

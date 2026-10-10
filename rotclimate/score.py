@@ -35,6 +35,11 @@ RULES = {
 # forested hills (median slope 0.7 vs 3.4 per mille), so flatness is what sets
 # it apart. Slope is measured on a fixed ~15 km scale (grid independent).
 SWAMP_HUMID = 2.0                # flat ground waterlogs with less rain than slopes
+# "Hot and wet, swampy" vs "Warm and wet": the painted swamp is set apart
+# from look-alike wet lowland by heat (mean annual temperature, AUC 0.96),
+# not by drainage or wetness; ~21 C keeps it in Earth's range (Miami,
+# Tampa, Guangzhou inside; Houston on the edge; New Orleans just below)
+SWAMP_MAT = 21.0
                                  # (Everglades ~1,400 mm, Pantanal ~1,200 mm)
 FLAT_SCALE_KM = 15.0
 
@@ -67,7 +72,8 @@ def memberships(ix: dict, floodplain=None, slope=None) -> dict:
         "med": sig((Th - 22) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
         "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0)
         * (humid(SWAMP_HUMID) if floodplain is None else np.maximum(humid(SWAMP_HUMID), floodplain * humid(1.2)))
-        * (1.0 if slope is None else flatness(slope)),
+        * (1.0 if slope is None else flatness(slope))
+        * sig((MAT - SWAMP_MAT) / 0.6),
         "tree": sig((Tc - 2) / 2.0) * humid(1.6),
         "hot_dry": sig((MAT - 17) / 1.2) * arid(1.0),
     }
