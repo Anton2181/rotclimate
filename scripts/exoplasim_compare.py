@@ -90,6 +90,27 @@ def score(Tm, Pm, summer, g):
                 coverage=cov, correct=correct, pred=pred, ix=ix)
 
 
+# painted zone -> wetness and warmth ranks (cold_wet, cold_dry, warm_wet, med, swamp, tree, hot_dry)
+WET_RANK = {1: 2, 2: 0, 3: 2, 4: 1, 5: 2, 6: 2, 7: 0}
+WARM_RANK = {1: 0, 2: 0, 3: 1, 4: 1, 5: 2, 6: 2, 7: 2}
+
+
+def patterns(ix, g):
+    """Rank agreement (Spearman) with the painting, robust to a model's overall wet/dry or warm/cold
+    bias: wetness (aridity index) vs the zones' wet/dry ordering, mean temperature vs their warm/cold
+    ordering, and summer dryness (1 - summer share of rain) vs being painted Mediterranean."""
+    from scipy.stats import spearmanr
+
+    m = g.inmap & g.land & (g.target > 0)
+    tz = g.target[m]
+    wet = np.vectorize(WET_RANK.get)(tz)
+    warm = np.vectorize(WARM_RANK.get)(tz)
+    dry_summer = 1 - ix["Psum"][m] / np.maximum(ix["MAP"][m], 1)
+    return dict(wet_dry=float(spearmanr(ix["aridity"][m], wet)[0]),
+                warm_cold=float(spearmanr(ix["MAT"][m], warm)[0]),
+                mediterranean=float(spearmanr(dry_summer, (tz == 4).astype(float))[0]))
+
+
 def coasts(ix, g):
     """Annual rain and summer share on the west / east coasts of each third."""
     valid = g.inmap & g.land
@@ -153,7 +174,8 @@ def main():
                               gcm_minus_rotclimate_land_mean_C=-shift, bias_corrected=a.bias_correct,
                               exoplasim={k: v for k, v in sg.items() if k not in ("pred", "ix")},
                               rotclimate={k: v for k, v in sr.items() if k not in ("pred", "ix")},
-                              coasts=dict(exoplasim=coasts(sg["ix"], g), rotclimate=coasts(sr["ix"], g)))
+                              coasts=dict(exoplasim=coasts(sg["ix"], g), rotclimate=coasts(sr["ix"], g)),
+                              patterns=dict(exoplasim=patterns(sg["ix"], g), rotclimate=patterns(sr["ix"], g)))
         panels.append((f"{label}: ExoPlaSim {a.res}, {spin} spin", sg["pred"], g))
         panels.append((f"{label}: rotclimate, {spin} spin", sr["pred"], g))
         print(f"== {label} ({spin} spin, {ppath}); ExoPlaSim years {c['first']}..{c['last']}; "
@@ -161,6 +183,10 @@ def main():
         for who, s in (("ExoPlaSim", sg), ("rotclimate", sr)):
             print(f"  {who:10s} objective {s['objective']:.3f}  correct {s['accuracy']:.0%}  "
                   + "  ".join(f"{k} {v:.0%}" for k, v in s["correct"].items()))
+        for who in ("exoplasim", "rotclimate"):
+            pt = results[label]["patterns"][who]
+            print(f"  {who:10s} pattern agreement: wet/dry {pt['wet_dry']:+.2f}  warm/cold {pt['warm_cold']:+.2f}  "
+                  f"dry-summer Mediterranean {pt['mediterranean']:+.2f}")
         for band in ("north", "middle", "south"):
             ce, cr = results[label]["coasts"]["exoplasim"][band], results[label]["coasts"]["rotclimate"][band]
             print(f"  {band:6s} coast rain W/E: ExoPlaSim {ce['west']['rain']:5.0f}/{ce['east']['rain']:5.0f} mm "
