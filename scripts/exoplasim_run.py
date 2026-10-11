@@ -39,7 +39,7 @@ def main():
     work = sra / f"run_{a.res}"
     out = sra / f"out_{a.res}"
     out.mkdir(parents=True, exist_ok=True)
-    done = sorted(glob.glob(str(out / "MOST.*.npz")))
+    done = [f for f in sorted(glob.glob(str(out / "MOST.*.npz"))) if not f.endswith("_metadata.npz")]
     start = len(done)
     restart = out / "restart"
     model = exo.Model(workdir=str(work), modelname=a.name, ncpus=a.ncpus, resolution=a.res,
