@@ -29,7 +29,11 @@ def tilt_sweep(p: Params, out, tilts=None, res=REF):
     tilts = tilts if tilts is not None else [0, 5, 10, 15, 20, 23.44, 27, 30, 35, 40, 45, 50, 60]
     items = []
     for t in tilts:
-        r, ev = _run(p.replace(tilt=float(t), **res))
+        try:
+            r, ev = _run(p.replace(tilt=float(t), **res))
+        except (ZeroDivisionError, FloatingPointError) as e:   # extreme tilts can break the solver
+            print(f"tilt {t}: skipped ({e!r})")
+            continue
         star = "  ← calibrated" if abs(t - p.tilt) < 0.6 else ""
         items.append((FullRes(r).compact(), f"axial tilt {t:g}°   score {ev['total']:.2f}{star}"))
         print(f"tilt {t}: {ev['total']:.3f}")
