@@ -43,6 +43,8 @@ def main():
     ap.add_argument("--years", type=int, default=20)
     ap.add_argument("--ncpus", type=int, default=4)
     ap.add_argument("--timestep", type=float, default=45.0)
+    ap.add_argument("--co2", type=float, default=360.0, help="CO2, ppm")
+    ap.add_argument("--ozone", action="store_true", help="include an Earth-like ozone layer")
     ap.add_argument("--balance", type=float, default=0.0,
                     help="stop once the global top-of-atmosphere imbalance stays within this (W/m2) "
                          "for 3 years running (0 = run all --years)")
@@ -62,7 +64,7 @@ def main():
     model = exo.Model(workdir=str(work), modelname=a.name, ncpus=a.ncpus, resolution=a.res,
                       layers=a.layers, precision=8, inityear=start, crashtolerant=True)
     model.configure(landmap=str(sra / f"{a.name}_surf_0172.sra"), topomap=str(sra / f"{a.name}_surf_0129.sra"),
-                    obliquity=a.tilt, eccentricity=0.0167, pN2=0.78, pO2=0.21, pAr=0.0093, pCO2=360e-6,
+                    obliquity=a.tilt, eccentricity=0.0167, pN2=0.78, pO2=0.21, pAr=0.0093, pCO2=a.co2 * 1e-6, ozone=a.ozone,
                     pH2O=None, mldepth=50.0, wetsoil=True, vegetation=False, timestep=a.timestep,
                     fixedorbit=True,          # else PlaSim computes Earth's own orbit and tilt
                     restartfile=str(restart) if start and restart.exists() else None)

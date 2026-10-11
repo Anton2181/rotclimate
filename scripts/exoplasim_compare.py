@@ -125,6 +125,9 @@ def main():
     ap.add_argument("--res", default="T21")
     ap.add_argument("--years", type=int, default=10)
     ap.add_argument("--out", default="")
+    ap.add_argument("--bias-correct", action="store_true",
+                    help="shift the GCM's temperatures by one constant so the map's mean land temperature "
+                         "matches rotclimate's (ExoPlaSim's slab-ocean planet runs cold); patterns are kept")
     a = ap.parse_args()
     results, panels = {}, []
     for spec in a.runs:
@@ -138,16 +141,23 @@ def main():
         hg = sample(c["H"], c["lat"], c["lon"], mp["lat"], mp["lon"])
         Tm = Tm - LAPSE * (np.maximum(g.elev, 0) - hg)[None]
         Pm = np.maximum(sample(c["P"], c["lat"], c["lon"], mp["lat"], mp["lon"]), 0)
+        Tr, Pr, Sr = rotclimate_climate(p)
+        land = g.inmap & g.land
+        shift = float(Tr.mean(0)[land].mean() - Tm.mean(0)[land].mean())
+        if a.bias_correct:
+            Tm = Tm + shift
         sg = score(Tm, Pm, c["summer"], g)
-        sr = score(*rotclimate_climate(p), g)
+        sr = score(Tr, Pr, Sr, g)
         spin = "reversed" if p.retrograde else "Earth-like"
         results[label] = dict(spin=spin, params=ppath, gcm_years=f"{c['first']}..{c['last']} ({c['years']})",
+                              gcm_minus_rotclimate_land_mean_C=-shift, bias_corrected=a.bias_correct,
                               exoplasim={k: v for k, v in sg.items() if k not in ("pred", "ix")},
                               rotclimate={k: v for k, v in sr.items() if k not in ("pred", "ix")},
                               coasts=dict(exoplasim=coasts(sg["ix"], g), rotclimate=coasts(sr["ix"], g)))
         panels.append((f"{label}: ExoPlaSim {a.res}, {spin} spin", sg["pred"], g))
         panels.append((f"{label}: rotclimate, {spin} spin", sr["pred"], g))
-        print(f"== {label} ({spin} spin, {ppath}); ExoPlaSim years {c['first']}..{c['last']}")
+        print(f"== {label} ({spin} spin, {ppath}); ExoPlaSim years {c['first']}..{c['last']}; "
+              f"map land {-shift:+.1f} C vs rotclimate" + (" (removed)" if a.bias_correct else ""))
         for who, s in (("ExoPlaSim", sg), ("rotclimate", sr)):
             print(f"  {who:10s} objective {s['objective']:.3f}  correct {s['accuracy']:.0%}  "
                   + "  ".join(f"{k} {v:.0%}" for k, v in s["correct"].items()))
