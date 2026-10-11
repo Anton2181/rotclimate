@@ -137,12 +137,12 @@ Each painted zone becomes a fuzzy rule on climate statistics:
 | zone | rule (soft thresholds) |
 |---|---|
 | Cold and wet | coldest month below ~1 °C, humid (precipitation ≥ 1.8× the Köppen dryness threshold) |
-| Cold and dry | coldest month below ~1 °C, semi-arid or arid (below 1.3× threshold) |
+| Cold and dry | Köppen BSk/BWk: arid or semi-arid (below the Köppen dryness threshold) with an annual mean below ~18 °C, Köppen's own cold/hot line for dry climates. (Until round 18 it also took places up to 1.3× the threshold, so cold dry-summer Dsa counted as cold and dry.) |
 | Warm and wet | coldest month above ~1 °C, warmest above ~20 °C, humid, no summer drought |
-| Mediterranean | warmest month above ~22 °C, coldest above ~0 °C, dry summer and wet winter, not desert |
+| Mediterranean | Köppen Cs (Csa and Csb): warmest month above ~10 °C, coldest above ~0 °C, dry summer and wet winter, not desert (until round 18 only Csa: warmest above 22 °C) |
 | Hot and wet, swampy | warmest month above ~25 °C, coldest above ~4 °C, **hot year (mean annual above ~21 °C)**, very wet (≥ 2.0×), **on flat ground** (slope under ~1.5 ‰ over ~15 km): waterlogged. Where this rule is met the place counts as swamp, since every swamp also meets the warm-wet and forest rules |
 | Tree | coldest month above ~2 °C, humid enough for forest (≥ 1.6×) |
-| Hot and dry | mean annual temperature above ~17 °C, arid or semi-arid (< 1×) |
+| Hot and dry | Köppen BSh/BWh: arid or semi-arid (below the dryness threshold) with an annual mean above ~18 °C |
 
 A zone's score is the average membership over its land cells. Two objectives
 are used:

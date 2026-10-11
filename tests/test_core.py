@@ -209,3 +209,31 @@ def test_north_bearing_rotates_latitude_and_coasts():
     left, right = cols[: cols.size // 5], cols[-cols.size // 5:]
     T = r.T.mean(0)
     assert T[:, left][land[:, left]].mean() > T[:, right][land[:, right]].mean() + 3
+
+
+# ------------------------------------------------------------------ zone rules vs Koppen
+def test_dry_zones_follow_koppen():
+    from rotclimate.koppen import CODES, classify, climate_indices
+    from rotclimate.score import memberships
+
+    summer = np.array([False] * 3 + [True] * 6 + [False] * 3)
+    season = -np.cos(2 * np.pi * (np.arange(12) + 0.5) / 12)
+    def climate(mat, amp, p_summer, p_winter):
+        Tm = (mat + amp / 2 * season)[:, None]
+        Pm = np.where(summer, p_summer, p_winter).astype(float)[:, None]
+        return Tm, Pm
+    cases = {   # name: (climate, expected Koppen code)
+        "cold steppe": (climate(9.0, 26.0, 25.0, 20.0), "BSk"),
+        "hot desert": (climate(24.0, 16.0, 2.0, 8.0), "BWh"),
+        "dry-summer continental": (climate(9.0, 28.0, 12.0, 75.0), "Dsa"),
+        "warm-summer Mediterranean": (climate(14.0, 9.0, 8.0, 110.0), "Csb"),
+    }
+    for name, ((Tm, Pm), code) in cases.items():
+        assert CODES[classify(Tm, Pm, summer)[0]] == code, name
+        mem = {k: float(v[0]) for k, v in memberships(climate_indices(Tm, Pm, summer)).items()}
+        best = max(mem, key=mem.get)
+        expected = {"BSk": "cold_dry", "BWh": "hot_dry", "Csb": "med"}.get(code)
+        if expected:
+            assert best == expected, (name, mem)
+        else:   # Dsa is not a dry climate: it must not read as cold and dry
+            assert mem["cold_dry"] < 0.3, (name, mem)

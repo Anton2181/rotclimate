@@ -67,15 +67,20 @@ def memberships(ix: dict, floodplain=None, slope=None) -> dict:
     cold = sig((1.0 - Tc) / 2.0)
     return {
         "cold_wet": cold * humid(1.8),
-        "cold_dry": cold * arid(1.3),
+        # Koppen-consistent dry zones: B climates (below the dryness threshold),
+        # split at Koppen's own k/h line (annual mean 18 C): BSk/BWk vs BSh/BWh.
+        # (Until round 18 cold-dry also took non-B climates up to 1.3x the
+        # threshold, so cold dry-summer Dsa counted as "cold and dry".)
+        "cold_dry": sig((18.0 - MAT) / 1.2) * arid(1.0),
         "warm_wet": sig((Tc - 1.0) / 2.0) * sig((Th - 20) / 1.5) * humid(1.8) * (1 - summer_dry),
-        "med": sig((Th - 22) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
+        # Cs (Csa and Csb): temperate, dry summer, wet winter, not desert
+        "med": sig((Th - 10) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
         "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0)
         * (humid(SWAMP_HUMID) if floodplain is None else np.maximum(humid(SWAMP_HUMID), floodplain * humid(1.2)))
         * (1.0 if slope is None else flatness(slope))
         * sig((MAT - SWAMP_MAT) / 0.6),
         "tree": sig((Tc - 2) / 2.0) * humid(1.6),
-        "hot_dry": sig((MAT - 17) / 1.2) * arid(1.0),
+        "hot_dry": sig((MAT - 18.0) / 1.2) * arid(1.0),
     }
 
 
