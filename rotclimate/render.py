@@ -147,15 +147,24 @@ def scale_bar(ax, fr, miles=200):
 
 
 def lat_ticks(ax, fr):
-    g = fr.r.grid
-    lat0 = fr.r.params.lat_center
-    km_px = fr.r.params.map_width_mi * 1.609344 / fr.W
-    for lat in range(int(np.floor(lat0 - 9)), int(np.ceil(lat0 + 9)) + 1):
-        y = fr.H / 2 - (lat - lat0) * 111.195 / km_px
-        if 5 < y < fr.H - 5:
-            ax.axhline(y, color="k", lw=0.3, alpha=0.35, ls=(0, (4, 4)))
-            ax.text(fr.W - 4, y - 3, f"{lat}°{'N'}", ha="right", va="bottom", fontsize=8, alpha=0.7)
-    del g
+    p = fr.r.params
+    lat0 = p.lat_center
+    km_px = p.map_width_mi * 1.609344 / fr.W
+    if not p.north_bearing % 360.0:
+        for lat in range(int(np.floor(lat0 - 9)), int(np.ceil(lat0 + 9)) + 1):
+            y = fr.H / 2 - (lat - lat0) * 111.195 / km_px
+            if 5 < y < fr.H - 5:
+                ax.axhline(y, color="k", lw=0.3, alpha=0.35, ls=(0, (4, 4)))
+                ax.text(fr.W - 4, y - 3, f"{lat}°{'N'}", ha="right", va="bottom", fontsize=8, alpha=0.7)
+        return
+    # true north is not up: parallels run across the map at an angle
+    th = np.radians(p.north_bearing)
+    yy, xx = np.mgrid[0:fr.H:8, 0:fr.W:8]
+    lat = lat0 + ((xx - fr.W / 2) * np.sin(th) + (fr.H / 2 - yy) * np.cos(th)) * km_px / 111.195
+    lo, hi = int(np.ceil(lat.min())), int(np.floor(lat.max()))
+    cs = ax.contour(xx, yy, lat, levels=list(range(lo, hi + 1)), colors="k", linewidths=0.3, alpha=0.35,
+                    linestyles=[(0, (4, 4))])
+    ax.clabel(cs, fmt=lambda v: f"{v:.0f}°N", fontsize=7, inline=True)
 
 
 # --------------------------------------------------------------------- maps
@@ -542,9 +551,10 @@ def insolation_chart(params, path):
     fig, ax = plt.subplots(figsize=(11, 5), dpi=100)
     im = ax.contourf(days, lats, Q.T, levels=np.arange(0, 560, 20), cmap="inferno")
     fig.colorbar(im, label="daily mean sunlight at top of atmosphere (W/m²)")
-    lat0, half = params.lat_center, params.map_height_mi * 1.609344 / 111.195 / 2
-    ax.axhspan(lat0 - half, lat0 + half, color="w", alpha=0.25)
-    ax.text(5, lat0, "  the map", color="w", va="center", fontsize=11, weight="bold")
+    from .geography import map_lat_range
+    south, north = map_lat_range(params)
+    ax.axhspan(south, north, color="w", alpha=0.25)
+    ax.text(5, params.lat_center, "  the map", color="w", va="center", fontsize=11, weight="bold")
     starts = [i * cal.MONTH_DAYS for i in range(10)] + [350]
     ax.set_xticks([s + 17.5 for s in starts[:10]] + [357.5])
     ax.set_xticklabels([m.name.replace(" ", "\n") for m in cal.MONTHS] + ["Holy\nDays"], fontsize=7)
@@ -583,11 +593,10 @@ def context_map(result, path, title=None):
     yy, xx = np.mgrid[step // 2:g.ny:step, step // 2:g.nx:step]
     ax.quiver(xx, yy, r.u.mean(0)[yy, xx], -r.v.mean(0)[yy, xx], color="k", alpha=0.45,
               scale=120, width=0.0018)
-    for lat in range(int(g.lat.min()) + 1, int(g.lat.max()) + 1):
-        if lat % 5 == 0:
-            yrow = np.interp(lat, g.lat[::-1, 0], np.arange(g.ny)[::-1])
-            ax.axhline(yrow, color="k", lw=0.4, alpha=0.4, ls=":")
-            ax.text(g.nx - 2, yrow - 1, f"{lat}°N", ha="right", fontsize=8, alpha=0.7)
+    levels = [la for la in range(int(g.lat.min()) + 1, int(g.lat.max()) + 1) if la % 5 == 0]
+    if levels:
+        cs = ax.contour(g.lat, levels=levels, colors="k", linewidths=0.4, alpha=0.4, linestyles=":")
+        ax.clabel(cs, fmt=lambda v: f"{v:.0f}°N", fontsize=8, inline=True)
     present = set(CODES[i] for i in np.unique(k[g.land]) if i >= 0)
     koppen_legend(ax, present, loc="lower left", fontsize=6.5, ncol=2)
     ax.set_axis_off()

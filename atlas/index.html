@@ -461,7 +461,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     for (let m = 0; m < n; m++) out.push(A[name].data[(m * c.h + c.iy) * c.w + c.ix]);
     return out;
   };
-  const latOf = (y) => meta.lat_center + (H / 2 - y) * meta.mi_per_px * 1.609344 / meta.km_per_deg;
+  // latitude at map pixel (x, y); true north may point away from the top of the map
+  const northRad = (meta.north_bearing || 0) * Math.PI / 180;
+  const latOf = (x, y) => meta.lat_center + ((x - W / 2) * Math.sin(northRad) + (H / 2 - y) * Math.cos(northRad))
+    * meta.mi_per_px * 1.609344 / meta.km_per_deg;
 
   function nearestPlace(x, y) {
     let best = null, bd = 45 * 45;
@@ -556,7 +559,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     $("station-h").textContent = place ? place.name : "Unnamed place";
     $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
     $("kdesc").textContent = K.desc;
-    const lat = latOf(y);
+    const lat = latOf(x, y);
     const months = meta.months;
     const iMin = Tm.slice(0, 10).indexOf(Math.min(...Tm.slice(0, 10)));
     const iMax = Tm.slice(0, 10).indexOf(Math.max(...Tm.slice(0, 10)));

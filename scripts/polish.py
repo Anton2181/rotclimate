@@ -30,7 +30,7 @@ import numpy as np  # noqa: E402
 from rotclimate import calibrate as C  # noqa: E402
 from rotclimate.config import Params  # noqa: E402
 
-SPACES = {"v6": "SPACE_V6", "v7": "SPACE_V7", "v8": "SPACE_V8"}
+SPACES = {"v6": "SPACE_V6", "v7": "SPACE_V7", "v8": "SPACE_V8", "v9": "SPACE_V9"}
 
 
 def _job(a):

@@ -20,6 +20,7 @@ OUTPUT = REPO / "output"
 class Params:
     # ---------------------------------------------------------------- planet
     lat_center: float = 34.0          # latitude of the map centre [deg N]
+    north_bearing: float = 0.0        # direction of true north, degrees clockwise from the top of the map
     tilt: float = 23.44               # axial tilt [deg]
     retrograde: bool = False          # spin opposite to Earth (flips Coriolis)
     eccentricity: float = 0.0167

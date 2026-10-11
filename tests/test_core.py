@@ -180,3 +180,32 @@ def test_wet_ground_cools_humid_summers_only():
     assert (hot0 - hot1)[wet].mean() > 1.0
     assert (hot0 - hot1)[wet].mean() > (hot0 - hot1)[dry].mean()
     assert abs((cold0 - cold1).mean()) < 0.6 * (hot0 - hot1).mean()
+
+
+# ------------------------------------------------------------------ map orientation (v9)
+def test_north_bearing_rotates_latitude_and_coasts():
+    from rotclimate.geography import build_grid, map_lat_range
+    from rotclimate.model import ClimateModel
+
+    p = Params.from_json("calibration/best_params.json").replace(downsample=16, steps_per_year=13,
+                                                                 picard_iters=1)
+    g0, g90, g180 = (build_grid(p.replace(north_bearing=b)) for b in (0.0, 90.0, 180.0))
+    m = g0.inmap
+    # north up: latitude falls down the rows; north to the right: it rises along them
+    assert (np.diff(g0.lat[:, 0]) < 0).all() and np.allclose(g0.lat, g0.lat[:, :1])
+    assert (np.diff(g90.lat[0]) > 0).all() and np.allclose(g90.lat, g90.lat[:1, :])
+    assert np.allclose(g180.lat - p.lat_center, -(g0.lat - p.lat_center), atol=0.2)
+    assert abs(g90.lat[m].max() - g90.lat[m].min() - np.subtract(*map_lat_range(p.replace(north_bearing=90))[::-1])) < 0.5
+    # a full turn is no turn; turning the map round swaps west and east coasts
+    s0 = ClimateModel(p).side
+    assert np.allclose(ClimateModel(p.replace(north_bearing=360.0)).side, s0)
+    s180 = ClimateModel(p.replace(north_bearing=180.0)).side
+    assert np.allclose(s180, -s0, atol=1e-9)
+    r = ClimateModel(p.replace(north_bearing=90.0)).run()
+    land = r.grid.land & r.grid.inmap
+    assert np.isfinite(r.T).all() and (r.P >= 0).all()
+    # with north to the right, the right of the map is the cold side
+    cols = np.flatnonzero(r.grid.inmap.any(0))
+    left, right = cols[: cols.size // 5], cols[-cols.size // 5:]
+    T = r.T.mean(0)
+    assert T[:, left][land[:, left]].mean() > T[:, right][land[:, right]].mean() + 3

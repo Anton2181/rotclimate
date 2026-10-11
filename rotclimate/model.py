@@ -117,16 +117,21 @@ class ClimateModel:
         dx = g.dx_m
         land = g.land.astype(float)
         cells_per_100km = 100.0 / g.cell_km
+        th = np.radians(p.north_bearing)
+
+        def d_east(a):
+            """Derivative per cell toward true east (the map's right when north is up)."""
+            return np.cos(th) * np.gradient(a, axis=1) + np.sin(th) * np.gradient(a, axis=0)
         # which side of a landmass an ocean cell lies on: >0 => land to the east
         # (a continent's WEST coast), <0 => land to the west (EAST coast)
         Ls = ndi.gaussian_filter(land, 2.5 * cells_per_100km)
-        gx = np.gradient(Ls, axis=1) * cells_per_100km
+        gx = d_east(Ls) * cells_per_100km
         self.side = np.clip(gx / 0.08, -1, 1) * (~g.land)
         self.side = ndi.gaussian_filter(self.side, 1.0 * cells_per_100km)
         # broad "which side of the ocean basin" field over land AND sea: >0 on
         # and off continents' west coasts, <0 on and off their east coasts
         Lb = ndi.gaussian_filter(land, 4.0 * cells_per_100km)
-        gb = ndi.gaussian_filter(np.gradient(Lb, axis=1) * cells_per_100km, 2.0 * cells_per_100km)
+        gb = ndi.gaussian_filter(d_east(Lb) * cells_per_100km, 2.0 * cells_per_100km)
         self.basin_side = np.clip(gb / max(np.abs(gb).max(), 1e-9) * 2.0, -1, 1)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
@@ -181,6 +186,9 @@ class ClimateModel:
         v = np.where(m, -0.3 * p.polar_speed * np.sin(np.pi * xi), v)
         if p.retrograde:
             u = -u
+        if p.north_bearing % 360.0:     # true east/north -> map right/up
+            th = np.radians(p.north_bearing)
+            u, v = u * np.cos(th) + v * np.sin(th), -u * np.sin(th) + v * np.cos(th)
         return u, v, phi_i, phi_h
 
     def thermal_wind(self, T_anom):

@@ -20,7 +20,7 @@ from . import calendar as cal
 from .config import REPO, SOURCE, Params
 from .geography import (TARGET_CLASSES, TARGET_DRAW_COLORS, TARGET_LABELS, load_places,
                         source_layers, target_fullres)
-from .geography import elevation_fullres
+from .geography import elevation_fullres, map_lat_range
 from .koppen import CODES, COLORS, DESCRIPTIONS, monthly_stats, rgb_image
 
 ATLAS = REPO / "atlas"
@@ -237,9 +237,9 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         reference=reference_payload(), reference_source=reference_source(),
         towns=town_markers(),
         solstice_day=p.winter_solstice_day,
-        world=dict(lat_south=p.lat_center - H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
-                   lat_north=p.lat_center + H * p.map_width_mi / W * 1.609344 / 111.195 / 2,
-                   tilt=p.tilt, retrograde=p.retrograde, tier_tops=list(p.tier_tops),
+        north_bearing=p.north_bearing,
+        world=dict(lat_south=map_lat_range(p)[0], lat_north=map_lat_range(p)[1],
+                   north_bearing=p.north_bearing, tilt=p.tilt, retrograde=p.retrograde, tier_tops=list(p.tier_tops),
                    beyond=_beyond_facts(p) if p.beyond_style == "procedural" else None),
     )
     (outdir / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))

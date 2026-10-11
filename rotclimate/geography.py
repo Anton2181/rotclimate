@@ -310,10 +310,32 @@ def build_grid(params: Params) -> Grid:
             (side, getattr(params, f"beyond_{side}"),
              round(float(getattr(params, f"beyond_{side}_gap_km")), 1))
             for side in ("north", "south", "west", "east"))
-    return _build_grid_cached(
+    g = _build_grid_cached(
         params.downsample, tuple(params.tier_tops), beyond, params.pad_km, params.lat_center,
         params.map_width_mi, params.map_height_mi,
     )._with_params(params)
+    if params.north_bearing % 360.0:
+        g.lat = rotated_latitude(g, params.lat_center, params.north_bearing)
+    return g
+
+
+def rotated_latitude(g, lat_center, bearing):
+    """Latitude of every cell when true north points `bearing` degrees
+    clockwise from the top of the map (the grid stays aligned with the map)."""
+    th = np.radians(bearing)
+    y_up = (g.lat[:, :1] - lat_center) * EARTH_KM_PER_DEG          # km up the map from its centre
+    cols = np.flatnonzero(g.inmap.any(0))
+    x_right = (np.arange(g.nx)[None, :] - 0.5 * (cols[0] + cols[-1])) * g.cell_km
+    return lat_center + (x_right * np.sin(th) + y_up * np.cos(th)) / EARTH_KM_PER_DEG
+
+
+def map_lat_range(params) -> tuple:
+    """(southernmost, northernmost) latitude of the drawn map."""
+    w = params.map_width_mi * MI_KM
+    h = params.map_height_mi * MI_KM
+    th = np.radians(params.north_bearing)
+    half = 0.5 * (abs(w * np.sin(th)) + abs(h * np.cos(th))) / EARTH_KM_PER_DEG
+    return params.lat_center - half, params.lat_center + half
 
 
 @lru_cache(maxsize=8)
