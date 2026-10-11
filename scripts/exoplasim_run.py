@@ -19,6 +19,20 @@ import time
 from pathlib import Path
 
 
+def global_toa(out):
+    """Area-weighted annual-mean net top-of-atmosphere flux of each year so far."""
+    import numpy as np
+
+    vals = []
+    for f in sorted(glob.glob(str(out / "MOST.*.npz"))):
+        if f.endswith("_metadata.npz"):
+            continue
+        d = np.load(f)
+        w = np.cos(np.radians(d["lat"]))[:, None] * np.ones(d["lon"].size)[None]
+        vals.append(float((d["ntr"].mean(0) * w).sum() / w.sum()))
+    return vals
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--sra", required=True, help="folder with <name>_surf_0172.sra and _0129.sra")
@@ -29,6 +43,9 @@ def main():
     ap.add_argument("--years", type=int, default=20)
     ap.add_argument("--ncpus", type=int, default=4)
     ap.add_argument("--timestep", type=float, default=45.0)
+    ap.add_argument("--balance", type=float, default=0.0,
+                    help="stop once the global top-of-atmosphere imbalance stays within this (W/m2) "
+                         "for 3 years running (0 = run all --years)")
     a = ap.parse_args()
     # containers often run everything as root, which OpenMPI refuses by default
     os.environ.setdefault("OMPI_ALLOW_RUN_AS_ROOT", "1")
@@ -40,7 +57,7 @@ def main():
     out = sra / f"out_{a.res}"
     out.mkdir(parents=True, exist_ok=True)
     done = [f for f in sorted(glob.glob(str(out / "MOST.*.npz"))) if not f.endswith("_metadata.npz")]
-    start = len(done)
+    start = int(Path(done[-1]).name.split(".")[1]) + 1 if done else 0
     restart = out / "restart"
     model = exo.Model(workdir=str(work), modelname=a.name, ncpus=a.ncpus, resolution=a.res,
                       layers=a.layers, precision=8, inityear=start, crashtolerant=True)
@@ -58,7 +75,12 @@ def main():
             shutil.copy(f, out / Path(f).name)
         if (work / "plasim_restart").exists():
             shutil.copy(work / "plasim_restart", restart)
-        print(f"year {year + 1}/{a.years} in {time.time() - t:.0f}s", flush=True)
+        toa = global_toa(out)
+        print(f"year {year + 1}/{a.years} in {time.time() - t:.0f}s; global TOA imbalance "
+              + ", ".join(f"{v:+.2f}" for v in toa[-3:]) + " W/m2", flush=True)
+        if a.balance > 0 and len(toa) >= 3 and max(abs(v) for v in toa[-3:]) < a.balance:
+            print("in balance", flush=True)
+            break
 
 
 if __name__ == "__main__":
