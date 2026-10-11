@@ -75,6 +75,36 @@ behave like the reversed spin.)
 
 ![Your painted zones, and the simulated climate in them with each spin](output/spin_comparison.png)
 
+### Independent check: a full 3-D climate model (ExoPlaSim)
+
+rotclimate is fast because it parameterises the winds; ExoPlaSim (Paradise et al. 2022) is a
+real general-circulation model that computes them, with no knowledge of your painted zones. It has
+no reversed-spin switch, but reversed spin is the same physics as Earth's spin on the east–west
+mirrored map, so each calibrated world was run four ways: as calibrated, and with the other spin.
+Setup: T21 grid (your continent is only about 5 × 3 cells), 50 m slab ocean without currents, an
+ozone layer and Earth's CO2, each world's own tilt, run until the planet's energy budget balanced
+(global means 17–21 °C), last 10 years averaged (`scripts/exoplasim_*.py`, results in
+`output/exoplasim_check.json`).
+
+![Painted zones; ExoPlaSim and rotclimate, each world under each spin](output/exoplasim_check.png)
+
+At this resolution ExoPlaSim puts a broad subtropical desert over the whole southern half of the
+continent under either spin, so it cannot judge your wet/dry layout (rank agreement with your
+zones' wet-to-dry ordering is about zero for every run). What it does show, in both worlds, is
+where summers are dry. Agreement between summer dryness and your painted Mediterranean band:
+
+| | Earth-like spin | reversed spin |
+|---|---|---|
+| Earth-like world (tilt 17°, 29–45°N) | +0.08 | **+0.38** |
+| reversed-spin world (tilt 21°, 27–42°N) | +0.23 | **+0.54** |
+
+Reversed spin puts the dry-summer belt where you painted the Mediterranean band, by about the same
+margin (+0.3) in both worlds, so the difference comes from the spin itself rather than from tilt,
+latitude or surroundings. That is one independent point for reversed spin, from a model that never
+saw the painting. Together with rotclimate's own results the spin question stays genuinely close:
+rotclimate's fit score prefers Earth-like spin; the share of painted land matched, the
+Mediterranean placement in ExoPlaSim and the literature on retrograde Earths lean reversed.
+
 ### Match with the painted zones (14 km render, round 17, Earth-like spin)
 
 Each zone is judged two ways. **Coverage**: how well the painted area meets the zone's climate
@@ -175,6 +205,11 @@ python -I scripts/build_dtr_model.py .   # day/night range model (data/dtr_knn.n
 #   geonames/  cities15000.zip, admin1CodesASCII.txt, countryInfo.txt  (download.geonames.org/export/dump/)
 #   worldclim/ wc2.1_5m_{tavg,tmin,tmax,prec,elev}.zip                   (geodata.ucdavis.edu/climate/worldclim/2_1/base/)
 python -m pytest -q                      # fast checks (calendar, Köppen, solver, hydrology, end-to-end)
+# ExoPlaSim cross-check (optional; needs gfortran, OpenMPI, and exoplasim + netCDF4 + meson + ninja in
+# their own virtualenv; run `python -c "import exoplasim; exoplasim.compile_pyfft()"` there once)
+python scripts/exoplasim_export.py calibration/round17_retrograde.json --res T21 --mirror --out exo/retro --name retro
+venv/bin/python scripts/exoplasim_run.py --sra exo/retro --name retro --res T21 --tilt 20.82 --ozone --years 60 --balance 0.4
+python scripts/exoplasim_compare.py R=calibration/round17_retrograde.json:exo/retro:retro --res T21 --years 10 --out out.png
 ```
 
 To view the interactive atlas locally, run `python -m http.server -d atlas` and open
