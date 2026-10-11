@@ -13,6 +13,7 @@ from __future__ import annotations
 
 import argparse
 import glob
+import os
 import shutil
 import time
 from pathlib import Path
@@ -29,6 +30,9 @@ def main():
     ap.add_argument("--ncpus", type=int, default=4)
     ap.add_argument("--timestep", type=float, default=45.0)
     a = ap.parse_args()
+    # containers often run everything as root, which OpenMPI refuses by default
+    os.environ.setdefault("OMPI_ALLOW_RUN_AS_ROOT", "1")
+    os.environ.setdefault("OMPI_ALLOW_RUN_AS_ROOT_CONFIRM", "1")
     import exoplasim as exo
 
     sra = Path(a.sra).resolve()
