@@ -47,6 +47,7 @@ def main():
     model.configure(landmap=str(sra / f"{a.name}_surf_0172.sra"), topomap=str(sra / f"{a.name}_surf_0129.sra"),
                     obliquity=a.tilt, eccentricity=0.0167, pN2=0.78, pO2=0.21, pAr=0.0093, pCO2=360e-6,
                     pH2O=None, mldepth=50.0, wetsoil=True, vegetation=False, timestep=a.timestep,
+                    fixedorbit=True,          # else PlaSim computes Earth's own orbit and tilt
                     restartfile=str(restart) if start and restart.exists() else None)
     model.exportcfg(str(out / f"{a.name}.cfg"))
     for year in range(start, a.years):
