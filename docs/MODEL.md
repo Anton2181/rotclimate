@@ -144,6 +144,13 @@ Each painted zone becomes a fuzzy rule on climate statistics:
 | Tree | coldest month above ~2 °C, humid enough for forest (≥ 1.6×) |
 | Hot and dry | Köppen BSh/BWh: arid or semi-arid (below the dryness threshold) with an annual mean above ~18 °C |
 
+A zone's score is the average membership over its land cells. A place's single *label* (the
+zone maps and the share of land "correct") is the best-fitting zone among those its Köppen
+class allows: cold-and-wet on D/E, cold-and-dry on BSk/BWk, hot-and-dry on BSh/BWh,
+Mediterranean on Cs, warm-and-wet on Cf/Cw/A, swamp and forest on C/A. The soft rules still
+give partial credit across Köppen's lines when scoring, but a label never contradicts the
+Köppen map (so dry-summer continental Dsa is never "cold and dry" or "Mediterranean").
+
 A zone's score is the average membership over its land cells. Two objectives
 are used:
 
