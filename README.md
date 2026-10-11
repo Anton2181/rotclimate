@@ -126,18 +126,32 @@ flat height tiers.
 
 | zone | coverage | precision | F1 | correct |
 |---|---|---|---|---|
-| Cold and wet | 0.47 | 0.23 | 0.31 | 63% |
-| Cold and dry | 0.45 | 0.77 | 0.57 | 68% |
+| Cold and wet | 0.47 | 0.23 | 0.31 | 48% |
+| Cold and dry | 0.31 | 0.79 | 0.45 | 20% |
 | Warm and wet | 0.49 | 0.67 | 0.56 | 0% |
-| Mediterranean | 0.69 | 0.41 | 0.51 | 90% |
+| Mediterranean | 0.69 | 0.41 | 0.51 | 89% |
 | Hot and wet, swampy | 0.46 | 0.47 | 0.47 | 50% |
-| Tree (forested) | 0.78 | 0.28 | 0.42 | 42% |
-| Hot and dry | 0.47 | 0.68 | 0.56 | 45% |
-| **overall** | **0.53** | | **0.46** (objective) | **51%** |
+| Tree (forested) | 0.78 | 0.28 | 0.42 | 41% |
+| Hot and dry | 0.47 | 0.75 | 0.58 | 45% |
+| **overall** | **0.53** | | **0.45** (objective) | **42%** |
+
+These use the Köppen-consistent zone rules (after round 18; see below), with round 18's
+parameters, which were calibrated on the old rules: a recalibration is under way.
+
+**Zone rules now follow Köppen.** Until round 18, *cold and dry* took any place with cold
+winters and rain below 1.3× Köppen's dryness threshold, so dry-summer continental **Dsa** (not a
+dry climate in Köppen) counted as cold and dry: 54% of the simulated cold-dry land was Dsa. Now
+cold-and-dry is BSk/BWk and hot-and-dry BSh/BWh (Köppen's dry climates, split at its own 18 °C
+line), the Mediterranean zone is Cs (Csb as well as Csa), and a place's label can only be a zone
+its Köppen class allows. Your painted cold-dry north is mostly Dsa in the simulation, so it now
+reads mostly as the semi-dry margin (52%) instead of cold and dry: the calibration has to make it
+genuinely drier to match.
 
 (it00, the Earth-like first guess: coverage 0.17 and 9% correct.)
 
 Where it still falls short:
+* **The cold-dry north** is simulated as dry-summer continental (Dsa), just too wet for a Köppen
+  steppe; under the corrected rules only 20% of it reads as cold and dry.
 * **The warm-wet west coast** meets its rule fairly well (F1 0.56) and shows as warm-wet on the
   maps, but in the score's strict count the forest rule fits it a shade better everywhere, so it
   counts as forest (53%) or cold-and-wet (24%). Reversed spin counts 53% of it as warm-wet and
