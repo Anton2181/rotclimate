@@ -80,7 +80,8 @@ def score(Tm, Pm, summer, g):
         m = valid & (g.target == cid)
         cov[key] = float(mem[key][m].mean())
     prec, f1 = precision_f1(mem, g.target, valid, cov, elev=g.elev)
-    pred = best_zone(mem)
+    from rotclimate.koppen import classify
+    pred = best_zone(mem, koppen=classify(Tm, Pm, summer))
     painted = valid & (g.target > 0)
     correct = {key: float((pred[valid & (g.target == cid)] == cid).mean()) for cid, key, _, _ in TARGET_CLASSES}
     MAP = ix["MAP"][valid]

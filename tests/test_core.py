@@ -237,3 +237,21 @@ def test_dry_zones_follow_koppen():
             assert best == expected, (name, mem)
         else:   # Dsa is not a dry climate: it must not read as cold and dry
             assert mem["cold_dry"] < 0.3, (name, mem)
+
+
+def test_zone_labels_never_contradict_koppen():
+    from rotclimate.koppen import CODES
+    from rotclimate.score import ZONE_KOPPEN, best_zone
+    from rotclimate.geography import TARGET_CLASSES
+
+    keys = [c[1] for c in TARGET_CLASSES]
+    rng = np.random.default_rng(0)
+    mem = {k: rng.random((40, 40)) for k in keys}
+    kop = rng.integers(0, len(CODES), (40, 40))
+    z = best_zone(mem, koppen=kop)
+    for (r, c), zone in np.ndenumerate(z):
+        if zone:
+            assert ZONE_KOPPEN[keys[zone - 1]](CODES[kop[r, c]]), (keys[zone - 1], CODES[kop[r, c]])
+    dsa = np.full((40, 40), CODES.index("Dsa"))
+    z = best_zone(mem, koppen=dsa)
+    assert set(np.unique(z)) <= {0, keys.index("cold_wet") + 1}

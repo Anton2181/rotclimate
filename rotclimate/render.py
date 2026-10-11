@@ -246,7 +246,7 @@ def zones_map(fr: FullRes, mem, path, title=None):
     """Your painted zones next to the whole simulated map classified into them."""
     from .atlas import ZONE_EXTRAS, zone_classes
 
-    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev)
+    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev, koppen=fr.koppen())
     tgt = target_fullres()
     fig, axs = plt.subplots(1, 2, figsize=(26, 6.8), dpi=80)
     for ax, cls, ttl in ((axs[0], tgt, "Your painted zones"),

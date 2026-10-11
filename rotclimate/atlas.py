@@ -304,7 +304,7 @@ ZONE_EXTRAS = [
 ]
 
 
-def zone_classes(mem, land, threshold=0.3, ix=None, elev=None):
+def zone_classes(mem, land, threshold=0.3, ix=None, elev=None, koppen=None):
     """Best-matching painted-zone type per pixel.
 
     With climate indices and elevation, high cold ground becomes "Mountain"
@@ -314,7 +314,7 @@ def zone_classes(mem, land, threshold=0.3, ix=None, elev=None):
 
     # "tree" (warm + humid) is the broadest rule: it only wins where no more
     # specific zone fits nearly as well; the swamp wins wherever it is met
-    z = best_zone(mem, threshold=threshold, weights={"tree": 0.75}).astype(np.int8)
+    z = best_zone(mem, threshold=threshold, weights={"tree": 0.75}, koppen=koppen).astype(np.int8)
     if ix is not None and elev is not None:
         z[(elev > 2200.0) | (ix["Thot"] < 15.0)] = 8
         left = z == 0
@@ -330,7 +330,7 @@ def zones_layer(fr, outdir: Path = ATLAS / "data"):
     from .render import OCEAN_RGB, fullres_memberships, hillshade
 
     mem = fullres_memberships(fr)
-    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev)
+    z = zone_classes(mem, fr.land, ix=fr._ix, elev=fr.elev, koppen=fr.koppen())
     rgb = np.ones(z.shape + (3,), np.float32) * 0.86
     for cid, col in list(TARGET_DRAW_COLORS.items()) + [(c, col) for c, _, col in ZONE_EXTRAS]:
         rgb[z == cid] = mc.to_rgb(col)

@@ -84,16 +84,41 @@ def memberships(ix: dict, floodplain=None, slope=None) -> dict:
     }
 
 
-def best_zone(mem: dict, threshold=0.3, weights=None) -> np.ndarray:
+# The Koppen classes each painted zone may be labelled on: the soft rules give
+# partial credit across Koppen's lines (fair for scoring), but a map label must
+# never contradict the Koppen map - e.g. dry-summer continental Dsa is neither
+# "cold and dry" (not a dry climate) nor "Mediterranean" (cold winters).
+ZONE_KOPPEN = {
+    "cold_wet": lambda c: c[0] in "DE",
+    "cold_dry": lambda c: c in ("BSk", "BWk"),
+    "warm_wet": lambda c: c[0] == "A" or (c[0] == "C" and c[1] != "s"),
+    "med": lambda c: c.startswith("Cs"),
+    "swamp": lambda c: c[0] in "CA",
+    "tree": lambda c: c[0] in "CA",
+    "hot_dry": lambda c: c in ("BSh", "BWh"),
+}
+
+
+def best_zone(mem: dict, threshold=0.3, weights=None, koppen=None) -> np.ndarray:
     """Single best-fitting painted zone per cell (0 = none above threshold).
     The swamp rule is the narrowest - every swamp also meets the warm-wet
-    and forest rules - so where it is met (>= 0.5) the cell is a swamp."""
+    and forest rules - so where it is met (>= 0.5) the cell is a swamp.
+    With `koppen` (class indices from koppen.classify) a zone is only
+    labelled on its own Koppen classes (ZONE_KOPPEN)."""
     keys = [c[1] for c in TARGET_CLASSES]
     w = np.ones(len(keys)) if weights is None else np.array([weights.get(k, 1.0) for k in keys])
-    stack = np.stack([mem[k] for k in keys]) * w[:, None, None]
+    stack = np.stack([mem[k] for k in keys]) * w.reshape((-1,) + (1,) * np.ndim(mem[keys[0]]))
+    allowed = np.ones(stack.shape, bool)
+    if koppen is not None:
+        from .koppen import CODES
+
+        for i, k in enumerate(keys):
+            ok = np.array([ZONE_KOPPEN[k](c) for c in CODES] + [False])     # index -1 = unclassified
+            allowed[i] = ok[np.asarray(koppen)]
+        stack = np.where(allowed, stack, 0.0)
     z = stack.argmax(0) + 1
     z[stack.max(0) < threshold] = 0
-    z[mem["swamp"] >= 0.5] = keys.index("swamp") + 1
+    z[(mem["swamp"] >= 0.5) & allowed[keys.index("swamp")]] = keys.index("swamp") + 1
     return z
 
 
@@ -145,7 +170,8 @@ def evaluate(result, land_only=True):
     total = float(np.nanmean(list(per.values())))
     prec, f1 = precision_f1(mem, g.target, valid, per, elev=g.elev)
     # hard confusion: best-matching zone per painted cell
-    pred = best_zone(mem)
+    from .koppen import classify
+    pred = best_zone(mem, koppen=classify(st["Tm"], st["Pm"], st["summer"]))
     conf = np.zeros((7, 8), int)
     for cid in range(1, 8):
         m = valid & (g.target == cid)
