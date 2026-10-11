@@ -26,41 +26,53 @@ between the wet and dry zones) or *Transitional* (humid, but between two zones' 
 
 ![Köppen map](output/koppen.png)
 
-### What the world must be like (best calibration, round 14)
+### What the world must be like (best calibration, round 17)
 
 | unknown | best fit |
 |---|---|
-| spin | **retrograde (opposite to Earth)**, narrowly (see below) |
-| latitude | 26.8°N to 42.1°N (centre 34.4°N) |
-| axial tilt | 25.8° (Earth 23.4°) |
-| height tiers | lowland ≤ 100 m, hills ≤ 497 m, upland ≤ 2297 m, peaks to 4733 m |
-| land beyond the map | north-west 59%, north-east ~100%, west 47%, east 16%, south-west 97%, south-east ~100% |
+| spin | **Earth-like**, narrowly, on the fit score (see below) |
+| latitude | 29.4°N to 44.7°N (centre 37.1°N) |
+| axial tilt | 17.0° (Earth 23.4°) |
+| height tiers | lowland ≤ 51 m, hills ≤ 251 m, upland ≤ 564 m, peaks to 2,697 m |
+| land beyond the map | north-west 98%, north-east 64%, west 35%, east 34%, south-west 25%, south-east 61% |
 
-**Spin: reversed spin still wins, but narrowly.** The original fairness test (rounds 1–8 physics
-and scoring) was lopsided: 0.336 for Earth-like spin against 0.493 for reversed. Since then the
-temperature physics was fixed (converged each step), the scoring penalises zones spilling into
-each other (F1), the swamp rule needs flat ground, and the scale and layers come from your
-lossless originals. Re-run on exactly those terms, with the same 320-evaluation budget each:
+**Spin: the verdict has flipped, and it is close.** Until round 15 reversed spin led
+(0.427 against 0.421). A literature review (`reports/Climate simulator improvement literature.md`)
+then turned up two things. First, the score alone could not separate the spins: re-scored on
+surroundings the search never saw, the gap shrank to 0.004 with an uncertainty range that
+included zero. Second, reversed spin was getting its fit partly from **summers no wet place on
+Earth has**. On Earth, where the warmest month brings 80 mm of rain or more, the lowland passes
+30 °C on only 2.8% of the land; the reversed-spin world did so on about half of it (swamp 32.6 °C,
+against 28–29 °C on the Gulf Coast). The model now lets wet ground spend summer sunshine on
+evaporation (physics v8), the score penalises humid summers hotter than Earth's, the swamp rule
+needs a hot year as your legend says, and both spins search the same physically set box.
 
-| | reversed spin (round 14) | Earth-like spin |
+Each spin was then recalibrated on equal terms and its three best candidates re-scored on 60
+fresh surrounding worlds, with a ±0.01 "tie" band declared in advance:
+
+| | reversed spin | Earth-like spin |
 |---|---|---|
-| F1 objective | **0.427** | 0.421 |
-| painted land in its own zone | **53.5%** | 48.1% |
-| warm-wet west coast correct | **32%** | 4% |
-| hot-dry south-east correct | **65%** | 35% |
-| Mediterranean correct | 68% | **83%** |
-| swamp correct | 38% | **43%** |
-| world it needs | 26.8–42.1°N, tilt 25.8° | 32.3–47.6°N, tilt 15.6° |
+| round 16 (fit score on 60 fresh worlds) | 0.394 | **0.422** |
+| round 17, sea and land offsets held within ±2 °C | 0.390 | **0.417** |
+| round 17 gap (95% range) | | −0.040 to −0.013 |
+| round 17 painted land in its own zone | **51.1%** (ahead on 46 of 60 worlds) | 47.7% |
+| warm-wet west coast (F1) | **0.56** | 0.51 |
+| swamp / forest (F1) | 0.32 / 0.39 | **0.40 / 0.48** |
+| world it needs | 26.7–42.0°N, tilt 20.8° | 29.4–44.7°N, tilt 17.0° |
 
-Earth-like spin can match the overall balance by moving the map 5° north and nearly halving the
-tilt, but it still cannot make the big west coast warm and wet or the south-east hot and dry:
-with Earth's spin those are on the wrong sides of the ocean basins. Reversed spin turns the
-continent into a mirror-image North America (west and south coasts as the humid south-east US,
-the east as California, the south-east as the dry south-west). Both searches were still
-improving when their budgets ran out, so this is a clear lean rather than proof. (A
-southern-hemisphere map with south at the top would behave like the reversed spin.)
+By the test fixed in advance (the fit score on fresh worlds) **Earth-like spin wins**, and the
+atlas now shows that world. But the two spins fail differently. Reversed spin gets more of your
+painted land right and is the only one that makes the big west coast warm and wet, while it
+sacrifices part of the swamp and the hot-dry south-east. Earth-like spin matches every zone a
+little, but gives the west coast the dry summers Earth gives every west coast at 30–45°
+(California, the Mediterranean), so the painted warm-wet coast reads as Mediterranean. The
+reversed-spin pattern (a mirror-image North America) is the one a full Earth-system model gives
+for a retrograde Earth (Mikolajewicz et al. 2018); the fit score prefers the Earth-like
+compromise. Both parameter sets are kept: `calibration/round17_earthlike.json` (published) and
+`calibration/round17_retrograde.json`. (A southern-hemisphere map with south at the top would
+behave like the reversed spin.)
 
-### Match with the painted zones (14 km render, round 14)
+### Match with the painted zones (14 km render, round 17, Earth-like spin)
 
 Each zone is judged two ways. **Coverage**: how well the painted area meets the zone's climate
 rule (0–1). **Precision**: how much of the rule's area lies inside its own painted zone, rather
@@ -69,32 +81,37 @@ a broader zone may hold inside a narrower one it contains, as forest inside swam
 balances the two. *Correct* is the share of painted land whose single best-fitting zone is its own
 (a place meeting the swamp rule counts as swamp).
 
-The swamp rule asks for a hot, very wet climate **on flat ground**: your painted swamp gets the
-same rain as the warm-wet coast but is about five times flatter (median slope 0.7 vs 3.4 ‰),
-and waterlogged lowland is what makes a swamp (Everglades, Pantanal, Gulf Coast bayous).
+The swamp rule asks for a hot, very wet climate **on flat ground** with a **hot year** (mean
+annual above ~21 °C): your painted swamp gets the same rain as the warm-wet coast but is about
+five times flatter (median slope 0.7 vs 3.4 ‰), and waterlogged lowland is what makes a swamp
+(Everglades, Pantanal, Gulf Coast bayous). Heat is what the legend's "Hot and wet" adds to
+"Warm and wet"; drainage measures from the wetland literature can't tell the two apart on four
+flat height tiers.
 
 | zone | coverage | precision | F1 | correct |
 |---|---|---|---|---|
-| Cold and wet | 0.49 | 0.31 | 0.38 | 74% |
-| Cold and dry | 0.50 | 0.71 | 0.59 | 70% |
-| Warm and wet | 0.55 | 0.55 | 0.55 | 35% |
-| Mediterranean | 0.42 | 0.60 | 0.49 | 59% |
-| Hot and wet, swampy | 0.33 | 0.27 | 0.30 | 37% |
-| Tree (forested) | 0.68 | 0.32 | 0.44 | 51% |
-| Hot and dry | 0.53 | 0.35 | 0.42 | 68% |
-| **overall** | **0.50** | | **0.43** (objective) | **54%** |
+| Cold and wet | 0.37 | 0.24 | 0.29 | 44% |
+| Cold and dry | 0.48 | 0.74 | 0.58 | 75% |
+| Warm and wet | 0.42 | 0.66 | 0.51 | 0% |
+| Mediterranean | 0.67 | 0.38 | 0.48 | 93% |
+| Hot and wet, swampy | 0.45 | 0.46 | 0.45 | 47% |
+| Tree (forested) | 0.83 | 0.31 | 0.45 | 40% |
+| Hot and dry | 0.39 | 0.52 | 0.45 | 38% |
+| **overall** | **0.51** | | **0.43** (objective) | **51%** |
 
 (it00, the Earth-like first guess: coverage 0.17 and 9% correct.)
 
 Where it still falls short:
-* **The swamp** now shows up on the painted south coast (it was never the best fit before round
-  13), but the same hot, wet, flat climate also covers the flat southern end of the warm-wet west
-  coast, so its precision stays low.
-* **Hot-and-dry** spills into patches along the northern edge of the Mediterranean band, and
-  cold-and-wet into hills; the swamp climate is a physically fair reading of that flat, rainy
-  west-coast lowland, so no rule should split them.
+* **The warm-wet west coast** is humid enough (precision 0.66) but its summers are dry, so the
+  Mediterranean rule fits it better everywhere: with Earth's spin a west coast at these
+  latitudes sits under the summer subtropical high. Reversed spin fixes this coast and loses
+  elsewhere (see above).
+* **Mediterranean and forest** climates spill beyond their painted bands (precision 0.38 and
+  0.31), and **cold-and-wet** climate reaches into hills painted as other zones.
+* Humid summers are now Earth-like in most places (9% of the wet-summer lowland passes 30 °C,
+  against 2.8% on Earth and about 50% before).
 
-The maps are simulated on 14 km cells, the same grid rounds 11–14 were calibrated on. Since the
+The maps are simulated on 14 km cells, the same grid rounds 11–17 were calibrated on. Since the
 time-step fix (see `docs/ITERATIONS.md`), the calibration's 25 steps a year and the maps' 73 give
 the same climate. All map layers are drawn at 3× resolution with full-detail terrain.
 
