@@ -64,13 +64,16 @@ By the test fixed in advance (the fit score on fresh worlds) **Earth-like spin w
 atlas now shows that world. But the two spins fail differently. Reversed spin gets more of your
 painted land right and is the only one that makes the big west coast warm and wet, while it
 sacrifices part of the swamp and the hot-dry south-east. Earth-like spin matches every zone a
-little, but gives the west coast the dry summers Earth gives every west coast at 30–45°
-(California, the Mediterranean), so the painted warm-wet coast reads as Mediterranean. The
+little, but none of the painted warm-wet west coast comes out warm-wet (against 44% with
+reversed spin): its summers are hotter and drier, so it reads mostly as hot forest (53%), partly
+as Mediterranean (18%), the way Earth's spin dries every west coast at 30–45° in summer. The
 reversed-spin pattern (a mirror-image North America) is the one a full Earth-system model gives
 for a retrograde Earth (Mikolajewicz et al. 2018); the fit score prefers the Earth-like
 compromise. Both parameter sets are kept: `calibration/round17_earthlike.json` (published) and
 `calibration/round17_retrograde.json`. (A southern-hemisphere map with south at the top would
 behave like the reversed spin.)
+
+![Your painted zones, and the simulated climate in them with each spin](output/spin_comparison.png)
 
 ### Match with the painted zones (14 km render, round 17, Earth-like spin)
 
@@ -102,10 +105,10 @@ flat height tiers.
 (it00, the Earth-like first guess: coverage 0.17 and 9% correct.)
 
 Where it still falls short:
-* **The warm-wet west coast** is humid enough (precision 0.66) but its summers are dry, so the
-  Mediterranean rule fits it better everywhere: with Earth's spin a west coast at these
-  latitudes sits under the summer subtropical high. Reversed spin fixes this coast and loses
-  elsewhere (see above).
+* **The warm-wet west coast** is humid enough (precision 0.66), but its summers are too hot and
+  dry for the warm-wet rule: it reads as hot forest (53%), Mediterranean (18%), cold-and-wet
+  (17%) and swamp (12%). With Earth's spin a west coast at these latitudes sits under the summer
+  subtropical high. Reversed spin fixes this coast (44% warm-wet) and loses elsewhere (see above).
 * **Mediterranean and forest** climates spill beyond their painted bands (precision 0.38 and
   0.31), and **cold-and-wet** climate reaches into hills painted as other zones.
 * Humid summers are now Earth-like in most places (9% of the wet-summer lowland passes 30 °C,
