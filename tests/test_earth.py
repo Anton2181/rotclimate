@@ -155,3 +155,33 @@ def test_upwelling_cools_a_west_coast_sea_under_equatorward_wind_only():
     ek_x, ek_y = ve, -ue                                                # Ekman transport, right of the wind
     assert (ek_x * ox + ek_y * oy)[near].mean() > 4.0                   # offshore: upwelling
     assert Params().upwelling == 0.0
+
+
+def test_e2_rain_closure_is_exponential_in_humidity_and_evaporates_dry_air_rain():
+    from rotclimate.moisture import rain_coefficient, DAY
+
+    W = np.array([10.0, 30.0, 45.0, 55.0])
+    sat = np.full(4, 60.0)                       # column relative humidity 0.17, 0.5, 0.75, 0.92
+    dyn, inst = np.ones(4), 1.0
+    base = rain_coefficient(W, sat, dyn, inst, 0.45, 6.0)
+    conv = dict(conv=1.0, r0=0.6, fT=np.ones(4), evap=0.0, T=np.full(4, 25.0))
+    with_conv = rain_coefficient(W, sat, dyn, inst, 0.45, 6.0, conv)
+    added = (with_conv - base) * W * DAY            # mm/day of convective rain
+    assert np.allclose(added, np.exp(11.4 * (W / sat - 0.6)), rtol=1e-9)
+    evap = dict(conv, conv=0.0, evap=1.0)
+    kept = rain_coefficient(W, sat, dyn, inst, 0.45, 6.0, evap)[1:] / base[1:]
+    assert np.all(np.diff(kept) > 0) and abs(kept[0] - np.exp(-1250 / 3000)) < 1e-9   # drier air loses more
+    p = Params()
+    assert (p.background_ascent, p.convective_rain, p.subcloud_evaporation, p.land_coupling_insolation) == (1.0, 0.0, 0.0, 0.0)
+
+
+def test_e2_seasonal_land_coupling_runs_and_keeps_moisture_converged():
+    case = _toy_case()
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=64, moisture_residual_tol=0.01,
+                  moisture_require_convergence=True, solver_rtol=1e-6)
+    off = earth.run_case(base, case, steps=13)
+    on = earth.run_case(base.replace(land_coupling_insolation=1.5, background_ascent=0.3, convective_rain=1.0,
+                                     subcloud_evaporation=0.5), case, steps=13)
+    land = case.grid.land
+    assert np.isfinite(on.T).all() and np.isfinite(on.P).all()
+    assert not np.allclose(on.T[:, land], off.T[:, land])

@@ -142,6 +142,12 @@ class Params:
     land_heat_capacity: float = 1.0   # e1: x the EBM land column's heat capacity (how far land seasons lag the sun)
     continentality: float = 0.0       # e1: land seasons x (1 + this * (upwind land share - 0.5))
     upwelling: float = 0.0            # e1: coastal sea cooling (C) per 5 m/s of offshore Ekman transport
+    # physics e2 (from the literature review of the remaining Earth failures)
+    background_ascent: float = 1.0    # e2: the rain dynamics' baseline (the "1 +"); 0 = rain needs ascent
+    convective_rain: float = 0.0      # e2: convective rain (mm/day) at column humidity convective_rh, x e^(11.4 dr)
+    convective_rh: float = 0.6        # e2: ... its reference column relative humidity
+    subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
+    land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

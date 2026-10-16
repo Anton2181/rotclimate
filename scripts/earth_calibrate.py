@@ -42,6 +42,7 @@ SPACES["e1"] = SPACES["v9"] + [g for g in C.SPACE_E1 if g[0] not in {n for n, *_
 # 6 K/km on the map, where it would trade off against the unknown tier heights)
 # can be fitted too; WorldClim's own along-terrain rates are 3-5.5 K/km
 SPACES["e1"] = SPACES["e1"] + [("lapse_rate", 4.0, 7.0)]
+SPACES["e2"] = SPACES["e1"] + [g for g in C.SPACE_E2 if g[0] not in {n for n, *_ in C.SPACE_E1}]
 SPACE = SPACES["v9"]
 _CASES = {}
 

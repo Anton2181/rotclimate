@@ -28,6 +28,7 @@ from functools import lru_cache
 import numpy as np
 from scipy import ndimage as ndi
 
+from .astronomy import daily_insolation, declination, distance_factor
 from .config import Params
 from .ebm import ZonalClimate
 from .geography import Grid, build_grid
@@ -84,6 +85,8 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
+LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
 
@@ -335,6 +338,18 @@ class ClimateModel:
                 pet = 0.5 + 0.2 * np.maximum(Tl, 0.0)
                 wet = np.clip(soilP / pet, 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
+            if p.land_coupling_insolation > 0:
+                # physics e2: the land surface ties the air to its temperature
+                # through sunshine-driven mixing, strongly in summer and weakly
+                # in winter (radiative cooling alone, ~30 days), so winter air
+                # masses keep where they came from (Held & Suarez 1994)
+                S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                     distance_factor(d, p.eccentricity,
+                                                     p.winter_solstice_day + p.perihelion_after_solstice,
+                                                     p.year_days))
+                lam_land = ((S / LAND_COUPLING_SREF) ** p.land_coupling_insolation / (p.land_tau_days * DAY)
+                            + 1.0 / (LAND_RADIATIVE_DAYS * DAY))
+                lamT = np.where(land, lam_land, 1.0 / (p.ocean_tau_days * DAY))
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
             SST = self.sst(d, To, Tl)
@@ -439,7 +454,7 @@ class ClimateModel:
             # door drives their sinking: Rodwell & Hoskins 2001)
             if p.subsidence_summer > 0:
                 sub = sub * (1.0 + p.subsidence_summer * s)
-            A_dyn = (1 + p.storm_track * storm + p.convective * conv + p.orographic * up)
+            A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
             if p.sverdrup > 0:       # physics e1: poleward flow rises, equatorward flow sinks
                 th = np.radians(p.north_bearing)
@@ -463,9 +478,14 @@ class ClimateModel:
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
+            closure = None
+            if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
+                closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
+                               fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange,
-                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None, sink=sink)
+                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None, sink=sink,
+                                      closure=closure)
             W, P = solution.water, solution.rain
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)

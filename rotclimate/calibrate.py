@@ -132,6 +132,10 @@ WORLD_GENES = ("lat_center", "tilt", "retrograde", "north_bearing", "tier1", "ti
 SPACE_WORLD = [g for g in SPACE_V9 if g[0] in WORLD_GENES]
 # only the e1 additions, around an existing fit (everything else held at the start)
 SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
+# physics e2: the rain closure and seasonal land coupling from the literature
+# review (reports/research_remaining_failures_20261016.md)
+SPACE_E2 = SPACE_E1 + [("background_ascent", 0.0, 1.0), ("convective_rain", 0.0, 3.0), ("convective_rh", 0.4, 0.95),
+                       ("subcloud_evaporation", 0.0, 2.0), ("land_coupling_insolation", 0.0, 2.5)]
 
 
 def _set_space(space):
