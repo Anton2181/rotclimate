@@ -136,6 +136,7 @@ SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
 # review (reports/research_remaining_failures_20261016.md)
 SPACE_E2 = SPACE_E1 + [("background_ascent", 0.0, 1.0), ("convective_rain", 0.0, 3.0), ("convective_rh", 0.4, 0.95),
                        ("subcloud_evaporation", 0.0, 2.0), ("land_coupling_insolation", 0.0, 2.5)]
+SPACE_E2_NEW = [g for g in SPACE_E2 if g[0] not in {n for n, *_ in SPACE_E1}]
 
 
 def _set_space(space):
@@ -334,7 +335,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "world"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -361,6 +362,10 @@ def main():
         _set_space(SPACE_WORLD)
     elif a.physics == "e1new":
         _set_space(SPACE_E1_NEW)
+    elif a.physics == "e2":
+        _set_space(SPACE_E2)
+    elif a.physics == "e2new":
+        _set_space(SPACE_E2_NEW)
     bounds = json.loads(a.bounds)
     if bounds:
         _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
@@ -368,7 +373,7 @@ def main():
     base = apply_numerics(base, saved=a.saved_numerics,
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
-    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "world"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
