@@ -98,7 +98,8 @@ def main():
                                         '"orographic":[0,10],"sst_offset":[-5,4]}')
     ap.add_argument("--evals", type=int, default=480)
     ap.add_argument("--popsize", type=int, default=16)
-    ap.add_argument("--sigma", type=float, default=0.12)
+    ap.add_argument("--sigma", type=float, default=0.04, help="step size of the physics genes (0-1 scale)")
+    ap.add_argument("--sigma-world", type=float, default=0.2, help="step size of the world genes")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--out", required=True)
@@ -118,7 +119,10 @@ def main():
     log = (out / "evals.jsonl").open("a")
     cfg = dict(objective=a.objective, regions=a.regions, cell_km=a.cell_km, earth_max=a.earth_max, penalty=a.penalty)
     x0 = encode(base)
-    es = cma.CMAEvolutionStrategy(x0, a.sigma, dict(bounds=[0, 1], popsize=a.popsize, seed=a.seed, verbose=-9))
+    world = {g[0] for g in WORLD}
+    stds = np.array([a.sigma_world if g[0] in world else a.sigma for g in SPACE])
+    es = cma.CMAEvolutionStrategy(x0, 1.0, dict(bounds=[0, 1], popsize=a.popsize, seed=a.seed, verbose=-9,
+                                                CMA_stds=stds))
     bd = asdict(base)
     t0 = time.time()
 
