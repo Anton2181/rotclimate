@@ -333,7 +333,7 @@ body.map-expanded { overflow: hidden; }
             <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
               <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
           </button>
-          <button type="button" id="copyview" aria-label="Copy this view to the clipboard" title="Copy this view to the clipboard">
+          <button type="button" id="copyview" aria-label="Copy the whole map to the clipboard" title="Copy the whole map to the clipboard">
             <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
               <rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
           </button>
@@ -1007,7 +1007,7 @@ body.map-expanded { overflow: hidden; }
     $("hint").textContent = "Pinch to zoom · drag to pan · tap a place";
   }
 
-  // ---------------------------------------------------------------- copy the current view
+  // ---------------------------------------------------------------- copy the whole map
   function toast(msg) {
     const t = $("toast");
     t.textContent = msg;
@@ -1018,19 +1018,20 @@ body.map-expanded { overflow: hidden; }
   function loadImage(src) {
     return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
   }
+  // The whole map, whatever part is on screen, at the map layers' own
+  // resolution, with the overlays that are switched on.
   async function renderView() {
-    const w = stage.clientWidth, h = stage.clientHeight;
-    const k = Math.min(3, Math.max(2, window.devicePixelRatio || 1));      // output pixels per screen pixel
+    const base = await loadImage($("base").src);
+    const fullW = Math.min(8000, Math.max(3000, base.naturalWidth || 6000));
+    const fullH = Math.round((fullW * H) / W);
+    const k = fullW / dims().bw;             // output pixels per screen pixel of the unzoomed map
     const cv = document.createElement("canvas");
-    cv.width = Math.round(w * k); cv.height = Math.round(h * k);
+    cv.width = fullW; cv.height = fullH;
     const ctx = cv.getContext("2d");
     ctx.imageSmoothingQuality = "high";
     ctx.fillStyle = "#d6e4f0";
     ctx.fillRect(0, 0, cv.width, cv.height);
-    const { bw, bh } = dims();
-    const fullW = bw * zs * k, fullH = bh * zs * k;            // the whole map at this zoom
-    const base = await loadImage($("base").src);
-    ctx.drawImage(base, tx * k, ty * k, fullW, fullH);
+    ctx.drawImage(base, 0, 0, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
     const overlays = ["simrivers", "matchsvg", "towns", "placenames", "marker"]
       .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
@@ -1047,7 +1048,7 @@ body.map-expanded { overflow: hidden; }
         <style>text{font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
         ${body}</svg>`;
       const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
-      try { ctx.drawImage(await loadImage(url), tx * k, ty * k, fullW, fullH); } finally { URL.revokeObjectURL(url); }
+      try { ctx.drawImage(await loadImage(url), 0, 0, fullW, fullH); } finally { URL.revokeObjectURL(url); }
     }
     // caption strip: layer name + scale note
     const L = meta.layers.find((l) => l.id === current);
@@ -1064,7 +1065,7 @@ body.map-expanded { overflow: hidden; }
     const url = URL.createObjectURL(blob);
     const wrap = document.createElement("div");
     wrap.className = "copy-fallback";
-    wrap.innerHTML = `<figure><img src="${url}" alt="Current map view"><figcaption class="note">Your browser blocked clipboard access here.
+    wrap.innerHTML = `<figure><img src="${url}" alt="The whole map"><figcaption class="note">Your browser blocked clipboard access here.
       Right-click or long-press the image and choose Copy image. Click outside to close.</figcaption></figure>`;
     wrap.addEventListener("click", (e) => { if (e.target === wrap) { wrap.remove(); URL.revokeObjectURL(url); } });
     document.body.appendChild(wrap);
@@ -1074,10 +1075,10 @@ body.map-expanded { overflow: hidden; }
     try {
       if (!navigator.clipboard || typeof ClipboardItem === "undefined") throw new Error("no clipboard");
       await navigator.clipboard.write([new ClipboardItem({ "image/png": pending })]);
-      toast("Copied this view");
+      toast("Copied the whole map");
     } catch (err) {
       const blob = await pending;
-      if (blob) showFallback(blob); else toast("Could not copy the view");
+      if (blob) showFallback(blob); else toast("Could not copy the map");
     }
   });
   goHome();
