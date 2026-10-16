@@ -292,7 +292,7 @@ class ClimateModel:
         order = list(range(nt - spinup, nt)) + list(range(nt))
         for n, k in enumerate(order):
             d = days[k]
-            s = self.season_index(d)
+            s = self.season_index(d, p.circulation_lag_days)
             Tl = self.z.land(lat, d) + p.land_offset
             if p.land_amplitude != 1.0 or p.wet_cooling > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
@@ -417,9 +417,12 @@ class ClimateModel:
                 instab = 1.0
             from .moisture import solve_moisture
             exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
+            # physics e1: under the highs, dry air sinking from aloft replaces
+            # moist low-level air (the column dries without raining)
+            sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange,
-                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None)
+                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None, sink=sink)
             W, P = solution.water, solution.rain
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)
@@ -438,7 +441,8 @@ class ClimateModel:
                 if budget is not None:
                     exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
                     mixed = gauss(W, sigE) if p.eddy_rate > 0 else W
-                    terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E, P, exchange, mixed)
+                    E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
+                    terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
                     for key, values in terms.items():
                         budget[key][k] = values[g.map_slice()]
             if progress:

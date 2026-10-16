@@ -119,7 +119,8 @@ SPACE_V9 = SPACE_V8 + [("north_bearing", -180.0, 180.0)]
 # physics e1, fitted on real regions (rotclimate/earth.py, scripts/earth_calibrate.py):
 # Sverdrup sinking under equatorward flow, the width of the highs' sinking and
 # the summer weakening of the storm track become free
-SPACE_E1 = SPACE_V9 + [("sverdrup", 0.0, 2.0), ("subsidence_width", 4.0, 14.0), ("storm_seasonality", 0.0, 0.9)]
+SPACE_E1 = SPACE_V9 + [("sverdrup", 0.0, 2.0), ("subsidence_width", 4.0, 14.0), ("storm_seasonality", 0.0, 0.9),
+                       ("circulation_lag_days", 10.0, 75.0), ("subsidence_drying", 0.0, 0.5)]
 # the world's unknowns only (where, how tilted, which way it spins, which way is
 # north, how high the terrain tiers are, what lies beyond the map): physics
 # held at an Earth-calibrated fit

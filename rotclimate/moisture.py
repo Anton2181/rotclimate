@@ -27,18 +27,23 @@ class MoistureSolution:
 
 
 def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
-                   dynamics, instability, boundary, guess, exchange=0., mix=None):
+                   dynamics, instability, boundary, guess, exchange=0., mix=None, sink=None):
     """Legacy fixed sweeps unless moisture_residual_tol > 0.
 
     The optional criterion is max |equation residual| / max(P+|E|,0.1)
     on the full interior, with all rates in mm/day. This is an actual local
     equation check, not the size of the artificially damped update.
+
+    `sink` (1/s, optional): water removed from the column without raining
+    (subsidence drying); it enters the equation check as negative evaporation.
     """
     W = guess
     converged = None if p.moisture_residual_tol == 0 else False
     residual = None
     for n in range(p.picard_iters):
         lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days)
+        if sink is not None:
+            lamP = lamP + sink
         if mix is not None:
             mixed = mix(W)
             new = solver.solve(u, v, p.moisture_diffusion, lamE + lamP + exchange,
@@ -54,6 +59,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             W[solver.border] = boundary[solver.border]
             P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days) * W * DAY
             E = (lamE * (ocean_water - W) + land_source) * DAY
+            if sink is not None:
+                E = E - sink * W * DAY
             terms = moisture_terms(W, u, v, solver.dx, p.moisture_diffusion, E, P,
                                    exchange, mix(W) if mix is not None else W)
             residual = float(np.max((terms['absolute_residual'] / np.maximum(P + np.abs(E), 0.1))[1:-1, 1:-1]))

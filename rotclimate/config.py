@@ -137,6 +137,8 @@ class Params:
     sverdrup: float = 0.0
     subsidence_width: float = 6.0     # e1: latitude half-width of the subtropical highs' sinking (deg)
     storm_seasonality: float = 0.3    # e1: storm track weaker in summer: x (1 - this * season)
+    circulation_lag_days: float = 30.0  # e1: how far the highs, storm track and ITCZ lag the sun (days)
+    subsidence_drying: float = 0.0    # e1: dry air sinking in the highs replaces moist air: loss of this x sink strength per day
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

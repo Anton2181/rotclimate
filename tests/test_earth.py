@@ -108,3 +108,14 @@ def test_sverdrup_sinking_dries_equatorward_flow_and_wets_poleward_flow():
     # the new genes default to the old fixed behaviour
     p = Params()
     assert (p.sverdrup, p.subsidence_width, p.storm_seasonality) == (0.0, 6.0, 0.3)
+
+
+def test_subsidence_drying_and_circulation_lag_keep_the_moisture_equation_closed():
+    case = _toy_case()
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=64, moisture_residual_tol=0.01,
+                  moisture_require_convergence=True, solver_rtol=1e-6)
+    off = earth.run_case(base, case, steps=13)
+    on = earth.run_case(base.replace(subsidence_drying=0.2, circulation_lag_days=50.0), case, steps=13)
+    land = case.grid.land
+    assert on.P[:, land].mean() < off.P[:, land].mean()       # drier under the highs, and still converged
+    assert (Params().subsidence_drying, Params().circulation_lag_days) == (0.0, 30.0)
