@@ -84,6 +84,9 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
+
+
 def eddy_exchange_rate(base_rate, storm, season, contrast=0.):
     """Regional seasonal exchange in 1/s; season +1 summer, -1 winter.
 
@@ -277,6 +280,7 @@ class ClimateModel:
         lamT = 1.0 / tau
         T_prev = T_prev2 = None
         W_prev = None
+        uv_prev = chi = None
         soilP = np.full(lat.shape, 1.5)
         self.t_iterations = []
         self.t_converged = []
@@ -294,10 +298,25 @@ class ClimateModel:
             d = days[k]
             s = self.season_index(d, p.circulation_lag_days)
             Tl = self.z.land(lat, d) + p.land_offset
-            if p.land_amplitude != 1.0 or p.wet_cooling > 0:
+            if p.land_amplitude != 1.0 or p.wet_cooling > 0 or p.continentality > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
             if p.land_amplitude != 1.0:      # v4: continental seasonality
                 Tl = Tl_mean + p.land_amplitude * (Tl - Tl_mean)
+            if p.continentality > 0:
+                # e1: the energy-balance land column is an average land at its
+                # latitude. Air that has crossed more land swings more (east
+                # coasts: cold winters, hot summers), sea air less (west coasts).
+                # chi = land fraction carried along the winds (last step's, the
+                # zonal belts on the first) with a CONTINENTAL_FETCH_DAYS memory.
+                if uv_prev is None:
+                    uc, vc, _, _ = self.zonal_wind(s)
+                    uc, vc = uc * self.drag, vc * self.drag
+                else:
+                    uc, vc = uv_prev
+                lamC = np.full(lat.shape, 1.0 / (CONTINENTAL_FETCH_DAYS * DAY))
+                chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, g.land_frac,
+                                        guess=g.land_frac if chi is None else chi)
+                Tl = Tl_mean + (Tl - Tl_mean) * np.clip(1.0 + p.continentality * (chi - 0.5), 0.2, 3.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a
@@ -435,6 +454,7 @@ class ClimateModel:
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
+            uv_prev = (u, v)
             if n >= spinup:
                 for key, val in (("T", T), ("Tsl", Tsl), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val

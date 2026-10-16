@@ -85,18 +85,22 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--holdout", nargs="*", default=[], help="regions scored only for the final best")
     ap.add_argument("--physics", default="v9", choices=list(SPACES))
+    ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"hadley_edge": [28, 34]}')
+    ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     import cma
 
     global SPACE
-    SPACE = SPACES[a.physics]          # set before the worker processes fork
+    bounds = json.loads(a.bounds)
+    SPACE = [(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACES[a.physics]]   # set before the workers fork
 
     d = json.loads(Path(a.start).read_text())
     d = d.get("params", d)
     base = Params(**{k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items()
-                     if k in Params.__dataclass_fields__}).replace(**NUMERICS)
+                     if k in Params.__dataclass_fields__}).replace(**NUMERICS).replace(**json.loads(a.set))
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    (out / "space.json").write_text(json.dumps(dict(args=vars(a), space=SPACE), indent=1))
     log = (out / "evals.jsonl").open("a")
     es = cma.CMAEvolutionStrategy(encode(base), a.sigma, dict(bounds=[0, 1], popsize=a.popsize, seed=a.seed,
                                                                  verbose=-9))

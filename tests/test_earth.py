@@ -119,3 +119,20 @@ def test_subsidence_drying_and_circulation_lag_keep_the_moisture_equation_closed
     land = case.grid.land
     assert on.P[:, land].mean() < off.P[:, land].mean()       # drier under the highs, and still converged
     assert (Params().subsidence_drying, Params().circulation_lag_days) == (0.0, 30.0)
+
+
+def test_continentality_widens_the_seasons_deep_inland_and_narrows_them_on_the_windward_coast():
+    case = _toy_case()                         # latitude 37 N: in the westerlies
+    g = case.grid
+    g.land[:, 10:] = True                      # an ocean to the west, a continent to the east edge
+    g.land_frac = g.land.astype(float)
+    g.elev = g.elev_max = np.where(g.land, 300.0, 0.0)
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=2, hadley_edge=28.0, hadley_shift=3.0,
+                  westerly_speed=8.0, monsoon_strength=0.0)
+    off = earth.run_case(base, case, steps=13)
+    on = earth.run_case(base.replace(continentality=1.5), case, steps=13)
+    row = g.ny // 2
+    swing = lambda r, c: float(r.T[:, row, c].max() - r.T[:, row, c].min())
+    assert swing(on, 10) < swing(off, 10)      # windward coast: sea air, milder seasons
+    assert swing(on, 28) > swing(off, 28)      # ~1,000 km downwind of the coast: harsher seasons
+    assert Params().continentality == 0.0
