@@ -189,4 +189,27 @@ Mediterranean 88 % dry; the anchor scores 50.2 % and 11.2 % at the same
 downsample-16 screening resolution): the anchor's world genes (reversed spin,
 34°N, 21° tilt) were fitted together with the fantasy physics. So the world's
 unknowns are refitted with the Earth physics held fixed, once per spin
-direction (`calibration/world_e1_retro`, `calibration/world_e1_pro`).
+direction (181 evaluations each, downsample 16, `zonefit`;
+`calibration/earth/world_e1_retro.json`, `world_e1_pro.json`):
+
+![map comparison](../output/earth_on_map/world_e1_compare.png)
+
+| Same screening resolution (downsample 16) | zonefit | strict | Med recall | Med Cs / dry | cold-dry | hot-dry | swamp | tree | cold-wet | warm-wet |
+|---|---|---|---|---|---|---|---|---|---|---|
+| live atlas (fantasy physics, reversed spin) | 0.411 | 50.1 % | 36 % | 39 % / 11 % | 72 % | 61 % | 11 % | 52 % | 78 % | 55 % |
+| Earth physics, reversed spin (35.5°N, tilt 28.9°) | 0.186 | 32.8 % | **66 %** | **70 % / 8 %** | 0 % | 20 % | 0 % | 1 % | 86 % | 34 % |
+| Earth physics, Earth spin (32.7°N, tilt 31.7°, north 29° W of up) | 0.209 | 28.6 % | 33 % | 43 % / 9 % | 1 % | 56 % | 0 % | 81 % | 79 % | 14 % |
+
+With physics that works on Earth and reversed spin, the painted Mediterranean
+band comes out *better* than in the live atlas — two thirds of it labelled
+Mediterranean, 70 % Cs and only 8 % dry, the user's main concern — but the
+painted cold-dry north turns into cold forest (500–1,000 mm of rain where
+cold-dry needs a few hundred), the swamp and "tree" zones vanish and the
+hot-dry south is too wet. With Earth's spin the west coast becomes
+Mediterranean instead of the painted warm-wet, which is why the map favours
+reversed spin under either physics. The live atlas's higher overall agreement
+relies partly on physics that is wrong on Earth (section 3).
+
+A joint fit is running next (`scripts/joint_calibrate.py`): physics and world
+together to the map, with the physics penalised as soon as its mean Earth
+climate distance rises above 2.25 (the Earth fit's is 2.10).
