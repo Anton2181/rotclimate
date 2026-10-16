@@ -1,6 +1,22 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-**Current handoff (16 October 2026):** Start with the
+**Earth mode (16 October 2026, latest):** the simulator now runs on real
+geography and is scored against observed climate (WorldClim 2.1) in nine
+regions; its physics was refitted on Earth and new physics added where Earth
+showed what was missing. Read [the Earth report](reports/earth_mode.md);
+pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
+[free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (new physics
+fitted to the map: painted Mediterranean 2.7 % dry, 64 % Cs; cold-dry weaker),
+[Earth-physics atlas](https://claude.ai/artifact/R1XvbWWCreL3ouVYh8jeLP)
+(physics that also fits Earth). The live atlas below is unchanged.
+
+```sh
+python -I scripts/earth_benchmark.py --params calibration/earth/earth_e1_r4.json --cell-km 56 --out output/earth_benchmark/r4
+python -I scripts/build_atlas_variant.py --params calibration/earth/free_e2new_retro.json --name free_fit \
+    --title "Rotclimate Free-Fit Atlas" --eyebrow "..." --downsample 8
+```
+
+**Previous handoff (16 October 2026):** Start with the
 [project handoff report](reports/HANDOFF_20261016.md).
 The latest V10 transport comparison stopped for diagnosis after 6/8 cases;
 the V9 retrograde atlas remains unchanged. The report includes verified results,
