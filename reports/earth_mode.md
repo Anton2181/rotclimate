@@ -63,35 +63,61 @@ agreement, and climographs for 4–8 well-known cities per region.
 
 ## 3. Results so far
 
-(56 km cells; d lower is better)
+Climate distance d on each region (56 km cells; lower is better). The two
+reference rows are built from the observations themselves: every land cell
+given its region's mean climate (no skill), and every cell given the mean
+observed climate of its 2° latitude band corrected to its height (a perfect
+zonal model with no coast-to-interior structure).
 
 | Physics | CA | Iberia | SE US | Levant | C Asia | E China | Chile* | Cape* | SW Aus* | mean |
 |---|---|---|---|---|---|---|---|---|---|---|
+| reference: region mean | 2.91 | 2.74 | 1.69 | 3.26 | 2.79 | 1.95 | 3.14 | 1.23 | 1.36 | 2.34 |
+| reference: latitude band + height | 1.78 | 1.12 | 1.01 | 1.30 | 1.27 | 1.26 | 2.22 | 1.07 | 0.79 | 1.31 |
 | fantasy-fitted (live atlas anchor) | 4.13 | 3.43 | 2.75 | 3.59 | 3.09 | 3.85 | 4.55 | 4.11 | 3.25 | 3.64 |
-| fitted on CA + Iberia only (stopped early) | 1.78 | 1.74 | 4.46 | 1.97 | 2.46 | 6.21 | 3.12 | 2.15 | 2.65 | 2.95 |
+| r1b: fitted on CA + Iberia only | 1.78 | 1.74 | 4.46 | 1.97 | 2.46 | 6.21 | 3.12 | 2.15 | 2.65 | 2.95 |
+| r2: six regions, free circulation | 2.56 | 2.66 | 1.79 | 2.23 | 1.93 | 3.21 | 2.85 | 2.60 | 1.65 | 2.39 |
 
 \* held out of every fit.
 
-The fantasy-fitted physics is ~2× too wet and 3–4 °C too cold in both
-Mediterranean regions and keeps almost no Cs (0–6 %); it fits the humid
-south-east US well (Köppen 87 %). Fitting California and Iberia alone fixes
-them (Köppen 39–52 %, Cs kept 33–45 %, coastal winter rain 290–370 mm) and
-transfers to the held-out southern Mediterranean coasts, but turns the humid
-south-east US and east China 5–7 °C too hot and too dry. So the physics must
-be fitted on all zone types at once.
+- The **fantasy-fitted physics** is worse than "the regional mean everywhere"
+  in every region but the south-east US: ~2× too wet and 3–4 °C too cold in
+  the Mediterranean regions, almost no Cs kept (0–6 %).
+- **Fitting California and Iberia alone** fixes them (Köppen 39–52 %, Cs kept
+  33–45 %) and transfers to the held-out southern Mediterranean coasts, but
+  turns the humid south-east US and east China 5–7 °C too hot and too dry.
+- **Fitting all six regions with the circulation free** finds a compensating
+  error: it moves the subtropical high to 37.7°N all year (Earth's: ~30–33°N,
+  migrating ~5° with the seasons). California and Iberia then sit under the
+  high all winter with weak easterly winds instead of the westerlies, so no
+  mild ocean air reaches the west coasts, and the Mediterranean regions are
+  sacrificed (Köppen 14–17 %) for the humid ones (south-east US 96 %).
+
+On Earth the circulation is observed, so later fits bound it to Earth's range
+(high 28–34°N shifting 3–8°, westerlies 4–12 m/s, trades 4–9 m/s, ITCZ 2–8°N
+± 6–14°): the climate must come out right for the right reasons. With those
+bounds (r3) the Mediterranean regions keep 78–90 % of their Cs.
 
 ## 4. What calibration could not fix: new physics (e1)
 
-City climographs showed three structural errors that no parameter setting of
-the V9 model removed:
+City climographs and monthly bias profiles showed structural errors that no
+parameter setting removed:
 
 1. **No real summer drought.** Rain-rate suppression under the subtropical
    highs cannot dry a supply-limited column: the water piles up until it rains
    anyway (San Francisco 45 mm in August, observed ~1 mm).
 2. **Rainy season 1–1½ months early** (San Francisco 85 mm in September,
-   observed ~5 mm), because the circulation was fixed to lag the sun by 30 days.
+   observed ~5 mm): the circulation was fixed to lag the sun by 30 days.
 3. **Spring on land a month early** (April in east China 8–9 °C too warm,
    Memphis +6 °C, summer peaking in June).
+4. **No west-coast/east-coast asymmetry.** Every land cell relaxes to the same
+   latitude-mean "continental" temperature however much land its air has
+   crossed: west coasts stayed 2–4 °C too cold, east coasts 1–4 °C too warm.
+5. **Cold seas all year or never.** The fits pinned the global sea-surface
+   offset at −4 °C plus 5.5 °C cold currents: right for the summer upwelling off
+   California and Iberia, far too cold for their winter coasts.
+6. **Elevated deserts ~6 °C too cool in summer** (Reno, Las Vegas, the
+   Meseta) at the fixed 6 K/km lapse rate; WorldClim's own along-terrain lapse
+   rates are 3–5.5 K/km.
 
 New parameters, each defaulting to the old behaviour (round 19's strict fit
 gives bit-identical temperature, rain and water fields with the handoff's
@@ -105,10 +131,17 @@ gives bit-identical temperature, rain and water fields with the handoff's
 | `subsidence_width` | Latitude width of the highs' sinking (was a fixed 6°). |
 | `storm_seasonality` | Summer weakening of the storm track (was a fixed 0.3). |
 | `land_heat_capacity` | Heat capacity of the energy-balance land column: how far land seasons lag the sun. |
+| `continentality` | Land fraction carried along the model's own winds (4-day memory, one extra linear solve per step) scales the land seasons: sea air milder, continental air harsher. With Earth-like westerlies it reads 0.40 over California and 0.61 over Iberia in January, 0.95–0.99 over the south-east US and east China. |
+| `upwelling` | Wind along a coast drives surface water 90° to its right (Ekman; left with reversed spin); where that is offshore, cold water wells up. From the coastline and the model's winds: +1.8 to +2.3 m/s offshore transport off California, Iberia and Chile in July, none in January. |
+| `lapse_rate` (Earth fit only) | Fitted on Earth where heights are known; held fixed on the map, where it would trade off against the unknown terrain heights. |
+
+All of them are computed from the model's own winds, temperatures and
+coastline, never from geographic labels, so they apply unchanged to the
+fantasy map with either spin and any orientation.
 
 ## 5. Next
 
-Section 3 is completed with the six-region fit (`calibration/earth_r2`) and
-its held-out scores, then the Earth-fitted physics goes onto the fantasy map
-with only the world's unknowns free (`calibrate.py --physics world`), judged by
-the handoff's promotion guards.
+The six-region fit with all of the above (`calibration/earth_r4`) and its
+held-out scores complete section 3. Then the Earth-fitted physics goes onto
+the fantasy map with only the world's unknowns free
+(`calibrate.py --physics world`), judged by the handoff's promotion guards.
