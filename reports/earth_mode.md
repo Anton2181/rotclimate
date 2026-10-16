@@ -76,6 +76,7 @@ zonal model with no coast-to-interior structure).
 | fantasy-fitted (live atlas anchor) | 4.13 | 3.43 | 2.75 | 3.59 | 3.09 | 3.85 | 4.55 | 4.11 | 3.25 | 3.64 |
 | r1b: fitted on CA + Iberia only | 1.78 | 1.74 | 4.46 | 1.97 | 2.46 | 6.21 | 3.12 | 2.15 | 2.65 | 2.95 |
 | r2: six regions, free circulation | 2.56 | 2.66 | 1.79 | 2.23 | 1.93 | 3.21 | 2.85 | 2.60 | 1.65 | 2.39 |
+| **r4: six regions, Earth circulation, all e1 physics** | **1.86** | 2.19 | 1.76 | **1.83** | **1.48** | 3.50 | 3.52 | 2.01 | 1.85 | **2.22** |
 
 \* held out of every fit.
 
@@ -96,6 +97,47 @@ On Earth the circulation is observed, so later fits bound it to Earth's range
 (high 28–34°N shifting 3–8°, westerlies 4–12 m/s, trades 4–9 m/s, ITCZ 2–8°N
 ± 6–14°): the climate must come out right for the right reasons. With those
 bounds (r3) the Mediterranean regions keep 78–90 % of their Cs.
+
+**The current Earth fit (r4,** `calibration/earth/earth_e1_r4.json`**: 46
+physics constants, 960 evaluations, ~2 h on four cores)** brings the training
+mean from 3.47 (fantasy physics) to 2.10:
+
+| Region | d (refs) | T bias | Rain sim/obs | Köppen exact | Cs kept / → arid |
+|---|---|---|---|---|---|
+| California | 1.86 (2.91 / 1.78) | −1.2 °C | 468 / 392 mm | 29 % | 92 % / 0 % |
+| Iberia | 2.19 (2.74 / 1.12) | −1.7 °C | 499 / 392 mm | 22 % | 73 % / 4 % |
+| SE US | 1.76 (1.69 / 1.01) | +0.4 °C | 1045 / 1229 mm | 97 % | – |
+| Levant | 1.83 (3.26 / 1.30) | −0.8 °C | 324 / 394 mm | 42 % | 50 % / 26 % |
+| Central Asia | 1.48 (2.79 / 1.27) | +0.2 °C | 233 / 228 mm | 34 % | – (cold-dry zone 88 %) |
+| East China | 3.50 (1.95 / 1.26) | +3.2 °C | 912 / 1281 mm | 62 % | – |
+| Chile* | 3.52 (3.14 / 2.22) | +4.2 °C | 485 / 489 mm | 8 % | 100 % / 0 % |
+| Cape* | 2.01 (1.23 / 1.07) | +1.0 °C | 595 / 324 mm | 3 % | 100 % / 0 % |
+| SW Australia* | 1.85 (1.36 / 0.79) | +1.4 °C | 438 / 358 mm | 22 % | 77 % / 23 % |
+
+What this means: the model now produces Mediterranean climates where Earth
+has them — wet winters and dry summers on the west coasts, with almost no Cs
+turned into desert (the V10 prototype turned 78–97 % arid) — and humid
+subtropics on the east coasts, steppe and desert in the interior, from the
+same physics. It does not yet beat the "perfect zonal model" reference in
+most regions: the coast-to-interior detail is right in kind but not yet in
+amount (exact Köppen agreement is 22–42 % in the Mediterranean regions, with
+most misses between neighbouring classes such as Csa/Csb or BSk/BWk).
+
+Known limits, documented rather than tuned around:
+
+- **East China** stays 3–6 °C too warm from autumn to spring. Its winters come
+  from Siberian air (the East Asian winter monsoon), Earth's most extreme
+  continental anomaly; the model's land temperature is the latitude mean
+  (11 °C in January at 30°N, against 4 °C observed in Wuhan). A test coupling
+  coastal seas to the overlying air did not help and was removed.
+- **Chile's coast** is 8 °C too warm in its summer: a strip one or two 56 km
+  cells wide against the Andes, whose cold marine layer is below the model's
+  resolution, in a hemisphere that is more oceanic than the mirrored northern
+  land temperature assumes. Weakening the storm-eddy heat mixing (to stop
+  Argentine air leaking over the Andes) did not help.
+- **Holdout transfer is mixed:** all three southern Mediterranean regions keep
+  their Cs (77–100 %, none turned arid), but their overall climate distance is
+  worse than with the earlier unconstrained fit, mostly from summer heat.
 
 ## 4. What calibration could not fix: new physics (e1)
 
@@ -139,9 +181,12 @@ All of them are computed from the model's own winds, temperatures and
 coastline, never from geographic labels, so they apply unchanged to the
 fantasy map with either spin and any orientation.
 
-## 5. Next
+## 5. On the fantasy map
 
-The six-region fit with all of the above (`calibration/earth_r4`) and its
-held-out scores complete section 3. Then the Earth-fitted physics goes onto
-the fantasy map with only the world's unknowns free
-(`calibrate.py --physics world`), judged by the handoff's promotion guards.
+Physics fitted on California and Iberia alone, dropped onto the live atlas's
+world unchanged, dried the map out (strict agreement 12.7 %, painted
+Mediterranean 88 % dry; the anchor scores 50.2 % and 11.2 % at the same
+downsample-16 screening resolution): the anchor's world genes (reversed spin,
+34°N, 21° tilt) were fitted together with the fantasy physics. So the world's
+unknowns are refitted with the Earth physics held fixed, once per spin
+direction (`calibration/world_e1_retro`, `calibration/world_e1_pro`).
