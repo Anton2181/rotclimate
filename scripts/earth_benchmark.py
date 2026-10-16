@@ -51,7 +51,8 @@ def maps(results, out):
             img[~g.land] = sea
             ax.imshow(img, interpolation="nearest")
             ax.contour(g.inmap.astype(float), levels=[0.5], colors="k", linewidths=0.8)
-            ax.set_title(f"{case.name}: {title}", fontsize=10)
+            ax.set_title(f"{case.name}{' (mirrored)' if earth.REGIONS[case.name]['lat0'] < 0 else ''}: {title}",
+                         fontsize=10)
         vmax = np.nanpercentile(np.nan_to_num(case.obs_P).sum(0)[g.land], 98)
         for ax, P, title in ((row[2], np.nan_to_num(case.obs_P).sum(0), "observed rain (mm/yr)"),
                              (row[3], st["Pm"].sum(0), "simulated rain (mm/yr)")):
@@ -64,6 +65,44 @@ def maps(results, out):
     fig.tight_layout()
     fig.savefig(out / "maps.png", dpi=90)
     plt.close(fig)
+
+
+def climographs(results, out):
+    """One row per region: observed (dashed) and simulated (solid) monthly
+    temperature and rain at the region's stations."""
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+
+    tables = [(case, earth.station_table(res, case)) for case, res in results]
+    ncol = max(len(t) for _, t in tables)
+    fig, axs = plt.subplots(len(tables), ncol, figsize=(2.6 * ncol, 2.3 * len(tables)), squeeze=False)
+    months = np.arange(12)
+    for row, (case, table) in zip(axs, tables):
+        mirrored = earth.REGIONS[case.name]["lat0"] < 0
+        order = np.roll(months, -6) if mirrored else months        # show calendar months Jan..Dec
+        for ax, (name, st) in zip(row, table.items()):
+            ax.bar(months, np.array(st["obs_P"])[order], width=0.8, color="#9ecae1", label="obs rain")
+            ax.bar(months, np.array(st["sim_P"])[order], width=0.4, color="#08519c", label="sim rain")
+            ax.set_ylim(0, max(150, 1.1 * max(max(st["obs_P"]), max(st["sim_P"]))))
+            ax.tick_params(labelsize=6)
+            t = ax.twinx()
+            t.plot(months, np.array(st["obs_T"])[order], "--", color="#cb181d", lw=1.2)
+            t.plot(months, np.array(st["sim_T"])[order], "-", color="#cb181d", lw=1.6)
+            t.set_ylim(-15, 35)
+            t.tick_params(labelsize=6)
+            ax.set_xticks(months, list("JFMAMJJASOND"), fontsize=6)
+            ax.set_title(f"{name}: obs {st['obs_koppen']}, sim {st['sim_koppen']}\n"
+                         f"{sum(st['obs_P']):.0f} / {sum(st['sim_P']):.0f} mm, "
+                         f"{np.mean(st['obs_T']):.1f} / {np.mean(st['sim_T']):.1f} C", fontsize=7)
+        for ax in row[len(table):]:
+            ax.set_axis_off()
+    fig.suptitle("Observed (light bars, dashed) vs simulated (dark bars, solid): rain mm/month, temperature C",
+                 fontsize=9)
+    fig.tight_layout()
+    fig.savefig(out / "climographs.png", dpi=90)
+    plt.close(fig)
+    return {case.name: table for case, table in tables}
 
 
 def main():
@@ -88,9 +127,13 @@ def main():
         rows.append(r)
         results.append((case, res))
         print(earth.summary_line(r), f"[{r['seconds']}s]", flush=True)
-    (out / "summary.json").write_text(json.dumps(dict(params=a.params, overrides=json.loads(a.set),
-                                                      cell_km=a.cell_km, steps=a.steps, regions=rows), indent=1))
     maps(results, out)
+    stations = climographs(results, out)
+    (out / "summary.json").write_text(json.dumps(dict(params=a.params, overrides=json.loads(a.set),
+                                                      cell_km=a.cell_km, steps=a.steps, regions=rows,
+                                                      stations=stations), indent=1))
+    d = [r["climate_distance"] for r in rows]
+    print(f"mean climate distance {np.mean(d):.3f} over {len(d)} regions")
 
 
 if __name__ == "__main__":

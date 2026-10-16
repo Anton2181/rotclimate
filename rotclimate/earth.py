@@ -65,6 +65,31 @@ REGIONS = {
 }
 
 
+# well-known places for climographs (lat, lon); the model cell containing each
+STATIONS = {
+    "california": {"San Francisco": (37.77, -122.42), "Sacramento": (38.58, -121.49), "Fresno": (36.74, -119.79),
+                   "Los Angeles": (34.05, -118.24), "San Diego": (32.72, -117.16), "Reno": (39.53, -119.81),
+                   "Las Vegas": (36.17, -115.14)},
+    "iberia": {"Lisbon": (38.72, -9.14), "Porto": (41.15, -8.61), "Madrid": (40.42, -3.70), "Seville": (37.39, -5.98),
+               "Valencia": (39.47, -0.38), "Barcelona": (41.39, 2.17), "Algiers": (36.75, 3.06),
+               "Marrakech": (31.63, -7.99)},
+    "southeast_us": {"Houston": (29.76, -95.37), "New Orleans": (29.95, -90.07), "Memphis": (35.15, -90.05),
+                     "Atlanta": (33.75, -84.39), "Tampa": (27.95, -82.46), "Miami": (25.76, -80.19)},
+    "levant": {"Athens": (37.98, 23.73), "Istanbul": (41.01, 28.98), "Ankara": (39.93, 32.86), "Beirut": (33.89, 35.50),
+               "Damascus": (33.51, 36.28), "Jerusalem": (31.77, 35.21)},
+    "central_asia": {"Ashgabat": (37.95, 58.38), "Bukhara": (39.77, 64.42), "Samarkand": (39.65, 66.96),
+                     "Tashkent": (41.30, 69.24), "Dushanbe": (38.56, 68.77), "Aralsk": (46.80, 61.67)},
+    "east_china": {"Shanghai": (31.23, 121.47), "Nanjing": (32.06, 118.80), "Wuhan": (30.59, 114.31),
+                   "Changsha": (28.23, 112.94), "Chongqing": (29.56, 106.55), "Guangzhou": (23.13, 113.26)},
+    "chile": {"La Serena": (-29.90, -71.25), "Valparaiso": (-33.05, -71.62), "Santiago": (-33.45, -70.67),
+              "Concepcion": (-36.83, -73.05)},
+    "cape": {"Cape Town": (-33.92, 18.42), "Worcester": (-33.65, 19.45), "George": (-33.96, 22.46),
+             "Beaufort West": (-32.35, 22.58)},
+    "sw_australia": {"Geraldton": (-28.78, 114.61), "Perth": (-31.95, 115.86), "Albany": (-35.02, 117.88),
+                     "Kalgoorlie": (-30.75, 121.47)},
+}
+
+
 @dataclass
 class EarthCase:
     name: str
@@ -291,6 +316,45 @@ def compare(result, case: EarthCase) -> dict:
         koppen_full_model=kstats(ks), koppen_observed_T_sim_rain=kstats(kr),
         zones=dict(objective_f1=obj, strict_agreement=float((pred[painted] == g.target[painted]).mean()),
                    coverage=present, f1=f1p, recall=recall))
+
+
+def station_cell(case: EarthCase, lat, lon):
+    """(row, col) of the land cell holding (lat, lon), or the nearest land cell
+    (a coastal city can fall in a cell that is mostly sea)."""
+    spec = REGIONS[case.name]
+    x, y = forward(lat, lon, spec["lat0"], spec["lon0"])
+    g = case.grid
+    if spec["lat0"] < 0:
+        y = -y                                   # mirrored region
+    half_w, half_h = g.nx * g.cell_km / 2, g.ny * g.cell_km / 2
+    i, j = int((half_h - y) // g.cell_km), int((x + half_w) // g.cell_km)
+    if not g.land[i, j]:
+        ii, jj = np.nonzero(g.land)
+        k = np.argmin((ii - i) ** 2 + (jj - j) ** 2)
+        i, j = int(ii[k]), int(jj[k])
+    return i, j
+
+
+def station_table(result, case: EarthCase) -> dict:
+    """Monthly simulated and observed temperature (C) and rain (mm) at the
+    region's STATIONS, with both Koppen classes (calendar months; for a
+    mirrored southern region month 0 is July)."""
+    from .koppen import monthly_stats
+
+    p = result.params
+    st = monthly_stats(result.T, result.P, result.days, p.year_days,
+                       summer_solstice=p.winter_solstice_day + p.year_days / 2)
+    out = {}
+    for name, (la, lo) in STATIONS.get(case.name, {}).items():
+        i, j = station_cell(case, la, lo)
+        Ts, Ps = st["Tm"][:, i, j], st["Pm"][:, i, j]
+        To, Po = case.obs_T[:, i, j], case.obs_P[:, i, j]
+        if not np.isfinite(To).all():
+            continue
+        k = lambda T, P: CODES[int(classify(T[:, None], P[:, None], st["summer"])[0])]
+        out[name] = dict(cell=(i, j), elev_m=float(case.grid.elev[i, j]), sim_T=Ts.tolist(), obs_T=To.tolist(),
+                         sim_P=Ps.tolist(), obs_P=Po.tolist(), sim_koppen=k(Ts, Ps), obs_koppen=k(To, Po))
+    return out
 
 
 def climate_distance(result, case: EarthCase) -> float:
