@@ -93,3 +93,18 @@ def test_southern_regions_are_mirrored_into_the_north():
     assert T[6].mean() > T[0].mean() + 5 and P[6].mean() < P[0].mean()
     p = earth.earth_params(Params(), case)
     assert p.lat_center == 34.0 and p.perihelion_after_solstice > 180
+
+
+def test_sverdrup_sinking_dries_equatorward_flow_and_wets_poleward_flow():
+    case = _toy_case()
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=2, monsoon_strength=2.0)
+    off = earth.run_case(base, case, steps=13)
+    on = earth.run_case(base.replace(sverdrup=1.0), case, steps=13)
+    land = case.grid.land
+    v = off.v[:, land]
+    ratio = on.P[:, land] / np.maximum(off.P[:, land], 1e-6)
+    strong = off.P[:, land] > 0.05
+    assert np.median(ratio[(v < -1.0) & strong]) < 1.0 < np.median(ratio[(v > 1.0) & strong])
+    # the new genes default to the old fixed behaviour
+    p = Params()
+    assert (p.sverdrup, p.subsidence_width, p.storm_seasonality) == (0.0, 6.0, 0.3)

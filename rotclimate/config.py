@@ -131,6 +131,12 @@ class Params:
     subsidence_asym: float = 0.0      # east/west-of-basin asymmetry of the highs
     subsidence_summer: float = 0.0    # v7: highs sink harder in summer: x (1 + this * season)
     wet_cooling: float = 0.0          # v8: share of the summer warmth that wet ground evaporates away
+    # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
+    # flow toward the pole rises, flow toward the equator sinks: rain x
+    # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km
+    sverdrup: float = 0.0
+    subsidence_width: float = 6.0     # e1: latitude half-width of the subtropical highs' sinking (deg)
+    storm_seasonality: float = 0.3    # e1: storm track weaker in summer: x (1 - this * season)
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

@@ -36,7 +36,9 @@ WORLD = {"lat_center", "tilt", "retrograde", "north_bearing", "tier1", "tier2_ad
 # equation cannot reach its tolerance in Iberia)
 NUMERICS = dict(moisture_residual_tol=0.01, moisture_require_convergence=True, solver_rtol=1e-5,
                 solver_require_convergence=False, steps_per_year=25)
-SPACE = [g for g in C.SPACE_V8 if g[0] not in WORLD] + [("eddy_seasonality", 0.0, 0.9)]
+SPACES = {"v9": [g for g in C.SPACE_V8 if g[0] not in WORLD] + [("eddy_seasonality", 0.0, 0.9)]}
+SPACES["e1"] = SPACES["v9"] + [g for g in C.SPACE_E1 if g[0] not in {n for n, *_ in C.SPACE_V9}]
+SPACE = SPACES["v9"]
 _CASES = {}
 
 
@@ -82,9 +84,13 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--holdout", nargs="*", default=[], help="regions scored only for the final best")
+    ap.add_argument("--physics", default="v9", choices=list(SPACES))
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     import cma
+
+    global SPACE
+    SPACE = SPACES[a.physics]          # set before the worker processes fork
 
     d = json.loads(Path(a.start).read_text())
     d = d.get("params", d)

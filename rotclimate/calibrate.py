@@ -116,6 +116,17 @@ SPACE_V8 = SPACE_V7 + [("wet_cooling", 0.0, 0.8)]
 # v9: the map's orientation is unknown too - true north may point anywhere
 # (with the spin, this also covers mirror images and the southern hemisphere)
 SPACE_V9 = SPACE_V8 + [("north_bearing", -180.0, 180.0)]
+# physics e1, fitted on real regions (rotclimate/earth.py, scripts/earth_calibrate.py):
+# Sverdrup sinking under equatorward flow, the width of the highs' sinking and
+# the summer weakening of the storm track become free
+SPACE_E1 = SPACE_V9 + [("sverdrup", 0.0, 2.0), ("subsidence_width", 4.0, 14.0), ("storm_seasonality", 0.0, 0.9)]
+# the world's unknowns only (where, how tilted, which way it spins, which way is
+# north, how high the terrain tiers are, what lies beyond the map): physics
+# held at an Earth-calibrated fit
+WORLD_GENES = ("lat_center", "tilt", "retrograde", "north_bearing", "tier1", "tier2_add", "tier3_add", "tier4_add",
+               "beyond_north_land", "beyond_south_land", "beyond_west_land", "beyond_east_land",
+               "beyond_southeast_land", "beyond_northeast_land", "beyond_continuity_km", "beyond_relief_m")
+SPACE_WORLD = [g for g in SPACE_V9 if g[0] in WORLD_GENES]
 
 
 def _set_space(space):
@@ -312,7 +323,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -333,6 +344,10 @@ def main():
         _set_space(SPACE_V8)
     elif a.physics == "v9":
         _set_space(SPACE_V9)
+    elif a.physics == "e1":
+        _set_space(SPACE_E1)
+    elif a.physics == "world":
+        _set_space(SPACE_WORLD)
     bounds = json.loads(a.bounds)
     if bounds:
         _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
@@ -340,7 +355,7 @@ def main():
     base = apply_numerics(base, saved=a.saved_numerics,
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
-    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

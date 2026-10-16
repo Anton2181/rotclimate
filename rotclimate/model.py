@@ -316,14 +316,14 @@ class ClimateModel:
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
             # peaks in the storm track
-            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - 0.3 * s)
+            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - p.storm_seasonality * s)
             if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
                 side = (1.0 if p.retrograde else -1.0) * self.basin_side
                 storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
                 # ... and reach further equatorward there
                 shift = p.storm_reach * np.clip(side, 0, 1)
                 storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
-                                   * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
+                                   * (1 - p.storm_seasonality * s) * np.clip(side, 0, 1) * p.storm_asym)
             eddy = eddy_exchange_rate(p.eddy_rate, storm, s, p.eddy_seasonality)
             sigE = p.eddy_scale_km / g.cell_km
 
@@ -386,7 +386,7 @@ class ClimateModel:
             div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
             conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
             up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
-            sub = np.exp(-((lat - phi_h) / 6.0) ** 2)
+            sub = np.exp(-((lat - phi_h) / p.subsidence_width) ** 2)
             # subtropical highs sink hardest over the eastern side of ocean
             # basins on a prograde planet (dry west coasts: California,
             # Sahara coast); the asymmetry flips for retrograde spin
@@ -398,6 +398,10 @@ class ClimateModel:
                 sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (1 + p.storm_track * storm + p.convective * conv + p.orographic * up)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
+            if p.sverdrup > 0:       # physics e1: poleward flow rises, equatorward flow sinks
+                th = np.radians(p.north_bearing)
+                v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
+                A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
             bnd = np.where(ocean, W_ocean, 0.5 * Ws)
             W = W_prev if W_prev is not None else bnd
