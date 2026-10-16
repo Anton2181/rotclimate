@@ -284,7 +284,7 @@ def _indexed_worker(job):
 
 
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
-              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06):
+              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06, stds=None):
     import cma
 
     if evals < 1:
@@ -297,9 +297,10 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
     for i, v in fixed_idx.items():
         x0[i] = v
     free = [i for i in range(len(NAMES)) if i not in fixed_idx]
-    es = cma.CMAEvolutionStrategy(x0[free], sigma0,
-                                  {"bounds": [0, 1], "popsize": popsize, "seed": seed,
-                                   "verbose": -9})
+    opts = {"bounds": [0, 1], "popsize": popsize, "seed": seed, "verbose": -9}
+    if stds:                     # per-gene step sizes, as multiples of sigma0
+        opts["CMA_stds"] = np.array([stds.get(NAMES[i], 1.0) for i in free])
+    es = cma.CMAEvolutionStrategy(x0[free], sigma0, opts)
     # The supplied fit is a candidate too. Previously only random offspring
     # were saved, so a short restart could silently replace it with a worse fit.
     print(f"Scoring starting candidate on {len(seeds or [None])} world(s)...", flush=True)
@@ -384,6 +385,7 @@ def main():
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"sst_offset": [-2, 2]}')
+    ap.add_argument("--stds", default="{}", help='json of per-gene step sizes as multiples of --sigma, e.g. {"north_bearing": 0.1}')
     a = ap.parse_args()
     if a.physics == "v3":
         _set_space(SPACE_V3)
@@ -434,7 +436,8 @@ def main():
                               evals=a.evals, fixed=fixed), indent=2))
         return
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
-                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race)
+                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race,
+                     stds=json.loads(a.stds))
     print(json.dumps(best["per_class"], indent=1), best["score"])
 
 
