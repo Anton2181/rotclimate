@@ -121,7 +121,8 @@ SPACE_V9 = SPACE_V8 + [("north_bearing", -180.0, 180.0)]
 # the summer weakening of the storm track become free
 SPACE_E1 = SPACE_V9 + [("sverdrup", 0.0, 2.0), ("subsidence_width", 4.0, 14.0), ("storm_seasonality", 0.0, 0.9),
                        ("circulation_lag_days", 10.0, 75.0), ("subsidence_drying", 0.0, 0.5),
-                       ("land_heat_capacity", 0.7, 4.0), ("continentality", 0.0, 3.0)]
+                       ("land_heat_capacity", 0.7, 4.0), ("continentality", 0.0, 3.0),
+                       ("upwelling", 0.0, 8.0)]
 # the world's unknowns only (where, how tilted, which way it spins, which way is
 # north, how high the terrain tiers are, what lies beyond the map): physics
 # held at an Earth-calibrated fit

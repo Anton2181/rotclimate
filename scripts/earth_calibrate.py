@@ -38,6 +38,10 @@ NUMERICS = dict(moisture_residual_tol=0.01, moisture_require_convergence=True, s
                 solver_require_convergence=False, steps_per_year=25)
 SPACES = {"v9": [g for g in C.SPACE_V8 if g[0] not in WORLD] + [("eddy_seasonality", 0.0, 0.9)]}
 SPACES["e1"] = SPACES["v9"] + [g for g in C.SPACE_E1 if g[0] not in {n for n, *_ in C.SPACE_V9}]
+# on Earth the terrain heights are known, so the near-surface lapse rate (held at
+# 6 K/km on the map, where it would trade off against the unknown tier heights)
+# can be fitted too; WorldClim's own along-terrain rates are 3-5.5 K/km
+SPACES["e1"] = SPACES["e1"] + [("lapse_rate", 4.0, 7.0)]
 SPACE = SPACES["v9"]
 _CASES = {}
 

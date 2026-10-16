@@ -84,6 +84,7 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
 
 
@@ -181,6 +182,16 @@ class ClimateModel:
         self.conv_sigma = 28.0 / g.cell_km
         self.lat = g.lat
         self.col_sigma = 300.0 / g.cell_km
+        # coastal upwelling geometry (e1): the offshore direction (map frame,
+        # x right / y up) of sea cells near land and how close they are
+        Lc = ndi.gaussian_filter(land, 1.0 * cells_per_100km)
+        cx, cy = np.gradient(Lc, axis=1), -np.gradient(Lc, axis=0)       # toward land
+        norm = np.hypot(cx, cy)
+        ok = norm > 1e-3 / max(cells_per_100km, 1e-9)
+        self.offshore = (np.where(ok, -cx / np.maximum(norm, 1e-12), 0.0),
+                         np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
+        sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
+        self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
 
     # ------------------------------------------------------------------ helpers
     def season_index(self, day, lag=30.0):
@@ -327,6 +338,19 @@ class ClimateModel:
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
             SST = self.sst(d, To, Tl)
+            if p.upwelling > 0:
+                # e1: wind along a coast drives surface water 90 deg to its right
+                # (left with reversed spin; Ekman); where that is offshore, cold
+                # water wells up - strongest in summer under the subtropical
+                # highs' equatorward winds on west coasts (California, Iberia,
+                # NW Africa, Chile). Last step's winds; the zonal belts at first.
+                if uv_prev is None:
+                    ue, ve, _, _ = self.zonal_wind(s)
+                else:
+                    ue, ve = uv_prev
+                ek_x, ek_y = (-ve, ue) if p.retrograde else (ve, -ue)
+                index = gauss(ek_x * self.offshore[0] + ek_y * self.offshore[1], 100.0 / g.cell_km)
+                SST = SST - p.upwelling * np.clip(index / 5.0, 0.0, 2.0) * self.upwelling_weight
             T_eq = np.where(land, Tl, SST)
 
             # ---- parts of the winds and storms that do not depend on temperature

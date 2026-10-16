@@ -141,6 +141,7 @@ class Params:
     subsidence_drying: float = 0.0    # e1: dry air sinking in the highs replaces moist air: loss of this x sink strength per day
     land_heat_capacity: float = 1.0   # e1: x the EBM land column's heat capacity (how far land seasons lag the sun)
     continentality: float = 0.0       # e1: land seasons x (1 + this * (upwind land share - 0.5))
+    upwelling: float = 0.0            # e1: coastal sea cooling (C) per 5 m/s of offshore Ekman transport
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

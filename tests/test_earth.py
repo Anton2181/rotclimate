@@ -136,3 +136,22 @@ def test_continentality_widens_the_seasons_deep_inland_and_narrows_them_on_the_w
     assert swing(on, 10) < swing(off, 10)      # windward coast: sea air, milder seasons
     assert swing(on, 28) > swing(off, 28)      # ~1,000 km downwind of the coast: harsher seasons
     assert Params().continentality == 0.0
+
+
+def test_upwelling_cools_a_west_coast_sea_under_equatorward_wind_only():
+    case = _toy_case()
+    g = case.grid
+    g.land[:, :] = False
+    g.land[:, 15:] = True                      # sea to the west, land to the east: a west coast
+    g.land_frac = g.land.astype(float)
+    g.elev = g.elev_max = np.where(g.land, 100.0, 0.0)
+    from rotclimate.model import ClimateModel
+    p = earth.earth_params(Params(steps_per_year=13, upwelling=4.0), case)
+    m = ClimateModel(p, grid=g)
+    ox, oy = m.offshore
+    near = m.upwelling_weight > 0.5
+    assert near.any() and np.allclose(ox[near], -1.0, atol=0.05)        # offshore = west
+    ue, ve = np.zeros_like(g.lat), np.full_like(g.lat, -5.0)            # wind toward the equator
+    ek_x, ek_y = ve, -ue                                                # Ekman transport, right of the wind
+    assert (ek_x * ox + ek_y * oy)[near].mean() > 4.0                   # offshore: upwelling
+    assert Params().upwelling == 0.0
