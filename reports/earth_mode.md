@@ -213,3 +213,22 @@ relies partly on physics that is wrong on Earth (section 3).
 A joint fit is running next (`scripts/joint_calibrate.py`): physics and world
 together to the map, with the physics penalised as soon as its mean Earth
 climate distance rises above 2.25 (the Earth fit's is 2.10).
+
+## 6. Tried and removed (no measurable effect)
+
+- **Coastal seas following the air over them** (shallow shelf seas chilled by
+  offshore continental air): East China stayed +4.1 °C; its warm winters come
+  from the land temperature itself, not the coastal sea.
+- **A trapped marine layer** (low coastal land pulled toward the nearest sea's
+  temperature when warmer, below a 0.8–1 km inversion, fading over 50 km):
+  Valparaíso's summer moved 30.2 → 29.7 °C against 19.2 observed. At 56 km
+  the coastal cells' temperature is set by the storm-eddy heat mixing (fitted
+  to a ~900 km scale), which averages the coast with the hot interior.
+- **Seasonal land coupling** (e2, `land_coupling_insolation`) is kept as an
+  option but barely moved East China (Wuhan January 10 °C vs 4 °C observed):
+  the air arriving there is itself 4 °C too warm, with no Siberian High in a
+  latitude-mean land temperature.
+
+The e2 rain closure (exponential convective rain, no background ascent,
+sub-cloud evaporation) is what helps: Miami 936 → 1,548 mm (observed 1,395)
+in a hand test, and the free map fit chose it (no background ascent).
