@@ -1,0 +1,1292 @@
+{
+  "schema": 1,
+  "code_sha256": "6eb5a1698f3be8d1529b528c11a57a002f5e46c7a97eae57eb8e5212c655e732",
+  "parent_code_sha256": "9446abd0630b812322925a76e41e62ea891ca1bb0d9b690c9d0213342004f306",
+  "anchors": {
+    "s41_california_lift1_steady": {
+      "reference_protocol": {
+        "schema": 1,
+        "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+        "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+        "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+        "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+        "forcing_array_sha256": {
+          "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+          "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+        },
+        "inputs": {
+          "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+          "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+        },
+        "jobs": [
+          {
+            "key": "california_lift1_steady",
+            "region": "california",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+            "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+          },
+          {
+            "key": "california_lift16_aligned",
+            "region": "california",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+            "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+          },
+          {
+            "key": "iberia_lift1_steady",
+            "region": "iberia",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+            "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+          },
+          {
+            "key": "iberia_lift16_aligned",
+            "region": "iberia",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+            "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+          }
+        ],
+        "settings": {
+          "terrain": "shallow",
+          "observed_wind": true,
+          "observed_temperature": true,
+          "observed_humidity": true,
+          "humidity_scale": 1.0,
+          "relaxation_lower_days": 0.5,
+          "relaxation_upper_days": 20.0,
+          "storm_rate_month": 1.0,
+          "storm_convergence_ms": 0.5,
+          "storm_rotation_ms": 6.0,
+          "storm_radius_km": 500.0,
+          "terrain_drag_height_m": 3000.0
+        },
+        "seed": 41,
+        "budget_seconds": 2700.0,
+        "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+        "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+        "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+        "regions": [
+          "domain",
+          "scored_land",
+          "coast",
+          "interior"
+        ],
+        "stages": [
+          "after_transport",
+          "after_relaxation",
+          "before_condensation"
+        ],
+        "ascent_bin_edges_pa_s": [
+          null,
+          -0.1,
+          -0.03,
+          -0.01,
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          null
+        ],
+        "humidity_bin_edges": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          0.9,
+          0.99,
+          1.0,
+          1.05,
+          2.0,
+          null
+        ],
+        "atlas_publication": false,
+        "downloads": false
+      },
+      "source_case": "california_lift1_steady"
+    },
+    "s41_california_lift16_aligned": {
+      "reference_protocol": {
+        "schema": 1,
+        "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+        "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+        "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+        "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+        "forcing_array_sha256": {
+          "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+          "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+        },
+        "inputs": {
+          "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+          "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+        },
+        "jobs": [
+          {
+            "key": "california_lift1_steady",
+            "region": "california",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+            "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+          },
+          {
+            "key": "california_lift16_aligned",
+            "region": "california",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+            "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+          },
+          {
+            "key": "iberia_lift1_steady",
+            "region": "iberia",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+            "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+          },
+          {
+            "key": "iberia_lift16_aligned",
+            "region": "iberia",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+            "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+          }
+        ],
+        "settings": {
+          "terrain": "shallow",
+          "observed_wind": true,
+          "observed_temperature": true,
+          "observed_humidity": true,
+          "humidity_scale": 1.0,
+          "relaxation_lower_days": 0.5,
+          "relaxation_upper_days": 20.0,
+          "storm_rate_month": 1.0,
+          "storm_convergence_ms": 0.5,
+          "storm_rotation_ms": 6.0,
+          "storm_radius_km": 500.0,
+          "terrain_drag_height_m": 3000.0
+        },
+        "seed": 41,
+        "budget_seconds": 2700.0,
+        "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+        "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+        "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+        "regions": [
+          "domain",
+          "scored_land",
+          "coast",
+          "interior"
+        ],
+        "stages": [
+          "after_transport",
+          "after_relaxation",
+          "before_condensation"
+        ],
+        "ascent_bin_edges_pa_s": [
+          null,
+          -0.1,
+          -0.03,
+          -0.01,
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          null
+        ],
+        "humidity_bin_edges": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          0.9,
+          0.99,
+          1.0,
+          1.05,
+          2.0,
+          null
+        ],
+        "atlas_publication": false,
+        "downloads": false
+      },
+      "source_case": "california_lift16_aligned"
+    },
+    "s41_iberia_lift1_steady": {
+      "reference_protocol": {
+        "schema": 1,
+        "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+        "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+        "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+        "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+        "forcing_array_sha256": {
+          "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+          "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+        },
+        "inputs": {
+          "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+          "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+        },
+        "jobs": [
+          {
+            "key": "california_lift1_steady",
+            "region": "california",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+            "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+          },
+          {
+            "key": "california_lift16_aligned",
+            "region": "california",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+            "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+          },
+          {
+            "key": "iberia_lift1_steady",
+            "region": "iberia",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+            "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+          },
+          {
+            "key": "iberia_lift16_aligned",
+            "region": "iberia",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+            "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+          }
+        ],
+        "settings": {
+          "terrain": "shallow",
+          "observed_wind": true,
+          "observed_temperature": true,
+          "observed_humidity": true,
+          "humidity_scale": 1.0,
+          "relaxation_lower_days": 0.5,
+          "relaxation_upper_days": 20.0,
+          "storm_rate_month": 1.0,
+          "storm_convergence_ms": 0.5,
+          "storm_rotation_ms": 6.0,
+          "storm_radius_km": 500.0,
+          "terrain_drag_height_m": 3000.0
+        },
+        "seed": 41,
+        "budget_seconds": 2700.0,
+        "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+        "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+        "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+        "regions": [
+          "domain",
+          "scored_land",
+          "coast",
+          "interior"
+        ],
+        "stages": [
+          "after_transport",
+          "after_relaxation",
+          "before_condensation"
+        ],
+        "ascent_bin_edges_pa_s": [
+          null,
+          -0.1,
+          -0.03,
+          -0.01,
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          null
+        ],
+        "humidity_bin_edges": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          0.9,
+          0.99,
+          1.0,
+          1.05,
+          2.0,
+          null
+        ],
+        "atlas_publication": false,
+        "downloads": false
+      },
+      "source_case": "iberia_lift1_steady"
+    },
+    "s41_iberia_lift16_aligned": {
+      "reference_protocol": {
+        "schema": 1,
+        "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+        "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+        "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+        "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+        "forcing_array_sha256": {
+          "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+          "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+        },
+        "inputs": {
+          "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+          "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+        },
+        "jobs": [
+          {
+            "key": "california_lift1_steady",
+            "region": "california",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+            "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+          },
+          {
+            "key": "california_lift16_aligned",
+            "region": "california",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+            "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+          },
+          {
+            "key": "iberia_lift1_steady",
+            "region": "iberia",
+            "amplitude": 1.0,
+            "timing": "steady",
+            "source_year": 4,
+            "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+            "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+          },
+          {
+            "key": "iberia_lift16_aligned",
+            "region": "iberia",
+            "amplitude": 16.0,
+            "timing": "aligned",
+            "source_year": 4,
+            "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+            "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+          }
+        ],
+        "settings": {
+          "terrain": "shallow",
+          "observed_wind": true,
+          "observed_temperature": true,
+          "observed_humidity": true,
+          "humidity_scale": 1.0,
+          "relaxation_lower_days": 0.5,
+          "relaxation_upper_days": 20.0,
+          "storm_rate_month": 1.0,
+          "storm_convergence_ms": 0.5,
+          "storm_rotation_ms": 6.0,
+          "storm_radius_km": 500.0,
+          "terrain_drag_height_m": 3000.0
+        },
+        "seed": 41,
+        "budget_seconds": 2700.0,
+        "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+        "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+        "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+        "regions": [
+          "domain",
+          "scored_land",
+          "coast",
+          "interior"
+        ],
+        "stages": [
+          "after_transport",
+          "after_relaxation",
+          "before_condensation"
+        ],
+        "ascent_bin_edges_pa_s": [
+          null,
+          -0.1,
+          -0.03,
+          -0.01,
+          0.0,
+          0.01,
+          0.03,
+          0.1,
+          null
+        ],
+        "humidity_bin_edges": [
+          0.0,
+          0.25,
+          0.5,
+          0.75,
+          0.9,
+          0.99,
+          1.0,
+          1.05,
+          2.0,
+          null
+        ],
+        "atlas_publication": false,
+        "downloads": false
+      },
+      "source_case": "iberia_lift16_aligned"
+    },
+    "s67_california_lift1_steady": {
+      "config_sha256": "ec1c1af315408fafec3bd95b159319cf2c77b87e54c7c8f7f8b485a8709f52d1",
+      "summary_sha256": "105c1415cb929e7b71e23de168ea10f7405e380466ad7a5f49728c9789842bda",
+      "evidence_sha256": {
+        "year1.json": "cbfd4db769d041cf49942ee7ad295db3ea410f9f03407521c4b7cd3a806d1f64",
+        "year1.npz": "5acd73bf9a18e4ad5d070a7a29cfa226b44b3b83e4e7f6c693dc1c6c2cdf7d5c",
+        "year2.json": "b7d7e1fd5408291a9cefa144ffedbbb142f59de61fce9f8ea793a923eb8e84b0",
+        "year2.npz": "0a7b79a5148e9da8f02b869e1b8bf38e86b26f38d2ebb6b02a6778b5deb0f09d",
+        "year3.json": "d709a05c3c21a0cfbe38058a6414a37f81b4a74db2a8fbaade1b2ee16972d3f3",
+        "year3.npz": "9bb8269ea542ff30baf73d9f3ecdd9c827806c05ce430a454219d6003ffda3ec",
+        "year4.json": "1d0fd97deca47b9680ce9682f33878e7f79a347af9222fcde0e377c8479b4ba1",
+        "year4.npz": "e7134e6bcef84a5447b1c449fc11fee410d8646498535fea272af12a5ca36b38"
+      },
+      "years": 4
+    },
+    "s67_california_lift16_aligned": {
+      "config_sha256": "c178ebbccfc56b78a92986c267cad6798ff47e23106477235b5f2e7d7f9a4d66",
+      "summary_sha256": "7c58b6e6b468db2d9cbc4230f3f04c63b8b57bc15703cb8eecd4cf3d74494e1f",
+      "evidence_sha256": {
+        "year1.json": "49d936c72e089f251926bbea4bb904eed55def42a74edddd7601cf3900c803e5",
+        "year1.npz": "1d01d9aa101ae4281023d6c8b4db07688bda120033a324b23aff0b243f9c8826",
+        "year2.json": "961d63937a00f70fc8a968615c64cb3253a7baef7d62928f6b2d8e34c81b4c51",
+        "year2.npz": "0fc0b699b40fa3185f752561c707257d8f7546cc9a25467549eb2178327f6785",
+        "year3.json": "70940bb2761cb2e47382f81e6475284bd3b94ab89469c523396da6747e6b66ab",
+        "year3.npz": "7fd923c2b66bfa0033d4a8e2287eb6849667bd51bb070091456fc9c4ad873624",
+        "year4.json": "61c2e0c46188e491ea43b15766aa9c9f6a73c5110845aed214415fac1b1f2383",
+        "year4.npz": "e25256ad268a5f0ddac5d0d7b2299c239f75cdbb562dae206f452d39ad6c2283"
+      },
+      "years": 4
+    },
+    "s67_iberia_lift1_steady": {
+      "config_sha256": "e425c762221b53bfa0fc9e0dc9f59e7df8819cbffe02f8948d4da472bbd9ae41",
+      "summary_sha256": "587db43c4533d18dd98a46d4083fb107969f5f604812119294c5d12119012b9e",
+      "evidence_sha256": {
+        "year1.json": "1888dc083b6e927c5b4c918e79c5d52939dcd4837d441edc9bd2e42e034f71b3",
+        "year1.npz": "20ec859bb2852c9961e44dd2037a524f3fc2f5000fcb7322f1aa94da525c7744",
+        "year2.json": "d884f95e5e9d35f08772a8a221caf394e704d68e8a3363243a8f5c34d436d440",
+        "year2.npz": "f161904fce53ede130008effd5c4d6867d5eede50e29c8820b7be845eb05e629",
+        "year3.json": "fba090d3d684eb0c70a684da750667adb53084514b24b041976293eedc858699",
+        "year3.npz": "395cb97ad5992f44201cbea40d0d8b93ba63a0e51b6f95f4fbbc1f97f6c971c8",
+        "year4.json": "4853e03567ebecb4d58a9e913420a52f04d37d833c427f7fd1ef09ec5278f5e1",
+        "year4.npz": "5a2ed23788c06c23f704a64743ad18df098179991d078b3fdb57b506201f1eef"
+      },
+      "years": 4
+    },
+    "s67_iberia_lift16_aligned": {
+      "config_sha256": "8953eac4f68970d8fd7993dee417e9fe9a5c3095a0f9e9c6fd3dbd62d9205ca4",
+      "summary_sha256": "0a1fe50ba0e4622403aa8867a5a6e0ca9353edc9a1eba4bf101945a0849722a0",
+      "evidence_sha256": {
+        "year1.json": "6648c6225ecbd59ebb78a27eed8477079781e42a14b8bfa51afdce866d67a3b9",
+        "year1.npz": "0880271fa28fde29df5c560c0528e2eb8367d72a22ef13fd724748ae07d49f6c",
+        "year2.json": "05fd5311c45c7dbd6f11c1bb8758563d829d19b9cb70e9f798bcde86dc926cbc",
+        "year2.npz": "3c9cd159cd7b55a70eaa095fbf3f8e2dc961573e18268cfe21d50faf94bd23e3",
+        "year3.json": "1cf6300ea51d99c9db5461eb3c3428d76edf69fd9c1cf00177676def4c8fae2b",
+        "year3.npz": "bc18bf0a65e52b4ab9d7b9e22e21fb0f95c441b65bdf4eba9ee5f3276ce9353e",
+        "year4.json": "6338057b7b05d737d2b42b43f62f364ba1d964089a324f121a4ffb5ac201b98d",
+        "year4.npz": "a37f0ba02e9d5dbf885657a73f1b7178c4bc30c861bf3f936b1ac62800a6d274"
+      },
+      "years": 4
+    },
+    "s103_california_lift1_steady": {
+      "config_sha256": "d46bafdea4da7c85b7e9512693b4470193ce2e6fb3daf875d17b992eef24e880",
+      "summary_sha256": "4b2ddccf7a1bfa1a31ba4588cfb027a6ffef824e2dd56c86ca36d34d0b78ae2d",
+      "evidence_sha256": {
+        "year1.json": "629ac38fe9a7dafcb7fbe341d569ae3ff5ce9f290b98dbe14e1531da6cd3a1f0",
+        "year1.npz": "9ad25f7290f60857fc1738ead10628c8824830f317b9e3ff8828bf55c2bf9263",
+        "year2.json": "79989f8d497c9fdbdd3120844eff464d00b3cd0ec28b3929051bd14a56c74afa",
+        "year2.npz": "5d41c5f49f60efa2371346598c08594a391977cad62f1803ad0d6ed905a412b3",
+        "year3.json": "42cb8bac6f686449d523b0de92514bcc5bf1d5cb63a18f28b8b4b6c853222b04",
+        "year3.npz": "8309516493bdb757fcb19c7df81b1c71b1ed45ed5b8d12bfb7f88327205457f6",
+        "year4.json": "35d0ab3cdd973d7a61960c9e298402800ff8ccc269d5f0f94b4f8a263e91755b",
+        "year4.npz": "32fe701a2d1788aa6d1a6bcf6a022f46a7838b9ebd326179ec8fe467736a46d6"
+      },
+      "years": 4
+    },
+    "s103_california_lift16_aligned": {
+      "config_sha256": "1c820d07178b97ef88a7b338ad5ad8b5ff43ab0bd1c68c9a53ca5cc0a6a292a4",
+      "summary_sha256": "188922d3dfc9dfe646c37d9a9d8e72c8da23f227e338bb6cf9faeac978a7cff6",
+      "evidence_sha256": {
+        "year1.json": "8076a4280ee087e8ad6bc3586f13e7c28df62d521a3891867d5f9766ae42e81f",
+        "year1.npz": "ed2913f4112171ee350893d87509a1fa7e66a5d73325d05b7c860ddd0a5e71f6",
+        "year2.json": "76319c809821cf2a8d6db1b52428892c01eeda38662b4aee8aa900ca4fe1cb99",
+        "year2.npz": "541eb84246a1a3eb292b437945cde7e98ffa7c6ba11f331dceb2894c56613cb0",
+        "year3.json": "5ac37269d20be2b5d994557e5a69ae84bebcac1a1262aa905d1a28309bd53d98",
+        "year3.npz": "4a806ff70a4b186321d2fad5f1ff4834757e2a125c1d57a3f7c278653e6b546f",
+        "year4.json": "90d5c20623d7d5db978e69e6fb334ad52d79ebba5c1fdc9eaa7ec05adfe8b46e",
+        "year4.npz": "aeef9e6e1cf1a2fc91279778d34311100efa81fe04ce371f9343289487311a1e"
+      },
+      "years": 4
+    },
+    "s103_iberia_lift1_steady": {
+      "config_sha256": "356f5b4f59367b8b08d6cdeebc9a1232771f4fb06bd94b18f9ccba2a939420c5",
+      "summary_sha256": "18da7c0035ab7127f2ca756b77c4ddfbb0047883a125713d3ae5865d71f24a1b",
+      "evidence_sha256": {
+        "year1.json": "9c1c4daa479fafd1da6925251fa68aae7ab1b4f3ea6a7395e554671459501a88",
+        "year1.npz": "926fb14b03003ee8a3964649cffdbfabbdf8fbd0b3b283493047f7643090e072",
+        "year2.json": "d6274a5155fe573f5f2e8ca20f650300bc8e0afd9e89b2bd55acc87297575419",
+        "year2.npz": "56296ae3d629c02adc3c95e329c145b6d8efa59a719c93f8f5e381bac50f3199",
+        "year3.json": "6e38e77ba982a51c8bf58864f8e891f77e9cb64d4a9a30bd0e0e0f322fe929c0",
+        "year3.npz": "6079135c758dfd2d09dee65a101467f45454f48fa293726096c1d89465f158cb",
+        "year4.json": "e07f4b3a3588f7b5c7790e527386005572b47e4ac81e602e6c7b85a17979fa0b",
+        "year4.npz": "fb1fd9d66739094a383141555f36ef411f60c82f98e0ea1ea3768435c8a08de8"
+      },
+      "years": 4
+    },
+    "s103_iberia_lift16_aligned": {
+      "config_sha256": "63647b44c1aab7153264517044f00152cee0f5dda7530debf6ee2003bfd7f4fa",
+      "summary_sha256": "4f434ec2bfee4b40dc12a1af30b67ec30cfe6dc2867b8a4288e3012f03ab7de6",
+      "evidence_sha256": {
+        "year1.json": "fdf93347962b491a5e8bed3b5041c62f05184f54c90f4077821ec5722612b099",
+        "year1.npz": "4eb543808310502a4b03ea16565fe2cf2f2a13d8317cc90538214b4b110c4f40",
+        "year2.json": "afa8fcce8cbb6b53b74ccc4d8e0e97fbb727479d190de1256d12f31350002599",
+        "year2.npz": "e0b0839d2bcc4176d5f2745b175ae08f07901ddf1e5247217d04d3576a29e7ae",
+        "year3.json": "4588959fafc2d20a5889e8a0372f6e9b92e13a8d831b74be7a2ea34849623da3",
+        "year3.npz": "4aaef4b549152253dc2e1a1caee10f4931514e1cfa7ca21c1db99b9e0e676050",
+        "year4.json": "69a959bb1b8e09b48af203742efbbf0b4f47068c3419eb9cf2845c26890281d1",
+        "year4.npz": "e00b71dea31c526ae3904962dc70dd4e6ec9ce5fb357ea63ba591b686c439212"
+      },
+      "years": 4
+    },
+    "s149_california_lift1_steady": {
+      "config_sha256": "cc4d21e506b3770e81a79b4c38249a13f2335674334fd25317bee6326998c5c7",
+      "summary_sha256": "e8f8bcae5408e3b5481382328819ef0c79a616866619209ba2f94c2aaa26368d",
+      "evidence_sha256": {
+        "year1.json": "b1439ad32bb2147224833022ee5163f0e9b025f0c862d39ba360ef5b9caf673b",
+        "year1.npz": "097682b62b0a68a466d2670be8f787f78701bedf6631875e2ff5c0e09dc9eddd",
+        "year2.json": "2ed1a2e684214dd8629f32fa98f788ead2ffd2cc88c5afc4c64cadd3e8cd79fa",
+        "year2.npz": "a875ae9bff26f161fd927495c7e9f352b5b6d6151c3c9c2b1305434067d3598b",
+        "year3.json": "78a394922076a3043666f3094c8f6f8efd886df8ad5bb4bb16e55f0d11e1b9d1",
+        "year3.npz": "39c230db86dd0b9f7966628e68df97fcd328d4f06196095c6c32ff9deeb1094b",
+        "year4.json": "7c392b22f717e479fcfacd0dcef28525ad2cfb1fec9117cde4c347d108da9ee5",
+        "year4.npz": "42d9bd73c78392824483fe03140697cf34942a3ab003428267f18ecf9fdff70f"
+      },
+      "years": 4
+    },
+    "s149_california_lift16_aligned": {
+      "config_sha256": "e88ec77b03ea5afc701abf16b896de57c6912c329756d0924410f7d249e0b22c",
+      "summary_sha256": "ec47afe922316116109f625206b0ad21da518aae0e46fce4e88923a590b4971a",
+      "evidence_sha256": {
+        "year1.json": "95b320bd9681e2dbe4ef3b3d293c41ff612dcb7d65615f2641186f749c4e87ca",
+        "year1.npz": "ae1f934990f237dfffaa62794f50953f052be4c6b0a646d00ba7ebea8ff63112",
+        "year2.json": "ec2df2eeccacbc957dbf6ddec4383e5c73f02bd743be70484228d1ecfe6e599d",
+        "year2.npz": "9035d83c01e748ae86e8a125856f532602078838315b281d697f04fdbfdc0649",
+        "year3.json": "6ca3cb937e38b90bf4e6ba59890a94c622b0a0a31713523eba2180d4f4fb64c0",
+        "year3.npz": "c0cc91cd875fb511e01df47171b48297a86e5f82ebc29f81abae3e4047b806cc",
+        "year4.json": "50888277eb6557e799114a2641facd83f12054a27216c1f11f6b8fe371f5aab7",
+        "year4.npz": "a66e71bc0fecf80431e66a81536ead844d2490528a6a944805c1a5c7372115ee"
+      },
+      "years": 4
+    },
+    "s149_iberia_lift1_steady": {
+      "config_sha256": "b09f45bb774739aaba6f100641c7aa6dfdea30e16cf19bd4bd65b3b17e03434c",
+      "summary_sha256": "173d8aae40e70316e9cec48bc90ffeb2979c1e72ae94d43b9bbc750af3918360",
+      "evidence_sha256": {
+        "year1.json": "4bd9538daaf702287768ea45b25916fc06fc7f8b8d1530ca0329d84b973dd9a4",
+        "year1.npz": "faee627d51fc0930186429e13cd37bd4e8123a93cbc4fcce9525a3374056824c",
+        "year2.json": "706d941598822c70dccbdd487e4e17130fca6269175a4dab904993d24e0f9c77",
+        "year2.npz": "efed8217527721311fb854924343caf1c6a2286194cb53537b2348edbb4d6a44",
+        "year3.json": "958c4049134507c816ace84db47df52337c8c56077821de1f6927f7144b4115d",
+        "year3.npz": "eaf8fdd989eb79f3f474611aa04ef355c983e8baa98967ff6a996d46bef9e427",
+        "year4.json": "cc6d4f0413edce0f4812bade988a212a76dfce7e89d03b57e122016121a161f1",
+        "year4.npz": "434ca7122c40a43f1ad26c6e8c891d8013b3e898b7e8e71aa88170faf209df69"
+      },
+      "years": 4
+    },
+    "s149_iberia_lift16_aligned": {
+      "config_sha256": "d61fd228fcdbd24282351c1b7df38708dea27500cf7efa1a4e0bca03ca827e70",
+      "summary_sha256": "89666007def513bc62b7787a65ec30045dff7d74b4e1049b00c071c3cab2295d",
+      "evidence_sha256": {
+        "year1.json": "3f0dbf5dcb288ac62c9994a5564fd0b8285f2080734f3b5dc01f0c8100b8c07b",
+        "year1.npz": "28e66b2de988f39a5860864b7946081142a72aa19241012ebea517183aa14cfe",
+        "year2.json": "c0bc06e365105255c03e6655944220918c29f1ad58071b5320d721bc0632c48a",
+        "year2.npz": "58de5c0da9b805d420229d4b61a2e56a1ca53693eb7103fd0e7b62cd113e9a76",
+        "year3.json": "eae37fb1c17000b3409c17e804ac848fa706b45e5035578f52380b2661e11f95",
+        "year3.npz": "6fc80e45fc180500d9fca1d773709a3678b642aea2b8f8eba7ebb77d1f81c401",
+        "year4.json": "c4db814e246babec0df2cc83fc0833082c86430c808765b9c70aace7f108bbba",
+        "year4.npz": "202f26a3dd704ee1bb493222fed5dd2072bd0bbd6d6f20943eb85c4db7d3cfbb"
+      },
+      "years": 4
+    },
+    "s211_california_lift1_steady": {
+      "config_sha256": "59ce57ec1423dec0cd81cd315c4ec6f799a277e11a18f9f49f71ad8d0f5fcbe3",
+      "summary_sha256": "24a652a3b4a019e8f5f38fa1161530c904e2a7d7dc9c48ec9000d0b382a455a4",
+      "evidence_sha256": {
+        "year1.json": "28644ccdfc35af9f67506f1de13c8c6d85b8c481dcc6ccf8141634358426dd8c",
+        "year1.npz": "edd6e52a5daee1bd193f8f647fbc9c934a76b1c4c0a8f9c490e8b2e7e25ec658",
+        "year2.json": "ccf84b3f6c307ee2ca32d390205f16c2455871c557b35309f297899461c95218",
+        "year2.npz": "1acd17e14508c74976d05a92fcccb1ca919a65d11397b589534664ee692f1256",
+        "year3.json": "398936e80e7c24d0ecfa38ee93eac06434d41044d9526768e87e87d67dbbc0b1",
+        "year3.npz": "149c6dc69f170ef510c6070dd2654ed15e0ed974621f4e0c31aa2669d3b31ce2",
+        "year4.json": "d17c5c760b4f234ba8df69a309520b1269de5dbd8eda12908eaae9600e863b2f",
+        "year4.npz": "ef16e2f63e74ef3df79406998ce8956cc5427eae67b4a63c2c7dbc74d27ea821"
+      },
+      "years": 4
+    },
+    "s211_california_lift16_aligned": {
+      "config_sha256": "3de0248f8f01647accd498f70765dbd74b348c6551e3507891de45a05e9dcd0d",
+      "summary_sha256": "d779c90b34cbce6eec5a6298752172fba36ea8180bcc008e2ce6aad04776a683",
+      "evidence_sha256": {
+        "year1.json": "3b64dcd98055a2dbadfc8072e704a29ea9b2205875b12b7cdd3f2e6cf3148561",
+        "year1.npz": "9220b663ae0be75cd083e31842cb238667454295f7948817621e3f6f0c0c1b3c",
+        "year2.json": "04df22704ee24d812dcbb7fea55db51f2994ba85b75e87826e45d0c10c14137a",
+        "year2.npz": "3cccae57dcc470a09f4ff4eb115f805b586c37dce6ad8a789b41cc11c61dc485",
+        "year3.json": "6fe9d6265ef91f3e2f7ac00dffe7c64cc660c6dd918967478d7deb4743134927",
+        "year3.npz": "bdcd391b705ca15c9c2da9e3d29aff19b5441c591f0abfb173dd03c7fb8951f4",
+        "year4.json": "da18f1319c71aa487114a7bc4b7894bfbfe8e4d52ec615943afa3fc8054f1dec",
+        "year4.npz": "0a21cf184d99e36f9b994a7dfd0623b3e7f8383cc67e884c7756dcc31cdb47f2"
+      },
+      "years": 4
+    },
+    "s211_iberia_lift1_steady": {
+      "config_sha256": "a9cf1a6fcfa8e0ef54c502f309015df020176ee6f2819079b738b8ee1ffba73f",
+      "summary_sha256": "fe229fa457f13cdd69fb2680ef96ddc28bd410ffa29cfce6734d039649422254",
+      "evidence_sha256": {
+        "year1.json": "f16179562efbfc4bb49795c071a4d4235b937325edb9849f47d34d072ed1af73",
+        "year1.npz": "6c75cd37c6a7e16924589f16f3383e39a12e3154d180d2115018ada4e114e157",
+        "year2.json": "2191dfbb7cd40bda0948b56513ac506f4258b71d050b8ed33d2b0731679b8127",
+        "year2.npz": "6558243ef6e91829f4a06d9b4ca75505243b111fc60dccaf64c24cf8d13fa937",
+        "year3.json": "d29de02d11e4c377f6c398dfa09c65d66d90aabb03aca7e134f3e0f33a424e6e",
+        "year3.npz": "b6e538671b2b478bf57289d7f68eecd4109460fc316c1faa91df70e41a6a8e81",
+        "year4.json": "63f3dd07bd226f1786323f9800943c99bcf4caffb6c954e5cc6909361401060d",
+        "year4.npz": "611616b0279a08186b43a9b66eab8ca0305c8202a6ecdf6b72fe1857bd297167"
+      },
+      "years": 4
+    },
+    "s211_iberia_lift16_aligned": {
+      "config_sha256": "2902ad28d200f80e73c3bef5ccbe5663c3aaf880516b6248e78cd27b47eea266",
+      "summary_sha256": "b6fdd14b676db1335b9234207f7337cb51514be41a6ac681cd41133de8aa12e8",
+      "evidence_sha256": {
+        "year1.json": "74fd868bfb8e6899ae366c866e7ce49eca29e0282be8e90fcd9b3362b3e8977e",
+        "year1.npz": "d3a17e634bfcb4ceb27c8ef123d4b2be3a1d34dd9962da7c61b257d4fc002db7",
+        "year2.json": "c9dfbae2282cf53c8ab59361f2868dc4d43f2fc16ba3599e369492a82f6def4d",
+        "year2.npz": "de14223f310d464ee0805c3e09d65c3a8b1af9f340f2e288bb8e5968857c6c32",
+        "year3.json": "53b75abfba26cccffe8db5b86c7c0e42f19200c8beb40047e31b997015c8182d",
+        "year3.npz": "1eb74b506a63a2593d05878deec7a408854d64a0cfd61333a14b889080f9204f",
+        "year4.json": "6536e0bfdf8d5d43ac0bb39fa7ae3773c8eb7bb82f5520bb56af712d6c025291",
+        "year4.npz": "5732409c9225850c0d5bd4e65770e6170bbd30890eadced99c1010da32134d7b"
+      },
+      "years": 4
+    }
+  },
+  "jobs": [
+    {
+      "key": "control_s41_california_lift1_steady_bulk_dt1",
+      "phase": "control",
+      "seed": 41,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "bulk",
+      "time_factor": 1.0,
+      "anchor": "s41_california_lift1_steady"
+    },
+    {
+      "key": "control_s41_california_lift16_aligned_bulk_dt1",
+      "phase": "control",
+      "seed": 41,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "bulk",
+      "time_factor": 1.0,
+      "anchor": "s41_california_lift16_aligned"
+    },
+    {
+      "key": "control_s41_iberia_lift1_steady_bulk_dt1",
+      "phase": "control",
+      "seed": 41,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "bulk",
+      "time_factor": 1.0,
+      "anchor": "s41_iberia_lift1_steady"
+    },
+    {
+      "key": "control_s41_iberia_lift16_aligned_bulk_dt1",
+      "phase": "control",
+      "seed": 41,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "bulk",
+      "time_factor": 1.0,
+      "anchor": "s41_iberia_lift16_aligned"
+    },
+    {
+      "key": "screen_s41_california_lift1_steady_parcel_lower_dt1",
+      "phase": "screen",
+      "seed": 41,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s41_california_lift1_steady"
+    },
+    {
+      "key": "screen_s41_california_lift16_aligned_parcel_lower_dt1",
+      "phase": "screen",
+      "seed": 41,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s41_california_lift16_aligned"
+    },
+    {
+      "key": "screen_s41_iberia_lift1_steady_parcel_lower_dt1",
+      "phase": "screen",
+      "seed": 41,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s41_iberia_lift1_steady"
+    },
+    {
+      "key": "screen_s41_iberia_lift16_aligned_parcel_lower_dt1",
+      "phase": "screen",
+      "seed": 41,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s41_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s67_california_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s67_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s67_california_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s67_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s67_california_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s67_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s67_california_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s67_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s67_iberia_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s67_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s67_iberia_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s67_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s67_iberia_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s67_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s67_iberia_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s67_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s103_california_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s103_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s103_california_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s103_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s103_california_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s103_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s103_california_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s103_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s103_iberia_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s103_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s103_iberia_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s103_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s103_iberia_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s103_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s103_iberia_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 103,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s103_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s149_california_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s149_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s149_california_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s149_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s149_california_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s149_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s149_california_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s149_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s149_iberia_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s149_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s149_iberia_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s149_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s149_iberia_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s149_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s149_iberia_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 149,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s149_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s211_california_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s211_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s211_california_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s211_california_lift1_steady"
+    },
+    {
+      "key": "repeat_s211_california_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s211_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s211_california_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s211_california_lift16_aligned"
+    },
+    {
+      "key": "repeat_s211_iberia_lift1_steady_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s211_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s211_iberia_lift1_steady_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s211_iberia_lift1_steady"
+    },
+    {
+      "key": "repeat_s211_iberia_lift16_aligned_parcel_lower_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 1.0,
+      "anchor": "s211_iberia_lift16_aligned"
+    },
+    {
+      "key": "repeat_s211_iberia_lift16_aligned_parcel_all_dt1",
+      "phase": "repeat",
+      "seed": 211,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 1.0,
+      "anchor": "s211_iberia_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_california_lift1_steady_bulk_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "bulk",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_california_lift1_steady_parcel_lower_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_california_lift1_steady_parcel_all_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_california_lift16_aligned_bulk_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "bulk",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_california_lift16_aligned_parcel_lower_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_california_lift16_aligned_parcel_all_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 0.5,
+      "anchor": "s67_california_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_iberia_lift1_steady_bulk_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "bulk",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_iberia_lift1_steady_parcel_lower_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_lower",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_iberia_lift1_steady_parcel_all_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "mode": "parcel_all",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift1_steady"
+    },
+    {
+      "key": "numerics_s67_iberia_lift16_aligned_bulk_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "bulk",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_iberia_lift16_aligned_parcel_lower_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_lower",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift16_aligned"
+    },
+    {
+      "key": "numerics_s67_iberia_lift16_aligned_parcel_all_dt0.5",
+      "phase": "numerics",
+      "seed": 67,
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "mode": "parcel_all",
+      "time_factor": 0.5,
+      "anchor": "s67_iberia_lift16_aligned"
+    }
+  ],
+  "settings": {
+    "terrain": "shallow",
+    "observed_wind": true,
+    "observed_temperature": true,
+    "observed_humidity": true,
+    "humidity_scale": 1.0,
+    "relaxation_lower_days": 0.5,
+    "relaxation_upper_days": 20.0,
+    "storm_rate_month": 1.0,
+    "storm_convergence_ms": 0.5,
+    "storm_rotation_ms": 6.0,
+    "storm_radius_km": 500.0,
+    "terrain_drag_height_m": 3000.0
+  },
+  "minimum_cycles": 3,
+  "maximum_cycles": 6,
+  "forcing": "Reuse exact parent calendars and upward dry-mass flux. No humidity, amplitude, or boundary-dose retuning.",
+  "cloud_bound": "Unmixed upward donor parcels cool to the recipient pressure and undergo its linear thermal relaxation before energy-coupled liquid condensation. Condensate is removed from their carried vapor before bulk saturation; latent energy remains as sensible heat. Immediate fallout/soil convention retained. Not an entraining plume or validated cloud scheme.",
+  "lower_mode": "Only first three upward interfaces; omit receiving 150hPa layer. All-interface variant is an upper-structure sensitivity.",
+  "screen_gate": {
+    "require_all_settled": true,
+    "require_all_temperature_guards": true,
+    "minimum_coastal_winter_gain_mm_each_strong_lift_region": 5.0
+  },
+  "selection": "Fixed mechanism screen followed by fixed paired sensitivity, no best weather seed or parameter choice. Synthetic seeds are reused, not untouched validation.",
+  "atlas_publication": false,
+  "downloads": false
+}

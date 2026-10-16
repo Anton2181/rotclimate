@@ -23,7 +23,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .config import Params
+from .config import Params, apply_numerics
 
 BEYOND_MODES = ["ocean", "land", "extend"]
 
@@ -152,6 +152,10 @@ def decode(x: np.ndarray, base: Params) -> Params:
 
 def encode(p: Params) -> np.ndarray:
     v = {k: getattr(p, k) for k in NAMES if hasattr(p, k)}
+    if "north_bearing" in v:
+        # Screened bearings use 0..360; v9 searches -180..180. Wrap before
+        # clipping so e.g. 330 degrees starts at -30, not at 180.
+        v["north_bearing"] = (v["north_bearing"] + 180.0) % 360.0 - 180.0
     v["retrograde"] = 0.75 if p.retrograde else 0.25
     for side in ("north", "south", "west", "east"):
         if f"beyond_{side}" in NAMES:
@@ -166,9 +170,10 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     """Score a parameter set; with several seeds the unknown surroundings are
     re-generated for each and the zone scores averaged (ensemble).
 
-    Racing: with a `cutoff`, a candidate whose first world already scores
-    below it skips the remaining worlds (it cannot become the best; the
-    best is always scored on every world)."""
+    Racing: with a `cutoff`, a candidate whose first world scores below it
+    skips the remaining worlds. This is a speed heuristic, not an upper
+    bound: a candidate could recover on other worlds. Winners must always
+    be fully scored; use race=0 for an exhaustive ensemble comparison."""
     from .model import ClimateModel
     from .score import evaluate, objective
 
@@ -182,12 +187,14 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     ev = dict(evs[0])
     ev["per_class"] = {k: float(np.mean([e["per_class"][k] for e in evs])) for k in ev["per_class"]}
     ev["total"] = float(np.nanmean(list(ev["per_class"].values())))
-    for key in ("precision", "f1"):
+    for key in ("precision", "f1", "recall"):
         ev[key] = {k: float(np.mean([e[key][k] for e in evs])) for k in ev[key]}
     ev["accuracy"] = float(np.mean([e["accuracy"] for e in evs]))
+    display_accuracy = float(np.mean([e["label_policy_audit"]["display_accuracy"] for e in evs]))
     ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
     return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"], raced=len(evs) < len(seeds),
-                per_class=ev["per_class"], f1=ev["f1"], precision=ev["precision"], realism=ev["realism"],
+                per_class=ev["per_class"], f1=ev["f1"], recall=ev["recall"],
+                display_accuracy=display_accuracy, precision=ev["precision"], realism=ev["realism"],
                 spread=float(np.std([e["total"] for e in evs])))
 
 
@@ -203,25 +210,51 @@ def _worker(args):
     return out
 
 
+def _indexed_worker(job):
+    index, args = job
+    started = time.monotonic()
+    result = _worker(args)
+    result["seconds"] = time.monotonic() - started
+    return index, result
+
+
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
               popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06):
     import cma
 
+    if evals < 1:
+        raise ValueError("evals must include at least the starting candidate")
     out_dir.mkdir(parents=True, exist_ok=True)
     log = open(out_dir / "evals.jsonl", "a")
     x0 = encode(base) if x0 is None else np.asarray(x0)
     fixed = fixed or {}
     fixed_idx = {NAMES.index(k): v for k, v in fixed.items()}
+    for i, v in fixed_idx.items():
+        x0[i] = v
     free = [i for i in range(len(NAMES)) if i not in fixed_idx]
     es = cma.CMAEvolutionStrategy(x0[free], sigma0,
                                   {"bounds": [0, 1], "popsize": popsize, "seed": seed,
                                    "verbose": -9})
-    best = (-1, None)
-    n = n_raced = 0
+    # The supplied fit is a candidate too. Previously only random offspring
+    # were saved, so a short restart could silently replace it with a worse fit.
+    print(f"Scoring starting candidate on {len(seeds or [None])} world(s)...", flush=True)
+    initial = _worker((x0, asdict(base), mode, SPACE, seeds, None))
+    if "error" in initial or not np.isfinite(initial["score"]):
+        log.close()
+        raise RuntimeError(f"Starting candidate failed: {initial.get('error', initial['score'])}")
+    initial.update(eval=1, x=list(map(float, x0)), stage="initial")
+    log.write(json.dumps(initial) + "\n")
+    log.flush()
+    Params(**initial["params"]).to_json(out_dir / "best_params.json")
+    best = (initial["score"], initial)
+    n, n_raced = 1, 0
     t0 = time.time()
     base_dict = asdict(base)
-    with mp.get_context("fork").Pool(workers) as pool:
-        while n < evals and not es.stop():
+    # The initial evaluation has already initialized NumPy/Numba runtimes.
+    # Fresh processes avoid inheriting their native locks (notably on macOS).
+    with mp.get_context("spawn").Pool(workers) as pool:
+        # CMA-ES needs complete populations. Never exceed the requested budget.
+        while n + popsize <= evals and not es.stop():
             sols = es.ask()
             full = []
             for s in sols:
@@ -231,25 +264,35 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                     x[i] = v
                 full.append(x)
             cutoff = best[0] - race if (race and best[1] is not None) else None
-            res = pool.map(_worker, [(x, base_dict, mode, SPACE, seeds, cutoff) for x in full], chunksize=1)
-            n_raced += sum(bool(r.get("raced")) for r in res)
-            es.tell(sols, [-r["score"] for r in res])
-            for x, r in zip(full, res):
+            # Persist each finished candidate instead of going silent until
+            # the slowest candidate in the population finishes. CMA-ES still
+            # receives results in ask() order once the population is complete.
+            res = [None] * len(full)
+            jobs = [(i, (x, base_dict, mode, SPACE, seeds, cutoff)) for i, x in enumerate(full)]
+            for index, r in pool.imap_unordered(_indexed_worker, jobs, chunksize=1):
+                x = full[index]
+                res[index] = r
                 n += 1
                 r["eval"] = n
                 r["x"] = list(map(float, x))
                 log.write(json.dumps(r) + "\n")
-                if r["score"] > best[0]:
+                log.flush()
+                if not r.get("error") and not r.get("raced") and r["score"] > best[0]:
                     best = (r["score"], r)
                     Params(**r["params"]).to_json(out_dir / "best_params.json")
-            log.flush()
+                print(f"  [{n}/{evals} candidates, {time.time() - t0:.0f}s] "
+                      f"finished in {r['seconds']:.0f}s; score {r['score']:.3f}; best {best[0]:.3f}"
+                      + (f"; error: {r['error']}" if r.get("error") else ""), flush=True)
+            n_raced += sum(bool(r.get("raced")) for r in res)
+            es.tell(sols, [-r["score"] for r in res])
             pc = best[1]["per_class"]
-            f1 = best[1].get("f1", {}) if mode == "f1" else {}
+            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit") else {}
             print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
                   + " ".join(f"{k}={v:.2f}" + (f"/F{f1[k]:.2f}" if k in f1 else "") for k, v in pc.items()),
                   flush=True)
+    log.close()
     return best[1]
 
 
@@ -258,14 +301,17 @@ def main():
     ap.add_argument("--out", default="calibration/run")
     ap.add_argument("--evals", type=int, default=600)
     ap.add_argument("--start", default=None, help="params json to start from")
-    ap.add_argument("--downsample", type=int, default=16)
-    ap.add_argument("--steps", type=int, default=25)
+    ap.add_argument("--downsample", type=int)
+    ap.add_argument("--steps", type=int)
+    ap.add_argument("--picard", type=int)
+    ap.add_argument("--saved-numerics", action="store_true", help="preserve the starting numerical configuration")
+    ap.add_argument("--plan", action="store_true", help="show starting configuration without running a calibration")
     ap.add_argument("--sigma", type=float, default=0.25)
     ap.add_argument("--popsize", type=int, default=16)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r"])
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit"])
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
@@ -291,13 +337,19 @@ def main():
     if bounds:
         _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
     base = Params.from_json(a.start) if a.start else Params()
-    base = base.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=2)
+    base = apply_numerics(base, saved=a.saved_numerics,
+                          defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
+                          downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
     fixed = json.loads(a.fix)
+    if a.plan:
+        print(json.dumps(dict(params=asdict(base), objective=a.objective, seeds=seeds,
+                              evals=a.evals, fixed=fixed), indent=2))
+        return
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
                      workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race)
     print(json.dumps(best["per_class"], indent=1), best["score"])

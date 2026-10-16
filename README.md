@@ -1,11 +1,33 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Current handoff (16 October 2026):** Start with the
+[project handoff report](reports/HANDOFF_20261016.md).
+The latest V10 transport comparison stopped for diagnosis after 6/8 cases;
+the V9 retrograde atlas remains unchanged. The report includes verified results,
+frozen evidence, user-run-only simulation rules and next development priorities.
+The older development notes and render commands below are historical.
+
 A physically based seasonal climate model for a 2287 × 1058 mile hand-drawn
 map (pointy-top hexes with 15-mile sides). The model reads the map's layers (coast, height tiers, rivers, place
 names) and runs a year of weather in 73 five-day weeks on the local calendar.
 A calibrator then searches for what the map doesn't say — latitude, axial
 tilt, spin direction, how high the tiers are, and what lies beyond the edges —
 until the simulated climate reproduces the painted target zones.
+
+**Development update (13 October 2026):** Round 19's poor fine-grid atlas was
+mostly caused by loose linear-solver stopping. User-run checks with tighter
+solves give 43.65% / 43.78% coarse/fine accuracy on the same surrounding world.
+The fine-grid verification completes all solves successfully. The exact tested
+settings are saved in `calibration/round19_earthlike_strict.json`; this is the
+round-19 physical fit with verified numerics, not a new calibration. To regenerate:
+
+```sh
+.venv/bin/python -m rotclimate render --params calibration/round19_earthlike_strict.json --saved-numerics --out output --atlas
+```
+
+This uses the tested 25-step configuration. See
+[`reports/round19_diagnosis.md`](reports/round19_diagnosis.md) for the investigation.
+The historical round-18 results below have not been rewritten as round-19 results.
 
 ## Results
 
@@ -73,10 +95,10 @@ reversed spin. Both parameter sets are kept: `calibration/round18_earthlike.json
 
 ![Your painted zones, and the simulated climate in them with each spin](output/spin_comparison.png)
 
-**Open question: is up north?** The model assumes the top of your map points north. Two other
-orientations are already covered by symmetry (an east–west mirror behaves like the other spin, and
-a map turned upside down behaves like one in the southern hemisphere), but a map turned 90° either
-way would span about 33° of latitude top to bottom instead of 15°, and has not been tested.
+**Map orientation.** Physics v9 lets true north point in any direction. The improvement log
+records a screen at 30° intervals under both spins, with north-up fitting best. The detailed
+screen outputs were not included in this handoff, so that result cannot be audited here.
+Round 19 leaves orientation free while recalibrating under the corrected zone rules.
 
 ### Independent check: a full 3-D climate model (ExoPlaSim)
 
@@ -136,7 +158,7 @@ flat height tiers.
 | **overall** | **0.53** | | **0.45** (objective) | **42%** |
 
 These use the Köppen-consistent zone rules (after round 18; see below), with round 18's
-parameters, which were calibrated on the old rules: a recalibration is under way.
+parameters, which were calibrated on the old rules: round 19 is the pending recalibration.
 
 **Zone rules now follow Köppen.** Until round 18, *cold and dry* took any place with cold
 winters and rain below 1.3× Köppen's dryness threshold, so dry-summer continental **Dsa** (not a

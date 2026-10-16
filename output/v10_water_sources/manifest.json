@@ -1,0 +1,179 @@
+{
+  "schema": 1,
+  "code_sha256": "d6694aad24a92dbd8f3262ba5ebad0ec7f072fbf9e32cb5dcb7f59d98237c1e4",
+  "source_manifest_sha256": "eb09a34c11c65f3d80dfe1029235f5fca5a371cb138909e06b94f8edc712bffb",
+  "source_state_sha256": "c0113d84d5c98ceab35be0a50c4ef14f83e599d6d4a801b722b726031eb6bb58",
+  "inputs": {
+    "california": "e614dab041b7dd18f2254255334a78974de03985baf1dfaed2b1ece22faf7666",
+    "iberia": "89dc9a37aff771378e7bba7d8eac46c1776ae43c406a745d9a8b6959d9553b5d"
+  },
+  "settings": {
+    "uniform": {
+      "terrain": "shallow",
+      "observed_wind": true,
+      "observed_temperature": true,
+      "observed_humidity": true,
+      "humidity_scale": 1.0,
+      "relaxation_lower_days": 0.5,
+      "relaxation_upper_days": 20.0,
+      "storm_rate_month": 1.0,
+      "storm_convergence_ms": 0.5,
+      "storm_rotation_ms": 6.0,
+      "storm_radius_km": 500.0,
+      "terrain_drag_height_m": 3000.0
+    },
+    "spatial": {
+      "terrain": "shallow",
+      "observed_wind": true,
+      "observed_temperature": true,
+      "observed_humidity": true,
+      "humidity_scale": 1.0,
+      "relaxation_lower_days": 0.5,
+      "relaxation_upper_days": 20.0,
+      "storm_rate_month": 1.0,
+      "storm_convergence_ms": 0.5,
+      "storm_rotation_ms": 6.0,
+      "storm_radius_km": 500.0,
+      "terrain_drag_height_m": 3000.0
+    }
+  },
+  "jobs": [
+    {
+      "key": "california_uniform_s41",
+      "region": "california",
+      "wind": "uniform",
+      "seed": 41
+    },
+    {
+      "key": "california_spatial_s41",
+      "region": "california",
+      "wind": "spatial",
+      "seed": 41
+    },
+    {
+      "key": "iberia_uniform_s41",
+      "region": "iberia",
+      "wind": "uniform",
+      "seed": 41
+    },
+    {
+      "key": "iberia_spatial_s41",
+      "region": "iberia",
+      "wind": "spatial",
+      "seed": 41
+    },
+    {
+      "key": "california_uniform_s67",
+      "region": "california",
+      "wind": "uniform",
+      "seed": 67
+    },
+    {
+      "key": "california_spatial_s67",
+      "region": "california",
+      "wind": "spatial",
+      "seed": 67
+    },
+    {
+      "key": "iberia_uniform_s67",
+      "region": "iberia",
+      "wind": "uniform",
+      "seed": 67
+    },
+    {
+      "key": "iberia_spatial_s67",
+      "region": "iberia",
+      "wind": "spatial",
+      "seed": 67
+    },
+    {
+      "key": "california_uniform_s103",
+      "region": "california",
+      "wind": "uniform",
+      "seed": 103
+    },
+    {
+      "key": "california_spatial_s103",
+      "region": "california",
+      "wind": "spatial",
+      "seed": 103
+    },
+    {
+      "key": "iberia_uniform_s103",
+      "region": "iberia",
+      "wind": "uniform",
+      "seed": 103
+    },
+    {
+      "key": "iberia_spatial_s103",
+      "region": "iberia",
+      "wind": "spatial",
+      "seed": 103
+    },
+    {
+      "key": "california_uniform_s149",
+      "region": "california",
+      "wind": "uniform",
+      "seed": 149
+    },
+    {
+      "key": "california_spatial_s149",
+      "region": "california",
+      "wind": "spatial",
+      "seed": 149
+    },
+    {
+      "key": "iberia_uniform_s149",
+      "region": "iberia",
+      "wind": "uniform",
+      "seed": 149
+    },
+    {
+      "key": "iberia_spatial_s149",
+      "region": "iberia",
+      "wind": "spatial",
+      "seed": 149
+    },
+    {
+      "key": "california_uniform_s211",
+      "region": "california",
+      "wind": "uniform",
+      "seed": 211
+    },
+    {
+      "key": "california_spatial_s211",
+      "region": "california",
+      "wind": "spatial",
+      "seed": 211
+    },
+    {
+      "key": "iberia_uniform_s211",
+      "region": "iberia",
+      "wind": "uniform",
+      "seed": 211
+    },
+    {
+      "key": "iberia_spatial_s211",
+      "region": "iberia",
+      "wind": "spatial",
+      "seed": 211
+    }
+  ],
+  "sources": [
+    "initial",
+    "boundary",
+    "ocean_evaporation",
+    "land_recycling"
+  ],
+  "minimum_cycles": 3,
+  "maximum_cycles": 6,
+  "spacing_km": 60,
+  "budget_hours": 2.5,
+  "downloads": false,
+  "atlas_publication": false,
+  "intervention": "Passive last-vapor-source diagnostics only. Frozen dry-theta water/energy/rain/soil/flow untouched. Five fixed storm seeds, paired within region across uniform/spatial background winds; no best-seed selection.",
+  "source_policy": "Incoming atmospheric boundary water, local ocean evaporation, latest land evaporation, initial vapor. Rain tags proportional to vapor at each layer/cell. Soil ancestry is deliberately reset on land evaporation. Explicit bounded numerical reconciliation.",
+  "checks": "Per-step/per-cycle source budgets, sums to unchanged water/rain, physical and source settling. At the original completed year seed-41 climate arrays must reproduce the saved pressure controls.",
+  "reference_saved_minutes_four_cases": 16.669063356283974,
+  "limitations": "Synthetic seed spread, not observed weather uncertainty or independent years. Source fractions alone do not establish a causal fix or import-to-land precipitation efficiency. No real weather covariance measurement."
+}

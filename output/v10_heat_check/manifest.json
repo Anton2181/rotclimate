@@ -1,0 +1,72 @@
+{
+  "schema": 1,
+  "code_sha256": "5376ea055c2631ffe2a78c3554b1fd5554c4dfefac1b943373ede1bea2fe0ac2",
+  "baseline_manifest_sha256": "3f7e42e513ac32ea1aabdda1c621eb34a78f2b8376c88b5c9d7ac0d7646596c9",
+  "original_code_sha256": "80a35b428a0c8d19174b27a8f3d8ac61a5b6acf03b0d948d5c502e198686f71a",
+  "config": {
+    "lower_fraction": 0.25,
+    "cfl": 0.6,
+    "max_step_s": 3600.0,
+    "forcing_interval_s": 10800.0,
+    "lower_temperature_offset_c": -3.0,
+    "upper_temperature_offset_c": -35.0,
+    "lower_pressure_fraction": 0.875,
+    "upper_pressure_fraction": 0.375,
+    "ocean_boundary_rh": 0.8,
+    "land_boundary_rh": 0.4,
+    "upper_boundary_rh": 0.2,
+    "initial_lower_rh": 0.6,
+    "soil_capacity_mm": 150.0,
+    "initial_soil_fraction": 0.5,
+    "ocean_evap_max_mm_day": 5.0,
+    "land_pet_mm_day": 3.0,
+    "bulk_exchange_coefficient": 0.0012,
+    "gust_ms": 2.0,
+    "background_wind_ms": 6.0,
+    "storm_rate_month": 4.0,
+    "storm_seasonality": 0.75,
+    "storm_rotation_ms": 12.0,
+    "storm_convergence_ms": 1.0,
+    "storm_radius_km": 350.0,
+    "storm_lifetime_days": 2.0,
+    "storm_translation_ms": 7.0,
+    "winter_track_lat": 37.0,
+    "summer_track_lat": 47.0,
+    "terrain_drag_height_m": 1800.0,
+    "seed": 41,
+    "rotation_sign": 1
+  },
+  "closures": {
+    "heat": {
+      "relaxation_days": 5.0,
+      "terrain_drag": true
+    },
+    "heat_no_drag": {
+      "relaxation_days": 5.0,
+      "terrain_drag": false
+    }
+  },
+  "years": 3,
+  "runtime": {
+    "python": "3.10.11",
+    "numpy": "2.2.6"
+  },
+  "temperature_departure_p95_guards_c": {
+    "lower": 5.0,
+    "upper": 10.0
+  },
+  "original_checkpoints": {
+    "california_mean_only/year1.json": "5a4453374a369df960a9fdd0120a4d20522df237698ba18c5c2ef534e5ed4132",
+    "california_mean_only/year2.json": "576cf58d8f7bfaab13cfa028ddcc9704b2d4df25c5d63cd6e3de5efa8879cc68",
+    "california_mean_only/year3.json": "17550231dc6f9854d2b776868d961ca2ec55fed1376d18b0def0ef565b8ea00e",
+    "california_storms/year1.json": "979f5af669029e3a86ce9df1c55ce4e79b94648953c8b73ea77df2b2e9dc82d7",
+    "california_storms/year2.json": "5c6da2f7a9bf371d30be96d03eec4042ead65e33c955f575e03ca16788b2f333",
+    "california_storms/year3.json": "2f2b8e569ccb3e045b62201271a08d75a7665a08b39ae2121a388be685f0ad08",
+    "iberia_mean_only/year1.json": "68f29bf60f63b7c4de17745b3a9111495f7c139c0162d4383f3c942a039fad49",
+    "iberia_mean_only/year2.json": "319fdfc10afa0dab8152f5efcb12fb01e59af89b394c9367555da79306c01385",
+    "iberia_mean_only/year3.json": "cffaae529ac084f3f6fe85206a245f8d23ae4f4ab2107ab4e6b9efba8c1e7540",
+    "iberia_storms/year1.json": "31ab14d6c3f5a050f1f9ca8e0ff2c5d5233edf05761311ad15979a0d8c5649b8",
+    "iberia_storms/year2.json": "55f245b222391e86bfa035c6782a809f389a5ad5b7b5b1e4b025f0f8bd72b93e",
+    "iberia_storms/year3.json": "769e1aef8ee32d8cdbb58044c7c0206f0bd6d0e1efdea5cca64b327249bfb9ed"
+  }
+}

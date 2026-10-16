@@ -8,6 +8,7 @@ all the charts.)
 from __future__ import annotations
 
 import numpy as np
+from .numerics import matrix_product
 
 CODES = [
     "Af", "Am", "Aw",
@@ -71,8 +72,8 @@ def monthly_stats(T, P, days, year_days=365, summer_solstice=204.5):
     """T [nt,...] in C and P [nt,...] in mm/day -> dict of monthly fields."""
     Wm = monthly_weights(days, year_days)
     shp = T.shape[1:]
-    Tm = (Wm @ T.reshape(len(days), -1)).reshape((12,) + shp)
-    Pm = (Wm @ P.reshape(len(days), -1)).reshape((12,) + shp) * year_days / 12.0
+    Tm = matrix_product(Wm, T.reshape(len(days), -1)).reshape((12,) + shp)
+    Pm = matrix_product(Wm, P.reshape(len(days), -1)).reshape((12,) + shp) * year_days / 12.0
     summer = summer_months(year_days, 12, summer_solstice)
     return dict(Tm=Tm, Pm=Pm, summer=summer)
 

@@ -1,0 +1,420 @@
+{
+  "protocol": {
+    "schema": 1,
+    "code_sha256": "0989ca4dba0d193e69c660612d4712094b897c44f383d5f0b0bcd6306858949c",
+    "source_manifest_sha256": "484f22bd00ef221f4a0efa67930a00298998a87bc30460925085143c4e14d958",
+    "source_state_sha256": "ba29db9d05ce655f3f8448418e3922a61fd6e042f6e9112f8c2fec334a956841",
+    "baseline_case_names": {
+      "humidity_08": "anchor",
+      "humidity_10": "rare_storms"
+    },
+    "baseline_evidence": {
+      "california_humidity_08": {
+        "year1.json": "933c5da310de8f99cd6bea0bddd5ea6bcd6f7692dee44fabaa9ee7390191d8be",
+        "year1.npz": "3985130f426ce2e1c5de4a776a28fe0e88be4df24542611596cc8d27ed843bdd",
+        "year2.json": "749ef247c1c60e03f8303c1c255fb12dbb0b2a4c5175f063e0d535d687e993b7",
+        "year2.npz": "1546322a69648d501fa51270c5c6d4142b42a0a7f05fb31869ebcc0b8762e9a8",
+        "year3.json": "2443def70764d2d88905377969cfabdfa32e16ffd5471d6d6279164b84872221",
+        "year3.npz": "d30f200abbcc81846790fa38eb24b0239586748f2125c8b0087a7ce07e26ed22"
+      },
+      "california_humidity_10": {
+        "year1.json": "c2d665d63d07825499bbce50ea4222acde50310dbae98a149129e4d992704940",
+        "year1.npz": "acf2284896839a61c5f8c70cfab11ad852d6e68ae81b43ebb45c07a46c4b8d1a",
+        "year2.json": "4a5e922423f3199b447f30638d56450157d8e83d758ecdfba0b79cf9a962fa4a",
+        "year2.npz": "247a1704acc29d86a249421fdde7f2a618f0ff1b8e492dc1dc73a66babad57bf",
+        "year3.json": "f822d171539b3f4bd75d64704c5cbedc7e0ff41dca204e22a2a4ae3559bfd6bf",
+        "year3.npz": "df4090739096b616f8dd047664807747e2fbd1e8be84b03872c85a1539765bb2"
+      },
+      "iberia_humidity_08": {
+        "year1.json": "7191c05938747042e6780da41cd88c954c279b9cb6bc9b6d255d9b645de5cff2",
+        "year1.npz": "1ee9591d28aa2d890999c8602fe2e5ce0cefe7db6f63cc983b7e33b96d35d72f",
+        "year2.json": "13cbb1e9df2926eec738b8300c5b2a77bec6ceefd438cd6c5f5ebe3a2d20c2eb",
+        "year2.npz": "de46c690525a552783d634939c330478ffe1a30d3442a422a69c9624c8fab356",
+        "year3.json": "020b8f75f66c6c363e596cc40dc6b89efc555a984045da98df8d26bcf884162c",
+        "year3.npz": "87b1c6d69c7c223f5d041b1d356cf06f5ee2a6f0bc9372049a0856c4ee4c7088",
+        "year4.json": "2cf6ca05bae56132a98ffce7bc8ea99959e29e4b4b45b72258d7461d459de8ed",
+        "year4.npz": "e1c0e190174eeae694fe948dcb70507dc1b67f9a40859e187c9758c03155bc85"
+      },
+      "iberia_humidity_10": {
+        "year1.json": "7f7e47d7b10d40c72f84a35c062e264eb4b46c584a61700c0b7eb64d29452b62",
+        "year1.npz": "61bb40b93e48c8f9e1398b48307a1f164b5a0baa35ae07f47b22891951ce18d4",
+        "year2.json": "41202d06d66eb43db57be1f5325562030b4efebe179150036ed3c1a6a290e06e",
+        "year2.npz": "c5f030b88f782187281f12c1a0f7e188557c96c27044e3535b7f139a61fccdf5",
+        "year3.json": "c530474d8c2d11ff0727654773a377ccdab7cb8ddabfae61c122c6bc3624e552",
+        "year3.npz": "09b1130fcf319cc0ecd439f10b3d0c15b73bebec2c83039b1ff96dfc3c339fab",
+        "year4.json": "b2c7d1941b3e75dc5426040c1fcfcb6f506869f95b9bcab46ef04e2ad5ab9046",
+        "year4.npz": "109a63bd98bed71ee579caf970ad316cccba594b8255d82d4ff78d62f0da7a99"
+      }
+    },
+    "settings": {
+      "humidity_08": {
+        "terrain": "shallow",
+        "observed_wind": true,
+        "observed_temperature": true,
+        "observed_humidity": true,
+        "humidity_scale": 0.8,
+        "relaxation_lower_days": 0.5,
+        "relaxation_upper_days": 20.0,
+        "storm_rate_month": 1.0,
+        "storm_convergence_ms": 0.5,
+        "storm_rotation_ms": 6.0,
+        "storm_radius_km": 500.0,
+        "terrain_drag_height_m": 3000.0
+      },
+      "humidity_10": {
+        "terrain": "shallow",
+        "observed_wind": true,
+        "observed_temperature": true,
+        "observed_humidity": true,
+        "humidity_scale": 1.0,
+        "relaxation_lower_days": 0.5,
+        "relaxation_upper_days": 20.0,
+        "storm_rate_month": 1.0,
+        "storm_convergence_ms": 0.5,
+        "storm_rotation_ms": 6.0,
+        "storm_radius_km": 500.0,
+        "terrain_drag_height_m": 3000.0
+      }
+    },
+    "inputs": {
+      "california": "e614dab041b7dd18f2254255334a78974de03985baf1dfaed2b1ece22faf7666",
+      "iberia": "89dc9a37aff771378e7bba7d8eac46c1776ae43c406a745d9a8b6959d9553b5d"
+    },
+    "winds": {
+      "california": {
+        "uniform_target_departure_p95_m_s_by_layer": [
+          7.902662712846056,
+          9.165720463041048,
+          6.113007091057133,
+          6.391524572346176
+        ],
+        "spatial_target_departure_p95_m_s_by_layer": [
+          1.0414668979601505,
+          0.8059262748300051,
+          0.3528193427691927,
+          0.3071839325380722
+        ],
+        "spatial_speed_max_m_s_by_layer": [
+          6.314515281979399,
+          7.430740738415615,
+          10.107307639553875,
+          24.268921997947096
+        ],
+        "background_projection_adjustment_max_m_s": 0.5577209683753305,
+        "continuity_residual_max_kg_m2_s": 1.0685896612017132e-15,
+        "note": "Consistency against the imposed bilinear monthly wind target, not independent wind validation. Terrain drag, face interpolation and projection change that target."
+      },
+      "iberia": {
+        "uniform_target_departure_p95_m_s_by_layer": [
+          5.953312306912476,
+          5.704664477722998,
+          5.1532089122406,
+          10.538164834218891
+        ],
+        "spatial_target_departure_p95_m_s_by_layer": [
+          0.7179778181405451,
+          0.5450761416433497,
+          0.3547248573048217,
+          0.35388532843169324
+        ],
+        "spatial_speed_max_m_s_by_layer": [
+          5.88944527653943,
+          7.897362813236832,
+          9.580979642501665,
+          29.58396479070176
+        ],
+        "background_projection_adjustment_max_m_s": 0.7362574692753805,
+        "continuity_residual_max_kg_m2_s": 1.6618650899857812e-15,
+        "note": "Consistency against the imposed bilinear monthly wind target, not independent wind validation. Terrain drag, face interpolation and projection change that target."
+      }
+    },
+    "reference_downloads": {
+      "air.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.das",
+        "sha256": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c",
+        "bytes": 2996
+      },
+      "air_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.ascii?air[0:1:11][0:1:16][18:1:24][90:1:100]",
+        "sha256": "15161274c9ccd5795cc288c14684e743db43858c4e8473a0e0ce1fa3b0d79cee",
+        "bytes": 194269
+      },
+      "air_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.ascii?air[0:1:11][0:1:16][17:1:25][136:1:143]",
+        "sha256": "de1821f939d90f0ece2cb90db8af1f385da0d56d06493cc5c31742136e74314f",
+        "bytes": 187106
+      },
+      "air_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.ascii?air[0:1:11][0:1:16][17:1:25][0:1:5]",
+        "sha256": "95d97cb56489b4b96a0af1f2edae6e9c6c0d1c8fa23a042ef7e67379ae48ce90",
+        "bytes": 145551
+      },
+      "hgt.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.das",
+        "sha256": "07c873a5acda51f74fb4c2de86bb990b852ad2269e283555f859eb95c9b2df2c",
+        "bytes": 3056
+      },
+      "hgt_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][18:1:24][90:1:100]",
+        "sha256": "3a447b068c0712dd0c4d1a3c0207acd6ea64ef2e4277f5636fe3db3a77f48132",
+        "bytes": 183572
+      },
+      "hgt_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][17:1:25][136:1:143]",
+        "sha256": "a1df565e83ce205fb9ea71e0301000a82fcc0d5076b6e6a7ca860ccc8c4abb1f",
+        "bytes": 177018
+      },
+      "hgt_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][17:1:25][0:1:5]",
+        "sha256": "ca75d5dcda4da310f032b03d08e97d5f6ad6a9b88f4927508b1b9939dde5a779",
+        "bytes": 137879
+      },
+      "uwnd.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.das",
+        "sha256": "48994f62fc5204c73fec82563b5e0ad70c13834e5f1e49045d6565a75999b848",
+        "bytes": 2971
+      },
+      "uwnd_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][18:1:24][90:1:100]",
+        "sha256": "d2317655c19da1ac07498bfd517bdc6676d0f9f918395a296eacf87c34ee38f0",
+        "bytes": 187071
+      },
+      "uwnd_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][17:1:25][136:1:143]",
+        "sha256": "9246aeb5493df42a5dc5de74d9802198daeef41e5a835a81b3a9571cd538727e",
+        "bytes": 179628
+      },
+      "uwnd_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][17:1:25][0:1:5]",
+        "sha256": "814a866b54c7c976e78b46e6e7535ba8caa483f9598ea8234f9a8d0828663ba3",
+        "bytes": 139884
+      },
+      "vwnd.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.das",
+        "sha256": "0422025805f7f3234f9d30e21d196d9cec667e000ce77454e2951b581d1a812a",
+        "bytes": 2971
+      },
+      "vwnd_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][18:1:24][90:1:100]",
+        "sha256": "1301146e1b9803c0475085ef1ff600a23c6e4ae88839003ec7de49bd4d63c5f1",
+        "bytes": 198057
+      },
+      "vwnd_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][17:1:25][136:1:143]",
+        "sha256": "fee0ce368dba3aa881a4ac3d515dd7b96a2acd8fa6b40924104c7d07a69d1541",
+        "bytes": 193793
+      },
+      "vwnd_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][17:1:25][0:1:5]",
+        "sha256": "0f1941702c3b6c6f903308d59557810f23c5f7d15338eaae8b2065d604e2bf91",
+        "bytes": 150627
+      },
+      "shum.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.das",
+        "sha256": "1c0d05786050fb319b6189b3e49070a793f9d9113b03add3e78f6da70b28902d",
+        "bytes": 3036
+      },
+      "shum_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][18:1:24][90:1:100]",
+        "sha256": "fc562d4ee3a883b3a162f3a40f2e4b412604ce7e17c8f59efa6d94e3fe9810c4",
+        "bytes": 88200
+      },
+      "shum_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][17:1:25][136:1:143]",
+        "sha256": "b8821672979456cd34676aceaf61156b621d84bc3707e621b1c3543ca49877d8",
+        "bytes": 85115
+      },
+      "shum_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][17:1:25][0:1:5]",
+        "sha256": "4967151c8049f4cea3c4c22f89bd39606c4be3da879cde3bcb6d41df616eed55",
+        "bytes": 66498
+      },
+      "omega.das": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/omega.mon.1981-2010.ltm.nc.das",
+        "sha256": "b660a9adc28260ad8e55e92ef7d88be37ef9a860413682ec2b3aa1194ebcb29b",
+        "bytes": 2988
+      },
+      "omega_california_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/omega.mon.1981-2010.ltm.nc.ascii?omega[0:1:11][0:1:11][18:1:24][90:1:100]",
+        "sha256": "9de784b3ab0365d4aa14b6dfff14a778654bce334143beee7d50bba953fd8f18",
+        "bytes": 159068
+      },
+      "omega_iberia_0.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/omega.mon.1981-2010.ltm.nc.ascii?omega[0:1:11][0:1:11][17:1:25][136:1:143]",
+        "sha256": "f5039bd6ad443001a6dcf8b32f4dfbb81c6ee5658d9513ba267fa581c0d7bc83",
+        "bytes": 152676
+      },
+      "omega_iberia_1.ascii": {
+        "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/omega.mon.1981-2010.ltm.nc.ascii?omega[0:1:11][0:1:11][17:1:25][0:1:5]",
+        "sha256": "7d5ce01e6c01fdaea359a85a85a0c860385450aeeeb00ed14e5b4d1999785939",
+        "bytes": 117734
+      }
+    },
+    "change": "Only background winds: bilinear horizontal and log-pressure interpolation of cached local monthly NCEP wind at each representative layer pressure; same terrain drag, mass projection, thermodynamics and offshore boundary humidity.",
+    "weather": "Unchanged old rate-one catalogue, seed 41, same spatial domain and storm strength/radius. No observed storm heat/moisture covariance.",
+    "spacing_km": 60,
+    "seed": 41,
+    "minimum_cycles": 3,
+    "maximum_cycles": 6,
+    "hour_cap_per_invocation": 1.0,
+    "atlas_publication": false,
+    "runtime": {
+      "python": "3.10.11",
+      "numpy": "2.2.6",
+      "scipy": "1.15.3"
+    }
+  },
+  "checks": [
+    {
+      "case": "california_humidity_08",
+      "probe": "January",
+      "time_s": 1339200.0,
+      "dt_s": 300.0,
+      "water_error_mm": -5.386316392907986e-16,
+      "energy_error_j_m2": -4.711182555183768e-09,
+      "temperature_ledger_error_c": 1.7930362056217675e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05071349474962529,
+      "projected_column_divergence_max_kg_m2_s": 7.919012667834124e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.4723782092828506
+    },
+    {
+      "case": "california_humidity_08",
+      "probe": "July",
+      "time_s": 16977600.0,
+      "dt_s": 300.0,
+      "water_error_mm": -4.475586568020162e-16,
+      "energy_error_j_m2": 4.889443516731262e-09,
+      "temperature_ledger_error_c": 1.4307999229856705e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05971043936620893,
+      "projected_column_divergence_max_kg_m2_s": 6.123573870198129e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.5072262289541392
+    },
+    {
+      "case": "california_humidity_08",
+      "probe": "strongest storm center",
+      "time_s": 7570800.0,
+      "dt_s": 300.0,
+      "water_error_mm": -1.5005358067199381e-16,
+      "energy_error_j_m2": 5.042238626629114e-09,
+      "temperature_ledger_error_c": 1.9200396481067195e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.1434113780934113,
+      "projected_column_divergence_max_kg_m2_s": 1.4814538484841933e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.6391029651329293
+    },
+    {
+      "case": "iberia_humidity_08",
+      "probe": "January",
+      "time_s": 1339200.0,
+      "dt_s": 300.0,
+      "water_error_mm": -2.491496592371689e-16,
+      "energy_error_j_m2": 1.508851710241288e-09,
+      "temperature_ledger_error_c": 1.7047821487814474e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05346560786605247,
+      "projected_column_divergence_max_kg_m2_s": 1.4710455076283324e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.7121725932350581
+    },
+    {
+      "case": "iberia_humidity_08",
+      "probe": "July",
+      "time_s": 16977600.0,
+      "dt_s": 300.0,
+      "water_error_mm": -2.1163626406917047e-16,
+      "energy_error_j_m2": 4.0745362639427185e-09,
+      "temperature_ledger_error_c": 1.6911472222602697e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.057319766240797494,
+      "projected_column_divergence_max_kg_m2_s": 8.94249951866044e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.30693298035386163
+    },
+    {
+      "case": "iberia_humidity_08",
+      "probe": "strongest storm center",
+      "time_s": 7570800.0,
+      "dt_s": 300.0,
+      "water_error_mm": -3.0357660829594124e-16,
+      "energy_error_j_m2": -1.469743438065052e-09,
+      "temperature_ledger_error_c": 1.7421827869235074e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.11079139639823377,
+      "projected_column_divergence_max_kg_m2_s": 1.6423494508810421e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.6661759068051011
+    },
+    {
+      "case": "california_humidity_10",
+      "probe": "January",
+      "time_s": 1339200.0,
+      "dt_s": 300.0,
+      "water_error_mm": -1.8214596497756474e-16,
+      "energy_error_j_m2": -1.1896190699189901e-09,
+      "temperature_ledger_error_c": 1.6165367655585072e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05071349474962529,
+      "projected_column_divergence_max_kg_m2_s": 7.919012667834124e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.4723782092828506
+    },
+    {
+      "case": "california_humidity_10",
+      "probe": "July",
+      "time_s": 16977600.0,
+      "dt_s": 300.0,
+      "water_error_mm": -3.1051550219984847e-16,
+      "energy_error_j_m2": 7.159542292356491e-09,
+      "temperature_ledger_error_c": 1.6587772821985425e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05971043936620893,
+      "projected_column_divergence_max_kg_m2_s": 6.123573870198129e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.5072262289541392
+    },
+    {
+      "case": "california_humidity_10",
+      "probe": "strongest storm center",
+      "time_s": 7570800.0,
+      "dt_s": 300.0,
+      "water_error_mm": -1.6219664500383146e-16,
+      "energy_error_j_m2": 4.154571797698736e-09,
+      "temperature_ledger_error_c": 1.7486879999584204e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.1434113780934113,
+      "projected_column_divergence_max_kg_m2_s": 1.4814538484841933e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.6391029651329293
+    },
+    {
+      "case": "iberia_humidity_10",
+      "probe": "January",
+      "time_s": 1339200.0,
+      "dt_s": 300.0,
+      "water_error_mm": -9.763240563231967e-17,
+      "energy_error_j_m2": 2.3601387511007488e-09,
+      "temperature_ledger_error_c": 1.8592072326129028e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.05346560786605247,
+      "projected_column_divergence_max_kg_m2_s": 1.4710455076283324e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.7121725932350581
+    },
+    {
+      "case": "iberia_humidity_10",
+      "probe": "July",
+      "time_s": 16977600.0,
+      "dt_s": 300.0,
+      "water_error_mm": -4.753142324176451e-16,
+      "energy_error_j_m2": 6.05359673500061e-09,
+      "temperature_ledger_error_c": 1.791648426840986e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.057319766240797494,
+      "projected_column_divergence_max_kg_m2_s": 8.94249951866044e-16,
+      "barotropic_velocity_adjustment_max_m_s": 0.30693298035386163
+    },
+    {
+      "case": "iberia_humidity_10",
+      "probe": "strongest storm center",
+      "time_s": 7570800.0,
+      "dt_s": 300.0,
+      "water_error_mm": -2.0339632755828063e-16,
+      "energy_error_j_m2": -5.005858838558197e-09,
+      "temperature_ledger_error_c": 1.6303755220881122e-13,
+      "raw_column_divergence_max_kg_m2_s": 0.11079139639823377,
+      "projected_column_divergence_max_kg_m2_s": 1.6423494508810421e-15,
+      "barotropic_velocity_adjustment_max_m_s": 0.6661759068051011
+    }
+  ],
+  "seasonal_runs_started": 0,
+  "note": "Twelve independent actual-input single-step probes. No feedback between probes or regional seasonal integration.",
+  "historical_fingerprints": {
+    "storm_delivery": "07169e3946def820dacce806258d5c1220daf48440ff71fa035ec02322bb4ca2",
+    "production_v9": "6e084f1fb10d3f4d568423bd7a99b60dcea58fe876a32de898e9e06655c5eafb"
+  },
+  "focused_tests_passed": 65
+}

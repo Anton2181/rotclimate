@@ -1,0 +1,271 @@
+{
+  "protocol": {
+    "schema": 1,
+    "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+    "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+    "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+    "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+    "forcing_array_sha256": {
+      "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+      "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+    },
+    "inputs": {
+      "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+      "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+    },
+    "jobs": [
+      {
+        "key": "california_lift1_steady",
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady",
+        "source_year": 4,
+        "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+        "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+      },
+      {
+        "key": "california_lift16_aligned",
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned",
+        "source_year": 4,
+        "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+        "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+      },
+      {
+        "key": "iberia_lift1_steady",
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady",
+        "source_year": 4,
+        "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+        "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+      },
+      {
+        "key": "iberia_lift16_aligned",
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned",
+        "source_year": 4,
+        "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+        "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+      }
+    ],
+    "settings": {
+      "terrain": "shallow",
+      "observed_wind": true,
+      "observed_temperature": true,
+      "observed_humidity": true,
+      "humidity_scale": 1.0,
+      "relaxation_lower_days": 0.5,
+      "relaxation_upper_days": 20.0,
+      "storm_rate_month": 1.0,
+      "storm_convergence_ms": 0.5,
+      "storm_rotation_ms": 6.0,
+      "storm_radius_km": 500.0,
+      "terrain_drag_height_m": 3000.0
+    },
+    "seed": 41,
+    "budget_seconds": 2700.0,
+    "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+    "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+    "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+    "regions": [
+      "domain",
+      "scored_land",
+      "coast",
+      "interior"
+    ],
+    "stages": [
+      "after_transport",
+      "after_relaxation",
+      "before_condensation"
+    ],
+    "ascent_bin_edges_pa_s": [
+      null,
+      -0.1,
+      -0.03,
+      -0.01,
+      0.0,
+      0.01,
+      0.03,
+      0.1,
+      null
+    ],
+    "humidity_bin_edges": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      0.9,
+      0.99,
+      1.0,
+      1.05,
+      2.0,
+      null
+    ],
+    "atlas_publication": false,
+    "downloads": false
+  },
+  "checks": [
+    {
+      "case": "california_lift1_steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.7408297026122455e-13,
+        0.0,
+        2.7899147700188517e-18,
+        2.3689817468808272e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "case": "california_lift1_steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.971756091734278e-13,
+        0.0,
+        1.849919956803392e-17,
+        1.429791614965259e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "case": "california_lift1_steady",
+      "time_s": 7570800.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.794120407794253e-13,
+        0.0,
+        2.6461309272224343e-18,
+        2.336455681706262e-17,
+        0.0
+      ]
+    },
+    {
+      "case": "california_lift16_aligned",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.6919798895287386e-13,
+        0.0,
+        1.256954542078019e-17,
+        5.204170427930421e-17,
+        1.734723475976807e-18
+      ]
+    },
+    {
+      "case": "california_lift16_aligned",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.6209256159527285e-13,
+        0.0,
+        1.916327339868129e-17,
+        4.846383711010205e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "case": "california_lift16_aligned",
+      "time_s": 7570800.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.6342482922482304e-13,
+        0.0,
+        1.5224570193948794e-17,
+        2.087089182034596e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "case": "iberia_lift1_steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.6697754290362354e-13,
+        0.0,
+        1.7167240258476532e-18,
+        1.2319247184866544e-17,
+        0.0
+      ]
+    },
+    {
+      "case": "iberia_lift1_steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.8118839761882555e-13,
+        0.0,
+        4.9776738178346214e-17,
+        1.6046192152785466e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "case": "iberia_lift1_steady",
+      "time_s": 7570800.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.829647544582258e-13,
+        0.0,
+        1.2197274440461925e-19,
+        1.5720931501039814e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "case": "iberia_lift16_aligned",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.723066134218243e-13,
+        0.0,
+        3.116234212948571e-18,
+        3.0574501264091225e-17,
+        0.0
+      ]
+    },
+    {
+      "case": "iberia_lift16_aligned",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.865174681370263e-13,
+        0.0,
+        9.40714791220626e-17,
+        5.789639601072594e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "case": "iberia_lift16_aligned",
+      "time_s": 7570800.0,
+      "dt_s": 60.0,
+      "physical_arrays_unchanged": true,
+      "maximum_reconstruction_errors": [
+        1.8562928971732617e-13,
+        0.0,
+        3.98274891798972e-18,
+        2.0057740190981832e-17,
+        0.0
+      ]
+    }
+  ],
+  "real_annual_replays_started": 0,
+  "atlas_updated": false,
+  "note": "Twelve independent <=60-second probes; all physical arrays remain unchanged. Diagnostic states are not advanced into a real year."
+}

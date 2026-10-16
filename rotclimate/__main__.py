@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from .config import OUTPUT, Params
+from .config import OUTPUT, Params, apply_numerics
 
 CLIMOGRAPH_CITIES = [
     "Sam'al", "Harran", "Urrann", "Paraman", "Kadā", "Zakuruiði", "Iasos", "Nasios",
@@ -57,11 +57,16 @@ def cmd_render(a):
     from .score import evaluate
 
     p = Params.from_json(a.params) if a.params else Params()
-    p = p.replace(downsample=a.downsample, steps_per_year=a.steps, picard_iters=3)
+    p = render_params(p, a)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     r = simulate(p)
     ev = evaluate(r)
+    from .diagnostics import analyse_rules
+
+    audit = analyse_rules(r, ev, snapshot=out / "rule_fields.npz")
+    audit["numerics"] = numerical_settings(p)
+    (out / "rule_diagnostics.json").write_text(json.dumps(audit, indent=2, ensure_ascii=False) + "\n")
     fr = R.FullRes(r)
     t = time.time()
     k = fr.koppen()
@@ -100,6 +105,12 @@ def cmd_render(a):
     summary = dict(score=ev["total"], accuracy=ev["accuracy"], per_class=ev["per_class"],
                    precision=ev["precision"], f1=ev["f1"], f1_objective=objective(ev, "f1"),
                    koppen_share={})
+    summary["numerics"] = numerical_settings(p)
+    summary["label_policy_audit"] = ev["label_policy_audit"]
+    summary["recall"] = ev["recall"]
+    summary["realism"] = ev["realism"]
+    summary["f1r_objective"] = objective(ev, "f1r")
+    summary["zonefit_objective"] = objective(ev, "zonefit")
     from .koppen import CODES
 
     vals, counts = np.unique(k[fr.land], return_counts=True)
@@ -115,14 +126,35 @@ def cmd_render(a):
     print(json.dumps(summary["per_class"], indent=1), summary["score"])
 
 
+def numerical_settings(p):
+    return {k: getattr(p, k) for k in (
+        "downsample", "steps_per_year", "picard_iters", "t_iters", "t_relaxation", "transport_scheme",
+        "t_adaptive_retries", "t_require_convergence",
+        "moisture_relaxation", "moisture_residual_tol", "moisture_require_convergence",
+        "solver_rtol", "solver_max_iter", "solver_require_convergence")}
+
+
+def add_render_numerics(parser):
+    parser.add_argument("--saved-numerics", action="store_true",
+                        help="preserve the parameter file's grid, seasonal steps and moisture iterations")
+    parser.add_argument("--downsample", type=int, default=None)
+    parser.add_argument("--steps", type=int, default=None)
+    parser.add_argument("--picard", type=int, default=None)
+
+
+def render_params(p, a):
+    return apply_numerics(p, saved=a.saved_numerics,
+                          defaults=dict(downsample=4, steps_per_year=73, picard_iters=3),
+                          downsample=a.downsample, steps=a.steps, picard=a.picard)
+
+
 def main(argv=None):
     ap = argparse.ArgumentParser(prog="rotclimate")
     sub = ap.add_subparsers(dest="cmd", required=True)
     s = sub.add_parser("render", help="simulate and draw every map / gif / chart")
     s.add_argument("--params", default=None)
     s.add_argument("--out", default=str(OUTPUT))
-    s.add_argument("--downsample", type=int, default=4)
-    s.add_argument("--steps", type=int, default=73)
+    add_render_numerics(s)
     s.add_argument("--gif-stride", type=int, default=1)
     s.add_argument("--no-gif", action="store_true")
     s.add_argument("--atlas", action="store_true", help="also export the atlas data")

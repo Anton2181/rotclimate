@@ -26,7 +26,7 @@ from dataclasses import asdict  # noqa: E402
 import numpy as np  # noqa: E402
 
 from rotclimate import calibrate as C  # noqa: E402
-from rotclimate.config import Params  # noqa: E402
+from rotclimate.config import Params, apply_numerics  # noqa: E402
 
 STEP = 0.1
 SPACES = {"v6": "SPACE_V6", "v7": "SPACE_V7", "v8": "SPACE_V8", "v9": "SPACE_V9"}
@@ -49,10 +49,17 @@ def main():
     ap.add_argument("--step", type=float, default=STEP)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--out", default="")
+    ap.add_argument("--saved-numerics", action="store_true")
+    ap.add_argument("--downsample", type=int)
+    ap.add_argument("--steps", type=int)
+    ap.add_argument("--picard", type=int)
+    ap.add_argument("--plan", action="store_true", help="show experiment configuration without running simulations")
     a = ap.parse_args()
     space = getattr(C, SPACES[a.physics])
     C._set_space(space)
-    base = Params.from_json(a.params).replace(downsample=8, steps_per_year=25, picard_iters=2)
+    base = apply_numerics(Params.from_json(a.params), saved=a.saved_numerics,
+                          defaults=dict(downsample=8, steps_per_year=25, picard_iters=2),
+                          downsample=a.downsample, steps=a.steps, picard=a.picard)
     x0 = C.encode(base)
     seeds = [int(s) for s in a.seeds.split(",")]
     jobs = [("base", x0, None)]
@@ -65,7 +72,11 @@ def main():
             if abs(x[i] - x0[i]) > 1e-9:
                 jobs.append((f"{name}{'+' if sgn > 0 else '-'}", x, None))
     bd = asdict(base)
-    with mp.get_context("fork").Pool(a.workers) as pool:
+    if a.plan:
+        print(json.dumps(dict(params=bd, candidates=len(jobs), seeds=seeds,
+                              simulations=len(jobs)*len(seeds)), indent=2))
+        return
+    with mp.get_context("spawn").Pool(a.workers) as pool:
         res = dict(pool.map(_job, [(lab, x, bd, space, seeds, a.objective) for lab, x, _ in jobs], chunksize=1))
     b = res.pop("base")
     rows = []

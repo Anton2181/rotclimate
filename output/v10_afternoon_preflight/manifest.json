@@ -1,0 +1,1407 @@
+{
+  "protocol": {
+    "schema": 1,
+    "code_sha256": "9446abd0630b812322925a76e41e62ea891ca1bb0d9b690c9d0213342004f306",
+    "reference_protocol": {
+      "schema": 1,
+      "code_sha256": "c251f51d2cb99b8177b4f4eda6df1486749ae7a9b882dce0f71f4d1d2c22f761",
+      "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+      "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+      "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+      "forcing_array_sha256": {
+        "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+        "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+      },
+      "inputs": {
+        "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+        "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+      },
+      "jobs": [
+        {
+          "key": "california_lift1_steady",
+          "region": "california",
+          "amplitude": 1.0,
+          "timing": "steady",
+          "source_year": 4,
+          "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+          "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+        },
+        {
+          "key": "california_lift16_aligned",
+          "region": "california",
+          "amplitude": 16.0,
+          "timing": "aligned",
+          "source_year": 4,
+          "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+          "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+        },
+        {
+          "key": "iberia_lift1_steady",
+          "region": "iberia",
+          "amplitude": 1.0,
+          "timing": "steady",
+          "source_year": 4,
+          "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+          "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+        },
+        {
+          "key": "iberia_lift16_aligned",
+          "region": "iberia",
+          "amplitude": 16.0,
+          "timing": "aligned",
+          "source_year": 4,
+          "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+          "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+        }
+      ],
+      "settings": {
+        "terrain": "shallow",
+        "observed_wind": true,
+        "observed_temperature": true,
+        "observed_humidity": true,
+        "humidity_scale": 1.0,
+        "relaxation_lower_days": 0.5,
+        "relaxation_upper_days": 20.0,
+        "storm_rate_month": 1.0,
+        "storm_convergence_ms": 0.5,
+        "storm_rotation_ms": 6.0,
+        "storm_radius_km": 500.0,
+        "terrain_drag_height_m": 3000.0
+      },
+      "seed": 41,
+      "budget_seconds": 2700.0,
+      "policy": "One identical final-year replay per fixed case, initialized from its exact preceding-year state. No search or new warmup. All physical state/monthly fields, budgets and diagnostics must reproduce exactly; elapsed time excluded.",
+      "diagnostics": "Time-weighted joint recipient humidity/upward exchange; layer rain; gross regional water budgets; signed thermal changes; independent instantaneous latent-condensation opportunities before/after prescribed thermal relaxation.",
+      "opportunity_warning": "Stage opportunities follow the realized trajectory; they are not rainfall from a changed operator order or an alternative climate.",
+      "regions": [
+        "domain",
+        "scored_land",
+        "coast",
+        "interior"
+      ],
+      "stages": [
+        "after_transport",
+        "after_relaxation",
+        "before_condensation"
+      ],
+      "ascent_bin_edges_pa_s": [
+        null,
+        -0.1,
+        -0.03,
+        -0.01,
+        0.0,
+        0.01,
+        0.03,
+        0.1,
+        null
+      ],
+      "humidity_bin_edges": [
+        0.0,
+        0.25,
+        0.5,
+        0.75,
+        0.9,
+        0.99,
+        1.0,
+        1.05,
+        2.0,
+        null
+      ],
+      "atlas_publication": false,
+      "downloads": false
+    },
+    "jobs": [
+      {
+        "key": "reference_california_lift1_steady",
+        "phase": "reference",
+        "reference_job": {
+          "key": "california_lift1_steady",
+          "region": "california",
+          "amplitude": 1.0,
+          "timing": "steady",
+          "source_year": 4,
+          "source_start_npz_sha256": "b9ee750d9466112b4ed97880c26ff440d1fa56fe84520e9aec7d327289cd69ab",
+          "source_final_npz_sha256": "fb4278f782fc594d66fedd0bee15df0870d1eea0ae386e3864a9e75e38f21bb4"
+        }
+      },
+      {
+        "key": "reference_california_lift16_aligned",
+        "phase": "reference",
+        "reference_job": {
+          "key": "california_lift16_aligned",
+          "region": "california",
+          "amplitude": 16.0,
+          "timing": "aligned",
+          "source_year": 4,
+          "source_start_npz_sha256": "7f6521af1577b050b1a244f683be40bf9ca5cf288a31b95e3fec993cebde24d9",
+          "source_final_npz_sha256": "765bc987cc330feb5c4ca351cbb4334f4fecdcdf26327f76eb3aaac6d6c504c3"
+        }
+      },
+      {
+        "key": "reference_iberia_lift1_steady",
+        "phase": "reference",
+        "reference_job": {
+          "key": "iberia_lift1_steady",
+          "region": "iberia",
+          "amplitude": 1.0,
+          "timing": "steady",
+          "source_year": 4,
+          "source_start_npz_sha256": "f0ab43528a48936bbb4a22605bd44a6aeb50c6a10efe0aa9a33005c8e777ff0c",
+          "source_final_npz_sha256": "ffaf8bb70966025bc41fba2e59a0ed397e7ae8461de0a09e89d1e65355c07068"
+        }
+      },
+      {
+        "key": "reference_iberia_lift16_aligned",
+        "phase": "reference",
+        "reference_job": {
+          "key": "iberia_lift16_aligned",
+          "region": "iberia",
+          "amplitude": 16.0,
+          "timing": "aligned",
+          "source_year": 4,
+          "source_start_npz_sha256": "56a1d76ac0e0676326dfa49c429e37478f4c72260fdda40d54b162aa136aad37",
+          "source_final_npz_sha256": "c750fc607663aa3c3d32e30809928385bf2a5a4c540a86871b010c459b33c14f"
+        }
+      },
+      {
+        "key": "s67_california_lift1_steady",
+        "phase": "climate",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s67_california_lift16_steady",
+        "phase": "climate",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s67_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s67_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s67_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s67_california_lift1_steady",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s67_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s67_california_lift16_aligned",
+        "seed": 67,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s67_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s67_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s67_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s67_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s67_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s67_iberia_lift1_steady",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s67_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s67_iberia_lift16_aligned",
+        "seed": 67,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s103_california_lift1_steady",
+        "phase": "climate",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s103_california_lift16_steady",
+        "phase": "climate",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s103_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s103_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s103_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s103_california_lift1_steady",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s103_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s103_california_lift16_aligned",
+        "seed": 103,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s103_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s103_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s103_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s103_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s103_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s103_iberia_lift1_steady",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s103_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s103_iberia_lift16_aligned",
+        "seed": 103,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s149_california_lift1_steady",
+        "phase": "climate",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s149_california_lift16_steady",
+        "phase": "climate",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s149_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s149_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s149_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s149_california_lift1_steady",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s149_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s149_california_lift16_aligned",
+        "seed": 149,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s149_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s149_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s149_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s149_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s149_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s149_iberia_lift1_steady",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s149_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s149_iberia_lift16_aligned",
+        "seed": 149,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s211_california_lift1_steady",
+        "phase": "climate",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s211_california_lift16_steady",
+        "phase": "climate",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s211_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s211_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s211_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s211_california_lift1_steady",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s211_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s211_california_lift16_aligned",
+        "seed": 211,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s211_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s211_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s211_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s211_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s211_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s211_iberia_lift1_steady",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s211_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s211_iberia_lift16_aligned",
+        "seed": 211,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s307_california_lift1_steady",
+        "phase": "climate",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s307_california_lift16_steady",
+        "phase": "climate",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s307_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s307_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s307_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s307_california_lift1_steady",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s307_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s307_california_lift16_aligned",
+        "seed": 307,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s307_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s307_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s307_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s307_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s307_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s307_iberia_lift1_steady",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s307_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s307_iberia_lift16_aligned",
+        "seed": 307,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s401_california_lift1_steady",
+        "phase": "climate",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s401_california_lift16_steady",
+        "phase": "climate",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s401_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s401_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s401_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s401_california_lift1_steady",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s401_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s401_california_lift16_aligned",
+        "seed": 401,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s401_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s401_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s401_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s401_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s401_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s401_iberia_lift1_steady",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s401_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s401_iberia_lift16_aligned",
+        "seed": 401,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s503_california_lift1_steady",
+        "phase": "climate",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s503_california_lift16_steady",
+        "phase": "climate",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s503_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s503_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s503_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s503_california_lift1_steady",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s503_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s503_california_lift16_aligned",
+        "seed": 503,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s503_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s503_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s503_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s503_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s503_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s503_iberia_lift1_steady",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s503_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s503_iberia_lift16_aligned",
+        "seed": 503,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s607_california_lift1_steady",
+        "phase": "climate",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s607_california_lift16_steady",
+        "phase": "climate",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s607_california_lift16_aligned",
+        "phase": "climate",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s607_california_lift16_shifted",
+        "phase": "climate",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s607_california_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s607_california_lift1_steady",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s607_california_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s607_california_lift16_aligned",
+        "seed": 607,
+        "region": "california",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s607_iberia_lift1_steady",
+        "phase": "climate",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s607_iberia_lift16_steady",
+        "phase": "climate",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "steady"
+      },
+      {
+        "key": "s607_iberia_lift16_aligned",
+        "phase": "climate",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      },
+      {
+        "key": "s607_iberia_lift16_shifted",
+        "phase": "climate",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "shifted"
+      },
+      {
+        "key": "diagnostic_s607_iberia_lift1_steady",
+        "phase": "diagnostic",
+        "source_case": "s607_iberia_lift1_steady",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 1.0,
+        "timing": "steady"
+      },
+      {
+        "key": "diagnostic_s607_iberia_lift16_aligned",
+        "phase": "diagnostic",
+        "source_case": "s607_iberia_lift16_aligned",
+        "seed": 607,
+        "region": "iberia",
+        "amplitude": 16.0,
+        "timing": "aligned"
+      }
+    ],
+    "seeds": [
+      67,
+      103,
+      149,
+      211,
+      307,
+      401,
+      503,
+      607
+    ],
+    "conditions": [
+      [
+        1.0,
+        "steady"
+      ],
+      [
+        16.0,
+        "steady"
+      ],
+      [
+        16.0,
+        "aligned"
+      ],
+      [
+        16.0,
+        "shifted"
+      ]
+    ],
+    "minimum_cycles": 3,
+    "maximum_cycles": 6,
+    "settings": {
+      "terrain": "shallow",
+      "observed_wind": true,
+      "observed_temperature": true,
+      "observed_humidity": true,
+      "humidity_scale": 1.0,
+      "relaxation_lower_days": 0.5,
+      "relaxation_upper_days": 20.0,
+      "storm_rate_month": 1.0,
+      "storm_convergence_ms": 0.5,
+      "storm_rotation_ms": 6.0,
+      "storm_radius_km": 500.0,
+      "terrain_drag_height_m": 3000.0
+    },
+    "forcing_control": "Within each seed/region, preserve monthly mean dry circulation and match monthly gross boundary vapor input across all conditions. Across catalogues, forcing means/doses may differ.",
+    "selection": "Fixed paired catalogue sensitivity, no best-seed selection or parameter optimization. Retain all cases. Previously used catalogues are not untouched validation; none represents observational uncertainty.",
+    "diagnostics": "Replay four completed reference years first; then final-year diagnostics of original/steady and lift16/aligned in each new seed/region. Require exact physical reproduction.",
+    "atlas_publication": false,
+    "downloads": false
+  },
+  "checks": [
+    {
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8118839761882555e-13,
+        0.0,
+        2.961227183601034e-18,
+        6.933472893044801e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        2.3109292257572633e-13,
+        0.0,
+        5.1228552649940085e-17,
+        1.496198998029996e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        2.0991194893404952e-13,
+        0.0,
+        5.613456748043699e-17,
+        7.3075226425523e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.7852386235972517e-13,
+        0.0,
+        5.590417451878382e-18,
+        5.355958732078392e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        2.3109292257572633e-13,
+        0.0,
+        5.1228552649940085e-17,
+        1.496198998029996e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.6342482922482304e-13,
+        0.0,
+        4.6132802439258214e-17,
+        2.992397996059992e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8829382497642655e-13,
+        0.0,
+        6.315477654728063e-18,
+        5.355958732078392e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        2.3109292257572633e-13,
+        0.0,
+        5.1228552649940085e-17,
+        1.496198998029996e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.6342482922482304e-13,
+        0.0,
+        4.4967285103836296e-17,
+        2.992397996059992e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.7852386235972517e-13,
+        0.0,
+        7.196391919872536e-18,
+        5.355958732078392e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        2.3109292257572633e-13,
+        0.0,
+        5.1228552649940085e-17,
+        1.496198998029996e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.6342482922482304e-13,
+        0.0,
+        4.662069341687669e-17,
+        2.992397996059992e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8696155734687636e-13,
+        0.0,
+        4.187730891225261e-18,
+        4.445228907190568e-17,
+        8.673617379884035e-19
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.9406698470447736e-13,
+        0.0,
+        2.293087594806842e-17,
+        4.90059381963448e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8429702208777599e-13,
+        0.0,
+        4.0766001685454967e-17,
+        6.5052130349130266e-18,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.794120407794253e-13,
+        0.0,
+        8.95822045016148e-18,
+        1.5720931501039814e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.9406698470447736e-13,
+        0.0,
+        2.293087594806842e-17,
+        4.90059381963448e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8562928971732617e-13,
+        0.0,
+        3.247185506594086e-17,
+        2.927345865710862e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.794120407794253e-13,
+        0.0,
+        9.961107459710572e-18,
+        1.5720931501039814e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.9406698470447736e-13,
+        0.0,
+        2.293087594806842e-17,
+        4.90059381963448e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8562928971732617e-13,
+        0.0,
+        3.333921680392926e-17,
+        2.927345865710862e-17,
+        4.336808689942018e-19
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 0.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.794120407794253e-13,
+        0.0,
+        8.768485069976517e-18,
+        1.5720931501039814e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 16848000.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.9406698470447736e-13,
+        0.0,
+        2.293087594806842e-17,
+        4.90059381963448e-17,
+        0.0
+      ]
+    },
+    {
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "time_s": 21837600.0,
+      "dt_s": 60.0,
+      "seed41_flow_boundary_identical": true,
+      "seed67_physical_diagnostics_unchanged": true,
+      "reconstruction_errors": [
+        1.8562928971732617e-13,
+        0.0,
+        3.247185506594086e-17,
+        2.927345865710862e-17,
+        4.336808689942018e-19
+      ]
+    }
+  ],
+  "seed41_california_calendar_identical": true,
+  "new_annual_integrations_started": 0,
+  "new_seed67_calendars_verified": true,
+  "atlas_updated": false
+}

@@ -1,0 +1,397 @@
+{
+  "status": "ok",
+  "name": "incumbent_warm2",
+  "input_id": "70a234bd9b2c65bfb356c7f022a48be1e24333bdd5b746ecd679d6088df5b257",
+  "row": {
+    "params": {
+      "lat_center": 34.37787622900666,
+      "north_bearing": 0.0,
+      "tilt": 20.822431192737028,
+      "retrograde": true,
+      "eccentricity": 0.0167,
+      "perihelion_after_solstice": 13.0,
+      "year_days": 365,
+      "winter_solstice_day": 22.0,
+      "map_width_mi": 2286.8,
+      "map_height_mi": 1058.2,
+      "tier_tops": [
+        50,
+        250,
+        2601,
+        4801
+      ],
+      "lapse_rate": 6.0,
+      "beyond_style": "procedural",
+      "beyond_north_land": 0.3716820279865992,
+      "beyond_south_land": 1.0,
+      "beyond_west_land": 0.677135020671171,
+      "beyond_east_land": 0.21429484620715775,
+      "beyond_southeast_land": 0.9437784454690604,
+      "beyond_northeast_land": 0.7952992454170693,
+      "beyond_continuity_km": 252.8541955868924,
+      "beyond_relief_m": 210.54262176544842,
+      "beyond_seed": 1,
+      "beyond_north": "extend",
+      "beyond_south": "extend",
+      "beyond_west": "ocean",
+      "beyond_east": "ocean",
+      "beyond_north_gap_km": 727.9185365176538,
+      "beyond_south_gap_km": 352.5505015768525,
+      "beyond_west_gap_km": 18.61759185731694,
+      "beyond_east_gap_km": 247.0982050069382,
+      "pad_km": 1100.0,
+      "land_tau_days": 0.6542204877776198,
+      "ocean_tau_days": 2.106169348407523,
+      "heat_diffusion": 40000.0,
+      "current_strength": 1.0761329475458323,
+      "sst_offset": -2.0,
+      "land_offset": 1.8884775819258697,
+      "inland_sea_warming": 5.675078781265243,
+      "lake_coupling": 0.4290952635134435,
+      "land_amplitude": 1.2856355706325364,
+      "storm_asym": 0.26000100994320086,
+      "storm_reach": 3.687934644297477,
+      "instability": 0.6436988179530776,
+      "soil_memory_days": 50.8,
+      "t_iters": 192,
+      "t_relaxation": 0.25,
+      "t_adaptive_retries": 2,
+      "t_require_convergence": true,
+      "hadley_edge": 24.385783236107695,
+      "hadley_shift": 3.434350171103188,
+      "itcz_mean": 9.449618597039997,
+      "itcz_shift": 11.021142711398412,
+      "trade_speed": 4.192608127214596,
+      "westerly_speed": 2.0727877888868016,
+      "polar_speed": 3.0,
+      "monsoon_strength": 3.6645813257919144,
+      "monsoon_scale_km": 251.06056254186578,
+      "cross_isobar_deg": 35.31388649646419,
+      "terrain_drag": 1.1121167263808354,
+      "ocean_rh": 0.8727182381865104,
+      "evap_tau_days": 1.3192915483594996,
+      "land_recycling": 0.35254706656530016,
+      "precip_tau_days": 5.259609580964455,
+      "rh_threshold": 0.2562593471433992,
+      "storm_track": 7.489809749587348,
+      "storm_width": 5.77931826847879,
+      "convective": 0.0,
+      "orographic": 4.5684677677833685,
+      "subsidence": 0.5629754641774721,
+      "subsidence_asym": 0.8398878191426751,
+      "subsidence_summer": 0.0012072633734462022,
+      "wet_cooling": 0.5660653309564666,
+      "moisture_diffusion": 60000.0,
+      "eddy_rate": 0.9983285564265898,
+      "eddy_seasonality": 0.7,
+      "eddy_scale_km": 422.7057473559143,
+      "downsample": 8,
+      "steps_per_year": 25,
+      "picard_iters": 256,
+      "moisture_relaxation": 0.25,
+      "moisture_residual_tol": 0.01,
+      "moisture_require_convergence": true,
+      "transport_scheme": "upwind",
+      "solver_rtol": 1e-07,
+      "solver_max_iter": 2000,
+      "solver_require_convergence": true
+    },
+    "accuracy": 0.4936102236421725,
+    "zone_recall": {
+      "cold_wet": 0.7865429234338747,
+      "cold_dry": 0.6759352881698686,
+      "warm_wet": 0.5424146427314326,
+      "med": 0.35370741482965934,
+      "swamp": 0.11694510739856802,
+      "tree": 0.5201698513800425,
+      "hot_dry": 0.6068627450980392
+    },
+    "mediterranean": {
+      "dry_share": 0.11022044088176353,
+      "cs_share": 0.38443553774215095
+    },
+    "convergence": {
+      "linear_unconverged_solves": 0,
+      "temperature_unconverged_steps": 0,
+      "max_temperature_update_c": 0.04997658655517334,
+      "moisture_convergence_checked": true,
+      "moisture_unconverged_steps": 0,
+      "usable_for_comparison": true
+    },
+    "moisture_transport": {
+      "note": "Local nonconservative discrete moisture-equation terms. Positive transport terms supply water; residual = evaporation + transport sources - rain. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.",
+      "zones": {
+        "cold_wet": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 373.48446388906996,
+              "evaporation": 115.99002985972002,
+              "advection": -77.34075959752423,
+              "diffusion": 172.70860418258232,
+              "storm_exchange": 162.11965094443735,
+              "residual": -0.006938416897992026
+            },
+            "mean_absolute_equation_residual_mm_day": 0.00025902505957643625,
+            "absolute_residual_over_rain": 0.0001265703876419879
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 853.598183968299,
+              "evaporation": 228.71946176527342,
+              "advection": 602.0733937040546,
+              "diffusion": 34.939687313509964,
+              "storm_exchange": -12.12270029614569,
+              "residual": 0.011658860172294868
+            },
+            "mean_absolute_equation_residual_mm_day": 9.175804100332287e-05,
+            "absolute_residual_over_rain": 1.9617945302152062e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 1227.0826478573688,
+              "evaporation": 344.70949162499346,
+              "advection": 524.7326341065304,
+              "diffusion": 207.64829149609233,
+              "storm_exchange": 149.99695064829166,
+              "residual": 0.004720443274302841
+            },
+            "mean_absolute_equation_residual_mm_day": 0.00017539155028987953,
+            "absolute_residual_over_rain": 5.217082644562603e-05
+          }
+        },
+        "cold_dry": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 186.39048568325455,
+              "evaporation": 45.98521361973496,
+              "advection": -67.44249685027121,
+              "diffusion": 29.928547682190235,
+              "storm_exchange": 177.90946974970603,
+              "residual": -0.009751461143060029
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0007030715616548372,
+            "absolute_residual_over_rain": 0.0006883965108608292
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 207.37383874659608,
+              "evaporation": 60.39737738868674,
+              "advection": -72.30250160089892,
+              "diffusion": 64.5577973992891,
+              "storm_exchange": 154.75406871478813,
+              "residual": 0.03290307711983011
+            },
+            "mean_absolute_equation_residual_mm_day": 0.00021538195048164448,
+            "absolute_residual_over_rain": 0.00018954756395734283
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 393.7643244298506,
+              "evaporation": 106.38259100842168,
+              "advection": -139.74499845117012,
+              "diffusion": 94.48634508147931,
+              "storm_exchange": 332.6635384644942,
+              "residual": 0.023151615976770075
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0004592267560682408,
+            "absolute_residual_over_rain": 0.0004256804275186924
+          }
+        },
+        "warm_wet": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 738.3744080159483,
+              "evaporation": 211.08933513091745,
+              "advection": -90.21347714848385,
+              "diffusion": 127.44786948354175,
+              "storm_exchange": 490.03902457041255,
+              "residual": -0.011655870655765265
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0005638518381413801,
+            "absolute_residual_over_rain": 0.0001393642024204328
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 1188.1695453569168,
+              "evaporation": 347.6031030009951,
+              "advection": 752.1805081751322,
+              "diffusion": 38.31800019362647,
+              "storm_exchange": 50.0775672775318,
+              "residual": 0.009633393230936763
+            },
+            "mean_absolute_equation_residual_mm_day": 8.498230664317389e-05,
+            "absolute_residual_over_rain": 1.305307901804567e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 1926.5439533728647,
+              "evaporation": 558.6924381319126,
+              "advection": 661.9670310266483,
+              "diffusion": 165.7658696771682,
+              "storm_exchange": 540.1165918479445,
+              "residual": -0.002022477424828505
+            },
+            "mean_absolute_equation_residual_mm_day": 0.000324417072392277,
+            "absolute_residual_over_rain": 6.146355042451684e-05
+          }
+        },
+        "med": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 456.6133062599397,
+              "evaporation": 108.79959741892229,
+              "advection": -70.9224496893959,
+              "diffusion": 47.270144238609454,
+              "storm_exchange": 371.4497939294065,
+              "residual": -0.0162203965881909
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0010188526067841082,
+            "absolute_residual_over_rain": 0.0004072167810025404
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 349.7605502257486,
+              "evaporation": 116.46095799246466,
+              "advection": -22.387316721626966,
+              "diffusion": 97.54752141915756,
+              "storm_exchange": 158.1604096442496,
+              "residual": 0.021022129299436077
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0001747527864099868,
+            "absolute_residual_over_rain": 9.11834782374343e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 806.3738564856883,
+              "evaporation": 225.26055541138697,
+              "advection": -93.30976641102285,
+              "diffusion": 144.817665657767,
+              "storm_exchange": 529.6102035736561,
+              "residual": 0.004801732711245175
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0005968026965970474,
+            "absolute_residual_over_rain": 0.0002701389467253747
+          }
+        },
+        "swamp": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 595.2055562288367,
+              "evaporation": 245.58623462999546,
+              "advection": -160.5950020789211,
+              "diffusion": 78.96545384115898,
+              "storm_exchange": 431.24075594640425,
+              "residual": -0.008113995821061292
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0009279491665629895,
+            "absolute_residual_over_rain": 0.0002845247681670429
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 1333.4598003610633,
+              "evaporation": 364.07726305673833,
+              "advection": 1065.9031250973637,
+              "diffusion": -72.23874974035762,
+              "storm_exchange": -24.27035664128905,
+              "residual": 0.011481884212529108
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0001262373078098652,
+            "absolute_residual_over_rain": 1.7277092769547514e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 1928.6653565898996,
+              "evaporation": 609.6634976867338,
+              "advection": 905.3081230184425,
+              "diffusion": 6.726704100801372,
+              "storm_exchange": 406.97039930511517,
+              "residual": 0.0033678883914678155
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0005270932371864274,
+            "absolute_residual_over_rain": 9.975241734689098e-05
+          }
+        },
+        "tree": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 580.9374484008432,
+              "evaporation": 153.84815982939918,
+              "advection": 6.467948903558361,
+              "diffusion": 232.39648971209579,
+              "storm_exchange": 188.19581815937977,
+              "residual": -0.029031932265317445
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0008109074924439798,
+            "absolute_residual_over_rain": 0.0002547444957773039
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 484.0915650406701,
+              "evaporation": 168.25257717544596,
+              "advection": 147.20766685484165,
+              "diffusion": 154.41669114436522,
+              "storm_exchange": 14.212869720773856,
+              "residual": -0.001760274299450351
+            },
+            "mean_absolute_equation_residual_mm_day": 7.464373368050456e-05,
+            "absolute_residual_over_rain": 2.8140299026998358e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 1065.0290134415134,
+              "evaporation": 322.10073700484514,
+              "advection": 153.6756157584,
+              "diffusion": 386.8131808564611,
+              "storm_exchange": 202.40868788015354,
+              "residual": -0.03079220656476779
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0004427756130622422,
+            "absolute_residual_over_rain": 0.0001517452545686855
+          }
+        },
+        "hot_dry": {
+          "winter": {
+            "mean_total_mm_per_cell": {
+              "rain": 382.7959032037907,
+              "evaporation": 116.71100830501732,
+              "advection": -36.23635896422711,
+              "diffusion": 174.311389131556,
+              "storm_exchange": 127.99977682300378,
+              "residual": -0.010087690739190965
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0007086953391717042,
+            "absolute_residual_over_rain": 0.0003378743040778584
+          },
+          "summer": {
+            "mean_total_mm_per_cell": {
+              "rain": 291.3145564906012,
+              "evaporation": 100.73118372617837,
+              "advection": 6.021002037674793,
+              "diffusion": 169.8778309338883,
+              "storm_exchange": 14.694838623847005,
+              "residual": 0.010298948489345825
+            },
+            "mean_absolute_equation_residual_mm_day": 9.358685228539662e-05,
+            "absolute_residual_over_rain": 5.862940989917862e-05
+          },
+          "annual": {
+            "mean_total_mm_per_cell": {
+              "rain": 674.110459694392,
+              "evaporation": 217.44219203119567,
+              "advection": -30.215356926552325,
+              "diffusion": 344.1892200654443,
+              "storm_exchange": 142.6946154468508,
+              "residual": 0.00021125775015485947
+            },
+            "mean_absolute_equation_residual_mm_day": 0.0004011410957285505,
+            "absolute_residual_over_rain": 0.00021719956697793837
+          }
+        }
+      }
+    }
+  },
+  "seconds": 2252.4829801669985,
+  "fields": "/Users/antonidomanowski/Downloads/rotclimate-claude-friendly-turing-43ygeu/output/overnight_mediterranean/cases/incumbent_warm2_fields.npz",
+  "result": "/Users/antonidomanowski/Downloads/rotclimate-claude-friendly-turing-43ygeu/output/overnight_mediterranean/cases/incumbent_warm2_result.npz",
+  "transport": "/Users/antonidomanowski/Downloads/rotclimate-claude-friendly-turing-43ygeu/output/overnight_mediterranean/cases/incumbent_warm2_transport.npz"
+}

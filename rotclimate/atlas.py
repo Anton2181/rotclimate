@@ -143,6 +143,7 @@ def _beyond_facts(p) -> dict:
 
 def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     from .render import shaded_rgb
+    from .__main__ import numerical_settings
 
     outdir.mkdir(parents=True, exist_ok=True)
     p = result.params
@@ -231,6 +232,8 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         zones=[dict(key=key, label=TARGET_LABELS[cid], color=TARGET_DRAW_COLORS[cid],
                     score=ev["per_class"][key]) for cid, key, _, _ in TARGET_CLASSES],
         score=ev["total"], accuracy=ev["accuracy"],
+        numerics=numerical_settings(p),
+        label_policy_audit=ev["label_policy_audit"],
         layers=_layer_meta(),
         zones_extra=[dict(label=lab, color=col) for _, lab, col in ZONE_EXTRAS],
         rivers_sim=river_segments(result),
@@ -310,18 +313,9 @@ def zone_classes(mem, land, threshold=0.3, ix=None, elev=None, koppen=None):
     With climate indices and elevation, high cold ground becomes "Mountain"
     (8) and places that fit none of the painted zones become "Grassland" (9, the
     semi-dry margins) or "Transitional" (10); otherwise they are 0."""
-    from .score import best_zone
+    from .score import display_zones
 
-    # "tree" (warm + humid) is the broadest rule: it only wins where no more
-    # specific zone fits nearly as well; the swamp wins wherever it is met
-    z = best_zone(mem, threshold=threshold, weights={"tree": 0.75}, koppen=koppen).astype(np.int8)
-    if ix is not None and elev is not None:
-        z[(elev > 2200.0) | (ix["Thot"] < 15.0)] = 8
-        left = z == 0
-        z[left & (ix["aridity"] < 1.8)] = 9
-        z[left & (ix["aridity"] >= 1.8)] = 10
-    z[~land] = -1
-    return z
+    return display_zones(mem, land, threshold, ix, elev, koppen)
 
 
 def zones_layer(fr, outdir: Path = ATLAS / "data"):
@@ -419,17 +413,15 @@ def copy_media(outdir: Path = ATLAS / "data", src: Path = REPO / "output"):
 
 
 def main():
-    from .__main__ import simulate
+    from .__main__ import simulate, add_render_numerics, render_params
     from .render import FullRes, fullres_memberships  # noqa: F401
     from .score import evaluate
 
     ap = argparse.ArgumentParser()
     ap.add_argument("--params", default=str(REPO / "calibration" / "best_params.json"))
-    ap.add_argument("--downsample", type=int, default=4)
-    ap.add_argument("--steps", type=int, default=73)
+    add_render_numerics(ap)
     a = ap.parse_args()
-    p = Params.from_json(a.params).replace(downsample=a.downsample, steps_per_year=a.steps,
-                                           picard_iters=3)
+    p = render_params(Params.from_json(a.params), a)
     r = simulate(p)
     ev = evaluate(r)
     fr = FullRes(r)

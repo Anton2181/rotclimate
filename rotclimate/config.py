@@ -16,6 +16,20 @@ SOURCE = DATA / "source"
 OUTPUT = REPO / "output"
 
 
+def apply_numerics(params, *, saved=False, defaults=None, downsample=None, steps=None, picard=None):
+    """Preserve verified moisture settings unless numerics are explicitly overridden.
+
+    Old profiles retain each CLI's historical defaults. Positive moisture
+    tolerance opts into the saved profile automatically, so a strict solve
+    cannot silently be shortened back to two iterations.
+    """
+    values = {} if saved or params.moisture_residual_tol > 0 else dict(defaults or {})
+    values.update({key: value for key, value in
+                   [('downsample', downsample), ('steps_per_year', steps), ('picard_iters', picard)]
+                   if value is not None})
+    return params.replace(**values)
+
+
 @dataclass
 class Params:
     # ---------------------------------------------------------------- planet
@@ -86,6 +100,9 @@ class Params:
     # each step (stops once nothing moves by 0.05 C; 1 = legacy one-step lag)
     soil_memory_days: float = 0.0
     t_iters: int = 1
+    t_relaxation: float = 1.0        # fraction of temperature fixed-point update; 1 preserves legacy runs
+    t_adaptive_retries: int = 0      # optional bounded retries with smaller damping
+    t_require_convergence: bool = False
 
     # ---------------------------------------------------------------- winds
     hadley_edge: float = 30.0         # annual-mean subtropical high latitude
@@ -116,12 +133,20 @@ class Params:
     wet_cooling: float = 0.0          # v8: share of the summer warmth that wet ground evaporates away
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
+    eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)
     eddy_scale_km: float = 450.0
 
     # ---------------------------------------------------------------- numerics
     downsample: int = 8               # source pixels per model cell
     steps_per_year: int = 73          # 73 x 5-day weeks
     picard_iters: int = 3
+    moisture_relaxation: float = 0.5  # retains legacy half-updates
+    moisture_residual_tol: float = 0.0  # 0 retains fixed Picard count; >0 checks local equation
+    moisture_require_convergence: bool = False
+    transport_scheme: str = "upwind"  # optional 'exponential' fitted advection-diffusion
+    solver_rtol: float = 1e-3        # linear sweep update / maximum boundary magnitude
+    solver_max_iter: int = 400
+    solver_require_convergence: bool = False  # strict profiles reject capped solves
 
     def to_json(self, path: Path | str) -> None:
         Path(path).write_text(json.dumps(asdict(self), indent=2))

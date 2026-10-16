@@ -1,0 +1,84 @@
+{
+  "schema": 1,
+  "code_sha256": "e307b56edc61e03b0313d2a9e93c924d4d9b3573e389191fc8239f00b99dd748",
+  "parent_code_sha256": "6eb5a1698f3be8d1529b528c11a57a002f5e46c7a97eae57eb8e5212c655e732",
+  "parent_manifest_sha256": "0b0a8e86b82d400b2e41d2cdfc505815121731359e126aefd41ac9d287696f46",
+  "parent_state_sha256": "a3b30f98ea786be9c1dfb1f01700eb6dd824dca022df63dd91099fb63cb69916",
+  "jobs": [
+    {
+      "key": "california_bulk",
+      "region": "california",
+      "mode": "bulk",
+      "seed": 67,
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "source_case": "s67_california_lift16_aligned",
+      "source_year": 4,
+      "start_npz_sha256": "7fd923c2b66bfa0033d4a8e2287eb6849667bd51bb070091456fc9c4ad873624",
+      "final_npz_sha256": "e25256ad268a5f0ddac5d0d7b2299c239f75cdbb562dae206f452d39ad6c2283"
+    },
+    {
+      "key": "california_parcel_lower",
+      "region": "california",
+      "mode": "parcel_lower",
+      "seed": 67,
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "source_case": "repeat_s67_california_lift16_aligned_parcel_lower_dt1",
+      "source_year": 4,
+      "start_npz_sha256": "8a6bffaacc22b9ff83b7cb6d0a55240b44c3094dac622b24dd1c8a9e18002578",
+      "final_npz_sha256": "4ab4b50a815879f1493986c962088228bb4548ea8a80320014cd6c24a1378ce7"
+    },
+    {
+      "key": "iberia_bulk",
+      "region": "iberia",
+      "mode": "bulk",
+      "seed": 67,
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "source_case": "s67_iberia_lift16_aligned",
+      "source_year": 4,
+      "start_npz_sha256": "bc18bf0a65e52b4ab9d7b9e22e21fb0f95c441b65bdf4eba9ee5f3276ce9353e",
+      "final_npz_sha256": "a37f0ba02e9d5dbf885657a73f1b7178c4bc30c861bf3f936b1ac62800a6d274"
+    },
+    {
+      "key": "iberia_parcel_lower",
+      "region": "iberia",
+      "mode": "parcel_lower",
+      "seed": 67,
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "source_case": "repeat_s67_iberia_lift16_aligned_parcel_lower_dt1",
+      "source_year": 4,
+      "start_npz_sha256": "23c2fbb8470eefaf430b0ff22cc2b37c180293beed6b5429285b4da6cf2334d8",
+      "final_npz_sha256": "5902091ac730e4a2a13af7f63b7dd7343e175ffb461091721b15643bd3a456d5"
+    }
+  ],
+  "budget_seconds": 2700.0,
+  "sources": [
+    "initial",
+    "boundary",
+    "ocean_evaporation",
+    "land_recycling"
+  ],
+  "winter_months_0based": [
+    0,
+    1,
+    2,
+    9,
+    10,
+    11
+  ],
+  "summer_months_0based": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8
+  ],
+  "policy": "One final-year replay per fixed case, exact saved preceding-year physical state. No new warmup or changed physical trajectory.",
+  "interpretation": "Last atmospheric vapor entry, not soil ancestry or causal suppression test. Initial vapor is explicitly unknown; newly evaporated land water is relabelled recycling. Parcel condensate inherits ascending-donor tags before bulk mixing.",
+  "atlas_publication": false,
+  "downloads": false
+}

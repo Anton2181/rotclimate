@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "code_sha256": "f3645bbf52b60d8e266944070218d60397cf47774d1e626af816ca56b7cb40ae",
+  "source_code_sha256": "97afe7ac31cf7e9d9409f9d75b87a81314ec78a21a5c7c696717b38f4c2e662e",
+  "source_manifest_sha256": "243c6891978d12c00fef9f6d354126b1e3f6e3b3fc09c3074bcfd06b027c2a06",
+  "source_state_sha256": "57af9366801bc765f58392e40b6fb26e64601f9d7ae15deb2caeff0249702cea",
+  "closed_lab_evidence_sha256": {
+    "audit.json": "1d6d003a49008b49c2c5b5423179e83de3280bfc9ba644bed118bd0661de1958",
+    "paths.npz": "9ab5d83909122f00e362aade5a65ccb5cf83fdd51c0baedc1fe495c8047f40ce"
+  },
+  "anchors": {
+    "test_california_bulk_local_matched": {
+      "source_year": 3,
+      "source_start_sha256": "abb223637465d6c684a5121e7258cdc9fd383bc52fff86bdb79a55caf1e9145e",
+      "source_final_sha256": "745e64f10cf2494c8b090cdd0c77e3563cfa041081db1c165234609be2ba7c1a",
+      "source_summary_sha256": "dfe9d53883ff5e5e265394795e7a082d5af1822470b36e4c324de71560597ec8"
+    },
+    "test_california_parcel_lower_local_matched": {
+      "source_year": 3,
+      "source_start_sha256": "2642ac8a7b7e7a0cf3e5095f72f472c0e7837796ed649d8c46a5c3a8fe924c18",
+      "source_final_sha256": "96dc52a82530501d56122e31630f7a9c7fe1b54dafff55915116d64aff2f7c4b",
+      "source_summary_sha256": "6c294e09e6baf2dd91b8ca703b6101982109d5232462dc3c0a0cf6e68b335c9f"
+    },
+    "test_iberia_bulk_local_matched": {
+      "source_year": 3,
+      "source_start_sha256": "fb08a97ad80af7da04a1855f23c2c3555a60ffe52a482ca4eee7bf607a96772c",
+      "source_final_sha256": "fa509b0e0dc015192bbaaa0986d99d31f154a33963ee6f73d90929fa32fbe877",
+      "source_summary_sha256": "ff18bc5c1086aa256cff62acb000d9cb26486f4d9d8a439ac8743d982955b92d"
+    },
+    "test_iberia_parcel_lower_local_matched": {
+      "source_year": 3,
+      "source_start_sha256": "681359ecfec2b339ec244614887566a27e763a4921781a8008bb0c401f85a8b6",
+      "source_final_sha256": "98f50c8a60a8cb2979adaf03203be0b7e784064a4da2f5631cb8eb16ae3e8f2c",
+      "source_summary_sha256": "7066223d22cbd5d277a7497c84915f8b43b510558116c8a7f12dbe9003b4b41c"
+    }
+  },
+  "jobs": [
+    {
+      "key": "control_california_bulk",
+      "phase": "control",
+      "region": "california",
+      "mode": "bulk",
+      "scheme": "upwind",
+      "source_case": "test_california_bulk_local_matched"
+    },
+    {
+      "key": "control_iberia_bulk",
+      "phase": "control",
+      "region": "iberia",
+      "mode": "bulk",
+      "scheme": "upwind",
+      "source_case": "test_iberia_bulk_local_matched"
+    },
+    {
+      "key": "control_california_parcel_lower",
+      "phase": "control",
+      "region": "california",
+      "mode": "parcel_lower",
+      "scheme": "upwind",
+      "source_case": "test_california_parcel_lower_local_matched"
+    },
+    {
+      "key": "control_iberia_parcel_lower",
+      "phase": "control",
+      "region": "iberia",
+      "mode": "parcel_lower",
+      "scheme": "upwind",
+      "source_case": "test_iberia_parcel_lower_local_matched"
+    },
+    {
+      "key": "candidate_california_bulk",
+      "phase": "candidate",
+      "region": "california",
+      "mode": "bulk",
+      "scheme": "coupled_fct",
+      "source_case": "test_california_bulk_local_matched"
+    },
+    {
+      "key": "candidate_iberia_bulk",
+      "phase": "candidate",
+      "region": "iberia",
+      "mode": "bulk",
+      "scheme": "coupled_fct",
+      "source_case": "test_iberia_bulk_local_matched"
+    },
+    {
+      "key": "candidate_california_parcel_lower",
+      "phase": "candidate",
+      "region": "california",
+      "mode": "parcel_lower",
+      "scheme": "coupled_fct",
+      "source_case": "test_california_parcel_lower_local_matched"
+    },
+    {
+      "key": "candidate_iberia_parcel_lower",
+      "phase": "candidate",
+      "region": "iberia",
+      "mode": "parcel_lower",
+      "scheme": "coupled_fct",
+      "source_case": "test_iberia_parcel_lower_local_matched"
+    }
+  ],
+  "settings": {
+    "terrain": "shallow",
+    "observed_wind": true,
+    "observed_temperature": true,
+    "observed_humidity": true,
+    "humidity_scale": 1.0,
+    "relaxation_lower_days": 0.5,
+    "relaxation_upper_days": 20.0,
+    "storm_rate_month": 1.0,
+    "storm_convergence_ms": 0.5,
+    "storm_rotation_ms": 6.0,
+    "storm_radius_km": 500.0,
+    "terrain_drag_height_m": 3000.0
+  },
+  "minimum_cycles": 3,
+  "maximum_cycles": 6,
+  "seed": 67,
+  "forcing_variant": "local_matched",
+  "maximum_invocation_hours": 4.0,
+  "forcing": "Exact cached seed67 lift16 aligned dry flow, local humidity pattern and fixed actual monthly gross incoming vapor. No new forcing table or downloads.",
+  "transport": "Only internal theta/vapor transfers use shared bounded flux correction. External incoming/outgoing faces retain frozen donor-cell fluxes. Original cloud, soil, relaxation and energy/work conventions remain fixed.",
+  "controls": "Four exact final-year upwind replays from their saved preceding-year states. Four FCT candidates start from their paired settled final states and repeat 3\u20136 cycles.",
+  "selection": "Fixed numerical/physical mechanism comparison, no fit, best-seed selection or atlas promotion. Compare coast winter and reference-arid summer errors separately. Reused regions/weather are not untouched validation.",
+  "atlas_publication": false,
+  "downloads": false
+}

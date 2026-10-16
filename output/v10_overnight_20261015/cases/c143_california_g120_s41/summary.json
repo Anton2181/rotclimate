@@ -1,0 +1,126 @@
+{
+  "rainfall": {
+    "scored_land_cells": 67,
+    "annual_bias_mm": 784.4423733191592,
+    "annual_rmse_mm": 2729.4606016706107,
+    "monthly_mae_mm": 96.69209939991252,
+    "winter_fraction_mae": 0.17293666786482784,
+    "winter_fraction_scored_cells": 42,
+    "dry_model_cells_lt_1mm": 25,
+    "predicted_mean_annual_mm": 1192.3378957072186,
+    "observed_mean_annual_mm": 407.8955223880597,
+    "coast_interior": {
+      "coastal": {
+        "cells": 12,
+        "predicted_annual_mm": 968.1001019416752,
+        "observed_annual_mm": 735.75
+      },
+      "interior": {
+        "cells": 38,
+        "predicted_annual_mm": 1199.1031936809422,
+        "observed_annual_mm": 275.5263157894737
+      }
+    },
+    "coast_minus_interior": {
+      "predicted_annual_mm": -231.003091739267,
+      "observed_annual_mm": 460.2236842105263
+    },
+    "predicted_monthly_mean_mm": [
+      156.11220675683532,
+      133.83592161728663,
+      158.9252510531541,
+      128.30991732859792,
+      95.95973214427629,
+      56.196479934840305,
+      29.466706449141448,
+      27.6668680552507,
+      29.048406473368114,
+      73.30758476507191,
+      145.356818710114,
+      158.15200241928213
+    ],
+    "observed_monthly_mean_mm": [
+      62.71641791044776,
+      54.55223880597015,
+      52.37313432835821,
+      29.238805970149254,
+      20.388059701492537,
+      13.223880597014926,
+      10.35820895522388,
+      14.746268656716419,
+      16.582089552238806,
+      25.432835820895523,
+      52.0,
+      56.28358208955224
+    ]
+  },
+  "settling": {
+    "passed": true,
+    "changes": {
+      "monthly_rain_p95_mm": 0.00945955818867716,
+      "annual_rain_p95_mm": 0.13450598972458255,
+      "water_store_p95_mm": 5.449958818815048e-05,
+      "soil_p95_mm": 0.26121354048621537,
+      "monthly_temperature_p95_c": 0.0003871221399850411,
+      "end_temperature_p95_c": 3.929847801202868e-05
+    },
+    "limits": {
+      "monthly_rain_p95_mm": 1.0,
+      "annual_rain_p95_mm": 5.0,
+      "water_store_p95_mm": 1.0,
+      "soil_p95_mm": 1.0,
+      "monthly_temperature_p95_c": 0.05,
+      "end_temperature_p95_c": 0.05
+    }
+  },
+  "years": 5,
+  "temperature_departure_p95_c": [
+    8.812628287255384,
+    16.88007110876727
+  ],
+  "annual_rain_ratio": 2.9231453405680283,
+  "annual_rain_p99_ratio": 8.081299586294108,
+  "wet_reference_coverage": 0.6268656716417911,
+  "guards": {
+    "lower_temperature": false,
+    "upper_temperature": false,
+    "rain_amount": false,
+    "wet_reference_coverage": false,
+    "rain_tail": false,
+    "reference_forcing": true
+  },
+  "eligible": false,
+  "budget": {
+    "ocean_evaporation_mm": 366.5942142938651,
+    "land_evaporation_mm": 17.911147162240894,
+    "rain_mm": 465.2772332288435,
+    "ocean_rain_mm": 51.61584085641267,
+    "runoff_mm": 395.7923434892433,
+    "boundary_export_mm": -80.77185943754365,
+    "roundoff_correction_mm": 0.0,
+    "surface_latent_input_j_m2": 961263403.6402656,
+    "temperature_relaxation_j_m2": 1206208970.2976072,
+    "energy_boundary_export_j_m2": 2167472427.6348934,
+    "roundoff_energy_j_m2": 0.0,
+    "annual_water_error_mm": -1.0373923942097463e-12,
+    "annual_energy_error_j_m2": -1.621246337890625e-05,
+    "max_step_water_error_mm": 1.689186984732416e-15,
+    "max_step_energy_error_j_m2": 2.745946403592825e-08,
+    "max_air_continuity_kg_m2_s": 5.776629175002768e-16,
+    "steps": 14030
+  },
+  "score": 96.69209939991252,
+  "note": "Temperature remains observation-informed relaxation forcing. Provisional guards, not independent climate validation.",
+  "evidence_sha256": {
+    "year1.json": "66be549d07990e548f38b9de44f64af6cef82d572d65881200840c839bbafb88",
+    "year1.npz": "f359b62eda7abe450b73bbed34976cd6a083543935b152fad086fbc5dd96aaa7",
+    "year2.json": "41e96e069c490a2b1d28099cb0eaee78df3975f957b560aff147973285fb2f42",
+    "year2.npz": "3f829c183d73d029bedb4d1c67c49876da5d9147890ed3a5d9d728ae6a49bc31",
+    "year3.json": "71063ed809d65ca79886180fdea19e2111c9e0c96ff64824ee9cfc9f354c2563",
+    "year3.npz": "afb7f780bed48fe571efe67bfe4087fd24c5ec2f49445a46b3849aa0759c8868",
+    "year4.json": "39d2beac5217b437a023f41d905e135e0839c9b95e8f98a9c3658c367de7e536",
+    "year4.npz": "302f702c19e6b5642d783cd4221d8762ac7c466b8967d29b4d65f8b3fa255891",
+    "year5.json": "fd1d892b68911ff693a787c2d828c808cedc5957343a760986a96150028762aa",
+    "year5.npz": "c926b6bdbf55f4f784842da73c229d46279bc2bd1f040e300d3c88eccb2c097c"
+  }
+}

@@ -1,0 +1,789 @@
+{
+  "scope": "model_grid",
+  "quantile_percentiles": [
+    10,
+    50,
+    90
+  ],
+  "zones": {
+    "cold_wet": {
+      "rule": "coldest month < ~1 C  AND  humid (precip >= 1.8x Koppen dry threshold)",
+      "cells": 862,
+      "membership_mean": 0.6176921459892812,
+      "all_factor_strengths_at_least_half_share": 0.8155452436194895,
+      "membership_at_least_half_share": 0.765661252900232,
+      "strict_recall": 0.7958236658932715,
+      "display_recall": 0.7958236658932715,
+      "failure_partition": {
+        "correct": 0.7958236658932715,
+        "incompatible_koppen": 0.11136890951276102,
+        "eligible_but_membership_below_threshold": 0.09280742459396751,
+        "eligible_but_other_label_wins": 0.0
+      },
+      "strict_labels": {
+        "unmatched": 0.09280742459396751,
+        "cold_wet": 0.7958236658932715,
+        "cold_dry": 0.0,
+        "warm_wet": 0.11136890951276102,
+        "med": 0.0,
+        "swamp": 0.0,
+        "tree": 0.0,
+        "hot_dry": 0.0
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.7958236658932715,
+        "cold_dry": 0.0,
+        "warm_wet": 0.11136890951276102,
+        "med": 0.0,
+        "swamp": 0.0,
+        "tree": 0.0,
+        "hot_dry": 0.0,
+        "mountain": 0.0,
+        "grassland": 0.09280742459396751,
+        "transitional": 0.0
+      },
+      "koppen_share": {
+        "Cfa": 0.11136890951276102,
+        "Dsa": 0.35266821345707655,
+        "Dwa": 0.16473317865429235,
+        "Dwb": 0.03944315545243619,
+        "Dfa": 0.3294663573085847,
+        "Dfb": 0.002320185614849188
+      },
+      "factors": {
+        "cold_winter": {
+          "mean": 0.8150695078174043,
+          "median": 0.8653368560602677,
+          "below_half_share": 0.037122969837587005,
+          "smallest_factor_share": 0.5382830626450116,
+          "recall_if_factor_removed": 0.8109048723897911
+        },
+        "humidity": {
+          "mean": 0.7745668588325998,
+          "median": 0.8745977676736201,
+          "below_half_share": 0.14733178654292342,
+          "smallest_factor_share": 0.4617169373549884,
+          "recall_if_factor_removed": 0.888631090487239
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          11.513636401176454,
+          13.65655823469162,
+          15.500536019086837
+        ],
+        "Tcold": [
+          -3.732716736793518,
+          -2.7206848859786987,
+          0.20455344092845837
+        ],
+        "Thot": [
+          22.500713172912597,
+          27.380236320495605,
+          29.733870155334472
+        ],
+        "MAP": [
+          743.9907634934783,
+          1063.0208561182021,
+          2052.339469718933
+        ],
+        "aridity": [
+          1.6279708043313126,
+          2.5533091655777675,
+          4.613106114960968
+        ],
+        "Psdry": [
+          22.2718453570207,
+          39.11829612155756,
+          79.81414920091629
+        ],
+        "Pwwet": [
+          113.3470795067151,
+          141.9827690839767,
+          207.23526771624879
+        ]
+      }
+    },
+    "cold_dry": {
+      "rule": "mean annual T < ~18 C AND arid/semi-arid (precip < Koppen dry threshold)",
+      "cells": 1978,
+      "membership_mean": 0.48430924062505903,
+      "all_factor_strengths_at_least_half_share": 0.6107178968655207,
+      "membership_at_least_half_share": 0.42264914054600605,
+      "strict_recall": 0.6107178968655207,
+      "display_recall": 0.6107178968655207,
+      "failure_partition": {
+        "correct": 0.6107178968655207,
+        "incompatible_koppen": 0.38928210313447925,
+        "eligible_but_membership_below_threshold": 0.0,
+        "eligible_but_other_label_wins": 0.0
+      },
+      "strict_labels": {
+        "unmatched": 0.24519716885743176,
+        "cold_wet": 0.01820020222446916,
+        "cold_dry": 0.6107178968655207,
+        "warm_wet": 0.0,
+        "med": 0.12588473205257836,
+        "swamp": 0.0,
+        "tree": 0.0,
+        "hot_dry": 0.0
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.01820020222446916,
+        "cold_dry": 0.6107178968655207,
+        "warm_wet": 0.0,
+        "med": 0.12588473205257836,
+        "swamp": 0.0,
+        "tree": 0.0,
+        "hot_dry": 0.0,
+        "mountain": 0.0,
+        "grassland": 0.24064711830131447,
+        "transitional": 0.00455005055611729
+      },
+      "koppen_share": {
+        "BWk": 0.08190091001011122,
+        "BSk": 0.5288169868554095,
+        "Csa": 0.13549039433771487,
+        "Cwa": 0.08190091001011122,
+        "Dsa": 0.08645096056622852,
+        "Dsb": 0.0005055611729019212,
+        "Dwa": 0.08038422649140546,
+        "Dwb": 0.00455005055611729
+      },
+      "factors": {
+        "cool_year": {
+          "mean": 0.849854532400257,
+          "median": 0.882131811030332,
+          "below_half_share": 0.0,
+          "smallest_factor_share": 0.18301314459049545,
+          "recall_if_factor_removed": 0.6107178968655207
+        },
+        "aridity": {
+          "mean": 0.5624941693795101,
+          "median": 0.58229582538436,
+          "below_half_share": 0.38928210313447925,
+          "smallest_factor_share": 0.8169868554095046,
+          "recall_if_factor_removed": 0.6107178968655207
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          13.929973466783762,
+          15.584670542813836,
+          17.093648611068726
+        ],
+        "Tcold": [
+          -2.5006105346679686,
+          -0.2595177891477942,
+          1.8522128095626829
+        ],
+        "Thot": [
+          26.62750583648682,
+          29.677488784790036,
+          30.95723582458496
+        ],
+        "MAP": [
+          228.646593275494,
+          443.6405984245241,
+          632.6211837023496
+        ],
+        "aridity": [
+          0.533940592880049,
+          0.941955802039927,
+          1.4348566018771567
+        ],
+        "Psdry": [
+          0.7130469596137609,
+          3.245003517468771,
+          14.030921055177853
+        ],
+        "Pwwet": [
+          62.024435752630225,
+          94.54143466750781,
+          114.8745679072539
+        ]
+      }
+    },
+    "warm_wet": {
+      "rule": "coldest month > ~1 C, warmest > ~20 C  AND  humid (>= 1.8x)  AND  no summer drought",
+      "cells": 2841,
+      "membership_mean": 0.574976057316465,
+      "all_factor_strengths_at_least_half_share": 0.6920098556846181,
+      "membership_at_least_half_share": 0.6001407954945441,
+      "strict_recall": 0.47659274903203097,
+      "display_recall": 0.6624428018303414,
+      "failure_partition": {
+        "correct": 0.47659274903203097,
+        "incompatible_koppen": 0.29320661738824355,
+        "eligible_but_membership_below_threshold": 0.020415346708905314,
+        "eligible_but_other_label_wins": 0.20978528687082013
+      },
+      "strict_labels": {
+        "unmatched": 0.027103132699753608,
+        "cold_wet": 0.1921858500527983,
+        "cold_dry": 0.0,
+        "warm_wet": 0.47659274903203097,
+        "med": 0.06230200633579725,
+        "swamp": 0.005631819781766983,
+        "tree": 0.23618444209785286,
+        "hot_dry": 0.0
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.11334037310806054,
+        "cold_dry": 0.0,
+        "warm_wet": 0.6624428018303414,
+        "med": 0.06546990496304118,
+        "swamp": 0.005631819781766983,
+        "tree": 0.03308694121788103,
+        "hot_dry": 0.0,
+        "mountain": 0.07884547694473777,
+        "grassland": 0.017599436818021823,
+        "transitional": 0.023583245336149243
+      },
+      "koppen_share": {
+        "Csa": 0.09186906019007392,
+        "Cfa": 0.6965857092573038,
+        "Cfb": 0.010207673354452657,
+        "Dsa": 0.021471312917986624,
+        "Dsb": 0.00035198873636043646,
+        "Dfa": 0.026047166490672298,
+        "Dfb": 0.0908130939809926,
+        "Dfc": 0.013375571981696586,
+        "ET": 0.04294262583597325,
+        "EF": 0.006335797254487857
+      },
+      "factors": {
+        "mild_winter": {
+          "mean": 0.6814807257634619,
+          "median": 0.8169697119983632,
+          "below_half_share": 0.24850404787046815,
+          "smallest_factor_share": 0.7293206617388244,
+          "recall_if_factor_removed": 0.633931714185146
+        },
+        "warm_summer": {
+          "mean": 0.8578122126246603,
+          "median": 0.9909135440901885,
+          "below_half_share": 0.12002815909890883,
+          "smallest_factor_share": 0.04399859204505456,
+          "recall_if_factor_removed": 0.5519183386131644
+        },
+        "humidity": {
+          "mean": 0.8917186411483367,
+          "median": 0.9867214180378739,
+          "below_half_share": 0.07743752199929602,
+          "smallest_factor_share": 0.15557902147131292,
+          "recall_if_factor_removed": 0.6494192185850053
+        },
+        "summer_moisture": {
+          "mean": 0.9100836937065895,
+          "median": 0.9999839268746917,
+          "below_half_share": 0.07602956705385427,
+          "smallest_factor_share": 0.07110172474480816,
+          "recall_if_factor_removed": 0.5406546990496304
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          8.446452444791793,
+          17.725304870605473,
+          20.48308906555176
+        ],
+        "Tcold": [
+          -4.451347808837891,
+          3.991900749206543,
+          9.077250976562501
+        ],
+        "Thot": [
+          18.08443229675293,
+          27.03776351928711,
+          28.26715805053711
+        ],
+        "MAP": [
+          872.5666788935663,
+          1938.633084344864,
+          2671.70022315979
+        ],
+        "aridity": [
+          1.9476982899900233,
+          3.908950935663497,
+          5.728469920918463
+        ],
+        "Psdry": [
+          34.85719829201698,
+          94.20451973279319,
+          198.96737661361695
+        ],
+        "Pwwet": [
+          110.76736236810683,
+          174.9989443063736,
+          228.69116499423978
+        ]
+      }
+    },
+    "med": {
+      "rule": "warmest month > ~10 C, coldest > ~0 C, dry summer + wet winter (Koppen Cs), not desert",
+      "cells": 2994,
+      "membership_mean": 0.49230628880756117,
+      "all_factor_strengths_at_least_half_share": 0.678690714762859,
+      "membership_at_least_half_share": 0.6082164328657315,
+      "strict_recall": 0.657314629258517,
+      "display_recall": 0.6730126920507682,
+      "failure_partition": {
+        "correct": 0.657314629258517,
+        "incompatible_koppen": 0.31730126920507684,
+        "eligible_but_membership_below_threshold": 0.004342017368069473,
+        "eligible_but_other_label_wins": 0.021042084168336674
+      },
+      "strict_labels": {
+        "unmatched": 0.020374081496325986,
+        "cold_wet": 0.06680026720106881,
+        "cold_dry": 0.01068804275217101,
+        "warm_wet": 0.014028056112224449,
+        "med": 0.657314629258517,
+        "swamp": 0.0,
+        "tree": 0.18537074148296592,
+        "hot_dry": 0.04542418169672679
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.03072812291249165,
+        "cold_dry": 0.01068804275217101,
+        "warm_wet": 0.13460253841015363,
+        "med": 0.6730126920507682,
+        "swamp": 0.0,
+        "tree": 0.04208416833667335,
+        "hot_dry": 0.04542418169672679,
+        "mountain": 0.036072144288577156,
+        "grassland": 0.027054108216432865,
+        "transitional": 0.00033400133600534405
+      },
+      "koppen_share": {
+        "BSh": 0.04843019372077488,
+        "BSk": 0.013360053440213761,
+        "Csa": 0.6826987307949232,
+        "Cwa": 0.018704074816299265,
+        "Cfa": 0.15564462257849032,
+        "Cfb": 0.01002004008016032,
+        "Dsa": 0.01569806279225117,
+        "Dsb": 0.0056780227120908485,
+        "Dfa": 0.0006680026720106881,
+        "Dfb": 0.02237808951235805,
+        "Dfc": 0.014696058784235137,
+        "ET": 0.012024048096192385
+      },
+      "factors": {
+        "warm_summer": {
+          "mean": 0.9869955025872784,
+          "median": 0.9999999389837526,
+          "below_half_share": 0.012024048096192385,
+          "smallest_factor_share": 0.0,
+          "recall_if_factor_removed": 0.657314629258517
+        },
+        "mild_winter": {
+          "mean": 0.8603367299329606,
+          "median": 0.9308507041132595,
+          "below_half_share": 0.07114228456913828,
+          "smallest_factor_share": 0.11222444889779559,
+          "recall_if_factor_removed": 0.6626586506346025
+        },
+        "summer_drought": {
+          "mean": 0.7025297424237625,
+          "median": 0.9084693410367369,
+          "below_half_share": 0.24048096192384769,
+          "smallest_factor_share": 0.36138944555778224,
+          "recall_if_factor_removed": 0.6826987307949232
+        },
+        "nonarid": {
+          "mean": 0.8305232707127891,
+          "median": 0.8747401360359626,
+          "below_half_share": 0.061790247160988646,
+          "smallest_factor_share": 0.5263861055444222,
+          "recall_if_factor_removed": 0.663994655978624
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          15.245748857021331,
+          18.738584618568417,
+          20.199022176742556
+        ],
+        "Tcold": [
+          2.479165930747986,
+          5.199662055969238,
+          7.600319047927858
+        ],
+        "Thot": [
+          23.446706687927247,
+          29.934552078247073,
+          31.859248840332032
+        ],
+        "MAP": [
+          467.6024752947688,
+          660.2387198925019,
+          1332.6189000129702
+        ],
+        "aridity": [
+          1.0742331791603408,
+          1.4188356997448364,
+          2.970755463562867
+        ],
+        "Psdry": [
+          6.022652884523074,
+          13.493093626449507,
+          82.41073521256449
+        ],
+        "Pwwet": [
+          93.44889987786611,
+          118.65699145992596,
+          175.179662659963
+        ]
+      }
+    },
+    "swamp": {
+      "rule": "warmest month > ~25 C, coldest > ~4 C, annual mean > ~21 C AND very wet (>= 2.0x threshold) AND flat (slope < ~1.5 per mille)",
+      "cells": 1257,
+      "membership_mean": 0.22252850732258625,
+      "all_factor_strengths_at_least_half_share": 0.31821797931583135,
+      "membership_at_least_half_share": 0.1511535401750199,
+      "strict_recall": 0.1511535401750199,
+      "display_recall": 0.1511535401750199,
+      "failure_partition": {
+        "correct": 0.1511535401750199,
+        "incompatible_koppen": 0.07159904534606205,
+        "eligible_but_membership_below_threshold": 0.5449482895783612,
+        "eligible_but_other_label_wins": 0.23229912490055687
+      },
+      "strict_labels": {
+        "unmatched": 0.0007955449482895784,
+        "cold_wet": 0.066030230708035,
+        "cold_dry": 0.0,
+        "warm_wet": 0.09785202863961814,
+        "med": 0.25059665871121717,
+        "swamp": 0.1511535401750199,
+        "tree": 0.42800318217979316,
+        "hot_dry": 0.005568814638027049
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.013524264120922832,
+        "cold_dry": 0.0,
+        "warm_wet": 0.4105011933174224,
+        "med": 0.27764518695306284,
+        "swamp": 0.1511535401750199,
+        "tree": 0.08750994431185362,
+        "hot_dry": 0.005568814638027049,
+        "mountain": 0.05250596658711217,
+        "grassland": 0.0,
+        "transitional": 0.0015910898965791568
+      },
+      "koppen_share": {
+        "BSh": 0.005568814638027049,
+        "Csa": 0.3038981702466189,
+        "Cwa": 0.1917263325377884,
+        "Cfa": 0.4232299124900557,
+        "Cfb": 0.00954653937947494,
+        "Dfb": 0.028639618138424822,
+        "Dfc": 0.007159904534606206,
+        "ET": 0.030230708035003977
+      },
+      "factors": {
+        "hot_summer": {
+          "mean": 0.8773976690102865,
+          "median": 0.962203896567925,
+          "below_half_share": 0.09228321400159109,
+          "smallest_factor_share": 0.0,
+          "recall_if_factor_removed": 0.17104216388225935
+        },
+        "mild_winter": {
+          "mean": 0.8467063619356268,
+          "median": 0.9245289976004394,
+          "below_half_share": 0.08432776451869531,
+          "smallest_factor_share": 0.0,
+          "recall_if_factor_removed": 0.18217979315831345
+        },
+        "humidity": {
+          "mean": 0.7085896929712885,
+          "median": 0.8707421995504436,
+          "below_half_share": 0.24343675417661098,
+          "smallest_factor_share": 0.2498011137629276,
+          "recall_if_factor_removed": 0.43914081145584727
+        },
+        "flat_ground": {
+          "mean": 0.6329221550128118,
+          "median": 0.971223020968002,
+          "below_half_share": 0.3723150357995227,
+          "smallest_factor_share": 0.2760540970564837,
+          "recall_if_factor_removed": 0.21400159108989658
+        },
+        "hot_year": {
+          "mean": 0.533139347574725,
+          "median": 0.6066168171618697,
+          "below_half_share": 0.38743038981702466,
+          "smallest_factor_share": 0.4741447891805887,
+          "recall_if_factor_removed": 0.4081145584725537
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          17.991398872375488,
+          21.25986789703369,
+          21.996785057067875
+        ],
+        "Tcold": [
+          5.841598556518556,
+          9.011071815490723,
+          10.404063568115234
+        ],
+        "Thot": [
+          25.927412994384767,
+          28.884424438476564,
+          32.32202709960938
+        ],
+        "MAP": [
+          659.3094505155086,
+          1611.148158097267,
+          3110.1276407718656
+        ],
+        "aridity": [
+          1.318133248510859,
+          2.8193429358900284,
+          5.2560081784195285
+        ],
+        "Psdry": [
+          14.094506295422713,
+          71.74913367033007,
+          158.1213181670507
+        ],
+        "Pwwet": [
+          109.89087732632947,
+          148.3090218702951,
+          175.58037158807113
+        ]
+      }
+    },
+    "tree": {
+      "rule": "coldest month > ~2 C  AND  humid enough for forest (>= 1.6x threshold)",
+      "cells": 942,
+      "membership_mean": 0.5448241362029274,
+      "all_factor_strengths_at_least_half_share": 0.6050955414012739,
+      "membership_at_least_half_share": 0.5934182590233545,
+      "strict_recall": 0.5138004246284501,
+      "display_recall": 0.12101910828025478,
+      "failure_partition": {
+        "correct": 0.5138004246284501,
+        "incompatible_koppen": 0.2346072186836518,
+        "eligible_but_membership_below_threshold": 0.07643312101910828,
+        "eligible_but_other_label_wins": 0.1751592356687898
+      },
+      "strict_labels": {
+        "unmatched": 0.025477707006369428,
+        "cold_wet": 0.11040339702760085,
+        "cold_dry": 0.0,
+        "warm_wet": 0.0,
+        "med": 0.22611464968152867,
+        "swamp": 0.0,
+        "tree": 0.5138004246284501,
+        "hot_dry": 0.12420382165605096
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.010615711252653927,
+        "cold_dry": 0.0,
+        "warm_wet": 0.33970276008492567,
+        "med": 0.2611464968152866,
+        "swamp": 0.0,
+        "tree": 0.12101910828025478,
+        "hot_dry": 0.12420382165605096,
+        "mountain": 0.10191082802547771,
+        "grassland": 0.03503184713375796,
+        "transitional": 0.006369426751592357
+      },
+      "koppen_share": {
+        "BSh": 0.12420382165605096,
+        "Csa": 0.26857749469214437,
+        "Csb": 0.012738853503184714,
+        "Cfa": 0.45329087048832273,
+        "Cfb": 0.03078556263269639,
+        "Dsb": 0.012738853503184714,
+        "Dsc": 0.0010615711252653928,
+        "Dfb": 0.04883227176220807,
+        "Dfc": 0.01592356687898089,
+        "ET": 0.03184713375796178
+      },
+      "factors": {
+        "mild_winter": {
+          "mean": 0.8646166413664906,
+          "median": 0.9900078120760178,
+          "below_half_share": 0.12526539278131635,
+          "smallest_factor_share": 0.1613588110403397,
+          "recall_if_factor_removed": 0.5318471337579618
+        },
+        "humidity": {
+          "mean": 0.6754950890973133,
+          "median": 0.8298504202721333,
+          "below_half_share": 0.26963906581740976,
+          "smallest_factor_share": 0.8386411889596603,
+          "recall_if_factor_removed": 0.7515923566878981
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          9.097764728963377,
+          20.392218952178958,
+          22.734390724182127
+        ],
+        "Tcold": [
+          -1.4107205231189714,
+          11.191818790435793,
+          13.930262611389159
+        ],
+        "Thot": [
+          16.665172218322756,
+          27.205830078125,
+          29.611974838256838
+        ],
+        "MAP": [
+          483.8333164067567,
+          1043.9361718893051,
+          1582.6419266843793
+        ],
+        "aridity": [
+          0.9459778038544225,
+          2.128091970903502,
+          4.198833266497369
+        ],
+        "Psdry": [
+          5.490431762511532,
+          50.876759878794346,
+          100.80078573187191
+        ],
+        "Pwwet": [
+          65.07184297859669,
+          134.2645700852076,
+          192.7966221086184
+        ]
+      }
+    },
+    "hot_dry": {
+      "rule": "mean annual T > ~18 C  AND  arid/semi-arid (< 1.0x threshold)",
+      "cells": 1020,
+      "membership_mean": 0.5003220970198331,
+      "all_factor_strengths_at_least_half_share": 0.5901960784313726,
+      "membership_at_least_half_share": 0.5852941176470589,
+      "strict_recall": 0.5901960784313726,
+      "display_recall": 0.5901960784313726,
+      "failure_partition": {
+        "correct": 0.5901960784313726,
+        "incompatible_koppen": 0.40980392156862744,
+        "eligible_but_membership_below_threshold": 0.0,
+        "eligible_but_other_label_wins": 0.0
+      },
+      "strict_labels": {
+        "unmatched": 0.01764705882352941,
+        "cold_wet": 0.05392156862745098,
+        "cold_dry": 0.004901960784313725,
+        "warm_wet": 0.0,
+        "med": 0.19019607843137254,
+        "swamp": 0.020588235294117647,
+        "tree": 0.12254901960784313,
+        "hot_dry": 0.5901960784313726
+      },
+      "display_labels": {
+        "unmatched": 0.0,
+        "cold_wet": 0.0,
+        "cold_dry": 0.004901960784313725,
+        "warm_wet": 0.08725490196078431,
+        "med": 0.19607843137254902,
+        "swamp": 0.020588235294117647,
+        "tree": 0.021568627450980392,
+        "hot_dry": 0.5901960784313726,
+        "mountain": 0.05784313725490196,
+        "grassland": 0.0196078431372549,
+        "transitional": 0.00196078431372549
+      },
+      "koppen_share": {
+        "BWh": 0.06862745098039216,
+        "BSh": 0.5215686274509804,
+        "BSk": 0.004901960784313725,
+        "Csa": 0.20784313725490197,
+        "Csb": 0.011764705882352941,
+        "Cfa": 0.12450980392156863,
+        "Cfb": 0.006862745098039216,
+        "Dsb": 0.008823529411764706,
+        "Dsc": 0.006862745098039216,
+        "Dfb": 0.010784313725490196,
+        "Dfc": 0.004901960784313725,
+        "ET": 0.022549019607843137
+      },
+      "factors": {
+        "hot_year": {
+          "mean": 0.8884777090672812,
+          "median": 0.9870124770701303,
+          "below_half_share": 0.09901960784313725,
+          "smallest_factor_share": 0.08823529411764706,
+          "recall_if_factor_removed": 0.5901960784313726
+        },
+        "aridity": {
+          "mean": 0.51604177628937,
+          "median": 0.599696760221378,
+          "below_half_share": 0.40490196078431373,
+          "smallest_factor_share": 0.9117647058823529,
+          "recall_if_factor_removed": 0.5901960784313726
+        }
+      },
+      "climate_quantiles": {
+        "MAT": [
+          18.173896030426025,
+          23.196837215423585,
+          24.777282928466793
+        ],
+        "Tcold": [
+          8.227444067001345,
+          13.448447227478027,
+          15.067295978546142
+        ],
+        "Thot": [
+          25.521631469726564,
+          30.897118225097657,
+          32.76222961425781
+        ],
+        "MAP": [
+          301.7001327571272,
+          550.5895593643188,
+          1617.6942247438433
+        ],
+        "aridity": [
+          0.5715337998518112,
+          0.9298273831494402,
+          2.884784885099604
+        ],
+        "Psdry": [
+          4.6994405771046885,
+          16.95416598965724,
+          66.37727504332868
+        ],
+        "Pwwet": [
+          47.83718503673872,
+          83.22342997392019,
+          162.63512514988582
+        ]
+      }
+    }
+  },
+  "interpretation": "Factors are fuzzy rule strengths, not probabilities. The smallest factor is a diagnostic; ties choose the first factor.",
+  "counterfactual_note": "Removing a factor is an attribution probe on unchanged climate fields, not a physical improvement or a recommendation to loosen rules.",
+  "numerics": {
+    "downsample": 8,
+    "steps_per_year": 25,
+    "picard_iters": 2,
+    "t_iters": 192,
+    "t_relaxation": 0.25,
+    "transport_scheme": "upwind",
+    "solver_rtol": 1e-06,
+    "solver_max_iter": 2000,
+    "solver_require_convergence": true
+  }
+}

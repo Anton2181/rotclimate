@@ -1,0 +1,198 @@
+{
+  "code_sha256": "bf54844b6cc1287be79c7a8182675e15a1c0be40defb7b4cc2c5d24351c4d237",
+  "protocol": {
+    "schema": 1,
+    "code_sha256": "bf54844b6cc1287be79c7a8182675e15a1c0be40defb7b4cc2c5d24351c4d237",
+    "source_manifest_sha256": "154a87940321c6268ee0ec5895783a8c68d727b73542fb6f6525ad993c60e614",
+    "source_state_sha256": "90e89d16e7dfb146d5e99dcdf160859f1deef56d991cfd1e3f0b5838e7d5cd20",
+    "settings": {
+      "terrain": "shallow",
+      "observed_wind": true,
+      "observed_temperature": true,
+      "observed_humidity": true,
+      "humidity_scale": 0.8,
+      "relaxation_lower_days": 0.5,
+      "relaxation_upper_days": 20.0,
+      "storm_rate_month": 1.0,
+      "storm_convergence_ms": 0.5,
+      "storm_rotation_ms": 6.0,
+      "storm_radius_km": 500.0,
+      "terrain_drag_height_m": 3000.0
+    },
+    "cases": {
+      "california_sigma": {
+        "array_sha256": "09b7cc7dd8dc797b85502e8d1e339c90100a54e4fdd3131a84a38cc1b21b2cb9",
+        "wind": {
+          "no_storm_speed_max_m_s_by_layer": [
+            8.202564036030939,
+            12.954054515372833,
+            13.411757974422587,
+            31.54416348595968
+          ],
+          "no_storm_speed_p95_m_s_by_layer": [
+            7.669220264009914,
+            8.749241344397246,
+            10.934576575981977,
+            25.660363918955472
+          ],
+          "difference_from_offshore_vector_p95_m_s_by_layer": [
+            0.6796865787515691,
+            3.0687589530700707,
+            2.2658274535588507,
+            5.393541164146113
+          ],
+          "warning": "Offshore vectors are not local wind observations. Fixed face fluxes imply different velocities when masses change; this is a path hypothesis test, not pure coordinate invariance."
+        }
+      },
+      "california_hybrid": {
+        "array_sha256": "6e941c7954b4ad20e67edd047a8cb08977e002be264289ab991648e749666d71",
+        "wind": {
+          "no_storm_speed_max_m_s_by_layer": [
+            26.886278845414743,
+            54.435128291561064,
+            56.35847564842891,
+            20.91762445441448
+          ],
+          "no_storm_speed_p95_m_s_by_layer": [
+            10.703342131758466,
+            14.811778740834876,
+            18.034885715698515,
+            20.91762445441448
+          ],
+          "difference_from_offshore_vector_p95_m_s_by_layer": [
+            3.514455250304226,
+            9.245912732831014,
+            9.70275280453814,
+            3.66205343881779e-15
+          ],
+          "warning": "Offshore vectors are not local wind observations. Fixed face fluxes imply different velocities when masses change; this is a path hypothesis test, not pure coordinate invariance."
+        }
+      },
+      "iberia_sigma": {
+        "array_sha256": "f636bf52bd7ac0ffe41b2874064e65c39666a41c7b6563e11d867939a4049926",
+        "wind": {
+          "no_storm_speed_max_m_s_by_layer": [
+            5.83689720040868,
+            6.596018190211569,
+            7.961245998716684,
+            21.061083146419993
+          ],
+          "no_storm_speed_p95_m_s_by_layer": [
+            5.527880966077376,
+            4.352313002916438,
+            6.301094203544567,
+            16.51432703530208
+          ],
+          "difference_from_offshore_vector_p95_m_s_by_layer": [
+            0.1624466006946817,
+            0.9092781521762572,
+            0.8573909155649722,
+            2.1688367603601666
+          ],
+          "warning": "Offshore vectors are not local wind observations. Fixed face fluxes imply different velocities when masses change; this is a path hypothesis test, not pure coordinate invariance."
+        }
+      },
+      "iberia_hybrid": {
+        "array_sha256": "bc5b073a9df350d97df5a3915153321339bfe32a53b09a0c2e5c25fbde43c713",
+        "wind": {
+          "no_storm_speed_max_m_s_by_layer": [
+            11.448767490121055,
+            15.300542324025798,
+            18.46741137495836,
+            15.269746824759475
+          ],
+          "no_storm_speed_p95_m_s_by_layer": [
+            6.188304236877365,
+            5.652441941596892,
+            8.172953687609265,
+            15.269746824759475
+          ],
+          "difference_from_offshore_vector_p95_m_s_by_layer": [
+            1.2363892130657652,
+            2.292357881817327,
+            2.839134149299719,
+            3.553147333202946e-15
+          ],
+          "warning": "Offshore vectors are not local wind observations. Fixed face fluxes imply different velocities when masses change; this is a path hypothesis test, not pure coordinate invariance."
+        }
+      }
+    },
+    "spacing_km": 60,
+    "seed": 41,
+    "minimum_cycles": 3,
+    "maximum_cycles": 6,
+    "upper_transition_pa": 60795.0,
+    "common_change": "All-layer local pressure temperature; annual reference geopotential heights; surface pressure inferred from those heights at model terrain. Below-1000-hPa surface inference extrapolates only the lowest reference interval.",
+    "comparison": "Sigma versus hybrid pressure geometry and its implied kinematic circulation. Same prescribed face fluxes/storms; physical velocities differ. Not coordinate invariance.",
+    "atlas_publication": false,
+    "hour_cap_per_invocation": 1.0
+  },
+  "checks": [
+    {
+      "case": "california_sigma",
+      "month": 1,
+      "dt_s": 300.0,
+      "water_error_mm": 2.0469737016526324e-16,
+      "energy_error_j_m2": 2.342858351767063e-09,
+      "temperature_ledger_error_c": 1.4682005611277305e-13
+    },
+    {
+      "case": "california_sigma",
+      "month": 7,
+      "dt_s": 300.0,
+      "water_error_mm": -2.688821387764051e-16,
+      "energy_error_j_m2": 1.4551915228366852e-08,
+      "temperature_ledger_error_c": 1.6034396033148823e-13
+    },
+    {
+      "case": "california_hybrid",
+      "month": 1,
+      "dt_s": 300.0,
+      "water_error_mm": -3.7730235602495554e-16,
+      "energy_error_j_m2": -2.422893885523081e-09,
+      "temperature_ledger_error_c": 1.8575614137150698e-13
+    },
+    {
+      "case": "california_hybrid",
+      "month": 7,
+      "dt_s": 300.0,
+      "water_error_mm": -2.0816681711721685e-16,
+      "energy_error_j_m2": 9.313225746154785e-09,
+      "temperature_ledger_error_c": 1.508099201075197e-13
+    },
+    {
+      "case": "iberia_sigma",
+      "month": 1,
+      "dt_s": 300.0,
+      "water_error_mm": -2.0729945537922845e-16,
+      "energy_error_j_m2": -1.0615622159093618e-08,
+      "temperature_ledger_error_c": 1.9153428842955122e-13
+    },
+    {
+      "case": "iberia_sigma",
+      "month": 7,
+      "dt_s": 300.0,
+      "water_error_mm": -2.8449465006019636e-16,
+      "energy_error_j_m2": 1.257285475730896e-08,
+      "temperature_ledger_error_c": 1.522532100395324e-13
+    },
+    {
+      "case": "iberia_hybrid",
+      "month": 1,
+      "dt_s": 300.0,
+      "water_error_mm": 4.336808689942018e-17,
+      "energy_error_j_m2": 4.4165062718093395e-09,
+      "temperature_ledger_error_c": 1.560383766641138e-13
+    },
+    {
+      "case": "iberia_hybrid",
+      "month": 7,
+      "dt_s": 300.0,
+      "water_error_mm": -4.2847669856627135e-16,
+      "energy_error_j_m2": 1.6007106751203537e-08,
+      "temperature_ledger_error_c": 1.9245716131877089e-13
+    }
+  ],
+  "seasonal_runs_started": 0,
+  "note": "Eight independent frozen-input single-step probes, not seasonal integrations."
+}

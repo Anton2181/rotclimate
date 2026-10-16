@@ -9,6 +9,7 @@ zones count as much as big ones).
 from __future__ import annotations
 
 import numpy as np
+from functools import reduce
 
 from .geography import TARGET_CLASSES, TARGET_KEYS
 from .koppen import climate_indices, monthly_stats
@@ -21,12 +22,12 @@ def sig(x):
 # Human-readable versions of the rules, used in the docs and plots.
 RULES = {
     "cold_wet": "coldest month < ~1 C  AND  humid (precip >= 1.8x Koppen dry threshold)",
-    "cold_dry": "coldest month < ~1 C  AND  semi-arid/arid (precip < 1.3x Koppen threshold)",
+    "cold_dry": "mean annual T < ~18 C AND arid/semi-arid (precip < Koppen dry threshold)",
     "warm_wet": "coldest month > ~1 C, warmest > ~20 C  AND  humid (>= 1.8x)  AND  no summer drought",
-    "med": "warmest month > ~22 C, coldest > ~0 C, dry summer + wet winter (Koppen 's'), not desert",
-    "swamp": "warmest month > ~25 C, coldest > ~4 C  AND  very wet (>= 2.0x threshold)  AND  flat ground (slope < ~1.5 per mille): waterlogged",
+    "med": "warmest month > ~10 C, coldest > ~0 C, dry summer + wet winter (Koppen Cs), not desert",
+    "swamp": "warmest month > ~25 C, coldest > ~4 C, annual mean > ~21 C AND very wet (>= 2.0x threshold) AND flat (slope < ~1.5 per mille)",
     "tree": "coldest month > ~2 C  AND  humid enough for forest (>= 1.6x threshold)",
-    "hot_dry": "mean annual T > ~17 C  AND  arid/semi-arid (< 1.0x threshold)",
+    "hot_dry": "mean annual T > ~18 C  AND  arid/semi-arid (< 1.0x threshold)",
 }
 
 
@@ -58,30 +59,33 @@ def flatness(slope):
     return sig((np.log(1.5) - np.log(np.maximum(slope, 1e-3))) / 0.35)
 
 
-def memberships(ix: dict, floodplain=None, slope=None) -> dict:
+def membership_factors(ix: dict, floodplain=None, slope=None) -> dict:
+    """Named factors in the existing rules, ordered as in the original products."""
     Tc, Th, MAT, ar = ix["Tcold"], ix["Thot"], ix["MAT"], ix["aridity"]
     lar = np.log(np.maximum(ar, 1e-3))
     humid = lambda a: sig((lar - np.log(a)) / 0.18)
     arid = lambda a: sig((np.log(a) - lar) / 0.18)
     summer_dry = sig((40 - ix["Psdry"]) / 8) * sig((ix["Pwwet"] / 3 - ix["Psdry"]) / 8)
-    cold = sig((1.0 - Tc) / 2.0)
     return {
-        "cold_wet": cold * humid(1.8),
-        # Koppen-consistent dry zones: B climates (below the dryness threshold),
-        # split at Koppen's own k/h line (annual mean 18 C): BSk/BWk vs BSh/BWh.
-        # (Until round 18 cold-dry also took non-B climates up to 1.3x the
-        # threshold, so cold dry-summer Dsa counted as "cold and dry".)
-        "cold_dry": sig((18.0 - MAT) / 1.2) * arid(1.0),
-        "warm_wet": sig((Tc - 1.0) / 2.0) * sig((Th - 20) / 1.5) * humid(1.8) * (1 - summer_dry),
-        # Cs (Csa and Csb): temperate, dry summer, wet winter, not desert
-        "med": sig((Th - 10) / 1.2) * sig((Tc - 0.0) / 2.0) * summer_dry * humid(1.0),
-        "swamp": sig((Th - 25) / 1.2) * sig((Tc - 4) / 2.0)
-        * (humid(SWAMP_HUMID) if floodplain is None else np.maximum(humid(SWAMP_HUMID), floodplain * humid(1.2)))
-        * (1.0 if slope is None else flatness(slope))
-        * sig((MAT - SWAMP_MAT) / 0.6),
-        "tree": sig((Tc - 2) / 2.0) * humid(1.6),
-        "hot_dry": sig((MAT - 18.0) / 1.2) * arid(1.0),
+        "cold_wet": dict(cold_winter=sig((1.0 - Tc) / 2.0), humidity=humid(1.8)),
+        "cold_dry": dict(cool_year=sig((18.0 - MAT) / 1.2), aridity=arid(1.0)),
+        "warm_wet": dict(mild_winter=sig((Tc - 1.0) / 2.0), warm_summer=sig((Th - 20) / 1.5),
+                         humidity=humid(1.8), summer_moisture=1 - summer_dry),
+        "med": dict(warm_summer=sig((Th - 10) / 1.2), mild_winter=sig(Tc / 2.0),
+                    summer_drought=summer_dry, nonarid=humid(1.0)),
+        "swamp": dict(hot_summer=sig((Th - 25) / 1.2), mild_winter=sig((Tc - 4) / 2.0),
+                      humidity=humid(SWAMP_HUMID) if floodplain is None else
+                      np.maximum(humid(SWAMP_HUMID), floodplain * humid(1.2)),
+                      flat_ground=np.ones_like(Tc, dtype=float) if slope is None else flatness(slope),
+                      hot_year=sig((MAT - SWAMP_MAT) / 0.6)),
+        "tree": dict(mild_winter=sig((Tc - 2) / 2.0), humidity=humid(1.6)),
+        "hot_dry": dict(hot_year=sig((MAT - 18.0) / 1.2), aridity=arid(1.0)),
     }
+
+
+def memberships(ix: dict, floodplain=None, slope=None) -> dict:
+    return {key: reduce(np.multiply, factors.values())
+            for key, factors in membership_factors(ix, floodplain, slope).items()}
 
 
 # The Koppen classes each painted zone may be labelled on: the soft rules give
@@ -119,6 +123,18 @@ def best_zone(mem: dict, threshold=0.3, weights=None, koppen=None) -> np.ndarray
     z = stack.argmax(0) + 1
     z[stack.max(0) < threshold] = 0
     z[(mem["swamp"] >= 0.5) & allowed[keys.index("swamp")]] = keys.index("swamp") + 1
+    return z
+
+
+def display_zones(mem, land, threshold=0.3, ix=None, elev=None, koppen=None):
+    """Atlas labels, including mountain/grassland/transitional display types."""
+    z = best_zone(mem, threshold=threshold, weights={"tree": 0.75}, koppen=koppen).astype(np.int8)
+    if ix is not None and elev is not None:
+        z[(elev > 2200.0) | (ix["Thot"] < 15.0)] = 8
+        left = z == 0
+        z[left & (ix["aridity"] < 1.8)] = 9
+        z[left & (ix["aridity"] >= 1.8)] = 10
+    z[~land] = -1
     return z
 
 
@@ -171,18 +187,32 @@ def evaluate(result, land_only=True):
     prec, f1 = precision_f1(mem, g.target, valid, per, elev=g.elev)
     # hard confusion: best-matching zone per painted cell
     from .koppen import classify
-    pred = best_zone(mem, koppen=classify(st["Tm"], st["Pm"], st["summer"]))
+    kop = classify(st["Tm"], st["Pm"], st["summer"])
+    pred = best_zone(mem, koppen=kop)
     conf = np.zeros((7, 8), int)
     for cid in range(1, 8):
         m = valid & (g.target == cid)
         conf[cid - 1] = np.bincount(pred[m], minlength=8)
     painted = valid & (g.target > 0)
     acc = float((pred[painted] == g.target[painted]).mean())
+    recall = {key: float(conf[cid - 1, cid] / conf[cid - 1].sum())
+              if conf[cid - 1].sum() else np.nan for cid, key, _, _ in TARGET_CLASSES}
+    displayed = display_zones(mem, g.land, ix=ix, elev=g.elev, koppen=kop)
+    policy_audit = dict(
+        grid="model_grid",
+        strict_accuracy=acc,
+        display_accuracy=float((displayed[painted] == g.target[painted]).mean()),
+        note="Same model fields under two label policies; full-resolution map interpolation can differ.",
+        per_zone={key: dict(
+            strict_recall=float((pred[valid & (g.target == cid)] == cid).mean()),
+            display_recall=float((displayed[valid & (g.target == cid)] == cid).mean()))
+            for cid, key, _, _ in TARGET_CLASSES if (valid & (g.target == cid)).any()})
     MAP = ix["MAP"][valid]
     realism = dict(map_median=float(np.median(MAP)), map_p95=float(np.percentile(MAP, 95)),
                    share_over_3500=float((MAP > 3500).mean()), **summer_heat(st["Tm"], st["Pm"], g, valid))
-    return dict(total=total, per_class=per, precision=prec, f1=f1, accuracy=acc, confusion=conf,
-                indices=ix, memberships=mem, monthly=st, predicted=pred,
+    return dict(total=total, per_class=per, precision=prec, f1=f1, recall=recall,
+                accuracy=acc, confusion=conf,
+                indices=ix, memberships=mem, monthly=st, predicted=pred, label_policy_audit=policy_audit,
                 rivers={**river_check(result, ix), **river_network_check(g, hyd)},
                 realism=realism, hydrology=hyd)
 
@@ -239,19 +269,29 @@ def objective(ev, mode="mean"):
     'f1r'       as 'f1', and humid summers must be no hotter than Earth's:
                 penalised when more than twice Earth's share (2.8%) of the
                 wet-summer lowland passes 30 C in its warmest month.
+    'zonefit'   equal weight to balanced fuzzy F1 and balanced per-zone strict
+                recall, with the same realism penalties as f1r. Each painted
+                zone has equal weight regardless of area; old objectives stay.
     """
     if mode == "mean":
         return ev["total"]
-    vals = ev["f1"] if mode in ("f1", "f1r") else ev["per_class"]
+    vals = ev["f1"] if mode in ("f1", "f1r", "zonefit") else ev["per_class"]
     sc = np.array([v for v in vals.values() if np.isfinite(v)])
     tau = 0.08
     softmin = -tau * np.log(np.mean(np.exp(-sc / tau)))
+    fit = 0.5 * sc.mean() + 0.5 * softmin
+    if mode == "zonefit":
+        rec = np.array([v for v in ev["recall"].values() if np.isfinite(v)])
+        if not rec.size:
+            raise ValueError("zonefit requires per-zone strict recall")
+        rec_softmin = -tau * np.log(np.mean(np.exp(-rec / tau)))
+        fit = 0.5 * fit + 0.5 * (0.5 * rec.mean() + 0.5 * rec_softmin)
     r = ev["realism"]
     pen = (np.clip((r["map_median"] - 1300) / 800, 0, 1.5)
            + np.clip((r["map_p95"] - 3500) / 2500, 0, 1.5))
-    if mode == "f1r":        # v8: humid summers as hot as Earth allows, no hotter
+    if mode in ("f1r", "zonefit"):
         pen = pen + np.clip((r.get("wet_summer_hot", 0.0) - 2 * EARTH_WET_SUMMER_HOT) / 0.25, 0, 1.5)
-    return float(0.5 * sc.mean() + 0.5 * softmin - 0.2 * pen)
+    return float(fit - 0.2 * pen)
 
 
 def river_check(result, ix):

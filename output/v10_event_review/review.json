@@ -1,0 +1,1999 @@
+{
+  "source_code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+  "source_manifest_sha256": "ef130209a9e19c8aac794c1eb90efe99aedbdff06192392bf49876e1d3157497",
+  "source_state_sha256": "828c08fe9218155d18f7f47fc903c4f73d5cb6c0450ab24c9b781f9386559799",
+  "analysis_script_sha256": "d2be45bc47e0d24301afee392017c212cca145658c3ae603fb92275efd4fa267",
+  "sources_verified": true,
+  "completed_cases": 12,
+  "cycles": 48,
+  "integration_minutes": 31.02757134516675,
+  "all_settled": true,
+  "both_anchors_passed": true,
+  "maximum_absolute_recomputed_errors": {
+    "water_mm": 8.043343768804334e-12,
+    "energy_j_m2": 1.8477439880371094e-05,
+    "gross_net_mm": 5.474021236295812e-11,
+    "atmospheric_water_mm": 5.589846582842745e-11
+  },
+  "maximum_integrated_monthly_import_error_mm": 1.77351466845721e-11,
+  "cases": {
+    "california_lift1_steady": {
+      "response": {
+        "monthly_mae_mm": 32.23674737608915,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.037237169542343795,
+        "annual_rain_mm": 15.169182084413025,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 0.0,
+        "winter_rain_mm": 11.978962834591055,
+        "summer_rain_mm": 3.1902192498219706,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.9368029739776952,
+        "wettest_five_percent_rain_share": 0.7442733847153176,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 32.53711206754591,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 25.97252473450086,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 6.564587333045056,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 2.167329667818681,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 1.1717733498231717,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 0.9955563179955093,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        13.84915221579084,
+        0.20454566829512674,
+        0.14781546209111865,
+        0.49831217965721963,
+        0.46935655857871383
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 451.28530391655033,
+        "land_evaporation_mm": 3.215247681385225,
+        "rain_mm": 14.647279632179325,
+        "ocean_rain_mm": 9.129101296561494,
+        "runoff_mm": 2.380239290469458,
+        "boundary_export_mm": 439.8532978395405,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 1136251378.9948323,
+        "temperature_relaxation_j_m2": -1080976344.7675416,
+        "energy_boundary_export_j_m2": 939348064.7330663,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 884072959.2037833,
+        "theta_transport_error_kg_k_m2": -2.6285736434705775e-10,
+        "boundary_import_gross_mm": 2037.1576931809932,
+        "boundary_export_gross_mm": 2477.0109910205188,
+        "annual_water_error_mm": 2.7284841053187847e-12,
+        "annual_energy_error_j_m2": 1.430511474609375e-06,
+        "max_step_water_error_mm": 3.61039323437673e-16,
+        "max_step_energy_error_j_m2": 1.4528737324326357e-08,
+        "max_air_continuity_kg_m2_s": 1.9767174008755717e-15,
+        "steps": 23008
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.241635687732342,
+        "main_group_agreement": 0.5985130111524164,
+        "arid_share": 0.9739776951672863,
+        "desert_share": 0.9516728624535316,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.9420289855072463,
+        "target_mediterranean_retained": 0.057971014492753624,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 218,
+          "BSk": 6,
+          "Csb": 4,
+          "Dsb": 1,
+          "Dsc": 2
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 27
+          },
+          "Csb": {
+            "BWk": 37,
+            "Csb": 4,
+            "BSk": 1
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BWk": 19,
+            "Dsb": 1,
+            "BSk": 2
+          },
+          "Dsc": {
+            "BSk": 3,
+            "Dsc": 2
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.1576931809932,
+        "gross_boundary_export_mm": 2477.0109910205188,
+        "total_atmospheric_supply_mm": 2491.6582447789287,
+        "rain_to_supply": 0.005878526745339788,
+        "export_to_supply": 0.9941214836388168,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.369904144650917,
+        5.63402013721578
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.77351466845721e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 0.0,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 0.0,
+        "fraction_cells_with_lower_monthly_error": 0.0,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 36.03029486919179,
+        "temperature_relaxation_j_m2": -34.277535031948936,
+        "energy_boundary_export_j_m2": 29.786531733037364,
+        "prescribed_flow_work_j_m2": 28.033769634823162
+      },
+      "anchor_check": {
+        "passed": true,
+        "changes": {
+          "monthly_rain_p95_mm": 0.00010577855731470547,
+          "annual_rain_p95_mm": 0.001697733097511954,
+          "monthly_mae_change_mm": 3.383228958142581e-05,
+          "annual_mean_change_mm": 0.0003781101961912725,
+          "coastal_winter_change_mm": 0.0003016750472717433
+        },
+        "limits": {
+          "monthly_rain_p95_mm": 1.0,
+          "annual_rain_p95_mm": 5.0,
+          "monthly_mae_change_mm": 0.1,
+          "annual_mean_change_mm": 1.0,
+          "coastal_winter_change_mm": 1.0
+        },
+        "note": "Checks the new held-boundary-water discretization against the frozen continuously interpolated boundary. Not an exact annual reproduction or climate-validation claim."
+      }
+    },
+    "california_lift1_aligned": {
+      "response": {
+        "monthly_mae_mm": 32.032143399558194,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.0433477458132594,
+        "annual_rain_mm": 17.627393213340856,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 0.013467259125645998,
+        "winter_rain_mm": 14.187540667378858,
+        "summer_rain_mm": 3.4398525459619957,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.9368029739776952,
+        "wettest_five_percent_rain_share": 0.7166684921190366,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 36.41817212633428,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 29.307355173038236,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 7.110816953296046,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 2.2768596006639013,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 1.2188421346721796,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 1.0580174659917219,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        14.113957077631753,
+        0.735601161845693,
+        0.47836577181767037,
+        1.6931339136156351,
+        0.6063352884301059
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 452.28191580512845,
+        "land_evaporation_mm": 3.6070413706430684,
+        "rain_mm": 15.957791440853812,
+        "ocean_rain_mm": 9.758478115836175,
+        "runoff_mm": 2.666907221378895,
+        "boundary_export_mm": 439.93118559755135,
+        "roundoff_correction_mm": 5e-324,
+        "surface_latent_input_j_m2": 1139722392.9394279,
+        "temperature_relaxation_j_m2": -1081869856.6876228,
+        "energy_boundary_export_j_m2": 941938066.2099789,
+        "roundoff_energy_j_m2": 1.235164e-317,
+        "prescribed_flow_work_j_m2": 884085475.472666,
+        "theta_transport_error_kg_k_m2": -2.953401447014503e-10,
+        "boundary_import_gross_mm": 2037.1576931809786,
+        "boundary_export_gross_mm": 2477.0888787785398,
+        "annual_water_error_mm": -2.525979425627156e-12,
+        "annual_energy_error_j_m2": -5.364418029785156e-06,
+        "max_step_water_error_mm": 3.982545630082379e-16,
+        "max_step_energy_error_j_m2": 1.590524334460497e-08,
+        "max_air_continuity_kg_m2_s": 1.9767174008755717e-15,
+        "steps": 23008
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.24907063197026022,
+        "main_group_agreement": 0.6059479553903345,
+        "arid_share": 0.966542750929368,
+        "desert_share": 0.9516728624535316,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.9420289855072463,
+        "target_mediterranean_retained": 0.057971014492753624,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 218,
+          "BSk": 4,
+          "Csb": 4,
+          "Dsb": 1,
+          "Dsc": 4
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 27
+          },
+          "Csb": {
+            "BWk": 37,
+            "Csb": 4,
+            "BSk": 1
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BWk": 19,
+            "Dsb": 1,
+            "BSk": 2
+          },
+          "Dsc": {
+            "Dsc": 4,
+            "BSk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.1576931809786,
+        "gross_boundary_export_mm": 2477.0888787785398,
+        "total_atmospheric_supply_mm": 2493.04665035675,
+        "rain_to_supply": 0.0064009197094528035,
+        "export_to_supply": 0.9935990882577642,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.3699018512039016,
+        5.63690829686899
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.6370904631912708e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 0.20460397653095205,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 0.20460397653095205,
+        "fraction_cells_with_lower_monthly_error": 0.5204460966542751,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 36.14035999934766,
+        "temperature_relaxation_j_m2": -34.30586810906972,
+        "energy_boundary_export_j_m2": 29.868660141107906,
+        "prescribed_flow_work_j_m2": 28.03416652310585
+      }
+    },
+    "california_lift1_shifted": {
+      "response": {
+        "monthly_mae_mm": 32.06359900531038,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.042408312077143795,
+        "annual_rain_mm": 17.237352104192603,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 0.0,
+        "winter_rain_mm": 14.003341353930503,
+        "summer_rain_mm": 3.2340107502620987,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.9368029739776952,
+        "wettest_five_percent_rain_share": 0.7319170929235456,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 37.83275138377871,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 31.09750425926102,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 6.735247124517693,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 2.1654734290090962,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 1.1907980499289277,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 0.9746753790801685,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        13.939897189249113,
+        0.7507422659888284,
+        0.5446503337936583,
+        1.5514016130295603,
+        0.4506607021314385
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 452.1001506808471,
+        "land_evaporation_mm": 3.556227014869419,
+        "rain_mm": 15.723218538751102,
+        "ocean_rain_mm": 9.43303546870162,
+        "runoff_mm": 2.8090490078124435,
+        "boundary_export_mm": 439.93318519632265,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 1139140944.2392783,
+        "temperature_relaxation_j_m2": -1081460362.0250728,
+        "energy_boundary_export_j_m2": 941752696.1426835,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 884072043.0425642,
+        "theta_transport_error_kg_k_m2": 2.3557224573811375e-10,
+        "boundary_import_gross_mm": 2037.1576931809473,
+        "boundary_export_gross_mm": 2477.0908783772984,
+        "annual_water_error_mm": -2.5934809855243657e-12,
+        "annual_energy_error_j_m2": 9.059906005859375e-06,
+        "max_step_water_error_mm": 4.730103028011134e-16,
+        "max_step_energy_error_j_m2": 1.3864337233826518e-08,
+        "max_air_continuity_kg_m2_s": 1.9767174008755717e-15,
+        "steps": 23008
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.24535315985130113,
+        "main_group_agreement": 0.6022304832713755,
+        "arid_share": 0.9702602230483272,
+        "desert_share": 0.9479553903345725,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.9420289855072463,
+        "target_mediterranean_retained": 0.057971014492753624,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 217,
+          "BSk": 6,
+          "Csb": 4,
+          "Dsb": 1,
+          "Dsc": 3
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 27
+          },
+          "Csb": {
+            "BSk": 3,
+            "BWk": 35,
+            "Csb": 4
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BWk": 19,
+            "Dsb": 1,
+            "BSk": 2
+          },
+          "Dsc": {
+            "Dsc": 3,
+            "BWk": 1,
+            "BSk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.1576931809473,
+        "gross_boundary_export_mm": 2477.0908783772984,
+        "total_atmospheric_supply_mm": 2492.8140708766637,
+        "rain_to_supply": 0.00630741727690169,
+        "export_to_supply": 0.9936925931688777,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.3699032048215485,
+        5.636436026159046
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.745092959026806e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 0.17314837077876422,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 0.17314837077876422,
+        "fraction_cells_with_lower_monthly_error": 0.11524163568773234,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 36.12192238201669,
+        "temperature_relaxation_j_m2": -34.2928831185018,
+        "energy_boundary_export_j_m2": 29.862782094833953,
+        "prescribed_flow_work_j_m2": 28.03374058354148
+      }
+    },
+    "california_lift16_steady": {
+      "response": {
+        "monthly_mae_mm": 29.64928810599016,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.11451263351865448,
+        "annual_rain_mm": 46.87270900481493,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 15.118566937373775,
+        "winter_rain_mm": 40.89621242431893,
+        "summer_rain_mm": 5.976496580495988,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.7360594795539034,
+        "wettest_five_percent_rain_share": 0.4032272593354684,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 75.82650114249492,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 66.92077154893498,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 8.905729593559952,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 16.517484049082615,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 13.70207230838718,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 2.8154117406954353,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        15.795511053013357,
+        5.737606359048121,
+        6.99259004078178,
+        13.211020355132725,
+        5.135981196838964
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 469.1712166042279,
+        "land_evaporation_mm": 10.999433092628742,
+        "rain_mm": 36.42698372371299,
+        "ocean_rain_mm": 20.72933918645627,
+        "runoff_mm": 4.767762154235498,
+        "boundary_export_mm": 443.7436948046027,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 1200426624.2421443,
+        "temperature_relaxation_j_m2": -1176238425.4771752,
+        "energy_boundary_export_j_m2": 954738538.2799537,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 930550262.1580313,
+        "theta_transport_error_kg_k_m2": 2.4602424264497103e-11,
+        "boundary_import_gross_mm": 2037.1576931809634,
+        "boundary_export_gross_mm": 2480.901387985566,
+        "annual_water_error_mm": 3.538502824085299e-12,
+        "annual_energy_error_j_m2": 5.841255187988281e-06,
+        "max_step_water_error_mm": 4.984077386915864e-16,
+        "max_step_energy_error_j_m2": 1.3282260624691844e-08,
+        "max_air_continuity_kg_m2_s": 3.1002977962657496e-14,
+        "steps": 22985
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.26394052044609667,
+        "main_group_agreement": 0.620817843866171,
+        "arid_share": 0.9516728624535316,
+        "desert_share": 0.8996282527881041,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.9130434782608695,
+        "target_mediterranean_retained": 0.08695652173913043,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 204,
+          "BSk": 14,
+          "Csb": 6,
+          "Dsb": 2,
+          "Dsc": 5
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 24,
+            "BSk": 3
+          },
+          "Csb": {
+            "BSk": 10,
+            "BWk": 26,
+            "Csb": 6
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BWk": 19,
+            "Dsb": 2,
+            "BSk": 1
+          },
+          "Dsc": {
+            "Dsc": 5
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.1576931809634,
+        "gross_boundary_export_mm": 2480.901387985566,
+        "total_atmospheric_supply_mm": 2517.32834287782,
+        "rain_to_supply": 0.014470493619465436,
+        "export_to_supply": 0.9855295178337322,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.4341466234947777,
+        5.65468283221764
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.77351466845721e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 2.5874592700989885,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 2.5874592700989885,
+        "fraction_cells_with_lower_monthly_error": 0.9925650557620818,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 38.06527854649113,
+        "temperature_relaxation_j_m2": -37.29827579519201,
+        "energy_boundary_export_j_m2": 30.274560447740797,
+        "prescribed_flow_work_j_m2": 29.507555243468776
+      }
+    },
+    "california_lift16_aligned": {
+      "response": {
+        "monthly_mae_mm": 29.413282616591705,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.12156102802092772,
+        "annual_rain_mm": 49.83280402529779,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 17.639521033127917,
+        "winter_rain_mm": 42.95518941022439,
+        "summer_rain_mm": 6.877614615073399,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.7137546468401487,
+        "wettest_five_percent_rain_share": 0.39267296662190004,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 80.58922184554338,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 70.19555508875737,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 10.393666756785995,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 17.906181376990475,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 14.587544053662116,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 3.3186373233283617,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        15.872603447865636,
+        6.218077660241509,
+        7.638161417474253,
+        14.53809138181693,
+        5.56587011789946
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 470.9034150862789,
+        "land_evaporation_mm": 11.759274211161001,
+        "rain_mm": 44.10802515997329,
+        "ocean_rain_mm": 27.321396626392442,
+        "runoff_mm": 5.10043134797074,
+        "boundary_export_mm": 438.55469210850845,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 1206656723.2435977,
+        "temperature_relaxation_j_m2": -1180093707.5231287,
+        "energy_boundary_export_j_m2": 956337615.7754341,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 929774524.94736,
+        "theta_transport_error_kg_k_m2": 3.590701746353231e-10,
+        "boundary_import_gross_mm": 2037.1576931809652,
+        "boundary_export_gross_mm": 2475.712385289475,
+        "annual_water_error_mm": -7.638334409421077e-13,
+        "annual_energy_error_j_m2": 9.655952453613281e-06,
+        "max_step_water_error_mm": 4.758156759224197e-16,
+        "max_step_energy_error_j_m2": 1.3819658306601923e-08,
+        "max_air_continuity_kg_m2_s": 3.1002977962657496e-14,
+        "steps": 22985
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.26394052044609667,
+        "main_group_agreement": 0.620817843866171,
+        "arid_share": 0.9516728624535316,
+        "desert_share": 0.8921933085501859,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.9130434782608695,
+        "target_mediterranean_retained": 0.08695652173913043,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 202,
+          "BSk": 16,
+          "Csb": 6,
+          "Dsb": 2,
+          "Dsc": 5
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 23,
+            "BSk": 4
+          },
+          "Csb": {
+            "BSk": 11,
+            "BWk": 25,
+            "Csb": 6
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BWk": 19,
+            "Dsb": 2,
+            "BSk": 1
+          },
+          "Dsc": {
+            "Dsc": 5
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.1576931809652,
+        "gross_boundary_export_mm": 2475.712385289475,
+        "total_atmospheric_supply_mm": 2519.820382478405,
+        "rain_to_supply": 0.017504432247107318,
+        "export_to_supply": 0.9824955788533043,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.4350362719684098,
+        5.6565203248644105
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.5404566511278972e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 2.823464759497446,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 2.823464759497446,
+        "fraction_cells_with_lower_monthly_error": 0.9925650557620818,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 38.26283368986548,
+        "temperature_relaxation_j_m2": -37.42052598690794,
+        "energy_boundary_export_j_m2": 30.325266862488398,
+        "prescribed_flow_work_j_m2": 29.482956777884326
+      }
+    },
+    "california_lift16_shifted": {
+      "response": {
+        "monthly_mae_mm": 29.562721370756456,
+        "zero_rain_mae_mm": 33.48358116480793,
+        "skill_vs_zero_rain": 0.11709798228429624,
+        "annual_rain_mm": 47.86292196844232,
+        "annual_reference_mm": 401.80297397769516,
+        "median_annual_rain_mm": 14.88170249421688,
+        "winter_rain_mm": 41.61063904300238,
+        "summer_rain_mm": 6.252282925439945,
+        "winter_reference_mm": 298.2193308550186,
+        "summer_reference_mm": 103.58364312267658,
+        "cells_below_tenth_reference_fraction": 0.7323420074349443,
+        "wettest_five_percent_rain_share": 0.4083077374282168,
+        "reference_wettest_five_percent_rain_share": 0.19200629134477495,
+        "coast_annual_mm": 78.4611571789362,
+        "coast_annual_reference_mm": 627.0454545454545,
+        "coast_winter_mm": 69.03596892997182,
+        "coast_winter_reference_mm": 534.8181818181819,
+        "coast_summer_mm": 9.425188248964387,
+        "coast_summer_reference_mm": 92.22727272727273,
+        "interior_annual_mm": 16.47713411920377,
+        "interior_annual_reference_mm": 252.8235294117647,
+        "interior_winter_mm": 13.503291532658391,
+        "interior_winter_reference_mm": 141.1985294117647,
+        "interior_summer_mm": 2.973842586545379,
+        "interior_summer_reference_mm": 111.625
+      },
+      "annual_layer_rain_mm": [
+        15.93521581368449,
+        5.874519075057705,
+        7.0650400209789055,
+        13.846257815589242,
+        5.14188924313198
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 470.0630723389651,
+        "land_evaporation_mm": 11.108576731521785,
+        "rain_mm": 36.46277307659527,
+        "ocean_rain_mm": 20.32922307975257,
+        "runoff_mm": 5.094683970520318,
+        "boundary_export_mm": 444.70890674288904,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 1202929122.6762304,
+        "temperature_relaxation_j_m2": -1176244150.3355813,
+        "energy_boundary_export_j_m2": 957331243.6616507,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 930646188.9839935,
+        "theta_transport_error_kg_k_m2": 2.2906869109884376e-11,
+        "boundary_import_gross_mm": 2037.157693180944,
+        "boundary_export_gross_mm": 2481.866599923888,
+        "annual_water_error_mm": 1.2327916465437738e-12,
+        "annual_energy_error_j_m2": -1.3828277587890625e-05,
+        "max_step_water_error_mm": 4.915772650049277e-16,
+        "max_step_energy_error_j_m2": 1.3169483281672001e-08,
+        "max_air_continuity_kg_m2_s": 3.1002977962657496e-14,
+        "steps": 22985
+      },
+      "koppen": {
+        "scored_cells": 269,
+        "exact_class_agreement": 0.27137546468401486,
+        "main_group_agreement": 0.6282527881040892,
+        "arid_share": 0.9442379182156134,
+        "desert_share": 0.8884758364312267,
+        "target_mediterranean_cells": 69,
+        "target_mediterranean_to_arid": 0.8985507246376812,
+        "target_mediterranean_retained": 0.10144927536231885,
+        "class_counts": {
+          "BWh": 38,
+          "BWk": 201,
+          "BSk": 15,
+          "Csb": 7,
+          "Dsb": 3,
+          "Dsc": 5
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 2
+          },
+          "BSk": {
+            "BWk": 94
+          },
+          "BWh": {
+            "BWh": 36
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Csa": {
+            "BWk": 24,
+            "BSk": 3
+          },
+          "Csb": {
+            "BSk": 11,
+            "BWk": 24,
+            "Csb": 7
+          },
+          "Dfb": {
+            "BWk": 19
+          },
+          "Dsb": {
+            "BSk": 1,
+            "BWk": 18,
+            "Dsb": 3
+          },
+          "Dsc": {
+            "Dsc": 5
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 2037.157693180944,
+        "gross_boundary_export_mm": 2481.866599923888,
+        "total_atmospheric_supply_mm": 2518.3293422514307,
+        "rain_to_supply": 0.01447895335405055,
+        "export_to_supply": 0.9855210588560491,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        3.4313064636366892,
+        5.654896794283221
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 1.574562702444382e-11,
+      "error_change": {
+        "total_mae_improvement_mm": 2.6740260053326916,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 2.6740260053326916,
+        "fraction_cells_with_lower_monthly_error": 0.9925650557620818,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 38.1446322512757,
+        "temperature_relaxation_j_m2": -37.298457329261204,
+        "energy_boundary_export_j_m2": 30.35677459606959,
+        "prescribed_flow_work_j_m2": 29.5105970631657
+      }
+    },
+    "iberia_lift1_steady": {
+      "response": {
+        "monthly_mae_mm": 34.66450575888895,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.019320847675112218,
+        "annual_rain_mm": 22.032808444424273,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 0.40239691852580434,
+        "winter_rain_mm": 10.873487283200811,
+        "summer_rain_mm": 11.15932116122346,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.8208469055374593,
+        "wettest_five_percent_rain_share": 0.7068784249645598,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 27.63696774933895,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 16.27108061423952,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 11.365887135099431,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 11.843592521144895,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 0.42951715587132394,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.41407536527357,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.764645895319767,
+        0.15387758086903475,
+        9.649216072234548e-05,
+        0.0,
+        5.114188476074739
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 313.61392514747274,
+        "land_evaporation_mm": 4.342428362392401,
+        "rain_mm": 17.487833477763772,
+        "ocean_rain_mm": 7.9525131773419035,
+        "runoff_mm": 5.3122268656425184,
+        "boundary_export_mm": 300.4689603282943,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 794890883.7746718,
+        "temperature_relaxation_j_m2": -657380637.4650798,
+        "energy_boundary_export_j_m2": 675695727.4383961,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 538184362.9469688,
+        "theta_transport_error_kg_k_m2": -5.1203158900337e-10,
+        "boundary_import_gross_mm": 1087.9888907430175,
+        "boundary_export_gross_mm": 1388.4578510713081,
+        "annual_water_error_mm": 1.4779288903810084e-12,
+        "annual_energy_error_j_m2": -1.3113021850585938e-06,
+        "max_step_water_error_mm": 3.7404974950749903e-16,
+        "max_step_energy_error_j_m2": 1.1332303984090686e-08,
+        "max_air_continuity_kg_m2_s": 2.7347915598774364e-15,
+        "steps": 23507
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36319218241042345,
+        "main_group_agreement": 0.5390879478827362,
+        "arid_share": 0.9869706840390879,
+        "desert_share": 0.9706840390879479,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 372,
+          "BSk": 10,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 2
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 74,
+            "Csb": 1,
+            "Cfb": 1
+          },
+          "Csa": {
+            "BWk": 128,
+            "BSk": 5,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 49,
+            "BSk": 3,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 2
+          },
+          "Dfc": {
+            "BSk": 1
+          },
+          "Dsb": {
+            "BWk": 1,
+            "Dsb": 2
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.9888907430175,
+        "gross_boundary_export_mm": 1388.4578510713081,
+        "total_atmospheric_supply_mm": 1405.9452442528825,
+        "rain_to_supply": 0.012438488304753848,
+        "export_to_supply": 0.9875618248626268,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        1.9333832228148424,
+        4.866119918007644
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 4.888534022029489e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 0.0,
+        "baseline_annual_overwet_cells_contribution_mm": 0.0,
+        "baseline_annual_underwet_cells_contribution_mm": 0.0,
+        "fraction_cells_with_lower_monthly_error": 0.0,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 25.205824574285636,
+        "temperature_relaxation_j_m2": -20.84540326817224,
+        "energy_boundary_export_j_m2": 21.426170961390035,
+        "prescribed_flow_work_j_m2": 17.065714197963242
+      },
+      "anchor_check": {
+        "passed": true,
+        "changes": {
+          "monthly_rain_p95_mm": 0.00023936337253167508,
+          "annual_rain_p95_mm": 0.0025202975523917876,
+          "monthly_mae_change_mm": 2.3350033146130045e-05,
+          "annual_mean_change_mm": 6.147304888060035e-05,
+          "coastal_winter_change_mm": 0.0006344992662796756
+        },
+        "limits": {
+          "monthly_rain_p95_mm": 1.0,
+          "annual_rain_p95_mm": 5.0,
+          "monthly_mae_change_mm": 0.1,
+          "annual_mean_change_mm": 1.0,
+          "coastal_winter_change_mm": 1.0
+        },
+        "note": "Checks the new held-boundary-water discretization against the frozen continuously interpolated boundary. Not an exact annual reproduction or climate-validation claim."
+      }
+    },
+    "iberia_lift1_aligned": {
+      "response": {
+        "monthly_mae_mm": 34.66098756877447,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.019420379332167448,
+        "annual_rain_mm": 22.12236438770338,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 0.49352368042911554,
+        "winter_rain_mm": 10.872327368198178,
+        "summer_rain_mm": 11.250037019505202,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.8192182410423453,
+        "wettest_five_percent_rain_share": 0.7049370899973593,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 27.71743127586251,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 16.179766997760623,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 11.537664278101888,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 11.8479536727535,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 0.4384973691953268,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.409456303558173,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.80162816219321,
+        0.1910039329402046,
+        0.00011045296574874641,
+        0.0,
+        5.12962183960421
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 314.2783302631503,
+        "land_evaporation_mm": 4.370050833318726,
+        "rain_mm": 17.432222584571935,
+        "ocean_rain_mm": 7.885242851252458,
+        "runoff_mm": 5.296577169339803,
+        "boundary_export_mm": 301.21659008450825,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 796620952.7411666,
+        "temperature_relaxation_j_m2": -657284244.3157312,
+        "energy_boundary_export_j_m2": 677522501.3906356,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 538184696.6787835,
+        "theta_transport_error_kg_k_m2": 2.8270329697002716e-10,
+        "boundary_import_gross_mm": 1087.9888907430152,
+        "boundary_export_gross_mm": 1389.2054808275354,
+        "annual_water_error_mm": -2.4371615836571436e-12,
+        "annual_energy_error_j_m2": -4.172325134277344e-06,
+        "max_step_water_error_mm": 3.37403716077489e-16,
+        "max_step_energy_error_j_m2": 1.2084456102456897e-08,
+        "max_air_continuity_kg_m2_s": 2.7347915598774364e-15,
+        "steps": 23507
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36319218241042345,
+        "main_group_agreement": 0.5390879478827362,
+        "arid_share": 0.9869706840390879,
+        "desert_share": 0.9690553745928339,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 371,
+          "BSk": 11,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 2
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 74,
+            "Csb": 1,
+            "Cfb": 1
+          },
+          "Csa": {
+            "BWk": 128,
+            "BSk": 5,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 49,
+            "BSk": 3,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 1,
+            "BSk": 1
+          },
+          "Dfc": {
+            "BSk": 1
+          },
+          "Dsb": {
+            "BWk": 1,
+            "Dsb": 2
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.9888907430152,
+        "gross_boundary_export_mm": 1389.2054808275354,
+        "total_atmospheric_supply_mm": 1406.6372718394844,
+        "rain_to_supply": 0.012392834267625732,
+        "export_to_supply": 0.9876074725439679,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        1.933326057327113,
+        4.866127446166967
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 4.689582056016661e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 0.003518190114475102,
+        "baseline_annual_overwet_cells_contribution_mm": -0.0024042680273344105,
+        "baseline_annual_underwet_cells_contribution_mm": 0.005922458141809512,
+        "fraction_cells_with_lower_monthly_error": 0.40390879478827363,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 25.260684701330753,
+        "temperature_relaxation_j_m2": -20.842346661457736,
+        "energy_boundary_export_j_m2": 21.484097583416908,
+        "prescribed_flow_work_j_m2": 17.065724780529667
+      }
+    },
+    "iberia_lift1_shifted": {
+      "response": {
+        "monthly_mae_mm": 34.66356717131362,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.019347400866845388,
+        "annual_rain_mm": 22.05060747212591,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 0.42488467835416144,
+        "winter_rain_mm": 10.899474288988175,
+        "summer_rain_mm": 11.151133183137738,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.8208469055374593,
+        "wettest_five_percent_rain_share": 0.7072711065334389,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 27.646763679425824,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 16.299799697804385,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 11.34696398162144,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 11.830228227257448,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 0.43738383842964423,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.392844388827804,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.780207092537978,
+        0.15986434683443662,
+        2.4816580970855192e-05,
+        0.0,
+        5.110511216172516
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 314.12365016361576,
+        "land_evaporation_mm": 4.346658680587486,
+        "rain_mm": 17.439499898670565,
+        "ocean_rain_mm": 7.894864041444663,
+        "runoff_mm": 5.316761375071522,
+        "boundary_export_mm": 301.031257289146,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 796175772.1105084,
+        "temperature_relaxation_j_m2": -657298484.2344364,
+        "energy_boundary_export_j_m2": 677062947.6333959,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 538184521.6800867,
+        "theta_transport_error_kg_k_m2": 1.8610400200069765e-10,
+        "boundary_import_gross_mm": 1087.9888907430436,
+        "boundary_export_gross_mm": 1389.0201480321684,
+        "annual_water_error_mm": -1.0764722446765518e-12,
+        "annual_energy_error_j_m2": 3.814697265625e-06,
+        "max_step_water_error_mm": 3.458604930228759e-16,
+        "max_step_energy_error_j_m2": 9.72795533016324e-09,
+        "max_air_continuity_kg_m2_s": 2.7347915598774364e-15,
+        "steps": 23507
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36319218241042345,
+        "main_group_agreement": 0.5407166123778502,
+        "arid_share": 0.9853420195439739,
+        "desert_share": 0.9674267100977199,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 370,
+          "BSk": 11,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 2,
+          "Dsc": 1
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 74,
+            "Csb": 1,
+            "Cfb": 1
+          },
+          "Csa": {
+            "BWk": 127,
+            "BSk": 6,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 49,
+            "BSk": 3,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 1,
+            "BSk": 1
+          },
+          "Dfc": {
+            "Dsc": 1
+          },
+          "Dsb": {
+            "BWk": 1,
+            "Dsb": 2
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.9888907430436,
+        "gross_boundary_export_mm": 1389.0201480321684,
+        "total_atmospheric_supply_mm": 1406.459199587247,
+        "rain_to_supply": 0.012399577537541458,
+        "export_to_supply": 0.9876007412371461,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        1.9333774980854348,
+        4.86611983105654
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 5.115907697472721e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 0.0009385875753235204,
+        "baseline_annual_overwet_cells_contribution_mm": -0.0005509297025820053,
+        "baseline_annual_underwet_cells_contribution_mm": 0.0014895172779055255,
+        "fraction_cells_with_lower_monthly_error": 0.23127035830618892,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 25.246568116137382,
+        "temperature_relaxation_j_m2": -20.842798206317745,
+        "energy_boundary_export_j_m2": 21.46952522936948,
+        "prescribed_flow_work_j_m2": 17.06571923135739
+      }
+    },
+    "iberia_lift16_steady": {
+      "response": {
+        "monthly_mae_mm": 33.25840309435248,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.05910031485490297,
+        "annual_rain_mm": 39.7280319385812,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 21.662235876798185,
+        "winter_rain_mm": 22.736919505591263,
+        "summer_rain_mm": 16.991112432989933,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.7638436482084691,
+        "wettest_five_percent_rain_share": 0.457084168592878,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 55.5879159670914,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 34.46858652563948,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 21.11932944145192,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 14.176276461055119,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 2.6070874022602615,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.569189058794857,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.521104448141617,
+        3.4134246138326154,
+        4.567030959665322,
+        7.154228262843399,
+        8.072243654098243
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 334.72752281387864,
+        "land_evaporation_mm": 10.925976729625596,
+        "rain_mm": 32.56326658195945,
+        "ocean_rain_mm": 15.719343947059079,
+        "runoff_mm": 5.983850217599213,
+        "boundary_export_mm": 313.0904664259339,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 864133748.8587583,
+        "temperature_relaxation_j_m2": -758042337.4640992,
+        "energy_boundary_export_j_m2": 696478834.0113032,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 590386780.0502741,
+        "theta_transport_error_kg_k_m2": -5.813493176437534e-10,
+        "boundary_import_gross_mm": 1087.988890743028,
+        "boundary_export_gross_mm": 1401.079357168958,
+        "annual_water_error_mm": -1.538325022920617e-12,
+        "annual_energy_error_j_m2": -4.887580871582031e-06,
+        "max_step_water_error_mm": 3.5545568224937263e-16,
+        "max_step_energy_error_j_m2": 9.770246833795682e-09,
+        "max_air_continuity_kg_m2_s": 5.80490516766119e-14,
+        "steps": 23508
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36482084690553745,
+        "main_group_agreement": 0.5407166123778502,
+        "arid_share": 0.9853420195439739,
+        "desert_share": 0.9592833876221498,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 365,
+          "BSk": 16,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 3
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 72,
+            "Csb": 1,
+            "Cfb": 1,
+            "BSk": 2
+          },
+          "Csa": {
+            "BWk": 126,
+            "BSk": 7,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 48,
+            "BSk": 4,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 1,
+            "BSk": 1
+          },
+          "Dfc": {
+            "BSk": 1
+          },
+          "Dsb": {
+            "Dsb": 3
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.988890743028,
+        "gross_boundary_export_mm": 1401.079357168958,
+        "total_atmospheric_supply_mm": 1433.642390286532,
+        "rain_to_supply": 0.02271366053528262,
+        "export_to_supply": 0.9772865023117335,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        2.013189511422607,
+        5.203850272641666
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 5.258016244624741e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 1.4061026645364596,
+        "baseline_annual_overwet_cells_contribution_mm": -0.025997125690549204,
+        "baseline_annual_underwet_cells_contribution_mm": 1.4320997902270087,
+        "fraction_cells_with_lower_monthly_error": 0.9462540716612378,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 27.401501422461894,
+        "temperature_relaxation_j_m2": -24.037364835873262,
+        "energy_boundary_export_j_m2": 22.085198947593327,
+        "prescribed_flow_work_j_m2": 18.72104198535877
+      }
+    },
+    "iberia_lift16_aligned": {
+      "response": {
+        "monthly_mae_mm": 33.1552508313464,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.06201855273629142,
+        "annual_rain_mm": 41.05391031171303,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 22.57388265462509,
+        "winter_rain_mm": 23.437140356894236,
+        "summer_rain_mm": 17.6167699548188,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.760586319218241,
+        "wettest_five_percent_rain_share": 0.4498815890395412,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 57.71715867286357,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 35.54922989872736,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 22.16792877413621,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 14.256128726263068,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 2.6793443598275077,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.57678436643556,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.68283796958351,
+        3.6330516012528324,
+        4.7362365742834305,
+        7.7784807101797995,
+        8.223303456413477
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 335.308868045192,
+        "land_evaporation_mm": 11.379763788573339,
+        "rain_mm": 34.88289104578134,
+        "ocean_rain_mm": 17.47057909466637,
+        "runoff_mm": 6.099227087117521,
+        "boundary_export_mm": 311.8059686825744,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 866721579.5844164,
+        "temperature_relaxation_j_m2": -759614472.1989232,
+        "energy_boundary_export_j_m2": 697309212.9911232,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 590201475.4664708,
+        "theta_transport_error_kg_k_m2": 5.065425986647276e-11,
+        "boundary_import_gross_mm": 1087.9888907430297,
+        "boundary_export_gross_mm": 1399.7948594255952,
+        "annual_water_error_mm": 1.7976731214730535e-12,
+        "annual_energy_error_j_m2": -5.7220458984375e-06,
+        "max_step_water_error_mm": 3.720981855970251e-16,
+        "max_step_energy_error_j_m2": 9.455106919631362e-09,
+        "max_air_continuity_kg_m2_s": 5.80490516766119e-14,
+        "steps": 23508
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36482084690553745,
+        "main_group_agreement": 0.5407166123778502,
+        "arid_share": 0.9853420195439739,
+        "desert_share": 0.9560260586319218,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 363,
+          "BSk": 18,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 3
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 71,
+            "Csb": 1,
+            "Cfb": 1,
+            "BSk": 3
+          },
+          "Csa": {
+            "BWk": 126,
+            "BSk": 7,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 47,
+            "BSk": 5,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 1,
+            "BSk": 1
+          },
+          "Dfc": {
+            "BSk": 1
+          },
+          "Dsb": {
+            "Dsb": 3
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.9888907430297,
+        "gross_boundary_export_mm": 1399.7948594255952,
+        "total_atmospheric_supply_mm": 1434.6775225767951,
+        "rain_to_supply": 0.024314098810950136,
+        "export_to_supply": 0.9756860600363014,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        2.014189495434373,
+        5.212159704659208
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 5.6132876125047915e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 1.5092549275425438,
+        "baseline_annual_overwet_cells_contribution_mm": -0.02853314860838432,
+        "baseline_annual_underwet_cells_contribution_mm": 1.537788076150928,
+        "fraction_cells_with_lower_monthly_error": 0.9527687296416938,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 27.48356099646171,
+        "temperature_relaxation_j_m2": -24.087216901284982,
+        "energy_boundary_export_j_m2": 22.11153009231111,
+        "prescribed_flow_work_j_m2": 18.71516601555273
+      }
+    },
+    "iberia_lift16_shifted": {
+      "response": {
+        "monthly_mae_mm": 33.269365936940574,
+        "zero_rain_mae_mm": 35.34744842562432,
+        "skill_vs_zero_rain": 0.05879016962302974,
+        "annual_rain_mm": 39.59319057877569,
+        "annual_reference_mm": 424.16938110749186,
+        "median_annual_rain_mm": 21.679260476731677,
+        "winter_rain_mm": 22.50845417931017,
+        "summer_rain_mm": 17.08473639946553,
+        "winter_reference_mm": 273.8061889250814,
+        "summer_reference_mm": 150.36319218241042,
+        "cells_below_tenth_reference_fraction": 0.7654723127035831,
+        "wettest_five_percent_rain_share": 0.45852409665513133,
+        "reference_wettest_five_percent_rain_share": 0.15907694670557518,
+        "coast_annual_mm": 55.32139472097159,
+        "coast_annual_reference_mm": 661.05,
+        "coast_winter_mm": 34.11139859784099,
+        "coast_winter_reference_mm": 439.18333333333334,
+        "coast_summer_mm": 21.2099961231306,
+        "coast_summer_reference_mm": 221.86666666666667,
+        "interior_annual_mm": 14.152995848728727,
+        "interior_annual_reference_mm": 86.63934426229508,
+        "interior_winter_mm": 2.5662511624990985,
+        "interior_winter_reference_mm": 57.90710382513661,
+        "interior_summer_mm": 11.586744686229627,
+        "interior_summer_reference_mm": 28.73224043715847
+      },
+      "annual_layer_rain_mm": [
+        16.531279120786895,
+        3.367254548689652,
+        4.504122224213065,
+        7.115704624163441,
+        8.074830060922656
+      ],
+      "budget": {
+        "ocean_evaporation_mm": 335.16484802131924,
+        "land_evaporation_mm": 10.874996720125806,
+        "rain_mm": 32.30866003370189,
+        "ocean_rain_mm": 15.515887368076712,
+        "runoff_mm": 5.985159460697277,
+        "boundary_export_mm": 313.73142528919544,
+        "roundoff_correction_mm": 0.0,
+        "surface_latent_input_j_m2": 865099611.8536127,
+        "temperature_relaxation_j_m2": -757849069.4512227,
+        "energy_boundary_export_j_m2": 697663997.1920754,
+        "roundoff_energy_j_m2": 0.0,
+        "prescribed_flow_work_j_m2": 590412795.0729675,
+        "theta_transport_error_kg_k_m2": 7.472243887009233e-10,
+        "boundary_import_gross_mm": 1087.9888907430075,
+        "boundary_export_gross_mm": 1401.7203160322133,
+        "annual_water_error_mm": -2.2311041902867146e-12,
+        "annual_energy_error_j_m2": 3.933906555175781e-06,
+        "max_step_water_error_mm": 3.649424512586208e-16,
+        "max_step_energy_error_j_m2": 1.0093572200275958e-08,
+        "max_air_continuity_kg_m2_s": 5.80490516766119e-14,
+        "steps": 23508
+      },
+      "koppen": {
+        "scored_cells": 614,
+        "exact_class_agreement": 0.36482084690553745,
+        "main_group_agreement": 0.5407166123778502,
+        "arid_share": 0.9853420195439739,
+        "desert_share": 0.9592833876221498,
+        "target_mediterranean_cells": 198,
+        "target_mediterranean_to_arid": 0.9848484848484849,
+        "target_mediterranean_retained": 0.010101010101010102,
+        "class_counts": {
+          "BWh": 224,
+          "BWk": 365,
+          "BSk": 16,
+          "Csb": 4,
+          "Cfb": 2,
+          "Dsb": 3
+        },
+        "confusion_cells": {
+          "BSh": {
+            "BWh": 19
+          },
+          "BSk": {
+            "BWk": 87,
+            "BSk": 1,
+            "Csb": 1
+          },
+          "BWh": {
+            "BWh": 195
+          },
+          "BWk": {
+            "BWk": 22
+          },
+          "Cfa": {
+            "BWk": 8
+          },
+          "Cfb": {
+            "BWk": 72,
+            "Csb": 1,
+            "Cfb": 1,
+            "BSk": 2
+          },
+          "Csa": {
+            "BWk": 126,
+            "BSk": 7,
+            "BWh": 10
+          },
+          "Csb": {
+            "BWk": 48,
+            "BSk": 4,
+            "Cfb": 1,
+            "Csb": 2
+          },
+          "Dfb": {
+            "BWk": 1,
+            "BSk": 1
+          },
+          "Dfc": {
+            "BSk": 1
+          },
+          "Dsb": {
+            "Dsb": 3
+          },
+          "Dsc": {
+            "BWk": 1
+          }
+        },
+        "weighting": "Equal scored 60 km model cells; not independent samples or an exact spherical land-area estimate."
+      },
+      "supply": {
+        "gross_boundary_import_mm": 1087.9888907430075,
+        "gross_boundary_export_mm": 1401.7203160322133,
+        "total_atmospheric_supply_mm": 1434.0287354844525,
+        "rain_to_supply": 0.022529994855917012,
+        "export_to_supply": 0.977470172910221,
+        "note": "Whole-domain atmospheric input/removals, including ocean and unscored land. No source attribution or land precipitation efficiency."
+      },
+      "settled": true,
+      "temperature_departure_p95_c": [
+        2.013021076340501,
+        5.203587982586223
+      ],
+      "broad_screen_passed": false,
+      "maximum_monthly_import_error_mm": 6.23856521997368e-12,
+      "error_change": {
+        "total_mae_improvement_mm": 1.3951398219483757,
+        "baseline_annual_overwet_cells_contribution_mm": -0.026647159268492513,
+        "baseline_annual_underwet_cells_contribution_mm": 1.4217869812168682,
+        "fraction_cells_with_lower_monthly_error": 0.9478827361563518,
+        "note": "Additive MAE contributions grouped by baseline annual bias, not causal attribution or independent samples."
+      },
+      "mean_energy_flux_w_m2": {
+        "surface_latent_input_j_m2": 27.43212873711354,
+        "temperature_relaxation_j_m2": -24.031236347387832,
+        "energy_boundary_export_j_m2": 22.12278022552243,
+        "prescribed_flow_work_j_m2": 18.72186691631683
+      }
+    }
+  },
+  "contrasts": {
+    "california": {
+      "lifting": {
+        "steady": {
+          "monthly_mae_mm": -2.5874592700989894,
+          "annual_rain_mm": 31.703526920401906,
+          "coast_winter_mm": 40.94824681443412,
+          "interior_winter_mm": 12.530298958564009,
+          "coast_summer_mm": 2.3411422605148964,
+          "interior_summer_mm": 1.8198554226999262
+        },
+        "aligned": {
+          "monthly_mae_mm": -2.6188607829664896,
+          "annual_rain_mm": 32.20541081195694,
+          "coast_winter_mm": 40.88819991571914,
+          "interior_winter_mm": 13.368701918989936,
+          "coast_summer_mm": 3.282849803489949,
+          "interior_summer_mm": 2.26061985733664
+        },
+        "shifted": {
+          "monthly_mae_mm": -2.500877634553923,
+          "annual_rain_mm": 30.62556986424972,
+          "coast_winter_mm": 37.9384646707108,
+          "interior_winter_mm": 12.312493482729463,
+          "coast_summer_mm": 2.689941124446694,
+          "interior_summer_mm": 1.9991672074652103
+        }
+      },
+      "aligned_minus_shifted": {
+        "1": {
+          "monthly_mae_mm": -0.031455605752185534,
+          "annual_rain_mm": 0.3900411091482532,
+          "coast_winter_mm": -1.7901490862227831,
+          "interior_winter_mm": 0.02804408474325193,
+          "coast_summer_mm": 0.3755698287783531,
+          "interior_summer_mm": 0.08334208691155331
+        },
+        "16": {
+          "monthly_mae_mm": -0.14943875416475194,
+          "annual_rain_mm": 1.969882056855468,
+          "coast_winter_mm": 1.159586158785558,
+          "interior_winter_mm": 1.0842525210037248,
+          "coast_summer_mm": 0.968478507821608,
+          "interior_summer_mm": 0.3447947367829829
+        }
+      },
+      "chosen_mechanism_minus_baseline": {
+        "monthly_mae_mm": -2.823464759497444,
+        "annual_rain_mm": 34.66362194088477,
+        "coast_winter_mm": 44.223030354256515,
+        "interior_winter_mm": 13.415770703838945,
+        "coast_summer_mm": 3.8290794237409393,
+        "interior_summer_mm": 2.3230810053328526
+      },
+      "coastal_winter_deficit_fraction_closed": 0.08690853452048608,
+      "layer_rain_change_mm": [
+        2.0234512320747964,
+        6.013531991946382,
+        7.490345955383134,
+        14.03977920215971,
+        5.096513559320746
+      ],
+      "middle_three_layers_fraction_of_rain_increase": 0.794598360103918,
+      "atmospheric_budget_change": {
+        "domain_rain_change_mm": 29.46074552779396,
+        "signed_ledger_terms_mm": {
+          "boundary_import": -2.7966962079517543e-11,
+          "ocean_evaporation": 19.618111169728593,
+          "land_recycling": 8.544026529775776,
+          "reduced_export": 1.298605731043608,
+          "roundoff": 0.0
+        },
+        "implied_atmospheric_storage_change_difference_mm": -2.09727394917536e-06,
+        "note": "All values are full-domain atmospheric mm. Land evaporation is recycled water. Ledger differences are not source fractions or causal attribution; storage changes need not vanish exactly."
+      },
+      "lifting_timing_interaction": {
+        "monthly_mae_mm": -0.11798314841256641,
+        "annual_rain_mm": 1.5798409477072148,
+        "coast_winter_mm": 2.949735245008341,
+        "interior_winter_mm": 1.056208436260473,
+        "coast_summer_mm": 0.592908679043255,
+        "interior_summer_mm": 0.2614526498714296
+      }
+    },
+    "iberia": {
+      "lifting": {
+        "steady": {
+          "monthly_mae_mm": -1.4061026645364691,
+          "annual_rain_mm": 17.69522349415693,
+          "coast_winter_mm": 18.19750591139996,
+          "interior_winter_mm": 2.1775702463889375,
+          "coast_summer_mm": 9.75344230635249,
+          "interior_summer_mm": 0.15511369352128668
+        },
+        "aligned": {
+          "monthly_mae_mm": -1.505736737428073,
+          "annual_rain_mm": 18.93154592400965,
+          "coast_winter_mm": 19.369462900966738,
+          "interior_winter_mm": 2.240846990632181,
+          "coast_summer_mm": 10.630264496034323,
+          "interior_summer_mm": 0.16732806287738633
+        },
+        "shifted": {
+          "monthly_mae_mm": -1.3942012343730497,
+          "annual_rain_mm": 17.54258310664978,
+          "coast_winter_mm": 17.811598900036604,
+          "interior_winter_mm": 2.1288673240694544,
+          "coast_summer_mm": 9.86303214150916,
+          "interior_summer_mm": 0.19390029740182335
+        }
+      },
+      "aligned_minus_shifted": {
+        "1": {
+          "monthly_mae_mm": -0.0025796025391500166,
+          "annual_rain_mm": 0.07175691557747044,
+          "coast_winter_mm": -0.12003270004376176,
+          "interior_winter_mm": 0.0011135307656825466,
+          "coast_summer_mm": 0.19070029648044695,
+          "interior_summer_mm": 0.016611914730368937
+        },
+        "16": {
+          "monthly_mae_mm": -0.11411510559417337,
+          "annual_rain_mm": 1.460719732937342,
+          "coast_winter_mm": 1.4378313008863728,
+          "interior_winter_mm": 0.11309319732840928,
+          "coast_summer_mm": 0.9579326510056099,
+          "interior_summer_mm": -0.009960319794068084
+        }
+      },
+      "chosen_mechanism_minus_baseline": {
+        "monthly_mae_mm": -1.5092549275425498,
+        "annual_rain_mm": 19.02110186728876,
+        "coast_winter_mm": 19.278149284487842,
+        "interior_winter_mm": 2.2498272039561837,
+        "coast_summer_mm": 10.80204163903678,
+        "interior_summer_mm": 0.16270900116198916
+      },
+      "coastal_winter_deficit_fraction_closed": 0.045584277023283,
+      "layer_rain_change_mm": [
+        -0.08180792573625695,
+        3.4791740203837977,
+        4.736140082122708,
+        7.7784807101797995,
+        3.109114980338738
+      ],
+      "middle_three_layers_fraction_of_rain_increase": 0.8408448114244822,
+      "atmospheric_budget_change": {
+        "domain_rain_change_mm": 17.39505756801757,
+        "signed_ledger_terms_mm": {
+          "boundary_import": 1.2278178473934531e-11,
+          "ocean_evaporation": 21.694942897719272,
+          "land_recycling": 7.037335426180937,
+          "reduced_export": -11.337008354287036,
+          "roundoff": 0.0
+        },
+        "implied_atmospheric_storage_change_difference_mm": 0.00021240160788238427,
+        "note": "All values are full-domain atmospheric mm. Land evaporation is recycled water. Ledger differences are not source fractions or causal attribution; storage changes need not vanish exactly."
+      },
+      "lifting_timing_interaction": {
+        "monthly_mae_mm": -0.11153550305502336,
+        "annual_rain_mm": 1.3889628173598716,
+        "coast_winter_mm": 1.5578640009301346,
+        "interior_winter_mm": 0.11197966656272673,
+        "coast_summer_mm": 0.7672323545251629,
+        "interior_summer_mm": -0.02657223452443702
+      }
+    }
+  },
+  "interpretation": "Twelve fixed cases; last settled synthetic year, not independent weather samples. Gross incoming vapor is matched but evaporation, recycling and actual humidity distributions can change. Fixed-T Koppen uses the same observed WorldClim monthly surface temperature. No automatic climate selection.",
+  "new_climate_integrations": 0,
+  "atlas_updated": false
+}

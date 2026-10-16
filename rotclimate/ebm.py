@@ -24,6 +24,7 @@ from functools import lru_cache
 import numpy as np
 
 from .astronomy import insolation_table
+from .numerics import matrix_product
 
 A_OLR = 209.0      # W m-2   (OLR at 0 C)
 B_OLR = 2.05       # W m-2 K-1
@@ -89,7 +90,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10):
             Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR
             Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR
             rhs = np.concatenate([C_LAND / dt * Tl + Fl, C_OCEAN / dt * To + Fo])
-            T = Minv @ rhs
+            T = matrix_product(Minv, rhs)
             Tl, To = T[:N], T[N:]
             if yr == years - 1:
                 out_l[d] = Tl

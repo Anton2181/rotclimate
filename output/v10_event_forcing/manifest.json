@@ -1,0 +1,144 @@
+{
+  "schema": 1,
+  "code_sha256": "99acb240f91210ea652706b8f25894924d51de2b7b2244007ec3bc7a5cec4328",
+  "lifting_contrast_audit_sha256": "d27e20b4f3f95b10bf366de3d618ba0cb61dd4c75f7a797470f6bab3948e4d37",
+  "parent_manifest_sha256": "f6fce5917896b74f8d3e87ab957a464a8c37fedcc510e051cd867cf4b74f2c16",
+  "parent_state_sha256": "7f9c0cee8f30247adea5fa4dad6d6a9f407c112294cdacd526cbbbc71f10dc32",
+  "inputs": {
+    "california": "01648c2154e64d91eecebda077e7998e12f3dd1447cabf1d466a5c51a5c0bf65",
+    "iberia": "56cbb6c30bb078e06a82dc4aaef623fc3286b9d16a28e24e0130a8c6146821d5"
+  },
+  "settings": {
+    "terrain": "shallow",
+    "observed_wind": true,
+    "observed_temperature": true,
+    "observed_humidity": true,
+    "humidity_scale": 1.0,
+    "relaxation_lower_days": 0.5,
+    "relaxation_upper_days": 20.0,
+    "storm_rate_month": 1.0,
+    "storm_convergence_ms": 0.5,
+    "storm_rotation_ms": 6.0,
+    "storm_radius_km": 500.0,
+    "terrain_drag_height_m": 3000.0
+  },
+  "seed": 41,
+  "preflight_manifest_sha256": "07cdf307a8ee1c6c4945392b1fe0c7a06ee4eb2b8a3ce8a08870a6c3eba833c6",
+  "forcing_array_sha256": {
+    "california": "6a108018e5a9b704760630ee413495df1e30158690b8af9bd0f49320d3d83a6f",
+    "iberia": "db846402fbc21df269f2782b8a0721bb255191d81d4d149797e227028e0cfe57"
+  },
+  "forcing_file_sha256": {
+    "california": "716f4c34c4845d1b8b6d2d747c981d424d2ad6a7053863c99e71fb9402946e56",
+    "iberia": "641a03ae01441a41e42fef1870ab1f6e82a9f6b6f8868ca1a7056c5d5ac6be18"
+  },
+  "jobs": [
+    {
+      "key": "california_lift1_steady",
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "anchor": true
+    },
+    {
+      "key": "iberia_lift1_steady",
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "steady",
+      "anchor": true
+    },
+    {
+      "key": "california_lift1_aligned",
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "aligned",
+      "anchor": false
+    },
+    {
+      "key": "iberia_lift1_aligned",
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "aligned",
+      "anchor": false
+    },
+    {
+      "key": "california_lift1_shifted",
+      "region": "california",
+      "amplitude": 1.0,
+      "timing": "shifted",
+      "anchor": false
+    },
+    {
+      "key": "iberia_lift1_shifted",
+      "region": "iberia",
+      "amplitude": 1.0,
+      "timing": "shifted",
+      "anchor": false
+    },
+    {
+      "key": "california_lift16_steady",
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "anchor": false
+    },
+    {
+      "key": "iberia_lift16_steady",
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "steady",
+      "anchor": false
+    },
+    {
+      "key": "california_lift16_aligned",
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "anchor": false
+    },
+    {
+      "key": "iberia_lift16_aligned",
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "aligned",
+      "anchor": false
+    },
+    {
+      "key": "california_lift16_shifted",
+      "region": "california",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "anchor": false
+    },
+    {
+      "key": "iberia_lift16_shifted",
+      "region": "iberia",
+      "amplitude": 16.0,
+      "timing": "shifted",
+      "anchor": false
+    }
+  ],
+  "minimum_cycles": 3,
+  "maximum_cycles": 6,
+  "budget_hours": 2.0,
+  "forcing_interval_seconds": 10800.0,
+  "lifting_fluctuation_amplitudes": [
+    1.0,
+    16.0
+  ],
+  "nominal_moisture_pulse_amplitude": 0.4,
+  "upper_humidity": "Zero prescribed incoming water above 300 hPa; an explicit assumption, not observed.",
+  "circulation_control": "Original full circulation plus (amplitude-1) times convergence-only anomaly about its exact monthly face mean. Original rotation, catalogue and mean circulation retained.",
+  "moisture_control": "Same monthly gross incoming vapor in every case, verified after saturation caps and again in each integrated month. Boundary r held at each 3-hour tick. Concentration means and variance are diagnosed, not matched.",
+  "timing_control": "At each boundary cell, moisture follows positive convergence-only storm ascent there. A within-month half-window shift preserves identical nominal pulse values per cell. Caps and gross-dose normalization alter actual humidity distributions; a timing sensitivity, not a pure covariance isolation or observed front.",
+  "anchor_guard": {
+    "monthly_rain_p95_mm": 1.0,
+    "annual_rain_p95_mm": 5.0,
+    "monthly_mae_change_mm": 0.1,
+    "annual_mean_change_limit": "max(1 mm, 2% of frozen control annual mean)",
+    "coastal_winter_change_limit": "max(1 mm, 2% of frozen control coastal winter)"
+  },
+  "selection": "No automatic climate selection. Coastal/interior seasonal response, fixed-T Koppen, gross input/export and physical/thermal/work budgets; average error alone is insufficient.",
+  "downloads": false,
+  "atlas_publication": false
+}

@@ -42,6 +42,7 @@
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body {
   background: var(--paper); color: var(--ink);
   font-family: var(--font-body); font-size: var(--step-0); line-height: 1.5;
@@ -76,6 +77,16 @@ section { display: grid; gap: 16px; }
 .stage { position: relative; aspect-ratio: 2000 / 926; max-width: 100%; background: var(--sea);
   border-radius: 3px; overflow: hidden; cursor: crosshair; touch-action: manipulation; }
 .stage img, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* Compass is fixed to the map plate: its arrow, not the map image, rotates. */
+.compass { position: absolute; right: 10px; bottom: 10px; z-index: 2; pointer-events: none;
+  display: flex; align-items: center; gap: 5px; padding: 5px 8px;
+  background: var(--plate); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; }
+.stage .compass svg { position: static; inset: auto; display: block; width: 38px; height: 38px; flex: none; }
+.compass-text { display: grid; line-height: 1.2; }
+.compass-text b { font: 500 0.73rem var(--font-data); }
+.compass-text span { font: 0.73rem var(--font-data); color: var(--ink-soft); }
+@media (max-width: 650px) { .compass { padding: 3px; } .compass-text { display: none; } }
+
 .stage .labels { pointer-events: none; }
 .stage svg { pointer-events: none; overflow: visible; }
 .hint { position: absolute; left: 10px; bottom: 10px; font-size: var(--step--1); background: var(--plate);
@@ -212,6 +223,27 @@ figcaption { font-size: var(--step--1); color: var(--ink-soft); }
 .zoom button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
 @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* Interactive reference-climate comparison. */
+.chart .comparison-rain { fill: transparent; stroke: var(--rain); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: var(--step--1); color: var(--ink-soft); }
+.chart-key span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-key i { display: inline-block; width: 14px; height: 12px; box-sizing: border-box; }
+.chart-key .key-local { background: var(--rain); opacity: 0.75; }
+.chart-key .key-comparison { border: 1.6px dashed var(--rain); }
+.chart-key .key-temperature { height: 0; border-top: 1.6px dashed var(--ink); }
+.similarity-controls { margin: 0 0 16px; }
+.similarity-controls label { font-weight: 700; }
+.balance-labels { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--ink-soft); font-size: var(--step--1); }
+.similarity-controls input[type="range"] { width: 100%; margin: 8px 0; accent-color: var(--brass); cursor: pointer; }
+.similarity-controls output { display: block; font-family: var(--font-data); font-size: var(--step--1); }
+.similarity-controls button { font: inherit; color: var(--ink); background: var(--chip); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+.similarity-controls button[hidden] { display: none; }
+.analogs li.analog-result { display: block; }
+.analogs .analog-choice { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid var(--rule); border-radius: 5px; text-decoration: none; font-weight: 400; }
+.analogs .analog-choice:hover { background: var(--chip); }
+.analogs .analog-choice[aria-pressed="true"] { border-color: var(--brass); background: var(--chip); box-shadow: inset 3px 0 var(--brass); }
+.analogs .analog-choice:focus-visible, .similarity-controls input:focus-visible, .similarity-controls button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
 </style>
 
 <div class="wrap">
@@ -267,6 +299,16 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
               <rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
           </button>
         </div>
+        <div class="compass" id="compass" role="img" aria-label="True north points toward the top of the map">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1"/>
+            <g id="north-arrow">
+              <path d="M22 36V9M15 19L22 8L29 19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="22" cy="22" r="2.3" fill="currentColor"/>
+            </g>
+          </svg>
+          <div class="compass-text"><b>TRUE NORTH</b><span id="north-bearing-label">0° · up</span></div>
+        </div>
         <span class="toast" id="toast" role="status" aria-live="polite"></span>
         <span class="hint" id="hint">Scroll or pinch to zoom · drag to pan · click for a place's climate</span>
       </div>
@@ -284,10 +326,21 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       </div>
       <div class="readouts" id="readouts"></div>
       <div class="chart" id="chart"></div>
-      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: average daily low to high (the day/night swing, learned from Earth's climate). Dashed lines: the closest real place's daily highs and lows.</p>
+      <div class="chart-key"><span><i class="key-local"></i>This place’s rain</span><span><i class="key-comparison"></i>Comparison rain</span><span><i class="key-temperature"></i>Comparison temperature</span></div>
+      <p class="note" id="chart-comparison" aria-live="polite"></p>
+      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: average daily low to high (the day/night swing, learned from Earth's climate). Select a city in “Feels like” to compare its temperature and precipitation. Outlined bars show that city’s rain on the same scale.</p>
     </div>
     <div class="card">
       <h3>Feels like</h3>
+      <div class="similarity-controls">
+        <label for="similarity-balance">Prioritize in similarity</label>
+        <div class="balance-labels"><span>Precipitation</span><span>Temperature</span></div>
+        <input id="similarity-balance" type="range" min="0" max="100" value="50" step="5"
+          aria-describedby="similarity-help" aria-valuetext="50% temperature, 50% precipitation">
+        <output id="similarity-value" for="similarity-balance">Balanced</output>
+        <p class="note" id="similarity-help">Weights apply to this list and real-city search, including highlighted map areas. Select a city below to compare it on the graph.</p>
+        <button type="button" id="comparison-auto" hidden>Compare closest match automatically</button>
+      </div>
       <ol class="analogs" id="analogs"></ol>
       <p class="note" id="analog-note"></p>
     </div>
@@ -298,6 +351,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <h2>What the world must be like</h2>
       <p class="note">The unknowns the calibration searched for, chosen so the simulated climate best reproduces your painted zones.</p>
       <dl class="facts" id="facts"></dl>
+      <p class="note">True north's bearing is measured clockwise from the top edge of the original map. The map image is not rotated. Spin direction and north bearing are separate settings; day length is not calibrated.</p>
     </div>
     <div class="card">
       <h2>How close to your painting</h2>
@@ -305,6 +359,23 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <div class="zones" id="zones"></div>
       <p class="note" id="zone-total"></p>
     </div>
+  </section>
+
+  <section id="round19-results" hidden aria-labelledby="round19-h">
+    <div class="section-head">
+      <h2 id="round19-h">Round 19 · independently calibrated spins</h2>
+      <p id="round19-intro">Climate maps from separately calibrated spin configurations. Held-out comparison scores appear when their rematch data is available.</p>
+    </div>
+    <div class="two">
+      <div class="card"><h3>Earth-like spin</h3><dl class="facts" id="round19-earthlike"></dl></div>
+      <div class="card"><h3>Retrograde spin</h3><dl class="facts" id="round19-retrograde"></dl></div>
+    </div>
+    <p id="round19-verdict" class="note"></p>
+    <div class="media" id="round19-maps" hidden>
+      <figure><img id="round19-earthlike-map" alt="Köppen map from the separately calibrated round 19 Earth-like-spin world" loading="lazy"><figcaption>Round 19: Earth-like spin, fitted independently</figcaption></figure>
+      <figure><img id="round19-retrograde-map" alt="Köppen map from the separately calibrated round 19 retrograde-spin world" loading="lazy"><figcaption>Round 19: retrograde spin, fitted independently</figcaption></figure>
+    </div>
+    <p class="note">When supplied, the scores are evaluated on fresh surrounding worlds. The comparison images are separate renders. This section does not switch the atlas map between worlds: the map and station charts show only the parameters used to regenerate <code>atlas/data</code>.</p>
   </section>
 
   <section>
@@ -321,8 +392,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <p>Each frame is one five-day week. Arrows are surface winds.</p>
     </div>
     <div class="media">
-      <figure><img src="data/year_temperature.gif" alt="Animated temperature and winds through the year" loading="lazy"><figcaption>Temperature and wind</figcaption></figure>
-      <figure><img src="data/year_precipitation.gif" alt="Animated precipitation and snow through the year" loading="lazy"><figcaption>Rain, snow cover and wind</figcaption></figure>
+      <figure><img data-src="data/year_temperature.gif" alt="Animated temperature and winds through the year" loading="lazy"><figcaption>Temperature and wind</figcaption></figure>
+      <figure><img data-src="data/year_precipitation.gif" alt="Animated precipitation and snow through the year" loading="lazy"><figcaption>Rain, snow cover and wind</figcaption></figure>
     </div>
   </section>
 
@@ -332,10 +403,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <p>What changes if the planet were different. Outlines mark your painted zones.</p>
     </div>
     <div class="media">
-      <figure><img src="data/spin_flip.gif" alt="Climate with the planet spinning each way" loading="lazy"><figcaption>Spin direction: retrograde against Earth-like</figcaption></figure>
-      <figure><img src="data/tilt_sweep.gif" alt="Climate across axial tilts" loading="lazy"><figcaption>Axial tilt from 0° to 60°</figcaption></figure>
-      <figure><img src="data/surroundings.gif" alt="Climate with different land beyond the map" loading="lazy"><figcaption>What lies beyond the map edges</figcaption></figure>
-      <figure><img src="data/improvement.gif" alt="Model improvement iterations" loading="lazy"><figcaption>How the model improved, iteration by iteration</figcaption></figure>
+      <figure><img data-src="data/spin_flip.gif" alt="Climate with the planet spinning each way" loading="lazy"><figcaption>Spin reversal with the other parameters held fixed (not the independently recalibrated round 19 worlds)</figcaption></figure>
+      <figure><img data-src="data/tilt_sweep.gif" alt="Climate across axial tilts" loading="lazy"><figcaption>Axial tilt from 0° to 60°</figcaption></figure>
+      <figure><img data-src="data/surroundings.gif" alt="Climate with different land beyond the map" loading="lazy"><figcaption>What lies beyond the map edges</figcaption></figure>
+      <figure><img data-src="data/improvement.gif" alt="Model improvement iterations" loading="lazy"><figcaption>How the model improved, iteration by iteration</figcaption></figure>
     </div>
   </section>
 
@@ -345,6 +416,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   </footer>
 </div>
 
+<script src="climate-comparison.js"></script>
 <script>
 (async function () {
   const $ = (id) => document.getElementById(id);
@@ -354,17 +426,30 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   }
 
   let meta, buf;
+  // Always load a matching set of newly generated atlas assets, not cached earlier runs.
+  const assetVersion = Date.now().toString(36);
+  const fresh = (path) => `${path}${path.includes("?") ? "&" : "?"}v=${assetVersion}`;
   try {
-    meta = await (await fetch("data/atlas.json")).json();
+    const metadataResponse = await fetch(fresh("data/atlas.json"), { cache: "no-store" });
+    if (!metadataResponse.ok) throw new Error(`Metadata HTTP ${metadataResponse.status}`);
+    meta = await metadataResponse.json();
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
         r.D = r.D ? r.D.map((v) => v / 10) : null;
       }
-    // packed arrays: published as atlas.wasm (a served binary type), atlas.bin locally
-    let res = await fetch("data/atlas.wasm");
-    if (!res.ok) res = await fetch("data/atlas.bin");
+    // The generator writes atlas.bin. Prefer it over a possibly stale atlas.wasm
+    // left over from an older publish. Only fall back for legacy atlas hosting.
+    let res = await fetch(fresh("data/atlas.bin"), { cache: "no-store" });
+    if (!res.ok) res = await fetch(fresh("data/atlas.wasm"), { cache: "no-store" });
+    if (!res.ok) throw new Error(`Binary data HTTP ${res.status}`);
     buf = await res.arrayBuffer();
+    // An incomplete deploy should fail visibly instead of mixing old map data.
+    const expectedBytes = Object.values(meta.arrays).reduce((max, a) => {
+      const bytesPerElement = { uint8: 1, uint16: 2, int16: 2 }[a.dtype];
+      return Math.max(max, a.offset + a.shape.reduce((n, v) => n * v, 1) * bytesPerElement);
+    }, 0);
+    if (buf.byteLength < expectedBytes) throw new Error("Climate arrays do not match atlas metadata");
   } catch (e) {
     $("hint").textContent = "Climate data failed to load. Reload the page to try again.";
     return;
@@ -375,6 +460,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const n = a.shape.reduce((x, y) => x * y, 1);
     A[k] = { data: new T[a.dtype](buf, a.offset, n), shape: a.shape };
   }
+  // Refresh map and animation images on each load too; their filenames stay constant.
+  for (const img of document.querySelectorAll("figure img[data-src]")) img.src = fresh(img.dataset.src);
   const W = meta.width, H = meta.height;
   const cls = A.cls, elev = A.elev;
   const kop = meta.koppen;
@@ -390,10 +477,11 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     b.addEventListener("click", () => setLayer(L.id));
     layerBtns.appendChild(b);
   }
+  $("base").src = fresh("data/koppen.webp");
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
-    $("base").src = "data/" + L.file;
+    $("base").src = fresh("data/" + L.file);
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
   }
@@ -485,29 +573,20 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   // Lists skip a place within 100 km of a better match.
   // With day/night ranges on both sides the temperature term covers daily
   // highs and lows: mean of (d high^2 + d low^2)/2 = d mean^2 + d swing^2/4.
-  function compare(T12, P12, r, D12) {
-    const hasD = !!(D12 && r.D);
-    let dt = 0, dhi = 0, dlo = 0, dp = 0, dmm = 0;
-    for (let i = 0; i < 12; i++) {
-      const dm = T12[i] - r.T[i], ds = hasD ? D12[i] - r.D[i] : 0;
-      dt += dm * dm + ds * ds / 4;
-      dhi += (dm + ds / 2) ** 2; dlo += (dm - ds / 2) ** 2;
-      dp += (Math.sqrt(Math.max(P12[i], 0)) - Math.sqrt(Math.max(r.P[i], 0))) ** 2;
-      dmm += (P12[i] - r.P[i]) ** 2;
-    }
-    const d = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
-    return { r, d, sim: 100 * Math.exp(-d / 2), dT: Math.sqrt(dt / 12), dmm: Math.sqrt(dmm / 12),
-             hasD, dHi: Math.sqrt(dhi / 12), dLo: Math.sqrt(dlo / 12) };
-  }
+  const compare = ClimateComparison.compare;
   // climate at one map pixel, exactly as its station card shows it
   function climateAt(x, y) {
     const h = elev.data[pixIdx(x, y)], c = cell(x, y), lapse = meta.lapse * h / 1000;
     return { h, c, lapse, T12: series("T12", c, 12).map((v) => v / 10 - lapse), P12: series("P12", c, 12),
              D12: A.D12 ? series("D12", c, 12).map((v) => v / 10) : null };
   }
+  let selectedRef = null, stationClimate = null, currentAnalogRows = [];
+  let temperatureWeight = 0.5, similarityFrame = 0, searchDistanceCache = null;
+  const similarityPriority = () => temperatureWeight === 0.5 ? "Balanced temperature and precipitation"
+    : `${Math.round(temperatureWeight * 100)}% temperature · ${Math.round((1 - temperatureWeight) * 100)}% precipitation`;
   let activeRef = null;           // the real place being searched, if any
   function analogs(T12, P12, D12, k = 5) {
-    const all = meta.reference.map((r) => compare(T12, P12, r, D12)).sort((a, b) => a.d - b.d);
+    const all = meta.reference.map((r) => compare(T12, P12, r, D12, temperatureWeight)).sort((a, b) => a.d - b.d);
     const out = [];
     for (const a of all) {
       if (a.r.y === undefined || out.every((b) => refKm(a.r, b.r) >= 100)) out.push(a);
@@ -541,6 +620,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       $("station-h").textContent = "Open sea";
       $("kchip").textContent = ""; $("kchip").style.background = "transparent";
       $("kdesc").textContent = "Pick a spot on land to see its climate.";
+      stationClimate = null;
+      $("chart-comparison").textContent = "";
       $("readouts").innerHTML = ""; $("chart").innerHTML = ""; $("analogs").innerHTML = "";
       return;
     }
@@ -574,20 +655,67 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       [snowy ? "yes" : "no", "lasting winter snow"],
       ...(Dloc ? [[`${Math.round(Math.min(...Dloc))}–${Math.round(Math.max(...Dloc))} °C`, "day/night swing"]] : []),
     ].map(([v, k]) => `<div class="readout"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join("");
-    const top = analogs(T12, P12, D12);
-    drawChart(Tm, Tlo, Thi, P, top[0]);
-    const row = (a, cls = "") => {
-      const kk = kop.find((q) => q.code === a.r.k);
-      return `<li class="${cls}"><span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
-        <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
-        <span class="why">${whyText(a)}</span>
-        <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span></li>`;
-    };
-    // while a real place is being searched, show how this spot compares with it
-    const vs = activeRef && !top.some((a) => a.r === activeRef)
-      ? `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef, D12), "vs")}<li class="vs-h">Closest overall</li>` : "";
-    $("analogs").innerHTML = vs + top.map((a) => row(a, a.r === activeRef ? "vs" : "")).join("");
+    stationClimate = { Tm, Tlo, Thi, P, T12, P12, D12 };
+    refreshComparisons();
   }
+
+  function refreshComparisons() {
+    if (!stationClimate) return;
+    const { Tm, Tlo, Thi, P, T12, P12, D12 } = stationClimate;
+    const top = analogs(T12, P12, D12);
+    const comparison = selectedRef || (top[0] && top[0].r);
+    const best = comparison ? compare(T12, P12, comparison, D12, temperatureWeight) : null;
+    drawChart(Tm, Tlo, Thi, P, best);
+    currentAnalogRows = [];
+    const row = (a) => {
+      const i = currentAnalogRows.push(a) - 1;
+      const kk = kop.find((q) => q.code === a.r.k);
+      const chosen = a.r === comparison;
+      return `<li class="analog-result"><button type="button" class="analog-choice" data-analog="${i}" aria-pressed="${chosen}">
+        <span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
+        <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
+        <span class="why">${whyText(a)}${chosen ? " · shown on graph" : ""}</span>
+        <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span>
+        </button></li>`;
+    };
+    let pinned = "";
+    if (selectedRef && !top.some((a) => a.r === selectedRef))
+      pinned += `<li class="vs-h">Selected comparison</li>${row(best)}`;
+    if (activeRef && activeRef !== selectedRef && !top.some((a) => a.r === activeRef))
+      pinned += `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef, D12, temperatureWeight))}`;
+    if (pinned) pinned += `<li class="vs-h">Closest matches</li>`;
+    $("analogs").innerHTML = pinned + top.map(row).join("");
+    $("comparison-auto").hidden = !selectedRef;
+  }
+
+  $("analogs").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-analog]");
+    if (!button) return;
+    const a = currentAnalogRows[Number(button.dataset.analog)];
+    if (!a) return;
+    selectedRef = a.r;
+    refreshComparisons();
+    // Rebuilding the list must not strand keyboard focus on a removed button.
+    const selected = $("analogs").querySelector('button[aria-pressed="true"]');
+    if (selected) selected.focus({ preventScroll: true });
+  });
+  $("comparison-auto").addEventListener("click", () => {
+    selectedRef = null;
+    refreshComparisons();
+    $("similarity-balance").focus({ preventScroll: true });
+  });
+  $("similarity-balance").addEventListener("input", (event) => {
+    temperatureWeight = Number(event.target.value) / 100;
+    const temperature = Math.round(temperatureWeight * 100), rain = 100 - temperature;
+    $("similarity-value").textContent = temperature === 50 ? "Balanced" : `${temperature}% temperature · ${rain}% precipitation`;
+    event.target.setAttribute("aria-valuetext", `${temperature}% temperature, ${rain}% precipitation`);
+    if (similarityFrame) cancelAnimationFrame(similarityFrame);
+    similarityFrame = requestAnimationFrame(() => {
+      similarityFrame = 0;
+      if (activeRef) showReal(activeRef, { reframe: false });
+      else refreshComparisons();
+    });
+  });
 
   // map local months onto the solstice-aligned analog bins for the dashed line
   // 12 solstice-aligned values -> the 11 local months (10 + holy days)
@@ -618,16 +746,22 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const anLines = anD ? [an.map((v, i) => v + anD[i] / 2), an.map((v, i) => v - anD[i] / 2)] : (an.length ? [an] : []);
     const tmin = Math.floor((Math.min(...Tlo, ...anLines.flat()) - 2) / 5) * 5;
     const tmax = Math.ceil((Math.max(...Thi, ...anLines.flat()) + 2) / 5) * 5;
-    const pmax = Math.max(100, Math.ceil(Math.max(...P) / 50) * 50);
+    const anP = best ? ClimateComparison.localRain(best.r.P, months, meta.solstice_day) : [];
+    const pmax = Math.max(100, Math.ceil(Math.max(...P, ...anP) / 50) * 50);
     const yT = (v) => t + (tmax - v) / (tmax - tmin) * (h - t - b);
     const yP = (v) => h - b - v / pmax * (h - t - b);
     const cx = xs.map((s) => (s.x0 + s.x1) / 2);
-    let s = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Climograph">`;
+    let s = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Climograph${best ? ": comparing temperature and precipitation with " + esc(best.r.n) : ""}">`;
     for (let v = tmin; v <= tmax; v += 5) s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${yT(v)}" y2="${yT(v)}" opacity="0.5"/><text x="${l - 6}" y="${yT(v) + 4}" text-anchor="end">${v}°</text>`;
     if (tmin < 0 && tmax > 0) s += `<line class="zero" x1="${l}" x2="${w - r}" y1="${yT(0)}" y2="${yT(0)}"/>`;
     for (let i = 0; i <= 4; i++) { const v = pmax * i / 4; s += `<text x="${w - r + 6}" y="${yP(v) + 4}">${Math.round(v)}</text>`; }
     s += `<text x="${w - r + 6}" y="${h - b + 16}">mm</text>`;
-    P.forEach((v, i) => { const pad = (xs[i].x1 - xs[i].x0) * 0.16; s += `<rect class="bar" x="${xs[i].x0 + pad}" y="${yP(v)}" width="${xs[i].x1 - xs[i].x0 - 2 * pad}" height="${Math.max(0, h - b - yP(v))}"/>`; });
+    P.forEach((v, i) => {
+      const width = xs[i].x1 - xs[i].x0, pad = width * 0.12;
+      const barWidth = best ? width * 0.34 : width - 2 * pad;
+      s += `<rect class="bar" x="${xs[i].x0 + pad}" y="${yP(v)}" width="${barWidth}" height="${Math.max(0, h - b - yP(v))}"><title>${esc(months[i].name)}: this place, ${Math.round(v)} mm</title></rect>`;
+      if (best) s += `<rect class="comparison-rain" x="${xs[i].x1 - pad - barWidth}" y="${yP(anP[i])}" width="${barWidth}" height="${Math.max(0, h - b - yP(anP[i]))}"><title>${esc(months[i].name)}: ${esc(best.r.n)}, ${Math.round(anP[i])} mm</title></rect>`;
+    });
     let band = `M${cx[0]},${yT(Thi[0])}`;
     for (let i = 1; i < cx.length; i++) band += `L${cx[i]},${yT(Thi[i])}`;
     for (let i = cx.length - 1; i >= 0; i--) band += `L${cx[i]},${yT(Tlo[i])}`;
@@ -637,9 +771,12 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     Tm.forEach((v, i) => { s += `<circle class="dot" cx="${cx[i]}" cy="${yT(v)}" r="3"/>`; });
     months.forEach((m, i) => { s += `<text x="${cx[i]}" y="${h - b + 16}" text-anchor="middle">${m.short}</text>`; });
     s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${h - b}" y2="${h - b}"/>`;
-    if (best) s += `<text x="${l}" y="${h - 6}">${A.D12 ? "band: daily low to high · " : ""}dashed: ${esc(best.r.n)}${anD ? " (daily highs and lows)" : ""}</text>`;
+
     s += `</svg>`;
     $("chart").innerHTML = s;
+    $("chart-comparison").textContent = best
+      ? `Comparing with ${best.r.n}, ${best.r.c} · ${anD ? "dashed: daily highs and lows" : "dashed: mean temperature"} · outlined bars: precipitation`
+      : "";
   }
 
   // ---------------------------------------------------------------- place names (vector, crisp at any zoom)
@@ -870,8 +1007,18 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
 
   // ---------------------------------------------------------------- facts, zones, calendar
   const wd = meta.world;
+  // Normalize signed bearings (e.g. -90°) to a map-relative 0–360° compass.
+  const rawBearing = Number(wd.north_bearing ?? meta.north_bearing ?? 0);
+  const bearing = Number.isFinite(rawBearing) ? (rawBearing % 360 + 360) % 360 : 0;
+  const directions = ["up", "upper right", "right", "lower right", "down", "lower left", "left", "upper left"];
+  const bearingDirection = directions[Math.round(bearing / 45) % 8];
+  const bearingText = `${bearing.toFixed(1)}° clockwise from map up (${bearingDirection})`;
+  $("north-arrow").setAttribute("transform", `rotate(${bearing} 22 22)`);
+  $("north-bearing-label").textContent = `${bearing.toFixed(1)}° · ${bearingDirection}`;
+  $("compass").setAttribute("aria-label", `True north: ${bearingText}`);
   const facts = [
     ["Spin", wd.retrograde ? "retrograde (opposite to Earth)" : "prograde (like Earth)"],
+    ["True north bearing", bearingText],
     ["Latitude", `${wd.lat_south.toFixed(1)}°N to ${wd.lat_north.toFixed(1)}°N`],
     ["Axial tilt", `${wd.tilt.toFixed(1)}° (Earth 23.4°)`],
     ["Height tiers", `lowland ≤ ${wd.tier_tops[0]} m · hills ≤ ${wd.tier_tops[1]} m · upland ≤ ${wd.tier_tops[2]} m · peaks to ${wd.tier_tops[3]} m`],
@@ -888,6 +1035,48 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       <span></span><span class="track"><span style="width:${(z.score * 100).toFixed(0)}%"></span></span></div>`).join("");
   $("zone-total").textContent = `Overall ${meta.score.toFixed(2)}; ${Math.round(meta.accuracy * 100)}% of painted land falls in its own zone's best-matching rule.`;
 
+  // Optional round 19 assets; missing files leave the comparison section hidden.
+  // The two images must be produced separately, each using its own calibrated params.
+  Promise.all(["earthlike", "retrograde"].map((spin) => new Promise((resolve) => {
+    const url = fresh(`data/r19_${spin}.webp`), probe = new Image();
+    probe.onload = () => resolve(url);
+    probe.onerror = () => resolve(null);
+    probe.src = url;
+  }))).then(([earthlike, retrograde]) => {
+    if (!earthlike || !retrograde) return;
+    $("round19-earthlike-map").src = earthlike;
+    $("round19-retrograde-map").src = retrograde;
+    $("round19-maps").hidden = false;
+    $("round19-results").hidden = false;
+  });
+  // Copy calibration/r19_rematch.json to atlas/data/r19_rematch.json to show
+  // held-out rematch scores; the atlas itself does not generate these metrics.
+  (async () => {
+    try {
+      const response = await fetch(fresh("data/r19_rematch.json"), { cache: "no-store" });
+      if (!response.ok) return;
+      const r = await response.json();
+      const e = r.finalists?.["earthlike#1"], retro = r.finalists?.["retrograde#1"];
+      if (!e || !retro || !Number.isFinite(r.gap) || !Array.isArray(r.interval) ||
+          !Number.isFinite(e.fresh_objective) || !Number.isFinite(retro.fresh_objective)) return;
+      const signed = (x) => `${x >= 0 ? "+" : ""}${x.toFixed(3)}`;
+      for (const [id, fit] of [["round19-earthlike", e], ["round19-retrograde", retro]]) {
+        const rows = [
+          ["Held-out objective", fit.fresh_objective.toFixed(3)],
+          ["Painted land correct", `${(fit.fresh_correct * 100).toFixed(1)}%`],
+          ["Calibration objective", fit.calibration_score.toFixed(3)],
+        ];
+        $(id).innerHTML = rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+      }
+      const worlds = Array.isArray(r.seeds) ? r.seeds.length : "an unknown number of";
+      $("round19-intro").textContent = `Best candidate from each spin, evaluated on ${worlds} fresh surrounding worlds with identical scoring.`;
+      $("round19-verdict").textContent =
+        `Objective gap (retrograde − Earth-like): ${signed(r.gap)}; 95% interval ${signed(r.interval[0])} to ${signed(r.interval[1])}. ` +
+        `Result: ${r.verdict || "not determined"}. Tie threshold: ±${Number(r.tie_band || 0.01).toFixed(3)}.`;
+      $("round19-results").hidden = false;
+    } catch (_) { /* Comparison is optional; the atlas works without it. */ }
+  })();
+
   const events = { 22: "winter solstice", 113: "spring equinox", 204: "summer solstice", 295: "autumn equinox" };
   let start = 0;
   $("calendar").innerHTML = meta.months.map((m) => {
@@ -902,10 +1091,9 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   const nRef = meta.reference.length.toLocaleString("en");
   $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${nRef} real places (${meta.reference_source}). Southern-hemisphere places are shifted half a year.`;
   $("analog-note").textContent = `Closest of ${nRef} real places (${meta.reference_source}), no two within 100 km. `
-    + `Match % = 100 × e^(−d/2), where d = (typical monthly temperature difference ÷ 2.5 °C) + (typical difference in √rain ÷ 2): `
-    + `100% is identical, and each 2.5 °C off in a typical month multiplies it by 0.61. `
-    + `Temperatures compare daily highs and lows, so a day/night swing 4 °C wider counts like a month 2 °C warmer; `
-    + `the map's swing is learned from Earth (WorldClim highs and lows by rainfall, temperature, elevation, distance from the sea and latitude).`;
+    + `Balanced gives temperature and precipitation equal weight in this list and real-city search; either end compares only that feature. `
+    + `Temperature includes seasonal daily highs and lows where available; rainfall compares seasonal patterns using square-root differences. `
+    + `Your selected city stays on the graph until you choose another or return to the closest match.`;
 
   // ---------------------------------------------------------------- search: map towns and real cities
   const [, CH, CW] = A.T12.shape;
@@ -1056,24 +1244,39 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     return out.join("");
   }
 
-  function clearMatches() { matchState = null; activeRef = null; drawMatches(); $("find-results").innerHTML = ""; }
+  function clearMatches() {
+    matchState = null; activeRef = null; searchDistanceCache = null;
+    drawMatches(); $("find-results").innerHTML = "";
+    refreshComparisons();
+  }
 
-  function showReal(ref) {
+  function showReal(ref, { reframe = true } = {}) {
+    // Cache each component separately; slider changes only recombine them.
+    if (!searchDistanceCache || searchDistanceCache.ref !== ref) {
+      const temperature = new Float64Array(NC), precipitation = new Float64Array(NC);
+      const useD = A.D12 && ref.D;
+      for (let c = 0; c < NC; c++) {
+        if (!cellLand[c]) continue;
+        const lapse = meta.lapse * cellElev[c] / 1000;
+        let dt = 0, dp = 0;
+        for (let m = 0; m < 12; m++) {
+          const t = A.T12.data[m * NC + c] / 10 - lapse;
+          const p = A.P12.data[m * NC + c];
+          const ds = useD ? A.D12.data[m * NC + c] / 10 - ref.D[m] : 0;
+          dt += (t - ref.T[m]) ** 2 + ds * ds / 4;
+          dp += (Math.sqrt(Math.max(p, 0)) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
+        }
+        temperature[c] = Math.sqrt(dt / 12) / 2.5;
+        precipitation[c] = Math.sqrt(dp / 12) / 2;
+      }
+      searchDistanceCache = { ref, temperature, precipitation };
+    }
     const d = new Float32Array(NC).fill(99);
     let best = Infinity;
     for (let c = 0; c < NC; c++) {
       if (!cellLand[c]) continue;
-      const lapse = meta.lapse * cellElev[c] / 1000;
-      let dt = 0, dp = 0;
-      const useD = A.D12 && ref.D;
-      for (let m = 0; m < 12; m++) {
-        const t = A.T12.data[m * NC + c] / 10 - lapse;
-        const p = A.P12.data[m * NC + c];
-        const ds = useD ? A.D12.data[m * NC + c] / 10 - ref.D[m] : 0;
-        dt += (t - ref.T[m]) ** 2 + ds * ds / 4;
-        dp += (Math.sqrt(p) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
-      }
-      d[c] = Math.sqrt(dt / 12) / 2.5 + Math.sqrt(dp / 12) / 2.0;
+      d[c] = ClimateComparison.weightedDistance(searchDistanceCache.temperature[c],
+        searchDistanceCache.precipitation[c], temperatureWeight);
       if (d[c] < best) best = d[c];
     }
     // smooth a copy for clean edges, averaging over land neighbours only (so
@@ -1102,7 +1305,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     activeRef = ref;
     const out = meta.places
       .filter((p) => cls.data[pixIdx(Math.round(p.x), Math.round(p.y))] !== 255)
-      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref, cl.D12) }; })
+      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref, cl.D12, temperatureWeight) }; })
       .sort((a, b) => a.d - b.d).slice(0, 6);
     matchState = { fill: spotlight(f, l1, l2), pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
     // frame the very-close areas and the numbered towns
@@ -1110,14 +1313,17 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
     for (let c = 0; c < NC; c++) if (f[c] < l1) grow(((c % CW) + 0.5) * meta.cell_px, (Math.floor(c / CW) + 0.5) * meta.cell_px);
     for (const o of out) grow(o.p.x, o.p.y);
-    fitTo(x0, y0, x1, y1);
+    if (reframe) fitTo(x0, y0, x1, y1);
+    else drawMatches();
     $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.s ? ", weather station" : ""}).
+      <span class="note" style="display:block">Similarity: ${esc(similarityPriority())}</span>
       <span class="match-key"><span><i></i>very close</span><span><i class="close"></i>close</span><span><i class="far"></i>less alike</span></span>`;
     $("find-results").innerHTML = out.map((o, i) => `<li><span class="num">${i + 1}</span><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
       <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
     for (const b of $("find-results").querySelectorAll("button")) {
       b.addEventListener("click", () => { const o = out[+b.dataset.i]; select(o.p.x, o.p.y, o.p.name); focusOn(o.p.x, o.p.y, 3); });
     }
+    refreshComparisons();
   }
 
   function runSearch(query) {

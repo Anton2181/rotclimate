@@ -77,3 +77,496 @@ median cell.
 | it15 | **round 18**: both round 17 bests polished with the same batch pattern search (`scripts/polish.py`; the ten inert genes frozen, offsets within ±2 °C, ~400 evals each), then the 60-world rematch | f1r 0.442 (retrograde, from 0.403) vs 0.468 (Earth-like, from 0.437) | Both gain about as much: the screening's untapped one-gene moves were real for both spins once searched for. On fresh worlds **Earth-like spin wins on both measures**: objective gap −0.030 (95% −0.049 to −0.010, outside the ±0.01 tie band) and painted land correct 52.2% vs 50.6% (Earth-like ahead on 40 of 60 worlds). The Earth-like world now matches the warm-wet west coast almost as well (F1 0.57 vs 0.59) and the swamp, forest and hot-dry zones better. Published world: 29.4–44.7°N, tilt 17.0°. |
 | — | *zone rules follow Köppen* | (static on round 18: Earth-like 0.468 → 0.456, reversed 0.442 → 0.438) | Cold-and-dry took cold places up to 1.3× the dryness threshold, so dry-summer continental Dsa (not a Köppen dry climate) counted as cold and dry: 54% of the simulated cold-dry land was Dsa. Cold-and-dry is now BSk/BWk and hot-and-dry BSh/BWh (split at Köppen's 18 °C line, was 17 °C), Mediterranean is all of Cs (Csb too), and a place's label can only be a zone its Köppen class allows. On the published map the share of land correct drops 48% → 42%: the painted cold-dry north is simulated as Dsa, a little too wet for a steppe. |
 | — | *map orientation* (physics v9: true north may point anywhere; with the spin this also covers mirror images and the southern hemisphere) and a screen of every 30° × both spins (80 evals on one world each, `calibration/run_orient_screen.sh`) | best 0.358 (Earth-like) / 0.333 (reversed) at 0° | North at the top of the map fits far better than any other orientation for both spins: 30° off already costs 0.05–0.12, 90° off 0.2, the upside-down map (equivalent to the southern hemisphere) 0.2–0.25. Turning north anticlockwise costs a little less than clockwise (330°: 0.27–0.28), so round 19 leaves the orientation free around 0°. |
+
+## Handoff continuation: reliable calibration restarts
+
+The handoff includes round-19 scripts but no orientation-screen run directory or
+round-19 results. The launch script previously waited forever for the absent
+`screen.done`. It now starts from each spin's retained round-18 fit if no completed
+screen candidates are available, and exits on failed commands instead of marking
+failed stages complete. The orientation screen also exits on failure.
+
+Before further calibration:
+
+* v9 encoding wraps bearings into −180° to 180° before applying search bounds;
+  a screened 330° fit therefore starts at −30°, rather than being clipped to 180°.
+* CMA-ES evaluates and saves the starting candidate on every requested world,
+  after applying fixed genes and bounds. A restart cannot discard this candidate
+  just because its random offspring are worse.
+* The evaluation budget includes that initial evaluation; only complete CMA-ES
+  populations that fit the remaining budget run. Round 19 now requests 321
+  evaluations (one initial candidate plus 20 populations of 16).
+* Round 19 disables first-world racing. Racing is a speed heuristic that can
+  reject a fit which would recover on other worlds, not a proven score bound.
+  Only fully evaluated, successful candidates can replace the saved best.
+
+Regression tests are in `tests/test_calibration.py`. This work repairs the search
+workflow; it does not establish a new preferred spin or replace the published
+round-18 parameters and atlas.
+
+To run the full pending experiment with the local environment:
+
+```sh
+PATH="$PWD/.venv/bin:$PATH" sh calibration/run_round19.sh
+```
+
+The pattern-search and 60-world rematch stages remain part of that full run.
+
+Known validation caveat: the original core suite passes but emits NumPy matrix
+multiplication warnings (divide-by-zero, overflow, invalid) in `ebm.py` and
+`koppen.py` on this machine. Finite-output checks pass; the cause of those warnings
+has not yet been established.
+
+The initial live trial stalled in the forked worker pool after the baseline had
+initialized the numerical libraries. Calibration now uses fresh (`spawn`)
+workers, avoiding inherited native runtime locks on macOS. The interrupted
+trial's baseline is retained in `calibration/r19_smoke_earthlike`; the rerun is
+in `calibration/r19_smoke_spawn`.
+
+Validation: 31 tests passed (23 existing core checks and eight new calibration
+regressions); the eight search regressions also passed after switching worker
+startup to spawn. Both edited shell scripts pass syntax checking.
+
+## Round 19 review — 13 October 2026
+
+The user completed round 19. The 60-world rematch favors Earth-like spin on F1r
+(0.4749 vs 0.4276), but reversed spin on painted-zone accuracy (49.04% vs 43.34%).
+The Earth-like atlas render shows only 32.41% accuracy. Its parameters match the
+polished winner except that downsample changes 8→4, steps/year 25→73, and moisture
+iterations 2→3. Those effects have not yet been isolated on the same world.
+
+See `reports/round19_diagnosis.md` for evidence, research sources and priorities.
+`scripts/diagnose_numerics.py` prepares controlled comparisons and per-zone
+physical diagnostics. Only its plan and two lightweight setup tests were run;
+no simulations or calibrations were run during this review.
+
+User workflow preference: leave calibrations and other long-running tasks to the
+user; provide exact commands rather than launching them or waiting for them.
+
+### Round-19 numerical isolation results
+
+User-run same-seed diagnostics identify grid refinement as the main effect:
+44.22% accuracy at calibration settings → 32.96% with only downsample 8→4.
+Changing moisture iterations 2→3 yields 43.87%; changing steps 25→73 yields
+43.28%. The full render is 32.41%. The earlier moisture-iteration hypothesis is
+not the main explanation on this case.
+
+Fine-grid temperature/wind iteration reaches its cap on 29/33 steps, compared
+with 0/33 coarse-grid steps. Added observation of final updates and actual
+convergence decisions without changing the numerical solution. Prepared
+`grid4_t48` and `grid4_t96` cases for the user to test iteration stability before
+investigating spatial discretization and geography. Three quick setup tests pass;
+no climate runs were launched by the assistant.
+
+### Round-19 transport investigation
+
+User-run fine-grid temperature caps of 48 and 96 both converge within at most
+28 iterations and give identical objective 0.29318846 / accuracy 32.5503%.
+Increasing the cap does not recover the fit. Added an experimental exponential
+transport stencil (default remains upwind) to test grid-dependent numerical
+diffusion. Prepared `coarse_fitted,fine_fitted` diagnostic cases for the user.
+
+Reproduced the matrix warnings on small, finite, benign inputs independently
+of the climate model, consistent with NumPy/Apple Accelerate issue #28687.
+EBM and monthly statistics now use explicit contractions to avoid that backend
+path; real nonfinite model outputs stop the diagnostic before scoring.
+Thirteen focused tests pass. No assistant-run seasonal simulations or calibrations.
+
+### Round-19 fitted transport results
+
+User-run fitted transport gives 43.59% coarse-grid accuracy and 33.40% fine-grid
+accuracy, with temperature convergence in both. This recovers only 0.85 points
+on the fine grid versus converged original transport (32.55%). It does not
+resolve the coarse/fine gap. Keep upwind as the default.
+
+Made the existing linear solver update tolerance explicit (`solver_rtol`, default
+0.001). Prepared `coarse_tight,fine_tight` with rtol=1e-6 to check whether loose
+boundary-scaled per-sweep stopping explains part of the grid dependence. Saved
+cap counts must be inspected before claiming convergence. Thirteen focused
+checks pass; no assistant-run seasonal simulations.
+
+### Round-19 cause identified: linear solve stopping accuracy
+
+User-run tighter solves close the same-world grid gap: coarse/fine accuracy is
+43.65%/43.78%, objectives 0.4668/0.4660, and cold-dry median annual rainfall
+277/275 mm. With original stopping, converged coarse/fine accuracy was about
+44.22%/32.55%. Loose inner linear solves explain the main discrepancy in this
+case; this is not yet a multi-world or 73-step validation.
+
+Fine tightening reached the old 400-sweep cap in 32 solves. Added actual
+convergence status, configurable `solver_max_iter` (historical default 400), and
+`solver_require_convergence` (historical default false; unfinished legacy solves
+warn once). Prepared `fine_verified` at rtol=1e-6 with a 2,000-sweep cap and
+strict rejection of unfinished solves. Sixteen focused tests pass. The user
+runs the final verification; no assistant-run seasonal simulations.
+
+### Round-19 fine-grid verification complete
+
+User-run `fine_verified` completes all 243 linear solves (maximum 602 sweeps) and
+all temperature/wind steps. Accuracy 43.7783%, objective 0.4659994; rainfall is
+stable relative to the 400-cap tight run. Saved exact tested settings as
+`calibration/round19_earthlike_strict.json` (same physical fit, no new calibration).
+
+Added `--saved-numerics` to both render entry points so tested grid/steps/Picard
+settings can be preserved explicitly. Exports include numerical provenance and
+an audit of the two existing label policies on the model grid. The atlas display
+policy is shared with the audit; historical strict accuracy and label rules are
+unchanged. Nineteen focused tests pass. User runs atlas regeneration; no
+assistant-run seasonal simulations or calibration.
+
+### Corrected atlas checked; round-20 pilot prepared
+
+The regenerated atlas and output summary match the verified numerics: 43.7783%
+strict accuracy, 46.0979% display-policy accuracy. Forest discount raises warm-wet
+recall 5.44→21.82% but lowers forest recall 30.35→11.25%; label weights alone trade
+classes instead of improving the climate.
+
+Added optional `zonefit` objective: equal weight to balanced fuzzy F1 and balanced
+per-zone strict recall, with unchanged realism penalties. Historical objectives
+and label policies remain intact. Ensembles and held-out comparisons log recall
+and display accuracy; rematches can compare unchanged starts on identical worlds.
+
+Prepared `scripts/round20_pilot.py`: 65 evaluations per spin on worlds 1–3,
+strict numerics, then winners and unchanged starting fits on fresh worlds
+201–212. It refuses existing output directories and leaves the atlas untouched.
+Thirty-two focused tests pass; only the plan was previewed. User launches the
+hours-long pilot.
+
+### Atlas reference-climate controls
+
+Added a temperature/precipitation priority slider to “Feels like”; its midpoint
+preserves the original distance formula and score, and endpoints rank by just
+one component. City rows are keyboard-accessible toggle buttons that update the
+graph's temperature comparison and outlined precipitation bars. A selected city
+stays pinned when rankings or the selected map location change; an automatic
+comparison button restores the closest match. Reverse city-to-map search keeps
+its existing balanced metric.
+
+Reference rainfall is integrated from equal solstice-aligned bins into the local
+35-day months and 15 Holy Days, preserving annual totals. The precipitation axis
+includes both series. Verified ranking changes, city selection, pinning and both
+chart series in the browser; four fast calculation tests pass. This is a static
+atlas edit and needs only a page refresh, with no simulation or calibration.
+
+### Similarity slider also controls real-city search
+
+The temperature/precipitation weights now apply consistently to “Feels like”,
+real-city search scores, ranked map towns, and map highlight regions. Changing
+the slider refreshes an active search automatically without reframing the map.
+The search panel states the active weighting. Grid comparison components are
+cached and recombined with the same distance helper used for city comparisons.
+
+Browser check with Athens: balanced ranks Paraman at 26%; temperature-only ranks
+Selinunte at 49%; precipitation-only ranks Tuz at 44%. Highlight changes were
+verified while the viewport transform stayed unchanged. Selecting Tuz reproduces
+the same 44% Athens score in its station card. Five fast calculation tests pass;
+no simulation or calibration rerun is needed.
+
+### Round-20 apparent stall: active computation with batch-buffered reporting
+
+A read-only process inspection during the user-run pilot found Earth-like complete
+(65 candidates, no errors, starting score 0.3852 → best 0.4137 at evaluation 5).
+Reversed spin had saved its initial candidate (score 0.4542) and was evaluating its
+first 16-candidate population. Four worker processes each used approximately
+one core continuously; a one-second stack sample showed compiled numerical work.
+The starting reversed fit took about 17 minutes on three worlds, substantially
+longer than the Earth-like configuration.
+
+The old parent used blocking pool.map and wrote no candidate results until the
+entire population returned, explaining unchanged files and no console messages.
+Changed future runs to consume indexed results with imap_unordered, flush each
+candidate immediately, and pass the complete population back to CMA-ES in the
+original ask order. Added explicit pilot stage start/completion messages. The
+active run is left running; loaded code will keep its old reporting behavior.
+
+### Round-20 pilot stopped after first reversed-spin population
+
+User stopped the run after 65 Earth-like and 17 reversed-spin evaluations. Both
+best files match the successful logged candidates; no calibration worker remains.
+Training strict accuracy is 44.72% Earth-like and 52.88% reversed. These are not
+held-out results, and the unequal search budgets preclude a final spin claim.
+
+Added `round20_pilot.py --compare-only` to evaluate saved fits without restarting
+searches. The rematch deduplicates exactly identical parameter sets (ignoring the
+seed explicitly overridden by each job); the reversed-spin winner is identical
+to its baseline, reducing the comparison from 48 to 36 simulations. It now prints
+and checkpoints each completed world, and uses spawned workers with an explicit
+objective initializer. Six focused tests pass; plan confirms three unique fits
+on twelve worlds. No comparison simulations were launched by the assistant.
+
+### Round-20 held-out comparison completed
+
+User-run comparison on worlds 201–212: reversed strict accuracy 49.33% versus
+Earth-like 43.36% (ahead on all twelve worlds); display-policy accuracy 51.60%
+versus 50.77%. zonefit gap +0.0150, bootstrap 95% −0.0111 to +0.0426: undecided.
+Search budgets were unequal (65 vs 17), and reversed retains its starting fit.
+
+Earth-like improves strict accuracy only 0.915 points over its start; mean
+per-zone recall decreases 0.269 points and fuzzy F1 objective decreases 0.00614.
+Its zonefit gain 0.02973 is more than explained by removal of a 0.03432 hot-wet
+summer penalty. Warm-wet recall stays low (7.76%); reversed has 46.72% but swamp
+recall only 19.72% against Earth-like's 37.54%. Further broad search is not
+justified by the pilot alone. Preserve both fits and diagnose rule competition
+and physical mismatches before changing objectives again. Analysis used saved
+metrics only; no assistant-run simulations.
+
+### Retrograde atlas selection and factor diagnosis
+
+User selected the pilot's saved retrograde fit. Saved exact parameters as
+`calibration/round20_retrograde_selected.json`; user runs render with
+`--saved-numerics --out output --atlas` at the tested 14.7 km / 25-step settings.
+
+Confirmed a structural overlap: a compatible humid Cfa example scores 0.9254
+warm-wet but 0.9530 forest and therefore receives the broad forest label. F1
+spill handling already recognizes this hierarchy; flat label argmax largely
+does not. Swamp's five multiplied factors create a compound threshold whose
+limiting factor must be checked on actual fields.
+
+Named factor extraction retains existing memberships and classification rules.
+Each render now saves `rule_diagnostics.json` with eligibility, weak-rule and
+competing-label explanations, and `rule_fields.npz` with exact cropped fields
+for offline rule/label analysis. Seventeen focused tests pass. The assistant
+prepared the update and diagnosis; no seasonal simulation was launched.
+
+### Completed retrograde atlas: saved-field probes
+
+User completed the retrograde rebuild. Atlas metadata verified: strict model-grid
+agreement 54.19%, display agreement 56.51%. Köppen gate failures cover 28.90%
+of painted cells, versus 9.03% losing to other labels and 7.89% weak own rules.
+The forest display multiplier trades warm-wet recall 47.24→69.98% against
+forest 58.07→12.74%. A fixed selective warm-wet priority probe at membership
+0.9 gives 57.32% accuracy and 58.10% balanced recall on this one world, but is
+not yet validated across worlds. No production policy changed.
+
+Added `scripts/audit_saved_rules.py` for offline NPZ policy probes, including
+exclusive-label precision. Removing swamp annual heat increases swamp recall
+23.15→42.56%, but precision falls 79.29→41.71% and overall accuracy declines.
+Report: `reports/round19_diagnosis.md`; results: `output/rule_policy_probes.json`.
+Seventeen focused tests pass. No assistant-run climate simulations/calibrations.
+
+### Mediterranean dry patch is the next user priority
+
+Saved fields show 12.99% of the Mediterranean target is steppe (BSh/BSk), not
+BW desert. Of those dry cells, 99.74% already meet dry-summer rainfall criteria;
+median annual rain 472.7 mm falls 45.2 mm below the current non-arid threshold.
+This points to testing cool-season moisture delivery, retaining dry summers.
+
+Prepared `scripts/mediterranean_pilot.py`: read-only plan by default, explicit
+`--run` for two seasonal simulations on the saved seed. One probe increases
+seasonal belt migration 2°, the other storm exchange 25%. Neither uses target
+paint in the physics. Existing baseline is reused, exact parameters checked,
+completed cases resumable, strict numerics retained. Prints progress and checks
+Mediterranean dry/Cs area alongside intended dry-zone recall. No atlas overwrite.
+`diagnose_numerics.diagnose` now optionally saves exact fields and accepts a
+progress callback. No assistant-run climate simulation or calibration.
+
+### Mediterranean pilot completed; fix coupled temperature iteration next
+
+User-run storm exchange probe reduces Mediterranean dry area 12.99→2.81%, but
+cold-dry recall falls 56.32→30.64%, hot-dry 69.22→41.37%, and overall accuracy
+54.19→48.90%. Seasonal belt probe gives little Mediterranean benefit. Neither
+promoted. Fixed original Mediterranean dry cells gain winter rain 284.6→378.1 mm
+under stronger storm mixing, confirming moisture delivery as the useful mechanism.
+
+Critical new diagnostic: despite converged linear solves, coupled temperature/
+wind iteration fails on 21/20 seasonal steps in belt/mixing probes. Maximum final
+updates inside map 16.75/15.30°C. Scores remain provisional. Added opt-in
+`t_relaxation` with legacy default 1; damping does not shrink the convergence-error
+test. Prepared one `coarse_damped` user-run numerical test (quarter updates,
+192 iterations), exact fields optional via `--save-fields`. Numerical metadata
+records relaxation. Legacy NPZ parameter checks normalise new defaults.
+Thirty focused tests pass. No assistant-run long task, no atlas update.
+
+### Damped baseline verified by user
+
+User completed quarter-update temperature test in 129.3 seconds. All 33 coupled
+steps and 947 linear solves converge; coupled iterations 16–51, median 24, no
+cap hits. The unchanged physical fit now has 48.70% strict agreement and 24.15%
+dry area inside the Mediterranean target, versus 54.19% and 12.99% previously.
+This exposes numerical sensitivity in the fitted baseline; do not retain an
+unsettled solve for its higher score.
+
+Saved `calibration/round20_retrograde_stable.json` from the verified archive.
+Next user command in the diagnosis report reruns only storm mixing on the stable
+baseline. Pilot now optionally checks baseline convergence history and records/
+rejects failed candidate convergence before continuing. Atlas remains unchanged.
+Thirty-one focused tests pass; assistant ran no climate simulation.
+
+### Stable storm mixing succeeds for Mediterranean; cold-dry remains a tradeoff
+
+User-run stable storm exchange completes in 117.9 seconds with zero linear or
+coupled temperature convergence failures. Mediterranean dry area 24.15→6.15%,
+Mediterranean recall 41.85→64.16%, overall agreement 48.70→51.61%. Hot-dry
+recall stays 68.33→67.25%, while cold-dry falls 64.51→39.64%.
+Preserved exact fit as `calibration/round20_retrograde_stable_mixing.json`.
+Prepared one combined belt/exchange probe to investigate recovery of cold-dry
+contrast. Pilot now retains matching completed cases in incremental comparisons.
+Thirty-two focused tests pass. No assistant-run simulation; atlas unchanged.
+
+### Combined stable fit recovers cold-dry contrast
+
+User completed combined belt/exchange probe in 119.3 seconds; all linear and
+coupled temperature solves converge. Mediterranean dry area 6.18%, Mediterranean
+recall 65.73%, cold-dry recall 61.07%, overall agreement 54.58%. Versus stable
+baseline, hot-dry declines 68.33→59.02% and forest 59.13→51.38%; this is a
+Mediterranean-focused compromise, not universal improvement or multiworld proof.
+Saved exact fit as `calibration/round20_retrograde_mediterranean.json` after
+checking parameters and convergence. Prepared user-run atlas render command in
+the diagnosis report. No more parameter probes now; review the atlas next.
+Assistant ran no simulation/render; existing atlas unchanged pending user rebuild.
+
+### Combined Mediterranean atlas rebuilt by user
+
+Verified exact combined parameters and stable numerical metadata in the updated
+atlas. Strict agreement reproduces 54.5821%; model-grid display agreement 56.3057%.
+Mediterranean target has 68.27% Cs and 6.18% steppe (185 cells), no BW desert.
+Dayan/Ayah model-grid locations are now Csa; Yezi/Šepaš remain BSh. No new long
+run requested; review this map first. Verification used saved outputs only.
+
+### Continuing Mediterranean: focus storm exchange geographically
+
+Remaining dry cells are lowland (median elevation 46.8 m) around 35.49°N, inland
+of wetter Mediterranean cells. Dry target medians lie north (cold, 39.19°N) and
+south (hot, 27.81°N). Prepared one `focused_storms` probe relative to the current
+atlas: storm width ×0.8 and eddy exchange ×1.25. Simplified zonal winter exchange
+ratios are 1.21 / 0.91 / 0.84 at Mediterranean / cold-dry / hot-dry medians.
+Summer dry-zone ratios increase; actual precipitation must be tested, not assumed.
+
+Pilot now tracks fixed original Mediterranean dry cells, newly dry cells and
+same-location seasonal rainfall changes, rather than relying only on total area.
+Prepared one user-run command in the diagnosis report. Thirty-three focused tests
+pass; no assistant-run simulation or change to atlas data/production physics.
+
+### Focused storms rejected; user retains current atlas
+
+User-run focused fit cures 174/185 dry Mediterranean cells, creates no new dry
+cells and reduces dry area 6.18→0.37%. Both solvers converge. Cold-dry agreement
+nevertheless falls 61.07→32.56%, overall 54.58→51.49%. Cold-dry temperatures
+hardly change; rainfall increases in winter and summer. User explicitly prefers
+keeping current atlas and diagnosing this collateral damage.
+
+Preserved rejected fit as `round20_retrograde_focused.json`. Added opt-in local
+discrete moisture-equation terms, monthly wind/water archives, and absolute
+residual aggregation. Diagnostics observe final fields without changing physics;
+they are not conservative global water budgets. Prepared user command
+`scripts/diagnose_moisture.py --run` for exact current/rejected reruns, no search
+or atlas writes. Check two-Picard moisture closure before more parameter tuning.
+Thirty-six focused tests pass; assistant ran no climate simulation.
+
+### Moisture closure is the next numerical defect
+
+User transport reruns reproduce both earlier fits. Despite converged linear/
+temperature solves, current mean absolute moisture-equation residual / mean rain
+is 82.4% cold-dry, 37.4% Mediterranean, 21.0% hot-dry, 18.6% swamp. Two partial
+moisture updates leave large opposing seasonal errors. Focused cold-dry storm
+exchange increases mainly in summer, but unsettled closure makes attribution
+provisional. Atlas kept unchanged per user's explicit choice.
+
+Added opt-in equation-based convergence in `rotclimate/moisture.py`, damped
+iteration and strict failure handling. Legacy fixed-count behavior remains default
+and matches old water arithmetic in tests. Adaptive runs enforce Dirichlet values
+after damping and safely handle zero water. Numerical metadata includes the new
+settings. Prepared one user-run current-fit check: `scripts/diagnose_moisture.py
+--converged --cases current --run`, with 1% scaled equation tolerance, quarter
+updates, cap256 and linear rtol1e-7. Fails early rather than completing invalid
+runs. Forty-two focused tests pass. No assistant seasonal simulation/calibration.
+
+### Moisture equation verification passes; seasonal fit needs retesting
+
+User strict moisture run completes in 475.8 seconds. All seasonal temperature,
+linear and moisture checks pass; moisture iterations 28–46, median36. Cold-dry
+mean absolute equation residual / rain drops 82.4→0.0437%, Mediterranean
+37.4→0.0193%. Corrected Mediterranean Cs area is only 20.67%, dry B area23.75%,
+Cfa46.93%. Median winter rain 419.6→320.3 mm, summer245.8→300.0 mm. Overall
+strict agreement43.31%; cold-dry66.18%, hot-dry65.10%. Earlier fit partly depended
+on unfinished seasonal moisture updates; do not use them to retain a score.
+
+Saved exact profile as `round20_retrograde_moisture_verified.json`. Prepared one
+focused-case rerun using the same strict numerics; current baseline reused and
+retained in comparisonJSON. Added comparable zone recalls and Mediterranean
+climate shares. Forty-three focused tests pass. Current atlas remains unchanged
+per user's preference; no assistant seasonal simulation.
+
+### Settled focused storms still fail the dry-zone tradeoff; test seasonality
+
+User converged focused case takes 479.2 seconds and passes all local numerical
+checks. Mediterranean dry area23.75→9.12%, Cs20.67→37.37%, but Cfa remains45.22%
+and cold-dry recall66.18→43.07%. Mediterranean summer rain barely changes
+(376.3→372.0 mm mean), while cold-dry summer rain259.0→313.2 mm.
+
+Added opt-in `eddy_seasonality`, default0 preserving old exchange arithmetic.
+One fixed probe at0.4 scales the existing exchange1.4× in winter and0.6× summer
+at seasonal extrema, applied consistently to heat and moisture. It uses the
+verified current baseline, with no focused width/rate changes and no paint forcing.
+Prepared user command `scripts/diagnose_moisture.py --converged --cases seasonal
+--run`. Annual exchange/rain is not assumed conserved. Forty-nine focused tests
+pass; no assistant simulation or atlas update. Research rationale in diagnosis report.
+
+### Seasonal exchange improves verified fit; next test summer circulation
+
+User seasonal case converges in 477.6 seconds. Overall agreement43.31→46.91%,
+Mediterranean Cs20.67→30.26%, dry B23.75→15.10%, cold-dry recall66.18→67.04%.
+Hot-dry recall falls65.10→60.78%. Exact profile preserved as
+`round20_retrograde_seasonal_verified.json`; atlas unchanged.
+
+Mediterranean summer exchange drops45.8 mm but wind export drops25.8 mm,
+offsetting much of the reduction. Prepared one existing-parameter `poleward`
+probe on the seasonal fit: Hadley edge+4°, moving summer high centre27.82→31.82°N
+and summer storm centre40.82→44.82°N. Winter storm movement may wet cold-dry
+land, so all zones remain in the comparison. Fifty focused tests pass. No
+assistant-run climate simulation or atlas update.
+
+### Poleward shift fails; protect verified numerics and test stronger seasonality
+
+User poleward run converges in444.1 seconds but overall agreement falls46.91→32.94%
+and Mediterranean dry area15.10→56.01%. Reject; no atlas update. Winter and summer
+Mediterranean rain both decrease, while hot-dry summer rain surges. Seasonal fit
+remains best verified candidate. Prepared one `strong_seasonal` test at contrast0.7
+versus0.4, retaining its geometry and strict solver settings.
+
+Found calibration/sensitivity still forcing Picard2. Added shared numerical
+configuration helper: verified positive-tolerance profiles preserve saved settings
+automatically; legacy defaults unchanged, explicit overrides take priority. Render
+shares the helper. Calibration/sensitivity gain saved-numerics, picard override and
+read-only plan options; sensitivity uses spawn. Sixty-three focused tests pass.
+No assistant climate simulation, calibration, sensitivity run or atlas update.
+
+### Stronger seasonality improves the verified fit; interaction test prepared
+
+User contrast0.7 run converges in482.9 seconds. Overall48.90%, Mediterranean
+Cs37.24%, dry B12.02%, strict Mediterranean34.27%, cold-dry68.30%, hot-dry57.16%.
+Saved `round20_retrograde_strong_seasonal_verified.json`; atlas unchanged.
+Prepared one `focused_seasonal` interaction case using the already-tested focused
+width/rate plus contrast0.7. Focused storms added54.3 mm cold-dry summer rain;
+strong seasonality removed54.6 mm relative to the same verified current baseline,
+motivating a mitigation test without assuming additive responses. No poleward
+shift or new parameter. Sixty-four focused tests pass. No assistant-run simulation.
+
+### Interaction completed; switch to paired fresh-world screening
+
+User combined case converges in491.6 seconds. Overall48.79%, Mediterranean
+dry1.57%, Cs50.37%, cold-dry48.38%, hot-dry63.73%. Cold-dry still drops20 points
+versus strong seasonal; no automatic atlas selection. Preserved exact combined
+profile. Two equal overall scores hide the regional tradeoff.
+
+Prepared `scripts/validate_mediterranean.py` for both finalists on seeds301/302:
+four sequential user-run simulations, resumable by exact parameters/model-source
+fingerprint, strict checks, paired comparisons and saved rule fields. Plan only
+by default. Roadmap in `reports/near_term_plan.md`: screen finalists, then one
+small bounded calibration with dry-zone limits, independent checks and atlas
+review. Sixty-six focused tests pass. No assistant-run simulation or atlas update.
+
+### Fresh-world validation finds a difficult temperature fixed point
+
+First user job, strong seasonal world301, takes672.6 seconds and passes all linear/
+moisture checks. Temperature steps19–21 cap at192 with in-map final updates
+0.101/0.095/0.054°C >0.05°C. Result rejected; other jobs not run. Preserved original
+failed JSON/fields with `_pre_temperature_retry` suffix.
+
+Added opt-in bounded temperature retries and strict failure: first-stage arithmetic
+unchanged, up to two continuation stages halve damping and double caps while
+retaining full-update0.05°C tolerance. Validation uses the same policy for both
+finalists and fails immediately on persistent temperature failure. Detailed stage
+histories and live retry progress added. Prepared one-job retry command in report;
+default validation can resume afterward. Sixty-nine focused tests pass; no
+assistant-run seasonal simulation or atlas update.

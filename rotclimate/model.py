@@ -32,6 +32,7 @@ from .config import Params
 from .ebm import ZonalClimate
 from .geography import Grid, build_grid
 from .solver import AdvectionSolver
+from .temperature import temperature_update, iterate_temperature, TemperatureConvergenceError
 
 DAY = 86400.0
 
@@ -83,6 +84,17 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+def eddy_exchange_rate(base_rate, storm, season, contrast=0.):
+    """Regional seasonal exchange in 1/s; season +1 summer, -1 winter.
+
+    Contrast scales the whole exchange, including the background floor. Its
+    time-mean multiplier is one for a sinusoidal season, but the full annual
+    exchange is not conserved because the storm envelope also varies.
+    """
+    rate = base_rate * (0.15 + storm) / DAY
+    return rate if contrast == 0. else rate * (1. - contrast * season)
+
+
 @dataclass
 class Result:
     params: Params
@@ -96,6 +108,7 @@ class Result:
     v: np.ndarray           # northward wind (m/s)
     snow: np.ndarray        # snow water equivalent (mm)
     E: np.ndarray           # evaporation (mm / day)
+    moisture_budget: dict | None = None  # optional cropped diagnostic terms [nt, map_y, map_x]
 
     @property
     def nt(self):
@@ -104,11 +117,28 @@ class Result:
 
 class ClimateModel:
     def __init__(self, params: Params):
+        if not np.isfinite(params.eddy_seasonality) or not 0 <= params.eddy_seasonality < 1:
+            raise ValueError('eddy_seasonality must be in [0, 1)')
+        if not np.isfinite(params.t_relaxation) or not 0 < params.t_relaxation <= 1:
+            raise ValueError('t_relaxation must be in (0, 1]')
+        if params.t_adaptive_retries not in (0,1,2):
+            raise ValueError('t_adaptive_retries must be 0, 1 or 2')
+        if not np.isfinite(params.moisture_relaxation) or not 0 < params.moisture_relaxation <= 1:
+            raise ValueError('moisture_relaxation must be in (0, 1]')
+        if not np.isfinite(params.moisture_residual_tol) or params.moisture_residual_tol < 0 or params.picard_iters < 1:
+            raise ValueError('Moisture tolerance must be nonnegative and picard_iters positive')
+        if params.moisture_residual_tol > 0 and params.transport_scheme != 'upwind':
+            raise ValueError('Moisture convergence checking currently requires upwind transport')
+        if params.moisture_require_convergence and params.moisture_residual_tol == 0:
+            raise ValueError('Required moisture convergence needs a positive moisture_residual_tol')
         self.p = params
         self.g = build_grid(params)
         self.z = ZonalClimate(params)
         g = self.g
-        self.solver = AdvectionSolver(g.ny, g.nx, g.dx_m)
+        self.solver = AdvectionSolver(g.ny, g.nx, g.dx_m, scheme=params.transport_scheme)
+        self.solver.rtol = params.solver_rtol
+        self.solver.max_iter = params.solver_max_iter
+        self.solver.require_convergence = params.solver_require_convergence
         self._static_fields()
 
     # ------------------------------------------------------------------ static
@@ -222,12 +252,21 @@ class ClimateModel:
         return sst
 
     # ------------------------------------------------------------------ run
-    def run(self, steps: int | None = None, spinup: int = 8, progress=None) -> Result:
+    def run(self, steps: int | None = None, spinup: int = 8, progress=None,
+            diagnose_moisture=False,temperature_retry=None) -> Result:
         p, g = self.p, self.g
         nt = steps or p.steps_per_year
         days = (np.arange(nt) + 0.5) * p.year_days / nt
         shape = (nt, g.ny, g.nx)
         out = {k: np.zeros(shape, np.float32) for k in ("T", "Tsl", "P", "W", "u", "v", "E")}
+        budget = None
+        if diagnose_moisture:
+            if p.transport_scheme != 'upwind':
+                raise ValueError('Moisture equation diagnostics currently require upwind transport')
+            from .transport import moisture_terms
+            cropped_shape = (nt,) + g.target[g.map_slice()].shape
+            budget = {key: np.zeros(cropped_shape, np.float32) for key in
+                      ('advection', 'diffusion', 'storm_exchange', 'residual', 'absolute_residual')}
         land = g.land
         ocean = ~land
         lat = self.lat
@@ -240,6 +279,13 @@ class ClimateModel:
         W_prev = None
         soilP = np.full(lat.shape, 1.5)
         self.t_iterations = []
+        self.t_converged = []
+        self.t_update_max = []
+        self.t_update_inmap_max = []
+        self.t_stages = []
+        self.moisture_iterations = []
+        self.moisture_converged = []
+        self.moisture_scaled_residual = []
         dt_days = p.year_days / nt
         spinup = max(spinup, int(round(117.0 / dt_days)))      # ~4 months whatever the step
         soil_keep = np.exp(-dt_days / p.soil_memory_days) if p.soil_memory_days > 0 else 0.75
@@ -278,7 +324,7 @@ class ClimateModel:
                 shift = p.storm_reach * np.clip(side, 0, 1)
                 storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
                                    * (1 - 0.3 * s) * np.clip(side, 0, 1) * p.storm_asym)
-            eddy = p.eddy_rate * (0.15 + storm) / DAY
+            eddy = eddy_exchange_rate(p.eddy_rate, storm, s, p.eddy_seasonality)
             sigE = p.eddy_scale_km / g.cell_km
 
             # winds and temperature depend on temperature: iterate within the
@@ -291,25 +337,37 @@ class ClimateModel:
                 T_ref = T_prev + (T_prev - T_prev2)
             else:
                 T_ref = T_prev
-            for _it in range(max(1, p.t_iters)):
+            u=v=None
+            def solve_temperature(T_state, first_iteration):
+                nonlocal u,v
                 # ---- winds
-                T_anom = T_ref - Tz
+                T_anom = T_state - Tz
                 ut, vt = self.thermal_wind(T_anom)
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
 
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
-                    Tmix = gauss(T_ref, sigE)
-                    Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
-                                            lamT * T_eq + eddy * Tmix, T_eq, guess=T_ref if _it else T_prev)
+                    Tmix = gauss(T_state, sigE)
+                    return self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
+                                            lamT * T_eq + eddy * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
                 else:
-                    Tsl = self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_ref if _it else T_prev)
-                done = _it > 0 and float(np.abs(Tsl - T_ref).max()) < 0.05
-                T_ref = Tsl
-                if done:
-                    break
-            self.t_iterations.append(_it + 1)
+                    return self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
+            retry_callback=(lambda info:temperature_retry(dict(seasonal_step=n+1,day=float(d),**info))) if temperature_retry else None
+            temperature=iterate_temperature(solve_temperature,T_ref,p.t_iters,p.t_relaxation,p.t_adaptive_retries,
+                                            on_retry=retry_callback)
+            Tsl,update=temperature.temperature,temperature.update
+            update_max=float(update.max())
+            self.t_iterations.append(temperature.iterations)
+            self.t_stages.append(temperature.stages)
+            # Observe the existing stopping test without changing the solve.
+            # Reaching the last allowed iteration is not necessarily failure:
+            # it can satisfy the tolerance on that same iteration.
+            self.t_converged.append(temperature.converged)
+            self.t_update_max.append(update_max)
+            self.t_update_inmap_max.append(float(update[g.inmap].max()))
+            if not temperature.converged and p.t_require_convergence:
+                raise TemperatureConvergenceError(n+1,d,temperature,update[g.inmap].max())
             T = Tsl - p.lapse_rate * h_km
 
             # ---- moisture
@@ -353,24 +411,19 @@ class ClimateModel:
                 instab = 1.0 + p.instability * np.clip((T - 22.0) / 8.0, 0, 1.5) * moist
             else:
                 instab = 1.0
-            for _ in range(p.picard_iters):
-                RH = W / Ws
-                g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5
-                lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY)
-                lamP = lamP + np.maximum(RH - 1.0, 0) / RH / DAY
-                if p.eddy_rate > 0:
-                    Wmix = gauss(W, sigE)
-                    eq = eddy * np.exp(-h_km / 2.5)     # eddies carry vapour low down
-                    W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP + eq,
-                                              lamE * W_ocean + E_land + eq * Wmix, bnd, guess=W)
-                else:
-                    W_new = self.solver.solve(u, v, p.moisture_diffusion, lamE + lamP,
-                                              lamE * W_ocean + E_land, bnd, guess=W)
-                W = 0.5 * (W + np.maximum(W_new, 0))
-            RH = W / Ws
-            g_rh = np.clip((RH - p.rh_threshold) / (1 - p.rh_threshold), 0, 2) ** 1.5
-            lamP = A_dyn * g_rh * instab / (p.precip_tau_days * DAY) + np.maximum(RH - 1.0, 0) / RH / DAY
-            P = lamP * W * DAY
+            from .moisture import solve_moisture
+            exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
+            solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
+                                      A_dyn, instab, bnd, W, exchange,
+                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None)
+            W, P = solution.water, solution.rain
+            self.moisture_iterations.append(solution.iterations)
+            self.moisture_converged.append(solution.converged)
+            self.moisture_scaled_residual.append(solution.scaled_residual)
+            if solution.converged is False and p.moisture_require_convergence:
+                raise RuntimeError(f'Moisture equation failed at seasonal step {n+1}: '
+                                   f'{solution.iterations} iterations, scaled residual '
+                                   f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
             E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
@@ -378,11 +431,17 @@ class ClimateModel:
             if n >= spinup:
                 for key, val in (("T", T), ("Tsl", Tsl), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val
+                if budget is not None:
+                    exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
+                    mixed = gauss(W, sigE) if p.eddy_rate > 0 else W
+                    terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E, P, exchange, mixed)
+                    for key, values in terms.items():
+                        budget[key][k] = values[g.map_slice()]
             if progress:
                 progress(n + 1, len(order))
 
         snow = snowpack(out["T"], out["P"], p.year_days / nt)
-        return Result(params=p, grid=g, days=days, snow=snow, **out)
+        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, **out)
 
 
 def snowpack(T, P, step_days, years=3):
