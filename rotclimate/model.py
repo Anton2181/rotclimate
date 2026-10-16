@@ -116,7 +116,7 @@ class Result:
 
 
 class ClimateModel:
-    def __init__(self, params: Params):
+    def __init__(self, params: Params, grid=None):
         if not np.isfinite(params.eddy_seasonality) or not 0 <= params.eddy_seasonality < 1:
             raise ValueError('eddy_seasonality must be in [0, 1)')
         if not np.isfinite(params.t_relaxation) or not 0 < params.t_relaxation <= 1:
@@ -132,7 +132,7 @@ class ClimateModel:
         if params.moisture_require_convergence and params.moisture_residual_tol == 0:
             raise ValueError('Required moisture convergence needs a positive moisture_residual_tol')
         self.p = params
-        self.g = build_grid(params)
+        self.g = build_grid(params) if grid is None else grid   # grid: e.g. real geography (earth.py)
         self.z = ZonalClimate(params)
         g = self.g
         self.solver = AdvectionSolver(g.ny, g.nx, g.dx_m, scheme=params.transport_scheme)
