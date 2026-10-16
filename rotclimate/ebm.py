@@ -49,7 +49,7 @@ def _albedo(x, T, surface):
 
 
 @lru_cache(maxsize=64)
-def _solve(tilt, ecc, peri, ws_day, year_days, years=10):
+def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -73,10 +73,11 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10):
             L[j, j + 1] += w[j + 1] / dx**2
             L[j, j] -= w[j + 1] / dx**2
     fl, fo = F_LAND, 1 - F_LAND
+    C_L = C_LAND * c_land_scale     # e1: heat capacity of the land column (seasonal lag)
     dt = 86400.0
     I = np.eye(N)
     M = np.block([
-        [(C_LAND / dt + B_OLR + NU) * I - D_DIFF * fl * L, -D_DIFF * fo * L - NU * I],
+        [(C_L / dt + B_OLR + NU) * I - D_DIFF * fl * L, -D_DIFF * fo * L - NU * I],
         [-D_DIFF * fl * L - NU * fl / fo * I, (C_OCEAN / dt + B_OLR + NU * fl / fo) * I - D_DIFF * fo * L],
     ])
     Minv = np.linalg.inv(M)
@@ -89,7 +90,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10):
         for d in range(year_days):
             Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR
             Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR
-            rhs = np.concatenate([C_LAND / dt * Tl + Fl, C_OCEAN / dt * To + Fo])
+            rhs = np.concatenate([C_L / dt * Tl + Fl, C_OCEAN / dt * To + Fo])
             T = matrix_product(Minv, rhs)
             Tl, To = T[:N], T[N:]
             if yr == years - 1:
@@ -102,9 +103,11 @@ class ZonalClimate:
     """Interpolated EBM output: land / ocean temperature for (lat, day)."""
 
     def __init__(self, params):
+        scale = round(getattr(params, "land_heat_capacity", 1.0), 3)
+        extra = {} if scale == 1.0 else {"c_land_scale": scale}
         lat, Tl, To = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                              round(params.perihelion_after_solstice, 2),
-                             round(params.winter_solstice_day, 2), params.year_days)
+                             round(params.winter_solstice_day, 2), params.year_days, **extra)
         self.lat, self.Tl, self.To = lat, Tl, To
         self.Tz = F_LAND * Tl + (1 - F_LAND) * To
         self.year_days = params.year_days
