@@ -130,6 +130,8 @@ WORLD_GENES = ("lat_center", "tilt", "retrograde", "north_bearing", "tier1", "ti
                "beyond_north_land", "beyond_south_land", "beyond_west_land", "beyond_east_land",
                "beyond_southeast_land", "beyond_northeast_land", "beyond_continuity_km", "beyond_relief_m")
 SPACE_WORLD = [g for g in SPACE_V9 if g[0] in WORLD_GENES]
+# only the e1 additions, around an existing fit (everything else held at the start)
+SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
 
 
 def _set_space(space):
@@ -156,11 +158,12 @@ def decode(x: np.ndarray, base: Params) -> Params:
             continue
         else:
             kw[k] = float(val)
-    t1 = v["tier1"]
-    t2 = t1 + v["tier2_add"]
-    t3 = t2 + v["tier3_add"]
-    t4 = t3 + v["tier4_add"]
-    kw["tier_tops"] = (round(t1), round(t2), round(t3), round(t4))
+    if "tier1" in v:                 # spaces without the terrain tiers keep the base's
+        t1 = v["tier1"]
+        t2 = t1 + v["tier2_add"]
+        t3 = t2 + v["tier3_add"]
+        t4 = t3 + v["tier4_add"]
+        kw["tier_tops"] = (round(t1), round(t2), round(t3), round(t4))
     return base.replace(**kw)
 
 
@@ -176,6 +179,7 @@ def encode(p: Params) -> np.ndarray:
             v[f"beyond_{side}"] = BEYOND_MODES.index(getattr(p, f"beyond_{side}")) + 0.5
     t = p.tier_tops
     v["tier1"], v["tier2_add"], v["tier3_add"], v["tier4_add"] = t[0], t[1] - t[0], t[2] - t[1], t[3] - t[2]
+    v = {k: x for k, x in v.items() if k in NAMES}
     x = (np.array([v[k] for k in NAMES], float) - LO) / (HI - LO)
     return np.clip(x, 0.0, 1.0)
 
@@ -326,7 +330,7 @@ def main():
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "world"])
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -351,6 +355,8 @@ def main():
         _set_space(SPACE_E1)
     elif a.physics == "world":
         _set_space(SPACE_WORLD)
+    elif a.physics == "e1new":
+        _set_space(SPACE_E1_NEW)
     bounds = json.loads(a.bounds)
     if bounds:
         _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
@@ -358,7 +364,7 @@ def main():
     base = apply_numerics(base, saved=a.saved_numerics,
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
-    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "world"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
