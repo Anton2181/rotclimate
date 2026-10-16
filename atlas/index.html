@@ -296,6 +296,7 @@ body.map-expanded { overflow: hidden; }
         <div class="toggles">
           <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
+          <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
         </div>
       </div>
       <div class="mapwrap">
@@ -1020,13 +1021,94 @@ body.map-expanded { overflow: hidden; }
   }
   // The whole map, whatever part is on screen, at the map layers' own
   // resolution, with the overlays that are switched on.
+  // The legend of the layer on show, as data for drawing on a canvas.
+  function legendSpec(L) {
+    if (!L) return null;
+    if (L.kind === "koppen") return { title: "Köppen–Geiger climate", items: meta.present.map((c) => {
+      const k = kop.find((x) => x.code === c);
+      return { color: rgb(k.rgb), code: c, label: k.desc, share: (k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)) + "%" };
+    }) };
+    if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
+      ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
+    if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
+    const span = L.vmax - L.vmin;
+    const fmt = (v) => L.log ? String(Math.round(v / 10) * 10) : span <= 2 ? String(Math.round(v * 100) / 100) : String(Math.round(v));
+    const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
+    return { title: `${L.label}, ${L.unit}`, ramp: { stops: L.stops, ticks } };
+  }
+  const LEG_SANS = '"Alegreya Sans", "Gill Sans", sans-serif', LEG_MONO = '"IBM Plex Mono", ui-monospace, monospace';
+  // Lay the legend out in columns across `width` (sizes scale with the image).
+  function legendLayout(ctx, spec, width) {
+    const u = width / 1000, lay = { u, pad: 18 * u, font: 13 * u, rowH: 22 * u, sw: 13 * u, gap: 6 * u, titleH: 26 * u };
+    if (spec.ramp) return { ...lay, height: 2 * lay.pad + lay.titleH + 38 * u };
+    const widthOf = (it) => {
+      ctx.font = `600 ${lay.font}px ${LEG_MONO}`;
+      let w = it.code ? ctx.measureText(it.code + " ").width : 0;
+      ctx.font = `${lay.font}px ${LEG_SANS}`;
+      return lay.sw + lay.gap + w + ctx.measureText(it.label + (it.share ? "  " + it.share : "")).width;
+    };
+    const colW = Math.max(...spec.items.map(widthOf)) + 26 * u;
+    const cols = Math.max(1, Math.min(spec.items.length, Math.floor((width - 2 * lay.pad) / colW)));
+    const rows = Math.ceil(spec.items.length / cols);
+    return { ...lay, colW, rows, height: 2 * lay.pad + lay.titleH + rows * lay.rowH };
+  }
+  function drawLegendBand(ctx, spec, lay, y0, width) {
+    const { u, pad, font, sw, gap, rowH } = lay;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, y0, width, lay.height);
+    ctx.fillStyle = "#15181a";
+    ctx.textBaseline = "middle";
+    ctx.font = `700 ${font * 1.08}px ${LEG_SANS}`;
+    ctx.fillText(spec.title, pad, y0 + pad + lay.titleH / 2 - 3 * u);
+    const top = y0 + pad + lay.titleH;
+    if (spec.ramp) {
+      const bw = Math.min(600 * u, width - 2 * pad), bh = 14 * u, n = spec.ramp.ticks.length;
+      const g = ctx.createLinearGradient(pad, 0, pad + bw, 0);
+      spec.ramp.stops.forEach((c, i) => g.addColorStop(i / (spec.ramp.stops.length - 1), c));
+      ctx.fillStyle = g;
+      ctx.fillRect(pad, top, bw, bh);
+      ctx.fillStyle = "#15181a";
+      ctx.font = `${font}px ${LEG_MONO}`;
+      ctx.textBaseline = "top";
+      spec.ramp.ticks.forEach((t, i) => {
+        ctx.textAlign = i === 0 ? "left" : i === n - 1 ? "right" : "center";
+        ctx.fillText(t, pad + (bw * i) / (n - 1), top + bh + 5 * u);
+      });
+      ctx.textAlign = "left";
+      return;
+    }
+    spec.items.forEach((it, i) => {
+      const x = pad + Math.floor(i / lay.rows) * lay.colW, y = top + (i % lay.rows) * rowH, cy = y + rowH / 2;
+      ctx.fillStyle = it.color;
+      ctx.fillRect(x, cy - sw / 2, sw, sw);
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.lineWidth = Math.max(1, u);
+      ctx.strokeRect(x, cy - sw / 2, sw, sw);
+      let tx = x + sw + gap;
+      ctx.fillStyle = "#15181a";
+      if (it.code) {
+        ctx.font = `600 ${font}px ${LEG_MONO}`;
+        ctx.fillText(it.code, tx, cy);
+        tx += ctx.measureText(it.code + " ").width;
+      }
+      ctx.font = `${font}px ${LEG_SANS}`;
+      ctx.fillText(it.label, tx, cy);
+      if (it.share) {
+        tx += ctx.measureText(it.label + "  ").width;
+        ctx.fillStyle = "#55626a";
+        ctx.fillText(it.share, tx, cy);
+      }
+    });
+  }
   async function renderView() {
     const base = await loadImage($("base").src);
     const fullW = Math.min(8000, Math.max(3000, base.naturalWidth || 6000));
     const fullH = Math.round((fullW * H) / W);
     const k = fullW / dims().bw;             // output pixels per screen pixel of the unzoomed map
     const cv = document.createElement("canvas");
-    cv.width = fullW; cv.height = fullH;
+    const spec = $("copylegend").checked ? legendSpec(meta.layers.find((l) => l.id === current)) : null;
+    const lay = spec ? legendLayout(cv.getContext("2d"), spec, fullW) : null;
+    cv.width = fullW; cv.height = fullH + (lay ? Math.ceil(lay.height) : 0);
     const ctx = cv.getContext("2d");
     ctx.imageSmoothingQuality = "high";
     ctx.fillStyle = "#d6e4f0";
@@ -1050,15 +1132,7 @@ body.map-expanded { overflow: hidden; }
       const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
       try { ctx.drawImage(await loadImage(url), 0, 0, fullW, fullH); } finally { URL.revokeObjectURL(url); }
     }
-    // caption strip: layer name + scale note
-    const L = meta.layers.find((l) => l.id === current);
-    ctx.font = `${12 * k}px sans-serif`;
-    const cap = `${L ? L.label : ""} · Rotclimate Atlas`;
-    const pad = 6 * k, tw = ctx.measureText(cap).width;
-    ctx.fillStyle = "rgba(255,255,255,0.85)";
-    ctx.fillRect(cv.width - tw - 3 * pad, cv.height - 18 * k - pad, tw + 2 * pad, 18 * k);
-    ctx.fillStyle = "#15181a";
-    ctx.fillText(cap, cv.width - tw - 2 * pad, cv.height - pad - 5 * k);
+    if (lay) drawLegendBand(ctx, spec, lay, fullH, fullW);
     return new Promise((res) => cv.toBlob(res, "image/png"));
   }
   function showFallback(blob) {
@@ -1070,12 +1144,16 @@ body.map-expanded { overflow: hidden; }
     wrap.addEventListener("click", (e) => { if (e.target === wrap) { wrap.remove(); URL.revokeObjectURL(url); } });
     document.body.appendChild(wrap);
   }
+  try { $("copylegend").checked = localStorage.getItem("rotclimate-copy-legend") === "1"; } catch (e) { /* storage off */ }
+  $("copylegend").addEventListener("change", (e) => {
+    try { localStorage.setItem("rotclimate-copy-legend", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
+  });
   $("copyview").addEventListener("click", async () => {
     const pending = renderView();
     try {
       if (!navigator.clipboard || typeof ClipboardItem === "undefined") throw new Error("no clipboard");
       await navigator.clipboard.write([new ClipboardItem({ "image/png": pending })]);
-      toast("Copied the whole map");
+      toast($("copylegend").checked ? "Copied the whole map with its legend" : "Copied the whole map");
     } catch (err) {
       const blob = await pending;
       if (blob) showFallback(blob); else toast("Could not copy the map");
