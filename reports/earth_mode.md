@@ -224,6 +224,13 @@ climate distance rises above 2.25 (the Earth fit's is 2.10).
   Valparaíso's summer moved 30.2 → 29.7 °C against 19.2 observed. At 56 km
   the coastal cells' temperature is set by the storm-eddy heat mixing (fitted
   to a ~900 km scale), which averages the coast with the hot interior.
+- **A crest squeeze** (air fast enough to climb a ridge, h_eff = min(h, U/N),
+  saturates at the crest: Smith & Barstad's dividing streamline, to make rain
+  shadows): the lee dried a little (Reno 441 → 347 mm, observed 241) but all
+  high ground got wetter (Fresno 802 → 1,110 mm against 382, Tashkent 290 →
+  898 against 474); the mean distance over California, Central Asia, the
+  Levant and Iberia rose from 1.84 to 1.93–2.11 even with the orographic
+  boost cut to a half or a quarter.
 - **Seasonal land coupling** (e2, `land_coupling_insolation`) is kept as an
   option but barely moved East China (Wuhan January 10 °C vs 4 °C observed):
   the air arriving there is itself 4 °C too warm, with no Siberian High in a
