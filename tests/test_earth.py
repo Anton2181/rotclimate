@@ -79,3 +79,17 @@ def test_california_case_matches_the_geography():
                                                   earth.summer_months(365, 12, 172.0))]
     assert np.char.startswith(codes[m], "Cs").mean() > 0.2
     assert np.char.startswith(codes[m], "BW").mean() > 0.1
+
+
+@pytest.mark.skipif(not (earth.WORLDCLIM / "wc2.1_5m_prec.zip").exists(), reason="WorldClim cache not downloaded")
+def test_southern_regions_are_mirrored_into_the_north():
+    case = earth.region_case("chile", cell_km=56, pad_km=560)
+    g = case.grid
+    m = g.inmap & g.land
+    assert (g.lat > 0).all() and g.lat[0].mean() > g.lat[-1].mean()        # poleward is up, as in the north
+    assert not g.land[g.ny // 2, :g.pad].any()                              # the Pacific is still to the west
+    # the model calendar's July is the observed January: mirrored summer is warm and dry
+    T, P = case.obs_T[:, m], case.obs_P[:, m]
+    assert T[6].mean() > T[0].mean() + 5 and P[6].mean() < P[0].mean()
+    p = earth.earth_params(Params(), case)
+    assert p.lat_center == 34.0 and p.perihelion_after_solstice > 180

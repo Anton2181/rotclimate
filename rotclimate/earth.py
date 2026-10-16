@@ -46,6 +46,22 @@ REGIONS = {
                        note="Mediterranean coast, Central Valley, Sierra Nevada, Mojave/Sonoran desert"),
     "iberia": dict(lat0=37.1, lon0=-3.45, width_km=2400, height_km=1690,
                    note="Iberia, the western Mediterranean and north-west Africa"),
+    # analogues of the other painted zones, at the map's latitudes
+    "southeast_us": dict(lat0=31.0, lon0=-89.0, width_km=2000, height_km=1300,
+                         note="Gulf coast swamps, Florida, humid subtropical south, Appalachians, Texas plains"),
+    "levant": dict(lat0=36.0, lon0=36.5, width_km=1900, height_km=1300,
+                   note="Aegean/Levant Mediterranean coasts, Anatolian steppe, Syrian desert, Zagros"),
+    "central_asia": dict(lat0=42.0, lon0=66.0, width_km=2000, height_km=1300,
+                         note="Turan steppe and deserts, Tian Shan / Pamir foothills"),
+    "east_china": dict(lat0=29.0, lon0=113.0, width_km=1800, height_km=1300,
+                       note="monsoon humid subtropics: Yangtze, south China hills, Sichuan basin"),
+    # southern-hemisphere Mediterranean climates (held out; run mirrored, see region_case)
+    "chile": dict(lat0=-34.0, lon0=-71.0, width_km=700, height_km=1500,
+                  note="central Chile: Mediterranean coast, Andes, Atacama edge"),
+    "cape": dict(lat0=-33.4, lon0=20.6, width_km=780, height_km=560,
+                 note="Western Cape Mediterranean, Karoo, southern coast"),
+    "sw_australia": dict(lat0=-32.0, lon0=118.5, width_km=1200, height_km=1000,
+                         note="south-west Australia: Mediterranean coast to the interior deserts"),
 }
 
 
@@ -116,6 +132,14 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     ys = half_h - (np.arange(ny) + 0.5) * cell_km
     X, Y = np.meshgrid(xs, ys)
     lat, lon = inverse(X, Y, lat0, lon0)
+    if lat0 < 0:
+        # The model is written for a northern-hemisphere map. The mirror image
+        # (north <-> south) of a southern region is the same physics in the
+        # north: the Coriolis turning and the reflection both flip handedness,
+        # winds still blow west to east in the westerlies. Seasons move by half
+        # a year: observed July is the mirrored January.
+        fields = {k: (np.roll(v[:, ::-1], 6, axis=0) if v.ndim == 3 else v[::-1]) for k, v in fields.items()}
+        lat, lon, Y = -lat[::-1], lon[::-1], -Y[::-1]
     land = fields["land_frac"] >= 0.5
     inmap = (np.abs(X) <= spec["width_km"] / 2) & (np.abs(Y) <= spec["height_km"] / 2)
     pad = int(round(pad_km / cell_km))
@@ -198,9 +222,11 @@ def observed_zones(T, P, g) -> np.ndarray:
 def earth_params(base: Params, case: EarthCase) -> Params:
     """Earth's own geometry and calendar (day 0 = 1 January) with the
     physics constants of `base`."""
+    lat0 = REGIONS[case.name]["lat0"]
     return base.replace(tilt=23.44, retrograde=False, north_bearing=0.0, eccentricity=0.0167,
-                        perihelion_after_solstice=13.0, year_days=365, winter_solstice_day=354.5,
-                        lat_center=REGIONS[case.name]["lat0"])
+                        # mirrored southern regions: perihelion falls in their (mirrored) summer
+                        perihelion_after_solstice=13.0 if lat0 >= 0 else 13.0 + 365.25 / 2,
+                        year_days=365, winter_solstice_day=354.5, lat_center=abs(lat0))
 
 
 # ---------------------------------------------------------------- scoring
@@ -298,10 +324,13 @@ def run_case(base: Params, case: EarthCase, steps=25):
 
 def summary_line(r: dict) -> str:
     t, rn, k, kr, z = r["temperature"], r["rain"], r["koppen_full_model"], r["koppen_observed_T_sim_rain"], r["zones"]
-    return (f"{r['region']:10s} T bias {t['bias_C']:+5.1f} C (rmse {t['rmse_C']:4.1f}) | rain {rn['sim_mean_annual_mm']:5.0f}/"
-            f"{rn['obs_mean_annual_mm']:5.0f} mm, coast winter {rn['coast_winter_sim_mm']:4.0f}/{rn['coast_winter_obs_mm']:4.0f}"
-            f" | Koppen exact {k['exact']:.0%} (obs-T {kr['exact']:.0%}), Cs->arid {k['cs_to_arid']:.0%} "
-            f"(obs-T {kr['cs_to_arid']:.0%}), Cs kept {k['cs_retained']:.0%} | zones {z['strict_agreement']:.0%}")
+    pct = lambda x: "  - " if x is None else f"{x:4.0%}"
+    mm = lambda x: "  - " if x is None else f"{x:4.0f}"
+    return (f"{r['region']:12s} d {r['climate_distance']:.2f} | T bias {t['bias_C']:+5.1f} C (rmse {t['rmse_C']:4.1f}) | "
+            f"rain {rn['sim_mean_annual_mm']:5.0f}/{rn['obs_mean_annual_mm']:5.0f} mm, coast winter "
+            f"{mm(rn['coast_winter_sim_mm'])}/{mm(rn['coast_winter_obs_mm'])} | Koppen exact {pct(k['exact'])} "
+            f"(obs-T {pct(kr['exact'])}), Cs->arid {pct(k['cs_to_arid'])}, Cs kept {pct(k['cs_retained'])} "
+            f"| zones {pct(z['strict_agreement'])}")
 
 
 def save_json(path, obj):

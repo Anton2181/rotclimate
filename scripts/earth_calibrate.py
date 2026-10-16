@@ -81,6 +81,7 @@ def main():
     ap.add_argument("--sigma", type=float, default=0.15)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--holdout", nargs="*", default=[], help="regions scored only for the final best")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     import cma
@@ -113,9 +114,20 @@ def main():
             br = best.get("regions", {})
             print(f"[{n:4d} evals, {time.time() - t0:5.0f}s] best {best['cost']:.4f} gen-median {np.median([r['cost'] for r in res]):.3f} | "
                   + " ".join(f"{k}: d {v['climate_distance']:.3f} Kop {v['koppen_full_model']['exact']:.0%} "
-                             f"Cs kept {v['koppen_full_model']['cs_retained']:.0%} T {v['temperature']['bias_C']:+.1f} "
+                             f"Cs kept {_pct(v['koppen_full_model']['cs_retained'])} T {v['temperature']['bias_C']:+.1f} "
                              f"rain {v['rain']['sim_mean_annual_mm']:.0f}/{v['rain']['obs_mean_annual_mm']:.0f}"
                              for k, v in br.items()), flush=True)
+        if a.holdout:
+            h = pool.map(evaluate, [(encode(Params(**best["params"])), bd, [r], a.cell_km) for r in a.holdout])
+            held = {r: x.get("regions", {}).get(r, x.get("error")) for r, x in zip(a.holdout, h)}
+            Path(out / "holdout.json").write_text(json.dumps(held, indent=1))
+            for r, v in held.items():
+                print(f"holdout {earth.summary_line(v) if isinstance(v, dict) else r + ' ' + str(v)}"
+                      + (f" | d {v['climate_distance']:.3f}" if isinstance(v, dict) else ""), flush=True)
+
+
+def _pct(x):
+    return "n/a" if x is None else f"{x:.0%}"
 
 
 if __name__ == "__main__":
