@@ -133,7 +133,9 @@ def main():
                                                       cell_km=a.cell_km, steps=a.steps, regions=rows,
                                                       stations=stations), indent=1))
     d = [r["climate_distance"] for r in rows]
-    print(f"mean climate distance {np.mean(d):.3f} over {len(d)} regions")
+    ref = {k: np.mean([r["reference_distances"][k] for r in rows]) for k in rows[0]["reference_distances"]}
+    print(f"mean climate distance {np.mean(d):.3f} over {len(d)} regions (references from the observations: "
+          f"region mean {ref['region_mean']:.3f}, latitude band + height {ref['latitude_band_and_height']:.3f})")
 
 
 if __name__ == "__main__":

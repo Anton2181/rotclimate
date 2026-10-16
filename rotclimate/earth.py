@@ -301,7 +301,7 @@ def compare(result, case: EarthCase) -> dict:
                     "f1")
     return dict(
         region=case.name, scored_land_cells=int(m.sum()), cell_km=g.cell_km,
-        climate_distance=climate_distance(result, case),
+        climate_distance=climate_distance(result, case), reference_distances=reference_distances(case),
         temperature=dict(bias_C=float((Ts - To)[:, m].mean()), rmse_C=float(np.sqrt(((Ts - To)[:, m] ** 2).mean())),
                          monthly_bias_C=[float(x) for x in (Ts - To)[:, m].mean(1)],
                          coldest_bias_C=float((Ts.min(0) - To.min(0))[m].mean()),
@@ -375,6 +375,32 @@ def climate_distance(result, case: EarthCase) -> float:
     return float((dT / 2.5 + dP / 2.0).mean())
 
 
+def _distance(Tp, Pp, To, Po, m):
+    dT = np.sqrt(((Tp - To) ** 2)[:, m].mean(0))
+    dP = np.sqrt(((np.sqrt(np.maximum(Pp, 0)) - np.sqrt(Po)) ** 2)[:, m].mean(0))
+    return float((dT / 2.5 + dP / 2.0).mean())
+
+
+def reference_distances(case: EarthCase, lapse=0.006) -> dict:
+    """Climate distances of two references built from the observations
+    themselves: every land cell given the region's mean climate (no skill),
+    and every cell given the mean observed climate of its 2-degree latitude
+    band, corrected for its height at 6 K/km (a perfect zonal model: right
+    latitude and height, no coast-to-interior structure)."""
+    g = case.grid
+    m = g.inmap & g.land & np.isfinite(case.obs_T).all(0)
+    To, Po = np.nan_to_num(case.obs_T), np.nan_to_num(case.obs_P)
+    Tr = np.broadcast_to(To[:, m].mean(1)[:, None, None], To.shape)
+    Pr = np.broadcast_to(Po[:, m].mean(1)[:, None, None], Po.shape)
+    band = np.floor(g.lat / 2.0)
+    Tz, Pz = np.zeros_like(To), np.zeros_like(Po)
+    for b in np.unique(band[m]):
+        sel = m & (band == b)
+        Tz[:, sel] = (To[:, sel] + lapse * g.elev[sel]).mean(1)[:, None] - lapse * g.elev[sel]
+        Pz[:, sel] = Po[:, sel].mean(1)[:, None]
+    return dict(region_mean=_distance(Tr, Pr, To, Po, m), latitude_band_and_height=_distance(Tz, Pz, To, Po, m))
+
+
 def _spearman(a, b):
     ra = np.argsort(np.argsort(a)).astype(float)
     rb = np.argsort(np.argsort(b)).astype(float)
@@ -392,7 +418,9 @@ def summary_line(r: dict) -> str:
     t, rn, k, kr, z = r["temperature"], r["rain"], r["koppen_full_model"], r["koppen_observed_T_sim_rain"], r["zones"]
     pct = lambda x: "  - " if x is None else f"{x:4.0%}"
     mm = lambda x: "  - " if x is None else f"{x:4.0f}"
-    return (f"{r['region']:12s} d {r['climate_distance']:.2f} | T bias {t['bias_C']:+5.1f} C (rmse {t['rmse_C']:4.1f}) | "
+    ref = r.get("reference_distances")
+    refs = f" (refs {ref['region_mean']:.2f}/{ref['latitude_band_and_height']:.2f})" if ref else ""
+    return (f"{r['region']:12s} d {r['climate_distance']:.2f}{refs} | T bias {t['bias_C']:+5.1f} C (rmse {t['rmse_C']:4.1f}) | "
             f"rain {rn['sim_mean_annual_mm']:5.0f}/{rn['obs_mean_annual_mm']:5.0f} mm, coast winter "
             f"{mm(rn['coast_winter_sim_mm'])}/{mm(rn['coast_winter_obs_mm'])} | Koppen exact {pct(k['exact'])} "
             f"(obs-T {pct(kr['exact'])}), Cs->arid {pct(k['cs_to_arid'])}, Cs kept {pct(k['cs_retained'])} "
