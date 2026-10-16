@@ -244,6 +244,41 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
 .analogs .analog-choice:hover { background: var(--chip); }
 .analogs .analog-choice[aria-pressed="true"] { border-color: var(--brass); background: var(--chip); box-shadow: inset 3px 0 var(--brass); }
 .analogs .analog-choice:focus-visible, .similarity-controls input:focus-visible, .similarity-controls button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+/* The map can fill the whole screen (expand button); on phones it is taller,
+   opens filling its height, and the header, layer chips and legend are compact. */
+.stage.expanded { position: fixed; inset: 0; z-index: 40; aspect-ratio: auto; width: auto; height: 100%;
+  max-width: none; border-radius: 0; }
+.stage.expanded .zoom { top: calc(10px + env(safe-area-inset-top, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
+.stage.expanded .compass { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
+.stage.expanded .hint { top: calc(10px + env(safe-area-inset-top, 0px)); left: calc(10px + env(safe-area-inset-left, 0px)); }
+.stage.expanded .toast { top: calc(10px + env(safe-area-inset-top, 0px)); }
+body.map-expanded { overflow: hidden; }
+.legend .ramp { grid-column: 1 / -1; }
+.wrap, .plate, section { grid-template-columns: minmax(0, 1fr); }
+.plate > *, section > * { min-width: 0; }
+@media (max-width: 700px) {
+  .wrap { gap: 28px; padding-block: 18px 48px; }
+  header { gap: 6px; }
+  .eyebrow { font-size: 0.7rem; }
+  h1 { font-size: clamp(1.75rem, 8vw, 2.3rem); }
+  .lede { font-size: var(--step-0); }
+  .lede + .lede { font-size: var(--step--1); }
+  .plate { padding: 10px; gap: 10px; }
+  .controls { gap: 8px; }
+  .layers { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -10px; padding-inline: 10px;
+    scroll-snap-type: x proximity; flex: 1 1 100%; min-width: 0; max-width: calc(100% + 20px); }
+  .layers::-webkit-scrollbar { display: none; }
+  .layers button { flex: none; scroll-snap-align: start; padding: 7px 13px; }
+  .stage { aspect-ratio: auto; height: clamp(260px, 62vh, 560px); }
+  .hint { left: 8px; top: 8px; bottom: auto; max-width: calc(100% - 64px); font-size: 0.78rem; }
+  .zoom { right: 8px; top: 8px; }
+  .zoom button { width: 38px; height: 38px; }
+  .legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; font-size: 0.78rem; }
+  .legend .share { margin-left: 2px; }
+  .chart svg { min-width: 320px; }
+  .card { padding: 12px; }
+}
 </style>
 
 <div class="wrap">
@@ -294,6 +329,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
           <button type="button" id="zin" aria-label="Zoom in">+</button>
           <button type="button" id="zout" aria-label="Zoom out">−</button>
           <button type="button" id="zreset" aria-label="Reset view">⤢</button>
+          <button type="button" id="zexpand" aria-pressed="false" aria-label="Show the map on the whole screen" title="Full-screen map">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
           <button type="button" id="copyview" aria-label="Copy this view to the clipboard" title="Copy this view to the clipboard">
             <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
               <rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
@@ -499,6 +538,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     el.innerHTML = src.innerHTML;
     applyZoom();
   }).catch(() => {});
+  if (window.matchMedia("(max-width: 760px)").matches) {
+    $("searchbox").hidden = true;
+    $("searchtoggle").setAttribute("aria-pressed", "false");
+  }
   $("searchtoggle").addEventListener("click", (e) => {
     const box = $("searchbox"), show = box.hidden;
     box.hidden = !show;
@@ -826,18 +869,38 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     svg.innerHTML = `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#111" stroke-width="${5 / zs}" opacity="0.55"/>
       <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#fff" stroke-width="${2.5 / zs}"/>`;
   }
-  function applyZoom() {
+  // The map keeps its own shape inside a stage of any shape (phones get a
+  // taller stage, the expanded map the whole screen): at zoom 1 it just fits,
+  // centred; zoomed further it can be panned edge to edge.
+  function dims() {
     const w = stage.clientWidth, h = stage.clientHeight;
+    const bw = Math.min(w, (h * W) / H);
+    return { w, h, bw, bh: (bw * H) / W };
+  }
+  function homeZoom() {
+    const { h, bh } = dims();
+    return h > bh * 1.15 ? Math.min(ZMAX, h / bh) : 1;     // fill a tall stage's height
+  }
+  function goHome() {
+    zs = homeZoom();
+    const { w, h, bw, bh } = dims();
+    tx = (w - bw * zs) / 2;
+    ty = (h - bh * zs) / 2;
+    applyZoom();
+  }
+  function applyZoom() {
+    const { w, h, bw, bh } = dims();
     zs = Math.min(ZMAX, Math.max(1, zs));
-    tx = Math.min(0, Math.max(w - w * zs, tx));
-    ty = Math.min(0, Math.max(h - h * zs, ty));
+    const mw = bw * zs, mh = bh * zs;
+    tx = mw <= w ? (w - mw) / 2 : Math.min(0, Math.max(w - mw, tx));
+    ty = mh <= h ? (h - mh) / 2 : Math.min(0, Math.max(h - mh, ty));
     // lay the map out at the zoomed size (the browser re-samples the
     // high-resolution layers and redraws vectors sharply)
     vp.style.left = tx + "px";
     vp.style.top = ty + "px";
-    vp.style.width = zs * 100 + "%";
-    vp.style.height = zs * 100 + "%";
-    const pxPerUnit = (w * zs) / 2000;
+    vp.style.width = mw + "px";
+    vp.style.height = mh + "px";
+    const pxPerUnit = mw / 2000;
     const fontPx = Math.min(13, Math.max(6, 10 * pxPerUnit));
     namesSvg.style.fontSize = fontPx / pxPerUnit + "px";
     namesSvg.style.strokeWidth = 2.6 / pxPerUnit + "px";
@@ -845,10 +908,10 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     // settlement markers are pixel art: hard edges once a pixel spans a
     // screen pixel, smoothed below that so tiny icons don't lose pixels
     const townSvg = $("towns"), vb = townSvg.viewBox.baseVal;
-    townSvg.setAttribute("shape-rendering", vb && vb.width && (w * zs) / vb.width >= 1 ? "crispEdges" : "auto");
+    townSvg.setAttribute("shape-rendering", vb && vb.width && mw / vb.width >= 1 ? "crispEdges" : "auto");
     drawMarker();
     if (typeof drawMatches === "function" && matchSvgReady) drawMatches();
-    $("zreset").disabled = zs === 1;
+    $("zreset").disabled = Math.abs(zs - homeZoom()) < 1e-3;
     $("zin").disabled = zs >= ZMAX;
     $("zout").disabled = zs <= 1;
   }
@@ -862,20 +925,21 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     applyZoom();
   }
   function focusOn(x, y, z) {
-    const w = stage.clientWidth, h = stage.clientHeight;
+    const { w, h, bw, bh } = dims();
     zs = Math.max(zs, z);
-    tx = w / 2 - (x / W) * w * zs;
-    ty = h / 2 - (y / H) * h * zs;
+    tx = w / 2 - (x / W) * bw * zs;
+    ty = h / 2 - (y / H) * bh * zs;
     applyZoom();
   }
   // show a map rectangle as large as fits beside the search box (zoom 1-4)
   function fitTo(x0, y0, x1, y1) {
-    const w = stage.clientWidth, h = stage.clientHeight, box = $("searchbox");
+    const { w, h, bw: mapW, bh: mapH } = dims(), box = $("searchbox");
     const left = !box.hidden && getComputedStyle(box).position === "absolute" ? box.offsetWidth + 20 : 0;
     const pad = 60, bw = Math.max(x1 - x0 + 2 * pad, 200), bh = Math.max(y1 - y0 + 2 * pad, 100);
-    zs = Math.min(4, Math.max(1, Math.min(((w - left) * W) / (bw * w), H / bh)));
-    tx = left + (w - left) / 2 - ((x0 + x1) / 2 / W) * w * zs;
-    ty = h / 2 - ((y0 + y1) / 2 / H) * h * zs;
+    // screen px per map unit that fits the box, as a zoom of the fitted map
+    zs = Math.min(4, Math.max(1, Math.min((w - left) / bw, h / bh) * W / mapW));
+    tx = left + (w - left) / 2 - ((x0 + x1) / 2 / W) * mapW * zs;
+    ty = h / 2 - ((y0 + y1) / 2 / H) * mapH * zs;
     applyZoom();
   }
   stage.addEventListener("wheel", (e) => {
@@ -928,8 +992,20 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
   const centre = () => { const r = stage.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
   $("zin").addEventListener("click", () => zoomAt(...centre(), 1.6));
   $("zout").addEventListener("click", () => zoomAt(...centre(), 1 / 1.6));
-  $("zreset").addEventListener("click", () => { zs = 1; tx = 0; ty = 0; applyZoom(); });
+  $("zreset").addEventListener("click", goHome);
   window.addEventListener("resize", applyZoom);
+  function setExpanded(on) {
+    stage.classList.toggle("expanded", on);
+    document.body.classList.toggle("map-expanded", on);
+    $("zexpand").setAttribute("aria-pressed", on ? "true" : "false");
+    $("zexpand").setAttribute("aria-label", on ? "Close the full-screen map" : "Show the map on the whole screen");
+    goHome();
+  }
+  $("zexpand").addEventListener("click", () => setExpanded(!stage.classList.contains("expanded")));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && stage.classList.contains("expanded")) setExpanded(false); });
+  if (window.matchMedia("(max-width: 700px)").matches) {
+    $("hint").textContent = "Pinch to zoom · drag to pan · tap a place";
+  }
 
   // ---------------------------------------------------------------- copy the current view
   function toast(msg) {
@@ -951,7 +1027,8 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
     ctx.imageSmoothingQuality = "high";
     ctx.fillStyle = "#d6e4f0";
     ctx.fillRect(0, 0, cv.width, cv.height);
-    const fullW = w * zs * k, fullH = h * zs * k;              // the whole map at this zoom
+    const { bw, bh } = dims();
+    const fullW = bw * zs * k, fullH = bh * zs * k;            // the whole map at this zoom
     const base = await loadImage($("base").src);
     ctx.drawImage(base, tx * k, ty * k, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
@@ -1003,7 +1080,7 @@ footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; dis
       if (blob) showFallback(blob); else toast("Could not copy the view");
     }
   });
-  applyZoom();
+  goHome();
 
   // ---------------------------------------------------------------- facts, zones, calendar
   const wd = meta.world;
