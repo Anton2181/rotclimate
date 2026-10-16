@@ -137,6 +137,7 @@ SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
 SPACE_E2 = SPACE_E1 + [("background_ascent", 0.0, 1.0), ("convective_rain", 0.0, 3.0), ("convective_rh", 0.4, 0.95),
                        ("subcloud_evaporation", 0.0, 2.0), ("land_coupling_insolation", 0.0, 2.5)]
 SPACE_E2_NEW = [g for g in SPACE_E2 if g[0] not in {n for n, *_ in SPACE_E1}]
+SPACE_NEW = SPACE_E1_NEW + SPACE_E2_NEW          # every addition since v9, around an existing fit
 
 
 def _set_space(space):
@@ -200,11 +201,16 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     from .model import ClimateModel
     from .score import evaluate, objective
 
-    evs = []
+    guarded = mode == "guarded"
+    if guarded:
+        mode = "zonefit"
+    evs, meds = [], []
     seeds = seeds or [None]
     for i, sd in enumerate(seeds):
         q = p if sd is None else p.replace(beyond_seed=int(sd))
-        evs.append(evaluate(ClimateModel(q).run()))
+        result = ClimateModel(q).run()
+        evs.append(evaluate(result))
+        meds.append(mediterranean_shares(result, evs[-1]))
         if cutoff is not None and i == 0 and len(seeds) > 1 and objective(evs[0], mode) < cutoff:
             break
     ev = dict(evs[0])
@@ -215,10 +221,46 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     ev["accuracy"] = float(np.mean([e["accuracy"] for e in evs]))
     display_accuracy = float(np.mean([e["label_policy_audit"]["display_accuracy"] for e in evs]))
     ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
-    return dict(score=objective(ev, mode), mean=ev["total"], accuracy=ev["accuracy"], raced=len(evs) < len(seeds),
+    med = {k: float(np.mean([m[k] for m in meds])) for k in meds[0]}
+    score = objective(ev, mode)
+    penalty = guard_penalty(ev, med) if guarded else 0.0
+    return dict(score=score - penalty, guard_penalty=penalty, mediterranean=med,
+                mean=ev["total"], accuracy=ev["accuracy"], raced=len(evs) < len(seeds),
                 per_class=ev["per_class"], f1=ev["f1"], recall=ev["recall"],
                 display_accuracy=display_accuracy, precision=ev["precision"], realism=ev["realism"],
                 spread=float(np.std([e["total"] for e in evs])))
+
+
+def mediterranean_shares(result, ev) -> dict:
+    """Share of the painted Mediterranean classed dry (Koppen B) and Cs."""
+    from .koppen import CODES, classify
+
+    g = result.grid
+    st = ev["monthly"]
+    codes = np.array(CODES)[classify(st["Tm"], st["Pm"], st["summer"])]
+    med = g.inmap & g.land & (g.target == 4)
+    return dict(dry_share=float(np.char.startswith(codes[med], "B").mean()),
+                cs_share=float(np.char.startswith(codes[med], "Cs").mean()))
+
+
+# The handoff's promotion guards, as a penalty against a reference fit (the
+# live atlas scored at the same resolution; file named by ROTCLIMATE_GUARDS):
+# overall strict agreement may fall 1 point, cold-dry recall 2, hot-dry 3 and
+# the painted Mediterranean's Cs share 2; its dry share may not exceed
+# max(reference, 5 %). Each point beyond a limit costs GUARD_WEIGHT / 100.
+GUARD_WEIGHT = 2.0
+
+
+def guard_penalty(ev, med) -> float:
+    import os
+
+    ref = json.loads(Path(os.environ["ROTCLIMATE_GUARDS"]).read_text())
+    over = (max(0.0, ref["strict"] - ev["accuracy"] - 0.01)
+            + max(0.0, ref["cold_dry"] - ev["recall"]["cold_dry"] - 0.02)
+            + max(0.0, ref["hot_dry"] - ev["recall"]["hot_dry"] - 0.03)
+            + max(0.0, med["dry_share"] - max(ref["med_dry"], 0.05))
+            + max(0.0, ref["med_cs"] - med["cs_share"] - 0.02))
+    return GUARD_WEIGHT * over
 
 
 def _worker(args):
@@ -309,7 +351,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
             n_raced += sum(bool(r.get("raced")) for r in res)
             es.tell(sols, [-r["score"] for r in res])
             pc = best[1]["per_class"]
-            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit") else {}
+            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "guarded") else {}
             print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
@@ -334,8 +376,9 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit"])
-    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "world"])
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded"])
+    ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
+    ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -366,6 +409,8 @@ def main():
         _set_space(SPACE_E2)
     elif a.physics == "e2new":
         _set_space(SPACE_E2_NEW)
+    elif a.physics == "new":
+        _set_space(SPACE_NEW)
     bounds = json.loads(a.bounds)
     if bounds:
         _set_space([(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE])
@@ -373,11 +418,16 @@ def main():
     base = apply_numerics(base, saved=a.saved_numerics,
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
-    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "world"):
+    if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
+    if a.objective == "guarded":
+        import os
+        if not a.guards:
+            raise SystemExit("--objective guarded needs --guards")
+        os.environ["ROTCLIMATE_GUARDS"] = str(Path(a.guards).resolve())     # inherited by the workers
     fixed = json.loads(a.fix)
     if a.plan:
         print(json.dumps(dict(params=asdict(base), objective=a.objective, seeds=seeds,
