@@ -1,0 +1,221 @@
+<title>Rotclimate Earth Test</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a single reading column of findings, with full-width figure plates;
+   the same slate-and-brass atlas palette and faces as the climate atlas. */
+:root {
+  --paper: #eef1f1;
+  --plate: #f8faf9;
+  --ink: #1b262c;
+  --ink-soft: #4b5a62;
+  --rule: #c9d2d4;
+  --brass: #94641a;
+  --before: #b45b48;
+  --after: #2f6db3;
+  --ref: #6c7a80;
+  --good: #2e7d4f;
+  --font-display: "Spectral SC", "Iowan Old Style", Georgia, serif;
+  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7; --rule: #2c3a41;
+    --brass: #d7a64b; --before: #e58a74; --after: #6aa7ee; --ref: #8d9ca2; --good: #6cc492;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7; --rule: #2c3a41;
+  --brass: #d7a64b; --before: #e58a74; --after: #6aa7ee; --ref: #8d9ca2; --good: #6cc492;
+  color-scheme: dark;
+}
+body {
+  background: var(--paper); color: var(--ink); font-family: var(--font-body); font-size: 1.05rem; line-height: 1.55;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 0;
+}
+.wrap { max-width: 1080px; margin: 0 auto; padding-block: 2.2rem 3rem; display: grid; gap: 2.4rem; }
+.col { max-width: 68ch; }
+header { display: grid; gap: 0.6rem; }
+.eyebrow { font-family: var(--font-data); font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--brass); }
+h1 { font-family: var(--font-display); font-weight: 600; font-size: clamp(2rem, 5vw, 2.9rem); line-height: 1.05; margin: 0; text-wrap: balance; }
+h2 { font-family: var(--font-display); font-weight: 600; font-size: 1.55rem; margin: 0 0 0.6rem; text-wrap: balance; }
+h3 { font-size: 1.1rem; margin: 0 0 0.3rem; }
+p { margin: 0 0 0.8rem; }
+.lede { font-size: 1.2rem; color: var(--ink-soft); }
+section { display: grid; gap: 0.9rem; }
+.tally { display: flex; flex-wrap: wrap; gap: 1.5rem 2.5rem; border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); padding-block: 1rem; }
+.tally div { display: grid; gap: 0.1rem; min-width: 0; }
+.tally b { font-family: var(--font-data); font-weight: 500; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+.tally span { font-size: 0.92rem; color: var(--ink-soft); max-width: 26ch; }
+.tally b .arrow { color: var(--ink-soft); font-weight: 400; font-size: inherit; max-width: none; }
+.chart-wrap, .table-wrap { overflow-x: auto; background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 0.8rem; }
+svg text { fill: var(--ink); font-family: var(--font-data); font-size: 11px; }
+svg .soft { fill: var(--ink-soft); }
+.legend { display: flex; flex-wrap: wrap; gap: 0.4rem 1.2rem; font-size: 0.9rem; color: var(--ink-soft); }
+.legend i { display: inline-block; width: 0.9rem; height: 0.9rem; border-radius: 2px; vertical-align: -2px; margin-right: 0.35rem; }
+table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; min-width: 640px; }
+th, td { text-align: right; padding: 0.35rem 0.6rem; border-bottom: 1px solid var(--rule); font-family: var(--font-data); font-size: 0.86rem; }
+th:first-child, td:first-child { text-align: left; font-family: var(--font-body); font-size: 0.95rem; }
+th { font-family: var(--font-body); font-weight: 700; color: var(--ink-soft); font-size: 0.85rem; }
+td.up { color: var(--good); }
+tr.held td:first-child::after { content: " held out"; font-size: 0.75rem; color: var(--brass); }
+figure { margin: 0; display: grid; gap: 0.4rem; }
+figure img { width: 100%; height: auto; border: 1px solid var(--rule); border-radius: 6px; background: #fff; }
+figcaption { font-size: 0.92rem; color: var(--ink-soft); max-width: 80ch; }
+details { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 0.6rem 0.9rem; }
+summary { cursor: pointer; font-weight: 500; }
+summary:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+.physics { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 0.9rem 1.6rem; }
+.physics div { min-width: 0; border-top: 2px solid var(--rule); padding-top: 0.5rem; }
+.physics code { font-family: var(--font-data); font-size: 0.85rem; color: var(--brass); }
+.physics p { font-size: 0.95rem; margin: 0; }
+ul { margin: 0; padding-left: 1.2rem; display: grid; gap: 0.35rem; }
+footer { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(--rule); padding-top: 1rem; }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Rotclimate · tested on real geography · 16 October 2026</span>
+    <h1>Rotclimate Earth Test</h1>
+    <p class="lede col">The simulator built for the hand-drawn world was run, unchanged in structure, on nine real regions with their own terrain, Earth's tilt, spin and calendar, and scored against observed 1970–2000 climate (WorldClim 2.1). Then its physics was refitted on Earth and taken back to the map.</p>
+  </header>
+
+  <section aria-labelledby="h-headline">
+    <h2 id="h-headline" hidden>Headline</h2>
+    <div class="tally">
+      <div><b>3.64 <span class="arrow">→</span> 2.22</b><span>mean climate distance over nine regions (lower is better)</span></div>
+      <div><b>0–6% <span class="arrow">→</span> 73–92%</b><span>of California's and Iberia's Mediterranean climate kept as Mediterranean</span></div>
+      <div><b>100%</b><span>Cs kept on the held-out Chilean and Cape coasts, none turned to desert</span></div>
+      <div><b>97%</b><span>Köppen agreement in the humid south-east US</span></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-regions">
+    <h2 id="h-regions">Nine regions, before and after</h2>
+    <p class="col">Climate distance compares every month's temperature and rain with the observations, cell by cell: 1 is about 2.5 °C or a 100-versus-144 mm month off. Two references come from the observations themselves: every cell given its region's average climate (no skill at all), and every cell given the average climate of its latitude band at its own height (a perfect model with no coasts or rain shadows).</p>
+    <div class="chart-wrap"><svg id="chart" role="img" aria-label="Climate distance by region before and after the Earth fit, with reference marks"></svg></div>
+    <div class="legend">
+      <span><i style="background:var(--before)"></i>physics fitted to the painted map (live atlas)</span>
+      <span><i style="background:var(--after)"></i>physics fitted on Earth</span>
+      <span><i style="background:var(--ref)"></i>tick: region-mean reference · dot: perfect latitude-band model</span>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Region</th><th>Distance before</th><th>after</th><th>Temp. bias</th><th>Rain sim / obs</th><th>Köppen exact</th><th>Cs kept / → arid</th></tr></thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section aria-labelledby="h-maps">
+    <h2 id="h-maps">What the Earth-fitted physics makes</h2>
+    <figure>
+      <img src="img/earth_maps.png" alt="Observed and simulated Köppen classes and annual rain for nine regions" loading="lazy">
+      <figcaption>Observed (left) and simulated Köppen classes, then observed and simulated annual rain; the boxes are the scored areas, the rest is real surroundings. Southern regions are shown as their north–south mirror image, the way the model runs them.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/earth_climographs.png" alt="Monthly temperature and rain at 51 cities, observed and simulated" loading="lazy">
+      <figcaption>Cities, calendar months: light bars and dashed lines observed, dark bars and solid lines simulated. Wet winters and dry summers now appear where Earth has them (San Francisco, Lisbon, Seville, Athens, Beirut, Perth). Still wrong: East China's monsoon rain, Chile's summer coast, desert rain at Las Vegas.</figcaption>
+    </figure>
+    <details>
+      <summary>Before: the same regions with the live atlas's physics</summary>
+      <figure>
+        <img src="img/anchor_maps.png" alt="Köppen and rain with the physics fitted to the painted map" loading="lazy">
+        <img src="img/anchor_climographs.png" alt="City climographs with the physics fitted to the painted map" loading="lazy">
+        <figcaption>The Mediterranean regions turn humid, with rain through the summer and about twice the observed total.</figcaption>
+      </figure>
+    </details>
+  </section>
+
+  <section aria-labelledby="h-physics">
+    <h2 id="h-physics">Physics added to get there</h2>
+    <p class="col">Each piece answers a failure seen on Earth, is computed from the model's own winds, temperatures and coastline (no geographic labels), and is off by default: the live atlas's settings reproduce it bit for bit.</p>
+    <div class="physics">
+      <div><code>subsidence_drying</code><p>Dry air sinking in the subtropical highs replaces moist air, so the column dries without raining. Without it summer rain only waited until the water piled up.</p></div>
+      <div><code>sverdrup</code><p>Low-level flow toward the pole rises and toward the equator sinks (βv = f ∂w/∂z): dry summers on west coasts, monsoon rain on east coasts.</p></div>
+      <div><code>upwelling</code><p>Wind along a coast drives surface water to its right; where that is offshore, cold water wells up: cold summer seas off California and Iberia, mild winter ones.</p></div>
+      <div><code>continentality</code><p>The share of land the air has recently crossed, carried on the winds: sea air gives mild seasons, continental air harsh ones.</p></div>
+      <div><code>circulation_lag_days</code><p>How far the subtropical highs, storm track and monsoon lag the sun; it was fixed at 30 days and the rainy season began a month early.</p></div>
+      <div><code>land_heat_capacity</code><p>How slowly the land warms in spring; with the old value spring arrived a month early on every continent.</p></div>
+      <div><code>subsidence_width · storm_seasonality</code><p>Two constants of the old model made free: how wide the highs sink and how much the storm track weakens in summer.</p></div>
+      <div><code>lapse_rate</code><p>Fitted on Earth where heights are known: 4.4 °C per km near the ground rather than 6. Held fixed on the map, where heights are unknown.</p></div>
+    </div>
+    <p class="col">The fit also had to be kept honest. Left free, it moved the subtropical high to 38°N all year, which dried the Mediterranean summers but killed the winter westerlies; bounded to Earth's observed circulation it kept the right climates for the right reasons.</p>
+  </section>
+
+  <section aria-labelledby="h-map">
+    <h2 id="h-map">Back on the painted map</h2>
+    <figure>
+      <img src="img/map_earth_physics.png" alt="Painted zones against the live atlas and two Earth-physics fits" loading="lazy">
+      <figcaption>Earth physics with only the world's unknowns refitted. With reversed spin the painted Mediterranean band comes out better than in the live atlas (66% vs 36% labelled Mediterranean, 70% Cs, 8% dry), but the cold-dry north turns into forest, and the swamp and hot forest zones vanish.</figcaption>
+    </figure>
+    <figure>
+      <img src="img/map_free_fit.png" alt="Painted zones against the live atlas and the free fit with the new physics" loading="lazy">
+      <figcaption>The new physics fitted freely to the map (no Earth constraint): 51.1% strict agreement (atlas 50.1%) with the painted Mediterranean 61% Cs and only 6.5% dry (atlas 39% and 11%); cold-dry and hot-dry recall drop by 3 and 6 points.</figcaption>
+    </figure>
+    <p class="col">A literature check on the cold-dry north: Earth's dry mid-latitude interiors owe their aridity first to mountains upwind and very long distances from a windward coast (Manabe &amp; Broccoli 1990). Where neither is drawn, physics that works on Earth makes the interior subhumid, so that gap may belong to the map rather than the model.</p>
+  </section>
+
+  <section aria-labelledby="h-limits">
+    <h2 id="h-limits">Known limits</h2>
+    <ul class="col">
+      <li><b>East China</b> stays 3–6 °C too warm from autumn to spring, with too little monsoon rain: its Siberian winter air and south-west summer monsoon are continent-scale circulations a regional model cannot make.</li>
+      <li><b>Chile's coast</b> is too warm in summer: a strip one or two 56 km cells wide against the Andes, whose cold marine layer is below the model's resolution.</li>
+      <li><b>Exact Köppen agreement</b> in the Mediterranean regions is 22–42%; most misses are between neighbours such as Csa/Csb or BSk/BWk.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Region grids from WorldClim 2.1 at 5′, 56 km cells, 1,100 km of real surroundings. Physics fitted with CMA-ES on California, Iberia, the south-east US, the Levant, Central Asia and East China; Chile, the Western Cape and south-west Australia were never used in fitting. Full report: reports/earth_mode.md in the project.
+  </footer>
+</div>
+
+<script>
+const regions = [
+  ["California", 4.13, 1.86, 2.91, 1.78, "−1.2 °C", "468 / 392", "29%", "92% / 0%", false],
+  ["Iberia", 3.43, 2.19, 2.74, 1.12, "−1.7 °C", "499 / 392", "22%", "73% / 4%", false],
+  ["South-east US", 2.75, 1.76, 1.69, 1.01, "+0.4 °C", "1045 / 1229", "97%", "–", false],
+  ["Levant", 3.59, 1.83, 3.26, 1.30, "−0.8 °C", "324 / 394", "42%", "50% / 26%", false],
+  ["Central Asia", 3.09, 1.48, 2.79, 1.27, "+0.2 °C", "233 / 228", "34%", "–", false],
+  ["East China", 3.85, 3.50, 1.95, 1.26, "+3.2 °C", "912 / 1281", "62%", "–", false],
+  ["Chile", 4.55, 3.52, 3.14, 2.22, "+4.2 °C", "485 / 489", "8%", "100% / 0%", true],
+  ["Western Cape", 4.11, 2.01, 1.23, 1.07, "+1.0 °C", "595 / 324", "3%", "100% / 0%", true],
+  ["SW Australia", 3.25, 1.85, 1.36, 0.79, "+1.4 °C", "438 / 358", "22%", "77% / 23%", true],
+];
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+document.getElementById("rows").innerHTML = regions.map((r) =>
+  `<tr class="${r[9] ? "held" : ""}"><td>${esc(r[0])}</td><td>${r[1].toFixed(2)}</td><td class="${r[2] < r[1] ? "up" : ""}">${r[2].toFixed(2)}</td>` +
+  `<td>${esc(r[5])}</td><td>${esc(r[6])}</td><td>${esc(r[7])}</td><td>${esc(r[8])}</td></tr>`).join("");
+
+(function chart() {
+  const svg = document.getElementById("chart");
+  const W = 980, H = 300, left = 44, right = 12, top = 14, bottom = 58;
+  const max = 5;
+  const n = regions.length, band = (W - left - right) / n, bw = Math.min(26, band * 0.28);
+  const y = (v) => top + (H - top - bottom) * (1 - v / max);
+  let s = "";
+  for (let t = 0; t <= max; t++) {
+    s += `<line x1="${left}" x2="${W - right}" y1="${y(t)}" y2="${y(t)}" stroke="var(--rule)" stroke-width="1"/>`;
+    s += `<text x="${left - 8}" y="${y(t) + 4}" text-anchor="end" class="soft">${t}</text>`;
+  }
+  regions.forEach((r, i) => {
+    const cx = left + band * (i + 0.5);
+    s += `<rect x="${cx - bw - 2}" y="${y(r[1])}" width="${bw}" height="${y(0) - y(r[1])}" fill="var(--before)"><title>${esc(r[0])}: ${r[1].toFixed(2)} before</title></rect>`;
+    s += `<rect x="${cx + 2}" y="${y(r[2])}" width="${bw}" height="${y(0) - y(r[2])}" fill="var(--after)"><title>${esc(r[0])}: ${r[2].toFixed(2)} after</title></rect>`;
+    s += `<line x1="${cx - bw - 6}" x2="${cx + bw + 6}" y1="${y(r[3])}" y2="${y(r[3])}" stroke="var(--ref)" stroke-width="2"><title>region-mean reference ${r[3].toFixed(2)}</title></line>`;
+    s += `<circle cx="${cx}" cy="${y(r[4])}" r="4" fill="var(--paper)" stroke="var(--ref)" stroke-width="2"><title>latitude-band reference ${r[4].toFixed(2)}</title></circle>`;
+    s += `<text x="${cx}" y="${H - bottom + 18}" text-anchor="middle">${esc(r[0])}</text>`;
+    if (r[9]) s += `<text x="${cx}" y="${H - bottom + 33}" text-anchor="middle" class="soft">held out</text>`;
+  });
+  s += `<text x="${left}" y="${H - 6}" class="soft">climate distance (0 = identical to the observations)</text>`;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  svg.setAttribute("width", W);
+  svg.setAttribute("height", H);
+  svg.innerHTML = s;
+})();
+</script>
