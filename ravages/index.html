@@ -116,6 +116,13 @@ table.lb th, table.lb td { padding: 6px 8px; text-align: right; white-space: now
 table.lb th { position: sticky; top: 0; background: var(--panel-2); font-weight: 600; cursor: pointer; user-select: none; font-size: .74rem; }
 table.lb th:first-child, table.lb td:first-child { text-align: left; position: sticky; left: 0; background: var(--panel); z-index: 1; }
 table.lb th:first-child { background: var(--panel-2); z-index: 2; }
+table.lb th.mv { touch-action: none; }
+table.lb th .grip { color: var(--ink-soft); opacity: .45; margin-right: 4px; letter-spacing: -2px; cursor: grab; }
+table.lb th.dragging { opacity: .45; }
+table.lb th.drop-before { box-shadow: inset 3px 0 0 var(--accent); } table.lb th.drop-after { box-shadow: inset -3px 0 0 var(--accent); }
+.colghost { position: fixed; z-index: 50; pointer-events: none; background: var(--accent); color: var(--accent-ink); border-radius: 6px; padding: 4px 10px;
+  font: 600 .78rem var(--font-body); box-shadow: 0 4px 14px rgb(0 0 0 / .25); }
+.linkbtn { background: none; border: none; color: var(--accent); font: 500 .78rem var(--font-body); cursor: pointer; padding: 0; }
 table.lb th[aria-sort="descending"]::after { content: " ▾"; } table.lb th[aria-sort="ascending"]::after { content: " ▴"; }
 table.lb td { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
 table.lb td:first-child { font-family: var(--font-body); }
@@ -266,7 +273,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     <canvas id="race" aria-label="Leaders over the campaign"></canvas>
     <div class="racekey" id="racekey"></div>
     <h2>Every army</h2>
-    <div class="lbctl"><label><input type="checkbox" id="lbcmd" checked> Commanders only (armies with a ledger)</label><span class="muted">Click a column to sort, a row to follow that army on the map.</span></div>
+    <div class="lbctl"><label><input type="checkbox" id="lbcmd" checked> Commanders only (armies with a ledger)</label><span class="muted">Click a column to sort it, drag it by its header to move it, click a row to follow that army on the map.</span><button type="button" class="linkbtn" id="lbreset">Reset columns</button></div>
     <div class="tablewrap"><table class="lb" id="lbtable"></table></div>
   </section>
 
@@ -996,6 +1003,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     ["Plunderer", "loot", money], ["Forager", "foraged", money], ["Hardest fought", "losses", (v) => `${v} lost`],
   ];
   let lbSort = { k: "hexes", dir: -1 };
+  // column order: dragged by its header (mouse or touch), Alt+arrow from the keyboard; kept per viewer
+  let lbOrder = LBCOLS.map(c => c.k);
+  try { const o = JSON.parse(localStorage.getItem("ravages-columns") || "null");
+    if (Array.isArray(o)) lbOrder = [...o.filter(k => LBCOLS.some(c => c.k === k)), ...lbOrder.filter(k => !o.includes(k))]; } catch (e) { /* storage off */ }
+  const saveOrder = () => { try { localStorage.setItem("ravages-columns", JSON.stringify(lbOrder)); } catch (e) { /* storage off */ } };
+  const moveColumn = (k, to) => { const from = lbOrder.indexOf(k); if (from < 0 || to === from) return;
+    lbOrder.splice(from, 1); lbOrder.splice(Math.max(0, Math.min(lbOrder.length, to > from ? to - 1 : to)), 0, k); saveOrder(); renderBoard(); };
   const lbArmies = () => armies.filter(a => !$("lbcmd").checked || statsOf(a).ledger);
   const pickRow = (a) => { setTab("map"); if (followed !== a) follow(a); };
   function renderBoard() {
@@ -1006,10 +1020,41 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       return `<div class="pc"><h3>${title}</h3><ol>${top.map((x, i) => `<li data-i="${x.a.i}" tabindex="0"><span class="rk">${i + 1}</span><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span><span class="nm2">${esc(x.a.name)}</span><span class="v">${fv(x[k])}</span></li>`).join("") || '<li class="empty">No one yet</li>'}</ol></div>`;
     }).join("");
     const best = {}; for (const c of LBCOLS) best[c.k] = Math.max(...st.map(x => x[c.k] ?? -Infinity));
+    const COLS = lbOrder.map(k => LBCOLS.find(c => c.k === k));
     const sorted = st.slice().sort((x, y) => lbSort.k === "name" ? lbSort.dir * x.a.name.localeCompare(y.a.name) : lbSort.dir * ((x[lbSort.k] ?? -1) - (y[lbSort.k] ?? -1)));
-    $("lbtable").innerHTML = `<thead><tr><th data-k="name" ${lbSort.k === "name" ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}>Army</th>${LBCOLS.map(c => `<th data-k="${c.k}" title="${esc(c.d || c.t)}" ${lbSort.k === c.k ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}>${c.t}</th>`).join("")}</tr></thead>
-      <tbody>${sorted.map(x => `<tr data-i="${x.a.i}" class="${x.a.ended != null ? "gone" : ""}" tabindex="0"><td><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span>${esc(x.a.name)}${x.a.ended != null ? ` <span class="muted">(left ${shortDate(x.a.ended)})</span>` : ""}</td>${LBCOLS.map(c => `<td>${x[c.k] != null && x[c.k] === best[c.k] && best[c.k] > 0 ? `<span class="top">${c.f(x[c.k])}</span>` : c.f(x[c.k])}</td>`).join("")}</tr>`).join("")}</tbody>`;
-    $("lbtable").querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; lbSort = { k, dir: lbSort.k === k ? -lbSort.dir : (k === "name" ? 1 : -1) }; renderBoard(); });
+    $("lbtable").innerHTML = `<thead><tr><th data-k="name" ${lbSort.k === "name" ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}>Army</th>${COLS.map(c => `<th data-k="${c.k}" class="mv" tabindex="0" title="${esc(c.d || c.t)}. Drag to move; Alt+arrows from the keyboard." ${lbSort.k === c.k ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}><span class="grip" aria-hidden="true">⋮⋮</span>${c.t}</th>`).join("")}</tr></thead>
+      <tbody>${sorted.map(x => `<tr data-i="${x.a.i}" class="${x.a.ended != null ? "gone" : ""}" tabindex="0"><td><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span>${esc(x.a.name)}${x.a.ended != null ? ` <span class="muted">(left ${shortDate(x.a.ended)})</span>` : ""}</td>${COLS.map(c => `<td>${x[c.k] != null && x[c.k] === best[c.k] && best[c.k] > 0 ? `<span class="top">${c.f(x[c.k])}</span>` : c.f(x[c.k])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+    const sortBy = (k) => { lbSort = { k, dir: lbSort.k === k ? -lbSort.dir : (k === "name" ? 1 : -1) }; renderBoard(); };
+    $("lbtable").querySelector('th[data-k="name"]').onclick = () => sortBy("name");
+    $("lbtable").querySelectorAll("th.mv").forEach(th => {
+      const k = th.dataset.k;
+      th.onkeydown = (e) => {
+        if (e.key === "Enter" || e.key === " ") { e.preventDefault(); sortBy(k); }
+        else if (e.altKey && (e.key === "ArrowLeft" || e.key === "ArrowRight")) { e.preventDefault(); const i = lbOrder.indexOf(k);
+          moveColumn(k, e.key === "ArrowLeft" ? i - 1 : i + 2); $("lbtable").querySelector(`th[data-k="${k}"]`)?.focus(); } };
+      th.onpointerdown = (e) => {
+        if (e.button !== 0) return;
+        const x0 = e.clientX, y0 = e.clientY; let ghost = null, target = null;
+        const ths = [...$("lbtable").querySelectorAll("th.mv")];
+        const clear = () => ths.forEach(h => h.classList.remove("drop-before", "drop-after", "dragging"));
+        const move = (ev) => {
+          if (!ghost && Math.hypot(ev.clientX - x0, ev.clientY - y0) < 6) return;
+          if (!ghost) { ghost = document.createElement("div"); ghost.className = "colghost"; ghost.textContent = th.textContent.replace("⋮⋮", "");
+            document.body.appendChild(ghost); th.classList.add("dragging"); }
+          ghost.style.left = ev.clientX + 10 + "px"; ghost.style.top = ev.clientY + 10 + "px";
+          clear(); th.classList.add("dragging"); target = null;
+          for (const h of ths) { const r = h.getBoundingClientRect();
+            if (ev.clientX >= r.left && ev.clientX < r.right) { const after = ev.clientX > r.left + r.width / 2;
+              target = lbOrder.indexOf(h.dataset.k) + (after ? 1 : 0); h.classList.add(after ? "drop-after" : "drop-before"); } }
+          // drag near the table's edges to scroll it sideways
+          const wrapR = th.closest(".tablewrap").getBoundingClientRect();
+          if (ev.clientX > wrapR.right - 40) th.closest(".tablewrap").scrollLeft += 12; else if (ev.clientX < wrapR.left + 160) th.closest(".tablewrap").scrollLeft -= 12;
+        };
+        const up = () => { window.removeEventListener("pointermove", move); window.removeEventListener("pointerup", up); window.removeEventListener("pointercancel", up);
+          if (ghost) { ghost.remove(); clear(); if (target != null) moveColumn(k, target); } else sortBy(k); };
+        window.addEventListener("pointermove", move); window.addEventListener("pointerup", up); window.addEventListener("pointercancel", up);
+      };
+    });
     document.querySelectorAll("#lbtable tbody tr, #podium li[data-i]").forEach(el => { const a = armies[+el.dataset.i];
       el.onclick = () => pickRow(a); el.onkeydown = (e) => { if (e.key === "Enter") pickRow(a); }; });
     drawRace();
@@ -1046,6 +1091,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   }
   $("racemetric").onchange = () => { raceHidden.clear(); drawRace(); };
   $("lbcmd").onchange = renderBoard;
+  $("lbreset").onclick = () => { lbOrder = LBCOLS.map(c => c.k); saveOrder(); renderBoard(); };
   function setTab(tab) {
     document.querySelector(".app").classList.toggle("on-board", tab === "board");
     document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
