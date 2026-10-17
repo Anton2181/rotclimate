@@ -146,6 +146,12 @@ SPACE_E3 = SPACE_E2 + [("ocean_tau_stable", 0.05, 3.0), ("eddy_heat", 0.0, 1.5),
 # e3b: terrain-limited eddy moisture transport
 SPACE_E3B = SPACE_E3 + [("eddy_rainout", 0.0, 2.0)]
 SPACE_E3B_NEW = [g for g in SPACE_E3B if g[0] not in {n for n, *_ in SPACE_E2}]
+# physics e4 (research round 2): terrain-aware eddy moisture, cloud and
+# clear-sky radiation on land, sub-grid marine air on coasts
+SPACE_E4 = SPACE_E3B + [("eddy_moisture_height_km", 1.5, 8.0), ("cloud_radiation", 0.0, 15.0),
+                        ("cloud_longwave", 0.0, 2.0), ("marine_layer", 0.0, 1.0), ("marine_reach_km", 10.0, 80.0),
+                        ("marine_inversion_m", 200.0, 1500.0), ("marine_contrast", 1.0, 10.0)]
+SPACE_E4_NEW = [g for g in SPACE_E4 if g[0] not in {n for n, *_ in SPACE_E3B}]
 SPACE_E3_NEW = [g for g in SPACE_E3 if g[0] not in {n for n, *_ in SPACE_E2}]
 
 
@@ -401,7 +407,7 @@ def main():
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "new", "world"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -442,6 +448,10 @@ def main():
         _set_space(SPACE_E3B)
     elif a.physics == "e3bnew":
         _set_space(SPACE_E3B_NEW)
+    elif a.physics == "e4":
+        _set_space(SPACE_E4)
+    elif a.physics == "e4new":
+        _set_space(SPACE_E4_NEW)
     elif a.physics == "new":
         _set_space(SPACE_NEW)
     bounds = json.loads(a.bounds)
@@ -452,7 +462,7 @@ def main():
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new", "e3b",
-                     "e3bnew", "new", "world"):
+                     "e3bnew", "e4", "e4new", "new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

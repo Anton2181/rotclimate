@@ -152,6 +152,13 @@ class Params:
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
+    eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
+    cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
+    cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
+    marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
+    marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air
+    marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental
+    marine_contrast: float = 5.0      # e4: land-minus-sea warmth (K) for a full marine layer
     eddy_rainout: float = 0.0         # e3: eddy moisture steps capped at crest saturation / this (0 = off)
     subtropical_high: float = 0.0     # e3: m/s, wind around the subtropical highs that sit over the oceans
     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill

@@ -88,8 +88,35 @@ def w_sat(T):
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
+MARINE_SOFTNESS_M = 150.0        # e4: softness of the marine layer's terrain test
+MARINE_SST_KM = 100.0            # e4: the coastal sea temperature: Gaussian mean of nearby sea
 EDDY_RAINOUT_STEPS = 6           # e3: steps of the eddy moisture mixing that each meet the terrain
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
+
+
+def lowest_crest_from_sea(land, barrier):
+    """For every cell, the lowest possible highest barrier on any 8-connected
+    path from the sea to it, the cell itself included (Priority-Flood,
+    Barnes et al. 2014). Sea cells are 0."""
+    import heapq
+
+    ny, nx = land.shape
+    z = np.where(land, np.inf, 0.0)
+    heap = [(0.0, i, j) for i, j in zip(*np.nonzero(~land))]
+    heapq.heapify(heap)
+    while heap:
+        h, i, j = heapq.heappop(heap)
+        if h > z[i, j]:
+            continue
+        for di in (-1, 0, 1):
+            for dj in (-1, 0, 1):
+                a, b = i + di, j + dj
+                if (di or dj) and 0 <= a < ny and 0 <= b < nx:
+                    nh = max(h, barrier[a, b])
+                    if nh < z[a, b]:
+                        z[a, b] = nh
+                        heapq.heappush(heap, (nh, a, b))
+    return z
 
 
 def enclosed_directions(land, reach_cells, n_dir=16):
@@ -224,11 +251,41 @@ class ClimateModel:
                          np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
         sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
         self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
+        # e4: sub-grid marine air on coasts under a subtropical inversion
+        # (Rahn & Garreaud 2010; Iacobellis & Cayan 2013): the share of each
+        # land cell within sea-breeze reach of the sea (cell mean of
+        # exp(-d / reach), the coast taken one cell width from the centre of
+        # the first land row) on ground the marine layer can reach: below the
+        # inversion and behind no crest above it (lowest crest on any path
+        # from the sea; crests from the cells' mean and highest ground)
+        self.marine_geom = None
+        if p.marine_layer > 0:
+            L, D = p.marine_reach_km, g.cell_km
+            a = np.maximum(ndi.distance_transform_edt(g.land) * D - D, 0.0)
+            reach = (L / D) * (np.exp(-a / L) - np.exp(-(a + D) / L))
+            barrier = np.where(g.land, g.elev + 0.5 * (np.maximum(g.elev_max, g.elev) - g.elev), 0.0)
+            crest = lowest_crest_from_sea(g.land, barrier)
+            up = ndi.minimum_filter(np.where(np.isfinite(crest), crest, 1e9), size=3, mode="nearest")
+            z_test = np.maximum(np.minimum(up, crest), g.elev)
+            below = 1.0 / (1.0 + np.exp(-(p.marine_inversion_m - z_test) / MARINE_SOFTNESS_M))
+            self.marine_geom = np.where(g.land, reach * below, 0.0)
         # e3: ocean basins at the scale of the subtropical highs
         self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
                             if p.subtropical_high > 0 else None)
 
     # ------------------------------------------------------------------ helpers
+    def _lat_mean(self, field):
+        """Mean of a field over the grid's 1-degree latitude bands, mapped back
+        onto the grid (the latitude's own mean in this domain)."""
+        if not hasattr(self, "_lat_bins"):
+            b = np.floor(self.lat).astype(int)
+            b -= b.min()
+            self._lat_bins = b
+            self._lat_count = np.maximum(np.bincount(b.ravel()), 1)
+        b = self._lat_bins
+        return (np.bincount(b.ravel(), weights=field.ravel(), minlength=len(self._lat_count))
+                / self._lat_count)[b]
+
     def season_index(self, day, lag=30.0):
         """+1 at (lagged) mid-summer, -1 at mid-winter."""
         p = self.p
@@ -347,6 +404,7 @@ class ClimateModel:
         T_prev = T_prev2 = None
         W_prev = None
         uv_prev = chi = None
+        cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         soilP = np.full(lat.shape, 1.5)
         self.t_iterations = []
         self.t_converged = []
@@ -390,6 +448,31 @@ class ClimateModel:
                 pet = 0.5 + 0.2 * np.maximum(Tl, 0.0)
                 wet = np.clip(soilP / pet, 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
+            if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
+                # e4: the latitude-mean land column carries its latitude's mean
+                # cloudiness. Where this step's sky is clearer than that mean,
+                # more sunshine reaches the ground (dry interiors: Ghausi et
+                # al. 2023) and, with dry air, more heat escapes to space
+                # (clear-sky emissivity, Prata 1996: winter cold pools, the
+                # Siberian High); cloudier and moister places the reverse.
+                # Cloud cover from last step's humidity and rain (SPEEDY).
+                fc, Wc = cloud_prev
+                fbar = self._lat_mean(fc)
+                dT = np.zeros_like(Tl)
+                if p.cloud_radiation > 0:
+                    S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                         distance_factor(d, p.eccentricity,
+                                                         p.winter_solstice_day + p.perihelion_after_solstice,
+                                                         p.year_days))
+                    dT -= p.cloud_radiation * (fc - fbar) * S / LAND_COUPLING_SREF
+                if p.cloud_longwave > 0:
+                    def clear_loss(f, w):
+                        x = np.maximum(w, 0.0) / 10.0                  # column water in cm
+                        eps = 1.0 - (1.0 + x) * np.exp(-np.sqrt(1.2 + 3.0 * x))
+                        return (1.0 - f) * (1.0 - eps)
+                    sigT4 = 5.67e-8 * (np.maximum(Tl, -60.0) + 273.15) ** 4
+                    dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, self._lat_mean(Wc))) / 10.0
+                Tl = Tl + np.clip(dT, -15.0, 10.0)
             if p.land_coupling_insolation > 0:
                 # physics e2: the land surface ties the air to its temperature
                 # through sunshine-driven mixing, strongly in summer and weakly
@@ -492,6 +575,21 @@ class ClimateModel:
             if not temperature.converged and p.t_require_convergence:
                 raise TemperatureConvergenceError(n+1,d,temperature,update[g.inmap].max())
             T = Tsl - p.lapse_rate * h_km
+            T_rep, Tsl_rep = T, Tsl
+            if self.marine_geom is not None:
+                # e4: a two-tile coast: marine air under the inversion (the
+                # nearby sea's temperature) and continental air (the solved
+                # T, which keeps driving winds, humidity and rain). The marine
+                # share grows with how much warmer the land air is than the
+                # sea (none in winter)
+                sea = ocean.astype(float)
+                sig = MARINE_SST_KM / g.cell_km
+                sst_c = gauss(np.where(ocean, SST, 0.0), sig) / np.maximum(gauss(sea, sig), 1e-6)
+                inv = np.clip((Tsl - sst_c) / p.marine_contrast, 0.0, 1.0)
+                F = p.marine_layer * inv * self.marine_geom
+                T_m = sst_c - p.lapse_rate * h_km
+                T_rep = T - F * np.maximum(T - T_m, 0.0)
+                Tsl_rep = T_rep + p.lapse_rate * h_km
 
             # ---- moisture
             # saturation is set by the temperature of the whole air column,
@@ -548,6 +646,21 @@ class ClimateModel:
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
             mix = (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None
+            if p.eddy_rate > 0 and p.eddy_moisture_height_km > 0:
+                # e4: eddies mix specific humidity above the ground, not column
+                # water: mix the sea-level equivalent and convert back, so a
+                # basin behind a range does not receive sea-level columns at
+                # inflated humidity (CLIMBER-X; UVic's undepleted vapour over
+                # high land)
+                # The neighbours' humidity is averaged by the air they hold
+                # above their ground (mass-weighted), so a mountain column adds
+                # little: target = c * G(W) / G(c), c = exp(-z / H). Mixing the
+                # bare sea-level equivalents flooded the Turan lowlands with
+                # Pamir moisture (the model's mountain columns hold more than
+                # physical ones).
+                col = np.exp(-h_km / p.eddy_moisture_height_km)
+                gcol = np.maximum(gauss(col, sigE), 1e-6)
+                mix = lambda water, col=col, gcol=gcol: col * gauss(water, sigE) / gcol
             if p.eddy_rate > 0 and p.eddy_rainout > 0:
                 # e3: storm eddies carry water vapour by many short steps, not
                 # one jump: a step over a ridge can hold no more than the
@@ -575,9 +688,13 @@ class ClimateModel:
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
+            if p.cloud_radiation > 0 or p.cloud_longwave > 0:
+                rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)
+                cloud_prev = (np.clip(0.2 * np.sqrt(np.clip(P, 0.0, 10.0)) + np.clip((rh - 0.3) / 0.7, 0.0, 1.0) ** 2,
+                                      0.0, 1.0), W)
             uv_prev = (u, v)
             if n >= spinup:
-                for key, val in (("T", T), ("Tsl", Tsl), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
+                for key, val in (("T", T_rep), ("Tsl", Tsl_rep), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val
                 if budget is not None:
                     exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0

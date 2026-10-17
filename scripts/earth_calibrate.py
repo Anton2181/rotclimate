@@ -51,6 +51,12 @@ SPACES["e3b"] = SPACES["e3"] + [g for g in C.SPACE_E3B if g[0] not in {n for n, 
 # off against (base temperatures, inland seas, currents, eddy moisture)
 _E3_PARTNERS = {"eddy_rate", "eddy_scale_km", "land_offset", "sst_offset", "continentality", "land_amplitude",
                 "inland_sea_warming", "current_strength", "upwelling"}
+SPACES["e4"] = SPACES["e3b"] + C.SPACE_E4_NEW
+# first stage around r5: the e4 genes and what they trade against (moisture
+# supply and rain efficiency, base temperatures, eddies)
+_E4_PARTNERS = {"eddy_rate", "eddy_scale_km", "rh_threshold", "precip_tau_days", "ocean_rh", "land_recycling",
+                "wet_cooling", "land_offset", "sst_offset", "orographic", "storm_track", "upwelling", "inland_sea_warming"}
+SPACES["e4_stage1"] = [g for g in SPACES["e4"] if g[0] in _E4_PARTNERS] + C.SPACE_E4_NEW
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]

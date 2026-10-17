@@ -70,3 +70,56 @@ demonstrated.
    (PlaSim/SimBA bucket; PALADYN β_s, doi:10.5194/gmd-9-3817-2016).
 5. Convergence-fraction rain closure plus lee re-evaporation (SESAM; LFPM,
    Hergarten & Robl 2022, doi:10.5194/gmd-15-2063-2022).
+
+## C. Continental winter cold and the East Asian monsoon
+
+- The Siberian High is a shallow cold dome built by clear-sky longwave loss
+  over snow plus subsidence; cooling raises surface pressure only above the
+  ~1000 km deformation radius (Ding & Krishnamurti 1987; Jones & Cohen 2011,
+  doi:10.1175/2010JCLI3970.1). Mountains channel the outflow east of Tibet;
+  the Mongolian ranges matter ~4x more than Tibet (White et al. 2017,
+  doi:10.1175/JCLI-D-16-0401.1). Heat release over warm currents (Kuroshio)
+  forces a high and cold air to its west (Kaspi & Schneider 2011).
+- CLIMBER-X diagnoses azonal sea-level pressure p* ≈ −2.3 hPa/K × T*_sl and
+  still keeps eastern-continent winters too warm.
+- Meiyu rain: southerlies between the Asian heat low and the Pacific high,
+  advection of moist static energy by the stationary meridional wind (Sampe &
+  Xie 2010, doi:10.1175/2009JCLI3128.1; Chen & Bordoni 2014,
+  doi:10.1175/JCLI-D-13-00479.1); summer subtropical highs are forced by
+  monsoon heating through the Sverdrup balance (Rodwell & Hoskins 2001).
+- Check: the model's thermal wind already uses the sea-level-equivalent
+  temperature, as CLIMBER-X does (no false summer high over Tibet).
+
+Proposals: (1) a local radiative correction to land T_eq: cloud proxy from the
+rain machinery, clear-sky emissivity from column water (Prata 1996,
+doi:10.1002/qj.49712253306), snow albedo, a calm-air coupling for inversions
+(estimated −5 to −9 K over Inner Mongolia in January); (2) poleward monsoon
+flow from rain heating, v = s·tanφ·(P − P0), and weaker summer trades over
+land; (3) frontal ascent from moist-static-energy advection; (4) blocking of
+cold air by terrain (Froude number) and a Kaspi-Schneider high west of warm
+seas.
+
+## D. Rain shadows, dry interiors and dryland summer heat
+
+- Diagnosis: the storm-eddy moisture mixing relaxes W toward a smoothed field
+  of mostly sea-level columns, but a column over high ground holds ~exp(−z/2.5
+  km) less water; plateaus and basins behind ranges get sea-level moisture at
+  inflated humidity (Reno ~1.7x). CLIMBER-X mixes specific humidity above the
+  surface (Willeit et al. 2022 eqs. A42-A51); UVic found vapour "not
+  sufficiently depleted" over high land (Brennan et al. 2011).
+- Smith & Barstad linear theory: condensation ≈ (W/H_w)·U·∇h with 1000-2400 s
+  cloud times (under one 56 km cell); descent is an equal negative source that
+  evaporates spillover. Observed drying ratios 0.32 (northern California),
+  0.42 (Oregon Cascades).
+- Clouds cut land surface sunshine by >100 W m−2 in humid regions and cool the
+  surface by up to 7 K; the effect vanishes in arid regions (Ghausi et al.
+  2023, doi:10.1073/pnas.2220400120). With a latitude-only albedo every column
+  carries its latitude's mean cloudiness.
+
+Proposals: (1) **terrain-aware eddy moisture mixing** (implemented as
+`eddy_moisture_height_km`): mix the sea-level equivalent W·exp(z/H_w) and
+convert back, W_e = exp(−z/H_w)·S[W·exp(z/H_w)]; (2) **cloud cover from the
+model's RH and ascent shading the land relative to its latitude's mean**
+(implemented with item C1 as `cloud_radiation`); (3) moisture-flux upslope
+condensation with subtractive lee evaporation (drying-ratio law); (4) eddy
+mixing scaled by storm-track strength.
