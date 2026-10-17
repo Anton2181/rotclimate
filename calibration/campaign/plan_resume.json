@@ -1,0 +1,46 @@
+{
+ "common": [
+  "--physics",
+  "e3b",
+  "--objective",
+  "zonefit",
+  "--downsample",
+  "32",
+  "--set",
+  "{\"solver_rtol\": 1e-05, \"solver_require_convergence\": false}",
+  "--workers",
+  "2",
+  "--popsize",
+  "16",
+  "--evals",
+  "481",
+  "--sigma",
+  "0.08",
+  "--stds",
+  "{\"north_bearing\": 0.5}"
+ ],
+ "runs": [
+  {
+   "name": "D1_random_world",
+   "start": "calibration/campaign/starts/random_world_7_1.json",
+   "out": "calibration/campaign/run_D1",
+   "args": [
+    "--seed",
+    "11"
+   ]
+  },
+  {
+   "name": "D2_polish",
+   "start": "calibration/campaign/run_D2/best_params.json",
+   "out": "calibration/campaign/run_D2_polish",
+   "args": [
+    "--seed",
+    "22",
+    "--sigma",
+    "0.05",
+    "--evals",
+    "641"
+   ]
+  }
+ ]
+}
