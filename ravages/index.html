@@ -87,6 +87,14 @@ ul.armies li.sel { background: var(--panel-2); outline: 1.5px solid var(--accent
 ul.armies li .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .86rem; }
 ul.armies li .wh { display: block; color: var(--ink-soft); font-size: .72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 ul.armies li.off .nm, ul.armies li.off .sw { opacity: .4; }
+ul.armies li.early .sw { opacity: .45; border-style: dashed; }
+ul.armies li.early .wh { font-style: italic; }
+details.fate { font-size: .78rem; }
+details.fate summary { cursor: pointer; color: var(--accent); font-weight: 500; }
+details.fate p { margin: 6px 0 0; line-height: 1.45; }
+label.opt { display: flex; align-items: center; gap: 6px; font-size: .78rem; color: var(--ink-soft); margin: 0 0 8px; cursor: pointer; }
+.mapctl [hidden], .hexinfo[hidden] { display: none; }
+.mapctl button.recentre { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); font-size: .78rem; padding: 0 10px; }
 .sw { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .35); }
 .sw.sq { border-radius: 3px; }
 .card { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; }
@@ -134,6 +142,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       <button type="button" id="zin" aria-label="Zoom in">+</button>
       <button type="button" id="zout" aria-label="Zoom out">−</button>
       <button type="button" id="zfit" aria-label="Show the whole map" title="Whole map">⤢</button>
+      <button type="button" id="recentre" class="recentre" hidden>Re-centre</button>
       <label for="gridtog" title="Hex grid"><input type="checkbox" id="gridtog">Hex</label>
       <label for="nametog" title="Town names"><input type="checkbox" id="nametog" checked>Towns</label>
     </div>
@@ -167,7 +176,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   <aside>
     <section>
       <div class="sec-head"><h2>Followed army</h2><button type="button" id="unfollow" hidden>Stop following</button></div>
-      <div id="armycard"><p class="empty">Pick an army on the map or in the list to follow it: the map keeps it in view and shows its whole route.</p></div>
+      <div id="armycard"><p class="empty">Pick an army on the map or in the list to follow it: the map stays centred on it and shows its whole route.</p></div>
     </section>
     <section>
       <div class="sec-head"><h2>This day</h2><span class="muted" id="daycount"></span></div>
@@ -176,6 +185,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     <section>
       <div class="sec-head"><h2>Armies</h2><span><button type="button" id="showall">Show all</button> · <button type="button" id="hideall">Hide all</button></span></div>
       <input type="search" id="filter" placeholder="Find a commander or force" aria-label="Find an army">
+      <label class="opt" for="earlytog"><input type="checkbox" id="earlytog">Show armies before they were raised and after they left</label>
       <ul class="armies" id="armylist"></ul>
     </section>
     <p class="muted" id="sourcenote"></p>
@@ -232,10 +242,14 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     return t ? t.name : v ? (v.commandery || v.region || v.terrain) : "Open water"; };
 
   // ---------------------------------------------------------------- state
-  let t = NDAY - 1, playing = false, speed = 2, trail = 14, followed = null;
-  try { const s = JSON.parse(localStorage.getItem("ravages-view") || "{}"); if (s.trail != null) trail = s.trail; if (s.speed) speed = s.speed; } catch (e) { /* storage off */ }
-  $("trail").value = String(trail); $("speed").value = String(speed);
-  const saveView = () => { try { localStorage.setItem("ravages-view", JSON.stringify({ trail, speed })); } catch (e) { /* storage off */ } };
+  let t = NDAY - 1, playing = false, speed = 2, trail = 14, followed = null, locked = true, showOut = false;
+  try { const s = JSON.parse(localStorage.getItem("ravages-view") || "{}"); if (s.trail != null) trail = s.trail; if (s.speed) speed = s.speed; showOut = !!s.early; } catch (e) { /* storage off */ }
+  $("trail").value = String(trail); $("speed").value = String(speed); $("earlytog").checked = showOut;
+  const saveView = () => { try { localStorage.setItem("ravages-view", JSON.stringify({ trail, speed, early: showOut })); } catch (e) { /* storage off */ } };
+  // framanders ride in their Sakar's ledger column until they are raised;
+  // commanders who leave the campaign (killed, retired) stand still in it after
+  const alive = (a, i) => showOut || ((a.raised == null || i >= a.raised) && (a.ended == null || i <= a.ended));
+  const shortDate = (i) => new Date(D.days[i].date + "T12:00:00").toLocaleString("en-GB", { day: "numeric", month: "short" });
 
   // ---------------------------------------------------------------- map view
   const cv = $("map"), ctx = cv.getContext("2d"), wrap = $("mapwrap");
@@ -252,8 +266,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   // positions at fractional time (smooth between days while playing)
   const posAt = (a, tt) => {
     const i0 = Math.floor(tt), i1 = Math.min(i0 + 1, NDAY - 1), f = tt - i0;
-    const h0 = a.hex[i0], h1 = a.hex[i1] ?? h0;
-    if (h0 == null) return null;
+    const h0 = a.hex[i0], h1 = alive(a, i1) ? a.hex[i1] ?? h0 : h0;
+    if (h0 == null || !alive(a, i0)) return null;
     const p0 = centre(h0), p1 = h1 != null ? centre(h1) : p0;
     return [p0[0] + (p1[0] - p0[0]) * f, p0[1] + (p1[1] - p0[1]) * f, h0];
   };
@@ -272,37 +286,58 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   }
 
   function draw() {
+    if (followed && locked) { const p = posAt(followed, t); if (p) { tx = W / 2 - p[0] * s; ty = H / 2 - p[1] * s; } }
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     ctx.fillStyle = css.getPropertyValue("--map-bg"); ctx.fillRect(0, 0, W, H);
     ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
     if (base.complete && base.naturalWidth) { ctx.imageSmoothingQuality = "high"; ctx.drawImage(base, 0, 0, G.width, G.height); }
     if ($("gridtog").checked && s * G.dx > 9) drawHexGrid();
     const day = Math.round(t);
-    // trails
-    const span = Math.min(trail, NDAY);
+    // trails: recent moves fade with age. A followed army also gets its
+    // whole route as a faint line, its recent moves bold with arrows, and
+    // everyone else's trails step back.
+    const span = Math.min(trail, NDAY), now = Math.floor(t), px = 1 / s * Math.max(1, Math.min(2.2, s / 1.5));
+    ctx.lineJoin = "round"; ctx.lineCap = "round";
+    const route = (a, from, to) => { const pts = [];
+      for (let i = from; i <= to; i++) if (a.hex[i] != null && (!pts.length || pts[pts.length - 1].h !== a.hex[i])) { const [x, y] = centre(a.hex[i]); pts.push({ x, y, h: a.hex[i], i }); }
+      return pts; };
     for (const a of armies) {
       if (!a.visible) continue;
-      const isF = followed === a, len = isF ? NDAY : span;
-      if (!len) continue;
-      const from = Math.max(0, Math.floor(t) - len);
-      const pts = [];
-      for (let i = from; i <= Math.floor(t); i++) if (a.hex[i] != null) pts.push(centre(a.hex[i]));
-      const cur = posAt(a, t); if (cur) pts.push([cur[0], cur[1]]);
-      if (pts.length < 2) continue;
-      ctx.lineJoin = "round"; ctx.lineCap = "round";
-      for (let k = 1; k < pts.length; k++) {
-        const age = (pts.length - k) / pts.length;
-        ctx.strokeStyle = a.color; ctx.globalAlpha = isF ? 0.95 : Math.max(0.15, 0.85 * (1 - age));
-        ctx.lineWidth = (isF ? 3.2 : 2.2) / s * Math.max(1, Math.min(2.2, s / 1.5));
-        ctx.beginPath(); ctx.moveTo(pts[k - 1][0], pts[k - 1][1]); ctx.lineTo(pts[k][0], pts[k][1]); ctx.stroke();
+      const isF = followed === a, first = showOut ? 0 : a.raised ?? 0, last = Math.min(now, showOut ? NDAY - 1 : a.ended ?? NDAY - 1);
+      if (last < first) continue;
+      const cur = posAt(a, t);
+      if (isF) {
+        const all = route(a, first, last); if (cur) all.push({ x: cur[0], y: cur[1] });
+        ctx.strokeStyle = a.color; ctx.globalAlpha = 0.3; ctx.lineWidth = 1.6 * px; ctx.setLineDash([4 * px, 4 * px]);
+        ctx.beginPath(); all.forEach((p, k) => k ? ctx.lineTo(p.x, p.y) : ctx.moveTo(p.x, p.y)); ctx.stroke(); ctx.setLineDash([]);
       }
-      if (isF) { ctx.fillStyle = a.color; for (const p of pts) { ctx.beginPath(); ctx.arc(p[0], p[1], 2.2 / s * Math.max(1, s / 1.5), 0, 7); ctx.fill(); } }
+      const len = isF ? (span && span < NDAY ? span : 14) : span;
+      if (!len) continue;
+      const pts = route(a, Math.max(first, now - len), last);
+      if (cur && pts.length && (cur[0] !== pts[pts.length - 1].x || cur[1] !== pts[pts.length - 1].y)) pts.push({ x: cur[0], y: cur[1], i: t });
+      if (pts.length < 2) continue;
+      for (let k = 1; k < pts.length; k++) {
+        const p = pts[k - 1], q = pts[k], age = Math.min(1, (t - (q.i ?? t)) / len);
+        ctx.strokeStyle = a.color;
+        ctx.globalAlpha = followed && !isF ? 0.18 : isF ? 1 - 0.65 * age : Math.max(0.15, 0.85 * (1 - age));
+        ctx.lineWidth = (isF ? 3.6 : 2.2) * px;
+        ctx.beginPath(); ctx.moveTo(p.x, p.y); ctx.lineTo(q.x, q.y); ctx.stroke();
+        if (isF) {                                   // which way it went
+          const dx = q.x - p.x, dy = q.y - p.y, d = Math.hypot(dx, dy); if (d < 1e-6) continue;
+          const ux = dx / d, uy = dy / d, m = Math.min(d / 2 + 4 * px, d - 2 * px), ax = p.x + ux * m, ay = p.y + uy * m, hs = 5.5 * px;
+          ctx.fillStyle = a.color; ctx.beginPath(); ctx.moveTo(ax, ay);
+          ctx.lineTo(ax - ux * hs * 1.6 - uy * hs, ay - uy * hs * 1.6 + ux * hs); ctx.lineTo(ax - ux * hs * 1.6 + uy * hs, ay - uy * hs * 1.6 - ux * hs);
+          ctx.closePath(); ctx.fill();
+        }
+      }
+      if (isF) { ctx.fillStyle = "#fff"; ctx.strokeStyle = a.color; ctx.lineWidth = 1.4 * px;
+        for (const p of pts.slice(0, -1)) { ctx.globalAlpha = 1 - 0.65 * Math.min(1, (t - p.i) / len); ctx.beginPath(); ctx.arc(p.x, p.y, 2.6 * px, 0, 7); ctx.fill(); ctx.stroke(); } }
       ctx.globalAlpha = 1;
     }
     // today's battles and assaults: a ring at the army's hex
     for (const e of events) {
       if (e.d !== day || !e.a || !e.a.visible || (e.kind !== "battle" && e.kind !== "assault")) continue;
-      const h = e.a.hex[day]; if (h == null) continue;
+      const h = e.a.hex[day]; if (h == null || !alive(e.a, day)) continue;
       const [x, y] = centre(h); ctx.strokeStyle = kindColor(e.kind); ctx.lineWidth = 3 / s;
       ctx.beginPath(); ctx.arc(x, y, R * 1.25, 0, 7); ctx.stroke();
     }
@@ -345,7 +380,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     else if (pointers.size === 2) { const [p, q] = [...pointers.values()]; pinch = [Math.hypot(p[0] - q[0], p[1] - q[1]), s]; drag = null; } });
   cv.addEventListener("pointermove", (e) => { if (!pointers.has(e.pointerId)) return; pointers.set(e.pointerId, [e.offsetX, e.offsetY]);
     if (pinch && pointers.size === 2) { const [p, q] = [...pointers.values()]; const d = Math.hypot(p[0] - q[0], p[1] - q[1]); zoomAt(pinch[1] * d / pinch[0] / s, (p[0] + q[0]) / 2, (p[1] + q[1]) / 2); moved = true; }
-    else if (drag) { const dx = e.offsetX - drag[0], dy = e.offsetY - drag[1]; if (Math.abs(dx) + Math.abs(dy) > 3) moved = true; tx = drag[2] + dx; ty = drag[3] + dy; draw(); } });
+    else if (drag) { const dx = e.offsetX - drag[0], dy = e.offsetY - drag[1]; if (Math.abs(dx) + Math.abs(dy) > 3) { moved = true; if (followed && locked) setLock(false); }
+      if (moved) { tx = drag[2] + dx; ty = drag[3] + dy; draw(); } } });
   const up = (e) => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch = null; if (!pointers.size) { drag = null; cv.classList.remove("dragging"); } };
   cv.addEventListener("pointerup", (e) => { const was = moved; up(e); if (!was) clickAt(e.offsetX, e.offsetY); });
   cv.addEventListener("pointercancel", up);
@@ -353,7 +389,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   cv.addEventListener("dblclick", (e) => zoomAt(2, e.offsetX, e.offsetY));
   $("zin").onclick = () => zoomAt(1.6, W / 2, H / 2);
   $("zout").onclick = () => zoomAt(1 / 1.6, W / 2, H / 2);
-  $("zfit").onclick = () => { fit(); draw(); };
+  $("zfit").onclick = () => { if (followed && locked) setLock(false); fit(); draw(); };
+  // following keeps the camera centred on the army; panning away frees it until re-centred
+  function setLock(on) { locked = on; $("recentre").hidden = !followed || on; if (on) draw(); }
+  $("recentre").onclick = () => setLock(true);
   $("gridtog").onchange = draw; $("nametog").onchange = draw;
 
   function clickAt(px, py) {
@@ -367,7 +406,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   function showHex(h) {
     const box = $("hexinfo"); if (!h) { box.hidden = true; return; }
     const v = hexInfo(h), tw = townAt.get(h), day = Math.round(t);
-    const here = armies.filter(a => a.visible && a.hex[day] === h);
+    const here = armies.filter(a => a.visible && alive(a, day) && a.hex[day] === h);
     box.innerHTML = `<div><b>${esc(tw ? tw.name : (v?.commandery || "Open water"))}</b> <span class="code">hex ${h}</span></div>`
       + (v ? `<div>${esc([v.terrain, v.region, v.province].filter(Boolean).join(" · "))}</div>` : "")
       + (tw ? `<div>${esc(tw.kind)}${tw.prov ? " of " + esc(tw.prov) : ""}</div>` : "")
@@ -382,7 +421,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   function setDay(v, { keepPlay = false } = {}) {
     t = Math.max(0, Math.min(NDAY - 1, v));
     if (!keepPlay && playing) togglePlay(false);
-    slider.value = String(Math.round(t)); refreshDay(); centreFollowed(); draw();
+    slider.value = String(Math.round(t)); refreshDay(); draw();
   }
   function refreshDay() {
     const d = D.days[Math.round(t)];
@@ -403,6 +442,12 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     const unit = 3;
     stacks.forEach((st, i) => { let y = r.height; for (const kk of order) { const n = st[kk]; if (!n) continue; const hgt = Math.min(n * unit, r.height);
       g.fillStyle = kindColor(kk); g.fillRect(x(i) - 1.5, y - hgt, 3, hgt); y -= hgt; } });
+    for (const [d, label] of followed ? [[followed.raised, "raised"], [followed.ended, "left"]] : []) {
+      if (d == null) continue;
+      const xr = x(d); g.fillStyle = followed.color; g.fillRect(xr - 1, 0, 2, r.height);
+      g.font = `600 10px ${css.getPropertyValue("--font-body")}`; g.textBaseline = "top"; g.textAlign = xr > r.width - 60 ? "right" : "left";
+      g.fillText(label, xr + (g.textAlign === "right" ? -4 : 4), 9); g.textAlign = "left";
+    }
     // month marks
     g.fillStyle = css.getPropertyValue("--ink-soft"); g.font = `10px ${css.getPropertyValue("--font-mono")}`; g.textBaseline = "top";
     D.days.forEach((d, i) => { if (d.date.endsWith("-01")) { g.fillRect(x(i), 0, 1, 6); g.fillText(new Date(d.date + "T12:00:00").toLocaleString("en-GB", { month: "short" }), x(i) + 3, 0); } });
@@ -421,7 +466,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     if (nt >= NDAY - 1) { nt = NDAY - 1; t = nt; togglePlay(false); slider.value = String(NDAY - 1); refreshDay(); draw(); return; }
     const before = Math.round(t); t = nt;
     if (Math.round(t) !== before) { slider.value = String(Math.round(t)); refreshDay(); }
-    centreFollowed(); draw(); requestAnimationFrame(frame);
+    draw(); requestAnimationFrame(frame);
   }
   function togglePlay(on = !playing) {
     playing = on; $("play").textContent = on ? "Pause" : "Play";
@@ -436,32 +481,30 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   });
 
   // ---------------------------------------------------------------- follow an army
-  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  function centreFollowed() {
-    if (!followed) return; const p = posAt(followed, t); if (!p) return;
-    const sx = p[0] * s + tx, sy = p[1] * s + ty, m = Math.min(W, H) * 0.22;
-    if (sx < m || sx > W - m || sy < m || sy > H - m || !playing) {
-      const gx = W / 2 - p[0] * s, gy = H / 2 - p[1] * s;
-      if (playing && !reduce) { tx += (gx - tx) * 0.12; ty += (gy - ty) * 0.12; } else if (!playing) { /* keep the user's framing when paused */ }
-    }
-  }
   function follow(a) {
     followed = followed === a ? null : a;
     $("unfollow").hidden = !followed;
-    if (followed) { const p = posAt(followed, t); if (p) { if (s < 2) s = 2.5; tx = W / 2 - p[0] * s; ty = H / 2 - p[1] * s; } }
+    if (followed && s < 2) s = 2.5;
+    setLock(true);
     renderList(); renderCard(); drawTicks(); draw();
   }
   $("unfollow").onclick = () => follow(followed);
 
   function marched(a, from, to) {
+    from = Math.max(from, a.raised ?? 0); to = Math.min(to, a.ended ?? to);
     let n = 0; for (let i = from + 1; i <= to; i++) if (a.hex[i] != null && a.hex[i - 1] != null) n += hexDist(a.hex[i - 1], a.hex[i]);
     return n;
   }
   function renderCard() {
     const a = followed, box = $("armycard");
-    if (!a) { box.innerHTML = '<p class="empty">Pick an army on the map or in the list to follow it: the map keeps it in view and shows its whole route.</p>'; return; }
+    if (!a) { box.innerHTML = '<p class="empty">Pick an army on the map or in the list to follow it: the map stays centred on it and shows its whole route.</p>'; return; }
     const day = Math.round(t), h = a.hex[day], v = h != null ? hexInfo(h) : null, tw = h != null ? townAt.get(h) : null;
-    let stay = 0; for (let i = day; i > 0 && a.hex[i - 1] === h; i--) stay++;
+    let stay = 0; for (let i = day; i > (a.raised ?? 0) && a.hex[i - 1] === h; i--) stay++;
+    const early = a.raised != null && day < a.raised, withParent = a.parent ? ` with ${esc(a.parent)}'s legion` : "";
+    const gone = a.ended != null && day > a.ended;
+    const status = early ? `Not yet raised${showOut && a.parent ? `: riding${withParent}` : ""}; raised on ${shortDate(a.raised)}`
+      : gone ? `Left the campaign on ${shortDate(a.ended)}` : day === a.ended ? "Last day in the ledger"
+      : stay ? `In this hex for ${stay + 1} days` : day === (a.raised ?? 0) ? (a.raised ? "Raised today" : "Starting position") : "Moved here today";
     const total = marched(a, 0, day), week = marched(a, Math.max(0, day - 7), day);
     const inf = a.info;
     const troops = inf && Object.keys(inf.troops).length
@@ -470,13 +513,16 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     box.innerHTML = `<div class="card">
       <div class="title"><span class="sw ${a.commander ? "" : "sq"}" style="background:${a.color}"></span><b>${esc(a.name)}</b></div>
       <dl class="kv">
-        <dt>Where</dt><dd>${h == null ? "Unknown" : esc(tw ? tw.name + " (" + tw.kind + ")" : (v?.commandery || "Open water"))} <span class="mono muted">hex ${h ?? "—"}</span></dd>
+        <dt>Where</dt><dd>${h == null || ((early || gone) && !showOut) ? (gone ? `Out of the campaign · last seen at ${esc(placeName(a.hex[a.ended]))}` : "Not in the field yet") : esc(tw ? tw.name + " (" + tw.kind + ")" : (v?.commandery || "Open water"))}${(early || gone) && !showOut ? "" : ` <span class="mono muted">hex ${h ?? "—"}</span>`}</dd>
         ${v ? `<dt>Land</dt><dd>${esc([v.terrain, v.region, v.province].filter(Boolean).join(" · "))}</dd>` : ""}
-        <dt>Status</dt><dd>${stay ? `In this hex for ${stay + 1} days` : (day ? "Moved here today" : "Starting position")}</dd>
+        <dt>Status</dt><dd>${status}</dd>
+        ${a.raised != null ? `<dt>Raised</dt><dd>${shortDate(a.raised)}${a.parent ? ` from ${esc(a.parent)}'s legion` : ""}</dd>` : ""}
+        ${a.ended != null ? `<dt>Left</dt><dd>${shortDate(a.ended)} (last ledger entry)</dd>` : ""}
         <dt>Marched</dt><dd class="mono">${total} hexes (~${Math.round(total * MILES_PER_HEX).toLocaleString("en-GB")} mi) so far · ${week} in the last 7 days</dd>
         ${inf ? `<dt>Speed</dt><dd>${inf.speed ?? "—"} mi/day · morale ${inf.morale ?? "—"}</dd>` : ""}
         ${inf && inf.tradition ? `<dt>Tradition</dt><dd>${esc(inf.tradition)}</dd>` : ""}
       </dl>
+      ${a.fate && day >= a.ended ? `<details class="fate"><summary>Rumour, ${shortDate(dayIndex.get(a.fate.date) ?? a.ended)}</summary><p>${esc(a.fate.text)}</p></details>` : ""}
       ${inf && inf.traits.length ? `<div class="chips">${inf.traits.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>` : ""}
       ${troops ? `<div><div class="muted" style="margin-bottom:4px">Troops (current ledger)</div><div class="chips">${troops}</div></div>` : ""}
       <div><div class="muted" style="margin-bottom:4px">Campaign log (${evs.length})</div>
@@ -495,11 +541,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   function renderList() {
     const q = $("filter").value.trim().toLowerCase(), day = Math.round(t);
     $("armylist").innerHTML = armies.filter(a => !q || a.name.toLowerCase().includes(q)).map(a => {
-      const h = a.hex[day];
-      return `<li data-i="${a.i}" class="${a.visible ? "" : "off"} ${followed === a ? "sel" : ""}" tabindex="0">
+      const h = a.hex[day], early = !alive(a, day);
+      const where = !early ? (h == null ? "—" : `${placeName(h)} · hex ${h}`)
+        : day < (a.raised ?? 0) ? `Not yet raised · joins ${shortDate(a.raised)}` : `Left the campaign · ${shortDate(a.ended)}`;
+      return `<li data-i="${a.i}" class="${a.visible ? "" : "off"} ${followed === a ? "sel" : ""} ${early ? "early" : ""}" tabindex="0">
         <input type="checkbox" ${a.visible ? "checked" : ""} aria-label="Show ${esc(a.name)}" id="vis${a.i}">
         <span class="sw ${a.commander ? "" : "sq"}" style="background:${a.color}"></span>
-        <span class="nm">${esc(a.name)}<span class="wh">${h == null ? "—" : esc(placeName(h))} · hex ${h ?? "—"}</span></span></li>`;
+        <span class="nm">${esc(a.name)}<span class="wh">${esc(where)}</span></span></li>`;
     }).join("");
     $("armylist").querySelectorAll("li").forEach(li => {
       const a = armies[+li.dataset.i];
@@ -509,10 +557,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     });
   }
   $("filter").addEventListener("input", renderList);
+  $("earlytog").onchange = (e) => { showOut = e.target.checked; saveView(); renderList(); renderCard(); draw(); };
   $("showall").onclick = () => { armies.forEach(a => a.visible = true); renderList(); drawTicks(); renderDayLog(); draw(); };
   $("hideall").onclick = () => { armies.forEach(a => a.visible = false); renderList(); drawTicks(); renderDayLog(); draw(); };
 
-  $("sourcenote").textContent = `${armies.length} armies over ${NDAY} days (${D.days[0].date} to ${D.days[NDAY - 1].date}), from the ComLoc and ComEvents tabs of ${D.source}. Troops, traits and morale are the ledger's current values. One hex is about ${Math.round(MILES_PER_HEX)} miles across.`;
+  $("sourcenote").textContent = `${armies.length} armies over ${NDAY} days (${D.days[0].date} to ${D.days[NDAY - 1].date}), from the ComLoc and ComEvents tabs of ${D.source}. Troops, traits and morale are the ledger's current values. Framanders appear on the day they were raised (their "New subcommander" entry, else their first ledger entry); before that their column only follows their Sakar. Commanders whose daily ledger stops before the sheet does (killed, retired) leave the map after their last entry. One hex is about ${Math.round(MILES_PER_HEX)} miles across.`;
 
   window.claude?.hot?.snapshot?.(() => ({ t: Math.round(t), f: followed ? followed.name : null }));
   const start = (data) => { if (data && data.t != null) t = data.t; if (data && data.f) followed = byName.get(data.f) || null; $("unfollow").hidden = !followed; };
