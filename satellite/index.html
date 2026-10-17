@@ -151,7 +151,8 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px 
     if (first) fit(); else { s = Math.max(s, minS()); tx = W / 2 - cx * s; ty = H / 2 - cy * s; clamp(); }
     draw();
   }
-  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 3.5);   // past this there are no more pixels to show tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
+  // zoom stops at 3.5 screen pixels per drawing pixel: past that there are no more pixels to show
+  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 3.5); tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
 
   function draw() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
