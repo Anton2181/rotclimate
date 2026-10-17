@@ -7,7 +7,8 @@ showed what was missing. Read [the Earth report](reports/earth_mode.md);
 pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (world and
 physics fitted to the map with every setting free, from the restart campaign's
-best basin: zonefit 0.520, strict 59.1 %; reversed spin, 32.9°N, 15.8° tilt).
+best basin, now with Earth's pressure-driven winds: zonefit 0.529, strict 59.1 %;
+reversed spin, 32.9°N, 15.8° tilt).
 The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
 plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the

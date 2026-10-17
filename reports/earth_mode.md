@@ -316,7 +316,13 @@ wind equations and their planetary-scale setting are shared; what differs
 is how much small-scale (~330 km) thermal circulation each world wants,
 and the map wants roughly what Earth tolerates at a 2 % cost. r9 stays
 the Earth reference (`calibration/earth/earth_e5_r10.json` keeps r10).
-The full-detail (downsample 8) comparison of the map fit with D2 is pending.
+At full detail (downsample 8, the same moisture iterations for both) the
+pressure-wind map scores **0.529 against D2's 0.520**, strict agreement 59.1 %
+for both: the cold-dry north 53 → 59 % recall, "tree" 55 → 59 %, swamp 45 → 47 %,
+against cold-wet 76 → 71 % and the Mediterranean 67 → 64 % (Cs 78 → 77 %, dry
+11 → 12 %). It is the new free fit (`calibration/earth/free_e5p_ds16.json`)
+and the free-fit atlas is rebuilt from it: the map now runs on Earth's wind
+equations and Earth's planetary-scale pressure, with a stronger local term.
 
 ### 4d. East China, taken apart (17 October)
 
