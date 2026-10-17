@@ -44,6 +44,8 @@ SPACES["e1"] = SPACES["v9"] + [g for g in C.SPACE_E1 if g[0] not in {n for n, *_
 SPACES["e1"] = SPACES["e1"] + [("lapse_rate", 4.0, 7.0)]
 SPACES["e2"] = SPACES["e1"] + [g for g in C.SPACE_E2 if g[0] not in {n for n, *_ in C.SPACE_E1}]
 SPACES["e2new"] = [g for g in C.SPACE_E2 if g[0] not in {n for n, *_ in C.SPACE_E1}]   # only the e2 additions
+SPACES["e3"] = SPACES["e2"] + C.SPACE_E3_NEW
+SPACES["e3new"] = C.SPACE_E3_NEW
 SPACE = SPACES["v9"]
 _CASES = {}
 

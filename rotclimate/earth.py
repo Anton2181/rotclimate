@@ -248,7 +248,10 @@ def earth_params(base: Params, case: EarthCase) -> Params:
     """Earth's own geometry and calendar (day 0 = 1 January) with the
     physics constants of `base`."""
     lat0 = REGIONS[case.name]["lat0"]
-    return base.replace(tilt=23.44, retrograde=False, north_bearing=0.0, eccentricity=0.0167,
+    land = base.ebm_land
+    if land == "earth" and lat0 < 0:
+        land = "earth_mirrored"
+    return base.replace(ebm_land=land, tilt=23.44, retrograde=False, north_bearing=0.0, eccentricity=0.0167,
                         # mirrored southern regions: perihelion falls in their (mirrored) summer
                         perihelion_after_solstice=13.0 if lat0 >= 0 else 13.0 + 365.25 / 2,
                         year_days=365, winter_solstice_day=354.5, lat_center=abs(lat0))

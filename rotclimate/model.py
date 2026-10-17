@@ -91,6 +91,26 @@ UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea 
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
 
 
+def enclosed_directions(land, reach_cells, n_dir=16):
+    """Share of n_dir compass directions in which a ray from each cell meets
+    land within reach_cells (rays leaving the grid count as open)."""
+    ny, nx = land.shape
+    out = np.zeros((ny, nx))
+    steps = max(1, int(np.ceil(reach_cells)))
+    for k in range(n_dir):
+        th = 2 * np.pi * k / n_dir
+        hit = np.zeros((ny, nx), bool)
+        for n in range(1, steps + 1):
+            di, dj = int(round(-n * np.sin(th))), int(round(n * np.cos(th)))
+            shifted = np.zeros((ny, nx), bool)
+            ys, yd = (slice(di, ny), slice(0, ny - di)) if di >= 0 else (slice(0, ny + di), slice(-di, ny))
+            xs, xd = (slice(dj, nx), slice(0, nx - dj)) if dj >= 0 else (slice(0, nx + dj), slice(-dj, nx))
+            shifted[yd, xd] = land[ys, xs]
+            hit |= shifted
+        out += hit
+    return out / n_dir
+
+
 def eddy_exchange_rate(base_rate, storm, season, contrast=0.):
     """Regional seasonal exchange in 1/s; season +1 summer, -1 winter.
 
@@ -172,6 +192,14 @@ class ClimateModel:
         self.basin_side = np.clip(gb / max(np.abs(gb).max(), 1e-9) * 2.0, -1, 1)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
+        if p.sea_enclosure == "rays":
+            # e3: a straight coast has land within 400 km on one side only and
+            # is no inland sea (the disc measure warmed the cold-current waters
+            # off Chile and California by up to 5 C); count the directions in
+            # which land closes the sea within ~1,000 km instead
+            self.enclosure = np.clip((enclosed_directions(g.land, 1000.0 / g.cell_km) - 0.55) / 0.35, 0, 1)
+        elif p.sea_enclosure != "disc":
+            raise ValueError(f"unknown sea_enclosure {p.sea_enclosure!r}")
         # small water bodies (lakes, narrow bays): mostly land within ~120 km
         self.lakeness = np.clip((ndi.gaussian_filter(land, 1.2 * cells_per_100km) - 0.35) / 0.5, 0, 1) * (~g.land)
         # terrain slopes (m/m), east and north components, on a smoothed surface
@@ -195,6 +223,9 @@ class ClimateModel:
                          np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
         sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
         self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
+        # e3: ocean basins at the scale of the subtropical highs
+        self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
+                            if p.subtropical_high > 0 else None)
 
     # ------------------------------------------------------------------ helpers
     def season_index(self, day, lag=30.0):
@@ -253,6 +284,26 @@ class ClimateModel:
         u = k * (gx * ca + gy * sa)                       # clockwise turn (NH prograde)
         v = k * (-gx * sa + gy * ca)
         return u, v
+
+    def subtropical_high_wind(self, s, phi_h):
+        """e3: the subtropical highs are oceanic cells, not a zonal ridge
+        (Rodwell & Hoskins 2001): pressure ~ ocean basin x a band around the
+        Hadley edge. Their eastern flanks blow equatorward and onshore along
+        west coasts (California, Chile, the Canaries, the Etesians), their
+        western flanks poleward along east coasts (Gulf and East Asian summer
+        southerlies). Friction-turned geostrophic wind as in thermal_wind;
+        `subtropical_high` is about the peak speed in m/s."""
+        p, g = self.p, self.g
+        band = np.exp(-((self.lat - phi_h) / p.subtropical_high_width) ** 2)
+        psi = band * self.ocean_basin * (1.0 + p.subtropical_high_seasonality * s)
+        gx = -np.gradient(psi, axis=1) / g.dx_m            # toward low pressure
+        gy = np.gradient(psi, axis=0) / g.dx_m
+        k = p.subtropical_high * 2.5 * p.subtropical_high_scale_km * 1000.0
+        a = np.deg2rad(90.0 - p.cross_isobar_deg) * np.clip(np.abs(self.lat) / 12.0, 0, 1)
+        if p.retrograde:
+            a = -a
+        ca, sa = np.cos(a), np.sin(a)
+        return k * (gx * ca + gy * sa), k * (-gx * sa + gy * ca)
 
     def sst(self, day, To, Tl):
         p = self.p
@@ -370,6 +421,9 @@ class ClimateModel:
 
             # ---- parts of the winds and storms that do not depend on temperature
             u0, v0, phi_i, phi_h = self.zonal_wind(s)
+            if p.subtropical_high > 0:
+                us, vs = self.subtropical_high_wind(s, phi_h)
+                u0, v0 = u0 + us, v0 + vs
             # transient eddies (storms) mix heat and moisture between land and
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
@@ -403,14 +457,24 @@ class ClimateModel:
                 ut, vt = self.thermal_wind(T_anom)
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
+                lam = lamT
+                if p.ocean_tau_stable > 0:
+                    # e3: air warmer than the sea under it is stable: a shallow
+                    # surface layer takes the sea's temperature within hours
+                    # (desert air blowing over a cold current stays aloft,
+                    # above the marine inversion); cold air over warm sea
+                    # keeps the slower convective adjustment
+                    warm = np.clip((T_state - T_eq) / 2.0, 0.0, 1.0) * ocean
+                    lam = lamT + warm * (1.0 / (p.ocean_tau_stable * DAY) - lamT)
 
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
                     Tmix = gauss(T_state, sigE)
-                    return self.solver.solve(u, v, p.heat_diffusion, lamT + eddy,
-                                            lamT * T_eq + eddy * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
+                    eh = eddy if p.eddy_heat == 1.0 else eddy * p.eddy_heat
+                    return self.solver.solve(u, v, p.heat_diffusion, lam + eh,
+                                            lam * T_eq + eh * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
                 else:
-                    return self.solver.solve(u, v, p.heat_diffusion, lamT, lamT * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
+                    return self.solver.solve(u, v, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
             retry_callback=(lambda info:temperature_retry(dict(seasonal_step=n+1,day=float(d),**info))) if temperature_retry else None
             temperature=iterate_temperature(solve_temperature,T_ref,p.t_iters,p.t_relaxation,p.t_adaptive_retries,
                                             on_retry=retry_callback)

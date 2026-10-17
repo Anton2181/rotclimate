@@ -148,6 +148,14 @@ class Params:
     convective_rh: float = 0.6        # e2: ... its reference column relative humidity
     subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
+    ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
+    sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
+    ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
+    eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
+    subtropical_high: float = 0.0     # e3: m/s, wind around the subtropical highs that sit over the oceans
+    subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
+    subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge
+    subtropical_high_seasonality: float = 0.5  # e3: summer strength x (1 + this), winter x (1 - this)
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

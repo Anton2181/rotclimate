@@ -36,6 +36,29 @@ NU = 5.0           # W m-2 K-1  land-sea exchange inside a band
 F_LAND = 0.3
 N_BANDS = 90
 
+# Earth's land fraction in 2-degree bands from 90 S to 90 N (WorldClim 2.1 5'
+# land mask, Antarctica included). The southern mid-latitudes are nearly all
+# sea (5 % land at 40 S against 48 % at 40 N): with a uniform 30 % the model
+# gave South America's summers 6-9 C too hot and the Sahara's 4-8 C too cool.
+EARTH_LAND = (
+    1.0, 1.0, 0.986, 0.901, 0.801, 0.79, 0.766, 0.688, 0.579, 0.48, 0.322, 0.167, 0.013, 0.005, 0.001, 0.0, 0.0,
+    0.014, 0.017, 0.021, 0.026, 0.027, 0.035, 0.04, 0.042, 0.052, 0.078, 0.094, 0.155, 0.196, 0.212, 0.221, 0.233,
+    0.251, 0.252, 0.239, 0.249, 0.233, 0.212, 0.2, 0.229, 0.248, 0.248, 0.262, 0.244, 0.229, 0.211, 0.228, 0.248,
+    0.258, 0.242, 0.24, 0.264, 0.291, 0.321, 0.34, 0.371, 0.38, 0.406, 0.426, 0.445, 0.418, 0.429, 0.442, 0.452,
+    0.48, 0.494, 0.536, 0.567, 0.581, 0.601, 0.618, 0.572, 0.555, 0.571, 0.674, 0.73, 0.785, 0.78, 0.677, 0.468,
+    0.339, 0.268, 0.239, 0.252, 0.237, 0.085, 0.0, 0.0, 0.0)
+
+
+def land_profile(name):
+    """Land fraction per 2-degree band (90 S .. 90 N), or None for uniform."""
+    if name in (None, "", "uniform"):
+        return None
+    if name == "earth":
+        return EARTH_LAND
+    if name == "earth_mirrored":          # southern regions run as their northern mirror image
+        return EARTH_LAND[::-1]
+    raise ValueError(f"unknown ebm_land profile {name!r}")
+
 
 ALB_P2 = 0.15
 
@@ -48,8 +71,15 @@ def _albedo(x, T, surface):
     return free + (ice - free) * w
 
 
+def _band_land(lat, profile):
+    if profile is None:
+        return np.full(lat.shape, F_LAND)
+    centres = np.arange(-89.0, 90.0, 2.0)
+    return np.clip(np.interp(lat, centres, np.asarray(profile, float)), 0.02, 0.95)
+
+
 @lru_cache(maxsize=64)
-def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0):
+def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -72,13 +102,19 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0):
         if j < N - 1:
             L[j, j + 1] += w[j + 1] / dx**2
             L[j, j] -= w[j + 1] / dx**2
-    fl, fo = F_LAND, 1 - F_LAND
+    fl = _band_land(lat, profile)
+    fo = 1 - fl
+    # land-sea exchange per unit land area: NU at the uniform 30 % land, more
+    # where the land is a thin strip in a wide ocean, less inside big
+    # continents (exchange runs across coastlines)
+    nu = NU * fo / (1 - F_LAND) if profile is not None else np.full(N, NU)
     C_L = C_LAND * c_land_scale     # e1: heat capacity of the land column (seasonal lag)
     dt = 86400.0
     I = np.eye(N)
+    Lfl, Lfo = L * fl[None, :], L * fo[None, :]     # diffusion of the zonal mean fl T_l + fo T_o
     M = np.block([
-        [(C_L / dt + B_OLR + NU) * I - D_DIFF * fl * L, -D_DIFF * fo * L - NU * I],
-        [-D_DIFF * fl * L - NU * fl / fo * I, (C_OCEAN / dt + B_OLR + NU * fl / fo) * I - D_DIFF * fo * L],
+        [np.diag(C_L / dt + B_OLR + nu) - D_DIFF * Lfl, -D_DIFF * Lfo - np.diag(nu)],
+        [-D_DIFF * Lfl - np.diag(nu * fl / fo), np.diag(C_OCEAN / dt + B_OLR + nu * fl / fo) - D_DIFF * Lfo],
     ])
     Minv = np.linalg.inv(M)
 
@@ -96,7 +132,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0):
             if yr == years - 1:
                 out_l[d] = Tl
                 out_o[d] = To
-    return lat, out_l, out_o
+    return lat, out_l, out_o, fl
 
 
 class ZonalClimate:
@@ -105,11 +141,14 @@ class ZonalClimate:
     def __init__(self, params):
         scale = round(getattr(params, "land_heat_capacity", 1.0), 3)
         extra = {} if scale == 1.0 else {"c_land_scale": scale}
-        lat, Tl, To = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
-                             round(params.perihelion_after_solstice, 2),
-                             round(params.winter_solstice_day, 2), params.year_days, **extra)
+        profile = land_profile(getattr(params, "ebm_land", "uniform"))
+        if profile is not None:
+            extra["profile"] = profile
+        lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
+                                 round(params.perihelion_after_solstice, 2),
+                                 round(params.winter_solstice_day, 2), params.year_days, **extra)
         self.lat, self.Tl, self.To = lat, Tl, To
-        self.Tz = F_LAND * Tl + (1 - F_LAND) * To
+        self.Tz = fl * Tl + (1 - fl) * To
         self.year_days = params.year_days
 
     def _interp(self, arr, lat, day):
