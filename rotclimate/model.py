@@ -473,8 +473,15 @@ class ClimateModel:
                 else:
                     uc, vc = uv_prev
                 lamC = np.full(lat.shape, 1.0 / (CONTINENTAL_FETCH_DAYS * DAY))
-                chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, g.land_frac,
-                                        guess=g.land_frac if chi is None else chi)
+                # e6: air entering the grid has crossed the world beyond it; on
+                # Earth that world is known (the westward land share with a
+                # ~1,700 km memory, WorldClim), so the edge carries it instead
+                # of the edge cell's own land
+                edge = g.land_frac
+                if p.far_fetch > 0 and g.chi_far is not None:
+                    edge = g.land_frac + p.far_fetch * (g.chi_far - g.land_frac)
+                chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, edge,
+                                        guess=edge if chi is None else chi)
                 Tl = Tl_mean + (Tl - Tl_mean) * np.clip(1.0 + p.continentality * (chi - 0.5), 0.2, 3.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers

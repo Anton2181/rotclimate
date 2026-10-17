@@ -272,6 +272,50 @@ wind at the same resolution (`calibration/earth/free_e5_ds32_best.json`).
 The map prefers the thermal wind, so the free fit keeps it: pressure winds
 are the Earth physics, not the map's.
 
+### 4d. East China, taken apart (17 October)
+
+East China is the worst training region under r9 (3.39 against 1.46-2.09
+for the other five). Its distance splits into a temperature part of 1.51 and
+a rain part of 1.89, and most of the rain part is timing: with the right
+annual total it would still be 1.61. The model gives 65-100 mm in every month
+against 29 mm in December and 199 mm in June: no monsoon. Temperature is too
+warm from October to May (+3.3 to +5.7 °C, worst in March and April) and
+slightly cool in July and August.
+
+Taking January apart at 30°N, 114°E (Wuhan's cell): the land's own target
+temperature is 10.1 °C against 4.5 °C observed, and neither transport nor
+eddies change it (9.6 °C solved), because the winds come from the west
+(+2.9, −1.4 m/s) instead of from the cold north. The north itself is too mild:
+Mongolia is 5-7 °C too warm in January, so the continental high the pressure
+winds build is too weak to beat the prescribed westerly belt (~4 m/s at
+30°N in winter).
+
+With the westerlies nearly removed and a stronger, sharper high
+(`westerly_speed` 1, `slp_large` 4, `slp_scale_km` 1,200), January winds turn
+northerly (~3 m/s), January's bias falls to +1.4 °C, the monsoon appears
+(January 35 mm against 34, July 176 against 171) and East China's distance
+drops to 2.95. The same settings make Florida's winter 8-10 °C too cold and
+Iberia's summer 5-7 °C too cool (south-east US 1.72 → 2.69, Iberia 2.09 →
+2.57): the model's continental highs cannot tell Eurasia from North America.
+
+On WorldClim, the land share upwind to the west, with a memory of
+1,000-2,000 km, and latitude explain 85 % of the variance of the annual
+temperature range over land (latitude alone 60 %); Wuhan's westward land
+share is 1.00 and Atlanta's 0.80, and the fit predicts their ranges within
+2 °C. The model's continentality term already measures this along its own
+winds with a ~1,700 km memory, but its domains reach only 1,100 km beyond the
+scored region and treated air entering at the edge as having crossed only
+the edge cell. Physics e6 (`far_fetch`) gives the edge the real world's
+westward land share instead. On r9 unrefitted it moves the training mean from
+2.038 to 2.119 and leaves East China unchanged; a domain twice as large
+(2,200 km) moves East China only from 3.39 to 3.35; Earth's land profile in
+the energy balance takes it to 3.20 but costs California and the Levant, as
+in r6. Spring stays 5-6 °C too warm at 30°N whatever the winds (the land
+target in early April is 23 °C against 17 °C observed), as it is, less
+strongly, in the south-east US (+3.2 °C in April): humid east coasts warm
+too early. East China stays the open problem; e6 remains an option (off by
+default) for later fits.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's

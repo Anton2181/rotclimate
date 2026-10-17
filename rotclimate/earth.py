@@ -180,7 +180,52 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
              elev_max=np.maximum(elev_max, elev), lat=lat, inmap=inmap,
              target=np.zeros((ny, nx), np.int8), rivers=np.zeros((ny, nx)), lake=np.zeros((ny, nx), bool))
     g.target = observed_zones(obs_T, obs_P, g)
+    g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
+
+
+FETCH_KM = 1700.0      # e6: ~ the model's CONTINENTAL_FETCH_DAYS at 5 m/s
+
+
+def west_fetch(fetch_km: float = FETCH_KM) -> tuple:
+    """Global land share upwind to the west with an exponential memory of
+    fetch_km, on a 0.5-degree grid (WorldClim land): (field, lat, lon).
+    Westward land share with a ~2,000 km memory and latitude explain 85 % of
+    the variance of WorldClim's annual temperature range over land (15-65
+    deg, below 1,500 m), against 60 % for latitude alone."""
+    key = CACHE / f"west_fetch_{fetch_km:g}km.npz"
+    if key.exists():
+        z = np.load(key)
+        return z["fetch"], z["lat"], z["lon"]
+    elev = _wc("elev")
+    land = np.isfinite(elev) & (elev > -1000)
+    f = 6
+    H, W = land.shape[0] // f, land.shape[1] // f
+    lf = land[:H * f, :W * f].reshape(H, f, W, f).mean((1, 3))
+    lat = 90 - (np.arange(H) + 0.5) * 0.5
+    lon = -180 + (np.arange(W) + 0.5) * 0.5
+    out = np.empty_like(lf)
+    for i in range(H):
+        Lc = fetch_km / (111.2 * 0.5 * max(np.cos(np.radians(lat[i])), 0.1))   # cells
+        n = np.arange(int(6 * Lc) + 1)
+        k = np.exp(-n / Lc)
+        kw = np.zeros(W)
+        np.add.at(kw, n % W, k / k.sum())                                      # land n cells to the west
+        out[i] = np.real(np.fft.ifft(np.fft.fft(lf[i]) * np.fft.fft(kw)))
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, fetch=out.astype(np.float32), lat=lat, lon=lon)
+    return out, lat, lon
+
+
+def fetch_at(lat, lon, fetch_km: float = FETCH_KM):
+    """West fetch (0-1) at points, bilinear on the 0.5-degree grid."""
+    from scipy import ndimage as ndi
+
+    F, flat, flon = west_fetch(fetch_km)
+    i = (flat[0] - np.asarray(lat)) / 0.5
+    j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
+    Fw = np.concatenate([F, F[:, :1]], axis=1)                                 # wrap in longitude
+    return ndi.map_coordinates(Fw, [i, j], order=1, mode="nearest")
 
 
 def _aggregate(lat0, lon0, nx, ny, cell_km, half_w, half_h):
