@@ -292,7 +292,10 @@ def _indexed_worker(job):
 
 
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
-              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06, stds=None):
+              popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06, stds=None,
+              resume=False):
+    import pickle
+
     import cma
 
     if evals < 1:
@@ -309,19 +312,25 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
     if stds:                     # per-gene step sizes, as multiples of sigma0
         opts["CMA_stds"] = np.array([stds.get(NAMES[i], 1.0) for i in free])
     es = cma.CMAEvolutionStrategy(x0[free], sigma0, opts)
-    # The supplied fit is a candidate too. Previously only random offspring
-    # were saved, so a short restart could silently replace it with a worse fit.
-    print(f"Scoring starting candidate on {len(seeds or [None])} world(s)...", flush=True)
-    initial = _worker((x0, asdict(base), mode, SPACE, seeds, None))
-    if "error" in initial or not np.isfinite(initial["score"]):
-        log.close()
-        raise RuntimeError(f"Starting candidate failed: {initial.get('error', initial['score'])}")
-    initial.update(eval=1, x=list(map(float, x0)), stage="initial")
-    log.write(json.dumps(initial) + "\n")
-    log.flush()
-    Params(**initial["params"]).to_json(out_dir / "best_params.json")
-    best = (initial["score"], initial)
-    n, n_raced = 1, 0
+    state = out_dir / "state.pkl"
+    if resume and state.exists():
+        with state.open("rb") as f:          # our own checkpoint, written each generation below
+            es, best, n, n_raced = pickle.load(f)
+        print(f"Resumed at {n} evaluations, best {best[0]:.3f}", flush=True)
+    else:
+        # The supplied fit is a candidate too. Previously only random offspring
+        # were saved, so a short restart could silently replace it with a worse fit.
+        print(f"Scoring starting candidate on {len(seeds or [None])} world(s)...", flush=True)
+        initial = _worker((x0, asdict(base), mode, SPACE, seeds, None))
+        if "error" in initial or not np.isfinite(initial["score"]):
+            log.close()
+            raise RuntimeError(f"Starting candidate failed: {initial.get('error', initial['score'])}")
+        initial.update(eval=1, x=list(map(float, x0)), stage="initial")
+        log.write(json.dumps(initial) + "\n")
+        log.flush()
+        Params(**initial["params"]).to_json(out_dir / "best_params.json")
+        best = (initial["score"], initial)
+        n, n_raced = 1, 0
     t0 = time.time()
     base_dict = asdict(base)
     # The initial evaluation has already initialized NumPy/Numba runtimes.
@@ -359,6 +368,9 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                       + (f"; error: {r['error']}" if r.get("error") else ""), flush=True)
             n_raced += sum(bool(r.get("raced")) for r in res)
             es.tell(sols, [-r["score"] for r in res])
+            with (out_dir / "state.tmp").open("wb") as f:
+                pickle.dump((es, best, n, n_raced), f)
+            (out_dir / "state.tmp").replace(state)
             pc = best[1]["per_class"]
             f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "guarded") else {}
             print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
@@ -395,6 +407,7 @@ def main():
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"sst_offset": [-2, 2]}')
     ap.add_argument("--stds", default="{}", help='json of per-gene step sizes as multiples of --sigma, e.g. {"north_bearing": 0.1}')
+    ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     a = ap.parse_args()
     if a.physics == "v3":
         _set_space(SPACE_V3)
@@ -451,7 +464,7 @@ def main():
         return
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
                      workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race,
-                     stds=json.loads(a.stds))
+                     stds=json.loads(a.stds), resume=a.resume)
     print(json.dumps(best["per_class"], indent=1), best["score"])
 
 
