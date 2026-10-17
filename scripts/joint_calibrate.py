@@ -100,6 +100,8 @@ def main():
     ap.add_argument("--popsize", type=int, default=16)
     ap.add_argument("--sigma", type=float, default=0.04, help="step size of the physics genes (0-1 scale)")
     ap.add_argument("--sigma-world", type=float, default=0.2, help="step size of the world genes")
+    ap.add_argument("--stds", default="{}", help='json of per-gene step sizes overriding the group ones, '
+                                                 'e.g. {"north_bearing": 0.02}')
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--physics", default="e1", choices=[k for k in SPACES if not k.endswith("new")],
@@ -125,7 +127,8 @@ def main():
     cfg = dict(objective=a.objective, regions=a.regions, cell_km=a.cell_km, earth_max=a.earth_max, penalty=a.penalty)
     x0 = encode(base)
     world = {g[0] for g in WORLD}
-    stds = np.array([a.sigma_world if g[0] in world else a.sigma for g in SPACE])
+    over = json.loads(a.stds)
+    stds = np.array([over.get(g[0], a.sigma_world if g[0] in world else a.sigma) for g in SPACE])
     es = cma.CMAEvolutionStrategy(x0, 1.0, dict(bounds=[0, 1], popsize=a.popsize, seed=a.seed, verbose=-9,
                                                 CMA_stds=stds))
     bd = asdict(base)
