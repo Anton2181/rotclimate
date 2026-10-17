@@ -162,18 +162,19 @@ footer { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(-
   </section>
 
   <section aria-labelledby="h-atlases">
-    <h2 id="h-atlases">The two new atlases</h2>
+    <h2 id="h-atlases">The atlas</h2>
+    <p class="col">The workflow is now two steps: the model is improved and fitted on Earth, then calibrated freely on the painted map. The joint fit (map and Earth at once) and its atlas are retired, as is the old live atlas; the free-fit atlas is the one to use.</p>
     <div class="table-wrap">
       <table>
         <thead><tr><th>Full resolution (downsample 8)</th><th>Strict</th><th>Med dry</th><th>Med Cs</th><th>Cold-dry</th><th>Hot-dry</th><th>Swamp</th></tr></thead>
         <tbody>
-          <tr><td>Live atlas (fantasy-fitted physics)</td><td>48.9%</td><td>11.6%</td><td>37.3%</td><td>68.0%</td><td>56.3%</td><td>12.3%</td></tr>
+          <tr><td>Old live atlas (retired)</td><td>48.9%</td><td>11.6%</td><td>37.3%</td><td>68.0%</td><td>56.3%</td><td>12.3%</td></tr>
           <tr><td><a href="https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY">Free-fit atlas</a>: every setting fitted to the map at once</td><td class="up">57.1%</td><td class="up">0.0%</td><td class="up">82.0%</td><td>60.5%</td><td>43.0%</td><td class="up">35.0%</td></tr>
-          <tr><td><a href="https://claude.ai/artifact/R1XvbWWCreL3ouVYh8jeLP">Earth-physics atlas</a>: physics that also fits Earth</td><td>32.3%</td><td class="up">10.5%</td><td class="up">65.4%</td><td>0.2%</td><td>19.8%</td><td>0%</td></tr>
+          <tr><td>Joint Earth-and-map fit (retired)</td><td>32.3%</td><td>10.5%</td><td>65.4%</td><td>0.2%</td><td>19.8%</td><td>0%</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="col">The free fit now has the world and the physics fitted together with every setting free at once (514 evaluations with per-setting step sizes; zonefit 0.458 → 0.499). It beats the live atlas on strict agreement, the Mediterranean and the swamp; cold-dry is 7.5 points and hot-dry 13 points below it, so it stays published beside the live atlas.</p>
+    <p class="col">The free fit now has the world and the physics fitted together with every setting free at once (514 evaluations with per-setting step sizes; zonefit 0.458 → 0.499). It beats the live atlas on strict agreement, the Mediterranean and the swamp; cold-dry is 7.5 points and hot-dry 13 points below it, the price of a better Mediterranean band.</p>
   </section>
 
   <section aria-labelledby="h-limits">

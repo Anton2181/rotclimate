@@ -8,8 +8,9 @@ pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (world and
 new physics fitted to the map with every setting free: strict 57.1 %, painted
 Mediterranean 82 % Cs and 0 % dry; cold-dry 60 %, hot-dry 43 %),
-[Earth-physics atlas](https://claude.ai/artifact/R1XvbWWCreL3ouVYh8jeLP)
-(physics that also fits Earth). The live atlas below is unchanged.
+The workflow is two steps: improve and fit the model on Earth, then calibrate
+it freely on the map. The joint Earth-and-map fit, its atlas and the old live
+atlas are retired.
 
 ```sh
 python -I scripts/earth_benchmark.py --params calibration/earth/earth_e1_r4.json --cell-km 56 --out output/earth_benchmark/r4
@@ -48,7 +49,7 @@ The historical round-18 results below have not been rewritten as round-19 result
 
 ## Results
 
-**Interactive atlas:** https://claude.ai/artifact/BMvofWDzswrdCgSBkHnNRf (private until you share it).
+**Interactive atlas (round 19, retired; see the free-fit atlas above):**
 Zoomable map layers (Köppen, your zones, the simulated climate in your zones, match accuracy,
 temperatures, precipitation). Click any place for its climograph in the local calendar and its
 closest real cities. Search a town on the map, or a real city to see outlined where on the map
