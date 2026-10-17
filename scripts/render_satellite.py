@@ -97,7 +97,7 @@ C = {k: hexrgb(v) for k, v in dict(
     tundra="#7d7a64", sand_hot="#d9b583", sand_red="#c48d5a", cold_desert="#a69a82", rock="#8c8478",
     rock_dark="#5e5a52",
     snow="#eef1f4", ice="#f6f8fb", dry_grass="#a8935e", dormant="#5f5a3e", shelf="#2f8a9a",
-    shelf_warm="#3aa3a6", deep="#0a1f3d", mid="#123a66", lake="#163a5a", river="#2b4a5c",
+    shelf_warm="#3aa3a6", deep="#0a1f3d", mid="#123a66", lake="#163a5a", river="#3f78a8",
     seaice="#dfe7ee").items()}
 
 
@@ -150,6 +150,8 @@ def main():
     ap.add_argument("--relief", type=float, default=1.0, help="scale of the synthetic mountain relief")
     ap.add_argument("--vexag", type=float, default=0.6, help="hillshade vertical exaggeration")
     ap.add_argument("--rise", type=float, default=22.0, help="how gradually the highest tier climbs (pixels)")
+    ap.add_argument("--scale", type=int, default=2,
+                    help="paint the final picture at this multiple of the drawing's resolution (smooth coasts and rivers, sharper relief)")
     ap.add_argument("--erosion-steps", type=int, default=200, help="uplift-erosion steps that carve the valleys")
     ap.add_argument("--crop", type=int, nargs=4, metavar=("X0", "Y0", "X1", "Y1"),
                     help="render only this window of the original drawing (for quick look development)")
@@ -297,7 +299,49 @@ def main():
     # sea ice: a broken edge (floes and leads) instead of the smooth front of
     # the coarse sea temperatures, and fast ice along the shore first
     floes = fractal((H, W), 9, (2, 6, 18, 50), (0.3, 0.6, 1.0, 0.8))
-    riv = ndi.gaussian_filter(rivers, 1.0)
+    # The picture is painted at `scale` times the drawing's resolution: the
+    # climate and cover fields are smooth and only interpolated, while the
+    # relief, the coast, lakes and rivers are redrawn at the finer grid. The
+    # drawing's coasts and rivers are pixel art (stair steps, 1-2 px lines),
+    # so they are blurred and re-thresholded into smooth, anti-aliased edges.
+    k = max(1, a.scale)
+    H2, W2 = H * k, W * k
+    t1 = time.time()
+    zoom2 = lambda x, order=1: ndi.zoom(np.asarray(x, np.float32), k, order=order).astype(np.float32)
+    zoomc = lambda x: ndi.zoom(x, (k, k, 1), order=1).astype(np.float32)
+    # coasts: a wide blur re-thresholded (no stair steps), sampled through a
+    # small warp so the shore stays natural rather than turning rubbery
+    yy2, xx2 = np.mgrid[0:H2, 0:W2].astype(np.float32)
+    wob = 1.1 * k
+    wy2 = yy2 + wob * fractal((H2, W2), 41, (2.0 * k, 6.0 * k), (0.6, 1.0))
+    wx2 = xx2 + wob * fractal((H2, W2), 42, (2.0 * k, 6.0 * k), (0.6, 1.0))
+    del yy2, xx2
+    shore = lambda m: smooth(ndi.map_coordinates(ndi.gaussian_filter(zoom2(m), 1.6 * k), [wy2, wx2], order=1,
+                                                 mode="nearest"), 0.44, 0.56).astype(np.float32)
+    landA = shore(land | lake)
+    lakeA = shore(lake)
+    del wy2, wx2
+    # rivers: traced into smooth curves and redrawn (vector_rivers)
+    from vector_rivers import river_alpha
+    rivA, nriv = river_alpha(rivers, k)
+    rivA = rivA * landA * (1 - lakeA)
+    elev2 = zoom2(elev_d, order=3)
+    shade2 = LightSource(azdeg=315, altdeg=35).hillshade(elev2, vert_exag=a.vexag, dx=dx / k, dy=dx / k).astype(np.float32)
+    del elev2
+    light2 = (0.5 + 0.75 * shade2) * (1.0 - 0.18 * np.clip(zoom2(hollow), 0, 1))
+    del shade2
+    grain2 = 1.0 + 0.05 * fractal((H2, W2), 5, (1.0, 3.0, 9.0), (0.5, 0.7, 1.0))
+    # fine texture the 1x colours cannot carry: forest patches with crisp
+    # edges (woods darker than the open ground round them) and canopy mottle
+    wood2 = zoom2(woodiness)
+    patchy = smooth(wood2 + 0.35 * fractal((H2, W2), 6, (2.0 * k, 6.0 * k, 16.0 * k), (0.5, 0.8, 1.0)), 0.42, 0.58)
+    mottle = fractal((H2, W2), 4, (0.8, 1.6), (0.6, 1.0))
+    grain2 *= (1.0 - 0.22 * (patchy - wood2)) * (1.0 + (0.04 + 0.10 * patchy) * mottle)
+    del wood2, patchy, mottle
+    # colours under the coast's new line come from the nearest land (or sea) pixel
+    _, (iy, ix) = ndi.distance_transform_edt(~land, return_indices=True)
+    _, (sy, sx) = ndi.distance_transform_edt(land, return_indices=True)
+    print(f"{W2} x {H2} relief and shorelines ready ({time.time() - t1:.0f}s)", flush=True)
 
     for name in seasons:
         T, P, S = sT[name], sP[name], sS[name]
@@ -315,8 +359,7 @@ def main():
         snow = snow * (1.0 - 0.55 * woodiness)         # forest canopy hides the snow beneath it
         col = mix(col, C["snow"], np.clip(snow, 0, 0.95))
         col = mix(col, C["ice"], smooth(-(Thot - relief_T), 0.5, 3.5))
-        col = col * (1.0 + 0.045 * grain[..., None])
-        col = col * (0.5 + 0.75 * shade[..., None]) * (1.0 - 0.18 * np.clip(hollow, 0, 1)[..., None])
+        col = col[iy, ix]
         sst = sSST[name]
         shelf = mix(C["shelf"], C["shelf_warm"], smooth(sst, 12.0, 27.0))
         reach = dist_km * np.exp(-0.5 * shelfvar)                  # shelves of uneven width
@@ -326,16 +369,31 @@ def main():
         ice = smooth(-sst + 1.4 * floes + 1.2 * np.exp(-dist_km / 25.0), 1.0, 1.25)
         icecol = C["seaice"][None, None] * (0.93 + 0.07 * floes[..., None])
         sea = sea * (1 - 0.95 * ice[..., None]) + icecol * (0.95 * ice[..., None])
-        img = np.where(land[..., None], col, sea)
-        img = np.where(lake[..., None], mix(C["lake"], C["seaice"], smooth(-T, 1.0, 4.0)), img)
-        img = mix(img, C["river"], np.clip(riv * 0.5, 0, 0.5) * land)
+        sea = sea[sy, sx]
+        lakecol = mix(C["lake"], C["seaice"], smooth(-T, 1.0, 4.0))
+        frozen = smooth(-T, 1.0, 4.0)
+        del T, P, S, Tloc, snow, snowy, dryness, dormant, wet_now, shelf, reach, ice, icecol
+        img = zoomc(sea)
+        del sea
+        a2 = landA[..., None]
+        img *= 1 - a2
+        img += zoomc(col) * (light2 * grain2)[..., None] * a2
+        del col
+        a2 = lakeA[..., None]
+        img = img * (1 - a2) + zoomc(lakecol) * a2
+        # rivers: a bright, nearly opaque line (frozen rivers go pale)
+        rc = mix(C["river"], C["seaice"], zoom2(frozen))
+        a2 = (0.9 * rivA)[..., None]
+        img = img * (1 - a2) + rc * a2
+        del rc, a2, lakecol
         img8 = (np.clip(img, 0, 1) * 255).astype(np.uint8)
+        del img
         big = Image.fromarray(img8)
-        big.save(out / f"satellite_{name}.webp", quality=90, method=6)
-        big.resize((1600, round(1600 * H / W)), Image.LANCZOS).save(out / f"satellite_{name}_preview.png")
+        big.save(out / f"satellite_{name}.webp", quality=88, method=4)
+        big.resize((1600, round(1600 * H2 / W2)), Image.LANCZOS).save(out / f"satellite_{name}_preview.png")
         print(f"{name}: months {seasons[name]} written ({time.time() - t0:.0f}s)", flush=True)
     (out / "satellite.json").write_text(json.dumps(dict(params=str(a.params), downsample=a.downsample,
-                                                        seasons=seasons, width=W, height=H), indent=1))
+                                                        seasons=seasons, width=W2, height=H2, scale=k), indent=1))
 
 
 if __name__ == "__main__":

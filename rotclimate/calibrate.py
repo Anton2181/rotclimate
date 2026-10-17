@@ -158,6 +158,8 @@ SPACE_E5 = SPACE_E4 + [("slp_large", 0.0, 4.0), ("slp_local", 0.0, 2.0), ("slp_s
                        ("slp_local_km", 60.0, 400.0), ("bl_drag_ocean", 1.0e-5, 1.0e-4),
                        ("bl_drag_land", 3.0e-5, 4.0e-4), ("divergence_drying", 0.0, 2.0)]
 SPACE_E5_NEW = [g for g in SPACE_E5 if g[0] not in {n for n, *_ in SPACE_E4}]
+# the map fit's own settings plus the pressure winds (without the e4 extras)
+SPACE_E3B5 = SPACE_E3B + SPACE_E5_NEW
 SPACE_E3_NEW = [g for g in SPACE_E3 if g[0] not in {n for n, *_ in SPACE_E2}]
 
 
@@ -413,7 +415,7 @@ def main():
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "new", "world"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -462,6 +464,8 @@ def main():
         _set_space(SPACE_E5)
     elif a.physics == "e5new":
         _set_space(SPACE_E5_NEW)
+    elif a.physics == "e3b5":
+        _set_space(SPACE_E3B5)
     elif a.physics == "new":
         _set_space(SPACE_NEW)
     bounds = json.loads(a.bounds)
@@ -472,7 +476,7 @@ def main():
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new", "e3b",
-                     "e3bnew", "e4", "e4new", "e5", "e5new", "new", "world"):
+                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

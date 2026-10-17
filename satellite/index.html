@@ -106,7 +106,33 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px 
   $("status").hidden = true;
   const Wd = M.width, Hd = M.height, w = M.world;
   $("world").textContent = `${w.lat}°N · tilt ${w.tilt}° · ${w.retrograde ? "reversed spin" : "Earth's spin"} · north ${Math.abs(w.bearing)}° ${w.bearing < 0 ? "anticlockwise" : "clockwise"} of the top`;
-  $("legendnote").textContent = "Grown from the simulated climate: cover from rain against evaporation, its kind from the temperatures, relief carved by rivers into the drawn heights. Summer and winter are the warmest and coldest three months over land.";
+  $("legendnote").textContent = "Grown from the simulated climate: cover from rain against evaporation, its kind from the temperatures, relief carved by rivers into the drawn heights; coasts and rivers redrawn as smooth lines from the drawing. Summer and winter are the warmest and coldest three months over land. Zoom in for twice the detail.";
+
+  // ---------------------------------------------------------------- detail tiles
+  // the overview is the drawing's resolution; zoomed in, the full render's
+  // tiles (twice as sharp) load for the part in view and draw over it
+  const T = M.tiles, tiles = new Map();
+  let tick = 0;
+  function tileImg(season, r, c) {
+    const key = `${season}_${r}_${c}`; let t = tiles.get(key);
+    if (!t) { t = { im: new Image(), used: 0 }; t.im.decoding = "async"; t.im.onload = () => draw(); t.im.src = `tiles/${key}.webp`; tiles.set(key, t); }
+    t.used = ++tick;
+    if (tiles.size > 10) {                         // keep memory low on phones
+      const old = [...tiles.entries()].sort((a, b) => a[1].used - b[1].used)[0];
+      if (old[1].used < tick - 8) { old[1].im.src = ""; tiles.delete(old[0]); }
+    }
+    return t.im.complete && t.im.naturalWidth ? t.im : null;
+  }
+  function drawTiles(season) {
+    if (!T || s < 0.7) return;
+    const x0 = -tx / s, y0 = -ty / s, x1 = (W - tx) / s, y1 = (H - ty) / s, tw = T.w / T.scale, th = T.h / T.scale;
+    for (let r = 0; r < T.rows; r++) for (let c = 0; c < T.cols; c++) {
+      const gx = c * tw, gy = r * th;
+      if (gx > x1 || gy > y1 || gx + tw < x0 || gy + th < y0) continue;
+      const im = tileImg(season, r, c);
+      if (im) ctx.drawImage(im, gx, gy, im.naturalWidth / T.scale, im.naturalHeight / T.scale);
+    }
+  }
 
   // ---------------------------------------------------------------- view
   const cv = $("view"), ctx = cv.getContext("2d"), stage = $("stage");
@@ -125,7 +151,7 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px 
     if (first) fit(); else { s = Math.max(s, minS()); tx = W / 2 - cx * s; ty = H / 2 - cy * s; clamp(); }
     draw();
   }
-  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 6); tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
+  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 3.5);   // past this there are no more pixels to show tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
 
   function draw() {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -133,10 +159,10 @@ button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px 
     ctx.imageSmoothingQuality = "high";
     ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
     if (mode === "compare") {
-      ctx.drawImage(IM.winter, 0, 0, Wd, Hd);
+      ctx.drawImage(IM.winter, 0, 0, Wd, Hd); drawTiles("winter");
       const xs = (split * W - tx) / s;
-      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, Math.max(0, xs), Hd); ctx.clip(); ctx.drawImage(IM.summer, 0, 0, Wd, Hd); ctx.restore();
-    } else ctx.drawImage(IM[mode], 0, 0, Wd, Hd);
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, Math.max(0, xs), Hd); ctx.clip(); ctx.drawImage(IM.summer, 0, 0, Wd, Hd); drawTiles("summer"); ctx.restore();
+    } else { ctx.drawImage(IM[mode], 0, 0, Wd, Hd); drawTiles(mode); }
     if ($("names").checked) drawNames();
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
     if (mode === "compare") {                        // the divider and its handle

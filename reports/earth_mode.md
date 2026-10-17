@@ -237,6 +237,36 @@ nine-region mean and nothing on California and Iberia, so r5 stays the Earth
 reference; the options remain for the map and for finer grids, where coastal
 ranges are resolved.
 
+### 4c. Pressure-driven winds (e5) become the Earth reference
+
+A sea-level pressure diagnosed from the temperature anomaly (CLIMBER-style:
+~2 hPa/K on a planetary scale, plus an optional boundary-layer term) drives
+the surface wind through the friction-Coriolis balance, replacing the
+thermal-wind approximation. A first fit (r8, sigma 0.2 in 28 settings) never
+beat its starting point: its typical candidate scored 3.1 against a start of
+2.13. A scan of the two pressure strengths around r5 (`scripts/earth_scan.py`,
+`calibration/earth_scan_slp.json`) showed the large-scale term helping
+(2.061 at 2.0) and the local term hurting at every strength, so r9 started
+there with small steps (sigma 0.06, 241 evaluations):
+
+| Fit | Training (6) | Chile | Cape | SW Australia | 9-region mean |
+|---|---|---|---|---|---|
+| r5 (e2) | 2.077 | 3.60 | 2.02 | 1.82 | 2.210 |
+| **r9 (e5, pressure winds)** | **2.038** | **3.45** | 2.02 | **1.76** | **2.162** |
+
+r9 (`calibration/earth/earth_e5_r9.json`: large-scale pressure 1.65, local
+0.12, planetary scale 1,870 km, drag 3.5e-5 over sea and 8.9e-5 over land) is
+better on training and on the held-out regions and is the new Earth
+reference. East China's winter stays ~3 °C too warm: the pressure field has
+no cold-season continental high strong enough to push polar air south.
+
+On the map the pressure winds cannot simply be switched on: with the free
+fit's other settings (tuned to the thermal wind) the map warms by 2.6 °C on
+average and dries, and the zone score falls from 0.527 to about -0.03 at any
+strength from 0.2 to 3 (`calibration/map_scan_slp*.json`). The map is being
+refitted with them (`--physics e3b5`: the free fit's settings plus the
+pressure-wind ones).
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
