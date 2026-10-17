@@ -123,3 +123,19 @@ model's RH and ascent shading the land relative to its latitude's mean**
 (implemented with item C1 as `cloud_radiation`); (3) moisture-flux upslope
 condensation with subtractive lee evaporation (drying-ratio law); (4) eddy
 mixing scaled by storm-track strength.
+
+## Results of the hand tests (on the r5 fit, untuned; nine-region mean 2.210)
+
+| Option | Nine-region mean | Notes |
+|---|---|---|
+| eddy_moisture_height_km 2.5 (bare sea-level equivalents) | 2.464 | Great Basin, Cape, SE US better; Central Asia flooded (1098 mm vs 228) |
+| same, mass-weighted, 2.5 km | 2.318 | Reno 155 mm (241), Las Vegas 150 (144), Cape 327 (324), Central Asia 258 (228); everything drier |
+| same, mass-weighted, 4 km | 2.237 | |
+| cloud_radiation 8 | 2.221 | |
+| cloud_longwave 1 | 2.230 | |
+| marine_layer 1 + ray enclosure | 2.203 | San Diego July 30 -> 26 °C, La Serena 32 -> 28 |
+| monsoon_heating 0.6 | 2.203 | East China rain 908 -> 973 mm |
+| + trade_land 0.6 | 2.203 | nothing added |
+| moisture-flux upslope rain + lee evaporation (D3) | 2.48-2.53 | **removed**: at 56 km the Central Valley cells sit on the Sierra's rising flank (Fresno 954-1588 mm vs 382); lee evaporation dried Athens to 0 mm |
+
+The first group needs the rain constants refitted together (Earth fit r7).
