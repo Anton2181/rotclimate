@@ -102,13 +102,15 @@ def main():
     ap.add_argument("--sigma-world", type=float, default=0.2, help="step size of the world genes")
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--physics", default="e1", choices=[k for k in SPACES if not k.endswith("new")],
+                    help="Earth physics space fitted together with the world")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     import cma
 
     global SPACE
     bounds = json.loads(a.bounds)
-    SPACE = [(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACE]
+    SPACE = [(n, *bounds.get(n, (lo, hi))) for n, lo, hi in SPACES[a.physics] + WORLD]   # set before the workers fork
     d = json.loads(Path(a.start).read_text())
     d = d.get("params", d)
     base = Params(**{k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items()

@@ -31,7 +31,10 @@ from rotclimate.koppen import CODES  # noqa: E402
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from earth_calibrate import SPACES  # noqa: E402
 
-PHYSICS = [g[0] for g in SPACES["e1"]]
+# every constant the Earth calibration can fit, plus the e3 sea-enclosure
+# measure; the EBM's land-by-latitude profile stays the planet's own
+# (uniform on the fantasy world: Earth's continents are not its continents)
+PHYSICS = [g[0] for g in SPACES["e3"]] + ["sea_enclosure"]
 
 
 def load(path):
