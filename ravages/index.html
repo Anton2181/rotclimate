@@ -267,7 +267,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     <div class="podium" id="podium"></div>
     <h2>Over time</h2>
     <div class="lbctl"><label>Compare <select id="racemetric">
-      <option value="hexes">Hexes marched</option><option value="upkeep">Army size (daily upkeep)</option>
+      <option value="hexes">Hexes marched</option><option value="upkeep">Supplies consumed per day</option>
       <option value="wins">Battles and assaults won</option><option value="fights">Battles and assaults fought</option></select></label>
       <span class="muted">The eight leaders on the chosen measure; click a name to hide it.</span></div>
     <canvas id="race" aria-label="Leaders over the campaign"></canvas>
@@ -965,11 +965,6 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   // ---------------------------------------------------------------- leaderboard
   const int = (v) => v == null ? "—" : Math.round(v).toLocaleString("en-GB");
   const money = (v) => v == null ? "—" : v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "M" : v >= 1e3 ? Math.round(v / 1e3) + "k" : String(Math.round(v));
-  // soldiers per supply eaten, from each army's current muster; the median for armies without one
-  const ratioOf = (a) => { const inf = a.info; if (!inf || !(inf.upkeep > 0)) return null;
-    const n = Object.values(inf.troops).reduce((x, y) => x + y, 0); return n > 0 ? n / inf.upkeep : null; };
-  const RATIOS = armies.map(ratioOf).filter(x => x != null).sort((x, y) => x - y);
-  const MEDIAN_RATIO = RATIOS.length ? RATIOS[Math.floor(RATIOS.length / 2)] : 0.25;
   function statsOf(a) {
     if (a._s) return a._s;
     const j = journeyOf(a), f = { bw: 0, bl: 0, aw: 0, al: 0 };
@@ -980,15 +975,15 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       bw: f.bw, bl: f.bl, aw: f.aw, al: f.al, wins: f.bw + f.aw, losses: f.bl + f.al,
       troops: inf ? Object.values(inf.troops).reduce((x, y) => x + y, 0) : null, camp: inf ? inf.noncombatants : null, length: inf ? inf.length : null,
       peak: up.length ? Math.max(...up) : null,
-      peakTroops: up.length ? Math.max(...up) * (ratioOf(a) ?? MEDIAN_RATIO) : null, peakGuess: ratioOf(a) == null, taxes: b.taxes || 0, loot: b.loot || 0, foraged: b.foraged || 0, training: b.training || 0, wages: b.wages || 0,
+      eaten: up.length ? up.reduce((x, y) => x + y, 0) : null, taxes: b.taxes || 0, loot: b.loot || 0, foraged: b.foraged || 0, training: b.training || 0, wages: b.wages || 0,
       ops: b.operations || 0, det: a.detachments ? a.detachments[0] : null, ledger: up.length > 0 };
   }
   const LBCOLS = [
     { k: "troops", t: "Troops now", f: int, d: "Soldiers under arms now (Commanders tab)" },
-    { k: "peakTroops", t: "Peak troops (est.)", f: (v) => v == null ? "—" : "≈" + int(Math.round(v / 100) * 100), d: "Troops at the army's biggest: its peak daily upkeep times its present soldiers per supply eaten (the median army's for those no longer mustered)" },
     { k: "camp", t: "Camp followers", f: int, d: "Noncombatants with the army now" },
     { k: "length", t: "Column (mi)", f: (v) => v == null ? "—" : v.toFixed(1), d: "Length of the army on the march, now" },
-    { k: "peak", t: "Peak upkeep", f: money, d: "Most supplies eaten in one day: a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5, so this tracks the army at its biggest" },
+    { k: "peak", t: "Most supplies in a day", f: money, d: "Most supplies consumed in one day (a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5)" },
+    { k: "eaten", t: "Supplies consumed", f: money, d: "Supplies consumed over the whole campaign (daily supply consumption entries)" },
     { k: "hexes", t: "Hexes marched", f: int }, { k: "miles", t: "Miles", f: int }, { k: "bestDay", t: "Longest day", f: int, d: "Most hexes covered in one day" },
     { k: "days", t: "Days in field", f: int }, { k: "towns", t: "Towns visited", f: int },
     { k: "bw", t: "Battles won", f: int }, { k: "bl", t: "Battles lost", f: int }, { k: "aw", t: "Assaults won", f: int }, { k: "al", t: "Assaults failed", f: int },
@@ -998,8 +993,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   ];
   const PODIUM = [
     ["Most travelled", "hexes", (v) => `${int(v)} hexes`], ["Most victories", "wins", (v) => `${v} won`], ["Largest army now", "troops", (v) => int(v)],
-    ["Largest army at its peak", "peakTroops", (v) => `≈${int(Math.round(v / 100) * 100)}`],
-    ["Longest column", "length", (v) => `${v.toFixed(1)} mi`], ["Biggest appetite", "peak", (v) => `${money(v)}/day`], ["Taxman", "taxes", money],
+    ["Longest column", "length", (v) => `${v.toFixed(1)} mi`], ["Most supplies in a day", "peak", (v) => `${money(v)}/day`],
+    ["Most supplies consumed", "eaten", money], ["Taxman", "taxes", money],
     ["Plunderer", "loot", money], ["Forager", "foraged", money], ["Hardest fought", "losses", (v) => `${v} lost`],
   ];
   let lbSort = { k: "hexes", dir: -1 };
@@ -1014,7 +1009,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   const pickRow = (a) => { setTab("map"); if (followed !== a) follow(a); };
   function renderBoard() {
     const list = lbArmies(), st = list.map(statsOf);
-    $("lbintro").textContent = `${list.length} armies compared over the whole campaign (${D.days[0].date} to ${D.days[NDAY - 1].date}). The sheet records no casualty or kill counts, so battles and assaults stand in for them; troop numbers, camp followers and column length are the Commanders tab's current values. The sheet keeps no troop history, so peak troops are estimated from each army's biggest day of supply use (a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5) at its present mix of men and horses.`;
+    $("lbintro").textContent = `${list.length} armies compared over the whole campaign (${D.days[0].date} to ${D.days[NDAY - 1].date}). The sheet records no casualty or kill counts, so battles and assaults stand in for them; troop numbers, camp followers and column length are the Commanders tab's current values. Supplies consumed come from the daily ledger (a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5).`;
     $("podium").innerHTML = PODIUM.map(([title, k, fv]) => {
       const top = st.filter(x => x[k] != null && x[k] > 0).sort((x, y) => y[k] - x[k]).slice(0, 3);
       return `<div class="pc"><h3>${title}</h3><ol>${top.map((x, i) => `<li data-i="${x.a.i}" tabindex="0"><span class="rk">${i + 1}</span><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span><span class="nm2">${esc(x.a.name)}</span><span class="v">${fv(x[k])}</span></li>`).join("") || '<li class="empty">No one yet</li>'}</ol></div>`;
