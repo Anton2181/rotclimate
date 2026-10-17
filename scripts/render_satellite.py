@@ -294,6 +294,9 @@ def main():
     grain = fractal((H, W), 5, (1.2, 4, 11), (0.5, 0.7, 1.0))
     seagrain = fractal((H, W), 7, (6, 25), (0.6, 1.0))
     shelfvar = fractal((H, W), 8, (8, 30, 80), (0.4, 0.8, 1.0))
+    # sea ice: a broken edge (floes and leads) instead of the smooth front of
+    # the coarse sea temperatures, and fast ice along the shore first
+    floes = fractal((H, W), 9, (2, 6, 18, 50), (0.3, 0.6, 1.0, 0.8))
     riv = ndi.gaussian_filter(rivers, 1.0)
 
     for name in seasons:
@@ -320,7 +323,9 @@ def main():
         sea = mix(C["mid"], C["deep"], smooth(dist_km, 15.0, 160.0))
         sea = mix(sea, shelf, 0.55 * (1.0 - smooth(reach, 1.5, 18.0)))
         sea = sea * (1.0 + 0.03 * seagrain[..., None])
-        sea = mix(sea, C["seaice"], 0.9 * smooth(-sst, 0.5, 2.5))
+        ice = smooth(-sst + 1.4 * floes + 1.2 * np.exp(-dist_km / 25.0), 1.0, 1.25)
+        icecol = C["seaice"][None, None] * (0.93 + 0.07 * floes[..., None])
+        sea = sea * (1 - 0.95 * ice[..., None]) + icecol * (0.95 * ice[..., None])
         img = np.where(land[..., None], col, sea)
         img = np.where(lake[..., None], mix(C["lake"], C["seaice"], smooth(-T, 1.0, 4.0)), img)
         img = mix(img, C["river"], np.clip(riv * 0.5, 0, 0.5) * land)

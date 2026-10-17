@@ -11,7 +11,8 @@ best basin: zonefit 0.520, strict 59.1 %; reversed spin, 32.9°N, 15.8° tilt).
 The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
 plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
-world is drawn by `scripts/render_satellite.py` (viewer in `satellite/`).
+world is drawn by `scripts/render_satellite.py` and shown in the
+[orbital view](https://claude.ai/artifact/8wc4PHmHcRX1Pctjbhx3nn) (`satellite/`).
 The workflow is two steps: improve and fit the model on Earth, then calibrate
 it freely on the map. The joint Earth-and-map fit, its atlas and the old live
 atlas are retired.
