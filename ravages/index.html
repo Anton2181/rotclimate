@@ -228,7 +228,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       <label for="gridtog" title="Hex grid"><input type="checkbox" id="gridtog">Hex</label>
       <label for="nametog" title="Town names"><input type="checkbox" id="nametog" checked>Towns</label>
       <select id="layer" aria-label="Map layer" title="Colour the hexes by">
-        <option value="">No layer</option><option value="weather">Weather</option><option value="surplus">Wealth surplus</option>
+        <option value="">No layer</option><option value="pale">Pale map</option><option value="weather">Weather</option><option value="surplus">Wealth surplus</option>
         <option value="recruit">Recruitment</option><option value="forage">Foraging</option><option value="tax">Taxation</option>
       </select>
       <label for="journeytog" id="journeyctl" title="The followed army's whole journey" hidden><input type="checkbox" id="journeytog">Journey</label>
@@ -470,8 +470,10 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   }
   function drawLayer(day) {
     if (!layer) return;
+    const veil = (c) => { ctx.fillStyle = c; ctx.fillRect(-tx / s, -ty / s, W / s, H / s); };   // over the whole view, sea margin included
+    if (layer === "pale") { veil("rgba(241,236,225,0.55)"); return; }   // the drawing washed toward paper
     const { fills, today } = layerPaths(layer, day);
-    if (layer !== "weather") { ctx.fillStyle = "rgba(255,255,255,0.45)"; ctx.fillRect(0, 0, G.width, G.height); }   // let the counts stand out
+    if (layer !== "weather") veil("rgba(255,255,255,0.45)");   // let the counts stand out
     ctx.globalAlpha = layer === "weather" ? 1 : 0.85;
     for (const [c, pth] of fills) { ctx.fillStyle = c; ctx.fill(pth); }
     ctx.globalAlpha = 1;
@@ -486,7 +488,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     }
   }
   function renderLayerLegend() {
-    const box = $("llegend"); box.hidden = !layer; if (!layer) return;
+    const box = $("llegend"); box.hidden = !layer || layer === "pale"; if (box.hidden) return;
     const day = Math.round(t), st = seasonOf(day);
     const all = econScope === "all";
     const since = all ? `since ${shortDate(0)}, across every season` : `since ${shortDate(st)} (${esc(D.days[st].season || "season")} start; the sheet resets hexes each season)`;
