@@ -1,0 +1,85 @@
+{
+ "common": [
+  "--physics",
+  "e3b",
+  "--objective",
+  "zonefit",
+  "--downsample",
+  "32",
+  "--set",
+  "{\"solver_rtol\": 1e-05, \"solver_require_convergence\": false}",
+  "--workers",
+  "2",
+  "--popsize",
+  "24",
+  "--evals",
+  "433",
+  "--sigma",
+  "0.3"
+ ],
+ "runs": [
+  {
+   "name": "A_best",
+   "start": "calibration/earth/free_e3new_retro.json",
+   "out": "calibration/campaign/run_A_best",
+   "args": [
+    "--fix",
+    "{\"retrograde\": 0.75}"
+   ]
+  },
+  {
+   "name": "B_live_world",
+   "start": "output/overnight_mediterranean/selected_params.json",
+   "out": "calibration/campaign/run_B_live",
+   "args": [
+    "--fix",
+    "{\"retrograde\": 0.75}"
+   ]
+  },
+  {
+   "name": "C_prograde",
+   "start": "calibration/earth/free_e3new_retro.json",
+   "out": "calibration/campaign/run_C_prograde",
+   "args": [
+    "--fix",
+    "{\"retrograde\": 0.25}"
+   ]
+  },
+  {
+   "name": "D0_random_world",
+   "start": "calibration/campaign/starts/random_world_7_0.json",
+   "out": "calibration/campaign/run_D0",
+   "args": [
+    "--seed",
+    "10"
+   ]
+  },
+  {
+   "name": "D1_random_world",
+   "start": "calibration/campaign/starts/random_world_7_1.json",
+   "out": "calibration/campaign/run_D1",
+   "args": [
+    "--seed",
+    "11"
+   ]
+  },
+  {
+   "name": "D2_random_world",
+   "start": "calibration/campaign/starts/random_world_7_2.json",
+   "out": "calibration/campaign/run_D2",
+   "args": [
+    "--seed",
+    "12"
+   ]
+  },
+  {
+   "name": "D3_random_world",
+   "start": "calibration/campaign/starts/random_world_7_3.json",
+   "out": "calibration/campaign/run_D3",
+   "args": [
+    "--seed",
+    "13"
+   ]
+  }
+ ]
+}
