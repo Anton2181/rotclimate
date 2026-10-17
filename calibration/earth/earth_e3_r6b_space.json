@@ -1,0 +1,111 @@
+{
+ "args": {
+  "start": "calibration/earth/earth_e2_r5.json",
+  "regions": [
+   "california",
+   "iberia",
+   "southeast_us",
+   "levant",
+   "central_asia",
+   "east_china"
+  ],
+  "cell_km": 56.0,
+  "evals": 240,
+  "popsize": 12,
+  "sigma": 0.2,
+  "seed": 1,
+  "workers": 2,
+  "holdout": [
+   "chile",
+   "cape",
+   "sw_australia"
+  ],
+  "physics": "e3b_stage1",
+  "bounds": "{\"sst_offset\":[-5,4]}",
+  "set": "{\"sea_enclosure\":\"rays\",\"ocean_tau_stable\":1.0,\"subtropical_high\":2.0,\"eddy_rainout\":1.0}",
+  "out": "calibration/earth_r6b",
+  "resume": true
+ },
+ "space": [
+  [
+   "current_strength",
+   0.0,
+   8.0
+  ],
+  [
+   "sst_offset",
+   -5,
+   4
+  ],
+  [
+   "land_offset",
+   -5.0,
+   5.0
+  ],
+  [
+   "inland_sea_warming",
+   0.0,
+   8.0
+  ],
+  [
+   "eddy_rate",
+   0.0,
+   2.0
+  ],
+  [
+   "eddy_scale_km",
+   200.0,
+   900.0
+  ],
+  [
+   "land_amplitude",
+   0.7,
+   2.0
+  ],
+  [
+   "continentality",
+   0.0,
+   3.0
+  ],
+  [
+   "upwelling",
+   0.0,
+   8.0
+  ],
+  [
+   "ocean_tau_stable",
+   0.05,
+   3.0
+  ],
+  [
+   "eddy_heat",
+   0.0,
+   1.5
+  ],
+  [
+   "subtropical_high",
+   0.0,
+   10.0
+  ],
+  [
+   "subtropical_high_scale_km",
+   400.0,
+   2000.0
+  ],
+  [
+   "subtropical_high_width",
+   5.0,
+   15.0
+  ],
+  [
+   "subtropical_high_seasonality",
+   0.0,
+   1.0
+  ],
+  [
+   "eddy_rainout",
+   0.0,
+   2.0
+  ]
+ ]
+}

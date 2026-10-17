@@ -181,6 +181,62 @@ All of them are computed from the model's own winds, temperatures and
 coastline, never from geographic labels, so they apply unchanged to the
 fantasy map with either spin and any orientation.
 
+## 4b. Physics e2 and e3 on Earth
+
+**e2 rain closure on Earth (r5,** `calibration/earth/earth_e2_r5.json`**):**
+fitting only the five e2 genes around r4 gives a training mean of 2.077
+(r4 2.104) and holdouts Chile 3.60, Cape 2.02, SW Australia 1.82
+(nine-region mean 2.210 against 2.22). Earth keeps the background ascent
+(0.996) and little convective rain (0.13), unlike the free map fit.
+
+**Diagnosis that led to e3.** Summer temperature errors on the r5 fit
+(`output/earth_benchmark/e3_hand_56km/t_error_before_after.png`): the
+Chilean coast was 12-14 °C too hot (La Serena 32 °C against 18 °C, the air
+over the sea off it 32 °C) and San Diego 8 °C too hot. Causes found:
+
+1. the trade easterlies blow desert air offshore at 30° in summer, and air
+   over the sea relaxed to the sea surface in 3 days;
+2. the inland-sea warming measured land within 400 km, so every straight
+   coast counted as half an inland sea and its waters warmed by up to 5 °C;
+3. the planet-wide EBM used 30 % land at every latitude (Earth: 5 % at 40°S,
+   48 % at 40°N);
+4. storm-eddy moisture mixing was one 900 km Gaussian jump, carrying Pacific
+   moisture straight through the Sierra Nevada (Reno 416 mm a year against 241).
+
+**e3 options (default off; a default run is bit-identical):**
+`ebm_land="earth"` (WorldClim land fraction by latitude, mirrored for the
+southern regions; land-sea exchange scaled by the band's ocean share),
+`sea_enclosure="rays"` (share of 16 compass directions closed by land within
+1,000 km), `ocean_tau_stable` (air warmer than the sea cools to it in hours),
+`subtropical_high` + scale/width/seasonality (pressure ~ ocean basin × band
+around the Hadley edge; equatorward, onshore flow on west coasts),
+`eddy_heat` (eddy heat vs moisture exchange) and `eddy_rainout` (the eddy
+moisture mixing in six capped steps that cannot carry more than the crest's
+saturation across a ridge). A lee-descent rain factor was tried and removed
+(Reno 416 -> 409 mm).
+
+By hand on r5 they work where aimed: Chile's summer error +7.9 -> +4.9 °C,
+East China's winter +3.9 -> +2.9 °C; the rain-out alone takes California
+1.78 -> 1.67 and Köppen agreement up in California, Central Asia, Iberia and
+the Levant. Refitted (first stage: the e3 genes and the constants they trade
+against, 240 evaluations each):
+
+| Fit | Training mean (6) | California | Iberia | E China | Chile | Cape | SW Australia | Nine-region mean |
+|---|---|---|---|---|---|---|---|---|
+| r5 (e2) | 2.077 | **1.78** | **2.09** | 3.45 | 3.60 | **2.02** | 1.82 | 2.210 |
+| r6, e3 with Earth's land profile | 2.105 | 2.05 | 2.26 | **3.12** | **3.18** | 2.15 | 1.94 | 2.211 |
+| r6b, e3 with uniform land | 2.077 | 1.89 | 2.19 | 3.27 | 3.48 | 2.04 | **1.79** | **2.197** |
+
+The fits keep the stable marine air (1.3 days) but switch the subtropical
+highs (0.23) and the rain-out (0.05-0.13) nearly off: the highs' onshore flow
+pushes marine air through the smoothed Coast Ranges into the Central Valley
+(Sacramento's summer 17 °C against 25 °C), and the rain-out starves Central
+Asia's winter rain. Earth's land profile helps the southern hemisphere and
+East China but costs California and Iberia. Net: e3 is worth ~0.6 % on the
+nine-region mean and nothing on California and Iberia, so r5 stays the Earth
+reference; the options remain for the map and for finer grids, where coastal
+ranges are resolved.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
