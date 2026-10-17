@@ -93,11 +93,32 @@ details.fate { font-size: .78rem; }
 .tabs { display: flex; gap: 4px; }
 .tabs button { background: none; border: 1px solid var(--rule); color: var(--ink); border-radius: 999px; padding: 4px 12px; font: 500 .82rem var(--font-body); cursor: pointer; }
 .tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
-#board { display: none; grid-column: 1 / -1; grid-row: 2 / -1; overflow-y: auto; min-height: 0; background: var(--bg);
+#board, #pvp { display: none; grid-column: 1 / -1; grid-row: 2 / -1; overflow-y: auto; min-height: 0; background: var(--bg);
   padding-block: 16px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
-.app.on-board > .mapwrap, .app.on-board > .timeline, .app.on-board > aside { display: none; }
-.app.on-board > #board { display: block; }
-.app.on-board .daybox { visibility: hidden; }
+.app.on-board > .mapwrap, .app.on-board > .timeline, .app.on-board > aside,
+.app.on-pvp > .mapwrap, .app.on-pvp > .timeline, .app.on-pvp > aside { display: none; }
+.app.on-board > #board, .app.on-pvp > #pvp { display: block; }
+.app.on-board .daybox, .app.on-pvp .daybox { visibility: hidden; }
+#pvp h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.25rem; margin: 18px 0 8px; }
+#pvp .intro { color: var(--ink-soft); font-size: .84rem; max-width: 760px; margin: 0 0 10px; line-height: 1.45; }
+.h2h { border-collapse: collapse; font-size: .76rem; }
+.h2h th, .h2h td { border: 1px solid var(--rule); padding: 4px 6px; text-align: center; white-space: nowrap; font-variant-numeric: tabular-nums; }
+.h2h th { background: var(--panel-2); font-weight: 600; }
+.h2h th.rowh { text-align: left; position: sticky; left: 0; z-index: 1; }
+.h2h td.self { background: var(--panel-2); }
+.h2h td.win { background: color-mix(in srgb, #2f8a5c 28%, transparent); }
+.h2h td.loss { background: color-mix(in srgb, #b3261e 24%, transparent); }
+.h2h td.even { background: color-mix(in srgb, #9a7b2c 22%, transparent); }
+.h2h .colh { writing-mode: vertical-rl; transform: rotate(180deg); max-height: 140px; text-align: left; }
+ol.battles { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+ol.battles li { background: var(--panel); border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; display: grid;
+  grid-template-columns: 92px minmax(0, 1fr) auto; gap: 10px; align-items: center; cursor: pointer; font-size: .84rem; }
+ol.battles li:hover { background: var(--panel-2); }
+ol.battles .side { display: inline-flex; align-items: center; gap: 5px; flex-wrap: wrap; }
+ol.battles .vs { color: var(--ink-soft); margin: 0 6px; font-size: .78rem; }
+ol.battles .w { font-weight: 600; } ol.battles .l { color: var(--ink-soft); }
+ol.battles .where { color: var(--ink-soft); font-size: .76rem; text-align: right; }
+@media (max-width: 640px) { ol.battles li { grid-template-columns: minmax(0, 1fr); gap: 4px; } ol.battles .where { text-align: left; } }
 #board h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.25rem; margin: 18px 0 8px; }
 #board .intro { color: var(--ink-soft); font-size: .84rem; max-width: 760px; margin: 0 0 10px; line-height: 1.45; }
 .podium { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
@@ -210,7 +231,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
 <div class="app">
   <header>
     <h1>Ravages Campaign Map</h1>
-    <nav class="tabs" aria-label="View"><button type="button" data-tab="map" aria-selected="true">Map</button><button type="button" data-tab="board" aria-selected="false">Leaderboard</button></nav>
+    <nav class="tabs" aria-label="View"><button type="button" data-tab="map" aria-selected="true">Map</button><button type="button" data-tab="board" aria-selected="false">Leaderboard</button><button type="button" data-tab="pvp" aria-selected="false">PvP</button></nav>
     <span class="muted" id="subtitle">Army positions from the ComLoc ledger</span>
     <div class="daybox" aria-live="polite">
       <span class="real" id="realdate">—</span>
@@ -260,6 +281,18 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       <input type="range" id="day" min="0" max="0" value="0" step="1" aria-label="Campaign day">
     </div>
     <div class="legend" id="legend"></div>
+  </section>
+
+  <section id="pvp" aria-label="Player against player">
+    <p class="intro" id="pvpintro"></p>
+    <div class="podium" id="pvppodium"></div>
+    <h2>Every commander's record</h2>
+    <div class="tablewrap"><table class="lb" id="pvptable"></table></div>
+    <h2>Head to head</h2>
+    <p class="intro">Each cell is the row commander's record against the column commander, wins and losses.</p>
+    <div class="tablewrap" style="width: fit-content; max-width: 100%"><table class="h2h" id="h2h"></table></div>
+    <h2>Every battle between players</h2>
+    <ol class="battles" id="battles"></ol>
   </section>
 
   <section id="board" aria-label="Leaderboard">
@@ -1089,10 +1122,89 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   $("racemetric").onchange = () => { raceHidden.clear(); drawRace(); };
   $("lbcmd").onchange = renderBoard;
   $("lbreset").onclick = () => { lbOrder = LBCOLS.map(c => c.k); saveOrder(); renderBoard(); };
+  // ---------------------------------------------------------------- player against player
+  // The ledger logs each side of a fight on its own line ("Battle won",
+  // "Battle lost", "Assault success" ...). Lines of one day whose armies stand
+  // within two hexes of each other are one engagement. Players are the
+  // armies that keep a daily ledger; an engagement between players is one in
+  // which players won and players lost.
+  const isPlayer = (a) => !!a && (a.upkeep || []).some(Boolean);
+  const posOn = (a, d) => { for (const k of [0, -1, 1, -2, 2]) { const h = a.hex[d + k]; if (h != null) return h; } return null; };
+  const ENG = (() => {
+    const byDay = new Map();
+    for (const e of events) { if (!e.a || (e.kind !== "battle" && e.kind !== "assault") || !outcome(e)) continue;
+      const h = posOn(e.a, e.d); if (h == null) continue;
+      if (!byDay.has(e.d)) byDay.set(e.d, []); byDay.get(e.d).push({ e, a: e.a, h, o: outcome(e) }); }
+    const out = [];
+    for (const [d, items] of byDay) {
+      const grp = items.map((_, i) => i), find = (i) => grp[i] === i ? i : (grp[i] = find(grp[i]));
+      items.forEach((x, i) => items.forEach((y, j) => { if (j > i && hexDist(x.h, y.h) <= 2) grp[find(i)] = find(j); }));
+      const sets = new Map(); items.forEach((x, i) => { const r = find(i); if (!sets.has(r)) sets.set(r, []); sets.get(r).push(x); });
+      for (const list of sets.values()) {
+        const won = [...new Set(list.filter(x => x.o === "won").map(x => x.a))], lost = [...new Set(list.filter(x => x.o === "lost").map(x => x.a))];
+        const both = won.filter(a => lost.includes(a));            // one army logging both: two fights, sort by majority
+        const W = won.filter(a => !both.includes(a)), L = lost.filter(a => !both.includes(a));
+        const pvp = W.some(isPlayer) && L.some(isPlayer);
+        out.push({ d, h: list[0].h, won: W, lost: L, kinds: [...new Set(list.map(x => x.e.kind))], notes: list.map(x => `${x.a.name}: ${x.e.note}`), pvp });
+      }
+    }
+    return out.sort((a, b) => a.d - b.d);
+  })();
+  function pvpRecord() {
+    const rec = new Map(), h2h = new Map();
+    const get = (a) => { if (!rec.has(a)) rec.set(a, { a, pw: 0, pl: 0, ew: 0, el: 0, foes: new Map() }); return rec.get(a); };
+    for (const g of ENG) {
+      for (const a of g.won) if (isPlayer(a)) { const r = get(a); if (g.pvp) r.pw++; else r.ew++; }
+      for (const a of g.lost) if (isPlayer(a)) { const r = get(a); if (g.pvp) r.pl++; else r.el++; }
+      if (!g.pvp) continue;
+      for (const w of g.won.filter(isPlayer)) for (const l of g.lost.filter(isPlayer)) {
+        const k1 = w.name + "|" + l.name, k2 = l.name + "|" + w.name;
+        h2h.set(k1, (h2h.get(k1) || 0) + 1); h2h.set(k2, h2h.get(k2) || 0);
+        get(w).foes.set(l, (get(w).foes.get(l) || 0) + 1); get(l).foes.set(w, (get(l).foes.get(w) || 0) + 1);
+      }
+    }
+    return { rec: [...rec.values()], h2h };
+  }
+  const sw = (a) => `<span class="sw ${a.commander ? "" : "sq"}" style="background:${a.color}"></span>`;
+  function renderPvp() {
+    const { rec, h2h } = pvpRecord(), battles = ENG.filter(g => g.pvp);
+    const fought = rec.filter(r => r.pw + r.pl > 0);
+    $("pvpintro").textContent = `${battles.length} battles between players, out of ${ENG.length} engagements the ledger records (${D.days[0].date} to ${D.days[NDAY - 1].date}). An engagement is every "won" and "lost" entry of one day within two hexes of each other; players are the armies that keep a daily ledger, so fights against the Blue Scarves, royal hosts and other forces count as PvE. Click a battle to see it on the map.`;
+    const pairs = [...h2h.entries()].filter(([, n]) => n > 0).map(([k, n]) => { const [a, b] = k.split("|"); return { a, b, n, back: h2h.get(b + "|" + a) || 0 }; })
+      .filter(x => x.a < x.b || !h2h.get(x.b + "|" + x.a)).map(x => ({ ...x, total: x.n + x.back })).sort((x, y) => y.total - x.total);
+    const top = (k, f, filter = () => true) => fought.filter(filter).sort((x, y) => f(y) - f(x) || (y.pw + y.pl) - (x.pw + x.pl)).slice(0, 3);
+    const card = (title, list, fv) => `<div class="pc"><h3>${title}</h3><ol>${list.map((r, i) => `<li data-i="${r.a.i}" tabindex="0"><span class="rk">${i + 1}</span>${sw(r.a)}<span class="nm2">${esc(r.a.name)}</span><span class="v">${fv(r)}</span></li>`).join("") || '<li class="empty">No one yet</li>'}</ol></div>`;
+    $("pvppodium").innerHTML = card("Most PvP wins", top("pw", r => r.pw), r => `${r.pw} won`)
+      + card("Best record (2+ battles)", top("rate", r => r.pw / (r.pw + r.pl), r => r.pw + r.pl >= 2), r => `${r.pw}–${r.pl}`)
+      + card("Most PvP defeats", top("pl", r => r.pl), r => `${r.pl} lost`)
+      + `<div class="pc"><h3>Fiercest rivalries</h3><ol>${pairs.slice(0, 3).map((x, i) => `<li><span class="rk">${i + 1}</span><span></span><span class="nm2">${esc(x.a)} · ${esc(x.b)}</span><span class="v">${x.n}–${x.back}</span></li>`).join("") || '<li class="empty">No rivalries yet</li>'}</ol></div>`;
+    document.querySelectorAll("#pvppodium li[data-i]").forEach(el => { const a = armies[+el.dataset.i]; el.onclick = () => pickRow(a); });
+    // records
+    const rows = rec.filter(r => r.pw + r.pl + r.ew + r.el > 0).sort((x, y) => (y.pw - y.pl) - (x.pw - x.pl) || y.pw - x.pw);
+    const nem = (r) => { const f = [...r.foes.entries()].sort((x, y) => y[1] - x[1])[0]; return f ? esc(f[0].name) + ` (${f[1]})` : "—"; };
+    $("pvptable").innerHTML = `<thead><tr><th>Commander</th><th>PvP won</th><th>PvP lost</th><th>PvP record</th><th>PvE won</th><th>PvE lost</th><th>Most fought player</th></tr></thead><tbody>`
+      + rows.map(r => `<tr data-i="${r.a.i}" tabindex="0"><td>${sw(r.a)}${esc(r.a.name)}</td><td>${r.pw}</td><td>${r.pl}</td><td>${r.pw + r.pl ? Math.round(100 * r.pw / (r.pw + r.pl)) + " %" : "—"}</td><td>${r.ew}</td><td>${r.el}</td><td style="font-family: var(--font-body)">${nem(r)}</td></tr>`).join("") + "</tbody>";
+    $("pvptable").querySelectorAll("tbody tr").forEach(tr => { const a = armies[+tr.dataset.i]; tr.onclick = () => pickRow(a); });
+    // head to head
+    const who = fought.sort((x, y) => (y.pw + y.pl) - (x.pw + x.pl)).map(r => r.a);
+    $("h2h").innerHTML = `<thead><tr><th></th>${who.map(a => `<th><span class="colh">${esc(a.name)}</span></th>`).join("")}</tr></thead><tbody>`
+      + who.map(a => `<tr><th class="rowh">${sw(a)}${esc(a.name)}</th>${who.map(b => { if (a === b) return '<td class="self"></td>';
+          const w = h2h.get(a.name + "|" + b.name) || 0, l = h2h.get(b.name + "|" + a.name) || 0;
+          return !w && !l ? "<td></td>" : `<td class="${w > l ? "win" : w < l ? "loss" : "even"}">${w}–${l}</td>`; }).join("")}</tr>`).join("") + "</tbody>";
+    // battle list
+    $("battles").innerHTML = battles.length ? battles.map((g, i) => `<li data-b="${i}" tabindex="0"><span class="mono">${shortDate(g.d)}</span>
+      <span><span class="side w">${g.won.map(a => sw(a) + esc(a.name)).join(", ")}</span><span class="vs">beat</span><span class="side l">${g.lost.map(a => sw(a) + esc(a.name)).join(", ")}</span></span>
+      <span class="where">${esc(placeName(g.h))} · ${g.kinds.includes("assault") ? "assault" : "battle"}</span></li>`).join("")
+      : '<li class="empty">No battles between players found in the ledger.</li>';
+    $("battles").querySelectorAll("li[data-b]").forEach(li => { const g = battles[+li.dataset.b];
+      li.onclick = () => { setTab("map"); if (followed !== g.won[0]) follow(g.won[0]); setDay(g.d); }; });
+  }
+
   function setTab(tab) {
     document.querySelector(".app").classList.toggle("on-board", tab === "board");
+    document.querySelector(".app").classList.toggle("on-pvp", tab === "pvp");
     document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
-    if (tab === "board") renderBoard(); else requestAnimationFrame(() => { resize(); drawTicks(); drawCharts(); });
+    if (tab === "board") renderBoard(); else if (tab === "pvp") renderPvp(); else requestAnimationFrame(() => { resize(); drawTicks(); drawCharts(); });
   }
   document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => setTab(b.dataset.tab));
   new ResizeObserver(() => { if (document.querySelector(".app").classList.contains("on-board")) drawRace(); }).observe($("board"));
