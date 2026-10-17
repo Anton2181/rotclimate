@@ -134,6 +134,9 @@ table.lb td .top { color: var(--accent); font-weight: 600; }
 .llegend { position: absolute; left: 10px; top: 10px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule);
   border-radius: 8px; padding: 6px 10px; font-size: .72rem; display: grid; gap: 4px; box-shadow: 0 2px 10px rgb(0 0 0 / .12); max-width: min(300px, calc(100% - 150px)); }
 .llegend[hidden] { display: none; }
+.llegend .scope { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; width: max-content; }
+.llegend .scope button { background: none; border: none; color: var(--ink); font: 500 .72rem var(--font-body); padding: 3px 10px; cursor: pointer; }
+.llegend .scope button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
 .llegend b { font-weight: 600; font-size: .78rem; }
 .llegend .sw2 { display: inline-flex; align-items: center; gap: 4px; margin-right: 8px; white-space: nowrap; }
 .llegend .sw2 i { width: 12px; height: 12px; border-radius: 2px; border: 1px solid rgb(0 0 0 / .25); background: var(--c); }
@@ -342,11 +345,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     return t ? t.name : v ? (v.commandery || v.region || v.terrain) : "Open water"; };
 
   // ---------------------------------------------------------------- state
-  let savedLayer = "";
+  let savedLayer = "", savedScope = "season";
   let t = NDAY - 1, playing = false, speed = 2, trail = 14, followed = null, locked = true, showOut = false, journey = false;
-  try { const s = JSON.parse(localStorage.getItem("ravages-view") || "{}"); if (s.trail != null) trail = s.trail; if (s.speed) speed = s.speed; showOut = !!s.early; if (s.layer) savedLayer = s.layer; } catch (e) { /* storage off */ }
+  try { const s = JSON.parse(localStorage.getItem("ravages-view") || "{}"); if (s.trail != null) trail = s.trail; if (s.speed) speed = s.speed; showOut = !!s.early; if (s.layer) savedLayer = s.layer; if (s.scope) savedScope = s.scope; } catch (e) { /* storage off */ }
   $("trail").value = String(trail); $("speed").value = String(speed); $("earlytog").checked = showOut;
-  const saveView = () => { try { localStorage.setItem("ravages-view", JSON.stringify({ trail, speed, early: showOut, layer })); } catch (e) { /* storage off */ } };
+  const saveView = () => { try { localStorage.setItem("ravages-view", JSON.stringify({ trail, speed, early: showOut, layer, scope: econScope })); } catch (e) { /* storage off */ } };
   // framanders ride in their Sakar's ledger column until they are raised;
   // commanders who leave the campaign (killed, retired) stand still in it after
   const alive = (a, i) => showOut || ((a.raised == null || i >= a.raised) && (a.ended == null || i <= a.ended));
@@ -404,29 +407,32 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   const seasonOf = (day) => { let st = 0; for (const x of ECON.season_start) if (x <= day) st = x; return st; };
   const fullValue = (h) => 1000 * EMAX[h][0] * EMAX[h][1];
   const econCache = new Map();
-  function econAt(day) {                             // this season's state of every touched hex
-    if (econCache.has(day)) return econCache.get(day);
-    const st = seasonOf(day), m = new Map();
+  let econScope = savedScope === "all" ? "all" : "season";
+  function econAt(day, scope = "season") {          // every touched hex, this season or since the first day
+    const key = scope + day; if (econCache.has(key)) return econCache.get(key);
+    const st = scope === "all" ? 0 : seasonOf(day), m = new Map();
     for (const e of econEvents) { if (e.d < st || e.d > day) continue;
-      let v = m.get(e.h); if (!v) m.set(e.h, v = { dS: 0, dB: 0, dF: 0, rec: 0, fo: 0, tax: 0, today: { rec: 0, fo: 0, tax: 0 } });
-      v.dS += e.dS; v.dB += e.dB; v.dF += e.dF; v.rec += e.rec; v.fo += e.fo; v.tax += e.tax;
+      let v = m.get(e.h); if (!v) m.set(e.h, v = { dS: 0, dB: 0, dF: 0, taken: 0, rec: 0, fo: 0, tax: 0, today: { rec: 0, fo: 0, tax: 0 } });
+      v.dS += e.dS; v.dB += e.dB; v.dF += e.dF; v.taken += Math.max(0, -e.dF); v.rec += e.rec; v.fo += e.fo; v.tax += e.tax;
       if (e.d === day) { v.today.rec += e.rec; v.today.fo += e.fo; v.today.tax += e.tax; } }
-    econCache.set(day, m); return m;
+    econCache.set(key, m); return m;
   }
   const surplusShare = (v) => Math.max(0, Math.min(1, 1 + (v ? v.dF : 0)));
   const hexValue = (h, v) => EMAX[h] ? 1000 * Math.max(0, EMAX[h][0] + (v ? v.dS : 0)) * Math.max(0, EMAX[h][1] + (v ? v.dB : 0)) * surplusShare(v) : 0;
   // the realm day by day: surplus left, actions taken, weather over the land
   const FULL = Object.keys(EMAX).reduce((a, h) => a + fullValue(+h), 0);
   const realm = D.days.map((_, day) => {
-    const m = econAt(day); let lost = 0;
+    const m = econAt(day, "season"); let lost = 0;
     for (const [h, v] of m) if (EMAX[h]) lost += fullValue(h) - hexValue(h, v);
-    const r = { surplus: (FULL - lost) / FULL, value: FULL - lost, rec: 0, fo: 0, tax: 0, wx: {} };
-    for (const e of econEvents) if (e.d === day) { r.rec += e.rec; r.fo += e.fo; r.tax += e.tax; }
+    const r = { surplus: (FULL - lost) / FULL, value: FULL - lost, rec: 0, fo: 0, tax: 0, taken: 0, wx: {} };
+    for (const e of econEvents) if (e.d === day) { r.rec += e.rec; r.fo += e.fo; r.tax += e.tax; if (EMAX[e.h]) r.taken += Math.max(0, -e.dF) * fullValue(e.h); }
     (WX.days[day] || []).forEach((st, k) => { if (st >= 0 && regionLand[k]) r.wx[WX.states[st]] = (r.wx[WX.states[st]] || 0) + 1; });
     return r;
   });
+  realm.forEach((r, i) => { const p = realm[i - 1]; r.cum = { rec: (p ? p.cum.rec : 0) + r.rec, fo: (p ? p.cum.fo : 0) + r.fo, tax: (p ? p.cum.tax : 0) + r.tax, taken: (p ? p.cum.taken : 0) + r.taken }; });
   const LAYERS = {
-    surplus: { title: "Wealth surplus left this season", bins: [[0.9, "#fde3a7"], [0.7, "#f9b66d"], [0.5, "#ef7c45"], [0.3, "#d4472c"], [0.1, "#a11d1d"], [-1, "#5c0b0b"]] },
+    surplus: { title: "Wealth surplus left this season", bins: [[0.9, "#fde3a7"], [0.7, "#f9b66d"], [0.5, "#ef7c45"], [0.3, "#d4472c"], [0.1, "#a11d1d"], [-1, "#5c0b0b"]],
+      takenBins: [[3, "#5c0b0b", "3×+"], [2, "#a11d1d", "2–3×"], [1, "#d4472c", "1–2×"], [0.5, "#f9b66d", "½–1×"], [0.01, "#fde3a7", "under ½×"]] },
     recruit: { title: "Recruitment this season", key: "rec", colors: ["#d9c7ef", "#b08fdc", "#8655c4", "#5b2a9a", "#35115f"] },
     forage: { title: "Foraging this season", key: "fo", colors: ["#c6e6f0", "#86c5dc", "#3f97bd", "#17668f", "#0a3a5c"] },
     tax: { title: "Taxation this season", key: "tax", colors: ["#f6e6b0", "#e8c867", "#c99a2e", "#97681a", "#5f3d0b"] },
@@ -436,15 +442,16 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   let layer = "";
   const layerCache = new Map();
   function layerPaths(kind, day) {                   // one Path2D per colour, rebuilt per day
-    const key = kind + day; if (layerCache.has(key)) return layerCache.get(key);
+    const key = kind + econScope + day; if (layerCache.has(key)) return layerCache.get(key);
     const out = [], today = new Path2D(); let any = false;
     if (kind === "weather") { (WX.days[day] || []).forEach((st, k) => { const c = st >= 0 ? WCOL[WX.states[st]] : null; if (c) out.push([c, regionPath[k]]); }); }
     else {
-      const m = econAt(day), L = LAYERS[kind], paths = new Map();
+      const m = econAt(day, econScope), L = LAYERS[kind], paths = new Map();
       for (const [h, v] of m) {
         let col = null;
-        if (kind === "surplus") { const f = surplusShare(v); if (f < 1) col = L.bins.find(([lo]) => f >= lo)[1]; }
-        else { const b = countBin(v[L.key]); if (b >= 0) col = L.colors[b]; if (v.today[L.key] > 0) { hexPath(today, h); any = true; } }
+        if (kind === "surplus" && econScope === "all") { const b = L.takenBins.find(([lo]) => v.taken >= lo); if (b) col = b[1]; }
+        else if (kind === "surplus") { const f = surplusShare(v); if (f < 1) col = L.bins.find(([lo]) => f >= lo)[1]; }
+        else { const b = countBin(econScope === "all" ? Math.ceil(v[L.key] / 3) : v[L.key]); if (b >= 0) col = L.colors[b]; if (v.today[L.key] > 0) { hexPath(today, h); any = true; } }
         if (!col) continue;
         if (!paths.has(col)) paths.set(col, new Path2D()); hexPath(paths.get(col), h);
       }
@@ -474,22 +481,26 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   function renderLayerLegend() {
     const box = $("llegend"); box.hidden = !layer; if (!layer) return;
     const day = Math.round(t), st = seasonOf(day);
-    const since = `since ${shortDate(st)} (${esc(D.days[st].season || "season")} start; the sheet resets hexes each season)`;
+    const all = econScope === "all";
+    const since = all ? `since ${shortDate(0)}, across every season` : `since ${shortDate(st)} (${esc(D.days[st].season || "season")} start; the sheet resets hexes each season)`;
+    const scopeSw = `<div class="scope" role="group" aria-label="Period"><button type="button" data-scope="season" aria-pressed="${!all}">This season</button><button type="button" data-scope="all" aria-pressed="${all}">All seasons</button></div>`;
     let html = "";
     if (layer === "weather") html = `<b>Weather on ${shortDate(day)}</b><div>${WX.states.map(n => `<span class="sw2"><i style="--c:${WCOL[n] || WSWATCH[n] || "#eee"}"></i>${esc(n)}</span>`).join("")}</div>`;
-    else if (layer === "surplus") html = `<b>${LAYERS.surplus.title}</b><div>${LAYERS.surplus.bins.map(([lo, c], i) => `<span class="sw2"><i style="--c:${c}"></i>${i ? (lo < 0 ? "<10%" : `${Math.round(lo * 100)}%+`) : "90%+"}</span>`).join("")}</div><div class="muted">Untouched hexes are not coloured; ${since}.</div>`;
-    else { const L = LAYERS[layer]; html = `<b>${L.title}</b><div>${L.colors.map((c, i) => `<span class="sw2"><i style="--c:${c}"></i>${["1", "2–3", "4–6", "7–10", "11+"][i]}</span>`).join("")}<span class="sw2"><i style="--c:transparent; border: 2px solid #111"></i>today</span></div><div class="muted">Times a hex was ${layer === "recruit" ? "recruited" : layer === "forage" ? "foraged" : "taxed"}, ${since}.</div>`; }
+    else if (layer === "surplus" && all) html = `<b>Wealth surplus taken, all seasons</b>${scopeSw}<div>${LAYERS.surplus.takenBins.slice().reverse().map(([, c, l]) => `<span class="sw2"><i style="--c:${c}"></i>${l}</span>`).join("")}</div><div class="muted">In multiples of the hex's full surplus, ${since}.</div>`;
+    else if (layer === "surplus") html = `<b>${LAYERS.surplus.title}</b>${scopeSw}<div>${LAYERS.surplus.bins.map(([lo, c], i) => `<span class="sw2"><i style="--c:${c}"></i>${i ? (lo < 0 ? "<10%" : `${Math.round(lo * 100)}%+`) : "90%+"}</span>`).join("")}</div><div class="muted">Untouched hexes are not coloured; ${since}.</div>`;
+    else { const L = LAYERS[layer]; html = `<b>${all ? L.title.replace("this season", "in all seasons") : L.title}</b>${scopeSw}<div>${L.colors.map((c, i) => `<span class="sw2"><i style="--c:${c}"></i>${(all ? ["1–3", "4–9", "10–18", "19–30", "31+"] : ["1", "2–3", "4–6", "7–10", "11+"])[i]}</span>`).join("")}<span class="sw2"><i style="--c:transparent; border: 2px solid #111"></i>today</span></div><div class="muted">Times a hex was ${layer === "recruit" ? "recruited" : layer === "forage" ? "foraged" : "taxed"}, ${since}.</div>`; }
     box.innerHTML = html;
+    box.querySelectorAll("[data-scope]").forEach(b => b.onclick = () => { econScope = b.dataset.scope; saveView(); renderLayerLegend(); draw(); });
   }
   $("layer").onchange = (e) => { layer = e.target.value; saveView(); renderLayerLegend(); draw(); };
 
   // ---------------------------------------------------------------- realm charts
   const CHARTS = [
     { id: "wx", title: "Weather over the land", tall: true },
-    { id: "surplus", title: "Wealth surplus left", fmt: (r) => `${Math.round(r.surplus * 100)}% · ${(r.value / 1e6).toFixed(1)}M` },
-    { id: "rec", title: "Recruitment per day", fmt: (r) => `${r.rec}`, color: "#8655c4" },
-    { id: "fo", title: "Foraging per day", fmt: (r) => `${r.fo}`, color: "#17668f" },
-    { id: "tax", title: "Taxation per day", fmt: (r) => `${r.tax}`, color: "#97681a" },
+    { id: "surplus", title: "Wealth surplus left", fmt: (r) => `${Math.round(r.surplus * 100)}% · taken so far ${(r.cum.taken / 1e6).toFixed(1)}M` },
+    { id: "rec", title: "Recruitment per day", fmt: (r) => `${r.rec} · ${r.cum.rec.toLocaleString("en-GB")} so far`, color: "#8655c4" },
+    { id: "fo", title: "Foraging per day", fmt: (r) => `${r.fo} · ${r.cum.fo.toLocaleString("en-GB")} so far`, color: "#17668f" },
+    { id: "tax", title: "Taxation per day", fmt: (r) => `${r.tax} · ${r.cum.tax.toLocaleString("en-GB")} so far`, color: "#97681a" },
   ];
   $("charts").innerHTML = CHARTS.map(c => `<div class="chart ${c.tall ? "tall" : ""}"><div class="ch"><span>${c.title}</span><b id="cv-${c.id}"></b></div><canvas id="c-${c.id}" aria-label="${c.title}, day by day"></canvas></div>`).join("");
   const maxOf = (k) => Math.max(1, ...realm.map(r => r[k]));
@@ -661,8 +672,9 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       + (tw ? `<div>${esc(tw.kind)}${tw.prov ? " of " + esc(tw.prov) : ""}</div>` : "")
       + `<div>${here.length ? "Here: " + here.map(a => esc(a.name)).join(", ") : "No army here on this day."}</div>`
       + (() => { const w = weatherOf(h, day); return w ? `<div>Weather: <b>${esc(w.state)}</b> over ${esc(w.region)}</div>` : ""; })()
-      + (() => { if (!EMAX[h]) return ""; const ev = econAt(day).get(h);
-          return `<div>Wealth surplus ${Math.round(surplusShare(ev) * 100)}% of ${(fullValue(h) / 1e3).toLocaleString("en-GB")}k · this season recruited ${ev?.rec ?? 0}, foraged ${ev?.fo ?? 0}, taxed ${ev?.tax ?? 0}</div>`; })();
+      + (() => { if (!EMAX[h]) return ""; const ev = econAt(day, "season").get(h), ea = econAt(day, "all").get(h);
+          return `<div>Wealth surplus ${Math.round(surplusShare(ev) * 100)}% of ${(fullValue(h) / 1e3).toLocaleString("en-GB")}k · this season recruited ${ev?.rec ?? 0}, foraged ${ev?.fo ?? 0}, taxed ${ev?.tax ?? 0}</div>`
+            + `<div>All seasons: recruited ${ea?.rec ?? 0}, foraged ${ea?.fo ?? 0}, taxed ${ea?.tax ?? 0}, surplus taken ${(ea?.taken ?? 0).toFixed(1)}× (${Math.round((ea?.taken ?? 0) * fullValue(h) / 1e3).toLocaleString("en-GB")}k)</div>`; })();
     box.hidden = false;
   }
   const esc = (x) => String(x ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -946,6 +958,11 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   // ---------------------------------------------------------------- leaderboard
   const int = (v) => v == null ? "—" : Math.round(v).toLocaleString("en-GB");
   const money = (v) => v == null ? "—" : v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "M" : v >= 1e3 ? Math.round(v / 1e3) + "k" : String(Math.round(v));
+  // soldiers per supply eaten, from each army's current muster; the median for armies without one
+  const ratioOf = (a) => { const inf = a.info; if (!inf || !(inf.upkeep > 0)) return null;
+    const n = Object.values(inf.troops).reduce((x, y) => x + y, 0); return n > 0 ? n / inf.upkeep : null; };
+  const RATIOS = armies.map(ratioOf).filter(x => x != null).sort((x, y) => x - y);
+  const MEDIAN_RATIO = RATIOS.length ? RATIOS[Math.floor(RATIOS.length / 2)] : 0.25;
   function statsOf(a) {
     if (a._s) return a._s;
     const j = journeyOf(a), f = { bw: 0, bl: 0, aw: 0, al: 0 };
@@ -955,11 +972,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
     return a._s = { a, hexes: j.hexes, miles: j.hexes * MILES_PER_HEX, days: j.runs.length ? j.last - j.first + 1 : 0, bestDay: j.best.n, towns: j.towns.size,
       bw: f.bw, bl: f.bl, aw: f.aw, al: f.al, wins: f.bw + f.aw, losses: f.bl + f.al,
       troops: inf ? Object.values(inf.troops).reduce((x, y) => x + y, 0) : null, camp: inf ? inf.noncombatants : null, length: inf ? inf.length : null,
-      peak: up.length ? Math.max(...up) : null, taxes: b.taxes || 0, loot: b.loot || 0, foraged: b.foraged || 0, training: b.training || 0, wages: b.wages || 0,
+      peak: up.length ? Math.max(...up) : null,
+      peakTroops: up.length ? Math.max(...up) * (ratioOf(a) ?? MEDIAN_RATIO) : null, peakGuess: ratioOf(a) == null, taxes: b.taxes || 0, loot: b.loot || 0, foraged: b.foraged || 0, training: b.training || 0, wages: b.wages || 0,
       ops: b.operations || 0, det: a.detachments ? a.detachments[0] : null, ledger: up.length > 0 };
   }
   const LBCOLS = [
     { k: "troops", t: "Troops now", f: int, d: "Soldiers under arms now (Commanders tab)" },
+    { k: "peakTroops", t: "Peak troops (est.)", f: (v) => v == null ? "—" : "≈" + int(Math.round(v / 100) * 100), d: "Troops at the army's biggest: its peak daily upkeep times its present soldiers per supply eaten (the median army's for those no longer mustered)" },
     { k: "camp", t: "Camp followers", f: int, d: "Noncombatants with the army now" },
     { k: "length", t: "Column (mi)", f: (v) => v == null ? "—" : v.toFixed(1), d: "Length of the army on the march, now" },
     { k: "peak", t: "Peak upkeep", f: money, d: "Most supplies eaten in one day: a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5, so this tracks the army at its biggest" },
@@ -972,7 +991,8 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   ];
   const PODIUM = [
     ["Most travelled", "hexes", (v) => `${int(v)} hexes`], ["Most victories", "wins", (v) => `${v} won`], ["Largest army now", "troops", (v) => int(v)],
-    ["Longest column", "length", (v) => `${v.toFixed(1)} mi`], ["Biggest at its peak", "peak", (v) => `${money(v)}/day`], ["Taxman", "taxes", money],
+    ["Largest army at its peak", "peakTroops", (v) => `≈${int(Math.round(v / 100) * 100)}`],
+    ["Longest column", "length", (v) => `${v.toFixed(1)} mi`], ["Biggest appetite", "peak", (v) => `${money(v)}/day`], ["Taxman", "taxes", money],
     ["Plunderer", "loot", money], ["Forager", "foraged", money], ["Hardest fought", "losses", (v) => `${v} lost`],
   ];
   let lbSort = { k: "hexes", dir: -1 };
@@ -980,7 +1000,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   const pickRow = (a) => { setTab("map"); if (followed !== a) follow(a); };
   function renderBoard() {
     const list = lbArmies(), st = list.map(statsOf);
-    $("lbintro").textContent = `${list.length} armies compared over the whole campaign (${D.days[0].date} to ${D.days[NDAY - 1].date}). The sheet records no casualty or kill counts, so battles and assaults stand in for them; troop numbers, camp followers and column length are the Commanders tab's current values, and peak upkeep from the daily ledger tracks each army at its biggest.`;
+    $("lbintro").textContent = `${list.length} armies compared over the whole campaign (${D.days[0].date} to ${D.days[NDAY - 1].date}). The sheet records no casualty or kill counts, so battles and assaults stand in for them; troop numbers, camp followers and column length are the Commanders tab's current values. The sheet keeps no troop history, so peak troops are estimated from each army's biggest day of supply use (a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5) at its present mix of men and horses.`;
     $("podium").innerHTML = PODIUM.map(([title, k, fv]) => {
       const top = st.filter(x => x[k] != null && x[k] > 0).sort((x, y) => y[k] - x[k]).slice(0, 3);
       return `<div class="pc"><h3>${title}</h3><ol>${top.map((x, i) => `<li data-i="${x.a.i}" tabindex="0"><span class="rk">${i + 1}</span><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span><span class="nm2">${esc(x.a.name)}</span><span class="v">${fv(x[k])}</span></li>`).join("") || '<li class="empty">No one yet</li>'}</ol></div>`;
