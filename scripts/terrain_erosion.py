@@ -140,19 +140,24 @@ def erode(z, domain, K, dx, steps=12, m=0.5, eps=1e-3):
     return z, A.reshape(z.shape)
 
 
-def uplift_landscape(target, domain, dx, steps=150, K=2e-3, m=0.5, seed=0):
+def uplift_landscape(target, domain, dx, steps=150, K=2e-3, m=0.5, seed=0, jitter=0.5):
     """Grow a landscape to steady state under an uplift pattern shaped like
-    `target` (uplift per step = target / steps * 4, so ranges rise where the
-    drawing puts them) against stream-power erosion. The channel network
-    organises itself from the initial noise, so valleys branch the way real
-    drainage does. Returns the grown surface (not scaled to `target`)."""
+    `target` against stream-power erosion. The uplift is patchy (`jitter`)
+    and every step adds a little fresh noise, so the channel network
+    organises itself into branching valleys instead of the straight lines of
+    a single steepest-descent pass. Returns the grown surface (not scaled to
+    `target`)."""
     rng = np.random.default_rng(seed)
     domain = np.ascontiguousarray(domain, np.bool_)
     z = np.where(domain, rng.random(target.shape) * 5.0, 0.0).astype(np.float64)
-    U = np.where(domain, np.maximum(target, 0.0) * 4.0 / steps, 0.0)
+    patch = rng.standard_normal(target.shape)
+    from scipy import ndimage as ndi
+    patch = ndi.gaussian_filter(patch, 3.0)
+    patch /= patch.std() + 1e-12
+    U = np.where(domain, np.maximum(target, 0.0) * (1.0 + jitter * patch).clip(0.2, None) * 4.0 / steps, 0.0)
     Kf = np.full(target.shape, K, np.float64)
     for _ in range(steps):
-        z += U
+        z += U + np.where(domain, rng.random(target.shape) * 0.02 * U.max(), 0.0)
         recv, dist, order = _flood(z, domain, 1e-3)
         _erode_step(z, recv, dist, order, Kf, float(dx), float(m))
     return z

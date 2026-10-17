@@ -90,6 +90,45 @@ ul.armies li.off .nm, ul.armies li.off .sw { opacity: .4; }
 ul.armies li.early .sw { opacity: .45; border-style: dashed; }
 ul.armies li.early .wh { font-style: italic; }
 details.fate { font-size: .78rem; }
+.tabs { display: flex; gap: 4px; }
+.tabs button { background: none; border: 1px solid var(--rule); color: var(--ink); border-radius: 999px; padding: 4px 12px; font: 500 .82rem var(--font-body); cursor: pointer; }
+.tabs button[aria-selected="true"] { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+#board { display: none; grid-column: 1 / -1; grid-row: 2 / -1; overflow-y: auto; min-height: 0; background: var(--bg);
+  padding-block: 16px 32px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.app.on-board > .mapwrap, .app.on-board > .timeline, .app.on-board > aside { display: none; }
+.app.on-board > #board { display: block; }
+.app.on-board .daybox { visibility: hidden; }
+#board h2 { font-family: var(--font-display); font-weight: 400; font-size: 1.25rem; margin: 18px 0 8px; }
+#board .intro { color: var(--ink-soft); font-size: .84rem; max-width: 760px; margin: 0 0 10px; line-height: 1.45; }
+.podium { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; }
+.podium .pc { background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; padding: 10px 12px; }
+.podium .pc h3 { margin: 0 0 6px; font-size: .78rem; font-weight: 600; color: var(--ink-soft); text-transform: uppercase; letter-spacing: .04em; }
+.podium ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; }
+.podium li { display: grid; grid-template-columns: 18px 14px minmax(0, 1fr) auto; gap: 6px; align-items: center; font-size: .84rem; cursor: pointer; border-radius: 4px; padding: 1px 2px; }
+.podium li:hover { background: var(--panel-2); }
+.podium li .rk { font: 600 .8rem var(--font-mono); color: var(--ink-soft); }
+.podium li:first-child .rk { color: var(--accent); }
+.podium li .nm2 { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.podium li .v { font-family: var(--font-mono); font-variant-numeric: tabular-nums; font-size: .8rem; }
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); border-radius: 10px; background: var(--panel); }
+table.lb { border-collapse: collapse; width: 100%; font-size: .8rem; }
+table.lb th, table.lb td { padding: 6px 8px; text-align: right; white-space: nowrap; border-bottom: 1px solid var(--rule); }
+table.lb th { position: sticky; top: 0; background: var(--panel-2); font-weight: 600; cursor: pointer; user-select: none; font-size: .74rem; }
+table.lb th:first-child, table.lb td:first-child { text-align: left; position: sticky; left: 0; background: var(--panel); z-index: 1; }
+table.lb th:first-child { background: var(--panel-2); z-index: 2; }
+table.lb th[aria-sort="descending"]::after { content: " ▾"; } table.lb th[aria-sort="ascending"]::after { content: " ▴"; }
+table.lb td { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+table.lb td:first-child { font-family: var(--font-body); }
+table.lb tr.gone td { color: var(--ink-soft); }
+table.lb tbody tr { cursor: pointer; } table.lb tbody tr:hover td { background: var(--panel-2); }
+table.lb td .sw { display: inline-block; vertical-align: -2px; margin-right: 6px; width: 10px; height: 10px; }
+table.lb td .top { color: var(--accent); font-weight: 600; }
+.lbctl { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; margin: 0 0 8px; font-size: .8rem; }
+.lbctl select { height: 30px; background: var(--panel-2); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; font: .82rem var(--font-body); }
+#race { width: 100%; height: 260px; display: block; background: var(--panel); border: 1px solid var(--rule); border-radius: 10px; }
+.racekey { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .76rem; margin-top: 6px; }
+.racekey span { display: inline-flex; align-items: center; gap: 5px; cursor: pointer; }
+.racekey i { width: 14px; height: 3px; border-radius: 2px; background: var(--c); }
 .mapctl select { background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; height: 34px;
   font: 500 .75rem var(--font-body); padding: 0 4px; max-width: 120px; }
 .llegend { position: absolute; left: 10px; top: 10px; background: color-mix(in srgb, var(--panel) 94%, transparent); border: 1px solid var(--rule);
@@ -161,6 +200,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
 <div class="app">
   <header>
     <h1>Ravages Campaign Map</h1>
+    <nav class="tabs" aria-label="View"><button type="button" data-tab="map" aria-selected="true">Map</button><button type="button" data-tab="board" aria-selected="false">Leaderboard</button></nav>
     <span class="muted" id="subtitle">Army positions from the ComLoc ledger</span>
     <div class="daybox" aria-live="polite">
       <span class="real" id="realdate">—</span>
@@ -210,6 +250,21 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
       <input type="range" id="day" min="0" max="0" value="0" step="1" aria-label="Campaign day">
     </div>
     <div class="legend" id="legend"></div>
+  </section>
+
+  <section id="board" aria-label="Leaderboard">
+    <p class="intro" id="lbintro"></p>
+    <div class="podium" id="podium"></div>
+    <h2>Over time</h2>
+    <div class="lbctl"><label>Compare <select id="racemetric">
+      <option value="hexes">Hexes marched</option><option value="upkeep">Army size (daily upkeep)</option>
+      <option value="wins">Battles and assaults won</option><option value="fights">Battles and assaults fought</option></select></label>
+      <span class="muted">The eight leaders on the chosen measure; click a name to hide it.</span></div>
+    <canvas id="race" aria-label="Leaders over the campaign"></canvas>
+    <div class="racekey" id="racekey"></div>
+    <h2>Every army</h2>
+    <div class="lbctl"><label><input type="checkbox" id="lbcmd" checked> Commanders only (armies with a ledger)</label><span class="muted">Click a column to sort, a row to follow that army on the map.</span></div>
+    <div class="tablewrap"><table class="lb" id="lbtable"></table></div>
   </section>
 
   <aside>
@@ -301,7 +356,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   const cv = $("map"), ctx = cv.getContext("2d"), wrap = $("mapwrap");
   let W = 0, H = 0, dpr = 1, s = 1, tx = 0, ty = 0;
   const fit = () => { s = Math.min(W / G.width, H / G.height) * 0.98; tx = (W - G.width * s) / 2; ty = (H - G.height * s) / 2; };
-  const resize = () => { dpr = window.devicePixelRatio || 1; const r = wrap.getBoundingClientRect(); const first = !W;
+  const resize = () => { dpr = window.devicePixelRatio || 1; const r = wrap.getBoundingClientRect(); if (!r.width || !r.height) return; const first = !W;
     const cxw = (W / 2 - tx) / s, cyw = (H / 2 - ty) / s; W = r.width; H = r.height;
     cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
     if (first) fit(); else { tx = W / 2 - cxw * s; ty = H / 2 - cyw * s; } draw(); };
@@ -887,6 +942,97 @@ button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visibl
   $("hideall").onclick = () => { armies.forEach(a => a.visible = false); renderList(); drawTicks(); renderDayLog(); draw(); };
 
   $("sourcenote").textContent = `${armies.length} armies over ${NDAY} days (${D.days[0].date} to ${D.days[NDAY - 1].date}), from the ComLoc and ComEvents tabs of ${D.source}. Troops, traits and morale are the ledger's current values. Framanders appear on the day they were raised (their "New subcommander" entry, else their first ledger entry); before that their column only follows their Sakar. Commanders whose daily ledger stops before the sheet does (killed, retired) leave the map after their last entry; armies from ComLocArchive are included. Weather comes from WeatherLog; wealth surplus, recruitment, foraging and taxation from HexArchive and HexEvents, which the sheet resets every season. Armies in a stronghold are drawn at its town marker. One hex is about ${Math.round(MILES_PER_HEX)} miles across.`;
+
+  // ---------------------------------------------------------------- leaderboard
+  const int = (v) => v == null ? "—" : Math.round(v).toLocaleString("en-GB");
+  const money = (v) => v == null ? "—" : v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "M" : v >= 1e3 ? Math.round(v / 1e3) + "k" : String(Math.round(v));
+  function statsOf(a) {
+    if (a._s) return a._s;
+    const j = journeyOf(a), f = { bw: 0, bl: 0, aw: 0, al: 0 };
+    for (const e of events) { if (e.a !== a) continue; const o = outcome(e); if (!o) continue;
+      if (e.kind === "battle") f[o === "won" ? "bw" : "bl"]++; else if (e.kind === "assault") f[o === "won" ? "aw" : "al"]++; }
+    const inf = a.info, up = (a.upkeep || []).filter(Boolean), b = a.books || {};
+    return a._s = { a, hexes: j.hexes, miles: j.hexes * MILES_PER_HEX, days: j.runs.length ? j.last - j.first + 1 : 0, bestDay: j.best.n, towns: j.towns.size,
+      bw: f.bw, bl: f.bl, aw: f.aw, al: f.al, wins: f.bw + f.aw, losses: f.bl + f.al,
+      troops: inf ? Object.values(inf.troops).reduce((x, y) => x + y, 0) : null, camp: inf ? inf.noncombatants : null, length: inf ? inf.length : null,
+      peak: up.length ? Math.max(...up) : null, taxes: b.taxes || 0, loot: b.loot || 0, foraged: b.foraged || 0, training: b.training || 0, wages: b.wages || 0,
+      ops: b.operations || 0, det: a.detachments ? a.detachments[0] : null, ledger: up.length > 0 };
+  }
+  const LBCOLS = [
+    { k: "troops", t: "Troops now", f: int, d: "Soldiers under arms now (Commanders tab)" },
+    { k: "camp", t: "Camp followers", f: int, d: "Noncombatants with the army now" },
+    { k: "length", t: "Column (mi)", f: (v) => v == null ? "—" : v.toFixed(1), d: "Length of the army on the march, now" },
+    { k: "peak", t: "Peak upkeep", f: money, d: "Most supplies eaten in one day: a soldier or camp follower eats 1, a horseman or wagon 10, a mage 5, so this tracks the army at its biggest" },
+    { k: "hexes", t: "Hexes marched", f: int }, { k: "miles", t: "Miles", f: int }, { k: "bestDay", t: "Longest day", f: int, d: "Most hexes covered in one day" },
+    { k: "days", t: "Days in field", f: int }, { k: "towns", t: "Towns visited", f: int },
+    { k: "bw", t: "Battles won", f: int }, { k: "bl", t: "Battles lost", f: int }, { k: "aw", t: "Assaults won", f: int }, { k: "al", t: "Assaults failed", f: int },
+    { k: "taxes", t: "Taxes", f: money, d: "Coin from taxation entries" }, { k: "loot", t: "Loot", f: money, d: "Coin from loot, sack, pillage and ransom entries" },
+    { k: "foraged", t: "Foraged", f: money, d: "Supplies from foraging entries" }, { k: "training", t: "Training spend", f: money, d: "Coin spent on training and recruitment" },
+    { k: "wages", t: "Wages paid", f: money }, { k: "ops", t: "Operations", f: int }, { k: "det", t: "Detachments", f: int, d: "Detachments under command now" },
+  ];
+  const PODIUM = [
+    ["Most travelled", "hexes", (v) => `${int(v)} hexes`], ["Most victories", "wins", (v) => `${v} won`], ["Largest army now", "troops", (v) => int(v)],
+    ["Longest column", "length", (v) => `${v.toFixed(1)} mi`], ["Biggest at its peak", "peak", (v) => `${money(v)}/day`], ["Taxman", "taxes", money],
+    ["Plunderer", "loot", money], ["Forager", "foraged", money], ["Hardest fought", "losses", (v) => `${v} lost`],
+  ];
+  let lbSort = { k: "hexes", dir: -1 };
+  const lbArmies = () => armies.filter(a => !$("lbcmd").checked || statsOf(a).ledger);
+  const pickRow = (a) => { setTab("map"); if (followed !== a) follow(a); };
+  function renderBoard() {
+    const list = lbArmies(), st = list.map(statsOf);
+    $("lbintro").textContent = `${list.length} armies compared over the whole campaign (${D.days[0].date} to ${D.days[NDAY - 1].date}). The sheet records no casualty or kill counts, so battles and assaults stand in for them; troop numbers, camp followers and column length are the Commanders tab's current values, and peak upkeep from the daily ledger tracks each army at its biggest.`;
+    $("podium").innerHTML = PODIUM.map(([title, k, fv]) => {
+      const top = st.filter(x => x[k] != null && x[k] > 0).sort((x, y) => y[k] - x[k]).slice(0, 3);
+      return `<div class="pc"><h3>${title}</h3><ol>${top.map((x, i) => `<li data-i="${x.a.i}" tabindex="0"><span class="rk">${i + 1}</span><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span><span class="nm2">${esc(x.a.name)}</span><span class="v">${fv(x[k])}</span></li>`).join("") || '<li class="empty">No one yet</li>'}</ol></div>`;
+    }).join("");
+    const best = {}; for (const c of LBCOLS) best[c.k] = Math.max(...st.map(x => x[c.k] ?? -Infinity));
+    const sorted = st.slice().sort((x, y) => lbSort.k === "name" ? lbSort.dir * x.a.name.localeCompare(y.a.name) : lbSort.dir * ((x[lbSort.k] ?? -1) - (y[lbSort.k] ?? -1)));
+    $("lbtable").innerHTML = `<thead><tr><th data-k="name" ${lbSort.k === "name" ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}>Army</th>${LBCOLS.map(c => `<th data-k="${c.k}" title="${esc(c.d || c.t)}" ${lbSort.k === c.k ? `aria-sort="${lbSort.dir > 0 ? "ascending" : "descending"}"` : ""}>${c.t}</th>`).join("")}</tr></thead>
+      <tbody>${sorted.map(x => `<tr data-i="${x.a.i}" class="${x.a.ended != null ? "gone" : ""}" tabindex="0"><td><span class="sw ${x.a.commander ? "" : "sq"}" style="background:${x.a.color}"></span>${esc(x.a.name)}${x.a.ended != null ? ` <span class="muted">(left ${shortDate(x.a.ended)})</span>` : ""}</td>${LBCOLS.map(c => `<td>${x[c.k] != null && x[c.k] === best[c.k] && best[c.k] > 0 ? `<span class="top">${c.f(x[c.k])}</span>` : c.f(x[c.k])}</td>`).join("")}</tr>`).join("")}</tbody>`;
+    $("lbtable").querySelectorAll("th").forEach(th => th.onclick = () => { const k = th.dataset.k; lbSort = { k, dir: lbSort.k === k ? -lbSort.dir : (k === "name" ? 1 : -1) }; renderBoard(); });
+    document.querySelectorAll("#lbtable tbody tr, #podium li[data-i]").forEach(el => { const a = armies[+el.dataset.i];
+      el.onclick = () => pickRow(a); el.onkeydown = (e) => { if (e.key === "Enter") pickRow(a); }; });
+    drawRace();
+  }
+  const raceHidden = new Set();
+  function raceSeries(a, metric) {
+    const out = new Array(NDAY).fill(null), first = a.raised ?? 0, last = a.ended ?? NDAY - 1;
+    if (metric === "upkeep") { for (let i = first; i <= last; i++) out[i] = a.upkeep?.[i] ?? null; return out; }
+    let acc = 0; const evs = events.filter(e => e.a === a);
+    for (let i = first; i <= last; i++) {
+      if (metric === "hexes") { if (i > first && a.hex[i] != null && a.hex[i - 1] != null) acc += hexDist(a.hex[i - 1], a.hex[i]); }
+      else for (const e of evs) if (e.d === i && (e.kind === "battle" || e.kind === "assault") && outcome(e) && (metric === "fights" || outcome(e) === "won")) acc++;
+      out[i] = acc;
+    }
+    return out;
+  }
+  function drawRace() {
+    const metric = $("racemetric").value, cv3 = $("race"), box = cv3.getBoundingClientRect(), k = window.devicePixelRatio || 1;
+    if (!box.width) return;
+    cv3.width = Math.round(box.width * k); cv3.height = Math.round(box.height * k);
+    const g = cv3.getContext("2d"); g.setTransform(k, 0, 0, k, 0, 0); g.clearRect(0, 0, box.width, box.height);
+    const ser = lbArmies().map(a => ({ a, v: raceSeries(a, metric) })).map(o => ({ ...o, end: Math.max(0, ...o.v.filter(x => x != null)) }))
+      .filter(o => o.end > 0).sort((x, y) => y.end - x.end).slice(0, 8);
+    const shown = ser.filter(o => !raceHidden.has(o.a.name)), mx = Math.max(1, ...shown.map(o => o.end));
+    const L = 46, Rr = 12, T = 10, B = 22, w = box.width - L - Rr, hh = box.height - T - B, X = (i) => L + w * i / (NDAY - 1), Y = (v) => T + hh * (1 - v / mx);
+    g.strokeStyle = css.getPropertyValue("--rule"); g.fillStyle = css.getPropertyValue("--ink-soft"); g.font = `10px ${css.getPropertyValue("--font-mono")}`; g.lineWidth = 1;
+    for (let q = 0; q <= 4; q++) { const v = mx * q / 4, y = Y(v); g.beginPath(); g.moveTo(L, y); g.lineTo(L + w, y); g.stroke(); g.textAlign = "right"; g.textBaseline = "middle"; g.fillText(metric === "upkeep" ? money(v) : int(v), L - 6, y); }
+    g.textAlign = "left"; g.textBaseline = "top";
+    D.days.forEach((d, i) => { if (d.date.endsWith("-01")) g.fillText(new Date(d.date + "T12:00:00").toLocaleString("en-GB", { month: "short" }), X(i) + 2, T + hh + 6); });
+    for (const o of shown) { g.strokeStyle = o.a.color; g.lineWidth = 2; g.beginPath(); let pen = false;
+      o.v.forEach((v, i) => { if (v == null) { pen = false; return; } pen ? g.lineTo(X(i), Y(v)) : g.moveTo(X(i), Y(v)); pen = true; }); g.stroke(); }
+    $("racekey").innerHTML = ser.map(o => `<span data-n="${esc(o.a.name)}" style="--c:${o.a.color}; opacity:${raceHidden.has(o.a.name) ? 0.35 : 1}"><i></i>${esc(o.a.name)}</span>`).join("");
+    $("racekey").querySelectorAll("span").forEach(sp => sp.onclick = () => { const n = sp.dataset.n; raceHidden.has(n) ? raceHidden.delete(n) : raceHidden.add(n); drawRace(); });
+  }
+  $("racemetric").onchange = () => { raceHidden.clear(); drawRace(); };
+  $("lbcmd").onchange = renderBoard;
+  function setTab(tab) {
+    document.querySelector(".app").classList.toggle("on-board", tab === "board");
+    document.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", String(b.dataset.tab === tab)));
+    if (tab === "board") renderBoard(); else requestAnimationFrame(() => { resize(); drawTicks(); drawCharts(); });
+  }
+  document.querySelectorAll(".tabs button").forEach(b => b.onclick = () => setTab(b.dataset.tab));
+  new ResizeObserver(() => { if (document.querySelector(".app").classList.contains("on-board")) drawRace(); }).observe($("board"));
 
   window.claude?.hot?.snapshot?.(() => ({ t: Math.round(t), f: followed ? followed.name : null }));
   const start = (data) => { if (data && data.t != null) t = data.t; if (data && data.f) followed = byName.get(data.f) || null; $("unfollow").hidden = !followed; $("journeyctl").hidden = !followed; };

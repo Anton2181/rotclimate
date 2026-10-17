@@ -79,11 +79,41 @@ def main(xlsx, out):
         info[n] = dict(traits=[t for t in (g("Trait 1"), g("Trait 2"), g("Trait 3")) if t],
                        tradition=g("Army Tradition"), troops={k: v for k, v in troops.items() if v},
                        morale=g("Current Morale"), speed=g("Speed (Miles/Day)"),
-                       supplies=round(float(g("Current Supplies") or 0)), coin=round(float(g("Current Coin") or 0)))
+                       supplies=round(float(g("Current Supplies") or 0)), coin=round(float(g("Current Coin") or 0)),
+                       wagons=round(float(g("Wagons") or 0)), noncombatants=round(float(g("Noncombatants") or 0)),
+                       length=round(float(g("Army Length (Miles)") or 0), 2), upkeep=round(float(g("Daily Supply Consumption") or 0)))
 
     events = []
     year = int(dates[0][:4])
     first_seen, raised_on, ledger = {}, {}, {}
+    # the ledger's money and supplies, summed per commander for the leaderboard
+    BOOKS = [("foraged", "supplies", 1, r"forag"), ("taxes", "coin", 1, r"tax"),
+             ("loot", "coin", 1, r"loot|sack|pillag|ransom|plunder"), ("loot_supplies", "supplies", 1, r"loot|sack|pillag"),
+             ("training", "coin", -1, r"train|recruit"), ("wages", "coin", -1, r"payday|payment|salary|wage|mercenary"),
+             ("bought", "supplies", 1, r"purchase|buying"), ("operations", None, 1, r"operation")]
+    books = {}
+    upkeep_days = {}
+    ledger_rows = list(wb["ComEvents"].iter_rows(values_only=True))[1:] + list(wb["ComDaily"].iter_rows(values_only=True))[1:]
+    for r in ledger_rows:
+        if not r or not r[0] or not isinstance(r[1], dt.datetime) or len(r) < 6:
+            continue
+        who, note = str(r[0]).strip(), str(r[5] or "").strip()
+        sup = r[2] if isinstance(r[2], (int, float)) else 0.0
+        coin = r[3] if isinstance(r[3], (int, float)) else 0.0
+        b = books.setdefault(who, {k: 0.0 for k, *_ in BOOKS})
+        if re.match(r"supply consumption", note, re.I) and sup < 0:
+            d = iso(r[1].replace(year=year))
+            upkeep_days.setdefault(who, {})[d] = upkeep_days.get(who, {}).get(d, 0.0) - sup
+            continue
+        for key, what, sign, pat in BOOKS:
+            if re.search(pat, note, re.I):
+                if what is None:
+                    b[key] += 1
+                else:
+                    v = sup if what == "supplies" else coin
+                    if v * sign > 0:
+                        b[key] += v * sign
+                break
     for r in list(wb["ComEvents"].iter_rows(values_only=True))[1:]:
         if not r or not r[0] or not isinstance(r[1], dt.datetime):
             continue
@@ -183,6 +213,14 @@ def main(xlsx, out):
                 break
     grid = json.loads((ROOT / "data" / "hexgrid.json").read_text())
 
+    # detachments under each commander now (and how many are mercenaries)
+    detachments = {}
+    for r in list(wb["Detachments"].iter_rows(values_only=True))[1:]:
+        if r and r[0] and r[1] and r[2] != "Wagons":
+            d = detachments.setdefault(str(r[1]).strip(), [0, 0])
+            d[0] += 1
+            d[1] += bool(r[4])
+
     # Weather: one state per region per day
     wl = list(wb["WeatherLog"].iter_rows(values_only=True))
     regions = [str(c).strip() for c in wl[0][2:] if c]
@@ -252,7 +290,10 @@ def main(xlsx, out):
 
     data = dict(days=days, armies=[dict(name=n, hex=pos[n], info=info.get(n), raised=raised.get(n),
                                         parent=parent.get(n), ended=ended.get(n), fate=fate.get(n),
-                                        archived=n in archived)
+                                        archived=n in archived,
+                                        books={k: round(v) for k, v in books.get(n, {}).items()},
+                                        upkeep=[round(upkeep_days.get(n, {}).get(d, 0)) or None for d in dates],
+                                        detachments=detachments.get(n))
                                    for n in names],
                 events=events, hexes=hexes, towns=towns, anchors=anchors,
                 weather=dict(regions=regions, states=states, days=weather, hexreg=hexreg),
