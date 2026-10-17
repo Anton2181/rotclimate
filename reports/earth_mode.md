@@ -347,6 +347,15 @@ current free fit is not a lucky local optimum among those tried, though the
 two runners-up (the live atlas world and random world 2) had far fewer
 evaluations behind them.
 
+Polishing the runner-up changed that. Random world 2, refined at downsample
+32 (0.505 there) and then at 16 (193 evaluations, 0.527), scores **0.520 at
+downsample 8 against 0.497 for the previous free fit** (strict agreement
+59.1% against 57.4%). It is now the free-fit atlas: reversed spin, 32.9°N,
+15.8° tilt, true north 7.4° anticlockwise of the map's top edge
+(`calibration/earth/free_d2_polish_ds16.json`). It trades some Mediterranean
+purity (78% Cs, 11% dry, against 82% and under 1%) for better cold-wet,
+warm-wet and swamp recall.
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by
