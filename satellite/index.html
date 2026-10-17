@@ -1,0 +1,191 @@
+<title>Rotclimate Orbital View</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500&family=Source+Sans+3:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* layout: one full-bleed imagery canvas under a slim instrument bar; legend and notes float over the sea */
+:root {
+  --ground: #0d141c;      /* night side of the planet */
+  --panel: #151f2a;
+  --panel-2: #1d2a37;
+  --line: #2c3b4a;
+  --ink: #e4e9ee;
+  --ink-soft: #94a3b1;
+  --accent: #e9b65c;      /* low sun on the terminator */
+  --accent-ink: #1b1306;
+  --font-display: "Spectral SC", "Cormorant SC", Georgia, serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, Menlo, monospace;
+  color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--ground); color: var(--ink); font-family: var(--font-body); font-size: 14px; }
+.app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr); }
+header { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 18px; background: var(--panel); border-bottom: 1px solid var(--line);
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1 { margin: 0; font-family: var(--font-display); font-weight: 500; font-size: 1.45rem; letter-spacing: .02em; text-wrap: balance; }
+.world { font-family: var(--font-mono); font-size: .76rem; color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-left: auto; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; }
+.seg button { background: none; border: none; color: var(--ink); font: 500 .82rem var(--font-body); padding: 5px 13px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); }
+.tog { display: inline-flex; align-items: center; gap: 6px; font-size: .82rem; color: var(--ink-soft); cursor: pointer; }
+.stage { position: relative; overflow: hidden; touch-action: none; background: var(--ground); min-height: 0; }
+canvas#view { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; }
+canvas#view.dragging { cursor: grabbing; }
+.zoom { position: absolute; top: 10px; right: max(10px, env(safe-area-inset-right, 0px)); display: grid; gap: 6px; }
+.zoom button { width: 36px; height: 36px; background: var(--panel); color: var(--ink); border: 1px solid var(--line); border-radius: 8px; font: 600 1rem var(--font-body); cursor: pointer; }
+.legend { position: absolute; left: max(10px, env(safe-area-inset-left, 0px)); bottom: 10px; background: color-mix(in srgb, var(--panel) 92%, transparent);
+  border: 1px solid var(--line); border-radius: 10px; padding: 8px 12px; max-width: min(360px, calc(100% - 70px)); font-size: .78rem; display: grid; gap: 6px; }
+.legend summary { cursor: pointer; font-weight: 600; font-size: .8rem; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-soft); }
+.legend ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; }
+.legend li { display: flex; align-items: center; gap: 7px; min-width: 0; }
+.legend i { flex: none; width: 13px; height: 13px; border-radius: 3px; background: var(--c); box-shadow: inset 0 0 0 1px rgb(255 255 255 / .12); }
+.legend p { margin: 0; color: var(--ink-soft); line-height: 1.4; }
+.hint { position: absolute; top: 10px; left: max(10px, env(safe-area-inset-left, 0px)); font-size: .74rem; color: var(--ink-soft);
+  background: color-mix(in srgb, var(--panel) 85%, transparent); border: 1px solid var(--line); border-radius: 999px; padding: 3px 10px; }
+.status { position: absolute; inset: 0; display: grid; place-items: center; color: var(--ink-soft); font-size: .9rem; pointer-events: none; }
+button:focus-visible, input:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 640px) { h1 { font-size: 1.2rem; } .ctl { margin-left: 0; } .legend ul { grid-template-columns: minmax(0, 1fr); } }
+</style>
+
+<div class="app">
+  <header>
+    <h1>Rotclimate Orbital View</h1>
+    <span class="world" id="world"></span>
+    <div class="ctl">
+      <div class="seg" role="group" aria-label="Season">
+        <button type="button" id="m-summer" aria-pressed="true">Summer</button>
+        <button type="button" id="m-winter" aria-pressed="false">Winter</button>
+        <button type="button" id="m-compare" aria-pressed="false">Compare</button>
+      </div>
+      <label class="tog" for="names"><input type="checkbox" id="names" checked>Place names</label>
+    </div>
+  </header>
+  <div class="stage" id="stage">
+    <canvas id="view" aria-label="Satellite-style picture of the world"></canvas>
+    <div class="status" id="status">Loading the imagery…</div>
+    <span class="hint" id="hint" hidden>Drag the divider to compare</span>
+    <div class="zoom">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">−</button>
+      <button type="button" id="zfit" aria-label="Whole world" title="Whole world">⤢</button>
+    </div>
+    <details class="legend" id="legend" open>
+      <summary>What the colours are</summary>
+      <ul>
+        <li><i style="--c:#2f5326"></i>Broadleaf forest</li>
+        <li><i style="--c:#22392a"></i>Conifer forest</li>
+        <li><i style="--c:#8b8455"></i>Grassland and steppe</li>
+        <li><i style="--c:#a8935e"></i>Grass browned by the dry season</li>
+        <li><i style="--c:#d9b583"></i>Hot desert</li>
+        <li><i style="--c:#a69a82"></i>Cold desert</li>
+        <li><i style="--c:#7d7a64"></i>Tundra and alpine meadow</li>
+        <li><i style="--c:#8c8478"></i>Bare rock</li>
+        <li><i style="--c:#eef1f4"></i>Snow and ice</li>
+        <li><i style="--c:#2f8a9a"></i>Shallow sea</li>
+      </ul>
+      <p id="legendnote"></p>
+    </details>
+  </div>
+</div>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  let M;
+  try { M = await (await fetch("meta.json")).json(); }
+  catch (e) { $("status").textContent = "The imagery did not load. Reload the page to try again."; return; }
+  const load = (src) => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  let IM;
+  try { IM = { summer: await load("summer.webp"), winter: await load("winter.webp") }; }
+  catch (e) { $("status").textContent = "The imagery did not load. Reload the page to try again."; return; }
+  $("status").hidden = true;
+  const Wd = M.width, Hd = M.height, w = M.world;
+  $("world").textContent = `${w.lat}°N · tilt ${w.tilt}° · ${w.retrograde ? "reversed spin" : "Earth's spin"} · north ${Math.abs(w.bearing)}° ${w.bearing < 0 ? "anticlockwise" : "clockwise"} of the top`;
+  $("legendnote").textContent = "Grown from the simulated climate: cover from rain against evaporation, its kind from the temperatures, relief carved by rivers into the drawn heights. Summer and winter are the warmest and coldest three months over land.";
+
+  // ---------------------------------------------------------------- view
+  const cv = $("view"), ctx = cv.getContext("2d"), stage = $("stage");
+  let W = 0, H = 0, dpr = 1, s = 1, tx = 0, ty = 0, mode = "summer", split = 0.5;
+  try { const v = JSON.parse(localStorage.getItem("orbital-view") || "{}"); if (v.mode) mode = v.mode; if (v.names === false) $("names").checked = false; } catch (e) { /* storage off */ }
+  const save = () => { try { localStorage.setItem("orbital-view", JSON.stringify({ mode, names: $("names").checked })); } catch (e) { /* storage off */ } };
+  const minS = () => Math.min(W / Wd, H / Hd);
+  const fit = () => { s = minS(); tx = (W - Wd * s) / 2; ty = (H - Hd * s) / 2; };
+  const clamp = () => { const mw = Wd * s, mh = Hd * s;
+    tx = mw <= W ? (W - mw) / 2 : Math.min(0, Math.max(W - mw, tx)); ty = mh <= H ? (H - mh) / 2 : Math.min(0, Math.max(H - mh, ty)); };
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (!r.width || !r.height) return;
+    const first = !W, cx = (W / 2 - tx) / s, cy = (H / 2 - ty) / s;
+    W = r.width; H = r.height; dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    if (first) fit(); else { s = Math.max(s, minS()); tx = W / 2 - cx * s; ty = H / 2 - cy * s; clamp(); }
+    draw();
+  }
+  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 6); tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
+
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = getComputedStyle(document.documentElement).getPropertyValue("--ground"); ctx.fillRect(0, 0, W, H);
+    ctx.imageSmoothingQuality = "high";
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
+    if (mode === "compare") {
+      ctx.drawImage(IM.winter, 0, 0, Wd, Hd);
+      const xs = (split * W - tx) / s;
+      ctx.save(); ctx.beginPath(); ctx.rect(0, 0, Math.max(0, xs), Hd); ctx.clip(); ctx.drawImage(IM.summer, 0, 0, Wd, Hd); ctx.restore();
+    } else ctx.drawImage(IM[mode], 0, 0, Wd, Hd);
+    if ($("names").checked) drawNames();
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (mode === "compare") {                        // the divider and its handle
+      const x = split * W; ctx.fillStyle = "rgba(255,255,255,0.9)"; ctx.fillRect(x - 1, 0, 2, H);
+      ctx.beginPath(); ctx.arc(x, H / 2, 16, 0, 7); ctx.fill();
+      ctx.fillStyle = "#1b1306"; ctx.font = `600 12px ${getComputedStyle(document.documentElement).getPropertyValue("--font-body")}`;
+      ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText("◀ ▶", x, H / 2 + 1);
+      ctx.textBaseline = "top"; ctx.font = `600 11px ${getComputedStyle(document.documentElement).getPropertyValue("--font-body")}`;
+      const tag = (t, x0, al) => { ctx.textAlign = al; ctx.lineWidth = 3; ctx.strokeStyle = "rgba(0,0,0,0.6)"; ctx.strokeText(t, x0, 12); ctx.fillStyle = "#fff"; ctx.fillText(t, x0, 12); };
+      tag("SUMMER", x - 10, "right"); tag("WINTER", x + 10, "left");
+    }
+  }
+  function drawNames() {
+    const font = getComputedStyle(document.documentElement).getPropertyValue("--font-body");
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (const p of M.places) {
+      if (!p.major && s < 0.75) continue;
+      const fs = (p.major ? 13 : 11) / s;
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(p.x, p.y, (p.major ? 3 : 2.2) / s, 0, 7); ctx.fill();
+      ctx.font = `${p.major ? 600 : 500} ${fs}px ${font}`; ctx.lineWidth = 3 / s; ctx.strokeStyle = "rgba(10,14,20,0.75)";
+      ctx.strokeText(p.name, p.x, p.y + 5 / s); ctx.fillStyle = "#f4f1ea"; ctx.fillText(p.name, p.x, p.y + 5 / s);
+    }
+  }
+
+  // ---------------------------------------------------------------- interaction
+  const pts = new Map(); let drag = null, pinch = null, divider = false;
+  cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (mode === "compare" && Math.abs(e.offsetX - split * W) < 22 && pts.size === 1) { divider = true; return; }
+    if (pts.size === 1) { drag = [e.offsetX, e.offsetY, tx, ty]; cv.classList.add("dragging"); }
+    else if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = [Math.hypot(a[0] - b[0], a[1] - b[1]), s]; drag = null; } });
+  cv.addEventListener("pointermove", (e) => { if (!pts.has(e.pointerId)) { cv.style.cursor = mode === "compare" && Math.abs(e.offsetX - split * W) < 22 ? "ew-resize" : ""; return; }
+    pts.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (divider) { split = Math.min(0.98, Math.max(0.02, e.offsetX / W)); draw(); return; }
+    if (pinch && pts.size === 2) { const [a, b] = [...pts.values()]; zoomAt(pinch[1] * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch[0] / s, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); }
+    else if (drag) { tx = drag[2] + e.offsetX - drag[0]; ty = drag[3] + e.offsetY - drag[1]; clamp(); draw(); } });
+  const up = (e) => { pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) { drag = null; divider = false; cv.classList.remove("dragging"); } };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", up);
+  cv.addEventListener("wheel", (e) => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.offsetX, e.offsetY); }, { passive: false });
+  cv.addEventListener("dblclick", (e) => zoomAt(2, e.offsetX, e.offsetY));
+  $("zin").onclick = () => zoomAt(1.6, W / 2, H / 2);
+  $("zout").onclick = () => zoomAt(1 / 1.6, W / 2, H / 2);
+  $("zfit").onclick = () => { fit(); draw(); };
+  $("names").onchange = () => { save(); draw(); };
+  function setMode(m) { mode = m; ["summer", "winter", "compare"].forEach(k => $("m-" + k).setAttribute("aria-pressed", String(k === m)));
+    $("hint").hidden = m !== "compare"; save(); draw(); }
+  ["summer", "winter", "compare"].forEach(k => $("m-" + k).onclick = () => setMode(k));
+  document.addEventListener("keydown", (e) => { if (e.target.closest("input, button, summary")) return;
+    if (e.key === "s") setMode("summer"); else if (e.key === "w") setMode("winter"); else if (e.key === "c") setMode("compare"); });
+  if (window.matchMedia("(max-width: 640px)").matches) $("legend").open = false;
+  new ResizeObserver(resize).observe(stage);
+  setMode(["summer", "winter", "compare"].includes(mode) ? mode : "summer");
+  resize();
+})();
+</script>

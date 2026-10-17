@@ -6,8 +6,12 @@ regions; its physics was refitted on Earth and new physics added where Earth
 showed what was missing. Read [the Earth report](reports/earth_mode.md);
 pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (world and
-new physics fitted to the map with every setting free: strict 57.1 %, painted
-Mediterranean 82 % Cs and 0 % dry; cold-dry 60 %, hot-dry 43 %),
+physics fitted to the map with every setting free, from the restart campaign's
+best basin: zonefit 0.520, strict 59.1 %; reversed spin, 32.9°N, 15.8° tilt).
+The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
+plays the game's army movements, weather and economy from its master sheet
+(`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
+world is drawn by `scripts/render_satellite.py` (viewer in `satellite/`).
 The workflow is two steps: improve and fit the model on Earth, then calibrate
 it freely on the map. The joint Earth-and-map fit, its atlas and the old live
 atlas are retired.

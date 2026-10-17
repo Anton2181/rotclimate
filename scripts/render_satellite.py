@@ -31,6 +31,7 @@ from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / "scripts"))
 
 from rotclimate.config import Params  # noqa: E402
 from rotclimate.koppen import monthly_weights  # noqa: E402
@@ -114,9 +115,11 @@ def original_terrain():
     return land, tier, lake, rivers
 
 
-def elevation(tier, land, tops, px_scale):
+def elevation(tier, land, tops, px_scale, a_rise=8.0):
     """Continuous elevation (m) from the tier map, as geography.elevation_fullres
-    but at this resolution (its pixel constants scaled by px_scale)."""
+    but at this resolution (its pixel constants scaled by px_scale). `a_rise`
+    sets how far (working-layer pixels) the highest tier takes to climb to
+    its summit level."""
     tops = [0.0] + list(tops)
     h = np.zeros(tier.shape, np.float32)
     for k in range(1, 5):
@@ -131,7 +134,7 @@ def elevation(tier, land, tops, px_scale):
             if k == 1:
                 s = np.minimum(s, 1 - np.exp(-d_lo / (60.0 * px_scale)))
         else:
-            s = 1 - np.exp(-d_lo / (8.0 * px_scale))
+            s = 1 - np.exp(-d_lo / (a_rise * px_scale))
         h += np.where(inside, tops[k - 1] + (tops[k] - tops[k - 1]) * s, 0.0).astype(np.float32)
     h = ndi.gaussian_filter(h, 2.0 * px_scale)
     return np.where(land, np.maximum(h, 1.0), 0.0).astype(np.float32)
@@ -146,6 +149,8 @@ def main():
     ap.add_argument("--reuse", action="store_true", help="reuse <out>/climate_cache.npz instead of simulating")
     ap.add_argument("--relief", type=float, default=1.0, help="scale of the synthetic mountain relief")
     ap.add_argument("--vexag", type=float, default=0.6, help="hillshade vertical exaggeration")
+    ap.add_argument("--rise", type=float, default=22.0, help="how gradually the highest tier climbs (pixels)")
+    ap.add_argument("--erosion-steps", type=int, default=200, help="uplift-erosion steps that carve the valleys")
     ap.add_argument("--crop", type=int, nargs=4, metavar=("X0", "Y0", "X1", "Y1"),
                     help="render only this window of the original drawing (for quick look development)")
     a = ap.parse_args()
@@ -175,7 +180,7 @@ def main():
     H, W = land.shape
     px_scale = W / 2000.0                                   # original pixels per working-layer pixel
     km_px = MAP_KM / W
-    elev = elevation(tier, land, p.tier_tops, px_scale)
+    elev = elevation(tier, land, p.tier_tops, px_scale, a_rise=a.rise)
     # the drawing's tiers are hex clusters: warp the elevation with smooth
     # noise so ridges and tier edges come out organic (coasts stay as drawn)
     yy, xx = np.mgrid[0:H, 0:W].astype(np.float32)
@@ -226,15 +231,25 @@ def main():
                 sSST[k] += up(Tm_c[m], land_fill=False) / 3
     print(f"climate at {W} x {H} ({time.time() - t0:.0f}s)", flush=True)
 
-    # relief: the tier terrain plus a ridged multifractal (ridge networks with
-    # smooth valleys between them), stronger the higher the ground
+    # relief: valleys carved by growing the ranges against river erosion at a
+    # quarter of the resolution (so the drainage branches the way real
+    # drainage does), plus fine ridges for texture, stronger the higher the ground
     relief = smooth(elev, 150.0, 2000.0)
-    ridges = ridged_multifractal((H, W), 11, tuple(s * px_scale / 2.2 for s in (40, 18, 8, 3.5, 1.6)),
-                                 (1.0, 0.9, 0.75, 0.55, 0.35))
-    elev_d = elev + a.relief * relief * (120.0 + 0.22 * elev) * ridges \
+    from terrain_erosion import uplift_landscape
+    f = 4
+    coarse = ndi.zoom(elev, 1 / f, order=1)
+    cdom = ndi.zoom((land | lake).astype(np.float32), 1 / f, order=1) > 0.5
+    t1 = time.time()
+    grown = uplift_landscape(coarse, cdom, km_px * 1000.0 * f, steps=a.erosion_steps, K=3e-3, jitter=0.35, seed=7)
+    valleys = grown - ndi.gaussian_filter(grown, 4.0)
+    valleys /= valleys[ndi.zoom(relief, 1 / f, order=1)[:valleys.shape[0], :valleys.shape[1]] > 0.8].std() + 1e-9
+    valleys = ndi.zoom(valleys, (H / valleys.shape[0], W / valleys.shape[1]), order=3).astype(np.float32)
+    print(f"valleys carved ({time.time() - t1:.0f}s)", flush=True)
+    fine = ridged_multifractal((H, W), 11, tuple(s * px_scale / 2.2 for s in (3.5, 1.6)), (1.0, 0.6))
+    elev_d = elev + a.relief * relief * (120.0 + 0.22 * elev) * (valleys + 0.15 * fine) \
         + 25.0 * fractal((H, W), 12, (2, 6, 18), (0.4, 0.7, 1.0))
     elev_d = np.where(land, np.maximum(elev_d, 1.0), 0.0).astype(np.float32)
-    del ridges
+    del valleys, fine, grown, coarse
     relief_T = p.lapse_rate * (elev_d - elev) / 1000.0          # the detailed relief's own lapse
     from matplotlib.colors import LightSource
 
@@ -294,6 +309,7 @@ def main():
         # (smoothed: its grid cells must not show)
         snowy = ndi.gaussian_filter(smooth(S, 2.0, 30.0), 25.0 * px_scale)
         snow = smooth(-Tloc, -1.0, 4.0) * (0.35 + 0.65 * snowy) * smooth(P, 3.0, 20.0)
+        snow = snow * (1.0 - 0.55 * woodiness)         # forest canopy hides the snow beneath it
         col = mix(col, C["snow"], np.clip(snow, 0, 0.95))
         col = mix(col, C["ice"], smooth(-(Thot - relief_T), 0.5, 3.5))
         col = col * (1.0 + 0.045 * grain[..., None])
