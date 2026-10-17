@@ -46,6 +46,7 @@ SPACES["e2"] = SPACES["e1"] + [g for g in C.SPACE_E2 if g[0] not in {n for n, *_
 SPACES["e2new"] = [g for g in C.SPACE_E2 if g[0] not in {n for n, *_ in C.SPACE_E1}]   # only the e2 additions
 SPACES["e3"] = SPACES["e2"] + C.SPACE_E3_NEW
 SPACES["e3new"] = C.SPACE_E3_NEW
+SPACES["e3b"] = SPACES["e3"] + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E3}]
 SPACE = SPACES["v9"]
 _CASES = {}
 

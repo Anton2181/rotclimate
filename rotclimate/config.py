@@ -152,6 +152,7 @@ class Params:
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
+    eddy_rainout: float = 0.0         # e3: eddy moisture steps capped at crest saturation / this (0 = off)
     subtropical_high: float = 0.0     # e3: m/s, wind around the subtropical highs that sit over the oceans
     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
     subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge

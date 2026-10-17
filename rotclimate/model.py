@@ -88,6 +88,7 @@ def w_sat(T):
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
+EDDY_RAINOUT_STEPS = 6           # e3: steps of the eddy moisture mixing that each meet the terrain
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
 
 
@@ -546,10 +547,22 @@ class ClimateModel:
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
+            mix = (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None
+            if p.eddy_rate > 0 and p.eddy_rainout > 0:
+                # e3: storm eddies carry water vapour by many short steps, not
+                # one jump: a step over a ridge can hold no more than the
+                # crest's saturation, the rest rains out on the windward side.
+                # The single Gaussian let moisture tunnel through the Sierra
+                # Nevada (Reno 416 mm a year against 241 observed).
+                crest = w_sat(T_col - p.lapse_rate * h_km) / p.eddy_rainout
+                n_steps = EDDY_RAINOUT_STEPS
+
+                def mix(water, crest=crest, n_steps=n_steps):
+                    for _ in range(n_steps):
+                        water = np.minimum(gauss(water, sigE / np.sqrt(n_steps)), crest)
+                    return water
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
-                                      A_dyn, instab, bnd, W, exchange,
-                                      (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None, sink=sink,
-                                      closure=closure)
+                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure)
             W, P = solution.water, solution.rain
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)
@@ -568,7 +581,7 @@ class ClimateModel:
                     out[key][k] = val
                 if budget is not None:
                     exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
-                    mixed = gauss(W, sigE) if p.eddy_rate > 0 else W
+                    mixed = mix(W) if mix is not None else W
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
                     terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
                     for key, values in terms.items():

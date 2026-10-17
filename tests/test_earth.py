@@ -185,3 +185,70 @@ def test_e2_seasonal_land_coupling_runs_and_keeps_moisture_converged():
     land = case.grid.land
     assert np.isfinite(on.T).all() and np.isfinite(on.P).all()
     assert not np.allclose(on.T[:, land], off.T[:, land])
+
+
+def test_e3_earth_land_profile_is_mirrored_for_southern_regions_and_more_continental_in_the_north():
+    from rotclimate import ebm
+
+    assert ebm.land_profile("uniform") is None
+    assert ebm.land_profile("earth_mirrored") == ebm.EARTH_LAND[::-1]
+    lat, Tl_u, _, fl_u = ebm._solve(23.44, 0.0167, 13.0, 354.5, 365)
+    _, Tl_e, _, fl_e = ebm._solve(23.44, 0.0167, 13.0, 354.5, 365, profile=ebm.EARTH_LAND)
+    n40, s40 = np.argmin(abs(lat - 40)), np.argmin(abs(lat + 40))
+    assert np.allclose(fl_u, 0.3) and fl_e[n40] > 0.4 and fl_e[s40] < 0.1
+    swing = lambda T, j: T[:, j].max() - T[:, j].min()
+    assert swing(Tl_e, n40) > swing(Tl_u, n40) and swing(Tl_e, s40) < swing(Tl_u, s40)
+    south = earth.REGIONS["chile"]
+    case = earth.EarthCase(name="chile", grid=None, lon=None, obs_T=None, obs_P=None, coast_km=None)
+    assert south["lat0"] < 0
+    assert earth.earth_params(Params(ebm_land="earth"), case).ebm_land == "earth_mirrored"
+    assert earth.earth_params(Params(), case).ebm_land == "uniform"
+
+
+def test_e3_ray_enclosure_separates_inland_seas_from_straight_coasts():
+    from rotclimate.model import enclosed_directions
+
+    land = np.zeros((40, 60), bool)
+    land[:, 30:] = True                        # a straight west coast
+    land[15:25, 40:50] = False                 # a lake inside the continent
+    f = enclosed_directions(land, 18.0)
+    assert 0.3 < f[20, 29] < 0.65              # sea next to a straight coast: half the compass is land
+    assert f[20, 45] == 1.0                    # the lake is closed all round
+
+
+def test_e3_subtropical_high_blows_equatorward_and_onshore_along_a_west_coast():
+    case = _toy_case()
+    g = case.grid
+    g.land[:, :] = False
+    g.land[:, 15:] = True                      # sea to the west, land to the east
+    g.land_frac = g.land.astype(float)
+    g.elev = g.elev_max = np.where(g.land, 100.0, 0.0)
+    from rotclimate.model import ClimateModel
+    p = earth.earth_params(Params(steps_per_year=13, subtropical_high=6.0, subtropical_high_scale_km=300.0), case)
+    m = ClimateModel(p, grid=g)
+    us, vs = m.subtropical_high_wind(1.0, 37.0)        # the ridge at the toy's latitude, in summer
+    row = g.ny // 2
+    assert vs[row, 12:18].mean() < -1.0                 # equatorward along the coast
+    assert us[row, 12:18].mean() > 0.0                  # turned onshore by friction
+    assert Params().subtropical_high == 0.0
+
+
+def test_e3_stable_marine_air_cools_warm_air_over_a_cold_sea_and_rainout_dries_the_lee():
+    case = _toy_case()
+    g = case.grid
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=64, moisture_residual_tol=0.01,
+                  moisture_require_convergence=True, solver_rtol=1e-6, eddy_rate=1.0, eddy_scale_km=600.0)
+    off = earth.run_case(base, case, steps=13)
+    on = earth.run_case(base.replace(ocean_tau_stable=0.2), case, steps=13)
+    sea = ~g.land
+    summer = slice(5, 9)
+    assert on.T[summer][:, sea].mean() < off.T[summer][:, sea].mean()
+    # a 3 km ridge across the continent: terrain-limited eddy moisture dries its far side
+    g.elev = g.elev_max = np.where(g.land, 300.0, 0.0)
+    g.elev[6:18, 14:16] = 3000.0
+    g.elev_max = g.elev.copy()
+    a = earth.run_case(base.replace(westerly_speed=0.0, trade_speed=0.0, monsoon_strength=0.0), case, steps=13)
+    b = earth.run_case(base.replace(westerly_speed=0.0, trade_speed=0.0, monsoon_strength=0.0, eddy_rainout=1.0),
+                       case, steps=13)
+    lee = (slice(None), slice(8, 16), slice(18, 23))
+    assert b.W[lee].mean() < a.W[lee].mean()

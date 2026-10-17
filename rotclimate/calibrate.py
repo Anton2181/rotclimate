@@ -143,6 +143,8 @@ SPACE_NEW = SPACE_E1_NEW + SPACE_E2_NEW          # every addition since v9, arou
 SPACE_E3 = SPACE_E2 + [("ocean_tau_stable", 0.05, 3.0), ("eddy_heat", 0.0, 1.5), ("subtropical_high", 0.0, 10.0),
                        ("subtropical_high_scale_km", 400.0, 2000.0), ("subtropical_high_width", 5.0, 15.0),
                        ("subtropical_high_seasonality", 0.0, 1.0)]
+# e3b: terrain-limited eddy moisture transport
+SPACE_E3B = SPACE_E3 + [("eddy_rainout", 0.0, 2.0)]
 SPACE_E3_NEW = [g for g in SPACE_E3 if g[0] not in {n for n, *_ in SPACE_E2}]
 
 
