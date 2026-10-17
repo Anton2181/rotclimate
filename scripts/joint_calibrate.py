@@ -105,7 +105,10 @@ def main():
     ap.add_argument("--physics", default="e1", choices=[k for k in SPACES if not k.endswith("new")],
                     help="Earth physics space fitted together with the world")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     a = ap.parse_args()
+    import pickle
+
     import cma
 
     global SPACE
@@ -135,11 +138,17 @@ def main():
                 + " ".join(f"{k[:5]} {v:.2f}" for k, v in r.get("earth", {}).items())
                 + (f" | error {r['error']}" if "error" in r else ""))
 
+    state = out / "state.pkl"
     with mp.get_context("fork").Pool(a.workers) as pool:
-        best = pool.map(evaluate, [(x0, bd, cfg, None)])[0]
-        log.write(json.dumps(best) + "\n"); log.flush()
-        print(show("start", best), flush=True)
-        n = 1
+        if a.resume and state.exists():
+            with state.open("rb") as f:          # our own checkpoint, written below
+                es, best, n = pickle.load(f)
+            print(show(f"resumed at {n} evals, best", best), flush=True)
+        else:
+            best = pool.map(evaluate, [(x0, bd, cfg, None)])[0]
+            log.write(json.dumps(best) + "\n"); log.flush()
+            print(show("start", best), flush=True)
+            n = 1
         while n + a.popsize <= a.evals:
             xs = es.ask()
             cutoff = best["map"]["score"] - a.race if "map" in best else None
@@ -151,6 +160,9 @@ def main():
                     best = r
             log.flush(); n += len(xs)
             Path(out / "best_params.json").write_text(json.dumps(best["params"], indent=1))
+            with (out / "state.tmp").open("wb") as f:
+                pickle.dump((es, best, n), f)
+            (out / "state.tmp").replace(state)
             raced = sum(bool(r.get("raced")) for r in res)
             print(f"[{n:4d} evals, {raced:2d} raced, {time.time() - t0:5.0f}s] " + show("best", best)
                   + f" | per class {json.dumps({k: round(v, 2) for k, v in best['map']['per_class'].items()})}",
