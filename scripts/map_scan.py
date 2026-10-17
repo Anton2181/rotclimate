@@ -22,7 +22,10 @@ from rotclimate.calibrate import evaluate_params  # noqa: E402
 def one(args):
     start, over, ds = args
     p = load(start).replace(downsample=ds, solver_rtol=1e-5, solver_require_convergence=False, **over)
-    m = evaluate_params(p, "zonefit")
+    try:
+        m = evaluate_params(p, "zonefit")
+    except Exception as e:          # e.g. the temperature-wind iteration not converging
+        return dict(over=over, score=-1.0, accuracy=0.0, recall=None, mediterranean=None, error=repr(e)[:200])
     return dict(over=over, score=m["score"], accuracy=m["accuracy"], recall=m.get("recall"),
                 mediterranean=m.get("mediterranean"))
 

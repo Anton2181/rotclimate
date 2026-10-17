@@ -67,3 +67,7 @@ class TemperatureConvergenceError(RuntimeError):
         super().__init__(f'Temperature/wind failed at seasonal step {step} (day {day:.1f}): '
                          f'{solution.iterations} iterations over {len(solution.stages)} stages, '
                          f'full update {solution.update.max():.6g} C exceeds 0.05 C')
+
+    def __reduce__(self):
+        # picklable for worker pools: rebuilt as a plain RuntimeError with the same message
+        return (RuntimeError, (str(self),))

@@ -272,6 +272,28 @@ wind at the same resolution (`calibration/earth/free_e5_ds32_best.json`).
 The map prefers the thermal wind, so the free fit keeps it: pressure winds
 are the Earth physics, not the map's.
 
+**Correction (17 October): the map does not reject the pressure winds, only
+Earth's settings of them.** The free fit's thermal wind works at a small scale
+(its temperature field smoothed over 366 km, with a 51° cross-isobar angle):
+sea breezes and heat lows. The refit above started from r9's large-scale
+pressure (1.65 hPa/K over 1,870 km, local term 0.12 hPa/K over 100 km) and
+never found that scale. At downsample 32 on the free fit D2 (`scripts/map_scan.py`):
+
+| D2 with | zonefit | strict |
+|---|---|---|
+| its thermal wind (reference) | 0.514 | 59.1 % |
+| pressure winds at its own scale, 2 hPa/K over 366 km | 0.519 | 59.3 % |
+| the same with r9's friction (8.9e-5 land, 3.5e-5 sea) | 0.518 | 59.5 % |
+| **r9's large-scale term + a local term of 2 hPa/K over 366 km** | **0.517** | 59.1 % |
+| r9's large-scale term at half strength + the same local term | 0.486 | 56.2 % |
+| 2 hPa/K over 500 km | 0.479 | 57.1 % |
+
+So one set of wind equations serves both worlds: Earth's planetary-scale
+pressure plus a strong boundary-layer term at ~370 km. On Earth that local
+term costs a little before refitting (training mean 2.038 → 2.070 at 1 hPa/K,
+2.169 at 2 hPa/K; East China improves to 3.20 and 3.09); the two fits
+below settle how strong it should be.
+
 ### 4d. East China, taken apart (17 October)
 
 East China is the worst training region under r9 (3.39 against 1.46-2.09
