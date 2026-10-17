@@ -214,8 +214,13 @@ A joint fit (`scripts/joint_calibrate.py`) then fitted physics and world
 together to the map, the physics penalised as soon as its mean Earth climate
 distance rose above 2.25: best zonefit 0.202 at Earth distance 2.23
 (`calibration/earth/joint_e1_retro.json`, the Earth-physics atlas). A free fit
-of the same physics with no Earth constraint reached 0.458
-(`free_e2new_retro.json`, the free-fit atlas).
+of the same physics with no Earth constraint reached 0.458 in stages
+(`free_e2new_retro.json`) and 0.499 with every world and physics setting free
+at once (`free_e2_all_retro.json`, the free-fit atlas: per-setting CMA-ES step
+sizes, 0.1-0.5 x sigma for the world's orientation, latitude, tilt, tiers and
+beyond-the-edge land; at downsample 8 strict 57.1 %, painted Mediterranean
+82 % Cs and 0 % dry, cold-dry 60 %, hot-dry 43 %, swamp 35 %;
+`output/earth_on_map/free_all_compare.png`).
 
 ### 5.1 What makes the painted cold-dry north dry?
 

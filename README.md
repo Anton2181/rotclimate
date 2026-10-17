@@ -5,14 +5,15 @@ geography and is scored against observed climate (WorldClim 2.1) in nine
 regions; its physics was refitted on Earth and new physics added where Earth
 showed what was missing. Read [the Earth report](reports/earth_mode.md);
 pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
-[free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (new physics
-fitted to the map: painted Mediterranean 2.7 % dry, 64 % Cs; cold-dry weaker),
+[free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (world and
+new physics fitted to the map with every setting free: strict 57.1 %, painted
+Mediterranean 82 % Cs and 0 % dry; cold-dry 60 %, hot-dry 43 %),
 [Earth-physics atlas](https://claude.ai/artifact/R1XvbWWCreL3ouVYh8jeLP)
 (physics that also fits Earth). The live atlas below is unchanged.
 
 ```sh
 python -I scripts/earth_benchmark.py --params calibration/earth/earth_e1_r4.json --cell-km 56 --out output/earth_benchmark/r4
-python -I scripts/build_atlas_variant.py --params calibration/earth/free_e2new_retro.json --name free_fit \
+python -I scripts/build_atlas_variant.py --params calibration/earth/free_e2_all_retro.json --name free_fit \
     --title "Rotclimate Free-Fit Atlas" --eyebrow "..." --downsample 8
 ```
 

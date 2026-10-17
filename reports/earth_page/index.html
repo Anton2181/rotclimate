@@ -156,7 +156,7 @@ footer { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(-
     </figure>
     <figure>
       <img src="img/map_free_fit.png" alt="Painted zones against the live atlas and the free fit with the new physics" loading="lazy">
-      <figcaption>The new physics fitted freely to the map (no Earth constraint): 51.1% strict agreement (atlas 50.1%) with the painted Mediterranean 61% Cs and only 6.5% dry (atlas 39% and 11%); cold-dry and hot-dry recall drop by 3 and 6 points.</figcaption>
+      <figcaption>The new physics fitted freely to the map (no Earth constraint), first in stages and then with every setting free at once (bottom row): 58.5% strict agreement (live atlas 50.1%), the painted Mediterranean 84% Cs and 0% dry (atlas 39% and 11%), swamp 33% (11%); cold-dry 63% (72%) and hot-dry 45% (61%) are lower.</figcaption>
     </figure>
     <p class="col">A literature check on the cold-dry north: Earth's dry mid-latitude interiors owe their aridity first to mountains upwind and very long distances from a windward coast (Manabe &amp; Broccoli 1990). Where neither is drawn, physics that works on Earth makes the interior subhumid, so that gap may belong to the map rather than the model.</p>
   </section>
@@ -168,12 +168,12 @@ footer { font-size: 0.88rem; color: var(--ink-soft); border-top: 1px solid var(-
         <thead><tr><th>Full resolution (downsample 8)</th><th>Strict</th><th>Med dry</th><th>Med Cs</th><th>Cold-dry</th><th>Hot-dry</th><th>Swamp</th></tr></thead>
         <tbody>
           <tr><td>Live atlas (fantasy-fitted physics)</td><td>48.9%</td><td>11.6%</td><td>37.3%</td><td>68.0%</td><td>56.3%</td><td>12.3%</td></tr>
-          <tr><td><a href="https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY">Free-fit atlas</a>: new physics fitted to the map</td><td class="up">49.7%</td><td class="up">2.7%</td><td class="up">63.6%</td><td>47.2%</td><td class="up">58.2%</td><td class="up">27.6%</td></tr>
+          <tr><td><a href="https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY">Free-fit atlas</a>: every setting fitted to the map at once</td><td class="up">57.1%</td><td class="up">0.0%</td><td class="up">82.0%</td><td>60.5%</td><td>43.0%</td><td class="up">35.0%</td></tr>
           <tr><td><a href="https://claude.ai/artifact/R1XvbWWCreL3ouVYh8jeLP">Earth-physics atlas</a>: physics that also fits Earth</td><td>32.3%</td><td class="up">10.5%</td><td class="up">65.4%</td><td>0.2%</td><td>19.8%</td><td>0%</td></tr>
         </tbody>
       </table>
     </div>
-    <p class="col">The free fit passes every promotion guard from the handoff except cold-dry (21 points down against a 2-point limit), so it is published beside the live atlas rather than replacing it. A fit that treats those guards as hard limits is running next.</p>
+    <p class="col">The free fit now has the world and the physics fitted together with every setting free at once (514 evaluations with per-setting step sizes; zonefit 0.458 → 0.499). It beats the live atlas on strict agreement, the Mediterranean and the swamp; cold-dry is 7.5 points and hot-dry 13 points below it, so it stays published beside the live atlas.</p>
   </section>
 
   <section aria-labelledby="h-limits">
