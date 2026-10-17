@@ -1,0 +1,518 @@
+<title>Ravages Harvest Atlas</title>
+<meta charset="utf-8">
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a survey map that fills the window, with the surveyor's ledger beside it (below it on a phone). */
+:root {
+  --bg: #e9ece4;          /* loess field, faintly green */
+  --panel: #f5f6f1;
+  --fg: #1d221e;
+  --muted: #59625b;
+  --line: #c9d0c4;
+  --accent: #9a5b14;      /* ripe millet */
+  --accent-ink: #fff8ec;
+  --ground: #1a2530;      /* behind the map */
+  --chip: #dfe4d8;
+  --font-display: "Marcellus", "Trajan Pro", Georgia, serif;
+  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.8125rem; --step-0: 0.9375rem; --step-1: 1.125rem; --step-2: 1.5rem; --step-3: 2rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #121612; --panel: #191e1a; --fg: #e4e8df; --muted: #9aa597; --line: #2f3830;
+    --accent: #e0a547; --accent-ink: #1b1306; --ground: #0c1218; --chip: #232a24; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #121612; --panel: #191e1a; --fg: #e4e8df; --muted: #9aa597; --line: #2f3830;
+  --accent: #e0a547; --accent-ink: #1b1306; --ground: #0c1218; --chip: #232a24; color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font: var(--step-0)/1.45 var(--font-body); }
+.app { height: 100%; display: grid; grid-template-rows: auto 1fr; gap: 10px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); padding-block: 12px; box-sizing: border-box; }
+.bar { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; min-width: 0; }
+h1 { font: 400 var(--step-2)/1.1 var(--font-display); letter-spacing: 0.02em; margin: 0; text-wrap: balance; }
+.sub { color: var(--muted); font-size: var(--step--1); }
+.layers { display: flex; flex-wrap: wrap; gap: 6px; margin-left: auto; }
+.layers button { font: 500 var(--step--1)/1 var(--font-body); padding: 7px 11px; border-radius: 999px; border: 1px solid var(--line);
+  background: var(--chip); color: var(--fg); cursor: pointer; }
+.layers button[aria-pressed="true"] { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.layers button:focus-visible, .mapctl button:focus-visible, th button:focus-visible, tbody tr:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.body { display: grid; grid-template-columns: minmax(0, 1fr) 390px; gap: 14px; min-height: 0; }
+.stage { position: relative; min-height: 0; border-radius: 6px; overflow: hidden; background: var(--ground); }
+#view { position: absolute; inset: 0; width: 100%; height: 100%; touch-action: none; cursor: grab; }
+#view.dragging { cursor: grabbing; }
+.mapctl { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; align-items: flex-end; }
+.mapctl .zoom { display: flex; flex-direction: column; border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.18); }
+.mapctl button { width: 34px; height: 34px; border: 0; background: rgba(14,20,26,0.78); color: #eef2ea; font: 600 17px/1 var(--font-body); cursor: pointer; }
+.mapctl button + button { border-top: 1px solid rgba(255,255,255,0.14); }
+.toggles { display: flex; flex-direction: column; gap: 4px; background: rgba(14,20,26,0.78); color: #eef2ea; border-radius: 6px; padding: 7px 9px; font-size: var(--step--1); }
+.toggles label { display: flex; gap: 6px; align-items: center; cursor: pointer; }
+.legend { position: absolute; left: 10px; bottom: 10px; background: rgba(14,20,26,0.82); color: #eef2ea; border-radius: 6px; padding: 9px 11px 8px; max-width: min(330px, calc(100% - 20px)); }
+.legend .lt { font: 500 var(--step--1)/1.2 var(--font-body); margin-bottom: 6px; }
+.legend .lt span { color: #b9c2b6; font-weight: 400; }
+.legend canvas { display: block; width: 100%; height: 12px; border-radius: 2px; }
+.legend .ticks { position: relative; height: 15px; font: 10.5px/1 var(--font-data); color: #cfd6cb; margin-top: 3px; }
+.legend .ticks span { position: absolute; transform: translateX(-50%); white-space: nowrap; }
+.legend .ticks span:first-child { transform: none; }
+.legend .ticks span:last-child { transform: translateX(-100%); }
+.swatches { display: grid; grid-template-columns: repeat(2, minmax(0, auto)); gap: 4px 14px; font-size: var(--step--1); }
+.swatches i { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 6px; vertical-align: -1px; }
+.status { position: absolute; inset: 0; display: grid; place-items: center; color: #dfe6da; font-size: var(--step-0); }
+.status[hidden] { display: none; }
+.panel { min-height: 0; overflow-y: auto; background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px 16px 18px;
+  display: flex; flex-direction: column; gap: 18px; }
+.panel h2 { font: 400 var(--step-1)/1.2 var(--font-display); margin: 0 0 6px; letter-spacing: 0.02em; }
+.eyebrow { font: 500 11px/1 var(--font-body); text-transform: uppercase; letter-spacing: 0.09em; color: var(--muted); margin-bottom: 6px; }
+.big { font: 500 var(--step-3)/1 var(--font-data); letter-spacing: -0.02em; }
+.big small { font: 400 var(--step-0) var(--font-body); color: var(--muted); letter-spacing: 0; margin-left: 4px; }
+.lede { margin: 6px 0 0; color: var(--muted); max-width: 62ch; }
+.cropbar { display: flex; height: 10px; border-radius: 3px; overflow: hidden; margin-top: 10px; }
+.cropkey { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--step--1); color: var(--muted); margin-top: 6px; }
+.cropkey i { display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; }
+.probe .reading { display: flex; align-items: baseline; gap: 8px; }
+.probe .reading b { font: 500 var(--step-2)/1 var(--font-data); }
+.probe .reading span { color: var(--muted); }
+.probe .where { font-size: var(--step--1); color: var(--muted); margin: 4px 0 8px; }
+dl.kv { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: var(--step--1); }
+dl.kv dt { color: var(--muted); }
+dl.kv dd { margin: 0; font-family: var(--font-data); font-variant-numeric: tabular-nums; text-align: right; }
+dl.kv dd.on { color: var(--accent); font-weight: 500; }
+.hexcard { margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); font-size: var(--step--1); }
+.hexcard .hn { font-weight: 700; }
+.note { color: var(--muted); font-size: var(--step--1); margin: 0; max-width: 62ch; }
+.tablewrap { overflow-x: auto; margin: 0 -4px; }
+table { border-collapse: collapse; width: 100%; font-size: var(--step--1); }
+th, td { padding: 5px 4px; text-align: left; border-bottom: 1px solid var(--line); vertical-align: middle; }
+th { font-weight: 500; color: var(--muted); white-space: nowrap; }
+th button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
+th button[aria-sort="descending"]::after { content: " ↓"; }
+th button[aria-sort="ascending"]::after { content: " ↑"; }
+td.num, th.num { text-align: right; font-family: var(--font-data); font-variant-numeric: tabular-nums; white-space: nowrap; }
+th.num { font-family: var(--font-body); }
+tbody tr { cursor: pointer; }
+tbody tr:hover { background: color-mix(in srgb, var(--accent) 9%, transparent); }
+tbody tr[aria-selected="true"] { background: color-mix(in srgb, var(--accent) 18%, transparent); }
+td .mini { display: flex; width: 64px; height: 8px; border-radius: 2px; overflow: hidden; }
+details { border-top: 1px solid var(--line); padding-top: 12px; }
+details summary { cursor: pointer; font: 400 var(--step-1)/1.2 var(--font-display); letter-spacing: 0.02em; }
+details[open] summary { margin-bottom: 8px; }
+details p, details li { font-size: var(--step--1); max-width: 62ch; }
+details ol { padding-left: 18px; margin: 6px 0; }
+details h3 { font: 500 var(--step-0)/1.3 var(--font-body); margin: 14px 0 4px; }
+.src { color: var(--muted); }
+.earthfig { margin: 8px 0 10px; }
+.earthfig img { display: block; width: 100%; border-radius: 4px; }
+.earthfig figcaption { font-size: var(--step--1); color: var(--muted); margin-top: 4px; }
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .app { height: auto; }
+  .body { grid-template-columns: minmax(0, 1fr); }
+  .stage { height: 62vh; min-height: 340px; }
+  .panel { overflow: visible; }
+  .layers { margin-left: 0; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="app">
+  <header class="bar">
+    <h1>Ravages Harvest Atlas</h1>
+    <span class="sub" id="world">Farming around 200 AD, grown from the simulated climate</span>
+    <nav class="layers" id="layers" aria-label="Map layer"></nav>
+  </header>
+  <main class="body">
+    <section class="stage" id="stage" aria-label="Map">
+      <canvas id="view"></canvas>
+      <div class="mapctl">
+        <div class="zoom">
+          <button id="zin" type="button" aria-label="Zoom in">+</button>
+          <button id="zout" type="button" aria-label="Zoom out">−</button>
+          <button id="zfit" type="button" aria-label="Show the whole map">⤢</button>
+        </div>
+        <div class="toggles">
+          <label><input type="checkbox" id="t-names" checked> Names</label>
+          <label><input type="checkbox" id="t-hexes"> Hexes</label>
+          <label><input type="checkbox" id="t-rivers" checked> Rivers</label>
+        </div>
+      </div>
+      <div class="legend" id="legend"></div>
+      <div class="status" id="status">Loading the survey…</div>
+    </section>
+    <aside class="panel">
+      <section>
+        <div class="eyebrow">The whole map could feed</div>
+        <div class="big" id="total">…</div>
+        <p class="lede" id="totalnote"></p>
+        <div class="cropbar" id="cropbar"></div>
+        <div class="cropkey" id="cropkey"></div>
+      </section>
+      <section class="probe" id="probe" aria-live="polite">
+        <div class="eyebrow">At this spot</div>
+        <div class="reading"><b id="pv">…</b><span id="pu"></span></div>
+        <div class="where" id="pw">Point at the map to read it.</div>
+        <dl class="kv" id="plist"></dl>
+        <div class="hexcard" id="phex"></div>
+      </section>
+      <section>
+        <h2 id="ltitle"></h2>
+        <p class="note" id="lnote"></p>
+      </section>
+      <section>
+        <h2>Provinces and realms</h2>
+        <p class="note">From the campaign sheet's hexes. Click one to outline it on the map; settlement and wealth are the sheet's own averages.</p>
+        <div class="tablewrap">
+          <table id="prov">
+            <thead><tr>
+              <th><button type="button" data-k="name">Name</button></th>
+              <th class="num"><button type="button" data-k="people">People</button></th>
+              <th class="num"><button type="button" data-k="density">/km²</button></th>
+              <th>Staples</th>
+              <th class="num"><button type="button" data-k="settlement" title="Mean settlement level in the sheet">Settl.</button></th>
+              <th class="num"><button type="button" data-k="wealth" title="Mean wealth base in the sheet">Wealth</button></th>
+            </tr></thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </section>
+      <details id="method">
+        <summary>How the numbers are made</summary>
+        <ol>
+          <li>Monthly temperature and rain come from the climate fit of the map (the free-fit world), with the day/night swing learned from Earth.</li>
+          <li>Evaporation demand: Hargreaves &amp; Samani (1985) from temperature, the day/night swing and the sunlight of the world's latitude and tilt. A 100 mm soil holds water between months.</li>
+          <li>Each staple of a Han and Parthian world (wheat, barley, foxtail millet, paddy rice, date palm) is tried in every season it could fill: its temperature window, its heat sum and its water balance (FAO-33 yield response; under a third of its water, it fails). Land near the rivers is watered: fully within a few km of a navigable river, partly along streams.</li>
+          <li>Yields are low-input yields of the period: about 1 t/ha of wheat or barley, 0.9 t/ha of millet, 1.8 t/ha of paddy, 3 t/ha of dates; net of hulls, milling and seed.</li>
+          <li>People = calories × arable share (by drawn terrain: lowland 85 %, upland 75 %, hills 45 %, mountains 8 %) × 60 % of that in fields × 68 % of the fields sown each year (all of them where a second crop fits) ÷ 1.1 million kcal a person needs a year, losses and draft animals included.</li>
+          <li>The sown share is the one number fitted: run on Earth's climate, the same rules give the Han North China Plain the 29.4 million people its AD 2 census counted. Every other region below is a test.</li>
+        </ol>
+        <p>It is a ceiling: how many farmers the land could carry once fully settled, not how many live there. On Earth, the old cores of the period lived near it; frontier provinces held a tenth to a third of it.</p>
+        <h3>Checked against Earth</h3>
+        <p id="earthnote">The same rules, run on Earth's own climate (WorldClim) with Natural Earth's rivers, against populations of the period (hover a row for its sources). Share is the people who lived there over the people the land could feed.</p>
+        <figure class="earthfig" id="earthfig"><img src="earth.webp" alt="People the land could feed on Earth, from the Atlantic to the Pacific, by the same rules and colours as the map" loading="lazy">
+          <figcaption>The same rules on Earth's own climate, Atlantic to Pacific, 0–56°N. The Nile, the Indus and Mesopotamia stand out from their deserts; Sichuan and the rice south of China are the richest land; deserts and the Tibetan plateau feed almost no one.</figcaption></figure>
+        <div class="tablewrap"><table id="earth"><thead><tr><th>Region</th><th class="num">Could feed</th><th class="num">Lived there</th><th class="num">Share</th></tr></thead><tbody></tbody></table></div>
+        <p class="note">Where a region is known by its density, that density is applied to the land of the outline used here. The old cores (the Han plains, the Wei valley, Syria, Italy) lived near the ceiling; Egypt is above it because Natural Earth draws only two branches of the Delta, so most of the Delta gets no river water here. The Roman West, Mesopotamia under the Parthians and the Han south held a tenth to a quarter of what their land could feed.</p>
+        <h3>Checked against the campaign sheet</h3>
+        <p id="sheetnote"></p>
+        <h3>Sources</h3>
+        <p class="src">Hargreaves &amp; Samani 1985, Applied Engineering in Agriculture 1:96. Allen et al. 1998, FAO Irrigation and Drainage Paper 56. Doorenbos &amp; Kassam 1979, FAO-33 Yield response to water. FAO GAEZ v4 (length of growing period, slope classes). Lieth 1975, Miami model. Galor &amp; Özak 2016, Caloric Suitability Index. Craig, Snow &amp; le Sueur 1999, Parasitology Today 15:105 (MARA). Fick &amp; Hijmans 2017, WorldClim 2.1.</p>
+      </details>
+    </aside>
+  </main>
+</div>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const css = (v) => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+  const fail = () => { $("status").textContent = "The survey did not load. Reload the page to try again."; };
+  let M;
+  try { M = await (await fetch("meta.json")).json(); } catch (e) { fail(); return; }
+  const load = (src) => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  let BASE, RIV; const RAW = {};
+  try {
+    [BASE, RIV] = await Promise.all([load("base.webp"), load("rivers.webp")]);
+    const ims = await Promise.all(M.layers.map(l => load(`layers/${l.key}.png`)));
+    const c = document.createElement("canvas"); c.width = M.grid.w; c.height = M.grid.h;
+    const g = c.getContext("2d", { willReadFrequently: true });
+    ims.forEach((im, i) => { g.clearRect(0, 0, c.width, c.height); g.drawImage(im, 0, 0);
+      const d = g.getImageData(0, 0, c.width, c.height).data, q = new Uint8Array(c.width * c.height);
+      for (let k = 0; k < q.length; k++) q[k] = d[k * 4];
+      RAW[M.layers[i].key] = q; });
+  } catch (e) { fail(); return; }
+  $("status").hidden = true;
+
+  const Wd = M.width, Hd = M.height, gw = M.grid.w, gh = M.grid.h;
+  const w = M.world;
+  if (w) $("world").textContent = `Farming around 200 AD, grown from the simulated climate · ${w.lat}°N, tilt ${w.tilt}°`;
+
+  // ---------------------------------------------------------------- colours
+  const RAMPS = {
+    people: ["#f4ecc4", "#e8c46a", "#d38a3a", "#ad4a2f", "#6e2238", "#2f1638"],
+    food: ["#f1eed2", "#d4dc8f", "#93bf5a", "#4f9343", "#24603a", "#0f3a2a"],
+    season: ["#b7884f", "#dcc27d", "#e9e6b0", "#9fcb76", "#4c9d5d", "#17684f"],
+    npp: ["#efe6c6", "#d3d88d", "#9cc26a", "#5a9a4c", "#2c6c3d", "#113f2b"],
+    water: ["#b5602c", "#e1a75b", "#f1e7bf", "#a9d3cd", "#5a9fbf", "#24578a"],
+    irr: ["#f3f0e3", "#cfe5df", "#8ec7d6", "#4a95c2", "#22609e", "#13366a"],
+    malaria: ["#f2efe3", "#f2d79c", "#eba05f", "#d4583a", "#a2283a", "#5f1430"],
+  };
+  const CROPC = ["#d9b343", "#b4652a", "#4f9d5c", "#7b4a2b", "#9c9c94"];
+  const hex2 = (h) => [1, 3, 5].map(i => parseInt(h.slice(i, i + 2), 16));
+  function lutOf(l) {
+    const out = new Uint8ClampedArray(256 * 4);
+    if (l.kind === "cat") {
+      for (let q = 1; q < 256; q++) { const c = CROPC[((q & 7) - 1)] || "#000000"; const r = hex2(c); out.set([...r, 255], q * 4); }
+      return out;
+    }
+    const st = RAMPS[l.ramp].map(hex2);
+    for (let q = 1; q < 256; q++) {
+      const t = (q - 1) / 254 * (st.length - 1), i = Math.min(Math.floor(t), st.length - 2), f = t - i;
+      for (let k = 0; k < 3; k++) out[q * 4 + k] = st[i][k] + (st[i + 1][k] - st[i][k]) * f;
+      out[q * 4 + 3] = 255;
+    }
+    return out;
+  }
+  const LUT = Object.fromEntries(M.layers.map(l => [l.key, lutOf(l)]));
+  const L = Object.fromEntries(M.layers.map(l => [l.key, l]));
+  const value = (l, q) => {
+    if (!q) return null;
+    if (l.kind === "log") return Math.pow(10, Math.log10(l.lo) + (q - 1) / 254 * (Math.log10(l.hi) - Math.log10(l.lo)));
+    return l.lo + (q - 1) / 254 * (l.hi - l.lo);
+  };
+  const fmtN = (v) => v >= 1e6 ? (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + " M" : v >= 1e3 ? Math.round(v / 1e3) + " k" : String(Math.round(v));
+  const FMT = {
+    capacity: (v) => [v >= 100 ? Math.round(v) : v.toFixed(v >= 10 ? 0 : 1), "people per km²"],
+    kcal_ha: (v) => [v.toFixed(1), "million kcal per ha a year"],
+    lgp_days: (v) => [Math.round(v), "growing days"],
+    npp: (v) => [Math.round(v), "g/m² a year"],
+    aridity: (v) => [v.toFixed(2), "rain ÷ evaporation"],
+    irr: (v) => [Math.round(v * 100) + " %", "of the land watered"],
+    malaria: (v) => [v.toFixed(2), "suitability, 0–1"],
+  };
+
+  // ---------------------------------------------------------------- compositing
+  const comp = document.createElement("canvas"); comp.width = Wd; comp.height = Hd; const cc = comp.getContext("2d");
+  const lay = document.createElement("canvas"); lay.width = gw; lay.height = gh; const lc = lay.getContext("2d");
+  let cur = M.layers[0].key;
+  try { const k = localStorage.getItem("harvest-layer"); if (k && L[k]) cur = k; } catch (e) { /* storage off */ }
+  function compose() {
+    const q = RAW[cur], lut = LUT[cur], img = lc.createImageData(gw, gh), d = img.data;
+    for (let i = 0; i < q.length; i++) { const v = q[i]; if (!v) continue; const o = v * 4, j = i * 4; d[j] = lut[o]; d[j + 1] = lut[o + 1]; d[j + 2] = lut[o + 2]; d[j + 3] = 255; }
+    lc.putImageData(img, 0, 0);
+    cc.globalCompositeOperation = "source-over"; cc.drawImage(BASE, 0, 0, Wd, Hd);
+    cc.globalCompositeOperation = "multiply"; cc.imageSmoothingEnabled = true; cc.imageSmoothingQuality = "high"; cc.drawImage(lay, 0, 0, Wd, Hd);
+    cc.globalCompositeOperation = "source-over";
+    if (L[cur].kind === "cat") stripes(q);
+    if ($("t-rivers").checked) cc.drawImage(RIV, 0, 0, Wd, Hd);
+  }
+  function stripes(q) {                     // hatch where a second crop fits
+    const m = lc.createImageData(gw, gh), d = m.data;
+    for (let i = 0; i < q.length; i++) if (q[i] & 8) d[i * 4 + 3] = 255;
+    lc.putImageData(m, 0, 0);
+    const st = document.createElement("canvas"); st.width = Wd; st.height = Hd; const sc = st.getContext("2d");
+    sc.strokeStyle = "rgba(255,250,235,0.6)"; sc.lineWidth = 1.3; sc.beginPath();
+    for (let k = -Hd; k < Wd; k += 6) { sc.moveTo(k, 0); sc.lineTo(k + Hd, Hd); }
+    sc.stroke(); sc.globalCompositeOperation = "destination-in"; sc.imageSmoothingEnabled = true; sc.drawImage(lay, 0, 0, Wd, Hd);
+    cc.drawImage(st, 0, 0);
+  }
+
+  // ---------------------------------------------------------------- hexes
+  const G = M.hexgrid, R = G.dx / Math.sqrt(3);
+  const hexXY = (h) => { const r = Math.floor((h - 1) / G.ncol), c = (h - 1) % G.ncol; return [G.x0 + G.dx * (c + 0.5 * (r % 2)), G.y0 + G.dy * r]; };
+  function hexAt(x, y) {
+    let best = null, bd = Infinity; const r0 = Math.round((y - G.y0) / G.dy);
+    for (let r = r0 - 1; r <= r0 + 1; r++) { if (r < 0) continue;
+      const c0 = Math.round((x - G.x0) / G.dx - 0.5 * (r % 2));
+      for (let c = c0 - 1; c <= c0 + 1; c++) { if (c < 0 || c >= G.ncol) continue;
+        const cx = G.x0 + G.dx * (c + 0.5 * (r % 2)), cy = G.y0 + G.dy * r, d = (x - cx) ** 2 + (y - cy) ** 2;
+        if (d < bd) { bd = d; best = r * G.ncol + c + 1; } } }
+    return best;
+  }
+  const hexPath = (p, h) => { const [cx, cy] = hexXY(h);
+    for (let k = 0; k < 6; k++) { const a = Math.PI / 180 * (60 * k - 90), x = cx + R * Math.cos(a), y = cy + R * Math.sin(a); k ? p.lineTo(x, y) : p.moveTo(x, y); }
+    p.closePath(); };
+  const GRID = new Path2D();
+  for (const h of Object.keys(M.hexes)) hexPath(GRID, +h);
+
+  // ---------------------------------------------------------------- view
+  const cv = $("view"), ctx = cv.getContext("2d"), stage = $("stage");
+  let W = 0, H = 0, dpr = 1, s = 1, tx = 0, ty = 0, selProv = null, probeHex = null;
+  const minS = () => Math.min(W / Wd, H / Hd);
+  const fit = () => { s = minS(); tx = (W - Wd * s) / 2; ty = (H - Hd * s) / 2; };
+  const clamp = () => { const mw = Wd * s, mh = Hd * s;
+    tx = mw <= W ? (W - mw) / 2 : Math.min(0, Math.max(W - mw, tx)); ty = mh <= H ? (H - mh) / 2 : Math.min(0, Math.max(H - mh, ty)); };
+  function resize() {
+    const r = stage.getBoundingClientRect(); if (!r.width || !r.height) return;
+    const first = !W, cx = (W / 2 - tx) / s, cy = (H / 2 - ty) / s;
+    W = r.width; H = r.height; dpr = window.devicePixelRatio || 1;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    if (first) fit(); else { s = Math.max(s, minS()); tx = W / 2 - cx * s; ty = H / 2 - cy * s; clamp(); }
+    draw();
+  }
+  // the layers hold one value per 3.3 km; past 5 screen pixels per map pixel there is nothing more to see
+  function zoomAt(f, px, py) { const ns = Math.min(Math.max(s * f, minS()), 5); tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; clamp(); draw(); }
+  let pending = false;
+  const draw = () => { if (!pending) { pending = true; requestAnimationFrame(paint); } };
+  function paint() {
+    pending = false;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.fillStyle = css("--ground"); ctx.fillRect(0, 0, W, H);
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
+    ctx.imageSmoothingEnabled = true; ctx.imageSmoothingQuality = "high";
+    ctx.drawImage(comp, 0, 0);
+    if ($("t-hexes").checked && s > 0.35) { ctx.lineWidth = 0.7 / s; ctx.strokeStyle = "rgba(255,255,255,0.35)"; ctx.stroke(GRID); }
+    if (selProv) { const p = new Path2D(); selProv.hexes.forEach(h => hexPath(p, h));
+      ctx.fillStyle = "rgba(255,255,255,0.16)"; ctx.fill(p); ctx.lineWidth = 1.6 / s; ctx.strokeStyle = "rgba(255,255,255,0.95)"; ctx.stroke(p); }
+    if (probeHex) { const p = new Path2D(); hexPath(p, probeHex); ctx.lineWidth = 2 / s; ctx.strokeStyle = "#ffffff"; ctx.stroke(p);
+      ctx.lineWidth = 1 / s; ctx.strokeStyle = "rgba(0,0,0,0.6)"; ctx.stroke(p); }
+    if ($("t-names").checked) names();
+  }
+  // names in screen space, cities first; a name that would overlap one already placed is left out
+  const PLACES = [...M.places].sort((a, b) => b.major - a.major);
+  function names() {
+    const font = css("--font-body"), boxes = [];
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.textAlign = "center"; ctx.textBaseline = "top";
+    for (const p of PLACES) {
+      if (p.major ? s < 0.3 : s < 0.9) continue;
+      const x = p.x * s + tx, y = p.y * s + ty;
+      if (x < -50 || y < -20 || x > W + 50 || y > H + 20) continue;
+      const fs = p.major ? 13 : 11;
+      ctx.font = `${p.major ? 700 : 500} ${fs}px ${font}`;
+      const tw = ctx.measureText(p.name).width, b = [x - tw / 2 - 2, y - 3, x + tw / 2 + 2, y + 5 + fs + 2];
+      if (boxes.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1])) continue;
+      boxes.push(b);
+      ctx.fillStyle = "#fff"; ctx.beginPath(); ctx.arc(x, y, p.major ? 3 : 2.2, 0, 7); ctx.fill();
+      ctx.lineWidth = 3; ctx.strokeStyle = "rgba(10,14,20,0.8)"; ctx.lineJoin = "round";
+      ctx.strokeText(p.name, x, y + 5); ctx.fillStyle = "#f6f3ea"; ctx.fillText(p.name, x, y + 5);
+    }
+  }
+
+  // ---------------------------------------------------------------- legend and layer notes
+  function legend() {
+    const l = L[cur], el = $("legend");
+    if (l.kind === "cat") {
+      el.innerHTML = `<div class="lt">${l.title}</div><div class="swatches">${M.crop_classes.map((c, i) => `<span><i style="background:${CROPC[i]}"></i>${c}</span>`).join("")}
+        <span><i style="background:repeating-linear-gradient(135deg,#d9b343 0 2px,#fffaeb 2px 4px)"></i>Second crop fits</span></div>`;
+    } else {
+      const ticks = l.kind === "log" ? [1, 10, 100, 1000].map(v => [v, (Math.log10(v) - Math.log10(l.lo)) / (Math.log10(l.hi) - Math.log10(l.lo))])
+        : [0, 0.25, 0.5, 0.75, 1].map(t => [l.lo + t * (l.hi - l.lo), t]);
+      const lab = (v) => l.key === "irr" ? Math.round(v * 100) + "%" : l.key === "malaria" || l.key === "aridity" ? +v.toFixed(2) : Math.round(v).toLocaleString("en");
+      el.innerHTML = `<div class="lt">${l.title} <span>${l.unit}</span></div><canvas width="256" height="1"></canvas>
+        <div class="ticks">${ticks.map(([v, t]) => `<span style="left:${(t * 100).toFixed(1)}%">${lab(v)}${l.kind === "log" && v === 1000 ? "+" : ""}</span>`).join("")}</div>`;
+      const c = el.querySelector("canvas"), g = c.getContext("2d"), im = g.createImageData(256, 1), lut = LUT[cur];
+      for (let i = 0; i < 256; i++) { const q = 1 + Math.round(i / 255 * 254); im.data.set([lut[q * 4], lut[q * 4 + 1], lut[q * 4 + 2], 255], i * 4); }
+      g.putImageData(im, 0, 0);
+    }
+    $("ltitle").textContent = l.title;
+    $("lnote").textContent = l.note;
+  }
+  const nav = $("layers");
+  M.layers.forEach((l, i) => { const b = document.createElement("button"); b.type = "button"; b.textContent = l.title; b.dataset.k = l.key;
+    b.title = `${l.title} (key ${i + 1})`; b.onclick = () => setLayer(l.key); nav.appendChild(b); });
+  function setLayer(k) {
+    cur = k; [...nav.children].forEach(b => b.setAttribute("aria-pressed", String(b.dataset.k === k)));
+    try { localStorage.setItem("harvest-layer", k); } catch (e) { /* storage off */ }
+    compose(); legend(); if (lastProbe) probe(...lastProbe); draw();
+  }
+
+  // ---------------------------------------------------------------- the reading at a spot
+  const HF = Object.fromEntries(M.hex_fields.map((f, i) => [f, i]));
+  let lastProbe = null;
+  function probe(x, y, label) {
+    lastProbe = [x, y, label];
+    const gx = Math.floor(x / Wd * gw), gy = Math.floor(y / Hd * gh);
+    const inside = gx >= 0 && gy >= 0 && gx < gw && gy < gh, i = gy * gw + gx;
+    const l = L[cur], q = inside ? RAW[cur][i] : 0;
+    if (!q) { $("pv").textContent = "Sea"; $("pu").textContent = ""; }
+    else if (l.kind === "cat") { $("pv").textContent = M.crop_classes[(q & 7) - 1]; $("pu").textContent = q & 8 ? "with a second crop" : ""; }
+    else { const [a, b] = FMT[cur](value(l, q)); $("pv").textContent = a; $("pu").textContent = b; }
+    $("plist").innerHTML = M.layers.filter(m => m.kind !== "cat").map(m => {
+      const v = inside ? value(m, RAW[m.key][i]) : null;
+      return `<dt>${m.title}</dt><dd class="${m.key === cur ? "on" : ""}">${v == null ? "–" : FMT[m.key](v).join(" ").replace(" people per km²", " /km²").replace(" million kcal per ha a year", " M kcal/ha").replace(" of the land watered", "").replace(" suitability, 0–1", "").replace(" rain ÷ evaporation", "").replace(" growing days", " days").replace(" g/m² a year", " g/m²")}</dd>`;
+    }).join("");
+    const h = hexAt(x, y), rec = h && M.hexes[h];
+    probeHex = rec ? h : null;
+    $("pw").textContent = label || (rec ? `Hex ${h}${rec[HF.commandery] ? " · " + rec[HF.commandery] : ""}` : "Open sea");
+    if (rec) {
+      const terr = rec[HF.terrain] || "", prov = rec[HF.province] || "unclaimed", lvl = rec[HF.settlement], wl = rec[HF.wealth];
+      $("phex").innerHTML = `<span class="hn">Hex ${h}</span> · ${prov}${terr ? " · " + terr : ""}<br>
+        Its ${rec[HF.area].toLocaleString("en")} km² of land could feed about <b>${fmtN(rec[HF.people])}</b> people (${rec[HF.capacity]} /km²), mostly on ${M.crop_classes[rec[HF.crop]].toLowerCase()}.
+        <br>Million kcal per hectare: ${M.crop_classes.slice(0, 4).map((c, k) => `${c.toLowerCase()} ${rec[HF.crop_kcal][k].toFixed(1)}`).join(" · ")}.
+        ${lvl ? `<br>Sheet: settlement level ${lvl}, wealth base ${wl}.` : ""}`;
+    } else $("phex").innerHTML = "";
+    draw();
+  }
+
+  // ---------------------------------------------------------------- summary and provinces
+  const S = M.summary;
+  $("total").innerHTML = `${(S.people / 1e6).toFixed(0)} million<small>people</small>`;
+  $("totalnote").textContent = `${Math.round(S.density)} per km² over ${(S.land_km2 / 1e6).toFixed(2)} million km² of land, if every field were farmed the way Han and Parthian farmers did. ${Math.round(S.double * 100)} % of the land could carry a second crop.`;
+  const cropsS = M.crop_classes.map(c => S.crops[c] || 0);
+  $("cropbar").innerHTML = cropsS.map((v, i) => `<span style="flex:${v};background:${CROPC[i]}" title="${M.crop_classes[i]} ${Math.round(v * 100)} %"></span>`).join("");
+  $("cropkey").innerHTML = cropsS.map((v, i) => v > 0.004 ? `<span><i style="background:${CROPC[i]}"></i>${M.crop_classes[i]} ${Math.round(v * 100)} %</span>` : "").join("");
+  let sortK = "people", sortDir = -1;
+  const tb = $("prov").querySelector("tbody");
+  function provTable() {
+    const rows = [...M.provinces].sort((a, b) => { const x = a[sortK], y = b[sortK];
+      if (typeof x === "string") return sortDir * x.localeCompare(y); return sortDir * ((x ?? -1) - (y ?? -1)); });
+    tb.innerHTML = rows.map(p => `<tr tabindex="0" data-n="${encodeURIComponent(p.name)}" aria-selected="${selProv && selProv.name === p.name}">
+      <td>${p.name}</td><td class="num">${fmtN(p.people)}</td><td class="num">${Math.round(p.density)}</td>
+      <td><span class="mini">${p.crops.map((v, i) => `<span style="flex:${v};background:${CROPC[i]}"></span>`).join("")}</span></td>
+      <td class="num">${p.settlement ?? "–"}</td><td class="num">${p.wealth ?? "–"}</td></tr>`).join("");
+    $("prov").querySelectorAll("th button").forEach(b => b.setAttribute("aria-sort", b.dataset.k === sortK ? (sortDir < 0 ? "descending" : "ascending") : "none"));
+  }
+  $("prov").querySelectorAll("th button").forEach(b => b.onclick = () => {
+    if (sortK === b.dataset.k) sortDir = -sortDir; else { sortK = b.dataset.k; sortDir = b.dataset.k === "name" ? 1 : -1; }
+    provTable(); });
+  function pickProv(tr) {
+    const n = decodeURIComponent(tr.dataset.n), p = M.provinces.find(r => r.name === n);
+    selProv = selProv && selProv.name === n ? null : p;
+    if (selProv) {
+      const xy = selProv.hexes.map(hexXY), xs = xy.map(a => a[0]), ys = xy.map(a => a[1]);
+      const x0 = Math.min(...xs) - G.dx, x1 = Math.max(...xs) + G.dx, y0 = Math.min(...ys) - G.dy, y1 = Math.max(...ys) + G.dy;
+      s = Math.min(Math.max(Math.min(W / (x1 - x0), H / (y1 - y0)) * 0.85, minS()), 5);
+      tx = W / 2 - (x0 + x1) / 2 * s; ty = H / 2 - (y0 + y1) / 2 * s; clamp();
+      const big = [...selProv.hexes].sort((a, b) => M.hexes[b][HF.people] - M.hexes[a][HF.people])[0];
+      const [hx, hy] = hexXY(big); probe(hx, hy);
+      if (window.matchMedia("(max-width: 860px)").matches) stage.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+    provTable(); draw();
+  }
+  tb.addEventListener("click", (e) => { const tr = e.target.closest("tr"); if (tr) pickProv(tr); });
+  tb.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && e.target.closest("tr")) { e.preventDefault(); pickProv(e.target.closest("tr")); } });
+
+  // ---------------------------------------------------------------- notes: the Earth and sheet checks
+  if (M.earth && Object.keys(M.earth).length) {
+    const eb = $("earth").querySelector("tbody");
+    eb.innerHTML = Object.entries(M.earth).map(([n, r]) => {
+      const lo = r.ratio[0], hi = r.ratio[1], pct = (v) => Math.round(v * 100) + "%";
+      return `<tr title="${r.source}"><td>${n}${r.fitted ? " <em>(fitted)</em>" : ""}</td><td class="num">${r.capacity_m.toFixed(1)} M</td>
+        <td class="num">${r.historical_m[0] === r.historical_m[1] ? r.historical_m[0] : r.historical_m.join("–")} M</td>
+        <td class="num">${lo === hi ? pct(lo) : pct(lo) + "–" + pct(hi)}</td></tr>`; }).join("");
+  } else { $("earthnote").textContent = "The Earth check is not in this build."; $("earth").hidden = true; }
+  if (M.check) {
+    const c = M.check, wt = c.within_terrain && c.within_terrain.Flatland;
+    $("sheetnote").textContent = `Over ${c.hexes.toLocaleString("en")} land hexes, the people a hex could feed rank much as the sheet's settlement level does (Spearman ρ = ${c.capacity.settlement.toFixed(2)}) and its wealth base (ρ = ${c.capacity.wealth.toFixed(2)})` +
+      (wt ? `, also among flatland hexes alone (ρ = ${wt.settlement.toFixed(2)} and ${wt.wealth.toFixed(2)}).` : ".") +
+      " The sheet was drawn by hand, the climate fitted only to the painted climate zones, so the two agree in the large but not hex by hex.";
+  }
+
+  // ---------------------------------------------------------------- interaction
+  const pts = new Map(); let drag = null, pinch = null, moved = 0;
+  const toMap = (ox, oy) => [(ox - tx) / s, (oy - ty) / s];
+  cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); pts.set(e.pointerId, [e.offsetX, e.offsetY]); moved = 0;
+    if (pts.size === 1) { drag = [e.offsetX, e.offsetY, tx, ty]; cv.classList.add("dragging"); }
+    else if (pts.size === 2) { const [a, b] = [...pts.values()]; pinch = [Math.hypot(a[0] - b[0], a[1] - b[1]), s]; drag = null; } });
+  cv.addEventListener("pointermove", (e) => {
+    if (!pts.has(e.pointerId)) { if (e.pointerType === "mouse") probe(...toMap(e.offsetX, e.offsetY)); return; }
+    pts.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (pinch && pts.size === 2) { const [a, b] = [...pts.values()]; zoomAt(pinch[1] * Math.hypot(a[0] - b[0], a[1] - b[1]) / pinch[0] / s, (a[0] + b[0]) / 2, (a[1] + b[1]) / 2); }
+    else if (drag) { moved += Math.abs(e.movementX || 0) + Math.abs(e.movementY || 0); tx = drag[2] + e.offsetX - drag[0]; ty = drag[3] + e.offsetY - drag[1]; clamp(); draw(); } });
+  const up = (e) => { if (pts.size === 1 && moved < 6 && drag) probe(...toMap(e.offsetX, e.offsetY));
+    pts.delete(e.pointerId); if (pts.size < 2) pinch = null; if (!pts.size) { drag = null; cv.classList.remove("dragging"); } };
+  cv.addEventListener("pointerup", up); cv.addEventListener("pointercancel", (e) => { pts.delete(e.pointerId); drag = null; pinch = null; cv.classList.remove("dragging"); });
+  cv.addEventListener("wheel", (e) => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.offsetX, e.offsetY); }, { passive: false });
+  cv.addEventListener("dblclick", (e) => zoomAt(2, e.offsetX, e.offsetY));
+  $("zin").onclick = () => zoomAt(1.6, W / 2, H / 2);
+  $("zout").onclick = () => zoomAt(1 / 1.6, W / 2, H / 2);
+  $("zfit").onclick = () => { fit(); draw(); };
+  $("t-names").onchange = draw; $("t-hexes").onchange = draw;
+  $("t-rivers").onchange = () => { compose(); draw(); };
+  document.addEventListener("keydown", (e) => { if (e.target.closest("input, button, summary, tr")) return;
+    const n = +e.key; if (n >= 1 && n <= M.layers.length) setLayer(M.layers[n - 1].key); });
+  matchMedia("(prefers-color-scheme: dark)").addEventListener("change", draw);
+
+  provTable();
+  new ResizeObserver(resize).observe(stage);
+  setLayer(cur);
+  // open on the capital's hex
+  const cap = M.places.find(p => /capital/i.test(p.kind)) || M.places.find(p => p.major);
+  if (cap) probe(cap.x, cap.y, cap.name); else probe(Wd / 2, Hd / 2);
+  resize();
+})();
+</script>

@@ -13,6 +13,10 @@ plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
 world is drawn by `scripts/render_satellite.py` and shown in the
 [orbital view](https://claude.ai/artifact/8wc4PHmHcRX1Pctjbhx3nn) (`satellite/`).
+What that climate would grow around 200 AD, and how many farmers it could
+feed, is mapped in the [Ravages Harvest Atlas](https://claude.ai/artifact/JkEE3xBLsuJ2WgqL8p3Bns)
+(`land/`; method and its checks against Earth's populations of the period
+and against the campaign sheet in [reports/land_people.md](reports/land_people.md)).
 The workflow is two steps: improve and fit the model on Earth, then calibrate
 it freely on the map. The joint Earth-and-map fit, its atlas and the old live
 atlas are retired.
