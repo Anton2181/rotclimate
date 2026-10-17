@@ -318,6 +318,35 @@ scale, so Earth-like physics keeps it forested. Stronger summer weakening of
 the eddies alone is cheaper (Earth d +0.09) and lifts the Mediterranean
 match from 62 % to 78 %.
 
+### 5.2 Is the free fit stuck in a local optimum?
+
+A restart campaign (`scripts/campaign.py`, `calibration/campaign/plan.json`)
+ran independent CMA-ES fits from deliberately different starting worlds at
+downsample 32, which ranks candidates like downsample 16 (Spearman 0.97 over
+16 logged candidates, 0.95 over the better half) at a fifth of the cost.
+
+Large steps do not work in 72 dimensions: with sigma 0.3 every candidate was
+effectively random (the map orientation alone, with ±108° jumps, explains most
+of the loss; Spearman −0.51 between score and orientation distance), and even
+sigma 0.2 found nothing in 361 evaluations. So each start got a proper local
+fit instead (sigma 0.08, orientation ±14° per step, 481 evaluations):
+
+| Start | Best zonefit (downsample 32) |
+|---|---|
+| current free fit (reference) | **0.499** |
+| live atlas world with its own (v9-era) physics | 0.448 |
+| current fit with Earth's spin | 0.332 |
+| random world 0 (31.8°N, tilt 17°, retro) | 0.375 |
+| random world 2 (28.6°N, tilt 16°, retro; ended 33.2°N, 16.5°, −19°) | 0.446 |
+| random world 3 (38.3°N, tilt 23°, Earth spin) | 0.266 |
+| random world 1 | stopped at 81 of 481 (0.323) |
+
+No other basin came within 0.05 of the current fit in the same budget; the
+reversed spin is preferred again (both Earth-spin starts end lowest). The
+current free fit is not a lucky local optimum among those tried, though the
+two runners-up (the live atlas world and random world 2) had far fewer
+evaluations behind them.
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by
