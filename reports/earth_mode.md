@@ -210,9 +210,52 @@ Mediterranean instead of the painted warm-wet, which is why the map favours
 reversed spin under either physics. The live atlas's higher overall agreement
 relies partly on physics that is wrong on Earth (section 3).
 
-A joint fit is running next (`scripts/joint_calibrate.py`): physics and world
-together to the map, with the physics penalised as soon as its mean Earth
-climate distance rises above 2.25 (the Earth fit's is 2.10).
+A joint fit (`scripts/joint_calibrate.py`) then fitted physics and world
+together to the map, the physics penalised as soon as its mean Earth climate
+distance rose above 2.25: best zonefit 0.202 at Earth distance 2.23
+(`calibration/earth/joint_e1_retro.json`, the Earth-physics atlas). A free fit
+of the same physics with no Earth constraint reached 0.458
+(`free_e2new_retro.json`, the free-fit atlas).
+
+### 5.1 What makes the painted cold-dry north dry?
+
+`scripts/physics_attribution.py` swaps one group of the free fit's physics
+constants at a time into the joint (Earth-realistic) fit, world unchanged
+(downsample 16; `output/earth_on_map/attribution_joint_vs_free.json`):
+
+| Swapped from the free fit | zonefit | strict | cold-dry | Mediterranean | hot-dry |
+|---|---|---|---|---|---|
+| nothing (joint fit) | 0.202 | 33.1 % | 0 % | 62 % | 18 % |
+| circulation | 0.158 | 22.6 % | 0 % | 23 % | 0 % |
+| temperature | 0.099 | 20.8 % | 2 % | 40 % | 26 % |
+| moisture supply | 0.195 | 30.9 % | 1 % | 69 % | 22 % |
+| rain (incl. e2 closure) | 0.171 | 32.5 % | 0 % | **90 %** | 38 % |
+| sinking air | 0.174 | 30.1 % | 0 % | 42 % | 2 % |
+| **storm eddies** | **0.219** | 32.3 % | **55 %** | 48 % | 26 % |
+
+Only the storm-eddy group makes the cold-dry zone: the free fit mixes
+moisture by eddies over a 423 km scale (the Earth fits: ~900 km) and weakens
+them more in summer (seasonality 0.7 vs 0.22). A scan of the eddy settings on
+the joint fit, scored on the map and on all nine Earth regions
+(`scripts/eddy_scan.py`, `output/earth_on_map/eddy_scan.json`):
+
+| eddy scale / seasonality | zonefit | strict | cold-dry | Mediterranean | Earth d (9 regions) | C Asia | SE US |
+|---|---|---|---|---|---|---|---|
+| 896 km / 0.22 (joint fit) | 0.201 | 33.1 % | 0 % | 62 % | 2.336 | 1.66 | 2.01 |
+| 896 km / 0.70 | 0.206 | 37.4 % | 0 % | **78 %** | 2.427 | 1.74 | 2.04 |
+| 750 km / 0.45 | 0.207 | 34.2 % | 1 % | 68 % | 2.389 | 1.79 | 2.09 |
+| 650 km / 0.55 | 0.211 | 33.8 % | 2 % | 68 % | 2.419 | 1.88 | 2.17 |
+| 550 km / 0.70 | 0.214 | 31.9 % | 7 % | 65 % | 2.459 | 1.98 | 2.29 |
+| 423 km / 0.22 | 0.217 | 30.3 % | **53 %** | 40 % | 2.501 | 2.16 | 2.64 |
+
+The cold-dry zone switches on only below ~550 km, and every step there costs
+Earth realism: shorter eddy mixing starves continental interiors (Central Asia
+61 mm a year against 228 observed at 423 km) and the Gulf coast. On Earth a
+dry interior at 40–45° needs either a long overland fetch or mountains
+upwind (Manabe & Broccoli 1990); the painted north has neither at the map's
+scale, so Earth-like physics keeps it forested. Stronger summer weakening of
+the eddies alone is cheaper (Earth d +0.09) and lifts the Mediterranean
+match from 62 % to 78 %.
 
 ## 6. Tried and removed (no measurable effect)
 
