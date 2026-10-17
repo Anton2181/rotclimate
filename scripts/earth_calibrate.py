@@ -97,7 +97,10 @@ def main():
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"hadley_edge": [28, 34]}')
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     a = ap.parse_args()
+    import pickle
+
     import cma
 
     global SPACE
@@ -115,11 +118,17 @@ def main():
                                                                  verbose=-9))
     bd = asdict(base)
     best, n, t0 = None, 0, time.time()
+    state = out / "state.pkl"
     with mp.get_context("fork").Pool(a.workers) as pool:
-        first = pool.map(evaluate, [(encode(base), bd, a.regions, a.cell_km)])[0]
-        log.write(json.dumps(first) + "\n"); log.flush(); best = first; n = 1
-        print(f"start cost {first['cost']:.4f} {first.get('error', '')} " + " ".join(f"{r} {v['climate_distance']:.3f}/K{v['koppen_full_model']['exact']:.0%}"
-                                                       for r, v in first.get("regions", {}).items()), flush=True)
+        if a.resume and state.exists():
+            with state.open("rb") as f:          # our own checkpoint, written below
+                es, best, n = pickle.load(f)
+            print(f"resumed at {n} evals, best {best['cost']:.4f}", flush=True)
+        else:
+            first = pool.map(evaluate, [(encode(base), bd, a.regions, a.cell_km)])[0]
+            log.write(json.dumps(first) + "\n"); log.flush(); best = first; n = 1
+            print(f"start cost {first['cost']:.4f} {first.get('error', '')} " + " ".join(f"{r} {v['climate_distance']:.3f}/K{v['koppen_full_model']['exact']:.0%}"
+                                                           for r, v in first.get("regions", {}).items()), flush=True)
         while n < a.evals:
             xs = es.ask()
             res = pool.map(evaluate, [(x, bd, a.regions, a.cell_km) for x in xs], chunksize=1)
@@ -130,6 +139,9 @@ def main():
                     best = r
             log.flush(); n += len(xs)
             Path(out / "best_params.json").write_text(json.dumps(best["params"], indent=1))
+            with (out / "state.tmp").open("wb") as f:
+                pickle.dump((es, best, n), f)
+            (out / "state.tmp").replace(state)
             br = best.get("regions", {})
             print(f"[{n:4d} evals, {time.time() - t0:5.0f}s] best {best['cost']:.4f} gen-median {np.median([r['cost'] for r in res]):.3f} | "
                   + " ".join(f"{k}: d {v['climate_distance']:.3f} Kop {v['koppen_full_model']['exact']:.0%} "
