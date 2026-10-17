@@ -294,6 +294,30 @@ term costs a little before refitting (training mean 2.038 → 2.070 at 1 hPa/K,
 2.169 at 2 hPa/K; East China improves to 3.20 and 3.09); the two fits
 below settle how strong it should be.
 
+**The two fits (17-18 October).** On the map, a refit of every gene around
+D2 with the unified winds (481 candidates, sigma 0.08) found nothing above
+its start: D2 sits on a sharp peak that broad steps in ~80 dimensions only
+fall off. Searching the seven pressure-wind genes alone works: 0.530 at
+downsample 32 (241 candidates; D2 with its thermal wind 0.505 under the same
+numerics), then 0.539 at downsample 16 (121 candidates; D2 0.527). The map's
+planetary-scale term lands on Earth's own values without being told them:
+
+| Fit | large-scale hPa/K, km | local hPa/K, km | friction land / sea (1/s) |
+|---|---|---|---|
+| Earth r9 | 1.65, 1,870 | 0.12, 100 | 8.9e-5 / 3.5e-5 |
+| Earth r10 (local term free, started at the map's) | 1.15, 2,110 | 1.42, 329 | 3.8e-5 / 3.2e-5 |
+| Map, pressure genes at downsample 16 | **1.77, 1,893** | 1.85, 323 | **9.9e-5** / 2.7e-5 |
+
+Earth keeps a strong local term when it starts with one (r10, 241
+evaluations from r9 with the map's local term) but scores worse than r9:
+training 2.086 against 2.038, nine-region mean 2.203 against 2.162 (Chile
+improves 3.45 → 3.22, south-west Australia worsens 1.76 → 2.07). So the
+wind equations and their planetary-scale setting are shared; what differs
+is how much small-scale (~330 km) thermal circulation each world wants,
+and the map wants roughly what Earth tolerates at a 2 % cost. r9 stays
+the Earth reference (`calibration/earth/earth_e5_r10.json` keeps r10).
+The full-detail (downsample 8) comparison of the map fit with D2 is pending.
+
 ### 4d. East China, taken apart (17 October)
 
 East China is the worst training region under r9 (3.39 against 1.46-2.09
