@@ -150,7 +150,8 @@ SPACE_E3B_NEW = [g for g in SPACE_E3B if g[0] not in {n for n, *_ in SPACE_E2}]
 # clear-sky radiation on land, sub-grid marine air on coasts
 SPACE_E4 = SPACE_E3B + [("eddy_moisture_height_km", 1.5, 8.0), ("cloud_radiation", 0.0, 15.0),
                         ("cloud_longwave", 0.0, 2.0), ("marine_layer", 0.0, 1.0), ("marine_reach_km", 10.0, 80.0),
-                        ("marine_inversion_m", 200.0, 1500.0), ("marine_contrast", 1.0, 10.0)]
+                        ("marine_inversion_m", 200.0, 1500.0), ("marine_contrast", 1.0, 10.0),
+                        ("monsoon_heating", 0.0, 1.5), ("monsoon_rain0", 0.0, 3.0), ("trade_land", 0.0, 1.0)]
 SPACE_E4_NEW = [g for g in SPACE_E4 if g[0] not in {n for n, *_ in SPACE_E3B}]
 SPACE_E3_NEW = [g for g in SPACE_E3 if g[0] not in {n for n, *_ in SPACE_E2}]
 

@@ -88,6 +88,8 @@ def w_sat(T):
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
+MONSOON_MAX_MS = 6.0             # e4b: cap of the heating-driven meridional wind
+MONSOON_SMOOTH_KM = 600.0        # e4b: scale of the rain heating that drives it
 MARINE_SOFTNESS_M = 150.0        # e4: softness of the marine layer's terrain test
 MARINE_SST_KM = 100.0            # e4: the coastal sea temperature: Gaussian mean of nearby sea
 EDDY_RAINOUT_STEPS = 6           # e3: steps of the eddy moisture mixing that each meet the terrain
@@ -269,6 +271,8 @@ class ClimateModel:
             z_test = np.maximum(np.minimum(up, crest), g.elev)
             below = 1.0 / (1.0 + np.exp(-(p.marine_inversion_m - z_test) / MARINE_SOFTNESS_M))
             self.marine_geom = np.where(g.land, reach * below, 0.0)
+        # e4b: land fraction at the scale of continents (summer trade weakening)
+        self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
         self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
                             if p.subtropical_high > 0 else None)
@@ -298,11 +302,15 @@ class ClimateModel:
         phi_p = phi_h + 30.0
         u = np.zeros_like(lat)
         v = np.zeros_like(lat)
-        # northern trades
+        # northern trades (e4b: weaker over big land masses in summer, where
+        # heat lows and monsoon inflow replace them)
+        trade = p.trade_speed
+        if p.trade_land > 0:
+            trade = trade * (1.0 - p.trade_land * max(s, 0.0) * self.land_broad)
         m = (lat >= phi_i) & (lat < phi_h)
         xi = (lat - phi_i) / (phi_h - phi_i)
-        u = np.where(m, -p.trade_speed * np.sin(np.pi * xi), u)
-        v = np.where(m, -0.35 * p.trade_speed * np.sin(np.pi * xi), v)
+        u = np.where(m, -trade * np.sin(np.pi * xi), u)
+        v = np.where(m, -0.35 * trade * np.sin(np.pi * xi), v)
         # southern trades (only reached if the padding goes that far south)
         phi_hs = -(p.hadley_edge - p.hadley_shift * s)
         m = (lat < phi_i) & (lat > phi_hs)
@@ -405,6 +413,7 @@ class ClimateModel:
         W_prev = None
         uv_prev = chi = None
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
+        heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
         self.t_iterations = []
         self.t_converged = []
@@ -508,6 +517,22 @@ class ClimateModel:
             if p.subtropical_high > 0:
                 us, vs = self.subtropical_high_wind(s, phi_h)
                 u0, v0 = u0 + us, v0 + vs
+            uM = vM = None
+            if p.monsoon_heating > 0 and heating_prev is not None:
+                # e4b: latent heating aloft drives low-level flow toward it by
+                # the Sverdrup balance, beta*v = f*dw/dz (Rodwell & Hoskins
+                # 2001): poleward inflow under heavy warm-season rain (the
+                # East Asian south-westerlies), equatorward flow under dry
+                # skies (Etesians, Portuguese and Californian northerlies).
+                # ~1 m/s * tan(lat) per mm/day of rain beyond monsoon_rain0;
+                # it carries heat and moisture but does not feed the
+                # convergence that makes rain (no runaway).
+                vN = p.monsoon_heating * np.tan(np.radians(np.clip(np.abs(lat), 0.0, 60.0))) \
+                    * (heating_prev - p.monsoon_rain0)
+                vN = np.clip(vN, -MONSOON_MAX_MS, MONSOON_MAX_MS) * np.sign(lat)
+                th = np.radians(p.north_bearing)
+                uM, vM = vN * np.sin(th), vN * np.cos(th)
+                u0, v0 = u0 + uM, v0 + vM
             # transient eddies (storms) mix heat and moisture between land and
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
@@ -604,7 +629,11 @@ class ClimateModel:
             else:
                 Ws = w_sat(T_col - p.lapse_rate * h_km) * np.exp(-h_km / 6.0)
             W_ocean = p.ocean_rh * w_sat(SST)
-            div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
+            if uM is None:
+                div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
+            else:
+                ur, vr = u - uM * self.drag, v - vM * self.drag
+                div = (np.gradient(ur, axis=1) - np.gradient(vr, axis=0)) / dx
             conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
             up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
             sub = np.exp(-((lat - phi_h) / p.subsidence_width) ** 2)
@@ -688,6 +717,9 @@ class ClimateModel:
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
+            if p.monsoon_heating > 0:
+                warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
+                heating_prev = gauss(P * warm, MONSOON_SMOOTH_KM / g.cell_km)
             if p.cloud_radiation > 0 or p.cloud_longwave > 0:
                 rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)
                 cloud_prev = (np.clip(0.2 * np.sqrt(np.clip(P, 0.0, 10.0)) + np.clip((rh - 0.3) / 0.7, 0.0, 1.0) ** 2,
