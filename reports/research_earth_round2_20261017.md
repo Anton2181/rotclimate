@@ -139,3 +139,27 @@ mixing scaled by storm-track strength.
 | moisture-flux upslope rain + lee evaporation (D3) | 2.48-2.53 | **removed**: at 56 km the Central Valley cells sit on the Sierra's rising flank (Fresno 954-1588 mm vs 382); lee evaporation dried Athens to 0 mm |
 
 The first group needs the rain constants refitted together (Earth fit r7).
+
+## Earth fit with the e4 options (r7, `calibration/earth/earth_e4_r7.json`)
+
+First stage around r5: the e4 genes and the constants they trade against
+(20 genes, 300 evaluations).
+
+| Fit | Training mean (6) | California | Iberia | Levant | Central Asia | East China | Chile | Cape | SW Australia | Nine-region mean |
+|---|---|---|---|---|---|---|---|---|---|---|
+| r5 | 2.077 | 1.78 | 2.09 | **1.83** | **1.49** | 3.45 | **3.60** | **2.02** | **1.82** | **2.210** |
+| r7 (e4) | **2.064** | 1.78 | **1.98** | 2.01 | 1.56 | **3.27** | 3.87 | 2.04 | 1.96 | 2.25 |
+
+The fit keeps strong cloud shading (cloud_radiation 10.3 K), a weak marine
+layer (0.39, reach 27 km, inversion 820 m) and only a weak terrain-aware
+moisture scale (7.2 km); clear-sky longwave is off. Cloud shading warms the
+clear dry interiors (Iberia better) but also the southern regions, whose
+summers were already too hot: the holdouts get worse, so the gain on the six
+training regions does not generalise. r5 stays the Earth reference.
+
+Conclusion of round 2: each option fixes the places it was aimed at when set
+by hand (Great Basin and Karoo rain, San Diego's summer, East China's winter),
+but against the regional climate distance the fits trade them away. The
+remaining structural item from the survey, a diagnosed sea-level pressure with
+friction-balanced winds (B1), replaces the prescribed wind belts rather than
+adding to them, and is the next candidate.

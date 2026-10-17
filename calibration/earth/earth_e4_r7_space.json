@@ -1,0 +1,131 @@
+{
+ "args": {
+  "start": "calibration/earth/earth_e2_r5.json",
+  "regions": [
+   "california",
+   "iberia",
+   "southeast_us",
+   "levant",
+   "central_asia",
+   "east_china"
+  ],
+  "cell_km": 56.0,
+  "evals": 300,
+  "popsize": 12,
+  "sigma": 0.2,
+  "seed": 1,
+  "workers": 2,
+  "holdout": [
+   "chile",
+   "cape",
+   "sw_australia"
+  ],
+  "physics": "e4_stage1",
+  "bounds": "{\"sst_offset\":[-5,4]}",
+  "set": "{\"sea_enclosure\":\"rays\",\"eddy_moisture_height_km\":4.0,\"marine_layer\":0.5}",
+  "out": "calibration/earth_r7",
+  "resume": true
+ },
+ "space": [
+  [
+   "sst_offset",
+   -5,
+   4
+  ],
+  [
+   "land_offset",
+   -5.0,
+   5.0
+  ],
+  [
+   "inland_sea_warming",
+   0.0,
+   8.0
+  ],
+  [
+   "ocean_rh",
+   0.65,
+   0.9
+  ],
+  [
+   "land_recycling",
+   0.0,
+   0.8
+  ],
+  [
+   "precip_tau_days",
+   2.0,
+   15.0
+  ],
+  [
+   "rh_threshold",
+   0.2,
+   0.7
+  ],
+  [
+   "storm_track",
+   0.0,
+   8.0
+  ],
+  [
+   "orographic",
+   0.0,
+   6.0
+  ],
+  [
+   "eddy_rate",
+   0.0,
+   2.0
+  ],
+  [
+   "eddy_scale_km",
+   200.0,
+   900.0
+  ],
+  [
+   "wet_cooling",
+   0.0,
+   0.8
+  ],
+  [
+   "upwelling",
+   0.0,
+   8.0
+  ],
+  [
+   "eddy_moisture_height_km",
+   1.5,
+   8.0
+  ],
+  [
+   "cloud_radiation",
+   0.0,
+   15.0
+  ],
+  [
+   "cloud_longwave",
+   0.0,
+   2.0
+  ],
+  [
+   "marine_layer",
+   0.0,
+   1.0
+  ],
+  [
+   "marine_reach_km",
+   10.0,
+   80.0
+  ],
+  [
+   "marine_inversion_m",
+   200.0,
+   1500.0
+  ],
+  [
+   "marine_contrast",
+   1.0,
+   10.0
+  ]
+ ]
+}
