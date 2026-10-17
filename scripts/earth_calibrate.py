@@ -47,6 +47,12 @@ SPACES["e2new"] = [g for g in C.SPACE_E2 if g[0] not in {n for n, *_ in C.SPACE_
 SPACES["e3"] = SPACES["e2"] + C.SPACE_E3_NEW
 SPACES["e3new"] = C.SPACE_E3_NEW
 SPACES["e3b"] = SPACES["e3"] + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E3}]
+# first stage around an existing fit: the e3 genes and the constants they trade
+# off against (base temperatures, inland seas, currents, eddy moisture)
+_E3_PARTNERS = {"eddy_rate", "eddy_scale_km", "land_offset", "sst_offset", "continentality", "land_amplitude",
+                "inland_sea_warming", "current_strength", "upwelling"}
+SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
+                        + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]
 _CASES = {}
 
