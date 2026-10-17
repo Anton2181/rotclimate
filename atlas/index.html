@@ -1100,6 +1100,71 @@ body.map-expanded { overflow: hidden; }
       }
     });
   }
+  // copy of a real-city search: a band above the map saying what the spotlight shows
+  function searchCaptionLayout(ctx, width) {
+    const u = width / 1000, ref = matchState.ref;
+    const lay = { u, pad: 18 * u, titleFont: 17 * u, font: 12.5 * u, rowH: 24 * u, r: 8 * u, gap: 26 * u };
+    lay.title = `Where the map feels most like ${refLabel(ref)}`;
+    lay.sub = `${ref.k}${ref.s ? " · weather station" : ""} · similarity: ${similarityPriority().toLowerCase()}`;
+    ctx.font = `${lay.font}px ${LEG_SANS}`;
+    const keyW = ["very close", "close", "less alike"].reduce((w, t) => w + 22 * u + ctx.measureText(t).width + 18 * u, 0);
+    lay.chips = matchState.pins.map((p) => ({ p, w: 2 * lay.r + 6 * u + ctx.measureText(`${p.name}  ${p.sim.toFixed(0)}%`).width }));
+    // the colour key first, then the numbered towns, wrapped to the width
+    let x = lay.pad + keyW + 10 * u, rows = 1;
+    for (const c of lay.chips) {
+      if (x + c.w > width - lay.pad) { rows++; x = lay.pad; }
+      c.row = rows - 1; c.x = x; x += c.w + lay.gap;
+    }
+    lay.keyW = keyW;
+    lay.height = 2 * lay.pad + lay.titleFont * 1.35 + lay.font * 1.6 + rows * lay.rowH;
+    return lay;
+  }
+  function drawSearchCaption(ctx, lay, width) {
+    const { u, pad, font, r } = lay;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, lay.height);
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#15181a";
+    ctx.font = `700 ${lay.titleFont}px ${LEG_SANS}`;
+    let y = pad + lay.titleFont;
+    ctx.fillText(lay.title, pad, y);
+    ctx.fillStyle = "#55626a";
+    ctx.font = `${font}px ${LEG_SANS}`;
+    y += lay.font * 1.6;
+    ctx.fillText(lay.sub, pad, y);
+    const top = y + 8 * u;
+    ctx.textBaseline = "middle";
+    // colour key: the spotlight keeps full colour (outlined) where very close,
+    // half-fades where close and washes out elsewhere
+    let x = pad;
+    const cy0 = top + lay.rowH / 2;
+    for (const [label, wash, edge] of [["very close", 0, true], ["close", 0.39, false], ["less alike", 0.78, false]]) {
+      const w = 16 * u, h = 11 * u, sx = x, sy = cy0 - h / 2;
+      ["#b9e84a", "#f0e400", "#2cc7c9"].forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(sx + (w * i) / 3, sy, w / 3 + 0.5, h); });
+      if (wash) { ctx.fillStyle = `rgba(238, 236, 230, ${wash})`; ctx.fillRect(sx, sy, w, h); }
+      if (edge) { ctx.strokeStyle = "#15181a"; ctx.lineWidth = 1.3 * u; ctx.strokeRect(sx, sy, w, h); }
+      ctx.fillStyle = "#15181a";
+      ctx.fillText(label, sx + w + 6 * u, cy0);
+      x += 22 * u + ctx.measureText(label).width + 18 * u;
+    }
+    // numbered towns, matching the pins on the map
+    for (const c of lay.chips) {
+      const cy = top + c.row * lay.rowH + lay.rowH / 2, cx = c.x + r;
+      ctx.fillStyle = "#15181a";
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.font = `600 ${font * 0.95}px ${LEG_MONO}`;
+      ctx.fillText(String(c.p.i), cx, cy + 0.5 * u);
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#15181a";
+      ctx.font = `${font}px ${LEG_SANS}`;
+      const nx = c.x + 2 * r + 6 * u;
+      ctx.fillText(c.p.name, nx, cy);
+      ctx.fillStyle = "#55626a";
+      ctx.fillText(`${c.p.sim.toFixed(0)}%`, nx + ctx.measureText(c.p.name + "  ").width, cy);
+    }
+  }
   async function renderView() {
     const base = await loadImage($("base").src);
     const fullW = Math.min(8000, Math.max(3000, base.naturalWidth || 6000));
@@ -1108,11 +1173,15 @@ body.map-expanded { overflow: hidden; }
     const cv = document.createElement("canvas");
     const spec = $("copylegend").checked ? legendSpec(meta.layers.find((l) => l.id === current)) : null;
     const lay = spec ? legendLayout(cv.getContext("2d"), spec, fullW) : null;
-    cv.width = fullW; cv.height = fullH + (lay ? Math.ceil(lay.height) : 0);
+    const cap = matchState && matchState.ref ? searchCaptionLayout(cv.getContext("2d"), fullW) : null;
+    const top = cap ? Math.ceil(cap.height) : 0;
+    cv.width = fullW; cv.height = top + fullH + (lay ? Math.ceil(lay.height) : 0);
     const ctx = cv.getContext("2d");
     ctx.imageSmoothingQuality = "high";
     ctx.fillStyle = "#d6e4f0";
     ctx.fillRect(0, 0, cv.width, cv.height);
+    if (cap) drawSearchCaption(ctx, cap, fullW);
+    ctx.translate(0, top);
     ctx.drawImage(base, 0, 0, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
     const overlays = ["simrivers", "matchsvg", "towns", "placenames", "marker"]
@@ -1120,19 +1189,20 @@ body.map-expanded { overflow: hidden; }
     for (const el of overlays) {
       const st = el.getAttribute("style") || "";
       // non-scaling strokes are in output pixels: widen them by k to match the screen
-      const body = el.innerHTML.replace(/<[^>]*non-scaling-stroke[^>]*>/g, (tag) =>
+      const body = (el.id === "matchsvg" ? matchMarkup(1) : el.innerHTML).replace(/<[^>]*non-scaling-stroke[^>]*>/g, (tag) =>
         tag.replace(/stroke-width="([\d.]+)"/, (_, v) => `stroke-width="${(+v * k).toFixed(2)}"`));
       const vbAttr = el.getAttribute("viewBox") || "0 0 2000 926";
       const vbW = +vbAttr.split(/\s+/)[2];
       const crisp = el.id === "towns" && fullW / vbW >= 1 ? ' shape-rendering="crispEdges"' : "";
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbAttr}" preserveAspectRatio="none"${crisp}
         width="${fullW}" height="${fullH}" style="${st.replace(/display:\s*none;?/, "")}" font-family="sans-serif">
-        <style>text{font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
+        <style>text:not(.pin){font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
         ${body}</svg>`;
       const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
       try { ctx.drawImage(await loadImage(url), 0, 0, fullW, fullH); } finally { URL.revokeObjectURL(url); }
     }
     if (lay) drawLegendBand(ctx, spec, lay, fullH, fullW);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
     return new Promise((res) => cv.toBlob(res, "image/png"));
   }
   function showFallback(blob) {
@@ -1153,7 +1223,8 @@ body.map-expanded { overflow: hidden; }
     try {
       if (!navigator.clipboard || typeof ClipboardItem === "undefined") throw new Error("no clipboard");
       await navigator.clipboard.write([new ClipboardItem({ "image/png": pending })]);
-      toast($("copylegend").checked ? "Copied the whole map with its legend" : "Copied the whole map");
+      toast("Copied the whole map" + (matchState && matchState.ref ? ` (where it feels like ${matchState.ref.n})` : "")
+            + ($("copylegend").checked ? " with its legend" : ""));
     } catch (err) {
       const blob = await pending;
       if (blob) showFallback(blob); else toast("Could not copy the map");
@@ -1314,17 +1385,19 @@ body.map-expanded { overflow: hidden; }
   // Real-city matches as a spotlight: the map keeps its colour where the
   // climate feels alike, half-fades where it is close, and washes out
   // elsewhere; a thin ink edge marks the very-close areas.
-  function drawMatches() {
-    if (!matchState) { matchSvg.innerHTML = ""; return; }
-    const pxPerUnit = (stage.clientWidth * zs) / 2000;
+  // the spotlight and numbered pins, sized for zoom z (the copy uses the unzoomed size)
+  function matchMarkup(z) {
+    if (!matchState) return "";
+    const pxPerUnit = (stage.clientWidth * z) / 2000;
     const r = 8.5 / pxPerUnit, fs = 10.5 / pxPerUnit;
     // pins sit just above the town's name label, so both stay readable
     const lift = r + (0.6 * Math.min(13, Math.max(6, 10 * pxPerUnit)) + 2) / pxPerUnit;
-    matchSvg.innerHTML = matchState.fill
+    return matchState.fill
       + matchState.pins.map((p) => `<circle cx="${p.x}" cy="${p.y - lift}" r="${r}" fill="#15181a" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
-         <text x="${p.x}" y="${p.y - lift}" fill="#fff" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="600"
+         <text class="pin" x="${p.x}" y="${p.y - lift}" fill="#fff" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="600"
            text-anchor="middle" dominant-baseline="central">${p.i}</text>`).join("");
   }
+  function drawMatches() { matchSvg.innerHTML = matchMarkup(zs); }
   function spotlight(f, l1, l2) {
     // two black-and-white masks (no grey levels, so no colour-space ambiguity):
     // 0.39 wash outside "very close", a further 0.64 outside "close" (0.78 total)
@@ -1463,7 +1536,8 @@ body.map-expanded { overflow: hidden; }
       .filter((p) => cls.data[pixIdx(Math.round(p.x), Math.round(p.y))] !== 255)
       .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref, cl.D12, temperatureWeight) }; })
       .sort((a, b) => a.d - b.d).slice(0, 6);
-    matchState = { fill: spotlight(f, l1, l2), pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1 })) };
+    matchState = { fill: spotlight(f, l1, l2), ref,
+                   pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1, name: o.p.name, sim: o.sim })) };
     // frame the very-close areas and the numbered towns
     let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
     const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
