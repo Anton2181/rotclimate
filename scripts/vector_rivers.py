@@ -132,22 +132,38 @@ def smooth_path(a, sigma=2.5):
     return a * (1 - w) + b * w
 
 
-def river_alpha(rivers, scale, min_width=1.1, max_width=3.0, supersample=2):
-    """Anti-aliased river coverage (0..1) at `scale` times the drawing's size:
-    centre lines traced into long polylines, smoothed along their length and
-    drawn round-capped, one width per river system (its drawn width)."""
+def river_lines(rivers):
+    """Traced river centre lines with their class: (line, navigable). The
+    drawing has two kinds, streams one pixel wide and navigable rivers two,
+    on a 2000-px canvas; on this 4401-px layer they are about 3 and 5 px
+    wide, so their centre lines sit 1-2 px and 3 px from the edge."""
     mask = rivers > 0.3
     dt = ndi.distance_transform_edt(mask)
     skel = _drop_corners(_thin(mask.astype(np.uint8).copy()))
-    lab, n = ndi.label(skel, structure=np.ones((3, 3)))
-    med = np.atleast_1d(ndi.median(2.0 * dt, lab, index=np.arange(1, n + 1)))
-    lines = trace(skel)
+    return [(l, float(np.median([dt[y, x] for y, x in l])) > 2.5) for l in trace(skel)]
+
+
+def river_classes(rivers):
+    """Masks (at the drawing's resolution) of the streams and of the navigable rivers."""
+    stream = np.zeros(rivers.shape, bool)
+    navigable = np.zeros(rivers.shape, bool)
+    for line, nav in river_lines(rivers):
+        ys, xs = zip(*line)
+        (navigable if nav else stream)[list(ys), list(xs)] = True
+    return stream, navigable
+
+
+def river_alpha(rivers, scale, stream_width=0.9, navigable_width=2.4, supersample=2):
+    """Anti-aliased river coverage (0..1) at `scale` times the drawing's size:
+    centre lines traced into long polylines, smoothed along their length and
+    drawn round-capped, streams thin and navigable rivers wide."""
+    lines = river_lines(rivers)
     H, W = rivers.shape
     f = scale * supersample
     img = Image.new("L", (W * f, H * f), 0)
     draw = ImageDraw.Draw(img)
-    for line in lines:
-        w = float(np.clip(med[lab[line[0]] - 1], min_width, max_width)) * f
+    for line, nav in sorted(lines, key=lambda t: t[1]):        # navigable rivers drawn last, on top
+        w = (navigable_width if nav else stream_width) * f
         a = smooth_path(line)
         xy = [((x + 0.5) * f, (y + 0.5) * f) for y, x in a]
         draw.line(xy, fill=255, width=max(1, round(w)), joint="curve")
