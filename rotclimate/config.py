@@ -155,6 +155,13 @@ class Params:
     eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
+    slp_large: float = 0.0            # e5: hPa of low pressure per K of warm anomaly, planetary scale (0 with slp_local 0 = off)
+    slp_local: float = 0.0            # e5: hPa/K at the boundary-layer scale (sea breezes, heat lows)
+    slp_scale_km: float = 2000.0      # e5: smoothing of the planetary-scale pressure
+    slp_local_km: float = 150.0       # e5: smoothing of the boundary-layer-scale pressure
+    bl_drag_ocean: float = 3.5e-5     # e5: boundary-layer friction over sea (1/s)
+    bl_drag_land: float = 1.0e-4      # e5: boundary-layer friction over land (1/s)
+    divergence_drying: float = 0.0    # e5: rain x exp(-this * low-level divergence index)
     monsoon_heating: float = 0.0      # e4b: m/s per mm/day x tan(lat) of meridional inflow toward warm rain (0 = off)
     monsoon_rain0: float = 1.0        # e4b: warm-season rain (mm/day) with no inflow; drier skies drive outflow
     trade_land: float = 0.0           # e4b: summer weakening of the trades over continental-scale land (0-1)

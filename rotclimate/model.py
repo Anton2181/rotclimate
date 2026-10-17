@@ -88,6 +88,8 @@ def w_sat(T):
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
+OMEGA = 7.292e-5                 # e5: rotation rate (1/s) for the boundary-layer wind balance
+RHO_AIR = 1.2                    # e5: kg/m3
 MONSOON_MAX_MS = 6.0             # e4b: cap of the heating-driven meridional wind
 MONSOON_SMOOTH_KM = 600.0        # e4b: scale of the rain heating that drives it
 MARINE_SOFTNESS_M = 150.0        # e4: softness of the marine layer's terrain test
@@ -271,6 +273,10 @@ class ClimateModel:
             z_test = np.maximum(np.minimum(up, crest), g.elev)
             below = 1.0 / (1.0 + np.exp(-(p.marine_inversion_m - z_test) / MARINE_SOFTNESS_M))
             self.marine_geom = np.where(g.land, reach * below, 0.0)
+        # e5: boundary-layer friction for the pressure-driven wind (smoothed
+        # across coasts over ~100 km)
+        self.bl_drag = ndi.gaussian_filter(np.where(g.land, p.bl_drag_land, p.bl_drag_ocean), cells_per_100km,
+                                           mode="nearest")
         # e4b: land fraction at the scale of continents (summer trade weakening)
         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
@@ -350,6 +356,26 @@ class ClimateModel:
         u = k * (gx * ca + gy * sa)                       # clockwise turn (NH prograde)
         v = k * (-gx * sa + gy * ca)
         return u, v
+
+    def pressure_wind(self, T_anom):
+        """e5: surface wind from a sea-level pressure diagnosed from the
+        temperature anomaly (warm air, low pressure), as in CLIMBER-2/X:
+        p = -(slp_large * G_L(T*) + slp_local * (G_l(T*) - G_L(T*))), a
+        planetary-wave scale (~2 hPa/K, Blinova) and a boundary-layer scale
+        (sea breezes, heat lows); then the mixed-layer momentum balance
+        f k x U + eps U = -grad p / rho (Stevens et al. 2002; Back & Bretherton
+        2009): cross-isobar angle atan(eps / f) from the surface friction (sea
+        ~20 deg, land ~45 deg at 40 deg latitude), regular at the equator."""
+        p, g = self.p, self.g
+        big = gauss(T_anom, p.slp_scale_km / g.cell_km)
+        local = gauss(T_anom, p.slp_local_km / g.cell_km) - big
+        pres = -100.0 * (p.slp_large * big + p.slp_local * local)              # Pa
+        px = np.gradient(pres, axis=1) / g.dx_m
+        py = -np.gradient(pres, axis=0) / g.dx_m
+        f = 2.0 * OMEGA * np.sin(np.radians(self.lat)) * (-1.0 if p.retrograde else 1.0)
+        eps = self.bl_drag
+        den = RHO_AIR * (eps ** 2 + f ** 2)
+        return -(eps * px + f * py) / den, (f * px - eps * py) / den
 
     def subtropical_high_wind(self, s, phi_h):
         """e3: the subtropical highs are oceanic cells, not a zonal ridge
@@ -563,7 +589,10 @@ class ClimateModel:
                 nonlocal u,v
                 # ---- winds
                 T_anom = T_state - Tz
-                ut, vt = self.thermal_wind(T_anom)
+                if p.slp_large > 0 or p.slp_local > 0:
+                    ut, vt = self.pressure_wind(T_anom)      # physics e5
+                else:
+                    ut, vt = self.thermal_wind(T_anom)
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
                 lam = lamT
@@ -648,6 +677,11 @@ class ClimateModel:
                 sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
+            if p.divergence_drying > 0:
+                # e5: diverging low-level air sinks and dries the column, the
+                # counterpart of the convergence term
+                dvg = np.clip(ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
+                A_dyn = A_dyn * np.exp(-p.divergence_drying * dvg)
             if p.sverdrup > 0:       # physics e1: poleward flow rises, equatorward flow sinks
                 th = np.radians(p.north_bearing)
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
