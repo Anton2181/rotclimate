@@ -13,10 +13,14 @@ import sys
 import unicodedata
 from pathlib import Path
 
+import numpy as np
 import openpyxl
+from PIL import Image
+from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 NCOL = 90
+NROW = 47
 EVENT_KINDS = [  # (kind, pattern) checked in order; anything else is routine and dropped
     ("battle", r"battle|victory|defeat|routed|ambush"),
     ("assault", r"assault|siege|storm|sack"),
@@ -47,6 +51,17 @@ def main(xlsx, out):
         dates.append(iso(r[0]))
         for n, v in zip(names, r[2:2 + len(names)]):
             pos[n].append(int(v) if isinstance(v, (int, float)) else None)
+    # armies moved to ComLocArchive (same rows as ComLoc) when they left play
+    archived = set()
+    arch = list(wb["ComLocArchive"].iter_rows(values_only=True))
+    for j, n in enumerate(arch[0]):
+        n = str(n).strip() if n else None
+        if not n or n in pos:
+            continue
+        col = [arch[1 + i][j] if 1 + i < len(arch) and j < len(arch[1 + i]) else None for i in range(len(dates))]
+        pos[n] = [int(v) if isinstance(v, (int, float)) else None for v in col]
+        names.append(n)
+        archived.add(n)
     dtab = {iso(r[0]): (r[1], r[2]) for r in list(wb["DateTable"].iter_rows(values_only=True))[1:] if r and r[0]}
     days = [dict(date=d, ig=(dtab.get(d) or (None,))[0], season=(dtab.get(d) or (None, None))[1]) for d in dates]
 
@@ -88,7 +103,7 @@ def main(xlsx, out):
         events.append(dict(army=str(r[0]).strip(), date=iso(r[1]), kind=kind, note=note,
                            morale=r[4] if isinstance(r[4], (int, float)) else None))
 
-    hexes = {}
+    hexes, hex_region, economy_max, stronghold = {}, {}, {}, set()
     for r in list(wb["Hex"].iter_rows(values_only=True))[2:]:
         if r[0] is None:
             continue
@@ -96,8 +111,14 @@ def main(xlsx, out):
         row, col = int(r[20]), int(r[21])
         assert h == (row - 1) * NCOL + col, (h, row, col)
         terrain = r[5]
+        if r[4]:
+            hex_region[h] = str(r[4]).strip()
         if terrain in (None, "N/A", "Ocean", "Sea"):
             continue
+        if r[6] == "Yes":
+            stronghold.add(h)
+        if isinstance(r[11], (int, float)) and isinstance(r[13], (int, float)) and r[11] * r[13] > 0:
+            economy_max[h] = [r[11], r[13]]                  # settlement level, wealth base
         hexes[h] = [r[2] if r[2] not in (None, "N/A") else "", r[3] if r[3] not in (None, "N/A") else "",
                     r[4] or "", terrain, r[11] or 0]
     towns = []
@@ -144,16 +165,98 @@ def main(xlsx, out):
         if len(days_n) < 20 or last > shift(sheet_end, -5):
             continue
         ended[n] = day_of.get(last, len(dates) - 1)
-        key = fold(n)
-        for when, text in rumours:
-            if shift(last, -3) <= when <= shift(last, 10) and key in fold(text):
-                fate[n] = dict(date=when, text=text.split("\n")[0][:900])
+    for n in archived:                                  # archived columns stop being filled
+        filled = [i for i, v in enumerate(pos[n]) if v is not None]
+        if filled and filled[-1] < len(dates) - 1:
+            ended[n] = min(ended.get(n, filled[-1]), filled[-1])
+    fate_words = re.compile(r"died|dead|death|killed|slain|execut|disband|retire|fallen ill|fell ill|relieved|"
+                            r"captured|lost (his|her|their) life|passed away|assassinat", re.I)
+    for n, d in ended.items():
+        last, key = dates[d], fold(n)
+        for when, text in rumours:                     # news travels: look up to three weeks on
+            if not shift(last, -3) <= when <= shift(last, 21):
+                continue
+            para = next((q.strip("# ").strip() for q in text.split("\n")
+                         if key in fold(q) and fate_words.search(q)), None)
+            if para:
+                fate[n] = dict(date=when, text=para[:900])
                 break
     grid = json.loads((ROOT / "data" / "hexgrid.json").read_text())
+
+    # Weather: one state per region per day
+    wl = list(wb["WeatherLog"].iter_rows(values_only=True))
+    regions = [str(c).strip() for c in wl[0][2:] if c]
+    wdays = {iso(r[0]): r for r in wl[1:] if r and isinstance(r[0], dt.datetime)}
+    states = []
+    weather = []
+    for d in dates:
+        r = wdays.get(d)
+        row = []
+        for k in range(len(regions)):
+            v = str(r[2 + k]).strip() if r and 2 + k < len(r) and r[2 + k] else None
+            if v and v not in states:
+                states.append(v)
+            row.append(states.index(v) if v else -1)
+        weather.append(row)
+    reg_index = {n: i for i, n in enumerate(regions)}
+    hexreg = [reg_index.get(hex_region.get(h), -1) for h in range(1, NCOL * NROW + 1)]
+
+    # The hexes' economy: HexArchive (past seasons) and HexEvents (this one)
+    # log changes to settlement level, wealth base and wealth surplus (a
+    # share of the full surplus, 1000 x settlement x base coin) and how often
+    # a hex was recruited, foraged or taxed. A hex's state resets each season.
+    econ = []
+    for sheet in ("HexArchive", "HexEvents"):
+        for r in list(wb[sheet].iter_rows(values_only=True))[1:]:
+            if not r or not r[0] or not isinstance(r[1], dt.datetime) or iso(r[1]) not in day_of:
+                continue
+            v = [float(r[2 + k]) if 2 + k < len(r) and isinstance(r[2 + k], (int, float)) else 0.0 for k in range(6)]
+            if any(v):
+                econ.append([int(r[0]), day_of[iso(r[1])]] + [round(x, 3) for x in v])
+    econ.sort(key=lambda e: e[1])
+    season_start = [i for i, d in enumerate(days) if i == 0 or d["season"] != days[i - 1]["season"]]
+    # the sheet's own reset: HexEvents holds the current season from its first day
+    cur = [day_of[iso(r[1])] for r in list(wb["HexEvents"].iter_rows(values_only=True))[1:]
+           if r and r[0] and isinstance(r[1], dt.datetime) and iso(r[1]) in day_of]
+    if cur:
+        near = min(season_start, key=lambda i: abs(i - min(cur)))
+        if abs(near - min(cur)) <= 2:
+            season_start[season_start.index(near)] = min(cur)
+
+    # Strongholds: armies stand at the drawn town marker, not the hex centre
+    rs = np.array(Image.open(ROOT / "data" / "source" / "original" / "roads_settlements.png").convert("RGBA"))
+    road = (rs[..., 0] > 200) & (rs[..., 1] > 80) & (rs[..., 1] < 140) & (rs[..., 2] < 60)
+    marks = (rs[..., 3] > 128) & ~road
+    lab, n_lab = ndi.label(marks)
+    scale = 2000.0 / rs.shape[1]                       # original pixels -> map coordinates
+    centres = ndi.center_of_mass(marks, lab, range(1, n_lab + 1))
+    sizes = ndi.sum(marks, lab, range(1, n_lab + 1))
+    R = grid["dx"] / np.sqrt(3)
+    anchors = {}
+    for (cy, cx), size in zip(centres, sizes):
+        x, y = (cx + 0.5) * scale, (cy + 0.5) * scale
+        row = int(round((y - grid["y0"]) / grid["dy"]))
+        best = None
+        for rr in (row - 1, row, row + 1):
+            col = int(round((x - grid["x0"]) / grid["dx"] - 0.5 * (rr % 2)))
+            for cc in (col - 1, col, col + 1):
+                hx, hy = grid["x0"] + grid["dx"] * (cc + 0.5 * (rr % 2)), grid["y0"] + grid["dy"] * rr
+                d = np.hypot(hx - x, hy - y)
+                if best is None or d < best[0]:
+                    best = (d, rr * NCOL + cc + 1)
+        h = best[1]
+        if best[0] < R and (h in stronghold or any(t[0] == h for t in towns)):
+            if h not in anchors or size > anchors[h][2]:
+                anchors[h] = [round(x, 1), round(y, 1), float(size)]
+    anchors = {h: v[:2] for h, v in anchors.items()}
+
     data = dict(days=days, armies=[dict(name=n, hex=pos[n], info=info.get(n), raised=raised.get(n),
-                                        parent=parent.get(n), ended=ended.get(n), fate=fate.get(n))
+                                        parent=parent.get(n), ended=ended.get(n), fate=fate.get(n),
+                                        archived=n in archived)
                                    for n in names],
-                events=events, hexes=hexes, towns=towns,
+                events=events, hexes=hexes, towns=towns, anchors=anchors,
+                weather=dict(regions=regions, states=states, days=weather, hexreg=hexreg),
+                economy=dict(max=economy_max, events=econ, season_start=season_start),
                 grid=dict(ncol=NCOL, x0=grid["x0"], dx=grid["dx"], y0=grid["y0"], dy=grid["dy"], width=2000, height=926),
                 source=Path(xlsx).name)
     Path(out).write_text(json.dumps(data, ensure_ascii=False, separators=(",", ":")))
