@@ -15,18 +15,11 @@
   "--evals",
   "433",
   "--sigma",
-  "0.3"
+  "0.2",
+  "--stds",
+  "{\"north_bearing\": 0.25}"
  ],
  "runs": [
-  {
-   "name": "A_best",
-   "start": "calibration/earth/free_e3new_retro.json",
-   "out": "calibration/campaign/run_A_best",
-   "args": [
-    "--fix",
-    "{\"retrograde\": 0.75}"
-   ]
-  },
   {
    "name": "B_live_world",
    "start": "output/overnight_mediterranean/selected_params.json",
@@ -79,6 +72,15 @@
    "args": [
     "--seed",
     "13"
+   ]
+  },
+  {
+   "name": "A_best",
+   "start": "calibration/earth/free_e3new_retro.json",
+   "out": "calibration/campaign/run_A_best",
+   "args": [
+    "--fix",
+    "{\"retrograde\": 0.75}"
    ]
   }
  ]
