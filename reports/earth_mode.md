@@ -265,7 +265,12 @@ fit's other settings (tuned to the thermal wind) the map warms by 2.6 °C on
 average and dries, and the zone score falls from 0.527 to about -0.03 at any
 strength from 0.2 to 3 (`calibration/map_scan_slp*.json`). The map is being
 refitted with them (`--physics e3b5`: the free fit's settings plus the
-pressure-wind ones).
+pressure-wind ones). After 400 evaluations at downsample 32 (sigma 0.12,
+from the free fit with r9's pressure settings) the best zone score was 0.369,
+flat from evaluation 145 on, against 0.505 for the free fit with the thermal
+wind at the same resolution (`calibration/earth/free_e5_ds32_best.json`).
+The map prefers the thermal wind, so the free fit keeps it: pressure winds
+are the Earth physics, not the map's.
 
 ## 5. On the fantasy map
 
