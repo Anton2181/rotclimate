@@ -1,0 +1,526 @@
+<meta charset="utf-8">
+<title>Ravages Campaign Map</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IM+Fell+English+SC&family=Noto+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one-screen field table on desktop (map | orders panel, timeline under the map);
+   on phones the map, timeline and panels stack and the page scrolls. */
+:root {
+  --bg: #e7e3d8;          /* linen table */
+  --panel: #f6f3ec;
+  --panel-2: #ece7db;
+  --ink: #23262a;
+  --ink-soft: #5c6066;
+  --rule: #cfc8b8;
+  --accent: #8a3b24;      /* sealing-wax red: selection, play */
+  --accent-ink: #fff7f2;
+  --battle: #b3261e; --assault: #d0691b; --operation: #3d6aa2; --march: #6f7d36;
+  --command: #7a4c9c; --recruit: #2f8a7c; --tax: #9a7b2c;
+  --map-bg: #b9c9d2;
+  --font-display: "IM Fell English SC", "Iowan Old Style", Georgia, serif;
+  --font-body: "Noto Sans", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #15181c; --panel: #1d2126; --panel-2: #252a30; --ink: #e9e4d8; --ink-soft: #a7a69e;
+    --rule: #343a41; --accent: #e07a55; --accent-ink: #1a1210; --map-bg: #26333b;
+    --battle: #ff6b5e; --assault: #ff9b4a; --operation: #7fa8e0; --march: #b6c46a;
+    --command: #c39ae6; --recruit: #5fcab9; --tax: #e2c26a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #15181c; --panel: #1d2126; --panel-2: #252a30; --ink: #e9e4d8; --ink-soft: #a7a69e;
+  --rule: #343a41; --accent: #e07a55; --accent-ink: #1a1210; --map-bg: #26333b;
+  --battle: #ff6b5e; --assault: #ff9b4a; --operation: #7fa8e0; --march: #b6c46a;
+  --command: #c39ae6; --recruit: #5fcab9; --tax: #e2c26a; color-scheme: dark;
+}
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--font-body); font-size: 14px; }
+.app { height: 100%; display: grid; grid-template-columns: minmax(0, 1fr) 360px; grid-template-rows: auto minmax(0, 1fr) auto;
+  grid-template-areas: "head head" "map side" "time side"; gap: 0;
+  padding-left: max(0px, env(safe-area-inset-left, 0px)); padding-right: max(0px, env(safe-area-inset-right, 0px)); }
+header { grid-area: head; display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
+  padding-block: 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  border-bottom: 1px solid var(--rule); background: var(--panel); }
+header h1 { margin: 0; font-family: var(--font-display); font-weight: 400; font-size: 1.55rem; letter-spacing: .01em; text-wrap: balance; }
+.daybox { display: flex; flex-direction: column; gap: 1px; margin-left: auto; text-align: right; }
+.daybox .real { font-family: var(--font-mono); font-size: .95rem; font-variant-numeric: tabular-nums; }
+.daybox .ig { color: var(--ink-soft); font-size: .82rem; }
+.mapwrap { grid-area: map; position: relative; background: var(--map-bg); overflow: hidden; touch-action: none; min-height: 0; }
+canvas#map { position: absolute; inset: 0; width: 100%; height: 100%; cursor: grab; display: block; }
+canvas#map.dragging { cursor: grabbing; }
+.mapctl { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 6px; }
+.mapctl button, .mapctl label { background: var(--panel); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px;
+  min-width: 34px; height: 34px; font: 600 1rem var(--font-body); cursor: pointer; display: grid; place-items: center; padding: 0 8px; }
+.mapctl label { font-size: .75rem; font-weight: 500; gap: 6px; grid-auto-flow: column; }
+.hexinfo { position: absolute; left: 10px; bottom: 10px; max-width: min(340px, calc(100% - 20px)); background: var(--panel);
+  border: 1px solid var(--rule); border-radius: 8px; padding: 8px 10px; font-size: .8rem; line-height: 1.4; box-shadow: 0 2px 10px rgb(0 0 0 / .12); }
+.hexinfo b { font-weight: 600; }
+.hexinfo .code { font-family: var(--font-mono); color: var(--ink-soft); }
+.timeline { grid-area: time; background: var(--panel); border-top: 1px solid var(--rule);
+  padding-block: 8px 10px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: 16px; display: grid; gap: 6px; }
+.tl-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.tl-row button { background: var(--panel-2); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; height: 32px; min-width: 36px;
+  font: 500 .85rem var(--font-body); cursor: pointer; padding: 0 10px; }
+.tl-row button.play { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); min-width: 72px; }
+.tl-row select { height: 32px; background: var(--panel-2); color: var(--ink); border: 1px solid var(--rule); border-radius: 6px; font: .85rem var(--font-body); }
+.tl-row .lab { color: var(--ink-soft); font-size: .78rem; }
+.track { position: relative; height: 46px; }
+canvas#ticks { position: absolute; left: 0; right: 0; top: 0; width: 100%; height: 26px; }
+input#day { position: absolute; left: 0; right: 0; bottom: 0; width: 100%; margin: 0; accent-color: var(--accent); }
+.legend { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: .74rem; color: var(--ink-soft); }
+.legend span::before { content: ""; display: inline-block; width: 9px; height: 9px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; background: var(--c); }
+aside { grid-area: side; background: var(--panel); border-left: 1px solid var(--rule); overflow-y: auto; min-height: 0;
+  padding-block: 12px 24px; padding-left: 16px; padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 18px; align-content: start; }
+aside h2 { margin: 0 0 6px; font-family: var(--font-display); font-weight: 400; font-size: 1.15rem; }
+.sec-head { display: flex; align-items: baseline; justify-content: space-between; gap: 8px; }
+.sec-head button { background: none; border: none; color: var(--accent); font: 500 .78rem var(--font-body); cursor: pointer; padding: 2px 0; }
+input#filter { width: 100%; box-sizing: border-box; height: 32px; border: 1px solid var(--rule); border-radius: 6px; background: var(--panel-2);
+  color: var(--ink); padding: 0 10px; font: .85rem var(--font-body); margin-bottom: 6px; }
+ul.armies { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+ul.armies li { display: grid; grid-template-columns: 20px 18px minmax(0, 1fr); align-items: center; gap: 6px; padding: 4px 6px; border-radius: 6px; cursor: pointer; }
+ul.armies li:hover { background: var(--panel-2); }
+ul.armies li.sel { background: var(--panel-2); outline: 1.5px solid var(--accent); }
+ul.armies li .nm { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: .86rem; }
+ul.armies li .wh { display: block; color: var(--ink-soft); font-size: .72rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+ul.armies li.off .nm, ul.armies li.off .sw { opacity: .4; }
+.sw { width: 14px; height: 14px; border-radius: 50%; border: 2px solid #fff; box-shadow: 0 0 0 1px rgb(0 0 0 / .35); }
+.sw.sq { border-radius: 3px; }
+.card { background: var(--panel-2); border-radius: 8px; padding: 10px 12px; display: grid; gap: 8px; }
+.card .title { display: flex; align-items: center; gap: 8px; }
+.card .title b { font-size: 1rem; font-weight: 600; min-width: 0; }
+dl.kv { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 3px 10px; font-size: .8rem; }
+dl.kv dt { color: var(--ink-soft); }
+dl.kv dd { margin: 0; min-width: 0; }
+.mono { font-family: var(--font-mono); font-variant-numeric: tabular-nums; }
+.chips { display: flex; flex-wrap: wrap; gap: 4px; }
+.chip { font-size: .72rem; padding: 2px 7px; border-radius: 999px; background: var(--panel); border: 1px solid var(--rule); }
+ol.log { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; max-height: 260px; overflow-y: auto; }
+ol.log li.empty { display: block; cursor: default; }
+ol.log li:not(.empty) { display: grid; grid-template-columns: 74px minmax(0, 1fr); gap: 8px; font-size: .78rem; padding: 3px 4px; border-radius: 4px; cursor: pointer; }
+ol.log li:hover { background: var(--panel); }
+ol.log li.today { background: var(--panel); }
+ol.log .k { display: inline-block; width: 8px; height: 8px; border-radius: 2px; margin-right: 6px; background: var(--c); }
+.muted { color: var(--ink-soft); font-size: .8rem; }
+.empty { color: var(--ink-soft); font-style: italic; font-size: .8rem; }
+button:focus-visible, input:focus-visible, select:focus-visible, li:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+@media (max-width: 860px) {
+  html, body { height: auto; }
+  .app { display: block; }
+  header h1 { font-size: 1.3rem; }
+  .mapwrap { height: 62vh; min-height: 320px; }
+  aside { border-left: none; border-top: 1px solid var(--rule); padding-left: max(16px, env(safe-area-inset-left, 0px)); }
+  ol.log { max-height: none; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="app">
+  <header>
+    <h1>Ravages Campaign Map</h1>
+    <span class="muted" id="subtitle">Army positions from the ComLoc ledger</span>
+    <div class="daybox" aria-live="polite">
+      <span class="real" id="realdate">—</span>
+      <span class="ig" id="igdate">—</span>
+    </div>
+  </header>
+
+  <div class="mapwrap" id="mapwrap">
+    <canvas id="map" aria-label="Campaign map with army positions"></canvas>
+    <div class="mapctl">
+      <button type="button" id="zin" aria-label="Zoom in">+</button>
+      <button type="button" id="zout" aria-label="Zoom out">−</button>
+      <button type="button" id="zfit" aria-label="Show the whole map" title="Whole map">⤢</button>
+      <label for="gridtog" title="Hex grid"><input type="checkbox" id="gridtog">Hex</label>
+      <label for="nametog" title="Town names"><input type="checkbox" id="nametog" checked>Towns</label>
+    </div>
+    <div class="hexinfo" id="hexinfo" hidden></div>
+  </div>
+
+  <section class="timeline" aria-label="Timeline">
+    <div class="tl-row">
+      <button type="button" id="back" aria-label="One day back">◀</button>
+      <button type="button" id="play" class="play">Play</button>
+      <button type="button" id="fwd" aria-label="One day forward">▶</button>
+      <span class="lab">Speed</span>
+      <select id="speed" aria-label="Playback speed">
+        <option value="1">1 day/s</option><option value="2" selected>2 days/s</option>
+        <option value="4">4 days/s</option><option value="8">8 days/s</option>
+      </select>
+      <span class="lab">Trails</span>
+      <select id="trail" aria-label="Trail length">
+        <option value="0">None</option><option value="7">7 days</option><option value="14" selected>14 days</option>
+        <option value="30">30 days</option><option value="9999">Whole campaign</option>
+      </select>
+      <span class="lab mono" id="dayno"></span>
+    </div>
+    <div class="track">
+      <canvas id="ticks" aria-hidden="true"></canvas>
+      <input type="range" id="day" min="0" max="0" value="0" step="1" aria-label="Campaign day">
+    </div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <aside>
+    <section>
+      <div class="sec-head"><h2>Followed army</h2><button type="button" id="unfollow" hidden>Stop following</button></div>
+      <div id="armycard"><p class="empty">Pick an army on the map or in the list to follow it: the map keeps it in view and shows its whole route.</p></div>
+    </section>
+    <section>
+      <div class="sec-head"><h2>This day</h2><span class="muted" id="daycount"></span></div>
+      <ol class="log" id="daylog"></ol>
+    </section>
+    <section>
+      <div class="sec-head"><h2>Armies</h2><span><button type="button" id="showall">Show all</button> · <button type="button" id="hideall">Hide all</button></span></div>
+      <input type="search" id="filter" placeholder="Find a commander or force" aria-label="Find an army">
+      <ul class="armies" id="armylist"></ul>
+    </section>
+    <p class="muted" id="sourcenote"></p>
+  </aside>
+</div>
+
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const KINDS = { battle: "Battle", assault: "Assault or siege", operation: "Operation", march: "Forced march or rest",
+                  command: "Command", recruit: "Recruitment", tax: "Taxation" };
+  const css = getComputedStyle(document.documentElement);
+  const kindColor = (k) => css.getPropertyValue("--" + k).trim() || "#888";
+  // 30 distinguishable army colours (Kelly's and Glasbey's sets, light ones dropped)
+  const PALETTE = ["#e6194b", "#3cb44b", "#4363d8", "#f58231", "#911eb4", "#46c7c7", "#f032e6", "#7cae0e", "#d4a106", "#008080",
+    "#9a6324", "#800000", "#2a7f62", "#808000", "#000075", "#c75a8f", "#5f4b8b", "#b8471b", "#1b6ca8", "#6b8e23",
+    "#a0522d", "#2f4f4f", "#8b008b", "#cd5c5c", "#4682b4", "#556b2f", "#b03060", "#20b2aa", "#704214", "#483d8b"];
+
+  let D;
+  try { D = await (await fetch("data.json")).json(); }
+  catch (e) { $("armycard").innerHTML = '<p class="empty">The campaign data did not load. Reload the page to try again.</p>'; return; }
+  const base = new Image(); base.src = "base.webp";
+  const G = D.grid, NDAY = D.days.length;
+  const dayIndex = new Map(D.days.map((d, i) => [d.date, i]));
+  const armies = D.armies.map((a, i) => ({ ...a, i, color: PALETTE[i % PALETTE.length], visible: true,
+    commander: !!a.info, short: a.name.normalize("NFKD").replace(/[\u0300-\u036f]/g, "").split(/[\s-]+/).filter(w => !/^(of|the)$/i.test(w)).slice(0, 2).map(w => w[0]).join("").toUpperCase() }));
+  const byName = new Map(armies.map(a => [a.name, a]));
+  const events = D.events.map(e => ({ ...e, d: dayIndex.has(e.date) ? dayIndex.get(e.date) : -1, a: byName.get(e.army) || null })).filter(e => e.d >= 0);
+  const towns = D.towns.map(([h, name, kind, prov]) => ({ h, name, kind, prov, major: /capital|city/i.test(kind) }));
+  const townAt = new Map(towns.map(t => [t.h, t]));
+
+  // ---------------------------------------------------------------- hex geometry (odd rows shifted right)
+  const rc = (h) => [Math.floor((h - 1) / G.ncol), (h - 1) % G.ncol];
+  const centre = (h) => { const [r, c] = rc(h); return [G.x0 + G.dx * (c + 0.5 * (r % 2)), G.y0 + G.dy * r]; };
+  const R = G.dx / Math.sqrt(3);
+  const cube = (h) => { const [r, c] = rc(h); const x = c - (r - (r & 1)) / 2; return [x, r, -x - r]; };
+  const hexDist = (a, b) => { const p = cube(a), q = cube(b); return Math.max(Math.abs(p[0] - q[0]), Math.abs(p[1] - q[1]), Math.abs(p[2] - q[2])); };
+  const MILES_PER_HEX = 15 * Math.sqrt(3);
+  const hexAt = (x, y) => {           // nearest hex centre to a map point
+    const r0 = Math.round((y - G.y0) / G.dy); let best = null, bd = 1e9;
+    for (let r = r0 - 1; r <= r0 + 1; r++) {
+      if (r < 0) continue;
+      const c0 = Math.round((x - G.x0) / G.dx - 0.5 * (r % 2));
+      for (let c = c0 - 1; c <= c0 + 1; c++) {
+        if (c < 0 || c >= G.ncol) continue;
+        const h = r * G.ncol + c + 1, [cx, cy] = centre(h), dd = (cx - x) ** 2 + (cy - y) ** 2;
+        if (dd < bd) { bd = dd; best = h; }
+      }
+    }
+    return best;
+  };
+  const hexInfo = (h) => { const v = D.hexes[h]; return v ? { commandery: v[0], province: v[1], region: v[2], terrain: v[3], settlement: v[4] } : null; };
+  const placeName = (h) => { const t = townAt.get(h), v = hexInfo(h);
+    return t ? t.name : v ? (v.commandery || v.region || v.terrain) : "Open water"; };
+
+  // ---------------------------------------------------------------- state
+  let t = NDAY - 1, playing = false, speed = 2, trail = 14, followed = null;
+  try { const s = JSON.parse(localStorage.getItem("ravages-view") || "{}"); if (s.trail != null) trail = s.trail; if (s.speed) speed = s.speed; } catch (e) { /* storage off */ }
+  $("trail").value = String(trail); $("speed").value = String(speed);
+  const saveView = () => { try { localStorage.setItem("ravages-view", JSON.stringify({ trail, speed })); } catch (e) { /* storage off */ } };
+
+  // ---------------------------------------------------------------- map view
+  const cv = $("map"), ctx = cv.getContext("2d"), wrap = $("mapwrap");
+  let W = 0, H = 0, dpr = 1, s = 1, tx = 0, ty = 0;
+  const fit = () => { s = Math.min(W / G.width, H / G.height) * 0.98; tx = (W - G.width * s) / 2; ty = (H - G.height * s) / 2; };
+  const resize = () => { dpr = window.devicePixelRatio || 1; const r = wrap.getBoundingClientRect(); const first = !W;
+    const cxw = (W / 2 - tx) / s, cyw = (H / 2 - ty) / s; W = r.width; H = r.height;
+    cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
+    if (first) fit(); else { tx = W / 2 - cxw * s; ty = H / 2 - cyw * s; } draw(); };
+  const zoomAt = (f, px, py) => { const ns = Math.min(Math.max(s * f, Math.min(W / G.width, H / G.height) * 0.5), 40);
+    tx = px - (px - tx) * ns / s; ty = py - (py - ty) * ns / s; s = ns; draw(); };
+  const toWorld = (px, py) => [(px - tx) / s, (py - ty) / s];
+
+  // positions at fractional time (smooth between days while playing)
+  const posAt = (a, tt) => {
+    const i0 = Math.floor(tt), i1 = Math.min(i0 + 1, NDAY - 1), f = tt - i0;
+    const h0 = a.hex[i0], h1 = a.hex[i1] ?? h0;
+    if (h0 == null) return null;
+    const p0 = centre(h0), p1 = h1 != null ? centre(h1) : p0;
+    return [p0[0] + (p1[0] - p0[0]) * f, p0[1] + (p1[1] - p0[1]) * f, h0];
+  };
+
+  function drawHexGrid() {
+    const x0w = Math.max(0, -tx / s), y0w = Math.max(0, -ty / s), x1w = Math.min(G.width, (W - tx) / s), y1w = Math.min(G.height, (H - ty) / s);
+    ctx.beginPath();
+    const r0 = Math.max(0, Math.floor((y0w - G.y0) / G.dy) - 1), r1 = Math.ceil((y1w - G.y0) / G.dy) + 1;
+    const c0 = Math.max(0, Math.floor((x0w - G.x0) / G.dx) - 1), c1 = Math.min(G.ncol - 1, Math.ceil((x1w - G.x0) / G.dx) + 1);
+    for (let r = r0; r <= r1; r++) for (let c = c0; c <= c1; c++) {
+      const h = r * G.ncol + c + 1; if (!D.hexes[h]) continue;
+      const [x, y] = centre(h);
+      for (let k = 0; k <= 6; k++) { const ang = Math.PI / 180 * (60 * k - 90); const X = x + R * Math.cos(ang), Y = y + R * Math.sin(ang); k ? ctx.lineTo(X, Y) : ctx.moveTo(X, Y); }
+    }
+    ctx.strokeStyle = "rgba(40,40,40,0.28)"; ctx.lineWidth = 0.8 / s; ctx.stroke();
+  }
+
+  function draw() {
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = css.getPropertyValue("--map-bg"); ctx.fillRect(0, 0, W, H);
+    ctx.setTransform(dpr * s, 0, 0, dpr * s, dpr * tx, dpr * ty);
+    if (base.complete && base.naturalWidth) { ctx.imageSmoothingQuality = "high"; ctx.drawImage(base, 0, 0, G.width, G.height); }
+    if ($("gridtog").checked && s * G.dx > 9) drawHexGrid();
+    const day = Math.round(t);
+    // trails
+    const span = Math.min(trail, NDAY);
+    for (const a of armies) {
+      if (!a.visible) continue;
+      const isF = followed === a, len = isF ? NDAY : span;
+      if (!len) continue;
+      const from = Math.max(0, Math.floor(t) - len);
+      const pts = [];
+      for (let i = from; i <= Math.floor(t); i++) if (a.hex[i] != null) pts.push(centre(a.hex[i]));
+      const cur = posAt(a, t); if (cur) pts.push([cur[0], cur[1]]);
+      if (pts.length < 2) continue;
+      ctx.lineJoin = "round"; ctx.lineCap = "round";
+      for (let k = 1; k < pts.length; k++) {
+        const age = (pts.length - k) / pts.length;
+        ctx.strokeStyle = a.color; ctx.globalAlpha = isF ? 0.95 : Math.max(0.15, 0.85 * (1 - age));
+        ctx.lineWidth = (isF ? 3.2 : 2.2) / s * Math.max(1, Math.min(2.2, s / 1.5));
+        ctx.beginPath(); ctx.moveTo(pts[k - 1][0], pts[k - 1][1]); ctx.lineTo(pts[k][0], pts[k][1]); ctx.stroke();
+      }
+      if (isF) { ctx.fillStyle = a.color; for (const p of pts) { ctx.beginPath(); ctx.arc(p[0], p[1], 2.2 / s * Math.max(1, s / 1.5), 0, 7); ctx.fill(); } }
+      ctx.globalAlpha = 1;
+    }
+    // today's battles and assaults: a ring at the army's hex
+    for (const e of events) {
+      if (e.d !== day || !e.a || !e.a.visible || (e.kind !== "battle" && e.kind !== "assault")) continue;
+      const h = e.a.hex[day]; if (h == null) continue;
+      const [x, y] = centre(h); ctx.strokeStyle = kindColor(e.kind); ctx.lineWidth = 3 / s;
+      ctx.beginPath(); ctx.arc(x, y, R * 1.25, 0, 7); ctx.stroke();
+    }
+    // town names
+    if ($("nametog").checked) {
+      ctx.textAlign = "center"; ctx.textBaseline = "top";
+      for (const tw of towns) {
+        if (!tw.major && s < 2.2) continue;
+        const [x, y] = centre(tw.h), fs = (tw.major ? 12 : 10.5) / s;
+        ctx.font = `${tw.major ? 600 : 500} ${fs}px ${css.getPropertyValue("--font-body")}`;
+        ctx.lineWidth = 3 / s; ctx.strokeStyle = "rgba(250,247,240,0.9)"; ctx.strokeText(tw.name, x, y + R * 0.55);
+        ctx.fillStyle = "#2b2a27"; ctx.fillText(tw.name, x, y + R * 0.55);
+      }
+    }
+    // army markers, several in one hex spread round it
+    const groups = new Map();
+    for (const a of armies) { if (!a.visible) continue; const p = posAt(a, t); if (!p) continue;
+      const key = Math.round(p[0]) + "," + Math.round(p[1]); if (!groups.has(key)) groups.set(key, []); groups.get(key).push([a, p]); }
+    const mr = Math.max(7, Math.min(13, 5 + s * 2.2)) / s;
+    for (const list of groups.values()) {
+      list.forEach(([a, p], k) => {
+        let x = p[0], y = p[1];
+        if (list.length > 1) { const ang = -Math.PI / 2 + k * 2 * Math.PI / list.length, rr = mr * (0.9 + 0.12 * list.length); x += rr * Math.cos(ang); y += rr * Math.sin(ang); }
+        a._screen = [x * s + tx, y * s + ty];
+        const sel = followed === a;
+        if (sel) { ctx.fillStyle = "rgba(255,255,255,0.55)"; ctx.beginPath(); ctx.arc(x, y, mr * 1.7, 0, 7); ctx.fill(); }
+        ctx.fillStyle = a.color; ctx.strokeStyle = "#fff"; ctx.lineWidth = 2 / s;
+        ctx.beginPath();
+        if (a.commander) ctx.arc(x, y, mr, 0, 7); else ctx.roundRect(x - mr, y - mr, 2 * mr, 2 * mr, mr * 0.3);
+        ctx.fill(); ctx.stroke();
+        if (mr * s >= 9) { ctx.fillStyle = "#fff"; ctx.font = `600 ${mr * 0.95}px ${css.getPropertyValue("--font-body")}`; ctx.textAlign = "center"; ctx.textBaseline = "middle"; ctx.fillText(a.short, x, y + mr * 0.04); }
+      });
+    }
+  }
+
+  // ---------------------------------------------------------------- interaction
+  const pointers = new Map(); let drag = null, pinch = null, moved = false;
+  cv.addEventListener("pointerdown", (e) => { cv.setPointerCapture(e.pointerId); pointers.set(e.pointerId, [e.offsetX, e.offsetY]); moved = false;
+    if (pointers.size === 1) { drag = [e.offsetX, e.offsetY, tx, ty]; cv.classList.add("dragging"); }
+    else if (pointers.size === 2) { const [p, q] = [...pointers.values()]; pinch = [Math.hypot(p[0] - q[0], p[1] - q[1]), s]; drag = null; } });
+  cv.addEventListener("pointermove", (e) => { if (!pointers.has(e.pointerId)) return; pointers.set(e.pointerId, [e.offsetX, e.offsetY]);
+    if (pinch && pointers.size === 2) { const [p, q] = [...pointers.values()]; const d = Math.hypot(p[0] - q[0], p[1] - q[1]); zoomAt(pinch[1] * d / pinch[0] / s, (p[0] + q[0]) / 2, (p[1] + q[1]) / 2); moved = true; }
+    else if (drag) { const dx = e.offsetX - drag[0], dy = e.offsetY - drag[1]; if (Math.abs(dx) + Math.abs(dy) > 3) moved = true; tx = drag[2] + dx; ty = drag[3] + dy; draw(); } });
+  const up = (e) => { pointers.delete(e.pointerId); if (pointers.size < 2) pinch = null; if (!pointers.size) { drag = null; cv.classList.remove("dragging"); } };
+  cv.addEventListener("pointerup", (e) => { const was = moved; up(e); if (!was) clickAt(e.offsetX, e.offsetY); });
+  cv.addEventListener("pointercancel", up);
+  cv.addEventListener("wheel", (e) => { e.preventDefault(); zoomAt(Math.exp(-e.deltaY * 0.0015), e.offsetX, e.offsetY); }, { passive: false });
+  cv.addEventListener("dblclick", (e) => zoomAt(2, e.offsetX, e.offsetY));
+  $("zin").onclick = () => zoomAt(1.6, W / 2, H / 2);
+  $("zout").onclick = () => zoomAt(1 / 1.6, W / 2, H / 2);
+  $("zfit").onclick = () => { fit(); draw(); };
+  $("gridtog").onchange = draw; $("nametog").onchange = draw;
+
+  function clickAt(px, py) {
+    // an army marker first, else the hex
+    let hit = null, hd = 1e9;
+    for (const a of armies) { if (!a.visible || !a._screen) continue; const d = Math.hypot(a._screen[0] - px, a._screen[1] - py); if (d < hd) { hd = d; hit = a; } }
+    if (hit && hd < 16) { follow(hit); return; }
+    const [x, y] = toWorld(px, py), h = hexAt(x, y);
+    showHex(h);
+  }
+  function showHex(h) {
+    const box = $("hexinfo"); if (!h) { box.hidden = true; return; }
+    const v = hexInfo(h), tw = townAt.get(h), day = Math.round(t);
+    const here = armies.filter(a => a.visible && a.hex[day] === h);
+    box.innerHTML = `<div><b>${esc(tw ? tw.name : (v?.commandery || "Open water"))}</b> <span class="code">hex ${h}</span></div>`
+      + (v ? `<div>${esc([v.terrain, v.region, v.province].filter(Boolean).join(" · "))}</div>` : "")
+      + (tw ? `<div>${esc(tw.kind)}${tw.prov ? " of " + esc(tw.prov) : ""}</div>` : "")
+      + `<div>${here.length ? "Here: " + here.map(a => esc(a.name)).join(", ") : "No army here on this day."}</div>`;
+    box.hidden = false;
+  }
+  const esc = (x) => String(x ?? "").replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+
+  // ---------------------------------------------------------------- timeline
+  const slider = $("day"); slider.max = String(NDAY - 1);
+  const fmt = new Intl.DateTimeFormat("en-GB", { weekday: "short", day: "numeric", month: "short", year: "numeric" });
+  function setDay(v, { keepPlay = false } = {}) {
+    t = Math.max(0, Math.min(NDAY - 1, v));
+    if (!keepPlay && playing) togglePlay(false);
+    slider.value = String(Math.round(t)); refreshDay(); centreFollowed(); draw();
+  }
+  function refreshDay() {
+    const d = D.days[Math.round(t)];
+    $("realdate").textContent = fmt.format(new Date(d.date + "T12:00:00"));
+    $("igdate").textContent = [d.ig, d.season].filter(Boolean).join(" · ") || "—";
+    $("dayno").textContent = `Day ${Math.round(t) + 1} of ${NDAY}`;
+    renderDayLog(); renderList(); renderCard();
+  }
+  function drawTicks() {
+    const c = $("ticks"), r = c.getBoundingClientRect(), k = window.devicePixelRatio || 1;
+    c.width = Math.round(r.width * k); c.height = Math.round(r.height * k);
+    const g = c.getContext("2d"); g.setTransform(k, 0, 0, k, 0, 0); g.clearRect(0, 0, r.width, r.height);
+    const thumb = 8, w = r.width - 2 * thumb, x = (i) => thumb + w * i / Math.max(1, NDAY - 1);
+    const order = ["battle", "assault", "operation", "march", "command", "recruit", "tax"];
+    const shown = (e) => (followed ? e.a === followed : (e.a ? e.a.visible : true));
+    const stacks = Array.from({ length: NDAY }, () => ({}));
+    for (const e of events) if (shown(e)) stacks[e.d][e.kind] = (stacks[e.d][e.kind] || 0) + 1;
+    const unit = 3;
+    stacks.forEach((st, i) => { let y = r.height; for (const kk of order) { const n = st[kk]; if (!n) continue; const hgt = Math.min(n * unit, r.height);
+      g.fillStyle = kindColor(kk); g.fillRect(x(i) - 1.5, y - hgt, 3, hgt); y -= hgt; } });
+    // month marks
+    g.fillStyle = css.getPropertyValue("--ink-soft"); g.font = `10px ${css.getPropertyValue("--font-mono")}`; g.textBaseline = "top";
+    D.days.forEach((d, i) => { if (d.date.endsWith("-01")) { g.fillRect(x(i), 0, 1, 6); g.fillText(new Date(d.date + "T12:00:00").toLocaleString("en-GB", { month: "short" }), x(i) + 3, 0); } });
+  }
+  $("legend").innerHTML = Object.entries(KINDS).map(([k, v]) => `<span style="--c: var(--${k})">${v}</span>`).join("");
+  slider.addEventListener("input", () => setDay(+slider.value));
+  $("back").onclick = () => setDay(Math.round(t) - 1);
+  $("fwd").onclick = () => setDay(Math.round(t) + 1);
+  $("speed").onchange = (e) => { speed = +e.target.value; saveView(); };
+  $("trail").onchange = (e) => { trail = +e.target.value; saveView(); draw(); };
+  let last = 0;
+  function frame(ts) {
+    if (!playing) return;
+    const dtSec = last ? (ts - last) / 1000 : 0; last = ts;
+    let nt = t + dtSec * speed;
+    if (nt >= NDAY - 1) { nt = NDAY - 1; t = nt; togglePlay(false); slider.value = String(NDAY - 1); refreshDay(); draw(); return; }
+    const before = Math.round(t); t = nt;
+    if (Math.round(t) !== before) { slider.value = String(Math.round(t)); refreshDay(); }
+    centreFollowed(); draw(); requestAnimationFrame(frame);
+  }
+  function togglePlay(on = !playing) {
+    playing = on; $("play").textContent = on ? "Pause" : "Play";
+    if (on) { if (t >= NDAY - 1) t = 0; last = 0; requestAnimationFrame(frame); }
+  }
+  $("play").onclick = () => togglePlay();
+  document.addEventListener("keydown", (e) => {
+    if (e.target.closest("input, select, textarea")) return;
+    if (e.key === " ") { e.preventDefault(); togglePlay(); }
+    else if (e.key === "ArrowRight") setDay(Math.round(t) + 1);
+    else if (e.key === "ArrowLeft") setDay(Math.round(t) - 1);
+  });
+
+  // ---------------------------------------------------------------- follow an army
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function centreFollowed() {
+    if (!followed) return; const p = posAt(followed, t); if (!p) return;
+    const sx = p[0] * s + tx, sy = p[1] * s + ty, m = Math.min(W, H) * 0.22;
+    if (sx < m || sx > W - m || sy < m || sy > H - m || !playing) {
+      const gx = W / 2 - p[0] * s, gy = H / 2 - p[1] * s;
+      if (playing && !reduce) { tx += (gx - tx) * 0.12; ty += (gy - ty) * 0.12; } else if (!playing) { /* keep the user's framing when paused */ }
+    }
+  }
+  function follow(a) {
+    followed = followed === a ? null : a;
+    $("unfollow").hidden = !followed;
+    if (followed) { const p = posAt(followed, t); if (p) { if (s < 2) s = 2.5; tx = W / 2 - p[0] * s; ty = H / 2 - p[1] * s; } }
+    renderList(); renderCard(); drawTicks(); draw();
+  }
+  $("unfollow").onclick = () => follow(followed);
+
+  function marched(a, from, to) {
+    let n = 0; for (let i = from + 1; i <= to; i++) if (a.hex[i] != null && a.hex[i - 1] != null) n += hexDist(a.hex[i - 1], a.hex[i]);
+    return n;
+  }
+  function renderCard() {
+    const a = followed, box = $("armycard");
+    if (!a) { box.innerHTML = '<p class="empty">Pick an army on the map or in the list to follow it: the map keeps it in view and shows its whole route.</p>'; return; }
+    const day = Math.round(t), h = a.hex[day], v = h != null ? hexInfo(h) : null, tw = h != null ? townAt.get(h) : null;
+    let stay = 0; for (let i = day; i > 0 && a.hex[i - 1] === h; i--) stay++;
+    const total = marched(a, 0, day), week = marched(a, Math.max(0, day - 7), day);
+    const inf = a.info;
+    const troops = inf && Object.keys(inf.troops).length
+      ? Object.entries(inf.troops).map(([k, n]) => `<span class="chip">${esc(k)} <span class="mono">${n.toLocaleString("en-GB")}</span></span>`).join("") : "";
+    const evs = events.filter(e => e.a === a);
+    box.innerHTML = `<div class="card">
+      <div class="title"><span class="sw ${a.commander ? "" : "sq"}" style="background:${a.color}"></span><b>${esc(a.name)}</b></div>
+      <dl class="kv">
+        <dt>Where</dt><dd>${h == null ? "Unknown" : esc(tw ? tw.name + " (" + tw.kind + ")" : (v?.commandery || "Open water"))} <span class="mono muted">hex ${h ?? "—"}</span></dd>
+        ${v ? `<dt>Land</dt><dd>${esc([v.terrain, v.region, v.province].filter(Boolean).join(" · "))}</dd>` : ""}
+        <dt>Status</dt><dd>${stay ? `In this hex for ${stay + 1} days` : (day ? "Moved here today" : "Starting position")}</dd>
+        <dt>Marched</dt><dd class="mono">${total} hexes (~${Math.round(total * MILES_PER_HEX).toLocaleString("en-GB")} mi) so far · ${week} in the last 7 days</dd>
+        ${inf ? `<dt>Speed</dt><dd>${inf.speed ?? "—"} mi/day · morale ${inf.morale ?? "—"}</dd>` : ""}
+        ${inf && inf.tradition ? `<dt>Tradition</dt><dd>${esc(inf.tradition)}</dd>` : ""}
+      </dl>
+      ${inf && inf.traits.length ? `<div class="chips">${inf.traits.map(x => `<span class="chip">${esc(x)}</span>`).join("")}</div>` : ""}
+      ${troops ? `<div><div class="muted" style="margin-bottom:4px">Troops (current ledger)</div><div class="chips">${troops}</div></div>` : ""}
+      <div><div class="muted" style="margin-bottom:4px">Campaign log (${evs.length})</div>
+        <ol class="log">${evs.length ? evs.map(e => `<li data-d="${e.d}" class="${e.d === day ? "today" : ""}" tabindex="0"><span class="mono">${e.date.slice(5)}</span><span><i class="k" style="--c: var(--${e.kind})"></i>${esc(e.note)}</span></li>`).join("") : '<li class="empty">No notable events recorded.</li>'}</ol></div>
+    </div>`;
+    box.querySelectorAll("li[data-d]").forEach(li => { li.onclick = () => setDay(+li.dataset.d); li.onkeydown = (e) => { if (e.key === "Enter") setDay(+li.dataset.d); }; });
+  }
+  function renderDayLog() {
+    const day = Math.round(t);
+    const list = events.filter(e => e.d === day && (followed ? e.a === followed || !e.a : (e.a ? e.a.visible : true)));
+    $("daycount").textContent = list.length ? `${list.length} recorded` : "";
+    $("daylog").innerHTML = list.length ? list.map(e => `<li tabindex="0" data-a="${esc(e.army)}"><span class="mono">${esc(KINDS[e.kind].split(" ")[0])}</span><span><i class="k" style="--c: var(--${e.kind})"></i><b>${esc(e.army)}</b>: ${esc(e.note)}</span></li>`).join("")
+      : '<li class="empty">No battles, operations or marches recorded on this day.</li>';
+    $("daylog").querySelectorAll("li[data-a]").forEach(li => { const a = byName.get(li.dataset.a); if (a) li.onclick = () => { if (followed !== a) follow(a); }; });
+  }
+  function renderList() {
+    const q = $("filter").value.trim().toLowerCase(), day = Math.round(t);
+    $("armylist").innerHTML = armies.filter(a => !q || a.name.toLowerCase().includes(q)).map(a => {
+      const h = a.hex[day];
+      return `<li data-i="${a.i}" class="${a.visible ? "" : "off"} ${followed === a ? "sel" : ""}" tabindex="0">
+        <input type="checkbox" ${a.visible ? "checked" : ""} aria-label="Show ${esc(a.name)}" id="vis${a.i}">
+        <span class="sw ${a.commander ? "" : "sq"}" style="background:${a.color}"></span>
+        <span class="nm">${esc(a.name)}<span class="wh">${h == null ? "—" : esc(placeName(h))} · hex ${h ?? "—"}</span></span></li>`;
+    }).join("");
+    $("armylist").querySelectorAll("li").forEach(li => {
+      const a = armies[+li.dataset.i];
+      li.querySelector("input").onclick = (e) => { e.stopPropagation(); a.visible = e.target.checked; li.classList.toggle("off", !a.visible); drawTicks(); renderDayLog(); draw(); };
+      li.onclick = () => follow(a);
+      li.onkeydown = (e) => { if (e.key === "Enter") follow(a); };
+    });
+  }
+  $("filter").addEventListener("input", renderList);
+  $("showall").onclick = () => { armies.forEach(a => a.visible = true); renderList(); drawTicks(); renderDayLog(); draw(); };
+  $("hideall").onclick = () => { armies.forEach(a => a.visible = false); renderList(); drawTicks(); renderDayLog(); draw(); };
+
+  $("sourcenote").textContent = `${armies.length} armies over ${NDAY} days (${D.days[0].date} to ${D.days[NDAY - 1].date}), from the ComLoc and ComEvents tabs of ${D.source}. Troops, traits and morale are the ledger's current values. One hex is about ${Math.round(MILES_PER_HEX)} miles across.`;
+
+  window.claude?.hot?.snapshot?.(() => ({ t: Math.round(t), f: followed ? followed.name : null }));
+  const start = (data) => { if (data && data.t != null) t = data.t; if (data && data.f) followed = byName.get(data.f) || null; $("unfollow").hidden = !followed; };
+  window.claude?.hot?.ready ? window.claude.hot.ready(start) : start(window.claude?.hot?.data ?? {});
+
+  new ResizeObserver(() => { resize(); drawTicks(); }).observe(wrap);
+  base.onload = draw;
+  slider.value = String(Math.round(t));
+  refreshDay(); drawTicks(); resize();
+})();
+</script>
