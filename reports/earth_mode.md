@@ -804,6 +804,36 @@ painted. The map has no swamp, little hot or cold desert, and a Mediterranean
 band that is a quarter dry. The gap between the two fits measures how far the
 painted zones are from what Earth's climate rules would give this geography.
 
+### 5.6 The Earth-fit map on r16 (19 October)
+
+With r16 the world alone, fitted to the map with the physics unchanged
+(`calibration/earth/earthfit_world_r16.json`; 145 candidates over layouts
+1-3 at downsample 32), scores 0.189: as much as the r11 joint fit (0.187)
+needed drifting physics for. Letting the physics drift again (Earth
+distance up to 2.10) adds almost nothing (0.190 at 2.054;
+`earthfit_joint_r16.json`), so the Earth-fit atlas now runs on r16
+unchanged (downsample 8, layouts 1-3: zonefit 0.179, strict 24.9 %;
+cold-wet 0.78, "tree" 0.29, the painted Mediterranean 12 % dry against
+24 %; swamp still 0).
+
+Why Earth physics cannot paint this map: in each painted zone (downsample
+32, layout 1),
+
+| | Free fit | Earth fit (r16) |
+|---|---|---|
+| where the map sits | 23-43°N, tilt 15.8° | 28-50°N, tilt 30.4° |
+| mean temperature, cold-wet → hot-dry | 13.0 → 24.8 °C | 9.2 → 17.2 °C |
+| coldest month, cold-wet → hot-dry | -3.9 → 15.5 °C | -3.5 → 7.0 °C |
+| coldest month's fall per degree north | ~1.5 °C | ~0.7 °C |
+
+The painted zones need the coldest month to fall ~1.5 °C per degree of
+latitude; with Earth's physics the map gets half that, so the fit moves the
+whole map north (and tilts the planet more) to make the north's winters
+cold, and the south is left at a 15 °C mean where the swamp rule needs
+21 °C. Earth has gradients that steep on the downwind sides of continents
+(China's coast: coldest month ~1 °C near 33°N, a 21 °C mean near 26°N); the
+model's are too weak there too (East China's winters +2-3 °C).
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by
