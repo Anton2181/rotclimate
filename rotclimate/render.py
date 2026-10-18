@@ -666,7 +666,7 @@ def _around_decorate(ax, r, box, land):
     H, W = land.shape
     if p.beyond_style == "procedural":
         pc = lambda v: f"{round(v * 100)} % land"
-        kw = dict(fontsize=9, color="#222", ha="center", va="center",
+        kw = dict(fontsize=max(9.0, W / 105), color="#222", ha="center", va="center",
                   bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.75))
         north = p.beyond_north_land
         ne = p.beyond_northeast_land if p.beyond_northeast_land >= 0 else None
