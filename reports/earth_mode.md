@@ -573,6 +573,22 @@ physics from here on use averages over several layouts, so that a gain
 cannot come from one lucky coastline. The atlas builder and the satellite
 renderer take `--seeds` to publish an averaged climate if wanted.
 
+### 5.4 Why swamp and hot-dry lag (18 October)
+
+On the pressure-wind free fit at downsample 16, layout 1:
+
+| painted zone | recall | what the rest becomes | the failing rule |
+|---|---|---|---|
+| swamp (317 cells) | 49 % | Mediterranean 16 %, "tree" 16 %, warm-wet 14 % | 42 % of the cells are Csa (dry summers); 39 % not flat enough in the drawing |
+| hot-dry (250 cells) | 54 % | Mediterranean 30 %, "tree" 13 % | 820 mm of mostly winter rain: median aridity 0.94 against the rule's 1.0 |
+
+Both are the same fault: the winter storm rains and the summer drought of the
+Mediterranean regime reach too far into the warm south (the swamp needs wet
+summers, the desert dry winters). The pressure-wind refit left every rain
+setting where D2 had it, so the next map step refits the rain genes alone
+(`--physics rain`: supply, rain efficiency, storm track, subsidence, the e2
+convective closure; 21 settings), scored over several layouts.
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by

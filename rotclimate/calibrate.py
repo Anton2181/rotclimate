@@ -161,6 +161,13 @@ SPACE_E5_NEW = [g for g in SPACE_E5 if g[0] not in {n for n, *_ in SPACE_E4}]
 # the map fit's own settings plus the pressure winds (without the e4 extras)
 SPACE_E3B5 = SPACE_E3B + SPACE_E5_NEW
 SPACE_E3_NEW = [g for g in SPACE_E3 if g[0] not in {n for n, *_ in SPACE_E2}]
+# the rain genes alone, around a map fit (the painted swamp and hot desert
+# need the winter storm rains and summer drought to stop further north)
+_RAIN = ("ocean_rh", "land_recycling", "precip_tau_days", "rh_threshold", "storm_track", "storm_width", "convective",
+         "subsidence", "subsidence_asym", "instability", "subsidence_summer", "sverdrup", "subsidence_width",
+         "storm_seasonality", "circulation_lag_days", "subsidence_drying", "background_ascent", "convective_rain",
+         "convective_rh", "subcloud_evaporation")
+SPACE_RAIN_MAP = [g for g in SPACE_E3B5 if g[0] in _RAIN] + [("eddy_seasonality", 0.0, 0.9)]
 # e6 on the map: the pressure winds, the surroundings beyond the map and the
 # weight of their land share at the grid's edge, with the base temperatures
 # they trade against (fitted on several random layouts of the surroundings)
@@ -421,7 +428,7 @@ def main():
     ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "new", "world"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "rain", "new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument("--race", type=float, default=0.06,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
@@ -474,6 +481,8 @@ def main():
         _set_space(SPACE_E3B5)
     elif a.physics == "e6map":
         _set_space(SPACE_E6_MAP)
+    elif a.physics == "rain":
+        _set_space(SPACE_RAIN_MAP)
     elif a.physics == "new":
         _set_space(SPACE_NEW)
     bounds = json.loads(a.bounds)
@@ -484,7 +493,7 @@ def main():
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new", "e3b",
-                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "new", "world"):
+                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "rain", "new", "world"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
