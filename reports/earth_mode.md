@@ -448,8 +448,26 @@ nothing: six-region distances moved by -0.04 to +0.06 with r11, and with
 strong pressure Miami's January stayed at -9.0 °C. The pressure field's
 reach is not what lets a larger domain tell North America from Eurasia; the
 larger domain's temperature and moisture transport is. e7 was removed
-(section 6). A refit at the larger domain is the remaining test (about four
-times the cost of an r11 fit).
+(section 6). Weakening the summer trades over large land masses (e4b
+`trade_land` = 1, unrefitted) is a wash: Florida and Iberia improve (1.73
+→ 1.66, 2.17 → 2.04) and East China gets drier and worse (2.97 → 3.07);
+without the easterlies nothing drives the south-westerly inflow either.
+
+**A refit at a 2,200 km pad** (r13: r11's search space from r11, 145
+candidates, `calibration/earth/earth_e6_r13_pad2200.json`; the calibrator
+and benchmark take `--pad-km`) does not beat r11:
+
+| Fit | Training (6) | E China | Levant | Chile | Cape | SW Australia | Nine-region mean |
+|---|---|---|---|---|---|---|---|
+| r11, 1,100 km pad | **2.016** | 2.97 | **1.90** | 3.37 | **1.89** | 1.55 | **2.102** |
+| r11 unrefitted, 2,200 km pad | 2.155 | 2.94 | 1.97 | 3.38 | 2.05 | 1.72 | 2.231 |
+| r13, 2,200 km pad | 2.037 | **2.77** | 2.14 | 3.37 | 2.05 | **1.42** | 2.119 |
+
+East China and south-west Australia gain, the Levant loses most of its
+Mediterranean to desert (12 % kept) and the Cape gets worse. r11 stays the
+Earth reference. The humid subtropics need a mechanism the model does not
+have: a summer monsoon inflow driven by the continent's heating, not by the
+domain's size.
 
 ## 5. On the fantasy map
 
