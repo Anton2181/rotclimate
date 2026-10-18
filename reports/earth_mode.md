@@ -578,6 +578,36 @@ on held-out ones, so r19 is r16 plus e10 at a set strength, unrefitted
 training regions it is 2.028 (r16 2.012), over the original nine 2.086
 (2.084); the broader sample is the better judge.
 
+**r20: one setting at a time, kept only when both halves improve.** With
+refits overfitting, the next steps were scanned one physically motivated
+setting at a time from r19 on all 13 regions (`scripts/earth_coord_scan.py`;
+scans in `output/earth_benchmark/coord_scans_r19/`), a change kept only if
+both the eight training and the five held-out means improve. Alone, none
+did: a narrower storm track (12.5° or 11° against 14.7°) dries the dry
+interiors and the Cape but costs the humid east coasts (south-east US, East
+China, south Brazil, Japan), which need the broad winter rain belt; more
+storm asymmetry toward the warm-current coasts helps the held-out regions
+and costs Iberia and the Levant; less background ascent, more subsidence,
+a summer-weakening storm track, drier air at land edges, more or less
+orographic lift each trade one group of regions for another. Two changes
+pulling in opposite directions combine well: wet cooling judged by the
+bucket's soil water (e8b, at a milder 0.5) helps Japan, south Brazil and
+East China, and slightly drier ocean air (`ocean_rh` 0.722 → 0.702) helps
+east Australia, Mexico, the Cape and Iberia:
+
+| | Training (8) | Held out (5) | All 13 |
+|---|---|---|---|
+| r16 | 2.175 | 2.466 | 2.287 |
+| r19 (+ e10) | 2.161 | 2.448 | 2.271 |
+| **r20** (+ e8b at 0.5, `ocean_rh` 0.702) | **2.140** | **2.431** | **2.252** |
+
+`calibration/earth/earth_e10_r20.json` is the Earth reference. A further
+round of single changes from r20 (stronger drying under highs, fuller land
+seasons, less background ascent, wet cooling 0.55, ocean air 0.697) finds
+none that improves both halves: r20 is a local optimum of the existing
+mechanisms, and further gains need new ones (the East Asian rain front, the
+dry continental interiors' winter).
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's

@@ -10,7 +10,7 @@ physics fitted to the map with every setting free, from the restart campaign's
 best basin, now with Earth's pressure-driven winds: zonefit 0.529, strict 59.1 %;
 reversed spin, 32.9°N, 15.8° tilt).
 [Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF) beside it: the map on
-the Earth reference physics (now r16, unchanged, with only the world fitted; the newest reference is r19, report 4f), drifting only while its Earth score stays
+the Earth reference physics (now r16, unchanged, with only the world fitted; the newest reference is r20, report 4f), drifting only while its Earth score stays
 within 3 % (zonefit 0.18, strict 26 %; `atlases/earth_fit/`).
 Both atlases carry 21 map layers (temperature, water, winds and sea in
 winter and summer, month by month on the local calendar with a slider),
