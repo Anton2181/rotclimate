@@ -12,6 +12,10 @@ reversed spin, 32.9°N, 15.8° tilt).
 [Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF) beside it: the map on
 the Earth reference physics (r11), drifting only while its Earth score stays
 within 3 % (zonefit 0.18, strict 26 %; `atlases/earth_fit/`).
+Both atlases carry 21 map layers (temperature, water, winds and sea in
+winter and summer, month by month on the local calendar with a slider),
+six animations, the invented surroundings around the map, and every named
+place's monthly climate as CSV (`rotclimate/atlas.py`, `scripts/build_atlas_variant.py`).
 The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
 plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
