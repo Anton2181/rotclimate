@@ -714,6 +714,13 @@ summer winds are trade easterlies. Scans from r21 (in
 
 `calibration/earth/earth_e16_r22.json` (r21 + `cloud_longwave` 0.25):
 2.120 / 2.326 / 2.199 over 8 / 5 / 13 regions.
+From r22, `cloud_longwave` 0.4, snow cover at 2 K and monsoon inflow at
+0.25 each improve the held-out half (2.310, 2.320, 2.315) and cost the
+training half 0.003–0.011, so r22 is a local optimum for single changes.
+Snow cover, stronger longwave cooling and monsoon inflow all point the same
+way on the held-out regions, so a joint refit of the temperature offsets
+with them is the next test, once refits can be held to the
+both-halves rule.
 
 ## 5. On the fantasy map
 
