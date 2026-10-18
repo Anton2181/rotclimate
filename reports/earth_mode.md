@@ -386,6 +386,16 @@ gain, not a training artefact; the fit raised the planetary-scale pressure
 inside. On the map the option has no effect (the map's surroundings are its
 own procedural edge), so the map fit is unchanged.
 
+The e4 extras, never tried with the pressure winds, were then refitted
+around r11 (r12: cloud and clear-sky radiation, the marine layer, monsoon
+heating and summer trade weakening, with the pressure genes and their
+partners; 241 evaluations). The fit turns cloud radiation on (4.2) and
+improves the training mean to 1.998, but every held-out region gets worse
+(Chile 3.37 → 3.48, Cape 1.89 → 2.08, south-west Australia 1.55 → 1.65) and
+the nine-region mean rises to 2.133: it fits the northern training regions
+at the southern ones' expense. r11 stays the reference
+(`calibration/earth/earth_e4x_r12.json` keeps r12).
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
