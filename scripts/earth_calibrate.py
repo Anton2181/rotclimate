@@ -76,6 +76,7 @@ SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]
 _CASES = {}
+_PAD_KM = 1100.0     # land and sea modelled around each region (set by --pad-km before the pool forks)
 
 
 def physics(x, base):
@@ -97,9 +98,9 @@ def evaluate(args):
     out = dict(params=asdict(p), regions={})
     try:
         for r in regions:
-            if (r, cell_km) not in _CASES:
-                _CASES[(r, cell_km)] = earth.region_case(r, cell_km)
-            case = _CASES[(r, cell_km)]
+            if (r, cell_km, _PAD_KM) not in _CASES:
+                _CASES[(r, cell_km, _PAD_KM)] = earth.region_case(r, cell_km, pad_km=_PAD_KM)
+            case = _CASES[(r, cell_km, _PAD_KM)]
             res = earth.run_case(p, case, steps=p.steps_per_year)
             out["regions"][r] = earth.compare(res, case)
         out["cost"] = float(np.mean([out["regions"][r]["climate_distance"] for r in regions]))
@@ -125,7 +126,10 @@ def main():
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--out", required=True)
     ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
+    ap.add_argument("--pad-km", type=float, default=1100.0, help="land and sea modelled around each region")
     a = ap.parse_args()
+    global _PAD_KM
+    _PAD_KM = a.pad_km
     import pickle
 
     import cma

@@ -112,6 +112,7 @@ def main():
     ap.add_argument("--cell-km", type=float, default=28.0)
     ap.add_argument("--steps", type=int, default=25)
     ap.add_argument("--set", default="{}", help="json of parameter overrides")
+    ap.add_argument("--pad-km", type=float, default=1100.0, help="land and sea modelled around each region")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     base = load_params(a.params).replace(**json.loads(a.set))
@@ -120,7 +121,7 @@ def main():
     rows, results = [], []
     for name in a.regions:
         t = time.time()
-        case = earth.region_case(name, a.cell_km)
+        case = earth.region_case(name, a.cell_km, pad_km=a.pad_km)
         res = earth.run_case(base, case, steps=a.steps)
         r = earth.compare(res, case)
         r["seconds"] = round(time.time() - t, 1)
@@ -130,7 +131,7 @@ def main():
     maps(results, out)
     stations = climographs(results, out)
     (out / "summary.json").write_text(json.dumps(dict(params=a.params, overrides=json.loads(a.set),
-                                                      cell_km=a.cell_km, steps=a.steps, regions=rows,
+                                                      cell_km=a.cell_km, pad_km=a.pad_km, steps=a.steps, regions=rows,
                                                       stations=stations), indent=1))
     d = [r["climate_distance"] for r in rows]
     ref = {k: np.mean([r["reference_distances"][k] for r in rows]) for k in rows[0]["reference_distances"]}
