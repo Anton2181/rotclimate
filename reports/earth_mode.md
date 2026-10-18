@@ -608,6 +608,72 @@ none that improves both halves: r20 is a local optimum of the existing
 mechanisms, and further gains need new ones (the East Asian rain front, the
 dry continental interiors' winter).
 
+**e11 and e12: what feeds the humid east coasts.** Tracing r20 at Kagoshima
+showed summer air at 0.61–0.67 of saturation and 2 mm of rain a day against
+15. Two causes were tested (scans in `output/earth_benchmark/coord_scans_r20/`):
+
+- *e11, one-sided sea uptake* (`ocean_sink`, 1 = symmetric, the default).
+  Sea evaporation is lamE × (W_ocean − W), so moist air carried over a cooler
+  sea gives water back. Making the uptake one-sided barely moves anything
+  (held out 2.431 → 2.426 at 0), so it is left off.
+- *e12, how far away a coast is felt* (`current_scale_km`, default 250). The
+  warm and cold boundary currents come from the east–west gradient of the
+  land smoothed over 250 km. That reached only coasts facing east or west:
+  the sea south of Kyushu, with China 800 km to the west, got no Kuroshio,
+  and summer there peaked at 21–24 °C against about 28 °C. Smoothing over
+  900 km gives:
+
+| From r20, one change | Training (8) | Held out (5) | All 13 |
+|---|---|---|---|
+| r20 | 2.140 | 2.431 | 2.252 |
+| `current_scale_km` 600 | 2.135 | 2.363 | 2.223 |
+| **900 (r21)** | **2.121** | **2.356** | **2.211** |
+| 1200 | 2.113 | 2.374 | 2.213 |
+| 900, current 5 K (6.3) | 2.098 | 2.383 | 2.208 |
+| 900, current 8 K | 2.160 | 2.334 | 2.227 |
+
+Japan, south Brazil, Mexico, the south-east US and the Cape improve. East
+Australia gets worse (2.24 → 2.43), but it was already twice as wet as
+observed (1207 mm against 641), mostly from winter rain inland (Moree 112 mm
+in the winter month against 47); the warmer sea only adds to that.
+`calibration/earth/earth_e12_r21.json` (r20 + 900 km) is the new reference.
+
+**e13: carrying water out of the highs (removed).** In the dry interiors'
+winter (Torreón, Moree) rain matches land evaporation all year: rain
+refills the soil bucket and the soil feeds the next rain. Cutting the ascent
+under highs (e10) only raises the humidity until the rain matches again. Two
+sinks that remove column water without rain were tried from r21. Both
+help east Australia, the Cape and Mexico, and both cost the humid east
+coasts more:
+
+| From r21 | Training (8) | Held out (5) | East Australia | East China | South Brazil |
+|---|---|---|---|---|---|
+| r21 | 2.121 | 2.356 | 2.43 | 2.71 | 2.38 |
+| water lost under positive pressure, 0.01 /day/hPa | 2.192 | 2.419 | 2.23 | 2.83 | 2.59 |
+| water exported by low-level divergence, 0.2 of the column | 2.155 | 2.532 | 1.96 | 3.18 | 3.03 |
+
+The second is the −W∇·u term that the u·∇W transport leaves out. The
+winter monsoon outflow of East China and south Brazil needs that water, so
+neither sink is kept.
+
+**e14 and e15 (removed).** Two more ways to break the interiors' soil-to-rain
+loop also trade one group of regions for another:
+
+| From r21 | Training (8) | Held out (5) | East Australia | East China | Notes |
+|---|---|---|---|---|---|
+| r21 | 2.121 | 2.356 | 2.43 | 2.71 | |
+| e14: soil evaporation × (soil / ¾ bucket)², not linear (two-stage drying, Ritchie 1972) | 2.160 | 2.327 | 2.41 | 2.72 | Chile 3.31 → 3.15; California and Iberia worse |
+| e14, power 3 | 2.196 | 2.311 | 2.39 | 2.73 | |
+| e15: vapour carried 1 km up the thermal-wind shear (~3 m/s westerly in winter) | 2.209 | 2.494 | 2.08 | 3.37 | Japan and the Levant better |
+| e15, 2 km | 2.330 | 2.620 | 1.72 | 4.03 | |
+
+e14 barely touches Mexico or east Australia: their soils do not dry out,
+so the soil curve is not the lever. Every change that dries the interiors
+(e13, e15, and e10 before them) also drains East China and south Brazil,
+whose rain the model holds only through the same moist pool. The missing
+piece is probably what keeps those coasts wet in reality, the monsoon
+inflow, rather than the interiors' outflow.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
