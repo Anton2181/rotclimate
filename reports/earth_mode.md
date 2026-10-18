@@ -609,6 +609,27 @@ setting where D2 had it, so the next map step refits the rain genes alone
 (`--physics rain`: supply, rain efficiency, storm track, subsidence, the e2
 convective closure; 21 settings), scored over several layouts.
 
+**The rain refit** (the 21 rain settings over layouts 1-3, 201
+candidates at downsample 32; `calibration/earth/free_rain_multi_ds32.json`)
+reached 0.489 against the start's 0.480 on its own layouts, but not beyond
+them:
+
+| downsample 32 | layouts 1-3 (mean of single scores) | unseen layouts 4-9 | swamp recall, 9 layouts | hot-dry recall, 9 layouts |
+|---|---|---|---|---|
+| published free fit | 0.470 | 0.458 | 0.35-0.58 | 0.40-0.51 |
+| rain refit | 0.480 | 0.462 | 0.35-0.58 | 0.43-0.52 |
+
+Its temperature-wind solve also fails to converge on layout 4 (a limit
+cycle; scored without the convergence test there). Not adopted: swamp and
+hot-dry did not move, so the rain settings are not what holds them back.
+
+* **Swamp is capped by the terrain.** The swamp rule wants flat ground
+  (slope under ~1.5 per mille over ~15 km), and only 61 % of the painted
+  swamp is that flat once the drawn tiers become heights (60-62 % at
+  downsample 32-8): the swamp is painted on the two south-eastern
+  peninsulas, whose hill ridges run along their spines. The climate
+  delivers 0.47-0.53 of that 0.61.
+
 ### 5.5 The Earth-fit map, back beside the free fit (18 October)
 
 The map run on the Earth reference (r11, with the far-field edge fetch),
