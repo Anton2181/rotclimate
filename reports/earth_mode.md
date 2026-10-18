@@ -368,6 +368,24 @@ strongly, in the south-east US (+3.2 °C in April): humid east coasts warm
 too early. East China stays the open problem; e6 remains an option (off by
 default) for later fits.
 
+**Refitted, e6 is the new Earth reference (r11, 18 October).** With
+`far_fetch` = 1 and the pressure winds and their partners refitted from r9
+(241 evaluations, sigma 0.06, `calibration/earth/earth_e6_r11.json`):
+
+| Fit | Training (6) | E China | Chile | Cape | SW Australia | Nine-region mean |
+|---|---|---|---|---|---|---|
+| r9 (e5) | 2.038 | 3.39 | 3.45 | 2.02 | 1.76 | 2.162 |
+| **r11 (e5 + e6)** | **2.016** | **2.97** | **3.37** | **1.89** | **1.55** | **2.102** |
+
+East China's distance falls by 0.42 (January bias +2.3 °C against +3.0) and
+all three held-out southern regions improve, so the edge fetch is a real
+gain, not a training artefact; the fit raised the planetary-scale pressure
+(1.99 hPa/K over 1,780 km against 1.65) and the land's seasonal amplitude
+(0.86 against 0.72) while lowering the continentality factor (0.84 against
+1.19): with true upwind land at the edge, less amplification is needed
+inside. On the map the option has no effect (the map's surroundings are its
+own procedural edge), so the map fit is unchanged.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
