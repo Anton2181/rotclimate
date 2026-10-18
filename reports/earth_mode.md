@@ -469,6 +469,32 @@ Earth reference. The humid subtropics need a mechanism the model does not
 have: a summer monsoon inflow driven by the continent's heating, not by the
 domain's size.
 
+**Physics e8: a soil bucket** (`soil_bucket_mm`, off by default). Land
+evaporation was a fixed share of the last ~50 days' rain, so soils could not
+store spring rain for the summer: Changsha evaporated 1.3-1.9 mm a day in
+summer against about 4 observed. With e8 land evaporates the Priestley-Taylor
+rate (net radiation from the sunshine at the top of the air) while the soil
+holds water, slowing below 75 % of what it holds (Manabe 1969). Unrefitted it
+is the first change that moves East China a lot (2.97 → 2.59: Changsha 796
+→ 1,073 mm, Chongqing 358 → 612) without freezing Florida, but it wets the
+dry regions (Central Asia 193 → 468 mm against 228). Refitted (the e8_stage
+space: the pressure-wind stage, the bucket, the evaporation factor and the
+rain closure):
+
+| Fit | California | Iberia | SE US | Levant | C Asia | E China | Training (6) | Chile | Cape | SW Australia | Nine-region |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| r11 | **1.83** | 2.17 | **1.73** | 1.90 | **1.50** | 2.97 | 2.016 | **3.37** | 1.89 | 1.55 | 2.102 |
+| r14 (e8, 241 candidates) | 1.92 | 2.19 | 1.75 | 1.80 | 1.73 | **2.76** | 2.022 | 3.40 | **1.80** | **1.49** | **2.091** |
+| r15 (r14 polished, 145) | 2.02 | **2.02** | 1.74 | **1.71** | 1.64 | 2.89 | **2.004** | 3.52 | 1.86 | 1.58 | 2.109 |
+
+r14 (a 75 mm bucket, evaporation factor 0.47) generalises best: the three
+held-out regions improve to a mean of 2.23 (r11 2.27) and East China gains
+0.21, but its training mean is 0.006 worse. Polishing it (r15) buys the
+training regions at the held-out ones' expense. Neither beats r11 on both,
+so r11 stays the reference (`calibration/earth/earth_e8_r14.json` and
+`earth_e8_r15.json` keep them); e8 stays as an option, the most promising
+lead for the humid subtropics.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
