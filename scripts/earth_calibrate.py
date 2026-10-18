@@ -84,6 +84,11 @@ SPACES["e8b_stage"] = SPACES["e8_stage"] + [("wet_cooling", 0.0, 0.9), ("trade_l
 SPACES["e8tl_stage"] = SPACES["e8_stage"] + [("trade_land", 0.0, 1.0)]
 # e10: drying under the pressure winds' highs, with the r16 stage
 SPACES["e10_stage"] = SPACES["e8tl_stage"] + [("high_drying", 0.0, 0.2)]
+# e16-e22: the strengths of the newer mechanisms with the land temperature offset
+# and land evaporation they trade against (each alone helps one group of regions)
+SPACES["mech_stage"] = [("snow_albedo", 0.0, 8.0), ("sea_winter_mixing", 0.0, 1.0), ("cloud_longwave", 0.0, 1.0),
+                        ("rh_spread", 0.0, 0.25), ("monsoon_heating", 0.0, 1.0), ("flux_convergence", 0.0, 0.4),
+                        ("land_offset", -1.0, 3.0), ("land_recycling", 0.2, 0.8)]
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]

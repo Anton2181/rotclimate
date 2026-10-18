@@ -125,6 +125,7 @@ class Params:
     land_recycling: float = 0.35      # fraction of land P re-evaporated
     precip_tau_days: float = 6.0      # background rain-out time scale
     rh_threshold: float = 0.45
+    rh_spread: float = 0.0            # e22: day-to-day spread (s.d.) of column humidity the rain gate is averaged over (0 = the mean alone)
     storm_track: float = 1.6          # extra-tropical cyclone rain factor
     storm_width: float = 9.0          # deg
     convective: float = 2.0           # convergence-driven rain factor

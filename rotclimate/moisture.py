@@ -8,9 +8,18 @@ from .transport import moisture_terms
 DAY = 86400.
 
 
-def rain_coefficient(W, saturation, dynamics, instability, rh_threshold, tau_days, closure=None):
+def rain_coefficient(W, saturation, dynamics, instability, rh_threshold, tau_days, closure=None, spread=0.0):
     rh = W / saturation
     gate = np.clip((rh - rh_threshold) / (1 - rh_threshold), 0, 2) ** 1.5
+    if spread > 0:
+        # e22: the humidity of a season is a mean over days that are moister
+        # and drier; rain starts on the moist days, so the season's rain is the
+        # gate averaged over that spread (three-point Gauss-Hermite) and a
+        # mean below the threshold still gets showers (Mediterranean summers)
+        def g(r):
+            return np.clip((r - rh_threshold) / (1 - rh_threshold), 0, 2) ** 1.5
+        d = np.sqrt(3.0) * spread
+        gate = (g(rh - d) + 4.0 * gate + g(rh + d)) / 6.0
     rate = dynamics * gate * instability / (tau_days * DAY)
     if closure is not None:
         # physics e2: convective rain rising exponentially with column relative
@@ -58,7 +67,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
     lamE_all = lamE
     for n in range(p.picard_iters):
         lamE = ocean_rate(p, lamE_all, W, ocean_water)
-        lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure)
+        lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure,
+                                spread=p.rh_spread)
         if sink is not None:
             lamP = lamP + sink
         source = land_source if gain is None else land_source + gain * W
@@ -75,7 +85,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             W = (1-p.moisture_relaxation) * W + p.moisture_relaxation * np.maximum(new, 0)
         if p.moisture_residual_tol > 0:
             W[solver.border] = boundary[solver.border]
-            P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure) * W * DAY
+            P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure,
+                                spread=p.rh_spread) * W * DAY
             E = (lamE * (ocean_water - W) + land_source) * DAY
             if sink is not None:
                 E = E - sink * W * DAY
@@ -89,7 +100,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             converged = residual <= p.moisture_residual_tol
             if converged:
                 break
-    P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure) * W * DAY
+    P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure,
+                                spread=p.rh_spread) * W * DAY
     return MoistureSolution(W, P, n+1, converged, residual)
 
 
