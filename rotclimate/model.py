@@ -492,6 +492,11 @@ class ClimateModel:
                 # rough potential evaporation (~6.5 mm/day at 30 C)
                 pet = 0.5 + 0.2 * np.maximum(Tl, 0.0)
                 wet = np.clip(soilP / pet, 0.0, 1.0)
+                if p.soil_wet_cooling and p.soil_bucket_mm > 0:
+                    # e8b: wetness is the bucket's own soil water (a wet spring
+                    # after a rainy winter evaporates instead of heating; a soil
+                    # dried by a rainless summer heats)
+                    wet = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean

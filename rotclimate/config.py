@@ -168,6 +168,7 @@ class Params:
     far_fetch: float = 0.0            # e6: weight of the far-field upwind land share at the domain edge (0 = local land)
     wind_cap: float = 0.0             # e6: m/s ceiling of the temperature-driven wind, soft above half of it (0 = none)
     soil_bucket_mm: float = 0.0       # e8: soil water a land cell holds for energy-limited evaporation (0 = recent-rain recycling)
+    soil_wet_cooling: bool = False    # e8b: wet_cooling judges wetness by the bucket's soil water, not recent rain
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
     marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air
     marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental
