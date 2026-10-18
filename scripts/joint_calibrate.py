@@ -60,7 +60,7 @@ def evaluate(args):
     out = dict(params=asdict(p))
     t = time.time()
     try:
-        m = C.evaluate_params(p, a["objective"])
+        m = C.evaluate_params(p, a["objective"], seeds=a.get("seeds"))
         out["map"] = {k: m[k] for k in ("score", "mean", "accuracy", "per_class", "recall", "f1")}
         if cutoff is not None and m["score"] < cutoff:
             out.update(score=m["score"] - 1.0, raced=True)
@@ -106,6 +106,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--physics", default="e1", choices=[k for k in SPACES if not k.endswith("new")],
                     help="Earth physics space fitted together with the world")
+    ap.add_argument("--seeds", default="", help="comma list of surroundings layouts the map is scored on (mean)")
     ap.add_argument("--out", required=True)
     ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     a = ap.parse_args()
@@ -124,7 +125,8 @@ def main():
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     (out / "space.json").write_text(json.dumps(dict(args=vars(a), space=SPACE), indent=1))
     log = (out / "evals.jsonl").open("a")
-    cfg = dict(objective=a.objective, regions=a.regions, cell_km=a.cell_km, earth_max=a.earth_max, penalty=a.penalty)
+    cfg = dict(objective=a.objective, regions=a.regions, cell_km=a.cell_km, earth_max=a.earth_max, penalty=a.penalty,
+               seeds=[int(x) for x in a.seeds.split(",") if x.strip()] or None)
     x0 = encode(base)
     world = {g[0] for g in WORLD}
     over = json.loads(a.stds)
