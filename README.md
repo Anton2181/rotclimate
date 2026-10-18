@@ -9,6 +9,9 @@ pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 physics fitted to the map with every setting free, from the restart campaign's
 best basin, now with Earth's pressure-driven winds: zonefit 0.529, strict 59.1 %;
 reversed spin, 32.9°N, 15.8° tilt).
+[Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF) beside it: the map on
+the Earth reference physics (r11), drifting only while its Earth score stays
+within 3 % (zonefit 0.18, strict 26 %; `atlases/earth_fit/`).
 The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
 plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
@@ -19,7 +22,8 @@ feed, is mapped in the [Ravages Harvest Atlas](https://claude.ai/artifact/JkEE3x
 (`land/`; method and its checks against Earth's populations of the period
 and against the campaign sheet in [reports/land_people.md](reports/land_people.md)).
 The workflow is two steps: improve and fit the model on Earth, then calibrate
-it freely on the map. The joint Earth-and-map fit, its atlas and the old live
+it freely on the map; the Earth-fit atlas shows the same map held to Earth's
+physics. The older joint fit (e1), its Earth-physics atlas and the old live
 atlas are retired.
 
 ```sh

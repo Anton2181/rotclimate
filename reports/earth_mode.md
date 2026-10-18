@@ -589,6 +589,35 @@ setting where D2 had it, so the next map step refits the rain genes alone
 (`--physics rain`: supply, rain efficiency, storm track, subsidence, the e2
 convective closure; 21 settings), scored over several layouts.
 
+### 5.5 The Earth-fit map, back beside the free fit (18 October)
+
+The map run on the Earth reference (r11, with the far-field edge fetch),
+in two steps from the free fit's world (`scripts/combine_world_physics.py`):
+
+1. **World only** (latitude, tilt, orientation, tiers, the surroundings;
+   the physics held at r11): zonefit 0.163 at downsample 32
+   (`calibration/earth/earthfit_world_r11.json`).
+2. **Joint** (`scripts/joint_calibrate.py`, scored over three layouts of the
+   surroundings): world and physics together, the physics allowed to drift
+   only while its Earth climate distance stays at or under 2.10 (r11: 2.016).
+   Best 0.187 at Earth distance 2.066 (`calibration/earth/earthfit_joint_r11.json`).
+   Reversed spin, 36.5°N, 30.7° tilt, true north 24.8° anticlockwise of the
+   top edge.
+
+At full detail (downsample 8, averaged over layouts 1-3), the
+[Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF)
+(`atlases/earth_fit/`) shows:
+
+| downsample 8 | zonefit | strict | cold-wet | cold-dry | warm-wet | Med | swamp | tree | hot-dry | Med Cs / dry |
+|---|---|---|---|---|---|---|---|---|---|---|
+| free fit (`free_e5p_ds16`, layout 1) | 0.529 | 59.1 % | 71 % | 59 % | 58 % | 64 % | 47 % | 59 % | 53 % | 77 % / 12 % |
+| Earth fit (layouts 1-3) | 0.179 | 25.7 % | 66 % | 11 % | 35 % | 32 % | 0 % | 17 % | 15 % | 40 % / 24 % |
+
+With physics that holds on Earth, only the cold-wet north comes out much as
+painted. The map has no swamp, little hot or cold desert, and a Mediterranean
+band that is a quarter dry. The gap between the two fits measures how far the
+painted zones are from what Earth's climate rules would give this geography.
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by
