@@ -96,6 +96,114 @@ def build_hires_layers(result, scale=3, outdir: Path = ATLAS / "data"):
     _save_webp(_overlay_rivers(timg, fr), outdir / "target.webp")
     agreement_layer(fr, outdir)
     zones_layer(fr, outdir)
+    extra_layers(result, fr, outdir)
+
+
+WIND_VMAX = 6.0      # m/s at the top of the wind layers' colour scale
+
+
+def _season_steps(result, season):
+    """Model steps in the local calendar's months of `season` ("winter", "summer")."""
+    idx = [k for k, d in enumerate(result.days)
+           if season in cal.month_of_day(int(d))[0].season.split(" / ")[0]]
+    return np.array(idx, int)
+
+
+def _land_grey(rgb, fr, sea_rgb=None):
+    """Hill-shaded light grey on land (for maps of the sea)."""
+    from .render import hillshade
+
+    hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
+    grey = (0.80 + 0.18 * (hs - 0.5))[..., None] * np.ones(3)
+    return np.where(fr.land[..., None], grey, rgb if sea_rgb is None else sea_rgb)
+
+
+def _wind_layer(result, fr, steps, path, vmax=WIND_VMAX, spacing_km=110.0):
+    """Mean surface wind over `steps`: speed in colour (land hill-shaded) and
+    arrows every ~spacing_km, length proportional to speed."""
+    import matplotlib.pyplot as plt
+    from PIL import ImageDraw
+
+    from .render import hillshade
+
+    g = result.grid
+    u, v = result.u[steps].mean(0), result.v[steps].mean(0)
+    sp = fr.up(np.hypot(u, v), land_fill=False)
+    rgb = plt.get_cmap("YlGnBu")(0.08 + 0.8 * np.clip(sp / vmax, 0, 1))[..., :3]
+    hs = hillshade(fr.elev, getattr(fr, "px_m", 1770.0))
+    rgb = np.where(fr.land[..., None], rgb * (0.78 + 0.3 * hs[..., None]).clip(0, 1.08), rgb * 0.92 + 0.08)
+    rgb = _overlay_rivers(rgb.clip(0, 1), fr)
+    im = Image.fromarray((rgb * 255).astype(np.uint8))
+    draw = ImageDraw.Draw(im)
+    sc = fr.W / source_layers()["land"].shape[1]          # image px per source px
+    step = max(1, int(round(spacing_km / g.cell_km)))
+    seg = spacing_km / g.cell_km * g.f * sc                # arrow spacing in image px
+    width = max(3, int(round(fr.W / 1700)))
+    for i in range(g.pad + step // 2, g.ny - g.pad, step):
+        for j in range(g.pad + step // 2, g.nx - g.pad, step):
+            x = ((j - g.pad + 0.5) * g.f) * sc
+            y = ((i - g.pad + 0.5) * g.f) * sc
+            if not (0 <= x < fr.W and 0 <= y < fr.H):
+                continue
+            s = float(np.hypot(u[i, j], v[i, j]))
+            if s < 0.3:
+                continue
+            L = seg * 0.85 * float(np.clip(s / vmax, 0.3, 1.0))     # weak winds still show their direction
+            dx, dy = u[i, j] / s * L, -v[i, j] / s * L
+            x0, y0, x1, y1 = x - dx / 2, y - dy / 2, x + dx / 2, y + dy / 2
+            draw.line([(x0, y0), (x1, y1)], fill=(20, 24, 40), width=width)
+            hl = max(4.0, 0.35 * L)
+            for a in (2.6, -2.6):
+                ca, sa = np.cos(a), np.sin(a)
+                hx, hy = (dx * ca - dy * sa) / L * hl, (dx * sa + dy * ca) / L * hl
+                draw.line([(x1, y1), (x1 + hx, y1 + hy)], fill=(20, 24, 40), width=width)
+    im.save(path, "WEBP", quality=88, method=6)
+
+
+def extra_layers(result, fr, outdir: Path):
+    """More layers from the same run: seasonal and day/night swing, warm
+    months, snow cover, rain season, wetness against Koppen's dry limit, the
+    driest month, winds and sea temperature in local winter and summer, and
+    temperature and rain month by month on the local calendar."""
+    ix = fr._ix
+    land = fr.land
+    _save_webp(_cmap_img(ix["Thot"] - ix["Tcold"], "YlOrRd", 0, 40, fr, 20), outdir / "t_range.webp")
+    from .diurnal import available, grid_dtr12
+
+    if available():
+        D = np.nanmean(grid_dtr12(result), axis=0)
+        _save_webp(_cmap_img(fr.up(np.nan_to_num(D, nan=np.nanmean(D))), "OrRd", 4, 20, fr, 16),
+                   outdir / "t_daynight.webp")
+    _save_webp(_cmap_img(ix["Tmon10"].astype(float), "YlGn", 0, 12, fr, 12), outdir / "warm_months.webp")
+    snow_months = 12.0 * (result.snow > 10.0).mean(0)
+    _save_webp(_cmap_img(fr.up(snow_months), "PuBu", 0, 8, fr, 16), outdir / "snow.webp")
+    share = np.where(ix["MAP"] > 30, ix["Psum"] / np.maximum(ix["MAP"], 1e-6), 0.5)
+    _save_webp(_cmap_img(share, "PuOr", 0.1, 0.9, fr, 16), outdir / "rain_season.webp")
+    _save_webp(_cmap_img(np.log10(np.clip(ix["aridity"], 0.1, 10)), "BrBG", np.log10(0.2), np.log10(5), fr, 14),
+               outdir / "wetness.webp")
+    _save_webp(_cmap_img(np.log10(np.maximum(ix["Pdry"], 1)), "YlGnBu", 0, np.log10(200), fr, 12),
+               outdir / "p_driest.webp")
+    import matplotlib.pyplot as plt
+
+    for season in ("winter", "summer"):
+        steps = _season_steps(result, season)
+        _wind_layer(result, fr, steps, outdir / f"wind_{season}.webp")
+        sea = fr.up(result.T[steps].mean(0), land_fill=False)
+        rgb = plt.get_cmap("turbo")((np.clip((sea + 2) / 32, 0, 1) * 16).round() / 16)[..., :3]
+        _save_webp(_overlay_rivers(_land_grey(rgb, fr), fr), outdir / f"sea_{season}.webp")
+    # month by month on the local calendar (10 months + the holy days), at half size
+    months = outdir / "months"
+    months.mkdir(exist_ok=True)
+    groups = cal.month_slices(result.nt)
+    for k, gi in enumerate(groups):
+        T = fr.temperature(result.Tsl[gi].mean(0))
+        P = np.maximum(fr.up(result.P[gi].mean(0)), 0) * 30.0                 # mm per 30 days
+        for name, rgb in (("t", _cmap_img(T, "turbo", -25, 40, fr, 26)),
+                          ("p", _cmap_img(np.log10(np.maximum(P, 3)), "YlGnBu", np.log10(5), np.log10(500), fr, 14))):
+            im = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8))
+            im.resize((fr.W // 2, fr.H // 2), Image.LANCZOS).save(months / f"{name}_{k + 1:02d}.webp", "WEBP",
+                                                                  quality=85, method=6)
+        del T, P
 
 
 def _save_webp(rgb, path, q=88):
@@ -216,6 +324,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     save_settlements(outdir)
 
     places = [dict(name=pl["name"], x=pl["x"], y=pl["y"], kind=pl["kind"]) for pl in load_places()]
+    places_climate_csv(result, fr, k, places, outdir / "places_climate.csv")
     present = [c for c in CODES if CODES.index(c) in set(np.unique(k[fr.land]).tolist())]
     share = {c: float((k[fr.land] == CODES.index(c)).mean()) for c in present}
     meta = dict(
@@ -335,6 +444,40 @@ def zones_layer(fr, outdir: Path = ATLAS / "data"):
     return z
 
 
+def places_climate_csv(result, fr, k, places, path: Path):
+    """Every named place's climate in the local calendar's months (as the
+    click panel shows it): temperature at the place's own height, rain, and
+    its Koppen class, latitude and elevation."""
+    import csv
+
+    g = result.grid
+    groups = cal.month_slices(result.nt)
+    fill_iy, fill_ix = fr._fill
+    Tsl = result.Tsl[:, fill_iy, fill_ix]
+    P = result.P[:, fill_iy, fill_ix]
+    Tm = np.stack([Tsl[gi].mean(0) for gi in groups])
+    Pm = np.stack([P[gi].sum(0) * cal.YEAR_DAYS / result.nt for gi in groups])
+    months = cal.MONTHS + [cal.HOLY]
+    lapse = result.params.lapse_rate
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        w = csv.writer(f)
+        w.writerow(["name", "kind", "x_px", "y_px", "latitude", "elevation_m", "koppen", "mean_temp_C",
+                    "rain_mm_year"] + [f"temp_C_{m.short}" for m in months] + [f"rain_mm_{m.short}" for m in months])
+        for pl in places:
+            x = int(min(max(round(pl["x"]), 0), fr.W - 1))
+            y = int(min(max(round(pl["y"]), 0), fr.H - 1))
+            i = int(min(max(round((y + 0.5) / g.f - 0.5 + g.pad), 0), g.ny - 1))
+            j = int(min(max(round((x + 0.5) / g.f - 0.5 + g.pad), 0), g.nx - 1))
+            h = float(fr.elev[y, x]) if fr.land[y, x] else 0.0
+            T = Tm[:, i, j] - lapse * h / 1000.0
+            R = Pm[:, i, j]
+            days = np.array([cal.MONTH_DAYS] * len(cal.MONTHS) + [cal.HOLY_DAYS], float)
+            w.writerow([pl["name"], pl["kind"], round(pl["x"], 1), round(pl["y"], 1), round(float(g.lat[i, j]), 2),
+                        round(h), CODES[k[y, x]] if fr.land[y, x] and k[y, x] >= 0 else "sea",
+                        round(float((T * days).sum() / days.sum()), 1), round(float(R.sum()))]
+                       + [round(float(v), 1) for v in T] + [round(float(v)) for v in R])
+
+
 def _layer_meta():
     import matplotlib.pyplot as plt
     import matplotlib.colors as mc
@@ -343,7 +486,7 @@ def _layer_meta():
         cm = plt.get_cmap(cmap)
         return [mc.to_hex(cm(i / (n - 1))) for i in range(n)]
 
-    return [
+    base = [
         dict(id="koppen", file="koppen.webp", label="Köppen", kind="koppen"),
         dict(id="target", file="target.webp", label="Your zones", kind="target"),
         dict(id="zones", file="zones.webp", label="Simulated zones", kind="zones"),
@@ -359,6 +502,50 @@ def _layer_meta():
         dict(id="precip", file="precip.webp", label="Precipitation", kind="ramp",
              unit="mm per year", vmin=100, vmax=3000, log=True, stops=stops("YlGnBu")),
     ]
+    from .diurnal import available
+
+    months = [m.name for m in cal.MONTHS] + [cal.HOLY.name]
+    frames = lambda v: [f"months/{v}_{k + 1:02d}.webp" for k in range(len(months))]
+    extra = [
+        dict(id="t_range", file="t_range.webp", label="Seasonal swing", kind="ramp", group="Temperature",
+             unit="°C, warmest minus coldest month", vmin=0, vmax=40, stops=stops("YlOrRd")),
+        *([dict(id="t_daynight", file="t_daynight.webp", label="Day/night swing", kind="ramp", group="Temperature",
+                unit="°C, average daily range over the year (Earth-trained)", vmin=4, vmax=20,
+                stops=stops("OrRd"))] if available() else []),
+        dict(id="warm_months", file="warm_months.webp", label="Warm months", kind="ramp", group="Temperature",
+             unit="months above 10 °C (forest needs at least one)", vmin=0, vmax=12, stops=stops("YlGn")),
+        dict(id="snow", file="snow.webp", label="Snow cover", kind="ramp", group="Temperature",
+             unit="months with lasting snow on the ground", vmin=0, vmax=8, stops=stops("PuBu")),
+        dict(id="rain_season", file="rain_season.webp", label="Rain season", kind="ramp", group="Water",
+             unit="% of the year's rain in the warm half-year (orange: winter rain, purple: summer rain)",
+             vmin=10, vmax=90, stops=stops("PuOr")),
+        dict(id="wetness", file="wetness.webp", label="Wetness", kind="ramp", group="Water",
+             unit="rain ÷ Köppen's dry limit (below 1 steppe, below 0.5 desert)", vmin=0.2, vmax=5, log=True,
+             stops=stops("BrBG")),
+        dict(id="p_driest", file="p_driest.webp", label="Driest month", kind="ramp", group="Water",
+             unit="mm in the driest month", vmin=1, vmax=200, log=True, stops=stops("YlGnBu")),
+        dict(id="wind_winter", file="wind_winter.webp", label="Winds, winter", kind="ramp", group="Air and sea",
+             unit="m/s, mean surface wind over the winter months (arrows: direction)", vmin=0, vmax=WIND_VMAX,
+             stops=[mc.to_hex(plt.get_cmap("YlGnBu")(0.08 + 0.8 * i / 8)) for i in range(9)]),
+        dict(id="wind_summer", file="wind_summer.webp", label="Winds, summer", kind="ramp", group="Air and sea",
+             unit="m/s, mean surface wind over the summer months (arrows: direction)", vmin=0, vmax=WIND_VMAX,
+             stops=[mc.to_hex(plt.get_cmap("YlGnBu")(0.08 + 0.8 * i / 8)) for i in range(9)]),
+        dict(id="sea_winter", file="sea_winter.webp", label="Sea, winter", kind="ramp", group="Air and sea",
+             unit="°C, air over the sea in the winter months", vmin=-2, vmax=30, stops=stops("turbo")),
+        dict(id="sea_summer", file="sea_summer.webp", label="Sea, summer", kind="ramp", group="Air and sea",
+             unit="°C, air over the sea in the summer months", vmin=-2, vmax=30, stops=stops("turbo")),
+        dict(id="t_month", file=frames("t")[0], label="Temperature", kind="ramp", group="Month by month",
+             unit="°C, month mean", vmin=-25, vmax=40, stops=stops("turbo"), frames=frames("t"),
+             frame_labels=months),
+        dict(id="p_month", file=frames("p")[0], label="Rain", kind="ramp", group="Month by month",
+             unit="mm per 30 days", vmin=5, vmax=500, log=True, stops=stops("YlGnBu"), frames=frames("p"),
+             frame_labels=months),
+    ]
+    for d in base:
+        d.setdefault("group", "Climate" if d["id"] in ("koppen", "target", "zones", "agreement") else
+                     "Temperature" if d["id"].startswith("t_") else "Water")
+    order = ["Climate", "Temperature", "Water", "Air and sea", "Month by month"]
+    return sorted(base + extra, key=lambda d: order.index(d["group"]))     # stable: keeps order within a group
 
 
 SETTLEMENTS = REPO / "data" / "source" / "settlements.png"     # lossless, 2.2x the map's pixels

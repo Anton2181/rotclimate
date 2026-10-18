@@ -81,6 +81,24 @@ def main():
     if not a.no_gif:
         R.season_gif(fr, data / "year_temperature.gif", "T")
         R.season_gif(fr, data / "year_precipitation.gif", "P")
+        R.season_gif(fr, data / "year_vapour.gif", "W")
+        R.season_gif(fr, data / "year_growing.gif", "G")
+    # around the map: the invented land and sea the model adds on every side (one
+    # layout: an average over layouts mixes different coastlines out there)
+    if p.beyond_style == "procedural":
+        rr = simulate(p.replace(beyond_seed=seeds[0], downsample=max(16, a.downsample))) if seeds else r
+        R.around_koppen(rr, data / "around_koppen.webp")
+        if not a.no_gif:
+            R.around_gif(rr, data / "around_year.gif")
+        meta = json.loads((data / "atlas.json").read_text())
+        note = (f"Nobody drew the world beyond the map, so the model invents {p.pad_km:,.0f} km of land and sea on "
+                "every side. How much of each side is land was fitted along with the climate; the coastlines "
+                "themselves are random, so this is one plausible neighbourhood, not a fact about the world.")
+        if seeds:
+            note += (f" The map above averages {len(seeds)} random layouts of it; these pictures show layout "
+                     f"{seeds[0]}.")
+        meta["around"] = dict(note=note, layout=seeds[0] if seeds else p.beyond_seed, averaged=len(seeds))
+        (data / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))
     src = (ROOT / "atlas" / "index.html").read_text()
     (out / "index.html").write_text(page(src, a.title, a.eyebrow, a.lede, a.note))
     shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")

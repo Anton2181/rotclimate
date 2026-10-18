@@ -332,6 +332,29 @@ def _wind_grid(fr, spacing_km=110):
     return sl, X, Y, ok
 
 
+GROW_RGB = (np.array([0.74, 0.77, 0.81]), np.array([0.84, 0.72, 0.50]), np.array([0.22, 0.56, 0.22]),
+            np.array([1.0, 1.0, 1.0]))
+
+
+def growing_rgb(fr: FullRes, k: int) -> np.ndarray:
+    """Growing conditions at step k: grey where too cold (growth starts near
+    5 °C), tan where too dry by Gaussen's rule (a month is dry when its rain in
+    mm is under twice its temperature in °C; rain smoothed over three steps,
+    as the soil holds water), green where both allow growth, white under snow."""
+    r = fr.r
+    T = fr.temperature(r.Tsl[k])
+    P = np.maximum(fr.up(r.P[[(k - 1) % r.nt, k, (k + 1) % r.nt]].mean(0)), 0) * 30.0     # mm per 30 days
+    warm = np.clip((T - 2.0) / 8.0, 0, 1)[..., None]
+    wet = np.clip((P / np.maximum(2.0 * T, 10.0) - 0.6) / 0.8, 0, 1)[..., None]
+    cold, dry, green, white = GROW_RGB
+    rgb = cold * (1 - warm) + warm * (dry * (1 - wet) + green * wet)
+    if r.snow is not None:
+        sn = (np.clip(fr.up(r.snow[k]) / 40.0, 0, 1) * fr.land)[..., None]
+        rgb = rgb * (1 - sn) + white * sn
+    rgb[~fr.land] = OCEAN_RGB
+    return rgb
+
+
 def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
     r = fr.r
     frames = []
@@ -340,6 +363,10 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
     hs = hillshade(fr.elev)
     if var == "T":
         cmap, vmin, vmax, unit = "turbo", -25, 40, "°C"
+    elif var == "W":
+        cmap, vmin, vmax, unit = "YlGnBu", 0, 50, "mm of water in the air"
+    elif var == "G":
+        cmap, vmin, vmax, unit = None, 0, 1, ""
     else:
         cmap, vmin, vmax, unit = "YlGnBu", 0, 12, "mm / day"
     hdr = 1.15                                   # header strip height (inches)
@@ -355,6 +382,10 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
             sea = np.zeros((H, W, 4))
             sea[~fr.land] = (1, 1, 1, 0.35)
             ax.imshow(sea)
+        elif var == "W":
+            ax.imshow(fr.up(r.W[k], land_fill=False), cmap=cmap, vmin=vmin, vmax=vmax)
+        elif var == "G":
+            ax.imshow(growing_rgb(fr, k))
         else:
             f = np.maximum(fr.up(r.P[k]), 0)
             img = plt.get_cmap(cmap)(np.clip((f - vmin) / (vmax - vmin), 0, 1))
@@ -379,18 +410,25 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
         tax.set_xlim(0, 1)
         tax.set_ylim(0, 1)
         tax.axis("off")
-        name = "Temperature & surface wind" if var == "T" else "Precipitation, snow cover & wind"
+        name = {"T": "Temperature & surface wind", "W": "Water vapour & wind",
+                "G": "Growing conditions & wind"}.get(var, "Precipitation, snow cover & wind")
         # line 1: date (left) and what is shown (right)
         tax.text(0.012, 0.80, cal.date_label(day), fontsize=13, va="center", weight="bold")
         tax.text(0.988, 0.80, name, fontsize=10.5, va="center", ha="right")
         # line 2: season (left), unit + colour scale (right)
         tax.text(0.012, 0.47, m.season.capitalize(), fontsize=10.5, va="center", style="italic",
                  color="#444")
-        tax.text(0.585, 0.47, unit, fontsize=9, va="center", ha="right", color="#444")
-        sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin, vmax))
-        cax = fig.add_axes([0.60, mf + (1 - mf) * 0.36, 0.385, (1 - mf) * 0.16])
-        cb = fig.colorbar(sm, cax=cax, orientation="horizontal")
-        cb.ax.tick_params(labelsize=7, pad=1, length=2)
+        if var == "G":
+            for i, (col, lab) in enumerate(zip(GROW_RGB, ("too cold", "too dry", "growing", "snow"))):
+                x0 = 0.60 + 0.097 * i
+                tax.add_patch(plt.Rectangle((x0, 0.40), 0.018, 0.16, color=col, ec="#888", lw=0.4))
+                tax.text(x0 + 0.024, 0.48, lab, fontsize=8.5, va="center", color="#444")
+        else:
+            tax.text(0.585, 0.47, unit, fontsize=9, va="center", ha="right", color="#444")
+            sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin, vmax))
+            cax = fig.add_axes([0.60, mf + (1 - mf) * 0.36, 0.385, (1 - mf) * 0.16])
+            cb = fig.colorbar(sm, cax=cax, orientation="horizontal")
+            cb.ax.tick_params(labelsize=7, pad=1, length=2)
         # line 3: year progress
         tax.add_patch(plt.Rectangle((0.012, 0.06), 0.976, 0.07, color="#ddd"))
         tax.add_patch(plt.Rectangle((0.012, 0.06), 0.976 * day / cal.YEAR_DAYS, 0.07, color="#555"))
@@ -605,3 +643,110 @@ def context_map(result, path, title=None):
     fig.tight_layout()
     fig.savefig(path)
     plt.close(fig)
+
+
+# ---------------------------------------------------------------- around the map
+def _around_frame(r, width_px=1500):
+    """Geometry for whole-domain pictures: upsampling factor, the land mask at
+    that size and the drawn map's box (in output pixels)."""
+    g = r.grid
+    up = max(1, int(round(width_px / g.nx)))
+    land = ndi.zoom(g.land_frac.astype(float), up, order=1) > 0.5
+    rows, cols = np.flatnonzero(g.inmap.any(1)), np.flatnonzero(g.inmap.any(0))
+    box = (cols[0] * up, rows[0] * up, (cols[-1] + 1) * up, (rows[-1] + 1) * up)
+    return up, land, box
+
+
+def _around_decorate(ax, r, box, land):
+    """Coastline, the drawn map's box and each side's fitted land share."""
+    p = r.params
+    ax.contour(land.astype(float), levels=[0.5], colors="#333", linewidths=0.6)
+    x0, y0, x1, y1 = box
+    ax.add_patch(plt.Rectangle((x0, y0), x1 - x0, y1 - y0, fill=False, ec="#94641a", lw=1.6, ls=(0, (6, 4))))
+    H, W = land.shape
+    if p.beyond_style == "procedural":
+        pc = lambda v: f"{round(v * 100)} % land"
+        kw = dict(fontsize=9, color="#222", ha="center", va="center",
+                  bbox=dict(boxstyle="round,pad=0.25", fc="white", ec="none", alpha=0.75))
+        north = p.beyond_north_land
+        ne = p.beyond_northeast_land if p.beyond_northeast_land >= 0 else None
+        se = p.beyond_southeast_land if p.beyond_southeast_land >= 0 else None
+        if ne is None:
+            ax.text((x0 + x1) / 2, y0 / 2, f"north {pc(north)}", **kw)
+        else:
+            ax.text(x0 + (x1 - x0) * 0.25, y0 / 2, f"north-west {pc(north)}", **kw)
+            ax.text(x0 + (x1 - x0) * 0.75, y0 / 2, f"north-east {pc(ne)}", **kw)
+        if se is None:
+            ax.text((x0 + x1) / 2, (y1 + H) / 2, f"south {pc(p.beyond_south_land)}", **kw)
+        else:
+            ax.text(x0 + (x1 - x0) * 0.25, (y1 + H) / 2, f"south-west {pc(p.beyond_south_land)}", **kw)
+            ax.text(x0 + (x1 - x0) * 0.75, (y1 + H) / 2, f"south-east {pc(se)}", **kw)
+        ax.text(x0 / 2, (y0 + y1) / 2, f"west\n{pc(p.beyond_west_land)}", **kw)
+        ax.text((x1 + W) / 2, (y0 + y1) / 2, f"east\n{pc(p.beyond_east_land)}", **kw)
+    ax.set_xlim(0, W)
+    ax.set_ylim(H, 0)
+    ax.axis("off")
+
+
+def around_koppen(r, path, width_px=1500):
+    """Koppen classes over the whole model domain: the drawn map (dashed box)
+    and the invented land and sea around it."""
+    g = r.grid
+    up, land, box = _around_frame(r, width_px)
+    st = monthly_stats(r.T, r.P, r.days, r.params.year_days,
+                       summer_solstice=r.params.winter_solstice_day + r.params.year_days / 2)
+    k = classify(st["Tm"], st["Pm"], st["summer"])
+    rgb = rgb_image(np.kron(k, np.ones((up, up), int))).astype(float) / 255.0
+    rgb[~land] = OCEAN_RGB
+    hs = hillshade(np.kron(g.elev, np.ones((up, up))), g.cell_km * 1000 / up)
+    rgb[land] = (rgb[land] * (0.75 + 0.35 * hs[land, None])).clip(0, 1)
+    H, W = land.shape
+    fig = plt.figure(figsize=(W / 100, H / 100), dpi=100)
+    ax = fig.add_axes([0, 0, 1, 1])
+    ax.imshow(rgb, interpolation="nearest")
+    _around_decorate(ax, r, box, land)
+    fig.savefig(path, dpi=100, format="webp" if str(path).endswith(".webp") else None,
+                pil_kwargs={"quality": 88} if str(path).endswith(".webp") else None)
+    plt.close(fig)
+
+
+def around_gif(r, path, width_px=1000, ms=130):
+    """Temperature and surface wind over the whole model domain through the
+    year: how the invented land and sea around the map shape its seasons."""
+    g = r.grid
+    up, land, box = _around_frame(r, width_px)
+    H, W = land.shape
+    step = max(1, int(round(250.0 / g.cell_km)))
+    ii, jj = np.mgrid[step // 2:g.ny:step, step // 2:g.nx:step]
+    X, Y = (jj + 0.5) * up, (ii + 0.5) * up
+    hdr = 0.75
+    frames = []
+    for k in range(r.nt):
+        fig = plt.figure(figsize=(W / 100, H / 100 + hdr), dpi=100)
+        mf = (H / 100) / (H / 100 + hdr)
+        ax = fig.add_axes([0, 0, 1, mf])
+        T = ndi.zoom(r.T[k], up, order=1)
+        ax.imshow(T, cmap="turbo", vmin=-25, vmax=40)
+        sea = np.zeros((H, W, 4))
+        sea[~land] = (1, 1, 1, 0.35)
+        ax.imshow(sea)
+        ax.quiver(X, Y, r.u[k][ii, jj], -r.v[k][ii, jj], color="k", alpha=0.55, scale=200, width=0.0018,
+                  headwidth=4)
+        _around_decorate(ax, r, box, land)
+        tax = fig.add_axes([0, mf, 1, 1 - mf])
+        tax.axis("off")
+        tax.set_xlim(0, 1)
+        tax.set_ylim(0, 1)
+        day = r.days[k]
+        m, _, _ = cal.month_of_day(int(day))
+        tax.text(0.012, 0.62, cal.date_label(day), fontsize=12, va="center", weight="bold")
+        tax.text(0.012, 0.22, m.season.capitalize(), fontsize=9.5, va="center", style="italic", color="#444")
+        tax.text(0.988, 0.62, "Temperature & wind around the map (dashed: the drawn map)", fontsize=9.5,
+                 va="center", ha="right")
+        sm = plt.cm.ScalarMappable(cmap="turbo", norm=plt.Normalize(-25, 40))
+        cax = fig.add_axes([0.62, mf + (1 - mf) * 0.12, 0.36, (1 - mf) * 0.2])
+        cb = fig.colorbar(sm, cax=cax, orientation="horizontal")
+        cb.ax.tick_params(labelsize=7, pad=1, length=2)
+        frames.append(_fig_to_pil(fig))
+        plt.close(fig)
+    save_gif(frames, path, ms=ms, colors=128)

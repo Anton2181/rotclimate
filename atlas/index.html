@@ -72,6 +72,16 @@ section { display: grid; gap: 16px; }
   border: 1px solid transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer;
 }
 .layers button[aria-pressed="true"] { background: var(--ink); color: var(--plate); }
+.layers .layer-group { font: 500 0.7rem var(--font-data); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-soft); align-self: center; margin: 0 2px 0 8px; }
+.layers .layer-group:first-child { margin-left: 0; }
+.monthctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: var(--step--1); }
+.monthctl[hidden] { display: none; }
+.monthctl input[type="range"] { flex: 1 1 220px; max-width: 420px; accent-color: var(--brass); }
+.monthctl button { font: 500 var(--step--1) var(--font-body); color: var(--ink); background: var(--chip);
+  border: 1px solid transparent; border-radius: 999px; padding: 4px 12px; cursor: pointer; min-width: 4.5em; }
+.monthctl button:focus-visible, .monthctl input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.monthctl .mlabel { font-family: var(--font-data); color: var(--ink-soft); }
 .layers button:focus-visible, .toggle input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
 .toggle { display: flex; align-items: center; gap: 6px; font-size: var(--step--1); color: var(--ink-soft); cursor: pointer; }
 .stage { position: relative; aspect-ratio: 2000 / 926; max-width: 100%; background: var(--sea);
@@ -270,6 +280,7 @@ body.map-expanded { overflow: hidden; }
     scroll-snap-type: x proximity; flex: 1 1 100%; min-width: 0; max-width: calc(100% + 20px); }
   .layers::-webkit-scrollbar { display: none; }
   .layers button { flex: none; scroll-snap-align: start; padding: 7px 13px; }
+  .layers .layer-group { flex: none; }
   .stage { aspect-ratio: auto; height: clamp(260px, 62vh, 560px); }
   .hint { left: 8px; top: 8px; bottom: auto; max-width: calc(100% - 64px); font-size: 0.78rem; }
   .zoom { right: 8px; top: 8px; }
@@ -298,6 +309,11 @@ body.map-expanded { overflow: hidden; }
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
           <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
         </div>
+      </div>
+      <div class="monthctl" id="monthctl" hidden>
+        <button type="button" id="mplay" aria-pressed="false">Play</button>
+        <input type="range" id="mslider" min="0" max="10" step="1" value="0" aria-label="Month of the local year">
+        <span class="mlabel" id="mlabel" aria-live="polite"></span>
       </div>
       <div class="mapwrap">
       <div class="searchbox" id="searchbox">
@@ -434,6 +450,8 @@ body.map-expanded { overflow: hidden; }
     <div class="media">
       <figure><img data-src="data/year_temperature.gif" alt="Animated temperature and winds through the year" loading="lazy"><figcaption>Temperature and wind</figcaption></figure>
       <figure><img data-src="data/year_precipitation.gif" alt="Animated precipitation and snow through the year" loading="lazy"><figcaption>Rain, snow cover and wind</figcaption></figure>
+      <figure><img data-src="data/year_vapour.gif" alt="Animated water vapour and winds through the year" loading="lazy"><figcaption>Water vapour in the air and wind: where the moisture comes from</figcaption></figure>
+      <figure><img data-src="data/year_growing.gif" alt="Animated growing conditions through the year" loading="lazy"><figcaption>Growing conditions: green where it is warm and wet enough to grow, tan where too dry, grey where too cold, white under snow</figcaption></figure>
     </div>
   </section>
 
@@ -450,9 +468,21 @@ body.map-expanded { overflow: hidden; }
     </div>
   </section>
 
+  <section id="around" hidden>
+    <div class="section-head">
+      <h2>Around the map</h2>
+      <p id="around-note"></p>
+    </div>
+    <div class="media">
+      <figure><img data-src="data/around_koppen.webp" alt="Köppen climates of the drawn map and the invented land and sea around it" loading="lazy"><figcaption>Köppen climates over everything the model simulates; the dashed box is your map, the labels give each side's fitted share of land</figcaption></figure>
+      <figure><img data-src="data/around_year.gif" alt="Animated temperature and winds over the map and its surroundings" loading="lazy"><figcaption>Temperature and wind through the year, map and surroundings together</figcaption></figure>
+    </div>
+  </section>
+
   <footer>
     <p>Physics: a planet-wide seasonal energy balance (tilt and orbit), a 2-D model of winds, sea temperatures, air masses, moisture, rain and snow, and Köppen–Geiger classification. Unknown surroundings are procedurally generated; their land fraction per side is calibrated.</p>
     <p id="ref-note"></p>
+    <p>Data: <a href="data/places_climate.csv" download>monthly temperature and rain of every named place (CSV)</a> · <a href="params.json" download>the fit's settings (JSON)</a></p>
   </footer>
 </div>
 
@@ -510,7 +540,14 @@ body.map-expanded { overflow: hidden; }
   // ---------------------------------------------------------------- layers
   let current = "koppen";
   const layerBtns = $("layers");
+  let lastGroup = null;
   for (const L of meta.layers) {
+    if (L.group && L.group !== lastGroup) {
+      const g = document.createElement("span");
+      g.className = "layer-group"; g.textContent = L.group;
+      layerBtns.appendChild(g);
+      lastGroup = L.group;
+    }
     const b = document.createElement("button");
     b.type = "button"; b.textContent = L.label; b.id = "layer-" + L.id;
     b.setAttribute("aria-pressed", L.id === current ? "true" : "false");
@@ -518,10 +555,46 @@ body.map-expanded { overflow: hidden; }
     layerBtns.appendChild(b);
   }
   $("base").src = fresh("data/koppen.webp");
+  // month-by-month layers: one image per month of the local calendar, a slider and a play button
+  let frameIdx = 0, playTimer = null;
+  function showFrame() {
+    const L = meta.layers.find((l) => l.id === current);
+    if (!L || !L.frames) return;
+    frameIdx = Math.max(0, Math.min(L.frames.length - 1, frameIdx));
+    $("base").src = fresh("data/" + L.frames[frameIdx]);
+    $("mslider").max = String(L.frames.length - 1);
+    $("mslider").value = String(frameIdx);
+    const m = meta.months[frameIdx];
+    $("mlabel").textContent = (L.frame_labels ? L.frame_labels[frameIdx] : `Month ${frameIdx + 1}`) + (m ? ` · ${m.season}` : "");
+  }
+  function stopPlay() {
+    if (playTimer) clearInterval(playTimer);
+    playTimer = null;
+    $("mplay").textContent = "Play"; $("mplay").setAttribute("aria-pressed", "false");
+  }
+  $("mslider").addEventListener("input", (e) => { stopPlay(); frameIdx = Number(e.target.value); showFrame(); });
+  $("mplay").addEventListener("click", () => {
+    if (playTimer) { stopPlay(); return; }
+    $("mplay").textContent = "Pause"; $("mplay").setAttribute("aria-pressed", "true");
+    playTimer = setInterval(() => {
+      const L = meta.layers.find((l) => l.id === current);
+      if (!L || !L.frames) { stopPlay(); return; }
+      frameIdx = (frameIdx + 1) % L.frames.length;
+      showFrame();
+    }, 900);
+  });
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
-    $("base").src = fresh("data/" + L.file);
+    if (L.frames) {
+      $("monthctl").hidden = false;
+      for (const f of L.frames) { const im = new Image(); im.src = fresh("data/" + f); }   // preload for smooth play
+      showFrame();
+    } else {
+      stopPlay();
+      $("monthctl").hidden = true;
+      $("base").src = fresh("data/" + L.file);
+    }
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
   }
@@ -550,6 +623,11 @@ body.map-expanded { overflow: hidden; }
     if (show) $("find-input").focus();
   });
 
+  // ramp tick labels: tens for big log values, one decimal below 10, hundredths for spans under 2
+  function tickText(L, v) {
+    if (L.log) return v >= 100 ? String(Math.round(v / 10) * 10) : v >= 10 ? String(Math.round(v)) : String(Math.round(v * 10) / 10);
+    return L.vmax - L.vmin <= 2 ? String(Math.round(v * 100) / 100) : String(Math.round(v));
+  }
   function drawLegend(L) {
     const el = $("legend");
     if (L.kind === "koppen") {
@@ -566,8 +644,7 @@ body.map-expanded { overflow: hidden; }
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
     } else {
       const span = L.vmax - L.vmin;
-      const fmt = (v) => L.log ? String(Math.round(v / 10) * 10)
-        : span <= 2 ? String(Math.round(v * 100) / 100) : String(Math.round(v));
+      const fmt = (v) => tickText(L, v);
       const ticks = [];
       for (let i = 0; i <= 4; i++) {
         const f = i / 4;
@@ -1032,7 +1109,7 @@ body.map-expanded { overflow: hidden; }
       ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
     if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
     const span = L.vmax - L.vmin;
-    const fmt = (v) => L.log ? String(Math.round(v / 10) * 10) : span <= 2 ? String(Math.round(v * 100) / 100) : String(Math.round(v));
+    const fmt = (v) => tickText(L, v);
     const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
     return { title: `${L.label}, ${L.unit}`, ramp: { stops: L.stops, ticks } };
   }
@@ -1317,6 +1394,10 @@ body.map-expanded { overflow: hidden; }
   }).join("");
 
   const nRef = meta.reference.length.toLocaleString("en");
+  if (meta.around) {
+    $("around").hidden = false;
+    $("around-note").textContent = meta.around.note;
+  }
   $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${nRef} real places (${meta.reference_source}). Southern-hemisphere places are shifted half a year.`;
   $("analog-note").textContent = `Closest of ${nRef} real places (${meta.reference_source}), no two within 100 km. `
     + `Balanced gives temperature and precipitation equal weight in this list and real-city search; either end compares only that feature. `
