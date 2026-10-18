@@ -34,7 +34,7 @@ LAYERS = [
     ("main_crop", "Staple crop", "", "cat", 0, 0, "crops",
      "The crop (or crop pair) that gives the most calories after seed; hatched where a second crop "
      "fits in the months the first leaves free. Where both grow, barley and millet feed about as "
-     "many (millet is within 5 % on a quarter of the land); a hex's card lists every crop."),
+     "many (millet is within 5 % on over a quarter of the land); a hex's card lists every crop."),
     ("kcal_ha", "Food per hectare", "million kcal/ha/yr", "lin", 0.0, 8.0, "food",
      "Low-input yields of the period (grain ~1 t/ha, paddy ~1.8 t/ha, dates 3 t/ha), scaled by "
      "the season's water balance (FAO-33), net of seed."),

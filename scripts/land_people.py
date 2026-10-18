@@ -28,7 +28,7 @@ climate cache):
 * malaria suitability, MARA (Craig, Snow & le Sueur 1999): months with
   22-32 C and >= 80 mm rain (fuzzy edges), the best run of 5 such months.
 
-    python -I scripts/land_people.py --params calibration/earth/free_d2_polish_ds16.json \
+    python -I scripts/land_people.py --params calibration/earth/free_e5p_ds16.json \
         --cache output/satellite/climate_cache.npz --out output/land_people
 """
 from __future__ import annotations

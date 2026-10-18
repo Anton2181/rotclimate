@@ -4,7 +4,7 @@ What the simulated climate of the map would grow, and how many farmers it
 could feed, for a world of Han and Parthian farming (the campaign's mix of
 the Persian empires and the Three Kingdoms). Everything here comes from
 published empirical relationships, run on the climate fit of the map (the
-free-fit world D2, `calibration/earth/free_d2_polish_ds16.json`), and checked
+free fit with pressure-driven winds, `calibration/earth/free_e5p_ds16.json`), and checked
 in two ways: the same rules run on Earth's own climate against populations of
 the period, and the map's numbers hex by hex against the campaign sheet.
 
@@ -73,28 +73,29 @@ settled and farmed this way, not how many live there.
 ## The map
 
 The map's land (3.29 million km²) could feed about
-**310 million people**, 94 per km². Barley (with wheat
-close behind) is the best crop on 75 % of the land and paddy rice,
-in the wet west and south, on 23 %; foxtail millet comes
-within 5 % of barley on a quarter of the land but rarely beats it; date palms grow
+**317 million people**, 96 per km². Barley (with wheat
+close behind) is the best crop on 74 % of the land and paddy rice,
+in the wet west and south, on 24 %; foxtail millet comes
+within 5 % of barley on 29 % of the land but rarely beats it; date palms grow
 only along the few irrigated rivers in dry country. A second crop fits on
-15 % of the land. The world is wetter and warmer than Earth's
+17 % of the land. The world is wetter and warmer than Earth's
 same latitudes, so it feeds more per km² than the Mediterranean or northern China.
+(With the earlier free fit D2 and its thermal wind: 310 million, 94 per km².)
 
 The ten provinces and realms of the sheet that could feed the most:
 
 | province or realm | could feed | per km² | sheet settlement | sheet wealth |
 |---|---|---|---|---|
-| River Cities | 26.1 M | 180 | 23.9 | 10.0 |
-| Anušiya Cities | 23.9 M | 123 | 24.2 | 20.5 |
-| Xšāça | 18.0 M | 118 | 23.3 | 11.4 |
-| Ul-Bit Hamadrun | 12.3 M | 84 | 20.6 | 5.2 |
-| Kasos | 12.3 M | 93 | 21.9 | 13.3 |
-| (E) Dars | 12.0 M | 195 | 23.9 | 13.3 |
-| Selonken | 10.4 M | 177 | 22.6 | 13.5 |
+| River Cities | 27.8 M | 192 | 23.9 | 10.0 |
+| Anušiya Cities | 23.6 M | 122 | 24.2 | 20.5 |
+| Xšāça | 20.7 M | 135 | 23.3 | 11.4 |
+| Kasos | 13.6 M | 104 | 21.9 | 13.3 |
+| (E) Dars | 12.5 M | 204 | 23.9 | 13.3 |
+| Ul-Bit Hamadrun | 12.4 M | 84 | 20.6 | 5.2 |
+| Selonken | 9.7 M | 165 | 22.6 | 13.5 |
+| (E) Asman | 9.4 M | 150 | 22.1 | 15.3 |
 | Tarani Kingdom | 8.7 M | 76 | 22.6 | 10.9 |
 | Lasiŕos | 8.1 M | 142 | 22.9 | 12.2 |
-| Yu’ež Tokar | 7.4 M | 51 | 20.7 | 10.2 |
 
 ## Checked against Earth
 
@@ -155,10 +156,10 @@ for Mesopotamia.
 
 The sheet gives each land hex a settlement level (10, 20, 40, 60, 80 or 100)
 and a wealth base (5-40). Over 2,226 land hexes the people a hex could
-feed rank with the settlement level at Spearman ρ = 0.32 and with the
-wealth base at ρ = 0.30; among flatland hexes alone, at 0.31 and
-0.26. The plain annual temperature ranks better than any farming
-measure (ρ = 0.50 with settlement): the sheet's settled core lies in the
+feed rank with the settlement level at Spearman ρ = 0.33 and with the
+wealth base at ρ = 0.31; among flatland hexes alone, at 0.32 and
+0.27. The plain annual temperature ranks better than any farming
+measure (ρ = 0.52 with settlement): the sheet's settled core lies in the
 warmer part of the map. The sheet was set by hand and the climate fitted only to
 the painted climate zones, so agreement in the large is what to expect.
 
