@@ -85,6 +85,7 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
@@ -447,6 +448,7 @@ class ClimateModel:
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
         soil_w = np.where(land, 0.5 * p.soil_bucket_mm, 0.0)    # e8: soil water (mm)
+        swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
         self.t_iterations = []
         self.t_converged = []
         self.t_update_max = []
@@ -526,6 +528,18 @@ class ClimateModel:
                     sigT4 = 5.67e-8 * (np.maximum(Tl, -60.0) + 273.15) ** 4
                     dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, self._lat_mean(Wc))) / 10.0
                 Tl = Tl + np.clip(dT, -15.0, 10.0)
+            if p.snow_albedo > 0:
+                # e16: the latitude-mean land column has no snow of its own.
+                # Snow on the ground reflects most of the sunshine, so snowy
+                # interiors stay colder through winter and warm late in spring
+                # (Mongolia and Manchuria, which feed East Asia's winter
+                # monsoon; the Kazakh steppe). Cover from last step's snow.
+                S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                     distance_factor(d, p.eccentricity,
+                                                     p.winter_solstice_day + p.perihelion_after_solstice,
+                                                     p.year_days))
+                cover = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
+                Tl = Tl - p.snow_albedo * cover * S / LAND_COUPLING_SREF
             if p.land_coupling_insolation > 0:
                 # physics e2: the land surface ties the air to its temperature
                 # through sunshine-driven mixing, strongly in summer and weakly
@@ -815,6 +829,9 @@ class ClimateModel:
             if p.soil_bucket_mm > 0:
                 soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
 
+            if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
+                swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days
+                swe = np.where(land, np.minimum(swe - np.minimum(swe, 3.5 * np.maximum(T_rep, 0.0) * dt_days), 3000.0), 0.0)
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
