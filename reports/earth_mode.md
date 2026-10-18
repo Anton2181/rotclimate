@@ -573,6 +573,26 @@ physics from here on use averages over several layouts, so that a gain
 cannot come from one lucky coastline. The atlas builder and the satellite
 renderer take `--seeds` to publish an averaged climate if wanted.
 
+**Which zones the surroundings decide.** Scored layout by layout
+(downsample 32, the pressure-wind free fit), only the north moves:
+
+| layout | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|
+| zonefit | 0.520 | 0.439 | 0.450 | 0.406 | 0.449 | 0.513 | 0.436 | 0.467 | 0.478 |
+| cold-wet recall | 0.70 | 0.28 | 0.31 | 0.98 | 0.70 | 0.72 | 0.26 | 0.93 | 0.44 |
+| cold-dry recall | 0.54 | 0.45 | 0.51 | 0.08 | 0.22 | 0.48 | 0.47 | 0.27 | 0.42 |
+
+The Mediterranean (0.62-0.73), swamp (0.35-0.58), "tree" (0.46-0.72) and
+hot-dry (0.40-0.51) hold steady. The painted cold-wet zone is a thin strip
+along the map's northern edge (69 % of it within 150 km of the edge; the
+cold-dry interior behind it, 21 %), and its rain depends on what lies just
+beyond: about 2,000 mm a year where a layout puts sea or wet land north of
+the edge (layouts 4 and 8; the whole north then turns wet and the cold-dry
+zone is lost) and about 1,200 mm where it puts dry land (layouts 2 and 7;
+`output/north_edge_layouts.png`). One painted zone in seven is thus mostly
+set by coastlines nobody drew, which is why single layouts swing by ±0.06
+and why fits and comparisons now average several.
+
 ### 5.4 Why swamp and hot-dry lag (18 October)
 
 On the pressure-wind free fit at downsample 16, layout 1:
