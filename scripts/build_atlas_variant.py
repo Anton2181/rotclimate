@@ -56,6 +56,8 @@ def main():
     ap.add_argument("--downsample", type=int, default=8)
     ap.add_argument("--set", default='{"solver_rtol": 1e-6, "solver_require_convergence": false}')
     ap.add_argument("--no-gif", action="store_true")
+    ap.add_argument("--seeds", default="", help="comma list of surroundings layouts to average (ensemble climate)")
+    ap.add_argument("--workers", type=int, default=1, help="parallel runs for --seeds")
     a = ap.parse_args()
     from rotclimate import render as R
     from rotclimate.__main__ import simulate
@@ -67,7 +69,12 @@ def main():
     data = out / "data"
     data.mkdir(parents=True, exist_ok=True)
     t = time.time()
-    r = simulate(p)
+    seeds = [int(x) for x in a.seeds.split(",") if x.strip()]
+    if seeds:
+        from rotclimate.model import run_ensemble
+        r = run_ensemble(p, seeds, workers=a.workers)
+    else:
+        r = simulate(p)
     ev = evaluate(r)
     fr = R.FullRes(r)
     build(r, fr, ev, outdir=data)
@@ -85,7 +92,7 @@ def main():
     g = r.grid
     kop = np.array(codes)[classify(st["Tm"], st["Pm"], st["summer"])]
     med = g.inmap & g.land & (g.target == 4)
-    summary = dict(params=a.params, downsample=a.downsample, seconds=round(time.time() - t),
+    summary = dict(params=a.params, downsample=a.downsample, seeds=seeds or None, seconds=round(time.time() - t),
                    strict_accuracy=ev["accuracy"], zonefit=objective(ev, "zonefit"),
                    recall={k: float(v) for k, v in ev["recall"].items()},
                    mediterranean=dict(dry_share=float(np.char.startswith(kop[med], "B").mean()),

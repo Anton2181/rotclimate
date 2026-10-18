@@ -550,6 +550,29 @@ on the temperature-driven wind (`wind_cap`, off), and the `e6map` search
 space (the pressure winds, the surroundings, `far_fetch` and the base
 temperatures) for fits that average several seeds (`--seeds 1,2,3`).
 
+**A fit over three layouts** (e6map, seeds 1-3, 201 candidates at
+downsample 32; `calibration/earth/free_e6multi_ds32.json`) raises their mean
+from 0.480 to 0.513. It switches the edge fetch off (0.003), opens the south
+fully to the sea and grows the eastern continent (82 % land), and its
+planetary-scale pressure lands on Earth's value again (1.64 hPa/K over
+1,950 km). Scored on layouts neither fit has seen, and on the climate
+averaged over six layouts (`rotclimate.model.run_ensemble`: the climate to
+expect when nothing is known beyond the map):
+
+| | single layouts 4-9 (mean) | climate averaged over layouts 4-9 | averaged over 1-6 at downsample 16 |
+|---|---|---|---|
+| pressure-wind free fit | 0.458 | 0.477 | 0.473 (layout 1 alone 0.539) |
+| fit over three layouts | **0.474** | **0.497** | **0.480** (layout 1 alone 0.515) |
+
+The fit over several layouts is the more robust one, by a small margin. The
+published atlas stays on the pressure-wind free fit: what lies beyond the
+map is unknown either way, and letting the fit infer it (coastlines
+included) is legitimate for a map whose surroundings nobody drew; that fit
+matches the painted zones best (0.529 at full detail). Comparisons of
+physics from here on use averages over several layouts, so that a gain
+cannot come from one lucky coastline. The atlas builder and the satellite
+renderer take `--seeds` to publish an averaged climate if wanted.
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by

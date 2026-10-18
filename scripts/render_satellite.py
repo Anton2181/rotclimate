@@ -147,6 +147,8 @@ def main():
     ap.add_argument("--set", default='{"solver_rtol": 1e-6, "solver_require_convergence": false}')
     ap.add_argument("--out", required=True)
     ap.add_argument("--reuse", action="store_true", help="reuse <out>/climate_cache.npz instead of simulating")
+    ap.add_argument("--seeds", default="", help="comma list of surroundings layouts to average (ensemble climate)")
+    ap.add_argument("--workers", type=int, default=1, help="parallel runs for --seeds")
     ap.add_argument("--relief", type=float, default=1.0, help="scale of the synthetic mountain relief")
     ap.add_argument("--vexag", type=float, default=0.6, help="hillshade vertical exaggeration")
     ap.add_argument("--rise", type=float, default=22.0, help="how gradually the highest tier climbs (pixels)")
@@ -168,7 +170,12 @@ def main():
         Tm_c, Pm_c, Sm_c, gland = z["Tm"], z["Pm"], z["Sm"], z["land"]
         gpad, gf = int(z["pad"]), int(z["f"])
     else:
-        res = ClimateModel(p).run()
+        seeds = [int(x) for x in a.seeds.split(",") if x.strip()]
+        if seeds:
+            from rotclimate.model import run_ensemble
+            res = run_ensemble(p, seeds, workers=a.workers)
+        else:
+            res = ClimateModel(p).run()
         Wm = monthly_weights(res.days, p.year_days)
         n = len(res.days)
         Tm_c = (Wm @ res.Tsl.reshape(n, -1)).reshape((12,) + res.Tsl.shape[1:])

@@ -795,6 +795,28 @@ class ClimateModel:
         return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, **out)
 
 
+def _run_one(params):
+    return ClimateModel(params).run()
+
+
+def run_ensemble(params: Params, seeds, workers: int = 1) -> Result:
+    """The mean climate over several random layouts of the unknown
+    surroundings (beyond_seed): the climate to expect when nothing is known
+    about the world beyond the map, rather than that of one invented coastline.
+    The grid (identical inside the map) is the first layout's; outside the map
+    the averaged fields mix different geographies and are not meaningful."""
+    plist = [params.replace(beyond_seed=int(s)) for s in seeds]
+    if workers > 1 and len(plist) > 1:
+        import multiprocessing as mp
+        with mp.get_context("fork").Pool(min(workers, len(plist))) as pool:
+            runs = pool.map(_run_one, plist)
+    else:
+        runs = [_run_one(q) for q in plist]
+    keys = ("T", "Tsl", "P", "W", "u", "v", "E", "snow")
+    mean = {k: np.mean([getattr(r, k) for r in runs], axis=0).astype(np.float32) for k in keys}
+    return Result(params=runs[0].params, grid=runs[0].grid, days=runs[0].days, **mean)
+
+
 def snowpack(T, P, step_days, years=3):
     """Degree-day snow model run to a periodic state."""
     nt = T.shape[0]
