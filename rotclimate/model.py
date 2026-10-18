@@ -371,6 +371,7 @@ class ClimateModel:
         big = gauss(T_anom, p.slp_scale_km / g.cell_km)
         local = gauss(T_anom, p.slp_local_km / g.cell_km) - big
         pres = -100.0 * (p.slp_large * big + p.slp_local * local)              # Pa
+        self.last_pres = pres                                                 # e10: highs dry the column
         px = np.gradient(pres, axis=1) / g.dx_m
         py = -np.gradient(pres, axis=0) / g.dx_m
         f = 2.0 * OMEGA * np.sin(np.radians(self.lat)) * (-1.0 if p.retrograde else 1.0)
@@ -704,6 +705,11 @@ class ClimateModel:
                 sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
+            if p.high_drying > 0 and getattr(self, "last_pres", None) is not None:
+                # e10: under the highs the pressure winds build (cold continents
+                # in winter) air sinks and dries the column: the winter dryness
+                # of subtropical continental interiors (Mexico, inland Australia)
+                A_dyn = A_dyn * np.exp(-p.high_drying * np.maximum(self.last_pres, 0.0) / 100.0)
             if p.divergence_drying > 0:
                 # e5: diverging low-level air sinks and dries the column, the
                 # counterpart of the convergence term

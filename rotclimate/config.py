@@ -170,6 +170,7 @@ class Params:
     soil_bucket_mm: float = 0.0       # e8: soil water a land cell holds for energy-limited evaporation (0 = recent-rain recycling)
     soil_wet_cooling: bool = False    # e8b: wet_cooling judges wetness by the bucket's soil water, not recent rain
     land_edge_rh: float = 0.5         # column humidity (of saturation) of air entering the grid over land
+    high_drying: float = 0.0          # e10: rain-making ascent x exp(-this x hPa of the pressure winds' high anomaly)
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
     marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air
     marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental
