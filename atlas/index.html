@@ -1184,7 +1184,8 @@ body.map-expanded { overflow: hidden; }
     ctx.translate(0, top);
     ctx.drawImage(base, 0, 0, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
-    const overlays = ["simrivers", "matchsvg", "towns", "placenames", "marker"]
+    // the selection circle stays out of the copy: it marks a click, not the map
+    const overlays = ["simrivers", "matchsvg", "towns", "placenames"]
       .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
     for (const el of overlays) {
       const st = el.getAttribute("style") || "";
