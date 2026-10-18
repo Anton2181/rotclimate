@@ -396,6 +396,61 @@ the nine-region mean rises to 2.133: it fits the northern training regions
 at the southern ones' expense. r11 stays the reference
 (`calibration/earth/earth_e4x_r12.json` keeps r12).
 
+### 4e. The humid subtropics, traced (18 October)
+
+Scored with the map's own zone rules, the Earth reference (r11,
+`output/earth_benchmark/earth_r11_56km/`) misses the same zones the map
+does: the south-east US has no swamp (recall 0: Florida's rain falls 11 %
+short of the doubled dryness threshold the rule wants), East China no
+warm-wet (recall 0, rain 27 % short), and 46 % of the Levant's Mediterranean
+turns to desert. The Earth-fit map's missing swamp follows from that.
+
+A trace of the rain step at the stations (`ClimateModel.trace_cells`,
+diagnostics only) shows where the rain is lost:
+
+* **Summer column humidity is too low over land.** Column water against
+  saturation falls from 0.77-0.90 in winter to 0.53-0.58 at Changsha and
+  0.47 at Chongqing in spring and summer, the seasons of their heaviest
+  rain (Changsha 200 mm a month in April-June against 50-70 simulated;
+  Chongqing 1,124 mm a year against 358).
+* **The summer wind at Changsha is wrong.** It blows from the east at
+  8 m/s (the prescribed trade-wind belt reaching 28°N in summer) where the
+  monsoon blows from the south-west, so moist air from the South China Sea
+  never arrives.
+* **Florida's humidity is pinned at the sea's (~0.72),** and the
+  convergence term is effectively off (`convective` 0.004), so the
+  sea-breeze storms of the peninsula are missing (Miami July 138 mm against
+  165, its wettest months 140 against 240).
+
+Section 4d found that strong large-scale pressure brings East China's
+monsoon but freezes Florida. A larger domain separates the two:
+
+| distance (56 km) | pad 1,100 km, r11 | pad 1,100 km, strong pressure | pad 3,300 km, r11 | pad 3,300 km, strong pressure |
+|---|---|---|---|---|
+| East China | 2.97 | 2.80 | 3.04 | 2.90 |
+| south-east US | 1.73 | 2.30 (Miami January -8.6 °C) | 1.95 | 1.92 (Miami January -3.3 °C) |
+| Iberia | 2.17 | 2.64 | 2.18 | 2.35 |
+| Levant | 1.90 | 2.33 | 2.20 | 2.53 |
+| California | 1.83 | 2.14 | 2.17 | 2.59 |
+| Central Asia | 1.50 | 1.65 | 3.19 | 3.43 |
+
+("Strong" is 4d's `westerly_speed` 1, `slp_large` 4, `slp_scale_km` 1,200.)
+With the larger domain, strong pressure no longer freezes Florida, but it
+changes everything else: Central Asia's rain triples (Aralsk 669 mm against
+131) once the Arabian Sea and the Mediterranean are inside the grid. r11
+is tuned to the 1,100 km pad.
+
+To keep only the useful part, physics e7 gave the planetary-scale pressure
+the real world's land pattern up to 5,000 km beyond the grid (land share x
+the model's own land and sea temperatures at each latitude and season,
+replacing the edge copies the wide Gaussian assumes). It changed almost
+nothing: six-region distances moved by -0.04 to +0.06 with r11, and with
+strong pressure Miami's January stayed at -9.0 °C. The pressure field's
+reach is not what lets a larger domain tell North America from Eurasia; the
+larger domain's temperature and moisture transport is. e7 was removed
+(section 6). A refit at the larger domain is the remaining test (about four
+times the cost of an r11 fit).
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
@@ -680,6 +735,12 @@ painted zones are from what Earth's climate rules would give this geography.
   option but barely moved East China (Wuhan January 10 °C vs 4 °C observed):
   the air arriving there is itself 4 °C too warm, with no Siberian High in a
   latitude-mean land temperature.
+
+- **Far-field planetary pressure** (e7, 18 October): the large-scale
+  pressure saw the real world's land pattern up to 5,000 km beyond the grid
+  instead of copies of the grid's edge. Six-region distances moved by -0.04
+  to +0.06 unrefitted, and it did not stop strong pressure from freezing
+  Florida (section 4e).
 
 The e2 rain closure (exponential convective rain, no background ascent,
 sub-cloud evaporation) is what helps: Miami 936 → 1,548 mm (observed 1,395)

@@ -262,6 +262,7 @@ class ClimateModel:
         # the first land row) on ground the marine layer can reach: below the
         # inversion and behind no crest above it (lowest crest on any path
         # from the sea; crests from the cells' mean and highest ground)
+        self.trace_cells = None          # (rows, cols) at which run() records the rain step (diagnostics)
         self.marine_geom = None
         if p.marine_layer > 0:
             L, D = p.marine_reach_km, g.cell_km
@@ -431,6 +432,7 @@ class ClimateModel:
         ocean = ~land
         lat = self.lat
         h_km = g.elev / 1000.0
+        self.trace = []
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -767,6 +769,16 @@ class ClimateModel:
                                    f'{solution.iterations} iterations, scaled residual '
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
             E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
+            if self.trace_cells is not None and n >= spinup:
+                # diagnostics only: the rain step's inputs at a few cells
+                ti, tj = self.trace_cells
+                raw = p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up
+                cell = lambda a: np.broadcast_to(np.asarray(a, float), lat.shape)[ti, tj].copy()
+                self.trace.append(dict(
+                    day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP),
+                    u=cell(u), v=cell(v), background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
+                    conv=cell(p.convective * conv), orog=cell(p.orographic * up),
+                    damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab)))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
 
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
