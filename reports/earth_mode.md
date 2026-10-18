@@ -524,6 +524,23 @@ south-east US zones 59 → 65 %, East China 33 → 46 %, the Levant's
 Mediterranean kept 34 → 40 % (lost to desert 46 → 36 %). Central Asia pays
 (1.50 → 1.73, rain 312 mm against 228). r16 is the new Earth reference.
 
+**What r16 still gets wrong, month by month:** the humid downwind coasts
+warm too early in spring (East China +4 to +5 °C in March-May, the
+south-east US +2 to +3 in April-May) and the dry Mediterranean summers are
+too cool (Iberia -4 °C in July-August, California -2.5). Wet cooling judged
+wetness by the last 50 days' rain, which is low in East China's spring, and
+the fits damp every land's seasons (`land_amplitude` 0.88) to compensate.
+Physics e8b (`soil_wet_cooling`, off by default) judges it by the bucket's
+own water instead. Refitted (r17: the e8 stage with the cooling's strength
+and the trade weakening free, 241 candidates;
+`calibration/earth/earth_e8b_r17.json`) it improves the training regions to
+1.981 (south-east US 1.54, Iberia 1.89) but every held-out region gets
+worse (Chile 3.64, Cape 2.04, south-west Australia 1.86; nine-region mean
+2.158 against r16's 2.084): the southern Mediterranean coasts run 1-2 °C
+too warm once their dry summer soil stops cooling them. Not adopted. Twice
+now (r15, r17) a fit gained on the six training regions at the held-out
+regions' expense: six regions are too few to constrain this many settings.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
