@@ -505,6 +505,41 @@ downsample 8 against 0.497 for the previous free fit** (strict agreement
 purity (78% Cs, 11% dry, against 82% and under 1%) for better cold-wet,
 warm-wet and swamp recall.
 
+### 5.3 The invented surroundings (18 October)
+
+The model pads the map with 1,100 km of invented land and sea on every side
+(`output/offmap_free_fit.png`): the fit chooses each side's land share, how
+far the map's edge features carry outward and how hilly the surroundings
+are, and fractal noise with one fixed seed draws the coastlines. The free
+fit chose mostly ocean (29 % land against the map's 52 %), a continent to
+the east (71 %; with the reversed spin the mid-latitude winds blow from the
+east), land to the north-west (56 %) and open sea to the south (11 %).
+
+Both map fits lean on the particular coastlines that seed draws. Re-scored
+with other seeds at the same land shares (downsample 32):
+
+| Fit | its own seed | seeds 2-6 |
+|---|---|---|
+| D2 (thermal wind) | 0.505 | 0.335, 0.458, 0.350, 0.418 (seeds 2-5) |
+| pressure-wind fit | 0.520 | 0.439, 0.450, 0.406, 0.449, 0.513 |
+
+Three of the five failed outright at first: the linear solver's
+over-relaxation (ω = 1.3) is not guaranteed to converge when transport by
+the wind dominates, and under the strong local winds it diverged to huge
+finite values. A solve whose result leaves the discrete maximum-principle
+bound (boundary values and S/λ) is now redone with plain Gauss-Seidel,
+which converges for this M-matrix; solves that converged are unchanged bit
+for bit, so every earlier result stands. The pressure-wind fit is the more
+robust of the two (mean 0.463 over six seeds against ~0.41 for D2 over
+five), but both are partly fitted to coastlines nobody drew.
+
+Changes: the map's grid edge now carries its side's land share as `chi_far`
+(the counterpart of Earth's edge fetch, weighted by `far_fetch`; it costs
+0.05 unrefitted, as e6 did on Earth before r11), an optional soft ceiling
+on the temperature-driven wind (`wind_cap`, off), and the `e6map` search
+space (the pressure winds, the surroundings, `far_fetch` and the base
+temperatures) for fits that average several seeds (`--seeds 1,2,3`).
+
 ## 6. Tried and removed (no measurable effect)
 
 - **Coastal seas following the air over them** (shallow shelf seas chilled by
