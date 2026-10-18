@@ -65,6 +65,13 @@ _E5_PARTNERS = {"land_offset", "sst_offset", "land_tau_days", "ocean_tau_days", 
                 "eddy_scale_km", "rh_threshold", "precip_tau_days", "convective", "subsidence", "orographic",
                 "ocean_rh", "current_strength", "upwelling"}
 SPACES["e5_stage1"] = [g for g in SPACES["e5"] if g[0] in _E5_PARTNERS] + C.SPACE_E5_NEW
+# around r11 (e5 + e6): the e4 extras (cloud and clear-sky radiation, marine
+# air, monsoon heating, terrain-aware eddy moisture), never tried with the
+# pressure winds, with the pressure genes and their partners
+# (terrain-aware eddy moisture stays off: its range starts at 1.5 km, so the
+# search could not begin from r11's "off")
+SPACES["e4x_stage"] = ([g for g in SPACES["e5"] if g[0] in _E5_PARTNERS]
+                       + [g for g in C.SPACE_E4_NEW if g[0] != "eddy_moisture_height_km"] + C.SPACE_E5_NEW)
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]
