@@ -541,6 +541,43 @@ too warm once their dry summer soil stops cooling them. Not adopted. Twice
 now (r15, r17) a fit gained on the six training regions at the held-out
 regions' expense: six regions are too few to constrain this many settings.
 
+### 4f. A broader Earth sample; r19 (19 October)
+
+Four more held-out regions (east Australia, south Brazil and the Pampas,
+southern Japan with the Korea Strait, northern Mexico; `rotclimate/earth.py`)
+test the fits on climates the training set has least of. On them r16
+generalises best (mean 2.747; r11 2.885, r14 2.758, r15 2.894, r17 2.967),
+confirming the rejections of r15 and r17. All four show faults no training
+region does: Japan has no June-July rain front (Fukuoka 70 mm in July
+against 350), winter rain reaches too far towards the equator over dry
+continents (Chihuahua, El Paso, Torreón 50-70 mm a month in winter against
+5-20; inland east Australia 130-145 against ~40), east Australia's coast
+gets twice its summer rain and south Brazil half its winter rain.
+
+From here fits train on eight regions (the six plus east Australia and
+Mexico) and hold out five (Chile, Cape, south-west Australia, south Brazil,
+Japan). Tested against r16 (8 training / 5 held out: 2.175 / 2.466):
+
+| Candidate | Training (8) | Held out (5) | |
+|---|---|---|---|
+| drier air entering over land (`land_edge_rh` 0.3) | | | dries Central Asia, the Levant, south Brazil; Mexico unchanged |
+| ocean highs instead of the trade belt (`trade_speed` 3, `subtropical_high` 4) | 2.306 | 2.520 | Japan's rain front still missing, Chile still ~9 °C too warm |
+| r18: r16 refitted on the eight (241 candidates) | **2.108** | 2.612 | overfits: south Brazil 2.83, Japan 3.57 |
+| **r19: r16 + drying under highs (e10, 0.05 per hPa)** | 2.161 | **2.448** | adopted |
+
+Physics e10 (`high_drying`, off by default) damps the rain-making ascent
+by exp(-k x hPa) under the highs the pressure winds already build: cold
+continents in winter, where air sinks and dries. It helps California,
+Iberia, Central Asia, east Australia, Mexico, the Cape and Japan and costs
+the south-east US and the Levant; winter rain in the dry interiors falls
+but stays well above observed (Torreón 636 → 619 mm against 275). Three
+refits in a row (r15, r17, r18) gained on their training regions and lost
+on held-out ones, so r19 is r16 plus e10 at a set strength, unrefitted
+(`calibration/earth/earth_e10_r19.json`; the 13-region scan is
+`output/earth_benchmark/e10_scan_13regions.json`). On the original six
+training regions it is 2.028 (r16 2.012), over the original nine 2.086
+(2.084); the broader sample is the better judge.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
