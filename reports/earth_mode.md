@@ -495,6 +495,35 @@ so r11 stays the reference (`calibration/earth/earth_e8_r14.json` and
 `earth_e8_r15.json` keep them); e8 stays as an option, the most promising
 lead for the humid subtropics.
 
+**r16: the bucket with weaker summer trades over land becomes the Earth
+reference.** Two more mechanisms were tried on top. Rain heating the
+column (e9: last step's rain anomaly, smoothed over 600 km, added to the
+temperature the pressure winds see, as latent heat drives a monsoon low)
+made every region worse unrefitted (six-region mean 2.016 → 2.050 at
+1 K per mm/day); with warm-season land rain only it helped Miami (1,049 →
+1,203 mm against 1,395) but dried East China; removed (section 6). The
+subtropical highs' flank winds (e3) moved Chile 3.40 → 3.25 at 4 m/s but
+California, Iberia and the south-east US got worse. Chile's summer stays
+~10 °C too warm whatever the winds: in its summer the prescribed trade belt
+(poleward edge at 38°) blows offshore at 33° and the coastal strip is one
+56 km cell wide, mixed with the hot interior (the resolution limit
+section 6 already found).
+
+The summer weakening of the trades over large land masses (e4b
+`trade_land`), a wash on r11, combines well with the bucket: r14 with
+`trade_land` = 1, unrefitted (`calibration/earth/earth_e8_r16.json`,
+`output/earth_benchmark/earth_r16_56km/`), beats r11 on both counts:
+
+| Fit | California | Iberia | SE US | Levant | C Asia | E China | Training (6) | Chile | Cape | SW Australia | Nine-region |
+|---|---|---|---|---|---|---|---|---|---|---|---|
+| r11 | **1.83** | 2.17 | 1.73 | 1.90 | **1.50** | 2.97 | 2.016 | **3.37** | 1.89 | 1.55 | 2.102 |
+| **r16** (r14 + `trade_land` 1) | 1.92 | **2.09** | **1.67** | **1.85** | 1.73 | **2.81** | **2.012** | 3.40 | **1.80** | **1.47** | **2.084** |
+
+Scored with the map's zone rules it gains more than the distances show:
+south-east US zones 59 → 65 %, East China 33 → 46 %, the Levant's
+Mediterranean kept 34 → 40 % (lost to desert 46 → 36 %). Central Asia pays
+(1.50 → 1.73, rain 312 mm against 228). r16 is the new Earth reference.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
@@ -780,6 +809,12 @@ painted zones are from what Earth's climate rules would give this geography.
   the air arriving there is itself 4 °C too warm, with no Siberian High in a
   latitude-mean land temperature.
 
+- **Rain heating the column** (e9, 18 October): the pressure winds saw last
+  step's rain anomaly as latent heating (K per mm/day, smoothed over 600 km).
+  Every region got worse unrefitted (six-region mean 2.016 → 2.050 at 1 K
+  per mm/day): the model's rain falls mostly at sea and on coasts, so the
+  lows drew air away from the inland regions that lack rain; with warm-season
+  land rain only it helped Miami and dried East China (section 4e).
 - **Far-field planetary pressure** (e7, 18 October): the large-scale
   pressure saw the real world's land pattern up to 5,000 km beyond the grid
   instead of copies of the grid's edge. Six-region distances moved by -0.04

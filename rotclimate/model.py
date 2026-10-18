@@ -796,7 +796,8 @@ class ClimateModel:
                     day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP), bucket=cell(soil_w),
                     u=cell(u), v=cell(v), background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
                     conv=cell(p.convective * conv), orog=cell(p.orographic * up),
-                    damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab)))
+                    damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab),
+                    Teq=cell(T_eq), Tsl=cell(Tsl), SST=cell(SST), chi=cell(0.0 if chi is None else chi)))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
             if p.soil_bucket_mm > 0:
                 soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
