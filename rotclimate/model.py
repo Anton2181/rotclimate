@@ -443,6 +443,7 @@ class ClimateModel:
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
+        soil_w = np.where(land, 0.5 * p.soil_bucket_mm, 0.0)    # e8: soil water (mm)
         self.t_iterations = []
         self.t_converged = []
         self.t_update_max = []
@@ -711,7 +712,24 @@ class ClimateModel:
             bnd = np.where(ocean, W_ocean, 0.5 * Ws)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
-            E_land = np.where(land, p.land_recycling * soilP * energy, 0.0) / DAY
+            if p.soil_bucket_mm > 0:
+                # e8: land evaporates what the sun can evaporate while the soil
+                # holds water (Priestley & Taylor 1972 with net radiation ~ half
+                # the sunshine at the top of the air less 25 W/m2), slowing as
+                # the soil dries below 75 % of what it holds (Manabe 1969);
+                # winter rain stored in the soil feeds the summer air
+                S_toa = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                         distance_factor(d, p.eccentricity,
+                                                         p.winter_solstice_day + p.perihelion_after_solstice,
+                                                         p.year_days))
+                Ts = np.clip(T, -40.0, 50.0)
+                es = 0.6108 * np.exp(17.27 * Ts / (Ts + 237.3))
+                slope = 4098.0 * es / (Ts + 237.3) ** 2
+                pet = 1.26 * slope / (slope + 0.066) * np.maximum(0.5 * S_toa - 25.0, 0.0) / 28.4       # mm/day
+                beta = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                E_land = np.where(land, np.minimum(p.land_recycling * pet * beta, soil_w / dt_days), 0.0) / DAY
+            else:
+                E_land = np.where(land, p.land_recycling * soilP * energy, 0.0) / DAY
             # v6: hot, moist low-level air is convectively unstable, so it rains
             # more efficiently than relative humidity alone suggests (gated by
             # moisture, so hot deserts stay dry)
@@ -775,11 +793,13 @@ class ClimateModel:
                 raw = p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up
                 cell = lambda a: np.broadcast_to(np.asarray(a, float), lat.shape)[ti, tj].copy()
                 self.trace.append(dict(
-                    day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP),
+                    day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP), bucket=cell(soil_w),
                     u=cell(u), v=cell(v), background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
                     conv=cell(p.convective * conv), orog=cell(p.orographic * up),
                     damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab)))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
+            if p.soil_bucket_mm > 0:
+                soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
 
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
             if p.monsoon_heating > 0:

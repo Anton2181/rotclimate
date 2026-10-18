@@ -72,6 +72,11 @@ SPACES["e5_stage1"] = [g for g in SPACES["e5"] if g[0] in _E5_PARTNERS] + C.SPAC
 # search could not begin from r11's "off")
 SPACES["e4x_stage"] = ([g for g in SPACES["e5"] if g[0] in _E5_PARTNERS]
                        + [g for g in C.SPACE_E4_NEW if g[0] != "eddy_moisture_height_km"] + C.SPACE_E5_NEW)
+# around r11: the soil bucket (e8) with the pressure-wind stage's genes and the
+# rain closure it trades against
+SPACES["e8_stage"] = ([g for g in SPACES["e5_stage1"] if g[0] != "land_recycling"] + C.SPACE_E8_NEW
+                      + [g for g in C.SPACE_E2 if g[0] in ("convective_rain", "convective_rh", "subcloud_evaporation")]
+                      + [("instability", 0.0, 3.0)])
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]

@@ -167,6 +167,9 @@ _RAIN = ("ocean_rh", "land_recycling", "precip_tau_days", "rh_threshold", "storm
          "subsidence", "subsidence_asym", "instability", "subsidence_summer", "sverdrup", "subsidence_width",
          "storm_seasonality", "circulation_lag_days", "subsidence_drying", "background_ascent", "convective_rain",
          "convective_rh", "subcloud_evaporation")
+# e8: the soil bucket's size and the evaporation factor it scales (bounded
+# above 0.8 here: with the bucket, 1 is Priestley-Taylor's own rate)
+SPACE_E8_NEW = [("soil_bucket_mm", 20.0, 400.0), ("land_recycling", 0.05, 1.2)]
 SPACE_RAIN_MAP = [g for g in SPACE_E3B5 if g[0] in _RAIN] + [("eddy_seasonality", 0.0, 0.9)]
 # e6 on the map: the pressure winds, the surroundings beyond the map and the
 # weight of their land share at the grid's edge, with the base temperatures
