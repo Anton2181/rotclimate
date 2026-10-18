@@ -714,7 +714,7 @@ class ClimateModel:
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
                 A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
-            bnd = np.where(ocean, W_ocean, 0.5 * Ws)
+            bnd = np.where(ocean, W_ocean, p.land_edge_rh * Ws)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             if p.soil_bucket_mm > 0:
