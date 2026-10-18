@@ -40,7 +40,8 @@ def main():
     for k, v in world.items():
         if k in WORLD_KEYS or k.startswith("beyond_"):
             out[k] = v
-    out["far_fetch"] = 0.0          # the map's surroundings are its own procedural edge
+    # far_fetch stays the Earth fit's: on the map the grid's edge carries the
+    # land share of the procedural surroundings (geography.chi_far)
     Path(a.out).write_text(json.dumps(out, indent=1))
     changed = sorted(k for k in out if k in phys and k in world and out[k] != world[k])
     print(f"{len(changed)} physics settings taken from the Earth fit; world from {a.world}")
