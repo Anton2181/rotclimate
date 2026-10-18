@@ -52,7 +52,9 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
     W = guess
     converged = None if p.moisture_residual_tol == 0 else False
     residual = None
+    lamE_all = lamE
     for n in range(p.picard_iters):
+        lamE = ocean_rate(p, lamE_all, W, ocean_water)
         lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure)
         if sink is not None:
             lamP = lamP + sink
@@ -83,3 +85,10 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                 break
     P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure) * W * DAY
     return MoistureSolution(W, P, n+1, converged, residual)
+
+
+def ocean_rate(p, lamE, W, ocean_water):
+    """Sea-surface exchange rate (1/s); e11 weakens uptake where W exceeds the sea's equilibrium."""
+    if p.ocean_sink == 1.0:
+        return lamE
+    return np.where(W > ocean_water, p.ocean_sink * lamE, lamE)

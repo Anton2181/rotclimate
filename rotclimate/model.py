@@ -213,9 +213,11 @@ class ClimateModel:
             return np.cos(th) * np.gradient(a, axis=1) + np.sin(th) * np.gradient(a, axis=0)
         # which side of a landmass an ocean cell lies on: >0 => land to the east
         # (a continent's WEST coast), <0 => land to the west (EAST coast)
-        Ls = ndi.gaussian_filter(land, 2.5 * cells_per_100km)
+        # e12: current_scale_km sets how far away a coast is felt (the Kuroshio
+        # warms the sea south of Japan with China 800 km to the west)
+        Ls = ndi.gaussian_filter(land, p.current_scale_km / 100.0 * cells_per_100km)
         gx = d_east(Ls) * cells_per_100km
-        self.side = np.clip(gx / 0.08, -1, 1) * (~g.land)
+        self.side = np.clip(gx / (0.08 * 250.0 / p.current_scale_km), -1, 1) * (~g.land)
         self.side = ndi.gaussian_filter(self.side, 1.0 * cells_per_100km)
         # broad "which side of the ocean basin" field over land AND sea: >0 on
         # and off continents' west coasts, <0 on and off their east coasts
@@ -749,7 +751,7 @@ class ClimateModel:
                 instab = 1.0 + p.instability * np.clip((T - 22.0) / 8.0, 0, 1.5) * moist
             else:
                 instab = 1.0
-            from .moisture import solve_moisture
+            from .moisture import ocean_rate, solve_moisture
             exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
@@ -797,7 +799,7 @@ class ClimateModel:
                 raise RuntimeError(f'Moisture equation failed at seasonal step {n+1}: '
                                    f'{solution.iterations} iterations, scaled residual '
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
-            E = np.where(ocean, lamE * (W_ocean - W) * DAY, E_land * DAY)
+            E = np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY)
             if self.trace_cells is not None and n >= spinup:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells

@@ -87,6 +87,7 @@ class Params:
     ocean_tau_days: float = 1.5       # ... over sea
     heat_diffusion: float = 4.0e4     # m^2/s, horizontal mixing of air
     current_strength: float = 4.0     # K, boundary current SST anomaly
+    current_scale_km: float = 250.0   # e12: smoothing scale (km) of the land that decides which side of a sea a cell is on
     sst_offset: float = 0.0           # K, global SST tweak
     land_offset: float = 0.0          # K, global land-column tweak
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
@@ -169,6 +170,7 @@ class Params:
     wind_cap: float = 0.0             # e6: m/s ceiling of the temperature-driven wind, soft above half of it (0 = none)
     soil_bucket_mm: float = 0.0       # e8: soil water a land cell holds for energy-limited evaporation (0 = recent-rain recycling)
     soil_wet_cooling: bool = False    # e8b: wet_cooling judges wetness by the bucket's soil water, not recent rain
+    ocean_sink: float = 1.0           # e11: fraction of sea uptake kept when air is moister than the sea's equilibrium (1 = symmetric)
     land_edge_rh: float = 0.5         # column humidity (of saturation) of air entering the grid over land
     high_drying: float = 0.0          # e10: rain-making ascent x exp(-this x hPa of the pressure winds' high anomaly)
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
