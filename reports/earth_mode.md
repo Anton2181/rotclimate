@@ -674,6 +674,47 @@ whose rain the model holds only through the same moist pool. The missing
 piece is probably what keeps those coasts wet in reality, the monsoon
 inflow, rather than the interiors' outflow.
 
+**r22: temperature first in East Asia.** Splitting r21's errors shows that
+East China and Japan miss mostly on temperature, not rain. East China is
+2.5 °C too warm on average: Shanghai is +3 °C in January, +7 in March,
++8 in April, and 1 °C too cold in July and August. Japan has winters 2–6 °C
+too warm and summers 2–4 °C too cold. The cold continental air of East
+Asia's winter monsoon is missing. The traces also show that summer rain
+there comes only from the summer-weakened storm track and the humidity
+boost: the convergence ascent is 0.00 (its fitted weight is 0.014) and the
+summer winds are trade easterlies. Scans from r21 (in
+`output/earth_benchmark/coord_scans_r21/`):
+
+| From r21 | Training (8) | Held out (5) | Japan | East China | East Australia | Costs |
+|---|---|---|---|---|---|---|
+| r21 | 2.121 | 2.356 | 3.04 | 2.71 | 2.43 | |
+| e4 cloud shading (`cloud_radiation` 2 / 5) | 2.123 / 2.129 | 2.367 / 2.384 | 3.09 / 3.16 | 2.70 / 2.69 | 2.47 / 2.53 | |
+| e4 clear-sky longwave (`cloud_longwave` 1) | 2.171 | 2.266 | 2.72 | 2.85 | 1.97 | SE US 1.71 → 2.00 |
+| `cloud_longwave` 0.5 | 2.127 | 2.300 | 2.84 | 2.74 | 2.21 | |
+| **`cloud_longwave` 0.25 (r22)** | **2.120** | **2.326** | **2.93** | **2.71** | **2.33** | |
+| e16 snow cover (`snow_albedo` 6 K) | 2.140 | 2.339 | 2.94 | 2.63 | 2.43 | California 1.89 → 2.02 |
+| e16 at 10 K | 2.186 | 2.328 | 2.87 | 2.62 | 2.43 | California 2.16 |
+| e16 at 6 K, `land_offset` +0.5 | 2.139 | 2.397 | 3.03 | 2.76 | 2.56 | |
+| e4b monsoon inflow (`monsoon_heating` 0.5 / 1) | 2.147 / 2.220 | 2.334 / 2.319 | 2.89 / 2.72 | 2.67 / 2.70 | 2.55 / 2.85 | SE US 1.78 / 1.96 |
+
+- **e4 clear-sky longwave**, existing but unused on Earth until now: dry, clear
+  air loses more heat to space, moist, cloudy air less. It is the one change
+  that passes, at a quarter of its physical strength.
+- **e16, snow cover** (`snow_albedo`, new, off by default): a degree-day
+  snowpack carried through the year, with cover 1 − exp(−snow / 10 mm),
+  cools the land by `snow_albedo` × cover × sunshine / 480 W m⁻² (about 7 K
+  physically). The latitude-mean land column had no snow of its own; snow
+  was only diagnosed after the run. It helps Japan, East China and the
+  south-east US, but California is already 2–3 °C too cold from February to
+  October at every height. Snow makes its high ground's spring another
+  2–3 °C colder, and Central Asia and the Levant lose too. The fitted
+  temperature offsets were tuned without snow, so it waits for a refit.
+- **e4b monsoon inflow**: helps Japan, Central Asia and East China, but costs
+  the south-east US and east Australia.
+
+`calibration/earth/earth_e16_r22.json` (r21 + `cloud_longwave` 0.25):
+2.120 / 2.326 / 2.199 over 8 / 5 / 13 regions.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
