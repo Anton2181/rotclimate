@@ -80,6 +80,8 @@ SPACES["e8_stage"] = ([g for g in SPACES["e5_stage1"] if g[0] != "land_recycling
 # e8b: wet cooling by the bucket's soil water, with the strength of that cooling
 # and the summer trade weakening free (start from r16 with soil_wet_cooling on)
 SPACES["e8b_stage"] = SPACES["e8_stage"] + [("wet_cooling", 0.0, 0.9), ("trade_land", 0.0, 1.0)]
+# around r16: the e8 stage with the summer trade weakening free
+SPACES["e8tl_stage"] = SPACES["e8_stage"] + [("trade_land", 0.0, 1.0)]
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
 SPACE = SPACES["v9"]

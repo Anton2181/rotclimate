@@ -62,6 +62,16 @@ REGIONS = {
                  note="Western Cape Mediterranean, Karoo, southern coast"),
     "sw_australia": dict(lat0=-32.0, lon0=118.5, width_km=1200, height_km=1000,
                          note="south-west Australia: Mediterranean coast to the interior deserts"),
+    # more held-out regions (19 October): the humid subtropics on three more
+    # coasts and a hot desert, the climates the training set has least of
+    "east_australia": dict(lat0=-29.0, lon0=151.0, width_km=1300, height_km=1500,
+                           note="humid subtropical east coast, Great Dividing Range, inland plains"),
+    "south_brazil": dict(lat0=-31.0, lon0=-55.5, width_km=1600, height_km=1300,
+                         note="Pampas and south Brazil: humid subtropical, no dry season"),
+    "japan": dict(lat0=35.0, lon0=134.0, width_km=1500, height_km=1200,
+                  note="maritime humid subtropics: southern Japan and the Korea Strait"),
+    "mexico": dict(lat0=27.0, lon0=-104.5, width_km=1500, height_km=1300,
+                   note="northern Mexico: hot deserts and steppes, the Sierra Madre"),
 }
 
 
@@ -87,6 +97,15 @@ STATIONS = {
              "Beaufort West": (-32.35, 22.58)},
     "sw_australia": {"Geraldton": (-28.78, 114.61), "Perth": (-31.95, 115.86), "Albany": (-35.02, 117.88),
                      "Kalgoorlie": (-30.75, 121.47)},
+    "east_australia": {"Brisbane": (-27.47, 153.03), "Toowoomba": (-27.56, 151.95), "Moree": (-29.47, 149.85),
+                       "Coffs Harbour": (-30.30, 153.11), "Dubbo": (-32.25, 148.60), "Sydney": (-33.87, 151.21)},
+    "south_brazil": {"Florianopolis": (-27.60, -48.55), "Santa Maria": (-29.69, -53.81),
+                     "Porto Alegre": (-30.03, -51.23), "Rosario": (-32.95, -60.65), "Montevideo": (-34.90, -56.16),
+                     "Buenos Aires": (-34.60, -58.38)},
+    "japan": {"Busan": (35.18, 129.08), "Fukuoka": (33.59, 130.40), "Kagoshima": (31.60, 130.56),
+              "Osaka": (34.69, 135.50), "Nagoya": (35.18, 136.91), "Tokyo": (35.68, 139.69)},
+    "mexico": {"Hermosillo": (29.07, -110.96), "Chihuahua": (28.63, -106.07), "El Paso": (31.76, -106.49),
+               "Torreon": (25.54, -103.41), "Durango": (24.02, -104.67), "Monterrey": (25.69, -100.32)},
 }
 
 
