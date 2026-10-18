@@ -106,11 +106,26 @@ class AdvectionSolver:
         if not np.isfinite(rtol) or rtol <= 0 or max_iter < 1:
             raise ValueError("Solver tolerance and iteration limit must be positive")
         if HAVE_NUMBA:
-            phi = np.array(boundary if guess is None else guess, float, copy=True)
-            phi[self.border] = boundary[self.border]
+            start = np.array(boundary if guess is None else guess, float, copy=True)
+            start[self.border] = boundary[self.border]
+            phi = start.copy()
             scale = max(np.abs(boundary).max(), 1e-12)
-            n, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, np.ascontiguousarray(S, float),
-                        rtol * scale, max_iter, self.omega)
+            Sc = np.ascontiguousarray(S, float)
+            n, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, Sc, rtol * scale, max_iter, self.omega)
+            # the exact solution of this M-matrix problem is bounded by its
+            # boundary values and S / lam (discrete maximum principle)
+            bound = max(np.abs(boundary).max(), float(np.max(np.abs(Sc) / np.maximum(np.asarray(lam, float), 1e-30))))
+            diverged = not np.isfinite(phi).all() or np.abs(phi).max() > 2.0 * bound + 1.0
+            if diverged and self.omega != 1.0:
+                # Over-relaxation is only guaranteed to converge for omega <= 1;
+                # strongly advection-dominated flow (fast local winds) can make
+                # it diverge. Plain Gauss-Seidel converges for this diagonally
+                # dominant M-matrix, so redo the solve without it (solves that
+                # did not diverge are unchanged).
+                phi = start.copy()
+                n2, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, Sc, rtol * scale, max_iter, 1.0)
+                n += n2
+                self.fallbacks = getattr(self, "fallbacks", 0) + 1
             self.iterations.append(n)
             self.converged.append(converged)
             self.final_updates.append(update)

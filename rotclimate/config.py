@@ -166,6 +166,7 @@ class Params:
     monsoon_rain0: float = 1.0        # e4b: warm-season rain (mm/day) with no inflow; drier skies drive outflow
     trade_land: float = 0.0           # e4b: summer weakening of the trades over continental-scale land (0-1)
     far_fetch: float = 0.0            # e6: weight of the far-field upwind land share at the domain edge (0 = local land)
+    wind_cap: float = 0.0             # e6: m/s ceiling of the temperature-driven wind, soft above half of it (0 = none)
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
     marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air
     marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental

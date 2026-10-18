@@ -600,6 +600,18 @@ class ClimateModel:
                     ut, vt = self.pressure_wind(T_anom)      # physics e5
                 else:
                     ut, vt = self.thermal_wind(T_anom)
+                if p.wind_cap > 0:
+                    # e6: surface winds are friction-limited; without a ceiling,
+                    # strong small-scale heat lows feed back on themselves
+                    # (wind -> sharper contrast -> more wind) and the
+                    # temperature-wind iteration runs away on some coastlines.
+                    # Unchanged below half the cap, saturating at the cap.
+                    sp = np.hypot(ut, vt)
+                    knee = 0.5 * p.wind_cap
+                    over = (sp - knee) / (p.wind_cap - knee)
+                    f_cap = np.where(sp > knee, (knee + (p.wind_cap - knee) * np.tanh(np.maximum(over, 0.0)))
+                                     / np.maximum(sp, 1e-9), 1.0)
+                    ut, vt = ut * f_cap, vt * f_cap
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
                 lam = lamT

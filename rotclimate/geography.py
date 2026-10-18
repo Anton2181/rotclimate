@@ -437,6 +437,9 @@ def _procedural_offmap(core: dict, p: int, cell_km: float, low_fill: float, spec
         full = np.zeros((H, W))
         full[p:p + h, p:p + w] = core[k]
         out[k] = np.where(inmap, full, v)
+    # e6: the land share of the world beyond each side, for the air entering
+    # at the grid's edge (the map's counterpart of Earth's westward land share)
+    out["chi_far"] = frac
     return out, inmap
 
 
@@ -475,7 +478,9 @@ def _build_grid_cached(f, tier_tops, beyond, pad_km, lat_center, width_mi, heigh
         land = land_frac >= 0.5
         elev = np.where(land, np.maximum(fields["elev"], 1.0), 0.0)
         elev_max = np.where(land, np.maximum(fields["elev_max"], elev), 0.0)
+        chi_far = fields["chi_far"]
     else:
+        chi_far = None
         fields = dict(land_frac=land_frac, elev=elev, elev_max=elev_max)
         for side, mode, gap_km in beyond[1:]:
             gap = int(round(gap_km / cell_km))
@@ -504,7 +509,7 @@ def _build_grid_cached(f, tier_tops, beyond, pad_km, lat_center, width_mi, heigh
     lat = np.repeat(lat1d[:, None], nx, axis=1)
     g = Grid(params=None, f=f, pad=p, ny=ny, nx=nx, cell_km=cell_km, land=land,
              land_frac=land_frac, elev=elev, elev_max=elev_max, lat=lat, inmap=inmap,
-             target=tgt, rivers=rivers, lake=lake)
+             target=tgt, rivers=rivers, lake=lake, chi_far=chi_far)
     return g
 
 
