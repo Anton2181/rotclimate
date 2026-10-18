@@ -39,7 +39,8 @@ class MoistureSolution:
 
 
 def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
-                   dynamics, instability, boundary, guess, exchange=0., mix=None, sink=None, closure=None):
+                   dynamics, instability, boundary, guess, exchange=0., mix=None, sink=None, closure=None,
+                   gain=None):
     """Legacy fixed sweeps unless moisture_residual_tol > 0.
 
     The optional criterion is max |equation residual| / max(P+|E|,0.1)
@@ -48,6 +49,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
 
     `sink` (1/s, optional): water removed from the column without raining
     (subsidence drying); it enters the equation check as negative evaporation.
+    `gain` (1/s, optional): water brought in by converging air, gain * W, taken
+    from the current iterate as a source so the linear solve stays well posed.
     """
     W = guess
     converged = None if p.moisture_residual_tol == 0 else False
@@ -58,13 +61,14 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
         lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure)
         if sink is not None:
             lamP = lamP + sink
+        source = land_source if gain is None else land_source + gain * W
         if mix is not None:
             mixed = mix(W)
             new = solver.solve(u, v, p.moisture_diffusion, lamE + lamP + exchange,
-                               lamE * ocean_water + land_source + exchange * mixed, boundary, guess=W)
+                               lamE * ocean_water + source + exchange * mixed, boundary, guess=W)
         else:
             new = solver.solve(u, v, p.moisture_diffusion, lamE + lamP,
-                               lamE * ocean_water + land_source, boundary, guess=W)
+                               lamE * ocean_water + source, boundary, guess=W)
         if p.moisture_relaxation == 0.5:
             W = 0.5 * (W + np.maximum(new, 0))  # exact legacy arithmetic
         else:
@@ -75,6 +79,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             E = (lamE * (ocean_water - W) + land_source) * DAY
             if sink is not None:
                 E = E - sink * W * DAY
+            if gain is not None:
+                E = E + gain * W * DAY
             terms = moisture_terms(W, u, v, solver.dx, p.moisture_diffusion, E, P,
                                    exchange, mix(W) if mix is not None else W)
             residual = float(np.max((terms['absolute_residual'] / np.maximum(P + np.abs(E), 0.1))[1:-1, 1:-1]))

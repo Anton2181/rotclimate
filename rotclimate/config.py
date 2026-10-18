@@ -92,6 +92,7 @@ class Params:
     land_offset: float = 0.0          # K, global land-column tweak
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
     lake_coupling: float = 0.0        # v4: lakes/small seas follow land temp (0 = off)
+    sea_winter_mixing: float = 0.0    # e19: share of an enclosed sea's or lake's winter cooling toward the land that deep mixing cancels (0 = symmetric)
     land_amplitude: float = 1.0       # v4: scale of the continental seasonal swing
     storm_asym: float = 0.0           # v5: storm track stronger on the warm-current side
     storm_reach: float = 0.0          # v5: ... and this many degrees further equatorward
@@ -157,6 +158,7 @@ class Params:
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
+    flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)
     slp_large: float = 0.0            # e5: hPa of low pressure per K of warm anomaly, planetary scale (0 with slp_local 0 = off)
     slp_local: float = 0.0            # e5: hPa/K at the boundary-layer scale (sea breezes, heat lows)
     slp_scale_km: float = 2000.0      # e5: smoothing of the planetary-scale pressure

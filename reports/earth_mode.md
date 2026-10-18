@@ -722,6 +722,67 @@ way on the held-out regions, so a joint refit of the temperature offsets
 with them is the next test, once refits can be held to the
 both-halves rule.
 
+**r23 and r24: where the rain goes wrong.** Splitting each region's rain
+error into timing (the error left with the simulated rain rescaled to the
+observed yearly total) and amount (the error left with only the yearly total
+wrong) shows rain is at least half the climate distance in 10 of 13 regions
+under r22:
+
+- **Timing** dominates in Mexico (1.48 against 0.80 for amount), Japan (1.33 /
+  0.91), the SE US and the Levant.
+- **Amount** dominates in east Australia (0.49 / 1.39), where 98 % of cells are
+  too wet.
+- **Mexico has no summer monsoon:** about 50 mm a month all year against 14–23
+  in spring and 92–95 from July to September.
+- **East China and Japan** get half their summer rain: Japan's July is 113
+  against 252 mm.
+- **The Levant's wet season** peaks in March instead of January (January 30
+  against 54 mm).
+
+- **e17, convergence brings water** (`flux_convergence`). Moisture moves with
+  u·∇W, which leaves out −W∇·u. Converging air rose (the convergence ascent)
+  but brought no water in, so a monsoon could rain only what its column held.
+  The full term (smoothed over 300 km) gives Mexico a monsoon: Chihuahua goes
+  from 46 / 14 mm (January / July, observed 8 / 95) to 22 / 80 at strength 0.5.
+  But its export half, under winter highs, drains the SE US (October to
+  January already too dry), inland south Brazil and Japan, whose winter
+  water comes with passing storms that the mean wind does not carry. Kept:
+  the import half, into columns warm enough for deep convection
+  (T_col 15–25 °C ramp).
+- **e18, rain from air colder than the sea upwind** (removed): no effect,
+  because the model's Mediterranean is never warmer than the air over it.
+  It is far too cold in winter: 8.9 °C off Lebanon in January (about 17
+  observed), 6.7 in the Aegean (15), 0.9 in the Black Sea (8). Enclosed
+  seas take 69 % of the land's departure from the open ocean
+  (`inland_sea_warming` 6.9, `lake_coupling` 0.67), in winter as in summer.
+- **e19, winter mixing of enclosed seas** (`sea_winter_mixing`, kept, off by
+  default): a sea cooled from above turns over and mixes down 100–200 m, so
+  the winter cooling toward the land is cancelled by this share and the
+  summer warming kept. It helps the Levant (1.99 → 1.84 at 1) and the
+  training half, but warms the Sea of Japan under a Japanese winter already
+  2–3 °C too warm (the missing Siberian cold) and moistens the Cape's already
+  doubled winter rain. The `rays` enclosure measure does not rescue it, nor do
+  snow cover or stronger longwave cooling alongside.
+
+| From r22 / r23 | Training (8) | Held out (5) | East China | Mexico | Levant | Japan | South Brazil |
+|---|---|---|---|---|---|---|---|
+| r22 | 2.120 | 2.326 | 2.71 | 2.54 | 1.96 | 2.93 | 2.42 |
+| e17 both halves, 0.1 | 2.093 | 2.343 | 2.63 | 2.49 | 1.95 | 2.96 | 2.53 |
+| e17 import only, 0.2 | 2.154 | 2.303 | 2.51 | 2.56 | 1.98 | 2.93 | 2.34 |
+| e17 both halves, warm columns, 0.2 | 2.086 | 2.367 | 2.54 | 2.49 | 1.94 | 3.00 | 2.57 |
+| **e17 import, warm columns, 0.15 (r23)** | **2.115** | **2.301** | **2.55** | **2.50** | **1.99** | **2.93** | **2.35** |
+| r23 + e19 at 1 | 2.108 | 2.359 | 2.55 | 2.53 | 1.84 | 3.10 | 2.37 |
+| r23 + eddy rain-out cap 1 | 2.126 | 2.287 | 2.72 | 2.36 | 2.04 | 2.88 | 2.46 |
+| **r23 + `land_recycling` 0.42 (r24)** | **2.113** | **2.299** | **2.59** | **2.46** | **2.00** | **2.97** | **2.37** |
+
+`calibration/earth/earth_e17_r24.json` is the Earth reference: 2.113 / 2.299 /
+2.185 over 8 / 5 / 13 regions (r23, `earth_e17_r23.json`, 2.115 / 2.301 /
+2.187). The eddy rain-out cap (e3) points at the rain shadows. At 1.5 east
+Australia goes 2.41 → 1.73 and the Cape 1.61 → 1.23, but above 1 the cap
+limits humidity on flat ground too and drains the SE US, East China and
+south Brazil. A cap that acts only across ridges is the next rain change to
+try. Scans are in `output/earth_benchmark/coord_scans_r22/`.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's

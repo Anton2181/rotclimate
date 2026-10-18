@@ -85,6 +85,8 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+FLUX_SMOOTH_KM = 300.0           # e17: scale of the low-level divergence that moves column water
+FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
@@ -410,9 +412,20 @@ class ClimateModel:
         band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
-        sst = To + cur + self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
+        pull = self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
+        if p.sea_winter_mixing > 0:
+            # e19: a sea cooled from above turns over: the dense cold surface
+            # water sinks and mixes down 100-200 m, so the surface draws on
+            # the summer's stored heat and stays warm (the winter Mediterranean
+            # at 15-17 C, not the 7-9 C of a sea that follows the land), while
+            # the shallow, stable summer layer heats with the land
+            pull = np.where(Tl < To, (1.0 - p.sea_winter_mixing) * pull, pull)
+        sst = To + cur + pull
         if p.lake_coupling > 0:     # physics v4: lakes / small seas follow the land
-            sst = sst + p.lake_coupling * self.lakeness * (Tl - sst)
+            lake = p.lake_coupling * self.lakeness * (Tl - sst)
+            if p.sea_winter_mixing > 0:
+                lake = np.where(Tl < sst, (1.0 - p.sea_winter_mixing) * lake, lake)
+            sst = sst + lake
             sst = np.maximum(sst, -1.8)          # sea water freezes, ice insulates
         return sst
 
@@ -770,6 +783,22 @@ class ClimateModel:
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
+            gain = None
+            if p.flux_convergence > 0:
+                # e17: moisture moves with u.grad(W), which leaves out -W div(u):
+                # air converging at low levels brings its water with it. The
+                # convergence ascent let converging air rise but import no
+                # water, so a monsoon (Mexico in July, the Yangtze in June)
+                # could rain only what its column held. Where the column is
+                # warm enough for deep convection the imported water rises and
+                # rains out; flux_convergence = share of the column water
+                # moving with the low-level flow, on its ~300 km scale. The
+                # export half is left out: it drained south Brazil and Japan,
+                # whose winter water comes with passing storms that the mean
+                # wind does not carry, and subsidence drying already removes
+                # water under the highs.
+                cv = np.clip(-ndi.gaussian_filter(div, FLUX_SMOOTH_KM / g.cell_km), 0.0, FLUX_DIV_MAX)
+                gain = p.flux_convergence * cv * np.clip((T_col - 15.0) / 10.0, 0.0, 1.0)
             closure = None
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
@@ -804,7 +833,7 @@ class ClimateModel:
                         water = np.minimum(gauss(water, sigE / np.sqrt(n_steps)), crest)
                     return water
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
-                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure)
+                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain)
             W, P = solution.water, solution.rain
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)
@@ -848,6 +877,8 @@ class ClimateModel:
                     exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
                     mixed = mix(W) if mix is not None else W
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
+                    if gain is not None:
+                        E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
                     for key, values in terms.items():
                         budget[key][k] = values[g.map_slice()]
