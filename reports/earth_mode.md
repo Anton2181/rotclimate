@@ -1072,6 +1072,18 @@ Europe 2.00 → 2.04, eastern Europe 1.65 → 1.78). Both unfitted groups fall b
 Central Asia 1.61 → 1.88, Mexico 2.42 → 2.57, east Australia 2.31 → 2.44,
 the Levant 1.93 → 1.98.
 
+**A refit on all 13 subtropical regions** (192 evaluations), judged on the
+fresh six, also overfits, this time to the subtropics: 2.051 / 2.087 on the
+13, but the fresh six go to 2.377 (r29: 2.303). It cuts continentality to
+0.38, the land offset to 0.31 and the sea offset to −3.2
+(`calibration/earth/earth_bg_r30_train13_rejected.json`). That costs the
+continental and oceanic types the 13 do not contain: eastern Europe 1.78 →
+1.90, western Europe 2.04 → 2.17, Manchuria 2.86 → 2.96, New Zealand
+3.01 → 3.17; only the Midwest gains (1.67 → 1.61). A refit can only be
+trusted with every climate type inside its fitting set. Next is a two-fold
+cross-check over all 19 regions, each fold mixing Mediterranean, humid
+subtropical, dry, oceanic and continental regions.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
