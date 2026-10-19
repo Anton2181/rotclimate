@@ -1047,10 +1047,30 @@ New Zealand 3.26 → 3.01, Manchuria 3.02 → 2.86; also the SE US 1.76 → 1.58
 and East China 2.58 → 2.47. It costs only the 8 training regions every fit
 was tuned on against the uniform background (Central Asia 1.61 → 1.88,
 Mexico 2.42 → 2.57, east Australia 2.31 → 2.44). It is a boundary
-condition of the Earth test, not physics. It is adopted by refitting the 6
-settings tied to the zonal background (land and sea offsets, land
-amplitude, continentality, lapse rate, ocean transport;
-`--physics background_stage`) on the training 8, judged on the other 11.
+condition of the Earth test, not physics.
+
+| Zonal-background settings refitted (6; `--physics background_stage`) | Training (8) | Held out (5) | Fresh (6) |
+|---|---|---|---|
+| r28, uniform | 2.083 | 2.214 | 2.387 |
+| Earth background, unrefitted | 2.122 | 2.121 | 2.303 |
+| Earth background, refitted on the training 8 (192 evaluations) | 2.024 | 2.224 | 2.416 |
+
+The refit on the training 8 overfits like the earlier ones. It pushes the
+sea offset to its −4 °C bound, continentality from 0.72 to 0.41 and the
+lapse rate to 3.7 K/km (`calibration/earth/earth_bg_r29_train8_rejected.json`),
+winning training and losing the other 11. The 8 training regions have a
+systematic preference that does not carry over, so fitting on them alone
+is not informative.
+
+**r29 = r28 + `ebm_land` `earth`, unrefitted**
+(`calibration/earth/earth_bg_r29.json`): 2.122 / 2.121 / 2.303. This is an
+explicit exception to the both-halves rule, made because it corrects the
+test's boundary condition rather than tuning a setting. Of the 11 regions
+never used for fitting, 8 improve, 1 ties (SW Australia) and 2 lose (western
+Europe 2.00 → 2.04, eastern Europe 1.65 → 1.78). Both unfitted groups fall by
+~0.09. The cost is in the training regions tuned against the old background:
+Central Asia 1.61 → 1.88, Mexico 2.42 → 2.57, east Australia 2.31 → 2.44,
+the Levant 1.93 → 1.98.
 
 ## 5. On the fantasy map
 
