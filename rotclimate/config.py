@@ -177,6 +177,7 @@ class Params:
     soil_wet_cooling: bool = False    # e8b: wet_cooling judges wetness by the bucket's soil water, not recent rain
     ocean_sink: float = 1.0           # e11: fraction of sea uptake kept when air is moister than the sea's equilibrium (1 = symmetric)
     land_edge_rh: float = 0.5         # column humidity (of saturation) of air entering the grid over land
+    edge_continental_drying: float = 0.0   # e24: land-edge inflow humidity cut by this share where the westerlies crossed ~5,000 km of land
     high_drying: float = 0.0          # e10: rain-making ascent x exp(-this x hPa of the pressure winds' high anomaly)
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)
     marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air

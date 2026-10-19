@@ -232,7 +232,7 @@ class ClimateModel:
         # the real world's, WorldClim; other grids: their own land along the
         # westerlies' upwind direction, the off-grid share beyond the edge)
         self.deep_land = None
-        if p.continental_depth > 0:
+        if p.continental_depth > 0 or p.edge_continental_drying > 0:
             self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
@@ -794,7 +794,17 @@ class ClimateModel:
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
                 A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
-            bnd = np.where(ocean, W_ocean, p.land_edge_rh * Ws)
+            edge_rh = p.land_edge_rh
+            if p.edge_continental_drying > 0:
+                # e24: air entering over land has lost water on its way across:
+                # air off the Australian interior, Inner Asia or the Kazakh
+                # steppe is far drier than air off a coastal strip. Its
+                # humidity falls with the land the westerlies crossed over
+                # ~5,000 km (e23's share): by this fraction at all land, not
+                # at half land or less.
+                edge_rh = p.land_edge_rh * (1.0 - p.edge_continental_drying
+                                            * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0))
+            bnd = np.where(ocean, W_ocean, edge_rh * Ws)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             if p.soil_bucket_mm > 0:

@@ -872,6 +872,39 @@ warm, so a stronger deep term is physically wanted, but beyond 0.3 it cools
 Central Asia and East China too much: the remaining Siberian cold is
 specific to the Siberian High, not to land fetch alone.
 
+**r26: continental air is dry (e24).** Air entering the grid over land was
+given half of saturation (`land_edge_rh` 0.5) wherever it came from. Air off
+the Australian interior, Inner Asia or the Kazakh steppe is far drier than
+air off a coastal strip. e24 (`edge_continental_drying`, new, off by
+default) is the moisture counterpart of e23. The land-edge inflow humidity
+falls by this share where the westerlies crossed ~5,000 km of land (the
+same static field), not at all at half land or less.
+
+| From r25 | Training (8) | Held out (5) | All 13 | Central Asia | Levant | Japan | East China |
+|---|---|---|---|---|---|---|---|
+| r25 | 2.112 | 2.261 | 2.169 | 1.77 | 2.02 | 2.78 | 2.53 |
+| 0.15 | 2.101 | 2.255 | 2.160 | 1.69 | 1.98 | 2.75 | 2.56 |
+| **0.25 (r26)** | **2.099** | **2.251** | **2.158** | **1.67** | **1.97** | **2.73** | **2.59** |
+| 0.35 | 2.101 | 2.249 | 2.158 | 1.67 | 1.96 | 2.72 | 2.61 |
+| 0.4, westerly belt only | 2.110 | 2.250 | | 1.71 | 2.01 | 2.72 | 2.60 |
+
+East China loses: Sichuan's air arrives drier across its western edge. Fading
+e24 out equatorward of the model's westerly belt (summer monsoon air comes
+from the south-west) does not save East China, and it gives back most of
+Central Asia's and the Levant's gain, so the simple form stays.
+`calibration/earth/earth_e24_r26.json` is the Earth reference.
+
+From r26, no single change improves both halves:
+
+| From r26 | Training (8) | Held out (5) |
+|---|---|---|
+| winter sea mixing 0.25 | 2.094 | 2.262 |
+| convergence import 0.25 | 2.105 | 2.241 |
+| clear-sky longwave 0.35 | 2.104 | 2.245 |
+| humidity spread 0.05 | 2.102 | 2.248 |
+| snow cover 1.5 K | 2.104 | 2.250 |
+| `land_edge_rh` 0.55 | 2.137 | 2.254 |
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
