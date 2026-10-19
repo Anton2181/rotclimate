@@ -231,7 +231,9 @@ class ClimateModel:
         # e23: land share the westerlies have crossed over ~5,000 km (Earth:
         # the real world's, WorldClim; other grids: their own land along the
         # westerlies' upwind direction, the off-grid share beyond the edge)
-        self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
+        self.deep_land = None
+        if p.continental_depth > 0:
+            self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
         if p.sea_enclosure == "rays":
