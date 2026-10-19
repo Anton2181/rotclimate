@@ -144,6 +144,7 @@ class Params:
     subsidence_drying: float = 0.0    # e1: dry air sinking in the highs replaces moist air: loss of this x sink strength per day
     land_heat_capacity: float = 1.0   # e1: x the EBM land column's heat capacity (how far land seasons lag the sun)
     continentality: float = 0.0       # e1: land seasons x (1 + this * (upwind land share - 0.5))
+    continental_depth: float = 0.0    # e23: extra seasonal amplitude where the westerlies crossed ~5,000 km of land (none at half land or less)
     upwelling: float = 0.0            # e1: coastal sea cooling (C) per 5 m/s of offshore Ekman transport
     # physics e2 (from the literature review of the remaining Earth failures)
     background_ascent: float = 1.0    # e2: the rain dynamics' baseline (the "1 +"); 0 = rain needs ascent

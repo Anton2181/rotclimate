@@ -200,6 +200,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
              target=np.zeros((ny, nx), np.int8), rivers=np.zeros((ny, nx)), lake=np.zeros((ny, nx), bool))
     g.target = observed_zones(obs_T, obs_P, g)
     g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
+    g.chi_far_long = fetch_at(-lat if lat0 < 0 else lat, lon, fetch_km=3.0 * FETCH_KM)   # e23
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 

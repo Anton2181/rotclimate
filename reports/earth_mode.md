@@ -821,6 +821,57 @@ because the cold of the Siberian High never reaches a grid that ends near
 beyond the edge sets how cold air arriving from there is, just as e6 set
 its continentality.
 
+**r25: deep continentality (e23).** Measured over the whole grid (scored region
+and margin) under r24, the cold is lost inside the grid, not only at its
+edge. In January, Japan's grid north of 40° N (Manchuria, the Russian Far
+East) is 5–8 °C too warm (−11 to −15 °C against −19 to −23), and North China
+is 4 °C too warm: that is where the winter monsoon air is made. Raising
+`continentality` fixes Manchuria but turns Kyushu and Shikoku 2.6 °C too cold
+and acts everywhere. The ~1,700 km land memory calls central Spain and
+Manchuria equally continental; what sets Siberian air apart is the ~5,000 km
+of land it has crossed.
+
+- **e23** (`continental_depth`, new, off by default) adds seasonal amplitude
+  where the westerlies have crossed land for ~5,100 km (three times the
+  continental fetch). It adds nothing at half land or less and all of
+  `continental_depth` at all land. On Earth the field is the real world's
+  westward land share (WorldClim, as e6): Harbin 0.88, Shanghai 0.91,
+  Kagoshima 0.77, Chicago 0.54, Tashkent 0.65, Madrid 0.28, Sacramento 0.16.
+  Other grids compute it from their own land along the westerlies' upwind
+  direction (east with reversed spin), with the off-grid land share beyond the
+  edge; on Japan's grid that estimate correlates 0.93 with the real field.
+- Two earlier forms failed. A symmetric term (amplitude down below half land)
+  damped the maritime seasons of Iberia, SW Australia and the Cape. A tracer
+  advected with the winds called the stagnant air over Mexico's plateau a
+  continent's worth and cooled Mexico's January, which is already 2–3 °C too
+  cold.
+
+| From r24 | Training (8) | Held out (5) | All 13 | Japan | East China | Central Asia |
+|---|---|---|---|---|---|---|
+| r24 | 2.113 | 2.299 | 2.185 | 2.97 | 2.59 | 1.75 |
+| symmetric, 0.5 | 2.118 | 2.294 | | 2.82 | 2.50 | 1.77 |
+| advected, one-sided, 0.2 | 2.117 | 2.287 | | 2.83 | 2.51 | 1.76 |
+| static, 0.2 | 2.110 | 2.269 | 2.171 | 2.82 | 2.54 | 1.76 |
+| **static, 0.3 (r25)** | **2.112** | **2.261** | **2.169** | **2.78** | **2.53** | **1.77** |
+| static, 0.7 | 2.150 | 2.279 | | 2.87 | 2.70 | 1.87 |
+
+Every region with maritime westerlies is unchanged. January biases go from
++1.5 to +2.1 °C to between −0.7 and +0.1 over East China (24–36° N), from
++1.4 / +3.6 to −0.9 / +1.1 over Japan, and from +5.1 to +7.8 to +2.2 to +4.5
+over Manchuria. `calibration/earth/earth_e23_r25.json` is the Earth
+reference.
+
+From r25, the mechanisms the missing cold had blocked come closer but still
+do not pass. Winter sea mixing (e19) at 0.5 gives 2.105 / 2.287 and at 0.25
+gives 2.108 / 2.273: the Levant gains (2.02 → 1.94) and Japan still loses
+(2.78 → 2.86 / 2.82), now by half as much. Snow cover (1.5 K), the humidity
+spread (0.05), stronger longwave cooling (0.35), more convergence import
+(0.2) and less land evaporation (0.38) each improve the held-out half by
+0.001–0.005 and cost training 0.002–0.006. Manchuria is still 2–4.5 °C too
+warm, so a stronger deep term is physically wanted, but beyond 0.3 it cools
+Central Asia and East China too much: the remaining Siberian cold is
+specific to the Siberian High, not to land fetch alone.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's

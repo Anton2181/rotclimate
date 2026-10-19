@@ -99,6 +99,7 @@ MARINE_SOFTNESS_M = 150.0        # e4: softness of the marine layer's terrain te
 MARINE_SST_KM = 100.0            # e4: the coastal sea temperature: Gaussian mean of nearby sea
 EDDY_RAINOUT_STEPS = 6           # e3: steps of the eddy moisture mixing that each meet the terrain
 CONTINENTAL_FETCH_DAYS = 4.0     # memory of the land the air has crossed (~1,700 km at 5 m/s)
+DEEP_FETCH_KM = 5100.0           # e23: memory of the westerlies' land share (3x the ~1,700 km continental fetch)
 
 
 def lowest_crest_from_sea(land, barrier):
@@ -227,6 +228,10 @@ class ClimateModel:
         Lb = ndi.gaussian_filter(land, 4.0 * cells_per_100km)
         gb = ndi.gaussian_filter(d_east(Lb) * cells_per_100km, 2.0 * cells_per_100km)
         self.basin_side = np.clip(gb / max(np.abs(gb).max(), 1e-9) * 2.0, -1, 1)
+        # e23: land share the westerlies have crossed over ~5,000 km (Earth:
+        # the real world's, WorldClim; other grids: their own land along the
+        # westerlies' upwind direction, the off-grid share beyond the edge)
+        self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
         if p.sea_enclosure == "rays":
@@ -404,6 +409,31 @@ class ClimateModel:
         ca, sa = np.cos(a), np.sin(a)
         return k * (gx * ca + gy * sa), k * (-gx * sa + gy * ca)
 
+    def _upwind_land(self, fetch_km):
+        """Land share along the westerlies' upwind direction (true west; east
+        with reversed spin) with an exponential memory of fetch_km; beyond the
+        grid the off-grid land share (chi_far) or the edge's own land."""
+        g, p = self.g, self.p
+        th = np.radians(p.north_bearing)
+        sgn = 1.0 if p.retrograde else -1.0
+        dj, di = sgn * np.cos(th), sgn * np.sin(th)            # columns / rows per step toward upwind
+        L = fetch_km / g.cell_km
+        step = max(1.0, L / 60.0)
+        ii, jj = np.mgrid[0:g.ny, 0:g.nx].astype(float)
+        beyond = g.chi_far if g.chi_far is not None else g.land_frac
+        acc = np.zeros((g.ny, g.nx))
+        wsum = 0.0
+        for k in range(int(3.0 * L / step) + 1):
+            ci, cj = ii + k * step * di, jj + k * step * dj
+            inside = (ci >= 0) & (ci <= g.ny - 1) & (cj >= 0) & (cj <= g.nx - 1)
+            cc = [np.clip(ci, 0, g.ny - 1), np.clip(cj, 0, g.nx - 1)]
+            val = np.where(inside, ndi.map_coordinates(g.land_frac.astype(float), cc, order=1),
+                           ndi.map_coordinates(np.asarray(beyond, float), cc, order=0))
+            w = np.exp(-k * step / L)
+            acc += w * val
+            wsum += w
+        return acc / wsum
+
     def sst(self, day, To, Tl):
         p = self.p
         lat = self.lat
@@ -503,7 +533,20 @@ class ClimateModel:
                     edge = g.land_frac + p.far_fetch * (g.chi_far - g.land_frac)
                 chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, edge,
                                         guess=edge if chi is None else chi)
-                Tl = Tl_mean + (Tl - Tl_mean) * np.clip(1.0 + p.continentality * (chi - 0.5), 0.2, 3.0)
+                amp = 1.0 + p.continentality * (chi - 0.5)
+                if p.continental_depth > 0:
+                    # e23: the ~1,700 km memory calls central Spain and
+                    # Manchuria equally continental, but Siberian air has
+                    # crossed ~5,000 km of land and is far colder (Manchuria
+                    # 5-8 C too warm in January without it). Where the
+                    # westerlies have crossed land for that long (static
+                    # share, self.deep_land) the seasons swing more: nothing
+                    # at half land or less, all of continental_depth at all
+                    # land. A symmetric term damped the maritime seasons of
+                    # Iberia and the Cape; an advected one called the
+                    # stagnant air over Mexico's plateau a continent's worth.
+                    amp = amp + p.continental_depth * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0)
+                Tl = Tl_mean + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a

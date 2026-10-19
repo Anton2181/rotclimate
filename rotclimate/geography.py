@@ -225,6 +225,7 @@ class Grid:
     rivers: np.ndarray     # river pixel fraction
     lake: np.ndarray       # bool
     chi_far: np.ndarray | None = None   # e6: upwind land share of the world beyond the grid (Earth mode)
+    chi_far_long: np.ndarray | None = None   # e23: westward land share over ~5,100 km (Earth mode; other grids compute their own)
 
     @property
     def dx_m(self) -> float:
