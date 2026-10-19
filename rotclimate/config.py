@@ -89,6 +89,7 @@ class Params:
     heat_diffusion: float = 4.0e4     # m^2/s, horizontal mixing of air
     current_strength: float = 4.0     # K, boundary current SST anomaly
     current_scale_km: float = 250.0   # e12: smoothing scale (km) of the land that decides which side of a sea a cell is on
+    subpolar_current: float = 0.0     # e26: K, warm west-coast / cold east-coast currents of the subpolar gyres (poleward of ~42 deg)
     sst_offset: float = 0.0           # K, global SST tweak
     land_offset: float = 0.0          # K, global land-column tweak
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
@@ -154,6 +155,7 @@ class Params:
     subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
+    ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture

@@ -72,6 +72,20 @@ REGIONS = {
                   note="maritime humid subtropics: southern Japan and the Korea Strait"),
     "mexico": dict(lat0=27.0, lon0=-104.5, width_km=1500, height_km=1300,
                    note="northern Mexico: hot deserts and steppes, the Sierra Madre"),
+    # mid-latitude regions added after the physics rounds e11-e25, as a fresh
+    # test of physics tuned on the 13 subtropical ones (oceanic and continental)
+    "pacific_nw": dict(lat0=46.0, lon0=-121.5, width_km=1100, height_km=1100,
+                       note="Pacific Northwest: oceanic and dry-summer coast, the Cascades' rain shadow"),
+    "western_europe": dict(lat0=49.0, lon0=1.5, width_km=1600, height_km=1200,
+                           note="France, the Low Countries and southern England: oceanic"),
+    "eastern_europe": dict(lat0=50.0, lon0=28.0, width_km=1600, height_km=1200,
+                           note="Ukraine, Poland and Belarus: cold continental"),
+    "us_midwest": dict(lat0=41.0, lon0=-91.0, width_km=1800, height_km=1200,
+                       note="the Corn Belt: hot-summer continental"),
+    "manchuria": dict(lat0=44.0, lon0=126.0, width_km=1400, height_km=1200,
+                      note="north-east China and the Russian Far East: the Siberian High's winter monsoon"),
+    "new_zealand": dict(lat0=-41.5, lon0=173.0, width_km=1000, height_km=1300,
+                        note="New Zealand: oceanic, the Southern Alps' rain shadow"),
 }
 
 
@@ -106,6 +120,18 @@ STATIONS = {
               "Osaka": (34.69, 135.50), "Nagoya": (35.18, 136.91), "Tokyo": (35.68, 139.69)},
     "mexico": {"Hermosillo": (29.07, -110.96), "Chihuahua": (28.63, -106.07), "El Paso": (31.76, -106.49),
                "Torreon": (25.54, -103.41), "Durango": (24.02, -104.67), "Monterrey": (25.69, -100.32)},
+    "pacific_nw": {"Seattle": (47.61, -122.33), "Portland": (45.52, -122.68), "Vancouver": (49.28, -123.12),
+                   "Eugene": (44.05, -123.09), "Yakima": (46.60, -120.51), "Spokane": (47.66, -117.43)},
+    "western_europe": {"London": (51.51, -0.13), "Paris": (48.86, 2.35), "Brest": (48.39, -4.49),
+                       "Bordeaux": (44.84, -0.58), "Brussels": (50.85, 4.35), "Strasbourg": (48.58, 7.75)},
+    "eastern_europe": {"Warsaw": (52.23, 21.01), "Lviv": (49.84, 24.03), "Kyiv": (50.45, 30.52),
+                       "Minsk": (53.90, 27.57), "Odesa": (46.48, 30.73), "Kharkiv": (49.99, 36.23)},
+    "us_midwest": {"Chicago": (41.88, -87.63), "Minneapolis": (44.98, -93.27), "Des Moines": (41.59, -93.62),
+                   "Kansas City": (39.10, -94.58), "St. Louis": (38.63, -90.20), "Indianapolis": (39.77, -86.16)},
+    "manchuria": {"Harbin": (45.80, 126.53), "Qiqihar": (47.35, 123.92), "Changchun": (43.82, 125.32),
+                  "Shenyang": (41.81, 123.43), "Dalian": (38.91, 121.60), "Vladivostok": (43.12, 131.89)},
+    "new_zealand": {"Auckland": (-36.85, 174.76), "Nelson": (-41.27, 173.28), "Wellington": (-41.29, 174.78),
+                    "Hokitika": (-42.72, 170.97), "Christchurch": (-43.53, 172.64), "Dunedin": (-45.87, 170.50)},
 }
 
 

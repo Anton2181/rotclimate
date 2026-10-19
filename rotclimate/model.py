@@ -444,6 +444,14 @@ class ClimateModel:
         band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
+        if p.subpolar_current > 0:
+            # e26: poleward of ~42 deg the subpolar gyre turns the other way:
+            # the North Atlantic Drift and the Alaska Current warm the west
+            # coasts of continents (north-west Europe 4-6 C above its
+            # latitude), the Labrador and Oyashio cool the east coasts. The
+            # band above only reaches its subpolar sign slowly (1-2 C at 50 N)
+            sub = np.clip((np.abs(lat) - 42.0) / 10.0, 0.0, 1.0) * np.clip((72.0 - np.abs(lat)) / 8.0, 0.0, 1.0)
+            cur = cur - sign * p.subpolar_current * self.side * sub
         pull = self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
         if p.sea_winter_mixing > 0:
             # e19: a sea cooled from above turns over: the dense cold surface

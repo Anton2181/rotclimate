@@ -79,7 +79,7 @@ def _band_land(lat, profile):
 
 
 @lru_cache(maxsize=64)
-def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None):
+def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -116,6 +116,24 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
         [np.diag(C_L / dt + B_OLR + nu) - D_DIFF * Lfl, -D_DIFF * Lfo - np.diag(nu)],
         [-D_DIFF * Lfl - np.diag(nu * fl / fo), np.diag(C_OCEAN / dt + B_OLR + nu * fl / fo) - D_DIFF * Lfo],
     ])
+    if ocean_transport > 0:
+        # e27: the oceans carry heat poleward themselves (~2 PW: gyres and the
+        # overturning circulation), which the zonal diffusion of the column
+        # leaves to the air: without it the sea ran several degrees too cold
+        # at 45-60 deg and too warm in the subtropics. A flux-form diffusion of
+        # the ocean temperature through the ocean's share of each band, per
+        # unit ocean area, ocean_transport x D_DIFF.
+        fo_e = np.interp(xe, x, fo)
+        wo = (1 - xe**2) * fo_e
+        Lo = np.zeros((N, N))
+        for j in range(N):
+            if j > 0:
+                Lo[j, j - 1] += wo[j] / dx**2
+                Lo[j, j] -= wo[j] / dx**2
+            if j < N - 1:
+                Lo[j, j + 1] += wo[j + 1] / dx**2
+                Lo[j, j] -= wo[j + 1] / dx**2
+        M[N:, N:] -= ocean_transport * D_DIFF * Lo / fo[:, None]
     Minv = np.linalg.inv(M)
 
     Tl = 15 - 30 * x**2
@@ -144,6 +162,8 @@ class ZonalClimate:
         profile = land_profile(getattr(params, "ebm_land", "uniform"))
         if profile is not None:
             extra["profile"] = profile
+        if getattr(params, "ocean_transport", 0.0) > 0:
+            extra["ocean_transport"] = round(params.ocean_transport, 3)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)

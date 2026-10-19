@@ -956,6 +956,102 @@ reaches only 40 km into a 56 km cell and leaves training flat. A coastal strip
 needs its sea air from the onshore sea breeze the pressure winds should
 supply; that, with `rays`, is the next coastal change.
 
+The ocean highs' own circulation (e3 `subtropical_high`, off in the reference)
+gives west coasts their equatorward, onshore summer flow, but from r27 it
+moves Chile only from 3.04 to 2.98 even at 4 m/s. California, Iberia and the
+southern regions lose: 2.117 / 2.249 at 1 m/s, 2.219 / 2.394 at 4.
+
+**Six fresh mid-latitude regions.** All 13 regions are subtropical (25–40°),
+and every physics change since r21 was judged on them. Six mid-latitude
+regions, never used for any fit or scan, were added
+(`rotclimate/earth.py`, six stations each):
+
+- `pacific_nw`: oceanic and dry-summer coast, the Cascades' rain shadow.
+- `western_europe`: oceanic.
+- `eastern_europe`: cold continental.
+- `us_midwest`: hot-summer continental.
+- `manchuria`: the Siberian High's winter monsoon.
+- `new_zealand`: oceanic, mirrored.
+
+`scripts/earth_fresh_check.py` scores fits side by side; `earth_coord_scan.py`
+scores them as a third group with a fourth argument `fresh`.
+
+| On the fresh six | Mean | Pacific NW | W Europe | E Europe | US Midwest | Manchuria | New Zealand |
+|---|---|---|---|---|---|---|---|
+| r16 | 2.620 | 2.40 | 2.60 | 1.73 | 2.13 | 3.94 | 2.91 |
+| r20 | 2.630 | 2.50 | 2.63 | 1.66 | 1.96 | 3.69 | 3.33 |
+| r24 | 2.589 | 2.57 | 2.58 | 1.67 | 1.88 | 3.56 | 3.28 |
+| r27 | 2.516 | 2.61 | 2.60 | 1.65 | 1.93 | 3.03 | 3.27 |
+
+The physics since r16 generalises: −0.10 on regions it never saw, most in
+Manchuria (e23) and the Midwest. The fresh regions show an oceanic blind
+spot. The Pacific Northwest, western Europe and New Zealand get half their
+rain (476 / 897, 505 / 875, 847 / 1,685 mm). Windward coasts in winter get
+60–66 mm a month against ~300 (Pacific NW) and 30–50 against ~90
+(France, England). Springs and summers are 4–7 °C too cold (London April to
+July −6 to −7 °C).
+
+**r28: subpolar gyres (e26).** The boundary-current band changes sign only
+at 45° and grows slowly, so the warm poleward currents of west coasts (North
+Atlantic Drift, Alaska Current) added 1–2 °C at 50° N against a real 4–6.
+e26 (`subpolar_current`, new, off by default) adds them poleward of ~42°:
+warm on west coasts, cold on east coasts (Labrador, Oyashio), fading in by
+52° and out above 64°.
+
+| From r27 | Training (8) | Held out (5) | Fresh (6) | W Europe | Pacific NW | Iberia |
+|---|---|---|---|---|---|---|
+| r27 | 2.098 | 2.224 | 2.516 | 2.60 | 2.61 | 2.16 |
+| 4 K | 2.090 | 2.220 | 2.438 | 2.24 | 2.52 | 2.12 |
+| **10 K (r28)** | **2.083** | **2.214** | **2.387** | **2.00** | **2.46** | **2.08** |
+| 13 K | 2.082 | 2.211 | 2.402 | 2.08 | 2.47 | 2.07 |
+
+All three groups improve up to 10 K (5–7 °C at a coast's side factor of
+0.5–0.7, the real north-east Atlantic's anomaly). The fresh group chose 10
+over 13, so it is only lightly fresh from here on.
+`calibration/earth/earth_e26_r28.json`: 2.083 / 2.214 / 2.387.
+
+**The zonal ocean is too cold at mid-latitudes.** Broken down at Brest, the
+sea is 3.3 °C in January (real ~11–12). The energy-balance ocean gives 3.7 °C
+at 49° N before the −2.2 °C offset (real zonal mean ~8), the enclosure
+measure −3.8, the currents +5.6. The zonal sea runs from −6 (January) to 1 °C
+(July) at 60° N against ~5 and 10, and 1–3 °C too warm in the subtropics.
+The energy balance moves heat poleward by one diffusion of the column, so
+the oceans' own ~2 PW transport is missing, and the −2.2 °C offset was a
+compromise between the two errors. Winter sea mixing (e19) on top of r28
+still costs Japan and Manchuria (2.079 / 2.226 at 0.25) and barely moves
+western Europe.
+
+- **e27, ocean heat transport** (`ocean_transport`, new, off by default): a
+  flux-form diffusion of the ocean temperature through the ocean's share of
+  each band, `ocean_transport` × the air's diffusion. At 1 the zonal sea is
+  27 / 22 / 15 / 7 / 1 °C in January and 26 / 26 / 22 / 15 / 10 in July at
+  0 / 20 / 35 / 49 / 60° N (real ~28 / 25 / 17 / 8 / 5 and 28 / 28 / 24 / 15 / 10).
+  From r28 at 0.5: California 1.98 → 1.82, Iberia 2.08 → 1.95, Pacific NW
+  2.46 → 2.25, eastern Europe 1.65 → 1.40, training 2.059, fresh 2.361. But
+  regions already too warm lose (Chile, south Brazil, Japan, Manchuria, New
+  Zealand) and the held-out half goes to 2.252.
+- **The Earth runs used a uniform planet.** The reference's zonal background
+  is `ebm_land` `uniform`: 30 % land in every band, the same for northern and
+  southern regions. Earth's own land profile (with the southern hemisphere's
+  for mirrored regions) was available and unused:
+
+| From r28 | Training (8) | Held out (5) | Fresh (6) | All 19 |
+|---|---|---|---|---|
+| r28 (uniform) | 2.083 | 2.214 | 2.387 | 2.214 |
+| `ebm_land` `earth` | 2.122 | 2.121 | 2.303 | 2.179 |
+| `earth` with ocean transport 0.5 | 2.147 | 2.204 | 2.282 | |
+
+The Earth background helps all 11 regions not used for fitting: Chile 3.05
+→ 2.83, the Cape 1.56 → 1.44, Japan 2.74 → 2.64, the Midwest 1.93 → 1.67,
+New Zealand 3.26 → 3.01, Manchuria 3.02 → 2.86; also the SE US 1.76 → 1.58
+and East China 2.58 → 2.47. It costs only the 8 training regions every fit
+was tuned on against the uniform background (Central Asia 1.61 → 1.88,
+Mexico 2.42 → 2.57, east Australia 2.31 → 2.44). It is a boundary
+condition of the Earth test, not physics. It is adopted by refitting the 6
+settings tied to the zonal background (land and sea offsets, land
+amplitude, continentality, lapse rate, ocean transport;
+`--physics background_stage`) on the training 8, judged on the other 11.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
