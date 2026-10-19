@@ -1080,9 +1080,25 @@ fresh six, also overfits, this time to the subtropics: 2.051 / 2.087 on the
 continental and oceanic types the 13 do not contain: eastern Europe 1.78 →
 1.90, western Europe 2.04 → 2.17, Manchuria 2.86 → 2.96, New Zealand
 3.01 → 3.17; only the Midwest gains (1.67 → 1.61). A refit can only be
-trusted with every climate type inside its fitting set. Next is a two-fold
-cross-check over all 19 regions, each fold mixing Mediterranean, humid
-subtropical, dry, oceanic and continental regions.
+trusted with every climate type inside its fitting set, so the last test is
+a two-fold cross-check over all 19 regions, each fold mixing Mediterranean,
+humid subtropical, dry, oceanic and continental regions:
+
+- Fold A: California, south-east US, Central Asia, east Australia, Chile,
+  SW Australia, Japan, western Europe, US Midwest, New Zealand.
+- Fold B: Iberia, the Levant, East China, Mexico, the Cape, south Brazil,
+  Pacific NW, eastern Europe, Manchuria.
+
+Fitted on fold A (168 evaluations), fold A goes 2.148 → 2.092 but the unseen
+fold B goes 2.214 → 2.291 (Mexico 2.57 → 2.77, Pacific NW 2.45 → 2.67,
+eastern Europe 1.78 → 2.07, the Levant 1.98 → 2.22, Iberia 2.09 → 2.23),
+with continentality at 0.23 and the land offset at 0
+(`calibration/earth/earth_bg_cv_foldA_rejected.json`). One failed fold
+settles it; fold B was not run. Every refit of the zonal-background settings
+(on 8, on 13, on a mixed 10) drives continentality to 0.23–0.41 and loses on
+regions it did not see. These six settings are not where the remaining
+error is: what is left is regional (cold-current coasts, oceanic rain, the
+Siberian High, the monsoons), and r29 stays.
 
 ## 5. On the fantasy map
 
