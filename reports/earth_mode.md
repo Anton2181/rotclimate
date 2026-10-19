@@ -783,6 +783,44 @@ limits humidity on flat ground too and drains the SE US, East China and
 south Brazil. A cap that acts only across ridges is the next rain change to
 try. Scans are in `output/earth_benchmark/coord_scans_r22/`.
 
+**Ridges, humidity spread, and a joint refit (no new reference).** From r24
+(scans in `output/earth_benchmark/coord_scans_r24/`):
+
+- **e20, the eddy rain-out cap applied only with height** (reverted). Even a cap
+  at plain saturation above 1 km costs East China (2.59 → 2.73) and south
+  Brazil.
+- **e21, the capped eddy water falls as rain where it was capped** (reverted).
+  The cap had simply discarded the water its comment said would rain on the
+  windward side. Raining it out piles it on the mountains: Japan goes
+  2.97 → 4.34 (cap everywhere) or 3.25 (above 1 km).
+- **e22, the rain gate averaged over a day-to-day humidity spread**
+  (`rh_spread`, kept, off by default). Rain starts on the moist days, so a
+  seasonal mean below the threshold still gets showers. It helps the held-out
+  half (2.299 → 2.267 at 0.2; Chile 3.17 → 3.09, south Brazil 2.37 → 2.26),
+  but gives the deserts showers too (Central Asia 1.75 → 2.17).
+
+Each of e16, e19, e22, the longwave cooling and the monsoon inflow helps one
+group of regions. So their strengths were refitted together, with the land
+temperature offset and land evaporation (8 settings, CMA-ES, 240
+evaluations on the training 8, `--physics mech_stage`):
+
+| | Training (8) | Held out (5) | Japan | Cape | South Brazil |
+|---|---|---|---|---|---|
+| r24 | 2.113 | 2.299 | 2.97 | 1.59 | 2.37 |
+| joint refit | 2.103 | 2.367 | 3.12 | 1.64 | 2.43 |
+
+The refit takes e19 at 0.78 (the Levant's warm winter sea), switches the
+rest nearly off (snow 0.24 K, humidity spread 0.002, monsoon inflow 0.001),
+halves the convergence import (0.087) and raises the land offset to
+1.0. That is the e19 trade again, and the held-out half rejects it
+(`calibration/earth/earth_e19_r25_rejected.json`). r24 stays the reference.
+The conflict is structural. The Levant's winter needs a warm Mediterranean,
+and the same physics warms Japan's winter, which is already 2–3 °C too warm
+because the cold of the Siberian High never reaches a grid that ends near
+45° N. The cold air from outside the grid has to come first: the land
+beyond the edge sets how cold air arriving from there is, just as e6 set
+its continentality.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's
