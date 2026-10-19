@@ -55,6 +55,7 @@ class Params:
     # (lowland green, hill cream, upland orange, mountain red)
     tier_tops: tuple = (350.0, 900.0, 1800.0, 3300.0)
     lapse_rate: float = 6.0           # K / km (environmental)
+    lapse_seasonal: float = 0.0       # e25: lapse rate x (1 + this x season index): steeper in summer, flatter in winter
 
     # What lies beyond each edge of the map is unknown.
     # beyond_style 'procedural' (default): edge features continue and fade

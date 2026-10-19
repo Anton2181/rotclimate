@@ -905,6 +905,57 @@ From r26, no single change improves both halves:
 | snow cover 1.5 K | 2.104 | 2.250 |
 | `land_edge_rh` 0.55 | 2.137 | 2.254 |
 
+**r27: a seasonal lapse rate (e25).** Chile, the worst region (3.17), was put
+down to resolution. Split by height it is a summer heat bias everywhere:
++6.7 to +7.6 °C on the coast and in the valley (0–500 m) and +8.7 to +10.7 °C
+on the Andes above 3,000 m in local summer, with winters close to right.
+The fitted lapse rate is 4.4 K/km against summer values near 6.5–7. e25
+(`lapse_seasonal`, new, off by default) sets the lapse rate to
+`lapse_rate` × (1 + `lapse_seasonal` × the season index). Summer sunshine
+mixes the lowest kilometres nearly dry-adiabatically; winter nights pool cold
+air under inversions.
+
+| From r26 | Training (8) | Held out (5) | All 13 | Chile | California | Iberia | Central Asia |
+|---|---|---|---|---|---|---|---|
+| r26 | 2.099 | 2.251 | 2.158 | 3.17 | 1.90 | 2.11 | 1.67 |
+| **0.15 (r27; 3.8 / 5.1 K/km in winter / summer)** | **2.098** | **2.224** | **2.146** | **3.04** | **1.98** | **2.16** | **1.61** |
+| 0.3 | 2.132 | 2.217 | | 2.95 | 2.11 | 2.23 | 1.63 |
+| 0.3 at a 5 K/km mean | 2.209 | 2.179 | | 2.70 | 2.33 | 2.34 | 1.67 |
+
+`calibration/earth/earth_e25_r27.json` is the Earth reference. A steeper
+summer rate fixes more of Chile but cools California and Iberia, which run
+the other way: under r27 their interiors are 3–6 °C (Sacramento, Fresno,
+Reno, Las Vegas) and 2–5 °C (Lisbon, Madrid, Seville) too cold from spring
+through summer. Chile's coast is the hottest error: La Serena is +12 °C in
+local summer, Valparaíso +9, Santiago +7.
+
+**Why the cold-current coasts differ.** In local summer the model's sea off
+La Serena is 26.6 °C (about 16 real), off San Francisco 23.1 (14–15), off San
+Diego 24.4 (19–20). Two terms cause it:
+
+- **Enclosure:** the `disc` measure counts any land within 400 km, so open
+  coasts get half an inland sea's summer warming, +3.5 to +4.8 °C.
+- **Cold currents:** they cool by only 1–3 °C, against real summer anomalies
+  of 5–8 °C below the zonal mean.
+
+| From r27 | Training (8) | Held out (5) | Chile |
+|---|---|---|---|
+| `rays` enclosure | 2.109 | 2.298 | 3.11 |
+| `rays` and `upwelling` 1.5 | 2.110 | 2.309 | |
+| `rays` and cold currents 8 K | 2.144 | 2.269 | 3.04 |
+| `upwelling` 1.5 / 3 | 2.099 / 2.102 | 2.230 / 2.243 | |
+| e4 marine layer 0.3 / 0.6 / 1 | 2.098 / 2.099 / 2.100 | 2.216 / 2.209 / 2.200 | 3.02 / 3.00 / 2.98 |
+
+The `rays` measure removes the false coastal warming, but Chile gets *worse*
+and Iberia, south Brazil, the Cape and SW Australia lose with it: the other
+settings were fitted around `disc`. The heat at La Serena is land-side. Its
+summer air counts as 88 % continental (`chi`), because the coastal winds are
+weak and slightly offshore and the narrow strip between the sea and the
+Andes relaxes to its own land. The marine layer helps the held-out half but
+reaches only 40 km into a 56 km cell and leaves training flat. A coastal strip
+needs its sea air from the onshore sea breeze the pressure winds should
+supply; that, with `rays`, is the next coastal change.
+
 ## 5. On the fantasy map
 
 Physics fitted on California and Iberia alone, dropped onto the live atlas's

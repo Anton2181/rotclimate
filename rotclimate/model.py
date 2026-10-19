@@ -730,7 +730,16 @@ class ClimateModel:
             self.t_update_inmap_max.append(float(update[g.inmap].max()))
             if not temperature.converged and p.t_require_convergence:
                 raise TemperatureConvergenceError(n+1,d,temperature,update[g.inmap].max())
-            T = Tsl - p.lapse_rate * h_km
+            lapse = p.lapse_rate
+            if p.lapse_seasonal != 0:
+                # e25: summer sunshine mixes the lowest kilometres nearly dry-
+                # adiabatically (6.5-8 K/km), while winter nights pool cold air
+                # in valleys and basins under inversions (3-4 K/km), so high
+                # ground is colder in summer and milder in winter than one
+                # year-round rate gives (Chile's Andes 9-11 C too warm in
+                # summer at the fitted 4.4 K/km)
+                lapse = p.lapse_rate * (1.0 + p.lapse_seasonal * s)
+            T = Tsl - lapse * h_km
             T_rep, Tsl_rep = T, Tsl
             if self.marine_geom is not None:
                 # e4: a two-tile coast: marine air under the inversion (the
@@ -743,9 +752,9 @@ class ClimateModel:
                 sst_c = gauss(np.where(ocean, SST, 0.0), sig) / np.maximum(gauss(sea, sig), 1e-6)
                 inv = np.clip((Tsl - sst_c) / p.marine_contrast, 0.0, 1.0)
                 F = p.marine_layer * inv * self.marine_geom
-                T_m = sst_c - p.lapse_rate * h_km
+                T_m = sst_c - lapse * h_km
                 T_rep = T - F * np.maximum(T - T_m, 0.0)
-                Tsl_rep = T_rep + p.lapse_rate * h_km
+                Tsl_rep = T_rep + lapse * h_km
 
             # ---- moisture
             # saturation is set by the temperature of the whole air column,
