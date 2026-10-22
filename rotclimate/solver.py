@@ -58,9 +58,11 @@ class AdvectionSolver:
         self.iterations = []
         self.converged = []
         self.final_updates = []
+        self.methods = []
         self.rtol = 1e-3
         self.max_iter = 400
         self.require_convergence = False
+        self.recover = False
         self._warned_limit = False
         self.omega = 1.3          # successive over-relaxation
 
@@ -116,6 +118,7 @@ class AdvectionSolver:
             # boundary values and S / lam (discrete maximum principle)
             bound = max(np.abs(boundary).max(), float(np.max(np.abs(Sc) / np.maximum(np.asarray(lam, float), 1e-30))))
             diverged = not np.isfinite(phi).all() or np.abs(phi).max() > 2.0 * bound + 1.0
+            method = 'sor' if self.omega != 1.0 else 'gauss_seidel'
             if diverged and self.omega != 1.0:
                 # Over-relaxation is only guaranteed to converge for omega <= 1;
                 # strongly advection-dominated flow (fast local winds) can make
@@ -126,9 +129,29 @@ class AdvectionSolver:
                 n2, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, Sc, rtol * scale, max_iter, 1.0)
                 n += n2
                 self.fallbacks = getattr(self, "fallbacks", 0) + 1
+                method = 'gauss_seidel'
+            if not converged and self.recover:
+                # A bounded oscillation can miss tolerance without crossing
+                # the divergence bound. Plain sweeps solve the same operator.
+                if method != 'gauss_seidel':
+                    phi = start.copy() if diverged else phi
+                    n2, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, Sc,
+                                                   rtol * scale, max_iter, 1.0)
+                    n += n2
+                    self.fallbacks = getattr(self, 'fallbacks', 0) + 1
+                    method = 'gauss_seidel'
+                if not converged:
+                    phi = self._direct(ce, cw, cs, cn, diag, Sc, boundary)
+                    update = self.equation_error(phi, ce, cw, cs, cn, diag, Sc)
+                    # Account only for floating-point roundoff, not a relaxed
+                    # physical tolerance. Direct solves must pass the equation.
+                    roundoff = 50 * np.finfo(float).eps * max(1., float(np.max(np.abs(phi))))
+                    converged = np.isfinite(update) and update <= rtol * scale + roundoff
+                    method = 'direct'
             self.iterations.append(n)
             self.converged.append(converged)
             self.final_updates.append(update)
+            self.methods.append(method)
             if not np.isfinite(phi).all():
                 raise FloatingPointError("Nonfinite linear solver output")
             if not converged:
@@ -139,13 +162,31 @@ class AdvectionSolver:
                     warnings.warn(message, RuntimeWarning, stacklevel=2)
                     self._warned_limit = True
             return phi
-        return self._direct(ce, cw, cs, cn, diag, S, boundary)
+        phi = self._direct(ce, cw, cs, cn, diag, S, boundary)
+        update = self.equation_error(phi, ce, cw, cs, cn, diag, S)
+        if not np.isfinite(phi).all() or not np.isfinite(update):
+            raise FloatingPointError('Nonfinite direct solver output')
+        self.iterations.append(0); self.converged.append(True)
+        self.final_updates.append(update); self.methods.append('direct')
+        return phi
+
+    @staticmethod
+    def equation_error(phi, ce, cw, cs, cn, diag, source):
+        """Maximum diagonal-scaled interior residual, in the field's units."""
+        source = np.broadcast_to(source, phi.shape)
+        residual = (diag[1:-1, 1:-1] * phi[1:-1, 1:-1]
+                    + ce[1:-1, 1:-1] * phi[1:-1, 2:]
+                    + cw[1:-1, 1:-1] * phi[1:-1, :-2]
+                    + cs[1:-1, 1:-1] * phi[2:, 1:-1]
+                    + cn[1:-1, 1:-1] * phi[:-2, 1:-1] - source[1:-1, 1:-1])
+        return float(np.max(np.abs(residual / diag[1:-1, 1:-1])))
 
     def _direct(self, ce, cw, cs, cn, diag, S, boundary):  # pragma: no cover
         import scipy.sparse as sp
         import scipy.sparse.linalg as spla
 
         ny, nx = self.ny, self.nx
+        S = np.broadcast_to(S, (ny, nx))
         idx = np.arange(ny * nx).reshape(ny, nx)
         inner = ~self.border
         c = idx[inner]

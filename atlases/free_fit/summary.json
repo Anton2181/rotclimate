@@ -1,21 +1,38 @@
 {
- "params": "calibration/earth/free_e5p_ds16.json",
+ "params": "calibration/autonomous_20261021/free_polish/best_params.json",
  "downsample": 8,
+ "image_scale": 2,
  "seeds": null,
- "seconds": 1492,
- "strict_accuracy": 0.591222465108458,
- "zonefit": 0.5291752183478327,
+ "seconds": 2775,
+ "strict_accuracy": 0.5910543130990416,
+ "zonefit": 0.5330535863713907,
  "recall": {
-  "cold_wet": 0.7088167053364269,
-  "cold_dry": 0.5925176946410515,
-  "warm_wet": 0.5769095388947554,
-  "med": 0.6419505678022712,
-  "swamp": 0.47494033412887826,
-  "tree": 0.5859872611464968,
-  "hot_dry": 0.5284313725490196
+  "cold_wet": 0.7006960556844548,
+  "cold_dry": 0.6061678463094035,
+  "warm_wet": 0.5747976064765927,
+  "med": 0.6382765531062125,
+  "swamp": 0.47653142402545745,
+  "tree": 0.5923566878980892,
+  "hot_dry": 0.515686274509804
  },
  "mediterranean": {
-  "dry_share": 0.11623246492985972,
-  "cs_share": 0.7688710754843019
+  "dry_share": 0.11990647962591851,
+  "cs_share": 0.7618570474281897
+ },
+ "numerics": {
+  "downsample": 8,
+  "steps_per_year": 25,
+  "picard_iters": 256,
+  "t_iters": 192,
+  "t_relaxation": 0.25,
+  "transport_scheme": "upwind",
+  "t_adaptive_retries": 2,
+  "t_require_convergence": true,
+  "moisture_relaxation": 0.25,
+  "moisture_residual_tol": 0.01,
+  "moisture_require_convergence": true,
+  "solver_rtol": 1e-06,
+  "solver_max_iter": 2000,
+  "solver_require_convergence": false
  }
 }

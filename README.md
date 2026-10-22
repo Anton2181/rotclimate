@@ -1,21 +1,54 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-**Earth mode (16 October 2026, latest):** the simulator now runs on real
-geography and is scored against observed climate (WorldClim 2.1) in nine
-regions; its physics was refitted on Earth and new physics added where Earth
-showed what was missing. Read [the Earth report](reports/earth_mode.md);
-pages: [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
-[free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) (world and
-physics fitted to the map with every setting free, from the restart campaign's
-best basin, now with Earth's pressure-driven winds: zonefit 0.529, strict 59.1 %;
-reversed spin, 32.9°N, 15.8° tilt).
-[Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF) beside it: the map on
-the Earth reference physics (now r16, unchanged, with only the world fitted; the newest reference is r29, report 4f), drifting only while its Earth score stays
-within 3 % (zonefit 0.18, strict 26 %; `atlases/earth_fit/`).
-Both atlases carry 21 map layers (temperature, water, winds and sea in
-winter and summer, month by month on the local calendar with a slider),
-six animations, the invented surroundings around the map, and every named
-place's monthly climate as CSV (`rotclimate/atlas.py`, `scripts/build_atlas_variant.py`).
+**In progress (22 October 2026):** a new parallel campaign is updating free fit,
+Earth fit and a separate Whittaker-fit atlas with required numerical convergence
+and the same three surroundings layouts. The free and Earth searches are
+complete; full-resolution atlas builds and the Whittaker search are still
+running. See the [three-fit report](reports/THREE_FIT_20261022.md) for the current
+snapshot and continuation commands. The active atlas files below remain the
+last completed builds until the new exports pass review.
+
+**Last completed atlas update (22 October 2026):** seasonal mountain-temperature exports
+now agree with the model, and both atlas builds include Whittaker potential
+biomes, climate diagrams, biome shares and station labels. The local free-fit
+refinement improves its final-grid painted-zone score from 0.5292 to 0.5331
+(strict agreement 59.1%). Earth r29 remains the physics reference: none of eight
+screened changes improved every regional group. The Earth-fit calibration holds
+that physics fixed and averages three layouts of the unknown surroundings,
+improving its final-grid objective from 0.1532 to 0.1597 against the same r29
+starting world (exact agreement falls from 19.6% to 18.8%).
+Read the [campaign report](reports/CONTINUE_20261022.md) for selection, scores,
+checks and numerical limits; [biome methods](docs/BIOMES.md) explain the new maps.
+
+An [experimental Whittaker-target calibration](reports/WHITTAKER_TARGETS_20261022.md)
+maps the painted zones to annual-climate biome envelopes. Its 49-candidate pilot
+raises finer-grid biome agreement from 28.5% to 37.4%, while losing original
+zone agreement and Mediterranean seasonality. It remains separate from the
+active atlas fits. Use `--objective whittaker` or `whittaker-broad` to test the
+explicit crosswalk; the report records numerical failures and mapping ambiguity.
+
+The current repository atlases are [free fit](atlases/free_fit/index.html) and
+[Earth fit](atlases/earth_fit/index.html). Both use 25 seasonal steps and 22 map
+layers, including monthly temperature and rain, five seasonal animations,
+the invented surroundings, and 152 named places' climate as CSV.
+Some linear solves reached their iteration limit, so scores remain provisional.
+Serve the repository over HTTP to use the interactive pages:
+
+```sh
+python3 scripts/serve_atlases.py
+```
+
+This opens your browser and serves the atlas data locally. Keep the terminal
+open while browsing. With Python 3 installed, you can also double-click
+`start_atlases.command` on macOS or `start_atlases.bat` on Windows. Opening
+`index.html` directly through `file://` cannot reliably load the separate data
+files. The launcher also works in the extracted portable atlas bundle.
+
+The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
+[free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) and
+[Earth-fit atlas](https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF) predate this
+campaign; those hosted copies have not been updated. The earlier
+[Earth-mode report](reports/earth_mode.md) records development of the reference.
 The [Ravages campaign map](https://claude.ai/artifact/6SFW2VgMuxwNUPwSLoqYdH)
 plays the game's army movements, weather and economy from its master sheet
 (`scripts/ravages_extract.py`, `ravages/`); the satellite-style picture of the
@@ -25,16 +58,9 @@ What that climate would grow around 200 AD, and how many farmers it could
 feed, is mapped in the [Ravages Harvest Atlas](https://claude.ai/artifact/JkEE3xBLsuJ2WgqL8p3Bns)
 (`land/`; method and its checks against Earth's populations of the period
 and against the campaign sheet in [reports/land_people.md](reports/land_people.md)).
-The workflow is two steps: improve and fit the model on Earth, then calibrate
-it freely on the map; the Earth-fit atlas shows the same map held to Earth's
-physics. The older joint fit (e1), its Earth-physics atlas and the old live
-atlas are retired.
-
-```sh
-python -I scripts/earth_benchmark.py --params calibration/earth/earth_e1_r4.json --cell-km 56 --out output/earth_benchmark/r4
-python -I scripts/build_atlas_variant.py --params calibration/earth/free_e2_all_retro.json --name free_fit \
-    --title "Rotclimate Free-Fit Atlas" --eyebrow "..." --downsample 8
-```
+The workflow is to check model changes on Earth, then fit the invented world
+freely and with Earth physics held fixed. The older joint fit (e1), its
+Earth-physics atlas and the old live atlas are retired.
 
 **Previous handoff (16 October 2026):** Start with the
 [project handoff report](reports/HANDOFF_20261016.md).

@@ -1,0 +1,52 @@
+{
+  "goal": "Test an explicit painted-zone to Whittaker crosswalk as an alternative calibration objective",
+  "profile": "strict",
+  "search": {
+    "physics": "e3b5",
+    "candidates": 49,
+    "population": 8,
+    "sigma": 0.025,
+    "seed": 221022,
+    "downsample": 32,
+    "layouts": [
+      1
+    ],
+    "spin": "fixed retrograde",
+    "race": 0
+  },
+  "review": {
+    "downsample": 16,
+    "layouts": [
+      1,
+      2
+    ],
+    "compare": "baseline and candidate at identical settings"
+  },
+  "publication": "Experimental; audit original seasonal, hydrological and realism diagnostics before any atlas replacement. Existing atlas scores remain provisional due to prior linear solve warnings.",
+  "sources": {
+    "rotclimate/model.py": "5c84f6b7fa9618e98c310e6d4ffbe2cddb1a6d93cf0eeba63df8aff644bea9ad",
+    "rotclimate/calibrate.py": "fcc9f74d0d4cc0e7d23dc9ae95441b45a7d6d7589a420e4afac52330237dc196",
+    "rotclimate/biome_targets.py": "41e6bae8a9f70e7fee92caa0a019d32b849190c2be670d7c53c544eeff966532",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "data/biome_target_crosswalk.json": "f1a0042d7ca90964a34e03d8a1836b06fc9d7206d6b8cbb3f84ca37059ce7396",
+    "calibration/autonomous_20261021/free_polish/best_params.json": "e272688b3540d3a9e1c875b7c5bf63a07f75464daa4c24ffebc00dd6da789e50"
+  },
+  "analysis_sources": {
+    "scripts/whittaker_target_experiment.py": "2a032d1d31f7de863470aa20e20711d2af2fae0c7da04815788865d7956f8f8d",
+    "tests/test_biome_targets.py": "fa356ec48c2c156eb897aedea00b3ae6479cda4101b878a3e42bcba39b192091"
+  },
+  "outcome": {
+    "task_status": "experiment_complete",
+    "promoted": false,
+    "crosswalk": "strict",
+    "search_candidates": 49,
+    "search_failures": 9,
+    "finer_review": "partial",
+    "completed_review_cases": 3,
+    "planned_review_cases": 4,
+    "paired_layouts": [
+      1
+    ],
+    "reason": "Annual biome score improves, but original overall and Mediterranean guards fail. Baseline layout 2 fails convergence; no publication-grid validation."
+  }
+}

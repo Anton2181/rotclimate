@@ -56,6 +56,7 @@ class Params:
     tier_tops: tuple = (350.0, 900.0, 1800.0, 3300.0)
     lapse_rate: float = 6.0           # K / km (environmental)
     lapse_seasonal: float = 0.0       # e25: lapse rate x (1 + this x season index): steeper in summer, flatter in winter
+    seasonal_column_lapse: bool = False  # opt-in: use that season's lapse in column/crest saturation too
 
     # What lies beyond each edge of the map is unknown.
     # beyond_style 'procedural' (default): edge features continue and fade
@@ -106,6 +107,7 @@ class Params:
     t_iters: int = 1
     t_relaxation: float = 1.0        # fraction of temperature fixed-point update; 1 preserves legacy runs
     t_adaptive_retries: int = 0      # optional bounded retries with smaller damping
+    t_anderson: bool = False        # accelerate retry stages; retain the full-update stopping test
     t_require_convergence: bool = False
 
     # ---------------------------------------------------------------- winds
@@ -207,6 +209,7 @@ class Params:
     solver_rtol: float = 1e-3        # linear sweep update / maximum boundary magnitude
     solver_max_iter: int = 400
     solver_require_convergence: bool = False  # strict profiles reject capped solves
+    solver_recover: bool = False    # retry capped sweeps with Gauss-Seidel, then a checked direct solve
 
     def to_json(self, path: Path | str) -> None:
         Path(path).write_text(json.dumps(asdict(self), indent=2))

@@ -43,3 +43,17 @@ def test_no_fixed_point_stops_at_the_exact_budget_without_faking_convergence():
     assert error.details['iterations']==28
     assert len(error.details['stages'])==3
     assert 'seasonal step 19' in str(error)
+
+
+def test_accelerated_retry_recovers_a_noncontractive_linear_fixed_point():
+    # Damping cannot make a positive derivative above one contractive.
+    # Anderson can solve the equilibrium without changing its equation.
+    result=iterate_temperature(lambda x,first:1.1*x+1,np.array([0.]),8,.25,retries=1,acceleration=True)
+    assert result.converged and result.update.max()<.05
+    np.testing.assert_allclose(result.temperature,-10,atol=.05)
+    assert result.stages[-1]['method']=='anderson'
+
+
+def test_acceleration_cannot_claim_a_fixed_point_for_a_constant_nonzero_residual():
+    result=iterate_temperature(lambda x,first:x+1,np.array([0.]),4,.25,retries=2,acceleration=True)
+    assert not result.converged and result.iterations==28 and result.update.max()==1

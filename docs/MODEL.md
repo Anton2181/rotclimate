@@ -124,6 +124,33 @@ Each week's transport equations
 over-relaxed Gauss–Seidel "fast sweeping" solver (`solver.py`, Numba). Each
 solve is warm-started from the previous week.
 
+### Numerical convergence and recovery
+
+The current publication profile uses 25 seasonal steps per year; the calendar
+and equations are unchanged by that temporal sampling choice. Saved parameter
+files record the grid, iteration limits and convergence requirements. Pass
+`--saved-numerics` to the main CLI to retain those settings.
+
+With `solver_recover=true`, a linear solve that reaches its iteration cap can
+retry plain Gauss–Seidel, then the same operator's sparse direct solve. The
+direct recovery checks its diagonal-scaled equation residual against the
+requested tolerance, with a floating-point roundoff allowance. This changes
+the numerical route, not the transport equation or its tolerance.
+
+With `t_anderson=true`, temperature/wind retry stages can use Anderson mixing.
+The initial stage keeps the original damped iteration. Proposals are checked
+for finiteness and excessive step size; the full undamped temperature update
+must still fall below 0.05°C. Neither option is enabled by default, so older
+saved configurations retain their original path.
+
+`Result.numerics` records linear solves, temperature steps and moisture checks,
+including spinup. Ensemble results retain every member's diagnostics. Atlas
+generation with `--require-verified` rejects results without successful
+observed checks, including the separate surroundings display. Requested
+settings alone do not certify convergence. Successful convergence does not
+establish physical accuracy, spatial resolution independence or predictive
+skill on an unseen region.
+
 ## 4. Köppen classification (`koppen.py`)
 
 This uses the standard Köppen–Geiger rules of Peel et al. (2007) and Beck et

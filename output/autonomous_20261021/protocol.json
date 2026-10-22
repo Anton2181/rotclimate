@@ -1,0 +1,12 @@
+{
+ "goal": "Improve the climate simulator, run free and Earth-constrained map calibrations, rebuild both active atlases with Whittaker biome maps",
+ "earth_reference": "calibration/earth/earth_bg_r29.json",
+ "earth_resolution_km": 56,
+ "earth_selection": "Adopt a screened mechanism only if all 19 cases complete and mean climate distance improves in each of the existing training-8, former-holdout-5 and midlatitude-6 groups. These reused groups are development checks, not independent validation.",
+ "free_fit": "Local CMA-ES refinement of the existing retrograde basin at downsample 32, 97 candidate budget including baseline, 12-member populations, sigma 0.035, seed 2110. Retain baseline if no improvement. Replayed unfinished generation after interruption is retained in logs.",
+ "earth_fit": "World-only calibration with selected Earth physics held fixed, over surroundings layouts 1,2,3. No joint drift or substitution of free-fit physics.",
+ "publication": "Both atlases use downsample 8 and 25 seasonal steps; Earth fit averages layouts 1,2,3. Render images at 2x source resolution; save parameters, summaries, climate checkpoints and provenance.",
+ "limits": "Bounded local searches are not global optima. Whittaker envelopes are potential climate biomes, not observed vegetation. Outside-envelope climates remain explicitly unclassified. Seasonal atlas lapse correction improves export consistency, not the Earth benchmark itself.",
+ "free_polish": "25 candidates, popsize 8, sigma 0.003, seed 2210, downsample 32, one layout, after broad refinement.",
+ "earth_fit_budget": "49 candidates, popsize 8, sigma 0.045, seed 2210, downsample 32, layouts 1,2,3, racing disabled."
+}

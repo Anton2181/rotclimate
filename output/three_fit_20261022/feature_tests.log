@@ -1,0 +1,22 @@
+.......FF.............                                                   [100%]
+=================================== FAILURES ===================================
+_ test_existing_model_schedule_repeats_full_years_and_scores_only_last_year[1] _
+tests/test_mediterranean_spinup.py:150: in test_existing_model_schedule_repeats_full_years_and_scores_only_last_year
+    result = model.run(spinup=warmup_years*25, progress=lambda done,total:progress.append((done,total)))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rotclimate/model.py:923: in run
+    if self.trace_cells is not None and n >= spinup:
+       ^^^^^^^^^^^^^^^^
+E   AttributeError: 'ClimateModel' object has no attribute 'trace_cells'
+_ test_existing_model_schedule_repeats_full_years_and_scores_only_last_year[2] _
+tests/test_mediterranean_spinup.py:150: in test_existing_model_schedule_repeats_full_years_and_scores_only_last_year
+    result = model.run(spinup=warmup_years*25, progress=lambda done,total:progress.append((done,total)))
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+rotclimate/model.py:923: in run
+    if self.trace_cells is not None and n >= spinup:
+       ^^^^^^^^^^^^^^^^
+E   AttributeError: 'ClimateModel' object has no attribute 'trace_cells'
+=========================== short test summary info ============================
+FAILED tests/test_mediterranean_spinup.py::test_existing_model_schedule_repeats_full_years_and_scores_only_last_year[1]
+FAILED tests/test_mediterranean_spinup.py::test_existing_model_schedule_repeats_full_years_and_scores_only_last_year[2]
+2 failed, 20 passed in 6.17s

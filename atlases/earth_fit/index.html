@@ -301,9 +301,9 @@ body.map-expanded { overflow: hidden; }
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Simulated climate · 25 seasonal steps · physics that also reproduces real Earth climates</span>
+    <span class="eyebrow">Simulated climate · 25 seasonal steps · Whittaker potential biomes</span>
     <h1>Rotclimate Earth-Fit Atlas</h1>
-    <p class="lede">Click anywhere on land to see its climate through the local year, and which real places feel most alike.</p><p class="lede">Physics: the Earth reference (r16: fitted on six real regions, California, Iberia, south-east US, Levant, Central Asia and East China, and checked on three more), used unchanged; only the world is fitted to your map: reversed spin, 39.0°N, 30.4° tilt, true north 13.7° anticlockwise of the map's top edge. The climate is averaged over three random layouts of the unknown land beyond the map. It matches the painted zones far less well than the free fit (score 0.18 against 0.53, 25 % of cells exact against 59 %): with Earth's physics, cold winters in the north force the map northwards, which leaves the south too cool for swamp or hot desert.</p>
+    <p class="lede">Click anywhere on land to see its climate through the local year, and which real places feel most alike.</p><p class="lede">World fitted with Earth reference r29 physics held fixed: reversed spin, map centre 38.6°N, 29.8° tilt, true north 20.1° anticlockwise of the map’s top edge. Climate averages three layouts of the unknown surroundings. The painted-zone score improves from 0.1532 to 0.1597 against the same r29 starting world; exact agreement falls from 19.6% to 18.8%. Whittaker biomes describe climate potential. Fit scores remain provisional because some linear solves reached their iteration limit.</p>
   </header>
 
   <section aria-labelledby="map-h">
@@ -631,6 +631,10 @@ body.map-expanded { overflow: hidden; }
         const k = kop.find((x) => x.code === c);
         return `<span title="${esc(k.desc)}"><span class="sw" style="background:${rgb(k.rgb)}"></span><span class="code">${c}</span>${esc(k.desc)}<span class="share">${k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)}%</span></span>`;
       }).join("");
+    } else if (L.kind === "biomes") {
+      el.innerHTML = meta.biomes.filter((b) => b.share > 0).map((b) =>
+        `<span><span class="sw" style="background:${b.color}"></span>${esc(b.label)}<span class="share">${(b.share * 100).toFixed(1)}%</span></span>`).join("")
+        + `<span class="note">${esc(meta.biome_note)} <a href="data/whittaker_diagram.png" target="_blank">Climate diagram</a> · <a href="${meta.biome_source}" target="_blank" rel="noopener">Method source</a></span>`;
     } else if (L.kind === "zones") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
         + (meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])
@@ -693,8 +697,8 @@ body.map-expanded { overflow: hidden; }
   const compare = ClimateComparison.compare;
   // climate at one map pixel, exactly as its station card shows it
   function climateAt(x, y) {
-    const h = elev.data[pixIdx(x, y)], c = cell(x, y), lapse = meta.lapse * h / 1000;
-    return { h, c, lapse, T12: series("T12", c, 12).map((v) => v / 10 - lapse), P12: series("P12", c, 12),
+    const h = elev.data[pixIdx(x, y)], c = cell(x, y);
+    return { h, c, T12: series("T12", c, 12).map((v, m) => v / 10 - (meta.lapse12?.[m] ?? meta.lapse) * h / 1000), P12: series("P12", c, 12),
              D12: A.D12 ? series("D12", c, 12).map((v) => v / 10) : null };
   }
   let selectedRef = null, stationClimate = null, currentAnalogRows = [];
@@ -745,18 +749,19 @@ body.map-expanded { overflow: hidden; }
     const place = name ? meta.places.find((p) => p.name === name) : nearestPlace(x, y);
     const h = elev.data[pixIdx(x, y)];
     const c = cell(x, y);
-    const lapse = meta.lapse * h / 1000;
-    const Tm = series("Tm", c, 11).map((v) => v / 10 - lapse);
+    const Tm = series("Tm", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
     const { T12, P12, D12 } = climateAt(x, y);
     // shaded band: average daily low to high (day/night range learned from Earth)
     const Dloc = D12 ? onLocal(D12) : null;
-    const Tlo = Dloc ? Tm.map((v, i) => v - Dloc[i] / 2) : series("Tlo", c, 11).map((v) => v / 10 - lapse);
-    const Thi = Dloc ? Tm.map((v, i) => v + Dloc[i] / 2) : series("Thi", c, 11).map((v) => v / 10 - lapse);
+    const Tlo = Dloc ? Tm.map((v, i) => v - Dloc[i] / 2) : series("Tlo", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
+    const Thi = Dloc ? Tm.map((v, i) => v + Dloc[i] / 2) : series("Thi", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
     const P = series("P", c, 11);
     const K = kop[k];
     $("station-h").textContent = place ? place.name : "Unnamed place";
     $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
-    $("kdesc").textContent = K.desc;
+    const biomeId = A.biome ? A.biome.data[pixIdx(x, y)] : null;
+    const biome = meta.biomes?.find((b) => b.id === biomeId);
+    $("kdesc").textContent = K.desc + (biome ? ` · Whittaker: ${biome.label}` : "");
     const lat = latOf(x, y);
     const months = meta.months;
     const iMin = Tm.slice(0, 10).indexOf(Math.min(...Tm.slice(0, 10)));
@@ -1101,6 +1106,8 @@ body.map-expanded { overflow: hidden; }
       const k = kop.find((x) => x.code === c);
       return { color: rgb(k.rgb), code: c, label: k.desc, share: (k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)) + "%" };
     }) };
+    if (L.kind === "biomes") return { title: "Whittaker potential biomes · annual temperature and precipitation",
+      items: meta.biomes.filter((b) => b.share > 0).map((b) => ({ color: b.color, label: b.label, share: (b.share * 100).toFixed(1) + "%" })) };
     if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
       ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
     if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
@@ -1596,10 +1603,9 @@ body.map-expanded { overflow: hidden; }
       const useD = A.D12 && ref.D;
       for (let c = 0; c < NC; c++) {
         if (!cellLand[c]) continue;
-        const lapse = meta.lapse * cellElev[c] / 1000;
         let dt = 0, dp = 0;
         for (let m = 0; m < 12; m++) {
-          const t = A.T12.data[m * NC + c] / 10 - lapse;
+          const t = A.T12.data[m * NC + c] / 10 - (meta.lapse12?.[m] ?? meta.lapse) * cellElev[c] / 1000;
           const p = A.P12.data[m * NC + c];
           const ds = useD ? A.D12.data[m * NC + c] / 10 - ref.D[m] : 0;
           dt += (t - ref.T[m]) ** 2 + ds * ds / 4;

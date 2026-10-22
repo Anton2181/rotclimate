@@ -21,7 +21,7 @@ WORLD_KEYS = {"lat_center", "north_bearing", "tilt", "retrograde", "eccentricity
               "year_days", "winter_solstice_day", "map_width_mi", "map_height_mi", "tier_tops", "pad_km",
               "downsample", "steps_per_year", "picard_iters", "moisture_relaxation", "moisture_residual_tol",
               "moisture_require_convergence", "transport_scheme", "solver_rtol", "solver_max_iter",
-              "solver_require_convergence", "t_iters", "t_relaxation", "t_adaptive_retries", "t_require_convergence"}
+              "solver_require_convergence", "solver_recover", "t_iters", "t_relaxation", "t_adaptive_retries", "t_anderson", "t_require_convergence"}
 
 
 def params(path):

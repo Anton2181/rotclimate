@@ -243,14 +243,20 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     guarded = mode == "guarded"
     if guarded:
         mode = "zonefit"
-    evs, meds = [], []
+    biome_profile = {'whittaker': 'strict', 'whittaker-broad': 'broad'}.get(mode)
+    evs, meds, biome_rows = [], [], []
     seeds = seeds or [None]
     for i, sd in enumerate(seeds):
         q = p if sd is None else p.replace(beyond_seed=int(sd))
         result = ClimateModel(q).run()
         evs.append(evaluate(result))
         meds.append(mediterranean_shares(result, evs[-1]))
-        if cutoff is not None and i == 0 and len(seeds) > 1 and objective(evs[0], mode) < cutoff:
+        if biome_profile:
+            from . import biome_targets
+            biome_rows.append(biome_targets.evaluate(evs[-1]['indices'], result.grid.target,
+                              result.grid.inmap & result.grid.land, biome_profile))
+        first_score = biome_rows[-1]['score'] if biome_profile else objective(evs[-1], mode)
+        if cutoff is not None and i == 0 and len(seeds) > 1 and first_score < cutoff:
             break
     ev = dict(evs[0])
     ev["per_class"] = {k: float(np.mean([e["per_class"][k] for e in evs])) for k in ev["per_class"]}
@@ -261,13 +267,15 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     display_accuracy = float(np.mean([e["label_policy_audit"]["display_accuracy"] for e in evs]))
     ev["realism"] = {k: float(np.mean([e["realism"][k] for e in evs])) for k in ev["realism"]}
     med = {k: float(np.mean([m[k] for m in meds])) for k in meds[0]}
-    score = objective(ev, mode)
+    biome_result = biome_targets.average(biome_rows) if biome_profile else None
+    score = biome_result['score'] if biome_profile else objective(ev, mode)
     penalty = guard_penalty(ev, med) if guarded else 0.0
     return dict(score=score - penalty, guard_penalty=penalty, mediterranean=med,
                 mean=ev["total"], accuracy=ev["accuracy"], raced=len(evs) < len(seeds),
                 per_class=ev["per_class"], f1=ev["f1"], recall=ev["recall"],
                 display_accuracy=display_accuracy, precision=ev["precision"], realism=ev["realism"],
-                spread=float(np.std([e["total"] for e in evs])))
+                spread=float(np.std([e["total"] for e in evs])),
+                **(dict(whittaker=biome_result, zonefit_score=objective(ev, 'zonefit')) if biome_profile else {}))
 
 
 def mediterranean_shares(result, ev) -> dict:
@@ -428,7 +436,8 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded"])
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded",
+                                                           "whittaker", "whittaker-broad"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
                                                     "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "rain", "new", "world"])

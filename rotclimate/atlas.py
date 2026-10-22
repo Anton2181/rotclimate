@@ -16,6 +16,8 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
+from . import biomes
+from .climate_fields import lapse_at_days
 from . import calendar as cal
 from .config import REPO, SOURCE, Params
 from .geography import (TARGET_CLASSES, TARGET_DRAW_COLORS, TARGET_LABELS, load_places,
@@ -62,7 +64,9 @@ class HiRes:
                 st = monthly_stats(self.r.Tsl, self.r.P, self.r.days, self.r.params.year_days,
                                    summer_solstice=self.r.params.winter_solstice_day
                                    + self.r.params.year_days / 2)
-                Tm = np.stack([self.temperature(t).astype(np.float32) for t in st["Tm"]])
+                from .koppen import monthly_weights
+                rates = monthly_weights(self.r.days, self.r.params.year_days) @ lapse_at_days(self.r.params, self.r.days)
+                Tm = np.stack([self.temperature(t, lapse=l).astype(np.float32) for t, l in zip(st["Tm"], rates)])
                 Pm = np.stack([np.maximum(self.up(q), 0).astype(np.float32) for q in st["Pm"]])
                 return Tm, Pm, st["summer"]
 
@@ -82,6 +86,8 @@ def build_hires_layers(result, scale=3, outdir: Path = ATLAS / "data"):
     ix = fr._ix
     _save_webp(_overlay_rivers(shaded_rgb(rgb_image(k).astype(float) / 255.0, fr, 0.42), fr),
                outdir / "koppen.webp")
+    biome = biomes.classify(ix["MAT"], ix["MAP"], fr.land)
+    _save_webp(_overlay_rivers(shaded_rgb(biomes.rgb_image(biome), fr, 0.25), fr), outdir / "whittaker.webp")
     _save_webp(_cmap_img(ix["MAT"], "turbo", -10, 30, fr, 20), outdir / "t_annual.webp")
     _save_webp(_cmap_img(ix["Tcold"], "turbo", -25, 25, fr, 25), outdir / "t_cold.webp")
     _save_webp(_cmap_img(ix["Thot"], "turbo", 0, 40, fr, 20), outdir / "t_hot.webp")
@@ -196,7 +202,7 @@ def extra_layers(result, fr, outdir: Path):
     months.mkdir(exist_ok=True)
     groups = cal.month_slices(result.nt)
     for k, gi in enumerate(groups):
-        T = fr.temperature(result.Tsl[gi].mean(0))
+        T = fr.temperature(result.Tsl[gi].mean(0), days=result.days[gi])
         P = np.maximum(fr.up(result.P[gi].mean(0)), 0) * 30.0                 # mm per 30 days
         for name, rgb in (("t", _cmap_img(T, "turbo", -25, 40, fr, 26)),
                           ("p", _cmap_img(np.log10(np.maximum(P, 3)), "YlGnBu", np.log10(5), np.log10(500), fr, 14))):
@@ -249,18 +255,21 @@ def _beyond_facts(p) -> dict:
     return b
 
 
-def build(result, fr, ev, outdir: Path = ATLAS / "data"):
+def build(result, fr, ev, outdir: Path = ATLAS / "data", image_scale=3):
     from .render import shaded_rgb
     from .__main__ import numerical_settings
 
     outdir.mkdir(parents=True, exist_ok=True)
+    from .config import DATA
+    for source in ("WHITTAKER_LICENSE.txt", "whittaker_sources.json"):
+        shutil.copyfile(DATA / source, outdir / source)
     p = result.params
     g = result.grid
     k = fr.koppen()
     ix = fr._ix
 
     # ---------------------------------------------------------------- images (3x)
-    build_hires_layers(result, scale=3, outdir=outdir)
+    build_hires_layers(result, scale=image_scale, outdir=outdir)
     # labels overlay (transparent png with a soft halo)
     lab = np.array(Image.open(SOURCE / "labels.webp").convert("RGBA")).astype(float) / 255.0
     a = lab[..., 3]
@@ -273,6 +282,8 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     # ---------------------------------------------------------------- arrays
     H, W = fr.H, fr.W
     cls = np.where(fr.land, k, 255).astype(np.uint8)[::2, ::2]
+    biome = biomes.classify(ix["MAT"], ix["MAP"], fr.land)
+    biomes.diagram(ix["MAT"], ix["MAP"], fr.land, outdir / "whittaker_diagram.png")
     elev = np.where(fr.land, fr.elev, 0).astype(np.uint16)[::2, ::2]
     # local-month climate on the coarse grid (map region), sea-level temps
     groups = cal.month_slices(result.nt)
@@ -289,6 +300,10 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     from .analogs import model_bins, reference_payload, reference_source
 
     T12, P12 = model_bins(Tsl, P, result.days, p.winter_solstice_day, p.year_days)
+    lapse_steps = lapse_at_days(p, result.days)
+    lapse_local = [float(lapse_steps[gi].mean()) for gi in groups]
+    lapse12, _ = model_bins(lapse_steps[:, None, None], np.zeros((result.nt, 1, 1)),
+                            result.days, p.winter_solstice_day, p.year_days)
     T12, P12 = T12[(slice(None),) + sl], P12[(slice(None),) + sl]
     # day/night range (Earth-trained, rotclimate/diurnal.py) in the same bins
     from .diurnal import available, grid_dtr12
@@ -305,7 +320,7 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
         Tm, Tlo, Thi, Pm, snow, T12, P12, D12 = map(thin, (Tm, Tlo, Thi, Pm, snow, T12, P12, D12))
     cell_px = g.f * step
     arrays = {
-        "cls": cls, "elev": elev,
+        "cls": cls, "elev": elev, "biome": biome[::2, ::2],
         "Tm": np.round(Tm * 10).astype(np.int16), "Tlo": np.round(Tlo * 10).astype(np.int16),
         "Thi": np.round(Thi * 10).astype(np.int16),
         "P": np.round(np.clip(Pm, 0, 65000)).astype(np.uint16),
@@ -330,10 +345,12 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data"):
     meta = dict(
         width=W, height=H, mi_per_px=p.map_width_mi / W, lapse=p.lapse_rate,
         lat_center=p.lat_center, km_per_deg=111.195, cell_px=cell_px,
+        lapse_local=lapse_local, lapse12=lapse12.ravel().tolist(),
         arrays=offsets,
         koppen=[dict(code=c, rgb=COLORS[c], desc=DESCRIPTIONS[c], share=share.get(c, 0.0))
                 for c in CODES],
         present=present,
+        biomes=biomes.legend(biome, fr.land), biome_note=biomes.NOTE, biome_source=biomes.SOURCE,
         months=[dict(name=m.name, short=m.short, season=m.season, days=cal.MONTH_DAYS)
                 for m in cal.MONTHS] + [dict(name=cal.HOLY.name, short=cal.HOLY.short,
                                              season=cal.HOLY.season, days=cal.HOLY_DAYS)],
@@ -458,11 +475,11 @@ def places_climate_csv(result, fr, k, places, path: Path):
     Tm = np.stack([Tsl[gi].mean(0) for gi in groups])
     Pm = np.stack([P[gi].sum(0) * cal.YEAR_DAYS / result.nt for gi in groups])
     months = cal.MONTHS + [cal.HOLY]
-    lapse = result.params.lapse_rate
+    lapse = np.array([lapse_at_days(result.params, result.days[gi]).mean() for gi in groups])
     with open(path, "w", newline="", encoding="utf-8") as f:
         w = csv.writer(f)
         w.writerow(["name", "kind", "x_px", "y_px", "latitude", "elevation_m", "koppen", "mean_temp_C",
-                    "rain_mm_year"] + [f"temp_C_{m.short}" for m in months] + [f"rain_mm_{m.short}" for m in months])
+                    "rain_mm_year", "whittaker_biome"] + [f"temp_C_{m.short}" for m in months] + [f"rain_mm_{m.short}" for m in months])
         for pl in places:
             x = int(min(max(round(pl["x"]), 0), fr.W - 1))
             y = int(min(max(round(pl["y"]), 0), fr.H - 1))
@@ -474,8 +491,53 @@ def places_climate_csv(result, fr, k, places, path: Path):
             days = np.array([cal.MONTH_DAYS] * len(cal.MONTHS) + [cal.HOLY_DAYS], float)
             w.writerow([pl["name"], pl["kind"], round(pl["x"], 1), round(pl["y"], 1), round(float(g.lat[i, j]), 2),
                         round(h), CODES[k[y, x]] if fr.land[y, x] and k[y, x] >= 0 else "sea",
-                        round(float((T * days).sum() / days.sum()), 1), round(float(R.sum()))]
+                        round(float((T * days).sum() / days.sum()), 1), round(float(R.sum())),
+                        biomes.LABELS[int(biomes.classify(fr._ix["MAT"][y,x], fr._ix["MAP"][y,x]))] if fr.land[y,x] else "sea"]
                        + [round(float(v), 1) for v in T] + [round(float(v)) for v in R])
+
+
+def add_biome_target_layers(fr, outdir: Path, profile='strict'):
+    """Expose the calibration hypothesis and its categorical match separately."""
+    from . import biome_targets
+    from .config import DATA
+    from .geography import target_fullres
+    from matplotlib.colors import to_rgb
+    target = target_fullres()
+    mapping = biome_targets.specification()['profiles'][profile]
+    actual = biomes.classify(fr._ix['MAT'], fr._ix['MAP'], fr.land)
+    rgb = np.full((*target.shape, 3), .72)
+    rgb[~fr.land] = [0.84, 0.89, 0.94]
+    matched = np.zeros(target.shape, bool)
+    items, audit = [], {}
+    for cid, key, label, _ in TARGET_CLASSES:
+        allowed = mapping[key]
+        color = biomes.COLORS[allowed[0]] if len(allowed)==1 else TARGET_DRAW_COLORS[cid]
+        mask = fr.land & (target==cid)
+        rgb[mask] = to_rgb(color)
+        matched[mask] = np.isin(actual[mask], allowed)
+        labels = [biomes.LABELS[i] for i in allowed]
+        items.append(dict(color=color, label=label+' → '+' / '.join(labels)))
+        audit[key] = dict(allowed=allowed, labels=labels, land_pixels=int(mask.sum()),
+                          match_share=float(matched[mask].mean()) if mask.any() else None)
+    _save_webp(rgb, outdir/'biome_targets.webp')
+    match_rgb = np.full_like(rgb, .72);match_rgb[~fr.land] = [0.84, 0.89, 0.94]
+    painted = fr.land & (target>0)
+    match_rgb[painted & matched] = to_rgb('#459f73')
+    match_rgb[painted & ~matched] = to_rgb('#bd7159')
+    _save_webp(match_rgb, outdir/'biome_match.webp')
+    meta_path = outdir/'atlas.json';meta = json.loads(meta_path.read_text())
+    note = ('Proposed target-to-biome interpretation, '+profile+' profile. Annual climate envelopes do not '
+            'establish cold winters, Mediterranean summer drought or swamp hydrology. Grey target land is unpainted.')
+    meta['layers'][2:2] = [
+        dict(id='biome_targets',file='biome_targets.webp',label='Biome targets',kind='categories',items=items,note=note),
+        dict(id='biome_match',file='biome_match.webp',label='Biome match',kind='categories',
+             items=[dict(color='#459f73',label='Allowed biome'),dict(color='#bd7159',label='Different / outside biome'),
+                    dict(color='#b8b8b8',label='Unpainted land')],
+             note='Categorical match to the proposed biome targets. This display uses interpolated climate and source terrain; optimization scores use the model grid.')]
+    meta['biome_target_audit'] = audit
+    meta['default_layer'] = 'whittaker'
+    meta_path.write_text(json.dumps(meta,ensure_ascii=False))
+    shutil.copyfile(DATA / 'biome_target_crosswalk.json', outdir/'biome_target_crosswalk.json')
 
 
 def _layer_meta():
@@ -488,6 +550,7 @@ def _layer_meta():
 
     base = [
         dict(id="koppen", file="koppen.webp", label="Köppen", kind="koppen"),
+        dict(id="whittaker", file="whittaker.webp", label="Whittaker biomes", kind="biomes", group="Climate"),
         dict(id="target", file="target.webp", label="Your zones", kind="target"),
         dict(id="zones", file="zones.webp", label="Simulated zones", kind="zones"),
         dict(id="agreement", file="agreement.webp", label="Match accuracy", kind="ramp",

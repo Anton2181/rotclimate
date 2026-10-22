@@ -137,9 +137,11 @@ def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(mo
     model.thermal_wind = lambda anomaly:(zeros, zeros)
     model.sst = lambda day,To,Tl:To
     model.col_sigma = model.conv_sigma = 1.
+    model.marine_geom = None
+    model.trace_cells = None
     model.dhdx = model.dhdy = model.basin_side = zeros
     model.drag = np.ones(shape)
-    model.solver = SimpleNamespace(solve=lambda *args,**kwargs:args[5].copy())
+    model.solver = SimpleNamespace(solve=lambda *args,**kwargs:args[5].copy(),converged=[])
     def fake_temperature(solve, initial, *args, **kwargs):
         return SimpleNamespace(temperature=solve(initial, True), update=zeros, iterations=1,
                                converged=True, stages=[])

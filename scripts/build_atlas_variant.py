@@ -12,7 +12,10 @@ atlas/ is not touched.
 from __future__ import annotations
 
 import argparse
+from dataclasses import asdict
+import hashlib
 import json
+import pickle
 import re
 import shutil
 import sys
@@ -32,12 +35,35 @@ def load(path):
                      if k in Params.__dataclass_fields__})
 
 
+def write_provenance(data: Path, identity: dict, image_scale: int):
+    """Keep simulation inputs and export sources beside a portable atlas."""
+    sources = [ROOT / 'rotclimate' / name for name in
+               ('atlas.py', 'render.py', 'biomes.py', 'biome_targets.py', 'climate_fields.py')]
+    sources += [ROOT / 'data' / name for name in
+                ('whittaker_biomes.csv', 'whittaker_sources.json', 'WHITTAKER_LICENSE.txt',
+                 'biome_target_crosswalk.json')]
+    provenance = dict(simulation=identity, image_scale=image_scale,
+                      export_sources={str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest()
+                                      for f in sources},
+                      convergence_note='Requested tolerances are in simulation.params. Observed convergence '
+                                       'checks are recorded separately in atlas.json and summary.json; '
+                                       'numerical convergence does not establish physical accuracy.')
+    (data / 'build_provenance.json').write_text(json.dumps(provenance, indent=2) + '\n')
+
+
 def page(src: str, title: str, eyebrow: str, lede: str, note: str) -> str:
     html = src.replace("<title>Rotclimate Atlas</title>", f"<title>{title}</title>", 1)
     html = html.replace("<h1>Rotclimate Atlas</h1>", f"<h1>{title}</h1>", 1)
     html = re.sub(r'<span class="eyebrow">[^<]*</span>', f'<span class="eyebrow">{eyebrow}</span>', html, count=1)
     html = re.sub(r'<p class="lede">[^<]*</p>', f'<p class="lede">{lede}</p><p class="lede">{note}</p>', html,
                   count=1)
+    links=['<a href="../">Compare fits</a>']
+    for name,label,heading in [('free_fit','Free fit','Rotclimate Free-Fit Atlas'),
+                               ('earth_fit','Earth fit','Rotclimate Earth-Fit Atlas'),
+                               ('whittaker_fit','Whittaker fit','Rotclimate Whittaker-Fit Atlas')]:
+        active=' aria-current="page"' if title==heading else ''
+        links.append(f'<a href="../{name}/"{active}>{label}</a>')
+    html=html.replace('</header>','<nav class="atlas-nav" aria-label="Atlas fits">'+' '.join(links)+'</nav></header>',1)
     # the experiments gallery shows other fits' animations: leave it to the live atlas
     html = re.sub(r'\s*<section>\s*<div class="section-head">\s*<h2>Experiments</h2>.*?</section>', "", html,
                   count=1, flags=re.S)
@@ -54,10 +80,15 @@ def main():
                                       "and which real places feel most alike.")
     ap.add_argument("--note", default="")
     ap.add_argument("--downsample", type=int, default=8)
-    ap.add_argument("--set", default='{"solver_rtol": 1e-6, "solver_require_convergence": false}')
+    ap.add_argument("--set", default='{}', help='explicit overrides; saved numerical requirements are preserved')
+    ap.add_argument('--fit-objective', choices=['zonefit','whittaker','whittaker-broad'], default='zonefit')
+    ap.add_argument('--require-verified', action='store_true', help='refuse exports without successful observed convergence checks')
     ap.add_argument("--no-gif", action="store_true")
     ap.add_argument("--seeds", default="", help="comma list of surroundings layouts to average (ensemble climate)")
     ap.add_argument("--workers", type=int, default=1, help="parallel runs for --seeds")
+    ap.add_argument("--image-scale", type=int, choices=[1, 2, 3], default=3,
+                    help="image resolution multiplier; does not change the simulation grid")
+    ap.add_argument("--checkpoint", help="local result cache, verified against parameters, seeds and model sources")
     a = ap.parse_args()
     from rotclimate import render as R
     from rotclimate.__main__ import simulate
@@ -70,15 +101,65 @@ def main():
     data.mkdir(parents=True, exist_ok=True)
     t = time.time()
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()]
-    if seeds:
-        from rotclimate.model import run_ensemble
-        r = run_ensemble(p, seeds, workers=a.workers)
+    # Cache only self-generated local results. A stopped export can then be
+    # restarted without repeating the full simulation; incompatible caches
+    # fail explicitly rather than serving fields from another parameter set.
+    identity = dict(params=json.loads(json.dumps(asdict(p))), seeds=seeds, sources={
+        f.name: hashlib.sha256(f.read_bytes()).hexdigest()
+        for f in (ROOT / "rotclimate").glob("*.py")
+        if f.name not in {"atlas.py", "render.py", "biomes.py", "climate_fields.py"}})
+    identity["map_inputs"] = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
+                              for f in (ROOT / "data/source").iterdir() if f.is_file()}
+    checkpoint = Path(a.checkpoint) if a.checkpoint else None
+    if checkpoint and checkpoint.exists():
+        with checkpoint.open("rb") as f:
+            cached = pickle.load(f)
+        if cached["identity"] != identity:
+            raise ValueError("Result checkpoint inputs or model sources differ; use a new checkpoint")
+        r = cached["result"]
+        print("Loaded verified simulation checkpoint", flush=True)
     else:
-        r = simulate(p)
+        print("Simulating climate...", flush=True)
+        if seeds:
+            from rotclimate.model import run_ensemble
+            r = run_ensemble(p, seeds, workers=a.workers)
+        else:
+            r = simulate(p)
+        if checkpoint:
+            checkpoint.parent.mkdir(parents=True, exist_ok=True)
+            tmp = checkpoint.with_suffix(".tmp")
+            with tmp.open("wb") as f:
+                pickle.dump(dict(identity=identity, result=r), f)
+            tmp.replace(checkpoint)
+            print("Saved simulation checkpoint", flush=True)
+    numerics = getattr(r, 'numerics', None)
+    if a.require_verified and not (numerics and numerics.get('all_checks_passed')):
+        raise RuntimeError('Atlas export requires observed successful linear, temperature and moisture checks')
     ev = evaluate(r)
+    from rotclimate import biome_targets
+    valid = r.grid.inmap & r.grid.land
+    biome_scores = {profile:biome_targets.evaluate(ev['indices'],r.grid.target,valid,profile)
+                    for profile in ['strict','broad']}
+    profile = 'broad' if a.fit_objective=='whittaker-broad' else 'strict'
+    fit_score = objective(ev,'zonefit') if a.fit_objective=='zonefit' else biome_scores[profile]['score']
+    # High-resolution monthly fields are large. Concurrent branches may
+    # simulate independently, but only one export should allocate them at once.
+    import fcntl
+    export_lock = (ROOT / "atlases" / ".build.lock").open("a")
+    print("Waiting for atlas export memory slot...", flush=True)
+    fcntl.flock(export_lock, fcntl.LOCK_EX)
     fr = R.FullRes(r)
-    build(r, fr, ev, outdir=data)
+    print("Rendering atlas layers and station data...", flush=True)
+    build(r, fr, ev, outdir=data, image_scale=a.image_scale)
+    if a.fit_objective.startswith('whittaker'):
+        from rotclimate.atlas import add_biome_target_layers
+        add_biome_target_layers(fr, data, profile)
+    meta_path=data/'atlas.json';meta=json.loads(meta_path.read_text())
+    meta['calibration']=dict(objective=a.fit_objective,score=fit_score,whittaker_profile=profile if a.fit_objective.startswith('whittaker') else None)
+    meta['observed_numerics']=numerics
+    meta_path.write_text(json.dumps(meta,ensure_ascii=False))
     if not a.no_gif:
+        print("Rendering seasonal animations...", flush=True)
         R.season_gif(fr, data / "year_temperature.gif", "T")
         R.season_gif(fr, data / "year_precipitation.gif", "P")
         R.season_gif(fr, data / "year_vapour.gif", "W")
@@ -87,6 +168,9 @@ def main():
     # layout: an average over layouts mixes different coastlines out there)
     if p.beyond_style == "procedural":
         rr = simulate(p.replace(beyond_seed=seeds[0], downsample=max(16, a.downsample))) if seeds else r
+        around_numerics = getattr(rr, 'numerics', None)
+        if a.require_verified and not (around_numerics and around_numerics.get('all_checks_passed')):
+            raise RuntimeError('Neighbourhood export requires successful observed convergence checks')
         R.around_koppen(rr, data / "around_koppen.webp")
         if not a.no_gif:
             R.around_gif(rr, data / "around_year.gif")
@@ -97,7 +181,8 @@ def main():
         if seeds:
             note += (f" The map above averages {len(seeds)} random layouts of it; these pictures show layout "
                      f"{seeds[0]}.")
-        meta["around"] = dict(note=note, layout=seeds[0] if seeds else p.beyond_seed, averaged=len(seeds))
+        meta["around"] = dict(note=note, layout=seeds[0] if seeds else p.beyond_seed, averaged=len(seeds),
+                              observed_numerics=around_numerics)
         (data / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))
     src = (ROOT / "atlas" / "index.html").read_text()
     (out / "index.html").write_text(page(src, a.title, a.eyebrow, a.lede, a.note))
@@ -110,14 +195,23 @@ def main():
     g = r.grid
     kop = np.array(codes)[classify(st["Tm"], st["Pm"], st["summer"])]
     med = g.inmap & g.land & (g.target == 4)
-    summary = dict(params=a.params, downsample=a.downsample, seeds=seeds or None, seconds=round(time.time() - t),
+    summary = dict(params=a.params, downsample=a.downsample, image_scale=a.image_scale,
+                   seeds=seeds or None, seconds=round(time.time() - t),
                    strict_accuracy=ev["accuracy"], zonefit=objective(ev, "zonefit"),
                    recall={k: float(v) for k, v in ev["recall"].items()},
                    mediterranean=dict(dry_share=float(np.char.startswith(kop[med], "B").mean()),
                                       cs_share=float(np.char.startswith(kop[med], "Cs").mean())))
+    from rotclimate.__main__ import numerical_settings
+    summary['numerics'] = numerical_settings(p)
+    summary['observed_numerics'] = numerics
+    summary['fit_objective'] = a.fit_objective
+    summary['fit_score'] = fit_score
+    summary['whittaker'] = biome_scores
+    write_provenance(data, identity, a.image_scale)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
     print(json.dumps(summary, indent=1))
     print("atlas written to", out)
+    export_lock.close()
 
 
 if __name__ == "__main__":

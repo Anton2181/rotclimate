@@ -1,0 +1,16 @@
+.F....................                                                   [100%]
+=================================== FAILURES ===================================
+_______ test_edges_are_deterministic_and_invalid_inputs_not_extrapolated _______
+
+    def test_edges_are_deterministic_and_invalid_inputs_not_extrapolated():
+        for vertices in biomes.polygons().values():
+            got = biomes.classify(vertices[:,0], vertices[:,1])
+>           assert np.all((got >= 1) & (got <= 9))
+E           assert np.False_
+E            +  where np.False_ = <function all at 0x7f4f30d6a570>((array([5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,\n       5, 5, 5, 5, 6, 0, 6, 5, 5, 5, 5, 5, 5,...,\n       1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,\n       5, 5, 5, 5, 5, 5, 5, 5], dtype=uint8) >= 1 & array([5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,\n       5, 5, 5, 5, 6, 0, 6, 5, 5, 5, 5, 5, 5,...,\n       1, 1, 1, 1, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,\n       5, 5, 5, 5, 5, 5, 5, 5], dtype=uint8) <= 9))
+E            +    where <function all at 0x7f4f30d6a570> = np.all
+
+tests/test_biomes.py:16: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_biomes.py::test_edges_are_deterministic_and_invalid_inputs_not_extrapolated
+1 failed, 21 passed in 10.70s

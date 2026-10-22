@@ -20,7 +20,8 @@ class TemperatureSolution:
     stages: list
 
 
-def iterate_temperature(solve, initial, max_iter, relaxation, retries=0, tolerance=.05,on_retry=None):
+def iterate_temperature(solve, initial, max_iter, relaxation, retries=0, tolerance=.05,on_retry=None,
+                        acceleration=False):
     """Continue failed steps with half damping and twice the stage cap.
 
     solve(state, first_iteration) must recompute winds and solve temperature.
@@ -39,6 +40,8 @@ def iterate_temperature(solve, initial, max_iter, relaxation, retries=0, toleran
             on_retry(dict(stage=stage+1,relaxation=fraction,cap=cap,
                           previous_update_c=stages[-1]['final_update_c']))
         history=[]
+        states=[]
+        residuals=[]
         done=False
         for it in range(cap):
             solved=solve(state,total==0)
@@ -49,11 +52,31 @@ def iterate_temperature(solve, initial, max_iter, relaxation, retries=0, toleran
             total+=1
             history.append(maximum)
             done=total>1 and maximum<tolerance
+            if acceleration and stage and not done:
+                # Type-II Anderson mixing of the last five actual operator
+                # residuals. It changes the path, never the stopping tolerance.
+                residual=solved-state
+                states.append(np.asarray(state, float).copy())
+                residuals.append(residual.copy())
+                states, residuals=states[-6:], residuals[-6:]
+                if len(states)>1:
+                    dx=np.column_stack([(b-a).ravel() for a,b in zip(states,states[1:])])
+                    df=np.column_stack([(b-a).ravel() for a,b in zip(residuals,residuals[1:])])
+                    try:
+                        coefficients=np.linalg.lstsq(df,residual.ravel(),rcond=1e-10)[0]
+                        proposal=state+fraction*residual-((dx+fraction*df)@coefficients).reshape(state.shape)
+                        if np.isfinite(proposal).all() and np.max(np.abs(proposal-state))<=max(10.,50*maximum):
+                            next_state=proposal
+                        else:
+                            states, residuals=[],[]
+                    except np.linalg.LinAlgError:
+                        states, residuals=[],[]
             state=solved if done else next_state
             if done:
                 break
         stages.append(dict(relaxation=fraction,cap=cap,iterations=it+1,
-                           converged=done,final_update_c=maximum,update_history_c=history))
+                           converged=done,final_update_c=maximum,update_history_c=history,
+                           method='anderson' if acceleration and stage else 'damped'))
         if done:
             break
     return TemperatureSolution(solved,update,total,done,stages)

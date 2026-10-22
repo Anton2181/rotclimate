@@ -1,25 +1,42 @@
 {
- "params": "calibration/earth/earthfit_world_r16.json",
+ "params": "calibration/autonomous_20261021/earth_fit/best_params.json",
  "downsample": 8,
+ "image_scale": 2,
  "seeds": [
   1,
   2,
   3
  ],
- "seconds": 1062,
- "strict_accuracy": 0.24903312594585506,
- "zonefit": 0.1792201793925075,
+ "seconds": 2562,
+ "strict_accuracy": 0.187993946527661,
+ "zonefit": 0.15972354441909908,
  "recall": {
-  "cold_wet": 0.7830626450116009,
-  "cold_dry": 0.047522750252780584,
-  "warm_wet": 0.2770151355156635,
-  "med": 0.32197728790915164,
+  "cold_wet": 0.7819025522041764,
+  "cold_dry": 0.03538928210313448,
+  "warm_wet": 0.15698697641675466,
+  "med": 0.19706078824315298,
   "swamp": 0.0,
-  "tree": 0.291932059447983,
-  "hot_dry": 0.16372549019607843
+  "tree": 0.23885350318471338,
+  "hot_dry": 0.22647058823529412
  },
  "mediterranean": {
-  "dry_share": 0.12224448897795591,
-  "cs_share": 0.3303273213092852
+  "dry_share": 0.17635270541082165,
+  "cs_share": 0.21910487641950568
+ },
+ "numerics": {
+  "downsample": 8,
+  "steps_per_year": 25,
+  "picard_iters": 256,
+  "t_iters": 192,
+  "t_relaxation": 0.25,
+  "transport_scheme": "upwind",
+  "t_adaptive_retries": 2,
+  "t_require_convergence": true,
+  "moisture_relaxation": 0.25,
+  "moisture_residual_tol": 0.01,
+  "moisture_require_convergence": true,
+  "solver_rtol": 1e-06,
+  "solver_max_iter": 2000,
+  "solver_require_convergence": false
  }
 }

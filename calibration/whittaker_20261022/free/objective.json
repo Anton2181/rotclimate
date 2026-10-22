@@ -1,0 +1,88 @@
+{
+  "mode": "whittaker",
+  "profile": "strict",
+  "specification": {
+    "version": 1,
+    "status": "experimental interpretation of painted labels; not observed biome ground truth",
+    "profiles": {
+      "strict": {
+        "cold_wet": [
+          7
+        ],
+        "cold_dry": [
+          8
+        ],
+        "warm_wet": [
+          3
+        ],
+        "med": [
+          5
+        ],
+        "swamp": [
+          4
+        ],
+        "tree": [
+          1
+        ],
+        "hot_dry": [
+          2
+        ]
+      },
+      "broad": {
+        "cold_wet": [
+          3,
+          7,
+          9
+        ],
+        "cold_dry": [
+          8
+        ],
+        "warm_wet": [
+          3,
+          9
+        ],
+        "med": [
+          5
+        ],
+        "swamp": [
+          1,
+          4
+        ],
+        "tree": [
+          1,
+          9
+        ],
+        "hot_dry": [
+          2
+        ]
+      }
+    },
+    "distance_scales": {
+      "temperature_C": 5.0,
+      "precipitation_mm": 500.0
+    },
+    "objective": "Equal weight per painted zone; half mean categorical match, half mean exp(-distance_squared/2) to the allowed polygons. Distance is zero inside an allowed envelope; axes scaled by 5 C and 500 mm/year. No seasonal or terrain factors enter this experimental objective.",
+    "limitations": [
+      "Cold winters do not uniquely imply low mean annual temperature or boreal vegetation.",
+      "Woodland/shrubland does not establish Mediterranean summer drought.",
+      "Tropical rainforest does not establish swamp hydrology; seasonal forests can also contain wetlands.",
+      "The tropical seasonal forest/savanna envelope combines forest and grass-dominated vegetation.",
+      "The broad profile has overlapping target sets, so it separates the painted categories less strongly.",
+      "Changing this file changes the calibration hypothesis; preserve its hash with each run."
+    ]
+  },
+  "biome_labels": [
+    "Outside diagram",
+    "Tropical seasonal forest / savanna",
+    "Subtropical desert",
+    "Temperate rainforest",
+    "Tropical rainforest",
+    "Woodland / shrubland",
+    "Tundra",
+    "Boreal forest",
+    "Temperate grassland / desert",
+    "Temperate seasonal forest"
+  ],
+  "csv_sha256": "8717907b4c26b4d3dfcf1c4f63da607ca03899473d759a0bbd7ff5778b1d3560",
+  "scoring_sha256": "41e6bae8a9f70e7fee92caa0a019d32b849190c2be670d7c53c544eeff966532"
+}

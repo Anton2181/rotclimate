@@ -129,9 +129,9 @@ def cmd_render(a):
 def numerical_settings(p):
     return {k: getattr(p, k) for k in (
         "downsample", "steps_per_year", "picard_iters", "t_iters", "t_relaxation", "transport_scheme",
-        "t_adaptive_retries", "t_require_convergence",
+        "t_adaptive_retries", "t_anderson", "t_require_convergence",
         "moisture_relaxation", "moisture_residual_tol", "moisture_require_convergence",
-        "solver_rtol", "solver_max_iter", "solver_require_convergence")}
+        "solver_rtol", "solver_max_iter", "solver_require_convergence", "solver_recover")}
 
 
 def add_render_numerics(parser):

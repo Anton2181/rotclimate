@@ -1,0 +1,33 @@
+Simulating climate...
+/workspace/rotclimate/rotclimate/model.py:722: RuntimeWarning: Linear solve failed its update tolerance after 2000 sweeps (rtol=1e-06)
+  return self.solver.solve(u, v, p.heat_diffusion, lam + eh,
+  week 10/33  week 20/33  week 30/33  week 33/33  simulated 25 steps on 266x400 cells in 2096s
+Saved simulation checkpoint
+Waiting for atlas export memory slot...
+Rendering atlas layers and station data...
+/workspace/rotclimate/rotclimate/atlas.py:180: RuntimeWarning: Mean of empty slice
+  D = np.nanmean(grid_dtr12(result), axis=0)
+Rendering seasonal animations...
+{
+ "params": "/workspace/rotclimate/calibration/autonomous_20261021/free_polish/best_params.json",
+ "downsample": 8,
+ "image_scale": 2,
+ "seeds": null,
+ "seconds": 2775,
+ "strict_accuracy": 0.5910543130990416,
+ "zonefit": 0.5330535863713907,
+ "recall": {
+  "cold_wet": 0.7006960556844548,
+  "cold_dry": 0.6061678463094035,
+  "warm_wet": 0.5747976064765927,
+  "med": 0.6382765531062125,
+  "swamp": 0.47653142402545745,
+  "tree": 0.5923566878980892,
+  "hot_dry": 0.515686274509804
+ },
+ "mediterranean": {
+  "dry_share": 0.11990647962591851,
+  "cs_share": 0.7618570474281897
+ }
+}
+atlas written to /workspace/rotclimate/atlases/free_fit_next

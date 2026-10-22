@@ -172,6 +172,7 @@ class Result:
     snow: np.ndarray        # snow water equivalent (mm)
     E: np.ndarray           # evaporation (mm / day)
     moisture_budget: dict | None = None  # optional cropped diagnostic terms [nt, map_y, map_x]
+    numerics: dict | None = None         # observed solver/temperature/moisture status, including spinup
 
     @property
     def nt(self):
@@ -202,6 +203,7 @@ class ClimateModel:
         self.solver.rtol = params.solver_rtol
         self.solver.max_iter = params.solver_max_iter
         self.solver.require_convergence = params.solver_require_convergence
+        self.solver.recover = params.solver_recover
         self._static_fields()
 
     # ------------------------------------------------------------------ static
@@ -725,7 +727,7 @@ class ClimateModel:
                     return self.solver.solve(u, v, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
             retry_callback=(lambda info:temperature_retry(dict(seasonal_step=n+1,day=float(d),**info))) if temperature_retry else None
             temperature=iterate_temperature(solve_temperature,T_ref,p.t_iters,p.t_relaxation,p.t_adaptive_retries,
-                                            on_retry=retry_callback)
+                                            on_retry=retry_callback, acceleration=p.t_anderson)
             Tsl,update=temperature.temperature,temperature.update
             update_max=float(update.max())
             self.t_iterations.append(temperature.iterations)
@@ -769,13 +771,16 @@ class ClimateModel:
             # which is smoother than the surface (boundary-layer) temperature
             T_col = (0.4 * np.where(land, Tsl, SST)
                      + 0.6 * gauss(Tsl, self.col_sigma))
+            # Keep historical fits reproducible. The optional consistent
+            # column profile must be tested against Earth before promotion.
+            column_lapse = lapse if p.seasonal_column_lapse else p.lapse_rate
             if p.eddy_rate > 0:      # physics v3
                 # the column over high ground is colder (lapse rate) but the
                 # low-level moisture that cannot climb is diverted around the
                 # mountain rather than squeezed out: compare like with like
-                Ws = w_sat(T_col - 0.5 * p.lapse_rate * h_km)
+                Ws = w_sat(T_col - 0.5 * column_lapse * h_km)
             else:
-                Ws = w_sat(T_col - p.lapse_rate * h_km) * np.exp(-h_km / 6.0)
+                Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
             W_ocean = p.ocean_rh * w_sat(SST)
             if uM is None:
                 div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
@@ -897,7 +902,7 @@ class ClimateModel:
                 # crest's saturation, the rest rains out on the windward side.
                 # The single Gaussian let moisture tunnel through the Sierra
                 # Nevada (Reno 416 mm a year against 241 observed).
-                crest = w_sat(T_col - p.lapse_rate * h_km) / p.eddy_rainout
+                crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
                 n_steps = EDDY_RAINOUT_STEPS
 
                 def mix(water, crest=crest, n_steps=n_steps):
@@ -958,7 +963,20 @@ class ClimateModel:
                 progress(n + 1, len(order))
 
         snow = snowpack(out["T"], out["P"], p.year_days / nt)
-        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, **out)
+        methods=getattr(self.solver,'methods',[])
+        numerics=dict(linear_solves=len(self.solver.converged),
+                      linear_unconverged=sum(not v for v in self.solver.converged),
+                      linear_methods={m:methods.count(m) for m in sorted(set(methods))},
+                      temperature_steps=len(self.t_converged),
+                      temperature_unconverged=sum(not v for v in self.t_converged),
+                      temperature_max_update_c=max(self.t_update_max),
+                      accelerated_stages=sum(s.get('method')=='anderson' for stages in self.t_stages for s in stages),
+                      moisture_checked=all(v is not None for v in self.moisture_converged),
+                      moisture_unconverged=sum(v is False for v in self.moisture_converged))
+        numerics['all_checks_passed']=(numerics['linear_unconverged']==0 and
+                                      numerics['temperature_unconverged']==0 and numerics['moisture_checked'] and
+                                      numerics['moisture_unconverged']==0)
+        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, **out)
 
 
 def _run_one(params):
@@ -980,7 +998,9 @@ def run_ensemble(params: Params, seeds, workers: int = 1) -> Result:
         runs = [_run_one(q) for q in plist]
     keys = ("T", "Tsl", "P", "W", "u", "v", "E", "snow")
     mean = {k: np.mean([getattr(r, k) for r in runs], axis=0).astype(np.float32) for k in keys}
-    return Result(params=runs[0].params, grid=runs[0].grid, days=runs[0].days, **mean)
+    members=[r.numerics for r in runs]
+    numerics=dict(members=members,all_checks_passed=all(m and m['all_checks_passed'] for m in members))
+    return Result(params=runs[0].params, grid=runs[0].grid, days=runs[0].days, numerics=numerics, **mean)
 
 
 def snowpack(T, P, step_days, years=3):

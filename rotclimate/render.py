@@ -20,6 +20,7 @@ from matplotlib.patches import Patch  # noqa: E402
 from PIL import Image  # noqa: E402
 from scipy import ndimage as ndi  # noqa: E402
 
+from .climate_fields import lapse_at_days
 from . import calendar as cal  # noqa: E402
 from .geography import (TARGET_CLASSES, TARGET_DRAW_COLORS, TARGET_LABELS,  # noqa: E402
                         elevation_fullres, load_places, source_layers, target_fullres)
@@ -62,15 +63,19 @@ class FullRes:
         lnd = ndi.map_coordinates(self.coarse_fill(a), [self.cy, self.cx], order=1, mode="nearest")
         return np.where(self.land, lnd, sea)
 
-    def temperature(self, Tsl):
-        return np.where(self.land, self.up(Tsl) - self._lapse * self.elev / 1000.0,
+    def temperature(self, Tsl, days=None, lapse=None):
+        if lapse is None:
+            lapse = self._lapse if days is None else lapse_at_days(self.r.params, days).mean()
+        return np.where(self.land, self.up(Tsl) - lapse * self.elev / 1000.0,
                         self.up(Tsl, land_fill=False))
 
     def monthly(self):
         r = self.r
         st = monthly_stats(r.Tsl, r.P, r.days, r.params.year_days,
                            summer_solstice=r.params.winter_solstice_day + r.params.year_days / 2)
-        Tm = np.stack([self.temperature(t) for t in st["Tm"]])
+        from .koppen import monthly_weights
+        rates = monthly_weights(r.days, r.params.year_days) @ lapse_at_days(r.params, r.days)
+        Tm = np.stack([self.temperature(t, lapse=l) for t, l in zip(st["Tm"], rates)])
         Pm = np.stack([np.maximum(self.up(p), 0) for p in st["Pm"]])
         return Tm, Pm, st["summer"]
 
@@ -342,7 +347,7 @@ def growing_rgb(fr: FullRes, k: int) -> np.ndarray:
     mm is under twice its temperature in °C; rain smoothed over three steps,
     as the soil holds water), green where both allow growth, white under snow."""
     r = fr.r
-    T = fr.temperature(r.Tsl[k])
+    T = fr.temperature(r.Tsl[k], days=r.days[k])
     P = np.maximum(fr.up(r.P[[(k - 1) % r.nt, k, (k + 1) % r.nt]].mean(0)), 0) * 30.0     # mm per 30 days
     warm = np.clip((T - 2.0) / 8.0, 0, 1)[..., None]
     wet = np.clip((P / np.maximum(2.0 * T, 10.0) - 0.6) / 0.8, 0, 1)[..., None]
@@ -377,7 +382,7 @@ def season_gif(fr: FullRes, path, var="T", stride=1, scale=0.42, ms=110):
         fig = plt.figure(figsize=(W * scale / 100, map_h + hdr), dpi=100)
         ax = fig.add_axes([0, 0, 1, mf])
         if var == "T":
-            f = fr.temperature(r.Tsl[k])
+            f = fr.temperature(r.Tsl[k], days=r.days[k])
             ax.imshow(f, cmap=cmap, vmin=vmin, vmax=vmax)
             sea = np.zeros((H, W, 4))
             sea[~fr.land] = (1, 1, 1, 0.35)
@@ -479,7 +484,7 @@ def climograph_panel(ax, fr: FullRes, x, y, name):
     if not g.land[iy, ix]:
         (iy, ix) = (fr._fill[0][iy, ix], fr._fill[1][iy, ix])
     elev = fr.elev[int(y), int(x)]
-    T = r.Tsl[:, iy, ix] - r.params.lapse_rate * elev / 1000.0
+    T = r.Tsl[:, iy, ix] - lapse_at_days(r.params, r.days) * elev / 1000.0
     P = r.P[:, iy, ix]
     groups = cal.month_slices(r.nt)
     Tm = np.array([T[gi].mean() for gi in groups])
@@ -563,7 +568,7 @@ def monthly_atlas(fr: FullRes, path, var="T"):
     for ax, (i, gi) in zip(axs.flat, enumerate(groups)):
         name = (cal.MONTHS + [cal.HOLY])[i]
         if var == "T":
-            f = fr.temperature(r.Tsl[gi].mean(0))
+            f = fr.temperature(r.Tsl[gi].mean(0), days=r.days[gi])
         else:
             f = np.maximum(fr.up(r.P[gi].mean(0)), 0) * 35.0
         ax.imshow(np.ma.masked_where(~fr.land, f), cmap=cmap, vmin=vmin, vmax=vmax)
