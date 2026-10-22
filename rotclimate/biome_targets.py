@@ -93,3 +93,53 @@ def average(rows):
                    for k in ('score', 'macro_hard', 'macro_soft', 'outside_share')},
                 per_zone={k: {m: float(np.mean([r['per_zone'][k][m] for r in rows]))
                               for m in ('hard', 'soft')} for k in sorted(keys)})
+
+
+@lru_cache(maxsize=1)
+def coverage_policy():
+    policy = json.loads((DATA / 'whittaker_coverage.json').read_text())
+    if not 0 <= policy['outside_allowance'] < 1:
+        raise ValueError('Outside allowance must be a fraction below one')
+    if any(not np.isfinite(policy[k]) or policy[k] <= 0
+           for k in ['outside_weight','distance_weight','distance_cap']):
+        raise ValueError('Coverage weights and distance cap must be finite and positive')
+    return policy
+
+
+def coverage(temperature, precipitation, land):
+    """Coverage of all rendered land, including unpainted terrain; never relabel it."""
+    t,p = np.broadcast_arrays(np.asarray(temperature,float),np.asarray(precipitation,float))
+    land = np.broadcast_to(np.asarray(land,bool),t.shape)
+    n = int(land.sum())
+    if not n:
+        raise ValueError('No land cells available for diagram coverage')
+    codes = biomes.classify(t,p,land)
+    outside = land & (codes == 0)
+    distance = envelope_distance(t[outside],p[outside],range(1,10))
+    debt = float(np.sum(np.minimum(distance,coverage_policy()['distance_cap'])**2)/n)
+    return dict(outside_share=float(outside.sum()/n),distance_debt=debt,
+                outside_cells=int(outside.sum()),land_cells=n)
+
+
+def rendered_coverage(result):
+    """Exact annual source-terrain coverage without allocating twelve full maps.
+
+    Annual averaging commutes with linear interpolation and the lapse correction.
+    Model precipitation is nonnegative; this matches FullRes.monthly's clip.
+    """
+    from .render import FullRes
+    from .climate_fields import lapse_at_days
+    from .koppen import monthly_weights
+    fr = FullRes(result)
+    weights = monthly_weights(result.days,result.params.year_days).mean(0)
+    from .numerics import matrix_product
+    mean = lambda a: matrix_product(weights[None,:],np.asarray(a).reshape(len(weights),-1)).reshape(a.shape[1:])
+    t = fr.up(mean(result.Tsl))-float(np.sum(weights*lapse_at_days(result.params,result.days)))*fr.elev/1000
+    p = np.maximum(fr.up(mean(result.P))*result.params.year_days,0)
+    return dict(coverage(t,p,fr.land),scope='source_land_pixels')
+
+
+def covered_score(strict_score, measures):
+    policy = coverage_policy()
+    return (strict_score-policy['outside_weight']*max(measures['outside_share']-policy['outside_allowance'],0)
+            -policy['distance_weight']*measures['distance_debt'])

@@ -1,0 +1,18 @@
+{
+  "status": "passed",
+  "tests": 25,
+  "seconds": 1.72,
+  "command": ".venv/bin/python -m pytest -q tests/test_whittaker_coverage.py tests/test_biome_targets.py tests/test_biomes.py tests/test_calibration.py",
+  "baseline_source_outside_share": 0.08521488420526234,
+  "policy": {
+    "version": 1,
+    "outside_allowance": 0.01,
+    "outside_weight": 2.0,
+    "distance_weight": 0.1,
+    "distance_cap": 4.0,
+    "publication_outside_limit": 0.02,
+    "publication_minimum_strict_score": 0.46,
+    "interpretation": "Scenario-selection preference for the Whittaker fit, not a physical law. Penalize outside land on the full source terrain, including unpainted cells. Keep the original envelopes and classifier unchanged.",
+    "objective": "Strict target-to-biome score minus 2*max(source-land outside share - 0.01, 0) minus 0.1*mean_land(min(scaled envelope distance,4)^2). Distance uses the existing 5 C / 500 mm axis scales. Invalid land climates receive the maximum distance debt."
+  }
+}

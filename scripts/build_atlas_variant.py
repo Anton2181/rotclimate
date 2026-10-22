@@ -41,7 +41,7 @@ def write_provenance(data: Path, identity: dict, image_scale: int):
                ('atlas.py', 'render.py', 'biomes.py', 'biome_targets.py', 'climate_fields.py')]
     sources += [ROOT / 'data' / name for name in
                 ('whittaker_biomes.csv', 'whittaker_sources.json', 'WHITTAKER_LICENSE.txt',
-                 'biome_target_crosswalk.json')]
+                 'biome_target_crosswalk.json', 'whittaker_coverage.json')]
     provenance = dict(simulation=identity, image_scale=image_scale,
                       export_sources={str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest()
                                       for f in sources},
@@ -81,7 +81,7 @@ def main():
     ap.add_argument("--note", default="")
     ap.add_argument("--downsample", type=int, default=8)
     ap.add_argument("--set", default='{}', help='explicit overrides; saved numerical requirements are preserved')
-    ap.add_argument('--fit-objective', choices=['zonefit','whittaker','whittaker-broad'], default='zonefit')
+    ap.add_argument('--fit-objective', choices=['zonefit','whittaker','whittaker-broad','whittaker-covered'], default='zonefit')
     ap.add_argument('--require-verified', action='store_true', help='refuse exports without successful observed convergence checks')
     ap.add_argument("--no-gif", action="store_true")
     ap.add_argument("--seeds", default="", help="comma list of surroundings layouts to average (ensemble climate)")
@@ -142,6 +142,10 @@ def main():
                     for profile in ['strict','broad']}
     profile = 'broad' if a.fit_objective=='whittaker-broad' else 'strict'
     fit_score = objective(ev,'zonefit') if a.fit_objective=='zonefit' else biome_scores[profile]['score']
+    coverage = None
+    if a.fit_objective == 'whittaker-covered':
+        coverage = biome_targets.rendered_coverage(r)
+        fit_score = biome_targets.covered_score(fit_score,coverage)
     # High-resolution monthly fields are large. Concurrent branches may
     # simulate independently, but only one export should allocate them at once.
     import fcntl
@@ -208,6 +212,10 @@ def main():
     summary['fit_objective'] = a.fit_objective
     summary['fit_score'] = fit_score
     summary['whittaker'] = biome_scores
+    if coverage is not None:
+        summary['whittaker_coverage'] = coverage
+        summary['coverage_policy'] = biome_targets.coverage_policy()
+        shutil.copy(ROOT/'data/whittaker_coverage.json',data/'whittaker_coverage.json')
     write_provenance(data, identity, a.image_scale)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
     # These products use the exported climate packet, with no new simulation.
