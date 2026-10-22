@@ -7,6 +7,15 @@ The bounded searches completed all 59 candidates. Earth r29 physical constants
 remain fixed. Read the [three-fit report](reports/THREE_FIT_20261022.md) for the
 score definitions, tradeoffs and numerical evidence.
 
+The latest Whittaker refinement reduces land outside the original biome diagram
+from **8.52% to 1.21%**, with unchanged terrain, envelopes and classifier. Its
+strict biome score changes from 0.5169 to 0.5092; exact biome agreement remains
+about 35.3%. The native three-layout climate, farming, population and animation
+assets are regenerated with required convergence checks. Free and Earth fits
+are unchanged. See the [before/after comparison](output/whittaker_coverage_20261022/coverage_comparison.png)
+and [iteration report](reports/ITERATION_20261022.md) for coverage checks and
+the seasonal-score tradeoff.
+
 The Harvest features are integrated into every atlas: farming, crop choices,
 grazing, irrigation, productivity, malaria potential, place cards, provinces,
 campaign-sheet comparisons and CSV downloads. Overview adds a combined

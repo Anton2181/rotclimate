@@ -19,7 +19,7 @@ def main():
     for i,(root,label) in enumerate(zip(roots,labels)):
         axes[0,i].imshow(Image.open(root/'data/whittaker.webp'));axes[0,i].set_axis_off()
         axes[0,i].set_title(f'{label}\n{outside[i]:.2f}% of source land outside the unchanged diagram',loc='left',fontsize=12)
-    ax=axes[1,0];bars=ax.barh(['Original','Coverage fit'],outside,color=['#a6a8a8','#32786b']);ax.invert_yaxis()
+    ax=axes[1,0];bars=ax.barh(['Original','Refined'],outside,color=['#a6a8a8','#32786b']);ax.invert_yaxis()
     ax.set(xlabel='Source land outside diagram (%)',xlim=(0,max(outside)*1.17));ax.spines[['top','right']].set_visible(False)
     for bar,value in zip(bars,outside):ax.text(value+.12,bar.get_y()+bar.get_height()/2,f'{value:.2f}%',va='center')
     rows=[['Strict biome objective']+[f'{s["whittaker"]["strict"]["score"]:.4f}' for s in summaries],

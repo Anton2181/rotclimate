@@ -1,5 +1,10 @@
 # Harvest, settlement and population in the climate atlases
 
+This records the original Harvest integration and its original climate inputs.
+The later Whittaker-coverage refinement regenerates its farming and population
+outputs using the same Harvest assumptions; see
+[the iteration report](ITERATION_20261022.md) for the updated results.
+
 Harvest farming, ecology and campaign-sheet features are now integrated into
 the normal free-fit, Earth-fit and separate Whittaker-fit atlases, alongside
 combined settlement potential and population-density scenarios. The map selector

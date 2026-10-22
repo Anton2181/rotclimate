@@ -89,3 +89,75 @@ screen are captured at commit `03e7d56`. Native publication now has explicit
 `--max-outside` and `--minimum-biome-score` gates. The standalone verifier
 correctly rejects the old 8.52% atlas against a 2% limit. The comparison hub
 also shows actual source-land outside shares for all three fits.
+
+## Milestone 4: native diagram coverage with a small biome-score tradeoff
+
+The follow-up RH 0.75 / lapse 4.5 K/km candidate passes the unchanged native
+publication gates on the mean climate over layouts 1–3 at downsample 8.
+Only ocean-source humidity and lapse rate change from the original Whittaker
+fit. Terrain, elevation tiers, painted targets, all other physical parameters,
+envelopes and classifier are retained. Free and Earth atlas files are unchanged
+from the original publication (`9a0a456`).
+
+| Same native measure | Original Whittaker fit | Coverage fit |
+|---|---:|---:|
+| Source land outside diagram | 8.5215% | **1.2104%** |
+| Outside source pixels / 971,849 land pixels | 82,816 | **11,763** |
+| Strict biome objective | 0.516885 | 0.509173 |
+| Mean exact allowed-biome agreement | 35.3520% | 35.3130% |
+| Seasonal zone objective | 0.426672 | 0.387694 |
+| Exact seasonal-zone agreement | 52.2112% | 53.9600% |
+| Mediterranean Cs share | 82.1977% | 85.1035% |
+
+Outside area falls **85.80%**. The strict objective falls 0.00771 and exact
+allowed-biome agreement changes only −0.039 percentage points. The seasonal
+zone objective falls despite improved exact zone agreement: its continuous
+climate-rule rewards measure a different property. This fit prioritizes annual
+biomes and diagram coverage, rather than improving every seasonal measure.
+The covered objective is 0.502426; it should not be compared directly with
+the original strict objective, which omits the coverage penalty.
+
+The unchanged source terrain provides a direct area comparison. **71,053**
+formerly outside pixels now fall inside an envelope, mostly temperate rain,
+temperate seasonal and boreal forest. No previously covered pixel becomes
+outside in this pair of fits. The outside share below 500 m falls from 4.17%
+to 0.25%; above 1,500 m it falls from 57.89% to 11.73%. Residual grey land has
+a median elevation of 2,776 m. These are alternative simulated climates and
+potential biome classifications, not a vegetation-change forecast.
+
+The native layouts record **11,938** checked linear solves and **99** temperature
+steps including spinup, with zero failed linear, temperature or moisture
+certificates. Maximum reported temperature update is 0.04998°C, below the
+unchanged 0.05°C criterion. Ten capped SOR solves recover through plain
+Gauss–Seidel; no direct solve is needed. Full observed records are in
+`output/whittaker_coverage_20261022/native_metrics.json`; same-terrain area
+transitions and checkpoint hashes are in `field_diagnostics.json` alongside it.
+As with the screen, these are reused fitting layouts, not independent
+physical validation.
+
+The promoted Whittaker atlas regenerates every climate, farming, health and
+settlement layer, station series and seasonal animation from this climate.
+The c.200 AD Harvest assumptions are unchanged. Its mixed food ceiling changes
+from 291.5 M to 267.2 M; endemic-malaria population scenarios change from
+27.5 / 59.2 / 161.1 M to **25.4 / 54.6 / 148.7 M** for frontier / central /
+settled core. The central scenario without malaria changes from 63.8 M to
+58.4 M. These are scenario capacities rather than reconstructed censuses.
+
+Before promotion, export verification passes all 63 layer images, 11 climate
+and 26 Harvest binary fields, 152 named places, 38 provinces and 2,227 campaign
+hexes. All five seasonal animations decode with 25 frames. The native and
+separate surroundings simulations both pass observed convergence checks.
+Publication also verifies exact selected parameters and current source,
+map-input, export and Harvest hashes. The predecessor is preserved locally;
+the immutable original campaign artifacts and report tables are retained.
+
+Desktop and 390 px mobile browser checks pass for all three active atlases and
+the comparison hub, with zero page errors. They exercise biome and monthly
+maps, place lookup, population scenarios, province controls and restored links.
+A fresh Git-index checkout with `core.autocrlf=true` preserves all **253**
+scientific binary, JSON and image assets byte-for-byte and serves through the
+standard-library launcher. The same atlas and hub browser checks pass there.
+Evidence is under `browser/`, `fresh_browser/` and `fresh_checkout.json` in
+`output/whittaker_coverage_20261022/`.
+
+![Original and refined Whittaker fit](../output/whittaker_coverage_20261022/coverage_comparison.png)

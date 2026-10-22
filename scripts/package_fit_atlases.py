@@ -21,10 +21,12 @@ or start_atlases.bat (Windows), with Python 3 installed. Or run:
 The launcher opens your browser. Keep its terminal window open while browsing.
 
 The free and Earth fits optimize the seasonal target zones. The separate
-Whittaker fit optimizes the proposed strict target-to-biome crosswalk. All
+Whittaker fit optimizes the proposed strict target-to-biome crosswalk with
+an explicit penalty for land outside the original Whittaker diagram. All
 three classify the mean climate over surroundings layouts 1, 2 and 3.
 The report explains the scores, crosswalk assumptions and numerical checks.
 These are simulated potential climates, not observed vegetation maps.
+See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
 
 The Farming and Health and ecology topics bring Harvest analysis into each
 atlas. Overview includes settlement potential and expected density. Choose
@@ -43,6 +45,7 @@ def main():
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
+             ROOT/'data/whittaker_coverage.json',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
@@ -53,8 +56,10 @@ def main():
         if file.exists():
             files.append(file)
     coverage = ROOT/'output/whittaker_coverage_20261022'
-    for name in ['review.json','protocol.json','selected_params.json','publication_params.json','native_choice.json','publication.json','coverage_comparison.png',
-                 'atlas_validation.json','browser/browser_checks.json']:
+    for name in ['review.json','protocol.json','selected_params.json','publication_params.json','native_choice.json','native_metrics.json','publication.json','coverage_comparison.png',
+                 'atlas_validation.json','field_diagnostics.json','fresh_checkout.json',
+                 'browser/browser_checks.json','browser/hub_checks.json',
+                 'fresh_browser/browser_checks.json','fresh_browser/hub_checks.json']:
         if (coverage/name).is_file():files.append(coverage/name)
     files += sorted((ROOT/'calibration/three_fit_20261022').glob('**/*.json'))
     summaries = {}
