@@ -20,7 +20,8 @@ def main():
         'atlases/' if (root/'atlases/index.html').exists() else 'atlases/free_fit/')
     if not (root/path/'index.html').exists():
         ap.error('That atlas has not been built yet.')
-    names = [args.atlas] if args.atlas else (['free_fit', 'earth_fit', 'whittaker_fit']
+    names = [args.atlas] if args.atlas else ([name for name in ['free_fit', 'earth_fit', 'whittaker_fit']
+            if (root/'atlases'/name/'index.html').exists()]
             if path == 'atlases/' else ['free_fit'])
     missing = [name for name in names if not all((root/'atlases'/name/'data'/file).exists()
                for file in ['atlas.json', 'atlas.bin'])]

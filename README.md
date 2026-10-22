@@ -43,6 +43,9 @@ open while browsing. With Python 3 installed, you can also double-click
 `start_atlases.command` on macOS or `start_atlases.bat` on Windows. Opening
 `index.html` directly through `file://` cannot reliably load the separate data
 files. The launcher also works in the extracted portable atlas bundle.
+The completed free-fit and Earth-fit data folders are included in Git, so a
+fresh clone can run the viewer without installing the simulator or building
+its climate data. Pending atlas builds remain separate until checked.
 
 The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) and
