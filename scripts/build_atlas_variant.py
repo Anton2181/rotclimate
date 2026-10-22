@@ -187,6 +187,7 @@ def main():
     src = (ROOT / "atlas" / "index.html").read_text()
     (out / "index.html").write_text(page(src, a.title, a.eyebrow, a.lede, a.note))
     shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
+    shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
     p.to_json(out / "params.json")
     codes = __import__("rotclimate.koppen", fromlist=["CODES"]).CODES
     import numpy as np
@@ -209,6 +210,10 @@ def main():
     summary['whittaker'] = biome_scores
     write_provenance(data, identity, a.image_scale)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
+    # These products use the exported climate packet, with no new simulation.
+    # The existing export lock also bounds the farming analysis's memory use.
+    from harvest.export import export as export_harvest
+    export_harvest(out)
     print(json.dumps(summary, indent=1))
     print("atlas written to", out)
     export_lock.close()

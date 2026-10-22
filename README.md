@@ -1,51 +1,44 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-**In progress (22 October 2026):** a new parallel campaign is updating free fit,
-Earth fit and a separate Whittaker-fit atlas with required numerical convergence
-and the same three surroundings layouts. The free and Earth searches are
-complete; full-resolution atlas builds and the Whittaker search are still
-running. See the [three-fit report](reports/THREE_FIT_20261022.md) for the current
-snapshot and continuation commands. The active atlas files below remain the
-last completed builds until the new exports pass review.
+**Updated 22 October 2026:** the [comparison hub](atlases/index.html) now includes
+complete free-fit, Earth-fit and separate Whittaker-fit atlases, using the same
+three surroundings layouts and required recorded numerical convergence checks.
+The bounded searches completed all 59 candidates. Earth r29 physical constants
+remain fixed. Read the [three-fit report](reports/THREE_FIT_20261022.md) for the
+score definitions, tradeoffs and numerical evidence.
 
-**Last completed atlas update (22 October 2026):** seasonal mountain-temperature exports
-now agree with the model, and both atlas builds include Whittaker potential
-biomes, climate diagrams, biome shares and station labels. The local free-fit
-refinement improves its final-grid painted-zone score from 0.5292 to 0.5331
-(strict agreement 59.1%). Earth r29 remains the physics reference: none of eight
-screened changes improved every regional group. The Earth-fit calibration holds
-that physics fixed and averages three layouts of the unknown surroundings,
-improving its final-grid objective from 0.1532 to 0.1597 against the same r29
-starting world (exact agreement falls from 19.6% to 18.8%).
-Read the [campaign report](reports/CONTINUE_20261022.md) for selection, scores,
-checks and numerical limits; [biome methods](docs/BIOMES.md) explain the new maps.
+The Harvest features are integrated into every atlas: farming, crop choices,
+grazing, irrigation, productivity, malaria potential, place cards, provinces,
+campaign-sheet comparisons and CSV downloads. Overview adds a combined
+settlement-potential index and expected population density for low-input
+technology around 200 AD. Choose frontier, central or settled-core occupation
+and environmental malaria or no malaria penalty. These are explicit scenarios,
+not reconstructed censuses or a validated demographic forecast. The
+[Harvest method](reports/HARVEST_MIGRATION_20261022.md) documents FAO crop-water,
+Mordecai malaria and other published components alongside the assumed coefficients.
 
-An [experimental Whittaker-target calibration](reports/WHITTAKER_TARGETS_20261022.md)
-maps the painted zones to annual-climate biome envelopes. Its 49-candidate pilot
-raises finer-grid biome agreement from 28.5% to 37.4%, while losing original
-zone agreement and Mediterranean seasonality. It remains separate from the
-active atlas fits. Use `--objective whittaker` or `whittaker-broad` to test the
-explicit crosswalk; the report records numerical failures and mapping ambiguity.
+The map selector shows one of eight topics at a time. The free and Earth fits
+have 35 layers; Whittaker has 37, including proposed biome targets and match.
+All retain monthly climate maps, seasonal animations, potential biome diagrams,
+climate analogues and 152 named places. The strict biome crosswalk is an
+alternative hypothesis; annual biomes do not guarantee Mediterranean summer
+drought or swamp hydrology. See the [original crosswalk pilot](reports/WHITTAKER_TARGETS_20261022.md)
+and [biome methods](docs/BIOMES.md).
 
-The current repository atlases are [free fit](atlases/free_fit/index.html) and
-[Earth fit](atlases/earth_fit/index.html). Both use 25 seasonal steps and 22 map
-layers, including monthly temperature and rain, five seasonal animations,
-the invented surroundings, and 152 named places' climate as CSV.
-Some linear solves reached their iteration limit, so scores remain provisional.
-Serve the repository over HTTP to use the interactive pages:
+To browse, run:
 
 ```sh
 python3 scripts/serve_atlases.py
 ```
 
-This opens your browser and serves the atlas data locally. Keep the terminal
-open while browsing. With Python 3 installed, you can also double-click
-`start_atlases.command` on macOS or `start_atlases.bat` on Windows. Opening
-`index.html` directly through `file://` cannot reliably load the separate data
-files. The launcher also works in the extracted portable atlas bundle.
-The completed free-fit and Earth-fit data folders are included in Git, so a
-fresh clone can run the viewer without installing the simulator or building
-its climate data. Pending atlas builds remain separate until checked.
+With Python 3 installed, you can also double-click `start_atlases.bat` on Windows
+or `start_atlases.command` on macOS. Keep the terminal open while browsing.
+The launcher needs only Python's standard library. All three complete atlas
+data folders are committed, so a fresh clone works without installing or running
+the simulator. Opening `index.html` directly through `file://` cannot reliably
+load the data. The extracted portable bundle uses the same launchers.
+Share the atlas URL to preserve the selected layer and population scenarios;
+switching fits also carries those choices across.
 
 The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) and

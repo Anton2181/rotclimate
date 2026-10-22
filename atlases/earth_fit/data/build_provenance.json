@@ -1,9 +1,9 @@
 {
   "simulation": {
     "params": {
-      "lat_center": 38.6005606757585,
-      "north_bearing": -20.076718544793465,
-      "tilt": 29.788783958660883,
+      "lat_center": 37.949912213280044,
+      "north_bearing": -15.13630778010841,
+      "tilt": 30.708221254128137,
       "retrograde": true,
       "eccentricity": 0.0167,
       "perihelion_after_solstice": 13.0,
@@ -13,22 +13,22 @@
       "map_height_mi": 1058.2,
       "tier_tops": [
         50,
-        835,
-        1136,
-        2548
+        834,
+        1138,
+        2619
       ],
       "lapse_rate": 4.4142078309475306,
       "lapse_seasonal": 0.15,
       "seasonal_column_lapse": false,
       "beyond_style": "procedural",
-      "beyond_north_land": 0.528023298762579,
-      "beyond_south_land": 0.7855939222810356,
-      "beyond_west_land": 0.23959417116667678,
-      "beyond_east_land": 0.6939939584152199,
-      "beyond_southeast_land": 0.4687218309095929,
-      "beyond_northeast_land": 0.04112304402917901,
-      "beyond_continuity_km": 731.5796824039104,
-      "beyond_relief_m": 11.163647041146783,
+      "beyond_north_land": 0.5218784838332069,
+      "beyond_south_land": 0.7797262902405816,
+      "beyond_west_land": 0.23141575283370677,
+      "beyond_east_land": 0.7027200079038486,
+      "beyond_southeast_land": 0.4425543052622135,
+      "beyond_northeast_land": 0.043549961655240096,
+      "beyond_continuity_km": 711.5218543971068,
+      "beyond_relief_m": 16.35527328768612,
       "beyond_seed": 1,
       "beyond_north": "extend",
       "beyond_south": "extend",
@@ -58,6 +58,7 @@
       "t_iters": 192,
       "t_relaxation": 0.25,
       "t_adaptive_retries": 2,
+      "t_anderson": true,
       "t_require_convergence": true,
       "hadley_edge": 33.590636492301385,
       "hadley_shift": 6.027970293264813,
@@ -148,7 +149,8 @@
       "transport_scheme": "upwind",
       "solver_rtol": 1e-06,
       "solver_max_iter": 2000,
-      "solver_require_convergence": false
+      "solver_require_convergence": true,
+      "solver_recover": true
     },
     "seeds": [
       1,
@@ -157,12 +159,12 @@
     ],
     "sources": {
       "__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
-      "__main__.py": "f4e81b7ea16fc1086940752ac4078782444096054f113a0f8b8006126444476d",
+      "__main__.py": "1ba5395e0b3e0bc12f7c8eb940ceded49704cf50ac36dd8f15ad0d890a26e7ff",
       "analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
       "astronomy.py": "9afdde35c8263b49de3abd91b9f7178a0df8d6d30207febd714884ec490137fc",
       "calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
-      "calibrate.py": "e53f376293a1d34641c0370aca99b2a08357654fb0a97b96c0270499d65b6be6",
-      "config.py": "0f11a66de86c48aea10e393e9d162ae546f4a66ea7589e36c59ebcfade88af3d",
+      "calibrate.py": "fcc9f74d0d4cc0e7d23dc9ae95441b45a7d6d7589a420e4afac52330237dc196",
+      "config.py": "155530e209eb2247964c79f1a1fe43b3a420927d100d5594cd9980ad3e1454f4",
       "diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
       "diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
       "earth.py": "d32882b46206f8dcc9e27849ce8f01bc2c1ff98ec2b11d9af60ac727961342ea",
@@ -171,13 +173,14 @@
       "geography.py": "301f9c846a9c163923d215e4bb6f67d3af192a6728ef431b1426df9377d5027b",
       "hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
       "koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
-      "model.py": "5c84f6b7fa9618e98c310e6d4ffbe2cddb1a6d93cf0eeba63df8aff644bea9ad",
+      "model.py": "2d708b37f8c552b1517063ae70be99e37f5325cbd6c20c2302000ec88ee9cfef",
       "moisture.py": "8a9d9c25ed39889ff6f6dc2b858cbe30bf85e198490aab4c46aab3ccd339b7ee",
       "numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
       "score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
-      "solver.py": "71f3b0d254b3cc313789f1a2a3fe8b6b96abec9be8ce7809cb99af06579a3da8",
-      "temperature.py": "a3f84a8451074edc66b336f298d51a6658d229ca28c6b4a6b23e3b4ba6b8f65f",
-      "transport.py": "705ae7f9f2e0ce3fd5283bbb18671a8cbdf7f31dc2e81803b1daf51128a32c94"
+      "solver.py": "4ddff764319ac59b1117110e59524562afa93bfe91b7f9b75356af673beec37b",
+      "temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+      "transport.py": "705ae7f9f2e0ce3fd5283bbb18671a8cbdf7f31dc2e81803b1daf51128a32c94",
+      "biome_targets.py": "41e6bae8a9f70e7fee92caa0a019d32b849190c2be670d7c53c544eeff966532"
     },
     "map_inputs": {
       "climate_target.png": "60389d13ceeaa9c6f2977264c3d39f6efaceeb5eeed29aeb5c19fcecafd4af15",
@@ -190,13 +193,15 @@
   },
   "image_scale": 2,
   "export_sources": {
-    "rotclimate/atlas.py": "7cfbfb0661628dc06b82ab018ec284e99a5d19822b4770e9fd44d24fe145e9ab",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
     "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
     "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/biome_targets.py": "41e6bae8a9f70e7fee92caa0a019d32b849190c2be670d7c53c544eeff966532",
     "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
     "data/whittaker_biomes.csv": "8717907b4c26b4d3dfcf1c4f63da607ca03899473d759a0bbd7ff5778b1d3560",
     "data/whittaker_sources.json": "d830695cba0fef42312bcc7b58a8d0adfdfe9cf328326536278a7a939549bb17",
-    "data/WHITTAKER_LICENSE.txt": "839b53e0842a7072cc2ebde5fdee2cc55ec15f1ae31f58da8f47f199788b3250"
+    "data/WHITTAKER_LICENSE.txt": "839b53e0842a7072cc2ebde5fdee2cc55ec15f1ae31f58da8f47f199788b3250",
+    "data/biome_target_crosswalk.json": "f1a0042d7ca90964a34e03d8a1836b06fc9d7206d6b8cbb3f84ca37059ce7396"
   },
-  "convergence_note": "Settings record convergence requirements; they are not a certificate that every linear solve met its tolerance. Consult the build log."
+  "convergence_note": "Requested tolerances are in simulation.params. Observed convergence checks are recorded separately in atlas.json and summary.json; numerical convergence does not establish physical accuracy."
 }

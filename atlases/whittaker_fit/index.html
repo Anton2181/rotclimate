@@ -1,0 +1,1815 @@
+<title>Rotclimate Whittaker-Fit Atlas</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: one wide map "plate" like an atlas spread, with a station card and
+   instrument-style readouts beneath; quiet slate chrome so the climate colours lead. */
+:root {
+  --paper: #eef1f1;
+  --plate: #f8faf9;
+  --ink: #1b262c;
+  --ink-soft: #4b5a62;
+  --rule: #c9d2d4;
+  --brass: #94641a;
+  --sea: #d6e4f0;
+  --temp: #c8452f;
+  --temp-band: rgba(200, 69, 47, 0.16);
+  --rain: #2f6db3;
+  --chip: #e2e8e9;
+  --font-display: "Spectral SC", "Iowan Old Style", Georgia, serif;
+  --font-body: "Alegreya Sans", "Gill Sans", "Segoe UI", system-ui, sans-serif;
+  --font-data: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --step--1: 0.84rem;
+  --step-0: 1rem;
+  --step-1: 1.2rem;
+  --step-2: 1.55rem;
+  --step-3: 2.3rem;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7;
+    --rule: #2c3a41; --brass: #d7a64b; --sea: #20303b; --temp: #f0745c;
+    --temp-band: rgba(240, 116, 92, 0.2); --rain: #6aa7ee; --chip: #22303a;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #12191d; --plate: #182126; --ink: #e3e9eb; --ink-soft: #9fb0b7;
+  --rule: #2c3a41; --brass: #d7a64b; --sea: #20303b; --temp: #f0745c;
+  --temp-band: rgba(240, 116, 92, 0.2); --rain: #6aa7ee; --chip: #22303a;
+  color-scheme: dark;
+}
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  background: var(--paper); color: var(--ink);
+  font-family: var(--font-body); font-size: var(--step-0); line-height: 1.5;
+}
+.wrap { max-width: 1240px; margin: 0 auto; padding-inline: clamp(16px, 3vw, 32px); padding-block: 28px 64px;
+  display: grid; gap: 40px; }
+header { display: grid; gap: 8px; max-width: 70ch; }
+.eyebrow { font-family: var(--font-data); font-size: var(--step--1); letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--brass); }
+h1, h2 { font-family: var(--font-display); font-weight: 600; text-wrap: balance; margin: 0; letter-spacing: 0.01em; }
+h1 { font-size: var(--step-3); line-height: 1.1; }
+h2 { font-size: var(--step-2); line-height: 1.2; }
+h3 { font-size: var(--step-1); margin: 0; font-weight: 700; }
+p { margin: 0; }
+.lede { color: var(--ink-soft); font-size: var(--step-1); }
+section { display: grid; gap: 16px; }
+.section-head { display: grid; gap: 4px; max-width: 70ch; }
+.section-head p { color: var(--ink-soft); }
+
+/* map plate */
+.plate { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 14px;
+  display: grid; gap: 12px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; justify-content: space-between; }
+.layers { display: flex; flex-wrap: wrap; gap: 6px; }
+.layers button {
+  font: 500 var(--step--1) var(--font-body); color: var(--ink); background: var(--chip);
+  border: 1px solid transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer;
+}
+.layers button[aria-pressed="true"] { background: var(--ink); color: var(--plate); }
+.layers .layer-group { font: 500 0.7rem var(--font-data); letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink-soft); align-self: center; margin: 0 2px 0 8px; }
+.layers .layer-group:first-child { margin-left: 0; }
+.monthctl { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; font-size: var(--step--1); }
+.monthctl[hidden] { display: none; }
+.monthctl input[type="range"] { flex: 1 1 220px; max-width: 420px; accent-color: var(--brass); }
+.monthctl button { font: 500 var(--step--1) var(--font-body); color: var(--ink); background: var(--chip);
+  border: 1px solid transparent; border-radius: 999px; padding: 4px 12px; cursor: pointer; min-width: 4.5em; }
+.monthctl button:focus-visible, .monthctl input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.monthctl .mlabel { font-family: var(--font-data); color: var(--ink-soft); }
+.layers button:focus-visible, .toggle input:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.toggle { display: flex; align-items: center; gap: 6px; font-size: var(--step--1); color: var(--ink-soft); cursor: pointer; }
+.stage { position: relative; aspect-ratio: 2000 / 926; max-width: 100%; background: var(--sea);
+  border-radius: 3px; overflow: hidden; cursor: crosshair; touch-action: manipulation; }
+.stage img, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+/* Compass is fixed to the map plate: its arrow, not the map image, rotates. */
+.compass { position: absolute; right: 10px; bottom: 10px; z-index: 2; pointer-events: none;
+  display: flex; align-items: center; gap: 5px; padding: 5px 8px;
+  background: var(--plate); color: var(--ink); border: 1px solid var(--rule); border-radius: 4px; }
+.stage .compass svg { position: static; inset: auto; display: block; width: 38px; height: 38px; flex: none; }
+.compass-text { display: grid; line-height: 1.2; }
+.compass-text b { font: 500 0.73rem var(--font-data); }
+.compass-text span { font: 0.73rem var(--font-data); color: var(--ink-soft); }
+@media (max-width: 650px) { .compass { padding: 3px; } .compass-text { display: none; } }
+
+.stage .labels { pointer-events: none; }
+.stage svg { pointer-events: none; overflow: visible; }
+.hint { position: absolute; left: 10px; bottom: 10px; font-size: var(--step--1); background: var(--plate);
+  color: var(--ink-soft); padding: 3px 9px; border-radius: 4px; border: 1px solid var(--rule); pointer-events: none; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--step--1); align-items: center; }
+.legend .sw { display: inline-block; width: 12px; height: 12px; border-radius: 2px; margin-right: 5px;
+  vertical-align: -1px; border: 1px solid rgba(0,0,0,0.15); }
+.legend .code { font-family: var(--font-data); font-weight: 500; margin-right: 4px; }
+.legend .share { color: var(--ink-soft); font-family: var(--font-data); margin-left: 4px; }
+.ramp { display: grid; gap: 4px; width: min(420px, 100%); }
+.ramp .bar { height: 12px; border-radius: 2px; }
+.ramp .ticks { display: flex; justify-content: space-between; font-family: var(--font-data); font-size: 0.75rem; color: var(--ink-soft); }
+
+/* station */
+.station { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 860px) { .station { grid-template-columns: 1fr; } }
+.card { background: var(--plate); border: 1px solid var(--rule); border-radius: 6px; padding: 16px; display: grid; gap: 12px; min-width: 0; align-content: start; }
+.station-title { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; }
+.station-title h3 { font-family: var(--font-display); font-size: var(--step-2); font-weight: 600; }
+.kchip { font-family: var(--font-data); font-weight: 500; font-size: var(--step--1); padding: 2px 8px; border-radius: 4px; color: #111; }
+.kdesc { color: var(--ink-soft); }
+.readouts { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 10px; }
+.readout { border-top: 2px solid var(--rule); padding-top: 6px; }
+.readout .v { font-family: var(--font-data); font-size: var(--step-1); font-variant-numeric: tabular-nums; }
+.readout .k { font-size: var(--step--1); color: var(--ink-soft); }
+.chart { overflow-x: auto; }
+.chart svg { width: 100%; min-width: 420px; height: auto; display: block; }
+.chart text { fill: var(--ink-soft); font-family: var(--font-data); font-size: 11px; }
+.chart .axis { stroke: var(--rule); stroke-width: 1; }
+.chart .zero { stroke: var(--ink-soft); stroke-width: 0.6; stroke-dasharray: 3 3; }
+.chart .bar { fill: var(--rain); opacity: 0.75; }
+.chart .band { fill: var(--temp-band); }
+.chart .line { fill: none; stroke: var(--temp); stroke-width: 2.4; }
+.chart .dot { fill: var(--temp); }
+.chart .analog { fill: none; stroke: var(--ink); stroke-width: 1.4; stroke-dasharray: 4 3; opacity: 0.6; }
+.analogs { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.analogs li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 2px 10px; align-items: baseline; }
+.analogs .nm { font-weight: 700; }
+.analogs .ct { color: var(--ink-soft); font-weight: 400; }
+.analogs .sim { font-family: var(--font-data); font-variant-numeric: tabular-nums; font-size: var(--step--1); }
+.analogs li.vs-h { display: block; font-size: var(--step--1); color: var(--ink-soft); text-transform: uppercase; letter-spacing: 0.06em; margin-top: 4px; }
+.analogs li.vs .nm { text-decoration: underline; text-decoration-color: var(--brass); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.analogs .why { grid-column: 1 / -1; font-size: var(--step--1); color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+.analogs .meter { grid-column: 1 / -1; height: 4px; background: var(--chip); border-radius: 2px; overflow: hidden; }
+.analogs .meter span { display: block; height: 100%; background: var(--brass); }
+.note { font-size: var(--step--1); color: var(--ink-soft); }
+
+/* facts + zones */
+.two { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 20px; }
+@media (max-width: 860px) { .two { grid-template-columns: 1fr; } }
+dl.facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 8px 16px; margin: 0; }
+dl.facts dt { color: var(--ink-soft); font-size: var(--step--1); padding-top: 2px; }
+dl.facts dd { margin: 0; font-family: var(--font-data); font-size: 0.92rem; font-variant-numeric: tabular-nums; }
+.zones { display: grid; gap: 8px; }
+.zone { display: grid; grid-template-columns: 14px minmax(0, 1fr) 3.5em; gap: 10px; align-items: center; font-size: var(--step--1); }
+.zone .sw { width: 14px; height: 14px; border-radius: 3px; }
+.zone .track { grid-column: 2; height: 6px; background: var(--chip); border-radius: 3px; overflow: hidden; }
+.zone .track span { display: block; height: 100%; background: var(--ink-soft); }
+.zone .val { font-family: var(--font-data); text-align: right; font-variant-numeric: tabular-nums; }
+.zone .lbl { grid-column: 2; }
+
+/* calendar */
+.calendar { display: flex; width: 100%; min-width: 640px; border: 1px solid var(--rule); border-radius: 4px; overflow: hidden; }
+.cal-wrap { overflow-x: auto; }
+.cal-m { padding: 8px 6px; border-right: 1px solid var(--rule); min-width: 0; position: relative; }
+.cal-m:last-child { border-right: 0; }
+.cal-m b { display: block; font-size: 0.82rem; line-height: 1.2; }
+.cal-m span { display: block; font-size: 0.72rem; color: var(--ink-soft); line-height: 1.2; }
+.cal-m.winter { background: color-mix(in srgb, var(--rain) 12%, var(--plate)); }
+.cal-m.summer { background: color-mix(in srgb, var(--temp) 12%, var(--plate)); }
+.cal-m.mid { background: var(--plate); }
+.cal-ev { font-family: var(--font-data); font-size: 0.68rem; color: var(--brass); margin-top: 4px; display: block; }
+
+/* media */
+.media { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 520px), 1fr)); gap: 20px; }
+figure { margin: 0; display: grid; gap: 6px; min-width: 0; }
+figure img { width: 100%; height: auto; border-radius: 4px; border: 1px solid var(--rule); background: var(--plate); cursor: zoom-in; }
+/* any figure opens enlarged in a lightbox (scroll to pan when it is larger than the screen) */
+#lightbox { padding: 0; border: 1px solid var(--rule); border-radius: 6px; background: var(--plate); max-width: 96vw; max-height: 94vh; overflow: auto; }
+#lightbox::backdrop { background: rgba(10, 16, 20, 0.72); }
+#lightbox img { display: block; max-width: none; cursor: zoom-out; }
+#lightbox button { position: sticky; bottom: 8px; left: 8px; margin: 8px; font: 500 var(--step--1) var(--font-body); color: var(--ink);
+  background: var(--chip); border: 1px solid var(--rule); border-radius: 999px; padding: 5px 14px; cursor: pointer; }
+#dl-status { color: var(--ink-soft); margin-left: 6px; }
+figcaption { font-size: var(--step--1); color: var(--ink-soft); }
+.toggles { display: flex; flex-wrap: wrap; gap: 6px 16px; }
+.mapwrap { position: relative; }
+.searchbox { position: absolute; z-index: 3; left: 10px; top: 10px; width: min(340px, calc(100% - 70px));
+  max-height: calc(100% - 20px); overflow: visible; background: var(--plate); border: 1px solid var(--rule);
+  border-radius: 6px; padding: 10px; display: grid; gap: 8px; box-shadow: 0 2px 10px rgba(0, 0, 0, 0.12);
+  grid-template-rows: auto auto minmax(0, 1fr); }
+/* only the results scroll, so the suggestion list can hang over the map below the panel */
+#find-results { overflow: auto; min-height: 0; }
+.searchbox[hidden] { display: none; }
+@media (max-width: 760px) { .searchbox { position: static; width: auto; max-height: none; box-shadow: none; margin-bottom: 10px; } }
+.found li { grid-template-columns: 1.6em minmax(0, 1fr) auto; }
+.found .num { font-family: var(--font-data); font-size: var(--step--1); color: var(--ink-soft); }
+.found .meter { grid-column: 2 / -1; }
+.match-key { display: flex; flex-wrap: wrap; gap: 4px 12px; font-size: var(--step--1); color: var(--ink-soft); align-items: center; }
+.match-key i { display: inline-block; width: 16px; height: 11px; vertical-align: -1px; margin-right: 4px; border-radius: 2px;
+  background: linear-gradient(90deg, #b9e84a 0 33%, #f0e400 33% 66%, #2cc7c9 66%); border: 1.3px solid #15181a; }
+.match-key i.close { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.39); }
+.match-key i.far { border-color: transparent; box-shadow: inset 0 0 0 20px rgba(238, 236, 230, 0.78); }
+.find { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; position: relative; }
+.suggest { position: absolute; z-index: 5; left: 0; right: 0; top: calc(100% + 2px); list-style: none; margin: 0; padding: 4px 0;
+  background: var(--plate); border: 1px solid var(--rule); border-radius: 4px; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+  max-height: 300px; overflow: auto; }
+.suggest[hidden] { display: none; }
+.suggest li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 10px; cursor: pointer; }
+.suggest li[aria-selected="true"], .suggest li:hover { background: var(--chip); }
+.suggest .sub { color: var(--ink-soft); font-size: var(--step--1); white-space: nowrap; }
+.find input { font: 400 var(--step-0) var(--font-body); color: var(--ink); background: var(--paper);
+  border: 1px solid var(--rule); border-radius: 4px; padding: 7px 10px; flex: 1 1 150px; min-width: 0; }
+.find button { font: 500 var(--step--1) var(--font-body); border-radius: 999px; padding: 7px 14px; cursor: pointer;
+  border: 1px solid var(--rule); background: var(--chip); color: var(--ink); }
+.find button[type="submit"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
+.find input:focus-visible, .find button:focus-visible, .analogs button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+.sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+.analogs button { all: unset; cursor: pointer; font-weight: 700; color: var(--ink); text-decoration: underline;
+  text-decoration-color: var(--rule); text-underline-offset: 3px; }
+.stage canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+.stage { touch-action: none; cursor: crosshair; user-select: none; -webkit-user-select: none; }
+.stage.dragging { cursor: grabbing; }
+.viewport { position: absolute; left: 0; top: 0; width: 100%; height: 100%; }
+/* place names sit on the map imagery, which looks the same in both themes */
+.names text { font-family: var(--font-body); font-weight: 500; fill: #15181a; stroke: rgba(255, 255, 255, 0.85);
+  paint-order: stroke; stroke-linejoin: round; }
+.zoom { position: absolute; right: 10px; top: 10px; display: grid; gap: 4px; }
+.zoom button { width: 34px; height: 34px; font: 600 1.05rem var(--font-body); color: var(--ink); background: var(--plate);
+  border: 1px solid var(--rule); border-radius: 4px; cursor: pointer; display: grid; place-items: center; }
+.zoom button:disabled { opacity: 0.45; cursor: default; }
+.zoom button svg { position: static; width: 17px; height: 17px; pointer-events: none; }
+.zoom button[aria-pressed="true"] { background: var(--ink); color: var(--plate); border-color: var(--ink); }
+.zoom .gap { height: 4px; }
+.toast { position: absolute; right: 54px; top: 10px; background: var(--ink); color: var(--plate); font-size: var(--step--1);
+  padding: 6px 10px; border-radius: 4px; opacity: 0; transition: opacity 0.2s; pointer-events: none; }
+.toast.show { opacity: 1; }
+.copy-fallback { position: fixed; inset: 0; z-index: 50; background: rgba(0, 0, 0, 0.6); display: grid; place-items: center; padding: 16px; }
+.copy-fallback figure { background: var(--plate); padding: 12px; border-radius: 6px; max-width: min(1100px, 100%); }
+.copy-fallback img { max-height: 70vh; width: auto; }
+.zoom button:focus-visible { outline: 2px solid var(--brass); outline-offset: 2px; }
+footer { color: var(--ink-soft); font-size: var(--step--1); max-width: 80ch; display: grid; gap: 6px; border-top: 1px solid var(--rule); padding-top: 16px; }
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+
+/* Interactive reference-climate comparison. */
+.chart .comparison-rain { fill: transparent; stroke: var(--rain); stroke-width: 1.6; stroke-dasharray: 3 2; }
+.chart-key { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: var(--step--1); color: var(--ink-soft); }
+.chart-key span { display: inline-flex; align-items: center; gap: 6px; }
+.chart-key i { display: inline-block; width: 14px; height: 12px; box-sizing: border-box; }
+.chart-key .key-local { background: var(--rain); opacity: 0.75; }
+.chart-key .key-comparison { border: 1.6px dashed var(--rain); }
+.chart-key .key-temperature { height: 0; border-top: 1.6px dashed var(--ink); }
+.similarity-controls { margin: 0 0 16px; }
+.similarity-controls label { font-weight: 700; }
+.balance-labels { display: flex; justify-content: space-between; gap: 12px; margin-top: 10px; color: var(--ink-soft); font-size: var(--step--1); }
+.similarity-controls input[type="range"] { width: 100%; margin: 8px 0; accent-color: var(--brass); cursor: pointer; }
+.similarity-controls output { display: block; font-family: var(--font-data); font-size: var(--step--1); }
+.similarity-controls button { font: inherit; color: var(--ink); background: var(--chip); border: 1px solid var(--rule); border-radius: 4px; padding: 6px 10px; cursor: pointer; }
+.similarity-controls button[hidden] { display: none; }
+.analogs li.analog-result { display: block; }
+.analogs .analog-choice { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; align-items: baseline; width: 100%; box-sizing: border-box; padding: 10px; border: 1px solid var(--rule); border-radius: 5px; text-decoration: none; font-weight: 400; }
+.analogs .analog-choice:hover { background: var(--chip); }
+.analogs .analog-choice[aria-pressed="true"] { border-color: var(--brass); background: var(--chip); box-shadow: inset 3px 0 var(--brass); }
+.analogs .analog-choice:focus-visible, .similarity-controls input:focus-visible, .similarity-controls button:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; }
+
+/* The map can fill the whole screen (expand button); on phones it is taller,
+   opens filling its height, and the header, layer chips and legend are compact. */
+.stage.expanded { position: fixed; inset: 0; z-index: 40; aspect-ratio: auto; width: auto; height: 100%;
+  max-width: none; border-radius: 0; }
+.stage.expanded .zoom { top: calc(10px + env(safe-area-inset-top, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
+.stage.expanded .compass { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); right: calc(10px + env(safe-area-inset-right, 0px)); }
+.stage.expanded .hint { top: calc(10px + env(safe-area-inset-top, 0px)); left: calc(10px + env(safe-area-inset-left, 0px)); }
+.stage.expanded .toast { top: calc(10px + env(safe-area-inset-top, 0px)); }
+body.map-expanded { overflow: hidden; }
+.legend .ramp { grid-column: 1 / -1; }
+.wrap, .plate, section { grid-template-columns: minmax(0, 1fr); }
+.plate > *, section > * { min-width: 0; }
+@media (max-width: 700px) {
+  .wrap { gap: 28px; padding-block: 18px 48px; }
+  header { gap: 6px; }
+  .eyebrow { font-size: 0.7rem; }
+  h1 { font-size: clamp(1.75rem, 8vw, 2.3rem); }
+  .lede { font-size: var(--step-0); }
+  .lede + .lede { font-size: var(--step--1); }
+  .plate { padding: 10px; gap: 10px; }
+  .controls { gap: 8px; }
+  .layers { flex-wrap: wrap; margin: 0; padding: 0; min-width: 0; max-width: 100%; }
+  .controls > .layers { flex-basis: 100%; }
+  .layers::-webkit-scrollbar { display: none; }
+  .layers button { flex: none; scroll-snap-align: start; padding: 7px 13px; }
+  .layers .layer-group { flex: none; }
+  .stage { aspect-ratio: auto; height: clamp(260px, 62vh, 560px); }
+  .hint { left: 8px; top: 8px; bottom: auto; max-width: calc(100% - 64px); font-size: 0.78rem; }
+  .zoom { right: 8px; top: 8px; }
+  .zoom button { width: 38px; height: 38px; }
+  .legend { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px 12px; font-size: 0.78rem; }
+  .legend .share { margin-left: 2px; }
+  .chart svg { min-width: 320px; }
+  .card { padding: 12px; }
+}
+.atlas-nav { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:var(--step--1); }
+.atlas-nav a[aria-current="page"] { font-weight:700; text-decoration:none; }
+
+.topic-control { display:flex; gap:8px; align-items:center; font-size:var(--step--1); color:var(--ink-soft); }
+select { font:inherit; color:var(--ink); background:var(--plate); border:1px solid var(--rule); border-radius:4px; padding:6px; max-width:100%; }
+.controls > .layers { flex:1 1 550px; }
+summary { cursor:pointer; font-weight:700; }
+details.card { display:block; }
+details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
+.harvest-table { width:100%; }
+.harvest-table { overflow:auto; max-height:430px; }
+.harvest-table table { width:100%; border-collapse:collapse; font-size:var(--step--1); }
+.harvest-table th, .harvest-table td { padding:8px; text-align:left; border-bottom:1px solid var(--rule); }
+.harvest-table th { position:sticky; top:0; background:var(--plate); }
+.harvest-table button { border:0; background:transparent; color:var(--brass); font:inherit; text-align:left; cursor:pointer; }
+.harvest-table button[aria-pressed="true"] { font-weight:700; text-decoration:underline; }
+.crop-bar { display:flex; height:14px; border-radius:3px; overflow:hidden; margin:6px 0; }
+.crop-key { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:var(--step--1); }
+#harvest-sources { display:grid; gap:8px; font-size:var(--step--1); }
+</style>
+
+<div class="wrap">
+  <header>
+    <span class="eyebrow">Climate, farming and settlement · three layouts · c.200 AD</span>
+    <h1>Rotclimate Whittaker-Fit Atlas</h1>
+    <p class="lede">Explore the climate, food potential and settlement scenarios. Choose a map topic, then a layer; select a place for its climate and farming details.</p><p class="lede">World and physics fitted to the proposed strict target-to-Whittaker crosswalk. Annual biomes do not guarantee summer drought or swamp hydrology; seasonal checks remain separate. Climate averages surroundings layouts 1–3, with recorded linear, temperature and moisture convergence checks. Farming and population layers use low-input c.200 AD technology; population values are declared settlement scenarios.</p>
+  <nav class="atlas-nav" aria-label="Atlas fits"><a href="../">Compare fits</a> <a href="../free_fit/">Free fit</a> <a href="../earth_fit/">Earth fit</a> <a href="../whittaker_fit/" aria-current="page">Whittaker fit</a></nav></header>
+
+  <section aria-labelledby="map-h">
+    <h2 id="map-h" hidden>Map</h2>
+    <div class="plate">
+      <div class="controls">
+        <label class="topic-control">Map topic <select id="map-topic" aria-controls="layers"></select></label>
+        <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
+        <div class="toggles">
+          <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
+          <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
+          <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
+        </div>
+      </div>
+      <div id="settlement-controls" class="monthctl" hidden>
+        <label>Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
+        <label>Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
+        <span class="note">c.200 AD technology · scenarios, not a census</span>
+      </div>
+      <div class="monthctl" id="monthctl" hidden>
+        <button type="button" id="mplay" aria-pressed="false">Play</button>
+        <input type="range" id="mslider" min="0" max="10" step="1" value="0" aria-label="Month of the local year">
+        <span class="mlabel" id="mlabel" aria-live="polite"></span>
+      </div>
+      <div class="mapwrap">
+      <div class="searchbox" id="searchbox">
+        <form id="find-form" class="find" role="search">
+          <label for="find-input" class="sr">Search a town on the map or a real city</label>
+          <input id="find-input" placeholder="A town on the map, or a real city…" autocomplete="off"
+            role="combobox" aria-autocomplete="list" aria-expanded="false" aria-controls="find-suggest">
+          <ul class="suggest" id="find-suggest" role="listbox" hidden></ul>
+          <button type="submit">Go</button>
+          <button type="button" id="find-clear" aria-label="Clear search">Clear</button>
+        </form>
+        <p class="note" id="find-msg">Map towns jump to their climate. Real cities light up where on the map feels most like them.</p>
+        <ol class="analogs found" id="find-results"></ol>
+      </div>
+      <div class="stage" id="stage">
+        <div class="viewport" id="viewport">
+          <img id="base" alt="Climate map of the world" src="data/koppen.webp" draggable="false">
+          <svg id="simrivers" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
+          <svg id="matchsvg" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="towns" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="province-overlay" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+        </div>
+        <div class="zoom" role="group" aria-label="Map tools">
+          <button type="button" id="searchtoggle" aria-pressed="true" aria-controls="searchbox" aria-label="Show or hide the search box" title="Search box">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round">
+              <circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 20 20"/></svg>
+          </button>
+          <span class="gap" aria-hidden="true"></span>
+          <button type="button" id="zin" aria-label="Zoom in">+</button>
+          <button type="button" id="zout" aria-label="Zoom out">−</button>
+          <button type="button" id="zreset" aria-label="Reset view">⤢</button>
+          <button type="button" id="zexpand" aria-pressed="false" aria-label="Show the map on the whole screen" title="Full-screen map">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+              <path d="M4 9V4h5M20 9V4h-5M4 15v5h5M20 15v5h-5"/></svg>
+          </button>
+          <button type="button" id="copyview" aria-label="Copy the whole map to the clipboard" title="Copy the whole map to the clipboard">
+            <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+              <rect x="8" y="8" width="12" height="12" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg>
+          </button>
+        </div>
+        <div class="compass" id="compass" role="img" aria-label="True north points toward the top of the map">
+          <svg viewBox="0 0 44 44" aria-hidden="true">
+            <circle cx="22" cy="22" r="18" fill="none" stroke="currentColor" stroke-opacity=".25" stroke-width="1"/>
+            <g id="north-arrow">
+              <path d="M22 36V9M15 19L22 8L29 19" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+              <circle cx="22" cy="22" r="2.3" fill="currentColor"/>
+            </g>
+          </svg>
+          <div class="compass-text"><b>TRUE NORTH</b><span id="north-bearing-label">0° · up</span></div>
+        </div>
+        <span class="toast" id="toast" role="status" aria-live="polite"></span>
+        <span class="hint" id="hint">Scroll or pinch to zoom · drag to pan · click for a place's climate</span>
+      </div>
+      </div>
+      <div class="legend" id="legend"></div>
+    </div>
+  </section>
+
+  <section aria-labelledby="station-h" class="station">
+    <div class="card">
+      <div class="station-title">
+        <h3 id="station-h">—</h3>
+        <span class="kchip" id="kchip"></span>
+        <span class="kdesc" id="kdesc"></span>
+      </div>
+      <div class="readouts" id="readouts"></div>
+      <div class="chart" id="chart"></div>
+      <div class="chart-key"><span><i class="key-local"></i>This place’s rain</span><span><i class="key-comparison"></i>Comparison rain</span><span><i class="key-temperature"></i>Comparison temperature</span></div>
+      <p class="note" id="chart-comparison" aria-live="polite"></p>
+      <p class="note">Bars: precipitation per month (the Holy Days bar covers 15 days). Line: mean temperature; band: average daily low to high (the day/night swing, learned from Earth's climate). Select a city in “Feels like” to compare its temperature and precipitation. Outlined bars show that city’s rain on the same scale.</p>
+    </div>
+    <div class="card">
+      <h3>Feels like</h3>
+      <div class="similarity-controls">
+        <label for="similarity-balance">Prioritize in similarity</label>
+        <div class="balance-labels"><span>Precipitation</span><span>Temperature</span></div>
+        <input id="similarity-balance" type="range" min="0" max="100" value="50" step="5"
+          aria-describedby="similarity-help" aria-valuetext="50% temperature, 50% precipitation">
+        <output id="similarity-value" for="similarity-balance">Balanced</output>
+        <p class="note" id="similarity-help">Weights apply to this list and real-city search, including highlighted map areas. Select a city below to compare it on the graph.</p>
+        <button type="button" id="comparison-auto" hidden>Compare closest match automatically</button>
+      </div>
+      <ol class="analogs" id="analogs"></ol>
+      <p class="note" id="analog-note"></p>
+    </div>
+  </section>
+
+  <section id="harvest-section" hidden aria-labelledby="harvest-h">
+    <div class="section-head"><h2 id="harvest-h">Land and people · c.200 AD</h2>
+      <p>Food, environment and settlement under low-input Han, Roman and Parthian technology.</p></div>
+    <div class="two"><div class="card"><h3 id="harvest-place">At the selected place</h3>
+      <div class="readouts" id="harvest-readouts" aria-live="polite"></div>
+      <p class="note" id="harvest-hex"></p><div id="crop-yields"></div>
+    </div><div class="card"><h3>The whole map</h3>
+      <div class="readouts" id="harvest-totals" aria-live="polite"></div>
+      <div id="harvest-crops"></div><p class="note" id="harvest-scenario"></p>
+      <p class="note">Capacity is a food ceiling. Expected density also includes clearing, access, an assumed disease penalty and occupation. Settlement potential is an environmental index, not living standards.</p>
+    </div></div>
+    <details class="card"><summary>Provinces and campaign sheet</summary>
+      <p class="note">Choose a province to highlight its hexes. Totals include coastal land fractions; sheet settlement and wealth are separate campaign values.</p>
+      <label>Sort provinces <select id="province-sort"><option value="population">Scenario population</option><option value="food">Food ceiling</option><option value="density">Density</option><option value="wealth">Sheet wealth</option><option value="name">Name</option></select></label>
+      <div class="harvest-table"><table><thead><tr><th>Province / realm</th><th>Land km²</th><th>Food ceiling</th><th>Scenario population</th><th>People/km²</th><th>Staples</th><th>Sheet settlement</th><th>Sheet wealth</th></tr></thead><tbody id="province-rows"></tbody></table></div>
+      <button type="button" id="province-clear">Clear highlight</button><p class="note" id="harvest-sheet"></p>
+    </details>
+    <details class="card"><summary>Models, assumptions and Earth reference</summary>
+      <p>Expected density = (crop food × biome clearing factor + grazing) × water access × health × occupation. Settlement potential = 100 × usable food / (usable food + 100 people/km²) × water access × health.</p>
+      <p class="note">Crop yields retain the Harvest period assumptions and Han calibration. The malaria thermal curve follows Mordecai et al. (2013); rainfall and irrigation add a declared moisture gate. Suitability is not infection prevalence. The maximum 35% population penalty is an assumption, removable above.</p>
+      <p class="note">Frontier, central and settled-core occupation use historical population / food-capacity analogue quantiles. They are not confidence intervals. HYDE and GLUES inform the distinction between resource potential and realized population; this composite does not reproduce either model.</p>
+      <p class="note">Cities, trade, fishing, soils, floods, wars and epidemics are not explicitly simulated. Grazing and biome clearing coefficients remain uncertain scenario choices.</p>
+      <div id="harvest-sources"></div>
+      <h3>Inherited Earth food-capacity comparison</h3><p class="note">Historical analogue inputs; modern WorldClim climate and broad regional outlines. Han plains set the original fallow factor. Other regions now inform occupation scenarios, so this is not independent validation of population.</p>
+      <figure><img src="data/earth_crop_reference.webp" alt="Inherited Earth crop food-capacity reference, Atlantic to Pacific, using WorldClim climate" loading="lazy"><figcaption>Original Harvest Earth crop-capacity reference. This reference is shared by all fits; it does not show the new population scenarios.</figcaption></figure>
+      <div class="harvest-table"><table><thead><tr><th>Region</th><th>Crop ceiling, M</th><th>Historical people, M</th><th>Source</th></tr></thead><tbody id="earth-reference"></tbody></table></div>
+      <p><a href="data/harvest_model.json">Settlement coefficients</a> · <a href="data/crop_model.json">Crop coefficients</a> · <a href="data/harvest_sources.json">Model sources</a> · <a href="data/harvest_provenance.json">Input fingerprints</a> · <a href="data/provinces_people.csv" download>Province CSV</a> · <a href="data/places_harvest.csv" download>Place CSV</a></p>
+    </details>
+  </section>
+
+  <section class="two">
+    <div class="card">
+      <h2>What the world must be like</h2>
+      <p class="note">The unknowns the calibration searched for, chosen so the simulated climate best reproduces your painted zones.</p>
+      <dl class="facts" id="facts"></dl>
+      <p class="note">True north's bearing is measured clockwise from the top edge of the original map. The map image is not rotated. Spin direction and north bearing are separate settings; day length is not calibrated.</p>
+    </div>
+    <div class="card">
+      <h2>How close to your painting</h2>
+      <p class="note">How well each painted zone's climate rule is met (1 = everywhere).</p>
+      <div class="zones" id="zones"></div>
+      <p class="note" id="zone-total"></p>
+    </div>
+  </section>
+
+  <section id="round19-results" hidden aria-labelledby="round19-h">
+    <div class="section-head">
+      <h2 id="round19-h">Round 19 · independently calibrated spins</h2>
+      <p id="round19-intro">Climate maps from separately calibrated spin configurations. Held-out comparison scores appear when their rematch data is available.</p>
+    </div>
+    <div class="two">
+      <div class="card"><h3>Earth-like spin</h3><dl class="facts" id="round19-earthlike"></dl></div>
+      <div class="card"><h3>Retrograde spin</h3><dl class="facts" id="round19-retrograde"></dl></div>
+    </div>
+    <p id="round19-verdict" class="note"></p>
+    <div class="media" id="round19-maps" hidden>
+      <figure><img id="round19-earthlike-map" alt="Köppen map from the separately calibrated round 19 Earth-like-spin world" loading="lazy"><figcaption>Round 19: Earth-like spin, fitted independently</figcaption></figure>
+      <figure><img id="round19-retrograde-map" alt="Köppen map from the separately calibrated round 19 retrograde-spin world" loading="lazy"><figcaption>Round 19: retrograde spin, fitted independently</figcaption></figure>
+    </div>
+    <p class="note">When supplied, the scores are evaluated on fresh surrounding worlds. The comparison images are separate renders. This section does not switch the atlas map between worlds: the map and station charts show only the parameters used to regenerate <code>atlas/data</code>.</p>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The local year</h2>
+      <p>Ten months of 35 days plus 15 Holy Days. With the winter solstice on Titian Marigold 23, every month's season name matches the sun.</p>
+    </div>
+    <div class="cal-wrap"><div class="calendar" id="calendar"></div></div>
+  </section>
+
+  <section>
+    <div class="section-head">
+      <h2>The year in motion</h2>
+      <p>Each frame is one five-day week. Arrows are surface winds.</p>
+    </div>
+    <div class="media">
+      <figure><img data-src="data/year_temperature.gif" alt="Animated temperature and winds through the year" loading="lazy"><figcaption>Temperature and wind</figcaption></figure>
+      <figure><img data-src="data/year_precipitation.gif" alt="Animated precipitation and snow through the year" loading="lazy"><figcaption>Rain, snow cover and wind</figcaption></figure>
+      <figure><img data-src="data/year_vapour.gif" alt="Animated water vapour and winds through the year" loading="lazy"><figcaption>Water vapour in the air and wind: where the moisture comes from</figcaption></figure>
+      <figure><img data-src="data/year_growing.gif" alt="Animated growing conditions through the year" loading="lazy"><figcaption>Growing conditions: green where it is warm and wet enough to grow, tan where too dry, grey where too cold, white under snow</figcaption></figure>
+    </div>
+  </section>
+
+  <section id="around" hidden>
+    <div class="section-head">
+      <h2>Around the map</h2>
+      <p id="around-note"></p>
+    </div>
+    <div class="media">
+      <figure><img data-src="data/around_koppen.webp" alt="Köppen climates of the drawn map and the invented land and sea around it" loading="lazy"><figcaption>Köppen climates over everything the model simulates; the dashed box is your map, the labels give each side's fitted share of land</figcaption></figure>
+      <figure><img data-src="data/around_year.gif" alt="Animated temperature and winds over the map and its surroundings" loading="lazy"><figcaption>Temperature and wind through the year, map and surroundings together</figcaption></figure>
+    </div>
+  </section>
+
+  <footer>
+    <p>Physics: a planet-wide seasonal energy balance (tilt and orbit), a 2-D model of winds, sea temperatures, air masses, moisture, rain and snow, and Köppen–Geiger classification. Unknown surroundings are procedurally generated; their land fraction per side is calibrated.</p>
+    <p id="ref-note"></p>
+    <p id="downloads">Data: <a href="data/places_climate.csv" download data-download="rotclimate_places_climate.csv">monthly temperature and rain of every named place (CSV)</a> · <a href="params.json" download data-download="rotclimate_fit_settings.json">the fit's settings (JSON)</a> <span id="dl-status" role="status" aria-live="polite"></span></p>
+  </footer>
+  <dialog id="lightbox" aria-label="Enlarged picture"><img id="lightbox-img" alt=""><button type="button" id="lightbox-close">Close</button></dialog>
+</div>
+
+<script src="climate-comparison.js"></script>
+<script src="harvest.js"></script>
+<script>
+(async function () {
+  const $ = (id) => document.getElementById(id);
+  const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+  for (const img of document.querySelectorAll("figure img")) {
+    img.addEventListener("error", () => { img.closest("figure").hidden = true; });
+  }
+
+  let meta, buf;
+  // Always load a matching set of newly generated atlas assets, not cached earlier runs.
+  const assetVersion = Date.now().toString(36);
+  const fresh = (path) => `${path}${path.includes("?") ? "&" : "?"}v=${assetVersion}`;
+  try {
+    const metadataResponse = await fetch(fresh("data/atlas.json"), { cache: "no-store" });
+    if (!metadataResponse.ok) throw new Error(`Metadata HTTP ${metadataResponse.status}`);
+    meta = await metadataResponse.json();
+    if (meta.reference.length && meta.reference[0].s !== undefined)
+      for (const r of meta.reference) {                                   // tenths of a degree
+        r.T = r.T.map((v) => v / 10);
+        r.D = r.D ? r.D.map((v) => v / 10) : null;
+      }
+    // The generator writes atlas.bin. Prefer it over a possibly stale atlas.wasm
+    // left over from an older publish. Only fall back for legacy atlas hosting.
+    let res = await fetch(fresh("data/atlas.bin"), { cache: "no-store" });
+    if (!res.ok) res = await fetch(fresh("data/atlas.wasm"), { cache: "no-store" });
+    if (!res.ok) throw new Error(`Binary data HTTP ${res.status}`);
+    buf = await res.arrayBuffer();
+    // An incomplete deploy should fail visibly instead of mixing old map data.
+    const expectedBytes = Object.values(meta.arrays).reduce((max, a) => {
+      const bytesPerElement = { uint8: 1, uint16: 2, int16: 2 }[a.dtype];
+      return Math.max(max, a.offset + a.shape.reduce((n, v) => n * v, 1) * bytesPerElement);
+    }, 0);
+    if (buf.byteLength < expectedBytes) throw new Error("Climate arrays do not match atlas metadata");
+  } catch (e) {
+    $("hint").textContent = "Climate data failed to load. Reload the page to try again.";
+    return;
+  }
+  const T = { uint8: Uint8Array, uint16: Uint16Array, int16: Int16Array };
+  const A = {};
+  for (const [k, a] of Object.entries(meta.arrays)) {
+    const n = a.shape.reduce((x, y) => x * y, 1);
+    A[k] = { data: new T[a.dtype](buf, a.offset, n), shape: a.shape };
+  }
+  // Refresh map and animation images on each load too; their filenames stay constant.
+  for (const img of document.querySelectorAll("figure img[data-src]")) img.src = fresh(img.dataset.src);
+  const W = meta.width, H = meta.height;
+  const cls = A.cls, elev = A.elev;
+  const kop = meta.koppen;
+  const rgb = (c) => `rgb(${c[0]},${c[1]},${c[2]})`;
+
+  // ---------------------------------------------------------------- layers
+  let current = "koppen";
+  const layerBtns = $("layers");
+  const topicOf = (L) => {
+    if (["koppen", "whittaker", "land_density", "land_livability"].includes(L.id)) return "Overview";
+    if (["target", "zones", "agreement", "biome_targets", "biome_match"].includes(L.id)) return "Fit checks";
+    if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
+    return L.group || "Climate";
+  };
+  const topicNames = ["Overview", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Fit checks"];
+  const lastLayer = {};
+  for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
+    const option = document.createElement("option"); option.value = name; option.textContent = name;
+    $("map-topic").appendChild(option);
+  }
+  function showTopic(name) {
+    $("map-topic").value = name;
+    for (const b of layerBtns.children) b.hidden = b.dataset.topic !== name;
+  }
+  for (const L of meta.layers) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = L.label; b.id = "layer-" + L.id; b.dataset.topic = topicOf(L);
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => setLayer(L.id)); layerBtns.appendChild(b);
+  }
+  $("map-topic").addEventListener("change", e => {
+    const name = e.target.value; setLayer(lastLayer[name] || meta.layers.find(L => topicOf(L) === name).id);
+  });
+  const scenarioKey = () => $("occupation").value + "_" + $("disease").value;
+  const scenarioLabel = () => `${$("occupation").selectedOptions[0].textContent}, ${$("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential"}`;
+  const layerScenario = L => L.id === "land_livability"
+    ? ($("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential") : scenarioLabel();
+  let harvestUI = null;
+  function scenarioChanged() {
+    harvestUI?.refresh(); setLayer(current);
+  }
+  $("occupation").addEventListener("change", scenarioChanged);
+  $("disease").addEventListener("change", scenarioChanged);
+  $("base").src = fresh("data/koppen.webp");
+  // month-by-month layers: one image per month of the local calendar, a slider and a play button
+  let frameIdx = 0, playTimer = null;
+  function showFrame() {
+    const L = meta.layers.find((l) => l.id === current);
+    if (!L || !L.frames) return;
+    frameIdx = Math.max(0, Math.min(L.frames.length - 1, frameIdx));
+    $("base").src = fresh("data/" + L.frames[frameIdx]);
+    $("mslider").max = String(L.frames.length - 1);
+    $("mslider").value = String(frameIdx);
+    const m = meta.months[frameIdx];
+    $("mlabel").textContent = (L.frame_labels ? L.frame_labels[frameIdx] : `Month ${frameIdx + 1}`) + (m ? ` · ${m.season}` : "");
+  }
+  function stopPlay() {
+    if (playTimer) clearInterval(playTimer);
+    playTimer = null;
+    $("mplay").textContent = "Play"; $("mplay").setAttribute("aria-pressed", "false");
+  }
+  $("mslider").addEventListener("input", (e) => { stopPlay(); frameIdx = Number(e.target.value); showFrame(); });
+  $("mplay").addEventListener("click", () => {
+    if (playTimer) { stopPlay(); return; }
+    $("mplay").textContent = "Pause"; $("mplay").setAttribute("aria-pressed", "true");
+    playTimer = setInterval(() => {
+      const L = meta.layers.find((l) => l.id === current);
+      if (!L || !L.frames) { stopPlay(); return; }
+      frameIdx = (frameIdx + 1) % L.frames.length;
+      showFrame();
+    }, 900);
+  });
+  function setLayer(id) {
+    current = id;
+    const L = meta.layers.find((l) => l.id === id);
+    showTopic(topicOf(L)); lastLayer[topicOf(L)] = id;
+    $("settlement-controls").hidden = !meta.harvest;
+    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "");
+    if (L.frames) {
+      $("monthctl").hidden = false;
+      for (const f of L.frames) { const im = new Image(); im.src = fresh("data/" + f); }   // preload for smooth play
+      showFrame();
+    } else {
+      stopPlay();
+      $("monthctl").hidden = true;
+      $("base").src = fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
+    }
+    for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
+    drawLegend(L);
+    const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
+    history.replaceState(null, "", "#" + state.toString());
+    for (const link of document.querySelectorAll(".atlas-nav a")) {
+      if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
+        link.href = link.href.split("#")[0] + "#" + state.toString();
+    }
+  }
+  $("names").addEventListener("change", (e) => {
+    const show = e.target.checked ? "" : "none";
+    $("placenames").style.display = show;
+    $("towns").style.display = show;
+  });
+  // settlement markers: vector pixel art (each pixel of the layer is a square)
+  fetch("data/towns.svg").then((r) => (r.ok ? r.text() : "")).then((t) => {
+    if (!t) return;
+    const src = new DOMParser().parseFromString(t, "image/svg+xml").documentElement;
+    const el = $("towns");
+    el.setAttribute("viewBox", src.getAttribute("viewBox"));
+    el.innerHTML = src.innerHTML;
+    applyZoom();
+  }).catch(() => {});
+  if (window.matchMedia("(max-width: 760px)").matches) {
+    $("searchbox").hidden = true;
+    $("searchtoggle").setAttribute("aria-pressed", "false");
+  }
+  $("searchtoggle").addEventListener("click", (e) => {
+    const box = $("searchbox"), show = box.hidden;
+    box.hidden = !show;
+    e.currentTarget.setAttribute("aria-pressed", show ? "true" : "false");
+    if (show) $("find-input").focus();
+  });
+
+  // ramp tick labels: tens for big log values, one decimal below 10 (or for spans under 10), hundredths for spans under 2
+  function tickText(L, v) {
+    if (L.log) return v >= 100 ? String(Math.round(v / 10) * 10) : v >= 10 ? String(Math.round(v)) : String(Math.round(v * 10) / 10);
+    const span = L.vmax - L.vmin;
+    return span <= 2 ? String(Math.round(v * 100) / 100) : span < 10 ? String(Math.round(v * 10) / 10) : String(Math.round(v));
+  }
+  function drawLegend(L) {
+    const el = $("legend");
+    if (L.kind === "koppen") {
+      el.innerHTML = meta.present.map((c) => {
+        const k = kop.find((x) => x.code === c);
+        return `<span title="${esc(k.desc)}"><span class="sw" style="background:${rgb(k.rgb)}"></span><span class="code">${c}</span>${esc(k.desc)}<span class="share">${k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)}%</span></span>`;
+      }).join("");
+    } else if (L.kind === "biomes") {
+      el.innerHTML = meta.biomes.filter((b) => b.share > 0).map((b) =>
+        `<span><span class="sw" style="background:${b.color}"></span>${esc(b.label)}<span class="share">${(b.share * 100).toFixed(1)}%</span></span>`).join("")
+        + `<span class="note">${esc(meta.biome_note)} <a href="data/whittaker_diagram.png" target="_blank">Climate diagram</a> · <a href="${meta.biome_source}" target="_blank" rel="noopener">Method source</a></span>`;
+    } else if (L.kind === "categories") {
+      el.innerHTML = L.items.map((b) => `<span><span class="sw" style="background:${b.color}"></span>${esc(b.label)}</span>`).join("")
+        + (L.note ? `<span class="note">${esc(L.note)}</span>` : "");
+    } else if (L.kind === "zones") {
+      el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
+        + (meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])
+          .map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
+        + `<span class="note">Each place takes the zone type its simulated climate fits best; a place meeting the swamp rule (hot, very wet, flat ground) counts as swamp, and no place takes a zone its Köppen class contradicts (cold and dry is BSk/BWk only, Mediterranean is Cs only).</span>`;
+    } else if (L.kind === "target") {
+      el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
+    } else {
+      const span = L.vmax - L.vmin;
+      const fmt = (v) => tickText(L, v);
+      const ticks = [];
+      for (let i = 0; i <= 4; i++) {
+        const f = i / 4;
+        ticks.push(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, f) : L.vmin + span * f);
+      }
+      el.innerHTML = `<div class="ramp"><div class="bar" style="background:linear-gradient(90deg,${L.stops.join(",")})"></div>
+        <div class="ticks">${ticks.map((t) => `<span>${fmt(t)}</span>`).join("")}</div></div>
+        <span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
+    }
+  }
+
+  // ---------------------------------------------------------------- lookups
+  const halfW = cls.shape[1];
+  const pixIdx = (x, y) => Math.min(cls.shape[0] - 1, y >> 1) * halfW + Math.min(halfW - 1, x >> 1);
+  const cell = (x, y) => {
+    const [, h, w] = A.Tm.shape;
+    const iy = Math.min(h - 1, Math.floor(y / meta.cell_px));
+    const ix = Math.min(w - 1, Math.floor(x / meta.cell_px));
+    return { iy, ix, h, w };
+  };
+  const series = (name, c, n) => {
+    const out = [];
+    for (let m = 0; m < n; m++) out.push(A[name].data[(m * c.h + c.iy) * c.w + c.ix]);
+    return out;
+  };
+  // latitude at map pixel (x, y); true north may point away from the top of the map
+  const northRad = (meta.north_bearing || 0) * Math.PI / 180;
+  const latOf = (x, y) => meta.lat_center + ((x - W / 2) * Math.sin(northRad) + (H / 2 - y) * Math.cos(northRad))
+    * meta.mi_per_px * 1.609344 / meta.km_per_deg;
+
+  function nearestPlace(x, y) {
+    let best = null, bd = 45 * 45;
+    for (const p of meta.places) {
+      const d = (p.x - x) ** 2 + (p.y - y) ** 2;
+      if (d < bd) { bd = d; best = p; }
+    }
+    return best;
+  }
+
+  // great-circle km between two reference places (lat y, lon x)
+  function refKm(a, b) {
+    const r = Math.PI / 180, c = Math.sin(a.y * r) * Math.sin(b.y * r) + Math.cos(a.y * r) * Math.cos(b.y * r) * Math.cos((a.x - b.x) * r);
+    return 6371 * Math.acos(Math.max(-1, Math.min(1, c)));
+  }
+  // Match % = 100 e^(-d/2), d = RMS monthly temperature difference / 2.5 C
+  //                          + RMS difference of sqrt(monthly rain) / 2
+  // Lists skip a place within 100 km of a better match.
+  // With day/night ranges on both sides the temperature term covers daily
+  // highs and lows: mean of (d high^2 + d low^2)/2 = d mean^2 + d swing^2/4.
+  const compare = ClimateComparison.compare;
+  // climate at one map pixel, exactly as its station card shows it
+  function climateAt(x, y) {
+    const h = elev.data[pixIdx(x, y)], c = cell(x, y);
+    return { h, c, T12: series("T12", c, 12).map((v, m) => v / 10 - (meta.lapse12?.[m] ?? meta.lapse) * h / 1000), P12: series("P12", c, 12),
+             D12: A.D12 ? series("D12", c, 12).map((v) => v / 10) : null };
+  }
+  let selectedRef = null, stationClimate = null, currentAnalogRows = [];
+  let temperatureWeight = 0.5, similarityFrame = 0, searchDistanceCache = null;
+  const similarityPriority = () => temperatureWeight === 0.5 ? "Balanced temperature and precipitation"
+    : `${Math.round(temperatureWeight * 100)}% temperature · ${Math.round((1 - temperatureWeight) * 100)}% precipitation`;
+  let activeRef = null;           // the real place being searched, if any
+  function analogs(T12, P12, D12, k = 5) {
+    const all = meta.reference.map((r) => compare(T12, P12, r, D12, temperatureWeight)).sort((a, b) => a.d - b.d);
+    const out = [];
+    for (const a of all) {
+      if (a.r.y === undefined || out.every((b) => refKm(a.r, b.r) >= 100)) out.push(a);
+      if (out.length >= k) break;
+    }
+    return out;
+  }
+  const whyText = (a) => (a.hasD
+    ? `typical month: highs ±${a.dHi.toFixed(1)} °C, lows ±${a.dLo.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`
+    : `typical month ±${a.dT.toFixed(1)} °C, rain ±${Math.round(a.dmm)} mm`);
+
+  // ---------------------------------------------------------------- station
+  function select(x, y, name) {
+    x = Math.max(0, Math.min(W - 1, Math.round(x)));
+    y = Math.max(0, Math.min(H - 1, Math.round(y)));
+    let k = cls.data[pixIdx(x, y)];
+    if (k === 255 && !name) {
+      // snap a click on the sea to the nearest coast within ~40 px
+      let best = null, bd = Infinity;
+      for (let dy = -40; dy <= 40; dy += 2) for (let dx = -40; dx <= 40; dx += 2) {
+        const xx = x + dx, yy = y + dy;
+        if (xx < 0 || yy < 0 || xx >= W || yy >= H) continue;
+        const d = dx * dx + dy * dy;
+        if (d < bd && cls.data[pixIdx(xx, yy)] !== 255) { bd = d; best = [xx, yy]; }
+      }
+      if (best) { [x, y] = best; k = cls.data[pixIdx(x, y)]; }
+    }
+    harvestUI?.select(x, y, name, k === 255);
+    lastMarker = { x, y };
+    drawMarker();
+    if (k === 255) {
+      $("station-h").textContent = "Open sea";
+      $("kchip").textContent = ""; $("kchip").style.background = "transparent";
+      $("kdesc").textContent = "Pick a spot on land to see its climate.";
+      stationClimate = null;
+      $("chart-comparison").textContent = "";
+      $("readouts").innerHTML = ""; $("chart").innerHTML = ""; $("analogs").innerHTML = "";
+      return;
+    }
+    const place = name ? meta.places.find((p) => p.name === name) : nearestPlace(x, y);
+    const h = elev.data[pixIdx(x, y)];
+    const c = cell(x, y);
+    const Tm = series("Tm", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
+    const { T12, P12, D12 } = climateAt(x, y);
+    // shaded band: average daily low to high (day/night range learned from Earth)
+    const Dloc = D12 ? onLocal(D12) : null;
+    const Tlo = Dloc ? Tm.map((v, i) => v - Dloc[i] / 2) : series("Tlo", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
+    const Thi = Dloc ? Tm.map((v, i) => v + Dloc[i] / 2) : series("Thi", c, 11).map((v, m) => v / 10 - (meta.lapse_local?.[m] ?? meta.lapse) * h / 1000);
+    const P = series("P", c, 11);
+    const K = kop[k];
+    $("station-h").textContent = place ? place.name : "Unnamed place";
+    $("kchip").textContent = K.code; $("kchip").style.background = rgb(K.rgb);
+    const biomeId = A.biome ? A.biome.data[pixIdx(x, y)] : null;
+    const biome = meta.biomes?.find((b) => b.id === biomeId);
+    $("kdesc").textContent = K.desc + (biome ? ` · Whittaker: ${biome.label}` : "");
+    const lat = latOf(x, y);
+    const months = meta.months;
+    const iMin = Tm.slice(0, 10).indexOf(Math.min(...Tm.slice(0, 10)));
+    const iMax = Tm.slice(0, 10).indexOf(Math.max(...Tm.slice(0, 10)));
+    const total = P.reduce((a, b) => a + b, 0);
+    const snowy = series("snow", c, 11).some((v) => v > 10);
+    $("readouts").innerHTML = [
+      [`${lat.toFixed(1)}°N`, "latitude"],
+      [`${Math.round(h)} m`, "elevation"],
+      [`${Tm[iMin].toFixed(1)}°C`, `coldest, ${months[iMin].name}`],
+      [`${Tm[iMax].toFixed(1)}°C`, `warmest, ${months[iMax].name}`],
+      [`${Math.round(total)} mm`, "precipitation / year"],
+      [snowy ? "yes" : "no", "lasting winter snow"],
+      ...(Dloc ? [[`${Math.round(Math.min(...Dloc))}–${Math.round(Math.max(...Dloc))} °C`, "day/night swing"]] : []),
+    ].map(([v, k]) => `<div class="readout"><div class="v">${v}</div><div class="k">${esc(k)}</div></div>`).join("");
+    stationClimate = { Tm, Tlo, Thi, P, T12, P12, D12 };
+    refreshComparisons();
+  }
+
+  function refreshComparisons() {
+    if (!stationClimate) return;
+    const { Tm, Tlo, Thi, P, T12, P12, D12 } = stationClimate;
+    const top = analogs(T12, P12, D12);
+    const comparison = selectedRef || (top[0] && top[0].r);
+    const best = comparison ? compare(T12, P12, comparison, D12, temperatureWeight) : null;
+    drawChart(Tm, Tlo, Thi, P, best);
+    currentAnalogRows = [];
+    const row = (a) => {
+      const i = currentAnalogRows.push(a) - 1;
+      const kk = kop.find((q) => q.code === a.r.k);
+      const chosen = a.r === comparison;
+      return `<li class="analog-result"><button type="button" class="analog-choice" data-analog="${i}" aria-pressed="${chosen}">
+        <span class="nm">${esc(a.r.n)} <span class="ct">${esc(a.r.c)}${a.r.s ? " · weather station" : ""}</span></span>
+        <span class="sim">${a.sim.toFixed(0)}% <span class="kchip" style="background:${kk ? rgb(kk.rgb) : "var(--chip)"}">${esc(a.r.k)}</span></span>
+        <span class="why">${whyText(a)}${chosen ? " · shown on graph" : ""}</span>
+        <span class="meter"><span style="width:${Math.max(4, a.sim).toFixed(0)}%"></span></span>
+        </button></li>`;
+    };
+    let pinned = "";
+    if (selectedRef && !top.some((a) => a.r === selectedRef))
+      pinned += `<li class="vs-h">Selected comparison</li>${row(best)}`;
+    if (activeRef && activeRef !== selectedRef && !top.some((a) => a.r === activeRef))
+      pinned += `<li class="vs-h">Your search</li>${row(compare(T12, P12, activeRef, D12, temperatureWeight))}`;
+    if (pinned) pinned += `<li class="vs-h">Closest matches</li>`;
+    $("analogs").innerHTML = pinned + top.map(row).join("");
+    $("comparison-auto").hidden = !selectedRef;
+  }
+
+  $("analogs").addEventListener("click", (event) => {
+    const button = event.target.closest("button[data-analog]");
+    if (!button) return;
+    const a = currentAnalogRows[Number(button.dataset.analog)];
+    if (!a) return;
+    selectedRef = a.r;
+    refreshComparisons();
+    // Rebuilding the list must not strand keyboard focus on a removed button.
+    const selected = $("analogs").querySelector('button[aria-pressed="true"]');
+    if (selected) selected.focus({ preventScroll: true });
+  });
+  $("comparison-auto").addEventListener("click", () => {
+    selectedRef = null;
+    refreshComparisons();
+    $("similarity-balance").focus({ preventScroll: true });
+  });
+  $("similarity-balance").addEventListener("input", (event) => {
+    temperatureWeight = Number(event.target.value) / 100;
+    const temperature = Math.round(temperatureWeight * 100), rain = 100 - temperature;
+    $("similarity-value").textContent = temperature === 50 ? "Balanced" : `${temperature}% temperature · ${rain}% precipitation`;
+    event.target.setAttribute("aria-valuetext", `${temperature}% temperature, ${rain}% precipitation`);
+    if (similarityFrame) cancelAnimationFrame(similarityFrame);
+    similarityFrame = requestAnimationFrame(() => {
+      similarityFrame = 0;
+      if (activeRef) showReal(activeRef, { reframe: false });
+      else refreshComparisons();
+    });
+  });
+
+  // map local months onto the solstice-aligned analog bins for the dashed line
+  // 12 solstice-aligned values -> the 11 local months (10 + holy days)
+  const analogOnLocal = (r) => onLocal(r.T);
+  function onLocal(a12) {
+    const out = [];
+    let start = 0;
+    for (const m of meta.months) {
+      const mid = start + m.days / 2;
+      const phase = ((mid - meta.solstice_day) % 365 + 365) % 365;
+      const f = phase / (365 / 12) - 0.5;
+      const i0 = ((Math.floor(f) % 12) + 12) % 12, i1 = (i0 + 1) % 12, w = f - Math.floor(f);
+      out.push(a12[i0] * (1 - w) + a12[i1] * w);
+      start += m.days;
+    }
+    return out;
+  }
+
+  function drawChart(Tm, Tlo, Thi, P, best) {
+    const months = meta.months;
+    const w = 640, h = 280, l = 44, r = 48, t = 14, b = 42;
+    const days = months.map((m) => m.days);
+    const totalDays = days.reduce((a, b) => a + b, 0);
+    const xs = []; let acc = 0;
+    for (const d of days) { xs.push({ x0: l + (acc / totalDays) * (w - l - r), x1: l + ((acc + d) / totalDays) * (w - l - r) }); acc += d; }
+    const an = best ? analogOnLocal(best.r) : [];
+    const anD = best && best.r.D ? onLocal(best.r.D) : null;
+    const anLines = anD ? [an.map((v, i) => v + anD[i] / 2), an.map((v, i) => v - anD[i] / 2)] : (an.length ? [an] : []);
+    const tmin = Math.floor((Math.min(...Tlo, ...anLines.flat()) - 2) / 5) * 5;
+    const tmax = Math.ceil((Math.max(...Thi, ...anLines.flat()) + 2) / 5) * 5;
+    const anP = best ? ClimateComparison.localRain(best.r.P, months, meta.solstice_day) : [];
+    const pmax = Math.max(100, Math.ceil(Math.max(...P, ...anP) / 50) * 50);
+    const yT = (v) => t + (tmax - v) / (tmax - tmin) * (h - t - b);
+    const yP = (v) => h - b - v / pmax * (h - t - b);
+    const cx = xs.map((s) => (s.x0 + s.x1) / 2);
+    let s = `<svg viewBox="0 0 ${w} ${h}" role="img" aria-label="Climograph${best ? ": comparing temperature and precipitation with " + esc(best.r.n) : ""}">`;
+    for (let v = tmin; v <= tmax; v += 5) s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${yT(v)}" y2="${yT(v)}" opacity="0.5"/><text x="${l - 6}" y="${yT(v) + 4}" text-anchor="end">${v}°</text>`;
+    if (tmin < 0 && tmax > 0) s += `<line class="zero" x1="${l}" x2="${w - r}" y1="${yT(0)}" y2="${yT(0)}"/>`;
+    for (let i = 0; i <= 4; i++) { const v = pmax * i / 4; s += `<text x="${w - r + 6}" y="${yP(v) + 4}">${Math.round(v)}</text>`; }
+    s += `<text x="${w - r + 6}" y="${h - b + 16}">mm</text>`;
+    P.forEach((v, i) => {
+      const width = xs[i].x1 - xs[i].x0, pad = width * 0.12;
+      const barWidth = best ? width * 0.34 : width - 2 * pad;
+      s += `<rect class="bar" x="${xs[i].x0 + pad}" y="${yP(v)}" width="${barWidth}" height="${Math.max(0, h - b - yP(v))}"><title>${esc(months[i].name)}: this place, ${Math.round(v)} mm</title></rect>`;
+      if (best) s += `<rect class="comparison-rain" x="${xs[i].x1 - pad - barWidth}" y="${yP(anP[i])}" width="${barWidth}" height="${Math.max(0, h - b - yP(anP[i]))}"><title>${esc(months[i].name)}: ${esc(best.r.n)}, ${Math.round(anP[i])} mm</title></rect>`;
+    });
+    let band = `M${cx[0]},${yT(Thi[0])}`;
+    for (let i = 1; i < cx.length; i++) band += `L${cx[i]},${yT(Thi[i])}`;
+    for (let i = cx.length - 1; i >= 0; i--) band += `L${cx[i]},${yT(Tlo[i])}`;
+    s += `<path class="band" d="${band}Z"/>`;
+    for (const ln of anLines) s += `<path class="analog" d="${ln.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
+    s += `<path class="line" d="${Tm.map((v, i) => (i ? "L" : "M") + cx[i] + "," + yT(v)).join("")}"/>`;
+    Tm.forEach((v, i) => { s += `<circle class="dot" cx="${cx[i]}" cy="${yT(v)}" r="3"/>`; });
+    months.forEach((m, i) => { s += `<text x="${cx[i]}" y="${h - b + 16}" text-anchor="middle">${m.short}</text>`; });
+    s += `<line class="axis" x1="${l}" x2="${w - r}" y1="${h - b}" y2="${h - b}"/>`;
+
+    s += `</svg>`;
+    $("chart").innerHTML = s;
+    $("chart-comparison").textContent = best
+      ? `Comparing with ${best.r.n}, ${best.r.c} · ${anD ? "dashed: daily highs and lows" : "dashed: mean temperature"} · outlined bars: precipitation`
+      : "";
+  }
+
+  // ---------------------------------------------------------------- place names (vector, crisp at any zoom)
+  const namesSvg = $("placenames");
+  namesSvg.innerHTML = meta.places.map((p) =>
+    `<text x="${p.x}" y="${p.y}" text-anchor="middle" dominant-baseline="central">${esc(p.name)}</text>`).join("");
+  // a name that belongs to a settlement marker sits just below the marker
+  const towns = meta.towns || [];
+  const nameEls = Array.from(namesSvg.children);
+  const labelTown = meta.places.map((p) => {
+    let best = null, bd = 12 * 12;
+    for (const t of towns) { const d = (t[0] - p.x) ** 2 + (t[1] - p.y) ** 2; if (d < bd) { bd = d; best = t; } }
+    return best;
+  });
+  function placeLabels(pxPerUnit, fontPx) {
+    const gap = (0.62 * fontPx + 1.5) / pxPerUnit;                 // half a line plus a pixel, in map units
+    labelTown.forEach((t, i) => {
+      if (!t) return;
+      nameEls[i].setAttribute("x", t[0]);
+      nameEls[i].setAttribute("y", (t[1] + t[2] + gap).toFixed(2));
+    });
+  }
+
+  // ---------------------------------------------------------------- simulated rivers (vector)
+  const rivSvg = $("simrivers");
+  if (meta.rivers_sim && meta.rivers_sim.length) {
+    const classes = [[15, 50, 0.9], [50, 200, 1.5], [200, 800, 2.3], [800, 1e9, 3.2]];
+    rivSvg.innerHTML = classes.map(([lo, hi, w]) => {
+      const d = meta.rivers_sim.filter((r) => r[4] >= lo && r[4] < hi)
+        .map((r) => `M${r[0]} ${r[1]}L${r[2]} ${r[3]}`).join("");
+      return `<path d="${d}" fill="none" stroke="#fff" stroke-opacity="0.7" stroke-width="${w + 2}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>
+        <path d="${d}" fill="none" stroke="#0b3a9c" stroke-width="${w}" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+    }).join("");
+  } else {
+    $("rivtoggle").closest("label").hidden = true;
+  }
+  $("rivtoggle").addEventListener("change", (e) => { rivSvg.style.display = e.target.checked ? "" : "none"; });
+
+  // ---------------------------------------------------------------- zoom & pan
+  const stage = $("stage"), vp = $("viewport");
+  const ZMAX = 10;
+  let zs = 1, tx = 0, ty = 0, lastMarker = null, matchSvgReady = false;
+  function drawMarker() {
+    const svg = $("marker");
+    if (!lastMarker) { svg.innerHTML = ""; return; }
+    const { x, y } = lastMarker, r = 14 / zs;
+    svg.innerHTML = `<circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#111" stroke-width="${5 / zs}" opacity="0.55"/>
+      <circle cx="${x}" cy="${y}" r="${r}" fill="none" stroke="#fff" stroke-width="${2.5 / zs}"/>`;
+  }
+  // The map keeps its own shape inside a stage of any shape (phones get a
+  // taller stage, the expanded map the whole screen): at zoom 1 it just fits,
+  // centred; zoomed further it can be panned edge to edge.
+  function dims() {
+    const w = stage.clientWidth, h = stage.clientHeight;
+    const bw = Math.min(w, (h * W) / H);
+    return { w, h, bw, bh: (bw * H) / W };
+  }
+  function homeZoom() {
+    const { h, bh } = dims();
+    return h > bh * 1.15 ? Math.min(ZMAX, h / bh) : 1;     // fill a tall stage's height
+  }
+  function goHome() {
+    zs = homeZoom();
+    const { w, h, bw, bh } = dims();
+    tx = (w - bw * zs) / 2;
+    ty = (h - bh * zs) / 2;
+    applyZoom();
+  }
+  function applyZoom() {
+    const { w, h, bw, bh } = dims();
+    zs = Math.min(ZMAX, Math.max(1, zs));
+    const mw = bw * zs, mh = bh * zs;
+    tx = mw <= w ? (w - mw) / 2 : Math.min(0, Math.max(w - mw, tx));
+    ty = mh <= h ? (h - mh) / 2 : Math.min(0, Math.max(h - mh, ty));
+    // lay the map out at the zoomed size (the browser re-samples the
+    // high-resolution layers and redraws vectors sharply)
+    vp.style.left = tx + "px";
+    vp.style.top = ty + "px";
+    vp.style.width = mw + "px";
+    vp.style.height = mh + "px";
+    const pxPerUnit = mw / 2000;
+    const fontPx = Math.min(13, Math.max(6, 10 * pxPerUnit));
+    namesSvg.style.fontSize = fontPx / pxPerUnit + "px";
+    namesSvg.style.strokeWidth = 2.6 / pxPerUnit + "px";
+    placeLabels(pxPerUnit, fontPx);
+    // settlement markers are pixel art: hard edges once a pixel spans a
+    // screen pixel, smoothed below that so tiny icons don't lose pixels
+    const townSvg = $("towns"), vb = townSvg.viewBox.baseVal;
+    townSvg.setAttribute("shape-rendering", vb && vb.width && mw / vb.width >= 1 ? "crispEdges" : "auto");
+    drawMarker();
+    if (typeof drawMatches === "function" && matchSvgReady) drawMatches();
+    $("zreset").disabled = Math.abs(zs - homeZoom()) < 1e-3;
+    $("zin").disabled = zs >= ZMAX;
+    $("zout").disabled = zs <= 1;
+  }
+  function zoomAt(cx, cy, f) {
+    const r = stage.getBoundingClientRect();
+    const px = cx - r.left, py = cy - r.top;
+    const nz = Math.min(ZMAX, Math.max(1, zs * f));
+    tx = px - (px - tx) * (nz / zs);
+    ty = py - (py - ty) * (nz / zs);
+    zs = nz;
+    applyZoom();
+  }
+  function focusOn(x, y, z) {
+    const { w, h, bw, bh } = dims();
+    zs = Math.max(zs, z);
+    tx = w / 2 - (x / W) * bw * zs;
+    ty = h / 2 - (y / H) * bh * zs;
+    applyZoom();
+  }
+  // show a map rectangle as large as fits beside the search box (zoom 1-4)
+  function fitTo(x0, y0, x1, y1) {
+    const { w, h, bw: mapW, bh: mapH } = dims(), box = $("searchbox");
+    const left = !box.hidden && getComputedStyle(box).position === "absolute" ? box.offsetWidth + 20 : 0;
+    const pad = 60, bw = Math.max(x1 - x0 + 2 * pad, 200), bh = Math.max(y1 - y0 + 2 * pad, 100);
+    // screen px per map unit that fits the box, as a zoom of the fitted map
+    zs = Math.min(4, Math.max(1, Math.min((w - left) / bw, h / bh) * W / mapW));
+    tx = left + (w - left) / 2 - ((x0 + x1) / 2 / W) * mapW * zs;
+    ty = h / 2 - ((y0 + y1) / 2 / H) * mapH * zs;
+    applyZoom();
+  }
+  stage.addEventListener("wheel", (e) => {
+    e.preventDefault();
+    zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015));
+  }, { passive: false });
+  const pts = new Map();
+  let moved = 0, pinch = null;
+  stage.addEventListener("pointerdown", (e) => {
+    if (e.target.closest(".zoom")) return;
+    stage.setPointerCapture(e.pointerId);
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) moved = 0;
+    if (pts.size === 2) {
+      const [a, b] = [...pts.values()];
+      pinch = { d: Math.hypot(a.x - b.x, a.y - b.y), mx: (a.x + b.x) / 2, my: (a.y + b.y) / 2 };
+      moved = 99;
+    }
+  });
+  stage.addEventListener("pointermove", (e) => {
+    if (!pts.has(e.pointerId)) return;
+    const p = pts.get(e.pointerId), dx = e.clientX - p.x, dy = e.clientY - p.y;
+    pts.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (pts.size === 1) {
+      moved += Math.abs(dx) + Math.abs(dy);
+      if (moved > 5 && zs > 1) { tx += dx; ty += dy; stage.classList.add("dragging"); applyZoom(); }
+    } else if (pts.size === 2 && pinch) {
+      const [a, b] = [...pts.values()];
+      const d = Math.hypot(a.x - b.x, a.y - b.y), mx = (a.x + b.x) / 2, my = (a.y + b.y) / 2;
+      tx += mx - pinch.mx; ty += my - pinch.my;
+      zoomAt(mx, my, d / Math.max(pinch.d, 1));
+      pinch = { d, mx, my };
+    }
+  });
+  function endPointer(e) {
+    if (!pts.has(e.pointerId)) return;
+    const single = pts.size === 1;
+    pts.delete(e.pointerId);
+    if (pts.size < 2) pinch = null;
+    stage.classList.remove("dragging");
+    if (single && moved <= 5 && e.type === "pointerup") {
+      const r = vp.getBoundingClientRect();
+      $("hint").hidden = true;
+      select((e.clientX - r.left) / r.width * W, (e.clientY - r.top) / r.height * H);
+    }
+  }
+  stage.addEventListener("pointerup", endPointer);
+  stage.addEventListener("pointercancel", endPointer);
+  stage.addEventListener("dblclick", (e) => zoomAt(e.clientX, e.clientY, 2));
+  const centre = () => { const r = stage.getBoundingClientRect(); return [r.left + r.width / 2, r.top + r.height / 2]; };
+  $("zin").addEventListener("click", () => zoomAt(...centre(), 1.6));
+  $("zout").addEventListener("click", () => zoomAt(...centre(), 1 / 1.6));
+  $("zreset").addEventListener("click", goHome);
+  window.addEventListener("resize", applyZoom);
+  function setExpanded(on) {
+    stage.classList.toggle("expanded", on);
+    document.body.classList.toggle("map-expanded", on);
+    $("zexpand").setAttribute("aria-pressed", on ? "true" : "false");
+    $("zexpand").setAttribute("aria-label", on ? "Close the full-screen map" : "Show the map on the whole screen");
+    goHome();
+  }
+  $("zexpand").addEventListener("click", () => setExpanded(!stage.classList.contains("expanded")));
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape" && stage.classList.contains("expanded")) setExpanded(false); });
+  if (window.matchMedia("(max-width: 700px)").matches) {
+    $("hint").textContent = "Pinch to zoom · drag to pan · tap a place";
+  }
+
+  // ---------------------------------------------------------------- copy the whole map
+  function toast(msg) {
+    const t = $("toast");
+    t.textContent = msg;
+    t.classList.add("show");
+    clearTimeout(toast._t);
+    toast._t = setTimeout(() => t.classList.remove("show"), 2200);
+  }
+  function loadImage(src) {
+    return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+  }
+  // The whole map, whatever part is on screen, at the map layers' own
+  // resolution, with the overlays that are switched on.
+  // The legend of the layer on show, as data for drawing on a canvas.
+  function legendSpec(L) {
+    if (!L) return null;
+    if (L.kind === "koppen") return { title: "Köppen–Geiger climate", items: meta.present.map((c) => {
+      const k = kop.find((x) => x.code === c);
+      return { color: rgb(k.rgb), code: c, label: k.desc, share: (k.share < 0.005 ? "<1" : (k.share * 100).toFixed(0)) + "%" };
+    }) };
+    if (L.kind === "biomes") return { title: "Whittaker potential biomes · annual temperature and precipitation",
+      items: meta.biomes.filter((b) => b.share > 0).map((b) => ({ color: b.color, label: b.label, share: (b.share * 100).toFixed(1) + "%" })) };
+    if (L.kind === "categories") return { title: L.label, items: L.items };
+    if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
+      ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
+    if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
+    const span = L.vmax - L.vmin;
+    const fmt = (v) => tickText(L, v);
+    const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
+    return { title: `${L.label}, ${L.unit}${L.scenario_files ? " · " + layerScenario(L) : ""}`, ramp: { stops: L.stops, ticks } };
+  }
+  const LEG_SANS = '"Alegreya Sans", "Gill Sans", sans-serif', LEG_MONO = '"IBM Plex Mono", ui-monospace, monospace';
+  // Lay the legend out in columns across `width` (sizes scale with the image).
+  function legendLayout(ctx, spec, width) {
+    const u = width / 1000, lay = { u, pad: 18 * u, font: 13 * u, rowH: 22 * u, sw: 13 * u, gap: 6 * u, titleH: 26 * u };
+    if (spec.ramp) return { ...lay, height: 2 * lay.pad + lay.titleH + 38 * u };
+    const widthOf = (it) => {
+      ctx.font = `600 ${lay.font}px ${LEG_MONO}`;
+      let w = it.code ? ctx.measureText(it.code + " ").width : 0;
+      ctx.font = `${lay.font}px ${LEG_SANS}`;
+      return lay.sw + lay.gap + w + ctx.measureText(it.label + (it.share ? "  " + it.share : "")).width;
+    };
+    const colW = Math.max(...spec.items.map(widthOf)) + 26 * u;
+    const cols = Math.max(1, Math.min(spec.items.length, Math.floor((width - 2 * lay.pad) / colW)));
+    const rows = Math.ceil(spec.items.length / cols);
+    return { ...lay, colW, rows, height: 2 * lay.pad + lay.titleH + rows * lay.rowH };
+  }
+  function drawLegendBand(ctx, spec, lay, y0, width) {
+    const { u, pad, font, sw, gap, rowH } = lay;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, y0, width, lay.height);
+    ctx.fillStyle = "#15181a";
+    ctx.textBaseline = "middle";
+    ctx.font = `700 ${font * 1.08}px ${LEG_SANS}`;
+    ctx.fillText(spec.title, pad, y0 + pad + lay.titleH / 2 - 3 * u);
+    const top = y0 + pad + lay.titleH;
+    if (spec.ramp) {
+      const bw = Math.min(600 * u, width - 2 * pad), bh = 14 * u, n = spec.ramp.ticks.length;
+      const g = ctx.createLinearGradient(pad, 0, pad + bw, 0);
+      spec.ramp.stops.forEach((c, i) => g.addColorStop(i / (spec.ramp.stops.length - 1), c));
+      ctx.fillStyle = g;
+      ctx.fillRect(pad, top, bw, bh);
+      ctx.fillStyle = "#15181a";
+      ctx.font = `${font}px ${LEG_MONO}`;
+      ctx.textBaseline = "top";
+      spec.ramp.ticks.forEach((t, i) => {
+        ctx.textAlign = i === 0 ? "left" : i === n - 1 ? "right" : "center";
+        ctx.fillText(t, pad + (bw * i) / (n - 1), top + bh + 5 * u);
+      });
+      ctx.textAlign = "left";
+      return;
+    }
+    spec.items.forEach((it, i) => {
+      const x = pad + Math.floor(i / lay.rows) * lay.colW, y = top + (i % lay.rows) * rowH, cy = y + rowH / 2;
+      ctx.fillStyle = it.color;
+      ctx.fillRect(x, cy - sw / 2, sw, sw);
+      ctx.strokeStyle = "rgba(0, 0, 0, 0.25)";
+      ctx.lineWidth = Math.max(1, u);
+      ctx.strokeRect(x, cy - sw / 2, sw, sw);
+      let tx = x + sw + gap;
+      ctx.fillStyle = "#15181a";
+      if (it.code) {
+        ctx.font = `600 ${font}px ${LEG_MONO}`;
+        ctx.fillText(it.code, tx, cy);
+        tx += ctx.measureText(it.code + " ").width;
+      }
+      ctx.font = `${font}px ${LEG_SANS}`;
+      ctx.fillText(it.label, tx, cy);
+      if (it.share) {
+        tx += ctx.measureText(it.label + "  ").width;
+        ctx.fillStyle = "#55626a";
+        ctx.fillText(it.share, tx, cy);
+      }
+    });
+  }
+  // copy of a real-city search: a band above the map saying what the spotlight shows
+  function searchCaptionLayout(ctx, width) {
+    const u = width / 1000, ref = matchState.ref;
+    const lay = { u, pad: 18 * u, titleFont: 17 * u, font: 12.5 * u, rowH: 24 * u, r: 8 * u, gap: 26 * u };
+    lay.title = `Where the map feels most like ${refLabel(ref)}`;
+    lay.sub = `${ref.k}${ref.s ? " · weather station" : ""} · similarity: ${similarityPriority().toLowerCase()}`;
+    ctx.font = `${lay.font}px ${LEG_SANS}`;
+    const keyW = ["very close", "close", "less alike"].reduce((w, t) => w + 22 * u + ctx.measureText(t).width + 18 * u, 0);
+    lay.chips = matchState.pins.map((p) => ({ p, w: 2 * lay.r + 6 * u + ctx.measureText(`${p.name}  ${p.sim.toFixed(0)}%`).width }));
+    // the colour key first, then the numbered towns, wrapped to the width
+    let x = lay.pad + keyW + 10 * u, rows = 1;
+    for (const c of lay.chips) {
+      if (x + c.w > width - lay.pad) { rows++; x = lay.pad; }
+      c.row = rows - 1; c.x = x; x += c.w + lay.gap;
+    }
+    lay.keyW = keyW;
+    lay.height = 2 * lay.pad + lay.titleFont * 1.35 + lay.font * 1.6 + rows * lay.rowH;
+    return lay;
+  }
+  function drawSearchCaption(ctx, lay, width) {
+    const { u, pad, font, r } = lay;
+    ctx.fillStyle = "#ffffff";
+    ctx.fillRect(0, 0, width, lay.height);
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#15181a";
+    ctx.font = `700 ${lay.titleFont}px ${LEG_SANS}`;
+    let y = pad + lay.titleFont;
+    ctx.fillText(lay.title, pad, y);
+    ctx.fillStyle = "#55626a";
+    ctx.font = `${font}px ${LEG_SANS}`;
+    y += lay.font * 1.6;
+    ctx.fillText(lay.sub, pad, y);
+    const top = y + 8 * u;
+    ctx.textBaseline = "middle";
+    // colour key: the spotlight keeps full colour (outlined) where very close,
+    // half-fades where close and washes out elsewhere
+    let x = pad;
+    const cy0 = top + lay.rowH / 2;
+    for (const [label, wash, edge] of [["very close", 0, true], ["close", 0.39, false], ["less alike", 0.78, false]]) {
+      const w = 16 * u, h = 11 * u, sx = x, sy = cy0 - h / 2;
+      ["#b9e84a", "#f0e400", "#2cc7c9"].forEach((c, i) => { ctx.fillStyle = c; ctx.fillRect(sx + (w * i) / 3, sy, w / 3 + 0.5, h); });
+      if (wash) { ctx.fillStyle = `rgba(238, 236, 230, ${wash})`; ctx.fillRect(sx, sy, w, h); }
+      if (edge) { ctx.strokeStyle = "#15181a"; ctx.lineWidth = 1.3 * u; ctx.strokeRect(sx, sy, w, h); }
+      ctx.fillStyle = "#15181a";
+      ctx.fillText(label, sx + w + 6 * u, cy0);
+      x += 22 * u + ctx.measureText(label).width + 18 * u;
+    }
+    // numbered towns, matching the pins on the map
+    for (const c of lay.chips) {
+      const cy = top + c.row * lay.rowH + lay.rowH / 2, cx = c.x + r;
+      ctx.fillStyle = "#15181a";
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, 2 * Math.PI); ctx.fill();
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.font = `600 ${font * 0.95}px ${LEG_MONO}`;
+      ctx.fillText(String(c.p.i), cx, cy + 0.5 * u);
+      ctx.textAlign = "left";
+      ctx.fillStyle = "#15181a";
+      ctx.font = `${font}px ${LEG_SANS}`;
+      const nx = c.x + 2 * r + 6 * u;
+      ctx.fillText(c.p.name, nx, cy);
+      ctx.fillStyle = "#55626a";
+      ctx.fillText(`${c.p.sim.toFixed(0)}%`, nx + ctx.measureText(c.p.name + "  ").width, cy);
+    }
+  }
+  async function renderView() {
+    const base = await loadImage($("base").src);
+    const fullW = Math.min(8000, Math.max(3000, base.naturalWidth || 6000));
+    const fullH = Math.round((fullW * H) / W);
+    const k = fullW / dims().bw;             // output pixels per screen pixel of the unzoomed map
+    const cv = document.createElement("canvas");
+    const spec = $("copylegend").checked ? legendSpec(meta.layers.find((l) => l.id === current)) : null;
+    const lay = spec ? legendLayout(cv.getContext("2d"), spec, fullW) : null;
+    const cap = matchState && matchState.ref ? searchCaptionLayout(cv.getContext("2d"), fullW) : null;
+    const top = cap ? Math.ceil(cap.height) : 0;
+    cv.width = fullW; cv.height = top + fullH + (lay ? Math.ceil(lay.height) : 0);
+    const ctx = cv.getContext("2d");
+    ctx.imageSmoothingQuality = "high";
+    ctx.fillStyle = "#d6e4f0";
+    ctx.fillRect(0, 0, cv.width, cv.height);
+    if (cap) drawSearchCaption(ctx, cap, fullW);
+    ctx.translate(0, top);
+    ctx.drawImage(base, 0, 0, fullW, fullH);
+    // vector overlays that are switched on, rasterised at the same scale
+    // the selection circle stays out of the copy: it marks a click, not the map
+    const overlays = ["simrivers", "matchsvg", "towns", "placenames", "province-overlay"]
+      .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
+    for (const el of overlays) {
+      const st = el.getAttribute("style") || "";
+      // non-scaling strokes are in output pixels: widen them by k to match the screen
+      const body = (el.id === "matchsvg" ? matchMarkup(1) : el.innerHTML).replace(/<[^>]*non-scaling-stroke[^>]*>/g, (tag) =>
+        tag.replace(/stroke-width="([\d.]+)"/, (_, v) => `stroke-width="${(+v * k).toFixed(2)}"`));
+      const vbAttr = el.getAttribute("viewBox") || "0 0 2000 926";
+      const vbW = +vbAttr.split(/\s+/)[2];
+      const crisp = el.id === "towns" && fullW / vbW >= 1 ? ' shape-rendering="crispEdges"' : "";
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${vbAttr}" preserveAspectRatio="none"${crisp}
+        width="${fullW}" height="${fullH}" style="${st.replace(/display:\s*none;?/, "")}" font-family="sans-serif">
+        <style>text:not(.pin){font-weight:500;fill:#15181a;stroke:rgba(255,255,255,.85);paint-order:stroke;stroke-linejoin:round}</style>
+        ${body}</svg>`;
+      const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
+      try { ctx.drawImage(await loadImage(url), 0, 0, fullW, fullH); } finally { URL.revokeObjectURL(url); }
+    }
+    if (lay) drawLegendBand(ctx, spec, lay, fullH, fullW);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    return new Promise((res) => cv.toBlob(res, "image/png"));
+  }
+  function showFallback(blob) {
+    const url = URL.createObjectURL(blob);
+    const wrap = document.createElement("div");
+    wrap.className = "copy-fallback";
+    wrap.innerHTML = `<figure><img src="${url}" alt="The whole map"><figcaption class="note">Your browser blocked clipboard access here.
+      Right-click or long-press the image and choose Copy image. Click outside to close.</figcaption></figure>`;
+    wrap.addEventListener("click", (e) => { if (e.target === wrap) { wrap.remove(); URL.revokeObjectURL(url); } });
+    document.body.appendChild(wrap);
+  }
+  try { $("copylegend").checked = localStorage.getItem("rotclimate-copy-legend") === "1"; } catch (e) { /* storage off */ }
+  $("copylegend").addEventListener("change", (e) => {
+    try { localStorage.setItem("rotclimate-copy-legend", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
+  });
+  $("copyview").addEventListener("click", async () => {
+    const pending = renderView();
+    try {
+      if (!navigator.clipboard || typeof ClipboardItem === "undefined") throw new Error("no clipboard");
+      await navigator.clipboard.write([new ClipboardItem({ "image/png": pending })]);
+      toast("Copied the whole map" + (matchState && matchState.ref ? ` (where it feels like ${matchState.ref.n})` : "")
+            + ($("copylegend").checked ? " with its legend" : ""));
+    } catch (err) {
+      const blob = await pending;
+      if (blob) showFallback(blob); else toast("Could not copy the map");
+    }
+  });
+  goHome();
+
+  // ---------------------------------------------------------------- facts, zones, calendar
+  const wd = meta.world;
+  // Normalize signed bearings (e.g. -90°) to a map-relative 0–360° compass.
+  const rawBearing = Number(wd.north_bearing ?? meta.north_bearing ?? 0);
+  const bearing = Number.isFinite(rawBearing) ? (rawBearing % 360 + 360) % 360 : 0;
+  const directions = ["up", "upper right", "right", "lower right", "down", "lower left", "left", "upper left"];
+  const bearingDirection = directions[Math.round(bearing / 45) % 8];
+  const bearingText = `${bearing.toFixed(1)}° clockwise from map up (${bearingDirection})`;
+  $("north-arrow").setAttribute("transform", `rotate(${bearing} 22 22)`);
+  $("north-bearing-label").textContent = `${bearing.toFixed(1)}° · ${bearingDirection}`;
+  $("compass").setAttribute("aria-label", `True north: ${bearingText}`);
+  const facts = [
+    ["Spin", wd.retrograde ? "retrograde (opposite to Earth)" : "prograde (like Earth)"],
+    ["True north bearing", bearingText],
+    ["Latitude", `${wd.lat_south.toFixed(1)}°N to ${wd.lat_north.toFixed(1)}°N`],
+    ["Axial tilt", `${wd.tilt.toFixed(1)}° (Earth 23.4°)`],
+    ["Height tiers", `lowland ≤ ${wd.tier_tops[0]} m · hills ≤ ${wd.tier_tops[1]} m · upland ≤ ${wd.tier_tops[2]} m · peaks to ${wd.tier_tops[3]} m`],
+  ];
+  if (wd.beyond) {
+    const b = wd.beyond, pc = (v) => `${Math.round(v * 100)}%`;
+    const ns = (side) => (b[side + "east"] !== undefined && Math.abs(b[side + "east"] - b[side]) > 0.02
+      ? [`${side}-west ${pc(b[side])}`, `${side}-east ${pc(b[side + "east"])}`] : [`${side} ${pc(b[side])}`]);
+    facts.push(["Land beyond the map", [...ns("north"), `west ${pc(b.west)}`, `east ${pc(b.east)}`, ...ns("south")].join(" · ")]);
+  }
+  $("facts").innerHTML = facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+  $("zones").innerHTML = meta.zones.map((z) => `<div class="zone"><span class="sw" style="background:${z.color}"></span>
+      <span class="lbl">${esc(z.label)}</span><span class="val">${z.score.toFixed(2)}</span>
+      <span></span><span class="track"><span style="width:${(z.score * 100).toFixed(0)}%"></span></span></div>`).join("");
+  $("zone-total").textContent = `Overall ${meta.score.toFixed(2)}; ${Math.round(meta.accuracy * 100)}% of painted land falls in its own zone's best-matching rule.`;
+
+  // Optional round 19 assets; missing files leave the comparison section hidden.
+  // The two images must be produced separately, each using its own calibrated params.
+  Promise.all(["earthlike", "retrograde"].map((spin) => new Promise((resolve) => {
+    const url = fresh(`data/r19_${spin}.webp`), probe = new Image();
+    probe.onload = () => resolve(url);
+    probe.onerror = () => resolve(null);
+    probe.src = url;
+  }))).then(([earthlike, retrograde]) => {
+    if (!earthlike || !retrograde) return;
+    $("round19-earthlike-map").src = earthlike;
+    $("round19-retrograde-map").src = retrograde;
+    $("round19-maps").hidden = false;
+    $("round19-results").hidden = false;
+  });
+  // Copy calibration/r19_rematch.json to atlas/data/r19_rematch.json to show
+  // held-out rematch scores; the atlas itself does not generate these metrics.
+  (async () => {
+    try {
+      const response = await fetch(fresh("data/r19_rematch.json"), { cache: "no-store" });
+      if (!response.ok) return;
+      const r = await response.json();
+      const e = r.finalists?.["earthlike#1"], retro = r.finalists?.["retrograde#1"];
+      if (!e || !retro || !Number.isFinite(r.gap) || !Array.isArray(r.interval) ||
+          !Number.isFinite(e.fresh_objective) || !Number.isFinite(retro.fresh_objective)) return;
+      const signed = (x) => `${x >= 0 ? "+" : ""}${x.toFixed(3)}`;
+      for (const [id, fit] of [["round19-earthlike", e], ["round19-retrograde", retro]]) {
+        const rows = [
+          ["Held-out objective", fit.fresh_objective.toFixed(3)],
+          ["Painted land correct", `${(fit.fresh_correct * 100).toFixed(1)}%`],
+          ["Calibration objective", fit.calibration_score.toFixed(3)],
+        ];
+        $(id).innerHTML = rows.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${esc(v)}</dd>`).join("");
+      }
+      const worlds = Array.isArray(r.seeds) ? r.seeds.length : "an unknown number of";
+      $("round19-intro").textContent = `Best candidate from each spin, evaluated on ${worlds} fresh surrounding worlds with identical scoring.`;
+      $("round19-verdict").textContent =
+        `Objective gap (retrograde − Earth-like): ${signed(r.gap)}; 95% interval ${signed(r.interval[0])} to ${signed(r.interval[1])}. ` +
+        `Result: ${r.verdict || "not determined"}. Tie threshold: ±${Number(r.tie_band || 0.01).toFixed(3)}.`;
+      $("round19-results").hidden = false;
+    } catch (_) { /* Comparison is optional; the atlas works without it. */ }
+  })();
+
+  const events = { 22: "winter solstice", 113: "spring equinox", 204: "summer solstice", 295: "autumn equinox" };
+  let start = 0;
+  $("calendar").innerHTML = meta.months.map((m) => {
+    const evs = Object.entries(events).filter(([d]) => d >= start && d < start + m.days)
+      .map(([d, n]) => `<span class="cal-ev">${n} · day ${d - start + 1}</span>`).join("");
+    const cl = /winter/.test(m.season) && !/spring/.test(m.season) ? "winter" : (/summer/.test(m.season) && !/fall/.test(m.season) ? "summer" : "mid");
+    const html = `<div class="cal-m ${cl}" style="flex:${m.days}"><b>${esc(m.name)}</b><span>${esc(m.season)}</span>${evs}</div>`;
+    start += m.days;
+    return html;
+  }).join("");
+
+  const nRef = meta.reference.length.toLocaleString("en");
+  // lightbox: a click on any figure shows it at its own size
+  const lb = $("lightbox");
+  for (const img of document.querySelectorAll("figure img")) {
+    img.addEventListener("click", () => {
+      $("lightbox-img").src = img.currentSrc || img.src;
+      $("lightbox-img").alt = img.alt;
+      if (typeof lb.showModal === "function") lb.showModal();
+    });
+  }
+  lb.addEventListener("click", (e) => { if (e.target === lb || e.target.id === "lightbox-img") lb.close(); });
+  $("lightbox-close").addEventListener("click", () => lb.close());
+  // downloads: inside claude.ai a plain link saves nothing, so the files go
+  // through the viewer's save prompt; opened anywhere else the links work as they are
+  if (window.claude && typeof window.claude.use === "function") {
+    window.claude.use("downloads").then((dl) => {
+      if (!dl) { $("downloads").hidden = true; return; }
+      for (const a of document.querySelectorAll("a[data-download]")) {
+        a.addEventListener("click", async (e) => {
+          e.preventDefault();
+          $("dl-status").textContent = "";
+          try {
+            const res = await fetch(fresh(a.getAttribute("href")));
+            if (!res.ok) throw { code: "unavailable" };
+            await dl.save({ filename: a.dataset.download, data: await res.blob() });
+          } catch (err) {
+            if (err && (err.code === "declined" || err.code === "rate_limited")) return;
+            $("dl-status").textContent = "Saving files is not available here.";
+          }
+        });
+      }
+    });
+  }
+  if (meta.around) {
+    $("around").hidden = false;
+    $("around-note").textContent = meta.around.note;
+  }
+  $("ref-note").textContent = `“Feels like” compares 12 solstice-aligned months of temperature and rainfall with ${nRef} real places (${meta.reference_source}). Southern-hemisphere places are shifted half a year.`;
+  $("analog-note").textContent = `Closest of ${nRef} real places (${meta.reference_source}), no two within 100 km. `
+    + `Balanced gives temperature and precipitation equal weight in this list and real-city search; either end compares only that feature. `
+    + `Temperature includes seasonal daily highs and lows where available; rainfall compares seasonal patterns using square-root differences. `
+    + `Your selected city stays on the graph until you choose another or return to the closest match.`;
+
+  // ---------------------------------------------------------------- search: map towns and real cities
+  const [, CH, CW] = A.T12.shape;
+  const NC = CH * CW;
+  const cellLand = new Uint8Array(NC), cellElev = new Float32Array(NC);
+  for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
+    const px = Math.min(W - 1, Math.round((ix + 0.5) * meta.cell_px));
+    const py = Math.min(H - 1, Math.round((iy + 0.5) * meta.cell_px));
+    const q = pixIdx(px, py);
+    cellLand[iy * CW + ix] = cls.data[q] !== 255 ? 1 : 0;
+    cellElev[iy * CW + ix] = elev.data[q];
+  }
+  const refLabel = (r) => `${r.n}, ${r.c}`;
+  // suggestions: map towns first, then real places by name prefix (bigger first), then anywhere in the label
+  const fold = (t) => t.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+  const refIndex = meta.reference.map((r) => ({ r, key: fold(refLabel(r)), name: fold(r.n) }))
+    .sort((a, b) => (b.r.p || 0) - (a.r.p || 0));
+  const placeIndex = meta.places.map((p) => ({ p, key: fold(p.name) }));
+  const sugg = $("find-suggest"), input = $("find-input");
+  let suggItems = [], suggActive = -1;
+  function suggest() {
+    const q = fold(input.value.trim());
+    suggItems = [];
+    if (q) {
+      for (const e of placeIndex) if (e.key.startsWith(q)) suggItems.push({ label: e.p.name, sub: "on the map" });
+      const seen = new Set();
+      const add = (e) => { if (!seen.has(e)) { seen.add(e); suggItems.push({ label: refLabel(e.r), sub: e.r.s ? `${e.r.k} · station` : e.r.k }); } };
+      for (const e of refIndex) { if (suggItems.length >= 10) break; if (e.name.startsWith(q)) add(e); }
+      for (const e of refIndex) { if (suggItems.length >= 10) break; if (e.key.includes(q)) add(e); }
+      suggItems = suggItems.slice(0, 10);
+    }
+    suggActive = -1;
+    sugg.innerHTML = suggItems.map((s, i) => `<li role="option" id="sg${i}" data-i="${i}" aria-selected="false"><span>${esc(s.label)}</span><span class="sub">${esc(s.sub)}</span></li>`).join("");
+    sugg.hidden = !suggItems.length;
+    input.setAttribute("aria-expanded", suggItems.length ? "true" : "false");
+  }
+  function pick(i) {
+    input.value = suggItems[i].label;
+    sugg.hidden = true; input.setAttribute("aria-expanded", "false");
+    runSearch(input.value);
+  }
+  input.addEventListener("input", suggest);
+  input.addEventListener("keydown", (e) => {
+    if (sugg.hidden) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      suggActive = (suggActive + (e.key === "ArrowDown" ? 1 : -1) + suggItems.length) % suggItems.length;
+      for (const li of sugg.children) li.setAttribute("aria-selected", li.dataset.i == suggActive ? "true" : "false");
+      input.setAttribute("aria-activedescendant", `sg${suggActive}`);
+      sugg.children[suggActive].scrollIntoView({ block: "nearest" });
+    } else if (e.key === "Enter" && suggActive >= 0) {
+      e.preventDefault(); pick(suggActive);
+    } else if (e.key === "Escape") {
+      sugg.hidden = true; input.setAttribute("aria-expanded", "false");
+    }
+  });
+  sugg.addEventListener("mousedown", (e) => { const li = e.target.closest("li"); if (li) { e.preventDefault(); pick(+li.dataset.i); } });
+  input.addEventListener("blur", () => { sugg.hidden = true; input.setAttribute("aria-expanded", "false"); });
+  const matchSvg = $("matchsvg");
+  let matchState = null;          // {fill: svg markup, pins: [{x, y, i}]}
+
+  // Real-city matches as a spotlight: the map keeps its colour where the
+  // climate feels alike, half-fades where it is close, and washes out
+  // elsewhere; a thin ink edge marks the very-close areas.
+  // the spotlight and numbered pins, sized for zoom z (the copy uses the unzoomed size)
+  function matchMarkup(z) {
+    if (!matchState) return "";
+    const pxPerUnit = (stage.clientWidth * z) / 2000;
+    const r = 8.5 / pxPerUnit, fs = 10.5 / pxPerUnit;
+    // pins sit just above the town's name label, so both stay readable
+    const lift = r + (0.6 * Math.min(13, Math.max(6, 10 * pxPerUnit)) + 2) / pxPerUnit;
+    return matchState.fill
+      + matchState.pins.map((p) => `<circle cx="${p.x}" cy="${p.y - lift}" r="${r}" fill="#15181a" stroke="#fff" stroke-width="1.5" vector-effect="non-scaling-stroke"/>
+         <text class="pin" x="${p.x}" y="${p.y - lift}" fill="#fff" font-size="${fs}" font-family="IBM Plex Mono, monospace" font-weight="600"
+           text-anchor="middle" dominant-baseline="central">${p.i}</text>`).join("");
+  }
+  function drawMatches() { matchSvg.innerHTML = matchMarkup(zs); }
+  function spotlight(f, l1, l2) {
+    // two black-and-white masks (no grey levels, so no colour-space ambiguity):
+    // 0.39 wash outside "very close", a further 0.64 outside "close" (0.78 total)
+    const mask = (id, d) => `<mask id="${id}" maskUnits="userSpaceOnUse" x="0" y="0" width="2000" height="926">
+        <rect width="2000" height="926" fill="#fff"/><path d="${d}" fill="#000"/></mask>`;
+    return `<defs>${mask("match-near", region(f, l1))}${mask("match-close", region(f, l2))}</defs>
+      <rect width="2000" height="926" fill="#eeece6" fill-opacity="0.39" mask="url(#match-near)"/>
+      <rect width="2000" height="926" fill="#eeece6" fill-opacity="0.64" mask="url(#match-close)"/>
+      <path d="${contour(f, l1)}" fill="none" stroke="#15181a" stroke-opacity="0.85" stroke-width="1.3" stroke-linecap="round" vector-effect="non-scaling-stroke"/>`;
+  }
+
+  // filled marching squares: one path covering where f < v (cell-centre grid).
+  // Polygons share exact edges and wind the same way, so the single path
+  // fills without seams; saddles split like contour() below.
+  function region(f, v) {
+    const out = [];
+    const X = (ix) => ((ix + 0.5) * meta.cell_px).toFixed(1), Y = (iy) => ((iy + 0.5) * meta.cell_px).toFixed(1);
+    const lerp = (a, b) => (v - a) / (b - a);
+    for (let iy = 0; iy < CH - 1; iy++) {
+      let run = -1;
+      for (let ix = 0; ix < CW; ix++) {
+        const a = f[iy * CW + ix], b = f[iy * CW + ix + 1], c = f[(iy + 1) * CW + ix + 1], d = f[(iy + 1) * CW + ix];
+        const full = ix < CW - 1 && a < v && b < v && c < v && d < v;
+        if (full) { if (run < 0) run = ix; continue; }
+        if (run >= 0) { out.push(`M${X(run)} ${Y(iy)}H${X(ix)}V${Y(iy + 1)}H${X(run)}Z`); run = -1; }
+        if (ix >= CW - 1) continue;
+        const ins = [a < v, b < v, c < v, d < v];
+        if (!ins[0] && !ins[1] && !ins[2] && !ins[3]) continue;
+        const pt = [[ix, iy], [ix + 1, iy], [ix + 1, iy + 1], [ix, iy + 1]], val = [a, b, c, d];
+        const cross = (k) => {            // point where edge k (corner k -> k+1) crosses v
+          const k2 = (k + 1) % 4, t = lerp(val[k], val[k2]);
+          return `${X(pt[k][0] + t * (pt[k2][0] - pt[k][0]))} ${Y(pt[k][1] + t * (pt[k2][1] - pt[k][1]))}`;
+        };
+        const corner = (k) => `${X(pt[k][0])} ${Y(pt[k][1])}`;
+        if (ins[0] === ins[2] && ins[1] === ins[3] && ins[0] !== ins[1]) {   // saddle: separate corners
+          for (let k = ins[0] ? 0 : 1; k < 4; k += 2) out.push(`M${corner(k)}L${cross(k)}L${cross((k + 3) % 4)}Z`);
+          continue;
+        }
+        const poly = [];
+        for (let k = 0; k < 4; k++) {
+          if (ins[k]) poly.push(corner(k));
+          if (ins[k] !== ins[(k + 1) % 4]) poly.push(cross(k));
+        }
+        out.push(`M${poly.join("L")}Z`);
+      }
+    }
+    return out.join("");
+  }
+
+  // marching squares: line segments where field f crosses level v (cell-centre grid)
+  function contour(f, v) {
+    const out = [];
+    const P = (ix, iy) => `${((ix + 0.5) * meta.cell_px).toFixed(1)} ${((iy + 0.5) * meta.cell_px).toFixed(1)}`;
+    const lerp = (a, b) => (v - a) / (b - a);
+    for (let iy = 0; iy < CH - 1; iy++) for (let ix = 0; ix < CW - 1; ix++) {
+      const a = f[iy * CW + ix], b = f[iy * CW + ix + 1], c = f[(iy + 1) * CW + ix + 1], d = f[(iy + 1) * CW + ix];
+      const idx = (a < v ? 8 : 0) | (b < v ? 4 : 0) | (c < v ? 2 : 0) | (d < v ? 1 : 0);
+      if (idx === 0 || idx === 15) continue;
+      const top = () => P(ix + lerp(a, b), iy), right = () => P(ix + 1, iy + lerp(b, c));
+      const bottom = () => P(ix + lerp(d, c), iy + 1), left = () => P(ix, iy + lerp(a, d));
+      const seg = (p, q) => out.push(`M${p()}L${q()}`);
+      switch (idx) {
+        case 1: case 14: seg(left, bottom); break;
+        case 2: case 13: seg(bottom, right); break;
+        case 3: case 12: seg(left, right); break;
+        case 4: case 11: seg(top, right); break;
+        case 5: seg(left, top); seg(bottom, right); break;
+        case 6: case 9: seg(top, bottom); break;
+        case 7: case 8: seg(left, top); break;
+        case 10: seg(top, right); seg(left, bottom); break;
+      }
+    }
+    return out.join("");
+  }
+
+  function clearMatches() {
+    matchState = null; activeRef = null; searchDistanceCache = null;
+    drawMatches(); $("find-results").innerHTML = "";
+    refreshComparisons();
+  }
+
+  function showReal(ref, { reframe = true } = {}) {
+    // Cache each component separately; slider changes only recombine them.
+    if (!searchDistanceCache || searchDistanceCache.ref !== ref) {
+      const temperature = new Float64Array(NC), precipitation = new Float64Array(NC);
+      const useD = A.D12 && ref.D;
+      for (let c = 0; c < NC; c++) {
+        if (!cellLand[c]) continue;
+        let dt = 0, dp = 0;
+        for (let m = 0; m < 12; m++) {
+          const t = A.T12.data[m * NC + c] / 10 - (meta.lapse12?.[m] ?? meta.lapse) * cellElev[c] / 1000;
+          const p = A.P12.data[m * NC + c];
+          const ds = useD ? A.D12.data[m * NC + c] / 10 - ref.D[m] : 0;
+          dt += (t - ref.T[m]) ** 2 + ds * ds / 4;
+          dp += (Math.sqrt(Math.max(p, 0)) - Math.sqrt(Math.max(ref.P[m], 0))) ** 2;
+        }
+        temperature[c] = Math.sqrt(dt / 12) / 2.5;
+        precipitation[c] = Math.sqrt(dp / 12) / 2;
+      }
+      searchDistanceCache = { ref, temperature, precipitation };
+    }
+    const d = new Float32Array(NC).fill(99);
+    let best = Infinity;
+    for (let c = 0; c < NC; c++) {
+      if (!cellLand[c]) continue;
+      d[c] = ClimateComparison.weightedDistance(searchDistanceCache.temperature[c],
+        searchDistanceCache.precipitation[c], temperatureWeight);
+      if (d[c] < best) best = d[c];
+    }
+    // smooth a copy for clean edges, averaging over land neighbours only (so
+    // coastal matches survive); sea then counts as "no match"
+    let f = Float32Array.from(d);
+    for (let pass = 0; pass < 2; pass++) {
+      const g = new Float32Array(NC);
+      for (let iy = 0; iy < CH; iy++) for (let ix = 0; ix < CW; ix++) {
+        if (!cellLand[iy * CW + ix]) continue;
+        let s = 0, n = 0;
+        for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) {
+          const y = iy + dy, x = ix + dx;
+          if (y < 0 || x < 0 || y >= CH || x >= CW || !cellLand[y * CW + x]) continue;
+          s += f[y * CW + x]; n++;
+        }
+        g[iy * CW + ix] = s / n;
+      }
+      f = g;
+    }
+    for (let c = 0; c < NC; c++) if (!cellLand[c]) f[c] = best + 3;
+    let fbest = Infinity;
+    for (let c = 0; c < NC; c++) if (cellLand[c] && f[c] < fbest) fbest = f[c];
+    const l1 = fbest + 0.25, l2 = fbest + 0.6;
+    // best-matching named towns, judged by the climate at each town itself
+    // (the same numbers its station card shows)
+    activeRef = ref;
+    const out = meta.places
+      .filter((p) => cls.data[pixIdx(Math.round(p.x), Math.round(p.y))] !== 255)
+      .map((p) => { const cl = climateAt(Math.round(p.x), Math.round(p.y)); return { p, ...compare(cl.T12, cl.P12, ref, cl.D12, temperatureWeight) }; })
+      .sort((a, b) => a.d - b.d).slice(0, 6);
+    matchState = { fill: spotlight(f, l1, l2), ref,
+                   pins: out.map((o, i) => ({ x: o.p.x, y: o.p.y, i: i + 1, name: o.p.name, sim: o.sim })) };
+    // frame the very-close areas and the numbered towns
+    let x0 = Infinity, y0 = Infinity, x1 = -Infinity, y1 = -Infinity;
+    const grow = (x, y) => { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); };
+    for (let c = 0; c < NC; c++) if (f[c] < l1) grow(((c % CW) + 0.5) * meta.cell_px, (Math.floor(c / CW) + 0.5) * meta.cell_px);
+    for (const o of out) grow(o.p.x, o.p.y);
+    if (reframe) fitTo(x0, y0, x1, y1);
+    else drawMatches();
+    $("find-msg").innerHTML = `Where the map feels like <b>${esc(refLabel(ref))}</b> (${esc(ref.k)}${ref.s ? ", weather station" : ""}).
+      <span class="note" style="display:block">Similarity: ${esc(similarityPriority())}</span>
+      <span class="match-key"><span><i></i>very close</span><span><i class="close"></i>close</span><span><i class="far"></i>less alike</span></span>`;
+    $("find-results").innerHTML = out.map((o, i) => `<li><span class="num">${i + 1}</span><span><button type="button" data-i="${i}">${esc(o.p.name)}</button></span>
+      <span class="sim">${o.sim.toFixed(0)}%</span><span class="meter"><span style="width:${Math.max(4, o.sim).toFixed(0)}%"></span></span></li>`).join("");
+    for (const b of $("find-results").querySelectorAll("button")) {
+      b.addEventListener("click", () => { const o = out[+b.dataset.i]; select(o.p.x, o.p.y, o.p.name); focusOn(o.p.x, o.p.y, 3); });
+    }
+    refreshComparisons();
+  }
+
+  function runSearch(query) {
+    const q = query.trim().toLowerCase();
+    if (!q) return;
+    sugg.hidden = true;
+    const place = meta.places.find((p) => p.name.toLowerCase() === q);
+    const fq = fold(q);
+    const real = (refIndex.find((e) => e.key === fq) || refIndex.find((e) => e.name === fq) || {}).r;
+    const placeLoose = meta.places.find((p) => p.name.toLowerCase().startsWith(q));
+    const realLoose = (refIndex.find((e) => e.name.startsWith(fq)) || refIndex.find((e) => e.key.includes(fq)) || {}).r;
+    const hitPlace = place || (!real && placeLoose);
+    if (hitPlace) {
+      clearMatches();
+      select(hitPlace.x, hitPlace.y, hitPlace.name);
+      focusOn(hitPlace.x, hitPlace.y, 3);
+      $("find-msg").innerHTML = `<b>${esc(hitPlace.name)}</b> is on the map. Its climate card is below the map.`;
+      return;
+    }
+    const ref = real || realLoose;
+    if (!ref) { $("find-msg").textContent = `Nothing called “${query}” on the map or among the real cities. Pick one from the suggestions.`; return; }
+    showReal(ref);
+  }
+  matchSvgReady = true;
+  $("find-form").addEventListener("submit", (e) => { e.preventDefault(); runSearch($("find-input").value); });
+  $("find-clear").addEventListener("click", () => {
+    clearMatches(); $("find-input").value = "";
+    $("find-msg").textContent = "Map towns jump to their climate. Real cities light up where on the map feels most like them.";
+  });
+
+  if (meta.harvest && window.HarvestAtlas) {
+    try { harvestUI = await HarvestAtlas.load(meta, fresh); }
+    catch (error) {
+      $("harvest-section").hidden = false;
+      $("harvest-readouts").textContent = "Land and people data could not load. Reload the atlas or check the complete data bundle.";
+      console.error(error);
+    }
+  }
+  const initialView = new URLSearchParams(location.hash.slice(1));
+  for (const id of ["occupation", "disease"]) {
+    const value = initialView.get(id);
+    if ([...$(id).options].some(option => option.value === value)) $(id).value = value;
+  }
+  harvestUI?.refresh();
+  const requestedLayer = initialView.get("layer");
+  setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
+  const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
+  select(start0.x, start0.y + 8, start0.name);
+})();
+</script>

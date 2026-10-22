@@ -1,23 +1,27 @@
 {
- "params": "calibration/autonomous_20261021/free_polish/best_params.json",
+ "params": "/workspace/rotclimate/calibration/three_fit_20261022/free/best_params.json",
  "downsample": 8,
  "image_scale": 2,
- "seeds": null,
- "seconds": 2775,
- "strict_accuracy": 0.5910543130990416,
- "zonefit": 0.5330535863713907,
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "seconds": 6101,
+ "strict_accuracy": 0.5435513704388767,
+ "zonefit": 0.49704523731464545,
  "recall": {
-  "cold_wet": 0.7006960556844548,
-  "cold_dry": 0.6061678463094035,
-  "warm_wet": 0.5747976064765927,
-  "med": 0.6382765531062125,
-  "swamp": 0.47653142402545745,
-  "tree": 0.5923566878980892,
-  "hot_dry": 0.515686274509804
+  "cold_wet": 0.4466357308584687,
+  "cold_dry": 0.5247724974721941,
+  "warm_wet": 0.4924322421682506,
+  "med": 0.6439545758183033,
+  "swamp": 0.5322195704057279,
+  "tree": 0.6273885350318471,
+  "hot_dry": 0.44607843137254904
  },
  "mediterranean": {
-  "dry_share": 0.11990647962591851,
-  "cs_share": 0.7618570474281897
+  "dry_share": 0.10454241816967268,
+  "cs_share": 0.7852371409485638
  },
  "numerics": {
   "downsample": 8,
@@ -27,12 +31,183 @@
   "t_relaxation": 0.25,
   "transport_scheme": "upwind",
   "t_adaptive_retries": 2,
+  "t_anderson": true,
   "t_require_convergence": true,
   "moisture_relaxation": 0.25,
   "moisture_residual_tol": 0.01,
   "moisture_require_convergence": true,
   "solver_rtol": 1e-06,
   "solver_max_iter": 2000,
-  "solver_require_convergence": false
+  "solver_require_convergence": true,
+  "solver_recover": true
+ },
+ "observed_numerics": {
+  "members": [
+   {
+    "linear_solves": 3758,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "gauss_seidel": 1,
+     "sor": 3757
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.04982469966597591,
+    "accelerated_stages": 5,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   },
+   {
+    "linear_solves": 3657,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "sor": 3657
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.04989947895130342,
+    "accelerated_stages": 3,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   },
+   {
+    "linear_solves": 3537,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "sor": 3537
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.049755529085260264,
+    "accelerated_stages": 0,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   }
+  ],
+  "all_checks_passed": true
+ },
+ "fit_objective": "zonefit",
+ "fit_score": 0.49704523731464545,
+ "whittaker": {
+  "strict": {
+   "profile": "strict",
+   "score": 0.4764329664344637,
+   "macro_hard": 0.27972403642740995,
+   "macro_soft": 0.6731418964415175,
+   "outside_share": 0.06717672776189676,
+   "per_zone": {
+    "cold_wet": {
+     "cells": 862,
+     "hard": 0.0,
+     "soft": 0.11823654676592958
+    },
+    "cold_dry": {
+     "cells": 1978,
+     "hard": 0.3609706774519717,
+     "soft": 0.9652021825241348
+    },
+    "warm_wet": {
+     "cells": 2841,
+     "hard": 0.18514607532558958,
+     "soft": 0.6371858461251677
+    },
+    "med": {
+     "cells": 2994,
+     "hard": 0.09352037408149633,
+     "soft": 0.8663575323203068
+    },
+    "swamp": {
+     "cells": 1257,
+     "hard": 0.1328560063643596,
+     "soft": 0.4010459071914557
+    },
+    "tree": {
+     "cells": 942,
+     "hard": 0.5934182590233545,
+     "soft": 0.892876513404246
+    },
+    "hot_dry": {
+     "cells": 1020,
+     "hard": 0.592156862745098,
+     "soft": 0.8310887467593812
+    }
+   }
+  },
+  "broad": {
+   "profile": "broad",
+   "score": 0.6956173402037361,
+   "macro_hard": 0.4840816864501635,
+   "macro_soft": 0.9071529939573088,
+   "outside_share": 0.06717672776189676,
+   "per_zone": {
+    "cold_wet": {
+     "cells": 862,
+     "hard": 0.39675174013921116,
+     "soft": 0.9150983887278427
+    },
+    "cold_dry": {
+     "cells": 1978,
+     "hard": 0.3609706774519717,
+     "soft": 0.9652021825241348
+    },
+    "warm_wet": {
+     "cells": 2841,
+     "hard": 0.40021119324181625,
+     "soft": 0.9014946056929278
+    },
+    "med": {
+     "cells": 2994,
+     "hard": 0.09352037408149633,
+     "soft": 0.8663575323203068
+    },
+    "swamp": {
+     "cells": 1257,
+     "hard": 0.862370723945903,
+     "soft": 0.9403907642975984
+    },
+    "tree": {
+     "cells": 942,
+     "hard": 0.6825902335456475,
+     "soft": 0.930438737378971
+    },
+    "hot_dry": {
+     "cells": 1020,
+     "hard": 0.592156862745098,
+     "soft": 0.8310887467593812
+    }
+   }
+  }
+ },
+ "harvest": {
+  "crop_capacity": 330000905.81542903,
+  "pastoral_capacity": 9453777.036275055,
+  "food_capacity": 339454680.8838328,
+  "settlement_base": 217086215.9733833,
+  "settlement_no_malaria": 241240748.16880864,
+  "land_km2": 3290735.211683006,
+  "population": {
+   "endemic": {
+    "frontier": 29630141.527324364,
+    "central": 63777207.10385521,
+    "core": 173545276.92914918
+   },
+   "absent": {
+    "frontier": 32926998.512313757,
+    "central": 70873505.66623496,
+    "core": 192855139.41928124
+   }
+  },
+  "crops": [
+   0.7517309787837408,
+   0.013142988262579884,
+   0.20291526770105225,
+   0.0006667702492876977,
+   0.031543995003338994
+  ],
+  "double_crop_share": 0.20069270020342658,
+  "mean_malaria": 0.21912534369900574
  }
 }

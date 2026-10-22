@@ -1,5 +1,6 @@
 <title>Rotclimate Free-Fit Atlas</title>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
@@ -283,8 +284,8 @@ body.map-expanded { overflow: hidden; }
   .lede + .lede { font-size: var(--step--1); }
   .plate { padding: 10px; gap: 10px; }
   .controls { gap: 8px; }
-  .layers { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin-inline: -10px; padding-inline: 10px;
-    scroll-snap-type: x proximity; flex: 1 1 100%; min-width: 0; max-width: calc(100% + 20px); }
+  .layers { flex-wrap: wrap; margin: 0; padding: 0; min-width: 0; max-width: 100%; }
+  .controls > .layers { flex-basis: 100%; }
   .layers::-webkit-scrollbar { display: none; }
   .layers button { flex: none; scroll-snap-align: start; padding: 7px 13px; }
   .layers .layer-group { flex: none; }
@@ -297,25 +298,50 @@ body.map-expanded { overflow: hidden; }
   .chart svg { min-width: 320px; }
   .card { padding: 12px; }
 }
+.atlas-nav { display:flex; flex-wrap:wrap; gap:8px 18px; font-size:var(--step--1); }
+.atlas-nav a[aria-current="page"] { font-weight:700; text-decoration:none; }
+
+.topic-control { display:flex; gap:8px; align-items:center; font-size:var(--step--1); color:var(--ink-soft); }
+select { font:inherit; color:var(--ink); background:var(--plate); border:1px solid var(--rule); border-radius:4px; padding:6px; max-width:100%; }
+.controls > .layers { flex:1 1 550px; }
+summary { cursor:pointer; font-weight:700; }
+details.card { display:block; }
+details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
+.harvest-table { width:100%; }
+.harvest-table { overflow:auto; max-height:430px; }
+.harvest-table table { width:100%; border-collapse:collapse; font-size:var(--step--1); }
+.harvest-table th, .harvest-table td { padding:8px; text-align:left; border-bottom:1px solid var(--rule); }
+.harvest-table th { position:sticky; top:0; background:var(--plate); }
+.harvest-table button { border:0; background:transparent; color:var(--brass); font:inherit; text-align:left; cursor:pointer; }
+.harvest-table button[aria-pressed="true"] { font-weight:700; text-decoration:underline; }
+.crop-bar { display:flex; height:14px; border-radius:3px; overflow:hidden; margin:6px 0; }
+.crop-key { display:flex; flex-wrap:wrap; gap:4px 14px; font-size:var(--step--1); }
+#harvest-sources { display:grid; gap:8px; font-size:var(--step--1); }
 </style>
 
 <div class="wrap">
   <header>
-    <span class="eyebrow">Simulated climate · 25 seasonal steps · Whittaker potential biomes</span>
+    <span class="eyebrow">Climate, farming and settlement · three layouts · c.200 AD</span>
     <h1>Rotclimate Free-Fit Atlas</h1>
-    <p class="lede">Click anywhere on land to see its climate through the local year, and which real places feel most alike.</p><p class="lede">World and physics fitted together to the painted zones: reversed spin, map centre 33.0°N, 15.8° tilt, true north 7.1° anticlockwise of the map’s top edge. The refined fit scores 0.5331 (previously 0.5292); 59.1% of painted cells match exactly. Whittaker biomes describe climate potential. Fit scores remain provisional because some linear solves reached their iteration limit.</p>
-  </header>
+    <p class="lede">Explore the climate, food potential and settlement scenarios. Choose a map topic, then a layer; select a place for its climate and farming details.</p><p class="lede">World and physics fitted to your painted seasonal zones. Climate averages surroundings layouts 1–3, with recorded linear, temperature and moisture convergence checks. Farming and population layers use low-input c.200 AD technology; population values are declared settlement scenarios.</p>
+  <nav class="atlas-nav" aria-label="Atlas fits"><a href="../">Compare fits</a> <a href="../free_fit/" aria-current="page">Free fit</a> <a href="../earth_fit/">Earth fit</a> <a href="../whittaker_fit/">Whittaker fit</a></nav></header>
 
   <section aria-labelledby="map-h">
     <h2 id="map-h" hidden>Map</h2>
     <div class="plate">
       <div class="controls">
+        <label class="topic-control">Map topic <select id="map-topic" aria-controls="layers"></select></label>
         <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
         <div class="toggles">
           <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
           <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
         </div>
+      </div>
+      <div id="settlement-controls" class="monthctl" hidden>
+        <label>Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
+        <label>Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
+        <span class="note">c.200 AD technology · scenarios, not a census</span>
       </div>
       <div class="monthctl" id="monthctl" hidden>
         <button type="button" id="mplay" aria-pressed="false">Play</button>
@@ -342,6 +368,7 @@ body.map-expanded { overflow: hidden; }
           <svg id="matchsvg" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="towns" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="province-overlay" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
         <div class="zoom" role="group" aria-label="Map tools">
@@ -407,6 +434,36 @@ body.map-expanded { overflow: hidden; }
       <ol class="analogs" id="analogs"></ol>
       <p class="note" id="analog-note"></p>
     </div>
+  </section>
+
+  <section id="harvest-section" hidden aria-labelledby="harvest-h">
+    <div class="section-head"><h2 id="harvest-h">Land and people · c.200 AD</h2>
+      <p>Food, environment and settlement under low-input Han, Roman and Parthian technology.</p></div>
+    <div class="two"><div class="card"><h3 id="harvest-place">At the selected place</h3>
+      <div class="readouts" id="harvest-readouts" aria-live="polite"></div>
+      <p class="note" id="harvest-hex"></p><div id="crop-yields"></div>
+    </div><div class="card"><h3>The whole map</h3>
+      <div class="readouts" id="harvest-totals" aria-live="polite"></div>
+      <div id="harvest-crops"></div><p class="note" id="harvest-scenario"></p>
+      <p class="note">Capacity is a food ceiling. Expected density also includes clearing, access, an assumed disease penalty and occupation. Settlement potential is an environmental index, not living standards.</p>
+    </div></div>
+    <details class="card"><summary>Provinces and campaign sheet</summary>
+      <p class="note">Choose a province to highlight its hexes. Totals include coastal land fractions; sheet settlement and wealth are separate campaign values.</p>
+      <label>Sort provinces <select id="province-sort"><option value="population">Scenario population</option><option value="food">Food ceiling</option><option value="density">Density</option><option value="wealth">Sheet wealth</option><option value="name">Name</option></select></label>
+      <div class="harvest-table"><table><thead><tr><th>Province / realm</th><th>Land km²</th><th>Food ceiling</th><th>Scenario population</th><th>People/km²</th><th>Staples</th><th>Sheet settlement</th><th>Sheet wealth</th></tr></thead><tbody id="province-rows"></tbody></table></div>
+      <button type="button" id="province-clear">Clear highlight</button><p class="note" id="harvest-sheet"></p>
+    </details>
+    <details class="card"><summary>Models, assumptions and Earth reference</summary>
+      <p>Expected density = (crop food × biome clearing factor + grazing) × water access × health × occupation. Settlement potential = 100 × usable food / (usable food + 100 people/km²) × water access × health.</p>
+      <p class="note">Crop yields retain the Harvest period assumptions and Han calibration. The malaria thermal curve follows Mordecai et al. (2013); rainfall and irrigation add a declared moisture gate. Suitability is not infection prevalence. The maximum 35% population penalty is an assumption, removable above.</p>
+      <p class="note">Frontier, central and settled-core occupation use historical population / food-capacity analogue quantiles. They are not confidence intervals. HYDE and GLUES inform the distinction between resource potential and realized population; this composite does not reproduce either model.</p>
+      <p class="note">Cities, trade, fishing, soils, floods, wars and epidemics are not explicitly simulated. Grazing and biome clearing coefficients remain uncertain scenario choices.</p>
+      <div id="harvest-sources"></div>
+      <h3>Inherited Earth food-capacity comparison</h3><p class="note">Historical analogue inputs; modern WorldClim climate and broad regional outlines. Han plains set the original fallow factor. Other regions now inform occupation scenarios, so this is not independent validation of population.</p>
+      <figure><img src="data/earth_crop_reference.webp" alt="Inherited Earth crop food-capacity reference, Atlantic to Pacific, using WorldClim climate" loading="lazy"><figcaption>Original Harvest Earth crop-capacity reference. This reference is shared by all fits; it does not show the new population scenarios.</figcaption></figure>
+      <div class="harvest-table"><table><thead><tr><th>Region</th><th>Crop ceiling, M</th><th>Historical people, M</th><th>Source</th></tr></thead><tbody id="earth-reference"></tbody></table></div>
+      <p><a href="data/harvest_model.json">Settlement coefficients</a> · <a href="data/crop_model.json">Crop coefficients</a> · <a href="data/harvest_sources.json">Model sources</a> · <a href="data/harvest_provenance.json">Input fingerprints</a> · <a href="data/provinces_people.csv" download>Province CSV</a> · <a href="data/places_harvest.csv" download>Place CSV</a></p>
+    </details>
   </section>
 
   <section class="two">
@@ -482,6 +539,7 @@ body.map-expanded { overflow: hidden; }
 </div>
 
 <script src="climate-comparison.js"></script>
+<script src="harvest.js"></script>
 <script>
 (async function () {
   const $ = (id) => document.getElementById(id);
@@ -535,20 +593,41 @@ body.map-expanded { overflow: hidden; }
   // ---------------------------------------------------------------- layers
   let current = "koppen";
   const layerBtns = $("layers");
-  let lastGroup = null;
-  for (const L of meta.layers) {
-    if (L.group && L.group !== lastGroup) {
-      const g = document.createElement("span");
-      g.className = "layer-group"; g.textContent = L.group;
-      layerBtns.appendChild(g);
-      lastGroup = L.group;
-    }
-    const b = document.createElement("button");
-    b.type = "button"; b.textContent = L.label; b.id = "layer-" + L.id;
-    b.setAttribute("aria-pressed", L.id === current ? "true" : "false");
-    b.addEventListener("click", () => setLayer(L.id));
-    layerBtns.appendChild(b);
+  const topicOf = (L) => {
+    if (["koppen", "whittaker", "land_density", "land_livability"].includes(L.id)) return "Overview";
+    if (["target", "zones", "agreement", "biome_targets", "biome_match"].includes(L.id)) return "Fit checks";
+    if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
+    return L.group || "Climate";
+  };
+  const topicNames = ["Overview", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Fit checks"];
+  const lastLayer = {};
+  for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
+    const option = document.createElement("option"); option.value = name; option.textContent = name;
+    $("map-topic").appendChild(option);
   }
+  function showTopic(name) {
+    $("map-topic").value = name;
+    for (const b of layerBtns.children) b.hidden = b.dataset.topic !== name;
+  }
+  for (const L of meta.layers) {
+    const b = document.createElement("button");
+    b.type = "button"; b.textContent = L.label; b.id = "layer-" + L.id; b.dataset.topic = topicOf(L);
+    b.setAttribute("aria-pressed", "false");
+    b.addEventListener("click", () => setLayer(L.id)); layerBtns.appendChild(b);
+  }
+  $("map-topic").addEventListener("change", e => {
+    const name = e.target.value; setLayer(lastLayer[name] || meta.layers.find(L => topicOf(L) === name).id);
+  });
+  const scenarioKey = () => $("occupation").value + "_" + $("disease").value;
+  const scenarioLabel = () => `${$("occupation").selectedOptions[0].textContent}, ${$("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential"}`;
+  const layerScenario = L => L.id === "land_livability"
+    ? ($("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential") : scenarioLabel();
+  let harvestUI = null;
+  function scenarioChanged() {
+    harvestUI?.refresh(); setLayer(current);
+  }
+  $("occupation").addEventListener("change", scenarioChanged);
+  $("disease").addEventListener("change", scenarioChanged);
   $("base").src = fresh("data/koppen.webp");
   // month-by-month layers: one image per month of the local calendar, a slider and a play button
   let frameIdx = 0, playTimer = null;
@@ -581,6 +660,9 @@ body.map-expanded { overflow: hidden; }
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
+    showTopic(topicOf(L)); lastLayer[topicOf(L)] = id;
+    $("settlement-controls").hidden = !meta.harvest;
+    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "");
     if (L.frames) {
       $("monthctl").hidden = false;
       for (const f of L.frames) { const im = new Image(); im.src = fresh("data/" + f); }   // preload for smooth play
@@ -588,10 +670,16 @@ body.map-expanded { overflow: hidden; }
     } else {
       stopPlay();
       $("monthctl").hidden = true;
-      $("base").src = fresh("data/" + L.file);
+      $("base").src = fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
     }
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
+    const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
+    history.replaceState(null, "", "#" + state.toString());
+    for (const link of document.querySelectorAll(".atlas-nav a")) {
+      if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
+        link.href = link.href.split("#")[0] + "#" + state.toString();
+    }
   }
   $("names").addEventListener("change", (e) => {
     const show = e.target.checked ? "" : "none";
@@ -635,6 +723,9 @@ body.map-expanded { overflow: hidden; }
       el.innerHTML = meta.biomes.filter((b) => b.share > 0).map((b) =>
         `<span><span class="sw" style="background:${b.color}"></span>${esc(b.label)}<span class="share">${(b.share * 100).toFixed(1)}%</span></span>`).join("")
         + `<span class="note">${esc(meta.biome_note)} <a href="data/whittaker_diagram.png" target="_blank">Climate diagram</a> · <a href="${meta.biome_source}" target="_blank" rel="noopener">Method source</a></span>`;
+    } else if (L.kind === "categories") {
+      el.innerHTML = L.items.map((b) => `<span><span class="sw" style="background:${b.color}"></span>${esc(b.label)}</span>`).join("")
+        + (L.note ? `<span class="note">${esc(L.note)}</span>` : "");
     } else if (L.kind === "zones") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("")
         + (meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])
@@ -652,7 +743,7 @@ body.map-expanded { overflow: hidden; }
       }
       el.innerHTML = `<div class="ramp"><div class="bar" style="background:linear-gradient(90deg,${L.stops.join(",")})"></div>
         <div class="ticks">${ticks.map((t) => `<span>${fmt(t)}</span>`).join("")}</div></div>
-        <span class="note">${esc(L.unit)}</span>`;
+        <span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
     }
   }
 
@@ -735,6 +826,7 @@ body.map-expanded { overflow: hidden; }
       }
       if (best) { [x, y] = best; k = cls.data[pixIdx(x, y)]; }
     }
+    harvestUI?.select(x, y, name, k === 255);
     lastMarker = { x, y };
     drawMarker();
     if (k === 255) {
@@ -1108,13 +1200,14 @@ body.map-expanded { overflow: hidden; }
     }) };
     if (L.kind === "biomes") return { title: "Whittaker potential biomes · annual temperature and precipitation",
       items: meta.biomes.filter((b) => b.share > 0).map((b) => ({ color: b.color, label: b.label, share: (b.share * 100).toFixed(1) + "%" })) };
+    if (L.kind === "categories") return { title: L.label, items: L.items };
     if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
       ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
     if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
     const span = L.vmax - L.vmin;
     const fmt = (v) => tickText(L, v);
     const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
-    return { title: `${L.label}, ${L.unit}`, ramp: { stops: L.stops, ticks } };
+    return { title: `${L.label}, ${L.unit}${L.scenario_files ? " · " + layerScenario(L) : ""}`, ramp: { stops: L.stops, ticks } };
   }
   const LEG_SANS = '"Alegreya Sans", "Gill Sans", sans-serif', LEG_MONO = '"IBM Plex Mono", ui-monospace, monospace';
   // Lay the legend out in columns across `width` (sizes scale with the image).
@@ -1265,7 +1358,7 @@ body.map-expanded { overflow: hidden; }
     ctx.drawImage(base, 0, 0, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
     // the selection circle stays out of the copy: it marks a click, not the map
-    const overlays = ["simrivers", "matchsvg", "towns", "placenames"]
+    const overlays = ["simrivers", "matchsvg", "towns", "placenames", "province-overlay"]
       .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
     for (const el of overlays) {
       const st = el.getAttribute("style") || "";
@@ -1700,7 +1793,22 @@ body.map-expanded { overflow: hidden; }
     $("find-msg").textContent = "Map towns jump to their climate. Real cities light up where on the map feels most like them.";
   });
 
-  setLayer("koppen");
+  if (meta.harvest && window.HarvestAtlas) {
+    try { harvestUI = await HarvestAtlas.load(meta, fresh); }
+    catch (error) {
+      $("harvest-section").hidden = false;
+      $("harvest-readouts").textContent = "Land and people data could not load. Reload the atlas or check the complete data bundle.";
+      console.error(error);
+    }
+  }
+  const initialView = new URLSearchParams(location.hash.slice(1));
+  for (const id of ["occupation", "disease"]) {
+    const value = initialView.get(id);
+    if ([...$(id).options].some(option => option.value === value)) $(id).value = value;
+  }
+  harvestUI?.refresh();
+  const requestedLayer = initialView.get("layer");
+  setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
   const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
   select(start0.x, start0.y + 8, start0.name);
 })();

@@ -1,0 +1,39 @@
+{
+  "version": 1,
+  "technology": "Low-input Han / Roman / Parthian agriculture, approximately 200 AD",
+  "interpretation": "Population scenarios, not a reconstructed census or a validated demographic forecast",
+  "occupation_quantiles": {"frontier": 0.2, "central": 0.5, "core": 0.8},
+  "river_access_floor": 0.75,
+  "river_access_length_km": 20.0,
+  "maximum_malaria_penalty": 0.35,
+  "irrigation_mosquito_water": 0.75,
+  "malaria_season_threshold": 0.25,
+  "livability_food_reference_per_km2": 100.0,
+  "biome_crop_realization": {"0": 1.0, "1": 0.85, "2": 1.0, "3": 0.75, "4": 0.55, "5": 0.95, "6": 0.9, "7": 0.7, "8": 1.0, "9": 0.85},
+  "grazing": {
+    "aboveground_npp_share": 0.5,
+    "sustainable_use": 0.25,
+    "human_kcal_per_kg_consumed_forage": 100.0,
+    "edible_forage_share": {"0": 0.2, "1": 0.5, "2": 0.35, "3": 0.12, "4": 0.10, "5": 0.45, "6": 0.3, "7": 0.15, "8": 0.65, "9": 0.25}
+  },
+  "malaria_traits": {
+    "biting": {"form": "briere", "c": 0.000203, "minimum": 11.7, "maximum": 42.3},
+    "competence_percent": {"form": "quadratic", "q": -0.54, "r": 25.2, "s": -206.0},
+    "daily_survival": {"form": "quadratic", "q": -0.000828, "r": 0.0367, "s": 0.522},
+    "parasite_development": {"form": "briere", "c": 0.000111, "minimum": 14.7, "maximum": 34.4},
+    "egg_adult_survival": {"form": "quadratic", "q": -0.00924, "r": 0.453, "s": -4.77},
+    "mosquito_development": {"form": "briere", "c": 0.000111, "minimum": 14.7, "maximum": 34.0},
+    "eggs_per_day": {"form": "quadratic", "q": -0.153, "r": 8.61, "s": -97.7}
+  },
+  "assumptions": [
+    "Crop yields, arable fractions, irrigation reach, fallow and calorie needs are inherited from the Harvest food model; they are low-input period assumptions.",
+    "Occupation scenarios are quantiles of historical population / food-capacity ratios in the existing Earth comparison, excluding the fitted Han plains. They are analogues, not confidence limits.",
+    "Biome crop realization represents clearing and management effort. Its coefficients are explicit scenario choices, not measured biome fertility or published 200 AD population coefficients.",
+    "Waterway access is a settlement scenario modifier; irrigation is already represented separately in crop yields.",
+    "The grazing calculation is a forage-energy allowance on land reserved from cropping. Aboveground, edible forage and human calorie conversion shares are uncertain scenario assumptions.",
+    "Mordecai 2013 Table 2 and equation 2 supply the malaria thermal traits. The curve is normalized against a fixed temperature grid, not each map.",
+    "Rainfall and irrigation are a simple moisture gate added to the thermal model. Relative suitability is not prevalence, mortality, or the probability of infection.",
+    "The maximum 35% disease penalty is a scenario assumption. An absent-malaria scenario removes it entirely.",
+    "Cities, food imports, fishing, soil nutrients, flood damage, political history and epidemic shocks are not explicitly simulated."
+  ]
+}

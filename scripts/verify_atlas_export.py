@@ -41,7 +41,7 @@ def verify(root, require_verified=False):
     assert any(l['id']=='whittaker' for l in meta['layers'])
     images=set()
     for layer in meta['layers']:
-        for file in [layer['file'],*layer.get('frames',[])]:
+        for file in [layer['file'],*layer.get('frames',[]),*layer.get('scenario_files',{}).values()]:
             with Image.open(data/file) as im:im.verify()
             images.add(file)
     with Image.open(data/'whittaker_diagram.png') as im:im.verify()
@@ -65,7 +65,11 @@ def verify(root, require_verified=False):
         assert (data/'biome_target_crosswalk.json').exists()
         assert len(meta['biome_target_audit'])==7
         assert any(l['id']=='biome_match' for l in meta['layers'])
-    return dict(atlas=str(root),binary_bytes=len(blob),fields=len(arrays),layer_images=len(images),places=len(rows),
+    harvest=None
+    if meta.get('harvest'):
+        from harvest.validation import verify as verify_harvest
+        harvest=verify_harvest(data,meta)
+    return dict(atlas=str(root),binary_bytes=len(blob),fields=len(arrays),layer_images=len(images),places=len(rows),harvest=harvest,
                 unclassified_land_share=meta['biomes'][0]['share'],status='passed',
                 numerical_checks_passed=bool(observed and observed.get('all_checks_passed')),
                 animation_frames=animations)

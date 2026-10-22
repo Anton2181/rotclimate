@@ -181,6 +181,28 @@ def malaria(T, P):
     return best
 
 
+def best_crop_mix(kcal, masks, can_double):
+    """Choose the actual primary and secondary crops of the best calorie mix."""
+    names = list(kcal)
+    stack = np.array([kcal[n] for n in names])
+    total = stack.max(0)
+    primary = np.where(total > 0, stack.argmax(0), -1)
+    secondary = np.full(total.shape, -1, dtype=int)
+    for i, a in enumerate(names):
+        if a == 'dates':
+            continue
+        for j, b in enumerate(names):
+            if b == a or b == 'dates':
+                continue
+            allowed = ~np.any(masks[a] & masks[b], axis=0) & can_double
+            candidate = kcal[a]+0.5*kcal[b]
+            better = allowed & (kcal[b] > 0) & (candidate > total)
+            total = np.where(better, candidate, total)
+            primary = np.where(better, i, primary)
+            secondary = np.where(better, j, secondary)
+    return total, primary, secondary
+
+
 def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None):
     """Every product, from monthly T (C), P (mm) and day/night range (C),
     shape (12, ...)."""
@@ -202,27 +224,15 @@ def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None):
     palm_water = irr * (1.0 - smoothstep(Pann, *DATES["dry_mm"]))
     kcal["dates"] = np.where(palm_ok, palm_water, 0.0) * DATES["grain"] * 1000.0 * DATES["kcal"]
     names = list(kcal)
-    stack = np.array([kcal[n] for n in names])
-    first = stack.argmax(0)
-    total = stack.max(0)
     # a second crop in the months the first leaves free, at half weight, and
     # only where water allows it every year: irrigated land, or a growing
     # period of ten months or more
-    second = np.zeros_like(total)
     can_double = (irr >= 0.5) | (out["lgp_days"] >= 300)
-    for i, a in enumerate(names):
-        if a == "dates":
-            continue
-        for b in names:
-            if b in (a, "dates"):
-                continue
-            free = ~np.any(masks[a] & masks[b], axis=0) & can_double
-            pair = np.where(free, kcal[a] + 0.5 * kcal[b], 0.0)
-            better = pair > total + second
-            second = np.where(better, pair - total, second)
-    out["kcal_ha"] = total + second
-    out["main_crop"] = np.where(total > 0, first, -1)
-    out["double_crop"] = second > 0
+    total, first, second = best_crop_mix(kcal, masks, can_double)
+    out["kcal_ha"] = total
+    out["main_crop"] = first
+    out["second_crop"] = second
+    out["double_crop"] = second >= 0
     # a double-cropped field is sown every year, not left fallow
     sown = np.where(out["double_crop"], 1.0, FALLOW)
     out["capacity"] = out["kcal_ha"] * arable * FARMED_SHARE * sown * 100.0 / NEED_KCAL

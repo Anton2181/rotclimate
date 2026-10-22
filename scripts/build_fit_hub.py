@@ -11,11 +11,14 @@ def main():
         'free_fit':('Free fit','World and physics fitted to the seasonal painted zones.'),
         'earth_fit':('Earth fit','World fitted with Earth r29 physics held fixed.'),
         'whittaker_fit':('Whittaker fit','World and physics fitted to the proposed annual-biome targets.')}
-    cards=[];rows=[]
+    cards=[];rows=[];population_rows=[];density_cards=[]
     for name,(title,description) in descriptions.items():
         summary=json.loads((ROOT/'atlases'/name/'summary.json').read_text())
         verified=bool(summary.get('observed_numerics',{}).get('all_checks_passed'))
         strict=summary['whittaker']['strict']
+        h=summary['harvest'];pop=h['population']['endemic']
+        population_rows.append(f'<tr><th scope="row">{title}</th><td>{h["food_capacity"]/1e6:.1f} M</td><td>{pop["frontier"]/1e6:.1f} M</td><td>{pop["central"]/1e6:.1f} M</td><td>{pop["core"]/1e6:.1f} M</td></tr>')
+        density_cards.append(f'<article><a href="{name}/#layer=land_density&amp;occupation=central&amp;disease=endemic"><img src="{name}/data/land_density_central_endemic.webp" alt="{title} central population density scenario"><h2>{title}: land and people</h2></a><p>{pop["central"]/1e6:.1f} M people in the central scenario</p></article>')
         cards.append(f'<article><a href="{name}/"><img src="{name}/data/whittaker.webp" alt="{escape(title)} potential biome map"><h2>{escape(title)}</h2></a>'
                      f'<p>{escape(description)}</p><p class="status">Numerical checks: {"passed" if verified else "unverified"}</p></article>')
         rows.append(f'<tr><th scope="row"><a href="{name}/">{title}</a></th><td>{summary["zonefit"]:.4f}</td>'
@@ -30,7 +33,11 @@ def main():
 <p class="note">Each target zone counts equally in mean biome agreement. Objective scores measure different definitions of a match and are not interchangeable. These figures classify the mean climate fields; calibration logs average scores across individual layouts.</p>
 <p class="note">Med. dry and Med. Cs are the shares of the painted Mediterranean zone classified as Köppen dry climates and Mediterranean climates, respectively.</p>
 <p>The Whittaker atlas includes the proposed biome target map and a separate match layer. Annual temperature and rainfall do not determine Mediterranean summer drought or swamp hydrology, so those seasonal diagnostics remain separate.</p>
-<p><a href="../reports/THREE_FIT_20261022.md">Campaign report</a> · <a href="../docs/BIOMES.md">Biome methods</a></p></section></html>'''
+<h2>Land and people around 200 AD</h2><p>Every atlas includes Harvest farming layers, malaria potential, place readouts, province totals and CSV downloads. Choose a map topic to see a small set of related layers. Overview contains the combined settlement-potential and expected-density maps.</p>
+<div class="cards">'''+''.join(density_cards)+'''</div>
+<div class="table"><table><thead><tr><th>Atlas</th><th>Mixed food ceiling</th><th>Frontier scenario</th><th>Central scenario</th><th>Settled-core scenario</th></tr></thead><tbody>'''+''.join(population_rows)+'''</tbody></table></div>
+<p class="note">Low-input Han, Roman and Parthian technology; environmental malaria potential included. Occupation scenarios are historical analogues, not confidence intervals or reconstructed censuses. Each atlas exposes the assumptions and a choice to remove the malaria penalty. All three density maps share one colour scale.</p>
+<p><a href="../reports/HARVEST_MIGRATION_20261022.md">Food, disease and settlement models</a> · <a href="../reports/THREE_FIT_20261022.md">Campaign report</a> · <a href="../docs/BIOMES.md">Biome methods</a></p></section></html>'''
     (ROOT/'atlases/index.html').write_text(html)
 
 

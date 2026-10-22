@@ -25,6 +25,13 @@ Whittaker fit optimizes the proposed strict target-to-biome crosswalk. All
 three classify the mean climate over surroundings layouts 1, 2 and 3.
 The report explains the scores, crosswalk assumptions and numerical checks.
 These are simulated potential climates, not observed vegetation maps.
+
+The Farming and Health and ecology topics bring Harvest analysis into each
+atlas. Overview includes settlement potential and expected density. Choose
+frontier, central or settled-core occupation and environmental malaria or no
+malaria penalty. These are c.200 AD scenarios, not a reconstructed census.
+Source models, explicit coefficients, province totals and CSVs are inside
+each atlas. See reports/HARVEST_MIGRATION_20261022.md for the method.
 '''
 
 
@@ -34,12 +41,14 @@ def main():
     args = ap.parse_args()
     files = [ROOT/'atlases/index.html', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
+             ROOT/'reports/HARVEST_MIGRATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
-                 'search_review.csv', 'atlas_validation.json', 'publication.json',
-                 'recovery_probe.json', 'earth_numerics_check.json', 'browser/browser_checks.json']:
+                 'search_review.csv', 'atlas_validation.json', 'publication.json', 'settlement_comparison.png', 'harvest_tests.log',
+                 'recovery_probe.json', 'earth_numerics_check.json', 'browser/browser_checks.json',
+                 'fresh_checkout.json', 'fresh_browser/browser_checks.json', 'javascript_tests.log']:
         file = evidence/name
         if file.exists():
             files.append(file)
