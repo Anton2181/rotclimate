@@ -83,6 +83,8 @@ def main():
     ap.add_argument("--set", default='{}', help='explicit overrides; saved numerical requirements are preserved')
     ap.add_argument('--fit-objective', choices=['zonefit','whittaker','whittaker-broad','whittaker-covered'], default='zonefit')
     ap.add_argument('--require-verified', action='store_true', help='refuse exports without successful observed convergence checks')
+    ap.add_argument('--max-outside',type=float,help='reject a build whose source land exceeds this outside-diagram fraction')
+    ap.add_argument('--minimum-biome-score',type=float,help='minimum strict target-biome objective for publication')
     ap.add_argument("--no-gif", action="store_true")
     ap.add_argument("--seeds", default="", help="comma list of surroundings layouts to average (ensemble climate)")
     ap.add_argument("--workers", type=int, default=1, help="parallel runs for --seeds")
@@ -90,6 +92,9 @@ def main():
                     help="image resolution multiplier; does not change the simulation grid")
     ap.add_argument("--checkpoint", help="local result cache, verified against parameters, seeds and model sources")
     a = ap.parse_args()
+    for label,value in [('max-outside',a.max_outside),('minimum-biome-score',a.minimum_biome_score)]:
+        if value is not None and not 0 <= value <= 1:
+            ap.error('--'+label+' must be between zero and one')
     from rotclimate import render as R
     from rotclimate.__main__ import simulate
     from rotclimate.atlas import build
@@ -143,9 +148,14 @@ def main():
     profile = 'broad' if a.fit_objective=='whittaker-broad' else 'strict'
     fit_score = objective(ev,'zonefit') if a.fit_objective=='zonefit' else biome_scores[profile]['score']
     coverage = None
-    if a.fit_objective == 'whittaker-covered':
+    if a.fit_objective == 'whittaker-covered' or a.max_outside is not None:
         coverage = biome_targets.rendered_coverage(r)
-        fit_score = biome_targets.covered_score(fit_score,coverage)
+        if a.fit_objective == 'whittaker-covered':
+            fit_score = biome_targets.covered_score(fit_score,coverage)
+    if a.max_outside is not None and coverage['outside_share'] > a.max_outside:
+        raise RuntimeError(f"Outside-diagram land {coverage['outside_share']:.4%} exceeds publication limit {a.max_outside:.4%}")
+    if a.minimum_biome_score is not None and biome_scores['strict']['score'] < a.minimum_biome_score:
+        raise RuntimeError('Strict biome fit is below the publication floor')
     # High-resolution monthly fields are large. Concurrent branches may
     # simulate independently, but only one export should allocate them at once.
     import fcntl

@@ -58,3 +58,34 @@ certificates and failed cases. Native ds8 verification and atlas publication
 are separate gates; the existing atlas stays active until they pass. The free
 and Earth fits are unchanged. Training layouts are reused, so this measures
 fit and scenario sensitivity rather than independent predictive validation.
+
+## Milestone 3: resolution checks and a bounded follow-up candidate
+
+All seven coarse scenarios and both ds16 refinements completed with successful
+observed numerical certificates. The three-layout *mean climate* is classified
+in these comparisons; scores are not averages of per-layout classifications.
+
+| Candidate | Weather grid | Source land outside | Strict biome objective | Coverage-aware score |
+|---|---:|---:|---:|---:|
+| Baseline | ds32 | 6.5670% | 0.529402 | 0.413401 |
+| RH 0.78, lapse 4.5 | ds32 | 0.9400% | 0.526837 | 0.526763 |
+| RH 0.72, lapse 4.0, orography 1.75 | ds32 | 0.0012% | 0.486326 | 0.486326 |
+| RH 0.78, lapse 4.5 | ds16 | 1.9008% | 0.520525 | 0.500882 |
+| RH 0.72, lapse 4.0, orography 1.75 | ds16 | 0.2788% | 0.492701 | 0.492551 |
+
+The original screen winner remains recorded as RH 0.78 / lapse 4.5. Its coverage
+worsens with grid refinement and nearly exhausts the 2% publication ceiling.
+A follow-up native candidate therefore uses RH **0.75** (between the screened
+0.72 and 0.78), lapse **4.5 K/km**, and the original orography coefficient.
+This is an adaptive next experiment, not a retroactive change to the frozen
+screen protocol or a claim that this exact midpoint passed ds16 already.
+Native ds8 verification must meet the same coverage and strict-biome gates.
+The chosen lapse is close to the retained Earth r29 lapse, 4.414 K/km; the Earth
+fit itself is untouched.
+
+The complete cases, source hashes, selection record and explicit follow-up
+parameters are under `output/whittaker_coverage_20261022/`. Sources of the frozen
+screen are captured at commit `03e7d56`. Native publication now has explicit
+`--max-outside` and `--minimum-biome-score` gates. The standalone verifier
+correctly rejects the old 8.52% atlas against a 2% limit. The comparison hub
+also shows actual source-land outside shares for all three fits.

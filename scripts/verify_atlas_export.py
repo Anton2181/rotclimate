@@ -24,7 +24,7 @@ def verify_numerics(observed):
         assert observed['temperature_max_update_c'] <= .05
 
 
-def verify(root, require_verified=False):
+def verify(root, require_verified=False, max_outside=None):
     root=Path(root); data=root/'data';meta=json.loads((data/'atlas.json').read_text());blob=(data/'atlas.bin').read_bytes()
     end=0;arrays={}
     for name,spec in meta['arrays'].items():
@@ -36,6 +36,12 @@ def verify(root, require_verified=False):
     assert np.array_equal(arrays['biome']==255,arrays['cls']==255)
     assert set(np.unique(arrays['biome']))<=set(range(len(LABELS)))|{255}
     assert abs(sum(b['share'] for b in meta['biomes'])-1)<1e-10
+    if max_outside is not None:
+        assert 0 <= max_outside <= 1
+        assert meta['biomes'][0]['share'] <= max_outside, 'Source-land outside-diagram limit failed'
+        summary=json.loads((root/'summary.json').read_text())
+        if 'whittaker_coverage' in summary:
+            assert abs(summary['whittaker_coverage']['outside_share']-meta['biomes'][0]['share']) < 2e-6
     assert len(meta['lapse_local'])==len(meta['months'])==11 and len(meta['lapse12'])==12
     assert np.isfinite(meta['lapse12']).all() and min(meta['lapse12'])>0
     assert any(l['id']=='whittaker' for l in meta['layers'])
@@ -77,6 +83,7 @@ def verify(root, require_verified=False):
 if __name__=='__main__':
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('atlas',nargs='+');ap.add_argument('--out')
     ap.add_argument('--require-verified',action='store_true')
-    a=ap.parse_args();results=[verify(root,a.require_verified) for root in a.atlas]
+    ap.add_argument('--max-outside',type=float)
+    a=ap.parse_args();results=[verify(root,a.require_verified,a.max_outside) for root in a.atlas]
     text=json.dumps(results,indent=2);print(text)
     if a.out:Path(a.out).write_text(text+'\n')

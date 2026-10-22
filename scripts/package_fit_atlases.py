@@ -41,7 +41,7 @@ def main():
     args = ap.parse_args()
     files = [ROOT/'atlases/index.html', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
-             ROOT/'reports/HARVEST_MIGRATION_20261022.md',
+             ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
@@ -52,6 +52,10 @@ def main():
         file = evidence/name
         if file.exists():
             files.append(file)
+    coverage = ROOT/'output/whittaker_coverage_20261022'
+    for name in ['review.json','protocol.json','selected_params.json','publication_params.json','native_choice.json','publication.json','coverage_comparison.png',
+                 'atlas_validation.json','browser/browser_checks.json']:
+        if (coverage/name).is_file():files.append(coverage/name)
     files += sorted((ROOT/'calibration/three_fit_20261022').glob('**/*.json'))
     summaries = {}
     for name in NAMES:
