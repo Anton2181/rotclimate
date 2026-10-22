@@ -107,11 +107,11 @@ class AdvectionSolver:
         max_iter = self.max_iter if max_iter is None else max_iter
         if not np.isfinite(rtol) or rtol <= 0 or max_iter < 1:
             raise ValueError("Solver tolerance and iteration limit must be positive")
+        scale = max(np.abs(boundary).max(), 1e-12)
         if HAVE_NUMBA:
             start = np.array(boundary if guess is None else guess, float, copy=True)
             start[self.border] = boundary[self.border]
             phi = start.copy()
-            scale = max(np.abs(boundary).max(), 1e-12)
             Sc = np.ascontiguousarray(S, float)
             n, converged, update = _sweeps(phi, ce, cw, cs, cn, diag, Sc, rtol * scale, max_iter, self.omega)
             # the exact solution of this M-matrix problem is bounded by its
@@ -142,11 +142,7 @@ class AdvectionSolver:
                     method = 'gauss_seidel'
                 if not converged:
                     phi = self._direct(ce, cw, cs, cn, diag, Sc, boundary)
-                    update = self.equation_error(phi, ce, cw, cs, cn, diag, Sc)
-                    # Account only for floating-point roundoff, not a relaxed
-                    # physical tolerance. Direct solves must pass the equation.
-                    roundoff = 50 * np.finfo(float).eps * max(1., float(np.max(np.abs(phi))))
-                    converged = np.isfinite(update) and update <= rtol * scale + roundoff
+                    update, converged = self._direct_status(phi, ce, cw, cs, cn, diag, Sc, boundary, rtol * scale)
                     method = 'direct'
             self.iterations.append(n)
             self.converged.append(converged)
@@ -155,7 +151,8 @@ class AdvectionSolver:
             if not np.isfinite(phi).all():
                 raise FloatingPointError("Nonfinite linear solver output")
             if not converged:
-                message = f"Linear solve failed its update tolerance after {n} sweeps (rtol={rtol:g})"
+                criterion = 'equation/boundary' if method == 'direct' else 'update'
+                message = f"Linear solve failed its {criterion} tolerance after {n} sweeps (rtol={rtol:g})"
                 if self.require_convergence:
                     raise RuntimeError(message)
                 if not self._warned_limit:
@@ -163,12 +160,30 @@ class AdvectionSolver:
                     self._warned_limit = True
             return phi
         phi = self._direct(ce, cw, cs, cn, diag, S, boundary)
-        update = self.equation_error(phi, ce, cw, cs, cn, diag, S)
+        update, converged = self._direct_status(phi, ce, cw, cs, cn, diag, S, boundary, rtol * scale)
+        self.iterations.append(0); self.converged.append(converged)
+        self.final_updates.append(update); self.methods.append('direct')
         if not np.isfinite(phi).all() or not np.isfinite(update):
             raise FloatingPointError('Nonfinite direct solver output')
-        self.iterations.append(0); self.converged.append(True)
-        self.final_updates.append(update); self.methods.append('direct')
+        if not converged:
+            message = f"Linear direct solve failed its equation/boundary tolerance (error={update:g}, rtol={rtol:g})"
+            if self.require_convergence:
+                raise RuntimeError(message)
+            if not self._warned_limit:
+                warnings.warn(message, RuntimeWarning, stacklevel=2)
+                self._warned_limit = True
         return phi
+
+    def _direct_status(self, phi, ce, cw, cs, cn, diag, source, boundary, tolerance):
+        """Certify the solved equation and prescribed boundary, for either backend."""
+        if not np.isfinite(phi).all():
+            return float('inf'), False
+        equation = self.equation_error(phi, ce, cw, cs, cn, diag, source)
+        boundary_error = float(np.max(np.abs(phi[self.border] - boundary[self.border])))
+        error = max(equation, boundary_error)
+        # Only floating-point roundoff is allowed beyond the requested tolerance.
+        roundoff = 50 * np.finfo(float).eps * max(1., float(np.max(np.abs(phi))))
+        return error, bool(np.isfinite(error) and error <= tolerance + roundoff)
 
     @staticmethod
     def equation_error(phi, ce, cw, cs, cn, diag, source):
