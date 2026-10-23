@@ -54,6 +54,7 @@ def one(job):
     record = dict(fit=fit, region=region, identity=identity)
     try:
         p = Params(**protocol['fits'][fit])
+        earth.REGIONS.update(protocol.get('region_specs', {}))
         case = earth.region_case(region, protocol['cell_km'], pad_km=protocol['pad_km'])
         result = earth.run_case(p, case, steps=p.steps_per_year)
         record['numerics'] = result.numerics
@@ -97,12 +98,24 @@ def summarize(rows, fits, regions):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--fits', nargs='+', required=True, help='NAME=PARAMS.json, e.g. baseline=atlases/earth_fit/params.json')
-    ap.add_argument('--regions', nargs='+', default=list(earth.REGIONS), choices=list(earth.REGIONS))
+    ap.add_argument('--regions', nargs='+')
+    ap.add_argument('--regions-file', type=Path, help='JSON with additional frozen Earth region specifications')
     ap.add_argument('--cell-km', type=float, default=56.)
     ap.add_argument('--pad-km', type=float, default=1100.)
     ap.add_argument('--workers', type=int, default=2)
     ap.add_argument('--out', type=Path, required=True)
     a = ap.parse_args()
+    extra = json.loads(a.regions_file.read_text()) if a.regions_file else {}
+    for name, spec in extra.items():
+        if name in earth.REGIONS: ap.error('Additional regions cannot replace an existing region')
+        if any(c not in 'abcdefghijklmnopqrstuvwxyz0123456789_' for c in name):
+            ap.error('Region names must contain lowercase letters, digits or underscores')
+        if not (-85 < spec['lat0'] < 85 and -180 <= spec['lon0'] <= 180
+                and spec['width_km'] > 0 and spec['height_km'] > 0):
+            ap.error('Invalid additional region geometry')
+    earth.REGIONS.update(extra)
+    a.regions = a.regions or (list(extra) if extra else list(earth.REGIONS))
+    if not set(a.regions) <= set(earth.REGIONS): ap.error('Unknown region')
     if not 1 <= a.workers <= 2: ap.error('Use one or two workers')
     if len(a.regions) != len(set(a.regions)): ap.error('Repeated regions change weighting')
     fits = {}
@@ -117,9 +130,14 @@ def main():
             ap.error('Rainfall benchmarks require verified numerical criteria')
         fits[name] = asdict(p)
     sources = list((ROOT/'rotclimate').glob('*.py')) + [Path(__file__), ROOT/'scripts/rainfall_metrics.py']
+    # Build any new observed grids before freezing their actual byte hashes.
+    for region in a.regions:
+        earth.region_case(region, a.cell_km, pad_km=a.pad_km)
+    if a.regions_file: sources.append(a.regions_file.resolve())
     sources += [ROOT/'data/cache/earth'/f'{r}_{a.cell_km:g}km_{a.pad_km:g}pad.npz' for r in a.regions]
     sources += [ROOT/'data/cache/earth'/f'west_fetch_{km}km.npz' for km in (1700, 5100)]
     protocol = dict(fits=fits, regions=a.regions, cell_km=a.cell_km, pad_km=a.pad_km,
+                    region_specs={r:earth.REGIONS[r] for r in a.regions},
                     rainfall_loss=LOSS_SPEC,
                     sources={str(p.relative_to(ROOT)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
                     reference='WorldClim 2.1, monthly 1970-2000 normals; area-averaged to local projected cells',

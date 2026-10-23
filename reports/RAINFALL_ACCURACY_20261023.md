@@ -93,3 +93,43 @@ means, reversed wet seasons, desert/zero-rain behavior, invalid data,
 rainfall-only optimizer scoring, failed numerical checks, incomplete regional
 comparisons and equal-region versus pooled-cell reporting. Calibration and
 new validation results will be recorded after they complete.
+
+## Completed baseline and first search
+
+The strict 19-region rerun passes all observed convergence checks and confirms
+the archived errors: equal-region monthly MAE **31.359 mm**, annual cell MAE
+**293.910 mm**, annual log RMSE **0.451874**. Of **7,834** cells receiving at
+least 50 mm/year, **39.63%** are within 25% of observed annual rainfall and
+**69.80%** within 50%. These pooled-cell percentages differ from equal-region
+averages; the benchmark summary labels both. Mean 12-month rainfall-fraction
+total variation is 0.173522, a separate seasonal-pattern diagnostic.
+
+![Published rainfall baseline](../output/climate_physics_20261023/rainfall_baseline.png)
+
+The first search completes nine candidates and eleven final development
+comparisons with no numerical failures. Its selected training loss improves
+**0.487145 → 0.466780 (4.18%)**, but the full 19-region loss worsens
+**0.442412 → 0.457687**, monthly MAE rises **31.359 → 31.770 mm**, and pooled
+annual agreement within 25% falls **39.63% → 35.15%**. Several dry biases
+worsen, including New Zealand and southwest Australia. The candidate fails
+the predeclared regional and overall protections and is rejected. No atlas
+is updated; the two new geographic tests remain unused.
+
+![Rejected first candidate](../output/climate_physics_20261023/rainfall_r1.png)
+
+The follow-up is a separately bounded balanced refinement: all original
+19 regions now contribute to the rainfall training objective, one baseline
+plus eight candidates, sigma 0.04 and seed 251023. They are explicitly all
+development data; none are relabeled as independent validation. Its unchanged
+selection limits and distinct region list are frozen in `rainfall_r2_policy.json`
+before results. Norway and southeast Africa remain reserved for a selected
+candidate. This responds to the observed regional tradeoff rather than
+relaxing the rainfall protections.
+
+The geographic benchmark now accepts an explicit region-definition JSON and
+freezes both those definitions and the actual aggregated observational grids.
+The review script checks shared input/source hashes, paired cell counts, saved
+optimizer costs and every selection protection. All 26 rainfall, Earth-search
+and regional-selection tests pass. The baseline, rejected candidate, journals,
+station-cell samples, figure data and source manifests are retained in the
+repository.

@@ -29,6 +29,8 @@ These are simulated potential climates, not observed vegetation maps.
 See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
 See reports/CLIMATE_PHYSICS_20261023.md for subsequent physics experiments,
 paired calibration checks and the criteria used to select published climates.
+See reports/RAINFALL_ACCURACY_20261023.md for observed local rainfall errors
+and the separate rainfall calibration experiments.
 
 The Farming and Health and ecology topics bring Harvest analysis into each
 atlas. Overview includes settlement potential and expected density. Choose
@@ -56,6 +58,7 @@ def main():
              ROOT/'data/whittaker_coverage.json',
              ROOT/'reports/ITERATION_20261023.md', ROOT/'data/population_model.json',
              ROOT/'reports/CLIMATE_PHYSICS_20261023.md',
+             ROOT/'reports/RAINFALL_ACCURACY_20261023.md',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
