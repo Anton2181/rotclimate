@@ -612,13 +612,17 @@ HYDE and the reference regions before this file was opened.
 
 | Against Roman towns, AD 150 | Town count: rank / to move | Town area: rank / to move |
 |---|---|---|
-| uniform over land | −0.067 / 54 % | 0.042 / 58 % |
-| settlement base | 0.115 / 54 % | 0.124 / 57 % |
-| × cores (cradles + Rome, great circle, L 800) | 0.471 / 46 % | 0.485 / 48 % |
-| × cores (travel: forest × 2, relief 1 per km, L 800) | **0.584 / 42 %** | **0.603 / 44 %** |
-| HYDE 3.3, 200 CE | 0.604 / 44 % | 0.635 / 42 % |
-| × rule cores (top 10, great circle, L 800) | 0.135 / 63 % | 0.176 / 62 % |
-| × rule cores (top 10, travel, L 800) | 0.106 / 67 % | 0.153 / 66 % |
+| uniform over land | −0.097 / 54 % | 0.059 / 58 % |
+| settlement base | 0.189 / 54 % | 0.197 / 57 % |
+| × cores (cradles + Rome, great circle, L 800) | 0.525 / 46 % | 0.539 / 48 % |
+| × cores (travel: forest × 2, relief 1 per km, L 800) | **0.616 / 42 %** | **0.636 / 44 %** |
+| HYDE 3.3, 200 CE | 0.641 / 44 % | 0.672 / 42 % |
+| × rule cores (top 10, great circle, L 800) | 0.196 / 63 % | 0.238 / 62 % |
+| × rule cores (top 10, travel, L 800) | 0.163 / 67 % | 0.210 / 66 % |
+
+Rank correlations here and below average tied ranks (`scipy.stats.spearmanr`).
+Town counts have many ties; with continuous fields, as for HYDE blocks and
+Han commanderies, the values are unchanged.
 
 The history-free rule does not carry over to Rome. Its western cores
 (Mesopotamia, the Nile, the upper Euphrates, the lower Danube) pull towns
@@ -626,8 +630,8 @@ east and north, and none sits in Italy or Greece. On a map, the rule is a
 weak fallback: the gain needs the cores a history supplies.
 
 Inside the Roman empire the environment alone barely predicts where the
-towns were (0.12). The old-core term, carried over unchanged, raises it to
-0.58–0.60, level with HYDE. Urban life was densest in the old east:
+towns were (0.19). The old-core term, carried over unchanged, raises it to
+0.62–0.64, close to HYDE's 0.64–0.67. Urban life was densest in the old east:
 Greece, Asia Minor and Syria, then Italy. It thinned toward Gaul,
 Britain and the Danube, whatever the soil.
 
@@ -636,10 +640,16 @@ Britain and the Danube, whatever the soil.
 - Its first two cores fall in the Ayauda River Valley, in the province the
   campaign calls *The Heartlands*, and in Old Arǧos. A third falls in
   Mazdahyu; two more are beyond the hex map.
-- Against the sheet's settlement levels (2,227 hexes, unweighted
-  pixel means), the rank correlation rises from 0.243 with the settlement
-  base to 0.280 with five cores at L = 700 km. One core alone lowers it.
+- Against the sheet's settlement levels (2,227 hexes, unweighted pixel
+  means, tied ranks averaged), the rank correlation rises from 0.298 with
+  the settlement base to 0.334 with five cores at L = 700 km. One core alone
+  lowers it.
 - The sheet is mostly levels 10 and 20, so the ranks are coarse.
+- **The campaign's 151 settlements** (`ravages/data.json`, from the Capital
+  City Aēnaha down to towns), counted in ~150 km blocks, follow the
+  settlement base (rank 0.40). Five rule cores do worse (0.31), and so does
+  the capital with the two major cities as cores (0.27). The towns were
+  spread over the farmland rather than crowded toward the heartland.
 
 Next population steps:
 

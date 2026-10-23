@@ -41,8 +41,9 @@ def blocks(x, n=12):
 
 
 def spearman(a, b):
-    ra, rb = np.argsort(np.argsort(a)), np.argsort(np.argsort(b))
-    return float(np.corrcoef(ra, rb)[0, 1])
+    """Rank correlation with tied ranks averaged (nan when a field is constant)."""
+    from scipy.stats import spearmanr
+    return float(spearmanr(a, b).statistic)
 
 
 def metrics(model_people, hyde_people, area, land_blk):
