@@ -676,6 +676,35 @@ next plan
 `continentality` and widens the dark-winter interiors through e23's
 deep-continent term, which r33 limits to latitudes above 30°.
 
+### Continentality balance (rejected) and the lapse rate
+
+| On r33, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| continentality 0.5, deep continent 0.45 | 0.9941 | 0.9893 | 0.9870 | 1.0090 | 0.9924 | −1.4 % | +0.2 % |
+| continentality 0.55, deep continent 0.4 | 0.9944 | 0.9901 | 0.9896 | 1.0064 | 0.9930 | −1.3 % | +0.2 % |
+
+Lower continentality helps the subtropical interiors (Anatolia −11 %,
+Central Asia −10 %, Levant −7 %). The mid-latitude group still worsens: the
+US Midwest's range narrows (−2.6 → −3.6 °C), and its westward land share
+(~0.5) is too low for e23's deep-continent term to reach it.
+
+**The lapse rate is too gentle.** Under r33 the annual error rises with
+elevation inside regions:
+
+| Region | Error per km of elevation | r |
+|---|---|---|
+| all 31, pooled | +0.46 K/km | |
+| north India | +1.03 K/km | 0.87 |
+| Korea | +1.79 K/km | 0.72 |
+| the Levant | +1.24 K/km | 0.50 |
+
+High ground runs warm against low ground. Iran's and north India's cold
+bias lies on low ground: it is not a plateau effect. A plateau warming
+would make it worse. The next plan
+(`calibration/lapse_20261023/plan.json`) steepens the lapse rate from 4.41
+to 4.85 or 5.1 K/km and raises the land offset to keep the mean at the
+cells' mean elevation.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).

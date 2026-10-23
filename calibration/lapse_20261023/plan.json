@@ -1,0 +1,9 @@
+{
+  "frozen": "2026-10-23, after the continentality-balance plan failed (S 0.9941 / 0.9944, mid-latitude group worse) and before any result of this plan",
+  "finding": "Under r33 the cell-by-cell annual error rises with elevation inside regions: pooled slope +0.46 K/km over the 31 development regions (north India +1.03, r 0.87; Korea +1.79; Levant +1.24). High ground runs warm against low ground, so the fitted 4.41 K/km lapse rate is too gentle. Iran's and north India's cold bias is not a plateau effect.",
+  "hypothesis": "Steepen the lapse rate and give the land the mean back at the development cells' mean elevation (~0.65 km), so the regional means stay and the within-region gradient is corrected.",
+  "reference": "output/continentality_range_20261023/reference (r33, same source fingerprint)",
+  "candidates": {"lapse4.85": {"lapse_rate": 4.85, "land_offset": -0.38},
+                  "lapse5.1": {"lapse_rate": 5.1, "land_offset": -0.22}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
