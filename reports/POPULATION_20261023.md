@@ -78,6 +78,26 @@ The settings were fixed on Han and HYDE before the Roman towns were opened:
    - southern India, which is too empty: far from any listed core but dense
      in HYDE.
 
+## The great cities of AD 100–200
+
+`scripts/great_cities_check.py` takes Modelski's sizes as geocoded by Reba et
+al. (2016): the 20 cities in the window with a size at AD 100 or 200. It
+finds each city's percentile among the 100 km means of every land cell. The
+11 cities more than 500 km from a declared core are the fair subset, since
+Rome itself is a core.
+
+| Field | Median percentile, all 20 | In the top decile, all 20 | Median, the 11 far from cores | Top decile, the 11 |
+|---|---|---|---|---|
+| settlement base | 69 % | 0 % | 69 % | 0 % |
+| × old cores (travel, L 800) | 95 % | 60 % | 86 % | 27 % |
+| HYDE 3.3, 200 CE | 93 % | 55 % | 90 % | 55 % |
+
+- The environment alone never puts a great city in its top tenth.
+- With old cores the great cities sit high. Far from the cores the cored
+  model is level with HYDE in median but less often at the very top.
+- The misses are the Ganges cities (Pataliputra, Vaishali at 80 %) and
+  Anuradhapura in Sri Lanka (55 %), all far from any declared core.
+
 ## On the fantasy map
 
 - The automatic rule's first core falls in the province the campaign calls
@@ -99,7 +119,7 @@ nation's heartland, not as a silent default.
 | HYDE 3.3 (population, cropland, pasture) | Consistency test | Done |
 | Han AD 2 census polygons (Zheng & Wu 2026) | Independent count inside a state | Done |
 | Hanson 2016 Roman towns (OxREP) | Independent test of town density | Done |
-| Reba et al. 2016 / Modelski city sizes | Rank-size test of the largest cities | Not yet |
+| Reba et al. 2016 / Modelski city sizes | Where the great cities sat in each density field | Done, below |
 | ORBIS (Roman travel costs) | Check of the travel-cost core distance | Not yet; the cost ratios are noted in the research note |
 | GAEZ / Caloric Suitability Index | Alternative capacity input | Research note only |
 
@@ -112,6 +132,8 @@ python3 -I scripts/population_cores.py --earth output/land_people/earth/earth.np
 python3 -I scripts/roman_cities_check.py --xlsx data/cache/hanson2016/cities.xlsx \
     --earth output/land_people/earth/earth.npz --hyde data/cache/hyde33/popc_ce_200.tif \
     --out output/population_roman/ad150.json
+python3 -I scripts/great_cities_check.py --csv data/cache/reba2016/modelskiAncientV2.csv \
+    --earth output/land_people/earth/earth.npz --hyde data/cache/hyde33/popc_ce_200.tif
 python3 -I scripts/plot_population_cores.py --earth output/land_people/earth/earth.npz \
     --hyde data/cache/hyde33/popc_ce_200.tif --shp data/cache/han_ad2/shp/ResearchArea \
     --xlsx data/cache/hanson2016/cities.xlsx --out output/population_cores
