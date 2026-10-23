@@ -928,6 +928,110 @@ hard as a true rain shadow. A rain shadow needs the vapour already lost
 upwind, and the model's moisture sink does that once there is enough
 upslope rain. r34 stays.
 
+## Iteration 7: dry ground heats the air → r35
+
+Under r34 the west-coast and Mediterranean regions are 2–3 °C too cool in
+their warmest month:
+
+| Region | Warmest month | Coldest month |
+|---|---|---|
+| SW Australia | −3.3 °C | +0.6 °C |
+| Morocco | −3.2 | −0.2 |
+| Iberia | −3.2 | +0.4 |
+| British Isles | −2.9 | −0.0 |
+| the Cape | −2.7 | +0.1 |
+| Pacific NW | −2.4 | +0.9 |
+
+**The sea is not the cause.** With the observed sea (WOA18,
+`sst_source="observed"`) the summers stay as cool (Iberia −2.8, SW
+Australia −3.5), and winters become 2–5 °C too warm. The model's too-cold
+winter sea has been hiding that land air is too marine all year.
+
+**Decomposition** (scratch probe wrapping the temperature solve). For the
+warmest month at the scored cells, sea-level equivalent:
+
+| Region | Land equilibrium | With eddy mixing | Solved air |
+|---|---|---|---|
+| Iberia | −0.6 °C | −1.9 | −3.2 |
+| SW Australia | +1.2 | −0.2 | −3.3 |
+| western Europe | −2.5 | −1.8 | −2.1 |
+| the Levant | +2.3 | +1.3 | +0.9 |
+
+On the dry coasts the land's own summer equilibrium is right. The air is
+too cool because the fitted ~1.2-day summer coupling lets sea air travel
+~500 km inland before the land warms it.
+
+**e36 (`dry_coupling`, off by default).** On wet ground summer sunshine goes
+into evaporation; on dry ground it goes into sensible heat, which mixes a
+deep boundary layer within hours (the Bowen ratio). The sunshine part of
+the land–air coupling is multiplied by `1 + dry_coupling × dryness`, where
+dryness is 1 minus the bucket's soil wetness (as `wet_cooling` uses it).
+
+The plan (`calibration/dry_coupling_20261023/plan.json`) was frozen before
+any result. It declared e36 at 1.0 and 2.5, and 2.5 with e33's subtropical
+ramp (`continentality_lat` 25). The reasoning: e36 warms the dry interiors
+whose summers are already too hot, and e33 damps those but had narrowed
+the coasts' seasons. r34's rerun under the new source fingerprint is
+identical.
+
+| On r34, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e36 1.0 | 0.9913 | 0.9979 | 0.9696 | 0.9913 | 0.9940 | −2.1 % | +0.3 % |
+| e36 2.5 | 0.9929 | 1.0077 | 0.9653 | 0.9848 | 0.9966 | −2.1 % | +0.7 % |
+| **e36 2.5 + e33 25°** | **0.9758** | 0.9782 | 0.9520 | 0.9974 | 0.9707 | **−5.7 %** | +0.8 % |
+
+e36 2.5 alone fails the training group: the Levant, Central Asia and
+Mexico warm further. With e33 the pair gains more than either alone did.
+e33 by itself scored 0.9964 and failed the mid-latitude group.
+
+| Region | Temperature error under r34 → r35 | Range error |
+|---|---|---|
+| SW Australia | 1.40 → 0.76 °C | −3.7 → −1.9 °C |
+| the Cape | 1.70 → 1.13 | −2.7 → −1.2 |
+| north India | 4.31 → 3.30 | +5.5 → +1.3 |
+| Mexico | 1.82 → 1.51 | +2.5 → +0.8 |
+| Texas | 1.36 → 1.11 | +2.0 → +0.1 |
+| Iberia | 1.86 → 1.62 | −3.2 → −2.6 |
+| the Levant | 2.44 → 2.23 | +4.5 → +2.9 |
+| Victoria | 1.23 → 1.56 | |
+| east China | 1.98 → 2.17 | +1.0 → −1.5 |
+| Chile | 2.09 → 2.36 | +1.3 → +2.1 |
+| east Australia | 1.35 → 1.54 | |
+| Korea | 2.25 → 2.38 | |
+| Manchuria | 2.68 → 2.79 | |
+
+The losses are east-coast winters made milder by e33, and Chile's and
+Victoria's summers, already too warm, made warmer.
+
+**r35 adopted** (`calibration/local_accuracy_20261023/r35_params.json`:
+r34 + `dry_coupling` 2.5 + `continentality_lat` 25).
+
+| Check | Result |
+|---|---|
+| gate v2, 31 regions | S 0.9758; temperature 1.969 → 1.858 °C, rain loss 0.4756 → 0.4795: **passes** |
+| paired 28 km | S 0.9843; temperature 2.058 → 1.976 °C, rain loss 0.438 → 0.441: **passes** |
+| sealed six, run once | S 0.9698; temperature 2.204 → 2.051 °C, rain loss 0.556 → 0.561 |
+
+Sealed regions:
+
+| Region | Temperature error |
+|---|---|
+| Yunnan | 2.37 → 1.62 °C (range error +6.1 → +1.5) |
+| Caucasus | 2.66 → 2.49 |
+| NE US | 1.94 → 1.85 |
+| SE Africa | 1.36 → 1.30 |
+| Norway | 3.64 → 3.62 |
+| Tasmania | 1.25 → 1.43 |
+
+![Warmest- and coldest-month error, r34 against r35](../output/dry_coupling_20261023/temp_r34_r35.png)
+
+Drawn by `scripts/plot_temp_regions.py`. Two errors remain large:
+
+- **Hot-desert summers are still 3–6 °C too cool.** These are the Sahara
+  edge (the south of the Iberia panel), north India's warmest month
+  (−3.4 °C), and Iran's plateau.
+- **East China's winter now runs 1.4 °C warm.**
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
