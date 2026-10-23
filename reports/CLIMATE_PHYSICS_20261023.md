@@ -68,3 +68,35 @@ terrain mass, humidity-variance dissipation, zero rates, invalid mass,
 unaccounted crest clipping, and a coupled climate solve whose recorded
 moisture residual matches the new exchange. Existing core, Earth, moisture,
 transport, seasonal-column and solver-certificate tests also pass.
+
+## Milestone 2: calibrate the climate that the atlas actually displays
+
+The former calibration averages scores over surroundings layouts; atlas
+publication averages their temperature/rainfall fields before classification.
+Those operations differ for nonlinear climate rules, biome boundaries and
+outside-diagram penalties. A search could therefore select a winner for a
+different mathematical objective from the published atlas.
+
+New CLI searches default to `--ensemble-objective climate`: they use the
+same shared `ensemble_mean` function as atlas publication, then measure all
+fit metrics and source-terrain coverage on that averaged climate. Every
+layout is evaluated; racing is disabled and explicitly rejected if requested.
+The Python API retains its previous `scores` default, and
+`--ensemble-objective scores` explicitly reproduces historical searches.
+Saved publications and their reported scores are unchanged.
+
+The shared average rejects mismatched calendars, physical parameters or
+geography inside the mapped domain. It preserves failed member numerical
+certificates. New calibration checkpoints have a configuration sidecar with
+objective, aggregation, layouts, parameter bounds, coefficients, source/input
+hashes and optimizer settings; incompatible resumes fail rather than mixing
+objectives. A bounded `storm-water` search space varies eight moisture/storm
+coefficients while retaining the selected exchange scheme and world geometry.
+
+Six focused tests prove the distinction with a nonlinear manufactured score
+(mean scores 5 versus score of mean climate 4), exact agreement with the
+atlas's averaging path, source-terrain coverage after averaging, rejection of
+incompatible members and racing, preservation of failed certificates, and
+the new CLI default. All 36 calibration, Whittaker coverage and storm tests
+pass. Earth retuning and map comparisons are separate experiments; changing
+the search objective alone is not claimed as an accuracy gain.

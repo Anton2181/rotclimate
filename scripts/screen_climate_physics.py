@@ -112,10 +112,11 @@ def main():
             ap.error('Base profiles must require all three convergence checks')
         bases[region] = asdict(p)
     sources = list((ROOT/'rotclimate').glob('*.py')) + [Path(__file__)]
-    sources += list((ROOT/'data/source').glob('*.png'))
+    sources += [p for p in (ROOT/'data/source').iterdir() if p.is_file()]
     sources += [ROOT/'data/whittaker_biomes.csv', ROOT/'data/biome_target_crosswalk.json', ROOT/'data/whittaker_coverage.json']
     if a.mode == 'earth':
         sources += [ROOT/'data/cache/earth'/f'{r}_{a.cell_km:g}km_1100pad.npz' for r in regions]
+        sources += [ROOT/'data/cache/earth'/f'west_fetch_{km}km.npz' for km in (1700, 5100)]
     protocol = dict(mode=a.mode, profiles=profiles, bases=bases, regions=regions,
         cell_km=a.cell_km, downsample=a.downsample, seeds=a.seeds, groups=GROUPS,
         sources={str(p.relative_to(ROOT)):sha(p) for p in sources},

@@ -1,5 +1,12 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Climate development, 23 October 2026:** an opt-in conservative storm-water
+scheme now has explicit internal and boundary accounting. The first Earth
+pilot establishes conservation but needs retuning before atlas promotion.
+New calibration CLI runs score the same averaged climate fields that an atlas
+publishes (`--ensemble-objective climate`, no racing); `scores` reproduces the
+historical layout-score average. See the [physics and calibration report](reports/CLIMATE_PHYSICS_20261023.md).
+
 **Updated 22 October 2026:** the [comparison hub](atlases/index.html) now includes
 complete free-fit, Earth-fit and separate Whittaker-fit atlases, using the same
 three surroundings layouts and required recorded numerical convergence checks.

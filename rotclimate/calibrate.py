@@ -171,6 +171,10 @@ _RAIN = ("ocean_rh", "land_recycling", "precip_tau_days", "rh_threshold", "storm
 # above 0.8 here: with the bucket, 1 is Priestley-Taylor's own rate)
 SPACE_E8_NEW = [("soil_bucket_mm", 20.0, 400.0), ("land_recycling", 0.05, 1.2)]
 SPACE_RAIN_MAP = [g for g in SPACE_E3B5 if g[0] in _RAIN] + [("eddy_seasonality", 0.0, 0.9)]
+SPACE_STORM_WATER = [("eddy_rate", .05, 3.), ("eddy_scale_km", 100., 1200.),
+                    ("eddy_seasonality", 0., .9), ("ocean_rh", .55, .95),
+                    ("rh_threshold", .2, .6), ("land_recycling", .05, .8),
+                    ("precip_tau_days", 2., 15.), ("orographic", 0., 8.)]
 # e6 on the map: the pressure winds, the surroundings beyond the map and the
 # weight of their land share at the grid's edge, with the base temperatures
 # they trade against (fitted on several random layouts of the surroundings)
@@ -229,7 +233,7 @@ def encode(p: Params) -> np.ndarray:
     return np.clip(x, 0.0, 1.0)
 
 
-def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
+def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None, ensemble_objective="scores") -> dict:
     """Score a parameter set; with several seeds the unknown surroundings are
     re-generated for each and the zone scores averaged (ensemble).
 
@@ -237,6 +241,12 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
     skips the remaining worlds. This is a speed heuristic, not an upper
     bound: a candidate could recover on other worlds. Winners must always
     be fully scored; use race=0 for an exhaustive ensemble comparison."""
+    if ensemble_objective not in ('scores', 'climate'):
+        raise ValueError('Unknown ensemble objective')
+    if ensemble_objective == 'climate':
+        if cutoff is not None:
+            raise ValueError('Mean-climate objectives require every layout; disable racing')
+        return evaluate_mean_climate(p, mode, seeds)
     from .model import ClimateModel
     from .score import evaluate, objective
 
@@ -287,6 +297,36 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None) -> dict:
                    if coverage_rows else {}))
 
 
+def evaluate_mean_climate(p, mode, seeds):
+    """Score precisely the ensemble climate that an atlas would publish."""
+    from .model import ClimateModel, ensemble_mean
+    from .score import evaluate, objective
+    from . import biome_targets
+    runs = [ClimateModel(p if seed is None else p.replace(beyond_seed=int(seed))).run()
+            for seed in (seeds or [None])]
+    result = ensemble_mean(runs)
+    ev = evaluate(result)
+    med = mediterranean_shares(result, ev)
+    guarded = mode == 'guarded'
+    if guarded: mode = 'zonefit'
+    profile = {'whittaker':'strict', 'whittaker-broad':'broad', 'whittaker-covered':'strict'}.get(mode)
+    biome = (biome_targets.evaluate(ev['indices'], result.grid.target,
+             result.grid.inmap & result.grid.land, profile) if profile else None)
+    coverage = biome_targets.rendered_coverage(result) if mode == 'whittaker-covered' else None
+    score = biome['score'] if biome else objective(ev, mode)
+    if coverage is not None: score = biome_targets.covered_score(score, coverage)
+    penalty = guard_penalty(ev, med) if guarded else 0.
+    member_totals = [evaluate(run)['total'] for run in runs]
+    return dict(score=score-penalty, guard_penalty=penalty, mediterranean=med,
+        mean=ev['total'], accuracy=ev['accuracy'], raced=False, per_class=ev['per_class'],
+        f1=ev['f1'], recall=ev['recall'], display_accuracy=ev['label_policy_audit']['display_accuracy'],
+        precision=ev['precision'], realism=ev['realism'], spread=float(np.std(member_totals)),
+        ensemble_objective='climate', layouts=len(runs), observed_numerics=result.numerics,
+        **(dict(whittaker=biome, zonefit_score=objective(ev, 'zonefit')) if biome else {}),
+        **(dict(whittaker_coverage=dict(scope='source_land_pixels', layouts=len(runs),
+             outside_share=coverage['outside_share'], distance_debt=coverage['distance_debt'])) if coverage is not None else {}))
+
+
 def mediterranean_shares(result, ev) -> dict:
     """Share of the painted Mediterranean classed dry (Koppen B) and Cs."""
     from .koppen import CODES, classify
@@ -320,11 +360,11 @@ def guard_penalty(ev, med) -> float:
 
 
 def _worker(args):
-    x, base_dict, mode, space, seeds, cutoff = args
+    x, base_dict, mode, space, seeds, cutoff, *options = args
     _set_space(space)
     p = decode(np.asarray(x), Params(**base_dict))
     try:
-        out = evaluate_params(p, mode, seeds, cutoff)
+        out = evaluate_params(p, mode, seeds, cutoff, ensemble_objective=options[0] if options else 'scores')
     except Exception as e:  # keep the search alive on numerical failures
         out = dict(score=-1.0, mean=0.0, accuracy=0.0, per_class={}, error=repr(e))
     out["params"] = asdict(p)
@@ -341,14 +381,41 @@ def _indexed_worker(job):
 
 def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
               popsize=16, workers=4, seed=1, fixed=None, mode="mean", seeds=None, race=0.06, stds=None,
-              resume=False):
+              resume=False, ensemble_objective="scores"):
     import pickle
 
     import cma
 
     if evals < 1:
         raise ValueError("evals must include at least the starting candidate")
+    if ensemble_objective not in ('scores', 'climate'):
+        raise ValueError('Unknown ensemble objective')
+    if ensemble_objective == 'climate' and race:
+        raise ValueError('Mean-climate calibration requires race=0')
     out_dir.mkdir(parents=True, exist_ok=True)
+    # Never resume a score-average search as a different mathematical objective.
+    config = dict(mode=mode, ensemble_objective=ensemble_objective, seeds=seeds,
+                  space=SPACE, base=asdict(base), fixed=fixed or {}, sigma=sigma0,
+                  popsize=popsize, seed=seed, stds=stds, race=race)
+    import hashlib
+    from .config import REPO
+    sources = list((REPO/'rotclimate').glob('*.py')) + list((REPO/'data/source').iterdir())
+    sources += [REPO/'data'/name for name in ('biome_target_crosswalk.json', 'whittaker_coverage.json', 'whittaker_biomes.csv')]
+    config['sources'] = {str(path.relative_to(REPO)):hashlib.sha256(path.read_bytes()).hexdigest()
+                         for path in sources if path.is_file()}
+    config = json.loads(json.dumps(config))
+    config_path = out_dir/'calibration_config.json'
+    if config_path.exists():
+        if json.loads(config_path.read_text()) != config:
+            raise ValueError('Calibration configuration changed; use a new output directory')
+    elif resume and (out_dir/'state.pkl').exists() and ensemble_objective != 'scores':
+        raise ValueError('Old checkpoints have no mean-climate objective certificate; use a new output directory')
+    if not resume and (out_dir/'evals.jsonl').exists() and (out_dir/'evals.jsonl').stat().st_size:
+        raise ValueError('Calibration already has results; use --resume or a new output directory')
+    config_path.write_text(json.dumps(config, indent=2)+'\n')
+    def job_args(x, cutoff):
+        job = (x, asdict(base), mode, SPACE, seeds, cutoff)
+        return job if ensemble_objective == 'scores' else (*job, ensemble_objective)
     log = open(out_dir / "evals.jsonl", "a")
     x0 = encode(base) if x0 is None else np.asarray(x0)
     fixed = fixed or {}
@@ -369,7 +436,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
         # The supplied fit is a candidate too. Previously only random offspring
         # were saved, so a short restart could silently replace it with a worse fit.
         print(f"Scoring starting candidate on {len(seeds or [None])} world(s)...", flush=True)
-        initial = _worker((x0, asdict(base), mode, SPACE, seeds, None))
+        initial = _worker(job_args(x0, None))
         if "error" in initial or not np.isfinite(initial["score"]):
             log.close()
             raise RuntimeError(f"Starting candidate failed: {initial.get('error', initial['score'])}")
@@ -380,7 +447,6 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
         best = (initial["score"], initial)
         n, n_raced = 1, 0
     t0 = time.time()
-    base_dict = asdict(base)
     # The initial evaluation has already initialized NumPy/Numba runtimes.
     # Fresh processes avoid inheriting their native locks (notably on macOS).
     with mp.get_context("spawn").Pool(workers) as pool:
@@ -399,7 +465,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
             # the slowest candidate in the population finishes. CMA-ES still
             # receives results in ask() order once the population is complete.
             res = [None] * len(full)
-            jobs = [(i, (x, base_dict, mode, SPACE, seeds, cutoff)) for i, x in enumerate(full)]
+            jobs = [(i, job_args(x, cutoff)) for i, x in enumerate(full)]
             for index, r in pool.imap_unordered(_indexed_worker, jobs, chunksize=1):
                 x = full[index]
                 res[index] = r
@@ -449,9 +515,11 @@ def main():
                                                            "whittaker", "whittaker-broad", "whittaker-covered"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "rain", "new", "world"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e6map", "rain", "storm-water", "new", "world"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
-    ap.add_argument("--race", type=float, default=0.06,
+    ap.add_argument('--ensemble-objective', choices=['climate', 'scores'], default='climate',
+                    help='climate scores the field average published by the atlas; scores reproduces legacy layout-score averaging')
+    ap.add_argument("--race", type=float,
                     help="skip the other worlds for candidates whose first world scores this far below the best (0 = off)")
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"sst_offset": [-2, 2]}')
@@ -504,6 +572,8 @@ def main():
         _set_space(SPACE_E6_MAP)
     elif a.physics == "rain":
         _set_space(SPACE_RAIN_MAP)
+    elif a.physics == "storm-water":
+        _set_space(SPACE_STORM_WATER)
     elif a.physics == "new":
         _set_space(SPACE_NEW)
     bounds = json.loads(a.bounds)
@@ -519,6 +589,9 @@ def main():
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
     seeds = [int(x) for x in a.seeds.split(",") if x.strip()] or None
+    race = a.race if a.race is not None else (0. if a.ensemble_objective == 'climate' else .06)
+    if a.ensemble_objective == 'climate' and race:
+        ap.error('--ensemble-objective climate requires --race 0')
     if a.objective == "guarded":
         import os
         if not a.guards:
@@ -527,11 +600,11 @@ def main():
     fixed = json.loads(a.fix)
     if a.plan:
         print(json.dumps(dict(params=asdict(base), objective=a.objective, seeds=seeds,
-                              evals=a.evals, fixed=fixed), indent=2))
+                              evals=a.evals, fixed=fixed, ensemble_objective=a.ensemble_objective, race=race), indent=2))
         return
     best = calibrate(Path(a.out), a.evals, base, sigma0=a.sigma, popsize=a.popsize,
-                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=a.race,
-                     stds=json.loads(a.stds), resume=a.resume)
+                     workers=a.workers, seed=a.seed, fixed=fixed, mode=a.objective, seeds=seeds, race=race,
+                     stds=json.loads(a.stds), resume=a.resume, ensemble_objective=a.ensemble_objective)
     print(json.dumps(best["per_class"], indent=1), best["score"])
 
 

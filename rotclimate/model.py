@@ -21,7 +21,7 @@ One model year = 73 five-day weeks.  For every week:
 """
 from __future__ import annotations
 
-from dataclasses import dataclass
+from dataclasses import asdict, dataclass
 
 from functools import lru_cache
 
@@ -1015,11 +1015,37 @@ def run_ensemble(params: Params, seeds, workers: int = 1) -> Result:
             runs = pool.map(_run_one, plist)
     else:
         runs = [_run_one(q) for q in plist]
+    return ensemble_mean(runs)
+
+
+def ensemble_mean(runs) -> Result:
+    """The exact equal-weight field average used by both atlas and calibration.
+
+    Only surroundings layouts may differ; geography inside the painted map,
+    calendar and physical parameters must match. Outside that map the average
+    mixes different coastlines and has no physical interpretation.
+    """
+    if not runs:
+        raise ValueError('Need at least one climate ensemble member')
+    first = runs[0]
+    reference = asdict(first.params)
+    reference.pop('beyond_seed')
+    for run in runs[1:]:
+        candidate = asdict(run.params)
+        candidate.pop('beyond_seed')
+        if candidate != reference or not np.array_equal(run.days, first.days):
+            raise ValueError('Ensemble members must share physical parameters and calendar')
+        if not np.array_equal(run.grid.inmap, first.grid.inmap):
+            raise ValueError('Ensemble members must share the mapped domain')
+        for name in ('land', 'land_frac', 'elev', 'target', 'lat'):
+            if not np.array_equal(getattr(run.grid, name)[first.grid.inmap],
+                                  getattr(first.grid, name)[first.grid.inmap]):
+                raise ValueError('Ensemble members differ inside the mapped geography: ' + name)
     keys = ("T", "Tsl", "P", "W", "u", "v", "E", "snow")
     mean = {k: np.mean([getattr(r, k) for r in runs], axis=0).astype(np.float32) for k in keys}
     members=[r.numerics for r in runs]
     numerics=dict(members=members,all_checks_passed=all(m and m['all_checks_passed'] for m in members))
-    return Result(params=runs[0].params, grid=runs[0].grid, days=runs[0].days, numerics=numerics, **mean)
+    return Result(params=first.params, grid=first.grid, days=first.days, numerics=numerics, **mean)
 
 
 def snowpack(T, P, step_days, years=3):
