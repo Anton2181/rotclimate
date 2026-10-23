@@ -120,10 +120,67 @@ potential should. The pattern differences are systematic:
 - By latitude, capacity puts 45 % of people at 0–20° N (HYDE 17 %) and
   25 % at 20–35° N (HYDE 54 %).
 
+**The atlas model on Earth.** The Earth check above used crops alone. The
+atlases' settlement model (`harvest.models.settlement_fields`) adds biome
+clearance, herding from grassland productivity, river access and a malaria
+penalty. Run on the Earth inputs (`scripts/harvest_earth_hyde.py`; biomes
+from annual climate, river distance recovered from the irrigation field,
+MARA malaria in place of the atlas's Mordecai index):
+
+| Stage, 200 CE, against HYDE 3.3 | Rank correlation | People to move |
+|---|---|---|
+| crops only | 0.529 | 58.0 % |
+| × clearance + herding | 0.562 | 57.0 % |
+| + river access | 0.565 | 56.7 % |
+| + malaria (settlement base) | 0.575 | 55.8 % |
+
+**The Han census of AD 2** (`scripts/han_census_check.py`) is the
+independent test: a real count inside one state, so one technology and one
+tax system. The source is Zheng & Wu (2026), Sci. Data 13:876, CC BY 4.0:
+103 commandery polygons, 57.7 M people. The Earth run's 5′ cells are projected
+into the dataset's Albers projection (Krasovsky ellipsoid, Snyder's formulas)
+and summed per commandery. 98 commanderies lie at least 90 % inside the
+Earth window.
+
+| Against the AD 2 census, 98 commanderies | Rank correlation | People to move | log10 density error |
+|---|---|---|---|
+| crops only | 0.104 | 59.5 % | 0.630 |
+| × clearance + herding | 0.188 | 58.2 % | 0.615 |
+| settlement base (+ rivers, malaria) | 0.286 | 56.4 % | 0.591 |
+| uniform over land | −0.177 | 55.5 % | 0.615 |
+| HYDE 3.3, 0 CE | 0.716 | 45.5 % | 0.466 |
+
+Inside Han China the environmental model is barely better than a uniform
+spread, and HYDE does much better. The errors are a north–south split:
+
+- **North China Plain, under-predicted ~10×.** Jiyin, Yingchuan,
+  Zhending, Lu, Dongping and Gaomi have 160–250 people per km² recorded
+  against 14–19 modelled.
+- **Southern frontier, over-predicted 10–25×.** Cangwu, Wuling,
+  Zangke, Hepu, Nanhai and Yulin have 1–3 per km² recorded against
+  13–29 modelled.
+
+The plain's recorded density is above the model's maximum low-input
+capacity there (~45 per km²: 1 t/ha, fields on 60 % of arable land,
+fallow). The Han core was farmed far more intensively than the low-input
+assumption: continuous cropping, manure, canal irrigation well beyond 6 km
+from the big rivers. That is Boserup's intensification: dense cores push
+yields up, frontiers stay far below capacity.
+
+Soil leaching is not the missing factor. A low-input yield penalty for
+leached soils (water surplus 300–1,200 mm, up to 75 %, the scale of FAO
+GAEZ's nutrient constraint; `--leaching`) moves the census rank correlation
+only 0.286 → 0.310 and leaves HYDE unchanged.
+
+The allocation needs an intensification term tied to core status (people
+can exceed low-input capacity several-fold where the state's core is), not
+only an occupation share of capacity. That term is historical, not
+environmental: on the map it should come from the campaign's provinces and
+cores.
+
 Next population steps:
 
-- A pastoral capacity from grassland productivity.
+- An intensification and core-distance term, fitted on Han and tested on
+  Rome's provinces.
 - An occupation discount for forest and disease frontiers.
-- The Han AD 2 census as an independent target. The prefecture records
-  (Zheng & Wu 2026, CC BY 4.0) carry no coordinates, so this needs their
-  563 MB shapefile.
+- City sizes and transport costs (research note, recommendation 3).

@@ -33,26 +33,48 @@ from hyde_compare import blocks, hyde_at, metrics  # noqa: E402
 from rotclimate import biomes  # noqa: E402
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--earth", required=True)
-    ap.add_argument("--hyde", nargs="+", required=True)
-    ap.add_argument("--out", required=True)
-    a = ap.parse_args()
-    z = np.load(a.earth)
+def leaching_fertility(z, max_penalty):
+    """Low-input fertility of leached soils: 1 - max_penalty x smoothstep of the
+    annual water surplus (rain - potential evaporation) from 300 to 1,200 mm.
+    Heavily leached, highly weathered soils (south China's red soils, the humid
+    tropics) give low-input farmers a fraction of what loess and alluvium give;
+    FAO GAEZ applies this as its soil-nutrient constraint (up to ~75 %)."""
+    from land_people import smoothstep
+    surplus = np.maximum(np.nan_to_num(z["P_ann"]) - np.nan_to_num(z["PET_ann"]), 0.0)
+    return 1.0 - max_penalty * smoothstep(surplus, 300.0, 1200.0)
+
+
+def earth_stages(z, leaching=0.0):
+    """Settlement stages of harvest.models on the Earth run (people per km2)."""
     lat, lon, land = z["lat"], z["lon"], z["land"]
     km2 = (111.32 / 12) ** 2 * np.cos(np.radians(lat))[:, None] * np.ones((1, len(lon)))
     biome = biomes.classify(np.nan_to_num(z["T_ann"]), np.nan_to_num(z["P_ann"]), land)
     water_km = np.minimum(-6.0 * np.log(np.maximum(np.nan_to_num(z["irr"]), 1e-12)), 300.0)
-    f = settlement_fields(np.nan_to_num(z["capacity"]), np.nan_to_num(z["npp"]), biome, np.nan_to_num(z["arable"]),
+    crops = np.nan_to_num(z["capacity"])
+    if leaching > 0:
+        crops = crops * leaching_fertility(z, leaching)
+    f = settlement_fields(crops, np.nan_to_num(z["npp"]), biome, np.nan_to_num(z["arable"]),
                           water_km, np.nan_to_num(z["malaria"]))
-    stages = {
+    return km2, {
         "crops only (Earth run)": f["crop_capacity"],
         "crops x clearance + herding": f["crop_capacity"] * f["clearance"] + f["pastoral_capacity"],
         "+ river access": f["settlement_no_malaria"],
         "+ malaria (settlement base)": f["settlement_base"],
         "uniform over land": np.ones_like(km2),
     }
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
+    ap.add_argument("--earth", required=True)
+    ap.add_argument("--hyde", nargs="+", required=True)
+    ap.add_argument("--leaching", type=float, default=0.0, help="maximum low-input yield penalty of leached soils (0 = off)")
+    ap.add_argument("--out", required=True)
+    a = ap.parse_args()
+    z = np.load(a.earth)
+    lat, lon, land = z["lat"], z["lon"], z["land"]
+    km2, stages = earth_stages(z, a.leaching)
+    f = None
     out = {}
     for path in a.hyde:
         H = blocks(hyde_at(path, lat, lon) * land)
@@ -66,8 +88,6 @@ def main():
         print(f"{Path(path).name}  ({int(ok.sum())} land blocks of 1 degree)")
         for name, v in res.items():
             print(f"  {name:30s} rank corr {v['spearman']:.3f}  people to move {v['moved_share']:.1%}  log10 RMSE {v['log_rmse']:.3f}")
-    herd = f["pastoral_capacity"][land]
-    out["herding_people_per_km2_percentiles_5_50_95"] = [float(x) for x in np.percentile(herd, [5, 50, 95])]
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
     Path(a.out).write_text(json.dumps(out, indent=1))
 
