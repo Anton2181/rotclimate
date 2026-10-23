@@ -136,6 +136,47 @@ Scripts:
   margins;
 - `scripts/plot_region_population.py`: the figure.
 
+## Cores for the map: the lore, not the richest land
+
+Can a map's old cores come from its own settlement score? On Earth
+(`scripts/population_core_rules.py`), with the poor-year margins, a travel
+cost and L 800 km, scored as the mean rank of HYDE 200 CE, the Han census
+and the Roman towns:
+
+| Cores | HYDE 200 CE | Han AD 2 | Roman towns | Mean |
+|---|---|---|---|---|
+| none | 0.658 | 0.328 | 0.277 | 0.421 |
+| declared: cradles + Rome | 0.811 | 0.834 | 0.652 | **0.766** |
+| peaks of the settlement score, top 4–10 | 0.50–0.66 | −0.14 to −0.05 | 0.38–0.48 | 0.28–0.33 |
+| peaks of dry irrigable river land, top 4–10 | 0.47–0.71 | −0.09 to 0.77 | 0.21–0.29 | 0.23–0.57 |
+
+The settlement-score peaks fall in the humid tropics (the Congo, Cameroon,
+Liberia, Bengal, south China, Vietnam, Sumatra), none of them an old state
+around 200 CE. They score below no cores at all. Old cores follow history.
+The map therefore takes its cores from the campaign lore
+(`data/lore_cores.json`), as Earth takes them from the record:
+
+| Core | Since | Lore |
+|---|---|---|
+| Aēnaha | before year 0 | the Sémih Kingdom's capital at the Ayauda estuary, conquered by Avesta and the Empire's capital since |
+| Kāma Basin | year −450 | where the Mahistva, founders of the Empire, settled |
+| Arǧos | year ~25 | the founding city of the Kingdom of Arǧos |
+| Hyavā Shore | Ekiari era | the Ekiari Empire's south-western coast and the Suzerainty's city-states |
+| Kaŕko Plain | late Ekiari era | the new heart of the Ekiari imperium; Lasiŕos, the largest realm |
+| Arsi Negele | ancient | the Tarani kingdom's ancient capital |
+| Nisāyan Peninsula | centuries past | a confederation of cities that ruled every shore of Nisāya's Sea |
+
+Each atlas now has an Overview layer, **Density around the old
+heartlands**. It holds the same people, drawn toward these cores by
+exp(−D / 800 km), with D the travel cost through forest and relief, for each
+occupation and malaria scenario.
+
+On the free-fit climate this layer matches the campaign sheet's settlement
+levels at 0.39 per hex, against 0.27 for the environment alone. The two
+automatic dry-river cores had lowered the match to 0.21.
+
+![The lore's old heartlands on the map](../output/population_cores/map_lore_cores_free_fit.png)
+
 ## The great cities of AD 100–200
 
 `scripts/great_cities_check.py` takes Modelski's sizes as geocoded by Reba et
