@@ -836,6 +836,60 @@ The plan (`calibration/subgrid_eddy_20261023/plan.json`) tests e34 at 1.0
 and 2.5, and `eddy_heat` at 0.5, against r33 rerun under the new source
 fingerprint.
 
+| On r33 (rerun, identical), gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e34 1.0 | 0.9978 | 1.0014 | 0.9944 | 0.9960 | 0.9974 | +0.1 % | −0.6 % |
+| e34 2.5 | 0.9970 | 1.0056 | 0.9882 | 0.9940 | 0.9961 | +0.2 % | −0.8 % |
+| `eddy_heat` 0.5 | 1.0153 | 1.0044 | 1.0486 | 1.0248 | 1.0091 | +1.6 % | +1.5 % |
+| e34 2.5, background ascent 0.85 | 0.9952 | 0.9999 | 0.9945 | 0.9919 | 0.9937 | +0.2 % | −1.1 % |
+| e34 4, background 0.75 | 0.9949 | 1.0016 | 0.9936 | 0.9910 | 0.9926 | +0.3 % | −1.3 % |
+| e34 2.5, background 0.75 | 0.9944 | 0.9963 | 0.9993 | 0.9906 | 0.9925 | +0.1 % | −1.3 % |
+| **e34 3, background 0.75** | **0.9943** | 0.9979 | 0.9972 | 0.9904 | 0.9922 | +0.2 % | **−1.3 %** |
+
+Three plans, each frozen before its results (`plan*.json`):
+
+- **e34 alone** improves the hilly regions but adds rain overall. The
+  regions already too wet (east Australia, western Europe, Manchuria)
+  fail the training group.
+- **With a lower uniform background ascent**, it moves rain from flat to
+  hilly ground instead. The background term had partly stood in for
+  unresolved uplift.
+- **`eddy_heat` 0.5** is rejected. The eddy exchange carries sea air
+  inland, and every maritime region worsened without it.
+
+With e34 3 and background 0.75, rainfall loss falls:
+
+| Region | Rainfall loss |
+|---|---|
+| Alps | −15 % |
+| New Zealand | −13 % |
+| Pacific NW | −8 % |
+| Japan | −8 % |
+| Anatolia | −8 % |
+| Levant | −5 % |
+| Chile | −5 % |
+
+**r34 adopted** (`calibration/local_accuracy_20261023/r34_params.json`:
+r33 + `subgrid_orographic` 3.0 + `background_ascent` 0.75).
+
+| Check | Result |
+|---|---|
+| gate v2, 31 regions | S 0.9943; rain loss 0.4819 → 0.4756, temperature 1.966 → 1.969 °C: **passes** |
+| paired 28 km | S 0.9862; rain loss 0.451 → 0.438: **passes** |
+| sealed six, run once | S 0.9925; rain loss 0.5650 → 0.5556, temperature 2.200 → 2.204 °C |
+
+Sealed regions, rainfall loss:
+
+| Region | Rainfall loss | Note |
+|---|---|---|
+| Tasmania | 0.519 → 0.469 | |
+| Caucasus | 0.596 → 0.572 | |
+| Norway | 0.535 → 0.515 | |
+| SE Africa | 0.785 → 0.802 | too wet already |
+| Yunnan | 0.816 → 0.829 | |
+
+The first three are mountainous and were too dry.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
