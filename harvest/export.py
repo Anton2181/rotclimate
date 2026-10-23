@@ -114,8 +114,10 @@ def derive(meta, arrays):
     if not all(np.isfinite(a[:,land]).all() for a in [t,p,d]):
         raise ValueError('Nonfinite climate on analysis land')
     # T12/P12 start at the winter solstice, so radiation uses solstice day 0.
+    margin = specification().get('margin_reliability')
+    margins = (tuple(margin['cold_mean_temperature_c']),tuple(margin['dry_rain_over_evaporation'])) if margin else None
     result,names = analyse(t[:,land],p[:,land],latitude[land],meta['world']['tilt'],0,
-                           geo['irr'][land],geo['arable'][land],d[:,land])
+                           geo['irr'][land],geo['arable'][land],d[:,land],margins=margins)
     result.update(malaria_fields(t[:,land],p[:,land],geo['irr'][land]))
     result.update(settlement_fields(result.pop('capacity'),result['npp'],arrays['biome'][land],
                                     geo['arable'][land],geo['water_distance'][land],result['malaria']))
