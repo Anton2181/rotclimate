@@ -78,6 +78,64 @@ The settings were fixed on Han and HYDE before the Roman towns were opened:
    - southern India, which is too empty: far from any listed core but dense
      in HYDE.
 
+## Poor-year harvests on cold and dry margins
+
+Old Arǧos's arid plains looked hardly emptier than the land around them. Earth
+shows a general flaw behind it. Across the Old World's dry belt (15–50° N, away
+from rivers), the settlement base held about twice HYDE's density on land
+with a 30–90-day growing season. It held too few people where the season
+lasts 120–180 days.
+
+Split by temperature and dryness, the excess is mostly on cold land
+(Tibet, Mongolia, the high plateaus: 2.2–3.7× HYDE). Warm dry land with
+30–120 growing days is 1.3–1.8× too full.
+
+Low-input farmers live at the harvests of the poor years. Frost and a short
+frost-free season cut harvests on cold land, failed rains on dry land, and
+herding takes over where farming fails.
+
+| Plan (frozen before results) | Rule | HYDE 200 CE | Han AD 2 | Mean | Outcome |
+|---|---|---|---|---|---|
+| none | | 0.746 | 0.843 | 0.794 | |
+| 1 | yield × a ramp in growing-season length | 0.758–0.779 | 0.28–0.77 | ≤ 0.762 | rejected: the Han north's short summer-rain season is dense |
+| 2 | yield × clip((T − t0)/(t1 − t0)) × clip((P/PET − a0)/(a1 − a0)) | 0.812 | 0.833 | 0.823 | chosen: cold −2…10 °C, dry 0…0.35 |
+| 2, inside the crop model | the dry factor on the rain-fed share only | 0.811 | 0.834 | 0.822 | adopted |
+
+The first form of plan 2 multiplied each cell's whole capacity. That
+penalised irrigated floodplains twice, because irrigation access in the
+crop model is a share of the cell. Egypt's capacity halved (3.46 → 1.72
+M). Inside the crop model, the dry factor scales only the rain-fed share and
+the cold factor the whole yield. Egypt is then 3.29 M, Roman Syria's
+dry-farmed steppe falls 5.45 → 3.89 M, and the Mesopotamian alluvium 7.50 →
+5.79 M.
+
+Held out, read once for the adopted rule:
+
+| | Before | After |
+|---|---|---|
+| Roman towns AD 150, full model | 0.616 | 0.652 |
+| Roman towns AD 150, settlement base | 0.189 | 0.277 |
+| Great cities in the settlement base's top decile | 0 % | 15 % |
+| Great cities, full model, median percentile | 95 % | 94 % |
+
+The rule is in `data/harvest_model.json` (version 2,
+`margin_reliability`). The occupation scenarios are re-derived from the
+reference regions recomputed with it (central share 0.294 → 0.325). On
+the free-fit climate, Old Arǧos's arid plains fall from 44 to 23 people per
+km² against 83 on its wetter land, a contrast of 1.9× → 3.6×. Irrigated river
+lines keep their harvest. The Earth-fit climate never makes those plains
+arid, which is the climate model's known failure to dry the painted arid
+zones.
+
+![Old Arǧos, mean against poor-year harvest](../output/population_reliability/old_argos_free_fit.png)
+
+Scripts:
+
+- `scripts/population_reliability.py`: both plans;
+- `scripts/land_people_earth.py --crop-margins`: the Earth crop model with the
+  margins;
+- `scripts/plot_region_population.py`: the figure.
+
 ## The great cities of AD 100–200
 
 `scripts/great_cities_check.py` takes Modelski's sizes as geocoded by Reba et
