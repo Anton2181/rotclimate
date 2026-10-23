@@ -51,14 +51,16 @@ def _gauss_kernel_fft(sigma: float, n: int, radius: int):
     return sfft.rfft(full)
 
 
-def gauss(a: np.ndarray, sigma: float) -> np.ndarray:
-    """Same result as ndi.gaussian_filter(a, sigma, mode="nearest") (truncate
+def gauss(a: np.ndarray, sigma: float, mode: str = "nearest") -> np.ndarray:
+    """Same result as ndi.gaussian_filter(a, sigma, mode=mode) (truncate
     4), computed by FFT for the wide kernels (300-500 km) used every step,
     which is several times faster than a direct convolution. Edges are
-    extended (as mode="nearest") to an FFT-friendly length; the kernel only
+    extended to an FFT-friendly length with the requested edge rule; the kernel only
     reaches `radius` cells, so the extra extension does not change the result."""
+    if mode not in ("nearest", "reflect"):
+        raise ValueError('Gaussian edge mode must be nearest or reflect')
     if sigma < 6.0:
-        return ndi.gaussian_filter(a, sigma, mode="nearest")
+        return ndi.gaussian_filter(a, sigma, mode=mode)
     from scipy import fft as sfft
 
     radius = int(4.0 * sigma + 0.5)
@@ -68,7 +70,7 @@ def gauss(a: np.ndarray, sigma: float) -> np.ndarray:
         n = sfft.next_fast_len(n0 + 2 * radius, real=True)
         pad = [(0, 0), (0, 0)]
         pad[axis] = (radius, n - n0 - radius)
-        b = np.pad(out, pad, mode="edge")
+        b = np.pad(out, pad, mode="edge" if mode == "nearest" else "symmetric")
         kf = _gauss_kernel_fft(round(float(sigma), 9), n, radius)
         shape = [1, 1]
         shape[axis] = -1
@@ -181,6 +183,10 @@ class Result:
 
 class ClimateModel:
     def __init__(self, params: Params, grid=None):
+        if params.eddy_moisture_scheme not in ('legacy', 'conservative'):
+            raise ValueError('Unknown eddy_moisture_scheme')
+        if params.eddy_moisture_scheme == 'conservative' and params.eddy_rainout > 0:
+            raise ValueError('Conservative exchange requires eddy_rainout=0; crest clipping has no accounted rainfall')
         if not np.isfinite(params.eddy_seasonality) or not 0 <= params.eddy_seasonality < 1:
             raise ValueError('eddy_seasonality must be in [0, 1)')
         if not np.isfinite(params.t_relaxation) or not 0 < params.t_relaxation <= 1:
@@ -512,6 +518,7 @@ class ClimateModel:
         self.moisture_iterations = []
         self.moisture_converged = []
         self.moisture_scaled_residual = []
+        self.storm_budgets = []
         dt_days = p.year_days / nt
         spinup = max(spinup, int(round(117.0 / dt_days)))      # ~4 months whatever the step
         soil_keep = np.exp(-dt_days / p.soil_memory_days) if p.soil_memory_days > 0 else 0.75
@@ -909,9 +916,16 @@ class ClimateModel:
                     for _ in range(n_steps):
                         water = np.minimum(gauss(water, sigE / np.sqrt(n_steps)), crest)
                     return water
+            if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
+                from .storms import conservative_exchange
+                mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
+                exchange, mix = conservative_exchange(exchange, lambda a: gauss(a, sigE, mode='reflect'), mass)
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain)
             W, P = solution.water, solution.rain
+            if p.eddy_rate > 0 and (p.eddy_moisture_scheme == 'conservative' or diagnose_moisture):
+                from .storms import exchange_budget
+                self.storm_budgets.append(exchange_budget(W, exchange, mix))
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)
             self.moisture_scaled_residual.append(solution.scaled_residual)
@@ -951,7 +965,6 @@ class ClimateModel:
                 for key, val in (("T", T_rep), ("Tsl", Tsl_rep), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val
                 if budget is not None:
-                    exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
                     mixed = mix(W) if mix is not None else W
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
                     if gain is not None:
@@ -976,6 +989,12 @@ class ClimateModel:
         numerics['all_checks_passed']=(numerics['linear_unconverged']==0 and
                                       numerics['temperature_unconverged']==0 and numerics['moisture_checked'] and
                                       numerics['moisture_unconverged']==0)
+        if self.storm_budgets:
+            numerics['storm_exchange'] = dict(scheme=p.eddy_moisture_scheme,
+                max_relative_closure=max(b['relative_closure'] for b in self.storm_budgets),
+                steps=self.storm_budgets)
+            if p.eddy_moisture_scheme == 'conservative':
+                numerics['all_checks_passed'] &= numerics['storm_exchange']['max_relative_closure'] <= 1e-10
         return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, **out)
 
 
