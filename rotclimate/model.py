@@ -601,6 +601,16 @@ class ClimateModel:
                 chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, edge,
                                         guess=edge if chi is None else chi)
                 amp = 1.0 + p.continentality * (chi - 0.5)
+                if p.continentality_lat > 0:
+                    # e33: as e32 for the advected continentality: land air
+                    # swings harder than sea air mainly because the winter night
+                    # over land is long; in the subtropics (the Levant, Anatolia's
+                    # south, north India, Mexico) the continental widening is
+                    # weaker. Ramp the widening (chi above 0.5) in from
+                    # continentality_lat to +20 deg; the maritime damping
+                    # (chi below 0.5) is unchanged.
+                    ramp = np.clip((np.abs(lat) - p.continentality_lat) / 20.0, 0.0, 1.0)
+                    amp = 1.0 + p.continentality * (np.minimum(chi - 0.5, 0.0) + ramp * np.maximum(chi - 0.5, 0.0))
                 if p.continental_depth > 0:
                     # e23: the ~1,700 km memory calls central Spain and
                     # Manchuria equally continental, but Siberian air has

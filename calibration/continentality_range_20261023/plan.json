@@ -1,0 +1,7 @@
+{
+  "frozen": "2026-10-23, after r33 was adopted and before any e33 result",
+  "hypothesis": "e33: after e32 the subtropical interiors still swing too far (range error under r32/e32: Anatolia +5.7, north India +5.8, the Levant +4.5, Central Asia +3.2 C). The remaining source is the advected continentality widening (chi above 0.5), applied at all latitudes. Ramp that widening in from continentality_lat to +20 degrees; keep the maritime damping.",
+  "reference": "calibration/local_accuracy_20261023/r33_params.json rerun on dev31 under the e33 source fingerprint (output/continentality_range_20261023/reference)",
+  "candidates": {"clat25": {"continentality_lat": 25.0}, "clat30": {"continentality_lat": 30.0}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
