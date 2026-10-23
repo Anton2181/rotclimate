@@ -1,0 +1,17 @@
+{
+  "reference": "calibration/local_accuracy_20261023/r31_params.json",
+  "reference_run": "output/storm_rainout_20261023/reference",
+  "hypothesis": "Separate conservative transport from condensation after the first rainout pilot failed; test the existing wide conservative operator, short conservative hops with effectively unlimited capacity, and one weaker crest limit.",
+  "control_params": {"eddy_moisture_scheme": "legacy", "eddy_rainout": 0.0},
+  "candidates": [
+    {"eddy_moisture_scheme": "conservative", "eddy_rainout": 0.0},
+    {"eddy_moisture_scheme": "conservative-rainout", "eddy_rainout": 0.000001},
+    {"eddy_moisture_scheme": "conservative-rainout", "eddy_rainout": 0.5}
+  ],
+  "pilot_regions": ["california", "central_asia", "east_china", "east_australia", "japan", "mexico"],
+  "pilot_requirements": "Mean rainfall loss and monthly rainfall MAE must improve; mean temperature MAE must not worsen by more than 1%; no regional monthly rainfall MAE increase greater than max(2 mm, 10%); select at most one combination for dev31, by lowest mean rainfall loss.",
+  "diagnostics": "Confirm actual condensation is zero in the effectively unlimited-capacity run. Compare its results with wide conservative exchange and the 0.5 setting to attribute the failed first pilot; these are reused development regions, not independent confirmation.",
+  "development_gate": "Unchanged policy_v2: S improves at least 0.5%, no group worsens, neither temperature MAE nor rainfall loss worsens by more than 1%.",
+  "transfer": "Only after dev31 passes, paired 28 km California, western Europe, Japan and New Zealand, then the six established validation regions once. Those regions were evaluated previously, not fresh validation.",
+  "publication": "No adoption from a pilot gain. Preserve r31 and the published atlases unless the complete development, transfer and native atlas verification sequence passes."
+}

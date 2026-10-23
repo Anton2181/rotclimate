@@ -122,3 +122,48 @@ retained evidence covers **43 verified regional simulations**: the 31-region
 reference plus 12 candidate regions. Further diagnosis should distinguish the
 effect of conservative storm transport from that of local condensation before
 attempting another rainout setting.
+
+## Transport and condensation controls
+
+The follow-up `attribution_plan.json` predeclares three comparisons: the existing
+wide conservative exchange, six conservative hops with effectively unlimited
+capacity (`eddy_rainout=0.000001`), and one weaker crest coefficient (0.5).
+All **18 regional simulations** pass numerical checks. The unlimited-capacity
+case has **zero actual condensation at every seasonal step in every region**.
+
+| Scheme / crest coefficient | Rainfall loss | Monthly rain MAE | Monthly temperature MAE |
+|---|---:|---:|---:|
+| r31 legacy control | 0.476515 | 36.423 mm | 1.99206 °C |
+| Wide conservative exchange, no rainout | 0.493426 | 35.606 mm | 2.01527 °C |
+| Six conservative hops, no condensation | 0.488019 | 35.677 mm | 2.00212 °C |
+| Six conservative hops, 0.50 | 0.490237 | 35.626 mm | 1.99869 °C |
+
+None passes the unchanged pilot limits. The wide operator worsens rainfall
+loss, Central Asia's monthly error and temperature error. Short hops improve
+some of those effects but still worsen mean rainfall loss and exceed
+California's monthly-error limit. The weaker crest cap does not resolve this.
+`attribution_review.json` selects no candidate for dev31.
+
+The mechanism is clearer after these controls. Regional mean annual rainfall
+in eastern Australia falls from **1,066 to 922 mm** under short conservative
+hops, against **641 mm observed**, even without condensation. Its large
+improvement comes primarily from transport. In Central Asia, however, the
+same change lowers rainfall from **200 to 136 mm**, against **228 mm observed**.
+The current fit relies partly on the legacy exchange's nonconservative
+moisture supply; a conservative replacement needs a broader physical retune.
+The data do not support treating an accounting fix as an accuracy fix.
+
+Japan also illustrates why regional annual totals are insufficient. With
+rainout 0.75, its annual regional mean moves from **1,238 to 1,318 mm** toward
+the observed **1,601 mm**, while monthly cell MAE worsens **65.53 → 83.22 mm**
+and rainfall loss **0.40005 → 0.50878**. More water alone does not put rainfall
+in the correct months and locations. At 1.00 the regional mean overshoots to
+**2,408 mm**.
+
+The completed campaign retains **61 verified regional simulations** and the
+unchanged **137 passing targeted tests**; `verification.json` checks all saved
+monthly-cell hashes, current scientific-source hashes and storm certificates.
+Both experiment families are complete, with no candidate promoted, no use
+of the established validation regions and no simulation left running. The
+new operator remains available for future joint physical calibration; no
+r31 fit or atlas packet is replaced.

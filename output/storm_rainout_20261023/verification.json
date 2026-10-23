@@ -1,0 +1,38 @@
+{
+  "regional_simulations": 61,
+  "counts": {
+    "reference": 31,
+    "rainout075_pilot": 6,
+    "rainout100_pilot": 6,
+    "conservative_wide_pilot": 6,
+    "conservative_hops_pilot": 6,
+    "rainout050_pilot": 6
+  },
+  "all_numerical_checks_passed": true,
+  "all_saved_cells_verified": true,
+  "current_sources_match_frozen_protocol": true,
+  "max_storm_relative_closure": 1.686763944024329e-16,
+  "no_cap_max_condensation_cell_mm_day": 0.0,
+  "tests": {
+    "passed": 137,
+    "command": "OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -m pytest -q tests/test_storm_rainout.py tests/test_storm_exchange.py tests/test_moisture.py tests/test_r31_pilot.py tests/test_earth.py tests/test_transient_orography.py tests/test_transport.py tests/test_moisture_diagnostics.py tests/test_eddy_seasonality.py tests/test_seasonal_column.py tests/test_local_benchmark.py tests/test_local_gate.py tests/test_rainfall_metrics.py tests/test_earth_calibration.py tests/test_temperature_iteration.py tests/test_temperature_retries.py tests/test_solver_recovery.py tests/test_direct_solver_status.py"
+  },
+  "adopted_candidate": null,
+  "evidence_sha256": {
+    "output/storm_rainout_20261023/reference/protocol.json": "e171b595b968eecee6e43b6160e566824851eb9b3b495a7e5dc4b31f586c0272",
+    "output/storm_rainout_20261023/reference/summary.json": "e3a807a824306054c3514662574d85c9a7400041c9488dc144d4178eab43392f",
+    "output/storm_rainout_20261023/rainout075_pilot/protocol.json": "7e096c53b72644a431454598c627ec31838ab06abcd15e2c6f6e2f404e7b73a1",
+    "output/storm_rainout_20261023/rainout075_pilot/summary.json": "6cd07ee6913c59fbd395d327051f7c809f2ce03bb18fc2db1c5bf6100f2113a1",
+    "output/storm_rainout_20261023/rainout100_pilot/protocol.json": "0d1f936615198b0416009e3ecb97ae17233c4cd9b8c7757caae0d5f72402ca42",
+    "output/storm_rainout_20261023/rainout100_pilot/summary.json": "4f463e0380b886c859c8c0adc224eb7047c9107b62308671d7ecc3569a5e65a5",
+    "output/storm_rainout_20261023/conservative_wide_pilot/protocol.json": "0e0b298549e6de726e25572289000a6b38e0eaf8370ac77d27a935844152d8b5",
+    "output/storm_rainout_20261023/conservative_wide_pilot/summary.json": "25246c779c95e076ba8e1d87407e9cd8f8bf9e8241b96e41eaab41c47a585e69",
+    "output/storm_rainout_20261023/conservative_hops_pilot/protocol.json": "e3ebf5525949515bd266667b353839c36f29b1ed7c5e5fdb9f72462c39884642",
+    "output/storm_rainout_20261023/conservative_hops_pilot/summary.json": "52924b67dba96a75e621225e3cf140d58544bc5e406f647be21d2f0d6edc38c9",
+    "output/storm_rainout_20261023/rainout050_pilot/protocol.json": "cb2969efa8cb4bef319f6b13185cfe7af4e34270e3771e1783d7b63ff6b6bcf2",
+    "output/storm_rainout_20261023/rainout050_pilot/summary.json": "2035e17d81c06dac6b5ae08f5136dfc61ebe9025073206b2f22c0702441581fb",
+    "output/storm_rainout_20261023/pilot_review.json": "b34f947a39aa111e42f05c38640f6c8743b05e4a8430ad8fae2bb1474d03a324",
+    "output/storm_rainout_20261023/attribution_review.json": "5316c02a12e9e68df41afd3ff15edb7e1fe73ae7323e8366a510117dcff3aacd",
+    "output/storm_rainout_20261023/reference_reproduction.json": "9075508d50d8d539547d2a1e9e22a155292ed64abe213301fe52da3d94c45b09"
+  }
+}
