@@ -78,10 +78,11 @@ def main():
     ap.add_argument("--earth", required=True)
     ap.add_argument("--hyde")
     ap.add_argument("--out", required=True)
+    ap.add_argument("--reliability", help="START,FULL,POWER of harvest.models.harvest_reliability (default none)")
     a = ap.parse_args()
     z = np.load(a.earth)
     lat, lon, land = z["lat"], z["lon"], z["land"]
-    km2, stages = earth_stages(z)
+    km2, stages = earth_stages(z, reliability=tuple(map(float, a.reliability.split(","))) if a.reliability else None)
     base = np.nan_to_num(stages["+ malaria (settlement base)"])
     cores = CORE_SETS["cradles + Rome"]
     fields = {

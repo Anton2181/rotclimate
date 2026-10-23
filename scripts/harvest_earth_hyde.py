@@ -44,7 +44,7 @@ def leaching_fertility(z, max_penalty):
     return 1.0 - max_penalty * smoothstep(surplus, 300.0, 1200.0)
 
 
-def earth_stages(z, leaching=0.0):
+def earth_stages(z, leaching=0.0, reliability=None):
     """Settlement stages of harvest.models on the Earth run (people per km2)."""
     lat, lon, land = z["lat"], z["lon"], z["land"]
     km2 = (111.32 / 12) ** 2 * np.cos(np.radians(lat))[:, None] * np.ones((1, len(lon)))
@@ -53,6 +53,10 @@ def earth_stages(z, leaching=0.0):
     crops = np.nan_to_num(z["capacity"])
     if leaching > 0:
         crops = crops * leaching_fertility(z, leaching)
+    if reliability is not None:
+        # (start_days, full_days, power): harvest.models.harvest_reliability
+        from harvest.models import harvest_reliability
+        crops = crops * harvest_reliability(np.nan_to_num(z["lgp_days"]), z["irr"], *reliability)
     f = settlement_fields(crops, np.nan_to_num(z["npp"]), biome, np.nan_to_num(z["arable"]),
                           water_km, np.nan_to_num(z["malaria"]))
     return km2, {

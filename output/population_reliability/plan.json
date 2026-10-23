@@ -1,0 +1,9 @@
+{
+  "frozen": "2026-10-23, before any reliability result",
+  "finding": "Old World 15-50 N away from rivers, density relative to the region's mean: growing season 30-60 days HYDE 0.33 vs settlement base 0.65; 60-90 days 0.61 vs 1.22; 120-150 days 2.32 vs 1.80; 150-180 days 3.38 vs 2.22. Short-season dry farming holds about twice too many people; the step from 60-90 to 150-180 days is 5.5x in HYDE and 1.8x in the model. On the map, Old Arǧos's arid plains (P/PET < 0.2, 70-90 days) hold 44-49 people/km2 against 85-95 around them.",
+  "hypothesis": "Low-input farmers live at the capacity of the poor years, not the mean: where the growing season is short, rain varies most from year to year and harvests fail; herding takes the land over. Multiply the crop capacity by a harvest reliability R = max(irrigation access, clip((LGP - start) / (full - start), 0, 1)^power); grazing is unchanged.",
+  "grid": {"start_days": [0, 30, 60], "full_days": [120, 150, 180], "power": [1, 2]},
+  "fitting": "HYDE 3.3 at 0 and 200 CE (1-degree blocks) and the Han AD 2 census, for the full model (settlement base x old cores cradles + Rome, travel cost forest x2, relief 1/km, L 800 km). Choose the setting with the highest mean of the HYDE 200 CE and Han ranks; ties within 0.005 go to the smaller change.",
+  "held_out": "Roman towns AD 150 (Hanson 2016, 2-degree blocks) and the 20 great cities of AD 100-200 (Modelski via Reba et al. 2016): reported once for the chosen setting against no reliability; a held-out result that worsens is reported as such.",
+  "map": "if adopted, the same rule goes into harvest.models.settlement_fields for the atlases"
+}

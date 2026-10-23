@@ -96,6 +96,17 @@ def occupation_reference():
                 note='Regional analogue quantiles, not confidence intervals or an independently validated population forecast.')
 
 
+def harvest_reliability(lgp_days, irrigation, start_days, full_days, power=1.0):
+    """Share of the mean crop capacity that the poor years leave: low-input
+    farmers live at the harvests of the bad years, and where the growing
+    season is short the rain varies most from year to year and dry farming
+    fails (herding takes such land over). clip((LGP - start) / (full - start),
+    0, 1) ** power, but irrigated land keeps its harvest (irrigation access,
+    0-1, beside rivers)."""
+    ramp = np.clip((np.asarray(lgp_days, float) - start_days) / max(full_days - start_days, 1e-9), 0, 1) ** power
+    return np.maximum(ramp, np.clip(np.nan_to_num(np.asarray(irrigation, float)), 0, 1))
+
+
 def settlement_fields(crop_capacity, npp, biome, arable, water_distance_km, malaria):
     """Return food components, population before occupation, and settlement index."""
     from scripts.land_people import FARMED_SHARE, NEED_KCAL
