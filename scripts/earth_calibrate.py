@@ -191,6 +191,9 @@ def main():
                               rainfall_loss=LOSS_SPEC if a.objective == 'rainfall' else None), indent=2))
         return
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    existing_manifest = out/'calibration_config.json'
+    if existing_manifest.exists() and json.loads(existing_manifest.read_text()).get('objective') != a.objective:
+        raise ValueError('Calibration objective changed; use a new output directory')
     if a.objective == 'rainfall':
         # Freeze the exact experiment, including observations and loss. A new
         # objective must never append to a former climate-distance journal.

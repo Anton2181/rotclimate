@@ -1,0 +1,13 @@
+{
+  "hypothesis": "Monthly mean winds miss upslope episodes from transient weather; average the existing capped uplift over Gaussian wind variations before the coupled precipitation solve",
+  "base": "atlases/earth_fit/params.json",
+  "mean_terrain_velocity_ms": "u * dzdx + v * dzdy",
+  "rms_terrain_velocity_ms": "orographic_gust_ms * sqrt(max(storm_index, 0)) * hypot(dzdx, dzdy)",
+  "uplift": "E[clip(Normal(mean_terrain_velocity, rms_terrain_velocity), 0, 0.2)] / 0.05",
+  "wind_deviation_ms": [0, 4, 8],
+  "screen_regions": ["california", "central_asia", "east_china", "east_australia", "japan", "new_zealand"],
+  "water_accounting": "Only changes the existing orographic precipitation coefficient; rain remains a sink of the solved vapor column, with unchanged convergence requirements and no separate rainfall addition",
+  "controls": ["Zero wind deviation reproduces the original uplift exactly", "Flat terrain has no extra uplift", "Analytic expectation agrees with numerical Gaussian integration", "Expectation is bounded by the original 0.2 m/s uplift cap"],
+  "selection": "Require paired rainfall loss improvement on the six development regions without severe regional regression before expanding to all nineteen; no result from this screen establishes independent or native atlas accuracy",
+  "validation": "Do not inspect the two reserved new geographic regions during this mechanism screen"
+}

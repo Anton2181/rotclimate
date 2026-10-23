@@ -133,3 +133,45 @@ optimizer costs and every selection protection. All 26 rainfall, Earth-search
 and regional-selection tests pass. The baseline, rejected candidate, journals,
 station-cell samples, figure data and source manifests are retained in the
 repository.
+
+## Finer terrain and the next mechanism test
+
+The published baseline also completes strict 28 km simulations on California
+and New Zealand. Each is compared with WorldClim aggregated at its own weather
+resolution; these are geographic diagnostics, not a same-cell before/after
+fit claim.
+
+| Region | Monthly MAE at 56 / 28 km, mm | Annual log RMSE at 56 / 28 km |
+|---|---:|---:|
+| California | 19.277 / 20.555 | 0.435866 / 0.465420 |
+| New Zealand | 69.144 / 68.868 | 0.698584 / 0.685307 |
+
+Finer terrain slightly improves New Zealand and worsens California on these
+measures. More resolution alone does not remove the rainfall errors. A
+selected fit will need paired 28 km checks; the transfer policy and regions
+are recorded in `rainfall_resolution_policy.json` before candidate results.
+
+An isolated prototype now computes the expected **capped positive terrain
+uplift** under Gaussian weather-scale wind variations. Seasonal mean winds
+can conceal episodes when passing storms blow uphill. For terrain velocity
+mean `u dz/dx + v dz/dy`, its hypothesized standard deviation is
+`gust_ms * sqrt(storm_index) * hypot(dz/dx, dz/dy)`, where `gust_ms` is the
+standard deviation of each horizontal wind component at unit storm strength.
+The analytic expected uplift is bounded by the existing 0.2 m/s cap; it is
+not obtained by averaging an uncapped uplift and then clipping.
+
+This remains an **uncoupled mechanism prototype**, not an established rainfall
+gain or a measured wind-variability model. Twelve tests check its Gaussian
+integral, zero-variance behavior, flat ground, symmetry, bounds, extreme
+limits and invalid statistics. The next controlled trial is frozen in
+`rainfall_transient_orography_plan.json`: unchanged Earth r29 physics apart
+from wind deviations 0, 4 and 8 m/s, tested on six development regions first.
+In a coupled trial, any extra precipitation must still leave the solved vapor
+column; no independent rainfall amount may be added.
+
+The calibrator also rejects changing objectives in **both** resume directions;
+switching a saved rainfall run back to the default combined objective cannot
+silently mix incompatible costs. The active balanced search uses its already
+loaded and fingerprinted earlier driver. The new guard does not change that
+run's physics, loss or compiled search. Resume/source manifests intentionally
+reject different driver versions.

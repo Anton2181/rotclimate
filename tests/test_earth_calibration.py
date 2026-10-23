@@ -31,6 +31,15 @@ def test_unverified_old_profiles_keep_historical_earth_defaults(tmp_path, monkey
     for key, value in E.NUMERICS.items(): assert config['params'][key] == value
 
 
+@pytest.mark.parametrize('before,after', [('rainfall','climate'), ('climate','rainfall')])
+def test_resuming_with_a_different_objective_is_rejected_in_both_directions(tmp_path, monkeypatch, before, after):
+    (tmp_path/'calibration_config.json').write_text(json.dumps(dict(objective=before)))
+    monkeypatch.setattr(sys, 'argv', ['earth_calibrate', '--start', 'atlases/earth_fit/params.json',
+        '--objective', after, '--out', str(tmp_path), '--resume'])
+    monkeypatch.setattr(E.mp, 'get_context', lambda *a:pytest.fail('Started a mixed-objective worker'))
+    with pytest.raises(ValueError, match='objective changed'): E.main()
+
+
 @pytest.mark.parametrize('budget,count', [(1,1), (8,1), (9,9), (18,17)])
 def test_earth_budget_is_not_exceeded_and_the_initial_fit_is_saved(tmp_path, monkeypatch, budget, count):
     pytest.importorskip('cma')
