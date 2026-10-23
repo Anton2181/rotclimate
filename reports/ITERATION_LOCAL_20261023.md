@@ -753,6 +753,42 @@ the Bay and the Gangetic plain, and by Tibet's elevated heat source.
   ([RAINFALL_R31_20261023.md](RAINFALL_R31_20261023.md)) and must pass the
   same gate.
 
+### The fantasy map on r33: candidate atlas (not promoted)
+
+The map's world settings were refitted for r33
+(`calibration/map_world_r33/best_params.json`, 97 candidates).
+
+On the same 3-layout ensemble-climate objective at coarse resolution, the
+zone fit is 0.161 for the current atlas and 0.174 for the refit. The
+publication build (`build_atlas_variant.py`, 8× downsample, 3 layouts,
+numerical checks verified):
+
+| | Current Earth-fit atlas (r29) | Candidate (r33 + refitted world) |
+|---|---|---|
+| zone fit | 0.1617 | 0.1664 |
+| strict accuracy | 20.3 % | 22.9 % |
+| recall: cold-wet | 0.78 | 0.72 |
+| recall: warm-wet | 0.22 | 0.37 |
+| recall: Mediterranean | 0.21 | 0.17 |
+| recall: forest (tree) | 0.22 | 0.23 |
+| recall: hot-dry | 0.20 | 0.22 |
+
+![Current atlas against the r33 candidate](../output/map_r31/atlas_r29_vs_r33.png)
+
+The candidate stays local (`atlases/*_next/` is ignored by design).
+Replacing the published `atlases/earth_fit` waits for review. To rebuild
+and promote:
+
+```sh
+python3 -I scripts/build_atlas_variant.py --params calibration/map_world_r33/best_params.json \
+    --name earth_fit_next --title "Rotclimate Earth-Fit Atlas" \
+    --eyebrow "Simulated climate · 25 seasonal steps · Whittaker potential biomes" \
+    --note "World fitted with Earth r33 physics held fixed; climate averaged over three layouts of the unknown surroundings." \
+    --downsample 8 --image-scale 2 --seeds 1,2,3 --workers 3 --fit-objective zonefit --require-verified
+# then replace atlases/earth_fit with atlases/earth_fit_next, change "Earth r29" to "Earth r33"
+# in scripts/build_fit_hub.py, and rerun it for atlases/index.html
+```
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
