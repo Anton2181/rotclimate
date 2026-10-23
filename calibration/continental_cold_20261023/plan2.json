@@ -1,0 +1,10 @@
+{
+  "frozen": "2026-10-23, after plan.json's results (cm3 S 0.9934, cm5 S 1.0013, both fail on the training and dev12 groups) and before any plan-2 result",
+  "finding": "e31 cuts its targets' error (US Midwest -28 %, Manchuria -26 %, Korea -18 %, North China Plain -16 % at 3 C) but cools almost every region a little; those already too cold (Iran, Levant, Mexico, SE US, eastern Europe, Alps) worsen by 8-11 %.",
+  "hypothesis": "The useful part is the contrast between open continental and other land; the mean cooling is not. Raise the land offset to give back the mean.",
+  "candidates": {
+    "cm3_lo+0.4": {"continental_mean": 3.0, "land_offset": -0.27},
+    "cm5_lo+0.7": {"continental_mean": 5.0, "land_offset": 0.03}
+  },
+  "evaluation": "as plan.json: dev31 at 56 km against output/continental_cold_20261023/reference, policy_v2 unchanged; a pass takes the paired 28 km check and the sealed six once"
+}
