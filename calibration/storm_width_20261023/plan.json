@@ -1,0 +1,8 @@
+{
+  "frozen": "2026-10-23, after r35 was adopted and before any gate result for e37",
+  "finding": "Under r35, pooled over the 31 regions, arid cells (observed < 250 mm a year) get 1.5-3x their observed rain in every month and cells above 1,000 mm get 0.6-0.8x. Iran's arid cells rain 43-53 mm a month in April-June (observed 1-17): the storm term (storm_track x the storm envelope) is still 1.5-2.2 there in spring, the soil bucket stays wet into June and its evaporation keeps the column at 59 % relative humidity, which also cools Iran's summer (wet_cooling off: +2.6 C). The storm envelope exp(-((lat - (phi_h + 13)) / storm_width)^2) has storm_width 14.7 deg, so storms keep 37 % of their strength 15 deg from the track. A probe on eight dry regions (output/diag_desert_20261023, not the gate): storm_width 11 cut Iran's rainfall loss 0.826 -> 0.602 and Morocco's and Iberia's by 0.06; circulation lag 30 days, land recycling 0.25 and a 40 mm bucket did less or traded regions.",
+  "hypothesis": "e37 (parameter, no code change): the storm track is narrower than fitted; storms in the subtropical deserts in spring are too frequent.",
+  "reference": "calibration/local_accuracy_20261023/r35_params.json rerun on dev31 under the current source fingerprint (output/storm_width_20261023/reference)",
+  "candidates": {"sw12.5": {"storm_width": 12.5}, "sw11": {"storm_width": 11.0}, "sw9.5": {"storm_width": 9.5}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
