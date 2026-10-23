@@ -1,0 +1,10 @@
+{
+  "frozen": "2026-10-23, after plan2's results and before any plan-3 result",
+  "finding": "cm3 with land offset +0.4: S 0.9878, every group but training improves (training 1.0002). The uniform land offset also warms the southern regions, which e31 hardly touches and which were already warm (east Australia +7.6 %, south Brazil +12.6 %, Victoria +15.6 % temperature error in cm5 + 0.7).",
+  "hypothesis": "Give the northern hemisphere back the warmth e31 takes, without warming the south: more cross-equatorial transport (e30) warms the north and cools the south, the right shape here.",
+  "candidates": {
+    "cm3_cet1.0": {"continental_mean": 3.0, "cross_equatorial_transport": 1.0},
+    "cm4_cet1.1": {"continental_mean": 4.0, "cross_equatorial_transport": 1.1}
+  },
+  "evaluation": "as plan.json: dev31 at 56 km against output/continental_cold_20261023/reference, policy_v2 unchanged; a pass takes the paired 28 km check and the sealed six once"
+}
