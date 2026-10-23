@@ -633,6 +633,49 @@ Monthly temperature error, step by step:
 
 Rainfall loss over the 31 regions is 0.4810 at r31 and 0.4819 at r33.
 
+### e33: the same ramp for the advected continentality (rejected)
+
+e33 (`continentality_lat`, off by default) ramps in with latitude the
+widening that the advected continentality gives to continental air (chi
+above 0.5). The plan is in
+`calibration/continentality_range_20261023/plan.json`; r33's own rerun is
+identical to its adoption run.
+
+| On r33, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e33 from 25° | 0.9964 | 0.9936 | 0.9994 | 1.0119 | 0.9895 | −1.0 % | +0.3 % |
+| e33 from 30° | 1.0055 | 1.0062 | 1.0065 | 1.0216 | 0.9968 | +0.5 % | +0.6 % |
+
+At 25° the subtropical interiors improve:
+
+| Region | Temperature error | Range error, °C |
+|---|---|---|
+| Anatolia | −16 % | +5.7 → +3.9 |
+| Mexico | −12 % | |
+| Central Asia | −11 % | |
+| Levant | −10 % | +4.5 → +2.0 |
+| north India | −10 % | +5.4 → +2.0 |
+
+Texas and the SE US improve as well.
+
+The regions whose seasons were already too narrow narrow further:
+
+| Region | Temperature error | Range error, °C |
+|---|---|---|
+| east Australia | +18 % | |
+| SW Australia | +9 % | |
+| California | +7 % | |
+| Morocco | +6 % | |
+| Iberia | +4 % | −3.2 → −4.4 |
+
+Manchuria and the US Midwest also narrow further. The range errors have
+opposite signs at the two ends of the continentality scale: too wide
+inland, too narrow on the coasts. That points at the slope itself. The
+next plan
+(`calibration/continentality_balance_20261023/plan.json`) lowers
+`continentality` and widens the dark-winter interiors through e23's
+deep-continent term, which r33 limits to latitudes above 30°.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
