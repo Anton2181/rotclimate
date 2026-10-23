@@ -37,7 +37,7 @@ from rotclimate.model import ClimateModel  # noqa: E402
 
 SPACE = [("sst_offset", -4.0, 2.0), ("current_strength", 0.0, 12.0), ("subpolar_current", 0.0, 14.0),
          ("inland_sea_warming", 0.0, 10.0), ("lake_coupling", 0.0, 1.0), ("sea_winter_mixing", 0.0, 1.0),
-         ("ocean_transport", 0.0, 1.5), ("ocean_heat_capacity", 0.5, 4.0)]
+         ("ocean_transport", 0.0, 1.5), ("ocean_heat_capacity", 0.5, 4.0), ("ocean_mixed_seasonality", 0.0, 0.8)]
 _MODELS = {}
 
 

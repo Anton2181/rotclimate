@@ -80,7 +80,7 @@ def _band_land(lat, profile):
 
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
-           c_ocean_scale=1.0):
+           c_ocean_scale=1.0, c_ocean_season=0.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -142,16 +142,40 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     To = Tl.copy()
     out_l = np.zeros((year_days, N))
     out_o = np.zeros((year_days, N))
+    year_o = np.zeros((year_days, N))
+    T_deep = To.copy()
+    if c_ocean_season > 0:
+        # e29: the mixed layer shoals as spring warming stratifies the sea and
+        # deepens as winter cooling overturns it (mid-latitude ~20 m in late
+        # summer, ~100 m in late winter): the sea warms fast and cools slowly.
+        # Heat capacity x (1 - c_ocean_season x w x s), s = +1 a month after
+        # the local summer solstice, w ramping in over 0-30 deg of latitude.
+        w = np.clip(np.abs(lat) / 30.0, 0.0, 1.0) * np.sign(lat)
+        s_nh = -np.cos(2 * np.pi * (days - ws_day - 30.0) / year_days)
+        C_Od = C_O * (1.0 - c_ocean_season * w[None, :] * s_nh[:, None])       # [day, band]
     for yr in range(years):
         for d in range(year_days):
             Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR
             Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR
-            rhs = np.concatenate([C_L / dt * Tl + Fl, C_O / dt * To + Fo])
-            T = matrix_product(Minv, rhs)
+            if c_ocean_season > 0:
+                # a deepening layer entrains water from below the mixed layer
+                # (taken at last year's annual mean); a shoaling one leaves its
+                # heat behind, so the layer keeps its temperature
+                prev = C_Od[d - 1]
+                deeper = C_Od[d] > prev
+                To = np.where(deeper, (prev * To + (C_Od[d] - prev) * T_deep) / C_Od[d], To)
+                Md = M.copy()
+                Md[N:, N:] += np.diag((C_Od[d] - C_O) / dt)
+                T = np.linalg.solve(Md, np.concatenate([C_L / dt * Tl + Fl, C_Od[d] / dt * To + Fo]))
+            else:
+                rhs = np.concatenate([C_L / dt * Tl + Fl, C_O / dt * To + Fo])
+                T = matrix_product(Minv, rhs)
             Tl, To = T[:N], T[N:]
+            year_o[d] = To
             if yr == years - 1:
                 out_l[d] = Tl
                 out_o[d] = To
+        T_deep = year_o.mean(0)
     return lat, out_l, out_o, fl
 
 
@@ -168,6 +192,8 @@ class ZonalClimate:
             extra["ocean_transport"] = round(params.ocean_transport, 3)
         if getattr(params, "ocean_heat_capacity", 1.0) != 1.0:
             extra["c_ocean_scale"] = round(params.ocean_heat_capacity, 3)
+        if getattr(params, "ocean_mixed_seasonality", 0.0) > 0:
+            extra["c_ocean_season"] = round(params.ocean_mixed_seasonality, 3)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)

@@ -87,7 +87,51 @@ the fitted sea held fixed (`scripts/fit_local.py`; land–air coupling in
 sun and in darkness via the new `land_radiative_days`, coupling exponent,
 continentality, land offset and amplitude, sea-air humidity, rain
 threshold). It is fitted on fold A and judged on the unseen fold B against
-the gate; results below when complete.
+the gate.
+
+**Stage A result: rejected without the cross-check.** After 151 evaluations
+the best score on its own fitting fold is 1.0487: worse than r29 even where
+it was fitted (California's rainfall loss 0.44 → 0.67 over the warmer winter
+sea; SW Australia's temperature error 1.32 → 2.14 °C). The rain settings
+themselves (storm, convection, rain timescale) were tuned around the cold
+sea, so eight coupling and humidity settings cannot absorb it.
+
+**The sea one setting at a time**, each with r29's atmosphere:
+
+| Single sea change | S all | S training | S holdout | S mid-latitude | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|
+| mixed layer ×1.4 | 0.9885 | 0.9939 | 1.0069 | 0.9707 | −2.5 % | +0.2 % |
+| mixed layer ×1.87 | 0.9894 | 1.0040 | 1.0055 | 0.9649 | −2.7 % | +0.6 % |
+| mixed layer ×1.2 | 0.9915 | 0.9942 | 1.0036 | 0.9803 | −1.8 % | +0.1 % |
+| cold currents 4.5 | 0.9990 | 0.9866 | 1.0207 | 0.9974 | −0.5 % | +0.3 % |
+| sea offset −1.5 / −0.74 | 1.0125 / 1.0368 | | | | +1.8 / +4.6 % | |
+| subpolar currents 7.4, ocean transport 0.17 | 1.0050, 1.0042 | | | | | |
+| mixed layer ×1.4 + darkness coupling 15 days | **0.9857** | 0.9951 | 1.0026 | 0.9643 | −3.2 % | +0.4 % |
+| mixed layer ×1.4 + coupling 1.0 day | 0.9869 | 0.9922 | 1.0079 | 0.9672 | −3.5 % | +0.9 % |
+
+A deeper mixed layer (a smoother sea) is the sea correction the current
+atmosphere tolerates best. Monthly temperature error falls by 9.5 % in New
+Zealand, 8.9 % in Central Asia, 7.5 % in Manchuria and 4–5 % in the Pacific
+Northwest, western and eastern Europe. It fails only on the former holdout
+group, by 0.3–0.7 %:
+
+- **SW Australia** becomes more maritime (+16 %). Its real coast has the
+  warm Leeuwin Current, which the model's west-coast cold-current rule gets
+  backwards.
+- **Japan's** already too-wet winter gets wetter over a warmer winter sea
+  (rainfall loss +6 %).
+
+**e29, a seasonal mixed layer** (`ocean_mixed_seasonality`, new, off by
+default). Real mid-latitude mixed layers are ~20 m deep in late summer and
+~100 m in late winter, so the sea warms fast and cools slowly. In the
+energy-balance ocean the heat capacity is × (1 − m·w·s), with s = +1 a month
+after the local summer solstice and w ramping in over 0–30° of latitude. A
+deepening layer entrains water at the previous year's annual-mean
+temperature; a shoaling one keeps its temperature. A first version that
+kept the temperature on deepening created heat and raised the sea error to
+4.1 °C. Against WOA18 with a ×1.4 layer, m = 0.2 lowers the sea-temperature
+error from 2.86 to 2.72 °C (0.4: 2.89; 0.6: 3.30). A full sea fit including
+it is running.
 
 ## Population side track
 
