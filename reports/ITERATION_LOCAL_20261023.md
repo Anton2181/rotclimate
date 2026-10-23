@@ -130,8 +130,103 @@ deepening layer entrains water at the previous year's annual-mean
 temperature; a shoaling one keeps its temperature. A first version that
 kept the temperature on deepening created heat and raised the sea error to
 4.1 °C. Against WOA18 with a ×1.4 layer, m = 0.2 lowers the sea-temperature
-error from 2.86 to 2.72 °C (0.4: 2.89; 0.6: 3.30). A full sea fit including
-it is running.
+error from 2.86 to 2.72 °C (0.4: 2.89; 0.6: 3.30).
+
+**The full sea fit with e29** (all 19 regions, 480 evaluations,
+`calibration/sst_20261023/all19_e29/`) reaches a sea-surface error of
+2.10 °C, against 2.14 without e29 and 3.06 for r29. Its sea is very deep
+and very seasonal: mixed layer × 3.6, seasonality 0.65. Its sea offset is
++0.72 against r29's −2.19, which says how much r29's cold sea was carrying.
+
+## Iteration 3: a calmer sea, with the warming taken back out → r30
+
+The seasonal layer alone fails the land gate badly:
+
+| Change from r29 | S all | S training | S holdout | S mid-latitude | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|
+| layer × 1.4, seasonality 0.2 | 1.0336 | 1.0074 | 1.1353 | 0.9907 | +5.2 % | +1.5 % |
+| layer × 2, seasonality 0.4 | 1.0253 | 1.0076 | 1.1364 | 0.9674 | +3.4 % | +1.7 % |
+
+The cause is not timing. Annual bias moves by about +1 °C in every region:
+
+- the sea gains heat in the shallow summer layer;
+- it loses less in winter;
+- the land follows.
+
+Taking the warming back out with the two offsets (land −1.0 °C, sea
+−1.0 °C) turns it into the best change so far:
+
+| From r29 | S all | S training | S holdout | S mid-latitude | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|
+| layer × 1.4 + darkness coupling 15 d (iteration 2) | 0.9857 | 0.9951 | 1.0026 | 0.9643 | −3.2 % | +0.4 % |
+| + seasonality 0.2, offsets −1 | 0.9768 | 0.9897 | 1.0054 | 0.9449 | −4.7 % | +0.0 % |
+| same, sea offset only −0.5 | 0.9843 | 0.9971 | 1.0212 | 0.9443 | −3.3 % | +0.2 % |
+| same, land offset −1.5 and sea unchanged | 0.9939 | 1.0271 | 1.0101 | 0.9426 | −1.9 % | +0.7 % |
+| **offsets −1, sea-air humidity 0.710** | **0.9775** | **0.9964** | **0.9987** | **0.9427** | **−4.6 %** | **+0.1 %** |
+| offsets −1, humidity 0.714 | 0.9783 | 1.0001 | 0.9959 | 0.9421 | −4.6 % | +0.2 % |
+| offsets −1, humidity 0.720 | 0.9801 | 1.0060 | 0.9925 | 0.9420 | −4.5 % | +0.6 % |
+
+With the cooler sea the rain fell by about 4 % everywhere. That hurt the
+regions that were already too dry:
+
+| Region | Rainfall loss |
+|---|---|
+| Japan | +8 % |
+| SW Australia | +5 % |
+| South Brazil | +5 % |
+| New Zealand | +6 % |
+
+Sea-air humidity 0.702 → 0.710 gives the moisture back. Higher values start
+flooding the regions that are too wet (east Australia, Mexico). This is the
+only setting chosen by looking at the groups, so the 28 km check and the
+sealed regions below are the real test.
+
+**The adopted change, r30** (`calibration/local_accuracy_20261023/r30_params.json`,
+r29 plus `candidate_r30_sea.json`):
+
+| Setting | r29 | r30 |
+|---|---|---|
+| mixed layer (heat capacity scale) | 1.0 | 1.4 |
+| mixed-layer seasonality (e29) | 0 | 0.2 |
+| darkness coupling of land air | 30 days | 15 days |
+| land offset | +0.83 °C | −0.17 °C |
+| sea offset | −2.19 °C | −3.19 °C |
+| sea-air humidity | 0.702 | 0.710 |
+
+The checks the gate requires, run in order:
+
+| Check | Result |
+|---|---|
+| 56 km gate, 19 development regions | S 0.9775 (training 0.9964, holdout 0.9987, mid-latitude 0.9427); temperature −4.6 %, rain +0.1 %: **passes** |
+| paired 28 km check (California, western Europe, Japan, New Zealand) | S 0.9759; temperature 2.58 → 2.41 °C, rain loss 0.414 → 0.422: **passes** |
+| sealed six, run once (Norway, SE Africa, Caucasus, Yunnan, NE US, Tasmania) | S 0.9810; temperature 2.735 → 2.660 °C, rain loss 0.584 → 0.578 |
+
+Sealed regions, each:
+
+| Region | Temperature error, °C | Rainfall loss |
+|---|---|---|
+| Norway | 4.94 → 4.81 | 0.612 → 0.572 |
+| SE Africa | 1.43 → 1.20 | 0.937 → 0.926 |
+| Caucasus | 2.72 → 2.70 | 0.580 → 0.585 |
+| Yunnan | 2.97 → 2.97 | 0.791 → 0.800 |
+| NE US | 1.79 → 1.77 | 0.149 → 0.144 |
+| Tasmania | 2.56 → 2.50 | 0.437 → 0.442 |
+
+Where the gain is, across the 19 regions:
+
+- **Maritime mid-latitudes, temperature:** western Europe 2.98 → 2.50 °C,
+  the Pacific Northwest 2.94 → 2.54, eastern Europe 2.46 → 2.16, Manchuria
+  3.01 → 2.73, the Cape 1.29 → 1.13.
+- **Worse, temperature:** the humid subtropics, about +6 %
+  (SE US 1.16 → 1.24, Mexico 1.82 → 1.93); also SW Australia 1.32 → 1.43,
+  where the Leeuwin Current runs against the model's west-coast rule.
+
+The gate for the next candidate compares against r30's 56 km run
+(`output/local_20261023/sea5_D_rh0.710`), with the same rules and the
+reference values T 2.127 °C, rain loss 0.4429. The 12 predeclared
+development regions (`regions_dev12.json`) have not been seen by any
+choice so far. They are run next for r29 and r30, then join the
+development set.
 
 ## Population side track
 
