@@ -1,8 +1,8 @@
 """Calibrate the model's physics constants on real regions (Earth mode).
 
 Only physics genes are searched; geography, tilt, spin and calendar are
-Earth's own. Objective (minimised): the mean over regions of the mean
-climate distance to WorldClim (rotclimate.earth.climate_distance).
+Earth's own. Minimise combined climate distance, or use --objective rainfall
+to fit local annual amounts and monthly rain without a temperature reward.
 
     python -I scripts/earth_calibrate.py --start output/overnight_mediterranean/selected_params.json \
         --regions california iberia --evals 240 --out calibration/earth_r1
@@ -26,6 +26,7 @@ import numpy as np  # noqa: E402
 from rotclimate import calibrate as C  # noqa: E402
 from rotclimate import earth  # noqa: E402
 from rotclimate.config import Params, apply_numerics  # noqa: E402
+from scripts.rainfall_metrics import LOSS_SPEC, loss as rainfall_loss, compare as rainfall_compare  # noqa: E402
 
 # genes that describe the world rather than its physics: fixed on Earth
 WORLD = {"lat_center", "tilt", "retrograde", "north_bearing", "tier1", "tier2_add", "tier3_add", "tier4_add",
@@ -99,6 +100,7 @@ SPACES["storm_water"] = C.SPACE_STORM_WATER
 SPACE = SPACES["v9"]
 _CASES = {}
 _PAD_KM = 1100.0     # land and sea modelled around each region (set by --pad-km before the pool forks)
+_OBJECTIVE = 'climate'
 
 
 def physics(x, base):
@@ -125,8 +127,18 @@ def evaluate(args):
             case = _CASES[(r, cell_km, _PAD_KM)]
             res = earth.run_case(p, case, steps=p.steps_per_year)
             out.setdefault('observed_numerics', {})[r] = res.numerics
+            if not res.numerics.get('all_checks_passed'):
+                raise RuntimeError('Observed numerical checks failed in '+r)
             out["regions"][r] = earth.compare(res, case)
-        out["cost"] = float(np.mean([out["regions"][r]["climate_distance"] for r in regions]))
+            if _OBJECTIVE == 'rainfall':
+                out.setdefault('rainfall_details', {})[r] = rainfall_compare(res, case)
+                out.setdefault('stations', {})[r] = earth.station_table(res, case)
+        out['objective'] = _OBJECTIVE
+        costs = [rainfall_loss(out['regions'][r]) if _OBJECTIVE == 'rainfall'
+                 else out['regions'][r]['climate_distance'] for r in regions]
+        out["cost"] = float(np.mean(costs))
+        if not np.isfinite(out['cost']):
+            raise ValueError('Nonfinite Earth calibration cost')
     except Exception as e:      # non-convergence or numerical failure
         out["cost"] = 99.0
         out["error"] = repr(e)[:300]
@@ -145,6 +157,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--holdout", nargs="*", default=[], help="regions scored only for the final best")
     ap.add_argument("--physics", default="v9", choices=list(SPACES))
+    ap.add_argument('--objective', choices=['climate', 'rainfall'], default='climate')
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"hadley_edge": [28, 34]}')
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
     ap.add_argument('--saved-numerics', action='store_true', help='retain the starting convergence criteria; verified moisture profiles do this automatically')
@@ -153,8 +166,9 @@ def main():
     ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     ap.add_argument("--pad-km", type=float, default=1100.0, help="land and sea modelled around each region")
     a = ap.parse_args()
-    global _PAD_KM
+    global _PAD_KM, _OBJECTIVE
     _PAD_KM = a.pad_km
+    _OBJECTIVE = a.objective
     import pickle
 
     import cma
@@ -172,9 +186,44 @@ def main():
         ap.error('Use evals >= 1, popsize >= 2 and workers >= 1')
     if a.plan:
         print(json.dumps(dict(params=asdict(base), space=SPACE, regions=a.regions,
-                              holdout=a.holdout, evals=a.evals, popsize=a.popsize), indent=2))
+                              holdout=a.holdout, evals=a.evals, popsize=a.popsize,
+                              objective=a.objective,
+                              rainfall_loss=LOSS_SPEC if a.objective == 'rainfall' else None), indent=2))
         return
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    if a.objective == 'rainfall':
+        # Freeze the exact experiment, including observations and loss. A new
+        # objective must never append to a former climate-distance journal.
+        import hashlib
+        root = Path(__file__).resolve().parents[1]
+        sources = list((root/'rotclimate').glob('*.py')) + [Path(__file__), root/'scripts/rainfall_metrics.py']
+        sources += [root/'data/cache/earth'/f'{r}_{a.cell_km:g}km_{a.pad_km:g}pad.npz'
+                    for r in dict.fromkeys(a.regions + a.holdout)]
+        sources += [root/'data/cache/earth'/f'west_fetch_{km}km.npz' for km in (1700, 5100)]
+        if set(a.regions) & set(a.holdout):
+            ap.error('Training and final comparison regions must be disjoint')
+        if len(set(a.regions)) != len(a.regions) or len(set(a.holdout)) != len(a.holdout):
+            ap.error('Repeated regions would change the objective weighting')
+        if not (base.t_require_convergence and base.moisture_require_convergence and
+                base.solver_require_convergence and base.moisture_residual_tol > 0):
+            ap.error('Rainfall calibration requires strict saved numerical criteria')
+        if any(not lo <= getattr(base, name) <= hi for name, lo, hi in SPACE):
+            ap.error('The starting parameters must be inside all search bounds')
+        config = dict(objective=a.objective, rainfall_loss=LOSS_SPEC, params=asdict(base),
+                      space=SPACE, regions=a.regions, final_comparison=a.holdout,
+                      cell_km=a.cell_km, pad_km=a.pad_km, popsize=a.popsize, sigma=a.sigma, seed=a.seed,
+                      sources={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sources},
+                      note='All named regions are reused development data, not fresh independent validation.')
+        config = json.loads(json.dumps(config))
+        manifest = out/'calibration_config.json'
+        if a.resume:
+            if not manifest.exists() or json.loads(manifest.read_text()) != config:
+                raise ValueError('Rainfall experiment changed; use a new output directory')
+            if not (out/'state.pkl').exists():
+                raise ValueError('No saved optimizer state to resume')
+        elif manifest.exists() or (out/'evals.jsonl').exists():
+            raise ValueError('Refusing to append a new rainfall search to existing results')
+        manifest.write_text(json.dumps(config, indent=2)+'\n')
     (out / "space.json").write_text(json.dumps(dict(args=vars(a), space=SPACE), indent=1))
     log = (out / "evals.jsonl").open("a")
     es = cma.CMAEvolutionStrategy(encode(base), a.sigma, dict(bounds=[0, 1], popsize=a.popsize, seed=a.seed,
@@ -218,9 +267,18 @@ def main():
             h = pool.map(evaluate, [(encode(Params(**best["params"])), bd, [r], a.cell_km) for r in a.holdout])
             held = {r: x.get("regions", {}).get(r, x.get("error")) for r, x in zip(a.holdout, h)}
             Path(out / "holdout.json").write_text(json.dumps(held, indent=1))
+            # Keep certificates and explicit failures, rather than only the
+            # extracted comparison metrics in the older holdout.json format.
+            Path(out / 'holdout_evaluations.json').write_text(json.dumps(
+                dict(zip(a.holdout, h)), indent=1))
             for r, v in held.items():
                 print(f"holdout {earth.summary_line(v) if isinstance(v, dict) else r + ' ' + str(v)}"
                       + (f" | d {v['climate_distance']:.3f}" if isinstance(v, dict) else ""), flush=True)
+    first = json.loads((out/'evals.jsonl').read_text().splitlines()[0])
+    Path(out/'summary.json').write_text(json.dumps(dict(objective=a.objective,
+        initial=first['cost'], best=best['cost'], evaluations=n,
+        failures=sum(bool(json.loads(line).get('error')) for line in (out/'evals.jsonl').read_text().splitlines()),
+        gain=first['cost']-best['cost'], note='Development calibration only; final comparisons and selection gates are separate.'), indent=2)+'\n')
 
 
 def _pct(x):

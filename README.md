@@ -1,5 +1,10 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Rainfall priority, 23 October 2026:** Earth calibration now has a rainfall-only
+objective, with explicit local annual and monthly error diagnostics. The
+[rainfall accuracy report](reports/RAINFALL_ACCURACY_20261023.md) records the
+current measured errors and the selection criteria for the new bounded search.
+
 **Climate development, 23 October 2026:** an opt-in conservative storm-water
 scheme now has explicit internal and boundary accounting. The first Earth
 pilot establishes conservation but needs retuning before atlas promotion.

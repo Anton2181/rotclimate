@@ -1,0 +1,24 @@
+{
+  "purpose": "Improve observed local rainfall, independently of fantasy zone and temperature scores",
+  "baseline": "atlases/earth_fit/params.json",
+  "training": ["california", "iberia", "southeast_us", "levant", "central_asia", "east_china", "east_australia", "mexico"],
+  "reused_comparison": ["chile", "cape", "sw_australia", "south_brazil", "japan", "pacific_nw", "western_europe", "eastern_europe", "us_midwest", "manchuria", "new_zealand"],
+  "selection": {
+    "all_19_rainfall_loss_minimum_relative_gain": 0.01,
+    "training_rainfall_loss_must_improve": true,
+    "all_19_monthly_mae_must_improve": true,
+    "all_19_annual_log_rmse_must_not_increase": true,
+    "maximum_region_annual_log_rmse_increase": 0.10,
+    "maximum_region_monthly_mae_increase_mm_or_fraction": [2.0, 0.10],
+    "maximum_mean_temperature_rmse_increase_C": 0.15,
+    "maximum_mean_annual_rank_correlation_loss": 0.02,
+    "maximum_mean_seasonality_total_variation_increase": 0.01,
+    "maximum_pooled_annual_within_25pct_share_loss": 0.01,
+    "observed_numerical_checks_must_all_pass": true
+  },
+  "new_geographic_validation": {
+    "regions_file": "calibration/climate_physics_20261023/rainfall_validation_regions.json",
+    "policy": "Freeze regions before looking at candidate results; evaluate baseline and the selected candidate once; require mean rainfall loss and monthly MAE not to increase. These regions must not be used for subsequent tuning and still described as fresh validation."
+  },
+  "publication": "Passing these development gates does not itself update atlas climates; the mean three-layout native atlas must also be regenerated and verified."
+}
