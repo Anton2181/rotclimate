@@ -59,22 +59,28 @@ def baseline_seeds(packet, path):
 
 
 def assess(baseline, candidate, branch):
-    """Existing class protections plus no new grey terrain for Whittaker."""
+    """Protect seasonal targets for zone fits, annual biomes for Whittaker.
+
+    Annual biome targets do not encode Koppen precipitation seasonality.
+    Seasonal metrics remain reported for Whittaker, but its selection uses
+    its own biome objective, exact biome match and diagram coverage.
+    """
     failures = []
     objective = 'covered_score' if branch == 'whittaker' else 'zonefit'
     if candidate[objective] <= baseline[objective] + 1e-8:
         failures.append('Primary fit objective did not improve')
     if not candidate['numerics'].get('all_checks_passed'):
         failures.append('Observed numerical checks failed')
-    for key, margin in [('zone_accuracy', .01)]:
-        if candidate[key] < baseline[key]-margin-1e-12: failures.append(key+' regressed beyond its protection')
-    for key, margin in [('cold_dry', .02), ('hot_dry', .03)]:
-        if candidate['zone_recall'][key] < baseline['zone_recall'][key]-margin-1e-12:
-            failures.append(key+' recall regressed beyond its protection')
-    if candidate['mediterranean']['cs_share'] < baseline['mediterranean']['cs_share']-.02-1e-12:
-        failures.append('Mediterranean Cs share regressed beyond its protection')
-    if candidate['mediterranean']['dry_share'] > max(.05, baseline['mediterranean']['dry_share'])+1e-12:
-        failures.append('Mediterranean dry share exceeded its protection')
+    if branch != 'whittaker':
+        if candidate['zone_accuracy'] < baseline['zone_accuracy']-.01-1e-12:
+            failures.append('zone_accuracy regressed beyond its protection')
+        for key, margin in [('cold_dry', .02), ('hot_dry', .03)]:
+            if candidate['zone_recall'][key] < baseline['zone_recall'][key]-margin-1e-12:
+                failures.append(key+' recall regressed beyond its protection')
+        if candidate['mediterranean']['cs_share'] < baseline['mediterranean']['cs_share']-.02-1e-12:
+            failures.append('Mediterranean Cs share regressed beyond its protection')
+        if candidate['mediterranean']['dry_share'] > max(.05, baseline['mediterranean']['dry_share'])+1e-12:
+            failures.append('Mediterranean dry share exceeded its protection')
     if branch == 'whittaker':
         maximum = min(B.coverage_policy()['publication_outside_limit'], baseline['coverage']['outside_share'])
         if candidate['coverage']['outside_share'] > maximum+1e-12:
@@ -84,6 +90,7 @@ def assess(baseline, candidate, branch):
         if candidate['strict']['macro_hard'] < baseline['strict']['macro_hard']-.01-1e-12:
             failures.append('Exact allowed-biome agreement regressed by more than one point')
     return dict(eligible=not failures, objective=objective,
+                protection_scope='annual_biomes' if branch == 'whittaker' else 'seasonal_zones',
                 gain=candidate[objective]-baseline[objective], failures=failures)
 
 

@@ -180,3 +180,64 @@ layout is checkpointed separately; the final mean checkpoint can be passed
 directly to the atlas exporter. Interrupted verification need not repeat
 completed layouts. Three tests verify the selection protections and layout
 identities. Native reviews remain separate from actual atlas publication.
+
+## Milestone 5: coupled terrain-aware exchange and explicit target policies
+
+The map physics pilot completes **eight three-layout mean climates** at ds32:
+24 individual simulations, **61,612 checked linear solves and 792 temperature
+steps**, all successful. Terrain-aware conservative exchange eliminates grey
+land in this *coarse* Whittaker scenario but loses annual-biome fit; it is a
+mechanism to calibrate, not an already-qualified atlas replacement.
+
+| World / exchange | Zone objective | Strict biome objective | Source land outside, ds32 |
+|---|---:|---:|---:|
+| Free, legacy | 0.480249 | 0.491316 | 7.2482% |
+| Free, conservative | 0.476910 | 0.501056 | 7.2480% |
+| Free, conservative with 3 km carrier scale | 0.475271 | 0.492195 | 4.2128% |
+| Whittaker, legacy | 0.346002 | 0.513383 | 0.1480% |
+| Whittaker, conservative | 0.336201 | 0.503344 | 0.3727% |
+| Whittaker, conservative with 3 km carrier scale | 0.333090 | 0.484832 | 0.0000% |
+
+These source-pixel percentages classify weather simulated at ds32; they are
+not the native atlas's 1.21% figure. The unclipped legacy controls and all
+per-layout certificates are retained in `map_pilot/`. Changing an operator
+does not establish predictive accuracy merely because its budget closes.
+
+A further nine-candidate free search retunes the conservative scheme around
+the selected coarse coefficients: its own starting score 0.451263 improves
+to 0.457404 at ds64, with zero numerical failures. This is also a coarse
+candidate requiring a paired finer check. All complete candidate journals
+are now retained alongside their parameter, source and optimizer manifests.
+
+Before evaluating the humidity/lapse refinement outcomes, the promotion
+policy is made explicit by target definition in `selection_policy.json`.
+Free and Earth retain seasonal-zone and Mediterranean protections. Whittaker
+uses its **annual** covered-biome objective, exact allowed-biome agreement,
+strict-biome floor and no increase in grey land. Its seasonal metrics are
+always reported to show the different hypothesis. Annual biomes do not
+encode a Mediterranean precipitation season, as documented in the original
+crosswalk. The initial coarse Whittaker winner still fails its grey-land
+constraint under this policy; the rejected free winner is also unchanged.
+
+Completed finer checks reject the free secondary candidate (zone objective
+0.480249 → 0.480132) and conservative retune (0.480249 → 0.472616, also losing
+protected exact-zone and cold-dry agreement). The mild Whittaker refinement
+improves its covered objective to 0.525316 but increases outside-diagram land
+from 0.1480% to 0.5149% at ds32, so it is rejected even under the annual
+selection policy. The terrain-aware Whittaker coarse retune completes all
+nine candidates, improving 0.484884 → 0.509827; it has not passed finer or
+native checks and is not published.
+
+The Earth geometry search completes 17 candidates, improving its map objective
+0.161213 → 0.169138 without changing Earth physics. Separately, the conservative
+Earth physics search completes nine candidates and all eleven final regional
+comparisons. Its best combined training distance, 2.1284, remains worse than
+the legacy control's 2.1219. No rainfall accuracy gain is inferred from either
+search. All complete journals and regional diagnostics are retained.
+
+The user has now prioritized observed rainfall accuracy. Further fantasy-map
+searches and the partially completed native Earth geography review are paused;
+its completed first-layout checkpoint is retained for an explicit later resume.
+No atlas climate has been replaced by this campaign. The next round will
+separate rainfall losses from temperature and biome scores. The 46 targeted
+calibration, exchange, ensemble, coverage and selection tests pass.

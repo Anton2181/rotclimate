@@ -27,6 +27,8 @@ three classify the mean climate over surroundings layouts 1, 2 and 3.
 The report explains the scores, crosswalk assumptions and numerical checks.
 These are simulated potential climates, not observed vegetation maps.
 See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
+See reports/CLIMATE_PHYSICS_20261023.md for subsequent physics experiments,
+paired calibration checks and the criteria used to select published climates.
 
 The Farming and Health and ecology topics bring Harvest analysis into each
 atlas. Overview includes settlement potential and expected density. Choose
@@ -53,6 +55,7 @@ def main():
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
              ROOT/'data/whittaker_coverage.json',
              ROOT/'reports/ITERATION_20261023.md', ROOT/'data/population_model.json',
+             ROOT/'reports/CLIMATE_PHYSICS_20261023.md',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
@@ -74,6 +77,14 @@ def main():
                  'fresh_browser/browser_checks.json','fresh_checkout.json','current_whittaker.json',
                  'core_assets.json','tests.json','hub_checks.json']:
         if (iteration/name).is_file():files.append(iteration/name)
+    physics = ROOT/'output/climate_physics_20261023'
+    excluded = {'checkpoints', 'fresh_snapshot', 'previous_atlases', 'previous_atlas'}
+    if physics.exists():
+        files += sorted(p for p in physics.rglob('*') if p.is_file() and p.suffix in {'.json', '.png'}
+                        and not excluded.intersection(p.relative_to(physics).parts))
+    calibration = ROOT/'calibration/climate_physics_20261023'
+    if calibration.exists():
+        files += sorted(p for p in calibration.rglob('*') if p.is_file() and p.suffix in {'.json', '.jsonl'})
     summaries = {}
     for name in NAMES:
         directory = ROOT/'atlases'/name

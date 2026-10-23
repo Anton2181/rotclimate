@@ -1,0 +1,23 @@
+{
+  "free_and_earth": {
+    "objective": "seasonal zonefit, strictly improved at native resolution",
+    "maximum_exact_zone_loss": 0.01,
+    "maximum_cold_dry_recall_loss": 0.02,
+    "maximum_hot_dry_recall_loss": 0.03,
+    "maximum_mediterranean_cs_loss": 0.02,
+    "maximum_mediterranean_dry": "max(baseline, 0.05)"
+  },
+  "whittaker": {
+    "objective": "covered biome score, strictly improved at native resolution",
+    "maximum_outside": "min(baseline, 0.02)",
+    "minimum_strict_biome_score": 0.46,
+    "maximum_exact_allowed_biome_loss": 0.01,
+    "seasonal_metrics": "Always reported. They diagnose a separate target hypothesis and are not annual-biome selection constraints."
+  },
+  "all": {
+    "require_observed_numerical_checks": true,
+    "layouts": [1, 2, 3],
+    "publication_downsample": 8,
+    "note": "Policy follows each atlas's target definition. No biome envelopes, source map or classifier boundaries change. Native checks determine promotion; coarse search gains do not."
+  }
+}

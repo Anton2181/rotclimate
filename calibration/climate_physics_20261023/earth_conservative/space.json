@@ -1,0 +1,84 @@
+{
+ "args": {
+  "start": "atlases/earth_fit/params.json",
+  "regions": [
+   "california",
+   "iberia",
+   "southeast_us",
+   "levant",
+   "central_asia",
+   "east_china",
+   "east_australia",
+   "mexico"
+  ],
+  "cell_km": 56.0,
+  "evals": 9,
+  "popsize": 8,
+  "sigma": 0.04,
+  "seed": 231023,
+  "workers": 1,
+  "holdout": [
+   "chile",
+   "cape",
+   "sw_australia",
+   "south_brazil",
+   "japan",
+   "pacific_nw",
+   "western_europe",
+   "eastern_europe",
+   "us_midwest",
+   "manchuria",
+   "new_zealand"
+  ],
+  "physics": "storm_water",
+  "bounds": "{}",
+  "set": "{\"eddy_moisture_scheme\":\"conservative\"}",
+  "saved_numerics": true,
+  "plan": false,
+  "out": "calibration/climate_physics_20261023/earth_conservative",
+  "resume": false,
+  "pad_km": 1100.0
+ },
+ "space": [
+  [
+   "eddy_rate",
+   0.05,
+   3.0
+  ],
+  [
+   "eddy_scale_km",
+   100.0,
+   1200.0
+  ],
+  [
+   "eddy_seasonality",
+   0.0,
+   0.9
+  ],
+  [
+   "ocean_rh",
+   0.55,
+   0.95
+  ],
+  [
+   "rh_threshold",
+   0.2,
+   0.6
+  ],
+  [
+   "land_recycling",
+   0.05,
+   0.8
+  ],
+  [
+   "precip_tau_days",
+   2.0,
+   15.0
+  ],
+  [
+   "orographic",
+   0.0,
+   8.0
+  ]
+ ]
+}

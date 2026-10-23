@@ -35,6 +35,16 @@ def test_whittaker_must_improve_its_score_without_more_grey_land():
     assert assess(base, new, 'whittaker')['eligible']
 
 
+def test_annual_biomes_are_evaluated_separately_from_seasonal_zone_targets():
+    base = measurements()
+    new = copy.deepcopy(base)
+    new.update(covered_score=.52, zonefit=.6, zone_accuracy=.3)
+    new['mediterranean']['cs_share'] = .4
+    assert assess(base, new, 'whittaker')['eligible']
+    assert assess(base, new, 'whittaker')['protection_scope'] == 'annual_biomes'
+    assert not assess(base, new, 'earth')['eligible']
+
+
 def test_layout_ids_are_verified_from_either_checkpoint_format(tmp_path):
     path = tmp_path/'checkpoints'/'baseline.pkl'
     assert baseline_seeds(dict(identity=dict(seeds=[1,2,3])), path) == [1,2,3]
