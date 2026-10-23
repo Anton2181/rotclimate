@@ -1,0 +1,14 @@
+{
+  "frozen": "2026-10-23, after the heat-diffusion plan failed (S 1.0005 / 1.0010: no effect) and before any result of this plan",
+  "findings": {
+    "rain": "Under r33 the local (within-region) share of the rainfall error is 54 %. The annual log10 rain error of each cell falls by -0.27 per km of sub-grid relief (the cell's highest minus mean ground), negative in nearly every region (Patagonia -0.84, SW Australia -0.83, north India -0.36, Mexico -0.25): hilly cells are too dry.",
+    "temperature": "The within-region temperature error says the solved field is too smooth (coast-interior -1.2 C per decade of distance, latitude +0.12 C/deg), but the horizontal diffusion is not the cause."
+  },
+  "hypotheses": {
+    "e34": "Sub-grid hills force ascent whatever the wind direction; add subgrid_orographic x relief_km x wind/5 m/s to the rain ascent (rain stays a sink of the solved vapour).",
+    "eddy_heat": "The storm-eddy exchange relaxes temperature toward its ~850 km Gaussian surroundings (eddy_heat 1.0, eddy_scale_km 852): the stronger smoother. Weaken its heat part."
+  },
+  "reference": "calibration/local_accuracy_20261023/r33_params.json rerun on dev31 under the e34 source fingerprint (output/subgrid_eddy_20261023/reference)",
+  "candidates": {"so1.0": {"subgrid_orographic": 1.0}, "so2.5": {"subgrid_orographic": 2.5}, "eh0.5": {"eddy_heat": 0.5}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}

@@ -275,6 +275,8 @@ class ClimateModel:
         emax = ndi.maximum_filter(g.elev_max, size=max(1, int(round(28.0 / g.cell_km))))
         self.drag = 1.0 / (1.0 + p.terrain_drag * (emax / 1000.0) ** 2)
         self.conv_sigma = 28.0 / g.cell_km
+        # e34: sub-grid relief (km), the cell's highest minus its mean ground, on land
+        self.subgrid_relief = np.where(g.land, np.maximum(g.elev_max - g.elev, 0.0), 0.0) / 1000.0
         self.lat = g.lat
         self.col_sigma = 300.0 / g.cell_km
         # coastal upwelling geometry (e1): the offshore direction (map frame,
@@ -922,6 +924,15 @@ class ClimateModel:
             if p.subsidence_summer > 0:
                 sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
+            if p.subgrid_orographic > 0:
+                # e34: hills smaller than the grid force air up whatever way it
+                # blows, and their crests wring out rain the smoothed terrain
+                # cannot (within each region the rain error falls by -0.27 in
+                # log10 per km of sub-grid relief: Patagonia, SW Australia,
+                # north India, Mexico). Extra ascent ~ the cell's highest minus
+                # mean ground x the wind speed; the rain stays a sink of the
+                # solved vapour, so the lee side dries.
+                A_dyn = A_dyn + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u, v) / 5.0, 0.0, 3.0)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
             if p.high_drying > 0 and getattr(self, "last_pres", None) is not None:
                 # e10: under the highs the pressure winds build (cold continents
@@ -1063,6 +1074,8 @@ class ClimateModel:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells
                 raw = p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up
+                if p.subgrid_orographic > 0:
+                    raw = raw + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u, v) / 5.0, 0.0, 3.0)
                 cell = lambda a: np.broadcast_to(np.asarray(a, float), lat.shape)[ti, tj].copy()
                 self.trace.append(dict(
                     day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP), bucket=cell(soil_w),

@@ -789,6 +789,53 @@ python3 -I scripts/build_atlas_variant.py --params calibration/map_world_r33/bes
 # in scripts/build_fit_hub.py, and rerun it for atlases/index.html
 ```
 
+## Iteration 6: where r33's errors are
+
+| r33, 31 regions | Seasonal shape | Region offset | Local pattern |
+|---|---|---|---|
+| Temperature | 41 % | 24 % | 35 % |
+| Rainfall (log) | 26 % | 20 % | 54 % |
+
+The local pattern is now a third of the temperature error and over half
+of the rainfall error. Each cell's local error (its error minus its
+region's mean) was regressed on its geography over all 31 regions.
+
+**Temperature**: the solved field is too smooth.
+
+- Error per tenfold distance from the coast: −1.23 °C over the year
+  (summer −1.42, winter −0.55). Inland cells run too cold against coastal
+  ones.
+- Error per degree of latitude: +0.124 °C (winter +0.175). The
+  north–south gradient inside a region is too weak.
+
+Lowering the horizontal heat diffusion does nothing:
+
+| On r33, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature |
+|---|---|---|---|---|---|---|
+| heat diffusion 20,000 m²/s | 1.0005 | 1.0011 | 1.0026 | 0.9988 | 1.0002 | +0.1 % |
+| heat diffusion 10,000 m²/s | 1.0010 | 1.0021 | 1.0045 | 0.9983 | 1.0005 | +0.2 % |
+
+The stronger smoother is the storm-eddy exchange. It relaxes temperature
+toward its ~850 km Gaussian surroundings (`eddy_heat` 1.0).
+
+**Rainfall**: hilly cells are too dry.
+
+- The log10 error of annual rain falls by −0.27 per km of sub-grid relief
+  (the cell's highest minus its mean ground).
+- It is negative in nearly every region: Patagonia −0.84, SW Australia
+  −0.83, north India −0.36, Mexico −0.25.
+- The model's orographic rain uses only the uplift of the mean wind over
+  terrain smoothed to ~50 km. Hills smaller than a cell force air up
+  whatever way it blows.
+
+**e34 (`subgrid_orographic`, off by default)** adds ascent
+`subgrid_orographic × relief_km × wind / 5 m/s`. The rain stays a sink of
+the solved vapour, so the lee dries.
+
+The plan (`calibration/subgrid_eddy_20261023/plan.json`) tests e34 at 1.0
+and 2.5, and `eddy_heat` at 0.5, against r33 rerun under the new source
+fingerprint.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
