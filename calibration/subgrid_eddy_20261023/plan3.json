@@ -1,0 +1,9 @@
+{
+  "frozen": "2026-10-23, after plan2's results and before any plan-3 result",
+  "findings": "subgrid 2.5 + background 0.85: S 0.9952 (rain -1.13 %, temperature +0.17 %), every group at or below 1 (training 0.9999) but short of the 0.5 % overall threshold. subgrid 4 + background 0.75: S 0.9949, training 1.0016: hilly regions improve strongly (Alps -15 %, New Zealand -13 %, Pacific NW and Japan -8 %) while the already-wet western Europe (+11 %), Manchuria (+7 %) and east Australia (+6 %) get wetter.",
+  "hypothesis": "The background ascent is the lever that dries the uniformly wet regions; take it to 0.75 with moderate sub-grid ascent.",
+  "reference": "output/subgrid_eddy_20261023/reference",
+  "candidates": {"so2.5_bg0.75": {"subgrid_orographic": 2.5, "background_ascent": 0.75},
+                  "so3_bg0.75": {"subgrid_orographic": 3.0, "background_ascent": 0.75}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
