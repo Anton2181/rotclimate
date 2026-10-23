@@ -890,6 +890,14 @@ Sealed regions, rainfall loss:
 
 The first three are mountainous and were too dry.
 
+![Annual rain, WorldClim against r33 and r34](../output/subgrid_eddy_20261023/rain_r33_r34.png)
+
+The figure is drawn by `scripts/plot_rain_regions.py`. Southern regions are
+drawn mirrored, as they run. More rain now falls on the Alps, the Cascades
+and New Zealand's ranges. Rain shadows stay too weak: the Columbia Basin
+behind the Cascades simulates 600–1,000 mm against ~300 observed. The
+model has an upslope ascent term but nothing for descending lee air.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
