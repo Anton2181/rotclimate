@@ -617,6 +617,13 @@ HYDE and the reference regions before this file was opened.
 | × cores (cradles + Rome, great circle, L 800) | 0.471 / 46 % | 0.485 / 48 % |
 | × cores (travel: forest × 2, relief 1 per km, L 800) | **0.584 / 42 %** | **0.603 / 44 %** |
 | HYDE 3.3, 200 CE | 0.604 / 44 % | 0.635 / 42 % |
+| × rule cores (top 10, great circle, L 800) | 0.135 / 63 % | 0.176 / 62 % |
+| × rule cores (top 10, travel, L 800) | 0.106 / 67 % | 0.153 / 66 % |
+
+The history-free rule does not carry over to Rome. Its western cores
+(Mesopotamia, the Nile, the upper Euphrates, the lower Danube) pull towns
+east and north, and none sits in Italy or Greece. On a map, the rule is a
+weak fallback: the gain needs the cores a history supplies.
 
 Inside the Roman empire the environment alone barely predicts where the
 towns were (0.12). The old-core term, carried over unchanged, raises it to

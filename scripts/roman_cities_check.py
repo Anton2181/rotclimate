@@ -33,7 +33,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT)); sys.path.insert(0, str(ROOT / "scripts"))
 from harvest_earth_hyde import earth_stages  # noqa: E402
 from hyde_compare import blocks, hyde_at, spearman  # noqa: E402
-from population_cores import CORE_SETS, core_distance, core_term, travel_distance  # noqa: E402
+from population_cores import CORE_SETS, core_distance, core_term, dry_river_cores, travel_distance  # noqa: E402
 
 YEAR = 150
 BLOCK = 24          # 5' cells: 2 degrees
@@ -90,6 +90,9 @@ def main():
         "base x cores (cradles + Rome, great circle, L 800)": base * core_term(core_distance(lat, lon, cores), 800),
         "base x cores (travel: forest x2, relief 1/km, L 800)": base * core_term(travel_distance(z, cores, 2.0, 1.0, 1.0), 800),
     }
+    rule = dry_river_cores(z, base, km2, 10)
+    fields["base x rule cores (top 10, great circle, L 800)"] = base * core_term(core_distance(lat, lon, rule), 800)
+    fields["base x rule cores (top 10, travel, L 800)"] = base * core_term(travel_distance(z, rule, 2.0, 1.0, 1.0), 800)
     if a.hyde:
         fields["HYDE 3.3, 200 CE"] = hyde_at(a.hyde, lat, lon) / km2
     T = towns(a.xlsx)
