@@ -539,6 +539,35 @@ For the fantasy map:
 - a core term multiplies the settlement base as a share of capacity. It
   should not create people above the core's intensified capacity.
 
+**Travel cost instead of straight-line distance**
+(`population_cores.py --travel`; cradles + Rome).
+
+The core term uses the cheapest path, on an 8-neighbour Dijkstra over
+15′ cells. Each km costs:
+
+- 1 on open land;
+- × the forest factor in forest (biome share);
+- × the sea factor at sea;
+- plus the relief factor × local relief in km.
+
+| Travel cost, L = 800 km | HYDE 200 CE: rank / to move | Han AD 2: rank / to move | Regions: spread |
+|---|---|---|---|
+| great circle (above) | 0.744 / 42 % | 0.818 / 45 % | 0.409 |
+| no friction, sea = land | 0.741 / 42 % | 0.823 / 45 % | 0.406 |
+| forest × 3 | 0.723 / 46 % | 0.843 / 39 % | **0.353** |
+| relief 1 per km (L 600) | **0.759 / 45 %** | 0.831 / 39 % | 0.417 |
+| **forest × 2, relief 1 per km** | 0.746 / 44 % | **0.843 / 39 %** | 0.372 |
+| forest × 2, sea × 3 | 0.724 / 45 % | 0.835 / 41 % | 0.396 |
+
+- Slow forests help where they should. Hunan and Jiangxi go from 8×
+  too full (−0.89 in log10) to 4× (−0.57) with forest × 3. Gaul goes from
+  −0.28 to −0.21.
+- Mountains help HYDE.
+- A slow sea hurts: Mediterranean shipping tied the Roman provinces
+  together.
+- The gain over the straight line is modest. The straight line already
+  carries most of it.
+
 **The rule on the fantasy map** (Earth-fit atlas fields, 3.7 km cells):
 
 - Its first two cores fall in the Ayauda River Valley, in the province the

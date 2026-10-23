@@ -90,6 +90,57 @@ def dry_river_cores(z, base, km2, n, box=24, min_sep_km=1000.0):
     return peaks
 
 
+FOREST_SHARE = {1: 0.5, 3: 1.0, 4: 1.0, 7: 1.0, 9: 1.0}     # rotclimate.biomes codes: savanna half, forests whole
+
+
+def travel_distance(z, cores, forest_cost=1.0, sea_cost=1.0, relief_cost=0.0, coarsen=3):
+    """[lat, lon] effective km to the nearest core along the cheapest path:
+    each km costs 1 on open land, forest_cost in forest (biome share from
+    rotclimate.biomes), sea_cost at sea, plus relief_cost x the local relief
+    in km. 8-neighbour Dijkstra on a grid coarsened by `coarsen` (5' x 3 =
+    15', ~28 km), then repeated back to full resolution."""
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import dijkstra
+    from rotclimate import biomes
+    lat, lon, land = z["lat"], z["lon"], z["land"]
+    biome = biomes.classify(np.nan_to_num(z["T_ann"]), np.nan_to_num(z["P_ann"]), land)
+    forest = np.zeros(land.shape)
+    for code, share in FOREST_SHARE.items():
+        forest[biome == code] = share
+    relief = np.clip(np.nan_to_num(z["relief"]), 0, 3000) / 1000.0
+    c = coarsen
+    ny, nx = land.shape[0] // c, land.shape[1] // c
+
+    def co(a):
+        return a[:ny * c, :nx * c].reshape(ny, c, nx, c).mean((1, 3))
+    lf = co(land.astype(float))
+    cost = np.where(lf >= 0.5, 1.0 + (forest_cost - 1.0) * co(forest * land) / np.maximum(lf, 1e-9)
+                    + relief_cost * co(relief * land) / np.maximum(lf, 1e-9), sea_cost)
+    clat = lat[:ny * c].reshape(ny, c).mean(1)
+    clon = lon[:nx * c].reshape(nx, c).mean(1)
+    dy_km = abs(clat[1] - clat[0]) * 111.32
+    idx = np.arange(ny * nx).reshape(ny, nx)
+    rows, cols, w = [], [], []
+    for di, dj in ((0, 1), (1, 0), (1, 1), (1, -1)):
+        a = idx[max(0, -di):ny - max(0, di), max(0, -dj):nx - max(0, dj)]
+        b = idx[max(0, di):ny - max(0, -di) or None, max(0, dj):nx - max(0, -dj) or None]
+        ia = a // nx
+        dx_km = abs(clon[1] - clon[0]) * 111.32 * np.cos(np.radians(0.5 * (clat[ia] + clat[b // nx])))
+        d = np.hypot(di * dy_km, dj * dx_km)
+        wt = 0.5 * (cost.ravel()[a] + cost.ravel()[b]) * d
+        rows += [a.ravel(), b.ravel()]; cols += [b.ravel(), a.ravel()]; w += [wt.ravel(), wt.ravel()]
+    g = coo_matrix((np.concatenate(w), (np.concatenate(rows), np.concatenate(cols))), shape=(ny * nx, ny * nx)).tocsr()
+    src = [int(np.argmin(np.abs(clat - la0))) * nx + int(np.argmin(np.abs(clon - lo0))) for la0, lo0 in cores.values()
+           if clat.min() - 1 <= la0 <= clat.max() + 1 and clon.min() - 1 <= lo0 <= clon.max() + 1]
+    dist = dijkstra(g, indices=src, min_only=True).reshape(ny, nx)
+    full = np.repeat(np.repeat(dist, c, 0), c, 1)
+    out = np.full(land.shape, np.inf)
+    out[:ny * c, :nx * c] = full
+    out[ny * c:, :] = out[ny * c - 1:ny * c, :]
+    out[:, nx * c:] = out[:, nx * c - 1:nx * c]
+    return out
+
+
 def core_term(D, scale_km):
     return np.exp(-D / scale_km)
 
@@ -115,6 +166,7 @@ def main():
     ap.add_argument("--earth", required=True)
     ap.add_argument("--hyde", nargs="+", required=True)
     ap.add_argument("--shp", required=True)
+    ap.add_argument("--travel", action="store_true", help="scan travel-cost distances (forest, sea, relief) instead")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     z = np.load(a.earth)
@@ -135,6 +187,15 @@ def main():
         return out
 
     results = {"settlement base": evaluate(base)}
+    if a.travel:
+        cores = CORE_SETS["cradles + Rome"]
+        for fc, sc, rc in [(1.0, 1.0, 0.0), (2.0, 1.0, 0.0), (3.0, 1.0, 0.0), (1.0, 1.0, 1.0), (2.0, 1.0, 1.0),
+                           (2.0, 3.0, 0.0), (2.0, 3.0, 1.0)]:
+            D = travel_distance(z, cores, fc, sc, rc)
+            for L in (450, 600, 800, 1000, 1500):
+                results[f"travel forest x{fc:g} sea x{sc:g} relief {rc:g}/km, L {L}"] = evaluate(base * core_term(D, L))
+        report(results, a)
+        return
     core_sets = dict(CORE_SETS)
     for n in (4, 6, 10):
         core_sets[f"rule, top {n}"] = dry_river_cores(z, base, km2, n)
@@ -142,6 +203,10 @@ def main():
         D = core_distance(lat, lon, cores)
         for L in SCALES_KM:
             results[f"{set_name}, L {L} km"] = evaluate(base * core_term(D, L))
+    report(results, a, core_sets)
+
+
+def report(results, a, core_sets=None):
     names = [Path(p).name for p in a.hyde]
     print(f"{'':42s}" + "".join(f"{n.replace('popc_', 'HYDE ').replace('.tif', ''):>22s}" for n in names)
           + f"{'Han AD 2':>22s}{'regions':>9s}")
@@ -149,7 +214,7 @@ def main():
         cols = "".join(f"   rank {v[n]['spearman']:.3f} mv {v[n]['moved_share']:4.0%}" for n in names + ["Han AD 2"])
         print(f"{k:42s}{cols}   sd {v['regions_spread']:.3f}")
     Path(a.out).parent.mkdir(parents=True, exist_ok=True)
-    Path(a.out).write_text(json.dumps(dict(core_sets=core_sets, scales_km=SCALES_KM, results=results), indent=1))
+    Path(a.out).write_text(json.dumps(dict(core_sets=core_sets or CORE_SETS, scales_km=SCALES_KM, results=results), indent=1))
 
 
 if __name__ == "__main__":
