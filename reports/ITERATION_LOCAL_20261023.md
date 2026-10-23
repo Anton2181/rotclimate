@@ -436,6 +436,71 @@ continent) is the next missing piece. 0.8 PW is twice the observed ocean
 transport, so the setting also stands in for the Antarctic cold the
 energy balance lacks: no ice-sheet height, no circumpolar isolation.
 
+## Iteration 5: on r31, continental winter cold (e31)
+
+Rainfall development on r31 runs in parallel in another session
+([RAINFALL_R31_20261023.md](RAINFALL_R31_20261023.md),
+[STORM_RAINOUT_20261023.md](STORM_RAINOUT_20261023.md)). That session made
+`benchmark_local.py` and `gate_local.py` verifiable: frozen parameters,
+source and observation hashes, and per-case identities. This track uses
+those tools unchanged.
+
+**The pattern under r31.** Errors by month, °C:
+
+| Region | Jan | Apr | May | Jul | Oct | Annual bias |
+|---|---|---|---|---|---|---|
+| Korea | +0.5 | +5.3 | +5.5 | +1.2 | +4.1 | +2.5 |
+| North China Plain | | +3.1 | +4.2 | | | +1.9 |
+| Manchuria | | | | | | +3.4 (warm all year) |
+| US Midwest | +3.1 | | | | | +2.0 |
+
+- In East Asia the spring and autumn excess (+3 to +5.5 °C) is the
+  annual-mean centre showing. The winter cold comes from the amplitude, and
+  the summer warmth is held down by wet cooling.
+- The west coasts run cold: western Europe −0.4, Pacific Northwest −1.0,
+  Iberia −1.4 °C.
+- Real east coasts are about 4 °C colder in annual mean than west coasts at
+  the same latitude (Seoul 12.5 °C against Lisbon 17 °C; New York 12.9 °C
+  against Naples 16 °C).
+- The model's centre is the zonal land mean plus an amplitude that is
+  symmetric about it. Nothing lowers the annual mean where long winter
+  nights build pools of cold air that drain toward the equator.
+
+**e31 (`continental_mean`, °C, off by default).** The annual-mean centre
+of land temperature falls by
+
+    continental_mean × darkness ramp (25 → 45°) × poleward land × continental share of the air (chi)
+
+- The poleward land is the share that shallow cold air can reach:
+  `earth.pole_fetch`, with a 2,000 km memory along the meridian toward the
+  pole on WorldClim's 0.5° grid.
+- Ground above 1,500 m passes exp(−excess / 1,000 m) per step, so the
+  Himalaya, Tibet, the Alborz and the Rockies block the path.
+- Other grids march toward their own pole with the same barrier.
+
+| Place | Poleward reachable land |
+|---|---|
+| Seoul | 0.87 |
+| Beijing | 0.85 |
+| New York | 0.80 |
+| Chicago | 0.68 |
+| Tehran | 0.33 |
+| Delhi | 0.16 |
+| Paris | 0.11 |
+| Salt Lake City | 0.09 |
+
+Without the barrier, Tehran and Delhi would be 0.85 and 0.91.
+
+![Poleward land reachable by shallow cold air](../output/continental_cold_20261023/pole_fetch.png)
+
+**Protocol.** The plan was frozen before any result
+(`calibration/continental_cold_20261023/plan.json`):
+
+- candidates `continental_mean` 3 and 5 °C on r31, all else fixed;
+- r31 was rerun on all 31 regions under the new source fingerprint, and
+  every regional metric matches the storm-rainout reference exactly;
+- policy v2 rules are unchanged.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
