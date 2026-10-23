@@ -96,23 +96,61 @@ Findings:
   rule needs a Florida-like annual mean above 21 °C at about 35° N, inside 9° of
   latitude from cold-winter forest. Earth's gradients do not allow that.
 
+## Greenhouse and planet size (added on request)
+
+Both are now knobs (`greenhouse_wm2`, `planet_radius`); defaults reproduce the
+model exactly (the start re-scores 0.153).
+
+- **Greenhouse:** a forcing in W m⁻² on the outgoing longwave of the zonal
+  energy balance. Doubled CO₂ is about 3.7 W m⁻².
+- **Planet radius**, with Earth's gravity, day and year (a denser planet):
+  - a degree of latitude is radius × 111 km;
+  - the zonal energy balance keeps the eddies' diffusivity in m² s⁻¹, so its
+    diffusion in sin-latitude scales as 1 / radius²;
+  - the Hadley cells' reach scales as radius^−½ (eddy-limited, Held 2000);
+  - the storm-track, subsidence and subtropical-high widths keep their size
+    in km, so in degrees they scale as 1 / radius.
+
+  These scalings are first-order theory, not Earth-tested physics.
+
+| Probe | Zone-fit | Strict accuracy | Swamp annual mean | Cold-wet coldest month |
+|---|---|---|---|---|
+| start | 0.153 | 21.2 % | 14.6 °C | −2.2 °C |
+| greenhouse +3.7 W m⁻² | **0.160** | 26.2 % | 16.5 | −0.2 |
+| greenhouse +7.4 W m⁻² | 0.015 | 23.7 % | 18.5 | +1.8 (guard share 22 %) |
+| radius 0.9 | 0.152 | 20.9 % | 15.2 | −0.1 |
+| radius 0.8 | 0.110 | 9.9 % | 15.7 | +2.2 |
+| radius 0.7 | 0.083 | 5.5 % | 16.1 | +4.2 |
+| radius 0.8, 3° further south | 0.088 | 5.2 % | 16.4 | +3.3 |
+| radius 0.8, greenhouse +3.7 | 0.086 | 6.0 % | 17.5 | +4.1 |
+| radius 1.15 | 0.147 | 20.4 % | 13.4 | −5.1 |
+| radius 1.3 | 0.120 | 14.2 % | 12.1 | −7.8 |
+| radius 1.3, 3° further south | 0.152 | 21.3 % | 14.5 | −4.6 |
+
+**A smaller planet flattens the map's north–south contrast.** The map spans
+more degrees of latitude, but heat spreads across a smaller sphere more easily,
+and the wider Hadley cells push the subtropical high north. The north warms more
+than the south.
+
+**A larger planet steepens the contrast.** At 1.3 × Earth's radius the north's
+winter falls 5.6 °C and the swamp cools only 2.5 °C. Moved 3° south, it keeps
+the start's zone-fit with a 2.4 °C colder northern winter. The combination the
+painted zones ask for, a larger planet, further south, with a stronger
+greenhouse, is for the joint world-plus refit to find.
+
 ## Knobs left out
 
-- **Greenhouse gases and atmospheric mass:** chemistry, or the atmosphere's
-  composition.
+- **Atmospheric mass:** surface pressure changes the atmosphere's physics. Greenhouse
+  forcing was added on request (above).
 - **Gravity, rotation rate and orbital period:** fixed by the question.
-- **Planet radius.** Equal gravity on a smaller planet means a denser one. A radius
-  of 0.8 × Earth's would stretch the map over 19° of latitude, the strongest
-  lever on the gradient. But the model's circulation latitudes (the subtropical
-  highs, the storm track, the ITCZ) are calibrated on Earth's radius. They would
-  have to be rescaled by theory (Held & Hou), which is a physics change in all
-  but name.
+- **Planet radius** was added on request (above), with the circulation rescaled by
+  theory.
 - **Soil depth and vegetation** (the soil bucket). Arguably the world's geology,
   but it is one of the land-surface settings calibrated on Earth's average.
 
 ## Recommendation
 
-Add five world genes to the Earth-fit:
+Add seven world genes to the Earth-fit (`--physics worldplus`):
 
 | Gene | Range | Code |
 |---|---|---|
@@ -121,6 +159,8 @@ Add five world genes to the Earth-fit:
 | stellar flux | 0.96–1.04 × Earth's | new `solar_flux` (EBM and land insolation) |
 | ocean heat transport across the equator | −0.5 to 2.5 PW | exists |
 | poleward land beyond the grid | 0–1 | new `far_pole_land` (continental cold, e31) |
+| greenhouse forcing | −2 to 8 W m⁻² | new `greenhouse_wm2` |
+| planet radius | 0.6–1.3 × Earth's | new `planet_radius` |
 
 Then refit the world with the same budget and objective as the standard refit,
 and compare the two on the three-layout publication climate. Defaults reproduce

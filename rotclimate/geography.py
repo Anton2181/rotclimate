@@ -318,19 +318,24 @@ def build_grid(params: Params) -> Grid:
         params.downsample, tuple(params.tier_tops), beyond, params.pad_km, params.lat_center,
         params.map_width_mi, params.map_height_mi,
     )._with_params(params)
+    radius = getattr(params, "planet_radius", 1.0)
+    if radius != 1.0:
+        # a degree of latitude is radius x Earth's 111 km: the map spans more
+        # of them on a smaller planet
+        g.lat = params.lat_center + (g.lat - params.lat_center) / radius
     if params.north_bearing % 360.0:
-        g.lat = rotated_latitude(g, params.lat_center, params.north_bearing)
+        g.lat = rotated_latitude(g, params.lat_center, params.north_bearing, EARTH_KM_PER_DEG * radius)
     return g
 
 
-def rotated_latitude(g, lat_center, bearing):
+def rotated_latitude(g, lat_center, bearing, km_per_deg=EARTH_KM_PER_DEG):
     """Latitude of every cell when true north points `bearing` degrees
     clockwise from the top of the map (the grid stays aligned with the map)."""
     th = np.radians(bearing)
-    y_up = (g.lat[:, :1] - lat_center) * EARTH_KM_PER_DEG          # km up the map from its centre
+    y_up = (g.lat[:, :1] - lat_center) * km_per_deg          # km up the map from its centre
     cols = np.flatnonzero(g.inmap.any(0))
     x_right = (np.arange(g.nx)[None, :] - 0.5 * (cols[0] + cols[-1])) * g.cell_km
-    return lat_center + (x_right * np.sin(th) + y_up * np.cos(th)) / EARTH_KM_PER_DEG
+    return lat_center + (x_right * np.sin(th) + y_up * np.cos(th)) / km_per_deg
 
 
 def map_lat_range(params) -> tuple:
@@ -338,7 +343,7 @@ def map_lat_range(params) -> tuple:
     w = params.map_width_mi * MI_KM
     h = params.map_height_mi * MI_KM
     th = np.radians(params.north_bearing)
-    half = 0.5 * (abs(w * np.sin(th)) + abs(h * np.cos(th))) / EARTH_KM_PER_DEG
+    half = 0.5 * (abs(w * np.sin(th)) + abs(h * np.cos(th))) / (EARTH_KM_PER_DEG * getattr(params, "planet_radius", 1.0))
     return params.lat_center - half, params.lat_center + half
 
 

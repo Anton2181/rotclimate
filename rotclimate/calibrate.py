@@ -133,10 +133,12 @@ SPACE_WORLD = [g for g in SPACE_V9 if g[0] in WORLD_GENES]
 # the world's other unknowns that leave physics, chemistry, gravity, the day
 # and the year Earth's: the orbit's shape and its perihelion's season, the
 # star's brightness at the planet, the ocean heat the basins carry across the
-# equator and the land poleward of the grid (reports/WORLD_KNOBS_20261023.md)
+# equator, the land poleward of the grid, a stronger or weaker greenhouse and
+# the planet's size at Earth's gravity (reports/WORLD_KNOBS_20261023.md)
 SPACE_WORLD_PLUS = SPACE_WORLD + [("eccentricity", 0.0, 0.06), ("perihelion_after_solstice", 0.0, 365.0),
                                   ("solar_flux", 0.96, 1.04), ("cross_equatorial_transport", -0.5, 2.5),
-                                  ("far_pole_land", 0.0, 1.0)]
+                                  ("far_pole_land", 0.0, 1.0), ("greenhouse_wm2", -2.0, 8.0),
+                                  ("planet_radius", 0.6, 1.3)]
 # only the e1 additions, around an existing fit (everything else held at the start)
 SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
 # physics e2: the rain closure and seasonal land coupling from the literature

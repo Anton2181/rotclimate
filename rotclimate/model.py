@@ -210,6 +210,12 @@ class ClimateModel:
         self.p = params
         self.g = build_grid(params) if grid is None else grid   # grid: e.g. real geography (earth.py)
         self.z = ZonalClimate(params)
+        # world: on a planet of another size with Earth's gravity, day and year
+        # the Hadley cells reach radius^-1/2 as far in latitude (eddy-limited,
+        # Held 2000) and weather systems keep their size in km, so storm-track,
+        # subsidence and subtropical-high widths in degrees scale as 1 / radius
+        self.hadley_scale = params.planet_radius ** -0.5
+        self.synoptic_scale = 1.0 / params.planet_radius
         g = self.g
         self.solver = AdvectionSolver(g.ny, g.nx, g.dx_m, scheme=params.transport_scheme)
         self.solver.rtol = params.solver_rtol
@@ -351,8 +357,9 @@ class ClimateModel:
 
     def zonal_wind(self, s):
         p, lat = self.p, self.lat
-        phi_i = p.itcz_mean + p.itcz_shift * s
-        phi_h = p.hadley_edge + p.hadley_shift * s
+        hr = self.hadley_scale
+        phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
+        phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
         phi_p = phi_h + 30.0
         u = np.zeros_like(lat)
         v = np.zeros_like(lat)
@@ -366,7 +373,7 @@ class ClimateModel:
         u = np.where(m, -trade * np.sin(np.pi * xi), u)
         v = np.where(m, -0.35 * trade * np.sin(np.pi * xi), v)
         # southern trades (only reached if the padding goes that far south)
-        phi_hs = -(p.hadley_edge - p.hadley_shift * s)
+        phi_hs = -(p.hadley_edge - p.hadley_shift * s) * hr
         m = (lat < phi_i) & (lat > phi_hs)
         xi = (phi_i - lat) / (phi_i - phi_hs)
         u = np.where(m, -p.trade_speed * np.sin(np.pi * xi), u)
@@ -435,7 +442,7 @@ class ClimateModel:
         southerlies). Friction-turned geostrophic wind as in thermal_wind;
         `subtropical_high` is about the peak speed in m/s."""
         p, g = self.p, self.g
-        band = np.exp(-((self.lat - phi_h) / p.subtropical_high_width) ** 2)
+        band = np.exp(-((self.lat - phi_h) / (p.subtropical_high_width * self.synoptic_scale)) ** 2)
         psi = band * self.ocean_basin * (1.0 + p.subtropical_high_seasonality * s)
         gx = -np.gradient(psi, axis=1) / g.dx_m            # toward low pressure
         gy = np.gradient(psi, axis=0) / g.dx_m
@@ -798,13 +805,14 @@ class ClimateModel:
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
             # peaks in the storm track
-            storm = np.exp(-((lat - (phi_h + 13.0)) / p.storm_width) ** 2) * (1 - p.storm_seasonality * s)
+            sw, so = p.storm_width * self.synoptic_scale, 13.0 * self.synoptic_scale
+            storm = np.exp(-((lat - (phi_h + so)) / sw) ** 2) * (1 - p.storm_seasonality * s)
             if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
                 side = (1.0 if p.retrograde else -1.0) * self.basin_side
                 storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
                 # ... and reach further equatorward there
-                shift = p.storm_reach * np.clip(side, 0, 1)
-                storm = np.maximum(storm, np.exp(-((lat - (phi_h + 13.0 - shift)) / p.storm_width) ** 2)
+                shift = p.storm_reach * self.synoptic_scale * np.clip(side, 0, 1)
+                storm = np.maximum(storm, np.exp(-((lat - (phi_h + so - shift)) / sw) ** 2)
                                    * (1 - p.storm_seasonality * s) * np.clip(side, 0, 1) * p.storm_asym)
             eddy = eddy_exchange_rate(p.eddy_rate, storm, s, p.eddy_seasonality)
             sigE = p.eddy_scale_km / g.cell_km
@@ -933,7 +941,7 @@ class ClimateModel:
                 vertical_rms = (p.orographic_gust_ms * np.sqrt(np.maximum(storm, 0))
                                 * np.hypot(self.dhdx, self.dhdy))
                 up = expected_uplift(u*self.dhdx + v*self.dhdy, vertical_rms) / .05
-            sub = np.exp(-((lat - phi_h) / p.subsidence_width) ** 2)
+            sub = np.exp(-((lat - phi_h) / (p.subsidence_width * self.synoptic_scale)) ** 2)
             # subtropical highs sink hardest over the eastern side of ocean
             # basins on a prograde planet (dry west coasts: California,
             # Sahara coast); the asymmetry flips for retrograde spin

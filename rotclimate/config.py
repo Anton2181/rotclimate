@@ -41,6 +41,8 @@ class Params:
     perihelion_after_solstice: float = 13.0  # days after the winter solstice
     year_days: int = 365
     solar_flux: float = 1.0           # starlight at the planet, x Earth's 1,361 W m-2 (a world property: the star)
+    greenhouse_wm2: float = 0.0       # extra greenhouse forcing on the outgoing longwave, W m-2 (doubled CO2 ~3.7)
+    planet_radius: float = 1.0        # x Earth's radius, with Earth's gravity, day and year (a denser planet); maps only
     # day-of-year (0-based, day 0 = Titian Marigold 1) of the winter solstice.
     # Day 22 puts the solstice in "early winter", the equinox in "middle
     # spring", the summer solstice in "early summer" etc. - see calendar.py

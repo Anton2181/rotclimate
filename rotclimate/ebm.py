@@ -80,7 +80,8 @@ def _band_land(lat, profile):
 
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
-           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0, solar_flux=1.0):
+           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0, solar_flux=1.0,
+           greenhouse=0.0, radius=1.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -95,7 +96,11 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
 
     # diffusion operator L (N x N)
     L = np.zeros((N, N))
-    w = (1 - xe**2) * (1 + D_TROPICS * np.exp(-(np.rad2deg(np.arcsin(xe)) / 22.0) ** 2))
+    # world: on a planet of another size (same gravity, day and year) the eddies'
+    # diffusivity in m^2/s stays, so in x = sin(lat) it scales as 1 / radius^2,
+    # and the Hadley cells' reach (the flat tropics) as radius^-1/2 (Held 2000)
+    D = D_DIFF / radius ** 2
+    w = (1 - xe**2) * (1 + D_TROPICS * np.exp(-(np.rad2deg(np.arcsin(xe)) / (22.0 * radius ** -0.5)) ** 2))
     for j in range(N):
         if j > 0:
             L[j, j - 1] += w[j] / dx**2
@@ -115,8 +120,8 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     I = np.eye(N)
     Lfl, Lfo = L * fl[None, :], L * fo[None, :]     # diffusion of the zonal mean fl T_l + fo T_o
     M = np.block([
-        [np.diag(C_L / dt + B_OLR + nu) - D_DIFF * Lfl, -D_DIFF * Lfo - np.diag(nu)],
-        [-D_DIFF * Lfl - np.diag(nu * fl / fo), np.diag(C_O / dt + B_OLR + nu * fl / fo) - D_DIFF * Lfo],
+        [np.diag(C_L / dt + B_OLR + nu) - D * Lfl, -D * Lfo - np.diag(nu)],
+        [-D * Lfl - np.diag(nu * fl / fo), np.diag(C_O / dt + B_OLR + nu * fl / fo) - D * Lfo],
     ])
     if ocean_transport > 0:
         # e27: the oceans carry heat poleward themselves (~2 PW: gyres and the
@@ -135,7 +140,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
             if j < N - 1:
                 Lo[j, j + 1] += wo[j + 1] / dx**2
                 Lo[j, j] -= wo[j + 1] / dx**2
-        M[N:, N:] -= ocean_transport * D_DIFF * Lo / fo[:, None]
+        M[N:, N:] -= ocean_transport * D * Lo / fo[:, None]
     Minv = np.linalg.inv(M)
 
     # e30: the Atlantic overturning carries ~0.4 PW of heat northward across
@@ -147,7 +152,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     # in winter), so a share cross_ocean of it goes to the sea column alone,
     # concentrated by its band's sea fraction (at most x 2), and reaches land
     # only through the sea air.
-    q_cross = cross_transport * 1e15 * 2.0 * x / (2.0 * np.pi * 6.371e6 ** 2)
+    q_cross = cross_transport * 1e15 * 2.0 * x / (2.0 * np.pi * (6.371e6 * radius) ** 2)
     q_cross_l = (1.0 - cross_ocean) * q_cross
     q_cross_o = q_cross * (1.0 - cross_ocean + cross_ocean * np.minimum(1.0 / fo, 2.0))
     Tl = 15 - 30 * x**2
@@ -167,8 +172,8 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
         C_Od = C_O * (1.0 - c_ocean_season * w[None, :] * s_nh[:, None])       # [day, band]
     for yr in range(years):
         for d in range(year_days):
-            Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR + q_cross_l
-            Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR + q_cross_o
+            Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - (A_OLR - greenhouse) + q_cross_l
+            Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - (A_OLR - greenhouse) + q_cross_o
             if c_ocean_season > 0:
                 # a deepening layer entrains water from below the mixed layer
                 # (taken at last year's annual mean); a shoaling one leaves its
@@ -215,6 +220,10 @@ class ZonalClimate:
                 extra["cross_ocean"] = round(params.cross_transport_ocean, 3)
         if getattr(params, "solar_flux", 1.0) != 1.0:
             extra["solar_flux"] = round(params.solar_flux, 4)
+        if getattr(params, "greenhouse_wm2", 0.0) != 0.0:
+            extra["greenhouse"] = round(params.greenhouse_wm2, 3)
+        if getattr(params, "planet_radius", 1.0) != 1.0:
+            extra["radius"] = round(params.planet_radius, 4)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)
