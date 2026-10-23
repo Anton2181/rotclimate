@@ -100,3 +100,47 @@ incompatible members and racing, preservation of failed certificates, and
 the new CLI default. All 36 calibration, Whittaker coverage and storm tests
 pass. Earth retuning and map comparisons are separate experiments; changing
 the search objective alone is not claimed as an accuracy gain.
+
+## Milestone 3: reject simple storm retunes and repair the Earth search
+
+Two predeclared follow-up screens completed another **64 regional runs** on
+the existing eight training regions, with all strict numerical checks passed.
+Their control reproduces the earlier training baseline to the precision of
+the saved strict solver profile. These are reused fitting regions.
+
+| Conservative-exchange retune | Training climate distance |
+|---|---:|
+| Current legacy control | 2.121919 |
+| Original coefficients | 2.138911 |
+| Eddy rate 2/day | 2.138709 |
+| Ocean humidity 0.78 | 2.269966 |
+| Eddy rate 2/day, humidity 0.78 | 2.286736 |
+| Land recycling 0.55 | 2.173356 |
+| Eddy rate 2/day, recycling 0.55 | 2.167700 |
+
+None beats the control, so this screen selects no profile for publication.
+In particular, increasing moisture supply is not a general solution to the
+regional tradeoffs. Conservative cancellation remains below 1.79e-16 of
+gross storm exchange in these cases. Full rainfall, temperature, seasonal
+and classification diagnostics are in `earth_retune/` and `earth_recycling/`
+under `output/climate_physics_20261023/`.
+
+The Earth CMA calibrator previously overrode a verified start's linear
+tolerance and disabled strict linear convergence. It also exceeded an
+evaluation budget when the remaining budget was smaller than one optimizer
+population, and failed to save the starting fit for a one-evaluation run.
+It now preserves saved verified numerical profiles, records each region's
+observed numerical certificates, respects complete-population budgets and
+saves the baseline immediately. Six tests cover verified and legacy profiles
+and evaluation budgets 1, 8, 9 and 18. A `--plan` option exposes the exact
+configuration without running, and `storm_water` supplies the bounded
+eight-coefficient search for continuous Earth retuning.
+
+The map-round driver separately calibrates free and Whittaker moisture
+coefficients and the Earth fit's world geometry, always on the actual
+three-layout mean climate. It checks that search bounds do not clip the
+supplied baseline. Coarse candidates require paired finer-grid and native
+checks before any atlas publication; their calibration gain is not itself
+an atlas accuracy claim.
+
+![Paired Earth physics pilot](../output/climate_physics_20261023/earth_pilot.png)

@@ -25,7 +25,7 @@ import numpy as np  # noqa: E402
 
 from rotclimate import calibrate as C  # noqa: E402
 from rotclimate import earth  # noqa: E402
-from rotclimate.config import Params  # noqa: E402
+from rotclimate.config import Params, apply_numerics  # noqa: E402
 
 # genes that describe the world rather than its physics: fixed on Earth
 WORLD = {"lat_center", "tilt", "retrograde", "north_bearing", "tier1", "tier2_add", "tier3_add", "tier4_add",
@@ -95,6 +95,7 @@ SPACES["background_stage"] = [("land_offset", -2.0, 3.0), ("sst_offset", -4.0, 1
                               ("continentality", 0.2, 1.5), ("lapse_rate", 3.5, 6.5), ("ocean_transport", 0.0, 1.0)]
 SPACES["e3b_stage1"] = ([g for g in SPACES["e3b"] if g[0] in _E3_PARTNERS]
                         + [g for g in C.SPACE_E3B if g[0] not in {n for n, *_ in C.SPACE_E2}])
+SPACES["storm_water"] = C.SPACE_STORM_WATER
 SPACE = SPACES["v9"]
 _CASES = {}
 _PAD_KM = 1100.0     # land and sea modelled around each region (set by --pad-km before the pool forks)
@@ -123,6 +124,7 @@ def evaluate(args):
                 _CASES[(r, cell_km, _PAD_KM)] = earth.region_case(r, cell_km, pad_km=_PAD_KM)
             case = _CASES[(r, cell_km, _PAD_KM)]
             res = earth.run_case(p, case, steps=p.steps_per_year)
+            out.setdefault('observed_numerics', {})[r] = res.numerics
             out["regions"][r] = earth.compare(res, case)
         out["cost"] = float(np.mean([out["regions"][r]["climate_distance"] for r in regions]))
     except Exception as e:      # non-convergence or numerical failure
@@ -145,6 +147,8 @@ def main():
     ap.add_argument("--physics", default="v9", choices=list(SPACES))
     ap.add_argument("--bounds", default="{}", help='json of search bounds to override, e.g. {"hadley_edge": [28, 34]}')
     ap.add_argument("--set", default="{}", help="json of parameter overrides for the start point")
+    ap.add_argument('--saved-numerics', action='store_true', help='retain the starting convergence criteria; verified moisture profiles do this automatically')
+    ap.add_argument('--plan', action='store_true', help='print the configuration without starting a simulation')
     ap.add_argument("--out", required=True)
     ap.add_argument("--resume", action="store_true", help="continue from --out/state.pkl (saved every generation)")
     ap.add_argument("--pad-km", type=float, default=1100.0, help="land and sea modelled around each region")
@@ -162,7 +166,14 @@ def main():
     d = json.loads(Path(a.start).read_text())
     d = d.get("params", d)
     base = Params(**{k: (tuple(v) if isinstance(v, list) else v) for k, v in d.items()
-                     if k in Params.__dataclass_fields__}).replace(**NUMERICS).replace(**json.loads(a.set))
+                     if k in Params.__dataclass_fields__})
+    base = apply_numerics(base, saved=a.saved_numerics, defaults=NUMERICS).replace(**json.loads(a.set))
+    if a.evals < 1 or a.popsize < 2 or a.workers < 1:
+        ap.error('Use evals >= 1, popsize >= 2 and workers >= 1')
+    if a.plan:
+        print(json.dumps(dict(params=asdict(base), space=SPACE, regions=a.regions,
+                              holdout=a.holdout, evals=a.evals, popsize=a.popsize), indent=2))
+        return
     out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
     (out / "space.json").write_text(json.dumps(dict(args=vars(a), space=SPACE), indent=1))
     log = (out / "evals.jsonl").open("a")
@@ -179,9 +190,12 @@ def main():
         else:
             first = pool.map(evaluate, [(encode(base), bd, a.regions, a.cell_km)])[0]
             log.write(json.dumps(first) + "\n"); log.flush(); best = first; n = 1
+            if first.get('error'):
+                raise RuntimeError('Starting Earth candidate failed: '+first['error'])
+            Path(out / "best_params.json").write_text(json.dumps(best["params"], indent=1))
             print(f"start cost {first['cost']:.4f} {first.get('error', '')} " + " ".join(f"{r} {v['climate_distance']:.3f}/K{v['koppen_full_model']['exact']:.0%}"
                                                            for r, v in first.get("regions", {}).items()), flush=True)
-        while n < a.evals:
+        while n + a.popsize <= a.evals:
             xs = es.ask()
             res = pool.map(evaluate, [(x, bd, a.regions, a.cell_km) for x in xs], chunksize=1)
             es.tell(xs, [r["cost"] for r in res])
