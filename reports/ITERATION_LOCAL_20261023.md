@@ -563,7 +563,7 @@ Biggest changes over the 31 development regions:
 | Iran | +7 % |
 
 From r29 to r32, the monthly temperature error over the 19 original
-regions goes 2.230 → 1.947 (r31) → about 1.86 °C. Over all 31 regions it
+regions goes 2.230 → 1.947 (r31) → 1.856 °C (r32). Over all 31 regions it
 goes 2.314 (r30) → 2.102 (r31) → 2.016 °C (r32).
 
 ### Next: e32, deep-continent seasons only where winters are dark
