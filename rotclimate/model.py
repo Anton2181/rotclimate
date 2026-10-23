@@ -934,6 +934,15 @@ class ClimateModel:
                 # solved vapour, so the lee side dries.
                 A_dyn = A_dyn + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u, v) / 5.0, 0.0, 3.0)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
+            if p.lee_drying > 0:
+                # e35: air descending the lee of a range warms and dries (foehn)
+                # and keeps the basin behind it in a rain shadow: the Columbia
+                # basin behind the Cascades, the Patagonian steppe, the Great
+                # Basin. The upslope term above raises rain on the windward
+                # side; damp the rain ascent where the mean wind blows
+                # downslope, measured as the upslope term is.
+                down = np.clip(-(u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
+                A_dyn = A_dyn * np.exp(-p.lee_drying * down)
             if p.high_drying > 0 and getattr(self, "last_pres", None) is not None:
                 # e10: under the highs the pressure winds build (cold continents
                 # in winter) air sinks and dries the column: the winter dryness
