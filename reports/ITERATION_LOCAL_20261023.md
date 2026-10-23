@@ -222,9 +222,20 @@ only an occupation share of capacity. That term is historical, not
 environmental: on the map it should come from the campaign's provinces and
 cores.
 
+The repository's own regional estimates (`data/settlement_reference_regions.json`)
+show the same signal. It is not distance to the current capital. The ratio
+of recorded population to low-input capacity is above 1 in old cores (Egypt
+1.37, Roman Syria 1.07), 0.6–0.75 in Roman Italy and the Wei valley, and far
+lower on younger frontiers (Gaul 0.15, Iberia 0.17, Sichuan 0.09, Hunan and
+Jiangxi 0.03). Mesopotamia's alluvium (0.18) is an old core in decline. The
+variable is how long and how intensively a land has been farmed and governed
+(Earth datasets: state antiquity, agricultural-transition timing). On the
+fantasy map that is a worldbuilding input, which provinces are old cores,
+and the allocation model should take it as one.
+
 Next population steps:
 
-- An intensification and core-distance term, fitted on Han and tested on
-  Rome's provinces.
+- An intensification term for old cores, from a settlement-age map; fitted
+  on Han, tested on the Roman and Parthian regions.
 - An occupation discount for forest and disease frontiers.
 - City sizes and transport costs (research note, recommendation 3).
