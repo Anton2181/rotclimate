@@ -625,6 +625,20 @@ For the fantasy map:
 - a core term multiplies the settlement base as a share of capacity. It
   should not create people above the core's intensified capacity.
 
+![Old cores against HYDE 200 CE](../output/population_cores/cores_vs_hyde.png)
+
+![Han commanderies and Roman towns](../output/population_cores/han_roman.png)
+
+These two figures come from `scripts/plot_population_cores.py`, using
+cradles + Rome with travel cost (forest × 2, relief 1 per km, L 800 km).
+
+- **Removed by the cores:** the large overfill of tropical Africa, South-east
+  Asia and the Sahel.
+- **What remains too full:** Siberia's forest; the Mesopotamian alluvium,
+  which was depopulated under the Parthians; the Yangtze; Korea.
+- **Too empty:** southern India, which is far from any listed core but
+  dense in HYDE.
+
 **Travel cost instead of straight-line distance**
 (`population_cores.py --travel`; cradles + Rome).
 
