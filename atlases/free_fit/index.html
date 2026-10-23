@@ -324,6 +324,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     <span class="eyebrow">Climate, farming and settlement · three layouts · c.200 AD</span>
     <h1>Rotclimate Free-Fit Atlas</h1>
     <p class="lede">Explore the climate, food potential and settlement scenarios. Choose a map topic, then a layer; select a place for its climate and farming details.</p><p class="lede">World and physics fitted to your painted seasonal zones. Climate averages surroundings layouts 1–3, with recorded linear, temperature and moisture convergence checks. Farming and population layers use low-input c.200 AD technology; population values are declared settlement scenarios.</p>
+    <p class="note" id="atlas-data-status" role="status">Loading current atlas data…</p>
   <nav class="atlas-nav" aria-label="Atlas fits"><a href="../">Compare fits</a> <a href="../free_fit/" aria-current="page">Free fit</a> <a href="../earth_fit/">Earth fit</a> <a href="../whittaker_fit/">Whittaker fit</a></nav></header>
 
   <section aria-labelledby="map-h">
@@ -339,8 +340,8 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
         </div>
       </div>
       <div id="settlement-controls" class="monthctl" hidden>
-        <label>Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
-        <label>Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
+        <label id="occupation-control">Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
+        <label id="disease-control">Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
         <span class="note">c.200 AD technology · scenarios, not a census</span>
       </div>
       <div class="monthctl" id="monthctl" hidden>
@@ -556,6 +557,10 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     const metadataResponse = await fetch(fresh("data/atlas.json"), { cache: "no-store" });
     if (!metadataResponse.ok) throw new Error(`Metadata HTTP ${metadataResponse.status}`);
     meta = await metadataResponse.json();
+    const outside = meta.biomes?.find(b => b.id === 0)?.share;
+    $("atlas-data-status").textContent = Number.isFinite(outside)
+      ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
+      : "Current atlas data loaded.";
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -574,6 +579,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     }, 0);
     if (buf.byteLength < expectedBytes) throw new Error("Climate arrays do not match atlas metadata");
   } catch (e) {
+    $("atlas-data-status").textContent = "Current atlas data could not be loaded.";
     $("hint").textContent = "Climate data failed to load. Reload the page to try again.";
     return;
   }
@@ -661,7 +667,14 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     current = id;
     const L = meta.layers.find((l) => l.id === id);
     showTopic(topicOf(L)); lastLayer[topicOf(L)] = id;
-    $("settlement-controls").hidden = !meta.harvest;
+    // Show a selector only when changing it changes this map's image.
+    const files = L.scenario_files || {};
+    const occupations = ["frontier", "central", "core"], diseases = ["endemic", "absent"];
+    const occupationUsed = diseases.some(d => new Set(occupations.map(s => files[s + "_" + d] || L.file)).size > 1);
+    const diseaseUsed = occupations.some(s => new Set(diseases.map(d => files[s + "_" + d] || L.file)).size > 1);
+    $("occupation-control").hidden = !occupationUsed;
+    $("disease-control").hidden = !diseaseUsed;
+    $("settlement-controls").hidden = !meta.harvest || !(occupationUsed || diseaseUsed);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "");
     if (L.frames) {
       $("monthctl").hidden = false;

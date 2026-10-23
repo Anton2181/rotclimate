@@ -21,6 +21,7 @@ async def check(paths, base, out):
             await page.goto(base.rstrip('/')+'/'+path.strip('/')+'/',wait_until='domcontentloaded')
             await page.locator('#layer-whittaker').wait_for(state='attached',timeout=60000)
             await page.wait_for_function("document.querySelector('#station-h').textContent !== '—'", timeout=60000)
+            assert await page.locator('#settlement-controls').is_hidden()
             async def layer(id):
                 button=page.locator('#layer-'+id)
                 if await page.locator('#map-topic').count():
@@ -58,6 +59,8 @@ async def check(paths, base, out):
             harvest_checks=None
             if meta.get('harvest'):
                 await layer('land_density');await loaded('land_density_central_endemic.webp')
+                assert await page.locator('#occupation-control').is_visible()
+                assert await page.locator('#disease-control').is_visible()
                 assert not await page.locator('#harvest-section').is_hidden()
                 original=await page.locator('#harvest-totals').inner_text()
                 await page.locator('#occupation').select_option('core')
@@ -69,7 +72,10 @@ async def check(paths, base, out):
                 assert 'NaN' not in await page.locator('#harvest-readouts').inner_text()
                 await page.locator('.plate').screenshot(path=str(out/(Path(path).name+'_density.png')))
                 await layer('land_livability');await loaded('land_livability_absent.webp')
+                assert await page.locator('#occupation-control').is_hidden()
+                assert await page.locator('#disease-control').is_visible()
                 await layer('land_crop');await loaded('land_crop.webp')
+                assert await page.locator('#settlement-controls').is_hidden()
                 assert 'second crop' in await page.locator('#legend').inner_text()
                 await page.locator('#province-sort').evaluate("el=>el.closest('details').open=true")
                 await page.locator('#province-sort').select_option('wealth')
@@ -77,6 +83,7 @@ async def check(paths, base, out):
                 assert await page.locator('#province-overlay polygon').count()>0
                 await page.locator('#province-clear').click()
                 assert await page.locator('#province-overlay polygon').count()==0
+                await layer('land_density')
                 await page.locator('#occupation').select_option('central')
                 await page.locator('#disease').select_option('endemic')
                 await layer('land_density');await loaded('land_density_central_endemic.webp')

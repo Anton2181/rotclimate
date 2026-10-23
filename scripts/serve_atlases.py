@@ -6,6 +6,12 @@ from pathlib import Path
 import webbrowser
 
 
+class AtlasHandler(SimpleHTTPRequestHandler):
+    def end_headers(self):
+        self.send_header('Cache-Control', 'no-store')
+        super().end_headers()
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--port', type=int, default=8000)
@@ -28,7 +34,7 @@ def main():
     if missing:
         ap.error('Atlas data are missing for '+', '.join(missing)+'. Extract the complete portable atlas '
                  'bundle, including its data folders, or build the atlas first.')
-    handler = partial(SimpleHTTPRequestHandler, directory=str(root))
+    handler = partial(AtlasHandler, directory=str(root))
     try:
         server = ThreadingHTTPServer(('127.0.0.1', args.port), handler)
     except OSError:
