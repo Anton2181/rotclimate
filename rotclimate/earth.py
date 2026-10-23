@@ -227,6 +227,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.target = observed_zones(obs_T, obs_P, g)
     g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
     g.chi_far_long = fetch_at(-lat if lat0 < 0 else lat, lon, fetch_km=3.0 * FETCH_KM)   # e23
+    g.chi_pole = pole_fetch_at(lat if lat0 >= 0 else -lat, lon)   # e31 (real latitude: south of southern regions)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
@@ -262,6 +263,60 @@ def west_fetch(fetch_km: float = FETCH_KM) -> tuple:
     CACHE.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(key, fetch=out.astype(np.float32), lat=lat, lon=lon)
     return out, lat, lon
+
+
+POLE_FETCH_KM = 2000.0  # e31
+BARRIER_M = (1500.0, 1000.0)   # e31: cold air is shallow; ground above 1,500 m passes exp(-excess / 1,000 m) per 0.5 deg
+
+
+def pole_fetch(fetch_km: float = POLE_FETCH_KM) -> tuple:
+    """Global land share poleward (north in the northern hemisphere, south in
+    the southern) that shallow cold air can reach, with an exponential memory
+    of fetch_km on the 0.5-degree WorldClim grid: each 0.5-degree step past
+    ground higher than 1,500 m passes exp(-excess / 1,000 m) of the path, so
+    the Himalaya and Tibet shut north India off from Siberia, the Alborz Iran
+    from the Kazakh steppe, while Korea and the US plains lie open to Siberia
+    and Canada. (field, lat, lon)."""
+    key = CACHE / f"pole_fetch_{fetch_km:g}km.npz"
+    if key.exists():
+        z = np.load(key)
+        return z["fetch"], z["lat"], z["lon"]
+    elev = _wc("elev")
+    land = np.isfinite(elev) & (elev > -1000)
+    f = 6
+    H, W = land.shape[0] // f, land.shape[1] // f
+    lf = land[:H * f, :W * f].reshape(H, f, W, f).mean((1, 3))
+    ev = np.where(land, np.nan_to_num(elev), 0.0)[:H * f, :W * f].reshape(H, f, W, f).mean((1, 3))
+    lat = 90 - (np.arange(H) + 0.5) * 0.5
+    lon = -180 + (np.arange(W) + 0.5) * 0.5
+    trans = np.exp(-np.maximum(ev - BARRIER_M[0], 0.0) / BARRIER_M[1])
+    Lc = fetch_km / (111.2 * 0.5)
+    out = np.zeros_like(lf)
+    for i in range(H):
+        step = -1 if lat[i] >= 0 else 1                 # toward the pole: rows decrease in the north
+        acc, tr, ksum = np.zeros(W), np.ones(W), 0.0
+        for n in range(1, int(5 * Lc) + 1):
+            k = np.exp(-n / Lc)
+            ksum += k
+            r = i + step * n
+            if 0 <= r < H:
+                acc += k * tr * lf[r]
+                tr = tr * trans[r]
+        out[i] = acc / ksum
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, fetch=out.astype(np.float32), lat=lat, lon=lon)
+    return out, lat, lon
+
+
+def pole_fetch_at(lat, lon, fetch_km: float = POLE_FETCH_KM):
+    """Poleward reachable land (0-1) at points, bilinear on the 0.5-degree grid."""
+    from scipy import ndimage as ndi
+
+    F, flat, flon = pole_fetch(fetch_km)
+    i = (flat[0] - np.asarray(lat)) / 0.5
+    j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
+    Fw = np.concatenate([F, F[:, :1]], axis=1)
+    return ndi.map_coordinates(Fw, [i, j], order=1, mode="nearest")
 
 
 WOA_SST = CACHE / "woa18_sst_1deg.npz"     # scripts/build_woa_sst.py

@@ -249,6 +249,11 @@ class ClimateModel:
         self.sea_annual = None          # e28: built on first use (needs the sea-surface terms)
         if p.continental_depth > 0 or p.edge_continental_drying > 0:
             self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
+        # e31: poleward land that shallow cold air can reach (Earth: the real
+        # world's, earth.pole_fetch; other grids: their own, with ridges as barriers)
+        self.pole_land = None
+        if p.continental_mean > 0:
+            self.pole_land = g.chi_pole if g.chi_pole is not None else self._poleward_land(2000.0)
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
         if p.sea_enclosure == "rays":
@@ -439,6 +444,29 @@ class ClimateModel:
         ca, sa = np.cos(a), np.sin(a)
         return k * (gx * ca + gy * sa), k * (-gx * sa + gy * ca)
 
+    def _poleward_land(self, fetch_km):
+        """Land share toward the pole (north on the map's bearing; the map is
+        a northern-hemisphere one) that shallow cold air can reach: ground
+        above 1,500 m passes exp(-excess / 1,000 m) per 50 km, as earth.pole_fetch;
+        beyond the grid the edge's own land."""
+        g, p = self.g, self.p
+        th = np.radians(p.north_bearing)
+        di, dj = -np.cos(th), np.sin(th)                       # rows / columns per step toward the pole
+        L = fetch_km / g.cell_km
+        step = max(1.0, L / 60.0)
+        ii, jj = np.mgrid[0:g.ny, 0:g.nx].astype(float)
+        lf = g.land_frac.astype(float)
+        trans_per_cell = np.exp(-np.maximum(np.where(g.land, g.elev, 0.0) - 1500.0, 0.0) / 1000.0 * (g.cell_km / 55.0))
+        acc = np.zeros((g.ny, g.nx)); tr = np.ones((g.ny, g.nx)); wsum = 0.0
+        for k in range(1, int(5.0 * L / step) + 1):
+            ci, cj = ii + k * step * di, jj + k * step * dj
+            cc = [np.clip(ci, 0, g.ny - 1), np.clip(cj, 0, g.nx - 1)]
+            w = np.exp(-k * step / L)
+            acc += w * tr * ndi.map_coordinates(lf, cc, order=1)
+            tr = tr * ndi.map_coordinates(trans_per_cell, cc, order=1) ** step
+            wsum += w
+        return acc / wsum
+
     def _upwind_land(self, fetch_km):
         """Land share along the westerlies' upwind direction (true west; east
         with reversed spin) with an exponential memory of fetch_km; beyond the
@@ -601,6 +629,20 @@ class ClimateModel:
                     w = p.maritime_mean * np.clip(1.0 - chi, 0.0, 1.0)
                     centre = np.where(np.isfinite(self.sea_annual),
                                       Tl_mean + w * (np.nan_to_num(self.sea_annual) - Tl_mean), Tl_mean)
+                if p.continental_mean > 0:
+                    # e31: the long winter night over high-latitude land makes
+                    # shallow pools of very cold air (clear skies, snow,
+                    # inversions) that drain equatorward wherever no mountains
+                    # stand in the way, on the east sides of the northern
+                    # continents above all: Seoul 12.5 C against Lisbon 17 C,
+                    # New York 12.9 C against Naples 16 C. Summer heating is
+                    # capped by convection and evaporation, so the land's annual
+                    # mean falls. Shift the centre by continental_mean x the
+                    # poleward land the cold air can reach (self.pole_land)
+                    # x the continental share of the air (chi) x a ramp from 25
+                    # to 45 deg, where the winter sun weakens.
+                    dark = np.clip((np.abs(lat) - 25.0) / 20.0, 0.0, 1.0)
+                    centre = centre - p.continental_mean * dark * self.pole_land * np.clip(chi, 0.0, 1.0)
                 Tl = centre + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers

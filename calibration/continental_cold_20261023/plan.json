@@ -1,0 +1,8 @@
+{
+  "frozen": "2026-10-23, before any candidate result",
+  "hypothesis": "e31: shallow winter cold air from high-latitude land that no mountain barrier blocks lowers the annual-mean land temperature of the east sides and interiors of the northern continents. Under r31 these run warm (Manchuria +3.4, Korea +2.5, US Midwest +2.0, NE US +2.0, North China Plain +1.9 C annual bias) while the west coasts run cold.",
+  "reference": "calibration/local_accuracy_20261023/r31_params.json, rerun on dev31 under the e31 source fingerprint (output/continental_cold_20261023/reference)",
+  "candidates": {"cm3": {"continental_mean": 3.0}, "cm5": {"continental_mean": 5.0}},
+  "evaluation": "scripts/benchmark_local.py --regions dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a passing candidate then takes the paired 28 km check and the sealed six once",
+  "expected_risks": "eastern Europe (-0.8 C) and western Europe (-0.4 C) are already too cold and get part of the shift; Iran and north India are mostly shielded by the barrier and the 25-45 deg ramp"
+}
