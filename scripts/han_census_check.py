@@ -68,8 +68,55 @@ def spearman(a, b):
     return float(np.corrcoef(ra, rb)[0, 1])
 
 
-def main():
+def commanderies(shp_path, lat, lon, km2):
+    """The AD 2 commanderies of the census with the Earth-run cells inside each
+    (row and column indices), their recorded population and polygon area."""
     import shapefile
+    LA, LO = np.meshgrid(lat, lon, indexing="ij")
+    china = (LA > 15) & (LA < 50) & (LO > 95)
+    X, Y = albers_forward(LA[china], LO[china])
+    pts = np.column_stack([X, Y])
+    ci, cj = np.nonzero(china)
+    r = shapefile.Reader(shp_path)
+    out = []
+    for shp, rec in zip(r.iterShapes(), r.iterRecords()):
+        d = rec.as_dict()
+        if d["YEAR"] != "2AD":
+            continue
+        inside = np.zeros(len(pts), bool)
+        parts = list(shp.parts) + [len(shp.points)]
+        for k in range(len(parts) - 1):
+            ring = np.asarray(shp.points[parts[k]:parts[k + 1]])
+            bb = (pts[:, 0] >= ring[:, 0].min()) & (pts[:, 0] <= ring[:, 0].max()) & \
+                 (pts[:, 1] >= ring[:, 1].min()) & (pts[:, 1] <= ring[:, 1].max())
+            if bb.any():
+                hit = np.zeros(len(pts), bool)
+                hit[bb] = Poly(ring).contains_points(pts[bb])
+                inside ^= hit          # rings alternate outer / hole (even-odd)
+        sel_i, sel_j = ci[inside], cj[inside]
+        w = km2[sel_i, sel_j]
+        out.append(dict(name=d["PrefNAM"], pop=float(d["POP"]), area_km2=float(d["AREA"]),  # km2 in the dataset
+                        cells=int(inside.sum()), coverage=float(w.sum()) / max(float(d["AREA"]), 1e-9),
+                        lat=float((LA[sel_i, sel_j] * w).sum() / max(w.sum(), 1e-9)),
+                        lon=float((LO[sel_i, sel_j] * w).sum() / max(w.sum(), 1e-9)), idx=(sel_i, sel_j)))
+    return out
+
+
+def score(use, model_people):
+    """Pattern agreement of modelled people per commandery with the census."""
+    obs = np.array([x["pop"] for x in use]); area = np.array([x["area_km2"] for x in use])
+    m = np.asarray(model_people, float)
+    m = m * obs.sum() / max(m.sum(), 1e-9)
+    dm, do = m / area, obs / area
+    return dict(spearman=spearman(dm, do), moved_share=float(0.5 * np.abs(m / m.sum() - obs / obs.sum()).sum()),
+                log_rmse=float(np.sqrt(np.mean(np.log10((dm + 1) / (do + 1)) ** 2))))
+
+
+def used(rows):
+    return [x for x in rows if x["coverage"] >= 0.9 and x["cells"] >= 4]
+
+
+def main():
     from harvest_earth_hyde import earth_stages
     from hyde_compare import hyde_at
 
@@ -89,46 +136,17 @@ def main():
               "uniform over land": stages["uniform over land"]}
     if a.hyde:
         fields["HYDE 3.3, 0 CE"] = hyde_at(a.hyde, lat, lon) / km2
-    LA, LO = np.meshgrid(lat, lon, indexing="ij")
-    china = (LA > 15) & (LA < 50) & (LO > 95)
-    X, Y = albers_forward(LA[china], LO[china])
-    pts = np.column_stack([X, Y])
-    ci, cj = np.nonzero(china)
-
-    r = shapefile.Reader(a.shp)
-    rows = []
-    for shp, rec in zip(r.iterShapes(), r.iterRecords()):
-        d = rec.as_dict()
-        if d["YEAR"] != "2AD":
-            continue
-        inside = np.zeros(len(pts), bool)
-        parts = list(shp.parts) + [len(shp.points)]
-        for k in range(len(parts) - 1):
-            ring = np.asarray(shp.points[parts[k]:parts[k + 1]])
-            bb = (pts[:, 0] >= ring[:, 0].min()) & (pts[:, 0] <= ring[:, 0].max()) & \
-                 (pts[:, 1] >= ring[:, 1].min()) & (pts[:, 1] <= ring[:, 1].max())
-            if bb.any():
-                hit = np.zeros(len(pts), bool)
-                hit[bb] = Poly(ring).contains_points(pts[bb])
-                inside ^= hit          # rings alternate outer / hole (even-odd)
-        sel_i, sel_j = ci[inside], cj[inside]
-        area_cells = float(km2[sel_i, sel_j].sum())
-        area_poly = float(d["AREA"])               # km2 in the dataset
-        rows.append(dict(name=d["PrefNAM"], pop=float(d["POP"]), area_km2=area_poly, cells=int(inside.sum()),
-                         coverage=area_cells / max(area_poly, 1e-9),
-                         model={k: float((np.nan_to_num(v[sel_i, sel_j]) * km2[sel_i, sel_j] * land[sel_i, sel_j]).sum())
-                                for k, v in fields.items()}))
-    use = [x for x in rows if x["coverage"] >= 0.9 and x["cells"] >= 4]
-    obs = np.array([x["pop"] for x in use]); area = np.array([x["area_km2"] for x in use])
+    rows = commanderies(a.shp, lat, lon, km2)
+    for x in rows:
+        i, j = x.pop("idx")
+        x["model"] = {k: float((np.nan_to_num(v[i, j]) * km2[i, j] * land[i, j]).sum()) for k, v in fields.items()}
+    use = used(rows)
+    obs = np.array([x["pop"] for x in use])
     res = dict(commanderies_total=len(rows), commanderies_used=len(use), census_used_m=float(obs.sum() / 1e6), stages={})
     print(f"AD 2: {len(rows)} commanderies, {len(use)} with >= 90 % of their area in the Earth window "
           f"({obs.sum() / 1e6:.1f} M people)")
     for k in fields:
-        m = np.array([x["model"][k] for x in use])
-        m = m * obs.sum() / max(m.sum(), 1e-9)
-        dm, do = m / area, obs / area
-        v = dict(spearman=spearman(dm, do), moved_share=float(0.5 * np.abs(m / m.sum() - obs / obs.sum()).sum()),
-                 log_rmse=float(np.sqrt(np.mean(np.log10((dm + 1) / (do + 1)) ** 2))))
+        v = score(use, [x["model"][k] for x in use])
         res["stages"][k] = v
         print(f"  {k:36s} rank corr {v['spearman']:.3f}  people to move {v['moved_share']:.1%}  log10 RMSE {v['log_rmse']:.3f}")
     res["commanderies"] = rows

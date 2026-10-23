@@ -233,9 +233,103 @@ variable is how long and how intensively a land has been farmed and governed
 fantasy map that is a worldbuilding input, which provinces are old cores,
 and the allocation model should take it as one.
 
+### Old cores: distance from the first states
+
+`scripts/population_cores.py` multiplies the settlement base by a core term,
+max over cores of exp(−D / L), where D is the great-circle distance to a core.
+The core sets were declared before scoring:
+
+- **cradles:** the four Old World river-valley states, at Uruk, Memphis,
+  Harappa and Zhengzhou (the Shang city of the Central Plain);
+- **cradles + Rome**, and **cradles + Rome + a Han capital** (Chang'an,
+  or Luoyang).
+
+Each setting is scored three ways:
+
+- against HYDE 3.3 at 1°. HYDE's country totals carry historians'
+  estimates, so this tests the term against the historical record as HYDE
+  spreads it;
+- against the Han AD 2 census by commandery;
+- by the spread of the 11 historical regions of `scripts/land_people_earth.py`:
+  the standard deviation of log10(recorded / modelled) after removing the
+  median.
+
+| Core term | HYDE 0 CE: rank / people to move | HYDE 200 CE: rank / to move | Han AD 2: rank / to move | Regions: spread |
+|---|---|---|---|---|
+| none (settlement base) | 0.553 / 57 % | 0.575 / 56 % | 0.286 / 56 % | 0.457 |
+| cradles, L 600 km | 0.644 / 46 % | 0.638 / 50 % | 0.826 / 42 % | 0.786 |
+| cradles, L 1,000 km | 0.659 / 44 % | 0.660 / 46 % | 0.802 / 47 % | 0.554 |
+| **cradles + Rome, L 600 km** | **0.747 / 41 %** | **0.745 / 44 %** | **0.826 / 42 %** | **0.413** |
+| cradles + Rome, L 800 km | 0.743 / 40 % | 0.744 / 42 % | 0.818 / 45 % | 0.409 |
+| cradles + Rome + Chang'an, L 600 km | 0.750 / 42 % | 0.746 / 44 % | 0.736 / 45 % | 0.429 |
+| HYDE 3.3 itself, on the census | | | 0.716 / 46 % | |
+
+What the table shows:
+
+- **Distance from the oldest farmed and governed land is the missing
+  variable.** Inside Han China one core at the Central Plain takes the census
+  rank correlation from 0.29 to 0.83, above HYDE's own 0.72. Before the term,
+  the ratio of recorded to modelled people fell from 5.1 within 300 km of the
+  plain to 0.17 at 1,300–1,800 km.
+- **The core is the old heartland, not the capital.** Chang'an as an extra
+  core lowers the census score (0.83 → 0.74). Rome as an extra core raises
+  HYDE (0.66 → 0.75) because Rome *was* Italy's heartland.
+- **One scale fits all three tests:** L ≈ 600–800 km. Across Eurasia, HYDE
+  0 CE and 200 CE need about 10 % fewer people moved.
+- **What remains:**
+  - Hunan and Jiangxi are still about 9× too full; the Han south was a
+    frontier beyond what any distance scale gives.
+  - The Mesopotamian alluvium is worse. It is an old core in decline under
+    the Parthians: salinised and depopulated.
+
+**A core rule that needs no history** (`dry_river_cores`). The first states
+rose on irrigable river land in dry climates (Carneiro's circumscription).
+The rule:
+
+1. counts the settlement-base people on land within reach of a big river
+   (irrigation field > 0.3) where rain is under 65 % of potential
+   evaporation;
+2. smooths over ~216 km;
+3. keeps the strongest peaks at least 1,000 km apart.
+
+On Earth its ten peaks, in order, are:
+
+1. lower Mesopotamia;
+2. the Inner Niger Delta (Jenné-Jeno);
+3. the Nile confluence near Meroë;
+4. the Indus at Mohenjo-daro;
+5. the Nile delta at Memphis;
+6. the upper Euphrates by Göbekli Tepe;
+7. the Ganges at Varanasi;
+8. the lower Danube;
+9. the Irrawaddy dry zone;
+10. the Fen–Yellow River confluence by Taosi.
+
+Every one is an early state or an early complex society, and the four
+cradles are all among them.
+
+| Rule cores | HYDE 200 CE: rank / to move | Han AD 2: rank / to move | Regions: spread |
+|---|---|---|---|
+| top 10, L 800 km | 0.669 / 53 % | 0.730 / 49 % | 0.477 |
+| top 10, L 1,000 km | 0.665 / 53 % | 0.722 / 50 % | 0.443 |
+| top 4 or 6 (no China peak), any L | ≤ 0.56 | < 0.12 | ≥ 0.47 |
+
+The rule gives about half the gain of hand-placed cores. It over-weights
+the Sahel's floodplains, where HYDE has few people. Only the tenth peak
+reaches China.
+
+For the fantasy map:
+
+- cores should be a worldbuilding input: each nation's old heartland,
+  with L ≈ 700 km;
+- the rule is the fallback when none are given;
+- a core term multiplies the settlement base as a share of capacity. It
+  should not create people above the core's intensified capacity.
+
 Next population steps:
 
-- An intensification term for old cores, from a settlement-age map; fitted
-  on Han, tested on the Roman and Parthian regions.
-- An occupation discount for forest and disease frontiers.
+- A core input in the Harvest export (opt-in, default unchanged): occupation
+  = core term × the regional ratio, keeping the atlas's scenario totals.
+- An occupation discount for forest and disease frontiers (the Han south,
+  tropical Africa).
 - City sizes and transport costs (research note, recommendation 3).
