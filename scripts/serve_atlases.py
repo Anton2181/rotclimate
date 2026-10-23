@@ -1,5 +1,6 @@
 """Serve the atlas files locally and open them in your browser (standard library only)."""
 import argparse
+import json
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
@@ -16,6 +17,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--port', type=int, default=8000)
     ap.add_argument('--no-browser', action='store_true')
+    ap.add_argument('--check', action='store_true', help='show the served folder and dataset versions, then exit')
     ap.add_argument('--atlas', choices=['free_fit', 'earth_fit', 'whittaker_fit'])
     args = ap.parse_args()
     here = Path(__file__).resolve().parent
@@ -34,6 +36,16 @@ def main():
     if missing:
         ap.error('Atlas data are missing for '+', '.join(missing)+'. Extract the complete portable atlas '
                  'bundle, including its data folders, or build the atlas first.')
+    print(f'Atlas folder: {root}', flush=True)
+    for name in names:
+        with (root/'atlases'/name/'data/atlas.json').open(encoding='utf-8') as file:
+            metadata = json.load(file)
+        outside = next((b['share'] for b in metadata.get('biomes', []) if b['id'] == 0), None)
+        coverage = f'{outside:.2%} outside the Whittaker diagram' if outside is not None else 'legacy data'
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))} map modes', flush=True)
+    print('This launcher serves these local files; it does not download repository updates.', flush=True)
+    if args.check:
+        return
     handler = partial(AtlasHandler, directory=str(root))
     try:
         server = ThreadingHTTPServer(('127.0.0.1', args.port), handler)

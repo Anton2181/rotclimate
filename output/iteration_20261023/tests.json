@@ -1,0 +1,27 @@
+{
+  "status": "passed",
+  "python_checks": 9,
+  "javascript_checks": 4,
+  "results": [
+    {
+      "command": [
+        ".venv/bin/python",
+        "-m",
+        "pytest",
+        "-q",
+        "tests/test_population.py"
+      ],
+      "returncode": 0,
+      "stdout": ".........                                                                [100%]\n9 passed in 0.27s\n"
+    },
+    {
+      "command": [
+        "node",
+        "--test",
+        "tests/test_population.cjs"
+      ],
+      "returncode": 0,
+      "stdout": "\u2714 Attractive land saturates but every supplied person remains accounted for (1.091967ms)\n\u2714 Excess census and zero population do not create unsupported residents (0.710633ms)\n\u2714 Uniform occupation preserves area weighted capacity ratios (0.201559ms)\n\u2714 Nonfinite or negative data cannot silently corrupt the population budget (0.352998ms)\n\u2139 tests 4\n\u2139 suites 0\n\u2139 pass 4\n\u2139 fail 0\n\u2139 cancelled 0\n\u2139 skipped 0\n\u2139 todo 0\n\u2139 duration_ms 85.556791\n"
+    }
+  ]
+}

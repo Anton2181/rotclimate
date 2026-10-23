@@ -232,6 +232,8 @@ def main():
     # The existing export lock also bounds the farming analysis's memory use.
     from harvest.export import export as export_harvest
     export_harvest(out)
+    from population.export import export as export_population
+    export_population(out)
     print(json.dumps(summary, indent=1))
     print("atlas written to", out)
     export_lock.close()

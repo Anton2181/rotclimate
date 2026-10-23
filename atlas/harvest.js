@@ -106,7 +106,8 @@ window.HarvestAtlas = (() => {
     $('province-sort').addEventListener('change',refresh);
     $('province-clear').addEventListener('click',()=>{province=null;highlight();refresh();});
     $('harvest-section').hidden=false;refresh();
-    return {refresh,select:(x,y,name,sea)=>{selection=[x,y,name,sea];point();}};
+    return {refresh,select:(x,y,name,sea)=>{selection=[x,y,name,sea];point();},
+      selectProvince:name=>{province=name;highlight();refresh();}};
   }
   const slices=(values,fn)=>values.map(fn).join('');
   return {load};

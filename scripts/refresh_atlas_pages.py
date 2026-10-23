@@ -28,6 +28,8 @@ def main():
         (out / "index.html").write_text(page(src, h["title"], h["eyebrow"], h["lede"], h["note"]))
         shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
+        if (ROOT / "atlas" / "population.js").exists():
+            shutil.copy(ROOT / "atlas" / "population.js", out / "population.js")
         print("refreshed", out / "index.html")
 
 

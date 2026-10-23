@@ -7,6 +7,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
 from harvest.export import export
+from population.export import export as export_population
 
 
 if __name__=='__main__':
@@ -14,4 +15,6 @@ if __name__=='__main__':
     args=ap.parse_args()
     with (ROOT/'atlases/.build.lock').open('a') as lock:
         fcntl.flock(lock,fcntl.LOCK_EX)
-        for atlas in args.atlases:export(atlas)
+        for atlas in args.atlases:
+            export(atlas)
+            export_population(atlas)

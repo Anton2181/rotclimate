@@ -34,6 +34,12 @@ frontier, central or settled-core occupation and environmental malaria or no
 malaria penalty. These are c.200 AD scenarios, not a reconstructed census.
 Source models, explicit coefficients, province totals and CSVs are inside
 each atlas. See reports/HARVEST_MIGRATION_20261022.md for the method.
+
+Population adds six census-allocation and walking-access maps. Choose a total
+population and settlement pattern; local support caps are enforced and excess
+people remain explicitly unallocated. Province CSVs reflect the current choices.
+See reports/ITERATION_20261023.md. The launcher prints the folder it serves and
+the loaded Whittaker coverage. It does not automatically download Git updates.
 '''
 
 
@@ -46,6 +52,7 @@ def main():
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
              ROOT/'data/whittaker_coverage.json',
+             ROOT/'reports/ITERATION_20261023.md', ROOT/'data/population_model.json',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
@@ -62,6 +69,11 @@ def main():
                  'fresh_browser/browser_checks.json','fresh_browser/hub_checks.json']:
         if (coverage/name).is_file():files.append(coverage/name)
     files += sorted((ROOT/'calibration/three_fit_20261022').glob('**/*.json'))
+    iteration=ROOT/'output/iteration_20261023'
+    for name in ['atlas_validation.json','atlas_browser.json','selector_browser.json','population_maps.png','population_browser/browser_checks.json',
+                 'fresh_browser/browser_checks.json','fresh_checkout.json','current_whittaker.json',
+                 'core_assets.json','tests.json','hub_checks.json']:
+        if (iteration/name).is_file():files.append(iteration/name)
     summaries = {}
     for name in NAMES:
         directory = ROOT/'atlases'/name

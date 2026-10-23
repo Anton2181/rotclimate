@@ -26,8 +26,15 @@ not reconstructed censuses or a validated demographic forecast. The
 [Harvest method](reports/HARVEST_MIGRATION_20261022.md) documents FAO crop-water,
 Mordecai malaria and other published components alongside the assumed coefficients.
 
-The map selector shows one of eight topics at a time. The free and Earth fits
-have 35 layers; Whittaker has 37, including proposed biome targets and match.
+The Population topic adds six maps for a supplied census: allocated residents,
+population pressure, spare support, redistribution, walking to markets and
+settlement attraction. Choose a total and pattern; province totals and CSVs
+follow that choice. Local support limits hold, with any excess reported as
+unallocated. The [population lab report](reports/ITERATION_20261023.md) explains
+the HYDE-inspired allocation and Tobler walking components.
+
+The map selector shows one of nine topics at a time. The free and Earth fits
+have 41 layers; Whittaker has 43, including proposed biome targets and match.
 All retain monthly climate maps, seasonal animations, potential biome diagrams,
 climate analogues and 152 named places. The strict biome crosswalk is an
 alternative hypothesis; annual biomes do not guarantee Mediterranean summer
@@ -48,6 +55,14 @@ the simulator. Opening `index.html` directly through `file://` cannot reliably
 load the data. The extracted portable bundle uses the same launchers.
 Share the atlas URL to preserve the selected layer and population scenarios;
 switching fits also carries those choices across.
+
+The launcher serves the files beside it; it does not download updates. It now
+prints the served folder and each atlas's outside-diagram percentage. If an old
+Windows copy still shows 8.5% for Whittaker, update the complete checkout from
+`claude/friendly-turing-43ygeu` or extract the new portable bundle into its own
+folder, close the old atlas window and launch that folder's `start_atlases.bat`.
+The loaded-data line should show **1.21%**. `python3 scripts/serve_atlases.py --check`
+prints the folder and data versions without opening a browser.
 
 The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) and

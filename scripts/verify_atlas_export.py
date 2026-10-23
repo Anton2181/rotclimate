@@ -75,7 +75,11 @@ def verify(root, require_verified=False, max_outside=None):
     if meta.get('harvest'):
         from harvest.validation import verify as verify_harvest
         harvest=verify_harvest(data,meta)
-    return dict(atlas=str(root),binary_bytes=len(blob),fields=len(arrays),layer_images=len(images),places=len(rows),harvest=harvest,
+    population=None
+    if meta.get('population'):
+        from population.validation import verify as verify_population
+        population=verify_population(data,meta)
+    return dict(atlas=str(root),binary_bytes=len(blob),fields=len(arrays),layer_images=len(images),places=len(rows),harvest=harvest,population=population,
                 unclassified_land_share=meta['biomes'][0]['share'],status='passed',
                 numerical_checks_passed=bool(observed and observed.get('all_checks_passed')),
                 animation_frames=animations)
