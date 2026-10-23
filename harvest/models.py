@@ -122,6 +122,56 @@ def margin_reliability(mean_temperature, aridity_index, irrigation, cold=None, d
     return r
 
 
+FOREST_SHARE = {1: 0.5, 3: 1.0, 4: 1.0, 7: 1.0, 9: 1.0}     # rotclimate.biomes codes: savanna half, forests whole
+
+
+def lore_cores(width_px, height_px, shape):
+    """The campaign's old heartlands (data/lore_cores.json) as (row, col) on an analysis grid."""
+    spec = json.loads((ROOT/'data/lore_cores.json').read_text())
+    return {c['name']: (c['y']*shape[0]/height_px, c['x']*shape[1]/width_px) for c in spec['cores']}
+
+
+def core_term(land, biome, elevation_m, cell_km, cores_rc, scale_km=800.0, forest_cost=2.0, relief_cost=1.0,
+              coarsen=3):
+    """exp(-D / scale_km), D the cheapest travel to the nearest core: each km
+    costs 1 on open land and at sea, forest_cost in forest, plus relief_cost x
+    the local relief in km (the Earth-tested setting of scripts/population_cores.py:
+    travel cost forest x2, relief 1/km, sea as land, L 800 km)."""
+    from scipy import ndimage as ndi
+    from scipy.sparse import coo_matrix
+    from scipy.sparse.csgraph import dijkstra
+    land = np.asarray(land, bool)
+    forest = np.zeros(land.shape)
+    for code, share in FOREST_SHARE.items():
+        forest[np.asarray(biome) == code] = share
+    e = np.nan_to_num(np.asarray(elevation_m, float))
+    window = max(3, int(round(27.0/cell_km)) | 1)          # Earth's relief: 3 cells of 5' (~27 km)
+    relief = np.clip(ndi.maximum_filter(e, window) - ndi.minimum_filter(e, window), 0, 3000)/1000.0
+    c = coarsen
+    ny, nx = land.shape[0]//c, land.shape[1]//c
+    co = lambda a: a[:ny*c, :nx*c].reshape(ny, c, nx, c).mean((1, 3))
+    lf = co(land.astype(float))
+    cost = np.where(lf >= 0.5, 1.0+(forest_cost-1.0)*co(forest*land)/np.maximum(lf, 1e-9)
+                    +relief_cost*co(relief*land)/np.maximum(lf, 1e-9), 1.0)
+    step = cell_km*c
+    idx = np.arange(ny*nx).reshape(ny, nx)
+    rows, cols, w = [], [], []
+    for di, dj in ((0, 1), (1, 0), (1, 1), (1, -1)):
+        a = idx[max(0, -di):ny-max(0, di), max(0, -dj):nx-max(0, dj)]
+        b = idx[max(0, di):ny-max(0, -di) or None, max(0, dj):nx-max(0, -dj) or None]
+        wt = 0.5*(cost.ravel()[a]+cost.ravel()[b])*step*np.hypot(di, dj)
+        rows += [a.ravel(), b.ravel()]; cols += [b.ravel(), a.ravel()]; w += [wt.ravel(), wt.ravel()]
+    g = coo_matrix((np.concatenate(w), (np.concatenate(rows), np.concatenate(cols))), shape=(ny*nx, ny*nx)).tocsr()
+    src = [int(min(r//c, ny-1))*nx+int(min(q//c, nx-1)) for r, q in cores_rc.values()]
+    dist = dijkstra(g, indices=src, min_only=True).reshape(ny, nx)
+    full = np.repeat(np.repeat(dist, c, 0), c, 1)
+    out = np.empty(land.shape)
+    out[:ny*c, :nx*c] = full
+    out[ny*c:, :] = out[ny*c-1:ny*c, :]
+    out[:, nx*c:] = out[:, nx*c-1:nx*c]
+    return np.exp(-out/scale_km)
+
+
 def settlement_fields(crop_capacity, npp, biome, arable, water_distance_km, malaria):
     """Return food components, population before occupation, and settlement index."""
     from scripts.land_people import FARMED_SHARE, NEED_KCAL

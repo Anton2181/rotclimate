@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from .models import (ROOT, malaria_fields, occupation_reference, settlement_fields,
+from .models import (ROOT, core_term, lore_cores, malaria_fields, occupation_reference, settlement_fields,
                      specification, thermal_reference)
 
 CROP_LABELS = ['Wheat / barley', 'Foxtail millet', 'Paddy rice', 'Date palm', 'No viable staple']
@@ -132,13 +132,22 @@ def derive(meta, arrays):
     for i,name in enumerate(names):
         crop[raw==i]={'wheat':1,'barley':1,'millet':2,'rice':3,'dates':4}[name]
     crop[~land]=0;fields['crop']=crop
+    # the same people drawn toward the campaign's old heartlands (exp(-D / 800 km), as
+    # tested on Earth with the historical cores), keeping each scenario's total
+    shape=land.shape;cell_km=meta['width']*meta['mi_per_px']*1.609344/shape[1]
+    biome=np.asarray(arrays['biome']);elev=np.asarray(arrays['elev'],float)
+    term=core_term(land,biome,elev,cell_km,lore_cores(meta['width'],meta['height'],shape))
+    weight=geo['land_fraction'].astype(float)
+    for base,cored in [('settlement_base','settlement_cored'),('settlement_no_malaria','settlement_cored_no_malaria')]:
+        b=np.nan_to_num(fields[base]);t=b*term
+        fields[cored]=np.where(land,t*np.sum(b*weight)/max(np.sum(t*weight),1e-9),np.nan).astype(np.float32)
     return fields,geo,names,geo_inputs
 
 
 def pack_fields(fields,land,hexes,path):
     keys = ['crop_capacity','pastoral_capacity','food_capacity','kcal_ha','lgp_days','npp','irr',
             'aridity','malaria','malaria_months','clearance','access','health','settlement_base',
-            'settlement_no_malaria','livability','livability_no_malaria','arable',
+            'settlement_no_malaria','settlement_cored','livability','livability_no_malaria','arable',
             'kcal_wheat','kcal_barley','kcal_millet','kcal_rice','kcal_dates']
     blob = bytearray(); descriptors = {}
     for key in keys+['crop','double_crop','hex_id']:
@@ -295,6 +304,17 @@ def images_and_layers(fields,geo,meta,arrays,data):
         for scenario in occupation:livability['scenario_files'][scenario+'_'+disease]=file
     density['file']=density['scenario_files']['central_endemic']
     livability['file']=livability['scenario_files']['central_endemic']
+    cored=ramp('settlement_cored','Density around the old heartlands',
+               'people/km² · c.200 AD scenario, the same people drawn toward the lore heartlands',.1,300,'people',True,
+               'Heartlands from the campaign lore (data/lore_cores.json); occupation falls as exp(-D / 800 km) with '
+               'travel through forest and relief, as tested on Earth with the historical cores.')
+    cored['id']='land_density_cores';cored['scenario_files']={}
+    for disease,base in [('endemic','settlement_cored'),('absent','settlement_cored_no_malaria')]:
+        for scenario,fraction in occupation.items():
+            file=f'land_density_cores_{scenario}_{disease}.webp'
+            save(color_image(fields[base]*fraction,land,elevation,RAMPS['people'],.1,300,True),file)
+            cored['scenario_files'][scenario+'_'+disease]=file
+    cored['file']=cored['scenario_files']['central_endemic']
     return layers
 
 

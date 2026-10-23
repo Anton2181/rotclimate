@@ -643,7 +643,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
   let current = "koppen";
   const layerBtns = $("layers");
   const topicOf = (L) => {
-    if (["koppen", "whittaker", "land_density", "land_livability"].includes(L.id)) return "Overview";
+    if (["koppen", "whittaker", "land_density", "land_density_cores", "land_livability"].includes(L.id)) return "Overview";
     if (["target", "zones", "agreement", "biome_targets", "biome_match"].includes(L.id)) return "Fit checks";
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
