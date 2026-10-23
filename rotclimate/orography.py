@@ -1,4 +1,4 @@
-"""Prototype: average terrain uplift over unresolved weather-scale winds.
+"""Average terrain uplift over unresolved weather-scale winds.
 
 Monthly mean wind removes upslope episodes when wind directions fluctuate.
 For isotropic Gaussian horizontal wind anomalies, the vertical terrain

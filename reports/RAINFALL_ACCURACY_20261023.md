@@ -175,3 +175,73 @@ silently mix incompatible costs. The active balanced search uses its already
 loaded and fingerprinted earlier driver. The new guard does not change that
 run's physics, loss or compiled search. Resume/source manifests intentionally
 reject different driver versions.
+
+## Coupled weather-uplift pilot
+
+The balanced 19-region coefficient search completes its nine evaluations
+without numerical failures. None improves the baseline rainfall objective
+(0.442412). This bounded search provides no replacement parameters. The
+reserved new geographic regions remain unused.
+
+The weather-uplift mechanism is now coupled as the opt-in
+`orographic_gust_ms` parameter, default **0**. Its analytic operator lives in
+`rotclimate/orography.py`. The moisture equation removes all diagnosed rain
+from vapor; the mechanism adds no independent rainfall term. This does not
+change the model's other transport assumptions or establish a global water
+budget. The assumed wind deviations have not been validated against observed
+weather winds.
+
+All 18 pilot simulations (three strengths × six regions) pass their observed
+numerical checks. The zero-strength control reproduces the original baseline
+**exactly** on all six regions: complete climate metrics, local rainfall
+diagnostics, city samples and numerical certificates match. Coupled tests
+also verify that flat terrain leaves every climate field unchanged, disabling
+the feature never calls the operator, and additional mountain rainfall remains
+inside the checked discrete water equation.
+
+| Weather wind std per component | Rainfall loss | Monthly MAE, mm | Annual log RMSE | Cells within 25% annually |
+|---|---:|---:|---:|---:|
+| 0 m/s | 0.488196 | 42.774 | 0.493598 | 23.99% |
+| 4 m/s | 0.481846 | 42.331 | 0.484129 | 25.69% |
+| 8 m/s | 0.475056 | 41.772 | 0.473156 | 27.48% |
+
+These are **six development-region** results, with 2,351 cells receiving at
+least 50 mm/year. Both amplitudes also pass the existing individual-region,
+temperature, seasonality and spatial-ranking protections on this subset.
+The lower-loss 8 m/s setting is selected for a separate paired full 19-region
+comparison. Its 2.69% pilot loss improvement is not an independent or global
+accuracy claim, and no atlas climate is changed by the pilot. The unchanged
+full-region gates, finer-resolution check and new-geography check remain.
+
+The expanded climate, core, Earth, moisture, transport and rainfall tests pass
+all **104** cases. The subsequent paired-benchmark reader also checks complete
+evidence, matching region identities and the same saved loss definition; its
+focused tests are recorded with the final review.
+
+## Full-region outcome and saved stopping point
+
+The selected 8 m/s mechanism completes the paired **38 simulations across all
+19 regions**, with all numerical checks passing. Relative to the unchanged
+published physics:
+
+| Diagnostic | Baseline | Weather-uplift candidate |
+|---|---:|---:|
+| Rainfall loss | 0.442412 | 0.441195 |
+| Monthly cell MAE, mm | 31.359 | 31.267 |
+| Annual cell MAE, mm | 293.910 | 290.136 |
+| Annual log RMSE | 0.451874 | 0.446318 |
+| Annual wet/dry spatial correlation | 0.509559 | 0.531464 |
+| Pooled cells within 25% annually | 39.63% | 40.69% |
+
+The overall rainfall-loss improvement is **0.275%**, below the predeclared
+**1%** adoption threshold. All other selection protections pass. The mechanism
+therefore remains optional and experimental; it does **not** replace any
+published atlas. The two new geographic validation regions remain unused,
+and the candidate has not been checked on the finer grid. No new portable
+atlas bundle is claimed.
+
+The focused tests after adding paired-benchmark verification pass **27/27**,
+in addition to the earlier **104/104** expanded checks. The user requested a
+commit and a stop to further work because of remaining usage. All completed
+searches, controls, candidate parameters, numerical certificates and reviews
+are saved. No simulation remains running.

@@ -102,31 +102,60 @@ def load_candidate(directory):
     return config, rows
 
 
+def load_benchmark(directory):
+    protocol = json.loads((directory/'protocol.json').read_text())
+    if set(protocol['fits']) != {'baseline', 'candidate'} or protocol['rainfall_loss'] != LOSS_SPEC:
+        raise ValueError('Expected one paired rainfall candidate')
+    summary = json.loads((directory/'summary.json').read_text())
+    identity = hashlib.sha256(json.dumps(protocol, sort_keys=True).encode()).hexdigest()
+    if summary['identity'] != identity or not all(summary['fits'][f]['complete'] for f in protocol['fits']):
+        raise ValueError('Incomplete paired rainfall benchmark')
+    rows = {}
+    for fit in protocol['fits']:
+        rows[fit] = {}
+        for region in protocol['regions']:
+            row = json.loads((directory/'cases'/f'{fit}_{region}.json').read_text())
+            if row['identity'] != identity or row['fit'] != fit or row['region'] != region:
+                raise ValueError('Benchmark case labels or inputs differ')
+            rows[fit][region] = row
+    return protocol, rows['baseline'], rows['candidate']
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('--search', type=Path, required=True)
-    ap.add_argument('--baseline', type=Path, required=True)
+    mode = ap.add_mutually_exclusive_group(required=True)
+    mode.add_argument('--search', type=Path)
+    mode.add_argument('--benchmark', type=Path, help='Paired benchmark fits named baseline and candidate')
+    ap.add_argument('--baseline', type=Path, help='Published baseline benchmark for a CMA search')
     ap.add_argument('--policy', type=Path, default=ROOT/'calibration/climate_physics_20261023/rainfall_policy.json')
     ap.add_argument('--out', type=Path, required=True)
     a = ap.parse_args()
-    config, candidate = load_candidate(a.search)
     policy = json.loads(a.policy.read_text())
-    if config['regions'] != policy['training'] or config['final_comparison'] != policy['reused_comparison']:
-        raise ValueError('Search regions do not match the predeclared policy')
-    protocol = json.loads((a.baseline/'protocol.json').read_text())
-    if protocol['fits']['baseline'] != config['params'] or protocol['cell_km'] != config['cell_km'] or \
-            protocol['pad_km'] != config['pad_km']:
-        raise ValueError('Baseline and search start or geography differ')
-    # Drivers can differ; all shared scientific modules and observed inputs
-    # must match byte-for-byte. Their historical hashes remain authoritative.
-    for name in set(protocol['sources']) & set(config['sources']):
-        if protocol['sources'][name] != config['sources'][name]:
-            raise ValueError('Baseline scientific inputs differ: '+name)
-    baseline = {r:json.loads((a.baseline/'cases'/f'baseline_{r}.json').read_text()) for r in candidate}
+    if a.benchmark:
+        protocol, baseline, candidate = load_benchmark(a.benchmark)
+        if set(protocol['regions']) != set(policy['training']+policy['reused_comparison']):
+            raise ValueError('Benchmark regions do not match the predeclared policy')
+        evidence = [a.policy, a.benchmark/'protocol.json', a.benchmark/'summary.json']
+        evidence += sorted((a.benchmark/'cases').glob('*.json'))
+    else:
+        if a.baseline is None: ap.error('--search requires --baseline')
+        config, candidate = load_candidate(a.search)
+        if config['regions'] != policy['training'] or config['final_comparison'] != policy['reused_comparison']:
+            raise ValueError('Search regions do not match the predeclared policy')
+        protocol = json.loads((a.baseline/'protocol.json').read_text())
+        if protocol['fits']['baseline'] != config['params'] or protocol['cell_km'] != config['cell_km'] or \
+                protocol['pad_km'] != config['pad_km']:
+            raise ValueError('Baseline and search start or geography differ')
+        # Drivers can differ; all shared scientific modules and observed inputs
+        # must match byte-for-byte. Historical hashes remain authoritative.
+        for name in set(protocol['sources']) & set(config['sources']):
+            if protocol['sources'][name] != config['sources'][name]:
+                raise ValueError('Baseline scientific inputs differ: '+name)
+        baseline = {r:json.loads((a.baseline/'cases'/f'baseline_{r}.json').read_text()) for r in candidate}
+        evidence = [a.policy, a.search/'calibration_config.json', a.search/'evals.jsonl',
+                    a.baseline/'protocol.json', a.baseline/'summary.json']
+        if config['final_comparison']: evidence.append(a.search/'holdout_evaluations.json')
     decision = assess(baseline, candidate, policy['training'], policy)
-    evidence = [a.policy, a.search/'calibration_config.json', a.search/'evals.jsonl',
-                a.baseline/'protocol.json', a.baseline/'summary.json']
-    if config['final_comparison']: evidence.append(a.search/'holdout_evaluations.json')
     output = dict(policy=policy, selection=decision, baseline=baseline, candidate=candidate,
                   evidence_sha256={str(path):hashlib.sha256(path.read_bytes()).hexdigest() for path in evidence})
     a.out.parent.mkdir(parents=True, exist_ok=True)

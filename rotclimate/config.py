@@ -134,6 +134,7 @@ class Params:
     storm_width: float = 9.0          # deg
     convective: float = 2.0           # convergence-driven rain factor
     orographic: float = 2.5           # upslope rain factor
+    orographic_gust_ms: float = 0.0   # opt-in weather wind std per horizontal component at unit storm strength [m/s]
     subsidence: float = 0.75          # subtropical-high suppression (0..1)
     subsidence_asym: float = 0.0      # east/west-of-basin asymmetry of the highs
     subsidence_summer: float = 0.0    # v7: highs sink harder in summer: x (1 + this * season)

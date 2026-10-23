@@ -201,6 +201,8 @@ class ClimateModel:
             raise ValueError('Moisture convergence checking currently requires upwind transport')
         if params.moisture_require_convergence and params.moisture_residual_tol == 0:
             raise ValueError('Required moisture convergence needs a positive moisture_residual_tol')
+        if not np.isfinite(params.orographic_gust_ms) or params.orographic_gust_ms < 0:
+            raise ValueError('orographic_gust_ms must be finite and nonnegative')
         self.p = params
         self.g = build_grid(params) if grid is None else grid   # grid: e.g. real geography (earth.py)
         self.z = ZonalClimate(params)
@@ -796,6 +798,15 @@ class ClimateModel:
                 div = (np.gradient(ur, axis=1) - np.gradient(vr, axis=0)) / dx
             conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
             up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
+            if p.orographic_gust_ms > 0:
+                # Seasonal mean winds omit transient upslope episodes. Average
+                # the existing capped uplift over isotropic Gaussian weather
+                # wind variations. This changes the rain coefficient only:
+                # all resulting rain remains a sink of the solved vapor field.
+                from .orography import expected_uplift
+                vertical_rms = (p.orographic_gust_ms * np.sqrt(np.maximum(storm, 0))
+                                * np.hypot(self.dhdx, self.dhdy))
+                up = expected_uplift(u*self.dhdx + v*self.dhdy, vertical_rms) / .05
             sub = np.exp(-((lat - phi_h) / p.subsidence_width) ** 2)
             # subtropical highs sink hardest over the eastern side of ocean
             # basins on a prograde planet (dry west coasts: California,
