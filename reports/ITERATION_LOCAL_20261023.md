@@ -281,6 +281,71 @@ before any candidate on r30):
 - the reference is r30's own 31-region run;
 - the sealed six stay sealed until the next adoption.
 
+## Iteration 4: on r30, gate v2 (31 regions)
+
+r30's own 31-region run is the reference: temperature 2.314 °C, rainfall
+loss 0.4841.
+
+**Winter overturning of the enclosed seas** (e19, `sea_winter_mixing`):
+
+| On r30 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| overturning 0.5 | 1.0008 | 0.9961 | 1.0030 | 1.0106 | 0.9990 | −0.4 % | +0.5 % |
+| overturning 0.9 | 1.0058 | 0.9964 | 1.0082 | 1.0277 | 1.0021 | −0.5 % | +1.7 % |
+
+At 0.9 the Mediterranean regions improve:
+
+| Region | Rainfall loss | Temperature error |
+|---|---|---|
+| Anatolia | −28 % | −9 % |
+| Alps | −13 % | |
+| Levant | −8 % | −6 % |
+
+The warmer winter seas then flood other regions, which already had too much
+winter rain:
+
+| Region | Rainfall loss |
+|---|---|
+| eastern Europe | +23 % |
+| Korea | +19 % |
+| Iran | +11 % |
+| Manchuria | +10 % |
+
+It is the same lesson as iteration 2: the rain settings were tuned around
+cold seas.
+
+**The southern hemisphere runs warm.** Annual bias under r30:
+
+| Region | Bias, °C |
+|---|---|
+| Chile | +3.4 |
+| Victoria | +2.7 |
+| New Zealand | +2.1 |
+| east Australia | +1.7 |
+| south Brazil | +1.6 |
+| Patagonia | +1.2 |
+
+The southern seas themselves are nearly unbiased (−1.1 to +1.7 °C), while
+the northern ones are 0.5–4.7 °C too cold. The zonal energy balance gives
+the mirrored southern hemisphere a 1.5–2 °C warmer land background than the
+northern one at the same latitude. Annual land at 37.5° is 18.8 °C in the
+south against 16.9 °C in the north. Real Earth is the reverse: the north is
+about 1.2–1.5 °C warmer, because the Atlantic overturning carries about
+0.4 PW across the equator (Feulner et al. 2013; Marshall et al. 2014).
+
+**e30, cross-equatorial ocean heat transport**
+(`cross_equatorial_transport`, PW, off by default):
+
+- A northward transport Ψ0 (1 − x²), with x = sin(latitude), converges as
+  2 Ψ0 x / (2πR²) W m⁻² over the whole column. At 0.4 PW that is ±1.9 W m⁻²
+  at 37°.
+- Mirrored southern regions take the southern sign.
+- At 0.4 PW the land background at 37.5° moves from 16.9 / 18.8 °C
+  (north / south) to 17.5 / 18.3 °C; at 0.8 PW, to 18.1 / 17.7 °C.
+
+On the fantasy map, which takes Earth's northern profile, it adds the
+northern share.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
