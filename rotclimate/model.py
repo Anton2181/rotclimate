@@ -723,8 +723,23 @@ class ClimateModel:
                                      distance_factor(d, p.eccentricity,
                                                      p.winter_solstice_day + p.perihelion_after_solstice,
                                                      p.year_days))
-                lam_land = ((S / LAND_COUPLING_SREF) ** p.land_coupling_insolation / (p.land_tau_days * DAY)
-                            + 1.0 / (p.land_radiative_days * DAY))
+                sun = (S / LAND_COUPLING_SREF) ** p.land_coupling_insolation / (p.land_tau_days * DAY)
+                if p.dry_coupling > 0:
+                    # e36: sunshine on wet ground goes into evaporation, on dry
+                    # ground into sensible heat that mixes a deep boundary
+                    # layer within hours (Bowen ratio): sea air blowing over
+                    # Iberia, Morocco or SW Australia in summer takes the
+                    # land's heat within ~100 km, where the fitted ~1.2-day
+                    # coupling carried the cool Atlantic and Indian Ocean air
+                    # 500 km inland (summers 3 C too cool with the land's own
+                    # equilibrium right). Dryness from the bucket's soil
+                    # water, as wet_cooling uses it, or recent rain.
+                    if p.soil_wet_cooling and p.soil_bucket_mm > 0:
+                        wet_c = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                    else:
+                        wet_c = np.clip(soilP / (0.5 + 0.2 * np.maximum(Tl, 0.0)), 0.0, 1.0)
+                    sun = sun * (1.0 + p.dry_coupling * (1.0 - wet_c))
+                lam_land = sun + 1.0 / (p.land_radiative_days * DAY)
                 lamT = np.where(land, lam_land, 1.0 / (p.ocean_tau_days * DAY))
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)

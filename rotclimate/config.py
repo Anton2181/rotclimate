@@ -171,6 +171,7 @@ class Params:
     continentality_lat: float = 0.0  # e33: the continental (chi > 0.5) widening of the seasons ramps in from this latitude to +20 deg (0 = everywhere)
     subgrid_orographic: float = 0.0  # e34: ascent from sub-grid hills, x relief (km) x wind speed / 5 m/s (0 = none)
     lee_drying: float = 0.0  # e35: descending lee air dries the column, rain ascent x exp(-this x downslope) (0 = none)
+    dry_coupling: float = 0.0  # e36: dry ground couples the air to the land faster, sunshine coupling x (1 + this x dryness) (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
