@@ -1,11 +1,12 @@
-"""Per-region monthly temperature error and rainfall loss under r29 to r33.
+"""Per-region monthly temperature error and rainfall loss under r29 to r34.
 
-    python3 -I scripts/plot_local_progress.py --out output/local_20261023/progress_r29_r31.png
+    python3 -I scripts/plot_local_progress.py --out output/local_20261023/progress_r29_r34.png
 
 Reads the 56 km benchmark summaries of output/local_20261023: r29 (baseline_56km
 + dev12_r29 + sealed6_baseline), r30 (r30_dev31 + sealed6_r30sea) and r31
 (v2_cet0.8_off-0.5 + sealed6_r31cet) and r32 (output/continental_cold_20261023: cm4_cet1.1 +
-sealed6_r32) and r33 (output/continental_range_20261023: lat30 + sealed6_r33). Regions are grouped as in policy_v2,
+sealed6_r32), r33 (output/continental_range_20261023: lat30 + sealed6_r33) and r34
+(output/subgrid_eddy_20261023: so3_bg0.75 + sealed6_r34). Regions are grouped as in policy_v2,
 plus the sealed six (evaluated once per adopted milestone).
 """
 from __future__ import annotations
@@ -21,7 +22,7 @@ import matplotlib.pyplot as plt  # noqa: E402
 ROOT = Path(__file__).resolve().parents[1]
 D = ROOT / "output/local_20261023"
 SURFACE, INK, INK2, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e7e6e2"
-C29, C30, C31, C32, C33 = "#a3a29b", "#eb6834", "#1baf7a", "#e87ba4", "#2a78d6"
+C29, C30, C31, C32, C33, C34 = "#a3a29b", "#eb6834", "#1baf7a", "#e87ba4", "#8a63d2", "#2a78d6"
 
 
 def regions(*names):
@@ -39,7 +40,8 @@ def main():
             "r30": regions("r30_dev31", "sealed6_r30sea"),
             "r31": regions("v2_cet0.8_off-0.5", "sealed6_r31cet"),
             "r32": regions("output/continental_cold_20261023/cm4_cet1.1", "output/continental_cold_20261023/sealed6_r32"),
-            "r33": regions("output/continental_range_20261023/lat30", "output/continental_range_20261023/sealed6_r33")}
+            "r33": regions("output/continental_range_20261023/lat30", "output/continental_range_20261023/sealed6_r33"),
+            "r34": regions("output/subgrid_eddy_20261023/so3_bg0.75", "output/subgrid_eddy_20261023/sealed6_r34")}
     policy = json.loads((ROOT / "calibration/local_accuracy_20261023/policy_v2.json").read_text())["groups"]
     groups = dict(policy, sealed=["norway", "southeast_africa", "caucasus", "yunnan", "northeast_us", "tasmania"])
     rows = []
@@ -57,13 +59,14 @@ def main():
         for y, (g, n) in zip(ys, rows):
             if n is None:
                 continue
-            v = [runs[r][n][block][key] for r in ("r29", "r30", "r31", "r32", "r33")]
-            ax.plot([v[0], v[4]], [y, y], color=GRID, lw=2, zorder=1, solid_capstyle="round")
+            v = [runs[r][n][block][key] for r in ("r29", "r30", "r31", "r32", "r33", "r34")]
+            ax.plot([v[0], v[5]], [y, y], color=GRID, lw=2, zorder=1, solid_capstyle="round")
             ax.plot(v[0], y, "o", ms=6, mfc=SURFACE, mec=C29, mew=1.5, zorder=2)
             ax.plot(v[1], y, "|", ms=8, color=C30, mew=2, zorder=3)
             ax.plot(v[2], y, "|", ms=8, color=C31, mew=2, zorder=3)
             ax.plot(v[3], y, "|", ms=8, color=C32, mew=2, zorder=3)
-            ax.plot(v[4], y, "o", ms=6, mfc=C33, mec=SURFACE, mew=1, zorder=4)
+            ax.plot(v[4], y, "|", ms=8, color=C33, mew=2, zorder=3)
+            ax.plot(v[5], y, "o", ms=6, mfc=C34, mec=SURFACE, mew=1, zorder=4)
         ax.set_title(title, loc="left", fontsize=10)
         ax.grid(axis="x", color=GRID, lw=0.8); ax.set_axisbelow(True)
         for s in ("top", "right", "left"):
@@ -79,10 +82,11 @@ def main():
                plt.Line2D([], [], marker="|", ls="", color=C30, mew=2, ms=8, label="r30 (calmer sea)"),
                plt.Line2D([], [], marker="|", ls="", color=C31, mew=2, ms=8, label="r31 (+ cross-equatorial transport)"),
                plt.Line2D([], [], marker="|", ls="", color=C32, mew=2, ms=8, label="r32 (+ continental winter cold)"),
-               plt.Line2D([], [], marker="o", ls="", mfc=C33, mec=SURFACE, ms=6, label="r33 (+ dark-winter ramp)")]
-    fig.legend(handles=handles, loc="upper left", ncol=5, frameon=False, bbox_to_anchor=(0.0, 1.03))
-    fig.suptitle("Per-region error, 56 km, r29 → r33 (sealed six run once per milestone)", x=0.01, ha="left",
-                 fontsize=11.5, y=1.06)
+               plt.Line2D([], [], marker="|", ls="", color=C33, mew=2, ms=8, label="r33 (+ dark-winter ramp)"),
+               plt.Line2D([], [], marker="o", ls="", mfc=C34, mec=SURFACE, ms=6, label="r34 (+ sub-grid hills)")]
+    fig.legend(handles=handles, loc="upper left", ncol=3, frameon=False, bbox_to_anchor=(0.0, 1.05))
+    fig.suptitle("Per-region error, 56 km, r29 → r34 (sealed six run once per milestone)", x=0.01, ha="left",
+                 fontsize=11.5, y=1.08)
     fig.savefig(a.out, dpi=110, bbox_inches="tight", facecolor=SURFACE)
     print("wrote", a.out)
 
