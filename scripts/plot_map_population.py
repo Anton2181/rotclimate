@@ -9,10 +9,11 @@ The central occupation scenario fills a fixed share of the settlement
 capacity everywhere. The cored panel multiplies capacity by exp(-D / L),
 D the straight-line distance to the nearest core, L 800 km (the scale that
 fitted Han China, HYDE and Rome; reports/POPULATION_20261023.md), and
-rescales to the same total. The cores are the automatic rule's two: the
-richest irrigable river land in dry climates, which falls in The Heartlands
-(Ayauda River Valley) and Old Arǧos. Spearman correlations are over hexes
-with a sheet settlement level.
+rescales to the same total. The cores are the campaign lore's old
+heartlands (data/lore_cores.json); where the atlas exports the cored field
+(settlement_cored, travel cost through forest and relief) it is used, else the
+straight-line distance. Spearman correlations are over hexes with a sheet
+settlement level.
 """
 from __future__ import annotations
 
@@ -29,7 +30,8 @@ from scipy.stats import spearmanr  # noqa: E402
 
 SURFACE, INK, INK2, SEA = "#fcfcfb", "#0b0b0b", "#52514e", "#dfe6ea"
 DENSITY = LinearSegmentedColormap.from_list("density", ["#f6f1df", "#f2cf8a", "#e59a4f", "#c8603a", "#8f3426", "#4d1a17"])
-CORES = {"The Heartlands": (217, 513), "Old Arǧos": (182, 813)}       # harvest grid (row, col)
+ROOT = Path(__file__).resolve().parents[1]
+LORE = json.loads((ROOT / "data/lore_cores.json").read_text())["cores"]
 MAP_KM = (1058.2 * 1.609344, 2286.8 * 1.609344)
 
 
@@ -60,12 +62,16 @@ def main():
     land = np.isfinite(base)
     ny, nx = base.shape
     km = MAP_KM[0] / ny, MAP_KM[1] / nx
-    ii, jj = np.mgrid[0:ny, 0:nx]
-    D = np.min([np.hypot((ii - r) * km[0], (jj - c) * km[1]) for r, c in CORES.values()], axis=0)
+    cores = {c["name"]: (c["y"] * ny / h["height"], c["x"] * nx / h["width"]) for c in LORE}
     share = h["occupation"]["scenarios"]["central"]
     central = share * np.nan_to_num(base)
-    cored = np.nan_to_num(base) * np.exp(-D / a.scale_km)
-    cored *= central.sum() / cored.sum()
+    if "settlement_cored" in h["arrays"]:
+        cored = share * np.nan_to_num(get("settlement_cored"))
+    else:
+        ii, jj = np.mgrid[0:ny, 0:nx]
+        D = np.min([np.hypot((ii - r) * km[0], (jj - c) * km[1]) for r, c in cores.values()], axis=0)
+        cored = np.nan_to_num(base) * np.exp(-D / a.scale_km)
+        cored *= central.sum() / cored.sum()
     sheet = np.full(base.shape, np.nan)
     levels = {int(k): v["sheet_settlement"] for k, v in h["hexes"].items() if v.get("sheet_settlement") is not None}
     ids = np.array(sorted(levels))
@@ -87,16 +93,15 @@ def main():
     for ax, field, title in (
             (axs[0], central, f"Settlement field, central occupation: {central.sum() * km[0] * km[1] / 1e6:.0f} M people  "
                               f"(rank match to the sheet {rho_base:.2f})"),
-            (axs[1], cored, f"Same people around two old cores, exp(−D / {a.scale_km:.0f} km)  "
+            (axs[1], cored, f"Same people around the lore's old heartlands, exp(−D / {a.scale_km:.0f} km)  "
                             f"(rank match to the sheet {rho_core:.2f})")):
         im = ax.imshow(np.where(land, np.maximum(field, 0.5), np.nan), cmap=DENSITY, norm=norm, interpolation="nearest")
         ax.set_title(title, loc="left", fontsize=11)
         cb = fig.colorbar(im, ax=ax, shrink=0.8, pad=0.01)
         cb.set_label("people per km²", color=INK2)
-    for ax in axs[:2]:
-        for name, (r, c) in CORES.items():
-            axs[1].plot(c, r, marker="*", ms=14, mfc="#2a78d6", mec=SURFACE, mew=1.2)
-            axs[1].annotate(name, (c, r), xytext=(8, -14), textcoords="offset points", fontsize=9, color="#184f95")
+    for name, (r, c) in cores.items():
+        axs[1].plot(c, r, marker="*", ms=14, mfc="#2a78d6", mec=SURFACE, mew=1.2)
+        axs[1].annotate(name, (c, r), xytext=(8, -14), textcoords="offset points", fontsize=9, color="#184f95")
     lv = axs[2].imshow(sheet, cmap=DENSITY, vmin=0, vmax=100, interpolation="nearest")
     axs[2].set_title("The campaign sheet's settlement level per hex", loc="left", fontsize=11)
     cb = fig.colorbar(lv, ax=axs[2], shrink=0.8, pad=0.01)
