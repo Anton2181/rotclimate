@@ -31,9 +31,12 @@ def main():
     ap.add_argument('--downsample', type=int, default=32)
     ap.add_argument('--sigma', type=float, default=.025)
     ap.add_argument('--out', type=Path, required=True)
+    ap.add_argument('--start', type=Path, help='explicit alternative start; otherwise use the active atlas')
+    ap.add_argument('--set', default='{}', help='explicit Params overrides, recorded in the starting profile')
     a = ap.parse_args()
     spec = SPECS[a.branch]
-    base = Params.from_json(ROOT/'atlases'/f'{a.branch}_fit'/'params.json').replace(downsample=a.downsample)
+    base = Params.from_json(a.start or ROOT/'atlases'/f'{a.branch}_fit'/'params.json')
+    base = base.replace(**json.loads(a.set)).replace(downsample=a.downsample)
     C._set_space(C.SPACE_WORLD if a.branch == 'earth' else C.SPACE_STORM_WATER)
     decoded = C.decode(C.encode(base), base)
     changed = {k for k, v in asdict(base).items() if asdict(decoded)[k] != v

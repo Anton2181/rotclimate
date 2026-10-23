@@ -144,3 +144,39 @@ checks before any atlas publication; their calibration gain is not itself
 an atlas accuracy claim.
 
 ![Paired Earth physics pilot](../output/climate_physics_20261023/earth_pilot.png)
+
+## Milestone 4: make resolution and regional protections decide selection
+
+Both initial ds64 moisture searches completed all **17 candidates** with no
+failed numerical checks and no racing. They optimize the three-layout mean
+climate, not the former mean of layout scores.
+
+| Search | Starting objective | Best coarse objective |
+|---|---:|---:|
+| Free seasonal zone fit | 0.449438 | 0.459834 |
+| Whittaker covered-biome fit | 0.482832 | 0.547069 |
+
+These are deliberately coarse screens, not atlas gains. The free winner
+loses its apparent improvement at ds32: **0.480249 → 0.465920**, with cold-dry
+recall falling **54.84% → 45.97%**. It is rejected. Its same-resolution
+published-world baseline was reused from the physical pilot, with verified
+layout identities and successful observed numerical certificates.
+
+The Whittaker coarse winner increases source-land grey from **0.00113% to
+1.03699% on that same coarse climate**. It is not adopted as-is. The adaptive
+refinement retains its other moisture coefficients, restores the baseline
+orographic coefficient, sets ocean humidity to 0.74, and compares lapse rates
+4.25 and 4.0 K/km. The full starting profiles and rationale are recorded in
+`calibration/climate_physics_20261023/whittaker_refinement.json`. This is a new
+refinement experiment, not a retroactive claim that the original search
+passed publication gates.
+
+`review_climate_round.py` compares saved baseline fields with candidate
+fields at the same weather resolution. It preserves the existing exact-zone,
+cold-dry, hot-dry and Mediterranean protections. Whittaker must also improve
+its covered score, meet the strict-biome floor and have **no increase in
+outside-diagram land** relative to its paired baseline. Each completed native
+layout is checkpointed separately; the final mean checkpoint can be passed
+directly to the atlas exporter. Interrupted verification need not repeat
+completed layouts. Three tests verify the selection protections and layout
+identities. Native reviews remain separate from actual atlas publication.
