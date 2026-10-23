@@ -92,7 +92,10 @@ def main():
     ap.add_argument("--holdout", nargs="*", default=[])
     ap.add_argument("--evals", type=int, default=240)
     ap.add_argument("--out")
+    ap.add_argument("--region-specs", help="JSON of extra region definitions (as in benchmark_local.py)")
     a = ap.parse_args()
+    if a.region_specs:
+        earth.REGIONS.update(json.loads(Path(a.region_specs).read_text()))
     base = load_params(a.params).replace(**json.loads(a.set))
     with Pool(4) as pool:
         if a.mode == "score":

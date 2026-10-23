@@ -221,12 +221,65 @@ Where the gain is, across the 19 regions:
   (SE US 1.16 → 1.24, Mexico 1.82 → 1.93); also SW Australia 1.32 → 1.43,
   where the Leeuwin Current runs against the model's west-coast rule.
 
-The gate for the next candidate compares against r30's 56 km run
-(`output/local_20261023/sea5_D_rh0.710`), with the same rules and the
-reference values T 2.127 °C, rain loss 0.4429. The 12 predeclared
-development regions (`regions_dev12.json`) have not been seen by any
-choice so far. They are run next for r29 and r30, then join the
-development set.
+**The 12 predeclared development regions**
+(`calibration/local_accuracy_20261023/regions_dev12.json`) had not been run
+before r30 was chosen, so they are a second out-of-sample check:
+
+| 12 new regions | r29 | r30 |
+|---|---|---|
+| S (paired) | 1 | **0.9809** |
+| temperature monthly error | 2.699 °C | 2.610 °C |
+| rainfall loss | 0.552 | 0.549 |
+
+| Region | Temperature error, °C | Annual bias, °C | Range error, °C | Rainfall loss | Rain, mm: observed / simulated |
+|---|---|---|---|---|---|
+| Anatolia | 2.22 → 2.23 | −0.6 | +6.1 | 0.412 → 0.416 | 560 / 360 |
+| Iranian plateau | 3.73 → 3.93 | −3.5 | +1.7 | 0.958 → 0.947 | 232 / 529 |
+| North India | 4.64 → 4.75 | −3.8 | +6.9 | 1.142 → 1.145 | 761 / 177 |
+| North China Plain | 2.31 → 2.10 | +1.4 | +3.5 | 0.463 → 0.457 | 601 / 762 |
+| Korea | 2.46 → 2.36 | +2.0 | +0.9 | 0.410 → 0.419 | 1,257 / 1,306 |
+| Texas plains | 1.36 → 1.38 | −0.2 | +1.9 | 0.466 → 0.466 | 739 / 635 |
+| Great Basin | 2.02 → 1.89 | −1.4 | −1.3 | 0.447 → 0.462 | 337 / 447 |
+| British Isles | 3.58 → 2.99 | −3.0 | +1.0 | 0.345 → 0.315 | 1,083 / 841 |
+| Alps | 2.35 → 2.08 | −1.9 | −0.7 | 0.343 → 0.336 | 992 / 714 |
+| Morocco | 2.29 → 2.33 | −2.0 | −2.7 | 0.501 → 0.504 | 198 / 209 |
+| Patagonia | 2.71 → 2.47 | +1.2 | +0.5 | 0.823 → 0.821 | 744 / 656 |
+| Victoria | 2.72 → 2.83 | +2.7 | −0.0 | 0.316 → 0.303 | 640 / 782 |
+
+Bias, range and rain amounts are r29's.
+
+They expose failures the 19 did not show:
+
+- **North India.** No monsoon: 177 mm simulated against 761 observed, a
+  seasonal range 7 °C too wide and 3.8 °C too cold.
+- **The Iranian plateau.** Too wet (529 against 232 mm) and 3.5 °C too cold.
+- **The British Isles.** 3.0 °C too cold.
+
+**The sea under r30** (`scripts/fit_sst.py score`, now with
+`--region-specs`) is 3.5–4.7 °C too cold in every enclosed or semi-enclosed
+sea:
+
+| Sea, through its region | Annual bias, °C |
+|---|---|
+| Mediterranean (Iberia, Levant, Morocco, Alps) | −3.5 to −4.0 |
+| Black Sea (eastern Europe) | −4.7 |
+| Caspian (Central Asia) | −3.6 |
+| Arabian Sea and Bay of Bengal (north India) | −3.5 |
+| around Britain (British Isles) | −2.7 |
+| around western Europe | −2.9 |
+
+r30 leaves out winter overturning (e19, `sea_winter_mixing` 0), so the
+enclosed seas follow the cold winter land. The sea fit wanted 0.89. That
+setting was never tried on the land gate.
+
+**Gate v2** (`calibration/local_accuracy_20261023/policy_v2.json`, frozen
+before any candidate on r30):
+
+- the same rules over all 31 development regions
+  (`benchmark_local.py --regions dev31`);
+- the 12 new regions form a fourth group, which must not worsen either;
+- the reference is r30's own 31-region run;
+- the sealed six stay sealed until the next adoption.
 
 ## Population side track
 
@@ -420,6 +473,16 @@ For the fantasy map:
 - the rule is the fallback when none are given;
 - a core term multiplies the settlement base as a share of capacity. It
   should not create people above the core's intensified capacity.
+
+**The rule on the fantasy map** (Earth-fit atlas fields, 3.7 km cells):
+
+- Its first two cores fall in the Ayauda River Valley, in the province the
+  campaign calls *The Heartlands*, and in Old Arǧos. A third falls in
+  Mazdahyu; two more are beyond the hex map.
+- Against the sheet's settlement levels (2,227 hexes, unweighted
+  pixel means), the rank correlation rises from 0.243 with the settlement
+  base to 0.280 with five cores at L = 700 km. One core alone lowers it.
+- The sheet is mostly levels 10 and 20, so the ranks are coarse.
 
 Next population steps:
 

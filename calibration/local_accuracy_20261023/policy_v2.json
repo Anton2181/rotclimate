@@ -1,0 +1,19 @@
+{
+  "frozen": "2026-10-23, after r30 was adopted and before any candidate on r30 was scored",
+  "benchmark": "scripts/benchmark_local.py --regions dev31 at 56 km: the 19 regions of policy.json plus the 12 predeclared in regions_dev12.json; equal-region means",
+  "reference": {"fit": "calibration/local_accuracy_20261023/r30_params.json", "run": "output/local_20261023/r30_dev31"},
+  "score": "S = 0.5 * T_monthly_mae / T_ref + 0.5 * P_loss / P_ref, the reference being r30's own run (1.000 = r30)",
+  "adopt_if": [
+    "S over all 31 regions improves by at least 0.5 %",
+    "S does not worsen in any group: training 8, former holdout 5, mid-latitude 6, dev12 12",
+    "neither T_monthly_mae nor P_loss worsens by more than 1 % over all 31",
+    "paired 28 km check on california, western_europe, japan, new_zealand: S not worse by more than 1 %"
+  ],
+  "sealed_regions": "the six of regions_sealed6.json (norway, southeast_africa, caucasus, yunnan, northeast_us, tasmania): evaluated once per adopted milestone, never tuned on; r30's evaluation is recorded in reports/ITERATION_LOCAL_20261023.md",
+  "groups": {
+    "training": ["california", "iberia", "southeast_us", "levant", "central_asia", "east_china", "east_australia", "mexico"],
+    "holdout": ["chile", "cape", "sw_australia", "south_brazil", "japan"],
+    "midlatitude": ["pacific_nw", "western_europe", "eastern_europe", "us_midwest", "manchuria", "new_zealand"],
+    "dev12": ["anatolia", "iran_plateau", "north_india", "north_china_plain", "korea", "texas_plains", "great_basin", "british_isles", "alps", "morocco", "patagonia", "victoria"]
+  }
+}

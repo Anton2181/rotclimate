@@ -42,7 +42,13 @@ from rotclimate.koppen import monthly_stats  # noqa: E402
 DEV19 = ["california", "iberia", "southeast_us", "levant", "central_asia", "east_china", "east_australia", "mexico",
          "chile", "cape", "sw_australia", "south_brazil", "japan",
          "pacific_nw", "western_europe", "eastern_europe", "us_midwest", "manchuria", "new_zealand"]
-GROUPS = dict(training=DEV19[:8], holdout=DEV19[8:13], midlatitude=DEV19[13:])
+# 12 more development regions, predeclared before any result (their specs
+# are in calibration/local_accuracy_20261023/regions_dev12.json and load
+# automatically); DEV31 is the development set from r30 on
+DEV12_SPECS = ROOT / "calibration/local_accuracy_20261023/regions_dev12.json"
+DEV12 = list(json.loads(DEV12_SPECS.read_text()))
+DEV31 = DEV19 + DEV12
+GROUPS = dict(training=DEV19[:8], holdout=DEV19[8:13], midlatitude=DEV19[13:], dev12=DEV12)
 BINS = dict(
     elevation_m=[0, 300, 1000, 2000, 9000],
     coast_km=[0, 50, 200, 500, 1e9],
@@ -140,13 +146,17 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--fit", required=True)
     ap.add_argument("--set", default="{}", help="json parameter overrides")
-    ap.add_argument("--regions", nargs="+", default=DEV19)
+    ap.add_argument("--regions", nargs="+", default=DEV19, help="region names, or 'dev31' for all 31 development regions")
     ap.add_argument("--cell-km", type=float, default=56.0)
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--region-specs", help="json of extra region definitions (e.g. the sealed validation regions)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
-    specs = json.loads(Path(a.region_specs).read_text()) if a.region_specs else {}
+    if a.regions == ["dev31"]:
+        a.regions = DEV31
+    specs = {r: v for r, v in json.loads(DEV12_SPECS.read_text()).items() if r in a.regions}
+    if a.region_specs:
+        specs.update(json.loads(Path(a.region_specs).read_text()))
     out = Path(a.out)
     (out / "cells").mkdir(parents=True, exist_ok=True)
     overrides = json.loads(a.set)
