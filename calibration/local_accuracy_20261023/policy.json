@@ -1,0 +1,18 @@
+{
+  "frozen": "2026-10-23, before any candidate result",
+  "benchmark": "scripts/benchmark_local.py at 56 km on the 19 development regions; equal-region means",
+  "reference": {"fit": "atlases/earth_fit/params.json", "T_monthly_mae_C": 2.230, "P_loss": 0.4424},
+  "score": "S = 0.5 * T_monthly_mae / T_ref + 0.5 * P_loss / P_ref (1.000 = reference)",
+  "adopt_if": [
+    "S over all 19 regions improves by at least 0.5 %",
+    "S does not worsen in any group: training 8, former holdout 5, mid-latitude 6",
+    "neither T_monthly_mae nor P_loss worsens by more than 1 % over all 19",
+    "paired 28 km check on california, western_europe, japan, new_zealand: S not worse by more than 1 %"
+  ],
+  "sealed_regions": "norway and southeast_africa (calibration/climate_physics_20261023/rainfall_validation_regions.json) plus any later sealed set; evaluated once per adopted milestone, never tuned on",
+  "groups": {
+    "training": ["california", "iberia", "southeast_us", "levant", "central_asia", "east_china", "east_australia", "mexico"],
+    "holdout": ["chile", "cape", "sw_australia", "south_brazil", "japan"],
+    "midlatitude": ["pacific_nw", "western_europe", "eastern_europe", "us_midwest", "manchuria", "new_zealand"]
+  }
+}
