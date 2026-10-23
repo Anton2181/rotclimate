@@ -227,6 +227,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.target = observed_zones(obs_T, obs_P, g)
     g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
     g.chi_far_long = fetch_at(-lat if lat0 < 0 else lat, lon, fetch_km=3.0 * FETCH_KM)   # e23
+    g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 
@@ -261,6 +262,32 @@ def west_fetch(fetch_km: float = FETCH_KM) -> tuple:
     CACHE.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(key, fetch=out.astype(np.float32), lat=lat, lon=lon)
     return out, lat, lon
+
+
+WOA_SST = CACHE / "woa18_sst_1deg.npz"     # scripts/build_woa_sst.py
+
+
+def observed_sst(lat, lon, mirrored=False):
+    """Monthly sea-surface temperature [12, ...] (deg C) at points from the World
+    Ocean Atlas 2018 1-degree climatology, land gaps filled from the nearest sea;
+    months shifted by six for mirrored southern regions (their calendar runs as
+    the northern one). None when the climatology has not been built."""
+    if not WOA_SST.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(WOA_SST)
+    sst = z["sst"].astype(float)
+    filled = np.empty_like(sst)
+    for m in range(12):
+        bad = ~np.isfinite(sst[m])
+        idx = ndi.distance_transform_edt(bad, return_distances=False, return_indices=True)
+        filled[m] = sst[m][tuple(idx)]
+    i = np.asarray(lat, float) + 89.5
+    j = (np.asarray(lon, float) + 179.5) % 360.0
+    wrap = np.concatenate([filled, filled[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
 
 
 def fetch_at(lat, lon, fetch_km: float = FETCH_KM):

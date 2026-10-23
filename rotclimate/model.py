@@ -89,6 +89,7 @@ def w_sat(T):
 
 FLUX_SMOOTH_KM = 300.0           # e17: scale of the low-level divergence that moves column water
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
+MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
 SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
@@ -242,6 +243,7 @@ class ClimateModel:
         # the real world's, WorldClim; other grids: their own land along the
         # westerlies' upwind direction, the off-grid share beyond the edge)
         self.deep_land = None
+        self.sea_annual = None          # e28: built on first use (needs the sea-surface terms)
         if p.continental_depth > 0 or p.edge_continental_drying > 0:
             self.deep_land = g.chi_far_long if g.chi_far_long is not None else self._upwind_land(DEEP_FETCH_KM)
         # enclosure of seas (fraction of land within ~400 km)
@@ -318,6 +320,19 @@ class ClimateModel:
         b = self._lat_bins
         return (np.bincount(b.ravel(), weights=field.ravel(), minlength=len(self._lat_count))
                 / self._lat_count)[b]
+
+    def _sea_annual_field(self):
+        """e28: annual-mean temperature of the nearby sea (its currents included,
+        its land-driven seasonal pull excluded), spread onto land over ~400 km;
+        NaN where there is too little sea within reach."""
+        p, g = self.p, self.g
+        days = np.linspace(0.0, p.year_days, 24, endpoint=False)
+        sst = np.mean([self.sst(d, self.z.ocean(self.lat, d) + p.sst_offset, self.z.ocean(self.lat, d) + p.sst_offset)
+                       for d in days], axis=0)
+        sea = (~g.land).astype(float)
+        sig = MARITIME_KM / g.cell_km
+        num, den = gauss(np.where(g.land, 0.0, sst), sig), gauss(sea, sig)
+        return np.where(den > 0.02, num / np.maximum(den, 1e-6), np.nan)
 
     def season_index(self, day, lag=30.0):
         """+1 at (lagged) mid-summer, -1 at mid-winter."""
@@ -567,7 +582,23 @@ class ClimateModel:
                     # Iberia and the Cape; an advected one called the
                     # stagnant air over Mexico's plateau a continent's worth.
                     amp = amp + p.continental_depth * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0)
-                Tl = Tl_mean + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
+                centre = Tl_mean
+                if p.maritime_mean > 0:
+                    # e28: the latitude-mean land swings around its latitude's
+                    # continental annual mean (Siberia and Canada at 49 N), so
+                    # maritime land was damped around a cold mean: western
+                    # Europe's land equilibrium peaked at 13.7 C in July,
+                    # colder than the sea air, and the air followed the sea's
+                    # late season (35 days late). A maritime land's annual mean
+                    # is set by the sea air it lives in, its swing by its own
+                    # sunshine: the centre moves toward the nearby sea's annual
+                    # mean by maritime_mean x (1 - chi).
+                    if self.sea_annual is None:
+                        self.sea_annual = self._sea_annual_field()
+                    w = p.maritime_mean * np.clip(1.0 - chi, 0.0, 1.0)
+                    centre = np.where(np.isfinite(self.sea_annual),
+                                      Tl_mean + w * (np.nan_to_num(self.sea_annual) - Tl_mean), Tl_mean)
+                Tl = centre + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a
@@ -627,7 +658,7 @@ class ClimateModel:
                                                      p.winter_solstice_day + p.perihelion_after_solstice,
                                                      p.year_days))
                 lam_land = ((S / LAND_COUPLING_SREF) ** p.land_coupling_insolation / (p.land_tau_days * DAY)
-                            + 1.0 / (LAND_RADIATIVE_DAYS * DAY))
+                            + 1.0 / (p.land_radiative_days * DAY))
                 lamT = np.where(land, lam_land, 1.0 / (p.ocean_tau_days * DAY))
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
@@ -645,6 +676,15 @@ class ClimateModel:
                 ek_x, ek_y = (-ve, ue) if p.retrograde else (ve, -ue)
                 index = gauss(ek_x * self.offshore[0] + ek_y * self.offshore[1], 100.0 / g.cell_km)
                 SST = SST - p.upwelling * np.clip(index / 5.0, 0.0, 2.0) * self.upwelling_weight
+            if p.sst_source == "observed":
+                # Earth diagnostics: the observed monthly sea surface (WOA18)
+                # in place of the model's, to measure how much of the land
+                # climate's error comes from the sea (upwelling included)
+                if g.obs_sst is None:
+                    raise ValueError('sst_source="observed" needs an Earth grid with obs_sst')
+                mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
+                m0 = int(np.floor(mpos)); fr = mpos - m0
+                SST = (1.0 - fr) * g.obs_sst[m0] + fr * g.obs_sst[(m0 + 1) % 12]
             T_eq = np.where(land, Tl, SST)
 
             # ---- parts of the winds and storms that do not depend on temperature

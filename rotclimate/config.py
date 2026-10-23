@@ -86,12 +86,14 @@ class Params:
 
     # ---------------------------------------------------------------- energy
     land_tau_days: float = 3.0        # air-mass adjustment time over land
+    land_radiative_days: float = 30.0 # e2: land-air coupling time without sunshine (night, winter), days
     ocean_tau_days: float = 1.5       # ... over sea
     heat_diffusion: float = 4.0e4     # m^2/s, horizontal mixing of air
     current_strength: float = 4.0     # K, boundary current SST anomaly
     current_scale_km: float = 250.0   # e12: smoothing scale (km) of the land that decides which side of a sea a cell is on
     subpolar_current: float = 0.0     # e26: K, warm west-coast / cold east-coast currents of the subpolar gyres (poleward of ~42 deg)
     sst_offset: float = 0.0           # K, global SST tweak
+    sst_source: str = "model"         # "observed": Earth grids use WOA18 monthly SST (diagnostic upper bound)
     land_offset: float = 0.0          # K, global land-column tweak
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
     lake_coupling: float = 0.0        # v4: lakes/small seas follow land temp (0 = off)
@@ -150,6 +152,7 @@ class Params:
     land_heat_capacity: float = 1.0   # e1: x the EBM land column's heat capacity (how far land seasons lag the sun)
     continentality: float = 0.0       # e1: land seasons x (1 + this * (upwind land share - 0.5))
     continental_depth: float = 0.0    # e23: extra seasonal amplitude where the westerlies crossed ~5,000 km of land (none at half land or less)
+    maritime_mean: float = 0.0        # e28: maritime land swings around the nearby sea's annual mean (share x (1 - chi); 0 = the zonal land mean)
     upwelling: float = 0.0            # e1: coastal sea cooling (C) per 5 m/s of offshore Ekman transport
     # physics e2 (from the literature review of the remaining Earth failures)
     background_ascent: float = 1.0    # e2: the rain dynamics' baseline (the "1 +"); 0 = rain needs ascent
@@ -159,6 +162,7 @@ class Params:
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
+    ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture

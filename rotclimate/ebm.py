@@ -79,7 +79,8 @@ def _band_land(lat, profile):
 
 
 @lru_cache(maxsize=64)
-def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0):
+def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
+           c_ocean_scale=1.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -109,12 +110,13 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     # continents (exchange runs across coastlines)
     nu = NU * fo / (1 - F_LAND) if profile is not None else np.full(N, NU)
     C_L = C_LAND * c_land_scale     # e1: heat capacity of the land column (seasonal lag)
+    C_O = C_OCEAN * c_ocean_scale   # mixed-layer heat capacity (1 = ~26 m; the effective seasonal layer is deeper)
     dt = 86400.0
     I = np.eye(N)
     Lfl, Lfo = L * fl[None, :], L * fo[None, :]     # diffusion of the zonal mean fl T_l + fo T_o
     M = np.block([
         [np.diag(C_L / dt + B_OLR + nu) - D_DIFF * Lfl, -D_DIFF * Lfo - np.diag(nu)],
-        [-D_DIFF * Lfl - np.diag(nu * fl / fo), np.diag(C_OCEAN / dt + B_OLR + nu * fl / fo) - D_DIFF * Lfo],
+        [-D_DIFF * Lfl - np.diag(nu * fl / fo), np.diag(C_O / dt + B_OLR + nu * fl / fo) - D_DIFF * Lfo],
     ])
     if ocean_transport > 0:
         # e27: the oceans carry heat poleward themselves (~2 PW: gyres and the
@@ -144,7 +146,7 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
         for d in range(year_days):
             Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR
             Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR
-            rhs = np.concatenate([C_L / dt * Tl + Fl, C_OCEAN / dt * To + Fo])
+            rhs = np.concatenate([C_L / dt * Tl + Fl, C_O / dt * To + Fo])
             T = matrix_product(Minv, rhs)
             Tl, To = T[:N], T[N:]
             if yr == years - 1:
@@ -164,6 +166,8 @@ class ZonalClimate:
             extra["profile"] = profile
         if getattr(params, "ocean_transport", 0.0) > 0:
             extra["ocean_transport"] = round(params.ocean_transport, 3)
+        if getattr(params, "ocean_heat_capacity", 1.0) != 1.0:
+            extra["c_ocean_scale"] = round(params.ocean_heat_capacity, 3)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)
