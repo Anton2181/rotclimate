@@ -724,6 +724,35 @@ The within-region slope with elevation stands in for something else that
 also varies with height, such as distance from the coast or cold-air pools
 on low ground. It is not a fault in the lapse rate.
 
+### The largest remaining failure: north India's monsoon
+
+Under r33 north India keeps the largest temperature error, 4.3 °C, and the
+largest rainfall loss, 1.2. A one-region run under r30 for July
+(`india_july.py`) shows why:
+
+- **Rain:** 1.1 mm/day over the plain against ~7 observed; annual rain
+  is 177 mm against 761.
+- **Moisture:** precipitable water is 33 mm against 50–60.
+- **Wind:** weak, westerly and slightly southerly, off the Thar.
+- **The Bay of Bengal branch is missing.** In reality the monsoon trough
+  carries south-easterlies up the Ganges.
+- **Temperature, a consequence:** the dry summer with its wide seasonal
+  range, plus winters 6–8 °C too cold, give the temperature error.
+
+The model's surface pressure comes from the near-surface temperature
+anomaly alone. The monsoon trough is held up by latent heating aloft over
+the Bay and the Gangetic plain, and by Tibet's elevated heat source.
+
+- `monsoon_heating` (e4b) adds inflow under existing warm-season rain, so
+  it cannot start a monsoon that is not there. It was rejected in an
+  earlier round, before north India was in the sample.
+- What the fix needs: a pressure term from the column heating of elevated
+  plateaus and moist convection, the circulation Rodwell & Hoskins (1996)
+  describe, which the vapour equation then follows.
+- This is a structural rainfall change. It belongs to the rainfall track
+  ([RAINFALL_R31_20261023.md](RAINFALL_R31_20261023.md)) and must pass the
+  same gate.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
