@@ -252,3 +252,37 @@ def test_e3_stable_marine_air_cools_warm_air_over_a_cold_sea_and_rainout_dries_t
                        case, steps=13)
     lee = (slice(None), slice(8, 16), slice(18, 23))
     assert b.W[lee].mean() < a.W[lee].mean()
+
+
+def test_e31_continental_winter_cold_follows_reachable_poleward_land():
+    """e31 lowers the annual mean of continental air where land lies
+    poleward and open; a high ridge on the poleward side shuts the shallow
+    cold air off (the grid's own fallback, no Earth data)."""
+    from rotclimate.model import ClimateModel
+
+    def case(ridge):
+        c = _toy_case()
+        g = c.grid
+        g.land[:, 10:] = True                  # ocean to the west, land everywhere else
+        g.land_frac = g.land.astype(float)
+        g.elev = np.where(g.land, 300.0, 0.0)
+        if ridge:
+            g.elev[4:6, 20:] = 4500.0          # a high ridge north of the eastern part
+        g.elev_max = g.elev
+        g.lat = g.lat + 8.0                    # ~44 N: inside the winter-darkness ramp
+        return c
+
+    base = Params(steps_per_year=13, t_iters=6, picard_iters=2, continentality=0.7, westerly_speed=8.0,
+                  hadley_edge=28.0, hadley_shift=3.0, monsoon_strength=0.0)
+    row, col = 14, 26
+    cooling = {}
+    for ridge in (False, True):
+        c = case(ridge)
+        m = ClimateModel(base.replace(continental_mean=4.0), grid=c.grid)
+        cooling[ridge] = (m.pole_land[row, col],
+                          float((earth.run_case(base, c, steps=13).T[:, row, col]
+                                 - earth.run_case(base.replace(continental_mean=4.0), c, steps=13).T[:, row, col]).mean()))
+    assert cooling[True][0] < 0.5 * cooling[False][0]      # the ridge cuts the reachable poleward land
+    assert cooling[False][1] > 0.2                          # open land: a colder annual mean
+    assert cooling[True][1] < 0.6 * cooling[False][1]      # behind the ridge: much less
+    assert Params().continental_mean == 0.0
