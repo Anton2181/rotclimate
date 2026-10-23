@@ -346,6 +346,39 @@ about 1.2–1.5 °C warmer, because the Atlantic overturning carries about
 On the fantasy map, which takes Earth's northern profile, it adds the
 northern share.
 
+| On r30, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e30 0.4 PW | 0.9717 | 0.9660 | 0.9706 | 0.9983 | 0.9641 | −5.6 % | −0.1 % |
+| e30 0.8 PW | 0.9617 | 0.9515 | 0.9559 | 1.0218 | 0.9442 | −7.8 % | +0.1 % |
+| e30 0.8 PW, offsets −0.5 °C | **0.9508** | 0.9401 | 0.9452 | 0.9940 | 0.9413 | **−9.2 %** | **−0.7 %** |
+
+At 0.8 PW with the offsets lowered, temperature error falls:
+
+| Region | Temperature error |
+|---|---|
+| Victoria | −45 % |
+| south Brazil | −40 % |
+| Chile | −31 % |
+| east Australia | −31 % |
+| the Alps | −27 % |
+| New Zealand | −24 % |
+| eastern Europe | −22 % |
+| Pacific Northwest | −20 % |
+
+The northern regions that were already too warm get warmer:
+
+| Region | Temperature error | Bias, °C |
+|---|---|---|
+| US Midwest | +37 % | +1.2 → +2.0 |
+| Manchuria | +27 % | +2.5 → +3.4 |
+| Korea | +18 % | |
+| North China Plain | +14 % | |
+
+Eastern continental cold (east coasts, outflow from the winter
+continent) is the next missing piece. 0.8 PW is twice the observed ocean
+transport, so the setting also stands in for the Antarctic cold the
+energy balance lacks: no ice-sheet height, no circumpolar isolation.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
@@ -567,6 +600,29 @@ The core term uses the cheapest path, on an 8-neighbour Dijkstra over
   together.
 - The gain over the straight line is modest. The straight line already
   carries most of it.
+
+**Roman towns of AD 150, an independent test** (`scripts/roman_cities_check.py`).
+
+The source is Hanson (2016), the OxREP cities database: 1,388 sites with
+urban characteristics, with coordinates, dates and, for 885 of them, an
+area. The towns standing in AD 150 are counted per 2° land block over the
+empire's footprint: 213 blocks, 1,243 towns. Towns without an area take
+the median of their Barrington rank. The core settings were fixed on Han,
+HYDE and the reference regions before this file was opened.
+
+| Against Roman towns, AD 150 | Town count: rank / to move | Town area: rank / to move |
+|---|---|---|
+| uniform over land | −0.067 / 54 % | 0.042 / 58 % |
+| settlement base | 0.115 / 54 % | 0.124 / 57 % |
+| × cores (cradles + Rome, great circle, L 800) | 0.471 / 46 % | 0.485 / 48 % |
+| × cores (travel: forest × 2, relief 1 per km, L 800) | **0.584 / 42 %** | **0.603 / 44 %** |
+| HYDE 3.3, 200 CE | 0.604 / 44 % | 0.635 / 42 % |
+
+Inside the Roman empire the environment alone barely predicts where the
+towns were (0.12). The old-core term, carried over unchanged, raises it to
+0.58–0.60, level with HYDE. Urban life was densest in the old east:
+Greece, Asia Minor and Syria, then Italy. It thinned toward Gaul,
+Britain and the Danube, whatever the soil.
 
 **The rule on the fantasy map** (Earth-fit atlas fields, 3.7 km cells):
 
