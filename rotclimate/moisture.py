@@ -49,7 +49,7 @@ class MoistureSolution:
 
 def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                    dynamics, instability, boundary, guess, exchange=0., mix=None, sink=None, closure=None,
-                   gain=None):
+                   gain=None, condensate=None):
     """Legacy fixed sweeps unless moisture_residual_tol > 0.
 
     The optional criterion is max |equation residual| / max(P+|E|,0.1)
@@ -60,7 +60,14 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
     (subsidence drying); it enters the equation check as negative evaporation.
     `gain` (1/s, optional): water brought in by converging air, gain * W, taken
     from the current iterate as a source so the linear solve stays well posed.
+    `condensate` (optional): storm condensate in mm per exchange event. `mix`
+    then returns only surviving vapor. The solve already loses this water via
+    the smaller incoming target; add it to diagnosed rain, not to lamP again.
+    Equation diagnostics use vapor + condensate as the balanced transport
+    target and total rain as the sink, counting condensation exactly once.
     """
+    if condensate is not None and mix is None:
+        raise ValueError('Storm condensate requires a vapor exchange target')
     W = guess
     converged = None if p.moisture_residual_tol == 0 else False
     residual = None
@@ -92,8 +99,13 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                 E = E - sink * W * DAY
             if gain is not None:
                 E = E + gain * W * DAY
+            mixed = mix(W) if mix is not None else W
+            if condensate is not None:
+                condensed = condensate(W)
+                P = P + exchange * condensed * DAY
+                mixed = mixed + condensed
             terms = moisture_terms(W, u, v, solver.dx, p.moisture_diffusion, E, P,
-                                   exchange, mix(W) if mix is not None else W)
+                                   exchange, mixed)
             residual = float(np.max((terms['absolute_residual'] / np.maximum(P + np.abs(E), 0.1))[1:-1, 1:-1]))
             if not np.isfinite(residual):
                 raise FloatingPointError('Nonfinite moisture-equation residual')
@@ -102,6 +114,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                 break
     P = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure,
                                 spread=p.rh_spread) * W * DAY
+    if condensate is not None:
+        P = P + exchange * condensate(W) * DAY
     return MoistureSolution(W, P, n+1, converged, residual)
 
 

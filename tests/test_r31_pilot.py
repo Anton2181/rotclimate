@@ -48,3 +48,20 @@ def test_different_observation_inputs_cannot_be_a_pilot_gain():
     b,c,bp,cp,p = inputs()
     c['regions']['california']['case_identity'] = 'changed observations'
     with pytest.raises(ValueError, match='Unpaired observed'): assess(b,c,bp,cp,p)
+
+
+def test_new_physics_must_match_an_exact_predeclared_parameter_combination():
+    b,c,bp,cp,p = inputs()
+    p['control_params'] = dict(flux_convergence=.15, eddy_rainout=0.)
+    p['candidates'] = [dict(flux_convergence=.30, eddy_rainout=.75),
+                       dict(flux_convergence=.45, eddy_rainout=1.)]
+    cp['params'].update(p['candidates'][0])
+    c['identity'] = identity(cp)
+    for row in c['regions'].values(): row['identity'] = c['identity']
+    assert assess(b,c,bp,cp,p)['eligible_for_dev31']
+    # Combining individually declared values from different experiments is
+    # still an undeclared candidate.
+    cp['params']['eddy_rainout'] = 1.
+    c['identity'] = identity(cp)
+    for row in c['regions'].values(): row['identity'] = c['identity']
+    with pytest.raises(ValueError, match='outside its predeclared'): assess(b,c,bp,cp,p)

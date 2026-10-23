@@ -205,7 +205,7 @@ class Params:
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)
     eddy_scale_km: float = 450.0
-    eddy_moisture_scheme: str = "legacy"  # opt-in "conservative": symmetric water fluxes, no unaccounted crest clipping
+    eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 
     # ---------------------------------------------------------------- numerics
     downsample: int = 8               # source pixels per model cell

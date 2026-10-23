@@ -184,10 +184,13 @@ class Result:
 
 class ClimateModel:
     def __init__(self, params: Params, grid=None):
-        if params.eddy_moisture_scheme not in ('legacy', 'conservative'):
+        if params.eddy_moisture_scheme not in ('legacy', 'conservative', 'conservative-rainout'):
             raise ValueError('Unknown eddy_moisture_scheme')
         if params.eddy_moisture_scheme == 'conservative' and params.eddy_rainout > 0:
             raise ValueError('Conservative exchange requires eddy_rainout=0; crest clipping has no accounted rainfall')
+        if params.eddy_moisture_scheme == 'conservative-rainout':
+            if not np.isfinite(params.eddy_rainout) or params.eddy_rainout <= 0:
+                raise ValueError('Conservative rainout requires finite positive eddy_rainout')
         if not np.isfinite(params.eddy_seasonality) or not 0 <= params.eddy_seasonality < 1:
             raise ValueError('eddy_seasonality must be in [0, 1)')
         if not np.isfinite(params.t_relaxation) or not 0 < params.t_relaxation <= 1:
@@ -954,7 +957,8 @@ class ClimateModel:
                 col = np.exp(-h_km / p.eddy_moisture_height_km)
                 gcol = np.maximum(gauss(col, sigE), 1e-6)
                 mix = lambda water, col=col, gcol=gcol: col * gauss(water, sigE) / gcol
-            if p.eddy_rate > 0 and p.eddy_rainout > 0:
+            condensate = None
+            if p.eddy_rate > 0 and p.eddy_rainout > 0 and p.eddy_moisture_scheme == 'legacy':
                 # e3: storm eddies carry water vapour by many short steps, not
                 # one jump: a step over a ridge can hold no more than the
                 # crest's saturation, the rest rains out on the windward side.
@@ -971,12 +975,21 @@ class ClimateModel:
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
                 exchange, mix = conservative_exchange(exchange, lambda a: gauss(a, sigE, mode='reflect'), mass)
+            if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative-rainout':
+                from .storms import RainoutExchange
+                mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
+                crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
+                mix = RainoutExchange(exchange,
+                    lambda a: gauss(a, sigE / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
+                    crest, mass, steps=EDDY_RAINOUT_STEPS)
+                exchange, condensate = mix.frequency, mix.condensate
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
-                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain)
+                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
+                                      condensate=condensate)
             W, P = solution.water, solution.rain
-            if p.eddy_rate > 0 and (p.eddy_moisture_scheme == 'conservative' or diagnose_moisture):
+            if p.eddy_rate > 0 and (p.eddy_moisture_scheme != 'legacy' or diagnose_moisture):
                 from .storms import exchange_budget
-                self.storm_budgets.append(exchange_budget(W, exchange, mix))
+                self.storm_budgets.append(exchange_budget(W, exchange, mix, condensate))
             self.moisture_iterations.append(solution.iterations)
             self.moisture_converged.append(solution.converged)
             self.moisture_scaled_residual.append(solution.scaled_residual)
@@ -1017,6 +1030,8 @@ class ClimateModel:
                     out[key][k] = val
                 if budget is not None:
                     mixed = mix(W) if mix is not None else W
+                    if condensate is not None:
+                        mixed = mixed + condensate(W)
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
@@ -1044,7 +1059,7 @@ class ClimateModel:
             numerics['storm_exchange'] = dict(scheme=p.eddy_moisture_scheme,
                 max_relative_closure=max(b['relative_closure'] for b in self.storm_budgets),
                 steps=self.storm_budgets)
-            if p.eddy_moisture_scheme == 'conservative':
+            if p.eddy_moisture_scheme != 'legacy':
                 numerics['all_checks_passed'] &= numerics['storm_exchange']['max_relative_closure'] <= 1e-10
         return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, **out)
 

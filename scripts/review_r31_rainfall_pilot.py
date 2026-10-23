@@ -1,4 +1,4 @@
-"""Review a predeclared single-parameter r31 rainfall pilot; no atlas adoption."""
+"""Review a predeclared r31 rainfall pilot; no atlas adoption."""
 from __future__ import annotations
 import argparse
 import json
@@ -20,11 +20,25 @@ def assess(ref, current, rp, cp, plan):
         raise ValueError('Unexpected pilot region set')
     if rp['sources'] != cp['sources'] or rp['cell_km'] != cp['cell_km']:
         raise ValueError('Unpaired scientific sources or resolution')
+    if set(rp['params']) != set(cp['params']):
+        raise ValueError('Pilot parameter definitions differ')
     changes = {key for key in rp['params'] if rp['params'][key] != cp['params'][key]}
-    if changes != {plan['parameter']} or cp['params'][plan['parameter']] not in plan['candidates']:
+    # A new physical scheme can require a matched pair of parameters. Accept
+    # only an exact predeclared combination, never an unrestricted search box.
+    if 'control_params' in plan:
+        control = plan['control_params']
+        candidates = plan['candidates']
+        if any(set(c) != set(control) for c in candidates):
+            raise ValueError('Pilot combinations must use the exact control keys')
+    else:
+        control = {plan['parameter']:plan['control']}
+        candidates = [{plan['parameter']:v} for v in plan['candidates']]
+    if any(rp['params'][k] != v for k,v in control.items()):
+        raise ValueError('Incorrect reference pilot parameters')
+    declared = any(changes == {k for k,v in c.items() if v != control[k]} and
+                   all(cp['params'][k] == v for k,v in c.items()) for c in candidates)
+    if not declared:
         raise ValueError('Pilot changed parameters outside its predeclared hypothesis')
-    if rp['params'][plan['parameter']] != plan['control']:
-        raise ValueError('Incorrect reference convergence strength')
     regional = {}
     failures = []
     for name in names:

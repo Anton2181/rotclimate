@@ -1,0 +1,17 @@
+{
+  "reference": "calibration/local_accuracy_20261023/r31_params.json",
+  "reference_revision": "6a408f0",
+  "hypothesis": "Conservative short storm hops with explicit condensation can place more rain at mountain barriers and retain less vapor beyond them, improving the opposing coastal/interior rainfall errors without a global rain multiplier.",
+  "control_params": {"eddy_moisture_scheme": "legacy", "eddy_rainout": 0.0},
+  "candidates": [
+    {"eddy_moisture_scheme": "conservative-rainout", "eddy_rainout": 0.75},
+    {"eddy_moisture_scheme": "conservative-rainout", "eddy_rainout": 1.0}
+  ],
+  "pilot_regions": ["california", "central_asia", "east_china", "east_australia", "japan", "mexico"],
+  "pilot_requirements": "Mean rainfall loss and monthly rainfall MAE must improve; mean temperature MAE must not worsen by more than 1%; no regional monthly rainfall MAE increase greater than max(2 mm, 10%); select at most one combination for dev31, by lowest mean rainfall loss.",
+  "development_gate": "Unchanged policy_v2: S improves at least 0.5%, no group worsens, neither temperature MAE nor rainfall loss worsens by more than 1%.",
+  "reference_reproduction": "Rerun r31 under the new source fingerprint before the paired pilot. Compare the six control regions with the restored historical r31 metrics; do not relabel old manifests as new runs.",
+  "accounting": "Each storm event takes six symmetric conservative hops; vapor above local crest capacity condenses at that hop and remains there. Vapor plus condensate conserves water on the closed full grid. The moisture solve imports surviving vapor only; reported rainfall includes event condensate exactly once. Boundary-reservoir supply is reported separately. Mean-wind transport and the existing convergence import are not globally conservative.",
+  "transfer": "Only after dev31 passes, run the paired 28 km California, western Europe, Japan and New Zealand checks, then the six established validation regions once. Those regions have been evaluated previously and are not fresh independent validation.",
+  "publication": "The scheme remains opt-in unless the full sequence passes. Published atlases need map calibration and native numerical verification before updating. No direct correction of final rainfall maps."
+}
