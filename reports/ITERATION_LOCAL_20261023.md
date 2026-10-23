@@ -582,7 +582,26 @@ westward land is the Sahara and Arabia, but e23 widens the seasons as if
 that air were Siberian. e32 (`continental_depth_lat`, off by default) ramps
 e23's amplification in from that latitude to +20°. The plan
 (`calibration/continental_range_20261023/plan.json`) tests 25° and 30° on
-r32.
+r32. r32's own 31-region rerun under the e32 fingerprint is identical to
+the adoption run.
+
+| On r32, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e32 from 25° | 0.9905 | 0.9881 | 0.9942 | 0.9987 | 0.9867 | −1.9 % | −0.0 % |
+
+At 25° the seasonal-range error falls:
+
+| Region | Temperature error | Range error, °C |
+|---|---|---|
+| North China Plain | −12 % | +3.4 → +2.2 |
+| eastern China | −12 % | +3.3 → +1.6 |
+| Japan | −6 % | |
+| north India | −5.5 % | +7.4 → +5.8 |
+| Korea | −4 % | |
+
+The Levant (+4.8 °C range error) and Anatolia (+5.7) barely move. Their
+excess swing comes mostly from the advected continentality term, not
+from e23.
 
 ## Population side track
 
