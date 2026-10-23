@@ -374,6 +374,59 @@ The northern regions that were already too warm get warmer:
 | Korea | +18 % | |
 | North China Plain | +14 % | |
 
+More settings, on the same r30 reference:
+
+| On r30, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| 0.6 PW, offsets −0.25 | 0.9589 | 0.9520 | 0.9492 | 0.9945 | 0.9514 | −7.8 % | −0.4 % |
+| 0.8 PW, offsets −0.5, humidity 0.715 | 0.9513 | 0.9442 | 0.9400 | 0.9937 | 0.9418 | −9.2 % | −0.6 % |
+| 1.0 PW, offsets −0.75 | **0.9482** | 0.9310 | 0.9600 | 0.9971 | 0.9345 | −9.6 % | −0.7 % |
+| 1.0 PW sea-only (e30b), offsets −0.75 | 0.9607 | 0.9650 | 0.9514 | 0.9820 | 0.9548 | −7.8 % | −0.1 % |
+| 1.0 PW half sea-only, offsets −0.75 | 0.9522 | 0.9451 | 0.9544 | 0.9868 | 0.9427 | −9.1 % | −0.5 % |
+| 1.2 PW sea-only, offsets −0.75 | 0.9578 | 0.9565 | 0.9591 | 0.9897 | 0.9474 | −8.7 % | +0.3 % |
+
+**e30b** (`cross_transport_ocean`) releases the heat into the sea column
+only, so it reaches land only through the sea air. That spares the
+interiors and helps the mid-latitude group, but loses overall. The
+whole-column form stays.
+
+**The candidate for r31 is 0.8 PW with offsets −0.5 °C.** 1.0 PW scores
+slightly better (0.9482 against 0.9508), but 0.8 is closer to the observed
+transport, for nearly the same skill.
+
+**r31 adopted** (`calibration/local_accuracy_20261023/r31_params.json`:
+r30 + `candidate_r31_cet.json`, i.e. cross-equatorial transport 0.8 PW,
+land offset −0.67 °C, sea offset −3.69 °C).
+
+| Check | Result |
+|---|---|
+| gate v2, 31 regions | S 0.9508 (training 0.9401, holdout 0.9452, mid-latitude 0.9940, dev12 0.9413); temperature −9.2 %, rain −0.7 %: **passes** |
+| paired 28 km (California, western Europe, Japan, New Zealand) | S 0.9697; temperature 2.41 → 2.16 °C, rain loss 0.422 → 0.439: **passes** |
+| sealed six, run once | S 0.9461; temperature 2.660 → 2.420 °C, rain loss 0.578 → 0.568 |
+
+Sealed regions, each:
+
+| Region | Temperature error, °C | Annual bias, °C | Rainfall loss |
+|---|---|---|---|
+| Norway | 4.81 → 3.93 | −4.6 → −3.5 | 0.572 → 0.556 |
+| SE Africa | 1.20 → 1.26 | +0.5 → −0.6 | 0.926 → 0.807 |
+| Caucasus | 2.70 → 2.67 | | 0.585 → 0.586 |
+| Yunnan | 2.97 → 2.96 | | 0.800 → 0.809 |
+| NE US | 1.77 → 2.27 | +1.2 → +2.0 | 0.144 → 0.140 |
+| Tasmania | 2.50 → 1.44 | +2.5 → +0.9 | 0.442 → 0.507 |
+
+The north-east US repeats the development regions' lesson: the east coasts
+and interiors of the northern continents were already too warm, and the
+northern share of the transport warms them further.
+
+From r29 to r31 the 19 original regions' monthly temperature error goes
+2.230 → 2.127 (r30) → 1.947 °C (r31). On the full 31 regions: 2.314 (r30) →
+2.101 °C (r31). The rainfall loss is level: 0.484 → 0.481.
+
+The gate for the next candidate is policy v2 with r31's 31-region run as
+the reference (`output/local_20261023/v2_cet0.8_off-0.5`: T 2.101 °C,
+rain loss 0.4810).
+
 Eastern continental cold (east coasts, outflow from the winter
 continent) is the next missing piece. 0.8 PW is twice the observed ocean
 transport, so the setting also stands in for the Antarctic cold the
