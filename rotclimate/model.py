@@ -612,7 +612,16 @@ class ClimateModel:
                     # land. A symmetric term damped the maritime seasons of
                     # Iberia and the Cape; an advected one called the
                     # stagnant air over Mexico's plateau a continent's worth.
-                    amp = amp + p.continental_depth * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0)
+                    depth = p.continental_depth * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0)
+                    if p.continental_depth_lat > 0:
+                        # e32: the deep continent's harsher seasons come from its
+                        # long winter night; air that crossed the Sahara and
+                        # Arabia in winter is mild, not Siberian (the Levant,
+                        # Iran and north India were 3-8 C too cold in January
+                        # and the Levant too hot in summer). Ramp the
+                        # amplification in from continental_depth_lat to +20 deg.
+                        depth = depth * np.clip((np.abs(lat) - p.continental_depth_lat) / 20.0, 0.0, 1.0)
+                    amp = amp + depth
                 centre = Tl_mean
                 if p.maritime_mean > 0:
                     # e28: the latitude-mean land swings around its latitude's

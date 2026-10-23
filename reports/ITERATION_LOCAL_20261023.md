@@ -501,6 +501,89 @@ Without the barrier, Tehran and Delhi would be 0.85 and 0.91.
   every regional metric matches the storm-rainout reference exactly;
 - policy v2 rules are unchanged.
 
+### e31 results and r32
+
+| On r31, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e31 3 °C | 0.9934 | 1.0146 | 0.9906 | 0.9498 | 1.0024 | −1.4 % | +0.1 % |
+| e31 5 °C | 1.0013 | 1.0389 | 0.9911 | 0.9337 | 1.0146 | −0.1 % | +0.3 % |
+| e31 3 °C, land offset +0.4 | 0.9878 | 1.0002 | 0.9979 | 0.9597 | 0.9905 | −2.8 % | +0.3 % |
+| e31 5 °C, land offset +0.7 | 0.9851 | 1.0057 | 1.0028 | 0.9414 | 0.9880 | −3.7 % | +0.7 % |
+| e31 3 °C, transport 1.0 PW | 0.9842 | 0.9969 | 0.9951 | 0.9552 | 0.9871 | −3.3 % | +0.2 % |
+| **e31 4 °C, transport 1.1 PW** | **0.9810** | 0.9963 | 0.9989 | 0.9452 | 0.9835 | **−4.1 %** | +0.3 % |
+
+Three plans, each frozen before its results
+(`calibration/continental_cold_20261023/plan*.json`):
+
+1. **e31 alone** cut its targets' error by 16–28 % (US Midwest, Manchuria,
+   Korea, North China Plain). It also cooled every region a little, and the
+   regions already too cold got worse.
+2. **A higher uniform land offset** gave back the mean, but warmed the
+   southern regions as well. They have little reachable poleward land and
+   were already warm.
+3. **More cross-equatorial transport** warms the north and cools the south,
+   the shape needed. Both of its candidates pass.
+
+**r32 adopted** (`calibration/local_accuracy_20261023/r32_params.json`:
+r31 + `continental_mean` 4 °C + cross-equatorial transport 1.1 PW).
+
+| Check | Result |
+|---|---|
+| gate v2, 31 regions | S 0.9810, temperature 2.102 → 2.016 °C, rain loss 0.4810 → 0.4822: **passes** |
+| paired 28 km (California, western Europe, Japan, New Zealand) | S 0.9961; temperature 2.159 → 2.104 °C, rain loss 0.439 → 0.447: **passes** |
+| sealed six, run once | S 0.9787; temperature 2.420 → 2.331 °C, rain loss 0.568 → 0.564 |
+
+Sealed regions, each:
+
+| Region | Temperature error, °C | Annual bias, °C |
+|---|---|---|
+| NE US | 2.27 → 1.96 | +2.0 → +1.3 |
+| Norway | 3.93 → 3.64 | |
+| Tasmania | 1.44 → 1.26 | |
+| SE Africa | 1.26 → 1.36 | |
+| Caucasus | 2.67 → 2.74 | |
+| Yunnan | 2.96 → 3.03 | |
+
+The NE US was the target and was never used for tuning.
+
+Biggest changes over the 31 development regions:
+
+| Region | Temperature error |
+|---|---|
+| Manchuria | −23 % |
+| US Midwest | −23 % |
+| Victoria | −21 % |
+| Korea | −15 % |
+| North China Plain | −15 % |
+| Chile | −12 % |
+| Central Asia | −11 % |
+| the Cape | +15 % |
+| SW Australia | +7 % |
+| the Levant | +7 % |
+| Iran | +7 % |
+
+From r29 to r32, the monthly temperature error over the 19 original
+regions goes 2.230 → 1.947 (r31) → about 1.86 °C. Over all 31 regions it
+goes 2.314 (r30) → 2.102 (r31) → 2.016 °C (r32).
+
+### Next: e32, deep-continent seasons only where winters are dark
+
+Under r32 the subtropical interiors still swing too far:
+
+| Region | January error, °C |
+|---|---|
+| north India | −8 |
+| Iran | −5 |
+| the Levant | −3 |
+| Anatolia | −3 |
+
+The Levant and Anatolia are also 2–3 °C too hot in summer. Their deep
+westward land is the Sahara and Arabia, but e23 widens the seasons as if
+that air were Siberian. e32 (`continental_depth_lat`, off by default) ramps
+e23's amplification in from that latitude to +20°. The plan
+(`calibration/continental_range_20261023/plan.json`) tests 25° and 30° on
+r32.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).

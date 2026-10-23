@@ -167,6 +167,7 @@ class Params:
     cross_equatorial_transport: float = 0.0  # e30: northward ocean heat transport across the equator, PW (Earth ~0.4; 0 = none)
     cross_transport_ocean: float = 0.0  # e30b: share of that heat released into the sea only (0 = whole column, 1 = sea only)
     continental_mean: float = 0.0  # e31: annual-mean cooling (C) of deep continental land poleward of ~30-50 deg (long winter nights)
+    continental_depth_lat: float = 0.0  # e32: e23's deep-continent amplification ramps in from this latitude to +20 deg (0 = everywhere, as before)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
