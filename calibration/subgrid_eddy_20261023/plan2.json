@@ -1,0 +1,9 @@
+{
+  "frozen": "2026-10-23, after plan.json's results and before any plan-2 result",
+  "findings": "e34 alone: subgrid_orographic 1.0 S 0.9978 (rain -0.55 %), 2.5 S 0.9970 (rain -0.83 %); hilly regions improve 4-5 % (Anatolia, Alps, New Zealand, Japan) but e34 adds rain overall and the regions already too wet (east Australia +8.6 % rain loss, western Europe, Manchuria, the Cape) fail the training group. eddy_heat 0.5: S 1.0153, maritime regions much worse; rejected.",
+  "hypothesis": "The uniform background ascent (0.996) partly stood in for unresolved uplift such as sub-grid hills. With sub-grid ascent explicit, lower the background ascent so e34 moves rain from flat to hilly ground instead of adding it.",
+  "reference": "output/subgrid_eddy_20261023/reference (r33 under the e34 fingerprint)",
+  "candidates": {"so2.5_bg0.85": {"subgrid_orographic": 2.5, "background_ascent": 0.85},
+                  "so4_bg0.75": {"subgrid_orographic": 4.0, "background_ascent": 0.75}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
