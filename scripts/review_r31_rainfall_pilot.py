@@ -1,4 +1,4 @@
-"""Review the predeclared r31 warm-column convergence pilot; no atlas adoption."""
+"""Review a predeclared single-parameter r31 rainfall pilot; no atlas adoption."""
 from __future__ import annotations
 import argparse
 import json
@@ -16,7 +16,7 @@ def assess(ref, current, rp, cp, plan):
         raise ValueError('Incomplete pilot evidence')
     if ref['identity'] != identity(rp) or current['identity'] != identity(cp):
         raise ValueError('Input manifest mismatch')
-    if set(current['regions']) != set(names) or not set(names) <= set(ref['regions']):
+    if set(current['regions']) != set(names) or set(cp['regions']) != set(names) or not set(names) <= set(ref['regions']):
         raise ValueError('Unexpected pilot region set')
     if rp['sources'] != cp['sources'] or rp['cell_km'] != cp['cell_km']:
         raise ValueError('Unpaired scientific sources or resolution')
