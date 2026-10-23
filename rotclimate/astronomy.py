@@ -39,5 +39,5 @@ def insolation_table(params, lats, days):
     dec = declination(days, params.tilt, params.winter_solstice_day, params.year_days)
     df = distance_factor(days, params.eccentricity,
                          params.winter_solstice_day + params.perihelion_after_solstice,
-                         params.year_days)
+                         params.year_days) * getattr(params, "solar_flux", 1.0)
     return daily_insolation(np.asarray(lats)[None, :], dec[:, None], df[:, None])

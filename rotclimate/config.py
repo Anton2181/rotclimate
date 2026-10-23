@@ -40,6 +40,7 @@ class Params:
     eccentricity: float = 0.0167
     perihelion_after_solstice: float = 13.0  # days after the winter solstice
     year_days: int = 365
+    solar_flux: float = 1.0           # starlight at the planet, x Earth's 1,361 W m-2 (a world property: the star)
     # day-of-year (0-based, day 0 = Titian Marigold 1) of the winter solstice.
     # Day 22 puts the solstice in "early winter", the equinox in "middle
     # spring", the summer solstice in "early summer" etc. - see calendar.py
@@ -72,6 +73,7 @@ class Params:
     beyond_continuity_km: float = 300.0
     beyond_relief_m: float = 400.0
     beyond_seed: int = 1
+    far_pole_land: float = -1.0       # land share poleward of the grid that winter cold air comes from (e31); -1 = the edge's own land carried on
     # legacy 'blocks' style (rounds 0-2): per side 'ocean' | 'land' |
     # 'extend', with *_gap_km of open sea before the unknown coast.
     beyond_north: str = "extend"

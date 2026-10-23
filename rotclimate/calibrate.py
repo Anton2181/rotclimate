@@ -130,6 +130,13 @@ WORLD_GENES = ("lat_center", "tilt", "retrograde", "north_bearing", "tier1", "ti
                "beyond_north_land", "beyond_south_land", "beyond_west_land", "beyond_east_land",
                "beyond_southeast_land", "beyond_northeast_land", "beyond_continuity_km", "beyond_relief_m")
 SPACE_WORLD = [g for g in SPACE_V9 if g[0] in WORLD_GENES]
+# the world's other unknowns that leave physics, chemistry, gravity, the day
+# and the year Earth's: the orbit's shape and its perihelion's season, the
+# star's brightness at the planet, the ocean heat the basins carry across the
+# equator and the land poleward of the grid (reports/WORLD_KNOBS_20261023.md)
+SPACE_WORLD_PLUS = SPACE_WORLD + [("eccentricity", 0.0, 0.06), ("perihelion_after_solstice", 0.0, 365.0),
+                                  ("solar_flux", 0.96, 1.04), ("cross_equatorial_transport", -0.5, 2.5),
+                                  ("far_pole_land", 0.0, 1.0)]
 # only the e1 additions, around an existing fit (everything else held at the start)
 SPACE_E1_NEW = [g for g in SPACE_E1 if g[0] not in {n for n, *_ in SPACE_V9}]
 # physics e2: the rain closure and seasonal land coupling from the literature
@@ -523,7 +530,7 @@ def main():
                                                            "whittaker", "whittaker-broad", "whittaker-covered"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "storm-water", "new", "world"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "storm-water", "new", "world", "worldplus"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument('--ensemble-objective', choices=['climate', 'scores'], default='climate',
                     help='climate scores the field average published by the atlas; scores reproduces legacy layout-score averaging')
@@ -552,6 +559,8 @@ def main():
         _set_space(SPACE_E1)
     elif a.physics == "world":
         _set_space(SPACE_WORLD)
+    elif a.physics == "worldplus":
+        _set_space(SPACE_WORLD_PLUS)
     elif a.physics == "e1new":
         _set_space(SPACE_E1_NEW)
     elif a.physics == "e2":
@@ -594,7 +603,7 @@ def main():
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new", "e3b",
-                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "new", "world"):
+                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "new", "world", "worldplus"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})

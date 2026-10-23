@@ -80,11 +80,11 @@ def _band_land(lat, profile):
 
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
-           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0):
+           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0, solar_flux=1.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
-                        winter_solstice_day=ws_day, year_days=year_days)
+                        winter_solstice_day=ws_day, year_days=year_days, solar_flux=solar_flux)
     N = N_BANDS
     xe = np.linspace(-1, 1, N + 1)
     x = 0.5 * (xe[1:] + xe[:-1])
@@ -213,6 +213,8 @@ class ZonalClimate:
             extra["cross_transport"] = round(sign * params.cross_equatorial_transport, 3)
             if getattr(params, "cross_transport_ocean", 0.0) > 0:
                 extra["cross_ocean"] = round(params.cross_transport_ocean, 3)
+        if getattr(params, "solar_flux", 1.0) != 1.0:
+            extra["solar_flux"] = round(params.solar_flux, 4)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)

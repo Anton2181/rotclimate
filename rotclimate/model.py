@@ -450,7 +450,8 @@ class ClimateModel:
         """Land share toward the pole (north on the map's bearing; the map is
         a northern-hemisphere one) that shallow cold air can reach: ground
         above 1,500 m passes exp(-excess / 1,000 m) per 50 km, as earth.pole_fetch;
-        beyond the grid the edge's own land."""
+        beyond the grid the edge's own land, or far_pole_land where set (the
+        map's counterpart of the real globe's poleward land on Earth grids)."""
         g, p = self.g, self.p
         th = np.radians(p.north_bearing)
         di, dj = -np.cos(th), np.sin(th)                       # rows / columns per step toward the pole
@@ -464,7 +465,11 @@ class ClimateModel:
             ci, cj = ii + k * step * di, jj + k * step * dj
             cc = [np.clip(ci, 0, g.ny - 1), np.clip(cj, 0, g.nx - 1)]
             w = np.exp(-k * step / L)
-            acc += w * tr * ndi.map_coordinates(lf, cc, order=1)
+            land_k = ndi.map_coordinates(lf, cc, order=1)
+            if p.far_pole_land >= 0:
+                inside = (ci >= 0) & (ci <= g.ny - 1) & (cj >= 0) & (cj <= g.nx - 1)
+                land_k = np.where(inside, land_k, p.far_pole_land)
+            acc += w * tr * land_k
             tr = tr * ndi.map_coordinates(trans_per_cell, cc, order=1) ** step
             wsum += w
         return acc / wsum
@@ -690,7 +695,7 @@ class ClimateModel:
                 dT = np.zeros_like(Tl)
                 if p.cloud_radiation > 0:
                     S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
-                                         distance_factor(d, p.eccentricity,
+                                         p.solar_flux * distance_factor(d, p.eccentricity,
                                                          p.winter_solstice_day + p.perihelion_after_solstice,
                                                          p.year_days))
                     dT -= p.cloud_radiation * (fc - fbar) * S / LAND_COUPLING_SREF
@@ -709,7 +714,7 @@ class ClimateModel:
                 # (Mongolia and Manchuria, which feed East Asia's winter
                 # monsoon; the Kazakh steppe). Cover from last step's snow.
                 S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
-                                     distance_factor(d, p.eccentricity,
+                                     p.solar_flux * distance_factor(d, p.eccentricity,
                                                      p.winter_solstice_day + p.perihelion_after_solstice,
                                                      p.year_days))
                 cover = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
@@ -720,7 +725,7 @@ class ClimateModel:
                 # in winter (radiative cooling alone, ~30 days), so winter air
                 # masses keep where they came from (Held & Suarez 1994)
                 S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
-                                     distance_factor(d, p.eccentricity,
+                                     p.solar_flux * distance_factor(d, p.eccentricity,
                                                      p.winter_solstice_day + p.perihelion_after_solstice,
                                                      p.year_days))
                 sun = (S / LAND_COUPLING_SREF) ** p.land_coupling_insolation / (p.land_tau_days * DAY)
@@ -993,7 +998,7 @@ class ClimateModel:
                 # the soil dries below 75 % of what it holds (Manabe 1969);
                 # winter rain stored in the soil feeds the summer air
                 S_toa = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
-                                         distance_factor(d, p.eccentricity,
+                                         p.solar_flux * distance_factor(d, p.eccentricity,
                                                          p.winter_solstice_day + p.perihelion_after_solstice,
                                                          p.year_days))
                 Ts = np.clip(T, -40.0, 50.0)
