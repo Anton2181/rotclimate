@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[1]
 def main():
     descriptions={
         'free_fit':('Free fit','World and physics fitted to the seasonal painted zones.'),
-        'earth_fit':('Earth fit','World fitted with Earth r29 physics held fixed.'),
+        'earth_fit':('Earth fit','World fitted with Earth r35 physics held fixed.'),
         'whittaker_fit':('Whittaker fit','World and physics fitted to the proposed annual-biome targets.')}
     cards=[];rows=[];population_rows=[];density_cards=[]
     for name,(title,description) in descriptions.items():
