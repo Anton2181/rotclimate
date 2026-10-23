@@ -705,6 +705,25 @@ would make it worse. The next plan
 to 4.85 or 5.1 K/km and raises the land offset to keep the mean at the
 cells' mean elevation.
 
+| On r33, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| lapse 4.85 K/km, land offset −0.38 | 1.0139 | 1.0135 | 1.0047 | 1.0128 | 1.0170 | +2.0 % | +0.8 % |
+| lapse 5.1 K/km, land offset −0.22 | 1.0258 | 1.0271 | 1.0125 | 1.0215 | 1.0304 | +3.9 % | +1.3 % |
+
+Rejected. Chile improves (−10 %); other regions get worse:
+
+| Region | Temperature error |
+|---|---|
+| Great Basin | +19 % |
+| the Cape | +10 % |
+| California | +10 % |
+| Pacific Northwest | +10 % |
+| Mexico | +9 % |
+
+The within-region slope with elevation stands in for something else that
+also varies with height, such as distance from the coast or cold-air pools
+on low ground. It is not a fault in the lapse rate.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
