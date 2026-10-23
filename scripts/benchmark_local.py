@@ -70,7 +70,8 @@ def temperature_metrics(Ts, To):
 
 
 def one(job):
-    region, params_path, overrides, cell_km, out = job
+    region, params_path, overrides, cell_km, out, specs = job
+    earth.REGIONS.update(specs)
     p = load_params(params_path).replace(**overrides)
     case = earth.region_case(region, cell_km)
     res = earth.run_case(p, case, steps=p.steps_per_year)
@@ -142,13 +143,15 @@ def main():
     ap.add_argument("--regions", nargs="+", default=DEV19)
     ap.add_argument("--cell-km", type=float, default=56.0)
     ap.add_argument("--workers", type=int, default=4)
+    ap.add_argument("--region-specs", help="json of extra region definitions (e.g. the sealed validation regions)")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
+    specs = json.loads(Path(a.region_specs).read_text()) if a.region_specs else {}
     out = Path(a.out)
     (out / "cells").mkdir(parents=True, exist_ok=True)
     overrides = json.loads(a.set)
     with Pool(a.workers) as pool:
-        recs = {r["region"]: r for r in pool.map(one, [(r, a.fit, overrides, a.cell_km, str(out)) for r in a.regions],
+        recs = {r["region"]: r for r in pool.map(one, [(r, a.fit, overrides, a.cell_km, str(out), specs) for r in a.regions],
                                                   chunksize=1)}
     summary = dict(fit=a.fit, overrides=overrides, cell_km=a.cell_km, regions=recs,
                    groups={g: group_means(recs, n) for g, n in GROUPS.items() if any(x in recs for x in n)},
