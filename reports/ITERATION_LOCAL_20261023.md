@@ -603,6 +603,36 @@ The Levant (+4.8 °C range error) and Anatolia (+5.7) barely move. Their
 excess swing comes mostly from the advected continentality term, not
 from e23.
 
+| On r32, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e32 from 25° | 0.9905 | 0.9881 | 0.9942 | 0.9987 | 0.9867 | −1.9 % | −0.0 % |
+| **e32 from 30°** | **0.9873** | 0.9853 | 0.9917 | 0.9967 | 0.9821 | **−2.5 %** | −0.1 % |
+
+**r33 adopted** (`calibration/local_accuracy_20261023/r33_params.json`:
+r32 + `continental_depth_lat` 30°).
+
+| Check | Result |
+|---|---|
+| gate v2, 31 regions | S 0.9873: **passes** |
+| paired 28 km | S 0.9925; temperature 2.104 → 2.054 °C, rain loss 0.447 → 0.451: **passes** |
+| sealed six, run once | S 0.9723; temperature 2.331 → 2.200 °C, rain loss 0.5644 → 0.5650 |
+
+Of the sealed six, Yunnan carries the gain: 3.03 → 2.34 °C, its range error
++8.5 → +6.0 °C. It is a subtropical highland whose winter air is not
+Siberian. The Caucasus moves 2.74 → 2.67 °C; the rest are unchanged.
+
+Monthly temperature error, step by step:
+
+| Version | 31 development regions | 19 original regions |
+|---|---|---|
+| r29 | | 2.230 °C |
+| r30 | 2.314 °C | |
+| r31 | 2.102 °C | |
+| r32 | 2.016 °C | |
+| r33 | 1.966 °C | 1.822 °C |
+
+Rainfall loss over the 31 regions is 0.4810 at r31 and 0.4819 at r33.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
