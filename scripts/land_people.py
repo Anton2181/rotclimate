@@ -141,8 +141,10 @@ def bucket(P, PET, cap=100.0):
     return start
 
 
-def crop_yield(T, P, PET, S0, irr, c):
-    """Best season of one crop: (net kcal per ha, season mask (12,...))."""
+def crop_yield(T, P, PET, S0, irr, c, rain_keep=None, keep=None):
+    """Best season of one crop: (net kcal per ha, season mask (12,...)).
+    rain_keep scales the rain-fed share's yield (dry-margin reliability),
+    keep the whole yield (cold-margin reliability); None leaves them."""
     best = np.zeros(T.shape[1:])
     best_mask = np.zeros(T.shape, bool)
     lo, hi = c["window"]
@@ -159,7 +161,11 @@ def crop_yield(T, P, PET, S0, irr, c):
             # the FAO-33 line holds for deficits up to about half the need;
             # with under a third of it the crop fails
             yf = np.clip(1.0 - c["ky"] * (1.0 - fw), 0.0, 1.0) * smoothstep(fw, 0.3, 0.5)
+            if rain_keep is not None:
+                yf = yf * rain_keep                            # the poor years of the rain-fed share
             yf = irr + (1.0 - irr) * yf                      # the irrigated share is fully watered
+            if keep is not None:
+                yf = yf * keep                                 # frost on cold margins, irrigated or not
             # beyond the heat the crop needs, a longer season adds little
             y = np.where(ok, yf, 0.0) * c["grain"] * 1000.0 * c["edible"] * c["kcal"] * (1 - c["seed"])
             better = y > best
@@ -203,9 +209,11 @@ def best_crop_mix(kcal, masks, can_double):
     return total, primary, secondary
 
 
-def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None):
+def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None):
     """Every product, from monthly T (C), P (mm) and day/night range (C),
-    shape (12, ...)."""
+    shape (12, ...). margins = (cold, dry) of harvest.models.margin_reliability:
+    low-input harvests on cold and dry margins are worth their poor years
+    (None: the mean harvest)."""
     if dtr is not None:
         PET = hargreaves(T, dtr, sunlight_top(lat, tilt, ws_day))
     else:
@@ -216,9 +224,16 @@ def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None):
     out = dict(T_ann=Tann, P_ann=Pann, PET_ann=PET.sum(0), aridity=Pann / np.maximum(PET.sum(0), 1.0),
                lgp_days=grow.sum(0) * DAYS, gdd5=np.sum(np.maximum(T - 5.0, 0.0), 0) * DAYS,
                npp=np.minimum(3000.0 / (1.0 + np.exp(1.315 - 0.119 * Tann)), 3000.0 * (1.0 - np.exp(-0.000664 * Pann))))
+    rain_keep = keep = None
+    if margins is not None:
+        cold, dry = margins
+        if cold is not None:
+            keep = np.clip((Tann - cold[0]) / (cold[1] - cold[0]), 0.0, 1.0)
+        if dry is not None:
+            rain_keep = np.clip((out["aridity"] - dry[0]) / (dry[1] - dry[0]), 0.0, 1.0)
     kcal, masks = {}, {}
     for name, c in CROPS.items():
-        kcal[name], masks[name] = crop_yield(T, P, PET, S0, irr, c)
+        kcal[name], masks[name] = crop_yield(T, P, PET, S0, irr, c, rain_keep, keep)
     # date palm: a hot, frost-free, dry-country crop, watered by rivers
     palm_ok = (T.min(0) >= 7.0) & (np.sum(T >= 24.0, 0) >= 5) & (T.max(0) >= 30.0)
     palm_water = irr * (1.0 - smoothstep(Pann, *DATES["dry_mm"]))

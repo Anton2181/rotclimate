@@ -34,10 +34,13 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--csv", required=True); ap.add_argument("--earth", required=True); ap.add_argument("--hyde")
     ap.add_argument("--reliability", help="START,FULL,POWER of harvest.models.harvest_reliability (default none)")
+    ap.add_argument("--margins", help="T0,T1,A0,A1 of harvest.models.margin_reliability (default none)")
     a = ap.parse_args()
     z = np.load(a.earth)
     lat, lon, land = z["lat"], z["lon"], z["land"]
-    km2, stages = earth_stages(z, reliability=tuple(map(float, a.reliability.split(","))) if a.reliability else None)
+    mg = [float(x) for x in a.margins.split(",")] if a.margins else None
+    km2, stages = earth_stages(z, reliability=tuple(map(float, a.reliability.split(","))) if a.reliability else None,
+                               margins=((mg[0], mg[1]), (mg[2], mg[3])) if mg else None)
     base = np.nan_to_num(stages["+ malaria (settlement base)"])
     fields = {"settlement base": base,
               "× old cores (travel, L 800)": base * core_term(travel_distance(z, CORE_SETS["cradles + Rome"], 2.0, 1.0, 1.0), 800)}

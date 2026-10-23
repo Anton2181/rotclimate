@@ -157,7 +157,7 @@ def arable_share(elev):
     return np.vectorize(ARABLE_BY_TIER.get)(tier).astype(np.float32), relief
 
 
-def compute(out):
+def compute(out, margins=None):
     t0 = time.time()
     rs, cs = window_slices()
     elev = wc("elev")[rs, cs]
@@ -173,7 +173,8 @@ def compute(out):
     irr = irrigation(shape)
     arable, relief = arable_share(elev)
     print(f"rivers and relief ({time.time() - t0:.0f}s)", flush=True)
-    res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land])
+    res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land],
+                         margins=margins)
     print(f"analysis ({time.time() - t0:.0f}s)", flush=True)
     full = {}
     for k, v in res.items():
@@ -189,6 +190,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", required=True)
     ap.add_argument("--reuse", action="store_true", help="reuse earth.npz")
+    ap.add_argument("--margins", help="T0,T1,A0,A1: apply harvest.models.margin_reliability to the crop capacity")
+    ap.add_argument("--crop-margins", help="T0,T1,A0,A1 (or T0,T1 for cold only): margins inside the crop model, the dry one on the rain-fed share only")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -198,11 +201,18 @@ def main():
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     else:
-        full, land, irr, arable, lat, lon = compute(out)
+        cm = [float(x) for x in a.crop_margins.split(",")] if a.crop_margins else None
+        margins = ((cm[0], cm[1]), (cm[2], cm[3]) if len(cm) == 4 else None) if cm else None
+        full, land, irr, arable, lat, lon = compute(out, margins)
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     cell_km2 = (KM_DEG / RES) ** 2 * np.cos(np.radians(LAT))
     cap = np.nan_to_num(full["capacity"]) * cell_km2
+    if a.margins:
+        from harvest.models import margin_reliability
+        m = [float(x) for x in a.margins.split(",")]
+        ai = np.nan_to_num(full["P_ann"]) / np.maximum(np.nan_to_num(full["PET_ann"]), 1.0)
+        cap = cap * margin_reliability(np.nan_to_num(full["T_ann"]), ai, full["irr"], (m[0], m[1]), (m[2], m[3]))
     rows = {}
     LON = np.broadcast_to(lon[None, :], shape)
     pts = np.stack([LON.ravel(), LAT.ravel()], 1)
