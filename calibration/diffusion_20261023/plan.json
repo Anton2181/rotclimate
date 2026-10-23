@@ -1,0 +1,8 @@
+{
+  "frozen": "2026-10-23, after the lapse-rate plan failed and before any result of this plan",
+  "finding": "Under r33 the local (within-region) share of the temperature error is 35 % (shape 41 %, offset 24 %). Regressing each cell's local error on its geography over all 31 regions: -1.23 C per decade of distance from the coast (summer -1.42, winter -0.55): inland cells too cold against coastal ones; +0.124 C per degree of latitude (winter +0.175): the within-region equator-to-pole gradient is too weak. Both say the solved temperature is too smooth.",
+  "hypothesis": "The horizontal heat diffusion (heat_diffusion 40,000 m2/s) smooths coast-interior and north-south contrasts that real air keeps. Lower it.",
+  "reference": "output/continentality_range_20261023/reference (r33, same source fingerprint)",
+  "candidates": {"hd20k": {"heat_diffusion": 20000.0}, "hd10k": {"heat_diffusion": 10000.0}},
+  "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once"
+}
