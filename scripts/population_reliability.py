@@ -39,6 +39,7 @@ def main():
     ap.add_argument("--hyde", nargs="+", required=True)
     ap.add_argument("--shp", required=True)
     ap.add_argument("--plan", default=str(ROOT / "output/population_reliability/plan.json"))
+    ap.add_argument("--margins", action="store_true", help="plan 2: cold and dry margin factors instead of the growing season")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     plan = json.loads(Path(a.plan).read_text())["grid"]
@@ -72,22 +73,30 @@ def main():
         out["regions_spread"], _ = region_spread(density, km2, land, lat, lon)
         return out
 
-    settings = [None] + list(itertools.product(plan["start_days"], plan["full_days"], plan["power"]))
+    if a.margins:
+        settings = [None] + [(c, d) for c, d in itertools.product(plan["cold"], plan["dry"]) if c or d]
+    else:
+        settings = [None] + list(itertools.product(plan["start_days"], plan["full_days"], plan["power"]))
     results = {"HYDE by growing season (belt, away from rivers)": by_lgp(hyde_fine)}
     h200 = [n for n in hyde if "200" in n][0]
-    print(f"{'setting':22s} {'base HYDE200':>12s} {'base Han':>9s} | {'cored HYDE0':>11s} {'HYDE200':>8s} {'Han':>6s} {'mean':>6s} | "
+    print(f"{'setting':26s} {'base HYDE200':>12s} {'base Han':>9s} | {'cored HYDE0':>11s} {'HYDE200':>8s} {'Han':>6s} {'mean':>6s} | "
           "belt density by growing season (" + " ".join(f"{lo}-{hi}" for lo, hi in LGP_BINS) + ")")
     print(f"{'HYDE 200 CE':22s} {'':>12s} {'':>9s} | {'':>11s} {'':>8s} {'':>6s} {'':>6s} | "
           + " ".join(f"{v:5.2f}" for v in results["HYDE by growing season (belt, away from rivers)"]))
     for s in settings:
-        _, st = earth_stages(z, reliability=s)
+        _, st = earth_stages(z, margins=s) if a.margins else earth_stages(z, reliability=s)
         base = np.nan_to_num(st["+ malaria (settlement base)"])
         b, c = evaluate(base), evaluate(base * core)
         mean = 0.5 * (c[h200]["spearman"] + c["Han AD 2"]["spearman"])
-        name = "none" if s is None else f"start {s[0]:g} full {s[1]:g} pow {s[2]:g}"
+        if s is None:
+            name = "none"
+        elif a.margins:
+            name = (f"cold {s[0][0]:g}..{s[0][1]:g}" if s[0] else "cold off") + (f" dry {s[1][0]:g}..{s[1][1]:g}" if s[1] else " dry off")
+        else:
+            name = f"start {s[0]:g} full {s[1]:g} pow {s[2]:g}"
         results[name] = dict(setting=s, base=b, cored=c, fit_mean=mean, by_lgp=by_lgp(base))
         hy0 = [n for n in hyde if "_0." in n][0]
-        print(f"{name:22s} {b[h200]['spearman']:12.3f} {b['Han AD 2']['spearman']:9.3f} | {c[hy0]['spearman']:11.3f} "
+        print(f"{name:26s} {b[h200]['spearman']:12.3f} {b['Han AD 2']['spearman']:9.3f} | {c[hy0]['spearman']:11.3f} "
               f"{c[h200]['spearman']:8.3f} {c['Han AD 2']['spearman']:6.3f} {mean:6.3f} | "
               + " ".join(f"{v:5.2f}" for v in results[name]["by_lgp"]), flush=True)
     ranked = sorted(((v["fit_mean"], k) for k, v in results.items() if isinstance(v, dict)), reverse=True)
@@ -97,6 +106,8 @@ def main():
     if close and best[1] != "none":
         def size(k):
             s = results[k]["setting"]
+            if a.margins:      # fewer factors, then the milder (lower t1 / a1, lower t0 / a0)
+                return (sum(x is not None for x in s), *(s[0] or (-99, -99))[::-1], *(s[1] or (-99, -99))[::-1])
             return (s[0], s[1], s[2])
         chosen = min(close, key=size)
     else:

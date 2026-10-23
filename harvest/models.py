@@ -107,6 +107,21 @@ def harvest_reliability(lgp_days, irrigation, start_days, full_days, power=1.0):
     return np.maximum(ramp, np.clip(np.nan_to_num(np.asarray(irrigation, float)), 0, 1))
 
 
+def margin_reliability(mean_temperature, aridity_index, irrigation, cold=None, dry=None):
+    """Share of the mean crop capacity that low-input farming keeps on the
+    margins: frost and a short frost-free season on cold land
+    (clip((T - t0) / (t1 - t0), 0, 1), cold = (t0, t1) in C), failed rains on
+    dry land (clip((P/PET - a0) / (a1 - a0), 0, 1), dry = (a0, a1)), irrigated
+    land keeping its harvest from the dry factor. None turns a factor off."""
+    r = np.ones(np.shape(mean_temperature))
+    if cold is not None:
+        r = r * np.clip((np.asarray(mean_temperature, float) - cold[0]) / (cold[1] - cold[0]), 0, 1)
+    if dry is not None:
+        rd = np.clip((np.asarray(aridity_index, float) - dry[0]) / (dry[1] - dry[0]), 0, 1)
+        r = r * np.maximum(rd, np.clip(np.nan_to_num(np.asarray(irrigation, float)), 0, 1))
+    return r
+
+
 def settlement_fields(crop_capacity, npp, biome, arable, water_distance_km, malaria):
     """Return food components, population before occupation, and settlement index."""
     from scripts.land_people import FARMED_SHARE, NEED_KCAL
