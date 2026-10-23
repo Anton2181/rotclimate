@@ -898,6 +898,36 @@ and New Zealand's ranges. Rain shadows stay too weak: the Columbia Basin
 behind the Cascades simulates 600–1,000 mm against ~300 observed. The
 model has an upslope ascent term but nothing for descending lee air.
 
+### e35: lee drying (rejected)
+
+**e35 (`lee_drying`, off by default)** damps the dynamic ascent where the
+wind blows downslope: `A_dyn × exp(−lee_drying × clip(−(u·∂h/∂x +
+v·∂h/∂y) / 0.05 m/s, 0, 4))`. The plan (`calibration/lee_20261023/plan.json`)
+tests 0.3 and 0.7 against r34, rerun under the new source fingerprint
+(identical, `output/lee_20261023/reference`).
+
+| On r34, gate v2 | S all | training | holdout | mid-latitude | dev12 | Temperature | Rainfall loss |
+|---|---|---|---|---|---|---|---|
+| e35 0.3 | 0.9993 | 0.9997 | 1.0005 | 1.0006 | 0.9981 | −0.0 % | −0.1 % |
+| e35 0.7 | 0.9989 | 0.9995 | 1.0015 | 1.0028 | 0.9962 | −0.1 % | −0.2 % |
+
+Both fail: the overall gain is too small, and two groups worsen. At 0.7:
+
+| Region | Rainfall loss |
+|---|---|
+| Patagonia | 0.794 → 0.742 (−6.5 %) |
+| Manchuria | −2.6 % |
+| Victoria | −2.6 % |
+| New Zealand | 0.614 → 0.638 (+3.9 %) |
+| Alps | 0.278 → 0.299 (+7.7 %) |
+
+Real rain spills over a crest for tens of kilometres. At 56 km, a cell
+just behind the Southern Alps or the Alpine crest still gets much of the
+windward rain. Damping by the local downslope wind dries those cells as
+hard as a true rain shadow. A rain shadow needs the vapour already lost
+upwind, and the model's moisture sink does that once there is enough
+upslope rain. r34 stays.
+
 ## Population side track
 
 Research: [population_density_research_20261023.md](../research_notes/population_density_research_20261023.md).
