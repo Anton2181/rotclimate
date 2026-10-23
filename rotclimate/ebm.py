@@ -80,7 +80,7 @@ def _band_land(lat, profile):
 
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
-           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0):
+           c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -143,7 +143,13 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     # southern (Feulner et al. 2013; Marshall et al. 2014). A northward
     # transport Psi0 (1 - x^2) converges as 2 Psi0 x / (2 pi R^2) W m-2,
     # heating the north and cooling the south, applied to the whole column.
+    # e30b: the overturning gives its heat up over the sea (the North Atlantic
+    # in winter), so a share cross_ocean of it goes to the sea column alone,
+    # concentrated by its band's sea fraction (at most x 2), and reaches land
+    # only through the sea air.
     q_cross = cross_transport * 1e15 * 2.0 * x / (2.0 * np.pi * 6.371e6 ** 2)
+    q_cross_l = (1.0 - cross_ocean) * q_cross
+    q_cross_o = q_cross * (1.0 - cross_ocean + cross_ocean * np.minimum(1.0 / fo, 2.0))
     Tl = 15 - 30 * x**2
     To = Tl.copy()
     out_l = np.zeros((year_days, N))
@@ -161,8 +167,8 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
         C_Od = C_O * (1.0 - c_ocean_season * w[None, :] * s_nh[:, None])       # [day, band]
     for yr in range(years):
         for d in range(year_days):
-            Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR + q_cross
-            Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR + q_cross
+            Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - A_OLR + q_cross_l
+            Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - A_OLR + q_cross_o
             if c_ocean_season > 0:
                 # a deepening layer entrains water from below the mixed layer
                 # (taken at last year's annual mean); a shoaling one leaves its
@@ -205,6 +211,8 @@ class ZonalClimate:
             # hemisphere is the one that loses the heat
             sign = -1.0 if getattr(params, "ebm_land", "") == "earth_mirrored" else 1.0
             extra["cross_transport"] = round(sign * params.cross_equatorial_transport, 3)
+            if getattr(params, "cross_transport_ocean", 0.0) > 0:
+                extra["cross_ocean"] = round(params.cross_transport_ocean, 3)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),
                                  round(params.perihelion_after_solstice, 2),
                                  round(params.winter_solstice_day, 2), params.year_days, **extra)
