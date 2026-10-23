@@ -1,5 +1,10 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Development resumed on Earth r31:** the [latest rainfall report](reports/RAINFALL_R31_20261023.md)
+records the restored 31-region reference, resumable verified benchmarks and
+bounded rainfall experiments. The development reference and the published
+atlas packets are tracked separately; this round has not replaced atlas data.
+
 **Rainfall priority, 23 October 2026:** Earth calibration now has a rainfall-only
 objective, with explicit local annual and monthly error diagnostics. The
 [rainfall accuracy report](reports/RAINFALL_ACCURACY_20261023.md) records the

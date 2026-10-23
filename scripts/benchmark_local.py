@@ -25,6 +25,8 @@ import argparse
 import json
 import os
 import sys
+import time
+from dataclasses import asdict
 from multiprocessing import Pool
 from pathlib import Path
 
@@ -37,7 +39,10 @@ import numpy as np  # noqa: E402
 from earth_benchmark import load_params  # noqa: E402
 from rainfall_metrics import local_metrics  # noqa: E402
 from rotclimate import earth  # noqa: E402
+from rotclimate.config import Params  # noqa: E402
 from rotclimate.koppen import monthly_stats  # noqa: E402
+from scipy.stats import spearmanr  # noqa: E402
+from local_benchmark_protocol import case_hash, file_hash, freeze, reusable, write_json  # noqa: E402
 
 DEV19 = ["california", "iberia", "southeast_us", "levant", "central_asia", "east_china", "east_australia", "mexico",
          "chile", "cape", "sw_australia", "south_brazil", "japan",
@@ -57,8 +62,8 @@ BINS = dict(
 
 
 def spearman(a, b):
-    ra, rb = np.argsort(np.argsort(a)), np.argsort(np.argsort(b))
-    return float(np.corrcoef(ra, rb)[0, 1]) if len(a) > 2 else None
+    if len(a) < 3 or np.ptp(a) == 0 or np.ptp(b) == 0: return None
+    return float(spearmanr(a, b).statistic)
 
 
 def temperature_metrics(Ts, To):
@@ -67,7 +72,7 @@ def temperature_metrics(Ts, To):
     ann = err.mean(0)
     rng = (Ts.max(0) - Ts.min(0)) - (To.max(0) - To.min(0))
     sa, oa = Ts.mean(0), To.mean(0)
-    pattern = float(np.corrcoef(sa - sa.mean(), oa - oa.mean())[0, 1]) if len(sa) > 2 else None
+    pattern = float(np.corrcoef(sa - sa.mean(), oa - oa.mean())[0, 1]) if len(sa) > 2 and np.ptp(sa) > 0 and np.ptp(oa) > 0 else None
     return dict(monthly_mae_C=float(np.abs(err).mean()), monthly_rmse_C=float(np.sqrt((err ** 2).mean())),
                 annual_bias_C=float(ann.mean()), annual_mae_C=float(np.abs(ann).mean()),
                 range_error_C=float(rng.mean()), range_mae_C=float(np.abs(rng).mean()),
@@ -76,25 +81,52 @@ def temperature_metrics(Ts, To):
 
 
 def one(job):
-    region, params_path, overrides, cell_km, out, specs = job
+    region, params_dict, cell_km, out, specs, run_identity = job
+    started = time.monotonic()
     earth.REGIONS.update(specs)
-    p = load_params(params_path).replace(**overrides)
+    p = Params(**params_dict)
     case = earth.region_case(region, cell_km)
-    res = earth.run_case(p, case, steps=p.steps_per_year)
+    grid_identity = case_hash(case, observed_sea=p.sst_source == 'observed')
+    record_path = Path(out)/'cases'/f'{region}.json'
+    cells_path = Path(out)/'cells'/f'{region}.npz'
+    previous = reusable(record_path, run_identity, grid_identity, cells_path)
+    if previous is not None:
+        print(f'{region}: reusing verified result', flush=True)
+        return previous
+    res = None
+    try:
+        res = earth.run_case(p, case, steps=p.steps_per_year)
+        if res.numerics.get('all_checks_passed') is not True:
+            raise RuntimeError('Observed numerical checks failed')
+        if not np.isfinite(res.T).all() or not np.isfinite(res.P).all() or (res.P < 0).any():
+            raise ValueError('Invalid climate fields')
+    except Exception as error:
+        record = dict(region=region, status='failed', identity=run_identity, case_identity=grid_identity,
+                      error=repr(error), numerics=getattr(res, 'numerics', None), seconds=time.monotonic()-started)
+        write_json(record_path, record)
+        return record
     pr = res.params
     st = monthly_stats(res.T, res.P, res.days, pr.year_days, summer_solstice=pr.winter_solstice_day + pr.year_days / 2)
     g = case.grid
     m = g.inmap & g.land & np.isfinite(case.obs_T).all(0) & np.isfinite(case.obs_P).all(0)
+    if not m.any(): raise ValueError('No scored land cells: '+region)
     Ts, To = st["Tm"][:, m], np.asarray(case.obs_T)[:, m]
     Ps, Po = np.maximum(st["Pm"][:, m], 0.0), np.asarray(case.obs_P)[:, m]
     rain = local_metrics(np.maximum(st["Pm"], 0.0), np.nan_to_num(case.obs_P), m)
     rain["annual_spearman"] = spearman(Ps.sum(0), Po.sum(0))
-    rec = dict(region=region, cells=int(m.sum()), temperature=temperature_metrics(Ts, To), rain=rain,
+    rec = dict(region=region, status='passed', identity=run_identity, case_identity=grid_identity,
+               cells=int(m.sum()), temperature=temperature_metrics(Ts, To), rain=rain,
                numerics=getattr(res, "numerics", None))
     ii, jj = np.nonzero(m)
-    np.savez_compressed(Path(out) / "cells" / f"{region}.npz", Ts=Ts.astype(np.float32), To=To.astype(np.float32),
-                        Ps=Ps.astype(np.float32), Po=Po.astype(np.float32), lat=g.lat[m], lon=case.lon[m],
-                        elev=g.elev[m], elev_max=g.elev_max[m], coast_km=case.coast_km[m], i=ii, j=jj)
+    temporary = cells_path.with_suffix('.tmp')
+    with temporary.open('wb') as stream:
+        np.savez_compressed(stream, Ts=Ts.astype(np.float32), To=To.astype(np.float32),
+                            Ps=Ps.astype(np.float32), Po=Po.astype(np.float32), lat=g.lat[m], lon=case.lon[m],
+                            elev=g.elev[m], elev_max=g.elev_max[m], coast_km=case.coast_km[m], i=ii, j=jj)
+    temporary.replace(cells_path)
+    rec.update(cells_sha256=file_hash(cells_path), seconds=time.monotonic()-started)
+    write_json(record_path, rec)
+    print(f'{region}: verified, rainfall loss {rain["loss"]:.4f}', flush=True)
     return rec
 
 
@@ -154,19 +186,44 @@ def main():
     a = ap.parse_args()
     if a.regions == ["dev31"]:
         a.regions = DEV31
+    if len(set(a.regions)) != len(a.regions): ap.error('Duplicate regions change weighting')
+    if a.workers < 1: ap.error('Use at least one worker')
     specs = {r: v for r, v in json.loads(DEV12_SPECS.read_text()).items() if r in a.regions}
     if a.region_specs:
         specs.update(json.loads(Path(a.region_specs).read_text()))
     out = Path(a.out)
     (out / "cells").mkdir(parents=True, exist_ok=True)
+    (out / 'cases').mkdir(exist_ok=True)
     overrides = json.loads(a.set)
+    p = load_params(a.fit).replace(**overrides)
+    if not (p.t_require_convergence and p.moisture_require_convergence and
+            p.solver_require_convergence and p.moisture_residual_tol > 0):
+        ap.error('Local accuracy benchmarks require strict numerical criteria')
+    definitions = {**earth.REGIONS, **specs}
+    if not set(a.regions) <= set(definitions): ap.error('Unknown region')
+    sources = list((ROOT/'rotclimate').glob('*.py')) + [Path(__file__), ROOT/'scripts/rainfall_metrics.py',
+               ROOT/'scripts/local_benchmark_protocol.py', ROOT/'scripts/earth_benchmark.py']
+    sources += [earth.WORLDCLIM/f'wc2.1_5m_{name}.zip' for name in ['tavg','prec','elev']]
+    if p.sst_source == 'observed': sources.append(earth.WOA_SST)
+    protocol = dict(params=asdict(p), regions=a.regions, region_specs={r:definitions[r] for r in a.regions},
+                    cell_km=a.cell_km, pad_km=1100.,
+                    sources={str(path.relative_to(ROOT)):file_hash(path) for path in sources},
+                    note='Reused development regions; actual derived model inputs are hashed per case.')
+    run_identity = freeze(out/'protocol.json', protocol)
+    # Generate shared fetch caches once, before parallel region preparation.
+    earth.west_fetch(1700.)
+    earth.west_fetch(5100.)
     with Pool(a.workers) as pool:
-        recs = {r["region"]: r for r in pool.map(one, [(r, a.fit, overrides, a.cell_km, str(out), specs) for r in a.regions],
+        recs = {r["region"]: r for r in pool.map(one, [(r, asdict(p), a.cell_km, str(out), specs, run_identity) for r in a.regions],
                                                   chunksize=1)}
-    summary = dict(fit=a.fit, overrides=overrides, cell_km=a.cell_km, regions=recs,
+    failures = [r for r,row in recs.items() if row['status'] != 'passed']
+    if failures:
+        write_json(out/'summary.json', dict(complete=False, identity=run_identity, regions=recs, failures=failures))
+        raise SystemExit('Failed cases retained; no aggregate score: '+', '.join(failures))
+    summary = dict(complete=True, identity=run_identity, fit=a.fit, overrides=overrides, cell_km=a.cell_km, regions=recs,
                    groups={g: group_means(recs, n) for g, n in GROUPS.items() if any(x in recs for x in n)},
                    all=group_means(recs, a.regions), attribution=attribution(out, a.regions))
-    (out / "summary.json").write_text(json.dumps(summary, indent=1))
+    write_json(out/'summary.json', summary)
     print(f"{'region':15s} {'T mMAE':>7s} {'T aMAE':>7s} {'T bias':>7s} {'rngErr':>7s} {'<=2C':>5s} {'anom r':>6s} | "
           f"{'P mMAE':>7s} {'logRMSE':>7s} {'<=25%':>6s} {'rho':>5s} {'loss':>6s}")
     for r in a.regions:

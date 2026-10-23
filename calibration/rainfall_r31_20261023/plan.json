@@ -1,0 +1,15 @@
+{
+  "reference": "calibration/local_accuracy_20261023/r31_params.json",
+  "reference_revision": "f02ed84",
+  "reference_run": "output/rainfall_r31_20261023/reference",
+  "hypothesis": "Stronger warm-column moisture convergence can improve deficient monsoon rainfall and seasonal contrast while the r31 sea and temperature physics stay fixed",
+  "parameter": "flux_convergence",
+  "control": 0.15,
+  "candidates": [0.30, 0.45],
+  "pilot_regions": ["california", "central_asia", "east_china", "east_australia", "japan", "mexico"],
+  "pilot_requirements": "Mean rainfall loss and monthly rainfall MAE must improve; mean temperature MAE must not worsen by more than 1%; no regional monthly rainfall MAE increase greater than max(2 mm, 10%); select at most one amplitude for all 31 development regions",
+  "development_gate": "Unchanged policy_v2 rules, referenced to the restored r31 run: S improves by at least 0.5%, no group worsens, neither temperature MAE nor rainfall loss worsens by more than 1%",
+  "transfer": "Only after the full development gate passes: paired 28 km California, western Europe, Japan and New Zealand; then the six established validation regions once for the selected milestone. These have been evaluated previously and are not fresh independent validation.",
+  "accounting": "Uses the existing explicit low-level convergence import in the moisture equation; this is not a globally conservative atmospheric dynamics model",
+  "publication": "A pilot or benchmark gain alone does not update an atlas. Adopted Earth physics must be carried through map calibration and native atlas verification."
+}
