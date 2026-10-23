@@ -423,7 +423,7 @@ From r29 to r31 the 19 original regions' monthly temperature error goes
 2.230 → 2.127 (r30) → 1.947 °C (r31). On the full 31 regions: 2.314 (r30) →
 2.101 °C (r31). The rainfall loss is level: 0.484 → 0.481.
 
-![Per-region error, r29 to r32](../output/local_20261023/progress_r29_r32.png)
+![Per-region error, r29 to r33](../output/local_20261023/progress_r29_r33.png)
 
 The figure is drawn by `scripts/plot_local_progress.py`.
 
