@@ -88,6 +88,10 @@ def w_sat(T):
 
 
 GYRE_LAT = (30.0, 40.0)          # e42: open sea poleward to 30 deg: no cold current; to 40 deg: the full one
+TROPICAL_SST = (26.0, 28.0)      # e47: tropical disturbances form over seas this warm (none below, all above)
+TROPICAL_OPEN = (0.3, 0.6)       # e47: ... and this open (sea share within TROPICAL_OPEN_KM)
+TROPICAL_OPEN_KM = 800.0
+COLD_HIGH_C = 10.0               # e48: a high's air this far below freezing steers all of its storms around
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
 SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
@@ -243,6 +247,15 @@ class ClimateModel:
         gx = d_east(Ls) * cells_per_100km
         self.side = np.clip(gx / (0.08 * 250.0 / p.current_scale_km), -1, 1) * (~g.land)
         self.side = ndi.gaussian_filter(self.side, 1.0 * cells_per_100km)
+        self.tropical_open = None
+        if p.tropical_storms > 0:
+            # e47: tropical cyclones and monsoon depressions grow over open
+            # warm ocean; narrow seas ringed by land (the Red Sea, the Persian
+            # Gulf, the Mediterranean) breed none though they are as warm:
+            # desert air, shear and too little warm water. Sea share within
+            # ~800 km: none at 0.3 or less, all from 0.6.
+            share = gauss((~g.land).astype(float), TROPICAL_OPEN_KM / g.cell_km)
+            self.tropical_open = np.clip((share - TROPICAL_OPEN[0]) / (TROPICAL_OPEN[1] - TROPICAL_OPEN[0]), 0.0, 1.0)
         self.gyre = None
         if p.current_gyre > 0:
             # e42: a cold west-coast current is the eastern limb of a
@@ -864,7 +877,34 @@ class ClimateModel:
                 shift = p.storm_reach * self.synoptic_scale * np.clip(side, 0, 1)
                 storm = np.maximum(storm, np.exp(-((lat - (phi_h + so - shift)) / sw) ** 2)
                                    * (1 - p.storm_seasonality * s) * np.clip(side, 0, 1) * p.storm_asym)
+            if p.cold_high_storms > 0 and getattr(self, "last_pres", None) is not None and T_prev is not None:
+                # e48: depressions travel around a cold anticyclone, not through
+                # it: the Siberian High keeps the winter storm track off
+                # Manchuria and Korea (Harbin 3 mm in January, the model 38 and
+                # 5 C too warm: the storm field put the full Pacific track over
+                # the frozen plain and mixed in the seas' heat and water). The
+                # storm field (lift and eddy exchange of heat and water) falls
+                # by exp(-k x hPa) under the highs the pressure winds build
+                # (last temperature pass) where their air is below freezing
+                # (sea-level equivalent; all of k from -10 C): the mild highs
+                # over Texas or the autumn continent keep their storms
+                cold = np.clip(-T_prev / COLD_HIGH_C, 0.0, 1.0)
+                storm = storm * np.exp(-p.cold_high_storms * cold * np.maximum(self.last_pres, 0.0) / 100.0)
             eddy = eddy_exchange_rate(p.eddy_rate, storm, s, p.eddy_seasonality)
+            tropical = None
+            if p.tropical_storms > 0:
+                # e47: monsoon depressions and tropical cyclones form over seas
+                # warmer than ~26.5 C (Gray 1968) and carry the warm sea's
+                # water hundreds of kilometres inland: half the monsoon rain of
+                # central India (Hunt & Fletcher 2019), the Baiu and typhoon
+                # rain of southern Japan, the Gulf coast's summer storms. The
+                # storm track lives in the westerlies only, so the sub-tropical
+                # coasts got their summer rain from the mean wind alone.
+                # Storm-track equivalent: lift and moisture exchange as the
+                # mid-latitude storms', not heat.
+                warm = np.where(ocean, np.clip((SST - TROPICAL_SST[0]) / (TROPICAL_SST[1] - TROPICAL_SST[0]), 0.0, 1.0)
+                                * self.tropical_open, 0.0)
+                tropical = p.tropical_storms * gauss(warm, p.tropical_storm_km / g.cell_km)
             sigE = p.eddy_scale_km / g.cell_km
             # e38: water travels a shorter way than heat: an eddy that carries
             # moist air poleward or inland lifts and cools it and rains much of
@@ -1029,6 +1069,8 @@ class ClimateModel:
             if p.subsidence_summer > 0:
                 sub = sub * (1.0 + p.subsidence_summer * s)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
+            if tropical is not None:
+                A_dyn = A_dyn + p.storm_track * tropical
             if p.subgrid_orographic > 0:
                 # e34: hills smaller than the grid force air up whatever way it
                 # blows, and their crests wring out rain the smoothed terrain
@@ -1103,7 +1145,8 @@ class ClimateModel:
             else:
                 instab = 1.0
             from .moisture import ocean_rate, solve_moisture
-            exchange = eddy * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
+            eddy_w = eddy if tropical is None else eddy + p.eddy_rate * tropical / DAY
+            exchange = eddy_w * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None

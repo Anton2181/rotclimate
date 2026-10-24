@@ -106,6 +106,9 @@ class Params:
     land_amplitude: float = 1.0       # v4: scale of the continental seasonal swing
     storm_asym: float = 0.0           # v5: storm track stronger on the warm-current side
     storm_reach: float = 0.0          # v5: ... and this many degrees further equatorward
+    tropical_storms: float = 0.0      # e47: storms over seas warmer than ~26-28 C (storm-track equivalent; 0 = off)
+    tropical_storm_km: float = 600.0  # e47: ... and their reach inland from that sea
+    cold_high_storms: float = 0.0     # e48: storms steered around the thermal highs, exp(-k x hPa) (0 = off)
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     # time-step independence: soil-moisture memory in days (0 = the legacy
     # 0.75-per-step rule) and the most temperature/wind iterations within

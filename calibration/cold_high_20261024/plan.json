@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-10-24, after single-region probes on 15 regions (output/cold_high_probe: the pressure-only form ch0.02-0.08 and the cold-air form cc0.05-0.2) and before any dev31 result with e48",
+ "finding": "r36's winter rain is far too high on the cold continents: DJF observed against model, Manchuria 19 / 126 mm, the North China Plain 26 / 100, Korea 94 / 271, with Manchuria 4.3 C too warm (Harbin in January: column supersaturated, the full storm track over the frozen plain, the eddy exchange importing 87 mm a month). The storm field is a latitude band strengthened on the warm-current side of the basin, so the Pacific storm track sits over Manchuria and mixes in the seas' heat and water; the real one runs south and east of the Siberian High.",
+ "hypothesis": "e48 (cold_high_storms, default 0): the storm field (lift, eddy exchange of heat and water) falls by exp(-k x hPa) under the thermal highs the pressure winds build, where their air is below freezing (sea-level equivalent; all of k from -10 C). Probes on 15 regions: mean rain loss 0.451 -> 0.441 / 0.434 / 0.428 and T 1.905 -> 1.872 / 1.865 / 1.869 C at k 0.05 / 0.1 / 0.2; Manchuria 0.478 -> 0.390 / 0.331 / 0.290; Japan's temperature 2.00 -> 1.99 / 2.02 / 2.07 C (Hokkaido cools), which bounds k for the former holdout group. The pressure-only form (no cold-air weight) also cut the autumn and the mild winters of the south-east US, Texas, the Midwest and Anatolia and is not a candidate.",
+ "reference": "calibration/local_accuracy_20261023/r36_params.json rerun on dev31 under the current source fingerprint (output/cold_high_20261024/reference)",
+ "candidates": {
+  "cc0.05": {"cold_high_storms": 0.05},
+  "cc0.1": {"cold_high_storms": 0.1}
+ },
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); among passing candidates the highest S is selected before the paired 28 km check and the sealed six, run once. scripts/city_rain.py and scripts/rain_gradients.py are reported alongside and do not decide."
+}
