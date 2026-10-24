@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-10-24, after r36 was adopted and before any result on r36",
+ "why": "r36 (e44) imports the water that large-scale convergence brings. Two ideas rejected on r35 change that water: e42 (current_gyre, no cold current in seas shut off poleward: the Arabian Sea and Bay of Bengal 3-6 C warmer, sea-surface MAE 2.864 -> 2.685 C; on r35 gate S 0.9986, cities 0.752 -> 0.696) and e41 (moisture_wind_factor, column water carried by the lowest ~3 km's wind, faster than the surface wind; on r35 helped eastern Australia, Iran, Manchuria and cost western Europe). On r36 the warmer sea's water feeds the monsoon convergence.",
+ "reference": "calibration/local_accuracy_20261023/r36_params.json rerun on dev31 under the current source fingerprint (output/r36_round_20261024/reference)",
+ "candidates": {
+  "gyre1": {"current_gyre": 1.0},
+  "mwf1.5": {"moisture_wind_factor": 1.5},
+  "gyre1_mwf1.5": {"current_gyre": 1.0, "moisture_wind_factor": 1.5}
+ },
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); among passing candidates the highest S is selected before the paired 28 km check and the sealed six, run once. scripts/city_rain.py is reported alongside and does not decide."
+}
