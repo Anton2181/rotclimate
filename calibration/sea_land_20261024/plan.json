@@ -1,0 +1,24 @@
+{
+ "frozen": "2026-10-24, after the rejected sea-only refit (calibration/sea_refit_20261024: sea MAE 2.94 -> 2.06 C, land gate S 1.1696) and before any result of this search",
+ "why": "The land settings were fitted against a sea 3.5-4.7 C too cold in enclosed seas and with false cold currents (e42); correcting the sea alone breaks the land. Search the sea and the land/rain settings that balance it together, scored as the gate scores, starting from r36.",
+ "start": "calibration/local_accuracy_20261023/r36_params.json",
+ "set": {},
+ "reference": "output/sea_refit_20261024/reference",
+ "knobs": [
+  ["sst_offset", -4.5, 1.0],
+  ["current_strength", 1.0, 8.0],
+  ["subpolar_current", 1.0, 12.0],
+  ["inland_sea_warming", 1.0, 9.0],
+  ["current_gyre", 0.0, 1.0],
+  ["sea_winter_mixing", 0.0, 0.9],
+  ["land_offset", -2.5, 1.5],
+  ["land_amplitude", 0.8, 1.1],
+  ["ocean_rh", 0.62, 0.8],
+  ["eddy_rate", 0.7, 1.8],
+  ["precip_tau_days", 7.0, 15.0],
+  ["convective_rh", 0.55, 0.72]
+ ],
+ "sigma": 0.25, "popsize": 8, "seed": 3, "evals": 72,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "The best candidate takes the unchanged gate (policy_v2) against a fresh r36 reference under the then source fingerprint, the paired 28 km check and the sealed six once; scripts/city_rain.py is reported alongside."
+}
