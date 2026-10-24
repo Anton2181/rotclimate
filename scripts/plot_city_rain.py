@@ -27,7 +27,8 @@ from city_rain import cities, match, stats  # noqa: E402
 SURFACE, INK, INK_SOFT, GRID = "#fcfcfb", "#0b0b0b", "#52514e", "#e4e3df"
 SERIES = ["#eb6834", "#2a78d6", "#1baf7a"]          # reference categorical slots 2, 1, 3
 OTHER = "#b9b8b2"
-NAMES = {"north_india": "north India", "east_china": "east China", "southeast_us": "south-east US"}
+NAMES = {"north_india": "north India", "east_china": "east China", "southeast_us": "south-east US",
+         "manchuria": "Manchuria", "korea": "Korea", "north_china_plain": "North China Plain", "japan": "Japan"}
 
 
 def main():
