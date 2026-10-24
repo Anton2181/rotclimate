@@ -199,6 +199,9 @@ SPACE_E36_NEW = [("ocean_heat_capacity", 0.7, 2.5), ("ocean_mixed_seasonality", 
                  ("continental_mean", 0.0, 6.0), ("continentality_lat", 0.0, 40.0),
                  ("subgrid_orographic", 0.0, 5.0), ("dry_coupling", 0.0, 4.0)]
 SPACE_E36_MAP = SPACE_E3B5 + SPACE_E36_NEW
+# ... plus r36's water that large-scale convergence brings in (e17/e44): off at
+# its lower bound, so the start again reproduces the fit
+SPACE_E44_MAP = SPACE_E36_MAP + [("flux_convergence", 0.0, 1.0), ("flux_scale_km", 300.0, 2500.0)]
 
 def _set_space(space):
     global SPACE, NAMES, LO, HI
@@ -532,7 +535,7 @@ def main():
                                                            "whittaker", "whittaker-broad", "whittaker-covered"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",
-                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "storm-water", "new", "world", "worldplus"])
+                                                    "e3b", "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e44map", "e6map", "rain", "storm-water", "new", "world", "worldplus"])
     ap.add_argument("--seeds", default="", help="comma list of surroundings seeds (ensemble)")
     ap.add_argument('--ensemble-objective', choices=['climate', 'scores'], default='climate',
                     help='climate scores the field average published by the atlas; scores reproduces legacy layout-score averaging')
@@ -589,6 +592,8 @@ def main():
         _set_space(SPACE_E3B5)
     elif a.physics == "e36map":
         _set_space(SPACE_E36_MAP)
+    elif a.physics == "e44map":
+        _set_space(SPACE_E44_MAP)
     elif a.physics == "e6map":
         _set_space(SPACE_E6_MAP)
     elif a.physics == "rain":
@@ -605,7 +610,7 @@ def main():
                           defaults=dict(downsample=16, steps_per_year=25, picard_iters=2),
                           downsample=a.downsample, steps=a.steps, picard=a.picard)
     if a.physics in ("v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new", "e3b",
-                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e6map", "rain", "new", "world", "worldplus"):
+                     "e3bnew", "e4", "e4new", "e5", "e5new", "e3b5", "e36map", "e44map", "e6map", "rain", "new", "world", "worldplus"):
         base = base.replace(beyond_style="procedural")
     base = base.replace(**{k: (tuple(v) if isinstance(v, list) else v)
                            for k, v in json.loads(a.set).items()})
