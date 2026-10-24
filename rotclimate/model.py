@@ -88,6 +88,8 @@ def w_sat(T):
 
 
 GYRE_LAT = (30.0, 40.0)          # e42: open sea poleward to 30 deg: no cold current; to 40 deg: the full one
+DEEP_SEA_M = (100.0, 400.0)      # e50: winter overturning reaches stored heat in none of a sea this shallow, all of one this deep
+SHELF_KM = (50.0, 150.0)         # e50: ... where no depth is known, the shelf ends this far from the coast
 TROPICAL_SST = (26.0, 28.0)      # e47: tropical disturbances form over seas this warm (none below, all above)
 TROPICAL_OPEN = (0.3, 0.6)       # e47: ... and this open (sea share within TROPICAL_OPEN_KM)
 TROPICAL_OPEN_KM = 800.0
@@ -279,6 +281,22 @@ class ClimateModel:
             # ~800 km: none at 0.3 or less, all from 0.6.
             share = gauss((~g.land).astype(float), TROPICAL_OPEN_KM / g.cell_km)
             self.tropical_open = np.clip((share - TROPICAL_OPEN[0]) / (TROPICAL_OPEN[1] - TROPICAL_OPEN[0]), 0.0, 1.0)
+        self.sea_deep = None
+        if p.sea_winter_mixing > 0 and p.winter_mixing_deep:
+            # e50: winter overturning draws on stored heat only where the sea
+            # is deep: the Mediterranean (~1,500 m) is 13-15 C below 100 m
+            # all year and 14-17 C at the surface in January, the Black Sea
+            # 8.5 and 8.5; the Yellow Sea, the Bohai and the North Sea are
+            # 30-55 m shelves that follow the air (Bohai 2 C in January).
+            # Overturning every enclosed sea (e19) warmed the Yellow Sea's and
+            # the Sea of Japan's coasts into Korea's too-wet winters.
+            if g.sea_depth is not None:
+                depth = g.sea_depth
+            else:
+                coast_km = ndi.distance_transform_edt(~g.land) * g.cell_km
+                depth = DEEP_SEA_M[0] + (DEEP_SEA_M[1] - DEEP_SEA_M[0]) * np.clip(
+                    (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
+            self.sea_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
         self.gyre = None
         if p.current_gyre > 0:
             # e42: a cold west-coast current is the eastern limb of a
@@ -621,12 +639,13 @@ class ClimateModel:
             # the summer's stored heat and stays warm (the winter Mediterranean
             # at 15-17 C, not the 7-9 C of a sea that follows the land), while
             # the shallow, stable summer layer heats with the land
-            pull = np.where(Tl < To, (1.0 - p.sea_winter_mixing) * pull, pull)
+            mix = p.sea_winter_mixing if self.sea_deep is None else p.sea_winter_mixing * self.sea_deep
+            pull = np.where(Tl < To, (1.0 - mix) * pull, pull)
         sst = To + cur + pull
         if p.lake_coupling > 0:     # physics v4: lakes / small seas follow the land
             lake = p.lake_coupling * self.lakeness * (Tl - sst)
             if p.sea_winter_mixing > 0:
-                lake = np.where(Tl < sst, (1.0 - p.sea_winter_mixing) * lake, lake)
+                lake = np.where(Tl < sst, (1.0 - mix) * lake, lake)
             sst = sst + lake
             sst = np.maximum(sst, -1.8)          # sea water freezes, ice insulates
         return sst

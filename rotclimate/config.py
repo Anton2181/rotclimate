@@ -110,6 +110,7 @@ class Params:
     tropical_storm_km: float = 600.0  # e47: ... and their reach inland from that sea
     cold_high_storms: float = 0.0     # e48: storms steered around the thermal highs, exp(-k x hPa) (0 = off)
     monsoon_descent: float = 0.0      # e49: column drying (1/day) per mm/day of the monsoon heating that drives descent here (0 = off)
+    winter_mixing_deep: bool = False  # e50: only deep seas overturn in winter (sea_winter_mixing x depth share); shelf seas follow the air
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     # time-step independence: soil-moisture memory in days (0 = the legacy
     # 0.75-per-step rule) and the most temperature/wind iterations within

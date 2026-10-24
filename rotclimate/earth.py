@@ -233,6 +233,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
+    g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 
@@ -479,6 +480,54 @@ def monsoon_descent_at(lat, lon, mirrored=False):
 
 
 WOA_SST = CACHE / "woa18_sst_1deg.npz"     # scripts/build_woa_sst.py
+WOA_PROFILES = CACHE.parent / "woa18"      # woa18_decav_tMMan01.csv.gz, as scripts/build_woa_sst.py
+
+
+def sea_depth():
+    """e50: sea depth (m, to the 1,500 m of the monthly profiles) on a
+    1-degree globe: the deepest level with data in the World Ocean Atlas 2018
+    January temperature profiles (0 over land). None when the profiles are
+    missing. (field [180, 360], rows from 89.5 S)."""
+    key = CACHE / "woa18_depth_1deg.npz"
+    if key.exists():
+        return np.load(key)["depth"]
+    src = WOA_PROFILES / "woa18_decav_t01an01.csv.gz"
+    if not src.exists():
+        return None
+    import csv
+    import gzip
+
+    depth = np.zeros((180, 360))
+    levels = None
+    with gzip.open(src, "rt") as fh:
+        for row in csv.reader(fh):
+            if not row:
+                continue
+            if row[0].startswith("#"):
+                text = ",".join(row)
+                if "DEPTHS" in text:
+                    levels = np.array([float(x) for x in text.split(":")[-1].split(",") if x.strip()])
+                continue
+            vals = [x.strip() != "" for x in row[2:]][:len(levels)]
+            if any(vals):
+                i, j = int(np.floor(float(row[0]) + 90.0)), int(np.floor(float(row[1]) + 180.0))
+                depth[i, j] = levels[max(k for k, v in enumerate(vals) if v)]
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, depth=depth.astype(np.float32))
+    return depth
+
+
+def sea_depth_at(lat, lon):
+    """e50: sea_depth at points (bilinear, land counting as 0 m)."""
+    from scipy import ndimage as ndi
+
+    D = sea_depth()
+    if D is None:
+        return None
+    i = np.asarray(lat, float) + 89.5
+    j = (np.asarray(lon, float) + 179.5) % 360.0
+    wrap = np.concatenate([D, D[:, :1]], axis=1)
+    return ndi.map_coordinates(wrap, [i, j], order=1, mode="nearest")
 
 
 def observed_sst(lat, lon, mirrored=False):

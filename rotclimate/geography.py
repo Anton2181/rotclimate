@@ -230,6 +230,7 @@ class Grid:
     sea_reach: np.ndarray | None = None      # e42: latitude where the sea due poleward first meets land (Earth mode; other grids compute their own)
     cloud_ref: np.ndarray | None = None      # e43: [12, ny, nx] the globe's land-mean cloud cover at each cell's latitude, from WorldClim (Earth mode)
     descent: np.ndarray | None = None        # e49: [12, ny, nx] the descent the monsoons drive to their west, from WorldClim's rain (Earth mode; other grids compute their own)
+    sea_depth: np.ndarray | None = None      # e50: sea depth (m, to 1,500) from the World Ocean Atlas 2018 profiles (Earth mode; other grids take a shelf by distance from the coast)
     obs_sst: np.ndarray | None = None   # Earth mode: observed monthly sea-surface temperature [12, ny, nx]
 
     @property

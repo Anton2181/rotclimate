@@ -216,6 +216,7 @@ def main():
     earth.sea_reach()
     earth.land_cloud()
     earth.monsoon_descent()
+    earth.sea_depth()
     with Pool(a.workers) as pool:
         recs = {r["region"]: r for r in pool.map(one, [(r, asdict(p), a.cell_km, str(out), specs, run_identity) for r in a.regions],
                                                   chunksize=1)}
