@@ -228,6 +228,7 @@ class Grid:
     chi_far_long: np.ndarray | None = None   # e23: westward land share over ~5,100 km (Earth mode; other grids compute their own)
     chi_pole: np.ndarray | None = None       # e31: poleward land reachable by shallow cold air, ~2,000 km (Earth mode; other grids compute their own)
     sea_reach: np.ndarray | None = None      # e42: latitude where the sea due poleward first meets land (Earth mode; other grids compute their own)
+    cloud_ref: np.ndarray | None = None      # e43: [12, ny, nx] the globe's land-mean cloud cover at each cell's latitude, from WorldClim (Earth mode)
     obs_sst: np.ndarray | None = None   # Earth mode: observed monthly sea-surface temperature [12, ny, nx]
 
     @property

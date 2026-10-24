@@ -183,8 +183,10 @@ class Params:
     eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
+    cloud_reference: str = "domain"   # e43: cloud_radiation against the domain's own latitude mean ("domain") or the whole globe's land ("earth", Earth grids)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)
+    flux_scale_km: float = 300.0      # e44: scale (km) of the low-level convergence that brings water in (e17 used 300)
     slp_large: float = 0.0            # e5: hPa of low pressure per K of warm anomaly, planetary scale (0 with slp_local 0 = off)
     slp_local: float = 0.0            # e5: hPa/K at the boundary-layer scale (sea breezes, heat lows)
     slp_scale_km: float = 2000.0      # e5: smoothing of the planetary-scale pressure

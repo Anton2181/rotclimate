@@ -1,0 +1,12 @@
+{
+ "frozen": "2026-10-24, after single-region probes (north India, Mexico, eastern Australia, south-east US) and before any dev31 result for e44",
+ "finding": "North India holds 406 of the 3,667 cities and 72 % of the city rainfall error (log RMSE 1.92, bias -91 %). Its July budget: rain 28 mm (obs 224), mean-wind advection +1, eddy exchange -7, land evaporation 20. The model moves column water by u.grad(W) and adds only 15 % of the -W div(u) import (e17 flux_convergence 0.15, convergence smoothed over 300 km). The full import raises north India's July rain to 145 mm (log RMSE 2.16 -> 1.04) but floods Mexico (0.67 -> 1.17) and eastern Australia (0.55 -> 0.79): at 300 km the drag step at the coast, where onshore wind slows over land, counts as convergence. Neither a warmer Arabian Sea (e42), cloud shading against the globe (e43) nor a pressure field blind to heat beyond the Himalaya (scratch test) brings the monsoon.",
+ "hypothesis": "e44 (new parameter flux_scale_km, default 300 = unchanged): the water a converging flow brings in is the column's share moving with the low-level flow, on the scale of the flow's large-scale convergence (the monsoon trough, ~1,000 km and more), not the coastal drag step. Probes at share 1 and 1,200 km: north India 2.16 -> 1.18, Mexico 0.67 -> 0.65, south-east US 0.39 -> 0.32, eastern Australia 0.55 -> 0.61 (annual log RMSE over each region's land).",
+ "reference": "calibration/local_accuracy_20261023/r35_params.json rerun on dev31 under the current source fingerprint (output/monsoon_inflow_20261024/reference)",
+ "candidates": {
+  "fc1_800": {"flux_convergence": 1.0, "flux_scale_km": 800.0},
+  "fc1_1200": {"flux_convergence": 1.0, "flux_scale_km": 1200.0},
+  "fc1_2000": {"flux_convergence": 1.0, "flux_scale_km": 2000.0}
+ },
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once. scripts/city_rain.py is reported alongside and does not decide."
+}

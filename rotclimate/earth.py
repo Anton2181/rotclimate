@@ -24,6 +24,7 @@ from __future__ import annotations
 
 import io
 import json
+import warnings
 import zipfile
 from dataclasses import dataclass
 from pathlib import Path
@@ -230,6 +231,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.chi_pole = pole_fetch_at(lat if lat0 >= 0 else -lat, lon)   # e31 (real latitude: south of southern regions)
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
+    g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 
@@ -366,6 +368,51 @@ def sea_reach_at(lat, lon):
     j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
     Fw = np.concatenate([F, F[:, :1]], axis=1)
     return ndi.map_coordinates(Fw, [i, j], order=1, mode="nearest")
+
+
+def land_cloud() -> tuple:
+    """e43: the globe's land-mean cloud cover by 0.5-degree latitude row and
+    month, from the model's own cloud formula (ClimateModel: 0.2 sqrt(P) +
+    ((rh - 0.3) / 0.7)^2, P in mm/day) applied to WorldClim's rain and its
+    humidity (vapour pressure over the saturation at the mean temperature).
+    The latitude-mean land column of the energy balance carries this
+    cloudiness; a clearer place gets more sunshine. (field [12, H], lat)."""
+    key = CACHE / "land_cloud.npz"
+    if key.exists():
+        z = np.load(key)
+        return z["cloud"], z["lat"]
+    elev = _wc("elev")
+    f = 6
+    H, W = elev.shape[0] // f, elev.shape[1] // f
+    lat = 90 - (np.arange(H) + 0.5) * 0.5
+    out = np.full((12, H), np.nan)
+    days = np.array([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+    for m in range(12):
+        P = _wc("prec", m + 1) / days[m]
+        T = _wc("tavg", m + 1)
+        e = _wc("vapr", m + 1)
+        es = 0.6112 * np.exp(17.67 * T / (T + 243.5))
+        rh = np.clip(e / es, 0.0, 1.0)
+        fc = np.clip(0.2 * np.sqrt(np.clip(P, 0.0, 10.0)) + np.clip((rh - 0.3) / 0.7, 0.0, 1.0) ** 2, 0.0, 1.0)
+        fc = fc[:H * f, :W * f].reshape(H, f, W * f)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", RuntimeWarning)       # rows of sea only
+            out[m] = np.nanmean(fc.reshape(H, -1), axis=1)
+    rows = np.isfinite(out).all(0)
+    for m in range(12):                                  # rows without land: the nearest row with land
+        out[m] = np.interp(lat[::-1], lat[rows][::-1], out[m][rows][::-1])[::-1]
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, cloud=out.astype(np.float32), lat=lat)
+    return out, lat
+
+
+def land_cloud_at(lat, mirrored=False):
+    """e43: land_cloud at the cells' (real) latitudes, [12, ...]; months
+    shifted by six for mirrored southern regions, as observed_sst."""
+    F, flat = land_cloud()
+    lat = np.asarray(lat, float)
+    out = np.stack([np.interp(lat, flat[::-1], F[m][::-1]) for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
 
 
 WOA_SST = CACHE / "woa18_sst_1deg.npz"     # scripts/build_woa_sst.py

@@ -88,7 +88,6 @@ def w_sat(T):
 
 
 GYRE_LAT = (30.0, 40.0)          # e42: open sea poleward to 30 deg: no cold current; to 40 deg: the full one
-FLUX_SMOOTH_KM = 300.0           # e17: scale of the low-level divergence that moves column water
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
 SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
@@ -739,11 +738,24 @@ class ClimateModel:
                 fbar = self._lat_mean(fc)
                 dT = np.zeros_like(Tl)
                 if p.cloud_radiation > 0:
+                    fref = fbar
+                    if p.cloud_reference == "earth" and g.cloud_ref is not None:
+                        # e43: the latitude-mean land column carries the whole
+                        # globe's land cloudiness at its latitude, not this
+                        # domain's: in May at 27 N clear north India (Delhi 6.5 C
+                        # above the latitude's land mean) and cloudy south China
+                        # (Changsha 5 C below) share one domain mean, which
+                        # left India 5 C too cold and China 4 C too warm
+                        mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
+                        m0 = int(np.floor(mpos)); fr = mpos - m0
+                        fref = (1.0 - fr) * g.cloud_ref[m0] + fr * g.cloud_ref[(m0 + 1) % 12]
+                    elif p.cloud_reference not in ("domain", "earth"):
+                        raise ValueError(f"unknown cloud_reference {p.cloud_reference!r}")
                     S = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
                                          p.solar_flux * distance_factor(d, p.eccentricity,
                                                          p.winter_solstice_day + p.perihelion_after_solstice,
                                                          p.year_days))
-                    dT -= p.cloud_radiation * (fc - fbar) * S / LAND_COUPLING_SREF
+                    dT -= p.cloud_radiation * (fc - fref) * S / LAND_COUPLING_SREF
                 if p.cloud_longwave > 0:
                     def clear_loss(f, w):
                         x = np.maximum(w, 0.0) / 10.0                  # column water in cm
@@ -1109,7 +1121,12 @@ class ClimateModel:
                 # whose winter water comes with passing storms that the mean
                 # wind does not carry, and subsidence drying already removes
                 # water under the highs.
-                cv = np.clip(-ndi.gaussian_filter(div, FLUX_SMOOTH_KM / g.cell_km), 0.0, FLUX_DIV_MAX)
+                # e44: flux_scale_km sets the scale (300 km in e17); on that
+                # scale the drag step at every coast (onshore wind slowing over
+                # land) counts as convergence, which flooded eastern Australia's
+                # and Mexico's summers, while the monsoon trough's inflow (the
+                # Ganges plain in July) converges over 1,000 km and more
+                cv = np.clip(-ndi.gaussian_filter(div, p.flux_scale_km / g.cell_km), 0.0, FLUX_DIV_MAX)
                 gain = p.flux_convergence * cv * np.clip((T_col - 15.0) / 10.0, 0.0, 1.0)
             closure = None
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
