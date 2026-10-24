@@ -4,9 +4,19 @@
  "hypothesis": "e44 (new parameter flux_scale_km, default 300 = unchanged): the water a converging flow brings in is the column's share moving with the low-level flow, on the scale of the flow's large-scale convergence (the monsoon trough, ~1,000 km and more), not the coastal drag step. Probes at share 1 and 1,200 km: north India 2.16 -> 1.18, Mexico 0.67 -> 0.65, south-east US 0.39 -> 0.32, eastern Australia 0.55 -> 0.61 (annual log RMSE over each region's land).",
  "reference": "calibration/local_accuracy_20261023/r35_params.json rerun on dev31 under the current source fingerprint (output/monsoon_inflow_20261024/reference)",
  "candidates": {
-  "fc1_800": {"flux_convergence": 1.0, "flux_scale_km": 800.0},
-  "fc1_1200": {"flux_convergence": 1.0, "flux_scale_km": 1200.0},
-  "fc1_2000": {"flux_convergence": 1.0, "flux_scale_km": 2000.0}
+  "fc1_800": {
+   "flux_convergence": 1.0,
+   "flux_scale_km": 800.0
+  },
+  "fc1_1200": {
+   "flux_convergence": 1.0,
+   "flux_scale_km": 1200.0
+  },
+  "fc1_2000": {
+   "flux_convergence": 1.0,
+   "flux_scale_km": 2000.0
+  }
  },
- "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once. scripts/city_rain.py is reported alongside and does not decide."
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once. scripts/city_rain.py is reported alongside and does not decide.",
+ "selected": "2026-10-24, after the dev31 gate and before any 28 km or sealed run: fc1_2000, the higher gate S of the two passing candidates (fc1_1200 S 0.9872, fc1_2000 S 0.9859; fc1_800 fails, training group worse)."
 }
