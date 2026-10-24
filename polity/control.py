@@ -11,7 +11,8 @@ and back. Its reach is measured in days of travel for a person on foot:
                      heavy brush 1.5, swamp 1.8, loose sand 2.1, soft snow 2.5)
   footpaths          the off-path 0.6 rises toward 1.0 with the people per km2
                      (half-way at 20): farmed land is laced with tracks
-  seas and lakes     not crossed (no shipping yet)
+  ferry routes       the map's dotted routes over water, 40 km a day with the wait
+  other water        not crossed (no open-sea shipping yet)
 
 Days beyond the network = the cheapest travel to the nearest road or
 settlement. Effective control = exp(-days / 1 day): one day out (and one back)
@@ -26,6 +27,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import dijkstra
 
 ROAD_KM_DAY = 30.0
+FERRY_KM_DAY = 40.0             # a crossing on the map's ferry routes, waiting for the boat included
 MARCH_HOURS = 7.0
 OFF_PATH = 0.6
 CONTROL_DAYS = 1.0
@@ -56,10 +58,13 @@ def path_factor(density):
     return OFF_PATH + (1.0 - OFF_PATH) * d / (d + 20.0)
 
 
-def travel_graph(elevation, land, road, eta, cell_km, paths=None):
+def travel_graph(elevation, land, road, eta, cell_km, paths=None, ferry=None):
     """Directed 8-neighbour graph, edge cost in days; road-to-road steps at road speed.
-    paths (optional): the walking pace factor of each cell (path_factor), else off-path."""
-    z = np.asarray(elevation, float); land = np.asarray(land, bool); road = np.asarray(road, bool) & land
+    paths (optional): the walking pace factor of each cell (path_factor), else off-path.
+    ferry (optional): water cells on a ferry route, crossed at FERRY_KM_DAY."""
+    z = np.asarray(elevation, float); road = np.asarray(road, bool) & np.asarray(land, bool)
+    ferry = np.zeros(z.shape, bool) if ferry is None else np.asarray(ferry, bool) & ~np.asarray(land, bool)
+    land = np.asarray(land, bool) | ferry          # passable
     h, w = z.shape; nodes = np.arange(z.size).reshape(z.shape)
     rows, cols, cost = [], [], []
     for dy, dx in [(a, b) for a in (-1, 0, 1) for b in (-1, 0, 1) if a or b]:
@@ -74,6 +79,7 @@ def travel_graph(elevation, land, road, eta, cell_km, paths=None):
         off = km / (tobler_km_h(slope, pace) * MARCH_HOURS / (0.5 * (eta[src] + eta[dst])))
         on = km / ROAD_KM_DAY
         days = np.where(road[src] & road[dst], np.minimum(on, off), off)
+        days = np.where(ferry[src] | ferry[dst], km / FERRY_KM_DAY, days)
         rows.append(nodes[src][ok]); cols.append(nodes[dst][ok]); cost.append(days[ok])
     return coo_matrix((np.concatenate(cost), (np.concatenate(rows), np.concatenate(cols))),
                       shape=(z.size, z.size)).tocsr()
