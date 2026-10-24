@@ -1132,7 +1132,14 @@ class ClimateModel:
                     lambda a: gauss(a, sigW / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
                     crest, mass, steps=EDDY_RAINOUT_STEPS)
                 exchange, condensate = mix.frequency, mix.condensate
-            solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
+            # e41: column water moves with the wind of the lowest ~3 km, which
+            # the surface friction that slows the 10 m wind does not hold back
+            # (the 850 hPa wind is ~1.5-2x the surface wind over land). The
+            # surface wind left the water near where it evaporated: Iran,
+            # Mexico's dry season and inland eastern Australia rained their
+            # own evaporation back out, and the monsoon carried little inland.
+            uq, vq = (u, v) if p.moisture_wind_factor == 1.0 else (p.moisture_wind_factor * u, p.moisture_wind_factor * v)
+            solution = solve_moisture(self.solver, p, uq, vq, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
                                       condensate=condensate)
             W, P = solution.water, solution.rain
@@ -1186,7 +1193,7 @@ class ClimateModel:
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
-                    terms = moisture_terms(W, u, v, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
+                    terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
                     for key, values in terms.items():
                         budget[key][k] = values[g.map_slice()]
             if progress:

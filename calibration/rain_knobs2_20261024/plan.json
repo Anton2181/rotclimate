@@ -1,0 +1,24 @@
+{
+ "frozen": "2026-10-24, before any result of this search; after the first rain-knob search (calibration/rain_knobs_20261024: 64 candidates, none better than r35; best S 0.9985 with the holdout group 2.3 % worse) and single-region probes of e41",
+ "why": "A moisture budget (scripts/rain_budget.py) shows the excess rain of dry places (Iran, Mexico's dry season, inland eastern Australia) is their own evaporation rained back out, and the winter excess of north-east Asia is storm-eddy exchange (Manchuria 87 mm a month in January against an export of 52 by the mean wind). e41 (moisture_wind_factor) carries column water with a faster, lower-tropospheric wind: alone at 2x it helps eastern Australia, Iran and Manchuria and costs western Europe, Japan, the Midwest and Mexico. This search lets the transport, the eddy exchange, the ocean humidity, recycling and the rain closure rebalance together.",
+ "start": "calibration/local_accuracy_20261023/r35_params.json",
+ "set": {"eddy_moisture_scale_km": 851.6123690222877},
+ "reference": "output/eddy_water_20261024/reference",
+ "knobs": [
+  ["moisture_wind_factor", 1.0, 3.0],
+  ["eddy_rate", 0.6, 2.0],
+  ["eddy_moisture_scale_km", 400.0, 1200.0],
+  ["ocean_rh", 0.62, 0.8],
+  ["land_recycling", 0.2, 0.7],
+  ["precip_tau_days", 6.0, 18.0],
+  ["convective_rh", 0.55, 0.75],
+  ["rh_threshold", 0.25, 0.5],
+  ["moisture_diffusion", 20000.0, 120000.0],
+  ["high_drying", 0.0, 0.3],
+  ["subsidence_drying", 0.0, 0.1],
+  ["orographic", 2.0, 7.0]
+ ],
+ "sigma": 0.3, "popsize": 8, "seed": 2, "evals": 72,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "The best candidate takes the unchanged gate (policy_v2) against a fresh reference under the then source fingerprint, the paired 28 km check and the sealed six once; scripts/city_rain.py is reported alongside."
+}

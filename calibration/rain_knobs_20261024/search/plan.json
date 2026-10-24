@@ -1,0 +1,77 @@
+{
+ "frozen": "2026-10-24, before any search result; after the e37, e38 (eddy water reach) and e39 (free upslope wind) gate rejections and single-region probes of e38b (eddy humidity cap) and e40 (warm-sea humidity)",
+ "why": "Every single rain knob trades regions: a shorter eddy water reach fixes Manchuria and Korea but starves the US Midwest and Central Asia; moister warm seas help north India, eastern China, the SE US and Japan but drown eastern Australia and Mexico. A joint search of the rain knobs, scored as the gate scores, looks for a combination that helps where each single knob trades.",
+ "start": "calibration/local_accuracy_20261023/r35_params.json",
+ "set": {
+  "eddy_moisture_scale_km": 851.6123690222877
+ },
+ "reference": "output/eddy_water_20261024/reference",
+ "knobs": [
+  [
+   "eddy_moisture_scale_km",
+   300.0,
+   1200.0
+  ],
+  [
+   "upslope_free_wind",
+   0.0,
+   1.0
+  ],
+  [
+   "ocean_rh_warm",
+   0.0,
+   0.2
+  ],
+  [
+   "eddy_rh_cap",
+   0.0,
+   0.6
+  ],
+  [
+   "flux_convergence",
+   0.05,
+   0.6
+  ],
+  [
+   "orographic",
+   1.5,
+   8.0
+  ],
+  [
+   "subgrid_orographic",
+   0.0,
+   5.0
+  ],
+  [
+   "precip_tau_days",
+   6.0,
+   18.0
+  ],
+  [
+   "convective_rh",
+   0.55,
+   0.75
+  ],
+  [
+   "ocean_rh",
+   0.62,
+   0.8
+  ],
+  [
+   "monsoon_heating",
+   0.0,
+   3.0
+  ],
+  [
+   "land_recycling",
+   0.25,
+   0.8
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 1,
+ "evals": 64,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "The best candidate takes the unchanged gate (policy_v2) against a fresh reference under the then source fingerprint, the paired 28 km check and the sealed six once; scripts/city_rain.py is reported alongside."
+}
