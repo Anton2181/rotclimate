@@ -135,12 +135,12 @@ def main():
         overview = 'Overview holds the biome map, settlement potential, expected density and density around the old heartlands named in the campaign lore.'
     else:
         overview = 'Overview holds the biome map, settlement potential and expected density' + (
-            f'; the {who(cored)} atlas also maps density around the old heartlands named in the campaign lore.' if cored else '.')
+            f'; the {who(cored)} atlas{"es" if len(cored) > 1 else ""} also map{"" if len(cored) > 1 else "s"} density around the old heartlands named in the campaign lore.' if cored else '.')
     if len(margins) == len(FITS):
         harvest = 'Low-input Han, Roman and Parthian technology, with poor-year limits on cold and dry margins'
     else:
         harvest = 'Low-input Han, Roman and Parthian technology' + (
-            f' (the {who(margins)} atlas adds poor-year limits on cold and dry margins)' if margins else '')
+            f' (the {who(margins)} atlas{"es" if len(margins) > 1 else ""} add{"" if len(margins) > 1 else "s"} poor-year limits on cold and dry margins)' if margins else '')
     updated = datetime.date.today().strftime('%-d %B %Y').upper()
     if artifact:
         compare = ('Each atlas opens with the same Population lab, so the same total can be tried in all three: '
