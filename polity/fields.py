@@ -3,8 +3,8 @@
 compute(atlas) reads the atlas's terrain, potential biomes, snow months and
 Harvest density (1000 x 463 cells of ~3.7 km), the painted swamp zone, and
 data/source/ravages_v8 (roads and ferry routes, settlements by the map key,
-polity fills, commanderies), and adds the unmarked seats a populated
-countryside implies. See polity/control.py for the travel model.
+polity fills, commanderies), and adds the unmarked towns and minor roads a
+populated countryside implies (polity/settle.py). See polity/control.py for the travel model.
 """
 from __future__ import annotations
 
@@ -15,7 +15,8 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from .control import control, days_from, path_factor, terrain_coefficient, travel_graph, unmarked_days
+from .control import control, days_from, path_factor, terrain_coefficient, travel_graph
+from .settle import minor_roads, place_towns
 
 ROOT = Path(__file__).resolve().parents[1]
 LAYERS = ROOT / "data/source/ravages_v8"
@@ -109,22 +110,27 @@ def compute(atlas):
     core = block_any(rgba("commanderies_core.png")[..., 3] > 128, shape, 0.5) & land
     frontier = block_any(rgba("commanderies_frontier.png")[..., 3] > 128, shape, 0.5) & land
 
-    network = [(r, c) for r, c in zip(*np.nonzero(road))] + [(t["row"], t["col"]) for t in towns]
     ids, info = polity_fills(shape)
+    claimed = land & (ids > 0)
+    # the unmarked towns and minor roads a populated countryside implies (polity/settle.py)
+    open_eta = terrain_coefficient(biome, swamp, None)
+    bare = travel_graph(elev, land, road, open_eta, cell_km, paths, ferry)
+    marked = [(t["row"], t["col"]) for t in towns]
+    suggested, coast_km, smooth_density = place_towns(density, land, geo["water_distance"], road, elev, cell_km, marked,
+                                                      allowed=claimed)
+    tracks, routes, links = minor_roads(bare, shape, road, suggested, marked)
+    towns = towns + [dict(kind="unmarked town", row=int(y), col=int(x)) for y, x in suggested]
+    network = [(r, c) for r, c in zip(*np.nonzero(road))] + [(t["row"], t["col"]) for t in towns]
     capital = [(t["row"], t["col"]) for t in towns if t["kind"] == "imperial capital"]
     f = {}
-    claimed = land & (ids > 0)
     for season, share in (("open", None), ("winter", snow_share)):
         eta = terrain_coefficient(biome, swamp, share)
-        graph = travel_graph(elev, land, road, eta, cell_km, paths, ferry)
-        f[f"marked_days_{season}"] = days_from(graph, shape, network)
-        # the unmarked seats of the countryside (claimed land only): one per 40,000 people
-        f[f"unmarked_days_{season}"] = np.where(claimed, unmarked_days(density, eta, paths), np.inf)
-        f[f"days_{season}"] = np.minimum(f[f"marked_days_{season}"], f[f"unmarked_days_{season}"])
+        graph = travel_graph(elev, land, road, eta, cell_km, paths, ferry, tracks)
+        f[f"days_{season}"] = days_from(graph, shape, network)
         f[f"capital_days_{season}"] = days_from(graph, shape, capital)
         if season == "open":
             open_graph = graph
-    # each polity's reach from its own roads, settlements and unmarked seats (snow-free season)
+    # each polity's reach from its own roads and towns, marked or unmarked (snow-free season)
     groups = {}
     for i, d in info.items():
         if d["name"]:
@@ -135,7 +141,7 @@ def compute(atlas):
         own = np.isin(ids, groups[name])
         src = [(r, c) for r, c in zip(*np.nonzero(road & own))]
         src += [(t["row"], t["col"]) for t in towns if own[t["row"], t["col"]]]
-        reach[k] = np.minimum(days_from(open_graph, shape, src), np.where(own, f["unmarked_days_open"], np.inf))
+        reach[k] = days_from(open_graph, shape, src)
     best = np.argmin(reach, 0); best_days = np.min(reach, 0)
     second_days = np.partition(reach, 1, axis=0)[1] if len(names) > 1 else np.full(shape, np.inf)
     f["polity_best"] = np.where(np.isfinite(best_days), best, -1)
@@ -146,7 +152,9 @@ def compute(atlas):
         colours[name] = info[groups[name][0]]["rgb"]
     with np.errstate(invalid="ignore"):
         contested = land & (best_days <= HELD_DAYS) & (second_days - best_days <= CONTESTED_DAYS)
-    return dict(fields=f, land=land, road=road, ferry=ferry, polity_ids=ids, polity_info=info, groups=groups,
+    return dict(fields=f, land=land, road=road, ferry=ferry, tracks=tracks, routes=routes, links=links,
+                suggested=suggested, coast_km=coast_km, smooth_density=smooth_density, graph_open=open_graph, eta_open=terrain_coefficient(biome, swamp, None),
+                water_distance=geo["water_distance"], polity_ids=ids, polity_info=info, groups=groups,
                 polity_names=names, polity_rgb=colours, towns=towns, core=core, frontier=frontier, swamp=swamp,
                 snow_share=snow_share, density=density, paths=paths, cell_km=cell_km, elev=elev, meta=meta,
                 held=land & (best_days <= HELD_DAYS),

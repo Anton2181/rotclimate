@@ -12,8 +12,8 @@ and back. Its reach is measured in days of travel for a person on foot:
   footpaths          the off-path 0.6 rises toward 1.0 with the people per km2
                      (half-way at 20): farmed land is laced with tracks
   ferry routes       the map's dotted routes over water, 40 km a day with the wait
-  unmarked seats     one per 40,000 people, as dense as the people (unmarked_days);
-                     tracks between farms are in the footpath term
+  unmarked tracks    25 km a day: the suggested minor roads between the unmarked
+                     towns of polity/settle.py
   other water        not crossed (no open-sea shipping yet)
 
 Days beyond the network = the cheapest travel to the nearest road or
@@ -29,6 +29,7 @@ from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import dijkstra
 
 ROAD_KM_DAY = 30.0
+TRACK_KM_DAY = 25.0             # an unmarked minor road (polity/settle.py)
 FERRY_KM_DAY = 40.0             # a crossing on the map's ferry routes, waiting for the boat included
 MARCH_HOURS = 7.0
 OFF_PATH = 0.6
@@ -60,12 +61,14 @@ def path_factor(density):
     return OFF_PATH + (1.0 - OFF_PATH) * d / (d + 20.0)
 
 
-def travel_graph(elevation, land, road, eta, cell_km, paths=None, ferry=None):
+def travel_graph(elevation, land, road, eta, cell_km, paths=None, ferry=None, tracks=None):
     """Directed 8-neighbour graph, edge cost in days; road-to-road steps at road speed.
     paths (optional): the walking pace factor of each cell (path_factor), else off-path.
-    ferry (optional): water cells on a ferry route, crossed at FERRY_KM_DAY."""
+    ferry (optional): water cells on a ferry route, crossed at FERRY_KM_DAY.
+    tracks (optional): cells on an unmarked minor road, at TRACK_KM_DAY."""
     z = np.asarray(elevation, float); road = np.asarray(road, bool) & np.asarray(land, bool)
     ferry = np.zeros(z.shape, bool) if ferry is None else np.asarray(ferry, bool) & ~np.asarray(land, bool)
+    tracks = np.zeros(z.shape, bool) if tracks is None else np.asarray(tracks, bool) & np.asarray(land, bool)
     land = np.asarray(land, bool) | ferry          # passable
     h, w = z.shape; nodes = np.arange(z.size).reshape(z.shape)
     rows, cols, cost = [], [], []
@@ -81,6 +84,8 @@ def travel_graph(elevation, land, road, eta, cell_km, paths=None, ferry=None):
         off = km / (tobler_km_h(slope, pace) * MARCH_HOURS / (0.5 * (eta[src] + eta[dst])))
         on = km / ROAD_KM_DAY
         days = np.where(road[src] & road[dst], np.minimum(on, off), off)
+        on_track = (tracks[src] | road[src]) & (tracks[dst] | road[dst]) & ~(road[src] & road[dst])
+        days = np.where(on_track, np.minimum(km / TRACK_KM_DAY, days), days)
         days = np.where(ferry[src] | ferry[dst], km / FERRY_KM_DAY, days)
         rows.append(nodes[src][ok]); cols.append(nodes[dst][ok]); cost.append(days[ok])
     return coo_matrix((np.concatenate(cost), (np.concatenate(rows), np.concatenate(cols))),
@@ -93,24 +98,6 @@ def days_from(graph, shape, sources):
     if not ids:
         return np.full(shape, np.inf)
     return dijkstra(graph, directed=True, indices=ids, min_only=True).reshape(shape)
-
-
-def unmarked_days(density, eta, paths, seat_people=40000.0, min_density=1.0):
-    """Days to the nearest unmarked seat, from how many people live here.
-
-    The map marks the main roads and walled places; the countryside between
-    them has market towns and county seats on tracks. With one seat per
-    seat_people (40,000: the mean Han county of AD 2, 58 million people in
-    1,587 counties) on a hexagonal lattice, each seat serves seat_people /
-    density km2, and the mean distance to the nearest seat is 0.377 x the
-    square root of that area. It is walked at the local level-ground pace
-    (footpaths and terrain coefficient included). Below min_density people per
-    km2 there are no seats."""
-    d = np.asarray(density, float)
-    area = seat_people / np.maximum(d, 1e-9)
-    km = 0.377 * np.sqrt(area)
-    speed = tobler_km_h(0.0, np.asarray(paths, float)) * MARCH_HOURS / np.asarray(eta, float)
-    return np.where(d >= min_density, km / speed, np.inf)
 
 
 def control(days):

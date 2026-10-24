@@ -4,8 +4,8 @@
 
 The fields come from polity/fields.py (travel model in polity/control.py):
 the marked roads, ferry routes and settlements of the campaign map, plus the
-unmarked seats a populated countryside implies (one per 40,000 people,
-polity/control.py:unmarked_days). Writes
+unmarked towns and minor roads a populated countryside implies
+(polity/settle.py). Writes
 summary.json, settlements.json and the maps.
 """
 from __future__ import annotations
@@ -30,7 +30,8 @@ from polity.fields import LAYERS, compute  # noqa: E402
 INK, SURFACE, SEA = "#1b262c", "#fcfcfb", "#d6e4f0"
 MARKERS = (("fortified town", 6, "o", "#ffffff"), ("fortified city", 16, "o", "#ffffff"),
            ("imperial fort", 14, "s", "#b200ff"), ("imperial monastery", 14, "s", "#00a86b"),
-           ("major imperial city", 34, "o", "#b200ff"), ("imperial capital", 80, "s", "#b200ff"))
+           ("major imperial city", 34, "o", "#b200ff"), ("imperial capital", 80, "s", "#b200ff"),
+           ("unmarked town", 4, "o", "#9a9a9a"))
 
 
 def main():
@@ -82,7 +83,7 @@ def main():
     ext = (0, shape[1], shape[0], 0)
 
     def network(ax):
-        for mask, colour, size in ((road, "#5a2a12", 0.14), (ferry, "#ff6a00", 1.5)):
+        for mask, colour, size in ((r["tracks"], "#8b5a2b", 0.06), (road, "#5a2a12", 0.14), (ferry, "#ff6a00", 1.5)):
             py, px = np.nonzero(mask)
             ax.scatter(px + 0.5, py + 0.5, s=size, c=colour, marker="s", linewidths=0, alpha=0.8)
         for kind, size, marker, colour in MARKERS:
@@ -99,10 +100,10 @@ def main():
         im = ax.imshow(np.where(land, 100 * control(f[key]), np.nan), cmap=cmap, norm=norm, interpolation="nearest", extent=ext)
         ax.imshow(np.where(borders, 1.0, np.nan), cmap=ListedColormap([INK]), alpha=0.6, interpolation="nearest", extent=ext)
         network(ax)
-        ax.contour(xx, yy, np.where(land, f[key], 99), levels=[1, 2, 3], colors=[INK] * 3,
-                   linewidths=[0.9, 0.6, 0.4], linestyles=["solid", "dashed", "dotted"])
+        ax.contour(xx, yy, np.where(land, f[key], 99), levels=[2, 3], colors=[INK] * 2,
+                   linewidths=[0.7, 0.5], linestyles=["dashed", "dotted"])
         ax.set_xlim(0, shape[1]); ax.set_ylim(shape[0], 0); ax.set_xticks([]); ax.set_yticks([])
-        ax.set_title(title + " · lines: 1, 2 and 3 days on foot from the nearest road or settlement, marked or unmarked",
+        ax.set_title(title + " · lines: 2 and 3 days on foot from the nearest road or town, marked or unmarked",
                      loc="left")
         fig.colorbar(im, ax=ax, shrink=0.7, pad=0.01).set_label("effective control, % (exp(-days / 1 day))")
         ax.legend(loc="lower left", fontsize=8, framealpha=0.9)
@@ -127,7 +128,7 @@ def main():
             ax.text(np.median(rx), np.median(ry), name, fontsize=7.5, ha="center", va="center", color=INK,
                     bbox=dict(boxstyle="round,pad=0.15", fc="white", ec="none", alpha=0.7))
     ax.set_xticks([]); ax.set_yticks([])
-    ax.set_title("Who reaches where: each place takes the polity whose own roads, towns and unmarked seats are nearest in "
+    ax.set_title("Who reaches where: each place takes the polity whose own roads and towns, marked or unmarked, are nearest in "
                  "days; pale = weak reach, x = contested (a rival within half a day); dark lines: the drawn borders",
                  loc="left", fontsize=10)
     fig.savefig(a.out / "de_facto.png", dpi=110, facecolor=SURFACE)
