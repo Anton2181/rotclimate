@@ -109,6 +109,7 @@ class Params:
     tropical_storms: float = 0.0      # e47: storms over seas warmer than ~26-28 C (storm-track equivalent; 0 = off)
     tropical_storm_km: float = 600.0  # e47: ... and their reach inland from that sea
     cold_high_storms: float = 0.0     # e48: storms steered around the thermal highs, exp(-k x hPa) (0 = off)
+    monsoon_descent: float = 0.0      # e49: column drying (1/day) per mm/day of the monsoon heating that drives descent here (0 = off)
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     # time-step independence: soil-moisture memory in days (0 = the legacy
     # 0.75-per-step rule) and the most temperature/wind iterations within

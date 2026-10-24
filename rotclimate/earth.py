@@ -232,6 +232,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
+    g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 
@@ -412,6 +413,68 @@ def land_cloud_at(lat, mirrored=False):
     F, flat = land_cloud()
     lat = np.asarray(lat, float)
     out = np.stack([np.interp(lat, flat[::-1], F[m][::-1]) for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+def monsoon_descent() -> tuple:
+    """e49: the descent the monsoons drive to their west, less the ascent over
+    the heating itself, by month on a 1-degree globe (mm/day: the mean
+    heating of the source area, see model.descent_weight and ascent_weight),
+    from WorldClim's land rain beyond DESCENT_RAIN0
+    within DESCENT_LAT of the equator. A region's window seldom holds the
+    heating that sinks over it (Iran's lies over India), so Earth grids take
+    the globe's; other grids compute theirs from their own rain.
+    (field [12, 180, 360], lat, lon)."""
+    key = CACHE / "monsoon_descent.npz"
+    if key.exists():
+        z = np.load(key)
+        return z["descent"], z["lat"], z["lon"]
+    from .model import DESCENT_ASCENT_KM, DESCENT_KM, DESCENT_LAT, DESCENT_RAIN0, ascent_weight, descent_weight
+    f, km = 12, 111.2
+    Y0, LY = DESCENT_KM[2], DESCENT_KM[3]
+    days = np.array([31, 28.25, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31])
+    lat = 90 - (np.arange(180) + 0.5)
+    lon = -180 + (np.arange(360) + 0.5)
+    off = np.where(np.arange(360) < 180, np.arange(360), np.arange(360) - 360)     # degrees the source lies east
+    src = np.abs(lat) <= DESCENT_LAT
+    area = km * km * np.cos(np.radians(lat[src]))
+    out = np.zeros((12, 180, 360))
+    for m in range(12):
+        P = _wc("prec", m + 1) / days[m]
+        ok = np.isfinite(P)
+        total = np.where(ok, P, 0.0).reshape(180, f, 360, f).sum(axis=(1, 3))
+        n = ok.reshape(180, f, 360, f).sum(axis=(1, 3))
+        # land rain beyond the threshold, times the cell's land share
+        heat = np.maximum(total / np.maximum(n, 1) - DESCENT_RAIN0, 0.0) * (n / f ** 2)
+        heat = heat[src]
+        for i in range(180):
+            # separable weight: poleward of each source in its own hemisphere,
+            # then west along the target's latitude circle (circular)
+            pole = np.sign(lat[src]) * (lat[i] - lat[src]) * km
+            h = (heat * (area * np.exp(-((pole - Y0) / LY) ** 2))[:, None]).sum(0)
+            kx = descent_weight(off * km * np.cos(np.radians(lat[i])), Y0)
+            out[m, i] = np.real(np.fft.ifft(np.conj(np.fft.fft(kx)) * np.fft.fft(h)))
+            # less the ascent over the heating itself (same separable form)
+            north = (lat[src] - lat[i]) * km
+            ha = (heat * (area * np.exp(-(north / DESCENT_ASCENT_KM) ** 2))[:, None]).sum(0)
+            ka = ascent_weight(off * km * np.cos(np.radians(lat[i])), 0.0)
+            out[m, i] -= np.real(np.fft.ifft(np.conj(np.fft.fft(ka)) * np.fft.fft(ha)))
+    out = np.maximum(out, 0.0)
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, descent=out.astype(np.float32), lat=lat, lon=lon)
+    return out, lat, lon
+
+
+def monsoon_descent_at(lat, lon, mirrored=False):
+    """e49: monsoon_descent at points [12, ...]; months shifted by six for
+    mirrored southern regions, as observed_sst."""
+    from scipy import ndimage as ndi
+
+    F, flat, flon = monsoon_descent()
+    i = (90.0 - 0.5) - np.asarray(lat, float)
+    j = (np.asarray(lon, float) + 179.5) % 360.0
+    wrap = np.concatenate([F, F[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
 
 

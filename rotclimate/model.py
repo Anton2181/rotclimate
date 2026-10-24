@@ -92,6 +92,29 @@ TROPICAL_SST = (26.0, 28.0)      # e47: tropical disturbances form over seas thi
 TROPICAL_OPEN = (0.3, 0.6)       # e47: ... and this open (sea share within TROPICAL_OPEN_KM)
 TROPICAL_OPEN_KM = 800.0
 COLD_HIGH_C = 10.0               # e48: a high's air this far below freezing steers all of its storms around
+DESCENT_KM = (4000.0, 1500.0, 890.0, 780.0)   # e49: the descent lies this far west of the heating (east with reversed spin), +- spread, and this far poleward, +- spread
+DESCENT_RAIN0 = 4.0              # e49: land rain (mm/day) beyond which the heating drives remote descent
+DESCENT_ASCENT_KM = 800.0        # e49: ... and lifts the air over itself, over this radius (the net is the descent)
+DESCENT_LAT = 40.0               # e49: ... from heating within this many degrees of the equator
+
+
+def descent_weight(east_km, poleward_km, prograde=True):
+    """e49: weight of a heating source at (east_km, poleward_km) from the
+    sinking place: the Rossby-wave response to monsoon heating (Gill 1980;
+    Rodwell & Hoskins 1996) sinks ~4,000 km west of the heating and ~900 km
+    poleward of it (east with reversed spin). Per unit area: the sum of
+    heating x area x weight is the mean heating of the source area."""
+    L0, LX, Y0, LY = DESCENT_KM
+    x = east_km if prograde else -east_km
+    return np.exp(-((x - L0) / LX) ** 2 - ((poleward_km - Y0) / LY) ** 2) / (np.pi * LX * LY)
+
+
+def ascent_weight(east_km, north_km):
+    """e49: ... and the heating lifts the air over itself: weight of a source
+    for the mean heating within ~DESCENT_ASCENT_KM. Inside a monsoon (north
+    India lies in the descent of the Bay's and Burma's heating) the local
+    ascent wins: the net descent is the remote one less this."""
+    return np.exp(-(east_km ** 2 + north_km ** 2) / DESCENT_ASCENT_KM ** 2) / (np.pi * DESCENT_ASCENT_KM ** 2)
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
 SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
@@ -507,6 +530,25 @@ class ClimateModel:
             wsum += w
         return acc / wsum
 
+    def _descent(self, P):
+        """e49 on a grid of its own: descent less ascent (descent_weight,
+        ascent_weight) summed over this grid's land rain beyond DESCENT_RAIN0
+        (mm/day), as earth.monsoon_descent."""
+        g, p = self.g, self.p
+        if getattr(self, "_descent_kernel", None) is None:
+            L0, LX, Y0, LY = DESCENT_KM
+            th = np.radians(p.north_bearing)
+            r = int(np.ceil((L0 + 3.0 * LX) / g.cell_km))
+            di, dj = np.mgrid[-r:r + 1, -r:r + 1].astype(float)          # source minus target, rows / columns
+            east = (di * np.sin(th) + dj * np.cos(th)) * g.cell_km
+            north = (-di * np.cos(th) + dj * np.sin(th)) * g.cell_km
+            w = (descent_weight(east, -north, prograde=not p.retrograde) - ascent_weight(east, north)) * g.cell_km ** 2
+            self._descent_kernel = w[::-1, ::-1]                         # correlation as a convolution
+            self._descent_land = g.land & (np.abs(g.lat) <= DESCENT_LAT)
+        from scipy.signal import fftconvolve
+        heat = np.where(self._descent_land, np.maximum(P - DESCENT_RAIN0, 0.0), 0.0)
+        return np.maximum(fftconvolve(heat, self._descent_kernel, mode="same"), 0.0)
+
     def _sea_reach(self):
         """e42 on a grid of its own: the latitude where the sea due poleward
         (north on the map's bearing) first meets land, as earth.sea_reach;
@@ -615,6 +657,7 @@ class ClimateModel:
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
         lamT = 1.0 / tau
         T_prev = T_prev2 = None
+        P_last = None                    # e49: the last step's rain, for a grid's own monsoon descent
         W_prev = None
         uv_prev = chi = None
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
@@ -1150,6 +1193,23 @@ class ClimateModel:
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
+            if p.monsoon_descent > 0:
+                # e49: the monsoons' latent heating drives air down ~4,000 km
+                # to their west and a little poleward (Rodwell & Hoskins 1996):
+                # the summer deserts of Iran, Arabia and the eastern
+                # Mediterranean lie in the descent of the Indian monsoon, the
+                # Atacama coast in the Amazon's. The latitude band of the
+                # subtropical highs cannot place it: drying strong enough for
+                # Iran's summer (10 mm observed, the model 148 from rain
+                # recycled off its own wet soil) emptied Central Asia's and
+                # Anatolia's. The descent dries the column as subsidence does.
+                if g.descent is not None:
+                    mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
+                    m0 = int(np.floor(mpos)); fr = mpos - m0
+                    descent = (1.0 - fr) * g.descent[m0] + fr * g.descent[(m0 + 1) % 12]
+                else:
+                    descent = self._descent(P_last) if P_last is not None else 0.0
+                sink = (0.0 if sink is None else sink) + p.monsoon_descent * descent / DAY
             gain = None
             if p.flux_convergence > 0:
                 # e17: moisture moves with u.grad(W), which leaves out -W div(u):
@@ -1241,6 +1301,7 @@ class ClimateModel:
                                       A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
                                       condensate=condensate)
             W, P = solution.water, solution.rain
+            P_last = P
             if p.eddy_rate > 0 and (p.eddy_moisture_scheme != 'legacy' or diagnose_moisture):
                 from .storms import exchange_budget
                 self.storm_budgets.append(exchange_budget(W, exchange, mix, condensate))
@@ -1265,7 +1326,7 @@ class ClimateModel:
                     conv=cell(p.convective * conv), orog=cell(p.orographic * up),
                     damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab),
                     Teq=cell(T_eq), Tsl=cell(Tsl), SST=cell(SST), chi=cell(0.0 if chi is None else chi),
-                    A=cell(A_dyn), conv_rate=cell(0.0 if closure is None else closure['conv'] * np.exp(11.4 * (np.minimum(W / np.maximum(Ws, 1e-6), 1.5) - closure['r0'])) * closure['fT'])))
+                    A=cell(A_dyn), gain=cell(0.0 if gain is None else gain * DAY), sinkd=cell(0.0 if sink is None else sink * DAY), conv_rate=cell(0.0 if closure is None else closure['conv'] * np.exp(11.4 * (np.minimum(W / np.maximum(Ws, 1e-6), 1.5) - closure['r0'])) * closure['fT'])))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
             if p.soil_bucket_mm > 0:
                 soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
