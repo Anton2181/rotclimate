@@ -215,6 +215,8 @@ class Params:
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)
     eddy_scale_km: float = 450.0
+    eddy_moisture_scale_km: float = 0.0  # e38: reach of the eddies' water exchange, km (0 = eddy_scale_km)
+    upslope_free_wind: float = 0.0  # e39: share of the terrain drag removed from the wind that lifts air up slopes (0 = dragged wind)
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 
     # ---------------------------------------------------------------- numerics

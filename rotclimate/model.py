@@ -816,6 +816,13 @@ class ClimateModel:
                                    * (1 - p.storm_seasonality * s) * np.clip(side, 0, 1) * p.storm_asym)
             eddy = eddy_exchange_rate(p.eddy_rate, storm, s, p.eddy_seasonality)
             sigE = p.eddy_scale_km / g.cell_km
+            # e38: water travels a shorter way than heat: an eddy that carries
+            # moist air poleward or inland lifts and cools it and rains much of
+            # the water out on the way, while its heat arrives. Manchuria's
+            # winter drew Pacific water 850 km inland against the westerlies
+            # and snowed it out of supersaturated cold air (42 mm a month in
+            # January against 5).
+            sigW = (p.eddy_moisture_scale_km or p.eddy_scale_km) / g.cell_km
 
             # winds and temperature depend on temperature: iterate within the
             # step (t_iters > 1) instead of lagging one step behind
@@ -931,7 +938,18 @@ class ClimateModel:
                 ur, vr = u - uM * self.drag, v - vM * self.drag
                 div = (np.gradient(ur, axis=1) - np.gradient(vr, axis=0)) / dx
             conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
-            up = np.clip((u * self.dhdx + v * self.dhdy) / 0.05, 0, 4)
+            # e39: the lift on a slope comes from the flow arriving at it; the
+            # terrain drag slows the air over high ground (down to 3 % over the
+            # Himalaya), so the dragged wind left the monsoon almost no ascent
+            # on the Himalayan front (Dehradun and Haldwani 40-75 mm a year
+            # against 1,500-2,000) and carried its water on to Tibet.
+            # upslope_free_wind = the share of the drag removed for the lift.
+            if p.upslope_free_wind > 0:
+                free = self.drag ** -p.upslope_free_wind
+                u_up, v_up = u * free, v * free
+            else:
+                u_up, v_up = u, v
+            up = np.clip((u_up * self.dhdx + v_up * self.dhdy) / 0.05, 0, 4)
             if p.orographic_gust_ms > 0:
                 # Seasonal mean winds omit transient upslope episodes. Average
                 # the existing capped uplift over isotropic Gaussian weather
@@ -960,7 +978,7 @@ class ClimateModel:
                 # north India, Mexico). Extra ascent ~ the cell's highest minus
                 # mean ground x the wind speed; the rain stays a sink of the
                 # solved vapour, so the lee side dries.
-                A_dyn = A_dyn + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u, v) / 5.0, 0.0, 3.0)
+                A_dyn = A_dyn + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u_up, v_up) / 5.0, 0.0, 3.0)
             A_dyn = A_dyn * np.clip(1 - p.subsidence * sub, 0.03, 1)
             if p.lee_drying > 0:
                 # e35: air descending the lee of a range warms and dries (foehn)
@@ -1050,7 +1068,7 @@ class ClimateModel:
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
-            mix = (lambda water: gauss(water, sigE)) if p.eddy_rate > 0 else None
+            mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
             if p.eddy_rate > 0 and p.eddy_moisture_height_km > 0:
                 # e4: eddies mix specific humidity above the ground, not column
                 # water: mix the sea-level equivalent and convert back, so a
@@ -1064,8 +1082,8 @@ class ClimateModel:
                 # Pamir moisture (the model's mountain columns hold more than
                 # physical ones).
                 col = np.exp(-h_km / p.eddy_moisture_height_km)
-                gcol = np.maximum(gauss(col, sigE), 1e-6)
-                mix = lambda water, col=col, gcol=gcol: col * gauss(water, sigE) / gcol
+                gcol = np.maximum(gauss(col, sigW), 1e-6)
+                mix = lambda water, col=col, gcol=gcol: col * gauss(water, sigW) / gcol
             condensate = None
             if p.eddy_rate > 0 and p.eddy_rainout > 0 and p.eddy_moisture_scheme == 'legacy':
                 # e3: storm eddies carry water vapour by many short steps, not
@@ -1078,18 +1096,18 @@ class ClimateModel:
 
                 def mix(water, crest=crest, n_steps=n_steps):
                     for _ in range(n_steps):
-                        water = np.minimum(gauss(water, sigE / np.sqrt(n_steps)), crest)
+                        water = np.minimum(gauss(water, sigW / np.sqrt(n_steps)), crest)
                     return water
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
-                exchange, mix = conservative_exchange(exchange, lambda a: gauss(a, sigE, mode='reflect'), mass)
+                exchange, mix = conservative_exchange(exchange, lambda a: gauss(a, sigW, mode='reflect'), mass)
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative-rainout':
                 from .storms import RainoutExchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
                 crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
                 mix = RainoutExchange(exchange,
-                    lambda a: gauss(a, sigE / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
+                    lambda a: gauss(a, sigW / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
                     crest, mass, steps=EDDY_RAINOUT_STEPS)
                 exchange, condensate = mix.frequency, mix.condensate
             solution = solve_moisture(self.solver, p, u, v, lamE, W_ocean, E_land, Ws,
@@ -1112,7 +1130,7 @@ class ClimateModel:
                 ti, tj = self.trace_cells
                 raw = p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up
                 if p.subgrid_orographic > 0:
-                    raw = raw + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u, v) / 5.0, 0.0, 3.0)
+                    raw = raw + p.subgrid_orographic * self.subgrid_relief * np.clip(np.hypot(u_up, v_up) / 5.0, 0.0, 3.0)
                 cell = lambda a: np.broadcast_to(np.asarray(a, float), lat.shape)[ti, tj].copy()
                 self.trace.append(dict(
                     day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP), bucket=cell(soil_w),

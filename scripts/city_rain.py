@@ -43,9 +43,12 @@ def km(lat1, lon1, lat2, lon2):
 def match(run: Path, towns):
     """City rows with the containing cell's simulated and observed monthly rain."""
     out, seen = [], set()
+    tlat = np.array([t["lat"] for t in towns]); tlon = np.array([t["lon"] for t in towns])
     for path in sorted((run / "cells").glob("*.npz")):
         z = np.load(path)
-        for t in towns:
+        near = np.nonzero((tlat > z["lat"].min() - 1) & (tlat < z["lat"].max() + 1)
+                          & (tlon > z["lon"].min() - 1.5) & (tlon < z["lon"].max() + 1.5))[0]
+        for t in (towns[i] for i in near):
             d = km(t["lat"], t["lon"], z["lat"], z["lon"])
             k = int(np.argmin(d))
             if d[k] > MAX_KM or (t["name"], t["lat"]) in seen:
