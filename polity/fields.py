@@ -82,8 +82,10 @@ def polity_fills(shape):
     return ids, info
 
 
-def compute(atlas):
-    """All political reach fields of one atlas on its 1000 x 463 analysis grid."""
+def compute(atlas, density=None):
+    """All political reach fields of one atlas on its 1000 x 463 analysis grid.
+    `density` (people per km², that grid) replaces the central occupation
+    scenario, so other scenarios can be compared (scripts/control_scenarios.py)."""
     from harvest.export import climate_arrays, geometry
     from population.export import decode_harvest
     from rotclimate.geography import target_fullres
@@ -101,7 +103,9 @@ def compute(atlas):
     road = route & land
     ferry = ndi.binary_closing(route, iterations=2) & ~land        # dotted ferry routes, gaps closed
     hm, hf = decode_harvest(data)
-    density = np.where(land, hf["settlement_base"] * hm["occupation"]["scenarios"]["central"], 0.0)
+    if density is None:
+        density = hf["settlement_base"] * hm["occupation"]["scenarios"]["central"]
+    density = np.where(land, density, 0.0)
     paths = path_factor(density)
     towns = settlements(shape)
     _, nearest = ndi.distance_transform_edt(~land, return_indices=True)
