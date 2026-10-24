@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-10-24, after single-region probes on 12 mountainous regions (output/contrast_probe2, scripts/probe_city_contrast.py and scripts/rain_gradients.py) and before any dev31 result on r36",
+ "finding": "Inside regions, r36's rain is too flat (cell log-rain sd 0.33 against 0.48 observed, correlation 0.53). Pooled within-region regressions over all dev31 land cells: per log(1 + coast km) observed -0.23, model -0.24; per km of mean elevation observed -0.06, model +0.18; per km of sub-grid relief observed +0.55, model +0.03. Rugged ground is far wetter in reality than in the model. The slope lift and the sub-grid hill lift use the surface wind after terrain drag (1/(1 + 1.44 h_max^2): 3-15 % of the wind over mountains), while the flow lifted over a range is the free-air flow at crest level.",
+ "hypothesis": "e39 at full strength (upslope_free_wind 1, default 0): the slope and sub-grid lift use the undragged wind. Probes on 12 regions: relief coefficient 0.00 -> 0.40 (observed 0.45), within-region correlation 0.685 -> 0.742, mean rain loss 0.474 -> 0.465, city log RMSE 0.567 -> 0.549; California 0.441 -> 0.536 and Iberia, Morocco worse. On r34 e39 at 0.5 gave gate S 0.999.",
+ "reference": "calibration/local_accuracy_20261023/r36_params.json rerun on dev31 under the current source fingerprint (output/crest_wind_20261024/reference)",
+ "candidates": {
+  "free1": {"upslope_free_wind": 1.0},
+  "free0.75": {"upslope_free_wind": 0.75}
+ },
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); among passing candidates the highest S is selected before the paired 28 km check and the sealed six, run once. scripts/city_rain.py and scripts/rain_gradients.py are reported alongside and do not decide."
+}
