@@ -93,7 +93,10 @@ def main():
     ap.add_argument("--evals", type=int, default=240)
     ap.add_argument("--out")
     ap.add_argument("--region-specs", help="JSON of extra region definitions (as in benchmark_local.py)")
+    ap.add_argument("--gyre", action="store_true", help="also fit e42 current_gyre (0-1)")
     a = ap.parse_args()
+    if a.gyre:
+        SPACE.append(("current_gyre", 0.0, 1.0))
     if a.region_specs:
         earth.REGIONS.update(json.loads(Path(a.region_specs).read_text()))
     base = load_params(a.params).replace(**json.loads(a.set))

@@ -1,0 +1,7 @@
+{
+ "frozen": "2026-10-24, before the sea fit and before any land result for it",
+ "why": "The sea settings were fitted (Stage B, r30) to WOA18 without e42, so they were tuned around the false cold currents of shut-off seas; the enclosed and semi-enclosed seas stay 3.5-4.7 C too cold. e42 alone takes the dev31 sea-surface MAE 2.864 -> 2.685 C and, on land, fails the gate twice (S 0.9986 on r35, 0.9987 on r36: the training group, California and Mexico, worsens) while the cities improve (0.752 -> 0.696; 0.551 -> 0.503).",
+ "step1": "scripts/fit_sst.py fit calibration/local_accuracy_20261023/r36_params.json --gyre: the sea settings of fit_sst.SPACE plus current_gyre, fitted to WOA18 on the 26 dev31 regions outside the former holdout group (chile, cape, sw_australia, south_brazil, japan held out for the transfer check), 240 evaluations, seed 1023 (the script's).",
+ "step2": "The fitted sea settings on r36 take the unchanged gate (policy_v2) on dev31 against a fresh r36 reference; a pass takes the paired 28 km check and the sealed six once. scripts/city_rain.py is reported alongside.",
+ "out": "calibration/sea_refit_20261024/fit"
+}
