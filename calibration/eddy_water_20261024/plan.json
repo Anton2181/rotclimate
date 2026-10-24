@@ -1,0 +1,8 @@
+{
+ "frozen": "2026-10-24, after single-region probes (scripts/probe_region_rain.py on Manchuria, North China Plain, Korea, Japan, Mexico, Central Asia, western Europe, Iran) and before any dev31 result for e38",
+ "finding": "Per-city check (scripts/city_rain.py, 3,667 cities): the cold continental winters of north-east Asia are far too wet (Manchuria January 42 mm against 5, Korea 96 against 29, North China Plain 33 against 8). The column holds 5.4 mm against ~3 observed and its saturation over -15 C ground is ~3.5 mm, so the surplus snows out as supersaturation. The water arrives by storm-eddy exchange, a Gaussian of eddy_scale_km = 852 km that also mixes heat. Shrinking that scale to 300 km fixed Manchuria (loss 0.48 -> 0.23) but changed temperatures (Japan 2.00 -> 2.49 C).",
+ "hypothesis": "e38 (new parameter eddy_moisture_scale_km, default 0 = unchanged): eddies carry water a shorter way than heat, since lifted and cooled moist air rains out along the way. Moisture exchange gets its own Gaussian scale; heat keeps eddy_scale_km.",
+ "reference": "calibration/local_accuracy_20261023/r35_params.json rerun on dev31 under the current source fingerprint (output/eddy_water_20261024/reference)",
+ "candidates": {"w600": {"eddy_moisture_scale_km": 600.0}, "w450": {"eddy_moisture_scale_km": 450.0}, "w300": {"eddy_moisture_scale_km": 300.0}},
+ "evaluation": "dev31 at 56 km, scripts/gate_local.py under policy_v2 (unchanged rules); a pass takes the paired 28 km check and the sealed six once. scripts/city_rain.py is reported alongside and does not decide."
+}
