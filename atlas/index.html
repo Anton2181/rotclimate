@@ -585,6 +585,20 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="harvest.js"></script>
 <script src="population.js"></script>
 <script>
+// Published copies store the binaries gzip-compressed to fit the host's file
+// size limit; local builds keep them raw. Both load.
+window.atlasBytes = async (response) => {
+  const buf = await response.arrayBuffer(), head = new Uint8Array(buf.slice(0, 2));
+  if (head[0] !== 0x1f || head[1] !== 0x8b) return buf;
+  return new Response(new Blob([buf]).stream().pipeThrough(new DecompressionStream("gzip"))).arrayBuffer();
+};
+// A generated file: inside claude.ai through the viewer's save prompt, elsewhere a plain link.
+window.atlasSave = async (filename, blob) => {
+  const dl = window.claude && typeof window.claude.use === "function" ? await window.claude.use("downloads") : null;
+  if (dl) return dl.save({ filename, data: blob });
+  const a = document.createElement("a"), url = URL.createObjectURL(blob);
+  a.href = url; a.download = filename; a.click(); setTimeout(() => URL.revokeObjectURL(url), 1000);
+};
 (async function () {
   const $ = (id) => document.getElementById(id);
   const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
@@ -614,7 +628,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     let res = await fetch(fresh("data/atlas.bin"), { cache: "no-store" });
     if (!res.ok) res = await fetch(fresh("data/atlas.wasm"), { cache: "no-store" });
     if (!res.ok) throw new Error(`Binary data HTTP ${res.status}`);
-    buf = await res.arrayBuffer();
+    buf = await window.atlasBytes(res);
     // An incomplete deploy should fail visibly instead of mixing old map data.
     const expectedBytes = Object.values(meta.arrays).reduce((max, a) => {
       const bytesPerElement = { uint8: 1, uint16: 2, int16: 2 }[a.dtype];

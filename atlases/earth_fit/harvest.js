@@ -11,7 +11,7 @@ window.HarvestAtlas = (() => {
       json(fresh('data/'+meta.harvest.metadata)), json(fresh('data/harvest_sources.json')),
       json(fresh('data/settlement_reference_regions.json')), fetch(fresh('data/'+meta.harvest.binary))]);
     if(!response.ok) throw Error(`Harvest binary HTTP ${response.status}`);
-    const buf=await response.arrayBuffer(), types={uint8:Uint8Array,uint16:Uint16Array,float32:Float32Array};
+    const buf=await (window.atlasBytes?window.atlasBytes(response):response.arrayBuffer()), types={uint8:Uint8Array,uint16:Uint16Array,float32:Float32Array};
     const fields={};
     for(const [name,a] of Object.entries(m.arrays)) {
       const count=a.shape.reduce((x,y)=>x*y,1), Type=types[a.dtype];

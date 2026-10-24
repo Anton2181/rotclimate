@@ -34,7 +34,7 @@
     const m=await response.json();if(m.fingerprint!==meta.population.fingerprint)throw Error('Population metadata differs from this atlas.');
     const binary=await fetch(fresh('data/'+meta.population.binary),{cache:'no-store'});
     if(!binary.ok)throw Error('Population data could not load.');
-    const buf=await binary.arrayBuffer(),f={};let end=0;
+    const buf=await (window.atlasBytes?window.atlasBytes(binary):binary.arrayBuffer()),f={};let end=0;
     const digest=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',buf)),v=>v.toString(16).padStart(2,'0')).join('');
     if(digest!==m.binary_sha256)throw Error('Population data belong to a different build. Update the complete atlas folder.');
     for(const [name,a] of Object.entries(m.arrays)){
@@ -117,7 +117,8 @@
             if(area)rows.push(['"'+(p?m.provinces[p-1]:'Outside province grid').replace(/"/g,'""')+'"',area,people,support].join(','));
       }
       rows.push(['"TOTAL ALLOCATED"','',result.allocated,''].join(','));rows.push(['"UNALLOCATED"','',result.unallocated,''].join(','));
-      const a=document.createElement('a'),url=URL.createObjectURL(new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'}));a.href=url;a.download='population_'+s.population+'_'+s.pattern+'_'+$('disease').value+'.csv';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);
+      const name='population_'+s.population+'_'+s.pattern+'_'+$('disease').value+'.csv',blob=new Blob([rows.join('\n')+'\n'],{type:'text/csv;charset=utf-8'});
+      if(window.atlasSave)window.atlasSave(name,blob).catch(()=>{});
     });
     compute();return {render,state,select:(x,y,name)=>{selection=[x,y,name];point();},
       stats:()=>({...result,people:undefined})};
