@@ -3,8 +3,8 @@
 compute(atlas) reads the atlas's terrain, potential biomes, snow months and
 Harvest density (1000 x 463 cells of ~3.7 km), the painted swamp zone, and
 data/source/ravages_v8 (roads and ferry routes, settlements by the map key,
-legion markers, polity fills, commanderies). See polity/control.py for the
-travel model.
+polity fills, commanderies), and adds the unmarked seats a populated
+countryside implies. See polity/control.py for the travel model.
 """
 from __future__ import annotations
 
@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
-from .control import control, days_from, path_factor, terrain_coefficient, travel_graph
+from .control import control, days_from, path_factor, terrain_coefficient, travel_graph, unmarked_days
 
 ROOT = Path(__file__).resolve().parents[1]
 LAYERS = ROOT / "data/source/ravages_v8"
@@ -61,16 +61,6 @@ def settlements(shape):
     return out
 
 
-def legions(shape):
-    """The imperial legion markers (purple diamonds)."""
-    m = rgba("legions.png")[..., 3] > 0
-    lab, n = ndi.label(ndi.binary_closing(m, iterations=2))
-    H, W = m.shape
-    return [dict(kind="legion", y_px=float(y), x_px=float(x),
-                 row=int(min(shape[0] - 1, y * shape[0] / H)), col=int(min(shape[1] - 1, x * shape[1] / W)))
-            for y, x in ndi.center_of_mass(m, lab, range(1, n + 1))]
-
-
 def polity_fills(shape):
     """Polity fills by colour on the analysis grid: id map, RGB and name of each id."""
     a = rgba("borders_fill.png")
@@ -112,24 +102,29 @@ def compute(atlas):
     hm, hf = decode_harvest(data)
     density = np.where(land, hf["settlement_base"] * hm["occupation"]["scenarios"]["central"], 0.0)
     paths = path_factor(density)
-    towns = settlements(shape) + legions(shape)
+    towns = settlements(shape)
     _, nearest = ndi.distance_transform_edt(~land, return_indices=True)
     for t in towns:                                               # snap to land
         t["row"], t["col"] = int(nearest[0, t["row"], t["col"]]), int(nearest[1, t["row"], t["col"]])
-    ids, info = polity_fills(shape)
     core = block_any(rgba("commanderies_core.png")[..., 3] > 128, shape, 0.5) & land
     frontier = block_any(rgba("commanderies_frontier.png")[..., 3] > 128, shape, 0.5) & land
 
     network = [(r, c) for r, c in zip(*np.nonzero(road))] + [(t["row"], t["col"]) for t in towns]
+    ids, info = polity_fills(shape)
     capital = [(t["row"], t["col"]) for t in towns if t["kind"] == "imperial capital"]
     f = {}
+    claimed = land & (ids > 0)
     for season, share in (("open", None), ("winter", snow_share)):
-        graph = travel_graph(elev, land, road, terrain_coefficient(biome, swamp, share), cell_km, paths, ferry)
-        f[f"days_{season}"] = days_from(graph, shape, network)
+        eta = terrain_coefficient(biome, swamp, share)
+        graph = travel_graph(elev, land, road, eta, cell_km, paths, ferry)
+        f[f"marked_days_{season}"] = days_from(graph, shape, network)
+        # the unmarked seats of the countryside (claimed land only): one per 40,000 people
+        f[f"unmarked_days_{season}"] = np.where(claimed, unmarked_days(density, eta, paths), np.inf)
+        f[f"days_{season}"] = np.minimum(f[f"marked_days_{season}"], f[f"unmarked_days_{season}"])
         f[f"capital_days_{season}"] = days_from(graph, shape, capital)
         if season == "open":
             open_graph = graph
-    # each polity's reach from its own roads, settlements and garrisons (snow-free season)
+    # each polity's reach from its own roads, settlements and unmarked seats (snow-free season)
     groups = {}
     for i, d in info.items():
         if d["name"]:
@@ -140,7 +135,7 @@ def compute(atlas):
         own = np.isin(ids, groups[name])
         src = [(r, c) for r, c in zip(*np.nonzero(road & own))]
         src += [(t["row"], t["col"]) for t in towns if own[t["row"], t["col"]]]
-        reach[k] = days_from(open_graph, shape, src)
+        reach[k] = np.minimum(days_from(open_graph, shape, src), np.where(own, f["unmarked_days_open"], np.inf))
     best = np.argmin(reach, 0); best_days = np.min(reach, 0)
     second_days = np.partition(reach, 1, axis=0)[1] if len(names) > 1 else np.full(shape, np.inf)
     f["polity_best"] = np.where(np.isfinite(best_days), best, -1)

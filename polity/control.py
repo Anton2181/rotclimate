@@ -12,6 +12,8 @@ and back. Its reach is measured in days of travel for a person on foot:
   footpaths          the off-path 0.6 rises toward 1.0 with the people per km2
                      (half-way at 20): farmed land is laced with tracks
   ferry routes       the map's dotted routes over water, 40 km a day with the wait
+  unmarked seats     one per 40,000 people, as dense as the people (unmarked_days);
+                     tracks between farms are in the footpath term
   other water        not crossed (no open-sea shipping yet)
 
 Days beyond the network = the cheapest travel to the nearest road or
@@ -91,6 +93,24 @@ def days_from(graph, shape, sources):
     if not ids:
         return np.full(shape, np.inf)
     return dijkstra(graph, directed=True, indices=ids, min_only=True).reshape(shape)
+
+
+def unmarked_days(density, eta, paths, seat_people=40000.0, min_density=1.0):
+    """Days to the nearest unmarked seat, from how many people live here.
+
+    The map marks the main roads and walled places; the countryside between
+    them has market towns and county seats on tracks. With one seat per
+    seat_people (40,000: the mean Han county of AD 2, 58 million people in
+    1,587 counties) on a hexagonal lattice, each seat serves seat_people /
+    density km2, and the mean distance to the nearest seat is 0.377 x the
+    square root of that area. It is walked at the local level-ground pace
+    (footpaths and terrain coefficient included). Below min_density people per
+    km2 there are no seats."""
+    d = np.asarray(density, float)
+    area = seat_people / np.maximum(d, 1e-9)
+    km = 0.377 * np.sqrt(area)
+    speed = tobler_km_h(0.0, np.asarray(paths, float)) * MARCH_HOURS / np.asarray(eta, float)
+    return np.where(d >= min_density, km / speed, np.inf)
 
 
 def control(days):

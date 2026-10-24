@@ -20,7 +20,8 @@ DAYS_RAMP = CONTROL_RAMP[::-1]
 TRAVEL_NOTE = ('Days on foot for an official or a patrol: roads and river routes 30 km a day, ferry routes 40, '
                'otherwise Tobler\'s hiking speed over the terrain for 7 hours a day, slowed by Soule & Goldman '
                'terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, snow 2.5) and quickened by footpaths where '
-               'people farm. No open-sea shipping.')
+               'people farm. The countryside between the marked places holds unmarked seats, one per 40,000 '
+               'people (the mean Han county of AD 2), as dense as the people. No open-sea shipping.')
 
 
 def export(atlas):
@@ -45,13 +46,13 @@ def export(atlas):
         layers.append(dict(id=lid, file=lid + '.webp', label=label, kind='ramp', group='Political reach',
                            unit=unit, vmin=lo, vmax=hi, stops=stops, note=note, log=False))
     ramp('reach_control', 100 * r['control_open'], 'Effective control', '% · exp(−days / 1 day) from the nearest road, '
-         'town, fort, monastery or legion, snow-free season', 0, 100, CONTROL_RAMP,
+         'town, fort, monastery or unmarked seat, snow-free season', 0, 100, CONTROL_RAMP,
          'One day out and one day back is the reach a county seat or a fort holds directly; at two days a third of it '
          'remains. ' + TRAVEL_NOTE)
     ramp('reach_control_winter', 100 * r['control_winter'], 'Control in winter', '% · as above, with the months of '
          'lasting snow (soft snow 2.5× harder going)', 0, 100, CONTROL_RAMP, TRAVEL_NOTE)
     ramp('reach_days', np.minimum(f['days_open'], 6), 'Days beyond the roads', 'days on foot to the nearest road, '
-         'town, fort, monastery or legion', 0, 6, DAYS_RAMP, TRAVEL_NOTE)
+         'town, fort, monastery or unmarked seat', 0, 6, DAYS_RAMP, TRAVEL_NOTE)
     ramp('reach_capital', np.minimum(f['capital_days_open'], 60), 'Days from the capital', 'days on foot from the '
          'imperial capital by road and track', 0, 60, DAYS_RAMP, TRAVEL_NOTE)
 
@@ -78,7 +79,7 @@ def export(atlas):
             items.append(dict(color='#%02x%02x%02x' % tuple(r['polity_rgb'][name]), label=f'{name} · {held / 1000:,.0f} k km² held'))
     layers.append(dict(id='reach_polities', file='reach_polities.webp', label='Who reaches where', kind='categories',
                        group='Political reach', items=items,
-                       note=f'Each place takes the polity whose own roads, towns and garrisons are nearest in days; the '
+                       note=f'Each place takes the polity whose own roads, towns and unmarked seats are nearest in days; the '
                             f'colour fades with the days (exp(−days)). Hatched: contested, a rival within '
                             f'{CONTESTED_DAYS:g} day. Held = within {HELD_DAYS:g} days. ' + TRAVEL_NOTE))
     meta['layers'] = [l for l in meta['layers'] if not l['id'].startswith('reach_')] + layers
