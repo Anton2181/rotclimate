@@ -96,6 +96,7 @@ class Params:
     current_strength: float = 4.0     # K, boundary current SST anomaly
     current_scale_km: float = 250.0   # e12: smoothing scale (km) of the land that decides which side of a sea a cell is on
     subpolar_current: float = 0.0     # e26: K, warm west-coast / cold east-coast currents of the subpolar gyres (poleward of ~42 deg)
+    current_gyre: float = 0.0         # e42: share of the cold west-coast current that needs open sea poleward into the westerlies (0 = off)
     sst_offset: float = 0.0           # K, global SST tweak
     sst_source: str = "model"         # "observed": Earth grids use WOA18 monthly SST (diagnostic upper bound)
     land_offset: float = 0.0          # K, global land-column tweak

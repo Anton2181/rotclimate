@@ -87,6 +87,7 @@ def w_sat(T):
     return rho_v * 2200.0                                    # vapour scale height
 
 
+GYRE_LAT = (30.0, 40.0)          # e42: open sea poleward to 30 deg: no cold current; to 40 deg: the full one
 FLUX_SMOOTH_KM = 300.0           # e17: scale of the low-level divergence that moves column water
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
@@ -243,6 +244,19 @@ class ClimateModel:
         gx = d_east(Ls) * cells_per_100km
         self.side = np.clip(gx / (0.08 * 250.0 / p.current_scale_km), -1, 1) * (~g.land)
         self.side = ndi.gaussian_filter(self.side, 1.0 * cells_per_100km)
+        self.gyre = None
+        if p.current_gyre > 0:
+            # e42: a cold west-coast current is the eastern limb of a
+            # subtropical gyre and carries water down from the westerlies; a
+            # sea shut off poleward before ~30 deg has none (the Arabian Sea
+            # stops at 25 N, the Bay of Bengal at 22 N; the side measure gave
+            # the sea off western India California's -6 C). Open to 40 deg or
+            # beyond: the full current; smoothed over the current's scale.
+            reach = g.sea_reach if g.sea_reach is not None else self._sea_reach()
+            fed = np.clip((reach - GYRE_LAT[0]) / (GYRE_LAT[1] - GYRE_LAT[0]), 0.0, 1.0)
+            sea = (~g.land).astype(float)
+            sig = p.current_scale_km / g.cell_km
+            self.gyre = gauss(fed * sea, sig) / np.maximum(gauss(sea, sig), 1e-6)
         # broad "which side of the ocean basin" field over land AND sea: >0 on
         # and off continents' west coasts, <0 on and off their east coasts
         Lb = ndi.gaussian_filter(land, 4.0 * cells_per_100km)
@@ -481,6 +495,28 @@ class ClimateModel:
             wsum += w
         return acc / wsum
 
+    def _sea_reach(self):
+        """e42 on a grid of its own: the latitude where the sea due poleward
+        (north on the map's bearing) first meets land, as earth.sea_reach;
+        past the grid's edge the sea is taken as open."""
+        g, p = self.g, self.p
+        th = np.radians(p.north_bearing)
+        di, dj = -np.cos(th), np.sin(th)
+        ii, jj = np.mgrid[0:g.ny, 0:g.nx].astype(float)
+        lf = g.land_frac.astype(float)
+        reach = np.full((g.ny, g.nx), 90.0)
+        open_ = np.ones((g.ny, g.nx), bool)
+        for k in range(1, int(np.hypot(g.ny, g.nx)) + 1):
+            ci, cj = ii + k * di, jj + k * dj
+            inside = (ci >= 0) & (ci <= g.ny - 1) & (cj >= 0) & (cj <= g.nx - 1)
+            if not (inside & open_).any():
+                break
+            cc = [np.clip(ci, 0, g.ny - 1), np.clip(cj, 0, g.nx - 1)]
+            hit = open_ & inside & (ndi.map_coordinates(lf, cc, order=1) >= 0.5)
+            reach = np.where(hit, ndi.map_coordinates(g.lat, cc, order=1), reach)
+            open_ &= ~hit
+        return np.where(g.land, g.lat, reach)
+
     def _upwind_land(self, fetch_km):
         """Land share along the westerlies' upwind direction (true west; east
         with reversed spin) with an exponential memory of fetch_km; beyond the
@@ -514,6 +550,8 @@ class ClimateModel:
         band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
+        if self.gyre is not None:      # e42: no gyre, no cold current
+            cur = np.where(cur < 0, cur * (1.0 - p.current_gyre * (1.0 - self.gyre)), cur)
         if p.subpolar_current > 0:
             # e26: poleward of ~42 deg the subpolar gyre turns the other way:
             # the North Atlantic Drift and the Alaska Current warm the west

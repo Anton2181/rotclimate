@@ -228,6 +228,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
     g.chi_far_long = fetch_at(-lat if lat0 < 0 else lat, lon, fetch_km=3.0 * FETCH_KM)   # e23
     g.chi_pole = pole_fetch_at(lat if lat0 >= 0 else -lat, lon)   # e31 (real latitude: south of southern regions)
+    g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
@@ -313,6 +314,54 @@ def pole_fetch_at(lat, lon, fetch_km: float = POLE_FETCH_KM):
     from scipy import ndimage as ndi
 
     F, flat, flon = pole_fetch(fetch_km)
+    i = (flat[0] - np.asarray(lat)) / 0.5
+    j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
+    Fw = np.concatenate([F, F[:, :1]], axis=1)
+    return ndi.map_coordinates(Fw, [i, j], order=1, mode="nearest")
+
+
+def sea_reach() -> tuple:
+    """e42: for every 0.5-degree cell the latitude (degrees from the equator)
+    at which a path due poleward first meets land (a cell at least half land
+    on WorldClim), 90 where the sea runs open to the pole or the polar ice.
+    An eastern-boundary current carries water down from the westerlies; seas
+    shut off poleward before ~30 deg (the Arabian Sea at 25 N, the Bay of
+    Bengal at 22 N, the Red Sea, the Persian Gulf) have no such current.
+    (field, lat, lon)."""
+    key = CACHE / "sea_reach.npz"
+    if key.exists():
+        z = np.load(key)
+        return z["reach"], z["lat"], z["lon"]
+    elev = _wc("elev")
+    land = np.isfinite(elev) & (elev > -1000)
+    f = 6
+    H, W = land.shape[0] // f, land.shape[1] // f
+    lf = land[:H * f, :W * f].reshape(H, f, W, f).mean((1, 3))
+    lat = 90 - (np.arange(H) + 0.5) * 0.5
+    lon = -180 + (np.arange(W) + 0.5) * 0.5
+    out = np.empty_like(lf)
+    reach = np.full(W, 90.0)
+    for i in range(H):                          # north: from the pole down to the equator
+        if lat[i] < 0:
+            break
+        reach = np.where(lf[i] >= 0.5, lat[i], reach)
+        out[i] = reach
+    reach = np.full(W, 90.0)
+    for i in range(H - 1, -1, -1):              # south: from the pole up
+        if lat[i] >= 0:
+            break
+        reach = np.where(lf[i] >= 0.5, -lat[i], reach)
+        out[i] = reach
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, reach=out.astype(np.float32), lat=lat, lon=lon)
+    return out, lat, lon
+
+
+def sea_reach_at(lat, lon):
+    """e42: sea_reach at points (real latitude: southern points look south)."""
+    from scipy import ndimage as ndi
+
+    F, flat, flon = sea_reach()
     i = (flat[0] - np.asarray(lat)) / 0.5
     j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
     Fw = np.concatenate([F, F[:, :1]], axis=1)
