@@ -234,6 +234,8 @@ def main():
     export_harvest(out)
     from population.export import export as export_population
     export_population(out)
+    from polity.export import export as export_reach
+    export_reach(out)
     print(json.dumps(summary, indent=1))
     print("atlas written to", out)
     export_lock.close()
