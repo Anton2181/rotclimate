@@ -1221,7 +1221,8 @@ class ClimateModel:
                     u=cell(u), v=cell(v), background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
                     conv=cell(p.convective * conv), orog=cell(p.orographic * up),
                     damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab),
-                    Teq=cell(T_eq), Tsl=cell(Tsl), SST=cell(SST), chi=cell(0.0 if chi is None else chi)))
+                    Teq=cell(T_eq), Tsl=cell(Tsl), SST=cell(SST), chi=cell(0.0 if chi is None else chi),
+                    A=cell(A_dyn), conv_rate=cell(0.0 if closure is None else closure['conv'] * np.exp(11.4 * (np.minimum(W / np.maximum(Ws, 1e-6), 1.5) - closure['r0'])) * closure['fT'])))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
             if p.soil_bucket_mm > 0:
                 soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
