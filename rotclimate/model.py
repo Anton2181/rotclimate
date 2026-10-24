@@ -931,7 +931,16 @@ class ClimateModel:
                 Ws = w_sat(T_col - 0.5 * column_lapse * h_km)
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
-            W_ocean = p.ocean_rh * w_sat(SST)
+            if p.ocean_rh_warm > 0:
+                # e40: over seas warmer than ~25 C deep convection moistens the
+                # whole column, and its water rises steeply with the sea's
+                # temperature (Stephens 1990: ~45 mm at 27 C, ~55 at 29 C, or
+                # 0.80-0.87 of this model's saturated column, against 0.71-0.73
+                # at 15-24 C). One humidity for every sea left the Bay of
+                # Bengal at 45 mm and the monsoon short of water.
+                W_ocean = (p.ocean_rh + p.ocean_rh_warm * np.clip((SST - 25.0) / 4.0, 0.0, 1.0)) * w_sat(SST)
+            else:
+                W_ocean = p.ocean_rh * w_sat(SST)
             if uM is None:
                 div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
             else:
@@ -1069,6 +1078,19 @@ class ClimateModel:
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
+            if p.eddy_rate > 0 and p.eddy_rh_cap > 0:
+                # e38b: an eddy moves air, and air moved onto colder ground keeps
+                # at most its relative humidity: the rest condenses on the way
+                # (warm air gliding up over cold air). Moved onto warmer ground
+                # it keeps its water and its humidity falls. Mixing column water
+                # alone carried Pacific water into Manchuria's frozen columns,
+                # which snowed out the excess (42 mm in January against 5).
+                # target = min(G(W), Ws * G(W / Ws)), blended by eddy_rh_cap.
+                ws_safe = np.maximum(Ws, 1e-3)
+                plain_mix, c_rh = mix, p.eddy_rh_cap
+                mix = lambda water, ws_safe=ws_safe, plain_mix=plain_mix, c_rh=c_rh: (
+                    (1.0 - c_rh) * plain_mix(water)
+                    + c_rh * np.minimum(plain_mix(water), ws_safe * plain_mix(water / ws_safe)))
             if p.eddy_rate > 0 and p.eddy_moisture_height_km > 0:
                 # e4: eddies mix specific humidity above the ground, not column
                 # water: mix the sea-level equivalent and convert back, so a
