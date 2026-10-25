@@ -1,0 +1,19 @@
+{
+ "frozen": "2026-10-25, before any result",
+ "question": "Does market access over a goods-cost network (sea : river : road = 1 : 5 : 28 per km, Diocletian's Price Edict; upriver twice downriver) explain which Roman towns were large, beyond the people of their own hinterland? If so, at what cost scale, and does it carry from the west of the empire to the east?",
+ "data": {
+  "towns": "Hanson 2016 cities existing in AD 150, inside Cliopatria's Roman Empire of AD 150, in the rome window, with an area (ha)",
+  "people": "the Earth Harvest run's settlement density (central occupation) on every land cell of the window, inside the empire or not",
+  "network": "the rome window as in the polity tests (Itiner-e roads, straits ferried), priced by polity/trade.py: four months, one a season (TRADE_MONTHS); ports: towns within two cells of water; river boats as polity v2"
+ },
+ "predictors": {
+  "LOCAL": "log market access at a 30 road-km scale (about a day's haul by wagon): the town's own hinterland",
+  "MA(c)": "log market access at scale c road-km, c in [100, 200, 400, 800, 1600, 3200]"
+ },
+ "fit": "towns west of 20 E: ordinary least squares, log10 area ~ LOCAL (baseline) and log10 area ~ LOCAL + MA(c) for each c; the c with the highest R2 is adopted",
+ "test_run_once": {
+  "T_trade1": "towns east of 20 E, predicted with the west's coefficients: passes if the Spearman correlation of predicted and actual area is at least 0.02 higher for LOCAL + MA(c_fit) than for LOCAL alone",
+  "report": "out-of-sample R2 of both in the east; Spearman in both halves; the ten largest predicted and actual towns"
+ },
+ "map_use": "If T_trade1 passes: the map's towns get relative sizes (LOCAL + MA with the Roman coefficients) and the gravity trade routes use COST_SCALE = c_fit. If it fails: trade routes still drawn with c_fit, labelled untested, and town sizes are not shown."
+}
