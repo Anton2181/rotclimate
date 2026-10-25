@@ -5,10 +5,20 @@
 Earth r38 is built and promoted to `atlases/earth_fit`, with all three layout
 numerical certificates passing. See `reports/ATLAS_R38_20261025.md` and
 `output/atlas_r38/earth_publication.json` for map comparisons and browser QA.
-The hub and atlas pages are refreshed. Free-fit and Whittaker political
-exports have been started in `output/atlas_r38/staging/`; inspect their
-process/log status before restarting. The original list below describes the
-state before this follow-up. Hosted artifacts remain unchanged.
+The hub and atlas pages are refreshed. Free-fit and Whittaker political exports
+are now promoted and browser-checked; all three have political plates at fills
+0 and 1 day and claimed/held population figures. Map tables and figures are in
+`reports/POLITY_V3_20261025.md`; publication checks are in
+`output/atlas_r38/political_publication.json` and `food_population_checks.json`.
+Hosted artifacts remain unchanged because no tool for those URLs is available.
+
+The r38 rainfall-structure search is active, with its restored 31-region
+reference reproducing adopted r38 exactly. See `reports/RAIN_STRUCTURE_20261025.md`
+and use `scripts/guarded_gate_search.py` for future resumes; inspect the live
+process before starting another. No physical model source may change during
+that search. Separate directed-trade prototypes/audits are under
+`reports/DIRECTED_TRADE_20261025.md`; they are not the active atlas trade rules.
+The original list below describes the state before this follow-up.
 
 Branch: `claude/friendly-turing-43ygeu`. Everything below is committed and pushed. Background jobs
 that were running when the session ended did NOT save; rerun them as listed.
