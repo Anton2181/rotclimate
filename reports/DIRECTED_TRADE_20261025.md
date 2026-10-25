@@ -115,3 +115,12 @@ serialization identities. The original calculation sources are recorded at the
 time of staging; later renderer changes do not invalidate the saved shipment
 weights. Repository atlases are updated; external hosted artifacts still need a
 publishing tool for their existing URLs.
+
+
+The HTML atlas pages and comparison hub are refreshed for the local `.bat`
+launcher. Both startup output and the loaded page identify directed markets
+and three Trade views. All three atlases pass browser checks through the actual
+`serve_atlases.py` handler; HTML, metadata and Trade images return `no-store`.
+See `publication/launcher_check.json` and `publication/html_refresh.json`.
+Refreshing the browser picks up updated repository files; the launcher does
+not itself download newer commits.

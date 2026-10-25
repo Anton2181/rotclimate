@@ -623,6 +623,10 @@ window.atlasSave = async (filename, blob) => {
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
       : "Current atlas data loaded.";
+    if (meta.reach?.trade?.model === "inbound-directed") {
+      const tradeViews = meta.layers.find(layer => layer.id === "reach_trade")?.variants?.options?.length || 1;
+      $("atlas-data-status").textContent += ` Directed markets · ${tradeViews} trade views.`;
+    }
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);

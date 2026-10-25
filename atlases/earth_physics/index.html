@@ -338,12 +338,17 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
           <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
           <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
+          <label class="toggle" id="tiers-control" title="Group the colours into classes with round edges instead of a smooth gradient" hidden><input type="checkbox" id="tiers"> Tiered colours</label>
         </div>
       </div>
       <div id="settlement-controls" class="monthctl" hidden>
         <label id="occupation-control">Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
         <label id="disease-control">Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
         <span class="note">c.200 AD technology · scenarios, not a census</span>
+      </div>
+      <div id="variant-controls" class="monthctl" hidden>
+        <label><span id="variant-name">Variant</span> <select id="variant"></select></label>
+        <span class="note" id="variant-note"></span>
       </div>
       <div id="population-controls" class="monthctl population-controls" hidden>
         <label>Population, millions <input id="population-budget" type="number" min="0" step="0.1" aria-label="Supplied population in millions"></label>
@@ -605,6 +610,10 @@ window.atlasSave = async (filename, blob) => {
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
       : "Current atlas data loaded.";
+    if (meta.reach?.trade?.model === "inbound-directed") {
+      const tradeViews = meta.layers.find(layer => layer.id === "reach_trade")?.variants?.options?.length || 1;
+      $("atlas-data-status").textContent += ` Directed markets · ${tradeViews} trade views.`;
+    }
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -682,7 +691,7 @@ window.atlasSave = async (filename, blob) => {
         name => harvestUI?.selectProvince(name)).catch(error => { populationLoading = null; throw error; });
       populationUI = await populationLoading;
       if (current !== L.id) return;
-      $("base").src = populationUI.render(L);
+      $("base").src = populationUI.render(L, tieredOn(L));
       const context = populationUI.state();
       L.population_context = L.population_dynamic ? `${(context.population / 1e6).toLocaleString(undefined, {maximumFractionDigits: 3})} M budget · ${$("population-pattern").selectedOptions[0].textContent} · ${$("disease").selectedOptions[0].textContent}` : "";
       $("base").alt = L.label + (L.population_context ? " · " + L.population_context : "");
@@ -690,6 +699,7 @@ window.atlasSave = async (filename, blob) => {
       if (populationSelection) populationUI.select(...populationSelection);
       const state = new URLSearchParams(location.hash.slice(1));
       for (const [key, value] of Object.entries(populationUI.state())) state.set(key, value);
+      if ($("tiers").checked) state.set("colours", "tiers"); else state.delete("colours");
       history.replaceState(null, "", "#" + state.toString());
       for (const link of document.querySelectorAll(".atlas-nav a"))
         if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href"))) link.href = link.href.split("#")[0] + "#" + state.toString();
@@ -733,6 +743,32 @@ window.atlasSave = async (filename, blob) => {
       showFrame();
     }, 900);
   });
+  // Tiered colours: layers with a tiers record have a twin image per file
+  // (one colour per class) and a stepped legend; the rest keep their ramp.
+  const tieredOn = (L) => $("tiers").checked && !!L.tiers;
+  // Layers with variants (e.g. the de facto gap fill) have one image, legend and note per option
+  const variantOf = (L) => L.variants ? (L.variants.options.find(o => o.value === $("variant").value)
+    || L.variants.options.find(o => o.value === L.variants.default) || L.variants.options[0]) : null;
+  const layerFile = (L) => L.variants ? variantOf(L).file
+    : tieredOn(L) ? (L.tiers.scenario_files?.[scenarioKey()] || L.tiers.file)
+    : (L.scenario_files?.[scenarioKey()] || L.file);
+  function showVariants(L) {
+    $("variant-controls").hidden = !L.variants;
+    if (!L.variants) return;
+    const sel = $("variant"), keep = sel.value;
+    if (sel.dataset.layer !== L.id) {
+      sel.innerHTML = "";
+      for (const o of L.variants.options) sel.add(new Option(o.label, o.value));
+      sel.dataset.layer = L.id;
+      sel.value = L.variants.options.some(o => o.value === keep) ? keep : L.variants.default;
+    }
+    $("variant-name").textContent = L.variants.label;
+    const v = variantOf(L);
+    $("variant-note").textContent = v.caption || "";
+    if (v.items) L.items = v.items;
+    if (v.note) L.note = v.note;
+  }
+  $("variant").addEventListener("change", () => setLayer(current));
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
@@ -750,7 +786,8 @@ window.atlasSave = async (filename, blob) => {
     $("population-section").hidden = !population;
     $("population-message").hidden = !population;
     $("harvest-section").hidden = population || !meta.harvest;
-    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "");
+    showVariants(L);
+    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
       for (const f of L.frames) { const im = new Image(); im.src = fresh("data/" + f); }   // preload for smooth play
@@ -758,11 +795,14 @@ window.atlasSave = async (filename, blob) => {
     } else {
       stopPlay();
       $("monthctl").hidden = true;
-      $("base").src = fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
+      $("base").src = fresh("data/" + layerFile(L));
     }
+    $("tiers-control").hidden = !L.tiers;
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
     const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
+    if ($("tiers").checked) state.set("colours", "tiers");
+    if (L.variants) state.set("variant", variantOf(L).value);
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     history.replaceState(null, "", "#" + state.toString());
@@ -824,6 +864,9 @@ window.atlasSave = async (filename, blob) => {
         + `<span class="note">Each place takes the zone type its simulated climate fits best; a place meeting the swamp rule (hot, very wet, flat ground) counts as swamp, and no place takes a zone its Köppen class contradicts (cold and dry is BSk/BWk only, Mediterranean is Cs only).</span>`;
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
+    } else if (tieredOn(L)) {
+      el.innerHTML = L.tiers.colors.map((c, i) => `<span><span class="sw" style="background:${c}"></span>${esc(L.tiers.labels[i])}</span>`).join("")
+        + `<span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}${L.population_context ? " · " + esc(L.population_context) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
     } else {
       const span = L.vmax - L.vmin;
       const fmt = (v) => tickText(L, v);
@@ -1296,6 +1339,8 @@ window.atlasSave = async (filename, blob) => {
     if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
       ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
     if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
+    if (tieredOn(L)) return { title: `${L.label}, ${L.unit}${L.scenario_files ? " · " + layerScenario(L) : ""}${L.population_context ? " · " + L.population_context : ""}`,
+      items: L.tiers.colors.map((c, i) => ({ color: c, label: L.tiers.labels[i] })) };
     const span = L.vmax - L.vmin;
     const fmt = (v) => tickText(L, v);
     const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
@@ -1894,12 +1939,20 @@ window.atlasSave = async (filename, blob) => {
     }
   }
   const initialView = new URLSearchParams(location.hash.slice(1));
+  try { $("tiers").checked = initialView.has("colours") ? initialView.get("colours") === "tiers" : localStorage.getItem("rotclimate-tiers") === "1"; }
+  catch (e) { $("tiers").checked = initialView.get("colours") === "tiers"; }
+  $("tiers").addEventListener("change", (e) => {
+    try { localStorage.setItem("rotclimate-tiers", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
+    setLayer(current);
+  });
   for (const id of ["occupation", "disease"]) {
     const value = initialView.get(id);
     if ([...$(id).options].some(option => option.value === value)) $(id).value = value;
   }
   harvestUI?.refresh();
   const requestedLayer = initialView.get("layer");
+  if (initialView.has("variant")) { const L0 = meta.layers.find(L => L.id === requestedLayer);
+    if (L0?.variants) { showVariants(L0); $("variant").value = initialView.get("variant"); } }
   setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
   const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
   select(start0.x, start0.y + 8, start0.name);

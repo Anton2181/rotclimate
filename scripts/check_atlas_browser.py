@@ -36,6 +36,8 @@ async def check(paths, base, out):
             assert await page.locator('#layer-whittaker').get_attribute('aria-pressed')=='true'
             # Named-place search exercises biome lookup and seasonally corrected station series.
             meta=await page.evaluate("fetch('data/atlas.json').then(r=>r.json())")
+            if meta.get('reach',{}).get('trade',{}).get('model')=='inbound-directed':
+                assert 'Directed markets · 3 trade views.' in await page.locator('#atlas-data-status').inner_text()
             if any(layer['id']=='biome_targets' for layer in meta['layers']):
                 await layer('biome_targets')
                 await page.wait_for_function("document.querySelector('#base').complete && document.querySelector('#base').src.includes('biome_targets.webp')")

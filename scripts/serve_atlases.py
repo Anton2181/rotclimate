@@ -43,6 +43,11 @@ def main():
         outside = next((b['share'] for b in metadata.get('biomes', []) if b['id'] == 0), None)
         coverage = f'{outside:.2%} outside the Whittaker diagram' if outside is not None else 'legacy data'
         print(f'  {name}: {coverage}; {len(metadata.get("layers", []))} map modes', flush=True)
+        trade = metadata.get('reach', {}).get('trade', {})
+        if trade.get('model'):
+            layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})
+            views = len(layer.get('variants', {}).get('options', [])) or 1
+            print(f'    Trade: {trade["model"]}; {views} views', flush=True)
     print('This launcher serves these local files; it does not download repository updates.', flush=True)
     if args.check:
         return
