@@ -79,11 +79,13 @@ def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale
     for net in nets:
         for i in top:
             for reverse in (False, True):
+                keep = (~selected if reverse else np.ones(len(towns), dtype=bool)).copy()
+                keep[i] = False
+                if not keep.any() or mass[i]==0:
+                    continue
                 graph = net.base.T.tocsr() if reverse else net.base
                 costs, parent = dijkstra(graph, directed=True, indices=int(towns[i]),
                                           limit=scale*limit_scale, return_predecessors=True)
-                keep = (~selected if reverse else np.ones(len(towns), dtype=bool)).copy()
-                keep[i] = False
                 values = mass[i]*mass*np.exp(-costs[towns]/scale)
                 values[~keep] = 0.
                 traffic = np.zeros(shape[0])

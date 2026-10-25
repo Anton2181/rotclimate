@@ -53,3 +53,27 @@ before using the 300-largest approximation.
 Keep this an engineering and sensitivity comparison. Historical town sizes
 require a separate predeclared Earth test; the proxy-based HYDE allocations
 are not independent confirmation of within-country settlement patterns.
+
+## Real-map audit on all three fits
+
+The prepared geography, density, recognised claims and settlement nodes match each cached political export exactly. These comparisons preserve the 270 road-km scale and the four seasonal freight networks.
+
+| Atlas | Eligible people (M) | People changing market | Town catchment rank correlation | Normalized route L1, 12-town subset |
+|---|---:|---:|---:|---:|
+| Earth Fit | 46.12 | 7.94% | 0.780 | 0.322 |
+| Whittaker Fit | 45.45 | 7.51% | 0.803 | 0.309 |
+| Free Fit | 54.77 | 7.21% | 0.817 | 0.228 |
+
+Reversing the town records leaves the directed route weights unchanged (relative error zero on each twelve-town subset). All maps conserve assigned population against their direction-specific reachable population. The modelled population itself stays fixed. Earth-fit has about 7,068 eligible people who cannot reach a modelled town under inbound routing; they are unassigned to a market, not deleted from the population. No settlement records coincide on a physical node in these three exports.
+
+The route comparison normalizes undirected edge traffic before measuring L1 distance, so it compares placement rather than the changed convention for counting ordered shipments. It is a bounded twelve-town diagnostic, not the complete world network. The catchment calculations do use every physical town.
+
+![Earth Fit market assignment changes](../output/directed_trade_20261025/earth_fit/market_changes.png)
+
+![Whittaker Fit market assignment changes](../output/directed_trade_20261025/whittaker_fit/market_changes.png)
+
+![Free Fit market assignment changes](../output/directed_trade_20261025/free_fit/market_changes.png)
+
+In these diagnostic images blue background includes water and unscored/unclaimed land. Orange marks eligible cells whose assigned market changes; the remainder of scored land is neutral. These maps are scenario sensitivity, not archaeological validation.
+
+The efficient preparation path avoids recomputing twelve months of each polity’s control. Each complete audit took under a minute in this workspace while the climate search was active. The original trade functions and published atlas layers remain unchanged by this audit.
