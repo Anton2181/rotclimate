@@ -1,0 +1,21 @@
+{
+  "declared_before_world_results": true,
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "start": "calibration/map_world_r39/start.json",
+  "old_atlas": "atlases/earth_fit",
+  "planet": "Preserve the published world's retrograde rotation and tilt, radius, gravity, rotation-rate magnitude, year, orbit, stellar input, greenhouse forcing and map scale. Hold all qualified r39 shared physical parameters fixed. Only latitude/orientation, four tier heights and the existing exterior-geography variables are fitted.",
+  "downsample": 32,
+  "layouts": [1, 2, 3],
+  "objective": "zonefit of the mean climate, matching atlas semantics; race=0",
+  "evaluations": 97,
+  "popsize": 8,
+  "sigma": 0.08,
+  "seed": 39,
+  "workers": 2,
+  "stds": {"north_bearing": 0.05},
+  "coarse_control": "Evaluate the currently published r38 world with the same resolution, layouts and strict numerical profile. Also retain the new-physics starting geometry as an evaluated search candidate. Never discard it just because offspring are worse.",
+  "native_selection": "At most the two highest-scoring unique completed parameter sets passing the coarse screen advance, ordered by coarse score. Coarse screen versus the matched old-world control: strict accuracy may fall at most 0.01, each zone's recall at most 0.03, Mediterranean dry share may increase at most 0.01 and Cs share may fall at most 0.03. No numerical failure may advance.",
+  "native_check": "At downsample 8 and mean layouts 1-3, require observed numerical success, zonefit at least old published +0.001, strict agreement no worse than old published, no zone recall loss greater than 0.02, Mediterranean dry-share increase at most 0.005 and Cs-share loss at most 0.02. Try the second finalist only if the first fails this native check.",
+  "layout_transfer": "Only the first native-passing world is tested on layouts 17 and 23, unused by this refit, at downsample 16. Compare with the old published r38 world on those same layouts. Require mean-climate zonefit no worse and strict agreement loss at most 0.01. If it fails, stop this publication attempt without trying another candidate after inspecting this transfer result. These layouts are not claimed to be new to all historical project work.",
+  "publication": "Only a passing world is rebuilt as a staging Earth atlas with full climate, food, population, political and directed-market layers. Verify its climate checkpoint, source/parameter identities, browser behavior through the .bat server and complete assets before replacing canonical files. Keep existing atlases available while work proceeds. Free/Whittaker page updates remain current; their independently fitted physics are not silently replaced with Earth's fitted values."
+}

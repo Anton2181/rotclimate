@@ -46,6 +46,20 @@ The terrain closure is opt-in; production remains legacy/r38. Ninety-eight
 focused tests pass. See `reports/TERRAIN_QUADRATURE_20261025.md` and the matching
 plans/results. No model integration is active for these completed pilots.
 
+**r39 is now adopted for Earth physics.** The constrained-combination campaign
+passes dev31 S=0.987521 (all groups better), paired 28 km S=0.994737 and the
+established six S=0.994573. Full records and mixed city results are in
+`reports/CONSTRAINED_BLEND_R39_20261025.md`. North India worsens; do not call it
+a Himalayan fix. Static diagnostic SST remains exactly unchanged.
+
+A **world refit is active** via `scripts/refit_r39_world.py`, log
+`/tmp/r39_world_runtime.log`, plan `calibration/map_world_r39/plan.json`.
+It holds r39 physics, tilt/spin and other planetary properties fixed, fits
+97 mean-climate world candidates at ds32/layouts1–3, and still needs native and
+layout-transfer checks plus a staged Earth-atlas rebuild. Do not edit model
+sources, its scripts/plan or canonical Earth params while it runs. Local HTML
+atlases stay available on verified r38 data with current economic maps.
+
 ## Historical handoff before this follow-up
 
 The current status above supersedes the old status and task list below. Do not
