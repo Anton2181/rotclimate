@@ -61,3 +61,12 @@ contain the current directed markets and continuous sea routes.
 
 All original case records, input protocols, saved-cell checks, city statistics
 and adoption evidence are under `output/constrained_blend_20261025/`.
+
+
+![Observed rainfall, r38 and r39](../output/constrained_blend_20261025/rainfall_changes.png)
+
+Native world-publication checks are implemented in `scripts/check_r39_world.py`.
+They verify that finalists change only permitted world properties, reproduce the
+builder's checkpoint identity, enforce target and Mediterranean protections,
+and stop publication on a failed additional-layout comparison. Five focused
+guard tests pass. These checks run only after the frozen world search finishes.
