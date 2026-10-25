@@ -45,6 +45,10 @@ def case_hash(case, *, observed_sea=False):
     g = case.grid
     arrays = {k:getattr(g,k) for k in ['land', 'land_frac', 'elev', 'elev_max', 'lat', 'inmap',
                                       'target', 'chi_far', 'chi_far_long']}
+    # Later physics uses polar fetch, ocean connections, cloud references,
+    # remote monsoon forcing and shelf depths. Their actual derived fields
+    # matter even if the raw observational archives have not changed.
+    arrays.update({k:getattr(g,k,None) for k in ['chi_pole', 'sea_reach', 'cloud_ref', 'descent', 'sea_depth']})
     arrays.update(obs_T=case.obs_T, obs_P=case.obs_P, lon=case.lon, coast_km=case.coast_km)
     if observed_sea: arrays['obs_sst'] = g.obs_sst
     digest = hashlib.sha256()

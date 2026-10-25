@@ -76,3 +76,15 @@ def test_grid_identity_tracks_observations_and_fetch_beyond_the_region():
     assert case_hash(case) != before
     before = case_hash(case);case.obs_P[:] = 1
     assert case_hash(case) != before
+
+
+@pytest.mark.parametrize('field',['chi_pole','sea_reach','cloud_ref','descent','sea_depth'])
+def test_grid_identity_tracks_newer_physical_forcing(field):
+    from test_earth import _toy_case
+    case = _toy_case()
+    before = case_hash(case)
+    setattr(case.grid,field,np.ones_like(case.grid.elev))
+    populated = case_hash(case)
+    assert populated != before
+    getattr(case.grid,field)[0,0] += .1
+    assert case_hash(case) != populated

@@ -203,7 +203,7 @@ def main():
     if not set(a.regions) <= set(definitions): ap.error('Unknown region')
     sources = list((ROOT/'rotclimate').glob('*.py')) + [Path(__file__), ROOT/'scripts/rainfall_metrics.py',
                ROOT/'scripts/local_benchmark_protocol.py', ROOT/'scripts/earth_benchmark.py']
-    sources += [earth.WORLDCLIM/f'wc2.1_5m_{name}.zip' for name in ['tavg','prec','elev']]
+    sources += [earth.WORLDCLIM/f'wc2.1_5m_{name}.zip' for name in ['tavg','prec','elev','vapr']]
     if p.sst_source == 'observed': sources.append(earth.WOA_SST)
     protocol = dict(params=asdict(p), regions=a.regions, region_specs={r:definitions[r] for r in a.regions},
                     cell_km=a.cell_km, pad_km=1100.,
@@ -213,6 +213,11 @@ def main():
     # Generate shared fetch caches once, before parallel region preparation.
     earth.west_fetch(1700.)
     earth.west_fetch(5100.)
+    earth.pole_fetch()
+    earth.sea_reach()
+    earth.land_cloud()
+    earth.monsoon_descent()
+    earth.sea_depth()
     earth.sea_reach()
     earth.land_cloud()
     earth.monsoon_descent()

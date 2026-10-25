@@ -13,13 +13,14 @@ def main():
     ap.add_argument('--benchmark', type=Path, required=True)
     ap.add_argument('--regions', nargs='+', default=['california','east_china','east_australia','japan'])
     ap.add_argument('--out', type=Path, required=True)
+    ap.add_argument('--title',default='Earth climate: where rainfall is right and wrong')
     a = ap.parse_args()
     summary = json.loads((a.benchmark/'summary.json').read_text())
     if not summary.get('complete'): raise ValueError('A complete verified benchmark is required')
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    fig, axes = plt.subplots(len(a.regions),3,figsize=(12,3.2*len(a.regions)),squeeze=False)
+    fig, axes = plt.subplots(len(a.regions),3,figsize=(13,4.0*len(a.regions)+1.3),squeeze=False)
     hashes = {}
     for row, name in enumerate(a.regions):
         record = summary['regions'][name]
@@ -49,11 +50,11 @@ def main():
         axes[row,0].set_ylabel(name.replace('_',' ').title(),fontsize=12)
         rain = record['rain']
         axes[row,2].set_xlabel(f'Monthly cell MAE {rain["monthly_mae_mm"]:.1f} mm · annual rank {rain["annual_spearman"]:.2f}',fontsize=9)
-    fig.suptitle('Earth r31: where rainfall is right and wrong',fontsize=17,y=.99)
-    fig.text(.5,.958,'WorldClim 2.1 monthly normals (1970–2000) · 56 km model cells · reused development regions',ha='center',fontsize=10)
+    fig.suptitle(a.title,fontsize=17,y=.985)
+    fig.text(.5,.94,f'WorldClim 2.1 monthly normals (1970–2000) · {summary["cell_km"]:g} km model cells · reused development regions',ha='center',fontsize=10)
     fig.text(.03,.016,'Blue-green error areas are too wet; brown areas too dry. A +50 mm offset stabilizes ratios in deserts.\n'
              'Southern regions appear in the model’s mirrored northern frame. Grey areas are unscored; these are gridded climate comparisons, not station validation.',fontsize=9)
-    fig.tight_layout(rect=[0,.055,1,.945])
+    fig.tight_layout(rect=[0,.09,1,.90],h_pad=3.5,w_pad=2.0)
     a.out.parent.mkdir(parents=True,exist_ok=True);fig.savefig(a.out,dpi=145);plt.close(fig)
     a.out.with_suffix('.json').write_text(json.dumps(dict(benchmark=str(a.benchmark),regions=a.regions,
         cells_sha256=hashes,image_sha256=hashlib.sha256(a.out.read_bytes()).hexdigest()),indent=2)+'\n')
