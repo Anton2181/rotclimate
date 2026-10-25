@@ -1,0 +1,50 @@
+{
+  "frozen": "2026-10-25, before any result of the v2 travel model on Earth or on the map was computed",
+  "purpose": "Polity v2: ranked places, sea and river transport, monthly seasons, refuge terrain and mounted pastoralists. Free parameters are fitted on Han China (AD 2) and on Mediterranean sailing records; the Roman empire (AD 150) is the held-out test, run once.",
+  "earth_windows": {
+    "han":  {"lat0": 32.0, "lon0": 110.0, "width_km": 3600, "height_km": 3400, "cell_km": 9.0},
+    "rome": {"lat0": 40.0, "lon0": 17.0, "width_km": 5400, "height_km": 3600, "cell_km": 9.0},
+    "note": "azimuthal equidistant about the centre (rotclimate.earth.forward/inverse); WorldClim 2.1 5' elevation, monthly tavg/tmax/tmin/prec; land, biomes and the settlement density (settlement base x the central occupation 0.3246) from the Earth land/people run (output/land_people/earth/earth.npz); NCEP/NCAR reanalysis 1981-2010 monthly long-term mean surface winds (uwnd, vwnd, wspd, sigma 0.995)"
+  },
+  "data": {
+    "han_counties": "Zheng & Wu (2026) Sci. Data 13:876, CountyPointsWithPopulation, YEAR = 2AD: 1,196 county seats and 98 commandery (prefecture) seats",
+    "han_commanderies": "same source, ResearchArea YEAR = 2AD: 103 commandery polygons, 4.09 M km2, census 57.67 M",
+    "han_capital": [34.30, 108.90],
+    "roman_towns": "Hanson (2016) OxREP cities, standing in AD 150 (start <= 150 <= end or open)",
+    "roman_roads": "Itiner-e static 2024 (de Soto et al. 2025, Sci. Data 12:1731), all segments without dates or with Lower_Date <= 150 <= Upper_Date",
+    "polygons": "Cliopatria v0.2.1 (Seshat; Bennett et al. 2025): Roman Empire AD 150, Xiongnu AD 2, and the AD 2 / 117 / 150 polities of the windows",
+    "sailing_times": "Casson (1951) TAPA 82: Table 1 sailing times between principal Mediterranean ports (both directions) and the fair / foul wind speeds",
+    "orbis": "ORBIS (Scheidel & Meeks) new_routes.topojson: per-edge summer durations of roads, rivers, coastal and open-sea routes (the route API is closed)",
+    "season_dates": "Vegetius, Epitoma 4.39: sea safe 27 May - 14 Sep, uncertain 10 Mar - 27 May and 14 Sep - 11 Nov, closed 11 Nov - 10 Mar"
+  },
+  "fixed_from_literature": {
+    "foot": "unchanged from v1: roads 30 km/day (ORBIS foot), minor tracks 25, ferries 40, Tobler x path factor for 7 hours, Soule & Goldman coefficients",
+    "sail_fair_knots": 5.0,
+    "sail_note": "Casson 1951: 4-6 knots before a fair wind over open water, 3-4 working along coasts and through islands (coastal factor 0.7 within 20 km of land), less than 2 to 2.5 against the wind; square rig tacks at 80 degrees to the wind (100 degrees from downwind). Polar h(theta from downwind) = 1.0 to 90, 0.85 at 100, beyond that the tacking progress 0.85 cos(theta - 100). Variable winds: h_eff = s h(theta) + (1 - s) mean(h), steadiness s = |vector mean wind| / scalar mean speed. Wind strength g = min(1, w / 6 m/s), at least 0.25. Sailing round the clock.",
+    "board_days": 0.5,
+    "land_days": 0.25,
+    "river_note": "boats board at a settlement on a navigable river (0.25 day) and land anywhere on its banks; speeds up and down stream from the ORBIS civilian river edges (median of each direction)",
+    "season_model": "monthly degree-day snowpack (snow below 0 C, melt 4 mm per C per day), soil bucket of 100 mm with Hargreaves PET; lasting snow when the pack holds over 10 mm (as v1); mud = clip((S/100 - 0.75) / 0.25, 0, 1) when not frozen (monthly mean above -2 C), plus the month of snowmelt; mud coefficient 1.8 (Soule & Goldman swampy bog) at full mud on open ground and minor tracks, 1.1 on the marked roads; heat 1 + 0.4 clip((Tmax - 33) / 7, 0, 1); river crossings off the roads 0.1 day, x (1 + 4 flood), flood = clip((Q/Qmean - 1.5) / 1.5, 0, 1), Q the basin-mean runoff; rivers below 0.4 Qmean close upstream travel and halve downstream speed",
+    "horse": "mounted pastoralists: 50 km/day on level open ground, the same slope shape, forest x 2 and swamp x 2 harder than on foot, snow coefficient 2.0; no roads needed"
+  },
+  "fits": {
+    "F1_held_days": {"data": "Han window land: inside = the AD 2 commanderies", "network": "the 1,294 Han seats", "days": "year-round effective days -ln(mean_m exp(-days_m)) on the v2 graph", "metric": "balanced accuracy over land within 15 days of a seat", "grid": [1.0, 1.5, 2.0, 2.5, 3.0, 4.0, 5.0]},
+    "F2_ranks": {"model": "a county seat counts as if o_county days farther than a commandery seat; each seat is weakened by lambda x its own days from the capital", "grid_o_county": [0.0, 0.25, 0.5, 1.0], "grid_lambda": [0.0, 0.01, 0.02, 0.04], "metric": "as F1, each at its own best held threshold", "adopt_if": "balanced accuracy gain >= 0.005 over (0, 0); otherwise that term is 0"},
+    "F3_seats": {"model": "polity/settle.place_towns on the model density inside each commandery", "grid_seat_people": [25000, 32000, 40000, 50000, 63000], "grid_max_radius_km": [40, 60, 90], "metric": "Poisson deviance of seat counts per commandery (103)"},
+    "F4_refuge": {"model": "registered people / modelled people per commandery against the mean 3x3-cell relief (km)", "fit": "least-squares slope k of ln(census / model) on relief", "adopt_if": "k < 0 with its 95 % interval below 0; refuge factor exp(k x relief) on control"},
+    "F5_closure": {"data": "Mediterranean sea cells, NCEP monthly", "index": "storminess sigma = sqrt(wspd^2 - |V|^2) and the scalar speed", "fit": "two thresholds on sigma (uncertain, closed) that best classify the 12 months (majority of days) under Vegetius: Jan Feb closed, Mar Apr May uncertain, Jun Jul Aug open, Sep Oct uncertain, Nov Dec closed", "effect": "speed x 0.5 uncertain, x 0.15 closed; also uncertain at a scalar speed of 8 m/s and closed at 10.8 (Beaufort 5 and 6)"},
+    "F6_storminess_for_map": {"data": "NCEP ocean cells 15-50 N", "fit": "sigma as a function of latitude and of the month from the winter solstice (bilinear table)", "use": "the map's model winds are vector means: scalar speed = sqrt(|V|^2 + sigma^2)"},
+    "F7_pastoral": {"data": "AD 2 polities of the windows", "rule": "a polity is mobile when the pastoral share of its supported people is above a threshold", "labels_fit": {"mobile": ["Xiongnu", "Wusun"], "settled": ["Han Dynasty", "Roman Empire", "Parthian Empire"]}, "grid": [0.3, 0.4, 0.5, 0.6, 0.7]}
+  },
+  "tests_run_once": {
+    "T1_roman_extent": {"data": "Rome window land: inside = Roman Empire AD 150", "network": "Hanson towns of AD 150 + Itiner-e roads", "compare": "v1 (foot only, no ranks, snow-free season, held 2 days) against v2 with the F fits", "metric": "balanced accuracy over land within 15 days of a town; AUC", "pass": "v2 >= v1"},
+    "T2_roman_towns_refuge": {"metric": "Spearman of Hanson town area per 2-degree block against model people x refuge factor", "pass": "with refuge >= without"},
+    "T3_roman_town_counts": {"metric": "Poisson deviance of town counts per 2-degree block, place_towns with the F3 fit against 40,000 / 60 km", "pass": "F3 fit <= v1"},
+    "T4_polity_types": {"data": "AD 117 and 150 polities of both windows", "mobile": ["Xianbei", "Xiongnu", "Wusun", "Huns"], "settled": ["Roman Empire", "Han Dynasty", "Parthian Empire", "Kushan Empire", "Satavahana Dynasty", "Kingdom of Armenia", "Goguryeo"], "metric": "accuracy", "pass": ">= 0.8"},
+    "T5_monsoon_sea": {"place": "Arabian Sea off the Konkan coast (16 N, 71 E)", "expect": "uncertain or closed in Jun Jul Aug; open in Dec Jan Feb (Periplus: the west Indian ports are closed in the monsoon)"},
+    "T6_casson_routes": {"data": "Casson Table 1 routes between ports in the Rome window", "season": "mean of the May-September sailing days", "metric": "Spearman of model against Casson (range mid-points) and the median |log ratio|", "pass": "Spearman >= 0.6 and median ratio within 0.67-1.5"},
+    "T7_orbis_edges": {"metric": "Spearman and median ratio of model July sailing days against ORBIS coastal and open-sea edge durations", "pass": "informative only"},
+    "T8_seasons": {"snow_months": {"Moscow": [4, 6], "Kyiv": [2, 4], "Beijing": [0, 1], "Rome": [0, 0]}, "mud_months_expected": {"Kyiv": ["Mar", "Apr", "Oct", "Nov"]}, "monsoon_worst_months": {"Patna": ["Jul", "Aug", "Sep"]}, "flood_peak": {"Nile at Aswan (Ethiopian highlands catchment)": ["Aug", "Sep"], "Danube at Vienna": ["Apr", "May", "Jun"]}, "pass": "informative; reported per item"}
+  },
+  "adoption": "The F fits are used on the map whatever the tests show. Each v2 component (ranks, refuge, sea, seat spacing) whose test is worse than v1 is reported and switched off on the map."
+}
