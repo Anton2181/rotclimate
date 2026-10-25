@@ -134,3 +134,34 @@ factor means, medians, limiting-factor shares and current climate statistics.
 The diagnostic strengthens the case for regional moisture pathways: the cold
 interior needs drying while the southeastern forest needs more water. A uniform
 precipitation multiplier cannot do both.
+
+
+## Completed fixed-planet geography pilot
+
+All 18 seasonal-climate runs (six scenarios, layouts 1–3) pass the observed
+linear, temperature and moisture checks. The mapped land, elevation, target and
+latitude identities are identical across them. At the same downsample 16:
+
+| Scenario | Zonefit | Strict agreement | Mediterranean dry | Mediterranean Cs |
+|---|---:|---:|---:|---:|
+| Matched control | 0.18075 | 35.25% | 5.72% | 77.26% |
+| Northern continent | 0.10599 | 13.60% | 7.31% | 19.81% |
+| Northern continent with relief | 0.10745 | 14.04% | 7.71% | 20.88% |
+| Eastern ocean | 0.16626 | 28.72% | 9.57% | 86.17% |
+| Poleward continent | 0.09290 | 10.07% | 10.51% | 8.24% |
+| Maritime exterior | 0.15559 | 25.45% | 13.43% | 82.05% |
+
+**None qualifies for a native-resolution finalist check.** The published world
+is retained, and no extra fine-grid or new-layout selection is run on these
+failing candidates. Eastern-ocean and maritime cases recover small amounts of
+cold-dry recall (2.4% and 5.2%) but lose other zones and overall skill. The older
+r35 northern-continent benefit does not transfer to this fixed r38 world.
+
+This is a bounded fixed-background sensitivity comparison, not an exhaustive
+geography search. It does not rule out other surroundings, smaller perturbations,
+or jointly refitting latitude/orientation/terrain within a different coherent
+geographic scenario. Any such refit requires a new frozen plan and matched
+publication-resolution checks. Local exterior changes also do not create a
+self-consistent global continent/ocean reconstruction.
+
+![Fixed-planet geography rainfall comparisons](../output/earthlike_geography_20261025/geography_rainfall.png)

@@ -22,11 +22,15 @@ lanes. See `reports/DIRECTED_TRADE_20261025.md` and
 `output/directed_trade_20261025/publication/publication.json`. Full population
 and political tables are unchanged. Render-only changes have separate records.
 
-A geography-only pilot is running from `calibration/earthlike_geography_20261025/plan.json`
-via `scripts/check_earthlike_geography.py` (log `/tmp/earthlike_geography_runtime.log`).
+A geography-only pilot completed from `calibration/earthlike_geography_20261025/plan.json`
+via `scripts/check_earthlike_geography.py`; all 18 runs converged, none of the
+five alternative geographies beat the ds16 control, and no finalist advances.
+See `output/earthlike_geography_20261025/review.json` and
+`reports/JOINT_EARTH_FIT_20261025.md` for the negative result and target-factor
+diagnosis from the published ds8 climate.
 It holds r38 physics and the current planet fixed, compares six exterior
 scenarios across three layouts at ds16, and requires matched ds8 plus new-layout
-checks before adoption. Do not modify its script or climate sources while active.
+checks before adoption. Its experiment script and source manifest are frozen historical evidence.
 The fixed-footprint terrain audit confirms resolution dependence of the existing
 uplift proxy; it is a diagnostic, not a coupled rainfall improvement.
 The original list below describes the state before this follow-up.
