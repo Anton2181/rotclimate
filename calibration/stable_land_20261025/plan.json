@@ -1,0 +1,27 @@
+{
+ "frozen": "2026-10-25, before any result of this search; after the ablation of the joint new-physics candidate (output/joint_ablation) and the stable-land probe (output/stable_land_probe)",
+ "why": "The model's winter seas are 3-9 C too cold (January: Black Sea -0.4 C against 9, western Mediterranean 6.2 against 14.7, off Portugal 9.6 against 15.0), and the land and rain settings are fitted to them: e50's overturning brings the seas part-way back and costs eastern Europe, Iberia and western Europe. The land's winter coupling is the slow radiative one (15 days), so warm sea air keeps its warmth far inland; e52 (land_stable_rate) cools air warmer than the ground within a day or two. Probe: with the WOA-fitted sea (calibration/sea_refit_20261024/candidate_set.json) and e52 at 0.5/day the winters of the British Isles, Iberia, Morocco and California are right (0.0 to +0.4 C) and western Europe's +0.6, but the continental interiors fall 1.7-3.7 C too cold: the continentality settings compensated for the slow coupling. This search moves the sea, the stable coupling, the continental settings and the rain settings together, scored as the gate scores, from r37.",
+ "start": "calibration/local_accuracy_20261023/r37_params.json",
+ "set": {"winter_mixing_deep": true},
+ "reference": "output/new_physics_20261024/reference",
+ "knobs": [
+  ["sst_offset", -4.5, 1.0],
+  ["current_strength", 1.0, 8.0],
+  ["subpolar_current", 1.0, 12.0],
+  ["inland_sea_warming", 1.0, 9.0],
+  ["sea_winter_mixing", 0.0, 1.0],
+  ["land_stable_rate", 0.0, 1.5],
+  ["land_offset", -2.5, 1.5],
+  ["continentality", 0.3, 1.2],
+  ["continental_mean", 0.0, 8.0],
+  ["continental_depth", 0.0, 0.6],
+  ["land_radiative_days", 5.0, 40.0],
+  ["ocean_rh", 0.62, 0.8],
+  ["eddy_rate", 0.9, 1.7],
+  ["precip_tau_days", 7.0, 15.0],
+  ["convective_rh", 0.55, 0.72]
+ ],
+ "sigma": 0.25, "popsize": 10, "seed": 5, "evals": 200,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against r37's own run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "The best candidate takes the unchanged gate (policy_v2) against a fresh r37 reference under the then source fingerprint, the paired 28 km check and the sealed six once; scripts/city_rain.py is reported alongside. The sea's own error against WOA18 is reported too (it does not decide)."
+}

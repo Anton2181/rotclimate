@@ -1029,6 +1029,21 @@ class ClimateModel:
                     # cold sea keeps its own rate (ocean_tau_stable).
                     cold = np.clip((T_eq - T_state) / 2.0, 0.0, 1.0) * ocean
                     lam = lam + cold * (1.0 / (p.ocean_tau_unstable * DAY) - lamT)
+                if p.land_stable_rate > 0:
+                    # e52: air warmer than the ground under it is stable: mild
+                    # sea air over winter land forms a shallow layer (~300 m)
+                    # that loses ~40 W/m2 to the ground and to space and cools
+                    # by several degrees a day, so the Atlantic's 10 C air is
+                    # below freezing a few hundred kilometres inland. The
+                    # land's own coupling (sunshine, or 15 days in the dark)
+                    # let marine air keep its warmth thousands of kilometres
+                    # inland, so the land settings were fitted to a sea 3-9 C
+                    # too cold in winter (the Black Sea at 0 C, the western
+                    # Mediterranean at 6): with the real sea the British
+                    # Isles' winter was 4.5 C too warm. Air colder than the
+                    # ground (daytime heating, convective) keeps the land rate.
+                    warm = np.clip((T_state - T_eq) / 2.0, 0.0, 1.0) * land
+                    lam = lam + warm * np.maximum(p.land_stable_rate / DAY - lamT, 0.0)
 
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
