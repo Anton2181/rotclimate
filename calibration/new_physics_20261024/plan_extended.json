@@ -1,0 +1,68 @@
+{
+ "frozen": "2026-10-24, before any result of this search; after single-knob probes on r37 of e49 (monsoon descent), e50 (deep-sea winter overturning), e39 at full strength (crest wind, gated and rejected on r36) and e48's strength",
+ "why": "Each new structural option fixes one family of regions and pushes another the wrong way, often one held right by an older compensating setting: e49 fixes Iran's summer (0.937 -> 0.538 at 0.02) but Central Asia and the Levant then run hot in summer (the training group's temperature +1.8 %); e50 fixes the eastern Mediterranean's winter (Anatolia 0.408 -> 0.320, Levant 0.407 -> 0.362) but warms eastern and western Europe's winters (mid-latitude group ~+1.6 %); the crest wind restores the relief response (0.03 -> 0.41) but floods dry basins. This search lets them rebalance together with the settings they push against (sub-grid lift, lee drying, dry-ground coupling, eddy exchange, recycling, slope lift).",
+ "start": "calibration/local_accuracy_20261023/r37_params.json",
+ "set": {
+  "winter_mixing_deep": true
+ },
+ "reference": "output/cold_high_20261024/cc0.1",
+ "knobs": [
+  [
+   "monsoon_descent",
+   0.0,
+   0.03
+  ],
+  [
+   "sea_winter_mixing",
+   0.0,
+   1.0
+  ],
+  [
+   "upslope_free_wind",
+   0.0,
+   1.0
+  ],
+  [
+   "cold_high_storms",
+   0.05,
+   0.25
+  ],
+  [
+   "subgrid_orographic",
+   1.5,
+   4.5
+  ],
+  [
+   "lee_drying",
+   0.0,
+   1.0
+  ],
+  [
+   "dry_coupling",
+   1.5,
+   3.5
+  ],
+  [
+   "eddy_rate",
+   0.9,
+   1.7
+  ],
+  [
+   "land_recycling",
+   0.25,
+   0.6
+  ],
+  [
+   "orographic",
+   2.5,
+   6.0
+  ]
+ ],
+ "sigma": 0.3,
+ "popsize": 8,
+ "seed": 3,
+ "evals": 128,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against r37's own run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "The best candidate takes the unchanged gate (policy_v2) against a fresh r37 reference under the then source fingerprint, the paired 28 km check and the sealed six once (the six were seen once at r37: their north-east US result informs nothing here); scripts/city_rain.py is reported alongside.",
+ "extension": "2026-10-25: after the first 80 candidates (none passed every group; best cost 0.9918, S 0.9900, the former holdout group +0.09 % from the Cape's temperature) the budget was raised to 128 and the search resumed from its saved state; the score, knobs and the gate procedure afterwards are unchanged"
+}
