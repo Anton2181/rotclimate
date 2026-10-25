@@ -43,6 +43,15 @@ def main():
     else:
         with open(a.checkpoint, "rb") as f:
             r = pickle.load(f)["result"]
+    write(atlas, r, sim)
+
+
+def write(atlas, r, sim=None):
+    """winds12.npz for an atlas from its own simulation result r."""
+    from rotclimate.analogs import model_bins
+    atlas = Path(atlas)
+    if sim is None:
+        sim = json.loads((atlas / "data/build_provenance.json").read_text())["simulation"]
     p = r.params
     prov = sim["params"]
     mine = json.loads(json.dumps(asdict(p)))

@@ -234,6 +234,10 @@ def main():
     export_harvest(out)
     from population.export import export as export_population
     export_population(out)
+    # the monthly winds the polity model sails by, from this very run, then the political layers
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from export_winds12 import write as write_winds12
+    write_winds12(out, r)
     from polity.export import export as export_reach
     export_reach(out)
     print(json.dumps(summary, indent=1))

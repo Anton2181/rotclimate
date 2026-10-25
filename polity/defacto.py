@@ -96,12 +96,16 @@ def polity_table(r, d):
     rows = []
     for k, name in enumerate(r["polity_names"]):
         c, h = claim == k, held_by == k
+        reach_k = np.nan_to_num(r["reach"][k], nan=99.0, posinf=99.0)
         rows.append(dict(
             polity=name, claimed_km2=float(c.sum() * km2), held_km2=float(h.sum() * km2),
             claimed_people=float(ppl[c].sum()), held_people=float(ppl[h].sum()),
             held_in_claim_people=float(ppl[c & h].sum()), claimed_unheld_people=float(ppl[c & (held_by < 0)].sum()),
             claimed_held_by_others_people=float(ppl[c & (held_by >= 0) & ~h].sum()),
             held_outside_claim_people=float(ppl[h & ~c].sum()), contested_people=float(ppl[h & contested].sum()),
+            # how firmly the claimant reaches its own claimed people over the year: its own network's days
+            mean_control_claimed=float((np.exp(-reach_k[c]) * ppl[c]).sum() / max(ppl[c].sum(), 1e-9)),
+            within_day_claimed_share=float(ppl[c & (reach_k <= 1.0)].sum() / max(ppl[c].sum(), 1e-9)),
             mobile=bool(r["mobile"].get(name, False))))
     total = dict(people=float(ppl.sum()), unclaimed_unheld_people=float(ppl[(claim < 0) & (held_by < 0)].sum()),
                  unclaimed_unheld_km2=float(((claim < 0) & (held_by < 0) & r["land"]).sum() * km2))
