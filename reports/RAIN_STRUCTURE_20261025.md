@@ -56,3 +56,28 @@ The recovered maps show the problem the plan targets: a missing wet Himalayan
 front with excessive rain farther north, and deficient rain on Japan's south
 coast. Brown in the ratio panels means too dry, blue-green too wet; ratios
 include a +50 mm stabilizer. No post-hoc rainfall-map correction is applied.
+
+
+## Descriptive elevation diagnosis
+
+Grouping the reproduced r38 North India scored cells by terrain height gives:
+
+| Elevation | Cells | Simulated annual rain | Observed annual rain |
+|---|---:|---:|---:|
+| 0–500 m | 364 | 203 mm | 727 mm |
+| 500–1,500 m | 41 | 277 mm | 1,428 mm |
+| 1,500–3,000 m | 17 | 195 mm | 1,407 mm |
+| 3,000–4,500 m | 10 | 403 mm | 963 mm |
+| Above 4,500 m | 62 | 650 mm | 308 mm |
+
+The foothills and high plateau have opposite biases. This motivates examining
+ascent, crest airflow and vapor removal together; increasing all precipitation
+would worsen the existing plateau excess. These are native 56 km development
+cells with constant projected area. Elevation and location covary, so the
+comparison is descriptive and cannot isolate the cause. The bins were inspected
+before this plot was written; this is not a new predeclared acceptance test.
+
+`plot_rainfall_elevation.py` uses the verified cached cells without another
+climate run. The diagnostic JSON records source and plotting-code hashes.
+
+![North India elevation diagnosis](../output/rain_structure_20261025/elevation_diagnosis/rainfall_elevation.png)
