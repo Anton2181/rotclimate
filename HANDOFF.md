@@ -12,11 +12,15 @@ are now promoted and browser-checked; all three have political plates at fills
 `output/atlas_r38/political_publication.json` and `food_population_checks.json`.
 Hosted artifacts remain unchanged because no tool for those URLs is available.
 
-The r38 rainfall-structure search is active, with its restored 31-region
-reference reproducing adopted r38 exactly. See `reports/RAIN_STRUCTURE_20261025.md`
-and use `scripts/guarded_gate_search.py` for future resumes; inspect the live
-process before starting another. No physical model source may change during
-that search. All three repository atlases now use inbound-directed trade with three Trade
+The r38 rainfall-structure search completed all 120 evaluations (control plus
+119 candidates). The final input guard matches the initial identity. None
+passes all regional protections; retain r38 and do not run finer-grid or
+established-six selection on these rejected candidates. See
+`reports/RAIN_STRUCTURE_20261025.md` and
+`output/rain_structure_20261025/final_review/`. `search/best_params.json` is a
+rejected research candidate. No climate search remains active.
+
+All three repository atlases now use inbound-directed trade with three Trade
 views (routes, market hinterlands, people served) and continuous outlined sea
 lanes. See `reports/DIRECTED_TRADE_20261025.md` and
 `output/directed_trade_20261025/publication/publication.json`. Full population
@@ -34,6 +38,11 @@ checks before adoption. Its experiment script and source manifest are frozen his
 The fixed-footprint terrain audit confirms resolution dependence of the existing
 uplift proxy; it is a diagnostic, not a coupled rainfall improvement.
 The original list below describes the state before this follow-up.
+
+## Historical handoff before this follow-up
+
+The current status above supersedes the old status and task list below. Do not
+repeat completed builds or the completed rainfall search from these instructions.
 
 Branch: `claude/friendly-turing-43ygeu`. Everything below is committed and pushed. Background jobs
 that were running when the session ended did NOT save; rerun them as listed.

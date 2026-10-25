@@ -81,3 +81,47 @@ before this plot was written; this is not a new predeclared acceptance test.
 climate run. The diagnostic JSON records source and plotting-code hashes.
 
 ![North India elevation diagnosis](../output/rain_structure_20261025/elevation_diagnosis/rainfall_elevation.png)
+
+
+## Completed search: retain r38
+
+The declared budget is complete: **120 evaluations, including the reference
+control and 119 new parameter sets**. The original invocation stopped cleanly
+at 105; the guarded resume ran the remaining 15 with exactly the same scientific
+sources, packages, observed inputs and reference identity. The end-of-campaign
+guard passed. All 120 regional evaluations completed numerically.
+
+No new candidate satisfies every frozen search-screen criterion. No candidate
+advances to a finer-grid or established-six check, and no r39 is adopted.
+The automatic `best_params.json` is a rejected research candidate, not a model
+to publish. Full regional errors remain in the archived `evals.jsonl`.
+
+The best penalized candidate is zero-based evaluation **110**:
+
+- S = 0.986824, versus 1.000000 for r38.
+- Temperature monthly MAE 1.791453 °C, versus 1.796389 °C.
+- Rainfall loss 0.442081, versus 0.452768 (a 2.36% reduction).
+- Group scores: training 1.002713, former holdout
+  1.000445, mid-latitude 0.983615,
+  dev12 0.972911. The first two exceed 1 and disqualify it.
+
+The lowest unprotected overall S is 0.983759, at evaluation
+60; it also fails the regional protections. A better combined average
+does not establish a campaign winner or physical realism. The small protected-
+group regressions are acceptance failures under this plan, not evidence that
+the corresponding planet is physically impossible.
+
+`review_rain_structure_search.py` independently recomputes recorded scores from
+the regional errors, rejects incomplete/tampered/nonfinite records, verifies
+variable bounds and the unchanged input manifest, and selects at most three
+eligible finalists in the declared order. Its five tests include cases where
+better averages conceal a worse group or temperature component. This complete
+review selects none; details are in `final_review/review.json` and
+`final_review/campaign.json`.
+
+![Completed rainfall search](../output/rain_structure_20261025/progress.png)
+
+The useful next experiment is a physically motivated terrain closure on a
+common fine terrain reference, with matched coarse/fine controls. Merely
+extending this same search or relaxing its regional limits after seeing the
+results would not answer that question.

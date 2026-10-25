@@ -82,6 +82,11 @@ benchmark. Some existing `earth_params` overrides reset tilt/spin/orbit but do
 not reset every world property (notably solar flux, greenhouse forcing or
 radius); the new runner must explicitly separate them.
 
+The already adopted r38 physics remains admissible for geography-only searches;
+its identical Earth run can be reused. The S <= 0.995 improvement requirement
+applies to adopting new shared physics, not to demanding that an unchanged
+physical model improve merely because the invented geography changed.
+
 The existing `scripts/joint_calibrate.py` uses a six-region soft climate-distance
 penalty and defaults that relax convergence. It is historical tooling, not a
 sufficient acceptance gate for this round. Preserve it for reproducibility and
@@ -165,3 +170,39 @@ publication-resolution checks. Local exterior changes also do not create a
 self-consistent global continent/ocean reconstruction.
 
 ![Fixed-planet geography rainfall comparisons](../output/earthlike_geography_20261025/geography_rainfall.png)
+
+
+## Two further transfer checks before a broader joint fit
+
+**Ocean geometry and bathymetry are useful world variables.** The Earth grid
+can use WOA-derived depth, while the invented grid estimates deep-water access
+from distance offshore. Explicit shelf/basin depth and connecting straits would
+be a more physically interpretable extension than independent coastal SST
+corrections. A deeper connected sea may moderate coastal winters without the
+same warming of an inland steppe, but that benefit must be measured in paired
+runs. Hold the heat-exchange law fixed, conserve heat, and give inferred depths
+independent plausible priors. Ocean-current strength should follow basin
+geometry rather than be tuned independently for every painted zone.
+
+**Distinguish externally forced Earth skill from coupled-world skill.** The
+code can derive a latitude cloud reference and remote monsoon descent from
+observed global WorldClim climate (`earth.land_cloud`, `earth.monsoon_descent`).
+The fantasy world falls back to its own domain-derived quantities. In the
+published r38 parameters, cloud radiation is zero, cloud reference is `domain`,
+and monsoon-descent strength is zero: those observation-derived climate fields
+are not active drivers of these terms in the adopted model. SST is modelled.
+
+The active rain search does vary descent strength above zero. Its Earth
+candidates therefore use observed-global-rain-derived remote forcing where the
+fantasy map would generate that forcing from its own rainfall. That is a
+legitimate conditional regional experiment, not validation of the entire
+coupled fantasy feedback. Report the forcing distinction when judging transfer.
+A fair generated-forcing comparison must retain the remote source coverage:
+merely setting the regional Earth descent field to `None` can remove a monsoon
+outside the regional window and is not an equivalent global control. Do not
+change the current frozen campaign to perform such an ablation retroactively.
+
+For independent wind checks, match the sampled height and time statistic.
+Monthly mean wind speed is not the magnitude of monthly mean wind, and a
+surface wind is not the model's moisture-column transport wind. These checks
+should be defined on matching quantities before becoming acceptance criteria.

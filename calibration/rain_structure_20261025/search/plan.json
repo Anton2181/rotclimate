@@ -1,0 +1,65 @@
+{
+ "frozen": "2026-10-25, before any result of this search; after the r38 gate and a north India diagnosis on r38 (output/diag_rain/north_india_r38: July 76 mm against 224 on the plain, heavy rain on the high Tibetan plateau, little on the Himalayan front)",
+ "why": "On r37 the joint new-physics search (calibration/new_physics_20261024) found a candidate that passed the 56 km gate (S 0.9843) with the crest wind, sub-grid lift, lee drying, monsoon descent and cold-high storms moved together, and failed only the paired 28 km check (1.0123). r38 has since moved the sea, the stable-land coupling and the continental settings those rain settings were balanced against. The same rain-structure settings are searched again from r38, and the 28 km check, which decided last time, is applied to the best few gate-passing candidates in turn rather than to the best alone.",
+ "start": "calibration/local_accuracy_20261023/r38_params.json",
+ "set": {},
+ "reference": "output/stable_land_20261025/gate/candidate",
+ "knobs": [
+  [
+   "monsoon_descent",
+   0.0,
+   0.03
+  ],
+  [
+   "upslope_free_wind",
+   0.0,
+   1.0
+  ],
+  [
+   "cold_high_storms",
+   0.05,
+   0.25
+  ],
+  [
+   "subgrid_orographic",
+   1.5,
+   4.5
+  ],
+  [
+   "lee_drying",
+   0.0,
+   1.0
+  ],
+  [
+   "dry_coupling",
+   1.5,
+   3.5
+  ],
+  [
+   "eddy_rate",
+   0.9,
+   1.7
+  ],
+  [
+   "land_recycling",
+   0.25,
+   0.6
+  ],
+  [
+   "orographic",
+   2.5,
+   6.0
+  ],
+  [
+   "precip_tau_days",
+   7.0,
+   15.0
+  ]
+ ],
+ "sigma": 0.3,
+ "popsize": 8,
+ "seed": 11,
+ "evals": 120,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against r38's own run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "afterwards": "Up to three candidates, in order of score among those with no group worse and S <= 0.995, take in turn the unchanged gate (policy v2) against a fresh r38 reference and the paired 28 km check (S <= 1.01); the first to pass both takes the sealed six once and is adopted as r39. scripts/city_rain.py and the north India and Tibet rain are reported alongside (they do not decide)."
+}
