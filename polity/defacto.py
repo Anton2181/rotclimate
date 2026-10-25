@@ -63,3 +63,46 @@ def categories(claim, held_by, contested):
     cat[(claim < 0) & (held_by >= 0)] = 3
     cat[contested & (held_by >= 0)] = 4
     return cat
+
+
+def map_fields(r, choices=FILL_CHOICES):
+    """De facto control on the map for each gap fill in `choices` (days), from
+    polity.fields.compute's result: the held land (within HELD_DAYS of the
+    nearest polity's own network) bridged, each cell given to the polity whose
+    network is nearest, contested where a rival is within CONTESTED_DAYS."""
+    from . import network as N
+    from .fields import CONTESTED_DAYS, HELD_DAYS
+    land, f = r["land"], r["fields"]
+    best, best_days, second_days = f["polity_best"], f["polity_best_days"], f["polity_second_days"]
+    held = land & (best_days <= HELD_DAYS)
+    foot = [N.month_network(r["world"], r["statics"], r["climate"], m, boats=False) for m in range(12)]
+    dil = foot_days(foot, np.flatnonzero(held.ravel()), limit=max(choices) + 6).reshape(land.shape)
+    out = {}
+    for c in choices:
+        b = bridge(held, land, foot, c, dil)
+        held_by = np.where(b, best, -1)
+        with np.errstate(invalid="ignore"):
+            contested = b & (second_days - best_days <= CONTESTED_DAYS)
+        out[c] = dict(bridged=b, held_by=held_by, contested=contested,
+                      category=categories(r["claim"], held_by, contested))
+    return out
+
+
+def polity_table(r, d):
+    """People (central occupation scenario) and area by polity, de jure against de facto."""
+    km2 = r["cell_km"] ** 2
+    ppl = np.where(r["land"], r["density"], 0.0) * km2
+    claim, held_by, contested = r["claim"], d["held_by"], d["contested"]
+    rows = []
+    for k, name in enumerate(r["polity_names"]):
+        c, h = claim == k, held_by == k
+        rows.append(dict(
+            polity=name, claimed_km2=float(c.sum() * km2), held_km2=float(h.sum() * km2),
+            claimed_people=float(ppl[c].sum()), held_people=float(ppl[h].sum()),
+            held_in_claim_people=float(ppl[c & h].sum()), claimed_unheld_people=float(ppl[c & (held_by < 0)].sum()),
+            claimed_held_by_others_people=float(ppl[c & (held_by >= 0) & ~h].sum()),
+            held_outside_claim_people=float(ppl[h & ~c].sum()), contested_people=float(ppl[h & contested].sum()),
+            mobile=bool(r["mobile"].get(name, False))))
+    total = dict(people=float(ppl.sum()), unclaimed_unheld_people=float(ppl[(claim < 0) & (held_by < 0)].sum()),
+                 unclaimed_unheld_km2=float(((claim < 0) & (held_by < 0) & r["land"]).sum() * km2))
+    return rows, total

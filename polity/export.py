@@ -179,6 +179,15 @@ def export(atlas):
                             f'wherever their herds graze. ' if MOUNTED else 'No polity is set to ride: on Earth the '
                             f'land\'s herding share did not pick out the steppe peoples, so riding is set by lore. ')
                             + note))
+    from . import defacto as DF
+    from . import trade as TR
+    dfs = DF.map_fields(r)
+    layers.append(defacto_layer(r, dfs, meta, data, elev, coast, note))
+    tr = TR.map_fields(r)
+    layers.append(trade_layer(r, tr, meta, data, elev, coast))
+    from . import mapdata
+    mapdata.write(r, dfs, tr, data / 'vectors', DF.FILL_DAYS)
+    cache(atlas, r, dfs, tr)
     # the suggested unmarked towns and minor roads
     from PIL import ImageDraw
     base = color_image(np.zeros(land.shape), land, elev, ['#efe9d8', '#efe9d8'], 0, 1)
@@ -227,6 +236,150 @@ def export(atlas):
                          mounted=sorted(MOUNTED))
     (data / 'atlas.json').write_text(json.dumps(meta, ensure_ascii=False))
     print('Political reach layers written to', data, flush=True)
+
+
+def fill_label(c):
+    return 'none' if c == 0 else ('½ day' if c == 0.5 else f'{c:g} day' + ('s' if c > 1 else ''))
+
+
+def cache(atlas, r, dfs, tr):
+    """The arrays the political plate is drawn from (scripts/render_political_plate.py)."""
+    out = ROOT / 'output/polity_map'; out.mkdir(parents=True, exist_ok=True)
+    arrays = dict(land=r['land'], elev=r['elev'], claim=r['claim'], second=r['second'], density=r['density'],
+                  towns=np.array([[t['row'], t['col']] for t in r['towns']]),
+                  kinds=np.array([t['kind'] for t in r['towns']]), ports=np.array(r['ports']),
+                  names=np.array(r['polity_names']), rgb=np.array([r['polity_rgb'][n] for n in r['polity_names']]),
+                  t_mass=tr['mass'], t_ma=tr['ma'], t_local=tr['ma_local'], e_child=tr['edges'][0],
+                  e_parent=tr['edges'][1], e_flow=tr['edges'][2], through=tr['through'], cell_km=r['cell_km'],
+                  river=r['river'], water=r['water'])
+    if tr.get('area_ha') is not None:
+        arrays['t_area'] = tr['area_ha']
+    for c, d in dfs.items():
+        tag = f'{int(round(c * 10)):02d}'
+        arrays['held_by_' + tag] = d['held_by']; arrays['contested_' + tag] = d['contested']
+    np.savez_compressed(out / f'{Path(atlas).name}.npz', **arrays)
+
+
+def route_classes(flow):
+    qs = np.quantile(flow, [0.80, 0.95, 0.99])
+    return [('local', qs[0], 1.0), ('regional', qs[1], 2.0), ('main', qs[2], 3.5)]
+
+
+def trade_layer(r, tr, meta, data, elev, coast):
+    """Trade routes by traffic over a pale relief; towns by their catchment people."""
+    from PIL import ImageDraw
+    from . import trade as TR
+    from . import vectors as V
+    from .mapdata import chaikin
+    from .render import PAPER, SEA, hillshade
+    W, H = meta['width'], meta['height']
+    gh, gw = r['land'].shape
+    sx, sy = W / gw, H / gh
+    land = np.asarray(Image.fromarray(coast.astype(np.uint8) * 255).resize((W, H), Image.BILINEAR)) > 127
+    rgb = np.broadcast_to(PAPER, (H, W, 3)) * hillshade(elev, (W, H))[..., None]
+    rgb = np.where(land[..., None], rgb, SEA)
+    image = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8))
+    draw = ImageDraw.Draw(image)
+    cc, pc, fl = tr['edges']
+    water = r['water'].ravel()
+    colours = {'land': (122, 46, 18), 'sea': (25, 70, 125)}
+    classes = route_classes(fl)
+    for label, thr, width in classes:
+        for nodes, flows in V.chains(cc, pc, fl, thr):
+            yx = np.array([divmod(int(n), gw) for n in nodes])
+            pts = chaikin(np.column_stack([(yx[:, 1] + .5) * sx, (yx[:, 0] + .5) * sy]))
+            sea = water[np.asarray(nodes)].mean() > 0.5
+            draw.line([tuple(p) for p in pts], fill=colours['sea' if sea else 'land'], width=max(1, int(round(width))),
+                      joint='curve')
+    order = np.argsort(tr['mass'])
+    big = np.quantile(tr['mass'], [0.5, 0.9, 0.98])
+    for i in order:
+        t = r['towns'][i]
+        x, y = (t['col'] + .5) * sx, (t['row'] + .5) * sy
+        rad = 1.5 + 1.2 * int(np.searchsorted(big, tr['mass'][i]))
+        draw.ellipse([x - rad, y - rad, x + rad, y + rad], fill=(251, 248, 240), outline=(30, 30, 30))
+    image.save(data / 'reach_trade.webp', 'WEBP', quality=90, method=4)
+    km = r['cell_km']
+    sea_cost = TR.SEA_KM_DAY * TR.SEA_PER_KM / TR.ROAD_PER_KM
+    return dict(id='reach_trade', file='reach_trade.webp', label='Trade routes', kind='categories',
+                group='Political reach',
+                items=[dict(color='#7a2e12', label='overland and river routes (width: local, regional, main)'),
+                       dict(color='#19467d', label='sea lanes'),
+                       dict(color='#fbf8f0', label='towns, by the people they serve (four sizes)')],
+                note='Goods priced as Diocletian\'s Price Edict priced them: by sea, river and road about 1 : 5 : 28 '
+                     'per km (upriver twice downriver); a ship\'s day costs as much as about '
+                     f'{sea_cost:.0f} km of road haulage. Each town serves the people nearest it by that cost; trade '
+                     'between two towns grows with both their people and falls by a factor of e for every '
+                     f'{tr["scale"]:g} road-km of cost (a gravity model), routed along the cheapest paths in each '
+                     'season (sea lanes shut in the storm months) and averaged over the year. Widths: the busiest '
+                     '20 %, 5 % and 1 % of route segments. ' + TRADE_NOTE)
+
+
+TRADE_NOTE = ''
+
+
+def defacto_layer(r, dfs, meta, data, elev, coast, note):
+    """De facto against de jure, one image per gap fill; per-polity people in the legend and in polities.csv."""
+    from . import defacto as DF
+    from .render import FILL_ALPHA, PAPER, defacto_rgb
+    from .fields import rgba
+    names = r['polity_names']
+    cols = np.array([r['polity_rgb'][n] for n in names]) / 255.0
+    borders = rgba('borders.png')
+    options, tables = [], {}
+    for c in DF.FILL_CHOICES:
+        d = dfs[c]
+        img = defacto_rgb(d['held_by'], r['claim'], d['contested'], r['second'], cols, elev, coast, borders,
+                          (meta['width'], meta['height']))
+        fname = f'reach_defacto_fill{int(round(c * 10)):02d}.webp'
+        Image.fromarray((img * 255).astype(np.uint8)).save(data / fname, 'WEBP', quality=90, method=4)
+        rows, total = DF.polity_table(r, d)
+        tables[str(c)] = dict(rows=rows, total=total)
+        items = []
+        for row in sorted(rows, key=lambda x: -x['held_people']):
+            if row['held_km2'] <= 0 and row['claimed_km2'] <= 0:
+                continue
+            k = names.index(row['polity'])
+            shown = PAPER * (1 - FILL_ALPHA) + cols[k] * FILL_ALPHA
+            extra = []
+            if row['claimed_unheld_people'] >= 5e4:
+                extra.append(f"{row['claimed_unheld_people'] / 1e6:.1f} M claimed, unheld")
+            if row['claimed_held_by_others_people'] >= 5e4:
+                extra.append(f"{row['claimed_held_by_others_people'] / 1e6:.1f} M held by others")
+            if row['held_outside_claim_people'] >= 5e4:
+                extra.append(f"{row['held_outside_claim_people'] / 1e6:.1f} M beyond its claim")
+            items.append(dict(color='#%02x%02x%02x' % tuple(int(round(255 * v)) for v in shown),
+                              label=f"{row['polity']} · holds {row['held_people'] / 1e6:.1f} M people on "
+                                    f"{row['held_km2'] / 1000:,.0f} k km² · claims {row['claimed_people'] / 1e6:.1f} M"
+                                    + (' (' + '; '.join(extra) + ')' if extra else '')))
+        held_share = d['bridged'][r['land']].mean()
+        options.append(dict(value=f'{c:g}', label=fill_label(c), file=fname, items=items,
+                            caption=f"{100 * held_share:.0f} % of the land held · "
+                                    f"{total['unclaimed_unheld_people'] / 1e6:.1f} M people neither claimed nor held"))
+    meta.setdefault('reach', {})['defacto'] = tables
+    import csv
+    with open(data / 'polities.csv', 'w', newline='') as fh:
+        w = csv.writer(fh)
+        keys = [k for k in tables[str(DF.FILL_CHOICES[0])]['rows'][0] if k != 'polity']
+        w.writerow(['gap_fill_days', 'polity'] + keys)
+        for c, t in tables.items():
+            for row in t['rows']:
+                w.writerow([c, row['polity']] + [round(row[k]) if isinstance(row[k], float) else row[k] for k in keys])
+    default = f'{DF.FILL_DAYS:g}'
+    first = next(o for o in options if o['value'] == default)
+    return dict(id='reach_defacto', file=first['file'], label='De facto and de jure', kind='categories',
+                group='Political reach', items=first['items'],
+                variants=dict(label='Gap fill', options=options, default=default),
+                note='De jure: the painted borders (lines) and claims. De facto: each place takes the colour of the '
+                     f'polity whose own roads and towns are nearest, where that is within {HELD_DAYS:g} days over the '
+                     'year. Hatched in a polity\'s colour: land it claims but does not hold (over the holder\'s colour '
+                     'where another polity holds it). Hatched the other way: contested, a rival within '
+                     f'{CONTESTED_DAYS:g} day. The gap fill bridges unheld gaps narrower than about twice the chosen '
+                     'days on foot and leaves larger unheld regions open (a closing in travel time). On Earth, against '
+                     'historians\' maps of the Roman empire of AD 150 and Han China of AD 2, fills up to 2 days changed '
+                     'the match by under 0.01 (balanced accuracy: west of 20 E 0.831 → 0.830, east 0.811 → 0.819, Han '
+                     '0.796 → 0.797), so the default is no fill and the fill is a cartographic choice. People: the '
+                     'central occupation scenario; per-polity figures for every fill in data/polities.csv. ' + note)
 
 
 def rank_note():

@@ -89,3 +89,110 @@ def market_access(nets, sources, people, scales, limit_scale=6.0):
                 ma[k, j:j + len(s)] += (np.exp(-c / sc) * people).sum(1)
             j += len(s)
     return ma / len(nets)
+
+
+def catchments(net, towns, people):
+    """People served by each town: every cell goes to its cheapest town."""
+    from scipy.sparse.csgraph import dijkstra as dj
+    n = net.n_cells
+    d, _, src = dj(net.base, directed=True, indices=np.asarray(towns, np.int64), min_only=True,
+                   return_predecessors=True)
+    src = src[:n]
+    lookup = {int(t): k for k, t in enumerate(towns)}
+    owner = np.array([lookup.get(int(s), -1) for s in src])
+    mass = np.bincount(owner[owner >= 0], weights=np.asarray(people, float).ravel()[owner >= 0], minlength=len(towns))
+    return mass, owner
+
+
+def _depth(pred):
+    """Hops from the root of a shortest-path tree (pred < 0 at the root and unreached)."""
+    n = len(pred)
+    up = np.where(pred >= 0, pred, np.arange(n))
+    depth = (pred >= 0).astype(np.int64)
+    for _ in range(int(np.ceil(np.log2(max(n, 2)))) + 1):
+        depth = depth + np.where(up != np.arange(n), depth[up], 0)
+        nxt = up[up]
+        if np.array_equal(nxt, up):
+            break
+        up = nxt
+    return depth
+
+
+def flows(nets, towns, mass, scale=None, sources=300, limit_scale=6.0):
+    """Gravity flows P_i P_j exp(-c_ij / scale) between the `sources` largest
+    towns and every town, routed along each month's cheapest paths and
+    averaged over the networks. Returns {(node, parent_node): flow} as
+    arrays (child, parent, flow) and each town's through-traffic."""
+    from scipy.sparse import coo_matrix
+    scale = scale or COST_SCALE
+    towns = np.asarray(towns, np.int64); mass = np.asarray(mass, float)
+    top = np.argsort(-mass)[:sources]
+    in_top = np.zeros(len(towns), bool); in_top[top] = True
+    acc = None
+    for net in nets:
+        n = net.n
+        for s_idx, cost, pred in costs_from(net, towns[top], scale * limit_scale, predecessors=True):
+            for row, src in enumerate(s_idx):
+                i = int(np.flatnonzero(towns == src)[0])
+                c = cost[row][towns]
+                f = mass[i] * mass * np.exp(-c / scale)
+                f[~np.isfinite(c)] = 0.0
+                f[i] = 0.0
+                f[in_top & (np.arange(len(towns)) < i)] = 0.0    # each top pair once
+                x = np.zeros(n)
+                np.add.at(x, towns, f)
+                p = pred[row]
+                reach = np.flatnonzero(x > 0)
+                if not len(reach):
+                    continue
+                depth = _depth(p)
+                live = np.flatnonzero((p >= 0) & np.isfinite(cost[row]))
+                order = live[np.argsort(-depth[live], kind="stable")]
+                d_sorted = depth[order]
+                cuts = np.flatnonzero(np.diff(d_sorted)) + 1
+                for grp in np.split(order, cuts):
+                    np.add.at(x, p[grp], x[grp])
+                m = live[x[live] > 0]
+                e = coo_matrix((x[m], (m, p[m])), shape=(n, n))
+                acc = e if acc is None else acc + e
+    acc = (acc / len(nets)).tocoo()
+    return acc.row, acc.col, acc.data
+
+
+# the Roman fit (scripts/polity_trade_check.py): log10 town area (ha) = a + b LOCAL + c MA, LOCAL and MA in
+# log10 people; None until the test passes
+SIZE_COEF = None
+LOCAL_SCALE = 30.0
+
+
+def map_fields(r, scale=None, sources=300):
+    """Trade on the map from polity.fields.compute's result: each town's
+    catchment people, local and wide market access, the gravity flows between
+    towns routed over the four seasons' cheapest paths, and each cell's
+    through-traffic."""
+    scale = scale or COST_SCALE
+    W = r["land"].shape[1]
+    towns = np.array([t["row"] * W + t["col"] for t in r["towns"]])
+    people = np.where(r["land"], r["density"], 0.0) * r["cell_km"] ** 2
+    nets = [cost_network(r["world"], r["statics"], r["climate"], m, r["ports"], r["river_places"])
+            for m in TRADE_MONTHS]
+    mass, owner = catchments(nets[len(nets) // 2], towns, people)
+    ma = market_access(nets, towns, people, [LOCAL_SCALE, scale])
+    child, parent, flow = flows(nets, towns, mass, scale, sources)
+    n = nets[0].n_cells
+    node_cell = np.arange(nets[0].n)
+    for net in nets:                                  # river-boat nodes sit on their river cells
+        rc = getattr(net, "river_cells", np.zeros(0, np.int64))
+        node_cell[n:n + len(rc)] = rc
+    node_cell[node_cell >= n] = -1
+    cc, pc = node_cell[child], node_cell[parent]
+    ok = (cc >= 0) & (pc >= 0) & (cc != pc)
+    through = np.zeros(n)
+    np.maximum.at(through, cc[ok], flow[ok])
+    size = None
+    if SIZE_COEF is not None:
+        a, b, c = SIZE_COEF
+        size = 10 ** (a + b * np.log10(np.maximum(ma[0], 1)) + c * np.log10(np.maximum(ma[1], 1)))
+    return dict(towns=towns, mass=mass, catchment=owner.reshape(r["land"].shape), ma_local=ma[0], ma=ma[1],
+                edges=(cc[ok], pc[ok], flow[ok]), through=through.reshape(r["land"].shape), area_ha=size,
+                scale=scale)

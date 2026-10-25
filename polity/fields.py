@@ -246,6 +246,11 @@ def compute(atlas, density=None):
              sea_open_months=(cl["sea"] >= 1).sum(0) * st["water"])
     best = np.argmin(reach, 0); best_days = np.min(reach, 0)
     second_days = np.partition(reach, 1, axis=0)[1] if len(names) > 1 else np.full(shape, np.inf)
+    masked = reach.copy(); np.put_along_axis(masked, best[None], np.inf, 0)
+    second = np.argmin(masked, 0); del masked
+    claim = np.full(shape, -1, np.int16)                   # de jure: the painted fill, by polity name
+    for k, name in enumerate(names):
+        claim[np.isin(ids, groups[name])] = k
     f["polity_best"] = np.where(np.isfinite(best_days), best, -1)
     f["polity_best_days"] = best_days
     f["polity_second_days"] = second_days
@@ -261,4 +266,6 @@ def compute(atlas, density=None):
                 swamp=swamp, density=density, paths=paths, cell_km=cell_km, elev=elev, meta=meta,
                 held=land & (best_days <= HELD_DAYS), contested=contested, refuge=refuge, relief=relief,
                 mobile={n: m_ for n, m_ in zip(names, mobile)}, herding=herding, river=world["river"],
-                water=st["water"], ports=ports, control_open=control_year, control_winter=control_worst)
+                water=st["water"], ports=ports, control_open=control_year, control_winter=control_worst,
+                world=world, statics=st, climate=cl, river_places=river_places, reach=reach, second=second,
+                claim=np.where(land, claim, -1))
