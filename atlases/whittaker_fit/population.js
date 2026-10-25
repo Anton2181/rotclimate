@@ -81,11 +81,12 @@
         [num(support>0?density[i]/support*100:0)+'%','population pressure'],[num(Math.max(0,support-density[i]))+' /km²','spare food support'],
         [f.travel[i]>=0?num(f.travel[i])+' hours':'No land connection','walking to a named market'],[market,'nearest walking market']]);
     }
-    function render(layer){
+    function render(layer,tiered){
       compute();const key=layer.id.slice(4),base=f[$('disease').value==='absent'?'capacity_absent':'capacity'];
       const cv=document.createElement('canvas');cv.width=m.shape[1];cv.height=m.shape[0];
       const ctx=cv.getContext('2d'),im=ctx.createImageData(cv.width,cv.height);
       const colors=layer.stops.map(s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16)));
+      const tiers=tiered&&layer.tiers?{edges:layer.tiers.bounds.slice(1,-1),colors:layer.tiers.colors.map(s=>[1,3,5].map(i=>parseInt(s.slice(i,i+2),16)))}:null;
       for(let i=0;i<base.length;i++){
         let value=key==='density'?density[i]:key==='pressure'?(base[i]>0?100*density[i]/base[i]:0):
           key==='headroom'?Math.max(0,base[i]-density[i]):key==='shift'?(uniform[i]>0?density[i]/uniform[i]:1):
@@ -93,6 +94,7 @@
         let c;
         if(!f.area[i])c=[214,227,240];
         else if(key==='travel'&&value<0)c=[176,176,176];
+        else if(tiers){let k=0;while(k<tiers.edges.length&&value>=tiers.edges[k])k++;c=tiers.colors[k];}
         else{
           const scaled=layer.log?(Math.log(Math.max(value,layer.vmin))-Math.log(layer.vmin))/Math.log(layer.vmax/layer.vmin):(value-layer.vmin)/(layer.vmax-layer.vmin);
           const p=Math.max(0,Math.min(1,scaled))*(colors.length-1),j=Math.min(colors.length-2,Math.floor(p));

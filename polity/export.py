@@ -17,6 +17,14 @@ from .fields import CONTESTED_DAYS, HELD_DAYS, LAYERS, compute
 ROOT = Path(__file__).resolve().parents[1]
 CONTROL_RAMP = ['#4d1a17', '#8f3426', '#c8603a', '#e5a557', '#e8d98a', '#9fbf5f', '#4f8f4a', '#1f5f3a']
 DAYS_RAMP = CONTROL_RAMP[::-1]
+# tiered colours: control by the days out it means (exp(-days)), days in walking terms
+CONTROL_TIERS = ([0, 2, 5, 13, 22, 37, 50, 61, 78, 100],
+                 ['< 2 % · 4+ days out', '2–5 % · 3–4 days', '5–13 % · 2–3 days', '13–22 % · 1½–2 days',
+                  '22–37 % · 1–1½ days', '37–50 % · 17–24 h', '50–61 % · 12–17 h', '61–78 % · 6–12 h', '≥ 78 % · under 6 h'])
+DAYS_TIERS = ([0, .25, .5, 1, 1.5, 2, 3, 4, 6],
+              ['under 6 h', '6–12 h', '½–1 day', '1–1½ days', '1½–2 days', '2–3 days', '3–4 days', '4+ days'])
+CAPITAL_TIERS = ([0, 5, 10, 15, 20, 30, 45, 60],
+                 ['under 5 days', '5–10 days', '10–15 days', '15–20 days', '20–30 days', '30–45 days', '45+ days'])
 TRAVEL_NOTE = ('Days on foot for an official or a patrol: roads and river routes 30 km a day, ferry routes 40, '
                'otherwise Tobler\'s hiking speed over the terrain for 7 hours a day, slowed by Soule & Goldman '
                'terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, snow 2.5) and quickened by footpaths where '
@@ -25,7 +33,7 @@ TRAVEL_NOTE = ('Days on foot for an official or a patrol: roads and river routes
 
 
 def export(atlas):
-    from harvest.export import color_image
+    from harvest.export import color_image, tiers
     from rotclimate.geography import source_layers
     atlas = Path(atlas); data = atlas / 'data'
     meta = json.loads((data / 'atlas.json').read_text())
@@ -41,20 +49,23 @@ def export(atlas):
 
     layers = []
 
-    def ramp(lid, value, label, unit, lo, hi, stops, note):
+    def ramp(lid, value, label, unit, lo, hi, stops, note, tier):
         save(color_image(value, land, elev, stops, lo, hi), lid + '.webp')
+        t = tiers(stops, lo, hi, False, *tier)
+        t['file'] = lid + '_tiers.webp'
+        save(color_image(value, land, elev, stops, lo, hi, tiered=t), t['file'])
         layers.append(dict(id=lid, file=lid + '.webp', label=label, kind='ramp', group='Political reach',
-                           unit=unit, vmin=lo, vmax=hi, stops=stops, note=note, log=False))
+                           unit=unit, vmin=lo, vmax=hi, stops=stops, note=note, log=False, tiers=t))
     ramp('reach_control', 100 * r['control_open'], 'Effective control', '% · exp(−days / 1 day) from the nearest road, '
          'town, fort or monastery, marked or unmarked, snow-free season', 0, 100, CONTROL_RAMP,
          'One day out and one day back is the reach a county seat or a fort holds directly; at two days a third of it '
-         'remains. ' + TRAVEL_NOTE)
+         'remains. ' + TRAVEL_NOTE, CONTROL_TIERS)
     ramp('reach_control_winter', 100 * r['control_winter'], 'Control in winter', '% · as above, with the months of '
-         'lasting snow (soft snow 2.5× harder going)', 0, 100, CONTROL_RAMP, TRAVEL_NOTE)
+         'lasting snow (soft snow 2.5× harder going)', 0, 100, CONTROL_RAMP, TRAVEL_NOTE, CONTROL_TIERS)
     ramp('reach_days', np.minimum(f['days_open'], 6), 'Days beyond the roads', 'days on foot to the nearest road, '
-         'town, fort or monastery, marked or unmarked', 0, 6, DAYS_RAMP, TRAVEL_NOTE)
+         'town, fort or monastery, marked or unmarked', 0, 6, DAYS_RAMP, TRAVEL_NOTE, DAYS_TIERS)
     ramp('reach_capital', np.minimum(f['capital_days_open'], 60), 'Days from the capital', 'days on foot from the '
-         'imperial capital by road and track', 0, 60, DAYS_RAMP, TRAVEL_NOTE)
+         'imperial capital by road and track', 0, 60, DAYS_RAMP, TRAVEL_NOTE, CAPITAL_TIERS)
 
     # who reaches where
     best, best_days = f['polity_best'], f['polity_best_days']

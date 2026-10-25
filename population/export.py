@@ -7,7 +7,7 @@ import shutil
 import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
-from harvest.export import climate_arrays,geometry,color_image,RAMPS,physical_metadata
+from harvest.export import climate_arrays,geometry,color_image,RAMPS,physical_metadata,people_bounds,tiers
 from .models import allocate,market_access,attraction_fields
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -18,6 +18,13 @@ DEFINITIONS=[
     ('shift','Settlement redistribution','× same-total uniform occupation',.1,10,True,'shift'),
     ('travel','Walking to market','walking hours · no roads or boats',0,120,False,'water'),
     ('attraction','Settlement attraction','relative environmental and market attraction, 0–100',0,100,False,'green')]
+# tiered colours: people/km² in the steps a reader compares by; pressure by how
+# near local support; redistribution symmetric about 1x; walking time in
+# hours, half-days and days
+BOUNDS={'density':people_bounds(.1,300),'headroom':people_bounds(.1,300),'pressure':[0,25,50,75,90,100],
+        'shift':[.1,.25,.5,.8,1.25,2,4,10],'travel':[0,4,8,12,24,48,72,120]}
+LABELS={'shift':['< ¼×','¼–½×','½–0.8×','0.8–1.25×','1.25–2×','2–4×','≥ 4×'],
+        'travel':['under 4 h','4–8 h','8–12 h','½–1 day','1–2 days','2–3 days','3+ days']}
 COLORS={**RAMPS,'pressure':['#e9efce','#c5d48c','#e9c36a','#d88442','#96394d'],
         'shift':['#224d86','#79b3c9','#f1ecdb','#dc9c61','#962d41']}
 
@@ -103,9 +110,13 @@ def export(atlas):
         if key=='travel':image[land & (hours<0)]=[.69,.69,.69]
         file='pop_'+key+'.webp'
         Image.fromarray((np.clip(image,0,1)*255).astype('uint8')).resize((meta['width'],meta['height'])).save(data/file,'WEBP',quality=88,method=4)
+        tier=tiers(colors,lo,hi,log,BOUNDS.get(key),LABELS.get(key));tier['file']='pop_'+key+'_tiers.webp'
+        image=color_image(maps[key],land,arrays['elev'],colors,lo,hi,log,tiered=tier)
+        if key=='travel':image[land & (hours<0)]=[.69,.69,.69]
+        Image.fromarray((np.clip(image,0,1)*255).astype('uint8')).resize((meta['width'],meta['height'])).save(data/tier['file'],'WEBP',quality=88,method=4)
         dynamic=key not in ['travel','attraction']
         layers.append(dict(id='pop_'+key,file=file,label=label,unit=unit,group='Population',kind='ramp',
-                           stops=colors,vmin=lo,vmax=hi,log=log,note=notes[key],
+                           stops=colors,vmin=lo,vmax=hi,log=log,note=notes[key],tiers=tier,
                            controls=['disease'] if dynamic else [],population_dynamic=dynamic))
     totals=dict(requested=default,allocated=float(people.sum()),unallocated=unmet,
                 capacity=float((fields['capacity'].astype(float)*fields['area']).sum()),

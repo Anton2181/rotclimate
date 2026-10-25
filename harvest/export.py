@@ -235,13 +235,82 @@ def aggregates(fields,geo,meta):
                 index,area)
 
 
-def color_image(value,land,elevation,stops,lo,hi,log=False):
+def people_bounds(lo,hi):
+    """Class edges for people/km²: the steps a reader compares densities by."""
+    return [float(lo)]+[v for v in (1,2,5,10,20,50,100,300) if lo<v<hi]+[float(hi)]
+
+
+def _edge(v):
+    a=abs(v)
+    if a>=100 or float(v).is_integer():return f'{v:,.0f}'
+    return f'{v:.1f}'.rstrip('0').rstrip('.') if a>=1 else f'{v:.2f}'.rstrip('0').rstrip('.')
+
+
+def nice_bounds(lo,hi,log=False,classes=7):
+    """Round class edges over [lo, hi]: 1-2-5 per decade on a log scale (1-3
+    beyond 2.5 decades, one per decade beyond 5), else about `classes` round steps."""
+    if log:
+        span=np.log10(hi/lo);mant=(1,2,5) if span<=2.5 else (1,3) if span<=5 else (1,)
+        inner=[m*10.0**e for e in range(int(np.floor(np.log10(lo)))-1,int(np.ceil(np.log10(hi)))+1) for m in mant]
+    else:
+        mag=10.0**np.floor(np.log10((hi-lo)/classes))
+        step=min((m*g for g in (mag/10,mag,mag*10) for m in (1,2,2.5,5)),key=lambda st:abs((hi-lo)/st-classes))
+        inner=list(np.arange(np.ceil(lo/step)*step,hi,step))
+    inner=sorted({round(float(v),10) for v in inner if lo<v<hi*(1-1e-9)})
+    return [float(lo)]+inner+[float(hi)]
+
+
+def _oklab(rgb):
+    """sRGB (0-1, [..., 3]) to OKLab (Ottosson 2020)."""
+    c=np.asarray(rgb,float);c=np.where(c<=0.04045,c/12.92,((c+0.055)/1.055)**2.4)
+    l,m,s=[np.cbrt(c@np.array(w)) for w in ([0.4122214708,0.5363325363,0.0514459929],
+                                            [0.2119034982,0.6806995451,0.1073969566],
+                                            [0.0883024619,0.2817188376,0.6299787005])]
+    return np.stack([0.2104542553*l+0.7936177850*m-0.0040720468*s,1.9779984951*l-2.4285922050*m+0.4505937099*s,
+                     0.0259040371*l+0.7827717662*m-0.8086757660*s],-1)
+
+
+def tiers(stops,lo,hi,log=False,bounds=None,labels=None):
+    """Tiered colours for a ramp layer: class edges (round ones by default),
+    one colour per class at equal perceptual steps along the ramp's whole
+    span (OKLab path length), so that neighbouring classes differ alike
+    everywhere (sampling where the values lie gave uneven classes such as
+    control's 0-2-5-13 % near-identical colours, and even sampling bunched the
+    pale ends), and labels (the end classes also hold the values beyond the
+    ramp's ends).""" 
+    from matplotlib.colors import to_hex,to_rgb
+    b=[float(v) for v in (bounds if bounds is not None else nice_bounds(lo,hi,log))]
+    cols=np.asarray([to_rgb(c) for c in stops])
+    fine=np.linspace(0,1,1001)*(len(cols)-1);idx=np.minimum(fine.astype(int),len(cols)-2)
+    path=cols[idx]+(cols[idx+1]-cols[idx])*(fine-idx)[:,None]
+    lab=_oklab(path);arc=np.concatenate([[0],np.cumsum(np.linalg.norm(np.diff(lab,axis=0),axis=1))])
+    n=len(b)-1;L=lab[:,0];peak=int(np.argmax(L))
+    if 0<peak<len(L)-1 and L[peak]-max(L[0],L[-1])>0.1 and n>=3:
+        # a diverging ramp: one class on its pale pivot, the arms sharing the
+        # rest by their length (two classes on the pivot would differ by hue alone)
+        left=int(round((n-1)*arc[peak]/arc[-1]));right=n-1-left
+        pos=[arc[peak]*i/max(left,1) for i in range(left)]+[arc[peak]]+[arc[peak]+(arc[-1]-arc[peak])*j/right for j in range(1,right+1)]
+    else:
+        pos=[arc[-1]*k/(n-1) for k in range(n)] if n>1 else [arc[-1]/2]
+    picks=[path[int(np.argmin(np.abs(arc-x)))] for x in pos]
+    if labels is None:
+        labels=[('< '+_edge(b[1])) if k==0 else ('≥ '+_edge(b[k])) if k==n-1 else f'{_edge(b[k])}–{_edge(b[k+1])}'
+                for k in range(n)]
+    return dict(bounds=b,colors=[to_hex(c) for c in picks],labels=list(labels))
+
+
+def color_image(value,land,elevation,stops,lo,hi,log=False,tiered=None):
+    """Hill-shaded ramp image; with `tiered` (from tiers()) one colour per class."""
     from matplotlib.colors import to_rgb
     colors=np.asarray([to_rgb(c) for c in stops])
     v=np.nan_to_num(value,nan=lo)
-    x=(np.log(np.maximum(v,lo))-np.log(lo))/(np.log(hi)-np.log(lo)) if log else (v-lo)/(hi-lo)
-    x=np.clip(x,0,1)*(len(colors)-1);i=np.minimum(x.astype(int),len(colors)-2)
-    rgb=colors[i]+(colors[i+1]-colors[i])*(x-i)[...,None]
+    if tiered is not None:
+        classes=np.asarray([to_rgb(c) for c in tiered['colors']])
+        rgb=classes[np.clip(np.searchsorted(np.asarray(tiered['bounds'][1:-1]),v,side='right'),0,len(classes)-1)]
+    else:
+        x=(np.log(np.maximum(v,lo))-np.log(lo))/(np.log(hi)-np.log(lo)) if log else (v-lo)/(hi-lo)
+        x=np.clip(x,0,1)*(len(colors)-1);i=np.minimum(x.astype(int),len(colors)-2)
+        rgb=colors[i]+(colors[i+1]-colors[i])*(x-i)[...,None]
     gy,gx=np.gradient(elevation.astype(float))
     shade=np.clip(.96-.00018*gx+.00022*gy,.78,1.08)
     rgb=np.clip(rgb*shade[...,None],0,1)
@@ -258,11 +327,18 @@ def images_and_layers(fields,geo,meta,arrays,data):
         from rotclimate.geography import source_layers
         pixels=np.array(image);pixels[~source_layers()['land']]=[214,227,240]
         Image.fromarray(pixels).save(data/filename,'WEBP',quality=88,method=4)
+    def both(value,palette,lo,hi,log,tier,filename):
+        """The smooth image and its tiered twin (<name>_tiers.webp)."""
+        save(color_image(value,land,elevation,RAMPS[palette],lo,hi,log),filename)
+        twin=filename.replace('.webp','_tiers.webp')
+        save(color_image(value,land,elevation,RAMPS[palette],lo,hi,log,tiered=tier),twin)
+        return twin
     def ramp(key,label,unit,lo,hi,palette,log=False,note=''):
         filename='land_'+key+'.webp'
-        save(color_image(fields[key],land,elevation,RAMPS[palette],lo,hi,log),filename)
+        tier=tiers(RAMPS[palette],lo,hi,log,people_bounds(lo,hi) if unit.startswith('people/km²') else None)
+        tier['file']=both(fields[key],palette,lo,hi,log,tier,filename)
         item=dict(id='land_'+key,file=filename,label=label,kind='ramp',group='Harvest',
-                  unit=unit,vmin=lo,vmax=hi,stops=RAMPS[palette],note=note,log=log)
+                  unit=unit,vmin=lo,vmax=hi,stops=RAMPS[palette],note=note,log=log,tiers=tier)
         layers.append(item);return item
     ramp('crop_capacity','Crop food capacity','people/km² · fully developed low-input crop farming',.1,1000,'people',True,
          'A food-production ceiling with period yields, seed, fallow and draft/storage costs; not a census.')
@@ -291,30 +367,31 @@ def images_and_layers(fields,geo,meta,arrays,data):
                        note='Diagonal hatching marks a compatible second crop. Crop labels follow the winning crop pair.'))
     occupation=occupation_reference()['scenarios']
     density=ramp('settlement_base','Expected density','people/km² · c.200 AD settlement scenario',.1,300,'people',True)
-    density['id']='land_density';density['scenario_files']={}
+    density['id']='land_density';density['scenario_files']={};density['tiers']['scenario_files']={}
     livability=ramp('livability','Settlement potential','environmental settlement potential, 0–100; not living standards',0,100,'green')
-    livability['scenario_files']={}
+    livability['scenario_files']={};livability['tiers']['scenario_files']={}
     for disease,base,index in [('endemic','settlement_base','livability'),('absent','settlement_no_malaria','livability_no_malaria')]:
         for scenario,fraction in occupation.items():
             file=f'land_density_{scenario}_{disease}.webp'
-            save(color_image(fields[base]*fraction,land,elevation,RAMPS['people'],.1,300,True),file)
-            density['scenario_files'][scenario+'_'+disease]=file
+            twin=both(fields[base]*fraction,'people',.1,300,True,density['tiers'],file)
+            density['scenario_files'][scenario+'_'+disease]=file;density['tiers']['scenario_files'][scenario+'_'+disease]=twin
         file='land_livability_'+disease+'.webp'
-        save(color_image(fields[index],land,elevation,RAMPS['green'],0,100),file)
-        for scenario in occupation:livability['scenario_files'][scenario+'_'+disease]=file
-    density['file']=density['scenario_files']['central_endemic']
-    livability['file']=livability['scenario_files']['central_endemic']
+        twin=both(fields[index],'green',0,100,False,livability['tiers'],file)
+        for scenario in occupation:
+            livability['scenario_files'][scenario+'_'+disease]=file;livability['tiers']['scenario_files'][scenario+'_'+disease]=twin
+    density['file']=density['scenario_files']['central_endemic'];density['tiers']['file']=density['tiers']['scenario_files']['central_endemic']
+    livability['file']=livability['scenario_files']['central_endemic'];livability['tiers']['file']=livability['tiers']['scenario_files']['central_endemic']
     cored=ramp('settlement_cored','Density around the old heartlands',
                'people/km² · c.200 AD scenario, the same people drawn toward the lore heartlands',.1,300,'people',True,
                'Heartlands from the campaign lore (data/lore_cores.json); occupation falls as exp(-D / 800 km) with '
                'travel through forest and relief, as tested on Earth with the historical cores.')
-    cored['id']='land_density_cores';cored['scenario_files']={}
+    cored['id']='land_density_cores';cored['scenario_files']={};cored['tiers']['scenario_files']={}
     for disease,base in [('endemic','settlement_cored'),('absent','settlement_cored_no_malaria')]:
         for scenario,fraction in occupation.items():
             file=f'land_density_cores_{scenario}_{disease}.webp'
-            save(color_image(fields[base]*fraction,land,elevation,RAMPS['people'],.1,300,True),file)
-            cored['scenario_files'][scenario+'_'+disease]=file
-    cored['file']=cored['scenario_files']['central_endemic']
+            twin=both(fields[base]*fraction,'people',.1,300,True,cored['tiers'],file)
+            cored['scenario_files'][scenario+'_'+disease]=file;cored['tiers']['scenario_files'][scenario+'_'+disease]=twin
+    cored['file']=cored['scenario_files']['central_endemic'];cored['tiers']['file']=cored['tiers']['scenario_files']['central_endemic']
     return layers
 
 

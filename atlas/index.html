@@ -338,6 +338,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
           <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
           <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
+          <label class="toggle" id="tiers-control" title="Group the colours into classes with round edges instead of a smooth gradient" hidden><input type="checkbox" id="tiers"> Tiered colours</label>
         </div>
       </div>
       <div id="settlement-controls" class="monthctl" hidden>
@@ -695,7 +696,7 @@ window.atlasSave = async (filename, blob) => {
         name => harvestUI?.selectProvince(name)).catch(error => { populationLoading = null; throw error; });
       populationUI = await populationLoading;
       if (current !== L.id) return;
-      $("base").src = populationUI.render(L);
+      $("base").src = populationUI.render(L, tieredOn(L));
       const context = populationUI.state();
       L.population_context = L.population_dynamic ? `${(context.population / 1e6).toLocaleString(undefined, {maximumFractionDigits: 3})} M budget · ${$("population-pattern").selectedOptions[0].textContent} · ${$("disease").selectedOptions[0].textContent}` : "";
       $("base").alt = L.label + (L.population_context ? " · " + L.population_context : "");
@@ -703,6 +704,7 @@ window.atlasSave = async (filename, blob) => {
       if (populationSelection) populationUI.select(...populationSelection);
       const state = new URLSearchParams(location.hash.slice(1));
       for (const [key, value] of Object.entries(populationUI.state())) state.set(key, value);
+      if ($("tiers").checked) state.set("colours", "tiers"); else state.delete("colours");
       history.replaceState(null, "", "#" + state.toString());
       for (const link of document.querySelectorAll(".atlas-nav a"))
         if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href"))) link.href = link.href.split("#")[0] + "#" + state.toString();
@@ -746,6 +748,11 @@ window.atlasSave = async (filename, blob) => {
       showFrame();
     }, 900);
   });
+  // Tiered colours: layers with a tiers record have a twin image per file
+  // (one colour per class) and a stepped legend; the rest keep their ramp.
+  const tieredOn = (L) => $("tiers").checked && !!L.tiers;
+  const layerFile = (L) => tieredOn(L) ? (L.tiers.scenario_files?.[scenarioKey()] || L.tiers.file)
+    : (L.scenario_files?.[scenarioKey()] || L.file);
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
@@ -771,11 +778,13 @@ window.atlasSave = async (filename, blob) => {
     } else {
       stopPlay();
       $("monthctl").hidden = true;
-      $("base").src = fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
+      $("base").src = fresh("data/" + layerFile(L));
     }
+    $("tiers-control").hidden = !L.tiers;
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
     drawLegend(L);
     const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
+    if ($("tiers").checked) state.set("colours", "tiers");
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     history.replaceState(null, "", "#" + state.toString());
@@ -837,6 +846,9 @@ window.atlasSave = async (filename, blob) => {
         + `<span class="note">Each place takes the zone type its simulated climate fits best; a place meeting the swamp rule (hot, very wet, flat ground) counts as swamp, and no place takes a zone its Köppen class contradicts (cold and dry is BSk/BWk only, Mediterranean is Cs only).</span>`;
     } else if (L.kind === "target") {
       el.innerHTML = meta.zones.map((z) => `<span><span class="sw" style="background:${z.color}"></span>${esc(z.label)}</span>`).join("");
+    } else if (tieredOn(L)) {
+      el.innerHTML = L.tiers.colors.map((c, i) => `<span><span class="sw" style="background:${c}"></span>${esc(L.tiers.labels[i])}</span>`).join("")
+        + `<span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}${L.population_context ? " · " + esc(L.population_context) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
     } else {
       const span = L.vmax - L.vmin;
       const fmt = (v) => tickText(L, v);
@@ -1309,6 +1321,8 @@ window.atlasSave = async (filename, blob) => {
     if (L.kind === "zones") return { title: L.label, items: [...meta.zones,
       ...(meta.zones_extra || [{ label: "Fits none of your zones", color: "#dbdbdb" }])].map((z) => ({ color: z.color, label: z.label })) };
     if (L.kind === "target") return { title: L.label, items: meta.zones.map((z) => ({ color: z.color, label: z.label })) };
+    if (tieredOn(L)) return { title: `${L.label}, ${L.unit}${L.scenario_files ? " · " + layerScenario(L) : ""}${L.population_context ? " · " + L.population_context : ""}`,
+      items: L.tiers.colors.map((c, i) => ({ color: c, label: L.tiers.labels[i] })) };
     const span = L.vmax - L.vmin;
     const fmt = (v) => tickText(L, v);
     const ticks = [0, 1, 2, 3, 4].map((i) => fmt(L.log ? L.vmin * Math.pow(L.vmax / L.vmin, i / 4) : L.vmin + span * i / 4));
@@ -1907,6 +1921,12 @@ window.atlasSave = async (filename, blob) => {
     }
   }
   const initialView = new URLSearchParams(location.hash.slice(1));
+  try { $("tiers").checked = initialView.has("colours") ? initialView.get("colours") === "tiers" : localStorage.getItem("rotclimate-tiers") === "1"; }
+  catch (e) { $("tiers").checked = initialView.get("colours") === "tiers"; }
+  $("tiers").addEventListener("change", (e) => {
+    try { localStorage.setItem("rotclimate-tiers", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
+    setLayer(current);
+  });
   for (const id of ["occupation", "disease"]) {
     const value = initialView.get(id);
     if ([...$(id).options].some(option => option.value === value)) $(id).value = value;
