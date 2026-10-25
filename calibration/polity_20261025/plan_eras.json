@@ -1,0 +1,29 @@
+{
+  "frozen": "2026-10-25, before any of these results were computed (the seat counts per era were seen: 1,294 / 1,560 / 1,287 / 1,948 seats for 57.7 / 52.4 / 88.2 / 351.5 M people)",
+  "purpose": "Three more Earth checks of the polity model with data already on disk: how county seats are spaced across 1,800 years of China, how far the drawn extent reaches from seats in later eras, and whether riding explains where a steppe polity's border with a farming state lay.",
+  "data": {
+    "seats": "Zheng & Wu (2026) CountyPointsWithPopulation, YEAR 2AD / 742AD / 1102AD / 1820AD",
+    "areas": "Zheng & Wu (2026) ResearchArea, the same years: prefecture polygons with recorded population and area",
+    "polygons": "Cliopatria v0.2.1: Xiongnu AD 2, the Turkic khaganate of AD 742 (as named there), Tang Dynasty AD 742"
+  },
+  "E1_seat_rule": {
+    "question": "Are seats spaced by people (one per N), by area (one per A km2), or by a mix?",
+    "model": "expected seats in a prefecture = c x people^beta x area^(1 - beta); beta = 1 is the map's current people rule, beta = 0 an area rule",
+    "fit": "on AD 2 only: c for beta = 1 and beta = 0 (Poisson maximum likelihood), and the mixed rule with beta on a 0.05 grid from 0 to 1",
+    "data_use": "recorded populations and areas (not the Harvest model), prefectures with at least one seat",
+    "test": "Poisson deviance per prefecture in AD 742, 1102 and 1820 with the AD 2 constants (no refit); also the refitted c per era, reported",
+    "decision": "the rule with the lowest summed deviance over the three later eras goes to the map's unmarked towns: catchment radius R = sqrt(1 / (pi c' d^beta)) with c' set so that a Han-like density gives the same R as now"
+  },
+  "E2_held_by_era": {
+    "question": "Does the seats-only extent threshold (5 days for Han AD 2) hold in later eras?",
+    "method": "the Han window and the v2 monthly graph; inside = the era's prefecture polygons; network = the era's seats; best threshold on the same 1-5 day grid (plus 6, 8, 10), balanced accuracy over land within 15 days of a seat",
+    "decision": "informative: the map keeps 2 days because its network has roads (Roman test)"
+  },
+  "E3_riders": {
+    "question": "Does riding put a steppe polity's border with a farming state where it was?",
+    "cases": [["Han Dynasty AD 2 commanderies (seats)", "Xiongnu AD 2"], ["Tang Dynasty AD 742 prefectures (seats)", "the Turkic khaganate of AD 742"]],
+    "window": "a steppe window, centre 41 N 106 E, 4,200 x 2,800 km, 9 km cells",
+    "method": "the farming state reaches from its seats on foot (v2, twelve months); the steppe polity from every cell of its polygon where the modelled people reach 0.5 per km2, (a) on foot, (b) riding (50 km/day); each cell inside either polygon goes to the faster; balanced accuracy of the assignment",
+    "pass": "riding (b) above walking (a) in both cases; then riding stays available for the map's lore-named polities as tested"
+  }
+}

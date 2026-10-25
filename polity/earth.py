@@ -184,7 +184,8 @@ def inside_polygons(g, rings_lonlat):
 
 # ------------------------------------------------------------ historical data
 def cliopatria(name, year):
-    d = json.loads((CACHE / "cliopatria/geo/subset_ad2_117_150.json").read_text())
+    sub = "subset_ad2_117_150.json" if year in (2, 117, 150) else "subset_742_1102_1820.json"
+    d = json.loads((CACHE / "cliopatria/geo" / sub).read_text())
     out = []
     for p in d["polities"]:
         if p["name"] == name and year in p["years"]:
@@ -219,14 +220,15 @@ def _tm_inverse(x, y, a, f, lon0, k0=1.0, false_easting=0.0):
     return np.degrees(lat), np.degrees(lon)
 
 
-def han_seats():
-    """The AD 2 county and commandery seats: lat, lon, type, commandery, people."""
+def han_seats(year="2AD"):
+    """County and commandery (prefecture) seats of one year of Zheng & Wu (2026):
+    lat, lon, type, commandery, people. Years: 2AD, 742AD, 1102AD, 1820AD."""
     import shapefile
     r = shapefile.Reader(str(CACHE / "han_ad2/shp/CountyPointsWithPopulation"), encoding="utf-8")
     out = []
     for shp, rec in zip(r.iterShapes(), r.iterRecords()):
         d = rec.as_dict()
-        if d["YEAR"] != "2AD":
+        if d["YEAR"] != year:
             continue
         x, y = shp.points[0]
         # Xian 1980, Gauss-Kruger zone 19 (central meridian 111 E, false easting 19,500 km)
@@ -236,8 +238,8 @@ def han_seats():
     return out
 
 
-def han_commanderies(g):
-    """AD 2 commanderies: per cell the commandery index (-1 outside) and the list."""
+def han_commanderies(g, year="2AD"):
+    """Commanderies (prefectures) of one year: per cell the index (-1 outside) and the list."""
     import shapefile
     import sys
     sys.path.insert(0, str(ROOT / "scripts"))
@@ -248,7 +250,7 @@ def han_commanderies(g):
     ids = np.full(len(pts), -1); rows = []
     for shp, rec in zip(r.iterShapes(), r.iterRecords()):
         d = rec.as_dict()
-        if d["YEAR"] != "2AD":
+        if d["YEAR"] != year:
             continue
         inside = np.zeros(len(pts), bool)
         parts = list(shp.parts) + [len(shp.points)]
