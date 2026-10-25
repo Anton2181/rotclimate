@@ -99,6 +99,27 @@ async def check(paths, base, out):
                 await loaded('land_density_central_endemic.webp')
                 assert await page.locator('#layer-land_density').get_attribute('aria-pressed')=='true'
                 harvest_checks=dict(scenarios='passed',provinces='passed',deep_links='passed',visible_layer_buttons=visible)
+            political_checks=None
+            variant_layer=next((item for item in meta['layers'] if item['id']=='reach_defacto' and item.get('variants')),None)
+            if variant_layer:
+                await layer('reach_defacto')
+                assert await page.locator('#variant-controls').is_visible()
+                assert await page.locator('#settlement-controls').is_hidden()
+                options=variant_layer['variants']['options']
+                for option in options:
+                    await page.locator('#variant').select_option(option['value'])
+                    await loaded(option['file'])
+                    assert 'variant='+option['value'] in page.url
+                await page.reload(wait_until='domcontentloaded')
+                await loaded(options[-1]['file'])
+                assert await page.locator('#variant').input_value()==options[-1]['value']
+                await page.locator('.plate').screenshot(path=str(out/(Path(path).name+'_political.png')))
+                await layer('reach_trade')
+                await loaded('reach_trade.webp')
+                assert await page.locator('#variant-controls').is_hidden()
+                await layer('whittaker')
+                assert await page.locator('#variant-controls').is_hidden()
+                political_checks=dict(variants=len(options),deep_links='passed',trade='passed',conditional_controls='passed')
             if meta.get('harvest'):
                 await page.locator('#province-sort').evaluate("el=>el.closest('details').open=true")
                 await page.locator('#earth-reference').evaluate("el=>el.closest('details').open=true")
@@ -110,7 +131,8 @@ async def check(paths, base, out):
                 assert (await button.bounding_box())['width']>0
             assert not errors,errors
             results.append(dict(atlas=path,layer_count=len(meta['layers']),town=town,page_errors=errors,status='passed',
-                                biome_target_layers=any(layer['id']=='biome_targets' for layer in meta['layers']),harvest=harvest_checks))
+                                biome_target_layers=any(layer['id']=='biome_targets' for layer in meta['layers']),harvest=harvest_checks,
+                                political=political_checks))
             await context.close()
         await browser.close()
     (out/'browser_checks.json').write_text(json.dumps(results,indent=2));print(json.dumps(results,indent=2))

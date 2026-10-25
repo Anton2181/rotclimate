@@ -324,7 +324,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
   <header>
     <span class="eyebrow">Climate, farming and settlement · three layouts · c.200 AD</span>
     <h1>Rotclimate Earth-Fit Atlas</h1>
-    <p class="lede">Click anywhere on land to see its climate through the local year, and which real places feel most alike.</p><p class="lede">Only world parameters fitted; Earth r37 physics held fixed. Climate averages surroundings layouts 1–3, with recorded linear, temperature and moisture convergence checks. Farming and population layers use low-input c.200 AD technology; population values are declared settlement scenarios.</p>
+    <p class="lede">Explore the climate, food potential and settlement scenarios. Choose a map topic, then a layer; select a place for its climate and farming details.</p><p class="lede">Only world parameters fitted; Earth r38 physics held fixed. Climate averages surroundings layouts 1–3, with recorded linear, temperature and moisture convergence checks. Farming and population layers use low-input c.200 AD technology; population values are declared settlement scenarios.</p>
     <p class="note" id="atlas-data-status" role="status">Loading current atlas data…</p>
   <nav class="atlas-nav" aria-label="Atlas fits"><a href="../">Compare fits</a> <a href="../free_fit/">Free fit</a> <a href="../earth_fit/" aria-current="page">Earth fit</a> <a href="../whittaker_fit/">Whittaker fit</a></nav></header>
 
@@ -345,6 +345,10 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
         <label id="occupation-control">Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
         <label id="disease-control">Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
         <span class="note">c.200 AD technology · scenarios, not a census</span>
+      </div>
+      <div id="variant-controls" class="monthctl" hidden>
+        <label><span id="variant-name">Variant</span> <select id="variant"></select></label>
+        <span class="note" id="variant-note"></span>
       </div>
       <div id="population-controls" class="monthctl population-controls" hidden>
         <label>Population, millions <input id="population-budget" type="number" min="0" step="0.1" aria-label="Supplied population in millions"></label>
@@ -738,8 +742,29 @@ window.atlasSave = async (filename, blob) => {
   // Tiered colours: layers with a tiers record have a twin image per file
   // (one colour per class) and a stepped legend; the rest keep their ramp.
   const tieredOn = (L) => $("tiers").checked && !!L.tiers;
-  const layerFile = (L) => tieredOn(L) ? (L.tiers.scenario_files?.[scenarioKey()] || L.tiers.file)
+  // Layers with variants (e.g. the de facto gap fill) have one image, legend and note per option
+  const variantOf = (L) => L.variants ? (L.variants.options.find(o => o.value === $("variant").value)
+    || L.variants.options.find(o => o.value === L.variants.default) || L.variants.options[0]) : null;
+  const layerFile = (L) => L.variants ? variantOf(L).file
+    : tieredOn(L) ? (L.tiers.scenario_files?.[scenarioKey()] || L.tiers.file)
     : (L.scenario_files?.[scenarioKey()] || L.file);
+  function showVariants(L) {
+    $("variant-controls").hidden = !L.variants;
+    if (!L.variants) return;
+    const sel = $("variant"), keep = sel.value;
+    if (sel.dataset.layer !== L.id) {
+      sel.innerHTML = "";
+      for (const o of L.variants.options) sel.add(new Option(o.label, o.value));
+      sel.dataset.layer = L.id;
+      sel.value = L.variants.options.some(o => o.value === keep) ? keep : L.variants.default;
+    }
+    $("variant-name").textContent = L.variants.label;
+    const v = variantOf(L);
+    $("variant-note").textContent = v.caption || "";
+    if (v.items) L.items = v.items;
+    if (v.note) L.note = v.note;
+  }
+  $("variant").addEventListener("change", () => setLayer(current));
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
@@ -757,7 +782,8 @@ window.atlasSave = async (filename, blob) => {
     $("population-section").hidden = !population;
     $("population-message").hidden = !population;
     $("harvest-section").hidden = population || !meta.harvest;
-    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "");
+    showVariants(L);
+    $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
       for (const f of L.frames) { const im = new Image(); im.src = fresh("data/" + f); }   // preload for smooth play
@@ -772,6 +798,7 @@ window.atlasSave = async (filename, blob) => {
     drawLegend(L);
     const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
     if ($("tiers").checked) state.set("colours", "tiers");
+    if (L.variants) state.set("variant", variantOf(L).value);
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     history.replaceState(null, "", "#" + state.toString());
@@ -1920,6 +1947,8 @@ window.atlasSave = async (filename, blob) => {
   }
   harvestUI?.refresh();
   const requestedLayer = initialView.get("layer");
+  if (initialView.has("variant")) { const L0 = meta.layers.find(L => L.id === requestedLayer);
+    if (L0?.variants) { showVariants(L0); $("variant").value = initialView.get("variant"); } }
   setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
   const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
   select(start0.x, start0.y + 8, start0.name);

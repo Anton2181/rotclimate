@@ -1,5 +1,15 @@
 # Handoff — 2026-10-25
 
+## Repository publication follow-up
+
+Earth r38 is built and promoted to `atlases/earth_fit`, with all three layout
+numerical certificates passing. See `reports/ATLAS_R38_20261025.md` and
+`output/atlas_r38/earth_publication.json` for map comparisons and browser QA.
+The hub and atlas pages are refreshed. Free-fit and Whittaker political
+exports have been started in `output/atlas_r38/staging/`; inspect their
+process/log status before restarting. The original list below describes the
+state before this follow-up. Hosted artifacts remain unchanged.
+
 Branch: `claude/friendly-turing-43ygeu`. Everything below is committed and pushed. Background jobs
 that were running when the session ended did NOT save; rerun them as listed.
 

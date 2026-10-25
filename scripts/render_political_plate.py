@@ -28,6 +28,16 @@ SEA_ROUTE = "#1d4a7a"
 SOFT_ALPHA = 0.46
 
 
+def serif_font(bold=False, **kwargs):
+    """Use the preferred face when installed, otherwise a system serif."""
+    from matplotlib.font_manager import FontProperties
+    face = 'FreeSerifBold.ttf' if bold else 'FreeSerif.ttf'
+    path = Path('/usr/share/fonts/truetype/freefont') / face
+    if path.exists():
+        return FontProperties(fname=str(path), **kwargs)
+    return FontProperties(family='serif', weight='bold' if bold else 'normal', **kwargs)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("atlas")
@@ -101,7 +111,7 @@ def main():
     ax.scatter(xs[marked], ys[marked], s=size[marked] * 1.6, c="#fbf8f0", edgecolors=INK, linewidths=0.9 * lw * 2,
                zorder=6)
     # polity names at the most interior point of each polity's largest held area, sized by area, no overlaps
-    font = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
+    font = serif_font()
     held = z[f"held_by_{tag}"]
     renderer = fig.canvas.get_renderer()
     frame = ax.get_window_extent(renderer)
@@ -134,8 +144,8 @@ def main():
     paper = R.PAPER
     swatch = lambda k: tuple(paper * (1 - SOFT_ALPHA) + cols[k] * SOFT_ALPHA)
     k0 = int(np.argmax([(held == k).sum() for k in range(len(names))]))
-    bold = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf")
-    reg = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
+    bold = serif_font(bold=True)
+    reg = serif_font()
     fs = 9 * lw
     fig.text(0.012, (strip * 0.78) / (H + strip), "Political reach and trade, c. AD 200", fontproperties=bold,
              fontsize=17 * lw, color=INK, va="center")
@@ -158,8 +168,7 @@ def main():
                Line2D([], [], marker="o", ls="none", markerfacecolor="#fbf8f0", markeredgecolor="#555", markersize=4,
                       label="suggested unmarked town")]
     leg = fig.legend(handles=handles, loc="center", bbox_to_anchor=(0.62, (strip * 0.5) / (H + strip)), ncol=2,
-                     frameon=False, prop=FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
-                                                        size=fs * 1.05), columnspacing=2.5, handlelength=2.6)
+                     frameon=False, prop=serif_font(size=fs * 1.05), columnspacing=2.5, handlelength=2.6)
     # scale bar: miles per source pixel
     mi_px = meta["mi_per_px"] * meta["width"] / W
     bar_mi = 200
