@@ -1,0 +1,22 @@
+{
+ "frozen": "2026-10-25, before any result",
+ "question": "De facto control on the map is the land within HELD_DAYS (2) of a polity's own roads and towns. Between towns that leaves small unheld gaps; some large regions (the arid west of Old Argos) are unheld too. Does a gap fill that bridges narrow gaps and leaves large regions open bring the held land closer to historians' maps of a polity's extent on Earth, and by how much should it bridge?",
+ "operation": {
+  "name": "closing in travel time",
+  "held": "year-round days (polity v2 month networks, as the map: walking with seasons, sea and river boats, no refuge, no ranks) from the towns and roads <= 2 days",
+  "dilate": "land within r days on foot of held land (the twelve monthly foot networks, effective year-round days)",
+  "erode": "drop the dilated cells within r days on foot of land outside the dilation (water is never a source)",
+  "bridged": "held OR (dilated AND NOT eroded)",
+  "grid_r_days": [0, 0.25, 0.5, 1, 1.5, 2, 3, 4, 6]
+ },
+ "score": "balanced accuracy of bridged against the Cliopatria polygon, over land within 15 days on foot of the network (the T1 band)",
+ "fit": {
+  "F_fill": "Roman Empire AD 150 (Hanson towns, Itiner-e roads; window rome), cells west of 20 E: r with the best balanced accuracy; r = 0 is kept unless the best beats it by 0.005"
+ },
+ "tests_run_once": {
+  "T_fill1": "Roman Empire AD 150, cells east of 20 E (Balkans east of the line, Greece, Anatolia, the Levant, Egypt, Cyrenaica): passes if balanced accuracy at the fitted r >= at r = 0",
+  "T_fill2": "Han AD 2 (window han): held from the county and commandery seats at the Han fit's held days (F1, 5 days; the Han data has no roads), bridged at the fitted r, against the commanderies of AD 2: passes if balanced accuracy at the fitted r >= at r = 0",
+  "report": "for both: the score at every r; the largest unheld land regions inside the polygon left open at the fitted r (km2)"
+ },
+ "map_use": "The map's de facto layer uses the fitted r by default. Whatever the fit, the atlas also offers no fill, 1/2, 1 and 2 days, as the cartographic choice the user asked for. The de jure layer is the painted polity fill; categories: held by the claimant, claimed but unheld, held by another polity, held but unclaimed, contested (a rival within 0.5 day), neither."
+}
