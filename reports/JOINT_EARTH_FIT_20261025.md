@@ -104,3 +104,33 @@ for transfer, and report per-zone continuous margins alongside hard classes.
 mapped-geography checks and result checkpoints. `output/earthlike_geography_20261025/`
 contains its progress and, on completion, selection review and rainfall maps.
 No result of that coarse pilot alone is an atlas update.
+
+
+## Current target diagnosis from the published climate
+
+The saved ds8, layouts 1–3 checkpoint reproduces the atlas strict accuracy
+exactly. Its scientific-source, map-input and parameter identities match the
+current files; no model integration or fitting is involved.
+
+| Target | Current mean climate | Weakest mean rule factor | Useful direction to investigate |
+|---|---|---|---|
+| Cold-dry | 14.3 °C annual; 774 mm/year; aridity ratio 2.20 | Aridity 0.040 | Less moisture reaching the interior; additional cooling is not the main deficit |
+| Warm-wet | Coldest month 1.27 °C; 971 mm/year | Mild winter 0.537 | Milder coastal winters while retaining summer moisture |
+| Tree | Coldest month 6.24 °C; 544 mm/year; aridity ratio 1.47 | Humidity 0.369 | More moisture locally; winter warmth is already adequate |
+| Hot-dry | 17.65 °C annual; 725 mm/year; aridity ratio 1.54 | Aridity 0.266 | Drier conditions, with modest additional annual warmth |
+| Swamp | 15.57 °C annual versus the current 21 °C requirement | Hot year below 0.001 | A 5.4 °C annual deficit cannot be addressed casually without checking colder neighbors |
+
+A fuzzy factor is a graded rule satisfaction, not a probability or a strict
+classification recall. Group averages conceal local variation, and strict
+labels also require compatible Köppen classes and competition among rules.
+These are descriptive priorities, not measured parameter response derivatives.
+The target definitions are unchanged. In particular, the swamp is currently an
+explicitly **hot** swamp; drainage physics alone cannot satisfy its heat rule.
+
+![Published Earth-fit target factors](../output/earthlike_geography_20261025/target_diagnosis/target_factors.png)
+
+The new `scripts/diagnose_world_fit.py` performs these checks and exports the
+factor means, medians, limiting-factor shares and current climate statistics.
+The diagnostic strengthens the case for regional moisture pathways: the cold
+interior needs drying while the southeastern forest needs more water. A uniform
+precipitation multiplier cannot do both.
