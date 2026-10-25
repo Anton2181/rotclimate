@@ -1,0 +1,7 @@
+{
+  "question": "Does max-minus-mean terrain conflate a resolved smooth slope with unresolved hills, and how do the existing geometric uplift terms change under grid refinement?",
+  "known_answer_cases": "Smooth eastward plane and sinusoidal hills, prescribed constant wind, common 1 km fine grid. Test exact zero unresolved increment on a plane and aggregation invariance of mean positive ascent.",
+  "alternative": "Geometry-only prototype: average max(u dot grad(h),0) on the same fine terrain, then separate its resolved mean and unresolved positive increment. No moisture closure or new climate parameter is introduced.",
+  "real_geography": "North India at 56, 28 and 14 km using the unchanged r38 constructor. Report the current resolved and max-minus-mean geometric ascent factors for a prescribed northward 10 m/s wind subjected to the constructor's terrain drag.",
+  "limits": "No annual climate integration, rainfall accuracy score or adoption. The manufactured test isolates geometry; real-grid masks/samples differ and the prescribed wind is not a simulated monsoon. A new closure requires moisture accounting and the full climate gate later. Do not edit rotclimate while the active search runs."
+}
