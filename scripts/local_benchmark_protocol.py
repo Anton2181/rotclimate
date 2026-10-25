@@ -51,6 +51,8 @@ def case_hash(case, *, observed_sea=False):
     arrays.update({k:getattr(g,k,None) for k in ['chi_pole', 'sea_reach', 'cloud_ref', 'descent', 'sea_depth']})
     arrays.update(obs_T=case.obs_T, obs_P=case.obs_P, lon=case.lon, coast_km=case.coast_km)
     if observed_sea: arrays['obs_sst'] = g.obs_sst
+    if getattr(g, 'terrain_slopes', None) is not None:
+        arrays['terrain_slopes'] = g.terrain_slopes
     digest = hashlib.sha256()
     digest.update(json.dumps(dict(cell_km=g.cell_km, pad=g.pad), sort_keys=True).encode())
     for name, array in sorted(arrays.items()):

@@ -39,6 +39,13 @@ The fixed-footprint terrain audit confirms resolution dependence of the existing
 uplift proxy; it is a diagnostic, not a coupled rainfall improvement.
 The original list below describes the state before this follow-up.
 
+The next two controlled physics pilots are complete and rejected: common-DEM
+terrain quadrature (16/16 numerical passes, 4 exact r38 controls) and faster
+column-water transport (all coarse candidates rejected, no fine selection).
+The terrain closure is opt-in; production remains legacy/r38. Ninety-eight
+focused tests pass. See `reports/TERRAIN_QUADRATURE_20261025.md` and the matching
+plans/results. No model integration is active for these completed pilots.
+
 ## Historical handoff before this follow-up
 
 The current status above supersedes the old status and task list below. Do not

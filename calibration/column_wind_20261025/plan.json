@@ -1,0 +1,13 @@
+{
+  "declared_before_results": true,
+  "reason": "The common-terrain replacement alone did not fix the foothill deficit. Test moisture delivery separately: the current model transports column water with its frictional surface wind, while its existing moisture_wind_factor can represent a faster aligned low-tropospheric flow. This is a hypothesis, not a measured vertical wind profile.",
+  "reference": "calibration/local_accuracy_20261023/r38_params.json",
+  "regions": ["north_india", "japan", "pacific_nw", "iberia"],
+  "factors": [1.25, 1.5, 2.0],
+  "unchanged": "Planet, climate physics, legacy terrain closure, mean surface winds and temperature advection remain r38. Only the existing column-vapor transport multiplier changes. The vapor solver and convergence criteria remain unchanged. Both paired schemes receive identical terrain samples, which the legacy closure ignores.",
+  "reference_reuse": "Reuse the completed terrain-quadrature pilot's verified r38 references at 56 and 28 km, preserving their original identities and cell-file hashes. Require the same base parameters, scientific sources, packages and actual case identities; record the parent protocol and source records rather than rewriting them as new runs.",
+  "coarse_screen": "Evaluate each factor on all four 56 km regions. Select at most one, lowest combined S among those with S <= 0.995, mean T ratio <= 1.01, no regional combined S > 1.05, lower North India July cell-wise MAE below 1500 m, and no increase in North India annual cell-wise MAE above 4500 m. All numerical certificates must pass.",
+  "fine_screen": "Only the selected candidate runs the same four regions at 28 km against the verified paired references. Require combined S <= 1.01 and successful observed convergence. No tuning after fine results.",
+  "afterwards": "A passing pilot is development only and must take a separately frozen full 31-region/finer-grid/established-six protocol before adoption. Keep .bat-served atlas climates on r38 unless full adoption and world-refit/publication checks pass. Do not combine this multiplier with the rejected terrain replacement in this experiment.",
+  "limits": "A uniform speed multiplier omits vertical shear and directional changes. Rainfall skill does not independently validate the assumed wind profile. These are reused development regions, not independent holdouts."
+}

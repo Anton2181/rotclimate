@@ -236,6 +236,10 @@ class ClimateModel:
             raise ValueError('Required moisture convergence needs a positive moisture_residual_tol')
         if not np.isfinite(params.orographic_gust_ms) or params.orographic_gust_ms < 0:
             raise ValueError('orographic_gust_ms must be finite and nonnegative')
+        if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
+            raise ValueError('Unknown orographic_scheme')
+        if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
+            raise ValueError('Terrain quadrature replaces the subgrid relief proxy; set subgrid_orographic=0')
         self.p = params
         self.g = build_grid(params) if grid is None else grid   # grid: e.g. real geography (earth.py)
         self.z = ZonalClimate(params)
@@ -343,6 +347,12 @@ class ClimateModel:
         hs = ndi.gaussian_filter(g.elev, 0.5 * cells_per_100km)
         self.dhdx = np.gradient(hs, axis=1) / dx
         self.dhdy = -np.gradient(hs, axis=0) / dx
+        if p.orographic_scheme == 'terrain-quadrature':
+            from .orography import validate_terrain_samples
+            samples = validate_terrain_samples(g.terrain_slopes, g.land.shape)
+            # The resolved lee term uses the same fine terrain decomposition.
+            self.dhdx = np.sum(samples[0]*samples[2], axis=0)
+            self.dhdy = np.sum(samples[1]*samples[2], axis=0)
         # wind slow-down over high/rough ground
         # resolution-independent: highest ground within ~28 km (one calibration cell)
         emax = ndi.maximum_filter(g.elev_max, size=max(1, int(round(28.0 / g.cell_km))))
@@ -1137,7 +1147,11 @@ class ClimateModel:
             else:
                 u_up, v_up = u, v
             up = np.clip((u_up * self.dhdx + v_up * self.dhdy) / 0.05, 0, 4)
-            if p.orographic_gust_ms > 0:
+            if p.orographic_scheme == 'terrain-quadrature':
+                from .orography import terrain_uplift
+                up = terrain_uplift(g.terrain_slopes, u_up, v_up,
+                                    p.orographic_gust_ms*np.sqrt(np.maximum(storm, 0))) / .05
+            elif p.orographic_gust_ms > 0:
                 # Seasonal mean winds omit transient upslope episodes. Average
                 # the existing capped uplift over isotropic Gaussian weather
                 # wind variations. This changes the rain coefficient only:
