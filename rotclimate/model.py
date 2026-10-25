@@ -1018,6 +1018,17 @@ class ClimateModel:
                     # keeps the slower convective adjustment
                     warm = np.clip((T_state - T_eq) / 2.0, 0.0, 1.0) * ocean
                     lam = lamT + warm * (1.0 / (p.ocean_tau_stable * DAY) - lamT)
+                if p.ocean_tau_unstable > 0:
+                    # e51: air colder than the sea under it is unstable: a
+                    # convective layer of 1-2 km takes up ~20 W/m2 per K of
+                    # contrast and the sea's warmth in about a day (Japan's
+                    # winter monsoon crosses the Sea of Japan in half a day and
+                    # arrives at +5 C, not the -1 C a 2.7-day relaxation left
+                    # it: the islands' Pacific side then sat at 130 % humidity
+                    # and rained as much as the snow coast). Warm air over a
+                    # cold sea keeps its own rate (ocean_tau_stable).
+                    cold = np.clip((T_eq - T_state) / 2.0, 0.0, 1.0) * ocean
+                    lam = lam + cold * (1.0 / (p.ocean_tau_unstable * DAY) - lamT)
 
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
