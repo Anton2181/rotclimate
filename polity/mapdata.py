@@ -54,6 +54,9 @@ def write(r, dfs, tr, outdir, default_fill=0.0):
     hexes = {n: "#%02x%02x%02x" % tuple(r["polity_rgb"][n]) for n in names}
     meta = dict(crs="pixels of the source map (x right, y down, origin top-left)", width=W, height=H,
                 miles_per_pixel=r["meta"]["mi_per_px"] * r["meta"]["width"] / W, model="polity v2 + de facto + trade")
+    if tr is not None and tr.get('model'):
+        meta['trade_model']=tr['model']
+        meta['market_access_direction']=tr.get('market_access_direction','outbound')
     svg_groups = []
     # de jure
     claim = claims_full(names)
@@ -170,3 +173,8 @@ def write(r, dfs, tr, outdir, default_fill=0.0):
         "                           market access\n"
         "political.svg: the same as Inkscape layers over a blank canvas of the map's size; place the source map\n"
         "underneath (same pixel size) and restyle freely.\n")
+    if tr is not None and tr.get('model')=='inbound-directed':
+        with (outdir/'README.txt').open('a') as stream:
+            stream.write('Catchment people use goods travelling into town. Gravity shipments are ordered '
+                         'pairs with direction-specific costs; weights are relative, not tonnes. '
+                         'The market_access and local_access indicators retain their outward (town-to-people) direction.\n')

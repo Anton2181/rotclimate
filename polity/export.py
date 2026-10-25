@@ -56,7 +56,9 @@ def travel_note():
             '(calibration/polity_20261025).')
 
 
-def export(atlas):
+def export(atlas, trade_scheme='directed'):
+    if trade_scheme not in ('legacy','directed'):
+        raise ValueError('Unknown trade scheme')
     from harvest.export import color_image, tiers
     from rotclimate.geography import source_layers
     atlas = Path(atlas); data = atlas / 'data'
@@ -183,7 +185,11 @@ def export(atlas):
     from . import trade as TR
     dfs = DF.map_fields(r)
     layers.append(defacto_layer(r, dfs, meta, data, elev, coast, note))
-    tr = TR.map_fields(r)
+    if trade_scheme=='directed':
+        from .directed_trade import map_fields
+        tr=map_fields(r,progress=lambda message:print(message,flush=True))
+    else:
+        tr = TR.map_fields(r)
     layers.append(trade_layer(r, tr, meta, data, elev, coast))
     from . import mapdata
     mapdata.write(r, dfs, tr, data / 'vectors', DF.FILL_DAYS)
@@ -235,6 +241,8 @@ def export(atlas):
                          refuge_per_km=C.REFUGE_PER_KM,
                          herding={n: {k: round(x, 3) for k, x in v.items()} for n, v in r['herding'].items()},
                          mounted=sorted(MOUNTED))
+    meta['reach']['trade']=dict(model=tr.get('model','legacy-outward'),cost_scale=tr['scale'],
+                               market_access_direction='outbound')
     (data / 'atlas.json').write_text(json.dumps(meta, ensure_ascii=False))
     print('Political reach layers written to', data, flush=True)
 
@@ -264,7 +272,7 @@ def cache(atlas, r, dfs, tr):
                   kinds=np.array([t['kind'] for t in r['towns']]), ports=np.array(r['ports']),
                   names=np.array(r['polity_names']), rgb=np.array([r['polity_rgb'][n] for n in r['polity_names']]),
                   t_mass=tr['mass'], t_ma=tr['ma'], t_local=tr['ma_local'], e_child=tr['edges'][0],
-                  e_parent=tr['edges'][1], e_flow=tr['edges'][2], through=tr['through'], cell_km=r['cell_km'],
+                  e_parent=tr['edges'][1], e_flow=tr['edges'][2], through=tr['through'], market_owner=tr['catchment'],cell_km=r['cell_km'],
                   river=r['river'], water=r['water'])
     if tr.get('area_ha') is not None:
         arrays['t_area'] = tr['area_ha']
@@ -307,7 +315,7 @@ def trade_layer(r, tr, meta, data, elev, coast):
     image.save(data / 'reach_trade.webp', 'WEBP', quality=90, method=4)
     sea_cost = TR.SEA_KM_DAY * TR.SEA_PER_KM / TR.ROAD_PER_KM
     shares = ', '.join(f'{100 * s:g} %' for _, s in RT.CLASSES)
-    return dict(id='reach_trade', file='reach_trade.webp', label='Trade routes', kind='categories',
+    layer=dict(id='reach_trade', file='reach_trade.webp', label='Trade routes', kind='categories',
                 group='Political reach',
                 items=[dict(color='#7a2e12', label='overland and river routes (width: local, regional, main)'),
                        dict(color='#19467d', label='sea lanes (bundled)'),
@@ -320,6 +328,12 @@ def trade_layer(r, tr, meta, data, elev, coast):
                      'season (sea lanes shut in the storm months) and averaged over the year. Classes: segments '
                      f'carrying at least {shares} of the busiest one\'s traffic (land and sea separately); sea '
                      'traffic is bundled into lanes. ' + TRADE_NOTE)
+    if tr.get('model')=='inbound-directed':
+        layer['note'] += (' Catchments use the countryside’s cost of bringing goods into town. '
+                          'Shipments are routed in both directions with their own river and sailing costs; '
+                          'relative traffic is not tonnes. Smaller-to-smaller pairs outside the 300 largest '
+                          'markets are omitted. Population occupancy and political control are unchanged.')
+    return layer
 
 
 TRADE_NOTE = ('The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), '

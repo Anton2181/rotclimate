@@ -4,7 +4,7 @@ import numpy as np
 import pytest
 from scipy.sparse import csr_matrix
 
-from polity.directed_trade import gravity_routes, inbound_catchments
+from polity.directed_trade import gravity_routes, inbound_catchments, map_fields
 from polity.trade import catchments, flows
 
 
@@ -92,3 +92,18 @@ def test_auxiliary_river_nodes_cannot_be_aggregated_under_changed_identities():
     a.river_cells=np.array([0]);b.river_cells=np.array([1])
     with pytest.raises(ValueError,match='river-node identities'):
         gravity_routes([a,b],[0,1],[10.,20.])
+
+
+def test_map_fields_use_inbound_population_without_predicting_town_sizes(monkeypatch):
+    from polity import trade as T
+    net=network([(0,1,1.),(1,0,10.),(2,1,9.),(1,2,2.)])
+    monkeypatch.setattr(T,'cost_network',lambda *args:net)
+    r=dict(land=np.ones((1,3),bool),claim=np.zeros((1,3),int),density=np.array([[10.,100.,20.]]),
+           cell_km=1.,towns=[dict(row=0,col=0),dict(row=0,col=2)],world={},statics={},climate={},ports=[],river_places=[])
+    fresh=map_fields(r,sources=2)
+    np.testing.assert_allclose(fresh['mass'],[10.,120.])
+    assert fresh['area_ha'] is None and fresh['eligible_people']==130. and fresh['unassigned_people']==0.
+    assert fresh['market_access_direction']=='outbound'
+    cached=map_fields(r,sources=2,outward_access=np.stack([fresh['ma_local'],fresh['ma']]))
+    np.testing.assert_allclose(cached['mass'],fresh['mass'])
+    for a,b in zip(cached['edges'],fresh['edges']):np.testing.assert_allclose(a,b)

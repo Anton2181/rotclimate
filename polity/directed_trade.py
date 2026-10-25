@@ -1,4 +1,4 @@
-"""Experimental directed trade contracts; not used by the published atlases.
+"""Directed trade contracts, with historical functions preserved separately.
 
 The existing travel graph has asymmetric river, slope and wind costs. A
 hinterland bringing goods to town uses cell -> town costs. Gravity shipments
@@ -46,7 +46,7 @@ def inbound_catchments(net, towns, people):
     return mass, owner
 
 
-def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale=6.):
+def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale=6., progress=None):
     """Mean ordered gravity shipments per directed edge (from, to, volume).
 
     A pair is retained if at least one endpoint is among the largest `sources`
@@ -76,8 +76,8 @@ def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale
     selected = np.zeros(len(towns), dtype=bool)
     selected[top] = True
     accumulated = csr_matrix(shape, dtype=float)
-    for net in nets:
-        for i in top:
+    for season,net in enumerate(nets,1):
+        for ordinal,i in enumerate(top,1):
             for reverse in (False, True):
                 keep = (~selected if reverse else np.ones(len(towns), dtype=bool)).copy()
                 keep[i] = False
@@ -101,5 +101,43 @@ def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale
                 nodes = live[traffic[live] > 0]
                 origin, destination = (nodes, parent[nodes]) if reverse else (parent[nodes], nodes)
                 accumulated += csr_matrix((traffic[nodes], (origin, destination)), shape=shape)
+            if progress is not None and (ordinal%25==0 or ordinal==len(top)):
+                progress(f'Freight season {season}/{len(nets)}: market {ordinal}/{len(top)}')
     out = (accumulated/len(nets)).tocoo()
     return out.row, out.col, out.data
+
+
+def map_fields(r, scale=COST_SCALE, sources=300, outward_access=None, progress=None):
+    """Directed trade fields with the same geography and population scenario.
+
+    Existing outward market-access indicators retain their direction and are
+    not used to predict town sizes. A publication-only refresh can reuse those
+    indicators when the graph inputs and eligible population are unchanged.
+    """
+    from . import trade as T
+    width=r['land'].shape[1]
+    towns=np.array([t['row']*width+t['col'] for t in r['towns']],dtype=np.int64)
+    people=np.where(r['land']&(r['claim']>=0),r['density'],0.)*r['cell_km']**2
+    nets=[T.cost_network(r['world'],r['statics'],r['climate'],m,r['ports'],r['river_places']) for m in T.TRADE_MONTHS]
+    mass,owner=inbound_catchments(nets[2],towns,people)
+    if outward_access is None:
+        ma=T.market_access(nets,towns,people,[T.LOCAL_SCALE,scale])
+    else:
+        ma=np.asarray(outward_access,dtype=float)
+        if ma.shape!=(2,len(towns)) or not np.isfinite(ma).all() or (ma<0).any():
+            raise ValueError('Invalid unchanged outward-access indicators')
+    if progress:progress('Inbound catchments prepared; routing ordered shipments')
+    origin,destination,volume=gravity_routes(nets,towns,mass,scale,sources,progress=progress)
+    n=nets[0].n_cells
+    node_cell=np.arange(nets[0].base.shape[0])
+    river=getattr(nets[0],'river_cells',np.zeros(0,dtype=np.int64))
+    node_cell[n:n+len(river)]=river
+    node_cell[node_cell>=n]=-1
+    a,b=node_cell[origin],node_cell[destination]
+    ok=(a>=0)&(b>=0)&(a!=b)
+    through=np.zeros(n)
+    np.maximum.at(through,a[ok],volume[ok]);np.maximum.at(through,b[ok],volume[ok])
+    return dict(towns=towns,mass=mass,catchment=owner.reshape(r['land'].shape),ma_local=ma[0],ma=ma[1],
+                edges=(a[ok],b[ok],volume[ok]),through=through.reshape(r['land'].shape),area_ha=None,
+                scale=scale,model='inbound-directed',market_access_direction='outbound',
+                eligible_people=float(people.sum()),unassigned_people=float(people.ravel()[owner<0].sum()))

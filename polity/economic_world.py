@@ -43,7 +43,7 @@ def prepare(atlas):
     bare=C.travel_graph(elev,land,road,eta,cell_km,paths,ferry)
     marked=[(t['row'],t['col']) for t in towns]
     suggested,_,_=F.place_towns(density,land,geo['water_distance'],road,elev,cell_km,marked,allowed=claimed)
-    tracks,_,_=F.minor_roads(bare,shape,road,suggested,marked)
+    tracks,routes,_=F.minor_roads(bare,shape,road,suggested,marked)
     towns += [dict(kind='unmarked town',row=int(y),col=int(x)) for y,x in suggested]
     climate=F.map_climate(data,meta,arrays,shape)
     world=dict(elev=elev,land=land,biome=biome,swamp=swamp,density=density,cell_km=cell_km,
@@ -59,4 +59,4 @@ def prepare(atlas):
         claim[np.isin(ids,own)]=k
     return dict(land=land,elev=elev,density=density,cell_km=cell_km,claim=np.where(land,claim,-1),
                 towns=towns,world=world,statics=st,climate=cl,ports=ports_of(places,st['water']),
-                river_places=[(y,x) for y,x in places if river_near[y,x]])
+                river_places=[(y,x) for y,x in places if river_near[y,x]],routes=routes)
