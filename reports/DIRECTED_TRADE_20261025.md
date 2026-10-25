@@ -13,7 +13,7 @@ make the graph asymmetric.
    route and flow when the graph is asymmetric. This is an implementation
    dependence, not economic uncertainty.
 
-The separate prototype `polity/directed_trade.py` uses the transposed directed
+The implementation `polity/directed_trade.py` uses the transposed directed
 graph for inbound catchments. It routes ordered gravity shipments separately
 in each direction, with values `P_i P_j exp(-cost_ij / scale)`. For the largest
 300 towns approximation, it retains both directions of pairs with at least
@@ -28,13 +28,12 @@ costs and 270 road-km scale are unchanged. The earlier Roman town-size failure
 remains material; this work does not validate market access as a town-size
 predictor.
 
-**Eleven manufactured tests pass**, covering inbound access, population
+**Eleven initial manufactured tests passed**, covering inbound access, population
 accounting, disconnected markets, auxiliary nodes, asymmetric routing, town
 record permutation, seasonal averaging, distance cutoffs and the top-town
 approximation. They also reproduce the record-order dependence of the old
 algorithm. The existing implementation remains intact for completed evidence
-and the political exports already in progress. The prototype is not used by
-the published atlases yet.
+and the political exports already in progress. That initial audit preceded the publication described below.
 
 ![Directed catchments and routes](../output/directed_trade_20261025/direction_contracts.png)
 
@@ -76,4 +75,43 @@ The route comparison normalizes undirected edge traffic before measuring L1 dist
 
 In these diagnostic images blue background includes water and unscored/unclaimed land. Orange marks eligible cells whose assigned market changes; the remainder of scored land is neutral. These maps are scenario sensitivity, not archaeological validation.
 
-The efficient preparation path avoids recomputing twelve months of each polity’s control. Each complete audit took under a minute in this workspace while the climate search was active. The original trade functions and published atlas layers remain unchanged by this audit.
+The efficient preparation path avoids recomputing twelve months of each polity’s control. Each complete audit took under a minute in this workspace while the climate search was active. That audit left the original trade functions and atlas layers unchanged; the subsequent publication uses the tested directed model.
+
+
+## Directed atlas publication and readable sea lanes
+
+All three repository atlases now use inbound market catchments and ordered
+shipments on their complete four-season networks, with the 300-largest-town
+approximation documented above. The existing outward market-access indicators
+are preserved and labelled as outward access. The Trade selector contains
+three views: routes and towns, market hinterlands, and people served. Market
+population means countryside assigned to that market, not inhabitants of the
+town. A downloadable `market_hinterlands.csv` identifies every market.
+
+| Atlas | Markets | Assigned countryside people | Unassigned eligible people |
+|---|---:|---:|---:|
+| Earth Fit | 1,132 | 46,109,789 | 7,068 |
+| Whittaker Fit | 1,118 | 45,454,062 | 252 |
+| Free Fit | 1,265 | 54,773,227 | 1,173 |
+
+Sea routes are continuous navy lines with a light casing. One bundled skeleton
+is partitioned into traffic classes, preserving short junction links; opposite
+shipments are combined before drawing undirected lanes. All casings are drawn
+before the foreground, avoiding gaps at intersections. Raster layers, political
+plates and the editable SVG use the same convention. This changes the display
+of saved route weights, not the underlying shipments. Five rendering tests
+cover duplicate lanes, junction connectivity, empty networks, edge orientation
+and combining opposite shipments. Twelve directed-model tests include an
+integration test of the production field generator.
+
+Publication checks confirm byte-identical climate and population binaries,
+unchanged political/food/population tables, unchanged non-trade vector features,
+and assigned plus unassigned population equal to the existing eligible total.
+Browser checks cover all three Trade views, four political variants, conditional
+controls, deep links and mobile layout. The complete evidence is
+`output/directed_trade_20261025/publication/publication.json`; per-atlas records
+retain the staged calculation, subsequent display repaint and final compact-JSON
+serialization identities. The original calculation sources are recorded at the
+time of staging; later renderer changes do not invalidate the saved shipment
+weights. Repository atlases are updated; external hosted artifacts still need a
+publishing tool for their existing URLs.

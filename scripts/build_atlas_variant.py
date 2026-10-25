@@ -240,6 +240,8 @@ def main():
     write_winds12(out, r)
     from polity.export import export as export_reach
     export_reach(out)
+    from scripts.add_market_views import render_views
+    render_views(out,ROOT/'output/polity_map'/f'{out.name}.npz')
     print(json.dumps(summary, indent=1))
     print("atlas written to", out)
     export_lock.close()

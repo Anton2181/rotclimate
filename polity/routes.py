@@ -44,8 +44,8 @@ def thin(mask):
             return img[1:-1, 1:-1].astype(bool)
 
 
-def skeleton_chains(skel, weight):
-    """Polylines (lists of flat indices) through an 8-connected skeleton."""
+def skeleton_edges(skel, weight):
+    """Unique edges of an 8-connected skeleton, with local traffic weights."""
     h, w = skel.shape
     ys, xs = np.nonzero(skel)
     flat = ys * w + xs
@@ -56,15 +56,23 @@ def skeleton_chains(skel, weight):
         ok[ok] = skel[q[ok], c[ok]]
         a.append(flat[ok]); b.append(q[ok] * w + c[ok])
         f.append(0.5 * (weight.ravel()[flat[ok]] + weight.ravel()[q[ok] * w + c[ok]]))
-    if not a:
-        return []
-    return V.chains(np.concatenate(a), np.concatenate(b), np.concatenate(f), -np.inf)
+    return np.concatenate(a),np.concatenate(b),np.concatenate(f)
+
+
+def skeleton_chains(skel,weight):
+    return V.chains(*skeleton_edges(skel,weight),-np.inf)
 
 
 def lines(tr, water, shape):
     """[(kind, class, [(row, col), ...], relative traffic)] from map trade fields."""
     h, w = shape
     cc, pc, fl = tr["edges"]
+    # The displayed lane is undirected traffic. Combine opposite shipments
+    # before classifying, so arrow orientation cannot change widths or paths.
+    key=np.minimum(cc,pc).astype(np.int64)*(h*w)+np.maximum(cc,pc)
+    unique,inverse=np.unique(key,return_inverse=True)
+    fl=np.bincount(inverse,weights=fl,minlength=len(unique))
+    cc,pc=unique//(h*w),unique%(h*w)
     wat = np.asarray(water, bool).ravel()
     sea = wat[cc] & wat[pc]
     out = []
@@ -78,15 +86,24 @@ def lines(tr, water, shape):
                     out.append(("land", label, [divmod(int(n), w) for n in nodes], float(np.mean(flows) / mx)))
     # sea lanes: bundled
     t = np.zeros(h * w)
-    np.maximum.at(t, cc[sea], fl[sea])
+    np.add.at(t,cc[sea],.5*fl[sea])
+    np.add.at(t,pc[sea],.5*fl[sea])
     dens = ndi.gaussian_filter(t.reshape(h, w), SEA_BLUR)
     inner = np.zeros((h, w), bool); inner[EDGE_CELLS:-EDGE_CELLS, EDGE_CELLS:-EDGE_CELLS] = True
     dens = np.where(np.asarray(water, bool) & inner, dens, 0.0)
     if dens.max() > 0:
         rel = dens / dens.max()
-        for label, share in CLASSES:
-            skel = thin(rel >= share)
-            for nodes, flows in skeleton_chains(skel, rel):
-                if len(nodes) >= MIN_CHAIN:
-                    out.append(("sea", label, [divmod(int(n), w) for n in nodes], float(np.mean(flows))))
+        # Trace one lane network. Thinning each threshold separately drew
+        # parallel versions of the same lane and dropped short junction links.
+        skel=thin(rel>=CLASSES[0][1])
+        components,_=ndi.label(skel,structure=np.ones((3,3)))
+        sizes=np.bincount(components.ravel())
+        skel &= sizes[components]>=MIN_CHAIN
+        a,b,f=skeleton_edges(skel,rel)
+        for k,(label,share) in enumerate(CLASSES):
+            upper=CLASSES[k+1][1] if k+1<len(CLASSES) else np.inf
+            keep=(f>=share)&(f<upper)
+            for nodes,flows in V.chains(a[keep],b[keep],f[keep],-np.inf):
+                if len(nodes)>=2:
+                    out.append(('sea',label,[divmod(int(n),w) for n in nodes],float(np.mean(flows))))
     return out

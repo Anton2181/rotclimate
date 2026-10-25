@@ -300,11 +300,23 @@ def trade_layer(r, tr, meta, data, elev, coast):
     widths = {'local': 1, 'regional': 2, 'main': 4}
     colours = {'land': (122, 46, 18), 'sea': (25, 70, 125)}
     route_lines = RT.lines(tr, r['water'], r['land'].shape)
+    sea_segments=[]
     for cls in ('local', 'regional', 'main'):
         for kind, c, pts, rel in route_lines:
             if c == cls:
                 p = chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts]))
-                draw.line([tuple(q) for q in p], fill=colours[kind], width=widths[cls], joint='curve')
+                points=[tuple(q) for q in p]
+                if kind=='sea':
+                    sea_width={'local':2,'regional':3,'main':5}[cls]
+                    sea_segments.append((points,sea_width))
+                else:
+                    draw.line(points,fill=colours[kind],width=widths[cls],joint='curve')
+    # Complete the casing pass before any foreground: a later segment's
+    # outline must not erase another segment at a junction.
+    for points,width in sea_segments:
+        draw.line(points,fill=(243,248,252),width=width+3,joint='curve')
+    for points,width in sea_segments:
+        draw.line(points,fill=colours['sea'],width=width,joint='curve')
     order = np.argsort(tr['mass'])
     big = np.quantile(tr['mass'], [0.5, 0.9, 0.98])
     for i in order:

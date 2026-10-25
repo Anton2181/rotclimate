@@ -88,6 +88,7 @@ def main():
     tr = dict(edges=(z["e_child"], z["e_parent"], z["e_flow"]))
     style = {"local": (0.6, 0.45), "regional": (1.3, 0.65), "main": (2.4, 0.85)}
     route_lines = RT.lines(tr, z["water"], z["land"].shape)
+    sea_collections=[]
     for cls in ("local", "regional", "main"):
         width, alpha = style[cls]
         segs_l = [chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts]), 3)
@@ -96,8 +97,14 @@ def main():
                   for kind, c, pts, _ in route_lines if c == cls and kind == "sea"]
         ax.add_collection(LineCollection(segs_l, colors=LAND_ROUTE, linewidths=width * lw * 2, alpha=alpha,
                                          capstyle="round", joinstyle="round", zorder=3))
-        ax.add_collection(LineCollection(segs_s, colors=SEA_ROUTE, linewidths=width * lw * 2, alpha=alpha,
-                                         linestyles=(0, (4, 2)), capstyle="round", zorder=3))
+        sea_width={'local':.9,'regional':1.7,'main':2.8}[cls]*lw*2
+        sea_collections.append((segs_s,sea_width))
+    for segs_s,sea_width in sea_collections:
+        ax.add_collection(LineCollection(segs_s,colors='#f3f8fc',linewidths=sea_width+1.5*lw,
+                                        capstyle='round',joinstyle='round',zorder=3))
+    for segs_s,sea_width in sea_collections:
+        ax.add_collection(LineCollection(segs_s,colors=SEA_ROUTE,linewidths=sea_width,
+                                        alpha=.9,capstyle='round',joinstyle='round',zorder=3))
     # towns: size by the people they serve
     towns = z["towns"]; mass = z["t_mass"]; kinds = [str(k) for k in z["kinds"]]
     big = np.quantile(mass, [0.5, 0.9, 0.98])
@@ -162,7 +169,7 @@ def main():
                Patch(facecolor=swatch(k0), edgecolor="#555", hatch="\\\\\\\\", label="contested: a rival within half a day"),
                Line2D([], [], color=tuple(R.BORDER), lw=1.4, label="claims and provinces (de jure, as painted)"),
                Line2D([], [], color=LAND_ROUTE, lw=3, label="trade by road and river (width: traffic)"),
-               Line2D([], [], color=SEA_ROUTE, lw=2, ls=(0, (4, 2)), label="trade by sea (lanes bundled)"),
+               Line2D([], [], color=SEA_ROUTE, lw=2.5,label="trade by sea (continuous lanes; width: traffic)"),
                Line2D([], [], marker="o", ls="none", markerfacecolor="#fbf8f0", markeredgecolor=INK, markersize=7,
                       label="town marked on the map (size: people served)"),
                Line2D([], [], marker="o", ls="none", markerfacecolor="#fbf8f0", markeredgecolor="#555", markersize=4,

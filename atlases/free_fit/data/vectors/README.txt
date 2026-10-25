@@ -11,3 +11,4 @@ GeoJSON (load in QGIS as a non-georeferenced layer, or read with any JSON tool):
                            market access
 political.svg: the same as Inkscape layers over a blank canvas of the map's size; place the source map
 underneath (same pixel size) and restyle freely.
+Catchment people use goods travelling into town. Gravity shipments are ordered pairs with direction-specific costs; weights are relative, not tonnes. The market_access and local_access indicators retain their outward (town-to-people) direction.

@@ -19,17 +19,12 @@ from polity.render import PAPER, SEA
 from rotclimate.geography import source_layers
 
 
-def main():
-    name=sys.argv[1]
-    if name not in ['earth_fit','free_fit','whittaker_fit']:raise ValueError('Unknown atlas')
-    folder=ROOT/'output/directed_trade_20261025/publication'/name
-    stage=ROOT/'output/directed_trade_20261025/staging'/name;data=stage/'data'
-    check=json.loads((folder/'verification.json').read_text())
-    if check['status']!='staged' or file_hash(folder/'cache.npz')!=check['cache_sha256']:
-        raise ValueError('Verified directed trade checkpoint is required')
+def render_views(atlas,cache_path):
+    """Write views for a completed directed export; return artifact identities."""
+    data=Path(atlas)/'data';cache_path=Path(cache_path)
     meta=json.loads((data/'atlas.json').read_text())
     if meta['reach']['trade']['model']!='inbound-directed':raise ValueError('Unexpected trade model')
-    with np.load(folder/'cache.npz') as z:
+    with np.load(cache_path) as z:
         owner=z['market_owner'];mass=z['t_mass'];towns=z['towns'];land=z['land'];claim=z['claim']
     valid=land&(claim>=0)&(owner>=0)
     if owner[valid].max()>=len(mass):raise ValueError('Invalid owner indices')
@@ -51,7 +46,10 @@ def main():
     labels=['under 5,000','5,000–10,000','10,000–25,000','25,000–50,000','50,000–100,000','100,000–250,000','250,000 or more']
     def color(c):return '#%02x%02x%02x'%tuple(np.rint(c*255).astype(int))
     # Reuse the output map scale; numbered centres match the downloaded CSV.
-    font=ImageFont.load_default(size=max(11,round(width/170)))
+    try:
+        font=ImageFont.load_default(size=max(11,round(width/170)))
+    except TypeError:                    # Pillow before the scalable default face
+        font=ImageFont.load_default()
     for pixels,filename in [(territories,'reach_market_hinterlands.webp'),(people,'reach_market_people.webp')]:
         image=Image.fromarray(np.rint(np.clip(pixels,0,1)*255).astype(np.uint8)).resize((width,height),Image.Resampling.NEAREST)
         rgb=np.array(image);rgb[~coast]=np.rint(SEA*255).astype(np.uint8);image=Image.fromarray(rgb)
@@ -82,11 +80,23 @@ def main():
         dict(value='market_people',label='People served',file='reach_market_people.webp',
              items=[dict(color=color(c),label=l+' people served') for c,l in zip(palette,labels)],
              note=note,caption='Countryside population assigned to each market; not town population')])
-    write_json(data/'atlas.json',meta)
-    write_json(folder/'market_views.json',dict(status='staged',variants=3,source_cache_sha256=check['cache_sha256'],
+    (data/'atlas.json').write_text(json.dumps(meta,ensure_ascii=False),encoding='utf-8')
+    return dict(variants=3,source_cache_sha256=file_hash(cache_path),
         renderer_sha256=file_hash(Path(__file__)),metadata_sha256=file_hash(data/'atlas.json'),
         images_sha256={n:file_hash(data/n) for n in ['reach_market_hinterlands.webp','reach_market_people.webp']},
-        csv_sha256=file_hash(data/'market_hinterlands.csv')))
+        csv_sha256=file_hash(data/'market_hinterlands.csv'))
+
+
+def main():
+    name=sys.argv[1]
+    if name not in ['earth_fit','free_fit','whittaker_fit']:raise ValueError('Unknown atlas')
+    folder=ROOT/'output/directed_trade_20261025/publication'/name
+    stage=ROOT/'output/directed_trade_20261025/staging'/name
+    check=json.loads((folder/'verification.json').read_text())
+    if check['status']!='staged' or file_hash(folder/'cache.npz')!=check['cache_sha256']:
+        raise ValueError('Verified directed trade checkpoint is required')
+    info=render_views(stage,folder/'cache.npz')
+    write_json(folder/'market_views.json',dict(status='staged',**info))
     print(name+': staged three trade views, with unchanged population and route inputs',flush=True)
 
 

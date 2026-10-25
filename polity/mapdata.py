@@ -117,22 +117,26 @@ def write(r, dfs, tr, outdir, default_fill=0.0):
     # trade routes
     if tr is not None:
         from . import routes as RT
-        feats, els = [], []
+        feats, els,sea_halos = [], [], []
         widths = {"local": 1.2, "regional": 2.4, "main": 4.0}
         for kind, cls, pts, rel in RT.lines(tr, r["water"], r["land"].shape):
             p = V.rdp(chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts])), 1.0)
             feats.append(V.feature(V.linestring(p), dict(mode="sea" if kind == "sea" else "land or river",
                                                          route_class=cls, relative_traffic=round(rel, 4))))
+            if kind=='sea':
+                sea_halos.append('<polyline points="'+' '.join(f'{x:.1f},{y:.1f}' for x,y in p)
+                           +f'" fill="none" stroke="#f3f8fc" stroke-width="{widths[cls]+2.4}" '
+                            'stroke-linecap="round" stroke-linejoin="round"/>')
             els.append('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in p)
                        + f'" fill="none" stroke="{"#1d4a7a" if kind == "sea" else "#7a2e12"}" '
                          f'stroke-width="{widths[cls]}" stroke-linecap="round" stroke-linejoin="round" '
-                         f'stroke-opacity="0.85"{" stroke-dasharray=\"6 3\"" if kind == "sea" else ""}/>')
+                         f'stroke-opacity="0.95"/>')
         V.write_geojson(outdir / "trade_routes.geojson", feats,
                         dict(meta, note="gravity flows P_i P_j exp(-cost / scale) between towns, cost in road-km "
                                         f"equivalents (sea : river : road = 1 : 5 : 28), scale {tr['scale']:g}; classes: "
                                         "segments with at least 5, 12 and 30 % of the busiest segment's traffic; "
                                         "sea lanes bundled (blurred and thinned)"))
-        svg_groups.append(("trade", "Trade routes (width = traffic class)", els))
+        svg_groups.append(("trade", "Trade routes (width = traffic class)", sea_halos+els))
     # towns
     feats, els = [], []
     hb0 = dfs[default_fill]["held_by"]

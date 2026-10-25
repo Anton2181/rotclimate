@@ -16,8 +16,19 @@ The r38 rainfall-structure search is active, with its restored 31-region
 reference reproducing adopted r38 exactly. See `reports/RAIN_STRUCTURE_20261025.md`
 and use `scripts/guarded_gate_search.py` for future resumes; inspect the live
 process before starting another. No physical model source may change during
-that search. Separate directed-trade prototypes/audits are under
-`reports/DIRECTED_TRADE_20261025.md`; they are not the active atlas trade rules.
+that search. All three repository atlases now use inbound-directed trade with three Trade
+views (routes, market hinterlands, people served) and continuous outlined sea
+lanes. See `reports/DIRECTED_TRADE_20261025.md` and
+`output/directed_trade_20261025/publication/publication.json`. Full population
+and political tables are unchanged. Render-only changes have separate records.
+
+A geography-only pilot is running from `calibration/earthlike_geography_20261025/plan.json`
+via `scripts/check_earthlike_geography.py` (log `/tmp/earthlike_geography_runtime.log`).
+It holds r38 physics and the current planet fixed, compares six exterior
+scenarios across three layouts at ds16, and requires matched ds8 plus new-layout
+checks before adoption. Do not modify its script or climate sources while active.
+The fixed-footprint terrain audit confirms resolution dependence of the existing
+uplift proxy; it is a diagnostic, not a coupled rainfall improvement.
 The original list below describes the state before this follow-up.
 
 Branch: `claude/friendly-turing-43ygeu`. Everything below is committed and pushed. Background jobs
