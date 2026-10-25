@@ -116,10 +116,22 @@ async def check(paths, base, out):
                 await page.locator('.plate').screenshot(path=str(out/(Path(path).name+'_political.png')))
                 await layer('reach_trade')
                 await loaded('reach_trade.webp')
-                assert await page.locator('#variant-controls').is_hidden()
+                trade=next(item for item in meta['layers'] if item['id']=='reach_trade')
+                trade_options=trade.get('variants',{}).get('options',[])
+                if trade_options:
+                    assert await page.locator('#variant-controls').is_visible()
+                    for option in trade_options:
+                        await page.locator('#variant').select_option(option['value'])
+                        await loaded(option['file'])
+                        assert await page.locator('#settlement-controls').is_hidden()
+                    await page.reload(wait_until='domcontentloaded')
+                    await loaded(trade_options[-1]['file'])
+                    assert await page.locator('#variant').input_value()==trade_options[-1]['value']
+                else:
+                    assert await page.locator('#variant-controls').is_hidden()
                 await layer('whittaker')
                 assert await page.locator('#variant-controls').is_hidden()
-                political_checks=dict(variants=len(options),deep_links='passed',trade='passed',conditional_controls='passed')
+                political_checks=dict(variants=len(options),trade_variants=len(trade_options),deep_links='passed',trade='passed',conditional_controls='passed')
             if meta.get('harvest'):
                 await page.locator('#province-sort').evaluate("el=>el.closest('details').open=true")
                 await page.locator('#earth-reference').evaluate("el=>el.closest('details').open=true")
