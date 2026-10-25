@@ -13,7 +13,8 @@ sea freight rates follow sailing time), river boats by the km.
 Market access (MA) of a place: the people of the whole map, each discounted
 by exp(-cost / COST_SCALE). Trade flows: a gravity model between places,
 T_ij ~ P_i P_j exp(-c_ij / COST_SCALE), routed along the cheapest paths.
-Fitted and tested on Roman town sizes (scripts/polity_trade_check.py).
+Tested on Roman town sizes (scripts/polity_trade_check.py): market access did not explain them, so
+the map does not size towns by it.
 """
 from __future__ import annotations
 
@@ -29,7 +30,10 @@ RIVER_DOWN_PER_KM = 5.0
 RIVER_UP_PER_KM = 10.0
 ROAD_PER_KM = 28.0
 SEA_KM_DAY = X.SAIL_FAIR_KNOTS * 24 * 1.852          # a fair-wind day at sea
-COST_SCALE = 300.0       # road-km equivalents; set by the Earth fit
+# trade falls by e per COST_SCALE road-km: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones
+# 1982, p. 368), so road haulage eats a staple's whole value at ~270 km. Roman town sizes did not identify
+# the scale (calibration/polity_20261025/trade.json: no scale explained them)
+COST_SCALE = 270.0
 TRADE_MONTHS = (0, 3, 6, 9)  # one month a season (months from the winter solstice)
 
 

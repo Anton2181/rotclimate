@@ -315,7 +315,11 @@ def trade_layer(r, tr, meta, data, elev, coast):
                      '20 %, 5 % and 1 % of route segments. ' + TRADE_NOTE)
 
 
-TRADE_NOTE = ''
+TRADE_NOTE = ('The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), '
+              'so road haulage eats a staple\'s whole value at about 270 km. Tested on Earth: market access over this '
+              'network did not explain which Roman towns of AD 150 were large (Hanson 2016; Spearman about 0 in the '
+              'east), so towns are drawn by the people they serve, not by a predicted size, and the routes are a '
+              'model of where trade would run, not a reconstruction. Vector files of every layer: data/vectors/.')
 
 
 def defacto_layer(r, dfs, meta, data, elev, coast, note):
