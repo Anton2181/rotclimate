@@ -8,9 +8,16 @@ and spacing follow simple central-place rules:
              beside rivers and lakes (x 2 at the water, fading over ~3 km), on
              sheltered coasts (x 1.5), on flat ground, along the marked roads
              (x 1.5), never inside a marked town's own catchment
-  how many   one town per 40,000 people (the mean Han county of AD 2), so its
-             catchment radius is R = sqrt(40,000 / (pi x density)): ~20 km in
-             rich valleys, ~50 km in thin country, none below 2 people per km2
+  how many   seats go with people^0.7 x area^0.3: one per 40,000 people at
+             Han China's mean density (14 per km2), a catchment of
+             A = 40,000 / 14 x (14 / density)^0.7 km2, so fewer, larger towns
+             than one-per-40,000 in rich valleys and more in thin country
+             (R ~16 km at 100 per km2, ~30 km at 14, ~60 km at 2); none below
+             2 people per km2. Fitted on the 1,294 seats of AD 2 (deviance 256
+             against 449 for one per 40,000 and 1,677 for one per fixed area)
+             and the best of the three on Tang 742, Song 1102 and Qing 1820,
+             whose seat counts stayed near 1,300-1,950 while their people grew
+             six-fold (scripts/polity_eras_check.py, E1)
   spacing    greedy, best site first, no town within 1.6 R of another (a
              hexagonal tiling of such catchments has its centres 1.9 R apart)
   sites      +-25 % for the local quirks no layer holds (springs, fords, a
@@ -26,7 +33,9 @@ import numpy as np
 from scipy import ndimage as ndi
 from scipy.sparse.csgraph import dijkstra
 
-SEAT_PEOPLE = 40000.0
+SEAT_PEOPLE = 40000.0           # people per seat at the reference density
+SEAT_BETA = 0.7                 # seats ~ people^beta x area^(1 - beta)
+SEAT_REF_DENSITY = 14.1         # Han China AD 2: 57.7 M people on 4.09 M km2
 MAX_RADIUS_KM = 60.0            # no catchment wider than this, however thin the people
 MIN_DENSITY = 2.0
 SPACING = 1.6
@@ -44,8 +53,9 @@ def site_score(density, land, water_km, coast_km, road, elev, cell_km):
 
 
 def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
-                seat_people=None, max_radius_km=None):
+                seat_people=None, max_radius_km=None, beta=None):
     seat_people = SEAT_PEOPLE if seat_people is None else seat_people
+    beta = SEAT_BETA if beta is None else beta
     max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
     coast_km = ndi.distance_transform_edt(land) * cell_km
     score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km)
@@ -54,7 +64,8 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
     rng = np.random.default_rng(seed)
     quirk = ndi.gaussian_filter(rng.standard_normal(land.shape), 1.5)
     score = score * np.exp(0.25 * quirk / max(quirk.std(), 1e-9))
-    radius = np.sqrt(seat_people / (np.pi * np.maximum(d, 1e-9))) / cell_km        # cells
+    catchment = seat_people / SEAT_REF_DENSITY * (SEAT_REF_DENSITY / np.maximum(d, 1e-9)) ** beta      # km2
+    radius = np.sqrt(catchment / np.pi) / cell_km                                                       # cells
     ok = land & (d >= MIN_DENSITY)
     if allowed is not None:
         ok &= allowed

@@ -50,7 +50,7 @@ def travel_note():
             'the wind, by the month\'s winds from the climate model, halved when the sea is uncertain and nearly shut '
             'in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river '
             f'boat: {X.RIVER_DOWN_KM_DAY:.0f} km a day downstream, {X.RIVER_UP_KM_DAY:.0f} up (ORBIS), the upper '
-            'rivers shut at low water. Unmarked towns (one per 40,000 people) and their minor roads are added as on '
+            'rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on '
             'the "Unmarked towns and tracks" layer. Herding polities ride (50 km a day over open country). Year-round '
             'values average the control of the twelve months. Fitted and tested on Han China and the Roman empire '
             '(calibration/polity_20261025).')
@@ -211,7 +211,9 @@ def export(atlas):
                               dict(color='#5c8cc4', label='navigable rivers (river boats)'),
                               dict(color='#143c78', label=f"{len(r['ports']):,} ports (boxed)")],
                        note='Where a populated countryside would have market towns and county seats that the map does not '
-                            'mark: one town per 40,000 people (the mean Han county of AD 2), on the best sites (farming '
+                            'mark, spaced as Chinese county seats were (seats go with people^0.7 × area^0.3: one per 40,000 people '
+                            'at Han densities, fewer and larger towns where people are dense, more where thin; fitted on '
+                            'Han AD 2 and the best rule on Tang, Song and Qing), on the best sites (farming '
                             'people, rivers and lakes, sheltered coasts, flat ground, the marked roads), spaced by the '
                             'density, none in unclaimed land. Minor roads join neighbouring places by their cheapest '
                             'walking routes (a relative neighbourhood graph). Ports: any place within two cells of the '
