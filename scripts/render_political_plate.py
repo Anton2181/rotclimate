@@ -19,7 +19,6 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 
 from polity import render as R                      # noqa: E402
-from polity import vectors as V                     # noqa: E402
 from polity.fields import LAYERS, rgba              # noqa: E402
 from polity.mapdata import chaikin                  # noqa: E402
 
@@ -68,80 +67,110 @@ def main():
     base = base * (1 - 0.8 * riv) + np.array([0.33, 0.52, 0.72]) * 0.8 * riv
 
     dpi = 200
-    fig = plt.figure(figsize=(W / dpi, H / dpi), dpi=dpi)
-    ax = fig.add_axes([0, 0, 1, 1]); ax.set_xlim(0, W); ax.set_ylim(H, 0); ax.axis("off")
+    strip = int(0.15 * H)
+    fig = plt.figure(figsize=(W / dpi, (H + strip) / dpi), dpi=dpi)
+    fig.patch.set_facecolor("#f6f2e8")
+    ax = fig.add_axes([0, strip / (H + strip), 1, H / (H + strip)]); ax.set_xlim(0, W); ax.set_ylim(H, 0); ax.axis("off")
     ax.imshow(base, extent=(0, W, H, 0), interpolation="bilinear")
     lw = W / 4401
-    # trade routes
-    cc, pc, fl = z["e_child"], z["e_parent"], z["e_flow"]
-    water = z["water"].ravel()
-    qs = np.quantile(fl, [0.80, 0.95, 0.99])
-    for thr, width, alpha in ((qs[0], 0.9, 0.55), (qs[1], 1.8, 0.7), (qs[2], 3.2, 0.85)):
-        segs_l, segs_s = [], []
-        for nodes, _ in V.chains(cc, pc, fl, thr):
-            yx = np.array([divmod(int(n), gw) for n in nodes])
-            pts = chaikin(np.column_stack([(yx[:, 1] + .5) * sx, (yx[:, 0] + .5) * sy]), 3)
-            (segs_s if water[np.asarray(nodes)].mean() > 0.5 else segs_l).append(pts)
+    # trade routes (polity/routes.py: land routes as routed, sea lanes bundled)
+    from polity import routes as RT
+    tr = dict(edges=(z["e_child"], z["e_parent"], z["e_flow"]))
+    style = {"local": (0.6, 0.45), "regional": (1.3, 0.65), "main": (2.4, 0.85)}
+    route_lines = RT.lines(tr, z["water"], z["land"].shape)
+    for cls in ("local", "regional", "main"):
+        width, alpha = style[cls]
+        segs_l = [chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts]), 3)
+                  for kind, c, pts, _ in route_lines if c == cls and kind == "land"]
+        segs_s = [chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts]), 3)
+                  for kind, c, pts, _ in route_lines if c == cls and kind == "sea"]
         ax.add_collection(LineCollection(segs_l, colors=LAND_ROUTE, linewidths=width * lw * 2, alpha=alpha,
-                                         capstyle="round", joinstyle="round"))
+                                         capstyle="round", joinstyle="round", zorder=3))
         ax.add_collection(LineCollection(segs_s, colors=SEA_ROUTE, linewidths=width * lw * 2, alpha=alpha,
-                                         linestyles=(0, (4, 2)), capstyle="round"))
+                                         linestyles=(0, (4, 2)), capstyle="round", zorder=3))
     # towns: size by the people they serve
     towns = z["towns"]; mass = z["t_mass"]; kinds = [str(k) for k in z["kinds"]]
     big = np.quantile(mass, [0.5, 0.9, 0.98])
     order = np.argsort(mass)
     xs = (towns[order, 1] + .5) * sx; ys = (towns[order, 0] + .5) * sy
     cls = np.searchsorted(big, mass[order])
-    size = (np.array([3.0, 6.0, 11.0, 18.0])[cls] * lw * 4) ** 1.0
+    size = np.array([2.0, 4.5, 9.0, 16.0])[cls] * lw * 4
     marked = np.array([kinds[i] != "unmarked town" for i in order])
     ax.scatter(xs[~marked], ys[~marked], s=size[~marked], c="#fbf8f0", edgecolors="#555", linewidths=0.4 * lw * 2,
                zorder=5)
     ax.scatter(xs[marked], ys[marked], s=size[marked] * 1.6, c="#fbf8f0", edgecolors=INK, linewidths=0.9 * lw * 2,
                zorder=6)
-    # polity names at the most interior point of each polity's largest held area
+    # polity names at the most interior point of each polity's largest held area, sized by area, no overlaps
     font = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
     held = z[f"held_by_{tag}"]
-    for k, name in enumerate(names):
-        m = held == k
-        if m.sum() < 30:
+    renderer = fig.canvas.get_renderer()
+    frame = ax.get_window_extent(renderer)
+    placed = []
+    areas = {k: int((held == k).sum()) for k in range(len(names))}
+    biggest_area = max(areas.values())
+    for k in sorted(areas, key=lambda k: -areas[k]):
+        if areas[k] < 30:
             continue
-        lab, n = ndi.label(m)
-        biggest = 1 + int(np.argmax(np.bincount(lab.ravel())[1:]))
-        dist = ndi.distance_transform_edt(lab == biggest)
+        lab, n = ndi.label(held == k)
+        comp = 1 + int(np.argmax(np.bincount(lab.ravel())[1:]))
+        dist = ndi.distance_transform_edt(lab == comp)
         y, x = np.unravel_index(int(np.argmax(dist)), dist.shape)
-        fs = float(np.clip(5 + 1.1 * np.sqrt(m.sum()) / 6, 6, 20)) * lw * 2.2
-        ax.text((x + .5) * sx, (y + .5) * sy, name.upper(), fontproperties=font, fontsize=fs, color=INK, ha="center",
-                va="center", zorder=8, alpha=0.9,
-                path_effects=[pe.withStroke(linewidth=fs * 0.28, foreground="#f6f2e8", alpha=0.85)])
-    # legend
+        fs = float(np.clip(7 + 11 * np.sqrt(areas[k] / biggest_area), 7, 18)) * lw
+        for attempt in range(3):
+            t = ax.text((x + .5) * sx, (y + .5) * sy, names[k].upper(), fontproperties=font, fontsize=fs, color=INK,
+                        ha="center", va="center", zorder=8, alpha=0.92,
+                        path_effects=[pe.withStroke(linewidth=fs * 0.22, foreground="#f6f2e8", alpha=0.85)])
+            bb = t.get_window_extent(renderer)
+            inside = bb.x0 >= frame.x0 and bb.x1 <= frame.x1 and bb.y0 >= frame.y0 and bb.y1 <= frame.y1
+            if inside and not any(bb.overlaps(o) for o in placed):
+                placed.append(bb)
+                break
+            t.remove()
+            if not inside:                         # nudge inward
+                dx = (frame.x1 - bb.x1 if bb.x1 > frame.x1 else frame.x0 - bb.x0 if bb.x0 < frame.x0 else 0)
+                x += dx / (frame.width / W) / sx * 1.05
+            fs *= 0.82
+    # the strip: title, legend, scale
     paper = R.PAPER
     swatch = lambda k: tuple(paper * (1 - SOFT_ALPHA) + cols[k] * SOFT_ALPHA)
-    handles = [Patch(facecolor=swatch(0), edgecolor="none", label="held (de facto): the holder's colour"),
-               Patch(facecolor=tuple(paper), edgecolor=tuple(cols[0]), hatch="////",
+    k0 = int(np.argmax([(held == k).sum() for k in range(len(names))]))
+    bold = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf")
+    reg = FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf")
+    fs = 9 * lw
+    fig.text(0.012, (strip * 0.78) / (H + strip), "Political reach and trade, c. AD 200", fontproperties=bold,
+             fontsize=17 * lw, color=INK, va="center")
+    fig.text(0.012, (strip * 0.52) / (H + strip),
+             f"{a.atlas.replace('_', ' ').capitalize()} climate · gap fill {a.fill:g} days · held = within 2 days of a "
+             "polity's own roads and towns over the year (polity v2, tested on Rome AD 150)", fontproperties=reg,
+             fontsize=fs, color="#52514e", va="center")
+    fig.text(0.012, (strip * 0.30) / (H + strip),
+             "Trade: Price Edict costs (sea : river : road = 1 : 5 : 28), a gravity model between towns; a model of "
+             "where trade would run, not a reconstruction", fontproperties=reg, fontsize=fs, color="#52514e", va="center")
+    handles = [Patch(facecolor=swatch(k0), edgecolor="none", label="held (de facto): the holder's colour"),
+               Patch(facecolor=tuple(paper), edgecolor=tuple(cols[k0]), hatch="////",
                      label="claimed, not held: the claimant's colour, hatched"),
-               Patch(facecolor=swatch(0), edgecolor="#555", hatch="\\\\\\\\", label="contested: a rival within half a day"),
+               Patch(facecolor=swatch(k0), edgecolor="#555", hatch="\\\\\\\\", label="contested: a rival within half a day"),
                Line2D([], [], color=tuple(R.BORDER), lw=1.4, label="claims and provinces (de jure, as painted)"),
                Line2D([], [], color=LAND_ROUTE, lw=3, label="trade by road and river (width: traffic)"),
-               Line2D([], [], color=SEA_ROUTE, lw=2, ls=(0, (4, 2)), label="trade by sea"),
+               Line2D([], [], color=SEA_ROUTE, lw=2, ls=(0, (4, 2)), label="trade by sea (lanes bundled)"),
                Line2D([], [], marker="o", ls="none", markerfacecolor="#fbf8f0", markeredgecolor=INK, markersize=7,
-                      label="marked town (size: people served)"),
+                      label="town marked on the map (size: people served)"),
                Line2D([], [], marker="o", ls="none", markerfacecolor="#fbf8f0", markeredgecolor="#555", markersize=4,
                       label="suggested unmarked town")]
-    leg = ax.legend(handles=handles, loc="lower left", bbox_to_anchor=(0.012, 0.03), frameon=True, fontsize=8 * lw * 2.2,
-                    prop=FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf", size=8 * lw * 2.2),
-                    title=f"Political reach c. AD 200 · gap fill {a.fill:g} days", title_fontproperties=FontProperties(
-                        fname="/usr/share/fonts/truetype/freefont/FreeSerifBold.ttf", size=9 * lw * 2.2))
-    leg.get_frame().set_facecolor("#f6f2e8"); leg.get_frame().set_edgecolor(INK); leg.get_frame().set_alpha(0.92)
+    leg = fig.legend(handles=handles, loc="center", bbox_to_anchor=(0.62, (strip * 0.5) / (H + strip)), ncol=2,
+                     frameon=False, prop=FontProperties(fname="/usr/share/fonts/truetype/freefont/FreeSerif.ttf",
+                                                        size=fs * 1.05), columnspacing=2.5, handlelength=2.6)
     # scale bar: miles per source pixel
     mi_px = meta["mi_per_px"] * meta["width"] / W
     bar_mi = 200
-    bx, by = W * 0.86, H * 0.965
     L = bar_mi / mi_px
+    bx = W * 0.86; by = H + strip * 0.55                      # in figure pixels from the top
+    sax = fig.add_axes([0, 0, 1, strip / (H + strip)]); sax.set_xlim(0, W); sax.set_ylim(strip, 0); sax.axis("off")
     for i in range(4):
-        ax.add_patch(Rectangle((bx + i * L / 4, by), L / 4, H * 0.006, facecolor=INK if i % 2 == 0 else "#f6f2e8",
-                               edgecolor=INK, lw=0.6 * lw * 2, zorder=9))
-    ax.text(bx + L / 2, by - H * 0.008, f"{bar_mi} miles", ha="center", va="bottom", fontproperties=font,
-            fontsize=8 * lw * 2.2, color=INK, zorder=9)
+        sax.add_patch(Rectangle((bx + i * L / 4, strip * 0.5), L / 4, strip * 0.06,
+                                facecolor=INK if i % 2 == 0 else "#f6f2e8", edgecolor=INK, lw=0.6 * lw * 2))
+    sax.text(bx + L / 2, strip * 0.42, f"{bar_mi} miles", ha="center", va="bottom", fontproperties=reg,
+             fontsize=fs, color=INK)
     out = Path(a.out) if a.out else ROOT / f"output/polity_map/{a.atlas}_political_fill{tag}.png"
     fig.savefig(out, dpi=dpi)
     print("plate written to", out)

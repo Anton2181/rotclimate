@@ -113,24 +113,22 @@ def write(r, dfs, tr, outdir, default_fill=0.0):
     svg_groups.append(("minor_roads", "Minor roads (suggested)", els))
     # trade routes
     if tr is not None:
-        cc, pc, fl = tr["edges"]
+        from . import routes as RT
         feats, els = [], []
-        qs = np.quantile(fl, [0.80, 0.95, 0.99]) if len(fl) else []
-        classes = [("local", qs[0], 1.2), ("regional", qs[1], 2.4), ("main", qs[2], 4.0)] if len(fl) else []
-        for label, thr, width in classes:
-            for nodes, flows in V.chains(cc, pc, fl, thr):
-                yx = np.array([divmod(int(n), gw) for n in nodes])
-                pts = chaikin(np.column_stack([(yx[:, 1] + .5) * sx, (yx[:, 0] + .5) * sy]))
-                pts = V.rdp(pts, 1.0)
-                feats.append(V.feature(V.linestring(pts), dict(route_class=label, traffic=float(np.mean(flows)),
-                                                               relative_traffic=float(np.mean(flows) / fl.max()))))
-                els.append('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in pts)
-                           + f'" fill="none" stroke="#7a2e12" stroke-width="{width}" stroke-linecap="round" '
-                             f'stroke-linejoin="round" stroke-opacity="0.85"/>')
+        widths = {"local": 1.2, "regional": 2.4, "main": 4.0}
+        for kind, cls, pts, rel in RT.lines(tr, r["water"], r["land"].shape):
+            p = V.rdp(chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts])), 1.0)
+            feats.append(V.feature(V.linestring(p), dict(mode="sea" if kind == "sea" else "land or river",
+                                                         route_class=cls, relative_traffic=round(rel, 4))))
+            els.append('<polyline points="' + " ".join(f"{x:.1f},{y:.1f}" for x, y in p)
+                       + f'" fill="none" stroke="{"#1d4a7a" if kind == "sea" else "#7a2e12"}" '
+                         f'stroke-width="{widths[cls]}" stroke-linecap="round" stroke-linejoin="round" '
+                         f'stroke-opacity="0.85"{" stroke-dasharray=\"6 3\"" if kind == "sea" else ""}/>')
         V.write_geojson(outdir / "trade_routes.geojson", feats,
                         dict(meta, note="gravity flows P_i P_j exp(-cost / scale) between towns, cost in road-km "
                                         f"equivalents (sea : river : road = 1 : 5 : 28), scale {tr['scale']:g}; classes: "
-                                        "edges above the 80th, 95th and 99th percentiles of traffic"))
+                                        "segments with at least 5, 12 and 30 % of the busiest segment's traffic; "
+                                        "sea lanes bundled (blurred and thinned)"))
         svg_groups.append(("trade", "Trade routes (width = traffic class)", els))
     # towns
     feats, els = [], []

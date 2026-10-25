@@ -260,16 +260,11 @@ def cache(atlas, r, dfs, tr):
     np.savez_compressed(out / f'{Path(atlas).name}.npz', **arrays)
 
 
-def route_classes(flow):
-    qs = np.quantile(flow, [0.80, 0.95, 0.99])
-    return [('local', qs[0], 1.0), ('regional', qs[1], 2.0), ('main', qs[2], 3.5)]
-
-
 def trade_layer(r, tr, meta, data, elev, coast):
-    """Trade routes by traffic over a pale relief; towns by their catchment people."""
+    """Trade routes by traffic over a pale relief; towns by the people they serve."""
     from PIL import ImageDraw
+    from . import routes as RT
     from . import trade as TR
-    from . import vectors as V
     from .mapdata import chaikin
     from .render import PAPER, SEA, hillshade
     W, H = meta['width'], meta['height']
@@ -280,17 +275,14 @@ def trade_layer(r, tr, meta, data, elev, coast):
     rgb = np.where(land[..., None], rgb, SEA)
     image = Image.fromarray((np.clip(rgb, 0, 1) * 255).astype(np.uint8))
     draw = ImageDraw.Draw(image)
-    cc, pc, fl = tr['edges']
-    water = r['water'].ravel()
+    widths = {'local': 1, 'regional': 2, 'main': 4}
     colours = {'land': (122, 46, 18), 'sea': (25, 70, 125)}
-    classes = route_classes(fl)
-    for label, thr, width in classes:
-        for nodes, flows in V.chains(cc, pc, fl, thr):
-            yx = np.array([divmod(int(n), gw) for n in nodes])
-            pts = chaikin(np.column_stack([(yx[:, 1] + .5) * sx, (yx[:, 0] + .5) * sy]))
-            sea = water[np.asarray(nodes)].mean() > 0.5
-            draw.line([tuple(p) for p in pts], fill=colours['sea' if sea else 'land'], width=max(1, int(round(width))),
-                      joint='curve')
+    route_lines = RT.lines(tr, r['water'], r['land'].shape)
+    for cls in ('local', 'regional', 'main'):
+        for kind, c, pts, rel in route_lines:
+            if c == cls:
+                p = chaikin(np.array([((x + .5) * sx, (y + .5) * sy) for y, x in pts]))
+                draw.line([tuple(q) for q in p], fill=colours[kind], width=widths[cls], joint='curve')
     order = np.argsort(tr['mass'])
     big = np.quantile(tr['mass'], [0.5, 0.9, 0.98])
     for i in order:
@@ -299,20 +291,21 @@ def trade_layer(r, tr, meta, data, elev, coast):
         rad = 1.5 + 1.2 * int(np.searchsorted(big, tr['mass'][i]))
         draw.ellipse([x - rad, y - rad, x + rad, y + rad], fill=(251, 248, 240), outline=(30, 30, 30))
     image.save(data / 'reach_trade.webp', 'WEBP', quality=90, method=4)
-    km = r['cell_km']
     sea_cost = TR.SEA_KM_DAY * TR.SEA_PER_KM / TR.ROAD_PER_KM
+    shares = ', '.join(f'{100 * s:g} %' for _, s in RT.CLASSES)
     return dict(id='reach_trade', file='reach_trade.webp', label='Trade routes', kind='categories',
                 group='Political reach',
                 items=[dict(color='#7a2e12', label='overland and river routes (width: local, regional, main)'),
-                       dict(color='#19467d', label='sea lanes'),
+                       dict(color='#19467d', label='sea lanes (bundled)'),
                        dict(color='#fbf8f0', label='towns, by the people they serve (four sizes)')],
                 note='Goods priced as Diocletian\'s Price Edict priced them: by sea, river and road about 1 : 5 : 28 '
                      'per km (upriver twice downriver); a ship\'s day costs as much as about '
                      f'{sea_cost:.0f} km of road haulage. Each town serves the people nearest it by that cost; trade '
                      'between two towns grows with both their people and falls by a factor of e for every '
                      f'{tr["scale"]:g} road-km of cost (a gravity model), routed along the cheapest paths in each '
-                     'season (sea lanes shut in the storm months) and averaged over the year. Widths: the busiest '
-                     '20 %, 5 % and 1 % of route segments. ' + TRADE_NOTE)
+                     'season (sea lanes shut in the storm months) and averaged over the year. Classes: segments '
+                     f'carrying at least {shares} of the busiest one\'s traffic (land and sea separately); sea '
+                     'traffic is bundled into lanes. ' + TRADE_NOTE)
 
 
 TRADE_NOTE = ('The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), '
