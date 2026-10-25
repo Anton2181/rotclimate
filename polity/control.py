@@ -14,7 +14,10 @@ and back. Its reach is measured in days of travel for a person on foot:
   ferry routes       the map's dotted routes over water, 40 km a day with the wait
   unmarked tracks    25 km a day: the suggested minor roads between the unmarked
                      towns of polity/settle.py
-  other water        not crossed (no open-sea shipping yet)
+  ships, river boats polity/transport.py; the month's snow, mud, heat and floods:
+                     polity/seasons.py; one month's whole graph: polity/network.py
+  riders             horse_edges: 50 km a day on level open ground, for the
+                     polities the map's lore sets riding (polity/fields.py MOUNTED)
 
 Days beyond the network = the cheapest travel to the nearest road or
 settlement. Effective control = exp(-days / 1 day): one day out (and one back)

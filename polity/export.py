@@ -20,7 +20,7 @@ from .seasons import MONTHS
 ROOT = Path(__file__).resolve().parents[1]
 CONTROL_RAMP = ['#4d1a17', '#8f3426', '#c8603a', '#e5a557', '#e8d98a', '#9fbf5f', '#4f8f4a', '#1f5f3a']
 DAYS_RAMP = CONTROL_RAMP[::-1]
-SEA_RAMP = ['#f2efe6', '#d3dde8', '#a9c3dc', '#7ba6cf', '#4f86bd', '#2a65a3', '#143f73']
+SEA_RAMP = ['#dfe8f1', '#b9cfe5', '#8fb3d8', '#6597c9', '#3f78b4', '#255b96', '#143f73']
 # tiered colours: control by the days out it means (exp(-days)), days in walking terms
 CONTROL_TIERS = ([0, 2, 5, 13, 22, 37, 50, 61, 78, 100],
                  ['< 2 % · 4+ days out', '2–5 % · 3–4 days', '5–13 % · 2–3 days', '13–22 % · 1½–2 days',
@@ -31,8 +31,8 @@ CAPITAL_TIERS = ([0, 5, 10, 15, 20, 30, 45, 60],
                  ['under 5 days', '5–10 days', '10–15 days', '15–20 days', '20–30 days', '30–45 days', '45+ days'])
 MONTH_TIERS = ([0, 1, 3, 6, 9, 11, 12, 12.01],
                ['none', '1–2 months', '3–5', '6–8', '9–10', '11', 'all year'])
-SEA_TIERS = ([0, 1, 3, 5, 7, 9, 11, 12.01],
-             ['never', '1–2 months', '3–4', '5–6', '7–8', '9–10', '11–12'])
+SEA_TIERS = ([0, 1, 2, 3, 4, 5, 6, 8],
+             ['never safe', '1 month', '2 months', '3 months', '4 months', '5 months', '6 or more'])
 REFUGE_TIERS = ([0, 50, 70, 80, 90, 95, 100.01],
                 ['under half kept', '50–70 %', '70–80 %', '80–90 %', '90–95 %', '95–100 %'])
 CAUSES = [('#cfcabd', 'nothing much: open going'), ('#8fb8de', 'lasting snow'), ('#8a6a3f', 'mud'),
@@ -111,18 +111,18 @@ def export(atlas):
     # the sailing season
     water = r['water']
     gy, gx = np.gradient(elev)
-    sea_val = f['sea_open_months'].astype(float)
-    t = tiers(SEA_RAMP, 0, 12, False, *SEA_TIERS)
+    sea_val = np.minimum(f['sea_open_months'].astype(float), 8)
+    t = tiers(SEA_RAMP, 0, 8, False, *SEA_TIERS)
     for tiered, fname in ((None, 'reach_sea.webp'), (t, 'reach_sea_tiers.webp')):
-        rgb = color_image(sea_val, water, np.zeros_like(elev), SEA_RAMP, 0, 12, tiered=tiered)
-        grey = (0.86 + 0.1 * np.clip(.5 - .00018 * gx + .00022 * gy, -1, 1))[..., None] * np.ones(3)
+        rgb = color_image(sea_val, water, np.zeros_like(elev), SEA_RAMP, 0, 8, tiered=tiered)
+        grey = np.clip(0.66 + 0.12 * (.96 - .00018 * gx + .00022 * gy), 0.55, 0.82)[..., None] * np.array([1, .98, .94])
         rgb = np.where(water[..., None], rgb, grey)
         save(rgb, fname, sea=False)
     t['file'] = 'reach_sea_tiers.webp'
     layers.append(dict(id='reach_sea', file='reach_sea.webp', label='Safe sailing season', kind='ramp',
                        group='Political reach', unit='months a year the sea is safe (Vegetius\' certain season); '
                                                     'ships still sail, at half speed, in the uncertain months',
-                       vmin=0, vmax=12, stops=SEA_RAMP, log=False, tiers=t,
+                       vmin=0, vmax=8, stops=SEA_RAMP, log=False, tiers=t,
                        note='Storminess from the swing of the wind about its mean (the open oceans of Earth by latitude '
                             'and month, NCEP/NCAR), against the thresholds that best reproduce Vegetius\' sailing '
                             'season in the Mediterranean (safe late May to mid September, closed mid November to mid '
