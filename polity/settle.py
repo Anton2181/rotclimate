@@ -27,6 +27,7 @@ from scipy import ndimage as ndi
 from scipy.sparse.csgraph import dijkstra
 
 SEAT_PEOPLE = 40000.0
+MAX_RADIUS_KM = 60.0            # no catchment wider than this, however thin the people
 MIN_DENSITY = 2.0
 SPACING = 1.6
 URBAN_SHARE = 0.075
@@ -42,7 +43,10 @@ def site_score(density, land, water_km, coast_km, road, elev, cell_km):
     return np.where(land, d * river * coast * near_road * flat, 0.0), d
 
 
-def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1):
+def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
+                seat_people=None, max_radius_km=None):
+    seat_people = SEAT_PEOPLE if seat_people is None else seat_people
+    max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
     coast_km = ndi.distance_transform_edt(land) * cell_km
     score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km)
     # local quirks of site (springs, fords, a defensible hill) that no map layer
@@ -50,7 +54,7 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
     rng = np.random.default_rng(seed)
     quirk = ndi.gaussian_filter(rng.standard_normal(land.shape), 1.5)
     score = score * np.exp(0.25 * quirk / max(quirk.std(), 1e-9))
-    radius = np.sqrt(SEAT_PEOPLE / (np.pi * np.maximum(d, 1e-9))) / cell_km        # cells
+    radius = np.sqrt(seat_people / (np.pi * np.maximum(d, 1e-9))) / cell_km        # cells
     ok = land & (d >= MIN_DENSITY)
     if allowed is not None:
         ok &= allowed
@@ -63,7 +67,7 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
         yy, xx = np.mgrid[y0:y1, x0:x1]
         blocked[y0:y1, x0:x1] |= (yy - y) ** 2 + (xx - x) ** 2 <= rad * rad
     for y, x in marked:                         # a marked town serves its own catchment
-        block(y, x, SPACING * min(radius[y, x], 60.0 / cell_km))
+        block(y, x, SPACING * min(radius[y, x], max_radius_km / cell_km))
     towns = []
     order = np.argsort(-score[ok]); cy, cx = np.nonzero(ok)
     for k in order:
@@ -71,7 +75,7 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
         if blocked[y, x]:
             continue
         towns.append((y, x))
-        block(y, x, SPACING * min(radius[y, x], 60.0 / cell_km))
+        block(y, x, SPACING * min(radius[y, x], max_radius_km / cell_km))
     return towns, coast_km, d
 
 

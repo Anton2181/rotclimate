@@ -1,0 +1,32 @@
+1353 Roman towns, 28775 road cells
+   month 1: 1,912,578 edges, 1s
+   month 2: 1,912,578 edges, 0s
+   month 3: 1,914,173 edges, 0s
+   month 4: 1,913,241 edges, 0s
+   month 5: 1,910,297 edges, 0s
+   month 6: 1,909,917 edges, 0s
+   month 7: 1,906,929 edges, 0s
+   month 8: 1,906,929 edges, 0s
+   month 9: 1,906,929 edges, 0s
+   month 10: 1,910,058 edges, 0s
+   month 11: 1,911,444 edges, 0s
+   month 12: 1,912,345 edges, 0s
+Hanson ranks: {'-': 19, '1': 14, '2': 162, '3': 790, '4 or 5': 368}
+T1 Roman extent: {'v1': {'ba': np.float64(0.8219774556844617), 'auc': 0.8860425647377894, 'held': 2.0}, 'v2': {'ba': np.float64(0.7615767011525655), 'auc': 0.8312989553729483, 'held': 5.0}, 'passed': False, 'cells': 93174}
+T2 refuge: {'without': 0.1463866809611627, 'with_refuge': 0.12863361698903827, 'blocks': 141, 'passed': False}
+T3 town counts: {'v1': {'deviance': 1605.037572716592, 'placed': 1328, 'actual': 1232}, 'fit': {'deviance': 1605.037572716592, 'placed': 1328, 'actual': 1232}, 'passed': True}
+T4 polity types: 0.5714285714285714 [('Goguryeo (117)', 0.03, 'settled'), ('Han Dynasty (117)', 0.05, 'settled'), ('Kushan Empire (117)', 1.0, 'mobile'), ('Xianbei (117)', 0.06, 'settled'), ('Huns (117)', 0.11, 'settled'), ('Parthian Empire (117)', 0.1, 'settled'), ('Roman Empire (117)', 0.05, 'settled'), ('Goguryeo (150)', 0.03, 'settled'), ('Han Dynasty (150)', 0.05, 'settled'), ('Kushan Empire (150)', 1.0, 'mobile'), ('Xianbei (150)', 0.06, 'settled'), ('Huns (150)', 0.11, 'settled'), ('Parthian Empire (150)', 0.05, 'settled'), ('Roman Empire (150)', 0.05, 'settled')]
+Traceback (most recent call last):
+  File "/home/user/rotclimate/scripts/polity_earth_check.py", line 564, in <module>
+    la = np.arange(la0, la1, 0.25); lo = np.arange(lo0, lo1, 0.25)
+    ^^
+  File "/home/user/rotclimate/scripts/polity_earth_check.py", line 560, in main
+    out["monsoon_ok_Patna"] = sorted(out["Patna"]["worst"]) == sorted(plan["monsoon_worst_months"]["Patna"])
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/rotclimate/scripts/polity_earth_check.py", line 510, in stage_tests
+    shares = {}
+    
+  File "/home/user/rotclimate/scripts/polity_earth_check.py", line 527, in seasons_check
+    scored.append(dict(polity=key, share=v["share"], truth=truth, pred=pred))
+        ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: only 0-dimensional arrays can be converted to Python scalars
