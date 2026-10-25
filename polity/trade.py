@@ -177,7 +177,9 @@ def map_fields(r, scale=None, sources=300):
     scale = scale or COST_SCALE
     W = r["land"].shape[1]
     towns = np.array([t["row"] * W + t["col"] for t in r["towns"]])
-    people = np.where(r["land"], r["density"], 0.0) * r["cell_km"] ** 2
+    # the people a town serves and trades for: those of the claimed land (the unclaimed north is herders' country,
+    # where the farming density does not apply)
+    people = np.where(r["land"] & (r["claim"] >= 0), r["density"], 0.0) * r["cell_km"] ** 2
     nets = [cost_network(r["world"], r["statics"], r["climate"], m, r["ports"], r["river_places"])
             for m in TRADE_MONTHS]
     mass, owner = catchments(nets[len(nets) // 2], towns, people)
