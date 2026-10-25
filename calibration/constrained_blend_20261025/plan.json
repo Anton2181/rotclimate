@@ -1,0 +1,16 @@
+{
+  "declared_before_new_model_results": true,
+  "reason": "The completed 120-evaluation search contains complementary regional responses even though no individual candidate passes. An exploratory convex-hull diagnostic on those existing losses found feasible linear combinations; averaged parameters must still be evaluated because climate responses are nonlinear.",
+  "reference": "calibration/local_accuracy_20261023/r38_params.json",
+  "archive": "calibration/rain_structure_20261025/search/evals.jsonl",
+  "archive_review": "output/rain_structure_20261025/final_review/review.json",
+  "original_plan": "calibration/rain_structure_20261025/plan.json",
+  "group_targets": [0.9995, 0.999, 0.998, 0.995],
+  "fractions_from_reference": [0.75, 1.0],
+  "proposal_rule": "For each group target, minimize the archived combined S over nonnegative weights summing to one, with every archived group at or below that target and both overall component ratios <= 1.01. Use scipy linprog HiGHS in archive index order. Skip infeasible targets explicitly. Average only the original ten physical knobs with those weights; interpolate each resulting parameter vector from r38 by the declared fractions. Keep the original bounds. Freeze all resulting proposals before any new candidate result. Do not average climates or treat surrogate losses as real physics.",
+  "budget": "At most eight proposals; no new proposals or altered bounds after observing their actual results.",
+  "controls": "Run a fresh strict 31-region r38 benchmark under the current legacy default. Its per-region T/P errors must reproduce the archived r38 reference to 1e-10. All candidate/reference scientific sources and actual case inputs must match. Planet, world geometry, numerical criteria, terrain scheme and all other physics stay at r38; the experimental terrain closure and column-speed changes are not used.",
+  "selection": "Score every proposal with the unchanged policy-v2 gate: S <= 0.995, no group worse, neither component worse by more than 1%. At most the three passing candidates with lowest actual S take the paired 28 km California/Western Europe/Japan/New Zealand check, in order; require S <= 1.01.",
+  "validation": "The first passing the development and 28 km checks takes the established six once against a paired reference. Require all numerical checks and report S; if S exceeds 1.01, reject the milestone without trying another candidate after this validation. These are reused validation regions, not a new independent holdout.",
+  "publication": "Only a candidate passing all declared stages is eligible for a new adopted physics milestone and separate world-refit/publication checks. Keep the .bat atlases on adopted r38 until their climates are fully qualified and rebuilt. Archive all rejected candidates and numerical failures."
+}

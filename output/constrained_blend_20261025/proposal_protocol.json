@@ -1,0 +1,222 @@
+{
+  "plan": {
+    "declared_before_new_model_results": true,
+    "reason": "The completed 120-evaluation search contains complementary regional responses even though no individual candidate passes. An exploratory convex-hull diagnostic on those existing losses found feasible linear combinations; averaged parameters must still be evaluated because climate responses are nonlinear.",
+    "reference": "calibration/local_accuracy_20261023/r38_params.json",
+    "archive": "calibration/rain_structure_20261025/search/evals.jsonl",
+    "archive_review": "output/rain_structure_20261025/final_review/review.json",
+    "original_plan": "calibration/rain_structure_20261025/plan.json",
+    "group_targets": [
+      0.9995,
+      0.999,
+      0.998,
+      0.995
+    ],
+    "fractions_from_reference": [
+      0.75,
+      1.0
+    ],
+    "proposal_rule": "For each group target, minimize the archived combined S over nonnegative weights summing to one, with every archived group at or below that target and both overall component ratios <= 1.01. Use scipy linprog HiGHS in archive index order. Skip infeasible targets explicitly. Average only the original ten physical knobs with those weights; interpolate each resulting parameter vector from r38 by the declared fractions. Keep the original bounds. Freeze all resulting proposals before any new candidate result. Do not average climates or treat surrogate losses as real physics.",
+    "budget": "At most eight proposals; no new proposals or altered bounds after observing their actual results.",
+    "controls": "Run a fresh strict 31-region r38 benchmark under the current legacy default. Its per-region T/P errors must reproduce the archived r38 reference to 1e-10. All candidate/reference scientific sources and actual case inputs must match. Planet, world geometry, numerical criteria, terrain scheme and all other physics stay at r38; the experimental terrain closure and column-speed changes are not used.",
+    "selection": "Score every proposal with the unchanged policy-v2 gate: S <= 0.995, no group worse, neither component worse by more than 1%. At most the three passing candidates with lowest actual S take the paired 28 km California/Western Europe/Japan/New Zealand check, in order; require S <= 1.01.",
+    "validation": "The first passing the development and 28 km checks takes the established six once against a paired reference. Require all numerical checks and report S; if S exceeds 1.01, reject the milestone without trying another candidate after this validation. These are reused validation regions, not a new independent holdout.",
+    "publication": "Only a candidate passing all declared stages is eligible for a new adopted physics milestone and separate world-refit/publication checks. Keep the .bat atlases on adopted r38 until their climates are fully qualified and rebuilt. Archive all rejected candidates and numerical failures."
+  },
+  "generated": {
+    "proposals": [
+      {
+        "name": "g0.9995_a0.75",
+        "knobs": {
+          "monsoon_descent": 0.011582702170885237,
+          "upslope_free_wind": 0.1872741511898461,
+          "cold_high_storms": 0.1249350942071514,
+          "subgrid_orographic": 2.84084779065813,
+          "lee_drying": 0.4474603919199256,
+          "dry_coupling": 2.490408911416852,
+          "eddy_rate": 1.3810611424711938,
+          "land_recycling": 0.404406995365071,
+          "orographic": 3.007038142651279,
+          "precip_tau_days": 11.198596688092602
+        },
+        "predicted_S": 0.9915301040223148,
+        "group_target": 0.9995,
+        "fraction": 0.75,
+        "support": [
+          {
+            "n": 85,
+            "weight": 0.16116956287117484
+          },
+          {
+            "n": 97,
+            "weight": 0.7161964334807391
+          },
+          {
+            "n": 104,
+            "weight": 0.12263400364808605
+          }
+        ]
+      },
+      {
+        "name": "g0.9995_a1",
+        "knobs": {
+          "monsoon_descent": 0.015443602894513648,
+          "upslope_free_wind": 0.24969886825312815,
+          "cold_high_storms": 0.13324679227620187,
+          "subgrid_orographic": 2.7877970542108406,
+          "lee_drying": 0.5966138558932341,
+          "dry_coupling": 2.4872118818891362,
+          "eddy_rate": 1.434152674408984,
+          "land_recycling": 0.39920932715342805,
+          "orographic": 2.657882106689769,
+          "precip_tau_days": 11.078614585004903
+        },
+        "predicted_S": 0.9887068053630864,
+        "group_target": 0.9995,
+        "fraction": 1.0,
+        "support": [
+          {
+            "n": 85,
+            "weight": 0.16116956287117484
+          },
+          {
+            "n": 97,
+            "weight": 0.7161964334807391
+          },
+          {
+            "n": 104,
+            "weight": 0.12263400364808605
+          }
+        ]
+      },
+      {
+        "name": "g0.999_a0.75",
+        "knobs": {
+          "monsoon_descent": 0.01019140853761473,
+          "upslope_free_wind": 0.1351753854539306,
+          "cold_high_storms": 0.12283900555651217,
+          "subgrid_orographic": 2.7969652783838157,
+          "lee_drying": 0.42809035825379593,
+          "dry_coupling": 2.5295847591255076,
+          "eddy_rate": 1.4491933785755449,
+          "land_recycling": 0.40368189252192654,
+          "orographic": 3.0143238685774683,
+          "precip_tau_days": 11.25165281852144
+        },
+        "predicted_S": 0.9936429893788556,
+        "group_target": 0.999,
+        "fraction": 0.75,
+        "support": [
+          {
+            "n": 63,
+            "weight": 0.3043507113130516
+          },
+          {
+            "n": 97,
+            "weight": 0.6327760916073925
+          },
+          {
+            "n": 104,
+            "weight": 0.06287319707955386
+          }
+        ]
+      },
+      {
+        "name": "g0.999_a1",
+        "knobs": {
+          "monsoon_descent": 0.01358854471681964,
+          "upslope_free_wind": 0.18023384727190747,
+          "cold_high_storms": 0.1304520074086829,
+          "subgrid_orographic": 2.7292870378450877,
+          "lee_drying": 0.5707871443383946,
+          "dry_coupling": 2.539446345500677,
+          "eddy_rate": 1.5249956558814521,
+          "land_recycling": 0.3982425233625687,
+          "orographic": 2.667596407924688,
+          "precip_tau_days": 11.149356092243355
+        },
+        "predicted_S": 0.9915239858384742,
+        "group_target": 0.999,
+        "fraction": 1.0,
+        "support": [
+          {
+            "n": 63,
+            "weight": 0.3043507113130516
+          },
+          {
+            "n": 97,
+            "weight": 0.6327760916073925
+          },
+          {
+            "n": 104,
+            "weight": 0.06287319707955386
+          }
+        ]
+      }
+    ],
+    "linear_screens": [
+      {
+        "group_target": 0.9995,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+      },
+      {
+        "group_target": 0.999,
+        "feasible": true,
+        "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+      },
+      {
+        "group_target": 0.998,
+        "feasible": false,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      },
+      {
+        "group_target": 0.995,
+        "feasible": false,
+        "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+      }
+    ],
+    "note": "Predictions only; no interpolated loss is an observed climate result."
+  },
+  "sources": {
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "1ba5395e0b3e0bc12f7c8eb940ceded49704cf50ac36dd8f15ad0d890a26e7ff",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0b275f699b4b576f880cbeb239a5a3062ca9e1be9f5a52fc9557bc7414d73c82",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/config.py": "5657e2167859121cc0709b798c01fb25a7c6520de7502e0cb13aa73b8a5d1ec9",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/earth.py": "51b4de8435bb9c257d778f4013920c056f46538bbcde9f62f7c7a8153e816d4e",
+    "rotclimate/ebm.py": "a95b6bedc1b33404f145435b786e0990532a5220c382c279682d883abc550166",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/geography.py": "cacd3392918b21b51433b6d533f4ebf0ae1ad98d614002f34d0312ad430655c6",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "9682f9b2b76e1635997f7f0eee334c2a031ac70713c82858356e1a1de790034b",
+    "rotclimate/moisture.py": "354f8c4acb483aefccbd67562ac7ba1157711d03292ea1c1775a9f251537986e",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/solver.py": "7bd7c4a583ad75865b82441ff572796fd69af5b2e2da25e7bfa16d6a4e400a11",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/transport.py": "705ae7f9f2e0ce3fd5283bbb18671a8cbdf7f31dc2e81803b1daf51128a32c94",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "scripts/check_constrained_blend.py": "163264c3884b83b4b4efe3e9b0f4266cfdba324b8b11ff31bd8eb35e006b4b6d",
+    "calibration/constrained_blend_20261025/plan.json": "18d9e93641c4147bb02544f713c20e4946b18e1ebae8b3c9c5cffb7438dc5aba",
+    "calibration/rain_structure_20261025/search/evals.jsonl": "2043b3ed8bc7f34590d4d178145bde2cd39a59e751529c39aeda51e01b2ed010",
+    "calibration/local_accuracy_20261023/r38_params.json": "a58ee16d4694b35c4240c682673976230c5afbcc639fd5f4d7bf112f1f8daabd",
+    "scripts/gate_local.py": "3b69eb56dcaf26b6a3a90d5ee79b4b32b8fd72ef7c2e658c92ed7672df3212f5",
+    "calibration/local_accuracy_20261023/policy_v2.json": "3ef14a58e2de19b5226ebb92fa72c636f65d0c5f51deceee8d13affce6967a6b"
+  },
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  }
+}

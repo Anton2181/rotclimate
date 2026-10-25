@@ -1,0 +1,155 @@
+{
+  "proposals": [
+    {
+      "name": "g0.9995_a0.75",
+      "knobs": {
+        "monsoon_descent": 0.011582702170885237,
+        "upslope_free_wind": 0.1872741511898461,
+        "cold_high_storms": 0.1249350942071514,
+        "subgrid_orographic": 2.84084779065813,
+        "lee_drying": 0.4474603919199256,
+        "dry_coupling": 2.490408911416852,
+        "eddy_rate": 1.3810611424711938,
+        "land_recycling": 0.404406995365071,
+        "orographic": 3.007038142651279,
+        "precip_tau_days": 11.198596688092602
+      },
+      "predicted_S": 0.9915301040223148,
+      "group_target": 0.9995,
+      "fraction": 0.75,
+      "support": [
+        {
+          "n": 85,
+          "weight": 0.16116956287117484
+        },
+        {
+          "n": 97,
+          "weight": 0.7161964334807391
+        },
+        {
+          "n": 104,
+          "weight": 0.12263400364808605
+        }
+      ]
+    },
+    {
+      "name": "g0.9995_a1",
+      "knobs": {
+        "monsoon_descent": 0.015443602894513648,
+        "upslope_free_wind": 0.24969886825312815,
+        "cold_high_storms": 0.13324679227620187,
+        "subgrid_orographic": 2.7877970542108406,
+        "lee_drying": 0.5966138558932341,
+        "dry_coupling": 2.4872118818891362,
+        "eddy_rate": 1.434152674408984,
+        "land_recycling": 0.39920932715342805,
+        "orographic": 2.657882106689769,
+        "precip_tau_days": 11.078614585004903
+      },
+      "predicted_S": 0.9887068053630864,
+      "group_target": 0.9995,
+      "fraction": 1.0,
+      "support": [
+        {
+          "n": 85,
+          "weight": 0.16116956287117484
+        },
+        {
+          "n": 97,
+          "weight": 0.7161964334807391
+        },
+        {
+          "n": 104,
+          "weight": 0.12263400364808605
+        }
+      ]
+    },
+    {
+      "name": "g0.999_a0.75",
+      "knobs": {
+        "monsoon_descent": 0.01019140853761473,
+        "upslope_free_wind": 0.1351753854539306,
+        "cold_high_storms": 0.12283900555651217,
+        "subgrid_orographic": 2.7969652783838157,
+        "lee_drying": 0.42809035825379593,
+        "dry_coupling": 2.5295847591255076,
+        "eddy_rate": 1.4491933785755449,
+        "land_recycling": 0.40368189252192654,
+        "orographic": 3.0143238685774683,
+        "precip_tau_days": 11.25165281852144
+      },
+      "predicted_S": 0.9936429893788556,
+      "group_target": 0.999,
+      "fraction": 0.75,
+      "support": [
+        {
+          "n": 63,
+          "weight": 0.3043507113130516
+        },
+        {
+          "n": 97,
+          "weight": 0.6327760916073925
+        },
+        {
+          "n": 104,
+          "weight": 0.06287319707955386
+        }
+      ]
+    },
+    {
+      "name": "g0.999_a1",
+      "knobs": {
+        "monsoon_descent": 0.01358854471681964,
+        "upslope_free_wind": 0.18023384727190747,
+        "cold_high_storms": 0.1304520074086829,
+        "subgrid_orographic": 2.7292870378450877,
+        "lee_drying": 0.5707871443383946,
+        "dry_coupling": 2.539446345500677,
+        "eddy_rate": 1.5249956558814521,
+        "land_recycling": 0.3982425233625687,
+        "orographic": 2.667596407924688,
+        "precip_tau_days": 11.149356092243355
+      },
+      "predicted_S": 0.9915239858384742,
+      "group_target": 0.999,
+      "fraction": 1.0,
+      "support": [
+        {
+          "n": 63,
+          "weight": 0.3043507113130516
+        },
+        {
+          "n": 97,
+          "weight": 0.6327760916073925
+        },
+        {
+          "n": 104,
+          "weight": 0.06287319707955386
+        }
+      ]
+    }
+  ],
+  "linear_screens": [
+    {
+      "group_target": 0.9995,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+    },
+    {
+      "group_target": 0.999,
+      "feasible": true,
+      "message": "Optimization terminated successfully. (HiGHS Status 7: Optimal)"
+    },
+    {
+      "group_target": 0.998,
+      "feasible": false,
+      "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+    },
+    {
+      "group_target": 0.995,
+      "feasible": false,
+      "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+    }
+  ],
+  "note": "Predictions only; no interpolated loss is an observed climate result."
+}
