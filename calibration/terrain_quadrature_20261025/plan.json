@@ -1,0 +1,18 @@
+{
+  "declared_before_coupled_results": true,
+  "question": "Can averaging capped uplift on a common fine DEM improve dry Himalayan foothills and excessive plateau rain without changing the planet or adding water?",
+  "reference": "calibration/local_accuracy_20261023/r38_params.json",
+  "regions": ["north_india", "japan", "pacific_nw", "iberia"],
+  "cell_km": [56, 28],
+  "terrain_reference_km": 14,
+  "schemes": {
+    "reference": {},
+    "terrain_quadrature": {"orographic_scheme": "terrain-quadrature", "subgrid_orographic": 0.0}
+  },
+  "mechanism": "Aggregate WorldClim elevation alone on a fixed 14 km projected terrain reference. Keep the same reference origin for both climate resolutions. Within each climate cell, average the existing capped positive U dot terrain-gradient over exact overlapping fine-cell areas. Use mean fine gradients for the resolved lee term. Replace, rather than add to, max-minus-mean relief. All resulting rain remains a sink of the existing solved vapor. The mean cell wind is uniform over its terrain quadrature; sub-cell hydrologic and atmospheric dynamics are not resolved.",
+  "unchanged": "All r38 physical settings except the declared closure replacement and disabling its superseded relief proxy; actual Earth geometry/orbit/spin, observed climate, numerical criteria and regional scoring remain unchanged. No new fitted parameter or target change.",
+  "controls": "Both schemes receive identical terrain samples and observed-case identities. Every 56 km reference must reproduce the cached r38 monthly scored T/P arrays exactly at their saved float32 precision. Verify area/weight normalization, known-answer planes, capped uplift, common-footprint aggregation invariance, northward signs and invalid inputs before real runs. Save all numerical failures; never relax convergence to obtain a score.",
+  "pilot_screen": "At 56 km, mean rain loss must improve at least 1%, mean T error may increase at most 1%, and no regional combined normalized T/P score may exceed 1.05. North India July absolute error below 1500 m must decrease and annual absolute error above 4500 m must not increase. At 28 km the four-region combined score may be at most 1.01 versus its paired reference. All numerical checks must pass.",
+  "afterwards": "This four-region diagnostic is development only. If it passes, freeze a fresh 31-region reference/candidate gate with identical prepared terrain inputs and source identities, then the established resolution/validation protocol. No new physics or atlas climate is adopted from this pilot alone; keep the .bat-served atlases on adopted r38 until a candidate is fully qualified.",
+  "limits": "The terrain reference is finite-resolution DEM geometry, not observations of airflow or rain production. The closure assumes a uniform wind and vapor column within each coarse cell and cannot reconstruct within-cell rain shadows. A genuine improvement remains an empirical coupled-model question. Archive the completed previous rainfall campaign before changing model sources."
+}
