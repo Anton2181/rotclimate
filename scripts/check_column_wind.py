@@ -3,6 +3,8 @@ from dataclasses import asdict
 from pathlib import Path
 from multiprocessing import Pool
 import json
+import argparse
+import importlib.metadata
 import sys
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -10,13 +12,13 @@ sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'scripts'))
 import numpy as np
 from check_terrain_quadrature import run_one
 from earth_benchmark import load_params
-from local_benchmark_protocol import file_hash,freeze,write_json
+from local_benchmark_protocol import file_hash,freeze,write_json,identity as protocol_identity
 from experiments.terrain_quadrature import reference_terrain
 from benchmark_local import DEV12_SPECS
 from rotclimate import earth
 
 
-def compare(ref,candidate):
+def compare(ref,candidate,*,coarse=True):
     if any(r['status']!='passed' for r in candidate):return dict(passed=False,failures=['Numerical failure'])
     rr={r['region']:r for r in ref};cc={r['region']:r for r in candidate}
     if set(rr)!=set(cc) or any(rr[n]['case_identity']!=cc[n]['case_identity'] for n in rr):raise ValueError('Unpaired cases')
@@ -26,6 +28,9 @@ def compare(ref,candidate):
     regional={n:.5*cc[n]['temperature']['monthly_mae_C']/rr[n]['temperature']['monthly_mae_C']+
                 .5*cc[n]['rain']['loss']/rr[n]['rain']['loss'] for n in rr}
     failures=[];s=.5*(t+p)
+    if not coarse:
+        if s>1.01:failures.append('Fine S exceeds 1.01')
+        return dict(passed=not failures,failures=failures,S=s,T_ratio=t,P_ratio=p,regions=regional)
     if s>.995:failures.append('S exceeds 0.995')
     if t>1.01:failures.append('Temperature ratio exceeds 1.01')
     failures.extend(n+': regional S exceeds 1.05' for n,value in regional.items() if value>1.05)
@@ -36,11 +41,16 @@ def compare(ref,candidate):
 
 
 def main():
+    ap=argparse.ArgumentParser(description=__doc__)
+    ap.add_argument('--out',type=Path,default=ROOT/'output/column_wind_20261025')
+    a=ap.parse_args()
     plan_path=ROOT/'calibration/column_wind_20261025/plan.json';plan=json.loads(plan_path.read_text())
-    out=ROOT/'output/column_wind_20261025';out.mkdir(exist_ok=True)
+    out=a.out;out.mkdir(parents=True,exist_ok=True)
     parent=ROOT/'output/terrain_quadrature_20261025';protocol=json.loads((parent/'protocol.json').read_text())
     base=load_params(ROOT/plan['reference']);normalized=json.loads(json.dumps(asdict(base)))
     if normalized!=protocol['params']:raise ValueError('Different reference parameters')
+    packages={name:importlib.metadata.version(name) for name in protocol['packages']}
+    if packages!=protocol['packages']:raise ValueError('Reference package versions changed')
     for name,expected in protocol['sources'].items():
         if file_hash(ROOT/name)!=expected:raise ValueError('Reference source has changed: '+name)
     refs=[];evidence=[parent/'protocol.json']
@@ -48,9 +58,12 @@ def main():
         for name in plan['regions']:
             record=parent/'cases'/f'{name}_{km:g}km/reference.json';row=json.loads(record.read_text())
             cells=record.with_suffix('.npz')
-            if row['status']!='passed' or file_hash(cells)!=row['cells_sha256']:raise ValueError('Invalid reference')
+            if (row['status']!='passed' or row['identity']!=protocol_identity(protocol) or
+                    row['numerics'].get('all_checks_passed') is not True or
+                    row['region']!=name or row['cell_km']!=km or file_hash(cells)!=row['cells_sha256']):
+                raise ValueError('Invalid reference')
             refs.append(row);evidence.extend([record,cells])
-    identity=freeze(out/'protocol.json',dict(plan=plan,parent_protocol=protocol,
+    identity=freeze(out/'protocol.json',dict(plan=plan,parent_protocol=protocol,packages=packages,
         evidence_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in evidence},
         sources_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in [plan_path,Path(__file__)]}))
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
@@ -69,9 +82,7 @@ def main():
             selected=min(eligible,key=lambda label:reviews[label]['S']);factor=float(selected.removeprefix('wind_'))
             jobs=[(n,28,selected,dict(moisture_wind_factor=factor),asdict(base),identity,str(out)) for n in plan['regions']]
             results=list(pool.imap_unordered(run_one,jobs));records+=results
-            fine=compare([r for r in refs if r['cell_km']==28],results)
-            fine['passed']=not any(r['status']!='passed' for r in results) and fine.get('S',float('inf'))<=1.01
-            fine['note']='Fine screen uses S <= 1.01 and observed convergence; coarse diagnostics are reported only.'
+            fine=compare([r for r in refs if r['cell_km']==28],results,coarse=False)
     review=dict(complete=True,identity=identity,coarse=reviews,selected_for_fine=selected,fine=fine,
         passes_pilot=bool(selected and fine['passed']),records=records,reference_records=refs,
         decision='Prepare full fresh gate; no adoption yet.' if selected and fine['passed'] else 'Retain r38; no pilot candidate qualifies.')
