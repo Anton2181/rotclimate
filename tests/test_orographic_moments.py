@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from experiments.orographic_moments import uplift_moments
+from experiments.orographic_moments import uplift_moments,rectangle_weights
 
 
 def test_a_smooth_plane_has_no_unresolved_hill_increment_at_any_grid_size():
@@ -45,3 +45,13 @@ def test_wind_direction_and_northward_coordinate_sign_are_explicit():
 @pytest.mark.parametrize('spacing,block',[(0.,10),(np.nan,10),(1000.,0),(1000.,7)])
 def test_invalid_geometry_is_rejected(spacing,block):
     with pytest.raises(ValueError):uplift_moments(np.ones((60,120)),spacing,block)
+
+
+def test_fractional_cells_preserve_the_same_rectangle_area_on_unaligned_grids():
+    for cell in [14.,28.,56.]:
+        x=np.arange(-1000.,1000.,cell)+7.25
+        y=np.arange(-1000.,1000.,cell)-3.5
+        xx,yy=np.meshgrid(x,y)
+        weights=rectangle_weights(xx,yy,cell,173.,119.)
+        assert weights.min()>=0. and weights.max()<=1.
+        assert weights.sum()*cell**2==pytest.approx(346.*238.,rel=1e-13)

@@ -8,6 +8,16 @@ unresolved slopes without counting a smooth plane as extra roughness.
 import numpy as np
 
 
+def rectangle_weights(x_km,y_km,cell_km,half_width_km,half_height_km):
+    """Fraction of each square model cell inside a fixed projected rectangle."""
+    x,y=np.broadcast_arrays(np.asarray(x_km,float),np.asarray(y_km,float))
+    if (not np.isfinite(x).all() or not np.isfinite(y).all() or
+            not all(np.isfinite(v) and v>0 for v in [cell_km,half_width_km,half_height_km])):
+        raise ValueError('Need finite coordinates and positive cell/rectangle sizes')
+    overlap=lambda a,h:np.clip(np.minimum(a+cell_km/2,h)-np.maximum(a-cell_km/2,-h),0.,cell_km)/cell_km
+    return overlap(x,half_width_km)*overlap(y,half_height_km)
+
+
 def uplift_moments(height,spacing_m,block,u=0.,v=0.):
     height=np.asarray(height,dtype=float)
     if (height.ndim!=2 or min(height.shape)<3 or not np.isfinite(height).all() or

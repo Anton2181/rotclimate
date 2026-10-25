@@ -54,3 +54,31 @@ must use a consistent resolved/unresolved decomposition and account for its
 rain as a sink of solved vapor, then pass the full development and finer-grid
 gates. Existing 50 km terrain smoothing cannot simply be combined with an
 unrelated fine-grid increment without checking that decomposition.
+
+
+## Fixed-footprint follow-up
+
+The separately frozen `fixed_footprint_plan.json` removes the changing-area
+confound. Fractional cell overlap integrates exactly the same projected
+1,650,000 km² rectangle at every resolution, including partially intersected
+cells. No atmospheric simulation is run.
+
+| Cell size | Projected area (km²) | Mean relief proxy | Resolved factor | Sub-grid extra | Sum |
+|---|---:|---:|---:|---:|---:|
+| 56 km | 1,650,000 | 281.19 m | 0.49421 | 0.34180 | 0.83601 |
+| 28 km | 1,650,000 | 146.53 m | 0.60823 | 0.17884 | 0.78707 |
+| 14 km | 1,650,000 | 46.73 m | 0.57998 | 0.05006 | 0.63005 |
+
+The total geometric factor falls **24.6% from 56 to 14 km** even after this
+area correction; its sub-grid contribution falls 85.4%. The 56-to-28 km total
+change is 5.9%. This establishes resolution dependence of these current
+prescribed-wind factors on a matched footprint. It does not show that this
+formula alone causes the simulated monsoon displacement, or that rainfall
+would improve by the same percentage. Terrain drag and the represented terrain
+also change with resolution.
+
+A ninth known-answer test checks exact rectangle-area integration on unaligned
+14, 28 and 56 km grids. All nine geometry tests pass. The original audit is
+preserved; this follow-up has its own plan, source identities and outputs.
+
+![Fixed-footprint geometry audit](../output/orographic_resolution_20261025/fixed_footprint/resolution.png)
