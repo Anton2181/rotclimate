@@ -229,13 +229,27 @@ def export(atlas):
                             'water. Suggestions, not canon.'))
     meta['layers'] = [l for l in meta['layers'] if not l['id'].startswith('reach_')] + layers
     manifest = json.loads((LAYERS / 'manifest.json').read_text())
-    meta['reach'] = dict(source_sha256=manifest['source_sha256'], held_days=HELD_DAYS, contested_days=CONTESTED_DAYS,
+    meta['reach'] = dict(defacto=meta.get('reach', {}).get('defacto'),
+                         source_sha256=manifest['source_sha256'], held_days=HELD_DAYS, contested_days=CONTESTED_DAYS,
                          model='polity v2 (calibration/polity_20261025)', rank_offset_days=C.RANK_OFFSET_DAYS,
                          refuge_per_km=C.REFUGE_PER_KM,
                          herding={n: {k: round(x, 3) for k, x in v.items()} for n, v in r['herding'].items()},
                          mounted=sorted(MOUNTED))
     (data / 'atlas.json').write_text(json.dumps(meta, ensure_ascii=False))
     print('Political reach layers written to', data, flush=True)
+
+
+def write_polities_csv(data, tables):
+    """data/polities.csv from the de facto tables: people and km² rounded, shares to 4 places."""
+    import csv
+    with open(Path(data) / 'polities.csv', 'w', newline='') as fh:
+        w = csv.writer(fh)
+        keys = [k for k in next(iter(tables.values()))['rows'][0] if k != 'polity']
+        w.writerow(['gap_fill_days', 'polity'] + keys)
+        for c, t in tables.items():
+            for row in t['rows']:
+                w.writerow([c, row['polity']] + [(round(row[k], 4) if abs(row[k]) < 10 else round(row[k]))
+                                                 if isinstance(row[k], float) else row[k] for k in keys])
 
 
 def fill_label(c):
@@ -354,14 +368,7 @@ def defacto_layer(r, dfs, meta, data, elev, coast, note):
                             caption=f"{100 * held_share:.0f} % of the land held · "
                                     f"{total['unclaimed_unheld_people'] / 1e6:.1f} M people neither claimed nor held"))
     meta.setdefault('reach', {})['defacto'] = tables
-    import csv
-    with open(data / 'polities.csv', 'w', newline='') as fh:
-        w = csv.writer(fh)
-        keys = [k for k in tables[str(DF.FILL_CHOICES[0])]['rows'][0] if k != 'polity']
-        w.writerow(['gap_fill_days', 'polity'] + keys)
-        for c, t in tables.items():
-            for row in t['rows']:
-                w.writerow([c, row['polity']] + [round(row[k]) if isinstance(row[k], float) else row[k] for k in keys])
+    write_polities_csv(data, tables)
     default = f'{DF.FILL_DAYS:g}'
     first = next(o for o in options if o['value'] == default)
     return dict(id='reach_defacto', file=first['file'], label='De facto and de jure', kind='categories',
