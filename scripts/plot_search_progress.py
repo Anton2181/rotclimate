@@ -54,12 +54,13 @@ def main():
         ax.annotate(f"best passing so far: S {S[best]:.4f}", (n[best], S[best]), xytext=(8, -14),
                     textcoords="offset points", fontsize=9, color=INK)
     lowest = int(np.argmin(S))
-    ax.annotate(f"lowest S {S[lowest]:.4f} (worst group {worst[lowest]:.3f})", (n[lowest], shown[lowest]),
-                xytext=(8, -14), textcoords="offset points", fontsize=9, color=INK)
+    if lowest != best:
+        ax.annotate(f"lowest S {S[lowest]:.4f} (worst group {worst[lowest]:.3f})", (n[lowest], shown[lowest]),
+                    xytext=(-8, -28), ha="right", textcoords="offset points", fontsize=9, color=INK)
     ax.set_ylim(*lim); ax.set_xlim(0, len(rows) + 6)
     ax.set_xlabel("candidate"); ax.set_ylabel("S, temperature and rain loss vs r37 (clipped to 0.96–1.06)",
                                                color=INK_SOFT)
-    ax.set_title(f"{a.title} · {len(rows)} candidates", loc="left", fontsize=11, color=INK)
+    ax.set_title(a.title if "candidates" in a.title else f"{a.title} · {len(rows)} candidates", loc="left", fontsize=11, color=INK)
     ax.legend(frameon=False, fontsize=9, loc="upper right")
     a.out.parent.mkdir(parents=True, exist_ok=True)
     fig.savefig(a.out, dpi=110, facecolor=SURFACE)
