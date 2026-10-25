@@ -1,0 +1,19 @@
+{
+  "question": "Can plausible unknown exterior geography improve the r38 fantasy-map fit without changing the planet or calibrated physics?",
+  "start": "atlases/earth_fit/params.json",
+  "planet": "Hold the current retrograde rotation and 33.5-degree tilt, Earth radius/gravity/day/year, orbit, radiation and all r38 physical parameters. These are the current-world assumptions, not a claim that the orbit/rotation equal modern Earth's.",
+  "layouts": [1, 2, 3],
+  "downsample": 16,
+  "scenarios": {
+    "control": {},
+    "northern_continent": {"beyond_north_land": 0.95, "beyond_northeast_land": 0.95, "beyond_continuity_km": 1200.0, "beyond_relief_m": 250.0},
+    "continental_relief": {"beyond_north_land": 0.95, "beyond_northeast_land": 0.95, "beyond_continuity_km": 1200.0, "beyond_relief_m": 1200.0},
+    "eastern_ocean": {"beyond_east_land": 0.15, "beyond_northeast_land": 0.1, "beyond_southeast_land": 0.15},
+    "poleward_continent": {"beyond_north_land": 0.9, "beyond_northeast_land": 0.9, "far_pole_land": 0.95},
+    "maritime_exterior": {"beyond_north_land": 0.2, "beyond_northeast_land": 0.1, "beyond_east_land": 0.2, "far_pole_land": 0.2}
+  },
+  "screen": "Mean-climate zonefit must exceed the same-resolution three-layout control by at least 0.002; overall strict agreement must not fall; no painted-zone recall may fall by more than 0.02; Mediterranean dry share must not increase and Cs share may fall at most 0.02. Record failures explicitly.",
+  "transfer": "At most the highest-zonefit eligible scenario advances to paired downsample-8 control/candidate checks with the same three layouts. No publication from the coarse screen alone. Additional exterior layouts are required before any world-fit adoption.",
+  "accounting": "Verify that mapped land/terrain/targets are unchanged and every member passes observed numerical checks. Only the declared off-map variables may change. Preserve shared physics and all target definitions.",
+  "limits": "These are coherent local-exterior hypotheses within the existing procedural generator, not complete reconstructed continents. The global latitude land profile remains the model's Earth reference; no independent planetary GCM validation is implied."
+}
