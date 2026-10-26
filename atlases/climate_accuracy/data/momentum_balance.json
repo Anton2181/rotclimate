@@ -1,0 +1,351 @@
+{
+  "complete": true,
+  "decision": "Retain r39",
+  "verified_integrations": 155,
+  "exact_regional_error_controls": 31,
+  "development": {
+    "land_only": {
+      "passes_development_gate": false,
+      "failures": [
+        "Overall score did not improve by at least 0.5%",
+        "midlatitude: group score worsened"
+      ],
+      "score": 0.997598040254726,
+      "group_scores": {
+        "training": 0.9968802862101283,
+        "holdout": 0.9994599812373903,
+        "midlatitude": 1.0019070098264236,
+        "dev12": 0.994532691814598
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.008534390321529806,
+        "P_loss": -0.013338309812077842
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.8081235467758014,
+        "P_loss": 0.43646559930592804
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "Iran rainfall worsens by more than 2%",
+        "mexico: protected combined error worsens",
+        "pacific_nw: protected combined error worsens"
+      ],
+      "qualifies": false
+    },
+    "ocean_only": {
+      "passes_development_gate": false,
+      "failures": [
+        "Overall score did not improve by at least 0.5%",
+        "dev12: group score worsened"
+      ],
+      "score": 0.9981175916601557,
+      "group_scores": {
+        "training": 0.9939143801094381,
+        "holdout": 0.994040739867798,
+        "midlatitude": 0.9959933092027796,
+        "dev12": 1.003104243699896
+      },
+      "relative_changes": {
+        "T_monthly_mae": -0.0031772789638744303,
+        "P_loss": -0.0005875377158143236
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.787126597925858,
+        "P_loss": 0.44210610753681817
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "North India rain improvement below 5%"
+      ],
+      "qualifies": false
+    },
+    "balance110": {
+      "passes_development_gate": true,
+      "failures": [],
+      "score": 0.9949359112648908,
+      "group_scores": {
+        "training": 0.9917061143564341,
+        "holdout": 0.9998569603492555,
+        "midlatitude": 0.9961778635873954,
+        "dev12": 0.9936965379334081
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.00627546640778931,
+        "P_loss": -0.016403643878007634
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.8040736962620207,
+        "P_loss": 0.4351095996928245
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "japan: protected combined error worsens",
+        "mexico: protected combined error worsens",
+        "pacific_nw: protected combined error worsens"
+      ],
+      "qualifies": false
+    },
+    "balance120": {
+      "passes_development_gate": false,
+      "failures": [
+        "Overall score did not improve by at least 0.5%",
+        "holdout: group score worsened"
+      ],
+      "score": 0.9970478980727523,
+      "group_scores": {
+        "training": 0.9927288240799949,
+        "holdout": 1.0093864252378668,
+        "midlatitude": 0.9961872009857067,
+        "dev12": 0.9948858197170001
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.009239247134473105,
+        "P_loss": -0.015143450988968521
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.8093872302087302,
+        "P_loss": 0.43566706619834045
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "japan: protected combined error worsens",
+        "mexico: protected combined error worsens",
+        "pacific_nw: protected combined error worsens"
+      ],
+      "qualifies": false
+    }
+  },
+  "north_india_annual_rain_mm": {
+    "reference": 256.2620937802825,
+    "land_only": 314.6720949255088,
+    "ocean_only": 227.56812369228803,
+    "balance110": 298.99834753772956,
+    "balance120": 311.53462858372956
+  },
+  "hull": {
+    "complete": true,
+    "identity": "5fe61acf5a702b7a49dbe896f17a9bca2103ad531743c3b94e8328a46993c4b0",
+    "strict": {
+      "feasible": false,
+      "status": 2,
+      "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+    },
+    "diagnostic_without_overall_threshold": {
+      "feasible": false,
+      "status": 2,
+      "message": "The problem is infeasible. (HiGHS Status 8: model_status is Infeasible; primal_status is Infeasible)"
+    },
+    "point_names": [
+      "surface_momentum_20261026/reference",
+      "surface_momentum_20261026/drag125",
+      "surface_momentum_20261026/drag150",
+      "surface_momentum_20261026/nominal",
+      "momentum_balance_20261026/land_only",
+      "momentum_balance_20261026/ocean_only",
+      "momentum_balance_20261026/balance110",
+      "momentum_balance_20261026/balance120"
+    ],
+    "constraint_names": [
+      "overall",
+      "temperature",
+      "rain",
+      "training",
+      "holdout",
+      "midlatitude",
+      "dev12",
+      "north_india",
+      "iran_plateau",
+      "iberia",
+      "japan",
+      "mexico",
+      "east_australia",
+      "pacific_nw"
+    ],
+    "constraint_limits": {
+      "overall": 0.995,
+      "temperature": 1.01,
+      "rain": 1.01,
+      "training": 1,
+      "holdout": 1,
+      "midlatitude": 1,
+      "dev12": 1,
+      "north_india": 0.95,
+      "iran_plateau": 1.02,
+      "iberia": 1.02,
+      "japan": 1.02,
+      "mexico": 1.02,
+      "east_australia": 1.02,
+      "pacific_nw": 1.02
+    },
+    "responses": {
+      "overall": [
+        1.0,
+        0.9967548197450902,
+        0.9952672847571431,
+        0.9949478958361565,
+        0.997598040254726,
+        0.9981175916601557,
+        0.9949359112648908,
+        0.9970478980727523
+      ],
+      "temperature": [
+        1.0,
+        1.0013970028355839,
+        1.0024547752864819,
+        1.0053403785505792,
+        1.0085343903215298,
+        0.9968227210361256,
+        1.0062754664077893,
+        1.009239247134473
+      ],
+      "rain": [
+        1.0,
+        0.9921126366545965,
+        0.9880797942278043,
+        0.9845554131217338,
+        0.9866616901879222,
+        0.9994124622841857,
+        0.9835963561219924,
+        0.9848565490110315
+      ],
+      "training": [
+        1.0,
+        0.9952241109551017,
+        0.9928236621909794,
+        0.9920303113675657,
+        0.9968802862101283,
+        0.9939143801094381,
+        0.9917061143564341,
+        0.9927288240799949
+      ],
+      "holdout": [
+        1.0,
+        0.9976856150484308,
+        0.9954098808498097,
+        0.9939263606080531,
+        0.9994599812373903,
+        0.994040739867798,
+        0.9998569603492555,
+        1.0093864252378668
+      ],
+      "midlatitude": [
+        1.0,
+        0.997555272706276,
+        0.996461598849133,
+        0.9983942677706843,
+        1.0019070098264236,
+        0.9959933092027796,
+        0.9961778635873954,
+        0.9961872009857067
+      ],
+      "dev12": [
+        1.0,
+        0.9966417158012867,
+        0.9955748621003929,
+        0.9947719216123275,
+        0.994532691814598,
+        1.003104243699896,
+        0.9936965379334081,
+        0.9948858197170001
+      ],
+      "north_india": [
+        1.0,
+        0.9641412736713167,
+        0.9567058765893691,
+        0.9319481082942078,
+        0.8813486010543142,
+        1.0735381940992006,
+        0.9047963533762482,
+        0.8823134977651823
+      ],
+      "iran_plateau": [
+        1.0,
+        0.9992399706443067,
+        0.9948914599693602,
+        0.999729798060056,
+        1.0353960579279036,
+        0.9858426788751112,
+        0.9945281465899042,
+        0.9902572317978171
+      ],
+      "iberia": [
+        1.0,
+        0.9876767672687137,
+        0.9772236776146342,
+        0.9654766140308662,
+        0.9686055855490117,
+        0.9958927392082157,
+        0.96754339030577,
+        0.9706689042419537
+      ],
+      "japan": [
+        1.0,
+        1.0067219349509773,
+        1.0112553373637767,
+        1.0121769744536693,
+        1.0054155655829058,
+        1.0079615916502975,
+        1.0238171258805835,
+        1.039539947339346
+      ],
+      "mexico": [
+        1.0,
+        1.015772172286163,
+        1.0280714331756942,
+        1.0356225871100402,
+        1.0236637473459018,
+        1.0117945071523846,
+        1.0348094787309834,
+        1.0337226833974442
+      ],
+      "east_australia": [
+        1.0,
+        0.9683751014315352,
+        0.9486894574854339,
+        0.9412339621101311,
+        0.9775289249869012,
+        0.9653800211811197,
+        0.9143401413383005,
+        0.8877347972081691
+      ],
+      "pacific_nw": [
+        1.0,
+        1.0155320195019109,
+        1.0303862450459598,
+        1.0490774285686766,
+        1.0471189339625662,
+        1.0021008096229256,
+        1.0524810009702117,
+        1.0562676604647896
+      ]
+    },
+    "proposal": null,
+    "model_integrations": 0,
+    "eligible_for_adoption": false,
+    "interpretation": "A convex surrogate is only a proposal model. No mixed response is measured climate skill; the diagnostic cannot select a candidate. This is not a bound on the nonlinear model or other physics."
+  },
+  "scope": "Modern Earth solar/radius/greenhouse reference, tilt/spin/orbit/calendar via joint.earth_profile; mapped and exterior observed geography, strict numerical criteria, observed-global-rain remote descent, modelled SST, column shear ratio1 and moisture-speed factor unchanged. Only listed shared surface drag/pressure-amplitude parameters move; the model remains locally nonconservative and conditionally forced.",
+  "provenance": {
+    "review_sha256": "de26e32bb4ccd9523368c4faefc6065cb1aae2b95b3f24ce210b93058cbac903",
+    "protocol_sha256": "17531e03bce83083109dfce5a1af41bb9c1a7a30f4dd38a16ed09ef24546d70e",
+    "plotter_sha256": "cd5ff0ac2044787d53b50e39a6e26d234754300f5e8a339e61ebb678ad14bab9",
+    "image_sha256": "4fde228bc4d5b780f261f2bc418b8c462a04935a9cd3ea78bfe49b78c9b5dc62"
+  }
+}

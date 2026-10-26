@@ -7,6 +7,12 @@ Mexico/Pacific NW protections. Neither changes adopted physics or atlas climates
 The launcher's **Climate accuracy and joint fit** page now shows both results,
 charts and downloads. See the [shear](reports/COLUMN_SHEAR_20261026.md) and
 [surface momentum](reports/SURFACE_MOMENTUM_20261026.md) records.
+The subsequent 155-run land/ocean and pressure-balance test also fails the
+complete regional protections. A hard-constrained response-hull check finds
+no eligible interpolation, generates no candidate and runs no extra climate.
+See the [momentum balance report](reports/MOMENTUM_BALANCE_20261026.md).
+`python -I scripts/prepare_woa18.py --download` prepares the complete monthly
+ocean reference for scientific checks; its default is read-only verification.
 
 **Joint-fit input separation, 26 October 2026:** new constrained experiments can
 compose shared physics with separate Earth and invented-world inputs. Fantasy

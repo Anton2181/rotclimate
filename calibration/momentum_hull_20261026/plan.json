@@ -1,0 +1,11 @@
+{
+  "declared_before_new_proposal_results": true,
+  "purpose": "Check whether a convex response surrogate built from the seven completed shared-momentum candidates and r39 admits a proposal satisfying every existing Earth protection. Use actual paired development errors only to propose physical parameter vectors, never as simulated mixed climates or measured skill.",
+  "parents": ["output/surface_momentum_20261026", "output/momentum_balance_20261026"],
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "fields": ["bl_drag_land", "bl_drag_ocean", "slp_large", "slp_local"],
+  "constraints": "Nonnegative convex weights summing to1. Original policy_v2: combined S<=.995; each of4 groups S<=1; temperature and rain ratio<=1.01. North India rain ratio<=.95; Iran rain ratio<=1.02; combined S<=1.02 in Iberia, Japan, Mexico, eastern Australia, Pacific NW. No planetary/numerical/other-physics differences. All benchmark scientific sources, observations, region definitions and case identities must match; every solve and cell-file checksum verified.",
+  "proposal_rule": "One LP minimizing predicted combined S under ALL constraints. If infeasible, create no parameter proposal and run no model integration. If feasible, produce at most one physical parameter vector from convex weights and require actual full31, integrated SST/wind, fine and established6 gates in a separate frozen generated plan, using the same limits as the parent. No weight interpolation is an observed result or adoption.",
+  "diagnostic": "If strict LP infeasible, one additional LP may omit only the overall-improvement threshold to diagnose the best predicted S under the remaining protections. It MUST NOT generate an eligible proposal or a climate run. Label as a surrogate-hull diagnostic, not a lower bound on the actual nonlinear model or proof that physically realistic improvement is impossible.",
+  "interpretation": "Reused development evidence. Preserve all failed parents and criteria; no extra validation samples, relaxed adoption criteria or planet forcing. This evaluates the sampled momentum neighborhood only. Structural changes or other shared physical blocks require a separate experiment. No atlas-climate/economic changes."
+}

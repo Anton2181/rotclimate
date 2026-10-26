@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Active follow-up — momentum balance:** completed earlier results and plots
+**Completed follow-up — momentum balance:** completed earlier results and plots
 are pushed at `1ce0c5e`; column-shear implementation at `f22b0eb`.
 The separate `calibration/momentum_balance_20261026/plan.json` fixes4 candidates:
 land-only nominal drag; ocean-only nominal drag; nominal drags with both
@@ -17,8 +17,38 @@ validation samples. Fresh31 r39 errors/geography must match the archive.
 fixed-source version is preserved at `1ce0c5e`. Do not resume its completed
 parent folder under this updated runner. New run:
 `--plan calibration/momentum_balance_20261026/plan.json --out output/momentum_balance_20261026`.
-Log `/tmp/momentum_balance_20261026.log`, shell10626. Do not edit model sources
-or the frozen runner/plan while it runs. The earlier two pilots have ended.
+Log `/tmp/momentum_balance_20261026.log`; shell10626 has ended. All155 runs
+pass numerical checks and all31 fresh reference errors/geography match r39.
+None qualifies. Pressure×1.1 passes policy_v2 with S=.994936 and rainfall
+loss-1.64%, but fails Japan/Mexico/PacificNW protections. Other candidates
+fail the old group/overall or extra regional criteria. No ocean/fine/six
+stages run; no r40. Runner/plan source committed at `908edf6`.
+
+`scripts/propose_momentum_balance.py` verifies paired scientific epochs,
+case identities, records and cell-file hashes across all7 momentum candidates
+plus baseline. Predeclared `calibration/momentum_hull_20261026/plan.json` uses
+hard simultaneous convex-response constraints. Strict LP infeasible; diagnostic
+LP omitting only overall threshold also infeasible. NO proposal or extra model
+run. This is a surrogate-neighborhood result, not a nonlinear impossibility
+proof. Records `output/momentum_hull_20261026/`. Original failures unmodified.
+
+All3 completed experiments (28+124+155=307 numerical passes) now appear on the
+normal hub's Climate accuracy page, with5 PNGs total and4 JSON downloads across
+the page. Exporters verify source epochs and actual scientific evidence.
+Added `prepare_woa18.py`: read-only default verifies12 raw-source hashes,
+derived grid/coverage/provenance. `--download` obtains missing NOAA profiles,
+validates gzip and atomically builds a missing SST cache. `--rebuild` is explicit
+for a deliberate source revision. Current data checked, never rebuilt during
+experiments. 60 core/wind/gate +6 ocean-preparation +6 hull tests pass.
+Reports: `reports/MOMENTUM_BALANCE_20261026.md`, plus earlier two momentum reports.
+All3 normal atlas climate/food/population/trade fields remain unchanged. No
+integration is running. The actual launcher server remains on8766.
+Final QA: 72 focused tests; all3 browser suites and companion desktop/mobile
+light/dark checks pass;502 byte-exact staged Windows assets;935-file portable
+bundle validates all manifest hashes, hub/companion links and fresh launcher.
+Receipts under `output/momentum_balance_20261026/{verification,checkout,bundle_check,atlas_checks}.json`.
+`verification.json` binds all307 successful scientific records by SHA-256.
+Normal atlas/data folders unchanged. New default path still legacy; no r40.
 
 **Completed round — moisture-column pressure shear:** opt-in
 `moisture_pressure_drag_ratio` (default1 exact legacy), classified as shared
