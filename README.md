@@ -1,5 +1,10 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Terrain side project:** a [source audit and constrained-generation plan](reports/CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md)
+shows the existing ramps/rivers and explains how tier-respecting ridges, valleys
+and drainage could be generated without conditioning on painted climates.
+The baseline illustration is an audit, not a newly generated/adopted DEM.
+
 **Two-branch and terrain-tracer development,26 October2026:** three completed
 fixed pilots add133 passing regional integrations. Separate moist inflow and
 upper return restore monsoon supply; a common-mass correction preserves uniform

@@ -14,7 +14,7 @@ from scipy import ndimage as ndi
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
-from matplotlib.colors import ListedColormap,LightSource
+from matplotlib.colors import ListedColormap,LinearSegmentedColormap,LightSource
 from matplotlib.patches import Patch
 from local_benchmark_protocol import file_hash,write_json
 from rotclimate.config import SOURCE
@@ -39,7 +39,8 @@ def main():
     fig,axes=plt.subplots(2,1,figsize=(13,12),constrained_layout=True)
     extent=(0,tier.shape[1]*pixel_km,tier.shape[0]*pixel_km,0)
     axes[0].imshow(tier,cmap=cmap,vmin=-.5,vmax=4.5,extent=extent,interpolation='nearest')
-    shaded=LightSource(azdeg=315,altdeg=45).shade(h,cmap=plt.get_cmap('terrain'),vert_exag=4,
+    land_cmap=LinearSegmentedColormap.from_list('land_relief',['#c4d8a0','#e0d49a','#b78d60','#a9a799','#f6f5ef'])
+    shaded=LightSource(azdeg=315,altdeg=45).shade(h,cmap=land_cmap,vert_exag=4,
         dx=pixel_km*1000,dy=pixel_km*1000,blend_mode='soft')
     shaded[~land,:3]=[216/255,231/255,237/255]
     axes[1].imshow(shaded,extent=extent,interpolation='nearest')

@@ -2,11 +2,27 @@
 
 ## Current status
 
+**ACTIVE supervised calibration — read before changing source:** monitor
+PID63569, runner63571, source commit4dd3ff6. Same fixed70-run plan
+calibration/shared_wind_20261026/plan.json, actual output
+output/shared_wind_20261026_thread1/. Atomic status.json / monitor_pid.json
+and run.log show live progress. Snapshot2026-10-26T14:28:01.778219+00:00:
+23/70 completed,23 passed,0 failed;
+all14 exact controls passed and first shared-wind candidates are running.
+This is a continuing detached process, not waiting for another chat message.
+Both numerical thread settings are explicitly1. Stop ceiling2h or any frozen
+source/input change; own child group cleaned up. Do independent terrain/review
+work while it runs. Do NOT mutate core/calibration helper files without first
+reading status; changing them stops this supervised job. If complete, review
+out/review.json and any out/full/review.json before claiming qualification or
+publishing a world fit. No atlas climate has been adopted by this job yet.
+
+
 **Latest completed rounds:** two-layer source119d54d49/49; common-mass
 source38bc4e149/49; rain-threshold follow-up35/35. Total this turn133 strict
 integrations,70 exact control runs (28+28+14). Current series616 attempts:
-612 passes,4 original failures preserved. No candidate qualifies; no full31/
-fine/established6 stage ran. No adopted fit or normal atlas climate/economy
+612 passes,4 original failures preserved. None of those completed pilot candidates qualifies; no full31/
+fine/established6 stage ran for those pilots. No adopted fit or normal atlas climate/economy
 changed. Global/city headlines stay old; all regions are reused development.
 
 Common-mass flag moisture_mass_tracer=False by default, explicitly shared.
@@ -784,9 +800,11 @@ ridges/passes and compare coarse terrain statistics under unchanged physics.
 Do not silently load renderer erosion or infer climate gains from hillshade.
 
 Initial unattended shared-wind launch monitor62552/runner62554 was gracefully
-stopped before any completed regional record: it inherited multithread BLAS
-settings instead of the benchmark’s1-thread settings. Preserve
+stopped before any completed regional record. It did not explicitly pin the
+benchmark thread settings; the restart makes that numerical condition explicit. Preserve
 output/shared_wind_20261026/ as an incomplete setup. Supervisor now explicitly
 sets OPENBLAS_NUM_THREADS=1,OMP_NUM_THREADS=1; the completed-child test checks
 the actual inherited values. All3 supervisor tests pass after correction.
-Use fresh output/shared_wind_20261026_thread1 for restart, same fixed plan.
+The active restart uses output/shared_wind_20261026_thread1, same fixed plan;
+see the top active-job block. The initial incomplete setup is not a passed
+scientific comparison and contributes no completed run to the616-round count.
