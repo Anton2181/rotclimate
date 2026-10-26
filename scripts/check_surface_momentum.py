@@ -26,6 +26,22 @@ from rotclimate.numerics import matrix_product
 PROTECTED = ['north_india', 'iran_plateau', 'iberia', 'japan', 'mexico', 'east_australia', 'pacific_nw']
 
 
+def branch_failures(rows,params):
+    """Keep independent branch/mass-tracer guards through every later gate."""
+    failures=[]
+    for region,row in rows.items():
+        n=row.get('numerics',{})
+        if params.moisture_two_layer:
+            b=n.get('two_layer_transport',{})
+            if (b.get('max_scaled_dry_mass_divergence',float('inf'))>1e-10
+                    or b.get('maximum_branch_speed_ms',float('inf'))>60
+                    or b.get('p95_branch_speed_ms',float('inf'))>25):
+                failures.append(region+': branch mass/speed certificate failed')
+        if params.moisture_mass_tracer and n.get('mass_tracer_transport',{}).get('mass_aware_advection_diffusion_storms') is not True:
+            failures.append(region+': common-mass tracer certificate missing')
+    return failures
+
+
 def ocean_one(job):
     name, region, params, identity, folder = job
     folder = Path(folder)
@@ -115,7 +131,7 @@ def main():
         else:
             cp = json.loads((folder/'protocol.json').read_text())
             review = evaluate(reference, candidate, rp, cp, policy)
-            protections = []
+            protections = branch_failures(candidate['regions'],all_params[name])
             for region in PROTECTED:
                 b, c = reference['regions'][region], candidate['regions'][region]
                 rain = c['rain']['loss']/b['rain']['loss']
@@ -162,6 +178,7 @@ def main():
                         failures.append(region+': SST protection failed')
                     if c['column_speed']['maximum_ms'] > 60 or c['column_speed']['p95_ms'] > 25:
                         failures.append(region+': speed protection failed')
+                failures.extend(branch_failures(candidates,all_params[name]))
                 ocean_reviews[name] = dict(passed=not failures, failures=failures)
         names = ['california','western_europe','japan','new_zealand']
         qualified = [name for name in finalists if ocean_reviews[name]['passed']]
@@ -177,7 +194,8 @@ def main():
                     s = paired_score(out/'fine_reference', folder, names)
                     b = json.loads((out/'fine_reference/summary.json').read_text())
                     ratio = candidate['regions']['north_india']['rain']['loss']/b['regions']['north_india']['rain']['loss']
-                    fine[name] = dict(S=s, north_india_rain_loss_ratio=ratio, passed=s<=1.01 and ratio<=.98)
+                    branch_errors=branch_failures(candidate['regions'],all_params[name])
+                    fine[name] = dict(S=s, north_india_rain_loss_ratio=ratio,branch_failures=branch_errors, passed=s<=1.01 and ratio<=.98 and not branch_errors)
                 if fine[name]['passed']:
                     selected = name
                     break
@@ -188,7 +206,8 @@ def main():
         a = benchmark(params/'reference.json', out/'established_reference', names, 56.0, specs)
         b = benchmark(params/f'{selected}.json', out/'established_candidate', names, 56.0, specs)
         s = paired_score(out/'established_reference', out/'established_candidate', names) if a and b else None
-        established = dict(S=s, passed=s is not None and s<=1.01, note='Reused established regions')
+        branch_errors=branch_failures(b['regions'],all_params[selected]) if b else ['Missing established solve']
+        established = dict(S=s,branch_failures=branch_errors, passed=s is not None and s<=1.01 and not branch_errors, note='Reused established regions')
     adopted = bool(selected and established and established['passed'])
     profile = None
     if adopted:

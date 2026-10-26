@@ -31,9 +31,30 @@ def return_branches(lower_u, lower_v, balanced_u, balanced_v, upper_q_ratio, *, 
 
 class LayerFluxSolver(AdvectionSolver):
     """Weighted sum of actual directional flux operators; reaction counted once."""
-    def __init__(self, ny, nx, dx):
+    def __init__(self, ny, nx, dx, column_mass=None):
         super().__init__(ny, nx, dx, scheme='upwind', form='flux')
         self.layers = None
+        self.column_mass=None if column_mass is None else np.asarray(column_mass,float).copy()
+        if self.column_mass is not None and (self.column_mass.shape!=(ny,nx)
+                or not np.isfinite(self.column_mass).all() or (self.column_mass<=0).any()):
+            raise ValueError('Need matching finite positive column masses')
+
+    def mass_coefficients(self,u,v,K,lam):
+        """Face mass times donor q=W/M; diffuse q with the same face mass."""
+        if np.ndim(K)!=0:raise ValueError('Mass-aware flux requires uniform diffusivity')
+        m=self.column_mass;dx=self.dx;wr=-v
+        me=.5*(m+np.roll(m,-1,1));mw=.5*(m+np.roll(m,1,1))
+        ms=.5*(m+np.roll(m,-1,0));mn=.5*(m+np.roll(m,1,0))
+        ue=.5*(u+np.roll(u,-1,1));uw=.5*(u+np.roll(u,1,1))
+        vs=.5*(wr+np.roll(wr,-1,0));vn=.5*(wr+np.roll(wr,1,0))
+        kd=K/dx**2
+        ce=(np.minimum(ue,0)/dx-kd)*me/np.roll(m,-1,1)
+        cw=(-np.maximum(uw,0)/dx-kd)*mw/np.roll(m,1,1)
+        cs=(np.minimum(vs,0)/dx-kd)*ms/np.roll(m,-1,0)
+        cn=(-np.maximum(vn,0)/dx-kd)*mn/np.roll(m,1,0)
+        diag=lam+(np.maximum(ue,0)*me-np.minimum(uw,0)*mw+np.maximum(vs,0)*ms-np.minimum(vn,0)*mn)/(dx*m)
+        diag=diag+kd*(me+mw+ms+mn)/m
+        return ce,cw,cs,cn,diag
 
     def set_layers(self, branches):
         if (not branches or not np.isfinite([b[0] for b in branches]).all()
@@ -51,7 +72,8 @@ class LayerFluxSolver(AdvectionSolver):
         for weight, east, north in self.layers:
             if weight == 0:
                 continue
-            own = super().coefficients(east, north, K, lam)
+            own = (super().coefficients(east,north,K,lam) if self.column_mass is None
+                   else self.mass_coefficients(east,north,K,lam))
             if result is None:
                 result = [weight*a for a in own]
             else:

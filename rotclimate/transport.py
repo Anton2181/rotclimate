@@ -16,21 +16,33 @@ from .numerics import matrix_product
 DAY = 86400.
 
 
-def vapor_face_fluxes(W,u,v,*,layers=None):
+def vapor_face_fluxes(W,u,v,*,layers=None,mass=None):
     """Upwind vapor flux in mm*m/s across rightward/downward shared faces."""
     if layers is not None:
         result=None
         for weight,east,north in layers:
             if weight==0:continue
-            faces=vapor_face_fluxes(W,east,north)
+            faces=vapor_face_fluxes(W,east,north,mass=mass)
             if result is None:result=[weight*a for a in faces]
             else:
                 for i,value in enumerate(faces):result[i]+=weight*value
         return tuple(result)
     east=.5*(u[:,1:]+u[:,:-1])
     south=-.5*(v[1:]+v[:-1])
+    if mass is not None:
+        q=W/mass
+        return (.5*(mass[:,1:]+mass[:,:-1])*east*np.where(east>=0,q[:,:-1],q[:,1:]),
+                .5*(mass[1:]+mass[:-1])*south*np.where(south>=0,q[:-1],q[1:]))
     return (east*np.where(east>=0,W[:,:-1],W[:,1:]),
             south*np.where(south>=0,W[:-1],W[1:]))
+
+
+def diffusion_face_fluxes(W,diffusion,dx,*,mass=None):
+    if mass is None:
+        return -diffusion*(W[:,1:]-W[:,:-1])/dx,-diffusion*(W[1:]-W[:-1])/dx
+    q=W/mass
+    return (-diffusion*.5*(mass[:,1:]+mass[:,:-1])*(q[:,1:]-q[:,:-1])/dx,
+            -diffusion*.5*(mass[1:]+mass[:-1])*(q[1:]-q[:-1])/dx)
 
 
 def face_divergence(east,south,dx):
@@ -43,18 +55,17 @@ def boundary_supply(east,south,dx):
                          south[0,1:-1].sum()-south[-1,1:-1].sum()))
 
 
-def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,layers=None):
+def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,layers=None,mass=None):
     """Steady padded-domain vapor ledger, including physical border exchange.
 
     This is a local flat-grid ledger, not a closed planet or a transient
     atmosphere. Column drying counts in net evaporation. Storm exchange is
     only a boundary supply if that separate operator conserves water.
     """
-    east,south=vapor_face_fluxes(W,u,v,layers=layers)
+    east,south=vapor_face_fluxes(W,u,v,layers=layers,mass=mass)
     advection=-DAY*face_divergence(east,south,dx)
     adv_boundary=boundary_supply(east,south,dx)
-    de=-diffusion*(W[:,1:]-W[:,:-1])/dx
-    ds=-diffusion*(W[1:]-W[:-1])/dx
+    de,ds=diffusion_face_fluxes(W,diffusion,dx,mass=mass)
     diff=-DAY*face_divergence(de,ds,dx)
     diff_boundary=boundary_supply(de,ds,dx)
     storm=DAY*exchange_rate*(mixed_water-W)
@@ -73,7 +84,7 @@ def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,
                 transport_relative_cancellation=cancellation/transport_scale)
 
 
-def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration',layers=None):
+def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration',layers=None,mass=None):
     """Signed sources in mm/day; exact upwind/central discrete transport.
 
     Evaporation and rain are mm/day, exchange_rate is 1/s, W is mm.
@@ -84,16 +95,20 @@ def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mix
     above, below = np.roll(W, 1, 0), np.roll(W, -1, 0)
     wr = -v
     if form == 'concentration':
-        if layers is not None:raise ValueError('Layered transport requires flux form')
+        if layers is not None or mass is not None:raise ValueError('Layered/mass-aware transport requires flux form')
         adv = (np.maximum(u, 0) * (W - left) + np.minimum(u, 0) * (right - W)
                + np.maximum(wr, 0) * (W - above) + np.minimum(wr, 0) * (below - W)) / dx
     elif form == 'flux':
         adv=np.full_like(W,np.nan,dtype=float)
-        adv[1:-1,1:-1]=face_divergence(*vapor_face_fluxes(W,u,v,layers=layers),dx)
+        adv[1:-1,1:-1]=face_divergence(*vapor_face_fluxes(W,u,v,layers=layers,mass=mass),dx)
     else:
         raise ValueError('Unknown moisture transport form: '+form)
     lap = (left + right + above + below - 4 * W) / dx**2
-    terms = dict(advection=-DAY * adv, diffusion=DAY * diffusion * lap,
+    diff=DAY*diffusion*lap
+    if mass is not None:
+        diff=np.full_like(W,np.nan,dtype=float)
+        diff[1:-1,1:-1]=-DAY*face_divergence(*diffusion_face_fluxes(W,diffusion,dx,mass=mass),dx)
+    terms = dict(advection=-DAY * adv, diffusion=diff,
                  storm_exchange=DAY * exchange_rate * (mixed_water - W))
     terms['residual'] = evaporation + sum(terms.values()) - rain
     # Preserve absolute instantaneous errors before averaging; signed residuals

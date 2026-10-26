@@ -107,7 +107,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                 P = P + exchange * condensed * DAY
                 mixed = mixed + condensed
             terms = moisture_terms(W, u, v, solver.dx, p.moisture_diffusion, E, P,
-                                   exchange, mixed,form=getattr(solver,'form','concentration'),layers=getattr(solver,'layers',None))
+                                   exchange, mixed,form=getattr(solver,'form','concentration'),layers=getattr(solver,'layers',None),
+                                   mass=getattr(solver,'column_mass',None))
             residual = float(np.max((terms['absolute_residual'] / np.maximum(P + np.abs(E), 0.1))[1:-1, 1:-1]))
             if not np.isfinite(residual):
                 raise FloatingPointError('Nonfinite moisture-equation residual')

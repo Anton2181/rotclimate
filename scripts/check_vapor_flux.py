@@ -59,6 +59,11 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_mass_tracer_transport'):
+                    tracer=c.get('numerics',{}).get('mass_tracer_transport',{})
+                    if (c.get('params',{}).get('moisture_mass_tracer') is not True
+                            or tracer.get('mass_aware_advection_diffusion_storms') is not True):
+                        failures.append(region+': missing consistent mass-tracer evidence')
                 if plan.get('require_two_layer_transport'):
                     branches=c.get('numerics',{}).get('two_layer_transport',{})
                     if (c.get('params',{}).get('moisture_two_layer') is not True

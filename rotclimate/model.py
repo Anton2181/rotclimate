@@ -265,6 +265,13 @@ class ClimateModel:
             raise ValueError('moisture_upper_q_ratio must be in[0,1]')
         if params.moisture_two_layer and not params.moisture_mass_balance:
             raise ValueError('Two-layer transport requires the stationary dry-column mass basis')
+        if not isinstance(params.moisture_mass_tracer,(bool,np.bool_)):
+            raise ValueError('moisture_mass_tracer must be boolean')
+        if params.moisture_mass_tracer:
+            if not params.moisture_mass_balance or params.eddy_moisture_height_km!=0:
+                raise ValueError('Mass tracer needs the mass basis and no separate storm-mass height')
+            if params.eddy_rate>0 and params.eddy_moisture_scheme not in ('conservative','conservative-rainout'):
+                raise ValueError('Mass tracer needs conservative storm transport')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -286,7 +293,7 @@ class ClimateModel:
         self.solver.recover = params.solver_recover
         self.moisture_solver=self.solver
         if params.moisture_transport_form == 'flux':
-            if params.moisture_two_layer:
+            if params.moisture_two_layer or params.moisture_mass_tracer:
                 from .layer_transport import LayerFluxSolver
                 self.moisture_solver=LayerFluxSolver(g.ny,g.nx,g.dx_m)
             else:
@@ -298,6 +305,8 @@ class ClimateModel:
         if params.moisture_mass_balance:
             from .column_mass import ColumnMassProjection
             self.column_projector = ColumnMassProjection(self.g.elev, self.g.dx_m)
+            if params.moisture_mass_tracer:
+                self.moisture_solver.column_mass=self.column_projector.mass
 
     # ------------------------------------------------------------------ static
     def _static_fields(self):
@@ -1204,6 +1213,7 @@ class ClimateModel:
             # the column flow for its moisture import, with the same existing
             # exclusion of heating-driven inflow from convergence feedback.
             layers=None
+            tracer_mass=self.column_projector.mass if p.moisture_mass_tracer else None
             if self.column_projector is not None:
                 lower_u,lower_v=uq,vq
                 uq, vq, mass_info = self.column_projector.project(uq, vq)
@@ -1223,6 +1233,9 @@ class ClimateModel:
                         raise RuntimeError('Two-layer dry mass cancellation failed')
                     self.layer_checks.append(dict(day=float(d),max_scaled_dry_mass_divergence=scaled,
                         maximum_branch_speed_ms=float(speeds.max()),p95_branch_speed_ms=float(np.percentile(speeds,95))))
+                elif p.moisture_mass_tracer:
+                    layers=((1.,uq,vq),)
+                    self.moisture_solver.set_layers(layers)
             column_shear = (p.moisture_pressure_drag_ratio != 1 or p.moisture_thermal_height_km > 0
                             or p.moisture_mass_balance)
             ud, vd = (uq, vq) if column_shear else (u, v)
@@ -1441,10 +1454,12 @@ class ClimateModel:
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
+                if p.moisture_mass_tracer:mass=tracer_mass
                 exchange, mix = conservative_exchange(exchange, lambda a: gauss(a, sigW, mode='reflect'), mass)
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative-rainout':
                 from .storms import RainoutExchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
+                if p.moisture_mass_tracer:mass=tracer_mass
                 crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
                 mix = RainoutExchange(exchange,
                     lambda a: gauss(a, sigW / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
@@ -1478,7 +1493,7 @@ class ClimateModel:
                 if condensate is not None:
                     target=target+condensate(W)
                 net=E if sink is None else E-sink*W*DAY
-                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers))
+                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers,mass=tracer_mass))
             if self.trace_cells is not None and n >= spinup:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells
@@ -1524,7 +1539,7 @@ class ClimateModel:
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
-                                           form=p.moisture_transport_form,layers=layers)
+                                           form=p.moisture_transport_form,layers=layers,mass=tracer_mass)
                     # Expose the source/sink pieces already used above. These
                     # are observations of the local equation, not new physics.
                     terms['evaporation'] = E
@@ -1569,6 +1584,9 @@ class ClimateModel:
                 maximum_branch_speed_ms=max(r['maximum_branch_speed_ms'] for r in self.layer_checks),
                 p95_branch_speed_ms=max(r['p95_branch_speed_ms'] for r in self.layer_checks),steps=self.layer_checks)
             numerics['all_checks_passed'] &= numerics['two_layer_transport']['max_scaled_dry_mass_divergence']<=1e-10
+        if p.moisture_mass_tracer:
+            numerics['mass_tracer_transport']=dict(mass_aware_advection_diffusion_storms=True,
+                mass_scale_height_m=8000,scope='Fixed relative air mass, donor W/M and common-face mass; sources/rain unchanged')
         if cycle is not None:
             numerics['annual_cycle']=cycle.report()
             numerics['annual_cycle']['extra_spinup_years']=p.seasonal_spinup_years

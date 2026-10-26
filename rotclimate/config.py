@@ -236,6 +236,7 @@ class Params:
     moisture_mass_balance: bool = False  # opt-in stationary dry-column projection of the moisture wind
     moisture_two_layer: bool = False  # opt-in separate moist inflow and compensating upper transport
     moisture_upper_q_ratio: float = .15  # q_upper/q_lower for fixed two-branch humidity profile
+    moisture_mass_tracer: bool = False  # opt-in common air mass for vapor advection, diffusion and storms
     moisture_transport_form: str = "concentration"  # opt-in "flux": conservative face transport; requires flux_convergence=0
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 

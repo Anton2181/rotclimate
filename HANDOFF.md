@@ -2,6 +2,25 @@
 
 ## Current status
 
+**Next fixed mass-tracer pilot ready:** new opt-in shared
+`moisture_mass_tracer=False` preserves all previous paths. When enabled, the
+same projected relative M is used for branch donor W/M advection, K*Mface*gradq
+diffusion and conservative storm exchange. Matrix, instantaneous residual and
+boundary ledger share actual mass-aware faces. Equal-q/no-source manufactured
+cases over variable terrain preserve q for single and two branches; random
+operator/ledger identity, signs, boundary cancellation and coupled budgets pass.
+Requires mass-balance basis and conservative storms, rejects separate storm
+mass-height setting. No planetary, rain-source or numerical-tolerance change.
+
+New plan calibration/mass_tracer_20261026/plan.json repeats49 cases:28 exact
+controls (including previous two-layer.2 and balanced single-layer fields),
+21 corrected .1/.2/.3 trials. Same seven-region/error/ocean/outside-wind and
+branch safeguards. Extended full runner checks branch mass/speed/common-mass
+certificates in full31/ocean/fine/established stages too. New source epoch;
+do not resume/reexport completed old folders under this core. No new integration
+at this source milestone. Run check_vapor_flux.py --plan
+calibration/mass_tracer_20261026/plan.json --out output/mass_tracer_20261026.
+
 **Completed two-branch pilot:** source119d54d,49/49 strict solves pass;
 28 exact control runs precede21 candidates. Fixed plan
 calibration/two_layer_20261026/plan.json. No candidate qualifies, no full31/fine.
