@@ -665,6 +665,13 @@ class ClimateModel:
             diagnose_moisture=False,temperature_retry=None) -> Result:
         p, g = self.p, self.g
         nt = steps or p.steps_per_year
+        from .seasonal import integration_order,CycleMonitor
+        dt_days = p.year_days / nt
+        primer = max(spinup, int(round(117.0 / dt_days)))
+        order,spinup = integration_order(nt,primer,p.seasonal_spinup_years)
+        if p.seasonal_require_convergence and p.seasonal_spinup_years<1:
+            raise ValueError('Annual-cycle convergence requires at least one extra spin-up year')
+        cycle = CycleMonitor(nt,g.inmap & g.land) if p.seasonal_spinup_years else None
         days = (np.arange(nt) + 0.5) * p.year_days / nt
         shape = (nt, g.ny, g.nx)
         out = {k: np.zeros(shape, np.float32) for k in ("T", "Tsl", "P", "W", "u", "v", "E")}
@@ -703,10 +710,7 @@ class ClimateModel:
         self.moisture_converged = []
         self.moisture_scaled_residual = []
         self.storm_budgets = []
-        dt_days = p.year_days / nt
-        spinup = max(spinup, int(round(117.0 / dt_days)))      # ~4 months whatever the step
         soil_keep = np.exp(-dt_days / p.soil_memory_days) if p.soil_memory_days > 0 else 0.75
-        order = list(range(nt - spinup, nt)) + list(range(nt))
         for n, k in enumerate(order):
             d = days[k]
             s = self.season_index(d, p.circulation_lag_days)
@@ -1393,6 +1397,9 @@ class ClimateModel:
             if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
                 swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days
                 swe = np.where(land, np.minimum(swe - np.minimum(swe, 3.5 * np.maximum(T_rep, 0.0) * dt_days), 3000.0), 0.0)
+            if cycle is not None and n>=primer:
+                cycle.update(k,dict(temperature=T_rep,rain=P,water=W,soil_water=soil_w,
+                                    recycled_rain=soilP,snow_water=swe))
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
@@ -1432,6 +1439,13 @@ class ClimateModel:
         numerics['all_checks_passed']=(numerics['linear_unconverged']==0 and
                                       numerics['temperature_unconverged']==0 and numerics['moisture_checked'] and
                                       numerics['moisture_unconverged']==0)
+        if cycle is not None:
+            numerics['annual_cycle']=cycle.report()
+            numerics['annual_cycle']['extra_spinup_years']=p.seasonal_spinup_years
+            numerics['annual_cycle']['primer_steps']=primer
+            numerics['annual_cycle']['required']=p.seasonal_require_convergence
+            if p.seasonal_require_convergence and not numerics['annual_cycle']['domain_repeats']:
+                raise RuntimeError('Annual climate cycle failed repeatability limits after '+str(p.seasonal_spinup_years)+' extra spin-up years')
         if self.storm_budgets:
             numerics['storm_exchange'] = dict(scheme=p.eddy_moisture_scheme,
                 max_relative_closure=max(b['relative_closure'] for b in self.storm_budgets),

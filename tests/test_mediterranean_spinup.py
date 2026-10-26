@@ -114,7 +114,7 @@ def test_default_plan_never_launches_or_writes(monkeypatch, tmp_path):
     assert not out.exists()
 
 
-@pytest.mark.parametrize('warmup_years', [1, 2])
+@pytest.mark.parametrize('warmup_years', [1, 2, 3])
 def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(monkeypatch, warmup_years):
     # Exercise calendar/state storage with constant fake solves on nine cells;
     # no real grid, EBM, numerical solver or seasonal climate simulation runs.
@@ -137,6 +137,7 @@ def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(mo
     model.thermal_wind = lambda anomaly:(zeros, zeros)
     model.sst = lambda day,To,Tl:To
     model.col_sigma = model.conv_sigma = 1.
+    model.synoptic_scale = 1.
     model.marine_geom = None
     model.trace_cells = None
     model.dhdx = model.dhdy = model.basin_side = zeros

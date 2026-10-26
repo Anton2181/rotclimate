@@ -2,6 +2,33 @@
 
 ## Current status
 
+**ACTIVE new round:** `scripts/check_seasonal_cycle.py`, log
+`/tmp/seasonal_cycle_verified_runtime.log`, shell session2965, outputs
+`output/seasonal_cycle_20261026_verified/`. Frozen plan:
+`calibration/seasonal_cycle_20261026/plan.json`. Three Earth regions (North India,
+Iran plateau, Iberia) and r38-atlas/r39-candidate worlds at ds16/layout1 compare
+0,1,3 additional full spin-up years. Only0 controls run before any longer case;
+all must reproduce archived fields exactly. Core source, runner, plan, physics
+files and historical evidence are FROZEN while it runs. Do not edit them.
+
+The new core feature is opt-in `seasonal_spinup_years` plus
+`seasonal_require_convergence`, defaults0/false. It monitors repeated annual
+T/rain/vapor/soil/recycled-rain/snow fields with fixed physical-unit numerical
+limits. It also fixes calendar indexing for >2 years of legacy warm-up.
+63 focused tests pass. Production physics and atlas data remain unchanged.
+An initial preflight stopped Earth cases on integer56 versus float56.0 spacing
+in the identity metadata; the raw arrays/derived input fields match. Its failed
+records, protocol and original runner bytes are preserved in
+`output/seasonal_cycle_20261026/`. Both initial world controls matched all seven
+archived climate arrays exactly. The corrected runner uses a NEW output folder.
+
+After the pilot: report periodicity and monthly/skill changes even if worse;
+this is not an adoption search. A single-layout initialization-sensitivity map
+may be added to the normal r38 Earth atlas only with its exact control and
+parameter/source checks. Keep the .bat HTML/data current and post generated
+substantive pictures, then commit/push the milestone. Older completed status
+below refers to the preceding round and must not restart those jobs.
+
 All calibration/audit/build jobs in this round have ended. No climate integration
 is running. The actual `.bat` launcher server remains available on port 8766.
 Normal publication pushes: `git push origin HEAD:claude/friendly-turing-43ygeu`

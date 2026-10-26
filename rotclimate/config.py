@@ -236,6 +236,8 @@ class Params:
     # ---------------------------------------------------------------- numerics
     downsample: int = 8               # source pixels per model cell
     steps_per_year: int = 73          # 73 x 5-day weeks
+    seasonal_spinup_years: int = 0    # extra complete years before recording; 0 preserves existing fits
+    seasonal_require_convergence: bool = False  # require repeatable annual T/rain/vapor/soil/snow cycles
     picard_iters: int = 3
     moisture_relaxation: float = 0.5  # retains legacy half-updates
     moisture_residual_tol: float = 0.0  # 0 retains fixed Picard count; >0 checks local equation

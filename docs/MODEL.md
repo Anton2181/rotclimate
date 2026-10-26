@@ -126,6 +126,23 @@ solve is warm-started from the previous week.
 
 ### Numerical convergence and recovery
 
+The normal seasonal run retains its historical roughly four-month primer.
+`seasonal_spinup_years` optionally adds complete years before recording the
+final year, without changing the calendar, physical parameters or timestep.
+It defaults to zero. Arbitrarily long primers now wrap the calendar safely.
+The existing one- and two-year diagnostic warm-ups remain compatible.
+
+With additional years enabled, `Result.numerics.annual_cycle` compares the
+same seasonal steps in consecutive complete years. It reports domain-interior
+and mapped-land maximum changes for temperature, rain, atmospheric water,
+soil water, recycled-rain memory and snow, plus mean land changes. The fixed
+repeatability limits are 0.05°C, 0.01 mm/day, 0.05 mm, 0.1 mm, 0.01 mm/day
+and 0.1 mm respectively. They test deterministic seasonal settling, not real
+interannual variability or climate accuracy. `seasonal_require_convergence`
+rejects a run whose last complete annual comparison fails these limits;
+it requires at least one extra year. Both options are saved numerical settings,
+not calibration genes. Existing published fits keep their original settings.
+
 The current publication profile uses 25 seasonal steps per year; the calendar
 and equations are unchanged by that temporal sampling choice. Saved parameter
 files record the grid, iteration limits and convergence requirements. Pass

@@ -1,0 +1,19 @@
+{
+  "declared_before_new_coupled_results": true,
+  "purpose": "Check whether the existing roughly four-month primer leaves initialization dependence in seasonal soil, vapor and rainfall feedbacks. Numerical equilibration experiment, not parameter optimization or a physics/atlas adoption gate.",
+  "earth_params": "calibration/local_accuracy_20261023/r39_params.json",
+  "earth_regions": ["north_india", "iran_plateau", "iberia"],
+  "earth_cell_km": 56,
+  "earth_legacy_evidence": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "world_cases": {
+    "r38_atlas": {"params": "atlases/earth_fit/params.json", "legacy_checkpoint": "output/earthlike_geography_20261025/checkpoints/control_1.pkl"},
+    "r39_candidate": {"params": "calibration/map_world_r39_balance/proposals/balance_003.json", "legacy_checkpoint": "output/r39_world_balance/members/balance_003_screen_seed1.pkl"}
+  },
+  "world_downsample": 16,
+  "world_seed": 1,
+  "extra_spinup_years": [0, 1, 3],
+  "control": "Only extra complete spin-up years change. Preserve all physical parameters, planet properties, forcing fields, seasonal steps and strict per-step numerical criteria. The default0 run must reproduce archived T/P arrays exactly at their stored precision before any longer warm-up runs. Actual Earth case hashes must match the archived controls.",
+  "periodicity": "For each pair of consecutive full years, compare all matching seasonal steps. Record maximum absolute changes over the domain interior and mapped land, plus mapped-land mean absolute changes. Fixed repeatability limits: temperature0.05C; rain0.01mm/day; column vapor0.05mm; soil water0.1mm; recycled-rain memory0.01mm/day; snow water0.1mm. These are numerical criteria, not fitted climate targets or real interannual variability.",
+  "interpretation": "The three-extra-year case is the designated equilibrium candidate, never the lowest-error member of a search. One extra year is a sensitivity comparison. Report monthly T/P differences and observed Earth skill even if longer spin-up worsens skill. Require every per-step numerical solve; diagnose annual repeatability without suppressing nonperiodic results. No adaptive extra years or relaxed limits after seeing results.",
+  "publication": "Default remains0. No new Earth physics or world climate is adopted by this pilot. Preserve existing atlas data and all earlier failed campaigns. A matched-layout initialization-sensitivity diagnostic may be added to the current r38 Earth atlas only if the unchanged baseline and source identities are verified; label its single-layout and screening-resolution scope. Any future default/profile adoption requires full matched Earth and world checks."
+}
