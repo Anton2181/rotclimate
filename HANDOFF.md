@@ -2,6 +2,35 @@
 
 ## Current status
 
+**Active structural follow-up — conservative vapor flux:** the preceding
+307-run momentum round is complete and pushed at `e6be857`. Continuing without
+ending at that milestone, added opt-in `moisture_transport_form="flux"`;
+default="concentration" preserves legacy. Shared-face upwind vapor advection
+accounts for both inflow/outflow; requires flux_convergence=0 to avoid double
+import. Heat retains its legacy solver; separate moisture solver uses monotone
+GS, same strict tolerances/caps/recovery, and BOTH are counted in certificates.
+New ledger checks mean/diffusive boundary cancellation and steady regional
+E-drying+transport-storm-rain residual. Conserved storm scheme is separately
+required for complete horizontal water transport. This is NOT a closed or
+transient planet budget; fixed-border reservoirs/vertical drying remain.
+
+79 focused model/solver/moisture/wind/joint/numerics/spin-up checks pass, plus
+3 pilot guard checks. Known-answer divergent-flow case conserves through-flux;
+coupled test verifies positive water/rain and the ledger. Main atlas data and
+qualified r39 profile unchanged. New core source epoch: never resume/reexport
+the completed older campaigns under it by bypassing guards.
+
+Predeclared plan `calibration/vapor_flux_20261026/plan.json`:5 profiles ×7 reused
+regions at56km (exact baseline, legacy/no-import, conservative-storm/no-import,
+flux/legacy-storm, flux/conservative-storm). Only the last may qualify. Same
+regional/ocean/temperature safeguards, numerical+ledger checks. Only a screen
+pass triggers a generated separate full31 plan via the generalized existing
+momentum runner, then ocean/fine/established6 gates. No extra candidate after
+failures. Runner `scripts/check_vapor_flux.py`, shared recorder
+`scripts/paired_physics_pilot.py`. Source must remain frozen while it runs.
+Log will be `/tmp/vapor_flux_20261026.log`, results `output/vapor_flux_20261026/`.
+Earlier paragraphs below record completed campaigns; do not restart them.
+
 **Completed follow-up — momentum balance:** completed earlier results and plots
 are pushed at `1ce0c5e`; column-shear implementation at `f22b0eb`.
 The separate `calibration/momentum_balance_20261026/plan.json` fixes4 candidates:

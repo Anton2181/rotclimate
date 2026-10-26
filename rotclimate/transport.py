@@ -1,7 +1,8 @@
 """Observe the discrete moisture equation without changing the simulation.
 
-The model transports concentration with u.grad(W), not conservative flux
-divergence. These are local equation terms, not a global water-budget proof.
+The default transports concentration with u.grad(W). The opt-in shared-face
+flux form has an explicit regional vapor ledger. Neither is a closed-planet
+or transient atmosphere simulation.
 """
 from dataclasses import asdict
 import json
@@ -15,7 +16,55 @@ from .numerics import matrix_product
 DAY = 86400.
 
 
-def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water):
+def vapor_face_fluxes(W,u,v):
+    """Upwind vapor flux in mm*m/s across rightward/downward shared faces."""
+    east=.5*(u[:,1:]+u[:,:-1])
+    south=-.5*(v[1:]+v[:-1])
+    return (east*np.where(east>=0,W[:,:-1],W[:,1:]),
+            south*np.where(south>=0,W[:-1],W[1:]))
+
+
+def face_divergence(east,south,dx):
+    return (east[1:-1,1:]-east[1:-1,:-1]+south[1:,1:-1]-south[:-1,1:-1])/dx
+
+
+def boundary_supply(east,south,dx):
+    """Inflow across the solved interior's four faces, mm/day times cell count."""
+    return float(DAY/dx*(east[1:-1,0].sum()-east[1:-1,-1].sum()+
+                         south[0,1:-1].sum()-south[-1,1:-1].sum()))
+
+
+def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water):
+    """Steady padded-domain vapor ledger, including physical border exchange.
+
+    This is a local flat-grid ledger, not a closed planet or a transient
+    atmosphere. Column drying counts in net evaporation. Storm exchange is
+    only a boundary supply if that separate operator conserves water.
+    """
+    east,south=vapor_face_fluxes(W,u,v)
+    advection=-DAY*face_divergence(east,south,dx)
+    adv_boundary=boundary_supply(east,south,dx)
+    de=-diffusion*(W[:,1:]-W[:,:-1])/dx
+    ds=-diffusion*(W[1:]-W[:-1])/dx
+    diff=-DAY*face_divergence(de,ds,dx)
+    diff_boundary=boundary_supply(de,ds,dx)
+    storm=DAY*exchange_rate*(mixed_water-W)
+    e=np.broadcast_to(evaporation,W.shape)[1:-1,1:-1]
+    p=rain[1:-1,1:-1]
+    storm_interior=float(storm[1:-1,1:-1].sum())
+    residual=float(e.sum()+adv_boundary+diff_boundary+storm_interior-p.sum())
+    scale=float(np.maximum(p+np.abs(e),.1).sum())
+    transport_scale=max(float(np.abs(advection).sum()+np.abs(diff).sum()),1e-30)
+    cancellation=abs(float(advection.sum())-adv_boundary)+abs(float(diff.sum())-diff_boundary)
+    return dict(advection_boundary_supply_cell_mm_day=adv_boundary,
+                diffusion_boundary_supply_cell_mm_day=diff_boundary,
+                storm_interior_net_cell_mm_day=storm_interior,
+                net_evaporation_cell_mm_day=float(e.sum()),rain_cell_mm_day=float(p.sum()),
+                equation_residual_cell_mm_day=residual,scaled_equation_residual=abs(residual)/max(scale,1e-30),
+                transport_relative_cancellation=cancellation/transport_scale)
+
+
+def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration'):
     """Signed sources in mm/day; exact upwind/central discrete transport.
 
     Evaporation and rain are mm/day, exchange_rate is 1/s, W is mm.
@@ -25,8 +74,14 @@ def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mix
     left, right = np.roll(W, 1, 1), np.roll(W, -1, 1)
     above, below = np.roll(W, 1, 0), np.roll(W, -1, 0)
     wr = -v
-    adv = (np.maximum(u, 0) * (W - left) + np.minimum(u, 0) * (right - W)
-           + np.maximum(wr, 0) * (W - above) + np.minimum(wr, 0) * (below - W)) / dx
+    if form == 'concentration':
+        adv = (np.maximum(u, 0) * (W - left) + np.minimum(u, 0) * (right - W)
+               + np.maximum(wr, 0) * (W - above) + np.minimum(wr, 0) * (below - W)) / dx
+    elif form == 'flux':
+        adv=np.full_like(W,np.nan,dtype=float)
+        adv[1:-1,1:-1]=face_divergence(*vapor_face_fluxes(W,u,v),dx)
+    else:
+        raise ValueError('Unknown moisture transport form: '+form)
     lap = (left + right + above + below - 4 * W) / dx**2
     terms = dict(advection=-DAY * adv, diffusion=DAY * diffusion * lap,
                  storm_exchange=DAY * exchange_rate * (mixed_water - W))
@@ -78,5 +133,7 @@ def save_transport(result, evaluation, path):
                 mean_absolute_equation_residual_mm_day=mean('absolute_residual'),
                 absolute_residual_over_rain=mean('absolute_residual') / max(rain, 1e-9))
         zones[key] = periods
-    return dict(note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.',
-                zones=zones)
+    note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
+    if getattr(p,'moisture_transport_form','concentration')=='flux':
+        note='Steady flat-grid regional vapor equation with shared-face conservative mean-wind transport. Column drying is negative, convergence import is disabled. Storm exchange conserves separately only when its scheme does; see the numerical ledger. Fixed borders supply or remove water. This is not a closed planet or transient water budget.'
+    return dict(note=note,zones=zones)

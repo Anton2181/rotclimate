@@ -2,7 +2,8 @@
 
 Solves   u . grad(phi) - K lap(phi) + lam * phi = S
 with first-order upwinding (default) or an optional exponentially fitted local
-stencil, and Dirichlet values on the outer ring.
+stencil, and Dirichlet values on the outer ring. Opt-in form="flux" replaces
+the concentration derivative by shared-face div(u*phi), with upwind fluxes.
 
 The discrete operator is an M-matrix, so symmetric Gauss-Seidel sweeps in
 the four diagonal directions ("fast sweeping") converge quickly for these
@@ -47,10 +48,13 @@ if HAVE_NUMBA:
 
 
 class AdvectionSolver:
-    def __init__(self, ny: int, nx: int, dx: float, scheme="upwind"):
+    def __init__(self, ny: int, nx: int, dx: float, scheme="upwind", form="concentration"):
         if scheme not in ("upwind", "exponential"):
             raise ValueError(f"Unknown transport scheme: {scheme}")
         self.scheme = scheme
+        if form not in ('concentration','flux') or (form == 'flux' and scheme != 'upwind'):
+            raise ValueError('Flux transport requires the upwind face stencil')
+        self.form = form
         self.ny, self.nx, self.dx = ny, nx, dx
         border = np.zeros((ny, nx), bool)
         border[0, :] = border[-1, :] = border[:, 0] = border[:, -1] = True
@@ -64,12 +68,25 @@ class AdvectionSolver:
         self.require_convergence = False
         self.recover = False
         self._warned_limit = False
-        self.omega = 1.3          # successive over-relaxation
+        self.omega = 1.0 if form == 'flux' else 1.3  # monotone sweeps for column-dominant flux operator
 
     def coefficients(self, u, v, K, lam):
         dx = self.dx
         wr = -v                                  # velocity toward increasing row
         Kd = np.broadcast_to(np.asarray(K, float) / dx**2, u.shape)
+        if self.form == 'flux':
+            if np.ndim(K) != 0:
+                raise ValueError('Flux stencil currently requires uniform diffusivity')
+            # One shared velocity per face; upwind outgoing/incoming water.
+            # Opposite signs at the adjacent cells make interior fluxes cancel.
+            ue=.5*(u+np.roll(u,-1,axis=1)); uw=.5*(u+np.roll(u,1,axis=1))
+            vs=.5*(wr+np.roll(wr,-1,axis=0)); vn=.5*(wr+np.roll(wr,1,axis=0))
+            ce=np.minimum(ue,0)/dx-Kd
+            cw=-np.maximum(uw,0)/dx-Kd
+            cs=np.minimum(vs,0)/dx-Kd
+            cn=-np.maximum(vn,0)/dx-Kd
+            diag=(lam+(np.maximum(ue,0)-np.minimum(uw,0)+np.maximum(vs,0)-np.minimum(vn,0))/dx+4*Kd)
+            return ce,cw,cs,cn,diag
         if self.scheme == "exponential":
             # Exponentially fitted local stencil: D * B(Pe), with
             # B(Pe)=Pe/(exp(Pe)-1). Retains nonpositive neighbor coefficients
@@ -117,7 +134,9 @@ class AdvectionSolver:
             # the exact solution of this M-matrix problem is bounded by its
             # boundary values and S / lam (discrete maximum principle)
             bound = max(np.abs(boundary).max(), float(np.max(np.abs(Sc) / np.maximum(np.asarray(lam, float), 1e-30))))
-            diverged = not np.isfinite(phi).all() or np.abs(phi).max() > 2.0 * bound + 1.0
+            # Converging flux may physically exceed the concentration-form
+            # S/lam bound. It uses monotone sweeps instead of that heuristic.
+            diverged = not np.isfinite(phi).all() or (self.form == 'concentration' and np.abs(phi).max() > 2.0 * bound + 1.0)
             method = 'sor' if self.omega != 1.0 else 'gauss_seidel'
             if diverged and self.omega != 1.0:
                 # Over-relaxation is only guaranteed to converge for omega <= 1;

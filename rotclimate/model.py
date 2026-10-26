@@ -244,6 +244,10 @@ class ClimateModel:
                 raise ValueError('Column pressure shear requires pressure-driven winds')
             if params.moisture_wind_factor != 1 or params.wind_cap != 0:
                 raise ValueError('Column pressure shear requires moisture_wind_factor=1 and wind_cap=0')
+        if params.moisture_transport_form not in ('concentration','flux'):
+            raise ValueError('Unknown moisture_transport_form')
+        if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
+            raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -263,6 +267,11 @@ class ClimateModel:
         self.solver.max_iter = params.solver_max_iter
         self.solver.require_convergence = params.solver_require_convergence
         self.solver.recover = params.solver_recover
+        self.moisture_solver=self.solver
+        if params.moisture_transport_form == 'flux':
+            self.moisture_solver=AdvectionSolver(g.ny,g.nx,g.dx_m,scheme='upwind',form='flux')
+            for attr in ['rtol','max_iter','require_convergence','recover']:
+                setattr(self.moisture_solver,attr,getattr(self.solver,attr))
         self._static_fields()
 
     # ------------------------------------------------------------------ static
@@ -697,6 +706,7 @@ class ClimateModel:
         lat = self.lat
         h_km = g.elev / 1000.0
         self.trace = []
+        self.flux_budgets=[]
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -1386,7 +1396,7 @@ class ClimateModel:
             # surface wind left the water near where it evaporated: Iran,
             # Mexico's dry season and inland eastern Australia rained their
             # own evaporation back out, and the monsoon carried little inland.
-            solution = solve_moisture(self.solver, p, uq, vq, lamE, W_ocean, E_land, Ws,
+            solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
                                       condensate=condensate)
             W, P = solution.water, solution.rain
@@ -1402,6 +1412,13 @@ class ClimateModel:
                                    f'{solution.iterations} iterations, scaled residual '
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
             E = np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY)
+            if p.moisture_transport_form == 'flux':
+                from .transport import flux_budget
+                target=mix(W) if mix is not None else W
+                if condensate is not None:
+                    target=target+condensate(W)
+                net=E if sink is None else E-sink*W*DAY
+                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target))
             if self.trace_cells is not None and n >= spinup:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells
@@ -1446,7 +1463,8 @@ class ClimateModel:
                     E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
-                    terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
+                    terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
+                                           form=p.moisture_transport_form)
                     # Expose the source/sink pieces already used above. These
                     # are observations of the local equation, not new physics.
                     terms['evaporation'] = E
@@ -1460,9 +1478,13 @@ class ClimateModel:
                 progress(n + 1, len(order))
 
         snow = snowpack(out["T"], out["P"], p.year_days / nt)
-        methods=getattr(self.solver,'methods',[])
-        numerics=dict(linear_solves=len(self.solver.converged),
-                      linear_unconverged=sum(not v for v in self.solver.converged),
+        solvers=[self.solver]
+        if p.moisture_transport_form == 'flux':
+            solvers.append(self.moisture_solver)
+        linear_converged=[v for solver in solvers for v in solver.converged]
+        methods=[m for solver in solvers for m in getattr(solver,'methods',[])]
+        numerics=dict(linear_solves=len(linear_converged),
+                      linear_unconverged=sum(not v for v in linear_converged),
                       linear_methods={m:methods.count(m) for m in sorted(set(methods))},
                       temperature_steps=len(self.t_converged),
                       temperature_unconverged=sum(not v for v in self.t_converged),
@@ -1486,6 +1508,15 @@ class ClimateModel:
                 steps=self.storm_budgets)
             if p.eddy_moisture_scheme != 'legacy':
                 numerics['all_checks_passed'] &= numerics['storm_exchange']['max_relative_closure'] <= 1e-10
+        if self.flux_budgets:
+            ledger=dict(form='flux',scope='Steady flat-grid regional vapor equation, including fixed-border exchange',
+                horizontal_transport_conservative=p.eddy_rate==0 or p.eddy_moisture_scheme!='legacy',
+                max_relative_transport_cancellation=max(b['transport_relative_cancellation'] for b in self.flux_budgets),
+                max_scaled_equation_residual=max(b['scaled_equation_residual'] for b in self.flux_budgets),
+                moisture_linear_solves=len(self.moisture_solver.converged),steps=self.flux_budgets)
+            numerics['vapor_flux_budget']=ledger
+            numerics['all_checks_passed'] &= (ledger['max_relative_transport_cancellation']<=1e-10 and
+                                             ledger['max_scaled_equation_residual']<=p.moisture_residual_tol+1e-12)
         return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, **out)
 
 

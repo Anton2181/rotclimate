@@ -1,0 +1,21 @@
+{
+  "declared_before_new_climate_results": true,
+  "purpose": "Check whether shared-face conservative vapor transport improves rainfall and fixes regional transport accounting. Isolate removal of positive-only convergence import, change of advection form, and conservative storm exchange. This is a steady padded flat-grid column model, not a closed or transient planet.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": ["north_india", "iran_plateau", "iberia", "japan", "mexico", "east_australia", "pacific_nw"],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "no_import": {"flux_convergence": 0.0},
+    "no_import_conservative_storm": {"flux_convergence": 0.0, "eddy_moisture_scheme": "conservative"},
+    "flux_legacy_storm": {"flux_convergence": 0.0, "moisture_transport_form": "flux"},
+    "flux_conservative_storm": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative"}
+  },
+  "eligible_profiles": ["flux_conservative_storm"],
+  "control": "All seven fresh unchanged controls must reproduce archived float32 Ts/Ps/To/Po and actual derived geography before candidate integrations. Every profile retains the same modern Earth envelope, r39 momentum/thermal/rain coefficients, observed remote forcing, modelled SST, grid and strict tolerances. Flux solver uses monotone Gauss-Seidel with the same tolerance/cap/recovery rules; heat keeps its existing concentration solver. Aggregate certificates must count both solvers. Never loosen a failed criterion.",
+  "budget": "Shared-face upwind vapor advection includes inflow and outflow, so separate positive convergence import must be zero. Uniform diffusivity and fixed outer-ring water. Ledger compares summed local transport with signed boundary flux and E-drying+transport-storm-rain. Require relative transport cancellation<=1e-10 and global scaled steady equation residual<=the existing moisture tolerance. Only conservative-storm profile has conservative complete horizontal transport; legacy storm comparison remains explicitly partial. Vertical drying and boundary reservoirs are accounted sources/sinks, not closed-planet conservation.",
+  "screen": "Only flux_conservative_storm may qualify. Require every numerical and ledger certificate, combined S<=.995, mean rain-loss ratio<=.99, mean temperature ratio<=1.01 across the seven equal regions, North India rain loss<=.95, Iran rain loss<=1.02, combined S<=1.02 in each other protected region. Actual integrated SST MAE may rise<=.02C in each region on fixed observation-only ice-free padded-interior sea cells. Column speed maximum<=60m/s and p95<=25m/s. Report all five profiles even if comparisons fail; never average failed solves as successes.",
+  "advance": "If the single eligible profile passes the screen, write a separate frozen generated full31 plan and use the existing check_surface_momentum.py --plan/--out runner: unchanged policy_v2, same individual regional protections, then actual integrated SST/wind, paired28km four-region S<=1.01 plus North India rain ratio<=.98 and established six S<=1.01 once. Reused regions, not new validation. If screening fails, skip every later stage and retain r39. No other profile or extra parameters may advance.",
+  "publication": "Defaults remain concentration form; no atlas/economic data replacement on a screening result. Earth adoption needs every declared gate and a separate matched-world fit before atlas promotion. Preserve all failed comparisons and source epochs. A good budget alone is not evidence of more accurate rainfall."
+}

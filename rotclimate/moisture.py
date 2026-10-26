@@ -68,6 +68,8 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
     """
     if condensate is not None and mix is None:
         raise ValueError('Storm condensate requires a vapor exchange target')
+    if getattr(solver,'form','concentration') == 'flux' and gain is not None:
+        raise ValueError('Flux transport already includes convergence; do not add positive-only import')
     W = guess
     converged = None if p.moisture_residual_tol == 0 else False
     residual = None
@@ -105,7 +107,7 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
                 P = P + exchange * condensed * DAY
                 mixed = mixed + condensed
             terms = moisture_terms(W, u, v, solver.dx, p.moisture_diffusion, E, P,
-                                   exchange, mixed)
+                                   exchange, mixed,form=getattr(solver,'form','concentration'))
             residual = float(np.max((terms['absolute_residual'] / np.maximum(P + np.abs(E), 0.1))[1:-1, 1:-1]))
             if not np.isfinite(residual):
                 raise FloatingPointError('Nonfinite moisture-equation residual')
