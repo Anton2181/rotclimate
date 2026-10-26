@@ -2,7 +2,7 @@
 
 ## Current status — 26 October 2026
 
-**NEXT/ACTIVE:** `scripts/check_r39_world_robust.py`, plan
+**COMPLETED, REJECTED:** `scripts/check_r39_world_robust.py`, plan
 `calibration/map_world_r39_robust/plan.json`, outputs `output/r39_world_robust/`,
 log `/tmp/r39_robust_runtime.log`. This is a new campaign: the preceding balance
 attempt remains rejected. Inspected layouts17/23 are now explicitly development,
@@ -17,12 +17,16 @@ review after the campaign exits successfully, log `/tmp/r39_earth_build.log`.
 It skips a rejected review. Do not launch a duplicate builder. Browser QA and
 canonical promotion still remain if the stage is built.
 
+All four robust training screens converged, none passed the known17/23 batch
+guard. No native or prospective390xxx validation was run. The robust final
+review is immutable and canonical r38 is unchanged.
+
 DO NOT edit model sources, robust/transfer helper scripts, this plan or canonical
 Earth params/summary while this campaign or its queued build is running.
 Current canonical Earth is still r38. The more detailed older attempt below
 explains the rejected parent; its old build instructions are historical.
 
-A final, conditional fixed-candidate audit is declared before any of its nine
+**ACTIVE:** the final fixed-candidate audit was declared before any of its nine
 new layouts in `calibration/map_world_r39_audit/plan.json`, implemented by
 `scripts/audit_r39_surroundings.py`. Only if the robust campaign rejects:
 audit the single already native-passing balance003, with NO parameter search,
@@ -32,9 +36,13 @@ a strictly positive lower2.5% paired-bootstrap bound of individual-layout score
 gains (20000 draws, fixed RNG). Both estimands are reported separately; this
 is uncertainty under the invented-neighbourhood generator, not real-planet
 physical validation. No sample extension or second candidate. Twenty-three
-focused tests pass. Run only after the robust review is complete; it skips
-an eligible robust result. If it qualifies, use its review with the same stage
-builder and finish actual browser checks/promotion. Otherwise retain r38.
+focused tests pass. Its condition is met and it is now running, log
+`/tmp/r39_audit_runtime.log`, shell session94272. The SAME shell then queues
+the stage builder with `output/r39_world_audit/review.json`, log
+`/tmp/r39_earth_build.log`. Do not duplicate the builder. If it qualifies,
+finish actual browser checks and canonical promotion. Otherwise retain r38.
+All model and imported helper sources, plans and canonical climate inputs
+remain frozen until this audit and any queued export finish.
 
 r39 Earth physics is adopted (`calibration/local_accuracy_20261023/r39_params.json`):
 dev31 S 0.987521, paired 28 km S 0.994737, established six S 0.994573. Rain loss

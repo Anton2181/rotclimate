@@ -85,9 +85,24 @@ The next, separately declared campaign is
 five-layout mean climate. At most one proposal advances through actual native
 checks and five prospectively reserved validation layouts. All original native
 and layout thresholds remain unchanged. The previous failed attempts remain
-rejected. Nineteen focused tests pass. This campaign is currently running;
-the canonical Earth atlas still uses r38 and the complete local atlases remain
+rejected. All four training screens converged, but each lost on the known17/23
+batch, so this campaign is rejected. No native or prospective390xxx validation
+was run. Nineteen focused tests pass. The canonical Earth atlas still uses r38
+and the complete local atlases remain
 available through `start_atlases.bat`.
+
+A final separate audit is prospectively declared at
+`calibration/map_world_r39_audit/plan.json`. It tests one fixed, already
+native-passing geometry (balance003) over nine new490xxx surroundings layouts,
+without selection, parameter changes or sample extension. Publication requires
+the original native protections, a nonnegative nine-layout mean-climate zone
+gain and a strictly positive lower2.5% paired-bootstrap bound for mean individual
+layout gains (20000 draws). Score of the mean climate and mean individual score
+are distinct; both are required. This describes uncertainty under the invented
+surroundings generator, not validation against real planetary climate. The
+previous two-layout rejection remains reported. Twenty-three focused tests pass;
+the fixed audit is running and its original sample budget cannot be enlarged
+after observing results.
 
 Publication requires a native pass followed by the layouts17/23 comparison,
 a full staged export, food and population accounting, complete asset checks,
