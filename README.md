@@ -1,5 +1,12 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Observation-calendar audit, 26 October 2026:** an optional evaluation helper
+aligns unchanged Earth step series with non-leap calendar months, including the
+southern mirror. Four exact controls pass; rainfall MAE changes only0.02–0.12mm
+and temperature MAE slightly worsens. Annual rain is preserved. This audit
+changes no physical fit, benchmark default or headline score. See the
+[calendar report](reports/EARTH_CALENDAR_20261026.md) and launcher accuracy page.
+
 **Conservative vapor transport, 26 October 2026:** the opt-in flux equation
 has shared-face accounting and a checked regional water ledger. In a frozen
 35-attempt pilot it raises North India rain from256 to482mm/year, closer to761

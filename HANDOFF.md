@@ -2,6 +2,38 @@
 
 ## Current status
 
+**Completed observation-calendar audit:** after the preceding physics
+experiments, found the legacy monthly aggregator deliberately uses12
+equal365/12-day months, while WorldClim totals are calendar-month observations.
+New evaluation-only `scripts/earth_calendar.py` uses365-day non-leap Gregorian
+interval overlap and a half-year phase for southern mirrored observations,
+including wrap. Production model and all old default metrics remain untouched.
+16 known-answer/annual-integral/mirror/invalid-calendar tests pass.
+
+Predeclared `calibration/earth_calendar_20261026/plan.json`; runner
+`scripts/check_earth_calendar.py`; results `output/earth_calendar_20261026/`.
+Four reused cases (NI/Iran/Iberia/EastAustralia) all pass strict numerics,
+derived geography and exact archived float32 equal-month T/P/observations.
+Same actual step series aggregated twice; annual rain difference<1e-12mm.
+Gregorian rain MAE lower by .019–.122mm/month; T MAE higher by .009–.032C.
+Small evaluation effect does not explain the huge physical rainfall errors.
+No new physics, calibration, benchmark default, city headline or world adoption.
+Do not mix methods in future gates. Leap years/forcing interpolation still
+approximations. Raw step + both monthly arrays are saved locally/hash-bound.
+
+Exporter `publish_earth_calendar.py`, report `reports/EARTH_CALENDAR_20261026.md`.
+Normal accuracy companion now has6 indexed collapsible studies,9 charts,
+7 JSON downloads; old headline data labeled equal-month, no numbers changed.
+106 current-model checks plus16 calendar checks pass (122 unique focused tests).
+All normal atlas climate/food/population/trade data still unchanged. No
+integration is running. Global round total now388 attempts,384 passes,
+4 original failed nonlinear runs preserved (not overwritten by numerical replay).
+Final receipts under `output/earth_calendar_20261026/`:122 focused tests,
+companion keyboard/hash/mobile/dark checks,509 byte-exact Windows assets,
+945-file portable bundle, all links and fresh launcher. Packet/food/population
+checks still pass for all3 unchanged normal atlases. No integration active.
+Source plan has an explicit gitignore exception, so it survives fresh checkouts.
+
 **Completed follow-up — conservative flux plus column wind:** the original
 conservative pilot/report is committed separately; the following new plan
 preserves its failures. `calibration/flux_column_wind_20261026/plan.json` fixes

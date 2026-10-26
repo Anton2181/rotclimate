@@ -1,0 +1,12 @@
+{
+  "declared_before_new_scores": true,
+  "purpose": "Audit the mismatch between equal model months and WorldClim calendar-month totals using unchanged r39 simulations. This changes an evaluation definition, not climate physics, and cannot establish a physical accuracy gain by comparing different metrics.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": ["north_india", "iran_plateau", "iberia", "east_australia"],
+  "cell_km": 56.0,
+  "control": "All4 unchanged climates must reproduce archived float32 Ts/Ps/To/Po under the existing equal-month aggregation, actual geography identities and strict numerical certificates before new scores are interpreted. Keep planet, physical/numerical settings, forcing and original observed fields fixed. Integrate each region once; aggregate its actual step series twice, never interpolate old monthly means.",
+  "new_definition": "365-day non-leap Gregorian month boundaries and durations, exact overlap with uniform model intervals. Northern cases start1January. Mirrored southern observations remain in July-through-June order; shift actual original month boundaries by half the365-day model year, including circular wrap. Rain totals use each actual month duration; temperature uses interval-weighted monthly means. Preserve annual rain integral. The existing ideal seasonal/observed-forcing interpolation remains unchanged; leap-year/climatological year-length differences are not solved here.",
+  "outputs": "Per-region paired temperature MAE and rainfall diagnostics under both aggregation definitions, monthly regional means, maximum annual-rain-integral difference, saved raw step T/P and both monthly cell arrays with hashes. Four reused regions including one southern case, not a new validation set or a globally remeasured city statistic.",
+  "decision": "No calibration, parameter selection, new physical adoption, default benchmark change or atlas climate/economic replacement. Retain old scores with their method label. If the mismatch matters, a subsequent separately declared calendar-aware benchmark/gate must compare every candidate and reference under the same definition. Do not mix calendars or silently reinterpret old fits."
+}
