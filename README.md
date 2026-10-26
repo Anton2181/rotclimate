@@ -1,5 +1,13 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Mass-consistent column experiment,26 October2026:**49 strict solves test
+whether divergent surface-like transport causes wet coasts. The new closure
+substantially improves several regional rainfall errors, but loses the Indian
+monsoon; no profile passes all safeguards. A reference-only comparison confirms
+that pressure-mass and humidity-weighted winds are different targets. Three new
+plots/maps and all results are on the launcher accuracy page; see the
+[column mass report](reports/COLUMN_MASS_20261026.md) for the next two-layer design.
+
 **Thermal-wind development,26 October2026:** a fixed42-run experiment tests
 physical vertical shear with unchanged Earth planetary settings. Native-grid
 wind errors improve in India/Australia, but rain remains misplaced and wet-coast

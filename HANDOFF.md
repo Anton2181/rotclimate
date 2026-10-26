@@ -2,28 +2,61 @@
 
 ## Current status
 
-**New mass-consistent-column experiment ready:** opt-in
-`moisture_mass_balance=False` by default, explicitly shared physics. New
-`rotclimate/column_mass.py` minimizes mass-weighted velocity change subject to
-stationary interior dry-column face-flux divergence=0. Fixed M=p0/g*exp(-z/8km),
-open-border velocities may adjust, exact discrete arithmetic face averaging
-matches vapor. Sparse weighted orthogonal projection; default never constructs
-it. Not resolved3-D momentum, vertical return, storage or proof of a correct
-humidity-weighted wind. Surface heat/lift/evaporation still use surface wind.
-New numerical certificate includes per-step mass residual and correction size.
+**Completed column-mass milestone:** source `6eddef6`, fixed plan
+`calibration/column_mass_20261026/plan.json`, runner `check_vapor_flux.py` with
+--plan/--out output/column_mass_20261026.49 actual integrations all pass strict
+numerics:28 controls (7 original,21 previous physical/numerical) then21 candidates.
+Original climate/geography and3 native winds exact; the21 later controls match
+EVERY archived NPZ field including budgets/winds/equal-NaN masks. All current
+focused model/reference tests pass140. Cumulative483 attempts:479 passes,
+4 original preserved failures. No active climate integration.
 
-Fixed `calibration/column_mass_20261026/plan.json`:49 integrations, seven
-profiles ×seven reused regions at56km. Four controls (original r39, damped r39,
-conservative flux, thermal1km) precede3 eligible balanced flow trials with
-0/1/2km thermal shear. Original exact climate/native wind controls remain;
-three other controls must reproduce ALL prior NPZ fields, including budgets
-and circulation, before candidates. Same numerical, rain/T/regional/ocean,
-outside-wind safeguards, plus strict mass residual. At most2 qualifiers advance
-automatically through existing full31/fine/established6 checks. No added trials
-or relaxed gates after outcomes. No new simulation started at this milestone.
-Run `scripts/check_vapor_flux.py --plan calibration/column_mass_20261026/plan.json
---out output/column_mass_20261026`. Source epoch changes; never resume older
-campaign folders with this core/recorder. All adopted fits/atlas data unchanged.
+`moisture_mass_balance=False` default; opt-in requires conservative flux form,
+no wind multiplier/cap. Shared joint field; Earth planetary inputs unchanged.
+`rotclimate/column_mass.py` minimum-change stationary dry-column projection:
+M=p0/g*exp(-terrain/8km), mass-weighted norm, actual arithmetic face velocities,
+open-border adjustments and explicit boundary flux. Tests stencil/row sign,
+terrain, orthogonality/norm contraction/idempotence, coupled vapor/storm ledger.
+Model certificate records all steps; max scaled mass residual7.68e-15 vs1e-10
+limit, max velocity correction9.76m/s. Kinematic equivalent-barotropic closure,
+not a momentum/energy/storage/vertical-return/spherical mass model; not proof
+that dry-mass wind is the correct humidity-weighted transport. Surface heat,
+evaporation/convergence lift/terrain ascent retain surface wind.
+
+Balanced0/1/2km thermal profiles all fail fixed safeguards. Conservative flux
+PacificNW3966→807/845/884mm against897 observed; Iberia1057→394/393/397 vs392.
+But NI482→81/60/57 vs761: monsoon collapses. Balanced+1km local monthly MAE
+EA36.52→15.32, Iran16.52→12.00, Mexico39.27→33.67mm vs adopted r39. NI50.01→
+59.85, Japan76.11→88.42, PacificNW29.03→34.61 worse. Combined seven-region
+S=.9889 passes threshold but rain ratio1.0119 and regional protections fail.
+All3 outside-wind guards pass for+1/2km; no full31/fine/established6 stage.
+Do not call these7-region ratios a new global/city score or adopt the profile.
+
+Reference-only exploratory925–300hPa mass-vs-humidity weighted NCEP vector
+RMS differences NI5.42/Iberia ocean2.95/EA6.61m/s. Same retained native
+footprints, no scoring/selection/sampling change. Partial column, no transient
+q'u'; period/native-terrain limitations still apply. This supports investigating
+separate moist inflow and dry return, not a proof that two layers will fix rain.
+
+Concrete next design in reports/COLUMN_MASS_20261026.md: with barotropic Ub,
+lower Ul and lower mass fraction eta, define Uupper=Ub-eta/(1-eta)*(Ul-Ub).
+The dry-air weighted sum is Ub exactly, while humidity-weighted flux can
+converge. MUST sum the separate directional upwind face fluxes/operators;
+averaging layer velocities before upwinding incorrectly loses counterflow
+mixing. Need opposed-stream known answers, exact mass/boundary water ledgers,
+independent branch speed guards, fixed humidity-profile assumptions and a NEW
+predeclared experiment/source folder. No extra candidate added to completed
+49-run pilot and no changed Earth forcing to recover the monsoon.
+
+Publisher `publish_column_mass.py` verifies frozen sources/records/NPZs and
+exports3 figures/maps, readable NI table and complete JSON. Launcher companion
+now9 collapsible studies,17 images,10 downloads. Canonical3 climate/farm/pop/
+trade data unchanged. Qualified Earth physics r39; world Earth atlas r38.
+QA receipts in output/column_mass_20261026/ cover140 tests, all49 scientific
+records, companion keyboard/hash/mobile/dark, portable asset/link/launcher
+integrity and520 Windows-staged byte-exact assets. Portable bundle:959 files, complete
+manifest hashes/links and fresh launcher pass. No need to rerun older completed campaigns;
+future core/helper changes must not bypass their frozen-source guards.
 
 **Completed thermal-wind milestone:** new physical closure remains opt-in
 `moisture_thermal_height_km=0` by default, explicitly in shared joint partition.
