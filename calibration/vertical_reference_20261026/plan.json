@@ -1,0 +1,31 @@
+{
+  "purpose": "Read-only cached Earth vertical-profile diagnostic; no integration, fitting, rain reference or adoption.",
+  "regions": [
+    "california",
+    "iberia"
+  ],
+  "profiles": [
+    "lapse",
+    "moist"
+  ],
+  "lapse_k_km": 4.4142078309475306,
+  "ocean_column_rh": [
+    0.45,
+    0.6,
+    0.7547460305996778
+  ],
+  "map_rh": 0.6,
+  "pressure_hpa": [
+    925,
+    850,
+    700,
+    600,
+    500,
+    400,
+    300
+  ],
+  "anchor": "Observed925hPa air temperature, not a below-ground extrapolated surface; predictor receives no higher-level temperatures or observed humidity.",
+  "footprints": "Reuse hash-verified native ocean masks/areas from circulation_audit_20261026. Footprints are at least80% inmap-covered, at most20% land, and925hPa above maximum model terrain all months. Count native cells, not fine-grid replicas.",
+  "comparison": "Compare model saturation temperatures and q_sat on exactly matched native pressure levels925\u2013300hPa. Integrate observed and predicted specific humidity by identical trapezoidal quadrature in pressure; ratio of700\u2013300 vs925\u2013700 layer-mean q is partial-column only and not directly comparable to a full-column two-layer ratio. Apply the six already-predeclared pilot profile/humidity combinations; do not tune using these outcomes. Same Gregorian month/day and native-area weights.",
+  "publication": "Show fixed center humidity.60 examples, retain all6 profiles and all native cells in data. NCEP1981\u20132010 is model-assisted and differs from WorldClim1970\u20132000. Tiny ocean samples; diagnostic profiles anchored by observed temperature are not full climate predictions or independent rainfall validation. Does not select or adopt a fit."
+}

@@ -1,0 +1,51 @@
+{
+  "plan": {
+    "purpose": "Read-only cached Earth vertical-profile diagnostic; no integration, fitting, rain reference or adoption.",
+    "regions": [
+      "california",
+      "iberia"
+    ],
+    "profiles": [
+      "lapse",
+      "moist"
+    ],
+    "lapse_k_km": 4.4142078309475306,
+    "ocean_column_rh": [
+      0.45,
+      0.6,
+      0.7547460305996778
+    ],
+    "map_rh": 0.6,
+    "pressure_hpa": [
+      925,
+      850,
+      700,
+      600,
+      500,
+      400,
+      300
+    ],
+    "anchor": "Observed925hPa air temperature, not a below-ground extrapolated surface; predictor receives no higher-level temperatures or observed humidity.",
+    "footprints": "Reuse hash-verified native ocean masks/areas from circulation_audit_20261026. Footprints are at least80% inmap-covered, at most20% land, and925hPa above maximum model terrain all months. Count native cells, not fine-grid replicas.",
+    "comparison": "Compare model saturation temperatures and q_sat on exactly matched native pressure levels925\u2013300hPa. Integrate observed and predicted specific humidity by identical trapezoidal quadrature in pressure; ratio of700\u2013300 vs925\u2013700 layer-mean q is partial-column only and not directly comparable to a full-column two-layer ratio. Apply the six already-predeclared pilot profile/humidity combinations; do not tune using these outcomes. Same Gregorian month/day and native-area weights.",
+    "publication": "Show fixed center humidity.60 examples, retain all6 profiles and all native cells in data. NCEP1981\u20132010 is model-assisted and differs from WorldClim1970\u20132000. Tiny ocean samples; diagnostic profiles anchored by observed temperature are not full climate predictions or independent rainfall validation. Does not select or adopt a fit."
+  },
+  "sources": {
+    "calibration/vertical_reference_20261026/plan.json": "d50544e6a65627e5f04a489549da3b292cdfefb4e9a5b12bcdbc1d5d1d701f8e",
+    "scripts/audit_vertical_reference.py": "e3ec4b6ad083f8ea0739be4e6225a832953f0308b31ea2f12c000a2cf197d4d9",
+    "data/v10_atmosphere/downloads.json": "260997bbc769f39d09f98924c0d81258b6850fd26eadd3a6b520da250540d89d",
+    "experiments/v10_forcing_audit.py": "116e0d49e50b1491a1c337527e2c1940eeb59fa314a515b8791cd7a0b7fd8cf8",
+    "rotclimate/column_thermodynamics.py": "56b1937c9e793bd5051c937e04ca5b8f490ce29c75c4a7c1f911d09af82db1ca",
+    "rotclimate/model.py": "69383c7ec4b533cc5c1ed263d9843887fefbc9247152fe52c38140c54a0e8872",
+    "data/v10_atmosphere/air.das": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c",
+    "data/v10_atmosphere/air_california_0.ascii": "15161274c9ccd5795cc288c14684e743db43858c4e8473a0e0ce1fa3b0d79cee",
+    "data/v10_atmosphere/shum.das": "1c0d05786050fb319b6189b3e49070a793f9d9113b03add3e78f6da70b28902d",
+    "data/v10_atmosphere/shum_california_0.ascii": "fc562d4ee3a883b3a162f3a40f2e4b412604ce7e17c8f59efa6d94e3fe9810c4",
+    "data/v10_atmosphere/air_iberia_0.ascii": "de1821f939d90f0ece2cb90db8af1f385da0d56d06493cc5c31742136e74314f",
+    "data/v10_atmosphere/air_iberia_1.ascii": "95d97cb56489b4b96a0af1f2edae6e9c6c0d1c8fa23a042ef7e67379ae48ce90",
+    "data/v10_atmosphere/shum_iberia_0.ascii": "b8821672979456cd34676aceaf61156b621d84bc3707e621b1c3543ca49877d8",
+    "data/v10_atmosphere/shum_iberia_1.ascii": "4967151c8049f4cea3c4c22f89bd39606c4be3da879cde3bcb6d41df616eed55",
+    "output/circulation_audit_20261026/california.npz": "7851898a7a5ebeac2862ad4f77487f6512d5f61aa9fca417b9d14d7389441e33",
+    "output/circulation_audit_20261026/iberia.npz": "626c8f08f0d2e9098162ea7a478d6dc72488180f583019bdb048e898f2dbb626"
+  }
+}

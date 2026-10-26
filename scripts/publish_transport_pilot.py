@@ -39,7 +39,8 @@ def publish(out):
     title={'two_layer':'Moist inflow and upper return flow','mass_tracer':'Air-mass-aware water transport',
            'humidity_gate':'Rain activation and moisture delivery',
            'shared_wind':'Shared wind calibration on conservative transport',
-           'storm_path':'Storm paths and local condensation'}[stem]
+           'storm_path':'Storm paths and local condensation',
+           'pressure_column':'Hydrostatic saturation and rainfall'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
@@ -49,7 +50,8 @@ def publish(out):
     for name in eligible:
         value=plan['profiles'][name].get(parameter)
         prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
-        labels[name]=(f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
+        labels[name]=(plan['publication_labels'][name] if stem=='pressure_column' else
+                      f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
                       'Short hops, no condensation' if name=='hops_only' else
                       f'Crest coefficient = {value:g}' if parameter=='eddy_rainout' else
                       f'{prefix} = {value:g}' if value is not None else name.replace('_',' '))
@@ -66,7 +68,8 @@ def publish(out):
     short=dict(reference='r39',reference_damped='Damped',balanced_control='Balanced\ncontrol',
         thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol',transport_control='Transport\ncontrol')
     symbol='RH' if parameter=='rh_threshold' else 'C' if parameter=='eddy_rainout' else 'q'
-    ticks=[(f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else 'Hops only' if n=='hops_only' else f'{symbol}={plan["profiles"][n][parameter]:g}')
+    ticks=[(f'{plan["profiles"][n]["column_saturation_scheme"].split("-")[-1].title()}\nRH={plan["profiles"][n]["ocean_rh"]:.2f}'
+            if stem=='pressure_column' else f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else 'Hops only' if n=='hops_only' else f'{symbol}={plan["profiles"][n][parameter]:g}')
            if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
     axes[0].set(xticks=np.arange(len(profiles)),xticklabels=ticks,yticks=np.arange(len(regions)),
         yticklabels=[r.replace('_',' ').title() for r in regions],title='Local rain loss / r39 · lower is better')
@@ -186,11 +189,14 @@ def publish(out):
                 for r,row in group.items()} for n,group in records.items()}
     branches={n:{r:{key:value for key,value in row.get('numerics',{}).get('two_layer_transport',{}).items() if key!='steps'}
                  for r,row in group.items()} for n,group in records.items()}
+    pressure_certificates=({n:{r:row.get('numerics',{}).get('column_thermodynamics') for r,row in group.items()}
+                           for n,group in records.items()} if stem=='pressure_column' else None)
     passed=sum(row['status']=='passed' for group in records.values() for row in group.values());attempted=sum(len(g) for g in records.values())
     decision='No profile passed all fixed safeguards' if not review['development_finalists'] else 'Screening qualifiers require subsequent Earth/world checks'
     summary=dict(complete=True,decision=decision,attempted_runs=attempted,passed_runs=passed,failed_runs=attempted-passed,
         profiles=profiles,labels=labels,parameter_updates=plan['profiles'],sampling=plan.get('sampling'),
         regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
+        pressure_column_certificates=pressure_certificates,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
         selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,signed_water_budgets_mm_year=water_budgets,
         water_budget_drying_definition='column_drying includes monsoon_drying; other_column_drying is their difference. Only disjoint terms are stacked.',
@@ -210,6 +216,7 @@ def publish(out):
     if stem=='humidity_gate':specific='<p>Transport is held at the middle humidity ratio0.2. Only the rain-activation threshold changes to fixed0.5/0.6/0.7, testing whether delayed rainout improves delivery. This bounded plan was declared before its parent experiment finished; no extra humidity ratios or regional multipliers are added.</p>'
     if stem=='shared_wind':specific='<p>Eight fixed Sobol samples vary land/ocean friction, trade/westerly speed and large/local thermal-pressure amplitudes. Common-mass water transport, vertical humidity ratio0.2,1km thermal shear, rainfall closure and Earth planetary forcing remain fixed. The download records all six parameter values for every trial; eight samples do not establish an optimum.</p>'
     if stem=='storm_path':specific='<p>Shared winds and corrected common-mass transport stay fixed. Six shorter conservative storm hops first run without any actual condensation, then with fixed crest coefficients0.5/0.75. Vapor above local capacity condenses where it forms; only surviving vapor takes later hops. The download retains actual condensation certificates so changing transport geometry is distinguished from rainout. This is an unresolved storm closure, not a resolved cloud trajectory.</p>'
+    if stem=='pressure_column':specific='<p>The coupled model replaces the fixed vapor scale with hydrostatic specific-saturation integration. Two thermal profiles (existing environmental lapse or saturated moist adiabat) each use three fixed effective ocean column humidities0.45/0.60/original0.754746. Same pressure profile sets rain, sea-equilibrium and storm-crest capacities. Full terrain lapse, prescribed200K upper thermal boundary and water top100hPa are explicit approximations. The existing fixed transport humidity ratio remains; no independent vertical temperature or latent heating is added. All six combinations were declared before outcomes; no planetary forcing or accuracy threshold changes.</p>'
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 {specific}
 <p>Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.</p>

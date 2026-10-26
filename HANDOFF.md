@@ -2,29 +2,44 @@
 
 ## Current status
 
-**NEW pressure-column physics epoch; pilot ready for launch.**
-rotclimate/column_thermodynamics.py integrates hydrostatic q_sat dp/g, liquid
-Bolton specific humidity, existing8km pressure-mass basis; environmental lapse
-or saturated pseudo-moist profile, prescribed200K stratosphere, water top100hPa.
-Shared flag column_saturation_scheme defaultslegacy, opt-in pressure-lapse/moist.
-Actual model rain/sea-equilibrium/crest capacities use same profile, full terrain
-lapse. No independent vertical temperatures, latent-heating or humidity reset.
-Strict coupled toy and analytic/independent quadrature tests pass;92focused
-compatibility checks. Legacy controls still require actual archive reproduction.
-Full31/ocean/fine/established branch_failures now requires active profile cert.
+**ACTIVE pressure-column Earth pilot — read status before core changes.**
+Monitor68053, runner68055, source5c72c34. Fixed56-run plan
+calibration/pressure_column_20261026/plan.json; output/pressure_column_20261026/.
+Snapshot31/56 passed,0failed; all14 original/common-mass controls reproduce
+all saved arrays/observations/masks/budgets and native winds exactly. Six fixed
+combinations: pressure-lapse/moist x ocean column RH .45/.60/original.754746.
+Shared qratio.2/1km shear/common-mass basis unchanged; Earth forcing locked.
+No post-result additions or relaxed safeguards. Atomic status.json and own
+monitor_pid.json/run.log track progress. Source edits stop this supervisedjob;
+do independent publication/reference work while running. Budget2h, own-child
+cleanup; no automatic export, Git commit or push. If complete, read review.json
+and any full/review.json before qualification claims. No new atlasclimate adopted.
 
-Fixed56-run plan calibration/pressure_column_20261026/plan.json:14exactcontrols,
-then2profile modes x3column ocean RH(.45/.60/original.754746) x7regions. Same
-common-mass two-branch base,1km shear, qratio.2; all Earth forcing locked. No
-post-result additions or relaxed gates. Run through scripts/watch_physics_pilot.py
-with --hours 2 and --run, fresh output directory.
-Monitor stops on source changes; read status before changing core/runner helpers.
-Report PRESSURE_COLUMN_20261026.md. No new atlas climate or headline adopted.
-At this commit the pilot has NOT yet started; supervisor will record exact source
-commit/PIDs/status in output/pressure_column_20261026/. Keep work independent
-of frozen core files while it runs. Planned next independent work: cached Earth
-vertical-humidity/temperature reference audit and research-page publication.
+New core column_thermodynamics.py computes q_sat dp/g, same8km pressure mass,
+full terrain lapse, lapse/moist thermalprofile, prescribed200K stratosphere,
+water top100hPa; same rain/ocean/crest capacities. Shared flag defaultslegacy.
+No independent verticaltemperature/latentheat states or humidity reset.92focused
+compatibility checks pass, including analytic/independentquadrature and two
+coupled strict water-equation tests. Full31/ocean/fine/established guards require
+active profile certificate. Details PRESSURE_COLUMN_20261026.md.
 
+**Completed native vertical-reference audit:** output/vertical_reference_20261026/,
+calibration/vertical_reference_20261026/plan.json.0climateintegrations; cached
+NCEP1981–2010 metadata/units/arrays/masks/provenance verified.3California/20Iberia
+native ocean cells; observed925hPa temperatureanchor, otherT/q withheld.
+Matched925–300 pressurelevels andsame nativearea/Gregorianweights. Observed
+partialPW11.13/12.58mm; partialqratios.300/.243 vs lapse.475/.474, moist.324/.320.
+Moistprofile/humidity.45 closer in thesesamples; all6outcomes retained, figure
+usesfixedmiddleRH.60. Do notchange currentpilotplan or equatepartialratios to
+fullmodel two-layer ratio. Not fullclimate/rainfallvalidation.2independent
+pressureintegral/units tests pass. Cold capacityratiosaffectedby200K assumption;
+see VERTICAL_REFERENCE_20261026.md. Source/currentmodelpilot safeguards unchanged.
+
+Companion now17sections34figures19JSONdownloads, newestreferenceauditopens.
+NormalFree/Earth/Whittaker climate/econpacketsunchanged; Whittakeroutside1.44%.
+No changedglobal/cityheadline. Referencepublication QA receipts live in
+output/vertical_reference_20261026/. Genericpilotpublisher still needs a
+pressure_column title/string labels before publishing actual56-run results.
 
 **Latest layer-capacity follow-up complete (source60758ca):**
 output/reservoir_clouds_20261026/,2/2 manufactured nonlinear systems pass.
