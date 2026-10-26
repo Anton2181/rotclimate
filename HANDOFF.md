@@ -2,60 +2,56 @@
 
 ## Current status
 
-**Shared-wind campaign completed:** source4dd3ff6, output
-output/shared_wind_20261026_thread1/,70/70 strict integrations passed,14 exact
-controls, none of8 predeclared profiles qualifies. No full31/fine/established
-candidate stages. Monitor63569/runner63571 exited, runtime810.9seconds.
-No active calibration at this milestone. Initial output/shared_wind_20261026/
-protocol is retained; that launch stopped before a control completed, so adds
-no completed run. Thread settings are now explicitly1 in the supervisor.
+**Both continued calibration rounds complete; no active calibration process.**
+Shared-wind source4dd3ff6:70/70 strict integrations,14exactcontrols,nonequalify.
+Storm-path source395d51e:35/35,14exactcontrols,nonequalify. Monitor65854 and
+runner65856 exited normally at555.4s. Outputs shared_wind_20261026_thread1/
+and storm_path_20261026/. No full31/fine/established candidate stage for either.
+Cumulative series721 attempts:717passes,4original preservedfailures.
+Normal Earth scientificr39/world atlasr38, freefit and Whittaker packets all
+unchanged. Whittaker outside1.44%; no new observed global/city headline score.
 
-Series totals686 attempts:682 passes,4 original preserved failures. Shared
-wind8 fixed6-D Sobol points vary drag/background winds/pressure amplitudes,
-Earth planet and corrected common-mass two-branch water fixed. Trial6 has
-NI monthly MAE42.90 vs50.01mm and annual398 vs761obs, but aggregate rainloss
-1.1815 and S1.0965, coastal failures and aggregate temperature fail. No profile
-adopted. Read reports/SHARED_WIND_20261026.md and verified companion JSON.
+Sharedwind8fixed6-D Sobol points improve NI but still worsen coasts. Trial6
+NI monthlyMAE42.90vs50.01mm, annual398vs761obs;aggregate rainloss1.1815.
+Storm6short-hop control haszero actualcondensation eachcheckedstep all7regions;
+aggregate rainloss1.2182 vsbroadtransport1.3217. Fixedcrest.5/ .75 stillfail.
+Read reports/SHARED_WIND_20261026.md and STORM_PATH_20261026.md. No added
+candidates, adaptive thresholds or weakened gates; all recordednumerics pass.
 
-Launcher companion now13 collapsible studies,26 figures,14JSON downloads.
-Browser keyboard/hash/mobile/theme checks pass; original headline scores and
-all3 normal atlas climate/farming/population/trade data remain unchanged.
-Earth scientific profiler39; published world Earth atlasr38; Whittaker outside
-1.44%. Shared wind publisher verifies archived source/records and retainsall8
-profiles; fixed middle designindex5 is mapped, not an accuracy selection.
+**Important new attribution:** actualsigned waterbudgets show coastalexcess
+is mean-flowimport, with storms exportingwater. PacificNW commonmasstransport
+advection2639mm/year, storms-708, rain2025vs897observed. These are equation
+terms, not causalshares of a nonlinear change; legacyr39 is concentrationform.
+Publisher now exposes all7regionalbudgets and3regionalfigures in sharedwindJSON.
 
-**Next committed pilot:** calibration/storm_path_20261026/plan.json.35runs,
-14exact controls then3x7 new storm profiles on the original mass_tracer020
-basis:6 short conservative hops with effectively unlimited capacity1e-6,
-and condensation strengths.5/.75. No wind tuning, original rainfall/planetary
-parameters fixed. This separates changed mixing geometry from condensation;
-actual zero condensation of the hops-only control must be checked. Do not add
-strengths after results or weaken accuracy/numerical/branch guards. Samefull
-Earth and separate matched-world qualification before normalatlasadoption.
+**New isolated operator prototype:** experiments/two_reservoir_transport.py
+solves independentlower/upperW with verticalairflux F=-div(eta*M*Ul).
+Donorhumidity follows F; symmetric mixing optional; dry-column balance required.
+Eachlayer preservesuniformq, totalverticalwater cancels and actualmatrix/face/
+boundaryledgersagree.9new independenttests;46 focusedchecks pass with layer,
+mass-tracer andstormrainout suites. It is NOT coupled into ClimateModel, does
+notprovide Earthaccuracy or new atlasclimate. Existingcore remains unchanged.
 
-Launch supervisor only after the publication milestone commit, e.g.
-OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u \
- scripts/watch_physics_pilot.py --plan calibration/storm_path_20261026/plan.json \
- --out output/storm_path_20261026 --hours 2 --run
-(detach only with real process supervision).
-Read atomic status.json/monitor_pid.json before changing core/helperfiles.
-Frozen source changes stop own runner; no automatic atlasexport or Gitwrites.
-Generic publisher needs storm_path title/labels added before publication.
+scripts/diagnose_two_reservoir.py generates a controlledflat syntheticcase:
+samewinds/surfaceE/linearremoval and BOTHlayerboundaryvalues. Separatezero-
+and5daymixing controls; no observeddata. Imposedratio causes sharpconvergence
+pile-up; solved upperhumidityreducesit, evennomixing. Fullwaterledger~3e-14mm/day.
+This is a manufacturedmechanism with illustrative linearsinks, not cloudphysics.
+See reports/TWO_RESERVOIR_20261026.md and output/two_reservoir_20261026/.
+Nextstage must test nonlinear actualrainclosure and stable conservative ocean/
+storm exchanges before any coupled seasonal fit. Do not inherit oldscores.
 
-Terrain feasibility/audit completed separately, not a new DEM or climate.
-See reports/CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md and
-output/terrain_constraints_20261026/{audit.json,baseline_terrain_and_rivers.png}.
-Existing smooth ramp has5.27%land outside nominal tiers by>.5m; drawnrivers
-not currently used toshapeheight. Next prototype must solve channeldirection,
-strict-tier feasibility and monotonicity before inferring ridges/valleys.
-Never condition generated terrain on desired climate_target colors.
+Companion now15collapsible sections,30figures,16JSONdownloads; newprototype
+clearlymarkednotclimatecalibration. Same.batlauncher/hub. Browser keyboard/hash/
+mobile/theme checks pass. Portablemanifest andWindowscheckout checked atmilestone.
+Generic publisher supports shared_wind and storm_path; prototype has its own
+publisher. Frozenhistoric sourceepochs guarded; do not rerun oldstudies under
+future changedcore. Latestcheck receipts in output/storm_path_20261026/.
 
-The preceding completed rounds remain: two_layer49/49 (source119d54d),
-mass_tracer49/49 (source38bc4e1), humidity_gate35/35; all rejected accuracy.
-Commonmass flag is opt-in, uniformq terrain equilibrium fixed to roundoff;
-all solver/matrix/residual/face/boundary ledger terms match.164 focused model
-checks and3 actual-child supervisor tests passed in that sourceepoch. No core
-scientific source changed for the shared-wind publication milestone.
+Terrain feasibility remainsauditonly, noDEMgenerated/adopted. Read
+reports/CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md. Strict-tier feasibility and
+channelorientation are nextbeforevalley/ridgegeneration. Do notconditionDEM
+on climate_target colors. Preserve coast/lakes/bandconstraints and flagconflicts.
 
 **Completed two-branch pilot:** source119d54d,49/49 strict solves pass;
 28 exact control runs precede21 candidates. Fixed plan

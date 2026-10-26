@@ -11,6 +11,8 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('two-reservoir','Two-reservoir transport prototype'),
+    ('storm-path','Storm paths and local condensation'),
     ('shared-wind','Shared wind calibration on conservative transport'),
     ('humidity-gate','Rain activation and moisture delivery'),
     ('mass-tracer','Air-mass-aware water transport'),

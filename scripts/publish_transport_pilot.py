@@ -35,10 +35,11 @@ def publish(out):
             if name in plan.get('profile_control_archives',{}) and (row['status']!='passed' or not row['physical_control_exact']):
                 raise ValueError('Missing historical control')
             records[name][region]=row
-    stem=out.name.split('_20261026',1)[0];slug=stem.replace('_','-')
+    stem=plan.get('publication_stem',out.name.split('_20261026',1)[0]);slug=stem.replace('_','-')
     title={'two_layer':'Moist inflow and upper return flow','mass_tracer':'Air-mass-aware water transport',
            'humidity_gate':'Rain activation and moisture delivery',
-           'shared_wind':'Shared wind calibration on conservative transport'}[stem]
+           'shared_wind':'Shared wind calibration on conservative transport',
+           'storm_path':'Storm paths and local condensation'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
@@ -49,6 +50,8 @@ def publish(out):
         value=plan['profiles'][name].get(parameter)
         prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
         labels[name]=(f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
+                      'Short hops, no condensation' if name=='hops_only' else
+                      f'Crest coefficient = {value:g}' if parameter=='eddy_rainout' else
                       f'{prefix} = {value:g}' if value is not None else name.replace('_',' '))
     data=ROOT/'atlases/climate_accuracy/data'
     ratios=[[None if records[n][r]['status']!='passed' else records[n][r]['rain']['loss']/records['reference'][r]['rain']['loss']
@@ -62,8 +65,8 @@ def publish(out):
             bbox=dict(facecolor='white',alpha=.75,edgecolor='none',pad=1))
     short=dict(reference='r39',reference_damped='Damped',balanced_control='Balanced\ncontrol',
         thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol',transport_control='Transport\ncontrol')
-    symbol='RH' if parameter=='rh_threshold' else 'q'
-    ticks=[(f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else f'{symbol}={plan["profiles"][n][parameter]:g}')
+    symbol='RH' if parameter=='rh_threshold' else 'C' if parameter=='eddy_rainout' else 'q'
+    ticks=[(f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else 'Hops only' if n=='hops_only' else f'{symbol}={plan["profiles"][n][parameter]:g}')
            if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
     axes[0].set(xticks=np.arange(len(profiles)),xticklabels=ticks,yticks=np.arange(len(regions)),
         yticklabels=[r.replace('_',' ').title() for r in regions],title='Local rain loss / r39 · lower is better')
@@ -101,7 +104,48 @@ def publish(out):
     fig.supxlabel('Same scored56km cells. The middle trial in the fixed design is shown; it was not selected by accuracy.\n'
         'All profiles and failures are retained; annual regional totals do not replace local monthly error.',fontsize=9)
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
-    images=[first,second];tracer_diagnostic=None;extra_html=''
+    images=[first,second];tracer_diagnostic=None;extra_html='';water_budgets=None
+    if stem=='shared_wind':
+        # Signed terms of the actual solved equation, not an independent
+        # causal decomposition of nonlinear parameter changes.
+        keys=['advection','diffusion','storm_exchange','evaporation','other_column_drying','monsoon_drying','convergence_import']
+        water_budgets={}
+        for name in profiles:
+            water_budgets[name]={}
+            for region in regions:
+                if records[name][region]['status']!='passed':continue
+                with np.load(out/name/f'{region}.npz') as z:
+                    water_budgets[name][region]={key:float(z[key][:,z['valid']].sum(0).mean())
+                        for key in [*(k for k in keys if k!='other_column_drying'),'column_drying','simulated','observed','residual']}
+                    # Monsoon drying is already included in total column
+                    # drying. Partition it rather than counting it twice.
+                    b=water_budgets[name][region]
+                    b['other_column_drying']=b['column_drying']-b['monsoon_drying']
+        fig,axes=plt.subplots(1,3,figsize=(14,7.2))
+        colors=['#467aaf','#a1b9cd','#b18bba','#79a56e','#dfb484','#b37460','#d9c763']
+        for ax,region in zip(axes,['north_india','mexico','pacific_nw']):
+            names=['reference','transport_control'];positive=np.zeros(2);negative=np.zeros(2)
+            for key,color in zip(keys,colors):
+                values=np.array([water_budgets[n][region][key] for n in names])
+                ax.bar(np.arange(2),np.maximum(values,0),bottom=positive,color=color,label=key.replace('_',' '))
+                ax.bar(np.arange(2),np.minimum(values,0),bottom=negative,color=color)
+                positive+=np.maximum(values,0);negative+=np.minimum(values,0)
+            ax.plot(np.arange(2),[water_budgets[n][region]['simulated'] for n in names],'D',color='#222',label='Simulated rain')
+            ax.axhline(water_budgets['reference'][region]['observed'],color='#222',ls='--',lw=1.2,label='Observed rain')
+            ax.axhline(0,color='#888',lw=.6)
+            ax.set(xticks=[0,1],xticklabels=['r39','Common-mass\ntransport'],title=region.replace('_',' ').title(),
+                   ylabel='Signed annual equation terms (mm/year)')
+            low=min(float(negative.min()),0.);high=max(float(positive.max()),water_budgets['reference'][region]['observed'])
+            ax.set_ylim(low-.05*(high-low),high+.05*(high-low))
+            ax.grid(axis='y',alpha=.12)
+        handles,legend=axes[0].get_legend_handles_labels()
+        fig.legend(handles,legend,loc='lower center',bbox_to_anchor=(.5,.045),ncol=3,fontsize=8,frameon=False)
+        fig.suptitle('Where the modeled rainfall water comes from',fontsize=16)
+        fig.text(.5,.008,'Positive terms supply vapor; negative terms remove or export it. Their signed sum equals modeled rain plus residual.\n'
+            'Concentration-form r39 advection is not a conservative moisture flux. These budgets diagnose the equations; they are not causal attribution.',fontsize=8,ha='center')
+        fig.tight_layout(rect=[0,.17,1,.95])
+        proof=data/'shared_wind_water_budget.png';fig.savefig(proof,dpi=145);plt.close(fig);images.append(proof)
+        extra_html=f'<figure><a href="data/{proof.name}"><img src="data/{proof.name}" width="2030" height="943" loading="lazy" alt="Signed modeled water budgets: mean advection dominates excess coastal rain while storm exchange exports water"></a><figcaption>Excess coastal rain in the corrected two-branch control is supported mainly by mean-flow import; storm mixing exports water there. The signed terms are actual equation diagnostics, not causal shares of a nonlinear change. Legacy r39 concentration advection does not conserve vapor. All profiles and seven regional budgets are retained in the download.</figcaption></figure>'
     if stem=='mass_tracer':
         from scipy.ndimage import gaussian_filter
         from rotclimate.column_mass import ColumnMassProjection
@@ -130,6 +174,14 @@ def publish(out):
             'This verifies operator consistency, not observed rainfall skill. Values below1e-15 are clipped for the logarithmic axis.',fontsize=9)
         proof=data/'mass_tracer_equilibrium.png';fig.savefig(proof,dpi=145);plt.close(fig);images.append(proof)
         extra_html=f'<figure><a href="data/{proof.name}"><img src="data/{proof.name}" width="1450" height="653" loading="lazy" alt="Manufactured uniform mixing ratio: common-mass advection, diffusion and storm terms vanish to roundoff"></a><figcaption>The common air mass corrects a terrain tracer-consistency defect. Numerical equilibrium is separate from climate accuracy.</figcaption></figure>'
+    storm_condensation=None
+    if stem=='storm_path':
+        storm_condensation={n:{r:dict(steps=len(row['numerics']['storm_exchange']['steps']),
+            maximum_full_domain_condensation_cell_mm_day=max((s.get('condensation_cell_mm_day',0.)
+                for s in row['numerics']['storm_exchange']['steps']),default=0.))
+            for r,row in records[n].items() if row['status']=='passed'} for n in eligible}
+        if any(row['maximum_full_domain_condensation_cell_mm_day']!=0 for row in storm_condensation['hops_only'].values()):
+            raise ValueError('Hops-only control actually condensed; cannot publish as geometry-only attribution')
     compact={n:{r:{key:row.get(key) for key in ['status','error','rain','temperature','sst','column_speed','monthly_rain','circulation']}
                 for r,row in group.items()} for n,group in records.items()}
     branches={n:{r:{key:value for key,value in row.get('numerics',{}).get('two_layer_transport',{}).items() if key!='steps'}
@@ -140,7 +192,9 @@ def publish(out):
         profiles=profiles,labels=labels,parameter_updates=plan['profiles'],sampling=plan.get('sampling'),
         regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
-        selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,physics_or_atlas_adoption=False,
+        selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,signed_water_budgets_mm_year=water_budgets,
+        water_budget_drying_definition='column_drying includes monsoon_drying; other_column_drying is their difference. Only disjoint terms are stacked.',
+        storm_condensation_certificates=storm_condensation,physics_or_atlas_adoption=False,
         provenance=dict(protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),publisher_sha256=file_hash(Path(__file__))),
         images_sha256={p.name:file_hash(p) for p in images})
     write_json(data/f'{stem}.json',summary)
@@ -155,6 +209,7 @@ def publish(out):
     if stem=='mass_tracer':specific='<p>This follow-up uses the same air mass for donor W/M advection, mixing-ratio diffusion and storm exchange. The disabled path reproduces the preceding two-layer control exactly.</p>'
     if stem=='humidity_gate':specific='<p>Transport is held at the middle humidity ratio0.2. Only the rain-activation threshold changes to fixed0.5/0.6/0.7, testing whether delayed rainout improves delivery. This bounded plan was declared before its parent experiment finished; no extra humidity ratios or regional multipliers are added.</p>'
     if stem=='shared_wind':specific='<p>Eight fixed Sobol samples vary land/ocean friction, trade/westerly speed and large/local thermal-pressure amplitudes. Common-mass water transport, vertical humidity ratio0.2,1km thermal shear, rainfall closure and Earth planetary forcing remain fixed. The download records all six parameter values for every trial; eight samples do not establish an optimum.</p>'
+    if stem=='storm_path':specific='<p>Shared winds and corrected common-mass transport stay fixed. Six shorter conservative storm hops first run without any actual condensation, then with fixed crest coefficients0.5/0.75. Vapor above local capacity condenses where it forms; only surviving vapor takes later hops. The download retains actual condensation certificates so changing transport geometry is distinguished from rainout. This is an unresolved storm closure, not a resolved cloud trajectory.</p>'
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 {specific}
 <p>Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.</p>

@@ -58,6 +58,18 @@ parameter updates are included in the downloadable companion JSON.
 
 ![Fixed spatial examples](../atlases/climate_accuracy/data/shared_wind_maps.png)
 
+## Signed water-budget diagnosis
+
+![Actual signed equation terms](../atlases/climate_accuracy/data/shared_wind_water_budget.png)
+
+The corrected transport control's Pacific Northwest mean-flow term supplies
+2639mm/year while storm exchange exports708mm/year. Mexico shows the same
+pattern (advection1219mm, storms-338mm). Thus the coastal excess is maintained
+mainly by mean-flow moisture import, not positive net storm supply. These are
+actual signed equation terms, not causal shares of a nonlinear parameter
+change. Legacyr39 concentration-form advection is not a conservative flux.
+All seven regions and every sampled profile are retained in the download.
+
 ## Interpretation and next experiment
 
 Changing shared mean circulation within these bounds helps some rainfall and
@@ -81,3 +93,5 @@ These seven regions are reused development data. Global/city headline scores
 are unchanged. Reanalysis winds are monthly partial-column constraints with
 period and covariance limitations; this is conditional regional simulation,
 not a coupled global atmosphere or independent validation.
+
+The subsequent [storm-path attribution](STORM_PATH_20261026.md) is now complete; it rejects all three fixed candidates. The [two-reservoir prototype](TWO_RESERVOIR_20261026.md) tests vertical donor exchange separately and is not a new Earth accuracy result.
