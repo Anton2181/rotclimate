@@ -1,0 +1,15 @@
+{
+  "declared_before_interpolated_climates": true,
+  "conditional_on": "Run only if the completed r39 transfer review rejects both numerically converged native finalists 49 and 65. If either qualifies, skip this experiment and publish that qualified result instead.",
+  "parent": "output/r39_world_transfer",
+  "reason": "The ds16 results suggest a local tradeoff: candidate 49 has stronger overall and Mediterranean agreement but weaker tree-zone recall; candidate 65 has higher tree recall but more dry Mediterranean cells. Native candidate 49 confirms a tree-recall failure despite better total fit. Test a short, bounded path between these already fitted geometries without changing shared r39 physics or the planet.",
+  "endpoints": [49, 65],
+  "fractions_toward_65": [0.3333333333333333, 0.5, 0.6666666666666666],
+  "interpolation": "Interpolate only the existing continuous WORLD_GENES except tilt and rotation, plus the four tier_tops (rounded to metres). All other parameters must be identical. Both endpoints and every proposal must satisfy the original fixed-planet/shared-physics check. These are new physical integrations, never blends of climate fields.",
+  "screen": "Compute ds16 mean climates over layouts 1,2,3 for all three proposals, checkpointing every layout. Use the same strict numerical requirements. For ranking only, add the linearly weighted ds8-minus-ds16 discrepancies of the two measured endpoints to each proposal's metrics; clip predicted fractions to [0,1]. Rank by the unchanged native-protection violation sum, then higher predicted zonefit, then proposal index. At most one proposal advances to actual ds8; the predictor need not itself pass.",
+  "native": "Require zonefit >= published r38 +0.001, strict agreement no worse, each zone recall loss <=0.02, Mediterranean dry-share increase <=0.005, Mediterranean Cs-share loss <=0.02, and all observed numerical checks passed. Keep every original threshold unchanged.",
+  "transfer": "Only a native-passing proposal is tested against old r38 on mean climates over layouts 17,23 at ds16. Require zonefit no worse and strict-agreement loss <=0.01. On failure stop; never try another proposal after this check.",
+  "publication": "Only all passes allow staging and the complete climate, farming, population, political and directed-market export; verify assets and browser behavior through the actual .bat launcher server before replacing the canonical Earth atlas. If rejected, preserve the old atlas and all failed results.",
+  "layouts": [1, 2, 3],
+  "transfer_layouts": [17, 23]
+}

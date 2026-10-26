@@ -29,6 +29,23 @@ pass takes the 17/23 layout comparison; only all passes allow publication.
 Planet, r39 physics, target rules and the original native protection thresholds
 are unchanged. No correction is applied to actual climate fields.
 
+All seven ds16 screens converged. Native candidate 49 converged and improved
+zonefit to 0.187963 / strict 37.04%, but tree recall 4.56% failed the unchanged
+loss allowance (r38 6.79%; minimum 4.79%). Candidate 65 is now running native
+layouts. `native_comparison.png` shows the rejected 49 result; the earlier
+`world_preview.png` is ds16 only. Tree-zone mean rain falls 544→504 mm while
+winter temperatures improve; see `native_target_diagnosis.json`.
+
+If both native endpoints fail with successful numerics, a conditional bounded
+geometry path is prepared in `calibration/map_world_r39_balance/plan.json`.
+It was declared before any interpolated climates and before candidate 65's
+native result: three geometries at fractions 1/3,1/2,2/3 between 49 and 65,
+ds16 layouts1–3, at most one native check, same untouched native and layout
+protections. Run `scripts/check_r39_world_balance.py` only after the parent
+review is complete. It exits without work if the parent already qualifies.
+Use its review path with the same staging builder if it passes. Eleven
+focused interpolation, ranking and atlas-packet tests pass.
+
 DO NOT edit `rotclimate/`, `scripts/check_r39_world.py`, the transfer script/plan,
 or canonical Earth params/summary while this run is active. It freezes those
 inputs. `input_audit.json` also confirms original map/data-source hashes.

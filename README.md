@@ -1,9 +1,19 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-**Development resumed on Earth r31:** the [latest rainfall report](reports/RAINFALL_R31_20261023.md)
-records the restored 31-region reference, resumable verified benchmarks and
-bounded rainfall experiments. The development reference and the published
-atlas packets are tracked separately; this round has not replaced atlas data.
+**Current development, 26 October 2026:** Earth r39 physics passes the 31-region,
+paired 28 km and established-six checks. Its regional rainfall loss is 2.30%
+lower than r38; city monthly errors improve, but annual matches slightly worsen
+and North India remains a major weakness. See the
+[r39 calibration report](reports/CONSTRAINED_BLEND_R39_20261025.md).
+The normal Earth HTML atlas still uses verified r38 world fields while the
+fixed-planet r39 world refit undergoes native-resolution and additional-layout
+checks. A fitted Earth parameter set and a published fantasy-world atlas are
+separate milestones.
+
+All three `.bat`-served atlases include directed trade, three Trade views,
+continuous outlined sea routes, political reach, farming and population maps.
+The [trade report](reports/DIRECTED_TRADE_20261025.md) and
+[current handoff](HANDOFF.md) record the publication state.
 
 **Rainfall priority, 23 October 2026:** Earth calibration now has a rainfall-only
 objective, with explicit local annual and monthly error diagnostics. The
@@ -24,14 +34,13 @@ The bounded searches completed all 59 candidates. Earth r29 physical constants
 remain fixed. Read the [three-fit report](reports/THREE_FIT_20261022.md) for the
 score definitions, tradeoffs and numerical evidence.
 
-The latest Whittaker refinement reduces land outside the original biome diagram
-from **8.52% to 1.21%**, with unchanged terrain, envelopes and classifier. Its
-strict biome score changes from 0.5169 to 0.5092; exact biome agreement remains
-about 35.3%. The native three-layout climate, farming, population and animation
-assets are regenerated with required convergence checks. Free and Earth fits
-are unchanged. See the [before/after comparison](output/whittaker_coverage_20261022/coverage_comparison.png)
-and [iteration report](reports/ITERATION_20261022.md) for coverage checks and
-the seasonal-score tradeoff.
+The current Whittaker atlas has **1.44%** of mapped land outside the original
+biome diagram, compared with **8.52%** before the coverage guard. Its strict
+biome objective is 0.5257. The envelopes and classifier are unchanged. Climate,
+farming, population and animation assets are complete, with required numerical
+checks. The earlier [coverage comparison](output/whittaker_coverage_20261022/coverage_comparison.png)
+and [iteration report](reports/ITERATION_20261022.md) describe the initial guarded
+refinement; the current packet and comparison hub contain the later fit.
 
 The Harvest features are integrated into every atlas: farming, crop choices,
 grazing, irrigation, productivity, malaria potential, place cards, provinces,
@@ -50,8 +59,8 @@ follow that choice. Local support limits hold, with any excess reported as
 unallocated. The [population lab report](reports/ITERATION_20261023.md) explains
 the HYDE-inspired allocation and Tobler walking components.
 
-The map selector shows one of nine topics at a time. The free and Earth fits
-have 41 layers; Whittaker has 43, including proposed biome targets and match.
+The map selector shows one of ten topics at a time. The free and Earth fits
+have 53 layers; Whittaker has 55, including proposed biome targets and match.
 All retain monthly climate maps, seasonal animations, potential biome diagrams,
 climate analogues and 152 named places. The strict biome crosswalk is an
 alternative hypothesis; annual biomes do not guarantee Mediterranean summer
@@ -78,7 +87,7 @@ prints the served folder and each atlas's outside-diagram percentage. If an old
 Windows copy still shows 8.5% for Whittaker, update the complete checkout from
 `claude/friendly-turing-43ygeu` or extract the new portable bundle into its own
 folder, close the old atlas window and launch that folder's `start_atlases.bat`.
-The loaded-data line should show **1.21%**. `python3 scripts/serve_atlases.py --check`
+The loaded-data line should show **1.44%**. `python3 scripts/serve_atlases.py --check`
 prints the folder and data versions without opening a browser.
 
 The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
