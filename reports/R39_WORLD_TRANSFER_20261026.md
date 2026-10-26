@@ -62,8 +62,21 @@ All three actual ds16 balance screens converged:
 
 The declared ranking, using measured endpoint resolution discrepancies only
 to predict test order, chooses the 2/3 case (`balance_003`). Its one actual
-native test is running; these coarse results do not establish a native pass.
+native test has completed. It passes every native protection: zonefit0.187353,
+exact agreement36.35%, tree recall5.73%, Mediterranean dry6.88% and Cs80.90%.
 The five existing world-publication guard tests also pass.
+
+**The balance attempt is rejected at its final layout gate.** On layouts17/23,
+its zone objective is0.187013 versus0.187191 for r38. Strict agreement improves
+32.39%→33.60%, but that cannot cancel the objective loss under the declared
+rule. No other candidate is selected after inspecting this result. All numerical
+checks passed. The automatic staging builder correctly skips the unqualified
+result, retaining the canonical r38 atlas. Full records and the explanatory
+`native_balance.png` are under `output/r39_world_balance/`.
+
+Any future fit using these two inspected layouts must count them as development
+data and declare different layouts for final validation. This rejection remains
+part of the evidence; new training does not retroactively make it a pass.
 
 Publication requires a native pass followed by the layouts17/23 comparison,
 a full staged export, food and population accounting, complete asset checks,

@@ -39,7 +39,7 @@ native numerical checks passed; no additional-layout check was inspected.
 `world_preview.png` is ds16 only. Tree-zone mean rain falls 544→504 mm while
 winter temperatures improve; see `native_target_diagnosis.json`.
 
-**ACTIVE:** the conditional bounded geometry path in
+**COMPLETED, REJECTED:** the conditional bounded geometry path in
 `calibration/map_world_r39_balance/plan.json`, run by
 `scripts/check_r39_world_balance.py`, log `/tmp/r39_balance_runtime.log`.
 Its eligibility condition is now met: both endpoints failed, with successful numerics.
@@ -51,20 +51,19 @@ review is complete (it now is). It exits without work if the parent already qual
 Use its review path with the same staging builder if it passes. Eleven
 focused interpolation, ranking and atlas-packet tests pass.
 
-All three balance ds16 screens have now converged. The declared corrected-metric
-ranking selected `balance_003` (2/3 toward candidate65) for its one native check,
-which is running. Predictions are only for ranking; they are not measured native
-results. Native checkpoint tag will be `balance_003_native.pkl`.
-An automatic staging builder is queued behind this process (shell session5226):
-log `/tmp/r39_earth_build.log`, review `output/r39_world_balance/review.json`.
-It skips work if the final review rejects publication. Do not launch a duplicate
-builder; inspect that log/process first. Browser QA and canonical promotion
-remain manual after it finishes. The actual server is still port8766.
+All three balance ds16 screens converged. The ranking selected `balance_003`
+(2/3 toward65), which passed every actual native guard: zonefit0.187353,
+strict36.35%, tree5.73%, Med dry6.88%, Cs80.90%. Its additional-layout score
+on17/23 was0.187013 vs r38's0.187191, so it failed the unchanged gate despite
+better strict agreement33.60% vs32.39%. The attempt stopped, with no second
+candidate chosen after this result. The queued staging builder exited without
+work, correctly preserving canonical r38. No balance/build process remains.
+`native_balance.png` shows native gains but explicitly says ineligible.
 
-DO NOT edit `rotclimate/`, `scripts/check_r39_world.py`, the transfer or balance
-scripts/plans, their completed inputs, or canonical Earth params/summary while
-the balance run is active. It freezes those
-inputs. `input_audit.json` also confirms original map/data-source hashes.
+Preserve the completed transfer/balance plans, scripts and evidence. The original
+map/data source audit is in `input_audit.json`. A new robustness campaign must
+explicitly treat inspected layouts17/23 as development data and reserve other
+layouts for prospective validation; do not relabel this failed attempt a pass.
 
 If `output/r39_world_balance/review.json` says `eligible_for_publication=true`,
 run `python -I scripts/build_r39_earth_stage.py --review output/r39_world_balance/review.json`.

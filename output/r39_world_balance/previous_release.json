@@ -1,0 +1,224 @@
+{
+  "atlas": "earth_fit",
+  "physics": "r38",
+  "summary": {
+    "params": "calibration/map_world_r38/world/best_params.json",
+    "downsample": 8,
+    "image_scale": 2,
+    "seeds": [
+      1,
+      2,
+      3
+    ],
+    "seconds": 786,
+    "strict_accuracy": 0.3499243315957626,
+    "zonefit": 0.182806338810661,
+    "recall": {
+      "cold_wet": 0.7099767981438515,
+      "cold_dry": 0.0,
+      "warm_wet": 0.4149947201689546,
+      "med": 0.687374749498998,
+      "swamp": 0.0,
+      "tree": 0.06794055201698514,
+      "hot_dry": 0.24411764705882352
+    },
+    "mediterranean": {
+      "dry_share": 0.06412825651302605,
+      "cs_share": 0.7454909819639278
+    },
+    "numerics": {
+      "downsample": 8,
+      "steps_per_year": 25,
+      "picard_iters": 256,
+      "t_iters": 192,
+      "t_relaxation": 0.25,
+      "transport_scheme": "upwind",
+      "t_adaptive_retries": 2,
+      "t_anderson": true,
+      "t_require_convergence": true,
+      "moisture_relaxation": 0.25,
+      "moisture_residual_tol": 0.01,
+      "moisture_require_convergence": true,
+      "solver_rtol": 1e-06,
+      "solver_max_iter": 2000,
+      "solver_require_convergence": true,
+      "solver_recover": true
+    },
+    "observed_numerics": {
+      "members": [
+        {
+          "linear_solves": 2169,
+          "linear_unconverged": 0,
+          "linear_methods": {
+            "sor": 2169
+          },
+          "temperature_steps": 33,
+          "temperature_unconverged": 0,
+          "temperature_max_update_c": 0.04984379756430357,
+          "accelerated_stages": 0,
+          "moisture_checked": true,
+          "moisture_unconverged": 0,
+          "all_checks_passed": true
+        },
+        {
+          "linear_solves": 2197,
+          "linear_unconverged": 0,
+          "linear_methods": {
+            "sor": 2197
+          },
+          "temperature_steps": 33,
+          "temperature_unconverged": 0,
+          "temperature_max_update_c": 0.049854157548747224,
+          "accelerated_stages": 0,
+          "moisture_checked": true,
+          "moisture_unconverged": 0,
+          "all_checks_passed": true
+        },
+        {
+          "linear_solves": 2070,
+          "linear_unconverged": 0,
+          "linear_methods": {
+            "sor": 2070
+          },
+          "temperature_steps": 33,
+          "temperature_unconverged": 0,
+          "temperature_max_update_c": 0.04960395080131974,
+          "accelerated_stages": 0,
+          "moisture_checked": true,
+          "moisture_unconverged": 0,
+          "all_checks_passed": true
+        }
+      ],
+      "all_checks_passed": true
+    },
+    "fit_objective": "zonefit",
+    "fit_score": 0.182806338810661,
+    "whittaker": {
+      "strict": {
+        "profile": "strict",
+        "score": 0.3480122436747317,
+        "macro_hard": 0.1463902597962206,
+        "macro_soft": 0.5496342275532429,
+        "outside_share": 0.0,
+        "per_zone": {
+          "cold_wet": {
+            "cells": 862,
+            "hard": 0.0,
+            "soft": 0.2466736024515046
+          },
+          "cold_dry": {
+            "cells": 1978,
+            "hard": 0.023761375126390292,
+            "soft": 0.795869795486672
+          },
+          "warm_wet": {
+            "cells": 2841,
+            "hard": 0.0,
+            "soft": 0.11679861619447801
+          },
+          "med": {
+            "cells": 2994,
+            "hard": 0.6305945223780896,
+            "soft": 0.9857725894151091
+          },
+          "swamp": {
+            "cells": 1257,
+            "hard": 0.0,
+            "soft": 0.021325138213429427
+          },
+          "tree": {
+            "cells": 942,
+            "hard": 0.09978768577494693,
+            "soft": 0.8752014684336834
+          },
+          "hot_dry": {
+            "cells": 1020,
+            "hard": 0.27058823529411763,
+            "soft": 0.8057983826778228
+          }
+        }
+      },
+      "broad": {
+        "profile": "broad",
+        "score": 0.6002741865550635,
+        "macro_hard": 0.3159391073816468,
+        "macro_soft": 0.8846092657284802,
+        "outside_share": 0.0,
+        "per_zone": {
+          "cold_wet": {
+            "cells": 862,
+            "hard": 0.7621809744779582,
+            "soft": 0.9721808624716948
+          },
+          "cold_dry": {
+            "cells": 1978,
+            "hard": 0.023761375126390292,
+            "soft": 0.795869795486672
+          },
+          "warm_wet": {
+            "cells": 2841,
+            "hard": 0.3938753959873284,
+            "soft": 0.8961101828290787
+          },
+          "med": {
+            "cells": 2994,
+            "hard": 0.6305945223780896,
+            "soft": 0.9857725894151091
+          },
+          "swamp": {
+            "cells": 1257,
+            "hard": 0.0,
+            "soft": 0.7979577513275252
+          },
+          "tree": {
+            "cells": 942,
+            "hard": 0.1305732484076433,
+            "soft": 0.938575295891458
+          },
+          "hot_dry": {
+            "cells": 1020,
+            "hard": 0.27058823529411763,
+            "soft": 0.8057983826778228
+          }
+        }
+      }
+    },
+    "harvest": {
+      "crop_capacity": 243195244.80687332,
+      "pastoral_capacity": 9402451.378239276,
+      "food_capacity": 252597694.30918038,
+      "settlement_base": 184567335.22505397,
+      "settlement_no_malaria": 196044500.8605984,
+      "land_km2": 3290735.211683006,
+      "population": {
+        "endemic": {
+          "frontier": 25727100.292301226,
+          "central": 59906361.79115939,
+          "core": 151128076.84310302
+        },
+        "absent": {
+          "frontier": 27326918.543006092,
+          "central": 63631588.88002433,
+          "core": 160525850.11644292
+        }
+      },
+      "crops": [
+        0.9747028602179967,
+        0.0026711968628871353,
+        0.022065156212539183,
+        0.0005607867065768445,
+        0.0
+      ],
+      "double_crop_share": 0.054781143984302075,
+      "mean_malaria": 0.1355591424918257
+    }
+  },
+  "land_outside_diagram": 1.8521395813547165e-05,
+  "sha256": {
+    "atlases/earth_fit/params.json": "6f507a1bef3e518be0c36b5f08853e974524f099e0fc747e5d7cf35209bd77ee",
+    "atlases/earth_fit/summary.json": "1a92bd60f5e13b4c46d374fa323b5eec583a23cbaac71b4164d8e5a3a985fd58",
+    "atlases/earth_fit/data/atlas.json": "6d95dae404ff12e7af76b6a391cf56e66e1c30b01447ee54f53ee8a4015bdfee",
+    "atlases/earth_fit/data/atlas.bin": "dc7866bb3db578f84330febf72e23dd0722830017a2390007b8f00243a0b985e",
+    "atlases/earth_fit/data/build_provenance.json": "260a76dd4b1839a5b1a25198597461775083012efcaf5ed68b3c724f0fad2a15"
+  }
+}
