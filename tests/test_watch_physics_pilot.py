@@ -17,16 +17,17 @@ def fixture(tmp_path,monkeypatch,source):
 
 
 def test_completed_child_has_accurate_atomic_status(tmp_path,monkeypatch):
-    source="""import sys,json
+    source="""import sys,json,os
 from pathlib import Path
 p=Path(sys.argv[sys.argv.index('--out')+1])/'reference';p.mkdir()
-(p/'toy.json').write_text(json.dumps(dict(status='passed')))
+(p/'toy.json').write_text(json.dumps(dict(status='passed',threads=[os.environ['OPENBLAS_NUM_THREADS'],os.environ['OMP_NUM_THREADS']])))
 """
     plan,out,_=fixture(tmp_path,monkeypatch,source)
     sleep=time.sleep;monkeypatch.setattr(monitor.time,'sleep',lambda _:sleep(.02))
     monitor.run(plan,out,1)
     result=json.loads((out/'status.json').read_text())
     assert result['state']=='complete' and result['completed_runs']==result['planned_runs']==1 and result['passed_runs']==1
+    assert json.loads((out/'reference/toy.json').read_text())['threads']==['1','1']
 
 
 def test_changed_source_stops_only_its_own_child_group(tmp_path,monkeypatch):

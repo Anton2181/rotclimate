@@ -54,7 +54,8 @@ def run(plan_path,out,hours):
     began=time.monotonic();state='running';reason=None;child=None
     try:
         with (out/'run.log').open('w') as log:
-            child=subprocess.Popen(command,cwd=ROOT,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
+            environment=dict(os.environ,OPENBLAS_NUM_THREADS='1',OMP_NUM_THREADS='1')
+            child=subprocess.Popen(command,cwd=ROOT,env=environment,stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,start_new_session=True)
             atomic(out/'monitor_pid.json',dict(monitor_pid=os.getpid(),runner_pid=child.pid,source_commit=source_commit))
             while True:
                 manifest=out/'protocol.json'
@@ -80,6 +81,7 @@ def run(plan_path,out,hours):
                 review_path=out/'review.json';review=json.loads(review_path.read_text()) if review_path.exists() else None
                 status=dict(state=state,reason=reason,updated_utc=datetime.now(timezone.utc).isoformat(),elapsed_seconds=round(elapsed,1),
                     budget_hours=hours,source_commit=source_commit,monitor_pid=os.getpid(),runner_pid=child.pid,
+                    numerical_threads=dict(OPENBLAS_NUM_THREADS=1,OMP_NUM_THREADS=1),
                     completed_runs=len(rows),planned_runs=len(plan['profiles'])*len(plan['regions']),
                     passed_runs=sum(r['status']=='passed' for r in rows),failed_runs=sum(r['status']=='failed' for r in rows),
                     phase='full_earth_gates' if state=='running' and review is not None else 'fixed_regional_pilot',

@@ -33,7 +33,7 @@ new plots/maps/table/JSON across3 studies. Launcher companion now12 studies,
 Final QA is recorded in output/humidity_gate_20261026/; earlier source receipts
 are preserved in output/two_layer_20261026/ and mass_tracer_20261026/.
 
-**Next bounded job is prepared (not yet launched at this checkpoint):**
+**Bounded shared-wind job prepared for thread-capped restart:**
 calibration/shared_wind_20261026/plan.json declares8 fixed scrambled Sobol
 points (seed20261026), six shared atmospheric parameters: land/ocean drag,
 trade/westerly speed and large/local thermal-pressure amplitudes. Earth
@@ -765,3 +765,28 @@ that were running when the session ended did NOT save; rerun them as listed.
 Plans are frozen before results; tests run once; deviations reported. Don't edit `rotclimate/`
 while a search, gate or build is running. No model names in commits. Commit trailers as in the
 existing history. Never use `pkill -f` patterns that match your own shell (kill by PID).
+
+## Side project: constrained terrain feasibility,26October
+
+User asks whether additional/transition terrain fitting tiers/rivers is feasible
+and climatically useful. Answer yes with constrained ensembles and no climate-
+paint conditioning. Read-only audit script audit_terrain_constraints.py generates
+baseline_terrain_and_rivers.png/audit.json in output/terrain_constraints_20261026.
+No new terrain generated or adopted. Existing geography already uses continuous
+distance ramps+Gaussian; rivers do not constrain it. Renderer tools already have
+centreline tracing and stream-power erosion, but do not guarantee mapped river
+flow/tier bounds. Report CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md gives plan.
+Source2000x926,1.840km/pixel with publishedEarth tiers62/814/1135/2528m;108
+river raster components,107 sizeable/near-water; flow not inferred. Smoothing
+places5.27% land >.5m outside its nominal band. Future constrained ensemble
+should preserve coasts/lakes, fit monotone channels, flag tier conflicts, infer
+ridges/passes and compare coarse terrain statistics under unchanged physics.
+Do not silently load renderer erosion or infer climate gains from hillshade.
+
+Initial unattended shared-wind launch monitor62552/runner62554 was gracefully
+stopped before any completed regional record: it inherited multithread BLAS
+settings instead of the benchmark’s1-thread settings. Preserve
+output/shared_wind_20261026/ as an incomplete setup. Supervisor now explicitly
+sets OPENBLAS_NUM_THREADS=1,OMP_NUM_THREADS=1; the completed-child test checks
+the actual inherited values. All3 supervisor tests pass after correction.
+Use fresh output/shared_wind_20261026_thread1 for restart, same fixed plan.
