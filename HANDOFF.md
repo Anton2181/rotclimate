@@ -2,6 +2,22 @@
 
 ## Current status
 
+**Latest layer-capacity follow-up complete (source60758ca):**
+output/reservoir_clouds_20261026/,2/2 manufactured nonlinear systems pass.
+Prior controls source/result hashes verified before import; no new Earth
+integrations. Fixed capacity split.625/.375 uses old rainfall law on W_i/f_i,
+so exact old-profile equivalence includes the convective numerical water floor.
+Actualhumidity is not reset. No/5daymix peakrain2.81/2.56mm/day, maximumqratio
+.907/.912 vs proportionalcolumn.973: partialmechanism change, still no realistic
+Earth vertical-profile validation. Prescribedcapacity is not independent
+thermodynamics, clouds/latentheating/ocean/storm/seasonalcoupling remainunresolved.
+Sixnewtests pluspreviousfocusedchecks:58tests acrossreservoir/layer/mass/storm
+suites pass. See RESERVOIR_CLOUDS_20261026.md. No core/default/climateatlasadoption.
+Latest companion16sections32figures18downloads; newcloudresults foldedinto
+newest nonlinearsection toavoidanotherheadline. FinalQA/portable receipts are
+in output/reservoir_clouds_20261026/. No active calibration process.
+
+
 **Latest nonlinear follow-up (source0e55984) complete:**
 calibration/reservoir_rain_20261026/plan.json, output/reservoir_rain_20261026/.
 Three predeclared manufactured systems pass the unchanged r39 nonlinear column

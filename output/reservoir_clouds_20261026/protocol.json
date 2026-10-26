@@ -1,0 +1,61 @@
+{
+  "plan": {
+    "purpose": "Fixed layer-capacity condensation attribution after near-uniform upper humidity in proportional column rain. Two predeclared profiles; no Earth accuracy claim.",
+    "physics": "calibration/local_accuracy_20261023/r39_params.json",
+    "shape": [
+      7,
+      101
+    ],
+    "cell_km": 20.0,
+    "lower_mass_fraction": 0.25,
+    "lower_wind_amplitude_ms": 8.0,
+    "upper_wind_factor": -0.3333333333333333,
+    "source_mm_day": 1.0,
+    "saturation_mm": 40.0,
+    "dynamics": 0.5,
+    "instability": 1.0,
+    "prescribed_temperature_C": 22.0,
+    "convective_temperature_factor": 0.7,
+    "boundary_column_water_mm": 14.0,
+    "boundary_upper_lower_q_ratio": 0.2,
+    "drying_days": 50.0,
+    "profiles": {
+      "layer_no_mix": {
+        "mixing_days": null
+      },
+      "layer_mix5": {
+        "mixing_days": 5.0
+      }
+    },
+    "numerics": {
+      "moisture_diffusion": 0.0,
+      "moisture_relaxation": 0.1,
+      "moisture_residual_tol": 1e-08,
+      "picard_iters": 2048,
+      "linear_rtol": 1e-11,
+      "linear_max_iter": 10000
+    },
+    "physical_definition": "All previous synthetic inputs remain fixed. Partition total saturation capacity using the prior fixed0.2 humidity shape, f_lower=.625/f_upper=.375, but DO NOT force actual humidity. Evaluate unchanged rain_coefficient at equivalent column W_i/f_i; this exactly recovers the original column law when W_i=f_i*W, including convective numerical water floor. Each layer independently condenses/removes water through its own humidity relative to capacity. No new temperature or rain-law parameters. No/5day symmetric mixing separately controlled. Capacity shape is prescribed, not independently observed vertical thermodynamics. Parent controls imported only after verifying all frozen source/record hashes; no new parent climate integrations.",
+    "publication": "Two manufactured nonlinear solves, no Earth climate integration or normal atlas adoption. Retain all outcomes and strict per-layer residuals. New capacity shape is an explicit approximation; no interpretation as independent cloud temperatures, latent heating or validation. No adaptive profiles after outcomes.",
+    "parent": "output/reservoir_rain_20261026",
+    "capacity_upper_lower_q_ratio": 0.2
+  },
+  "sources": {
+    "calibration/reservoir_rain_20261026/plan.json": "f2560c0059c22e3ea6ab7a575a3c61a5c65937bbdea394556eea13af798b7e57",
+    "calibration/local_accuracy_20261023/r39_params.json": "2af65c29e35f4a06dce7a56e97219761b4c41c828734dd6d24a48ebdab3ee2e6",
+    "scripts/check_reservoir_rain.py": "a507658c144a2cfa5503fa37565a2eb5ffb16c43f4294dc63175f5077a521c4e",
+    "experiments/two_reservoir_transport.py": "a7a044710f2d56394b16fc8c3a8dc7421dbd8d040e54fc4c1216b6aa2f65f771",
+    "experiments/condensing_reservoirs.py": "7a93f4a07a81eb9b8420b0a8318b5e6ca62d43f98c2d77f62350261aa029565b",
+    "rotclimate/moisture.py": "ee40f0b9ce6248965868f1be03339c6e5b7d8f2bed00aa46f1384b42f35f0dfe",
+    "rotclimate/layer_transport.py": "9cbb87dda8d88331edc100e7e02e99f035a1f9b2bd14cced5395352c5b35c577",
+    "rotclimate/transport.py": "51e1f353f5649b24c79958bc7b0e7eff997cdf5c2f9fc13832f6a2879dc93fe4",
+    "rotclimate/solver.py": "19a954d0b91daa3a4ffee888f7f19e7f97396527386e4942ad677708f5be2cf6",
+    "calibration/reservoir_clouds_20261026/plan.json": "0014cb650553417e7cec418b8cb499ab8cddc3248eb1f4b1ecc075364724f49b",
+    "scripts/check_reservoir_clouds.py": "808811dae7787d43af3b9d5a68e323811220d112f1efbe9e05bace4cb243096f",
+    "experiments/reservoir_clouds.py": "74ee08ea6107cf5c77be978a7c2ce751d45ff5d3c97eb16696db8a9bc408a2bc",
+    "tests/test_reservoir_clouds.py": "fc79cd70553435e02a07c3329764b5797b4b6ccc74113aefc7d447723b1e47ac",
+    "output/reservoir_rain_20261026/protocol.json": "11c1a59e5261fcb859e9fe83ac59a2932de92b5c3dcd0999f6446b0b688a4fe6",
+    "output/reservoir_rain_20261026/review.json": "a59dbe15fbc34c393277c1d810d22596f325aa5d376c79cfb7e9c17766833023"
+  },
+  "source_commit": "60758ca9de8f29c7598454a91032cb1f65f40bf9"
+}
