@@ -82,6 +82,7 @@ def main():
              ROOT/'reports/PRESSURE_COLUMN_20261026.md',
              ROOT/'reports/VERTICAL_REFERENCE_20261026.md',
              ROOT/'reports/RESERVOIR_BACKEND_20261026.md',
+             ROOT/'reports/INDEPENDENT_WATER_20261026.md',
              ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
              ROOT/'reports/SEASONAL_CYCLE_20261026.md',
              ROOT/'output/constrained_blend_20261025/rainfall_changes.png',

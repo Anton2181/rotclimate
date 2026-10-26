@@ -40,7 +40,8 @@ def publish(out):
            'humidity_gate':'Rain activation and moisture delivery',
            'shared_wind':'Shared wind calibration on conservative transport',
            'storm_path':'Storm paths and local condensation',
-           'pressure_column':'Hydrostatic saturation and rainfall'}[stem]
+           'pressure_column':'Hydrostatic saturation and rainfall',
+           'independent_water':'Independent lower and upper atmospheric water'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
@@ -50,7 +51,7 @@ def publish(out):
     for name in eligible:
         value=plan['profiles'][name].get(parameter)
         prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
-        labels[name]=(plan['publication_labels'][name] if stem=='pressure_column' else
+        labels[name]=(plan['publication_labels'][name] if stem in ('pressure_column','independent_water') else
                       f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
                       'Short hops, no condensation' if name=='hops_only' else
                       f'Crest coefficient = {value:g}' if parameter=='eddy_rainout' else
@@ -68,14 +69,16 @@ def publish(out):
     short=dict(reference='r39',reference_damped='Damped',balanced_control='Balanced\ncontrol',
         thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol',transport_control='Transport\ncontrol')
     symbol='RH' if parameter=='rh_threshold' else 'C' if parameter=='eddy_rainout' else 'q'
-    ticks=[(f'{plan["profiles"][n]["column_saturation_scheme"].split("-")[-1].title()}\nRH={plan["profiles"][n]["ocean_rh"]:.2f}'
+    short.update(pressure_control='Pressure\ncontrol')
+    ticks=[(('No vertical\nmixing' if plan['profiles'][n][parameter]==0 else '5day vertical\nmixing') if stem=='independent_water' else
+            f'{plan["profiles"][n]["column_saturation_scheme"].split("-")[-1].title()}\nRH={plan["profiles"][n]["ocean_rh"]:.2f}'
             if stem=='pressure_column' else f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else 'Hops only' if n=='hops_only' else f'{symbol}={plan["profiles"][n][parameter]:g}')
            if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
     axes[0].set(xticks=np.arange(len(profiles)),xticklabels=ticks,yticks=np.arange(len(regions)),
         yticklabels=[r.replace('_',' ').title() for r in regions],title='Local rain loss / r39 · lower is better')
     axes[0].tick_params(axis='x',labelsize=8)
     fig.colorbar(im,ax=axes[0],shrink=.7,label='Log10 local rain-loss ratio')
-    selected=['reference',list(plan.get('profile_control_archives',{}))[-1],*eligible]
+    selected=['reference',plan.get('map_control',list(plan.get('profile_control_archives',{}))[-1]),*eligible]
     colors=['#285c80','#888888',*plt.colormaps['tab10'](np.linspace(0,1,len(eligible)))]
     for name,color in zip(selected,colors):
         row=records[name]['north_india']
@@ -108,6 +111,41 @@ def publish(out):
         'All profiles and failures are retained; annual regional totals do not replace local monthly error.',fontsize=9)
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
     images=[first,second];tracer_diagnostic=None;extra_html='';water_budgets=None
+    reservoir_certificates=None
+    if stem=='independent_water':
+        reservoir_certificates={n:{r:row.get('numerics',{}).get('moisture_reservoirs')
+            for r,row in group.items()} for n,group in records.items()}
+        fig,axes=plt.subplots(1,3,figsize=(15,5.6),constrained_layout=True)
+        names=['transport_control','pressure_control',*eligible];reference=None
+        for name in names:
+            row=records[name]['iberia']
+            score=row.get('circulation',{}).get('humidity',{}).get('scores',{}).get('ocean')
+            if row['status']!='passed' or score is None:continue
+            reference=score
+            axes[0].plot(score['monthly_model_water_mm'],label=labels[name])
+            axes[1].plot(score['monthly_model_q_ratio'],label=labels[name])
+        if reference is not None:
+            axes[0].plot(reference['monthly_reference_water_mm'],color='#222',lw=2.5,label='NCEP/NCAR')
+            axes[1].plot(reference['monthly_reference_q_ratio'],color='#222',lw=2.5,label='NCEP/NCAR')
+        for ax in axes[:2]:ax.set(xticks=range(12),xticklabels=list('JFMAMJJASOND'));ax.grid(alpha=.15)
+        axes[0].set(title='Iberia ocean · matched925–300hPa water',ylabel='Partial precipitable water (mm)')
+        axes[1].set(title='Vertical shape on identical pressure intervals',ylabel='Mean q700–300 / mean q925–700')
+        axes[0].legend(frameon=False,fontsize=7)
+        baseline=records['transport_control']['iberia']['circulation']['humidity']['scores']['ocean']
+        for i,name in enumerate(names):
+            score=records[name]['iberia'].get('circulation',{}).get('humidity',{}).get('scores',{}).get('ocean')
+            if records[name]['iberia']['status']!='passed' or score is None:continue
+            axes[2].bar(i-.17,score['partial_water_mae_mm']/baseline['partial_water_mae_mm'],width=.34,color='#547fa8',label='PW MAE' if i==0 else None)
+            axes[2].bar(i+.17,score['partial_q_ratio_mae']/baseline['partial_q_ratio_mae'],width=.34,color='#ba8658',label='Shape MAE' if i==0 else None)
+        axes[2].axhline(plan['humidity_max_ratio'],color='#555',ls='--',lw=1,label='1.02 protection limit')
+        axes[2].set(xticks=range(len(names)),xticklabels=['Fixed q','Pressure','No mix','5day mix'],
+            title='Separate observed-humidity error safeguards',ylabel='MAE / fixed-profile transport control')
+        axes[2].legend(frameon=False,fontsize=8)
+        fig.suptitle('Independent water · actual coupled Earth humidity',fontsize=16)
+        fig.supxlabel('Matched native ocean footprints, true areas and Gregorian month weights; no observed humidity enters the solver.\n'
+            'Partial pressure intervals differ from full dry-layer masses. Coarse model-assisted reanalysis is a reused development constraint.',fontsize=9)
+        third=data/f'{stem}_humidity.png';fig.savefig(third,dpi=145);plt.close(fig);images.append(third)
+        extra_html=f'<figure><a href="data/{third.name}"><img src="data/{third.name}" width="2175" height="812" loading="lazy" alt="Actual coupled partial ocean water, vertical humidity shape and separate observed error protections"></a><figcaption>Matched pressure ranges exclude air below925hPa and above300hPa. Each observed-water and shape MAE must remain within2% of the common-mass fixed-profile control. A closer rainfall total cannot pay for worse humidity physics.</figcaption></figure>'
     if stem=='shared_wind':
         # Signed terms of the actual solved equation, not an independent
         # causal decomposition of nonlinear parameter changes.
@@ -197,6 +235,7 @@ def publish(out):
         profiles=profiles,labels=labels,parameter_updates=plan['profiles'],sampling=plan.get('sampling'),
         regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
         pressure_column_certificates=pressure_certificates,
+        independent_water_certificates=reservoir_certificates,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
         selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,signed_water_budgets_mm_year=water_budgets,
         water_budget_drying_definition='column_drying includes monsoon_drying; other_column_drying is their difference. Only disjoint terms are stacked.',
@@ -217,15 +256,18 @@ def publish(out):
     if stem=='shared_wind':specific='<p>Eight fixed Sobol samples vary land/ocean friction, trade/westerly speed and large/local thermal-pressure amplitudes. Common-mass water transport, vertical humidity ratio0.2,1km thermal shear, rainfall closure and Earth planetary forcing remain fixed. The download records all six parameter values for every trial; eight samples do not establish an optimum.</p>'
     if stem=='storm_path':specific='<p>Shared winds and corrected common-mass transport stay fixed. Six shorter conservative storm hops first run without any actual condensation, then with fixed crest coefficients0.5/0.75. Vapor above local capacity condenses where it forms; only surviving vapor takes later hops. The download retains actual condensation certificates so changing transport geometry is distinguished from rainout. This is an unresolved storm closure, not a resolved cloud trajectory.</p>'
     if stem=='pressure_column':specific='<p>The coupled model replaces the fixed vapor scale with hydrostatic specific-saturation integration. Two thermal profiles (existing environmental lapse or saturated moist adiabat) each use three fixed effective ocean column humidities0.45/0.60/original0.754746. Same pressure profile sets rain, sea-equilibrium and storm-crest capacities. Full terrain lapse, prescribed200K upper thermal boundary and water top100hPa are explicit approximations. The existing fixed transport humidity ratio remains; no independent vertical temperature or latent heating is added. All six combinations were declared before outcomes; no planetary forcing or accuracy threshold changes.</p>'
+    if stem=='independent_water':specific='<p>Lower and upper water are solved independently in the coupled seasonal model, with donor vertical exchange, lower-only ocean/land evaporation, layer rain, drying and conservative storms. Both actual layer equations and their sum must pass strict residual checks. Calibrated total capacity stays fixed; a normalized moist hydrostatic profile only partitions capacity and boundary supply, without resetting actual humidity. The old fixed humidity ratio is inactive. The two declared closures add no extra mixing or symmetric5day mixing.</p>'
+    transport_scope=('The independent steady water states share a stationary dry-air column with25% lower and75% upper mass. Actual spatial water fractions feed donor faces and diagnostic vapor winds. There is no independently solved vertical temperature, latent heating or atmospheric time storage.' if stem=='independent_water' else 'Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.')
+    humidity_scope=('independently solved humidity in two broad dry layers' if stem=='independent_water' else 'an imposed vertical humidity shape')
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 {specific}
-<p>Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.</p>
+<p>{transport_scope}</p>
 <p>The pilot attempts {attempted} integrations: {passed} pass strict numerics and {attempted-passed} fail. Original and historical physical controls must reproduce their archived fields before candidates. <strong>{decision}.</strong> No adopted profile, headline score or atlas climate is replaced by this research page.</p>
 <figure><a href="data/{first.name}"><img src="data/{first.name}" width="2030" height="870" loading="lazy" alt="All fixed transport profiles: local regional rain-loss ratios and North India monthly rain"></a><figcaption>Every trial faces rain, temperature, regional, ocean, outside-wind, mass and separate-branch speed safeguards. Separate upwinding adds grid-dependent first-order mixing; it is not a measured physical diffusivity. Control details and all numerical certificates are in the download.</figcaption></figure>
 <div class="table"><table><caption>North India, identical scored cells</caption><thead><tr><th>Profile</th><th>Annual rain mm</th><th>Monthly rain MAE mm</th><th>Wind RMSE m/s</th></tr></thead><tbody>{''.join(table)}</tbody></table></div>
 <figure><a href="data/{second.name}"><img src="data/{second.name}" width="2030" height="1160" loading="lazy" alt="Observed, control and fixed middle-ratio transport rainfall maps in North India and Pacific Northwest"></a><figcaption>These fixed examples expose spatial tradeoffs. All ratios and failures remain in the results; closer annual totals can still hide worse local rain.</figcaption></figure>
 {extra_html}
-<p class="note">The model retains approximate hydrostatic mass, flat projected geometry, a fixed lower mass fraction and an imposed vertical humidity shape. Reanalysis constraints cover only a monthly925–300hPa partial column and omit transient moisture covariance. Reused development regions are not new independent validation.</p>
+<p class="note">The model retains approximate hydrostatic mass, flat projected geometry, a fixed lower mass fraction and {humidity_scope}. Reanalysis constraints cover only a monthly925–300hPa partial column and omit transient moisture covariance. Reused development regions are not new independent validation.</p>
 <p><a href="data/{stem}.json" download>Download {title.lower()} results</a> · <a href="../../reports/{stem.upper()}_20261026.md">Method, results and limitations</a></p></section><!--{slug}-end-->'''
     page=ROOT/'atlases/climate_accuracy/index.html';content=page.read_text();start,end=f'<!--{slug}-start-->',f'<!--{slug}-end-->'
     if start in content:

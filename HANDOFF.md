@@ -2,29 +2,41 @@
 
 ## Current status
 
-**Next actual Earth pilot declared:** `calibration/independent_water_20261026/plan.json`.
-The independent lower/upper moisture solver is now integrated behind
-`moisture_reservoirs=False` by default. Same total calibrated capacity; normalized
-moist profile partitions capacity only. Lower-only actual evaporation, layer
-rain/drying/conservative storms and donor vertical exchange. Both layer and
-column nonlinear equations plus independent sparse linear equation checked.
-Actual spatial layer fractions feed vapor faces and diagnostic winds. See
-`reports/INDEPENDENT_WATER_20261026.md`. Old ratio is inactive in this mode.
+**Independent seasonal water Earth pilot COMPLETE:** source `fd458cf`,
+`output/independent_water_20261026/`,35/35 strict passes,21historical controls
+(all saved NPZ fields verified exact, including original reference), runtime390.3s.
+No candidate qualifies; no full31/ocean/fine/established stages. No active job.
+Series812actual attempts/808passes/4old preserved failures. No normal atlas or
+headline replacement. No-mix candidate S1.17546,rainratio1.35486,T.99607;
+5daymix S1.28217,rain1.52319,T1.04114. NI rain281/316 vs761obs, monthlyMAE44.45/
+43.54 vsr39 50.01; Iran226/316 vs232obs, but Iberia822/1041 vs392obs.
 
-35declared actual Earth runs:7original r39,7exact archived common-mass controls,
-7exact pressure-moist/RH.45controls, then7each no/5day vertical mixing. Candidate
-numerics damping.1/work1024; controls.05/1024; all error tolerances unchanged.
-All original physical/accuracy guards remain. Extra native Iberia ocean partial
-PW and vertical-shape MAEs may each worsen at most2% vs paired fixed-profile
-transport control; matched925–300 and700–300/925–700intervals, no observed
-forcing. Full/ocean/fine/established stage layer certificates required, plus
-repeated ocean humidity guard and extra paired28km Iberia before adoption.
-No active job at this commit; supervisor should start after committing this
-source epoch. Check `output/independent_water_20261026/status.json` for live state
-once launched. Do not mutate frozen sources during it. No automatic atlas/Git
-writes; publish actual outcomes, preserving failures. Pressure campaign below
-is complete and unchanged; older backend "not integrated" text is superseded.
+Opt-in `moisture_reservoirs` integrates independent steady lower/upper water,
+actual lower-only evaporation, layer rain/drying/storms, donor vertical exchange
+and optional0/5day symmetric mixing. Actual layer AND total equation checked;
+231seasonal/primer steps per candidate, no sparse recoveries. Old humidity ratio
+inactive (coupled exact test). Legacy total capacity retained; normalized moist
+profile only partitions capacity and boundary supply. No new vertical energy,
+latent heat or atmospheric time storage. Default old controls exact.
 
+New native humidity safeguard catches physics regressions:20matched Iberia ocean
+footprints, partialPW925–300 and q700–300/q925–700. Control water11.68mm vs12.58obs,
+qratio.254 vs.243; no-mix improvesPWMAE slightly but shapeMAE3.10xcontrol,
+5daymix5.65xcontrol andPWMAE1.073xcontrol. Both fail. NIlandqratio.490 vs.251obs
+without mixing, diagnostic extra concern. Do not equate full dry-layer ratios
+with partial observed ratios; model reconstructs piecewise-uniform q within its
+broad layers. All controls and guards declared before candidate scores.
+
+Full/ocean/fine/established gates preserve every layer/column certificate, ocean
+humidity check, extra paired28km Iberia humidity before possible adoption.
+Actual results/report: `reports/INDEPENDENT_WATER_20261026.md`. Companion now
+19collapsible studies/39figures/21JSONdownloads, newest independent water opens;
+all prior evidence remains. Three normal atlas packets unchanged vsb47d075.
+Next physical question: missing parcel-ascent cooling/condensation before donor
+water reaches the broad upper layer. Test independently with manufactured
+thermodynamics before another actual Earth fit; no post-result humidity reset.
+Do not rerun frozen old publications after changing scientific source epochs.
+Older backend "not integrated" text below is superseded.
 
 **Pressure-column Earth pilot COMPLETE (source5c72c34), no active job.**
 output/pressure_column_20261026/status.json:56/56passed,14exactcontrols,noneof6
