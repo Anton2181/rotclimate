@@ -1,0 +1,112 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Predeclare a bounded rainfall-closure follow-up before the common-mass pilot completes: keep the middle humidity ratio .2 fixed and test higher column humidity thresholds to delay premature rainout. This is a new physical family, not extra humidity candidates after that pilot.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/mass_tracer_20261026/review.json",
+  "parent_source_commit": "38bc4e1",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "rh050": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "rh_threshold": 0.5
+    },
+    "rh060": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "rh_threshold": 0.6
+    },
+    "rh070": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "rh_threshold": 0.7
+    }
+  },
+  "profile_numerics": {
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "rh050": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "rh060": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "rh070": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "transport_control": "output/mass_tracer_20261026/mass_tracer020"
+  },
+  "eligible_profiles": [
+    "rh050",
+    "rh060",
+    "rh070"
+  ],
+  "maximum_finalists": 2,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Keep common-mass two-branch transport, lower mass fraction .25, fixed1km lower shear and upper/lower specific-humidity ratio .2. Only generic rain-activation rh_threshold changes from adopted .3677449 to fixed .5/.6/.7. No tau, rain multiplier, regional mask, Earth planetary or boundary forcing adjustment. The model column RH uses approximate saturated-column capacity, so these are plausible sensitivity values, not measured cloud-base relative humidities. Test whether delaying rainout improves delivery/placement; evaluate actual coupled solves, not offline rescaled rain.",
+  "control": "Seven unchanged r39 climates/geography and3 native winds must reproduce exactly. Seven new transport-control climates must reproduce every archived mass-tracer020 NPZ field, then21 candidate solves. Same .05/1024 work except original reference; all original error tolerances, branch/mass/operator certificates and seven-region protections preserved. Preserve numerical failures.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes. Also require two_layer_transport certificate with dry-column residual<=1e-10 and EACH branch wind maximum<=60m/s,p95<=25m/s (all primer/scored steps), rather than hiding a fast return in the weighted mean. Exactly3 fixed humidity ratios; no extra candidates after outcomes.",
+  "advance": "Best at most2 fixed qualifiers advance through unchanged full31 policy_v2 and individual regional protections, integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain ratio<=.98, and established6 S<=1.01 once. Record physical/numerical blocks separately. These are reused development sets, not new independent validation. Independent branch mass/speed and mass-tracer certificates are now checked in every full31/ocean/fine/established gate, not just the seven-region pilot.",
+  "publication": "This plan is declared before the parent common-mass pilot completes and before any new threshold scores. Exactly3 humidity thresholds, fixed middle transport ratio .2; no added threshold/ratio candidates after outcomes. No climate/atlas adoption unless unchanged full31/ocean/fine/established6 and matched-world gates all pass. No city/global-score claim from these reused regions.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "transport_control",
+  "publication_parameter": "rh_threshold"
+}
