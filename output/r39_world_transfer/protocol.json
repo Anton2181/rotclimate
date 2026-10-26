@@ -1,0 +1,72 @@
+{
+  "plan": {
+    "declared_before_supplemental_model_results": true,
+    "reason": "The completed ds32 search's eligible candidate 32 converged at ds8 but missed publication protections. Its coarse-to-native changes are substantial, especially Mediterranean recall. Use that measured fidelity discrepancy to guide a bounded intermediate-resolution screen instead of repeating the same coarse optimizer.",
+    "parent_search": "calibration/map_world_r39",
+    "native_anchor": "output/r39_world_publication/review.json",
+    "layouts": [
+      1,
+      2,
+      3
+    ],
+    "physics_and_planet": "Keep qualified r39 physics and the same planet fixed exactly as the parent search. Candidate parameters come only from completed parent rows; no new fitted variable, climate-field correction or altered target definition.",
+    "intermediate_selection": "Add the measured native-minus-coarse anchor discrepancy to every archived row's score, accuracy, per-zone recalls and Mediterranean shares for ranking only. Clip predicted fractions to [0,1]. Rank by the sum of positive violations of the unchanged native publication thresholds, then higher predicted zonefit, then evaluation index. Select five unique rows, excluding the already native-tested anchor. Include the parent initial geometry and the anchor itself as controls, deduplicating. At most seven worlds run at ds16.",
+    "native_selection": "Use the actual ds16 anchor to estimate its discrepancy to the known ds8 anchor. Rank the other successfully computed ds16 worlds with that new correction and the same violation/score/index ordering. At most two advance to actual ds8, sequentially; stop at the first passing all unchanged native thresholds. Do not require the approximate predictor itself to pass: it only orders real tests.",
+    "native_thresholds": "Zonefit at least the published r38 +0.001; strict agreement no worse; each zone recall may fall at most 0.02; Mediterranean dry share increase <=0.005 and Cs loss <=0.02. Every observed numerical check must pass. All tests classify actual integrated fields, never corrected fields.",
+    "layout_transfer": "Only the first native-passing world is compared with old r38 on layouts 17 and 23 at ds16, unused in this refit's optimization. Require mean-climate zonefit no worse and strict-accuracy loss <=0.01. On failure stop this publication attempt; do not select another candidate after inspecting these layouts.",
+    "persistence": "Save each verified layout separately with exact parameter, scientific-source and input identities before assembling means. Resume only identical saved inputs; preserve failures and never reduce convergence requirements.",
+    "publication": "Only a fully passing world may replace the normal Earth atlas after the full staging, food/population, assets and .bat-server browser checks. Preserve the original failed parent search and its review. Keep the current canonical atlas available until then."
+  },
+  "intermediate_candidates": [
+    93,
+    42,
+    9,
+    65,
+    49,
+    1,
+    32
+  ],
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1"
+  },
+  "source_hashes": {
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "1ba5395e0b3e0bc12f7c8eb940ceded49704cf50ac36dd8f15ad0d890a26e7ff",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0b275f699b4b576f880cbeb239a5a3062ca9e1be9f5a52fc9557bc7414d73c82",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/config.py": "5657e2167859121cc0709b798c01fb25a7c6520de7502e0cb13aa73b8a5d1ec9",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/earth.py": "51b4de8435bb9c257d778f4013920c056f46538bbcde9f62f7c7a8153e816d4e",
+    "rotclimate/ebm.py": "a95b6bedc1b33404f145435b786e0990532a5220c382c279682d883abc550166",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/geography.py": "cacd3392918b21b51433b6d533f4ebf0ae1ad98d614002f34d0312ad430655c6",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "9682f9b2b76e1635997f7f0eee334c2a031ac70713c82858356e1a1de790034b",
+    "rotclimate/moisture.py": "354f8c4acb483aefccbd67562ac7ba1157711d03292ea1c1775a9f251537986e",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/solver.py": "7bd7c4a583ad75865b82441ff572796fd69af5b2e2da25e7bfa16d6a4e400a11",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/transport.py": "705ae7f9f2e0ce3fd5283bbb18671a8cbdf7f31dc2e81803b1daf51128a32c94",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "scripts/check_r39_world_transfer.py": "0d3cee12a8324251806dbc4078921976c264b9283625ebfc353853eb8a020008",
+    "scripts/check_r39_world.py": "cf1669d569e132f5bab9bb720d509fa9399936ecbc547f9ea1960e59691edebc",
+    "calibration/map_world_r39_transfer/plan.json": "9e686cd8107d7dfc3c907b7e1ef072984cb5104de96894c33820d1a5119867b2",
+    "output/r39_world_publication/review.json": "1103b0bbfef2f13ff197632e2d41ae73234bc68ed9786ee75352a6a7ff109cf6",
+    "calibration/map_world_r39/world/evals.jsonl": "c28f3d658bae9faeadee9fb6e072d62aed6f65e2fd3fe70afbb64d82a289d9ef",
+    "calibration/map_world_r39/start.json": "0882520ed7fbd9b66624a744a61e53fc0b1a6b420c040df96e276c7a0a803d49",
+    "atlases/earth_fit/params.json": "6f507a1bef3e518be0c36b5f08853e974524f099e0fc747e5d7cf35209bd77ee",
+    "atlases/earth_fit/summary.json": "1a92bd60f5e13b4c46d374fa323b5eec583a23cbaac71b4164d8e5a3a985fd58"
+  }
+}

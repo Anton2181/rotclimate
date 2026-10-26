@@ -1,0 +1,14 @@
+{
+  "declared_before_supplemental_model_results": true,
+  "reason": "The completed ds32 search's eligible candidate 32 converged at ds8 but missed publication protections. Its coarse-to-native changes are substantial, especially Mediterranean recall. Use that measured fidelity discrepancy to guide a bounded intermediate-resolution screen instead of repeating the same coarse optimizer.",
+  "parent_search": "calibration/map_world_r39",
+  "native_anchor": "output/r39_world_publication/review.json",
+  "layouts": [1, 2, 3],
+  "physics_and_planet": "Keep qualified r39 physics and the same planet fixed exactly as the parent search. Candidate parameters come only from completed parent rows; no new fitted variable, climate-field correction or altered target definition.",
+  "intermediate_selection": "Add the measured native-minus-coarse anchor discrepancy to every archived row's score, accuracy, per-zone recalls and Mediterranean shares for ranking only. Clip predicted fractions to [0,1]. Rank by the sum of positive violations of the unchanged native publication thresholds, then higher predicted zonefit, then evaluation index. Select five unique rows, excluding the already native-tested anchor. Include the parent initial geometry and the anchor itself as controls, deduplicating. At most seven worlds run at ds16.",
+  "native_selection": "Use the actual ds16 anchor to estimate its discrepancy to the known ds8 anchor. Rank the other successfully computed ds16 worlds with that new correction and the same violation/score/index ordering. At most two advance to actual ds8, sequentially; stop at the first passing all unchanged native thresholds. Do not require the approximate predictor itself to pass: it only orders real tests.",
+  "native_thresholds": "Zonefit at least the published r38 +0.001; strict agreement no worse; each zone recall may fall at most 0.02; Mediterranean dry share increase <=0.005 and Cs loss <=0.02. Every observed numerical check must pass. All tests classify actual integrated fields, never corrected fields.",
+  "layout_transfer": "Only the first native-passing world is compared with old r38 on layouts 17 and 23 at ds16, unused in this refit's optimization. Require mean-climate zonefit no worse and strict-accuracy loss <=0.01. On failure stop this publication attempt; do not select another candidate after inspecting these layouts.",
+  "persistence": "Save each verified layout separately with exact parameter, scientific-source and input identities before assembling means. Resume only identical saved inputs; preserve failures and never reduce convergence requirements.",
+  "publication": "Only a fully passing world may replace the normal Earth atlas after the full staging, food/population, assets and .bat-server browser checks. Preserve the original failed parent search and its review. Keep the current canonical atlas available until then."
+}

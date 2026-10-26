@@ -1,5 +1,54 @@
 # Handoff — 2026-10-25
 
+## Current status — 26 October 2026
+
+r39 Earth physics is adopted (`calibration/local_accuracy_20261023/r39_params.json`):
+dev31 S 0.987521, paired 28 km S 0.994737, established six S 0.994573. Rain loss
+improves 2.30%; city monthly MAE improves but annual matches slightly worsen.
+North India worsens; Iran improves strongly. Static diagnostic SST is identical.
+See `reports/CONSTRAINED_BLEND_R39_20261025.md`.
+
+All normal `.bat` atlases are available, with directed markets (3 Trade views),
+continuous outlined sea routes and current HTML pages. Published Earth climate
+is still r38, Whittaker outside-diagram share 1.44%, Free share 11.47%. The
+actual launcher server is running locally on port 8766; browser and complete
+packet checks passed. Do not claim a new world is published until verified.
+
+The initial fixed-planet r39 world search completed 97 ds32 mean-climate cases.
+Its one coarse-eligible candidate 32 passed native numerical checks but failed
+publication protections: score 0.183300, strict 33.80% vs 34.99%, worse Med.
+The original failed attempt is preserved in `output/r39_world_publication/`.
+The world and native check processes have ended.
+
+**ACTIVE:** `scripts/check_r39_world_transfer.py`, log `/tmp/r39_transfer_runtime.log`.
+Plan: `calibration/map_world_r39_transfer/plan.json`; outputs
+`output/r39_world_transfer/`. It screens at most 7 worlds at ds16, using the
+measured resolution discrepancy for ranking, then at most 2 actual native ds8
+checks. Each layout is checkpointed separately under `members/`. Only a native
+pass takes the 17/23 layout comparison; only all passes allow publication.
+Planet, r39 physics, target rules and the original native protection thresholds
+are unchanged. No correction is applied to actual climate fields.
+
+DO NOT edit `rotclimate/`, `scripts/check_r39_world.py`, the transfer script/plan,
+or canonical Earth params/summary while this run is active. It freezes those
+inputs. `input_audit.json` also confirms original map/data-source hashes.
+
+If `output/r39_world_transfer/review.json` says `eligible_for_publication=true`,
+run `python -I scripts/build_r39_earth_stage.py --review output/r39_world_transfer/review.json`.
+It reuses the verified native checkpoint, writes `atlases/earth_fit_r39_next`,
+and checks assets/food/population. Browser-check that staging folder through
+port 8766, then promote only after its checks pass. Preserve canonical Earth
+as a backup, copy the new polity cache to `output/polity_map/earth_fit.npz`,
+update Earth note in `atlases/pages.json` and the hub description to r39,
+refresh pages/hub, render both political plates, check all canonical browsers,
+commit and push. Hosted external artifacts still lack a publishing tool.
+If the supplemental attempt fails, retain the canonical atlas and record why.
+
+Normal pushes: `git push origin HEAD:claude/friendly-turing-43ygeu` from local
+branch `work`. User requests autonomous continuous development, frequent updates,
+and every generated substantive map/plot shown inline. No agents unless the
+user explicitly requests agent delegation. Older status below is historical.
+
 ## Repository publication follow-up
 
 Earth r38 is built and promoted to `atlases/earth_fit`, with all three layout

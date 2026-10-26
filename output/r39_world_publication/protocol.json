@@ -1,0 +1,1037 @@
+{
+  "plan": {
+    "declared_before_world_results": true,
+    "physics": "calibration/local_accuracy_20261023/r39_params.json",
+    "start": "calibration/map_world_r39/start.json",
+    "old_atlas": "atlases/earth_fit",
+    "planet": "Preserve the published world's retrograde rotation and tilt, radius, gravity, rotation-rate magnitude, year, orbit, stellar input, greenhouse forcing and map scale. Hold all qualified r39 shared physical parameters fixed. Only latitude/orientation, four tier heights and the existing exterior-geography variables are fitted.",
+    "downsample": 32,
+    "layouts": [
+      1,
+      2,
+      3
+    ],
+    "objective": "zonefit of the mean climate, matching atlas semantics; race=0",
+    "evaluations": 97,
+    "popsize": 8,
+    "sigma": 0.08,
+    "seed": 39,
+    "workers": 2,
+    "stds": {
+      "north_bearing": 0.05
+    },
+    "coarse_control": "Evaluate the currently published r38 world with the same resolution, layouts and strict numerical profile. Also retain the new-physics starting geometry as an evaluated search candidate. Never discard it just because offspring are worse.",
+    "native_selection": "At most the two highest-scoring unique completed parameter sets passing the coarse screen advance, ordered by coarse score. Coarse screen versus the matched old-world control: strict accuracy may fall at most 0.01, each zone's recall at most 0.03, Mediterranean dry share may increase at most 0.01 and Cs share may fall at most 0.03. No numerical failure may advance.",
+    "native_check": "At downsample 8 and mean layouts 1-3, require observed numerical success, zonefit at least old published +0.001, strict agreement no worse than old published, no zone recall loss greater than 0.02, Mediterranean dry-share increase at most 0.005 and Cs-share loss at most 0.02. Try the second finalist only if the first fails this native check.",
+    "layout_transfer": "Only the first native-passing world is tested on layouts 17 and 23, unused by this refit, at downsample 16. Compare with the old published r38 world on those same layouts. Require mean-climate zonefit no worse and strict agreement loss at most 0.01. If it fails, stop this publication attempt without trying another candidate after inspecting this transfer result. These layouts are not claimed to be new to all historical project work.",
+    "publication": "Only a passing world is rebuilt as a staging Earth atlas with full climate, food, population, political and directed-market layers. Verify its climate checkpoint, source/parameter identities, browser behavior through the .bat server and complete assets before replacing canonical files. Keep existing atlases available while work proceeds. Free/Whittaker page updates remain current; their independently fitted physics are not silently replaced with Earth's fitted values."
+  },
+  "coarse_screen": [
+    {
+      "eval": 42,
+      "score": 0.19107255432736403,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 34,
+      "score": 0.188731024064217,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 41,
+      "score": 0.1881548511862871,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "med: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 46,
+      "score": 0.18776221609141863,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 92,
+      "score": 0.18774348968087787,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 83,
+      "score": 0.18773220581954742,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 12,
+      "score": 0.18733189143939716,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 32,
+      "score": 0.18728626751295868,
+      "failures": []
+    },
+    {
+      "eval": 52,
+      "score": 0.18723887742651596,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 93,
+      "score": 0.1871583657983038,
+      "failures": [
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 65,
+      "score": 0.18711297501087984,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 82,
+      "score": 0.18693061272432446,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 9,
+      "score": 0.1868919953412391,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 70,
+      "score": 0.1868494395001742,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 51,
+      "score": 0.18670871801258437,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 48,
+      "score": 0.1863476958686098,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 75,
+      "score": 0.1863230392980636,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 90,
+      "score": 0.18630907687831846,
+      "failures": [
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 89,
+      "score": 0.1858583755571466,
+      "failures": [
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 97,
+      "score": 0.18565063078529062,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 40,
+      "score": 0.18561299485161897,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 72,
+      "score": 0.18552808117952202,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 49,
+      "score": 0.18551570234936168,
+      "failures": [
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 71,
+      "score": 0.18529133293115213,
+      "failures": [
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 61,
+      "score": 0.18525447373047593,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 1,
+      "score": 0.18499307747146398,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 91,
+      "score": 0.184532691769196,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 66,
+      "score": 0.18448977987315995,
+      "failures": [
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 86,
+      "score": 0.1835102359108368,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 24,
+      "score": 0.18331450487306938,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 22,
+      "score": 0.1832835336749941,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 78,
+      "score": 0.18325894932787457,
+      "failures": [
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 38,
+      "score": 0.18323221053552108,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 17,
+      "score": 0.18321784917719353,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 56,
+      "score": 0.1829739791917275,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 10,
+      "score": 0.18289237851593673,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 68,
+      "score": 0.18265184648283733,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 58,
+      "score": 0.18238895000060748,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 36,
+      "score": 0.18227020613386538,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 96,
+      "score": 0.18214702264371646,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 57,
+      "score": 0.18205915381488388,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 81,
+      "score": 0.18204563418093916,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 44,
+      "score": 0.18172948193996558,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 37,
+      "score": 0.18163481856279973,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 88,
+      "score": 0.18154039568863334,
+      "failures": [
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 29,
+      "score": 0.18137440672766592,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 18,
+      "score": 0.18080361652247892,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 64,
+      "score": 0.18057107113340273,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 19,
+      "score": 0.18055824568419682,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 95,
+      "score": 0.180505644468815,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 28,
+      "score": 0.18043009901664117,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 77,
+      "score": 0.1804166811725227,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 84,
+      "score": 0.18006576690942916,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 33,
+      "score": 0.17978330319398567,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 14,
+      "score": 0.17976922803282927,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 4,
+      "score": 0.17892227391614013,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 53,
+      "score": 0.17875749585662035,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 87,
+      "score": 0.17859842436813872,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 8,
+      "score": 0.1785523132902514,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 62,
+      "score": 0.1784230986084434,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 74,
+      "score": 0.17827751003425182,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 43,
+      "score": 0.1780864951020893,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "med: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 47,
+      "score": 0.17789675844681518,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 35,
+      "score": 0.1777310997300857,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 39,
+      "score": 0.17771364079364993,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 85,
+      "score": 0.17746401719744834,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 94,
+      "score": 0.17742695260534425,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 3,
+      "score": 0.177323399003434,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 50,
+      "score": 0.17618937514145155,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 15,
+      "score": 0.17600288846488188,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 69,
+      "score": 0.1751343397914254,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 20,
+      "score": 0.17498252811187673,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 79,
+      "score": 0.1745211182955662,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 59,
+      "score": 0.17442076969784143,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 13,
+      "score": 0.17315200569475045,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 73,
+      "score": 0.1728797263368832,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 31,
+      "score": 0.17254011634653066,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 63,
+      "score": 0.17194935859306085,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 5,
+      "score": 0.1719419466003857,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 27,
+      "score": 0.17108805686368814,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 76,
+      "score": 0.1708518399543026,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 30,
+      "score": 0.1706632146620211,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 26,
+      "score": 0.16741455580560502,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 55,
+      "score": 0.16687276322508848,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance"
+      ]
+    },
+    {
+      "eval": 16,
+      "score": 0.16618993060238213,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 6,
+      "score": 0.16605533605003642,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 25,
+      "score": 0.16592698619057167,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 21,
+      "score": 0.1650498319985339,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 54,
+      "score": 0.1646246718635611,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 67,
+      "score": 0.1626454782989912,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 80,
+      "score": 0.1623458894535595,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 60,
+      "score": 0.1561636808816388,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 7,
+      "score": 0.15103833660792393,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 23,
+      "score": 0.14998007771146163,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 2,
+      "score": 0.14907011599917364,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 45,
+      "score": 0.14633556870486614,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "tree: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    },
+    {
+      "eval": 11,
+      "score": 0.12754084836633933,
+      "failures": [
+        "Coarse strict accuracy lost more than 0.01",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "hot_dry: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ]
+    }
+  ],
+  "finalists": [
+    32
+  ],
+  "sources": {
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "1ba5395e0b3e0bc12f7c8eb940ceded49704cf50ac36dd8f15ad0d890a26e7ff",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0b275f699b4b576f880cbeb239a5a3062ca9e1be9f5a52fc9557bc7414d73c82",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/config.py": "5657e2167859121cc0709b798c01fb25a7c6520de7502e0cb13aa73b8a5d1ec9",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/earth.py": "51b4de8435bb9c257d778f4013920c056f46538bbcde9f62f7c7a8153e816d4e",
+    "rotclimate/ebm.py": "a95b6bedc1b33404f145435b786e0990532a5220c382c279682d883abc550166",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/geography.py": "cacd3392918b21b51433b6d533f4ebf0ae1ad98d614002f34d0312ad430655c6",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "9682f9b2b76e1635997f7f0eee334c2a031ac70713c82858356e1a1de790034b",
+    "rotclimate/moisture.py": "354f8c4acb483aefccbd67562ac7ba1157711d03292ea1c1775a9f251537986e",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/solver.py": "7bd7c4a583ad75865b82441ff572796fd69af5b2e2da25e7bfa16d6a4e400a11",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/transport.py": "705ae7f9f2e0ce3fd5283bbb18671a8cbdf7f31dc2e81803b1daf51128a32c94",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "scripts/check_r39_world.py": "cf1669d569e132f5bab9bb720d509fa9399936ecbc547f9ea1960e59691edebc",
+    "calibration/map_world_r39/plan.json": "a92b52a908822f2533c1026def3f3fe1690779625cfababc31dc22389aabe6bf",
+    "calibration/map_world_r39/protocol.json": "fb59301f94df23b91c355db400d44840cc1204e3eddb3f81244b8e9965de2948",
+    "calibration/map_world_r39/world/evals.jsonl": "c28f3d658bae9faeadee9fb6e072d62aed6f65e2fd3fe70afbb64d82a289d9ef",
+    "calibration/map_world_r39/world/calibration_config.json": "119edf87e1df8b46dc8f8fbd00bd7dc282487c30b96590aeaa7a1c4becb083c7",
+    "atlases/earth_fit/params.json": "6f507a1bef3e518be0c36b5f08853e974524f099e0fc747e5d7cf35209bd77ee",
+    "atlases/earth_fit/summary.json": "1a92bd60f5e13b4c46d374fa323b5eec583a23cbaac71b4164d8e5a3a985fd58"
+  }
+}
