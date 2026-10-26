@@ -1,0 +1,33 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Combine the conservative vapor equation with vertically turned pressure flow to reduce excessive surface-drag convergence at coasts. Separately diagnose damping/work dependence and replay the formerly failing pure-flux case. Preserve the original35-attempt failures and all adopted profiles.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/vapor_flux_20261026/review.json",
+  "parent_source_commit": "08b3a23",
+  "regions": ["north_india", "iran_plateau", "iberia", "japan", "mexico", "east_australia", "pacific_nw"],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "reference_damped": {},
+    "flux_damped": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative"},
+    "shear075": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_pressure_drag_ratio": 0.75},
+    "shear050": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_pressure_drag_ratio": 0.5},
+    "shear025": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_pressure_drag_ratio": 0.25}
+  },
+  "profile_numerics": {
+    "reference_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "flux_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "shear075": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "shear050": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "shear025": {"moisture_relaxation": 0.05, "picard_iters": 1024}
+  },
+  "eligible_profiles": ["shear075", "shear050", "shear025"],
+  "maximum_finalists": 2,
+  "control": "The original reference keeps adopted r39 numerics and must reproduce all7 archived float32 Ts/Ps/To/Po and geography before other profiles run. The damped reference quantifies numerical drift without changing physics and cannot be selected. Other profiles share the declared .05/1024 damping/work budget; residual tolerance .01, linear tolerance, seasonal calendar and temperature checks remain unchanged. Increased work is not permission to accept a residual above tolerance. Previous256-iteration failures remain failed records, never overwritten or reclassified.",
+  "numerical_interpretation": "Report changes between reference_damped and reference as numerical sensitivity, not physics skill. Any candidate improvement combines its physical closure and declared numerical work profile and must be measured against actual adopted r39, with the same error tolerances. A qualified full profile records both blocks explicitly; never attribute numerical drift entirely to physics.",
+  "screen": "Only the three shear profiles may qualify. All numerical and conservative-ledger checks required. Same7-region limits: combined S<=.995, mean rain ratio<=.99, temperature ratio<=1.01; North India rain ratio<=.95; Iran rain ratio<=1.02; combined S<=1.02 in each other protected region. Integrated SST MAE increase<=.02C on identical observation-only ice-free padded sea masks; column wind maximum<=60m/s and p95<=25m/s. No partial-case means after failures. Report all6 profiles.",
+  "advance": "At most the best2 screening qualifiers by combined S take the unchanged full31 policy_v2 plus the same individual region protections. The generated plan passes physical and numerical updates in separate blocks to check_surface_momentum.py. Reference stays the adopted old numerical profile with exact archived error/geography controls. Only candidate damping/work changes; all error tolerances remain paired and equal. Then actual integrated SST/winds, paired28km four-region S<=1.01 plus North India rain ratio<=.98, and established six S<=1.01 once. Reused regions, no new independent holdout. Preserve all failures; no extra candidates or relaxed thresholds.",
+  "fixed": "Modern observed Earth envelope, all other r39 physical parameters, real geography, observed remote-monsoon forcing, modelled SST, unchanged pressure-gradient amplitude and surface momentum/heat closure. Flux transport has explicit boundary supply and vertical losses, not a closed or transient planet. Column shear changes direction and convergence as well as speed; conservative storms remain on.",
+  "publication": "No atlas climate/economic replacement without complete Earth qualification and a separate matched-world fit. Source epochs frozen in a new directory. Numerical controls are not eligible physical candidates; the known over-wet pure-flux replay is diagnostic only."
+}

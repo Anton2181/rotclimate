@@ -90,7 +90,8 @@ def main():
     params.mkdir(exist_ok=True)
     base = load_params(ROOT/plan['physics'])
     all_params = {'reference': base}
-    all_params.update({name: joint.update_block(base, 'physics', values) for name, values in plan['candidates'].items()})
+    all_params.update({name: joint.update_block(joint.update_block(base, 'physics', values),
+        'numerics',plan.get('candidate_numerics',{}).get(name,{})) for name, values in plan['candidates'].items()})
     for name, profile in all_params.items():
         joint.earth_profile(profile).to_json(params/f'{name}.json')
     reference = benchmark(params/'reference.json', out/'reference', ['dev31'], 56.0)

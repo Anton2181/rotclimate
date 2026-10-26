@@ -2,6 +2,7 @@
 from pathlib import Path
 from multiprocessing import Pool
 import importlib.metadata
+import argparse
 import json
 import subprocess
 import sys
@@ -65,8 +66,12 @@ def screening(rows,plan):
 
 
 def main():
-    path=ROOT/'calibration/vapor_flux_20261026/plan.json';plan=json.loads(path.read_text())
-    out=ROOT/'output/vapor_flux_20261026';out.mkdir(exist_ok=True)
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan',type=Path,default=ROOT/'calibration/vapor_flux_20261026/plan.json')
+    parser.add_argument('--out',type=Path,default=ROOT/'output/vapor_flux_20261026')
+    args=parser.parse_args()
+    path=args.plan.resolve();plan=json.loads(path.read_text())
+    out=args.out.resolve();out.mkdir(exist_ok=True)
     sources=list((ROOT/'rotclimate').glob('*.py'))+[path,Path(__file__),DEV12_SPECS,ROOT/plan['physics'],earth.WOA_SST,
         ROOT/'scripts/paired_physics_pilot.py',ROOT/'scripts/benchmark_local.py',ROOT/'scripts/earth_benchmark.py',
         ROOT/'scripts/rainfall_metrics.py',ROOT/'scripts/local_benchmark_protocol.py',
@@ -84,13 +89,14 @@ def main():
             if name=='reference' and any(r['status']!='passed' for r in rows):
                 raise SystemExit('Preserve failed exact controls; do not run candidates')
     reviews=screening(rows,plan)
-    selected=[name for name,row in reviews.items() if row['qualifies']]
+    selected=sorted((name for name,row in reviews.items() if row['qualifies']),key=lambda name:reviews[name]['S'])
+    selected=selected[:plan.get('maximum_finalists',1)]
     final=dict(complete=True,identity=identity,screen=reviews,development_finalists=selected,
                all_per_step_checks_passed=all(r['status']=='passed' for r in rows),physics_or_atlas_adoption=False)
     write_json(out/'review.json',final);write_json(out/'progress.json',dict(complete=True,records=rows))
     if selected:
-        if len(selected)!=1:raise ValueError('Only one profile may advance')
         generated=dict(plan,candidates={name:plan['profiles'][name] for name in selected},
+                       candidate_numerics={name:plan.get('profile_numerics',{}).get(name,{}) for name in selected},
                        parent=str(out.relative_to(ROOT)),note='Generated only from the predeclared eligible screening qualifier')
         generated_path=out/'full_plan.json';write_json(generated_path,generated)
         command=[sys.executable,'-u','-I',str(ROOT/'scripts/check_surface_momentum.py'),

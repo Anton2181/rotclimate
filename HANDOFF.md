@@ -2,6 +2,31 @@
 
 ## Current status
 
+**Active follow-up — conservative flux plus column wind:** the original
+conservative pilot/report is committed separately; the following new plan
+preserves its failures. `calibration/flux_column_wind_20261026/plan.json` fixes
+6 profiles ×7 regions: adopted reference; damped reference; pure-flux replay;
+flux+conservative-storm shear ratios .75/.5/.25. Only the3 shear profiles may
+advance, at most2. All except original reference use moisture relaxation.05
+and cap1024, with UNCHANGED residual.01/linear/temperature tolerances. Damped
+reference quantifies numerical drift and is not eligible. Pure flux is known
+over-wet and replayed only to diagnose numerical failure. No old failure is
+overwritten/reclassified and no threshold is relaxed.
+
+Generic pilot runner `check_vapor_flux.py` now takes `--plan/--out`; helper
+supports separate `profile_numerics` through the explicit numerical block.
+It now records parameters and partial solver diagnostics even on failure.
+Full31 runner supports separate `candidate_numerics` too, preserving original
+r39 reference numerics and pairing unchanged error tolerances. Gains would
+combine physical+numerical profile; never attribute numerical drift to physics.
+Both updated runner/helper sources are a NEW epoch; do not resume completed
+`output/vapor_flux_20261026/` with them (original source at `08b3a23`).
+
+New run: `scripts/check_vapor_flux.py --plan calibration/flux_column_wind_20261026/plan.json --out output/flux_column_wind_20261026`.
+Log `/tmp/flux_column_wind_20261026.log`. Keep all core/runner/plan sources fixed
+while running; sources/input identities frozen. All prior pilots have ended.
+All normal climate/food/population/trade atlas fields still unchanged.
+
 **Completed structural pilot — conservative vapor flux:** the preceding
 307-run momentum round is complete and pushed at `e6be857`. Continuing without
 ending at that milestone, added opt-in `moisture_transport_form="flux"`;

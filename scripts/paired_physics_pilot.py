@@ -26,31 +26,37 @@ def run_one(job):
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
     case=earth.region_case(region,float(plan['cell_km']))
     derived=case_hash(case,observed_sea=True)
+    numerical_updates=plan.get('profile_numerics',{}).get(name,{})
     if path.exists():
         row=json.loads(path.read_text())
         if (row['identity']!=identity or row['case_identity']!=derived or row['status']!='passed'
                 or row['name']!=name or row['region']!=region or row['updates']!=updates
+                or row.get('numerical_updates',{})!=numerical_updates
                 or row.get('numerics',{}).get('all_checks_passed') is not True
                 or file_hash(arrays)!=row['arrays_sha256']):
             raise ValueError('Changed inputs or preserved failed pilot run: '+str(path))
         return row
-    row=dict(name=name,region=region,updates=updates,identity=identity,case_identity=derived)
+    row=dict(name=name,region=region,updates=updates,numerical_updates=numerical_updates,identity=identity,case_identity=derived)
     started=time.monotonic()
+    model=None
     try:
         theta=joint.update_block(load_params(ROOT/plan['physics']),'physics',updates)
+        theta=joint.update_block(theta,'numerics',numerical_updates)
         p=earth.earth_params(joint.earth_profile(theta),case)
+        row['params']=asdict(p)
         g=case.grid
         land=g.inmap & g.land & np.isfinite(case.obs_T).all(0) & np.isfinite(case.obs_P).all(0)
         domain=np.ones_like(g.land);domain[[0,-1],:]=False;domain[:,[0,-1]]=False
         sea=domain & ~g.land & np.isfinite(g.obs_sst).all(0) & (g.obs_sst.min(0)>-1)
         model=ClimateModel(p,grid=g);model.trace_cells=np.nonzero(domain)
         result=model.run(diagnose_moisture=True)
+        row['numerics']=result.numerics
         if result.numerics.get('all_checks_passed') is not True:
             raise ValueError('Per-step solver or transport ledger failed')
         st=monthly_stats(result.T,result.P,result.days,p.year_days,
                          summer_solstice=p.winter_solstice_day+p.year_days/2)
         if name=='reference':
-            if updates:
+            if updates or numerical_updates:
                 raise ValueError('Reference overrides are forbidden')
             archive=ROOT/plan['archive'];prior=json.loads((archive/'cases'/f'{region}.json').read_text())
             old_cells=archive/'cells'/f'{region}.npz'
@@ -83,6 +89,13 @@ def run_one(job):
                    arrays_sha256=file_hash(arrays))
     except Exception as error:
         row.update(status='failed',error=repr(error))
+        if model is not None:
+            residuals=getattr(model,'moisture_scaled_residual',[])
+            row['partial_solver_diagnostics']=dict(
+                heat_linear_unconverged=sum(not x for x in model.solver.converged),
+                moisture_linear_unconverged=sum(not x for x in model.moisture_solver.converged),
+                completed_moisture_steps=len(getattr(model,'moisture_converged',[])),
+                last_scaled_moisture_residual=float(residuals[-1]) if residuals and residuals[-1] is not None else None)
     row['seconds']=time.monotonic()-started
     write_json(path,row)
     print(name+'/'+region+': '+row['status'],flush=True)
