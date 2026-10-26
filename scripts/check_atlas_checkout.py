@@ -15,7 +15,7 @@ if __name__=='__main__':
     else:snapshot=Path(tempfile.mkdtemp(prefix='rotclimate-atlases-'))
     subprocess.run(['git','-c','core.autocrlf=true','checkout-index','--all','--prefix='+str(snapshot)+'/'],cwd=ROOT,check=True)
     assets=[]
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in ['free_fit','earth_fit','whittaker_fit','climate_accuracy']:
         for path in sorted((ROOT/'atlases'/name/'data').rglob('*')):
             if not path.is_file() or path.suffix not in {'.bin','.json','.webp','.png','.gif','.csv'}:continue
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()

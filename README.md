@@ -7,6 +7,10 @@ world profiles cannot relax the numerical checks. Rainfall diagnostics now
 expose column drying and convergence import without changing climate output.
 See the [input-boundary report](reports/JOINT_INPUTS_20261026.md). This prepares
 experiments; it is not a new fitted climate or an adoption gate.
+The completed [moisture-source audit](reports/MOISTURE_SOURCES_20261026.md)
+reproduces all three r39 controls exactly. Open **Climate accuracy and joint
+fit** from the `.bat` launcher hub for measured errors, rainfall-source maps
+and the distinction between r39 Earth skill and the published r38 world.
 
 **Seasonal repeatability, 26 October 2026:** optional multi-year spin-up now
 checks repeated temperature, rainfall and water-reservoir cycles, and long

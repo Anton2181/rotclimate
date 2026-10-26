@@ -71,6 +71,13 @@ with exact historical monthly-climate controls before interpretation. It is
 not a parameter search or climate adoption. Numerical, geography and source
 identities remain mandatory.
 
+The audit is now complete: all three controls reproduce exactly and all
+numerical checks pass. North India's July rain is 70 versus 224 mm observed;
+Iran's prescribed monsoon drying removes 52 mm/month. The
+[source audit](MOISTURE_SOURCES_20261026.md) and
+[browser companion](../atlases/climate_accuracy/index.html) show the maps and
+signed contributions. No physical improvement or world publication is claimed.
+
 Earth remote-monsoon descent still derives from observed global rainfall;
 fantasy descent derives from its simulated domain. Fixing parameter isolation
 does not make those forcings equivalent or turn regional skill into coupled

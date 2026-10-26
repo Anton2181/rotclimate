@@ -21,7 +21,29 @@ Three-region r39 diagnostic audit is declared before results under
 `scripts/check_moisture_sources.py` requires exact archived Ts/Ps/To/Po, active
 parameter equality, derived geography hashes and strict per-step checks.
 No physics/atlas-climate adoption is authorized by this diagnostic.
-See `reports/JOINT_INPUTS_20261026.md`. This paragraph will be updated on completion.
+Core/tooling milestone `a82374c` is committed and pushed. The audit is complete:
+all three controls reproduce exactly and pass strict checks. Results and
+protocol are under `output/moisture_sources_20261026/`; no integrations remain.
+North India July rain70.29/223.95 observed; convergence import71.94,
+evaporation40.17, net storm exchange-17.45, drying-16.81 mm/model month.
+Iran prescribed monsoon drying-51.73 mm/month, exposing the observed/generated
+forcing distinction. See `reports/MOISTURE_SOURCES_20261026.md` and
+`reports/JOINT_INPUTS_20261026.md`. No physics/default/atlas-climate adoption.
+
+New portable HTML companion `atlases/climate_accuracy/index.html` links from
+the normal hub. It includes two source/rainfall figures and downloadable JSON,
+clearly distinguishing r39 Earth measurements from published r38 world fields.
+`scripts/publish_climate_accuracy.py` verifies the audit and profile first.
+All-three normal atlas browser checks plus companion desktop/mobile light/dark
+checks pass under `output/moisture_sources_20261026/browser*`. All53/55/55
+map layers and climate/economic data remain unchanged. Bundle and Windows
+checkout scripts now include companion assets; no scientific deps for browsing.
+The actual launcher server is running on8766 (shell84610).
+51 focused core tests pass. Windows-style staged checkout verifies496 byte-exact
+assets; complete926-file portable bundle passes manifest and linked-page checks,
+plus its fresh launcher. Receipts: `verification.json`, `checkout.json`,
+`bundle_check.json` in the new output folder. All normal data folders are
+unchanged against HEAD. No numerical integration remains active.
 
 **Latest completed round — seasonal repeatability:** core commit `0a0c8d9`
 is pushed. The controlled 15-run pilot has finished; no climate integrations

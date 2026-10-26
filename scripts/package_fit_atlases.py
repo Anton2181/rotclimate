@@ -26,6 +26,9 @@ an explicit penalty for land outside the original Whittaker diagram. All
 three classify the mean climate over surroundings layouts 1, 2 and 3.
 The report explains the scores, crosswalk assumptions and numerical checks.
 These are simulated potential climates, not observed vegetation maps.
+The hub's Climate accuracy and joint fit page includes measured Earth errors
+and rainfall-source maps. It distinguishes latest Earth r39 skill from the
+published r38 world; it is not measured accuracy of the fantasy geography.
 See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
 See reports/CLIMATE_PHYSICS_20261023.md for subsequent physics experiments,
 paired calibration checks and the criteria used to select published climates.
@@ -59,7 +62,15 @@ def main():
              ROOT/'reports/ITERATION_20261023.md', ROOT/'data/population_model.json',
              ROOT/'reports/CLIMATE_PHYSICS_20261023.md',
              ROOT/'reports/RAINFALL_ACCURACY_20261023.md',
+             ROOT/'reports/JOINT_INPUTS_20261026.md', ROOT/'reports/MOISTURE_SOURCES_20261026.md',
+             ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
+             ROOT/'reports/SEASONAL_CYCLE_20261026.md',
+             ROOT/'output/constrained_blend_20261025/rainfall_changes.png',
+             ROOT/'output/r39_world_audit/audit_results.png',
+             ROOT/'output/seasonal_cycle_20261026_verified/annual_repeatability.png',
+             ROOT/'output/seasonal_cycle_20261026_verified/rainfall_initialization.png',
              ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
+    files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
                  'search_review.csv', 'atlas_validation.json', 'publication.json', 'settlement_comparison.png', 'harvest_tests.log',

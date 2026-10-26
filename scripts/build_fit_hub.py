@@ -155,7 +155,8 @@ def main():
     else:
         compare = ('Compare the same 50 million people: ' + ' · '.join(
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
-        reports = ('<p class="note"><a href="../reports/SEASONAL_CYCLE_20261026.md">Seasonal settling checks</a> · '
+        reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
+                   '<a href="../reports/SEASONAL_CYCLE_20261026.md">Seasonal settling checks</a> · '
                    '<a href="../reports/CONSTRAINED_BLEND_R39_20261025.md">Earth r39 calibration</a> · '
                    '<a href="../reports/R39_WORLD_TRANSFER_20261026.md">World refit and atlas release checks</a> · '
                    '<a href="../reports/ITERATION_20261023.md">Population lab</a> · '
@@ -171,6 +172,7 @@ def main():
 <header><span class="eyebrow">Rotclimate · three calibration objectives · updated {updated}</span>
 <h1>One world, three climate fits</h1>
 <p class="lede">The seasonal map fit, the fit held to Earth physics, and the fit to proposed Whittaker biomes. Each atlas uses the mean climate over the same three layouts of the unknown surroundings.</p></header>
+{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements, rainfall-source maps, and why the published Earth atlas retains r38.</p>'}
 <section aria-label="The three atlases"><div class="plates">{''.join(plates)}</div></section>
 <section aria-labelledby="measures-h"><h2 id="measures-h">The same measures</h2>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Seasonal zone objective</th><th>Whittaker objective</th><th>Exact zone agreement</th><th>Mean biome agreement</th><th>Land outside diagram</th><th>Med. dry</th><th>Med. Cs</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
