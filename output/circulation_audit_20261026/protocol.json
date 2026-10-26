@@ -1,0 +1,226 @@
+{
+  "plan": {
+    "declared_before_new_scores": true,
+    "purpose": "Diagnose production r39 circulation against external pressure-level reanalysis before selecting another rainfall intervention. No parameter fitting or adoption.",
+    "physics": "calibration/local_accuracy_20261023/r39_params.json",
+    "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+    "regions": [
+      "california",
+      "iberia",
+      "north_india",
+      "east_australia"
+    ],
+    "cell_km": 56.0,
+    "new_reference_boxes": {
+      "north_india": [
+        [
+          21,
+          29,
+          26,
+          36
+        ]
+      ],
+      "east_australia": [
+        [
+          43,
+          53,
+          56,
+          64
+        ]
+      ]
+    },
+    "reference": "NOAA PSL NCEP/NCAR Reanalysis1 1981-2010 monthly means, native 2.5-degree pressure grid. Reuse hash-verified V10 California/Iberia sources; acquire only missing regional subsets. No reference field enters the climate integration.",
+    "control": "Four integrations must reproduce original float32 equal-month T/P/observations and derived geography, with strict numerical checks. Save actual diagnostic monthly wind components and projected-coordinate geometry. Gregorian overlap is used only to match reference wind months; legacy climate accuracy remains measured under the unchanged legacy definition.",
+    "comparison": "Transform modeled right/up components to geographic east/north using the full azimuthal-equidistant projection Jacobian. Undo southern north/south reflection and preserve July-through-June reference order. Aggregate model vectors to native reference footprints by true area; score only footprints at least80% covered by the inmap rectangle. Exclude mixed coast cells (20-80% model land). Require every month's925hPa geopotential height above maximum model mean terrain in the footprint, with nonnegative925hPa height. Report native-cell counts and physical area, not fine cells as independent observations.",
+    "targets": "Compare925hPa and850hPa monthly mean vectors separately, plus q-weighted925-300hPa mean wind from trapezoidal integration of q and qU over actual shared levels. Specific humidity q is recovered from the legacy reader's mixing ratio r=q/(1-q). This is a partial column and product of monthly means: it excludes transient q'u' flux, air below925hPa/above300hPa, and native reanalysis below-ground flags unavailable in these products. Terrain masking is conservative relative to model geography, not proof of native terrain validity. A surface-like single-layer model cannot be expected to match all pressure targets.",
+    "decision": "Diagnostic only. Do not select parameters, relabel wind differences as rainfall gains, replace r39/r38, change fantasy atlases, or infer global skill from these reused four regions. Use signs, seasonality and land/ocean differences to design a separately declared physical intervention. Reference1981-2010 differs from the WorldClim1970-2000 rain period. Reanalysis is model-assisted rather than independent point observations."
+  },
+  "references": {
+    "data/v10_atmosphere/uwnd.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.das",
+      "sha256": "48994f62fc5204c73fec82563b5e0ad70c13834e5f1e49045d6565a75999b848",
+      "bytes": 2971
+    },
+    "data/v10_atmosphere/uwnd_california_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][18:1:24][90:1:100]",
+      "sha256": "d2317655c19da1ac07498bfd517bdc6676d0f9f918395a296eacf87c34ee38f0",
+      "bytes": 187071
+    },
+    "data/v10_atmosphere/uwnd_iberia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][17:1:25][136:1:143]",
+      "sha256": "9246aeb5493df42a5dc5de74d9802198daeef41e5a835a81b3a9571cd538727e",
+      "bytes": 179628
+    },
+    "data/v10_atmosphere/uwnd_iberia_1.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][17:1:25][0:1:5]",
+      "sha256": "814a866b54c7c976e78b46e6e7535ba8caa483f9598ea8234f9a8d0828663ba3",
+      "bytes": 139884
+    },
+    "data/cache/circulation_reference_20261026/uwnd_north_india_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][21:1:29][26:1:36]",
+      "sha256": "d7d2cfe671f0c270c753bc83d96512873b9b28538e056aa2731eabaa24c34975",
+      "bytes": 242885
+    },
+    "data/cache/circulation_reference_20261026/uwnd_east_australia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][43:1:53][56:1:64]",
+      "sha256": "17f7e8068d0ba5031a015d4182eac9b2d29dab7acf146ce6d827335360bfd61c",
+      "bytes": 245926
+    },
+    "data/v10_atmosphere/vwnd.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.das",
+      "sha256": "0422025805f7f3234f9d30e21d196d9cec667e000ce77454e2951b581d1a812a",
+      "bytes": 2971
+    },
+    "data/v10_atmosphere/vwnd_california_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][18:1:24][90:1:100]",
+      "sha256": "1301146e1b9803c0475085ef1ff600a23c6e4ae88839003ec7de49bd4d63c5f1",
+      "bytes": 198057
+    },
+    "data/v10_atmosphere/vwnd_iberia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][17:1:25][136:1:143]",
+      "sha256": "fee0ce368dba3aa881a4ac3d515dd7b96a2acd8fa6b40924104c7d07a69d1541",
+      "bytes": 193793
+    },
+    "data/v10_atmosphere/vwnd_iberia_1.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][17:1:25][0:1:5]",
+      "sha256": "0f1941702c3b6c6f903308d59557810f23c5f7d15338eaae8b2065d604e2bf91",
+      "bytes": 150627
+    },
+    "data/cache/circulation_reference_20261026/vwnd_north_india_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][21:1:29][26:1:36]",
+      "sha256": "5b5ecbf4f2886579632c65a6c1d604a1093710039d790f190451a5791ad97968",
+      "bytes": 256184
+    },
+    "data/cache/circulation_reference_20261026/vwnd_east_australia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][43:1:53][56:1:64]",
+      "sha256": "4c4f95a55fcd01700898fa4768301f2e45bde210d400c3fccb84ab1a450fa305",
+      "bytes": 260952
+    },
+    "data/v10_atmosphere/shum.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.das",
+      "sha256": "1c0d05786050fb319b6189b3e49070a793f9d9113b03add3e78f6da70b28902d",
+      "bytes": 3036
+    },
+    "data/v10_atmosphere/shum_california_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][18:1:24][90:1:100]",
+      "sha256": "fc562d4ee3a883b3a162f3a40f2e4b412604ce7e17c8f59efa6d94e3fe9810c4",
+      "bytes": 88200
+    },
+    "data/v10_atmosphere/shum_iberia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][17:1:25][136:1:143]",
+      "sha256": "b8821672979456cd34676aceaf61156b621d84bc3707e621b1c3543ca49877d8",
+      "bytes": 85115
+    },
+    "data/v10_atmosphere/shum_iberia_1.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][17:1:25][0:1:5]",
+      "sha256": "4967151c8049f4cea3c4c22f89bd39606c4be3da879cde3bcb6d41df616eed55",
+      "bytes": 66498
+    },
+    "data/cache/circulation_reference_20261026/shum_north_india_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][21:1:29][26:1:36]",
+      "sha256": "d0f86d25f5c1291f1d50334baa1bb40fd999e41e9c1c5ed41cf82c4adbc82de3",
+      "bytes": 113113
+    },
+    "data/cache/circulation_reference_20261026/shum_east_australia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][43:1:53][56:1:64]",
+      "sha256": "508ab85720128ae07b78721c66f0aa3350b690105ca5afb00e2322284f2c77c3",
+      "bytes": 115448
+    },
+    "data/v10_atmosphere/hgt.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.das",
+      "sha256": "07c873a5acda51f74fb4c2de86bb990b852ad2269e283555f859eb95c9b2df2c",
+      "bytes": 3056
+    },
+    "data/v10_atmosphere/hgt_california_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][18:1:24][90:1:100]",
+      "sha256": "3a447b068c0712dd0c4d1a3c0207acd6ea64ef2e4277f5636fe3db3a77f48132",
+      "bytes": 183572
+    },
+    "data/v10_atmosphere/hgt_iberia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][17:1:25][136:1:143]",
+      "sha256": "a1df565e83ce205fb9ea71e0301000a82fcc0d5076b6e6a7ca860ccc8c4abb1f",
+      "bytes": 177018
+    },
+    "data/v10_atmosphere/hgt_iberia_1.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][17:1:25][0:1:5]",
+      "sha256": "ca75d5dcda4da310f032b03d08e97d5f6ad6a9b88f4927508b1b9939dde5a779",
+      "bytes": 137879
+    },
+    "data/cache/circulation_reference_20261026/hgt_north_india_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][21:1:29][26:1:36]",
+      "sha256": "c26f020f57087834fe7f9075cd0be6fc0739f824b587d63c156f971abda77205",
+      "bytes": 235733
+    },
+    "data/cache/circulation_reference_20261026/hgt_east_australia_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][43:1:53][56:1:64]",
+      "sha256": "2c82019434ec2ec0a505c2e030df35020ff98e3f62677f54c5533bc6f83517c0",
+      "bytes": 240413
+    }
+  },
+  "sources": {
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "26a749d033ae9e6117a486a50afeb4851e6a98412e0962a743b06887903f20ad",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0b275f699b4b576f880cbeb239a5a3062ca9e1be9f5a52fc9557bc7414d73c82",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/config.py": "68380a703c12c3e3dd3d864c347f1835515cac2d6d67861b5e71c7c901d61ca3",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/earth.py": "51b4de8435bb9c257d778f4013920c056f46538bbcde9f62f7c7a8153e816d4e",
+    "rotclimate/ebm.py": "a95b6bedc1b33404f145435b786e0990532a5220c382c279682d883abc550166",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/geography.py": "cacd3392918b21b51433b6d533f4ebf0ae1ad98d614002f34d0312ad430655c6",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "641ae5596b7d30a0f74d1f1b204731af67fba7e510f8297eca7b7a3e04ddbe66",
+    "rotclimate/moisture.py": "f030a157f0d7da754df47f9a050c5f35dca0716e82b31332ff783eeb341cb59c",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/solver.py": "19a954d0b91daa3a4ffee888f7f19e7f97396527386e4942ad677708f5be2cf6",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/transport.py": "8bbc9751b595d875985c67094de0df11130144d753672f6bc60a96021c1f49dc",
+    "rotclimate/seasonal.py": "9cdf6a3f5f5ce80a786e3d0fac7c655f8383ccda46ebb53e0aa2580d8dae8e89",
+    "rotclimate/joint.py": "070e70d8a52effb4eac8da0e59685d48f3a33f75cb88870e0ce4d71992f9f358",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "rotclimate/winds.py": "dfb79093861d489d28cca82b9812c5f8a7246d31442dd24544a0b9ff9a596984",
+    "calibration/circulation_audit_20261026/plan.json": "b3cdcd06bc50abd5e3968d3aae5ae3f204bec4fc94bdbeea1c797a5760bb00e0",
+    "scripts/check_circulation.py": "518661bea0d1e8ecf435f151d40c54a127af07a7860a6e5656ae0631575f9276",
+    "calibration/local_accuracy_20261023/regions_dev12.json": "8f117aa65c04aadab174bd4807814f1c2dd74c072d2c604809242818c7806774",
+    "scripts/circulation_reference.py": "f0568d0ec509b7895032bd092d29bdeb1039520133db0c1a6c1e4c69317ec12a",
+    "scripts/earth_calendar.py": "151002a8791072093bc4fdef868c74dbaf826854dcaa306bf829093ce5f01e90",
+    "scripts/local_benchmark_protocol.py": "d4243124d1e7021f3fc7bd3b01735c3e07deffd56dd63eae4efd5c0b6dc1268c",
+    "scripts/earth_benchmark.py": "6aacb873d0f58b7ddd892761ca76b298d6097bbd49c05905a218186eb62b4d80",
+    "experiments/v10_forcing_audit.py": "116e0d49e50b1491a1c337527e2c1940eeb59fa314a515b8791cd7a0b7fd8cf8",
+    "calibration/local_accuracy_20261023/r39_params.json": "2af65c29e35f4a06dce7a56e97219761b4c41c828734dd6d24a48ebdab3ee2e6",
+    "rotclimate_v10/__init__.py": "5089d96796f6f97f3770230011d24c48905c9d076613bbaf332a25c171e2ae7c",
+    "rotclimate_v10/core.py": "bccc922c62405f5b63dbaf65b698d912075cd61bf37658edfa7a46fdabfe21c1",
+    "rotclimate_v10/earth.py": "cb5e0c194216dcdb98d3235d0a9334e1592aea5e85a7c1ebdc088dd8109b28b6",
+    "rotclimate_v10/integrate.py": "afae61c76c3742024c6ad986605fffc8a723e6547a7a36678bb9f0ea84294201",
+    "rotclimate_v10/weather.py": "5298e7222b94bff95989884fc03e11766be36708d331f4edcf2e2aab661d27e6",
+    "experiments/v10_thermodynamics.py": "09495b019863115812df4984bbf1d873d2e982054ce8634c0f41e163b70d89b7",
+    "data/cache/worldclim/wc2.1_5m_tavg.zip": "dc963ba01132f42bcb8865c0475f7336b78fd14f65ea1bbfa394619a6770bdad",
+    "data/cache/worldclim/wc2.1_5m_prec.zip": "165da717a77d07e20781da63f9d39670236f0f6804a68527dfaabfb5f11b344e",
+    "data/cache/worldclim/wc2.1_5m_elev.zip": "c52cdf0e838909876ef0082c6b955a985e70accf13315f813519d0a68f380cca",
+    "data/cache/worldclim/wc2.1_5m_vapr.zip": "3e9c1a369057bcebb9b015e7411e0ba1205db15650adc932096de3c3facef5d8",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cases/california.json": "f5f4cd6442bc9dc1bb1b02087542e5cebeb6b6d6b506d76874e2cd8dcc30be3c",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cells/california.npz": "49c13fc15b2c6f25f89b231c2ea453f1eac48e9df4c3250af18e43dcad3b974a",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cases/iberia.json": "1d7d50cd3888505fa42407bd115a7937452055a9f8463d81797ab5ac08584fa4",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cells/iberia.npz": "741fa81516cab81dcef57c38654796c2efe0194b1625c65d510610984fe0070f",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cases/north_india.json": "b386c85f3db12696c16877e1d36e8dd35c2027df9c2c644326e220f9f01b335f",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cells/north_india.npz": "64e9ec0263dff219dbccf84b51fecec27ea07fef68126d041a23ecb9a33aee98",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cases/east_australia.json": "bd051c5a8852adc5cf63abf0d6c66fd9327559194f05d271db199058a37fcae3",
+    "output/constrained_blend_20261025/development/g0.9995_a1/cells/east_australia.npz": "64a04fce080bcac497da01d4379825a946c4c7cc5f2b981f984131a28955c181"
+  },
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "numba": "0.68.0"
+  }
+}

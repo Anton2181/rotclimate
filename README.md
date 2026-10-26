@@ -1,5 +1,11 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Outside circulation check,26 October2026:** four exact r39 controls now compare
+wind vectors against native-grid NCEP reanalysis. Direction and vertical-level
+differences remain substantial, especially over subtropical lowlands; this is
+an external diagnostic, not an adopted rainfall gain. New seasonal charts and
+winter maps are in the launcher accuracy page and [circulation report](reports/CIRCULATION_20261026.md).
+
 **Observation-calendar audit, 26 October 2026:** an optional evaluation helper
 aligns unchanged Earth step series with non-leap calendar months, including the
 southern mirror. Four exact controls pass; rainfall MAE changes only0.02–0.12mm

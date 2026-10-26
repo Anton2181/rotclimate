@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('circulation','Circulation against reanalysis'),
     ('earth-calendar','Observation-calendar alignment'),
     ('flux-column-wind','Conservative flux and column wind'),
     ('vapor-flux','Conservative vapor transport'),

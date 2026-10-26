@@ -2,24 +2,39 @@
 
 ## Current status
 
-**Active circulation audit (26 October):** new fixed four-region plan
-`calibration/circulation_audit_20261026/plan.json` checks production r39 against
-external NCEP/NCAR1981–2010 monthly pressure-level wind vectors. Reuses verified
-V10 California/Iberia ASCII sources; eight new NOAA subsets for NI/EastAustralia
-are downloaded and hash-recorded under ignored `data/cache/circulation_reference_20261026/`.
-`scripts/check_circulation.py --fetch` verifies/acquires references without
-integrating; add `--run` to execute the declared audit. No reference forcing
-enters the model. Production climate/parameters/normal atlas data unchanged.
+**Completed outside circulation audit:** fixed four-region production r39
+plan `calibration/circulation_audit_20261026/plan.json`, source `3747917`.
+All4 strict integrations pass and exactly reproduce archived float32 climate
+and geography. Results `output/circulation_audit_20261026/`; no active job.
+Cumulative total392 attempts:388 passes,4 original preserved failures.
 
-`scripts/circulation_reference.py` reverses the southern reflection, applies
-the full projection Jacobian (not an approximate rotation), aggregates true
-areas onto native2.5-degree footprints, masks incomplete/coastal/high-terrain
-footprints, and compares925/850hPa and q-weighted925–300hPa mean vectors.
-The column uses q, not the legacy reader's returned mixing ratio. Products of
-monthly means exclude transient moisture covariance; partial-column and
-surface-like model winds differ in height. These are diagnostic comparisons,
-not newly measured rainfall skill. Seven known-answer tests pass. No new
-climate integrations have run yet at this milestone; prior totals remain388.
+Reuses SHA-verified V10 California/Iberia references, plus eight small NOAA
+NI/Australia subsets under ignored `data/cache/circulation_reference_20261026/`.
+`scripts/check_circulation.py --fetch --run` requires matching source epoch;
+--fetch alone acquires/verifies without integrations. Reference URLs/checksums
+are frozen in protocol.json. `circulation_reference.py` reverses the southern
+reflection, uses full projection Jacobian and true-area native2.5-degree
+footprints, excludes incomplete/mixed/high-terrain bins. Seven known-answer
+tests pass. q-weighted925–300hPa target uses specific humidity recovered from
+legacy mixing ratio, not r weights. Monthly products omit transient q'u';
+partial column and surface-like model differ in represented height. Periods
+also differ from WorldClim rain. No false claim of full moisture-flux validation.
+
+NI11 lowland cells: q-column vector RMSE7.21m/s, direction cosine−.54.
+EastAustralia7 lowland cells:6.27m/s,−.14. Iberia20 ocean cells: modeled
+mean-vector magnitude7.77 vs4.21m/s; California only3 ocean/no land cells.
+925/850hPa targets are separately reported; cannot require one layer to match
+all heights. All4 reused regions, not independent/global validation.
+Diagnostic changes no rain score, fit, model default or atlas climate/economy.
+Thermal-wind shear from modeled temperature gradients is a motivated next
+experiment, not yet implemented or adopted at this milestone.
+
+Publisher `publish_circulation.py`, report `reports/CIRCULATION_20261026.md`;
+launcher companion now7 collapsible studies,11 charts,8 JSON downloads.
+Browser checks pass actual launcher navigation, keyboard/deep links/reload,
+all images/downloads, light/dark/mobile without overflow/page errors.
+Normal atlas datasets unchanged. Future source changes require a new campaign
+folder; do not bypass current audit publisher/runner source guards.
 
 **Completed observation-calendar audit:** after the preceding physics
 experiments, found the legacy monthly aggregator deliberately uses12
