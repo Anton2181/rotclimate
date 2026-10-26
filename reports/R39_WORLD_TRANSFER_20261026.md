@@ -78,6 +78,17 @@ Any future fit using these two inspected layouts must count them as development
 data and declare different layouts for final validation. This rejection remains
 part of the evidence; new training does not retroactively make it a pass.
 
+The next, separately declared campaign is
+`calibration/map_world_r39_robust/plan.json`, run by
+`scripts/check_r39_world_robust.py`. Four fixed geometries train over layouts
+1,2,3,17,23, with no score regression allowed in either known batch or their
+five-layout mean climate. At most one proposal advances through actual native
+checks and five prospectively reserved validation layouts. All original native
+and layout thresholds remain unchanged. The previous failed attempts remain
+rejected. Nineteen focused tests pass. This campaign is currently running;
+the canonical Earth atlas still uses r38 and the complete local atlases remain
+available through `start_atlases.bat`.
+
 Publication requires a native pass followed by the layouts17/23 comparison,
 a full staged export, food and population accounting, complete asset checks,
 and Chromium checks through the actual `.bat` server. All normal atlases remain

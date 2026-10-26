@@ -1,0 +1,14 @@
+{
+  "declared_before_any_audit_layout_results": true,
+  "conditional_on": "Run only after the completed robust campaign rejects publication. An eligible robust result instead goes to atlas staging. Never change the audited candidate in response to audit results.",
+  "fixed_candidate": "calibration/map_world_r39_balance/proposals/balance_003.json",
+  "native_review": "output/r39_world_balance/review.json",
+  "native_checkpoint": "output/r39_world_balance/balance_003_native.pkl",
+  "reason": "The fixed candidate passed all native guards but was rejected on the previous two-layout transfer batch. That attempt remains rejected. A separate prospective nine-layout audit estimates expected skill across the invented-surroundings generator, rather than choosing another favorable geometry after looking at validation. It is not independent validation of real planetary physics.",
+  "layouts": [490101, 490211, 490307, 490401, 490503, 490601, 490709, 490801, 490907],
+  "protocol": "Run matched r38 and the single fixed r39 candidate at ds16 for all nine layouts with the unchanged strict numerics. Save every member and both mean-climate checkpoints. No interim selection, stopping for favorable results, parameter changes, added layouts, or second candidate.",
+  "native_gate": "Recheck the original native1/2/3 cached identity and metrics and every original native protection against the canonical r38 reference. The original failed layouts17/23 remain reported as failures; they are excluded from this prospective audit.",
+  "ensemble_gate": "The actual nine-layout mean climate must have zonefit no worse than matched r38 and strict-agreement loss<=0.01, with every observed numerical check passed.",
+  "uncertainty_gate": "Additionally score each actual individual layout and form nine paired candidate-minus-reference zonefit differences. Require their mean>0 and the lower2.5th percentile of20000 paired bootstrap mean differences>0. Resample the sorted difference vector with numpy default_rng(seed394901). This tests expected individual-layout score, a different estimand from the nonlinear score of the mean climate; both gates are required. The bootstrap interval describes this generated-layout sample only, not real-world climate accuracy.",
+  "publication": "Only passing the unchanged native gate AND the prospective nine-layout mean-climate gate AND the predeclared paired uncertainty gate allows staging, full climate/economic exports, asset/accounting checks and actual .bat-server browser verification. Preserve all preceding failures. Otherwise retain canonical r38. This audit has a fixed budget and no follow-up candidate or extra sampling."
+}

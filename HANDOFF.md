@@ -22,6 +22,20 @@ Earth params/summary while this campaign or its queued build is running.
 Current canonical Earth is still r38. The more detailed older attempt below
 explains the rejected parent; its old build instructions are historical.
 
+A final, conditional fixed-candidate audit is declared before any of its nine
+new layouts in `calibration/map_world_r39_audit/plan.json`, implemented by
+`scripts/audit_r39_surroundings.py`. Only if the robust campaign rejects:
+audit the single already native-passing balance003, with NO parameter search,
+on nine other prospective layouts490101…490907. The original17/23 rejection
+remains. Require the unchanged native gate, nine-layout mean-climate gain and
+a strictly positive lower2.5% paired-bootstrap bound of individual-layout score
+gains (20000 draws, fixed RNG). Both estimands are reported separately; this
+is uncertainty under the invented-neighbourhood generator, not real-planet
+physical validation. No sample extension or second candidate. Twenty-three
+focused tests pass. Run only after the robust review is complete; it skips
+an eligible robust result. If it qualifies, use its review with the same stage
+builder and finish actual browser checks/promotion. Otherwise retain r38.
+
 r39 Earth physics is adopted (`calibration/local_accuracy_20261023/r39_params.json`):
 dev31 S 0.987521, paired 28 km S 0.994737, established six S 0.994573. Rain loss
 improves 2.30%; city monthly MAE improves but annual matches slightly worsen.

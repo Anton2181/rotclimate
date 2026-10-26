@@ -150,7 +150,9 @@ def main():
     else:
         compare = ('Compare the same 50 million people: ' + ' · '.join(
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
-        reports = ('<p class="note"><a href="../reports/ITERATION_20261023.md">Population lab and latest milestones</a> · '
+        reports = ('<p class="note"><a href="../reports/CONSTRAINED_BLEND_R39_20261025.md">Earth r39 calibration</a> · '
+                   '<a href="../reports/R39_WORLD_TRANSFER_20261026.md">World refit and atlas release checks</a> · '
+                   '<a href="../reports/ITERATION_20261023.md">Population lab</a> · '
                    '<a href="../reports/HARVEST_MIGRATION_20261022.md">Food, disease and settlement models</a> · '
                    '<a href="../reports/THREE_FIT_20261022.md">Campaign report</a> · <a href="../docs/BIOMES.md">Biome methods</a></p>')
         head = '<!doctype html><html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">\n'
