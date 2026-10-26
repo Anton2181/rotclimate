@@ -1,0 +1,45 @@
+{
+  "purpose": "Manufactured attribution of independent layer water under the unchanged r39 nonlinear column rain law. No Earth climate accuracy or seasonal coupling claim.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "shape": [
+    7,
+    101
+  ],
+  "cell_km": 20.0,
+  "lower_mass_fraction": 0.25,
+  "lower_wind_amplitude_ms": 8.0,
+  "upper_wind_factor": -0.3333333333333333,
+  "source_mm_day": 1.0,
+  "saturation_mm": 40.0,
+  "dynamics": 0.5,
+  "instability": 1.0,
+  "prescribed_temperature_C": 22.0,
+  "convective_temperature_factor": 0.7,
+  "boundary_column_water_mm": 14.0,
+  "boundary_upper_lower_q_ratio": 0.2,
+  "drying_days": 50.0,
+  "profiles": {
+    "fixed_ratio": {
+      "type": "fixed_ratio",
+      "upper_lower_q_ratio": 0.2
+    },
+    "separate_no_mix": {
+      "type": "two_reservoir",
+      "mixing_days": null
+    },
+    "separate_mix5": {
+      "type": "two_reservoir",
+      "mixing_days": 5.0
+    }
+  },
+  "numerics": {
+    "moisture_diffusion": 0.0,
+    "moisture_relaxation": 0.1,
+    "moisture_residual_tol": 1e-08,
+    "picard_iters": 2048,
+    "linear_rtol": 1e-11,
+    "linear_max_iter": 10000
+  },
+  "physical_definition": "All cases use the same flat domain, opposing balanced dry winds, column saturation40mm, source1mm/day to the lower reservoir, identical layer boundary values,50day accountable drying and unchanged r39 column rain_coefficient, including convective/subcloud terms at prescribed22C. Solved column rain removes each layer in proportion to its current water. No independent cloud temperature or layer saturation is inferred. Fixed-ratio source is the same total, and its rain/drying law uses the same current total column water. Zero versus5day symmetric vertical mixing separately controlled. No storms, ocean exchange, thermal feedback, time tendency or Earth geography. No adaptive parameter additions after outcomes.",
+  "publication": "Report all fixed profiles, strict local equations, actual boundary budgets and source hashes. No new global/city score, climate calibration or normal atlas data adoption. This is a nonlinear mechanism test before any full seasonal coupling."
+}
