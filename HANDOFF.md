@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Active follow-up — conservative flux plus column wind:** the original
+**Completed follow-up — conservative flux plus column wind:** the original
 conservative pilot/report is committed separately; the following new plan
 preserves its failures. `calibration/flux_column_wind_20261026/plan.json` fixes
 6 profiles ×7 regions: adopted reference; damped reference; pure-flux replay;
@@ -23,9 +23,35 @@ Both updated runner/helper sources are a NEW epoch; do not resume completed
 `output/vapor_flux_20261026/` with them (original source at `08b3a23`).
 
 New run: `scripts/check_vapor_flux.py --plan calibration/flux_column_wind_20261026/plan.json --out output/flux_column_wind_20261026`.
-Log `/tmp/flux_column_wind_20261026.log`. Keep all core/runner/plan sources fixed
-while running; sources/input identities frozen. All prior pilots have ended.
+Log `/tmp/flux_column_wind_20261026.log`, shell41379 ended. Source `8f5408b`.
+All42 runs pass, including pure-flux Japan/Mexico. Damped r39 rainfall changes
+at most .00901mm/month on mapped cells; big physical changes are not that drift.
+All3 shear candidates fail accuracy/ocean protections; no full31 or fine run.
+North India annual rain: reference256.26, flux481.71, shear.75=411.51,
+shear.5=222.20, shear.25=23.49mm, against760.83 observed. Coastal over-wetting
+persists (e.g. PacificNW~3966 vs897). No adoption or r40 profile.
+
+All5 completed experiments total384 attempted regional integrations:380 pass,
+4 failures remain in the original35-attempt vapor pilot. Do not call all384
+converged or overwrite original failures with the later numerical replay.
+106 focused current-source tests pass. All3 normal atlas browser checks pass;
+new companion check exercises native keyboard summaries, hash navigation/reload,
+7 charts,6 JSON downloads, desktop/mobile light/dark, no overflow/page errors.
+`scripts/check_climate_accuracy_browser.py` handles asynchronous hash changes.
+
+`publish_flux_column_wind.py` exports verified data/figure; report
+`reports/FLUX_COLUMN_WIND_20261026.md`. `organize_climate_accuracy.py` only
+reorders existing published sections, with newest open and an index, idempotent.
+Old scientific publication HTML hashes precede later layout changes; final
+page layout/verification receipts bind the current served page. No scientific
+statistic is recalculated by the formatter. All sources/records stay frozen.
+No climate integration is running. All prior pilots have ended.
 All normal climate/food/population/trade atlas fields still unchanged.
+Final receipts in `output/flux_column_wind_20261026/`:106 focused tests, all3
+atlas browser suites plus companion native keyboard/hash reload/mobile/dark,
+506 byte-exact Windows-staged assets,941-file portable bundle/link/launcher
+checks. `verification.json` hashes all384 attempted scientific records, preserving
+380 passes and4 original failures. No r40 or atlas climate/economic adoption.
 
 **Completed structural pilot — conservative vapor flux:** the preceding
 307-run momentum round is complete and pushed at `e6be857`. Continuing without

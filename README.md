@@ -7,6 +7,11 @@ observed, but over-wets several other regions and fails four nonlinear solves.
 It is rejected; defaults, qualified r39 physics and all atlas climate fields
 remain unchanged. The launcher's accuracy page shows successful and failed
 comparisons. See the [vapor-flux report](reports/VAPOR_FLUX_20261026.md).
+The separate 42-run [column-wind follow-up](reports/FLUX_COLUMN_WIND_20261026.md)
+converges everywhere with lower damping and unchanged residual tolerances,
+but still fails the physical accuracy guards. The accuracy page now has a
+short experiment index and newest-open collapsible sections, with seven
+figures and six measurement downloads. All 106 focused checks pass.
 
 **Momentum experiments, 26 October 2026:** column-pressure shear completed 28
 verified runs but worsened the Indian monsoon. A separate 124-run surface-drag
