@@ -2,21 +2,31 @@
 
 ## Current status
 
-**Parcel-ascent thermodynamics source/plan prepared:**
-`experiments/parcel_ascent.py`, `scripts/check_parcel_ascent.py`,
-`calibration/parcel_ascent_20261026/plan.json`.10independent unit checks pass:
-dry analytic adiabat/work; no condensation before LCL; exact LCL; true RH and
-mixing-ratio conservation; saturated-start and null displacement; unsupported
-inputs. Constant dry cp/Lv and liquid Bolton saturation, no ice/entrainment or
-environmental heat coupling. The saturated derivative uses the actual Bolton
-vapor-pressure derivative to satisfy cp*dT+Rd*T*dx+Lv*dr=0 consistently; pressure
-work integrated with temperature. Actual dry-air water ledger uses mixingratio,
-not changing-wet-mass specific-humidity differences. Source not in ClimateModel.
-Next run18declared manufactured T/RH/pressure combinations at64/128/256steps
-(noEarthintegrations), preserve failures, publish pressure sensitivity before
-choosing any donor-condensation coupling. No selected detrainment pressure.
-Latest Earth pilot/atlas update below is complete, committed afba2a0and pushed.
+**Parcel-ascent proof COMPLETE:** source `fc91ae4`,
+`output/parcel_ascent_20261026/`.18manufactured T/RH/pressure cases ×64/128/256
+resolutions=54numerical paths, all pass;0additional Earth integrations.
+Max water residual3.47e-18kg/kg dry air, first-law4.17e-5J/kg dry air vs.01limit;
+endpointT64/128vs256 max3.30e-8K.10analytic/physical unit tests pass. Script
+`check_parcel_ascent.py`, plan `calibration/parcel_ascent_20261026/plan.json`.
+Warm300K/RH60% condensation fraction22/66/95% at750/500/300hPa: pressure matters,
+no endpoint is selected. All18results retained, plot fixed300K profiles.
 
+`experiments/parcel_ascent.py` follows analytic dry adiabat until root-located
+LCL, then saturated RK4 with actual Bolton derivative, integrated pressure work
+and consistent cp*dT+Rd*T*dx+Lv*dr=0. Conserves vapor+immediate condensate per
+kg dry air using mixingratio; initial RH is vapor-pressure fraction. Constant
+dry cp/Lv, liquid-only, no ice/entrainment/re-evaporation/environment heat
+coupling or200K floor; some cold endpoints207K. This is isolated thermodynamics,
+not a climate gain or full atmospheric energy closure. Source not imported by
+ClimateModel. Never replace solved humidity by a fitted ratio to hide a failed
+Earth comparison. Future coupling must derive start/detrainment states, book
+surviving vapor and rain, and account explicitly for latent heat/environment.
+
+Report `reports/PARCEL_ASCENT_20261026.md`. Figure+full endpoint JSON folded
+inside existing independent-water atlas study:19sections/40figures/22downloads;
+normal three atlas packets/headlines unchanged. Earth series still812/808/4.
+No active calibration/supervisor. Server8766 may still serve local atlases.
+Committed prior Earth-results milestone afba2a0and parcel source fc91ae4pushed.
 
 **Independent seasonal water Earth pilot COMPLETE:** source `fd458cf`,
 `output/independent_water_20261026/`,35/35 strict passes,21historical controls
