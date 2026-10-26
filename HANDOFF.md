@@ -2,6 +2,24 @@
 
 ## Current status
 
+**Active follow-up — momentum balance:** completed earlier results and plots
+are pushed at `1ce0c5e`; column-shear implementation at `f22b0eb`.
+The separate `calibration/momentum_balance_20261026/plan.json` fixes4 candidates:
+land-only nominal drag; ocean-only nominal drag; nominal drags with both
+thermal-pressure amplitudes ×1.1/×1.2. Last two test whether pressure forcing
+can retain inflow and offset surface heat-transport regressions, all within
+existing e5 bounds. Same31-region and individual-region protections, actual
+integrated SST/wind guard, then at most2 fine finalists and established6 once.
+All regions reused, planet/geography fixed. No lowered criteria or extra
+validation samples. Fresh31 r39 errors/geography must match the archive.
+
+`scripts/check_surface_momentum.py` now takes `--plan`/`--out`; the earlier
+fixed-source version is preserved at `1ce0c5e`. Do not resume its completed
+parent folder under this updated runner. New run:
+`--plan calibration/momentum_balance_20261026/plan.json --out output/momentum_balance_20261026`.
+Log `/tmp/momentum_balance_20261026.log`, shell10626. Do not edit model sources
+or the frozen runner/plan while it runs. The earlier two pilots have ended.
+
 **Completed round — moisture-column pressure shear:** opt-in
 `moisture_pressure_drag_ratio` (default1 exact legacy), classified as shared
 physics. Lower Rayleigh drag changes direction and speed of the pressure-driven

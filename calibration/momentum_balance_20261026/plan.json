@@ -1,0 +1,20 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Separate land and ocean momentum responses, then test whether a modest common pressure-gradient increase offsets the slower heat transport of nominal surface drag while retaining its cross-isobar moisture inflow. Shared momentum/thermal-pressure closure, not an arbitrary temperature correction or planetary forcing change. Motivated by the completed surface_momentum pilot; all development regions have already been inspected.",
+  "parent": "output/surface_momentum_20261026/review.json",
+  "parent_source_commit": "1ce0c5e",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "candidates": {
+    "land_only": {"bl_drag_land": 0.0001},
+    "ocean_only": {"bl_drag_ocean": 0.000035},
+    "balance110": {"bl_drag_land": 0.0001, "bl_drag_ocean": 0.000035, "slp_large": 1.9387223814923944, "slp_local": 0.5190387201040705},
+    "balance120": {"bl_drag_land": 0.0001, "bl_drag_ocean": 0.000035, "slp_large": 2.1149698707189755, "slp_local": 0.5662240582953496}
+  },
+  "bounds": "All settings remain inside the pre-existing e5 pressure-wind bounds: slp_large0..4 hPa/K, slp_local0..2 hPa/K, land drag3e-5..4e-4 /s, ocean drag1e-5..1e-4 /s. The tested drags are the existing nominal values. Pressure scaling is a shared physical closure parameter, not observed pressure assimilation or a demonstrated global hydrostatic simulation.",
+  "development": "Fresh r39 reference and all four fixed candidates on dev31 at56km. Reference must reproduce all31 archived temperature/rainfall errors within1e-10 and exact geography hashes before candidate interpretation. Same complete protections as the parent: policy_v2 S<=.995, no group worse, neither component worse by more than1%; North India rain loss<=.95 of r39; Iran rain loss<=1.02; combined local S<=1.02 in Iberia, Japan, Mexico, eastern Australia and Pacific NW. No interpolation, extra candidates or limit changes after results.",
+  "ocean_and_winds": "Best at most two development qualifiers sorted by combined S get actual integrated SST/wind checks on the seven protected regions at56km. Fixed observation-only ice-free sea mask in the padded domain interior and WOA18 monthly observations; each region's monthly SST MAE increase<=.02C, domain maximum column speed<=60m/s and p95<=25m/s. Fresh baseline once. Include wind-dependent upwelling; preserve failed solves.",
+  "fine": "Ocean passers in fixed development-S order take paired28km California, Western Europe, Japan, New Zealand with S<=1.01 and North India rain-loss ratio<=.98. First fine passer takes established six once (S<=1.01); reused regions, not a new independent holdout. No world refit or atlas-climate promotion unless all Earth stages pass. No further candidate after an established-six failure.",
+  "fixed": "Modern Earth solar/radius/greenhouse reference, tilt/spin/orbit/calendar via joint.earth_profile; mapped and exterior observed geography, strict numerical criteria, observed-global-rain remote descent, modelled SST, column shear ratio1 and moisture-speed factor unchanged. Only listed shared surface drag/pressure-amplitude parameters move; the model remains locally nonconservative and conditionally forced.",
+  "decision": "If no qualifier, preserve all four failures and retain r39; skip later stages. Do not rerun or overwrite the parent source epoch. New CLI-capable runner uses this separate frozen folder. Any Earth adoption needs a separate matched-world campaign before changing the normal atlases."
+}

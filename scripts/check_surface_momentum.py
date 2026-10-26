@@ -2,6 +2,7 @@
 from dataclasses import asdict
 from pathlib import Path
 from multiprocessing import Pool
+import argparse
 import importlib.metadata
 import json
 import sys
@@ -66,9 +67,13 @@ def ocean_one(job):
 
 
 def main():
-    path = ROOT/'calibration/surface_momentum_20261026/plan.json'
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan', type=Path, default=ROOT/'calibration/surface_momentum_20261026/plan.json')
+    parser.add_argument('--out', type=Path, default=ROOT/'output/surface_momentum_20261026')
+    args = parser.parse_args()
+    path = args.plan.resolve()
     plan = json.loads(path.read_text())
-    out = ROOT/'output/surface_momentum_20261026'
+    out = args.out.resolve()
     out.mkdir(exist_ok=True)
     sources = list((ROOT/'rotclimate').glob('*.py'))+[Path(__file__), path, ROOT/plan['physics'],
         ROOT/'scripts/benchmark_local.py', ROOT/'scripts/check_constrained_blend.py', ROOT/'scripts/gate_local.py',
@@ -85,7 +90,7 @@ def main():
     params.mkdir(exist_ok=True)
     base = load_params(ROOT/plan['physics'])
     all_params = {'reference': base}
-    all_params.update({name: base.replace(**values) for name, values in plan['candidates'].items()})
+    all_params.update({name: joint.update_block(base, 'physics', values) for name, values in plan['candidates'].items()})
     for name, profile in all_params.items():
         joint.earth_profile(profile).to_json(params/f'{name}.json')
     reference = benchmark(params/'reference.json', out/'reference', ['dev31'], 56.0)
