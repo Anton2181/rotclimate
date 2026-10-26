@@ -1,0 +1,41 @@
+{
+  "purpose": "Fixed layer-capacity condensation attribution after near-uniform upper humidity in proportional column rain. Two predeclared profiles; no Earth accuracy claim.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "shape": [
+    7,
+    101
+  ],
+  "cell_km": 20.0,
+  "lower_mass_fraction": 0.25,
+  "lower_wind_amplitude_ms": 8.0,
+  "upper_wind_factor": -0.3333333333333333,
+  "source_mm_day": 1.0,
+  "saturation_mm": 40.0,
+  "dynamics": 0.5,
+  "instability": 1.0,
+  "prescribed_temperature_C": 22.0,
+  "convective_temperature_factor": 0.7,
+  "boundary_column_water_mm": 14.0,
+  "boundary_upper_lower_q_ratio": 0.2,
+  "drying_days": 50.0,
+  "profiles": {
+    "layer_no_mix": {
+      "mixing_days": null
+    },
+    "layer_mix5": {
+      "mixing_days": 5.0
+    }
+  },
+  "numerics": {
+    "moisture_diffusion": 0.0,
+    "moisture_relaxation": 0.1,
+    "moisture_residual_tol": 1e-08,
+    "picard_iters": 2048,
+    "linear_rtol": 1e-11,
+    "linear_max_iter": 10000
+  },
+  "physical_definition": "All previous synthetic inputs remain fixed. Partition total saturation capacity using the prior fixed0.2 humidity shape, f_lower=.625/f_upper=.375, but DO NOT force actual humidity. Evaluate unchanged rain_coefficient at equivalent column W_i/f_i; this exactly recovers the original column law when W_i=f_i*W, including convective numerical water floor. Each layer independently condenses/removes water through its own humidity relative to capacity. No new temperature or rain-law parameters. No/5day symmetric mixing separately controlled. Capacity shape is prescribed, not independently observed vertical thermodynamics. Parent controls imported only after verifying all frozen source/record hashes; no new parent climate integrations.",
+  "publication": "Two manufactured nonlinear solves, no Earth climate integration or normal atlas adoption. Retain all outcomes and strict per-layer residuals. New capacity shape is an explicit approximation; no interpretation as independent cloud temperatures, latent heating or validation. No adaptive profiles after outcomes.",
+  "parent": "output/reservoir_rain_20261026",
+  "capacity_upper_lower_q_ratio": 0.2
+}
