@@ -1,5 +1,13 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Conservative vapor transport, 26 October 2026:** the opt-in flux equation
+has shared-face accounting and a checked regional water ledger. In a frozen
+35-attempt pilot it raises North India rain from256 to482mm/year, closer to761
+observed, but over-wets several other regions and fails four nonlinear solves.
+It is rejected; defaults, qualified r39 physics and all atlas climate fields
+remain unchanged. The launcher's accuracy page shows successful and failed
+comparisons. See the [vapor-flux report](reports/VAPOR_FLUX_20261026.md).
+
 **Momentum experiments, 26 October 2026:** column-pressure shear completed 28
 verified runs but worsened the Indian monsoon. A separate 124-run surface-drag
 experiment improved average rainfall loss by 1.54%, yet failed the declared

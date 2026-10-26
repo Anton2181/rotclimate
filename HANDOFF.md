@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Active structural follow-up — conservative vapor flux:** the preceding
+**Completed structural pilot — conservative vapor flux:** the preceding
 307-run momentum round is complete and pushed at `e6be857`. Continuing without
 ending at that milestone, added opt-in `moisture_transport_form="flux"`;
 default="concentration" preserves legacy. Shared-face upwind vapor advection
@@ -28,7 +28,23 @@ pass triggers a generated separate full31 plan via the generalized existing
 momentum runner, then ocean/fine/established6 gates. No extra candidate after
 failures. Runner `scripts/check_vapor_flux.py`, shared recorder
 `scripts/paired_physics_pilot.py`. Source must remain frozen while it runs.
-Log will be `/tmp/vapor_flux_20261026.log`, results `output/vapor_flux_20261026/`.
+Log `/tmp/vapor_flux_20261026.log`, results `output/vapor_flux_20261026/`.
+Source commit `08b3a23`. All35 attempts finished:31 pass,4 fail. All7 default
+controls reproduce exactly. Both flux schemes fail Mexico at step1/Japan at
+step4 after256 moisture iterations; conservative-storm residuals1.23945 and
+.0101302 vs .01. Preserve those failures; no full31/fine/other stage ran.
+Conservative mean+storm gives North India482/761mm observed (r39=256), loss
+.80227 vs .94179. But Iberia1057/392, eastAustralia1722/641 and PacificNW3966/897
+are far too wet. No adoption despite near-machine-precision transport ledger.
+Published on the accuracy page with a PNG/JSON; report
+`reports/VAPOR_FLUX_20261026.md`, exporter `publish_vapor_flux.py`. Source guards
+verify the old epoch; future helper/model edits require new folders.
+
+Next intended follow-up: combine the conservative equation with weaker/turned
+column-pressure winds; preserve full-flux failures, use a separately declared
+damping/work budget without relaxing residual tolerances, and retain a damped
+r39 diagnostic to distinguish numerical drift. This follow-up is not yet run
+or adopted. No climate integration currently active.
 Earlier paragraphs below record completed campaigns; do not restart them.
 
 **Completed follow-up — momentum balance:** completed earlier results and plots
