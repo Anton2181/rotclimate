@@ -1,5 +1,12 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Thermal-wind development,26 October2026:** a fixed42-run experiment tests
+physical vertical shear with unchanged Earth planetary settings. Native-grid
+wind errors improve in India/Australia, but rain remains misplaced and wet-coast
+errors persist. No candidate qualifies; r39 physics and the r38 world Earth
+atlas stay adopted. See the [thermal-wind report](reports/THERMAL_WIND_20261026.md)
+and three new plots in the launcher’s accuracy page.
+
 **Outside circulation check,26 October2026:** four exact r39 controls now compare
 wind vectors against native-grid NCEP reanalysis. Direction and vertical-level
 differences remain substantial, especially over subtropical lowlands; this is

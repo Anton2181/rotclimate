@@ -2,32 +2,56 @@
 
 ## Current status
 
-**Thermal-wind experiment ready:** opt-in physical parameter
-`moisture_thermal_height_km` (default0), explicitly shared in joint partition.
-Hydrostatic/geostrophic shear uses smoothed common-height layer temperature
-gradient, effective height and smooth equatorial taper. Surface wind/heat/lift
-remain unchanged; vapor uses its own sheared wind/convergence. Not a resolved
-vertical mass/energy model. Default0 never calls the new helper; analytic sign,
-spin, height, nondivergence, equator and coupled conservative-ledger tests pass.
-Existing49 focused wind/joint/flux checks plus7 reference checks pass; the
-extended4 gate checks pass, including outside-wind/area protection.
+**Completed thermal-wind milestone:** new physical closure remains opt-in
+`moisture_thermal_height_km=0` by default, explicitly in shared joint partition.
+Source epoch `25a4c21`. Fixed plan `calibration/thermal_wind_20261026/plan.json`
+ran six profiles ×seven reused regions at56km: original r39, damped r39,
+conservative flux, flux+thermal1/2/3km. All42 pass strict numerical checks;
+7 original climate/geography controls and3 native wind controls match exactly.
+Cumulative392+42=434 attempts,430 passes and4 original preserved failures.
+No active climate integration. Do not resume older campaigns using changed code.
 
-Plan `calibration/thermal_wind_20261026/plan.json`: six profiles ×seven reused
-regions =42 integrations, at56km. Original r39, damped r39, damped conservative
-flux, and flux+thermal1/2/3km. Separate numerical blocks .05/1024, unchanged
-tolerances; only3 thermal candidates eligible. Same rain/T/regional/ocean gates,
-plus NI native partial-column wind RMSE improvement>=5%, Iberia ocean and
-EastAustralia lowland worsening<=2%. Three original native wind controls must
-also reproduce exactly. Updated `check_vapor_flux.py`/`paired_physics_pilot.py`
-record outside circulation for these optional declared regions. New source
-epoch; do not resume any older campaign using updated core/helpers.
+Thermal helper `rotclimate/winds.py` adds hydrostatic/geostrophic shear using
+500km smoothed common-height modeled temperature, effective height and smooth
+10-degree equatorial taper. No observed-wind forcing, planetary changes or
+surface heat/lift/evaporation-wind change. Aloft increment has no empirical
+surface terrain drag. Idealized single effective layer, not resolved vertical
+return/momentum/energy or transient q'u' closure. Known-answer sign/spin/height,
+f-plane nondivergence/equator/disabled path and coupled ledger tests pass.
+The final focused model/reference suite passes129 tests (record command in
+output/thermal_wind_20261026/verification.json).
 
-Run `scripts/check_vapor_flux.py --plan calibration/thermal_wind_20261026/plan.json
---out output/thermal_wind_20261026`. No integrations started at this milestone;
-prior totals392 attempts/388 passes/4 preserved failures remain. Old adopted
-physics and atlas climates unchanged. At most2 qualifiers automatically advance
-through the unchanged full31/ocean/fine/established6 gates; no extra candidates
-after failures. No wind reference enters climate forcing.
+All3 thermal candidates fail fixed safeguards; no full31/fine/established6.
+NI annual rain256.26→578.58/665.92/754.35 vs760.83 observed, but local monthly
+MAE50.01→52.82/56.42/59.25mm. NI partial-column vector RMSE7.207→5.402/4.183/
+3.989m/s; EastAustralia also improves, but Iberia wind worsens at2/3km and
+wet-coast rain remains very poor. First height passes outside-wind guards yet
+fails regional rain/ocean safeguards.3km near-correct annual average hides
+excess southwestern rain and a missing Himalayan foothill rain band.
+Seven-region rain-loss ratios2.3724/2.2654/2.1426 vs r39; these are development
+ratios, not accuracy percentages or the full31 score. Damped reference drift
+max.00901mm/month, same tolerances. Older failed solves stay failed.
+
+Recorder/helper `paired_physics_pilot.py` and `check_vapor_flux.py` optionally
+record native circulation and guard identical areas/masks. The original
+outside audit remains frozen at3758de5/3747917; its source guards must not be
+bypassed after core/helper changes. `publish_thermal_wind.py` verifies sources,
+all records/NPZs and produces3 charts/maps plus JSON. Report
+`reports/THERMAL_WIND_20261026.md`; newest launcher companion study,8 studies,
+14 charts and9 JSON downloads. No atlas climate/economic adoption. r39 Earth
+physics/r38 world Earth atlas remain. Suggested future work is moisture/rain
+placement and vertical return; do not add candidates to this fixed pilot.
+
+Portable verification is now reproducible with stdlib-only
+`scripts/check_portable_atlases.py <bundle.zip> --out <receipt.json>`: all
+manifest hashes, safe paths, hub/companion links, fresh extracted launcher.
+New final QA receipts under output/thermal_wind_20261026/: companion native
+keyboard/hash/mobile/dark/image/download checks, canonical3 climate/food/pop
+packets unchanged, portable954 files/77 checked links. Windows-staged516 assets pass, all temporary snapshots are cleaned, and final
+source/data verification.json records129 tests and all42 scientific records.
+The initial whole-repository checkout exhausted /tmp; verifier now copies only
+the staged site/docs/launcher into workspace scratch and removes it on success
+or failure. No user data or earlier artifacts were removed.
 
 **Completed outside circulation audit:** fixed four-region production r39
 plan `calibration/circulation_audit_20261026/plan.json`, source `3747917`.
