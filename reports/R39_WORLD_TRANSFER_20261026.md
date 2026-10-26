@@ -52,6 +52,19 @@ now rejected with successful numerics, so this path is running. It keeps all ori
 allows only one further actual native candidate. Eleven focused tests cover
 locked physical parameters, interpolation/ranking and complete atlas assets.
 
+All three actual ds16 balance screens converged:
+
+| Fraction from 49 toward 65 | Zone objective | Exact agreement | Tree recall | Mediterranean dry |
+|---|---:|---:|---:|---:|
+| 1/3 | 0.186653 | 36.90% | 5.56% | 5.05% |
+| 1/2 | 0.186477 | 36.87% | 5.56% | 5.05% |
+| 2/3 | 0.186510 | 36.67% | 5.98% | 5.45% |
+
+The declared ranking, using measured endpoint resolution discrepancies only
+to predict test order, chooses the 2/3 case (`balance_003`). Its one actual
+native test is running; these coarse results do not establish a native pass.
+The five existing world-publication guard tests also pass.
+
 Publication requires a native pass followed by the layouts17/23 comparison,
 a full staged export, food and population accounting, complete asset checks,
 and Chromium checks through the actual `.bat` server. All normal atlases remain

@@ -51,6 +51,16 @@ review is complete (it now is). It exits without work if the parent already qual
 Use its review path with the same staging builder if it passes. Eleven
 focused interpolation, ranking and atlas-packet tests pass.
 
+All three balance ds16 screens have now converged. The declared corrected-metric
+ranking selected `balance_003` (2/3 toward candidate65) for its one native check,
+which is running. Predictions are only for ranking; they are not measured native
+results. Native checkpoint tag will be `balance_003_native.pkl`.
+An automatic staging builder is queued behind this process (shell session5226):
+log `/tmp/r39_earth_build.log`, review `output/r39_world_balance/review.json`.
+It skips work if the final review rejects publication. Do not launch a duplicate
+builder; inspect that log/process first. Browser QA and canonical promotion
+remain manual after it finishes. The actual server is still port8766.
+
 DO NOT edit `rotclimate/`, `scripts/check_r39_world.py`, the transfer or balance
 scripts/plans, their completed inputs, or canonical Earth params/summary while
 the balance run is active. It freezes those
