@@ -2,6 +2,29 @@
 
 ## Current status
 
+**New mass-consistent-column experiment ready:** opt-in
+`moisture_mass_balance=False` by default, explicitly shared physics. New
+`rotclimate/column_mass.py` minimizes mass-weighted velocity change subject to
+stationary interior dry-column face-flux divergence=0. Fixed M=p0/g*exp(-z/8km),
+open-border velocities may adjust, exact discrete arithmetic face averaging
+matches vapor. Sparse weighted orthogonal projection; default never constructs
+it. Not resolved3-D momentum, vertical return, storage or proof of a correct
+humidity-weighted wind. Surface heat/lift/evaporation still use surface wind.
+New numerical certificate includes per-step mass residual and correction size.
+
+Fixed `calibration/column_mass_20261026/plan.json`:49 integrations, seven
+profiles ×seven reused regions at56km. Four controls (original r39, damped r39,
+conservative flux, thermal1km) precede3 eligible balanced flow trials with
+0/1/2km thermal shear. Original exact climate/native wind controls remain;
+three other controls must reproduce ALL prior NPZ fields, including budgets
+and circulation, before candidates. Same numerical, rain/T/regional/ocean,
+outside-wind safeguards, plus strict mass residual. At most2 qualifiers advance
+automatically through existing full31/fine/established6 checks. No added trials
+or relaxed gates after outcomes. No new simulation started at this milestone.
+Run `scripts/check_vapor_flux.py --plan calibration/column_mass_20261026/plan.json
+--out output/column_mass_20261026`. Source epoch changes; never resume older
+campaign folders with this core/recorder. All adopted fits/atlas data unchanged.
+
 **Completed thermal-wind milestone:** new physical closure remains opt-in
 `moisture_thermal_height_km=0` by default, explicitly in shared joint partition.
 Source epoch `25a4c21`. Fixed plan `calibration/thermal_wind_20261026/plan.json`

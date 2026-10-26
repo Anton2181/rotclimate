@@ -101,6 +101,19 @@ def run_one(job):
                 row['circulation']['legacy_exact']=True
         row['temperature']=temperature_metrics(st['Tm'][:,land],case.obs_T[:,land])
         row['monthly_rain']=dict(simulated=st['Pm'][:,land].mean(1).tolist(),observed=case.obs_P[:,land].mean(1).tolist())
+        control_archive=plan.get('profile_control_archives',{}).get(name)
+        if control_archive:
+            old_path=ROOT/control_archive/f'{region}.npz'
+            old_record=json.loads(old_path.with_suffix('.json').read_text())
+            if (old_record['status']!='passed' or not old_record['numerics']['all_checks_passed']
+                    or file_hash(old_path)!=old_record['arrays_sha256']):
+                raise ValueError('Invalid declared historical physical control')
+            with np.load(old_path) as old:
+                if set(old.files)!=set(fields):raise ValueError('Historical control field set changed')
+                for key in old.files:
+                    if not np.array_equal(fields[key],old[key],equal_nan=True):
+                        raise ValueError('Historical physical control changed: '+key)
+            row['physical_control_exact']=True
         with arrays.with_suffix('.tmp').open('wb') as stream:np.savez_compressed(stream,**fields)
         arrays.with_suffix('.tmp').replace(arrays)
         row.update(status='passed',params=asdict(p),numerics=result.numerics,legacy_exact=name=='reference',

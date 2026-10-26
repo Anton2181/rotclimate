@@ -254,6 +254,11 @@ class ClimateModel:
             raise ValueError('Unknown moisture_transport_form')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
             raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
+        if not isinstance(params.moisture_mass_balance, (bool, np.bool_)):
+            raise ValueError('moisture_mass_balance must be boolean')
+        if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
+                or params.moisture_wind_factor != 1 or params.wind_cap != 0):
+            raise ValueError('Mass-balanced moisture requires flux form, no wind multiplier and no wind cap')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -279,6 +284,10 @@ class ClimateModel:
             for attr in ['rtol','max_iter','require_convergence','recover']:
                 setattr(self.moisture_solver,attr,getattr(self.solver,attr))
         self._static_fields()
+        self.column_projector = None
+        if params.moisture_mass_balance:
+            from .column_mass import ColumnMassProjection
+            self.column_projector = ColumnMassProjection(self.g.elev, self.g.dx_m)
 
     # ------------------------------------------------------------------ static
     def _static_fields(self):
@@ -713,6 +722,7 @@ class ClimateModel:
         h_km = g.elev / 1000.0
         self.trace = []
         self.flux_budgets=[]
+        self.column_mass_checks=[]
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -1182,7 +1192,12 @@ class ClimateModel:
             # Legacy convergence remains exact. The shear experiment uses
             # the column flow for its moisture import, with the same existing
             # exclusion of heating-driven inflow from convergence feedback.
-            column_shear = p.moisture_pressure_drag_ratio != 1 or p.moisture_thermal_height_km > 0
+            if self.column_projector is not None:
+                uq, vq, mass_info = self.column_projector.project(uq, vq)
+                mass_info['day'] = float(d)
+                self.column_mass_checks.append(mass_info)
+            column_shear = (p.moisture_pressure_drag_ratio != 1 or p.moisture_thermal_height_km > 0
+                            or p.moisture_mass_balance)
             ud, vd = (uq, vq) if column_shear else (u, v)
             if uM is None:
                 div = (np.gradient(ud, axis=1) - np.gradient(vd, axis=0)) / dx
@@ -1513,6 +1528,13 @@ class ClimateModel:
         numerics['all_checks_passed']=(numerics['linear_unconverged']==0 and
                                       numerics['temperature_unconverged']==0 and numerics['moisture_checked'] and
                                       numerics['moisture_unconverged']==0)
+        if self.column_mass_checks:
+            numerics['column_mass_balance'] = dict(
+                scope='Stationary equivalent-barotropic dry-column kinematic projection, open borders',
+                max_scaled_mass_divergence=max(r['max_scaled_mass_divergence'] for r in self.column_mass_checks),
+                max_velocity_correction_ms=max(r['velocity_correction_max_ms'] for r in self.column_mass_checks),
+                steps=self.column_mass_checks)
+            numerics['all_checks_passed'] &= numerics['column_mass_balance']['max_scaled_mass_divergence'] <= 1e-10
         if cycle is not None:
             numerics['annual_cycle']=cycle.report()
             numerics['annual_cycle']['extra_spinup_years']=p.seasonal_spinup_years

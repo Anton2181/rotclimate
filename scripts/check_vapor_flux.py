@@ -59,6 +59,11 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_column_mass_balance'):
+                    mass=c.get('numerics',{}).get('column_mass_balance',{})
+                    if (c.get('params',{}).get('moisture_mass_balance') is not True
+                            or mass.get('max_scaled_mass_divergence',float('inf'))>1e-10):
+                        failures.append(region+': missing stationary column-mass evidence')
                 ledger=c.get('numerics',{}).get('vapor_flux_budget',{})
                 if (ledger.get('horizontal_transport_conservative') is not True
                         or ledger.get('max_relative_transport_cancellation',float('inf'))>1e-10
@@ -99,6 +104,9 @@ def main():
         sources += list((ROOT/'rotclimate_v10').glob('*.py'))+[ROOT/'experiments/v10_thermodynamics.py']
         sources += [ROOT/'output/circulation_audit_20261026'/f'{r}.npz' for r in plan['circulation_regions']]
     for region in plan['regions']:sources += [ROOT/plan['archive']/'cases'/f'{region}.json',ROOT/plan['archive']/'cells'/f'{region}.npz']
+    for folder in plan.get('profile_control_archives',{}).values():
+        for region in plan['regions']:
+            sources += [ROOT/folder/f'{region}.json',ROOT/folder/f'{region}.npz']
     identity=freeze(out/'protocol.json',dict(plan=plan,sources={str(p.relative_to(ROOT)):file_hash(p) for p in sources},
         packages={name:importlib.metadata.version(name) for name in ['numpy','scipy','numba']}))
     rows=[]
@@ -108,6 +116,8 @@ def main():
             write_json(out/'progress.json',dict(complete=False,records=rows))
             if name=='reference' and any(r['status']!='passed' for r in rows):
                 raise SystemExit('Preserve failed exact controls; do not run candidates')
+            if name in plan.get('profile_control_archives',{}) and any(r['status']!='passed' for r in rows if r['name']==name):
+                raise SystemExit('Preserve failed historical physical controls; do not run candidates')
     reviews=screening(rows,plan)
     selected=sorted((name for name,row in reviews.items() if row['qualifies']),key=lambda name:reviews[name]['S'])
     selected=selected[:plan.get('maximum_finalists',1)]

@@ -59,3 +59,16 @@ def test_better_rain_cannot_pay_for_worse_external_wind_or_changed_native_areas(
     wind['vector_rmse_ms']=9;wind['area_km2']=99
     with pytest.raises(ValueError,match='footprint'):
         screening(rows,plan)
+
+
+def test_mass_balanced_candidate_needs_the_actual_stationary_column_certificate():
+    plan,rows=cases();plan['require_column_mass_balance']=True
+    for row in rows:
+        row['params']['moisture_mass_balance']=True
+        row['numerics']['column_mass_balance']=dict(max_scaled_mass_divergence=1e-14)
+    assert screening(rows,plan)['flux_conservative_storm']['qualifies']
+    candidate=next(r for r in rows if r['name']=='flux_conservative_storm')
+    candidate['numerics']['column_mass_balance']['max_scaled_mass_divergence']=1e-7
+    assert not screening(rows,plan)['flux_conservative_storm']['qualifies']
+    del candidate['numerics']['column_mass_balance']
+    assert not screening(rows,plan)['flux_conservative_storm']['qualifies']

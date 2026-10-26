@@ -1,0 +1,43 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test whether coastal over-wetting in conservative vapor transport comes from applying divergent surface-like winds to an entire stationary air column. Impose an explicit minimum-change dry-column mass constraint, optionally after the already-tested thermal shear. No new planetary forcing or observed wind input.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/thermal_wind_20261026/review.json",
+  "parent_source_commit": "ae7689f",
+  "regions": ["north_india", "iran_plateau", "iberia", "japan", "mexico", "east_australia", "pacific_nw"],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "reference_damped": {},
+    "flux_damped": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative"},
+    "thermal_control": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 1.0},
+    "balanced_flux": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_mass_balance": true},
+    "balanced_thermal1": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 1.0, "moisture_mass_balance": true},
+    "balanced_thermal2": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 2.0, "moisture_mass_balance": true}
+  },
+  "profile_numerics": {
+    "reference_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "flux_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "thermal_control": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "balanced_flux": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "balanced_thermal1": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "balanced_thermal2": {"moisture_relaxation": 0.05, "picard_iters": 1024}
+  },
+  "profile_control_archives": {
+    "reference_damped": "output/thermal_wind_20261026/reference_damped",
+    "flux_damped": "output/thermal_wind_20261026/flux_damped",
+    "thermal_control": "output/thermal_wind_20261026/thermal1"
+  },
+  "eligible_profiles": ["balanced_flux", "balanced_thermal1", "balanced_thermal2"],
+  "maximum_finalists": 2,
+  "require_column_mass_balance": true,
+  "circulation_regions": ["north_india", "iberia", "east_australia"],
+  "circulation_groups": {"north_india": "land", "iberia": "ocean", "east_australia": "land"},
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Equivalent-barotropic stationary mass closure, not resolved3-D momentum. Use fixed approximate hydrostatic column M=(101325/g)*exp(-terrain/8000m). Minimize sum M*|delta_U|^2 subject to div(M_face*U_face)=0 on every interior cell, with arithmetic face velocities matching vapor transport. Open-border velocities may adjust and their net mass flux is diagnosed. Sparse weighted orthogonal projection uses the actual cell-to-face divergence operator; no velocity reconstruction or silent divergence tolerance relaxation. Moisture flow alone is projected, after optional thermal shear. Surface heat, evaporation, convergence lift and terrain ascent retain surface winds. This assumes the column's dry-mass wind is a usable effective vapor wind, a strong explicit approximation because humidity weighting can differ. No vertical return flow, surface-pressure storage, native spherical grid metric, momentum balance or transient moisture covariance is resolved. Kinematic norm contraction is not a prognostic energy budget.",
+  "control": "Seven original r39 climates/geography and3 native wind controls must reproduce exactly. The next3 physical/numerical controls must reproduce every saved NPZ field including vapor budgets and circulation arrays from the preceding thermal experiment, equal-NaN aware. All are ineligible. Stop before candidates if any control fails. Non-original profiles share .05/1024 and unchanged residual .01/linear/T tolerances. Keep original failed campaigns intact; no partial-case means or reinterpretation of failed solves.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes.",
+  "advance": "Best at most2 fixed qualifiers advance through unchanged full31 policy_v2 and individual regional protections, integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain ratio<=.98, and established6 S<=1.01 once. Record physical/numerical blocks separately. These are reused development sets, not new independent validation.",
+  "publication": "Publish all controls/failures, mass residuals, velocity adjustment, wind/rain tradeoffs and actual spatial maps. No adopted-profile or fantasy atlas climate/economy replacement without all Earth gates and a separate qualified matched-world fit. Preserve historical city/31-region metrics. New source epoch/output folder."
+}
