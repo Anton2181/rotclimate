@@ -2,6 +2,26 @@
 
 ## Current status — 26 October 2026
 
+**NEXT/ACTIVE:** `scripts/check_r39_world_robust.py`, plan
+`calibration/map_world_r39_robust/plan.json`, outputs `output/r39_world_robust/`,
+log `/tmp/r39_robust_runtime.log`. This is a new campaign: the preceding balance
+attempt remains rejected. Inspected layouts17/23 are now explicitly development,
+together with1/2/3. Four fixed geometries (balance001,002 and001 turned±1°)
+must improve both known batches and the five-layout mean, plus predicted native
+protections. At most one actual native1/2/3 check; only a native pass receives
+five prospectively declared validation layouts390101,390211,390307,390401,390503.
+Original native and layout thresholds remain unchanged. Cached actual member
+parameters, numerical certificates and source/file hashes are checked. Nineteen
+focused tests pass. The command queues `build_r39_earth_stage.py` with this new
+review after the campaign exits successfully, log `/tmp/r39_earth_build.log`.
+It skips a rejected review. Do not launch a duplicate builder. Browser QA and
+canonical promotion still remain if the stage is built.
+
+DO NOT edit model sources, robust/transfer helper scripts, this plan or canonical
+Earth params/summary while this campaign or its queued build is running.
+Current canonical Earth is still r38. The more detailed older attempt below
+explains the rejected parent; its old build instructions are historical.
+
 r39 Earth physics is adopted (`calibration/local_accuracy_20261023/r39_params.json`):
 dev31 S 0.987521, paired 28 km S 0.994737, established six S 0.994573. Rain loss
 improves 2.30%; city monthly MAE improves but annual matches slightly worsen.
