@@ -2,6 +2,25 @@
 
 ## Current status
 
+**Active circulation audit (26 October):** new fixed four-region plan
+`calibration/circulation_audit_20261026/plan.json` checks production r39 against
+external NCEP/NCAR1981–2010 monthly pressure-level wind vectors. Reuses verified
+V10 California/Iberia ASCII sources; eight new NOAA subsets for NI/EastAustralia
+are downloaded and hash-recorded under ignored `data/cache/circulation_reference_20261026/`.
+`scripts/check_circulation.py --fetch` verifies/acquires references without
+integrating; add `--run` to execute the declared audit. No reference forcing
+enters the model. Production climate/parameters/normal atlas data unchanged.
+
+`scripts/circulation_reference.py` reverses the southern reflection, applies
+the full projection Jacobian (not an approximate rotation), aggregates true
+areas onto native2.5-degree footprints, masks incomplete/coastal/high-terrain
+footprints, and compares925/850hPa and q-weighted925–300hPa mean vectors.
+The column uses q, not the legacy reader's returned mixing ratio. Products of
+monthly means exclude transient moisture covariance; partial-column and
+surface-like model winds differ in height. These are diagnostic comparisons,
+not newly measured rainfall skill. Seven known-answer tests pass. No new
+climate integrations have run yet at this milestone; prior totals remain388.
+
 **Completed observation-calendar audit:** after the preceding physics
 experiments, found the legacy monthly aggregator deliberately uses12
 equal365/12-day months, while WorldClim totals are calendar-month observations.

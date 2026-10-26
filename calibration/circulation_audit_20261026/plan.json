@@ -1,0 +1,14 @@
+{
+  "declared_before_new_scores": true,
+  "purpose": "Diagnose production r39 circulation against external pressure-level reanalysis before selecting another rainfall intervention. No parameter fitting or adoption.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": ["california", "iberia", "north_india", "east_australia"],
+  "cell_km": 56.0,
+  "new_reference_boxes": {"north_india": [[21, 29, 26, 36]], "east_australia": [[43, 53, 56, 64]]},
+  "reference": "NOAA PSL NCEP/NCAR Reanalysis1 1981-2010 monthly means, native 2.5-degree pressure grid. Reuse hash-verified V10 California/Iberia sources; acquire only missing regional subsets. No reference field enters the climate integration.",
+  "control": "Four integrations must reproduce original float32 equal-month T/P/observations and derived geography, with strict numerical checks. Save actual diagnostic monthly wind components and projected-coordinate geometry. Gregorian overlap is used only to match reference wind months; legacy climate accuracy remains measured under the unchanged legacy definition.",
+  "comparison": "Transform modeled right/up components to geographic east/north using the full azimuthal-equidistant projection Jacobian. Undo southern north/south reflection and preserve July-through-June reference order. Aggregate model vectors to native reference footprints by true area; score only footprints at least80% covered by the inmap rectangle. Exclude mixed coast cells (20-80% model land). Require every month's925hPa geopotential height above maximum model mean terrain in the footprint, with nonnegative925hPa height. Report native-cell counts and physical area, not fine cells as independent observations.",
+  "targets": "Compare925hPa and850hPa monthly mean vectors separately, plus q-weighted925-300hPa mean wind from trapezoidal integration of q and qU over actual shared levels. Specific humidity q is recovered from the legacy reader's mixing ratio r=q/(1-q). This is a partial column and product of monthly means: it excludes transient q'u' flux, air below925hPa/above300hPa, and native reanalysis below-ground flags unavailable in these products. Terrain masking is conservative relative to model geography, not proof of native terrain validity. A surface-like single-layer model cannot be expected to match all pressure targets.",
+  "decision": "Diagnostic only. Do not select parameters, relabel wind differences as rainfall gains, replace r39/r38, change fantasy atlases, or infer global skill from these reused four regions. Use signs, seasonality and land/ocean differences to design a separately declared physical intervention. Reference1981-2010 differs from the WorldClim1970-2000 rain period. Reanalysis is model-assisted rather than independent point observations."
+}
