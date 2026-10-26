@@ -16,8 +16,17 @@ from .numerics import matrix_product
 DAY = 86400.
 
 
-def vapor_face_fluxes(W,u,v):
+def vapor_face_fluxes(W,u,v,*,layers=None):
     """Upwind vapor flux in mm*m/s across rightward/downward shared faces."""
+    if layers is not None:
+        result=None
+        for weight,east,north in layers:
+            if weight==0:continue
+            faces=vapor_face_fluxes(W,east,north)
+            if result is None:result=[weight*a for a in faces]
+            else:
+                for i,value in enumerate(faces):result[i]+=weight*value
+        return tuple(result)
     east=.5*(u[:,1:]+u[:,:-1])
     south=-.5*(v[1:]+v[:-1])
     return (east*np.where(east>=0,W[:,:-1],W[:,1:]),
@@ -34,14 +43,14 @@ def boundary_supply(east,south,dx):
                          south[0,1:-1].sum()-south[-1,1:-1].sum()))
 
 
-def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water):
+def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,layers=None):
     """Steady padded-domain vapor ledger, including physical border exchange.
 
     This is a local flat-grid ledger, not a closed planet or a transient
     atmosphere. Column drying counts in net evaporation. Storm exchange is
     only a boundary supply if that separate operator conserves water.
     """
-    east,south=vapor_face_fluxes(W,u,v)
+    east,south=vapor_face_fluxes(W,u,v,layers=layers)
     advection=-DAY*face_divergence(east,south,dx)
     adv_boundary=boundary_supply(east,south,dx)
     de=-diffusion*(W[:,1:]-W[:,:-1])/dx
@@ -64,7 +73,7 @@ def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water):
                 transport_relative_cancellation=cancellation/transport_scale)
 
 
-def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration'):
+def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration',layers=None):
     """Signed sources in mm/day; exact upwind/central discrete transport.
 
     Evaporation and rain are mm/day, exchange_rate is 1/s, W is mm.
@@ -75,11 +84,12 @@ def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mix
     above, below = np.roll(W, 1, 0), np.roll(W, -1, 0)
     wr = -v
     if form == 'concentration':
+        if layers is not None:raise ValueError('Layered transport requires flux form')
         adv = (np.maximum(u, 0) * (W - left) + np.minimum(u, 0) * (right - W)
                + np.maximum(wr, 0) * (W - above) + np.minimum(wr, 0) * (below - W)) / dx
     elif form == 'flux':
         adv=np.full_like(W,np.nan,dtype=float)
-        adv[1:-1,1:-1]=face_divergence(*vapor_face_fluxes(W,u,v),dx)
+        adv[1:-1,1:-1]=face_divergence(*vapor_face_fluxes(W,u,v,layers=layers),dx)
     else:
         raise ValueError('Unknown moisture transport form: '+form)
     lap = (left + right + above + below - 4 * W) / dx**2

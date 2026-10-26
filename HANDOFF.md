@@ -2,6 +2,30 @@
 
 ## Current status
 
+**Two-branch transport ready for the next fixed pilot:** new opt-in
+`moisture_two_layer=False` and shared `moisture_upper_q_ratio=.15` (inactive
+unless enabled). Requires mass-balance basis and flux transport. New
+`layer_transport.py` constructs upper return so eta Ul+(1-eta)Uupper=Ub,
+eta=.25, and partitions W by a fixed layer-mean specific-humidity ratio.
+Separate directional branch coefficients and shared-face vapor fluxes feed
+the actual solver, instantaneous residuals and boundary ledger. Mean Uq is
+used only for comparison/diagnostics, not as a replacement donor stencil.
+First-order branch upwinding adds grid-dependent mixing; do not call it an
+observed physical eddy diffusivity. No separate vertical thermodynamic states.
+
+Known-answer opposed donors, manufactured affine solve, mass/humidity profile,
+matrix/ledger identity and coupled disabled/enabled checks pass. Exact old
+paths remain. New certificate checks dry-air sum and independent branch speeds
+over primer/scored steps, preventing a small weighted mean hiding a fast return.
+New plan `calibration/two_layer_20261026/plan.json`:49 runs,4 controls ×7 then
+3 candidates ×7. Controls original r39, damped r39, balanced0/1km repeat all
+historical NPZ fields before candidates. Candidates all1km lower thermal shear,
+fixed upper/lower q ratios .1/.2/.3, same .05/1024 work and old error tolerances.
+Old accuracy/ocean/outside-wind/full31/fine gates remain, plus branch limits.
+No new integration started at this source milestone; total483/479pass/4fail.
+Run `check_vapor_flux.py --plan calibration/two_layer_20261026/plan.json
+--out output/two_layer_20261026`. New epoch: do not resume older campaigns.
+
 **Completed column-mass milestone:** source `6eddef6`, fixed plan
 `calibration/column_mass_20261026/plan.json`, runner `check_vapor_flux.py` with
 --plan/--out output/column_mass_20261026.49 actual integrations all pass strict

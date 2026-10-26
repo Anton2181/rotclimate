@@ -234,6 +234,8 @@ class Params:
     moisture_pressure_drag_ratio: float = 1.0  # opt-in column/surface Rayleigh drag; 1 = legacy aligned flow
     moisture_thermal_height_km: float = 0.0  # opt-in thermal-wind shear to an effective vapor height (0 = off)
     moisture_mass_balance: bool = False  # opt-in stationary dry-column projection of the moisture wind
+    moisture_two_layer: bool = False  # opt-in separate moist inflow and compensating upper transport
+    moisture_upper_q_ratio: float = .15  # q_upper/q_lower for fixed two-branch humidity profile
     moisture_transport_form: str = "concentration"  # opt-in "flux": conservative face transport; requires flux_convergence=0
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 

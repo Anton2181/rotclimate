@@ -59,6 +59,14 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_two_layer_transport'):
+                    branches=c.get('numerics',{}).get('two_layer_transport',{})
+                    if (c.get('params',{}).get('moisture_two_layer') is not True
+                            or branches.get('max_scaled_dry_mass_divergence',float('inf'))>1e-10):
+                        failures.append(region+': missing two-layer dry-air evidence')
+                    if (branches.get('maximum_branch_speed_ms',float('inf'))>60
+                            or branches.get('p95_branch_speed_ms',float('inf'))>25):
+                        failures.append(region+': separate branch wind-speed limit failed')
                 if plan.get('require_column_mass_balance'):
                     mass=c.get('numerics',{}).get('column_mass_balance',{})
                     if (c.get('params',{}).get('moisture_mass_balance') is not True

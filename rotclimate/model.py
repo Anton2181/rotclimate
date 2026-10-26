@@ -259,6 +259,12 @@ class ClimateModel:
         if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
                 or params.moisture_wind_factor != 1 or params.wind_cap != 0):
             raise ValueError('Mass-balanced moisture requires flux form, no wind multiplier and no wind cap')
+        if not isinstance(params.moisture_two_layer,(bool,np.bool_)):
+            raise ValueError('moisture_two_layer must be boolean')
+        if not np.isfinite(params.moisture_upper_q_ratio) or not 0 <= params.moisture_upper_q_ratio <= 1:
+            raise ValueError('moisture_upper_q_ratio must be in[0,1]')
+        if params.moisture_two_layer and not params.moisture_mass_balance:
+            raise ValueError('Two-layer transport requires the stationary dry-column mass basis')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -280,7 +286,11 @@ class ClimateModel:
         self.solver.recover = params.solver_recover
         self.moisture_solver=self.solver
         if params.moisture_transport_form == 'flux':
-            self.moisture_solver=AdvectionSolver(g.ny,g.nx,g.dx_m,scheme='upwind',form='flux')
+            if params.moisture_two_layer:
+                from .layer_transport import LayerFluxSolver
+                self.moisture_solver=LayerFluxSolver(g.ny,g.nx,g.dx_m)
+            else:
+                self.moisture_solver=AdvectionSolver(g.ny,g.nx,g.dx_m,scheme='upwind',form='flux')
             for attr in ['rtol','max_iter','require_convergence','recover']:
                 setattr(self.moisture_solver,attr,getattr(self.solver,attr))
         self._static_fields()
@@ -723,6 +733,7 @@ class ClimateModel:
         self.trace = []
         self.flux_budgets=[]
         self.column_mass_checks=[]
+        self.layer_checks=[]
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -1192,10 +1203,26 @@ class ClimateModel:
             # Legacy convergence remains exact. The shear experiment uses
             # the column flow for its moisture import, with the same existing
             # exclusion of heating-driven inflow from convergence feedback.
+            layers=None
             if self.column_projector is not None:
+                lower_u,lower_v=uq,vq
                 uq, vq, mass_info = self.column_projector.project(uq, vq)
                 mass_info['day'] = float(d)
                 self.column_mass_checks.append(mass_info)
+                if p.moisture_two_layer:
+                    from .layer_transport import return_branches
+                    layers,uq,vq=return_branches(lower_u,lower_v,uq,vq,p.moisture_upper_q_ratio)
+                    self.moisture_solver.set_layers(layers)
+                    upper_u,upper_v=layers[1][1:]
+                    dry_u=.25*lower_u+.75*upper_u
+                    dry_v=.25*lower_v+.75*upper_v
+                    dry_residual=self.column_projector.divergence@np.r_[dry_u.ravel(),dry_v.ravel()]
+                    speeds=np.stack([np.hypot(a,b) for _,a,b in layers])
+                    scaled=float(np.max(np.abs(dry_residual)))/max(float(speeds.max()),1.)
+                    if not np.isfinite(scaled) or scaled>1e-10:
+                        raise RuntimeError('Two-layer dry mass cancellation failed')
+                    self.layer_checks.append(dict(day=float(d),max_scaled_dry_mass_divergence=scaled,
+                        maximum_branch_speed_ms=float(speeds.max()),p95_branch_speed_ms=float(np.percentile(speeds,95))))
             column_shear = (p.moisture_pressure_drag_ratio != 1 or p.moisture_thermal_height_km > 0
                             or p.moisture_mass_balance)
             ud, vd = (uq, vq) if column_shear else (u, v)
@@ -1451,7 +1478,7 @@ class ClimateModel:
                 if condensate is not None:
                     target=target+condensate(W)
                 net=E if sink is None else E-sink*W*DAY
-                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target))
+                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers))
             if self.trace_cells is not None and n >= spinup:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells
@@ -1497,7 +1524,7 @@ class ClimateModel:
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
-                                           form=p.moisture_transport_form)
+                                           form=p.moisture_transport_form,layers=layers)
                     # Expose the source/sink pieces already used above. These
                     # are observations of the local equation, not new physics.
                     terms['evaporation'] = E
@@ -1535,6 +1562,13 @@ class ClimateModel:
                 max_velocity_correction_ms=max(r['velocity_correction_max_ms'] for r in self.column_mass_checks),
                 steps=self.column_mass_checks)
             numerics['all_checks_passed'] &= numerics['column_mass_balance']['max_scaled_mass_divergence'] <= 1e-10
+        if self.layer_checks:
+            numerics['two_layer_transport']=dict(lower_mass_fraction=.25,upper_q_ratio=p.moisture_upper_q_ratio,
+                lower_water_fraction=.25/(.25+.75*p.moisture_upper_q_ratio),
+                max_scaled_dry_mass_divergence=max(r['max_scaled_dry_mass_divergence'] for r in self.layer_checks),
+                maximum_branch_speed_ms=max(r['maximum_branch_speed_ms'] for r in self.layer_checks),
+                p95_branch_speed_ms=max(r['p95_branch_speed_ms'] for r in self.layer_checks),steps=self.layer_checks)
+            numerics['all_checks_passed'] &= numerics['two_layer_transport']['max_scaled_dry_mass_divergence']<=1e-10
         if cycle is not None:
             numerics['annual_cycle']=cycle.report()
             numerics['annual_cycle']['extra_spinup_years']=p.seasonal_spinup_years

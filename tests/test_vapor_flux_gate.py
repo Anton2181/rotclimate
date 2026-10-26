@@ -72,3 +72,15 @@ def test_mass_balanced_candidate_needs_the_actual_stationary_column_certificate(
     assert not screening(rows,plan)['flux_conservative_storm']['qualifies']
     del candidate['numerics']['column_mass_balance']
     assert not screening(rows,plan)['flux_conservative_storm']['qualifies']
+
+
+def test_mean_wind_cannot_hide_an_excessive_return_branch():
+    plan,rows=cases();plan['require_two_layer_transport']=True
+    for row in rows:
+        row['params']['moisture_two_layer']=True
+        row['numerics']['two_layer_transport']=dict(max_scaled_dry_mass_divergence=1e-14,
+            maximum_branch_speed_ms=20,p95_branch_speed_ms=10)
+    assert screening(rows,plan)['flux_conservative_storm']['qualifies']
+    candidate=next(r for r in rows if r['name']=='flux_conservative_storm')
+    candidate['numerics']['two_layer_transport']['maximum_branch_speed_ms']=61
+    assert not screening(rows,plan)['flux_conservative_storm']['qualifies']

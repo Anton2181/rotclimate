@@ -1,0 +1,117 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test distinct moist inflow and drier compensating return using separately upwinded conservative branches, preserving stationary dry-column mass. Keep the Earth planet fixed.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/column_mass_20261026/review.json",
+  "parent_source_commit": "bb92553",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "reference_damped": {},
+    "balanced_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true
+    },
+    "thermal_balanced_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0
+    },
+    "two_layer010": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.1
+    },
+    "two_layer020": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2
+    },
+    "two_layer030": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.3
+    }
+  },
+  "profile_numerics": {
+    "reference_damped": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "balanced_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "thermal_balanced_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "two_layer010": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "two_layer020": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "two_layer030": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "reference_damped": "output/column_mass_20261026/reference_damped",
+    "balanced_control": "output/column_mass_20261026/balanced_flux",
+    "thermal_balanced_control": "output/column_mass_20261026/balanced_thermal1"
+  },
+  "eligible_profiles": [
+    "two_layer010",
+    "two_layer020",
+    "two_layer030"
+  ],
+  "maximum_finalists": 2,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Two conservative transport branches with fixed humidity profile. Lower dry-mass fraction eta=.25 (ground pressure to .75*surface pressure), upper specific-humidity ratio r=.1/.2/.3. With lower flow Ul (including fixed1km thermal shear) and projected stationary dry-column Ub, upper=(Ub-eta*Ul)/(1-eta). Dry mass weighted sum exactly Ub; water fractions eta/[eta+(1-eta)r] and remainder. Sum separate directional upwind fluxes and operators; do not upwind averaged velocity. Same branch faces in residual and boundary ledgers. Total W remains a single state: implicit instantaneous redistribution to a fixed vertical profile, no resolved vertical thermodynamics/momentum. Separate-branch upwinding adds resolution-dependent first-order mixing, not measured physical eddy diffusivity. Surface heat/lift/evaporation retain surface winds; no observed winds as forcing. Fixed hydrostatic M and flat-grid geometry remain approximations.",
+  "control": "All7 original r39 climate/geography and3 native wind controls exact; next21 physical/numerical controls must reproduce EVERY archived NPZ field including observed masks/budgets/winds. Stop before candidates on any failed control. All non-original profiles .05/1024, unchanged .01 residual/linear/T tolerances. Preserve all previous failed solves.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes. Also require two_layer_transport certificate with dry-column residual<=1e-10 and EACH branch wind maximum<=60m/s,p95<=25m/s (all primer/scored steps), rather than hiding a fast return in the weighted mean. Exactly3 fixed humidity ratios; no extra candidates after outcomes.",
+  "advance": "Best at most2 fixed qualifiers advance through unchanged full31 policy_v2 and individual regional protections, integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain ratio<=.98, and established6 S<=1.01 once. Record physical/numerical blocks separately. These are reused development sets, not new independent validation.",
+  "publication": "Publish all outcomes and separate-branch transport limitations. No adoption without all existing Earth/full31/ocean/fine/established6 and matched-world gates. Keep current headline scores and normal atlas climate/economics until qualified. New source/output epoch; preserve old failures. Do not interpret first-order counterflow mixing as a fitted physical diffusivity.",
+  "require_two_layer_transport": true
+}
