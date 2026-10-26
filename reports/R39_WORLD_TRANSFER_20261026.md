@@ -29,7 +29,11 @@ Candidate 49's complete native result is:
 **Candidate 49 is rejected.** The tree recall must remain at least 4.79% under
 the previously declared allowance. All its numerical checks passed, but a
 better aggregate cannot cancel this regional failure. The canonical atlas
-therefore stays on r38 while candidate 65 is checked.
+therefore stays on r38. Candidate 65 also converged but is rejected:
+zonefit 0.187228, strict agreement 36.00%, tree recall 6.26%, Mediterranean
+dry share 7.55% versus the unchanged 6.91% maximum. No additional-layout
+result was inspected for either rejected endpoint. The full final review is
+`output/r39_world_transfer/review.json`.
 
 The tree-zone climate diagnosis is descriptive: mean annual rainfall falls
 from 543.7 to 504.4 mm, mean coldest-month temperature rises 6.24→6.42°C,
@@ -41,11 +45,10 @@ classification rules remain fixed.
 climates. `world_preview.png` is the earlier ds16 preview. Input and picture
 hashes accompany both. No new model run is required to make these figures.
 
-A conditional three-case geometry path is declared in
+A conditional three-case geometry path was declared in
 `calibration/map_world_r39_balance/plan.json`, before candidate 65's native
-result and before any interpolated climate integrations. It runs only if both
-native endpoints are rejected with successful numerics; an eligible parent
-instead proceeds to atlas publication. It keeps all original protections and
+result and before any interpolated climate integrations. Both endpoints are
+now rejected with successful numerics, so this path is running. It keeps all original protections and
 allows only one further actual native candidate. Eleven focused tests cover
 locked physical parameters, interpolation/ranking and complete atlas assets.
 
