@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Active round — moisture-column pressure shear:** opt-in
+**Completed round — moisture-column pressure shear:** opt-in
 `moisture_pressure_drag_ratio` (default1 exact legacy), classified as shared
 physics. Lower Rayleigh drag changes direction and speed of the pressure-driven
 column flow; same column flow supplies advection and parameterized convergence
@@ -22,6 +22,31 @@ WOA cache before any protocol/result; restored months2–12 from NOAA and rebuil
 via existing `scripts/build_woa_sst.py`. January profile is unchanged. New audit
 records actual integrated SST including upwelling, not the old static19 metric.
 Do not edit core/frozen scripts during this experiment or bypass cache guards.
+
+All28 shear runs passed numerics and all7 legacy controls reproduced exactly.
+Every ratio candidate fails the screening accuracy guard; no full31/fine/six
+stage ran. Output `output/column_shear_20261026/`, report
+`reports/COLUMN_SHEAR_20261026.md`; source commit `f22b0eb`.
+Default/qualified physics and all world atlases remain unchanged.
+
+A separate surface-momentum pilot is also complete: plan
+`calibration/surface_momentum_20261026/plan.json`, runner
+`scripts/check_surface_momentum.py`, results `output/surface_momentum_20261026/`.
+All124 integrations pass; all31 fresh r39 error/geography controls reproduce.
+Nominal drag (land1e-4/ocean3.5e-5 per second) passes policy_v2 with S=.994948,
+rainloss-1.54%, temperature MAE1.792823→1.802397C, North India256→285mm/year.
+However it FAILS newly declared Mexico/PacificNW regional protections (S1.036/
+1.049 >1.02). No candidate qualifies; ocean-finalist/fine/established6 stages
+are correctly skipped. No r40 is created. Preserve that failure and the
+nominal candidate's distinction between passing the old gate and failing this
+full plan. Report `reports/SURFACE_MOMENTUM_20261026.md`.
+
+Both completed experiments now appear on the portable Climate accuracy page,
+with PNGs and JSON downloads; all normal atlas data remain unchanged.
+Exporters `publish_column_shear.py` and `publish_surface_momentum.py` verify
+current frozen sources/arrays first. Future source edits require recovering
+the committed source epoch for replay, not bypassing old guards.
+No climate integrations remain active for these two completed pilots.
 
 **New round — joint input separation and moisture-source instrumentation:**
 `rotclimate/joint.py` explicitly classifies all parameters into shared physics,

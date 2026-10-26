@@ -63,6 +63,7 @@ def main():
              ROOT/'reports/CLIMATE_PHYSICS_20261023.md',
              ROOT/'reports/RAINFALL_ACCURACY_20261023.md',
              ROOT/'reports/JOINT_INPUTS_20261026.md', ROOT/'reports/MOISTURE_SOURCES_20261026.md',
+             ROOT/'reports/COLUMN_SHEAR_20261026.md', ROOT/'reports/SURFACE_MOMENTUM_20261026.md',
              ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
              ROOT/'reports/SEASONAL_CYCLE_20261026.md',
              ROOT/'output/constrained_blend_20261025/rainfall_changes.png',

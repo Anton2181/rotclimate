@@ -1,0 +1,112 @@
+{
+  "complete": true,
+  "decision": "Rejected; retain r39",
+  "verified_integrations": 124,
+  "exact_regional_error_controls": 31,
+  "development": {
+    "drag125": {
+      "passes_development_gate": false,
+      "failures": [
+        "Overall score did not improve by at least 0.5%"
+      ],
+      "score": 0.9967548197450902,
+      "group_scores": {
+        "training": 0.9952241109551017,
+        "holdout": 0.9976856150484308,
+        "midlatitude": 0.997555272706276,
+        "dev12": 0.9966417158012867
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.0013970028355838604,
+        "P_loss": -0.00788736334540352
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.795327475070515,
+        "P_loss": 0.4388769127683048
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "North India rain improvement below 5%"
+      ],
+      "qualifies": false
+    },
+    "drag150": {
+      "passes_development_gate": false,
+      "failures": [
+        "Overall score did not improve by at least 0.5%"
+      ],
+      "score": 0.9952672847571431,
+      "group_scores": {
+        "training": 0.9928236621909794,
+        "holdout": 0.9954098808498097,
+        "midlatitude": 0.996461598849133,
+        "dev12": 0.9955748621003929
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.0024547752864818584,
+        "P_loss": -0.011920205772195658
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.7972238737396664,
+        "P_loss": 0.43709292033784874
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "North India rain improvement below 5%",
+        "mexico: protected combined error worsens",
+        "pacific_nw: protected combined error worsens"
+      ],
+      "qualifies": false
+    },
+    "nominal": {
+      "passes_development_gate": true,
+      "failures": [],
+      "score": 0.9949478958361565,
+      "group_scores": {
+        "training": 0.9920303113675657,
+        "holdout": 0.9939263606080531,
+        "midlatitude": 0.9983942677706843,
+        "dev12": 0.9947719216123275
+      },
+      "relative_changes": {
+        "T_monthly_mae": 0.005340378550579228,
+        "P_loss": -0.01544458687826622
+      },
+      "baseline": {
+        "T_monthly_mae": 1.7928228964005437,
+        "P_loss": 0.4423660142543871
+      },
+      "candidate": {
+        "T_monthly_mae": 1.8023972493414684,
+        "P_loss": 0.43553385391524285
+      },
+      "note": "Development gate only; finer-resolution, validation and atlas publication checks remain.",
+      "extra_protections": [
+        "mexico: protected combined error worsens",
+        "pacific_nw: protected combined error worsens"
+      ],
+      "qualifies": false
+    }
+  },
+  "north_india_annual_rain_mm": {
+    "reference": 256.2620937802825,
+    "drag125": 270.87959052114127,
+    "drag150": 273.1471877721828,
+    "nominal": 285.3175077415526
+  },
+  "scope": "Modern Earth solar/radius/greenhouse reference, tilt/spin/orbit/calendar through joint.earth_profile; all shared parameters except bl_drag_land/ocean, grid geometry, numerical criteria, remote observed-global-rain descent and modelled SST. moisture_pressure_drag_ratio=1 and moisture_wind_factor unchanged. This remains a regional parameterized model; no global moisture conservation or observed wind-profile validation is claimed.",
+  "provenance": {
+    "review_sha256": "8da8e34a29dd3c87c2fd6223b87eaafd1950428505ae12999f9957784ed78bb7",
+    "protocol_sha256": "6f176102158876ba7c3425a231c3011733a53ba5ecefa39d1b99d55df7ced262",
+    "plotter_sha256": "4dd4abff9b8b0967ececf126a26ae1622039f22c5174463e052089569a623a7f",
+    "image_sha256": "01e79fe4a3a43bb6da6fe61f0b6514367a25df50e30493b92fc69974663b28ba"
+  }
+}

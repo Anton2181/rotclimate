@@ -1,0 +1,16 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test stronger surface Rayleigh drag toward the model's independently motivated nominal land/ocean values. Less column drag in the completed shear pilot weakened Indian convergence and rain; this new experiment changes the surface momentum balance shared by heat, moisture and pressure winds, while retaining ratio=1 and all planetary/geometry inputs. Reused development data, not new validation.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "candidates": {
+    "drag125": {"bl_drag_land": 0.00006606543187348131, "bl_drag_ocean": 0.000027898313467806925},
+    "drag150": {"bl_drag_land": 0.00007927851824817757, "bl_drag_ocean": 0.00003347797616136831},
+    "nominal": {"bl_drag_land": 0.0001, "bl_drag_ocean": 0.000035}
+  },
+  "development": "Fresh reference and all three fixed candidates on dev31 at 56 km. Require exact archived baseline errors/geography, all strict numerical checks and unchanged policy_v2: S<=0.995, no protected group worse, neither temperature nor rain loss worse by more than 1%. Additionally require North India rain loss<=0.95 of r39, Iran rain loss<=1.02, and combined S<=1.02 in Iberia, Japan, Mexico, eastern Australia and Pacific NW. No selection or parameter changes after results.",
+  "ocean_and_winds": "At most the best two development qualifiers, in development-S order, get actual integrated SST/wind checks at 56 km on the seven protected regions. Use fixed observation-only ice-free ocean masks in the padded domain interior and monthly WOA18 data, identical in every comparison. Every region's monthly SST MAE may rise at most0.02C. Domain maximum column speed<=60m/s and p95<=25m/s. Fresh baseline once. Preserve solver failures. Do not substitute the static SST calculation.",
+  "fine": "Ocean/wind passers in the same fixed order take paired 28 km checks: California, Western Europe, Japan, New Zealand S<=1.01 and North India rain-loss ratio<=0.98. First fine passer takes the established six once (S<=1.01); they are reused, not an independent holdout. At most two finalists. No world refit or atlas-climate adoption unless the complete Earth gate qualifies.",
+  "fixed": "Modern Earth solar/radius/greenhouse reference, tilt/spin/orbit/calendar through joint.earth_profile; all shared parameters except bl_drag_land/ocean, grid geometry, numerical criteria, remote observed-global-rain descent and modelled SST. moisture_pressure_drag_ratio=1 and moisture_wind_factor unchanged. This remains a regional parameterized model; no global moisture conservation or observed wind-profile validation is claimed.",
+  "decision": "If no candidate qualifies, retain r39 and skip all later stages. Save actual source identities, failures and every per-region result. No additional candidates, extra held-out regions, relaxed limits or synthetic climate corrections. A qualified Earth profile still needs a separately declared matched-world fit before publication."
+}

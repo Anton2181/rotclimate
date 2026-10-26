@@ -1,5 +1,13 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Momentum experiments, 26 October 2026:** column-pressure shear completed 28
+verified runs but worsened the Indian monsoon. A separate 124-run surface-drag
+experiment improved average rainfall loss by 1.54%, yet failed the declared
+Mexico/Pacific NW protections. Neither changes adopted physics or atlas climates.
+The launcher's **Climate accuracy and joint fit** page now shows both results,
+charts and downloads. See the [shear](reports/COLUMN_SHEAR_20261026.md) and
+[surface momentum](reports/SURFACE_MOMENTUM_20261026.md) records.
+
 **Joint-fit input separation, 26 October 2026:** new constrained experiments can
 compose shared physics with separate Earth and invented-world inputs. Fantasy
 solar flux, greenhouse forcing and radius cannot leak into Earth, and stale
