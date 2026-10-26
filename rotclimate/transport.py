@@ -70,11 +70,13 @@ def save_transport(result, evaluation, path):
                 return float(arrays[f'monthly_{field}_mm_day'][months][:, own].mean())
             days = int(months.sum()) * p.year_days / 12
             rain = mean('rain')
+            components = ['rain', 'evaporation', 'advection', 'diffusion', 'storm_exchange', 'residual']
+            components += [key for key in ('column_drying', 'convergence_import')
+                           if f'monthly_{key}_mm_day' in arrays]
             periods[name] = dict(
-                mean_total_mm_per_cell={k: mean(k) * days for k in
-                    ('rain', 'evaporation', 'advection', 'diffusion', 'storm_exchange', 'residual')},
+                mean_total_mm_per_cell={k: mean(k) * days for k in components},
                 mean_absolute_equation_residual_mm_day=mean('absolute_residual'),
                 absolute_residual_over_rain=mean('absolute_residual') / max(rain, 1e-9))
         zones[key] = periods
-    return dict(note='Local nonconservative discrete moisture-equation terms. Positive transport terms supply water; residual = evaporation + transport sources - rain. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.',
+    return dict(note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.',
                 zones=zones)

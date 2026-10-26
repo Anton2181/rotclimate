@@ -1,5 +1,13 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Joint-fit input separation, 26 October 2026:** new constrained experiments can
+compose shared physics with separate Earth and invented-world inputs. Fantasy
+solar flux, greenhouse forcing and radius cannot leak into Earth, and stale
+world profiles cannot relax the numerical checks. Rainfall diagnostics now
+expose column drying and convergence import without changing climate output.
+See the [input-boundary report](reports/JOINT_INPUTS_20261026.md). This prepares
+experiments; it is not a new fitted climate or an adoption gate.
+
 **Seasonal repeatability, 26 October 2026:** optional multi-year spin-up now
 checks repeated temperature, rainfall and water-reservoir cycles, and long
 warm-ups wrap the calendar safely. A 15-run controlled pilot reproduces all

@@ -1,0 +1,13 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Trace the missing North India monsoon and the Iran improvement using the unchanged adopted r39 physics. Instrumentation/parameter-isolation audit, not a calibration or a coupled global forcing comparison.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "world": "atlases/earth_fit/params.json",
+  "regions": ["north_india", "iran_plateau", "iberia"],
+  "cell_km": 56.0,
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "controls": "Use new explicit Earth profile plus observed regional geography. Before interpreting any diagnostics, require every active shared physical/numerical/planet parameter to match the adopted historical Earth run, actual case hashes to match, exact float32 monthly Ts/Ps/To/Po equality to the archive, and all observed per-step numerical checks. Never bypass a failed control.",
+  "outputs": "Signed local equation sources in mm per equal model month: surface evaporation, column drying (negative), convergence import (positive), advection, diffusion, storm exchange, rain and signed/absolute residuals. Monsoon drying is a SUBSET of column drying, not an additional term. Trace humidity, vapor, saturation, ascent and winds on the same scored land cells. Summarize all land, below 1000 m, and at or above 1000 m without choosing bins after results.",
+  "scope": "Earth remote descent remains observed-global-rain-forced. Do not set descent to None and call the regional-window forcing equivalent to a global generated source. The moisture equation is locally nonconservative; diagnosed convergence import is parameterized, not proof of a closed planetary water budget. Model months are 365/12 days, not Gregorian calendar months.",
+  "decision": "No parameter search, new holdout, threshold relaxation, extra simulation cases, physics adoption or atlas climate replacement. Publish all three results including unfavorable evidence; use them to motivate a separately declared physical experiment. Existing atlas climates and economic data remain unchanged."
+}

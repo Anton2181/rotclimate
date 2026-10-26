@@ -2,6 +2,27 @@
 
 ## Current status
 
+**New round — joint input separation and moisture-source instrumentation:**
+`rotclimate/joint.py` explicitly classifies all parameters into shared physics,
+world properties and numerics. New fields must be classified; wrong-block
+updates fail. `scripts/prepare_joint_fit.py` freezes separate profiles; Earth
+fixes solar/greenhouse/radius/orbit/calendar/land profile and regional conversion
+handles hemisphere. Historical Earth conversion and soft joint optimizer remain
+untouched. This is a preparation tool, not a new optimizer or acceptance gate.
+The adopted r39 already has Earth solar/greenhouse/radius, so prior conclusions
+are unaffected. Source hashes change after instrumentation: do not bypass old
+checkpoint source guards or resume completed frozen campaigns.
+
+Optional moisture budgets now expose evaporation, total column drying,
+monsoon drying (subset), and convergence import. Ordinary arrays are unchanged;
+local equation sources still do not prove a closed planetary water budget.
+Three-region r39 diagnostic audit is declared before results under
+`calibration/moisture_sources_20261026/plan.json`; runner
+`scripts/check_moisture_sources.py` requires exact archived Ts/Ps/To/Po, active
+parameter equality, derived geography hashes and strict per-step checks.
+No physics/atlas-climate adoption is authorized by this diagnostic.
+See `reports/JOINT_INPUTS_20261026.md`. This paragraph will be updated on completion.
+
 **Latest completed round — seasonal repeatability:** core commit `0a0c8d9`
 is pushed. The controlled 15-run pilot has finished; no climate integrations
 remain active. See `reports/SEASONAL_CYCLE_20261026.md` and

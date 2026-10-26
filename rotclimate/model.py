@@ -682,7 +682,8 @@ class ClimateModel:
             from .transport import moisture_terms
             cropped_shape = (nt,) + g.target[g.map_slice()].shape
             budget = {key: np.zeros(cropped_shape, np.float32) for key in
-                      ('advection', 'diffusion', 'storm_exchange', 'residual', 'absolute_residual')}
+                      ('advection', 'diffusion', 'storm_exchange', 'residual', 'absolute_residual',
+                       'evaporation', 'column_drying', 'monsoon_drying', 'convergence_import')}
         land = g.land
         ocean = ~land
         lat = self.lat
@@ -1420,6 +1421,13 @@ class ClimateModel:
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed)
+                    # Expose the source/sink pieces already used above. These
+                    # are observations of the local equation, not new physics.
+                    terms['evaporation'] = E
+                    terms['column_drying'] = np.zeros_like(W) if sink is None else -sink * W * DAY
+                    terms['monsoon_drying'] = (np.zeros_like(W) if p.monsoon_descent <= 0 else
+                                               -(p.monsoon_descent * descent / DAY) * W * DAY)
+                    terms['convergence_import'] = np.zeros_like(W) if gain is None else gain * W * DAY
                     for key, values in terms.items():
                         budget[key][k] = values[g.map_slice()]
             if progress:

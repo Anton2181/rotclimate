@@ -63,3 +63,27 @@ def test_seasonal_averaging_cannot_hide_opposing_instantaneous_residuals(tmp_pat
     with np.load(path, allow_pickle=False) as archive:
         assert archive['monthly_water_mm'].shape == (12,2,3)
         assert 'params_json' in archive
+
+
+def test_diagnostic_sources_close_the_active_equation_without_changing_climate():
+    from test_earth import _toy_case
+    from test_transient_orography import strict_params
+    from rotclimate import earth
+    from rotclimate.model import ClimateModel
+    case = _toy_case()
+    p = earth.earth_params(strict_params().replace(subsidence_drying=.1,
+                            flux_convergence=.3), case)
+    observed = ClimateModel(p, grid=case.grid).run(diagnose_moisture=True)
+    ordinary = ClimateModel(p, grid=case.grid).run()
+    assert observed.numerics['all_checks_passed'] and ordinary.numerics['all_checks_passed']
+    for name in ['T', 'Tsl', 'P', 'W', 'u', 'v', 'E']:
+        np.testing.assert_array_equal(getattr(observed, name), getattr(ordinary, name))
+    terms = observed.moisture_budget
+    assert terms['column_drying'].min() < 0 and terms['column_drying'].max() <= 0
+    assert terms['convergence_import'].max() > 0 and terms['convergence_import'].min() >= 0
+    evaporation = observed.E[(slice(None),) + case.grid.map_slice()]
+    np.testing.assert_array_equal(terms['evaporation'], evaporation)
+    closure = evaporation + sum(terms[name] for name in ['column_drying', 'convergence_import',
+                               'advection', 'diffusion', 'storm_exchange'])
+    rain = observed.P[(slice(None),) + case.grid.map_slice()]
+    np.testing.assert_allclose(closure - rain, terms['residual'], atol=2e-6)
