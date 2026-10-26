@@ -1,0 +1,25 @@
+{
+  "declared_before_new_climate_results": true,
+  "purpose": "Test whether a lower effective Rayleigh drag above the surface improves monsoon moisture delivery through turned, not merely rescaled, pressure flow. Experimental column closure, not a resolved vertical atmosphere or a conservative global moisture model.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": ["north_india", "iran_plateau", "iberia", "japan", "mexico", "east_australia", "pacific_nw"],
+  "cell_km": 56.0,
+  "candidates": {"drag_075": 0.75, "drag_050": 0.5, "drag_025": 0.25},
+  "control": "All seven new ratio=1 controls must exactly reproduce archived float32 Ts/Ps/To/Po and actual Earth geography identities before candidate interpretation. Shared r39 physics, observed Earth envelope, geography, calendar, reference pressure forcing, surface winds/heat transport/terrain lift and strict numerical criteria are held fixed. Feedbacks may alter the eventual surface climate. No other physical knob is retuned.",
+  "closure": "Retain surface thermal-pressure gradient and background winds. Compute the pressure-flow difference between surface and smaller effective column Rayleigh drag under the existing Coriolis force; add its terrain-dragged contribution to column transport. Use that same column flow for convergence-driven moisture import, retaining the existing heating-flow exclusion, positive-import-only parameterization and smoothing. Surface convergence ascent/divergence suppression and terrain lift retain the surface flow. Ratio=1 is exact legacy. Reject combination with a separate moisture-speed multiplier or a capped pressure wind.",
+  "screen": {
+    "mean_combined_S_max": 0.995,
+    "mean_rain_loss_ratio_max": 0.99,
+    "mean_temperature_ratio_max": 1.01,
+    "north_india_rain_loss_ratio_max": 0.95,
+    "each_other_region_S_max": 1.02,
+    "each_region_integrated_SST_mae_increase_max_C": 0.02,
+    "column_speed_domain_max_ms": 60.0,
+    "column_speed_domain_p95_ms": 25.0,
+    "maximum_development_finalists": 2
+  },
+  "sst": "Actual integrated SST is recorded at every observed ice-free ocean cell in the padded domain interior, monthly weighted against fixed WOA fields. Select cells from observations only, never remove model-cold cells. All controls and candidates use identical sea cells. This includes wind-dependent upwelling; it is not the old static SST diagnostic.",
+  "advance": "Only the best at most two screening qualifiers, sorted by combined S, take the full 31-region policy_v2 gate against a fresh exact r39 reference. Gate passers take the paired 28 km four-region check (S<=1.01) plus North India at 28 km (rain-loss ratio<=0.98), in development-S order. First fine passer takes the established six once (S<=1.01); these regions have been reused and are not a new independent holdout. No more candidates or parameter changes after results. If all fail, retain r39 and do not run finer/adoption stages.",
+  "interpretation": "Preserve failures and source epochs. North India improvement cannot excuse worse protected regions or oceans. Earth remote descent remains observed-global-rain-forced. New source manifests are required; do not bypass old source guards or repurpose failures as validation. Defaults, r39 adoption and all atlas climates stay unchanged unless the complete declared Earth gate passes; a later, separate matched-world campaign is required before atlas-climate promotion."
+}

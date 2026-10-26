@@ -236,6 +236,14 @@ class ClimateModel:
             raise ValueError('Required moisture convergence needs a positive moisture_residual_tol')
         if not np.isfinite(params.orographic_gust_ms) or params.orographic_gust_ms < 0:
             raise ValueError('orographic_gust_ms must be finite and nonnegative')
+        if (not np.isfinite(params.moisture_pressure_drag_ratio)
+                or not .25 <= params.moisture_pressure_drag_ratio <= 1):
+            raise ValueError('moisture_pressure_drag_ratio must be in [0.25, 1]')
+        if params.moisture_pressure_drag_ratio != 1:
+            if params.slp_large <= 0 and params.slp_local <= 0:
+                raise ValueError('Column pressure shear requires pressure-driven winds')
+            if params.moisture_wind_factor != 1 or params.wind_cap != 0:
+                raise ValueError('Column pressure shear requires moisture_wind_factor=1 and wind_cap=0')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -1134,12 +1142,30 @@ class ClimateModel:
                 W_ocean = (p.ocean_rh + p.ocean_rh_warm * np.clip((SST - 25.0) / 4.0, 0.0, 1.0)) * w_sat(SST)
             else:
                 W_ocean = p.ocean_rh * w_sat(SST)
+            # Opt-in moisture-column shear: reduce the effective Rayleigh
+            # drag in the existing pressure balance, retaining its rotation,
+            # pressure forcing, background winds and terrain drag. Surface
+            # energy transport and terrain lift still use the surface flow.
+            uq, vq = (u, v) if p.moisture_wind_factor == 1.0 else (p.moisture_wind_factor*u, p.moisture_wind_factor*v)
+            if p.moisture_pressure_drag_ratio != 1:
+                from .winds import pressure_shear
+                coriolis = 2.0*OMEGA*np.sin(np.radians(self.lat))*(-1.0 if p.retrograde else 1.0)
+                du, dv = pressure_shear(self.last_pres, dx, coriolis, self.bl_drag, p.moisture_pressure_drag_ratio)
+                uq, vq = u+self.drag*du, v+self.drag*dv
+            # Legacy convergence remains exact. The shear experiment uses
+            # the column flow for its moisture import, with the same existing
+            # exclusion of heating-driven inflow from convergence feedback.
+            ud, vd = (u, v) if p.moisture_pressure_drag_ratio == 1 else (uq, vq)
             if uM is None:
-                div = (np.gradient(u, axis=1) - np.gradient(v, axis=0)) / dx
+                div = (np.gradient(ud, axis=1) - np.gradient(vd, axis=0)) / dx
             else:
-                ur, vr = u - uM * self.drag, v - vM * self.drag
+                ur, vr = ud - uM * self.drag, vd - vM * self.drag
                 div = (np.gradient(ur, axis=1) - np.gradient(vr, axis=0)) / dx
-            conv = np.clip(-ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
+            surface_div = div
+            if p.moisture_pressure_drag_ratio != 1:
+                us, vs = (u, v) if uM is None else (u-uM*self.drag, v-vM*self.drag)
+                surface_div = (np.gradient(us, axis=1)-np.gradient(vs, axis=0))/dx
+            conv = np.clip(-ndi.gaussian_filter(surface_div, self.conv_sigma) / 2e-6, 0, 3)
             # e39: the lift on a slope comes from the flow arriving at it; the
             # terrain drag slows the air over high ground (down to 3 % over the
             # Himalaya), so the dragged wind left the monsoon almost no ascent
@@ -1205,7 +1231,7 @@ class ClimateModel:
             if p.divergence_drying > 0:
                 # e5: diverging low-level air sinks and dries the column, the
                 # counterpart of the convergence term
-                dvg = np.clip(ndi.gaussian_filter(div, self.conv_sigma) / 2e-6, 0, 3)
+                dvg = np.clip(ndi.gaussian_filter(surface_div, self.conv_sigma) / 2e-6, 0, 3)
                 A_dyn = A_dyn * np.exp(-p.divergence_drying * dvg)
             if p.sverdrup > 0:       # physics e1: poleward flow rises, equatorward flow sinks
                 th = np.radians(p.north_bearing)
@@ -1360,7 +1386,6 @@ class ClimateModel:
             # surface wind left the water near where it evaporated: Iran,
             # Mexico's dry season and inland eastern Australia rained their
             # own evaporation back out, and the monsoon carried little inland.
-            uq, vq = (u, v) if p.moisture_wind_factor == 1.0 else (p.moisture_wind_factor * u, p.moisture_wind_factor * v)
             solution = solve_moisture(self.solver, p, uq, vq, lamE, W_ocean, E_land, Ws,
                                       A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
                                       condensate=condensate)
@@ -1386,7 +1411,8 @@ class ClimateModel:
                 cell = lambda a: np.broadcast_to(np.asarray(a, float), lat.shape)[ti, tj].copy()
                 self.trace.append(dict(
                     day=float(d), T=cell(T), W=cell(W), Ws=cell(Ws), P=cell(P), E=cell(E), soil=cell(soilP), bucket=cell(soil_w),
-                    u=cell(u), v=cell(v), background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
+                    u=cell(u), v=cell(v), moisture_u=cell(uq), moisture_v=cell(vq),
+                    background=cell(p.background_ascent), storm=cell(p.storm_track * storm),
                     conv=cell(p.convective * conv), orog=cell(p.orographic * up),
                     damp=cell(A_dyn / np.maximum(raw, 1e-9)), instab=cell(instab),
                     Teq=cell(T_eq), Tsl=cell(Tsl), SST=cell(SST), chi=cell(0.0 if chi is None else chi),

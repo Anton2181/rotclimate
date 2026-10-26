@@ -2,6 +2,27 @@
 
 ## Current status
 
+**Active round — moisture-column pressure shear:** opt-in
+`moisture_pressure_drag_ratio` (default1 exact legacy), classified as shared
+physics. Lower Rayleigh drag changes direction and speed of the pressure-driven
+column flow; same column flow supplies advection and parameterized convergence
+import. Surface heat transport/terrain lift/convergence ascent retain surface
+winds; later seasonal feedbacks may alter them. No planetary forcing changes.
+Defaults and r39/adopted atlas climates remain unchanged pending the full gate.
+Reject simultaneous aligned speed multiplier or capped-pressure-wind opt-ins.
+
+`calibration/column_shear_20261026/plan.json` fixes three ratios(.75,.5,.25),
+seven-region screen, exact archived controls, regional protections, integrated
+SST guard(+.02C maximum MAE increase/region), plausible column-speed limits,
+then at most two full31 finalists, paired fine4 plus North India, established6.
+All are reused regions, not new holdouts. Screen runner:
+`scripts/check_column_shear.py`; advancement: `scripts/advance_column_shear.py`.
+60 focused tests pass before simulations. First preflight found missing monthly
+WOA cache before any protocol/result; restored months2–12 from NOAA and rebuilt
+via existing `scripts/build_woa_sst.py`. January profile is unchanged. New audit
+records actual integrated SST including upwelling, not the old static19 metric.
+Do not edit core/frozen scripts during this experiment or bypass cache guards.
+
 **New round — joint input separation and moisture-source instrumentation:**
 `rotclimate/joint.py` explicitly classifies all parameters into shared physics,
 world properties and numerics. New fields must be classified; wrong-block
