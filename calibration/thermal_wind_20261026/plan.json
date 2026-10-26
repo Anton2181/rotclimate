@@ -1,0 +1,35 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test physical hydrostatic/geostrophic vertical shear from modeled horizontal temperature gradients after the outside circulation audit found opposite partial-column winter flow over subtropical lowlands. No observed wind is injected as forcing.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/circulation_audit_20261026/review.json",
+  "parent_source_commit": "3758de5",
+  "regions": ["north_india", "iran_plateau", "iberia", "japan", "mexico", "east_australia", "pacific_nw"],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "reference_damped": {},
+    "flux_damped": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative"},
+    "thermal1": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 1.0},
+    "thermal2": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 2.0},
+    "thermal3": {"flux_convergence": 0.0, "moisture_transport_form": "flux", "eddy_moisture_scheme": "conservative", "moisture_thermal_height_km": 3.0}
+  },
+  "profile_numerics": {
+    "reference_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "flux_damped": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "thermal1": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "thermal2": {"moisture_relaxation": 0.05, "picard_iters": 1024},
+    "thermal3": {"moisture_relaxation": 0.05, "picard_iters": 1024}
+  },
+  "eligible_profiles": ["thermal1", "thermal2", "thermal3"],
+  "maximum_finalists": 2,
+  "circulation_regions": ["north_india", "iberia", "east_australia"],
+  "circulation_groups": {"north_india": "land", "iberia": "ocean", "east_australia": "land"},
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Use the modeled sea-level-equivalent temperature smoothed by a fixed500km Gaussian, minus half the existing column lapse times the representative height. Its horizontal gradient approximates a common-height layer-mean gradient under a uniform-lapse assumption. Add du=-gH*inverse_f*dlog(T)/dnorth, dv=gH*inverse_f*dlog(T)/deast to moisture flow only. Smooth inverse_f=f/(f^2+f10^2), f10=Earth Coriolis at10degrees, is an explicit equatorial validity taper, not an equatorial dynamical solution. Shear aloft does not receive empirical surface mountain drag. Surface momentum, heat transport, evaporation and terrain lift retain surface winds. This is an idealized effective layer, not resolved vertical continuity, a prognostic momentum/energy budget, or measured full-column moisture flux. Planet parameters stay fixed Earth-like.",
+  "control": "The unchanged original reference must pass strict numerics and reproduce all7 archived float32 Ts/Ps/To/Po and geography, plus exact native wind-control vectors in the3 reference regions. The damped reference quantifies numerical sensitivity. All non-original profiles share .05 relaxation/1024 cap with unchanged residual .01/linear/temperature tolerances. Original failed campaigns remain preserved. No numerical control or known over-wet pure-flux profile is eligible.",
+  "screen": "Only3 thermal profiles may qualify. Require conservative vapor/storm ledger, all numerical certificates, S<=.995, mean rain ratio<=.99, T ratio<=1.01, NI rain ratio<=.95, Iran rain ratio<=1.02 and each other region S<=1.02. Integrated SST MAE increase<=.02C on identical observation-only ice-free sea masks; column wind maximum<=60m/s,p95<=25m/s. Additionally NI partial-column native wind-vector RMSE must improve>=5%; Iberia ocean/EastAustralia lowland RMSE may worsen<=2%, with identical native masks/areas and original fixed reference definition. These are reused diagnostic constraints, not new independent validation. No partial means after a failed solve.",
+  "advance": "At most best2 qualifiers by S take unchanged full31 policy_v2 plus individual region safeguards, actual integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain ratio<=.98, and established6 once S<=1.01. No additional candidates, relaxed thresholds or new validation sampling after failures. Full physics and numerical profiles recorded separately.",
+  "publication": "Publish all outcomes and outside-wind/rain tradeoffs. No Earth adoption or fantasy atlas climate/economic replacement without all Earth gates and a separate qualified matched-world fit. Keep old headlines, r39 Earth physics and r38 world atlas until then. New source epoch and output folder."
+}

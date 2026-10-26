@@ -47,6 +47,17 @@ def screening(rows,plan):
                 failures.append(region+': wind-speed limit failed')
             if c.get('numerics',{}).get('all_checks_passed') is not True:
                 failures.append(region+': missing numerical certificate')
+            if region in plan.get('circulation_regions',[]):
+                group=plan['circulation_groups'][region]
+                base_wind=b['circulation']['scores']['q925_300'][group]
+                wind=c['circulation']['scores']['q925_300'][group]
+                if (wind is None or base_wind is None or wind['native_cells']!=base_wind['native_cells']
+                        or wind['area_km2']!=base_wind['area_km2']):
+                    raise ValueError('Changed native circulation footprint')
+                wind_ratio=wind['vector_rmse_ms']/base_wind['vector_rmse_ms']
+                ratios[region]['circulation_vector_rmse_ratio']=wind_ratio
+                if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
+                    failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
                 ledger=c.get('numerics',{}).get('vapor_flux_budget',{})
                 if (ledger.get('horizontal_transport_conservative') is not True
@@ -78,6 +89,15 @@ def main():
         ROOT/'scripts/check_surface_momentum.py',ROOT/'scripts/check_constrained_blend.py',ROOT/'scripts/gate_local.py',
         ROOT/'calibration/local_accuracy_20261023/policy_v2.json']
     sources += [earth.WORLDCLIM/f'wc2.1_5m_{key}.zip' for key in ['tavg','prec','elev','vapr']]
+    if plan.get('circulation_regions'):
+        from circulation_reference import acquire
+        reference_plan=ROOT/plan['circulation_reference_plan']
+        _,references=acquire(ROOT,json.loads(reference_plan.read_text()))
+        sources += [reference_plan,ROOT/'scripts/circulation_reference.py',ROOT/'scripts/earth_calendar.py',
+                    ROOT/'experiments/v10_forcing_audit.py']
+        sources += [ROOT/name for name in references]
+        sources += list((ROOT/'rotclimate_v10').glob('*.py'))+[ROOT/'experiments/v10_thermodynamics.py']
+        sources += [ROOT/'output/circulation_audit_20261026'/f'{r}.npz' for r in plan['circulation_regions']]
     for region in plan['regions']:sources += [ROOT/plan['archive']/'cases'/f'{region}.json',ROOT/plan['archive']/'cells'/f'{region}.npz']
     identity=freeze(out/'protocol.json',dict(plan=plan,sources={str(p.relative_to(ROOT)):file_hash(p) for p in sources},
         packages={name:importlib.metadata.version(name) for name in ['numpy','scipy','numba']}))

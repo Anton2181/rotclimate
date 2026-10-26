@@ -42,3 +42,20 @@ def test_regional_or_ocean_regression_rejects_better_global_means():
     row['sst']['monthly_mae_C']=2
     row['rain']['loss']=1.2
     assert not screening(rows,plan)['flux_conservative_storm']['qualifies']
+
+
+def test_better_rain_cannot_pay_for_worse_external_wind_or_changed_native_areas():
+    plan,rows=cases()
+    plan.update(circulation_regions=['north_india'],circulation_groups={'north_india':'land'})
+    for row in rows:
+        if row['region']=='north_india':
+            row['circulation']=dict(scores={'q925_300':dict(land=dict(native_cells=11,area_km2=100,
+                vector_rmse_ms=10 if row['name']=='reference' else 9))})
+    assert screening(rows,plan)['flux_conservative_storm']['qualifies']
+    candidate=next(r for r in rows if r['name']=='flux_conservative_storm' and r['region']=='north_india')
+    wind=candidate['circulation']['scores']['q925_300']['land']
+    wind['vector_rmse_ms']=9.6
+    assert not screening(rows,plan)['flux_conservative_storm']['qualifies']
+    wind['vector_rmse_ms']=9;wind['area_km2']=99
+    with pytest.raises(ValueError,match='footprint'):
+        screening(rows,plan)

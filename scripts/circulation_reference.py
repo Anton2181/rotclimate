@@ -202,3 +202,43 @@ def vector_scores(model, reference, area, month_days):
         direction_cosine=None if not direction_weight.any() else float(np.sum(direction_weight*cosine)/direction_weight.sum()),
         monthly_model=np.average(model, axis=2, weights=area).tolist(),
         monthly_reference=np.average(reference, axis=2, weights=area).tolist())
+
+
+def diagnose_model(case, params, model, result, reference):
+    """The fixed native-grid diagnostic, reusable inside a later physics pilot.
+
+    Requires traced cells to contain every interior domain cell in np.nonzero
+    order. Only fully covered inmap native footprints contribute to scores.
+    """
+    from scripts.earth_calendar import observation_weights
+    from rotclimate.numerics import matrix_product
+    g = case.grid
+    spec = earth.REGIONS[case.name]
+    mirrored = spec['lat0'] < 0
+    latitude = -g.lat if mirrored else g.lat
+    geometry = projection_jacobian(latitude, case.lon, spec['lat0'], spec['lon0'])
+    weights, durations, order = observation_weights(result.days, mirrored=mirrored)
+    fields = {var: reference[case.name, var] for var in VARIABLES}
+    targets, water, height = column_targets(fields)
+    targets = {key: value[order].reshape(12, 2, -1) for key, value in targets.items()}
+    area = g.cell_km**2/geometry[-1]
+    interior = np.ones_like(g.land)
+    interior[[0, -1], :] = False; interior[:, [0, -1]] = False
+    if not all(np.array_equal(a, b) for a, b in zip(model.trace_cells, np.nonzero(interior))):
+        raise ValueError('Circulation pilot needs the full ordered interior trace')
+    aggregate, masks, native_area, coverage = native_aggregation(latitude, case.lon, area,
+        g.inmap & interior, g.land, g.elev, fields['shum'], height)
+    components = []
+    for key in ('moisture_u', 'moisture_v'):
+        full = np.zeros((len(result.days),)+g.land.shape)
+        full[:, interior] = np.stack([step[key] for step in model.trace])
+        components.append(full)
+    east, north = geographic_wind(*components, geometry, mirrored=mirrored)
+    native = aggregate(np.stack([matrix_product(weights, value.reshape(len(result.days), -1)).reshape((12,)+g.land.shape)
+                                for value in (east, north)], axis=1))
+    scores = {target: {kind: None if not selected.any() else vector_scores(native[:, :, selected], values[:, :, selected],
+        native_area[selected], durations) for kind, selected in masks.items()} for target, values in targets.items()}
+    saved = dict(circulation_model=native, circulation_area=native_area,
+        **{'circulation_mask_'+kind: mask for kind, mask in masks.items()},
+        **{'circulation_reference_'+key: value for key, value in targets.items()})
+    return dict(scores=scores, coverage=coverage, original_month=order.tolist()), saved

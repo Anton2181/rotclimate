@@ -1,5 +1,6 @@
 """Shared actual-model recorder for frozen small Earth physics comparisons."""
 from pathlib import Path
+from functools import lru_cache
 from dataclasses import asdict
 import json
 import sys
@@ -17,6 +18,12 @@ from rotclimate import earth,joint
 from rotclimate.koppen import monthly_stats,monthly_weights
 from rotclimate.model import ClimateModel
 from rotclimate.numerics import matrix_product
+
+
+@lru_cache(maxsize=1)
+def circulation_fields(plan_path):
+    from circulation_reference import acquire
+    return acquire(ROOT,json.loads((ROOT/plan_path).read_text()))[0]
 
 
 def run_one(job):
@@ -81,6 +88,17 @@ def run_one(job):
         for key,value in result.moisture_budget.items():
             fields[key]=matrix_product(weights,value.reshape(len(result.days),-1)).reshape((12,)+value.shape[1:])*p.year_days/12
         row['rain']=local_metrics(st['Pm'],np.nan_to_num(case.obs_P),land)
+        if region in plan.get('circulation_regions',[]):
+            from circulation_reference import diagnose_model
+            row['circulation'],wind_fields=diagnose_model(case,p,model,result,
+                circulation_fields(plan['circulation_reference_plan']))
+            fields.update(wind_fields)
+            if name=='reference':
+                with np.load(ROOT/'output/circulation_audit_20261026'/f'{region}.npz') as old:
+                    # Source changes may not alter the external audit control.
+                    if not np.array_equal(wind_fields['circulation_model'],old['model_moisture']):
+                        raise ValueError('Exact native circulation control changed')
+                row['circulation']['legacy_exact']=True
         row['temperature']=temperature_metrics(st['Tm'][:,land],case.obs_T[:,land])
         row['monthly_rain']=dict(simulated=st['Pm'][:,land].mean(1).tolist(),observed=case.obs_P[:,land].mean(1).tolist())
         with arrays.with_suffix('.tmp').open('wb') as stream:np.savez_compressed(stream,**fields)

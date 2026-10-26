@@ -2,6 +2,33 @@
 
 ## Current status
 
+**Thermal-wind experiment ready:** opt-in physical parameter
+`moisture_thermal_height_km` (default0), explicitly shared in joint partition.
+Hydrostatic/geostrophic shear uses smoothed common-height layer temperature
+gradient, effective height and smooth equatorial taper. Surface wind/heat/lift
+remain unchanged; vapor uses its own sheared wind/convergence. Not a resolved
+vertical mass/energy model. Default0 never calls the new helper; analytic sign,
+spin, height, nondivergence, equator and coupled conservative-ledger tests pass.
+Existing49 focused wind/joint/flux checks plus7 reference checks pass; the
+extended4 gate checks pass, including outside-wind/area protection.
+
+Plan `calibration/thermal_wind_20261026/plan.json`: six profiles ×seven reused
+regions =42 integrations, at56km. Original r39, damped r39, damped conservative
+flux, and flux+thermal1/2/3km. Separate numerical blocks .05/1024, unchanged
+tolerances; only3 thermal candidates eligible. Same rain/T/regional/ocean gates,
+plus NI native partial-column wind RMSE improvement>=5%, Iberia ocean and
+EastAustralia lowland worsening<=2%. Three original native wind controls must
+also reproduce exactly. Updated `check_vapor_flux.py`/`paired_physics_pilot.py`
+record outside circulation for these optional declared regions. New source
+epoch; do not resume any older campaign using updated core/helpers.
+
+Run `scripts/check_vapor_flux.py --plan calibration/thermal_wind_20261026/plan.json
+--out output/thermal_wind_20261026`. No integrations started at this milestone;
+prior totals392 attempts/388 passes/4 preserved failures remain. Old adopted
+physics and atlas climates unchanged. At most2 qualifiers automatically advance
+through the unchanged full31/ocean/fine/established6 gates; no extra candidates
+after failures. No wind reference enters climate forcing.
+
 **Completed outside circulation audit:** fixed four-region production r39
 plan `calibration/circulation_audit_20261026/plan.json`, source `3747917`.
 All4 strict integrations pass and exactly reproduce archived float32 climate

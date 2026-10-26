@@ -244,6 +244,12 @@ class ClimateModel:
                 raise ValueError('Column pressure shear requires pressure-driven winds')
             if params.moisture_wind_factor != 1 or params.wind_cap != 0:
                 raise ValueError('Column pressure shear requires moisture_wind_factor=1 and wind_cap=0')
+        if (not np.isfinite(params.moisture_thermal_height_km)
+                or not 0 <= params.moisture_thermal_height_km <= 4):
+            raise ValueError('moisture_thermal_height_km must be in [0,4]')
+        if params.moisture_thermal_height_km > 0:
+            if params.moisture_pressure_drag_ratio != 1 or params.moisture_wind_factor != 1 or params.wind_cap != 0:
+                raise ValueError('Thermal shear requires no pressure shear, wind multiplier or wind cap')
         if params.moisture_transport_form not in ('concentration','flux'):
             raise ValueError('Unknown moisture_transport_form')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
@@ -1162,17 +1168,29 @@ class ClimateModel:
                 coriolis = 2.0*OMEGA*np.sin(np.radians(self.lat))*(-1.0 if p.retrograde else 1.0)
                 du, dv = pressure_shear(self.last_pres, dx, coriolis, self.bl_drag, p.moisture_pressure_drag_ratio)
                 uq, vq = u+self.drag*du, v+self.drag*dv
+            if p.moisture_thermal_height_km > 0:
+                from .winds import thermal_shear
+                coriolis = 2.0*OMEGA*np.sin(np.radians(self.lat))*(-1.0 if p.retrograde else 1.0)
+                # Synoptic smoothing removes unbalanced small-scale thermal
+                # gradients. Uniform-lapse common-height approximation avoids
+                # falsely treating terrain surface cooling as a thermal front.
+                layer = gauss(Tsl, 500.0/g.cell_km)-.5*column_lapse*p.moisture_thermal_height_km
+                du, dv = thermal_shear(layer, dx, coriolis, p.moisture_thermal_height_km)
+                # Geostrophic shear is aloft: do not apply the empirical
+                # surface terrain slowdown a second time to this increment.
+                uq, vq = u+du, v+dv
             # Legacy convergence remains exact. The shear experiment uses
             # the column flow for its moisture import, with the same existing
             # exclusion of heating-driven inflow from convergence feedback.
-            ud, vd = (u, v) if p.moisture_pressure_drag_ratio == 1 else (uq, vq)
+            column_shear = p.moisture_pressure_drag_ratio != 1 or p.moisture_thermal_height_km > 0
+            ud, vd = (uq, vq) if column_shear else (u, v)
             if uM is None:
                 div = (np.gradient(ud, axis=1) - np.gradient(vd, axis=0)) / dx
             else:
                 ur, vr = ud - uM * self.drag, vd - vM * self.drag
                 div = (np.gradient(ur, axis=1) - np.gradient(vr, axis=0)) / dx
             surface_div = div
-            if p.moisture_pressure_drag_ratio != 1:
+            if column_shear:
                 us, vs = (u, v) if uM is None else (u-uM*self.drag, v-vM*self.drag)
                 surface_div = (np.gradient(us, axis=1)-np.gradient(vs, axis=0))/dx
             conv = np.clip(-ndi.gaussian_filter(surface_div, self.conv_sigma) / 2e-6, 0, 3)
