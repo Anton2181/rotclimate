@@ -1,0 +1,18 @@
+{
+  "declared_before_manufactured_scores": true,
+  "purpose": "Isolated pressure-lifted parcel cooling and condensation before any new seasonal-model coupling. No Earth fit, humidity reset, observation forcing or climate adoption.",
+  "parent": "output/independent_water_20261026/review.json",
+  "parent_source_commit": "fd458cf",
+  "temperature_k": [285.0, 300.0],
+  "relative_humidity": [0.3, 0.6, 0.9],
+  "surface_pressure_pa": 100000.0,
+  "endpoint_pressure_pa": [75000.0, 50000.0, 30000.0],
+  "steps": [64, 128, 256],
+  "water_absolute_tolerance_kg_kg_dry": 1e-12,
+  "maximum_first_law_residual_j_kg_dry": 0.01,
+  "endpoint_temperature_convergence_k": 0.00001,
+  "endpoint_condensation_convergence_kg_kg_dry": 0.00000001,
+  "definition": "Exactly18 manufactured initial/endpoint combinations; run64/128/256step versions of each. Parcel is dry ideal gas with constant cp/Lv; RH means vapor-pressure fraction. Conserve vapor plus immediate fallout per kg dry air, not the difference of specific humidities on changing wet mass. Dry ascent is analytic until a root-located lifting condensation level. Saturated RK4 uses actual Bolton vapor-pressure derivative in cp*dT+Rd*T*dlog(p_initial/p)+Lv*dr=0 and integrates pressure work independently. No prescribed200K stratospheric heating, entrainment, ice, precipitation re-evaporation or environmental energy feedback. No observational fitting.",
+  "qualification": "Every pressure path has nonnegative monotone condensate, no water creation and actual first-law residual<=0.01J/kg dry air. Every64/128step endpoint must agree with256steps within1e-5K and1e-8kg/kg dry air. Preserve all failed paths. Unit checks independently verify dry adiabat/work, no condensation below LCL, exact LCL dry/dewpoint intersection, humidity mass conventions and unsupported inputs.",
+  "publication": "Publish all18 manufactured paths and sensitivity to endpoint pressure. Prefer the fixed300K paths in the chart, independent of outcomes. Add0Earth integrations to the existing812attempts. This can motivate a future conservative donor-condensation experiment, but no parcel output changes the seasonal model or fantasy atlases. A coupled implementation must account for rain and latent heating before any accuracy claim. No selected detrainment pressure or fitted humidity ratio in this study."
+}

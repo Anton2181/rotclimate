@@ -2,6 +2,22 @@
 
 ## Current status
 
+**Parcel-ascent thermodynamics source/plan prepared:**
+`experiments/parcel_ascent.py`, `scripts/check_parcel_ascent.py`,
+`calibration/parcel_ascent_20261026/plan.json`.10independent unit checks pass:
+dry analytic adiabat/work; no condensation before LCL; exact LCL; true RH and
+mixing-ratio conservation; saturated-start and null displacement; unsupported
+inputs. Constant dry cp/Lv and liquid Bolton saturation, no ice/entrainment or
+environmental heat coupling. The saturated derivative uses the actual Bolton
+vapor-pressure derivative to satisfy cp*dT+Rd*T*dx+Lv*dr=0 consistently; pressure
+work integrated with temperature. Actual dry-air water ledger uses mixingratio,
+not changing-wet-mass specific-humidity differences. Source not in ClimateModel.
+Next run18declared manufactured T/RH/pressure combinations at64/128/256steps
+(noEarthintegrations), preserve failures, publish pressure sensitivity before
+choosing any donor-condensation coupling. No selected detrainment pressure.
+Latest Earth pilot/atlas update below is complete, committed afba2a0and pushed.
+
+
 **Independent seasonal water Earth pilot COMPLETE:** source `fd458cf`,
 `output/independent_water_20261026/`,35/35 strict passes,21historical controls
 (all saved NPZ fields verified exact, including original reference), runtime390.3s.
