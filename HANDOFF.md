@@ -2,6 +2,27 @@
 
 ## Current status
 
+**Latest nonlinear follow-up (source0e55984) complete:**
+calibration/reservoir_rain_20261026/plan.json, output/reservoir_rain_20261026/.
+Three predeclared manufactured systems pass the unchanged r39 nonlinear column
+rainlaw includingconvection/subcloudevaporation, strict localtol1e-8. Samewinds,
+supply, BOTHlayerboundaries and40mmcolumncapacity; noEarthgeography/scoring.
+Fixedqratio.2 peakrain46.17mm/day, separatewater1.15/1.10 (nomix/5daymix).
+Upper/lowerq ratios.81–.97 expose missingvertical saturation/cloudphysics;
+DO NOT adopt or claimEarthaccuracy. Actualperlayer nonlinear equationschecked;
+no hidden sources orhumidityreset. These are0newclimateintegrations, leaving
+completedseries721/717passes/4oldfailures. No active modelcalibration now.
+
+New experiments/condensing_reservoirs.py uses existingcolumnrain coefficient
+at Wlower+Wupper andremovesrainproportionally to currentlayerwater. No independent
+layercloudthermodynamics.6newanalytic/failure/invalidinput tests plus9preceding
+operatorchecks=15pass. Modelcore/defaults unchanged. Sourceprotocolguarded;
+reproduceonlyunderrecordedepoch. See RESERVOIR_RAIN_20261026.md. Nextlogical
+physics: vertical saturation/cloudpartition beforecoupled seasonal benchmarks.
+Companion now16sections31figures17downloads, newest nonlinearprototype opens.
+FinalQA in output/reservoir_rain_20261026/; .bat normalclimate/econpacketsunchanged.
+
+
 **Both continued calibration rounds complete; no active calibration process.**
 Shared-wind source4dd3ff6:70/70 strict integrations,14exactcontrols,nonequalify.
 Storm-path source395d51e:35/35,14exactcontrols,nonequalify. Monitor65854 and

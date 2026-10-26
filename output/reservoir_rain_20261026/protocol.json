@@ -1,0 +1,58 @@
+{
+  "plan": {
+    "purpose": "Manufactured attribution of independent layer water under the unchanged r39 nonlinear column rain law. No Earth climate accuracy or seasonal coupling claim.",
+    "physics": "calibration/local_accuracy_20261023/r39_params.json",
+    "shape": [
+      7,
+      101
+    ],
+    "cell_km": 20.0,
+    "lower_mass_fraction": 0.25,
+    "lower_wind_amplitude_ms": 8.0,
+    "upper_wind_factor": -0.3333333333333333,
+    "source_mm_day": 1.0,
+    "saturation_mm": 40.0,
+    "dynamics": 0.5,
+    "instability": 1.0,
+    "prescribed_temperature_C": 22.0,
+    "convective_temperature_factor": 0.7,
+    "boundary_column_water_mm": 14.0,
+    "boundary_upper_lower_q_ratio": 0.2,
+    "drying_days": 50.0,
+    "profiles": {
+      "fixed_ratio": {
+        "type": "fixed_ratio",
+        "upper_lower_q_ratio": 0.2
+      },
+      "separate_no_mix": {
+        "type": "two_reservoir",
+        "mixing_days": null
+      },
+      "separate_mix5": {
+        "type": "two_reservoir",
+        "mixing_days": 5.0
+      }
+    },
+    "numerics": {
+      "moisture_diffusion": 0.0,
+      "moisture_relaxation": 0.1,
+      "moisture_residual_tol": 1e-08,
+      "picard_iters": 2048,
+      "linear_rtol": 1e-11,
+      "linear_max_iter": 10000
+    },
+    "physical_definition": "All cases use the same flat domain, opposing balanced dry winds, column saturation40mm, source1mm/day to the lower reservoir, identical layer boundary values,50day accountable drying and unchanged r39 column rain_coefficient, including convective/subcloud terms at prescribed22C. Solved column rain removes each layer in proportion to its current water. No independent cloud temperature or layer saturation is inferred. Fixed-ratio source is the same total, and its rain/drying law uses the same current total column water. Zero versus5day symmetric vertical mixing separately controlled. No storms, ocean exchange, thermal feedback, time tendency or Earth geography. No adaptive parameter additions after outcomes.",
+    "publication": "Report all fixed profiles, strict local equations, actual boundary budgets and source hashes. No new global/city score, climate calibration or normal atlas data adoption. This is a nonlinear mechanism test before any full seasonal coupling."
+  },
+  "sources": {
+    "calibration/reservoir_rain_20261026/plan.json": "f2560c0059c22e3ea6ab7a575a3c61a5c65937bbdea394556eea13af798b7e57",
+    "calibration/local_accuracy_20261023/r39_params.json": "2af65c29e35f4a06dce7a56e97219761b4c41c828734dd6d24a48ebdab3ee2e6",
+    "scripts/check_reservoir_rain.py": "a507658c144a2cfa5503fa37565a2eb5ffb16c43f4294dc63175f5077a521c4e",
+    "experiments/two_reservoir_transport.py": "a7a044710f2d56394b16fc8c3a8dc7421dbd8d040e54fc4c1216b6aa2f65f771",
+    "experiments/condensing_reservoirs.py": "7a93f4a07a81eb9b8420b0a8318b5e6ca62d43f98c2d77f62350261aa029565b",
+    "rotclimate/moisture.py": "ee40f0b9ce6248965868f1be03339c6e5b7d8f2bed00aa46f1384b42f35f0dfe",
+    "rotclimate/layer_transport.py": "9cbb87dda8d88331edc100e7e02e99f035a1f9b2bd14cced5395352c5b35c577",
+    "rotclimate/transport.py": "51e1f353f5649b24c79958bc7b0e7eff997cdf5c2f9fc13832f6a2879dc93fe4",
+    "rotclimate/solver.py": "19a954d0b91daa3a4ffee888f7f19e7f97396527386e4942ad677708f5be2cf6"
+  }
+}
