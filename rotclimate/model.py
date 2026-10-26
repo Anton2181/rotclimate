@@ -250,6 +250,8 @@ class ClimateModel:
         if params.moisture_thermal_height_km > 0:
             if params.moisture_pressure_drag_ratio != 1 or params.moisture_wind_factor != 1 or params.wind_cap != 0:
                 raise ValueError('Thermal shear requires no pressure shear, wind multiplier or wind cap')
+        if params.column_saturation_scheme not in ('legacy','pressure-lapse','pressure-moist'):
+            raise ValueError('Unknown column_saturation_scheme')
         if params.moisture_transport_form not in ('concentration','flux'):
             raise ValueError('Unknown moisture_transport_form')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
@@ -743,6 +745,7 @@ class ClimateModel:
         self.flux_budgets=[]
         self.column_mass_checks=[]
         self.layer_checks=[]
+        self.column_thermo_checks=[]
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -1171,13 +1174,35 @@ class ClimateModel:
             # Keep historical fits reproducible. The optional consistent
             # column profile must be tested against Earth before promotion.
             column_lapse = lapse if p.seasonal_column_lapse else p.lapse_rate
-            if p.eddy_rate > 0:      # physics v3
+            pressure_saturation=None
+            if p.column_saturation_scheme!='legacy':
+                from .column_thermodynamics import saturation_column
+                pressure=101325.*np.exp(-h_km/8.)
+                # Surface air in the smoothed column, at actual terrain height.
+                # The same pressure profile sets rain capacity, sea equilibrium
+                # and storm crest capacity; no extra vapor scale-height factor.
+                thermal_profile=p.column_saturation_scheme.removeprefix('pressure-')
+                thermal_column=saturation_column(T_col-column_lapse*h_km,pressure,
+                    profile=thermal_profile,lapse_k_km=column_lapse)
+                pressure_saturation=thermal_column.total_mm
+                Ws=pressure_saturation
+                ocean_saturation=saturation_column(SST,pressure,
+                    profile=thermal_profile,lapse_k_km=column_lapse).total_mm
+                self.column_thermo_checks.append(dict(day=float(d),
+                    minimum_column_capacity_mm=float(Ws.min()),maximum_column_capacity_mm=float(Ws.max()),
+                    minimum_surface_pressure_pa=float(pressure.min()),maximum_surface_pressure_pa=float(pressure.max()),
+                    minimum_profile_temperature_k=float(thermal_column.interface_temperature_k.min()),
+                    maximum_profile_temperature_k=float(thermal_column.interface_temperature_k.max()),
+                    minimum_upper_lower_saturation_q_ratio=float(thermal_column.upper_lower_q_ratio.min()),
+                    maximum_upper_lower_saturation_q_ratio=float(thermal_column.upper_lower_q_ratio.max())))
+            elif p.eddy_rate > 0:      # physics v3
                 # the column over high ground is colder (lapse rate) but the
                 # low-level moisture that cannot climb is diverted around the
                 # mountain rather than squeezed out: compare like with like
                 Ws = w_sat(T_col - 0.5 * column_lapse * h_km)
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
+            if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
             if p.ocean_rh_warm > 0:
                 # e40: over seas warmer than ~25 C deep convection moistens the
                 # whole column, and its water rises steeply with the sea's
@@ -1185,9 +1210,9 @@ class ClimateModel:
                 # 0.80-0.87 of this model's saturated column, against 0.71-0.73
                 # at 15-24 C). One humidity for every sea left the Bay of
                 # Bengal at 45 mm and the monsoon short of water.
-                W_ocean = (p.ocean_rh + p.ocean_rh_warm * np.clip((SST - 25.0) / 4.0, 0.0, 1.0)) * w_sat(SST)
+                W_ocean = (p.ocean_rh + p.ocean_rh_warm * np.clip((SST - 25.0) / 4.0, 0.0, 1.0)) * ocean_saturation
             else:
-                W_ocean = p.ocean_rh * w_sat(SST)
+                W_ocean = p.ocean_rh * ocean_saturation
             # Opt-in moisture-column shear: reduce the effective Rayleigh
             # drag in the existing pressure balance, retaining its rotation,
             # pressure forcing, background winds and terrain drag. Surface
@@ -1444,7 +1469,7 @@ class ClimateModel:
                 # crest's saturation, the rest rains out on the windward side.
                 # The single Gaussian let moisture tunnel through the Sierra
                 # Nevada (Reno 416 mm a year against 241 observed).
-                crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
+                crest = (w_sat(T_col-column_lapse*h_km) if pressure_saturation is None else pressure_saturation) / p.eddy_rainout
                 n_steps = EDDY_RAINOUT_STEPS
 
                 def mix(water, crest=crest, n_steps=n_steps):
@@ -1460,7 +1485,7 @@ class ClimateModel:
                 from .storms import RainoutExchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
                 if p.moisture_mass_tracer:mass=tracer_mass
-                crest = w_sat(T_col - column_lapse * h_km) / p.eddy_rainout
+                crest = (w_sat(T_col-column_lapse*h_km) if pressure_saturation is None else pressure_saturation) / p.eddy_rainout
                 mix = RainoutExchange(exchange,
                     lambda a: gauss(a, sigW / np.sqrt(EDDY_RAINOUT_STEPS), mode='reflect'),
                     crest, mass, steps=EDDY_RAINOUT_STEPS)
@@ -1584,6 +1609,12 @@ class ClimateModel:
                 maximum_branch_speed_ms=max(r['maximum_branch_speed_ms'] for r in self.layer_checks),
                 p95_branch_speed_ms=max(r['p95_branch_speed_ms'] for r in self.layer_checks),steps=self.layer_checks)
             numerics['all_checks_passed'] &= numerics['two_layer_transport']['max_scaled_dry_mass_divergence']<=1e-10
+        if p.column_saturation_scheme!='legacy':
+            numerics['column_thermodynamics']=dict(scheme=p.column_saturation_scheme,
+                quadrature='64 RK4 steps in log pressure per layer',top_pressure_pa=10000,
+                prescribed_tropopause_k=200,pressure_mass_scale_height_m=8000,
+                steps=self.column_thermo_checks,
+                scope='Diagnostic saturation profile; no prognostic vertical temperature or latent heating')
         if p.moisture_mass_tracer:
             numerics['mass_tracer_transport']=dict(mass_aware_advection_diffusion_storms=True,
                 mass_scale_height_m=8000,scope='Fixed relative air mass, donor W/M and common-face mass; sources/rain unchanged')

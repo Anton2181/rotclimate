@@ -1,0 +1,178 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Fixed temperature/pressure-based saturation columns with physically bounded column humidity; no planetary changes. Replace the old2.2km vapor scale with hydrostatic q_sat dp/g. Six predeclared thermal-profile/humidity combinations, no adaptive additions.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/reservoir_clouds_20261026/review.json",
+  "parent_source_commit": "60758ca",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "lapse_045": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-lapse",
+      "ocean_rh": 0.45
+    },
+    "lapse_060": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-lapse",
+      "ocean_rh": 0.6
+    },
+    "lapse_original": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-lapse",
+      "ocean_rh": 0.7547460305996778
+    },
+    "moist_045": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-moist",
+      "ocean_rh": 0.45
+    },
+    "moist_060": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-moist",
+      "ocean_rh": 0.6
+    },
+    "moist_original": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "column_saturation_scheme": "pressure-moist",
+      "ocean_rh": 0.7547460305996778
+    }
+  },
+  "profile_numerics": {
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "lapse_045": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "lapse_060": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "lapse_original": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "moist_045": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "moist_060": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "moist_original": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "transport_control": "output/mass_tracer_20261026/mass_tracer020"
+  },
+  "eligible_profiles": [
+    "lapse_045",
+    "lapse_060",
+    "lapse_original",
+    "moist_045",
+    "moist_060",
+    "moist_original"
+  ],
+  "maximum_finalists": 2,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Keep common-mass two-branch moisture, lower mass fraction.25, humidity ratio.2,1km shear, source/sink schemes and all Earth planetary settings fixed. Integrate liquid Bolton specific saturation over pressure using64RK4 steps/layer. Surface pressure=101325exp(-terrain/8000m), same mass basis; actual smoothed surface temperature=T_col-lapse*height. Shared column_saturation_scheme pressure-lapse uses current4.414K/km environmental lapse; pressure-moist uses saturated pseudoadiabatic dry-gas approximation with constant cp/Lv. Prescribed200K isothermal stratosphere; omit water above100hPa while retaining that air in upper mass. Same profile supplies rain, ocean-equilibrium and crest capacities. For each profile use existing shared column humidity ocean_rh=.45,.60,or original.754746, all declared before new Earth results. These effective column humidities are not measured surface RH or vertical temperature states. No humidity-profile reset beyond the pre-existing fixed two-branch ratio, no latent-heat or independent vertical-temperature claim. Quadrature error at nonsmooth tropopause checked within1e-4mm plus2e-5 relative; moisture equation/error tolerances unchanged.",
+  "control": "Seven original r39 climates and native winds exact, seven archived common-mass transport controls reproduce every saved array/mask/budget exactly before42 new candidate integrations. No candidate added or humidity value refined after outcomes.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes. Also require two_layer_transport certificate with dry-column residual<=1e-10 and EACH branch wind maximum<=60m/s,p95<=25m/s (all primer/scored steps), rather than hiding a fast return in the weighted mean. Exactly6 thermal-profile/column-humidity combinations. Require pressure-column certificate in every subsequent gate. No additions after outcomes.",
+  "advance": "Best at most2 fixed qualifiers advance through unchanged full31 policy_v2 and individual regional protections, integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain ratio<=.98, and established6 S<=1.01 once. Record physical/numerical blocks separately. These are reused development sets, not new independent validation. Independent branch mass/speed and mass-tracer certificates are now checked in every full31/ocean/fine/established gate, not just the seven-region pilot.",
+  "publication": "Fixed56-case actual coupled Earth pilot,14controls then42candidates. Same strict numerical, mass, branch-speed, rainfall, temperature, ocean and external-circulation protections. At most2 qualifiers advance full31/ocean/fine/established gates; fantasy/world qualification remains separate. No atlas climate replacement or new headline score from seven reused development regions. Supervisor stops on frozen-source change or2h ceiling; no automatic exports/Git writes.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "transport_control",
+  "publication_stem": "pressure_column",
+  "publication_parameter": "column_saturation_scheme",
+  "publication_labels": {
+    "reference": "r39",
+    "transport_control": "Common-mass transport control",
+    "lapse_045": "Lapse profile, column RH 0.450",
+    "lapse_060": "Lapse profile, column RH 0.600",
+    "lapse_original": "Lapse profile, column RH 0.755",
+    "moist_045": "Moist profile, column RH 0.450",
+    "moist_060": "Moist profile, column RH 0.600",
+    "moist_original": "Moist profile, column RH 0.755"
+  },
+  "require_column_thermodynamics": true
+}

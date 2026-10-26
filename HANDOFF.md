@@ -2,6 +2,30 @@
 
 ## Current status
 
+**NEW pressure-column physics epoch; pilot ready for launch.**
+rotclimate/column_thermodynamics.py integrates hydrostatic q_sat dp/g, liquid
+Bolton specific humidity, existing8km pressure-mass basis; environmental lapse
+or saturated pseudo-moist profile, prescribed200K stratosphere, water top100hPa.
+Shared flag column_saturation_scheme defaultslegacy, opt-in pressure-lapse/moist.
+Actual model rain/sea-equilibrium/crest capacities use same profile, full terrain
+lapse. No independent vertical temperatures, latent-heating or humidity reset.
+Strict coupled toy and analytic/independent quadrature tests pass;92focused
+compatibility checks. Legacy controls still require actual archive reproduction.
+Full31/ocean/fine/established branch_failures now requires active profile cert.
+
+Fixed56-run plan calibration/pressure_column_20261026/plan.json:14exactcontrols,
+then2profile modes x3column ocean RH(.45/.60/original.754746) x7regions. Same
+common-mass two-branch base,1km shear, qratio.2; all Earth forcing locked. No
+post-result additions or relaxed gates. Run through scripts/watch_physics_pilot.py
+with --hours 2 and --run, fresh output directory.
+Monitor stops on source changes; read status before changing core/runner helpers.
+Report PRESSURE_COLUMN_20261026.md. No new atlas climate or headline adopted.
+At this commit the pilot has NOT yet started; supervisor will record exact source
+commit/PIDs/status in output/pressure_column_20261026/. Keep work independent
+of frozen core files while it runs. Planned next independent work: cached Earth
+vertical-humidity/temperature reference audit and research-page publication.
+
+
 **Latest layer-capacity follow-up complete (source60758ca):**
 output/reservoir_clouds_20261026/,2/2 manufactured nonlinear systems pass.
 Prior controls source/result hashes verified before import; no new Earth

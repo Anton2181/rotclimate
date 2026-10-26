@@ -39,6 +39,10 @@ def branch_failures(rows,params):
                 failures.append(region+': branch mass/speed certificate failed')
         if params.moisture_mass_tracer and n.get('mass_tracer_transport',{}).get('mass_aware_advection_diffusion_storms') is not True:
             failures.append(region+': common-mass tracer certificate missing')
+        if params.column_saturation_scheme!='legacy':
+            c=n.get('column_thermodynamics',{})
+            if c.get('scheme')!=params.column_saturation_scheme or not c.get('steps'):
+                failures.append(region+': pressure-column thermodynamics certificate missing')
     return failures
 
 

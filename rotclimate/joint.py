@@ -26,7 +26,7 @@ t_relaxation t_require_convergence transport_scheme
 """.split())
 
 SHARED_FIELDS = frozenset("""
-background_ascent bl_drag_land bl_drag_ocean circulation_lag_days cloud_longwave cloud_radiation
+background_ascent bl_drag_land bl_drag_ocean circulation_lag_days cloud_longwave cloud_radiation column_saturation_scheme
 cloud_reference cold_high_storms continental_depth continental_depth_lat continental_mean
 continentality continentality_lat convective convective_rain convective_rh
 cross_equatorial_transport cross_isobar_deg cross_transport_ocean current_gyre current_scale_km

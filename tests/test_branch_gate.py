@@ -13,3 +13,13 @@ def test_later_gates_cannot_hide_fast_return_or_missing_mass_tracer_certificate(
     del row['numerics']['mass_tracer_transport']
     assert branch_failures({'region':row},p)
     assert branch_failures({'legacy':dict(numerics={})},Params())==[]
+
+
+def test_every_later_gate_requires_active_pressure_profile_certificate():
+    p=Params(column_saturation_scheme='pressure-moist')
+    row=dict(numerics={})
+    assert branch_failures({'region':row},p)
+    row['numerics']['column_thermodynamics']=dict(scheme='pressure-lapse',steps=[{}])
+    assert branch_failures({'region':row},p)
+    row['numerics']['column_thermodynamics']=dict(scheme='pressure-moist',steps=[dict(minimum_column_capacity_mm=1.)])
+    assert branch_failures({'region':row},p)==[]

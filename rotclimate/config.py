@@ -60,6 +60,7 @@ class Params:
     lapse_rate: float = 6.0           # K / km (environmental)
     lapse_seasonal: float = 0.0       # e25: lapse rate x (1 + this x season index): steeper in summer, flatter in winter
     seasonal_column_lapse: bool = False  # opt-in: use that season's lapse in column/crest saturation too
+    column_saturation_scheme: str = 'legacy'  # opt-in pressure-lapse / pressure-moist hydrostatic saturation
 
     # What lies beyond each edge of the map is unknown.
     # beyond_style 'procedural' (default): edge features continue and fade

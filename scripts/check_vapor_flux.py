@@ -59,6 +59,12 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_column_thermodynamics'):
+                    candidate_thermo=c.get('numerics',{}).get('column_thermodynamics',{})
+                    if (candidate_thermo.get('scheme')!=c['params'].get('column_saturation_scheme')
+                            or candidate_thermo.get('scheme') not in ('pressure-lapse','pressure-moist')
+                            or not candidate_thermo.get('steps')):
+                        failures.append(region+': pressure-column thermodynamics certificate missing')
                 if plan.get('require_mass_tracer_transport'):
                     tracer=c.get('numerics',{}).get('mass_tracer_transport',{})
                     if (c.get('params',{}).get('moisture_mass_tracer') is not True
