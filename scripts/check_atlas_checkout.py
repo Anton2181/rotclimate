@@ -17,7 +17,7 @@ if __name__=='__main__':
     assets=[]
     for name in ['free_fit','earth_fit','whittaker_fit']:
         for path in sorted((ROOT/'atlases'/name/'data').rglob('*')):
-            if not path.is_file() or path.suffix not in {'.bin','.json','.webp','.png','.gif'}:continue
+            if not path.is_file() or path.suffix not in {'.bin','.json','.webp','.png','.gif','.csv'}:continue
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
             assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
             assets.append(dict(file=str(relative),sha256=actual))

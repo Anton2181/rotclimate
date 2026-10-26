@@ -92,10 +92,13 @@ def main():
     if artifact:
         (a.artifact / 'img').mkdir(parents=True, exist_ok=True)
     plates, rows, population_rows, density_plates, cored, margins = [], [], [], [], [], []
+    has_sensitivity = False
     for name, (title, description) in FITS.items():
         folder = ROOT / 'atlases' / name
         summary = json.loads((folder / 'summary.json').read_text())
         metadata = json.loads((folder / 'data/atlas.json').read_text())
+        if name == 'earth_fit':
+            has_sensitivity = bool(metadata.get('surroundings_sensitivity'))
         verified = bool(summary.get('observed_numerics', {}).get('all_checks_passed'))
         strict = summary['whittaker']['strict']
         outside = metadata['biomes'][0]['share']
@@ -142,6 +145,8 @@ def main():
         harvest = 'Low-input Han, Roman and Parthian technology' + (
             f' (the {who(margins)} atlas{"es" if len(margins) > 1 else ""} add{"" if len(margins) > 1 else "s"} poor-year limits on cold and dry margins)' if margins else '')
     updated = datetime.date.today().strftime('%-d %B %Y').upper()
+    sensitivity_note = ('<p class="note">The Earth atlas also offers Rain sensitivity and Temperature sensitivity under Fit checks, with grid values to download. These show spread across nine hypothetical surroundings at the screening resolution; they are conditional boundary sensitivities, not weather variability or measured climate error.</p>'
+                        if has_sensitivity and not artifact else '')
     if artifact:
         compare = ('Each atlas opens with the same Population lab, so the same total can be tried in all three: '
                    'open the Population topic and set the population budget.')
@@ -171,6 +176,7 @@ def main():
 <div class="notes"><p class="note">Each target zone counts equally in mean biome agreement. Objective scores measure different definitions of a match and are not interchangeable. These figures classify the mean climate fields; calibration logs average scores across individual layouts.</p>
 <p class="note">Med. dry and Med. Cs are the shares of the painted Mediterranean zone classified as Köppen dry climates and Mediterranean climates.</p>
 <p class="note">The Whittaker atlas adds the proposed biome target map and a match layer. Annual temperature and rainfall do not decide Mediterranean summer drought or swamp hydrology, so those seasonal checks stay separate.</p></div></section>
+{sensitivity_note}
 <section aria-labelledby="people-h"><h2 id="people-h">Land and people around 200 AD</h2>
 <p>Every atlas has ten map topics: Overview, Population, Political reach, Farming, Health and ecology, Temperature, Water, Air and sea, Month by month and Fit checks. {overview} Select any place for its climate chart, farming readouts and the real cities whose climate feels most alike.</p>
 <p>Political reach measures how far each polity's hold extends beyond its roads, towns, forts and legions: days of travel over the terrain, month by month (snow, mud, heat and floods on land; ships by each month's winds, shut in the storm season; river boats), control fading by a factor of e per day and averaged over the year, the hardest month and what closes the roads then, and which polity's own network reaches each place first. The travel model was fitted on Han China in AD 2 and tested on the Roman empire of AD 150, on ancient sailing times and on Chinese county seats from AD 742 to 1820. De facto and de jure sets the held land against the painted claims, with a gap fill you choose (none, ½, 1 or 2 days) and the people each polity claims and holds; Trade prices freight as the Price Edict did (sea : river : road = 1 : 5 : 28) and routes shipments separately in each direction. Its Trade view selector also maps inbound market hinterlands and the countryside population each market serves; those people are not estimates of town inhabitants. Sea lanes are continuous, with widths indicating relative traffic. Every layer also comes as vector files (GeoJSON and a layered SVG in the source map's pixels) for making your own maps.</p>

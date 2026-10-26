@@ -16,7 +16,7 @@ from local_benchmark_protocol import file_hash,write_json
 
 def layer_files(node,asset=False):
     if isinstance(node,dict):
-        for key,value in node.items():yield from layer_files(value,asset or key in {'file','files','scenario_files','binary'})
+        for key,value in node.items():yield from layer_files(value,asset or key in {'file','files','scenario_files','binary','download'})
     elif isinstance(node,list):
         for value in node:yield from layer_files(value,asset)
     elif asset and isinstance(node,str) and node and '://' not in node:
@@ -31,6 +31,8 @@ def verify_packet(data,meta):
         end=offset+size
     if end!=len(blob):raise ValueError('Unexpected bytes after climate arrays')
     assets=set(layer_files(meta['layers']))
+    diagnostic=meta.get('surroundings_sensitivity',{})
+    assets.update(diagnostic[key] for key in ['metadata','download'] if diagnostic.get(key))
     for name in assets:
         path=data/name
         if not path.resolve().is_relative_to(data.resolve()) or not path.is_file() or not path.stat().st_size:

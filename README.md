@@ -5,10 +5,12 @@ paired 28 km and established-six checks. Its regional rainfall loss is 2.30%
 lower than r38; city monthly errors improve, but annual matches slightly worsen
 and North India remains a major weakness. See the
 [r39 calibration report](reports/CONSTRAINED_BLEND_R39_20261025.md).
-The normal Earth HTML atlas still uses verified r38 world fields while the
-fixed-planet r39 world refit undergoes native-resolution and additional-layout
-checks. A fitted Earth parameter set and a published fantasy-world atlas are
-separate milestones.
+The normal Earth HTML atlas retains verified r38 world fields: subsequent r39
+world refits improved some averages but failed regional or layout-uncertainty
+protections. Its new Fit-checks maps show rainfall and temperature sensitivity
+to nine hypothetical surroundings, with CSV downloads. These are conditional
+boundary sensitivities, not total climate-error estimates. A fitted Earth
+parameter set and a published fantasy-world atlas are separate milestones.
 
 All three `.bat`-served atlases include directed trade, three Trade views,
 continuous outlined sea routes, political reach, farming and population maps.
@@ -59,8 +61,9 @@ follow that choice. Local support limits hold, with any excess reported as
 unallocated. The [population lab report](reports/ITERATION_20261023.md) explains
 the HYDE-inspired allocation and Tobler walking components.
 
-The map selector shows one of ten topics at a time. The free and Earth fits
-have 53 layers; Whittaker has 55, including proposed biome targets and match.
+The map selector shows one of ten topics at a time. Free fit has 53 layers;
+Earth has 55 including surroundings sensitivity, and Whittaker has 55 including
+proposed biome targets and match.
 All retain monthly climate maps, seasonal animations, potential biome diagrams,
 climate analogues and 152 named places. The strict biome crosswalk is an
 alternative hypothesis; annual biomes do not guarantee Mediterranean summer

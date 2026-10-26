@@ -879,6 +879,7 @@ window.atlasSave = async (filename, blob) => {
         <div class="ticks">${ticks.map((t) => `<span>${fmt(t)}</span>`).join("")}</div></div>
         <span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}${L.population_context ? " · " + esc(L.population_context) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
     }
+    if (L.download) el.insertAdjacentHTML("beforeend", `<a class="note" href="${esc(fresh("data/" + L.download))}" download>Download grid values (CSV)</a>`);
   }
 
   // ---------------------------------------------------------------- lookups

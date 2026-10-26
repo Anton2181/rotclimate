@@ -54,6 +54,22 @@ async def check(paths, base, out):
             assert 'NaN' not in await page.locator('#readouts').inner_text()
             await page.locator('#searchtoggle').click()
             await page.locator('.plate').screenshot(path=str(out/(Path(path).name+'_biomes.png')))
+            sensitivity_checks=None
+            sensitivity=[item for item in meta['layers'] if item['id'].startswith('surroundings_')]
+            if sensitivity:
+                assert len(sensitivity)==2
+                for item in sensitivity:
+                    await layer(item['id']);await loaded(item['file'])
+                    assert await page.locator('#map-topic').input_value()=='Fit checks'
+                    assert await page.locator('#settlement-controls').is_hidden()
+                    assert 'not year-to-year weather' in await page.locator('#legend').inner_text()
+                    download=page.locator('#legend a[download]')
+                    response=await page.request.get(await download.evaluate('el => el.href'))
+                    assert response.ok and 'sd_rain_mm_year' in await response.text()
+                    await page.reload(wait_until='domcontentloaded');await loaded(item['file'])
+                    assert await page.locator('#legend a[download]').count()==1
+                    await page.locator('.plate').screenshot(path=str(out/(Path(path).name+'_'+item['id']+'.png')))
+                sensitivity_checks=dict(layers=2,downloads='passed',conditional_controls='passed',deep_links='passed')
             await layer('t_month')
             await page.locator('#mslider').fill('6')
             await page.locator('#mslider').dispatch_event('input')
@@ -146,7 +162,7 @@ async def check(paths, base, out):
             assert not errors,errors
             results.append(dict(atlas=path,layer_count=len(meta['layers']),town=town,page_errors=errors,status='passed',
                                 biome_target_layers=any(layer['id']=='biome_targets' for layer in meta['layers']),harvest=harvest_checks,
-                                political=political_checks))
+                                political=political_checks,surroundings_sensitivity=sensitivity_checks))
             await context.close()
         await browser.close()
     (out/'browser_checks.json').write_text(json.dumps(results,indent=2));print(json.dumps(results,indent=2))

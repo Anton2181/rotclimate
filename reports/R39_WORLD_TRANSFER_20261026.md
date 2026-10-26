@@ -101,8 +101,55 @@ layout gains (20000 draws). Score of the mean climate and mean individual score
 are distinct; both are required. This describes uncertainty under the invented
 surroundings generator, not validation against real planetary climate. The
 previous two-layout rejection remains reported. Twenty-three focused tests pass;
-the fixed audit is running and its original sample budget cannot be enlarged
-after observing results.
+the fixed audit has now completed its full original sample without extension.
+
+## Completed nine-layout audit and atlas sensitivity maps
+
+All 18 prospective members passed numerical checks. The r39 candidate improves
+the actual nine-layout mean-climate zone objective from 0.161844 to 0.176399
+and strict agreement from 30.61% to 34.48%. Seven of nine individual paired
+zone-score changes are positive. Their mean is +0.006091, but the declared
+bootstrap bounds are **[-0.003555, +0.014763]**. The lower bound is not positive,
+so **the audit rejects publication**. No further candidate or sample is added.
+The earlier two-layout failure also remains reported. The normal Earth atlas
+therefore retains its qualified r38 climate and economic data.
+
+![Complete prospective audit](../output/r39_world_audit/audit_results.png)
+
+The nine verified r38 reference climates provide a useful new atlas diagnostic.
+The Earth atlas now has **Rain sensitivity** and **Temperature sensitivity**
+under **Fit checks**, plus downloadable source-grid values. Only the generated
+surroundings seed varies. The maps show sample standard deviations (n−1),
+relative to mean annual rainfall for the rain map. They describe conditional
+boundary sensitivity, not total model uncertainty, interannual weather or
+validated climate-error intervals. Main atlas climate remains the ds8 mean
+over layouts 1–3; these sensitivity cases use ds16.
+
+| Spread over mapped land pixels | Median | 90th percentile | Maximum |
+|---|---:|---:|---:|
+| Annual rain (% of nine-layout mean) | 14.01% | 20.02% | 37.01% |
+| Mean annual temperature (°C) | 0.775 | 0.920 | 1.315 |
+
+`scripts/add_surroundings_sensitivity.py` checks actual physical/geographic
+parameter equality, scientific source hashes and all member numerical
+certificates. Each member is interpolated to source land pixels before taking
+moments, preserving covariance between neighbouring cells. A streaming sample
+variance calculation avoids stacking nine full-resolution products in memory.
+Five focused tests cover sample variance, interpolation covariance, physical
+fingerprints, consistent sea-level temperature projection and invalid samples.
+
+All three normal atlas pages are refreshed. Chromium checks through the actual
+`.bat` server pass for sensitivity maps, CSV downloads, deep-link reloads,
+conditional settlement controls, existing farming/population/political modes
+and mobile layout. Complete packet, food-budget and population-accounting
+checks pass. Earth parameters, summary, climate binary and build provenance
+are byte-identical to the previous release; only diagnostic assets and UI are
+added. CSV downloads join the Windows checkout byte-preservation checks.
+
+The next physical work should constrain or improve remote boundary forcing;
+small changes in a few fitted surroundings layouts are not reliable evidence
+of universal map-climate gains. Preserve the observed-global-rain versus
+generated-descent distinction when evaluating future r39 physics changes.
 
 Publication requires a native pass followed by the layouts17/23 comparison,
 a full staged export, food and population accounting, complete asset checks,

@@ -1,127 +1,80 @@
-# Handoff — 2026-10-25
+# Handoff — 26 October 2026
 
-## Current status — 26 October 2026
+## Current status
 
-**COMPLETED, REJECTED:** `scripts/check_r39_world_robust.py`, plan
-`calibration/map_world_r39_robust/plan.json`, outputs `output/r39_world_robust/`,
-log `/tmp/r39_robust_runtime.log`. This is a new campaign: the preceding balance
-attempt remains rejected. Inspected layouts17/23 are now explicitly development,
-together with1/2/3. Four fixed geometries (balance001,002 and001 turned±1°)
-must improve both known batches and the five-layout mean, plus predicted native
-protections. At most one actual native1/2/3 check; only a native pass receives
-five prospectively declared validation layouts390101,390211,390307,390401,390503.
-Original native and layout thresholds remain unchanged. Cached actual member
-parameters, numerical certificates and source/file hashes are checked. Nineteen
-focused tests pass. The command queues `build_r39_earth_stage.py` with this new
-review after the campaign exits successfully, log `/tmp/r39_earth_build.log`.
-It skips a rejected review. Do not launch a duplicate builder. Browser QA and
-canonical promotion still remain if the stage is built.
+All calibration/audit/build jobs in this round have ended. No climate integration
+is running. The actual `.bat` launcher server remains available on port 8766.
+Normal publication pushes: `git push origin HEAD:claude/friendly-turing-43ygeu`
+from local branch `work`. No agents unless explicitly requested.
 
-All four robust training screens converged, none passed the known17/23 batch
-guard. No native or prospective390xxx validation was run. The robust final
-review is immutable and canonical r38 is unchanged.
-
-DO NOT edit model sources, robust/transfer helper scripts, this plan or canonical
-Earth params/summary while this campaign or its queued build is running.
-Current canonical Earth is still r38. The more detailed older attempt below
-explains the rejected parent; its old build instructions are historical.
-
-**ACTIVE:** the final fixed-candidate audit was declared before any of its nine
-new layouts in `calibration/map_world_r39_audit/plan.json`, implemented by
-`scripts/audit_r39_surroundings.py`. Only if the robust campaign rejects:
-audit the single already native-passing balance003, with NO parameter search,
-on nine other prospective layouts490101…490907. The original17/23 rejection
-remains. Require the unchanged native gate, nine-layout mean-climate gain and
-a strictly positive lower2.5% paired-bootstrap bound of individual-layout score
-gains (20000 draws, fixed RNG). Both estimands are reported separately; this
-is uncertainty under the invented-neighbourhood generator, not real-planet
-physical validation. No sample extension or second candidate. Twenty-three
-focused tests pass. Its condition is met and it is now running, log
-`/tmp/r39_audit_runtime.log`, shell session94272. The SAME shell then queues
-the stage builder with `output/r39_world_audit/review.json`, log
-`/tmp/r39_earth_build.log`. Do not duplicate the builder. If it qualifies,
-finish actual browser checks and canonical promotion. Otherwise retain r38.
-All model and imported helper sources, plans and canonical climate inputs
-remain frozen until this audit and any queued export finish.
-
-r39 Earth physics is adopted (`calibration/local_accuracy_20261023/r39_params.json`):
-dev31 S 0.987521, paired 28 km S 0.994737, established six S 0.994573. Rain loss
-improves 2.30%; city monthly MAE improves but annual matches slightly worsen.
-North India worsens; Iran improves strongly. Static diagnostic SST is identical.
+Earth r39 physics is adopted at `calibration/local_accuracy_20261023/r39_params.json`:
+dev31 S=0.987521, paired 28 km S=0.994737, established six S=0.994573. Regional
+rain loss improves 2.30%; city monthly errors improve but annual matches slightly
+worsen. North India worsens. Static diagnostic SST is unchanged. Earth regional
+monsoon descent uses observed global-rain forcing, so skill is conditional.
 See `reports/CONSTRAINED_BLEND_R39_20261025.md`.
 
-All normal `.bat` atlases are available, with directed markets (3 Trade views),
-continuous outlined sea routes and current HTML pages. Published Earth climate
-is still r38, Whittaker outside-diagram share 1.44%, Free share 11.47%. The
-actual launcher server is running locally on port 8766; browser and complete
-packet checks passed. Do not claim a new world is published until verified.
+**The normal Earth atlas still uses r38 climate.** The subsequent fixed-planet
+r39 world attempts are preserved as rejected research, not published data:
 
-The initial fixed-planet r39 world search completed 97 ds32 mean-climate cases.
-Its one coarse-eligible candidate 32 passed native numerical checks but failed
-publication protections: score 0.183300, strict 33.80% vs 34.99%, worse Med.
-The original failed attempt is preserved in `output/r39_world_publication/`.
-The world and native check processes have ended.
+- Original 97-case ds32 search: candidate32 failed native protections.
+- Intermediate screen of seven worlds: native49 lost tree recall; native65
+  exceeded Mediterranean dry area. Both converged, neither published.
+- Three-case geometry balance: selected003 passed every native guard (zonefit
+  0.187353, strict36.35%, tree5.73%, Med dry6.88%, Cs80.90%), but layouts17/23
+  score0.187013 missed r38's0.187191. No second candidate after that check.
+- Five-layout development campaign: all four geometries converged, none passed
+  the known17/23 batch guard. No native or prospective390xxx validation ran.
+- Separate, fixed-candidate nine-layout audit: mean-climate score improves
+  0.161844→0.176399 and 7/9 individual paired gains are positive. Nevertheless,
+  the declared paired-bootstrap lower bound is negative: mean+0.006091,
+  bounds[-0.003555,+0.014763]. It is rejected; no extra sample/candidate was run.
+  All 18 model members converged. This is uncertainty under generated
+  surroundings, not external validation of planetary physics.
 
-**COMPLETED:** `scripts/check_r39_world_transfer.py`, log `/tmp/r39_transfer_runtime.log`.
-Plan: `calibration/map_world_r39_transfer/plan.json`; outputs
-`output/r39_world_transfer/`. It screens at most 7 worlds at ds16, using the
-measured resolution discrepancy for ranking, then at most 2 actual native ds8
-checks. Each layout is checkpointed separately under `members/`. Only a native
-pass takes the 17/23 layout comparison; only all passes allow publication.
-Planet, r39 physics, target rules and the original native protection thresholds
-are unchanged. No correction is applied to actual climate fields.
+Full plans are under `calibration/map_world_r39{,_transfer,_balance,_robust,_audit}`;
+results under matching `output/r39_world_*` folders. The readable record is
+`reports/R39_WORLD_TRANSFER_20261026.md`, including native and audit pictures.
+Preserve every failed plan/script/result. Layouts17/23 and490xxx have now been
+inspected; do not call them prospective validation in a future campaign.
+The queued staging builders all correctly skipped rejected results. No r39
+staging atlas was promoted; no full r39 economic export was required.
 
-All seven ds16 screens converged. Native candidate 49 converged and improved
-zonefit to 0.187963 / strict 37.04%, but tree recall 4.56% failed the unchanged
-loss allowance (r38 6.79%; minimum 4.79%). Native candidate 65 also converged:
-zonefit 0.187228 / strict 36.00%, tree recall 6.26%, but Mediterranean dry
-7.55% exceeded the unchanged 6.91% maximum. Both are rejected, with all
-native numerical checks passed; no additional-layout check was inspected.
-`native_comparison.png` shows the rejected 49 result; the earlier
-`world_preview.png` is ds16 only. Tree-zone mean rain falls 544→504 mm while
-winter temperatures improve; see `native_target_diagnosis.json`.
+**All normal HTML atlases are current**, including directed markets (3 Trade
+views), continuous outlined sea routes, and the conditional settlement selectors.
+Earth has two NEW Fit-checks maps: Rain sensitivity and Temperature sensitivity,
+with a CSV download. They use the nine VERIFIED r38 audit members matching its
+actual physical/geographic parameters at ds16. Main climate, farm, population,
+and political arrays/tables are unchanged. Conditional spread is not weather,
+total model uncertainty or measured climate error. Median mapped-land rain
+spread=14.01%; annual-temperature spread=0.775°C. Whittaker remains1.44% outside
+the diagram. Layer counts: Free53, Earth55, Whittaker55.
 
-**COMPLETED, REJECTED:** the conditional bounded geometry path in
-`calibration/map_world_r39_balance/plan.json`, run by
-`scripts/check_r39_world_balance.py`, log `/tmp/r39_balance_runtime.log`.
-Its eligibility condition is now met: both endpoints failed, with successful numerics.
-It was declared before any interpolated climates and before candidate 65's
-native result: three geometries at fractions 1/3,1/2,2/3 between 49 and 65,
-ds16 layouts1–3, at most one native check, same untouched native and layout
-protections. Run `scripts/check_r39_world_balance.py` only after the parent
-review is complete (it now is). It exits without work if the parent already qualifies.
-Use its review path with the same staging builder if it passes. Eleven
-focused interpolation, ranking and atlas-packet tests pass.
+Exporter: `scripts/add_surroundings_sensitivity.py atlases/earth_fit`. It checks
+physical/geographic parameter equality (except resolution and random seed),
+scientific source hashes and member numerical certificates. It interpolates
+EACH member before computing sample moments, preserving spatial covariance.
+The portable files are in `atlases/earth_fit/data/surroundings_*`; member caches
+are ignored local research data, unnecessary for browsing. After a future model
+or parameter change, regenerate sensitivity with matching runs or omit it:
+never attach stale spread maps to a different climate. This optional diagnostic
+export is separate from the normal full atlas builder.
 
-All three balance ds16 screens converged. The ranking selected `balance_003`
-(2/3 toward65), which passed every actual native guard: zonefit0.187353,
-strict36.35%, tree5.73%, Med dry6.88%, Cs80.90%. Its additional-layout score
-on17/23 was0.187013 vs r38's0.187191, so it failed the unchanged gate despite
-better strict agreement33.60% vs32.39%. The attempt stopped, with no second
-candidate chosen after this result. The queued staging builder exited without
-work, correctly preserving canonical r38. No balance/build process remains.
-`native_balance.png` shows native gains but explicitly says ineligible.
+The hub now links current calibration/release reports. HTML templates and all
+normal pages include diagnostic CSV downloads. Browser checks pass through the
+actual launcher server for all three atlases, including sensitivity reloads,
+downloads, hidden irrelevant controls, political variants, population and mobile.
+See `output/r39_world_audit/browser_final/browser_checks.json`. Screenshots are
+local/ignored; substantive new maps and plots were shown inline to the user.
+`atlas_verification.json` verifies all packets, food/population accounts and the
+unchanged Earth climate inputs/binary. CSV and JSON data are byte-preserved on
+Windows; the checkout checker now includes CSV downloads.
 
-Preserve the completed transfer/balance plans, scripts and evidence. The original
-map/data source audit is in `input_audit.json`. A new robustness campaign must
-explicitly treat inspected layouts17/23 as development data and reserve other
-layouts for prospective validation; do not relabel this failed attempt a pass.
-
-If `output/r39_world_balance/review.json` says `eligible_for_publication=true`,
-run `python -I scripts/build_r39_earth_stage.py --review output/r39_world_balance/review.json`.
-It reuses the verified native checkpoint, writes `atlases/earth_fit_r39_next`,
-and checks assets/food/population. Browser-check that staging folder through
-port 8766, then promote only after its checks pass. Preserve canonical Earth
-as a backup, copy the new polity cache to `output/polity_map/earth_fit.npz`,
-update Earth note in `atlases/pages.json` and the hub description to r39,
-refresh pages/hub, render both political plates, check all canonical browsers,
-commit and push. Hosted external artifacts still lack a publishing tool.
-If the supplemental attempt fails, retain the canonical atlas and record why.
-
-Normal pushes: `git push origin HEAD:claude/friendly-turing-43ygeu` from local
-branch `work`. User requests autonomous continuous development, frequent updates,
-and every generated substantive map/plot shown inline. No agents unless the
-user explicitly requests agent delegation. Older status below is historical.
+User requests autonomous ongoing physical/calibration and economic development,
+frequent check-ins, generated substantive pictures inline, and commits/pushes
+at milestones. Keep normal `.bat` atlas assets and UI current. Hosted claude.ai
+artifacts remain unchanged because no publishing tool for those URLs is present.
+Older status below is historical and must not restart completed jobs.
 
 ## Repository publication follow-up
 

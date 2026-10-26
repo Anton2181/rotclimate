@@ -23,6 +23,13 @@ def test_truncated_binary_is_rejected_before_serving(tmp_path):
     with pytest.raises(ValueError,match='Truncated'):verify_packet(tmp_path,meta)
 
 
+def test_diagnostic_downloads_must_be_present_in_portable_packet(tmp_path):
+    meta=packet(tmp_path);meta['layers'][0]['download']='values.csv'
+    with pytest.raises(ValueError,match='Missing'):verify_packet(tmp_path,meta)
+    (tmp_path/'values.csv').write_text('value\n1\n')
+    assert verify_packet(tmp_path,meta)['layer_assets']==3
+
+
 def test_missing_variant_and_incorrect_map_size_are_rejected(tmp_path):
     meta=packet(tmp_path);(tmp_path/'variant.webp').unlink()
     with pytest.raises(ValueError,match='Missing'):verify_packet(tmp_path,meta)
