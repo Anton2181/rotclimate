@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('pressure-column','Hydrostatic saturation and rainfall'),
     ('vertical-reference','Earth vertical temperature and moisture'),
     ('reservoir-rain','Nonlinear rain with separate reservoirs'),
     ('two-reservoir','Two-reservoir transport prototype'),

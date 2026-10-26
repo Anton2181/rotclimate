@@ -2,26 +2,32 @@
 
 ## Current status
 
-**ACTIVE pressure-column Earth pilot — read status before core changes.**
-Monitor68053, runner68055, source5c72c34. Fixed56-run plan
-calibration/pressure_column_20261026/plan.json; output/pressure_column_20261026/.
-Snapshot31/56 passed,0failed; all14 original/common-mass controls reproduce
-all saved arrays/observations/masks/budgets and native winds exactly. Six fixed
-combinations: pressure-lapse/moist x ocean column RH .45/.60/original.754746.
-Shared qratio.2/1km shear/common-mass basis unchanged; Earth forcing locked.
-No post-result additions or relaxed safeguards. Atomic status.json and own
-monitor_pid.json/run.log track progress. Source edits stop this supervisedjob;
-do independent publication/reference work while running. Budget2h, own-child
-cleanup; no automatic export, Git commit or push. If complete, read review.json
-and any full/review.json before qualification claims. No new atlasclimate adopted.
+**Pressure-column Earth pilot COMPLETE (source5c72c34), no active job.**
+output/pressure_column_20261026/status.json:56/56passed,14exactcontrols,noneof6
+qualifies; no full31/ocean/fine/established candidate stages. Runtime720.8seconds.
+All14 original/common-mass climates/masks/observations/budgets/nativewinds exact.
+Cumulative777attempts:773passes,4originalpreservedfailures. No normalclimate/
+headlineadoption. LowesteligibleS1.2503,moist/RH.60, rainlossratio1.5045;
+all failregionalguards. Fullresults PRESSURE_COLUMN_20261026.md. Publisher
+supportsstringlabels andrecordsallpressurethermodynamicstepcertificates.
+Newcoremode remainsopt-in; pressurecapacityalone worsensrain despite better
+externallyanchoredshape. Don'tconfoundthis with separatelysolvedlayerwater.
 
-New core column_thermodynamics.py computes q_sat dp/g, same8km pressure mass,
-full terrain lapse, lapse/moist thermalprofile, prescribed200K stratosphere,
-water top100hPa; same rain/ocean/crest capacities. Shared flag defaultslegacy.
-No independent verticaltemperature/latentheat states or humidity reset.92focused
-compatibility checks pass, including analytic/independentquadrature and two
-coupled strict water-equation tests. Full31/ocean/fine/established guards require
-active profile certificate. Details PRESSURE_COLUMN_20261026.md.
+**Reservoir backend prepared:** experiments/reservoir_block_solver.py solves
+2x2localwaterblocks, checksindependentoriginalsparsematrix andboundary residual,
+recoverssame sparseequation ifsweepsfail.8newtests+9originaloperatorchecks pass.
+Smallalternating2repeatbenchmark at24x30/48x64/72x96, max13824unknowns:
+39.62mssparse→15.38msblock, maxfielddifference1.38e-8mm. No climatespeed/accuracy
+claim. See RESERVOIR_BACKEND_20261026.md. Source/protocol in
+output/reservoir_blocks_20261026/. Backend is NOT yet in seasonal ClimateModel.
+
+Nextsubstantialwork: actualindependentlower/upperW, conservativevertical
+exchange, lower-layer ocean/landevaporation, per-layer rain, andexactsumwater
+ledger. Keep calibrated totalcolumncapacity initially (legacy) while pressure
+profile supplies onlynormalizedlayercapacityshape, to isolatehumiditystates
+from failedabsolutecapacitychange. Preservealloldcontrols/sourceepochs; no
+planetretune. New coupled state must have actualdynamicdonorfaces andper-layer
+certificates; do notfakeit by changingplots or claimingprototypes asEarthgains.
 
 **Completed native vertical-reference audit:** output/vertical_reference_20261026/,
 calibration/vertical_reference_20261026/plan.json.0climateintegrations; cached
@@ -35,11 +41,10 @@ fullmodel two-layer ratio. Not fullclimate/rainfallvalidation.2independent
 pressureintegral/units tests pass. Cold capacityratiosaffectedby200K assumption;
 see VERTICAL_REFERENCE_20261026.md. Source/currentmodelpilot safeguards unchanged.
 
-Companion now17sections34figures19JSONdownloads, newestreferenceauditopens.
+Companion now18sections36figures20JSONdownloads, newestpressurepilotopens.
 NormalFree/Earth/Whittaker climate/econpacketsunchanged; Whittakeroutside1.44%.
 No changedglobal/cityheadline. Referencepublication QA receipts live in
-output/vertical_reference_20261026/. Genericpilotpublisher still needs a
-pressure_column title/string labels before publishing actual56-run results.
+output/vertical_reference_20261026/. All56actualpressurepilot results are nowpublished as researchonly.
 
 **Latest layer-capacity follow-up complete (source60758ca):**
 output/reservoir_clouds_20261026/,2/2 manufactured nonlinear systems pass.

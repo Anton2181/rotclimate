@@ -1,0 +1,32 @@
+{
+  "plan": {
+    "shapes": [
+      [
+        24,
+        30
+      ],
+      [
+        48,
+        64
+      ],
+      [
+        72,
+        96
+      ]
+    ],
+    "cell_km": 56,
+    "rtol": 1e-09,
+    "max_iter": 2000,
+    "diffusion": 60000.0,
+    "repetitions": 2,
+    "scope": "Numerical backend only. Same operator/source/reaction/boundaries, alternating timing order after separate JIT warmup. No climate integrations or whole-season speed claim."
+  },
+  "sources": {
+    "scripts/benchmark_reservoir_blocks.py": "67e29b7d573d9faac8509fdd1788c10f305795a15eb7ad3f3f0974a5b3ab5333",
+    "experiments/two_reservoir_transport.py": "a7a044710f2d56394b16fc8c3a8dc7421dbd8d040e54fc4c1216b6aa2f65f771",
+    "experiments/reservoir_block_solver.py": "9d54868e0b57550bda192358f7380382bd32338edfa8e9158967719ef269605e",
+    "rotclimate/layer_transport.py": "9cbb87dda8d88331edc100e7e02e99f035a1f9b2bd14cced5395352c5b35c577",
+    "rotclimate/transport.py": "51e1f353f5649b24c79958bc7b0e7eff997cdf5c2f9fc13832f6a2879dc93fe4",
+    "tests/test_reservoir_block_solver.py": "e8e3bd9167463d771f06ad592d6db246f438d48b679c006a1c27eb3da2c33f52"
+  }
+}

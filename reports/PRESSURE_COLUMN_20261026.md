@@ -70,3 +70,45 @@ new global/city headline accuracy is implied. Existing fantasy Earthr38,
 scientific Earthr39, free and Whittaker atlas climates remain until all relevant
 qualification gates pass. An external vertical-profile audit and final coupled
 results will be recorded separately without retrospectively changing this plan.
+
+## Completed actual coupled comparison
+
+Source5c72c34, output `output/pressure_column_20261026/`. All56 integrations
+pass numerical checks; all14 archived controls reproduce exactly. None of the
+six candidates passes unchanged accuracy safeguards. No full31/ocean/fine/
+established candidate stage runs, and no atlas climate or headline changes.
+
+| Profile | North India annual mm | NI monthly MAE mm | Seven-region S | Rain-loss ratio |
+|---|---:|---:|---:|---:|
+|reference|256.3|50.01|1.0000|1.0000|
+|transport_control|345.1|43.67|1.1535|1.3217|
+|lapse_045|236.8|51.92|1.3188|1.6325|
+|lapse_060|372.3|49.42|1.2587|1.5207|
+|lapse_original|494.3|48.53|1.5696|2.1028|
+|moist_045|230.4|55.62|1.2978|1.5872|
+|moist_060|362.1|53.49|1.2503|1.5045|
+|moist_original|494.6|52.06|1.5308|2.0413|
+
+The smallest aggregate score is1.2503 for moist/RH0.60, still materially worse
+thanr39 (rain-loss ratio1.5045). Every candidate fails regional protections;
+several also fail SST or aggregate temperature safeguards. A better externally
+anchored thermal/humidity shape does not establish better coupled rainfall.
+All observations, masks, actual monthly cells, numerical steps and failures are
+retained. The fixed middle design index (moist/RH0.45) is mapped; no best-map
+selection is made.
+
+![All six coupled outcomes](../atlases/climate_accuracy/data/pressure_column_scores.png)
+
+![Fixed spatial examples](../atlases/climate_accuracy/data/pressure_column_maps.png)
+
+The external [vertical reference audit](VERTICAL_REFERENCE_20261026.md) remains
+a separate conditional diagnostic; it neither modifies the plan nor overrides
+these rainfall failures. Pressure-profile capacity alone leaves the imposed
+transport humidity ratio and associated mean-flow import. Next isolate separately
+solved layer water using the existing calibrated total capacity, so a failed
+absolute-capacity change is not conflated with a change in transport states.
+
+The completed Earth series is777 attempts:773 passed and4 original failures
+preserved. The new56 all pass, and the native reference audit adds0 integrations.
+A coupled reservoir backend is being prepared separately; it is not claimed as
+an adopted or already validated rainfall gain.
