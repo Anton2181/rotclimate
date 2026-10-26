@@ -74,6 +74,7 @@ def main():
              ROOT/'reports/TWO_LAYER_20261026.md',
              ROOT/'reports/MASS_TRACER_20261026.md',
              ROOT/'reports/HUMIDITY_GATE_20261026.md',
+             ROOT/'reports/SHARED_WIND_20261026.md',
              ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
              ROOT/'reports/SEASONAL_CYCLE_20261026.md',
              ROOT/'output/constrained_blend_20261025/rainfall_changes.png',

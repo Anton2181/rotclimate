@@ -2,72 +2,60 @@
 
 ## Current status
 
-**ACTIVE supervised calibration — read before changing source:** monitor
-PID63569, runner63571, source commit4dd3ff6. Same fixed70-run plan
-calibration/shared_wind_20261026/plan.json, actual output
-output/shared_wind_20261026_thread1/. Atomic status.json / monitor_pid.json
-and run.log show live progress. Snapshot2026-10-26T14:28:01.778219+00:00:
-23/70 completed,23 passed,0 failed;
-all14 exact controls passed and first shared-wind candidates are running.
-This is a continuing detached process, not waiting for another chat message.
-Both numerical thread settings are explicitly1. Stop ceiling2h or any frozen
-source/input change; own child group cleaned up. Do independent terrain/review
-work while it runs. Do NOT mutate core/calibration helper files without first
-reading status; changing them stops this supervised job. If complete, review
-out/review.json and any out/full/review.json before claiming qualification or
-publishing a world fit. No atlas climate has been adopted by this job yet.
+**Shared-wind campaign completed:** source4dd3ff6, output
+output/shared_wind_20261026_thread1/,70/70 strict integrations passed,14 exact
+controls, none of8 predeclared profiles qualifies. No full31/fine/established
+candidate stages. Monitor63569/runner63571 exited, runtime810.9seconds.
+No active calibration at this milestone. Initial output/shared_wind_20261026/
+protocol is retained; that launch stopped before a control completed, so adds
+no completed run. Thread settings are now explicitly1 in the supervisor.
 
+Series totals686 attempts:682 passes,4 original preserved failures. Shared
+wind8 fixed6-D Sobol points vary drag/background winds/pressure amplitudes,
+Earth planet and corrected common-mass two-branch water fixed. Trial6 has
+NI monthly MAE42.90 vs50.01mm and annual398 vs761obs, but aggregate rainloss
+1.1815 and S1.0965, coastal failures and aggregate temperature fail. No profile
+adopted. Read reports/SHARED_WIND_20261026.md and verified companion JSON.
 
-**Latest completed rounds:** two-layer source119d54d49/49; common-mass
-source38bc4e149/49; rain-threshold follow-up35/35. Total this turn133 strict
-integrations,70 exact control runs (28+28+14). Current series616 attempts:
-612 passes,4 original failures preserved. None of those completed pilot candidates qualifies; no full31/
-fine/established6 stage ran for those pilots. No adopted fit or normal atlas climate/economy
-changed. Global/city headlines stay old; all regions are reused development.
+Launcher companion now13 collapsible studies,26 figures,14JSON downloads.
+Browser keyboard/hash/mobile/theme checks pass; original headline scores and
+all3 normal atlas climate/farming/population/trade data remain unchanged.
+Earth scientific profiler39; published world Earth atlasr38; Whittaker outside
+1.44%. Shared wind publisher verifies archived source/records and retainsall8
+profiles; fixed middle designindex5 is mapped, not an accuracy selection.
 
-Common-mass flag moisture_mass_tracer=False by default, explicitly shared.
-When enabled: Mface*Uface*(W/M)_donor advection, K*Mface*gradq diffusion,
-same M in conservative storms. Actual matrix/residual/boundary faces agree.
-Uniform-q terrain equilibrium fixed to roundoff; independent random operator,
-ledger, sign and coupled tests pass.164 focused model checks plus3 independent
-supervisor-process tests pass. Branch/mass/tracer certificates are checked in
-all later full31/ocean/fine/established gates. No planet/rain-source change.
+**Next committed pilot:** calibration/storm_path_20261026/plan.json.35runs,
+14exact controls then3x7 new storm profiles on the original mass_tracer020
+basis:6 short conservative hops with effectively unlimited capacity1e-6,
+and condensation strengths.5/.75. No wind tuning, original rainfall/planetary
+parameters fixed. This separates changed mixing geometry from condensation;
+actual zero condensation of the hops-only control must be checked. Do not add
+strengths after results or weaken accuracy/numerical/branch guards. Samefull
+Earth and separate matched-world qualification before normalatlasadoption.
 
-Common-mass .1/.2/.3 NI annual446/345/277 vs761obs; monthly MAE44.85/43.67/
-44.94 vsr39=50.01. Regional/coastal regressions still fail. Mean rain-loss
-ratios1.6825/1.3217/1.1195; seven-region S1.3373/1.1535/1.0484. These are not
-new global accuracy scores. Reports MASS_TRACER_20261026 and TWO_LAYER_20261026.
-Threshold follow-up declared before parent ended: fixed middle ratio.2,
-only rh_threshold .5/.6/.7;35/35 pass,14 exact controls. NI monthly errors
-45.41/47.84/49.76 worsen vs corrected control43.67; all profiles fail guards.
-S1.2198/1.3188/1.4058. Report HUMIDITY_GATE_20261026. Do not add thresholds/
-humidity ratios to these completed plans or resume under changed sources.
+Launch supervisor only after the publication milestone commit, e.g.
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u \
+ scripts/watch_physics_pilot.py --plan calibration/storm_path_20261026/plan.json \
+ --out output/storm_path_20261026 --hours 2 --run
+(detach only with real process supervision).
+Read atomic status.json/monitor_pid.json before changing core/helperfiles.
+Frozen source changes stop own runner; no automatic atlasexport or Gitwrites.
+Generic publisher needs storm_path title/labels added before publication.
 
-Publisher publish_transport_pilot.py verifies each frozen epoch and emits7
-new plots/maps/table/JSON across3 studies. Launcher companion now12 studies,
-24 images,13 downloads. Normal r39 Earth physics/r38 world Earth atlas remain.
-Final QA is recorded in output/humidity_gate_20261026/; earlier source receipts
-are preserved in output/two_layer_20261026/ and mass_tracer_20261026/.
+Terrain feasibility/audit completed separately, not a new DEM or climate.
+See reports/CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md and
+output/terrain_constraints_20261026/{audit.json,baseline_terrain_and_rivers.png}.
+Existing smooth ramp has5.27%land outside nominal tiers by>.5m; drawnrivers
+not currently used toshapeheight. Next prototype must solve channeldirection,
+strict-tier feasibility and monotonicity before inferring ridges/valleys.
+Never condition generated terrain on desired climate_target colors.
 
-**Bounded shared-wind job prepared for thread-capped restart:**
-calibration/shared_wind_20261026/plan.json declares8 fixed scrambled Sobol
-points (seed20261026), six shared atmospheric parameters: land/ocean drag,
-trade/westerly speed and large/local thermal-pressure amplitudes. Earth
-planetary forcing, common-mass water, lower mass fraction.25, humidity ratio.2,
-1km shear and original rain threshold all fixed.70 regional integrations:
-14 exact controls then56 candidates. No added points or loosened guards.
-At most2 qualifiers automatically take existing full31/ocean/fine/established
-checks; no world atlas replacement. This is bounded exploratory calibration,
-not an independent validation set or a claim of an optimum.
-
-scripts/watch_physics_pilot.py defaults to read-only preflight; --run starts
-the job with atomic status.json, own-child process-group cleanup, stop on any
-frozen source/input change and a2h wall-clock ceiling. Three real-child tests
-verify completed status, source-change stop and budget stop. It neither exports
-atlases nor commits/pushes. Intended output output/shared_wind_20261026/;
-status/monitor_pid/run.log are local, not a live service on another checkout.
-Read status/PIDs before touching core/helper files; source changes stop the
-supervised job, so do independent review/publication while it runs.
+The preceding completed rounds remain: two_layer49/49 (source119d54d),
+mass_tracer49/49 (source38bc4e1), humidity_gate35/35; all rejected accuracy.
+Commonmass flag is opt-in, uniformq terrain equilibrium fixed to roundoff;
+all solver/matrix/residual/face/boundary ledger terms match.164 focused model
+checks and3 actual-child supervisor tests passed in that sourceepoch. No core
+scientific source changed for the shared-wind publication milestone.
 
 **Completed two-branch pilot:** source119d54d,49/49 strict solves pass;
 28 exact control runs precede21 candidates. Fixed plan

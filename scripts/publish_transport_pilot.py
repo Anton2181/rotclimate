@@ -35,18 +35,21 @@ def publish(out):
             if name in plan.get('profile_control_archives',{}) and (row['status']!='passed' or not row['physical_control_exact']):
                 raise ValueError('Missing historical control')
             records[name][region]=row
-    stem=out.name.rsplit('_',1)[0];slug=stem.replace('_','-')
+    stem=out.name.split('_20261026',1)[0];slug=stem.replace('_','-')
     title={'two_layer':'Moist inflow and upper return flow','mass_tracer':'Air-mass-aware water transport',
-           'humidity_gate':'Rain activation and moisture delivery'}[stem]
+           'humidity_gate':'Rain activation and moisture delivery',
+           'shared_wind':'Shared wind calibration on conservative transport'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
-        thermal_balanced_control='Balanced +1 km control',two_layer_control='Original two-layer control')
+        thermal_balanced_control='Balanced +1 km control',two_layer_control='Original two-layer control',
+        transport_control='Common-mass transport control')
     parameter=plan.get('publication_parameter','moisture_upper_q_ratio')
     for name in eligible:
         value=plan['profiles'][name].get(parameter)
         prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
-        labels[name]=f'{prefix} = {value:g}' if value is not None else name.replace('_',' ')
+        labels[name]=(f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
+                      f'{prefix} = {value:g}' if value is not None else name.replace('_',' '))
     data=ROOT/'atlases/climate_accuracy/data'
     ratios=[[None if records[n][r]['status']!='passed' else records[n][r]['rain']['loss']/records['reference'][r]['rain']['loss']
              for n in profiles] for r in regions]
@@ -60,13 +63,14 @@ def publish(out):
     short=dict(reference='r39',reference_damped='Damped',balanced_control='Balanced\ncontrol',
         thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol',transport_control='Transport\ncontrol')
     symbol='RH' if parameter=='rh_threshold' else 'q'
-    ticks=[f'{symbol}={plan["profiles"][n][parameter]:g}' if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
+    ticks=[(f'Wind {eligible.index(n)+1}' if stem=='shared_wind' else f'{symbol}={plan["profiles"][n][parameter]:g}')
+           if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
     axes[0].set(xticks=np.arange(len(profiles)),xticklabels=ticks,yticks=np.arange(len(regions)),
         yticklabels=[r.replace('_',' ').title() for r in regions],title='Local rain loss / r39 · lower is better')
     axes[0].tick_params(axis='x',labelsize=8)
     fig.colorbar(im,ax=axes[0],shrink=.7,label='Log10 local rain-loss ratio')
     selected=['reference',list(plan.get('profile_control_archives',{}))[-1],*eligible]
-    colors=['#285c80','#888888','#cf9142','#a14d68','#6c79ad']
+    colors=['#285c80','#888888',*plt.colormaps['tab10'](np.linspace(0,1,len(eligible)))]
     for name,color in zip(selected,colors):
         row=records[name]['north_india']
         if row['status']=='passed':axes[1].plot(row['monthly_rain']['simulated'],label=labels[name],color=color,lw=1.8)
@@ -94,7 +98,7 @@ def publish(out):
             ax.set_aspect(1/np.cos(np.radians(lat.mean())))
     fig.colorbar(im,ax=axes,shrink=.7,extend='both',label='Annual rain (mm/year) · same logarithmic scale')
     fig.suptitle(title+' · fixed spatial examples',fontsize=16)
-    fig.supxlabel('Same scored56km cells. The fixed middle parameter value is shown, not a selected best map.\n'
+    fig.supxlabel('Same scored56km cells. The middle trial in the fixed design is shown; it was not selected by accuracy.\n'
         'All profiles and failures are retained; annual regional totals do not replace local monthly error.',fontsize=9)
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
     images=[first,second];tracer_diagnostic=None;extra_html=''
@@ -133,7 +137,8 @@ def publish(out):
     passed=sum(row['status']=='passed' for group in records.values() for row in group.values());attempted=sum(len(g) for g in records.values())
     decision='No profile passed all fixed safeguards' if not review['development_finalists'] else 'Screening qualifiers require subsequent Earth/world checks'
     summary=dict(complete=True,decision=decision,attempted_runs=attempted,passed_runs=passed,failed_runs=attempted-passed,
-        profiles=profiles,labels=labels,regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
+        profiles=profiles,labels=labels,parameter_updates=plan['profiles'],sampling=plan.get('sampling'),
+        regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
         selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,physics_or_atlas_adoption=False,
         provenance=dict(protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),publisher_sha256=file_hash(Path(__file__))),
@@ -149,6 +154,7 @@ def publish(out):
     specific=''
     if stem=='mass_tracer':specific='<p>This follow-up uses the same air mass for donor W/M advection, mixing-ratio diffusion and storm exchange. The disabled path reproduces the preceding two-layer control exactly.</p>'
     if stem=='humidity_gate':specific='<p>Transport is held at the middle humidity ratio0.2. Only the rain-activation threshold changes to fixed0.5/0.6/0.7, testing whether delayed rainout improves delivery. This bounded plan was declared before its parent experiment finished; no extra humidity ratios or regional multipliers are added.</p>'
+    if stem=='shared_wind':specific='<p>Eight fixed Sobol samples vary land/ocean friction, trade/westerly speed and large/local thermal-pressure amplitudes. Common-mass water transport, vertical humidity ratio0.2,1km thermal shear, rainfall closure and Earth planetary forcing remain fixed. The download records all six parameter values for every trial; eight samples do not establish an optimum.</p>'
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 {specific}
 <p>Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.</p>
