@@ -1,5 +1,15 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Two-branch and terrain-tracer development,26 October2026:** three completed
+fixed pilots add133 passing regional integrations. Separate moist inflow and
+upper return restore monsoon supply; a common-mass correction preserves uniform
+mixing ratio over terrain. North India local monthly error reaches43.7mm versus
+r39’s50.0mm, but coastal regressions still reject all profiles. Higher rain
+thresholds also fail. Seven new figures/maps and all safeguards are on the
+launcher accuracy page. See [mass-aware transport](reports/MASS_TRACER_20261026.md)
+and [rain thresholds](reports/HUMIDITY_GATE_20261026.md). A separate bounded
+shared-wind design keeps the planet Earth-like and every accuracy gate intact.
+
 **Mass-consistent column experiment,26 October2026:**49 strict solves test
 whether divergent surface-like transport causes wet coasts. The new closure
 substantially improves several regional rainfall errors, but loses the Indian

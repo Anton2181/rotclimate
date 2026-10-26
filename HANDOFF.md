@@ -2,24 +2,56 @@
 
 ## Current status
 
-**Next fixed mass-tracer pilot ready:** new opt-in shared
-`moisture_mass_tracer=False` preserves all previous paths. When enabled, the
-same projected relative M is used for branch donor W/M advection, K*Mface*gradq
-diffusion and conservative storm exchange. Matrix, instantaneous residual and
-boundary ledger share actual mass-aware faces. Equal-q/no-source manufactured
-cases over variable terrain preserve q for single and two branches; random
-operator/ledger identity, signs, boundary cancellation and coupled budgets pass.
-Requires mass-balance basis and conservative storms, rejects separate storm
-mass-height setting. No planetary, rain-source or numerical-tolerance change.
+**Latest completed rounds:** two-layer source119d54d49/49; common-mass
+source38bc4e149/49; rain-threshold follow-up35/35. Total this turn133 strict
+integrations,70 exact control runs (28+28+14). Current series616 attempts:
+612 passes,4 original failures preserved. No candidate qualifies; no full31/
+fine/established6 stage ran. No adopted fit or normal atlas climate/economy
+changed. Global/city headlines stay old; all regions are reused development.
 
-New plan calibration/mass_tracer_20261026/plan.json repeats49 cases:28 exact
-controls (including previous two-layer.2 and balanced single-layer fields),
-21 corrected .1/.2/.3 trials. Same seven-region/error/ocean/outside-wind and
-branch safeguards. Extended full runner checks branch mass/speed/common-mass
-certificates in full31/ocean/fine/established stages too. New source epoch;
-do not resume/reexport completed old folders under this core. No new integration
-at this source milestone. Run check_vapor_flux.py --plan
-calibration/mass_tracer_20261026/plan.json --out output/mass_tracer_20261026.
+Common-mass flag moisture_mass_tracer=False by default, explicitly shared.
+When enabled: Mface*Uface*(W/M)_donor advection, K*Mface*gradq diffusion,
+same M in conservative storms. Actual matrix/residual/boundary faces agree.
+Uniform-q terrain equilibrium fixed to roundoff; independent random operator,
+ledger, sign and coupled tests pass.164 focused model checks plus3 independent
+supervisor-process tests pass. Branch/mass/tracer certificates are checked in
+all later full31/ocean/fine/established gates. No planet/rain-source change.
+
+Common-mass .1/.2/.3 NI annual446/345/277 vs761obs; monthly MAE44.85/43.67/
+44.94 vsr39=50.01. Regional/coastal regressions still fail. Mean rain-loss
+ratios1.6825/1.3217/1.1195; seven-region S1.3373/1.1535/1.0484. These are not
+new global accuracy scores. Reports MASS_TRACER_20261026 and TWO_LAYER_20261026.
+Threshold follow-up declared before parent ended: fixed middle ratio.2,
+only rh_threshold .5/.6/.7;35/35 pass,14 exact controls. NI monthly errors
+45.41/47.84/49.76 worsen vs corrected control43.67; all profiles fail guards.
+S1.2198/1.3188/1.4058. Report HUMIDITY_GATE_20261026. Do not add thresholds/
+humidity ratios to these completed plans or resume under changed sources.
+
+Publisher publish_transport_pilot.py verifies each frozen epoch and emits7
+new plots/maps/table/JSON across3 studies. Launcher companion now12 studies,
+24 images,13 downloads. Normal r39 Earth physics/r38 world Earth atlas remain.
+Final QA is recorded in output/humidity_gate_20261026/; earlier source receipts
+are preserved in output/two_layer_20261026/ and mass_tracer_20261026/.
+
+**Next bounded job is prepared (not yet launched at this checkpoint):**
+calibration/shared_wind_20261026/plan.json declares8 fixed scrambled Sobol
+points (seed20261026), six shared atmospheric parameters: land/ocean drag,
+trade/westerly speed and large/local thermal-pressure amplitudes. Earth
+planetary forcing, common-mass water, lower mass fraction.25, humidity ratio.2,
+1km shear and original rain threshold all fixed.70 regional integrations:
+14 exact controls then56 candidates. No added points or loosened guards.
+At most2 qualifiers automatically take existing full31/ocean/fine/established
+checks; no world atlas replacement. This is bounded exploratory calibration,
+not an independent validation set or a claim of an optimum.
+
+scripts/watch_physics_pilot.py defaults to read-only preflight; --run starts
+the job with atomic status.json, own-child process-group cleanup, stop on any
+frozen source/input change and a2h wall-clock ceiling. Three real-child tests
+verify completed status, source-change stop and budget stop. It neither exports
+atlases nor commits/pushes. Intended output output/shared_wind_20261026/;
+status/monitor_pid/run.log are local, not a live service on another checkout.
+Read status/PIDs before touching core/helper files; source changes stop the
+supervised job, so do independent review/publication while it runs.
 
 **Completed two-branch pilot:** source119d54d,49/49 strict solves pass;
 28 exact control runs precede21 candidates. Fixed plan
@@ -57,7 +89,7 @@ New plan `calibration/two_layer_20261026/plan.json`:49 runs,4 controls ×7 then
 historical NPZ fields before candidates. Candidates all1km lower thermal shear,
 fixed upper/lower q ratios .1/.2/.3, same .05/1024 work and old error tolerances.
 Old accuracy/ocean/outside-wind/full31/fine gates remain, plus branch limits.
-No new integration started at this source milestone; total483/479pass/4fail.
+The preceding readiness snapshot is historical; this pilot is now complete.
 Run `check_vapor_flux.py --plan calibration/two_layer_20261026/plan.json
 --out output/two_layer_20261026`. New epoch: do not resume older campaigns.
 

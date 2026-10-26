@@ -11,6 +11,8 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('humidity-gate','Rain activation and moisture delivery'),
+    ('mass-tracer','Air-mass-aware water transport'),
     ('two-layer','Moist inflow and upper return'),
     ('column-mass','Column mass, wind and rainfall'),
     ('thermal-wind','Thermal wind, rainfall and circulation'),

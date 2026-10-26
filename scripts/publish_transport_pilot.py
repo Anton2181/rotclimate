@@ -36,14 +36,17 @@ def publish(out):
                 raise ValueError('Missing historical control')
             records[name][region]=row
     stem=out.name.rsplit('_',1)[0];slug=stem.replace('_','-')
-    title={'two_layer':'Moist inflow and upper return flow','mass_tracer':'Air-mass-aware water transport'}[stem]
+    title={'two_layer':'Moist inflow and upper return flow','mass_tracer':'Air-mass-aware water transport',
+           'humidity_gate':'Rain activation and moisture delivery'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
         thermal_balanced_control='Balanced +1 km control',two_layer_control='Original two-layer control')
+    parameter=plan.get('publication_parameter','moisture_upper_q_ratio')
     for name in eligible:
-        ratio=plan['profiles'][name].get('moisture_upper_q_ratio')
-        labels[name]=f'Upper/lower q = {ratio:g}' if ratio is not None else name.replace('_',' ')
+        value=plan['profiles'][name].get(parameter)
+        prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
+        labels[name]=f'{prefix} = {value:g}' if value is not None else name.replace('_',' ')
     data=ROOT/'atlases/climate_accuracy/data'
     ratios=[[None if records[n][r]['status']!='passed' else records[n][r]['rain']['loss']/records['reference'][r]['rain']['loss']
              for n in profiles] for r in regions]
@@ -55,8 +58,9 @@ def publish(out):
         axes[0].text(j,i,'FAIL' if not np.isfinite(matrix[i,j]) else f'{matrix[i,j]:.2f}',ha='center',va='center',fontsize=8,
             bbox=dict(facecolor='white',alpha=.75,edgecolor='none',pad=1))
     short=dict(reference='r39',reference_damped='Damped',balanced_control='Balanced\ncontrol',
-        thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol')
-    ticks=[f'q={plan["profiles"][n]["moisture_upper_q_ratio"]:g}' if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
+        thermal_balanced_control='Balanced\n+1 km',two_layer_control='Two-layer\ncontrol',transport_control='Transport\ncontrol')
+    symbol='RH' if parameter=='rh_threshold' else 'q'
+    ticks=[f'{symbol}={plan["profiles"][n][parameter]:g}' if n in eligible else short.get(n,n.replace('_','\n')) for n in profiles]
     axes[0].set(xticks=np.arange(len(profiles)),xticklabels=ticks,yticks=np.arange(len(regions)),
         yticklabels=[r.replace('_',' ').title() for r in regions],title='Local rain loss / r39 · lower is better')
     axes[0].tick_params(axis='x',labelsize=8)
@@ -90,9 +94,38 @@ def publish(out):
             ax.set_aspect(1/np.cos(np.radians(lat.mean())))
     fig.colorbar(im,ax=axes,shrink=.7,extend='both',label='Annual rain (mm/year) · same logarithmic scale')
     fig.suptitle(title+' · fixed spatial examples',fontsize=16)
-    fig.supxlabel('Same scored56km cells. The fixed middle humidity ratio is shown, not a selected best map.\n'
+    fig.supxlabel('Same scored56km cells. The fixed middle parameter value is shown, not a selected best map.\n'
         'All profiles and failures are retained; annual regional totals do not replace local monthly error.',fontsize=9)
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
+    images=[first,second];tracer_diagnostic=None;extra_html=''
+    if stem=='mass_tracer':
+        from scipy.ndimage import gaussian_filter
+        from rotclimate.column_mass import ColumnMassProjection
+        from rotclimate.layer_transport import return_branches
+        from rotclimate.storms import conservative_exchange
+        from rotclimate.transport import moisture_terms
+        terrain=np.tile(np.linspace(0,4000,11),(9,1));projector=ColumnMassProjection(terrain,56000)
+        u=np.full_like(terrain,6.);v=np.zeros_like(terrain);ub,vb,_=projector.project(u,v)
+        layers,eu,ev=return_branches(u,v,ub,vb,1.);water=10*projector.mass
+        diagnostics={}
+        for label,mass in [('Column-water donors',None),('Common air mass',projector.mass)]:
+            loss,mix=conservative_exchange(np.full_like(water,1e-5),lambda a:gaussian_filter(a,1,mode='reflect'),mass)
+            terms=moisture_terms(water,eu,ev,56000,60000,0,0,loss,mix(water),form='flux',layers=layers,mass=mass)
+            diagnostics[label]={key:float(np.nanmax(np.abs(terms[key]))) for key in ['advection','diffusion','storm_exchange']}
+        tracer_diagnostic=dict(scope='Manufactured uniform-q terrain case, not a climate score',shape=[9,11],cell_km=56,
+            terrain_m=[0,4000],water_scale_mm=10,upper_lower_q_ratio=1,maximum_absolute_terms_mm_day=diagnostics)
+        write_json(out/'tracer_equilibrium.json',tracer_diagnostic)
+        fig,ax=plt.subplots(figsize=(10,4.5),constrained_layout=True)
+        x=np.arange(3)
+        for offset,(label,values),color in zip([-.18,.18],diagnostics.items(),['#b77841','#318b91']):
+            ax.bar(x+offset,np.maximum(list(values.values()),1e-15),width=.34,label=label,color=color)
+        ax.set(xticks=x,xticklabels=['Advection','Diffusion','Storm exchange'],yscale='log',
+            ylabel='Largest local |transport term| (mm/day)',title='Uniform mixing ratio should remain uniform over terrain')
+        ax.legend(frameon=False);ax.grid(axis='y',alpha=.15)
+        fig.supxlabel('No rain or physical sources; same stationary dry-air flow and water proportional to column mass.\n'
+            'This verifies operator consistency, not observed rainfall skill. Values below1e-15 are clipped for the logarithmic axis.',fontsize=9)
+        proof=data/'mass_tracer_equilibrium.png';fig.savefig(proof,dpi=145);plt.close(fig);images.append(proof)
+        extra_html=f'<figure><a href="data/{proof.name}"><img src="data/{proof.name}" width="1450" height="653" loading="lazy" alt="Manufactured uniform mixing ratio: common-mass advection, diffusion and storm terms vanish to roundoff"></a><figcaption>The common air mass corrects a terrain tracer-consistency defect. Numerical equilibrium is separate from climate accuracy.</figcaption></figure>'
     compact={n:{r:{key:row.get(key) for key in ['status','error','rain','temperature','sst','column_speed','monthly_rain','circulation']}
                 for r,row in group.items()} for n,group in records.items()}
     branches={n:{r:{key:value for key,value in row.get('numerics',{}).get('two_layer_transport',{}).items() if key!='steps'}
@@ -102,9 +135,9 @@ def publish(out):
     summary=dict(complete=True,decision=decision,attempted_runs=attempted,passed_runs=passed,failed_runs=attempted-passed,
         profiles=profiles,labels=labels,regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
-        selected_map_profile=map_candidate,physics_or_atlas_adoption=False,
+        selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,physics_or_atlas_adoption=False,
         provenance=dict(protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),publisher_sha256=file_hash(Path(__file__))),
-        images_sha256={p.name:file_hash(p) for p in [first,second]})
+        images_sha256={p.name:file_hash(p) for p in images})
     write_json(data/f'{stem}.json',summary)
     table=[]
     for n in profiles:
@@ -113,12 +146,17 @@ def publish(out):
             table.append(f'<tr><td>{html.escape(labels[n])}</td><td>{row["rain"]["sim_mean_annual_mm"]:.0f}</td><td>{row["rain"]["monthly_mae_mm"]:.2f}</td>'
                 f'<td>{row["circulation"]["scores"]["q925_300"]["land"]["vector_rmse_ms"]:.2f}</td></tr>')
         else:table.append(f'<tr><td>{html.escape(labels[n])}</td><td colspan="3">FAILED</td></tr>')
+    specific=''
+    if stem=='mass_tracer':specific='<p>This follow-up uses the same air mass for donor W/M advection, mixing-ratio diffusion and storm exchange. The disabled path reproduces the preceding two-layer control exactly.</p>'
+    if stem=='humidity_gate':specific='<p>Transport is held at the middle humidity ratio0.2. Only the rain-activation threshold changes to fixed0.5/0.6/0.7, testing whether delayed rainout improves delivery. This bounded plan was declared before its parent experiment finished; no extra humidity ratios or regional multipliers are added.</p>'
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
+{specific}
 <p>Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.</p>
 <p>The pilot attempts {attempted} integrations: {passed} pass strict numerics and {attempted-passed} fail. Original and historical physical controls must reproduce their archived fields before candidates. <strong>{decision}.</strong> No adopted profile, headline score or atlas climate is replaced by this research page.</p>
 <figure><a href="data/{first.name}"><img src="data/{first.name}" width="2030" height="870" loading="lazy" alt="All fixed transport profiles: local regional rain-loss ratios and North India monthly rain"></a><figcaption>Every trial faces rain, temperature, regional, ocean, outside-wind, mass and separate-branch speed safeguards. Separate upwinding adds grid-dependent first-order mixing; it is not a measured physical diffusivity. Control details and all numerical certificates are in the download.</figcaption></figure>
 <div class="table"><table><caption>North India, identical scored cells</caption><thead><tr><th>Profile</th><th>Annual rain mm</th><th>Monthly rain MAE mm</th><th>Wind RMSE m/s</th></tr></thead><tbody>{''.join(table)}</tbody></table></div>
 <figure><a href="data/{second.name}"><img src="data/{second.name}" width="2030" height="1160" loading="lazy" alt="Observed, control and fixed middle-ratio transport rainfall maps in North India and Pacific Northwest"></a><figcaption>These fixed examples expose spatial tradeoffs. All ratios and failures remain in the results; closer annual totals can still hide worse local rain.</figcaption></figure>
+{extra_html}
 <p class="note">The model retains approximate hydrostatic mass, flat projected geometry, a fixed lower mass fraction and an imposed vertical humidity shape. Reanalysis constraints cover only a monthly925–300hPa partial column and omit transient moisture covariance. Reused development regions are not new independent validation.</p>
 <p><a href="data/{stem}.json" download>Download {title.lower()} results</a> · <a href="../../reports/{stem.upper()}_20261026.md">Method, results and limitations</a></p></section><!--{slug}-end-->'''
     page=ROOT/'atlases/climate_accuracy/index.html';content=page.read_text();start,end=f'<!--{slug}-start-->',f'<!--{slug}-end-->'

@@ -1,0 +1,1764 @@
+{
+  "name": "mass_tracer010",
+  "region": "north_india",
+  "updates": {
+    "flux_convergence": 0.0,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "moisture_mass_balance": true,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_two_layer": true,
+    "moisture_upper_q_ratio": 0.1,
+    "moisture_mass_tracer": true
+  },
+  "numerical_updates": {
+    "moisture_relaxation": 0.05,
+    "picard_iters": 1024
+  },
+  "identity": "1b3eb1b0bf410ffe31fa8c8726bb855c0bd03c299eb6d9835a9cce97cc6b0e8f",
+  "case_identity": "3b3d0a7639cbb5d22d79b7e80a2144038ed56243f213bbca002fbd6fd3f06f8d",
+  "params": {
+    "lat_center": 27.5,
+    "north_bearing": 0.0,
+    "tilt": 23.44,
+    "retrograde": false,
+    "eccentricity": 0.0167,
+    "perihelion_after_solstice": 13.0,
+    "year_days": 365,
+    "solar_flux": 1.0,
+    "greenhouse_wm2": 0.0,
+    "planet_radius": 1.0,
+    "winter_solstice_day": 354.5,
+    "map_width_mi": 2286.8,
+    "map_height_mi": 1058.2,
+    "tier_tops": [
+      350.0,
+      900.0,
+      1800.0,
+      3300.0
+    ],
+    "lapse_rate": 4.4142078309475306,
+    "lapse_seasonal": 0.15,
+    "seasonal_column_lapse": false,
+    "beyond_style": "procedural",
+    "beyond_north_land": 0.6,
+    "beyond_south_land": 0.6,
+    "beyond_west_land": 0.3,
+    "beyond_east_land": 0.3,
+    "beyond_southeast_land": -1.0,
+    "beyond_northeast_land": -1.0,
+    "beyond_continuity_km": 300.0,
+    "beyond_relief_m": 400.0,
+    "beyond_seed": 1,
+    "far_pole_land": -1.0,
+    "beyond_north": "extend",
+    "beyond_south": "extend",
+    "beyond_west": "ocean",
+    "beyond_east": "ocean",
+    "beyond_north_gap_km": 0.0,
+    "beyond_south_gap_km": 0.0,
+    "beyond_west_gap_km": 0.0,
+    "beyond_east_gap_km": 0.0,
+    "pad_km": 1100.0,
+    "land_tau_days": 1.2977062637544587,
+    "land_radiative_days": 26.01270901368483,
+    "ocean_tau_days": 2.7381993028417,
+    "heat_diffusion": 40000.0,
+    "current_strength": 5.481952078680322,
+    "current_scale_km": 900.0,
+    "subpolar_current": 9.155653452635175,
+    "current_gyre": 0.0,
+    "sst_offset": -4.432542575075954,
+    "sst_source": "model",
+    "land_offset": -0.4366212356748429,
+    "inland_sea_warming": 3.880724030435667,
+    "lake_coupling": 0.6686924947790456,
+    "sea_winter_mixing": 0.13152579104056292,
+    "land_amplitude": 0.9274535284743188,
+    "storm_asym": 0.3026932600906564,
+    "storm_reach": 4.688131279001152,
+    "tropical_storms": 0.0,
+    "tropical_storm_km": 600.0,
+    "cold_high_storms": 0.13324679227620187,
+    "monsoon_descent": 0.015443602894513648,
+    "winter_mixing_deep": true,
+    "ocean_tau_unstable": 0.0,
+    "land_stable_rate": 0.1420060155383946,
+    "instability": 2.5204588569083555,
+    "soil_memory_days": 50.8,
+    "t_iters": 192,
+    "t_relaxation": 0.25,
+    "t_adaptive_retries": 2,
+    "t_anderson": true,
+    "t_require_convergence": true,
+    "hadley_edge": 33.590636492301385,
+    "hadley_shift": 6.027970293264813,
+    "itcz_mean": 6.726377335669385,
+    "itcz_shift": 13.928241055245742,
+    "trade_speed": 9.377285792105285,
+    "westerly_speed": 8.760247102945932,
+    "polar_speed": 3.0,
+    "monsoon_strength": 3.894783853353596,
+    "monsoon_scale_km": 1499.627706066449,
+    "cross_isobar_deg": 30.122343869604947,
+    "terrain_drag": 1.440741588958033,
+    "ocean_rh": 0.7547460305996778,
+    "evap_tau_days": 0.4047316552518218,
+    "land_recycling": 0.39920932715342805,
+    "precip_tau_days": 11.078614585004903,
+    "rh_threshold": 0.36774492725507657,
+    "rh_spread": 0.0,
+    "storm_track": 4.392637239362748,
+    "storm_width": 14.673873037843284,
+    "convective": 0.014161596536314148,
+    "orographic": 2.657882106689769,
+    "orographic_scheme": "legacy",
+    "orographic_gust_ms": 0.0,
+    "subsidence": 0.15923901104827515,
+    "subsidence_asym": 0.9976090824574222,
+    "subsidence_summer": 0.5184985513995239,
+    "wet_cooling": 0.5,
+    "sverdrup": 1.2044177847550401,
+    "subsidence_width": 11.891554121008305,
+    "storm_seasonality": 0.004426783245909501,
+    "circulation_lag_days": 45.248631949284665,
+    "subsidence_drying": 0.019548865912820436,
+    "land_heat_capacity": 0.9420733827136455,
+    "continentality": 0.4583683224927515,
+    "continental_depth": 0.47678530906438754,
+    "maritime_mean": 0.0,
+    "upwelling": 0.6148930955132041,
+    "background_ascent": 0.75,
+    "convective_rain": 0.3647612418951105,
+    "convective_rh": 0.6829148729649469,
+    "subcloud_evaporation": 0.3772388409328513,
+    "land_coupling_insolation": 1.7062520279160875,
+    "ebm_land": "earth",
+    "ocean_transport": 0.0,
+    "ocean_heat_capacity": 1.4,
+    "ocean_mixed_seasonality": 0.2,
+    "cross_equatorial_transport": 1.1,
+    "cross_transport_ocean": 0.0,
+    "continental_mean": 5.523796463110758,
+    "continental_depth_lat": 30.0,
+    "continentality_lat": 25.0,
+    "subgrid_orographic": 2.7877970542108406,
+    "lee_drying": 0.5966138558932341,
+    "dry_coupling": 2.4872118818891362,
+    "sea_enclosure": "disc",
+    "ocean_tau_stable": 0.0,
+    "eddy_heat": 1.0,
+    "eddy_moisture_height_km": 0.0,
+    "cloud_radiation": 0.0,
+    "cloud_longwave": 0.25,
+    "cloud_reference": "domain",
+    "snow_albedo": 0.0,
+    "flux_convergence": 0.0,
+    "flux_scale_km": 2000.0,
+    "slp_large": 1.7624748922658129,
+    "slp_local": 0.47185338191279136,
+    "slp_scale_km": 2050.5811112277306,
+    "slp_local_km": 209.69879410108845,
+    "bl_drag_ocean": 2.231865077424554e-05,
+    "bl_drag_land": 5.2852345498785046e-05,
+    "divergence_drying": 0.053592542495144835,
+    "monsoon_heating": 0.0,
+    "monsoon_rain0": 1.0,
+    "trade_land": 1.0,
+    "far_fetch": 1.0,
+    "wind_cap": 0.0,
+    "soil_bucket_mm": 75.3110415899167,
+    "soil_wet_cooling": true,
+    "ocean_sink": 1.0,
+    "land_edge_rh": 0.5,
+    "edge_continental_drying": 0.25,
+    "high_drying": 0.05,
+    "marine_layer": 0.0,
+    "marine_reach_km": 40.0,
+    "marine_inversion_m": 700.0,
+    "marine_contrast": 5.0,
+    "eddy_rainout": 0.0,
+    "subtropical_high": 0.0,
+    "subtropical_high_scale_km": 1000.0,
+    "subtropical_high_width": 10.0,
+    "subtropical_high_seasonality": 0.5,
+    "moisture_diffusion": 60000.0,
+    "eddy_rate": 1.434152674408984,
+    "eddy_seasonality": 0.21578530626276712,
+    "eddy_scale_km": 851.6123690222877,
+    "eddy_moisture_scale_km": 0.0,
+    "upslope_free_wind": 0.24969886825312815,
+    "eddy_rh_cap": 0.0,
+    "ocean_rh_warm": 0.0,
+    "moisture_wind_factor": 1.0,
+    "moisture_pressure_drag_ratio": 1.0,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_mass_balance": true,
+    "moisture_two_layer": true,
+    "moisture_upper_q_ratio": 0.1,
+    "moisture_mass_tracer": true,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "downsample": 8,
+    "steps_per_year": 25,
+    "seasonal_spinup_years": 0,
+    "seasonal_require_convergence": false,
+    "picard_iters": 1024,
+    "moisture_relaxation": 0.05,
+    "moisture_residual_tol": 0.01,
+    "moisture_require_convergence": true,
+    "transport_scheme": "upwind",
+    "solver_rtol": 1e-06,
+    "solver_max_iter": 2000,
+    "solver_require_convergence": true,
+    "solver_recover": true
+  },
+  "numerics": {
+    "linear_solves": 9088,
+    "linear_unconverged": 0,
+    "linear_methods": {
+      "gauss_seidel": 8417,
+      "sor": 671
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.04982102170389524,
+    "accelerated_stages": 0,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true,
+    "column_mass_balance": {
+      "scope": "Stationary equivalent-barotropic dry-column kinematic projection, open borders",
+      "max_scaled_mass_divergence": 3.710075182045852e-15,
+      "max_velocity_correction_ms": 9.562238811513163,
+      "steps": [
+        {
+          "max_scaled_mass_divergence": 2.1799819695375398e-15,
+          "max_mass_divergence_kgm2s": 2.6219723606245383e-15,
+          "original_max_mass_divergence_kgm2s": 0.41269772702768376,
+          "boundary_net_dry_air_kg_s": -8.222505322918552e-05,
+          "velocity_correction_rms_ms": 0.8647562926853452,
+          "velocity_correction_max_ms": 3.9518665886449074,
+          "day": 255.5
+        },
+        {
+          "max_scaled_mass_divergence": 1.2557789326073126e-15,
+          "max_mass_divergence_kgm2s": 1.5670381686545092e-15,
+          "original_max_mass_divergence_kgm2s": 0.4204384231429539,
+          "boundary_net_dry_air_kg_s": -5.3446284598970593e-05,
+          "velocity_correction_rms_ms": 0.91698230228627,
+          "velocity_correction_max_ms": 3.2785293215639038,
+          "day": 270.1
+        },
+        {
+          "max_scaled_mass_divergence": 2.0576482241490997e-15,
+          "max_mass_divergence_kgm2s": 3.0111713829047434e-15,
+          "original_max_mass_divergence_kgm2s": 0.546852746054883,
+          "boundary_net_dry_air_kg_s": 5.3446284598970593e-05,
+          "velocity_correction_rms_ms": 1.1595437620961095,
+          "velocity_correction_max_ms": 4.80629377523647,
+          "day": 284.7
+        },
+        {
+          "max_scaled_mass_divergence": 2.4792376603962843e-15,
+          "max_mass_divergence_kgm2s": 3.687148632128257e-15,
+          "original_max_mass_divergence_kgm2s": 0.6747822748642536,
+          "boundary_net_dry_air_kg_s": 0.00018089511710420815,
+          "velocity_correction_rms_ms": 1.591237805579261,
+          "velocity_correction_max_ms": 7.129756858026255,
+          "day": 299.3
+        },
+        {
+          "max_scaled_mass_divergence": 3.710075182045852e-15,
+          "max_mass_divergence_kgm2s": 7.507444298194479e-15,
+          "original_max_mass_divergence_kgm2s": 0.8369554527452416,
+          "boundary_net_dry_air_kg_s": 0.0002960101916250679,
+          "velocity_correction_rms_ms": 2.00027794218281,
+          "velocity_correction_max_ms": 8.759188303295021,
+          "day": 313.9
+        },
+        {
+          "max_scaled_mass_divergence": 2.6237986830085557e-15,
+          "max_mass_divergence_kgm2s": 6.882677446639414e-15,
+          "original_max_mass_divergence_kgm2s": 0.8851715436379844,
+          "boundary_net_dry_air_kg_s": 0.0003617902342084163,
+          "velocity_correction_rms_ms": 2.2433782965543383,
+          "velocity_correction_max_ms": 9.19765280093628,
+          "day": 328.5
+        },
+        {
+          "max_scaled_mass_divergence": 2.644104814418786e-15,
+          "max_mass_divergence_kgm2s": 8.009306195345269e-15,
+          "original_max_mass_divergence_kgm2s": 0.8910028369376569,
+          "boundary_net_dry_air_kg_s": 0.0003946802555000905,
+          "velocity_correction_rms_ms": 2.4000408458624203,
+          "velocity_correction_max_ms": 9.480462576897306,
+          "day": 343.1
+        },
+        {
+          "max_scaled_mass_divergence": 2.8121056013903944e-15,
+          "max_mass_divergence_kgm2s": 9.01302998964685e-15,
+          "original_max_mass_divergence_kgm2s": 0.9260931203062281,
+          "boundary_net_dry_air_kg_s": 0.0003617902342084163,
+          "velocity_correction_rms_ms": 2.4481786995527473,
+          "velocity_correction_max_ms": 9.558615442762088,
+          "day": 357.7
+        },
+        {
+          "max_scaled_mass_divergence": 2.5706362506050407e-15,
+          "max_mass_divergence_kgm2s": 8.193663626951683e-15,
+          "original_max_mass_divergence_kgm2s": 0.9076652652908614,
+          "boundary_net_dry_air_kg_s": 0.0003782352448542534,
+          "velocity_correction_rms_ms": 2.3799548051347887,
+          "velocity_correction_max_ms": 9.284494844800609,
+          "day": 7.3
+        },
+        {
+          "max_scaled_mass_divergence": 2.293319003697866e-15,
+          "max_mass_divergence_kgm2s": 6.9646140829089296e-15,
+          "original_max_mass_divergence_kgm2s": 0.8219815787385307,
+          "boundary_net_dry_air_kg_s": 0.0003453452235625792,
+          "velocity_correction_rms_ms": 2.213109806080746,
+          "velocity_correction_max_ms": 8.716476820091797,
+          "day": 21.9
+        },
+        {
+          "max_scaled_mass_divergence": 1.7732213450805983e-15,
+          "max_mass_divergence_kgm2s": 4.9571664943057676e-15,
+          "original_max_mass_divergence_kgm2s": 0.7416177175158257,
+          "boundary_net_dry_air_kg_s": 0.0002631201703333937,
+          "velocity_correction_rms_ms": 1.9705977403950294,
+          "velocity_correction_max_ms": 7.917821394189364,
+          "day": 36.5
+        },
+        {
+          "max_scaled_mass_divergence": 2.5121981615009242e-15,
+          "max_mass_divergence_kgm2s": 6.309120992752795e-15,
+          "original_max_mass_divergence_kgm2s": 0.6887775200604739,
+          "boundary_net_dry_air_kg_s": 0.00019734012775004525,
+          "velocity_correction_rms_ms": 1.6917105092277183,
+          "velocity_correction_max_ms": 6.949165835396178,
+          "day": 51.1
+        },
+        {
+          "max_scaled_mass_divergence": 1.3263209784204905e-15,
+          "max_mass_divergence_kgm2s": 2.9497189057026056e-15,
+          "original_max_mass_divergence_kgm2s": 0.6342044842832333,
+          "boundary_net_dry_air_kg_s": 0.00014800509581253395,
+          "velocity_correction_rms_ms": 1.426192175952367,
+          "velocity_correction_max_ms": 5.98840202009392,
+          "day": 65.7
+        },
+        {
+          "max_scaled_mass_divergence": 1.9351264126276485e-15,
+          "max_mass_divergence_kgm2s": 3.789569427465153e-15,
+          "original_max_mass_divergence_kgm2s": 0.5843705836566222,
+          "boundary_net_dry_air_kg_s": 7.400254790626697e-05,
+          "velocity_correction_rms_ms": 1.2248960003910727,
+          "velocity_correction_max_ms": 5.256358475380309,
+          "day": 80.3
+        },
+        {
+          "max_scaled_mass_divergence": 8.706759489840294e-16,
+          "max_mass_divergence_kgm2s": 1.6387327253903365e-15,
+          "original_max_mass_divergence_kgm2s": 0.5640923972132805,
+          "boundary_net_dry_air_kg_s": 2.4667515968755656e-05,
+          "velocity_correction_rms_ms": 1.1027186390798394,
+          "velocity_correction_max_ms": 4.715136109697511,
+          "day": 94.9
+        },
+        {
+          "max_scaled_mass_divergence": 1.060169508086039e-15,
+          "max_mass_divergence_kgm2s": 1.8614979552480853e-15,
+          "original_max_mass_divergence_kgm2s": 0.5318517512169454,
+          "boundary_net_dry_air_kg_s": 0.0,
+          "velocity_correction_rms_ms": 1.0504711655117154,
+          "velocity_correction_max_ms": 4.376257840824833,
+          "day": 109.5
+        },
+        {
+          "max_scaled_mass_divergence": 2.03503657173417e-15,
+          "max_mass_divergence_kgm2s": 3.0431778814475233e-15,
+          "original_max_mass_divergence_kgm2s": 0.48586362085013246,
+          "boundary_net_dry_air_kg_s": -3.905690028386312e-05,
+          "velocity_correction_rms_ms": 1.0544266440887793,
+          "velocity_correction_max_ms": 4.152487423120051,
+          "day": 124.1
+        },
+        {
+          "max_scaled_mass_divergence": 2.0078698728690004e-15,
+          "max_mass_divergence_kgm2s": 3.5181543198223787e-15,
+          "original_max_mass_divergence_kgm2s": 0.42787959904892187,
+          "boundary_net_dry_air_kg_s": -8.63363058906448e-05,
+          "velocity_correction_rms_ms": 1.0197884240344424,
+          "velocity_correction_max_ms": 3.936243186023525,
+          "day": 138.7
+        },
+        {
+          "max_scaled_mass_divergence": 2.5887923545631746e-15,
+          "max_mass_divergence_kgm2s": 5.16200808497956e-15,
+          "original_max_mass_divergence_kgm2s": 0.41218646967325373,
+          "boundary_net_dry_air_kg_s": -0.0001397825904896154,
+          "velocity_correction_rms_ms": 0.9643478473095904,
+          "velocity_correction_max_ms": 3.8381552800801706,
+          "day": 153.3
+        },
+        {
+          "max_scaled_mass_divergence": 2.4092251600019717e-15,
+          "max_mass_divergence_kgm2s": 3.687148632128257e-15,
+          "original_max_mass_divergence_kgm2s": 0.4597744372906274,
+          "boundary_net_dry_air_kg_s": -0.00014800509581253395,
+          "velocity_correction_rms_ms": 0.9270976244805833,
+          "velocity_correction_max_ms": 3.977749912072964,
+          "day": 167.9
+        },
+        {
+          "max_scaled_mass_divergence": 2.7191056395158758e-15,
+          "max_mass_divergence_kgm2s": 3.891990222802049e-15,
+          "original_max_mass_divergence_kgm2s": 0.45824650227688,
+          "boundary_net_dry_air_kg_s": -0.00016445010645837105,
+          "velocity_correction_rms_ms": 1.0184162447268519,
+          "velocity_correction_max_ms": 3.9993152704359054,
+          "day": 182.5
+        },
+        {
+          "max_scaled_mass_divergence": 2.8652012550676916e-15,
+          "max_mass_divergence_kgm2s": 3.87150606373467e-15,
+          "original_max_mass_divergence_kgm2s": 0.442564859866601,
+          "boundary_net_dry_air_kg_s": -0.00019734012775004525,
+          "velocity_correction_rms_ms": 1.0691023164207674,
+          "velocity_correction_max_ms": 3.918612586550091,
+          "day": 197.1
+        },
+        {
+          "max_scaled_mass_divergence": 3.388446651013811e-15,
+          "max_mass_divergence_kgm2s": 4.158284290677979e-15,
+          "original_max_mass_divergence_kgm2s": 0.39385224782338896,
+          "boundary_net_dry_air_kg_s": -0.00019734012775004525,
+          "velocity_correction_rms_ms": 1.0424000290874997,
+          "velocity_correction_max_ms": 3.808227098261673,
+          "day": 211.7
+        },
+        {
+          "max_scaled_mass_divergence": 2.4926712187920916e-15,
+          "max_mass_divergence_kgm2s": 2.959960985236295e-15,
+          "original_max_mass_divergence_kgm2s": 0.37747718201299213,
+          "boundary_net_dry_air_kg_s": -0.00016445010645837105,
+          "velocity_correction_rms_ms": 0.9430375582212119,
+          "velocity_correction_max_ms": 3.644842227630355,
+          "day": 226.3
+        },
+        {
+          "max_scaled_mass_divergence": 2.3063413146625416e-15,
+          "max_mass_divergence_kgm2s": 2.6424565196919177e-15,
+          "original_max_mass_divergence_kgm2s": 0.3949748669332582,
+          "boundary_net_dry_air_kg_s": -0.00015622760113545247,
+          "velocity_correction_rms_ms": 0.8069361428607441,
+          "velocity_correction_max_ms": 3.487664332304854,
+          "day": 240.9
+        },
+        {
+          "max_scaled_mass_divergence": 2.4196467646077547e-15,
+          "max_mass_divergence_kgm2s": 2.7039089968940554e-15,
+          "original_max_mass_divergence_kgm2s": 0.38011403282787665,
+          "boundary_net_dry_air_kg_s": -9.867006387502262e-05,
+          "velocity_correction_rms_ms": 0.732283661547721,
+          "velocity_correction_max_ms": 3.4264222581925075,
+          "day": 255.5
+        },
+        {
+          "max_scaled_mass_divergence": 1.5307323390391046e-15,
+          "max_mass_divergence_kgm2s": 1.8935044537908653e-15,
+          "original_max_mass_divergence_kgm2s": 0.3517430031760634,
+          "boundary_net_dry_air_kg_s": -3.289002129167421e-05,
+          "velocity_correction_rms_ms": 0.8459587593093473,
+          "velocity_correction_max_ms": 3.16767401571315,
+          "day": 270.1
+        },
+        {
+          "max_scaled_mass_divergence": 2.917770129544538e-15,
+          "max_mass_divergence_kgm2s": 4.270947165548565e-15,
+          "original_max_mass_divergence_kgm2s": 0.5339752662542603,
+          "boundary_net_dry_air_kg_s": 5.755753726042987e-05,
+          "velocity_correction_rms_ms": 1.146840745707039,
+          "velocity_correction_max_ms": 4.79368532593957,
+          "day": 284.7
+        },
+        {
+          "max_scaled_mass_divergence": 3.297145892031112e-15,
+          "max_mass_divergence_kgm2s": 4.916198176171009e-15,
+          "original_max_mass_divergence_kgm2s": 0.6710450212004867,
+          "boundary_net_dry_air_kg_s": 0.00020556263307296382,
+          "velocity_correction_rms_ms": 1.5921941480405206,
+          "velocity_correction_max_ms": 7.137890850509974,
+          "day": 299.3
+        },
+        {
+          "max_scaled_mass_divergence": 3.237452045717883e-15,
+          "max_mass_divergence_kgm2s": 6.554930901561346e-15,
+          "original_max_mass_divergence_kgm2s": 0.8372341753264709,
+          "boundary_net_dry_air_kg_s": 0.00031245520227090494,
+          "velocity_correction_rms_ms": 2.0027793286221476,
+          "velocity_correction_max_ms": 8.762152254699494,
+          "day": 313.9
+        },
+        {
+          "max_scaled_mass_divergence": 2.864689464016673e-15,
+          "max_mass_divergence_kgm2s": 7.517686377728168e-15,
+          "original_max_mass_divergence_kgm2s": 0.8853066591669878,
+          "boundary_net_dry_air_kg_s": 0.0003946802555000905,
+          "velocity_correction_rms_ms": 2.2461302329889574,
+          "velocity_correction_max_ms": 9.20176149818691,
+          "day": 328.5
+        },
+        {
+          "max_scaled_mass_divergence": 3.2180286122205387e-15,
+          "max_mass_divergence_kgm2s": 9.750459716072503e-15,
+          "original_max_mass_divergence_kgm2s": 0.8910114490924631,
+          "boundary_net_dry_air_kg_s": 0.00041112526614592765,
+          "velocity_correction_rms_ms": 2.4023298270428164,
+          "velocity_correction_max_ms": 9.485602411902743,
+          "day": 343.1
+        },
+        {
+          "max_scaled_mass_divergence": 2.460215346496116e-15,
+          "max_mass_divergence_kgm2s": 7.886401240940994e-15,
+          "original_max_mass_divergence_kgm2s": 0.9264118485999542,
+          "boundary_net_dry_air_kg_s": 0.0003946802555000905,
+          "velocity_correction_rms_ms": 2.449811099218059,
+          "velocity_correction_max_ms": 9.562238811513163,
+          "day": 357.7
+        }
+      ]
+    },
+    "two_layer_transport": {
+      "lower_mass_fraction": 0.25,
+      "upper_q_ratio": 0.1,
+      "lower_water_fraction": 0.7692307692307692,
+      "max_scaled_dry_mass_divergence": 2.9419051771660572e-15,
+      "maximum_branch_speed_ms": 19.844171104876068,
+      "p95_branch_speed_ms": 13.572068129550408,
+      "steps": [
+        {
+          "day": 255.5,
+          "max_scaled_dry_mass_divergence": 1.814322147721619e-15,
+          "maximum_branch_speed_ms": 7.83259727774786,
+          "p95_branch_speed_ms": 3.4409247922046515
+        },
+        {
+          "day": 270.1,
+          "max_scaled_dry_mass_divergence": 1.0029168354233488e-15,
+          "maximum_branch_speed_ms": 8.468504903297706,
+          "p95_branch_speed_ms": 3.6771484989423855
+        },
+        {
+          "day": 284.7,
+          "max_scaled_dry_mass_divergence": 1.7110507757531465e-15,
+          "maximum_branch_speed_ms": 9.53816139956815,
+          "p95_branch_speed_ms": 4.9983875099228445
+        },
+        {
+          "day": 299.3,
+          "max_scaled_dry_mass_divergence": 1.944418089642686e-15,
+          "maximum_branch_speed_ms": 10.277632444226622,
+          "p95_branch_speed_ms": 7.363272524313629
+        },
+        {
+          "day": 313.9,
+          "max_scaled_dry_mass_divergence": 2.9419051771660572e-15,
+          "maximum_branch_speed_ms": 13.831062322582547,
+          "p95_branch_speed_ms": 10.156071879189316
+        },
+        {
+          "day": 328.5,
+          "max_scaled_dry_mass_divergence": 2.278514805011169e-15,
+          "maximum_branch_speed_ms": 16.27439459288414,
+          "p95_branch_speed_ms": 12.15691303050947
+        },
+        {
+          "day": 343.1,
+          "max_scaled_dry_mass_divergence": 2.322013263032138e-15,
+          "maximum_branch_speed_ms": 18.694863183579844,
+          "p95_branch_speed_ms": 13.221681430017515
+        },
+        {
+          "day": 357.7,
+          "max_scaled_dry_mass_divergence": 2.462043264030535e-15,
+          "maximum_branch_speed_ms": 19.84116761763819,
+          "p95_branch_speed_ms": 13.572068129550408
+        },
+        {
+          "day": 7.3,
+          "max_scaled_dry_mass_divergence": 2.2440459284030878e-15,
+          "maximum_branch_speed_ms": 19.789666701077113,
+          "p95_branch_speed_ms": 13.227236322852542
+        },
+        {
+          "day": 21.9,
+          "max_scaled_dry_mass_divergence": 2.009183639093314e-15,
+          "maximum_branch_speed_ms": 18.787522505553405,
+          "p95_branch_speed_ms": 12.404136854048916
+        },
+        {
+          "day": 36.5,
+          "max_scaled_dry_mass_divergence": 1.578712303475531e-15,
+          "maximum_branch_speed_ms": 17.018551851898717,
+          "p95_branch_speed_ms": 11.313477910108698
+        },
+        {
+          "day": 51.1,
+          "max_scaled_dry_mass_divergence": 2.315089892917324e-15,
+          "maximum_branch_speed_ms": 14.770428251217796,
+          "p95_branch_speed_ms": 10.55241518457381
+        },
+        {
+          "day": 65.7,
+          "max_scaled_dry_mass_divergence": 1.2881827463824654e-15,
+          "maximum_branch_speed_ms": 12.41067045766471,
+          "p95_branch_speed_ms": 9.714873744159295
+        },
+        {
+          "day": 80.3,
+          "max_scaled_dry_mass_divergence": 1.7402351695031134e-15,
+          "maximum_branch_speed_ms": 11.80250021118117,
+          "p95_branch_speed_ms": 8.848429864988216
+        },
+        {
+          "day": 94.9,
+          "max_scaled_dry_mass_divergence": 7.635060260699449e-16,
+          "maximum_branch_speed_ms": 11.051248711923343,
+          "p95_branch_speed_ms": 7.969127767425106
+        },
+        {
+          "day": 109.5,
+          "max_scaled_dry_mass_divergence": 9.5328591801492e-16,
+          "maximum_branch_speed_ms": 10.605389450255784,
+          "p95_branch_speed_ms": 6.944631922455457
+        },
+        {
+          "day": 124.1,
+          "max_scaled_dry_mass_divergence": 1.4435232800945107e-15,
+          "maximum_branch_speed_ms": 11.435050243579427,
+          "p95_branch_speed_ms": 5.73994972741577
+        },
+        {
+          "day": 138.7,
+          "max_scaled_dry_mass_divergence": 1.5622841698394665e-15,
+          "maximum_branch_speed_ms": 12.20525741478672,
+          "p95_branch_speed_ms": 4.55346218239179
+        },
+        {
+          "day": 153.3,
+          "max_scaled_dry_mass_divergence": 2.165225010163566e-15,
+          "maximum_branch_speed_ms": 12.921345397927237,
+          "p95_branch_speed_ms": 4.701941965494862
+        },
+        {
+          "day": 167.9,
+          "max_scaled_dry_mass_divergence": 1.9848759746181944e-15,
+          "maximum_branch_speed_ms": 10.06814264407472,
+          "p95_branch_speed_ms": 5.247200051169117
+        },
+        {
+          "day": 182.5,
+          "max_scaled_dry_mass_divergence": 2.2344172704650515e-15,
+          "maximum_branch_speed_ms": 9.440599008388263,
+          "p95_branch_speed_ms": 4.998041189585207
+        },
+        {
+          "day": 197.1,
+          "max_scaled_dry_mass_divergence": 2.4460833974677796e-15,
+          "maximum_branch_speed_ms": 8.578290988417477,
+          "p95_branch_speed_ms": 4.82481698179322
+        },
+        {
+          "day": 211.7,
+          "max_scaled_dry_mass_divergence": 2.733788236846799e-15,
+          "maximum_branch_speed_ms": 8.244064809454983,
+          "p95_branch_speed_ms": 4.653675065164914
+        },
+        {
+          "day": 226.3,
+          "max_scaled_dry_mass_divergence": 1.909702490954065e-15,
+          "maximum_branch_speed_ms": 8.40063977599922,
+          "p95_branch_speed_ms": 4.412181597300571
+        },
+        {
+          "day": 240.9,
+          "max_scaled_dry_mass_divergence": 1.7788357889915844e-15,
+          "maximum_branch_speed_ms": 8.051264263006278,
+          "p95_branch_speed_ms": 4.013647353106275
+        },
+        {
+          "day": 255.5,
+          "max_scaled_dry_mass_divergence": 1.9560767135446055e-15,
+          "maximum_branch_speed_ms": 7.492008786555131,
+          "p95_branch_speed_ms": 3.501237670591169
+        },
+        {
+          "day": 270.1,
+          "max_scaled_dry_mass_divergence": 1.2427445659478015e-15,
+          "maximum_branch_speed_ms": 8.258031750918835,
+          "p95_branch_speed_ms": 3.524471390524135
+        },
+        {
+          "day": 284.7,
+          "max_scaled_dry_mass_divergence": 2.437780074742448e-15,
+          "maximum_branch_speed_ms": 9.495585882939059,
+          "p95_branch_speed_ms": 4.983048740125705
+        },
+        {
+          "day": 299.3,
+          "max_scaled_dry_mass_divergence": 2.5919485961951003e-15,
+          "maximum_branch_speed_ms": 10.280046691557967,
+          "p95_branch_speed_ms": 7.369830996094852
+        },
+        {
+          "day": 313.9,
+          "max_scaled_dry_mass_divergence": 2.5675736607925103e-15,
+          "maximum_branch_speed_ms": 13.836852017339655,
+          "p95_branch_speed_ms": 10.162975744766193
+        },
+        {
+          "day": 328.5,
+          "max_scaled_dry_mass_divergence": 2.502870105837607e-15,
+          "maximum_branch_speed_ms": 16.27938457881238,
+          "p95_branch_speed_ms": 12.157764419259491
+        },
+        {
+          "day": 343.1,
+          "max_scaled_dry_mass_divergence": 2.8261855933234665e-15,
+          "maximum_branch_speed_ms": 18.698919171126416,
+          "p95_branch_speed_ms": 13.21941508614954
+        },
+        {
+          "day": 357.7,
+          "max_scaled_dry_mass_divergence": 2.1539617967497602e-15,
+          "maximum_branch_speed_ms": 19.844171104876068,
+          "p95_branch_speed_ms": 13.571819390026372
+        }
+      ]
+    },
+    "mass_tracer_transport": {
+      "mass_aware_advection_diffusion_storms": true,
+      "mass_scale_height_m": 8000,
+      "scope": "Fixed relative air mass, donor W/M and common-face mass; sources/rain unchanged"
+    },
+    "storm_exchange": {
+      "scheme": "conservative",
+      "max_relative_closure": 1.7262807385234796e-16,
+      "steps": [
+        {
+          "net_cell_mm_day": -7.275957614183426e-12,
+          "throughput_cell_mm_day": 4510.7762427597345,
+          "gross_exchange_cell_mm_day": 49409.48978650948,
+          "relative_closure": 1.472583029215982e-16,
+          "boundary_supply_cell_mm_day": -192.59773204024486
+        },
+        {
+          "net_cell_mm_day": -6.139089236967266e-12,
+          "throughput_cell_mm_day": 4589.323291965638,
+          "gross_exchange_cell_mm_day": 45773.274886796986,
+          "relative_closure": 1.3411951083137483e-16,
+          "boundary_supply_cell_mm_day": -42.444384723712005
+        },
+        {
+          "net_cell_mm_day": -5.6843418860808015e-12,
+          "throughput_cell_mm_day": 4966.480124665464,
+          "gross_exchange_cell_mm_day": 43028.465981896225,
+          "relative_closure": 1.3210654287495234e-16,
+          "boundary_supply_cell_mm_day": 65.84514143994295
+        },
+        {
+          "net_cell_mm_day": -5.4569682106375694e-12,
+          "throughput_cell_mm_day": 5324.472228366066,
+          "gross_exchange_cell_mm_day": 40822.615356221024,
+          "relative_closure": 1.3367512500166095e-16,
+          "boundary_supply_cell_mm_day": 143.81716995613147
+        },
+        {
+          "net_cell_mm_day": -5.9117155615240335e-12,
+          "throughput_cell_mm_day": 5545.896049779712,
+          "gross_exchange_cell_mm_day": 39826.69707006382,
+          "relative_closure": 1.484359988759309e-16,
+          "boundary_supply_cell_mm_day": 202.12342697200597
+        },
+        {
+          "net_cell_mm_day": -6.252776074688882e-12,
+          "throughput_cell_mm_day": 5698.677870969592,
+          "gross_exchange_cell_mm_day": 40393.96539376099,
+          "relative_closure": 1.5479480694051018e-16,
+          "boundary_supply_cell_mm_day": 237.0439840598351
+        },
+        {
+          "net_cell_mm_day": -5.343281372915953e-12,
+          "throughput_cell_mm_day": 5935.518003526844,
+          "gross_exchange_cell_mm_day": 42066.445689261556,
+          "relative_closure": 1.2702003426640704e-16,
+          "boundary_supply_cell_mm_day": 261.6438705358819
+        },
+        {
+          "net_cell_mm_day": -6.821210263296962e-12,
+          "throughput_cell_mm_day": 6156.390644977078,
+          "gross_exchange_cell_mm_day": 44334.9489775893,
+          "relative_closure": 1.5385627863798802e-16,
+          "boundary_supply_cell_mm_day": 328.47997989568603
+        },
+        {
+          "net_cell_mm_day": -6.366462912410498e-12,
+          "throughput_cell_mm_day": 6271.039558401535,
+          "gross_exchange_cell_mm_day": 46130.687007906825,
+          "relative_closure": 1.3800928027192144e-16,
+          "boundary_supply_cell_mm_day": 359.4787220709791
+        },
+        {
+          "net_cell_mm_day": -7.958078640513122e-12,
+          "throughput_cell_mm_day": 6362.543971764564,
+          "gross_exchange_cell_mm_day": 48369.01162594536,
+          "relative_closure": 1.645284526807319e-16,
+          "boundary_supply_cell_mm_day": 358.66770549853277
+        },
+        {
+          "net_cell_mm_day": -8.185452315956354e-12,
+          "throughput_cell_mm_day": 6421.927393373404,
+          "gross_exchange_cell_mm_day": 51662.41042466335,
+          "relative_closure": 1.5844116154612609e-16,
+          "boundary_supply_cell_mm_day": 317.4595787886475
+        },
+        {
+          "net_cell_mm_day": -8.185452315956354e-12,
+          "throughput_cell_mm_day": 6479.4168256025305,
+          "gross_exchange_cell_mm_day": 56166.03253664466,
+          "relative_closure": 1.4573670145947876e-16,
+          "boundary_supply_cell_mm_day": 235.6502918586425
+        },
+        {
+          "net_cell_mm_day": -8.185452315956354e-12,
+          "throughput_cell_mm_day": 6551.460929841065,
+          "gross_exchange_cell_mm_day": 61531.570988968895,
+          "relative_closure": 1.330284955250664e-16,
+          "boundary_supply_cell_mm_day": 111.00282358596019
+        },
+        {
+          "net_cell_mm_day": -8.185452315956354e-12,
+          "throughput_cell_mm_day": 6575.919175148625,
+          "gross_exchange_cell_mm_day": 65666.37082683182,
+          "relative_closure": 1.246521196906425e-16,
+          "boundary_supply_cell_mm_day": -47.69398232567687
+        },
+        {
+          "net_cell_mm_day": -9.094947017729282e-12,
+          "throughput_cell_mm_day": 6484.88855712702,
+          "gross_exchange_cell_mm_day": 67218.78695806152,
+          "relative_closure": 1.3530364693138113e-16,
+          "boundary_supply_cell_mm_day": -113.02496254562607
+        },
+        {
+          "net_cell_mm_day": -9.549694368615746e-12,
+          "throughput_cell_mm_day": 6231.901476876814,
+          "gross_exchange_cell_mm_day": 66351.40144451252,
+          "relative_closure": 1.4392603864745553e-16,
+          "boundary_supply_cell_mm_day": -86.50835712534797
+        },
+        {
+          "net_cell_mm_day": -8.29913915367797e-12,
+          "throughput_cell_mm_day": 5947.114736253226,
+          "gross_exchange_cell_mm_day": 63433.11484029518,
+          "relative_closure": 1.3083291234511526e-16,
+          "boundary_supply_cell_mm_day": -13.025060877446549
+        },
+        {
+          "net_cell_mm_day": -7.73070496506989e-12,
+          "throughput_cell_mm_day": 5744.270229327256,
+          "gross_exchange_cell_mm_day": 63168.58031802207,
+          "relative_closure": 1.2238212298186335e-16,
+          "boundary_supply_cell_mm_day": -28.768638642130327
+        },
+        {
+          "net_cell_mm_day": -9.094947017729282e-12,
+          "throughput_cell_mm_day": 5093.714488041061,
+          "gross_exchange_cell_mm_day": 63345.87383993734,
+          "relative_closure": 1.4357599739977442e-16,
+          "boundary_supply_cell_mm_day": -87.26645817899157
+        },
+        {
+          "net_cell_mm_day": -8.242295734817162e-12,
+          "throughput_cell_mm_day": 3750.656931088969,
+          "gross_exchange_cell_mm_day": 60698.26653248185,
+          "relative_closure": 1.357912870609972e-16,
+          "boundary_supply_cell_mm_day": -83.50242208950192
+        },
+        {
+          "net_cell_mm_day": -8.58335624798201e-12,
+          "throughput_cell_mm_day": 3449.2625183493747,
+          "gross_exchange_cell_mm_day": 57170.77197451369,
+          "relative_closure": 1.5013539176641532e-16,
+          "boundary_supply_cell_mm_day": -72.09336616789022
+        },
+        {
+          "net_cell_mm_day": -8.412825991399586e-12,
+          "throughput_cell_mm_day": 3320.8690376842565,
+          "gross_exchange_cell_mm_day": 55191.27264733815,
+          "relative_closure": 1.5243036784377055e-16,
+          "boundary_supply_cell_mm_day": -99.57972163381143
+        },
+        {
+          "net_cell_mm_day": -9.265477274311706e-12,
+          "throughput_cell_mm_day": 3213.1165683909067,
+          "gross_exchange_cell_mm_day": 53673.06178852834,
+          "relative_closure": 1.7262807385234796e-16,
+          "boundary_supply_cell_mm_day": -124.65919668327774
+        },
+        {
+          "net_cell_mm_day": -9.094947017729282e-12,
+          "throughput_cell_mm_day": 3124.1619103190405,
+          "gross_exchange_cell_mm_day": 52981.70463098942,
+          "relative_closure": 1.7166203090433552e-16,
+          "boundary_supply_cell_mm_day": -152.75718365492133
+        },
+        {
+          "net_cell_mm_day": -7.16227077646181e-12,
+          "throughput_cell_mm_day": 3103.137898285515,
+          "gross_exchange_cell_mm_day": 52385.40633269531,
+          "relative_closure": 1.367226347539395e-16,
+          "boundary_supply_cell_mm_day": -165.87594275666936
+        },
+        {
+          "net_cell_mm_day": -7.503331289626658e-12,
+          "throughput_cell_mm_day": 3780.7739825315866,
+          "gross_exchange_cell_mm_day": 49809.32497679041,
+          "relative_closure": 1.5064109568083838e-16,
+          "boundary_supply_cell_mm_day": -106.23103103953008
+        },
+        {
+          "net_cell_mm_day": -6.707523425575346e-12,
+          "throughput_cell_mm_day": 4345.438770116718,
+          "gross_exchange_cell_mm_day": 45621.429446125156,
+          "relative_closure": 1.4702571811118574e-16,
+          "boundary_supply_cell_mm_day": 8.561142107624846
+        },
+        {
+          "net_cell_mm_day": -5.5706550483591855e-12,
+          "throughput_cell_mm_day": 4852.015215809831,
+          "gross_exchange_cell_mm_day": 42556.70875925792,
+          "relative_closure": 1.3089957402185919e-16,
+          "boundary_supply_cell_mm_day": 96.85827804524217
+        },
+        {
+          "net_cell_mm_day": -5.5706550483591855e-12,
+          "throughput_cell_mm_day": 5255.981626176183,
+          "gross_exchange_cell_mm_day": 40440.10973798021,
+          "relative_closure": 1.377507401550739e-16,
+          "boundary_supply_cell_mm_day": 163.62626652560562
+        },
+        {
+          "net_cell_mm_day": -6.139089236967266e-12,
+          "throughput_cell_mm_day": 5500.788174230807,
+          "gross_exchange_cell_mm_day": 39574.40144876924,
+          "relative_closure": 1.551277849373055e-16,
+          "boundary_supply_cell_mm_day": 214.4179318488766
+        },
+        {
+          "net_cell_mm_day": -6.366462912410498e-12,
+          "throughput_cell_mm_day": 5668.414689008978,
+          "gross_exchange_cell_mm_day": 40224.417055767684,
+          "relative_closure": 1.5827359048072582e-16,
+          "boundary_supply_cell_mm_day": 244.97306567773308
+        },
+        {
+          "net_cell_mm_day": -6.139089236967266e-12,
+          "throughput_cell_mm_day": 5914.099642737758,
+          "gross_exchange_cell_mm_day": 41941.02911295944,
+          "relative_closure": 1.4637431095057075e-16,
+          "boundary_supply_cell_mm_day": 267.1864247679491
+        },
+        {
+          "net_cell_mm_day": -5.6843418860808015e-12,
+          "throughput_cell_mm_day": 6142.486490462833,
+          "gross_exchange_cell_mm_day": 44233.91057183942,
+          "relative_closure": 1.2850642895000148e-16,
+          "boundary_supply_cell_mm_day": 331.82390923170306
+        }
+      ]
+    },
+    "vapor_flux_budget": {
+      "form": "flux",
+      "scope": "Steady flat-grid regional vapor equation, including fixed-border exchange",
+      "horizontal_transport_conservative": true,
+      "max_relative_transport_cancellation": 1.4205838473998677e-16,
+      "max_scaled_equation_residual": 0.00023902713573960998,
+      "moisture_linear_solves": 8417,
+      "steps": [
+        {
+          "advection_boundary_supply_cell_mm_day": 1977.486521687111,
+          "diffusion_boundary_supply_cell_mm_day": -528.8006308352758,
+          "storm_interior_net_cell_mm_day": -192.59773204024486,
+          "net_evaporation_cell_mm_day": 4634.199602924718,
+          "rain_cell_mm_day": 5888.478599460484,
+          "equation_residual_cell_mm_day": 1.8091622758247468,
+          "scaled_equation_residual": 0.0001483759579159722,
+          "transport_relative_cancellation": 2.0574055052286435e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 875.8792167873833,
+          "diffusion_boundary_supply_cell_mm_day": -96.6644185090156,
+          "storm_interior_net_cell_mm_day": -42.44438472371189,
+          "net_evaporation_cell_mm_day": 4505.961681558579,
+          "rain_cell_mm_day": 5244.031239064165,
+          "equation_residual_cell_mm_day": -1.299143950929647,
+          "scaled_equation_residual": 0.00011754676917014675,
+          "transport_relative_cancellation": 1.085614457359893e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -3529.1816786576182,
+          "diffusion_boundary_supply_cell_mm_day": 104.42579963233982,
+          "storm_interior_net_cell_mm_day": 65.84514143994284,
+          "net_evaporation_cell_mm_day": 6936.170704973502,
+          "rain_cell_mm_day": 3578.2833865579496,
+          "equation_residual_cell_mm_day": -1.0234191697827555,
+          "scaled_equation_residual": 8.76369351969808e-05,
+          "transport_relative_cancellation": 0.0
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -9902.779957050947,
+          "diffusion_boundary_supply_cell_mm_day": 176.16253067460718,
+          "storm_interior_net_cell_mm_day": 143.81716995613147,
+          "net_evaporation_cell_mm_day": 11496.54175939035,
+          "rain_cell_mm_day": 1914.7952061287313,
+          "equation_residual_cell_mm_day": -1.0537031585899967,
+          "scaled_equation_residual": 7.204976358812452e-05,
+          "transport_relative_cancellation": 6.666478045121002e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -15555.502382286997,
+          "diffusion_boundary_supply_cell_mm_day": 314.2785441700432,
+          "storm_interior_net_cell_mm_day": 202.12342697200597,
+          "net_evaporation_cell_mm_day": 16265.808320575366,
+          "rain_cell_mm_day": 1227.851182855303,
+          "equation_residual_cell_mm_day": -1.1432734248844554,
+          "scaled_equation_residual": 6.386487063986028e-05,
+          "transport_relative_cancellation": 1.1441222076859757e-16
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -18962.17200535645,
+          "diffusion_boundary_supply_cell_mm_day": 505.3735780030195,
+          "storm_interior_net_cell_mm_day": 237.04398405983488,
+          "net_evaporation_cell_mm_day": 19170.288844882787,
+          "rain_cell_mm_day": 951.7952660267697,
+          "equation_residual_cell_mm_day": -1.2608644375777658,
+          "scaled_equation_residual": 6.175653934921278e-05,
+          "transport_relative_cancellation": 1.7290662797728509e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -20522.115762665107,
+          "diffusion_boundary_supply_cell_mm_day": 639.1881808328299,
+          "storm_interior_net_cell_mm_day": 261.6438705358819,
+          "net_evaporation_cell_mm_day": 20433.578197936717,
+          "rain_cell_mm_day": 813.6721443080795,
+          "equation_residual_cell_mm_day": -1.3776576677586263,
+          "scaled_equation_residual": 6.400920677112946e-05,
+          "transport_relative_cancellation": 1.1670936871064742e-16
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -20702.78167519681,
+          "diffusion_boundary_supply_cell_mm_day": 687.4103284983619,
+          "storm_interior_net_cell_mm_day": 328.47997989568603,
+          "net_evaporation_cell_mm_day": 20470.31034531334,
+          "rain_cell_mm_day": 784.8569511525466,
+          "equation_residual_cell_mm_day": -1.4379726419672352,
+          "scaled_equation_residual": 6.684752556849158e-05,
+          "transport_relative_cancellation": 1.1168066089626111e-16
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -19657.607884956044,
+          "diffusion_boundary_supply_cell_mm_day": 660.9135708112027,
+          "storm_interior_net_cell_mm_day": 359.4787220709791,
+          "net_evaporation_cell_mm_day": 19435.81210865404,
+          "rain_cell_mm_day": 799.9339243998338,
+          "equation_residual_cell_mm_day": -1.3374078196542314,
+          "scaled_equation_residual": 6.531289375974452e-05,
+          "transport_relative_cancellation": 3.655856968727474e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -18071.721297812703,
+          "diffusion_boundary_supply_cell_mm_day": 571.6442672170933,
+          "storm_interior_net_cell_mm_day": 358.66770549853277,
+          "net_evaporation_cell_mm_day": 18002.872859726675,
+          "rain_cell_mm_day": 859.9792633525956,
+          "equation_residual_cell_mm_day": 1.4842712770023354,
+          "scaled_equation_residual": 7.76984494745339e-05,
+          "transport_relative_cancellation": 0.0
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -15819.586417501707,
+          "diffusion_boundary_supply_cell_mm_day": 414.63069150724846,
+          "storm_interior_net_cell_mm_day": 317.4595787886475,
+          "net_evaporation_cell_mm_day": 16076.09655888595,
+          "rain_cell_mm_day": 987.128750481914,
+          "equation_residual_cell_mm_day": 1.4716611982258883,
+          "scaled_equation_residual": 8.494685664315914e-05,
+          "transport_relative_cancellation": 6.887458769132109e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -13001.068468995723,
+          "diffusion_boundary_supply_cell_mm_day": 217.73591966481106,
+          "storm_interior_net_cell_mm_day": 235.6502918586424,
+          "net_evaporation_cell_mm_day": 13764.887231129502,
+          "rain_cell_mm_day": 1215.7071248201746,
+          "equation_residual_cell_mm_day": 1.497848837057063,
+          "scaled_equation_residual": 9.796807436035055e-05,
+          "transport_relative_cancellation": 1.4205838473998677e-16
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -9825.257634136815,
+          "diffusion_boundary_supply_cell_mm_day": 33.88790064355761,
+          "storm_interior_net_cell_mm_day": 111.00282358596019,
+          "net_evaporation_cell_mm_day": 11284.44419670215,
+          "rain_cell_mm_day": 1602.6713212232203,
+          "equation_residual_cell_mm_day": 1.4059655716330326,
+          "scaled_equation_residual": 0.00010441684588533133,
+          "transport_relative_cancellation": 1.9204996852218325e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -6720.968323280659,
+          "diffusion_boundary_supply_cell_mm_day": -72.43261142476528,
+          "storm_interior_net_cell_mm_day": -47.69398232567664,
+          "net_evaporation_cell_mm_day": 9092.471857186454,
+          "rain_cell_mm_day": 2249.9238913612694,
+          "equation_residual_cell_mm_day": 1.4530487940837702,
+          "scaled_equation_residual": 0.00011548291175407708,
+          "transport_relative_cancellation": 2.702335763009573e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -4127.880444102255,
+          "diffusion_boundary_supply_cell_mm_day": -102.5058836169275,
+          "storm_interior_net_cell_mm_day": -113.02496254562607,
+          "net_evaporation_cell_mm_day": 7394.5730071273165,
+          "rain_cell_mm_day": 3049.9286604331396,
+          "equation_residual_cell_mm_day": 1.2330564293683892,
+          "scaled_equation_residual": 9.642325270256906e-05,
+          "transport_relative_cancellation": 3.301189892373082e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -2188.8441410285973,
+          "diffusion_boundary_supply_cell_mm_day": -102.5049148183644,
+          "storm_interior_net_cell_mm_day": -86.50835712534797,
+          "net_evaporation_cell_mm_day": 6190.1710615373095,
+          "rain_cell_mm_day": 3811.161065387824,
+          "equation_residual_cell_mm_day": 1.152583177175984,
+          "scaled_equation_residual": 8.585597731162769e-05,
+          "transport_relative_cancellation": 3.159146478228764e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -217.00606953820045,
+          "diffusion_boundary_supply_cell_mm_day": -72.73882135642471,
+          "storm_interior_net_cell_mm_day": -13.025060877446549,
+          "net_evaporation_cell_mm_day": 4952.663886555116,
+          "rain_cell_mm_day": 4648.792887190147,
+          "equation_residual_cell_mm_day": 1.1010475928969754,
+          "scaled_equation_residual": 7.982142214134473e-05,
+          "transport_relative_cancellation": 6.035531368142226e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 2310.823931750432,
+          "diffusion_boundary_supply_cell_mm_day": -185.68580123590303,
+          "storm_interior_net_cell_mm_day": -28.768638642130327,
+          "net_evaporation_cell_mm_day": 4326.852983917878,
+          "rain_cell_mm_day": 6422.099056816791,
+          "equation_residual_cell_mm_day": 1.1234189734859683,
+          "scaled_equation_residual": 7.701891195649491e-05,
+          "transport_relative_cancellation": 3.557797226752107e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 5076.797014761927,
+          "diffusion_boundary_supply_cell_mm_day": -315.90264292644036,
+          "storm_interior_net_cell_mm_day": -87.26645817899146,
+          "net_evaporation_cell_mm_day": 3252.3822028088125,
+          "rain_cell_mm_day": 7924.499235628086,
+          "equation_residual_cell_mm_day": 1.5108808372215208,
+          "scaled_equation_residual": 8.965180259688912e-05,
+          "transport_relative_cancellation": 3.0373309240795596e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 5967.633958850346,
+          "diffusion_boundary_supply_cell_mm_day": -288.6726148473054,
+          "storm_interior_net_cell_mm_day": -83.5024220895018,
+          "net_evaporation_cell_mm_day": 2821.816537936687,
+          "rain_cell_mm_day": 8415.049831573764,
+          "equation_residual_cell_mm_day": 2.225628276461066,
+          "scaled_equation_residual": 0.0001275019117604486,
+          "transport_relative_cancellation": 0.0
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 6821.169023602803,
+          "diffusion_boundary_supply_cell_mm_day": -294.1592421007905,
+          "storm_interior_net_cell_mm_day": -72.09336616789022,
+          "net_evaporation_cell_mm_day": 3860.4823855054165,
+          "rain_cell_mm_day": 10312.260650654905,
+          "equation_residual_cell_mm_day": 3.1381501846335595,
+          "scaled_equation_residual": 0.00016694503267347902,
+          "transport_relative_cancellation": 6.353447427500287e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 7086.803437449508,
+          "diffusion_boundary_supply_cell_mm_day": -317.23580944179685,
+          "storm_interior_net_cell_mm_day": -99.57972163381146,
+          "net_evaporation_cell_mm_day": 5062.534621146916,
+          "rain_cell_mm_day": 11727.65947423466,
+          "equation_residual_cell_mm_day": 4.863053286157083,
+          "scaled_equation_residual": 0.00023902713573960998,
+          "transport_relative_cancellation": 3.245232611944557e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 6832.1284378157,
+          "diffusion_boundary_supply_cell_mm_day": -369.729874673112,
+          "storm_interior_net_cell_mm_day": -124.65919668327777,
+          "net_evaporation_cell_mm_day": 5603.852390193084,
+          "rain_cell_mm_day": 11940.19396785594,
+          "equation_residual_cell_mm_day": 1.397788796453824,
+          "scaled_equation_residual": 6.816437232819133e-05,
+          "transport_relative_cancellation": 0.0
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 6162.319408635819,
+          "diffusion_boundary_supply_cell_mm_day": -438.7090655212874,
+          "storm_interior_net_cell_mm_day": -152.7571836549214,
+          "net_evaporation_cell_mm_day": 5585.392257207771,
+          "rain_cell_mm_day": 11158.197567603589,
+          "equation_residual_cell_mm_day": -1.9521509362075449,
+          "scaled_equation_residual": 0.00010065918367624145,
+          "transport_relative_cancellation": 3.374200448611606e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 5090.417925287053,
+          "diffusion_boundary_supply_cell_mm_day": -474.38568778993806,
+          "storm_interior_net_cell_mm_day": -165.8759427566693,
+          "net_evaporation_cell_mm_day": 5054.9849228231915,
+          "rain_cell_mm_day": 9508.167108517384,
+          "equation_residual_cell_mm_day": -3.0258909537478758,
+          "scaled_equation_residual": 0.0001769995140092922,
+          "transport_relative_cancellation": 4.170075916477452e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 3467.0225118966905,
+          "diffusion_boundary_supply_cell_mm_day": -314.53461977451553,
+          "storm_interior_net_cell_mm_day": -106.23103103953008,
+          "net_evaporation_cell_mm_day": 4377.760165747995,
+          "rain_cell_mm_day": 7425.409912979557,
+          "equation_residual_cell_mm_day": -1.3928861489175688,
+          "scaled_equation_residual": 9.821288689601647e-05,
+          "transport_relative_cancellation": 1.930095517574988e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": 946.5483715992975,
+          "diffusion_boundary_supply_cell_mm_day": 0.8118382263074672,
+          "storm_interior_net_cell_mm_day": 8.561142107624846,
+          "net_evaporation_cell_mm_day": 4216.862979400972,
+          "rain_cell_mm_day": 5174.2346677737205,
+          "equation_residual_cell_mm_day": -1.4503364395186509,
+          "scaled_equation_residual": 0.00012534285832169862,
+          "transport_relative_cancellation": 4.791331962808988e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -3591.857939383317,
+          "diffusion_boundary_supply_cell_mm_day": 171.83361410041638,
+          "storm_interior_net_cell_mm_day": 96.8582780452424,
+          "net_evaporation_cell_mm_day": 6859.424098735952,
+          "rain_cell_mm_day": 3537.775723659763,
+          "equation_residual_cell_mm_day": -1.5176721614693633,
+          "scaled_equation_residual": 0.00012677644489433355,
+          "transport_relative_cancellation": 1.8440850971432012e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -9922.789946996505,
+          "diffusion_boundary_supply_cell_mm_day": 214.20315014709846,
+          "storm_interior_net_cell_mm_day": 163.62626652560562,
+          "net_evaporation_cell_mm_day": 11432.418008159508,
+          "rain_cell_mm_day": 1888.557127172695,
+          "equation_residual_cell_mm_day": -1.0996493369880227,
+          "scaled_equation_residual": 7.474987683166828e-05,
+          "transport_relative_cancellation": 6.287211344553297e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -15564.242288335417,
+          "diffusion_boundary_supply_cell_mm_day": 336.0076319551398,
+          "storm_interior_net_cell_mm_day": 214.4179318488766,
+          "net_evaporation_cell_mm_day": 16222.50853650871,
+          "rain_cell_mm_day": 1209.8382222733644,
+          "equation_residual_cell_mm_day": -1.1464102960549098,
+          "scaled_equation_residual": 6.400227204242789e-05,
+          "transport_relative_cancellation": 5.903035933892793e-17
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -18966.363628280054,
+          "diffusion_boundary_supply_cell_mm_day": 518.4638191919022,
+          "storm_interior_net_cell_mm_day": 244.97306567773308,
+          "net_evaporation_cell_mm_day": 19138.693308147176,
+          "rain_cell_mm_day": 937.0064932897326,
+          "equation_residual_cell_mm_day": -1.2399285529755844,
+          "scaled_equation_residual": 6.0762911686436e-05,
+          "transport_relative_cancellation": 6.91877559970501e-18
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -20521.7647143102,
+          "diffusion_boundary_supply_cell_mm_day": 647.7812109246448,
+          "storm_interior_net_cell_mm_day": 267.1864247679491,
+          "net_evaporation_cell_mm_day": 20406.14141727039,
+          "rain_cell_mm_day": 800.7237925479889,
+          "equation_residual_cell_mm_day": -1.3794538952035964,
+          "scaled_equation_residual": 6.415344888198908e-05,
+          "transport_relative_cancellation": 1.1332752539504935e-16
+        },
+        {
+          "advection_boundary_supply_cell_mm_day": -20698.742153929154,
+          "diffusion_boundary_supply_cell_mm_day": 693.8533973888124,
+          "storm_interior_net_cell_mm_day": 331.82390923170306,
+          "net_evaporation_cell_mm_day": 20443.330800407894,
+          "rain_cell_mm_day": 771.7009892663366,
+          "equation_residual_cell_mm_day": -1.4350361670811935,
+          "scaled_equation_residual": 6.679816419048242e-05,
+          "transport_relative_cancellation": 3.491901643300375e-18
+        }
+      ]
+    }
+  },
+  "column_speed": {
+    "maximum_ms": 18.56280185427632,
+    "p95_ms": 8.867634171530502
+  },
+  "sst": {
+    "cells": 884,
+    "monthly_mae_C": 4.266139757600814
+  },
+  "rain": {
+    "scored_land_cells": 494,
+    "wet_scored_cells": 494,
+    "sim_mean_annual_mm": 446.44877266023366,
+    "obs_mean_annual_mm": 760.8334602644358,
+    "annual_mae_mm": 465.77119176809106,
+    "annual_bias_mm": -314.38468760420204,
+    "annual_log_rmse": 0.9115883083921646,
+    "monthly_mae_mm": 44.84517883423433,
+    "monthly_rmse_mm": 80.65819271265015,
+    "annual_within_25pct": 0.13360323886639677,
+    "annual_within_50pct": 0.32793522267206476,
+    "annual_median_abs_relative_error": 0.6254317095217476,
+    "seasonality_total_variation": 0.27136198296977876,
+    "loss": 0.7612674191701763
+  },
+  "circulation": {
+    "scores": {
+      "925": {
+        "land": {
+          "native_cells": 11,
+          "area_km2": 764584.1520233139,
+          "vector_rmse_ms": 3.5623016112071797,
+          "mean_vector_error_ms": 2.935218007222794,
+          "east_bias_ms": -1.6591185440959082,
+          "north_bias_ms": -0.12995343627339415,
+          "model_mean_vector_speed_ms": 2.3043280329733706,
+          "reference_mean_vector_speed_ms": 2.457144008029441,
+          "direction_weight_fraction": 0.8590459249536242,
+          "direction_cosine": 0.2849869705399009,
+          "monthly_model": [
+            [
+              1.1686199842642546,
+              -2.015325593122159
+            ],
+            [
+              1.6432072044991168,
+              -1.7078973688210257
+            ],
+            [
+              0.9472228396150923,
+              -1.2517839018913965
+            ],
+            [
+              -0.9275120013281304,
+              -0.8945696642548527
+            ],
+            [
+              -2.6872578932195346,
+              -0.3479884443998623
+            ],
+            [
+              -1.431788162835809,
+              0.9818644761957798
+            ],
+            [
+              -0.0681706890285984,
+              1.3808397498316107
+            ],
+            [
+              -0.18853211185459953,
+              0.9438360814155115
+            ],
+            [
+              -1.7061407521629153,
+              -0.1778934208943522
+            ],
+            [
+              -3.2326068110086683,
+              -1.6636053756960276
+            ],
+            [
+              -2.5963685056664945,
+              -2.3604754560210672
+            ],
+            [
+              -0.40784613453446766,
+              -2.223530389942501
+            ]
+          ],
+          "monthly_reference": [
+            [
+              -0.5198890217757153,
+              -2.0660910554339704
+            ],
+            [
+              0.041983188364114514,
+              -1.849166712660131
+            ],
+            [
+              0.7293966006281071,
+              -1.9665104096273018
+            ],
+            [
+              1.6019671091408942,
+              -1.479119298684136
+            ],
+            [
+              2.6857081304868253,
+              -0.4543731285300584
+            ],
+            [
+              2.6893300802522293,
+              0.9968336494201132
+            ],
+            [
+              2.1926685907722367,
+              2.164281387207635
+            ],
+            [
+              1.758942818233289,
+              1.5211714768697515
+            ],
+            [
+              1.1079120885738603,
+              0.15297351960105135
+            ],
+            [
+              -0.5105830297987066,
+              -1.1250292691511887
+            ],
+            [
+              -0.8410098327308013,
+              -1.7014438991923488
+            ],
+            [
+              -0.6818382904447972,
+              -2.0000712369555416
+            ]
+          ]
+        },
+        "ocean": null
+      },
+      "850": {
+        "land": {
+          "native_cells": 11,
+          "area_km2": 764584.1520233139,
+          "vector_rmse_ms": 4.1466445346572565,
+          "mean_vector_error_ms": 3.596071089462489,
+          "east_bias_ms": -2.9830125401083794,
+          "north_bias_ms": 0.06453092386481535,
+          "model_mean_vector_speed_ms": 2.3043280329733706,
+          "reference_mean_vector_speed_ms": 2.7559421470630046,
+          "direction_weight_fraction": 0.876777464393247,
+          "direction_cosine": 0.048663267422471006,
+          "monthly_model": [
+            [
+              1.1686199842642546,
+              -2.015325593122159
+            ],
+            [
+              1.6432072044991168,
+              -1.7078973688210257
+            ],
+            [
+              0.9472228396150923,
+              -1.2517839018913965
+            ],
+            [
+              -0.9275120013281304,
+              -0.8945696642548527
+            ],
+            [
+              -2.6872578932195346,
+              -0.3479884443998623
+            ],
+            [
+              -1.431788162835809,
+              0.9818644761957798
+            ],
+            [
+              -0.0681706890285984,
+              1.3808397498316107
+            ],
+            [
+              -0.18853211185459953,
+              0.9438360814155115
+            ],
+            [
+              -1.7061407521629153,
+              -0.1778934208943522
+            ],
+            [
+              -3.2326068110086683,
+              -1.6636053756960276
+            ],
+            [
+              -2.5963685056664945,
+              -2.3604754560210672
+            ],
+            [
+              -0.40784613453446766,
+              -2.223530389942501
+            ]
+          ],
+          "monthly_reference": [
+            [
+              1.5288740574763173,
+              -1.054207042026323
+            ],
+            [
+              2.245692657838199,
+              -0.9617419332531426
+            ],
+            [
+              3.0203605572975873,
+              -1.3096701297255826
+            ],
+            [
+              3.5041832526266483,
+              -1.1529221308081044
+            ],
+            [
+              4.134996141700113,
+              -0.8531969567543544
+            ],
+            [
+              3.5358175640771052,
+              0.0028283146831850265
+            ],
+            [
+              2.566970099018219,
+              0.5894299707050157
+            ],
+            [
+              1.7179384248463347,
+              0.10364146182759358
+            ],
+            [
+              1.462812112231355,
+              -0.8905369602076307
+            ],
+            [
+              0.7806779965433494,
+              -1.546438643214714
+            ],
+            [
+              0.7228211215570061,
+              -1.622608151796301
+            ],
+            [
+              0.9850532064322062,
+              -1.3678001962915411
+            ]
+          ]
+        },
+        "ocean": null
+      },
+      "q925_300": {
+        "land": {
+          "native_cells": 11,
+          "area_km2": 764584.1520233139,
+          "vector_rmse_ms": 5.413294970952192,
+          "mean_vector_error_ms": 4.854131599712774,
+          "east_bias_ms": -4.511042834024223,
+          "north_bias_ms": 0.3956555657325639,
+          "model_mean_vector_speed_ms": 2.3043280329733706,
+          "reference_mean_vector_speed_ms": 4.094221124545545,
+          "direction_weight_fraction": 0.8480135686740988,
+          "direction_cosine": -0.1428697621085001,
+          "monthly_model": [
+            [
+              1.1686199842642546,
+              -2.015325593122159
+            ],
+            [
+              1.6432072044991168,
+              -1.7078973688210257
+            ],
+            [
+              0.9472228396150923,
+              -1.2517839018913965
+            ],
+            [
+              -0.9275120013281304,
+              -0.8945696642548527
+            ],
+            [
+              -2.6872578932195346,
+              -0.3479884443998623
+            ],
+            [
+              -1.431788162835809,
+              0.9818644761957798
+            ],
+            [
+              -0.0681706890285984,
+              1.3808397498316107
+            ],
+            [
+              -0.18853211185459953,
+              0.9438360814155115
+            ],
+            [
+              -1.7061407521629153,
+              -0.1778934208943522
+            ],
+            [
+              -3.2326068110086683,
+              -1.6636053756960276
+            ],
+            [
+              -2.5963685056664945,
+              -2.3604754560210672
+            ],
+            [
+              -0.40784613453446766,
+              -2.223530389942501
+            ]
+          ],
+          "monthly_reference": [
+            [
+              6.359678530440976,
+              -1.0864172155669924
+            ],
+            [
+              6.83012554061552,
+              -1.126229827476005
+            ],
+            [
+              6.720148263883041,
+              -1.2211573225251262
+            ],
+            [
+              5.774942061555557,
+              -1.2320571136170804
+            ],
+            [
+              5.114502205744098,
+              -1.5608768157766346
+            ],
+            [
+              2.932046240029766,
+              -1.0929410011407912
+            ],
+            [
+              0.7878572482701529,
+              -0.22082384102392397
+            ],
+            [
+              -3.02554566542257e-05,
+              -0.39898091624566095
+            ],
+            [
+              0.9658054878649496,
+              -1.0948284046866608
+            ],
+            [
+              1.7231806070863218,
+              -1.780485276268774
+            ],
+            [
+              2.8083788774447886,
+              -1.7971966954486536
+            ],
+            [
+              4.729558982360043,
+              -1.4159938461553117
+            ]
+          ]
+        },
+        "ocean": null
+      }
+    },
+    "coverage": {
+      "native_cells": 11,
+      "covered_native_cells": 15,
+      "mixed_excluded": 0,
+      "land_cells": 11,
+      "ocean_cells": 0
+    },
+    "original_month": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11
+    ]
+  },
+  "temperature": {
+    "monthly_mae_C": 3.277759556501789,
+    "monthly_rmse_C": 3.6830775283946195,
+    "annual_bias_C": -2.5779850409252556,
+    "annual_mae_C": 3.1022275459606288,
+    "range_error_C": 0.21223784353086347,
+    "range_mae_C": 1.7820271607352656,
+    "within_1C": 0.044534412955465584,
+    "within_2C": 0.14979757085020243,
+    "anomaly_pattern_r": 0.9955364888521235
+  },
+  "monthly_rain": {
+    "simulated": [
+      0.8952201916590582,
+      1.5765524121898036,
+      1.7819508893615115,
+      1.5154785786321974,
+      22.212636594338324,
+      94.75097065293537,
+      150.2674025085641,
+      126.60625053327965,
+      45.6703701409656,
+      0.9368700662897246,
+      0.04274592780118188,
+      0.19232416421735443
+    ],
+    "observed": [
+      20.378273010253906,
+      15.652944564819336,
+      17.409822463989258,
+      8.944347381591797,
+      15.240619659423828,
+      72.3658218383789,
+      223.94619750976562,
+      218.5721435546875,
+      124.0124740600586,
+      29.38901710510254,
+      5.4460625648498535,
+      9.4756441116333
+    ]
+  },
+  "status": "passed",
+  "legacy_exact": false,
+  "arrays_sha256": "3dfc1bdc5e47959eb6a89e2cd5b443cd8003b33cebd9834025bd90da4d6b1176",
+  "seconds": 28.379641820007237
+}
