@@ -114,14 +114,15 @@ def test_default_plan_never_launches_or_writes(monkeypatch, tmp_path):
     assert not out.exists()
 
 
-@pytest.mark.parametrize('warmup_years', [1, 2, 3])
-def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(monkeypatch, warmup_years):
+@pytest.mark.parametrize('warmup_years,extra_years,drift', [(1,0,False),(2,0,False),(3,0,False),(1,3,False),(0,1,True)])
+def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(monkeypatch, warmup_years,extra_years,drift):
     # Exercise calendar/state storage with constant fake solves on nine cells;
     # no real grid, EBM, numerical solver or seasonal climate simulation runs.
     from types import SimpleNamespace
     import rotclimate.model as model_module
     import rotclimate.moisture
     p = spinup.Params(steps_per_year=25, eddy_rate=0, land_amplitude=1, wet_cooling=0, instability=0)
+    p=p.replace(seasonal_spinup_years=extra_years,seasonal_require_convergence=bool(extra_years))
     shape = (3, 3)
     zeros = np.zeros(shape)
     grid = SimpleNamespace(ny=3, nx=3, land=np.ones(shape, bool), lat=zeros+35.,
@@ -147,11 +148,20 @@ def test_existing_model_schedule_repeats_full_years_and_scores_only_last_year(mo
         return SimpleNamespace(temperature=solve(initial, True), update=zeros, iterations=1,
                                converged=True, stages=[])
     monkeypatch.setattr(model_module, 'iterate_temperature', fake_temperature)
-    monkeypatch.setattr(rotclimate.moisture, 'solve_moisture', lambda *args,**kwargs:
-        SimpleNamespace(water=zeros, rain=zeros+1., iterations=1, converged=True, scaled_residual=0.))
+    calls=[]
+    def fake_moisture(*args,**kwargs):
+        calls.append(1)
+        return SimpleNamespace(water=zeros, rain=zeros+1.+(len(calls)*.01 if drift else 0),
+                               iterations=1, converged=True, scaled_residual=0.)
+    monkeypatch.setattr(rotclimate.moisture, 'solve_moisture', fake_moisture)
+    if drift:
+        with pytest.raises(RuntimeError,match='Annual climate cycle failed'):model.run(spinup=warmup_years*25)
+        return
     result = model.run(spinup=warmup_years*25, progress=lambda done,total:progress.append((done,total)))
     expected_days = (np.arange(25)+.5)*365/25
-    assert np.allclose(days_seen, np.tile(expected_days, warmup_years+1))
+    assert np.allclose(days_seen, np.tile(expected_days, warmup_years+extra_years+1))
     assert np.allclose(result.T[:,1,1], 20. + expected_days/100.)
     assert result.nt == 25
-    assert progress[-1] == ((warmup_years+1)*25, (warmup_years+1)*25)
+    assert progress[-1] == ((warmup_years+extra_years+1)*25, (warmup_years+extra_years+1)*25)
+    if extra_years:
+        assert result.numerics['annual_cycle']['required'] and result.numerics['annual_cycle']['domain_repeats']

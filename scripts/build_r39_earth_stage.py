@@ -31,8 +31,10 @@ def verify_packet(data,meta):
         end=offset+size
     if end!=len(blob):raise ValueError('Unexpected bytes after climate arrays')
     assets=set(layer_files(meta['layers']))
-    diagnostic=meta.get('surroundings_sensitivity',{})
-    assets.update(diagnostic[key] for key in ['metadata','download'] if diagnostic.get(key))
+    mapped_assets=assets.copy()
+    for key in ['surroundings_sensitivity','initialization_check']:
+        diagnostic=meta.get(key,{})
+        assets.update(diagnostic[name] for name in ['metadata','download','image'] if diagnostic.get(name))
     for name in assets:
         path=data/name
         if not path.resolve().is_relative_to(data.resolve()) or not path.is_file() or not path.stat().st_size:
@@ -43,7 +45,7 @@ def verify_packet(data,meta):
                 # economic maps use its native size. Preserve the aspect,
                 # allowing half a row for integer resampling.
                 width,height=image.size
-                if width<1 or height<1 or abs(height-width*meta['height']/meta['width'])>.51:
+                if width<1 or height<1 or (name in mapped_assets and abs(height-width*meta['height']/meta['width'])>.51):
                     raise ValueError('Wrong map dimensions: '+name)
                 image.verify()
     return dict(status='passed',climate_bytes=len(blob),layer_assets=len(assets),climate_sha256=file_hash(data/'atlas.bin'))

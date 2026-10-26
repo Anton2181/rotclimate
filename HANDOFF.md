@@ -2,32 +2,50 @@
 
 ## Current status
 
-**ACTIVE new round:** `scripts/check_seasonal_cycle.py`, log
-`/tmp/seasonal_cycle_verified_runtime.log`, shell session2965, outputs
-`output/seasonal_cycle_20261026_verified/`. Frozen plan:
-`calibration/seasonal_cycle_20261026/plan.json`. Three Earth regions (North India,
-Iran plateau, Iberia) and r38-atlas/r39-candidate worlds at ds16/layout1 compare
-0,1,3 additional full spin-up years. Only0 controls run before any longer case;
-all must reproduce archived fields exactly. Core source, runner, plan, physics
-files and historical evidence are FROZEN while it runs. Do not edit them.
+**Latest completed round — seasonal repeatability:** core commit `0a0c8d9`
+is pushed. The controlled 15-run pilot has finished; no climate integrations
+remain active. See `reports/SEASONAL_CYCLE_20261026.md` and
+`output/seasonal_cycle_20261026_verified/`. All five default controls exactly
+reproduce archived fields; all 15 runs pass per-step checks. Three extra years
+settle mapped land in all five cases and full domains in four; North India
+retains 0.1126 mm padding-area soil drift against the fixed 0.1 mm limit. Preserve
+that failure. No physics/default/profile/atlas-climate adoption is made.
 
-The new core feature is opt-in `seasonal_spinup_years` plus
-`seasonal_require_convergence`, defaults0/false. It monitors repeated annual
-T/rain/vapor/soil/recycled-rain/snow fields with fixed physical-unit numerical
-limits. It also fixes calendar indexing for >2 years of legacy warm-up.
-63 focused tests pass. Production physics and atlas data remain unchanged.
-An initial preflight stopped Earth cases on integer56 versus float56.0 spacing
-in the identity metadata; the raw arrays/derived input fields match. Its failed
-records, protocol and original runner bytes are preserved in
-`output/seasonal_cycle_20261026/`. Both initial world controls matched all seven
-archived climate arrays exactly. The corrected runner uses a NEW output folder.
+New opt-in numerical fields: `seasonal_spinup_years` (default 0) and
+`seasonal_require_convergence` (default false), saved by CLI provenance. The
+calendar now handles >2 years of legacy warm-up safely. 65 core/seasonal checks
+pass; 11 atlas-asset/matching/cache tests pass. Default arrays match history exactly;
+old checkpoint SOURCE identities still intentionally differ after this code
+change, so do not bypass cache identity guards for future native builds.
 
-After the pilot: report periodicity and monthly/skill changes even if worse;
-this is not an adoption search. A single-layout initialization-sensitivity map
-may be added to the normal r38 Earth atlas only with its exact control and
-parameter/source checks. Keep the .bat HTML/data current and post generated
-substantive pictures, then commit/push the milestone. Older completed status
-below refers to the preceding round and must not restart those jobs.
+Initialization barely affects the published-world case: mapped-grid monthly
+rain changes at most 0.038843 mm and temperature 0.008202°C. It does not explain
+the larger rainfall/boundary errors. Normal Earth Fit checks now include a
+short initialization note and an annual-cycle chart link, with NO extra map
+button. Shared pages are refreshed; the hub and README link the current report.
+Main climate/farm/population/trade binary and CSV data remain unchanged.
+Exporter: `scripts/add_initialization_check.py atlases/earth_fit`; it checks
+model/data source hashes, cached identities/numerical checks, exact legacy
+control, physical parameters and full geography/calendar equality. The portable
+`initialization_check.json/png` are independent of local research caches.
+
+Initial preflight evidence remains under `output/seasonal_cycle_20261026/`:
+integer 56 versus float 56.0 changed only identity serialization, not arrays.
+The original runner bytes and stopped records are preserved. Recovery used
+a new frozen folder; the predeclared plan and repeatability limits stayed fixed.
+The completed runner is archived in git at `0a0c8d9`; later hardening rechecks
+actual derived Earth case hashes before cache reuse and freezes world rasters.
+Use `--out` with a new directory after source changes; do not resume the frozen
+completed folder under the new runner. The atlas exporter additionally checks
+the historical raster hashes saved in the old world checkpoint.
+All earlier r39 failed-world campaigns below remain rejected. No other attempt
+or added sampling was started. Future physics priority is moisture delivery/
+monsoon structure rather than arbitrarily extending spin-up to improve scores.
+
+Actual `.bat` server is running on port 8766 (shell 42072). All-three browser
+checks are in `output/seasonal_cycle_20261026_verified/browser/`; the final
+Earth-only check adds initialization-note mobile coverage in `browser_earth/`.
+New plots were shown inline. Browser screenshots are ignored local QA files.
 
 All calibration/audit/build jobs in this round have ended. No climate integration
 is running. The actual `.bat` launcher server remains available on port 8766.

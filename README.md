@@ -1,5 +1,13 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Seasonal repeatability, 26 October 2026:** optional multi-year spin-up now
+checks repeated temperature, rainfall and water-reservoir cycles, and long
+warm-ups wrap the calendar safely. A 15-run controlled pilot reproduces all
+five legacy controls exactly; the published world's largest monthly rain
+change is only 0.039 mm. Defaults and published climate data remain unchanged.
+The normal Earth atlas links its initialization check under Fit checks.
+See the [seasonal-cycle report](reports/SEASONAL_CYCLE_20261026.md).
+
 **Current development, 26 October 2026:** Earth r39 physics passes the 31-region,
 paired 28 km and established-six checks. Its regional rainfall loss is 2.30%
 lower than r38; city monthly errors improve, but annual matches slightly worsen

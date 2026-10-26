@@ -30,6 +30,10 @@ def run_one(job):
     if record.exists():
         row=json.loads(record.read_text())
         if row['identity']!=run or row['status']!='passed':raise ValueError('Changed inputs or preserved failed run: '+name)
+        if kind=='earth':
+            current_case=earth.region_case(name,float(cell_km))
+            if row.get('case_identity')!=case_hash(current_case):
+                raise ValueError('Saved derived Earth inputs differ: '+name)
         if file_hash(cache)!=row['checkpoint_sha256']:raise ValueError('Changed result checkpoint')
         return row
     p=Params(**params).replace(seasonal_spinup_years=years,seasonal_require_convergence=False)
@@ -94,7 +98,7 @@ def main():
     for name,spec in plan['world_cases'].items():
         cases[name]=(load_params(ROOT/spec['params']).replace(downsample=plan['world_downsample'],beyond_seed=plan['world_seed']),
                      'world',str(ROOT/spec['legacy_checkpoint']))
-    sources=list((ROOT/'rotclimate').glob('*.py'))+[path,Path(__file__),DEV12_SPECS,ROOT/plan['earth_params'],
+    sources=list((ROOT/'rotclimate').glob('*.py'))+[p for p in (ROOT/'data/source').iterdir() if p.is_file()]+[path,Path(__file__),DEV12_SPECS,ROOT/plan['earth_params'],
         ROOT/'scripts/benchmark_local.py',ROOT/'scripts/earth_benchmark.py',ROOT/'scripts/rainfall_metrics.py',ROOT/'scripts/local_benchmark_protocol.py']
     sources += [earth.WORLDCLIM/f'wc2.1_5m_{name}.zip' for name in ['tavg','prec','elev','vapr']]
     for name in plan['earth_regions']:sources += [evidence/'cases'/f'{name}.json',evidence/'cells'/f'{name}.npz']

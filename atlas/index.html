@@ -893,6 +893,10 @@ window.atlasSave = async (filename, blob) => {
         <span class="note">${esc(L.unit)}${L.scenario_files ? " · " + esc(layerScenario(L)) : ""}${L.population_context ? " · " + esc(L.population_context) : ""}</span>${L.note ? `<span class="note">${esc(L.note)}</span>` : ""}`;
     }
     if (L.download) el.insertAdjacentHTML("beforeend", `<a class="note" href="${esc(fresh("data/" + L.download))}" download>Download grid values (CSV)</a>`);
+    if (topicOf(L) === "Fit checks" && meta.initialization_check) {
+      const check = meta.initialization_check;
+      el.insertAdjacentHTML("beforeend", `<span class="note">${esc(check.message)} <a data-initialization-check href="${esc(fresh("data/" + check.image))}" target="_blank" rel="noopener">Annual-cycle check</a></span>`);
+    }
   }
 
   // ---------------------------------------------------------------- lookups

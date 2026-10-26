@@ -30,6 +30,14 @@ def test_diagnostic_downloads_must_be_present_in_portable_packet(tmp_path):
     assert verify_packet(tmp_path,meta)['layer_assets']==3
 
 
+def test_initialization_check_metadata_and_chart_are_required(tmp_path):
+    meta=packet(tmp_path);meta['initialization_check']=dict(metadata='check.json',image='check.png')
+    with pytest.raises(ValueError,match='Missing'):verify_packet(tmp_path,meta)
+    (tmp_path/'check.json').write_text('{}')
+    Image.new('RGB',(7,3)).save(tmp_path/'check.png')  # a chart need not have the map's aspect ratio
+    assert verify_packet(tmp_path,meta)['layer_assets']==4
+
+
 def test_missing_variant_and_incorrect_map_size_are_rejected(tmp_path):
     meta=packet(tmp_path);(tmp_path/'variant.webp').unlink()
     with pytest.raises(ValueError,match='Missing'):verify_packet(tmp_path,meta)

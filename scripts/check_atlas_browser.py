@@ -38,6 +38,18 @@ async def check(paths, base, out):
             meta=await page.evaluate("fetch('data/atlas.json').then(r=>r.json())")
             if meta.get('reach',{}).get('trade',{}).get('model')=='inbound-directed':
                 assert 'Directed markets · 3 trade views.' in await page.locator('#atlas-data-status').inner_text()
+            initialization_checks=None
+            if meta.get('initialization_check'):
+                await layer('agreement');await loaded('agreement.webp')
+                assert 'three extra years' in await page.locator('#legend').inner_text()
+                link=page.locator('#legend a[data-initialization-check]')
+                response=await page.request.get(await link.evaluate('el => el.href'))
+                assert response.ok and response.headers.get('content-type','').startswith('image/png')
+                assert await page.locator('#settlement-controls').is_hidden()
+                await page.reload(wait_until='domcontentloaded');await loaded('agreement.webp')
+                assert await page.locator('#legend a[data-initialization-check]').count()==1
+                initialization_checks=dict(link='passed',deep_link='passed',conditional_controls='passed')
+                await layer('whittaker')
             if any(layer['id']=='biome_targets' for layer in meta['layers']):
                 await layer('biome_targets')
                 await page.wait_for_function("document.querySelector('#base').complete && document.querySelector('#base').src.includes('biome_targets.webp')")
@@ -157,12 +169,17 @@ async def check(paths, base, out):
             await layer('whittaker')
             await page.screenshot(path=str(out/(Path(path).name+'_mobile.png')))
             assert await page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Page overflows mobile viewport'
+            if meta.get('initialization_check'):
+                await layer('agreement');await loaded('agreement.webp')
+                assert await page.locator('#legend a[data-initialization-check]').is_visible()
+                assert await page.evaluate('document.documentElement.scrollWidth <= innerWidth + 1'), 'Initialization note overflows mobile viewport'
+                await layer('whittaker')
             for button in await page.locator('#layers button:visible').all():
                 assert (await button.bounding_box())['width']>0
             assert not errors,errors
             results.append(dict(atlas=path,layer_count=len(meta['layers']),town=town,page_errors=errors,status='passed',
                                 biome_target_layers=any(layer['id']=='biome_targets' for layer in meta['layers']),harvest=harvest_checks,
-                                political=political_checks,surroundings_sensitivity=sensitivity_checks))
+                                political=political_checks,surroundings_sensitivity=sensitivity_checks,initialization=initialization_checks))
             await context.close()
         await browser.close()
     (out/'browser_checks.json').write_text(json.dumps(results,indent=2));print(json.dumps(results,indent=2))
