@@ -2,7 +2,23 @@
 
 ## Current status
 
-**Two-branch transport ready for the next fixed pilot:** new opt-in
+**Completed two-branch pilot:** source119d54d,49/49 strict solves pass;
+28 exact control runs precede21 candidates. Fixed plan
+calibration/two_layer_20261026/plan.json. No candidate qualifies, no full31/fine.
+NI r=.1/.2/.3 annual423/329/265mm vs761obs; monthly MAE46.97/46.20/47.58
+vsr39=50.01. Coastal regressions persist; seven-region S1.3659/1.1821/1.0759.
+154 focused tests pass, both branch speeds pass (max21.38,p9516.33m/s),
+dry-air residual max9.18e-15. Cumulative532 attempts:528 pass/4 old failures.
+No active simulation. Publisher publish_transport_pilot.py emits2 plots/table/
+JSON; report TWO_LAYER_20261026.md. Keep this source epoch and completed runs.
+
+Manufactured tracer diagnostic found consistency issue: face dry mass vs donor
+column W makes uniform q drift over varying terrain (.07475mm/day example),
+although total water still conserves. Independent M_face*U_face*q_donor gives
+2.52e-14. Next planned epoch: mass-aware advection, q diffusion and consistent
+storm mass. Do not alter/reclassify this completed pilot or loosen climate gates.
+
+Implementation notes: new opt-in
 `moisture_two_layer=False` and shared `moisture_upper_q_ratio=.15` (inactive
 unless enabled). Requires mass-balance basis and flux transport. New
 `layer_transport.py` constructs upper return so eta Ul+(1-eta)Uupper=Ub,
