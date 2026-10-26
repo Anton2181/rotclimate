@@ -59,6 +59,18 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_moisture_reservoirs'):
+                    from check_surface_momentum import reservoir_failures
+                    failures.extend(region+': '+message for message in reservoir_failures(c.get('numerics',{}),c['params']))
+                if region in plan.get('humidity_regions',{}):
+                    from circulation_reference import humidity_protection
+                    group=plan['humidity_regions'][region]
+                    baseline=next(r for r in rows if r['name']==plan['humidity_control'] and r['region']==region)
+                    if c['case_identity']!=baseline['case_identity']:raise ValueError('Unpaired humidity inputs')
+                    score=lambda row:row.get('circulation',{}).get('humidity',{}).get('scores',{}).get(group)
+                    protection=humidity_protection(score(c),score(baseline),plan['humidity_max_ratio'])
+                    ratios[region]['humidity_protection']=protection
+                    failures.extend(region+': '+message for message in protection['failures'])
                 if plan.get('require_column_thermodynamics'):
                     candidate_thermo=c.get('numerics',{}).get('column_thermodynamics',{})
                     if (candidate_thermo.get('scheme')!=c['params'].get('column_saturation_scheme')

@@ -85,6 +85,9 @@ def run_one(job):
         sl=g.map_slice()
         fields=dict(valid=land[sl],elev=g.elev[sl],observed=case.obs_P[(slice(None),)+sl],
                     simulated=st['Pm'][(slice(None),)+sl])
+        if result.layer_water is not None:
+            fields['layer_water']=matrix_product(weights,result.layer_water.reshape(len(result.days),-1)).reshape((12,)+result.layer_water.shape[1:])
+            fields['column_water']=matrix_product(weights,result.W.reshape(len(result.days),-1)).reshape((12,)+result.W.shape[1:])
         for key,value in result.moisture_budget.items():
             fields[key]=matrix_product(weights,value.reshape(len(result.days),-1)).reshape((12,)+value.shape[1:])*p.year_days/12
         row['rain']=local_metrics(st['Pm'],np.nan_to_num(case.obs_P),land)

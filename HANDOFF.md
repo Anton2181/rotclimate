@@ -2,6 +2,30 @@
 
 ## Current status
 
+**Next actual Earth pilot declared:** `calibration/independent_water_20261026/plan.json`.
+The independent lower/upper moisture solver is now integrated behind
+`moisture_reservoirs=False` by default. Same total calibrated capacity; normalized
+moist profile partitions capacity only. Lower-only actual evaporation, layer
+rain/drying/conservative storms and donor vertical exchange. Both layer and
+column nonlinear equations plus independent sparse linear equation checked.
+Actual spatial layer fractions feed vapor faces and diagnostic winds. See
+`reports/INDEPENDENT_WATER_20261026.md`. Old ratio is inactive in this mode.
+
+35declared actual Earth runs:7original r39,7exact archived common-mass controls,
+7exact pressure-moist/RH.45controls, then7each no/5day vertical mixing. Candidate
+numerics damping.1/work1024; controls.05/1024; all error tolerances unchanged.
+All original physical/accuracy guards remain. Extra native Iberia ocean partial
+PW and vertical-shape MAEs may each worsen at most2% vs paired fixed-profile
+transport control; matched925–300 and700–300/925–700intervals, no observed
+forcing. Full/ocean/fine/established stage layer certificates required, plus
+repeated ocean humidity guard and extra paired28km Iberia before adoption.
+No active job at this commit; supervisor should start after committing this
+source epoch. Check `output/independent_water_20261026/status.json` for live state
+once launched. Do not mutate frozen sources during it. No automatic atlas/Git
+writes; publish actual outcomes, preserving failures. Pressure campaign below
+is complete and unchanged; older backend "not integrated" text is superseded.
+
+
 **Pressure-column Earth pilot COMPLETE (source5c72c34), no active job.**
 output/pressure_column_20261026/status.json:56/56passed,14exactcontrols,noneof6
 qualifies; no full31/ocean/fine/established candidate stages. Runtime720.8seconds.

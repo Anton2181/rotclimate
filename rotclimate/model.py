@@ -205,6 +205,7 @@ class Result:
     E: np.ndarray           # evaporation (mm / day)
     moisture_budget: dict | None = None  # optional cropped diagnostic terms [nt, map_y, map_x]
     numerics: dict | None = None         # observed solver/temperature/moisture status, including spinup
+    layer_water: np.ndarray | None = None  # optional [nt,2,ny,nx], independently solved moisture states
 
     @property
     def nt(self):
@@ -274,6 +275,15 @@ class ClimateModel:
                 raise ValueError('Mass tracer needs the mass basis and no separate storm-mass height')
             if params.eddy_rate>0 and params.eddy_moisture_scheme not in ('conservative','conservative-rainout'):
                 raise ValueError('Mass tracer needs conservative storm transport')
+        if not isinstance(params.moisture_reservoirs,(bool,np.bool_)):
+            raise ValueError('moisture_reservoirs must be boolean')
+        if not np.isfinite(params.moisture_reservoir_mixing_days) or params.moisture_reservoir_mixing_days<0:
+            raise ValueError('Need finite nonnegative moisture_reservoir_mixing_days')
+        if params.moisture_reservoirs:
+            if (not params.moisture_two_layer or not params.moisture_mass_tracer
+                    or params.moisture_residual_tol<=0 or not params.moisture_require_convergence
+                    or (params.eddy_rate>0 and params.eddy_moisture_scheme!='conservative')):
+                raise ValueError('Independent moisture reservoirs require strict two-layer common-mass conservative transport')
         if params.orographic_scheme not in ('legacy', 'terrain-quadrature'):
             raise ValueError('Unknown orographic_scheme')
         if params.orographic_scheme == 'terrain-quadrature' and params.subgrid_orographic != 0:
@@ -728,6 +738,7 @@ class ClimateModel:
         days = (np.arange(nt) + 0.5) * p.year_days / nt
         shape = (nt, g.ny, g.nx)
         out = {k: np.zeros(shape, np.float32) for k in ("T", "Tsl", "P", "W", "u", "v", "E")}
+        layer_water_out=np.zeros((nt,2,g.ny,g.nx),np.float32) if p.moisture_reservoirs else None
         budget = None
         if diagnose_moisture:
             if p.transport_scheme != 'upwind':
@@ -746,6 +757,8 @@ class ClimateModel:
         self.column_mass_checks=[]
         self.layer_checks=[]
         self.column_thermo_checks=[]
+        self.reservoir_checks=[]
+        if p.moisture_reservoirs:self.moisture_solver.reservoir_water=None
         dx = g.dx_m
 
         tau = np.where(land, p.land_tau_days, p.ocean_tau_days) * DAY
@@ -1186,8 +1199,9 @@ class ClimateModel:
                     profile=thermal_profile,lapse_k_km=column_lapse)
                 pressure_saturation=thermal_column.total_mm
                 Ws=pressure_saturation
-                ocean_saturation=saturation_column(SST,pressure,
-                    profile=thermal_profile,lapse_k_km=column_lapse).total_mm
+                ocean_column=saturation_column(SST,pressure,
+                    profile=thermal_profile,lapse_k_km=column_lapse)
+                ocean_saturation=ocean_column.total_mm
                 self.column_thermo_checks.append(dict(day=float(d),
                     minimum_column_capacity_mm=float(Ws.min()),maximum_column_capacity_mm=float(Ws.max()),
                     minimum_surface_pressure_pa=float(pressure.min()),maximum_surface_pressure_pa=float(pressure.max()),
@@ -1203,6 +1217,14 @@ class ClimateModel:
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
             if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
+            if p.moisture_reservoirs:
+                from .column_thermodynamics import saturation_column
+                if p.column_saturation_scheme=='pressure-moist':
+                    capacity_profile=thermal_column;sea_profile=ocean_column
+                else:
+                    pressure=101325.*np.exp(-h_km/8.)
+                    capacity_profile=saturation_column(T_col-column_lapse*h_km,pressure,profile='moist')
+                    sea_profile=saturation_column(SST,pressure,profile='moist')
             if p.ocean_rh_warm > 0:
                 # e40: over seas warmer than ~25 C deep convection moistens the
                 # whole column, and its water rises steeply with the sea's
@@ -1496,9 +1518,19 @@ class ClimateModel:
             # surface wind left the water near where it evaporated: Iran,
             # Mexico's dry season and inland eastern Australia rained their
             # own evaporation back out, and the monsoon carried little inland.
-            solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
-                                      A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
-                                      condensate=condensate)
+            if p.moisture_reservoirs:
+                from .reservoir_moisture import solve_reservoir_moisture
+                solution=solve_reservoir_moisture(self.moisture_solver,p,uq,vq,lamE,W_ocean,E_land,Ws,
+                    A_dyn,instab,bnd,W,exchange,mix,sink=sink,closure=closure,gain=gain,condensate=condensate,
+                    lower_capacity_fraction=capacity_profile.lower_water_fraction,
+                    ocean_lower_fraction=sea_profile.lower_water_fraction)
+                layers=self.moisture_solver.layers
+                uq=sum(f*a for f,a,b in layers);vq=sum(f*b for f,a,b in layers)
+                self.reservoir_checks.append(dict(solution.certificate,day=float(d)))
+            else:
+                solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
+                                          A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
+                                          condensate=condensate)
             W, P = solution.water, solution.rain
             P_last = P
             if p.eddy_rate > 0 and (p.eddy_moisture_scheme != 'legacy' or diagnose_moisture):
@@ -1511,7 +1543,8 @@ class ClimateModel:
                 raise RuntimeError(f'Moisture equation failed at seasonal step {n+1}: '
                                    f'{solution.iterations} iterations, scaled residual '
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
-            E = np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY)
+            E = (solution.evaporation if p.moisture_reservoirs else
+                 np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY))
             if p.moisture_transport_form == 'flux':
                 from .transport import flux_budget
                 target=mix(W) if mix is not None else W
@@ -1554,6 +1587,7 @@ class ClimateModel:
                                       0.0, 1.0), W)
             uv_prev = (u, v)
             if n >= spinup:
+                if layer_water_out is not None:layer_water_out[k]=solution.layer_water
                 for key, val in (("T", T_rep), ("Tsl", Tsl_rep), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):
                     out[key][k] = val
                 if budget is not None:
@@ -1609,6 +1643,18 @@ class ClimateModel:
                 maximum_branch_speed_ms=max(r['maximum_branch_speed_ms'] for r in self.layer_checks),
                 p95_branch_speed_ms=max(r['p95_branch_speed_ms'] for r in self.layer_checks),steps=self.layer_checks)
             numerics['all_checks_passed'] &= numerics['two_layer_transport']['max_scaled_dry_mass_divergence']<=1e-10
+            if p.moisture_reservoirs:
+                numerics['two_layer_transport'].update(upper_q_ratio=None,lower_water_fraction=None,
+                    humidity_profile='independently solved layer water; old fixed ratio inactive')
+        if self.reservoir_checks:
+            numerics['moisture_reservoirs']=dict(
+                all_layer_checks_passed=all(c['all_layer_checks_passed'] for c in self.reservoir_checks),
+                max_scaled_layer_residual=max(c['max_scaled_layer_residual'] for c in self.reservoir_checks),
+                max_scaled_column_residual=max(c['max_scaled_column_residual'] for c in self.reservoir_checks),
+                mixing_days=p.moisture_reservoir_mixing_days,
+                capacity_partition='normalized hydrostatic moist profile; total capacity scheme separately declared',
+                scope='Independent steady lower/upper water; no independent vertical energy/momentum',steps=self.reservoir_checks)
+            numerics['all_checks_passed'] &= numerics['moisture_reservoirs']['all_layer_checks_passed']
         if p.column_saturation_scheme!='legacy':
             numerics['column_thermodynamics']=dict(scheme=p.column_saturation_scheme,
                 quadrature='64 RK4 steps in log pressure per layer',top_pressure_pa=10000,
@@ -1640,7 +1686,7 @@ class ClimateModel:
             numerics['vapor_flux_budget']=ledger
             numerics['all_checks_passed'] &= (ledger['max_relative_transport_cancellation']<=1e-10 and
                                              ledger['max_scaled_equation_residual']<=p.moisture_residual_tol+1e-12)
-        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, **out)
+        return Result(params=p, grid=g, days=days, snow=snow, moisture_budget=budget, numerics=numerics, layer_water=layer_water_out, **out)
 
 
 def _run_one(params):
@@ -1690,7 +1736,11 @@ def ensemble_mean(runs) -> Result:
     mean = {k: np.mean([getattr(r, k) for r in runs], axis=0).astype(np.float32) for k in keys}
     members=[r.numerics for r in runs]
     numerics=dict(members=members,all_checks_passed=all(m and m['all_checks_passed'] for m in members))
-    return Result(params=first.params, grid=first.grid, days=first.days, numerics=numerics, **mean)
+    layers=None
+    if any(r.layer_water is not None for r in runs):
+        if not all(r.layer_water is not None for r in runs):raise ValueError('Missing ensemble layer-water state')
+        layers=np.mean([r.layer_water for r in runs],axis=0).astype(np.float32)
+    return Result(params=first.params, grid=first.grid, days=first.days, numerics=numerics,layer_water=layers, **mean)
 
 
 def snowpack(T, P, step_days, years=3):

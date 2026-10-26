@@ -238,6 +238,8 @@ class Params:
     moisture_two_layer: bool = False  # opt-in separate moist inflow and compensating upper transport
     moisture_upper_q_ratio: float = .15  # q_upper/q_lower for fixed two-branch humidity profile
     moisture_mass_tracer: bool = False  # opt-in common air mass for vapor advection, diffusion and storms
+    moisture_reservoirs: bool = False  # opt-in independent lower/upper water, instead of a forced humidity ratio
+    moisture_reservoir_mixing_days: float = 5.0  # symmetric vertical q exchange; 0 disables turbulent mixing
     moisture_transport_form: str = "concentration"  # opt-in "flux": conservative face transport; requires flux_convergence=0
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 

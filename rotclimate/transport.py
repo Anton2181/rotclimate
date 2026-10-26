@@ -21,8 +21,14 @@ def vapor_face_fluxes(W,u,v,*,layers=None,mass=None):
     if layers is not None:
         result=None
         for weight,east,north in layers:
-            if weight==0:continue
-            faces=vapor_face_fluxes(W,east,north,mass=mass)
+            if np.ndim(weight)>0:
+                # Resolved layer fractions belong to the DONOR cell's water,
+                # never an averaged fraction multiplying a completed face.
+                faces=vapor_face_fluxes(weight*W,east,north,mass=mass)
+                weight=1.
+            else:
+                if weight==0:continue
+                faces=vapor_face_fluxes(W,east,north,mass=mass)
             if result is None:result=[weight*a for a in faces]
             else:
                 for i,value in enumerate(faces):result[i]+=weight*value

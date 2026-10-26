@@ -204,6 +204,59 @@ def vector_scores(model, reference, area, month_days):
         monthly_reference=np.average(reference, axis=2, weights=area).tolist())
 
 
+def layer_partial_water(water, pressure_pa, bottom_pa=92500., top_pa=30000.):
+    """Integrate piecewise uniform specific humidity over matched pressures.
+
+    Lower dry mass is25% of the full column; the remainder is upper mass.
+    Below-ground intervals must be excluded by the caller's native mask.
+    """
+    pressure=np.asarray(pressure_pa,float);water=np.asarray(water,float)
+    if (water.shape[1:]!=(2,)+pressure.shape or water.ndim!=pressure.ndim+2
+            or not 0<top_pa<bottom_pa or not np.isfinite(water).all()
+            or (water<0).any() or not np.isfinite(pressure).all() or (pressure<=0).any()):
+        raise ValueError('Expected finite nonnegative time x2 x grid water and positive surface pressure')
+    split=.75*pressure
+    thickness=np.stack([np.maximum(np.minimum(pressure,bottom_pa)-np.maximum(split,top_pa),0),
+                        np.maximum(np.minimum(split,bottom_pa)-top_pa,0)])
+    mass=np.stack([.25*pressure,.75*pressure])/9.80665
+    return np.sum(water/mass*thickness/9.80665,axis=1)
+
+
+def humidity_scores(model_water, reference_water, model_ratio, reference_ratio, area, days):
+    arrays=[np.asarray(a) for a in (model_water,reference_water,model_ratio,reference_ratio)]
+    if (any(a.shape!=(12,len(area)) or not np.isfinite(a).all() for a in arrays)
+            or not len(area) or (np.asarray(area)<=0).any()):
+        raise ValueError('Need finite matched monthly partial humidity on positive native area')
+    weights=np.asarray(days)[:,None]*np.asarray(area)[None];weights=weights/weights.sum()
+    mean=lambda a:float(np.sum(a*weights))
+    mw,rw,mr,rr=arrays
+    return dict(native_cells=len(area),area_km2=float(np.sum(area)),
+        model_partial_water_mm=mean(mw),reference_partial_water_mm=mean(rw),
+        partial_water_mae_mm=mean(np.abs(mw-rw)),partial_water_bias_mm=mean(mw-rw),
+        model_partial_q_ratio=mean(mr),reference_partial_q_ratio=mean(rr),
+        partial_q_ratio_mae=mean(np.abs(mr-rr)),
+        monthly_model_water_mm=np.average(mw,axis=1,weights=area).tolist(),
+        monthly_reference_water_mm=np.average(rw,axis=1,weights=area).tolist(),
+        monthly_model_q_ratio=np.average(mr,axis=1,weights=area).tolist(),
+        monthly_reference_q_ratio=np.average(rr,axis=1,weights=area).tolist())
+
+
+def humidity_protection(candidate, baseline, maximum_ratio=1.02):
+    """Fixed observed partial-water AND vertical-shape protections, fail closed."""
+    if candidate is None or baseline is None:
+        return dict(passed=False,failures=['Missing native humidity certificate'])
+    if any(candidate.get(k)!=baseline.get(k) for k in ('native_cells','area_km2')):
+        raise ValueError('Changed native humidity footprint')
+    ratios={};failures=[]
+    for key in ('partial_water_mae_mm','partial_q_ratio_mae'):
+        c,b=candidate.get(key),baseline.get(key)
+        if c is None or b is None or not np.isfinite([c,b]).all() or min(c,b)<0:
+            failures.append(key+': missing or invalid humidity error');continue
+        ratios[key]=float(c/max(b,1e-12))
+        if c>maximum_ratio*b+1e-12:failures.append(key+': native humidity protection failed')
+    return dict(passed=not failures,failures=failures,ratios=ratios,maximum_ratio=maximum_ratio)
+
+
 def diagnose_model(case, params, model, result, reference):
     """The fixed native-grid diagnostic, reusable inside a later physics pilot.
 
@@ -241,4 +294,33 @@ def diagnose_model(case, params, model, result, reference):
     saved = dict(circulation_model=native, circulation_area=native_area,
         **{'circulation_mask_'+kind: mask for kind, mask in masks.items()},
         **{'circulation_reference_'+key: value for key, value in targets.items()})
-    return dict(scores=scores, coverage=coverage, original_month=order.tolist()), saved
+    report=dict(scores=scores,coverage=coverage,original_month=order.tolist())
+    if params.moisture_two_layer:
+        pressure=101325*np.exp(-g.elev/8000.)
+        layers=getattr(result,'layer_water',None)
+        source='independently solved layer water'
+        if layers is None:
+            lower=.25/(.25+.75*params.moisture_upper_q_ratio)
+            layers=np.stack([lower*result.W,(1-lower)*result.W],axis=1)
+            source='reconstructed imposed fixed specific-humidity ratio'
+        monthly=lambda a:matrix_product(weights,a.reshape(len(result.days),-1)).reshape((12,)+g.land.shape)
+        model_parts=[aggregate(monthly(layer_partial_water(layers,pressure,b,t)))
+                     for b,t in [(92500.,30000.),(92500.,70000.),(70000.,30000.)]]
+        model_ratio=np.divide(model_parts[2]/40000,model_parts[1]/22500,
+            out=np.zeros_like(model_parts[0]),where=model_parts[1]>0)
+        ratio=fields['shum'].values[:,1:];q=ratio/(1+ratio)
+        levels=fields['shum'].pressure_hpa[1:]*100
+        integrate=lambda a,p:np.trapezoid(a[:,::-1],x=p[::-1],axis=1)/9.80665
+        ref_lower=integrate(q[:,:3],levels[:3])[order].reshape(12,-1)
+        ref_upper=integrate(q[:,2:],levels[2:])[order].reshape(12,-1)
+        ref_ratio=(ref_upper/40000)/(ref_lower/22500)
+        ref_water=water[order].reshape(12,-1)
+        above_ground=aggregate((pressure>=92500.).astype(float))>=1-1e-12
+        humidity={kind:None if not (selected & above_ground).any() else humidity_scores(
+            model_parts[0][:,selected & above_ground],ref_water[:,selected & above_ground],
+            model_ratio[:,selected & above_ground],ref_ratio[:,selected & above_ground],
+            native_area[selected & above_ground],durations) for kind,selected in masks.items()}
+        report['humidity']=dict(scores=humidity,source=source,
+            definition='PW925-300hPa; upper700-300/lower925-700 mean specific humidity; matched native footprints',
+            below_ground_native_excluded={k:int(np.sum(v & ~above_ground)) for k,v in masks.items()})
+    return report, saved
