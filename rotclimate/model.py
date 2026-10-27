@@ -283,6 +283,13 @@ class ClimateModel:
             raise ValueError('Unknown moisture_reservoir_rain_scheme')
         if params.moisture_reservoir_rain_scheme!='layer' and not params.moisture_reservoirs:
             raise ValueError('Column-convection rain requires independent moisture reservoirs')
+        if params.moisture_reservoir_temperature_profile not in ('moist','environmental'):
+            raise ValueError('Unknown moisture_reservoir_temperature_profile')
+        if (not np.isfinite(params.moisture_reservoir_lapse_k_km)
+                or not 2 <= params.moisture_reservoir_lapse_k_km <= 9.8):
+            raise ValueError('moisture_reservoir_lapse_k_km must be finite and in [2,9.8] K/km')
+        if params.moisture_reservoir_temperature_profile=='environmental' and not params.moisture_reservoirs:
+            raise ValueError('Environmental temperature partition requires independent moisture reservoirs')
         if params.moisture_reservoirs:
             if (not params.moisture_two_layer or not params.moisture_mass_tracer
                     or params.moisture_residual_tol<=0 or not params.moisture_require_convergence
@@ -1223,7 +1230,16 @@ class ClimateModel:
             if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
             if p.moisture_reservoirs:
                 from .column_thermodynamics import saturation_column
-                if p.column_saturation_scheme=='pressure-moist':
+                if p.moisture_reservoir_temperature_profile=='environmental':
+                    # This environmental profile supplies only normalized layer
+                    # capacity and ocean water fractions. Keep the actual surface
+                    # anchors and the separately declared total capacity scheme.
+                    pressure=101325.*np.exp(-h_km/8.)
+                    capacity_profile=saturation_column(T_col-column_lapse*h_km,pressure,
+                        profile='lapse',lapse_k_km=p.moisture_reservoir_lapse_k_km)
+                    sea_profile=saturation_column(SST,pressure,
+                        profile='lapse',lapse_k_km=p.moisture_reservoir_lapse_k_km)
+                elif p.column_saturation_scheme=='pressure-moist':
                     capacity_profile=thermal_column;sea_profile=ocean_column
                 else:
                     pressure=101325.*np.exp(-h_km/8.)
@@ -1530,7 +1546,16 @@ class ClimateModel:
                     ocean_lower_fraction=sea_profile.lower_water_fraction)
                 layers=self.moisture_solver.layers
                 uq=sum(f*a for f,a,b in layers);vq=sum(f*b for f,a,b in layers)
-                self.reservoir_checks.append(dict(solution.certificate,day=float(d)))
+                self.reservoir_checks.append(dict(solution.certificate,day=float(d),
+                    partition_temperature_profile=p.moisture_reservoir_temperature_profile,
+                    partition_lapse_k_km=(p.moisture_reservoir_lapse_k_km
+                        if p.moisture_reservoir_temperature_profile=='environmental' else None),
+                    minimum_lower_capacity_fraction=float(capacity_profile.lower_water_fraction.min()),
+                    maximum_lower_capacity_fraction=float(capacity_profile.lower_water_fraction.max()),
+                    minimum_ocean_lower_fraction=float(sea_profile.lower_water_fraction.min()),
+                    maximum_ocean_lower_fraction=float(sea_profile.lower_water_fraction.max()),
+                    minimum_partition_temperature_k=float(capacity_profile.interface_temperature_k.min()),
+                    maximum_partition_temperature_k=float(capacity_profile.interface_temperature_k.max())))
             else:
                 solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
                                           A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
@@ -1657,11 +1682,15 @@ class ClimateModel:
                 max_scaled_column_residual=max(c['max_scaled_column_residual'] for c in self.reservoir_checks),
                 mixing_days=p.moisture_reservoir_mixing_days,
                 rain_scheme=p.moisture_reservoir_rain_scheme,
+                partition_temperature_profile=p.moisture_reservoir_temperature_profile,
+                partition_lapse_k_km=(p.moisture_reservoir_lapse_k_km
+                    if p.moisture_reservoir_temperature_profile=='environmental' else None),
                 rain_definition=('Local dynamic gate and overflow; empirical convection uses whole-column humidity; '
                     'shared lower-capacity RH evaporation routes upper precipitation into lower vapor'
                     if p.moisture_reservoir_rain_scheme=='column-convection' else
                     'Historical independent layer empirical convection and layer RH rain evaporation'),
-                capacity_partition='normalized hydrostatic moist profile; total capacity scheme separately declared',
+                capacity_partition=('normalized hydrostatic '+p.moisture_reservoir_temperature_profile+
+                    ' profile; total capacity scheme separately declared'),
                 scope='Independent steady lower/upper water; no independent vertical energy/momentum',steps=self.reservoir_checks)
             numerics['all_checks_passed'] &= numerics['moisture_reservoirs']['all_layer_checks_passed']
         if p.column_saturation_scheme!='legacy':

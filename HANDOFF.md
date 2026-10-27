@@ -2,6 +2,33 @@
 
 ## Current status
 
+**Environmental moisture partition predeclared:**
+`calibration/environmental_partition_20261027/plan.json`, coreopt-in profile
+'environmental' plus separate global6.0/6.5K/km lapse. Only normalized capacity/
+ocean boundary fractions change; totallegacyWs/W_ocean law, surface-elevation
+lapse, independentactualwater andallothercoefficients preserved. Moistdefault
+arithmeticexact. Two legacy/pressuremoist pre-edit toy snapshots identical;
+agent73focusedtests passed; root65combinedcore/guardtests pass (overlap), plus
+3independentreference-math/axis tests. Every primer/scored profile/lapsecert
+required in pilot andalllaterfull/fine gates. No solvedenergy/radiation claim.
+
+Pairedcachedreference: `calibration/environmental_reference_20261027/plan.json`,
+`scripts/audit_environmental_partition.py`: PNW4/Iberia20/California3ocean cells,
+observed925Tanchors, moist/env6/env6.5, compare withheld850–300TMAE ANDqsatshape
+versusqsat at observedT (notactualhumidity). MeanTerror improve>=5%, eachregion
+<=oldmoist+.5K; meanqsatshapeerror no worse; each<=1.10old+.005. Fixedbefore
+outcomes; neitherprofileselected. Samecachepayloads/archivemasks/areas/months,
+no newdownloads/fit/climateintegration. Sourceplancommittedbeforemetrics.
+
+Afterreferenceaudit, run42coupledregions:28exactoldcontrols (r39/commonmass/
+correctedmoistoriginalwind/correctedmoist7.5wind), then14env6/env6.5cases both
+7.5m/s. All prior r39/regional/temp/rain/SST/nativewind/humidity/layer/mass
+protections plus newthermalreferenceguard unchanged. ExtraPNWguardstillvs
+originalmoistcolumncontrol, actual4nativefootprints. maximum_finalists=0 first
+stage: anyqualifiermustcontinuefrozenfull31/ocean/fine/established+PNW56/28before
+adoption/worldtransfer. No active job yet; don'teditfrozen sourcesafterlaunch.
+
+
 **PNW vertical-reference audit COMPLETE:** source `a012505`,
 `output/pnw_vertical_20261027/`. Zero additional Earth integrations or fitted
 coefficients; series remains899attempts/895passes/4preserved old failures.

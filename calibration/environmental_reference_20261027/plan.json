@@ -1,0 +1,46 @@
+{
+  "declared_before_new_scores": true,
+  "purpose": "Compare fixed environmental thermal partition profiles with the old saturated moist profile on exactly the existing three native ocean reference samples. Zero climate integrations, downloads, humidity fitting or profile selection.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "regions": ["pacific_nw", "iberia", "california"],
+  "new_reference_boxes": {"pacific_nw": [[14, 22, 92, 102]]},
+  "pnw_air_plan": "calibration/pnw_vertical_20261027/plan.json",
+  "reference_plans": ["calibration/pnw_transport_20261027/plan.json", "calibration/circulation_audit_20261026/plan.json"],
+  "archives": {
+    "pacific_nw": {"directory": "output/pnw_transport_20261027", "stem": "reference", "native_ocean_cells": 4},
+    "iberia": {"directory": "output/circulation_audit_20261026", "stem": "iberia", "native_ocean_cells": 20},
+    "california": {"directory": "output/circulation_audit_20261026", "stem": "california", "native_ocean_cells": 3}
+  },
+  "pressure_hpa": [925, 850, 700, 600, 500, 400, 300],
+  "profiles": {
+    "moist": {"profile": "moist", "lapse_k_km": 6.0},
+    "environmental_6": {"profile": "lapse", "lapse_k_km": 6.0},
+    "environmental_6.5": {"profile": "lapse", "lapse_k_km": 6.5}
+  },
+  "profile_integration_steps_per_interval": 64,
+  "potential_temperature_reference_pa": 100000.0,
+  "qualification": {
+    "mean_regional_thermal_mae_ratio_max": 0.95,
+    "regional_thermal_mae_additive_max_k": 0.5,
+    "mean_regional_qsat_shape_mae_ratio_max": 1.0,
+    "regional_qsat_shape_mae_ratio_max": 1.10,
+    "regional_qsat_shape_mae_additive_max": 0.005
+  },
+  "acquisition": "Read cached inputs only, with no fetch flag. PNW air uses the existing audit_pnw_vertical.acquire_air plan and separate verified cache; California and Iberia air use the original V10 air metadata and each exact declared split box. Humidity and circulation fields use circulation_reference.acquire with these three regions plus the original PNW box. Verify URLs, raw SHA256, byte counts, metadata period/units, shapes, coordinate maps, matching horizontal/time axes and common pressure nodes. Missing or changed inputs fail closed.",
+  "footprints": "Reuse circulation_mask_ocean/circulation_area from the initial PNW reference NPZ, and mask_ocean/native_area_km2/month_days from the two original circulation NPZs, in their exact native flat-index order. Verify passed records, numerical certificates, record identity against its original protocol, archive SHA256, original January-December month order and footprint count/area certificates. Verify the historical source identity of the raw reference payloads only; historical core-code hashes are preserved as provenance and need not equal the present code epoch. After freezing, match archived native reference vectors and partial water where recorded. Never rerun an old audit main.",
+  "anchor": "Each footprint and month uses only its observed 925 hPa temperature. Withhold observed 850-300 hPa temperature and all humidity from profile construction. Integrate the existing moist or lapse helper at fixed 6.0/6.5 K/km, with identical seven pressure nodes and 64 RK4 steps per interval. No RH multiplier, humidity reset, rain score or fitted coefficient.",
+  "metrics": "Thermal MAE is the trapezoidal pressure mean of absolute temperature errors over the withheld 850-300 hPa nodes, excluding 925 hPa. Compute liquid-water specific saturation at observed temperatures and at every candidate temperature. Use identical trapezoidal q dp/g integration over 925-300, 925-700 and 700-300 hPa. qsat shape is the upper700-300 pressure-mean specific saturation divided by lower925-700 pressure-mean specific saturation; its MAE is against qsat shape AT OBSERVED TEMPERATURE, never actual observed humidity. Ratios are formed per native footprint/month before averaging. Actual q, PW, q/qsat and actual-q shape diagnostics remain separately labeled.",
+  "weights": "Within each region, use exact archived positive native physical areas and Gregorian nonleap month lengths 31/28/31/30/31/30/31/31/30/31/30/31. Preserve full native/month arrays, area-averaged monthly arrays and area/day-weighted annual/DJF/JJA means. Mean-three-region qualification gives each region equal weight after its native area/day calculation; no pooling of the 4/20/3 cells.",
+  "decision": "Review each environmental profile independently against moist using all five fixed qualification thresholds. Keep every outcome and failure. Passing reference qualification is necessary additional evidence for the separately declared coupled partition experiment, whose unchanged rain/ocean/wind/humidity protections also must pass. Do not rank profiles, select a best lapse or fit any coefficient from this audit. No physics or atlas adoption.",
+  "freeze": "Before deriving thermal/humidity outcomes, freeze this plan, script, present physics, every loaded local helper dependency, original air and circulation plans, original and separate download manifests, all raw reference payloads, independent reference NPZs/JSON records/protocols, and package versions. Recheck every frozen hash before the final review. Preserve failures and completed outputs; a nonempty output folder cannot be reused.",
+  "figure": "One clean 2x3 environmental_profiles.png: monthly withheld-temperature error in the top row and monthly saturation-shape error against saturation at observed T in the bottom row; columns are PNW/Iberia/California. Show all three profiles with common labels, native counts, explicit observed 925 hPa anchor and liquid-saturation/200 K-floor approximation. Retain full native and monthly results in native_profiles.npz and review.json.",
+  "limitations": [
+    "Tiny reused samples of 4 PNW, 20 Iberian and 3 Californian coarse native ocean footprints. These are not new held-out locations, land validation or global skill.",
+    "NCEP/NCAR 1981-2010 monthly normals are model-assisted reanalysis; WorldClim rain uses a different 1970-2000 period. Products of monthly means omit submonthly thermal/humidity and transport covariance.",
+    "Observed 925 hPa temperature is an external profile anchor. The marine layer below 925 hPa and water above 300 hPa are unobserved here; terrain masks follow existing model geography rather than native below-ground flags.",
+    "Liquid Bolton saturation, dry ideal-gas hydrostatic mapping, constant G/Rd/cp/latent heat and a prescribed 200 K floor follow the existing helper. No ice, entrainment, condensate, fallout, prognostic latent environmental-energy feedback or pressure-resolved momentum is solved.",
+    "Thermal partition and saturation capacity are diagnostics, not an environmental energy solution, actual humidity forcing or rainfall attribution. No reference field enters a climate integration, and qualification alone cannot authorize a climate or atlas change."
+  ],
+  "climate_integrations": 0,
+  "physics_or_atlas_adoption": false
+}

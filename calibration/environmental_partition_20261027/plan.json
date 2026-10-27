@@ -1,0 +1,195 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test separate environmental free-tropospheric lapse for independent moisture capacity partition after saturated-moist profiles were too cold aloft. No planetary retune, observed-temperature forcing, humidity reset, total-capacity/source coefficient adjustment or local fit.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/westerly_fit_20261027/review.json",
+  "parent_source_commit": "db2fc23",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "column_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection"
+    },
+    "wind_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 7.5
+    },
+    "environment_600": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 7.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0
+    },
+    "environment_650": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 7.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.5
+    }
+  },
+  "profile_numerics": {
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "column_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "wind_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "environment_600": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "environment_650": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "transport_control": "output/westerly_fit_20261027/transport_control",
+    "column_control": "output/westerly_fit_20261027/column_control",
+    "wind_control": "output/westerly_fit_20261027/west_750"
+  },
+  "eligible_profiles": [
+    "environment_600",
+    "environment_650"
+  ],
+  "maximum_finalists": 0,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Keep independent no-mixing layer water, corrected column convection/recycling, wind amplitude7.5m/s, all other wind/thermal/evaporation/rain/storm/drying coefficients and all Earth planetary settings fixed. Separate the prescribed environmental vertical lapse from the fitted surface-elevation lapse4.4142078309475306K/km. New environmental profile integrates hydrostatic Bolton liquid qsat at fixed6.0or6.5K/km, actual smoothed surface temperature and original ps=101325exp(-terrain/8000),200K floor and100hPa water top. It supplies only normalized lower/upper capacity and boundary fractions; calibrated totalWs and ocean-equilibrium water remain unchanged. Actual Wlower/Wupper are still independently solved with full layer/column budgets. No observed airT enters coupled integration; no humidity reset or environmental energy/latent-radiation solution is claimed. Thermal-profile plausibility is tested independently on reused observed925-anchored ocean samples before rainfall qualification, comparing temperature AND saturation-capacity shape, not equating saturation with actualhumidity.",
+  "control": "42actual coupled Earth runs:7original r39,7common-mass fixed-profile,7corrected original-wind,7corrected7.5m/s controls, then14environmental-profile candidates. Every archived main NPZ fieldset and all arrays exact; separatePNW companion native arrays still recorded/verified. All28controls precede candidates. No additional lapse or wind choice after outcomes.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes. Also require two_layer_transport certificate with dry-column residual<=1e-10 and EACH branch wind maximum<=60m/s,p95<=25m/s (all primer/scored steps), rather than hiding a fast return in the weighted mean. Exactly2 fixed reservoir closures, with strict layer/column certificates throughout. Additionally predeclare Iberia ocean native monthly partial humidity protection against the rerun fixed-profile transport control: PW925-300 MAE and upper700-300/lower925-700 mean specific-humidity ratio MAE may each worsen at most2%, with identical native cells/areas. Observed anchor is not assimilated; use actual solved model water and model piecewise-uniform layer q integrated over exactly matched pressures. Exclude any footprint containing model below-ground925hPa. Full-column humidity ratio is not compared directly with partial observations. No new error limit or candidate after outcomes. Corrected scheme must be certified at every primer/scored step and at every later gate; same unchanged numerical and physical accuracy protections. Require conservative precipitation re-evaporation transfer certificate and absolute internal cancellation<=1e-10mm/day throughout. Additionally require PNW ocean native q925\u2013300 vector RMSE reduction>=10% versus fresh corrected column_control on identical cells/areas, and partialPW plus partial vertical-shape MAEs each worsen at most2% versus that same control. These are reused4ocean development footprints, not land/global validation. Every pre-existing7region, native-wind, Iberia humidity, ocean and layer/mass guard remains. The prior wind bracket is not extended. New candidates must record environmental partition profile/lapse in every primer/scored certificate, and pass frozen three-region environmental-reference thermal AND capacity-shape guards. Exactly2global fixed lapse profiles at the already declared7.5m/s wind, no other tune. Preserve all pre-existing safeguards, including PNWwind/humidity vs original correctedcolumn_control and Iberiahumidity vs fixedtransport.",
+  "advance": "This first-stage calibration writes maximum_finalists=0 to prevent automatic adoption before the new circulation safeguard is carried through later gates. If any eligible candidate passes every screening guard, continue with a separately frozen at-most2candidate full31/ocean/fine/established comparison under all unchanged original guards, repeatingPNW native circulation and humidity at56/28km. No thresholds may be weakened. Fantasy/world qualification remains separate. A screening qualifier alone is not an adopted fit.",
+  "publication": "42fixed actual coupled Earth runs,28historical controls then14candidate runs; frozen three-region cached thermal/capacity reference audit adds0Earth solves. All oldnumerical/physical/region/humidity/thermal guards required. No automaticadoption; anyscreeningqualifier must continuefull31/ocean/fine/established plusPNW56/28 checks beforeworldtransfer. Preserve failures/allprofiles andsourceepochs;2hsupervisor/sourcechangestop.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "wind_control",
+  "publication_stem": "environmental_partition",
+  "publication_parameter": "moisture_reservoir_lapse_k_km",
+  "publication_labels": {
+    "reference": "r39",
+    "transport_control": "Fixed-profile transport",
+    "column_control": "Moist partition, original winds",
+    "wind_control": "Moist partition, 7.5 m/s winds",
+    "environment_600": "Environmental partition 6 K/km",
+    "environment_650": "Environmental partition 6.5 K/km"
+  },
+  "require_column_thermodynamics": false,
+  "require_moisture_reservoirs": true,
+  "require_reservoir_humidity": true,
+  "humidity_regions": {
+    "iberia": "ocean"
+  },
+  "humidity_control": "transport_control",
+  "humidity_max_ratio": 1.02,
+  "publication_date": "20261027",
+  "publication_ticks": {
+    "reference": "r39",
+    "transport_control": "Fixed-profile\ntransport",
+    "column_control": "Moist\noriginal winds",
+    "wind_control": "Moist\n7.5 m/s",
+    "environment_600": "6 K/km",
+    "environment_650": "6.5 K/km"
+  },
+  "require_reservoir_rain_scheme": "column-convection",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_control": "column_control",
+  "extra_circulation_groups": {
+    "pacific_nw": "ocean"
+  },
+  "extra_circulation_max_ratio": 0.9,
+  "extra_humidity_max_ratio": 1.02,
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "humidity_plot_profiles": [
+    "transport_control",
+    "wind_control",
+    "environment_600",
+    "environment_650"
+  ],
+  "humidity_plot_ticks": [
+    "Fixed q",
+    "Moist",
+    "6.0",
+    "6.5"
+  ],
+  "require_environmental_partition": true,
+  "environmental_reference_review": "output/environmental_reference_20261027/review.json"
+}

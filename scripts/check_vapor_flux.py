@@ -17,6 +17,22 @@ from benchmark_local import DEV12_SPECS
 from rotclimate import earth
 
 
+def environmental_reference(plan):
+    """Bind the independent zero-integration temperature/capacity comparison."""
+    from local_benchmark_protocol import identity
+    path=ROOT/plan['environmental_reference_review']
+    review=json.loads(path.read_text());protocol=json.loads((path.parent/'protocol.json').read_text())
+    if (review.get('complete') is not True or review.get('climate_integrations')!=0
+            or review.get('physics_or_atlas_adoption') is not False or review.get('identity')!=identity(protocol)):
+        raise ValueError('Invalid environmental reference epoch')
+    if (review.get('protocol_sha256')!=file_hash(path.parent/'protocol.json')
+            or review.get('arrays_sha256')!=file_hash(path.parent/'native_profiles.npz')):
+        raise ValueError('Changed environmental reference protocol/arrays')
+    for name,sha in protocol['sources'].items():
+        if file_hash(ROOT/name)!=sha:raise ValueError('Changed environmental reference source: '+name)
+    return review
+
+
 def extra_circulation_protection(candidate,baseline,plan,region):
     """Require paired new native wind and both humidity errors independently."""
     from circulation_reference import humidity_protection
@@ -85,6 +101,14 @@ def screening(rows,plan):
             reviews[name]=dict(qualifies=False,failures=['Incomplete or failed numerical comparison'],
                                eligible_profile=name in plan['eligible_profiles'])
             continue
+        if name in plan['eligible_profiles'] and plan.get('require_environmental_partition'):
+            params=next(iter(own.values()))['params']
+            if params.get('moisture_reservoir_temperature_profile')!='environmental':
+                failures.append('Environmental partition option missing')
+            key='environmental_'+format(params['moisture_reservoir_lapse_k_km'],'g')
+            thermal=environmental_reference(plan).get('reviews',{}).get(key,{})
+            if thermal.get('qualifies') is not True:
+                failures.append('Independent thermal/capacity-shape reference guard failed')
         for region,b in reference.items():
             c=own[region]
             if b['case_identity']!=c['case_identity']:
@@ -199,6 +223,12 @@ def main():
         sources += list((ROOT/'rotclimate_v10').glob('*.py'))+[ROOT/'experiments/v10_thermodynamics.py']
         sources += [ROOT/'output/circulation_audit_20261026'/f'{r}.npz' for r in plan['circulation_regions']]
     sources += extra_circulation_sources(plan)
+    if plan.get('require_environmental_partition'):
+        environmental_reference(plan)
+        reference_path=ROOT/plan['environmental_reference_review']
+        reference_protocol=reference_path.parent/'protocol.json'
+        sources += [reference_path,reference_protocol,reference_path.parent/'native_profiles.npz']
+        sources += [ROOT/name for name in json.loads(reference_protocol.read_text())['sources']]
     for region in plan['regions']:sources += [ROOT/plan['archive']/'cases'/f'{region}.json',ROOT/plan['archive']/'cells'/f'{region}.npz']
     for folder in plan.get('profile_control_archives',{}).values():
         for region in plan['regions']:

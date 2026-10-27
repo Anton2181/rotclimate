@@ -41,6 +41,12 @@ def reservoir_failures(numerics,params):
     if scheme!='layer' and any(not np.isfinite(s.get('maximum_internal_precipitation_transfer_residual_mm_day',float('inf')))
             or s.get('maximum_internal_precipitation_transfer_residual_mm_day',float('inf'))>1e-10 for s in c['steps']):
         return ['Internal precipitation transfer failed conservation']
+    profile=params.get('moisture_reservoir_temperature_profile','moist')
+    if profile!='moist':
+        lapse=params.get('moisture_reservoir_lapse_k_km')
+        if (c.get('partition_temperature_profile')!=profile or c.get('partition_lapse_k_km')!=lapse
+                or any(s.get('partition_temperature_profile')!=profile or s.get('partition_lapse_k_km')!=lapse for s in c['steps'])):
+            return ['Environmental partition temperature/lapse certificate missing']
     return []
 
 
