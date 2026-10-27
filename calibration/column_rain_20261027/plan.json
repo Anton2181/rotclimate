@@ -1,0 +1,161 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Correct whole-column empirical convection and lower-air subcloud evaporation in independently solved moisture reservoirs. No fitted coefficient, wind change, humidity reset or planetary retune. Conservatively route upper rain re-evaporation into lower air.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/independent_water_20261026/review.json",
+  "parent_source_commit": "1f6ca0a",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "reservoir_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0
+    },
+    "mixing_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 5.0
+    },
+    "column_no_mix": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection"
+    },
+    "column_mix5": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 5.0,
+      "moisture_reservoir_rain_scheme": "column-convection"
+    }
+  },
+  "profile_numerics": {
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "reservoir_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "mixing_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "column_no_mix": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "column_mix5": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "transport_control": "output/independent_water_20261026/transport_control",
+    "reservoir_control": "output/independent_water_20261026/reservoir_no_mix",
+    "mixing_control": "output/independent_water_20261026/reservoir_mix5"
+  },
+  "eligible_profiles": [
+    "column_no_mix",
+    "column_mix5"
+  ],
+  "maximum_finalists": 2,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Hold all r39 coefficients, shared wind, calibrated total capacity, normalized moist-profile capacity fractions, boundaries, mass/vertical transport, land and actual lower-ocean evaporation, drying, conservative storms and planetary parameters fixed. Preserve old layer rainfall as exact control. In corrected option, local dynamical gate and supersaturation overflow remain layer-specific, but the empirical whole-column convection coefficient is computed once from total W/Ws and applies to both Wi. Thus total convective rain equals its original column relation, including the 0.1mm dry-water numerical floor, rather than the sum of a convex exponential on independently varying layer humidities. Falling non-overflow rain in both layers is attenuated using actual lower-layer RH, representing the air it traverses, with the original subcloud evaporation coefficient. Overflow remains unattenuated. No new physical coefficient; no latent-heat, explicit cloud-plume, ice or vertical-energy claim. Old proportional profile remains equivalent to roundoff. Previous parcel experiment is not coupled in this study. Additionally upper non-overflow rain removes its gross amount from upper vapor; the fraction re-evaporated in lower air is added to actual lower water, not retained aloft. The pair of internal precipitation-transfer terms cancels exactly in the total-column equation. Lower locally formed rain retains its original effective attenuation. Ground rain is the attenuated dynamic/convective total plus unattenuated overflow; both layer equations include the signed precipitation transfer. This routing introduces no water source or fitted parameter. Proportional-profile equivalence refers to total ground rain, not the two individual layer losses.",
+  "control": "42 actual coupled regional integrations:7original r39 exact monthly climate/native-wind controls;7exact common-mass controls;7exact independent no-mixing controls;7exact independent5day-mixing controls; then14candidate runs. Historical NPZ fieldsets and every field must match exactly. All28controls precede new candidates. Preserve failures and never add profiles after outcomes.",
+  "screen": "All strict numerical/conservative-vapor/storm checks and scaled column-mass residual<=1e-10 required. Same accuracy guards: S<=.995, mean rain ratio<=.99,T ratio<=1.01; NI rain ratio<=.95; Iran<=1.02; every other region S<=1.02. Actual integrated SST MAE increase<=.02C on identical observation-only masks, column speed max<=60m/s,p95<=25m/s. Fixed outside-wind guards: NI native partial-column vector RMSE improvement>=5%; Iberia ocean/EastAustralia lowland worsening<=2%, identical masks and areas. No additional candidate, weakened threshold or new validation sampling after outcomes. Also require two_layer_transport certificate with dry-column residual<=1e-10 and EACH branch wind maximum<=60m/s,p95<=25m/s (all primer/scored steps), rather than hiding a fast return in the weighted mean. Exactly2 fixed reservoir closures, with strict layer/column certificates throughout. Additionally predeclare Iberia ocean native monthly partial humidity protection against the rerun fixed-profile transport control: PW925-300 MAE and upper700-300/lower925-700 mean specific-humidity ratio MAE may each worsen at most2%, with identical native cells/areas. Observed anchor is not assimilated; use actual solved model water and model piecewise-uniform layer q integrated over exactly matched pressures. Exclude any footprint containing model below-ground925hPa. Full-column humidity ratio is not compared directly with partial observations. No new error limit or candidate after outcomes. Corrected scheme must be certified at every primer/scored step and at every later gate; same unchanged numerical and physical accuracy protections. Require conservative precipitation re-evaporation transfer certificate and absolute internal cancellation<=1e-10mm/day throughout.",
+  "advance": "Best at most2 qualifiers advance through unchanged full31 policy_v2 and individual regional protections, integrated ocean/wind checks, paired28km four-region S<=1.01 plus NI rain<=.98 and established6 S<=1.01. All independent layer/column, mass, branch-speed and tracer certificates required at every stage. Repeat56km Iberia ocean humidity protection in the ocean gate; before adoption also run additional paired28km Iberia humidity control/candidate with same2% separate PW/shape limits (at most3 extra actual solves across2 finalists). Existing development sets remain reused, not independent validation. Fantasy/world qualification remains separate.",
+  "publication": "42fixed actual Earth integrations,28historical controls then14candidate runs. At most2qualifiers may advance through unchanged full31/ocean/fine/established guards, including humidity. Publish every score/failure and matched maps as reused development evidence. No normal atlas climate/headline replacement unless separate release gates pass. Source-change stop and2h ceiling.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "reservoir_control",
+  "publication_stem": "column_rain",
+  "publication_parameter": "moisture_reservoir_mixing_days",
+  "publication_labels": {
+    "reference": "r39",
+    "transport_control": "Fixed-profile transport",
+    "reservoir_control": "Previous independent water",
+    "mixing_control": "Previous water, 5-day mixing",
+    "column_no_mix": "Column convection, no mixing",
+    "column_mix5": "Column convection, 5-day mixing"
+  },
+  "require_column_thermodynamics": false,
+  "require_moisture_reservoirs": true,
+  "require_reservoir_humidity": true,
+  "humidity_regions": {
+    "iberia": "ocean"
+  },
+  "humidity_control": "transport_control",
+  "humidity_max_ratio": 1.02,
+  "publication_date": "20261027",
+  "publication_ticks": {
+    "reference": "r39",
+    "transport_control": "Fixed-profile\ntransport",
+    "reservoir_control": "Previous\nno mixing",
+    "mixing_control": "Previous\n5-day mixing",
+    "column_no_mix": "Corrected\nno mixing",
+    "column_mix5": "Corrected\n5-day mixing"
+  },
+  "require_reservoir_rain_scheme": "column-convection"
+}

@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('column-rain','Column convection and falling-rain evaporation'),
     ('independent-water','Independent lower and upper water'),
     ('pressure-column','Hydrostatic saturation and rainfall'),
     ('vertical-reference','Earth vertical temperature and moisture'),

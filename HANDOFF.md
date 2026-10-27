@@ -1,6 +1,30 @@
-# Handoff — 26 October 2026
+# Handoff — 27 October 2026
 
 ## Current status
+
+**Column-convection/rain recycling follow-up declared (27October):**
+`calibration/column_rain_20261027/plan.json`,42actual Earth runs planned:
+7r39,7fixed-profile transport,7independent-no-mix,7independent5daymix exact
+controls, then7each corrected no/5daymix. No new physical coefficient or planet
+change; unchanged numerical work/error/accuracy/mass/ocean/wind/humidity guards.
+`moisture_reservoir_rain_scheme='column-convection'` applies empirical convection
+to total W, keeps local dynamic rain/overflow, and attenuates falling rain with
+actual lower-layer RH. Upper gross rain loss is paired with a lower-vapor source
+for its re-evaporated fraction; internal transfer cancels in total water.
+Proportional-profile equivalence is TOTAL ground rain, not individual layer losses.
+Old default scheme='layer' retained for exact historical controls. No explicit
+parcel ascent/latent-energy feedback is coupled. See COLUMN_RAIN_20261027.md.
+
+Correction justified by two independent code reviews: layerwise convex empirical
+column law adds Jensen amplification; upper rain evaporation was retained aloft
+rather than routed down. PNW excessive onshore advection predates reservoir
+states, so this alone is not promised to cure it. Whole-column budgets are
+solved terms, not independent causal attributions. Rain scheme and internal
+precipitation transfer conservation must be certified in every later gate.
+Start supervisor only after committing source/tests; check
+`output/column_rain_20261027/status.json` for actual state. Do not edit frozen
+sources during the campaign. Publish all outcomes and keep failures.
+
 
 **Parcel-ascent proof COMPLETE:** source `fc91ae4`,
 `output/parcel_ascent_20261026/`.18manufactured T/RH/pressure cases ×64/128/256

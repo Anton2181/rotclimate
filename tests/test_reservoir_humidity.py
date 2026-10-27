@@ -51,6 +51,17 @@ def test_later_gates_require_independent_layer_and_column_not_just_total_pass_fl
     assert reservoir_failures({'all_checks_passed':True},p)
 
 
+def test_corrected_rain_requires_every_step_to_use_declared_scheme():
+    p=dict(moisture_reservoirs=True,moisture_residual_tol=.02,moisture_reservoir_rain_scheme='column-convection')
+    c=dict(all_layer_checks_passed=True,steps=[{'rain_scheme':'layer'}],rain_scheme='column-convection',
+           max_scaled_layer_residual=.01,max_scaled_column_residual=.01)
+    assert reservoir_failures({'moisture_reservoirs':c},p)
+    c['steps'][0].update(rain_scheme='column-convection',maximum_internal_precipitation_transfer_residual_mm_day=0.)
+    assert reservoir_failures({'moisture_reservoirs':c},p)==[]
+    c['steps'][0]['maximum_internal_precipitation_transfer_residual_mm_day']=float('nan')
+    assert reservoir_failures({'moisture_reservoirs':c},p)
+
+
 def test_good_rainfall_cannot_bypass_native_humidity_or_layer_certificate():
     from test_vapor_flux_gate import cases
     from scripts.check_vapor_flux import screening

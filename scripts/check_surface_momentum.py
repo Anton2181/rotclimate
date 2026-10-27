@@ -35,6 +35,12 @@ def reservoir_failures(numerics,params):
             or c.get('all_layer_checks_passed') is not True or not c.get('steps')
             or not np.isfinite(residuals).all() or min(residuals)<0 or max(residuals)>tolerance):
         return ['Independent layer/column water certificate missing or failed']
+    scheme=params.get('moisture_reservoir_rain_scheme','layer')
+    if scheme!='layer' and (c.get('rain_scheme')!=scheme or any(s.get('rain_scheme')!=scheme for s in c['steps'])):
+        return ['Corrected reservoir rainfall certificate missing']
+    if scheme!='layer' and any(not np.isfinite(s.get('maximum_internal_precipitation_transfer_residual_mm_day',float('inf')))
+            or s.get('maximum_internal_precipitation_transfer_residual_mm_day',float('inf'))>1e-10 for s in c['steps']):
+        return ['Internal precipitation transfer failed conservation']
     return []
 
 

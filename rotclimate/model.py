@@ -279,6 +279,10 @@ class ClimateModel:
             raise ValueError('moisture_reservoirs must be boolean')
         if not np.isfinite(params.moisture_reservoir_mixing_days) or params.moisture_reservoir_mixing_days<0:
             raise ValueError('Need finite nonnegative moisture_reservoir_mixing_days')
+        if params.moisture_reservoir_rain_scheme not in ('layer','column-convection'):
+            raise ValueError('Unknown moisture_reservoir_rain_scheme')
+        if params.moisture_reservoir_rain_scheme!='layer' and not params.moisture_reservoirs:
+            raise ValueError('Column-convection rain requires independent moisture reservoirs')
         if params.moisture_reservoirs:
             if (not params.moisture_two_layer or not params.moisture_mass_tracer
                     or params.moisture_residual_tol<=0 or not params.moisture_require_convergence
@@ -1652,6 +1656,11 @@ class ClimateModel:
                 max_scaled_layer_residual=max(c['max_scaled_layer_residual'] for c in self.reservoir_checks),
                 max_scaled_column_residual=max(c['max_scaled_column_residual'] for c in self.reservoir_checks),
                 mixing_days=p.moisture_reservoir_mixing_days,
+                rain_scheme=p.moisture_reservoir_rain_scheme,
+                rain_definition=('Local dynamic gate and overflow; empirical convection uses whole-column humidity; '
+                    'shared lower-capacity RH evaporation routes upper precipitation into lower vapor'
+                    if p.moisture_reservoir_rain_scheme=='column-convection' else
+                    'Historical independent layer empirical convection and layer RH rain evaporation'),
                 capacity_partition='normalized hydrostatic moist profile; total capacity scheme separately declared',
                 scope='Independent steady lower/upper water; no independent vertical energy/momentum',steps=self.reservoir_checks)
             numerics['all_checks_passed'] &= numerics['moisture_reservoirs']['all_layer_checks_passed']

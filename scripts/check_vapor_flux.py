@@ -59,6 +59,8 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if plan.get('require_reservoir_rain_scheme') and c['params'].get('moisture_reservoir_rain_scheme')!=plan['require_reservoir_rain_scheme']:
+                    failures.append(region+': required reservoir rainfall scheme missing')
                 if plan.get('require_moisture_reservoirs'):
                     from check_surface_momentum import reservoir_failures
                     failures.extend(region+': '+message for message in reservoir_failures(c.get('numerics',{}),c['params']))
