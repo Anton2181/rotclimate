@@ -2,6 +2,21 @@
 
 ## Current status
 
+**PNW vertical-reference audit predeclared:**
+`calibration/pnw_vertical_20261027/plan.json`, `scripts/audit_pnw_vertical.py`.
+Root reviewed source;2independent affine-pressure-integral and area/month/axis
+unit checks pass. No execution or new air-temperature download yet. Exact4ocean
+footprints/areas from independent PNW audit, observed925Tanchor only; higherT/q
+withheld frommoist/lapseprofiles. Separatelycached NOAAair withverifiedURL/SHA,
+metadatareuseprovenance; actualq/RHfraction/drytheta andpartialwater/capacity
+onmatched925–300nodes, nohumidityfit and0Earthintegrations. Freeze sources after
+acquisition/structuralchecks beforederivedmetrics. Preservefailedoutputfolders.
+Canrun afterthis sourcecommit with --fetch; thenpublishsinglefigure nested in
+westerly study andretainallmonth/season/native data. Do notinterpret drytheta
+above925as marineinversionbelow925 orfull moiststability/energy validation.
+Current windresults published8887cb6andpushed; no active climatecalibration.
+
+
 **Shared westerly bracket COMPLETE:** source1d706fd,
 `output/westerly_fit_20261027/`,42/42strict passes,21historical main climate
 controls exact;6separate PNW native packets verified, including2exact archived
