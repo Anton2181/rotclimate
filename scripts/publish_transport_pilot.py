@@ -16,6 +16,84 @@ from local_benchmark_protocol import file_hash,write_json
 from rotclimate import earth
 
 
+def plot_westerly_circulation(records,plan,labels,path):
+    """Plot the new PNW native diagnostics with explicit missing-data marks."""
+    names=[plan['extra_circulation_control'],*plan['eligible_profiles']]
+    group=plan['extra_circulation_groups']['pacific_nw']
+    fig,axes=plt.subplots(1,3,figsize=(16,5.8),constrained_layout=True)
+    colors=['#777777',*plt.colormaps['tab10'](np.linspace(0,1,len(names)-1))]
+    scores={};status={};reference_wind=reference_humidity=None
+    def monthly(value,shape):
+        try:array=np.asarray(value,float)
+        except (TypeError,ValueError):return None
+        return array if array.shape==shape and np.isfinite(array).all() else None
+    for name,color in zip(names,colors):
+        row=records.get(name,{}).get('pacific_nw',{})
+        extra=row.get('extra_circulation') or {}
+        wind=extra.get('scores',{}).get('q925_300',{}).get(group)
+        humidity=extra.get('humidity',{}).get('scores',{}).get(group)
+        issues=[]
+        if row.get('status')!='passed':
+            issues.append('FAILED solve or missing completed record');wind=humidity=None
+        scores[name]=(wind,humidity)
+        model=monthly(None if wind is None else wind.get('monthly_model'),(12,2))
+        observed=monthly(None if wind is None else wind.get('monthly_reference'),(12,2))
+        if model is not None:
+            # Scores store twelve months by east/north component.
+            axes[0].plot(model[:,0],label=labels[name],color=color,lw=1.8)
+        else:
+            issues.append('FAILED wind series')
+            axes[0].plot([],[],label=labels[name]+' · MISSING',color=color,ls=':')
+        if reference_wind is None and observed is not None:reference_wind=observed[:,0]
+        model=monthly(None if humidity is None else humidity.get('monthly_model_q_ratio'),(12,))
+        observed=monthly(None if humidity is None else humidity.get('monthly_reference_q_ratio'),(12,))
+        if model is not None:axes[1].plot(model,label=labels[name],color=color,lw=1.8)
+        else:
+            issues.append('FAILED humidity series')
+            axes[1].plot([],[],label=labels[name]+' · MISSING',color=color,ls=':')
+        if reference_humidity is None and observed is not None:reference_humidity=observed
+        status[name]=issues
+    if reference_wind is not None:axes[0].plot(reference_wind,color='#222',lw=2.5,label='NCEP/NCAR925–300 hPa')
+    else:axes[0].text(.5,.5,'FAILED · observed wind missing',ha='center',transform=axes[0].transAxes)
+    if reference_humidity is not None:axes[1].plot(reference_humidity,color='#222',lw=2.5,label='NCEP/NCAR')
+    else:axes[1].text(.5,.5,'FAILED · observed humidity missing',ha='center',transform=axes[1].transAxes)
+    axes[0].set(title='PNW native ocean · eastward moisture wind',ylabel='Eastward speed (m/s)')
+    axes[1].set(title='PNW native ocean · partial humidity shape',ylabel='Mean q700–300 / mean q925–700')
+    for ax in axes[:2]:
+        ax.set(xticks=range(12),xticklabels=list('JFMAMJJASOND'));ax.grid(alpha=.15)
+        ax.legend(frameon=False,fontsize=7)
+    baseline=scores[names[0]];x=np.arange(len(names));width=.24;maximum_ratio=1.02
+    metrics=[(0,'vector_rmse_ms','Vector RMSE','#547fa8'),
+             (1,'partial_water_mae_mm','PW MAE','#5c9a7c'),
+             (1,'partial_q_ratio_mae','q-shape MAE','#ba8658')]
+    for offset,(index,key,label,color) in zip([-width,0,width],metrics):
+        values=[]
+        for name in names:
+            own=scores[name][index];control=baseline[index]
+            numerator=None if own is None else own.get(key)
+            denominator=None if control is None else control.get(key)
+            if (numerator is None or denominator is None or not np.isfinite([numerator,denominator]).all()
+                    or numerator<0 or denominator<=0):
+                values.append(np.nan);status[name].append('FAILED '+label+' ratio')
+            else:values.append(numerator/denominator)
+        axes[2].bar(x+offset,values,width=width,color=color,label=label)
+        maximum_ratio=max(maximum_ratio,max((v for v in values if np.isfinite(v)),default=0))
+        for i,value in enumerate(values):
+            if not np.isfinite(value):axes[2].text(i+offset,.03,'FAIL',rotation=90,ha='center',va='bottom',fontsize=6,color=color)
+    wind_limit=plan['extra_circulation_max_ratio'];humidity_limit=plan['extra_humidity_max_ratio']
+    axes[2].axhline(wind_limit,color='#315f91',ls='--',lw=1.2,label=f'{wind_limit:.2f} wind target')
+    axes[2].axhline(humidity_limit,color='#925524',ls=':',lw=1.5,label=f'{humidity_limit:.2f} humidity limit')
+    ticks=[plan.get('publication_ticks',{}).get(n,labels[n])+('\nMISSING / FAIL' if status[n] else '') for n in names]
+    axes[2].set(xticks=x,xticklabels=ticks,title='Separate native circulation and humidity guards',
+        ylabel='Observed error / fresh corrected control',ylim=(0,1.35*maximum_ratio))
+    axes[2].tick_params(axis='x',labelsize=8);axes[2].grid(axis='y',alpha=.15);axes[2].legend(frameon=False,fontsize=7)
+    fig.suptitle('Shared westerlies · Pacific Northwest transport and humidity',fontsize=16)
+    fig.supxlabel('All three fixed amplitudes and the corrected original-westerly control; four native ocean footprints, no accepted land footprint.\n'
+        'Wind requires a 10% vector-RMSE reduction; each humidity MAE may increase at most 2%. Monthly partial reanalysis is not exact vapor flux.',fontsize=9)
+    fig.savefig(path,dpi=145);plt.close(fig)
+    return status
+
+
 def publish(out):
     review=json.loads((out/'review.json').read_text());protocol=json.loads((out/'protocol.json').read_text());plan=protocol['plan']
     if not review['complete'] or review['physics_or_atlas_adoption']:raise ValueError('Need completed research-only pilot')
@@ -30,6 +108,10 @@ def publish(out):
             if row['status']=='passed':
                 if not row['numerics']['all_checks_passed'] or file_hash(path.with_suffix('.npz'))!=row['arrays_sha256']:
                     raise ValueError('Unverified successful result')
+                if region in plan.get('extra_circulation_regions',[]):
+                    extra=path.with_name(region+'_extra.npz')
+                    if not extra.exists() or file_hash(extra)!=row.get('extra_circulation_arrays_sha256'):
+                        raise ValueError('Unverified extra native circulation arrays')
             elif row['status']!='failed':raise ValueError('Unknown solve status')
             if name=='reference' and (row['status']!='passed' or not row['legacy_exact']):raise ValueError('Missing original control')
             if name in plan.get('profile_control_archives',{}) and (row['status']!='passed' or not row['physical_control_exact']):
@@ -120,7 +202,7 @@ def publish(out):
         'All profiles and failures are retained; annual regional totals do not replace local monthly error.',fontsize=9)
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
     images=[first,second];tracer_diagnostic=None;extra_html='';water_budgets=None
-    reservoir_certificates=None
+    reservoir_certificates=None;pnw_plot_status=None
     if stem in ('independent_water','column_rain','westerly_fit'):
         reservoir_certificates={n:{r:row.get('numerics',{}).get('moisture_reservoirs')
             for r,row in group.items()} for n,group in records.items()}
@@ -155,6 +237,10 @@ def publish(out):
             'Partial pressure intervals differ from full dry-layer masses. Coarse model-assisted reanalysis is a reused development constraint.',fontsize=9)
         third=data/f'{stem}_humidity.png';fig.savefig(third,dpi=145);plt.close(fig);images.append(third)
         extra_html=f'<figure><a href="data/{third.name}"><img src="data/{third.name}" width="2175" height="812" loading="lazy" alt="Actual coupled partial ocean water, vertical humidity shape and separate observed error protections"></a><figcaption>Matched pressure ranges exclude air below925hPa and above300hPa. Each observed-water and shape MAE must remain within2% of the common-mass fixed-profile control. A closer rainfall total cannot pay for worse humidity physics.</figcaption></figure>'
+    if stem=='westerly_fit':
+        fourth=data/f'{stem}_pnw_circulation.png'
+        pnw_plot_status=plot_westerly_circulation(records,plan,labels,fourth);images.append(fourth)
+        extra_html+=f'<figure><a href="data/{fourth.name}"><img src="data/{fourth.name}" width="2320" height="841" loading="lazy" alt="Pacific Northwest native ocean monthly eastward wind, partial humidity shape and separate wind and humidity error ratios for every fixed westerly trial"></a><figcaption>Every fixed amplitude is shown against the fresh corrected original-westerly control. Wind vector RMSE must fall to at most 90% of that control; partial water and vertical-shape MAEs each may reach at most 102%. These distinct limits use only four reused native ocean footprints. Missing or failed diagnostics are marked; full screening failures remain in the download. The native partial-column reference and modeled whole-column moisture wind differ in vertical coverage and omit transient moisture covariance.</figcaption></figure>'
     if stem=='shared_wind':
         # Signed terms of the actual solved equation, not an independent
         # causal decomposition of nonlinear parameter changes.
@@ -246,6 +332,7 @@ def publish(out):
         regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
         pressure_column_certificates=pressure_certificates,
         independent_water_certificates=reservoir_certificates,
+        pnw_circulation_plot_status=pnw_plot_status,
         local_rain_loss_ratio=ratios,physical_definition=plan['physical_definition'],scope=plan['publication'],
         selected_map_profile=map_candidate,tracer_equilibrium=tracer_diagnostic,signed_water_budgets_mm_year=water_budgets,
         water_budget_drying_definition='column_drying includes monsoon_drying; other_column_drying is their difference. Only disjoint terms are stacked.',

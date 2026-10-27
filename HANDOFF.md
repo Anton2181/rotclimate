@@ -2,31 +2,41 @@
 
 ## Current status
 
-**Shared westerly sensitivity bracket predeclared:**
-`calibration/westerly_fit_20261027/plan.json`:42actual7region runs,21exact
-historical controls (r39/commonmass/correctednomix) then21candidate cases at
-shared background amplitude5.0/6.25/7.5m/s (prior8.76025), within existing2–12
-bounds. No physical model/planet/other coefficient changes. Coupled temperature,
-pressure, terrain lift, sea state and actual humidity may respond. This is the
-peak zonal-belt amplitude with fixed.15meridional andseasonal modulation,
-not observed column speed. Core rain/recycling andno-mixreservoirs fixed.
+**Shared westerly bracket COMPLETE:** source1d706fd,
+`output/westerly_fit_20261027/`,42/42strict passes,21historical main climate
+controls exact;6separate PNW native packets verified, including2exact archived
+native controls. Runtime480.6seconds,49focused guard/recording tests pass.
+All3amplitudes5.0/6.25/7.5m/s failed overall screening. No full/fine/established/
+world stages. No active calibration/supervisor, normalatlas/headlines unchanged.
+Series899actual attempts/895passes/4old preserved failures.
 
-New PNW circulation diagnostics are JSON + separate *_extra.npz, preserving
-all old main NPZfieldsets exactly. r39 native vector must match independent
-PNWauditexactly. Extra reference plan/cache/metadata/archive/reader/deps frozen.
-Candidate PNW ocean vectorRMSE must improve>=10% vs fresh correctedcontrol;
-partialPW andshapeMAEs may each worsen<=2% vs samecontrol onidenticalfootprints.
-All earlier r39/regional/NI/Iberia/EastAustralia/SST/mass/layer guards remain.
-No observed field becomes forcing. Only4reusedoceanfootprints, no land/global
-validation claim. Tests target fail-closed missing/mismatched/error certificates.
+Only background peak westerly amplitude changed (prior8.76025), other wind,
+planet, corrected convection/recycling, no-mix independent water andsource
+coefficients fixed; coupled states allowed to respond. PNW windRMSE4.126→2.154/
+2.591/3.290m/s;5m/s cuts47.78%, rain2394→1700vs897obs. Bestexperimental rainloss
+12.16%belowcorrectedcontrol, but still11.81%abover39 (combinedS1.05937).
+Japanrainweakens1115→970with5m/s andIberiahumidityremainsbad. PNWshapeMAEworsens
+5.78/3.56/1.64%;7.5passesextraPNWwind+humidityguard butfailsotherregions.
+No scalar wind/humidity fix justified as whole-model solution. Native-reference
+comparison remains partialobserved925–300vswhole modeled moisture column,
+4reusedoceanfootprints, coarsemodel-assisted/differentperiods, no landvalidation.
 
-This first stage sets maximum_finalists=0 to block auto-promotion until newPNW
-constraints carried through later full/fine gates. If any pilot candidate
-qualifies, continue with frozen full31/ocean/fine/established original guards
-and repeatPNW circulation/humidity at56/28km beforeadoption. Fantasy/world
-checks separate. No active job until source commit and supervisor launch;
-then check output/westerly_fit_20261027/status.json. Don't edit frozen sources.
+Extra PNW vectors saved only in *_extra.npz andJSON; mainhistoricalfieldsets
+unchanged. Missing/NaN/mismatched-footprint guards failclosed. Sources/reference
+archives/data/readers frozen. maximum_finalists=0 preventedautomaticpromotion,
+but actualqualifiersalsozero. Anyfuturequalifier requires full31/ocean/fine/
+established andPNW56/28km repeat beforeadoption. See WESTERLY_FIT_20261027.md.
+Companion21studies/49figures/25JSONdownloads; latestwesterlystudyopens, newPNW
+wind/humidity/errorguard chart. Fixedmapshows6.25middleamplitude, notscoreselected.
+Canonical574normalatlasfiles unchangedversus8abf797. Server8766maystillrun.
 
+Next referencephysics audit being prepared: verticalPNW T/q/RH/stability onthe
+same4oceanfootprints, moist/environmental capacity shapes with observed925Tanchor,
+no climate run orfit. CurrentPNWmodelq bottomheavy whileIberiatopheavy. Readonly
+terrain review: quadrature(subgrid=0) andgusts previouslytested/rejected onolder
+physics; corrected-reservoir combination distinct butnotuntriedgenerally. PNW
+excessrainbothcoastal/inland, so rain-shadow-onlyfixinsufficient. Do notchange
+planet/thresholds orimposeuniversalqratio tohidefailedregionalprotections.
 
 **Column convection/rain recycling COMPLETE:** source69d2f8b,
 `output/column_rain_20261027/`,42/42strict passes,28exact historical controls,
