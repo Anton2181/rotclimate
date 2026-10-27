@@ -2,7 +2,8 @@
 
 ## Current status
 
-**Joint storm/rain calibration predeclared; launch after source commit:**
+**Joint storm/rain calibration ACTIVE:** source `e207736`,
+`output/joint_rain_20261027/`, monitor PID 108835 / runner PID 108844.
 `calibration/joint_rain_20261027/plan.json`. Eight fixed combinations of
 eddy_rate 1.0/1.8, precip_tau_days 8/15, convective_rh 0.65/0.72, on
 reference-qualified environmental 6.0, independent water, corrected rain and
@@ -13,7 +14,7 @@ humidity/thermal/numerical safeguards and planetary forcing stay fixed.
 No added candidate or weaker limit after results. This factorial probes
 interactions and wider starts, not proof of a global optimum. Any qualifier
 still requires full31/ocean/fine/established and matched world qualification.
-Run through `scripts/supervise_frozen.py` with a two-hour ceiling and immutable
+Running through `scripts/supervise_frozen.py` with a two-hour ceiling and immutable
 source monitoring; its mocked operational checks pass. Frozen model/runner
 sources must not be edited after launch. Side FORGE development must use new
 modules outside rotclimate and leave frozen source files unchanged meanwhile.
@@ -39,7 +40,10 @@ scored land cells (347 diagnostic versus 358 full-score); all original scores
 remain full-mask and unaffected. Preserve legacy crop semantics in historical
 NPZ controls; a future complete-export repair must capture omitted rows.
 Two figures and full JSON nested in the existing environmental study;
-publication QA receipts to follow. Adopted climates and headlines unchanged.
+publication QA passes: 22 studies / 57 figures / 29 JSON downloads, browser
+light/dark/mobile/keyboard checks, 579 checkout assets byte-exact, 1,038-file
+portable bundle / 204 research links / extracted launcher verified. Adopted
+climates and headlines unchanged.
 
 **Environmental thermal reference and coupled Earth pilot COMPLETE:** scientific
 source `9746d51`, `output/environmental_partition_20261027/`. All 42 actual
