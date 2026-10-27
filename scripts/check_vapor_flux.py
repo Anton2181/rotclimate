@@ -4,6 +4,7 @@ from multiprocessing import Pool
 import importlib.metadata
 import argparse
 import json
+import math
 import subprocess
 import sys
 
@@ -14,6 +15,61 @@ from local_benchmark_protocol import file_hash,freeze,write_json
 from paired_physics_pilot import run_one
 from benchmark_local import DEV12_SPECS
 from rotclimate import earth
+
+
+def extra_circulation_protection(candidate,baseline,plan,region):
+    """Require paired new native wind and both humidity errors independently."""
+    from circulation_reference import humidity_protection
+    failures=[];ratios={}
+    if baseline is None or baseline.get('status')!='passed':
+        return dict(passed=False,failures=['Missing extra native circulation control'],ratios=ratios)
+    if candidate.get('case_identity') is None or baseline.get('case_identity') is None:
+        return dict(passed=False,failures=['Missing extra native case identity'],ratios=ratios)
+    if candidate['case_identity']!=baseline['case_identity']:
+        raise ValueError('Unpaired extra native circulation inputs')
+    group=plan['extra_circulation_groups'][region]
+    own=candidate.get('extra_circulation') or {}
+    control=baseline.get('extra_circulation') or {}
+    def valid_footprint(score):
+        if score is None:return False
+        try:return all(math.isfinite(score.get(k)) and score[k]>0 for k in ('native_cells','area_km2'))
+        except (TypeError,ValueError):return False
+    score=lambda report:report.get('scores',{}).get('q925_300',{}).get(group)
+    c,b=score(own),score(control)
+    if c is None or b is None:
+        failures.append('Missing extra native circulation certificate')
+    elif not all(valid_footprint(s) for s in (c,b)):
+        failures.append('Missing extra native circulation footprint')
+    elif any(c.get(k)!=b.get(k) for k in ('native_cells','area_km2')):
+        raise ValueError('Changed extra native circulation footprint')
+    else:
+        values=[c.get('vector_rmse_ms'),b.get('vector_rmse_ms')]
+        if any(v is None or not math.isfinite(v) or v<0 for v in values):
+            failures.append('Invalid extra native circulation error')
+        else:
+            ratios['vector_rmse_ratio']=values[0]/max(values[1],1e-12)
+            if values[0]>plan['extra_circulation_max_ratio']*values[1]+1e-12:
+                failures.append('Extra outside-reference circulation improvement failed')
+    humidity=lambda report:report.get('humidity',{}).get('scores',{}).get(group)
+    if not all(valid_footprint(s) for s in (humidity(own),humidity(control))):
+        failures.append('Missing extra native humidity footprint')
+    protection=humidity_protection(humidity(own),humidity(control),plan['extra_humidity_max_ratio'])
+    ratios['humidity_protection']=protection
+    failures.extend(protection['failures'])
+    return dict(passed=not failures,failures=failures,ratios=ratios)
+
+
+def extra_circulation_sources(plan):
+    """Freeze the new audit's forcing, reader and independent control epoch."""
+    if not plan.get('extra_circulation_regions'):return []
+    from circulation_reference import acquire
+    reference_plan=ROOT/plan['extra_circulation_reference_plan']
+    _,references=acquire(ROOT,json.loads(reference_plan.read_text()))
+    archive=ROOT/plan['extra_circulation_reference_archive']
+    return [reference_plan,archive,archive.with_suffix('.json'),
+        ROOT/'scripts/circulation_reference.py',ROOT/'scripts/earth_calendar.py',
+        ROOT/'experiments/v10_forcing_audit.py',ROOT/'experiments/v10_thermodynamics.py',
+        *list((ROOT/'rotclimate_v10').glob('*.py')),*[ROOT/name for name in references]]
 
 
 def screening(rows,plan):
@@ -59,6 +115,12 @@ def screening(rows,plan):
                 if name in plan['eligible_profiles'] and wind_ratio>(.95 if region=='north_india' else 1.02):
                     failures.append(region+': outside-reference circulation protection failed')
             if name in plan['eligible_profiles']:
+                if region in plan.get('extra_circulation_regions',[]):
+                    baseline=next((r for r in rows if r['name']==plan['extra_circulation_control']
+                        and r['region']==region),None)
+                    protection=extra_circulation_protection(c,baseline,plan,region)
+                    ratios[region]['extra_circulation_protection']=protection
+                    failures.extend(region+': '+message for message in protection['failures'])
                 if plan.get('require_reservoir_rain_scheme') and c['params'].get('moisture_reservoir_rain_scheme')!=plan['require_reservoir_rain_scheme']:
                     failures.append(region+': required reservoir rainfall scheme missing')
                 if plan.get('require_moisture_reservoirs'):
@@ -136,6 +198,7 @@ def main():
         sources += [ROOT/name for name in references]
         sources += list((ROOT/'rotclimate_v10').glob('*.py'))+[ROOT/'experiments/v10_thermodynamics.py']
         sources += [ROOT/'output/circulation_audit_20261026'/f'{r}.npz' for r in plan['circulation_regions']]
+    sources += extra_circulation_sources(plan)
     for region in plan['regions']:sources += [ROOT/plan['archive']/'cases'/f'{region}.json',ROOT/plan['archive']/'cells'/f'{region}.npz']
     for folder in plan.get('profile_control_archives',{}).values():
         for region in plan['regions']:

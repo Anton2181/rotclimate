@@ -2,6 +2,32 @@
 
 ## Current status
 
+**Shared westerly sensitivity bracket predeclared:**
+`calibration/westerly_fit_20261027/plan.json`:42actual7region runs,21exact
+historical controls (r39/commonmass/correctednomix) then21candidate cases at
+shared background amplitude5.0/6.25/7.5m/s (prior8.76025), within existing2–12
+bounds. No physical model/planet/other coefficient changes. Coupled temperature,
+pressure, terrain lift, sea state and actual humidity may respond. This is the
+peak zonal-belt amplitude with fixed.15meridional andseasonal modulation,
+not observed column speed. Core rain/recycling andno-mixreservoirs fixed.
+
+New PNW circulation diagnostics are JSON + separate *_extra.npz, preserving
+all old main NPZfieldsets exactly. r39 native vector must match independent
+PNWauditexactly. Extra reference plan/cache/metadata/archive/reader/deps frozen.
+Candidate PNW ocean vectorRMSE must improve>=10% vs fresh correctedcontrol;
+partialPW andshapeMAEs may each worsen<=2% vs samecontrol onidenticalfootprints.
+All earlier r39/regional/NI/Iberia/EastAustralia/SST/mass/layer guards remain.
+No observed field becomes forcing. Only4reusedoceanfootprints, no land/global
+validation claim. Tests target fail-closed missing/mismatched/error certificates.
+
+This first stage sets maximum_finalists=0 to block auto-promotion until newPNW
+constraints carried through later full/fine gates. If any pilot candidate
+qualifies, continue with frozen full31/ocean/fine/established original guards
+and repeatPNW circulation/humidity at56/28km beforeadoption. Fantasy/world
+checks separate. No active job until source commit and supervisor launch;
+then check output/westerly_fit_20261027/status.json. Don't edit frozen sources.
+
+
 **Column convection/rain recycling COMPLETE:** source69d2f8b,
 `output/column_rain_20261027/`,42/42strict passes,28exact historical controls,
 runtime465.5seconds. Neither candidate qualifies; no full31/ocean/fine/

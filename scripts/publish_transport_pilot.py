@@ -42,7 +42,8 @@ def publish(out):
            'storm_path':'Storm paths and local condensation',
            'pressure_column':'Hydrostatic saturation and rainfall',
            'independent_water':'Independent lower and upper atmospheric water',
-           'column_rain':'Column convection and falling-rain evaporation'}[stem]
+           'column_rain':'Column convection and falling-rain evaporation',
+           'westerly_fit':'Shared westerlies and climate calibration'}[stem]
     profiles=list(plan['profiles']);regions=plan['regions'];eligible=plan['eligible_profiles']
     labels={name:name.replace('_',' ') for name in profiles}
     labels.update(reference='r39',reference_damped='r39 numerical control',balanced_control='Balanced single layer',
@@ -53,7 +54,7 @@ def publish(out):
     for name in eligible:
         value=plan['profiles'][name].get(parameter)
         prefix='Rain threshold RH' if parameter=='rh_threshold' else 'Upper/lower q'
-        labels[name]=(plan['publication_labels'][name] if stem in ('pressure_column','independent_water','column_rain') else
+        labels[name]=(plan['publication_labels'][name] if stem in ('pressure_column','independent_water','column_rain','westerly_fit') else
                       f'Wind trial {eligible.index(name)+1}' if stem=='shared_wind' else
                       'Short hops, no condensation' if name=='hops_only' else
                       f'Crest coefficient = {value:g}' if parameter=='eddy_rainout' else
@@ -120,11 +121,11 @@ def publish(out):
     second=data/f'{stem}_maps.png';fig.savefig(second,dpi=145);plt.close(fig)
     images=[first,second];tracer_diagnostic=None;extra_html='';water_budgets=None
     reservoir_certificates=None
-    if stem in ('independent_water','column_rain'):
+    if stem in ('independent_water','column_rain','westerly_fit'):
         reservoir_certificates={n:{r:row.get('numerics',{}).get('moisture_reservoirs')
             for r,row in group.items()} for n,group in records.items()}
         fig,axes=plt.subplots(1,3,figsize=(15,5.6),constrained_layout=True)
-        names=(['transport_control','reservoir_control',*eligible] if stem=='column_rain' else ['transport_control','pressure_control',*eligible]);reference=None
+        names=plan.get('humidity_plot_profiles',(['transport_control','reservoir_control',*eligible] if stem=='column_rain' else ['transport_control','pressure_control',*eligible]));reference=None
         for name in names:
             row=records[name]['iberia']
             score=row.get('circulation',{}).get('humidity',{}).get('scores',{}).get('ocean')
@@ -146,10 +147,10 @@ def publish(out):
             axes[2].bar(i-.17,score['partial_water_mae_mm']/baseline['partial_water_mae_mm'],width=.34,color='#547fa8',label='PW MAE' if i==0 else None)
             axes[2].bar(i+.17,score['partial_q_ratio_mae']/baseline['partial_q_ratio_mae'],width=.34,color='#ba8658',label='Shape MAE' if i==0 else None)
         axes[2].axhline(plan['humidity_max_ratio'],color='#555',ls='--',lw=1,label='1.02 protection limit')
-        axes[2].set(xticks=range(len(names)),xticklabels=(['Fixed q','Previous','Corrected\nno mix','Corrected\n5-day mix'] if stem=='column_rain' else ['Fixed q','Pressure','No mix','5day mix']),
+        axes[2].set(xticks=range(len(names)),xticklabels=plan.get('humidity_plot_ticks',(['Fixed q','Previous','Corrected\nno mix','Corrected\n5-day mix'] if stem=='column_rain' else ['Fixed q','Pressure','No mix','5day mix'])),
             title='Separate observed-humidity error safeguards',ylabel='MAE / fixed-profile transport control')
         axes[2].legend(frameon=False,fontsize=8)
-        fig.suptitle(('Corrected rain closure' if stem=='column_rain' else 'Independent water')+' · actual coupled Earth humidity',fontsize=16)
+        fig.suptitle(('Shared westerly amplitudes' if stem=='westerly_fit' else 'Corrected rain closure' if stem=='column_rain' else 'Independent water')+' · actual coupled Earth humidity',fontsize=16)
         fig.supxlabel('Matched native ocean footprints, true areas and Gregorian month weights; no observed humidity enters the solver.\n'
             'Partial pressure intervals differ from full dry-layer masses. Coarse model-assisted reanalysis is a reused development constraint.',fontsize=9)
         third=data/f'{stem}_humidity.png';fig.savefig(third,dpi=145);plt.close(fig);images.append(third)
@@ -231,14 +232,15 @@ def publish(out):
             for r,row in records[n].items() if row['status']=='passed'} for n in eligible}
         if any(row['maximum_full_domain_condensation_cell_mm_day']!=0 for row in storm_condensation['hops_only'].values()):
             raise ValueError('Hops-only control actually condensed; cannot publish as geometry-only attribution')
-    compact={n:{r:{key:row.get(key) for key in ['status','error','rain','temperature','sst','column_speed','monthly_rain','circulation']}
+    compact={n:{r:{key:row.get(key) for key in ['status','error','rain','temperature','sst','column_speed','monthly_rain','circulation','extra_circulation']}
                 for r,row in group.items()} for n,group in records.items()}
     branches={n:{r:{key:value for key,value in row.get('numerics',{}).get('two_layer_transport',{}).items() if key!='steps'}
                  for r,row in group.items()} for n,group in records.items()}
     pressure_certificates=({n:{r:row.get('numerics',{}).get('column_thermodynamics') for r,row in group.items()}
                            for n,group in records.items()} if stem=='pressure_column' else None)
     passed=sum(row['status']=='passed' for group in records.values() for row in group.values());attempted=sum(len(g) for g in records.values())
-    decision='No profile passed all fixed safeguards' if not review['development_finalists'] else 'Screening qualifiers require subsequent Earth/world checks'
+    decision=('Screening qualifiers require subsequent Earth/world checks' if any(r.get('qualifies') for r in review['screen'].values())
+              else 'No profile passed all fixed safeguards')
     summary=dict(complete=True,decision=decision,attempted_runs=attempted,passed_runs=passed,failed_runs=attempted-passed,
         profiles=profiles,labels=labels,parameter_updates=plan['profiles'],sampling=plan.get('sampling'),
         regions=regions,screen=review['screen'],records=compact,branch_certificates=branches,
@@ -266,8 +268,9 @@ def publish(out):
     if stem=='pressure_column':specific='<p>The coupled model replaces the fixed vapor scale with hydrostatic specific-saturation integration. Two thermal profiles (existing environmental lapse or saturated moist adiabat) each use three fixed effective ocean column humidities0.45/0.60/original0.754746. Same pressure profile sets rain, sea-equilibrium and storm-crest capacities. Full terrain lapse, prescribed200K upper thermal boundary and water top100hPa are explicit approximations. The existing fixed transport humidity ratio remains; no independent vertical temperature or latent heating is added. All six combinations were declared before outcomes; no planetary forcing or accuracy threshold changes.</p>'
     if stem=='independent_water':specific='<p>Lower and upper water are solved independently in the coupled seasonal model, with donor vertical exchange, lower-only ocean/land evaporation, layer rain, drying and conservative storms. Both actual layer equations and their sum must pass strict residual checks. Calibrated total capacity stays fixed; a normalized moist hydrostatic profile only partitions capacity and boundary supply, without resetting actual humidity. The old fixed humidity ratio is inactive. The two declared closures add no extra mixing or symmetric5day mixing.</p>'
     if stem=='column_rain':specific='<p>The empirical convection law uses total column humidity once, while local dynamical rain and overflow retain layer humidities. Falling rain evaporates according to the actual lower air. Upper rain removes its gross water from the upper reservoir and routes the evaporated fraction into lower vapor; the internal transfer cancels exactly in the column ledger. Total proportional-profile ground rain remains compatible with the old law. All coefficients, winds, planetary settings, capacities and source/sink schemes stay fixed. The two trials retain the existing no/5-day mixing settings; no parcel model or vertical energy feedback is added.</p>'
-    transport_scope=('The independent steady water states share a stationary dry-air column with25% lower and75% upper mass. Actual spatial water fractions feed donor faces and diagnostic vapor winds. There is no independently solved vertical temperature, latent heating or atmospheric time storage.' if stem in ('independent_water','column_rain') else 'Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.')
-    humidity_scope=('independently solved humidity in two broad dry layers' if stem in ('independent_water','column_rain') else 'an imposed vertical humidity shape')
+    if stem=='westerly_fit':specific='<p>Only the globally shared peak background westerly amplitude changes: fixed5.0/6.25/7.5m/s versus8.76m/s. The background poleward component and seasonal factor remain fixed; terrain, pressure flow, thermal shear, temperature and sea state respond through the coupled model. Corrected rain/recycling, independent no-mixing moisture, all other coefficients and planetary settings remain fixed. New native PNW wind and humidity constraints supplement every earlier guard. This is a bounded sensitivity bracket, not three measured column speeds or an optimum.</p>'
+    transport_scope=('The independent steady water states share a stationary dry-air column with25% lower and75% upper mass. Actual spatial water fractions feed donor faces and diagnostic vapor winds. There is no independently solved vertical temperature, latent heating or atmospheric time storage.' if stem in ('independent_water','column_rain','westerly_fit') else 'Moist lower inflow and a drier upper return are transported as separate conservative directional branches. Their combined dry-air flux retains the stationary column constraint. Total water still shares a fixed vertical humidity profile; vertical humidity and thermodynamics are not independently prognostic. Surface heat, evaporation and terrain lift retain surface winds. Earth planetary settings stay fixed.')
+    humidity_scope=('independently solved humidity in two broad dry layers' if stem in ('independent_water','column_rain','westerly_fit') else 'an imposed vertical humidity shape')
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 {specific}
 <p>{transport_scope}</p>

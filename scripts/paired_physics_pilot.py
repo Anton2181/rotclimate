@@ -26,10 +26,30 @@ def circulation_fields(plan_path):
     return acquire(ROOT,json.loads((ROOT/plan_path).read_text()))[0]
 
 
+def extra_circulation_diagnostics(case,params,model,result,plan,*,reference=False):
+    """Audit new native vectors separately from historical climate NPZ fields."""
+    from circulation_reference import diagnose_model
+    report,native=diagnose_model(case,params,model,result,
+        circulation_fields(plan['extra_circulation_reference_plan']))
+    if reference:
+        archive=ROOT/plan['extra_circulation_reference_archive']
+        old_record=json.loads(archive.with_suffix('.json').read_text())
+        if (old_record.get('status')!='passed'
+                or old_record.get('numerics',{}).get('all_checks_passed') is not True
+                or file_hash(archive)!=old_record.get('arrays_sha256')):
+            raise ValueError('Invalid extra native circulation archive')
+        with np.load(archive) as old:
+            if not np.array_equal(native['circulation_model'],old['circulation_model']):
+                raise ValueError('Exact extra native circulation control changed')
+        report['legacy_exact']=True
+    return report,native
+
+
 def run_one(job):
     name,region,updates,plan,identity,out=job
     out=Path(out);folder=out/name;folder.mkdir(exist_ok=True)
     path,arrays=folder/f'{region}.json',folder/f'{region}.npz'
+    extra_arrays=folder/f'{region}_extra.npz'
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
     case=earth.region_case(region,float(plan['cell_km']))
     derived=case_hash(case,observed_sea=True)
@@ -42,6 +62,10 @@ def run_one(job):
                 or row.get('numerics',{}).get('all_checks_passed') is not True
                 or file_hash(arrays)!=row['arrays_sha256']):
             raise ValueError('Changed inputs or preserved failed pilot run: '+str(path))
+        if region in plan.get('extra_circulation_regions',[]):
+            if (not row.get('extra_circulation') or not extra_arrays.exists()
+                    or file_hash(extra_arrays)!=row.get('extra_circulation_arrays_sha256')):
+                raise ValueError('Changed or missing extra native circulation arrays: '+str(path))
         return row
     row=dict(name=name,region=region,updates=updates,numerical_updates=numerical_updates,identity=identity,case_identity=derived)
     started=time.monotonic()
@@ -102,6 +126,13 @@ def run_one(job):
                     if not np.array_equal(wind_fields['circulation_model'],old['model_moisture']):
                         raise ValueError('Exact native circulation control changed')
                 row['circulation']['legacy_exact']=True
+        if region in plan.get('extra_circulation_regions',[]):
+            row['extra_circulation'],extra_fields=extra_circulation_diagnostics(case,p,model,result,plan,
+                reference=name=='reference')
+            with extra_arrays.with_suffix('.tmp').open('wb') as stream:
+                np.savez_compressed(stream,**extra_fields)
+            extra_arrays.with_suffix('.tmp').replace(extra_arrays)
+            row['extra_circulation_arrays_sha256']=file_hash(extra_arrays)
         row['temperature']=temperature_metrics(st['Tm'][:,land],case.obs_T[:,land])
         row['monthly_rain']=dict(simulated=st['Pm'][:,land].mean(1).tolist(),observed=case.obs_P[:,land].mean(1).tolist())
         control_archive=plan.get('profile_control_archives',{}).get(name)
