@@ -1,0 +1,86 @@
+{
+  "declared_before_new_diagnostic_outcomes": true,
+  "purpose": "Audit the actual signed monthly water-removal terms retained in the completed environmental-partition comparison. Quantify an unresolved physical interpretation: internal donor vertical exchange now coexists with the old external column-drying closure. This is not a proof of double counting or a sink-off climate counterfactual.",
+  "parent": "output/environmental_partition_20261027",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "profiles": [
+    "reference",
+    "transport_control",
+    "column_control",
+    "wind_control",
+    "environment_600",
+    "environment_650"
+  ],
+  "water_profiles": [
+    "column_control",
+    "wind_control",
+    "environment_600",
+    "environment_650"
+  ],
+  "display_profiles": [
+    "reference",
+    "wind_control",
+    "environment_600",
+    "environment_650"
+  ],
+  "paired_change": {
+    "candidate": "environment_600",
+    "control": "wind_control"
+  },
+  "bins": {
+    "all_land": "unchanged cropped valid mask",
+    "lowland": "cropped valid and elevation < 1000 m",
+    "upland": "cropped valid and elevation >= 1000 m"
+  },
+  "source_terms": [
+    "evaporation",
+    "advection",
+    "diffusion",
+    "storm_exchange",
+    "column_drying",
+    "convergence_import"
+  ],
+  "display_disjoint_terms": [
+    "evaporation",
+    "advection",
+    "diffusion",
+    "storm_exchange",
+    "other_column_drying",
+    "monsoon_drying",
+    "convergence_import"
+  ],
+  "numerical_limits": {
+    "closure_atol_mm_model_month": 0.0002,
+    "closure_rtol_sum_abs": 5e-06,
+    "layer_sum_atol_mm": 2e-05,
+    "layer_sum_rtol": 2e-06
+  },
+  "identity": "Require completed parent review/protocol identity, every current parent scientific source hash, all 42 row identities/status/numerical certificates/parameter overrides and main NPZ hashes, all declared extra NPZ hashes, and exact case identities rebuilt from cached geography/observations without ClimateModel.run. Freeze all parent sources, row/array/protocol/review/progress files, current plan/script, region definitions, all loaded local helper modules excluding .venv, and package versions before computing derived outcomes. Recheck hashes before writing final review. Never reuse a nonempty output directory; preserve failure.json on any failure.",
+  "domain": "Use the original NPZ cropped valid mask and elevation. Rebuild each exact case grid and verify cropped mask/elevation/observations against the archive; require paired geometry identical across all profiles. Report both cropped diagnostic and full original scoring cell counts. The rounded-pad crop can omit inmap cells (known East Australia mismatch); do not equate cropped budget means with original full-score means or alter original scores. Equal cell weights within each fixed bin, equal model months for these saved equations, no Gregorian reinterpretation of saved means.",
+  "equation": "For each saved valid cell/month require evaporation + advection + diffusion + storm_exchange + column_drying + convergence_import - simulated = residual within fixed absolute plus sum-absolute-term relative tolerance. All operands must be finite on the unchanged mask. Rain/observations are nonnegative; column_drying and monsoon_drying are nonpositive up to saved-float tolerance. Monsoon drying is already included in column_drying: other_column_drying = column_drying - monsoon_drying, and only these two disjoint losses may be stacked. Do not add monsoon drying to total column drying.",
+  "water": "Only the four independent-water profiles contain monthly full-grid column_water and layer_water. Require finite nonnegative matching fields and sum of the two layer amounts matching column water within fixed saved-float tolerance. Crop water with the verified actual grid.map_slice, not guessed offsets. The other two controls have no saved water: all water-dependent metrics remain unavailable, never reconstructed from drying or humidity assumptions. Zero water with zero removal gives an undefined rate and timescale (JSON null, raw array NaN); positive removal with zero water is invalid.",
+  "metrics": "Keep monthly and annual mean signed equation amounts for every fixed region/profile/bin, both drying subsets, simulated and observed rain, residual and absolute residual. Annual amounts sum the twelve original equal model months. Report positive annual drying/rain burden D/P and drying/(rain+drying), with null when denominator is zero. For available saved water compute each cell/month k_eff = -column_drying_mm_month / ((year_days/12)*column_water_mm); this is the exact water-weighted monthly removal rate represented by the saved arrays, not a mean prescribed coefficient or an instantaneous rate. Tau_eff = 1/k_eff with null for zero removal. Bin rates use ratio of bin-mean loss to bin-mean water, not the mean of cell reciprocals. Annual rate uses total annual loss divided by the sum of monthly water times month duration. Export monthly cell water/rate/tau arrays separately. Preserve original full-score JSON rainfall metrics distinctly from cropped diagnostic summaries. Paired environment_600 minus wind_control changes use identical cropped cells and signed equation terms; they are not causal shares or a counterfactual.",
+  "figures": [
+    "One 2x4 regional annual signed-budget figure, seven regions and one legend panel. Show declared reference/wind_control/environment_600/environment_650 profiles only; stack disjoint equation sources and sinks, mark cropped simulated and observed rain. Retain every profile in the JSON. Explain concentration-form r39 advection is not conservative flux.",
+    "One two-panel paired-change/sink-burden figure. Left: all seven regions by all disjoint signed equation terms, environment_600 minus same-wind moist control annual amounts. Right: positive annual drying/rain for all six profiles and all seven regions. A source difference is not causal attribution or predicted sink-off rain."
+  ],
+  "unavailable": [
+    "Exact branch winds on model arithmetic faces",
+    "Instantaneous donor vertical dry-mass and vapor flux",
+    "Layer rain and layer drying fields",
+    "Submonthly humidity/transport/rate covariance",
+    "Spatial or temporal overlap of donor descent and prescribed drying",
+    "A sink-off rainfall response"
+  ],
+  "decision": "No accuracy threshold, fit, profile ranking, climate integration, adoption or parameter change. Numerical verification can pass while the physical interpretation remains unresolved. Internal vertical donor exchange cancels in the total column; the separately booked drying term removes column water. Existing diagnostics establish this equation distinction, not whether unresolved motions justify the additional sink. Any physical change requires a separately frozen coupled comparison under unchanged Earth safeguards.",
+  "climate_integrations": 0,
+  "physics_or_atlas_adoption": false
+}

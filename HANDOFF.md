@@ -2,6 +2,20 @@
 
 ## Current status
 
+**Next diagnostic predeclared; not yet run:**
+`calibration/column_drying_20261027/plan.json` and
+`scripts/audit_column_drying.py`. Zero integrations, all six profiles and seven
+regions from the completed environmental pilot. Five manufactured ledger,
+duration-axis, covariance, zero-water and layer-sum tests pass. Audit signed
+monthly removal, disjoint monsoon/other losses and water-weighted effective
+rates; donor exchange overlap is unavailable from these archives. No physical
+change, causal attribution, fit or adoption. Preserve the known East Australia
+diagnostic crop (347 land cells versus 358 full-score cells), report both
+domains, and do not reinterpret its original full-mask scores. Southern mirror
+padding explains the export discrepancy; all prognostic states and headline
+scores remain unaffected. A later complete-export repair must preserve legacy
+archive crop semantics and capture previously omitted budget rows explicitly.
+
 **Environmental thermal reference and coupled Earth pilot COMPLETE:** scientific
 source `9746d51`, `output/environmental_partition_20261027/`. All 42 actual
 Earth runs passed strict numerics; all 28 archived control NPZ fieldsets and
