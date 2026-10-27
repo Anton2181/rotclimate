@@ -314,7 +314,7 @@ def main():
                     geometry=dict(cropped_shape=list(mask.shape),cropped_diagnostic_cells=int(mask.sum()),
                         full_original_scoring_cells=row['rain']['scored_land_cells'],
                         cropped_omits_scoring_cells=row['rain']['scored_land_cells']-int(mask.sum()),
-                        map_slice=[[s.start,s.stop] for s in sl],case_identity=row['case_identity']),
+                        map_slice=[[int(s.start),int(s.stop)] for s in sl],case_identity=row['case_identity']),
                     original_full_score_rain=row['rain'],
                     bins={label:summarize(fields,own,duration,water) for label,own in bins.items()})
         paired={};own,base=plan['paired_change']['candidate'],plan['paired_change']['control']

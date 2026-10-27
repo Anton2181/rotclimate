@@ -2,13 +2,19 @@
 
 ## Current status
 
-**Next diagnostic predeclared; not yet run:**
+**Next diagnostic: first attempt preserved, serialization fix ready:**
 `calibration/column_drying_20261027/plan.json` and
 `scripts/audit_column_drying.py`. Zero integrations, all six profiles and seven
 regions from the completed environmental pilot. Five manufactured ledger,
 duration-axis, covariance, zero-water and layer-sum tests pass. Audit signed
 monthly removal, disjoint monsoon/other losses and water-weighted effective
-rates; donor exchange overlap is unavailable from these archives. No physical
+rates; donor exchange overlap is unavailable from these archives. The first
+attempt passed numerical checks and generated figures, then JSON writing
+failed because grid slice bounds were NumPy integers. Preserve the complete
+`output/column_drying_20261027/` failure. The fix only casts those bounds to
+native integers; rerun into `output/column_drying_20261027_verified/` after
+committing the correction. No threshold, mathematical or source-data change.
+Both attempts add zero Earth runs. No physical
 change, causal attribution, fit or adoption. Preserve the known East Australia
 diagnostic crop (347 land cells versus 358 full-score cells), report both
 domains, and do not reinterpret its original full-mask scores. Southern mirror
