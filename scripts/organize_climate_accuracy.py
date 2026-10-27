@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('environmental-partition','Environmental temperature and moisture capacity partition'),
     ('westerly-fit','Shared westerlies and climate calibration'),
     ('column-rain','Column convection and falling-rain evaporation'),
     ('independent-water','Independent lower and upper water'),

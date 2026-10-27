@@ -2,37 +2,67 @@
 
 ## Current status
 
-**Environmental moisture partition predeclared:**
-`calibration/environmental_partition_20261027/plan.json`, coreopt-in profile
-'environmental' plus separate global6.0/6.5K/km lapse. Only normalized capacity/
-ocean boundary fractions change; totallegacyWs/W_ocean law, surface-elevation
-lapse, independentactualwater andallothercoefficients preserved. Moistdefault
-arithmeticexact. Two legacy/pressuremoist pre-edit toy snapshots identical;
-agent73focusedtests passed; root65combinedcore/guardtests pass (overlap), plus
-3independentreference-math/axis tests. Every primer/scored profile/lapsecert
-required in pilot andalllaterfull/fine gates. No solvedenergy/radiation claim.
+**Environmental thermal reference and coupled Earth pilot COMPLETE:** scientific
+source `9746d51`, `output/environmental_partition_20261027/`. All 42 actual
+Earth runs passed strict numerics; all 28 archived control NPZ fieldsets and
+arrays reproduce exactly. Six separate PNW native companions have verified
+hashes; all four archived control companions are exact. Independent scientific
+verification checked all 177 coupled and 61 reference frozen source hashes,
+recomputed screening exactly, and verified every primer/scored certificate.
+Neither candidate qualifies; no full/fine/established/world stages or adoption.
+Series: **941 actual attempts / 937 passes / 4 preserved old failures**.
 
-Pairedcachedreference: `calibration/environmental_reference_20261027/plan.json`,
-`scripts/audit_environmental_partition.py`: PNW4/Iberia20/California3ocean cells,
-observed925Tanchors, moist/env6/env6.5, compare withheld850–300TMAE ANDqsatshape
-versusqsat at observedT (notactualhumidity). MeanTerror improve>=5%, eachregion
-<=oldmoist+.5K; meanqsatshapeerror no worse; each<=1.10old+.005. Fixedbefore
-outcomes; neitherprofileselected. Samecachepayloads/archivemasks/areas/months,
-no newdownloads/fit/climateintegration. Sourceplancommittedbeforemetrics. Firstauditprefreezearchive check failed because
-legacyprotocolbindsURL/hashesunderreferences withoutduplicatingsources; allraw
-hashesmatch. Failurepreserved output/environmental_reference_20261027/failure.json,
-zero profilescores/climateruns. Readercompatibilityfix+regressiontest added,
-rerunuses fresh output/environmental_reference_20261027_verified. Thresholds
-and sourcepayloads unchanged.
+New opt-in `moisture_reservoir_temperature_profile='environmental'` with
+separate global 6.0/6.5 K/km lapse changes normalized layer capacity and ocean
+boundary fractions only. Calibrated total laws stay identical at a matched
+state; coupled temperature/sea states may respond. Surface-elevation lapse
+remains 4.4142078309475306 K/km. Actual lower/upper humidity remains solved;
+no humidity reset, reference forcing, regional knob or new energy equation.
+The default moist path and both pre-edit toy snapshots remain exact. Root's
+65 combined core/guard checks passed, plus four reference math/provenance
+checks (agent's 73 focused checks overlap). Every primer/scored step must
+certify the selected profile/lapse through all later gates.
 
-Afterreferenceaudit, run42coupledregions:28exactoldcontrols (r39/commonmass/
-correctedmoistoriginalwind/correctedmoist7.5wind), then14env6/env6.5cases both
-7.5m/s. All prior r39/regional/temp/rain/SST/nativewind/humidity/layer/mass
-protections plus newthermalreferenceguard unchanged. ExtraPNWguardstillvs
-originalmoistcolumncontrol, actual4nativefootprints. maximum_finalists=0 first
-stage: anyqualifiermustcontinuefrozenfull31/ocean/fine/established+PNW56/28before
-adoption/worldtransfer. No active job yet; don'teditfrozen sourcesafterlaunch.
+Separate cached reference: `output/environmental_reference_20261027_verified/`,
+source `4e0b092`. Zero downloads, fits or Earth integrations. Same PNW 4,
+Iberia 20, California 3 native ocean footprints; observed 925 hPa T anchor,
+higher 850–300 hPa temperatures and all humidity withheld from construction.
+Environmental 6.0 passes: mean thermal MAE 4.05549 → 3.00433 K (25.92% less),
+observed-temperature saturation-shape MAE 0.05905 → 0.03028 (48.73% less).
+Environmental 6.5 fails five regional/aggregate protections; all failures
+retained, including Iberia exceeding its thermal limit by only 0.00167 K.
+Capacity shape is not actual humidity. Original archive-reader setup failure
+is preserved in `output/environmental_reference_20261027/failure.json`; it
+occurred before metrics and adds zero Earth runs. Reader fix accepts legacy
+reference-manifest hash bindings without requiring duplicate source entries.
 
+Both coupled candidates use the fixed prior 7.5 m/s westerly setting, corrected
+column convection/recycling, independently solved water and no vertical mixing.
+Environmental 6.0 improves North India rain 272 → 341 mm/year (761 observed),
+Japan and PNW, but worsens Mexico and East Australia. Its aggregate rain-loss
+ratio is 1.23797 versus r39 (matched moist 1.21977); temperature ratio 1.01389
+exceeds 1.01. PNW q-shape MAE improves 0.06285 → 0.04451, but partial-water
+MAE worsens 1.14837 → 1.26510 mm; closer annual mean cannot replace local error.
+The 6.5 profile fails coupled guards as well as the independent thermal guard.
+Every layer/column/mass check passes: 33 primer/scored steps per regional run,
+231 per seven-region candidate. No thresholds changed after outcomes.
+
+Research companion now has 22 studies / 55 figures / 28 JSON downloads; the
+new environmental study opens first. Full reference results are nested inside
+it, not added as another map topic. Reports: ENVIRONMENTAL_PARTITION_20261027.md
+and ENVIRONMENTAL_REFERENCE_20261027.md. Normal climate/economy/settlement
+packets and headline measurements stay unchanged: science Earth r39 and
+fantasy Earth r38. Standard `.bat` launcher serves the new evidence. No active
+calibration or supervisor. Server 8766 may still run. Final checkout, portable
+bundle, browser and science receipts live in the coupled output directory.
+
+Next physical question: a better vertical capacity profile alone cannot resolve
+the opposing regional rain errors. Audit rain activation/removal and seasonal
+transport on the independently solved humidity before another shared-parameter
+fit. Keep global Earth settings and all thermal/humidity protections. Do not
+select 6.5 because it is conventional, impose a universal q ratio, or mistake
+the small reused coastal reference for global validation. Historical notes
+below describe earlier milestones and are superseded by this status.
 
 **PNW vertical-reference audit COMPLETE:** source `a012505`,
 `output/pnw_vertical_20261027/`. Zero additional Earth integrations or fitted
