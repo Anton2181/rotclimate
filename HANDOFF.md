@@ -2,6 +2,23 @@
 
 ## Current status
 
+**PNW transport diagnostic predeclared:** `calibration/pnw_transport_20261027/plan.json`,
+`scripts/audit_pnw_transport.py`. Additional NOAA native PNW u/v/q/hgt subsets
+acquired and provenance/coordinates/units verified using unchanged reader.
+No new scores or climate runs yet. After parent column-rain pilot completes,
+run3actual diagnostic reruns (r39/old no-mix/corrected no-mix), each exact versus
+same-source parent rain and temperature scores; original r39 fullT/P archive
+also exact. Compare actual native geographic vectors, monthly partial humidity,
+true areas and fixed masks. Whole-column modeled moisture wind vs observed
+q-weighted925–300 partial wind is an explicit approximation, not an exact vapor
+flux. No fitting/adoption. Publish nested in parent study to avoid extra topics.
+Report PNW_TRANSPORT_20261027.md, publisher publish_pnw_transport.py.
+
+Parent42-run supervisor source69d2f8b is active; check live status file. First
+original and fixed-profile controls reproduced, remaining controls/candidates
+still running at this commit. Never mutate frozen scientific sources mid-job.
+
+
 **Column-convection/rain recycling follow-up declared (27October):**
 `calibration/column_rain_20261027/plan.json`,42actual Earth runs planned:
 7r39,7fixed-profile transport,7independent-no-mix,7independent5daymix exact

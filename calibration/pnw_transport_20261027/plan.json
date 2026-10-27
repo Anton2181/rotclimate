@@ -1,0 +1,15 @@
+{
+  "declared_before_new_scores": true,
+  "purpose": "Diagnose Pacific Northwest excessive water supply against independent native monthly circulation and humidity, without fitting or changed forcing.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": ["pacific_nw"],
+  "new_reference_boxes": {"pacific_nw": [[14, 22, 92, 102]]},
+  "cell_km": 56.0,
+  "parent": "output/column_rain_20261027",
+  "profiles": ["reference", "reservoir_control", "column_no_mix"],
+  "reference": "NCEP/NCAR1981-2010 native2.5degree pressure winds, specific humidity and925hPa geopotential; provenance and units verified with the existing constrained reader. No reference enters model forcing.",
+  "comparison": "Three fresh actual coupled runs must reproduce their same-source pilot monthly rainfall and temperature statistics; reference must additionally reproduce all original monthly float32T/P cells. Use same native aggregation, projection Jacobian, terrain/coast/coverage exclusions and Gregorian weights as previous circulation diagnostics. Compare925/850 and q-weighted925-300 winds; partialPW and vertical humidity shape for actual layer states. Fixed ocean/land masks and actual native cell counts, no invented below-ground extrapolation or use of surface-model winds as pressure-resolved observations.",
+  "plots": "Show every declared profile, winter/summer geographic vectors on native footprints and full monthly errors. Fixed pressure-weighted925-300 wind diagnostic is a partial column, based on products of monthly means, omitting transient covariance. Do not relabel wind or water differences as causal rainfall errors.",
+  "decision": "Diagnostic only, no candidate selected, no threshold or profile modified, no planet/wind/closure parameter fit. The reference is coarse/model-assisted and1981-2010 versus WorldClim1970-2000. Count exactly3actual Earth reruns if all execute; acquisition alone adds0. No normal atlas climate/headline change. This may motivate a separately declared physical wind or boundary correction. Preserve failures."
+}
