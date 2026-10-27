@@ -38,4 +38,54 @@ piecewise-uniform q in the two broad layers over matched pressure intervals.
 Coarse reanalysis is model-assisted;1981–2010 differs from the WorldClim rainfall
 period1970–2000. No native observed vector or humidity enters the simulation.
 
-Status: source/reference plan declared before new diagnostic scores; pending.
+Status: complete; three exact diagnostic reruns passed. No fitting or adoption.
+
+
+## Measured results
+
+All three actual integrations passed and reproduced their parent rainfall cells
+and temperature scores exactly. The original r39 also reproduced every archived
+monthly float32temperature/rainfall cell. Runtime was35.7seconds. Acquisition
+and corrected figure rendering add no additional climate integrations.
+
+Only4ocean footprints (191,166km²) pass the full selection;0land footprints pass.
+Fifteen native footprints have sufficient coverage, but terrain and mixed-coast
+exclusions remove the rest. This is a small coastal sample, not a validated
+circulation score for the land or the entire Pacific basin.
+
+| Profile | Annual land rain mm | Ocean vector RMSE m/s | Mean modeled vector speed m/s | Eastward bias m/s |
+|---|---:|---:|---:|---:|
+|r39|732.06|4.186|9.827|+2.995|
+|Previous reservoirs|2543.19|4.122|9.950|+3.585|
+|Corrected convection/recycling|2394.06|4.126|9.955|+3.589|
+
+Observed regional land rainfall averages897.46mm/year; the reference ocean mean
+vector speed is6.355m/s. The models broadly reproduce the winter/summer direction
+shift, but eastward flow is too strong, including in r39. The rain correction
+barely changes this circulation, supporting a separate transport investigation.
+The near-equality of wind RMSE despite very different rainfall is evidence that
+neither this speed error alone nor the scalar rain correction explains the
+whole rainfall problem. The error may also depend on native vertical structure,
+mean-flow moisture convergence, storm exchange, terrain and open boundaries.
+
+Previous and corrected reservoirs give partial ocean water11.321/11.355mm
+versus11.989observed; partial q ratios0.23364/0.23366 versus0.29139observed.
+PW MAE1.141/1.147mm and shape MAE0.06086/0.06184 change little. Thus PNW humidity
+shape is too bottom-heavy while Iberia's is too top-heavy; imposing a universal
+lower upper-humidity ratio would not fix both regions physically. This diagnostic
+does not add a new post-result gate or select any coefficient.
+
+## Figure correction audit
+
+The initial monthly wind rendering selected the January east/north pair rather
+than twelve eastward months. `scripts/plot_pnw_transport.py` corrects the component
+axis from the frozen saved arrays, with a separate analytic12month regression
+check. Raw diagnostic numbers, original figures, source/protocol and all three
+climates remain preserved. `figures.json` records the corrected plotter, raw
+review digest and replacement figures; no climate was rerun. The published page
+uses the corrected12month plot and simpler coast rendering for legible arrows.
+
+The complete series now contains857actual Earth attempts,853passes and4old
+preserved failures. The new reference audit adds3reruns to the854attempts after
+the parent closure campaign. Atlas climates, settlement/economy and headline
+accuracy remain unchanged.

@@ -2,46 +2,47 @@
 
 ## Current status
 
-**PNW transport diagnostic predeclared:** `calibration/pnw_transport_20261027/plan.json`,
-`scripts/audit_pnw_transport.py`. Additional NOAA native PNW u/v/q/hgt subsets
-acquired and provenance/coordinates/units verified using unchanged reader.
-No new scores or climate runs yet. After parent column-rain pilot completes,
-run3actual diagnostic reruns (r39/old no-mix/corrected no-mix), each exact versus
-same-source parent rain and temperature scores; original r39 fullT/P archive
-also exact. Compare actual native geographic vectors, monthly partial humidity,
-true areas and fixed masks. Whole-column modeled moisture wind vs observed
-q-weighted925–300 partial wind is an explicit approximation, not an exact vapor
-flux. No fitting/adoption. Publish nested in parent study to avoid extra topics.
-Report PNW_TRANSPORT_20261027.md, publisher publish_pnw_transport.py.
+**Column convection/rain recycling COMPLETE:** source69d2f8b,
+`output/column_rain_20261027/`,42/42strict passes,28exact historical controls,
+runtime465.5seconds. Neither candidate qualifies; no full31/ocean/fine/
+established stages, no active calibration/supervisor. All normal atlas/headline
+climates unchanged (574files exact versus1f6ca0a). ScienceEarthr39/worldEarthr38.
 
-Parent42-run supervisor source69d2f8b is active; check live status file. First
-original and fixed-profile controls reproduced, remaining controls/candidates
-still running at this commit. Never mutate frozen scientific sources mid-job.
+New opt-in moisture_reservoir_rain_scheme='column-convection': total-W empirical
+convection, local dynamical gate/overflow, lower-RH evaporation, upper gross-rain
+loss and actual lower-vapor source for evaporated upper rain. Internal signed
+transfer cancels exactly; each candidate231seasonal/primer checks pass unchanged
+layer/column0.01tol.102focused tests pass incl analytic rain-recycling two-box.
+Default='layer' kept exact. No explicit parcel/latent-energy feedback coupled.
+Corrected no-mix aggregate rainloss6.05%lower than old reservoir; mixing10.40%lower,
+but still27.29%/36.48%above r39rainloss. CombinedS1.13100/1.19409. No-mix annual
+NI272vs761obs,Iran213vs232,Iberia737vs392,PNW2394vs897. Iberian humidity vertical shape
+stillfails; no post-result gate/planet/threshold changes. See COLUMN_RAIN_20261027.md.
 
+**PNW native audit COMPLETE:** source9065c89,
+`output/pnw_transport_20261027/`,3actual strict reruns (r39/old no-mix/corrected
+no-mix), all parent raincells/Tscores exact; r39 all original float32T/Pcells exact.
+NOAA new u/v/q/hgt regional subsets verified;4native ocean footprints/191166km²,
+0land passes terrain mask. Ocean mean diagnostic vector speeds9.827/9.950/9.955m/s
+vs reference6.355; RMSE4.186/4.122/4.126m/s, eastbias+2.995/+3.585/+3.589m/s.
+Rain correction barelychangesincomingcirculation. PNWqpartialratio.234 vs.291obs
+(bottom-heavy), unlikeIberia too top-heavy: universal upper-humidity reduction
+would not fixboth. Small ocean sample/partial-observed vswhole-modelcolumn,
+model-assisted reanalysis anddifferentperiods limit inference. Not exact vapor
+flux or causal rain attribution. New wind study must keep shared physics/global
+Earthguards, not putPNWregionalcoefficient into model. Report PNW_TRANSPORT_20261027.md.
 
-**Column-convection/rain recycling follow-up declared (27October):**
-`calibration/column_rain_20261027/plan.json`,42actual Earth runs planned:
-7r39,7fixed-profile transport,7independent-no-mix,7independent5daymix exact
-controls, then7each corrected no/5daymix. No new physical coefficient or planet
-change; unchanged numerical work/error/accuracy/mass/ocean/wind/humidity guards.
-`moisture_reservoir_rain_scheme='column-convection'` applies empirical convection
-to total W, keeps local dynamic rain/overflow, and attenuates falling rain with
-actual lower-layer RH. Upper gross rain loss is paired with a lower-vapor source
-for its re-evaporated fraction; internal transfer cancels in total water.
-Proportional-profile equivalence is TOTAL ground rain, not individual layer losses.
-Old default scheme='layer' retained for exact historical controls. No explicit
-parcel ascent/latent-energy feedback is coupled. See COLUMN_RAIN_20261027.md.
-
-Correction justified by two independent code reviews: layerwise convex empirical
-column law adds Jensen amplification; upper rain evaporation was retained aloft
-rather than routed down. PNW excessive onshore advection predates reservoir
-states, so this alone is not promised to cure it. Whole-column budgets are
-solved terms, not independent causal attributions. Rain scheme and internal
-precipitation transfer conservation must be certified in every later gate.
-Start supervisor only after committing source/tests; check
-`output/column_rain_20261027/status.json` for actual state. Do not edit frozen
-sources during the campaign. Publish all outcomes and keep failures.
-
+Plot correction preserved: initial monthly wind plotted Januaryvectorcomponents
+instead of12eastwardmonths. Raw rows/arrays/climates/source and original figures
+preserved; plot_pnw_transport.py rerendersfromverifiedarrays,1analytic axis test
+passes. Corrected v2figures and provenance in figures.json; publishedcopyusesv2.
+No extra climate runs for rendering. Parent+audit series857attempts/853passes/
+4preserved old failures. Companion20studies/45figures/24JSONdownloads, PNWnested
+inside newestcolumn-rainstudy. Standard.batlauncher serves updated evidence,
+normalclimate/settlement/farming/trade packets unchanged. Server8766maystillrun.
+Next high-value step: bounded globallyshared westerly/drag/thermal-balance test
+against actual native circulation before another full Earth fit, preserving
+monsoon delivery and humidity guards. No candidate is qualified/adopted yet.
 
 **Parcel-ascent proof COMPLETE:** source `fc91ae4`,
 `output/parcel_ascent_20261026/`.18manufactured T/RH/pressure cases ×64/128/256

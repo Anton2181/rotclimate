@@ -13,12 +13,16 @@ def main():
         if file_hash(ROOT/name)!=sha:raise ValueError('Changed diagnostic source: '+name)
     for name,row in review['rows'].items():
         if not row['parent_climate_exact'] or file_hash(out/(name+'.npz'))!=row['arrays_sha256']:raise ValueError('Unverified diagnostic climate')
+    figures=json.loads((out/'figures.json').read_text())
+    if figures['review_sha256']!=file_hash(out/'review.json'):raise ValueError('Changed raw review for corrected figures')
+    for name,sha in review['images_sha256'].items():
+        if file_hash(out/name)!=sha:raise ValueError('Original figure audit lost')
     data=ROOT/'atlases/climate_accuracy/data';images={}
-    for source_name,target_name in [('native_vectors.png','pnw_native_vectors.png'),('monthly_diagnostics.png','pnw_monthly_diagnostics.png')]:
+    for source_name,target_name in [('native_vectors_v2.png','pnw_native_vectors.png'),('monthly_diagnostics_v2.png','pnw_monthly_diagnostics.png')]:
         source=out/source_name
-        if file_hash(source)!=review['images_sha256'][source_name]:raise ValueError('Changed audit picture')
+        if file_hash(source)!=figures['images_sha256'][source_name]:raise ValueError('Changed audit picture')
         shutil.copyfile(source,data/target_name);images[target_name]=file_hash(data/target_name)
-    write_json(data/'pnw_transport.json',dict(review,plan=protocol['plan'],protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),publisher_sha256=file_hash(Path(__file__)),published_images_sha256=images))
+    write_json(data/'pnw_transport.json',dict(review,plot_correction=figures,plan=protocol['plan'],protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),publisher_sha256=file_hash(Path(__file__)),published_images_sha256=images))
     counts=review['rows']['reference']['circulation']['coverage']
     names={'reference':'r39','reservoir_control':'Previous independent water','column_no_mix':'Corrected convection/recycling'};table=[]
     for name,label in names.items():
@@ -27,7 +31,7 @@ def main():
         q='—' if humidity is None else f'{humidity["model_partial_q_ratio"]:.3f}'
         table.append(f'<tr><td>{label}</td><td>{row["rain"]["sim_mean_annual_mm"]:.0f}</td><td>{wind["vector_rmse_ms"]:.2f}</td><td>{q}</td></tr>')
     section=f'''<!--pnw-transport-start--><div data-pnw-transport><h3>Pacific Northwest: check the incoming circulation</h3>
-<p><strong>Separate diagnostic, three actual climate reruns; no tuning or adoption.</strong> Every run reproduces the parent rainfall cells and temperature scores; r39 also reproduces archived monthly temperature/rain cells. New NCEP/NCAR pressure-level data use the same verified units, true-area native aggregation, projected-vector conversion, calendar weights and terrain/coast exclusions as the earlier circulation audits. Coverage retains{counts['ocean_cells']}ocean and{counts['land_cells']}land native footprints.</p>
+<p><strong>Separate diagnostic, three actual climate reruns; no tuning or adoption.</strong> Every run reproduces the parent rainfall cells and temperature scores; r39 also reproduces archived monthly temperature/rain cells. New NCEP/NCAR pressure-level data use the same verified units, true-area native aggregation, projected-vector conversion, calendar weights and terrain/coast exclusions as the earlier circulation audits. Coverage retains {counts['ocean_cells']} ocean and {counts['land_cells']} land native footprints.</p>
 <figure><a href="data/pnw_native_vectors.png"><img src="data/pnw_native_vectors.png" width="2030" height="1160" loading="lazy" alt="Winter and summer matched native Pacific Northwest geographic wind vectors in reanalysis, r39 and both moisture implementations"></a><figcaption>The reference is a q-weighted925–300hPa partial column; modeled vectors are whole-column moisture diagnostics. This approximation and monthly-mean reference omit vertical detail and transient moisture covariance. Arrows share a speed scale.</figcaption></figure>
 <div class="table"><table><caption>Identical PNW climates; matched native ocean diagnostics</caption><thead><tr><th>Profile</th><th>Annual land rain mm</th><th>Ocean vector RMSE m/s</th><th>Partial upper/lower q</th></tr></thead><tbody>{''.join(table)}</tbody></table></div>
 <figure><a href="data/pnw_monthly_diagnostics.png"><img src="data/pnw_monthly_diagnostics.png" width="2030" height="783" loading="lazy" alt="Pacific Northwest monthly eastward ocean circulation, land rainfall and actual partial humidity shape"></a><figcaption>More or less rainfall is not evidence by itself of better circulation. The coarse, model-assisted1981–2010 reanalysis differs from the WorldClim1970–2000 rainfall period. Native footprints are reused diagnostics, not a new global validation set.</figcaption></figure>
