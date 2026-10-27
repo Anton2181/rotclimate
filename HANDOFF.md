@@ -2,25 +2,44 @@
 
 ## Current status
 
-**Next diagnostic: first attempt preserved, serialization fix ready:**
-`calibration/column_drying_20261027/plan.json` and
-`scripts/audit_column_drying.py`. Zero integrations, all six profiles and seven
-regions from the completed environmental pilot. Five manufactured ledger,
-duration-axis, covariance, zero-water and layer-sum tests pass. Audit signed
-monthly removal, disjoint monsoon/other losses and water-weighted effective
-rates; donor exchange overlap is unavailable from these archives. The first
-attempt passed numerical checks and generated figures, then JSON writing
-failed because grid slice bounds were NumPy integers. Preserve the complete
-`output/column_drying_20261027/` failure. The fix only casts those bounds to
-native integers; rerun into `output/column_drying_20261027_verified/` after
-committing the correction. No threshold, mathematical or source-data change.
-Both attempts add zero Earth runs. No physical
-change, causal attribution, fit or adoption. Preserve the known East Australia
-diagnostic crop (347 land cells versus 358 full-score cells), report both
-domains, and do not reinterpret its original full-mask scores. Southern mirror
-padding explains the export discrepancy; all prognostic states and headline
-scores remain unaffected. A later complete-export repair must preserve legacy
-archive crop semantics and capture previously omitted budget rows explicitly.
+**Joint storm/rain calibration predeclared; launch after source commit:**
+`calibration/joint_rain_20261027/plan.json`. Eight fixed combinations of
+eddy_rate 1.0/1.8, precip_tau_days 8/15, convective_rh 0.65/0.72, on
+reference-qualified environmental 6.0, independent water, corrected rain and
+7.5 m/s westerlies. Four exact seven-region controls precede 56 candidate
+runs: 84 actual integrations planned. Only three shared empirical coefficients
+change; storm exchange also affects heat. All earlier Earth/native wind/
+humidity/thermal/numerical safeguards and planetary forcing stay fixed.
+No added candidate or weaker limit after results. This factorial probes
+interactions and wider starts, not proof of a global optimum. Any qualifier
+still requires full31/ocean/fine/established and matched world qualification.
+Run through `scripts/supervise_frozen.py` with a two-hour ceiling and immutable
+source monitoring; its mocked operational checks pass. Frozen model/runner
+sources must not be edited after launch. Side FORGE development must use new
+modules outside rotclimate and leave frozen source files unchanged meanwhile.
+
+**Archived column-drying audit COMPLETE:** source `255ac32`, successful output
+`output/column_drying_20261027_verified/`, zero climate runs or fitted changes.
+All six profiles / seven regions, 42 parent archive hashes, 28 water packets
+and 112 derived fields verified; five analytic tests pass. Maximum saved
+source reconstruction discrepancy 0.00013456 mm/model month; maximum layer
+sum discrepancy 0.0000034333 mm. Source, disjoint monsoon/other removal and
+water-weighted effective-rate definitions remain explicit. Donor overlap is
+unavailable, not inferred from monthly fields. Original writer failure in
+`output/column_drying_20261027/` is preserved; metadata-only native-integer
+fix preceded the fresh successful attempt and changes no mathematics.
+
+In environmental 6.0 minus matched moist, Mexico/East Australia cropped rain
+changes +221/+273 mm/year accompany advection +190/+170, while explicit
+column drying changes less than 0.4 mm/year. PNW rain/advection both decrease
+about 165–167 mm/year. These are equation differences, not causal shares or
+a sink-off prediction. Removing the drying closure is not established as a
+cure. The known southern mirrored-grid export bug omits 11 East Australia
+scored land cells (347 diagnostic versus 358 full-score); all original scores
+remain full-mask and unaffected. Preserve legacy crop semantics in historical
+NPZ controls; a future complete-export repair must capture omitted rows.
+Two figures and full JSON nested in the existing environmental study;
+publication QA receipts to follow. Adopted climates and headlines unchanged.
 
 **Environmental thermal reference and coupled Earth pilot COMPLETE:** scientific
 source `9746d51`, `output/environmental_partition_20261027/`. All 42 actual
