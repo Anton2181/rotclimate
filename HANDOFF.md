@@ -18,7 +18,12 @@ observed925Tanchors, moist/env6/env6.5, compare withheld850–300TMAE ANDqsatsha
 versusqsat at observedT (notactualhumidity). MeanTerror improve>=5%, eachregion
 <=oldmoist+.5K; meanqsatshapeerror no worse; each<=1.10old+.005. Fixedbefore
 outcomes; neitherprofileselected. Samecachepayloads/archivemasks/areas/months,
-no newdownloads/fit/climateintegration. Sourceplancommittedbeforemetrics.
+no newdownloads/fit/climateintegration. Sourceplancommittedbeforemetrics. Firstauditprefreezearchive check failed because
+legacyprotocolbindsURL/hashesunderreferences withoutduplicatingsources; allraw
+hashesmatch. Failurepreserved output/environmental_reference_20261027/failure.json,
+zero profilescores/climateruns. Readercompatibilityfix+regressiontest added,
+rerunuses fresh output/environmental_reference_20261027_verified. Thresholds
+and sourcepayloads unchanged.
 
 Afterreferenceaudit, run42coupledregions:28exactoldcontrols (r39/commonmass/
 correctedmoistoriginalwind/correctedmoist7.5wind), then14env6/env6.5cases both

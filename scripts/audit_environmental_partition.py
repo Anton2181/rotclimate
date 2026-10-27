@@ -73,6 +73,13 @@ def validate_matched_fields(air, humidity):
             raise ValueError('Invalid reference axes/values or missing hPa nodes')
 
 
+def verify_reference_provenance(prior, name, row):
+    """Legacy protocols bind payloads in references; newer ones also list sources."""
+    if (prior.get('references', {}).get(name) != row
+            or prior.get('sources', {}).get(name, row['sha256']) != row['sha256']):
+        raise ValueError('Independent archive raw reference differs: '+name)
+
+
 def verify_archive(region, spec, humidity, references):
     directory = ROOT/spec['directory']; arrays = directory/(spec['stem']+'.npz')
     record_path = directory/(spec['stem']+'.json'); protocol_path = directory/'protocol.json'
@@ -87,8 +94,7 @@ def verify_archive(region, spec, humidity, references):
     for name, row in references.items():
         filename = Path(name).name
         if filename.endswith('.das') or '_'+region+'_' in filename:
-            if prior['sources'].get(name) != row['sha256'] or prior.get('references', {}).get(name) != row:
-                raise ValueError('Independent archive raw reference differs: '+name)
+            verify_reference_provenance(prior, name, row)
     with np.load(arrays, allow_pickle=False) as saved:
         prefix = 'circulation_' if pnw else ''
         mask = saved[prefix+'mask_ocean'].copy()
@@ -210,7 +216,7 @@ def plot_errors(regions, path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--plan', type=Path, default=ROOT/'calibration/environmental_reference_20261027/plan.json')
-    parser.add_argument('--out', type=Path, default=ROOT/'output/environmental_reference_20261027')
+    parser.add_argument('--out', type=Path, default=ROOT/'output/environmental_reference_20261027_verified')
     args = parser.parse_args(); path = args.plan.resolve(); out = args.out.resolve()
     out.mkdir(parents=True, exist_ok=True)
     if any(out.iterdir()): raise ValueError('Preserve existing reference output; choose a fresh --out')

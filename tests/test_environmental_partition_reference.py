@@ -3,7 +3,15 @@ import numpy as np
 import pytest
 from experiments.v10_forcing_audit import Field
 from scripts.audit_environmental_partition import (LEVELS, THRESHOLDS, qualify,
-    validate_matched_fields, withheld_temperature_mae)
+    validate_matched_fields, verify_reference_provenance, withheld_temperature_mae)
+
+
+def test_legacy_reference_hash_binding_remains_strict_without_duplicate_source_entry():
+    row={'url':'https://example.invalid/reference','sha256':'abc','bytes':123}
+    verify_reference_provenance({'references':{'field':row},'sources':{}},'field',row)
+    verify_reference_provenance({'references':{'field':row},'sources':{'field':'abc'}},'field',row)
+    with pytest.raises(ValueError):verify_reference_provenance({'references':{}},'field',row)
+    with pytest.raises(ValueError):verify_reference_provenance({'references':{'field':row},'sources':{'field':'changed'}},'field',row)
 
 
 def test_withheld_pressure_quadrature_has_affine_analytic_solution_and_excludes_anchor():
