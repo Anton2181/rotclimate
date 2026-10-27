@@ -30,6 +30,8 @@ def main():
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
         if (ROOT / "atlas" / "population.js").exists():
             shutil.copy(ROOT / "atlas" / "population.js", out / "population.js")
+        if (ROOT / "atlas" / "foraging.js").exists():
+            shutil.copy(ROOT / "atlas" / "foraging.js", out / "foraging.js")
         print("refreshed", out / "index.html")
 
 
