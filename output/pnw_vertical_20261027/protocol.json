@@ -1,0 +1,196 @@
+{
+  "plan": {
+    "declared_before_new_temperature_download_or_scores": true,
+    "purpose": "Standalone native Pacific Northwest thermal and humidity profile diagnosis. No climate integration, rainfall scoring, coefficient fitting, humidity rescaling or adoption.",
+    "region": "pacific_nw",
+    "regions": [
+      "pacific_nw"
+    ],
+    "new_reference_boxes": {
+      "pacific_nw": [
+        [
+          14,
+          22,
+          92,
+          102
+        ]
+      ]
+    },
+    "physics": "calibration/local_accuracy_20261023/r39_params.json",
+    "circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+    "reference_archive": "output/pnw_transport_20261027/reference.npz",
+    "reference_record": "output/pnw_transport_20261027/reference.json",
+    "reference_protocol": "output/pnw_transport_20261027/protocol.json",
+    "air_cache": "data/cache/pnw_vertical_20261027",
+    "metadata_reuse_cache": "data/v10_atmosphere",
+    "download": "Acquire only NOAA PSL NCEP/NCAR Reanalysis 1 air-temperature metadata and the declared Pacific Northwest 1981-2010 monthly-normal subset. Keep a separate URL, SHA256 and byte-count manifest. Reuse air.das only after verifying its original URL, SHA256 and physical metadata, copying it into the separate cache with origin provenance. Existing circulation q/hgt are read and provenance-checked through circulation_reference.acquire; no existing cache or archive is rewritten.",
+    "pressure_hpa": [
+      925,
+      850,
+      700,
+      600,
+      500,
+      400,
+      300
+    ],
+    "profiles": [
+      "lapse",
+      "moist"
+    ],
+    "lapse_k_km": 4.4142078309475306,
+    "profile_integration_steps_per_interval": 64,
+    "potential_temperature_reference_pa": 100000.0,
+    "native_ocean_cells": 4,
+    "anchor": "Each native footprint and month uses its observed 925 hPa air temperature as the sole profile anchor. Higher observed temperatures and every observed humidity are withheld from the two profile calculations. The existing r39 environmental lapse is fixed; the alternative is the existing saturated moist thermodynamic profile. No effective humidity multiplier is fitted or applied to either saturation-capacity profile.",
+    "footprints": "Reuse exactly circulation_mask_ocean and circulation_area from the independent PNW reference NPZ, including their native flat-index order. Verify its passed JSON record and archive SHA256, original-month order, source reference fields and expected four ocean cells. Do not choose a new geographic subset or change terrain/coast exclusions. These footprints were at least 80% covered, at most 20% model land and above modeled terrain at 925 hPa in every month; native reanalysis below-ground flags are unavailable.",
+    "comparison": "Select exactly the seven declared common pressure nodes. Recover specific humidity q from the legacy reader's mixing ratio before all calculations. Diagnose observed temperature, dry potential temperature theta=T*(100000/p)^(Rd/cp), liquid-water specific saturation qsat and q/qsat at each node. Integrate observed q and observed/predicted qsat with identical trapezoidal pressure quadrature. Report PW925-300, lower925-700 and upper700-300 capacities and actual water, their layer-mean specific-humidity ratios, and actual-water/saturation-capacity fractions separately for both partial layers. q/qsat is an explicitly labeled specific-humidity saturation fraction, not exactly vapor-pressure relative humidity. No observed humidity is imposed on a predicted profile.",
+    "weights": "Use the archived geographic January-December order and Gregorian nonleap month lengths 31/28/31/30/31/30/31/31/30/31/30/31. Preserve exact selected native physical areas. Save full 12 x pressure x footprint arrays, area-averaged monthly profiles and January-December annual, DJF and JJA area/day-weighted profiles and scalars. DJF is December/January/February. Humidity ratios are computed per native footprint/month before area/day averaging; also retain their underlying integrated water and capacity. Temperature shape error is pressure-trapezoid mean absolute error over withheld 850-300 hPa, with the same month/area weights.",
+    "freeze": "After acquisition and structural metadata/axis/archive checks, freeze the exact plan, source code/dependencies, physics input, independent reference record/NPZ/protocol, original and separate download manifests and every actual reference payload before deriving any thermal/humidity outcome. Preserve the output protocol, all results and any failure. A completed or failed output folder cannot be silently reused; no automatic fetch or climate run occurs merely by importing the script.",
+    "figure": "One standalone 2 x 3 figure: DJF and JJA temperature profiles (observed, lapse, moist); observed annual/DJF/JJA dry theta; observed q/qsat vertical profiles; monthly partial actual water alongside observed-temperature saturation and both anchored saturation capacities; grouped actual-q and saturation-q upper/lower partial ratios with distinct labels. Every declared profile remains in raw data and the figure.",
+    "limitations": [
+      "Exactly four coarse native ocean footprints; no accepted PNW land sample and no global or rainfall validation.",
+      "NCEP/NCAR is model-assisted reanalysis with 1981-2010 monthly normals. Monthly mean qsat(T) and q/qsat omit submonthly temperature/humidity covariance; WorldClim rainfall uses a different 1970-2000 period.",
+      "Only 925-300 hPa is sampled. The ocean surface and marine inversion below 925 hPa, moisture above 300 hPa and transient moisture flux covariance are absent. Dry theta stability above 925 hPa cannot by itself diagnose a near-surface marine inversion or moist convective stability.",
+      "Observed 925 hPa temperature is an explicit external anchor, not a freely predicted climate state. Higher temperatures and humidity are diagnostic comparisons, not forcing for the climate model.",
+      "Liquid Bolton saturation, constant dry cp and latent heat, dry ideal-gas hydrostatic mapping and a prescribed 200 K temperature floor follow the existing profile helper. No ice, entrainment, cloud condensate, fallout, latent environmental-energy feedback or pressure-resolved momentum is solved.",
+      "Partial lower/upper pressure ratios are not full-column dry-layer ratios, a humidity reset, an exact vapor flux measurement or causal rainfall attribution. No profile or coefficient is selected from these outcomes."
+    ],
+    "climate_integrations": 0,
+    "physics_or_atlas_adoption": false
+  },
+  "sources": {
+    "calibration/pnw_vertical_20261027/plan.json": "89c7cd2e8fb0725e8c34d057cebbd5851ca69c97f56082232771ba5c91309ee6",
+    "scripts/audit_pnw_vertical.py": "bc5d5a34c29a144dcd1a285ec3704eb56ecb74d4e4444d329857d6a33b49c063",
+    "calibration/local_accuracy_20261023/r39_params.json": "2af65c29e35f4a06dce7a56e97219761b4c41c828734dd6d24a48ebdab3ee2e6",
+    "calibration/pnw_transport_20261027/plan.json": "060a14052abf0297ee421a48419f6c7be8ae6fdae3c99833caf58e10b6c4146b",
+    "output/pnw_transport_20261027/reference.npz": "63a45296ebd5e79e6e8e0ca6b3901c7d03272efadff160c5812764abd4513e76",
+    "output/pnw_transport_20261027/reference.json": "9a5218e3515f2e15fc37207a9062a705e11d2d6ae3af16acdadc097053b6403c",
+    "output/pnw_transport_20261027/protocol.json": "22c929792681ec256e4994057ec20cba3acf9fa7605210babd46feb9a7c8b1a2",
+    "scripts/circulation_reference.py": "6cc320d22e7c1ccafdb46ef1e4d783bfc9895d3e0ab1aaa0653416efc18999b6",
+    "scripts/earth_calendar.py": "151002a8791072093bc4fdef868c74dbaf826854dcaa306bf829093ce5f01e90",
+    "scripts/local_benchmark_protocol.py": "d4243124d1e7021f3fc7bd3b01735c3e07deffd56dd63eae4efd5c0b6dc1268c",
+    "experiments/v10_forcing_audit.py": "116e0d49e50b1491a1c337527e2c1940eeb59fa314a515b8791cd7a0b7fd8cf8",
+    "experiments/v10_thermodynamics.py": "09495b019863115812df4984bbf1d873d2e982054ce8634c0f41e163b70d89b7",
+    "data/v10_atmosphere/downloads.json": "260997bbc769f39d09f98924c0d81258b6850fd26eadd3a6b520da250540d89d",
+    "data/cache/circulation_reference_20261026/downloads.json": "0db6fcf6c780a0bc998c534f13fdcfacdf980a4021f877581e925af09bb23e7b",
+    "data/cache/pnw_vertical_20261027/downloads.json": "c637af00ba4fab9e120580381018a823df2256f3a88aae884494399a2788bd05",
+    "data/v10_atmosphere/air.das": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c",
+    "data/cache/pnw_vertical_20261027/air.das": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c",
+    "data/cache/pnw_vertical_20261027/air_pacific_nw_0.ascii": "8c7e99312cc5af725dca782e8810196ec2fd0a091ff793eafb64d3ac4671109b",
+    "data/v10_atmosphere/uwnd.das": "48994f62fc5204c73fec82563b5e0ad70c13834e5f1e49045d6565a75999b848",
+    "data/cache/circulation_reference_20261026/uwnd_pacific_nw_0.ascii": "39573a0089008f689441b8f29738ae4aceb0f45aee7113bf5bcac3a0a7d8d278",
+    "data/v10_atmosphere/vwnd.das": "0422025805f7f3234f9d30e21d196d9cec667e000ce77454e2951b581d1a812a",
+    "data/cache/circulation_reference_20261026/vwnd_pacific_nw_0.ascii": "0ce9f6e74ecd43f4eb42396e54240357feaefef81f2cb68edb8791ea93c4de22",
+    "data/v10_atmosphere/shum.das": "1c0d05786050fb319b6189b3e49070a793f9d9113b03add3e78f6da70b28902d",
+    "data/cache/circulation_reference_20261026/shum_pacific_nw_0.ascii": "0b292069a6afa79bd433d705bf6bf1a83c4eb9c67953a0424614f8a9839dbee7",
+    "data/v10_atmosphere/hgt.das": "07c873a5acda51f74fb4c2de86bb990b852ad2269e283555f859eb95c9b2df2c",
+    "data/cache/circulation_reference_20261026/hgt_pacific_nw_0.ascii": "27ee673593a8d642ffc147e4517811ec91679931757b74982bd67d3d316351e7",
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "26a749d033ae9e6117a486a50afeb4851e6a98412e0962a743b06887903f20ad",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "f087115f9046e153284957dbdbb75df6584777410a76397e69305d07eabf00ce",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0b275f699b4b576f880cbeb239a5a3062ca9e1be9f5a52fc9557bc7414d73c82",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/config.py": "20d554eb1aa2c1ecf3f79f403baba9d9dd4c252d9476e516d080f494c00d0575",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/earth.py": "51b4de8435bb9c257d778f4013920c056f46538bbcde9f62f7c7a8153e816d4e",
+    "rotclimate/ebm.py": "a95b6bedc1b33404f145435b786e0990532a5220c382c279682d883abc550166",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/geography.py": "cacd3392918b21b51433b6d533f4ebf0ae1ad98d614002f34d0312ad430655c6",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "34fc56685bbcb134de6ce8f07acc5bdb3fa9fd18a8e5efe44f8c930a41512c5e",
+    "rotclimate/moisture.py": "ee40f0b9ce6248965868f1be03339c6e5b7d8f2bed00aa46f1384b42f35f0dfe",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/render.py": "dae6b9400447988f8c09364d21ab314cbaecb2cd1f6dee4a2be3ffe480cdfc8d",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/solver.py": "19a954d0b91daa3a4ffee888f7f19e7f97396527386e4942ad677708f5be2cf6",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/transport.py": "e9e2a22626d3e1210099b9de65a03f42dd50059adc878b12060cb43000cc70f9",
+    "rotclimate/seasonal.py": "9cdf6a3f5f5ce80a786e3d0fac7c655f8383ccda46ebb53e0aa2580d8dae8e89",
+    "rotclimate/joint.py": "ce4d2f1c362b8bd7e00034c272885b320e4020c309be2927f1440f4e24390bae",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "rotclimate/reservoir_transport.py": "b206628d7b21d85a4bf1d2951d5bcaf2977032a59d10ee872956f98468fe376d",
+    "rotclimate/column_thermodynamics.py": "56b1937c9e793bd5051c937e04ca5b8f490ce29c75c4a7c1f911d09af82db1ca",
+    "rotclimate/winds.py": "94c15e6684c3e1feb32eacb1c58cc0a196f9c25de521cb2d5d99004a3321a104",
+    "rotclimate/column_mass.py": "7705de1e86be183338560280c658342d8f4e842a21e2f7cbe82ee6aea10a53d4",
+    "rotclimate/reservoir_moisture.py": "72d066a3508fc4623fa4a75a4f14eae6e28c8e96b8f741aa926b4af6f0bafe92",
+    "rotclimate/layer_transport.py": "f6a0a1619a9b62824585d9301e477824c73943dcf2ef967354f84ba67a26e8d7",
+    "rotclimate_v10/__init__.py": "5089d96796f6f97f3770230011d24c48905c9d076613bbaf332a25c171e2ae7c",
+    "rotclimate_v10/core.py": "bccc922c62405f5b63dbaf65b698d912075cd61bf37658edfa7a46fdabfe21c1",
+    "rotclimate_v10/earth.py": "cb5e0c194216dcdb98d3235d0a9334e1592aea5e85a7c1ebdc088dd8109b28b6",
+    "rotclimate_v10/integrate.py": "afae61c76c3742024c6ad986605fffc8a723e6547a7a36678bb9f0ea84294201",
+    "rotclimate_v10/weather.py": "5298e7222b94bff95989884fc03e11766be36708d331f4edcf2e2aab661d27e6"
+  },
+  "references": {
+    "data/v10_atmosphere/uwnd.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.das",
+      "sha256": "48994f62fc5204c73fec82563b5e0ad70c13834e5f1e49045d6565a75999b848",
+      "bytes": 2971
+    },
+    "data/cache/circulation_reference_20261026/uwnd_pacific_nw_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/uwnd.mon.1981-2010.ltm.nc.ascii?uwnd[0:1:11][0:1:16][14:1:22][92:1:102]",
+      "sha256": "39573a0089008f689441b8f29738ae4aceb0f45aee7113bf5bcac3a0a7d8d278",
+      "bytes": 239557
+    },
+    "data/v10_atmosphere/vwnd.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.das",
+      "sha256": "0422025805f7f3234f9d30e21d196d9cec667e000ce77454e2951b581d1a812a",
+      "bytes": 2971
+    },
+    "data/cache/circulation_reference_20261026/vwnd_pacific_nw_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/vwnd.mon.1981-2010.ltm.nc.ascii?vwnd[0:1:11][0:1:16][14:1:22][92:1:102]",
+      "sha256": "0ce9f6e74ecd43f4eb42396e54240357feaefef81f2cb68edb8791ea93c4de22",
+      "bytes": 253205
+    },
+    "data/v10_atmosphere/shum.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.das",
+      "sha256": "1c0d05786050fb319b6189b3e49070a793f9d9113b03add3e78f6da70b28902d",
+      "bytes": 3036
+    },
+    "data/cache/circulation_reference_20261026/shum_pacific_nw_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/shum.mon.1981-2010.ltm.nc.ascii?shum[0:1:11][0:1:7][14:1:22][92:1:102]",
+      "sha256": "0b292069a6afa79bd433d705bf6bf1a83c4eb9c67953a0424614f8a9839dbee7",
+      "bytes": 113725
+    },
+    "data/v10_atmosphere/hgt.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.das",
+      "sha256": "07c873a5acda51f74fb4c2de86bb990b852ad2269e283555f859eb95c9b2df2c",
+      "bytes": 3056
+    },
+    "data/cache/circulation_reference_20261026/hgt_pacific_nw_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/hgt.mon.1981-2010.ltm.nc.ascii?hgt[0:1:11][0:1:16][14:1:22][92:1:102]",
+      "sha256": "27ee673593a8d642ffc147e4517811ec91679931757b74982bd67d3d316351e7",
+      "bytes": 235916
+    }
+  },
+  "air_references": {
+    "data/cache/pnw_vertical_20261027/air.das": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.das",
+      "sha256": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c",
+      "bytes": 2996,
+      "origin": {
+        "path": "data/v10_atmosphere/air.das",
+        "manifest": "data/v10_atmosphere/downloads.json",
+        "sha256": "2e67dee01e75125f184cff00c38b4b28a428bd91716be43b06cd69b84e9edd2c"
+      }
+    },
+    "data/cache/pnw_vertical_20261027/air_pacific_nw_0.ascii": {
+      "url": "https://psl.noaa.gov/thredds/dodsC/Datasets/ncep.reanalysis.derived/pressure/air.mon.1981-2010.ltm.nc.ascii?air[0:1:11][0:1:16][14:1:22][92:1:102]",
+      "sha256": "8c7e99312cc5af725dca782e8810196ec2fd0a091ff793eafb64d3ac4671109b",
+      "bytes": 250858,
+      "origin": {}
+    }
+  },
+  "packages": {
+    "numpy": "2.5.4",
+    "scipy": "1.18.1",
+    "matplotlib": "3.11.2"
+  }
+}

@@ -2,20 +2,36 @@
 
 ## Current status
 
-**PNW vertical-reference audit predeclared:**
-`calibration/pnw_vertical_20261027/plan.json`, `scripts/audit_pnw_vertical.py`.
-Root reviewed source;2independent affine-pressure-integral and area/month/axis
-unit checks pass. No execution or new air-temperature download yet. Exact4ocean
-footprints/areas from independent PNW audit, observed925Tanchor only; higherT/q
-withheld frommoist/lapseprofiles. Separatelycached NOAAair withverifiedURL/SHA,
-metadatareuseprovenance; actualq/RHfraction/drytheta andpartialwater/capacity
-onmatched925–300nodes, nohumidityfit and0Earthintegrations. Freeze sources after
-acquisition/structuralchecks beforederivedmetrics. Preservefailedoutputfolders.
-Canrun afterthis sourcecommit with --fetch; thenpublishsinglefigure nested in
-westerly study andretainallmonth/season/native data. Do notinterpret drytheta
-above925as marineinversionbelow925 orfull moiststability/energy validation.
-Current windresults published8887cb6andpushed; no active climatecalibration.
+**PNW vertical-reference audit COMPLETE:** source `a012505`,
+`output/pnw_vertical_20261027/`. Zero additional Earth integrations or fitted
+coefficients; series remains899attempts/895passes/4preserved old failures.
+Exactly4archived native ocean footprints/191165.858km² and seven925–300hPa nodes.
+New NOAAair payload/metadata/provenance verified in separatecache, oldq/hgt and
+mask/areas/sourcearchives unchanged. Sources frozen beforederivedoutcomes.
+Two independent analytic pressure-integral and native/month/axis tests pass.
 
+Observed partial actualqratio.29139 versus capacityqsat at observedT.33940;
+anchored lapsecapacity.46232 andmoistcapacity.25679. ActualpartialPW11.989mm,
+capacity22.008mm; lower/upper actualwater-over-capacity.60486/.52647 (ratios per
+native/month beforeaveraging). Withheld850–300TshapeMAE lapse4.365K/moist5.238K.
+At300hPa observedannualT−44.432°C, moist−56.150°C, lapse−30.730°C. Saturatedmoist
+hypothesis too cold aloft; capacityshapeclosertoactualq isnotenvironmentalTskill.
+Both thermalstructure and actualhumidity vary. Neitherprofile selected; no
+universalqratio/reset, RHfit orrainfall attribution. Drytheta925–850rises4.21KDJF/
+5.07KJJA; this doesnotdiagnose marineinversionbelow925 orfullmoiststability.
+Observed925anchor, partialpressurewindow, liquid-onlyqsat atcoldT, fixedcp/Lv,
+no ice/cloud/entrainment/latentenergy, smallcoarsemodel-assisted1981–2010sample
+remainlimits. See PNW_VERTICAL_20261027.md. Fullnative/monthly/seasonarrays retained.
+
+Verifiedpublisher nests1figure+JSON insidewesterly study. Companion now21studies/
+50figures/26downloads; latestwesterly studyopens. Normalclimate/economy/settlement
+andheadlinepackets unchanged. No active calibration/supervisor. Windmilestone
+8887cb6 andverticalsourcea012505pushed; this publication includes finalQA receipts.
+Next physicalstep: distinguish environmental temperature lapse from saturated
+plume lapse in moisture capacity, require externalthermal ANDhumidity matches,
+then actualcoupledguards. Don'tfit a PNW-specific humidityratio orselect a
+profile fromthese reused4oceanfootprints. Stable/environmental vsconvective
+regimes may matter; no new model option implemented fromthis diagnostic yet.
 
 **Shared westerly bracket COMPLETE:** source1d706fd,
 `output/westerly_fit_20261027/`,42/42strict passes,21historical main climate
