@@ -91,6 +91,7 @@ def main():
              ROOT/'reports/ENVIRONMENTAL_PARTITION_20261027.md',
              ROOT/'reports/ENVIRONMENTAL_REFERENCE_20261027.md',
              ROOT/'reports/COLUMN_DRYING_20261027.md',
+             ROOT/'reports/JOINT_RAIN_20261027.md',
              ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
              ROOT/'reports/SEASONAL_CYCLE_20261026.md',
              ROOT/'output/constrained_blend_20261025/rainfall_changes.png',

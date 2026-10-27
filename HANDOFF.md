@@ -2,22 +2,47 @@
 
 ## Current status
 
-**Joint storm/rain calibration ACTIVE:** source `e207736`,
-`output/joint_rain_20261027/`, monitor PID 108835 / runner PID 108844.
-`calibration/joint_rain_20261027/plan.json`. Eight fixed combinations of
-eddy_rate 1.0/1.8, precip_tau_days 8/15, convective_rh 0.65/0.72, on
-reference-qualified environmental 6.0, independent water, corrected rain and
-7.5 m/s westerlies. Four exact seven-region controls precede 56 candidate
-runs: 84 actual integrations planned. Only three shared empirical coefficients
-change; storm exchange also affects heat. All earlier Earth/native wind/
-humidity/thermal/numerical safeguards and planetary forcing stay fixed.
-No added candidate or weaker limit after results. This factorial probes
-interactions and wider starts, not proof of a global optimum. Any qualifier
-still requires full31/ocean/fine/established and matched world qualification.
-Running through `scripts/supervise_frozen.py` with a two-hour ceiling and immutable
-source monitoring; its mocked operational checks pass. Frozen model/runner
-sources must not be edited after launch. Side FORGE development must use new
-modules outside rotclimate and leave frozen source files unchanged meanwhile.
+**Joint storm/rain calibration COMPLETE:** source `e207736`,
+`output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
+28 historical full NPZ controls and four PNW companion controls exact.
+Independent verification checks all 177 frozen sources, 84 row/array hashes,
+12 PNW companions, actual case/parameter identities, every physical/numerical
+certificate and identical recomputed screening. None of eight fixed factorial
+corners qualifies. No full/fine/established/world stages or adoption.
+Series now 1,025 actual attempts / 1,021 passes / four old preserved failures.
+
+Best experimental rain08: rain ratio 1.18431 versus r39, 4.3% below environmental
+control 1.23797; T ratio 1.00376, combined S 1.09404. Still fails regional and
+native humidity guards. Best corner at tested high storm/long tau/high convective
+RH boundaries is not an optimum; other minima remain possible. All planet
+settings and safeguards unchanged. Science Earth r39 / fantasy Earth r38 stay.
+Report JOINT_RAIN_20261027.md; four figures/JSON published in newest companion
+study. Scientific verification and reconciliation are separate from monitor:
+original supervisor status stopped at 56 runs during interrupted session;
+processes are no longer active, and no final continuous-monitoring receipt
+exists. Original status preserved, not overwritten with invented completion.
+
+**FORGE side project IN PROGRESS:** user supplied full Marx/biome discussion
+and explicitly asked to implement models such as FORGE while physics continues.
+New `foraging/` package implements published human food/energy/time/demography
+rules, with explicit Miami-NPP, phenology and prey proxy adaptation. Not the
+original ORCHIDEE-FORGE ecosystem, agricultural support, 200 AD census or
+civilization ranking. Research sources/assumptions in data/foraging_model.json
+and docs/FORAGING_MODELS.md. Tallavaara actual predictors require biodiversity
+and multi-pathogen richness unavailable for fantasy; no fake reproduction.
+
+Kernel tests (8) and exporter manufactured tests (5) pass; final last-50-year
+averaging added to 300-year runs because demographic cycles can persist.
+Keep convergence/floor/unsupported flags, terminal state and variability;
+finite-horizon density is not certified equilibrium capacity. Four viewer
+modes and local panel implemented; fixture passes old-packet compatibility,
+corrupt payload rejection, irrelevant-selector hiding, light/dark/mobile.
+Official coarse 116×250 separate foraging exports being prepared in
+output/foraging_20261027/staging/{variant}; normal atlas climate/agricultural
+fields must remain unchanged. Root must attach completed validated packets,
+refresh pages, run live browser/portable/checkout QA, post maps, commit/push.
+Current pending changes include viewer template/copy hooks, new package,
+source config/docs, tests, and joint publication. Do not omit either task.
 
 **Archived column-drying audit COMPLETE:** source `255ac32`, successful output
 `output/column_drying_20261027_verified/`, zero climate runs or fitted changes.
