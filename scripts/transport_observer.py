@@ -47,6 +47,8 @@ class TransportObserver:
             vertical_water=(f['lower_out']*w[0]-f['upper_out']*w[1])*DAY,
             drying=f['drying_rate']*w*DAY)
         f.update(rain_components(f,payload['closure'],self.params))
+        if payload['closure'] is not None:
+            f.update({'closure_'+key:value for key,value in payload['closure'].items()})
         np.testing.assert_allclose(f['rain'],f['rain_dynamic']+f['rain_convective']+f['rain_overflow'],rtol=3e-14,atol=3e-14)
         vertical=f['vertical_water'][1:-1,1:-1]
         recycled=np.stack([f['recycled'],-f['recycled']])
@@ -62,6 +64,8 @@ class TransportObserver:
         np.testing.assert_array_equal(arrays['water'][-n:].astype(np.float32),result.layer_water)
         np.testing.assert_array_equal(arrays['water'][-n:].sum(1).astype(np.float32),result.W)
         np.testing.assert_array_equal(arrays['rain'][-n:].sum(1).astype(np.float32),result.P)
+        np.testing.assert_array_equal(np.array([step['day'] for step in certificates[-n:]]),result.days)
+        arrays['solved_days']=np.array([step['day'] for step in certificates])
         arrays['days']=result.days.copy();arrays['scored_indices']=np.arange(len(self.steps)-n,len(self.steps))
         return arrays,dict(solved_steps=len(self.steps),scored_steps=n,primer_steps=len(self.steps)-n,
             layer_equations_reconstructed=True,rain_components_reconstructed=True,

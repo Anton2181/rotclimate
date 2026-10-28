@@ -1,0 +1,119 @@
+{
+  "purpose": "Six diagnostic-only reruns of two saved climates; no new parameter choice, calibration, objective, or adoption.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "global04": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0
+    },
+    "global06": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5
+    }
+  },
+  "profile_numerics": {
+    "global04": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global06": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "global04": "output/ocean_profile_20261028/global04",
+    "global06": "output/ocean_profile_20261028/global06"
+  },
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "parent_protocol": "output/ocean_profile_20261028/protocol.json",
+  "transport_reference_plan": "calibration/transport_diagnosis_20261028/reference_plan.json",
+  "reference_sources": "calibration/transport_diagnosis_20261028/reference_sources.json",
+  "maximum_integrations": 6,
+  "counter_before": {
+    "attempts": 1879,
+    "passes": 1875,
+    "failures": 4
+  },
+  "source_epoch": {
+    "before_commit": "5917086",
+    "after_commit": "985ba41",
+    "files": {
+      "rotclimate/reservoir_moisture.py": {
+        "before_sha256": "72d066a3508fc4623fa4a75a4f14eae6e28c8e96b8f741aa926b4af6f0bafe92",
+        "after_sha256": "1ac28918b66e50a79a3cc763fcca362c7c095cf4bef7c52fd7f2849a4327539d"
+      }
+    }
+  },
+  "declared_before_new_results": true,
+  "diagnostic_decision": "Exploratory process attribution only: compare actual inflow/return, dry donor exchange, storm redistribution and rain components before choosing one subsequent hypothesis. No diagnosis alone counts as improved rainfall or independent validation.",
+  "diagnostic_sources": [
+    "scripts/transport_diagnosis_pilot.py",
+    "scripts/transport_diagnostic_recorder.py",
+    "scripts/transport_native.py",
+    "scripts/transport_observer.py",
+    "scripts/transport_reference.py",
+    "tests/test_transport.py",
+    "tests/test_transport_native.py",
+    "tests/test_transport_observer.py",
+    "calibration/transport_diagnosis_20261028/reference_plan.json",
+    "calibration/transport_diagnosis_20261028/reference_sources.json"
+  ],
+  "exactness": "Every original climate NPZ field including legacy native vectors must be bit-exact. Actual params and case hashes identical. Sidecar equations/rain reconstruct; precise per-step water/rain cast to float32 must match result buffers. All33 primer/scored steps recorded, scored days identical.",
+  "fixed_background_scope": "Inherited WorldClim cloud and remote monsoon background fields remain fixed; conditional regional solver, not fully independent global forecast."
+}

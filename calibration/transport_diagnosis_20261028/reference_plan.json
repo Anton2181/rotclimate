@@ -1,0 +1,13 @@
+{
+  "purpose": "Fixed native circulation/humidity reference for six diagnostic reruns. New Mexico subset; old India/PNW inputs read-only. No climate tuning or adoption.",
+  "regions": ["north_india", "mexico", "pacific_nw"],
+  "new_reference_boxes": {
+    "north_india": [[21, 29, 26, 36]],
+    "mexico": [[22, 29, 98, 107]],
+    "pacific_nw": [[14, 22, 92, 102]]
+  },
+  "reference": "NOAA PSL NCEP/NCAR monthly climatology 1981–2010, 2.5 degree native grid; model-assisted reanalysis, not independent validation",
+  "matching": "Gregorian no-leap interval overlap; native inmap footprints >=80% covered; land/ocean >=80%; 925hPa above terrain in reference and model. Empty masks remain empty. Matched 925–300hPa model integral uses actual simultaneous layer water and winds; observed flux uses products of monthly means and omits submonthly covariance.",
+  "below_ground_fallback": "None. Report excluded coverage; do not substitute terrain levels after seeing results.",
+  "climate_integrations": 0
+}
