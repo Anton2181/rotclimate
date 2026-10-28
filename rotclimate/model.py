@@ -262,6 +262,10 @@ class ClimateModel:
         if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
                 or params.moisture_wind_factor != 1 or params.wind_cap != 0):
             raise ValueError('Mass-balanced moisture requires flux form, no wind multiplier and no wind cap')
+        if not isinstance(params.moisture_thermal_divergent_return,(bool,np.bool_)):
+            raise ValueError('moisture_thermal_divergent_return must be boolean')
+        if params.moisture_thermal_divergent_return and not params.moisture_thermal_layer_winds:
+            raise ValueError('Divergent thermal return requires thermal layer winds')
         if not isinstance(params.moisture_thermal_anomaly_decay,(bool,np.bool_)):
             raise ValueError('moisture_thermal_anomaly_decay must be boolean')
         if params.moisture_thermal_anomaly_decay and (not params.moisture_thermal_layer_winds
@@ -1349,7 +1353,11 @@ class ClimateModel:
                         shear,thermal=hydrostatic_thermal_shear(reference_temperature,
                             101325.*self.column_projector.mass,dx,coriolis,
                             lapse_k_km=p.moisture_reservoir_lapse_k_km)
-                    thermal_branches=project_thermal_branches(self.column_projector,(lower_u,lower_v),shear)
+                    if p.moisture_thermal_divergent_return:
+                        from .divergent_thermal_winds import divergent_thermal_branches
+                        thermal_branches=divergent_thermal_branches(self.column_projector,(lower_u,lower_v),shear)
+                    else:
+                        thermal_branches=project_thermal_branches(self.column_projector,(lower_u,lower_v),shear)
                     uq=.25*thermal_branches.lower[0]+.75*thermal_branches.upper[0]
                     vq=.25*thermal_branches.lower[1]+.75*thermal_branches.upper[1]
                     mass_info=dict(thermal_branches.certificate['projection'])
@@ -1762,7 +1770,8 @@ class ClimateModel:
                 max_scaled_dry_column_residual=max(c['max_scaled_dry_column_residual'] for c in self.thermal_layer_checks),
                 maximum_shear_error_ms=max(c['maximum_shear_error_ms'] for c in self.thermal_layer_checks),
                 maximum_branch_speed_ms=max(c['maximum_branch_speed_ms'] for c in self.thermal_layer_checks),
-                scope='Prescribed hydrostatic thermal shear and common dry-mass projection; no vertical momentum/energy solution')
+                scope=('Historical divergent return plus mass-balanced thermal rotation; full raw thermal shear not imposed; no new momentum/energy solution'
+                    if p.moisture_thermal_divergent_return else 'Prescribed hydrostatic thermal shear and common dry-mass projection; no vertical momentum/energy solution'))
             numerics['all_checks_passed'] &= numerics['thermal_layer_winds']['max_scaled_dry_column_residual']<=1e-10
         if self.reservoir_checks:
             numerics['moisture_reservoirs']=dict(

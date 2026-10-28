@@ -43,3 +43,30 @@ def test_split_preserves_uniform_specific_humidity_over_terrain():
     expected=18*op.layer_mass
     actual,_=op.solve(np.zeros_like(expected),np.zeros_like(expected),expected,diffusion=60000.)
     np.testing.assert_allclose(actual,expected,atol=1e-10,rtol=1e-10)
+
+
+import pytest
+
+@pytest.mark.parametrize('decay',[False,True])
+def test_coupled_mode_uses_exact_original_lower_wind_and_passes_ledgers(monkeypatch,decay):
+    import rotclimate.divergent_thermal_winds as module
+    from rotclimate.model import ClimateModel
+    from rotclimate.config import Params
+    from rotclimate.joint import SHARED_FIELDS,validate_partition
+    from test_earth import _toy_case
+    from test_environmental_partition import reservoir_params
+    assert 'moisture_thermal_divergent_return' in SHARED_FIELDS;validate_partition()
+    with pytest.raises(ValueError,match='must be boolean'):ClimateModel(Params(moisture_thermal_divergent_return=1))
+    with pytest.raises(ValueError,match='requires thermal'):ClimateModel(Params(moisture_thermal_divergent_return=True))
+    original=module.divergent_thermal_branches;seen=[]
+    def capture(projector,lower,shear):
+        out=original(projector,lower,shear)
+        np.testing.assert_array_equal(out.lower,np.array(lower));seen.append(out.certificate)
+        return out
+    monkeypatch.setattr(module,'divergent_thermal_branches',capture)
+    c=_toy_case();p=reservoir_params(c,moisture_thermal_layer_winds=True,moisture_thermal_anomaly_decay=decay,
+        moisture_thermal_divergent_return=True,moisture_thermal_height_km=1.,moisture_reservoir_temperature_profile='environmental',
+        moisture_reservoir_lapse_k_km=6.,moisture_reservoir_rain_scheme='column-convection')
+    r=ClimateModel(p,grid=c.grid).run(diagnose_moisture=True)
+    assert r.numerics['all_checks_passed'];assert len(seen)==len(r.days)+8
+    assert all(s['divergent_return_retained'] and s['lower_wind_exact'] for s in seen)

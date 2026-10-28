@@ -235,6 +235,7 @@ class Params:
     moisture_pressure_drag_ratio: float = 1.0  # opt-in column/surface Rayleigh drag; 1 = legacy aligned flow
     moisture_thermal_height_km: float = 0.0  # opt-in thermal-wind shear to an effective vapor height (0 = off)
     moisture_mass_balance: bool = False  # opt-in stationary dry-column projection of the moisture wind
+    moisture_thermal_divergent_return: bool = False  # opt-in separate divergent return and thermal rotation
     moisture_thermal_anomaly_decay: bool = False  # opt-in stable surface/zonal thermal separation
     moisture_thermal_layer_winds: bool = False  # opt-in hydrostatic shear with common dry-mass projection
     moisture_two_layer: bool = False  # opt-in separate moist inflow and compensating upper transport
