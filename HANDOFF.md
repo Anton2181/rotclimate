@@ -1,3 +1,87 @@
+# ACTIVE — full shared-cell dry dynamics and phase-pulse milestone
+
+User requests continuous development after pushes. Status answer was followed
+by completed cached Earth stability milestone ff6658e, pushed to origin
+claude/friendly-turing-43ygeu. Continued immediately into shared thermal cells.
+No new agents. Repo /workspace/rotclimate, branch work; use HTTP/1.1 push.
+
+New cell_thermal_column.py: Lorenz-grid cell buoyancy b; linear interpolation C
+to interfaces; integrate/gauge phi=H*b. Cell thermal energy weight E=M/N².
+Continuity rho*w=-cumsum(M*divU), adiabatic b_t=-E^-1 H.T M divU. Actual uneven
+grid pressure work cancels thermal-energy tendency exactly. All n-1 positive
+internal modes from mass-symmetric sqrt(M) H E^-1 H.T sqrt(M); analytical
+uniform c_k=N*dz/[2*tan(k*pi/(2*n))]. One pressure-invisible thermal null mode
+proportional to alternating cell widths: expose/retain its energy, never filter
+or call it physical. Pressure-active/null energies partition actual cell b.
+
+New cell_thermal_wave.py evolves every cell b and every level u/v together via
+energy-adjoint C-grid pressure/thermal blocks and skew Coriolis, Crank-Nicolson.
+It reuses ONLY horizontal geometry/rotation from the previous HydrostaticWave;
+no single vertical-mode evolution or truncation. Velocity is restricted to
+zero depth-mass-mean BAROCLINIC flow: divergence-free barotropic motion excluded,
+a stronger restriction than rigid lids. Do not mislabel as full atmosphere.
+Actual mean-flow roundoff tolerance is relative plus absolute1e-13m/s; no
+projection/reset. Actual final mean velocity ~6e-15m/s in demonstration.
+
+Eleven new column tests +six dynamics tests. Focused249 pass39.53s (prior232+17).
+Tests independently check vertical/horizontal dispersion, exact CN phase, work,
+variable Coriolis, damping/source work, computational-mode invariance, uniform
+horizontal heating no wind, invalid mass/stability/timesteps.
+
+Further128-level testing caught loss of hydrostatic-mode accuracy from forming
+the squared normal matrix. FIXED BEFORE COMMIT: use direct SVD of sqrt(M)H/
+sqrt(E), taking singular values as c and right singular vectors for b modes,
+rather than eigenvalues of A A.T and division by c². Uniform full-spectrum and
+hydrostatic identities independently pass through256 levels; actual stratified
+phase columns128/256 also now pass. No numerical stability floor or grid cap.
+
+demo_cell_thermal_wave.py:16cells/shallow8km,12x16horizontal100km, Ts300/ps101325,
+6K/km lapse +200Kcap, N² derived. Manufactured RH core ->ONE resolved liquid
+phase adjustment with actual vapor/liquid heat, evaporation/fall work. All rain
+reevaporates, groundrain0; maxTchange.715K. Actual delta virtual buoyancy from
+T/vapor change prescribed for1hour; five more hours dry/free. NO water transport
+or repeated phase in dynamical run. Four dt20/10/5/2.5min =270dry steps.
+Peak actual u/v .678/.682m/s. Final K+thermalAPE .00694267m²/s²; nullthermal
+.00006166 (~.89%, not a universal bound). Raw source-work integral closes final
+energy~1.3e-14 relative; hydrostatic reconstruction~2.7e-15m²/s². Source-free
+energy roundoff. Refinement pressure RMS .075845/.019369/.003936m²/s² vs2.5min.
+
+Publisher independently reconstructs actual phase energy/water, virtual source,
+pressure, continuity, final kinetic/thermal energy, integrated midpoint source
+work and analytic null amplitude. Keep phase static-energy and dry quadratic
+APE/work ledgers SEPARATE; they do not prove a full nonlinear moist first law.
+No multilevel MSE composed, hence no double-counted adiabatic cooling. Linear,
+fixed reference/density/pressure, no nonlinear momentum/terrain/ice/radiation.
+
+Report CELL_THERMAL_20261028.md; output/cell_thermal_20261028; new research study
+cell-thermal. Figure shown user. Current browser/checkout/portable QA passed;
+42studies/126images/50downloads,707checkoutassets,1202portablefiles/392links.
+Fresh launcher passes and latest assets byte-match bundle. Milestone receipts
+bound; commit/push this completed milestone.
+Then continue physics: grid computational mode needs a design decision before
+bidirectional moist adoption; also reference-maintenance/pressure/kinetic work,
+actual lateral/radiative reservoirs, terrain/compressible scope. Do NOT blindly
+compose full moist-static-energy advection with this dry adiabatic update.
+
+ONGOING vertical sensitivity exploration (ad hoc, not yet published/manifested):
+same continuous RH/source construction as demo, phase ONLY (no wave integration)
+with8/16/32/64/128/256 levels. c1 m/s:28.77036/29.04205/29.10990/29.12686/
+29.13110/29.13216. Phase-induced thermal AVAILABLE ENERGY per reference mass:
+.00479435/.00703573/.00724757/.00796007/.00803273/.00818040m²/s². This is NOT
+latent heat or total thermodynamic energy; it is the dry quadratic b norm of
+the phase impulse.16->256 rises16.3%, whereas c1 rises.31%; phase-source
+resolution dominates this diagnostic. Null fractions1.6668%/.8764%/.02879%/
+.06968%/.003328%/.002077% (nonmonotonic, keep that). MaxTchange.5205/.7149/
+.8965/.9810/1.1063/1.1679K. Need reproducible audit/raw receipts and vertical
+phase convergence before calling a16-level source resolved. Do not fit rainfall
+coefficients to compensate. No production adoption and no Earth runs.
+
+No new Earth integrations/calibrations; Earthr39/main world/biome/population
+datasets unchanged. Counters1934 attempts/1929strict/4historicalfailures/
+1historicalinterruption. No rainfall skill gain or global-optimum claim.
+
+Earlier handoff follows:
+
 # ACTIVE — lapse-derived reference audited; continue after publication/push
 
 User requests continuous development after pushes. Mid-turn status was answered
