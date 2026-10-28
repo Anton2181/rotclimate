@@ -21,19 +21,18 @@ metadata in companion atlas. Browser,626asset checkout,1095file portable
 bundle/launcher pass. Normal atlas climate/forage/economy data unchanged.
 Verification receipt output/global_rain_20261028/verification.json.
 
-**Immediate continuation:** commit/push the completed publication, then run
-scripts/prepare_wind_interaction.py --parent output/global_rain_20261028
---plan calibration/wind_interaction_20261028/plan.json. Parent shortlist is
-empty. This freezes three separated rain anchors and background westerly
-amplitudes4.5/6/8.5m/s; archived7.5m/s comparisons are not reruns. Same
-objective, invariants and all planet/other model parameters. Max91new actual
-integrations,28controls+63candidates, no local polish. Commit declaration
-BEFORE starting. Reuse unchanged scripts/tradeoff_search.py with new plan/out.
-Existing verify/analyze/diagnose/publish tradeoff helpers support pairedwind;
-add study/report to organizer/packager. Do not stop after pushing: user
-explicitly requests continued actual experiments. No active scientific job
-at this publication checkpoint. All frozen main model/runner/plan sources
-must remain immutable in active campaigns; helpers may be corrected.
+**Wind/rain interaction DECLARED, ready to launch:**
+calibration/wind_interaction_20261028/plan.json generated only after committed
+parent6dc22d8. Anchors local1_05/local2_05/local3_05 ×4.5/6/8.5m/s, no local
+proposals. Maximum91actual runs; same objective/invariants, planet fixed.
+After this declaration commit, launch unchanged scripts/tradeoff_search.py
+--plan calibration/wind_interaction_20261028/plan.json
+--out output/wind_interaction_20261028 with BLAS1, timeout7200 and log
+output/wind_interaction_20261028.log. Commit is before any new integrations.
+Then verify_tradeoff_search.py, analyze_tradeoff_robustness.py,
+diagnose_tradeoff_water.py, publish_tradeoff_search.py, organizer, completed
+report and browser/checkout/portable QA, commit/push. No automatic adoption.
+User says continue after pushes; carry through actual experiment.
 
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;

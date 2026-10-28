@@ -93,6 +93,7 @@ def main():
              ROOT/'reports/COLUMN_DRYING_20261027.md',
              ROOT/'reports/JOINT_RAIN_20261027.md',
              ROOT/'reports/GLOBAL_RAIN_20261028.md',
+             ROOT/'reports/WIND_INTERACTION_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
              ROOT/'output/foraging_20261027/foraging_comparison.png',

@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('wind-interaction','Wind and rain-setting interactions'),
     ('global-rain','Broader rainfall search and regional tradeoffs'),
     ('joint-rain','Joint storm and rain calibration'),
     ('environmental-partition','Environmental temperature and moisture capacity partition'),
