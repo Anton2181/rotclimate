@@ -2,6 +2,23 @@
 
 ## Current status
 
+**Broader tradeoff calibration PREDECLARED (28 October):** user explicitly
+accepted separating physics invariants from prediction tradeoffs and requested
+continued work without stopping after pushes. New source
+scripts/tradeoff_search.py, calibration/global_rain_20261028/plan.json,
+reports/GLOBAL_RAIN_20261028.md; eight analytic tests pass. Four exact controls,
+32 fixed scrambled Sobol points across wider eddy/rain-tau/convective-RH bounds,
+then up to three separated starts × six bounded coordinate proposals. Maximum
+378 actual integrations; duplicate proposals reuse records and do not count.
+Old strict acceptance rules/results stay unchanged. Hard numerical/physical/
+case/source checks remain; prediction errors become explicit average/regional/
+native/ocean objectives. New research shortlist permits ≤15% worst regional
+combined regression, but cannot adopt without broader prospective validation.
+All planet and other actual parameters fixed. Commit before running; then
+continue actual search, review, publish to companion, verify, commit/push.
+No normal atlas replacement authorized by a screening result alone.
+
+
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
 28 historical full NPZ controls and four PNW companion controls exact.
