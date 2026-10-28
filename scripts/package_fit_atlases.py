@@ -111,6 +111,8 @@ def main():
              ROOT/'reports/MOIST_ENTHALPY_20261028.md',
              ROOT/'reports/ENERGY_TRANSPORT_20261028.md',
              ROOT/'reports/MOIST_COMPOSITION_20261028.md',
+             ROOT/'reports/VERTICAL_STATE_20261028.md',
+             ROOT/'reports/HYDROSTATIC_FEEDBACK_20261028.md',
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',

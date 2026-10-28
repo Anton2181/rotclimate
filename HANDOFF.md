@@ -1,3 +1,49 @@
+# ACTIVE — dry thermal-state/wind feedback published; multilevel moisture next
+
+Userexplicitcontinueafterpushes. Noagents. Repo/work/pushsame. Firstcoref69b256
+pushedthencontinued. New hydrostatic_wave.py evolvespressure/momentum/buoyancy
+CN onclosedhorizontalCgrid, cfromverticaleigenmode; no prescribedwindneeded.
+Statebuoyancy=DF*Phi,pressure=F*Phi; initialvirtualthetaT->b->hydrostaticp->mode.
+MassnormalizedF2=1, physicalenergy.5mean(internalfaceu2+v2+(Phi/c)2). SkewR/G
+withCN midpointgivesexactenergywithheatingworkandpositiveaccounteddamping.
+11newwavetests+14vertical=25;full199focusedpass39.51s. NoEarthclimateruns;
+1934/1929/4oldfails+1oldinterruption unchanged, Earthr39/worldatlasesunchanged.
+
+output/vertical_state_20261028 demo_hydrostatic_feedback.py: hydrostaticdryref
+surfaceθ300,ps101325,N.01,H15km,64levels,c45.502916ms. Actualdensityincluded,
+no tempfloor/stabilityclip. ThermalpulseinitialzeroU drives~1.16ms finalmodeU,
+0/6/24hplots. FreeE+.drag errors~1e-15,hydrostaticresid2.5e-16ms2. TimeRMSPhi
+vs7.5min ref3.91466/1.00106/.203404 at60/30/15min. Five dryruns456CNsteps.
+Oldcoarse2boxaudit dt1/.1/.01sec independentlimits.512312up/.263697down vs
+oldcontinuousmodeexpectedcooling. DoNOTdirectlyattacholdboxTtosmoothmode.
+ReportsVERTICAL_STATE/HYDROSTATIC_FEEDBACK_20261028.md. Newpublisherbindsraw
+initialthermo/hydrostate/eigenenergy/finalwinds+verticalAPE andoldboxauditrerun.
+Research39studies/122images/47downloads;700checkoutassetsbyteexact;1191portable
+files/377links/freshlauncher+allbrowserpass. Latestassetsbyte-matchZIP. Twofigures
+shownuser. Metadata/milestoneverificationcomplete. ZeroEarthruns/adoption.
+
+NEXTactiveworkalreadynew(untracked)rotclimate/multilevel_transport.py: generic
+N-layernativefaceconservativedonortransport, layerdrymasses+actualU/Vfaces,
+verticalmassflux=-cumulativehorizontaldiv,rigidtop/surfacecolumnmasscheck,
+source/reaction/extqexplicit, sparsepositiveMmatrix, actualfluxbudgets. No tests
+orreportyet; testbeforeanyuse. Existing2layerkernelimmutableforoldreceipts.
+Motivation: newshareduniformvertical-grid donorbackground audit recoveredfirst
+modecooling ratioscos²(pi/(2n))=.99039264 at16levels/.99759236 at32, .5at2;
+up/downequalatuniformgrid. Addsourceaudit/report+manufacturedconvergence before
+claimingsharedmoistfeedback. DoNOTcalibrateamultipliertocancelcoarsegridalias.
+Thisopenspathconsistentresolvedverticalmoistureonthepressure/buoyancygrid.
+
+StillNOTfullmoistpressurefeedback. Current drywave hasan eigenmodeinterfaceb
+state; priorMSEtwo-box T/phase doesn'tshareit. Need resolvedthermo/moistphase
+andpressurestateconsistentgrid/adiabaticwork+physicalheat/kineticreservoirs;
+no second c²divU alongsideMSEascentcooling. Fixedreferenceanelasticnotcompressible
+terrain. GenericNscalartransportaloneisnotprecipitationorheatfeedback. Continue
+onlywithmanufacturedbudgets/stability/refinement;predeclareanyboundedEarthpilot
+withfixedEarthlikepriors,meanrainlossallowingregiontradeoffs,temperature/physics
+andheldoutguards. Linearuniquenessdoesnotclaimglobalcalibrationoptimum.
+
+Earlierhandofffollows:
+
 # ACTIVE — vertical state and box/mode consistency audit; dynamics next
 
 Userexplicitcontinueafterpushes. Noagents. Repo/work/pushsame. Currentkernels
