@@ -79,3 +79,93 @@ there are seven total attempts for six completed diagnostic cases, bringing
 the cumulative counter to1886 attempts if recovery completes. The controller
 fix is tested to preserve true numerical parameter differences. No scientific
 criterion, physical source, input, mask or original result is changed.
+
+## Completed results and interpretation
+
+Recovery completed all four remaining cases. All six final cases pass their
+strict numerical checks and reproduce every original climate NPZ field exactly
+(22fields for India and15each for Mexico/PNW). PNW's extra native archive also
+matches exactly. Independent analysis verifies592 frozen files,198 actual
+primer/scored solves, simultaneous upwind and diffusion faces, dry donor flux,
+layer equations and ground-rain/recycling coefficients. The largest discrepancy
+between independently reconstructed and saved residuals is below1e-12mm/day.
+The cumulative counter is1886 attempts,1881 strict passes,4 historical failures
+and1 controller interruption. No scientific failure occurred in the six
+completed cases; no parameter search or atlas climate adoption occurred.
+
+These diagnostic summaries use the original full scoring land mask, true
+projected area and Gregorian month overlap. The original score arrays and
+unweighted/equal-month metrics remain unchanged.
+
+| Region / season | Legacy rain mm | Hydrostatic-half rain mm | Observed mm | Half storm supply mm | Half empirical convection mm | Half overflow rain mm |
+|---|---:|---:|---:|---:|---:|---:|
+| North India / JJA | 187 | 216 | 515 | −80 | 6.5 | 4 |
+| Mexico / SON | 265 | 323 | 158 | −93 | 45.5 | 129 |
+| Pacific NW / DJF | 427 | 416 | 340 | +83 | 0 | 102 |
+
+India's hydrostatic-half JJA lower layer receives240mm horizontal advective
+supply and146mm surface evaporation, and exports288mm upward. Upper rain is
+157mm versus58mm lower rain;22mm upper rain evaporates back into lower air.
+The vertical288mm is an internal redistribution, not a column loss. Total
+horizontal advection is+212mm, with−80mm storms and−63mm drying. Those signed
+terms cannot be interpreted as independent recoverable parts of the300mm rain
+deficit. Only6.5mm is the explicit empirical convective component: blindly
+amplifying that coefficient is poorly motivated without evaluating its humidity
+and circulation feedbacks. Dynamic/orographic rain dominates in this model.
+
+Mexico's upper layer produces269mm of323mm autumn rain, including129mm local
+supersaturation overflow. Storm exchange supplies66mm below but removes159mm
+above. Rain is excessive in autumn despite near-correct summer amplitude;
+any mechanism test must retain that seasonal distinction. PNW's winter ocean
+wind comparison uses3 native ocean cells, never nonexistent lowland land cells.
+Full land rainfall is overestimated even though partial ocean water is low.
+
+### Circulation, separated from humidity weighting
+
+The new925–300hPa vector integrates actual per-step q×wind before spatial and
+calendar averaging. This fixes the old full-column versus partial-column
+comparison mismatch; it does not retroactively change any historical score.
+On11 India lowland footprints, JJA partial water is about28.5mm versus37.7mm
+reference. The mean modeled moisture wind is westward/northward while the
+reference is eastward/southward. Both ocean settings have nearly identical
+wind errors. Mexico's one matched land cell also has large circulation errors;
+it cannot stand in for the full mountainous region.
+
+A supplementary, explicitly exploratory pressure-node comparison uses the SAME
+925hPa-valid footprints, with no new fallback masks. It tests925/850/700/500/
+300hPa model two-box velocities against reference vectors; hence wind errors
+can be seen independently of errors in the humidity weighting. The three-month
+means below are illustrative equally weighted monthly vectors; the download
+also contains all area/day-weighted errors and every month.
+
+| Region / sample / season | Pressure | Model east/north m/s | Reference east/north m/s |
+|---|---:|---:|---:|
+| India /11 land / JJA |925hPa| −0.48 / +0.95 | +2.21 / +1.56 |
+| India /11 land / JJA |700hPa| −0.46 / +1.36 | +0.43 / −1.98 |
+| Mexico /1 land / SON |925hPa| −1.34 / −0.80 | −1.46 / +3.30 |
+| Mexico /1 land / SON |700hPa| −1.48 / +0.73 | +3.87 / +1.02 |
+| PNW /3 ocean / DJF |925hPa| +6.06 / +4.07 | +2.43 / +4.05 |
+| PNW /3 ocean / DJF |700hPa| +4.56 / +3.42 | +8.29 / +3.08 |
+
+This supports testing the lower/upper circulation structure before more ocean
+RH or rainfall-coefficient calibration. Existing upper winds are obtained by
+algebraically completing a stationary dry-column projection. Their shear is
+not independently tied to the thermodynamic horizontal gradient. The two-box
+representation is too crude to reproduce the full observed vertical profile,
+even if its native partial-column mean improves. This is evidence of a
+structural limitation, not proof that a proposed replacement will improve rain.
+
+The next single hypothesis is to derive a lower-to-upper wind difference from
+hydrostatic/geostrophic thermal wind, then apply a common mass-weighted
+projection that preserves that shear and exact dry continuity. Use fixed
+pressure-layer geometry and Earth constants, no observed wind forcing or
+region-specific correction. First verify uniform/isothermal limits, thermal
+wind signs, projection continuity and uniform-q transport in an isolated
+operator. Only then declare a small paired coupled pilot, with rainfall primary
+and all regional temperature/conservation tradeoffs exposed. Do not attach
+new search knobs before this process mechanism is tested.
+
+All four figures and full monthly/seasonal/native diagnostics are published in
+the current launcher-served climate accuracy companion. The maps are fixed
+reference/model comparisons, not a new atlas climate. The reference periods,
+submonthly covariance gap and small/empty native samples remain material limits.

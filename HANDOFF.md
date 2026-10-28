@@ -1,3 +1,53 @@
+# CURRENT — six-case transport diagnosis COMPLETE
+
+Latest user Continue. Repository /workspace/rotclimate, work branch; push
+HEAD:refs/heads/claude/friendly-turing-43ygeu. No agents spawned (developer
+forbids unless requested). No active scientific job.
+
+Observer core985ba41, six-run declaration8c1bba0, recoverybc71d06 committed and
+pushed. Original runner interrupted after two finished cases because in-memory
+asdict tuples were compared with JSON lists. Their params/case/climate arrays
+are identical after JSON canonicalization. Original folder/protocol/review/log
+preserved; remaining four integrated once under separately committed recovery.
+Seven attempts yield six strict completed diagnostic cases and one interruption.
+Cumulative1886attempts/1881strict passes/4historical failures+1interruption.
+Do not hide interruption or describe this as a new rainfall gain.
+
+New full results output/transport_diagnosis_20261028_recovered/, original two in
+output/transport_diagnosis_20261028/. Main protocol sources592 verified;198steps,
+all exact faces, layer equations, donor flux, rain/recycling recomputed. All
+original climate fields bitexact (India22,Mexico15,PNW15);PNWextra native exact.
+Native matching now actual925–300hPa per-step q*u, same land rain/PW/wind pixels,
+Gregorian months/truearea. Coverage India11land, Mexico1land/1ocean,PNW0land/
+3ocean. No fallback masks. Separate matched pressure nodes925/850/700/500/300
+are exploratory diagnostics, no climate/score change. NCEP monthly means lack
+submonthly q*u covariance; WorldClim periods differ; fixed observed cloud/remote
+monsoon backgrounds remain conditional. No observedwind/q forced inmodel.
+
+India halfJJA216vs515rain;E146,adv212,storm-80,drying-63. Vertical288 lower→upper
+cancels internally;upperrain157/lower58,recycled22. Explicitconvective only6.5mm;
+dynamic/orographic dominates. MexicoSON323vs158;upperrain269,overflow129,
+storm+66below/-159above. PNWwinter416vs340,storm+83,overflow102. Actual historical
+scores unchanged. No shortlist/adoption; Earth r39 and world/biome/pop fields stay.
+
+Clear circulation issue: on same India11 lowland JJA925hPa modelE/N-.48/+.95 vs
+reference+2.21/+1.56;700hPa-.46/+1.36 vs+.43/-1.98. Mexico1cellautumn925modelN-.80
+vsref+3.30;700modelE-1.48vsref+3.87. PNW3oceanwinter925E6.06vs2.43,700E4.56vs8.29.
+Ocean variants barely affectwinds. Upperreturn currently algebraic projection,
+not independent hydrostatic/geostrophic shear. Next SINGLE hypothesis: thermal
+shear betweenlayers withcommon massprojection preserving shear andexactdrymass.
+Firstisolated manufactured tests (uniform/isothermal/signs/continuity/uniformq),
+then separatelydeclared smallpaired climatepilot. No broadsweep/globaloptimumclaim.
+No nextcoupled physics change/pilot yet. See reports/TRANSPORT_DIAGNOSIS_20261028.md.
+
+Fourfigures inupdated launcher researchcompanion newest transport-diagnosis;
+user shown waterbudget andseasonal maps. Sourcepublication andfinalQA COMPLETE:30studies/96images/38downloads;665checkout
+assets exact;1142filebundle/301links/freshlauncher pass. Report bytes inbundle
+match latestreport. Finalverification.json saved. Commit/push results milestone. Do not editfrozen
+scientific files when rechecking current verifier. Generic publisher/organizer/
+packager helpers can change if not inprotocol.sources. Existing docs below are
+historical and include obsoleteACTIVE labels; follow this current block.
+
 # CURRENT STRATEGY — user asked why rainfall remains stuck
 
 Latestuser: "it seems we've been stuck for a long time, what's our plan going
