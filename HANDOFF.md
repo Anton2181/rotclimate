@@ -1,3 +1,27 @@
+# LATEST ADDITION — isolated thermal layer-wind prototype
+
+After completed diagnostic publication b50797a, continued with the selected
+physical hypothesis. New rotclimate/thermal_layer_winds.py is an ISOLATED
+operator, NOT wired into model/config/joint and no extra Earth integrations.
+pressure_thermal_shear uses fixed dry mass centroid p-ratio7/3,Rd287.05 and
+existing smooth10degree f regularization. Needs COMMON-PRESSURE meanT input.
+project_thermal_branches projects desired lower/upper dry-mass mean and applies
+the SAME correction to both, preserving thermal shear + exactdrycontinuity.
+Nohumidityratio or observedwinds enter.9manufactured operator tests pass;52
+combined focused tests pass. Uniform-q over terrain remains invariant and
+minimumdrymasscorrection checked against feasible alternative flows. Prototype
+report reports/THERMAL_LAYER_PROTOTYPE_20261028.md. Nextprerequisite: physical
+common-pressure Tgradient construction +terrain invariance, then opt-in coupling
+and separately committed smallpaired pilot; NOT another parameter sweep. The
+current two-box architecture and equatorial regularization remain approximations.
+
+Atlas transportstudy includes prototype note/report; no actualclimate/mapdata
+changes. Browser/checkout/portable rechecked AFTER note:30studies/96images/38
+downloads,665exactassets,1143files/302links/freshlauncher pass. Packaged reports,
+HTML andmetadata byte-match latestcheckout. Receipts updated; commit/push tested
+prototype. No background modeljob. Continue fromcommonpressure temperatureinput
+next, notanother diagnosisrepeat or broadcoefficientsearch.
+
 # CURRENT — six-case transport diagnosis COMPLETE
 
 Latest user Continue. Repository /workspace/rotclimate, work branch; push
