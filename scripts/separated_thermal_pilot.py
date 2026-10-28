@@ -29,7 +29,7 @@ def sources_for(plan,path):
     sources.update({name:hashes['after_sha256'] for name,hashes in epoch['files'].items()})
     for name in [str(path.relative_to(ROOT)),plan['parent_protocol'],*plan['new_sources']]:sources[name]=file_hash(ROOT/name)
     for region in plan['regions']:
-        for archive in plan['base_archives'].values():
+        for archive in sorted(set(plan['comparison_archives'].values())):
             for suffix in ('.json','.npz')+ (('_extra.npz',) if region in plan['extra_circulation_regions'] else ()):
                 name=archive+'/'+region+suffix;sources[name]=file_hash(ROOT/name)
     for name,sha in sources.items():
