@@ -1,3 +1,29 @@
+# ACTIVE — vertical state and box/mode consistency audit; dynamics next
+
+Userexplicitcontinueafterpushes. Noagents. Repo/work/pushsame. Currentkernels
+newvertical_state.py +14tests pass. Audit audit_box_mode_coupling.py shows old
+2donorboxes projectedcooling tends.512312up/.263697down versuscontinuousmode;
+actualdt1/.1/.01 recoverindependentone-sidedlimits.0Earthruns. DoNOTcoupleold
+boxTdirecttooldcontinuousfirstmodeoraddanotherc2divcooling.
+Newenergy-pairedanelasticverticalgrid: pressure/velocitycellcenters,b/winterfaces,
+hydrostaticDphi=b,continuityrho w=-cumsum(MdivU),exactworkcancellation.
+EigenD.T W D F=lambda M F, W=rhoface distance/N2;alln-1internalmodesnormalized
+massmeanF2=1. Heatprojectionc2*(DF).T W Qb/Mtot. PositiveN2required, no clipping.
+Stablehydrostaticreference theta0exp(N2z/g) analyticallyExner;referencepref100000,
+ps101325,theta0300,N.01,H15km ->top192.6K/12427.6Pa. RefDensityfirstspeed
+45.6995/45.5496/45.5122/45.5029m/s at8/16/32/64levels (uniformcontinuous47.7465).
+ReportVERTICAL_STATE_20261028.md. Earliercoreand682frozenfilesunchanged.
+No Earthintegrations,counters1934/1929/4oldfails+1oldinterruption unchanged.
+
+NEXTongoing: transientpressure/momentum/buoyancystate onclosedhorizontalCgrid,
+CrankNicolsonskewpressure/continuityandCoriolis; stable/dampedmodalenergy,
+initialthermalanomalydriveswind, thermalstateandpressurealwayshydrostatically
+consistent. Useverticaleigenmodec,normalizedF; don'tpretendoldMSEboxesalready
+sharethisverticalgrid.14newtests plus174old ->188corechecks; runfulllater.
+Thenplots+publisher/researchatlas/QAcommitpushandcontinueactualfeedbackwork.
+
+Earlierhandofffollows:
+
 # Current: composed prognostic moist thermodynamics complete under fixed winds
 
 The user explicitly asked not to stop after pushes. This round continued past
