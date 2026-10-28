@@ -108,6 +108,7 @@ def main():
              ROOT/'reports/REGIONAL_MODE_TRACER_20261028.md',
              ROOT/'reports/LATENT_HEATING_20261028.md',
              ROOT/'reports/FIRST_MODE_HEATING_20261028.md',
+             ROOT/'reports/MOIST_ENTHALPY_20261028.md',
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',

@@ -1,3 +1,106 @@
+# Current: phase, vertical-mode forcing and full moist enthalpy milestones complete
+
+The user explicitly asks to continue development after pushes. This round
+continued after ed8121a (phase change) and cd585a1 (vertical-mode demonstration)
+to add finite water heat capacities and precipitation enthalpy. No agents.
+Repo: /workspace/rotclimate, branch work. Push HEAD to
+claude/friendly-turing-43ygeu. Managed runtime checked running/unrestricted;
+network policy/reference read and inherited proxy/TLS preserved.
+No active model job. No Earth climate integrations this round.
+
+## Scientific state
+
+Earth counters remain 1934 attempts / 1929 strict passes / four historical
+failures / one historical interruption. Earth r39 and normal world/biome/
+population atlas fields are unchanged. All 682 frozen divergent-thermal sources
+and the earlier regional/latent receipt sources are unchanged. No rain skill
+or adoption claim; the new runs are manufactured phase columns and four
+isolated regional linear responses, not Earth benchmark integrations.
+
+New core files:
+- phase_adjustment.py: liquid-only saturation root with latent warming/cooling,
+  fixed dry cp/Lv enthalpy, upper condensation falling/reevaporating below.
+- heating_projection.py: accounted W/m2 -> temperature tendency and diagnostic
+  hydrostatic log-pressure thickness. Thickness forcing is NOT first-mode Q.
+- baroclinic_heating.py: rigid-lid, uniform-density, constant-N Boussinesq first
+  mode. Derives c=NH/pi; exact sine heating and cosine layer-average velocity.
+  Solver contrast scale S=sin(pi*a)/(pi*a*(1-a)); multiply solver work/energy
+  by1/(2*S^2) for continuous physical reference-mass mode. Independent vertical
+  quadratures verify work and energy. Mean/higher-mode heat remains ledger.
+- moist_enthalpy.py: dry/vapor/liquid heat capacity and incoming liquid at its
+  actual upper temperature. Gas enthalpy=(cpd Md+cpv W)(T-T0)+Lv0 W;
+  rain enthalpy=cpl P(Tlower-T0). Initial gas H=final gas H+exported rain H.
+  No ice or precipitation gravitational/mechanical energy. New full-capacity
+  kernel keeps earlier dilute kernel unchanged for reproducibility.
+
+156 focused tests passed in40.65s, including43 new tests this round (22 phase/
+thickness,11 mode projection,10 full enthalpy). Actual roots checked against
+independent Brent solvers; energy/water and continuous projection integrals
+are independently reconstructed by publishers. Prior regional/native-face
+kernels are untouched. Test-time validation errors are not climate runs.
+
+## Demonstrations and publication
+
+output/latent_circulation_20261028, scripts/demo_latent_circulation.py:
+Same upper pulse over dry/humid lower RH. Upper condensation max4.157mm;
+dry reevaporates all, ground rain0, net dilute heat0 but nonzero vertical
+heating dipole/circulation. Humid lower ground rain max3.931mm. Fixedone-day
+phase pulse -> steady dry response, NOT a coupled transient moist simulation.
+Reference N=.01/s,H15km,Tref275K,c47.75m/s, drag5/20days. Column water error
+<1.4e-14kg/m2; dilute enthalpy error<1.8e-7J/m2. Two operator responses.
+Reports LATENT_HEATING_20261028.md and FIRST_MODE_HEATING_20261028.md.
+
+output/moist_enthalpy_20261028, scripts/demo_moist_enthalpy.py:
+Reuses EXACT saved initial columns, pressures/masses. Full water heat capacities
+and cold rain alter humid peak rain3.931->4.154mm; ground rain sensible export
+max4.935W/m2 over pulse. Gas/rain enthalpy error<2.1e-7J/m2. Dry case rain0,
+actual net gas heat change≈0 while sum(cpd Md ΔT)/day reaches2.834W/m2:
+IMPORTANT these are distinct. Actual temperature tendency is projected via
+'dry-equivalent temperature forcing'; never call its sum net moist heat.
+Actual gas/rain enthalpy ledger is stored and checked separately. Two more
+isolated mode responses; no nonlinear feedback/time integration/Earth forecast.
+Report MOIST_ENTHALPY_20261028.md.
+
+All three generated figures were shown/linked to the user. Research atlas via
+.bat now36 studies/118 images/44 downloads. Latest study moist-enthalpy; earlier
+latent-circulation next. Publishers bind sources/images/old receipt and recompute
+raw phase water/energy, actual Tdot projection and mode work. QA passes browser
+keyboard/hash reload/light/dark/mobile,693 checkout assets byte-exact,1180
+portable files/362links/fresh launcher; latest site/data/images/report byte-exact
+in portable ZIP. Output milestone_verification.json binds all receipts.
+ZIP/logs/browser PNGs ignored. Standard free/earth/whittaker atlas datasets
+unchanged; launcher outside percentages11.47/0/1.44, modes57/59/59.
+
+## Next physics: thermodynamic state and transport before feedback
+
+The next substantive gap is prognostic heat/adiabatic work and circulation
+feedback, not another tuning of the synthetic moist pulse. New kernels are
+isolated foundations. Existing ground-temperature empirical EBM corrections
+are not a complete atmospheric heating budget. A thermal relaxation source
+can be used only with its external reservoir heat explicitly booked.
+
+Native-face Reservoir tracer transport already conserves actual dry/water
+fluxes, but its arbitrary positive removal is NOT condensation/rain. Do not
+reuse it as an unaccounted heat/rain sink. Heat and vapor must share actual
+face donor transport. A moist enthalpy/dry-static-energy or potential-temperature
+state must include vertical pressure/adiabatic/gravitational work; merely
+advecting cp*T across fixed-pressure layers omits ascent cooling. Avoid counting
+that adjustment twice via both a temperature update and the mode's c^2 divU.
+The current pressure-mode state is not a prognostic full temperature profile.
+
+Need a physically consistent relation between the thermodynamic state, vertical
+mode pressure and momentum, plus moist sources/radiative reservoirs and actual
+incoming lateral states. Compressible/terrain vertical structure remains
+approximate (maintained constant N and uniform reference density). Do not
+pretend the current boxes define N or a realistic height-pressure profile.
+After those gaps are addressed, separately declare a bounded coupled Earth
+rainfall test with fixed Earth-like priors, region tradeoffs allowed, mean
+location/month loss, temperature/physics guards and held-out/resolution checks.
+Single positive-damping linear solves being unique says nothing about global
+uniqueness of the nonlinear climate fit.
+
+Earlier handoff follows:
+
 # ACTIVE — phase-to-mode forward demo complete; finite moist enthalpy next
 
 Userexplicitcontinueafterpushes. No agents. Corephaseed8121a pushed, continued

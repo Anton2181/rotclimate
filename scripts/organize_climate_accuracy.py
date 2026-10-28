@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('moist-enthalpy','Water heat capacities and precipitation enthalpy'),
     ('latent-circulation','Conservative phase change and vertical-mode heating'),
     ('regional-baroclinic','Regional dry circulation and native-face water'),
     ('divergent-thermal','Divergent return and thermal rotation'),
