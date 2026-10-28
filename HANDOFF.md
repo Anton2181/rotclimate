@@ -2,7 +2,7 @@
 
 ## Current status
 
-**Broader tradeoff calibration PREDECLARED (28 October):** user explicitly
+**Broader tradeoff calibration ACTIVE (28 October), source `3ec90ee`:** user explicitly
 accepted separating physics invariants from prediction tradeoffs and requested
 continued work without stopping after pushes. New source
 scripts/tradeoff_search.py, calibration/global_rain_20261028/plan.json,
@@ -14,8 +14,11 @@ Old strict acceptance rules/results stay unchanged. Hard numerical/physical/
 case/source checks remain; prediction errors become explicit average/regional/
 native/ocean objectives. New research shortlist permits ≤15% worst regional
 combined regression, but cannot adopt without broader prospective validation.
-All planet and other actual parameters fixed. Commit before running; then
-continue actual search, review, publish to companion, verify, commit/push.
+All planet and other actual parameters fixed. Running via timeout7200 on PID4398 (workers4399/4400), execsession29264;
+log output/global_rain_20261028.log. Frozen sources MUST NOT be edited.
+Controls28exact; global stage progressing. New non-frozen publication/plot/
+verification helpers under scripts/*tradeoff*.py. Continue actual search,
+review, publish to companion, verify, commit/push; do not stop at this checkpoint.
 No normal atlas replacement authorized by a screening result alone.
 
 

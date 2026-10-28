@@ -92,6 +92,7 @@ def main():
              ROOT/'reports/ENVIRONMENTAL_REFERENCE_20261027.md',
              ROOT/'reports/COLUMN_DRYING_20261027.md',
              ROOT/'reports/JOINT_RAIN_20261027.md',
+             ROOT/'reports/GLOBAL_RAIN_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
              ROOT/'output/foraging_20261027/foraging_comparison.png',
