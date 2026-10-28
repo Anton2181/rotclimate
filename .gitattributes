@@ -1,5 +1,6 @@
 # Packed climate fields must remain byte-exact, including Windows checkouts.
+*.csv whitespace=cr-at-eol
 atlases/*/data/*.bin binary
 # Source copies and metadata carry byte hashes in the portable data packets.
 atlases/*/data/*.json -text
-atlases/*/data/*.csv -text
+atlases/*/data/*.csv -text whitespace=cr-at-eol
