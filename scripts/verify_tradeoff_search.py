@@ -36,6 +36,7 @@ def independent_objective(name,records,p):
 
 def verify(out):
     protocol=json.loads((out/'protocol.json').read_text());p=protocol['plan'];run_id=identity(protocol)
+    declaration_metadata_issues=[]
     progress=json.loads((out/'progress.json').read_text());review=json.loads((out/'review.json').read_text())
     if (progress.get('complete') is not True or review.get('complete') is not True
             or progress['identity']!=run_id or review['identity']!=run_id
@@ -43,6 +44,13 @@ def verify(out):
     for n,sha in protocol['sources'].items():
         if file_hash(ROOT/n)!=sha:raise ValueError('Changed scientific source: '+n)
     if p['design']['sampler']=='scrambled Sobol':
+        if 'joint_global_parent' in p:
+            parent_info=p['joint_global_parent'];parent=ROOT/parent_info['parent']
+            for filename,key in [('review.json','parent_review_sha256'),('progress.json','parent_progress_sha256'),('scientific_verification.json','parent_verification_sha256')]:
+                if file_hash(parent/filename)!=parent_info[key]:raise ValueError('Changed joint-search parent archive')
+            parent_review=json.loads((parent/'review.json').read_text())
+            parent_plan=json.loads((parent/'protocol.json').read_text())['plan']
+            if parent_review['validation_shortlist'] or any(p[k]!=parent_plan[k] for k in ['objective','validation_shortlist','fixed_model']):raise ValueError('Changed conditional joint-search policy')
         expected_points=qmc.Sobol(len(p['design']['bounds']),scramble=True,seed=p['design']['seed']).random_base2(p['design']['base2_exponent'])
         actual_points=np.stack([coordinates(p['profiles'][n],p['design']) for n in p['global_names']])
         np.testing.assert_allclose(actual_points,expected_points,rtol=0,atol=1e-14)
@@ -65,7 +73,21 @@ def verify(out):
             if file_hash(parent/filename)!=ablation[key]:raise ValueError('Changed drying-anchor source archive')
         parent_review=json.loads((parent/'review.json').read_text());parent_progress=json.loads((parent/'progress.json').read_text())
         old_updates={r['name']:r['updates'] for r in parent_progress['records']}
-        if parent_review['validation_shortlist'] or diverse_starts(parent_review['scores'],old_updates,ablation['anchor_selection'])!=ablation['anchors']:raise ValueError('Changed conditional drying anchors')
+        selection=json.loads(json.dumps(ablation['anchor_selection']))
+        parent_design=json.loads((parent/'protocol.json').read_text())['plan']['design']
+        if selection['bounds']!=parent_design['bounds']:
+            # Original generator selected before mutating a shallow-copied nested
+            # bounds dict. The literal pre-run grid/anchors remain frozen. Only
+            # reconstruct that already executed parent-space selection here.
+            expected_bounds={**parent_design['bounds'],**{k:dict(range=[0.,v],scale='linear') for k,v in ablation['retained'].items()}}
+            if selection['bounds']!=expected_bounds:raise ValueError('Unrecognized anchor-selection metadata discrepancy')
+            declaration_metadata_issues.append(dict(field='drying_ablation.anchor_selection.bounds',
+                issue='Generator shallow-copy alias appended the two new axes after parent-space anchor selection',
+                resolution='Verify the literal pre-run candidate grid and reconstruct selection in the committed parent parameter space; original plan retained',
+                saved_bounds=selection['bounds'],actual_selection_bounds=parent_design['bounds'],
+                scientific_runs_or_scores_changed=False))
+            selection['bounds']=parent_design['bounds']
+        if parent_review['validation_shortlist'] or diverse_starts(parent_review['scores'],old_updates,selection)!=ablation['anchors']:raise ValueError('Changed conditional drying anchors')
         variants={'subsidence_off':{'subsidence_drying':0.},'monsoon_off':{'monsoon_descent':0.},'both_off':{'subsidence_drying':0.,'monsoon_descent':0.}}
         if ablation['variants']!=variants or p['design']['local_poll_order']:raise ValueError('Changed fixed drying ablation')
         for row in parent_progress['records']:
@@ -201,6 +223,7 @@ def verify(out):
         parent_scientific_verification_sha256=file_hash(parent_receipt),
         frozen_sources_verified=len(protocol['sources']),actual_case_identities=derived,archived_controls_exact=controls,
         local_basin_diagnostics=basin_diagnostics,
+        declaration_metadata_issues=declaration_metadata_issues,
         near_duplicate_parameter_pairs=near_duplicates,
         native_controls_exact=extra_controls,all_actual_parameters_and_row_hashes_verified=True,
         all_scores_physical_checks_and_adaptive_decisions_recomputed=True,row_hashes=row_hashes,

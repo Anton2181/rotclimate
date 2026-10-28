@@ -206,6 +206,7 @@ def publish(out):
         portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
         history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,native_humidity_seasons=humidity,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
+        declaration_metadata_issues=verification.get('declaration_metadata_issues',[]),
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
         publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},
         old_policy_scope='Earlier strict regional acceptance rules and outcomes remain unchanged. This is a different prospective research objective.')
@@ -225,9 +226,13 @@ def publish(out):
     design_text=('The paired design switches off subsidence drying, monsoon drying, and both, at up to two separated retained wind/rain settings. Explicit conservative donor transport stays active. Parent anchors are archived comparisons, not new integrations. This tests a possible overlap, without assuming that removing a closure corrects the physics. No local refinement follows.' if ablation else
         'The paired design tests three shared background westerly amplitudes (4.5, 6.0 and 8.5 m/s) at up to three separated rain settings selected from the completed parent search. Original 7.5 m/s results are archived comparisons, not additional integrations. No local refinement follows this bracket.' if wind else
         'The frozen design covers 32 scrambled Sobol points over wider shared storm/rain-timescale/convective-RH ranges, then up to three separated starts with six bounded coordinate proposals each. Exact duplicate proposals reuse records.')
+    design_text=p.get('publication_design_text',design_text)
+    metadata_note=('<p class="note">The original declaration retains an anchor-selection bounds metadata error from a shallow copy. The literal trial grid was frozen before execution; verification reconstructs selection in the committed parent space. Runs, parameters and scores are unchanged. See the report and downloadable verification notes.</p>'
+                   if verification.get('declaration_metadata_issues') else '')
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 <p>New research policy: numerical conservation, paired inputs, fixed Earth settings and declared actual parameters remain hard requirements. Rainfall, temperature, humidity, wind and sea-state prediction errors are explicit objectives. Modest regional regressions can accompany an average improvement; no individual prediction-error veto prunes the optimization path. Earlier acceptance decisions remain unchanged.</p>
 <p>{design_text} {review['actual_integrations']} actual integrations completed, {review['strictly_passed']} passed numerics and {review['failed_integrations']} failed. All 28 historical controls reproduce their saved fields exactly. This finite search does not certify a global optimum.</p>
+{metadata_note}
 {figures}<div class="table"><table><caption>All research candidates; objective includes explicit regret penalties</caption><thead><tr><th>Trial</th><th>Objective</th><th>Mean rain / r39</th><th>Mean T / r39</th><th>Worst region / r39</th><th>Broader-validation shortlist eligible</th></tr></thead><tbody>{''.join(score_rows)}</tbody></table></div>
 <p>Non-dominated research candidates: {html.escape(', '.join(review['pareto_front']))}. At most two candidates may enter separately frozen broader validation: {html.escape(', '.join(review['validation_shortlist']) or 'none')}. A shortlist is not an adopted fit. No normal climate, foraging, farming, population packet or measured accuracy headline is replaced.</p>
 <p class="note">Means use equal-region normalized errors. Reference-error floors are declared normalization choices, not measured observational uncertainties. Seven reused regions and small coastal samples cannot establish global skill. The prescribed environmental profile does not solve atmospheric radiation or latent-energy feedback.</p>
@@ -236,7 +241,7 @@ def publish(out):
     if start in text:
         before,tail=text.split(start,1);_,after=tail.split(end,1);text=before+section+after
     else:
-        anchor='<!--wind-interaction-start-->' if ablation else '<!--global-rain-start-->' if wind else '<!--joint-rain-start-->'
+        anchor=('<!--'+p['previous_study_slug']+'-start-->') if 'previous_study_slug' in p else '<!--wind-interaction-start-->' if ablation else '<!--global-rain-start-->' if wind else '<!--joint-rain-start-->'
         if text.count(anchor)!=1:raise ValueError('Need unique preceding study')
         text=text.replace(anchor,section+'\n'+anchor)
     page.write_text(text)

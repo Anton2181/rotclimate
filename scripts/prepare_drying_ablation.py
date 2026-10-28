@@ -45,7 +45,7 @@ def prepare(parent, target):
             raise ValueError('Commit current parent archive before declaring this follow-up: ' + filename)
     p = json.loads(json.dumps(protocol['plan']))
     updates = {r['name']: r['updates'] for r in progress['records']}
-    selection = dict(p['design'], local_starts=2, start_minimum_distance=.35)
+    selection = dict(json.loads(json.dumps(p['design'])), local_starts=2, start_minimum_distance=.35)
     anchors = diverse_starts(review['scores'], updates, selection)
     if not anchors:
         raise ValueError('No admissible parent anchor')

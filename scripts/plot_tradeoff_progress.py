@@ -17,9 +17,14 @@ def plot(out,target):
     progress=json.loads((out/'progress.json').read_text());scores=progress['scores']
     updates=dict(p['profiles']);updates.update({x['name']:x['updates'] for x in progress['history'] if 'updates' in x})
     candidates=[x['name'] for x in progress['history'] if x['name'] in scores]
-    fig,axes=plt.subplots(2,2,figsize=(13,9.3),constrained_layout=True)
-    pairs=[('eddy_rate','precip_tau_days'),('eddy_rate','convective_rh'),('precip_tau_days','convective_rh')]
-    units={'eddy_rate':'Storm exchange rate (day⁻¹)','precip_tau_days':'Dynamic rain timescale (days)','convective_rh':'Convective activation RH'}
+    wide=len(p['design']['bounds'])>3
+    fig,axes=plt.subplots(2,3 if wide else 2,figsize=(17.7 if wide else 13,9.3),constrained_layout=True)
+    pairs=([('eddy_rate','precip_tau_days'),('convective_rh','westerly_speed'),('subsidence_drying','monsoon_descent'),
+            ('eddy_rate','westerly_speed'),('precip_tau_days','convective_rh')] if wide else
+           [('eddy_rate','precip_tau_days'),('eddy_rate','convective_rh'),('precip_tau_days','convective_rh')])
+    units={'eddy_rate':'Storm exchange rate (day⁻¹)','precip_tau_days':'Dynamic rain timescale (days)',
+           'convective_rh':'Convective activation RH','westerly_speed':'Background westerly amplitude (m/s)',
+           'subsidence_drying':'Legacy subsidence coefficient','monsoon_descent':'Legacy monsoon-descent coefficient'}
     valid=[n for n in candidates if scores[n].get('physical_admissible')]
     vals=[scores[n]['objective'] for n in valid];low=min(vals) if vals else 0.;high=max(vals) if vals else 1.
     if high-low<.02:
@@ -45,8 +50,8 @@ def plot(out,target):
         if valid:
             best=min(valid,key=lambda n:scores[n]['objective']);ax.annotate(best,(updates[best][a],updates[best][b]),xytext=(6,6),textcoords='offset points',fontsize=8)
     axes.flat[0].legend(frameon=False,fontsize=7)
-    if valid:fig.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=list(axes.flat[:3]),shrink=.7,label='Penalized research objective · lower is better')
-    ax=axes.flat[3]
+    if valid:fig.colorbar(plt.cm.ScalarMappable(norm=norm,cmap=cmap),ax=list(axes.flat[:len(pairs)]),shrink=.7,label='Penalized research objective · lower is better')
+    ax=axes.flat[-1]
     positions=[candidates.index(n)+1 for n in valid]
     ax.plot(positions,[scores[n]['objective'] for n in valid],'o-',ms=4,label='Objective including regret')
     ax.plot(positions,[scores[n]['mean_combined_ratio'] for n in valid],'s-',ms=3,label='Mean combined climate error / r39')
@@ -60,9 +65,10 @@ def plot(out,target):
     ax.set(xlabel='Completed candidate profiles (seven regions each)',ylabel='Error / research objective',title='No skill veto during exploration');ax.grid(alpha=.15);ax.legend(frameon=False,fontsize=8)
     if len(candidates)<10:ax.set_xticks(range(1,len(candidates)+1))
     count=len(progress['records']);passed=sum(r['status']=='passed' for r in progress['records'])
-    fig.suptitle(f'Global rainfall exploration · {count} actual integrations, {passed} numerical passes',fontsize=16)
+    title=p.get('publication_title','Global rainfall exploration')
+    fig.suptitle(f'{title} · {count} actual integrations, {passed} numerical passes',fontsize=16)
     fig.supxlabel(('Completed bounded search. ' if progress['complete'] else 'Provisional search record. ')+
-        'Empty circles are predeclared Sobol points; local triangles follow frozen adaptive rules.\n'
+        'Empty circles are predeclared Sobol points; '+('local triangles follow frozen adaptive rules.\n' if p['design']['local_poll_order'] else 'no local proposals.\n')+
         'Skill tradeoffs remain visible; numerical/physical failures cannot be traded away. No global-optimum or adoption claim.',fontsize=9)
     target.parent.mkdir(parents=True,exist_ok=True);fig.savefig(target,dpi=145);plt.close(fig)
     result=dict(status='rendered',complete=progress['complete'],actual_integrations=count,valid_candidate_profiles=len(valid),

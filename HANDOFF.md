@@ -38,30 +38,58 @@ No active model job. Browser25studies/71images/32downloads passed;633assets chec
 portable1103files/238links/launcher passed. Receipt verification.json.
 Commit/push publication before next declaration.
 
-**Drying ablation ACTIVE, source745cea2:**
-Parent wind results committed/pushed4e93862. New plan
-calibration/drying_ablation_20261028/plan.json selects global01/global07,
-both4.5m/s, then separately zero subsidence_drying, monsoon_descent, and both.
-70maximumactual integrations (28controls+42candidates); no local proposals.
-Prospective report DRYING_ABLATION_20261028.md. Parameter roundtrips pass for
-all6six-dimensional coefficient blocks, including zero endpoints.
-Launch unchanged scripts/tradeoff_search.py --plan above --out
-output/drying_ablation_20261028, BLAS1,timeout7200,log
-output/drying_ablation_20261028.log. Then verify/analyze/diagnose/plot rainfall/
-publish tradeoff helpers and organizer, completed report, browser/checkout/
-portable QA, commit/push. No automatic adoption or claimed double counting.
-All source/model/active plans must remain frozen. User says continue after
-pushes: carry through actual experiment. Source declaration must be committed
-before first new integration. Launched PID21878,workers21879/21880,execsession55177; log as above.
-All28controls exact; six candidates now running. Source/model/plan immutable.
-Non-frozen seasonal helpers now undo the southern6month display shift, and
-new plot_tradeoff_humidity.py plots the exact native objective footprints.
-Native controls transport_control(first3)/column_control(PNW), since r39
-record has no humidity certificate. New helper initially assumed otherwise;
-fixed plotting-only lookup, zero scientific runs. Parent broad/wind figures
-regenerated but not republished yet; after current completion refresh all
-three studies, verify browser/checkout/bundle and update receipts. No new
-physics metrics or outcomes changed by calendar display ordering.
+**Drying ablation COMPLETE, source745cea2:**
+output/drying_ablation_20261028;70actual runs/70strict passes,28main and4
+native controls exact.422frozen sources independently checked; counters1557
+attempts/1553passes/4old failures. No shortlist/adoption. Everyablationworse
+objective and meanrain error than retained parent. Bestamongablationsglobal02
+(monsoonoff at windglobal01):F1.13253 vsparent1.12568,R1.07529vs1.06867.
+NI can increase278→325mm aftersubsidenceoff, butstill761observed;PNWworsens.
+Science session55177 done; postpipeline64495initialverifierfailed (see below),
+corrected verification45839 passed; diagnostics37067 and publication42512 done.
+Six figures newest companion;26studies,expected79figures/33downloads.
+Parent broad/wind updated with nativehumidity and southerncalendar displayfix.
+No active model job. Browser26studies/79images/33downloads passed;642checkout
+assets exact;1113file portablebundle/256links/launcher passed. Receipt
+verification.json records preserved metadata issue. Commit/push completed
+publication then generate fresh globaljoint declaration.
+
+**Metadata issue preserved, NOT a physics/numerical failure:**
+Generator shallow-copy selection.bounds acquired2newdrying axes AFTER actual
+anchor selection inparent4D. Literal6trialcoefficients/anchorIDs committed
+correctly before runs; original plan/identity untouched. Initial verifier
+KeyError preserved in verification_run.log and verification_initial_failure.json.
+Verifier recognizes exactlythis metadata extension, reconstructs selectionusing
+committedparent4Dbounds, verifies sameanchors/globalgrid/allmetrics, andrecords
+`declaration_metadata_issues` in scientificreceipt andpublicdata. Reportexplicit;
+futuregenerator deepcopiesnestedselection. Two regressionchecks+8oldtests pass.
+Never rewrite frozen plan or relabel this as a model convergence failure.
+
+**Continue after publication:**
+Conditional script scripts/prepare_joint_global.py prepared (NOT declared/run)
+for no-shortlist parent:32fixed scrambledSobol points in6shared axes,wind
+separately extended2.5–8.5m/s; dryings0..retained; rain3boundsunchanged.
+252maxactualintegrations including28controls; no local proposals; sameobjective,
+shortlist/invariants and allotheractual/planetparams fixed. This samplesjoint
+interactions ratherthan assuming endpoint deletion or fixed-rain windfit works.
+Commitparentresultsfirst; run generator --parent output/drying_ablation_20261028
+--plan calibration/global_joint_20261028/plan.json; writeprospectivereport,
+organizer/packager/.gitignore,commitdeclaration BEFORE newruns. Then unchanged
+tradeoff_search.py withnewplan/out. Plothelper supports6Dcoverage; publisher
+supports title/design/previous_slug; verifier supportsconditionalparentchecks.
+No current newglobalplanexists. Do notstop afterpushing: carryactualnextwork.
+
+**Physical process side investigation prepared:**
+reports/HUMIDITY_PROCESS_NOTES_20261028.md cites verifiedprimary Manabe &
+Wetherald1967 Eq2,page243; pressure-dependent marineRH boundary profile is
+candidatehypothesis, not implemented/adopted. PDF cached ignored
+output/physical_reference_cache/; SHA in note. OCRpages1–4 checked title,
+linearRH pressureprofile,surface.77,normalizedpressurezero.02,andstratospheric
+mixingratiofloor. Interiorwatermustremain solved. Holding totalwater vs surface
+RH aredifferenttests; normalization canoversaturatelowerair. Nextpossible
+zero-Earth-run cachednative referenceaudit, independentlydeclared first.
+Current ratioerrors do NOTprove absoluteupperlayerwaterexcess; meanscannot
+recoverlayeramounts exactly. No newhumidity forcing or physicschange yet.
 
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
