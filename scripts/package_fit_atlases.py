@@ -96,6 +96,7 @@ def main():
              ROOT/'reports/WIND_INTERACTION_20261028.md',
              ROOT/'reports/DRYING_ABLATION_20261028.md',
              ROOT/'reports/GLOBAL_JOINT_20261028.md',
+             ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
              ROOT/'output/foraging_20261027/foraging_comparison.png',

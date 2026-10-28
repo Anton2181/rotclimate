@@ -67,4 +67,45 @@ The environmental profile does not solve radiation or latent-energy feedback.
 Any finalist still needs broader Earth, ocean, resolution, established-region
 and matched world assessment before replacing a normal atlas climate.
 
-Status: declared; no new integrations at declaration commit.
+Status: complete; source `c91e7b8`. All252actual regional integrations pass strict numerics, all32candidate settings meet the declared structural checks, and no candidate reaches the research shortlist.
+
+## Completed results
+
+The best new point is global11: F1.15523, meancombined1.05922,
+meanrain1.07241, meanT1.04602, worstcombined1.28663. This is worse than
+the preceding wind-study best global01 (F1.12568, meancombined1.05226,
+meanrain1.06867). The new experiment therefore produces no accuracy gain
+or replacement, despite broader joint coverage. All32fixed outcomes are
+retained, including regional and native errors.
+
+| Comparison | Objective | Mean rain / r39 | Mean combined / r39 |
+|---|---:|---:|---:|
+| Previous wind-study global01 |1.12568|1.06867|1.05226|
+| New joint-global global11 |1.15523|1.07241|1.05922|
+
+The finite32point six-dimensional design can miss a narrow or boundary basin.
+It is neither a global-optimum certificate nor evidence that every possible
+parameterization fails. The earlier controlled wind result and explicit
+regional tradeoffs remain valid; the new data reduce confidence that tuning
+these six coefficients alone is an adequate cure for the remaining bias.
+
+All28main archived control fields and4native companions reproduce exactly.
+Independent verification replays the Sobol points and conditional parent,
+checks actual parameters/source/input identities, every raw row/array hash,
+step water/branch certificates and the scalar objective. Cumulative series:
+**1809actual attempts /1805passes /four preserved historical failures**.
+This round adds252passes and no numerical failure. No full/fine/established/
+world stage or adoption ran.
+
+Six figures and compact complete metrics are published in the companion:
+six-axis coverage and progress, all regional errors, weight/region sensitivity,
+signed water equations, full-score rainfall seasons and native humidity seasons.
+The normal climate, agricultural, population and foraging packets and measured
+city-accuracy headlines remain unchanged.
+
+The separate pressure-dependent marine RH process comparison supplies a
+physical lead, not a climate gain. Any coupled implementation must explicitly
+separate a physical uniform-profile ocean column from its RH taper, preserve
+default controls, leave actual interior water independently solved and retain
+all climate/native tradeoffs. Passing that small reference test alone cannot
+authorize an atlas climate replacement.

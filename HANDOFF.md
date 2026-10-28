@@ -1,3 +1,92 @@
+# Current continuation — 28 October 2026
+
+User explicitly says continue development without stopping after pushes;
+commit/push each milestone and keep .bat atlases current. Latest user Continue.
+Repo /workspace/rotclimate, branchwork; push HEAD:claude/friendly-turing-43ygeu.
+No subagents permitted by latest developer unless explicitly requested.
+
+**NEW GLOBAL JOINT COMPLETE, sourcec91e7b8:**
+output/global_joint_20261028;252actual runs/252strict passes,28archived main
+controls+4native companions exact;480frozen sources independently checked.
+All32six-dimensional Sobol settings structurally admissible; no shortlist.
+Bestnewglobal11:F1.155234,meanS1.059216,R1.072413,T1.046018,worst1.286627.
+Does NOTbeat priorwindglobal01F1.125682,meanS1.052260,R1.068674. No local
+polish orconvergence/globaloptimum claim. Sameobjective/no regionalveto,
+planet/allnon-freeparamsfixed. Counters1809attempts/1805passes/4old failures.
+All studydata/6figures published newest researchcompanion. Normal atlasdata
+and3667city measuredheadlines unchanged. No active modeljob (session85019exit0).
+
+**MARINE RH REFERENCE COMPLETE, source1027292:**
+output/boundary_rh_20261028;zeroEarthruns/downloads.27reused nativeoceancells
+PNW4/Iberia20/California3. Same env6K/km saturations fromobserved925T,
+humidity withheldconstruction. FixedsurfaceRH.77/ps101325,taper0/.5/1,
+no totalWrenormalization. Half:F.895181,meancombined.894867,worst1.111445,
+shapeMAE.030554 vsuniform.038383 (~20.4%better); qualifiesREFERENCEsupport
+forseparatelydeclaredcoupledpilot only. RegionalS PNW1.111445/Iberia.521863/
+California1.051292. FulltaperfailsF1.872489. No actualcoupledresponse/adoption.
+Independent verifier67sources,allnativeq/water/ratios,monthly/seasonalweights/
+metrics/decisions withalternate formulas.19focusedtests pass. Newpublisher
+includesrawnativeinputs andalltradeoffs. Report BOUNDARY_RH_20261028.md;
+sourcepaper Manabe&Wetherald1967Eq2 p243 verifiedprimaryPDF(cacheignored).
+Researchnote HUMIDITY_PROCESS_NOTES_20261028.md hasURL+hash. Tropospheric
+shapeonly, notoriginalstratosphericfloor/RCE. FixedsurfaceRH vsfixedtotalwater
+are differentexperiments; ratiosalonecannotrecoverlayerwateramounts.
+
+**Publication QA bothnewstudies PASSED:**
+Browser28studies/86images/35downloads, keyboard/deeplink/light/dark/mobile;
+651checkoutassets exact; portablebundle1125files (actualJSONauthoritative)
+alllocalresearchlinks/launcher pass. Receipts in eachoutput/verification.json.
+Commit/push currentfinishedresults before actualnewphysics edits.
+
+**Next actual physics task (not implemented/declaration yet):**
+The newprocess result supports testing hydrostatic ocean water targets with
+uniform vs half-taper RH, leaving actual interior water independently solved.
+Do not claim numerical/process gains as coupledrainfall gains. Currentcore
+files have NOTchanged yet. Allfrozenpastscience/currentdata alreadyverified.
+Currentp ocean_rh=.7547460305996778,ocean_rh_warm=0,column_saturation='legacy'.
+Useful plan: twofixedwinds4.5(oldbest) and3.5(untried controlleddirection), at
+oldwindglobal01rainparams(eddy3.5,tau15.532421910244794,RH.8098909563459455),
+legacyfullsinks. For eachwind comparelegacyocean/default, physicaluniform,
+physicalhalfRHocean. Fourstandardcontrols28 +6profiles42 =70newruns.
+Legacy4.5 should also reproduce oldwindglobal01NPZ exactly (add archivebinding
+for thatcandidate so recorderchecks it). Same7regions/objective/shortlist,
+allEarth/nonfreeparams fixed. Literalprospectivegrid before integrations.
+
+Newcoreopt-in proposednames: moisture_ocean_hydrostatic:boolFalse,
+moisture_ocean_rh_taper:float0. Default must stay bit-exact. Newflagrequires
+independentreservoirs; taper[0,1], must0whenflagfalse; surfaceRHtargetmust
+be(0,1] on actualocean. Addphysicsclassification in rotclimate/joint.py.
+Add humidity_column helper using existing pressurethermal integration and
+RHshape weight; keep default integrate_saturation_profile pathbitexact.
+HydrostaticflagTrue: W_ocean=actualcurrentRHscalar(warmmodifierifany)*
+weightedhydrostaticprofile.total_mm, notlegacytotalnormalized. Uniformphysical
+control isolates changedtotalcapacitylaw; halfpairedisolatesRHshape+itswater
+change. Oceanlowerfractioncomesfromsameweightedprofile. No solvedhumidityreset.
+In model perstepcert recordchosenoceanprofile/taper, actualsurfaceRHrange,
+actualtargetcolumnwater andlowerfraction; checkallprimer/scoredsteps later.
+Alllandcapacity/temperaturelawstayssame, no newenergy eq orregionaltuning.
+Existing model locations: validation~line278; sea_profileconstruction~1233;
+W_ocean~1259; solverocean_lower_fraction~1547; certificate~1550. Params~245;
+joint.SHARED_FIELDS line40. Fourcorefiles would change.
+
+IMPORTANT sourceepoch: oldtradeoff_search.py freezes oldparentcode andcannot
+silentlyacceptcoreedits. Preserveit; create NEW fixedpilotrunner/importold
+scorehelpers andrecorder, with explicit prospective source_replacements
+before/after hashes +oldcommittedGitbytes/newcommit for exactly4changedcore
+files. Allother parent sources/inputs unchanged; defaultcontrols reproduce
+fullNPZs. Newprotocol.sources currenthashes, separatehistoricalsourceprovenance.
+Genericverifier needs newpaired-hydrostatic sampler andevery-step certificate
+checks, currentactualParamsincludingnewdefaults, exactlegacy4.5 extraarchive.
+Do not rewrite oldprotocols orchangeoldfailuredecisions. Historical old
+verifiers requiretheircodeepoch (checkout/worktree) after corechanges.
+Beforeediting capture pre-edit toy default/reservoir snapshots under output/
+using tests/test_earth._toy_case, strict_params and reservoir_params fixtures;
+thencompare bit-exact afteredit. Coretests+meaningful newthermophysicaltests.
+Commitcode first; thennewplan/source_replacements declaredbeforeactualruns.
+No permissionquestion needed; userauthorizedcontinuousphysicaldevelopment.
+
+Previous retained history follows (some ACTIVE descriptions are historical):
+
 # Handoff — 27 October 2026
 
 ## Current status

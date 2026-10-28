@@ -38,4 +38,36 @@ monsoon-land performance or a coupled rainfall response. Any later ocean
 boundary change must keep actual interior water independently solved and
 undergo broader Earth/world evaluation. All candidates and failures remain.
 
-Status: declared; no new candidate outcomes at declaration commit.
+Status: complete; scientific source `1027292`. All fixed profiles retained; half taper supports only a separately declared coupled pilot. No Earth climate integration or adoption.
+
+## Verified process results
+
+| Fixed shape | Objective | Mean combined | Worst region | Mean q-shape MAE | Separate coupled-pilot support |
+|---|---:|---:|---:|---:|---|
+| uniform | 1.00000 | 1.00000 | 1.00000 | 0.03838 | No |
+| half_taper | 0.89518 | 0.89487 | 1.11145 | 0.03055 | Yes, reference support only |
+| mw_taper | 1.87249 | 1.62245 | 2.49514 | 0.06490 | No |
+
+Half taper improves mean combined reference error10.5% and mean actual-q
+shape MAE20.4%. Regional combined scores are PNW1.11145, Iberia0.52186,
+California1.05129: the mean gain coexists with two regional regressions.
+The full classical taper has objective1.87249 and substantially worsens
+shape error at PNW and California despite improving Iberia. All native and
+seasonal errors remain available; neither taper was fitted to these humidity
+data. No observational uncertainty is inferred from the normalization floors.
+
+The independent verifier checks67frozen sources, reconstructs every native
+specific-humidity field, pressure trapezoid, lower/upper water amount and
+ratio, area/month/season summary, normalized error, regret and decision with
+independent formulas. Reconstructed temperatures reproduce the archived
+saturation from its925hPa anchor. Nineteen focused analytic/provenance checks
+pass across this and the prior research tooling.
+
+This is27reused coarse model-assisted ocean footprints, not a coupled climate
+prediction, a monsoon-land test or a general validation of the1967model.
+The published comparator holds literature surface RH0.77 fixed. A later
+climate pilot must document its actual calibrated RH and sea-temperature
+anchors, compare physical uniform and half-taper ocean targets separately,
+and retain the original default model as an exact control. No solved interior
+humidity may be reset. All current world atlases and measured accuracy
+headlines remain unchanged.
