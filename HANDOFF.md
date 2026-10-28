@@ -1,3 +1,33 @@
+# ACTIVE — phase-to-mode forward demo complete; finite moist enthalpy next
+
+Userexplicitcontinueafterpushes. No agents. Corephaseed8121a pushed, continued
+throughfirstmodeimplementation+publication.35study/117images/43downloads,
+691checkoutassets,1177portablefiles/358links/freshlauncher allpassed.146focused
+pass40.7s. NoEarthintegrations;counter1934/1929/4oldfails+1oldinterruption.
+Newbaroclinic_heating.pyderivesc=NH/pi, sinebuoyancyheating, exactcosinelayer
+averagesScaleS andphysicalmodeenergyfactor1/(2S2).11newtests independentquad.
+Newphase22tests conserveactualwater+diluteCPMdT+LvW, fallingrainreevap. Thickness
+projectiondiagnosticonlyNOTmodeforcing. Bothnewphase+mode33tests total.
+Demo scripts/demo_latent_circulation.py output/latent_circulation_20261028:
+uppercondmax4.157mm bothcases, drylowerreevapall/groundrain0/netheat0,humid
+lowerrainmax3.931mm. Watererror<1.4e-14kgm2, diluteenthalpyerror<1.8e-7Jm2,
+continuousmodework independentlyverified.2isolatedlinearsolves0Earthruns.
+BoussinesqconstantNreferenceandone-dayphasepulse->steadydryresponseNOTfully
+coupledtransient. Heatoutsidefirstmoderemainsledger, no globaloptimum/rainclaim.
+ReportsLATENT_HEATING_20261028,FIRST_MODE_HEATING_20261028. Allsourcesreceipts
+bound;oldregionalkernelsunchanged. NormalEarthr39/worldatlasunchanged.
+
+NEXTwithinactivetask: improvephasefirstlawwithfiniteCPvapor/CPliquid andactual
+falling-rainenthalpy(atuppertemperatureincoming,lowergroundrainexport). New
+moist_enthalpy.py (keep earlierdilutephasekernelunchangedforreproducibility),
+independentroot/budgetchecks, comparefixedsamecolumncases andprojectactual
+Tdot viaCPdryMdDT asdry-equivalentthermalforcing withproperheatledger. DoNOT
+call dry-equivalentheatthermodynamicnetsource. Needseparateactualgas/liquid
+enthalpyledger. Thenpublish/QA3rdmilestone. No fullatmosenergy/latentfeedback
+forecasts untilprognostictransport/radiation/background/verticalstructure.
+
+Previoushandofffollows:
+
 # ACTIVE — physical phase change implemented; first-mode projection next
 
 User says continue, don't stop after pushing. No agents. Repo/work/pushsame.

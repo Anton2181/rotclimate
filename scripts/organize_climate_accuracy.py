@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('latent-circulation','Conservative phase change and vertical-mode heating'),
     ('regional-baroclinic','Regional dry circulation and native-face water'),
     ('divergent-thermal','Divergent return and thermal rotation'),
     ('separated-thermal','Stable surface and atmospheric thermal separation'),
