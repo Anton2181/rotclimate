@@ -1,3 +1,61 @@
+# CURRENT — second thermal profile COMPLETE; architecture split next
+
+Latestuser Continue twice while active; keep working after pushes. Repo/work/push
+same. No agents allowed. No active modeljob. Coree14c50c, declaration69c5a6f,
+fullarchivebinding519d235 pushedbefore18runs. Stable two-pattern Tprofile
+moisture_thermal_anomaly_decay=False default, A=Tsl, B=zonalEBM commonp refs,
+nominal decay1/-ln(.75), warmdecaystability bound g/cp. Botholder toy modes exact.
+71focused tests pass. Current outputs output/separated_thermal_20261028/.
+
+18/18strict,12historical main+PNWextra controls exact;634frozenfiles;594solved
+steps. Complexstep+48nodequadrature checks actualshear error1.85e-12m/s,
+corefloorintervals reused androots/interior/exterior independentlychecked.
+actualmaxpossiblelapse9.662K/km<9.767drylimit. Cumulative1916attempts/1911strict/
+4oldfailures+1oldinterruption. NO ADOPTION/rainimprovement. Meanpairedrainloss
+legacy1.477853/hydro1.519560 vscriterion.95; meanTchange-.0505/-.0760C.
+Hydroannualrain original/single/separated India319/32/34.5,Mexico935/333/333.1,
+PNW1036/436/459.1. NewIndiaJJAthermalgradE/N925-700+.649/-.275vs-2.128/+2.186;
+700-300+.112/-1.307vs+.584/-.543. Upperdirection improves;rainstillbad.
+Twofailedthermalhypotheses =>reassessarchitecture,NOmoredecayprofiletuning.
+
+NEWARCHITECTUREPROOF+ISOLATEDSPLIT (not yet wired to ClimateModel):
+rotclimate/divergent_thermal_winds.py,tests/test_divergent_thermal_winds.py
+3pass. output/projection_architecture_20261028/diagnosis.json (0Earthruns).
+Atflatconstantf geostrophicthermalshear is nondivergent; imposingthatdifference
+andcommoncolumnprojectionremoveslowerageostrophicconvergence. Manufactured
+upwarddryexchange historical1e-6/s,common2.55e-21,splitexact1e-6. Unitchecks
+zeroS recoversoldbranches anduniformqtransportonterrain unchanged.
+Split P=existingmassprojection: B=P(lower), Srot=P(thermal_shear);
+upper=(B-.25lower)/.75+Srot; lowerleftEXACT. This retainsoriginaldivergentreturn
+whileaddingonlymassbalancedthermalrotation. Wholecolumnmassdiv0; shear is
+olddivergentcomponent+Srot,NOTfullrawgeostrophicshear. Certactualdecomposition
+errorandtotalrawsheardepartureexposed. No newenergy/momentumsolutionclaimed.
+
+Currentmilestonepublishcomplete:32studies/106images/40downloads,677checkout
+assets exact,1157portablefiles/327links/freshlauncher pass. Browser rerunwith
+subprocess-managedpreview server after earlierpreviewstopped;notEarthfailure.
+Reports/receipts ready,commit/pushfirstmilestone BEFORE changingcoreagain.
+
+Userwas told nextSTRUCTURALtest split; continue afterpush to wire defaultoff
+moisture_thermal_divergent_return bool requiringthermalwinds. Keep old paths
+bitexact (toy all3modes original/single/sep). Nextbounded18runs:6exactoriginal
+controls plus12splitcases (single/sep temperature patterns ×2oceans×3regions).
+Compare BOTHprofilecandidates againstoriginal wind (same .95rain/.25CTguard),
+notpreviousfailedcases. No newthermoprofiletuning. Freeze3coretransition and
+newoperator/test/runner beforeEarthruns, allnonflagparams andcases exact.
+Neednewcheckrow/scorer handles originalcontrol and two split candidate groups;
+bind comparison archives fromcompletedsepstudy. Existing634 sources mayonly
+advanceexplicit3corehashes +addnewmodule;preservefrozenoldprotocols.
+Verifyactualupper=(P(savedlower)-.25savedlower)/.75+P(reconstructedrawS);
+newmode doesn'tclaimrawshearexact, onlydecomposition. RawS independentgradient
+checker already implemented verify_separated_shear.py butexpectsfullshear;
+copy/adaptforarchitecture+singlepattern support, don'tweakenhistoricalchecks.
+Afterphysics results update.batresearchatlas,plots,QA,commit/push. Ifsplitfails,
+move todynamicallyforcedcirculation/energy (ageostrophic/baroclinic heat-driven
+mass adjustment);no4thkinematic/profiletweak. NormalatlasEarthr39unchanged.
+
+Historicalhandoffbelow:
+
 # CURRENT — hydrostatic thermal wind pilot COMPLETE; failed rainfall criterion
 
 Latestuser Continue. Repo /workspace/rotclimate branchwork; push

@@ -72,3 +72,63 @@ stop adjusting these temperature/shear forms and reassess the circulation/
 energy architecture. Any later adoption requires excluded-region, resolution
 and world-transfer checks. Keep observed cloud/remote-monsoon backgrounds and
 all approximations explicit. Normal atlases remain on the adopted climates.
+
+## Completed result: second rainfall failure
+
+All 18 integrations passed strict numerical checks. The 12 historical controls
+reproduced every original climate field and extra PNW native array exactly.
+All 634 frozen files and 594 solved seasonal steps were verified. Independent
+complex-step temperature derivatives and 48-node pressure quadrature reconstruct
+the exported shear within1.85e-12m/s; floor roots and both recovered temperature
+references were checked. The actual maximum possible profile lapse was9.662K/km,
+below the9.767K/km dry limit. No new numerical failures or restarts occurred.
+Cumulative counter:1916 attempts,1911 strict passes,4 old failures,1 old interruption.
+
+| Ocean | Region | Separated/original rainfall loss | Temperature MAE change C |
+|---|---|---:|---:|
+| Legacy | India |1.986| −0.087 |
+| Legacy | Mexico |0.930| −0.207 |
+| Legacy | PNW |1.518| +0.142 |
+| Hydrostatic half | India |2.064| −0.157 |
+| Hydrostatic half | Mexico |0.806| −0.226 |
+| Hydrostatic half | PNW |1.688| +0.155 |
+
+Mean rain-loss ratios are1.47785and1.51956, both failing the predeclared0.95
+threshold. Mean temperature changes are−0.051C and−0.076C. Against the ORIGINAL
+winds, rainfall is worse overall; comparison only to the earlier failed wind
+closure would obscure that. No adoption or parameter search follows.
+
+Hydrostatic-half annual rain (original / single / separated / observed mm):
+India319/32/35/761; Mexico935/333/333/537; PNW1036/436/459/897.
+The new India upper700–300hPa northward thermal gradient is−1.31K/1000km
+versus−0.54reference, correcting its sign. The lower925–700 gradient is now
+−0.27versus+2.19reference, so the prescribed profile remains imperfect.
+Improving one thermal feature does not restore the missing rainfall.
+
+## Architecture reassessment: divergent versus rotational flow
+
+Two failed thermal/shear hypotheses trigger the declared architecture review.
+A useful manufactured limit identifies an additional problem with the common
+projection. On flat terrain at constant Coriolis, geostrophic thermal shear
+is nondivergent. If both branches are required to preserve that shear while
+a common correction makes the column nondivergent, much of the original
+ageostrophic lower convergence is removed. Such convergence is precisely what
+needs an upper return and supplies upward donor exchange in the water model.
+This does not prove that it explains every Earth error, especially with variable
+Coriolis, terrain and feedbacks; it is a concrete mathematical failure mode.
+
+An isolated split prototype preserves the original lower wind and its divergent
+return, while adding only the dry-mass-balanced rotational part of thermal
+shear above. In a manufactured convergent lower wind, upward dry exchange is
+1.0e-6relative-mass/s historically,2.6e-21with the common projection, and exactly
+1.0e-6with the split. Three isolated tests also verify the zero-thermal limit,
+column continuity and uniform-specific-humidity transport over terrain.
+This zero-Earth-run diagnostic is recorded separately under
+`output/projection_architecture_20261028/diagnosis.json`; it does not establish
+rainfall gains or a newly solved momentum/energy budget.
+
+The next bounded structural test should separate divergent ageostrophic return
+from rotational thermal flow, rather than search more decay exponents. The
+lower convergence source and missing vertical energy still require scrutiny.
+If the structural split fails, move to dynamically forced circulation/thermal
+energy equations before more coefficient fitting. Existing atlas climates remain.
