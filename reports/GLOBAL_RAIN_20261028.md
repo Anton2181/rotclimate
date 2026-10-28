@@ -88,6 +88,69 @@ tradeoffs. If systematic wet-coast/dry-monsoon errors persist throughout the
 box, that motivates another transport or closure hypothesis; it does not by
 itself establish that every possible parameterization must fail.
 
-Status: active; scientific source `3ec90ee`. All 28 controls reproduced exactly. The frozen global and local search is continuing; no result has been adopted.
+Status: complete; scientific source `3ec90ee`. All 371 regional integrations pass strict numerics; 28 archived main controls and four native companions reproduce exactly. No candidate qualifies for the research shortlist or adoption.
 
 The machine-readable `physical_admissible` flag means that the declared numerical, structural, parameter-bound and reference requirements passed. It is not a claim of independently validated atmospheric physics. Older recorder metadata retains some historical skill-threshold fields for comparison; the new `objective` and `validation_shortlist` rules, rather than the old screening function, govern this campaign.
+
+
+## Completed results
+
+The 32 global profiles and 17 actual local profiles each ran seven regions,
+plus 28 controls: **371 actual integrations, all passing numerics**. Eighteen
+local proposals included one exact cached proposal. Four additional pairs
+were indistinguishable at 1e-10 normalized parameter distance due to floating
+round trips; those reruns count as actual work but do not add materially
+distinct parameter-space coverage. There are 45 materially distinct sampled
+candidate locations. No historical failure is removed.
+
+All 236 frozen source hashes, seven reconstructed case identities, actual
+parameters, raw NPZ hashes, complete control fieldsets/dtypes/arrays, native
+companions, per-step certificates and every adaptive decision were verified.
+The scalar objective was also reconstructed independently from raw errors.
+
+| Diagnostic selection | Profile | Objective | Mean combined / r39 | Mean rain / r39 | Mean T / r39 | Worst region / r39 |
+|---|---|---:|---:|---:|---:|---:|
+| Lowest frozen objective | local1_05 | 1.19494 | 1.10445 | 1.18798 | 1.02093 | 1.57715 |
+| Lowest mean combined climate error | global05 | 1.20661 | 1.10116 | 1.18967 | 1.01265 | 1.47964 |
+| Lowest native squared regret | global28 | 1.36291 | 1.28249 | 1.47638 | 1.08860 | 2.09259 |
+
+The best objective improves by about 7.6% over the best previous factorial
+trial under this same newly frozen score. The best mean combined climate
+ratio improves from 1.19021 for the environmental control to 1.10116, but is
+still 10.1% above r39. Lower objective and lower average climate error are
+reported separately. No trial passes the declared average-error and regional
+shortlist conditions; none proceeds to adoption or normal-map replacement.
+
+| Separated start | Best local endpoint | Start objective | End objective | Near parameter boundary |
+|---|---|---:|---:|---|
+| global05 | local1_05 | 1.20661 | 1.19494 | eddy_rate upper |
+| global13 | local2_05 | 1.24688 | 1.20662 | eddy_rate upper |
+| global12 | local3_05 | 1.27151 | 1.21379 | eddy_rate upper |
+
+Each start improves during its bounded poll cycle, but this is not optimizer
+convergence. The best endpoints remain near the upper storm-exchange limit;
+the box does not establish an unconstrained optimum. Ranking sensitivity
+across nine alternative weight combinations and seven region omissions has
+four different winners. Region omissions are sensitivity checks on reused
+development data, not a new validation set and not a reason to change the
+frozen selection rule.
+
+![Parameter coverage and score progress](../atlases/climate_accuracy/data/global_rain_coverage.png)
+
+![Ranking sensitivity](../atlases/climate_accuracy/data/global_rain_sensitivity.png)
+
+The water-equation diagnostic contrasts the best objective, best mean climate
+and best native-regret cases. It uses original cropped domains, explicitly
+retaining the East Australia347/358-cell distinction. Signed equation terms
+are not independent causal shares. Regional regressions and native errors
+remain in the full download rather than being removed by the aggregate.
+
+The series now contains **1,396 actual Earth attempts, 1,392 passes and four
+preserved original failures**. Post-search diagnostics add zero integrations.
+All normal climate, FORGE, farming, population and headline data stay unchanged.
+
+The conditional next experiment will test shared wind amplitude at the best
+separated rain settings, using the same objective and planet. It addresses
+persistent circulation error without simply extending storm exchange to ever
+larger values. It must be separately declared and committed before any new
+runs; no failed decision from this round is reclassified.

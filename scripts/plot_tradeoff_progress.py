@@ -61,7 +61,8 @@ def plot(out,target):
     if len(candidates)<10:ax.set_xticks(range(1,len(candidates)+1))
     count=len(progress['records']);passed=sum(r['status']=='passed' for r in progress['records'])
     fig.suptitle(f'Global rainfall exploration · {count} actual integrations, {passed} numerical passes',fontsize=16)
-    fig.supxlabel('Provisional search record. Empty circles are predeclared Sobol points; local triangles follow frozen adaptive rules.\n'
+    fig.supxlabel(('Completed bounded search. ' if progress['complete'] else 'Provisional search record. ')+
+        'Empty circles are predeclared Sobol points; local triangles follow frozen adaptive rules.\n'
         'Skill tradeoffs remain visible; numerical/physical failures cannot be traded away. No global-optimum or adoption claim.',fontsize=9)
     target.parent.mkdir(parents=True,exist_ok=True);fig.savefig(target,dpi=145);plt.close(fig)
     result=dict(status='rendered',complete=progress['complete'],actual_integrations=count,valid_candidate_profiles=len(valid),

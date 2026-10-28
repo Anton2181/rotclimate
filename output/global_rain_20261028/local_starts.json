@@ -1,0 +1,66 @@
+{
+  "identity": "5d63ebcef8f9240c09049bbd10147287dc2f1c70c2283a77dbb44295aeabe26c",
+  "starts": [
+    "global05",
+    "global13",
+    "global12"
+  ],
+  "selection_rule": {
+    "sampler": "scrambled Sobol",
+    "seed": 20261028,
+    "base2_exponent": 5,
+    "bounds": {
+      "eddy_rate": {
+        "range": [
+          0.4,
+          3.5
+        ],
+        "scale": "log"
+      },
+      "precip_tau_days": {
+        "range": [
+          3.0,
+          35.0
+        ],
+        "scale": "log"
+      },
+      "convective_rh": {
+        "range": [
+          0.5,
+          0.85
+        ],
+        "scale": "linear"
+      }
+    },
+    "local_starts": 3,
+    "start_minimum_distance": 0.35,
+    "local_step": 0.12,
+    "local_poll_order": [
+      [
+        1,
+        1
+      ],
+      [
+        1,
+        -1
+      ],
+      [
+        0,
+        1
+      ],
+      [
+        0,
+        -1
+      ],
+      [
+        2,
+        1
+      ],
+      [
+        2,
+        -1
+      ]
+    ],
+    "local_rule": "Choose up to three physically admissible global candidates, ordered by objective, at least0.35apart in normalized coordinates. Six sequential coordinate proposals per start; update center only for a strictly improved objective. Clip within original bounds; exact duplicate parameter dictionaries reuse existing records and add no integrations. At most18newlocalprofiles. No convergence/optimality claim."
+  }
+}

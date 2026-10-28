@@ -13,6 +13,27 @@ from tradeoff_search import evaluate,pareto_names
 from plot_tradeoff_progress import plot
 
 
+def portable_record(row):
+    """Keep all skill metrics, numerical summaries and compact invariant steps."""
+    def summaries(value):
+        if isinstance(value,dict):return {k:summaries(v) for k,v in value.items() if k!='steps'}
+        if isinstance(value,list):return [summaries(v) for v in value]
+        return value
+    result={k:v for k,v in row.items() if k!='numerics'}
+    if 'numerics' not in row:return result
+    result['numerics']=summaries(row['numerics'])
+    water=row['numerics'].get('moisture_reservoirs',{}).get('steps',[])
+    branches=row['numerics'].get('two_layer_transport',{}).get('steps',[])
+    if water:
+        steps=[]
+        for w,b in zip(water,branches,strict=True):
+            if w['day']!=b['day']:raise ValueError('Unpaired invariant step times')
+            steps.append({**{k:w[k] for k in ['day','all_layer_checks_passed','max_scaled_layer_residual','max_scaled_column_residual','max_scaled_dry_column_residual','maximum_internal_precipitation_transfer_residual_mm_day','partition_temperature_profile','partition_lapse_k_km','rain_scheme']},
+                **{k:b[k] for k in ['maximum_branch_speed_ms','p95_branch_speed_ms']}})
+        result['numerics']['invariant_steps']=steps
+    return result
+
+
 def plot_wind_interaction(out,p,progress,review,target):
     """Paired wind curves, with the original 7.5m/s anchors clearly archived."""
     interaction=p['wind_interaction'];parent=ROOT/interaction['parent']
@@ -124,7 +145,10 @@ def publish(out):
             name,region=key.split('/')
             if file_hash(out/name/(region+'.npz'))!=sha:raise ValueError('Changed diagnostic raw climate')
         target=data/f'{stem}_water.png';shutil.copyfile(source_image,target);pictures.append(target)
-    metadata=dict(review,plan=p,records=progress['records'],history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,local_basin_diagnostics=basins,
+    source_hashes={r['name']+'/'+r['region']:file_hash(out/r['name']/(r['region']+'.json')) for r in progress['records']}
+    metadata=dict(review,plan=p,records=[portable_record(r) for r in progress['records']],source_record_sha256=source_hashes,
+        portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
+        history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
         publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},
