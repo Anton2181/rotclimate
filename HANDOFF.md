@@ -1,3 +1,85 @@
+# Current: prognostic native-face moist-static-energy transport complete
+
+The user explicitly asked to continue after pushes. This round continued past
+ed8121a (phase), cd585a1 (specified first-mode forcing), and fd0b31b (full water
+heat capacity/rain enthalpy) into a fourth physical milestone. No agents.
+Repo /workspace/rotclimate, branch work; push HEAD to
+claude/friendly-turing-43ygeu. No active Earth/model job. Managed runtime checked,
+network policy/reference read; preserve proxy/TLS. No new Earth integrations.
+
+## New thermodynamic transport
+
+rotclimate/regional_energy_step.py advances vapor and gas moist static energy
+with identical actual native-face donor fluxes. Uses existing tracer matrix
+as backward Euler (rate1/dt, source old/dt+physical); this is time tendency,
+NOT tracer removal/rain. E=(cp_d Md+cp_v W)T+(Lv0-cp_v T0)W+g(Md+W)z.
+Includes dry AND vapor gravitational potential. Fixed layer dry mass/heights,
+constant reference shift from previous gas enthalpy cancels actual budgets.
+Vapor source carries its supplied enthalpy/temperature and potential energy;
+external heat and boundary energy/vapor fluxes accounted separately. Inverting
+updated E/W yields actual T. Zero clipping; invalid T/energy fail.
+
+Eight new tests independently verify heated boxes, vapor injection without
+spurious warming, dry ascent cooling/descent warming in closed overturning,
+exact uniform moist-static-energy+q equilibrium over varying mass/open edges,
+and invalid states. FULL combined164 focused tests passed43.22s.51 new tests
+this round (22 phase/thickness+11 mode+10 moist enthalpy+8 energy). Existing
+regional/tracer kernels, climate model/config/joint and682 frozen experimental
+sources unchanged. Default predictive climate is still Earthr39/world baseline.
+Earth counts1934 attempts/1929 strict/4 old fails/1 old interruption unchanged.
+
+scripts/demo_energy_transport.py reuses EXACT humid-case native velocities,
+phase-adjusted T/W from output/moist_enthalpy_20261028. Fixed zlower/upper1/7km,
+closed walls, no external heat/water. Integrates24h at6/3/1.5/.75-hour timesteps:
+4 isolated runs,60 BE steps,120 tracer solves. Final energy/vapor drift~1.4e-15.
+RMS T difference vs45min reference .001748/.000795/.000274K with6/3/1.5h steps;
+vapor .02848/.01257/.00425kgm2. This is fixed-wind transport only; NO phase step
+within it, so supersaturation can develop. NO rainfall prediction or momentum/
+radiation feedback; do not call these Earth benchmark runs.
+
+Report ENERGY_TRANSPORT_20261028.md. Output energy_transport_20261028 contains
+raw fields/source receipt, image, publication, layout, checkout, bundle/browser
+and milestone_verification. New publisher independently recomputes energy from
+raw T/W/m/z and closed total budgets, checks timestep refinement/source hashes.
+Image shown and linked user. Newest .bat research studyenergy-transport:
+37studies/119images/45downloads; browser keyboard/hash/light/dark/mobile pass;
+695checkoutassets byteexact;1183portablefiles/366links/freshlauncher pass;
+latest HTML/JSON/image/report byte-matchZIP. Standard main atlas datasets remain
+unchanged. All4 milestone receipts/reports provide detailed earlier physics.
+
+## Next: compose physical operators and derive pressure-state feedback
+
+Do not stop at another arbitrary pulse sweep. We now have (1) actual native-face
+prognostic E/W transport, (2) phase equilibrium with vapor/liquid heat capacity,
+actual incoming rain enthalpy and ground sensible export, and (3) a properly
+normalized maintained constant-N first vertical mode. They are NOT yet a closed
+nonlinear atmosphere. A coupled composition must account for rain potential/
+mechanical energy: transport includes g(Md+W)z, existing isolated phase kernel
+conserves gas/rain enthalpy but omits falling-water gravitational work. Account
+for condensate descending from upper to lower levels and ground explicitly;
+any unmodeled drag/dissipation must be in a named budget, not hidden as heat.
+
+The prognostic thermodynamic state must determine pressure-mode momentum. Merely
+feeding latent heat into the old steady thermal-wave equation while separately
+advecting E/W risks counting adiabatic c^2 divU twice. In a future state-based
+coupling, derive mode buoyancy/pressure from T relative to a stable reference,
+solve momentum consistently and let energy transport supply adiabatic cooling;
+do not independently impose the same thermal adjustment again. Need declared
+reference profile consistent with N, fixed Earth-like depth/drag priors, physical
+radiative/thermal reservoir source accounting, and actual boundary states.
+Current constant-N uniform-density Boussinesq geometry is not compressible
+terrain physics. Existing empirical ground-T corrections are not a complete
+atmospheric heat budget. Existing arbitrary tracer sink is not precipitation.
+
+After manufactured coupled budget/stability/refinement checks, declare a bounded
+Earth pilot before integrations. Allow region rainfall tradeoffs; primary mean
+location/month rain loss plus temperature/physics guards, excluded/resolution
+checks before adopting any normal atlas climate. Unique isolated linear solves
+do not establish a global minimum of the nonlinear calibration. No new Earth
+rain skill or global-optimum claim was made this round.
+
+Earlier handoff follows:
+
 # Current: phase, vertical-mode forcing and full moist enthalpy milestones complete
 
 The user explicitly asks to continue development after pushes. This round
