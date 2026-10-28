@@ -81,8 +81,10 @@ Plan calibration/global_joint_20261028/plan.json andprospectivereport
 GLOBAL_JOINT_20261028.md nowexist.32points6dims,16perhalfaxis,all32distinct
 andcoefficientroundtripschecked. Commitdeclaration BEFORE launch unchanged
 tradeoff_search.py --plan above --out output/global_joint_20261028 with
-BLAS1/timeout7200/log output/global_joint_20261028.log. No new globaljoint
-integration at declaration checkpoint. Do notstop afterpush; launchactualjob.
+BLAS1/timeout7200/log output/global_joint_20261028.log. GLOBAL JOINT ACTIVE sourcec91e7b8,execsession85019; controls running.
+Do notedit frozenmain/model/plan; helpers outside source set may change.
+Currentjob max252actual runs; do not stop afterpush. Complete all usual
+verification,diagnostics,publication,QA andcommit/push.
 
 **Physical process side investigation prepared:**
 reports/HUMIDITY_PROCESS_NOTES_20261028.md cites verifiedprimary Manabe &
@@ -1286,3 +1288,19 @@ the actual inherited values. All3 supervisor tests pass after correction.
 The active restart uses output/shared_wind_20261026_thread1, same fixed plan;
 see the top active-job block. The initial incomplete setup is not a passed
 scientific comparison and contributes no completed run to the616-round count.
+
+**Marine RH process audit DECLARED, no outcomes yet:**
+calibration/boundary_rh_20261028/plan.json; script audit_boundary_rh.py,
+report BOUNDARY_RH_20261028.md,9analytic tests pass (19with earlier checks).
+Cached environmental nativeNPZ has actualq,thermalqsat,areas/coords/months;
+no acquisition or climateintegration. Fixed surfaceRH.77,ps101325,taper0/.5/1,
+no totalwater renormalization. Same3ocean samples4/20/3. Pressureprofile Eq2
+primarypaper verified. Freeze source/input/package hashes before outcomes;
+reproduce saturationfrom925anchor, partialwater/qshape per nativepoint/month.
+Mean+regionalregret objective, no regionalveto, separately review both tapers;
+only reference support for a newcoupled pilot. Not an actual model change.
+Commitdeclaration BEFORE running --plan ... --out output/boundary_rh_20261028.
+Globaljoint c91e7b8 remainsrunning(PID27182,workers27184/27185,session85019).
+Never edit its frozen model/runner/plan. New standaloneaudit imports stableold
+helpers and writes separate outputs. After audit build independent verifier
+and research-only publication; don't claim a coupled response or adoption.

@@ -1,0 +1,53 @@
+{
+  "declared_before_new_scores": true,
+  "parent_directory": "output/environmental_reference_20261027_verified",
+  "parent_arrays_sha256": "9a17e32b7766b838b1a0a6ccc178f706826c73c5e50b8ba6f39a3223631b32b0",
+  "parent_review_sha256": "36441ad0c6651f6fe95a410f456e1694cc3481c73014da58578077802632c14c",
+  "parent_protocol_sha256": "c81c755c8d337aad6b4bde43bcc38d5039046a0900e262679c9405ef4e7935a1",
+  "regions": [
+    "pacific_nw",
+    "iberia",
+    "california"
+  ],
+  "pressure_hpa": [
+    925,
+    850,
+    700,
+    600,
+    500,
+    400,
+    300
+  ],
+  "profiles": {
+    "uniform": 0.0,
+    "half_taper": 0.5,
+    "mw_taper": 1.0
+  },
+  "policy": {
+    "water_error_floor_mm": 1.0,
+    "shape_error_floor": 0.02,
+    "regional_free_ratio": 1.05,
+    "regional_weight": 0.25,
+    "reference_objective_max": 0.99
+  },
+  "surface_rh": 0.77,
+  "surface_pressure_pa": 101325.0,
+  "paper_cache": "output/physical_reference_cache/manabe_wetherald_1967.pdf",
+  "paper_sha256": "169b6b1907b42fdc13f66018dca9a567a358aa12ea4b561f16d6c5a9ea384dfe",
+  "paper_source": "https://www.gfdl.noaa.gov/bibliography/related_files/sm6701.pdf",
+  "paper_definition": "Manabe and Wetherald1967, Eq2 p243: RH=RH_surface*(p/ps-.02)/.98 in the troposphere; original stratospheric mixing-ratio floor is not reproduced.",
+  "construction": "Use only the archived environmental6K/km specific saturation constructed from observed925hPa T. Reproduce it from that anchor and64RK4 steps per fixed pressure interval before deriving RH candidates. Withhold actual humidity and higher observed temperatures from construction. RH(p)=.77*((1-alpha)+alpha*max((p/101325-.02)/.98,0)), fixed alpha0/.5/1. Do not normalize total water or fit RH.",
+  "observations": "Same cached27native ocean footprints, NCEP/NCAR1981\u20132010 monthly reference; no new downloads or independent locations. Score actual specific humidity, not saturation at observed T. Native ratios formed per footprint/month before averaging. Surface below925hPa and water above300hPa are not evaluated.",
+  "metrics": "Same pressure trapezoids on925/850/700/600/500/400/300hPa. Keep PW925\u2013300, lower925\u2013700, upper700\u2013300 and upper/lower meanq ratio. Report monthly and area/day-weighted annual/DJF/JJA quantities/errors. Region means receive equal weight after native area/Gregorian calculation.",
+  "advancement": "For each nonbaseline fixed profile independently: F=mean(S_i)+.25*mean(max(S_i-1.05,0)^2), where S_i=1+.5*(delta waterMAE/max(baseline waterMAE,1mm)+delta shapeMAE/max(baseline shapeMAE,.02)). Reference support requires F<=.99 and equal-region mean actual-q shapeMAE<=baseline. No individual prediction-error veto; every regional regression reported. Physical humidity/saturation and partial-water closure remain hard. This permits only a separately declared coupled pilot, never adoption or humidity forcing.",
+  "freeze": "Freeze this committed plan/script, all imported local helpers, every historical source/raw reference bound by the parent, parentNPZ/review/protocol, primary-paper hash and package versions before new candidate outcomes. Missing/changed inputs fail. Preserve failures and nonempty outputs; no old audit main or climate integration runs.",
+  "limitations": [
+    "Tiny reused4/20/3 coarse ocean samples, model-assisted reanalysis; no independent validation or monsoon-land test.",
+    "UniformRH0.77 is a literature baseline for this process comparison, not a reproduction of the calibrated current ocean target or its total-water law.",
+    "Observed925hPa temperature is a diagnostic anchor, not climate forcing. Fixed environmental6K/km and liquid saturation/200K floor remain approximations.",
+    "Fixed surface RH changes total water when tapered. Holding total ocean water instead would be a different experiment and can imply excessive lower RH.",
+    "Tropospheric shape only; no original1967 stratospheric floor or radiative-convective energy model. No coupled rainfall response can be inferred."
+  ],
+  "climate_integrations": 0,
+  "physics_or_atlas_adoption": false
+}
