@@ -1,3 +1,32 @@
+# CURRENT — regional dry operator complete; native-face water coupling next
+
+User Continue. No agents. Repo /workspace/rotclimate branch work; push
+HEAD:claude/friendly-turing-43ygeu. Managed runtime checked running/unrestricted.
+New isolated rotclimate/regional_baroclinic.py with variable column mass,
+closed walls/passive normal impedance. sqrt-mass pressure/transport adjoints,
+weighted skew Coriolis, exact energy including nonnegative boundary export.
+17 regional tests + previous87 =104 pass. Existing periodic and coupled sources
+untouched. No Earth integrations; counter1934/1929/4oldfails+1oldinterruption.
+Demo scripts/demo_regional_baroclinic.py generates output/regional_baroclinic_20261028,
+3fixed cases flat/wall,mass/wall,mass/passive; identical forcing; 200/100/50km
+refinement. Energyerror<5.3e-15; RMS against50km1.114→.379m2/s2. Zero columnface
+velocity residual. All are operator checks, no rainfall gain/adoption.
+Report reports/REGIONAL_BAROCLINIC_20261028.md details equations/limits.
+Mass weights do NOT supply terrain metrics/mountain blocking/vertical modes.
+Passive edges first-order normal Robin impedance, NOT transparent rotating/open
+Earth boundary; externalvelocities no momentumdegree/storage and excludedrotation.
+
+NEXT within current task: native-C-grid donor moisture transport (existing
+ReservoirTransport uses cell-centered winds and averages faces; do NOT average
+new staggered velocities into it and destroy flux consistency). Implement isolated
+face transport using actual mass flux and dry-continuity diagnosed donor exchange,
+strict positive removal for bounded tracer limits, independent budgets/positivity.
+No actual rainlaw/latent energy claimed. Then publish both foundations as newest
+research atlas section, browser/checkout/portable QA, report+receipts commit/push.
+Do not edit previous frozen science sources. Existing climates unchanged.
+
+Previous handoff follows:
+
 # CURRENT — split experiment COMPLETE; dry dynamic mode prototype implemented
 
 Latestuser Continue twice midtask; workedcontinuouslyafterpushes. No agents.
