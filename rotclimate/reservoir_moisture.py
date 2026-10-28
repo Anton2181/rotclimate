@@ -154,5 +154,18 @@ def solve_reservoir_moisture(solver,p,u,v,lamE,ocean_water,land_source,saturatio
         sparse_recoveries=recoveries,iterations=iteration+1,
         boundary_advective_diffusive_supply_cell_mm_day=float(boundary_supply.sum())*DAY,
         scope='Independent steady layer water; donor vertical exchange cancels; surface exchange below, layer rain/storms/drying accounted separately')
+    observer=getattr(solver,'reservoir_observer',None)
+    if observer is not None:
+        # Observe only the final solved equation. Isolated copies prevent a
+        # diagnostic callback from changing this or the next seasonal state.
+        fields=dict(water=water,layer_mass=op.layer_mass,winds=np.asarray(winds),
+            upward_air=op.upward_air,lower_out=op.lower_out,upper_out=op.upper_out,
+            evaporation=evaporation,drying_rate=drying,storm=storm,rain=rain,
+            recycled=recycled,residual=residual,saturation=saturation,fractions=fractions,
+            dynamics=dynamics,instability=instability,boundary_water=bnd,
+            ocean_water=ocean_water,ocean_fraction=ocean_fraction)
+        observer(dict(fields={key:np.array(value,copy=True) for key,value in fields.items()},
+            closure=None if closure is None else {key:np.array(value,copy=True) for key,value in closure.items()},
+            dx=op.dx,diffusion=p.moisture_diffusion))
     return ReservoirMoistureSolution(total,rain.sum(0),iteration+1,scaled<=p.moisture_residual_tol,scaled,
         water,rain,evaporation.sum(0),certificate)
