@@ -66,7 +66,7 @@ futuregenerator deepcopiesnestedselection. Two regressionchecks+8oldtests pass.
 Never rewrite frozen plan or relabel this as a model convergence failure.
 
 **Continue after publication:**
-Conditional script scripts/prepare_joint_global.py prepared (NOT declared/run)
+NEW GLOBAL JOINT DECLARATION generated after committed parent5bd42f7:
 for no-shortlist parent:32fixed scrambledSobol points in6shared axes,wind
 separately extended2.5–8.5m/s; dryings0..retained; rain3boundsunchanged.
 252maxactualintegrations including28controls; no local proposals; sameobjective,
@@ -77,7 +77,12 @@ Commitparentresultsfirst; run generator --parent output/drying_ablation_20261028
 organizer/packager/.gitignore,commitdeclaration BEFORE newruns. Then unchanged
 tradeoff_search.py withnewplan/out. Plothelper supports6Dcoverage; publisher
 supports title/design/previous_slug; verifier supportsconditionalparentchecks.
-No current newglobalplanexists. Do notstop afterpushing: carryactualnextwork.
+Plan calibration/global_joint_20261028/plan.json andprospectivereport
+GLOBAL_JOINT_20261028.md nowexist.32points6dims,16perhalfaxis,all32distinct
+andcoefficientroundtripschecked. Commitdeclaration BEFORE launch unchanged
+tradeoff_search.py --plan above --out output/global_joint_20261028 with
+BLAS1/timeout7200/log output/global_joint_20261028.log. No new globaljoint
+integration at declaration checkpoint. Do notstop afterpush; launchactualjob.
 
 **Physical process side investigation prepared:**
 reports/HUMIDITY_PROCESS_NOTES_20261028.md cites verifiedprimary Manabe &

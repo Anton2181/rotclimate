@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('global-joint','Joint global wind, rain and drying search'),
     ('drying-ablation','Legacy drying and explicit vertical transport'),
     ('wind-interaction','Wind and rain-setting interactions'),
     ('global-rain','Broader rainfall search and regional tradeoffs'),
