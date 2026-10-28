@@ -1,0 +1,301 @@
+{
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "transport_reference_plan": "calibration/transport_diagnosis_20261028/reference_plan.json",
+  "reference_sources": "calibration/transport_diagnosis_20261028/reference_sources.json",
+  "fixed_background_scope": "Inherited WorldClim cloud and remote monsoon background fields remain fixed; conditional regional solver, not fully independent global forecast.",
+  "purpose": "One fixed statically stable separation of modeled surface and zonal thermal patterns; paired against both historical wind closures, no fitting.",
+  "parent_protocol": "output/thermal_wind_pilot_20261028/protocol.json",
+  "base_archives": {
+    "legacy": "output/thermal_wind_pilot_20261028/legacy_control",
+    "hydro": "output/thermal_wind_pilot_20261028/hydro_control"
+  },
+  "paired_base": {
+    "legacy_control": "legacy",
+    "hydro_control": "hydro",
+    "legacy_single": "legacy",
+    "hydro_single": "hydro",
+    "legacy_thermal": "legacy",
+    "hydro_thermal": "hydro"
+  },
+  "profiles": {
+    "legacy_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0,
+      "moisture_thermal_layer_winds": false,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "hydro_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5,
+      "moisture_thermal_layer_winds": false,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "legacy_single": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0,
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "hydro_single": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5,
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "legacy_thermal": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0,
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": true
+    },
+    "hydro_thermal": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5,
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": true
+    }
+  },
+  "profile_numerics": {
+    "legacy_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "hydro_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "legacy_single": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "hydro_single": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "legacy_thermal": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "hydro_thermal": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "legacy_control": "output/thermal_wind_pilot_20261028/legacy_control",
+    "hydro_control": "output/thermal_wind_pilot_20261028/hydro_control",
+    "legacy_single": "output/thermal_wind_pilot_20261028/legacy_thermal",
+    "hydro_single": "output/thermal_wind_pilot_20261028/hydro_thermal"
+  },
+  "maximum_integrations": 18,
+  "success": {
+    "maximum_mean_rain_loss_ratio": 0.95,
+    "maximum_mean_temperature_mae_increase_C": 0.25,
+    "aggregation": "Equal three regions, paired rainfall loss ratios; expose every regional regression; no individual rain veto.",
+    "interpretation": "Process support only. Compare separated candidates to original-wind controls; single-pattern cases are extra exact controls and explicit context. No independent validation/adoption."
+  },
+  "physical_limits": {
+    "maximum_branch_speed_ms": 80.0
+  },
+  "predicted_signature": "Allow lower and upper horizontal thermal gradients to differ in direction while preserving dry static stability and exact dry/water continuity; actual rainfall gain is primary.",
+  "fixed_approximations": "A=modeled Tsl, B=modeled zonal EBM Tz, both common101325Pa references smoothed500km; raw T=[B+(A-B)*sigma^a]*sigma^kappa with200K floor. Nominal a=1/(-log(.75)) from existing dry lower-layer depth. Warm anomaly a capped by dry-adiabatic stability using Rd,cp1004,g. No observed wind/humidity/T forcing for this law; inherited observational backgrounds remain fixed. Diagnostic profile only, no vertical energy/convective-adjustment claim.",
+  "counter_before": {
+    "attempts": 1898,
+    "passes": 1893,
+    "failures": 4,
+    "interruptions": 1
+  },
+  "declared_before_new_results": true,
+  "source_epoch": {
+    "before_commit": "0137594",
+    "after_commit": "e14c50c",
+    "files": {
+      "rotclimate/config.py": {
+        "before_sha256": "559383c32ca163807ad9687144a926fd573e7954a67cf55820ffa037a41b51d7",
+        "after_sha256": "98f2ba4ad4eb695a20ef2d644361d1eac9c852ce7507cffcdc9d442190543f94"
+      },
+      "rotclimate/model.py": {
+        "before_sha256": "21245cdcbaad1d032ac9cae837dd1cd8ff54fd1d85573e23d5b01bd1f2d0f9eb",
+        "after_sha256": "10a177c2ffa51b9ae87683783ec899e0bd63b9539ec942de044c3f01a5466ed8"
+      },
+      "rotclimate/joint.py": {
+        "before_sha256": "ed30a8d04b498566c2c3c446663408fa71b528acfbdb1df02cb016ef75a9a076",
+        "after_sha256": "5d4885a88617eae5d49145bd37a13a766852ed010ada4e885ccf601106d7798f"
+      }
+    }
+  },
+  "new_sources": [
+    "rotclimate/separated_thermal_profile.py",
+    "scripts/separated_thermal_pilot.py",
+    "tests/test_separated_thermal_profile.py",
+    "scripts/analyze_transport_diagnosis.py",
+    "scripts/analyze_thermal_wind_pilot.py",
+    "scripts/audit_thermal_structure.py"
+  ],
+  "comparison_archives": {
+    "legacy_control": "output/thermal_wind_pilot_20261028/legacy_control",
+    "hydro_control": "output/thermal_wind_pilot_20261028/hydro_control",
+    "legacy_single": "output/thermal_wind_pilot_20261028/legacy_thermal",
+    "hydro_single": "output/thermal_wind_pilot_20261028/hydro_thermal",
+    "legacy_thermal": "output/thermal_wind_pilot_20261028/legacy_control",
+    "hydro_thermal": "output/thermal_wind_pilot_20261028/hydro_control"
+  },
+  "mode_flags": {
+    "legacy_control": {
+      "moisture_thermal_layer_winds": false,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "hydro_control": {
+      "moisture_thermal_layer_winds": false,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "legacy_single": {
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "hydro_single": {
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": false
+    },
+    "legacy_thermal": {
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": true
+    },
+    "hydro_thermal": {
+      "moisture_thermal_layer_winds": true,
+      "moisture_thermal_anomaly_decay": true
+    }
+  }
+}
