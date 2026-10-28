@@ -22,6 +22,34 @@ review, publish to companion, verify, commit/push; do not stop at this checkpoin
 No normal atlas replacement authorized by a screening result alone.
 
 
+**Immediate continuation after active global search:**
+Do not edit scripts/tradeoff_search.py or the frozen plan/model sources.
+When output/global_rain_20261028/review.json completes:
+1. Run scripts/verify_tradeoff_search.py --out output/global_rain_20261028.
+2. Run scripts/analyze_tradeoff_robustness.py and diagnose_tradeoff_water.py
+   with the same --out; these add zero climate runs and change no rules.
+3. Run publish_tradeoff_search.py --out ..., organize_climate_accuracy.py,
+   update completed report, browser/checkout/portable QA, commit/push results.
+4. If validation_shortlist is nonempty, broader validation takes priority.
+   If empty, prepare_wind_interaction.py --parent output/global_rain_20261028
+   --plan calibration/wind_interaction_20261028/plan.json generates a NEW
+   prospective bracket at up to three separated parent rain settings and
+   wind amplitudes4.5/6/8.5m/s. Parent must be committed first; preserve old
+   results/criteria. Commit the generated declaration before any new runs.
+   Reuse unchanged tradeoff_search.py; output/wind_interaction_20261028;
+   max91newregional attempts(28controls+63candidates), no local polish.
+   Same prediction objective, same invariants, planet unchanged; only the
+   additional shared wind amplitude is free. Original7.5m/s parent anchors
+   are archived comparisons, not new attempts. Publish helper supports both
+   study types; add wind-interaction to organizer and its report to package
+   when that report exists. Current verifier supports Sobol and pairedwind
+   designs, counters derived from parent scientific verification.
+Prepared helpers are non-frozen and may be corrected; main model/runner/plan
+remain immutable while active. Local near-duplicate floating proposals count
+as actual runs but verifier identifies them as not distinct sample coverage.
+User explicitly said continue after pushes: carry through actual next work,
+not merely a setup commit.
+
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
 28 historical full NPZ controls and four PNW companion controls exact.

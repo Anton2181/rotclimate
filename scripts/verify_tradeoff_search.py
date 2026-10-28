@@ -42,9 +42,24 @@ def verify(out):
             or review['physics_or_atlas_adoption'] is not False):raise ValueError('Need completed unchanged research comparison')
     for n,sha in protocol['sources'].items():
         if file_hash(ROOT/n)!=sha:raise ValueError('Changed scientific source: '+n)
-    expected_points=qmc.Sobol(len(p['design']['bounds']),scramble=True,seed=p['design']['seed']).random_base2(p['design']['base2_exponent'])
-    actual_points=np.stack([coordinates(p['profiles'][n],p['design']) for n in p['global_names']])
-    np.testing.assert_allclose(actual_points,expected_points,rtol=0,atol=1e-14)
+    if p['design']['sampler']=='scrambled Sobol':
+        expected_points=qmc.Sobol(len(p['design']['bounds']),scramble=True,seed=p['design']['seed']).random_base2(p['design']['base2_exponent'])
+        actual_points=np.stack([coordinates(p['profiles'][n],p['design']) for n in p['global_names']])
+        np.testing.assert_allclose(actual_points,expected_points,rtol=0,atol=1e-14)
+    elif p['design']['sampler']=='paired wind bracket':
+        interaction=p['wind_interaction'];parent=ROOT/interaction['parent']
+        for filename,key in [('review.json','parent_review_sha256'),('progress.json','parent_progress_sha256'),('scientific_verification.json','parent_verification_sha256')]:
+            if file_hash(parent/filename)!=interaction[key]:raise ValueError('Changed wind-anchor source archive')
+        parent_review=json.loads((parent/'review.json').read_text());parent_progress=json.loads((parent/'progress.json').read_text())
+        old_updates={r['name']:r['updates'] for r in parent_progress['records']}
+        if parent_review['validation_shortlist'] or diverse_starts(parent_review['scores'],old_updates,interaction['anchor_selection'])!=interaction['anchors']:raise ValueError('Changed conditional anchor selection')
+        expected=[]
+        for basin,anchor in enumerate(interaction['anchors']):
+            for wind in interaction['winds_ms']:
+                name=f'global{len(expected)+1:02}';expected.append(dict(name=name,basin=basin+1,parent_profile=anchor,westerly_speed=wind))
+                if p['profiles'][name]!={**old_updates[anchor],'westerly_speed':wind}:raise ValueError('Changed paired wind/rain coefficients')
+        if expected!=interaction['grid'] or [x['name'] for x in expected]!=p['global_names']:raise ValueError('Changed paired wind grid')
+    else:raise ValueError('Unknown frozen sampling design')
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()));cases={r:earth.region_case(r,p['cell_km']) for r in p['regions']}
     derived={r:case_hash(c,observed_sea=True) for r,c in cases.items()}
     records=progress['records'];keys=set();controls=[];extra_controls=[];row_hashes={};passed=0
@@ -62,7 +77,7 @@ def verify(out):
         if n in p['profiles'] and row['updates']!=p['profiles'][n]:raise ValueError('Changed frozen profile coefficients')
         if n not in p['control_names']:
             coordinates(row['updates'],p['design'])
-            if {k:v for k,v in row['updates'].items() if k not in p['design']['bounds']}!=p['base_candidate']:raise ValueError('Undeclared physical coefficient')
+            if {k:v for k,v in row['updates'].items() if k not in p['design']['bounds']}!={k:v for k,v in p['base_candidate'].items() if k not in p['design']['bounds']}:raise ValueError('Undeclared physical coefficient')
         row_hashes[n+'/'+r]=file_hash(path)
         if row['status']=='passed':
             passed+=1;raw=path.with_suffix('.npz')
@@ -109,8 +124,9 @@ def verify(out):
     for n in [*p['control_names'],*p['global_names']]:
         h=history[index];index+=1
         if h['name']!=n or h['updates']!=updates[n] or h['stage']!=('controls' if n in p['control_names'] else 'global') or h['score']!=scores.get(n):raise ValueError('Changed declared global order')
+    basin_diagnostics=[]
     for basin,start in enumerate(starts):
-        current=start
+        current=start;accepted=[]
         for step,(axis,sign) in enumerate(p['design']['local_poll_order']):
             point=coordinates(updates[current],p['design']);point[axis]=np.clip(point[axis]+sign*p['design']['local_step'],0,1)
             coeff={**p['base_candidate'],**parameters(point,p['design'])}
@@ -125,20 +141,49 @@ def verify(out):
                 own=[r for r in records if r['name']==trial]
                 if any(r['updates']!=coeff for r in own) or len(own)!=len(p['regions']):raise ValueError('Changed actual local coefficients')
                 updates[trial]=coeff
-            if trial in scores and scores[trial].get('physical_admissible') and scores[trial]['objective']<scores[current]['objective']:current=trial
+            if trial in scores and scores[trial].get('physical_admissible') and scores[trial]['objective']<scores[current]['objective']:
+                current=trial;accepted.append(trial)
+        final_point=coordinates(updates[current],p['design'])
+        edges={key:('lower' if x<=.03 else 'upper') for key,x in zip(p['design']['bounds'],final_point) if x<=.03 or x>=.97}
+        basin_diagnostics.append(dict(start=start,end=current,start_objective=scores[start]['objective'],end_objective=scores[current]['objective'],
+            accepted_improvements=accepted,start_parameters={k:updates[start][k] for k in p['design']['bounds']},
+            end_parameters={k:updates[current][k] for k in p['design']['bounds']},near_boundaries=edges,
+            scope='One frozen coordinate-poll cycle; no numerical optimizer convergence claim'))
     if index!=len(history) or len(records)!=len(names)*len(p['regions']) or len(controls)!=28:raise ValueError('Undeclared trial/count')
     if pareto_names(scores)!=review['pareto_front']:raise ValueError('Changed Pareto frontier')
     shortlist=sorted((n for n,v in scores.items() if v.get('validation_ready')),key=lambda n:(scores[n]['objective'],n))[:2]
     if shortlist!=review['validation_shortlist']:raise ValueError('Changed prospective shortlist')
+    actual_updates={r['name']:r['updates'] for r in records if r['name'] in scores}
+    near_duplicates=[];actual_names=list(actual_updates)
+    for i,n in enumerate(actual_names):
+        x=coordinates(actual_updates[n],p['design'])
+        for m in actual_names[:i]:
+            distance=float(np.linalg.norm(x-coordinates(actual_updates[m],p['design'])))
+            if distance<1e-10:near_duplicates.append(dict(profiles=[m,n],normalized_parameter_distance=distance,
+                scope='Separate actual runs count as attempts, but are not materially distinct parameter-space samples'))
     if (review['actual_integrations']!=len(records) or review['strictly_passed']!=passed
             or review['failed_integrations']!=len(records)-passed):raise ValueError('Changed actual integration count')
     # Compare all normal climate/foraging assets with the last published state.
     normal=['atlases/free_fit','atlases/earth_fit','atlases/whittaker_fit']
     if subprocess.check_output(['git','diff','--name-only','d3c7c0d','--',*normal],cwd=ROOT).strip():raise ValueError('Normal atlas files changed')
-    result=dict(status='passed',scientific_source_epoch='3ec90ee',identity=run_id,
+    plan_paths=[n for n in protocol['sources'] if n.endswith('/plan.json') and json.loads((ROOT/n).read_text())==p]
+    if len(plan_paths)!=1:raise ValueError('Need unique committed declaration')
+    declaration_commit=subprocess.check_output(['git','log','-1','--format=%H','--',plan_paths[0]],cwd=ROOT,text=True).strip()
+    if not declaration_commit:raise ValueError('Declaration was not committed')
+    parent_receipt=ROOT/Path(p['parent_protocol']).parent/'scientific_verification.json'
+    previous=json.loads(parent_receipt.read_text())
+    if previous.get('status')!='passed' or previous.get('identity')!=identity(json.loads((ROOT/p['parent_protocol']).read_text())):
+        raise ValueError('Invalid parent scientific counter/identity chain')
+    previous_attempts=previous.get('cumulative_attempts',previous.get('attempted_integrations'))
+    previous_passes=previous.get('cumulative_passes',previous.get('passed'))
+    previous_failures=previous.get('cumulative_preserved_failures',previous.get('preserved_failures'))
+    result=dict(status='passed',scientific_source_epoch=declaration_commit[:7],declaration_commit=declaration_commit,identity=run_id,
         actual_integrations=len(records),strictly_passed=passed,failed_this_round=len(records)-passed,
-        cumulative_attempts=1025+len(records),cumulative_passes=1021+passed,cumulative_preserved_failures=4+len(records)-passed,
+        cumulative_attempts=previous_attempts+len(records),cumulative_passes=previous_passes+passed,cumulative_preserved_failures=previous_failures+len(records)-passed,
+        parent_scientific_verification_sha256=file_hash(parent_receipt),
         frozen_sources_verified=len(protocol['sources']),actual_case_identities=derived,archived_controls_exact=controls,
+        local_basin_diagnostics=basin_diagnostics,
+        near_duplicate_parameter_pairs=near_duplicates,
         native_controls_exact=extra_controls,all_actual_parameters_and_row_hashes_verified=True,
         all_scores_physical_checks_and_adaptive_decisions_recomputed=True,row_hashes=row_hashes,
         protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),normal_atlas_comparison_commit='d3c7c0d',
