@@ -64,3 +64,18 @@ signatures to choose one bounded physical hypothesis with a predicted response.
 Actual rainfall gains must be reported independently of native-state objective
 improvements. No parameter proposal or adoption follows automatically from a
 signed budget term. See the [recovery plan](RAINFALL_RECOVERY_PLAN_20261028.md).
+
+## Controller recovery declared before remaining integrations
+
+Two original global04 integrations (India and Mexico) completed with strict
+checks and every original climate field exact. A controller parameter check
+then compared in-memory tuples to lists in the old JSON record and raised
+before reading the second completed row. PNW was interrupted by worker-pool
+teardown. Saved parameter values are identical after JSON canonicalization.
+The original runner, protocol, review, log, rows and arrays are preserved.
+The separate recovery plan binds them by SHA, reuses the two completed cases,
+counts the interrupted attempt, and runs only the four missing cases. Thus
+there are seven total attempts for six completed diagnostic cases, bringing
+the cumulative counter to1886 attempts if recovery completes. The controller
+fix is tested to preserve true numerical parameter differences. No scientific
+criterion, physical source, input, mask or original result is changed.

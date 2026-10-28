@@ -1,0 +1,56 @@
+{
+  "purpose": "Recover tuple/list comparison failure, without changing physics, old sources, results or masks.",
+  "original_plan": "calibration/transport_diagnosis_20261028/plan.json",
+  "original_output": "output/transport_diagnosis_20261028",
+  "initial_attempts": [
+    {
+      "profile": "global04",
+      "region": "north_india",
+      "state": "completed"
+    },
+    {
+      "profile": "global04",
+      "region": "mexico",
+      "state": "completed"
+    },
+    {
+      "profile": "global04",
+      "region": "pacific_nw",
+      "state": "interrupted_by_controller"
+    }
+  ],
+  "completed_cases": [
+    [
+      "global04",
+      "north_india"
+    ],
+    [
+      "global04",
+      "mexico"
+    ]
+  ],
+  "remaining_profiles": {
+    "global04": [
+      "pacific_nw"
+    ],
+    "global06": [
+      "north_india",
+      "mexico",
+      "pacific_nw"
+    ]
+  },
+  "preserved_sources": {
+    "output/transport_diagnosis_20261028/protocol.json": "4967d004447f3678d9e196f96559876b2604f2dddeb03cf6762cef0da0143298",
+    "output/transport_diagnosis_20261028/review.json": "5c989dad878b7483f296d531701fa076612939a7dc7d2749157575ddc9a61598",
+    "output/transport_diagnosis_20261028.log": "65031476c332e7fa3bc98711f467b5187ed7a61bebe4690e223ce2e317cef54c",
+    "output/transport_diagnosis_20261028/global04/north_india.json": "3debd6d2e47fcd4a61e62935b8f117143b6dc7ba760e063d5804c46dd6b68972",
+    "output/transport_diagnosis_20261028/global04/north_india.npz": "244254f33f3b4a8abe738dc505a90f2f59d2bf993b384490c51036cc54dac89f",
+    "output/transport_diagnosis_20261028/global04/north_india_transport.npz": "1e45781a3a505c4dbb32c3acbf534b02db9769dba98b7fea6c8f049695f7f481",
+    "output/transport_diagnosis_20261028/global04/mexico.json": "528dc4278999ab71feda9efa95893899a848327fed6613c1edcddc5e24864169",
+    "output/transport_diagnosis_20261028/global04/mexico.npz": "2cf34d6572a84503599c07c636a4514f57661f96c80d7cfab6262b290d036122",
+    "output/transport_diagnosis_20261028/global04/mexico_transport.npz": "68727aa2160cc33a00e3bccc11be88021fd78d95995cf107af8e44e3887f178e"
+  },
+  "maximum_additional_integrations": 4,
+  "maximum_total_attempts": 7,
+  "controller_failure": "In-memory asdict parameter tuples compared with saved JSON lists; no changed parameter values or climate arrays. Original two saved cases verify after JSON canonicalization."
+}
