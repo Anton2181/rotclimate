@@ -1,3 +1,88 @@
+# Current: composed prognostic moist thermodynamics complete under fixed winds
+
+The user explicitly asked not to stop after pushes. This round continued past
+four pushed milestones ed8121a, cd585a1, fd0b31b and86040ff into this fifth one.
+No agents. Repo /workspace/rotclimate, branch work; push HEAD to
+claude/friendly-turing-43ygeu. Managed runtime/network policy/reference checked;
+preserve inherited proxy/TLS. No active Earth/model job. No new Earth climate
+integrations. Counters remain1934attempts/1929strict/4oldfailures/1interruption.
+No new Earth rain skill or global-calibration optimum/adoption claim. Earthr39
+and normal free/earth/whittaker/world/biome/population fields remain unchanged.
+All682 frozen divergent experiment sources unchanged.
+
+## New composition closes the rain potential-work gap
+
+rotclimate/falling_water_energy.py adjusts phase while returning falling-water
+potential energy as local terminal drag heat. Upper condensate falls between
+actual centroid heights; fraction(zu-zinterface)/(zu-zl) heats the upper box,
+the rest below. Surviving rain falls from zl to ground0 and heats below.
+Dissipation participates INSIDE both saturation roots, affecting actual
+condensation/evaporation, not an after-the-fact heat addition. Full vapor/liquid
+heat capacities and incoming/ground liquid enthalpy retained. All fall work
+becomes local gas/liquid heat; no stored drop kinetic energy, ice, surface impact
+reservoir or finite fall time. Uniform drag per distance is an explicit closure.
+Independent test proves old enthalpy-only phase loses>100kJ/m2 when combined
+with static-energy transport; new step closes that exact missing potential.
+
+rotclimate/regional_moist_step.py composes (1) native-face backward-Euler vapor/
+moist-static-energy transport and (2) phase/fall equilibrium. Every composed step
+checks actual E/W change, external heat/vapor source enthalpy, lateral fluxes,
+ground rain and rain sensible export. No second c^2divU cooling is added.
+It is a first-order operator split at fixed pressure/heights/winds.
+
+Full174 focused tests passed43.74s. Ten new tests here (8fall energy+2combined),
+61new tests total this round. Previous kernels remain reproducible and unchanged.
+
+## Repeated-step moist demonstration
+
+scripts/demo_moist_composition.py -> output/moist_composition_20261028.
+Uses exact saved humid full-enthalpy pulse and native velocities; no observed
+wind/rain forcing and no external heat/water. Geometry now matches maintained
+15km uniform-density first mode: zl1875m,interface3750m,zu9375m,upper fall share.75.
+Runs24h at6/3/1.5/.75-hour steps:4 fixed-wind runs,60composedsteps,120 native
+tracer solves. Finest run mean ground rain.249367mm,max4.029656mm; total atmosphere
+plus rain energy error1.28e-15relative,vapor+rain1.16e-15. RMS T differences vs
+45min reference .008736/.003927/.001338K; cumulative rain RMS.030013/.013378/
+.004566mm. These are manufactured transient consistency checks, not forecasts.
+Final saturation and actual atmosphere+rain energy/water independently checked
+by scripts/publish_moist_composition.py. Raw fields, sources and image bound.
+Report MOIST_COMPOSITION_20261028.md. Latest image shown and linked user.
+
+## Publication complete
+
+Newest .bat research studymoist-composition.38studies/120images/46downloads;
+keyboard/hash/light/dark/mobilebrowser passed.697 checkout assets byteexact;
+1186 portablefiles/370links/freshlauncher passed; latest HTML/JSON/image/report
+byte-match bundle. milestone_verification.json binds science/publication/checks.
+PortableZIP/logs/browserPNGs ignored. Standard main atlas datasets unchanged.
+
+## Next: evolving thermal state must drive momentum
+
+We now have a conservative fixed-wind prognostic moist thermodynamic loop, not
+just separate phase or tracer examples. Do not repeat arbitrary pulse tuning.
+The next unresolved link is deriving pressure-mode state/momentum from evolving
+thermal stratification consistently. Current dry mode is a specified maintained
+constant-N Boussinesq first mode; its pressure is NOT yet diagnosed from the
+prognostic two-box T/W profile. Fixed winds mean there is no latent-circulation
+feedback, kinetic/mechanical energy closure or predicted radiation.
+
+Need a stable reference thermal profile consistent with N, and a derived mapping
+from actual thermal/buoyancy anomaly to pressure mode. Avoid independently adding
+an adiabatic thermal-wave c^2divU term on top of ascent cooling already supplied
+by static-energy transport. Source heat/thermal relaxation may use an external
+reservoir only with its energy booked. GroundT empirical EBM shifts are not
+unaccounted atmospheric heat. Incoming lateral T/q must carry matching enthalpy.
+Current uniform-density height/pressure approximation is not compressible terrain
+physics; do not fit arbitrary N/H/drag/phase timescale per region.
+
+After manufactured feedback/stability/energy/time-resolution checks, predeclare
+a bounded Earth pilot. The calibration criterion remains mean location/month
+rain loss with regional tradeoffs allowed, plus temperature/physics guards and
+held-out/resolution checks before any atlas adoption. Unique isolated linear or
+phase roots do not establish a global minimum of nonlinear climate fitting.
+
+Earlier handoff follows:
+
 # Current: prognostic native-face moist-static-energy transport complete
 
 The user explicitly asked to continue after pushes. This round continued past

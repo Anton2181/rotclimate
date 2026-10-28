@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('moist-composition','Moist transport, phase change and falling-water work'),
     ('energy-transport','Prognostic vapor and moist static energy transport'),
     ('moist-enthalpy','Water heat capacities and precipitation enthalpy'),
     ('latent-circulation','Conservative phase change and vertical-mode heating'),
