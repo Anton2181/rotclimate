@@ -155,7 +155,8 @@ def publish(out):
     for i,j in np.ndindex(matrix.shape):ax.text(j,i,'FAIL' if not np.isfinite(matrix[i,j]) else f'{matrix[i,j]:.2f}',ha='center',va='center',fontsize=5)
     ax.set(xticks=range(len(names)),xticklabels=[n.replace('global','g').replace('local','l') for n in names],yticks=range(len(regions)),yticklabels=[r.replace('_',' ').title() for r in regions],title='Every completed candidate · regional combined error / r39')
     ax.tick_params(axis='x',rotation=90,labelsize=7);fig.colorbar(im,ax=ax,label='Log10 combined error ratio · lower is better')
-    fig.supxlabel('Global exploration and adaptive local proposals; all failures and regional regressions retained. These are reused development regions, not validation.\nNative humidity/wind and sea-state errors remain separate objective terms and downloadable diagnostics.',fontsize=9)
+    trial_scope='Global exploration and adaptive local proposals' if p['design']['local_poll_order'] else 'Fixed paired experiments; no local refinement'
+    fig.supxlabel(trial_scope+'; all failures and regional regressions retained. These are reused development regions, not validation.\nNative humidity/wind and sea-state errors remain separate objective terms and downloadable diagnostics.',fontsize=9)
     errors=data/f'{stem}_regions.png';fig.savefig(errors,dpi=165);plt.close(fig)
     score_rows=[]
     for name,s in review['scores'].items():
@@ -205,7 +206,9 @@ def publish(out):
         alt=('Monthly regional rainfall on the complete scored masks, compared with observations and previous controls' if '_seasons' in picture.name else
              'Signed water-equation comparisons for declared objective, mean-climate and native-error selections' if '_water' in picture.name else
              'Ranking sensitivity to alternative weights and omitted development regions' if 'sensitivity' in picture.name else
-             'Actual parameter coverage, separated global and local trials, and error progress' if picture==coverage else
+             ('Paired legacy-drying ablations and archived parent rainfall and score comparisons' if ablation else
+              'Wind-amplitude interactions with separated parent rain settings' if wind else
+              'Actual parameter coverage, separated global and local trials, and error progress') if picture==coverage else
              'Regional combined errors for every completed global and local candidate')
         with Image.open(picture) as image:w,h=image.size
         figures+=f'<figure><a href="data/{picture.name}"><img src="data/{picture.name}" width="{w}" height="{h}" loading="lazy" alt="{alt}"></a></figure>\n'

@@ -28,7 +28,8 @@ def prepare(parent, target):
     progress = json.loads((parent / 'progress.json').read_text())
     verification = json.loads((parent / 'scientific_verification.json').read_text())
     if (not review['complete'] or not progress['complete'] or review['identity'] != identity(protocol)
-            or verification['status'] != 'passed'
+            or verification['status'] != 'passed' or verification['identity'] != review['identity']
+            or verification['protocol_sha256'] != file_hash(parent / 'protocol.json')
             or verification['review_sha256'] != file_hash(parent / 'review.json')):
         raise ValueError('Need completed, independently verified parent')
     if review['validation_shortlist']:
@@ -38,6 +39,10 @@ def prepare(parent, target):
         ['git', 'log', '-1', '--format=%H', '--', parent_relative + '/review.json'], cwd=ROOT, text=True).strip()
     if not parent_commit:
         raise ValueError('Commit parent results before declaring this follow-up')
+    for filename in ['protocol.json', 'review.json', 'progress.json', 'scientific_verification.json']:
+        committed = subprocess.check_output(['git', 'show', 'HEAD:' + parent_relative + '/' + filename], cwd=ROOT)
+        if committed != (parent / filename).read_bytes():
+            raise ValueError('Commit current parent archive before declaring this follow-up: ' + filename)
     p = json.loads(json.dumps(protocol['plan']))
     updates = {r['name']: r['updates'] for r in progress['records']}
     selection = dict(p['design'], local_starts=2, start_minimum_distance=.35)

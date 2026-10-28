@@ -154,3 +154,23 @@ separated rain settings, using the same objective and planet. It addresses
 persistent circulation error without simply extending storm exchange to ever
 larger values. It must be separately declared and committed before any new
 runs; no failed decision from this round is reclassified.
+
+## Storm-exchange scale
+
+At the selected upper-bound rate 3.5/day and Gaussian width 851.612 km,
+the homogeneous, constant-mass, long-wavelength limit of
+`lambda*(Gaussian_sigma(q)-q)` has diffusivity
+`K=lambda*sigma^2/2 = 1.469e7 m²/s`, before the local storm/season/terrain
+modulation. The retained control gives 6.019e6 m²/s under the same limiting
+calculation. These are dimensional diagnostics of this closure, not measured
+eddy diffusivities or a physical confidence interval. Spatially varying
+conservative pair conductance, finite wavelength and regional reservoirs
+prevent interpreting this number as a uniform diagnosed atmospheric flux.
+The improved score therefore does not independently validate the high storm
+rate; the wind interaction and separate closure tests address possible
+compensation instead of assuming that larger exchange is physically better.
+
+Full-score seasonal rainfall comparisons are available in the companion.
+They include all 358 scored East Australia cells; the separate signed-budget
+diagrams retain the historical 347-cell crop. Regional means do not replace
+pixelwise monthly MAE or the original rainfall loss.

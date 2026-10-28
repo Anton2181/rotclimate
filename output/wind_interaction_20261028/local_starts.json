@@ -1,0 +1,46 @@
+{
+  "identity": "c338751add2cddc2d14a292c0a2682fb3ed6e38173158be2be4f2879c24004e8",
+  "starts": [
+    "global01"
+  ],
+  "selection_rule": {
+    "sampler": "paired wind bracket",
+    "seed": 20261028,
+    "base2_exponent": 5,
+    "bounds": {
+      "eddy_rate": {
+        "range": [
+          0.4,
+          3.5
+        ],
+        "scale": "log"
+      },
+      "precip_tau_days": {
+        "range": [
+          3.0,
+          35.0
+        ],
+        "scale": "log"
+      },
+      "convective_rh": {
+        "range": [
+          0.5,
+          0.85
+        ],
+        "scale": "linear"
+      },
+      "westerly_speed": {
+        "range": [
+          4.5,
+          8.5
+        ],
+        "scale": "linear"
+      }
+    },
+    "local_starts": 1,
+    "start_minimum_distance": 0.35,
+    "local_step": 0.12,
+    "local_poll_order": [],
+    "local_rule": "No local refinement in this small interaction study; empty poll order. Common runner records the best point only; it proposes no local trials."
+  }
+}

@@ -32,8 +32,9 @@ def plot(out):
     }
     names = list(dict.fromkeys(['reference', 'environment_control', *selected.values()]))
     labels = {'reference': 'r39', 'environment_control': 'Environmental control'}
-    for role, name in selected.items():
-        labels[name] = labels.get(name, '') + (' / ' if name in labels else '') + role.replace('_', ' ').title() + ' (' + name + ')'
+    for name in set(selected.values()):
+        roles = [role.replace('best_', '').replace('_', ' ') for role, value in selected.items() if value == name]
+        labels[name] = 'Best ' + ' / '.join(roles) + ' (' + name + ')'
     rows = {(r['name'], r['region']): r for r in progress['records']}
     series, hashes = {}, {}
     fig, axes = plt.subplots(2, 4, figsize=(17, 9), constrained_layout=True)

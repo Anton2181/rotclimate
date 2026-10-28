@@ -27,4 +27,63 @@ or independent validation. Any shortlist needs separately declared broader
 Earth, ocean, resolution and world assessment before adoption. All outcomes,
 including failures and regional damage, will be retained.
 
-Status: declared; no new integrations at declaration commit.
+Status: complete; source `9c1e789`. All 91 actual regional integrations pass strict numerics; all 28 archived main controls and four native companions reproduce exactly. No candidate reaches the research shortlist; no adopted climate changes.
+
+## Completed measurements
+
+| Trial | Parent rain setting | Wind amplitude m/s | Objective | Mean rain / r39 | Mean T / r39 | Worst combined / r39 |
+|---|---|---:|---:|---:|---:|---:|
+| global01 | local1_05 | 4.5 | 1.12568 | 1.06867 | 1.03585 | 1.27665 |
+| global02 | local1_05 | 6 | 1.15529 | 1.12280 | 1.02709 | 1.37937 |
+| global03 | local1_05 | 8.5 | 1.22528 | 1.23453 | 1.01795 | 1.71350 |
+| global04 | local2_05 | 4.5 | 1.13676 | 1.09416 | 1.04344 | 1.33848 |
+| global05 | local2_05 | 6 | 1.16689 | 1.14835 | 1.03496 | 1.40030 |
+| global06 | local2_05 | 8.5 | 1.23686 | 1.25841 | 1.02648 | 1.73150 |
+| global07 | local3_05 | 4.5 | 1.12657 | 1.08807 | 1.05389 | 1.35898 |
+| global08 | local3_05 | 6 | 1.16543 | 1.15752 | 1.04611 | 1.52540 |
+| global09 | local3_05 | 8.5 | 1.24980 | 1.29062 | 1.03775 | 1.88861 |
+
+The 4.5 m/s end improves the objective and mean rainfall error at each of the
+three retained rain settings, compared with its 7.5 m/s parent. The best
+objective and best mean combined climate ratio both select global01:
+F1.12568, meanS1.05226, meanR1.06867, meanT1.03585, worstS1.27665.
+Its mean rainfall-error ratio is 10.0% below the same rain setting's parent
+1.18798. It still exceeds r39, and fails every aggregate shortlist threshold.
+
+Pacific Northwest rainfall falls from 1,623 to 1,191 mm/year (897 observed).
+Native ocean wind-vector RMSE falls to 2.048 m/s. North India remains at
+278 mm/year against 761 observed. Different mechanisms dominate these errors;
+reducing wind alone is not a monsoon correction. Temperature worsens under
+the weaker wind, and native humidity-shape errors remain substantial.
+
+Global07 has the smallest native squared regret but a worse mean climate
+ratio than global01. Sixteen post-search weight/region-omission diagnostics
+select either global01 or global07; they reuse existing records and are not
+independent validation. The Pareto front is global01/global04/global07.
+
+All three best sampled wind amplitudes lie at the lower bracket boundary.
+This is evidence against treating the old neighborhood as an optimum, not a
+proof that further reductions remain physically credible or improve global
+skill. Only nine fixed four-parameter combinations were run; no local polish,
+full-region/finer-grid/established/world stage or adoption occurred.
+
+Independent verification rechecks 336 frozen sources, all raw rows and array
+hashes, actual per-case parameters, native footprints, each step's water and
+branch certificates, exact controls, paired anchor selection and the scalar
+objective. The series now contains **1,487 actual attempts / 1,483 passes /
+four preserved historical failures**. This round adds no numerical failures.
+
+Five figures and complete compact measurements are published in the climate
+accuracy companion served by start_atlases.bat: paired wind curves, all
+regional errors, ranking sensitivity, signed water equations and full-score
+seasonal rainfall. The broad-search section also now includes the seasonal
+comparison. Normal world climate, agricultural, population and foraging data
+remain unchanged. The older inherited plan control-description string refers
+to the preceding 84-run factorial; the literal grid and actual count here are
+91, as declared before this experiment.
+
+Next conditional mechanism test: remove the retained empirical subsidence and
+monsoon column sinks separately and jointly at two separated wind/rain
+settings. Conservative donor vertical exchange stays active. This tests a
+possible overlap; it does not presume that drying removal repairs the model.
+A fresh declaration must precede those integrations and retain these outcomes.

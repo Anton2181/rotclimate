@@ -21,27 +21,38 @@ metadata in companion atlas. Browser,626asset checkout,1095file portable
 bundle/launcher pass. Normal atlas climate/forage/economy data unchanged.
 Verification receipt output/global_rain_20261028/verification.json.
 
-**Wind/rain interaction ACTIVE, source9c1e789:**
-calibration/wind_interaction_20261028/plan.json generated only after committed
-parent6dc22d8. Anchors local1_05/local2_05/local3_05 ×4.5/6/8.5m/s, no local
-proposals. Maximum91actual runs; same objective/invariants, planet fixed.
-Launched unchanged scripts/tradeoff_search.py
---plan calibration/wind_interaction_20261028/plan.json
---out output/wind_interaction_20261028 with BLAS1, timeout7200 and log
-output/wind_interaction_20261028.log. Declaration committed before any new integrations. Active PID16954, workers16956/16957, execsession29962.
-First4.5m/s candidate global01 F1.12568, meanR1.06867, meanS1.05226; incomplete campaign, no advancement.
-Then verify_tradeoff_search.py, analyze_tradeoff_robustness.py,
-diagnose_tradeoff_water.py, publish_tradeoff_search.py, organizer, completed
-report and browser/checkout/portable QA, commit/push. No automatic adoption.
-User says continue after pushes; carry through actual experiment.
-Non-frozen helper scripts/plot_tradeoff_rainfall.py adds full-mask seasonal
-rainfall diagnostics, including358EA cells. Parent figure created; publish
-both parent and wind seasonal plots after wind verification. Publisher/verifier
-also support a CONDITIONAL next drying ablation; prepared script
-prepare_drying_ablation.py must only run after committed/verified wind with
-empty shortlist. Up to two separated wind/rain anchors, separately zero
-subsidence, monsoon, both; no presumed fix, same objective, no planet change.
-No new drying declaration or runs yet. Do not edit frozen main/model/plans.
+**Wind/rain interaction COMPLETE, source9c1e789:**
+output/wind_interaction_20261028:91actual integrations/91passes, all28main
+controls and4native companions exact;336frozen sources independently checked.
+Counter1487attempts/1483passes/4old failures. BestF and meanS global01 at
+wind4.5, eddy3.5,tau15.5324,RH.809891: F1.12568,meanS1.05226,
+meanR1.06867,meanT1.03585,worstS1.27665. No shortlist or adoption.
+Allthree separated rain settings improve with weaker wind; best at bracket
+lower boundary, not a global/converged optimum. PNW1191vs897observed,
+NI278vs761;nativeq-shape remains poor. Sensitivity winners global01/global07.
+Five figures and full metrics published newest companion study; parent broad
+section gets a full-score seasonal figure too (EA358cells, not347crop).
+Report WIND_INTERACTION_20261028.md. Main process session29962 exited0;
+post-science verification/diagnostic/publication session61374 exited0.
+No active model job. Browser25studies/71images/32downloads passed;633assets checkout exact;
+portable1103files/235links/launcher passed. Receipt verification.json.
+Commit/push publication before next declaration.
+
+**Immediate continuation after publication:**
+Run scripts/prepare_drying_ablation.py --parent output/wind_interaction_20261028
+--plan calibration/drying_ablation_20261028/plan.json. Requires committed,
+independently verified parent and empty shortlist; checks committed raw archive.
+Selectup2separated wind/rain settings; separately zero subsidence_drying,
+monsoon_descent, and both. Maximum70actual runs,28controls+42candidates.
+No presumed correction: explicit donor humidity transport may overlap legacy
+column removal, but a removal burden alone proves neither double counting
+nor a sink-off climate response. Same objective/invariants and planet.
+Write prospective report, add organizer/packager/.gitignore entries; commit
+BEFORE model runs. Reuse unchanged tradeoff_search.py. Verifier/publisher
+support paired drying ablation; no local proposals. Complete all scientific
+checks, seasonal/water/sensitivity plots, publication/QA and commit/push.
+Do not edit frozen model/runner/plans in active experiments. User explicitly
+asks to continue after pushes. Carry through actual next experiment.
 
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
