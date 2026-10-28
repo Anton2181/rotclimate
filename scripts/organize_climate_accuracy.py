@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('stability-reference','Earth height profiles and physically derived stability'),
     ('multilevel-moist','Resolved moisture, phase and energy on the shared grid'),
     ('hydrostatic-feedback','Shared thermal state, hydrostatic pressure and winds'),
     ('moist-composition','Moist transport, phase change and falling-water work'),

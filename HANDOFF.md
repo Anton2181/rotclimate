@@ -1,3 +1,59 @@
+# ACTIVE — lapse-derived reference audited; continue after publication/push
+
+User requests continuous development after pushes. Mid-turn status was answered
+with the distinction between checked physics prototypes and unchanged Earth
+rainfall accuracy. No new agents. Repo /workspace/rotclimate, branch work;
+push HEAD to origin refs/heads/claude/friendly-turing-43ygeu with HTTP/1.1.
+Previous pushed milestone 0c540da (multilevel moisture/phase/energy); before it
+1ff1bba (dry thermal-state wind feedback), f69b256 (paired vertical state).
+
+New lapse_reference.py derives T,p,rho,theta,N² and pressure-to-height inverse
+from Ts,ps,Gamma and explicit isothermal cap. Gamma=.006 K/m and Tcap=200K are
+globally fixed for this audit, not region-fitted. Constant-N reference remains
+unchanged. Ten new tests pass. audit_stability_reference.py uses ONLY cached
+NCEP1981–2010 hgt, strict old native masks, 925–100hPa pressure edges, pressure
+mass/dheight density and hypsometric layer-mean Tv/theta stability. Five new
+tests check isothermal retrieval, anchor, invalid orders and nonpositive N²
+without fabricated stable modes. Focused suite now232 tests (217+15); check
+output/stability_reference_20261028/tests.log for final result.
+
+All three modes use identical observed geometry/density: observed stability
+proxy, N=.01/s constant, and fixed lapse/cap. Candidate Ts is CONDITIONED on
+lowest925–850 layer thickness under fixed lapse. Not an independent forecast.
+N² is a secant log-theta gradient between cell centers. Observed Tv are coarse
+layer means; candidate theta is analytic at cell centers. Surface pressure is
+unavailable, so cannot independently verify925hPa above ground in all land cells.
+These are reused sparse development footprints, not heldout wave measurements.
+
+192 month/cell profiles; 3 nonpositive lowest-interface India profiles excluded:
+Aprilcell59, Maycell59, Maycell60. Keep signed N² and report invalid; no clipping.
+Native groups India11land, Mexico1land+1ocean, PNW3ocean. Area/day-weighted
+absolute relative inferred speed error constant -> lapse: India14.916->5.132%,
+Mexico land14.605->6.816%, Mexico ocean8.336->12.027% (regression retained),
+PNW ocean31.009->11.706%. Equal-group mean17.2166->8.9201%; NOT rainfall skill.
+Independent publisher reconstructs cached heights/masks, integrated logtheta,
+pressure roots and FULL DENSE generalized eigensolves; max speed difference
+3.2e-12m/s. No observed wind/humidity model forcing or regional corrections.
+
+Report STABILITY_REFERENCE_20261028.md; output/stability_reference_20261028;
+new research study stability-reference. Figure shown to user. Browser, checkout and portable QA passed; milestone receipts are bound.
+Research companion now41 studies/125images/49downloads;705 checkout assets;
+1199 portable files/388 checked links/fresh launcher passed. Normal
+world/biome/population datasets and Earthr39 unchanged. No new Earth integration:
+1934 attempts /1929 strict /4 historical failures /1 historical interruption.
+
+Next major work is still a consistent moist thermal-pressure-momentum state
+with pressure/kinetic-work and reference-maintenance energy accounting. Shared
+vertical grid and fixed-wind MSE/phase step do not by themselves close mechanics.
+Never add smooth-mode c²divU cooling to MSE advection: that double-counts the
+expansion cooling. Need lateral/thermal/radiative reservoirs, moist/ice limits
+and terrain/compressible scope before declaring Earth rain improvements.
+Regional unanimity is not a calibration acceptance rule; use bounded mean loss,
+temperature/physics guards, separate starts/structures and heldout checks.
+This stability audit does not establish a global nonlinear calibration optimum.
+
+Earlier handoff follows:
+
 # ACTIVE — shared-grid multilevel moist thermodynamics complete; Earth reference audit next
 
 Userexplicitcontinueafterpushes. Useraskedhowisgoing midtask; answeredhonestly:
