@@ -38,7 +38,7 @@ No active model job. Browser25studies/71images/32downloads passed;633assets chec
 portable1103files/238links/launcher passed. Receipt verification.json.
 Commit/push publication before next declaration.
 
-**Drying ablation DECLARED; ready to launch after declaration commit:**
+**Drying ablation ACTIVE, source745cea2:**
 Parent wind results committed/pushed4e93862. New plan
 calibration/drying_ablation_20261028/plan.json selects global01/global07,
 both4.5m/s, then separately zero subsidence_drying, monsoon_descent, and both.
@@ -52,7 +52,16 @@ publish tradeoff helpers and organizer, completed report, browser/checkout/
 portable QA, commit/push. No automatic adoption or claimed double counting.
 All source/model/active plans must remain frozen. User says continue after
 pushes: carry through actual experiment. Source declaration must be committed
-before first new integration. No active model job at this declaration checkpoint.
+before first new integration. Launched PID21878,workers21879/21880,execsession55177; log as above.
+All28controls exact; six candidates now running. Source/model/plan immutable.
+Non-frozen seasonal helpers now undo the southern6month display shift, and
+new plot_tradeoff_humidity.py plots the exact native objective footprints.
+Native controls transport_control(first3)/column_control(PNW), since r39
+record has no humidity certificate. New helper initially assumed otherwise;
+fixed plotting-only lookup, zero scientific runs. Parent broad/wind figures
+regenerated but not republished yet; after current completion refresh all
+three studies, verify browser/checkout/bundle and update receipts. No new
+physics metrics or outcomes changed by calendar display ordering.
 
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;

@@ -87,3 +87,20 @@ monsoon column sinks separately and jointly at two separated wind/rain
 settings. Conservative donor vertical exchange stays active. This tests a
 possible overlap; it does not presume that drying removal repairs the model.
 A fresh declaration must precede those integrations and retain these outcomes.
+
+## Seasonal display and native humidity appendix
+
+The later diagnostic appendix reorders the recorded six-month southern shift
+to show actual January–December labels, including East Australia. Earlier
+plots displayed model-calendar months. Source arrays, paired errors, weights,
+annual totals and selection outcomes are unchanged. Full-score rainfall
+series remain separate from the historical cropped water-equation diagrams.
+
+The native humidity curves use the exact objective footprints: North India
+land (11 cells), Iberian ocean (20), East Australian land (7), and PNW ocean
+(4). They compare partial-column water and upper700–300/lower925–700 mean
+specific humidity, without substituting a mean curve for local MAE. Native
+controls are transport_control for the first three and column_control for
+PNW; the original r39 record has no saved humidity certificate. All underlying
+area/day-weighted metrics stay downloadable. These are development-region
+diagnostics, not another independent observational validation.

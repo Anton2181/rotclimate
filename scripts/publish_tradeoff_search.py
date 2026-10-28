@@ -192,10 +192,19 @@ def publish(out):
             name,region=key.split('/')
             if file_hash(out/name/(region+'.json'))!=sha:raise ValueError('Changed seasonal rainfall source')
         target=data/f'{stem}_seasons.png';shutil.copyfile(source_image,target);pictures.append(target)
+    humidity=None;humidity_path=out/'humidity_seasons.json'
+    if humidity_path.exists():
+        humidity=json.loads(humidity_path.read_text());source_image=out/'humidity_seasons.png'
+        if (humidity['review_sha256']!=file_hash(out/'review.json') or humidity['protocol_sha256']!=file_hash(out/'protocol.json')
+                or humidity['image_sha256']!=file_hash(source_image) or humidity['new_earth_integrations']!=0):raise ValueError('Changed native humidity diagnostic')
+        for key,sha in humidity['row_sha256'].items():
+            name,region=key.split('/')
+            if file_hash(out/name/(region+'.json'))!=sha:raise ValueError('Changed native humidity source')
+        target=data/f'{stem}_humidity.png';shutil.copyfile(source_image,target);pictures.append(target)
     source_hashes={r['name']+'/'+r['region']:file_hash(out/r['name']/(r['region']+'.json')) for r in progress['records']}
     metadata=dict(review,plan=p,records=[portable_record(r) for r in progress['records']],source_record_sha256=source_hashes,
         portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
-        history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,local_basin_diagnostics=basins,
+        history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,native_humidity_seasons=humidity,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
         publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},
@@ -203,7 +212,8 @@ def publish(out):
     write_json(data/f'{stem}.json',metadata)
     figures=''
     for picture in pictures:
-        alt=('Monthly regional rainfall on the complete scored masks, compared with observations and previous controls' if '_seasons' in picture.name else
+        alt=('Native seasonal partial-column water and upper-to-lower humidity shape on the original scored footprints' if '_humidity' in picture.name else
+             'Monthly regional rainfall on the complete scored masks, compared with observations and previous controls' if '_seasons' in picture.name else
              'Signed water-equation comparisons for declared objective, mean-climate and native-error selections' if '_water' in picture.name else
              'Ranking sensitivity to alternative weights and omitted development regions' if 'sensitivity' in picture.name else
              ('Paired legacy-drying ablations and archived parent rainfall and score comparisons' if ablation else

@@ -17,6 +17,8 @@ import matplotlib.pyplot as plt
 import numpy as np
 from local_benchmark_protocol import file_hash, identity, write_json
 from publish_tradeoff_search import verified
+from benchmark_local import DEV12_SPECS
+from rotclimate import earth
 
 
 def plot(out):
@@ -37,14 +39,18 @@ def plot(out):
         labels[name] = 'Best ' + ' / '.join(roles) + ' (' + name + ')'
     rows = {(r['name'], r['region']): r for r in progress['records']}
     series, hashes = {}, {}
+    specs = {**earth.REGIONS, **json.loads(DEV12_SPECS.read_text())}
     fig, axes = plt.subplots(2, 4, figsize=(17, 9), constrained_layout=True)
     months = np.arange(1, 13)
     for ax, region in zip(axes.flat, protocol['plan']['regions']):
         observed = np.asarray(rows['reference', region]['monthly_rain']['observed'], float)
+        original_month = (np.arange(12) + (6 if specs[region]['lat0'] < 0 else 0)) % 12
+        display_order = np.argsort(original_month)
         if observed.shape != (12,) or not np.isfinite(observed).all() or (observed < 0).any():
             raise ValueError('Invalid observed rainfall')
-        ax.plot(months, observed, 'o-', color='black', lw=2, ms=3, label='Observed')
-        series[region] = {'observed_mm': observed.tolist(), 'profiles': {}}
+        ax.plot(months, observed[display_order], 'o-', color='black', lw=2, ms=3, label='Observed')
+        series[region] = {'observed_mm': observed[display_order].tolist(),
+                          'calendar_month_for_model_month': original_month.tolist(), 'profiles': {}}
         for color, name in zip(['#777777', '#cc6677', '#0072b2', '#009e73'], names):
             row = rows[name, region]
             simulated = np.asarray(row['monthly_rain']['simulated'], float)
@@ -55,13 +61,13 @@ def plot(out):
                 raise ValueError('Inconsistent full-score monthly series')
             hashes[name + '/' + region] = file_hash(out / name / (region + '.json'))
             series[region]['profiles'][name] = {
-                'simulated_mm': simulated.tolist(),
+                'simulated_mm': simulated[display_order].tolist(),
                 'scored_land_cells': row['rain']['scored_land_cells'],
                 'annual_mm': float(simulated.sum()),
                 'monthly_spatial_mae_mm': row['rain']['monthly_mae_mm'],
                 'rain_loss': row['rain']['loss'],
             }
-            ax.plot(months, simulated, color=color, label=labels[name])
+            ax.plot(months, simulated[display_order], color=color, label=labels[name])
         ax.set(title=region.replace('_', ' ').title(), xticks=months,
                xticklabels=list('JFMAMJJASOND'), ylabel='Regional mean mm/month', ylim=(0, None))
         ax.grid(alpha=.15)
@@ -71,7 +77,7 @@ def plot(out):
         r.replace('_', ' ').title() + ': ' + str(round(sum(v['observed_mm']))) for r, v in series.items()),
         transform=axes.flat[-1].transAxes, fontsize=9)
     fig.suptitle('Rainfall accuracy includes the seasonal cycle', fontsize=17)
-    fig.supxlabel('Full scored land masks, including all 358 East Australia cells; equal model-month totals from the original score records.\n'
+    fig.supxlabel('Calendar months (southern six-month shift undone); original equal model-month totals and full scored land masks, including all 358 East Australia cells.\n'
                   'Regional means can hide spatial errors: monthly spatial MAE and rain loss remain in the download. '
                   'Post-search diagnostics on reused regions; no new validation or adopted climate.', fontsize=9)
     picture = out / 'rainfall_seasons.png'
