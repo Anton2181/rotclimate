@@ -59,6 +59,23 @@ def verify(out):
                 name=f'global{len(expected)+1:02}';expected.append(dict(name=name,basin=basin+1,parent_profile=anchor,westerly_speed=wind))
                 if p['profiles'][name]!={**old_updates[anchor],'westerly_speed':wind}:raise ValueError('Changed paired wind/rain coefficients')
         if expected!=interaction['grid'] or [x['name'] for x in expected]!=p['global_names']:raise ValueError('Changed paired wind grid')
+    elif p['design']['sampler']=='paired drying ablation':
+        ablation=p['drying_ablation'];parent=ROOT/ablation['parent']
+        for filename,key in [('review.json','parent_review_sha256'),('progress.json','parent_progress_sha256'),('scientific_verification.json','parent_verification_sha256')]:
+            if file_hash(parent/filename)!=ablation[key]:raise ValueError('Changed drying-anchor source archive')
+        parent_review=json.loads((parent/'review.json').read_text());parent_progress=json.loads((parent/'progress.json').read_text())
+        old_updates={r['name']:r['updates'] for r in parent_progress['records']}
+        if parent_review['validation_shortlist'] or diverse_starts(parent_review['scores'],old_updates,ablation['anchor_selection'])!=ablation['anchors']:raise ValueError('Changed conditional drying anchors')
+        variants={'subsidence_off':{'subsidence_drying':0.},'monsoon_off':{'monsoon_descent':0.},'both_off':{'subsidence_drying':0.,'monsoon_descent':0.}}
+        if ablation['variants']!=variants or p['design']['local_poll_order']:raise ValueError('Changed fixed drying ablation')
+        for row in parent_progress['records']:
+            if row['name'] in ablation['anchors'] and any(row['params'][k]!=v for k,v in ablation['retained'].items()):raise ValueError('Incorrect retained drying coefficients')
+        expected=[]
+        for basin,anchor in enumerate(ablation['anchors']):
+            for variant,changes in variants.items():
+                name=f'global{len(expected)+1:02}';expected.append(dict(name=name,basin=basin+1,parent_profile=anchor,variant=variant,changes=changes))
+                if p['profiles'][name]!={**old_updates[anchor],**ablation['retained'],**changes}:raise ValueError('Changed paired drying coefficients')
+        if expected!=ablation['grid'] or [x['name'] for x in expected]!=p['global_names']:raise ValueError('Changed ablation grid')
     else:raise ValueError('Unknown frozen sampling design')
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()));cases={r:earth.region_case(r,p['cell_km']) for r in p['regions']}
     derived={r:case_hash(c,observed_sea=True) for r,c in cases.items()}
@@ -148,7 +165,8 @@ def verify(out):
         basin_diagnostics.append(dict(start=start,end=current,start_objective=scores[start]['objective'],end_objective=scores[current]['objective'],
             accepted_improvements=accepted,start_parameters={k:updates[start][k] for k in p['design']['bounds']},
             end_parameters={k:updates[current][k] for k in p['design']['bounds']},near_boundaries=edges,
-            scope='One frozen coordinate-poll cycle; no numerical optimizer convergence claim'))
+            scope=('One frozen coordinate-poll cycle; no numerical optimizer convergence claim' if p['design']['local_poll_order'] else
+                   'No local proposals; common-runner best-point bookkeeping only')))
     if index!=len(history) or len(records)!=len(names)*len(p['regions']) or len(controls)!=28:raise ValueError('Undeclared trial/count')
     if pareto_names(scores)!=review['pareto_front']:raise ValueError('Changed Pareto frontier')
     shortlist=sorted((n for n,v in scores.items() if v.get('validation_ready')),key=lambda n:(scores[n]['objective'],n))[:2]

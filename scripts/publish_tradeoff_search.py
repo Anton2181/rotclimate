@@ -68,6 +68,41 @@ def plot_wind_interaction(out,p,progress,review,target):
     fig.savefig(target,dpi=145);plt.close(fig)
 
 
+def plot_drying_ablation(out,p,progress,review,target):
+    ablation=p['drying_ablation'];parent=ROOT/ablation['parent']
+    old=json.loads((parent/'review.json').read_text())
+    rows={(r['name'],r['region']):r for r in progress['records']}
+    fig,axes=plt.subplots(2,2,figsize=(13,9),constrained_layout=True)
+    variants=['retained','subsidence_off','monsoon_off','both_off']
+    count=len(ablation['anchors']);width=.8/count
+    for index,anchor in enumerate(ablation['anchors']):
+        cases=[(old['scores'][anchor],json.loads((parent/anchor/'pacific_nw.json').read_text()),
+                json.loads((parent/anchor/'north_india.json').read_text()))]
+        for variant in variants[1:]:
+            name=next(g['name'] for g in ablation['grid'] if g['parent_profile']==anchor and g['variant']==variant)
+            score=review['scores'][name]
+            cases.append((score,rows[name,'pacific_nw'],rows[name,'north_india']))
+        values=[[c[0].get('objective',float('nan')) for c in cases],
+                [c[0].get('mean_rain_ratio',float('nan')) for c in cases],
+                [sum(c[1]['monthly_rain']['simulated']) if c[1]['status']=='passed' else float('nan') for c in cases],
+                [sum(c[2]['monthly_rain']['simulated']) if c[2]['status']=='passed' else float('nan') for c in cases]]
+        for ax,y in zip(axes.flat,values):
+            bars=ax.bar(np.arange(4)+(index-(count-1)/2)*width,y,width=width,label=f'Anchor {index+1}: {anchor}')
+            bars[0].set_hatch('//');bars[0].set_edgecolor('black')
+    axes[0,1].axhline(1,color='#555',ls=':',label='r39 rain-error ratio')
+    for ax,region in [(axes[1,0],'pacific_nw'),(axes[1,1],'north_india')]:
+        ax.axhline(sum(rows['reference',region]['monthly_rain']['observed']),color='#555',ls=':',label='Observed rainfall')
+    for ax,title,unit in zip(axes.flat,['Penalized research objective','Mean regional rain error / r39',
+            'PNW full-score annual rainfall','North India full-score annual rainfall'],['Objective','Normalized error','mm/year','mm/year']):
+        ax.set(title=title,ylabel=unit,xticks=range(4),xticklabels=['Retained','Subsidence off','Monsoon off','Both off'])
+        ax.legend(frameon=False,fontsize=8);ax.grid(axis='y',alpha=.15)
+    fig.suptitle('Do legacy column sinks overlap explicit donor transport?',fontsize=16)
+    fig.supxlabel('Hatched bars are archived parent anchors; other bars are fresh paired ablations. Planet and other coefficients stay fixed.\n'
+                  'Whole-column removal is tested separately for each closure and jointly; changed rainfall does not by itself prove double counting.\n'
+                  'Development-region ablation, not independent validation, global optimization or an adopted climate.',fontsize=9)
+    fig.savefig(target,dpi=145);plt.close(fig)
+
+
 def verified(out):
     protocol=json.loads((out/'protocol.json').read_text());progress=json.loads((out/'progress.json').read_text());review=json.loads((out/'review.json').read_text())
     run_id=identity(protocol);p=protocol['plan'];rows=progress['records']
@@ -95,15 +130,17 @@ def verified(out):
 
 def publish(out):
     protocol,progress,review=verified(out);p=protocol['plan'];data=ROOT/'atlases/climate_accuracy/data'
-    wind='wind_interaction' in p;stem='wind_interaction' if wind else 'global_rain';slug=stem.replace('_','-')
-    title='Wind and rain-setting interactions' if wind else 'Broader rainfall search and regional tradeoffs'
+    wind='wind_interaction' in p;ablation='drying_ablation' in p
+    stem=p.get('publication_stem','global_rain');slug=stem.replace('_','-')
+    title=p.get('publication_title','Wind and rain-setting interactions' if wind else 'Broader rainfall search and regional tradeoffs')
     verification=json.loads((out/'scientific_verification.json').read_text())
     if (verification.get('status')!='passed' or verification.get('identity')!=identity(protocol)
             or verification.get('review_sha256')!=file_hash(out/'review.json')
             or verification.get('protocol_sha256')!=file_hash(out/'protocol.json')):
         raise ValueError('Need matching independent scientific verification before publication')
     coverage=data/f'{stem}_coverage.png'
-    if wind:plot_wind_interaction(out,p,progress,review,coverage)
+    if ablation:plot_drying_ablation(out,p,progress,review,coverage)
+    elif wind:plot_wind_interaction(out,p,progress,review,coverage)
     else:plot(out,coverage)
     names=list(review['scores']);regions=p['regions'];ref={r['region']:r for r in progress['records'] if r['name']=='reference'}
     rows={(r['name'],r['region']):r for r in progress['records']}
@@ -145,10 +182,19 @@ def publish(out):
             name,region=key.split('/')
             if file_hash(out/name/(region+'.npz'))!=sha:raise ValueError('Changed diagnostic raw climate')
         target=data/f'{stem}_water.png';shutil.copyfile(source_image,target);pictures.append(target)
+    seasons=None;seasons_path=out/'rainfall_seasons.json'
+    if seasons_path.exists():
+        seasons=json.loads(seasons_path.read_text());source_image=out/'rainfall_seasons.png'
+        if (seasons['review_sha256']!=file_hash(out/'review.json') or seasons['protocol_sha256']!=file_hash(out/'protocol.json')
+                or seasons['image_sha256']!=file_hash(source_image) or seasons['new_earth_integrations']!=0):raise ValueError('Changed seasonal rainfall diagnostic')
+        for key,sha in seasons['row_sha256'].items():
+            name,region=key.split('/')
+            if file_hash(out/name/(region+'.json'))!=sha:raise ValueError('Changed seasonal rainfall source')
+        target=data/f'{stem}_seasons.png';shutil.copyfile(source_image,target);pictures.append(target)
     source_hashes={r['name']+'/'+r['region']:file_hash(out/r['name']/(r['region']+'.json')) for r in progress['records']}
     metadata=dict(review,plan=p,records=[portable_record(r) for r in progress['records']],source_record_sha256=source_hashes,
         portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
-        history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,local_basin_diagnostics=basins,
+        history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
         publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},
@@ -156,13 +202,15 @@ def publish(out):
     write_json(data/f'{stem}.json',metadata)
     figures=''
     for picture in pictures:
-        alt=('Signed water-equation comparisons for declared objective, mean-climate and native-error selections' if '_water' in picture.name else
+        alt=('Monthly regional rainfall on the complete scored masks, compared with observations and previous controls' if '_seasons' in picture.name else
+             'Signed water-equation comparisons for declared objective, mean-climate and native-error selections' if '_water' in picture.name else
              'Ranking sensitivity to alternative weights and omitted development regions' if 'sensitivity' in picture.name else
              'Actual parameter coverage, separated global and local trials, and error progress' if picture==coverage else
              'Regional combined errors for every completed global and local candidate')
         with Image.open(picture) as image:w,h=image.size
         figures+=f'<figure><a href="data/{picture.name}"><img src="data/{picture.name}" width="{w}" height="{h}" loading="lazy" alt="{alt}"></a></figure>\n'
-    design_text=('The paired design tests three shared background westerly amplitudes (4.5, 6.0 and 8.5 m/s) at up to three separated rain settings selected from the completed parent search. Original 7.5 m/s results are archived comparisons, not additional integrations. No local refinement follows this bracket.' if wind else
+    design_text=('The paired design switches off subsidence drying, monsoon drying, and both, at up to two separated retained wind/rain settings. Explicit conservative donor transport stays active. Parent anchors are archived comparisons, not new integrations. This tests a possible overlap, without assuming that removing a closure corrects the physics. No local refinement follows.' if ablation else
+        'The paired design tests three shared background westerly amplitudes (4.5, 6.0 and 8.5 m/s) at up to three separated rain settings selected from the completed parent search. Original 7.5 m/s results are archived comparisons, not additional integrations. No local refinement follows this bracket.' if wind else
         'The frozen design covers 32 scrambled Sobol points over wider shared storm/rain-timescale/convective-RH ranges, then up to three separated starts with six bounded coordinate proposals each. Exact duplicate proposals reuse records.')
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 <p>New research policy: numerical conservation, paired inputs, fixed Earth settings and declared actual parameters remain hard requirements. Rainfall, temperature, humidity, wind and sea-state prediction errors are explicit objectives. Modest regional regressions can accompany an average improvement; no individual prediction-error veto prunes the optimization path. Earlier acceptance decisions remain unchanged.</p>
@@ -175,7 +223,7 @@ def publish(out):
     if start in text:
         before,tail=text.split(start,1);_,after=tail.split(end,1);text=before+section+after
     else:
-        anchor='<!--global-rain-start-->' if wind else '<!--joint-rain-start-->'
+        anchor='<!--wind-interaction-start-->' if ablation else '<!--global-rain-start-->' if wind else '<!--joint-rain-start-->'
         if text.count(anchor)!=1:raise ValueError('Need unique preceding study')
         text=text.replace(anchor,section+'\n'+anchor)
     page.write_text(text)
