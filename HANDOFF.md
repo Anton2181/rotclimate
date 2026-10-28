@@ -1,3 +1,26 @@
+# ACTIVE — physical phase change implemented; first-mode projection next
+
+User says continue, don't stop after pushing. No agents. Repo/work/pushsame.
+New isolated phase_adjustment.py conserves liquid/vapor water and explicit
+cp*Md*T+Lv*Wv enthalpy, latentwarming/cooling inactual saturationroot; falling
+uppercondensate reevaporatesbelow orreachesground. Not convection/ice/fullenergy.
+New heating_projection.py accounts H Wm2 ->Tdot=H/(cpMd), pressure dp/g mass,
+logpressure thicknessrate. ThicknessNOTvalidatedfirstmodeforcing.22newtests,
+combined135focusedpass42.65s. Coupledmodelandpreviousregionalkernelsuntouched.
+No Earthruns;1934/1929/4oldfails+1oldinterruption. ReportLATENT_HEATING_20261028.md.
+
+Alreadydevelopingbaroclinic_heating.py+test (untracked initially) withproper
+constantN Boussinesq firstmode/rigidlids, c=NH/pi, sineheatingprojectionfrom
+physicalheat, exactcosine layermeanwinds andenergyfactor1/(2S2).11newtestspass
+inclindependentcontinuousverticalintegrals. Need report/column->mode demo,
+actualenergy/phaseledger andsourcehashreceipts. DoNOTequatethicknessQwithmodeQ.
+This isreferenceuniformdensity,NOTcompressibleEarthmode. Need heatingoutside
+firstmode retainedincolumnledger, not silentlydeleted. Nextpubresearchnewstudy,
+allmaps posted,portable/browser/checkoutQA,commitpushthencontinueusefulphysics.
+Not rainforecast; no completehorizontalmoistenthalpy/radiation budgetyet.
+
+Previoushandofffollows:
+
 # CURRENT — regional dry + native-face tracer foundations COMPLETE
 
 User Continue. Continued after core milestone0839e21 push to second water/site
