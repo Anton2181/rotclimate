@@ -1,3 +1,54 @@
+# CURRENT — hydrostatic thermal wind pilot COMPLETE; failed rainfall criterion
+
+Latestuser Continue. Repo /workspace/rotclimate branchwork; push
+HEAD:refs/heads/claude/friendly-turing-43ygeu. No agents, no active modeljobs.
+Core7439e98, declaration8d194a5 committed/pushed before12actualintegrations.
+New flag moisture_thermal_layer_winds=False default, core model/config/joint/
+thermal_layer_winds changes. Common-mode Tsl interpreted at101325Pa,500km
+smoothed; T(p)=max(A(p/p0)^kappa,200K), Gamma6K/km. Differentiate atFIXEDp,
+thenintegratebetweenmovingmasscentroids. Shared massprojection retainsshear.
+Original defaulttoy T/P/W/layers/days bitexact;56coretests+2policytests pass.
+
+12/12strict passes;6historical controls allarrays+PNWextra exact;599frozen
+sources;396solvedseasonalsteps+faces/equations;actualshearreconstructed by
+independent12nodequadraturefromsavedgroundT+actualseasonallapse max8.81e-12m/s.
+Allwinds<80m/s. Cumulative1898attempts/1893strictpasses/4oldfails+1oldinterruption.
+No newnumericalfailures/restarts. Rawout output/thermal_wind_pilot_20261028.
+
+FAILEDRAIN: meanpairedrainlossratio legacy1.471914, hydro1.522107 vscriterion<=.95;
+meanTerrorchanges-.064/-.080C passguard. Regionshydro ratiosIndia2.0754,
+Mexico.7939,PNW1.6970. Allregionaltradeoffs shown;no anyregionrainveto. Hydro
+annualrain India319→32,Mexico935→333,PNW1036→436. IndiaJJA216→13vs515obs,
+adv212→25, E146→11; PNWwinter416→217vs340obs,adv312→16. Nativeqweightedvector
+RMSE improvesIndia5.44→4.39/Mexico4.94→3.35butPNW2.24→2.61 andupperflowbad:
+IndiaJJA700E/N-6.63/+5.44vs+.43/-1.98;PNWwinter700+19.76/-6.18vs+8.29/+3.08.
+No adoption/shortlist/broadsweep. Earthr39/world/biome/popremainunchanged.
+
+NEW EXPLORATORY AUDIT (post-outcome,0Earthruns): audit_thermal_structure.py,
+includedanalysis.json. CachedheightshypsometricmeanvirtualT925-700 and700-300,
+samevalidnativefootprints/calendar/area,firstordermodelhumiditycorrection.
+Noobservedforcing/newcriteria,notdirectindependentairT. Modelbias925-700
+India-4.77K,Mexico-3.90,PNW-3.64;700-300 -2.94/-2.34/-3.18. Crucialgradient
+check:areaweightedspatialplanesIndia11cells only (>=4/fullrank;nevermodelinput).
+JJA3monthgradientmeanE/N K/1000km925-700model+1.44/+2.05 vsref-2.13/+2.19;
+700-300model+1.27/+2.08vsref+.58/-.54. Reference meridional gradient reverses
+aloft; singleAuniformlapseprofile retainssamedirection. Clearstructureissue,
+notproofglobalmechanism. Next ONE hypothesis: separate modeledzonal/free-air
+thermalfieldfromnear-surface land/oceananomaly thatdecayswithheight;first
+terraininvariant pressure/gradient tests+outsideTreference,notfitregionalfactor
+ornudgehum/wind. Also checkbarotropicprojection shift separately. Thisisone
+welltestedfailedmechanism;aftertwo reassesscirculation/energyarchitecture.
+
+Science report reports/THERMAL_WIND_PILOT_20261028.md completed;5figures generated.
+Scorecard/rainmaps shownuser;pressure,seasonal,thermalstructureplots needlink.
+Publication+QA COMPLETE:31studies/101images/39downloads;671checkoutassets exact;
+1150fileportable/315links/freshlauncher pass. Reports/HTML/JSONbyte-match
+latestbundle. verification.json complete. Commit/push completed milestone. No core/source599editsduring
+reverification. New posthelpersnotfrozen canchange. Previousverifiers needtheir
+historicalsourceepoch due4corechanges;neverweakenoldhashchecks.
+
+Historicalhandoffbelow:
+
 # LATEST ADDITION — isolated thermal layer-wind prototype
 
 After completed diagnostic publication b50797a, continued with the selected
