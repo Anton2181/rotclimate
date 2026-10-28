@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('ocean-profile','Hydrostatic ocean humidity and rainfall'),
     ('global-joint','Joint global wind, rain and drying search'),
     ('boundary-rh','Pressure-dependent marine humidity'),
     ('drying-ablation','Legacy drying and explicit vertical transport'),

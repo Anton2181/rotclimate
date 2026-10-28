@@ -1,0 +1,579 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test a physical ocean-water boundary law after finite joint calibration failed to beat the retained wind setting. Separate the absolute hydrostatic uniform target from a half-strength pressure RH taper; both hold the existing declared surface RH. No observed humidity or temperature enters model forcing.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/global_joint_20261028/review.json",
+  "parent_source_commit": "30a925ffcdb805cd9f65cefe085d8b6228d93f50",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "column_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection"
+    },
+    "environment_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 7.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0
+    },
+    "global01": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0
+    },
+    "global02": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.0
+    },
+    "global03": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5
+    },
+    "global04": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0
+    },
+    "global05": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.0
+    },
+    "global06": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5
+    }
+  },
+  "profile_numerics": {
+    "reference": {},
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "column_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "environment_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global01": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global02": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global03": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global04": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global05": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global06": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "reference": "output/global_joint_20261028/reference",
+    "transport_control": "output/global_joint_20261028/transport_control",
+    "column_control": "output/global_joint_20261028/column_control",
+    "environment_control": "output/global_joint_20261028/environment_control",
+    "global01": "output/wind_interaction_20261028/global01"
+  },
+  "eligible_profiles": [
+    "global01",
+    "global02",
+    "global03",
+    "global04",
+    "global05",
+    "global06"
+  ],
+  "maximum_finalists": 0,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Only the eight declared shared axes may differ from the fresh environmental control; literal grid further fixes all but wind and the new ocean modes at the retained rain setting. Four core source replacements are explicitly committed; every other source/input is unchanged. Actual interior water stays independently solved; all planetary properties and numerical/skill requirements are fixed.",
+  "control": "Four exact controls precede six fixed candidate settings. The fresh legacy4.5 candidate must additionally reproduce the retained old wind setting, including every main NPZ field and native companion.",
+  "screen": "Newpolicy: assess hard physical/structural eligibility separately from observational skill. Noindividualregion, nativehumidity orSST prediction-errorveto duringoptimization. Penalize average andregional/native/oceanregret explicitly; report every raw error and original strict-gate violation ascontext in publication. Missing/nonfinite scores, unpairedcases/footprints and changedfixedparameters failclosed. No alteration ofoldcampaignresults.",
+  "advance": "Same research shortlist and separately frozen broader Earth/ocean/resolution/world requirements; no local proposals or automatic adoption.",
+  "publication": "Every fixed six-dimensional point, failure, source/input identity and prediction tradeoff. New finite coverage is not a global-optimum certificate.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "environment_control",
+  "publication_stem": "ocean_profile",
+  "publication_parameter": "eddy_rate",
+  "publication_labels": {
+    "reference": "reference",
+    "transport_control": "transport_control",
+    "column_control": "column_control",
+    "environment_control": "environment_control",
+    "global01": "global01",
+    "global02": "global02",
+    "global03": "global03",
+    "global04": "global04",
+    "global05": "global05",
+    "global06": "global06",
+    "global07": "global07",
+    "global08": "global08",
+    "global09": "global09",
+    "global10": "global10",
+    "global11": "global11",
+    "global12": "global12",
+    "global13": "global13",
+    "global14": "global14",
+    "global15": "global15",
+    "global16": "global16",
+    "global17": "global17",
+    "global18": "global18",
+    "global19": "global19",
+    "global20": "global20",
+    "global21": "global21",
+    "global22": "global22",
+    "global23": "global23",
+    "global24": "global24",
+    "global25": "global25",
+    "global26": "global26",
+    "global27": "global27",
+    "global28": "global28",
+    "global29": "global29",
+    "global30": "global30",
+    "global31": "global31",
+    "global32": "global32"
+  },
+  "require_column_thermodynamics": false,
+  "require_moisture_reservoirs": true,
+  "require_reservoir_humidity": true,
+  "humidity_regions": {
+    "iberia": "ocean"
+  },
+  "humidity_control": "transport_control",
+  "humidity_max_ratio": 1.02,
+  "publication_date": "20261028",
+  "require_reservoir_rain_scheme": "column-convection",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_control": "column_control",
+  "extra_circulation_groups": {
+    "pacific_nw": "ocean"
+  },
+  "extra_circulation_max_ratio": 0.9,
+  "extra_humidity_max_ratio": 1.02,
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "require_environmental_partition": true,
+  "environmental_reference_review": "output/environmental_reference_20261027_verified/review.json",
+  "parent_epoch": {
+    "review_sha256": "ff2edda5ae7c25031e3e4b3b7398bfd0805504839f1e9668c9057eb84e8d97f5",
+    "protocol_sha256": "4fcca334cb6cd402b210f0fb1e73baa90c2cdfb111d2f8baee37bb5a673e6390",
+    "environmental_control_archive": "output/environmental_partition_20261027/environment_600"
+  },
+  "publication_parameters": [
+    "eddy_rate",
+    "precip_tau_days",
+    "convective_rh"
+  ],
+  "control_names": [
+    "reference",
+    "transport_control",
+    "column_control",
+    "environment_control"
+  ],
+  "candidate_numerics": {
+    "moisture_relaxation": 0.1,
+    "picard_iters": 1024
+  },
+  "parent_protocol": "output/global_joint_20261028/protocol.json",
+  "base_candidate": {
+    "flux_convergence": 0.0,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "moisture_mass_balance": true,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_two_layer": true,
+    "moisture_upper_q_ratio": 0.2,
+    "moisture_mass_tracer": true,
+    "moisture_reservoirs": true,
+    "moisture_reservoir_mixing_days": 0.0,
+    "moisture_reservoir_rain_scheme": "column-convection",
+    "westerly_speed": 7.5,
+    "moisture_reservoir_temperature_profile": "environmental",
+    "moisture_reservoir_lapse_k_km": 6.0,
+    "moisture_ocean_hydrostatic": false,
+    "moisture_ocean_rh_taper": 0.0
+  },
+  "fixed_model": {
+    "flux_convergence": 0.0,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "moisture_mass_balance": true,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_two_layer": true,
+    "moisture_mass_tracer": true,
+    "moisture_reservoirs": true,
+    "moisture_reservoir_mixing_days": 0.0,
+    "moisture_reservoir_rain_scheme": "column-convection",
+    "moisture_reservoir_temperature_profile": "environmental",
+    "moisture_reservoir_lapse_k_km": 6.0
+  },
+  "design": {
+    "sampler": "paired hydrostatic ocean pilot",
+    "seed": 2026102803,
+    "base2_exponent": 5,
+    "bounds": {
+      "eddy_rate": {
+        "range": [
+          0.4,
+          3.5
+        ],
+        "scale": "log"
+      },
+      "precip_tau_days": {
+        "range": [
+          3.0,
+          35.0
+        ],
+        "scale": "log"
+      },
+      "convective_rh": {
+        "range": [
+          0.5,
+          0.85
+        ],
+        "scale": "linear"
+      },
+      "westerly_speed": {
+        "range": [
+          2.5,
+          8.5
+        ],
+        "scale": "linear"
+      },
+      "subsidence_drying": {
+        "range": [
+          0.0,
+          0.019548865912820436
+        ],
+        "scale": "linear"
+      },
+      "monsoon_descent": {
+        "range": [
+          0.0,
+          0.015443602894513648
+        ],
+        "scale": "linear"
+      },
+      "moisture_ocean_hydrostatic": {
+        "range": [
+          0,
+          1
+        ],
+        "scale": "linear"
+      },
+      "moisture_ocean_rh_taper": {
+        "range": [
+          0.0,
+          0.5
+        ],
+        "scale": "linear"
+      }
+    },
+    "local_starts": 1,
+    "start_minimum_distance": 0.35,
+    "local_step": 0.12,
+    "local_poll_order": [],
+    "local_rule": "Fixed paired grid only; best-start bookkeeping, no local proposals."
+  },
+  "global_names": [
+    "global01",
+    "global02",
+    "global03",
+    "global04",
+    "global05",
+    "global06"
+  ],
+  "objective": {
+    "regional_free_ratio": 1.05,
+    "regional_weight": 0.25,
+    "native_weight": 0.05,
+    "ocean_weight": 0.05,
+    "definition": "Equal-region mean0.5*(TMAE/Tref+rainloss/rainref), plus0.25mean(max(regional_combined-1.05,0)^2), plus0.05mean(max(native_normalized_regression,0)^2), plus0.05mean(max(ocean_normalized_regression,0)^2). Native wind,PW,qshape errors versus fixed transportcontrol(NI,Iberia,EA) or correctedoriginalwindcontrol(PNW), denominatorsmax(baseline,.5m/s,1mm,.02qratio) respectively. Ocean error versusr39/max(baseline,.1C). Denominator floors are predeclared normalization scales, NOT measured reference uncertainty. No skill error vetoes physical eligibility."
+  },
+  "validation_shortlist": {
+    "mean_combined_max": 0.995,
+    "mean_rain_max": 0.99,
+    "mean_temperature_max": 1.02,
+    "worst_region_max": 1.15,
+    "scope": "At mosttwo candidates may advance to separately frozen broader validation; these are research screening thresholds, not adoption. Fifteenpercent regional combined cap permits bounded tradeoffs, unlike earlier2percentveto. Do not change after outcomes. All scores/failures remain visible."
+  },
+  "policy_version": "tradeoff_research_v1_hydrostatic_ocean_20261028",
+  "maximum_seconds": 7200,
+  "planned_maximum_integrations": 70,
+  "source_policy": "Commitplan/script/tests before any new Earth integration. Freeze allparent protocol scientificsources plusnewsource/plan/controlrows/arrays, recheck everyprofile andcompletion. Preserve failures. No simultaneous edits to frozen sources. Eachactualintegrationincludingcontrols counts; cached local proposals do not.",
+  "generator_sha256": "281954e448a6869be96c42e00054cac353c4800bc43e4065928662e5bd2ad3a0",
+  "publication_title": "Hydrostatic ocean humidity and rainfall",
+  "publication_design_text": "Two fixed background winds (4.5 and 3.5 m/s) each receive legacy, absolute hydrostatic uniform-RH, and half-taper RH ocean targets. Surface RH retains its calibrated value; total water is not renormalized. Actual sea temperatures drive the profiles and interior humidity remains independently solved. Four exact controls and a matched legacy epoch control protect existing behavior. No local proposals follow.",
+  "previous_study_slug": "global-joint",
+  "source_epoch": {
+    "before_commit": "30a925ffcdb805cd9f65cefe085d8b6228d93f50",
+    "after_commit": "76adf7e8bd58c2dfbfc0300a201162d272ce4565",
+    "files": {
+      "rotclimate/config.py": {
+        "before_sha256": "a7b47175ff2ccbea8f151d05d02f06d2ca1cd18535bdf7156b85eb60aa473fd5",
+        "after_sha256": "81f16cb6adca18170888c2728d6c159cb6bdd7b98f0da56002697a06e9280e25"
+      },
+      "rotclimate/model.py": {
+        "before_sha256": "1ceb809801a69b17c09c6dd58ed8650bcb0503e92017c658ffdf1f6775d22eeb",
+        "after_sha256": "639c31b231efa208ddb17c2f5d1f5f38a692a692f54517b2518d0b43d419fb53"
+      },
+      "rotclimate/column_thermodynamics.py": {
+        "before_sha256": "56b1937c9e793bd5051c937e04ca5b8f490ce29c75c4a7c1f911d09af82db1ca",
+        "after_sha256": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356"
+      },
+      "rotclimate/joint.py": {
+        "before_sha256": "e11a3c2a7c91b98abea3522228c3284f0e2941908e8fa6b9a6caea3cd4f748f5",
+        "after_sha256": "401f4cb44428ab1b8122d2fdc7e0198dc9f0e1ffc3a0dc599c6bde2c3967492f"
+      }
+    }
+  },
+  "ocean_profile_pilot": {
+    "parent": "output/global_joint_20261028",
+    "parent_identity": "8fcaf1bd35c5c8115ab30ac4ffbaecf4702362f4e74a73d69efd410499c43f77",
+    "parent_review_sha256": "0ce8862914fc4d073d6eb46dd3ca5e8de755c57e017ab1ccb5ec89abd2cfb4d1",
+    "parent_progress_sha256": "47b25ddaaadcc8d54661b99387820db6e1d00cb2aedde6010423233d64b0c690",
+    "parent_verification_sha256": "61eadad65892983379b86796fc5392a7dfd428f96232c487066cf4a70a831108",
+    "anchor_profile": "global01",
+    "anchor_archive": "output/wind_interaction_20261028/global01",
+    "anchor_review": "output/wind_interaction_20261028/review.json",
+    "anchor_review_sha256": "43f5dbbd112614c0f8c0f9fdbdadf01ee92ca9448e1338fb6430b15aa8e550f1",
+    "references": {
+      "thermal": {
+        "directory": "output/environmental_reference_20261027_verified",
+        "protocol_sha256": "c81c755c8d337aad6b4bde43bcc38d5039046a0900e262679c9405ef4e7935a1",
+        "review_sha256": "36441ad0c6651f6fe95a410f456e1694cc3481c73014da58578077802632c14c",
+        "arrays_sha256": "9a17e32b7766b838b1a0a6ccc178f706826c73c5e50b8ba6f39a3223631b32b0"
+      },
+      "marine_rh": {
+        "directory": "output/boundary_rh_20261028",
+        "protocol_sha256": "c11f268611849ae603f46cf09c516d714269c40a54919418c9f7f3035f25e0e4",
+        "review_sha256": "e82afac1fa91fe8b71cd01910fcff5501025e79680e2002710858d8f92e63655",
+        "arrays_sha256": "302d5bf881d2167749d472ecacca5758de071034a5683d1d974fd199f62165d2"
+      }
+    },
+    "grid": [
+      {
+        "name": "global01",
+        "westerly_speed": 4.5,
+        "mode": "legacy",
+        "hydrostatic": false,
+        "rh_taper": 0.0
+      },
+      {
+        "name": "global02",
+        "westerly_speed": 4.5,
+        "mode": "hydrostatic_uniform",
+        "hydrostatic": true,
+        "rh_taper": 0.0
+      },
+      {
+        "name": "global03",
+        "westerly_speed": 4.5,
+        "mode": "hydrostatic_half",
+        "hydrostatic": true,
+        "rh_taper": 0.5
+      },
+      {
+        "name": "global04",
+        "westerly_speed": 3.5,
+        "mode": "legacy",
+        "hydrostatic": false,
+        "rh_taper": 0.0
+      },
+      {
+        "name": "global05",
+        "westerly_speed": 3.5,
+        "mode": "hydrostatic_uniform",
+        "hydrostatic": true,
+        "rh_taper": 0.0
+      },
+      {
+        "name": "global06",
+        "westerly_speed": 3.5,
+        "mode": "hydrostatic_half",
+        "hydrostatic": true,
+        "rh_taper": 0.5
+      }
+    ],
+    "scope": "Legacy versus absolute hydrostatic uniform/half RH targets, at two fixed winds. Reference support is not a coupled climate gain."
+  }
+}

@@ -29,6 +29,7 @@ def portable_record(row):
         for w,b in zip(water,branches,strict=True):
             if w['day']!=b['day']:raise ValueError('Unpaired invariant step times')
             steps.append({**{k:w[k] for k in ['day','all_layer_checks_passed','max_scaled_layer_residual','max_scaled_column_residual','max_scaled_dry_column_residual','maximum_internal_precipitation_transfer_residual_mm_day','partition_temperature_profile','partition_lapse_k_km','rain_scheme']},
+                **{k:v for k,v in w.items() if k.startswith(('ocean_','minimum_ocean_','maximum_ocean_'))},
                 **{k:b[k] for k in ['maximum_branch_speed_ms','p95_branch_speed_ms']}})
         result['numerics']['invariant_steps']=steps
     return result
@@ -103,6 +104,33 @@ def plot_drying_ablation(out,p,progress,review,target):
     fig.savefig(target,dpi=145);plt.close(fig)
 
 
+def plot_ocean_pilot(out,p,progress,review,target):
+    rows={(r['name'],r['region']):r for r in progress['records']}
+    fig,axes=plt.subplots(2,2,figsize=(13,9),constrained_layout=True)
+    modes=['legacy','hydrostatic_uniform','hydrostatic_half']
+    for index,wind in enumerate([4.5,3.5]):
+        names=[next(g['name'] for g in p['ocean_profile_pilot']['grid'] if g['westerly_speed']==wind and g['mode']==mode) for mode in modes]
+        values=[[review['scores'][n].get('objective',float('nan')) for n in names],
+                [review['scores'][n].get('mean_rain_ratio',float('nan')) for n in names]]
+        for region in ['north_india','pacific_nw']:
+            values.append([sum(rows[n,region]['monthly_rain']['simulated']) if rows[n,region]['status']=='passed' else float('nan') for n in names])
+        for ax,y in zip(axes.flat,values):
+            positions=np.arange(3)+(index-.5)*.38
+            ax.bar(positions,y,width=.38,label=f'Background wind {wind:g} m/s')
+            for x,value in zip(positions,y):
+                if not np.isfinite(value):ax.text(x,0,'FAIL',ha='center',fontsize=8,color='#a22')
+    axes[0,1].axhline(1,color='#555',ls=':',label='r39 rain-error ratio')
+    for ax,region in [(axes[1,0],'north_india'),(axes[1,1],'pacific_nw')]:
+        ax.axhline(sum(rows['reference',region]['monthly_rain']['observed']),color='#555',ls=':',label='Observed rainfall')
+    for ax,title,unit in zip(axes.flat,['Penalized research objective','Mean regional rain error / r39','North India full-score annual rain','PNW full-score annual rain'],['Objective','Normalized error','mm/year','mm/year']):
+        ax.set(title=title,ylabel=unit,xticks=range(3),xticklabels=['Legacy target','Hydrostatic uniform','Hydrostatic half taper']);ax.legend(frameon=False,fontsize=8);ax.grid(axis='y',alpha=.15)
+    fig.suptitle('Ocean water amount and RH shape · fixed coupled pilot',fontsize=16)
+    fig.supxlabel('All bars are fresh integrations. Hydrostatic uniform isolates a changed total-water law; half taper also changes vertical RH and total water.\n'
+        'Actual surface-RH coefficient and other physics stay fixed; independently solved interior humidity is never reset.\n'
+        'Matched legacy control, explicit source transition, same numerical/skill policy and fixed Earth properties; no automatic adoption.',fontsize=9)
+    fig.savefig(target,dpi=145);plt.close(fig)
+
+
 def verified(out):
     protocol=json.loads((out/'protocol.json').read_text());progress=json.loads((out/'progress.json').read_text());review=json.loads((out/'review.json').read_text())
     run_id=identity(protocol);p=protocol['plan'];rows=progress['records']
@@ -122,15 +150,19 @@ def verified(out):
             if row['status']!='passed' or row.get('physical_control_exact') is not True:raise ValueError('Control failed')
             with np.load(raw) as a,np.load(ROOT/p['profile_control_archives'][row['name']]/raw.name) as b:
                 if set(a.files)!=set(b.files) or any(not np.array_equal(a[k],b[k],equal_nan=True) for k in a.files):raise ValueError('Historical control is not exact')
+    evaluator=evaluate
+    if 'ocean_profile_pilot' in p:
+        from ocean_profile_pilot import evaluate_ocean
+        evaluator=evaluate_ocean
     for name,score in review['scores'].items():
-        if evaluate(name,rows,p)!=score:raise ValueError('Changed score or physical certificate: '+name)
+        if evaluator(name,rows,p)!=score:raise ValueError('Changed score or physical certificate: '+name)
     if pareto_names(review['scores'])!=review['pareto_front']:raise ValueError('Changed tradeoff frontier')
     return protocol,progress,review
 
 
 def publish(out):
     protocol,progress,review=verified(out);p=protocol['plan'];data=ROOT/'atlases/climate_accuracy/data'
-    wind='wind_interaction' in p;ablation='drying_ablation' in p
+    wind='wind_interaction' in p;ablation='drying_ablation' in p;ocean='ocean_profile_pilot' in p
     stem=p.get('publication_stem','global_rain');slug=stem.replace('_','-')
     title=p.get('publication_title','Wind and rain-setting interactions' if wind else 'Broader rainfall search and regional tradeoffs')
     verification=json.loads((out/'scientific_verification.json').read_text())
@@ -139,7 +171,8 @@ def publish(out):
             or verification.get('protocol_sha256')!=file_hash(out/'protocol.json')):
         raise ValueError('Need matching independent scientific verification before publication')
     coverage=data/f'{stem}_coverage.png'
-    if ablation:plot_drying_ablation(out,p,progress,review,coverage)
+    if ocean:plot_ocean_pilot(out,p,progress,review,coverage)
+    elif ablation:plot_drying_ablation(out,p,progress,review,coverage)
     elif wind:plot_wind_interaction(out,p,progress,review,coverage)
     else:plot(out,coverage)
     names=list(review['scores']);regions=p['regions'];ref={r['region']:r for r in progress['records'] if r['name']=='reference'}
@@ -206,6 +239,7 @@ def publish(out):
         portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
         history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,native_humidity_seasons=humidity,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
+        source_transition=protocol.get('source_transition'),reference_refresh=protocol.get('reference_refresh'),
         declaration_metadata_issues=verification.get('declaration_metadata_issues',[]),
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
         publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},

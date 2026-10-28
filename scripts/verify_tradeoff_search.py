@@ -37,6 +37,7 @@ def independent_objective(name,records,p):
 def verify(out):
     protocol=json.loads((out/'protocol.json').read_text());p=protocol['plan'];run_id=identity(protocol)
     declaration_metadata_issues=[]
+    evaluator=evaluate
     progress=json.loads((out/'progress.json').read_text());review=json.loads((out/'review.json').read_text())
     if (progress.get('complete') is not True or review.get('complete') is not True
             or progress['identity']!=run_id or review['identity']!=run_id
@@ -98,10 +99,39 @@ def verify(out):
                 name=f'global{len(expected)+1:02}';expected.append(dict(name=name,basin=basin+1,parent_profile=anchor,variant=variant,changes=changes))
                 if p['profiles'][name]!={**old_updates[anchor],**ablation['retained'],**changes}:raise ValueError('Changed paired drying coefficients')
         if expected!=ablation['grid'] or [x['name'] for x in expected]!=p['global_names']:raise ValueError('Changed ablation grid')
+    elif p['design']['sampler']=='paired hydrostatic ocean pilot':
+        from ocean_source_epoch import validate_epoch,current_sources,reference_sources
+        from ocean_profile_pilot import evaluate_ocean
+        evaluator=evaluate_ocean;validate_epoch(p['source_epoch'])
+        old_protocol=json.loads((ROOT/p['parent_protocol']).read_text())
+        upgraded=current_sources(old_protocol['sources'],p['source_epoch'])
+        references,refresh=reference_sources(p)
+        if protocol.get('source_transition')!=p['source_epoch'] or protocol.get('reference_refresh')!=refresh:raise ValueError('Changed ocean source/reference transition')
+        if any(protocol['sources'].get(k)!=v for k,v in {**upgraded,**references}.items()):raise ValueError('Missing ocean epoch source binding')
+        experiment=p['ocean_profile_pilot'];parent=ROOT/experiment['parent']
+        for filename,key in [('review.json','parent_review_sha256'),('progress.json','parent_progress_sha256'),('scientific_verification.json','parent_verification_sha256')]:
+            if file_hash(parent/filename)!=experiment[key]:raise ValueError('Changed ocean pilot parent archive')
+        parent_plan=old_protocol['plan'];parent_review=json.loads((parent/'review.json').read_text())
+        if parent_review['validation_shortlist'] or any(p[k]!=parent_plan[k] for k in ['objective','validation_shortlist','fixed_model']):raise ValueError('Changed ocean pilot tradeoff policy')
+        anchor_review=json.loads((ROOT/experiment['anchor_review']).read_text())
+        if file_hash(ROOT/experiment['anchor_review'])!=experiment['anchor_review_sha256']:raise ValueError('Changed retained wind anchor review')
+        anchor=min((n for n,s in anchor_review['scores'].items() if s.get('physical_admissible')),key=lambda n:(anchor_review['scores'][n]['objective'],n))
+        if anchor!=experiment['anchor_profile']:raise ValueError('Changed retained best wind anchor')
+        source=json.loads((ROOT/experiment['anchor_archive']/(p['regions'][0]+'.json')).read_text())
+        expected=[]
+        for wind in [4.5,3.5]:
+            for mode,enabled,taper in [('legacy',False,0.),('hydrostatic_uniform',True,0.),('hydrostatic_half',True,.5)]:
+                name=f'global{len(expected)+1:02}';expected.append(dict(name=name,westerly_speed=wind,mode=mode,hydrostatic=enabled,rh_taper=taper))
+                coefficients={**source['updates'],**{k:source['params'][k] for k in ['subsidence_drying','monsoon_descent']},
+                    'westerly_speed':wind,'moisture_ocean_hydrostatic':enabled,'moisture_ocean_rh_taper':taper}
+                if p['profiles'][name]!=coefficients or p['profile_numerics'][name]!=source['numerical_updates']:raise ValueError('Changed paired ocean coefficients or numerical rules')
+        if expected!=experiment['grid'] or p['global_names']!=[g['name'] for g in expected] or p['design']['local_poll_order']:raise ValueError('Changed fixed ocean pilot grid')
+        if p['profile_control_archives'].get('global01')!=experiment['anchor_archive']:raise ValueError('Missing matched legacy epoch control')
     else:raise ValueError('Unknown frozen sampling design')
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()));cases={r:earth.region_case(r,p['cell_km']) for r in p['regions']}
     derived={r:case_hash(c,observed_sea=True) for r,c in cases.items()}
     records=progress['records'];keys=set();controls=[];extra_controls=[];row_hashes={};passed=0
+    matched_ocean_controls=[];matched_ocean_native_controls=[]
     for row in records:
         key=(row['name'],row['region'])
         if key in keys:raise ValueError('Repeated regional integration')
@@ -124,6 +154,8 @@ def verify(out):
             if n not in p['control_names']:
                 steps=row['numerics']['moisture_reservoirs']['steps']
                 for step in steps:
+                    if ('ocean_profile_pilot' in p and actual['moisture_ocean_hydrostatic']
+                            and step.get('ocean_target_cells')!=int((~cases[r].grid.land).sum())):raise ValueError('Actual ocean target grid footprint differs')
                     if (step['all_layer_checks_passed'] is not True
                             or any(not math.isfinite(step[k]) or step[k]<0 or step[k]>actual['moisture_residual_tol'] for k in ['max_scaled_layer_residual','max_scaled_column_residual'])
                             or step['max_scaled_dry_column_residual']>1e-10
@@ -135,23 +167,25 @@ def verify(out):
             if r in p['extra_circulation_regions']:
                 extra=path.with_name(r+'_extra.npz')
                 if file_hash(extra)!=row['extra_circulation_arrays_sha256']:raise ValueError('Changed native companion')
-            if n in p['control_names']:
+            matched_ocean=('ocean_profile_pilot' in p and n=='global01')
+            if n in p['control_names'] or matched_ocean:
                 archived=ROOT/p['profile_control_archives'][n]/raw.name
                 prior=json.loads(archived.with_suffix('.json').read_text())
                 if file_hash(archived)!=prior['arrays_sha256']:raise ValueError('Changed archived climate')
+                if matched_ocean and {k:v for k,v in row['params'].items() if k not in ['moisture_ocean_hydrostatic','moisture_ocean_rh_taper']}!=prior['params']:raise ValueError('Matched legacy ocean parameters differ from old source epoch')
                 with np.load(raw) as a,np.load(archived) as b:
                     if set(a.files)!=set(b.files) or any(a[k].dtype!=b[k].dtype or not np.array_equal(a[k],b[k],equal_nan=True) for k in a.files):raise ValueError('Control fieldset/array not exact')
-                controls.append(n+'/'+r)
+                (matched_ocean_controls if matched_ocean else controls).append(n+'/'+r)
                 if r in p['extra_circulation_regions']:
                     oldextra=archived.with_name(r+'_extra.npz')
                     if file_hash(oldextra)!=prior['extra_circulation_arrays_sha256']:raise ValueError('Changed archived native companion')
                     with np.load(extra) as a,np.load(oldextra) as b:
                         if set(a.files)!=set(b.files) or any(not np.array_equal(a[k],b[k],equal_nan=True) for k in a.files):raise ValueError('Native control not exact')
-                    extra_controls.append(n+'/'+r)
+                    (matched_ocean_native_controls if matched_ocean else extra_controls).append(n+'/'+r)
         elif n in p['control_names']:raise ValueError('Failed historical control')
     names={r['name'] for r in records}
     if any({(n,r) for r in p['regions']}-keys for n in names):raise ValueError('Incomplete profile')
-    scores={n:evaluate(n,records,p) for n in names if n not in p['control_names']}
+    scores={n:evaluator(n,records,p) for n in names if n not in p['control_names']}
     if scores!=review['scores'] or scores!=progress['scores']:raise ValueError('Recomputed objective/certificates differ')
     for n,s in scores.items():
         if s.get('physical_admissible') and not math.isclose(s['objective'],independent_objective(n,records,p),rel_tol=1e-12,abs_tol=1e-12):raise ValueError('Independent raw-error objective differs')
@@ -190,6 +224,7 @@ def verify(out):
             scope=('One frozen coordinate-poll cycle; no numerical optimizer convergence claim' if p['design']['local_poll_order'] else
                    'No local proposals; common-runner best-point bookkeeping only')))
     if index!=len(history) or len(records)!=len(names)*len(p['regions']) or len(controls)!=28:raise ValueError('Undeclared trial/count')
+    if 'ocean_profile_pilot' in p and (len(matched_ocean_controls)!=7 or len(matched_ocean_native_controls)!=1):raise ValueError('Missing exact matched legacy ocean epoch control')
     if pareto_names(scores)!=review['pareto_front']:raise ValueError('Changed Pareto frontier')
     shortlist=sorted((n for n,v in scores.items() if v.get('validation_ready')),key=lambda n:(scores[n]['objective'],n))[:2]
     if shortlist!=review['validation_shortlist']:raise ValueError('Changed prospective shortlist')
@@ -226,6 +261,7 @@ def verify(out):
         declaration_metadata_issues=declaration_metadata_issues,
         near_duplicate_parameter_pairs=near_duplicates,
         native_controls_exact=extra_controls,all_actual_parameters_and_row_hashes_verified=True,
+        matched_ocean_epoch_controls_exact=matched_ocean_controls,matched_ocean_native_controls_exact=matched_ocean_native_controls,
         all_scores_physical_checks_and_adaptive_decisions_recomputed=True,row_hashes=row_hashes,
         protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),normal_atlas_comparison_commit='d3c7c0d',
         physics_or_atlas_adoption=False)

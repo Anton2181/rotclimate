@@ -1,3 +1,30 @@
+# NEW OCEAN PILOT DECLARED, ready to launch after commit
+
+UserlatestContinue; continueafterpushes. Coremilestone76adf7e pushed, defaults
+bitexact and91coretests pass. Newrunner/sourceepoch/preparer/genericverifier/
+publisher support implemented.26epoch/kernel/objective checks pass. Preflight
+480parent+70reference sources valid; refreshedthermalqsat maxdifference0.
+Plan calibration/ocean_profile_20261028/plan.json generated fromcommitted
+parentglobaljoint results. Report OCEAN_PROFILE_20261028.md. No Earthmodelrun
+atdeclaration checkpoint. Six bounded8-axis literalblocks(two winds4.5/3.5
+×legacy/uniformhydro/halfhydro) plus4controls ->70max actualruns. Oldbest
+legacy4.5candidateglobal01 archiveboundto oldwindglobal01 forexactNPZproof.
+
+AFTER declaration commit launch:
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 timeout --signal=TERM --kill-after=30s
+7200s .venv/bin/python -u scripts/ocean_profile_pilot.py --plan
+calibration/ocean_profile_20261028/plan.json --out output/ocean_profile_20261028
+> output/ocean_profile_20261028.log 2>&1
+Newrunnerrefusesuncommittedplan beforemodels. Nevereditfrozen4corefiles or
+newrunner/sourceepoch duringrun. Genericposthelpers notfrozen maybecorrected.
+Then verify_tradeoff_search, analyze_tradeoff_robustness,diagnose_tradeoff_water,
+plot_tradeoff_rainfall,plot_tradeoff_humidity,publish_tradeoff_search,organizer;
+completedreport/browser/checkout/portableQA, receipts,commit/pushandcontinue.
+Countersbeforepilot1809attempts/1805passes/4oldfailures. Do notcounttoyruns
+orzero-runreferenceaudits asactualEarth integrations. No climateadoption yet.
+Oldhistoricalverifiers mustuse theircodeepochaftercoretransition; newprotocol
+has explicitbefore/after4fileGitSHAproof andrefreshedthermalreference.
+
 # Latest implementation — hydrostatic ocean targets
 
 All preceding global/process publication committed/pushed30a925f. No current
