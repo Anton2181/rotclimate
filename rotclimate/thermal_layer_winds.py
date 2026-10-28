@@ -1,6 +1,6 @@
 """Experimental thermal-wind constraint for the two dry-mass branches.
 
-Isolated operator only; the coupled model does not select it yet. This does
+The coupled model selects this only through an explicit default-off flag. This does
 not solve vertical momentum, temperature, latent heating or equatorial flow.
 The caller must supply a common-pressure layer-mean temperature, not a raw
 terrain-cooled surface field. Horizontal gradients use the existing local
@@ -83,3 +83,43 @@ def project_thermal_branches(projector,desired_lower,shear):
         lower_dry_mass_fraction=eta,pressure_centroid_ratio=LOWER_CENTROID_SIGMA/UPPER_CENTROID_SIGMA,
         projection=projection,scope='Isolated kinematic operator; fixed thermal shear and stationary dry continuity, no coupled climate or rainfall result')
     return ThermalLayerWinds(lower,upper,certificate)
+
+
+def hydrostatic_thermal_shear(reference_temperature_k,surface_pressure_pa,cell_m,coriolis,*,lapse_k_km=6.):
+    """Integrate fixed-pressure temperature gradients between local centroids.
+
+    T(p)=max(A*(p/101325Pa)**kappa,200K), kappa=Rd*Gamma/g. A is the
+    modeled common-reference temperature, NOT terrain-cooled surface T. The
+    gradient is taken at fixed pressure first: grad_p(T)=indicator(T>200)*
+    (p/p0)**kappa*grad(A). Only then integrate over local pressure bounds.
+    Thus changing terrain/ps alone creates no thermal shear. Differentiating
+    a mean evaluated at moving sigma bounds would create a spurious term.
+    Constant environmental lapse, dry hydrostatic profile, fixed200K floor;
+    no independent energy or equatorial momentum solution is implied.
+    """
+    t=np.asarray(reference_temperature_k,float);ps=np.asarray(surface_pressure_pa,float)
+    if (t.ndim!=2 or min(t.shape)<3 or ps.shape!=t.shape or not np.isfinite(t).all()
+            or (t<=0).any() or not np.isfinite(ps).all() or (ps<=0).any()
+            or not np.isfinite(cell_m) or cell_m<=0 or not np.isfinite(lapse_k_km)
+            or not 0<=lapse_k_km<=10):
+        raise ValueError('Need positive matching common-reference temperature/pressure, spacing and lapse in[0,10]')
+    f=np.broadcast_to(np.asarray(coriolis,float),t.shape)
+    if not np.isfinite(f).all():raise ValueError('Need finite matching Coriolis field')
+    kappa=DRY_AIR_GAS_CONSTANT*(lapse_k_km/1000)/9.80665
+    log_lower=np.log(LOWER_CENTROID_SIGMA*ps/101325.)
+    log_upper=np.log(UPPER_CENTROID_SIGMA*ps/101325.)
+    if kappa==0:
+        integral=np.where(t>200.,np.log(LOWER_CENTROID_SIGMA/UPPER_CENTROID_SIGMA),0.)
+    else:
+        floor_crossing=np.log(200./t)/kappa
+        start=np.maximum(log_upper,floor_crossing)
+        width=np.maximum(log_lower-start,0.)
+        integral=np.exp(kappa*start)*np.expm1(kappa*width)/kappa
+    tx=np.gradient(t,axis=1)/cell_m;ty=-np.gradient(t,axis=0)/cell_m
+    coefficient=DRY_AIR_GAS_CONSTANT*integral*f/(f*f+EQUATORIAL_F**2)
+    return (-coefficient*ty,coefficient*tx),dict(
+        temperature_coordinate='common101325Pa reference; fixed-pressure gradient before moving-bound integration',
+        thermal_lapse_k_km=float(lapse_k_km),thermal_floor_k=200.,reference_pressure_pa=101325.,
+        minimum_reference_temperature_k=float(t.min()),maximum_reference_temperature_k=float(t.max()),
+        minimum_active_pressure_integral=float(integral.min()),maximum_active_pressure_integral=float(integral.max()),
+        fully_floor_limited_cells=int((integral==0).sum()))

@@ -262,6 +262,12 @@ class ClimateModel:
         if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
                 or params.moisture_wind_factor != 1 or params.wind_cap != 0):
             raise ValueError('Mass-balanced moisture requires flux form, no wind multiplier and no wind cap')
+        if not isinstance(params.moisture_thermal_layer_winds,(bool,np.bool_)):
+            raise ValueError('moisture_thermal_layer_winds must be boolean')
+        if params.moisture_thermal_layer_winds and (not params.moisture_reservoirs
+                or params.moisture_reservoir_temperature_profile!='environmental'
+                or params.moisture_thermal_height_km<=0):
+            raise ValueError('Thermal layer winds require independent reservoirs, environmental profile and positive lower thermal height')
         if not isinstance(params.moisture_two_layer,(bool,np.bool_)):
             raise ValueError('moisture_two_layer must be boolean')
         if not np.isfinite(params.moisture_upper_q_ratio) or not 0 <= params.moisture_upper_q_ratio <= 1:
@@ -782,6 +788,7 @@ class ClimateModel:
         self.layer_checks=[]
         self.column_thermo_checks=[]
         self.reservoir_checks=[]
+        self.thermal_layer_checks=[]
         if p.moisture_reservoirs:self.moisture_solver.reservoir_water=None
         dx = g.dx_m
 
@@ -1319,12 +1326,38 @@ class ClimateModel:
             tracer_mass=self.column_projector.mass if p.moisture_mass_tracer else None
             if self.column_projector is not None:
                 lower_u,lower_v=uq,vq
-                uq, vq, mass_info = self.column_projector.project(uq, vq)
+                thermal_branches=None
+                if p.moisture_thermal_layer_winds:
+                    from .thermal_layer_winds import hydrostatic_thermal_shear,project_thermal_branches
+                    coriolis=2.0*OMEGA*np.sin(np.radians(self.lat))*(-1.0 if p.retrograde else 1.0)
+                    # Tsl is the modeled common-height thermal reference. This
+                    # opt-in profile interprets it at101325Pa, smooths on that
+                    # common reference, then differentiates at fixed pressure.
+                    reference_temperature=gauss(Tsl+273.15,500.0/g.cell_km)
+                    shear,thermal=hydrostatic_thermal_shear(reference_temperature,
+                        101325.*self.column_projector.mass,dx,coriolis,
+                        lapse_k_km=p.moisture_reservoir_lapse_k_km)
+                    thermal_branches=project_thermal_branches(self.column_projector,(lower_u,lower_v),shear)
+                    uq=.25*thermal_branches.lower[0]+.75*thermal_branches.upper[0]
+                    vq=.25*thermal_branches.lower[1]+.75*thermal_branches.upper[1]
+                    mass_info=dict(thermal_branches.certificate['projection'])
+                    self.thermal_layer_checks.append(dict(thermal_branches.certificate,**thermal,day=float(d),
+                        maximum_branch_speed_ms=max(float(np.hypot(*thermal_branches.lower).max()),float(np.hypot(*thermal_branches.upper).max())),
+                        maximum_thermal_shear_ms=float(np.hypot(*shear).max()),reference_smoothing_km=500.))
+                else:
+                    uq, vq, mass_info = self.column_projector.project(uq, vq)
                 mass_info['day'] = float(d)
                 self.column_mass_checks.append(mass_info)
                 if p.moisture_two_layer:
                     from .layer_transport import return_branches
                     layers,uq,vq=return_branches(lower_u,lower_v,uq,vq,p.moisture_upper_q_ratio)
+                    if thermal_branches is not None:
+                        # Retain the inherited provisional water weights for
+                        # pre-solve rain/drying diagnostics. The reservoir solve
+                        # replaces them with actual independent water fractions.
+                        layers=((layers[0][0],*thermal_branches.lower),(layers[1][0],*thermal_branches.upper))
+                        lower_u,lower_v=thermal_branches.lower
+                        uq=sum(weight*a for weight,a,b in layers);vq=sum(weight*b for weight,a,b in layers)
                     self.moisture_solver.set_layers(layers)
                     upper_u,upper_v=layers[1][1:]
                     dry_u=.25*lower_u+.75*upper_u
@@ -1712,6 +1745,13 @@ class ClimateModel:
             if p.moisture_reservoirs:
                 numerics['two_layer_transport'].update(upper_q_ratio=None,lower_water_fraction=None,
                     humidity_profile='independently solved layer water; old fixed ratio inactive')
+        if self.thermal_layer_checks:
+            numerics['thermal_layer_winds']=dict(steps=self.thermal_layer_checks,
+                max_scaled_dry_column_residual=max(c['max_scaled_dry_column_residual'] for c in self.thermal_layer_checks),
+                maximum_shear_error_ms=max(c['maximum_shear_error_ms'] for c in self.thermal_layer_checks),
+                maximum_branch_speed_ms=max(c['maximum_branch_speed_ms'] for c in self.thermal_layer_checks),
+                scope='Prescribed hydrostatic thermal shear and common dry-mass projection; no vertical momentum/energy solution')
+            numerics['all_checks_passed'] &= numerics['thermal_layer_winds']['max_scaled_dry_column_residual']<=1e-10
         if self.reservoir_checks:
             numerics['moisture_reservoirs']=dict(
                 all_layer_checks_passed=all(c['all_layer_checks_passed'] for c in self.reservoir_checks),
