@@ -1,0 +1,203 @@
+{
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "transport_reference_plan": "calibration/transport_diagnosis_20261028/reference_plan.json",
+  "reference_sources": "calibration/transport_diagnosis_20261028/reference_sources.json",
+  "fixed_background_scope": "Inherited WorldClim cloud and remote monsoon background fields remain fixed; conditional regional solver, not fully independent global forecast.",
+  "purpose": "Paired physical mechanism test of common-pressure hydrostatic shear and conservative layer projection; no calibration or automatic adoption.",
+  "parent_protocol": "output/transport_diagnosis_20261028_recovered/protocol.json",
+  "base_archives": {
+    "legacy": "output/ocean_profile_20261028/global04",
+    "hydro": "output/ocean_profile_20261028/global06"
+  },
+  "paired_base": {
+    "legacy_control": "legacy",
+    "hydro_control": "hydro",
+    "legacy_thermal": "legacy",
+    "hydro_thermal": "hydro"
+  },
+  "profiles": {
+    "legacy_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0,
+      "moisture_thermal_layer_winds": false
+    },
+    "hydro_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5,
+      "moisture_thermal_layer_winds": false
+    },
+    "legacy_thermal": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": false,
+      "moisture_ocean_rh_taper": 0.0,
+      "moisture_thermal_layer_winds": true
+    },
+    "hydro_thermal": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 3.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648,
+      "moisture_ocean_hydrostatic": true,
+      "moisture_ocean_rh_taper": 0.5,
+      "moisture_thermal_layer_winds": true
+    }
+  },
+  "profile_numerics": {
+    "legacy_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "hydro_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "legacy_thermal": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "hydro_thermal": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "legacy_control": "output/ocean_profile_20261028/global04",
+    "hydro_control": "output/ocean_profile_20261028/global06"
+  },
+  "maximum_integrations": 12,
+  "success": {
+    "maximum_mean_rain_loss_ratio": 0.95,
+    "maximum_mean_temperature_mae_increase_C": 0.25,
+    "aggregation": "Equal three regions, paired rainfall loss ratios; expose every regional regression; no individual rain veto.",
+    "interpretation": "Process support only. No independent validation or atlas adoption; later excluded-region and resolution tests required."
+  },
+  "physical_limits": {
+    "maximum_branch_speed_ms": 80.0
+  },
+  "predicted_signature": "Thermal vertical wind structure changes while exact dry continuity is retained; test whether this lowers actual rainfall error, not only native vector error.",
+  "fixed_approximations": "Common-reference modeled Tsl interpreted at101325Pa, smoothed500km; constant6K/km dry hydrostatic profile with200K floor; fixed-pressure derivative before local pressure integration; existing10degree Coriolis regularization. Existing provisional fixed-q weights for pre-solve rain/drying remain; actual reservoir water independently solved. No observed wind/humidity forcing.",
+  "counter_before": {
+    "attempts": 1886,
+    "passes": 1881,
+    "failures": 4,
+    "interruptions": 1
+  },
+  "declared_before_new_results": true,
+  "source_epoch": {
+    "before_commit": "2dd22be",
+    "after_commit": "7439e98",
+    "files": {
+      "rotclimate/config.py": {
+        "before_sha256": "81f16cb6adca18170888c2728d6c159cb6bdd7b98f0da56002697a06e9280e25",
+        "after_sha256": "559383c32ca163807ad9687144a926fd573e7954a67cf55820ffa037a41b51d7"
+      },
+      "rotclimate/model.py": {
+        "before_sha256": "639c31b231efa208ddb17c2f5d1f5f38a692a692f54517b2518d0b43d419fb53",
+        "after_sha256": "21245cdcbaad1d032ac9cae837dd1cd8ff54fd1d85573e23d5b01bd1f2d0f9eb"
+      },
+      "rotclimate/joint.py": {
+        "before_sha256": "401f4cb44428ab1b8122d2fdc7e0198dc9f0e1ffc3a0dc599c6bde2c3967492f",
+        "after_sha256": "ed30a8d04b498566c2c3c446663408fa71b528acfbdb1df02cb016ef75a9a076"
+      },
+      "rotclimate/thermal_layer_winds.py": {
+        "before_sha256": "dd5d6d6880ea6301eeefa29e065bc001add0e2a7e8d165f41d5f5eb1ce209ea9",
+        "after_sha256": "3dbca70ccaa429eee6f95cdf2c7cec676c88ffa2d4320f218640227cfc89613b"
+      }
+    }
+  },
+  "new_sources": [
+    "scripts/thermal_wind_pilot.py",
+    "scripts/analyze_transport_diagnosis.py",
+    "tests/test_thermal_layer_winds.py",
+    "tests/test_thermal_wind_pilot.py"
+  ]
+}

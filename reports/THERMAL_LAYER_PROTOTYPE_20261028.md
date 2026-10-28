@@ -1,4 +1,8 @@
-# Thermal shear with conservative layer winds — isolated prototype
+# Thermal shear with conservative layer winds — prototype history
+
+Continuation: the common-pressure construction and default-off coupled path are
+now implemented. The initial isolated milestone below is retained as history;
+see THERMAL_WIND_PILOT_20261028.md for the new paired experiment declaration.
 
 The completed six-case transport diagnosis found large errors in the vertical
 wind structure. In particular, PNW eastward wind weakens between the modeled
