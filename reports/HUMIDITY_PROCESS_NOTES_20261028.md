@@ -38,3 +38,11 @@ can require excessive lower-layer RH; applying a fixed surface RH changes
 column water. Those are different experiments, and must not be conflated.
 Any mechanism must leave actual interior water independently solved and retain
 numerical conservation, native errors and unchanged planetary settings.
+
+The inherited regional Earth setup also uses observation-derived latitude/month
+cloud and remote monsoon-descent backgrounds (earth.land_cloud and
+monsoon_descent). Keeping these fixed supports paired comparisons; it does
+not turn the simulator into an independent global forecast. The new marine
+RH mechanism uses modeled SST, and reference-profile observations remain
+outside its forcing. A future self-consistent background experiment should
+separate this issue from ocean humidity and record any lost regional skill.

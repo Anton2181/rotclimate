@@ -235,7 +235,12 @@ def publish(out):
             if file_hash(out/name/(region+'.json'))!=sha:raise ValueError('Changed native humidity source')
         target=data/f'{stem}_humidity.png';shutil.copyfile(source_image,target);pictures.append(target)
     source_hashes={r['name']+'/'+r['region']:file_hash(out/r['name']/(r['region']+'.json')) for r in progress['records']}
+    background_scope=None;scope_path=out/'background_input_scope.json'
+    if scope_path.exists():
+        background_scope=json.loads(scope_path.read_text())
+        if background_scope.get('literal_plan_unchanged') is not True or background_scope.get('actual_inputs_or_parameters_changed') is not False or background_scope.get('climate_integrations_added')!=0:raise ValueError('Unexpected background-input scope note')
     metadata=dict(review,plan=p,records=[portable_record(r) for r in progress['records']],source_record_sha256=source_hashes,
+        background_input_scope=background_scope,
         portable_record_scope='All prediction metrics and parameters; numerical summaries and compact per-step invariant checks. Full original runtime diagnostics remain in the hashed source-output JSON rows.',
         history=progress['history'],ranking_sensitivity=sensitivity,water_equation_diagnostic=water,rainfall_seasons=seasons,native_humidity_seasons=humidity,local_basin_diagnostics=basins,
         scientific_verification_sha256=file_hash(out/'scientific_verification.json'),
@@ -251,7 +256,8 @@ def publish(out):
              'Monthly regional rainfall on the complete scored masks, compared with observations and previous controls' if '_seasons' in picture.name else
              'Signed water-equation comparisons for declared objective, mean-climate and native-error selections' if '_water' in picture.name else
              'Ranking sensitivity to alternative weights and omitted development regions' if 'sensitivity' in picture.name else
-             ('Paired legacy-drying ablations and archived parent rainfall and score comparisons' if ablation else
+             ('Paired hydrostatic ocean-target laws, winds and coupled rainfall comparisons' if ocean else
+              'Paired legacy-drying ablations and archived parent rainfall and score comparisons' if ablation else
               'Wind-amplitude interactions with separated parent rain settings' if wind else
               'Actual parameter coverage, separated global and local trials, and error progress') if picture==coverage else
              'Regional combined errors for every completed global and local candidate')
@@ -263,6 +269,19 @@ def publish(out):
     design_text=p.get('publication_design_text',design_text)
     metadata_note=('<p class="note">The original declaration retains an anchor-selection bounds metadata error from a shallow copy. The literal trial grid was frozen before execution; verification reconstructs selection in the committed parent space. Runs, parameters and scores are unchanged. See the report and downloadable verification notes.</p>'
                    if verification.get('declaration_metadata_issues') else '')
+    if background_scope:
+        metadata_note+='<p class="note">The inherited regional setup retains observation-derived latitude/month cloud and remote monsoon-descent backgrounds, fixed across these comparisons. The new ocean target uses modeled SST and prescribed RH, without observed profile forcing. These are conditional regional tests, not independent global forecasts; the original declaration and inputs remain unchanged.</p>'
+    if ocean:
+        diagnosis=ROOT/'output/rainfall_diagnosis_20261028/archived_budgets.json'
+        if diagnosis.exists():
+            diagnostic=json.loads(diagnosis.read_text())
+            if (diagnostic['source_protocol_sha256']!=file_hash(out/'protocol.json') or diagnostic['source_review_sha256']!=file_hash(out/'review.json')
+                    or diagnostic['new_earth_integrations']!=0 or diagnostic['new_fit'] is not False):raise ValueError('Changed exploratory rainfall diagnosis')
+            for key,hashes in diagnostic['source_records'].items():
+                name,region=key.split('/')
+                if file_hash(out/name/(region+'.json'))!=hashes['row_sha256'] or file_hash(out/name/(region+'.npz'))!=hashes['arrays_sha256']:raise ValueError('Changed exploratory water-budget input')
+            shutil.copyfile(diagnosis,data/'ocean_profile_diagnosis.json')
+            metadata_note+='<p>The next milestone diagnoses seasonal transport in North India, Mexico and PNW before another broad parameter search. <a href="../../reports/RAINFALL_RECOVERY_PLAN_20261028.md">Rainfall recovery plan</a> · <a href="data/ocean_profile_diagnosis.json" download>Download exploratory seasonal water budgets</a>. These archived budgets add zero model runs and do not change acceptance decisions.</p>'
     section=f'''<!--{slug}-start--><section aria-labelledby="{slug}-h"><h2 id="{slug}-h">{title}</h2>
 <p>New research policy: numerical conservation, paired inputs, fixed Earth settings and declared actual parameters remain hard requirements. Rainfall, temperature, humidity, wind and sea-state prediction errors are explicit objectives. Modest regional regressions can accompany an average improvement; no individual prediction-error veto prunes the optimization path. Earlier acceptance decisions remain unchanged.</p>
 <p>{design_text} {review['actual_integrations']} actual integrations completed, {review['strictly_passed']} passed numerics and {review['failed_integrations']} failed. All 28 historical controls reproduce their saved fields exactly. This finite search does not certify a global optimum.</p>

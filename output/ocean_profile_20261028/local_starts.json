@@ -1,0 +1,74 @@
+{
+  "identity": "ec65820bd3575d56dc26e97d91e8accde04b6c639d1d0b97ee3bc29e334caf50",
+  "starts": [
+    "global06"
+  ],
+  "selection_rule": {
+    "sampler": "paired hydrostatic ocean pilot",
+    "seed": 2026102803,
+    "base2_exponent": 5,
+    "bounds": {
+      "eddy_rate": {
+        "range": [
+          0.4,
+          3.5
+        ],
+        "scale": "log"
+      },
+      "precip_tau_days": {
+        "range": [
+          3.0,
+          35.0
+        ],
+        "scale": "log"
+      },
+      "convective_rh": {
+        "range": [
+          0.5,
+          0.85
+        ],
+        "scale": "linear"
+      },
+      "westerly_speed": {
+        "range": [
+          2.5,
+          8.5
+        ],
+        "scale": "linear"
+      },
+      "subsidence_drying": {
+        "range": [
+          0.0,
+          0.019548865912820436
+        ],
+        "scale": "linear"
+      },
+      "monsoon_descent": {
+        "range": [
+          0.0,
+          0.015443602894513648
+        ],
+        "scale": "linear"
+      },
+      "moisture_ocean_hydrostatic": {
+        "range": [
+          0,
+          1
+        ],
+        "scale": "linear"
+      },
+      "moisture_ocean_rh_taper": {
+        "range": [
+          0.0,
+          0.5
+        ],
+        "scale": "linear"
+      }
+    },
+    "local_starts": 1,
+    "start_minimum_distance": 0.35,
+    "local_step": 0.12,
+    "local_poll_order": [],
+    "local_rule": "Fixed paired grid only; best-start bookkeeping, no local proposals."
+  }
+}

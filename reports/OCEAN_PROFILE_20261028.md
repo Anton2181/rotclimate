@@ -81,4 +81,75 @@ fractions. It is not the complete1967radiative-convective model. Reference
 gains cannot predict the coupled rainfall, temperature or wind response.
 Publish every candidate, numerical failure, regional damage and native metric.
 
-Status: declared; no new real-Earth integrations at declaration commit.
+Status: complete; source `bd27f58`, opt-in core `76adf7e`. All70actual runs pass strict numerics; no validation shortlist or adoption.
+
+## Scope of inherited Earth background inputs
+
+The new ocean target does not read the observed925hPa air/humidity profiles
+used in the reference comparison. The frozen plan's forcing sentence refers
+to that new boundary treatment; it must not be read as a claim that the whole
+regional Earth model is independent of observed climate backgrounds.
+
+Existing Earth grids carry a WorldClim-derived latitude/month cloud reference
+(from rain, temperature and vapor pressure) and a WorldClim-rain-derived
+remote monsoon-descent field. The retained cloud_longwave coefficient0.25
+and monsoon_descent0.015443602894513648 can use these prescribed backgrounds.
+They are held unchanged and included in actual case identities across all
+controls/candidates. Observed SST is loaded for evaluation, while the declared
+SST source remains model. These conditional regional tests therefore cannot
+establish fully independent global physical forecasting skill. Replacing such
+backgrounds is a separate future physical-model question, not an input change
+inside this pilot. The original frozen declaration remains untouched.
+
+## Completed coupled results
+
+| Trial | Wind m/s | Ocean mode | Objective | Mean rain/r39 | Mean T/r39 | Worst combined/r39 |
+|---|---:|---|---:|---:|---:|---:|
+| global01 | 4.5 | legacy | 1.12568 | 1.06867 | 1.03585 | 1.27665 |
+| global02 | 4.5 | hydrostatic_uniform | 1.18881 | 1.18705 | 1.07573 | 1.52247 |
+| global03 | 4.5 | hydrostatic_half | 1.10958 | 1.07424 | 1.04880 | 1.38032 |
+| global04 | 3.5 | legacy | 1.11455 | 1.04473 | 1.04379 | 1.27922 |
+| global05 | 3.5 | hydrostatic_uniform | 1.16462 | 1.14064 | 1.08268 | 1.52428 |
+| global06 | 3.5 | hydrostatic_half | 1.09941 | 1.04983 | 1.05696 | 1.38304 |
+
+At both winds, half taper improves the penalized objective versus legacy,
+but worsens mean rainfall and temperature errors at the same wind. Best
+objective global06 (half3.5) is1.09941 versus legacy3.5(global04)1.11455;
+mean rainfall1.04983 versus1.04473, and meanT1.05696 versus1.04379.
+This is a native-atmospheric diagnostic gain, not a rainfall breakthrough.
+Native squared normalized regret falls1.33243→0.83180; that is an objective
+component, not a claim that every native error or raw MAE falls37.6%.
+
+Half3.5 increases North India from278to319mm/year (761observed), and reduces
+PNW1050to1036mm/year (897observed). Mexico remains the largest regional
+combined regression. Hydrostatic uniform worsens the overall objective at
+both winds. Native/process improvements therefore do not establish better
+coupled precipitation skill or authorize adoption.
+
+The lower legacy wind itself improves mean rain error1.06867→1.04473 versus
+the previous4.5setting, while remaining4.5%above r39 on this seven-region
+screen. Best mean climate/mean rain selects global04; best objective/native
+selects global06. Sensitivity winners include global03/global04/global06.
+No candidate reaches the unchanged shortlist. All seven-region results are
+reused development evidence, not independent new global forecasting skill.
+
+Independent verification checks the source transition, refreshed thermal and
+retained RH references, every actual input/parameter and step certificate,
+28historical main controls/four native companions, and the additional seven
+matched legacy climate packets/one native companion. All matched packets are
+exact. Every scalar objective and fixed trial decision reproduces. Series
+counters: **1879actual attempts /1875passes /four preserved historical
+failures**. This round adds70passes, no numerical failure. No broader/full/
+fine/established/world stage ran; normal atlas climates/headlines stay unchanged.
+
+## Development decision after this round
+
+The user asked for a strategy review because rainfall gains have plateaued.
+Pause further broad coefficient sweeps. Next diagnose North India's dry
+monsoon, Mexico's seasonal timing/wet bias and PNW's coastal wet bias using
+common seasonal water budgets and native wind/humidity constraints. Prioritize
+explicit low/upper wind and donor-water exchange evidence before choosing a
+new transport/vertical-flow correction. Monthly means cannot recover exact
+instantaneous vapor fluxes, and native humidity/rain footprints must be aligned
+before inferring precipitation efficiency. Treat each physical hypothesis as
+a small falsifiable test with rainfall as a separate primary outcome.

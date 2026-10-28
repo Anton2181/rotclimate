@@ -1,3 +1,96 @@
+# CURRENT STRATEGY — user asked why rainfall remains stuck
+
+Latestuser: "it seems we've been stuck for a long time, what's our plan going
+forward?" This steers the ongoing autonomous work: shift to diagnosis-first,
+pause new broad coefficient sweeps; do NOTlaunch another32point search now.
+Continue development/commit/push, but judge actualrainfall separatelyfromnative
+humidity/objective gains. No permission question needed; this is strategy review.
+
+**Ocean pilot COMPLETE, sourcebd27f58/core76adf7e:**
+70actualruns/70strictpasses,6structurallyvalidprofiles,no shortlist/adoption.
+28historical controls+4native exact;7matchedoldwindclimates+1native exact.
+551frozen sources andsourceepoch/refrefresh/actualparams/everystep checked.
+Counter1879attempts/1875passes/4oldfailures. Bestmeanrain/climatelegacy3.5
+(global04):meanR1.044727,meanS1.044260,F1.114549. BestF/nativephysicalhalf3.5
+(global06):F1.099407,meanR1.049830,T1.056962,meanS1.053396,worst1.383038.
+Thus physicalhalfimprovesnativeweightedobjectivebutworsensrain/T atsamewind.
+NI278→319annual(761obs),PNW1050→1036(897obs);notarainfall breakthrough.
+No activemodeljob. Source4filesremain76adf7e. Allrawresults/protocolsfrozen.
+Sixfigures andcompleteJSONpublished newestresearchcompanion; background_input_
+scope.json clarifiesinheritedcloud/monsoondesc inputs; nofrozenplanrewrite.
+Scientific+diagnostic+publisherpipeline8467/68864 passed. Userhasnotseenlatest
+mainpairedfigureyet(optionalviewimage). No normalatlasclimate/headlinechange.
+
+**Publication QA PASSED:** browser29studies/92images/37downloads incldiagnosis;
+660checkoutassets exact;1136fileportablebundle/290links/launcher pass. Packagedrecoveryplan updatedandportablebundle/launcherreverifiedafterlastdoc
+change. Finalreceiptverification.jsoncomplete. Commit/pushcurrentround/results.
+No newlargecalibrationafterpush. Finishansweruserwithconcreteplan/evidence.
+
+**Exploratory seasonal diagnosis ALREADY DONE,0newEarthruns:**
+scripts/diagnose_rainfall_bottlenecks.py; output/rainfall_diagnosis_20261028/
+archived_budgets.json,thermodynamic_definitions.json. All9selectedrawrows/NPZs,
+fullscoringmasks/waterclosure verified. Rolesglobal01oldretained/global04best
+meanrain/global06bestF;regionsNI/Mexico/PNW. Inphysicalhalf3.5:
+NIJJA215vs515mmobserved;E146,advection+211,stormexchange−80,drying−62.
+MexicoJJA256vs246(correctamplitude),SON324vs158;peakOctober vsAugust.
+PNWJJA98vs110;wetseasonexcessseparately. Signedmodeltermsnotcausalshares;
+observedE/trueinstantaneousq*windcovariance unavailable. Nativehumidity and
+fullscoredrain masks differ, soNO rain/PW efficiencyratioacrossfootprints.
+Branchwinds/donorfluxeswerenotsaved; cannotreconstructfrommonthlymeans.
+Matcheduniformocean checkT0..30C,ps101325,RH.754746: newuniform/half targets
+remainbelowlegacyraincapacity atallpoints;differentdefinitions butno gross
+matchedstateovercapacityfailure. Do NOTclaimthermodynamicmismatchcausesbias.
+Thisisexploratorynotnewacceptanceorvalidation. SourceSHA/assumptionsinJSON.
+
+**Next boundedmilestone (NOT implemented/declared/run yet):**
+reports/RAINFALL_RECOVERY_PLAN_20261028.md givesfullplan andtables. Instrument
+actualpersteplower/upperwinds,layerwater,drymass/donorexchange,facevaporflux,
+stormexchange/raincomponents; alignP/PW/windstoSAMEnativefootprints/calendar.
+Only6regionaldiagnosticreruns:3regions×2fixedprofilesglobal04/global06. Require
+alloriginalclimateNPZarrays bitexact toproveinstrumentation-only. Explicitnew
+sourceepochbefore/afterGitproof andliteral6runplanBEFORE actualruns; countall6.
+No physics/parameterchangeinthesediagnosticruns. Startfromsavedcases/current
+core, supplementnativeMexicoreferenceonlyifmissinganddeclaredexplicitly.
+Sourcefunctionsreturnflow usesfixedseedqratio.2 whileactualindependentq differs;
+needsdiagnosis, notalreadyprovedbug. Isotropicstormmixing alsoexportsNIwaterin
+JJA. Chooseamongtransport/verticalreturn,stormredistribution,convection only
+AFTERdiagnosticsevidence. Onehypothesisatime, smallpairedtest, predictedprocess
+signature. Actualrainprimary;temperature/conservationguards;regiontradeoffs
+allowedandvisible. Resume broadcalibrationonlyaftercredibleprocesswin.
+Aftertwofailedwell-testedhypotheses,reassesswater/circulationarchitecture.
+InheritedWorldClimcloud/remoteheatingremainconditionalbackgrounds; do notclaim
+fullyindependentglobalforecasting. No oldacceptancerule/outcomechanges.
+
+Currentnewestfullpublication30a925f, kernel76adf7e, pilotdeclarationbd27f58;
+finaloceanresultscommitfollows. Rootsharedcwd/worktree/repo asbelow. Developer
+forbidsnewagentsunlessrequested; noneused. No active modeljobs. ServerPID593
+port8766 stillserves.batatlases; execsession72964. Avoidrerunningoldverifiers
+undernewcore; useoldcodeepoch. Currentoceanverifierworkswithexplicittransition.
+
+Historicalhandoffbelow maycontainoutdatedACTIVE labels:
+
+# ACTIVE OCEAN PILOT — sourcebd27f58
+
+Actualjobrunning PID36621(workers36631/36632),execsession31623;
+log output/ocean_profile_20261028.log. Declarationcommitted/pushedbeforeall
+integrations; untouched. First21controlscomplete, moreactive. No currentfailure.
+Do notedit core4files, ocean_profile_pilot.py, ocean_source_epoch.py, plan
+or anyprotocol.sources whileactive. Genericposthelpers notfrozen maybefixed.
+Aftercompletion run allverification/diagnostics/publication/.batQA, commit/push.
+Basecounter1809/1805/4; max70actualnewruns. Keepuserupdated/figures asproduced.
+
+IMPORTANT inputscopeclarification discoveredreadingoldsource:
+Earth grids use WorldClim-derived cloud_ref (rain/T/vaporpressure bylatitude)
+andremote monsoon descent field (fromglobalobservedlandrain). Current
+cloud_longwave.25, monsoon_descent.01544 useinheritedbackgrounds. Allfixed,
+casehashbound. Planpurpose sentenceaboutnoT/qforcing is aboutNEW ocean
+mechanism, not wholeEarthregionalsimulator. NewtargetusesmodeledSST,
+notobserved925T/shum fromreferenceaudit. No inputchange ornewcriteria.
+Report OCEAN_PROFILE_20261028.md and output/background_input_scope.json
+clarify; originalfrozenplan untouched. Furtherglobalphysicalindependence
+needsseparatebackgroundtest, notsilentchangeinthispilot. Do notclaimwhole
+modelisfirst-principles/pureforecast. ThisisnotanEarthnumericalfailure.
+
 # NEW OCEAN PILOT DECLARED, ready to launch after commit
 
 UserlatestContinue; continueafterpushes. Coremilestone76adf7e pushed, defaults
