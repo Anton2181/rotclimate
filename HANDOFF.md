@@ -1,3 +1,75 @@
+# ACTIVE — shared-grid multilevel moist thermodynamics complete; Earth reference audit next
+
+Userexplicitcontinueafterpushes. Useraskedhowisgoing midtask; answeredhonestly:
+dryfeedbackworks, resolvingoldboxmismatch; no newEarthcalibration/rainaccuracygain.
+Continuedafter f69b256(verticalstate) and1ff1bba(transientdryfeedbackpublication)
+into fullresolvedmoisture/phase milestone. Noagents. Repo/work/pushsame.
+Managedruntime/policy/referencechecked; preserveproxy/TLS. NoactiveEarthjob.
+
+Newmultilevel_transport.py genericpositivefixedlayerdonorMmatrix, actualstaggered
+horizontalfluxes, verticaldryflux=-cumsumhorizontaldiv, rigidtop/surfacecolumncheck,
+source/reaction/externalqexplicit. Matrix+actualfacebudgetchecked.9tests recover
+old2layerexactlimit,uniformq,stratmass,up/downmultidonors,analyticflows,invalid.
+Newmultilevel_phase.py generalizesexistingfalling_water_energy._equilibrium to
+allcells. RaincarriesactualTdownward. Cellheat=g Lin(edgeabove-z)+g Lout(z-edgebelow),
+insidephase root withextra=g Lin cellwidth,beta=g(z-edgebelow),notappendedafter.
+Allpotentialreleaseaslocalterminaldragheat;groundrainexportsliquidenthalpy.
+7tests old2celllimit,multilayeractualenergy/water,fullreevap,zeroheight,invalid.
+Newmultilevel_moist.py composesnativevapor+MSEtransport andphase, physicalvapor
+sourceenthalpy/heating/boundarybooked, nosecondadiabat.2composition/source tests.
+FULL217 focusedpass39.79s (43newthisturn =14vertical+11wave+9transport+7phase+2moist).
+
+Scientificresults:
+- scripts/audit_multilevel_adiabatic.py actual1simplicitvsindependentdryderivatives.
+Uniformrho/linearref ratioscos2(pi/(2n)): .99039at16,.99759at32. Stratifiedref
+ascent/descent1.03124/.95317at16,1.01764/.97845at32,1.00932/.98970at64,
+1.00478/.99497at128. Donorbackground bias decreaseswithverticalresolution;
+doNOT fitamultiplierorclaimuniform99.76%ratioappliestostratifiedcase.
+- demo_multilevel_transport.py 32levelsH15km, drythermalanomalygenerateswind6h,
+thenfixedwindpassivemoist24h8x3hsteps. Watererror1.49e-16, drycolumn1.37e-15.
+No phase/rain. Finalactualdonorflux+laststepsourcefields independentlychecked.
+- demo_multilevel_moist.py 32levelsH8km shallowwarm/supercooledliquidtest, ps101325,
+θbase300,N.01; pressure-derivedmassdp/g. Samegeneratedwind6hthenfixed24h,
+4timesteps3/1.5/.75/.375hours=120steps/240scalarsolves. Finestmeanrain.212546mm,
+max2.888607,minT245.85K,max301.05K; E+rain andW+rainerrors~2.3e-15. T_RMSvs
+.375h .033327/.020340/.006783K; rainRMS.092539/.054854/.018332mm. Boundaries
+reflect andheldflowproducesboundaryrainmaxima:labonly,NOTgeographicclimate.
+No ice/cloudstorage/dropkinetic/radiation/momentumfeedback. MoiststateNOTdrivingU.
+
+Output/multilevel_transport_20261028 verification(passive),moist_verification,
+publication andmilestonechecks. ReportsMULTILEVEL_TRANSPORT/MULTILEVEL_MOIST.
+Bothfigures shownuser; current3rdmilestone .bat research40studies/124images/
+48downloads.703checkoutassetsbyteexact;1196portablefiles/384links/freshlauncher;
+allbrowserkeyboard/hash/light/dark/mobilepass. Latestassetsbyte-matchZIP.
+217tests receipts/sourcehashesbound;682oldexperimentalfilesunchanged. NoEarth
+integrations;1934attempts/1929strict/4oldfails+1oldinterruption. Earthr39/main
+atlasworld/biome/popdata unchanged. No rainfallgain or globaloptimum claim.
+
+NEXTongoingintent: checknewEarthlikestability/verticalmodepriorsagainst EXISTING
+cachedreanalysisbeforemorephysicsfitting. transport_reference.acquire(root,plan,
+fetch=False) loadsprovenance-checkedfull17pressurelevelhgt1981-2010, no download.
+Plan calibration/transport_diagnosis_20261028/reference_plan.json. Latestoriginal
+controls output/divergent_thermal_20261028/hydro_control/{north_india,mexico,
+pacific_nw}_transport.npz containstrictnative_land/ocean_mask andnative_area.
+NativefootprintspriorIndia11land/Mexico1land/PNW3ocean; reuseddevelopment,sparse,
+notheldout/newvalidation. CaninferlayermeanvirtualT=G dh/(RD log pb/pt),then
+virtualthetaatgeometricmidp,N2=g dlogtheta/dzmid from925hPa through100hPa
+(full17hgtlevelsavailable). Usepressureedgeheights/dp/gdensities,positiveN2only
+(REPORTunstableinvalidcases,no clipping). build_vertical_state supportsnonuniform
+cells/rho/N2. CompareobservedpartialcolumnmodeswithconstantN=.01onEXACTsame
+height/density,NOT partial925-100columncagainstunmatchedfull15kmc. Thisisprior/
+structurediagnosticnotobservedwind/humidityforcingorfitting;0Earthintegrations.
+Needhashcacheinputs+masks, report+plot/publishifuseful. No neednewnetworkfetch.
+
+Remainingbiggap: consistentnonlinearmoistthermalpressuremomentumfeedback/
+mechanicalenergy onsharedgrid. Currentdrywavebinterfaces+Phi andNLmoistMSEcells
+areseparateproofs;merelyinterpolatingdoesnotprovefullenergetics. Donotdouble
+countadiabaticc2div alongsideMSEascentcooling; accountreservoirs,radiation,
+incomingstates,terrain/compressiblelimits. BeforeEarthpilotpredeclarebounded
+meanlocation/monthrainlosswithregionaltradeoffs,temperature/physics+heldoutguards.
+
+Earlierhandofffollows:
+
 # ACTIVE — dry thermal-state/wind feedback published; multilevel moisture next
 
 Userexplicitcontinueafterpushes. Noagents. Repo/work/pushsame. Firstcoref69b256
