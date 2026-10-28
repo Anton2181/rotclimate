@@ -1,3 +1,61 @@
+# CURRENT — regional dry + native-face tracer foundations COMPLETE
+
+User Continue. Continued after core milestone0839e21 push to second water/site
+milestone. Repo /workspace/rotclimate branchwork push HEAD:claude/friendly-turing-43ygeu.
+No agents; managedruntime checkedrunning/unrestricted. No active modeljob.
+
+NEW isolatedrotclimate/regional_baroclinic.py: regionalCgrid massweights,
+closedwall/passivenormalimpedance, pressure/transportadjoints insqrtM coords,
+weightedskewCoriolis, exactenergyincludingpassiveboundaryexport.17tests.
+Newisolatedrotclimate/regional_mode_tracer.py retainsNATIVEfaceflux (doNOT
+averageintoexistingcellwindReservoirTransport). Twolayeropposingdryflux exact,
+verticalexchange fromdrycontinuity, donorlowerorupperq, boundaryactualincomingq/
+outgoinglocalq, positiveprescribedtracerremoval, sparseMmatrix+actualfacechecks.
+9newtests (source/lossboxes,analyticopposedupwind,uniformqmassgradient,manufactured
+bothdonors,budgets,invalid/stalegeometry). All35foundationtests+previous78=113pass
+in41.1s. Existingperiodic/coupledmodel/config/jointsourcesunchangedthisturn.
+
+Core0839e21 containsdrysource/test/report/demo/receiptplots. Newwater/report/
+demo+atlaspublication isnextmilestone. Filesreports/REGIONAL_BAROCLINIC_20261028.md,
+REGIONAL_MODE_TRACER_20261028.md; output/regional_baroclinic_20261028/verification.json
+(dry) andtracer_verification.json (water), milestone_verification.json (finalQA).
+Drydemo: fixed3cases flatwall/masswall/masspassive, identicalq, synthetic3400m
+ridge affectsONLYexp(-h/8000)mass, Earthf30Nplusgeographicnorthing, c50m/s,
+5daymomentum/20daythermaldrags. 5isolateddrysolvesincl200/100/50km refinement,
+RMSagainst50km1.114→.379m2/s2, energyerror<5.3e-15. Passiveedgesfirstorder
+normalRobinimpedance,NOTtransparentrotating/openEarthBC; exteriornormalfaces
+nomomentumdegree/storageandexcludedrotation. No terrainmetric/blocking/modes.
+Waterdemo2passivesolves onEXACTsaveddryfaces, M=10000kg/m2*relativemass,
+2mm/daylowersupply,10daytracerremoval,externallower/upperq.009/.0025. Native
+qsolvedindependently,nofixedratio/saturationreset; transferactualdonor. Independent
+waterequationerror<4.3e-15relative,columnbudget<1.6e-12mm/day-cell-sum.
+TracerremovalISNOTRAINFALL; nolatentheatingfeedback. No rainfallgain/adoption.
+ZEROEarthruns; counterunchanged1934attempts/1929strict/4historicalfails+1old
+interruption. Prior682divergentfrozenfiles allunchanged. Older634separatedmanifest
+has3model/config/jointfilesalreadyhistoricallysupersededBEFOREthisturn;631match,
+zerochangesfromthisturn; receiptaccuratelyrecordsthis,don'trewriteoldmanifest.
+
+Research .bat atlas new34thregional-baroclinic study with3figures+fullJSON.
+Publisher scripts/publish_regional_baroclinic.py validates source/imagehashes,
+recomputesdryenergyviafrozendemoraudit, actualwaterdonorfaceflux+budgets.
+QAallpassed:34studies/115images/42downloads,keyboard/hash/light/dark/mobile,
+688checkoutassetsbyteexact,1172portablefiles/351links/freshlauncher. Latest
+reports/siteJSON/imagesbyte-identicalinportableZIP. All3generatedplotsshownorlinked
+user. NormalEarthr39/world/biome/populationclimatesunchanged. IgnoredportableZIP.
+
+NEXT physics: physicallyaccounted atmosphericheatingprojection+moistlatent
+budget, background/incominglateralstates,terrainmetrics/blocking,then separately
+predeclaredboundedcoupledrainpilot. Existinggroundtemperature/empiricalEBM
+corrections arenot an atmosphericheatingrate; doNOT useTcontrast asQwithoutenergy
+accounting. Passivewaterremovalcannotbecome latentheatwithoutcondensationand
+subcloudevaporationbudget. Needknownpressure/modeheatingprojectionconsistent
+withmodeenergy, sharedphysicalunits. DoNOTtunec/dragheatingonregiongains oruse
+observedwind/raininteriorforcing. Linearoperatorsuniquesteadyforfixedinputs,
+NOTglobaloptimumofnonlinearclimatecalibration. Continueallowingregionalrain
+tradeoffs/meanloss+temperatureguards andexcluded/resolutionchecksbeforeadoption.
+
+Previoushandofffollows:
+
 # CURRENT — regional dry operator complete; native-face water coupling next
 
 User Continue. No agents. Repo /workspace/rotclimate branch work; push

@@ -104,6 +104,8 @@ def main():
              ROOT/'reports/SEPARATED_THERMAL_20261028.md',
              ROOT/'reports/DIVERGENT_THERMAL_20261028.md',
              ROOT/'reports/BAROCLINIC_MODE_20261028.md',
+             ROOT/'reports/REGIONAL_BAROCLINIC_20261028.md',
+             ROOT/'reports/REGIONAL_MODE_TRACER_20261028.md',
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
