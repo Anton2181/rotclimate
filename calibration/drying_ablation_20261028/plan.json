@@ -1,0 +1,598 @@
+{
+  "declared_before_new_results": true,
+  "purpose": "Test whether retained empirical subsidence/monsoon column sinks overlap explicit donor vertical transport. Separately switch off each closure and both at two separated parent settings. This is an ablation, not a presumed correction or calibration gain.",
+  "physics": "calibration/local_accuracy_20261023/r39_params.json",
+  "archive": "output/constrained_blend_20261025/development/g0.9995_a1",
+  "parent": "output/wind_interaction_20261028/review.json",
+  "parent_source_commit": "4e938621789a70f9ad41e75780c9ad840eb62f33",
+  "regions": [
+    "north_india",
+    "iran_plateau",
+    "iberia",
+    "japan",
+    "mexico",
+    "east_australia",
+    "pacific_nw"
+  ],
+  "cell_km": 56.0,
+  "profiles": {
+    "reference": {},
+    "transport_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true
+    },
+    "column_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection"
+    },
+    "environment_control": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 7.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0
+    },
+    "global01": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.0,
+      "monsoon_descent": 0.015443602894513648
+    },
+    "global02": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.0
+    },
+    "global03": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 15.532421910244794,
+      "convective_rh": 0.8098909563459455,
+      "subsidence_drying": 0.0,
+      "monsoon_descent": 0.0
+    },
+    "global04": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 10.333762919318055,
+      "convective_rh": 0.6930062659159302,
+      "subsidence_drying": 0.0,
+      "monsoon_descent": 0.015443602894513648
+    },
+    "global05": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 10.333762919318055,
+      "convective_rh": 0.6930062659159302,
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.0
+    },
+    "global06": {
+      "flux_convergence": 0.0,
+      "moisture_transport_form": "flux",
+      "eddy_moisture_scheme": "conservative",
+      "moisture_mass_balance": true,
+      "moisture_thermal_height_km": 1.0,
+      "moisture_two_layer": true,
+      "moisture_upper_q_ratio": 0.2,
+      "moisture_mass_tracer": true,
+      "moisture_reservoirs": true,
+      "moisture_reservoir_mixing_days": 0.0,
+      "moisture_reservoir_rain_scheme": "column-convection",
+      "westerly_speed": 4.5,
+      "moisture_reservoir_temperature_profile": "environmental",
+      "moisture_reservoir_lapse_k_km": 6.0,
+      "eddy_rate": 3.5,
+      "precip_tau_days": 10.333762919318055,
+      "convective_rh": 0.6930062659159302,
+      "subsidence_drying": 0.0,
+      "monsoon_descent": 0.0
+    }
+  },
+  "profile_numerics": {
+    "reference": {},
+    "transport_control": {
+      "moisture_relaxation": 0.05,
+      "picard_iters": 1024
+    },
+    "column_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "environment_control": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global01": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global02": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global03": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global04": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global05": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    },
+    "global06": {
+      "moisture_relaxation": 0.1,
+      "picard_iters": 1024
+    }
+  },
+  "profile_control_archives": {
+    "reference": "output/wind_interaction_20261028/reference",
+    "transport_control": "output/wind_interaction_20261028/transport_control",
+    "column_control": "output/wind_interaction_20261028/column_control",
+    "environment_control": "output/wind_interaction_20261028/environment_control",
+    "source_anchor1": "output/wind_interaction_20261028/global01",
+    "source_anchor2": "output/wind_interaction_20261028/global07"
+  },
+  "eligible_profiles": [
+    "global01",
+    "global02",
+    "global03",
+    "global04",
+    "global05",
+    "global06"
+  ],
+  "maximum_finalists": 0,
+  "require_column_mass_balance": true,
+  "circulation_regions": [
+    "north_india",
+    "iberia",
+    "east_australia"
+  ],
+  "circulation_groups": {
+    "north_india": "land",
+    "iberia": "ocean",
+    "east_australia": "land"
+  },
+  "circulation_reference_plan": "calibration/circulation_audit_20261026/plan.json",
+  "physical_definition": "Allow only the parent four shared rain/wind coefficients and the two declared drying coefficients to differ from the environmental control. Keep all other actual parameters and all planetary properties fixed. Do not reset humidity or alter conservative donor transport.",
+  "control": "Four exact profiles on seven regions precede all fixed paired ablations; all archived main fields and native companions must reproduce exactly.",
+  "screen": "Newpolicy: assess hard physical/structural eligibility separately from observational skill. Noindividualregion, nativehumidity orSST prediction-errorveto duringoptimization. Penalize average andregional/native/oceanregret explicitly; report every raw error and original strict-gate violation ascontext in publication. Missing/nonfinite scores, unpairedcases/footprints and changedfixedparameters failclosed. No alteration ofoldcampaignresults.",
+  "advance": "No local refinement or adaptive extension. Same shortlist and prospective broader validation requirements as parent; no automatic adoption.",
+  "publication": "Retain each ablation, numerical failures, native errors, regional damage and archived parent anchors. Parent comparisons are not new integrations.",
+  "require_two_layer_transport": true,
+  "require_mass_tracer_transport": true,
+  "map_control": "environment_control",
+  "publication_stem": "drying_ablation",
+  "publication_parameter": "eddy_rate",
+  "publication_labels": {
+    "reference": "reference",
+    "transport_control": "transport_control",
+    "column_control": "column_control",
+    "environment_control": "environment_control",
+    "global01": "global01",
+    "global02": "global02",
+    "global03": "global03",
+    "global04": "global04",
+    "global05": "global05",
+    "global06": "global06",
+    "global07": "global07",
+    "global08": "global08",
+    "global09": "global09",
+    "global10": "global10",
+    "global11": "global11",
+    "global12": "global12",
+    "global13": "global13",
+    "global14": "global14",
+    "global15": "global15",
+    "global16": "global16",
+    "global17": "global17",
+    "global18": "global18",
+    "global19": "global19",
+    "global20": "global20",
+    "global21": "global21",
+    "global22": "global22",
+    "global23": "global23",
+    "global24": "global24",
+    "global25": "global25",
+    "global26": "global26",
+    "global27": "global27",
+    "global28": "global28",
+    "global29": "global29",
+    "global30": "global30",
+    "global31": "global31",
+    "global32": "global32"
+  },
+  "require_column_thermodynamics": false,
+  "require_moisture_reservoirs": true,
+  "require_reservoir_humidity": true,
+  "humidity_regions": {
+    "iberia": "ocean"
+  },
+  "humidity_control": "transport_control",
+  "humidity_max_ratio": 1.02,
+  "publication_date": "20261028",
+  "require_reservoir_rain_scheme": "column-convection",
+  "extra_circulation_regions": [
+    "pacific_nw"
+  ],
+  "extra_circulation_reference_plan": "calibration/pnw_transport_20261027/plan.json",
+  "extra_circulation_control": "column_control",
+  "extra_circulation_groups": {
+    "pacific_nw": "ocean"
+  },
+  "extra_circulation_max_ratio": 0.9,
+  "extra_humidity_max_ratio": 1.02,
+  "extra_circulation_reference_archive": "output/pnw_transport_20261027/reference.npz",
+  "require_environmental_partition": true,
+  "environmental_reference_review": "output/environmental_reference_20261027_verified/review.json",
+  "parent_epoch": {
+    "review_sha256": "ff2edda5ae7c25031e3e4b3b7398bfd0805504839f1e9668c9057eb84e8d97f5",
+    "protocol_sha256": "4fcca334cb6cd402b210f0fb1e73baa90c2cdfb111d2f8baee37bb5a673e6390",
+    "environmental_control_archive": "output/environmental_partition_20261027/environment_600"
+  },
+  "publication_parameters": [
+    "eddy_rate",
+    "precip_tau_days",
+    "convective_rh"
+  ],
+  "control_names": [
+    "reference",
+    "transport_control",
+    "column_control",
+    "environment_control"
+  ],
+  "candidate_numerics": {
+    "moisture_relaxation": 0.1,
+    "picard_iters": 1024
+  },
+  "parent_protocol": "output/wind_interaction_20261028/protocol.json",
+  "base_candidate": {
+    "flux_convergence": 0.0,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "moisture_mass_balance": true,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_two_layer": true,
+    "moisture_upper_q_ratio": 0.2,
+    "moisture_mass_tracer": true,
+    "moisture_reservoirs": true,
+    "moisture_reservoir_mixing_days": 0.0,
+    "moisture_reservoir_rain_scheme": "column-convection",
+    "westerly_speed": 7.5,
+    "moisture_reservoir_temperature_profile": "environmental",
+    "moisture_reservoir_lapse_k_km": 6.0
+  },
+  "fixed_model": {
+    "flux_convergence": 0.0,
+    "moisture_transport_form": "flux",
+    "eddy_moisture_scheme": "conservative",
+    "moisture_mass_balance": true,
+    "moisture_thermal_height_km": 1.0,
+    "moisture_two_layer": true,
+    "moisture_mass_tracer": true,
+    "moisture_reservoirs": true,
+    "moisture_reservoir_mixing_days": 0.0,
+    "moisture_reservoir_rain_scheme": "column-convection",
+    "moisture_reservoir_temperature_profile": "environmental",
+    "moisture_reservoir_lapse_k_km": 6.0
+  },
+  "design": {
+    "sampler": "paired drying ablation",
+    "seed": 20261028,
+    "base2_exponent": 5,
+    "bounds": {
+      "eddy_rate": {
+        "range": [
+          0.4,
+          3.5
+        ],
+        "scale": "log"
+      },
+      "precip_tau_days": {
+        "range": [
+          3.0,
+          35.0
+        ],
+        "scale": "log"
+      },
+      "convective_rh": {
+        "range": [
+          0.5,
+          0.85
+        ],
+        "scale": "linear"
+      },
+      "westerly_speed": {
+        "range": [
+          4.5,
+          8.5
+        ],
+        "scale": "linear"
+      },
+      "subsidence_drying": {
+        "range": [
+          0.0,
+          0.019548865912820436
+        ],
+        "scale": "linear"
+      },
+      "monsoon_descent": {
+        "range": [
+          0.0,
+          0.015443602894513648
+        ],
+        "scale": "linear"
+      }
+    },
+    "local_starts": 1,
+    "start_minimum_distance": 0.35,
+    "local_step": 0.12,
+    "local_poll_order": [],
+    "local_rule": "No local proposals; fixed paired ablation only."
+  },
+  "global_names": [
+    "global01",
+    "global02",
+    "global03",
+    "global04",
+    "global05",
+    "global06"
+  ],
+  "objective": {
+    "regional_free_ratio": 1.05,
+    "regional_weight": 0.25,
+    "native_weight": 0.05,
+    "ocean_weight": 0.05,
+    "definition": "Equal-region mean0.5*(TMAE/Tref+rainloss/rainref), plus0.25mean(max(regional_combined-1.05,0)^2), plus0.05mean(max(native_normalized_regression,0)^2), plus0.05mean(max(ocean_normalized_regression,0)^2). Native wind,PW,qshape errors versus fixed transportcontrol(NI,Iberia,EA) or correctedoriginalwindcontrol(PNW), denominatorsmax(baseline,.5m/s,1mm,.02qratio) respectively. Ocean error versusr39/max(baseline,.1C). Denominator floors are predeclared normalization scales, NOT measured reference uncertainty. No skill error vetoes physical eligibility."
+  },
+  "validation_shortlist": {
+    "mean_combined_max": 0.995,
+    "mean_rain_max": 0.99,
+    "mean_temperature_max": 1.02,
+    "worst_region_max": 1.15,
+    "scope": "At mosttwo candidates may advance to separately frozen broader validation; these are research screening thresholds, not adoption. Fifteenpercent regional combined cap permits bounded tradeoffs, unlike earlier2percentveto. Do not change after outcomes. All scores/failures remain visible."
+  },
+  "policy_version": "tradeoff_research_v1_drying_ablation_20261028",
+  "maximum_seconds": 7200,
+  "planned_maximum_integrations": 70,
+  "source_policy": "Commitplan/script/tests before any new Earth integration. Freeze allparent protocol scientificsources plusnewsource/plan/controlrows/arrays, recheck everyprofile andcompletion. Preserve failures. No simultaneous edits to frozen sources. Eachactualintegrationincludingcontrols counts; cached local proposals do not.",
+  "generator_sha256": "b30052911b693a162b9ca9c45e022bbfd4561e8a7dd4ec559c8f34b4ed5e84ca",
+  "publication_title": "Legacy drying and explicit vertical transport",
+  "drying_ablation": {
+    "parent": "output/wind_interaction_20261028",
+    "parent_identity": "c338751add2cddc2d14a292c0a2682fb3ed6e38173158be2be4f2879c24004e8",
+    "parent_review_sha256": "43f5dbbd112614c0f8c0f9fdbdadf01ee92ca9448e1338fb6430b15aa8e550f1",
+    "parent_progress_sha256": "3e5abda7d1f15a3bec9c1dd5248fe898fc1cbd01103c564c7cc7ce3dbb883dcd",
+    "parent_verification_sha256": "1ec88264cc96981d109ffe43d3826919ca7641b72a8605ae06454e692e327cd3",
+    "anchor_selection": {
+      "sampler": "paired wind bracket",
+      "seed": 20261028,
+      "base2_exponent": 5,
+      "bounds": {
+        "eddy_rate": {
+          "range": [
+            0.4,
+            3.5
+          ],
+          "scale": "log"
+        },
+        "precip_tau_days": {
+          "range": [
+            3.0,
+            35.0
+          ],
+          "scale": "log"
+        },
+        "convective_rh": {
+          "range": [
+            0.5,
+            0.85
+          ],
+          "scale": "linear"
+        },
+        "westerly_speed": {
+          "range": [
+            4.5,
+            8.5
+          ],
+          "scale": "linear"
+        },
+        "subsidence_drying": {
+          "range": [
+            0.0,
+            0.019548865912820436
+          ],
+          "scale": "linear"
+        },
+        "monsoon_descent": {
+          "range": [
+            0.0,
+            0.015443602894513648
+          ],
+          "scale": "linear"
+        }
+      },
+      "local_starts": 2,
+      "start_minimum_distance": 0.35,
+      "local_step": 0.12,
+      "local_poll_order": [],
+      "local_rule": "No local refinement in this small interaction study; empty poll order. Common runner records the best point only; it proposes no local trials."
+    },
+    "anchors": [
+      "global01",
+      "global07"
+    ],
+    "retained": {
+      "subsidence_drying": 0.019548865912820436,
+      "monsoon_descent": 0.015443602894513648
+    },
+    "variants": {
+      "subsidence_off": {
+        "subsidence_drying": 0.0
+      },
+      "monsoon_off": {
+        "monsoon_descent": 0.0
+      },
+      "both_off": {
+        "subsidence_drying": 0.0,
+        "monsoon_descent": 0.0
+      }
+    },
+    "grid": [
+      {
+        "name": "global01",
+        "basin": 1,
+        "parent_profile": "global01",
+        "variant": "subsidence_off",
+        "changes": {
+          "subsidence_drying": 0.0
+        }
+      },
+      {
+        "name": "global02",
+        "basin": 1,
+        "parent_profile": "global01",
+        "variant": "monsoon_off",
+        "changes": {
+          "monsoon_descent": 0.0
+        }
+      },
+      {
+        "name": "global03",
+        "basin": 1,
+        "parent_profile": "global01",
+        "variant": "both_off",
+        "changes": {
+          "subsidence_drying": 0.0,
+          "monsoon_descent": 0.0
+        }
+      },
+      {
+        "name": "global04",
+        "basin": 2,
+        "parent_profile": "global07",
+        "variant": "subsidence_off",
+        "changes": {
+          "subsidence_drying": 0.0
+        }
+      },
+      {
+        "name": "global05",
+        "basin": 2,
+        "parent_profile": "global07",
+        "variant": "monsoon_off",
+        "changes": {
+          "monsoon_descent": 0.0
+        }
+      },
+      {
+        "name": "global06",
+        "basin": 2,
+        "parent_profile": "global07",
+        "variant": "both_off",
+        "changes": {
+          "subsidence_drying": 0.0,
+          "monsoon_descent": 0.0
+        }
+      }
+    ],
+    "scope": "Paired closure ablation on reused regions; neither a global optimization nor independent validation."
+  }
+}

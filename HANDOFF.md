@@ -35,24 +35,24 @@ section gets a full-score seasonal figure too (EA358cells, not347crop).
 Report WIND_INTERACTION_20261028.md. Main process session29962 exited0;
 post-science verification/diagnostic/publication session61374 exited0.
 No active model job. Browser25studies/71images/32downloads passed;633assets checkout exact;
-portable1103files/235links/launcher passed. Receipt verification.json.
+portable1103files/238links/launcher passed. Receipt verification.json.
 Commit/push publication before next declaration.
 
-**Immediate continuation after publication:**
-Run scripts/prepare_drying_ablation.py --parent output/wind_interaction_20261028
---plan calibration/drying_ablation_20261028/plan.json. Requires committed,
-independently verified parent and empty shortlist; checks committed raw archive.
-Selectup2separated wind/rain settings; separately zero subsidence_drying,
-monsoon_descent, and both. Maximum70actual runs,28controls+42candidates.
-No presumed correction: explicit donor humidity transport may overlap legacy
-column removal, but a removal burden alone proves neither double counting
-nor a sink-off climate response. Same objective/invariants and planet.
-Write prospective report, add organizer/packager/.gitignore entries; commit
-BEFORE model runs. Reuse unchanged tradeoff_search.py. Verifier/publisher
-support paired drying ablation; no local proposals. Complete all scientific
-checks, seasonal/water/sensitivity plots, publication/QA and commit/push.
-Do not edit frozen model/runner/plans in active experiments. User explicitly
-asks to continue after pushes. Carry through actual next experiment.
+**Drying ablation DECLARED; ready to launch after declaration commit:**
+Parent wind results committed/pushed4e93862. New plan
+calibration/drying_ablation_20261028/plan.json selects global01/global07,
+both4.5m/s, then separately zero subsidence_drying, monsoon_descent, and both.
+70maximumactual integrations (28controls+42candidates); no local proposals.
+Prospective report DRYING_ABLATION_20261028.md. Parameter roundtrips pass for
+all6six-dimensional coefficient blocks, including zero endpoints.
+Launch unchanged scripts/tradeoff_search.py --plan above --out
+output/drying_ablation_20261028, BLAS1,timeout7200,log
+output/drying_ablation_20261028.log. Then verify/analyze/diagnose/plot rainfall/
+publish tradeoff helpers and organizer, completed report, browser/checkout/
+portable QA, commit/push. No automatic adoption or claimed double counting.
+All source/model/active plans must remain frozen. User says continue after
+pushes: carry through actual experiment. Source declaration must be committed
+before first new integration. No active model job at this declaration checkpoint.
 
 **Joint storm/rain calibration COMPLETE:** source `e207736`,
 `output/joint_rain_20261027/`. All 84 actual runs pass strict numerics;
