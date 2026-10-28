@@ -262,6 +262,11 @@ class ClimateModel:
         if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
                 or params.moisture_wind_factor != 1 or params.wind_cap != 0):
             raise ValueError('Mass-balanced moisture requires flux form, no wind multiplier and no wind cap')
+        if not isinstance(params.moisture_thermal_anomaly_decay,(bool,np.bool_)):
+            raise ValueError('moisture_thermal_anomaly_decay must be boolean')
+        if params.moisture_thermal_anomaly_decay and (not params.moisture_thermal_layer_winds
+                or params.moisture_reservoir_lapse_k_km>=9.80665/1004.*1000):
+            raise ValueError('Thermal anomaly decay requires thermal layer winds and a dry-stable lapse')
         if not isinstance(params.moisture_thermal_layer_winds,(bool,np.bool_)):
             raise ValueError('moisture_thermal_layer_winds must be boolean')
         if params.moisture_thermal_layer_winds and (not params.moisture_reservoirs
@@ -1334,9 +1339,16 @@ class ClimateModel:
                     # opt-in profile interprets it at101325Pa, smooths on that
                     # common reference, then differentiates at fixed pressure.
                     reference_temperature=gauss(Tsl+273.15,500.0/g.cell_km)
-                    shear,thermal=hydrostatic_thermal_shear(reference_temperature,
-                        101325.*self.column_projector.mass,dx,coriolis,
-                        lapse_k_km=p.moisture_reservoir_lapse_k_km)
+                    if p.moisture_thermal_anomaly_decay:
+                        from .separated_thermal_profile import separated_thermal_shear
+                        background_temperature=gauss(Tz+273.15,500.0/g.cell_km)
+                        shear,thermal=separated_thermal_shear(reference_temperature,background_temperature,
+                            101325.*self.column_projector.mass,dx,coriolis,
+                            lapse_k_km=p.moisture_reservoir_lapse_k_km)
+                    else:
+                        shear,thermal=hydrostatic_thermal_shear(reference_temperature,
+                            101325.*self.column_projector.mass,dx,coriolis,
+                            lapse_k_km=p.moisture_reservoir_lapse_k_km)
                     thermal_branches=project_thermal_branches(self.column_projector,(lower_u,lower_v),shear)
                     uq=.25*thermal_branches.lower[0]+.75*thermal_branches.upper[0]
                     vq=.25*thermal_branches.lower[1]+.75*thermal_branches.upper[1]
