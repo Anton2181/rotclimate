@@ -61,13 +61,26 @@ def publish(out):
         if not s.get('physical_admissible'):
             score_rows.append(f'<tr><td>{html.escape(name)}</td><td colspan="5">Physical/numerical rejection: {html.escape("; ".join(s["failures"]))}</td></tr>');continue
         score_rows.append(f'<tr><td>{name}</td><td>{s["objective"]:.4f}</td><td>{s["mean_rain_ratio"]:.4f}</td><td>{s["mean_temperature_ratio"]:.4f}</td><td>{s["worst_regional_combined_ratio"]:.4f}</td><td>{"Yes" if s["validation_ready"] else "No"}</td></tr>')
-    metadata=dict(review,plan=p,records=progress['records'],history=progress['history'],
+    pictures=[coverage,errors];sensitivity=None
+    sensitivity_path=out/'ranking_sensitivity.json'
+    if sensitivity_path.exists():
+        sensitivity=json.loads(sensitivity_path.read_text());source_image=out/'ranking_sensitivity.png'
+        if (sensitivity['review_sha256']!=file_hash(out/'review.json')
+                or sensitivity['protocol_sha256']!=file_hash(out/'protocol.json')
+                or sensitivity['new_earth_integrations']!=0
+                or sensitivity['image_sha256']!=file_hash(source_image)):
+            raise ValueError('Changed post-search sensitivity diagnostic')
+        target=data/'global_rain_sensitivity.png';shutil.copyfile(source_image,target);pictures.append(target)
+    metadata=dict(review,plan=p,records=progress['records'],history=progress['history'],ranking_sensitivity=sensitivity,
         source_protocol_sha256=file_hash(out/'protocol.json'),review_sha256=file_hash(out/'review.json'),
-        publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in [coverage,errors]},
+        publisher_sha256=file_hash(Path(__file__)),images_sha256={x.name:file_hash(x) for x in pictures},
         old_policy_scope='Earlier strict regional acceptance rules and outcomes remain unchanged. This is a different prospective research objective.')
     write_json(data/'global_rain.json',metadata)
     figures=''
-    for picture,alt in [(coverage,'Actual parameter coverage, separated global and local trials, and error progress'),(errors,'Regional combined errors for every completed global and local candidate')]:
+    for picture in pictures:
+        alt=('Ranking sensitivity to alternative weights and omitted development regions' if 'sensitivity' in picture.name else
+             'Actual parameter coverage, separated global and local trials, and error progress' if picture==coverage else
+             'Regional combined errors for every completed global and local candidate')
         with Image.open(picture) as image:w,h=image.size
         figures+=f'<figure><a href="data/{picture.name}"><img src="data/{picture.name}" width="{w}" height="{h}" loading="lazy" alt="{alt}"></a></figure>\n'
     section=f'''<!--global-rain-start--><section aria-labelledby="global-rain-h"><h2 id="global-rain-h">Broader rainfall search and regional tradeoffs</h2>

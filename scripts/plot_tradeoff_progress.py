@@ -4,6 +4,7 @@ import argparse,json,hashlib
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib.ticker import NullFormatter
 import numpy as np
 ROOT=Path(__file__).resolve().parents[1]
 
@@ -34,7 +35,9 @@ def plot(out,target):
         base=next((r['params'] for r in progress['records'] if r['name']=='environment_control'),None)
         if base is not None:ax.scatter([base[a]],[base[b]],marker='D',color='#777',s=65,label='Old environmental control')
         for key,axis in [(a,'x'),(b,'y')]:
-            if p['design']['bounds'][key]['scale']=='log':getattr(ax,'set_'+axis+'scale')('log')
+            if p['design']['bounds'][key]['scale']=='log':
+                getattr(ax,'set_'+axis+'scale')('log')
+                getattr(ax,axis+'axis').set_minor_formatter(NullFormatter())
             getattr(ax,'set_'+axis+'lim')(*p['design']['bounds'][key]['range'])
             if key=='eddy_rate':getattr(ax,'set_'+axis+'ticks')([.4,.6,1,1.5,2.5,3.5],labels=['0.4','0.6','1','1.5','2.5','3.5'])
             elif key=='precip_tau_days':getattr(ax,'set_'+axis+'ticks')([3,5,10,20,35],labels=['3','5','10','20','35'])

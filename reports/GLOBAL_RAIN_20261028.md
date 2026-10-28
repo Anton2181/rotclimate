@@ -88,4 +88,6 @@ tradeoffs. If systematic wet-coast/dry-monsoon errors persist throughout the
 box, that motivates another transport or closure hypothesis; it does not by
 itself establish that every possible parameterization must fail.
 
-Status: predeclared; new integrations not yet started.
+Status: active; scientific source `3ec90ee`. All 28 controls reproduced exactly. The frozen global and local search is continuing; no result has been adopted.
+
+The machine-readable `physical_admissible` flag means that the declared numerical, structural, parameter-bound and reference requirements passed. It is not a claim of independently validated atmospheric physics. Older recorder metadata retains some historical skill-threshold fields for comparison; the new `objective` and `validation_shortlist` rules, rather than the old screening function, govern this campaign.

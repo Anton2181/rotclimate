@@ -1,15 +1,37 @@
 """Independently verify a completed global/local search without integrating climate."""
 from pathlib import Path
+import math
 from dataclasses import asdict
 import argparse,json,subprocess,sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT));sys.path.insert(0,str(ROOT/'scripts'))
 import numpy as np
+from scipy.stats import qmc
 from rotclimate import earth,joint
 from benchmark_local import DEV12_SPECS
 from earth_benchmark import load_params
 from local_benchmark_protocol import case_hash,file_hash,identity,write_json
 from tradeoff_search import coordinates,parameters,diverse_starts,evaluate,pareto_names
+
+
+def independent_objective(name,records,p):
+    """Reconstruct the scalar independently with Python summation of raw errors."""
+    rows={(r['name'],r['region']):r for r in records};combined=[];native=[];ocean=[]
+    for region in p['regions']:
+        a,b=rows[name,region],rows['reference',region]
+        combined.append(.5*(a['temperature']['monthly_mae_C']/b['temperature']['monthly_mae_C']+a['rain']['loss']/b['rain']['loss']))
+        if a['sst'] is not None:ocean.append((a['sst']['monthly_mae_C']-b['sst']['monthly_mae_C'])/max(.1,b['sst']['monthly_mae_C']))
+        routes=[]
+        if region in p['circulation_regions']:routes.append(('circulation','transport_control',p['circulation_groups'][region]))
+        if region in p['extra_circulation_regions']:routes.append(('extra_circulation','column_control',p['extra_circulation_groups'][region]))
+        for key,baseline,group in routes:
+            x,y=a[key],rows[baseline,region][key]
+            windx,windy=x['scores']['q925_300'][group],y['scores']['q925_300'][group]
+            qx,qy=x['humidity']['scores'][group],y['humidity']['scores'][group]
+            for u,v,floor in [(windx['vector_rmse_ms'],windy['vector_rmse_ms'],.5),(qx['partial_water_mae_mm'],qy['partial_water_mae_mm'],1.),(qx['partial_q_ratio_mae'],qy['partial_q_ratio_mae'],.02)]:native.append((u-v)/max(v,floor))
+    mean=lambda values:math.fsum(values)/len(values) if values else 0.
+    policy=p['objective']
+    return mean(combined)+policy['regional_weight']*mean([max(v-policy['regional_free_ratio'],0.)**2 for v in combined])+policy['native_weight']*mean([max(v,0.)**2 for v in native])+policy['ocean_weight']*mean([max(v,0.)**2 for v in ocean])
 
 
 def verify(out):
@@ -20,6 +42,9 @@ def verify(out):
             or review['physics_or_atlas_adoption'] is not False):raise ValueError('Need completed unchanged research comparison')
     for n,sha in protocol['sources'].items():
         if file_hash(ROOT/n)!=sha:raise ValueError('Changed scientific source: '+n)
+    expected_points=qmc.Sobol(len(p['design']['bounds']),scramble=True,seed=p['design']['seed']).random_base2(p['design']['base2_exponent'])
+    actual_points=np.stack([coordinates(p['profiles'][n],p['design']) for n in p['global_names']])
+    np.testing.assert_allclose(actual_points,expected_points,rtol=0,atol=1e-14)
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()));cases={r:earth.region_case(r,p['cell_km']) for r in p['regions']}
     derived={r:case_hash(c,observed_sea=True) for r,c in cases.items()}
     records=progress['records'];keys=set();controls=[];extra_controls=[];row_hashes={};passed=0
@@ -32,7 +57,7 @@ def verify(out):
         if row['numerical_updates']!=numerical:raise ValueError('Changed numerical profile')
         theta=joint.update_block(load_params(ROOT/p['physics']),'physics',row['updates'])
         theta=joint.update_block(theta,'numerics',numerical)
-        actual=asdict(earth.earth_params(joint.earth_profile(theta),cases[r]))
+        actual=json.loads(json.dumps(asdict(earth.earth_params(joint.earth_profile(theta),cases[r]))))
         if row.get('params')!=actual:raise ValueError('Actual derived parameters differ')
         if n in p['profiles'] and row['updates']!=p['profiles'][n]:raise ValueError('Changed frozen profile coefficients')
         if n not in p['control_names']:
@@ -42,6 +67,17 @@ def verify(out):
         if row['status']=='passed':
             passed+=1;raw=path.with_suffix('.npz')
             if row['numerics']['all_checks_passed'] is not True or file_hash(raw)!=row['arrays_sha256']:raise ValueError('Invalid climate NPZ/numerics')
+            if n not in p['control_names']:
+                steps=row['numerics']['moisture_reservoirs']['steps']
+                for step in steps:
+                    if (step['all_layer_checks_passed'] is not True
+                            or any(not math.isfinite(step[k]) or step[k]<0 or step[k]>actual['moisture_residual_tol'] for k in ['max_scaled_layer_residual','max_scaled_column_residual'])
+                            or step['max_scaled_dry_column_residual']>1e-10
+                            or step['maximum_internal_precipitation_transfer_residual_mm_day']>1e-10
+                            or step['partition_temperature_profile']!='environmental'
+                            or step['partition_lapse_k_km']!=6.):raise ValueError('Actual step water/partition certificate failed')
+                for step in row['numerics']['two_layer_transport']['steps']:
+                    if step['max_scaled_dry_mass_divergence']>1e-10 or step['maximum_branch_speed_ms']>60 or step['p95_branch_speed_ms']>25:raise ValueError('Actual step branch certificate failed')
             if r in p['extra_circulation_regions']:
                 extra=path.with_name(r+'_extra.npz')
                 if file_hash(extra)!=row['extra_circulation_arrays_sha256']:raise ValueError('Changed native companion')
@@ -63,6 +99,8 @@ def verify(out):
     if any({(n,r) for r in p['regions']}-keys for n in names):raise ValueError('Incomplete profile')
     scores={n:evaluate(n,records,p) for n in names if n not in p['control_names']}
     if scores!=review['scores'] or scores!=progress['scores']:raise ValueError('Recomputed objective/certificates differ')
+    for n,s in scores.items():
+        if s.get('physical_admissible') and not math.isclose(s['objective'],independent_objective(n,records,p),rel_tol=1e-12,abs_tol=1e-12):raise ValueError('Independent raw-error objective differs')
     starts=diverse_starts({n:scores[n] for n in p['global_names']},p['profiles'],p['design'])
     if starts!=review['local_starts']:raise ValueError('Changed separated starting points')
     localfile=json.loads((out/'local_starts.json').read_text())
