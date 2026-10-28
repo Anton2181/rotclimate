@@ -243,6 +243,8 @@ class Params:
     moisture_reservoir_rain_scheme: str = "layer"  # historical layer closure, or column-convection with lower-air rain evaporation
     moisture_reservoir_temperature_profile: str = "moist"  # normalized capacity/supply shape: saturated moist or environmental lapse
     moisture_reservoir_lapse_k_km: float = 6.5  # environmental capacity lapse, independent of surface-elevation cooling
+    moisture_ocean_hydrostatic: bool = False  # opt-in absolute ocean target from the selected hydrostatic thermal profile
+    moisture_ocean_rh_taper: float = 0.0  # pressure-dependent RH shape; 0 uniform, .5 partial, 1 full tropospheric taper
     moisture_transport_form: str = "concentration"  # opt-in "flux": conservative face transport; requires flux_convergence=0
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 

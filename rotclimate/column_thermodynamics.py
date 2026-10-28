@@ -63,12 +63,30 @@ def saturation_column(temperature_c,surface_pressure_pa,*,profile='moist',lapse_
     return SaturationColumn(water,np.stack([.25*ps/G,.75*ps/G]),temperatures)
 
 
-def integrate_saturation_profile(temperature_c,surface_pressure_pa,pressure_edges_pa,*,profile='moist',lapse_k_km=6.,steps=64):
+def humidity_column(temperature_c,surface_pressure_pa,*,profile='moist',lapse_k_km=6.,rh_taper=0.,steps=64):
+    """Hydrostatic water target with unit surface RH and a pressure taper.
+
+    Multiply the returned water by the caller's surface RH. The full shape is
+    max((p/ps-.02)/.98,0); intermediate tapers interpolate RH before integration.
+    No total-water renormalization, actual humidity reset, stratospheric floor
+    or environmental latent/radiative energy solution is supplied. Thermal
+    lapse and dry masses are identical to saturation_column.
+    """
+    ts,ps=np.broadcast_arrays(np.asarray(temperature_c,float),np.asarray(surface_pressure_pa,float))
+    edges=np.stack([ps,.75*ps,np.full_like(ps,TOP_PRESSURE_PA)])
+    water,temperatures=integrate_saturation_profile(ts,ps,edges,profile=profile,
+        lapse_k_km=lapse_k_km,steps=steps,humidity_taper=rh_taper)
+    return SaturationColumn(water,np.stack([.25*ps/G,.75*ps/G]),temperatures)
+
+
+def integrate_saturation_profile(temperature_c,surface_pressure_pa,pressure_edges_pa,*,profile='moist',lapse_k_km=6.,steps=64,humidity_taper=None):
     """Integrate arbitrary descending pressure intervals, starting at surface.
 
     Returns water per interval and temperature at interfaces. This supports
     reference comparisons over exactly matched pressure ranges without
-    extrapolating below-ground or beyond the observed humidity column.
+    extrapolating below-ground or beyond the observed humidity column. Optional
+    humidity_taper weights the water integral only; temperature still follows
+    the declared thermal profile. None preserves the original arithmetic.
     """
     ts,ps=np.broadcast_arrays(np.asarray(temperature_c,float)+273.15,np.asarray(surface_pressure_pa,float))
     if (not np.isfinite(ts).all() or not np.isfinite(ps).all() or (ts<170).any() or (ts>330).any()
@@ -81,6 +99,8 @@ def integrate_saturation_profile(temperature_c,surface_pressure_pa,pressure_edge
     if profile not in ('moist','lapse','isothermal'):raise ValueError('Unknown column thermal profile')
     if (not np.isfinite(lapse_k_km) or not 0<lapse_k_km<=10
             or not isinstance(steps,int) or isinstance(steps,bool) or steps<8):raise ValueError('Need positive lapse<=10K/km and at least8 RK4 steps per layer')
+    if humidity_taper is not None and (not np.isfinite(humidity_taper) or not 0<=humidity_taper<=1):
+        raise ValueError('Need finite humidity_taper in[0,1]')
     specific_saturation(ts,ps)
     floor=np.minimum(ts,TROPOPAUSE_K);temperature=ts.copy();water=[];interfaces=[ts.copy()]
     def derivative(x,t):
@@ -92,7 +112,11 @@ def integrate_saturation_profile(temperature_c,surface_pressure_pa,pressure_edge
             r=q/(1-q)
             cooling=RD/CP*t*(1+LV*r/(RD*t))/(1+LV*LV*r*EPSILON/(CP*RD*t*t))
         cooling=np.where(t>floor,cooling,0.)
-        return -cooling,q*pressure/G
+        integral=q*pressure/G
+        if humidity_taper is not None:
+            shape=np.maximum((pressure/ps-.02)/.98,0.)
+            integral=integral*((1-humidity_taper)+humidity_taper*shape)
+        return -cooling,integral
     edges=np.log(ps[None]/pressure_edges)
     for start,end in zip(edges[:-1],edges[1:]):
         h=(end-start)/steps;amount=np.zeros_like(ps)

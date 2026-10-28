@@ -290,6 +290,19 @@ class ClimateModel:
             raise ValueError('moisture_reservoir_lapse_k_km must be finite and in [2,9.8] K/km')
         if params.moisture_reservoir_temperature_profile=='environmental' and not params.moisture_reservoirs:
             raise ValueError('Environmental temperature partition requires independent moisture reservoirs')
+        if not isinstance(params.moisture_ocean_hydrostatic,(bool,np.bool_)):
+            raise ValueError('moisture_ocean_hydrostatic must be boolean')
+        if not np.isfinite(params.moisture_ocean_rh_taper) or not 0<=params.moisture_ocean_rh_taper<=1:
+            raise ValueError('Need finite moisture_ocean_rh_taper in[0,1]')
+        if params.moisture_ocean_rh_taper!=0 and not params.moisture_ocean_hydrostatic:
+            raise ValueError('Ocean RH taper requires moisture_ocean_hydrostatic')
+        if params.moisture_ocean_hydrostatic:
+            if not params.moisture_reservoirs:
+                raise ValueError('Hydrostatic ocean target requires independent moisture reservoirs')
+            if (not np.isfinite(params.ocean_rh) or not np.isfinite(params.ocean_rh_warm)
+                    or not 0<params.ocean_rh<=1 or params.ocean_rh_warm<0
+                    or params.ocean_rh+params.ocean_rh_warm>1):
+                raise ValueError('Hydrostatic ocean target requires surface RH in(0,1], including warm increment')
         if params.moisture_reservoirs:
             if (not params.moisture_two_layer or not params.moisture_mass_tracer
                     or params.moisture_residual_tol<=0 or not params.moisture_require_convergence
@@ -1245,6 +1258,12 @@ class ClimateModel:
                     pressure=101325.*np.exp(-h_km/8.)
                     capacity_profile=saturation_column(T_col-column_lapse*h_km,pressure,profile='moist')
                     sea_profile=saturation_column(SST,pressure,profile='moist')
+                ocean_target_profile=sea_profile
+                if p.moisture_ocean_hydrostatic:
+                    from .column_thermodynamics import humidity_column
+                    ocean_target_profile=humidity_column(SST,pressure,
+                        profile='lapse' if p.moisture_reservoir_temperature_profile=='environmental' else 'moist',
+                        lapse_k_km=p.moisture_reservoir_lapse_k_km,rh_taper=p.moisture_ocean_rh_taper)
             if p.ocean_rh_warm > 0:
                 # e40: over seas warmer than ~25 C deep convection moistens the
                 # whole column, and its water rises steeply with the sea's
@@ -1255,6 +1274,23 @@ class ClimateModel:
                 W_ocean = (p.ocean_rh + p.ocean_rh_warm * np.clip((SST - 25.0) / 4.0, 0.0, 1.0)) * ocean_saturation
             else:
                 W_ocean = p.ocean_rh * ocean_saturation
+            ocean_target_certificate={}
+            if p.moisture_ocean_hydrostatic:
+                # Hold the declared surface RH, not the empirical legacy total.
+                # The same weighted profile defines total water and layer supply;
+                # actual interior lower/upper water remains independently solved.
+                surface_rh=p.ocean_rh+p.ocean_rh_warm*np.clip((SST-25.)/4.,0.,1.)
+                W_ocean=surface_rh*ocean_target_profile.total_mm
+                ocean_target_certificate=dict(ocean_target_scheme='hydrostatic-rh',
+                    ocean_target_cells=int(ocean.sum()),
+                    ocean_rh_taper=float(p.moisture_ocean_rh_taper),
+                    ocean_target_thermal_profile=p.moisture_reservoir_temperature_profile,
+                    ocean_target_lapse_k_km=(p.moisture_reservoir_lapse_k_km
+                        if p.moisture_reservoir_temperature_profile=='environmental' else None),
+                    minimum_ocean_surface_rh=float(surface_rh[ocean].min()) if ocean.any() else None,
+                    maximum_ocean_surface_rh=float(surface_rh[ocean].max()) if ocean.any() else None,
+                    minimum_ocean_target_water_mm=float(W_ocean[ocean].min()) if ocean.any() else None,
+                    maximum_ocean_target_water_mm=float(W_ocean[ocean].max()) if ocean.any() else None)
             # Opt-in moisture-column shear: reduce the effective Rayleigh
             # drag in the existing pressure balance, retaining its rotation,
             # pressure forcing, background winds and terrain drag. Surface
@@ -1543,7 +1579,7 @@ class ClimateModel:
                 solution=solve_reservoir_moisture(self.moisture_solver,p,uq,vq,lamE,W_ocean,E_land,Ws,
                     A_dyn,instab,bnd,W,exchange,mix,sink=sink,closure=closure,gain=gain,condensate=condensate,
                     lower_capacity_fraction=capacity_profile.lower_water_fraction,
-                    ocean_lower_fraction=sea_profile.lower_water_fraction)
+                    ocean_lower_fraction=ocean_target_profile.lower_water_fraction)
                 layers=self.moisture_solver.layers
                 uq=sum(f*a for f,a,b in layers);vq=sum(f*b for f,a,b in layers)
                 self.reservoir_checks.append(dict(solution.certificate,day=float(d),
@@ -1552,10 +1588,11 @@ class ClimateModel:
                         if p.moisture_reservoir_temperature_profile=='environmental' else None),
                     minimum_lower_capacity_fraction=float(capacity_profile.lower_water_fraction.min()),
                     maximum_lower_capacity_fraction=float(capacity_profile.lower_water_fraction.max()),
-                    minimum_ocean_lower_fraction=float(sea_profile.lower_water_fraction.min()),
-                    maximum_ocean_lower_fraction=float(sea_profile.lower_water_fraction.max()),
+                    minimum_ocean_lower_fraction=float(ocean_target_profile.lower_water_fraction.min()),
+                    maximum_ocean_lower_fraction=float(ocean_target_profile.lower_water_fraction.max()),
                     minimum_partition_temperature_k=float(capacity_profile.interface_temperature_k.min()),
-                    maximum_partition_temperature_k=float(capacity_profile.interface_temperature_k.max())))
+                    maximum_partition_temperature_k=float(capacity_profile.interface_temperature_k.max()),
+                    **ocean_target_certificate))
             else:
                 solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
                                           A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,

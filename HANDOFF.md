@@ -1,3 +1,49 @@
+# Latest implementation — hydrostatic ocean targets
+
+All preceding global/process publication committed/pushed30a925f. No current
+Earthmodeljob. Newopt-in core IMPLEMENTED andtested, not calibrated/adopted:
+Params moisture_ocean_hydrostaticFalse(default) andmoisture_ocean_rh_taper0.
+Fourcorefiles model/config/joint/column_thermodynamics changed. New
+humidity_column integrates pressureRHweight withsameT/drymass; no normalization.
+FlagTrue actualtargetW=surfaceRH*hydroprofiletotal, andsameprofilelowerfraction
+feedsindependentwater solver. Targetbound(0,1] RH includingwarm increment.
+Everyactualprimer/scoredstep certifiesmode/taper/thermal/lapse/cells/RH/Wtarget.
+Noocean casecertvaluesNone. Defaultsretainoldwaterintegrand arithmetic.
+Tests/test_ocean_humidity_profile.py: independentpressurequadrature,α0bitexact,
+waterlinearity/thermalunchanged,targetinputcapture,invalidargs/sharedpartition,
+fullcoupledtoy strictcerts. 91focusedcore/guardtests PASSED (39s).
+Pre-edit stricttoy legacy/independent snapshots saved at
+output/ocean_physics_development/*_before.npz andbefore.json, source30a925f.
+Afteredit T/P/W/days/layer_water bit-exact andstrictpass inbothcases;
+default_equivalence.json. OnlynewparamsareFalse/0. No actualEarthattempts.
+Commit/push this coremilestone before writing newcoupledpilotdeclaration.
+Corecode mustthen remainfrozen through new realEarthpilot.
+
+Next implement NEW fixedpilotrunner (old tradeoff_search.py staysunchanged)
+that explicitly replaces4oldcorehashes withnewcommittedhashes before freeze;
+verifybefore/after bytes fromGit30a925f/newcorecommit. Allotherparent sources
+andinputs mustmatch. Parent=global_joint_20261028 counter1809/1805/4.
+Oldenvironmental_reference() checksoldsourcehashes andcannotbecalled directly;
+newrunner mustbindsame referenceprotocol/NPZ anduseallowedcorehashreplacements,
+thenreproduceallthree archivedenv6saturationprofilesfrom925anchor undernew
+code (None waterweight) beforemodels. Oldref config/thermohashes are SAMEbefore
+asparent; model/joint notinrefsources, so4fileallowlist suffices. Neverrewrite
+oldprotocols. Existingrecorder run_one remainsunchanged; newjointfieldsclassified.
+
+Prospective70runpilot: fourexactcontrols28 +2winds(4.5,3.5)×3ocean modes
+(legacyFalse/0, hydrostaticTrue/0, hydrostaticTrue/.5)×7regions42. Useoldwind
+studyglobal01rainsetting eddy3.5/tau15.532421910244794/RH.8098909563459455,
+legacyfullsinks. Legacy4.5candidate alsoarchive-bound tooldwindglobal01 for
+fullNPZexactproof (recorderchecks any profile_control_archives name, notonly
+controlnames). New2flags are additional free axesbool[0,1],taper[0,.5] for
+strictactualparamcomparison; no localproposals. Allnonfreeactual/planetparams
+fixed. Sameobjective/shortlist; no automaticadoption. Validateextraocean cert
+ateveryprimer/scoredstep. Genericverifier/publisher needpaired-ocean sampler
+and evaluator dispatch soanymissingcertisphysicallyrejected. Newsourceepoch
+resolver mayverifyoldcoreGitbytes butactualrunningfilesmustmatchdeclarednew
+hashes; no other source can change. Commitnewrunner andliteralplan BEFORE
+firstrealEarthintegration. Complete allchecks/figures/.batQA,commit/push,continue.
+
 # Current continuation — 28 October 2026
 
 User explicitly says continue development without stopping after pushes;
@@ -34,7 +80,7 @@ are differentexperiments; ratiosalonecannotrecoverlayerwateramounts.
 
 **Publication QA bothnewstudies PASSED:**
 Browser28studies/86images/35downloads, keyboard/deeplink/light/dark/mobile;
-651checkoutassets exact; portablebundle1125files (actualJSONauthoritative)
+652checkoutassets exact; portablebundle1126files /274links (actualJSONauthoritative)
 alllocalresearchlinks/launcher pass. Receipts in eachoutput/verification.json.
 Commit/push currentfinishedresults before actualnewphysics edits.
 
