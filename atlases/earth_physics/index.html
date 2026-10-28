@@ -449,6 +449,25 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     </div>
   </section>
 
+  <section id="foraging-section" hidden aria-labelledby="foraging-h">
+    <div class="section-head"><h2 id="foraging-h">Terrestrial foraging</h2>
+      <p>Food procurement, seasonal scarcity and scenario density, separate from the agricultural settlement model.</p></div>
+    <div class="two"><div class="card"><h3 id="foraging-place">At the selected place</h3>
+      <div class="readouts" id="foraging-readouts" aria-live="polite"></div>
+      <p class="note" id="foraging-status" role="status">Choose a place on the map.</p>
+    </div><div class="card"><h3>The foraging scenario</h3>
+      <div class="readouts" id="foraging-totals"></div>
+      <p class="note" id="foraging-context"></p>
+      <p class="note">Climate-based productivity and seasonal resource proxies replace the original FORGE model's ORCHIDEE vegetation inputs. These estimates are not its published global simulation or a historical census.</p>
+    </div></div>
+    <details class="card"><summary>Foraging methods and limits</summary>
+      <p>Food procurement hours cover hunting and gathering only. Water, fuel, shelter and other work are excluded. Agriculture, food trade, fishing and marine resources are not included in this scenario.</p>
+      <p>Foraging support is not added to agricultural support: both draw on the same land. Neither density nor food effort predicts technological or political development.</p>
+      <div id="foraging-sources"></div>
+      <p><a id="foraging-method" href="../../reports/FORAGING_20261027.md">Equations and adaptation assumptions</a> · <a id="foraging-parameters" href="data/foraging.json" download>Scenario parameters and provenance</a></p>
+    </details>
+  </section>
+
   <section id="population-section" hidden aria-labelledby="population-h">
     <div class="section-head"><h2 id="population-h">Population lab · c.200 AD</h2>
       <p>Supply a population and explore where it could live within the food model. This is an allocation experiment, not a reconstructed census.</p></div>
@@ -576,6 +595,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="climate-comparison.js"></script>
 <script src="harvest.js"></script>
 <script src="population.js"></script>
+<script src="foraging.js"></script>
 <script>
 // Published copies store the binaries gzip-compressed to fit the host's file
 // size limit; local builds keep them raw. Both load.
@@ -658,7 +678,7 @@ window.atlasSave = async (filename, blob) => {
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
   };
-  const topicNames = ["Overview", "Population", "Political reach", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Fit checks"];
+  const topicNames = ["Overview", "Population", "Foraging", "Political reach", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Fit checks"];
   const lastLayer = {};
   for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
     const option = document.createElement("option"); option.value = name; option.textContent = name;
@@ -682,6 +702,18 @@ window.atlasSave = async (filename, blob) => {
   const layerScenario = L => L.id === "land_livability"
     ? ($("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential") : scenarioLabel();
   let harvestUI = null, populationUI = null, populationLoading = null, populationSelection = null;
+  let foragingUI = null, foragingLoading = null, foragingSelection = null;
+  async function showForagingPanel() {
+    try {
+      if (!window.ForagingAtlas) throw new Error("Foraging viewer could not load. Check the complete atlas folder.");
+      if (!foragingLoading) {
+        $("foraging-status").textContent = "Loading foraging scenario…";
+        foragingLoading = ForagingAtlas.load(meta, fresh).catch(error => { foragingLoading = null; throw error; });
+      }
+      foragingUI = await foragingLoading;
+      if (foragingSelection) foragingUI.select(...foragingSelection);
+    } catch (error) { $("foraging-status").textContent = error.message; }
+  }
   function populationStateChanged() { setLayer(current); }
   async function showPopulationMap(L) {
     const message = $("population-message"); message.hidden = false;
@@ -782,10 +814,12 @@ window.atlasSave = async (filename, blob) => {
     $("disease-control").hidden = !diseaseUsed;
     $("settlement-controls").hidden = !meta.harvest || !(occupationUsed || diseaseUsed);
     const population = L.group === "Population" && !!meta.population;
+    const foraging = L.group === "Foraging" && !!meta.foraging;
     $("population-controls").hidden = !population || !L.population_dynamic;
     $("population-section").hidden = !population;
     $("population-message").hidden = !population;
-    $("harvest-section").hidden = population || !meta.harvest;
+    $("harvest-section").hidden = population || foraging || !meta.harvest;
+    $("foraging-section").hidden = !foraging;
     showVariants(L);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
@@ -811,6 +845,7 @@ window.atlasSave = async (filename, blob) => {
         link.href = link.href.split("#")[0] + "#" + state.toString();
     }
     if (population) showPopulationMap(L);
+    if (foraging) showForagingPanel();
   }
   $("names").addEventListener("change", (e) => {
     const show = e.target.checked ? "" : "none";
@@ -967,6 +1002,7 @@ window.atlasSave = async (filename, blob) => {
     }
     harvestUI?.select(x, y, name, k === 255);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
+    foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
     drawMarker();
     if (k === 255) {

@@ -22,27 +22,45 @@ original supervisor status stopped at 56 runs during interrupted session;
 processes are no longer active, and no final continuous-monitoring receipt
 exists. Original status preserved, not overwritten with invented completion.
 
-**FORGE side project IN PROGRESS:** user supplied full Marx/biome discussion
-and explicitly asked to implement models such as FORGE while physics continues.
-New `foraging/` package implements published human food/energy/time/demography
-rules, with explicit Miami-NPP, phenology and prey proxy adaptation. Not the
-original ORCHIDEE-FORGE ecosystem, agricultural support, 200 AD census or
-civilization ranking. Research sources/assumptions in data/foraging_model.json
-and docs/FORAGING_MODELS.md. Tallavaara actual predictors require biodiversity
-and multi-pathogen richness unavailable for fantasy; no fake reproduction.
+**Adapted FORGE side project COMPLETE; publication QA PASSED:**
+Scientific source `6bd8758`, outputs `output/foraging_20261027/`.
+All three official 300-year scenarios exported and attached, final 50-year
+means retained alongside variability, terminal values and strict annual-state
+convergence flags. Four Foraging modes are separate from agricultural support
+and c.200 AD population allocation: density, food procurement effort, intake
+shortfall and meat share. Published human rules plus explicit Miami-NPP,
+phenology, grass/prey/turnover proxies; not original ORCHIDEE-FORGE or a validated
+carrying capacity. No fishing/migration/storage/pathogen module or civilization
+ranking. Tallavaara biodiversity/multiple-pathogen inputs remain unavailable.
 
-Kernel tests (8) and exporter manufactured tests (5) pass; final last-50-year
-averaging added to 300-year runs because demographic cycles can persist.
-Keep convergence/floor/unsupported flags, terminal state and variability;
-finite-horizon density is not certified equilibrium capacity. Four viewer
-modes and local panel implemented; fixture passes old-packet compatibility,
-corrupt payload rejection, irrelevant-selector hiding, light/dark/mobile.
-Official coarse 116×250 separate foraging exports being prepared in
-output/foraging_20261027/staging/{variant}; normal atlas climate/agricultural
-fields must remain unchanged. Root must attach completed validated packets,
-refresh pages, run live browser/portable/checkout QA, post maps, commit/push.
-Current pending changes include viewer template/copy hooks, new package,
-source config/docs, tests, and joint publication. Do not omit either task.
+Source config/docs: data/foraging_model.json, docs/FORAGING_MODELS.md;
+results reports/FORAGING_20261027.md. New foraging/ package, atlas/foraging.js,
+postprocessor scripts/add_foraging_to_atlas.py and future build pipeline hook.
+Official separate analysis grid 116×250 with 16,254 land cells per fit.
+Scenario people: free 1,671,297 / Earth 1,302,704 / Whittaker 1,314,513.
+Converged land 11.55% / 8.97% / 25.70%; remaining averages are finite-horizon,
+not certified annual equilibria. Food hours 6.38 / 6.17 / 6.55 per person/day
+exclude water, fuel, shelter. Intake-shortfall days include reserve drawdown;
+do not label them famine days. Local viewer must show positive nonconverged
+window means with warnings, not hide them or call them equilibrium capacity.
+
+17 analytic/export/independent-ledger tests and Node checks pass. Actual
+plant/meat/fat-energy start/flow/end ledgers reconstruct within fixed float32
+rounding tolerance; 54 fields reproduce exactly across chunk sizes. All 553
+original climate/farming data assets remain byte-exact and original atlas
+metadata remains unchanged after removing the explicit foraging extension.
+Thirty biome rows in biomes.csv/biomes.json preserve coarse-classification,
+nonconvergence and outside-diagram caveats. Scientific receipts, attachment,
+chunk checks and comparison figure in output/foraging_20261027/.
+
+Generated pages refreshed, live browser passes all three variants / four modes
+in light/dark/mobile layouts with irrelevant controls hidden. Browser readiness
+now respects Whittaker's biome default (the initial timeout was a Koppen-only
+test assumption). 620 staged checkout assets byte-exact; 1,088-file portable
+bundle / 214 research links / extracted launcher pass. Full verification
+receipt output/foraging_20261027/verification.json. No active scientific job.
+Standard .bat launcher serves the new topic. Initial scientific source6bd8758
+and climate milestone7a06056 already pushed; final publication commit follows.
 
 **Archived column-drying audit COMPLETE:** source `255ac32`, successful output
 `output/column_drying_20261027_verified/`, zero climate runs or fitted changes.

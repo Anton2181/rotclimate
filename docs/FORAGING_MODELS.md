@@ -129,3 +129,5 @@ publisher supplementary Python code has been copied or vendored. The public
 FORGE input archive is CC BY 4.0; that does not by itself establish the license
 of every supplementary software file. Published constants are distinguished
 from adapter assumptions in the machine-readable catalogue.
+
+[Atlas results and biome comparison](../reports/FORAGING_20261027.md).

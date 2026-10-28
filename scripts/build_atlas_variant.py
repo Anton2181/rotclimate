@@ -230,12 +230,14 @@ def main():
         shutil.copy(ROOT/'data/whittaker_coverage.json',data/'whittaker_coverage.json')
     write_provenance(data, identity, a.image_scale)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
-    # These products use the exported climate packet, with no new simulation.
+    # These products use the exported packet without rerunning climate.
     # The existing export lock also bounds the farming analysis's memory use.
     from harvest.export import export as export_harvest
     export_harvest(out)
     from population.export import export as export_population
     export_population(out)
+    from foraging.export import export as export_foraging
+    export_foraging(out)
     # the monthly winds the polity model sails by, from this very run, then the political layers
     sys.path.insert(0, str(ROOT / "scripts"))
     from export_winds12 import write as write_winds12

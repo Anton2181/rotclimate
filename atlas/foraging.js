@@ -50,6 +50,30 @@
     return row*shape[1]+column;
   }
 
+  function describePoint(values){
+    const value=key=>Number.isFinite(values[key])?values[key]:null;
+    if(value('unsupported')===1)return {
+      message:'The modeled resources did not sustain a population over the averaging window.',
+      status:'The whole window was unsupported. The numerical population floor is not a positive density estimate.',rows:[]};
+    const years=value('averaging_years_used');
+    const window=years>0?`final ${number(years,0)}-year mean`:'final-window mean';
+    const density=value('density_people_km2'),effort=value('foraging_hours_day'),meat=value('meat_fraction'),scarcity=value('scarcity_days_year');
+    const rows=[];
+    if(density!==null)rows.push([`${number(density,3)} /km²`,`${window} scenario density`]);
+    if(effort!==null)rows.push([`${number(effort,2)} h/person/day`,'mean food procurement only']);
+    if(meat!==null)rows.push([`${number(meat*100,1)}%`,'animal-food energy share']);
+    if(scarcity!==null)rows.push([`${number(scarcity,0)} days/year`,'mean modeled food shortfall']);
+    const variation=value('density_cv');
+    if(variation!==null)rows.push([`${number(variation*100,0)}%`,'annual density variation (CV)']);
+    const notes=[value('converged')===1
+      ?'The annual state met the convergence criterion under repeated resource forcing.'
+      :'Finite-horizon scenario, not an annual equilibrium: the annual state did not converge.'];
+    if(value('floor_limited')===1)notes.push('The terminal year reached the numerical population floor; floor re-inoculation can affect this window mean.');
+    if(variation!==null)notes.push('Annual variation is within-run variability, not a confidence interval.');
+    notes.push('Procurement hours exclude water, fuel, shelter and other work. This scenario is not a census or additional agricultural support.');
+    return {rows,status:notes.join(' ')};
+  }
+
   async function load(meta,fresh){
     const specification=meta.foraging;
     if(!specification)throw Error('This atlas has no foraging scenario packet.');
@@ -74,28 +98,17 @@
         $('foraging-readouts').textContent='Choose land to inspect the terrestrial-foraging scenario.';
         $('foraging-status').textContent='Fishing and marine food are not included.';return;
       }
-      if(value('unsupported')===1||value('floor_limited')===1){
-        $('foraging-readouts').textContent='The modeled resources did not sustain a supported population.';
-        $('foraging-status').textContent='The run reached its population floor. That numerical floor is not a positive density estimate.';return;
-      }
-      if(value('converged')!==1){
-        $('foraging-readouts').textContent='No converged scenario estimate at this place.';
-        $('foraging-status').textContent='The seasonal run did not meet its convergence requirement. Its trial values are not presented as support estimates.';return;
-      }
-      const density=value('density_people_km2'),effort=value('foraging_hours_day'),meat=value('meat_fraction'),scarcity=value('scarcity_days_year');
-      const rows=[];
-      if(density!==null)rows.push([`${number(density,3)} /km²`,'terrestrial-foraging scenario density']);
-      if(effort!==null)rows.push([`${number(effort,2)} h/person/day`,'food procurement only']);
-      if(meat!==null)rows.push([`${number(meat*100,1)}%`,'animal-food energy share']);
-      if(scarcity!==null)rows.push([`${number(scarcity,0)} days/year`,'modeled food shortfall']);
-      $('foraging-readouts').innerHTML=readouts(rows);
-      $('foraging-status').textContent='A resource-forced scenario, not a census or an addition to agricultural population support. Procurement hours exclude water, fuel, shelter and other work.';
+      const local=describePoint(Object.fromEntries(['unsupported','floor_limited','converged','density_people_km2',
+        'foraging_hours_day','meat_fraction','scarcity_days_year','density_cv','averaging_years_used'].map(key=>[key,value(key)])));
+      if(local.message)$('foraging-readouts').textContent=local.message;
+      else $('foraging-readouts').innerHTML=readouts(local.rows);
+      $('foraging-status').textContent=local.status;
     }
     const summary=metadata.summary||{},totals=[];
     if(Number.isFinite(summary.total_scenario_people))totals.push([people(summary.total_scenario_people),'people in finite-horizon scenario']);
     if(Number.isFinite(summary.converged_scenario_people))totals.push([people(summary.converged_scenario_people),'people in converged subset']);
     if(Number.isFinite(summary.converged_land_share))totals.push([`${number(summary.converged_land_share*100,1)}%`,'modeled land meeting convergence']);
-    if(Number.isFinite(summary.unsupported_land_share))totals.push([`${number(summary.unsupported_land_share*100,1)}%`,'modeled land reaching population floor']);
+    if(Number.isFinite(summary.unsupported_land_share))totals.push([`${number(summary.unsupported_land_share*100,1)}%`,'modeled land unsupported over window']);
     $('foraging-totals').innerHTML=readouts(totals);
     $('foraging-context').textContent=metadata.model_note||'FORGE-inspired terrestrial-foraging scenarios with declared climate-to-resource proxies. These are not the published ORCHIDEE-driven global simulations.';
     const report=metadata.report_url||'../../reports/FORAGING_20261027.md';
@@ -105,5 +118,5 @@
       .map(source=>`<p><a href="${esc(source.url)}" target="_blank" rel="noopener">${esc(source.title||source.url)}</a>${source.used_for?' — '+esc(source.used_for):''}</p>`).join('');
     return {select:(x,y,name,sea)=>{selection=[x,y,name,sea];point();},refresh:point};
   }
-  return {load,decodePacket,indexAt};
+  return {load,decodePacket,indexAt,describePoint};
 });

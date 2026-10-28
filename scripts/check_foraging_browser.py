@@ -18,7 +18,10 @@ def fixture_packet():
         'foraging_hours_day':np.full((2,2),4.25,dtype='<f4'),
         'meat_fraction':np.full((2,2),.3,dtype='<f4'),
         'scarcity_days_year':np.full((2,2),12.,dtype='<f4'),
+        'density_cv':np.full((2,2),1.2,dtype='<f4'),
+        'averaging_years_used':np.full((2,2),50.,dtype='<f4'),
         'converged':np.array([[1,0],[0,1]],dtype='u1'),
+        'floor_limited':np.array([[0,1],[1,0]],dtype='u1'),
         'unsupported':np.array([[0,0],[1,0]],dtype='u1')}
     blob=bytearray();arrays={}
     for name,value in fields.items():
@@ -65,7 +68,8 @@ ForagingAtlas.load=async(...args)=>{const ui=await fixtureLoad(...args);window.f
 
 
 def ready(page):
-    page.wait_for_function("document.querySelector('#layer-koppen')?.getAttribute('aria-pressed')==='true'",timeout=60000)
+    # Whittaker fit deliberately starts on its biome map, rather than Koppen.
+    page.wait_for_function("!!document.querySelector('#layers button[aria-pressed=true]')",timeout=60000)
 
 
 def check_topic(page):
@@ -107,6 +111,7 @@ def main():
             if args.fixture:install_fixture(page,with_foraging=True)
             page.goto(args.base.rstrip('/')+f'/atlases/{name}/',wait_until='domcontentloaded');ready(page)
             check_topic(page)
+            page.wait_for_function("document.querySelector('#foraging-context').textContent.length>0",timeout=60000)
             page.wait_for_function("!document.querySelector('#foraging-status').textContent.includes('Loading')",timeout=60000)
             assert 'could not' not in page.locator('#foraging-status').inner_text()
             if args.fixture:
@@ -115,7 +120,11 @@ def main():
                 text=page.locator('#foraging-readouts').inner_text()
                 assert '1 /km²' in text and '4.25 h/person/day' in text and '30%' in text and '12 days/year' in text
                 page.evaluate("foragingFixtureUI.select(1999,1,'trial',false)")
-                assert 'No converged' in page.locator('#foraging-readouts').inner_text()
+                assert '2 /km²' in page.locator('#foraging-readouts').inner_text()
+                assert '50-year mean' in page.locator('#foraging-readouts').inner_text()
+                assert '120%' in page.locator('#foraging-readouts').inner_text()
+                assert 'not an annual equilibrium' in page.locator('#foraging-status').inner_text()
+                assert 'floor re-inoculation' in page.locator('#foraging-status').inner_text()
                 page.evaluate("foragingFixtureUI.select(1,925,'floor',false)")
                 assert 'did not sustain' in page.locator('#foraging-readouts').inner_text()
                 page.evaluate("foragingFixtureUI.select(1,1,'sea',true)")
