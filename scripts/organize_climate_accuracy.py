@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('divergent-thermal','Divergent return and thermal rotation'),
     ('separated-thermal','Stable surface and atmospheric thermal separation'),
     ('thermal-wind-pilot','Coupled thermal layer winds and rainfall'),
     ('transport-diagnosis','Actual layer transport and persistent rainfall errors'),

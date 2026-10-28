@@ -59,3 +59,40 @@ projection and independently recovered thermal shear. A qualifying development
 result still needs excluded-region/resolution/transfer tests before adoption.
 If this split fails, move to dynamically forced circulation and atmospheric
 energy equations rather than another kinematic/profile variant.
+
+## Completed outcome
+
+All18 integrations passed strict checks; all six original controls reproduced
+full historical arrays and extra PNW native fields exactly. All682 frozen
+sources/inputs and594 seasonal solves were checked. Independent complex-step/
+48-node pressure integration plus mass projections reconstruct actual upper
+flow within1.33e-11m/s. The target is the decomposed return, not full raw shear.
+Counter:1934attempts,1929strict passes,4historical failures and1old interruption.
+
+| Ocean / thermal pattern | Mean rainfall-loss ratio | Mean temperature MAE change C |
+|---|---:|---:|
+| Legacy / single |1.04913| −0.0172 |
+| Legacy / separated |1.11816| −0.0209 |
+| Hydrostatic half / single |1.02547| −0.0273 |
+| Hydrostatic half / separated |1.09579| −0.0317 |
+
+None meets the0.95rain threshold. All temperature guards pass. The split reduces
+the much larger damage of the common projection but is still worse than the
+ORIGINAL winds; that original baseline determines the outcome. Mexico improves,
+while India and PNW regress in the location/month-sensitive rainfall loss.
+No adoption, shortlist or extra temperature/kinematic search follows.
+
+The architecture diagnosis is supported in its manufactured limit: preserving
+lower convergence is necessary to avoid the common-projection collapse, but it
+is insufficient to deliver a rainfall gain. Lower-convergence forcing, thermal
+energy, pressure adjustment, terrain lift and storm/rain closures still need
+independent physical assessment. Do not infer a unique real-world cause from
+these steady budget terms or sparse native comparisons.
+
+The next architecture milestone is now an isolated steady forced/damped
+baroclinic mode that solves momentum and thermal-thickness adjustment, rather
+than another prescribed shear/profile. Nine analytic/conservation tests pass,
+including a discrete modal energy identity and heating-generated convergence.
+It adds no Earth integrations and is not yet connected to climate. See
+[the dry-mode prototype](BAROCLINIC_MODE_20261028.md) for equations, manufactured
+example and boundary/heating prerequisites. Normal atlas climates remain.

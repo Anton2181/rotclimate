@@ -1,3 +1,117 @@
+# CURRENT — split experiment COMPLETE; dry dynamic mode prototype implemented
+
+Latestuser Continue twice midtask; workedcontinuouslyafterpushes. No agents.
+Repo /workspace/rotclimate branchwork push HEAD:claude/friendly-turing-43ygeu.
+No activeEarth/modeljob. Completed18runsoutput/divergent_thermal_20261028,
+core336a7ea/declaration5bc7a97 pushedbeforeallruns. All18strictpasses/sixexact
+historicalcontrols/main+PNWextra;682sources/594seasonalsolves;upperdecomposition
+verifiedcomplexstep48nodepressureintegrals+independentmassprojections max
+1.33e-11m/s. Counter1934attempts/1929strict/4oldfails+1oldinterruption.
+
+NO RAIN GAIN oradoption: fourmeanspairedrainlossratios vsORIGINALwind:
+legacySingle1.049126,legacySeparated1.118164,hydroSingle1.025471,
+hydroSeparated1.095791. MeanTchanges-.0172/-.0209/-.0273/-.0317C passguard;
+allfail.95raincriterion. Splitmassclosure recoversmostlostrainvscommonprojection
+butstillnotoriginal. Mexicoimproves;India/PNWerrorregress. Allregiontradeoffs
+allowedandshown. ExistingEarthr39/world/biome/popstayunchanged. No further
+kinematic/temperatureprofilevariant search;move toforcedcirculation+energy.
+
+Splitflag moisture_thermal_divergent_return=False default requires thermalwind;
+upper=(P(L)-.25L)/.75+P(rawS),lowerLexact. RawthermalshearNOTimposed;targetold
+divergentreturn+projectedthermalrotation. Threeoldertoyclimatesdefaultoffbitexact,
+76focused+2policytests passedbefore18casepilot. Isolatedflat-fproof lowerupair
+1e-6/s historical,2.55e-21common,1e-6split. Sourceimplemented/committed7a9f6b4.
+
+NEW DYNAMIC FOUNDATION (isolated,NOTCOUPLED,0Earthintegrations):
+rotclimate/baroclinic_mode.py solvessteadyforced/damped linearbaroclinicthermal
+thickness+momentum onperiodicCgrid. UnknownuEast,vSouth,phi/c. Momentumblocks
+rI,F,cGx;-F.T,rI,cGy;thermalblocks-cGx.T,-cGy.T,rTI. SkewCoriolis+adjointG/D
+makeexactmodalenergyinput=dissipation,positiveRunique. Q m2/s3 isthermalmode
+forcing,NOTexternaldrymass. FlatconstantdepthperiodicONLY; no terrain/open BC/
+latent/surfaceheatingbudgetyet. Futurelower=-.75mode,upper=.25modecolumnzero;
+actualdonorwaterexchangeandbarotropicbackgroundmustbeconservativebeforecouple.
+Nine tests pass Fourierdispersion f0/+/-,uniformheating,variablefenergy/integral,
+heatingdrivenlowerconvergence,massbalancedreturn,inputguards. Combined87 tests
+passedafterallcode. No extraEarthClimateModel.run fromprototype. Demo
+scripts/demo_baroclinic_mode.py output/baroclinic_mode_20261028/verification.json
+andbaroclinic_heating_response.png (shownuser). Fixedmanufacturedc50m/s,equivH255m,
+f30N,r5days,rT20days;Qequiv3Kgaussianminusmean. Energyerror1.41e-15,thermalresid
+1.76e-16m2/s3;maxwinds1.072m/s. DisplayarrowscollocatedfromCgridfaces+scalekeys.
+Report reports/BAROCLINIC_MODE_20261028.md. No measuredclimateaccuracyclaim.
+
+NEXT physicswork: properregionalboundary/terrainmassenergyadjointoperators,
+physical mode forcing from modeled heating in consistent energy units (neverobswind/
+humiditynudge),Earthlikemode/dragpriors,manufactured/openboundary/waterdonor
+checks. Onlythenseparatelydeclared coupledclimatepilot;no anotherkinematicfix.
+Couldstartclosedwall/variablemass operator+energyfluxchecks beforeopenradiation;
+periodicprototype NOT Earthready. Existingmodeforcingc/rchoicesnotcalibrated.
+
+Currentpublicationupdated .bat research33rdstudydivergent-thermal with5caseplots
+plusprototypeimage/fullJSON. Userpostedalllinks+prototypeinline. Newpublisher
+scripts/publish_divergent_thermal.py verifies18cases/sources thenprototypeSHA.
+Newposthelpersanalyze_divergent_thermal.py,verify_divergent_shear.py,periodicdemo.
+Source682frozenoldfilesunchanged. QA COMPLETE:33studies/112images/41downloads;684checkoutassets exact;
+1166portablefiles/342links/freshlauncher pass. Reports/page/JSON/protoimage
+byte-match latestbundle. verification.json complete;commit/pushcurrentresults+prototype. Normalatlasdatanochanges.
+UsemanagedPopenserver+browserinsameexecfinallyterminate (previewjobsdieonuser
+steering). Stageallsite/reportsbeforecheckoutQA. Reports/prototypesourcecanchange
+onlywithrefreshdemo+publisher;scientifichelpersboundbytheiranalysisSHA.
+
+Earliercurrenthandofffollows:
+
+# ACTIVE — divergence-preserving thermal architecture test
+
+User Continue twice duringongoingtask; continueafterpushes. No agents. Repo/work/
+pushsame. Core336a7ea and declaration5bc7a97 pushedBEFORE18newEarthintegrations.
+Actualjob scripts/divergent_thermal_pilot.py runningexecsession98996, log
+output/divergent_thermal_20261028.log, outputfolder samebasename. All682frozen
+sources muststayUNCHANGED whileactive: config/model/joint,newdivergentmodule,
+tests,runner,plan,etc. Newposthelpersnotfrozen canchange. Max18 actualruns,
+basecounter1916attempts/1911strict/4oldfails+1interruption; ifallpass1934/1929.
+Sixexact ORIGINALcontrols first,then12splitcases twofixedtemperaturelaws×two
+fixedoceans×3regions. Primaryscoreeachocean/pattern vsORIGINAL same.95rain/.25C
+criteria,exposeall4comparisons. No profile/amplitude tuning ornewobsforcing.
+Newflags moisture_thermal_divergent_return=False default; requires thermalwind.
+
+STRUCTURALfix: preserveoriginalpersteplower L exactly. P exactmassprojection,
+B=P(L),S=P(rawthermalshear);upper=(B-.25L)/.75+S. Massdivcancels, historical
+ageostrophicdivergentreturn retained,thermalrotationonlyabove. Actualtotalshear
+is olddivergentpart+projectedS,NOTfullrawgeostrophicshear. Certdecompositionerror
+andrawdepartureexposed. Summaryscope conditionalaccurate. No newenergy/momentum
+solution;oldlowerforcing/empiricalbackgroundsretained.76focusedtests+2newscorer
+checks pass;toyall3oldermodes original/single/separatedbitexact. Codecommits
+336a7ea/5bc7a97. Beforetoys output/divergent_thermal_development/.
+
+NEWpostanalysis readybutNOTRUN:
+scripts/verify_divergent_shear.py copiedcomplexstep48nodechecker supportsboth
+thermalpatterns; recoversA/BfromsavedgroundT/seasonallapse andfrozenZonalEBM
+(no ClimateModel.run), forms rawS thenindependentP(savedlower),P(S),checksactual
+upperdecomposition. Singlepatternusesanalyticfloor;sepusescertifiedcorefloor
+intervalwithroot/interior/exteriorchecks. Data.source coefficients unchanged.
+scripts/analyze_divergent_thermal.py copiedsephelper, newcheck_row/scorer, both
+candidatepressure/native/water audits. Fourgroupscorecard;raincurves+4columnmaps
+original/splitSingle/splitSep/obs; pressurewinds;temperatureaudit. FIXEDwrapper
+renamessepthermalstructurefiguretodivergentprefixafteroldplotter. Checkimports/
+shape/dynamiclabels withactualoutcomes. Source.posthelpersnotfrozenmaybefixed.
+Needpublisher+organizer+packager newstudy,reportcompleted,figuresposted,allQA,
+receiptscommitpush. DoNOTstopaftersetup. Ifanyprofilequalifiesneedsexcluded/
+resolution/transferchecks beforeadoption; ifsplitfails move todynamicallyforced
+circulation/atmosenergy (no4thkinematic/profiletweak).
+
+Previousmilestone7a9f6b4 published/pushed: stablethermal18casesallstrict12exact,
+634files594steps,secondrainfailurelegacy1.478/hydro1.520. AllQA32studies106images
+40downloads677exactassets1157bundle327links passed. NormalEarthr39/world/etc
+unchanged. Userwasalreadyshownscorecard viaimage tool;new5figures needposting
+explicit markdownpaths duringcurrentturn(linksokay). Docsstatearchitectureproof
+flatconstantfcommonprojectionremovesconvergence1e-6→2.55e-21/s,splitrestores1e-6;
+zeroEarthrun proof output/projection_architecture_20261028/diagnosis.json.
+
+Previewserverlaunchersessionsdisappearaftersteereduser messages; forbrowserQA
+runserver+browserinsamePythonexec Popen(start_new_session=True),finallyterminate,
+ratherthanassumingoldPID/port8766alive. ThiswasoperationalQAfailure,notEarthrun.
+
+Previoushandoffbelow:
+
 # CURRENT — second thermal profile COMPLETE; architecture split next
 
 Latestuser Continue twice while active; keep working after pushes. Repo/work/push
