@@ -1,3 +1,70 @@
+# ACTIVE — parcel stability verified; conservative convection experiment running
+
+User repeatedly says continue after pushes. Recalibration status answered:
+repeated coupling then bounded Earth trial; no dishonest ETA. Completed/pushed
+36ba30f conservative sublayers thena38d2a7 repeated pressure moist model. Did
+not stop after either. Runtime spec33; workspace persisted through restart.
+No agents. Currentrepo/work/pushsame. No Earth integrations or adoptedchanges.
+
+Parcel milestone nowready: parcel_stability.py and9tests. Source islowestmodel
+cell after localphase; partialpressurecolumn965->399hPa. Exactdryadiabat until
+bracketedLCL, saturatedRK4usesactualT-dependentlatent, vapor/liquidCp, sameqsat.
+IndependentDOP853 caught oldswitch-inside-RK error~.16K:FIXED bysplittingatLCL
+andusingexactdrybranch. Independentfinalprofilesagreewithin8microK. Interior
+logT/linearq pressureinterpolationresolvesCIN missedbycoarseendpoints.
+Independentexactsigncrossingintegrals andbrentLCLcheck. 9tests includecloudbase
+event, thermoenthalpydifferential,dryanalyticalintegrals, CINunderfirstinterval.
+Full282focusedpass54.53s (273+9);tests excludeuntrackedconvectionnextmilestone.
+
+Correctedfinestpartialdiagnostic values: conditionalinitialpositive mean1644.32,
+max2156.80J/kg,negative5.58. Conditionalfinalpositive804.90,max1197.35,negative
+19.68. Stableinitial/finalpositive0;negative1475.24/1601.30. Drypositive0,
+negative3097.61. Primarydry/dilute; optionalvirtual sensitivitysavedseparately.
+These are NOT fullatmosphereCAPE/CIN and no invented surfaceparcel/entrainment.
+ReportPARCEL_STABILITY_20261029;out/parcel_stability_20261029 (actually output/).
+Publicationall independentchecks passed. Checkout720assets,45studies/129images/
+53JSONdownloads;1215portablefiles/408links/freshlauncherpassed. Bindreceipts,
+commit/push this milestone; continueconvectionexperimentalreadyrunningbelow.
+
+NEXTalreadyimplementedUNTRACKED: rotclimate/convective_adjustment.py,
+tests/test_convective_adjustment.py (11pass1.40s), scripts/demo_convective_adjustment.py.
+Instantadjacentmixtrigger:dryunstable,or near-saturatedlowercellwarmersaturated
+parcelthanupper by .01K numericaltolerance. Pairs mixvaporq andredistributeT to
+dry/moistneutralparcel lapse, exactlypreserveactualgasenthalpy+water. Full
+enthalpyphaseexportsactualrainH aftersweep. Repeatuntilno activeadjacentpairs;
+64sweepmax/nonconvergenceexplicit. SaturatedtargetRK4uses validatedparcelODE.
+No arbitrarywindclip/buoyancydeletion, no observedforcing. Saturationactivation
+near1tol1e-8; unsaturateddry-stableconditionalCAPEdoesNOTtriggerwithoutlift.
+
+advance_with_convection = first-orderoperator split model.advance thenadjust.
+Nestedmomentumcertificate applies BEFOREadjustment; finalpressure reacts NEXT
+step, no falsepostadjustCNclaim. Supports relaxation_s=0/positive. Finitealpha=
+1-exp(-dt/tau) blends GASENTHALPY+WATER andactualtargetrainH, NOTT; thenexplicit
+phase ofhomogenizedmixture. Targetcanconverge whileactualrelaxedstate remains
+unstable: reportactual_remaining_active_interfacesseparately. Closureomits
+entrainment, convectivemomentum/TKE, waterloading/volume/potential/ice likebase.
+11tests actualdry/moist neutralization,E+rain/W, stable/no-liftunchanged, target
+vsfinerparcel, splitcouplingbudget, explicitnonconvergence, finite-relaxbudget,
+infinite-tau noadjustlimit, invalidinputs.
+
+Adhocdt300 sixhours: instantclosureconditionalpeak29.682m/s (unadjustedpaired
+42.483), meanrain5.1397mm,partialpositiveenergy69.45J/kg,2438pairadjusts,
+max14sweeps. Stablecontrol0pairs,peak2.4363123 matchesnoadjustto roundoff.
+Strongwindsstillremain; doNOTclaim realism/adoption just fromenergyreduction.
+Usertoldthis. Predeclared furthercasesinstant/1h/3hrelax anddt300/150/75,
+samepriorconditionalinput; no fitting or choosingtaubasedonwindscore.
+
+RUNNING execsession44075: demo_convective_adjustment.py outoutput/convection_20261029,
+stdout output/convection_20261029/run.log. 9conditionalruns=1512steps plus144
+stableinstantcontrol,1656total. Emitsfields.npz,verification.json andfigure.
+Baseline/noadjustarraysfromprioroutput/pressure_moist_20261029 are hash-bound.
+Finishthis, inspecttimestep/taudependence honestly, publishwithscope/limitsand
+full293tests (282+11) if codeunchanged. Keepnormalatlasesunchanged untilEarth
+protocol/forcing+boundarypilot. Earthr39/1934attempts/1929strict/4oldfails/
+1oldinterrupt unchanged. No newEarthrainaccuracygain.
+
+Earlier handoff follows:
+
 # ACTIVE — repeated pressure-coordinate moist coupling and convection gate
 
 User repeatedly requests "continue, dont stop after pushing". Answered latest
