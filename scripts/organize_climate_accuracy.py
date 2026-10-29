@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('rigid-lid','Retained mean circulation and constraint precision'),
     ('pressure-momentum','Initial momentum balance and thermal adjustment'),
     ('pressure-boundary-pilot','Regional boundary and initial-wind controls'),
     ('pressure-input-pilot','Earth-input smoke tests and the boundary artifact'),

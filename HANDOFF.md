@@ -1,3 +1,69 @@
+# ACTIVE — rigid-lid mean flow completed; open mean boundary is next
+
+Pushed4953571momentumdiagnosticpublication,5fd189fmeanflowcore+plan,16af837
+preservedfirstmeanflowfailuresanddeclaredrefinedrepeat. Continuousafterpushes.
+Newphysics RigidLidMoistModel permitsnonzeroverticalmeanwindifCOLUMNmassdiv0;
+CNsaddleconstraint [I+dtA/2,dtG;D,0],G=-D.T. Constraintsdozero workwhen
+boundarydepthmean0. Meanwindretainednotthrownaway. StillNO nonlinearmomentum
+advectionorvariablesurfacepressure, no fullybalancedinit.
+
+Original12Earthinputruns output/rigid_lid_20261029:8completed/4failed(native
+pressure-liddrymasscheck;450s India/PNWbothscenarios). Allhistory/partialsCOMMITTED
+16af837. Nevererasethesefailures. NewRefinedRigidLidMoistModel in
+rotclimate/rigid_lid_refined.py uses3LUresidualcorrections withlongdouble residual,
+8epsrowwisebackwarderrorguard. SAMEequations/physicaltolerances. Oldfrozenfiles
+remainunchanged. RefinedrepeatALL12cases output/rigid_lid_refined_20261029:
+12completed, nativecolumnmassres6.08e-17kg/m²/s, constraintwork<3.91e-15W/m²,
+rowwisebackwarderr<8.62e-17. ReconstructedE/Wrelativeerrors<7.31e-16.
+331focusedtestspass48.58s (328+3refinementtests).
+
+Meanflowpair usessameinitialT/WandSAMEverticalshear fromBOTHarchivedsimulated
+lower/upperwinds; lower25%drymass,upperremaining5cells. no_meanremovesfull
+verticalmean; retained_mean projectsrawfullwindmassorthogonally toCOLUMNdiv0.
+ProjectionKEremovedexplicitlyseparate,nohiddenheat. Fixedoldbaroclinicnormal
+portsmean0. Actualmeanflowcannotcrossperimeterinthisepoch. Fine450s:
+India no/retainrain.001924/.001561mm,edge100%;Mex.001016/.000382,edge100%;
+PNW.018033/.019112mm,edge99.6/99.8%. Retainedmeanpeak3.09/2.67/4.10m/s.
+Tmaxstartup7.71/10.83/12.82K. NOmeasuredrainaccuracygain,nocalibration/adoption.
+TotalactualprototypeEarthsmoke42starts/38completed/4numericalfailures SEPARATE
+fromUNCHANGEDlegacy1934/1929/4historicalfails/1interrupt. r39/world/biome/pop
+normaldatasetsunchanged. Researchatlasupdated50studies/134images,portable
+1236files/433links;Windows735assets. Currentmilestonebinding
+verifies682legacysources+literalplansources and6portablecurrentassets.
+Publicationstagedforcommit/pushnow;keepgoingafterpush.
+
+NEXT designnotimplementedyet: allowprescribedBAROTROPICnormalboundaryflow,
+withgloballyZEROnetdrymass (oldbaseconstructorrejectseachfacewithnonzeromean).
+Newseparatemodule/subclassshouldpreserveallfrozencorefiles. Constructbasewith
+zeroports thenassignnewactualboundaryarrays,computeactualboundaryCoriolisforce,
+externalT/q unchanged. Define d_boundary percell fromactualMd*normalports/dx.
+Require sum(d_boundary)=0; don'tsilentlydroporrenormalizeinmodel. Constraint
+D*x=-d_boundary, pressuregradientG=-D.T; CNsaddleRHSlast=-d_boundary[:-1].
+Projection becomesaffine min||x-x_raw||² s.t.D*x=-d. ItcanADDKE, recordactual
+KEchangeexplicitly. Existingorthogonalityx·correction=0nottrueforaffinecase;
+correctionorthogonaltodivergencefreeTANGENT instead.
+
+Criticalenergy: internalconstraintpressurework=-xmid·G*pi=-pi·d_boundary.
+Outwardbarotropicgeopotentialboundarywork=pi·d_boundary (lastgaugecellpi0).
+IncludeitwithoutwardTHERMALPhiworkinpublictotalboundarygeopotentialcertsoexisting
+advance_boundary_with_convectionwrapperbooksactualenergy. Keepseparatebarotropic
+andthermalportterms andcheckinternalconstraintwork+boundarybaroPhi=0.
+Cannotjustdropzero-meancheckwithoutthismass+energywork.
+UseRefinedSaddleSolvefortheactualmixedrows, no relaxedphysicaltolerance.
+Possibleexplicitpreparationhelperbalanceinitialrawnormalportsglobally byminimum
+kineticbarotropiccorrection uniformoutwarddelta=netMdU/(Mcol*numberfaces),subtract
+outwarddeltaoneachnormalface,alllevelsequal(noverticalshearchange). Recordactual
+originalnetkg/s,correctionm/s,newnetkg/s;modelitselfrejectunbalancedports.
+Tests beforeEarth: uniformmeanthroughflow,affineprojection,regionalbarotropic
+pressurework+actualenergy/water,unbalancedrejection,zero-meanoldlimit,helperflux/
+shear. ThenliteralplancommittedbeforeanyEarthoutcomes;fullsourcewindratherthan
+forcedupperreturn,noobservedwinds. DoNOTclaimopenmeanboundaryfixesstartup.
+
+Userexplicitcontinueafterpush. Noagents. Branchwork;pushHEADto
+claude/friendly-turing-43ygeu withgit http.versionHTTP/1.1.
+
+Earlier handoff follows (older active blocks stale):
+
 # ACTIVE — momentum diagnostic complete; rigid-lid mean-flow core implemented next
 
 Pushed boundarypublication2286617, thenfrozenmomentumplan/core d4d2195. Continued.

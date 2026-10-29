@@ -1,0 +1,63 @@
+{
+  "purpose": "Predeclared complete repeat of12 mean-flow cases with improved linear-solver precision after4 retained native-mass-check failures",
+  "boundary_plan": "calibration/pressure_boundary_pilot_20261029/plan.json",
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "scenarios": [
+    "no_mean",
+    "retained_mean"
+  ],
+  "timesteps_s": [
+    900,
+    450
+  ],
+  "duration_s": 21600,
+  "wind_source": "Both archived simulated lower and upper projected-right/up winds, not observed/reference wind. Lower pressure cell uses lower source; all other cells use upper source. Arithmetic staggering, up converted to grid-south.",
+  "paired_control": "Same baroclinic shear in both cases. no_mean removes whole vertical mean; retained_mean mass-orthogonally projects it to zero column divergence while retaining its nondivergent part. Declare actual removed initial kinetic energy separately; no heat compensation or initial energy equivalence claim.",
+  "boundary": "Identical old model-assisted zero-depth-mean prescribed normal ports in both scenarios. Incoming T/q fixed at adjacent initial fields. Mean flow is closed at regional perimeter; not transparent or free barotropic inflow.",
+  "unchanged": "Prior post-conversion T/water, Earth rotation, five-day drag, one-hour convective relaxation, pressure grid,224km sampling, prescribed boundary ports; no sustained solar/surface evaporation.",
+  "dynamics": "Rigid-lid CN pressure constraint permits nonzero mean wind with zero column divergence. Constraint pressure does no work. No nonlinear momentum advection, variable surface pressure or full balanced initialization.",
+  "counts": "12 additional Earth-input smoke integrations if all start. Cumulative42 starts after prior30, with prior4 numerical failures retained. No legacy benchmark attempts added.",
+  "failures": "Preserve all declared attempts and partial states; no replacement cases or post-outcome source changes",
+  "sources": {
+    "rotclimate/pressure_boundary.py": "a755f6cc5a8edf65378866f7558a6107410049188960b46cb3407d6afd4ad91e",
+    "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+    "rotclimate/pressure_coordinate.py": "f5aba77c4632ace2b0da94a2bd3f25c69cc35c8fb529d136828ef51beab11516",
+    "rotclimate/convective_adjustment.py": "35ee37e32e353cea503d09fe961c762aed5eb61f517a3191470225bf7a0c6413",
+    "rotclimate/parcel_stability.py": "845f30e50dc523f7d593589131cf0234dde820457b7c3822cf2b7d76b548edc3",
+    "rotclimate/multilevel_transport.py": "0923c32718fbc213cab0e8518b57418bf061349d0c453748bd47b1414be15119",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "rotclimate/moist_enthalpy.py": "d4fc73beadd4d1b910124fd8d2c89a09396f544feca51dbcdb177c031614e933",
+    "rotclimate/falling_water_energy.py": "1f5412c9f127cf2a7e4e002aeb78c21f5675135da847f76e467139ea20ed6b55",
+    "rotclimate/phase_adjustment.py": "5c3aeeb8e41b7a5c3ef283733d56631ff8b1aeeacfcfa6254e1da4dd4ace50c2",
+    "scripts/pressure_boundary_pilot.py": "6ea159a88757cc715477bb490de187ae6c97345589627d969370080ec1282123",
+    "output/pressure_input_pilot_20261029/verification.json": "62b1fb50ceefc3e417a214346a2645258f27d778d358bfec0a8ed5b5daae849b",
+    "output/divergent_thermal_20261028/hydro_control/north_india_transport.npz": "68a1a15b207335843e29bd295395760d341468b0c8785c16effef0a789be7d30",
+    "output/pressure_input_pilot_20261029/north_india/initial.npz": "f0f2253356572cc138e8ad5eb3ef5117c7a039c04ec13487da61536fc0487e7e",
+    "output/pressure_input_pilot_20261029/north_india/initial.json": "2d631fe235460742c80a5b28ad43c0540a1007bc4aeab335c167498c3b80824b",
+    "output/pressure_input_pilot_20261029/north_india/900.npz": "b2bb535e7c8995445c0b18dca688326ed0b9f3f6e8dfd879713dc7aa141083e7",
+    "output/pressure_input_pilot_20261029/north_india/900.json": "673947aacd0be5ea9824a695b7bf79ee927e4d6f23a9e5e86215e58580e1030a",
+    "output/divergent_thermal_20261028/hydro_control/mexico_transport.npz": "45695e69d55b0178a831680d5cb8ec60415eab81a1451ebc1387f4709eb3612b",
+    "output/pressure_input_pilot_20261029/mexico/initial.npz": "630f21efc12a5439a2d428665db7d7ce0512985911f2b7cbf5c5210ef7bbd3d7",
+    "output/pressure_input_pilot_20261029/mexico/initial.json": "63fe2d0e222fdaa959b4d582fa7738e2132cf5d7baaffa4c2ca961ebb2789ca7",
+    "output/pressure_input_pilot_20261029/mexico/900.npz": "a7d43b380e0e43fde50a9cebd630fcab2d4f5bc6dc2531bed7e9cbd24fb121aa",
+    "output/pressure_input_pilot_20261029/mexico/900.json": "058285d08b1fafda5656f034b74107db84a1ebcc9e280c6dd1bf680a9de9d0ca",
+    "output/divergent_thermal_20261028/hydro_control/pacific_nw_transport.npz": "334a9105cf511b9aa91d8d664591f3b4536b07c0f31b12798ddfd2c6891af3ba",
+    "output/pressure_input_pilot_20261029/pacific_nw/initial.npz": "3864bd4daf284d977670d9d16accd8327c0268f8278fab329c3e77582452c698",
+    "output/pressure_input_pilot_20261029/pacific_nw/initial.json": "a4e75bb4a822ef338c9a1ba9f1ab05f46c1c47187b5d24d129dbf286201e7e23",
+    "output/pressure_input_pilot_20261029/pacific_nw/900.npz": "3fa347b62e8e9bd3fa46998addbd19772b69001f443a8ae02572c11d5c8d518d",
+    "output/pressure_input_pilot_20261029/pacific_nw/900.json": "2f340e3a447c4412fa19104dd49fad6599729d8f2c9abe8e7db7d601c235eb50",
+    "calibration/pressure_boundary_pilot_20261029/plan.json": "d1e5704706923b999a5a520a912f2aa54b7dcc2e7d6a4bb5b9447993cb3c5d6e",
+    "rotclimate/rigid_lid_moist.py": "1bf64674b12535f9247a565b6271dade4578d175ba1a1fdef3c7a8c2341bc550",
+    "scripts/rigid_lid_pilot.py": "5296d395cc33da4104304d2f04b19bb24e6090079b07ecc26d80cf390c74650b",
+    "calibration/rigid_lid_20261029/plan.json": "ca882d98c475893c75d15dc9702b53fef9f8f71f116981a323e162ea6f64e81d",
+    "output/rigid_lid_20261029/verification.json": "b303323cedc8647d6edc8d2476ad76537c06d274244530567f0b00d5ce6f489c",
+    "rotclimate/rigid_lid_refined.py": "a1938b25464966ef87c44829962b47b806df6b01fc4ac876e4e87aa4814abacc",
+    "scripts/rigid_lid_refined_pilot.py": "9adad4e95fcb2c75bc6f6c3020b2ee2bf5fbccff54056feed40b878247a49ecc"
+  },
+  "numerical_change": "Same equations, initial fields, physical parameters, durations, timesteps and physical tolerances. Three LU residual-correction solves, residual in extended precision, final rowwise backward error checked against8 machine eps. No tolerance relaxation.",
+  "prior_attempt": "output/rigid_lid_20261029:12 started,8 completed,4 failed on unchanged native pressure-lid dry mass tolerance; partial states retained. Repeat all12, not only failures."
+}
