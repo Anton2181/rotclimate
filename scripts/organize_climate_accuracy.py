@@ -12,6 +12,7 @@ import re
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
     ('regional-rainfall-results','Complete-month rainfall results, with missing cases kept pending'),
+    ('terrain-advective','Paired nonlinear terrain momentum transport and actual state energy'),
     ('terrain-dry','Coupled dry terrain dynamics: all six-hour subsystem controls'),
     ('terrain-geometry','Terrain-following hydrostatic geometry and the omitted column mass'),
     ('monthly-water-progress','Rainfall trial progress and moisture-supply diagnosis'),

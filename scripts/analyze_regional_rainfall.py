@@ -66,6 +66,11 @@ def analyze(out,dest):
         first=load(region_dir/'forced'/f'day_14_{spec["dt_s"]}.npz');last=load(region_dir/'forced'/f'day_45_{spec["dt_s"]}.npz');rain=last['rain']-first['rain'];assert np.min(rain)>=0;prediction=rain/p['calendar']['evaluation_days'];metrics=rainfall_metrics(prediction,observed,ref['valid_area_km2'],ref['score_mask']);monthly_fields[spec['name']]=prediction
         for k in final:assert final[k].tobytes()==last[k].tobytes(),k
         trials[spec['name']].update(month=month,metrics=metrics,geographic=bins(prediction,observed,ref),mean_daily_scored_area_fraction_liquid_below_freezing=float(np.mean(cold)),minimum_scored_surface_temperature_k=min(min_surface),initial_fields_sha256=file_hash(region_dir/'initial.npz'))
+        duration=p['calendar']['evaluation_days'];mask=ref['score_mask'];weights=ref['valid_area_km2'][mask];weights=weights/weights.sum()
+        liquid_change=(last['surface_liquid']-first['surface_liquid'])/duration
+        vapor_change=(last['vapor']-first['vapor']).sum(0)/duration
+        evaporation=prediction-liquid_change;net_import=vapor_change+liquid_change
+        trials[spec['name']]['monthly_column_water_budget']=dict(rain_mm_day=float(weights@prediction[mask]),net_evaporation_mm_day=float(weights@evaporation[mask]),net_horizontal_water_import_mm_day=float(weights@net_import[mask]),vapor_storage_change_mm_day=float(weights@vapor_change[mask]),surface_storage_change_mm_day=float(weights@liquid_change[mask]),scope='Inferred from complete-month saved vapor/soil/rain stores under the fixed mask: P=E+import-vapor change. No runoff/ice; these are model identities, not independent water-origin tracers or observed evaporation.')
         combined[spec['name']+'_rain_rate']=prediction
         for label,fields in [('initial',initial),('day14',first),('day45',last)]:combined.update({spec['name']+'_'+label+'_'+k:v for k,v in fields.items()})
         if spec['primary']:all_primary.append(spec['name'])

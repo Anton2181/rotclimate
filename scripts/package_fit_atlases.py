@@ -135,6 +135,7 @@ def main():
              ROOT/'reports/MONTHLY_WATER_PROGRESS_20261029.md',
              ROOT/'reports/TERRAIN_GEOMETRY_20261029.md',
              ROOT/'reports/TERRAIN_DRY_20261029.md',
+             ROOT/'reports/TERRAIN_ADVECTIVE_20261029.md',
              ROOT/'reports/REGIONAL_RAINFALL_RESULTS_20261029.md',
              ROOT/'reports/CONVECTION_CAP_20261029.md',
              ROOT/'reports/REGIONAL_RAINFALL_BENCHMARK_DECLARATION_20261029.md',
