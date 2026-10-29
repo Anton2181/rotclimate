@@ -1,3 +1,20 @@
+# ACTIVE — fourteen-day runs active; conservative remap setup ready
+
+Extendedwet/dryjobs running from committede133bb19, sessions77124/6594. India
+passedday12, thenMexico/PNWqueued. No sourceedits to frozenintegrators. Monitor
+scripts/monitor_extended_spinup.py reconstructs dailyenergy/water andfirst3days
+againstold72h, outputsprogressseries. Firstsnapshotshownuser, Indiaday10wet/dry
+landP1.915/.48mm,soil38.6/2.06kg/m². Transientstartupwaterstillpersists.
+No newmonthlyskill,modeladoptionorcalibration. Keepmonitoringandfinishall6cases.
+
+Newpressure_remap.py+eighttests:86focusedtestsPASS. No oldphysicschanged.
+Literalstaticpressure_grid_remap_20261029 plan declares6 initialgridtransfers,
+zeroEarthintegrations:splitfirstcell4/16ways in3regions. Driver+plan MUSTcommit
+beforeoutcomes. Runpressure_grid_remap_audit.py thenpublishstaticchecks. Overlap
+enthalpy/vaporconservative,phaseconversionrain/Hmustreturntosurface; velocity
+coarseninglossisexplicit,refinementKEpreserved. Notbalancedstate/dynamicsproof.
+Do notconfusestaticcaseswithactualclimateintegrations. Continueafterpush.
+
 # ACTIVE — extended spinup declaration ready to run after commit
 
 Shared transport publication pushed. New14daywet/dryplans+driver nowdeclared;
