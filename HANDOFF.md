@@ -1,3 +1,70 @@
+# ACTIVE —24h forcing complete;72h wet/dry initial-land-water test prepared
+
+Pushed32ac7a6openmeanresults,cdb54ebforcingfluxkernels,2aeab87finite surfacecoupler
+andliteral24hplan. Continuedafterpushes. All12daylongEarth-inputrunscompleted:
+output/surface_forcing_20261029 (3regions*forced/unforced*900/450s). Sourcesfrom
+modelarchivesonly, NEVERobserveddata forinputs, fixedEarthorbit/f/drag/boundaries.
+FiniteSurfaceState liquid+substrateenthalpy; greyLW/SW andneutralbulkair-surface
+heat/water (signeddew) firstordersplit. Actualrainmass/Hreturnedexactlyonce,
+surfaceheatcapacitychangeswithwater. AtmosreturnedwithpendingrainCLEARED;
+result.rainarraysforcumulative/maps. Initialpressureconversionrain creditedto
+surfacebeforetime0andEXCLUDEDfromrunrain. Partial380hPatop's downwardLWexplicit
+omittedupperairreservoir, notTOA. No temperature restoration or rainfall fitting.
+Declaredopticaldepths/soil/roughnessexploratory, notEarthvalidatedoradopted.
+
+356focusedtestsPASS50.16s (337+12kernels+7surfacecoupling), log
+output/surface_coupling_checks_20261029/tests.log;verificationjsonCOMMITTED2aeab87.
+Finalrawgas+KE+surface budgets vsrecordedradiation+ports Eerror<2.69e-15rel,
+W<2.92e-16; surfacesoil identitydeltaM=rain-evap closes4.64e-13kg/m².
+Newactualprototype totals66STARTS/62completed/4retainedpriornumericalFAILURES.
+Legacy1934/1929/4historicalfails/1interruptUNCHANGED, Earthr39/world/biome/pop
+normaldataUNCHANGED. Nocalibration,no monthlyskill,noadoption.
+
+Fine24hforcedregionalrain1.453/1.273/.729mm vsunforced.505/.561/.087 (India/Mex/
+PNW). ForcedLANDmeans.853/1.819/.395mm;INTERIORLAND .331/.870/.030 vsunforced
+0/.308/0. Edgeforced67.8/57.9/64.6% vsunforced71.6/72.7/94.2%. DoNOTclaimgreater
+rainisaccuracy. Six-hour99–100%edgeclaimwasSTARTUP,notsteadystateclimate! The
+longerunforcedcontrolalreadyhasdelayedinteriorrain. Futureacceptance should
+separatespinupfromskill,notrequireeveryregioninitialtemp/rainimproves.
+LandmeanTschange−3.37/−1.39/−3.50K, ocean+.057/+.127/+.069; maxlocalTschange
+10.77/4.61/11.90K;allfinalsurfaces>279K. Wetuniformland50kg/m² maycauseoasis-
+likestartupcooling; don'tadopt. ForcedatmosT_RMSstepdiff.076/.074/.061K, surface
+.021/.036/.011K BUTlocalrainRMS.300/.397/.178mm, notconvergedlocalrain.
+Researchatlasupdated52studies/137images; Windows742assets,portable1247files/
+445links. MILESTONE_VERIFICATION binds8portablecurrentassets,
+QA/tests and682legacysources+allliteralplansourcesunchanged. Publicationstaged
+now;commit/pushit BEFOREnextspinupsetup. Userexplicitcontinueafterpush.
+
+NEXT PREPAREDUNTRACKED (NOoutcomesyet): scripts/surface_spinup_pilot.py and
+calibration/surface_spinup_20261029/{wet_plan,dry_plan,wet_preflight,dry_preflight}.json.
+Samephysics/sourceinputs,72h;wet50kg/m² land at900+450s ->6runs;dry0land at900
+only ->3runs. NineadditionalplannedactualEarthsmokes, expected75starts ifallstart,
+prior4failuresretained. Wetdtcomparison;drycoarsesensitivityscreennotnumeric
+acceptance. Fixed24/48/72h checkpointsinclude actualstate,day-specificrain,land/
+interiorlandmeans,netevap,land/oceanTs,landwater,minTs andsourcebudgets.
+Dailyfields day_1_900.npz etc ineachregion/forced folder; final900.npz/450.npz.
+Comparewetday1same-dt toprevious24hfinaltoverifyorchestrationrepeat. Lastday
+48–72hwindowonlyifcompleted. No observationreading,parametersearch,monthlyskill
+orsteadystateclaim. Sourcesallhashed;preflightpreparesonlyinputs,0integrations.
+NeedliteralplansCOMMITTEDBEFORERUN. Currentoldfrozenphys/runnerfilesUNCHANGED.
+Planstringscanbecleanedbeforecommitifneededbutregeneratepreflightshaafter.
+
+After24hpublicationcommit/push,gitaddONLYnewspinupdriver+plans/preflights,
+commit/push. Thenrunindependentwet/dry inseparateoutputpaths(logOUTSIDEfreshdir),
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/surface_spinup_pilot.py
+ --plan calibration/surface_spinup_20261029/wet_plan.json --out output/surface_spinup_wet_20261029
+anddryequivalent. Canlaunchbothshellprocessesparallel(twoCPU,threads1),notagents.
+No furthercorechangeswhilefrozenrunsactive. Keepallfailedattempts/partials.
+No newphysicscodechanges,so356testsremainingvalid unlessnewfailures/concerns.
+Needeventualcombinedspinuppublisher/report/atlas/QA/commit/pushandcontinue.
+
+Run/pushsameworkspace /workspace/rotclimate branchwork;
+git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu
+Noagents. Keepuserupdated<=60s,postgeneratedfigures. Current24hfiguresbothshown;
+mapexplicitlyembeddedcommentary,lastplotseriesviewedbutnotembeddedyet.
+
+Earlier handoff follows (older active blocks stale):
+
 # ACTIVE — open mean boundaries complete; surface/radiation kernels next
 
 Pushed c28f388rigid-lidpublication then50e37ebopenmeanboundarycore+literalplan.
