@@ -1,10 +1,23 @@
-# Active work — monthly rainfall forecast running; baseline publication ready
+# Active work — recovering interrupted monthly rainfall workers
 
-User justrepeatedcontinueafterpush. Fine-gridresultsalreadyPUSHEDbceb3239.
-MonthbenchmarksetupPUSHEDf48a02a7, parentRUNNINGsession98295 with2workers.
-Threelegacycontrolsdone/qualified; firstIndiawet/drypair~23/24 of45days.
-Referencepublicationnowstaged/QApass. Finishcommit/pushthenCONTINUE. Do notspawnagents.
-No prototypefullmonthscoreyet. No parametercalibration/modeladoption.
+Latest pushed baseline publication bddb0dfb. User says continue beyond pushes.
+Environment restart killed both India month workers; wet day29/dry day30 saved.
+No full prototype month score yet. Physics/plan/masks unchanged.
+Checkpoint recovery scripts and literal recovery plan are being committed now.
+Wet/dry isolated one-day replays reproduce all10 saved fields byte exactly.
+Wet replay repeated after removing a CLI-global dependency (three replay segments
+retained total, zero new Earth initializations). See output/monthly_recovery_replay*.
+After latest wet replay finishes, launch scripts/continue_rainfall_benchmark.py
+--recovery-plan calibration/regional_rainfall_recovery_20261029/plan.json
+--out output/regional_rainfall_benchmark_20261029. Do not launch duplicate workers.
+Original per-step histories before interruption weren't flushed; daily fields and
+budgets retained. Continuation history contains only new steps; absolute step
+count and cumulative ledgers are preserved. Count interrupted process segments
+separately from initialized trajectories. Then continue full-month plots/publishing.
+Read-only monitor now works: scripts/monitor_monthly_rainfall.py --source
+output/regional_rainfall_benchmark_20261029 --out output/monthly_rainfall_progress_20261029.
+First plot posted: wet rain low, dry nearly zero, soil memory persists.
+No incomplete-month candidate score or model adoption.
 
 ## Workspace and authorization
 
