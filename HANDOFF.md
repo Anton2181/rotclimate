@@ -1,3 +1,12 @@
+# ACTIVE — extended spinup declaration ready to run after commit
+
+Shared transport publication pushed. New14daywet/dryplans+driver nowdeclared;
+commit/push them before running. No extended Earthrun startedyet. Launchwet/dry
+as separateexecsessions, logsoutput/extended_surface_spinup_{wet,dry}_20261029.log.
+Outputsoutput/extended_surface_spinup_{wet,dry}_20261029. Read dailyJSON/checkpoints
+while working. No edits to frozensources, replacementsorpretendedmonthlyskill.
+Details reports/EXTENDED_SURFACE_SPINUP_DECLARATION_20261029.md. Keepgoing.
+
 # ACTIVE — shared factor controls passed; fourteen-day spinup prepared
 
 17d7c16 pushed shared-factor module/tests/literal numerical protocol. Six controls
