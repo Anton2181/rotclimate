@@ -1,3 +1,11 @@
+# ACTIVE — phase publication pushed; shared transport declaration ready
+
+3280f3f pushed phase publication/atlas. Shared transport setup now has374 passing
+tests, updated frozen source hashes and preflight. Commit/push setup before six
+Earth-input runs; none started yet. Declaration reports/SHARED_TRANSPORT_DECLARATION_20261029.md.
+After commit run benchmark_shared_transport.py with declared plan and freshout.
+No observed-data nudging, recalibration or production adoption. Keep working afterpush.
+
 # ACTIVE — faster phase backend verified; shared transport controls next
 
 Latest pushed c4bee73 declared six paired phase-backend Earth controls. All now
