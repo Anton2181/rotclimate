@@ -1,3 +1,36 @@
+# ACTIVE — boundary controls complete; momentum initialization next
+
+Pushed 2e0a6e2 (first six Earth-input smoke outcomes) and 2047035 (literal
+boundary/wind-control setup), continued. Twelve follow-up integrations complete:
+output/pressure_boundary_pilot_20261029, twelve + previous six = 18 actual NEW
+Earth-input smoke runs. Legacy 1934/1929/4fail/1interrupt UNCHANGED. No calibration
+or monthly skill, no adoption. India/PNW still 100/99.8% edge rain at fine dt;
+Mexico improves to77%, not a universal99–100% claim. Max T adjustments7.47/10.80/
+12.32K. Initial momentum imbalance remains .00396/.00378/.00435m/s². Seeded
+archived lower model winds do NOT balance the new pressure thermal state.
+Ports include actual gas/vapor/Phi/externally-maintained-velocity rotation work;
+not transparent radiation. Reconstructed final-state budgets vs summed solver
+port scalars errors <8.7e-16. 308 focused tests PASS54.74s. Atlas research companion
+updated:729 byte-exact checkoutassets,48studies/132images,1227portablefiles/423links.
+Milestone_verification binds results/QA and checks682legacy+27plansources unchanged.
+Normal Earthr39/world/biome/population data unchanged. Commit/push publication
+staged now, keep next momentum diagnostic out of that commit.
+
+NEXT untracked rotclimate/momentum_initialization.py and8analytic tests pass. It
+solves unique convex dry-mass-weighted initial momentum objective
+||A*x+b||²+||x-x_ref||²/tau², actual Coriolis/drag/pressure/prescribed-boundaryforce.
+Does NOT change f,drag,T,water or perform integration. No speed clipping. It is
+NOT full thermal/moist balance or normal-mode initialization. Need freeze finite
+tau1h/6h/24h study before Earth outcomes, keep winds/KE/divergence/thermaltendency
+visible, no rain-tuned weighting. Tests compare independent dense optimum,
+zeroport/uniform limit, actual boundaryforce, zero-depth-mean and monotone
+residual/correction tradeoff. No Earth diagnostic outcomes yet.
+
+User explicitly asks continuous work after pushes. No agents spawned. Push:
+git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu
+
+Earlier handoff follows (older active blocks are stale):
+
 # ACTIVE — first Earth-input smoke complete; regional-port follow-up prepared
 
 User continuesexplicitlyafterpushes. Pushed36ba30f/a38d2a7/ece3a92/cad4859 then
