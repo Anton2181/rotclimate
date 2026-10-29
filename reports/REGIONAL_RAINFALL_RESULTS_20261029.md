@@ -4,7 +4,9 @@ Pooled primary score is withheld until all six primary wet/dry months complete a
 
 north india: wet/dry MAE 7.254/8.092 mm/day versus r39 5.955; mean wet/dry rainfall 0.861/0.000 versus observed 8.092.
 
-2 of7 candidate months are complete. All complete fields are scored; no incomplete-month loss is substituted.
+mexico: wet/dry MAE 1.861/3.023 mm/day versus r39 2.088; mean wet/dry rainfall 1.225/0.000 versus observed 3.023.
+
+4 of7 candidate months are complete. All complete fields are scored; no incomplete-month loss is substituted.
 
 | Region | Profile | Observed | Model | MAE | Bias |
 |---|---|---:|---:|---:|---:|
@@ -12,8 +14,8 @@ north india: wet/dry MAE 7.254/8.092 mm/day versus r39 5.955; mean wet/dry rainf
 | north_india | wet | 8.0923 | 0.8613 | 7.2542 | -7.2309 |
 | north_india | dry | 8.0923 | 0.0000 | 8.0923 | -8.0923 |
 | mexico | r39 | 3.0234 | 1.5907 | 2.0883 | -1.4326 |
-| mexico | wet | 3.0234 | pending | pending | pending |
-| mexico | dry | 3.0234 | pending | pending | pending |
+| mexico | wet | 3.0234 | 1.2252 | 1.8608 | -1.7982 |
+| mexico | dry | 3.0234 | 0.0000 | 3.0234 | -3.0234 |
 | pacific_nw | r39 | 0.6806 | 0.8383 | 0.2051 | 0.1576 |
 | pacific_nw | wet | 0.6806 | pending | pending | pending |
 | pacific_nw | dry | 0.6806 | pending | pending | pending |

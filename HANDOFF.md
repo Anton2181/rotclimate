@@ -1,35 +1,81 @@
-# Active work — six native dry terrain controls complete; monthly rain still running
+# Active work — four complete rainfall months; final publisher being armed
 
-User:continue, do not stop after pushes; keep served .bat atlases current.
-Latest pushed3b414516: closed dry core + static work publication + literal six controls.
-Detached rainfall batch PID17717 still running. Log output/regional_rainfall_recovery_2_20261029.log.
-Mexico wet/dry aboutday38/37 as of18:52UTC. Do not relaunch any workers.
-Original session roots were killed twice; detached process survives tool resets.
-All remaining literal month cases still run. No pooled primaryscore until6done.
+User says keep developing/commit/push after milestones, do not stop after pushes.
+No agents. /workspace/rotclimate branchwork; single-thread .venv Python.
+Latest pushed584dea80: six dry terrain trajectory publication + nonlinear
+momentum operator (not enabled). Current staged milestone: complete Mexico
+tradeoff and automated final monthly publication. Finish commit/push then start
+finalizer DETACHED, and verify waiting status. Do not duplicate model workers.
 
-Current native dry publication staged, QA PASS:65studies/158figures, fresh portable
-1318files/534links, Windowscheckout, browser themes/mobile/keyboard/hash/errors,
-682old sources +monthly+newdry source manifests unchanged, ZIP bytecomparisons.
-Six synthetic-state/native-geometry6h controls ALLCOMPLETE at900/450s. Actual saved
-hourly and final energy independently checked, extended full-state agreement.
-Max final gasenthalpy+KE residual1.59e-4J/m² summedcells, no heat correction.
-Timestep finalmassweighted temperatureRMS1.86–2.24e-5K. NO rainfall skill claimed.
-New plots posted. No vapor/nonlinear momentum/open boundaries/surface/radiation.
-These add6syntheticgeometryintegrations, zero Earth-climate-initialized starts.
-67 related terrain/pressure/remapping/rainfall tests PASS.
-Finish current native publication commit/push then continue.
+## Long-running actual rainfall batch
 
-Uncommitted next building block terrain_momentum_transport.py +6tests PASS.
-Energy-skew reconstructed velocity transport, second-order manufacturedvortex
-acceleration convergence; NOT enabled in dry time integrator or rain forecasts.
-Needs actual implicit velocity+temperature coupling and trajectory qualification.
-Do not silently switch frozen terrain_dry.py (its6h protocol hashes it).
+Detached controller PID17717, log output/regional_rainfall_recovery_2_20261029.log.
+Four primary months complete (Indiawet/dry + Mexicowet/dry). Remaining Mexico
+wet450 numerical check and PNWwet900 active; PNWdry900 queued.
+Mexico wet MAE1.8608 vsr39 2.0883 (~11% gain), mean1.2252vsobserved3.0234.
+Mexico dry mean0/MAE3.0234. India wet/dryMAE7.2542/8.0923 vsr39 5.9545.
+No primary pooledscore untilall6complete/qualified. No best-initializationpick.
+BothIndiabranches worse; Mexico improvement onlywet, drycollapse unresolved.
 
-Potential next operational improvement: detached final rainfall publisher that
-waits for all originalattempts, scores fullmonths, updatesatlas+QA+commit+push.
-Keep original monthly source/objective/masks frozen. Commit only explicit own
-artifact paths (git commit --only) to avoid unrelated user staged changes.
-Current analyzer/publisher already support completecases/pending/failedstates.
+Current four-month publication output/regional_rainfall_results_mexico_20261029.
+QA PASS Windowscheckout/portable/browser,65studies/158figures, sources and ZIPbytes
+checked. Plots posted. Newest openingstudyregional-rainfall-results. Normal atlas
+climate fields unchanged; Earthbaseliner39, worldatlasr38 remain qualified.
+Counters currently115prototype starts/105complete/8retainedfailures/2active.
+Pending notfailures. Final ifall7complete116/108/8. Legacy1937/1932 unchanged.
+Synthetic dry subsystem controls6/6 separately counted, zero new Earth-climate
+initialized runs from those controls/static audits/tests.
+
+## Final publisher automation
+
+Script scripts/finalize_rainfall_benchmark.py tested:2tests prove artifact-only
+commits leave unrelated staged user work untouched and reject non-artifactpaths.
+New calibration/rainfall_final_publication_20261029/plan.json ARMED but mustbe
+committed before launch. Sources/guarded atlas inputs hashed before finaloutcomes.
+Then subprocess.Popen .venv/bin/python scripts/finalize_rainfall_benchmark.py
+--plan calibration/rainfall_final_publication_20261029/plan.json
+start_new_session=True, stdinDEVNULL, outputlog output/regional_rainfall_finalizer_20261029.log.
+Use singlethread environment. Do not leave longjobs attachedtoexec sessions.
+
+Automation waits forall10declared attempts (3r39 alreadydone +7candidatecases),
+validates frozen sources, scores onlycompletequalifiedmonths, updatesatlas,
+puts rainfallstudyfirst, runsWindows/portable/browserchecks+ZIPbytecomparison,
+commitsONLY explicit ownartifactpaths withgitcommit--only, pushes sameauthorized
+origin branchclaude/friendly-turing-43ygeu. It never adoptsphysics/recalibrates.
+Final status output/regional_rainfall_results_final_20261029/automation_status.json
+(local/ignored). Eight-hourtimeout. Guard rejects source/atlas/branch changes.
+
+IMPORTANT while watcherwaits: source-only newphysics outsidefrozen inputs isfine.
+Changing guarded HTML/resultdata/report/organizer requires re-arming finalizer
+against updatedfiles (preserve oldplan, stop onlyknownwatcherPID, newplanpath).
+Otherwise it will safely refuse to overwrite concurrentatlaschanges. Do not
+modify oldprediction/score sources while existing casesrun. Watcher can handle
+retainedfailed finalcases, withholding pooledscore; no substituted trajectories.
+
+## Physical mechanisms completed this round
+
+New variable-mass terrain geometry +commonpressureport intersections +hydrostatic
+rest pressuregradient +continuity-based compression power. All9declaredstatic
+work controls pass; max pressure/compressionwork residual9.20e-12W/m²summedcells.
+New native upwind heat/watertracer transport withpositive/constant/conservedtests.
+New TerrainDryModel couples heattransport, midpointpressure/Coriolis andcolumn
+constraint;8epssaddlelimit unchanged. Referencecolumnpotential absorbedinpressure
+gauge; testedzero work onadmissiblewind, noheatcorrection.
+
+Six6hsyntheticreference+1K thermalperturbation controls (3terrainregions,900/450s)
+ALLCOMPLETE. Independenthourly/finalstateenergychecked. Max finalactualgasenthalpy
++KE residual1.59e-4J/m²sumcells, dtRMS1.86–2.24e-5K. These are notrain/climateskill.
+Sourcecode+plans+rawfields inGit. Reports/TERRAIN_DRY_20261029.md andatlasstudy.
+
+terrain_momentum_transport.py is the next component: energy-skew centraltransport
+of reconstructednativevelocities usingadjoint interpolation.6testsPASS incl2nd
+order nonlinearvortexaccelerationconvergence, terrainKEwork, signreversal/zeroflow.
+NOT enabled in qualifieddryintegrator orrainforecasts. Need explicitnewsubclass/
+backend withimplicitvelocity+temperaturecoupling andnative trajectorycontrols;
+do not edit frozen terrain_dry.py/transport/work/gradient modules (literalplans
+hash them). Reuse untouched physics as reference. Full moisture/phase/open
+boundaries, surface/radiation andnonlinear vector momentum qualification remain.
+Total related selected terrain/pressure/remap/rainfall+Git safetytests75PASS.
 
 ## Actual rainfall result (fixed footprints,31-day July after14-day prelude)
 
