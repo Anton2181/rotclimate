@@ -1,0 +1,101 @@
+{
+  "status": "benchmark_inputs_and_fixed_footprints_prepared",
+  "actual_earth_integrations_started": 0,
+  "legacy_controls_prepared": 3,
+  "prototype_trials_prepared": 7,
+  "regions": {
+    "north_india": {
+      "r39_identity_exact": true,
+      "eligible_cells": 24,
+      "scored_area_km2": 1178072.1125893616,
+      "footprints_file": "calibration/regional_rainfall_benchmark_20261029/north_india_footprints.npz",
+      "footprints_sha256": "ca487a08374fe655f4ce0c8c1f24ad78b78e01f54cf0e09039254dc3cfaf9ef4",
+      "shape": [
+        15,
+        17
+      ]
+    },
+    "mexico": {
+      "r39_identity_exact": true,
+      "eligible_cells": 23,
+      "scored_area_km2": 1128717.8569344378,
+      "footprints_file": "calibration/regional_rainfall_benchmark_20261029/mexico_footprints.npz",
+      "footprints_sha256": "9c2c394dbb2d8fcb173ea29f29c665284c1357b57192ac11a4a5d4edea70aced",
+      "shape": [
+        16,
+        17
+      ]
+    },
+    "pacific_nw": {
+      "r39_identity_exact": true,
+      "eligible_cells": 12,
+      "scored_area_km2": 601771.2930487934,
+      "footprints_file": "calibration/regional_rainfall_benchmark_20261029/pacific_nw_footprints.npz",
+      "footprints_sha256": "495d91010d8ac3050dc11f6c40cb3b65b1ba7ef3224f9b91649818fde989fa01",
+      "shape": [
+        15,
+        15
+      ]
+    }
+  },
+  "prototype_preparations": {
+    "north_india_wet_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 50.0,
+      "atmospheric_temperature_sha256": "151ad3cfa2527850e6a9782900eb1bd8ec88eeaa7933f628c3784e8eb65fd1f7",
+      "atmospheric_vapor_sha256": "692bf302359b71bd0bc32fdde80958f25efb2a69581e57fffc10a8b8dfded69f"
+    },
+    "north_india_dry_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 0.0,
+      "atmospheric_temperature_sha256": "151ad3cfa2527850e6a9782900eb1bd8ec88eeaa7933f628c3784e8eb65fd1f7",
+      "atmospheric_vapor_sha256": "692bf302359b71bd0bc32fdde80958f25efb2a69581e57fffc10a8b8dfded69f"
+    },
+    "mexico_wet_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 50.0,
+      "atmospheric_temperature_sha256": "86d8ca3ecf84ff30bf19c6f683200eab92bb27701435710101227e9f38f1215b",
+      "atmospheric_vapor_sha256": "1e7069a1a7355c443675ff9aa04193181ec65b4bb53476d3122dc3b0777cdb52"
+    },
+    "mexico_dry_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 0.0,
+      "atmospheric_temperature_sha256": "86d8ca3ecf84ff30bf19c6f683200eab92bb27701435710101227e9f38f1215b",
+      "atmospheric_vapor_sha256": "1e7069a1a7355c443675ff9aa04193181ec65b4bb53476d3122dc3b0777cdb52"
+    },
+    "mexico_wet_450": {
+      "levels": 9,
+      "steps": 8640,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 50.0,
+      "atmospheric_temperature_sha256": "86d8ca3ecf84ff30bf19c6f683200eab92bb27701435710101227e9f38f1215b",
+      "atmospheric_vapor_sha256": "1e7069a1a7355c443675ff9aa04193181ec65b4bb53476d3122dc3b0777cdb52"
+    },
+    "pacific_nw_wet_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 50.0,
+      "atmospheric_temperature_sha256": "178fc5ad7e4963ceb445a12fdac37a97049cf6fa7990f643e895a9a5f714cf61",
+      "atmospheric_vapor_sha256": "3f953bb7504528e8838667f60f5e421087e67f33f46b6e6616d3675d92845e78"
+    },
+    "pacific_nw_dry_900": {
+      "levels": 9,
+      "steps": 4320,
+      "duration_days": 45.0,
+      "initial_land_liquid_setting": 0.0,
+      "atmospheric_temperature_sha256": "178fc5ad7e4963ceb445a12fdac37a97049cf6fa7990f643e895a9a5f714cf61",
+      "atmospheric_vapor_sha256": "3f953bb7504528e8838667f60f5e421087e67f33f46b6e6616d3675d92845e78"
+    }
+  },
+  "literal_plan_sha256": "d837108cb051f7b8a93eb61db8d390c824b4c770f3d73cd0c99f69d2e9074b75",
+  "scope": "Input/geometry preparation only. No forecast, observed-error computation or initialization selection. Each region has identical initial atmosphere across water/timestep scenarios."
+}
