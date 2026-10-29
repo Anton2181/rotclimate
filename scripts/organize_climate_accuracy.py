@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('terrain-dry','Coupled dry terrain dynamics: all six-hour subsystem controls'),
     ('regional-rainfall-results','Complete-month rainfall results, with missing cases kept pending'),
     ('terrain-geometry','Terrain-following hydrostatic geometry and the omitted column mass'),
     ('monthly-water-progress','Rainfall trial progress and moisture-supply diagnosis'),

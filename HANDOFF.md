@@ -1,19 +1,35 @@
-# Active work — first complete monthly scores; next terrain mechanics
+# Active work — six native dry terrain controls complete; monthly rain still running
 
-User says keep developing, commit/push milestones, do not stop after pushes.
-No new agents. Workspace `/workspace/rotclimate`, branch `work`.
-Run Python with OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python.
-Push: git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu.
-No AGENTS.md found. Cloud-runtime skill read earlier. No credentials accessed.
+User:continue, do not stop after pushes; keep served .bat atlases current.
+Latest pushed3b414516: closed dry core + static work publication + literal six controls.
+Detached rainfall batch PID17717 still running. Log output/regional_rainfall_recovery_2_20261029.log.
+Mexico wet/dry aboutday38/37 as of18:52UTC. Do not relaunch any workers.
+Original session roots were killed twice; detached process survives tool resets.
+All remaining literal month cases still run. No pooled primaryscore until6done.
 
-## Current milestone
+Current native dry publication staged, QA PASS:65studies/158figures, fresh portable
+1318files/534links, Windowscheckout, browser themes/mobile/keyboard/hash/errors,
+682old sources +monthly+newdry source manifests unchanged, ZIP bytecomparisons.
+Six synthetic-state/native-geometry6h controls ALLCOMPLETE at900/450s. Actual saved
+hourly and final energy independently checked, extended full-state agreement.
+Max final gasenthalpy+KE residual1.59e-4J/m² summedcells, no heat correction.
+Timestep finalmassweighted temperatureRMS1.86–2.24e-5K. NO rainfall skill claimed.
+New plots posted. No vapor/nonlinear momentum/open boundaries/surface/radiation.
+These add6syntheticgeometryintegrations, zero Earth-climate-initialized starts.
+67 related terrain/pressure/remapping/rainfall tests PASS.
+Finish current native publication commit/push then continue.
 
-Latest pushed3445b344: water-supply atlas. Current staged milestone is complete
-India monthly results + terrain hydrostatic geometry/common-pressure apertures.
-Atlas QA PASS:64studies/156figures,787 Windows byte assets, full portable checker,
-browser keyboard/hash/themes/mobile/errors, all682 old source hashes unchanged.
-New ZIP assets compared byte exactly. Figures posted to user.
-Finish current commit/push then keep working; queued month cases still matter.
+Uncommitted next building block terrain_momentum_transport.py +6tests PASS.
+Energy-skew reconstructed velocity transport, second-order manufacturedvortex
+acceleration convergence; NOT enabled in dry time integrator or rain forecasts.
+Needs actual implicit velocity+temperature coupling and trajectory qualification.
+Do not silently switch frozen terrain_dry.py (its6h protocol hashes it).
+
+Potential next operational improvement: detached final rainfall publisher that
+waits for all originalattempts, scores fullmonths, updatesatlas+QA+commit+push.
+Keep original monthly source/objective/masks frozen. Commit only explicit own
+artifact paths (git commit --only) to avoid unrelated user staged changes.
+Current analyzer/publisher already support completecases/pending/failedstates.
 
 ## Actual rainfall result (fixed footprints,31-day July after14-day prelude)
 
