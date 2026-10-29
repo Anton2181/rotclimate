@@ -1,3 +1,42 @@
+# ACTIVE — momentum diagnostic complete; rigid-lid mean-flow core implemented next
+
+Pushed boundarypublication2286617, thenfrozenmomentumplan/core d4d2195. Continued.
+output/pressure_momentum_20261029 contains30STATICstates, ZEROnewintegrations;
+actualEarth-inputsmoke cumulative18 unchanged. Legacy1934/1929/4fail/1interrupt
+unchanged, r39/world/biome/popdataunchanged. No calibration/adoption.
+Momentum-only convexglobaloptimum NOTclimateglobaloptimum: lowerresidualrequires
+unphysicalwinds/hugethermaltendencies. Formalsteadystatepeak207–250m/s. Withports,
+6hregularization29–34m/s butthermalRMS9–15K/day, notactualdayforecast. DoNOTadopt.
+318focusedtests pass48.31s, atlasresearchupdated49studies/133images,
+1231portablefiles/428links (checkexactreceipts), checkedWindowsassets732.
+VerificationbindsQA/tests,currentportable5files and682legacy/allplansources.
+Commitpublicationstagednow. Keepnextuntrackedcore/testsoutofthiscommit.
+
+NEXT alreadyimplemented untracked rotclimate/rigid_lid_moist.py and
+ tests/test_rigid_lid_moist.py —9analytic tests PASS .52s. RigidLidMoistModel
+extendsfrozenBoundaryPressureMoistModel; separateadvancecopy sooldsourcehashes
+remainvalid. Allowsnonzeroverticalmeanwind if actualcolumnmassdivergence=0.
+D maps sqrt(M)*facevelocity to columnmassdivergence. G=-D.T;droponeconstraint
+rowtofixpressuregauge. CNsaddlesystem [I+dtA/2,dtG;D,0] solvesnewvelocity+pressure.
+Pressureconstraintdoesnoworkonadmissiblemidpoint, drymass/energyconserved.
+Existingzero-depthmean controlsreproducedwith/withoutports. No nonlinear
+momentumadvectionorvariablesurfacepressure: rigid-lidapproximationexplicit.
+project_initial_wind givesmassorthogonalprojectionofanyfullsourcewind, changes
+onlyverticalmeancomponent; explicitlyrecordsKEremoved (nohiddenheat). Notbalanced
+thermalstate. Tests includeindependentdensematrixexponentialsecond-orderconvergence
+forvariablefmeanflow,CNKEconservation,actualregionalport+moist/convectionbudget,
+barotropiccirculationretention,projectionorthogonality/idempotence,invalidmass.
+
+NextfreezeEarth-input comparisonretainingarchivedlowerANDuppermodelwind vsold
+forcedupperreturn. UsepreviousinitialT/W/geo, pressuremassgrid, declaredports,
+projectinitialinteriorwindforzeroCOLUMNdivergence,bookremovedinitialKE separately.
+Noobservedwind/rain andnophysicsadoption. NeedliteralplancommittedBEFOREoutcomes.
+NoactualEarthrunswithnewrigid-lidcoreyet. Fullsuitewillbe327(318+9).
+Userexplicitcontinuousafterpush. Noagents. Branchwork;pushHEADto
+claude/friendly-turing-43ygeu withgit http.versionHTTP/1.1.
+
+Earlier handoff follows (older active blocks stale):
+
 # ACTIVE — boundary controls complete; momentum initialization next
 
 Pushed 2e0a6e2 (first six Earth-input smoke outcomes) and 2047035 (literal
