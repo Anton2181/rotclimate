@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('convective-adjustment','Conservative convection and closure sensitivity'),
     ('parcel-stability','Parcel stability and the unresolved convection regime'),
     ('pressure-moist','Repeated moist feedback and a convection acceptance gate'),
     ('sublayer-phase','Conservative phase sublayers on a fixed circulation grid'),

@@ -1,3 +1,75 @@
+# ACTIVE — convection complete; frozen Earth-input smoke test prepared next
+
+User repeatedlyrequestscontinueafterpush. Completedpushed36ba30f sublayers,
+a38d2a7 pressuremoist,ece3a92 parcelstability. Continuedinto conservative
+convectionand nowpreparing actualEarth-input smoke test; do NOT stopafterpush.
+Noagents. Repo/work/pushsame. CurrentrealEarthlegacybenchmark still1934/1929/
+4oldfails/1oldinterrupt; allnormalEarthr39/world/biome/popunchanged.
+
+CONVECTION milestonecomplete: rotclimate/convective_adjustment.py +11tests.
+Instantadjacentpairmix triggerdryunstable,ornearSATlowerandwarmerliftedsatparcel.
+Pairqmassmean; heatneutraldry/satparcelprofile; exactgasH andwaterpreserved.
+FullenthalpyphaseexportsactualrainH aftersweep, repeatmax64 untilnoactivepair,
+nonconvergencerejected. SaturatedtargetusespurewetRK4validatedparcelderivative.
+No windcaps/buoyancydeletion. Dry-stableunsaturatedCAPEdoesnottriggerunforced.
+Firstordersplit:basepressure-moistadvance thenadjust; nestedmomentumcertbefore
+adjustment, finalpressure reactsnextstep. Finiterelaxalpha=1-exp(-dt/tau),
+blend GASENTHALPY/WATER +targetrainH; diagnosticT, explicitphaseofmixedstate.
+Targetconvergence != actualrelaxedstability: reportboth. Noentrainment,
+convectivemomentum/TKE, watervolume/loading/potential, ice etc likebase.
+11tests pass; full293focusedpass42.01s. No codechangesaftertests besidesdocs.
+
+Formal9conditionalruns tau0/1h/3h ×dt300/150/75, plusstable150=1656steps.
+Finest75:instantpartialpositive55.998J/kg,wind29.276m/s,rain5.2088mm;
+1h430.312/34.454/5.0930;3h748.525/31.741/4.6723. Baselineunadjusted804.899/
+41.795/5.17895. No winnerselected! Windsarenotmonotonewithtau, stillstrong,
+closure/numericsnotEarthvalidation. Stable0pairs, Tdiff2e-12K/winddiff2.6e-12.
+Independentrawtotalenergy/watererrors<2.1e-14. ReportCONVECTIVE_ADJUSTMENT_20261029.
+outoutput/convection_20261029;figureposteduser. Pub/checksallpassed:46studies/
+130images/54JSONdownloads;723checkoutassets;1219portablefiles/413links/fresh
+launcher. Bindmilestonereceipts,commit/push ONLYthismilestone first.
+
+NEXT alreadyPREPARED (untracked, separatefrom293convectioncommit):
+rotclimate/pressure_initialization.py andtests/test_pressure_initialization.py
+(7pass, futurefull300). select_recorded_day requires exactscored-daymapping,
+notfirstsame-day spinupoccurrence. initialize_archived_column takes ONLYmodel
+surfaceT,lower/upperwater,elevation, fixedpgrid. Flatten byfixed6K/km sea-level
+lapse, samehydrostaticverticalgamma+declared200Kcap. UniformRHwithinlower/upper
+reservoir, preservesactualbothwaterintegrals. Initialenthalpyphasebookedseparately
+and returned; raw/adjustedT,W/initialrainH. No observedT/P/wind/humidityfields.
+No clipping: out-of-domaininputreject. Tests actualcalendar/water/E, drylimits,
+samegammaelevationcorrection,zeroreservoir,invalidinputs.
+
+scripts/pressure_input_pilot.py +calibration/pressure_input_pilot_20261029/plan.json
+andpreflight.json prepared; PLANLITERALMUSTBECOMMITTEDBEFORERUN. Planhashesall
+code/inputarchives. Fixedregionsnorth_indiaJulyday197.1(index21),mexicoAug226.3
+(index23),pacific_nwJuly197.1(index21), sourcehydro_control/*_transport.npz.
+Pointsubsampleevery4cells,dx224km. Sixpressurecells101325->38000Pa, firstcell25%
+drymass, next5upper. ModelTand2reservoirWtransfer; fixedsea-leveltopoflattening
+becauseuniformpressure/no terrain. Earthlatvaryingf, tau_conv1h,5daydrag,zero
+initialwind,closedwalls/lids. dt1800/900,6h=6fixedruns (notcalibration).
+No solar/surfaceevap/lateralforcing; initiallyunbalanced,notweatherprediction.
+No observedrain/temp/windread andNOmonthlyskillscore. Initialconversionrain
+EXCLUDEDfromrunrain; preflightmeansIndia.00269/Mex.00591/PNW.02849mm. Allinitial
+T238.39..306.95K,transferwater/E~1e-16rel. Warmseasonlowerbutcoldtopliquid-only
+approxstillvisible. Legacybenchmarkcounterunchanged; SIX EARTH-INITIALIZEDRUNS
+mustbecountedSEPARATELY whenstarted, not falselycalledzeroEarthdataor1934strict
+benchmark integrations. No adoption andno independentvalidation.
+
+NEXTexecution: afterconvectioncommit/push, commitliteralpilotplan+driver+init
+core/tests/preflight BEFORErunning. Then
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/pressure_input_pilot.py
+ --plan calibration/pressure_input_pilot_20261029/plan.json
+ --out output/pressure_input_pilot_20261029
+Use stdoutlog OUTSIDEtargetfolder (runnerrequiresfresh/emptyout). Preserveall
+failedcases;no newparams/replacementregionsafteroutcomes. Outcomes actualwater/
+energy,numericaladmissibility andtimestep sensitivity, NOTEarthrainaccuracy.
+Thenreport/publishrealgeographypilotmaps (labelterrainflattened/smoke), update
+atlasbeforecommittingmilestone. Neededbeforebroadcalibration: regionaldrivers/
+boundaryforcing/temperature/rainvalidation, withphysicalpriorsandheldoutguards.
+
+Earlier handoff follows:
+
 # ACTIVE — parcel stability verified; conservative convection experiment running
 
 User repeatedly says continue after pushes. Recalibration status answered:

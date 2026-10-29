@@ -120,6 +120,7 @@ def main():
              ROOT/'reports/SUBLAYER_PHASE_20261029.md',
              ROOT/'reports/PRESSURE_MOIST_20261029.md',
              ROOT/'reports/PARCEL_STABILITY_20261029.md',
+             ROOT/'reports/CONVECTIVE_ADJUSTMENT_20261029.md',
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
