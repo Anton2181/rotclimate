@@ -1,0 +1,47 @@
+{
+  "purpose": "Same full nonlinear terrain integrator body, reference compression quadrature versus precomputed static coefficients",
+  "sources": {
+    "rotclimate/terrain_work_cache.py": "75b26fd5b632650c35d3339df81b4d56df37d176ede5a05444b1cf23ac963568",
+    "rotclimate/terrain_advective.py": "59db077a502c449f7d4dc9dc32df8f1565a55d5aaa099bf170a015d2a209a604",
+    "rotclimate/terrain_momentum_transport.py": "7bb7a13d6c764f7d9d9c875ee58e02d66f41d47a93a3d550ea73a1089474bc5e",
+    "rotclimate/terrain_dry.py": "be703acf3d206e92dc996033b7bb9e6ec61826176c4a0f440426ae4a92da1c5f",
+    "rotclimate/terrain_transport.py": "eb205022b90b0859f7f8c52cc941a96a332d01a421111e83d3f694ac212dfeb7",
+    "rotclimate/terrain_pressure_work.py": "52cb6f1ad857d30d8887db34a9487bcd13cb7955c638c92741476b2ebdc5f270",
+    "rotclimate/terrain_pressure_gradient.py": "d99a8530f173079d63a0795dc53f3c219c4e9a5e0dd2a2da79a62a7fafeb5424",
+    "rotclimate/terrain_apertures.py": "aac95b5b48eb46a718b0488b77f3662c09a8a1e6fde415da5dc109022abad5b8",
+    "rotclimate/terrain_hydrostatics.py": "104c22c2896b93ef5e5db6a1d23149dbbf513fcc2827ac01b082a47b81192d07",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "rotclimate/open_mean_boundary.py": "e38d3270c7e46a3989ffb979d506e8f2df10c1c88c7d1d2f1046eb0ce93adc15",
+    "rotclimate/rigid_lid_refined.py": "a1938b25464966ef87c44829962b47b806df6b01fc4ac876e4e87aa4814abacc",
+    "rotclimate/phase_backend.py": "b8c26b20918229d3166a015299147b3c6b0beecf43d0036e2370f312da0a8ac0",
+    "scripts/benchmark_terrain_work_cache.py": "80a6b35577101152073481e8834b28be7c4e5451140d0bc461f8aa147dd36f90",
+    "output/terrain_geometry_20261029/verification.json": "1219b51261237062e323ff03a4027346a3468321aa38504484094b1a6b3a38ad",
+    "output/terrain_advective_20261029/north_india_transport_on/initial.npz": "dcce8445d551d8717824457a1ac3dd6ef3bc8b9eb0af08e8ea79afb299603e1d",
+    "output/terrain_advective_20261029/mexico_transport_on/initial.npz": "194644c3fc26107f5b3b7c00acf78acad616d88f2de3ad7ffba40b69e4b5a1ed",
+    "output/terrain_advective_20261029/pacific_nw_transport_on/initial.npz": "8b874d21699bce7d879d747e2df13773cdc8b5ad7eea3a9596c7f37146b1ab39"
+  },
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "initial_fields": {
+    "north_india": "output/terrain_advective_20261029/north_india_transport_on/initial.npz",
+    "mexico": "output/terrain_advective_20261029/mexico_transport_on/initial.npz",
+    "pacific_nw": "output/terrain_advective_20261029/pacific_nw_transport_on/initial.npz"
+  },
+  "duration_s": 21600,
+  "timestep_s": 900,
+  "temperature_tolerance_k": 1e-10,
+  "velocity_tolerance_ms": 1e-09,
+  "maximum_coupling_iterations": 80,
+  "maximum_state_difference": 1e-08,
+  "reference_temperature_k": 288.15,
+  "reference_lapse_k_m": 0.0065,
+  "cell_m": 224000.0,
+  "earth_rotation_rate_s": 7.292115e-05,
+  "synthetic_native_geometry_integrations_planned": 6,
+  "new_earth_climate_initializations_planned": 0,
+  "physics_adoption": false,
+  "retention": "All pairs and every partial/failure retained; no timing-based case selection; CPU and wall times plus construction costs reported."
+}
