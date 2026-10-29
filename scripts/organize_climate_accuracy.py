@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('convection-cap','Completed full finer-grid controls and remaining spatial sensitivity'),
     ('convection-limit','Reproduced fine-grid rejection and fixed solver work-cap controls'),
     ('lower-cell-resolution','Lower-air-cell grid controls and retained fine-grid failures'),
     ('extended-spinup','Fourteen-day soil-water memory and implications for calibration'),

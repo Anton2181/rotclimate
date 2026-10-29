@@ -1,18 +1,33 @@
-# Active work — finish fine-grid controls, then run the fixed rainfall benchmark
+# Active work — fine-grid results verified; launch committed rainfall benchmark next
 
-User explicitly requests continuous development, commits and pushes after milestones,
-and continuing after pushes. Latest questions asked progress versus baseline and ETA.
-Answered honestly: no measured monthly accuracy gain yet; first new fine-grid day
-arrived in ~7 minutes; full six-run comparison/atlas estimate45–90 minutes from start.
-Latest update: four of six done, last PNW pair running, ~10–20 more minutes estimated.
-Keep meaningful commentary frequent and post generated figures. Do not spawn agents.
+User explicitly continues after pushes, repeated latestmessage. No agents. Keep
+meaningful frequent commentary and post figures. Latest ETA question answered:
+first full fine-grid day ~7minutes; fullbatch45–90min. Batch nowfinished6/6.
+All six independent saved water/energy budgetsPASS, maxE<3e-15/W<1.5e-16.
+Prototype109starts/101completions/eightretainedfailures. Legacy1934/1929unchanged.
+Oldthreefailedinitialstatearraysandacceptedscalarprefixesexactlyreproduce.
+Fine21level900/450landP India.619/.632, Mexico1.751/1.715, PNW.427/.427mm/day.
+SpatialstepRMS.204/.559/.148mm. Maxactualclosurework432; no newaccuracyclaim.
+Bothfiguresposted. Currentstagedpublicationupdatesatlas60studies/149images,
+770Windowsbyteassets,1288ZIPfiles. Allbrowser/launcher/682source/bytechecksPASS.
+Commit/pushcurrentpublicationnow,thenimmediatelylaunchmonthbenchmarkbelow.
+
+BenchmarkSETUPalreadyCOMMITTEDandPUSHEDf48a02a7. No benchmarkintegrationsyet.
+Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python
+scripts/run_regional_rainfall_benchmark.py --plan
+calibration/regional_rainfall_benchmark_20261029/plan.json --out
+output/regional_rainfall_benchmark_20261029 > output/regional_rainfall_benchmark_20261029.log 2>&1`.
+It validates currentcapreceipt, snapshots prior109/101/8, runs3legacycontrols
+then7prototype45daycaseswith2workers. Sourceprotocolsallcurrentlyhashvalid.
+Do notstopafterpublicationpush. Scoring/publisherimplementationstillnext;
+metric/calendar/masksarealreadyfrozen. Monitorindividualcase.dailycheckpoints.
 
 ## Workspace and authorization
 
 `/workspace/rotclimate`, branch `work`. Python `.venv/bin/python`.
 Set `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1` for models/tests. CPU quota2 cores.
 Push: `git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu`.
-Last pushed5304a72c: rejected-step diagnosis publication and literal full-cap controls.
+Last pushedf48a02a7: fixed monthly rainfall benchmark setup. Current fine-grid publication ready.
 No approval required for this authorized local development/commit/push work.
 No AGENTS.md found. Cloud runtime skill read earlier; no secrets accessed.
 
