@@ -1,0 +1,31 @@
+{
+  "purpose": "Frozen static conservative initialization transfer for lower-air-cell resolution; no dynamic integration",
+  "inputs": {
+    "north_india": "output/shared_transport_20261029/north_india_candidate/north_india/initial.npz",
+    "mexico": "output/shared_transport_20261029/mexico_candidate/mexico/initial.npz",
+    "pacific_nw": "output/shared_transport_20261029/pacific_nw_candidate/pacific_nw/initial.npz"
+  },
+  "lowest_cell_parts": [
+    4,
+    16
+  ],
+  "sources": {
+    "rotclimate/pressure_remap.py": "83fc012ee11662c360841acdec62e5f2b7a5a9f713774d5aaf5c46840ab970da",
+    "tests/test_pressure_remap.py": "7d1d889e1b808d10a60e79a048da670e63e1db8e50dcfc3bcbf1abb90721dbdc",
+    "scripts/pressure_grid_remap_audit.py": "3d6c7270bf7752632420772113c7e63f4b73abfb413a7c5cead53947688d3d56",
+    "rotclimate/pressure_coordinate.py": "f5aba77c4632ace2b0da94a2bd3f25c69cc35c8fb529d136828ef51beab11516",
+    "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+    "rotclimate/fast_liquid_phase.py": "15355fa32a10549a270e7d764b6355d4cffdb419ed8abfc2ef90f443ec24a947",
+    "rotclimate/surface_coupling.py": "ba929e93e2b2e1974f9532fd30f77906879a49cec1a8a1becd8b398b4424c147",
+    "output/shared_transport_20261029/publication.json": "e0ec4f0fd69f7cf5760819a2ff8f0f666d208ff53d3a5483d39cbacb199293cb",
+    "output/shared_transport_20261029/north_india_candidate/north_india/initial.npz": "a78dc605d3aeed6383d72f333bee9f96a402ca2c9ec2d6b70b87f23f9e56d3ba",
+    "output/shared_transport_20261029/mexico_candidate/mexico/initial.npz": "cabcdc866e690933da8d87463c10fd4276ced8856920138d93f459f01e82b35d",
+    "output/shared_transport_20261029/pacific_nw_candidate/pacific_nw/initial.npz": "467c75eb7dfdc30ca80ddacf02baf7d9a298d3deb977aaa67a920ece75652a7b"
+  },
+  "energy_water_relative_tolerance": 1e-11,
+  "momentum_absolute_tolerance_kg_m_s": 1e-07,
+  "refinement_kinetic_tolerance_j_m2": 1e-07,
+  "interpretation": "Same pressure lids and total dry mass; source cells piecewise constant in pressure. Only lowest old cell subdivided uniformly in pressure. Gas enthalpy/vapor remapped by exact pressure overlap; target saturation phase returns actual rain and liquid enthalpy to same surface. Velocities preserve facewise momentum and KE under refinement. First-cell reference height recomputed from same dry adiabatic formula. No inferred subcell temperature slope or balanced state.",
+  "counts": "Six static transfers, zero new Earth integrations or legacy benchmark attempts; no monthly skill, parameter calibration or physical adoption.",
+  "failure": "Preserve all output. Do not replace failed grid definitions or clip state. This audit is not a dynamics convergence or performance test."
+}

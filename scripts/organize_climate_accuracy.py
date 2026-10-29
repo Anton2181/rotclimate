@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('pressure-grid-remap','Conservative initialization toward a shallower first air cell'),
     ('shared-transport','Exact transport factors and equivalent climate states'),
     ('phase-backend','Equivalent phase numerics and complete coupled timings'),
     ('surface-spinup','Three-day spinup and initial land-water sensitivity'),

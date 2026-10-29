@@ -1,3 +1,30 @@
+# ACTIVE — static remap published; dynamic resolution frozen;14dayrunsfinishing
+
+79950505 pushed conservative remapmodule/tests/staticplan. Sixstatictransfers
+nowallpass, zeroEarthintegrations. Firstcellheights~730–755→170–175m/42–43m.
+Totalenergy/water/momentum/KE savedstatechecksclose.86focusedtestsincl8newpass.
+Currentstagedpublication updatesatlas56studies/142images,755Windowsbyteassets,
+1267ZIPfiles/467links. FullQA/source682/portablebyte checks pass. Commit/push.
+
+Samecommitwillfreeze scripts/lower_cell_resolution_pilot.py andliteralplanat
+calibration/lower_cell_resolution_20261029/plan.json. Sixcaseplans/9integrations:
+3regions eachsplit4at900/450s andsplit16at900s,24h duration. Preflightallpass,
+ZEROnewdynamicresolutionrunsstarted. Do notstartuntilcommit. Wait14dayrunsfinish
+firsttoavoidCPUcompetition; thenrunpilotfreshoutoutput/lower_cell_resolution_20261029.
+Rainaccuracy/adoptionnotgate;reportallcases/failures,budgetsandspatialstepsensitivity.
+Piecewiseconstantremapchangesinitialstability; no imaginedsubcellprofile.
+
+14daywet/dryjobs(e133bb19) stillactive sessions77124/6594. BothIndia/Mexicocomplete
+14days;PNWday6justpassed. No failures sofar. Indiawet/drydays8–14landP1.993/.450mm,
+finalS38.55/3.29;Mex1.599/.388mm,44.67/5.09. Stillmajorinitializationmemory,
+notproofmultipleequilibria. scripts/monitor_extended_spinup.py producesverified
+seriesandwatermaps;bothuserposted. First3dayscheckedagainstold72hwithinliteral
+1e-6/0.1JHtol;dailyE/Wreconstructed. Currentmonitorchangesunstaged;includewith
+publicationifdesired. Finishall6runsandpublishfinal14dayresults/atlasbefore
+starting9newresolutionruns. Expected93starts/89completed/fourretainedfailuresif
+all14daycasesfinish;legacystill1934/1929. No monthlyskill/recalibration/modeladoption.
+Keepworkingafterpush. Do notspawnagents. Frequentupdates/postfigures.
+
 # ACTIVE — fourteen-day runs active; conservative remap setup ready
 
 Extendedwet/dryjobs running from committede133bb19, sessions77124/6594. India

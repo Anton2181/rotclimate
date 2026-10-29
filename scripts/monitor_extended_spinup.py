@@ -5,6 +5,7 @@ import numpy as np
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+import matplotlib.patheffects as pe
 ROOT=Path(__file__).resolve().parents[1];sys.path.insert(0,str(ROOT/'scripts'))
 from local_benchmark_protocol import file_hash,write_json
 
@@ -80,7 +81,30 @@ def monitor(wet,dry,out):
     fig.suptitle('Fourteen-day wet/dry experiment: available daily checkpoints',fontsize=14)
     fig.text(.5,.01,'Same physics and forcing • all completed days shown • initial-state sensitivity, not rainfall skill or equilibria',ha='center',fontsize=9)
     fig.tight_layout(rect=(0,.04,1,.96));fig.savefig(out/'extended_spinup_progress.png',dpi=150);plt.close(fig)
-    result=dict(status='available_daily_checkpoints_verified',counts=counts,checks=checks,daily=all_rows,first_three_day_reproduction=reproduction,figure_sha256=file_hash(out/'extended_spinup_progress.png'),monitor_sha256=file_hash(Path(__file__)),scope='Read-only snapshot. Empty future days are not outcomes; no replacement or fitted initialization. Daily budgets reconstructed from saved fields and actual recorded supplies. No monthly skill or physical adoption.')
+    maps,axes=plt.subplots(4,3,figsize=(15,13))
+    for col,region in enumerate(['north_india','mexico','pacific_nw']):
+        day=checks[region]['latest_matched_day']
+        if not day:
+            for ax in axes[:,col]:ax.text(.5,.5,'Awaiting matched checkpoint',ha='center',va='center',transform=ax.transAxes);ax.set_axis_off()
+            continue
+        geo=load(wet/region/'initial.npz');fields={}
+        for name,folder in [('wet',wet),('dry',dry)]:
+            a=load(folder/region/'forced'/f'day_{day}_900.npz')
+            before=load(folder/region/'forced'/f'day_{day-1}_900.npz') if day>1 else load(folder/region/'initial.npz')
+            fields[name]=dict(rain=a['day_rain'],evap=a['day_rain']-a['surface_liquid']+before['surface_liquid'],imported=(a['vapor']-before['vapor']).sum(0)+a['surface_liquid']-before['surface_liquid'])
+        arrays=[fields['wet']['rain'],fields['dry']['rain'],fields['wet']['evap']-fields['dry']['evap'],fields['wet']['imported']-fields['dry']['imported']]
+        rainmax=max(float(arrays[0].max()),float(arrays[1].max()),1e-10)
+        for row,field in enumerate(arrays):
+            ax=axes[row,col];limit=max(float(abs(field).max()),1e-10);delta=row>=2
+            plot=ax.pcolormesh(geo['longitude'],geo['latitude'],field,shading='nearest',cmap='RdBu_r' if delta else 'YlGnBu',vmin=-limit if delta else 0,vmax=limit if delta else rainmax)
+            coast=ax.contour(geo['longitude'],geo['latitude'],geo['land'].astype(float),levels=[.5],colors='#243c48',linewidths=1.)
+            coast.set_path_effects([pe.withStroke(linewidth=2.6,foreground='white')])
+            ax.set_title(region.replace('_',' ')+f' day {day}: '+['wet-start rain','dry-start rain','wet − dry evaporation','wet − dry column import'][row],fontsize=10)
+            ax.set_xlabel('Longitude');ax.set_ylabel('Latitude');maps.colorbar(plot,ax=ax,shrink=.8,label='mm/day')
+    maps.suptitle('Available matched daily rain and water budgets',fontsize=14)
+    maps.text(.5,.01,'Day shown per region • same rain scale within each region • net import is a storage identity, not a water-origin tracer',ha='center',fontsize=9)
+    maps.tight_layout(rect=(0,.035,1,.97));maps.savefig(out/'extended_spinup_water.png',dpi=140);plt.close(maps)
+    result=dict(status='available_daily_checkpoints_verified',counts=counts,checks=checks,daily=all_rows,first_three_day_reproduction=reproduction,figure_sha256=file_hash(out/'extended_spinup_progress.png'),water_figure_sha256=file_hash(out/'extended_spinup_water.png'),monitor_sha256=file_hash(Path(__file__)),scope='Read-only snapshot. Empty future days are not outcomes; no replacement or fitted initialization. Daily budgets reconstructed from saved fields and actual recorded supplies. No monthly skill or physical adoption.')
     write_json(out/'progress_verification.json',result);print(json.dumps({k:v for k,v in result.items() if k not in ['daily','first_three_day_reproduction']},indent=2))
 
 

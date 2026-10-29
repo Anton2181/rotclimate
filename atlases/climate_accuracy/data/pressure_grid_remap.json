@@ -1,0 +1,318 @@
+{
+  "protocol": {
+    "purpose": "Frozen static conservative initialization transfer for lower-air-cell resolution; no dynamic integration",
+    "inputs": {
+      "north_india": "output/shared_transport_20261029/north_india_candidate/north_india/initial.npz",
+      "mexico": "output/shared_transport_20261029/mexico_candidate/mexico/initial.npz",
+      "pacific_nw": "output/shared_transport_20261029/pacific_nw_candidate/pacific_nw/initial.npz"
+    },
+    "lowest_cell_parts": [
+      4,
+      16
+    ],
+    "sources": {
+      "rotclimate/pressure_remap.py": "83fc012ee11662c360841acdec62e5f2b7a5a9f713774d5aaf5c46840ab970da",
+      "tests/test_pressure_remap.py": "7d1d889e1b808d10a60e79a048da670e63e1db8e50dcfc3bcbf1abb90721dbdc",
+      "scripts/pressure_grid_remap_audit.py": "3d6c7270bf7752632420772113c7e63f4b73abfb413a7c5cead53947688d3d56",
+      "rotclimate/pressure_coordinate.py": "f5aba77c4632ace2b0da94a2bd3f25c69cc35c8fb529d136828ef51beab11516",
+      "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+      "rotclimate/fast_liquid_phase.py": "15355fa32a10549a270e7d764b6355d4cffdb419ed8abfc2ef90f443ec24a947",
+      "rotclimate/surface_coupling.py": "ba929e93e2b2e1974f9532fd30f77906879a49cec1a8a1becd8b398b4424c147",
+      "output/shared_transport_20261029/publication.json": "e0ec4f0fd69f7cf5760819a2ff8f0f666d208ff53d3a5483d39cbacb199293cb",
+      "output/shared_transport_20261029/north_india_candidate/north_india/initial.npz": "a78dc605d3aeed6383d72f333bee9f96a402ca2c9ec2d6b70b87f23f9e56d3ba",
+      "output/shared_transport_20261029/mexico_candidate/mexico/initial.npz": "cabcdc866e690933da8d87463c10fd4276ced8856920138d93f459f01e82b35d",
+      "output/shared_transport_20261029/pacific_nw_candidate/pacific_nw/initial.npz": "467c75eb7dfdc30ca80ddacf02baf7d9a298d3deb977aaa67a920ece75652a7b"
+    },
+    "energy_water_relative_tolerance": 1e-11,
+    "momentum_absolute_tolerance_kg_m_s": 1e-07,
+    "refinement_kinetic_tolerance_j_m2": 1e-07,
+    "interpretation": "Same pressure lids and total dry mass; source cells piecewise constant in pressure. Only lowest old cell subdivided uniformly in pressure. Gas enthalpy/vapor remapped by exact pressure overlap; target saturation phase returns actual rain and liquid enthalpy to same surface. Velocities preserve facewise momentum and KE under refinement. First-cell reference height recomputed from same dry adiabatic formula. No inferred subcell temperature slope or balanced state.",
+    "counts": "Six static transfers, zero new Earth integrations or legacy benchmark attempts; no monthly skill, parameter calibration or physical adoption.",
+    "failure": "Preserve all output. Do not replace failed grid definitions or clip state. This audit is not a dynamics convergence or performance test."
+  },
+  "static_outcomes": {
+    "status": "static_pressure_remap_complete",
+    "actual_earth_initialized_integrations_started": 0,
+    "static_transfer_cases": 6,
+    "results": [
+      {
+        "region": "north_india",
+        "lowest_cell_parts": 4,
+        "source_cells": 6,
+        "target_cells": 9,
+        "source_reference_height_mean_m": 754.7767894480137,
+        "target_reference_height_mean_m": 175.39941285905525,
+        "target_reference_height_min_m": 169.7098875356042,
+        "target_reference_height_max_m": 179.50289827482618,
+        "mean_conversion_rain_mm": 0.008867889248325949,
+        "maximum_surface_temperature_change_k": 6.03819743787426e-05,
+        "actual_checks": {
+          "energy_relative_error": 2.1271652209574815e-16,
+          "water_relative_error": 1.8810627429297808e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_v_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_absolute_face_kinetic_loss_j_m2": 0.0
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 9,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 7.105427357601002e-15,
+          "relative_energy_error": 2.462672668902596e-16,
+          "relative_water_error": 1.8421040590211218e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "4b8b68f44d8ce61ae22fd6b630df1e0ed4196299b82dd495614e4a5597974c4f"
+      },
+      {
+        "region": "north_india",
+        "lowest_cell_parts": 16,
+        "source_cells": 6,
+        "target_cells": 21,
+        "source_reference_height_mean_m": 754.7767894480137,
+        "target_reference_height_mean_m": 43.10914489952336,
+        "target_reference_height_min_m": 41.7080876168592,
+        "target_reference_height_max_m": 44.114828649308606,
+        "mean_conversion_rain_mm": 0.009234917347183843,
+        "maximum_surface_temperature_change_k": 5.75275115011209e-05,
+        "actual_checks": {
+          "energy_relative_error": 2.1271652209574815e-16,
+          "water_relative_error": 1.8810627429297808e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 7.275957614183426e-12,
+          "maximum_v_momentum_integral_error_kg_m_s": 3.637978807091713e-12,
+          "maximum_absolute_face_kinetic_loss_j_m2": 1.4551915228366852e-11
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 21,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 1.4210854715202004e-14,
+          "relative_energy_error": 2.5319968572859293e-16,
+          "relative_water_error": 3.503550364308909e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "3eb7738b997f24014cb18c553da87d434e1ecf37910e1883ccac093e250ac1f5"
+      },
+      {
+        "region": "mexico",
+        "lowest_cell_parts": 4,
+        "source_cells": 6,
+        "target_cells": 9,
+        "source_reference_height_mean_m": 745.2186798949231,
+        "target_reference_height_mean_m": 173.21745304328718,
+        "target_reference_height_min_m": 169.2241978715992,
+        "target_reference_height_max_m": 176.19489659147843,
+        "mean_conversion_rain_mm": 0.02250812739730476,
+        "maximum_surface_temperature_change_k": 0.00021882276035967152,
+        "actual_checks": {
+          "energy_relative_error": 0.0,
+          "water_relative_error": 1.7811208286617609e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_v_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_absolute_face_kinetic_loss_j_m2": 0.0
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 9,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 7.105427357601002e-15,
+          "relative_energy_error": 2.5251833827138513e-16,
+          "relative_water_error": 2.078315019876007e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "34cf8815d2f2c4bbddc34a63df4531b31ee9354c79ddf2bff8eec1a16578ed09"
+      },
+      {
+        "region": "mexico",
+        "lowest_cell_parts": 16,
+        "source_cells": 6,
+        "target_cells": 21,
+        "source_reference_height_mean_m": 745.2186798949231,
+        "target_reference_height_mean_m": 42.57670498985987,
+        "target_reference_height_min_m": 41.610581259035264,
+        "target_reference_height_max_m": 43.30185053678208,
+        "mean_conversion_rain_mm": 0.023356043466323435,
+        "maximum_surface_temperature_change_k": 0.0002206717257990931,
+        "actual_checks": {
+          "energy_relative_error": 0.0,
+          "water_relative_error": 1.7811208286617609e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 3.637978807091713e-12,
+          "maximum_v_momentum_integral_error_kg_m_s": 3.637978807091713e-12,
+          "maximum_absolute_face_kinetic_loss_j_m2": 7.275957614183426e-12
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 21,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 1.4210854715202004e-14,
+          "relative_energy_error": 2.549035176858503e-16,
+          "relative_water_error": 3.4596466752034685e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "38819690262569c6a0b18f752cfe00338ee79c056113fa11c976a8e326408f1d"
+      },
+      {
+        "region": "pacific_nw",
+        "lowest_cell_parts": 4,
+        "source_cells": 6,
+        "target_cells": 9,
+        "source_reference_height_mean_m": 731.7237706416025,
+        "target_reference_height_mean_m": 170.06958529305,
+        "target_reference_height_min_m": 161.15401763488995,
+        "target_reference_height_max_m": 177.28759902240068,
+        "mean_conversion_rain_mm": 0.019844548775025908,
+        "maximum_surface_temperature_change_k": 6.030960201997004e-05,
+        "actual_checks": {
+          "energy_relative_error": 0.0,
+          "water_relative_error": 2.421899723254813e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_v_momentum_integral_error_kg_m_s": 0.0,
+          "maximum_absolute_face_kinetic_loss_j_m2": 0.0
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 9,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 3.552713678800501e-15,
+          "relative_energy_error": 2.609324136099939e-16,
+          "relative_water_error": 2.1237810460586562e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "16a4e50cf3df74d594f8ba9967adb8a477060e6c371bf81dab9d2943c09088fa"
+      },
+      {
+        "region": "pacific_nw",
+        "lowest_cell_parts": 16,
+        "source_cells": 6,
+        "target_cells": 21,
+        "source_reference_height_mean_m": 731.7237706416025,
+        "target_reference_height_mean_m": 41.79995822603921,
+        "target_reference_height_min_m": 39.618919211673926,
+        "target_reference_height_max_m": 43.570394281580086,
+        "mean_conversion_rain_mm": 0.020065710148883836,
+        "maximum_surface_temperature_change_k": 8.823248714406873e-05,
+        "actual_checks": {
+          "energy_relative_error": 0.0,
+          "water_relative_error": 1.2109498616274065e-16,
+          "maximum_u_momentum_integral_error_kg_m_s": 7.275957614183426e-12,
+          "maximum_v_momentum_integral_error_kg_m_s": 7.275957614183426e-12,
+          "maximum_absolute_face_kinetic_loss_j_m2": 2.9103830456733704e-11
+        },
+        "thermal_certificate": {
+          "source_cells": 6,
+          "target_cells": 21,
+          "maximum_energy_rain_residual_j_m2": 4.76837158203125e-07,
+          "maximum_water_rain_residual_kg_m2": 7.105427357601002e-15,
+          "relative_energy_error": 2.722430941893135e-16,
+          "relative_water_error": 3.5922325379365606e-16,
+          "scope": "Conservative piecewise-constant pressure overlap, identical lids, vapor and gas enthalpy transfer then target-pressure phase. Rain/liquid enthalpy returned separately. No balanced momentum state, new observations or vertical-resolution convergence claim."
+        },
+        "fields_sha256": "2773493729de4c5dd918c9f50b1d1ef234d8c71f6cfe20fea4e0198c06f053f4"
+      }
+    ],
+    "literal_plan_sha256": "3109b537ddb550be7b6c28e520dfb2004986bf15b3b0107fb2d3654b44a5cf41",
+    "physics_adoption": false,
+    "recalibration": false,
+    "monthly_skill": false,
+    "scope": "Initial arrays only, no model.advance or climate integration. Same column pressure lids, total water/enthalpy, momentum and resolved KE under piecewise-constant refinement. Target phase rain and liquid enthalpy returned to same surface. Hydrostatic balance, forcing response and rainfall accuracy not tested."
+  },
+  "publication": {
+    "status": "six_static_remaps_independently_verified",
+    "checks": [
+      {
+        "region": "north_india",
+        "parts": 4,
+        "actual_energy_relative_error": 2.1271652209574815e-16,
+        "actual_water_relative_error": 1.8810627429297808e-16,
+        "momentum_integral_errors": {
+          "u": 0.0,
+          "v": 0.0
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 0.0,
+          "v": 0.0
+        }
+      },
+      {
+        "region": "north_india",
+        "parts": 16,
+        "actual_energy_relative_error": 2.1271652209574815e-16,
+        "actual_water_relative_error": 1.8810627429297808e-16,
+        "momentum_integral_errors": {
+          "u": 7.275957614183426e-12,
+          "v": 3.637978807091713e-12
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 7.275957614183426e-12,
+          "v": 1.4551915228366852e-11
+        }
+      },
+      {
+        "region": "mexico",
+        "parts": 4,
+        "actual_energy_relative_error": 0.0,
+        "actual_water_relative_error": 1.7811208286617609e-16,
+        "momentum_integral_errors": {
+          "u": 0.0,
+          "v": 0.0
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 0.0,
+          "v": 0.0
+        }
+      },
+      {
+        "region": "mexico",
+        "parts": 16,
+        "actual_energy_relative_error": 0.0,
+        "actual_water_relative_error": 1.7811208286617609e-16,
+        "momentum_integral_errors": {
+          "u": 3.637978807091713e-12,
+          "v": 3.637978807091713e-12
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 7.275957614183426e-12,
+          "v": 3.637978807091713e-12
+        }
+      },
+      {
+        "region": "pacific_nw",
+        "parts": 4,
+        "actual_energy_relative_error": 0.0,
+        "actual_water_relative_error": 2.421899723254813e-16,
+        "momentum_integral_errors": {
+          "u": 0.0,
+          "v": 0.0
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 0.0,
+          "v": 0.0
+        }
+      },
+      {
+        "region": "pacific_nw",
+        "parts": 16,
+        "actual_energy_relative_error": 0.0,
+        "actual_water_relative_error": 1.2109498616274065e-16,
+        "momentum_integral_errors": {
+          "u": 7.275957614183426e-12,
+          "v": 7.275957614183426e-12
+        },
+        "kinetic_variance_errors_j_m2": {
+          "u": 2.9103830456733704e-11,
+          "v": 2.9103830456733704e-11
+        }
+      }
+    ],
+    "actual_earth_initialized_integrations_started": 0,
+    "monthly_skill": false,
+    "recalibration": false,
+    "physical_adoption": false,
+    "maximum_actual_energy_relative_error": 2.1271652209574815e-16,
+    "maximum_actual_water_relative_error": 2.421899723254813e-16,
+    "figure_sha256": "597cf168d52185d38307aaa77d479eeacef4bb9463b92afb51373c1f85f2a8c3",
+    "raw_fields_sha256": "bcc5b38732eee2ffbae821d7fd28b14239306728c58272121327f50b84ecf436",
+    "publisher_sha256": "837421fad337f5e1d5c38ed0e151c3e9f1b28dae2461eff2534b592972499034",
+    "scope": "Saved initial fields only. No dynamics, inferred subcell slope, balanced-state claim or production adoption. Conversion rain is not climate rainfall."
+  }
+}
