@@ -1,0 +1,12 @@
+{
+  "region": "north_india",
+  "scenario": "forced",
+  "dt_s": 900,
+  "started": true,
+  "status": "failed",
+  "error": "RuntimeError('Convective adjustment did not converge; no step accepted')",
+  "traceback": "Traceback (most recent call last):\n  File \"/workspace/rotclimate/scripts/surface_forcing_pilot.py\", line 64, in run\n    result=advance_surface_coupled(model,state,surface,dt,longwave_optical_depth=kappa_lw*model.mass+plan['radiation']['vapor_lw_opacity_m2_kg']*state.vapor_kg_m2,\n           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/surface_coupling.py\", line 121, in advance_surface_coupled\n    dynamic=advance_boundary_with_convection(model,local.atmosphere,dt_s,relaxation_s=convection_relaxation_s,\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/pressure_boundary.py\", line 169, in advance_boundary_with_convection\n    if not closure.certificate['converged']:raise RuntimeError('Convective adjustment did not converge; no step accepted')\n                                            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nRuntimeError: Convective adjustment did not converge; no step accepted\n",
+  "completed_steps": 0,
+  "history": [],
+  "partial_fields_sha256": "ce714f774d572d4a961fead534adbf8325853c8502700c45c3fa02fd6ad55296"
+}

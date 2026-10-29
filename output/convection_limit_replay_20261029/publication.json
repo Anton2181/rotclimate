@@ -1,0 +1,76 @@
+{
+  "status": "replayed_rejection_and_static_work_caps_verified",
+  "new_earth_integrations": 1,
+  "integrations_completed": 0,
+  "expected_replay_numerical_failures": 1,
+  "static_closure_cases": 5,
+  "cumulative_prototype_starts": 103,
+  "cumulative_prototype_completions": 95,
+  "cumulative_retained_failures": 8,
+  "rejection_reproduced": true,
+  "retained_weather_byte_exact": {
+    "temperature": true,
+    "vapor": true,
+    "u": true,
+    "v": true,
+    "surface_temperature": true,
+    "surface_liquid": true,
+    "substrate_capacity": true
+  },
+  "checks": [
+    {
+      "maximum_sweeps": 64,
+      "converged": false,
+      "actual_sweeps": 64,
+      "remaining_interfaces": 13,
+      "actual_energy_relative_error": 9.853626425922837e-16,
+      "actual_water_relative_error": 3.7550560340573737e-16
+    },
+    {
+      "maximum_sweeps": 128,
+      "converged": false,
+      "actual_sweeps": 128,
+      "remaining_interfaces": 12,
+      "actual_energy_relative_error": 2.093895615508603e-15,
+      "actual_water_relative_error": 3.7550560340573737e-16
+    },
+    {
+      "maximum_sweeps": 256,
+      "converged": true,
+      "actual_sweeps": 176,
+      "remaining_interfaces": 0,
+      "actual_energy_relative_error": 2.8329175974528158e-15,
+      "actual_water_relative_error": 3.7550560340573737e-16
+    },
+    {
+      "maximum_sweeps": 512,
+      "converged": true,
+      "actual_sweeps": 176,
+      "remaining_interfaces": 0,
+      "actual_energy_relative_error": 2.8329175974528158e-15,
+      "actual_water_relative_error": 3.7550560340573737e-16
+    },
+    {
+      "maximum_sweeps": 1024,
+      "converged": true,
+      "actual_sweeps": 176,
+      "remaining_interfaces": 0,
+      "actual_energy_relative_error": 2.8329175974528158e-15,
+      "actual_water_relative_error": 3.7550560340573737e-16
+    }
+  ],
+  "converged_caps_byte_exact": true,
+  "converged_caps": [
+    256,
+    512,
+    1024
+  ],
+  "physical_adoption": false,
+  "numerical_cap_dynamic_adoption": false,
+  "recalibration": false,
+  "monthly_skill": false,
+  "publisher_sha256": "f5ab131e971b0453d02ea8b30e5a9bba5f6215000dd9d0c3d359d05e2395962c",
+  "raw_fields_sha256": "a000daec650763b387919d719623984f8fb25b28bf3081604c698ccb9d38202a",
+  "figure_sha256": "dc5d37561f365134ee03fae86bbc8db46989fc687f4cdf0c90f681b18bfc29b7",
+  "scope": "One rejected Earth-input step repeated and retained; five closure-only work-cap controls add no Earth integrations. A 176-sweep target diagnoses one insufficient work limit, not a new physical law, full-run stability or climate accuracy."
+}

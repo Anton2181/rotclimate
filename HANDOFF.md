@@ -1,3 +1,33 @@
+# ACTIVE — rejected-step diagnosis complete; six full cap1024 controls ready
+
+32b5030d pushed originalgridfailures+frozenreplay. Replaynowcompletedasexpected
+REJECTION, oldweatherall7fieldsBYTEEXACTunchanged. Oneactualattempt0completed:
+prototype103starts/95completions/EIGHTfailures(includesexpectedrepeat),legacy1934/1929.
+FiveSTATICclosurecaps addZEROEarthruns. Cap64matchesoriginalrejectedtarget13
+remaininginterfaces;128has12;256/512/1024CONVERGEat176sweepsandalltargetsBYTEEXACT.
+Budgetsenergy<2.9e-15,water<3.8e-16. Oneprofileonly,notfullrunstability/accuracy.
+Currentstagedpublication+nextplan:59atlasstudies/147images,766Windowsassets,
+1282ZIPfiles. Browser/launcher/source682/bytechecksPASS. Commit/pushnow,KEEPGOING.
+
+NEXTsixfull21level24hcasesALREADYprepared,literalplan
+calibration/convection_cap_20261029/plan.json,threecaseplans2steps900/450seach,
+fixedcap1024,unchangedneutral.01K/relax3600s/initialstate/physicalparameters.
+scripts/convection_cap_pilot.py bindsoldgrid.run withpreparedbasecapoverride;
+timedcoupledcallsrecordalltimes/targetiterations,livefileevery24calls. Preflight
+allpass,zeroEarthadvance. CommitsetupBEFOREoutcomes. Launch --plan... --out
+output/convection_cap_20261029 > output/convection_cap_20261029.log 2>&1.
+Actualexpectedcounts109starts/101completed/8failuresONLYifall6finish. No retry/
+raisedcap/replacementafteroutcomes. Alloldfailedcasesstayretained. Keepmonitoring
+livecalls,case900.json/450.json andtopprogress.json. Captureifcap1024failsagain.
+No newmonthlyskill/adoption/recalibration. Leavefrozenphysicsmodulesuntouched.
+
+Useraskedprogress/oldbaselinecomparisonwhileworking;answeredcommentary:
+Earthr39productionunchanged,accuracygainunproven. Againstpreviouscoarseprototype
+24hlandPold/newfourpart:India.845/.749,Mex1.809/1.722,PNW.387/.438mm.
+Thesearebehaviourchangesnotobservationscores. Soilinitializationmemorypersists
+14days;finegridlimitdiagnosedoneprofile176sweeps. Usercontinuoustaskstillactive,
+dontstopafterpush;postfigures/frequentupdates. Do notspawnagents.
+
 # ACTIVE — grid study done; one rejected-step replay and static caps frozen
 
 2bb918f4 pushed14daypublication. Ninegridcontrolsnowdone: six4part900/450s
