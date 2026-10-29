@@ -1,0 +1,37 @@
+{
+  "purpose": "Predeclared synthetic liquid phase equivalence and paired timing, not climate calibration",
+  "pressure_edges_pa": [
+    101325,
+    85493.75,
+    72694.9450895894,
+    61812.179739202256,
+    52558.61407423528,
+    44690.34945959743,
+    38000
+  ],
+  "horizontal_shape": [
+    15,
+    17
+  ],
+  "cases": [
+    "clear .5*qsat",
+    "condensing1.2*qsat",
+    "mixed(.7+.5*sin(cell_id))*qsat"
+  ],
+  "temperature": "300*(p/p_surface)^(Rd*.006/g) +.5*sin(cell_id), all synthetic",
+  "warmups": 2,
+  "repetitions": 32,
+  "timing": "Alternate reference/candidate order each repetition; report all times and medians. No minimum-speed gate or selected case suppression.",
+  "reference": "Frozen64-iteration bisection enthalpy_phase",
+  "candidate": "Clear endpoint shortcut; safeguarded analytic Newton in original bracket, up to32 iterations then reference fallback. Same actual enthalpy/water/phase guards.",
+  "equivalence": "All fields within rtol1e-9,atol1e-6; separately report actual max differences and budgets. No Earth fields or integrations; no dynamic-backend adoption.",
+  "sources": {
+    "rotclimate/fast_liquid_phase.py": "15355fa32a10549a270e7d764b6355d4cffdb419ed8abfc2ef90f443ec24a947",
+    "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+    "rotclimate/falling_water_energy.py": "1f5412c9f127cf2a7e4e002aeb78c21f5675135da847f76e467139ea20ed6b55",
+    "rotclimate/moist_enthalpy.py": "d4fc73beadd4d1b910124fd8d2c89a09396f544feca51dbcdb177c031614e933",
+    "rotclimate/phase_adjustment.py": "5c3aeeb8e41b7a5c3ef283733d56631ff8b1aeeacfcfa6254e1da4dd4ace50c2",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "scripts/benchmark_liquid_phase.py": "f7778612f54759c4d42c4f2111a42d4953cfac51f106c8e53f52c132599ee448"
+  }
+}
