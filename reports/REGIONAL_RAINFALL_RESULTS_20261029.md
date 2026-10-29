@@ -1,14 +1,16 @@
 # Regional complete-month rainfall results
 
-Pooled primary score is withheld until all six primary wet/dry months complete and pass saved-state budgets.
+The declared mean of six independently scored region/initialization losses is 3.526 mm/day, versus r39 2.749. The signed relative MAE gain is -28.2%. Regional tradeoffs are allowed; no favorable initial state is selected.
 
 north india: wet/dry MAE 7.254/8.092 mm/day versus r39 5.955; mean wet/dry rainfall 0.861/0.000 versus observed 8.092.
 
 mexico: wet/dry MAE 1.861/3.023 mm/day versus r39 2.088; mean wet/dry rainfall 1.225/0.000 versus observed 3.023.
 
-Even if every remaining primary case had zero MAE, the candidate mean would be at least 3.417 mm/day versus r39 2.749. This configuration therefore cannot beat the declared objective. This is a mathematical bound, not its completed pooled score; all planned cases continue.
+pacific nw: wet/dry MAE 0.270/0.654 mm/day versus r39 0.205; mean wet/dry rainfall 0.509/0.027 versus observed 0.681.
 
-5 of7 candidate months are complete. All complete fields are scored; no incomplete-month loss is substituted.
+
+
+7 of7 candidate months are complete. All complete fields are scored; no incomplete-month loss is substituted.
 
 | Region | Profile | Observed | Model | MAE | Bias |
 |---|---|---:|---:|---:|---:|
@@ -20,8 +22,8 @@ Even if every remaining primary case had zero MAE, the candidate mean would be a
 | mexico | dry | 3.0234 | 0.0000 | 3.0234 | -3.0234 |
 | pacific_nw | r39 | 0.6806 | 0.8383 | 0.2051 | 0.1576 |
 | pacific_nw | wet | 0.6806 | 0.5086 | 0.2699 | -0.1720 |
-| pacific_nw | dry | 0.6806 | pending | pending | pending |
-| mexico | wet450 (numerical) | 3.0234 | pending | pending | pending |
+| pacific_nw | dry | 0.6806 | 0.0267 | 0.6539 | -0.6539 |
+| mexico | wet450 (numerical) | 3.0234 | 1.2109 | 1.9187 | -1.8125 |
 
 The primary objective and masks were committed before prediction. Scores are area-weighted per case, then averaged equally across three regions and two initializations. Mexico wet450s is excluded from that primary mean. Geographic bins, wet/dry differences, numerical sensitivity and cold-liquid diagnostics are retained in the downloadable JSON.
 
@@ -38,3 +40,4 @@ Complete-month modeled water identities on the frozen footprints, all rates mm/d
 | mexico_wet_900 | 1.22516 | 1.89607 | -0.89747 | -0.22656 | -0.67091 |
 | mexico_dry_900 | 0.00000 | 0.01297 | -0.28623 | -0.27326 | -0.01297 |
 | pacific_nw_wet_900 | 0.50857 | 0.75911 | -0.32742 | -0.07688 | -0.25054 |
+| pacific_nw_dry_900 | 0.02670 | 0.00391 | 0.09344 | 0.07065 | 0.02279 |

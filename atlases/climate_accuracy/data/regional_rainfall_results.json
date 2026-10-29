@@ -883,16 +883,24 @@
     }
   },
   "publication": {
-    "status": "available_complete_cases_only",
+    "status": "complete_primary_benchmark",
     "complete_month_cases": [
       "north_india_wet_900",
       "north_india_dry_900",
       "mexico_wet_900",
       "mexico_dry_900",
-      "pacific_nw_wet_900"
+      "mexico_wet_450",
+      "pacific_nw_wet_900",
+      "pacific_nw_dry_900"
     ],
-    "primary": null,
-    "primary_comparison_available": false,
+    "primary": {
+      "candidate_equal_region_and_scenario_mae_mm_day": 3.525747648931745,
+      "r39_equal_region_mae_mm_day": 2.7493024378270032,
+      "absolute_mae_gain_mm_day": -0.776445211104742,
+      "relative_mae_gain_fraction": -0.28241535031643505,
+      "scenario_rule": "Mean of six independently scored900s losses; no averaging predictions or selecting favorable starts."
+    },
+    "primary_comparison_available": true,
     "table": [
       {
         "region": "north_india",
@@ -978,27 +986,33 @@
         "region": "pacific_nw",
         "profile": "dry",
         "month": 7,
-        "status": "pending",
-        "mae_mm_day": null,
-        "mean_mm_day": null,
-        "bias_mm_day": null,
+        "status": "completed",
+        "mae_mm_day": 0.6539195286680827,
+        "mean_mm_day": 0.02669677764065843,
+        "bias_mm_day": -0.6539195286680827,
         "observed_mean_mm_day": 0.680616306308741
       },
       {
         "region": "mexico",
         "profile": "wet450 (numerical)",
         "month": 8,
-        "status": "pending",
-        "mae_mm_day": null,
-        "mean_mm_day": null,
-        "bias_mm_day": null,
+        "status": "completed",
+        "mae_mm_day": 1.9186883302538524,
+        "mean_mm_day": 1.2108562623316304,
+        "bias_mm_day": -1.8125001059520232,
         "observed_mean_mm_day": 3.023356368283653
       }
     ],
     "analysis": {
-      "status": "available_complete_cases_only",
-      "primary_comparison_available": false,
-      "primary": null,
+      "status": "complete_primary_benchmark",
+      "primary_comparison_available": true,
+      "primary": {
+        "candidate_equal_region_and_scenario_mae_mm_day": 3.525747648931745,
+        "r39_equal_region_mae_mm_day": 2.7493024378270032,
+        "absolute_mae_gain_mm_day": -0.776445211104742,
+        "relative_mae_gain_fraction": -0.28241535031643505,
+        "scenario_rule": "Mean of six independently scored900s losses; no averaging predictions or selecting favorable starts."
+      },
       "baselines": {
         "north_india": {
           "status": "passed",
@@ -2499,11 +2513,344 @@
           }
         },
         "mexico_wet_450": {
-          "status": "pending",
-          "primary": false,
+          "status": "completed",
           "region": "mexico",
           "initial_water": "wet",
-          "dt_s": 450
+          "dt_s": 450,
+          "primary": false,
+          "available_complete_days": 45,
+          "complete_scored_month": true,
+          "saved_budgets_pass": true,
+          "maximum_daily_energy_relative_error": 1.229354258914239e-13,
+          "maximum_daily_water_relative_error": 2.5403040139009822e-15,
+          "final_or_partial_energy_relative_error": 1.229354258914239e-13,
+          "final_or_partial_water_relative_error": 2.0379831512912776e-15,
+          "daily_budget_checks": [
+            {
+              "day": 1,
+              "energy_relative_error": 2.840480141242889e-15,
+              "water_relative_error": 1.8138971915671267e-16,
+              "fields_sha256": "a12b96255a8b76bc356043d2f69057842d06dcac09d599c5a85fb183d32a813a"
+            },
+            {
+              "day": 2,
+              "energy_relative_error": 5.892143110434746e-15,
+              "water_relative_error": 1.7175249006364232e-16,
+              "fields_sha256": "a15506fb26317cb5d086820f0240eff1c2de69a6f084016c3a015c234ec75be5"
+            },
+            {
+              "day": 3,
+              "energy_relative_error": 8.438424951799232e-15,
+              "water_relative_error": 2.3535928918778755e-16,
+              "fields_sha256": "21724848d7b61967fa94fad1adc69851d238e71084a1e04e8802eb39daf38b17"
+            },
+            {
+              "day": 4,
+              "energy_relative_error": 1.1157848269950162e-14,
+              "water_relative_error": 3.8535871053712213e-16,
+              "fields_sha256": "fd608ceb8bbcd56e97dab34f9b3eeb9128d4f1c52785412c462b8992c7e32224"
+            },
+            {
+              "day": 5,
+              "energy_relative_error": 1.3836386023767538e-14,
+              "water_relative_error": 4.854815305564996e-16,
+              "fields_sha256": "0d5664000ae5f20bb22fcd497c221da8dca707ec3b52dbcc894b8b94af85e6db"
+            },
+            {
+              "day": 6,
+              "energy_relative_error": 1.614304290547276e-14,
+              "water_relative_error": 5.341079555235654e-16,
+              "fields_sha256": "aa248908a5dc2e3e57a88fb558baa90edb755a7731c68aade0cb42e5b73265bb"
+            },
+            {
+              "day": 7,
+              "energy_relative_error": 1.8658749455248676e-14,
+              "water_relative_error": 5.464683948679772e-16,
+              "fields_sha256": "9b5360cf6a5333b374834b7eaf5fda7d78b94c8b404b2149d0fb4ac96802044a"
+            },
+            {
+              "day": 8,
+              "energy_relative_error": 2.1386349886266318e-14,
+              "water_relative_error": 6.683007992064315e-16,
+              "fields_sha256": "2a1d7bee20631f8a2e6bc3e902183b2ce09c190fedc993f3237f1a8ebbd202ea"
+            },
+            {
+              "day": 9,
+              "energy_relative_error": 2.421989725790482e-14,
+              "water_relative_error": 6.144616823610496e-16,
+              "fields_sha256": "1169267dcd9cb12935035dc2de20f6183939ff6dfd02bdff5ab119994fbbabcc"
+            },
+            {
+              "day": 10,
+              "energy_relative_error": 2.7134504704917677e-14,
+              "water_relative_error": 7.854966799033804e-16,
+              "fields_sha256": "25c026403806f88b0fd47579c79763ff50055f3746966aed099aec40a22184f4"
+            },
+            {
+              "day": 11,
+              "energy_relative_error": 3.020696598292269e-14,
+              "water_relative_error": 5.773232910590737e-16,
+              "fields_sha256": "501e47c13e4420f7799d59a58dc8c5c403692db4a29f9da7ae5c0b0ca3605e0d"
+            },
+            {
+              "day": 12,
+              "energy_relative_error": 3.238705537851708e-14,
+              "water_relative_error": 4.291311898865275e-16,
+              "fields_sha256": "7c4678b612d2a6247728aa470ba8ad75111aec8a072a2ad8fef7ed6c9a240ff9"
+            },
+            {
+              "day": 13,
+              "energy_relative_error": 3.5079103144896846e-14,
+              "water_relative_error": 3.922628774455566e-16,
+              "fields_sha256": "a2ff4452c2b7e7a32a4aae363a274829519402fe354764abcd0debacd4dded8b"
+            },
+            {
+              "day": 14,
+              "energy_relative_error": 3.8018597457156215e-14,
+              "water_relative_error": 6.505931381359577e-16,
+              "fields_sha256": "c7c82198de0023a5abbf1f52c91a908b00420a5145e9b7510ade0466a63a3cb4"
+            },
+            {
+              "day": 15,
+              "energy_relative_error": 4.08357906030613e-14,
+              "water_relative_error": 9.290359507862095e-16,
+              "fields_sha256": "d3e1da377be68b84f94e7e51c0c584097fd15b8df149d93b80b13ed9ba56121f"
+            },
+            {
+              "day": 16,
+              "energy_relative_error": 4.340127088333024e-14,
+              "water_relative_error": 6.974516506594131e-16,
+              "fields_sha256": "7dc35cd88d75370adead44617dbde63e39eb0b44223feedc77042717ad25774a"
+            },
+            {
+              "day": 17,
+              "energy_relative_error": 4.614309238020302e-14,
+              "water_relative_error": 6.406121105430922e-16,
+              "fields_sha256": "7466031c8706968a13e9fd057a8f5d78d4f09ef0f5f09220cf74d9c3ecf236d7"
+            },
+            {
+              "day": 18,
+              "energy_relative_error": 4.9392605928104646e-14,
+              "water_relative_error": 6.3708987452938125e-16,
+              "fields_sha256": "54438d05ff966a63eceed111d2c218b09b49b148d5956a488ee7fffcc9ce48bc"
+            },
+            {
+              "day": 19,
+              "energy_relative_error": 5.238329607744255e-14,
+              "water_relative_error": 7.657058445238715e-16,
+              "fields_sha256": "0d9637827e314094286d4ec78e7e69a2f3ec43196ade6ebf1444ee8daa85910c"
+            },
+            {
+              "day": 20,
+              "energy_relative_error": 5.519337869042006e-14,
+              "water_relative_error": 6.170435683278902e-16,
+              "fields_sha256": "de2506aa42b81e5b7bd27aaf6c0c883414bdcb65e8be1c666f9094e19727ec37"
+            },
+            {
+              "day": 21,
+              "energy_relative_error": 5.783991904606335e-14,
+              "water_relative_error": 8.067225003255123e-16,
+              "fields_sha256": "fc345b0c8a7aaa88f2cc8294b38ec55b7c57edea53c98eea287d3112f42e88fb"
+            },
+            {
+              "day": 22,
+              "energy_relative_error": 6.03115402916883e-14,
+              "water_relative_error": 9.824211992563677e-16,
+              "fields_sha256": "4b9361481e526bf3bca8cf58d6543f31cd4744fc3bdc89a382b9e0203929b5c1"
+            },
+            {
+              "day": 23,
+              "energy_relative_error": 6.317708506150089e-14,
+              "water_relative_error": 9.266850756690335e-16,
+              "fields_sha256": "739576ebf4223a683d0187325436754d893737731c01bf33349f180cc2cbc155"
+            },
+            {
+              "day": 24,
+              "energy_relative_error": 6.586771072129514e-14,
+              "water_relative_error": 1.293334625158018e-15,
+              "fields_sha256": "0cd60e183ad895b739baa7c53bf37ff1e93b5fcad35cf2d0fd3faf70f7b298a5"
+            },
+            {
+              "day": 25,
+              "energy_relative_error": 6.867068280134508e-14,
+              "water_relative_error": 1.2809850569124138e-15,
+              "fields_sha256": "fa38e72af2e5563e34d3e08e4c7dd77b2e6617c2291f02c5bdfa01153e3c554e"
+            },
+            {
+              "day": 26,
+              "energy_relative_error": 7.199272378510796e-14,
+              "water_relative_error": 1.2125514899176276e-15,
+              "fields_sha256": "d6f6dac67b5a4c1f860f95636ac285bbfef7217bd983fd45524c601dc0a30375"
+            },
+            {
+              "day": 27,
+              "energy_relative_error": 7.45582040653769e-14,
+              "water_relative_error": 1.1255066017639733e-15,
+              "fields_sha256": "13bcb0429a88ab9fce0af4cb0b32bf5a9fa1608b9b287f845fa139530e2aa896"
+            },
+            {
+              "day": 28,
+              "energy_relative_error": 7.681650932317461e-14,
+              "water_relative_error": 1.2045286189975082e-15,
+              "fields_sha256": "1ebb0519bace0c2e3711f9839a81137350a52efe93bb6d84c87a3fde6e7a7ed4"
+            },
+            {
+              "day": 29,
+              "energy_relative_error": 7.96820540929872e-14,
+              "water_relative_error": 1.2206287163317859e-15,
+              "fields_sha256": "0415cda823720f1641095683d27be27a7274446e5b3c4b8e3ef0ac2fdc03dc22"
+            },
+            {
+              "day": 30,
+              "energy_relative_error": 8.245942825449786e-14,
+              "water_relative_error": 1.4264077456636857e-15,
+              "fields_sha256": "5b26a7c7f18dd049d182ad763b376422d44246c636a56e7607a4748c4171bf09"
+            },
+            {
+              "day": 31,
+              "energy_relative_error": 8.512303388916733e-14,
+              "water_relative_error": 1.472664271090662e-15,
+              "fields_sha256": "cc5e79da192952168b2858df82de9d64923d0de0a1b85f79fb545f2593bb5f49"
+            },
+            {
+              "day": 32,
+              "energy_relative_error": 8.780512690944849e-14,
+              "water_relative_error": 1.8414771692423885e-15,
+              "fields_sha256": "75cb179cb9562a596a564350ba50338f62d06815cc151ad5e168b5a0f52f161f"
+            },
+            {
+              "day": 33,
+              "energy_relative_error": 9.054552629973577e-14,
+              "water_relative_error": 1.6809871375435753e-15,
+              "fields_sha256": "cf4d966721fb8b5c6196758e171f8e58dde989c48f18eee028999aaa8b908617"
+            },
+            {
+              "day": 34,
+              "energy_relative_error": 9.335845312588432e-14,
+              "water_relative_error": 1.7700812278224904e-15,
+              "fields_sha256": "17f8d0889110a46a2de89be93a3d87c0108303df7ba8c39aa02a670321df7231"
+            },
+            {
+              "day": 35,
+              "energy_relative_error": 9.623964106813756e-14,
+              "water_relative_error": 1.9490140786486514e-15,
+              "fields_sha256": "baa74fa5c7c2e3948a106bf692b3eb1bc9beeddfe0d9e5b5fdde1c1e16837afe"
+            },
+            {
+              "day": 36,
+              "energy_relative_error": 9.916349220795626e-14,
+              "water_relative_error": 1.8672253667685443e-15,
+              "fields_sha256": "b58c5897a5b483ce48501bbfe8f5c42e6cd2cac688c0a3f0cd1df59d65f6a88e"
+            },
+            {
+              "day": 37,
+              "energy_relative_error": 1.0183420837555331e-13,
+              "water_relative_error": 1.969355263405303e-15,
+              "fields_sha256": "1e0426f6daad4c828b706978b28381b600977487e2a10daa8be4a88eb6c36f8a"
+            },
+            {
+              "day": 38,
+              "energy_relative_error": 1.0440253286899328e-13,
+              "water_relative_error": 2.0788149984131868e-15,
+              "fields_sha256": "1f18f67495efabbb40e1aacc1379e7bd38833ac342a88615974fee81835dd4e3"
+            },
+            {
+              "day": 39,
+              "energy_relative_error": 1.0720123862928667e-13,
+              "water_relative_error": 2.049968537726822e-15,
+              "fields_sha256": "2f1746160a3d23be5c533f1bfb83f418e38b68136e371eb20fafa2f5f3662777"
+            },
+            {
+              "day": 40,
+              "energy_relative_error": 1.0929457952316465e-13,
+              "water_relative_error": 2.301226808920944e-15,
+              "fields_sha256": "881332c6ed9f718125fa973c4777fbc5278178b651f9f40665dd154723697355"
+            },
+            {
+              "day": 41,
+              "energy_relative_error": 1.1205915472540567e-13,
+              "water_relative_error": 2.5403040139009822e-15,
+              "fields_sha256": "cae61e21fee51945943e40559b98e48f040c9f8b39613b4acf47d0b6efbfd5fa"
+            },
+            {
+              "day": 42,
+              "energy_relative_error": 1.144511380022418e-13,
+              "water_relative_error": 2.263004025512895e-15,
+              "fields_sha256": "60ef241b7d97b0bf5382200b1a8696a60805cbe7a8c0f387fd162795e17a5b59"
+            },
+            {
+              "day": 43,
+              "energy_relative_error": 1.1754564193232228e-13,
+              "water_relative_error": 2.043353474102306e-15,
+              "fields_sha256": "ebf5fc1b70259a1a4a8d6145e842eb8409e7c382c78e60a0dbb92ada6f60f23b"
+            },
+            {
+              "day": 44,
+              "energy_relative_error": 1.2048371413799614e-13,
+              "water_relative_error": 1.9200969558200366e-15,
+              "fields_sha256": "b8f9aa9b6282b66dff4a16798ee916b0c44e6d941a817865a56f3d3a3275b452"
+            },
+            {
+              "day": 45,
+              "energy_relative_error": 1.229354258914239e-13,
+              "water_relative_error": 2.0379831512912776e-15,
+              "fields_sha256": "51de43842d2135b81f0bba504c928b642a029c18ff3dd61ec2441d3e973ef064"
+            }
+          ],
+          "month": 8,
+          "metrics": {
+            "cells": 23,
+            "area_km2": 1128717.8569344378,
+            "observed_mean_mm_day": 3.023356368283653,
+            "predicted_mean_mm_day": 1.2108562623316304,
+            "mae_mm_day": 1.9186883302538524,
+            "rmse_mm_day": 2.6541353822995357,
+            "bias_mm_day": -1.8125001059520232
+          },
+          "geographic": {
+            "lowland": {
+              "cells": 4,
+              "area_km2": 181598.13624655711,
+              "observed_mean_mm_day": 1.9938768699916924,
+              "predicted_mean_mm_day": 0.9522058934651779,
+              "mae_mm_day": 1.3303562779128464,
+              "rmse_mm_day": 1.4525795260847754,
+              "bias_mm_day": -1.0416709765265146
+            },
+            "upland": {
+              "cells": 19,
+              "area_km2": 947119.7206878804,
+              "observed_mean_mm_day": 3.2207459422839513,
+              "predicted_mean_mm_day": 1.2604491742937198,
+              "mae_mm_day": 2.0314935035234387,
+              "rmse_mm_day": 2.8267564489042547,
+              "bias_mm_day": -1.9602967679902312
+            },
+            "coastal": {
+              "cells": 0,
+              "score": null
+            },
+            "inland": {
+              "cells": 23,
+              "area_km2": 1128717.8569344378,
+              "observed_mean_mm_day": 3.023356368283653,
+              "predicted_mean_mm_day": 1.2108562623316304,
+              "mae_mm_day": 1.9186883302538524,
+              "rmse_mm_day": 2.6541353822995357,
+              "bias_mm_day": -1.8125001059520232
+            }
+          },
+          "mean_daily_scored_area_fraction_liquid_below_freezing": 0.0,
+          "minimum_scored_surface_temperature_k": 291.0140427374005,
+          "initial_fields_sha256": "3ee67c984e6ed18462ce8f8d49d0737e3ae52e025e710a85deccc87ac886aa2e",
+          "monthly_column_water_budget": {
+            "rain_mm_day": 1.2108562623316304,
+            "net_evaporation_mm_day": 1.8656850188087277,
+            "net_horizontal_water_import_mm_day": -0.8863037816915406,
+            "vapor_storage_change_mm_day": -0.23147502521444327,
+            "surface_storage_change_mm_day": -0.6548287564770973,
+            "scope": "Inferred from complete-month saved vapor/soil/rain stores under the fixed mask: P=E+import-vapor change. No runoff/ice; these are model identities, not independent water-origin tracers or observed evaporation."
+          }
         },
         "pacific_nw_wet_900": {
           "status": "completed",
@@ -2841,11 +3188,339 @@
           }
         },
         "pacific_nw_dry_900": {
-          "status": "pending",
-          "primary": true,
+          "status": "completed",
           "region": "pacific_nw",
           "initial_water": "dry",
-          "dt_s": 900
+          "dt_s": 900,
+          "primary": true,
+          "available_complete_days": 45,
+          "complete_scored_month": true,
+          "saved_budgets_pass": true,
+          "maximum_daily_energy_relative_error": 5.843647448234177e-14,
+          "maximum_daily_water_relative_error": 7.59138251421572e-16,
+          "final_or_partial_energy_relative_error": 5.843647448234177e-14,
+          "final_or_partial_water_relative_error": 7.162759913036664e-16,
+          "daily_budget_checks": [
+            {
+              "day": 1,
+              "energy_relative_error": 1.918073919045992e-15,
+              "water_relative_error": 2.4485066092353554e-16,
+              "fields_sha256": "d620b7d179b30eea0fc2e179eb9634f850e80ee48c5d534b7e5470da182fa8d2"
+            },
+            {
+              "day": 2,
+              "energy_relative_error": 2.707124134600717e-15,
+              "water_relative_error": 1.941898507008444e-16,
+              "fields_sha256": "be9dd2720739c77f7493dd76b3aa81237d4845cf562f25c2beeeeaee81cfca7f"
+            },
+            {
+              "day": 3,
+              "energy_relative_error": 3.559493194613537e-15,
+              "water_relative_error": 7.869987204982106e-17,
+              "fields_sha256": "ed019711820d022f9d3dcaf25262fadd5ed77d3fa22cffeccae01bb964d4d119"
+            },
+            {
+              "day": 4,
+              "energy_relative_error": 4.319319328110679e-15,
+              "water_relative_error": 5.2149083143451776e-17,
+              "fields_sha256": "9077f435045a7c603dd2913196aeb99b4710c8202902703b81b2514ef9a47d06"
+            },
+            {
+              "day": 5,
+              "energy_relative_error": 5.410351724927089e-15,
+              "water_relative_error": 2.7574720675852583e-16,
+              "fields_sha256": "d4b203f251da20b5510454d6f0fa1aef1805eb9cd55600099127ebbc95e88b66"
+            },
+            {
+              "day": 6,
+              "energy_relative_error": 6.1643330420127155e-15,
+              "water_relative_error": 2.2026439227257027e-16,
+              "fields_sha256": "e24f7d6c7d831bf9dfbc71c0a38a8cb6090540dd3f9e8a06eded3c58d41b9f83"
+            },
+            {
+              "day": 7,
+              "energy_relative_error": 6.877400644217726e-15,
+              "water_relative_error": 1.383498507139063e-16,
+              "fields_sha256": "8afaf354c04ec11d43ba71da41bfb801e26a1650ced5e8d7618db3c1f722b6d0"
+            },
+            {
+              "day": 8,
+              "energy_relative_error": 7.948950319662415e-15,
+              "water_relative_error": 2.2121688694185706e-16,
+              "fields_sha256": "3eeabae600e5f86eb67db02695a315edfcc0acfa64813d6d2b958e602c6854bc"
+            },
+            {
+              "day": 9,
+              "energy_relative_error": 8.973741463814971e-15,
+              "water_relative_error": 2.671747547349447e-16,
+              "fields_sha256": "585510c37c3db2c1a80684507ce943f94f56125e0e5acbfcfd3996b216ae729c"
+            },
+            {
+              "day": 10,
+              "energy_relative_error": 1.0205049454507777e-14,
+              "water_relative_error": 2.7336597008530883e-16,
+              "fields_sha256": "d678e88e3e4d00d21b1340ec0968923cfda1dedf8bc988b68d52bfaf3aa80b16"
+            },
+            {
+              "day": 11,
+              "energy_relative_error": 1.1214254421562955e-14,
+              "water_relative_error": 3.1575198286857104e-16,
+              "fields_sha256": "a1b7745d2183e3fadf0dfd6c36bed92211b9557ad29827342fd4a65cea6d98b6"
+            },
+            {
+              "day": 12,
+              "energy_relative_error": 1.2461148589353138e-14,
+              "water_relative_error": 3.7052042635256146e-16,
+              "fields_sha256": "7769d38481a6045a254109b79faf653adeeeb8b18b9fe7f8fc46bbd10e1bf85a"
+            },
+            {
+              "day": 13,
+              "energy_relative_error": 1.405873174183431e-14,
+              "water_relative_error": 2.6241228138851075e-16,
+              "fields_sha256": "1006af0b5aa905b192c8ab4678c852448973105b7009c271a65ab029b4440ace"
+            },
+            {
+              "day": 14,
+              "energy_relative_error": 1.4951040380659157e-14,
+              "water_relative_error": 3.571855009825464e-16,
+              "fields_sha256": "cf4f953b549ab41e31943b5f9383f72a6461aad947cc4edf5fe35dac2e6b8863"
+            },
+            {
+              "day": 15,
+              "energy_relative_error": 1.6708381848388447e-14,
+              "water_relative_error": 4.0242899777366896e-16,
+              "fields_sha256": "98190724737a783087e1b013a895f392107a02fb5a7de00b9395875bb771f6eb"
+            },
+            {
+              "day": 16,
+              "energy_relative_error": 1.8192965216913634e-14,
+              "water_relative_error": 2.7050848607744847e-16,
+              "fields_sha256": "e987b4ee9d6d164a7f15dee9c8d0565acf76a49caf3897f0cad6707689f45be0"
+            },
+            {
+              "day": 17,
+              "energy_relative_error": 1.9509997181642015e-14,
+              "water_relative_error": 3.4908929629360867e-16,
+              "fields_sha256": "dd34b86d347742bb3abea46b1df1a25d66f45635d9b640c29c5789a8677984bd"
+            },
+            {
+              "day": 18,
+              "energy_relative_error": 2.09945805501672e-14,
+              "water_relative_error": 3.357543709235936e-16,
+              "fields_sha256": "9edc7ed03c413ca2d64ccb49f16bf84d348f5e0260d8c0716ecc32acc86583c2"
+            },
+            {
+              "day": 19,
+              "energy_relative_error": 2.220250927521394e-14,
+              "water_relative_error": 3.257531768960823e-16,
+              "fields_sha256": "6acb2aa3cc8e6a246f415a1b648b791f30e0aab59e08af30a22ce21e9fb7395a"
+            },
+            {
+              "day": 20,
+              "energy_relative_error": 2.3776713162049046e-14,
+              "water_relative_error": 3.105132621874937e-16,
+              "fields_sha256": "a5c886f0970c1a6f5ad7d74a242541a0e088c46f5f9c4a4ff4606561d365db5d"
+            },
+            {
+              "day": 21,
+              "energy_relative_error": 2.5163882923715622e-14,
+              "water_relative_error": 2.2288375261310895e-16,
+              "fields_sha256": "c95c50d931a9439347dc5a2b539ecb573888f40f3c2233c79a1031314872bfd3"
+            },
+            {
+              "day": 22,
+              "energy_relative_error": 2.6609500849497366e-14,
+              "water_relative_error": 4.1243019180118026e-16,
+              "fields_sha256": "5255c38a3b9ab3f1aa333f4ac0cc57d89ad712b86704d0cd1782521f3eb508f6"
+            },
+            {
+              "day": 23,
+              "energy_relative_error": 2.7973291345517877e-14,
+              "water_relative_error": 4.791048186512556e-16,
+              "fields_sha256": "7c111021d063f7a72c7a82a44b9f9ccf4ccf9e8942735186b2e94cde7cb47533"
+            },
+            {
+              "day": 24,
+              "energy_relative_error": 2.9259150956051506e-14,
+              "water_relative_error": 6.143590616899798e-16,
+              "fields_sha256": "ab5741018ae39b168eb9266ddde281e033560a6d054ce4c1c78598b32d971eca"
+            },
+            {
+              "day": 25,
+              "energy_relative_error": 3.072425160320497e-14,
+              "water_relative_error": 6.229315137135609e-16,
+              "fields_sha256": "981933b785c4c5df6a396afbe07e52f6b1c12bc5baacba70b37e499396901806"
+            },
+            {
+              "day": 26,
+              "energy_relative_error": 3.213480063051761e-14,
+              "water_relative_error": 5.019646907141385e-16,
+              "fields_sha256": "a3f8ccfd825d41149d8296a9a765e3202e3f8615e77bf6e495c9a145f7deff45"
+            },
+            {
+              "day": 27,
+              "energy_relative_error": 3.3662245986060586e-14,
+              "water_relative_error": 6.010241363199648e-16,
+              "fields_sha256": "4d64250961583f5f5c6ecbb49ea04bee3845956da5f7d3ee8fe4edc643461f14"
+            },
+            {
+              "day": 28,
+              "energy_relative_error": 3.462079587754929e-14,
+              "water_relative_error": 6.286464817292816e-16,
+              "fields_sha256": "512db62af8e503635212b7bf08575a05b82a3a1b1681c2893a9e51c4f1f02211"
+            },
+            {
+              "day": 29,
+              "energy_relative_error": 3.6304103004066035e-14,
+              "water_relative_error": 4.943447333598442e-16,
+              "fields_sha256": "52a9cb507822aac2d2eb4ae97dadcff4f21891b6b141ebdd34f96e2c537fee3a"
+            },
+            {
+              "day": 30,
+              "energy_relative_error": 3.741072157797982e-14,
+              "water_relative_error": 3.562330063132596e-16,
+              "fields_sha256": "8ac3eed96d0019b7cabca8610f5b5c374b27977ab0663502ad85bc74a3448282"
+            },
+            {
+              "day": 31,
+              "energy_relative_error": 3.876671898545165e-14,
+              "water_relative_error": 5.286345414541687e-16,
+              "fields_sha256": "0795afd25e928e84afbb6ec7e5462ba3c12b713654ea22d0c89a2d410ab93bb1"
+            },
+            {
+              "day": 32,
+              "energy_relative_error": 3.9982440799047075e-14,
+              "water_relative_error": 5.029171853834254e-16,
+              "fields_sha256": "d1c0788cbf16aa10a011ed546c29b16379b2c8869390dfe9ff05675cbe092d14"
+            },
+            {
+              "day": 33,
+              "energy_relative_error": 4.159171358435128e-14,
+              "water_relative_error": 4.18145159816901e-16,
+              "fields_sha256": "3f716e71e9bc0bdddb6abba17773fc05bb1b482bcd947781d66c038f26ea2983"
+            },
+            {
+              "day": 34,
+              "energy_relative_error": 4.302564187730999e-14,
+              "water_relative_error": 7.59138251421572e-16,
+              "fields_sha256": "7a685e21450a41bc0f9d2a4c10ba413351ac8648ad64ffb3b01d85d2285be049"
+            },
+            {
+              "day": 35,
+              "energy_relative_error": 4.44595701702687e-14,
+              "water_relative_error": 5.438744561627573e-16,
+              "fields_sha256": "458d0cf666f32c4d95e44caef593abdba7e5e2a5c1e43add7eccd07907dae27e"
+            },
+            {
+              "day": 36,
+              "energy_relative_error": 4.546487859304953e-14,
+              "water_relative_error": 6.143590616899798e-16,
+              "fields_sha256": "af480bf4bf305420006a90a061163c0a1582335c6b8bc8d7d2be725399f7c5c4"
+            },
+            {
+              "day": 37,
+              "energy_relative_error": 4.700401358141554e-14,
+              "water_relative_error": 5.00059701375565e-16,
+              "fields_sha256": "27f6b7392c86cd2d49d089ffb558e170689e4aaf3281a0179b3e5103933b7cb9"
+            },
+            {
+              "day": 38,
+              "energy_relative_error": 4.848859694994073e-14,
+              "water_relative_error": 7.124660126265192e-16,
+              "fields_sha256": "e8a4716b836cde0b2dc92cdf9130bf882cace6f2bb91d9ba7c00139019e00a88"
+            },
+            {
+              "day": 39,
+              "energy_relative_error": 4.9813422003217796e-14,
+              "water_relative_error": 5.867367162806629e-16,
+              "fields_sha256": "714c58a7ae1903a1cd4ccc05d850e63bebdc12fed94716f67bad37b28e727099"
+            },
+            {
+              "day": 40,
+              "energy_relative_error": 5.1040833449636256e-14,
+              "water_relative_error": 6.257889977214213e-16,
+              "fields_sha256": "26e4cc94bd3c7ad75c3d1e50aeacfa621e4c3f7f06c91a12eacb94064519afb5"
+            },
+            {
+              "day": 41,
+              "energy_relative_error": 5.2708554399055625e-14,
+              "water_relative_error": 4.981547120369914e-16,
+              "fields_sha256": "58d65be4cd609bec09af573d0e9a8970af1b65d665ebc282f9cff557974364ea"
+            },
+            {
+              "day": 42,
+              "energy_relative_error": 5.407234489507614e-14,
+              "water_relative_error": 5.600668655406327e-16,
+              "fields_sha256": "f9646840706c56450dc70d2a0991ad4b9bfb398ac1bac130f340cd78cfa5e235"
+            },
+            {
+              "day": 43,
+              "energy_relative_error": 5.566213495900862e-14,
+              "water_relative_error": 4.72437355966248e-16,
+              "fields_sha256": "da8d8297b037c61b654eabc72f306272c8284820b4073efa3526ba85e7efe04e"
+            },
+            {
+              "day": 44,
+              "energy_relative_error": 5.704540817640086e-14,
+              "water_relative_error": 6.676987631700401e-16,
+              "fields_sha256": "8e2242e2707639fc8dea9780c01dcd7b8416fca6308425b69bac59bddc1fc264"
+            },
+            {
+              "day": 45,
+              "energy_relative_error": 5.843647448234177e-14,
+              "water_relative_error": 7.162759913036664e-16,
+              "fields_sha256": "85f9f8e0daec4623ef1b2e27075f90839e50eb6a5cc1710ced5db6b354f82b96"
+            }
+          ],
+          "month": 7,
+          "metrics": {
+            "cells": 12,
+            "area_km2": 601771.2930487934,
+            "observed_mean_mm_day": 0.680616306308741,
+            "predicted_mean_mm_day": 0.02669677764065843,
+            "mae_mm_day": 0.6539195286680827,
+            "rmse_mm_day": 0.7206941622435797,
+            "bias_mm_day": -0.6539195286680827
+          },
+          "geographic": {
+            "lowland": {
+              "cells": 0,
+              "score": null
+            },
+            "upland": {
+              "cells": 12,
+              "area_km2": 601771.2930487934,
+              "observed_mean_mm_day": 0.680616306308741,
+              "predicted_mean_mm_day": 0.02669677764065843,
+              "mae_mm_day": 0.6539195286680827,
+              "rmse_mm_day": 0.7206941622435797,
+              "bias_mm_day": -0.6539195286680827
+            },
+            "coastal": {
+              "cells": 0,
+              "score": null
+            },
+            "inland": {
+              "cells": 12,
+              "area_km2": 601771.2930487934,
+              "observed_mean_mm_day": 0.680616306308741,
+              "predicted_mean_mm_day": 0.02669677764065843,
+              "mae_mm_day": 0.6539195286680827,
+              "rmse_mm_day": 0.7206941622435797,
+              "bias_mm_day": -0.6539195286680827
+            }
+          },
+          "mean_daily_scored_area_fraction_liquid_below_freezing": 0.0,
+          "minimum_scored_surface_temperature_k": 291.1412029404749,
+          "initial_fields_sha256": "ef6e72dc35cf1a1aab02743e3831a43c88acb0dc89c40ea7bf05303294681a27",
+          "monthly_column_water_budget": {
+            "rain_mm_day": 0.02669677764065843,
+            "net_evaporation_mm_day": 0.0039054742563275745,
+            "net_horizontal_water_import_mm_day": 0.09343890359918573,
+            "vapor_storage_change_mm_day": 0.07064760021485487,
+            "surface_storage_change_mm_day": 0.022791303384330854,
+            "scope": "Inferred from complete-month saved vapor/soil/rain stores under the fixed mask: P=E+import-vapor change. No runoff/ice; these are model identities, not independent water-origin tracers or observed evaporation."
+          }
         }
       },
       "scenario_comparisons": {
@@ -2860,9 +3535,18 @@
           "dry_mae_mm_day": 3.023356368283653,
           "worst_mae_mm_day": 3.023356368283653,
           "rainfall_rate_rms_difference_mm_day": 1.3633504299697725
+        },
+        "pacific_nw": {
+          "wet_mae_mm_day": 0.26994079575012164,
+          "dry_mae_mm_day": 0.6539195286680827,
+          "worst_mae_mm_day": 0.6539195286680827,
+          "rainfall_rate_rms_difference_mm_day": 0.5468481307792028
         }
       },
-      "mexico_wet_timestep_comparison": null,
+      "mexico_wet_timestep_comparison": {
+        "mean_rain_rate_difference_mm_day": -0.014298759554419324,
+        "spatial_rain_rate_rms_difference_mm_day": 0.26229981544236924
+      },
       "case_receipts": {
         "north_india_r39": {
           "receipt_sha256": "7f20c41c4dbefa635f7c2cec780442a901340d9977b704f699caad8d2ae2923d",
@@ -2892,29 +3576,37 @@
           "receipt_sha256": "aad81b83d57011ed6d49ebee881a66556aae82b35c47ccce1ca628435114737d",
           "status": "calendar_month_regional_rainfall_trial_finished"
         },
+        "mexico_wet_450": {
+          "receipt_sha256": "bb6797922a8398d923e68587e4cae94124016461918b10b2ea866b908eb4ec67",
+          "status": "calendar_month_regional_rainfall_trial_finished"
+        },
         "pacific_nw_wet_900": {
           "receipt_sha256": "b146fc7f36471fcfd73e600513f0f7942339518f1d5dbd28a72cb644d0f31fdb",
+          "status": "calendar_month_regional_rainfall_trial_finished"
+        },
+        "pacific_nw_dry_900": {
+          "receipt_sha256": "d53b2a8b12be00a14cbf4b20b69cea1982762dd8b9c2511c700c95a52147efab",
           "status": "calendar_month_regional_rainfall_trial_finished"
         }
       },
       "global_protocol_sha256": "d837108cb051f7b8a93eb61db8d390c824b4c770f3d73cd0c99f69d2e9074b75",
       "analyzer_sha256": "ded3332054169fcd156c432383ba99f01b4e892755333819ad6f7e5a2f3af6da",
-      "fields_sha256": "5c7758e4d1ed8b0c6221ff54375b2ca486c1ec302d54b70165b4932fc372f2cd",
+      "fields_sha256": "e273947e2260ba97b5b59b0c6ad97f73b0707af46cce8f36ad698a8a17383d6e",
       "new_integrations_started": 0,
       "physical_adoption": false,
       "recalibration": false,
       "scope": "Read-only analysis under fixed masks/calendar/objective. Pending/incomplete/invalid primary cases withhold pooled score. Three reused region/month pairs, fixed simulated laterals and initialization brackets are not annual/global validation; liquid-only and flat-terrain limitations retained."
     },
     "primary_lower_bound": {
-      "known_complete_primary_cases": 5,
-      "remaining_primary_cases": 1,
-      "candidate_mae_lower_bound_mm_day": 3.416761060820398,
+      "known_complete_primary_cases": 6,
+      "remaining_primary_cases": 0,
+      "candidate_mae_lower_bound_mm_day": 3.525747648931745,
       "r39_equal_region_mae_mm_day": 2.7493024378270032,
       "scope": "Nonnegative-loss lower bound, not a completed pooled score; no unfinished month is scored or substituted."
     },
     "figure_sha256": {
-      "regional_rainfall_results.png": "9f984759aa6400df35622f5b7925ac6884e4f01bd8705655faa9dee4dd8b0d11",
-      "regional_rainfall_maps.png": "ce664954cb30e04ffd976c4cb29384134cfda30712b5216044e384906529c3fd"
+      "regional_rainfall_results.png": "0122db29299630b228ccd88b6e28f786766ab7ce313c74057b3debd06324195c",
+      "regional_rainfall_maps.png": "df5e52e45773c9924d0bab39ce50b956357eac824d92d37410fe202d75e721a5"
     },
     "publisher_sha256": "7e0dff4aeb778c5a646b1f72eea9fdee1f84c72ea77ed54412e0a604e60a9559",
     "new_integrations_started": 0,
