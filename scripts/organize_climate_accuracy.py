@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('pressure-input-pilot','Earth-input smoke tests and the boundary artifact'),
     ('convective-adjustment','Conservative convection and closure sensitivity'),
     ('parcel-stability','Parcel stability and the unresolved convection regime'),
     ('pressure-moist','Repeated moist feedback and a convection acceptance gate'),

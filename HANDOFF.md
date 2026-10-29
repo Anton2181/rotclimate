@@ -1,3 +1,84 @@
+# ACTIVE — first Earth-input smoke complete; regional-port follow-up prepared
+
+User continuesexplicitlyafterpushes. Pushed36ba30f/a38d2a7/ece3a92/cad4859 then
+01c7e8c(frozenEarthinputplan). Didnotstop. SixfixedEarth-input runscompleted,
+alladmissible/conservative butphysical-usegate FAILS:99.5–100%rain atgridouter
+cells and7.5–12.9KstartupTadjustment. DoNOTfitraincoefficientsaroundthis.
+LatestnormalEarthr39/world/biome/popunchanged; no measuredrainaccuracygain.
+Legacybenchmark1934attempts/1929strict/4oldfails/1interruptUNCHANGED;6 NEW
+EARTH-INITIALIZEDSMOKERUNS mustbecountedSEPARATELY (not falsely0Earthruns).
+
+Completed pilot outoutput/pressure_input_pilot_20261029 (3regions×dt1800/900,
+6h each,108steps). India warmday197.1index21, Mex226.3index23, PNW197.1index21.
+Frozenplan committed01c7e8c; modelT/twomodelwaterreservoirs only, noobs/winds.
+Pointsubsample4from56km->224km,6p cells101325->38000,first25%drymass,flat
+sea-levelT usingfixed6K/km, sameverticalgamma200Kcap. Lower/upperwaterpreserved;
+initialphaseconversionrainbookedseparately. Zero initialwind,closedwalls/lids,
+no sustainedsolar/evap/lateralforcing. Not balancedweather or climate skill.
+
+Finest900s regionalmeanrunrain India.00041448mm/Mex.00047433/PNW.00840776;
+initialconversion.00269022/.00590914/.02848625mm EXCLUDEDfromrunrain. Peakwinds
+21.556/19.970/29.653m/s. Outer-cellrain100/100/99.477%. MaxwholeprofileTdelta
+7.495/10.677/12.893K. TimestepT_RMS.05536/.04374/.06347K;relative mean-rain
+diff27.0/23.8/2.2% BUTabsolute tropicalmeandiffs~.0001mm, notrainconvergence.
+Independent rawinit/finalH+faceKE+rainH andwater inclstartup errors<6.3e-16rel.
+Report PRESSURE_INPUT_PILOT_20261029.md; figurepostedvia view, embeduserlater.
+Full300focusedpass43.68s (293+7init/calendar tests). QA726checkoutassets,
+47studies/131images/55JSONdownloads;1223portablefiles;418portablelinks PASS.
+Milestoneverifier bindsQA/tests and confirms682legacy+allplansourcesunchanged.
+Finishbinding/commit/push ONLYfirstpilotpublication (currentlystaged) before
+the untrackedboundaryprototype below. NoEarthrecalibrationclaimed.
+
+ALREADYIMPLEMENTEDNEXT (untracked): rotclimate/pressure_boundary.py +8tests,
+scripts/pressure_boundary_pilot.py andcalibration/pressure_boundary_pilot_20261029/
+plan.json/preflight.json. Eightnewtests pass. BoundaryPressureMoistModel inherits
+frozenclosedgeometry, but keeps separate regionaladvance copy so oldsource
+receipts stayvalid. Zeroports recoverclosedstate andconvectionwrapper exactly.
+Prescribed normalu/v havezero depthmassmean on every boundary face, noignored
+interiorentries. Exteriorvelocities have no kineticstorage. Incoming gasH/q
+explicit; outflowdonors local. Coriolisskew terms missing prescribedexterior
+neighbors included asboundaryforce; workoninternalvelocities exchanged with
+externallymaintained boundary reservoir (NOTaCoriolisenergysource).
+
+Regionalenergyidentity:
+Delta(gasH+internalfaceKE)+groundrainH =dt*(externalheat/vaporH +boundaryrotation
+work -outwardadvectivegasH -outwardgeopotentialwork).
+Water identity addsoutwardboundaryvaporflux. Hydrostaticcompression cancels
+internalpressurework PLUS outwardPhi*Md*U flux. Tests independentlycheckactual
+portsupply/rotationwork/mass, uniformthroughflow, zeroports, combinedconvection.
+No transparent-waveboundary, exteriorKstorage or nonlinearmomentum/KE advection.
+New advance_boundary_with_convection duplicatesfrozenconvectionwrapper with
+theseactualport budgets; finalpostadjustpressure stillrespondsnextstep.
+
+baroclinic_lower_wind_seed preserves archivedLOWERmodel projectedright/up wind
+on exteriorfaces/arithmeticinteriorfaces, flipsup->south. Uppercells share
+compensating -Mlower/Mupper return so depthmean0. DoesNOT preservearchivedupper
+orbarotropicwind anddoesNOTguaranteegeostrophicbalance. Newtestchecksfacevalues,
+signandmassmean. Archived/referenceOBS wind neverused, onlysimulatedlowerwind.
+
+Follow-upplan PREPARED BEFOREOUTCOMES, NEEDCOMMITEXACTLITERALBEFORERUN:
+same3priorinitialT/W/geo, no re-remap/startuprain. setupsclosed_seeded(dt900),
+ports_rest(900),ports_seeded(900,450) =>12newEarth-inputruns,priorclosed-rest900
+retainedascontrol. Seeded=oldsimulatedlowerwindininterior, matchingdeclared
+boundaryvalues; nointernalnudging. Ports outsideT/q heldatpriorinitialadjacent
+modelvalues, prescribedbaroclinicnormalvelocitiesfrommodelwind. Same1hconv,
+5daydrag,Earthf,6h,flatgeometry. Recordinitialmomentumimbalance; doNOTcallseed
+balanced. Actualadvectivewater/H,Phi andprescribedrotation work cumulatively
+booked. Onlylateralenergy/moisture/mechanicalforcing, no solar/surfaceevap.
+
+NEXT afterfirstpilotpublicationcommit/push: gitadd ONLYboundarycore/tests,
+boundarydriver+literalplan/preflight,commit,push. Then
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/pressure_boundary_pilot.py
+ --plan calibration/pressure_boundary_pilot_20261029/plan.json
+ --out output/pressure_boundary_pilot_20261029
+Redirectlog OUTSIDEnewout (freshoutrequired). Preserveallfailures,partialfields.
+Compareedge-rain,initmomentumresidual,netboundarywater/energy,timestep, notmonthly
+skill. NewactualEarthinitializedrun count12 ifallstart; cumulativetotal18,
+legacybenchmarkattemptsadded0. Physicsnotadopted. Sourcehashesallfrozen; current
+newBoundary.py isuntrackedso avoid accidentallyincludingitin300pilotcommit.
+
+Earlier handoff follows:
+
 # ACTIVE — convection complete; frozen Earth-input smoke test prepared next
 
 User repeatedlyrequestscontinueafterpush. Completedpushed36ba30f sublayers,

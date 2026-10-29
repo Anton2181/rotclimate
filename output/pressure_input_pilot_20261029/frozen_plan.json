@@ -1,0 +1,67 @@
+{
+  "purpose": "Frozen six-hour archived-model Earth-input smoke test; no calibration or observed-skill scoring",
+  "regions": {
+    "north_india": {
+      "archive": "output/divergent_thermal_20261028/hydro_control/north_india_transport.npz",
+      "model_day": 197.1
+    },
+    "mexico": {
+      "archive": "output/divergent_thermal_20261028/hydro_control/mexico_transport.npz",
+      "model_day": 226.3
+    },
+    "pacific_nw": {
+      "archive": "output/divergent_thermal_20261028/hydro_control/pacific_nw_transport.npz",
+      "model_day": 197.1
+    }
+  },
+  "horizontal_stride": 4,
+  "cell_m": 224000.0,
+  "pressure_edges_pa": [
+    101325.0,
+    85493.75,
+    72694.9450895894,
+    61812.179739202256,
+    52558.61407423528,
+    44690.34945959743,
+    38000.0
+  ],
+  "lapse_k_m": 0.006,
+  "isothermal_cap_k": 200.0,
+  "rotation_rate_s": 7.2921159e-05,
+  "momentum_drag_s": 2.3148148148148148e-06,
+  "convection_relaxation_s": 3600.0,
+  "duration_s": 21600,
+  "timesteps_s": [
+    1800,
+    900
+  ],
+  "maximum_coupling_iterations": 40,
+  "initial_winds": "Zero; initially unbalanced thermal adjustment, not initialized weather forecast",
+  "terrain": "Flatten using one fixed6K/km lapse to sea-level reference; no terrain rain/drag claim",
+  "water": "Preserve archived lower/upper column vapor, uniform RH within each corresponding pressure reservoir; book initial conversion rain separately",
+  "forcing": "No external solar, evaporation or lateral forcing over six-hour smoke test",
+  "observed_fields_used": false,
+  "monthly_rainfall_skill_evaluated": false,
+  "legacy_benchmark_attempts_added": 0,
+  "counts": "Six Earth-initialized integrations, recorded separately from legacy1934 benchmark attempts; no strict benchmark passes claimed",
+  "success": "Numerical admissibility, conserved actual water/energy and honest timestep/closure diagnostics; no automatic physics adoption",
+  "failure": "Preserve all failed attempts; no parameter changes or replacement regions after outcomes",
+  "sources": {
+    "rotclimate/pressure_initialization.py": "32db6ab33920854941414739ac3965b92f530576790e638113b4734eb00c3dad",
+    "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+    "rotclimate/pressure_coordinate.py": "f5aba77c4632ace2b0da94a2bd3f25c69cc35c8fb529d136828ef51beab11516",
+    "rotclimate/convective_adjustment.py": "35ee37e32e353cea503d09fe961c762aed5eb61f517a3191470225bf7a0c6413",
+    "rotclimate/parcel_stability.py": "845f30e50dc523f7d593589131cf0234dde820457b7c3822cf2b7d76b548edc3",
+    "rotclimate/multilevel_transport.py": "0923c32718fbc213cab0e8518b57418bf061349d0c453748bd47b1414be15119",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "rotclimate/falling_water_energy.py": "1f5412c9f127cf2a7e4e002aeb78c21f5675135da847f76e467139ea20ed6b55",
+    "rotclimate/moist_enthalpy.py": "d4fc73beadd4d1b910124fd8d2c89a09396f544feca51dbcdb177c031614e933",
+    "rotclimate/phase_adjustment.py": "5c3aeeb8e41b7a5c3ef283733d56631ff8b1aeeacfcfa6254e1da4dd4ace50c2",
+    "scripts/pressure_input_pilot.py": "8f8e943bba579b491584fe6f64e9f1129117c4a03b099d239a0b9dafe8314881",
+    "output/divergent_thermal_20261028/hydro_control/north_india_transport.npz": "68a1a15b207335843e29bd295395760d341468b0c8785c16effef0a789be7d30",
+    "output/divergent_thermal_20261028/hydro_control/mexico_transport.npz": "45695e69d55b0178a831680d5cb8ec60415eab81a1451ebc1387f4709eb3612b",
+    "output/divergent_thermal_20261028/hydro_control/pacific_nw_transport.npz": "334a9105cf511b9aa91d8d664591f3b4536b07c0f31b12798ddfd2c6891af3ba"
+  },
+  "neutral_tolerance_k": 0.01,
+  "maximum_convective_sweeps": 64
+}
