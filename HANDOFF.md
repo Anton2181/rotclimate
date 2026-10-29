@@ -1,3 +1,58 @@
+# ACTIVE — conservative phase sublayers complete; prioritize repeated coupling
+
+User: "continue, dont stop after pushing"; mid-turn asked how far from a
+recalibration. Answered honestly: phase pulse is not an evolving moist model;
+need repeated transport/phase/circulation without duplicate adiabatic cooling,
+then bounded Earth comparison before broad search. PRIORITIZE INTEGRATION next,
+not automatic-refinement polishing. No agents. Current repo/work/push unchanged.
+
+New rotclimate/sublayer_phase.py reconstructs nested T/q with limited slopes
+centered on dry-mass centroid; preserves every parent's vapor and gas static
+energy, including geopotential, via a conservative T offset. Reference fine
+dry masses must sum to actual parents; reject mismatch, no normalization.
+Fine liquid phase uses existing multilevel_fall. Restriction sums M/W/E and
+diagnoses coarse T. Mean can exceed single-cell saturation while every fine
+cell is valid: NEVER recondense or clip coarse water. Return/retain complete
+fine state; reconstructing each step introduces a separate mixing assumption.
+Ten meaningful tests cover actual independent budgets, exact no-refine limit,
+shape heat ledger, supersaturated coarse means, fine-state equilibrium,
+invalid grids/masses. Full259 focused pass48.49s (249+10).
+
+Fixed-parent experiment: common16-cell input restricted from continuous512
+manufactured profile. Reconstruct identical parent at1/2/4/8/16/32 sublayers.
+Coarse T RMS vs32: .00298411/.00072203/.00015713/.00003424/.00000923K.
+Coarse sourceAPE .00730737/.00670110/.00655541/.00651953/.00651590/.00651334.
+SourceAPE error1->8sublayers12.19%->.095%; all SAME coarse grid. Earlier native
+16% APE change includes newly represented variance, not all phase-solver error.
+Candidate512 reconstructs from sameparent; no access to originalfine structure.
+
+Three dry source-pulse runs1/8/32sublevels, same16dynamic levels,dt150s,6h,
+432steps. PressureRMS vs32 improves.03390094->.00026942m²/s²; u/v .003955/
+.003574->.0000444/.0000404m/s. Still prescribed one-hour phase pulse, NOT
+interactive moist climate. Phaseparent/columnwater/E errors<1e-15relative,
+dry sourcework<2e-14. Newpublisher verifies raw originalparent, fine/coarse
+states, saturation, virtualforcing, sourceAPE, pressure and finalactualenergy.
+
+Report SUBLAYER_PHASE_20261029.md; output/sublayer_phase_20261029. Fullrawfields
+NPZ is in output AND atlasdata. Added NPZ to Windows checkout byte checks.
+Research study sublayer-phase:43studies/127images/51JSONdownloads plusNPZ;
+713byte-exactcheckoutassets;1206portablefiles/397links/freshlauncher pass.
+Latestassets must be bound byte-exact before commit. Figure shown user.
+No Earth integrations/adoption; Earthr39/all normalworld/biome/pop unchanged.
+1934attempts/1929strict/4historicalfailures/1historicalinterruption.
+
+NEXT physical coupling idea under consideration: pressure-coordinate thermal
+primitive equations make compressional work explicit once, instead of adding
+dry b cooling to MSE. Hydrostatic Phi=A*T, mass Δp/g, compression power derived
+as -T*(A.T Mdiv), paired with momentum pressure work. Transport gas enthalpy
+(not gas+fixed-gz MSE), phase/latent after transport; pressure-work cancellation
+then follows from actual T/omega. Need careful moisture/dilute/precipitation
+potential assumptions: cannot blindly reuse fixed-height fall-work energy in
+a pressure-enthalpy budget. Original modules/results remain unchanged. Build
+and test dry pressure-coordinate identity before claiming repeated moist model.
+
+Earlier handoff follows:
+
 # ACTIVE — full shared-cell dry dynamics and phase-pulse milestone
 
 User requests continuous development after pushes. Status answer was followed
