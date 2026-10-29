@@ -1,0 +1,113 @@
+{
+  "region": "north_india",
+  "scenario": "retained_mean",
+  "dt_s": 450,
+  "started": true,
+  "status": "failed",
+  "error": "ValueError('Pressure-lid dry mass continuity failed')",
+  "traceback": "Traceback (most recent call last):\n  File \"/workspace/rotclimate/scripts/rigid_lid_pilot.py\", line 56, in run\n    state=advance_boundary_with_convection(model,state,dt,relaxation_s=base['convection_relaxation_s'],neutral_tolerance_k=base['neutral_tolerance_k'],max_sweeps=base['maximum_convective_sweeps'],max_iterations=base['maximum_coupling_iterations'])\n          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/pressure_boundary.py\", line 166, in advance_boundary_with_convection\n    dynamic=model.advance(state,dt_s,**kwargs)\n            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/rigid_lid_moist.py\", line 101, in advance\n    compression=self.column.compression_power_w_m2(midpoint_t,div)\n                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/pressure_coordinate.py\", line 50, in compression_power_w_m2\n    flux=self.upward_mass_flux(div)\n         ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/workspace/rotclimate/rotclimate/pressure_coordinate.py\", line 36, in upward_mass_flux\n    if np.any(abs(flux[-1])>1e-10*scale+1e-13):raise ValueError('Pressure-lid dry mass continuity failed')\n                                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\nValueError: Pressure-lid dry mass continuity failed\n",
+  "history": [
+    {
+      "time_s": 450,
+      "mean_rain_mm": 0.00011520744601908108,
+      "port_power_w_m2": 31.165494747056854,
+      "outward_boundary_vapor_kg_m2_s": -2.005480862665906e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 1.4457190869801573e-13,
+      "constraint_pressure_work_w_m2": -7.015748906215349e-15,
+      "energy_error_j_m2": -3.128330789360346e-08,
+      "water_error_kg_m2": -5.2054221499679885e-15
+    },
+    {
+      "time_s": 900,
+      "mean_rain_mm": 0.00024185582787180203,
+      "port_power_w_m2": 31.0944995640572,
+      "outward_boundary_vapor_kg_m2_s": -2.0015014679601526e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 8.688926314559531e-14,
+      "constraint_pressure_work_w_m2": -1.2610227191725614e-14,
+      "energy_error_j_m2": -9.565413290379094e-08,
+      "water_error_kg_m2": 2.579200469756638e-15
+    },
+    {
+      "time_s": 1350,
+      "mean_rain_mm": 0.00024185582787180203,
+      "port_power_w_m2": 30.973263306828947,
+      "outward_boundary_vapor_kg_m2_s": -1.9957452291310337e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 2.002426002789548e-13,
+      "constraint_pressure_work_w_m2": -5.328496492269876e-15,
+      "energy_error_j_m2": 3.1353978841912515e-07,
+      "water_error_kg_m2": -1.7345602078849504e-15
+    },
+    {
+      "time_s": 1800,
+      "mean_rain_mm": 0.00024803067406594894,
+      "port_power_w_m2": 30.93068516144612,
+      "outward_boundary_vapor_kg_m2_s": -1.992915622466029e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 1.6358789323156486e-13,
+      "constraint_pressure_work_w_m2": 2.785543226534956e-15,
+      "energy_error_j_m2": -3.2768128257171783e-07,
+      "water_error_kg_m2": 2.4050478384428883e-15
+    },
+    {
+      "time_s": 2250,
+      "mean_rain_mm": 0.00024803067406594894,
+      "port_power_w_m2": 30.88037934298213,
+      "outward_boundary_vapor_kg_m2_s": -1.989905737969607e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 2.868330573058131e-13,
+      "constraint_pressure_work_w_m2": 3.315757285622614e-15,
+      "energy_error_j_m2": 2.1916028915667066e-07,
+      "water_error_kg_m2": -1.5725982607631628e-15
+    },
+    {
+      "time_s": 2700,
+      "mean_rain_mm": 0.00024803067406594894,
+      "port_power_w_m2": 30.841169857950405,
+      "outward_boundary_vapor_kg_m2_s": -1.9874054748619714e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 2.94618496265997e-13,
+      "constraint_pressure_work_w_m2": 1.9904493064730064e-15,
+      "energy_error_j_m2": -1.9570739538061851e-07,
+      "water_error_kg_m2": -7.46244025179419e-15
+    },
+    {
+      "time_s": 3150,
+      "mean_rain_mm": 0.00024803067406594894,
+      "port_power_w_m2": 30.803929474301704,
+      "outward_boundary_vapor_kg_m2_s": -1.9850907365464114e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 1.8070701185424198e-13,
+      "constraint_pressure_work_w_m2": -3.880477128223413e-15,
+      "energy_error_j_m2": -4.1538812950545666e-08,
+      "water_error_kg_m2": 1.0250623879127328e-14
+    },
+    {
+      "time_s": 3600,
+      "mean_rain_mm": 0.00024803067406594894,
+      "port_power_w_m2": 30.768313105413682,
+      "outward_boundary_vapor_kg_m2_s": -1.982957555981446e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 3.297431772075754e-13,
+      "constraint_pressure_work_w_m2": -1.9600086101261928e-14,
+      "energy_error_j_m2": 1.875391485644322e-07,
+      "water_error_kg_m2": -2.105505312583238e-15
+    },
+    {
+      "time_s": 4050,
+      "mean_rain_mm": 0.0003033144051022797,
+      "port_power_w_m2": 30.733450147745934,
+      "outward_boundary_vapor_kg_m2_s": -1.9809853245580018e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 3.237228193841979e-13,
+      "constraint_pressure_work_w_m2": -1.1373759534715432e-14,
+      "energy_error_j_m2": -1.3686789601456886e-07,
+      "water_error_kg_m2": -3.1887346793547634e-15
+    },
+    {
+      "time_s": 4500,
+      "mean_rain_mm": 0.00035308299202690795,
+      "port_power_w_m2": 30.637883545679784,
+      "outward_boundary_vapor_kg_m2_s": -1.9769569617943688e-05,
+      "maximum_column_mass_divergence_kg_m2_s": 4.359741734294431e-13,
+      "constraint_pressure_work_w_m2": -2.9297005920624224e-14,
+      "energy_error_j_m2": -1.0170590351609622e-07,
+      "water_error_kg_m2": 1.0658141036401502e-15
+    }
+  ],
+  "completed_steps": 10,
+  "partial_fields_sha256": "fa64c660b538f5a1698b5f78b9a30141cf0000816713eb74226f0712e7c857c5"
+}
