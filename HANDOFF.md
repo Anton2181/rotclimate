@@ -1,3 +1,71 @@
+# ACTIVE —72h soil-water study complete; faster equivalent phase root prepared
+
+Latestpusheda6e422c(daylongforcingpublication),5afa26b(literal72hwet/dryplans).
+Useragainexplicitcontinueafterpush. Both72hjobsCOMPLETED,nolongerspinupPIDsactive.
+output/surface_spinup_wet_20261029:6/6 complete(3regions*900/450s),dry:3/3complete
+(3regions900s). NewactualEarthprototype9starts9complete, cumulative75STARTS/
+71COMPLETED/4retainedearliernumericalFAILURES. Legacy1934/1929/4historicalfails/
+1interruptUNCHANGED;no monthlyskill,calibration,adoption;r39/world/biome/popunchanged.
+
+Physicsunchangedfrom356-test2aeab87stack. Wetinitialland50kg/m² vsdry0 plusold
+pressure-conversionrainreturnedpretime0. SAMEatmosT/W/sourcewind/orbit/lateral
+forcing;wateralsochangesheatcapacitysoinitialstatecomparisonnotE-equivalence.
+Allsaved24/48/72hstatesinrawNPZ;nohiddenclipping/replacement. Wetday1all6cases
+areBYTE-IDENTICALarrays toprevious24hrun(includingrainH;byte_exact_first_day.json).
+Sourcebeforeplanscommitted;sourcehashesstillvalid. No newmodelsourceeditsduring
+jobs. Userupdatedfrequently;bothseriesandwatermapsgenerated/viewed,seriesembedded
+commentary. Mapslastsnapshotfull3regions output/surface_spinup_publication_20261029.
+
+Coarse900s day3LANDP wet/dry: India1.318/.0647mm, Mex1.353/.4028,PNW1.635/.1829.
+Wetfine450sday3P1.314/1.325/1.647mm: meanstepsensitivitymuchsmallerthaninitwater,
+BUTlocalday3rainRMSstepdiff.822/.479/.428mm;notlocalconvergence. Wetsoilfinal40.1/
+46.2/41.4kg/m²,dry.43/2.35/.32. WetlandT301.99/301.04/293.85K,dry307.98/305.13/
+298.29K. Stilltransient, notproofmultipleequilibriaoroptimizerlocalminimum.
+Wetsoilwaterdeclining,dryaccumulatingsmallwater;DONOTfitonewetinitialstateas
+climatewithoutdeclaredspinup. Newmaps evap=P−deltaS,netcolumnimport=delta(vapor+S),
+verifieddailyglobalportwater;notorigintracers. ActualdailyEerror<7.14e-15rel,
+W<3.45e-16,surfacewateridentity8.52e-13kg/m². Publisherrawchecks+sourcesallpass.
+
+CurrentSTAGEDpublication/report/atlas:53studies/139images,746Windowsbyteassets,
+1252portablefiles/452links. Fullsource682andbothliteralplansources
+unchanged;6portablecurrentassetsbyteexact. Finishcommit/pushpublicationNOW;
+keepnextuntrackedfastphasemodule/tests/script/planoutofthiscommit.
+
+NEXT ALREADYIMPLEMENTED untrackedrotclimate/fast_liquid_phase.py +
+tests/test_fast_liquid_phase.py:9testsPASS .25s incl1800randomstatesagainstfrozen
+64bisectionroot,clearbitexact,near-boilingbrackets,coldrain,re-evap,scalar/strided
+inputs,forcedreferencefallback. NewrootSPECIALIZEDpressureenthalpy extraHeat0/
+beta0,notheightfallwork. Sameenthalpy/saturationmodel. All-evapcellsnoiterations;
+activecellsanalyticNewtonbracketedfromoldlo/hi,relativef<=1e-12*sat,32maxthen
+trustedold_equilibriumfallback. Physicalenergy200eps,saturation1e-9checksunchanged.
+Caught/fixedinf<=inf falselysolved near-boilingtests BEFOREanydynamicadoption;
+nowrequiresfinitef/sat,finalfiniteerrorguard. Randomcases0fallbacks,max12–15iters.
+Fallbackmaxiter0validatedbitexact. Newenthalpy_phase_fast topdowninterface4tuple
+matchesold. NOTWIREDINTOANYMODELyet.NoEarthoutputswithfastbackend,noadoption.
+
+Preliminarysynthetic4-stepfullcouplerprofile output/surface_core_profile_20261029/
+profile.json saysphase~38%cumtime,sparsegssv~25%self. Thiswasinline4syntheticsteps,
+notEarthorendtoendbenchmarkadoption. Needpairedtransportoperatorfuture(sameH/W
+operatorcurrentlybuilt/factorizedtwiceperiteration). Firstbenchmarkphasekernel.
+
+NEXTfrozenbenchmarkPREPAREDUNTRACKED BEFOREtimingoutcomes:
+scripts/benchmark_liquid_phase.py +calibration/fast_liquid_phase_20261029/plan.json.
+3SYNTHETICcases(clear,condensing,mixed) sixlevels15x17,2warmups,32pairedalternate
+old/newtimings,alltimes/medians,no speedgate. Actualfields/E/Wchecks andmaxdiffs.
+NoEarthdata ornewEarthintegration,NOTendtoendspeedclaim. NeedCOMMITliteralplan
+andnewfastcore/tests/benchmarkscript before executing. Aftercurrentpublication
+commit/push,nextgitaddthose4files+plan,commit/push THEN
+OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python scripts/benchmark_liquid_phase.py
+ --plan calibration/fast_liquid_phase_20261029/plan.json --out output/fast_liquid_phase_20261029
+redirectlogOUTSIDEfreshout. DoNOTalterfastsourceaftertimingwithoutnewepoch.
+Need actualmodeltrajectorycomparisonBEFOREfastbackendadoption. Current9unit
+checks+old356 notfull365suiteyet(no sharedsource changed). Newmodelbackendwill
+requirefullsuiteandfrozenreferencecases. ThenoptimizepairedH/Wtransport ifneeded.
+
+Noagents. Workspace/branch/pushunchanged. Keepuserupdated<=60sandpostfigures.
+
+Earlier handoff follows (older active blocks stale):
+
 # ACTIVE —24h forcing complete;72h wet/dry initial-land-water test prepared
 
 Pushed32ac7a6openmeanresults,cdb54ebforcingfluxkernels,2aeab87finite surfacecoupler

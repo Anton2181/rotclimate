@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('surface-spinup','Three-day spinup and initial land-water sensitivity'),
     ('surface-forcing','Day-long surface heat, water and radiation coupling'),
     ('open-mean','Regional mean throughflow and boundary pressure work'),
     ('rigid-lid','Retained mean circulation and constraint precision'),
