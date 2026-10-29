@@ -1,0 +1,45 @@
+{
+  "purpose": "Second infrastructure checkpoint recovery; preserve complete India outcomes and first recovery receipt, continue remaining literal cases detached from tool sessions",
+  "original_plan": "calibration/regional_rainfall_benchmark_20261029/plan.json",
+  "original_plan_sha256": "d837108cb051f7b8a93eb61db8d390c824b4c770f3d73cd0c99f69d2e9074b75",
+  "sources": {
+    "scripts/resume_rainfall_month.py": "7b591d95b2dffed835c8027a40b22af95f67dc5a7b58e7c26b61e408668a1fc1",
+    "scripts/continue_rainfall_benchmark.py": "376d886afc07463a55b52b06e06f9d108a4347e9965ec60a94c30111466d4fa4",
+    "scripts/continue_rainfall_batch_recovery.py": "5d830a1a5dee2d361cf7eefccf54e9ed19537179705efe668f8d2d7825d6ea69"
+  },
+  "interrupted_cases": {
+    "mexico_wet_900": {
+      "progress.json": "0f1ef549eb82a1b36b895b5a3758b42ed92b479b467ad4ea9b73a9a80b0c7fef",
+      "frozen_plan.json": "c58fa99fd36c7f4c57695b70cb84c59cb0fad9e44673a08e207e8f3d2556ebb9",
+      "mexico/wind_conversion.json": "a08eb9194335b83b3de5b083206fbff68fde98206cae35ea2b8a388dbd84e5e1",
+      "mexico/initial.npz": "3ee67c984e6ed18462ce8f8d49d0737e3ae52e025e710a85deccc87ac886aa2e",
+      "mexico/forced/day_3_900.npz": "5a28cb23344e18e3e35ec9592d21b693184430a61d558b069ee30b86bd9f3f7b",
+      "mexico/forced/day_2_900.json": "34921b70b871249b47c7285e5877d9f7cd2a375b5cfe28458b374e525584dd04",
+      "mexico/forced/day_1_900.npz": "a78f3056ce4af2a2c024103260ed64f769facdafbc876178a3eab0c2a0daa36d",
+      "mexico/forced/day_2_900.npz": "7ec69c7c46a8efcd14eaf87ab9cb1685f0ad2ce34d3508cd03e1896652834679",
+      "mexico/forced/day_3_900.json": "f8343a34d80f82cb88f0a998188a500f67d6bc9c93aee8ca963289726e398191",
+      "mexico/forced/day_1_900.json": "b52d1ecbeb223acd806aa15f5697c7cb302824efa2f69281f6b025a23af73f52"
+    },
+    "mexico_dry_900": {
+      "progress.json": "0f1ef549eb82a1b36b895b5a3758b42ed92b479b467ad4ea9b73a9a80b0c7fef",
+      "frozen_plan.json": "a3e6a43efa5b9138007d0d9e6162b1ccdb22ca0bddf53233ca699a6694e607f9",
+      "mexico/wind_conversion.json": "a08eb9194335b83b3de5b083206fbff68fde98206cae35ea2b8a388dbd84e5e1",
+      "mexico/initial.npz": "7d63f977c75713cd7c1cf97de15b0d23ab6900f030b1c2c63dfbf8e15c3aec05",
+      "mexico/forced/day_2_900.json": "151dd2bb4655fe2cd8dba8da075dc53eb2e862c062f39c70022ea5cce1ed5095",
+      "mexico/forced/day_1_900.npz": "7490431628d4abcc33d4eca2795517d0f8b66bd3c130abb2cac95579a4113b44",
+      "mexico/forced/day_2_900.npz": "442f35b883a1151f117a4f61eefef312c05b172b31c2190844dd565af70cc3e8",
+      "mexico/forced/day_1_900.json": "8968825534b70189aa907b83ac4cb7afe32dc27303c69e98effba2c47e58dbde"
+    }
+  },
+  "qualification_replays": [
+    "output/monthly_recovery_replay_mexico_wet_20261029",
+    "output/monthly_recovery_replay_mexico_dry_20261029"
+  ],
+  "qualification_rule": "Every next-day checkpoint field must reproduce byte exactly on an isolated copy before monthly continuation.",
+  "actual_replay_segments_retained": 5,
+  "prior_recovery_receipt_sha256": "682fd3b14afaaad49a6c5d5737ba135437811bbe0b4b7ab9a84eeab965f933b3",
+  "prior_recovery_plan_sha256": "e825ddeed09cde20115d3c54b64801764928046717c449ce2d7ebb75068217de",
+  "process_interruptions_preserved": 4,
+  "new_earth_initializations_by_recovery": 0,
+  "physics_or_scoring_changes": false
+}

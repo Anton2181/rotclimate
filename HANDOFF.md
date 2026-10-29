@@ -1,156 +1,125 @@
-# Active work — monthly workers recovered; water-supply atlas milestone ready
+# Active work — first complete monthly scores; next terrain mechanics
 
-41f77a71 pushed exact checkpoint recovery; controller RUNNING session83618.
-India wet/dry around day37/38 of45 as of18:03UTC; two workers, no duplicate launch.
-Controller log output/regional_rainfall_recovery_20261029.log. After India ends it
-runs every queued Mexico/PNW case from the original frozen plan; legacy controls
-are reused, not rerun. Recovery segments2/replay segments3 are separately recorded.
-Zero new Earth initializations by replay/recovery. Original prefix daily fields
-retained; per-step prefix histories unavailable. Both branches next-day states
-reproduce all10 fields byte exactly; frozen model sources unchanged.
+User says keep developing, commit/push milestones, do not stop after pushes.
+No new agents. Workspace `/workspace/rotclimate`, branch `work`.
+Run Python with OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python.
+Push: git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu.
+No AGENTS.md found. Cloud-runtime skill read earlier. No credentials accessed.
 
-Water-supply atlas publication READY and QA passed (62studies/153figures,
-778 Windows byte assets,1298 ZIPfiles/509links; browser, launcher,682source checks).
-Finish its commit/push, then CONTINUE. Partial India days15–30 scored-area water
-identity: wet rain1.043,evap1.662,netimport−.911,vaporchange−.292mm/day; dry allrain/
-evapzero and netimport/vaporchange−.079. These are mechanism diagnostics, NOT
-incomplete-month candidate accuracy scores. No model adoption/calibration.
+## Current milestone
 
-New complete-month publisher scripts/publish_regional_rainfall_results.py is
-implemented but not run (wait for at least one full45-day candidate receipt).
-Then publish all complete cases; never omit worse branches or average available
-regions into a pooled primary. Add organizer entry regional-rainfall-results and
-packager report REGIONAL_RAINFALL_RESULTS_20261029.md only when results exist.
-Analyzer requires complete receipts and all45 daily budgets, final fields exact.
+Latest pushed3445b344: water-supply atlas. Current staged milestone is complete
+India monthly results + terrain hydrostatic geometry/common-pressure apertures.
+Atlas QA PASS:64studies/156figures,787 Windows byte assets, full portable checker,
+browser keyboard/hash/themes/mobile/errors, all682 old source hashes unchanged.
+New ZIP assets compared byte exactly. Figures posted to user.
+Finish current commit/push then keep working; queued month cases still matter.
 
-New independent geometry module rotclimate/terrain_hydrostatics.py and15tests PASS.
-Not wired into frozen models. Hydrostatic pressure/analytic geopotential and
-variable dry-mass hybrid interfaces for future terrain-following atmosphere.
-Next: static terrain-mass audit using all3 prepared Earth source elevations;
-conserve source hashes, no dynamics, no claiming this changes current climate.
-Missing terrain and nonlinear momentum remain potential causes, not proven.
+## Actual rainfall result (fixed footprints,31-day July after14-day prelude)
 
-## Workspace and authorization
+India wet: mean.86133mm/day, MAE7.25423. Dry: mean0, MAE8.09228.
+Observed mean8.09228; r39 mean2.40797, MAE5.95452. BOTH prototypes worse thanr39.
+Both complete45days and saved daily/final independent E/W budgets pass.
+No pooled six-case score until all6 primary months are complete/qualified.
+Mexico450 is a numerical control, excluded primary mean. No physics adoption.
+Other reference MAE:MexicoAugust2.08827,PNWJuly.20511mm/day.
+These are reused summer regional development cases, not annual/global skill.
+World atlas release remainsr38; qualified Earth baseline remainsr39.
 
-`/workspace/rotclimate`, branch `work`. Python `.venv/bin/python`.
-Set `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1` for models/tests. CPU quota2 cores.
-Push: `git -c http.version=HTTP/1.1 push origin HEAD:refs/heads/claude/friendly-turing-43ygeu`.
-Last pushedf48a02a7: fixed monthly rainfall benchmark setup. Current fine-grid publication ready.
-No approval required for this authorized local development/commit/push work.
-No AGENTS.md found. Cloud runtime skill read earlier; no secrets accessed.
+Frozen benchmark plan calibration/regional_rainfall_benchmark_20261029/plan.json.
+Same224-km centered common footprints with projection-area weights and>=80%
+valid land, interior masks24/23/12 cells. Same masks allprofiles. Mean of6
+independently scored region/initialization MAEs; regional tradeoffs allowed.
+No best initial-state selection or averaged wet/dry predictions before scoring.
+Sources/calendar/timesteps1024cap/.01Kneutral/3600srelaxation unchanged.
 
-## Completed fine-grid controls
+## Process interruption/recovery — IMPORTANT
 
-bceb3239 pushed all six completed21-level900/450s controls and updated atlas.
-Prototype109starts/101completions/eightretainedfailures through that study.
-AllfinalbudgetsPASS, oldinitialarrays/scalaracceptedprefixesexact. Maxwork432.
-LandPfine900/450 India.619/.632,Mex1.751/1.715,PNW.427/.427mm24h.
-SpatialsteprainRMS.204/.559/.148mm; notlocalconvergence orobservedaccuracy.
-Old64-cap failures retained. See reports/CONVECTION_CAP_20261029.md.
+Tool-session/environment resets killed foreground process groups TWICE.
+First:India wetday29/dryday30. Recovery41f77a71 pushed; both India trajectories
+continued and completed. Original daily fields/ledgers preserved; original
+per-step histories were not flushed and are unavailable, never fabricated.
+Three one-day replay segments retained (wet repeated after CLI-global fix).
+All10 next-day fields byte exact on both branches.
+Second interruption:Mexico wetday3/dryday2. New literal recovery declaration
+calibration/regional_rainfall_recovery_2_20261029/plan.json. Two detached one-day
+Mexico replays complete, all10 saved fields byte exact. Total replaysegments5,
+processinterruptions4. These are separate from Earth-initialized trajectory counts.
+Original controller and first recovery driver/sources remain frozen.
 
-## ACTIVE monthly rainfall benchmark — session98295
+AFTER committing declaration, launch remaining controller DETACHED (not an exec
+session that stays running): subprocess.Popen([...],start_new_session=True,
+stdin=subprocess.DEVNULL,stdout=log,stderr=subprocess.STDOUT,env=singlethread).
+Command .venv/bin/python scripts/continue_rainfall_batch_recovery.py
+--recovery-plan calibration/regional_rainfall_recovery_2_20261029/plan.json
+--out output/regional_rainfall_benchmark_20261029.
+Log output/regional_rainfall_recovery_2_20261029.log.
+New recovery keeps recovery_batch.json and writes recovery_batch_2.json.
+Do not launch duplicate workers; checkps and latest checkpoints first.
+Every remaining literal case runs, bothMexico900, Mexicowet450,PNWwet/dry900.
+No completed India orlegacy control reruns. Two workers, CPUquota2.
 
-Setup COMMITTED/PUSHEDf48a02a7; controller nowRUNNING. All3legacy r39 controls
-passed strict checks and reproduced archivedfloat32monthlyT/P EXACTLY. Legacy
-record now1937/1932 (3added, no reruns by publication). First2prototypecases
-Indiawet/dry900currently~23/24 of45days, past14-dayprelude intoevaluationmonth.
-Do notmarkactivecasesasfailures. No newprototypefullmonthscoreyet.
+Counters before active monthly cases:prototype109starts/101completions/8failures.
+With India complete and Mexico initialized:113starts/103completions/8failures,
+2active. Pending not failures. Final if all7complete:116/108/8.
+Legacy1937attempts/1932strictpasses/4historicalfailures/1historicalinterruption.
+New month benchmark reproduced3r39 controls exactly; already counted. No repeat
+legacy or prototype integrations from analyses/publications/static geometry.
+Recovery/replay segments separately reported, no new Earth initializations.
 
-Code already committed:
-- `rotclimate/rainfall_validation.py`,4 tests;31 focused tests pass.
-- `scripts/rainfall_month_pilot.py`: nine-level/four-part grid, fixed1024 numerical
-  cap, fourteen-day prelude + complete July/August month, daily checkpoints.
-  Rebuilds wet/dry surface correctly then returns common conversion rain/H once.
-  It binds the frozen extended daily driver. Original driver's receipt is preserved
-  as `inherited_driver_receipt.json`; final receipt corrects calendar metadata.
-- `scripts/r39_rainfall_control.py`: canonical r39, strict checks, exact archived
-  float32 monthly reproduction required; retains raw25-step climate for Gregorian
-  reaggregation. Custom region definitions come from old archived protocol.
-- `scripts/preflight_regional_rainfall.py`: all10 inputs prepare,0 integrations;
-  exact r39 identities; identical initial atmosphere across water/timestep scenarios.
-- `scripts/run_regional_rainfall_benchmark.py`: validates committed literal global
-  plan, waits for current cap batch final receipt, freezes actual prior counters,
-  runs3 legacy controls then7 prototype cases with2 separate worker processes.
+## Useful tools
 
-Literal global plan `calibration/regional_rainfall_benchmark_20261029/plan.json`;
-all child plans, reference-footprint NPZs and preflights same directory.
-Three legacy r39 cases add3 legacy attempts (strict passes only if reproduced),
-zero prototype starts. Seven prototype month cases add7 starts:3regions wet/dry900s,
-plus Mexico wet450s as numerical sensitivity (excluded from primary objective).
-Do not double-count. Controller records actual case receipts, failures and counters.
+scripts/analyze_regional_rainfall.py --out output/regional_rainfall_benchmark_20261029
+--dest output/regional_rainfall_analysis_20261029. Validates all sources/receipts,
+all45 daily andfinal/partial E/W budgets; complete-month scores only. r39 rawannual
+Gregorian overlap reaggregation, not old equal-month totals. Prefix histories can
+be absent; retained daily ledgers and continuation cumulativehistory reconstruct.
 
-Primary: area-weighted MAE mm/day for each region/initialization, mean of six losses;
-never average wet/dry predictions before scoring or select best initialization.
-Common centered224km footprints over56km r39/reference data, projection-area weights,
->=80% valid reference land area, interior model-land centers. Eligible24/23/12 cells.
-Same mask for every profile. Gregorian JulyIndia/PNW and AugustMexico,31 evaluation
-physical days after14 prelude (not assumed adequate to erase memory).
-No pooled score if any primary case incomplete/budget-invalid or r39 fails reproduction.
-Report source initial-state uncertainty, numerical sensitivity, geographic attributions
-and liquid-below-freezing diagnostics. Reused development cases, not global validation.
+scripts/publish_regional_rainfall_results.py --source output/regional_rainfall_benchmark_20261029
+--out output/regional_rainfall_results_20261029. All available complete cases,
+explicit pending, extra450case in table/JSON, primaryscore withheld until6done.
+Creates atlas data/maps/report. Rerun after further complete cases, retain earlier
+publication snapshot BEFORE overwriting. No new dynamics. Source states/forcing
+are simulated fixed monthly lateral reservoirs, not observed-wind nudging.
 
-Before launching benchmark ensure all setup is COMMITTED and all source hashes match.
-Then `run_regional_rainfall_benchmark.py --plan .../plan.json --out
-output/regional_rainfall_benchmark_20261029` with root log same path+.log.
-Scoring IMPLEMENTED scripts/analyze_regional_rainfall.py, newuncommittedfile
-beingcommittedwithbaselinepublication. It validates all sourcehashes, rawreceipts,
-all45dailyandfinal/partialbudgets, fixedmasks/calendar; pooledscorewithhelduntil
-all6primarymonthscompleteandall3referencesqualified. No forecast/dynamicscalls.
-Run --out output/regional_rainfall_benchmark_20261029 --dest output/regional_rainfall_analysis_20261029.
-Fullmonthresultfigures/publisher stillneedsimplementation while jobsrun;
-metrics, calendar, masks and objective are already explicit in frozen plan.
-R39 raw climate needs `scripts.earth_calendar.monthly_stats` (Gregorian), not old
-saved equal-month totals. Reference arrays are WorldClim2.1, used for scoring only.
-Month predictions are fixed simulated lateral-boundary tests, not independent forecasts.
+scripts/monitor_monthly_rainfall.py --source ... --out output/monthly_rainfall_progress_20261029
+makes unique timestamped daily traces and verifies every saved state ledger.
+scripts/diagnose_monthly_water.py maps shared available postprelude wet/dry days.
+India days15–30:wetP1.043,E1.662,netimport−.911,vaporchange−.292mm/day;
+dryP/E0,import/vaporchange−.079. Conserved-store identities, not origintracers.
+This points to moisture delivery/circulation and soil supply; not a uniquecause.
 
-## Existing scientific results and frozen modules
+## New physical geometry building blocks (not adopted into forecasts)
 
-- `phase_backend.py` binds copied namespaces with identical frozen function bodies.
-  Fast liquid root qualified in six Earth controls, maxT difference1.42e-11K,
-  rain3.57e-11mm, measured complete-call time reduction15–28%.
-- `shared_transport_backend.py`: exact CSC factor reuse within one advance only;
- 1152→576 factorizations/day, all six control final fields byte-identical.
- Atomic key/factor installation protects singular-factor retry.374-test stack passed.
-- `surface_coupling.py`/`column_forcing.py`: finite water/heat, actual vapor and
- rain enthalpy, conservative grey radiation/neutral exchange, no runoff or ice.
-- Fourteen-day wet/dry all6 complete,84 daily ledgers verified. Late land Pwet/dry
- India1.993/.450, Mexico1.599/.388, PNW1.096/.004mm/day; soil memory persists.
-- `pressure_remap.py`: exact pressure overlaps; refinement conserves E/W/momentum/KE;
- coarsening exposes lost KE separately.8 new tests,86 focused passed.
-- Original fine-grid64-cap pilot:6 four-part runs complete;3 sixteen-part failures
- after19/18/39 steps. All failed states retained, final/partial budgets pass.
-- `convection_observer.py` receives copies only;2 tests/22 focused pass, full synthetic
- trajectories and certificates byte-identical even if callback mutates snapshots.
-- ReplayIndia next rejected step reproduces exactly. Five STATIC caps64/128 fail,
- 256/512/1024 converge at176 with byte-identical targets. These static solves are
- NOT Earth integrations. Replay itself is a new failed attempt already counted.
+rotclimate/terrain_hydrostatics.py: dry hydrostatic ps(height), inverse reference
+geopotential, positive variable-mass hybrid interfaces.15tests pass.
+rotclimate/terrain_apertures.py: all shared-pressure level-pair horizontal ports;
+blocks below-neighbor-ground flow; conservative mass-divergence incidence.
+7tests pass:flatlimit/stepmountain/portbounds/reversal/globalcancellation/singleport.
+Related pressure/remap/rainfall stack41tests passed.
+Static audits output/terrain_geometry_20261029 andoutput/terrain_apertures_20261029,
+zero weather integrations. Fixed scored-area flat-column mass excess /flatpartial
+column:India11.85%,Mexico20.65%,PNW17.94%. These are reference geometry differences,
+not observed pressure errors. Same source heights/lapse/seaPs and380hPatop.
 
-No new monthly rainfall skill, recalibration or physical-model adoption yet.
-Qualified Earth physics r39 remains benchmark; fantasy/world atlas release stillr38
-per existing summary, not r39. Normal free/Earth/Whittaker/biome/population fields unchanged.
-Unknown terrain, partial380hPa top, liquid-only physics, neutral deep-cell exchange,
-fixed lateral reservoirs and absent nonlinear momentum remain limitations.
-Initialization memory is not proof of bistability or optimizer local minima.
+NEXT IMPLEMENTATION GATE: hydrostatic resting atmosphere over terrain must have
+zero horizontal pressure force, with pressure work compatible with energy and
+mass transport. Need vertical exchange/columnconstraint/native momentum as well.
+Do not insert variable masses or elevation forcing into frozen flat operators.
+Nonlinear momentum and actual orographic lifting remain absent. Old r39 has
+parameterized upslope rain; flat experimental core does not replace it yet.
+Initialization sensitivity is not proof of bistability or optimizer local minima.
 
-## Atlas and QA
+## Publication QA
 
-Current baselinepublicationstaged:61studies/150figures, newestregional-rainfall-reference.
-773Windowsbyteassets,1292portablefiles/500links; browser/launcher/sourcechecksPASS.
-Baseline3referencecontrols/rawannualfilesstaged; no activeprototypefilesstaged.
-Finishthisbaselinepublicationcommit/push,thenKEEPWORKINGonthescorer/reporting.
-ReferenceMAEIndia5.9545,Mex2.0883,PNW.20511mm/dayatselectedJul/Augfootprints.
-Observed/r39meanrates8.092/2.408,3.023/1.591,.681/.838; notannual/globalskill.
-Allthreeinputidentitiesandoldmonthlyfloat32outputsverifiedexact.
-Raw source freeze:682 hashes from output/divergent_thermal_20261028/protocol.json;
-verify unchanged. Also check each current literal protocol's source hashes.
-Stage assets before Windows checkout QA. Force-add ignored raw NPZ outputs.
-Tools: organize_climate_accuracy.py, check_atlas_checkout.py,
-package_fit_atlases.py, check_portable_atlases.py, check_climate_accuracy_browser.py.
-Add new report paths to packager explicitly. Newest STUDIES entry first.
-Browser: start serve_atlases and checker in same exec Python process; terminate finally.
-Compare current HTML/JSON/PNG/NPZ/report bytes against ZIP, retain QA JSON receipts.
-Use dark coast with white halo. Avoid claiming numerical speed or conservation is skill.
-
-Historical detailed handoff archived at
-reports/handoffs/BEFORE_REGIONAL_RAINFALL_BENCHMARK_20261029.md (also in Git history).
-Untracked old progress snapshots and synthetic profile output are retained; not model changes.
+Stage atlas assets BEFORE checkout QA. Force-add ignored raw NPZ outputs.
+organize_climate_accuracy.py --report FILE (not--out).
+check_atlas_checkout.py --out FILE; package_fit_atlases.py --out ZIP;
+check_portable_atlases.py ZIP --out FILE; browser checker via local8768server.
+Keep page/report/data writers finished BEFORE packaging (previous concurrent
+report edit caused a retained checksumfailure; serial rerun passed).
+Compare currentnew HTML/JSON/PNG/NPZ/reports with ZIP bytes. RetainQAJSON,
+ignorelogs/ZIP/screenshots. Darkcoasts withwhitehalo.
+Reports explicitly listed in package_fit_atlases.py. Newest STUDIES entry first.
+Full682sourcefreeze output/divergent_thermal_20261028/protocol.json unchanged.
+Historical handoff reports/handoffs/BEFORE_REGIONAL_RAINFALL_BENCHMARK_20261029.md.
