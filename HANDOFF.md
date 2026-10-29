@@ -1,26 +1,10 @@
-# Active work — fine-grid results verified; launch committed rainfall benchmark next
+# Active work — monthly rainfall forecast running; baseline publication ready
 
-User explicitly continues after pushes, repeated latestmessage. No agents. Keep
-meaningful frequent commentary and post figures. Latest ETA question answered:
-first full fine-grid day ~7minutes; fullbatch45–90min. Batch nowfinished6/6.
-All six independent saved water/energy budgetsPASS, maxE<3e-15/W<1.5e-16.
-Prototype109starts/101completions/eightretainedfailures. Legacy1934/1929unchanged.
-Oldthreefailedinitialstatearraysandacceptedscalarprefixesexactlyreproduce.
-Fine21level900/450landP India.619/.632, Mexico1.751/1.715, PNW.427/.427mm/day.
-SpatialstepRMS.204/.559/.148mm. Maxactualclosurework432; no newaccuracyclaim.
-Bothfiguresposted. Currentstagedpublicationupdatesatlas60studies/149images,
-770Windowsbyteassets,1288ZIPfiles. Allbrowser/launcher/682source/bytechecksPASS.
-Commit/pushcurrentpublicationnow,thenimmediatelylaunchmonthbenchmarkbelow.
-
-BenchmarkSETUPalreadyCOMMITTEDandPUSHEDf48a02a7. No benchmarkintegrationsyet.
-Run `OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python
-scripts/run_regional_rainfall_benchmark.py --plan
-calibration/regional_rainfall_benchmark_20261029/plan.json --out
-output/regional_rainfall_benchmark_20261029 > output/regional_rainfall_benchmark_20261029.log 2>&1`.
-It validates currentcapreceipt, snapshots prior109/101/8, runs3legacycontrols
-then7prototype45daycaseswith2workers. Sourceprotocolsallcurrentlyhashvalid.
-Do notstopafterpublicationpush. Scoring/publisherimplementationstillnext;
-metric/calendar/masksarealreadyfrozen. Monitorindividualcase.dailycheckpoints.
+User justrepeatedcontinueafterpush. Fine-gridresultsalreadyPUSHEDbceb3239.
+MonthbenchmarksetupPUSHEDf48a02a7, parentRUNNINGsession98295 with2workers.
+Threelegacycontrolsdone/qualified; firstIndiawet/drypair~23/24 of45days.
+Referencepublicationnowstaged/QApass. Finishcommit/pushthenCONTINUE. Do notspawnagents.
+No prototypefullmonthscoreyet. No parametercalibration/modeladoption.
 
 ## Workspace and authorization
 
@@ -31,41 +15,24 @@ Last pushedf48a02a7: fixed monthly rainfall benchmark setup. Current fine-grid p
 No approval required for this authorized local development/commit/push work.
 No AGENTS.md found. Cloud runtime skill read earlier; no secrets accessed.
 
-## Active integration — do not edit its frozen dependencies
+## Completed fine-grid controls
 
-Session34000 runs `scripts/convection_cap_pilot.py --plan
-calibration/convection_cap_20261029/plan.json --out output/convection_cap_20261029`,
-stdout `output/convection_cap_20261029.log`. Six24h integrations:21levels, lowest
-old cell split16 ways,3regions each900/450s, fixed1024-sweep work limit.
+bceb3239 pushed all six completed21-level900/450s controls and updated atlas.
+Prototype109starts/101completions/eightretainedfailures through that study.
+AllfinalbudgetsPASS, oldinitialarrays/scalaracceptedprefixesexact. Maxwork432.
+LandPfine900/450 India.619/.632,Mex1.751/1.715,PNW.427/.427mm24h.
+SpatialsteprainRMS.204/.559/.148mm; notlocalconvergence orobservedaccuracy.
+Old64-cap failures retained. See reports/CONVECTION_CAP_20261029.md.
 
-India900/450 and Mexico900/450 now COMPLETE. PNW900 underway (last live624/864 total
-planned calls). Live progress every24 calls at `coupled_timings_live.json`;
-root `progress.json` updates per region group. Final `verification.json` and
-`coupled_timings.json` appear after all six. Case folders:
-`{region}_split16_cap1024/{region}/forced/{900,450}.{json,npz}` plus `initial.npz`.
-Every call records target sweeps, convergence and wall time, including failures.
+## ACTIVE monthly rainfall benchmark — session98295
 
-Before active batch:103 prototype starts/95 completions/eight retained numerical
-failures (includes one expected repeated rejection). If all6 finish:109/101/8.
-Read actual final counts. Legacy1934 attempts/1929 strict passes/four historical
-failures/one historical interruption unchanged by these prototype studies.
-Never replace failed cases or loosen tolerance after outcomes.
+Setup COMMITTED/PUSHEDf48a02a7; controller nowRUNNING. All3legacy r39 controls
+passed strict checks and reproduced archivedfloat32monthlyT/P EXACTLY. Legacy
+record now1937/1932 (3added, no reruns by publication). First2prototypecases
+Indiawet/dry900currently~23/24 of45days, past14-dayprelude intoevaluationmonth.
+Do notmarkactivecasesasfailures. No newprototypefullmonthscoreyet.
 
-India fine900 land rain.61927mm, fine450 .63161mm; land spatial timestep RMS.20403mm,
-skinT RMS.05457K. Initial fine43m reference height versus previous175m/750m cells.
-India actual fine budgets <2.5e-15E/<8e-17W. Max observed closure sweeps432 so far.
-Small regional mean differences are not local convergence or measured accuracy.
-
-NEXT: publish all six outcomes and independent final/partial energy/water checks,
-compare21level900/450 with old9level and6level archives, keep old64-cap failures.
-Use `publish_lower_cell_resolution.stats`/`comparison` helpers; new publisher needed
-(e.g.publish_convection_cap.py). Include all call timings and sweep distributions.
-Update atlas/report, full launcher/browser/portable/source/byte QA, commit/push,
-then CONTINUE into already prepared monthly benchmark below.
-
-## Prepared monthly rainfall benchmark — no integrations yet
-
-New code/plans currently being committed as setup milestone:
+Code already committed:
 - `rotclimate/rainfall_validation.py`,4 tests;31 focused tests pass.
 - `scripts/rainfall_month_pilot.py`: nine-level/four-part grid, fixed1024 numerical
   cap, fourteen-day prelude + complete July/August month, daily checkpoints.
@@ -101,7 +68,12 @@ and liquid-below-freezing diagnostics. Reused development cases, not global vali
 Before launching benchmark ensure all setup is COMMITTED and all source hashes match.
 Then `run_regional_rainfall_benchmark.py --plan .../plan.json --out
 output/regional_rainfall_benchmark_20261029` with root log same path+.log.
-Rainfall scoring/publisher still needs implementation while month jobs run;
+Scoring IMPLEMENTED scripts/analyze_regional_rainfall.py, newuncommittedfile
+beingcommittedwithbaselinepublication. It validates all sourcehashes, rawreceipts,
+all45dailyandfinal/partialbudgets, fixedmasks/calendar; pooledscorewithhelduntil
+all6primarymonthscompleteandall3referencesqualified. No forecast/dynamicscalls.
+Run --out output/regional_rainfall_benchmark_20261029 --dest output/regional_rainfall_analysis_20261029.
+Fullmonthresultfigures/publisher stillneedsimplementation while jobsrun;
 metrics, calendar, masks and objective are already explicit in frozen plan.
 R39 raw climate needs `scripts.earth_calendar.monthly_stats` (Gregorian), not old
 saved equal-month totals. Reference arrays are WorldClim2.1, used for scoring only.
@@ -138,8 +110,13 @@ Initialization memory is not proof of bistability or optimizer local minima.
 
 ## Atlas and QA
 
-Current pushed research atlas59 studies/147figures, newest convection-limit.
-766 Windows byte assets,1282 portable files. `.bat` launcher browser checks pass.
+Current baselinepublicationstaged:61studies/150figures, newestregional-rainfall-reference.
+773Windowsbyteassets,1292portablefiles/500links; browser/launcher/sourcechecksPASS.
+Baseline3referencecontrols/rawannualfilesstaged; no activeprototypefilesstaged.
+Finishthisbaselinepublicationcommit/push,thenKEEPWORKINGonthescorer/reporting.
+ReferenceMAEIndia5.9545,Mex2.0883,PNW.20511mm/dayatselectedJul/Augfootprints.
+Observed/r39meanrates8.092/2.408,3.023/1.591,.681/.838; notannual/globalskill.
+Allthreeinputidentitiesandoldmonthlyfloat32outputsverifiedexact.
 Raw source freeze:682 hashes from output/divergent_thermal_20261028/protocol.json;
 verify unchanged. Also check each current literal protocol's source hashes.
 Stage assets before Windows checkout QA. Force-add ignored raw NPZ outputs.
