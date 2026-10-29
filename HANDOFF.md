@@ -1,23 +1,34 @@
-# Active work — recovering interrupted monthly rainfall workers
+# Active work — monthly workers recovered; water-supply atlas milestone ready
 
-Latest pushed baseline publication bddb0dfb. User says continue beyond pushes.
-Environment restart killed both India month workers; wet day29/dry day30 saved.
-No full prototype month score yet. Physics/plan/masks unchanged.
-Checkpoint recovery scripts and literal recovery plan are being committed now.
-Wet/dry isolated one-day replays reproduce all10 saved fields byte exactly.
-Wet replay repeated after removing a CLI-global dependency (three replay segments
-retained total, zero new Earth initializations). See output/monthly_recovery_replay*.
-After latest wet replay finishes, launch scripts/continue_rainfall_benchmark.py
---recovery-plan calibration/regional_rainfall_recovery_20261029/plan.json
---out output/regional_rainfall_benchmark_20261029. Do not launch duplicate workers.
-Original per-step histories before interruption weren't flushed; daily fields and
-budgets retained. Continuation history contains only new steps; absolute step
-count and cumulative ledgers are preserved. Count interrupted process segments
-separately from initialized trajectories. Then continue full-month plots/publishing.
-Read-only monitor now works: scripts/monitor_monthly_rainfall.py --source
-output/regional_rainfall_benchmark_20261029 --out output/monthly_rainfall_progress_20261029.
-First plot posted: wet rain low, dry nearly zero, soil memory persists.
-No incomplete-month candidate score or model adoption.
+41f77a71 pushed exact checkpoint recovery; controller RUNNING session83618.
+India wet/dry around day37/38 of45 as of18:03UTC; two workers, no duplicate launch.
+Controller log output/regional_rainfall_recovery_20261029.log. After India ends it
+runs every queued Mexico/PNW case from the original frozen plan; legacy controls
+are reused, not rerun. Recovery segments2/replay segments3 are separately recorded.
+Zero new Earth initializations by replay/recovery. Original prefix daily fields
+retained; per-step prefix histories unavailable. Both branches next-day states
+reproduce all10 fields byte exactly; frozen model sources unchanged.
+
+Water-supply atlas publication READY and QA passed (62studies/153figures,
+778 Windows byte assets,1298 ZIPfiles/509links; browser, launcher,682source checks).
+Finish its commit/push, then CONTINUE. Partial India days15–30 scored-area water
+identity: wet rain1.043,evap1.662,netimport−.911,vaporchange−.292mm/day; dry allrain/
+evapzero and netimport/vaporchange−.079. These are mechanism diagnostics, NOT
+incomplete-month candidate accuracy scores. No model adoption/calibration.
+
+New complete-month publisher scripts/publish_regional_rainfall_results.py is
+implemented but not run (wait for at least one full45-day candidate receipt).
+Then publish all complete cases; never omit worse branches or average available
+regions into a pooled primary. Add organizer entry regional-rainfall-results and
+packager report REGIONAL_RAINFALL_RESULTS_20261029.md only when results exist.
+Analyzer requires complete receipts and all45 daily budgets, final fields exact.
+
+New independent geometry module rotclimate/terrain_hydrostatics.py and15tests PASS.
+Not wired into frozen models. Hydrostatic pressure/analytic geopotential and
+variable dry-mass hybrid interfaces for future terrain-following atmosphere.
+Next: static terrain-mass audit using all3 prepared Earth source elevations;
+conserve source hashes, no dynamics, no claiming this changes current climate.
+Missing terrain and nonlinear momentum remain potential causes, not proven.
 
 ## Workspace and authorization
 

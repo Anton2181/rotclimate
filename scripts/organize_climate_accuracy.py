@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('monthly-water-progress','Rainfall trial progress and moisture-supply diagnosis'),
     ('regional-rainfall-reference','Verified r39 baseline on the fixed monthly rainfall footprints'),
     ('convection-cap','Completed full finer-grid controls and remaining spatial sensitivity'),
     ('convection-limit','Reproduced fine-grid rejection and fixed solver work-cap controls'),
