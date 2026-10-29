@@ -1,0 +1,40 @@
+{
+  "purpose": "Closed dry native-terrain pressure/Coriolis/enthalpy subsystem controls, not Earth climate forecasts",
+  "sources": {
+    "rotclimate/terrain_dry.py": "be703acf3d206e92dc996033b7bb9e6ec61826176c4a0f440426ae4a92da1c5f",
+    "rotclimate/terrain_transport.py": "eb205022b90b0859f7f8c52cc941a96a332d01a421111e83d3f694ac212dfeb7",
+    "rotclimate/terrain_pressure_work.py": "52cb6f1ad857d30d8887db34a9487bcd13cb7955c638c92741476b2ebdc5f270",
+    "rotclimate/terrain_pressure_gradient.py": "d99a8530f173079d63a0795dc53f3c219c4e9a5e0dd2a2da79a62a7fafeb5424",
+    "rotclimate/terrain_apertures.py": "aac95b5b48eb46a718b0488b77f3662c09a8a1e6fde415da5dc109022abad5b8",
+    "rotclimate/terrain_hydrostatics.py": "104c22c2896b93ef5e5db6a1d23149dbbf513fcc2827ac01b082a47b81192d07",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "rotclimate/open_mean_boundary.py": "e38d3270c7e46a3989ffb979d506e8f2df10c1c88c7d1d2f1046eb0ce93adc15",
+    "rotclimate/rigid_lid_refined.py": "a1938b25464966ef87c44829962b47b806df6b01fc4ac876e4e87aa4814abacc",
+    "output/terrain_geometry_20261029/terrain_geometry.npz": "1f0dbe9581ba60fe74ddd1741913a7450dd2af8947403e4b9a0e426758846a2c",
+    "output/terrain_geometry_20261029/verification.json": "1219b51261237062e323ff03a4027346a3468321aa38504484094b1a6b3a38ad"
+  },
+  "regions": [
+    "north_india",
+    "mexico",
+    "pacific_nw"
+  ],
+  "timesteps_s": [
+    900,
+    450
+  ],
+  "duration_s": 21600,
+  "temperature_tolerance_k": 1e-10,
+  "maximum_coupling_iterations": 80,
+  "reference_temperature_k": 288.15,
+  "reference_lapse_k_m": 0.0065,
+  "top_pressure_pa": 38000.0,
+  "cell_m": 224000.0,
+  "earth_rotation_rate_s": 7.292115e-05,
+  "initial_anomaly": "1K bottom-layer anomaly in the eastern half of every region",
+  "initial_velocity": "zero on every native port; no projection energy change or simulated/observed climate wind imported",
+  "synthetic_native_geometry_integrations_planned": 6,
+  "earth_climate_initialized_integrations_planned": 0,
+  "physics_adoption": false,
+  "score": "None: no vapor or rain, regional boundaries closed, no observed climate initialization or forcing",
+  "retention": "Every declared case retained, including failed partial states; do not replace or tune after outcomes"
+}
