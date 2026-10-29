@@ -1,3 +1,35 @@
+# ACTIVE — faster phase backend verified; shared transport controls next
+
+Latest pushed c4bee73 declared six paired phase-backend Earth controls. All now
+complete:81 prototype starts/77 completions/four retained earlier numerical
+failures. Legacy1934/1929 unchanged. No new monthly skill, physical adoption or
+recalibration; Earthr39 and normal world/biome/population fields unchanged.
+
+Phase publication output/phase_backend_20261029: six actual24h900s controls.
+Every reference array/history matches earlier forcing archive exactly; candidate
+max deltaT1.421e-11K, deltaRain3.573e-11mm. Actual energy/water budgets close.
+369 focused tests pass. Numerical backend qualified for future prototype runs.
+Complete coupled-call times fell15–28%, distinct from3.4–9x kernel speedup.
+Atlas54studies/140images;749 Windows byte assets;1257 portable files/457links.
+Browser/portable launcher pass, six current assets byte-identical in ZIP.
+682 legacy sources and frozen protocol sources unchanged. Commit/push current
+staged publication milestone, then KEEP WORKING.
+
+Next untracked shared_transport_backend.py reuses identical CSC factors within
+one advance; physics/code bodies unchanged. Atomic factor/key installation
+protects singular-factorization retries. Five tests; full374-test suite running,
+read output/shared_transport_checks_20261029/tests.log. Preflight freshly hashed
+in calibration/shared_transport_20261029. No shared-transport Earth runs yet.
+Commit literal plans/module/tests/driver before six paired24h controls, then run
+scripts/benchmark_shared_transport.py --plan calibration/shared_transport_20261029/plan.json
+--out output/shared_transport_20261029. Reference must reproduce preceding FAST
+candidate arrays/history exactly; both use same fast phase root. Expected87starts/
+83completed/four failures if all six complete. Preserve failures and partials.
+
+User explicitly continues after pushes; frequent commentary and post figures.
+Do not spawn agents. Historical handoff below includes physical limitations.
+
+--- Historical handoff ---
 # ACTIVE —72h soil-water study complete; faster equivalent phase root prepared
 
 Latestpusheda6e422c(daylongforcingpublication),5afa26b(literal72hwet/dryplans).
