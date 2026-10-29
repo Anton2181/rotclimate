@@ -1,3 +1,30 @@
+# ACTIVE — grid study done; one rejected-step replay and static caps frozen
+
+2bb918f4 pushed14daypublication. Ninegridcontrolsnowdone: six4part900/450s
+complete;allthree16part900sFAILEDconvection64sweepcap at19/18/39 acceptedsteps
+(India/Mex/PNW). Allpartialstates/receiptsretained. IndependentbudgetsofALL9pass.
+Cumulative102starts/95completed/sevenfailures(earlier4+new3);legacy1934/1929unchanged.
+FourpartlandP900/450 India.749/.732,Mex1.722/1.710,PNW.438/.439mm24h.
+SpatiallandrainRMSstepdiff.166/.300/.075mm; smallmeansarenotlocalconvergence.
+Atlascurrentstaged58studies/146images,763Windowsassets,1278ZIPfiles;allQApass.
+Finishcommit/pushpublicationANDpassiveobserver+frozenreplaysetup,thenkeepgoing.
+
+NEXT alreadycodeduntrackedconvection_observer.py (2newtests/22focusedPASS)
+and scripts/replay_convection_limit.py. Plan calibration/convection_limit_replay_20261029/
+plan.json +caseplan+preflight. One NEWactualEarthintegrationattempt replaysnext
+rejectedIndia21levelstep900s fromsavedpartial19stepstate, samemodeldayoffset,
+forcing/lateral/pressure/old64sweeps. Passiveobserverreceivescopies;fullcoupled
+trajectory/certificatesbitexactevenifcallbackmutatescopies. Sourceglobalsunchanged.
+MustCOMMITliteralplansbeforeoutcome. Runreplay_convection_limit.py --plan... --out
+output/convection_limit_replay_20261029 stdoutlogsamepath+.log. Ifrejectionreproduces,
+prototypecounts103starts/95completions/EIGHTfailures(expectedrepeatstillfailure).
+FiveFIXEDstaticclosurecaps64/128/256/512/1024onexactcapturedinput addZEROEarth
+integrations. Reportallcaps,remaininginterfaces,budgets,convergedtargets. No cap
+adopted/dynamicallyusedyet. Ifreplaydoesnotmatchretainanddiagnosediscrepancy.
+Currentpreflightpasses(checkpointbyteexact,zeroevolution);no replaystarted.
+No sourceeditstofrozenphysics, planetparameter/tolerancechanges or replacements.
+No monthlyskill/recalibration/adoption. Continueafterpush;postfigures/updates.
+
 # ACTIVE — fourteen-day results complete; launch frozen grid controls next
 
 42c6bcd8 pushed staticremappublication+dynamicresolutionprotocol. Both14dayjobs

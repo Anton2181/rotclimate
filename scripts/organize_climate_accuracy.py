@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('lower-cell-resolution','Lower-air-cell grid controls and retained fine-grid failures'),
     ('extended-spinup','Fourteen-day soil-water memory and implications for calibration'),
     ('pressure-grid-remap','Conservative initialization toward a shallower first air cell'),
     ('shared-transport','Exact transport factors and equivalent climate states'),
