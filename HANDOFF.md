@@ -1,3 +1,79 @@
+# ACTIVE — open mean boundaries complete; surface/radiation kernels next
+
+Pushed c28f388rigid-lidpublication then50e37ebopenmeanboundarycore+literalplan.
+Continued. output/open_mean_20261029 has12/12 completed actualEarth-input6hsmoke
+runs,3regions*closed/openmeanports*dt900/450. SAMEinitialT/W andsourcebaroclinic
+shear, Earthf,5daydrag,1hconv,224km6levels. Explicitglobalnormalbarotropicwind
+correction −.05210/−.00943/+.23113m/s (India/Mex/PNW), keepsverticalshear;
+modelrejectsglobalnetdrymass. IncomingT/qfixedinitialcolumns. Affineinteriorwind
+projectioncanadd/removeKE, signedchangerecordedseparate(nohiddenheat).
+OpenMeanRigidLidModel permits D*x=-d_boundary, G=-D.T. Internalconstraintpressure
+work=-pi*d_boundary cancelsOUTWARDconstraintgeopotentialportflux+pi*d_boundary.
+Totalportgeopotentialterm=thermal+constraint sooldconvectionwrapperbookscorrectE.
+No nonlinear momentum or variablesurfacepressure. Sourcesoldfilesfrozenunchanged.
+
+OpenSaddleSolve uses3extended-residualLUcorrections asbefore, butbackwarderror
+referenceusesseparatevelocity/potentialinfinitynorms perrow: componentwiserelative
+errorzero-transversemodesdividesroundoffbyroundoff. Nativephysicalmass/energy
+checksUNCHANGED. Sixanalytictests incluniformthroughflow,affineprojection/global
+mass/shear,nonzerobarotropicpressureportwork+moistconvection,oldclosedmeanlimit.
+337focusedpass50.30s. All12newEarthrunscompleted. Cumulativesmoke54STARTS /
+50completed /4priornumericalFAILURES RETAINED. Legacy1934/1929/4historicalfails/
+1interruptUNCHANGED. No monthlyskill,recalibration,adoption. r39/world/biome/pop
+normaldatasetsunchanged. OpenmeanreducesTmaxstartup7.35->7.07 /10.89->9.66 /
+13.21->10.01K. Fineopenrain .000565/.004703/.000145mm;edge100/100/79.8%.
+Notmeasuredrainaccuracygain. MaxE/Werrors<7.54e-16rel,nativecolmass1.90e-16,
+constraintwork+boundaryfluxerror6.38e-15W/m². Researchatlasupdated51studies/
+135images,portable1240files/438links(checkactualreceipts),Windows738assets.
+Finishbinding(currentmilestone_verificationwritten)/commit/push publication;
+keepnextuntrackedforcingkerneloutofthiscommit.
+
+NEXT ALREADYIMPLEMENTED untracked rotclimate/column_forcing.py and
+ tests/test_column_forcing.py —12analytic tests PASS .10s. NOEarthoutcomes with
+these yet. two_stream_radiation: pureLWabsorb/emissionKirchhoff(gray),surface
+reflection1-emissivity,absorbingSWincludingupwardreflectedsolar. Cell0bottom,
+fluxesatinterfaces;actualatmos+surfaceheat=netTOPincoming to roundoff. Topis
+explicitcallerboundary, NOTautomaticallyTOA, especiallyold380hPa top. Opacities,
+solarincoming,externalLW,albedo/emissivity declaredinputs,no fittedEarthdefaults.
+Tests transparent/opaqueanalyticlimits,isothermalcavity,exactisothermallayersplit,
+randomlocalbudget/SWabsorption,invalidinputs. SourceconceptreferenceclimlabGreyGas:
+https://climlab.readthedocs.io/en/stable/api/climlab.radiation.greygas.html
+Readviawebthisturn; ownimplementationandanalyticmath,notcopiedcode.
+
+bulk_surface_exchange: neutral loglaw vonKarman.4 withexplicitzref,z0momentum/
+scalar (so not10mcoeffmisappliedto700mcell), dryadiabaticairT referredtosurface
+pressure, q=W/Mdry, densitydrypartialpressure. SensibleCp includesq*CPv.
+Signedvaporflux includesdew;wateravailabilitylimitspositiveevaponly. DonorvaporT
+isTsfcforevap andsurface-referredairTfordew. VaporHflux=phaseheat+liquidHtransport,
+consistentexisting CPv1850/CPl4186/Lv2.5e6 reference273.15. No stateintegration,
+stability/gustclosure,ice,hiddenrainfit or surfaceenergybudget yet. Kerneltests
+zeroequilibrium/zero wind,stress/dewsign,pressurepotentialT/logheight,actualvapor
+energyidentity and invalidinput. Newfullsuitewillbe349(337+12). Needdocumentation
+ofassumptionsandcommit/pushkernelmilestone, thencontinueinto conservativecoupled
+finite surfacewater/heat reservoir +atmosforcing, before3dayregionalpilot.
+
+NEXTCOUPLER DESIGN (notimplemented): Surfaceenthalpy=(Csubstrate+CPl*Mliquid)*
+(Ts-273.15). Radiationactualatmos/surfaceflux; surfacebulkQH/E/Hv asabove. Explicit
+forcingstep addsdt*(radheat+QH+E*Hv) togasH, addsdtE toLOWERvapor, removesdtE
+fromsurfacewater anddt*(QH+E*Hv) fromsurfaceH, addssurfaceRadheat. Allownegative
+E(dew)butrejectexhaustedsurface/airreservoirorreducestep;no clippingsource. Invert
+actualgasH forTthenexistingenthalpy_phase,returnphase rain+itsactualH tosurface
+soTOTALgas+surfaceE andwatercloseagainstnettopradiation. Kineticunchangedduring
+localforcing. SurfaceTderivedfromnewH/newwatercapacity;precipitationreturnmust
+changeheatcapacity,notjustaddheat tooldC. Forlaterdynamicalstageuseexisting
+advance_boundary_with_convection andreturnitsgroundrain/H tosurfaceexactlyonce.
+Recordforcingrainseparatelyfromdynamicsrain,allrainmapcountsnotwaterloss because
+surfacereturned. Firstordersplit explicit, doNOTclaimpostforcingCNmidpointbalance.
+Noactualcouplerornewscientificplan/outcomesyet. Needfreezeanynewregionalforcing
+inputsBEFORE outcomes andbookpartial380hPatop's externalLW explicitly; cannot
+callitTOA. Couldfirsttestsyntheticcolumns noEarthintegrationcounters. Longer
+sustaineddriver/terrain/nonlinear/initialbalance neededbeforemeaningfulrainfit.
+
+Userexplicitcontinueafterpush. Noagents. Branchwork;pushHEADto
+claude/friendly-turing-43ygeu withgit http.versionHTTP/1.1.
+
+Earlier handoff follows (older active blocks stale):
+
 # ACTIVE — rigid-lid mean flow completed; open mean boundary is next
 
 Pushed4953571momentumdiagnosticpublication,5fd189fmeanflowcore+plan,16af837
