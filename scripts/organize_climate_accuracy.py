@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('pressure-moist','Repeated moist feedback and a convection acceptance gate'),
     ('sublayer-phase','Conservative phase sublayers on a fixed circulation grid'),
     ('cell-thermal','Shared-cell thermal state and all-level dry dynamics'),
     ('stability-reference','Earth height profiles and physically derived stability'),

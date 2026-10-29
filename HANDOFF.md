@@ -1,3 +1,77 @@
+# ACTIVE — repeated pressure-coordinate moist coupling and convection gate
+
+User repeatedly requests "continue, dont stop after pushing". Answered latest
+recalibration-status question honestly: need repeated coupled physics, then
+bounded Earth comparison; no global optimum proof required. First milestone
+this turn36ba30f (sublayer phase) is committed/pushed. Continued directly into
+repeated moist coupling, stable/dry controls and parcel-stability diagnostics.
+No agents. Repo/work/push unchanged. Runtime restarted to spec33 mid-controls;
+workspace survived, /tmp logs lost. All source/data hashes still check.
+
+NEW pressure_coordinate.py: fixed descending pressure edges, M=dp/g dry ref,
+geometric pcenters. Hydrostatic Phi=A*T integrates Rd*T*d(-logp) with adjacent
+temperature trapezoids, massmeanPhi0. Continuity F=-cumsum(Mdiv), omega=-gF.
+Compression=-T*C.T(Rd*dlogp*F), so actual pressure and compression work cancel.
+Gas enthalpy transported WITHOUT fixed-height gz; adiabatic compression ONCE.
+7tests exactisothermal/loglinear integrals, unequalgridwork, analyticpressure
+compressionratio on8/16/32loggrids, invalidp/lids.
+
+NEW pressure_moist.py: repeated coupled T/W/u/v/phase, CN pressure+Coriolis+drag,
+BE native-face enthalpy+vapor transport, actual compression/evap/sourceenthalpy
+and returned dragheat. Fixed-point eachiterate from SAMEoldstate so no repeated
+evap/rain. Nonconvergence raises; actualmomentum/thermalresiduals exposed.
+Enthalpy phase calls old_equilibrium with extra=0,beta=0 and actualrainT/H.
+IMPORTANT coordinate is dry/dilute: NO water loading/volume/potential/fallheat.
+Do not add old fixed-height falling-water energy terms. No ice/cloudstorage,
+nonlinearmomentum/radiation/terrain/surfacep. Velocity depthmean0 (baroclinic).
+7tests actualdry/moistlongrunwater/E/rain, externalheat/vaporenthalpy, dragheat,
+motionlessequilibrium, phase-only limit, iterationsemantics andfailedcoupling.
+Full273focused pass41.37s (259+14).
+
+demo_pressure_moist.py:10pressurecells101325->38000Pa,8x10horizontal100km,
+Earthf30N,5daydrag. Initiallymotionless, manufacturedRH.88+.23gauss. T~p^.18
+(6.15K/km) is dry-stable/conditionally moist-unstable. Fourdt600/300/150/75s,
+6h each. Energy/waterconserve~2e-14rel andrefine, BUTfinestwind41.8m/s,
+meanrain5.179mm vsisolatedinitialphase.152mm. NOTphysicaladoption/validation.
+
+audit_pressure_moist_controls.py adds saturated-stable T~p^.08(2.73K/km),sameRH
+shapebutdifferentwatercapacity, fourtimesteps. Peakwind2.44m/s,meanrain1.053mm.
+Drycontrolfromconditionalinitialphase-adjustedT,noW/latent:peak1.17m/s atdt150s.
+Total1224steps (8moist+1dry). Stableanddrybounded, conditionalstressamplifies.
+Do not call41.8m/s mathematically impossible: positive parcelenergycan support
+strongmotion; absenceconvection/nonlinearphysics meansunvalidated response.
+
+Publisher independently reconstructs actualgasH+faceKE+groundHL andwater,
+phase saturation/depthmean, rawrefinement andhistory residuals. Two rawNPZ in
+output+atlas. Figure pressure_moist_controls.png shown throughview, shouldembed
+to user withnextupdate. Report PRESSURE_MOIST_20261029.md. Newresearchstudy
+pressure-moist. Checkout717assets,package1211files/403links/freshlauncher,
+browser44studies/128images/52JSONdownloads allpass. Latestassets byte-match
+bundle;milestone receipts bound. Commit/push this completed milestone.
+
+ALREADY ONGOING NEXT (untracked, DO NOT accidentally include current273 commit
+unless deliberately completing it): rotclimate/parcel_stability.py and
+tests/test_parcel_stability.py,8testspass. Dry/dilute pseudoadiabaticparcel ODE
+uses actualtemperature-dependentLv and saturationderivatives; dryascentcp_d+
+cp_v*r, saturatedascent dhgas+rainHL=Rd*T*dlogp. RK4 andanalyticdry-LCLroot.
+diagnose_parcel resolvesenvironmentinsidepressurecells with logT/linearq in
+logp. Coarse endpoints missed shallowCIN! Newtest coversit. Positive/negative
+linear-segment buoyancy integrals RD*integral(Tparcel-Tenv)d(-logp), optional
+explicitvirtualT. These are partialcolumn diagnostic integrals, NOT complete
+atmosphericCAPE/CIN or convectionclosure. Source supersaturation mustbephase
+adjusted; onlyroundoffexcess allowedandreported. Returnsfine sampledpressures.
+
+Adhocdiagnostic oninitialphase-adjustedcols:conditionalpositive mean1625.66,
+max2129.36J/kg,negative mean6.07,max11.29. Stablepositive0,negative1494.38;
+drypositive0,negative3097.59. Endconditionalpositive mean777.16,max1149.17;
+stablestays0. Need reproducibleaudit+publication andthenconvectiontreatment,
+notautomaticphase-refinementpolish. Userwas told these newfindings.
+The gate to Earthpilot remains convection/physicalacceptance oncoupled model,
+then realregionalforcing/boundaries. No Earthruns or rainfallskillgain.
+Earthr39/normalworld/biome/popfields unchanged;1934/1929/4historicfails/1interrupt.
+
+Earlier handoff follows:
+
 # ACTIVE — conservative phase sublayers complete; prioritize repeated coupling
 
 User: "continue, dont stop after pushing"; mid-turn asked how far from a
