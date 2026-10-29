@@ -131,6 +131,8 @@ def main():
              ROOT/'reports/SURFACE_COUPLING_DECLARATION_20261029.md',
              ROOT/'reports/COLUMN_FORCING_INTERFACE_20261029.md',
              ROOT/'reports/SURFACE_SPINUP_20261029.md',
+             ROOT/'reports/SHARED_TRANSPORT_20261029.md',
+             ROOT/'reports/SHARED_TRANSPORT_DECLARATION_20261029.md',
              ROOT/'reports/PHASE_BACKEND_20261029.md',
              ROOT/'reports/PHASE_BACKEND_DECLARATION_20261029.md',
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',

@@ -1,3 +1,27 @@
+# ACTIVE — shared factor controls passed; fourteen-day spinup prepared
+
+17d7c16 pushed shared-factor module/tests/literal numerical protocol. Six controls
+now all completed and independently verified:87starts/83completed/four retained
+failures; legacy1934/1929 unchanged, no monthlyskill/recalibration/physicaladoption.
+Candidate final states BYTE-IDENTICAL to reference in all3regions. Eachreference
+exactly reproduces preceding fast-phase candidate. Actual E/Werrors<1.6e-15/3e-16.
+Factorizations1152→576 each24h. Observed times reduce~12–43%, not confidenceinterval.
+374 tests passed. Atlas55studies/141images;752Windowsbyteassets;1262ZIPfiles/462links.
+Allbrowser/launcher/source/byte checks pass; finishcurrentpublicationcommit/push.
+
+NEXT prepared untracked scripts/extended_surface_spinup.py and two literalplans
+in calibration/extended_surface_spinup_20261029. Preflights pass, no Earthrunsyet.
+Same physics, now fastphase + exactLUreuse;14dayswet50/dry0kg/m²,3regions each,
+900ssteps,dailycheckpoints. Commit plans/driver BEFORE outcomes; runwet/dryjobs
+concurrently only after timingcontrols finish(they nowhave). Expected6newstarts,
+cumulative93starts/89completions/four failures ifcomplete. No fittedsoilselection.
+First3days must reproduceold72hwithin declared1e-6state/0.1JrainHtol. Dailybudget
+checksandday3/7/14gaps,days8–14means/storage trends; preservedfailures/partials.
+Solarseason evolves; lateralinitialreservoirsandpartial380hPatopstayfixed.
+Notstationaryclimate,monthlyskillorproofmultipleequilibria/globaloptimum.
+Keepgoingafterpush; postfigures/frequentupdates. Do notspawnagents.
+
+--- Historical handoff ---
 # ACTIVE — phase publication pushed; shared transport declaration ready
 
 3280f3f pushed phase publication/atlas. Shared transport setup now has374 passing
