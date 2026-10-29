@@ -1,3 +1,30 @@
+# ACTIVE — fourteen-day results complete; launch frozen grid controls next
+
+42c6bcd8 pushed staticremappublication+dynamicresolutionprotocol. Both14dayjobs
+nowcomplete6/6. Publicationstaged/QAcomplete:57studies/144images,759Windows
+byteassets,1273portablefiles(linksreadbundlecheck). All84dailybudgetsverified;
+18first3daycheckpointsoldarchivewithinliteral1e-6/0.1JHtol(maxT1.42e-11K,
+rainH6.77e-6J). Cumulative93starts/89completions/fourretainedearlierfailures.
+Legacy1934/1929 unchanged; no monthlyskill/recalibration/modeladoption.
+Wet/drydays8–14landP India1.993/.450;Mex1.599/.388;PNW1.096/.004mm/day.
+Day14soil38.55/3.29,44.67/5.09,35.62/.23. Majorinitializationmemorypersists.
+DailyE/Wrelerrors<2.26e-14/5.05e-16. First3daysreproduced;allrawsaved.
+Fullreports/atlasdata;commit/pushthispublication,thenKEEPWORKING.
+
+NEXT9dynamicresolutionintegrationsreadyandALREADYcommitted42c6bcd8. No grid
+Earthrunsstarted. Launchlower_cell_resolution_pilot.py --plan
+calibration/lower_cell_resolution_20261029/plan.json --out
+output/lower_cell_resolution_20261029, stdoutoutput/lower_cell_resolution_20261029.log.
+Eachregion split4lowestcell(9levels)900/450s andsplit16(21levels)900s,24h.
+No parametersfit/adoption/accuracygate. Needalloutcomes,actualsavedenergy/water,
+spatialstepsensitivity,rain/evap/soil/skinTvsarchivedcoarse. Staticconversionrain
+excludedfromrunrain,initialKE/momentum/water/Epreserved. Piecewiseconstantremap
+changesresolvedinitialstability; no inventedsubcellprofile. Expected102starts/
+98completions/fourfailuresONLYifall9finish;recordactualfailures/partials.
+Module/testsourcesfrozen:pressure_remap8newtests/86focusedpassed;existing374
+stackunchanged. Legacy682sourcehashesverified. Do noteditfrozenrundependencies.
+No agents;keepuserupdatedandpostfigures,continueafterpush.
+
 # ACTIVE — static remap published; dynamic resolution frozen;14dayrunsfinishing
 
 79950505 pushed conservative remapmodule/tests/staticplan. Sixstatictransfers

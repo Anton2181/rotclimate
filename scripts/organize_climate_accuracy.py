@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('extended-spinup','Fourteen-day soil-water memory and implications for calibration'),
     ('pressure-grid-remap','Conservative initialization toward a shallower first air cell'),
     ('shared-transport','Exact transport factors and equivalent climate states'),
     ('phase-backend','Equivalent phase numerics and complete coupled timings'),
