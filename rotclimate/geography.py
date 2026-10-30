@@ -232,6 +232,7 @@ class Grid:
     descent: np.ndarray | None = None        # e49: [12, ny, nx] the descent the monsoons drive to their west, from WorldClim's rain (Earth mode; other grids compute their own)
     sea_depth: np.ndarray | None = None      # e50: sea depth (m, to 1,500) from the World Ocean Atlas 2018 profiles (Earth mode; other grids take a shelf by distance from the coast)
     obs_sst: np.ndarray | None = None   # Earth mode: observed monthly sea-surface temperature [12, ny, nx]
+    obs_wind: np.ndarray | None = None  # Earth diagnostics: observed monthly surface winds [12, 2 (east, north), ny, nx]
     terrain_slopes: np.ndarray | None = None  # [3, samples, ny, nx]: east/north slopes and area weights
 
     @property

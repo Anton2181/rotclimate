@@ -255,6 +255,14 @@ class ClimateModel:
             raise ValueError('Unknown column_saturation_scheme')
         if params.moisture_transport_form not in ('concentration','flux'):
             raise ValueError('Unknown moisture_transport_form')
+        if params.wind_source not in ('model', 'observed'):
+            raise ValueError('wind_source must be "model" or "observed"')
+        if params.wind_source == 'observed' and (grid is None or getattr(grid, 'obs_wind', None) is None):
+            raise ValueError('wind_source="observed" needs an Earth grid with obs_wind')
+        if params.dry_heating < 0 or (params.dry_heating > 0 and params.soil_bucket_mm <= 0):
+            raise ValueError('dry_heating must be >= 0 and needs the soil bucket (soil_bucket_mm > 0)')
+        if not 0 <= params.dry_heating_chi0 < 1 or (params.dry_heating_chi0 > 0 and params.continentality <= 0):
+            raise ValueError('dry_heating_chi0 must be in [0, 1) and needs the advected land share (continentality > 0)')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
             raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
         if not isinstance(params.moisture_mass_balance, (bool, np.bool_)):
@@ -926,6 +934,30 @@ class ClimateModel:
                     # dried by a rainless summer heats)
                     wet = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
+            if p.dry_heating > 0:
+                # e54: the latitude-mean land column evaporates like an average
+                # land. Dry ground puts its sunshine into heating the air
+                # instead (Bowen ratio): the Thar and the Indus plain in May,
+                # Iran's plateau and the Maghreb in late summer are 3-6 C above
+                # their latitude's land mean (north India in April 30.6 C at
+                # sea level against 24.3 for all land at 27.5 N), and the
+                # model's dry interiors sat at that mean (Iran -3.1 C, north
+                # India -3.3 C before the monsoon). wet_cooling only cools wet
+                # ground and dry_coupling only ties the air faster to the same
+                # mean. Warm the land by dry_heating x dryness of the bucket x
+                # sunshine (TOA, against the 480 W/m2 coupling reference).
+                S_dry = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                         p.solar_flux * distance_factor(d, p.eccentricity,
+                                                         p.winter_solstice_day + p.perihelion_after_solstice,
+                                                         p.year_days))
+                dry = 1.0 - np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                if p.dry_heating_chi0 > 0:
+                    # e54b: on a coast the sea air keeps replacing the heated
+                    # layer (Chile, SW Australia, California stayed mild); only
+                    # air that has crossed land (the advected share chi) keeps
+                    # the dry ground's heat
+                    dry = dry * np.clip((chi - p.dry_heating_chi0) / (1.0 - p.dry_heating_chi0), 0.0, 1.0)
+                Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean
                 # cloudiness. Where this step's sky is clearer than that mean,
@@ -1134,6 +1166,14 @@ class ClimateModel:
                     ut, vt = ut * f_cap, vt * f_cap
                 u = (u0 + ut) * self.drag
                 v = (v0 + vt) * self.drag
+                if p.wind_source == "observed":
+                    # Earth diagnostics: observed monthly surface winds in place
+                    # of the model's, for heat and water alike, to measure how
+                    # much of a region's error the circulation causes
+                    mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
+                    m0 = int(np.floor(mpos)); fr = mpos - m0
+                    u = (1.0 - fr) * g.obs_wind[m0, 0] + fr * g.obs_wind[(m0 + 1) % 12, 0]
+                    v = (1.0 - fr) * g.obs_wind[m0, 1] + fr * g.obs_wind[(m0 + 1) % 12, 1]
                 lam = lamT
                 if p.ocean_tau_stable > 0:
                     # e3: air warmer than the sea under it is stable: a shallow

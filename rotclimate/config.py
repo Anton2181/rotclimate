@@ -100,6 +100,7 @@ class Params:
     current_gyre: float = 0.0         # e42: share of the cold west-coast current that needs open sea poleward into the westerlies (0 = off)
     sst_offset: float = 0.0           # K, global SST tweak
     sst_source: str = "model"         # "observed": Earth grids use WOA18 monthly SST (diagnostic upper bound)
+    wind_source: str = "model"        # "observed": Earth grids use reanalysis monthly surface winds (grid.obs_wind; diagnostic upper bound)
     land_offset: float = 0.0          # K, global land-column tweak
     inland_sea_warming: float = 2.0   # enclosed seas take 0.1*this of the land's swing
     lake_coupling: float = 0.0        # v4: lakes/small seas follow land temp (0 = off)
@@ -155,6 +156,8 @@ class Params:
     subsidence_asym: float = 0.0      # east/west-of-basin asymmetry of the highs
     subsidence_summer: float = 0.0    # v7: highs sink harder in summer: x (1 + this * season)
     wet_cooling: float = 0.0          # v8: share of the summer warmth that wet ground evaporates away
+    dry_heating: float = 0.0          # e54: K of land warmth on bone-dry soil under 480 W/m2 of sunshine, x (1 - soil wetness)
+    dry_heating_chi0: float = 0.0     # e54b: ... only in continental air: x clip((chi - this) / (1 - this), 0, 1); 0 = everywhere
     # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
     # flow toward the pole rises, flow toward the equator sinks: rain x
     # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km

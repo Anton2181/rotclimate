@@ -42,6 +42,23 @@ Full test suite: 1605 pass; 7 fail identically on the pre-session commit
 7e0b146 (harvest `settlement_cored`, Mediterranean spin-up `column_projector`,
 zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
+## Physics gaps (reports/PHYSICS_GAPS_20261030.md)
+
+* New reference: `scripts/prepare_ncep_reference.py --download` (NCEP/NCAR R1
+  1991-2020 monthly surface winds, SLP, RH, precipitable water via PSL
+  OPeNDAP; the plain download URL is refused, OPeNDAP text works but rate-limits).
+* New diagnostic switch `wind_source="observed"` (grid.obs_wind) and
+  `scripts/attribute_observed_forcing.py`: observed winds give North India
+  933 mm (r39 256, obs 761); observed winds+SST fix the maritime lag; Mexico,
+  Texas, Iran flood (rain settings fitted to wrong winds).
+* Circulation is the largest gap (single zonal ITCZ, no monsoon westerlies,
+  land winds 1.8x too strong, winter trades 2-6x); SST 1-3 C too cold
+  (global offset -4.4 C), mid-latitude SST range too large; Tibet too wet.
+* New opt-in `dry_heating` / `dry_heating_chi0` (e54): best 3.0 / 0.6 gives
+  S 0.9933 but former-holdout 1.038 and mid-latitude 1.027 groups worsen
+  (Chile, East Asia downwind of the Gobi); not adopted. All new switches
+  default off; r39 cells reproduce bit for bit.
+
 ## Rules to keep
 
 * The correction is valid only for r39 physics (hash in its metadata);
@@ -52,6 +69,9 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
+0. Physics milestone: circulation (heating-following ITCZ, monsoon westerlies,
+   weaker land winds) gated on NCEP winds, then refit rain settings; then the
+   sea's latitude profile; then revisit e54.
 1. r39 world refit that scores painted zones on corrected temperature and
    rain; atlas layers raw + corrected. Preview (unadopted world, one layout):
    strict painted-zone accuracy 0.314 → 0.325 with both stages.

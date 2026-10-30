@@ -1,5 +1,16 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Physics gaps behind North India, 30 October 2026:** rerunning r39 with
+observed (NCEP) surface winds lifts North India's rain from 256 to 933 mm
+(761 observed) with nothing else changed, and real winds plus real sea remove
+most of the British Isles' and western Europe's month-late seasons. The model's
+circulation is the main gap: one planet-wide ITCZ, no cross-equatorial
+monsoon westerlies, and land winds 1.8× too strong; its sea is 1–3 °C too
+cold. Rain settings fitted to those winds flood Mexico, Texas and Iran when
+given real ones, so the fix needs a recalibration. An opt-in dry-ground
+heating term (e54) lifts North India and Iran by ~0.8 °C but fails the group
+gates. See the [physics-gap report](reports/PHYSICS_GAPS_20261030.md).
+
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.
 Scored with whole geographic clusters held out (the Earth stand-in for an
