@@ -4,8 +4,8 @@
 a model learned from the 31 Earth development regions. Scored the honest way
 (each region corrected by a model trained without its whole geographic
 cluster), monthly temperature error falls **1.793 → 1.540 °C (−14.1 %)** and
-every policy group improves. On the paired 28 km runs it falls 1.896 → 1.274 °C,
-and on the two sealed regions, never used for anything, 2.621 → 2.143 °C.
+every policy group improves. On the paired 28 km runs it falls 1.896 → 1.274 °C (14 km, the atlas scale:
+1.908 → 1.288), and on the two sealed regions, never used for anything, 2.621 → 2.143 °C.
 Rain is **not** corrected: no rain correction tested transferred between
 continents. Physics r39, its outputs and the published atlases are unchanged.
 This stage is not yet wired into the fantasy atlases (see *Next*).
@@ -120,13 +120,16 @@ SST switch (`sst_source="observed"`) also leaves a 23-day lag.
 | mid-latitude 6 | 1.868 → 1.392 | | | | | | |
 | dev12 | 1.994 → 1.683 | | | | | | |
 | paired 28 km (4) | 1.896 → **1.274** | 0.819 → 0.738 | 1.604 → 1.750 | 1.457 → 1.430 | 1.458 → 1.208 | 42.3 → 45.6 % | 78.0 → 81.8 % |
+| paired 14 km (4) | 1.908 → **1.288** | 0.828 → 0.747 | 1.639 → 1.775 | 1.450 → 1.447 | 1.512 → 1.252 | 41.2 → 45.0 % | 77.6 → 81.7 % |
 | sealed (Norway, SE Africa) | 2.621 → **2.143** | 2.333 → 1.927 | 2.636 → 2.623 | 3.430 → 2.934 | 2.049 → 2.073 | 12.5 → 15.7 % | 40.3 → 41.1 % |
 
 In the existing local-accuracy policy's arithmetic (rain unchanged) the
 development S is 0.930, every group improves and the paired 28 km S is 0.836.
-The 28 km runs use the held-out fold models although training used 56 km
-cells, so the stage transfers across resolution at least that far. The
-fantasy atlases use ~15 km cells, which has not been tested on Earth.
+The 28 km and 14 km runs use the held-out fold models although training
+used 56 km cells. The atlases use ~15 km cells: at 14 km all four regions
+improve (California 1.78 → 1.46, Japan 1.93 → 1.53, New Zealand 1.89 → 1.15,
+western Europe 2.04 → 1.02 °C), with the same range caveat (California and
+Japan worse).
 
 **Mixed outcomes, reported as found.** Six of 31 regions get worse (South
 Brazil +0.22 °C, Cape +0.18, North China Plain +0.16, East China +0.08,
@@ -166,6 +169,13 @@ needs no special handling: the stage reacts to the simulated seasonal shape.
 Because the seasonal-range metric was the weak spot on Earth, summer-heat
 zones (Csa/Csb, hot-dry) must be checked before any atlas adoption.
 
+Scored against the painted zones with the calibration's own rules (a fit to
+the drawn intent, not an accuracy measure), mean zone membership moves
+0.300 → 0.303 and strict accuracy 0.314 → 0.314: warm-wet 0.314 → 0.340 and
+Mediterranean 0.531 → 0.543 rise, cold-wet 0.686 → 0.666 falls. This world's
+unknowns were fitted to the raw climate, so the meaningful test is a refit
+that scores corrected temperatures.
+
 ![Map preview](../output/earth_correction_20261030/map_preview/map_correction.png)
 
 ## Validity and use
@@ -182,8 +192,7 @@ zones (Csa/Csb, hot-dry) must be checked before any atlas adoption.
 1. Use the corrected temperatures in the r39 world refit (score the painted
    zones on corrected monthly fields), then publish an atlas with raw and
    corrected layers side by side.
-2. Test the stage on Earth at ~15 km before relying on it at atlas resolution.
-3. Physics: the maritime lag needs a boundary layer that is not almost
+2. Physics: the maritime lag needs a boundary layer that is not almost
    entirely sea-controlled (a land surface layer or two-tile coast) plus a
    recalibration; a two-scale relief lapse is a small, cheap follow-up.
 
@@ -197,7 +206,7 @@ python -I scripts/evaluate_earth_correction.py --run output/earth_correction_202
 python -I scripts/plot_earth_correction.py --dir output/earth_correction_20261030
 ```
 
-The 28 km (`--cell-km 28`, california western_europe japan new_zealand) and
+The 28 km and 14 km (`--cell-km 28` / `14`, california western_europe japan new_zealand) and
 sealed (`--region-specs calibration/climate_physics_20261023/rainfall_validation_regions.json`,
 norway southeast_africa) runs follow the same pattern. Training needs
 scikit-learn (1.9.1 used); `tests/test_earth_correction.py` checks the numpy

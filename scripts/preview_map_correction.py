@@ -60,10 +60,32 @@ def main():
                    numerics_passed=True, mean_change_C=float(d.mean()), mean_abs_change_C=float(np.abs(d).mean()),
                    monthly_mean_change_C=d.mean(1).tolist(), p95_abs_change_C=float(np.percentile(np.abs(d), 95)),
                    annual_range_change_C=float(((Tc.max(0) - Tc.min(0)) - (st["Tm"].max(0) - st["Tm"].min(0)))[mask].mean()),
-                   calendar=dict(year_days=p.year_days, winter_solstice_day=p.winter_solstice_day))
+                   calendar=dict(year_days=p.year_days, winter_solstice_day=p.winter_solstice_day),
+                   painted_zones=dict(note="fit to the drawn target, not an accuracy measure",
+                                      raw=zone_fit(st["Tm"], st["Pm"], st["summer"], g),
+                                      corrected=zone_fit(Tc, st["Pm"], st["summer"], g)))
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
     plot(out, st["Tm"], Tc, mask, p)
     print(json.dumps({k: v for k, v in summary.items() if k != "monthly_mean_change_C"}, indent=1))
+
+
+def zone_fit(Tm, Pm, summer, g):
+    """Painted-zone agreement under the calibration's rules (score.evaluate):
+    mean membership per zone, strict best-zone accuracy and recall."""
+    from rotclimate.koppen import classify, climate_indices
+    from rotclimate.score import TARGET_CLASSES, best_zone, memberships, terrain_slope
+
+    ix = climate_indices(Tm, Pm, summer)
+    mem = memberships(ix, slope=terrain_slope(g))
+    pred = best_zone(mem, koppen=classify(Tm, Pm, summer))
+    valid = g.inmap & g.land
+    painted = valid & (g.target > 0)
+    per = {key: float(mem[key][valid & (g.target == cid)].mean()) for cid, key, _, _ in TARGET_CLASSES
+           if (valid & (g.target == cid)).any()}
+    recall = {key: float((pred[valid & (g.target == cid)] == cid).mean()) for cid, key, _, _ in TARGET_CLASSES
+              if (valid & (g.target == cid)).any()}
+    return dict(mean_membership=float(np.mean(list(per.values()))), strict_accuracy=float((pred[painted] == g.target[painted]).mean()),
+                membership=per, recall=recall)
 
 
 def plot(out, Tm, Tc, mask, p):

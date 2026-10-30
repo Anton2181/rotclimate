@@ -4,7 +4,8 @@
 r39's repeatable monthly temperature errors from the 31 Earth regions, using
 only inputs every map has. Scored with whole geographic clusters held out
 (the Earth stand-in for an unseen invented continent), monthly temperature
-error falls 1.79 → 1.54 °C; paired 28 km runs 1.90 → 1.27 °C and the two sealed
+error falls 1.79 → 1.54 °C; paired 28 km runs 1.90 → 1.27 °C, 14 km runs (the
+atlas scale) 1.91 → 1.29 °C, and the two sealed
 regions 2.62 → 2.14 °C. It mainly fixes a month-late season on maritime
 westerly coasts. Rain is not corrected: no rain correction transferred between
 continents. Six regions and the seasonal-range metric get somewhat worse.

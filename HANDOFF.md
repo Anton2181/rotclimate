@@ -23,12 +23,16 @@ no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 ## Measured (held out by geographic cluster)
 
 Monthly land T MAE 1.793 → 1.540 °C over 31 regions, every policy group
-better; 28 km pairs 1.896 → 1.274; sealed Norway/SE Africa 2.621 → 2.143.
+better; 28 km pairs 1.896 → 1.274; 14 km pairs (atlas scale) 1.908 → 1.288; sealed Norway/SE Africa 2.621 → 2.143.
 Worse: six regions (South Brazil +0.22 °C worst), seasonal range MAE +6 %,
 coldest month +1 %. Köppen agreement ~unchanged (rain dominates classes).
 Rain corrections were tested and **rejected** (cluster holdout made unseen
 continents worse). Air-coupled SST seasonality (e53) and coupling retunes
 were tested and **rejected** (S 0.999–1.023), code reverted.
+
+Full test suite: 1605 pass; 7 fail identically on the pre-session commit
+7e0b146 (harvest `settlement_cored`, Mediterranean spin-up `column_projector`,
+zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Rules to keep
 
@@ -42,8 +46,7 @@ were tested and **rejected** (S 0.999–1.023), code reverted.
 
 1. r39 world refit that scores painted zones on corrected temperatures; atlas
    layers raw + corrected.
-2. Earth check at ~15 km (the atlas resolution) with fold models.
-3. Physics for the maritime lag: the land air is ~95 % sea-controlled because
+2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.
-4. Small: two-scale relief lapse (+~0.8 % T alone).
+3. Small: two-scale relief lapse (+~0.8 % T alone).
