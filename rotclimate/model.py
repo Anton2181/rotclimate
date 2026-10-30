@@ -257,6 +257,8 @@ class ClimateModel:
             raise ValueError('Unknown moisture_transport_form')
         if not 0 <= params.monsoon_westerly <= 1:
             raise ValueError('monsoon_westerly must be in [0, 1]')
+        if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
+            raise ValueError('monsoon_pressure_hpa must be >= 0 and needs the pressure winds (slp_large or slp_local > 0)')
         if params.wind_source not in ('model', 'observed'):
             raise ValueError('wind_source must be "model" or "observed"')
         if params.wind_source == 'observed' and (grid is None or getattr(grid, 'obs_wind', None) is None):
@@ -571,6 +573,22 @@ class ClimateModel:
         xi = (lat - phi_i) / (phi_h - phi_i)
         u = np.where(m, -trade * np.sin(np.pi * xi), u)
         v = np.where(m, -0.35 * trade * np.sin(np.pi * xi), v)
+        w = p.monsoon_westerly
+        if w > 0 and p.monsoon_pressure_hpa > 0:
+            # e55b: trades blow because pressure rises toward the subtropical
+            # high poleward. Where the model's own pressure falls poleward
+            # instead (a summer heat low beyond: the Arabian Sea and Bay of
+            # Bengal in July, 2.8 hPa per 1,000 km, reanalysis 5.5) the flow
+            # turns westerly; where it rises (the Coral Sea, the Caribbean)
+            # the trades stay. Last step's pressure, smoothed over 500 km.
+            last = getattr(self, "last_pres", None)
+            if last is None:
+                w = 0.0
+            else:
+                cell = self.g.cell_km
+                fall = np.sign(lat) * np.gradient(ndi.gaussian_filter(last, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
+                w = p.monsoon_westerly * np.clip(fall / p.monsoon_pressure_hpa, 0.0, 1.0)
+        tan_in = np.tan(np.radians(p.cross_isobar_deg))
         if p.monsoon_westerly > 0:
             # e55: trades that cross the equator toward an ITCZ in the other
             # hemisphere are turned by the reversed Coriolis force into
@@ -580,10 +598,9 @@ class ClimateModel:
             # angle, never slower than the trades' own inflow (5 m/s northward
             # against 2.3)
             cross = m & (lat < 0) & (phi_i < 0)
-            turned = p.monsoon_westerly * trade * np.sin(np.pi * np.clip(lat / np.minimum(phi_i, -1e-6), 0, 1))
-            u = np.where(cross, (1 - p.monsoon_westerly) * u + turned, u)
-            inflow = np.maximum(-v, np.tan(np.radians(p.cross_isobar_deg)) * turned / p.monsoon_westerly)
-            v = np.where(cross, (1 - p.monsoon_westerly) * v - p.monsoon_westerly * inflow, v)
+            turned = trade * np.sin(np.pi * np.clip(lat / np.minimum(phi_i, -1e-6), 0, 1))
+            u = np.where(cross, (1 - w) * u + w * turned, u)
+            v = np.where(cross, (1 - w) * v - w * np.maximum(-v, tan_in * turned), v)
         # southern trades (only reached if the padding goes that far south)
         phi_hs = -(p.hadley_edge - p.hadley_shift * s) * hr
         m = (lat < phi_i) & (lat > phi_hs)
@@ -592,10 +609,9 @@ class ClimateModel:
         v = np.where(m, 0.35 * p.trade_speed * np.sin(np.pi * xi), v)
         if p.monsoon_westerly > 0:
             cross = m & (lat > 0) & (phi_i > 0)
-            turned = p.monsoon_westerly * p.trade_speed * np.sin(np.pi * np.clip(lat / np.maximum(phi_i, 1e-6), 0, 1))
-            u = np.where(cross, (1 - p.monsoon_westerly) * u + turned, u)
-            inflow = np.maximum(v, np.tan(np.radians(p.cross_isobar_deg)) * turned / p.monsoon_westerly)
-            v = np.where(cross, (1 - p.monsoon_westerly) * v + p.monsoon_westerly * inflow, v)
+            turned = p.trade_speed * np.sin(np.pi * np.clip(lat / np.maximum(phi_i, 1e-6), 0, 1))
+            u = np.where(cross, (1 - w) * u + w * turned, u)
+            v = np.where(cross, (1 - w) * v + w * np.maximum(v, tan_in * turned), v)
         # westerlies (stronger in winter)
         m = (lat >= phi_h) & (lat < phi_p)
         xi = (lat - phi_h) / (phi_p - phi_h)

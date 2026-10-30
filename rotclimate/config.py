@@ -133,6 +133,7 @@ class Params:
     itcz_shift: float = 10.0
     itcz_shift_ocean: float = -1.0    # e55: the ITCZ's seasonal shift over open ocean (deg); land_broad blends to itcz_shift over broad land; < 0 = itcz_shift everywhere
     monsoon_westerly: float = 0.0     # e55: share of the trade speed by which air crossing the equator turns westerly before the ITCZ (Coriolis)
+    monsoon_pressure_hpa: float = 0.0  # e55b: ... only where the model's own pressure falls poleward, fully at this many hPa per 1,000 km; 0 = everywhere
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0
