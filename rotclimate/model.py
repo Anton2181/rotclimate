@@ -255,6 +255,8 @@ class ClimateModel:
             raise ValueError('Unknown column_saturation_scheme')
         if params.moisture_transport_form not in ('concentration','flux'):
             raise ValueError('Unknown moisture_transport_form')
+        if not 0 <= params.monsoon_westerly <= 1:
+            raise ValueError('monsoon_westerly must be in [0, 1]')
         if params.wind_source not in ('model', 'observed'):
             raise ValueError('wind_source must be "model" or "observed"')
         if params.wind_source == 'observed' and (grid is None or getattr(grid, 'obs_wind', None) is None):
@@ -545,7 +547,17 @@ class ClimateModel:
     def zonal_wind(self, s):
         p, lat = self.p, self.lat
         hr = self.hadley_scale
-        phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
+        if p.itcz_shift_ocean >= 0:
+            # e55: the ITCZ follows the heating: over broad summer land the
+            # monsoon trough runs far poleward (25 N over north India in July)
+            # while over open ocean it stays near 5-10 N (the Atlantic and
+            # eastern Pacific in July). One planet-wide latitude (20.6 N in
+            # July) put the Caribbean under southern trades and left north
+            # India's monsoon trough too far south.
+            broad = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(self.g.land.astype(float), 1500.0 / self.g.cell_km, mode="nearest")
+            phi_i = (p.itcz_mean + (p.itcz_shift_ocean + (p.itcz_shift - p.itcz_shift_ocean) * broad) * s) * hr
+        else:
+            phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
         phi_p = phi_h + 30.0
         u = np.zeros_like(lat)
@@ -559,12 +571,31 @@ class ClimateModel:
         xi = (lat - phi_i) / (phi_h - phi_i)
         u = np.where(m, -trade * np.sin(np.pi * xi), u)
         v = np.where(m, -0.35 * trade * np.sin(np.pi * xi), v)
+        if p.monsoon_westerly > 0:
+            # e55: trades that cross the equator toward an ITCZ in the other
+            # hemisphere are turned by the reversed Coriolis force into
+            # monsoon westerlies (the Somali jet and the south-west monsoon
+            # over the Arabian Sea, 7 m/s in July against 2.6 in r39), still flowing
+            # toward the trough across the isobars at the boundary layer's
+            # angle, never slower than the trades' own inflow (5 m/s northward
+            # against 2.3)
+            cross = m & (lat < 0) & (phi_i < 0)
+            turned = p.monsoon_westerly * trade * np.sin(np.pi * np.clip(lat / np.minimum(phi_i, -1e-6), 0, 1))
+            u = np.where(cross, (1 - p.monsoon_westerly) * u + turned, u)
+            inflow = np.maximum(-v, np.tan(np.radians(p.cross_isobar_deg)) * turned / p.monsoon_westerly)
+            v = np.where(cross, (1 - p.monsoon_westerly) * v - p.monsoon_westerly * inflow, v)
         # southern trades (only reached if the padding goes that far south)
         phi_hs = -(p.hadley_edge - p.hadley_shift * s) * hr
         m = (lat < phi_i) & (lat > phi_hs)
         xi = (phi_i - lat) / (phi_i - phi_hs)
         u = np.where(m, -p.trade_speed * np.sin(np.pi * xi), u)
         v = np.where(m, 0.35 * p.trade_speed * np.sin(np.pi * xi), v)
+        if p.monsoon_westerly > 0:
+            cross = m & (lat > 0) & (phi_i > 0)
+            turned = p.monsoon_westerly * p.trade_speed * np.sin(np.pi * np.clip(lat / np.maximum(phi_i, 1e-6), 0, 1))
+            u = np.where(cross, (1 - p.monsoon_westerly) * u + turned, u)
+            inflow = np.maximum(v, np.tan(np.radians(p.cross_isobar_deg)) * turned / p.monsoon_westerly)
+            v = np.where(cross, (1 - p.monsoon_westerly) * v + p.monsoon_westerly * inflow, v)
         # westerlies (stronger in winter)
         m = (lat >= phi_h) & (lat < phi_p)
         xi = (lat - phi_h) / (phi_p - phi_h)

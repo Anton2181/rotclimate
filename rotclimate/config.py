@@ -131,6 +131,8 @@ class Params:
     hadley_shift: float = 5.0         # seasonal poleward shift in summer
     itcz_mean: float = 5.0
     itcz_shift: float = 10.0
+    itcz_shift_ocean: float = -1.0    # e55: the ITCZ's seasonal shift over open ocean (deg); land_broad blends to itcz_shift over broad land; < 0 = itcz_shift everywhere
+    monsoon_westerly: float = 0.0     # e55: share of the trade speed by which air crossing the equator turns westerly before the ITCZ (Coriolis)
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0

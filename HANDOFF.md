@@ -58,6 +58,11 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   S 0.9933 but former-holdout 1.038 and mid-latitude 1.027 groups worsen
   (Chile, East Asia downwind of the Gobi); not adopted. All new switches
   default off; r39 cells reproduce bit for bit.
+* New opt-in `monsoon_westerly` (e55; plus `itcz_shift_ocean`, which failed):
+  cross-equatorial trades turn westerly toward the ITCZ with inflow at the
+  boundary-layer angle. w 0.7: North India 256 -> 482 mm, Arabian Sea July
+  wind 6.4/3.4 (NCEP 6.9/5.1), but East Australia, East China, Iran wetter;
+  training group S 1.045. Needs a heating-following ITCZ, then a rain refit.
 
 ## Rules to keep
 
@@ -69,9 +74,10 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
-0. Physics milestone: circulation (heating-following ITCZ, monsoon westerlies,
-   weaker land winds) gated on NCEP winds, then refit rain settings; then the
-   sea's latitude profile; then revisit e54.
+0. Physics milestone: heating-following ITCZ so e55's monsoon westerlies
+   appear only where the summer heat low is (Arabian Sea yes, Coral Sea no),
+   weaker land winds, NCEP wind gate, then refit rain settings; then the sea's
+   latitude profile; then revisit e54.
 1. r39 world refit that scores painted zones on corrected temperature and
    rain; atlas layers raw + corrected. Preview (unadopted world, one layout):
    strict painted-zone accuracy 0.314 → 0.325 with both stages.

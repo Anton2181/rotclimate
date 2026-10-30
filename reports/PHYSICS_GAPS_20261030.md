@@ -12,8 +12,11 @@ though: given real winds, Mexico, Texas and Iran become far too wet. The
 circulation therefore has to be fixed together with a recalibration of the
 rain settings. Separately, the land equilibrium has no dry-ground heating
 (North India and Iran ≈ 3 °C too cold); a new opt-in term (e54) fixes much of
-that but fails the region-group gates. Nothing is adopted; r39 is unchanged
-and its runs reproduce bit for bit with every new switch off.
+that but fails the region-group gates. A first circulation fix (e55, monsoon
+westerlies) roughly doubles North India's rain (256 → 482 mm) but wets East
+Australia, East China and Iran, because the model has one planet-wide ITCZ.
+Nothing is adopted; r39 is unchanged and its runs reproduce bit for bit with
+every new switch off.
 
 ## 1. Inside North India (lowland cells below 1,000 m, 56 km)
 
@@ -165,15 +168,56 @@ compensate elsewhere; e54 should be revisited after the circulation and sea.
 
 ![Dry heating](../output/physics_gaps_20261030/dry_heating.png)
 
+## 5. Monsoon westerlies (e55, opt-in, not adopted)
+
+Splitting the observed winds by area locates the lever. North India's annual
+rain with r39's own winds held fixed is 241 mm; observed winds over the ocean
+only give 598, over land only 576, and **only in the band south of the scored
+region (Arabian Sea, peninsula, Bay of Bengal) 664**; everywhere 933. The
+missing piece is the monsoon inflow from the south.
+
+`monsoon_westerly` (w, 0–1) turns trades that cross the equator toward the
+ITCZ into westerlies: on the equator side of the ITCZ the zonal wind becomes
+(1 − w)·u_trade + w·trade·sin(π·lat/φ_ITCZ), and the flow keeps crossing the
+isobars toward the trough at the boundary layer's own angle
+(northward speed tan(cross_isobar_deg) × the turned speed, never slower than
+the trades' inflow). Another opt-in switch, `itcz_shift_ocean`, blends the
+ITCZ's seasonal shift between open ocean and broad land; it pulled the ITCZ
+south over the Arabian Sea and halved North India's rain, so it is not used.
+Both default off and r39 reproduces bit for bit.
+
+North India lowland rain at w = 0.7: June 67, July 150, August 130,
+September 54 mm (observed 77, 239, 236, 135; r39 28, 62, 63, 23); column
+relative humidity 0.72–0.75 (r39 0.57–0.61); July column water 45 mm (NCEP
+48.7). Arabian Sea July wind 6.4, 3.4 m/s (NCEP 6.9, 5.1; r39 2.6, 2.3).
+
+| 31 regions | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 | North India annual mm |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| w 0.5 | +0.9 % | −0.4 % | 1.0024 | 1.028 | 0.995 | 1.000 | 0.991 | 425 |
+| w 0.7 | +1.2 % | +0.2 % | 1.0073 | 1.045 | 0.993 | 1.000 | 0.992 | 482 |
+| w 1.0 | +1.7 % | +1.8 % | 1.0174 | 1.078 | 0.989 | 1.000 | 0.997 | |
+| w 0.7, itcz_shift 18 | +2.2 % | +1.6 % | 1.0190 | 1.061 | 0.987 | 1.000 | 1.013 | 537 |
+
+North India's rain loss falls by 0.235–0.282 and South Brazil improves. The
+losses are where one planet-wide ITCZ puts monsoon flow that is not there or
+adds water to regions already too wet: East Australia +0.113 to +0.204
+(the Coral Sea has south-east trades in summer), East China +0.057 to +0.105
+(already too wet), Iran +0.047 to +0.213 (in the monsoon's descent). North
+India's temperature error also rises slightly (+0.21 to +0.37 °C: the
+wetter monsoon now cools the plain below observed in July–September).
+
+![Monsoon westerlies](../output/physics_gaps_20261030/monsoon_westerly.png)
+
 ## Plan for the next physics milestone
 
-1. **Circulation (largest gap).** Replace the single zonal ITCZ by one that
-   follows the heating (far poleward over broad summer land, near 8–10 ° over
-   oceans); turn cross-equatorial flow into monsoon westerlies (Ekman balance
-   with the existing boundary-layer drag); weaken surface winds over land
-   (mean speed 1.8× too strong). Use the NCEP winds as a circulation gate
-   (vector RMSE and direction by region and season), then refit the rain
-   settings, which currently compensate for the wrong winds.
+1. **Circulation (largest gap).** e55 shows the monsoon inflow is the lever
+   (North India 256 → 482 mm). It now needs an ITCZ that follows the heating
+   (the simulated heat low, not a land-share blend, which failed) so that
+   monsoon westerlies appear over the Arabian Sea but not the Coral Sea;
+   weaker surface winds over land (mean speed 1.8× too strong; winter trades
+   2–6×); NCEP winds as a circulation gate (vector RMSE and direction by
+   region and season); and then a refit of the rain settings (monsoon descent,
+   convergence import, subsidence), which compensate for the wrong winds.
 2. **Sea.** Fix the energy-balance ocean's latitude profile and mid-latitude
    seasonal range instead of a −4.4 °C global offset; the air-coupled sea
    swing (e53, earlier report) is one ingredient.
@@ -193,9 +237,14 @@ python -I scripts/physics_gap_figures.py attribution output/physics_gaps_2026103
 python -I scripts/physics_gap_figures.py sst
 python -I scripts/physics_gap_figures.py circulation north_india 1,5,7
 python -I scripts/physics_gap_figures.py dryheat output/physics_gaps_20261030/dry_heating_dh4 output/physics_gaps_20261030/dry_heating_dh3c6
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r39_params.json --regions dev31 --set '{"monsoon_westerly": 0.7}' --out output/physics_gaps_20261030/monsoon_westerly_mw07
+python -I scripts/physics_gap_figures.py monsoon output/physics_gaps_20261030/attribution_r39.json output/physics_gaps_20261030/monsoon_westerly_mw05 output/physics_gaps_20261030/monsoon_westerly_mw07
 ```
 
-The dry-heating runs kept here hold each run's summary and protocol (per-cell
-arrays are reproducible and not committed). `tests/test_physics_switches.py`
-checks that the new switches default off, are classified as shared physics
-and refuse invalid settings.
+The dry-heating and monsoon runs kept here hold each run's summary and
+protocol (per-cell arrays are reproducible and not committed). The screen ran
+with an earlier form of the e55 inflow that differs only within ~4 ° of the
+equator; every region's grid stays poleward of 10 °, and rerun cells of North
+India and East Australia are byte-identical. `tests/test_physics_switches.py`
+checks that the new switches default off, are classified as shared physics,
+refuse invalid settings and turn only the cross-equatorial trades.

@@ -9,7 +9,10 @@ monsoon westerlies, and land winds 1.8× too strong; its sea is 1–3 °C too
 cold. Rain settings fitted to those winds flood Mexico, Texas and Iran when
 given real ones, so the fix needs a recalibration. An opt-in dry-ground
 heating term (e54) lifts North India and Iran by ~0.8 °C but fails the group
-gates. See the [physics-gap report](reports/PHYSICS_GAPS_20261030.md).
+gates. A first circulation fix, monsoon westerlies (e55), doubles North
+India's rain (256 → 482 mm) but wets regions where one planet-wide ITCZ puts
+monsoon flow that is not there; not adopted yet. See the
+[physics-gap report](reports/PHYSICS_GAPS_20261030.md).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.

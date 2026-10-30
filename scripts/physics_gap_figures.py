@@ -4,6 +4,7 @@
     python -I scripts/physics_gap_figures.py sst          # model SST minus WOA18 by latitude (31 regions)
     python -I scripts/physics_gap_figures.py circulation north_india 1,5,7
     python -I scripts/physics_gap_figures.py dryheat RUN_DIR [RUN_DIR ...]   # benchmark_local runs with dry_heating
+    python -I scripts/physics_gap_figures.py monsoon ATTRIBUTION_JSON RUN_DIR [RUN_DIR ...]   # runs with monsoon_westerly
 
 Output goes to output/physics_gaps_20261030/.
 """
@@ -169,6 +170,47 @@ def dryheat(runs):
     plt.close(fig)
 
 
+def monsoon(attribution_path, runs):
+    from earth_benchmark import load_params
+    from benchmark_local import DEV12_SPECS
+    from rotclimate import earth
+    from rotclimate.koppen import monthly_stats
+    from rotclimate.model import ClimateModel
+
+    earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
+    att = json.loads(Path(attribution_path).read_text())["regions"]
+    case = earth.region_case("north_india", 56.0)
+    g = case.grid
+    m = g.inmap & g.land & np.isfinite(case.obs_P).all(0)
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6), gridspec_kw=dict(width_ratios=[1, 1.3]))
+    ax = axes[0]
+    ax.plot(range(12), att["model"]["north_india"]["monthly_rain_obs"], "k-o", ms=3, label="observed (WorldClim)")
+    ax.plot(range(12), att["model"]["north_india"]["monthly_rain_sim"], "-o", color="#c0392b", ms=3, label="r39")
+    colours = ["#7fb3d5", "#2471a3", "#1b4f72", "#7d3c98"]
+    base = json.loads((ROOT / "output/earth_correction_20261030/r39_dev31/summary.json").read_text())["regions"]
+    regs = sorted(base, key=lambda r: base[r]["rain"]["loss"])
+    for run, colour in zip(runs, colours):
+        s = json.loads((Path(run) / "summary.json").read_text())
+        ov = s["overrides"]
+        p = earth.earth_params(load_params(R39), case).replace(**ov)
+        res = ClimateModel(p, g).run(steps=p.steps_per_year)
+        st = monthly_stats(res.T, res.P, res.days, p.year_days, summer_solstice=p.winter_solstice_day + p.year_days / 2)
+        label = ", ".join(f"{k} {v}" for k, v in ov.items())
+        ax.plot(range(12), st["Pm"][:, m].mean(1), "-o", color=colour, ms=3, label=label)
+        axes[1].scatter([s["regions"][r]["rain"]["loss"] - base[r]["rain"]["loss"] for r in regs], range(len(regs)),
+                        color=colour, s=30, label=label)
+    ax.plot(range(12), att["observed_wind"]["north_india"]["monthly_rain_sim"], "--", color="#229954", label="r39 with observed winds")
+    ax.set_xticks(range(12)); ax.set_xticklabels(list("JFMAMJJASOND")); ax.set_ylabel("mm per month"); ax.grid(alpha=.3)
+    ax.legend(fontsize=8); ax.set_title("North India rain (scored land)")
+    axes[1].axvline(0, color="k", lw=1); axes[1].grid(alpha=.3)
+    axes[1].set_yticks(range(len(regs))); axes[1].set_yticklabels(regs, fontsize=8)
+    axes[1].set_xlabel("rain loss change against r39 (negative = better)")
+    fig.suptitle("Monsoon westerlies (e55): cross-equatorial trades turned westerly toward the ITCZ", fontsize=11)
+    plt.tight_layout()
+    plt.savefig(OUT / "monsoon_westerly.png", dpi=85)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     what = sys.argv[1]
@@ -180,5 +222,7 @@ if __name__ == "__main__":
         circulation(sys.argv[2], [int(x) for x in sys.argv[3].split(",")])
     elif what == "dryheat":
         dryheat(sys.argv[2:])
+    elif what == "monsoon":
+        monsoon(sys.argv[2], sys.argv[3:])
     else:
         sys.exit(__doc__)
