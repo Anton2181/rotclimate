@@ -77,6 +77,16 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   G 3.29, s 0.62, itcz 14.43, precip_tau 10.08, descent 0.0190 -> gate S
   0.9949, rain -1.7 %, 28 km S 0.9962, training 1.0005 fails (California,
   Iberia); not adopted, sealed six unused. output/physics_gaps_20261030/refit2/.
+* e57 `zonal_land_friction` (belts slowed over land, 300 km): US Midwest,
+  western Europe, Great Basin better, Central Asia/Anatolia/Levant lose
+  westerly water; net harmful. The one model wind is both surface wind and
+  ~850 hPa transport wind.
+* scripts/compare_column_water.py: winter column water 1.3-1.85x NCEP pw in
+  14 regions, winter rain error follows it (r 0.67 log); summer rain 0.5-0.8x
+  with columns ~right (r 0.08): summer needs rain-making physics.
+* e58 `ocean_column_air`: sea column saturates at the column temperature
+  where that is colder than the SST. Korea winter 292 -> 155 mm (94 obs),
+  training group 0.988, but Japan/S Brazil/British Isles lose annual rain.
 
 ## Rules to keep
 
