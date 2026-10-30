@@ -6,6 +6,7 @@
     python -I scripts/physics_gap_figures.py dryheat RUN_DIR [RUN_DIR ...]   # benchmark_local runs with dry_heating
     python -I scripts/physics_gap_figures.py monsoon ATTRIBUTION_JSON RUN_DIR [RUN_DIR ...]   # runs with monsoon_westerly
     python -I scripts/physics_gap_figures.py refit SEARCH_DIR KNOB VALIDATION_DIR NAME   # gate_calibrate search + validation
+    python -I scripts/physics_gap_figures.py columnwater output/physics_gaps_20261030/column_water_r39.json
 
 Output goes to output/physics_gaps_20261030/.
 """
@@ -251,6 +252,39 @@ def refit(search, knob, validation, name):
     plt.close(fig)
 
 
+def columnwater(path):
+    """Winter and summer column water against NCEP beside the rain error, and Korea's year."""
+    d = json.loads(Path(path).read_text())["regions"]
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5.8), gridspec_kw=dict(width_ratios=[1, 1, 0.9]))
+    for ax, months, name in ((axes[0], [11, 0, 1], "winter (DJF, model frame)"), (axes[1], [5, 6, 7], "summer (JJA)")):
+        x = np.array([np.mean(np.array(r["W"])[months]) / np.mean(np.array(r["pw"])[months]) for r in d.values()])
+        y = np.array([np.sum(np.array(r["rain"])[months]) / max(np.sum(np.array(r["rain_obs"])[months]), 1.0) for r in d.values()])
+        ax.scatter(x, y, color="#2471a3", s=25, zorder=3)
+        for name_r, xi, yi in zip(d, x, y):
+            ax.annotate(name_r.replace("_", " "), (xi, yi), fontsize=7, xytext=(3, 2), textcoords="offset points")
+        ax.set_xscale("log"); ax.set_yscale("log")
+        ax.axhline(1, color="k", lw=.8); ax.axvline(1, color="k", lw=.8); ax.grid(alpha=.3, which="both")
+        r = np.corrcoef(np.log(x), np.log(y))[0, 1]
+        ax.set_xlabel("model column water / NCEP precipitable water"); ax.set_ylabel("model rain / WorldClim rain")
+        ax.set_title(f"{name}: r = {r:.2f} (log)", fontsize=10)
+    k = d["korea"]
+    ax = axes[2]
+    ax.plot(range(12), k["W"], "-o", color="#c0392b", ms=3, label="r39 column water (mm)")
+    ax.plot(range(12), k["pw"], "-", color="k", lw=2, alpha=.6, label="NCEP precipitable water (mm)")
+    ax2 = ax.twinx()
+    ax2.plot(range(12), k["rain"], "--", color="#c0392b", label="r39 rain (mm/month)")
+    ax2.plot(range(12), k["rain_obs"], "--", color="k", alpha=.6, label="WorldClim rain (mm/month)")
+    ax.set_xticks(range(12)); ax.set_xticklabels(list("JFMAMJJASOND")); ax.grid(alpha=.3)
+    ax.set_ylabel("column water (mm)"); ax2.set_ylabel("rain (mm/month)")
+    h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
+    ax.legend(h1 + h2, l1 + l2, fontsize=7, loc="upper left")
+    ax.set_title("Korea: winter column 85 % too moist, summer 17 % too dry", fontsize=10)
+    fig.suptitle("Where the rain's seasons go wrong: winter rain follows too-moist columns; summer rain does not", fontsize=11)
+    plt.tight_layout()
+    plt.savefig(OUT / "column_water.png", dpi=85)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     what = sys.argv[1]
@@ -264,6 +298,8 @@ if __name__ == "__main__":
         dryheat(sys.argv[2:])
     elif what == "monsoon":
         monsoon(sys.argv[2], sys.argv[3:])
+    elif what == "columnwater":
+        columnwater(sys.argv[2])
     elif what == "refit":
         refit(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     else:

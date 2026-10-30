@@ -13,9 +13,10 @@ def test_new_switches_default_off_and_are_classified():
     p = Params()
     assert p.dry_heating == 0.0 and p.dry_heating_chi0 == 0.0 and p.wind_source == 'model'
     assert p.monsoon_westerly == 0.0 and p.itcz_shift_ocean < 0 and p.shelf_warm_currents == 0.0
+    assert p.zonal_land_friction == 0.0 and p.ocean_column_air == 0.0
     validate_partition()
     assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
-            'shelf_warm_currents'} <= SHARED_FIELDS
+            'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -29,6 +30,9 @@ def test_new_switches_default_off_and_are_classified():
     (dict(dry_heating=3.0, dry_heating_chi0=0.6, continentality=0.0), 'advected land share'),
     (dict(monsoon_westerly=1.5), 'monsoon_westerly must be'),
     (dict(shelf_warm_currents=1.2), 'shelf_warm_currents must be'),
+    (dict(zonal_land_friction=1.0), 'zonal_land_friction must be'),
+    (dict(ocean_column_air=1.5), 'ocean_column_air must be'),
+    (dict(ocean_column_air=0.5, column_saturation_scheme='pressure-moist'), 'ocean_column_air must be'),
     (dict(monsoon_westerly=0.7, monsoon_pressure_hpa=-1.0), 'monsoon_pressure_hpa must be'),
 ])
 def test_invalid_switches_are_refused_before_any_run(changes, message):
@@ -87,3 +91,20 @@ def test_shelf_rule_only_removes_warm_current_over_shallow_sea():
     assert warm[:, :2].all() and not warm[:, 2:].any()
     assert np.allclose(shelf[:, 0], To[:, 0])             # warm current kept off the shelf
     assert np.array_equal(shelf[:, 1:], plain[:, 1:])     # deep warm water and cold currents unchanged
+
+
+def test_land_friction_slows_the_zonal_belts_over_land_only():
+    import numpy as np
+    from types import SimpleNamespace
+
+    p = r39().replace(retrograde=False, north_bearing=0.0)
+    lat = np.linspace(-30, 70, 101)[:, None] * np.ones((1, 4))
+    share = np.array([[0.0, 0.0, 0.5, 1.0]] * 101)          # sea, sea, coast, interior
+    fake = SimpleNamespace(p=p, lat=lat, hadley_scale=1.0, land_broad=np.zeros_like(lat), land_friction=share,
+                           g=SimpleNamespace(land=share > 0.4, cell_km=56.0))
+    u0, v0, _, _ = ClimateModel.zonal_wind(fake, -1.0)
+    fake.p = p.replace(zonal_land_friction=0.6)
+    u1, v1, _, _ = ClimateModel.zonal_wind(fake, -1.0)
+    assert np.array_equal(u1[:, :2], u0[:, :2]) and np.array_equal(v1[:, :2], v0[:, :2])
+    assert np.allclose(u1[:, 2], 0.7 * u0[:, 2]) and np.allclose(u1[:, 3], 0.4 * u0[:, 3])
+    assert np.allclose(v1[:, 3], 0.4 * v0[:, 3])

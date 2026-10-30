@@ -145,6 +145,7 @@ class Params:
 
     # ---------------------------------------------------------------- water
     ocean_rh: float = 0.80
+    ocean_column_air: float = 0.0     # e58: share of the way the sea's column water moves from saturation at the SST to saturation at a colder column temperature (0.4 SST + 0.6 air over ~300 km)
     evap_tau_days: float = 2.0
     land_recycling: float = 0.35      # fraction of land P re-evaporated
     precip_tau_days: float = 6.0      # background rain-out time scale
@@ -213,6 +214,7 @@ class Params:
     monsoon_heating: float = 0.0      # e4b: m/s per mm/day x tan(lat) of meridional inflow toward warm rain (0 = off)
     monsoon_rain0: float = 1.0        # e4b: warm-season rain (mm/day) with no inflow; drier skies drive outflow
     trade_land: float = 0.0           # e4b: summer weakening of the trades over continental-scale land (0-1)
+    zonal_land_friction: float = 0.0  # e57: share by which surface friction over land slows the zonal belts (land smoothed over ~300 km; the pressure wind has its own land drag, e5)
     far_fetch: float = 0.0            # e6: weight of the far-field upwind land share at the domain edge (0 = local land)
     wind_cap: float = 0.0             # e6: m/s ceiling of the temperature-driven wind, soft above half of it (0 = none)
     soil_bucket_mm: float = 0.0       # e8: soil water a land cell holds for energy-limited evaporation (0 = recent-rain recycling)

@@ -1,0 +1,17 @@
+{
+ "frozen": "2026-10-30, before any result of this search; after the second refit (calibration/monsoon_refit2_20261030: lowest cost S 0.9949, training 1.0005 failed) and the e57 and e58 screens recorded in reports/PHYSICS_GAPS_20261030.md",
+ "why": "The second refit failed only the training group (California, Iberia), because its shorter rain residence time, needed to give South Brazil and Japan back their rain, wets winter-rain coasts that are already too wet. r39's winter columns are 1.3-1.85x NCEP's precipitable water in 14 regions, and the winter rain error follows them (r 0.67 in log); e58 (one-sided: the sea's column water saturates at the column temperature where that is colder than the sea) dries East Asia's and East Australia's winters and moves the training group to 0.988 on the second winner, but costs South Brazil, Japan and the British Isles annual rain they already lack. This search lets the residence time, the shelf rule and e58 settle that trade-off together. Land friction on the zonal belts (e57) is net harmful and is left out.",
+ "start": "calibration/monsoon_refit2_20261030/search/best_params.json",
+ "set": {"ocean_column_air": 0.25},
+ "reference": "output/earth_correction_20261030/r39_dev31",
+ "knobs": [["monsoon_westerly", 0.5, 1.0], ["monsoon_pressure_hpa", 1.0, 5.0], ["shelf_warm_currents", 0.0, 1.0],
+           ["ocean_column_air", 0.0, 0.6], ["itcz_shift", 11.0, 17.0], ["precip_tau_days", 8.5, 12.5],
+           ["monsoon_descent", 0.008, 0.03]],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 37,
+ "evals": 56,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r39 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/physics_gaps_20261030/refit3 BEST=calibration/monsoon_refit3_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r39 (policy v2), then the paired 28 km check (S not worse by more than 1 %), then the sealed six once only if both pass. Failing any step means nothing is adopted; every result is reported."
+}

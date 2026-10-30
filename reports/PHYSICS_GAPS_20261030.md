@@ -382,6 +382,84 @@ r39's winter-wet bias, not by the monsoon or shelf rules.
 
 ![Second refit](../output/physics_gaps_20261030/monsoon_refit2.png)
 
+## 10. Land friction on the zonal belts (e57, opt-in, not adopted)
+
+NCEP's January surface westerlies over land are 1–2 m/s (Iberia 0.9, central
+Europe 1.3–1.7, US Midwest 2.0); r39's are 4–7 (its belts peak at 11 m/s in
+winter and only the pressure-driven part has a land drag), and with observed
+winds California's, Iberia's and Morocco's winter rain comes out right (158,
+117, 64 mm against 166, 133, 77; r39 247, 202, 129). `zonal_land_friction`
+slows the belts by that share on land smoothed over 300 km.
+
+| 31 regions | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| e57 0.3 | −0.3 % | +0.7 % | 1.0019 | 1.014 | 0.991 | 0.989 | 1.006 |
+| e57 0.5 | 0.0 % | +1.8 % | 1.0088 | 1.030 | 0.987 | 0.992 | 1.014 |
+| e57 0.7 | +1.1 % | +3.4 % | 1.0225 | 1.054 | 0.988 | 1.007 | 1.027 |
+| second refit winner + e57 0.5 | +0.7 % | −0.7 % | 0.9998 | 1.027 | 0.984 | 0.978 | 0.999 |
+
+The US Midwest (T ×0.86, seasonal range −4.1 → −3.2 °C), western Europe, the
+Great Basin, Mexico, Cape and California improve; the interiors that live on
+westerly water and sea air lose both: Central Asia, Anatolia and the Levant
+(rain −9 to −17 %, seasonal ranges that are already too large grow by up to
+1.7 °C), the Pacific Northwest and the Alps. The model's one wind is both the
+surface wind (heat) and the transport wind (water at ~850 hPa, which friction
+barely slows); r39's strength is a compromise between them, not an error by
+itself.
+
+## 11. Winter columns too moist (e58, opt-in)
+
+`scripts/compare_column_water.py` sets r39's monthly column water beside
+NCEP's precipitable water over each region's scored land. In winter the
+column is 1.3–1.85× NCEP in 14 regions (Korea 11.8 against 6.4 mm, Japan
+14.7/8.3, North China Plain 9.6/5.9, East Australia 23.3/13.2, Cape, Mexico,
+Morocco, California, Great Basin), and the winter rain error follows the
+column (r 0.67 in log across 31 regions). In summer the columns are close
+(East Asia 0.8–0.9×) while the rain is 0.5–0.8× and does not follow them
+(r 0.08): summer rain is a rain-making problem, not a supply one. (Mountain
+regions read high against a 2.5° reanalysis that sees lower ground.)
+
+![Column water](../output/physics_gaps_20261030/column_water.png)
+
+The sea's column target is 80 % of saturation at the SST, while the column
+capacity that sets rain uses 0.4 SST + 0.6 the air over ~300 km. Under cold
+continental air (the Yellow Sea at 8–14 °C under −5 °C air) the sea column
+held more than the air above can, and the surplus rained or mixed onto the
+coasts. `ocean_column_air` saturates the sea column at the column
+temperature where that is colder than the sea (b × min(T_col − SST, 0)); a
+two-sided first form also moistened columns over cold upwelling seas (warm
+air over the California Current) and was replaced on that ground.
+
+| 31 regions | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| e58 0.5 | −0.2 % | 0.0 % | 0.9989 | **0.988** | 1.021 | 0.993 | 0.999 |
+| e58 1.0 | −0.3 % | +2.3 % | 1.0099 | 0.984 | 1.057 | 1.000 | 1.010 |
+| second refit winner + e58 1.0 | +0.3 % | +0.1 % | 1.0021 | 0.988 | 1.049 | 0.986 | 0.997 |
+| (two-sided form 0.5) | +0.1 % | −0.7 % | 0.9971 | 0.992 | 1.011 | 0.990 | 0.997 |
+
+| region | winter rain (observed) r39 → 0.5 → 1.0 | annual (observed) | rain loss |
+|---|---|---|---|
+| Korea | (94) 292 → 155 → 57 | (1257) 1241 → 1037 → 897 | 0.375 → 0.369 → 0.427 |
+| Japan | (192) 464 → 255 → 101 | (1601) 1330 → 1034 → 827 | 0.399 → 0.453 → 0.568 |
+| Manchuria | (19) 49 → 32 → 21 | (582) 690 → 650 → 619 | 0.291 → 0.250 → 0.224 |
+| East China | (117) 141 → 95 → 69 | (1281) 1339 → 1231 → 1147 | 0.320 → 0.310 → 0.321 |
+| East Australia | (105) 210 → 185 → 162 | (641) 1068 → 946 → 837 | 0.552 → 0.433 → 0.338 |
+| British Isles | (313) 251 → 216 → 184 | (1083) 1001 → 834 → 693 | 0.295 → 0.344 → 0.435 |
+| South Brazil | (222) 143 → 131 → 120 | (1256) 713 → 646 → 584 | 0.562 → 0.609 → 0.663 |
+
+East Asia's winters, East Australia and Manchuria improve strongly and the
+training group, the second refit's blocker, moves to 0.988. The cost is
+annual rain in regions already short of it in summer (Japan, South Brazil,
+the British Isles, where r39's winter column was right): the summer rain
+deficit, not e58, is what those need.
+
+## 12. Third frozen refit (in progress)
+
+`calibration/monsoon_refit3_20261030/plan.json`, committed before any
+result: the second refit's knobs plus ocean_column_air [0, 0.6] and a wider
+precip_tau_days [8.5, 12.5], from the second winner with e58 at 0.25,
+56 evaluations. Validation as in §7 into `output/physics_gaps_20261030/refit3/`.
+
 ## Plan for the next physics milestone
 
 1. **East Asia's summer and the mid-latitude land column.** The refit is
@@ -418,6 +496,11 @@ python -I scripts/physics_gap_figures.py monsoon output/physics_gaps_20261030/at
 python -I scripts/gate_calibrate.py --plan calibration/monsoon_refit2_20261030/plan.json --out calibration/monsoon_refit2_20261030/search
 OUT=output/physics_gaps_20261030/refit2 BEST=calibration/monsoon_refit2_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
 python -I scripts/physics_gap_figures.py refit calibration/monsoon_refit2_20261030/search precip_tau_days output/physics_gaps_20261030/refit2 "Second frozen refit (shelf rule + ITCZ): best S 0.9949, training group 1.0005 - not adopted"
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r39_params.json --regions dev31 --set '{"zonal_land_friction": 0.5}' --out output/physics_gaps_20261030/landfric_lf0.5
+python -I scripts/compare_column_water.py --params calibration/local_accuracy_20261023/r39_params.json --out output/physics_gaps_20261030/column_water_r39.json
+python -I scripts/physics_gap_figures.py columnwater output/physics_gaps_20261030/column_water_r39.json
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r39_params.json --regions dev31 --set '{"ocean_column_air": 0.5}' --out output/physics_gaps_20261030/oca_0.5
+python -I scripts/gate_calibrate.py --plan calibration/monsoon_refit3_20261030/plan.json --out calibration/monsoon_refit3_20261030/search --hours 3
 ```
 
 The dry-heating and monsoon runs kept here hold each run's summary and

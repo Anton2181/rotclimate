@@ -90,6 +90,7 @@ def w_sat(T):
 GYRE_LAT = (30.0, 40.0)          # e42: open sea poleward to 30 deg: no cold current; to 40 deg: the full one
 DEEP_SEA_M = (100.0, 400.0)      # e50: winter overturning reaches stored heat in none of a sea this shallow, all of one this deep
 SHELF_KM = (50.0, 150.0)         # e50: ... where no depth is known, the shelf ends this far from the coast
+LAND_FRICTION_KM = 300.0         # e57: scale over which a surface wind slows from the sea's to the land's
 TROPICAL_SST = (26.0, 28.0)      # e47: tropical disturbances form over seas this warm (none below, all above)
 TROPICAL_OPEN = (0.3, 0.6)       # e47: ... and this open (sea share within TROPICAL_OPEN_KM)
 TROPICAL_OPEN_KM = 800.0
@@ -259,6 +260,10 @@ class ClimateModel:
             raise ValueError('shelf_warm_currents must be in [0, 1]')
         if not 0 <= params.monsoon_westerly <= 1:
             raise ValueError('monsoon_westerly must be in [0, 1]')
+        if not 0 <= params.zonal_land_friction < 1:
+            raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.ocean_column_air <= 1 or (params.ocean_column_air > 0 and params.column_saturation_scheme != 'legacy'):
+            raise ValueError('ocean_column_air must be in [0, 1] and needs the legacy column saturation')
         if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
             raise ValueError('monsoon_pressure_hpa must be >= 0 and needs the pressure winds (slp_large or slp_local > 0)')
         if params.wind_source not in ('model', 'observed'):
@@ -522,6 +527,10 @@ class ClimateModel:
         # across coasts over ~100 km)
         self.bl_drag = ndi.gaussian_filter(np.where(g.land, p.bl_drag_land, p.bl_drag_ocean), cells_per_100km,
                                            mode="nearest")
+        # e57: land share over the ~300 km a surface wind takes to adjust to
+        # the rougher ground (internal boundary layer)
+        self.land_friction = (ndi.gaussian_filter(land, LAND_FRICTION_KM / g.cell_km, mode="nearest")
+                              if p.zonal_land_friction > 0 else None)
         # e4b: land fraction at the scale of continents (summer trade weakening)
         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
@@ -636,6 +645,14 @@ class ClimateModel:
         xi = np.clip((lat - phi_p) / 30.0, 0, 1)
         u = np.where(m, -p.polar_speed * np.sin(np.pi * xi), u)
         v = np.where(m, -0.3 * p.polar_speed * np.sin(np.pi * xi), v)
+        if p.zonal_land_friction > 0:
+            # e57: the belts are the sea's surface winds. Over land the rougher
+            # ground slows them (NCEP January surface westerlies 1-2 m/s over
+            # Iberia, central Europe and the US Midwest against 7-8 in r39,
+            # which carried winter Atlantic water far into Iberia and the
+            # Great Basin); the pressure-driven part already has its land drag
+            f = 1.0 - p.zonal_land_friction * self.land_friction
+            u, v = u * f, v * f
         if p.retrograde:
             u = -u
         if p.north_bearing % 360.0:     # true east/north -> map right/up
@@ -1367,6 +1384,17 @@ class ClimateModel:
             else:
                 Ws = w_sat(T_col - column_lapse * h_km) * np.exp(-h_km / 6.0)
             if p.column_saturation_scheme=='legacy':ocean_saturation=w_sat(SST)
+            if p.ocean_column_air > 0:
+                # e58: the sea saturates its boundary layer, not the column above
+                # it. Cold continental air over a warm sea (the Yellow Sea and
+                # the Sea of Japan in January, SST 8-14 C under -5 C air) holds
+                # far less than 80 % of a column at the SST (NCEP 6 mm over
+                # Korea, r39 11), and the surplus rained or mixed onto the
+                # coasts (Korea 290 mm in winter against 94). Saturate at the
+                # column temperature that sets the rain capacity (T_col) where
+                # it is colder than the sea; warm air over a cold sea (upwelling
+                # coasts) is stable and gains no more than the sea can give.
+                ocean_saturation = w_sat(SST + p.ocean_column_air * np.minimum(T_col - SST, 0.0))
             if p.moisture_reservoirs:
                 from .column_thermodynamics import saturation_column
                 if p.moisture_reservoir_temperature_profile=='environmental':
