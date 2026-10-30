@@ -1,4 +1,4 @@
-# Handoff — Earth temperature correction (30 October 2026)
+# Handoff — Earth temperature and rain-pattern corrections (30 October 2026)
 
 Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall
 benchmark, terrain research cores, detached jobs of an earlier container that
@@ -16,8 +16,11 @@ no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 * New: `rotclimate/correction.py` (numpy-only application),
   `scripts/train_earth_correction.py`, `scripts/evaluate_earth_correction.py`,
   `scripts/plot_earth_correction.py`, `tests/test_earth_correction.py`.
-  Model files: `calibration/earth_correction_20261030/` (final model, 12
-  held-out fold models, evaluation, protocol hashes). Evidence and figures:
+  Rain pattern: `scripts/collect_earth_fields.py` (full-grid monthly winds),
+  `scripts/train_rain_pattern.py`, `scripts/evaluate_rain_pattern.py`.
+  Model files: `calibration/earth_correction_20261030/` and
+  `calibration/earth_rain_pattern_20261030/` (final model, 12 held-out fold
+  models, evaluation, protocol hashes each). Evidence and figures:
   `output/earth_correction_20261030/`. Report: `reports/EARTH_CORRECTION_20261030.md`.
 
 ## Measured (held out by geographic cluster)
@@ -26,8 +29,13 @@ Monthly land T MAE 1.793 → 1.540 °C over 31 regions, every policy group
 better; 28 km pairs 1.896 → 1.274; 14 km pairs (atlas scale) 1.908 → 1.288; sealed Norway/SE Africa 2.621 → 2.143.
 Worse: six regions (South Brazil +0.22 °C worst), seasonal range MAE +6 %,
 coldest month +1 %. Köppen agreement ~unchanged (rain dominates classes).
-Rain corrections were tested and **rejected** (cluster holdout made unseen
-continents worse). Air-coupled SST seasonality (e53) and coupling retunes
+Rain *amount* corrections were **rejected** (cluster holdout made unseen
+continents worse). A **local rain pattern** (wind over terrain, 300 km local
+mean removed) passes: loss 0.4424 → 0.4281, every group better, 4 regions
+slightly worse (western Europe +0.027); 28 km −1.8 %, 14 km −1.5 %, sealed
+−2.4 %. Köppen exact 47.1 → 48.6 % with both stages; main group dips on fine
+grids (California, New Zealand). A domain-mean version made broad shifts on
+the larger map and was replaced. Air-coupled SST seasonality (e53) and coupling retunes
 were tested and **rejected** (S 0.999–1.023), code reverted.
 
 Full test suite: 1605 pass; 7 fail identically on the pre-session commit
@@ -44,8 +52,9 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
-1. r39 world refit that scores painted zones on corrected temperatures; atlas
-   layers raw + corrected.
+1. r39 world refit that scores painted zones on corrected temperature and
+   rain; atlas layers raw + corrected. Preview (unadopted world, one layout):
+   strict painted-zone accuracy 0.314 → 0.325 with both stages.
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.

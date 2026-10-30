@@ -103,3 +103,67 @@ def test_adopted_correction_records_its_physics_and_evidence():
     for name, digest in protocol['files'].items():
         assert hashlib.sha256((ADOPTED / name).read_bytes()).hexdigest() == digest
     assert sorted(meta['trained_on']) == sorted(sum(meta['clusters'].values(), []))
+
+
+RAIN_ADOPTED = Path('calibration/earth_rain_pattern_20261030')
+
+
+def ridge_grid(cell_km=20.0, ny=30, nx=60):
+    yy, xx = np.mgrid[0:ny, 0:nx]
+    land = np.ones((ny, nx), bool)
+    elev = 100.0 + 2000.0 * np.exp(-((xx - nx // 2) * cell_km / 60.0) ** 2)   # a north-south ridge
+    return SimpleNamespace(land=land, elev=elev, lat=np.full((ny, nx), 40.0), cell_km=cell_km, inmap=land.copy())
+
+
+def test_wind_terrain_fields_follow_the_wind_direction():
+    from rotclimate.correction import wind_terrain_features
+
+    g = ridge_grid()
+    mask = np.zeros(g.land.shape, bool)
+    mask[15, 30 - 200 // 20] = True                  # 200 km west of the crest
+    west = np.ones((12,) + g.land.shape) * 8.0         # westerly: blowing toward the ridge
+    calm = np.zeros_like(west)
+    w = wind_terrain_features(g, west, calm, mask)
+    e = wind_terrain_features(g, -west, calm, mask)
+    assert (w['barrier_down400'] > 1000).all() and (w['barrier_up400'] < 1).all()
+    assert (e['barrier_up400'] > 1000).all() and (e['barrier_down400'] < 1).all()
+    assert (w['upslope_s300'] > 0).all() and (e['upslope_s300'] < 0).all()
+    assert np.allclose(w['wind_speed'], 8.0) and np.allclose(w['sea_up1000'], 0.0)
+
+
+def test_rain_pattern_is_local_and_leaves_other_cells():
+    from rotclimate.correction import (RAIN_FEATURES, RainPatternCorrection, TreeEnsemble, local_mean,
+                                       season_phase, static_features, wind_terrain_features)
+
+    g = ridge_grid()
+    T, P = toy_climate(g)
+    u, v = np.ones_like(T) * 6.0, np.zeros_like(T)
+    mask = g.land & (np.arange(g.land.shape[1]) < 45)[None]
+    # a uniform prediction is entirely removed by the local mean: no change
+    flat = TreeEnsemble(0.7, np.array([0, 1]), np.zeros(1, np.int32), np.zeros(1), np.full(1, -1), np.full(1, -1),
+                        np.ones(1, bool), np.zeros(1))
+    assert np.allclose(RainPatternCorrection(flat, dict(pattern_weight=1.0)).apply(T, P, u, v, g, mask=mask), P)
+    trees = toy_ensemble(7)
+    trees.feature = np.random.default_rng(5).integers(0, len(RAIN_FEATURES), trees.feature.shape).astype(np.int32)
+    corr = RainPatternCorrection(trees, dict(pattern_weight=0.5))
+    Pc = corr.apply(T, P, u, v, g, mask=mask)
+    assert np.array_equal(Pc[:, ~mask], P[:, ~mask]) and (Pc >= 0).all()
+    values = np.random.default_rng(1).normal(size=(12, mask.sum()))
+    assert np.allclose(local_mean(np.ones_like(values), mask, g.cell_km), 1.0)
+    assert np.abs(local_mean(values, mask, g.cell_km)).max() < np.abs(values).max()
+
+
+@pytest.mark.skipif(not (RAIN_ADOPTED / 'correction.npz').exists(), reason='adopted rain pattern not present')
+def test_adopted_rain_pattern_records_its_physics_and_evidence():
+    from rotclimate.correction import RainPatternCorrection
+
+    corr = RainPatternCorrection.load(RAIN_ADOPTED / 'correction.npz')
+    params = Path(corr.meta['physics_params'])
+    assert hashlib.sha256(params.read_bytes()).hexdigest() == corr.meta['physics_params_sha256']
+    assert corr.weight == 1.0 and corr.meta['local_km'] == 300.0 and corr.meta['held_out_loss'] < corr.meta['raw_loss']
+    protocol = json.loads((RAIN_ADOPTED / 'protocol.json').read_text())
+    for name, digest in protocol['files'].items():
+        assert hashlib.sha256((RAIN_ADOPTED / name).read_bytes()).hexdigest() == digest
+    evaluation = json.loads((RAIN_ADOPTED / 'evaluation.json').read_text())
+    chosen = next(g for g in evaluation['grid'] if g['pattern_weight'] == corr.weight)
+    assert chosen['eligible'] and all(v < 1 for v in chosen['group_ratio'].values())

@@ -92,3 +92,45 @@ def main():
 
 if __name__ == "__main__":
     main()
+
+
+RAIN_MAPS = ["patagonia", "chile", "new_zealand", "pacific_nw", "mexico", "california", "north_india", "cape"]
+
+
+def plot_rain(d):
+    """Rain-pattern figures, when the rain evaluation exists."""
+    path = d / "eval_rain_dev31_holdout.json"
+    if not path.exists():
+        return
+    ev = json.loads(path.read_text())
+    fig, axes = plt.subplots(len(RAIN_MAPS) // 2, 6, figsize=(17, 12.5))
+    for n, r in enumerate(RAIN_MAPS):
+        z = np.load(d / "eval_rain_dev31_holdout" / f"{r}.npz")
+        ratio = lambda P: np.log2((P.sum(0) + 50) / (z["Po"].sum(0) + 50))
+        panels = (("observed mm/yr", np.log10(z["Po"].sum(0) + 1), "YlGnBu", (1.5, 3.5)),
+                  (f"raw ratio, loss {ev['regions'][r]['rain_raw']['loss']:.2f}", ratio(z["Ps"]), "BrBG", (-2, 2)),
+                  (f"corrected, loss {ev['regions'][r]['rain_corrected']['loss']:.2f}", ratio(z["Pc"]), "BrBG", (-2, 2)))
+        for k, (title, field, cmap, (lo, hi)) in enumerate(panels):
+            ax = axes.flat[3 * n + k]
+            im = ax.imshow(grid_of(z, field), cmap=cmap, vmin=lo, vmax=hi, interpolation="nearest")
+            ax.set_title(f"{r.replace('_', ' ')}: {title}" if k == 0 else title, fontsize=8)
+            ax.set_xticks([]); ax.set_yticks([])
+            if n == 0 and k == 0:
+                obs_im = im
+            if n == 0 and k == 1:
+                ratio_im = im
+    fig.colorbar(obs_im, ax=axes, orientation="horizontal", fraction=.025, pad=.01, anchor=(0.1, 1.0),
+                 label="observed annual rain, log10 mm")
+    fig.colorbar(ratio_im, ax=axes, orientation="horizontal", fraction=.025, pad=.04, anchor=(0.9, 1.0),
+                 label="log2 annual rain ratio, model / observed (brown too dry, green too wet)")
+    a, b = ev["groups"]["all"]["rain"]["loss"]["raw"], ev["groups"]["all"]["rain"]["loss"]["corrected"]
+    fig.suptitle(f"Held-out rain-pattern correction (wind over terrain; 300 km local mean removed): loss {a:.3f} → {b:.3f}", fontsize=11)
+    plt.savefig(d / "rain_pattern_maps.png", dpi=75, bbox_inches="tight")
+    plt.close(fig)
+
+
+if __name__ == "__main__":
+    import argparse as _a
+    _p = _a.ArgumentParser()
+    _p.add_argument("--dir", required=True)
+    plot_rain(Path(_p.parse_known_args()[0].dir))

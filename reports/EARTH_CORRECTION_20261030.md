@@ -1,14 +1,22 @@
-# Earth-trained temperature correction for r39, 30 October 2026
+# Earth-trained corrections for r39: temperature and local rain pattern, 30 October 2026
 
-**Result.** A new output stage corrects r39's monthly land temperatures with
-a model learned from the 31 Earth development regions. Scored the honest way
-(each region corrected by a model trained without its whole geographic
-cluster), monthly temperature error falls **1.793 → 1.540 °C (−14.1 %)** and
-every policy group improves. On the paired 28 km runs it falls 1.896 → 1.274 °C (14 km, the atlas scale:
-1.908 → 1.288), and on the two sealed regions, never used for anything, 2.621 → 2.143 °C.
-Rain is **not** corrected: no rain correction tested transferred between
-continents. Physics r39, its outputs and the published atlases are unchanged.
-This stage is not yet wired into the fantasy atlases (see *Next*).
+**Result.** Two new output stages correct r39 with models learned from the 31
+Earth development regions, using only inputs every map has. Scored the honest
+way (each region corrected by models trained without its whole geographic
+cluster):
+
+* **Temperature:** monthly error falls **1.793 → 1.540 °C (−14.1 %)**, every
+  policy group improving; paired 28 km runs 1.896 → 1.274 °C (14 km, the atlas
+  scale: 1.908 → 1.288), the two sealed regions 2.621 → 2.143 °C.
+* **Rain (local pattern, §8):** the model's own monthly winds over the terrain
+  move rain between windward slopes and rain shadows within ~300 km, leaving
+  larger-scale amounts alone. Rain loss falls **0.4424 → 0.4281 (−3.2 %)**,
+  every group improving (28 km −1.8 %, 14 km −1.5 %, sealed −2.4 %).
+  Correcting regional rain *amounts* failed between continents and is not done.
+
+Köppen class agreement over the 31 regions goes 47.1 % → 47.5 %
+(temperature) → 48.6 % (both). Physics r39, its outputs and the published
+atlases are unchanged; neither stage is wired into the atlases yet (see *Next*).
 
 ![Seasonal cycles before and after](../output/earth_correction_20261030/correction_seasonal_cycles.png)
 
@@ -136,7 +144,7 @@ Brazil +0.22 °C, Cape +0.18, North China Plain +0.16, East China +0.08,
 Central Asia +0.05, SW Australia +0.003). Seasonal range error worsens 6 %
 overall and 34 % in the former-holdout group; coldest-month error worsens
 slightly (1 %). Köppen agreement barely moves because classes depend heavily
-on rain, which is unchanged. The biggest gains are the maritime lag (western
+on rain, which this stage leaves unchanged. The biggest gains are the maritime lag (western
 Europe 1.95 → 0.92 °C, British Isles 2.44 → 1.54); the arid-interior cold bias
 improves only a little (Iran 3.31 → 3.11), because region-level offsets do
 not transfer reliably between continents.
@@ -153,7 +161,7 @@ region out looked promising (loss 0.442 → 0.408), but leaving out whole
 clusters made unseen continents **worse** in every variant: 0.511 with all
 features, 0.446–0.461 with rain-only features, and 0.441 at best (−0.3 %, with
 mid-latitudes worse). The apparent gain was neighbours sharing their errors.
-Rain stays as simulated; the rain loss remains 0.4424.
+Regional rain amounts stay as simulated; §8 corrects only the local pattern.
 
 ## 7. Preview on the invented map
 
@@ -178,6 +186,87 @@ that scores corrected temperatures.
 
 ![Map preview](../output/earth_correction_20261030/map_preview/map_correction.png)
 
+## 8. Rain: a local wind-over-terrain pattern
+
+**Hypothesis.** The rain-ratio maps show one pattern on several continents:
+windward mountain slopes too dry and lee sides too wet (Patagonia, Chile, New
+Zealand, Pacific NW, Mexico's Sierra Madre). The rain corrections of §6 had no
+information about the wind relative to the terrain.
+
+**Data.** `scripts/collect_earth_fields.py` reran every region and saved the
+full-grid monthly temperature, rain and surface winds; every region's scored
+cells reproduce the benchmark cells exactly (also for the 28 km, 14 km and
+sealed runs).
+
+**Predictors** (`correction.wind_terrain_features`, all lengths in km): wind
+speed; upslope flow (wind along the terrain gradient smoothed over 100 and
+300 km); the highest ground within 150 and 400 km upwind above the cell's own
+(rain shadow) and downwind (approach to a range), on terrain smoothed over
+50 km so they mean the same at any cell size; and the sea share along 300 and
+1,000 km upwind. They follow the simulated winds, so reversed spin needs no
+special handling.
+
+**Exploration** (leave-one-cluster-out, rain loss, raw 0.4424):
+
+| design | loss | groups |
+|---|---:|---|
+| monthly log ratio, base inputs, ×0.5 | 0.4538 | three worse |
+| monthly log ratio, base + wind, ×0.5 | 0.4434 | training, dev12 worse |
+| within-region pattern, base inputs, ×0.5 | 0.4366 | training 1.000 |
+| within-region pattern, base + wind, ×0.5 | 0.4295 | all better |
+| regional seasonal shape alone, ×0.5 | 0.4401 | 16 regions worse |
+| local pattern (600 km mean removed), ×0.7 | 0.4257 | all better, 6 regions worse |
+| **local pattern (300 km mean removed), ×1.0** | **0.4281** | **all better, 4 regions worse** |
+
+Within-region patterns transfer only with the wind predictors, which supports
+the hypothesis; regional amounts and seasons do not transfer. A first formal
+version removed the pattern's mean over the whole domain. On the map (a
+~3,700 km domain against Earth regions of 560–2,400 km) it produced a broad
+east–west shift no Earth test had validated, and lowered painted-zone strict
+accuracy 0.314 → 0.298. The adopted design removes the pattern's own Gaussian
+mean over **300 km** instead, the scale of rain shadows and below every
+training region, so it means the same on any domain. It was preferred to the
+slightly better 600 km version for that robustness; both are recorded.
+
+**Formal training** (`scripts/train_rain_pattern.py`, the same clusters and
+tree settings, ≥500 cell-months per leaf; rule fixed before the formal runs:
+among weights {1.0, 0.7, 0.5} the lowest held-out loss with every group
+improved and no region worse by more than 0.05):
+
+| weight | loss | training | former holdout | mid-latitude | dev12 | worst | regions worse |
+|---|---:|---:|---:|---:|---:|---|---:|
+| **1.0** | **0.4281** | 0.964 | 0.958 | 0.981 | 0.970 | western_europe +0.027 | 4 |
+| 0.7 | 0.4297 | 0.966 | 0.965 | 0.980 | 0.975 | western_europe +0.015 | 2 |
+| 0.5 | 0.4321 | 0.972 | 0.972 | 0.983 | 0.980 | western_europe +0.009 | 2 |
+
+| held out | rain loss | annual log RMSE | monthly MAE (mm) | annual within 25 % | Köppen exact raw / +T / +T+rain | Köppen main |
+|---|---:|---:|---:|---:|---:|---:|
+| all 31 | 0.442 → **0.428** | 0.448 → 0.432 | 30.75 → 30.07 | 38.4 → 40.8 % | 47.1 / 47.5 / 48.6 % | 74.8 / 74.9 / 75.9 % |
+| paired 28 km (4) | 0.437 → 0.429 | 0.430 → 0.421 | 48.51 → 47.86 | 42.5 → 42.5 % | 42.3 / 45.6 / 46.7 % | 78.0 / 81.8 / 80.8 % |
+| paired 14 km (4) | 0.452 → 0.445 | 0.451 → 0.443 | 49.92 → 49.35 | 42.2 → 42.5 % | 41.2 / 45.0 / 45.5 % | 77.6 / 81.7 / 80.5 % |
+| sealed (2, final model) | 0.580 → 0.566 | 0.592 → 0.575 | 43.63 → 42.64 | 14.4 → 15.8 % | 12.5 / 15.7 / 15.7 % | 40.3 / 41.1 / 41.1 % |
+
+Largest gains: Patagonia −0.065, North India −0.049, Chile −0.044, Cape
+−0.040, Iran −0.039, California −0.033. Worse: western Europe +0.027, Alps
++0.017, British Isles +0.003, Great Basin +0.002; at 28/14 km western Europe
+again, and sealed SE Africa (0.603 → 0.609). Gains are smaller on finer grids
+than at the 56 km training resolution. Köppen main-group agreement falls on
+the fine grids (California 57.1 → 54.0 % at 14 km, New Zealand 89.9 → 87.5 %):
+some cells cross the arid/temperate threshold the wrong way although their
+rain error shrinks. The large west-coast deficits remain: they are regional
+amounts, which this stage deliberately leaves to the physics.
+
+![Rain pattern](../output/earth_correction_20261030/rain_pattern_maps.png)
+
+**On the map** (the same preview run, the world's own winds, local means over
+the drawn land): mean absolute change 6.8 % (log2 0.095), 2.4 % of cells
+change by more than 25 %, total rain −1.4 %. Painted-zone fit (information
+only): strict accuracy 0.314 raw, 0.314 with temperature, **0.325 with both**;
+mean membership 0.300 / 0.303 / 0.307; tree recall 0.064 → 0.175 and warm-wet
+0.342 → 0.398 rise, Mediterranean 0.620 → 0.584 falls.
+
+![Map rain pattern](../output/earth_correction_20261030/map_preview/map_rain_pattern.png)
+
 ## Validity and use
 
 * Valid only for r39 physics: `correction.npz` records the parameter file
@@ -186,12 +275,16 @@ that scores corrected temperatures.
   simulation must always be kept and shown alongside.
 * `TemperatureCorrection.apply(Tm, Pm, grid, year_days, winter_solstice_day)`
   takes 12-month fields from `koppen.monthly_stats` on any grid.
+* `RainPatternCorrection.apply(Tm, Pm, um, vm, grid, year_days, winter_solstice_day, mask)`
+  also needs the monthly surface winds (see `scripts/preview_map_correction.py`);
+  only cells in mask (default the drawn land) enter its local means.
 
 ## Next
 
-1. Use the corrected temperatures in the r39 world refit (score the painted
-   zones on corrected monthly fields), then publish an atlas with raw and
-   corrected layers side by side.
+1. Use the corrected temperature and rain in the r39 world refit (score the
+   painted zones on corrected monthly fields), then publish an atlas with raw
+   and corrected layers side by side. Check summer-heat zones (range) and the
+   arid/temperate boundary (California's Köppen main group) first.
 2. Physics: the maritime lag needs a boundary layer that is not almost
    entirely sea-controlled (a land surface layer or two-tile coast) plus a
    recalibration; a two-scale relief lapse is a small, cheap follow-up.
@@ -208,7 +301,17 @@ python -I scripts/plot_earth_correction.py --dir output/earth_correction_2026103
 
 The 28 km and 14 km (`--cell-km 28` / `14`, california western_europe japan new_zealand) and
 sealed (`--region-specs calibration/climate_physics_20261023/rainfall_validation_regions.json`,
-norway southeast_africa) runs follow the same pattern. Training needs
+norway southeast_africa) runs follow the same pattern. The rain stage:
+
+```sh
+python -I scripts/collect_earth_fields.py --run output/earth_correction_20261030/r39_dev31 --params calibration/local_accuracy_20261023/r39_params.json --out output/earth_correction_20261030/fields_dev31
+python -I scripts/train_rain_pattern.py --run output/earth_correction_20261030/r39_dev31 --fields output/earth_correction_20261030/fields_dev31 --params calibration/local_accuracy_20261023/r39_params.json --out calibration/earth_rain_pattern_20261030
+python -I scripts/evaluate_rain_pattern.py --run output/earth_correction_20261030/r39_dev31 --fields output/earth_correction_20261030/fields_dev31 --rain calibration/earth_rain_pattern_20261030 --temperature calibration/earth_correction_20261030 --holdout --out output/earth_correction_20261030/eval_rain_dev31_holdout.json
+python -I scripts/preview_map_correction.py --params calibration/map_world_r39/world/best_params.json --correction calibration/earth_correction_20261030 --rain calibration/earth_rain_pattern_20261030 --downsample 16 --out output/earth_correction_20261030/map_preview
+```
+
+Training needs
 scikit-learn (1.9.1 used); `tests/test_earth_correction.py` checks the numpy
 trees against scikit-learn, the zero-mean shape term, unchanged sea and rain,
-km-based fields, the solstice calendar and the recorded evidence hashes.
+km-based fields, the solstice calendar, wind-direction handling, the local
+rain mean and the recorded evidence hashes of both stages.
