@@ -17,7 +17,10 @@ rain rises to 373 mm, but its temperature and the winter-rain coasts
 (California, Iberia) get slightly worse. Summer rain, still 0.5–0.8×
 observed almost everywhere, is now the largest systematic gap. The invented
 world and atlases are unchanged until a world refit on r40. See the
-[physics-gap report](reports/PHYSICS_GAPS_20261030.md).
+[physics-gap report](reports/PHYSICS_GAPS_20261030.md). A follow-up
+[summer-rain diagnosis](reports/SUMMER_RAIN_20261030.md) traces the humid
+summers' deficit to columns 10–22 % short of water, beginning over the sea;
+adding sea water (e59, a frozen refit) or slowing the sea does not beat r40.
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.

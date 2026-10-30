@@ -1,4 +1,4 @@
-# Summer rain: where r40 loses it, 30 October 2026
+# Summer rain: where r40 loses it (no adoption), 30 October 2026
 
 **Result so far.** r40's summer rain is 0.5–0.8× observed in most of the 31
 regions. Splitting the rain into the model's own factors shows two different
@@ -16,7 +16,11 @@ Existing settings (warm-sea humidity, land evaporation, soil depth, one-sided
 sea uptake) move the humid group only by flooding East China, East Australia
 and the south-east US, which are already too wet in summer. A new opt-in term
 (e59, warmer air over a cooler sea holds more, except under the subtropical
-highs' sinking) is screened below; a frozen refit with it is in progress.
+highs' sinking) is screened below. A frozen refit with it, the sea's
+column humidity and the rain residence time finds nothing better than r40
+(best S 1.0008, three groups worse), and a slower sea dries the humid
+regions instead. r40 stays; the summer needs season-aware rain-making, not
+more sea water.
 
 ## 1. The rain's factors (`scripts/rain_components.py`)
 
@@ -111,13 +115,55 @@ the sea too, and those regions' annual totals were already high (Manchuria
 680 against 582 mm, western Europe 924 against 875). At Japan's +1 K
 air–sea contrast it adds ~6 % to the column, where NCEP implies ~20 %.
 
-## 5. Frozen refit (in progress)
+## 5. Frozen refit: no improvement on r40
 
 `calibration/summer_refit_20261030/plan.json`, committed before any result:
 ocean_column_warm [0, 1], ocean_column_air [0, 0.6], ocean_rh [0.70, 0.82]
 and precip_tau_days [8.5, 12.5], every other r40 setting fixed, 40
-evaluations against a fresh r40 run, validated as for r40 (gate, 28 km,
-sealed six only if both pass) into `output/summer_rain_20261030/refit/`.
+evaluations against a fresh r40 run.
+
+No candidate beat its own start (e59 0.3 on r40): the lowest S of the 40 is
+0.9986 and the best worst group 1.0020; none reaches S ≤ 0.995. Validation
+as declared (`output/summer_rain_20261030/refit/`): development S 1.0008,
+training 1.0020, former holdout 0.9977, mid-latitude 1.0006, dev12 1.0014 →
+**fails** (no 0.5 % gain, three groups worse); 28 km 0.9973; sealed six not
+run. Nothing is adopted; r40 stays. The sea column's humidity, its two
+temperature sides and the rain residence time cannot move summer rain
+without moving the shoulder seasons and the already-wet subtropical east
+coasts with it.
+
+## 6. A slower sea (one more screen, not adopted)
+
+The sea column relaxes to its target in evap_tau_days = 0.40 days, i.e. a
+10 mm deficit evaporates at 25 mm/day where real seas give 3–6. A slower
+sea would let columns keep the water they bring from warmer seas upstream:
+
+| 31 regions against r40 | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| evap_tau_days 1.0 | −1.0 % | +2.1 % | 1.0055 | 0.989 | 1.041 | 1.001 | 1.004 |
+| evap_tau_days 2.5 | −1.4 % | +9.3 % | 1.0397 | 0.993 | 1.111 | 1.054 | 1.037 |
+
+Temperature and the dry west coasts (Iberia, the Cape, California, the Great
+Basin, East Australia, Iran) improve, but the humid regions lose water
+instead of keeping it (Japan 1.10 → 1.29, the British Isles 1.11 → 1.37,
+the Levant, Anatolia, South Brazil): in r40 the sea's fast uptake into dry
+air matters more than any upstream memory.
+
+## Conclusions and next step
+
+* The humid summer deficit is real and measurable: 10–22 % too little column
+  water, beginning over the sea, amplified ~3× by the rain gate.
+* Every lever that adds water to the sea column also adds it in spring and
+  autumn and to the subtropical east coasts, which are already too wet in
+  summer (East China, East Australia, south-east US 1.3–1.5×); every lever
+  that slows the sea dries the humid regions. The model has one column of
+  water per cell, so a seasonal rain error cannot be fixed by the sea alone.
+* What the summer seems to need is rain-making that responds to the season
+  and not only to column humidity: the instability boost starts at 22 °C and
+  the convective closure gives ~0.1 mm/day at mid-latitude summer humidity,
+  so mid-latitude summer convection is nearly absent; and the overflow of
+  supersaturated winter columns (Japan's winter rain) is the mirror error.
+  Both are the next things to test, against r40.
 
 ## Reproduce
 
@@ -126,4 +172,8 @@ python -I scripts/rain_components.py --params calibration/local_accuracy_2026102
 python -I scripts/compare_column_water.py --params calibration/local_accuracy_20261023/r40_params.json --regions japan korea western_europe british_isles us_midwest eastern_europe manchuria north_china_plain east_china southeast_us east_australia south_brazil --out output/summer_rain_20261030/column_water_r40_humid.json
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"ocean_column_warm": 0.5}' --out output/summer_rain_20261030/ocw05
 python -I scripts/gate_calibrate.py --plan calibration/summer_refit_20261030/plan.json --out calibration/summer_refit_20261030/search --hours 3
+OUT=output/summer_rain_20261030/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/summer_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
+python -I scripts/physics_gap_figures.py summer output/summer_rain_20261030/components_r40.json output/summer_rain_20261030/column_water_r40_humid.json
 ```
+
+![Summer rain](../output/summer_rain_20261030/summer_rain.png)

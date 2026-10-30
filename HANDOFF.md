@@ -108,11 +108,15 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
-0. Physics: summer rain-making (summer rain 0.5-0.8x observed in 25 of 31
-   regions with columns ~right; convective closure ~0.1 mm/day at summer
-   RH, instability boost only above 22 C). Then winter-rain coasts (separate
-   surface and transport winds) and North India's pre-monsoon cold.
-   Gate any change against r40 (fresh paired runs, same sources).
+0. Physics: summer rain-making. reports/SUMMER_RAIN_20261030.md: humid
+   summers lack 10-22 % column water (from the sea), x3 through the RH gate;
+   e59 (warm air over cooler sea, gated by subsidence), a frozen refit with
+   ocean_rh/e58/tau (best S 1.0008) and slower sea uptake all fail against
+   r40. Next: season-aware rain-making (mid-latitude summer convection is
+   ~absent: instability from 22 C, closure ~0.1 mm/day) and winter overflow
+   of supersaturated columns. Then winter-rain coasts and North India's
+   pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
+   in scripts/validate_monsoon_refit.sh).
 1. Retrain the Earth correction stages on r40; freeze a world refit for the
    invented map on r40 physics (r39's plan: calibration/map_world_r39/plan.json).
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because

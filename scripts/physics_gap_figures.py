@@ -8,6 +8,7 @@
     python -I scripts/physics_gap_figures.py refit SEARCH_DIR KNOB VALIDATION_DIR NAME   # gate_calibrate search + validation
     python -I scripts/physics_gap_figures.py columnwater output/physics_gaps_20261030/column_water_r39.json
     python -I scripts/physics_gap_figures.py adopted SEARCH_DIR KNOB VALIDATION_DIR NAME   # passing refit: search + every region
+    python -I scripts/physics_gap_figures.py summer output/summer_rain_20261030/components_r40.json output/summer_rain_20261030/column_water_r40_humid.json
 
 Output goes to output/physics_gaps_20261030/.
 """
@@ -302,6 +303,64 @@ def adopted(search, knob, validation, name):
     plt.close(fig)
 
 
+def summer(components, column_water):
+    """Summer rain against what the gate predicts from NCEP's column water, and
+    the sea's summer column against NCEP (reports/SUMMER_RAIN_20261030.md)."""
+    d = json.loads(Path(components).read_text())["regions"]
+    cw = json.loads((OUT / "column_water_r39.json").read_text())["regions"]
+    sea = json.loads(Path(column_water).read_text())["regions"]
+    th = json.loads((ROOT / "calibration/local_accuracy_20261023/r40_params.json").read_text())["rh_threshold"]
+    gate = lambda rh: np.clip((rh - th) / (1 - th), 0, 2) ** 1.5
+    S = [5, 6, 7]
+    fig, axes = plt.subplots(1, 3, figsize=(18, 5.8), gridspec_kw=dict(width_ratios=[1, 1, 0.9]))
+    ax = axes[0]
+    for r, x in d.items():
+        a = {k: np.array(v) for k, v in x.items()}
+        pw = np.array(cw[r]["pw"])
+        g_ncep = gate((pw[S] / a["Ws"][S]).mean())
+        if g_ncep < 0.05:
+            continue                                     # dry summers: the gate is at its threshold
+        pred = gate(a["RH"][S].mean()) / g_ncep
+        obs = a["rain"][S].sum() / a["rain_obs"][S].sum()
+        ax.scatter(pred, obs, color="#2471a3", s=25, zorder=3)
+        ax.annotate(r.replace("_", " "), (pred, obs), fontsize=7, xytext=(3, 2), textcoords="offset points")
+    lim = [0.3, 2.0]
+    ax.plot(lim, lim, "k--", lw=1); ax.set_xscale("log"); ax.set_yscale("log"); ax.grid(alpha=.3, which="both")
+    ax.set_xlabel("rain ratio the gate predicts from r40's column water / NCEP's")
+    ax.set_ylabel("r40 summer rain / WorldClim")
+    ax.set_title("Humid summers: the column's water explains the rain deficit", fontsize=10)
+    ax = axes[1]
+    names = list(sea)
+    land = [np.mean(np.array(sea[r]["W"])[S]) / np.mean(np.array(sea[r]["pw"])[S]) for r in names]
+    over = [np.mean(np.array(sea[r]["W_sea"])[S]) / np.mean(np.array(sea[r]["pw_sea"])[S]) for r in names]
+    y = np.arange(len(names))
+    ax.barh(y - 0.2, land, 0.4, color="#7d3c98", label="over land")
+    ax.barh(y + 0.2, over, 0.4, color="#2471a3", label="over the sea (within the grid)")
+    ax.axvline(1, color="k", lw=1); ax.set_yticks(y); ax.set_yticklabels([n.replace("_", " ") for n in names], fontsize=8)
+    ax.invert_yaxis(); ax.set_xlim(0.5, 1.4); ax.grid(alpha=.3, axis="x"); ax.legend(fontsize=8)
+    ax.set_xlabel("r40 summer column water / NCEP precipitable water")
+    ax.set_title("The deficit starts over the sea", fontsize=10)
+    ax = axes[2]
+    k = {kk: np.array(v) for kk, v in d["japan"].items()}
+    ax.plot(range(12), k["W"], "-o", color="#c0392b", ms=3, label="r40 column water W")
+    ax.plot(range(12), k["Ws"], "-", color="#d68910", label="r40 capacity Ws")
+    ax.plot(range(12), cw["japan"]["pw"], "-", color="k", lw=2, alpha=.6, label="NCEP precipitable water")
+    ax2 = ax.twinx()
+    ax2.plot(range(12), k["rain"], "--", color="#c0392b", label="r40 rain")
+    ax2.plot(range(12), k["rain_obs"], "--", color="k", alpha=.6, label="WorldClim rain")
+    ax.set_xticks(range(12)); ax.set_xticklabels(list("JFMAMJJASOND")); ax.grid(alpha=.3)
+    ax.set_ylabel("mm of column water"); ax2.set_ylabel("rain, mm/month")
+    h1, l1 = ax.get_legend_handles_labels(); h2, l2 = ax2.get_legend_handles_labels()
+    ax.legend(h1 + h2, l1 + l2, fontsize=7, loc="upper left")
+    ax.set_title("Japan: winter overflows (W > Ws), summer short of water", fontsize=10)
+    fig.suptitle("Summer rain in r40: humid regions lack column water, beginning over the sea", fontsize=11)
+    plt.tight_layout()
+    out = ROOT / "output/summer_rain_20261030"
+    out.mkdir(parents=True, exist_ok=True)
+    plt.savefig(out / "summer_rain.png", dpi=85)
+    plt.close(fig)
+
+
 def columnwater(path):
     """Winter and summer column water against NCEP beside the rain error, and Korea's year."""
     d = json.loads(Path(path).read_text())["regions"]
@@ -348,6 +407,8 @@ if __name__ == "__main__":
         dryheat(sys.argv[2:])
     elif what == "monsoon":
         monsoon(sys.argv[2], sys.argv[3:])
+    elif what == "summer":
+        summer(sys.argv[2], sys.argv[3])
     elif what == "adopted":
         adopted(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     elif what == "columnwater":
