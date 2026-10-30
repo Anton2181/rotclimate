@@ -1,24 +1,22 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
-**Physics gaps behind North India, 30 October 2026:** rerunning r39 with
-observed (NCEP) surface winds lifts North India's rain from 256 to 933 mm
-(761 observed) with nothing else changed, and real winds plus real sea remove
-most of the British Isles' and western Europe's month-late seasons. The model's
-circulation is the main gap: one planet-wide ITCZ, no cross-equatorial
-monsoon westerlies, and land winds 1.8× too strong; its sea is 1–3 °C too
-cold. Rain settings fitted to those winds flood Mexico, Texas and Iran when
-given real ones, so the fix needs a recalibration. An opt-in dry-ground
-heating term (e54) lifts North India and Iran by ~0.8 °C but fails the group
-gates. A first circulation fix, monsoon westerlies (e55), doubles North
-India's rain (256 → 482 mm) but wets regions where one planet-wide ITCZ puts
-monsoon flow that is not there. Gated by the model's own pressure (e55b) and
-refitted in a frozen 48-candidate search, the best candidate reaches S 0.9938
-(rain loss −1.5 %, North India 380 mm) but fails two region groups (East
-China, Texas, Manchuria). Those seas were 3–5 °C too warm in spring because a
-warm current covered the shelves; with a shelf rule (e56) a second frozen
-refit reaches S 0.9949 (rain −1.7 %, North India 374 mm, East Asia better)
-but misses the training group by 0.05 % (California and Iberia, whose winter
-rain r39 already has 50–90 % too high). Neither is adopted. See the
+**r40 adopted, 30 October 2026:** tracing North India's errors (256 mm of
+rain against 761) against reanalysis showed the model's circulation is the
+main gap: with observed surface winds North India gets 933 mm. Three new
+physical rules, all using only what an invented map has, follow from that
+diagnosis. Monsoon westerlies turn cross-equatorial trades where the model's
+own pressure falls poleward. Warm currents stay off shallow shelves (East
+Asia's seas were 3–5 °C too warm in spring). The sea's column cannot hold
+more water than the cold air above it (winter columns were up to 1.85× the
+reanalysis). After two frozen refits that each failed one region group, the
+third passes every check: 31-region S **0.9932** (rain loss −2.1 %,
+temperature +0.8 %, inside the 1 % allowance, every group better), 28 km
+0.9953, and the sealed six, run once, **0.9671**. It is adopted as
+[`r40`](calibration/local_accuracy_20261023/r40_params.json). North India's
+rain rises to 373 mm, but its temperature and the winter-rain coasts
+(California, Iberia) get slightly worse. Summer rain, still 0.5–0.8×
+observed almost everywhere, is now the largest systematic gap. The invented
+world and atlases are unchanged until a world refit on r40. See the
 [physics-gap report](reports/PHYSICS_GAPS_20261030.md).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's

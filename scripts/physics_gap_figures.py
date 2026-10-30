@@ -7,6 +7,7 @@
     python -I scripts/physics_gap_figures.py monsoon ATTRIBUTION_JSON RUN_DIR [RUN_DIR ...]   # runs with monsoon_westerly
     python -I scripts/physics_gap_figures.py refit SEARCH_DIR KNOB VALIDATION_DIR NAME   # gate_calibrate search + validation
     python -I scripts/physics_gap_figures.py columnwater output/physics_gaps_20261030/column_water_r39.json
+    python -I scripts/physics_gap_figures.py adopted SEARCH_DIR KNOB VALIDATION_DIR NAME   # passing refit: search + every region
 
 Output goes to output/physics_gaps_20261030/.
 """
@@ -252,6 +253,55 @@ def refit(search, knob, validation, name):
     plt.close(fig)
 
 
+def adopted(search, knob, validation, name):
+    """A refit that passed: its search (S against the worst group) and every
+    region's score against r39, development groups and the sealed six."""
+    from benchmark_local import GROUPS
+    rows = [json.loads(line) for line in (Path(search) / "evals.jsonl").read_text().splitlines()]
+    best = min(rows, key=lambda r: r["cost"])
+    fig, axes = plt.subplots(1, 2, figsize=(15, 7.5), gridspec_kw=dict(width_ratios=[1, 1.1]))
+    ax = axes[0]
+    ax.add_patch(plt.Rectangle((0.98, 0.98), 0.015, 0.02, color="#2ecc71", alpha=.15, label="gate passes here"))
+    sc = ax.scatter([r["S"] for r in rows], [max(r["groups"].values()) for r in rows], c=[r["knobs"][knob] for r in rows],
+                    cmap="viridis", s=40, zorder=3)
+    ax.scatter(rows[0]["S"], max(rows[0]["groups"].values()), s=150, facecolor="none", edgecolor="r", marker="s",
+               zorder=4, label="start")
+    ax.scatter(best["S"], max(best["groups"].values()), s=300, color="r", marker="*", zorder=5, label="lowest cost (adopted)")
+    ax.axhline(1.0, color="k", ls="--", lw=1); ax.axvline(0.995, color="k", ls="--", lw=1)
+    ax.set_xlim(0.98, 1.01); ax.set_ylim(0.98, 1.06); ax.grid(alpha=.3); ax.legend(fontsize=8)
+    ax.set_xlabel("31-region S (lower is better)"); ax.set_ylabel("worst region-group score")
+    plt.colorbar(sc, ax=ax, label=knob)
+    ax.set_title(f"{len(rows)} candidates", fontsize=10)
+    ax = axes[1]
+    v = Path(validation)
+    colours = dict(training="#c0392b", holdout="#2471a3", midlatitude="#229954", dev12="#7d3c98", sealed="#d68910")
+    names, scores, cols = [], [], []
+    for run_a, run_b, groups in (("r39_dev31", "candidate_dev31", GROUPS), ("r39_sealed6", "candidate_sealed6", None)):
+        if not (v / run_b / "summary.json").exists():
+            continue
+        a = json.loads((v / run_a / "summary.json").read_text())["regions"]
+        b = json.loads((v / run_b / "summary.json").read_text())["regions"]
+        for g, members in (groups.items() if groups else [("sealed", list(a))]):
+            for r in sorted(members, key=lambda r: -(0.5 * b[r]["temperature"]["monthly_mae_C"] / a[r]["temperature"]["monthly_mae_C"]
+                                                     + 0.5 * b[r]["rain"]["loss"] / a[r]["rain"]["loss"])):
+                names.append(r.replace("_", " ")); cols.append(colours[g])
+                scores.append(0.5 * b[r]["temperature"]["monthly_mae_C"] / a[r]["temperature"]["monthly_mae_C"]
+                              + 0.5 * b[r]["rain"]["loss"] / a[r]["rain"]["loss"] - 1.0)
+    y = np.arange(len(names))
+    ax.barh(y, scores, color=cols)
+    ax.set_yticks(y); ax.set_yticklabels(names, fontsize=7); ax.invert_yaxis()
+    ax.axvline(0, color="k", lw=1); ax.grid(alpha=.3, axis="x")
+    ax.set_xlabel("region score against r39 − 1 (negative = better)")
+    from matplotlib.patches import Patch
+    ax.legend(handles=[Patch(color=c, label="sealed six (run once)" if g == "sealed" else g) for g, c in colours.items()],
+              fontsize=8, loc="lower right")
+    ax.set_title("every development region and the sealed six", fontsize=10)
+    fig.suptitle(name, fontsize=11)
+    plt.tight_layout()
+    plt.savefig(OUT / f"{Path(search).parent.name.split('_2026')[0]}.png", dpi=85)
+    plt.close(fig)
+
+
 def columnwater(path):
     """Winter and summer column water against NCEP beside the rain error, and Korea's year."""
     d = json.loads(Path(path).read_text())["regions"]
@@ -298,6 +348,8 @@ if __name__ == "__main__":
         dryheat(sys.argv[2:])
     elif what == "monsoon":
         monsoon(sys.argv[2], sys.argv[3:])
+    elif what == "adopted":
+        adopted(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     elif what == "columnwater":
         columnwater(sys.argv[2])
     elif what == "refit":

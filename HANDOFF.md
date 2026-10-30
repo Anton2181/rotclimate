@@ -1,4 +1,4 @@
-# Handoff — Earth temperature and rain-pattern corrections (30 October 2026)
+# Handoff — Earth corrections, physics gaps and r40 (30 October 2026)
 
 Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall
 benchmark, terrain research cores, detached jobs of an earlier container that
@@ -6,9 +6,16 @@ no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 
 ## State
 
-* Adopted physics is still **r39** (`calibration/local_accuracy_20261023/r39_params.json`);
-  normal atlases still publish verified r38 world fields. Nothing in
-  `rotclimate/model.py`, `config.py` or `joint.py` changed this session.
+* Adopted Earth physics is now **r40** (`calibration/local_accuracy_20261023/r40_params.json`):
+  r39 plus e55/e55b monsoon westerlies, e56 shelf rule, e58 sea column under
+  cold air, and refitted itcz_shift / precip_tau_days / monsoon_descent.
+  Gate S 0.9932, 28 km 0.9953, sealed six 0.9671 (used once for r40).
+  Evidence: `output/physics_gaps_20261030/refit3/`, report §12.
+  Normal atlases still publish verified r38 world fields; no world refit on
+  r40 yet. New switches in `rotclimate/model.py` (e54-e58) all default off;
+  r39 cells reproduce bit for bit.
+* The Earth corrections below were trained on **r39** and must be retrained
+  for r40 (they check the physics hash).
 * Fresh-container setup: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt scikit-learn`;
   WorldClim 2.1 5′ `tavg prec elev vapr` zips into `data/cache/worldclim/`
   (geodata.ucdavis.edu); `python -I scripts/prepare_woa18.py --download`.
@@ -87,6 +94,9 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 * e58 `ocean_column_air`: sea column saturates at the column temperature
   where that is colder than the SST. Korea winter 292 -> 155 mm (94 obs),
   training group 0.988, but Japan/S Brazil/British Isles lose annual rain.
+* Third frozen refit calibration/monsoon_refit3_20261030 (+ e58, wider
+  precip_tau): 56 evals, one candidate clears every group and is the lowest
+  cost -> validated (gate 0.9932, 28 km 0.9953, sealed six 0.9671) -> r40.
 
 ## Rules to keep
 
@@ -98,15 +108,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
-0. Physics milestone: the second refit is blocked by r39's winter-wet bias on
-   winter-rain coasts (California, Iberia, Cape, Morocco, Great Basin winter
-   rain 1.5-1.9x observed) and East Asia's wet winters (Korea, Japan,
-   N China Plain 2.4-3.4x), with summer rain too low almost everywhere.
-   Winter surface westerlies over land are 2-5x NCEP. Fix that, then retry
-   e55b + e56 with the same frozen gate; then the sea's latitude profile.
-1. r39 world refit that scores painted zones on corrected temperature and
-   rain; atlas layers raw + corrected. Preview (unadopted world, one layout):
-   strict painted-zone accuracy 0.314 → 0.325 with both stages.
+0. Physics: summer rain-making (summer rain 0.5-0.8x observed in 25 of 31
+   regions with columns ~right; convective closure ~0.1 mm/day at summer
+   RH, instability boost only above 22 C). Then winter-rain coasts (separate
+   surface and transport winds) and North India's pre-monsoon cold.
+   Gate any change against r40 (fresh paired runs, same sources).
+1. Retrain the Earth correction stages on r40; freeze a world refit for the
+   invented map on r40 physics (r39's plan: calibration/map_world_r39/plan.json).
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.

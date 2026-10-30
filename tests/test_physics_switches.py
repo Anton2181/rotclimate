@@ -108,3 +108,14 @@ def test_land_friction_slows_the_zonal_belts_over_land_only():
     assert np.array_equal(u1[:, :2], u0[:, :2]) and np.array_equal(v1[:, :2], v0[:, :2])
     assert np.allclose(u1[:, 2], 0.7 * u0[:, 2]) and np.allclose(u1[:, 3], 0.4 * u0[:, 3])
     assert np.allclose(v1[:, 3], 0.4 * v0[:, 3])
+
+
+def test_r40_is_r39_plus_the_adopted_switches():
+    p40 = Params.from_json('calibration/local_accuracy_20261023/r40_params.json')
+    assert p40.monsoon_westerly > 0 and p40.monsoon_pressure_hpa > 0
+    assert p40.shelf_warm_currents > 0 and p40.ocean_column_air > 0
+    assert p40.dry_heating == 0.0 and p40.zonal_land_friction == 0.0 and p40.wind_source == 'model'
+    changed = {k for k, v in vars(p40).items() if v != getattr(r39(), k)}
+    assert changed == {'monsoon_westerly', 'monsoon_pressure_hpa', 'shelf_warm_currents', 'ocean_column_air',
+                       'itcz_shift', 'precip_tau_days', 'monsoon_descent'}
+    ClimateModel(p40)

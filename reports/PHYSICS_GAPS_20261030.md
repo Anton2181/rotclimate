@@ -1,30 +1,22 @@
-# What causes North India's large errors: circulation, sea and land heating, 30 October 2026
+# What causes North India's large errors, and r40: circulation, sea and land heating, 30 October 2026
 
 **Result.** North India is r39's worst region: 256 mm of rain a year against
-761 observed (rain loss 0.942) and 3.2 °C monthly temperature error, about
-3–5 °C too cold outside the monsoon. Tracing the model and comparing it with
-reanalysis shows the rain gap is mainly the **circulation**. Rerunning r39 with
-observed monthly surface winds gives North India **933 mm**, with no other
-change. Correct winds plus observed SST also remove most of the month-late
-seasons on maritime coasts (British Isles 2.44 → 1.25 °C, western Europe
-1.95 → 1.21 °C). The rest of the physics was fitted around the model's winds,
-though: given real winds, Mexico, Texas and Iran become far too wet. The
-circulation therefore has to be fixed together with a recalibration of the
-rain settings. Separately, the land equilibrium has no dry-ground heating
-(North India and Iran ≈ 3 °C too cold); a new opt-in term (e54) fixes much of
-that but fails the region-group gates. A first circulation fix (e55, monsoon
-westerlies) roughly doubles North India's rain (256 → 482 mm) but wets East
-Australia, East China and Iran, because the model has one planet-wide ITCZ.
-Gating it by the model's own poleward pressure fall (e55b) removes most of
-that damage; a frozen 48-candidate refit with dry heating, rain efficiency and
-monsoon descent reaches S 0.9938 (rain −1.5 %, North India 256 → 380 mm,
-28 km check passed) but fails the training (1.0055) and mid-latitude (1.0005)
-groups. A second frozen refit adds a shelf rule for warm currents (e56, which
-removes East Asia's 3–5 °C too-warm spring seas) and the ITCZ's reach: S
-0.9949, rain −1.7 %, North India 374 mm, East Asia better, 28 km passed, but
-the training group is 0.05 % worse (California, Iberia: winter rain that r39
-already has 50–90 % too high). Nothing is adopted; r39 is unchanged and its
-runs reproduce bit for bit with every new switch off.
+761 observed (rain loss 0.942) and 3.2 °C monthly temperature error. Comparing
+the model with reanalysis shows the rain gap is mainly the **circulation**:
+with observed monthly surface winds and no other change North India gets
+933 mm. Four new opt-in mechanisms follow from the diagnosis: monsoon
+westerlies where the model's own pressure falls poleward (e55/e55b), warm
+currents kept off shallow shelves (e56, East Asia's seas were 3–5 °C too warm
+in spring), and a sea column that cannot hold more water than the cold air
+above it (e58, winter columns were up to 1.85× the reanalysis). Two frozen
+refits failed one region group each (0.5 % and 0.05 %); the third passes the
+31-region gate (S **0.9932**, rain loss −2.1 %, temperature +0.8 % within the
+allowance, every group better), the 28 km check (0.9953) and the sealed six,
+run once (**0.9671**), and is **adopted as r40**. North India's rain rises to
+373 mm (loss 0.942 → 0.756); its temperature, California's and Iberia's get
+somewhat worse. Dry-ground heating (e54) and land friction on the zonal belts
+(e57) were screened and are not used. Summer rain is still 0.5–0.8× observed
+almost everywhere, now the largest systematic gap.
 
 ## 1. Inside North India (lowland cells below 1,000 m, 56 km)
 
@@ -453,33 +445,95 @@ annual rain in regions already short of it in summer (Japan, South Brazil,
 the British Isles, where r39's winter column was right): the summer rain
 deficit, not e58, is what those need.
 
-## 12. Third frozen refit (in progress)
+## 12. Third frozen refit: passes every check, adopted as r40
 
 `calibration/monsoon_refit3_20261030/plan.json`, committed before any
 result: the second refit's knobs plus ocean_column_air [0, 0.6] and a wider
 precip_tau_days [8.5, 12.5], from the second winner with e58 at 0.25,
-56 evaluations. Validation as in §7 into `output/physics_gaps_20261030/refit3/`.
+56 evaluations (about 100 minutes). The training and former-holdout groups
+still trade against each other through the rain residence time, but one
+candidate (24th of 56) clears both, and it has the lowest cost: the search's
+score equals its S, with no penalty at all.
+
+| setting | r39 | r40 |
+|---|---:|---:|
+| monsoon_westerly (e55) | 0 | 0.869 |
+| monsoon_pressure_hpa (e55b) | 0 | 3.58 |
+| shelf_warm_currents (e56) | 0 | 0.472 |
+| ocean_column_air (e58) | 0 | 0.182 |
+| itcz_shift | 13.93 | 15.79 |
+| precip_tau_days | 11.08 | 10.05 |
+| monsoon_descent | 0.0154 | 0.0198 |
+
+**Validation as declared** (`OUT=output/physics_gaps_20261030/refit3`;
+fresh paired runs with identical sources reproduce the search exactly):
+
+| check (policy v2) | result |
+|---|---|
+| development gate, 31 regions | S **0.9932** (needs ≤ 0.995); T +0.78 % (limit 1 %), rain −2.13 %; training 0.9988, former holdout 0.9998, mid-latitude 0.9893, dev12 0.9880 → **passes** |
+| paired 28 km (California, western Europe, Japan, New Zealand) | S 0.9953 → **passes** |
+| sealed six (run once) | S **0.9671**: rain loss 0.490 → 0.459, T 1.979 → 1.970; Yunnan 0.514 → 0.368, Tasmania, Caucasus, NE US better; Norway worse (rain 0.557 → 0.579, T 3.88 → 3.96) |
+
+Every policy criterion holds, so the candidate is **adopted as r40** at
+`calibration/local_accuracy_20261023/r40_params.json`. All regions pass the
+numerical checks.
+
+| region | annual rain r39 → r40 (observed) | rain loss | monthly T MAE |
+|---|---|---|---|
+| North India | 256 → 373 (761) | 0.942 → 0.756 | 3.22 → **3.40** |
+| Iran | 365 → 354 (232) | 0.598 → 0.574 | 3.31 → 3.28 |
+| East China | 1339 → 1311 (1281) | 0.320 → 0.306 | 2.01 → 2.00 |
+| Korea | 1241 → 1151 (1257) | 0.375 → 0.367 | 1.94 → 1.89 |
+| North China Plain | 660 → 648 (601) | 0.414 → 0.398 | 1.44 → 1.41 |
+| Manchuria | 690 → 680 (582) | 0.291 → 0.281 | 2.13 → 2.09 |
+| East Australia | 1068 → 1036 (641) | 0.552 → 0.523 | 1.51 → 1.51 |
+| Japan | 1330 → 1228 (1601) | 0.399 → 0.402 | 1.84 → 1.82 |
+| Texas plains | 599 → 649 (739) | 0.475 → 0.468 | 1.20 → **1.32** |
+| California | 467 → 488 (392) | 0.461 → 0.481 | 1.70 → 1.72 |
+| Iberia | 445 → 468 (392) | 0.521 → 0.542 | 1.62 → 1.63 |
+
+What r40 is and is not:
+
+* It is a regional-balance improvement of the Earth benchmark: rain loss
+  −2.1 % over 31 regions with every group protected, and −6.1 % on the six
+  regions never used for tuning. North India's rain rises 46 % but is still
+  half the observed; its temperature error grows (3.22 → 3.40 °C, too cold
+  before the monsoon), as do Texas's and the Cape's.
+* Overall temperature is 0.8 % worse, inside the 1 % allowance. California,
+  Iberia, Cape, Texas, Great Basin and Morocco are worse (region scores
+  +2.4 to +4.8 %); the winter-rain coasts are still 1.5–1.9× too wet in winter.
+* The new switches are generic physics with no Earth-only input: the
+  pressure-gated monsoon turn uses the model's own pressure, the shelf rule
+  uses depth (or the distance from the coast on an invented map), and e58
+  uses the model's own air and sea temperatures.
+* The Earth correction stages (EARTH_CORRECTION_20261030) were trained on
+  r39 and must be retrained for r40. The published world and atlases are
+  unchanged: they need a world refit on r40 physics and the publication
+  checks, as for r39.
+
+![Third refit](../output/physics_gaps_20261030/monsoon_refit3.png)
 
 ## Plan for the next physics milestone
 
-1. **East Asia's summer and the mid-latitude land column.** The refit is
-   blocked by East China, Manchuria, Korea and the North China Plain being
-   too warm and wet already; the energy-balance land column is 5–7 °C above
-   WorldClim's latitude mean in July at 37–52 °N and the model compensates
-   region by region. Fixing that baseline (and the over-strong mid-latitude
-   westerlies) is now the precondition for adopting e55b and e54.
-2. **Circulation.** e55b (pressure-gated monsoon westerlies) is the working
-   mechanism for the monsoon inflow (North India 256 → 380–441 mm with little
-   collateral damage). Remaining: weaker surface winds over land (mean speed
-   1.8× too strong; winter trades 2–6×) and NCEP winds as a circulation gate
-   (vector RMSE and direction by region and season).
-3. **Sea.** Fix the energy-balance ocean's latitude profile and mid-latitude
-   seasonal range instead of a −4.4 °C global offset; the air-coupled sea
-   swing (e53, earlier report) is one ingredient.
-4. **Tibet.** Over high plateaus the column holds and rains too much water;
-   the plateau's saturation profile and the Himalayan front's uplift need a
-   look once the monsoon flow reaches the plain.
-5. **Land heating.** Revisit e54 (and the clear-sky sunshine term) after 1.
+1. **Summer rain-making.** Summer rain is 0.5–0.8× observed in 25 of 31
+   regions while their columns hold about the reanalysis' water (East Asia
+   0.8–0.9×) and their summers are not too warm (most within ±1.5 °C, the
+   British Isles −3.3 °C and still 0.71× in rain). At summer column humidity
+   the convective closure adds ~0.1 mm/day; the instability boost starts at
+   22 °C. A heating-triggered convective term (sunshine-driven boundary-layer
+   instability with column moisture) is the next mechanism to test, frozen
+   against r40.
+2. **Winter-rain coasts.** California, Iberia, Morocco, Cape and the Great
+   Basin keep winter rain 1.5–1.9× observed; observed winds fix three of them,
+   but slowing the belts over land (e57) starves the interiors. Separating
+   the surface wind (heat) from the transport wind (water) is the structural
+   step.
+3. **North India's heat.** Still 3.4 °C monthly error, too cold before the
+   monsoon; revisit dry heating (e54) and the clear-sky sunshine term on r40.
+4. **Sea.** The energy-balance ocean's latitude profile and mid-latitude
+   seasonal range instead of a global offset; Tibet's over-wet plateau.
+5. **Downstream.** Retrain the Earth correction on r40; freeze and run a
+   world refit for the invented map on r40 physics.
 
 ## Reproduce
 
@@ -501,6 +555,8 @@ python -I scripts/compare_column_water.py --params calibration/local_accuracy_20
 python -I scripts/physics_gap_figures.py columnwater output/physics_gaps_20261030/column_water_r39.json
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r39_params.json --regions dev31 --set '{"ocean_column_air": 0.5}' --out output/physics_gaps_20261030/oca_0.5
 python -I scripts/gate_calibrate.py --plan calibration/monsoon_refit3_20261030/plan.json --out calibration/monsoon_refit3_20261030/search --hours 3
+OUT=output/physics_gaps_20261030/refit3 BEST=calibration/monsoon_refit3_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
+python -I scripts/physics_gap_figures.py adopted calibration/monsoon_refit3_20261030/search ocean_column_air output/physics_gaps_20261030/refit3 "Third frozen refit passes every check and is adopted as r40: S 0.9932, rain -2.1 %, 28 km 0.9953, sealed six 0.9671"
 ```
 
 The dry-heating and monsoon runs kept here hold each run's summary and
