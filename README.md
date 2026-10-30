@@ -1,5 +1,16 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Earth temperature correction, 30 October 2026:** a new output stage learns
+r39's repeatable monthly temperature errors from the 31 Earth regions, using
+only inputs every map has. Scored with whole geographic clusters held out
+(the Earth stand-in for an unseen invented continent), monthly temperature
+error falls 1.79 → 1.54 °C; paired 28 km runs 1.90 → 1.27 °C and the two sealed
+regions 2.62 → 2.14 °C. It mainly fixes a month-late season on maritime
+westerly coasts. Rain is not corrected: no rain correction transferred between
+continents. Six regions and the seasonal-range metric get somewhat worse.
+r39 physics and the published atlases are unchanged. See the
+[correction report](reports/EARTH_CORRECTION_20261030.md) and [handoff](HANDOFF.md).
+
 **Terrain side project:** a [source audit and constrained-generation plan](reports/CONSTRAINED_TERRAIN_FEASIBILITY_20261026.md)
 shows the existing ramps/rivers and explains how tier-respecting ridges, valleys
 and drainage could be generated without conditioning on painted climates.
