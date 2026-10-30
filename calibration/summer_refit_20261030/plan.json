@@ -1,0 +1,15 @@
+{
+ "frozen": "2026-10-30, before any result of this search; after r40 was adopted and after the summer-rain diagnosis and the e59 screens recorded in reports/SUMMER_RAIN_20261030.md",
+ "why": "Summer rain is 0.5-0.8x observed in most regions. In the humid mid-latitudes (Japan, Korea, the British Isles, Europe, the US Midwest, Manchuria, the North China Plain) r40's rain gate explains it: their summer columns are 10-22 % drier than NCEP's and the gate turns that into 30-50 % less rain; the deficit starts over the sea (0.70-0.80 of NCEP over the seas by Japan, Korea, Manchuria and Britain), where the column is held at 75.5 % of saturation at the SST under air that is warmer than the sea. e59 lets warmer air hold more over the sea, except under the subtropical highs' sinking; alone it helps Anatolia, New Zealand, SW Australia, Japan, the Levant and Chile but wets Manchuria's and Europe's shoulder seasons (S 1.0015 at 0.5). This search lets e59, the winter-side e58, the sea's column humidity and the rain residence time settle that together, with every other r40 setting fixed.",
+ "start": "calibration/local_accuracy_20261023/r40_params.json",
+ "set": {"ocean_column_warm": 0.3},
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "knobs": [["ocean_column_warm", 0.0, 1.0], ["ocean_column_air", 0.0, 0.6], ["ocean_rh", 0.70, 0.82], ["precip_tau_days", 8.5, 12.5]],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 41,
+ "evals": 40,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/summer_rain_20261030/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/summer_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r40 (policy v2), then the paired 28 km check (S not worse by more than 1 %), then the sealed six once only if both pass. Failing any step means nothing is adopted; every result is reported."
+}

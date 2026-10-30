@@ -264,6 +264,8 @@ class ClimateModel:
             raise ValueError('zonal_land_friction must be in [0, 1)')
         if not 0 <= params.ocean_column_air <= 1 or (params.ocean_column_air > 0 and params.column_saturation_scheme != 'legacy'):
             raise ValueError('ocean_column_air must be in [0, 1] and needs the legacy column saturation')
+        if not 0 <= params.ocean_column_warm <= 1 or (params.ocean_column_warm > 0 and params.column_saturation_scheme != 'legacy'):
+            raise ValueError('ocean_column_warm must be in [0, 1] and needs the legacy column saturation')
         if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
             raise ValueError('monsoon_pressure_hpa must be >= 0 and needs the pressure winds (slp_large or slp_local > 0)')
         if params.wind_source not in ('model', 'observed'):
@@ -538,6 +540,22 @@ class ClimateModel:
                             if p.subtropical_high > 0 else None)
 
     # ------------------------------------------------------------------ helpers
+    def _subsidence(self, phi_h, s):
+        """Relative sinking under the subtropical highs (the band around the
+        Hadley edge, asymmetric across ocean basins, stronger in summer)."""
+        p, lat = self.p, self.lat
+        sub = np.exp(-((lat - phi_h) / (p.subsidence_width * self.synoptic_scale)) ** 2)
+        # subtropical highs sink hardest over the eastern side of ocean
+        # basins on a prograde planet (dry west coasts: California,
+        # Sahara coast); the asymmetry flips for retrograde spin
+        asym = (-1.0 if p.retrograde else 1.0) * p.subsidence_asym * self.basin_side
+        sub = sub * np.clip(1.0 + asym, 0.0, 2.0)
+        # v7: the summer highs are the strong ones (monsoon heating next
+        # door drives their sinking: Rodwell & Hoskins 2001)
+        if p.subsidence_summer > 0:
+            sub = sub * (1.0 + p.subsidence_summer * s)
+        return sub
+
     def _lat_mean(self, field):
         """Mean of a field over the grid's 1-degree latitude bands, mapped back
         onto the grid (the latitude's own mean in this domain)."""
@@ -1395,6 +1413,18 @@ class ClimateModel:
                 # it is colder than the sea; warm air over a cold sea (upwelling
                 # coasts) is stable and gains no more than the sea can give.
                 ocean_saturation = w_sat(SST + p.ocean_column_air * np.minimum(T_col - SST, 0.0))
+            if p.ocean_column_warm > 0:
+                # e59: summer air over a cooler sea (the Yellow Sea, the Sea of
+                # Japan, the North Sea) keeps a column that its own warmth can
+                # hold: NCEP 42-44 mm over the seas by Japan and Korea in July
+                # (0.9 of saturation at the SST), r40 33-36 at 0.755. Under
+                # the subtropical highs' sinking (the eastern sides of ocean
+                # basins: off Iberia, Morocco, California) the warm air above
+                # the marine layer is dry desert air and adds nothing
+                # (already 1.08x NCEP off Iberia).
+                calm = np.exp(-self._subsidence(phi_h, s))
+                warm = p.ocean_column_warm * calm * np.maximum(T_col - SST, 0.0)
+                ocean_saturation = ocean_saturation * w_sat(SST + warm) / w_sat(SST)
             if p.moisture_reservoirs:
                 from .column_thermodynamics import saturation_column
                 if p.moisture_reservoir_temperature_profile=='environmental':
@@ -1568,16 +1598,7 @@ class ClimateModel:
                 vertical_rms = (p.orographic_gust_ms * np.sqrt(np.maximum(storm, 0))
                                 * np.hypot(self.dhdx, self.dhdy))
                 up = expected_uplift(u*self.dhdx + v*self.dhdy, vertical_rms) / .05
-            sub = np.exp(-((lat - phi_h) / (p.subsidence_width * self.synoptic_scale)) ** 2)
-            # subtropical highs sink hardest over the eastern side of ocean
-            # basins on a prograde planet (dry west coasts: California,
-            # Sahara coast); the asymmetry flips for retrograde spin
-            asym = (-1.0 if p.retrograde else 1.0) * p.subsidence_asym * self.basin_side
-            sub = sub * np.clip(1.0 + asym, 0.0, 2.0)
-            # v7: the summer highs are the strong ones (monsoon heating next
-            # door drives their sinking: Rodwell & Hoskins 2001)
-            if p.subsidence_summer > 0:
-                sub = sub * (1.0 + p.subsidence_summer * s)
+            sub = self._subsidence(phi_h, s)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
             if tropical is not None:
                 A_dyn = A_dyn + p.storm_track * tropical

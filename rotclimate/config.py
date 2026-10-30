@@ -146,6 +146,7 @@ class Params:
     # ---------------------------------------------------------------- water
     ocean_rh: float = 0.80
     ocean_column_air: float = 0.0     # e58: share of the way the sea's column water moves from saturation at the SST to saturation at a colder column temperature (0.4 SST + 0.6 air over ~300 km)
+    ocean_column_warm: float = 0.0    # e59: the same toward a warmer column temperature (summer air over cooler seas)
     evap_tau_days: float = 2.0
     land_recycling: float = 0.35      # fraction of land P re-evaporated
     precip_tau_days: float = 6.0      # background rain-out time scale

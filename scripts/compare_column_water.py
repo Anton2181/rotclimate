@@ -75,7 +75,10 @@ def one(job):
     slp_anom = (ref["slp"] - zm)[:, m].mean(1)
     days = np.array(sorted(pres))[-len(res.days):]          # the recorded year (after any spin-up)
     pres_m = monthly(np.stack([pres[d] for d in days]), days, p.year_days)[:, m].mean(1) / 100.0
+    sea = ~g.land & np.isfinite(ref["pw"]).all(0)
+    Wsea = monthly(res.W, res.days, p.year_days)[:, sea].mean(1)
     return region, dict(W=W.tolist(), pw=ref["pw"][:, m].mean(1).tolist(),
+                        W_sea=Wsea.tolist(), pw_sea=ref["pw"][:, sea].mean(1).tolist(),
                         rain=st["Pm"][:, m].mean(1).tolist(), rain_obs=case.obs_P[:, m].mean(1).tolist(),
                         pres_hpa=pres_m.tolist(), slp_anom_hpa=slp_anom.tolist())
 

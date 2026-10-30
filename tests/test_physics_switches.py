@@ -13,10 +13,10 @@ def test_new_switches_default_off_and_are_classified():
     p = Params()
     assert p.dry_heating == 0.0 and p.dry_heating_chi0 == 0.0 and p.wind_source == 'model'
     assert p.monsoon_westerly == 0.0 and p.itcz_shift_ocean < 0 and p.shelf_warm_currents == 0.0
-    assert p.zonal_land_friction == 0.0 and p.ocean_column_air == 0.0
+    assert p.zonal_land_friction == 0.0 and p.ocean_column_air == 0.0 and p.ocean_column_warm == 0.0
     validate_partition()
     assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
-            'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air'} <= SHARED_FIELDS
+            'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air', 'ocean_column_warm'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -32,6 +32,7 @@ def test_new_switches_default_off_and_are_classified():
     (dict(shelf_warm_currents=1.2), 'shelf_warm_currents must be'),
     (dict(zonal_land_friction=1.0), 'zonal_land_friction must be'),
     (dict(ocean_column_air=1.5), 'ocean_column_air must be'),
+    (dict(ocean_column_warm=-0.1), 'ocean_column_warm must be'),
     (dict(ocean_column_air=0.5, column_saturation_scheme='pressure-moist'), 'ocean_column_air must be'),
     (dict(monsoon_westerly=0.7, monsoon_pressure_hpa=-1.0), 'monsoon_pressure_hpa must be'),
 ])
