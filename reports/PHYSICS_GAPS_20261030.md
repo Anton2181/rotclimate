@@ -295,6 +295,50 @@ being 5–7 °C above WorldClim's latitude mean).
 
 ![Monsoon refit](../output/physics_gaps_20261030/monsoon_refit.png)
 
+## 8. East Asia's warm seas: warm currents off the shelves (e56, opt-in)
+
+The energy-balance land column is defined as deep continental air, so its
+gap to WorldClim's all-land latitude mean (§4) overstates a bias. East Asia's
+warm spring is instead its sea. Coastal SST minus WOA18:
+
+| | Jan | Mar | Apr | May | Jul | Aug |
+|---|---:|---:|---:|---:|---:|---:|
+| East China | +3.8 | +4.3 | +3.7 | +2.9 | +1.1 | +1.3 |
+| Korea | +2.4 | +3.9 | +3.9 | +3.2 | +0.3 | −1.1 |
+| Manchuria (Yellow Sea, Bohai) | +2.8 | +4.5 | +5.0 | +4.5 | +1.2 | −1.0 |
+| Japan | +1.4 | +2.3 | +2.2 | +1.6 | −0.8 | −2.0 |
+
+Over the East China Sea cells the subtropical warm-current term adds +3.9 °C
+all year (Korea +2.2); the Kuroshio runs along the continental slope, while
+the broad shelf holds water cooled by the winter monsoon. e50 already knows
+the shelves (WOA18 depth on Earth, distance from the coast elsewhere) but
+used them only for winter mixing. `shelf_warm_currents` scales the warm
+subtropical current by 1 − s·(1 − deep-sea share); the subpolar drift into
+the North Sea is untouched. At s = 1 East China's annual coastal bias falls
+from about +2.6 to +0.6 °C; the Gulf of Mexico coasts cool from about −1 to
+−1.9 °C.
+
+| 31 regions | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| s 0.5 | −0.2 % | −0.2 % | 0.9979 | **0.990** | 1.010 | **0.994** | 1.000 |
+| s 1.0 | −0.4 % | +0.1 % | 0.9989 | 0.984 | 1.022 | 0.990 | 1.002 |
+| first refit winner + s 0.5 | +0.1 % | −1.9 % | **0.9912** | 0.994 | **1.009** | 0.994 | 0.981 |
+| first refit winner + s 1.0 | 0.0 % | −1.6 % | 0.9916 | 0.987 | 1.021 | 0.989 | 0.983 |
+
+The shelf rule fixes exactly the groups that blocked the first refit, but
+cooler seas take rain from South Brazil (+0.030 rain loss) and Japan (+0.015),
+which are already much too dry (713 against 1,256 mm; 1,330 against 1,601).
+
+## 9. Second frozen refit (in progress)
+
+`calibration/monsoon_refit2_20261030/plan.json`, committed before any result:
+the same search and gate over monsoon_westerly [0.5, 1], monsoon_pressure_hpa
+[1, 5], shelf_warm_currents [0, 1], itcz_shift [11, 17] (a more poleward
+summer ITCZ helped South Brazil and Japan in §5), precip_tau_days
+[9.5, 12.5] and monsoon_descent [0.008, 0.03], starting from the first
+winner with s 0.5; dry heating dropped. Validation as in §7 into
+`output/physics_gaps_20261030/refit2/`.
+
 ## Plan for the next physics milestone
 
 1. **East Asia's summer and the mid-latitude land column.** The refit is
