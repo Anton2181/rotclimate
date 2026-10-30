@@ -208,6 +208,55 @@ wetter monsoon now cools the plain below observed in July–September).
 
 ![Monsoon westerlies](../output/physics_gaps_20261030/monsoon_westerly.png)
 
+## 6. Gating the monsoon by the model's own pressure (e55b)
+
+Trades blow because pressure rises toward the subtropical high. Where a summer
+heat low lies poleward instead, the meridional gradient reverses and so does
+the zonal wind. In July over the 10–22 °N ocean cells:
+
+| region | model poleward pressure change | NCEP | NCEP wind u |
+|---|---:|---:|---:|
+| North India (Arabian Sea, Bay of Bengal) | −2.8 | −5.5 | +7.0 |
+| Iran (Arabian Sea) | −1.4 | −5.5 | +6.9 |
+| East Australia (Coral Sea) | +0.9 | +1.7 | −2.5 |
+| southeast US (Caribbean) | +0.3 | +3.3 | −4.5 |
+| East China | +0.2 | −1.3 | +0.6 |
+| Mexico | −1.5 | +1.1 | −0.7 |
+
+(hPa per 1,000 km.) The model's July pressure pattern is poor over South Asia
+(correlation with NCEP −0.33; its heat low sits over Tibet), but its sign of
+the poleward gradient in the monsoon band agrees with NCEP on 92 % of North
+India's cells. `monsoon_pressure_hpa` (G) therefore scales the turning by
+clip(poleward fall / G, 0, 1), using last step's pressure smoothed over
+500 km. Mexico is the one region where the model's sign is wrong.
+
+| 31 regions | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 | North India mm |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| w 0.7, G 2 | +0.5 % | −1.4 % | 0.9957 | 1.003 | 1.000 | 1.000 | 0.988 | |
+| **w 1.0, G 2** | +0.7 % | −1.5 % | **0.9962** | 1.005 | 1.000 | 1.000 | 0.988 | 441 |
+| w 1.0, G 1 | +1.0 % | −1.4 % | 0.9979 | 1.012 | 0.999 | 1.000 | 0.988 | 542 |
+| w 1.0, G 4 | +0.4 % | −1.2 % | 0.9961 | 1.002 | 1.000 | 1.000 | 0.990 | |
+
+The collateral damage of §5 nearly disappears (w 1.0, G 2: East Australia
++0.002 rain loss against +0.161 ungated, Iran +0.008, East China +0.026), while
+North India keeps most of its gain (rain loss −0.235). Two things still fail
+the gate: North India's temperature (+0.24 °C: the wetter monsoon cools the
+plain while its dry season stays 3–5 °C too cold) and the training group
+(S 1.005: East China rain, Mexico temperature). With a wet monsoon, the
+dry-ground heating of §4 should no longer overheat it, so the two are now
+refitted together (§7).
+
+## 7. Frozen refit (in progress)
+
+`calibration/monsoon_refit_20261030/plan.json`, committed before any
+result: `scripts/gate_calibrate.py` (CMA-ES, the gate's own score plus 2× every
+group's worsening) over monsoon_westerly [0.3, 1], monsoon_pressure_hpa
+[0.5, 5], dry_heating [0, 5], dry_heating_chi0 [0.5, 0.95], precip_tau_days
+[8, 14] and monsoon_descent [0, 0.03], from the w 1.0 / G 2 point, 48
+evaluations. The winner then takes fresh paired dev31 runs and
+`scripts/gate_local.py`, the paired 28 km check, and only if both pass the
+sealed six once (`scripts/validate_monsoon_refit.sh`).
+
 ## Plan for the next physics milestone
 
 1. **Circulation (largest gap).** e55 shows the monsoon inflow is the lever
