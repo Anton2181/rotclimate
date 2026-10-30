@@ -1,0 +1,51 @@
+{
+ "frozen": "2026-10-30, before any result of this search; after the e54/e55/e55b screens recorded in reports/PHYSICS_GAPS_20261030.md",
+ "why": "With the pressure-gated monsoon westerlies (e55b: monsoon_westerly 1.0, monsoon_pressure_hpa 2.0) North India's rain rises 256 -> 441 mm with little collateral damage (31-region S 0.9962), but North India's temperature worsens (+0.24 C, the wetter monsoon cools the plain while its dry season stays 3-5 C too cold) and the training group worsens (S 1.005). Dry-ground heating (e54b) fixed North India's dry season but overheated the too-dry monsoon; with a wet monsoon the two should combine. The rain efficiency and the monsoon descent were fitted around the old winds. These six settings are searched together; everything else stays r39.",
+ "start": "calibration/local_accuracy_20261023/r39_params.json",
+ "set": {
+  "monsoon_westerly": 1.0,
+  "monsoon_pressure_hpa": 2.0,
+  "dry_heating": 0.0,
+  "dry_heating_chi0": 0.6
+ },
+ "reference": "output/earth_correction_20261030/r39_dev31",
+ "knobs": [
+  [
+   "monsoon_westerly",
+   0.3,
+   1.0
+  ],
+  [
+   "monsoon_pressure_hpa",
+   0.5,
+   5.0
+  ],
+  [
+   "dry_heating",
+   0.0,
+   5.0
+  ],
+  [
+   "dry_heating_chi0",
+   0.5,
+   0.95
+  ],
+  [
+   "precip_tau_days",
+   8.0,
+   14.0
+  ],
+  [
+   "monsoon_descent",
+   0.0,
+   0.03
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 30,
+ "evals": 48,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r39 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate; ties broken by S",
+ "validation": "the selected candidate is rerun as a fresh benchmark_local dev31 run and judged by scripts/gate_local.py against the r39 run (policy v2); then the paired 28 km check (california, western_europe, japan, new_zealand: S not worse by more than 1 %); then the sealed six of regions_sealed6.json once against output/physics_gaps_20261030/r39_sealed6. Failing any step means nothing is adopted; every result is reported."
+}

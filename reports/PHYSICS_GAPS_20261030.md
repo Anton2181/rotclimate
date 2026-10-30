@@ -15,7 +15,11 @@ rain settings. Separately, the land equilibrium has no dry-ground heating
 that but fails the region-group gates. A first circulation fix (e55, monsoon
 westerlies) roughly doubles North India's rain (256 → 482 mm) but wets East
 Australia, East China and Iran, because the model has one planet-wide ITCZ.
-Nothing is adopted; r39 is unchanged and its runs reproduce bit for bit with
+Gating it by the model's own poleward pressure fall (e55b) removes most of
+that damage; a frozen 48-candidate refit with dry heating, rain efficiency and
+monsoon descent reaches S 0.9938 (rain −1.5 %, North India 256 → 380 mm,
+28 km check passed) but fails the training (1.0055) and mid-latitude (1.0005)
+groups. Nothing is adopted; r39 is unchanged and its runs reproduce bit for bit with
 every new switch off.
 
 ## 1. Inside North India (lowland cells below 1,000 m, 56 km)
@@ -246,35 +250,71 @@ plain while its dry season stays 3–5 °C too cold) and the training group
 dry-ground heating of §4 should no longer overheat it, so the two are now
 refitted together (§7).
 
-## 7. Frozen refit (in progress)
+## 7. Frozen refit: no candidate clears every group
 
-`calibration/monsoon_refit_20261030/plan.json`, committed before any
-result: `scripts/gate_calibrate.py` (CMA-ES, the gate's own score plus 2× every
-group's worsening) over monsoon_westerly [0.3, 1], monsoon_pressure_hpa
-[0.5, 5], dry_heating [0, 5], dry_heating_chi0 [0.5, 0.95], precip_tau_days
-[8, 14] and monsoon_descent [0, 0.03], from the w 1.0 / G 2 point, 48
-evaluations. The winner then takes fresh paired dev31 runs and
-`scripts/gate_local.py`, the paired 28 km check, and only if both pass the
-sealed six once (`scripts/validate_monsoon_refit.sh`).
+`calibration/monsoon_refit_20261030/plan.json`, committed before any result:
+`scripts/gate_calibrate.py` (CMA-ES, the gate's own score plus 2× every
+group's worsening and 2× any T or P worsening beyond 1 %) over
+monsoon_westerly [0.3, 1], monsoon_pressure_hpa [0.5, 5], dry_heating [0, 5],
+dry_heating_chi0 [0.5, 0.95], precip_tau_days [8, 14] and monsoon_descent
+[0, 0.03], from the w 1.0 / G 2 point, 48 evaluations (about 4.5 hours).
+
+* Many candidates reach S 0.986–0.990, all with dry heating, and all worsen
+  a group: dry heating warms humid East Asia (Manchuria, North China Plain,
+  Korea, East China +0.1 to +0.24 °C, from the Gobi), rain-efficiency changes
+  hurt SW Australia, New Zealand and Anatolia. Across all 48 the best worst
+  group is 1.0042 (S 0.9965).
+* Lowest cost (the last candidate): monsoon_westerly 0.934,
+  monsoon_pressure_hpa 2.95, dry_heating 0.09 (≈ off), dry_heating_chi0 0.53,
+  precip_tau_days 10.93 (r39 11.08), monsoon_descent 0.0211 (r39 0.0154).
+
+**Validation as declared** (`scripts/validate_monsoon_refit.sh`; fresh paired
+runs with identical sources reproduce the search's numbers exactly):
+
+| check | result |
+|---|---|
+| development gate (`gate_local.py`, policy v2) | S **0.9938** (needs ≤ 0.995); T +0.30 %, rain −1.54 %; training **1.0055**, former holdout 0.9990, mid-latitude **1.0005**, dev12 0.9819 → **fails** (two groups) |
+| paired 28 km | S 0.9984 → passes |
+| sealed six | not run (only for a candidate that passes both) |
+
+| region | annual rain r39 → candidate (observed) | rain loss | monthly T MAE |
+|---|---|---|---|
+| North India | 256 → 380 (761) | 0.942 → 0.745 | 3.22 → 3.35 |
+| Iran | 365 → 344 (232) | 0.598 → 0.552 | 3.31 → 3.22 |
+| East China | 1339 → 1404 (1281) | 0.320 → 0.335 | 2.01 → 2.02 |
+| Texas plains | 599 → 632 (739) | 0.475 → 0.469 | 1.20 → 1.27 |
+| East Australia | 1068 → 1075 (641) | 0.552 → 0.559 | 1.51 → 1.51 |
+| Manchuria | 690 → 697 (582) | 0.291 → 0.297 | 2.13 → 2.13 |
+
+Nothing is adopted; r39 stays. The search shows the structural limit rather
+than a tuning gap: every candidate that helps North India and Iran puts a
+little rain or heat into East China, Texas or Manchuria, which are already
+too wet or too warm for reasons outside these six settings (their warm,
+wet East Asian summers and the energy-balance column's mid-latitude summer
+being 5–7 °C above WorldClim's latitude mean).
+
+![Monsoon refit](../output/physics_gaps_20261030/monsoon_refit.png)
 
 ## Plan for the next physics milestone
 
-1. **Circulation (largest gap).** e55 shows the monsoon inflow is the lever
-   (North India 256 → 482 mm). It now needs an ITCZ that follows the heating
-   (the simulated heat low, not a land-share blend, which failed) so that
-   monsoon westerlies appear over the Arabian Sea but not the Coral Sea;
-   weaker surface winds over land (mean speed 1.8× too strong; winter trades
-   2–6×); NCEP winds as a circulation gate (vector RMSE and direction by
-   region and season); and then a refit of the rain settings (monsoon descent,
-   convergence import, subsidence), which compensate for the wrong winds.
-2. **Sea.** Fix the energy-balance ocean's latitude profile and mid-latitude
+1. **East Asia's summer and the mid-latitude land column.** The refit is
+   blocked by East China, Manchuria, Korea and the North China Plain being
+   too warm and wet already; the energy-balance land column is 5–7 °C above
+   WorldClim's latitude mean in July at 37–52 °N and the model compensates
+   region by region. Fixing that baseline (and the over-strong mid-latitude
+   westerlies) is now the precondition for adopting e55b and e54.
+2. **Circulation.** e55b (pressure-gated monsoon westerlies) is the working
+   mechanism for the monsoon inflow (North India 256 → 380–441 mm with little
+   collateral damage). Remaining: weaker surface winds over land (mean speed
+   1.8× too strong; winter trades 2–6×) and NCEP winds as a circulation gate
+   (vector RMSE and direction by region and season).
+3. **Sea.** Fix the energy-balance ocean's latitude profile and mid-latitude
    seasonal range instead of a −4.4 °C global offset; the air-coupled sea
    swing (e53, earlier report) is one ingredient.
-3. **Tibet.** Over high plateaus the column holds and rains too much water;
+4. **Tibet.** Over high plateaus the column holds and rains too much water;
    the plateau's saturation profile and the Himalayan front's uplift need a
    look once the monsoon flow reaches the plain.
-4. **Land heating.** Revisit e54 (and the clear-sky sunshine term) once the
-   monsoon is wet enough not to overheat.
+5. **Land heating.** Revisit e54 (and the clear-sky sunshine term) after 1.
 
 ## Reproduce
 
