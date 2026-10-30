@@ -14,7 +14,11 @@ India's rain (256 → 482 mm) but wets regions where one planet-wide ITCZ puts
 monsoon flow that is not there. Gated by the model's own pressure (e55b) and
 refitted in a frozen 48-candidate search, the best candidate reaches S 0.9938
 (rain loss −1.5 %, North India 380 mm) but fails two region groups (East
-China, Texas, Manchuria); not adopted. See the
+China, Texas, Manchuria). Those seas were 3–5 °C too warm in spring because a
+warm current covered the shelves; with a shelf rule (e56) a second frozen
+refit reaches S 0.9949 (rain −1.7 %, North India 374 mm, East Asia better)
+but misses the training group by 0.05 % (California and Iberia, whose winter
+rain r39 already has 50–90 % too high). Neither is adopted. See the
 [physics-gap report](reports/PHYSICS_GAPS_20261030.md).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's

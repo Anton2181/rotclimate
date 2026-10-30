@@ -19,8 +19,12 @@ Gating it by the model's own poleward pressure fall (e55b) removes most of
 that damage; a frozen 48-candidate refit with dry heating, rain efficiency and
 monsoon descent reaches S 0.9938 (rain −1.5 %, North India 256 → 380 mm,
 28 km check passed) but fails the training (1.0055) and mid-latitude (1.0005)
-groups. Nothing is adopted; r39 is unchanged and its runs reproduce bit for bit with
-every new switch off.
+groups. A second frozen refit adds a shelf rule for warm currents (e56, which
+removes East Asia's 3–5 °C too-warm spring seas) and the ITCZ's reach: S
+0.9949, rain −1.7 %, North India 374 mm, East Asia better, 28 km passed, but
+the training group is 0.05 % worse (California, Iberia: winter rain that r39
+already has 50–90 % too high). Nothing is adopted; r39 is unchanged and its
+runs reproduce bit for bit with every new switch off.
 
 ## 1. Inside North India (lowland cells below 1,000 m, 56 km)
 
@@ -329,15 +333,54 @@ The shelf rule fixes exactly the groups that blocked the first refit, but
 cooler seas take rain from South Brazil (+0.030 rain loss) and Japan (+0.015),
 which are already much too dry (713 against 1,256 mm; 1,330 against 1,601).
 
-## 9. Second frozen refit (in progress)
+## 9. Second frozen refit: one group short by 0.05 %
 
 `calibration/monsoon_refit2_20261030/plan.json`, committed before any result:
 the same search and gate over monsoon_westerly [0.5, 1], monsoon_pressure_hpa
 [1, 5], shelf_warm_currents [0, 1], itcz_shift [11, 17] (a more poleward
 summer ITCZ helped South Brazil and Japan in §5), precip_tau_days
 [9.5, 12.5] and monsoon_descent [0.008, 0.03], starting from the first
-winner with s 0.5; dry heating dropped. Validation as in §7 into
-`output/physics_gaps_20261030/refit2/`.
+winner with s 0.5; dry heating dropped. 48 evaluations (about 4.5 hours).
+
+* No candidate clears every group. The start point fails the former holdout
+  group (1.0077, South Brazil and Japan); the search fixes that mostly with a
+  shorter rain residence time (precip_tau_days 10.9 → 10.1), which wets every
+  winter-rain coast a little more.
+* Lowest cost (candidate 37): monsoon_westerly 0.935, monsoon_pressure_hpa
+  3.29, shelf_warm_currents 0.62, itcz_shift 14.43 (r39 13.93),
+  precip_tau_days 10.08 (r39 11.08), monsoon_descent 0.0190 (r39 0.0154).
+
+**Validation as declared** (`OUT=output/physics_gaps_20261030/refit2`; the
+fresh paired runs reproduce the search's numbers exactly):
+
+| check | result |
+|---|---|
+| development gate (`gate_local.py`, policy v2) | S **0.9949** (needs ≤ 0.995); T +0.68 %, rain −1.70 %; training **1.0005**, former holdout 0.9991, mid-latitude 0.9920, dev12 0.9899 → **fails** (training) |
+| paired 28 km | S 0.9962 → passes |
+| sealed six | not run (only for a candidate that passes both) |
+
+| region | annual rain r39 → candidate (observed) | rain loss | monthly T MAE |
+|---|---|---|---|
+| North India | 256 → 374 (761) | 0.942 → 0.752 | 3.22 → 3.39 |
+| Iran | 365 → 362 (232) | 0.598 → 0.588 | 3.31 → 3.29 |
+| East China | 1339 → 1300 (1281) | 0.320 → 0.302 | 2.01 → 1.97 |
+| Manchuria | 690 → 684 (582) | 0.291 → 0.289 | 2.13 → 2.09 |
+| Texas plains | 599 → 647 (739) | 0.475 → 0.468 | 1.20 → 1.29 |
+| South Brazil | 713 → 684 (1256) | 0.562 → 0.576 | 0.90 → 0.89 |
+| California | 467 → 489 (392) | 0.461 → 0.482 | 1.70 → 1.72 |
+| Iberia | 445 → 468 (392) | 0.521 → 0.542 | 1.62 → 1.63 |
+
+Nothing is adopted; r39 stays. The shelf rule removed the East Asian blockers
+of the first refit (East China, Manchuria and the North China Plain now
+improve), and the binding regions moved to the winter-rain coasts: California
+(region score 1.027) and Iberia (1.023) in the training group, with Cape,
+Morocco and the Great Basin worse outside it. Their r39 winter rain is
+already 50–90 % too high and the refit's shorter residence time adds about
+5 %; their summer change is negligible. Every candidate that gives South
+Brazil and Japan back their rain does the same, so the trade-off is set by
+r39's winter-wet bias, not by the monsoon or shelf rules.
+
+![Second refit](../output/physics_gaps_20261030/monsoon_refit2.png)
 
 ## Plan for the next physics milestone
 
@@ -372,6 +415,9 @@ python -I scripts/physics_gap_figures.py circulation north_india 1,5,7
 python -I scripts/physics_gap_figures.py dryheat output/physics_gaps_20261030/dry_heating_dh4 output/physics_gaps_20261030/dry_heating_dh3c6
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r39_params.json --regions dev31 --set '{"monsoon_westerly": 0.7}' --out output/physics_gaps_20261030/monsoon_westerly_mw07
 python -I scripts/physics_gap_figures.py monsoon output/physics_gaps_20261030/attribution_r39.json output/physics_gaps_20261030/monsoon_westerly_mw05 output/physics_gaps_20261030/monsoon_westerly_mw07
+python -I scripts/gate_calibrate.py --plan calibration/monsoon_refit2_20261030/plan.json --out calibration/monsoon_refit2_20261030/search
+OUT=output/physics_gaps_20261030/refit2 BEST=calibration/monsoon_refit2_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
+python -I scripts/physics_gap_figures.py refit calibration/monsoon_refit2_20261030/search precip_tau_days output/physics_gaps_20261030/refit2 "Second frozen refit (shelf rule + ITCZ): best S 0.9949, training group 1.0005 - not adopted"
 ```
 
 The dry-heating and monsoon runs kept here hold each run's summary and

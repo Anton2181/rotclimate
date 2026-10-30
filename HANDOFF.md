@@ -70,6 +70,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   rain -1.5 %, 28 km S 0.9984, but training 1.0055 and mid-latitude 1.0005
   fail; not adopted, sealed six unused. Validation:
   output/physics_gaps_20261030/refit/ (scripts/validate_monsoon_refit.sh).
+* e56 `shelf_warm_currents`: the warm subtropical current is scaled by
+  1 - s*(1 - deep-sea share), so the Kuroshio stays off the East China Sea
+  shelf (East China coastal SST bias +2.6 -> +0.6 C at s 1). Second frozen
+  refit calibration/monsoon_refit2_20261030 (shelf + itcz_shift): best w 0.935,
+  G 3.29, s 0.62, itcz 14.43, precip_tau 10.08, descent 0.0190 -> gate S
+  0.9949, rain -1.7 %, 28 km S 0.9962, training 1.0005 fails (California,
+  Iberia); not adopted, sealed six unused. output/physics_gaps_20261030/refit2/.
 
 ## Rules to keep
 
@@ -81,11 +88,12 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Next
 
-0. Physics milestone: the refit is blocked by East Asia/Texas being too warm
-   and wet already; fix the energy-balance land column's mid-latitude summer
-   (+5-7 C vs WorldClim latitude mean in July) and over-strong westerlies,
-   then retry e55b (+ e54) with the same frozen gate; then the sea's latitude
-   profile.
+0. Physics milestone: the second refit is blocked by r39's winter-wet bias on
+   winter-rain coasts (California, Iberia, Cape, Morocco, Great Basin winter
+   rain 1.5-1.9x observed) and East Asia's wet winters (Korea, Japan,
+   N China Plain 2.4-3.4x), with summer rain too low almost everywhere.
+   Winter surface westerlies over land are 2-5x NCEP. Fix that, then retry
+   e55b + e56 with the same frozen gate; then the sea's latitude profile.
 1. r39 world refit that scores painted zones on corrected temperature and
    rain; atlas layers raw + corrected. Preview (unadopted world, one layout):
    strict painted-zone accuracy 0.314 → 0.325 with both stages.

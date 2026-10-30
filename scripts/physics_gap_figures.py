@@ -5,6 +5,7 @@
     python -I scripts/physics_gap_figures.py circulation north_india 1,5,7
     python -I scripts/physics_gap_figures.py dryheat RUN_DIR [RUN_DIR ...]   # benchmark_local runs with dry_heating
     python -I scripts/physics_gap_figures.py monsoon ATTRIBUTION_JSON RUN_DIR [RUN_DIR ...]   # runs with monsoon_westerly
+    python -I scripts/physics_gap_figures.py refit SEARCH_DIR KNOB VALIDATION_DIR NAME   # gate_calibrate search + validation
 
 Output goes to output/physics_gaps_20261030/.
 """
@@ -211,6 +212,45 @@ def monsoon(attribution_path, runs):
     plt.close(fig)
 
 
+def refit(search, knob, validation, name):
+    """Search candidates (S against the worst region group, coloured by one knob)
+    and the winter-rain regions that bind the trade-off, from the validation runs."""
+    rows = [json.loads(line) for line in (Path(search) / "evals.jsonl").read_text().splitlines()]
+    best = min(rows, key=lambda r: r["cost"])
+    fig, axes = plt.subplots(1, 2, figsize=(15, 6), gridspec_kw=dict(width_ratios=[1, 1.15]))
+    ax = axes[0]
+    ax.add_patch(plt.Rectangle((0.98, 0.99), 0.015, 0.01, color="#2ecc71", alpha=.15, label="gate passes here"))
+    sc = ax.scatter([r["S"] for r in rows], [max(r["groups"].values()) for r in rows], c=[r["knobs"][knob] for r in rows],
+                    cmap="viridis", s=40, zorder=3)
+    ax.scatter(rows[0]["S"], max(rows[0]["groups"].values()), s=150, facecolor="none", edgecolor="r", marker="s",
+               zorder=4, label="start")
+    ax.scatter(best["S"], max(best["groups"].values()), s=300, color="r", marker="*", zorder=5, label="lowest cost")
+    ax.axhline(1.0, color="k", ls="--", lw=1); ax.axvline(0.995, color="k", ls="--", lw=1)
+    ax.set_xlim(0.98, 1.01); ax.set_ylim(0.99, 1.03); ax.grid(alpha=.3); ax.legend(fontsize=8)
+    ax.set_xlabel("31-region S (lower is better)"); ax.set_ylabel("worst region-group score")
+    plt.colorbar(sc, ax=ax, label=knob)
+    ax.set_title(f"{len(rows)} candidates; none clears every group", fontsize=10)
+    ax = axes[1]
+    regions = ["california", "iberia", "cape", "morocco", "great_basin"]
+    colours = ["#c0392b", "#2471a3", "#229954", "#7d3c98", "#d68910"]
+    for r, colour in zip(regions, colours):
+        a = np.load(Path(validation) / "r39_dev31/cells" / f"{r}.npz")
+        b = np.load(Path(validation) / "candidate_dev31/cells" / f"{r}.npz")
+        ax.plot(range(12), a["Po"].mean(1), "-", color=colour, lw=2.5, alpha=.45)
+        ax.plot(range(12), a["Ps"].mean(1), "--", color=colour, lw=1.2)
+        ax.plot(range(12), b["Ps"].mean(1), "-o", color=colour, ms=3, lw=1.2, label=r.replace("_", " "))
+    ax.plot([], [], "-", color="grey", lw=2.5, alpha=.45, label="observed (WorldClim)")
+    ax.plot([], [], "--", color="grey", lw=1.2, label="r39")
+    ax.plot([], [], "-o", color="grey", ms=3, lw=1.2, label="refit winner")
+    ax.set_xticks(range(12)); ax.set_xticklabels(list("JFMAMJJASOND")); ax.set_ylabel("mm per month (scored land, model's season frame)")
+    ax.grid(alpha=.3); ax.legend(fontsize=8, ncol=2)
+    ax.set_title("Winter-rain coasts: r39 already 40-90 % too wet in winter; the refit adds ~5 %", fontsize=10)
+    fig.suptitle(name, fontsize=11)
+    plt.tight_layout()
+    plt.savefig(OUT / f"{Path(search).parent.name.split('_2026')[0]}.png", dpi=85)
+    plt.close(fig)
+
+
 if __name__ == "__main__":
     OUT.mkdir(parents=True, exist_ok=True)
     what = sys.argv[1]
@@ -224,5 +264,7 @@ if __name__ == "__main__":
         dryheat(sys.argv[2:])
     elif what == "monsoon":
         monsoon(sys.argv[2], sys.argv[3:])
+    elif what == "refit":
+        refit(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
     else:
         sys.exit(__doc__)
