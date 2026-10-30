@@ -165,6 +165,36 @@ air matters more than any upstream memory.
   supersaturated winter columns (Japan's winter rain) is the mirror error.
   Both are the next things to test, against r40.
 
+## 7. Winter overflow: eddies that keep their humidity (e38b) with more land water
+
+Japan's winter rain is mostly overflow: eddies mix warm-sea water into cold
+land columns beyond their capacity (January RH 1.3) and the excess rains at
+once. e38b (`eddy_rh_cap`, an older opt-in term, off in r40) lets air the
+eddies move onto colder ground keep at most its relative humidity.
+
+| 31 regions against r40 | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| eddy_rh_cap 0.5 | −0.1 % | −0.2 % | 0.9984 | 1.010 | 1.009 | 1.027 | **0.977** |
+| eddy_rh_cap 1.0 | +0.5 % | +11.9 % | 1.0620 | 1.072 | 1.041 | 1.177 | 1.027 |
+| cap 0.3, land_recycling 0.45 | **−0.65 %** | **−1.15 %** | **0.9910** | 1.009 | 1.000 | 0.989 | 0.979 |
+| cap 0.4, land_recycling 0.5, τ 9.5 | −0.4 % | −1.1 % | 0.9924 | 1.025 | 0.991 | 0.988 | 0.976 |
+
+At 0.5 the cap fixes the winter-wet regions that bind r40's training group
+(region scores: Great Basin 0.83, Iran 0.85, East Australia 0.90,
+California 0.91, Cape 0.91; Korea's winter 229 → 105 mm against 94,
+Japan's 380 → 226 against 192) but it removes water in every season, and
+the interiors that live on eddy water dry out (US Midwest 1.46, Anatolia,
+the Levant, Central Asia, the Alps). More land recycling does the opposite
+(§3). Together the two improve both temperature and rain; only the
+training group is still worse (Levant, Central Asia, East China, south-east
+US).
+
+A frozen search (`calibration/eddy_cap_refit_20261030/plan.json`, committed
+before any result: eddy_rh_cap [0, 0.6], land_recycling [0.35, 0.55],
+precip_tau_days [8.5, 12.5], ocean_column_warm [0, 1]; 48 evaluations from
+cap 0.3 / recycling 0.45) is in progress, validated against r40 into
+`output/summer_rain_20261030/eddy_cap_refit/`.
+
 ## Reproduce
 
 ```sh
@@ -174,6 +204,8 @@ python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r
 python -I scripts/gate_calibrate.py --plan calibration/summer_refit_20261030/plan.json --out calibration/summer_refit_20261030/search --hours 3
 OUT=output/summer_rain_20261030/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/summer_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
 python -I scripts/physics_gap_figures.py summer output/summer_rain_20261030/components_r40.json output/summer_rain_20261030/column_water_r40_humid.json
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 0.3, "land_recycling": 0.45}' --out output/summer_rain_20261030/rhcap03_lr045
+python -I scripts/gate_calibrate.py --plan calibration/eddy_cap_refit_20261030/plan.json --out calibration/eddy_cap_refit_20261030/search --hours 3
 ```
 
 ![Summer rain](../output/summer_rain_20261030/summer_rain.png)
