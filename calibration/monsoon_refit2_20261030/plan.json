@@ -1,0 +1,17 @@
+{
+ "frozen": "2026-10-30, before any result of this search; after the first refit (calibration/monsoon_refit_20261030: lowest cost S 0.9938, training 1.0055 and mid-latitude 1.0005 failed) and the e56 shelf screens recorded in reports/PHYSICS_GAPS_20261030.md",
+ "why": "The first refit was blocked by East China, Texas and Manchuria. Their marginal seas were 3-5 C too warm in spring because a warm boundary current covered the shelves (e56). With the shelf rule at 0.5 the first refit's winner reaches S 0.9912 with training 0.994, mid-latitude 0.9935 and dev12 0.981, but the former holdout group worsens (1.0086: South Brazil and Japan, both already too dry, lose rain to cooler seas). A more poleward summer ITCZ helped exactly those two in the e55 screens. Dry heating, nearly zero in the first winner and harmful to East Asia, is dropped. Everything else stays r39.",
+ "start": "calibration/local_accuracy_20261023/r39_params.json",
+ "set": {"monsoon_westerly": 0.9342153750623756, "monsoon_pressure_hpa": 2.9525799653659512, "dry_heating": 0.0,
+         "precip_tau_days": 10.931196058087432, "monsoon_descent": 0.02107762662844698, "shelf_warm_currents": 0.5},
+ "reference": "output/earth_correction_20261030/r39_dev31",
+ "knobs": [["monsoon_westerly", 0.5, 1.0], ["monsoon_pressure_hpa", 1.0, 5.0], ["shelf_warm_currents", 0.0, 1.0],
+           ["itcz_shift", 11.0, 17.0], ["precip_tau_days", 9.5, 12.5], ["monsoon_descent", 0.008, 0.03]],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 31,
+ "evals": 48,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r39 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/physics_gaps_20261030/refit2 BEST=calibration/monsoon_refit2_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r39 (policy v2), then the paired 28 km check (S not worse by more than 1 %), then the sealed six once only if both pass. Failing any step means nothing is adopted; every result is reported."
+}

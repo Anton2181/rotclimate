@@ -255,6 +255,8 @@ class ClimateModel:
             raise ValueError('Unknown column_saturation_scheme')
         if params.moisture_transport_form not in ('concentration','flux'):
             raise ValueError('Unknown moisture_transport_form')
+        if not 0 <= params.shelf_warm_currents <= 1:
+            raise ValueError('shelf_warm_currents must be in [0, 1]')
         if not 0 <= params.monsoon_westerly <= 1:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
@@ -415,6 +417,17 @@ class ClimateModel:
                 depth = DEEP_SEA_M[0] + (DEEP_SEA_M[1] - DEEP_SEA_M[0]) * np.clip(
                     (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
             self.sea_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
+        self.shelf_deep = None
+        if p.shelf_warm_currents > 0:
+            # e56: the deep-sea share of each cell (as e50 measures it), for the
+            # warm boundary currents that run along the slope, not the shelf
+            if g.sea_depth is not None:
+                depth = g.sea_depth
+            else:
+                coast_km = ndi.distance_transform_edt(~g.land) * g.cell_km
+                depth = DEEP_SEA_M[0] + (DEEP_SEA_M[1] - DEEP_SEA_M[0]) * np.clip(
+                    (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
+            self.shelf_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
         self.gyre = None
         if p.current_gyre > 0:
             # e42: a cold west-coast current is the eastern limb of a
@@ -791,6 +804,16 @@ class ClimateModel:
         cur = sign * p.current_strength * self.side * band
         if self.gyre is not None:      # e42: no gyre, no cold current
             cur = np.where(cur < 0, cur * (1.0 - p.current_gyre * (1.0 - self.gyre)), cur)
+        if self.shelf_deep is not None:
+            # e56: the Kuroshio, the Gulf Stream and the East Australian
+            # Current run along the continental slope; the broad shelves inside
+            # them hold their own water, cooled by the winter monsoon (the
+            # China Coastal Current, the Yellow Sea at 6 C in April). The
+            # current's +3.9 C over the East China Sea shelf left it 3.7-4.3 C
+            # warmer than WOA18 from winter to spring, and East China's coast
+            # 4 C too warm in spring. The subpolar drift that floods the North
+            # Sea is left alone.
+            cur = np.where(cur > 0, cur * (1.0 - p.shelf_warm_currents * (1.0 - self.shelf_deep)), cur)
         if p.subpolar_current > 0:
             # e26: poleward of ~42 deg the subpolar gyre turns the other way:
             # the North Atlantic Drift and the Alaska Current warm the west

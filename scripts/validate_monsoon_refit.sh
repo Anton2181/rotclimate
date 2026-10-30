@@ -7,8 +7,8 @@ set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=${PY:-.venv/bin/python}
 export OPENBLAS_NUM_THREADS=1
-OUT=output/physics_gaps_20261030/refit
-BEST=calibration/monsoon_refit_20261030/search/best_params.json
+OUT=${OUT:-output/physics_gaps_20261030/refit}
+BEST=${BEST:-calibration/monsoon_refit_20261030/search/best_params.json}
 R39=calibration/local_accuracy_20261023/r39_params.json
 mkdir -p "$OUT"
 cp "$BEST" "$OUT/candidate_params.json"

@@ -12,9 +12,10 @@ def r39():
 def test_new_switches_default_off_and_are_classified():
     p = Params()
     assert p.dry_heating == 0.0 and p.dry_heating_chi0 == 0.0 and p.wind_source == 'model'
-    assert p.monsoon_westerly == 0.0 and p.itcz_shift_ocean < 0
+    assert p.monsoon_westerly == 0.0 and p.itcz_shift_ocean < 0 and p.shelf_warm_currents == 0.0
     validate_partition()
-    assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa'} <= SHARED_FIELDS
+    assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
+            'shelf_warm_currents'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -27,6 +28,7 @@ def test_new_switches_default_off_and_are_classified():
     (dict(dry_heating=3.0, dry_heating_chi0=1.0), 'dry_heating_chi0 must be'),
     (dict(dry_heating=3.0, dry_heating_chi0=0.6, continentality=0.0), 'advected land share'),
     (dict(monsoon_westerly=1.5), 'monsoon_westerly must be'),
+    (dict(shelf_warm_currents=1.2), 'shelf_warm_currents must be'),
     (dict(monsoon_westerly=0.7, monsoon_pressure_hpa=-1.0), 'monsoon_pressure_hpa must be'),
 ])
 def test_invalid_switches_are_refused_before_any_run(changes, message):
@@ -67,3 +69,21 @@ def test_monsoon_gate_follows_the_models_own_pressure():
     assert np.array_equal(plain, high)                                   # pressure rising poleward: trades stay
     assert (turned[between] > plain[between]).all()
     assert np.array_equal(turned[~between], plain[~between])
+
+
+def test_shelf_rule_only_removes_warm_current_over_shallow_sea():
+    import numpy as np
+    from types import SimpleNamespace
+
+    p = r39().replace(retrograde=False, north_bearing=0.0)
+    lat = np.full((3, 4), 30.0)
+    base = dict(lat=lat, side=np.array([[-1.0, -1.0, 1.0, 1.0]] * 3), gyre=None, enclosure=np.zeros_like(lat),
+                sea_deep=None, lakeness=np.zeros_like(lat))
+    deep = np.array([[0.0, 1.0, 0.0, 1.0]] * 3)
+    To = np.full_like(lat, 20.0)
+    plain = ClimateModel.sst(SimpleNamespace(p=p, shelf_deep=None, **base), 0.0, To, To)
+    shelf = ClimateModel.sst(SimpleNamespace(p=p.replace(shelf_warm_currents=1.0), shelf_deep=deep, **base), 0.0, To, To)
+    warm = plain > To                                   # west side of the basin (east coast of a continent)
+    assert warm[:, :2].all() and not warm[:, 2:].any()
+    assert np.allclose(shelf[:, 0], To[:, 0])             # warm current kept off the shelf
+    assert np.array_equal(shelf[:, 1:], plain[:, 1:])     # deep warm water and cold currents unchanged
