@@ -19,8 +19,10 @@ and the south-east US, which are already too wet in summer. A new opt-in term
 highs' sinking) is screened below. A frozen refit with it, the sea's
 column humidity and the rain residence time finds nothing better than r40
 (best S 1.0008, three groups worse), and a slower sea dries the humid
-regions instead. r40 stays; the summer needs season-aware rain-making, not
-more sea water.
+regions instead. A cap on the eddies' humidity (e38b) with more land
+water passes the development gate and the 28 km check (S 0.9946) but makes
+the sealed six 1.35 % worse (the north-east US loses its eddy water) and is
+not adopted. r40 stays.
 
 ## 1. The rain's factors (`scripts/rain_components.py`)
 
@@ -192,8 +194,35 @@ US).
 A frozen search (`calibration/eddy_cap_refit_20261030/plan.json`, committed
 before any result: eddy_rh_cap [0, 0.6], land_recycling [0.35, 0.55],
 precip_tau_days [8.5, 12.5], ocean_column_warm [0, 1]; 48 evaluations from
-cap 0.3 / recycling 0.45) is in progress, validated against r40 into
-`output/summer_rain_20261030/eddy_cap_refit/`.
+cap 0.3 / recycling 0.45) finds one candidate (19th) that clears every group:
+eddy_rh_cap 0.176, land_recycling 0.388 (r40 0.399), precip_tau_days 9.92
+(r40 10.05), ocean_column_warm 0.208.
+
+| check against r40 | result |
+|---|---|
+| development gate, 31 regions | S **0.9946** (needs ≤ 0.995); T +0.30 %, rain −1.39 %; training 0.9995, former holdout 0.9982, mid-latitude 0.9970, dev12 0.9885 → passes |
+| paired 28 km | S 0.9981 → passes |
+| sealed six, run once | S **1.0135** → **worse**: north-east US rain loss 0.173 → 0.220 (+27 %), Caucasus 0.619 → 0.660; Tasmania and SE Africa better |
+
+**Not adopted.** The development gain is the smallest the policy allows
+(0.54 %), and the six regions never used for tuning get 1.35 % worse. Every
+earlier adoption (r30–r40) improved them (S 0.946–0.995). Policy v2 lists
+the sealed six as a once-per-milestone record rather than an adoption rule,
+so this is a judgment, recorded here: a sealed loss this size on top of a
+marginal development gain reads as overfitting. It is also consistent
+with the development set itself. The two worst development regions were the
+US Midwest (1.054) and the south-east US (1.034), and the north-east US is
+their neighbour: the cap takes the eddy water that eastern North America's
+rain lives on, and the gate's group averages hid it. r40 stays. The sealed
+six have now been seen once by this candidate; that is reported here and
+counts against their independence for the next milestone.
+
+What this leaves: capping the eddies' humidity is the first mechanism that
+fixes the winter-wet coasts (Great Basin, Iran, California, Cape, East
+Australia, Manchuria) without new physics, but as built it caps every season
+and every direction. A cap that acts only where eddies carry sea air onto
+much colder land (the winter monsoon coasts), leaving warm-season and
+continental transport alone, is the next step.
 
 ## Reproduce
 
@@ -206,6 +235,7 @@ OUT=output/summer_rain_20261030/refit REF_NAME=r40 REF_FIT=calibration/local_acc
 python -I scripts/physics_gap_figures.py summer output/summer_rain_20261030/components_r40.json output/summer_rain_20261030/column_water_r40_humid.json
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 0.3, "land_recycling": 0.45}' --out output/summer_rain_20261030/rhcap03_lr045
 python -I scripts/gate_calibrate.py --plan calibration/eddy_cap_refit_20261030/plan.json --out calibration/eddy_cap_refit_20261030/search --hours 3
+OUT=output/summer_rain_20261030/eddy_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/eddy_cap_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
 ```
 
 ![Summer rain](../output/summer_rain_20261030/summer_rain.png)

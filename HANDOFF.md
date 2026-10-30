@@ -114,8 +114,11 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    ocean_rh/e58/tau (best S 1.0008) and slower sea uptake all fail against
    r40. Next: season-aware rain-making (mid-latitude summer convection is
    ~absent: instability from 22 C, closure ~0.1 mm/day) and winter overflow
-   of supersaturated columns. Then winter-rain coasts and North India's
-   pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
+   of supersaturated columns. eddy_rh_cap (e38b) + land_recycling refit
+   (calibration/eddy_cap_refit_20261030) passed gate 0.9946 and 28 km 0.9981
+   but sealed six 1.0135 (NE US rain +27 %): NOT adopted (judgment; policy
+   lists sealed as a record). Sealed six seen once by it. Next: a cap only
+   for sea air onto much colder land. Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
 1. Retrain the Earth correction stages on r40; freeze a world refit for the
    invented map on r40 physics (r39's plan: calibration/map_world_r39/plan.json).
