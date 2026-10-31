@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "name": "Population budget and market access",
+  "technology": "c.200 AD food model; walking access without roads or ships",
+  "walking_off_path_factor": 0.6,
+  "water_weight_floor": 0.35,
+  "water_distance_scale_km": 15,
+  "slope_scale": 0.15,
+  "market_weight_floor": 0.25,
+  "market_time_scale_hours": 24,
+  "minimum_attraction": 0.02,
+  "sources": [
+    {"title": "Klein Goldewijk et al. 2017, HYDE 3.2, section 3.1", "url": "https://doi.org/10.5194/essd-9-927-2017", "use": "Population totals and spatial allocation are separate; historical allocation uses environmental proxies. No HYDE Earth raster or population count is transplanted into this world."},
+    {"title": "Tobler 1993, NCGIA Technical Report 93-1", "url": "https://escholarship.org/uc/item/05r820mz", "use": "Signed slope walking speed: 6 exp(-3.5 abs(s + 0.05)) km/h; 0.6 off-path factor. Slope is rise/run, not degrees."}
+  ],
+  "assumptions": [
+    "The population total is supplied by the user; the initial value is the existing central occupation scenario for this climate. This model reallocates a census, rather than predicting its total.",
+    "Environmental support is the existing Harvest settlement potential in people/km2, with optional removal of its malaria penalty. It is a local support ceiling for this experiment.",
+    "Attraction weights are explicit scenario choices, inspired by HYDE's use of environmental proxies; they are not HYDE coefficients or independent validation.",
+    "All named places are potential markets, with no assumed city population. Nearest market travel follows an eight-neighbour directed land graph. Water and blocked diagonal corners cannot be crossed.",
+    "Walking hours exclude rest, roads, boats, bridges, border costs and seasonal closures. Island land without a reachable named market retains a positive settlement weight.",
+    "Allocated people never exceed local environmental support. Excess requested population is reported separately, never silently dropped. Imports and urban densities above local food support are not simulated.",
+    "Market catchment totals describe surrounding residents, not city population. Population pressure and spare support use the same capacity and allocated population, so their food budget is consistent."
+  ]
+}

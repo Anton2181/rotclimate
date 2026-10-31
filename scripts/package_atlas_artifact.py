@@ -55,12 +55,19 @@ def main():
     meta_path = a.out / "data" / "atlas.json"
     meta = json.loads(meta_path.read_text())
     # every packet the page fetches by its "binary" entry (harvest, population,
-    # FORGE foraging and any later one) must follow its renamed file
-    renamed = [part for part, spec in meta.items()
-               if isinstance(spec, dict) and str(spec.get("binary", "")).endswith(".bin")]
-    for part in renamed:
-        meta[part]["binary"] = meta[part]["binary"][:-4] + ".wasm"
-    missing = [part for part in renamed if not (a.out / "data" / meta[part]["binary"]).is_file()]
+    # FORGE foraging, the Earth-corrected copies under corrected_food and any
+    # later one) must follow its renamed file
+    renamed, specs = [], {}
+
+    def walk(node, path):
+        if isinstance(node, dict):
+            if str(node.get("binary", "")).endswith(".bin"):
+                node["binary"] = node["binary"][:-4] + ".wasm"
+                renamed.append(path); specs[path] = node
+            for key, value in node.items():
+                walk(value, f"{path}.{key}" if path else key)
+    walk(meta, "")
+    missing = [part for part in renamed if not (a.out / "data" / specs[part]["binary"]).is_file()]
     if missing:
         raise SystemExit(f"Renamed packet binaries are missing: {missing}")
     meta_path.write_text(json.dumps(meta, ensure_ascii=False, separators=(",", ":")))

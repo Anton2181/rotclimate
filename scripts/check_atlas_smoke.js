@@ -69,10 +69,36 @@ async function checkPage(browser, url) {
     await showLayer('zones');
     result.checks.initialization_link = await page.locator('#legend a[data-initialization-check]').count();
   }
+  if (meta.corrected_food) {
+    // the same food and people topics on the Earth-corrected climate (#climate=corrected reloads them)
+    await page.goto('about:blank');               // a hash-only change would not reload the page
+    await page.goto(url.split('#')[0] + '#climate=corrected&layer=land_density', { waitUntil: 'domcontentloaded' });
+    await page.waitForFunction(() => document.querySelector('#station-h')?.textContent !== '—', null, { timeout: 90000 });
+    await page.waitForFunction(() => (document.querySelector('#base')?.src || '').includes('corrected/'), null, { timeout: 30000 });
+    const harvest = await page.$eval('#harvest-totals', e => e.innerText.replace(/\s+/g, ' ').trim().slice(0, 160));
+    const control = await page.isVisible('#food-climate-control');
+    const choice = await page.$eval('#food-climate', e => e.value);
+    let forage = '';
+    if (meta.foraging) {
+      await showLayer('forage_density');
+      await page.waitForFunction(() => document.querySelector('#foraging-totals')?.children.length > 0, null, { timeout: 60000 });
+      forage = await page.$eval('#foraging-totals', e => e.innerText.replace(/\s+/g, ' ').trim());
+    }
+    let pop = '';
+    if (meta.population) {
+      await showLayer('pop_density');
+      await page.waitForFunction(() => /supplied/.test(document.querySelector('#population-message')?.textContent || ''), null, { timeout: 60000 });
+      pop = await page.$eval('#population-message', e => e.textContent.trim());
+    }
+    result.checks.corrected_food = { control_visible: control, choice, harvest, foraging: forage, population: pop,
+      image: await page.$eval('#base', e => (e.src.split('/data/')[1] || e.src).slice(0, 120)), hash: await page.evaluate(() => location.hash) };
+  }
   await page.waitForTimeout(1500);
   result.errors = errors; result.failed_requests = failed;
   result.passed = !errors.length && !failed.length && (!meta.foraging || /people/.test(result.checks.foraging.totals))
-    && (!result.checks.corrected || (result.checks.corrected.topic && result.checks.corrected.layers.every(L => L.image_loaded)));
+    && (!result.checks.corrected || (result.checks.corrected.topic && result.checks.corrected.layers.every(L => L.image_loaded)))
+    && (!result.checks.corrected_food || (result.checks.corrected_food.choice === 'corrected' && /corrected/.test(result.checks.corrected_food.hash)
+        && (!meta.foraging || /people/.test(result.checks.corrected_food.foraging))));
   await page.close();
   return result;
 }

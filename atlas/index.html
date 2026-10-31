@@ -341,6 +341,10 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
           <label class="toggle" id="tiers-control" title="Group the colours into classes with round edges instead of a smooth gradient" hidden><input type="checkbox" id="tiers"> Tiered colours</label>
         </div>
       </div>
+      <div id="food-climate-control" class="monthctl" hidden>
+        <label>Climate for food and people <select id="food-climate"><option value="simulated">Simulated</option><option value="corrected">Earth-corrected</option></select></label>
+        <span class="note" id="food-climate-note"></span>
+      </div>
       <div id="settlement-controls" class="monthctl" hidden>
         <label id="occupation-control">Settlement <select id="occupation"><option value="frontier">Frontier</option><option value="central" selected>Central</option><option value="core">Settled core</option></select></label>
         <label id="disease-control">Malaria <select id="disease"><option value="endemic">Environmental potential</option><option value="absent">No malaria penalty</option></select></label>
@@ -632,6 +636,7 @@ window.atlasSave = async (filename, blob) => {
   }
 
   let meta, buf;
+  let foodClimate = "simulated";       // farming, population and foraging: simulated or Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
   const fresh = (path) => `${path}${path.includes("?") ? "&" : "?"}v=${assetVersion}`;
@@ -639,6 +644,13 @@ window.atlasSave = async (filename, blob) => {
     const metadataResponse = await fetch(fresh("data/atlas.json"), { cache: "no-store" });
     if (!metadataResponse.ok) throw new Error(`Metadata HTTP ${metadataResponse.status}`);
     meta = await metadataResponse.json();
+    if (meta.corrected_food && new URLSearchParams(location.hash.slice(1)).get("climate") === "corrected") {
+      // the same layers and packets, recomputed on the Earth-corrected climate (data/corrected/)
+      foodClimate = "corrected";
+      const swap = new Map(meta.corrected_food.layers.map(L => [L.id, L]));
+      meta.layers = meta.layers.map(L => swap.get(L.id) || L);
+      for (const part of ["harvest", "population", "foraging"]) if (meta.corrected_food[part]) meta[part] = meta.corrected_food[part];
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -826,6 +838,11 @@ window.atlasSave = async (filename, blob) => {
     $("occupation-control").hidden = !occupationUsed;
     $("disease-control").hidden = !diseaseUsed;
     $("settlement-controls").hidden = !meta.harvest || !(occupationUsed || diseaseUsed);
+    const foodLayer = /^(land_|pop_|forage_)/.test(L.id);
+    $("food-climate-control").hidden = !(meta.corrected_food && foodLayer);
+    $("food-climate").value = foodClimate;
+    $("food-climate-note").textContent = foodClimate === "corrected" ? meta.corrected_food.note
+      : "Simulated climate. Earth-corrected recomputes farming, population and foraging after the Earth-trained corrections.";
     const population = L.group === "Population" && !!meta.population;
     const foraging = L.group === "Foraging" && !!meta.foraging;
     $("population-controls").hidden = !population || !L.population_dynamic;
@@ -850,6 +867,7 @@ window.atlasSave = async (filename, blob) => {
     const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
     if ($("tiers").checked) state.set("colours", "tiers");
     if (L.variants) state.set("variant", variantOf(L).value);
+    if (foodClimate === "corrected") state.set("climate", "corrected");
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     history.replaceState(null, "", "#" + state.toString());
@@ -1995,6 +2013,13 @@ window.atlasSave = async (filename, blob) => {
   const initialView = new URLSearchParams(location.hash.slice(1));
   try { $("tiers").checked = initialView.has("colours") ? initialView.get("colours") === "tiers" : localStorage.getItem("rotclimate-tiers") === "1"; }
   catch (e) { $("tiers").checked = initialView.get("colours") === "tiers"; }
+  $("food-climate").addEventListener("change", (e) => {
+    // the packets load once per page, so switching climates reloads with the choice in the address
+    const state = new URLSearchParams(location.hash.slice(1));
+    if (e.target.value === "corrected") state.set("climate", "corrected"); else state.delete("climate");
+    history.replaceState(null, "", "#" + state.toString());
+    location.reload();
+  });
   $("tiers").addEventListener("change", (e) => {
     try { localStorage.setItem("rotclimate-tiers", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
     setLayer(current);
