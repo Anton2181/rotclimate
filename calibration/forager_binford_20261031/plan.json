@@ -1,0 +1,17 @@
+{
+ "frozen": "2026-10-31, before any model run at the Binford sites; only the dataset's makeup (counts by culture area, density and diet distributions) was looked at",
+ "purpose": "First empirical test of the atlas's adapted FORGE foraging scenario, and the decision rule for the robustness and storage changes (and, in a later addendum frozen before its runs, aquatic foods).",
+ "data": "Binford (2001) hunter-gatherer data as distributed in the CRAN package binford 0.1.0 (LRB, 339 groups; Marwick, Johnson, White, Eff; GPL-3). Population density = tlpop / area (persons per 100 km2); percent dependence on terrestrial plants (gatherin), terrestrial animals (hunting), aquatic foods (fishing); storage dependence (store).",
+ "sample": "Groups Binford marks as normal cases (subpop == 'n') with positive density and coordinates where WorldClim 2.1 5-arc-minute monthly temperature and rain exist within 25 km.",
+ "split": {"fit": "North American culture areas (wc.area SW, BC NWC, NNA, ARC, WNA, ENA)", "test": "all other culture areas (AUS, ASIA, SOAM, AFR, ...)", "rule": "any fitted number is fitted on the fit set only; decisions use the test set"},
+ "climate": "Mean of WorldClim 2.1 monthly mean temperature and precipitation over land cells within 25 km of the group's coordinates; months rotated so the year starts after the local winter solstice (January in the north, July in the south), as the atlas packet's bins start at the winter solstice.",
+ "model": "foraging.forcing.daily_resources + foraging.models.simulate_foraging with data/foraging_model.json as committed at this plan's commit, one cell per group, no other change.",
+ "configurations": {
+   "A": "current atlas: 300 years, display density = mean of the final 50 years with floor-limited years as zero",
+   "B": "robust summary: 600 years, display density = median of the final 300 annual densities (floor-limited years as zero); nothing fitted",
+   "C": "B + food storage: surplus food beyond the fat ceiling can be stored per person up to storage_capacity_mj and drawn before body fat; spoilage storage_decay_day = 0.003 (fixed, about a year's half-life for dried food); storage_capacity_mj fitted on the fit set over {0, 250, 500, 1000, 2000, 4000} by the median absolute log10 density error"
+ },
+ "metrics": "On each set: Spearman rank correlation of model and observed density (log), median absolute log10 ratio, median log10 ratio (bias); Spearman of model animal-food share against observed (hunting + fishing) / 100 and of model animal share against hunting / (hunting + gathering) among groups with fishing < 20 %; for C also the model's stored share of intake against Binford's storage dependence (Spearman).",
+ "decision": "B replaces A in the atlas if the test-set median absolute log10 error is not worse by more than 0.02 and the density Spearman is not lower by more than 0.02 (B's purpose is stable maps, not a better fit). C replaces B if, on the test set, the median absolute log10 error improves and the density Spearman does not fall by more than 0.02. Every result is reported, including failures.",
+ "reported_regardless": "Fit-set metrics, the per-culture-area table, and a figure of model against observed density."
+}
