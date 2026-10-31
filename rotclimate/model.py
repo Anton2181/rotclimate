@@ -262,6 +262,10 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not (0 <= params.heat_land_friction < 1 and 0 <= params.water_land_friction < 1):
+            raise ValueError('heat_land_friction and water_land_friction must be in [0, 1)')
+        if (params.heat_land_friction > 0 or params.water_land_friction > 0) and params.wind_source != 'model':
+            raise ValueError('heat_land_friction and water_land_friction need the model winds')
         if not 0 <= params.ocean_column_air <= 1 or (params.ocean_column_air > 0 and params.column_saturation_scheme != 'legacy'):
             raise ValueError('ocean_column_air must be in [0, 1] and needs the legacy column saturation')
         if not 0 <= params.ocean_column_warm <= 1 or (params.ocean_column_warm > 0 and params.column_saturation_scheme != 'legacy'):
@@ -536,7 +540,7 @@ class ClimateModel:
         # e57: land share over the ~300 km a surface wind takes to adjust to
         # the rougher ground (internal boundary layer)
         self.land_friction = (ndi.gaussian_filter(land, LAND_FRICTION_KM / g.cell_km, mode="nearest")
-                              if p.zonal_land_friction > 0 else None)
+                              if max(p.zonal_land_friction, p.heat_land_friction, p.water_land_friction) > 0 else None)
         # e4b: land fraction at the scale of continents (summer trade weakening)
         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
@@ -1173,9 +1177,25 @@ class ClimateModel:
 
             # ---- parts of the winds and storms that do not depend on temperature
             u0, v0, phi_i, phi_h = self.zonal_wind(s)
+            split = p.heat_land_friction > 0 or p.water_land_friction > 0
+            if split:
+                # e62: one wind was both the surface wind that carries heat
+                # and the ~850 hPa wind that carries water. NCEP's January
+                # surface westerlies over Iberia, central Europe and the US
+                # Midwest are 1-2 m/s, the 850 hPa flow above them 6-10, and
+                # slowing the model's belts over land for both (e57) mended
+                # the Midwest's and Europe's heat but starved Central Asia,
+                # Anatolia and the Levant of westerly water. Slow the belts
+                # over land separately in the two winds.
+                fh = 1.0 - p.heat_land_friction * self.land_friction
+                fw = 1.0 - p.water_land_friction * self.land_friction
+                u0h, v0h = u0 * fh, v0 * fh
+                u0, v0 = u0 * fw, v0 * fw
             if p.subtropical_high > 0:
                 us, vs = self.subtropical_high_wind(s, phi_h)
                 u0, v0 = u0 + us, v0 + vs
+                if split:
+                    u0h, v0h = u0h + us, v0h + vs
             uM = vM = None
             if p.monsoon_heating > 0 and heating_prev is not None:
                 # e4b: latent heating aloft drives low-level flow toward it by
@@ -1192,6 +1212,8 @@ class ClimateModel:
                 th = np.radians(p.north_bearing)
                 uM, vM = vN * np.sin(th), vN * np.cos(th)
                 u0, v0 = u0 + uM, v0 + vM
+                if split:
+                    u0h, v0h = u0h + uM, v0h + vM
             # transient eddies (storms) mix heat and moisture between land and
             # sea regardless of the mean wind; modelled as exchange with the
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
@@ -1252,9 +1274,9 @@ class ClimateModel:
                 T_ref = T_prev + (T_prev - T_prev2)
             else:
                 T_ref = T_prev
-            u=v=None
+            u=v=uh=vh=None
             def solve_temperature(T_state, first_iteration):
-                nonlocal u,v
+                nonlocal u,v,uh,vh
                 # ---- winds
                 T_anom = T_state - Tz
                 if p.slp_large > 0 or p.slp_local > 0:
@@ -1283,6 +1305,8 @@ class ClimateModel:
                     m0 = int(np.floor(mpos)); fr = mpos - m0
                     u = (1.0 - fr) * g.obs_wind[m0, 0] + fr * g.obs_wind[(m0 + 1) % 12, 0]
                     v = (1.0 - fr) * g.obs_wind[m0, 1] + fr * g.obs_wind[(m0 + 1) % 12, 1]
+                # e62: the heat solver and the air's land fetch take the heat wind
+                uh, vh = ((u0h + ut) * self.drag, (v0h + vt) * self.drag) if split else (u, v)
                 lam = lamT
                 if p.ocean_tau_stable > 0:
                     # e3: air warmer than the sea under it is stable: a shallow
@@ -1323,10 +1347,10 @@ class ClimateModel:
                 if p.eddy_rate > 0:
                     Tmix = gauss(T_state, sigE)
                     eh = eddy if p.eddy_heat == 1.0 else eddy * p.eddy_heat
-                    return self.solver.solve(u, v, p.heat_diffusion, lam + eh,
+                    return self.solver.solve(uh, vh, p.heat_diffusion, lam + eh,
                                             lam * T_eq + eh * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
                 else:
-                    return self.solver.solve(u, v, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
+                    return self.solver.solve(uh, vh, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
             retry_callback=(lambda info:temperature_retry(dict(seasonal_step=n+1,day=float(d),**info))) if temperature_retry else None
             temperature=iterate_temperature(solve_temperature,T_ref,p.t_iters,p.t_relaxation,p.t_adaptive_retries,
                                             on_retry=retry_callback, acceleration=p.t_anderson)
@@ -1897,7 +1921,7 @@ class ClimateModel:
                 rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)
                 cloud_prev = (np.clip(0.2 * np.sqrt(np.clip(P, 0.0, 10.0)) + np.clip((rh - 0.3) / 0.7, 0.0, 1.0) ** 2,
                                       0.0, 1.0), W)
-            uv_prev = (u, v)
+            uv_prev = (uh, vh)
             if n >= spinup:
                 if layer_water_out is not None:layer_water_out[k]=solution.layer_water
                 for key, val in (("T", T_rep), ("Tsl", Tsl_rep), ("P", P), ("W", W), ("u", u), ("v", v), ("E", E)):

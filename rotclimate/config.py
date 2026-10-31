@@ -216,6 +216,8 @@ class Params:
     monsoon_rain0: float = 1.0        # e4b: warm-season rain (mm/day) with no inflow; drier skies drive outflow
     trade_land: float = 0.0           # e4b: summer weakening of the trades over continental-scale land (0-1)
     zonal_land_friction: float = 0.0  # e57: share by which surface friction over land slows the zonal belts (land smoothed over ~300 km; the pressure wind has its own land drag, e5)
+    heat_land_friction: float = 0.0   # e62: as e57, but only in the wind that carries heat (the surface layer); the wind that carries water keeps its own share (water_land_friction)
+    water_land_friction: float = 0.0  # e62: as e57, but only in the wind that carries water, lifts it over terrain and makes convergence (~850 hPa, little slowed by the ground)
     far_fetch: float = 0.0            # e6: weight of the far-field upwind land share at the domain edge (0 = local land)
     wind_cap: float = 0.0             # e6: m/s ceiling of the temperature-driven wind, soft above half of it (0 = none)
     soil_bucket_mm: float = 0.0       # e8: soil water a land cell holds for energy-limited evaporation (0 = recent-rain recycling)
