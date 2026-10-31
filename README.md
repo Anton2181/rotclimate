@@ -27,7 +27,10 @@ regions 1.35 % worse, and a cold-air-only version (e60) 4 % worse (it
 removes the north-east US's winter snow), so neither is adopted. Both Earth
 correction stages are retrained on r40 (31 regions held out: temperature
 1.81 → 1.55 °C, rain loss 0.433 → 0.420; see the
-[correction report](reports/EARTH_CORRECTION_20261030.md)).
+[correction report](reports/EARTH_CORRECTION_20261030.md)). A frozen world
+refit on r40 does not beat the published r38 world on the invented map's
+zones at native resolution, so the atlas keeps r38
+([world report](reports/R40_WORLD_20261031.md)).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.

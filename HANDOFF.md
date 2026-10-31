@@ -132,8 +132,12 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    beside the surface wind. cold_high_storms 0.25-0.40: small clean gain
    (S 0.998), refit candidate. Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
-1. World refit for the invented map on r40: calibration/map_world_r40/plan.json,
-   scripts/world_campaign_r40.py (search, review), evidence output/r40_world/.
+1. World refit for the invented map on r40 (calibration/map_world_r40,
+   scripts/world_campaign_r40.py): NOT published. Coarse best 0.1922 vs
+   0.1895 but every better candidate breaks a zone/Mediterranean guard; the
+   start fails every native protection (zonefit 0.1796 vs 0.1828, strict
+   33.1 vs 35.0 %, Med dry 9.0 vs 6.4 %). Audit layouts 590xxx unused.
+   reports/R40_WORLD_20261031.md. Atlas stays r38.
 2. Fresh sealed set declared 2026-10-31: calibration/sealed_20261031/
    (hokkaido, canadian_prairies, kazakh_steppe, namibia_kalahari,
    southern_italy, north_queensland; no model run on them yet). Use

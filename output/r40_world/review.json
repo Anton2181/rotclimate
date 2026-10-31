@@ -1,0 +1,88 @@
+{
+  "complete": true,
+  "identity": "60316f0d93013b154ef22b7c72735663e8cb6ec04cc0985d873db5d8bf3f2db6",
+  "native": [
+    {
+      "name": "candidate_001",
+      "metrics": {
+        "zonefit": 0.17963120242039832,
+        "accuracy": 0.3308390785269884,
+        "recall": {
+          "cold_wet": 0.685614849187935,
+          "cold_dry": 0.0020222446916076846,
+          "warm_wet": 0.36888419570573744,
+          "med": 0.6646626586506346,
+          "swamp": 0.0,
+          "tree": 0.07006369426751592,
+          "hot_dry": 0.23137254901960785
+        },
+        "mediterranean": {
+          "dry_share": 0.08984635938543754,
+          "cs_share": 0.7247828991315965
+        },
+        "numerics": {
+          "members": [
+            {
+              "linear_solves": 2136,
+              "linear_unconverged": 0,
+              "linear_methods": {
+                "sor": 2136
+              },
+              "temperature_steps": 33,
+              "temperature_unconverged": 0,
+              "temperature_max_update_c": 0.04974973505031244,
+              "accelerated_stages": 0,
+              "moisture_checked": true,
+              "moisture_unconverged": 0,
+              "all_checks_passed": true
+            },
+            {
+              "linear_solves": 2186,
+              "linear_unconverged": 0,
+              "linear_methods": {
+                "sor": 2186
+              },
+              "temperature_steps": 33,
+              "temperature_unconverged": 0,
+              "temperature_max_update_c": 0.04991816882947475,
+              "accelerated_stages": 0,
+              "moisture_checked": true,
+              "moisture_unconverged": 0,
+              "all_checks_passed": true
+            },
+            {
+              "linear_solves": 2075,
+              "linear_unconverged": 0,
+              "linear_methods": {
+                "sor": 2075
+              },
+              "temperature_steps": 33,
+              "temperature_unconverged": 0,
+              "temperature_max_update_c": 0.049967671888381915,
+              "accelerated_stages": 0,
+              "moisture_checked": true,
+              "moisture_unconverged": 0,
+              "all_checks_passed": true
+            }
+          ],
+          "all_checks_passed": true
+        }
+      },
+      "failures": [
+        "Native zonefit improvement below 0.001",
+        "Native strict accuracy worsened",
+        "cold_wet: recall exceeded loss allowance",
+        "warm_wet: recall exceeded loss allowance",
+        "med: recall exceeded loss allowance",
+        "Mediterranean dry share exceeded allowance",
+        "Mediterranean Cs share exceeded loss allowance"
+      ],
+      "params": "calibration/map_world_r40/finalists/candidate_001.json"
+    }
+  ],
+  "audit": null,
+  "eligible_for_publication": false,
+  "params": null,
+  "checkpoint": null,
+  "decision": "Keep the canonical r38 atlas; no world qualifies."
+}
