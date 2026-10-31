@@ -1,0 +1,62 @@
+{
+ "frozen": "2026-10-31, before any result of this search; after the first dry-heating refit (calibration/dry_heat_refit_20261031: dev31 0.9879, 28 km 0.9893, first 31-Oct sealed set 1.0405) and the e54d screens on dev31 and on that retired sealed set (output/dry_heat_v2_20261031; reports/TRANSPORT_WIND_20261031.md section 9)",
+ "why": "The retired sealed set showed what failed: the cold-high storm damping made Hokkaido more continental, the water-wind land friction starved the Kazakh steppe, and summer dry heating warmed cold steppes. e54d lets dry heating act only where the annual-mean land equilibrium is warm; with no frictions and r40's storm damping (v1) dev31 gives 0.9881 (T -2.3 %) and the retired set 0.9936, but Manchuria and eastern Europe fail the mid-latitude group (1.010). The search balances dry heating, its gates, the storm damping, the winter overturning and the rain time scale with the retired set as an extra guarded group.",
+ "start": "calibration/dry_heat_refit_20261031/search/best_params.json",
+ "set": {
+  "heat_land_friction": 0.0,
+  "water_land_friction": 0.0,
+  "cold_high_storms": 0.13324679227620187,
+  "dry_heating_mean_c": 12.0
+ },
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "extra_groups": {
+  "retired_sealed": {
+   "spec": "calibration/sealed_20261031/regions.json",
+   "reference": "output/transport_wind_20261031/dry_heat_refit/r40_sealed6"
+  }
+ },
+ "knobs": [
+  [
+   "dry_heating",
+   0.5,
+   4.0
+  ],
+  [
+   "dry_heating_chi0",
+   0.6,
+   0.9
+  ],
+  [
+   "dry_heating_warm_c",
+   5.0,
+   20.0
+  ],
+  [
+   "dry_heating_mean_c",
+   5.0,
+   18.0
+  ],
+  [
+   "cold_high_storms",
+   0.1,
+   0.35
+  ],
+  [
+   "sea_winter_mixing",
+   0.0,
+   0.8
+  ],
+  [
+   "precip_tau_days",
+   9.0,
+   11.5
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 61,
+ "evals": 56,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every policy group's worsening, 2 x the retired sealed set's worsening, and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/dry_heat_v2_20261031/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/dry_heat_v2_refit_20261031/search/best_params.json SEALED_SPEC=calibration/sealed_20261031b/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs under policy v2, the paired 28 km check, then sealed set b (declared 2026-10-31, never run) once if both pass; adoption also requires sealed set b not to get worse. Failing any step means nothing is adopted; every result is reported."
+}
