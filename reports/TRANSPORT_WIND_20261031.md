@@ -271,3 +271,30 @@ its three gates, the storm damping, the winter overturning and the rain time
 scale with the retired set as an extra guarded group
 (`scripts/gate_calibrate.py` now takes `extra_groups`), to be validated on
 sealed set b.
+
+## 10. Dry-heating v2 refit: development and 28 km close, mid-latitude group blocks (not adopted)
+
+Plan `calibration/dry_heat_v2_refit_20261031/plan.json` (frozen before the
+search; the retired sealed set as an extra guarded group). 56 candidates;
+the lowest cost (candidate 46): dry heating 2.71 with its coastal gate 0.86,
+warm-ground gate 20 °C and annual-warmth gate 8 °C, cold_high_storms 0.15,
+winter overturning 0.45, precip_tau_days 9.98, no land frictions.
+
+| check (`output/dry_heat_v2_20261031/refit/`) | result |
+|---|---|
+| 31 regions, policy v2 | S 0.9909 (T −1.6 %, rain loss −0.2 %); training 0.994, dev12 0.982, **former holdout 1.0002 and mid-latitude 1.0034: fail** |
+| retired sealed set (development data) | 0.9996 |
+| paired 28 km | 0.9975 |
+| sealed set b | not run (the development gate failed); still unseen |
+
+Dry heating alone on r40 with the same gates gives the same picture (dev31
+0.9916, mid-latitude 1.0038, retired set 0.9964): North India 0.94, Iran
+0.95, the Levant, the Great Basin and California gain; Manchuria (rain
+680 → 705 mm against 582), East China and the North China Plain lose 1–4 %.
+The heating warms the dry North Chinese interior in summer, upwind of an East
+Asia already 1–2 °C too warm. That is a real trade-off between the dry
+subtropics and East Asia, and the policy's rule that no group may worsen
+blocks it. Dry heating stays opt-in (off). The East Asian warm bias (the
+shelf seas warming 5–7 °C too early, §2) is the error to fix first; with it
+fixed, gated dry heating is the ready-made next candidate, still to be judged
+on the unseen sealed set b.
