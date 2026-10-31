@@ -112,3 +112,31 @@ had the right swing only because a sea swinging twice too far drove it; the
 land itself follows the sea too closely (the "maritime lag" of HANDOFF.md).
 Mending the sea alone exposes that. Kept off; it belongs with a land surface
 that answers more to its own sunshine.
+
+## 6. The frozen refit (not adopted)
+
+`calibration/land_ice_refit_20261031` (plan frozen before any result): 45
+candidates (the search stopped there), best cost 0.9901, candidate 29:
+`ebm_land_ice` 0.33, `continental_mean` 7.31, `continentality` 0.56,
+`continental_depth` 0.31, `snow_albedo` 1.34, `land_offset` −0.68.
+
+Validation (`scripts/validate_monsoon_refit.sh`, fresh paired runs against
+r40; `output/land_ice_20261031/refit/validation.json`):
+
+| check | result |
+|---|---|
+| dev31 S | 0.9843 (T −3.0 %, P +0.1 %) |
+| training / holdout / mid-latitude / dev12 | **1.0029** / 0.9987 / 0.9645 / 0.9793 |
+| retired sealed six (development data) | 0.9441 |
+| 28 km paired S | 0.9926 |
+| sealed set b | not run (the dev gate failed first; the set stays unseen) |
+
+It fails policy v2 on the training group alone: East China's temperature
+worsens 5 % (its spring was already too warm and a lighter band snow warms
+it), Iberia 1 %, Central Asia 0.7 %. The US Midwest's temperature worsens
+9 % inside a mid-latitude group that improves 3.5 % (Pacific NW 0.93,
+eastern Europe 0.93, Manchuria 0.93, western Europe 0.98). Nothing is
+adopted; the atlases keep r40. e65 stays in the code (off). What blocks it is
+the subtropical east-coast spring (East China, and Japan in the holdout),
+already too warm, which any warmer land column worsens. The next physics step
+there is the East Asian spring itself, not the band's snow.

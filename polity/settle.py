@@ -39,6 +39,11 @@ SEAT_REF_DENSITY = 14.1         # Han China AD 2: 57.7 M people on 4.09 M km2
 MAX_RADIUS_KM = 60.0            # no catchment wider than this, however thin the people
 MIN_DENSITY = 2.0
 SPACING = 1.6
+# Dry-land towns need water (calibration/polity_20261025/addendum_dry_towns_20261031.json):
+# where rain over Hargreaves evaporation is below DRY_ARIDITY, a town site must
+# lie within DRY_WATER_KM of a river, lake or sea. None = no such rule.
+DRY_ARIDITY = 0.35
+DRY_WATER_KM = None
 URBAN_SHARE = 0.075
 
 
@@ -53,7 +58,7 @@ def site_score(density, land, water_km, coast_km, road, elev, cell_km):
 
 
 def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
-                seat_people=None, max_radius_km=None, beta=None):
+                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default"):
     seat_people = SEAT_PEOPLE if seat_people is None else seat_people
     beta = SEAT_BETA if beta is None else beta
     max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
@@ -69,6 +74,12 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
     ok = land & (d >= MIN_DENSITY)
     if allowed is not None:
         ok &= allowed
+    dry_water_km = DRY_WATER_KM if dry_water_km == "default" else dry_water_km
+    if dry_water_km is not None and aridity is not None:
+        # a dry-land town lives on its water: wells and springs aside, rivers,
+        # lakes and the sea (the Hexi oases, the Nile, the Syrian river towns)
+        dry = np.asarray(aridity, float) < DRY_ARIDITY
+        ok &= ~dry | (np.nan_to_num(np.asarray(water_km, float), nan=1e9) <= dry_water_km)
     blocked = np.zeros(land.shape, bool)
     h, w = land.shape
 
