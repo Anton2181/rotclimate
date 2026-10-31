@@ -63,3 +63,43 @@ remove the speckle) and (D) aquatic foods: coastal and freshwater fish as a
 third food source, with any scale fitted on North America only and judged
 on the rest of the world, including whether it predicts which groups
 depended on fishing.
+
+## Aquatic foods (addendum, frozen before its runs)
+
+`calibration/forager_binford_20261031/addendum_aquatic.json`. Aquatic food is
+a third stock: a daily supply `a_marine · exp(−d_coast / 25 km) ·
+clip((28 − SST) / 20, 0.2, 1) + a_fresh · W_fresh` (kg dry matter per km² of
+land per year; `W_fresh` = Natural Earth 1:10m river and lake-centre line
+length within 25 km in km per 100 km² plus 10 × the lake-covered share of
+that disc), spoiling at the plant rate, searched as animal food and split
+from prey by stock; terrestrial plant and prey supplies are multiplied by
+`k_terr`. Inputs at the groups: `scripts/binford_aquatic_inputs.py`
+(WorldClim water mask, WOA18, Natural Earth). Fitting on North America
+only: `k_terr` on the 53 fit-set groups that fish less than 20 % → 0.5;
+then `a_marine`, `a_fresh` on all 214 → 3,000 and 100 (the marine scale at
+the top of its frozen grid).
+
+| configuration | set | density rank correlation | median abs log10 error | median bias | fish share vs fishing % |
+|---|---|---:|---:|---:|---:|
+| A, current atlas | fit | 0.682 | 0.366 (×2.3) | +0.14 | — |
+| | test | 0.701 | 0.483 (×3.0) | +0.48 | — |
+| B2, long-window mean | test | 0.700 | 0.505 | +0.51 | — |
+| D, terrestrial ×0.5 + aquatic | fit | 0.599 | 0.504 (×3.2) | −0.30 | 0.70 |
+| | test | **0.736** | **0.251 (×1.8)** | **−0.04** | **0.78** |
+
+Decision by the frozen rule: **B2 does not replace A** (test error +0.022,
+allowance 0.02); **D is adopted** (test error 0.483 → 0.251, rank
+correlation 0.70 → 0.74, fish-share rank correlation 0.78 ≥ 0.3).
+
+By culture area (median log10 bias, A → D): Australia +0.51 → 0.00, Africa
++0.51 → −0.24, South America +0.38 → −0.01, Asia +0.43 → −0.04 (test set);
+Arctic −0.08 → +0.24, Subarctic +0.88 → +0.36, interior west +0.75 → +0.09,
+California and the Great Basin +0.10 → −0.49, Northwest Coast −0.12 → −0.58
+(fit set). Recorded honestly: the fitted aquatic scales leave North
+America's richest foragers (California's acorn and salmon economies, the
+Northwest Coast) about 3× too sparse, the marine scale sits on its grid's
+edge, and the freshwater index sees only Natural Earth's larger rivers. The
+model now predicts which groups depended on fishing (rank correlation 0.78
+on unseen continents) and no longer overfeeds the terrestrial foragers of
+Australia, Africa and South America, which is what the fantasy map's
+c.200 AD frontier peoples are closest to.

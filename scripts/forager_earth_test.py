@@ -99,25 +99,40 @@ def metrics(model_density, sites, mask, result=None):
         out['n_low_fishing'] = int(dry.sum())
         if 'mean_stored_share' in result:
             out['stored_share_vs_storage_spearman'] = spearman(np.asarray(result['mean_stored_share'])[mask], sites['store'][mask])
+        if np.asarray(result.get('mean_fish_share', 0.0)).any():
+            out['fish_share_spearman'] = spearman(np.asarray(result['mean_fish_share'])[mask], sites['fishing'][mask])
+            out['median_fish_share'] = float(np.median(np.asarray(result['mean_fish_share'])[mask]))
     return out
 
 
-def run(sites, config, spec, capacity=0.0):
+def aquatic_annual(sites, a_marine, a_fresh):
+    """The addendum's aquatic supply, kg dry matter per km2 of land per year."""
+    marine = np.exp(-sites['d_coast_km'] / 25.0) * np.clip((28.0 - sites['sst_annual_c']) / 20.0, 0.2, 1.0)
+    return a_marine * marine + a_fresh * sites['w_fresh']
+
+
+def run(sites, config, spec, capacity=0.0, k_terr=1.0, a_marine=0.0, a_fresh=0.0):
     run = dict(spec['run'])
     display = 'mean'
     if config in ('B', 'C'):
         run.update(years=600, averaging_years=300); display = 'median'
+    if config in ('B2', 'D'):
+        run.update(years=600, averaging_years=300); display = 'mean'
     kernel = dict(spec['kernel_parameters'])
     if config == 'C':
         kernel.update(storage_capacity_mj=float(capacity), storage_decay_day=STORAGE_DECAY)
     forcing = daily_resources(sites['T'], sites['P'], sites['npp'], spec['adapter'])
-    return simulate_foraging(forcing['plant_supply'], forcing['meat_supply'], params=ForagingParams(**kernel),
-                             display=display, **run)
+    plant, meat, fish = forcing['plant_supply'], forcing['meat_supply'], None
+    if config == 'D':
+        plant, meat = plant * k_terr, meat * k_terr
+        fish = np.broadcast_to(aquatic_annual(sites, a_marine, a_fresh) / plant.shape[0], plant.shape).copy()
+    return simulate_foraging(plant, meat, params=ForagingParams(**kernel), display=display, aquatic_supply=fish, **run)
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--out', type=Path, default=ROOT / 'output/forager_binford_20261031')
+    ap.add_argument('--aquatic', action='store_true', help='run the frozen aquatic addendum (B2 and D) instead of A-C')
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
     plan = json.loads(PLAN.read_text())
     df = binford()
@@ -139,6 +154,8 @@ def main():
     sites['npp'] = miami_npp(sites['T'], sites['P'])
     fit = np.isin(sites['area'], list(FIT_AREAS)); test = ~fit
     spec = specification()
+    if a.aquatic:
+        return aquatic(a, sites, fit, test, spec, rows, df)
     report = dict(plan=str(PLAN.relative_to(ROOT)), sites=len(rows), fit_sites=int(fit.sum()), test_sites=int(test.sum()),
                   excluded_no_climate=int(len(df) - len(rows)), configurations={})
     results = {}
@@ -176,13 +193,65 @@ def main():
     print(json.dumps({k: v for k, v in report.items() if k != 'by_culture_area'}, indent=1, default=float))
 
 
-def plot(sites, dA, dC, fit, capacity, path):
+def aquatic(a, sites, fit, test, spec, rows, df):
+    addendum = json.loads((PLAN.parent / 'addendum_aquatic.json').read_text())
+    inputs = {(s['name'], round(s['lat'], 4), round(s['lon'], 4)): s
+              for s in json.loads((a.out / 'aquatic_inputs.json').read_text())['sites']}
+    keyed = [inputs[(r['name'], round(r['lat'], 4), round(r['lon'], 4))] for r in rows]
+    for key in ('d_coast_km', 'sst_annual_c', 'w_fresh'):
+        sites[key] = np.array([float(s[key]) for s in keyed])
+    report = dict(addendum=str((PLAN.parent / 'addendum_aquatic.json').relative_to(ROOT)), sites=len(rows),
+                  fit_sites=int(fit.sum()), test_sites=int(test.sum()), configurations={})
+    A = run(sites, 'A', spec); B2 = run(sites, 'B2', spec)
+    for name, res in (('A', A), ('B2', B2)):
+        report['configurations'][name] = dict(fit=metrics(res['density_people_km2'], sites, fit, res),
+                                              test=metrics(res['density_people_km2'], sites, test, res))
+    terrestrial = fit & (sites['fishing'] < 20)
+    stage1 = []
+    for k in [0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 1.0]:
+        res = run(sites, 'D', spec, k_terr=k)
+        stage1.append(dict(k_terr=k, fit_low_fishing=metrics(res['density_people_km2'], sites, terrestrial)))
+    k_terr = min(stage1, key=lambda s: s['fit_low_fishing']['median_abs_log10_error'])['k_terr']
+    stage2, results = [], {}
+    for am in [0, 30, 100, 300, 1000, 3000]:
+        for af in [0, 10, 30, 100, 300, 1000]:
+            res = run(sites, 'D', spec, k_terr=k_terr, a_marine=am, a_fresh=af); results[(am, af)] = res
+            stage2.append(dict(a_marine=am, a_fresh=af, fit=metrics(res['density_people_km2'], sites, fit, res)))
+    best = min(stage2, key=lambda s: s['fit']['median_abs_log10_error'])
+    D = results[(best['a_marine'], best['a_fresh'])]
+    report['configurations']['D'] = dict(k_terr=k_terr, a_marine=best['a_marine'], a_fresh=best['a_fresh'],
+        stage1=stage1, stage2=stage2, fit=metrics(D['density_people_km2'], sites, fit, D),
+        test=metrics(D['density_people_km2'], sites, test, D))
+    tA, tB2, tD = (report['configurations'][k]['test'] for k in ('A', 'B2', 'D'))
+    b2_ok = (tB2['median_abs_log10_error'] <= tA['median_abs_log10_error'] + 0.02
+             and tB2['density_spearman'] >= tA['density_spearman'] - 0.02)
+    base = tB2 if b2_ok else tA
+    d_ok = (tD['median_abs_log10_error'] < base['median_abs_log10_error']
+            and tD['density_spearman'] >= base['density_spearman'] - 0.02
+            and tD.get('fish_share_spearman', float('nan')) >= 0.3)
+    report['decision'] = dict(B2_replaces_A=bool(b2_ok), D_adopted=bool(d_ok), base='B2' if b2_ok else 'A', rule=addendum['decision'])
+    areas = {}
+    for area in sorted(set(sites['area'])):
+        m = sites['area'] == area
+        areas[area] = dict(A=metrics(A['density_people_km2'], sites, m), D=metrics(D['density_people_km2'], sites, m, D),
+                           observed_median_density_km2=float(np.median(sites['density_km2'][m])),
+                           observed_median_fishing=float(np.median(sites['fishing'][m])))
+    report['by_culture_area'] = areas
+    (a.out / 'binford_aquatic.json').write_text(json.dumps(report, indent=1, default=float))
+    np.savez(a.out / 'binford_aquatic_sites.npz', **{k: v for k, v in sites.items()}, density_A=A['density_people_km2'],
+             density_B2=B2['density_people_km2'], density_D=D['density_people_km2'], fish_D=D['mean_fish_share'])
+    plot(sites, A['density_people_km2'], D['density_people_km2'], fit, best['a_marine'], a.out / 'binford_aquatic.png',
+         right=f"D: terrestrial x{k_terr}, marine {best['a_marine']}, fresh {best['a_fresh']}")
+    print(json.dumps({k: v for k, v in report.items() if k not in ('by_culture_area',)}, indent=1, default=float)[:6000])
+
+
+def plot(sites, dA, dC, fit, capacity, path, right=None):
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
     fig, axes = plt.subplots(1, 2, figsize=(12, 5.4), sharex=True, sharey=True)
     obs = sites['density_km2']
-    for ax, d, title in [(axes[0], dA, 'Current atlas FORGE (A)'), (axes[1], dC, f'Long-window median + storage {capacity:.0f} MJ (C)')]:
+    for ax, d, title in [(axes[0], dA, 'Current atlas FORGE (A)'), (axes[1], dC, right or f'Long-window median + storage {capacity:.0f} MJ (C)')]:
         for m, c, lab in [(fit, '#9aa3ad', 'North America (fit set)'), (~fit, '#2a78d6', 'rest of world (test set)')]:
             ax.scatter(obs[m], np.maximum(d[m], 1e-4), s=16, color=c, alpha=.8, label=lab, edgecolors='none')
         ax.plot([1e-3, 10], [1e-3, 10], color='#444', lw=1); ax.set_xscale('log'); ax.set_yscale('log')

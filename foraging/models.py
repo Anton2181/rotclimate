@@ -164,22 +164,23 @@ _OUTPUT_NAMES = ('raw_density_people_km2','foraging_hours_day','meat_fraction',
     'annual_start_plant_stock_kg_dm_km2','annual_start_meat_stock_kg_dm_km2',
     'annual_start_effective_fat_kg','annual_fat_energy_change_mj_person',
     'median_supported_density_people_km2','density_p10_people_km2','density_p90_people_km2',
-    'density_lag1_autocorrelation','mean_stored_share','annual_store_draw_mj_person','store_mj_person')
+    'density_lag1_autocorrelation','mean_stored_share','annual_store_draw_mj_person','store_mj_person',
+    'mean_fish_share','annual_fish_harvest_kg_dm_km2')
 
 
 @njit(cache=True)
-def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, tolerance, stable_years, averaging_years):
+def _simulate_flat(plant, meat, fish, packed, initial_p, initial_f, years, min_years, tolerance, stable_years, averaging_years):
     nday,ncell = plant.shape
-    out = np.zeros((52,ncell))
+    out = np.zeros((54,ncell))
     basal,activity,food,body,fmax,mminus,mplus,search,emax,crowd = packed[:10]
     hmin,hmax,hstep,hinit,kdiet,huntmin,huntmax,rmin = packed[10:18]
     bmax,bslope,fsigma,mb,repro,pfloor,pdecay,mdecay,reset = packed[18:27]
     scap,sdecay = packed[27:29]
     for cell in range(ncell):
         p = initial_p[cell]; f = initial_f[cell]; store=0.
-        bv=0.; ba=0.; tf=hinit; prev_delta=0.; prev_meat=.5; prev_hunt=.5
+        bv=0.; ba=0.; bf=0.; tf=hinit; prev_delta=0.; prev_meat=.5; prev_hunt=.5
         stable=0; converged=False
-        history=np.zeros((averaging_years,11))
+        history=np.zeros((averaging_years,12))
         maxmass=0.; maxenergy=0.; maxmassrel=0.; maxenergyrel=0.
         annual_plant_input=0.; annual_meat_input=0.
         for d in range(nday):
@@ -191,27 +192,30 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
             if reset > .5: ba=0.
             birth=0.; starve=0.; hours=0.; ia_sum=0.; iv_sum=0.; shortfall=0.
             intake_sum=0.; expense_sum=0.; hv=0.; ha=0.; dv_sum=0.; da_sum=0.; fat_energy=0.; draw_sum=0.
+            if_sum=0.; hf=0.
             for day in range(nday):
-                beforev=bv; beforea=ba
-                dv=bv*pdecay; da=ba*mdecay
-                bv = bv-dv+plant[day,cell]; ba=ba-da+meat[day,cell]
+                beforev=bv; beforea=ba; beforef=bf
+                dv=bv*pdecay; da=ba*mdecay; df=bf*pdecay
+                bv = bv-dv+plant[day,cell]; ba=ba-da+meat[day,cell]; bf=bf-df+fish[day,cell]
                 dv_sum+=dv; da_sum+=da
+                # aquatic food is animal food: one animal stock for search, split by stock
+                ban=ba+bf
                 if prev_delta > 0. and f > .5*fmax: tf=max(hmin,tf-hstep)
                 else: tf=min(hmax,tf+hstep)
                 bh=body*p
                 ev=emax*bv/(bv+crowd*bh) if bv+crowd*bh > 0. else 0.
-                ea=emax*ba/(ba+crowd*bh) if ba+crowd*bh > 0. else 0.
-                benefits=bv*ev+ba*ea
+                ea=emax*ban/(ban+crowd*bh) if ban+crowd*bh > 0. else 0.
+                benefits=bv*ev+ban*ea
                 if benefits > 0.:
-                    hunt=ba*ea/benefits*math.exp(-kdiet*(prev_meat-1.))
+                    hunt=ban*ea/benefits*math.exp(-kdiet*(prev_meat-1.))
                     hunt=min(huntmax,max(huntmin,hunt))
                 else: hunt=prev_hunt
                 if prev_meat < rmin: hunt=huntmax
                 th=tf*hunt; tg=tf-th
                 iv=bv/1e6*tg*ev*search
-                ia=ba/1e6*th*ea*search
+                ia=ban/1e6*th*ea*search
                 if p > 0.:
-                    iv=min(iv,bv/p); ia=min(ia,ba/p)
+                    iv=min(iv,bv/p); ia=min(ia,ban/p)
                 else:
                     iv=0.; ia=0.
                 expense=basal+activity*tf
@@ -239,14 +243,20 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
                 residual=abs(balance-conversion*delta)
                 maxenergy=max(maxenergy,residual)
                 maxenergyrel=max(maxenergyrel,residual/max(1.,abs(intake)+expense))
-                harvestv=iv*p; harvesta=ia*p
-                bv=max(0.,bv-harvestv); ba=max(0.,ba-harvesta)
+                harvestv=iv*p
+                if bf > 0.:
+                    share=bf/ban;harvestf=ia*p*share;harvesta=ia*p-harvestf;if_sum+=ia*share
+                else:
+                    harvestf=0.;harvesta=ia*p
+                bv=max(0.,bv-harvestv); ba=max(0.,ba-harvesta); bf=max(0.,bf-harvestf)
                 rv=abs(beforev+plant[day,cell]-dv-harvestv-bv)
                 ra=abs(beforea+meat[day,cell]-da-harvesta-ba)
-                maxmass=max(maxmass,rv,ra)
+                rf=abs(beforef+fish[day,cell]-df-harvestf-bf)
+                maxmass=max(maxmass,rv,ra,rf)
                 maxmassrel=max(maxmassrel,rv/max(1.,beforev+plant[day,cell]+dv+harvestv+bv),
-                    ra/max(1.,beforea+meat[day,cell]+da+harvesta+ba))
-                hv+=harvestv;ha+=harvesta
+                    ra/max(1.,beforea+meat[day,cell]+da+harvesta+ba),
+                    rf/max(1.,beforef+fish[day,cell]+df+harvestf+bf))
+                hv+=harvestv;ha+=harvesta;hf+=harvestf
                 x=max(-700.,min(700.,bslope*(f/fmax-.5)))
                 birth += bmax/(1.+math.exp(-x))
                 starve += .5*math.erfc(f/(fsigma*fmax*math.sqrt(2.)))
@@ -298,7 +308,8 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
             history[slot,8]=f
             history[slot,9]=1. if floor_limited else 0.
             history[slot,10]=draw_sum/intake_sum if intake_sum > 0. else 0.
-            out[50,cell]=draw_sum;out[51,cell]=store
+            history[slot,11]=if_sum/(iv_sum+ia_sum) if iv_sum+ia_sum > 0. else 0.
+            out[50,cell]=draw_sum;out[51,cell]=store;out[53,cell]=hf
             if converged: break
         window=min(year+1,averaging_years)
         means=np.zeros(10)
@@ -317,10 +328,10 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
         out[36,cell]=means[7];out[37,cell]=means[8];out[38,cell]=means[9]
         out[39,cell]=window;out[40,cell]=supported
         # long-window robust summaries, in chronological order, floor-limited years as zero
-        series=np.zeros(window);stored=0.
+        series=np.zeros(window);stored=0.;fished=0.
         for j in range(window):
             slot=(year+1-window+j) % averaging_years
-            series[j]=history[slot,0]*(1.-history[slot,9]);stored+=history[slot,10]/window
+            series[j]=history[slot,0]*(1.-history[slot,9]);stored+=history[slot,10]/window;fished+=history[slot,11]/window
         out[45,cell]=np.median(series)
         out[46,cell]=np.percentile(series,10.);out[47,cell]=np.percentile(series,90.)
         lag=0.
@@ -330,13 +341,14 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
                 den+=(series[j]-mu)**2
                 if j > 0:num+=(series[j]-mu)*(series[j-1]-mu)
             lag=num/den if den > 0. else 0.
-        out[48,cell]=lag;out[49,cell]=stored
+        out[48,cell]=lag;out[49,cell]=stored;out[52,cell]=fished
     return out
 
 
 def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
         initial_density=.1, initial_fat_kg=7.5, years=300, min_years=20,
-        convergence_rtol=.01, convergence_years=5, averaging_years=50, day_weights=None, display='mean'):
+        convergence_rtol=.01, convergence_years=5, averaging_years=50, day_weights=None, display='mean',
+        aquatic_supply=None):
     """Simulate repeating daily food inputs and annual population feedback.
 
     ``plant_supply`` and ``meat_supply`` have shape ``[day, ...cells]`` and
@@ -360,6 +372,9 @@ def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
     if display not in ('mean','median'):
         raise ValueError("display must be 'mean' or 'median'")
     plant=np.asarray(plant_supply,float);meat=np.asarray(meat_supply,float)
+    fish=np.zeros_like(plant) if aquatic_supply is None else np.asarray(aquatic_supply,float)
+    if fish.shape != plant.shape or not np.isfinite(fish).all() or (fish < 0).any():
+        raise ValueError('Need finite nonnegative daily aquatic supply matching the plant supply')
     if (plant.ndim < 1 or plant.shape != meat.shape or not 1 <= plant.shape[0] <= 2000
             or not np.isfinite(plant).all() or not np.isfinite(meat).all()
             or (plant < 0).any() or (meat < 0).any()):
@@ -384,7 +399,7 @@ def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
     values=asdict(params)
     packed=np.array([float(values[name]) for name in values],float)
     flat=_simulate_flat(np.ascontiguousarray(plant.reshape(plant.shape[0],-1)),
-        np.ascontiguousarray(meat.reshape(meat.shape[0],-1)),packed,p,f,
+        np.ascontiguousarray(meat.reshape(meat.shape[0],-1)),np.ascontiguousarray(fish.reshape(fish.shape[0],-1)),packed,p,f,
         years,min_years,convergence_rtol,convergence_years,averaging_years)
     result={name:flat[i].reshape(spatial) for i,name in enumerate(_OUTPUT_NAMES)}
     for name in ('converged','floor_limited'):
