@@ -40,13 +40,7 @@ def one(job):
         p = p.replace(**changes)
     model = ClimateModel(p, g)
     record = {}
-    raw = model.sst
-
-    def sst(day, To, Tl):
-        out = raw(day, To, Tl)
-        record[round(float(day), 6)] = out.copy()
-        return out
-    model.sst = sst
+    model.sst_record = record            # the sea surface as each step finally uses it (upwelling, e64, e67 included)
     res = model.run()
     days = np.asarray(res.days, float)
     S = np.stack([record[round(float(d), 6)] for d in days])

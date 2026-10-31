@@ -262,6 +262,10 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
+            raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
+        if params.continental_sea_air > 0 and params.continentality <= 0:
+            raise ValueError('continental_sea_air needs the advected land share (continentality > 0)')
         if not 0 <= params.warm_current_seasonality <= 1:
             raise ValueError('warm_current_seasonality must be in [0, 1]')
         if not 0 <= params.ebm_land_ice <= 1:
@@ -445,6 +449,7 @@ class ClimateModel:
                     (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
             self.sea_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
         self.shelf_share = None
+        self.sst_record = None          # diagnostics: {day: the sea surface each step uses} when set to a dict
         if p.shelf_air_coupling > 0:
             # e64: the shelf share of each sea cell (e50's depth rule, inverted)
             if g.sea_depth is not None:
@@ -967,6 +972,7 @@ class ClimateModel:
         uv_prev = chi = None
         Tl_sea = None                   # e63: the land equilibrium as the enclosed seas feel it
         air_shelf = None                # e64: the sea-level air over the shelf seas, lagged
+        air_cont = None                 # e67: the air over the sea, lagged, for continental outbreaks
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
@@ -1245,6 +1251,21 @@ class ClimateModel:
                 keep = np.exp(-dt_days / p.shelf_air_lag_days)
                 air_shelf = T_prev if air_shelf is None else keep * air_shelf + (1.0 - keep) * T_prev
                 SST = SST + p.shelf_air_coupling * self.shelf_share * (np.maximum(air_shelf, -1.8) - SST)
+            if p.continental_sea_air > 0 and T_prev is not None and chi is not None:
+                # e67: air that has crossed a continent and blows out over the
+                # sea takes its heat (the winter monsoon over the Yellow, Japan
+                # and East China Seas, cold-air outbreaks off New England: the
+                # largest ocean heat losses on Earth), while sea air over a west
+                # coast is already in balance with the water. The zonal ocean
+                # column exchanges only with its latitude's mean air, so East
+                # Asia's seas swung 13-24 C against WOA18's 10-26 and ran 3-5 C
+                # warm in spring. The sea's mixed layer (~50 m, ~30 W m-2 K-1)
+                # follows the air over it with continental_sea_lag_days of
+                # memory, in proportion to the continental share of that air.
+                keep = np.exp(-dt_days / p.continental_sea_lag_days)
+                air_cont = T_prev if air_cont is None else keep * air_cont + (1.0 - keep) * T_prev
+                w_c = p.continental_sea_air * np.where(ocean, np.clip(chi, 0.0, 1.0), 0.0)
+                SST = SST + w_c * (np.maximum(air_cont, -1.8) - SST)
             if p.sst_source == "observed":
                 # Earth diagnostics: the observed monthly sea surface (WOA18)
                 # in place of the model's, to measure how much of the land
@@ -1254,6 +1275,8 @@ class ClimateModel:
                 mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
                 m0 = int(np.floor(mpos)); fr = mpos - m0
                 SST = (1.0 - fr) * g.obs_sst[m0] + fr * g.obs_sst[(m0 + 1) % 12]
+            if self.sst_record is not None:
+                self.sst_record[round(float(d), 6)] = np.array(SST, copy=True)
             T_eq = np.where(land, Tl, SST)
 
             # ---- parts of the winds and storms that do not depend on temperature
