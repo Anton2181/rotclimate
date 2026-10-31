@@ -1,5 +1,13 @@
 # Transport wind, dry ground and the seas: r40's remaining regional errors, 31 October 2026
 
+**Outcome.** Nothing adopted; r40 stays. Splitting the land friction
+between the heat and water winds (e62) does not help by itself; the
+interiors it was meant for lack a warm winter sea instead (r40's
+Mediterranean is ~6 °C too cold in January). Dry-ground heating gated to
+warm ground (e54c) with small frictions passed the 31-region gate (S 0.9879,
+every group better; North India's temperature error 3.40 → 2.99 °C, Iran's 3.28 → 2.81) and the 28 km check (0.9893),
+then failed the fresh sealed six (1.0405: the Kazakh steppe and Hokkaido).
+
 Follow-up to `reports/PHYSICS_GAPS_20261030.md` (§10, e57) and
 `reports/SUMMER_RAIN_20261030.md` (§9, e61), which both ended on the same
 proposal: give the model a separate transport wind (the ~850 hPa flow, little
@@ -167,10 +175,68 @@ India's gain (0.85 → 0.88). On the refit's best candidate it brings S to
 0.9885–0.9887 with every group better except the former holdout, now
 0.3–0.4 % worse (Chile, SW Australia).
 
-## 7. Second frozen refit (running)
+## 7. Second frozen refit: passes development and 28 km, fails the fresh sealed six (not adopted)
 
 Plan `calibration/dry_heat_refit_20261031/plan.json`, frozen and committed
 before any result: from the last screen above, seven levers (dry heating,
 both its gates, cold-high damping, the two land frictions, winter
-overturning), 56 candidates against r40, the same validation with the fresh
-sealed six.
+overturning), 56 candidates against r40. 37 of them cleared every group.
+The lowest cost (candidate 38): dry heating 2.66 above a 15.7 °C
+equilibrium, coastal gate 0.83, cold_high_storms 0.29, heat friction 0.16,
+water friction 0.13, deep-sea winter overturning 0.80.
+
+| check (`output/transport_wind_20261031/dry_heat_refit/`) | result |
+|---|---|
+| 31 regions, policy v2 | **S 0.9879, passes**: T 1.807 → 1.773 °C (−1.9 %), rain loss 0.4329 → 0.4306 (−0.5 %); training 0.996, former holdout 0.999, mid-latitude 0.993, dev12 0.979 |
+| paired 28 km | **S 0.9893, passes** |
+| fresh sealed six (first use) | **S 1.0405, worse: not adopted** |
+
+| sealed region | S | T MAE r40 → candidate | seasonal range error | rain, mm (obs) |
+|---|---:|---|---|---|
+| Kazakh steppe | 1.162 | 2.15 → 2.54 °C | +3.6 → +5.3 | 194 → 171 (295) |
+| Hokkaido | 1.065 | 3.02 → 3.31 | +6.0 → +7.1 | 977 → 998 (1,091) |
+| Canadian prairies | 1.000 | 2.74 → 2.73 | −5.0 → −4.2 | 419 → 401 (406) |
+| southern Italy | 0.997 | 1.62 → 1.60 | +4.2 → +4.2 | 719 → 745 (789) |
+| north Queensland | 1.000 | 1.11 → 1.09 | +0.1 → +0.1 | 1,957 → 1,980 (874) |
+| Namib and Kalahari | 0.965 | 1.33 → 1.18 | +0.5 → +0.7 | 118 → 111 (237) |
+
+The two climates the 31 development regions lack, a cold steppe and a cold
+winter-monsoon coast, are where it fails: their seasonal ranges, already
+too large, grow. The heat friction makes their air more continental in
+winter (the steppe −0.3 to −0.5 °C) and dry heating warms the steppe's
+summer (+0.9 to +1.3 °C in June–August), which r40 already runs 1.5–2.2 °C
+too warm. On the development set the same levers mended the Midwest's
+too-small range and North India's, Iran's and Morocco's cold. The sealed
+set has done its job: dry heating needs to know a desert from a steppe
+(the steppe's summer heat is already there through the continental land
+column), and more continental heat in general is not supported.
+
+r40 stays. The fresh sealed six have now been seen by one candidate
+(`calibration/sealed_20261031/declaration.json`); because this result points
+at a mechanism (dry heating on cold steppes), a later design that uses it
+should come with a fresh sealed set.
+
+## 8. What this leaves
+
+* Opt-in switches added, all off in r40 (bit-identical): e62
+  `heat_land_friction` / `water_land_friction`, e63 `inland_sea_lag_days`,
+  e54c `dry_heating_warm_c`.
+* North India and Iran remain the worst regions. A dry-heating design that
+  does not warm cold steppes could gate on the equilibrium's annual mean or
+  on the latitude (subtropical dry season) rather than on the month's
+  warmth; it must be designed without further looks at the sealed regions'
+  numbers beyond this report.
+* The sea surface is the deeper error behind Anatolia, the Levant, the
+  Mediterranean coasts and part of North India (§2–3). It is entangled with
+  the land settings and needs the land-side structural change already noted
+  in HANDOFF.md (land surface layer or two-tile coast).
+
+## Reproduce
+
+```sh
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"heat_land_friction": 0.3}' --out output/transport_wind_20261031/hf03
+python -I scripts/compare_sea_surface.py --params calibration/local_accuracy_20261023/r40_params.json --regions anatolia levant central_asia iberia --out output/sea_20261031/sst_r40_4.json
+python -I scripts/gate_calibrate.py --plan calibration/transport_refit_20261031/plan.json --out calibration/transport_refit_20261031/search
+python -I scripts/gate_calibrate.py --plan calibration/dry_heat_refit_20261031/plan.json --out calibration/dry_heat_refit_20261031/search
+OUT=output/transport_wind_20261031/dry_heat_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/dry_heat_refit_20261031/search/best_params.json SEALED_SPEC=calibration/sealed_20261031/regions.json bash scripts/validate_monsoon_refit.sh
+```
