@@ -132,6 +132,19 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    beside the surface wind. cold_high_storms 0.25-0.40: small clean gain
    (S 0.998), refit candidate. Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
+   31 Oct (reports/TRANSPORT_WIND_20261031.md): the transport/surface wind split
+   (e62 heat_land_friction / water_land_friction) does not help alone; the
+   interiors lack a warm winter sea (scripts/compare_sea_surface.py: r40's
+   Mediterranean ~6 C too cold in January, west-coast seas' ranges ~2x WOA18).
+   North India's plain sits on the latitude's mean land column (2-3 C too
+   cold). Dry heating gated to warm ground (e54c dry_heating_warm_c) + small
+   frictions: refit calibration/dry_heat_refit_20261031 passed dev31 (S 0.9879,
+   North India T 3.40 -> 2.99) and 28 km (0.9893) but the FRESH sealed six got
+   worse (1.0405: Kazakh steppe, Hokkaido ranges grow): not adopted. The fresh
+   sealed set has now been seen once (declaration.json seen_by); a dry-heating
+   design that spares cold steppes should come with another fresh set.
+   e63 inland_sea_lag_days (lagged enclosed seas) alone just shifts East Asia's
+   sea error from spring to autumn.
 1. World refit for the invented map on r40 (calibration/map_world_r40,
    scripts/world_campaign_r40.py): NOT published. Coarse best 0.1922 vs
    0.1895 but every better candidate breaks a zone/Mediterranean guard; the

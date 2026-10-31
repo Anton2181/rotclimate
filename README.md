@@ -37,6 +37,11 @@ feature ([atlas report](reports/ATLAS_R40_20261031.md)). The Earth-fit atlas
 also has a **Corrected** topic: Köppen, biomes, zones, temperature and rain
 after the Earth-trained corrections, and maps of what they change (exact
 painted-zone agreement 33.1 % raw, 35.6 % corrected; every other topic stays raw).
+A later search for North India's and Iran's missing warmth (dry-ground heating
+on warm ground with separate heat and water land friction) passed the 31-region
+gate (S 0.9879) and the 28 km check but made the fresh sealed regions 4 % worse
+(the Kazakh steppe and Hokkaido), so r40 stays
+([transport wind report](reports/TRANSPORT_WIND_20261031.md)).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.
