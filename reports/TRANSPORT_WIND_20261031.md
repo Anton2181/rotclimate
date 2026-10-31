@@ -119,12 +119,58 @@ in April) but winter and autumn rise by as much (+1.6 → +3.3 in January,
 a later one (`output/sea_20261031/sst_lag45_eastasia.json`). Left to the
 refit, with the inland-sea strength and winter overturning.
 
-## 5. Frozen refit (running)
+## 5. Frozen refit of the frictions, dry heating and the inland seas (not adopted)
 
 Plan `calibration/transport_refit_20261031/plan.json`, frozen and committed
 before any result: from the combined screen (S 0.9900), eight levers — heat
 and water land friction, dry heating and its coastal gate, cold-high storm
 damping, inland-sea strength, lag and winter overturning — 72 candidates
-scored as the gate scores against r40. Validation: fresh paired dev31 runs
-under policy v2, the paired 28 km check, then the fresh sealed six declared
-on 31 October (never run) once.
+scored as the gate scores against r40.
+
+No candidate cleared every group. The lowest cost (candidate 68, 0.9992):
+heat friction 0.05, water friction 0.11, dry heating 0.49 with coastal gate
+0.61, cold_high_storms 0.45, inland-sea lag 2 days, warming 3.81, winter
+overturning 0.44. Validation (`output/transport_wind_20261031/refit/`):
+
+| check | result |
+|---|---|
+| 31 regions, policy v2 | S 0.9930 (T −0.8 %, rain loss −0.6 %); training 0.996, mid-latitude 0.988, dev12 0.990, **former holdout 1.0031: fails** |
+| paired 28 km | S 0.9950 (passes) |
+| fresh sealed six | not run (the development gate failed); still unseen |
+
+The holdout's loss is Chile (1.010) and SW Australia (1.008), whose summers
+dry heating warms, and Japan (1.004), which the stronger cold-high damping
+warms while it fixes Manchuria's and Korea's rain (Manchuria 0.950, Korea
+rain ×0.94, temperature ×1.04). The search moved away from dry heating,
+because at full strength it warmed North China's and Manchuria's dry
+winters, and kept the frictions small. r40 stays.
+
+## 6. Dry heating only on warm ground (e54c, opt-in)
+
+Dry ground warms the air through the day's sensible heat; a low winter sun
+and long clear nights cancel it, which is why the dry winter plains of North
+China and Manchuria are cold. `dry_heating_warm_c` lets e54 act fully where
+the land equilibrium is 8 K above this temperature and not at all below it.
+
+| 31 regions against r40 | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| dry heating 3.0, coastal gate 0.6 | −1.83 % | +0.69 % | 0.9943 | 0.993 | 1.035 | 1.026 | 0.972 |
+| … on warm ground (12 °C) | −2.06 % | +0.30 % | 0.9912 | 0.996 | 1.023 | 1.013 | 0.971 |
+| refit candidate 68 | −0.78 % | −0.62 % | 0.9930 | 0.996 | 1.003 | 0.988 | 0.990 |
+| … + dry heating 1.5 on warm ground (12 °C) | −1.66 % | −0.63 % | 0.9885 | 0.993 | 1.009 | 0.990 | 0.980 |
+| … + coastal gate 0.78 | −1.55 % | −0.71 % | 0.9887 | 0.993 | 1.004 | 0.990 | 0.981 |
+| … dry heating 2.0 at 15 °C, gate 0.78, cold_high_storms 0.3 | −1.67 % | −0.61 % | 0.9886 | 0.994 | 1.003 | 0.993 | 0.980 |
+
+The gate halves dry heating's cost in East Asia (Manchuria 1.20 → 1.12,
+North China Plain 1.17 → 1.10 at strength 3.0) and keeps most of North
+India's gain (0.85 → 0.88). On the refit's best candidate it brings S to
+0.9885–0.9887 with every group better except the former holdout, now
+0.3–0.4 % worse (Chile, SW Australia).
+
+## 7. Second frozen refit (running)
+
+Plan `calibration/dry_heat_refit_20261031/plan.json`, frozen and committed
+before any result: from the last screen above, seven levers (dry heating,
+both its gates, cold-high damping, the two land frictions, winter
+overturning), 56 candidates against r40, the same validation with the fresh
+sealed six.
