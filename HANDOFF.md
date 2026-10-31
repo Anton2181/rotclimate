@@ -126,7 +126,11 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    precipitation. The sealed six have been run for 3 candidates: declare a
    fresh sealed set before the next adoption. Next physics: direction-aware
    eddy moisture transport (eddies weakened against strong offshore mean
-   flow: winter monsoon coasts). Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
+   flow: winter monsoon coasts). e61 eddy_upwind_days built and screened:
+   fixes East Asian winters but floods west-coast winters (r40's over-land
+   westerlies 2-5x too strong); needs a separate transport wind (~850 hPa)
+   beside the surface wind. cold_high_storms 0.25-0.40: small clean gain
+   (S 0.998), refit candidate. Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
 1. World refit for the invented map on r40: calibration/map_world_r40/plan.json,
    scripts/world_campaign_r40.py (search, review), evidence output/r40_world/.

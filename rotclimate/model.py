@@ -268,6 +268,8 @@ class ClimateModel:
             raise ValueError('ocean_column_warm must be in [0, 1] and needs the legacy column saturation')
         if params.eddy_cap_contrast_k < 0 or (params.eddy_cap_contrast_k > 0 and params.eddy_rh_cap <= 0):
             raise ValueError('eddy_cap_contrast_k must be >= 0 and needs eddy_rh_cap > 0')
+        if not 0 <= params.eddy_upwind_days <= 3 or (params.eddy_upwind_days > 0 and params.eddy_rate <= 0):
+            raise ValueError('eddy_upwind_days must be in [0, 3] and needs eddy_rate > 0')
         if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
             raise ValueError('monsoon_pressure_hpa must be >= 0 and needs the pressure winds (slp_large or slp_local > 0)')
         if params.wind_source not in ('model', 'observed'):
@@ -1726,6 +1728,25 @@ class ClimateModel:
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
+            if p.eddy_rate > 0 and p.eddy_upwind_days > 0:
+                # e61: the eddies' water comes from where the air comes from.
+                # Isotropic mixing drew the warm seas' water onto Korea, Japan
+                # and Manchuria in January (winter rain 2.4-3.4x observed)
+                # against the winter monsoon's offshore flow, which carries dry
+                # continental air out over the sea; where storms blow onshore
+                # (the north-east US) the sea stays the source. Centre each
+                # cell's mixing source upwind along the eddy-scale mean wind,
+                # by eddy_upwind_days of travel, at most one kernel width.
+                ub, vb = gauss(u, 0.5 * sigW), gauss(v, 0.5 * sigW)
+                cells_per_ms = p.eddy_upwind_days * DAY / (g.cell_km * 1000.0)
+                dr, dc = vb * cells_per_ms, -ub * cells_per_ms          # rows run south: northward wind -> source south
+                reach = np.hypot(dr, dc)
+                scale = np.minimum(1.0, sigW / np.maximum(reach, 1e-9))
+                rows, cols = np.indices(lat.shape, dtype=float)
+                source = np.stack([rows + dr * scale, cols + dc * scale])
+                isotropic = mix
+                mix = lambda water, isotropic=isotropic, source=source: ndi.map_coordinates(
+                    isotropic(water), source, order=1, mode="nearest")
             if p.eddy_rate > 0 and p.eddy_rh_cap > 0:
                 # e38b: an eddy moves air, and air moved onto colder ground keeps
                 # at most its relative humidity: the rest condenses on the way

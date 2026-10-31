@@ -299,6 +299,40 @@ replaced by a newly declared sealed set before the next adoption.
 * Next: direction-aware eddy moisture transport; a fresh sealed set; and,
   downstream, retraining the Earth corrections on r40.
 
+## 9. Eddies that draw from upwind (e61, opt-in, not adopted)
+
+§8 traced the wet monsoon winters to isotropic eddy mixing: it pulls the warm
+seas' water onto Korea and Japan against an offshore winter monsoon as
+readily as it does under onshore storms. `eddy_upwind_days` centres each
+cell's mixing source upwind along the eddy-scale mean wind (that many days of
+travel, at most one kernel width). r40's cells reproduce bit for bit with it
+off.
+
+| 31 regions against r40 | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| e61 0.5 day | −0.2 % | +2.3 % | 1.0106 | 1.017 | 1.000 | 1.024 | 1.007 |
+| e61 1 day | −0.3 % | +6.4 % | 1.0304 | 1.040 | 1.009 | 1.065 | 1.022 |
+| e61 2 days | −0.3 % | +12.4 % | 1.0604 | 1.076 | 1.031 | 1.116 | 1.045 |
+| e61 0.3 day + land friction (e57) 0.3 | −0.5 % | +1.1 % | 1.0026 | 1.020 | 0.988 | 0.988 | 1.005 |
+| cold_high_storms 0.13 → 0.25 (e48) | +0.1 % | −0.4 % | 0.9983 | 1.000 | 1.002 | 0.991 | 0.999 |
+| cold_high_storms 0.40 | +0.1 % | −0.6 % | 0.9978 | 1.000 | 1.003 | 0.989 | 0.998 |
+
+At 1 day the East Asian winters come right or overshoot (winter rain Korea
+229 → 52 mm against 94, Japan 380 → 150 against 192, Manchuria 41 → 9
+against 19, North China Plain 79 → 37 against 26) and their summers gain a
+little. But the onshore westerlies of the west coasts now draw their eddy
+water from far out at sea on top of the mean flow, and their winters flood
+(western Europe 250 → 357 against 222, California 256 → 360 against 166,
+Great Basin 216 → 298 against 110, eastern Europe 129 → 184 against 113).
+Those westerlies are r40's over-land surface winds, 2–5× the reanalysis
+(§10 of the physics report), so any transport that follows the wind inherits
+that error; slowing them over land (e57) starves the interiors instead. The
+structural step both need is a separate transport wind (the ~850 hPa flow,
+little slowed by the ground) beside the surface wind that carries heat.
+Strengthening the existing cold-high damping of the storms (e48) is a small,
+clean gain (Manchuria, North China Plain, Korea, US Midwest) but costs Japan;
+it is a candidate knob for a future refit, not a mechanism by itself.
+
 ## Reproduce
 
 ```sh
@@ -312,6 +346,7 @@ python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r
 python -I scripts/gate_calibrate.py --plan calibration/eddy_cap_refit_20261030/plan.json --out calibration/eddy_cap_refit_20261030/search --hours 3
 OUT=output/summer_rain_20261030/eddy_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/eddy_cap_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 1.0, "eddy_cap_contrast_k": 2.5}' --out output/summer_rain_20261030/cold10k25
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_upwind_days": 1.0}' --out output/eddy_upwind_20261031/up10
 python -I scripts/gate_calibrate.py --plan calibration/cold_cap_refit_20261031/plan.json --out calibration/cold_cap_refit_20261031/search --hours 3
 OUT=output/summer_rain_20261030/cold_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/cold_cap_refit_20261031/search/best_params.json bash scripts/validate_monsoon_refit.sh
 ```
