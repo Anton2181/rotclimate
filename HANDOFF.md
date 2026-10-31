@@ -168,6 +168,12 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.
+   31 Oct (reports/SEASON_PHASE_20261031.md): much of the late spring is the
+   band column's temperature-driven snow albedo (53 N: April 4.3 C colder
+   than October, real interiors ~0). e65 ebm_land_ice keeps a share of it
+   (ice sheets keep all); 0.5 + continental_mean 7 screens S 0.9837 (holdout
+   1.0049). Frozen refit calibration/land_ice_refit_20261031 (validate with
+   sealed set b). e64/e64b shelf seas following the air: harmful, off.
 3. Small: two-scale relief lapse (+~0.8 % T alone).
 
 ## Food, foraging and political reach side project (31 Oct)
