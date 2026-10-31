@@ -1,0 +1,8 @@
+{
+ "frozen": "2026-10-31, after addendum_dry_towns_20261031.json (its F3 and T3 results are known: output/polity_dry_towns_20261031/dry_towns.json) and before any run below. The first test's fit set (Han AD 2) holds too little dry land (65 seats in dry commanderies) to fit the rule; the Roman world holds more (33 dry blocks, 136 towns).",
+ "change": "as addendum_dry_towns_20261031.json: where rain over Hargreaves evaporation < 0.35, a town site must lie within W km of a river, lake or sea; W in {inf, 60, 40, 25} km",
+ "fit": "T3 (Roman towns AD 150 per 22 x 22-cell block inside the Roman polygon, Poisson deviance of placed counts, adopted seat parameters): W with the lowest deviance (ties to the larger W). Seen data.",
+ "test_blind": "Tang AD 742 county seats per prefecture in the Han window (E.han_seats('742AD'), E.han_commanderies(g, '742AD'); prefectures with coverage >= 0.9 and >= 4 cells), Poisson deviance at the fitted W against inf, over all prefectures and over the dry prefectures (mean aridity < 0.35). The water rule has never been run on these seats.",
+ "adopt_if": "the fitted W < inf, the blind Tang deviance over all prefectures is not worse and over the dry prefectures improves; then polity.settle.DRY_WATER_KM = W and the three atlases' political reach is rebuilt.",
+ "script": "scripts/polity_dry_towns.py --second"
+}
