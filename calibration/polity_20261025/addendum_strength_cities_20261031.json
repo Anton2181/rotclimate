@@ -1,0 +1,15 @@
+{
+ "frozen": "2026-10-31, before any run of the changes below. Known before freezing: plan_strength_20261031.json and its results (output/polity_strength_20261031/strength.json; reports/POLITY_STRENGTH_20261031.md): the Rome-Parthia fit was uninformative because the Parthian seats were placed inside the Cliopatria polygon being scored (balanced accuracy 0.993 at every gamma); Han-Xiongnu and Tang-Turgesh results by gamma with density camps inside the steppe polygons.",
+ "change": "Each polity's network comes from sources independent of the polygon it is scored against. Rome AD 150: Hanson's towns and the Itiner-e roads of AD 150 (unchanged). Parthia AD 150: its royal and vassal capitals from the literature (Isidore of Charax, Parthian Stations; Strabo; Pliny), listed below with approximate coordinates, snapped to land at 9 km. Xiongnu c. AD 2 (blind test): the excavated Xiongnu elite centres of the 1st c. BC - 1st c. AD (Brosseder & Miller 2011, Xiongnu Archaeology), listed below. Han AD 2: the county seats (unchanged). The rule and the gammas are as plan_strength_20261031.json: a land cell goes to A when d_A / k_A < d_B / k_B, k_p = (F_p / sqrt(F_A F_B))^gamma, F_p the modelled people within 2 year-round days of p's sources; gamma in {0, 0.1, 0.2, 0.3, 0.5}.",
+ "parthia_sources": {"Ctesiphon": [33.09, 44.58], "Babylon": [32.54, 44.42], "Susa": [32.19, 48.25], "Ecbatana": [34.80, 48.52],
+                     "Rhagae": [35.58, 51.44], "Hecatompylos": [35.96, 54.13], "Nisa": [37.95, 58.20], "Merv": [37.66, 62.18],
+                     "Spasinou Charax": [30.60, 47.55], "Arbela": [36.19, 44.01], "Istakhr": [29.98, 52.90],
+                     "Ganzak": [36.60, 47.24], "Hatra": [35.59, 42.72]},
+ "xiongnu_sources": {"Noin-Ula": [48.90, 106.90], "Gol Mod": [48.00, 101.10], "Ivolga": [51.74, 107.48], "Tsaraam": [50.27, 106.60],
+                     "Terelj": [47.90, 107.40], "Duurlig Nars": [48.60, 111.90], "Egiin Gol": [49.30, 103.60]},
+ "fit": "gamma maximising the balanced accuracy of Rome AD 150 against Parthia AD 150 (Cliopatria polygons; ties to the smaller gamma), window lat0 35, lon0 42, 3600 x 2400 km, 9 km cells (as the first plan)",
+ "test_blind": "Han AD 2 against the Xiongnu with the excavated centres as the Xiongnu sources, in the E3 steppe window (lat0 41, lon0 106, 4200 x 2800 km, 9 km): balanced accuracy at the fitted gamma against gamma 0",
+ "tests_seen": "the first plan's two steppe contests (density camps) at the fitted gamma, reported; Tang-Turgesh's centres (Suyab, Talas) lie outside the steppe window, so it has no city version",
+ "adopt_if": "the fitted gamma > 0, the blind test gains >= 0.005 at that gamma, and neither seen contest loses more than 0.01. Otherwise nothing changes on the maps.",
+ "script": "scripts/polity_strength_check.py --cities"
+}

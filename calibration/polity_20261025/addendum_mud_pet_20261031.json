@@ -1,0 +1,22 @@
+{
+ "frozen": "2026-10-31, before any run of the changes below. Known before freezing: the first seasons addendum (addendum_seasons_20261031.json; Kyiv and Moscow station results with and without the 25 mm topsoil layer; reports/POLITY_SEASONS_20261031.md). Kyiv and Moscow are therefore not blind; the six rasputitsa stations and the new controls below have never been run.",
+ "why": "Kyiv's October and April stay dry because Hargreaves' evaporation in a cloudy October about equals the rain. Hargreaves (1985) uses only temperature and its daily range, and overestimates evaporation in humid, cloudy months. Droogers & Allen (2002, Irrigation and Drainage Systems 16: 33-45) fitted a monthly variant on 1,000+ CRU stations against Penman-Monteith that adds the month's rain as a cloudiness proxy: PET = 0.0013 x 0.408 Ra x (T + 17.0) x (TD - 0.0123 P)^0.76 (Ra MJ m-2 d-1, T mean C, TD daily range C, P month's rain mm). Constants fixed from the paper, not fitted.",
+ "variants": {
+   "A": "the first addendum's 25 mm topsoil layer, Hargreaves PET (as already run; reported again on the new stations)",
+   "B": "Droogers-Allen PET for the soil bucket (polity.seasons.PET_METHOD = 'droogers_allen'), no topsoil layer",
+   "C": "B with the 25 mm topsoil layer"
+ },
+ "stations_blind": {
+   "rasputitsa": {"Minsk": [53.90, 27.57], "Warsaw": [52.23, 21.01], "Smolensk": [54.78, 32.05], "Kharkiv": [49.99, 36.23],
+                  "Vilnius": [54.69, 25.28], "Kazan": [55.79, 49.12]},
+   "expect_rasputitsa": "mud >= 0.5 in at least one of Mar, Apr, May (the thaw) and in at least one of Oct, Nov (the autumn rains): the spring and autumn rasputitsa of the East European plain",
+   "controls": {"Seville": [[37.39, -5.98], "Jun-Sep"], "Baghdad": [[33.31, 44.37], "all"], "Tehran": [[35.69, 51.39], "all"],
+                "Delhi": [[28.61, 77.21], "Oct-May"], "Xi'an": [[34.34, 108.94], "Nov-Feb"], "Alexandria": [[31.20, 29.92], "all"]},
+   "expect_controls": "no month in the listed months reaches mud >= 0.5"
+ },
+ "stations_seen": "Kyiv, Moscow (rasputitsa, reported); Rome Jun-Sep, Patna Oct-May, Cairo all, Beijing Oct-Feb (controls, must also pass)",
+ "climate": "WorldClim 2.1 5' monthly tavg, tmax, tmin, prec at the station points (3 x 3 cells), months from January, as scripts/polity_season_stations.py",
+ "adopt_if": "a variant passes when every blind rasputitsa station meets its expectation and no blind or seen control fails. Of the passing variants the simplest is adopted, in the order B, A, C. The map's political-reach layers are then rebuilt with it (all three atlases).",
+ "reported_not_gating": "T1 (Roman extent, AD 150, balanced accuracy of the v2 control rule against the Cliopatria polygon) with each variant, now that its data are cached again; its baseline (0.7616) is known, so it does not gate. The share of each map's land with mud >= 0.5 by month.",
+ "script": "scripts/polity_mud_pet.py"
+}
