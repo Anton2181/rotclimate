@@ -281,9 +281,10 @@ mean membership 0.300 / 0.303 / 0.307; tree recall 0.064 → 0.175 and warm-wet
 
 ## Next
 
-1. Use the corrected temperature and rain in the r39 world refit (score the
-   painted zones on corrected monthly fields), then publish an atlas with raw
-   and corrected layers side by side. Check summer-heat zones (range) and the
+1. Use the corrected temperature and rain in the world refit (score the
+   painted zones on corrected monthly fields). Done for display: the
+   Earth-fit atlas shows r40-corrected layers beside the raw ones
+   (reports/ATLAS_R40_20261031.md, exact zone agreement 33.1 → 35.6 %). Check summer-heat zones (range) and the
    arid/temperate boundary (California's Köppen main group) first.
 2. Physics: the maritime lag needs a boundary layer that is not almost
    entirely sea-controlled (a land surface layer or two-tile coast) plus a

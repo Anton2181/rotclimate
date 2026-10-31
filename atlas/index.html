@@ -691,7 +691,7 @@ window.atlasSave = async (filename, blob) => {
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
   };
-  const topicNames = ["Overview", "Population", "Foraging", "Political reach", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Fit checks"];
+  const topicNames = ["Overview", "Population", "Foraging", "Political reach", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
   const lastLayer = {};
   for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
     const option = document.createElement("option"); option.value = name; option.textContent = name;

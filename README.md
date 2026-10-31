@@ -33,7 +33,10 @@ published world's geometry, with FORGE foraging, politics, trade and its
 Fit-check diagnostics rebuilt; it fits the painted zones slightly less well
 than r38 did (zone objective 0.180 against 0.183). The hosted claude.ai
 copies of all three atlases and the hub are republished with every current
-feature ([atlas report](reports/ATLAS_R40_20261031.md)).
+feature ([atlas report](reports/ATLAS_R40_20261031.md)). The Earth-fit atlas
+also has a **Corrected** topic: Köppen, biomes, zones, temperature and rain
+after the Earth-trained corrections, and maps of what they change (exact
+painted-zone agreement 33.1 % raw, 35.6 % corrected; every other topic stays raw).
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.

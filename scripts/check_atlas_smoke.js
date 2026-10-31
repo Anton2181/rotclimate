@@ -6,8 +6,8 @@
 // Opens each page in Chromium, waits for the climate card, then visits every
 // map topic and checks the panels that load their own data packets: Foraging
 // (FORGE), Population, Land and people, the directed-trade views and, where the
-// atlas has them, the surroundings-sensitivity layers and the initialization
-// check under Fit checks. Any page error or failed data load fails the page.
+// atlas has them, the surroundings-sensitivity layers, the initialization
+// check under Fit checks and every Earth-corrected layer. Any page error or failed data load fails the page.
 const { chromium } = require('playwright');
 
 async function checkPage(browser, url) {
@@ -54,13 +54,25 @@ async function checkPage(browser, url) {
     await showLayer(sensitivity[0]);
     result.checks.sensitivity = { layers: sensitivity, download_link: await page.locator('#legend a[download]').count() };
   }
+  const corrected = meta.layers.filter(L => L.group === 'Corrected');
+  if (corrected.length) {
+    const shown = [];
+    for (const L of corrected) {
+      await showLayer(L.id);
+      const ok = await page.waitForFunction(src => { const i = document.querySelector('#base'); return i.src.includes(src) && i.complete && i.naturalWidth > 0; },
+        L.file, { timeout: 20000 }).then(() => true, () => false);
+      shown.push({ id: L.id, image_loaded: ok, legend: (await page.$eval('#legend', e => e.innerText.replace(/\s+/g, ' ').trim())).slice(0, 80) });
+    }
+    result.checks.corrected = { topic: topics.includes('Corrected'), layers: shown };
+  }
   if (meta.initialization_check) {
     await showLayer('zones');
     result.checks.initialization_link = await page.locator('#legend a[data-initialization-check]').count();
   }
   await page.waitForTimeout(1500);
   result.errors = errors; result.failed_requests = failed;
-  result.passed = !errors.length && !failed.length && (!meta.foraging || /people/.test(result.checks.foraging.totals));
+  result.passed = !errors.length && !failed.length && (!meta.foraging || /people/.test(result.checks.foraging.totals))
+    && (!result.checks.corrected || (result.checks.corrected.topic && result.checks.corrected.layers.every(L => L.image_loaded)));
   await page.close();
   return result;
 }

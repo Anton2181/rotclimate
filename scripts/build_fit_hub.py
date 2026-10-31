@@ -93,6 +93,7 @@ def main():
         (a.artifact / 'img').mkdir(parents=True, exist_ok=True)
     plates, rows, population_rows, density_plates, cored, margins = [], [], [], [], [], []
     has_sensitivity = False
+    corrected = None
     foraging_fits, foraging_rows = [], []
     for name, (title, description) in FITS.items():
         folder = ROOT / 'atlases' / name
@@ -100,6 +101,7 @@ def main():
         metadata = json.loads((folder / 'data/atlas.json').read_text())
         if name == 'earth_fit':
             has_sensitivity = bool(metadata.get('surroundings_sensitivity'))
+            corrected = metadata.get('earth_correction')
         verified = bool(summary.get('observed_numerics', {}).get('all_checks_passed'))
         strict = summary['whittaker']['strict']
         outside = metadata['biomes'][0]['share']
@@ -158,6 +160,12 @@ def main():
         topics.insert(2, 'Foraging')
     numbers = {10: 'ten', 11: 'eleven'}
     topic_text = f'Every atlas has {numbers.get(len(topics), len(topics))} map topics: {", ".join(topics[:-1])} and {topics[-1]}.'
+    if corrected:
+        fit = corrected['zone_fit']
+        topic_text += (' The Earth atlas adds a Corrected topic: Köppen, biome, zone, temperature and rain maps after the '
+                       'corrections learned from the 31 Earth regions, and maps of the changes themselves '
+                       f'(exact zone agreement {100 * fit["raw"]["strict_accuracy"]:.1f} % raw, '
+                       f'{100 * fit["corrected"]["strict_accuracy"]:.1f} % corrected).')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a terrestrial hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation). '

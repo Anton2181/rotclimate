@@ -144,6 +144,9 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    free, earth, whittaker; URLs in atlases/artifact_links.json) republished
    with all local features (FORGE etc.): scripts/package_atlas_artifact.py ->
    Artifact publish per atlas; check with scripts/check_atlas_smoke.js.
+   Earth-fit atlas has a Corrected topic (scripts/add_corrected_layers.py,
+   r40 corrections on the atlas checkpoint; zone agreement 33.1 -> 35.6 %;
+   rerun it after any rebuild of atlases/earth_fit, refuses other physics).
 2. Fresh sealed set declared 2026-10-31: calibration/sealed_20261031/
    (hokkaido, canadian_prairies, kazakh_steppe, namibia_kalahari,
    southern_italy, north_queensland; no model run on them yet). Use
