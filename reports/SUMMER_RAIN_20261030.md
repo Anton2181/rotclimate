@@ -224,6 +224,43 @@ and every direction. A cap that acts only where eddies carry sea air onto
 much colder land (the winter monsoon coasts), leaving warm-season and
 continental transport alone, is the next step.
 
+## 8. A cap only for cold-air outbreaks (e60, opt-in)
+
+The cap binds wherever a column holds less than its eddy surroundings: on the
+winter monsoon coasts, but also on every mountain in every season and at the
+cold edge of each grid. `eddy_cap_contrast_k` keeps it only where the
+column's sea-level-equivalent air is colder than the eddies' surroundings
+(G(Tsl) − Tsl over the eddy scale, ~850 km), in full at that many K. The sea-
+level equivalent removes height, so mountains alone do not trigger it, and
+warm summer land never does.
+
+| 31 regions against r40 | T MAE | rain loss | S | training | former holdout | mid-latitude | dev12 |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| e38b 0.5 (everywhere, §7) | −0.1 % | −0.2 % | 0.9984 | 1.010 | 1.009 | 1.027 | 0.977 |
+| e60: cap 0.5, full at 10 K | 0.0 % | −0.2 % | 0.9987 | 0.9995 | 0.9996 | 0.996 | 0.999 |
+| cap 0.5, 5 K | 0.0 % | −0.4 % | 0.9977 | 0.999 | 0.999 | 0.994 | 0.997 |
+| cap 1.0, 5 K | −0.1 % | −0.7 % | 0.9962 | 0.998 | 0.999 | 0.992 | 0.995 |
+| cap 1.0, 2.5 K | −0.15 % | −0.8 % | **0.9952** | 0.997 | 0.999 | 0.994 | 0.993 |
+| cap 1.0, 5 K, land_recycling 0.45 | −0.8 % | 0.0 % | 0.9959 | 1.007 | 0.996 | 0.983 | 0.995 |
+| cap 1.0, 2.5 K, land_recycling 0.45 | −0.8 % | −0.3 % | 0.9946 | 1.005 | 0.996 | 0.984 | 0.992 |
+
+Every group improves with e60 alone; the interiors' losses fall from 10–20 %
+to 0.4–5 % (the US Midwest is still the worst, 1.05 at 2.5 K), and Manchuria,
+Korea, East Australia, the Great Basin and the Cape improve. Its gain is
+smaller than the ungated cap's on the Great Basin and California, part of
+whose earlier gain came from capping their mountains.
+
+**Caveat.** e60 was designed after the sealed six had shown the ungated cap
+drying the north-east US. For this mechanism the sealed six are therefore
+not a fully blind test, and any result on them is reported with that caveat.
+
+A frozen search (`calibration/cold_cap_refit_20261031/plan.json`, committed
+before any result: eddy_rh_cap [0.3, 1], eddy_cap_contrast_k [1.5, 10],
+precip_tau_days [9, 11.5], land_recycling [0.35, 0.5]; 40 evaluations from
+cap 1.0 at 2.5 K) is in progress, validated against r40 into
+`output/summer_rain_20261030/cold_cap_refit/`; adoption also requires the
+sealed six not to get worse.
+
 ## Reproduce
 
 ```sh
@@ -236,6 +273,8 @@ python -I scripts/physics_gap_figures.py summer output/summer_rain_20261030/comp
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 0.3, "land_recycling": 0.45}' --out output/summer_rain_20261030/rhcap03_lr045
 python -I scripts/gate_calibrate.py --plan calibration/eddy_cap_refit_20261030/plan.json --out calibration/eddy_cap_refit_20261030/search --hours 3
 OUT=output/summer_rain_20261030/eddy_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/eddy_cap_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
+python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 1.0, "eddy_cap_contrast_k": 2.5}' --out output/summer_rain_20261030/cold10k25
+python -I scripts/gate_calibrate.py --plan calibration/cold_cap_refit_20261031/plan.json --out calibration/cold_cap_refit_20261031/search --hours 3
 ```
 
 ![Summer rain](../output/summer_rain_20261030/summer_rain.png)

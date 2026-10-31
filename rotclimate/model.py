@@ -266,6 +266,8 @@ class ClimateModel:
             raise ValueError('ocean_column_air must be in [0, 1] and needs the legacy column saturation')
         if not 0 <= params.ocean_column_warm <= 1 or (params.ocean_column_warm > 0 and params.column_saturation_scheme != 'legacy'):
             raise ValueError('ocean_column_warm must be in [0, 1] and needs the legacy column saturation')
+        if params.eddy_cap_contrast_k < 0 or (params.eddy_cap_contrast_k > 0 and params.eddy_rh_cap <= 0):
+            raise ValueError('eddy_cap_contrast_k must be >= 0 and needs eddy_rh_cap > 0')
         if params.monsoon_pressure_hpa < 0 or (params.monsoon_pressure_hpa > 0 and params.slp_large <= 0 and params.slp_local <= 0):
             raise ValueError('monsoon_pressure_hpa must be >= 0 and needs the pressure winds (slp_large or slp_local > 0)')
         if params.wind_source not in ('model', 'observed'):
@@ -1734,6 +1736,17 @@ class ClimateModel:
                 # target = min(G(W), Ws * G(W / Ws)), blended by eddy_rh_cap.
                 ws_safe = np.maximum(Ws, 1e-3)
                 plain_mix, c_rh = mix, p.eddy_rh_cap
+                if p.eddy_cap_contrast_k > 0:
+                    # e60: the cap was meant for sea air pushed onto cold land
+                    # (the winter monsoon coasts), but a column also holds less
+                    # than its surroundings on high ground and at the cold edge
+                    # of any grid, so it dried the mountain interiors in every
+                    # season (the Alps, Anatolia, the Levant, Central Asia) and
+                    # the eddy water of eastern North America. Cap only where
+                    # the column's sea-level-equivalent air is colder than the
+                    # eddies' surroundings, fully at eddy_cap_contrast_k.
+                    contrast = gauss(Tsl, sigW) - Tsl
+                    c_rh = p.eddy_rh_cap * np.clip(contrast / p.eddy_cap_contrast_k, 0.0, 1.0)
                 mix = lambda water, ws_safe=ws_safe, plain_mix=plain_mix, c_rh=c_rh: (
                     (1.0 - c_rh) * plain_mix(water)
                     + c_rh * np.minimum(plain_mix(water), ws_safe * plain_mix(water / ws_safe)))

@@ -240,6 +240,7 @@ class Params:
     eddy_moisture_scale_km: float = 0.0  # e38: reach of the eddies' water exchange, km (0 = eddy_scale_km)
     upslope_free_wind: float = 0.0  # e39: share of the terrain drag removed from the wind that lifts air up slopes (0 = dragged wind)
     eddy_rh_cap: float = 0.0  # e38b: air the eddies move onto colder ground keeps at most its relative humidity (0 = off, 1 = full)
+    eddy_cap_contrast_k: float = 0.0  # e60: e38b only where a column is colder (sea-level equivalent) than the eddies' surroundings, in full this many K colder (0 = everywhere)
     ocean_rh_warm: float = 0.0  # e40: extra column humidity over seas warmer than 25 C, reached at 29 C (0 = off)
     moisture_wind_factor: float = 1.0  # e41: the wind that carries column water, x the surface wind (1 = unchanged)
     moisture_pressure_drag_ratio: float = 1.0  # opt-in column/surface Rayleigh drag; 1 = legacy aligned flow
