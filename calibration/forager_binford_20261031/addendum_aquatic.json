@@ -1,0 +1,14 @@
+{
+ "frozen": "2026-10-31, after parts A-C (reports/FORAGING_EARTH_20261031.md) and before any aquatic model run or any computation of aquatic inputs at the Binford sites",
+ "same_as_plan": "sample, fit/test split, climate, metrics of calibration/forager_binford_20261031/plan.json",
+ "configurations": {
+   "B2": "long-window mean: 600 years, display density = mean of the final 300 annual densities (floor-limited years as zero). The same statistic as A with six times the sample; nothing fitted.",
+   "D": "B2 + aquatic food as a third stock: daily supply S_aq = a_marine * exp(-d_coast / 25 km) * clip((28 - SST) / 20, 0.2, 1) + a_fresh * W_fresh (kg dry matter per km2 of land per year, spread evenly over the year), fish stock spoiling at the plant decay rate; fish counts as animal food, the animal intake is split between prey and fish in proportion to their stocks, and the model reports the fish share of intake. Terrestrial plant and prey supplies are multiplied by k_terr."
+ },
+ "inputs": {
+   "earth": "d_coast: distance from the group to the nearest WorldClim 5' ocean/water cell; SST: WOA18 annual mean at the nearest sea point (rotclimate.earth.observed_sst); W_fresh: Natural Earth 1:10m rivers (lake centrelines) length within 25 km in km per 100 km2 plus 10 x the share of that disc covered by Natural Earth 1:10m lakes",
+   "atlas": "the same definitions on the map: d_coast from the map's coastline; SST from the climate packet's annual mean sea-level air temperature over the nearest open-sea cells; W_fresh from the map's drawn rivers (length per area) and lakes"
+ },
+ "fitting": "Stage 1: k_terr over {0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 1.0} on fit-set groups with fishing < 20 % (D without aquatic), minimising the median absolute log10 density error. Stage 2: with that k_terr, a_marine and a_fresh over the grid {0, 30, 100, 300, 1000, 3000} x {0, 10, 30, 100, 300, 1000} on all fit-set groups, minimising the median absolute log10 density error.",
+ "decision": "B2 replaces A if the test-set median absolute log10 error is not worse by more than 0.02 and the density rank correlation is not lower by more than 0.02. D replaces the adopted one of A/B2 if, on the test set, the median absolute log10 error improves, the density rank correlation is not lower by more than 0.02, and the rank correlation of the model's fish share with Binford's fishing dependence is at least 0.3. Every result is reported."
+}
