@@ -1,0 +1,16 @@
+chile: verified, rainfall loss 0.5745
+iran_plateau: verified, rainfall loss 0.5519
+north_india: verified, rainfall loss 0.7787
+mexico: verified, rainfall loss 0.6245
+region           T mMAE  T aMAE  T bias  rngErr  <=2C anom r |  P mMAE logRMSE  <=25%   rho   loss
+north_india        3.27    2.99   -2.68   +0.15   22%   0.99 |    44.5   0.951    13%  0.23  0.779
+iran_plateau       3.14    2.89   -2.86   -1.44   28%   0.96 |    15.1   0.591    20%  0.32  0.552
+mexico             1.46    1.12   -1.02   +0.65   90%   0.96 |    38.7   0.541    34%  0.24  0.624
+chile              2.37    1.92   +1.77   +2.37   64%   0.85 |    28.1   0.596    21%  0.63  0.574
+[training] T_monthly_mae 1.460 T_annual_mae 1.117 T_within_2C 0.896 T_anomaly_r 0.964 P_monthly_mae 38.715 P_annual_log_rmse 0.541 P_within_25pct 0.342 P_spearman 0.243 P_loss 0.624
+[holdout] T_monthly_mae 2.367 T_annual_mae 1.922 T_within_2C 0.640 T_anomaly_r 0.850 P_monthly_mae 28.095 P_annual_log_rmse 0.596 P_within_25pct 0.211 P_spearman 0.633 P_loss 0.574
+[dev12] T_monthly_mae 3.203 T_annual_mae 2.939 T_within_2C 0.252 T_anomaly_r 0.975 P_monthly_mae 29.792 P_annual_log_rmse 0.771 P_within_25pct 0.162 P_spearman 0.275 P_loss 0.665
+[all] T_monthly_mae 2.558 T_annual_mae 2.229 T_within_2C 0.510 T_anomaly_r 0.941 P_monthly_mae 31.598 P_annual_log_rmse 0.670 P_within_25pct 0.219 P_spearman 0.356 P_loss 0.632
+-- by elevation_m: 0-300 n470 T -2.3/2.8 rng +0.6 P -0.37/0.74 | 300-1000 n488 T -2.2/2.5 rng +0.0 P -0.22/0.72 | 1000-2000 n531 T -1.7/2.0 rng +0.0 P +0.17/0.61 | 2000-9000 n245 T +0.4/1.4 rng -0.6 P +0.31/0.79
+-- by coast_km: 50-200 n303 T -0.4/2.4 rng +1.0 P -0.12/0.67 | 200-500 n624 T -1.3/1.7 rng -0.0 P +0.05/0.57 | 500-1e+09 n807 T -2.5/2.7 rng -0.2 P -0.13/0.80
+-- by relief_m: 0-300 n808 T -2.4/2.5 rng -0.1 P -0.26/0.66 | 300-1000 n748 T -1.5/2.0 rng -0.3 P +0.17/0.71 | 1000-2000 n142 T -0.4/2.0 rng +1.5 P -0.08/0.74 | 2000-9000 n20 T +2.9/3.7 rng +4.6 P -0.58/1.08
