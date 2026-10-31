@@ -46,10 +46,99 @@ def aridity(g):
     return np.nan_to_num(g["prec"]).sum(0) / np.maximum(pet, 1.0)
 
 
+def han_counts(year, Ws, b3):
+    """Seats per commandery/prefecture in the Han window: placed (per W) against actual."""
+    g = window("han")
+    world = P.world_of(g); land = world["land"]
+    st = N.statics(world)
+    seats = E.han_seats(year)
+    r, c, ok = P.snap(g, np.array([s["lat"] for s in seats]), np.array([s["lon"] for s in seats]))
+    seats = [(int(y), int(x)) for y, x, k in zip(r, c, ok) if k]
+    ids, rows = E.han_commanderies(g, year)
+    inside = ids >= 0
+    water_km = ndi.distance_transform_edt(~((st["basin"] > 0) | st["water"])) * world["cell_km"]
+    ai = aridity(g)
+    coverage = np.array([g["covered"][ids == k].mean() if (ids == k).any() else 0 for k in range(len(rows))])
+    ncells = np.bincount(ids[ids >= 0], minlength=len(rows))
+    use = (coverage >= 0.9) & (ncells >= 4)
+    actual = np.bincount([ids[y, x] for y, x in seats if ids[y, x] >= 0], minlength=len(rows))
+    dry_u = np.array([ai[ids == k].mean() < settle.DRY_ARIDITY if (ids == k).any() else False for k in range(len(rows))])
+    out = {}
+    for W in Ws:
+        towns, _, _ = settle.place_towns(world["density"], land, water_km, np.zeros(land.shape, bool), world["elev"],
+                                         world["cell_km"], [], allowed=inside, seat_people=b3["seat_people"],
+                                         max_radius_km=b3["max_radius_km"], aridity=ai, dry_water_km=W)
+        pred = np.bincount([ids[y, x] for y, x in towns if ids[y, x] >= 0], minlength=len(rows))
+        key = "inf" if W is None else f"{W:g}"
+        out[key] = dict(deviance=P.poisson_deviance(actual[use], pred[use]), placed=int(pred[use].sum()), actual=int(actual[use].sum()),
+                        units=int(use.sum()), dry_units=int((use & dry_u).sum()),
+                        dry_deviance=P.poisson_deviance(actual[use & dry_u], pred[use & dry_u]) if (use & dry_u).any() else None,
+                        dry_placed=int(pred[use & dry_u].sum()), dry_actual=int(actual[use & dry_u].sum()))
+        print(year, key, out[key], flush=True)
+    return out
+
+
+def rome_counts(Ws, b3):
+    """Roman towns AD 150 per 22 x 22-cell block: placed (per W) against Hanson's."""
+    g = window("rome")
+    land = g["land"].astype(bool)
+    road = E.draw_lines(g, [l for _, l in E.itinere_roads(150)]) & land
+    towns = E.hanson_towns(150)
+    r, c, ok = P.snap(g, np.array([t["lat"] for t in towns]), np.array([t["lon"] for t in towns]))
+    towns = [(int(y), int(x)) for y, x, k in zip(r, c, ok) if k]
+    inside = E.inside_polygons(g, E.cliopatria("Roman Empire", 150)) & land
+    world = P.world_of(g, road); st = N.statics(world)
+    water_km = ndi.distance_transform_edt(~((st["basin"] > 0) | st["water"])) * g["cell_km"]
+    ai = aridity(g)
+    B = 22; ny, nx = land.shape[0] // B, land.shape[1] // B
+    blocks = lambda a_: a_[:ny * B, :nx * B].reshape(ny, B, nx, B).sum((1, 3))
+    cnt = np.zeros((ny, nx))
+    for y, x in towns:
+        if y // B < ny and x // B < nx:
+            cnt[y // B, x // B] += 1
+    lb = blocks(land.astype(float)); ib = blocks(inside.astype(float))
+    okb = (lb >= 0.3 * B * B) & (ib >= 0.5 * lb) & (blocks(g["covered"].astype(float) * land) >= 0.9 * lb)
+    dryb = okb & (blocks(np.where(land, ai, 0.0)) / np.maximum(lb, 1) < settle.DRY_ARIDITY)
+    out = {}
+    for W in Ws:
+        pt, _, _ = settle.place_towns(g["density"], land, water_km, road, g["elev"], g["cell_km"], [], allowed=inside,
+                                      seat_people=b3["seat_people"], max_radius_km=b3["max_radius_km"], aridity=ai, dry_water_km=W)
+        pc = np.zeros((ny, nx))
+        for y, x in pt:
+            if y // B < ny and x // B < nx:
+                pc[y // B, x // B] += 1
+        key = "inf" if W is None else f"{W:g}"
+        out[key] = dict(deviance=P.poisson_deviance(cnt[okb], pc[okb]), placed=int(pc[okb].sum()), actual=int(cnt[okb].sum()),
+                        dry_deviance=P.poisson_deviance(cnt[dryb], pc[dryb]) if dryb.any() else None,
+                        dry_placed=int(pc[dryb].sum()), dry_actual=int(cnt[dryb].sum()), dry_blocks=int(dryb.sum()))
+        print("Rome", key, out[key], flush=True)
+    return out
+
+
+def second(out_dir, b3):
+    plan = ROOT / "calibration/polity_20261025/addendum_dry_towns2_20261031.json"
+    Ws = [None, 60.0, 40.0, 25.0]
+    fit = rome_counts(Ws, b3)
+    best = min(fit, key=lambda k: (round(fit[k]["deviance"], 6), -(1e9 if k == "inf" else float(k))))
+    Wb = None if best == "inf" else float(best)
+    test = han_counts("742AD", list(dict.fromkeys([None, Wb])), b3)
+    ok = best != "inf" and test[best]["deviance"] <= test["inf"]["deviance"] and \
+        (test[best]["dry_deviance"] or 0) < (test["inf"]["dry_deviance"] or 0)
+    res = dict(addendum=str(plan.relative_to(ROOT)), fit_rome=fit, W_fitted=best, test_tang742=test, adopted=bool(ok),
+               rule=json.loads(plan.read_text())["adopt_if"])
+    (out_dir / "dry_towns2.json").write_text(json.dumps(res, indent=1))
+    print(json.dumps(dict(W=best, adopted=ok), indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", type=Path, default=ROOT / "output/polity_dry_towns_20261031")
+    ap.add_argument("--second", action="store_true", help="the second addendum (fit Rome, blind Tang 742)")
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
+    if a.second:
+        P.apply_sea()
+        b3 = json.loads((P.PLAN / "fits.json").read_text())["F3_seats"]["best"]
+        return second(a.out, b3)
     P.apply_sea()
     fits = json.loads((P.PLAN / "fits.json").read_text())
     b3 = fits["F3_seats"]["best"]

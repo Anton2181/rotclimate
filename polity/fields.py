@@ -166,7 +166,7 @@ def compute(atlas, density=None):
     bare = travel_graph(elev, land, road, open_eta, cell_km, paths, ferry)
     marked = [(t["row"], t["col"]) for t in towns]
     suggested, coast_km, smooth_density = place_towns(density, land, geo["water_distance"], road, elev, cell_km, marked,
-                                                      allowed=claimed)
+                                                      allowed=claimed, aridity=hf["aridity"])
     tracks, routes, links = minor_roads(bare, shape, road, suggested, marked)
     towns = towns + [dict(kind="unmarked town", row=int(y), col=int(x)) for y, x in suggested]
 

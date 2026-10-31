@@ -42,7 +42,7 @@ def prepare(atlas):
     eta=C.terrain_coefficient(biome,swamp,None)
     bare=C.travel_graph(elev,land,road,eta,cell_km,paths,ferry)
     marked=[(t['row'],t['col']) for t in towns]
-    suggested,_,_=F.place_towns(density,land,geo['water_distance'],road,elev,cell_km,marked,allowed=claimed)
+    suggested,_,_=F.place_towns(density,land,geo['water_distance'],road,elev,cell_km,marked,allowed=claimed,aridity=hf['aridity'])
     tracks,routes,_=F.minor_roads(bare,shape,road,suggested,marked)
     towns += [dict(kind='unmarked town',row=int(y),col=int(x)) for y,x in suggested]
     climate=F.map_climate(data,meta,arrays,shape)

@@ -1,6 +1,6 @@
 cd /home/user/rotclimate
 set -e
-for a in free_fit earth_fit whittaker_fit; do cp atlases/$a/data/atlas.json output/corrected_climate/$a.atlas.json.before_mud; done
+for a in free_fit earth_fit whittaker_fit; do cp atlases/$a/data/atlas.json output/corrected_climate/$a.atlas.json.before_drytowns; done
 .venv/bin/python -I scripts/export_reach.py atlases/free_fit atlases/earth_fit atlases/whittaker_fit > output/corrected_climate/reach.log 2>&1
 echo REACH DONE
 cp atlases/earth_fit/data/atlas.json output/corrected_climate/atlas.json.before

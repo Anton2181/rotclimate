@@ -130,7 +130,7 @@ days (`output/polity_sea_west_20261031/sea_west.json`; July):
   wind serves a course) needs data not used in its design to test: ORBIS's
   sea edges (test T7) are not cached in this container. Nothing is changed.
 
-## Towns in the dry south (user observation; not adopted)
+## Towns in the dry south (user observation; adopted by the second test)
 
 The user noticed the maps' proposed settlements scattered evenly through
 the southern deserts. Earth fit: 94 unmarked towns in the model's BSh/BSk
@@ -159,3 +159,23 @@ test improves by 1.5 % (dry blocks by 16 %, there with too few towns
 instead of too many). The rule stays in `polity.settle` (DRY_WATER_KM =
 None, off). The larger cause on the map is the climate: the painted desert
 is simulated as steppe (the hot-dry zone's recall is 23 %).
+
+**Second test (adopted).** Han China held too little dry land to fit the
+rule, so a second addendum, frozen before its run
+(`calibration/polity_20261025/addendum_dry_towns2_20261031.json`), fits on
+the Roman towns (seen: T3 above, and W 60 / 25 added) and tests blind on the
+Tang county seats of AD 742 (the water rule had never been run on them),
+which include the Hexi-corridor oases and the Ordos margin
+(`output/polity_dry_towns_20261031/dry_towns2.json`):
+
+| W | Roman towns AD 150 (fit) | dry blocks (placed / actual 136) | Tang AD 742 seats (blind), 314 prefectures | 10 dry prefectures (placed / actual 45) |
+|---|---:|---|---:|---|
+| none | 1481.2 | 151.2 (153) | 1270.6 | 75.4 (78) |
+| 60 km | 1465.8 | 136.9 (112) | — | — |
+| **40 km** | **1458.3** | 127.1 (103) | **1247.7** | **51.9 (57)** |
+| 25 km | 1479.6 | 146.3 (91) | — | — |
+
+Adopted: `polity.settle.DRY_WATER_KM = 40` (dry land: rain over Hargreaves
+evaporation < 0.35, the harvest model's own aridity layer on the maps; water:
+the drawn rivers and lakes or the sea). All three atlases' political reach is
+rebuilt with it (and with the autumn mud).
