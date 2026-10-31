@@ -33,6 +33,10 @@ DAYS = 365.0 / 12
 SNOW_LASTING_MM = 10.0
 MELT_MM_C_DAY = 4.0
 SOIL_MM = 100.0
+# Topsoil wetness (calibration/polity_20261025/addendum_seasons_20261031.json): the
+# top ~10 cm, 25 mm, is a partition of the same bucket that rain and melt fill
+# first and evaporation empties first; mud also when it is nearly full. 0 = off.
+TOPSOIL_MM = 0.0
 FROZEN_C = -2.0
 MUD_COEFFICIENT = 1.8          # Soule & Goldman (1972): swampy bog
 MUD_ROAD = 1.1                 # the marked roads: built and drained
@@ -61,36 +65,46 @@ def hargreaves(T, Tmax, Tmin, lat, tilt=23.44):
     return np.maximum(pet, 0.0) * DAYS
 
 
-def water_year(T, P, pet, spin=3):
+def water_year(T, P, pet, spin=3, topsoil_mm=0.0):
     """Snowpack, melt, soil water and runoff for each month (mm), cycled
-    `spin` years from a full bucket and no snow."""
+    `spin` years from a full bucket and no snow. With topsoil_mm > 0 the top
+    layer's water (part of the same bucket: soil, runoff and floods are
+    unchanged) is returned as "top"."""
     T = np.asarray(T, float); P = np.asarray(P, float)
     snow_frac = np.clip((1.0 - T) / 2.0, 0.0, 1.0)
-    swe = np.zeros(T.shape[1:]); soil = np.full(T.shape[1:], SOIL_MM)
-    out = {k: np.zeros(T.shape) for k in ("swe", "melt", "soil", "runoff")}
+    swe = np.zeros(T.shape[1:]); soil = np.full(T.shape[1:], SOIL_MM); top = np.full(T.shape[1:], float(topsoil_mm))
+    out = {k: np.zeros(T.shape) for k in ("swe", "melt", "soil", "runoff", "top")}
     for year in range(spin):
         for m in range(12):
             swe = swe + P[m] * snow_frac[m]
             melt = np.minimum(swe, MELT_MM_C_DAY * np.maximum(T[m], 0.0) * DAYS)
             swe = swe - melt
             frozen = T[m] < FROZEN_C
-            water = soil + P[m] * (1 - snow_frac[m]) + melt - np.where(frozen, 0.0, pet[m])
+            inflow = P[m] * (1 - snow_frac[m]) + melt
+            loss = np.where(frozen, 0.0, pet[m])
+            water = soil + inflow - loss
             runoff = np.maximum(water - SOIL_MM, 0.0)
             soil = np.clip(water, 0.0, SOIL_MM)
+            if topsoil_mm > 0:
+                top = np.minimum(np.clip(top + inflow - loss, 0.0, topsoil_mm), soil)
             if year == spin - 1:
-                out["swe"][m], out["melt"][m], out["soil"][m], out["runoff"][m] = swe, melt, soil, runoff
+                out["swe"][m], out["melt"][m], out["soil"][m], out["runoff"][m], out["top"][m] = swe, melt, soil, runoff, top
     return out
 
 
-def fields(T, Tmax, Tmin, P, lat, tilt=23.44):
+def fields(T, Tmax, Tmin, P, lat, tilt=23.44, topsoil_mm=None):
     """All monthly travel fields: lasting snow (0/1), mud (0-1), heat factor,
-    runoff (mm), PET (mm), soil (mm), frozen (bool)."""
+    runoff (mm), PET (mm), soil (mm), frozen (bool). topsoil_mm: None = the
+    module's TOPSOIL_MM."""
     T = np.asarray(T, float)
+    topsoil_mm = TOPSOIL_MM if topsoil_mm is None else topsoil_mm
     pet = hargreaves(T, Tmax, Tmin, lat, tilt)
-    w = water_year(T, P, pet)
+    w = water_year(T, P, pet, topsoil_mm=topsoil_mm)
     frozen = T < FROZEN_C
     mud = np.where(frozen, 0.0, np.clip((w["soil"] / SOIL_MM - 0.75) / 0.25, 0.0, 1.0))
     mud = np.maximum(mud, np.where(frozen, 0.0, np.clip(w["melt"] / 50.0, 0.0, 1.0)))
+    if topsoil_mm > 0:
+        mud = np.maximum(mud, np.where(frozen, 0.0, np.clip((w["top"] / topsoil_mm - 0.75) / 0.25, 0.0, 1.0)))
     heat = 1.0 + HEAT_GAIN * np.clip((np.asarray(Tmax, float) - 33.0) / 7.0, 0.0, 1.0)
     return dict(snow=(w["swe"] > SNOW_LASTING_MM).astype(float), mud=mud, heat=heat, runoff=w["runoff"],
                 pet=pet, soil=w["soil"], swe=w["swe"], frozen=frozen)
