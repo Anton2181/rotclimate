@@ -262,6 +262,8 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.inland_sea_lag_days <= 120:
+            raise ValueError('inland_sea_lag_days must be in [0, 120]')
         if not (0 <= params.heat_land_friction < 1 and 0 <= params.water_land_friction < 1):
             raise ValueError('heat_land_friction and water_land_friction must be in [0, 1)')
         if (params.heat_land_friction > 0 or params.water_land_friction > 0) and params.wind_source != 'model':
@@ -928,6 +930,7 @@ class ClimateModel:
         P_last = None                    # e49: the last step's rain, for a grid's own monsoon descent
         W_prev = None
         uv_prev = chi = None
+        Tl_sea = None                   # e63: the land equilibrium as the enclosed seas feel it
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
@@ -1150,7 +1153,19 @@ class ClimateModel:
                 lamT = np.where(land, lam_land, 1.0 / (p.ocean_tau_days * DAY))
             To = self.z.ocean(lat, d) + p.sst_offset
             Tz = self.z.zonal(lat, d)
-            SST = self.sst(d, To, Tl)
+            if p.inland_sea_lag_days > 0:
+                # e63: an enclosed sea or a lake is a mixed layer of its own,
+                # 30-50 m of water warmed and cooled by the air over the
+                # surrounding land (~25 W/m2/K): it follows the land with a
+                # lag of one to two months. Taking the land's equilibrium at
+                # once warmed the Yellow Sea, the Bohai and the inner East
+                # China Sea 5-7 C above WOA18 in April and May and East
+                # China's and Korea's springs with them.
+                keep = np.exp(-dt_days / p.inland_sea_lag_days)
+                Tl_sea = Tl if Tl_sea is None else keep * Tl_sea + (1.0 - keep) * Tl
+                SST = self.sst(d, To, Tl_sea)
+            else:
+                SST = self.sst(d, To, Tl)
             if p.upwelling > 0:
                 # e1: wind along a coast drives surface water 90 deg to its right
                 # (left with reversed spin; Ekman); where that is offshore, cold

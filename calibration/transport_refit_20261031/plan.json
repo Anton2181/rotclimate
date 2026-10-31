@@ -1,0 +1,17 @@
+{
+ "frozen": "2026-10-31, before any result of this search; after the e62 screens (heat_land_friction / water_land_friction alone and together, best S 1.0001), the dry-heating and combined screens on r40 (dh 3.0 chi0 0.6: S 0.9943; heat 0.3 + water 0.2 + dh 3.0 chi0 0.6 + cold_high_storms 0.3: S 0.9900, training 1.0008 and holdout 1.026 fail) and the e63 sea-surface check (lag 45 days: East Asian spring sea bias down 2-3 C, winter and autumn up 2-3 C), recorded in reports/TRANSPORT_WIND_20261031.md",
+ "why": "Splitting the land friction between the heat and the water winds does not by itself resolve e57's conflict: the interiors (Central Asia, Anatolia, the Levant) want the strong westerlies in both. Dry-ground heating gives North India, Morocco and Iran most of their missing heat but warms East Asian springs that are already 2-4 C too warm (their shelf seas warm 5-7 C too early) and the cold-current Mediterranean coasts (Chile, SW Australia). The search lets the two frictions, dry heating and its coastal gate, the cold-high storm damping and the inland-sea rule (strength, lag, winter overturning) settle these trade-offs together.",
+ "start": "calibration/local_accuracy_20261023/r40_params.json",
+ "set": {"heat_land_friction": 0.3, "water_land_friction": 0.2, "dry_heating": 3.0, "dry_heating_chi0": 0.6, "cold_high_storms": 0.3},
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "knobs": [["heat_land_friction", 0.0, 0.6], ["water_land_friction", 0.0, 0.5], ["dry_heating", 0.0, 5.0],
+           ["dry_heating_chi0", 0.3, 0.9], ["cold_high_storms", 0.1, 0.5], ["inland_sea_lag_days", 0.0, 60.0],
+           ["inland_sea_warming", 2.0, 8.0], ["sea_winter_mixing", 0.0, 0.8]],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 53,
+ "evals": 72,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/transport_wind_20261031/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/transport_refit_20261031/search/best_params.json SEALED_SPEC=calibration/sealed_20261031/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r40 (policy v2), then the paired 28 km check (S not worse by more than 1 %), then the fresh sealed six (declared 2026-10-31, never run) once only if both pass; adoption also requires the sealed six not to get worse. Failing any step means nothing is adopted; every result is reported."
+}
