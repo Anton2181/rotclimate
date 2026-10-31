@@ -55,6 +55,11 @@ class ForagingParams:
     plant_decay_day: float = 0.02
     meat_decay_day: float = 0.0
     reset_meat_each_year: bool = True
+    # Food storage (off at 0): food beyond the fat ceiling can be kept per
+    # person up to this energy and is eaten before body fat; it spoils by
+    # storage_decay_day. An explicit extension, not part of published FORGE.
+    storage_capacity_mj: float = 0.0
+    storage_decay_day: float = 0.0
 
     def validate(self):
         values = asdict(self)
@@ -73,7 +78,7 @@ class ForagingParams:
             raise ValueError('Need bounded initial and minimum/maximum foraging hours')
         if not (0 <= self.min_hunt_fraction <= self.max_hunt_fraction <= 1):
             raise ValueError('Need hunting fractions in [0,1]')
-        if not (0 <= self.plant_decay_day <= 1 and 0 <= self.meat_decay_day <= 1):
+        if not (0 <= self.plant_decay_day <= 1 and 0 <= self.meat_decay_day <= 1 and 0 <= self.storage_decay_day <= 1):
             raise ValueError('Daily stock decay must be in [0,1]')
         if not 0 <= self.meat_fraction_floor <= 1:
             raise ValueError('Need meat_fraction_floor in [0,1]')
@@ -157,21 +162,24 @@ _OUTPUT_NAMES = ('raw_density_people_km2','foraging_hours_day','meat_fraction',
     'mean_net_growth_rate','mean_effective_fat_kg','floor_year_fraction',
     'averaging_years_used','mean_supported_density_people_km2',
     'annual_start_plant_stock_kg_dm_km2','annual_start_meat_stock_kg_dm_km2',
-    'annual_start_effective_fat_kg','annual_fat_energy_change_mj_person')
+    'annual_start_effective_fat_kg','annual_fat_energy_change_mj_person',
+    'median_supported_density_people_km2','density_p10_people_km2','density_p90_people_km2',
+    'density_lag1_autocorrelation','mean_stored_share','annual_store_draw_mj_person','store_mj_person')
 
 
 @njit(cache=True)
 def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, tolerance, stable_years, averaging_years):
     nday,ncell = plant.shape
-    out = np.zeros((45,ncell))
+    out = np.zeros((52,ncell))
     basal,activity,food,body,fmax,mminus,mplus,search,emax,crowd = packed[:10]
     hmin,hmax,hstep,hinit,kdiet,huntmin,huntmax,rmin = packed[10:18]
     bmax,bslope,fsigma,mb,repro,pfloor,pdecay,mdecay,reset = packed[18:27]
+    scap,sdecay = packed[27:29]
     for cell in range(ncell):
-        p = initial_p[cell]; f = initial_f[cell]
+        p = initial_p[cell]; f = initial_f[cell]; store=0.
         bv=0.; ba=0.; tf=hinit; prev_delta=0.; prev_meat=.5; prev_hunt=.5
         stable=0; converged=False
-        history=np.zeros((averaging_years,10))
+        history=np.zeros((averaging_years,11))
         maxmass=0.; maxenergy=0.; maxmassrel=0.; maxenergyrel=0.
         annual_plant_input=0.; annual_meat_input=0.
         for d in range(nday):
@@ -182,7 +190,7 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
             unused=ba if reset > .5 else 0.
             if reset > .5: ba=0.
             birth=0.; starve=0.; hours=0.; ia_sum=0.; iv_sum=0.; shortfall=0.
-            intake_sum=0.; expense_sum=0.; hv=0.; ha=0.; dv_sum=0.; da_sum=0.; fat_energy=0.
+            intake_sum=0.; expense_sum=0.; hv=0.; ha=0.; dv_sum=0.; da_sum=0.; fat_energy=0.; draw_sum=0.
             for day in range(nday):
                 beforev=bv; beforea=ba
                 dv=bv*pdecay; da=ba*mdecay
@@ -210,9 +218,18 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
                 potential=food*(iv+ia)
                 # Published intake/fat ceiling: surplus food is not extracted.
                 allowed=max(0.,expense+(fmax-f)*mplus)
-                if potential > allowed and potential > 0.:
-                    factor=allowed/potential;iv*=factor;ia*=factor
+                limit=allowed+max(0.,scap-store) if scap > 0. else allowed
+                if potential > limit and potential > 0.:
+                    factor=limit/potential;iv*=factor;ia*=factor
                 intake=food*(iv+ia)
+                if scap > 0.:
+                    # food beyond the fat ceiling goes into the store, and the
+                    # store is eaten before body fat
+                    kept=max(0.,intake-allowed)
+                    store+=kept;intake-=kept
+                    if intake < expense and store > 0.:
+                        draw=min(store,expense-intake);store-=draw;intake+=draw;draw_sum+=draw
+                    store*=1.-sdecay
                 balance=intake-expense
                 conversion=mplus if balance >= 0. else mminus
                 delta=balance/conversion
@@ -280,6 +297,8 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
             history[slot,7]=growth
             history[slot,8]=f
             history[slot,9]=1. if floor_limited else 0.
+            history[slot,10]=draw_sum/intake_sum if intake_sum > 0. else 0.
+            out[50,cell]=draw_sum;out[51,cell]=store
             if converged: break
         window=min(year+1,averaging_years)
         means=np.zeros(10)
@@ -297,12 +316,27 @@ def _simulate_flat(plant, meat, packed, initial_p, initial_f, years, min_years, 
         out[33,cell]=means[4];out[34,cell]=means[5];out[35,cell]=means[6]
         out[36,cell]=means[7];out[37,cell]=means[8];out[38,cell]=means[9]
         out[39,cell]=window;out[40,cell]=supported
+        # long-window robust summaries, in chronological order, floor-limited years as zero
+        series=np.zeros(window);stored=0.
+        for j in range(window):
+            slot=(year+1-window+j) % averaging_years
+            series[j]=history[slot,0]*(1.-history[slot,9]);stored+=history[slot,10]/window
+        out[45,cell]=np.median(series)
+        out[46,cell]=np.percentile(series,10.);out[47,cell]=np.percentile(series,90.)
+        lag=0.
+        if window > 2:
+            mu=series.mean();num=0.;den=0.
+            for j in range(window):
+                den+=(series[j]-mu)**2
+                if j > 0:num+=(series[j]-mu)*(series[j-1]-mu)
+            lag=num/den if den > 0. else 0.
+        out[48,cell]=lag;out[49,cell]=stored
     return out
 
 
 def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
         initial_density=.1, initial_fat_kg=7.5, years=300, min_years=20,
-        convergence_rtol=.01, convergence_years=5, averaging_years=50, day_weights=None):
+        convergence_rtol=.01, convergence_years=5, averaging_years=50, day_weights=None, display='mean'):
     """Simulate repeating daily food inputs and annual population feedback.
 
     ``plant_supply`` and ``meat_supply`` have shape ``[day, ...cells]`` and
@@ -323,6 +357,8 @@ def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
     reserve drawdown; it is not a census of famine days or starvation deaths.
     """
     params.validate()
+    if display not in ('mean','median'):
+        raise ValueError("display must be 'mean' or 'median'")
     plant=np.asarray(plant_supply,float);meat=np.asarray(meat_supply,float)
     if (plant.ndim < 1 or plant.shape != meat.shape or not 1 <= plant.shape[0] <= 2000
             or not np.isfinite(plant).all() or not np.isfinite(meat).all()
@@ -356,7 +392,8 @@ def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
     result['years_simulated']=result['years_simulated'].astype(np.int32)
     result['unsupported']=(result['floor_year_fraction'] >= 1.-1e-12) | ((result['annual_plant_supply_kg_dm_km2']+result['annual_meat_supply_kg_dm_km2']) <= 0.)
     result['terminal_density_people_km2']=result['raw_density_people_km2'].copy()
-    result['density_people_km2']=np.where(result['unsupported'],0.,result['mean_supported_density_people_km2'])
+    shown='median_supported_density_people_km2' if display=='median' else 'mean_supported_density_people_km2'
+    result['density_people_km2']=np.where(result['unsupported'],0.,result[shown])
     for name in ('foraging_hours_day','meat_fraction','scarcity_days_year'):
         result['terminal_'+name]=result[name].copy()
         result[name]=result['mean_'+name].copy()
@@ -366,7 +403,8 @@ def simulate_foraging(plant_supply, meat_supply, *, params=ForagingParams(),
     result['fat_kg'],result['energy_debt_mj']=fat_components(result['effective_fat_kg'],params)
     result['days_per_year']=plant.shape[0]
     result['requested_averaging_years']=averaging_years
-    result['display_statistic']='Final-window arithmetic annual means (diet share weighted by consumed food); strict annual-state convergence is separate.'
+    result['display_statistic']=(('Final-window median of annual densities' if display=='median' else 'Final-window arithmetic annual means')
+        +' (diet share weighted by consumed food); strict annual-state convergence is separate.')
     result['parameters']=values
     result['source']=SOURCE.copy()
     result['ledger_scope']='Daily resource conservation and asymmetric fat-energy conversion; annual reproduction separately debited. Population itself changes annually, so per-capita annual ledgers are not whole-population energy accounts.'
