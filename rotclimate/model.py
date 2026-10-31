@@ -262,6 +262,10 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.ebm_land_ice <= 1:
+            raise ValueError('ebm_land_ice must be in [0, 1]')
+        if not 0 <= params.shelf_air_coupling <= 1 or not 1 <= params.shelf_air_lag_days <= 180:
+            raise ValueError('shelf_air_coupling must be in [0, 1] and shelf_air_lag_days in [1, 180]')
         if not 0 <= params.inland_sea_lag_days <= 120:
             raise ValueError('inland_sea_lag_days must be in [0, 120]')
         if not (0 <= params.heat_land_friction < 1 and 0 <= params.water_land_friction < 1):
@@ -438,6 +442,16 @@ class ClimateModel:
                 depth = DEEP_SEA_M[0] + (DEEP_SEA_M[1] - DEEP_SEA_M[0]) * np.clip(
                     (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
             self.sea_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
+        self.shelf_share = None
+        if p.shelf_air_coupling > 0:
+            # e64: the shelf share of each sea cell (e50's depth rule, inverted)
+            if g.sea_depth is not None:
+                depth = g.sea_depth
+            else:
+                coast_km = ndi.distance_transform_edt(~g.land) * g.cell_km
+                depth = DEEP_SEA_M[0] + (DEEP_SEA_M[1] - DEEP_SEA_M[0]) * np.clip(
+                    (coast_km - SHELF_KM[0]) / (SHELF_KM[1] - SHELF_KM[0]), 0.0, 1.0)
+            self.shelf_share = np.where(g.land, 0.0, 1.0 - np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0))
         self.shelf_deep = None
         if p.shelf_warm_currents > 0:
             # e56: the deep-sea share of each cell (as e50 measures it), for the
@@ -489,6 +503,10 @@ class ClimateModel:
             self.enclosure = np.clip((enclosed_directions(g.land, 1000.0 / g.cell_km) - 0.55) / 0.35, 0, 1)
         elif p.sea_enclosure != "disc":
             raise ValueError(f"unknown sea_enclosure {p.sea_enclosure!r}")
+        if self.shelf_share is not None and p.shelf_air_enclosed:
+            # e64b: only shallow seas closed in by land (the Yellow Sea, the Bohai);
+            # open shelves exchange their water with the ocean's currents
+            self.shelf_share = self.shelf_share * self.enclosure
         # small water bodies (lakes, narrow bays): mostly land within ~120 km
         self.lakeness = np.clip((ndi.gaussian_filter(land, 1.2 * cells_per_100km) - 0.35) / 0.5, 0, 1) * (~g.land)
         # terrain slopes (m/m), east and north components, on a smoothed surface
@@ -935,6 +953,7 @@ class ClimateModel:
         W_prev = None
         uv_prev = chi = None
         Tl_sea = None                   # e63: the land equilibrium as the enclosed seas feel it
+        air_shelf = None                # e64: the sea-level air over the shelf seas, lagged
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
@@ -1202,6 +1221,17 @@ class ClimateModel:
                 ek_x, ek_y = (-ve, ue) if p.retrograde else (ve, -ue)
                 index = gauss(ek_x * self.offshore[0] + ek_y * self.offshore[1], 100.0 / g.cell_km)
                 SST = SST - p.upwelling * np.clip(index / 5.0, 0.0, 2.0) * self.upwelling_weight
+            if p.shelf_air_coupling > 0 and T_prev is not None:
+                # e64: a shelf sea is a 30-60 m water column that the air over it
+                # warms and cools (the Bohai at 2 C and the Yellow Sea at 6 C in
+                # January under the winter monsoon, 25 C in August), not the
+                # land equilibrium's share an enclosed sea takes; the model's
+                # shelf seas ran 2 C too warm in winter and 5-7 C too warm in
+                # April and May, and East Asia's coasts with them. The water
+                # follows the air with shelf_air_lag_days of memory.
+                keep = np.exp(-dt_days / p.shelf_air_lag_days)
+                air_shelf = T_prev if air_shelf is None else keep * air_shelf + (1.0 - keep) * T_prev
+                SST = SST + p.shelf_air_coupling * self.shelf_share * (np.maximum(air_shelf, -1.8) - SST)
             if p.sst_source == "observed":
                 # Earth diagnostics: the observed monthly sea surface (WOA18)
                 # in place of the model's, to measure how much of the land

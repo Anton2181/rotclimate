@@ -81,7 +81,7 @@ def _band_land(lat, profile):
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
            c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0, solar_flux=1.0,
-           greenhouse=0.0, radius=1.0):
+           greenhouse=0.0, radius=1.0, land_ice=1.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -161,6 +161,8 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     out_o = np.zeros((year_days, N))
     year_o = np.zeros((year_days, N))
     T_deep = To.copy()
+    Tl_ann = Tl.copy()                 # e65: last year's annual-mean land column
+    year_l = np.zeros((year_days, N))
     if c_ocean_season > 0:
         # e29: the mixed layer shoals as spring warming stratifies the sea and
         # deepens as winter cooling overturns it (mid-latitude ~20 m in late
@@ -172,7 +174,21 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
         C_Od = C_O * (1.0 - c_ocean_season * w[None, :] * s_nh[:, None])       # [day, band]
     for yr in range(years):
         for d in range(year_days):
-            Fl = (1 - _albedo(x, Tl, "land")) * Q[d] - (A_OLR - greenhouse) + q_cross_l
+            a_land = _albedo(x, Tl, "land")
+            if land_ice != 1.0:
+                # e65: the column's ice albedo is a function of its temperature
+                # alone, so every land cell at the latitude inherits the
+                # average continent's snowy spring (Britain's April with
+                # Siberia's snow: maritime springs 2-5 C too cold, autumns
+                # too warm). Keep land_ice of the seasonal snow's albedo here
+                # (the cells' own snowpack, e16 snow_albedo, can carry the
+                # rest); land whose annual mean (last year's) is below -10 C
+                # is ice sheet or perennial snow (Antarctica, Greenland) and
+                # keeps all of it
+                free = (0.295 + ALB_P2 * 0.5 * (3 * x**2 - 1))
+                keep = land_ice + (1.0 - land_ice) * np.clip(-Tl_ann / 10.0, 0.0, 1.0)
+                a_land = free + keep * (a_land - free)
+            Fl = (1 - a_land) * Q[d] - (A_OLR - greenhouse) + q_cross_l
             Fo = (1 - _albedo(x, To, "ocean")) * Q[d] - (A_OLR - greenhouse) + q_cross_o
             if c_ocean_season > 0:
                 # a deepening layer entrains water from below the mixed layer
@@ -189,10 +205,12 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
                 T = matrix_product(Minv, rhs)
             Tl, To = T[:N], T[N:]
             year_o[d] = To
+            year_l[d] = Tl
             if yr == years - 1:
                 out_l[d] = Tl
                 out_o[d] = To
         T_deep = year_o.mean(0)
+        Tl_ann = year_l.mean(0)
     return lat, out_l, out_o, fl
 
 
@@ -222,6 +240,8 @@ class ZonalClimate:
             extra["solar_flux"] = round(params.solar_flux, 4)
         if getattr(params, "greenhouse_wm2", 0.0) != 0.0:
             extra["greenhouse"] = round(params.greenhouse_wm2, 3)
+        if getattr(params, "ebm_land_ice", 1.0) != 1.0:
+            extra["land_ice"] = round(params.ebm_land_ice, 3)
         if getattr(params, "planet_radius", 1.0) != 1.0:
             extra["radius"] = round(params.planet_radius, 4)
         lat, Tl, To, fl = _solve(round(params.tilt, 3), round(params.eccentricity, 4),

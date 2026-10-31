@@ -186,6 +186,7 @@ class Params:
     subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
+    ebm_land_ice: float = 1.0         # e65: share of the latitude-mean land column's seasonal snow albedo kept (1 = all; ice sheets keep all)
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)
     ocean_mixed_seasonality: float = 0.0  # e29: mixed layer shallower in summer, deeper in winter (heat capacity x (1 -/+ this))
@@ -219,6 +220,9 @@ class Params:
     trade_land: float = 0.0           # e4b: summer weakening of the trades over continental-scale land (0-1)
     zonal_land_friction: float = 0.0  # e57: share by which surface friction over land slows the zonal belts (land smoothed over ~300 km; the pressure wind has its own land drag, e5)
     heat_land_friction: float = 0.0   # e62: as e57, but only in the wind that carries heat (the surface layer); the wind that carries water keeps its own share (water_land_friction)
+    shelf_air_coupling: float = 0.0   # e64: shallow seas (the shelf share of e50's depth rule) take this share of the gap to the lagged air above them
+    shelf_air_enclosed: bool = False  # e64b: ... only on enclosed shallow seas (x the enclosure share)
+    shelf_air_lag_days: float = 45.0  # e64: ... the air felt with this memory (a 30-60 m water column's lag)
     inland_sea_lag_days: float = 0.0  # e63: enclosed seas and lakes follow the land's equilibrium with this memory (their own mixed layer's lag; 0 = at once)
     water_land_friction: float = 0.0  # e62: as e57, but only in the wind that carries water, lifts it over terrain and makes convergence (~850 hPa, little slowed by the ground)
     far_fetch: float = 0.0            # e6: weight of the far-field upwind land share at the domain edge (0 = local land)

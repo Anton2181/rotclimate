@@ -17,11 +17,12 @@ def test_new_switches_default_off_and_are_classified():
     assert p.eddy_cap_contrast_k == 0.0 and p.eddy_upwind_days == 0.0
     assert p.heat_land_friction == 0.0 and p.water_land_friction == 0.0 and p.inland_sea_lag_days == 0.0
     assert p.dry_heating_warm_c == -99.0 and p.dry_heating_mean_c == -99.0
+    assert p.shelf_air_coupling == 0.0 and p.shelf_air_enclosed is False and p.ebm_land_ice == 1.0
     validate_partition()
     assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
             'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air', 'ocean_column_warm', 'eddy_cap_contrast_k', 'eddy_upwind_days',
             'heat_land_friction', 'water_land_friction', 'inland_sea_lag_days', 'dry_heating_warm_c',
-            'dry_heating_mean_c'} <= SHARED_FIELDS
+            'dry_heating_mean_c', 'shelf_air_coupling', 'shelf_air_lag_days', 'shelf_air_enclosed', 'ebm_land_ice'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -45,6 +46,9 @@ def test_new_switches_default_off_and_are_classified():
     (dict(inland_sea_lag_days=200.0), 'inland_sea_lag_days must be'),
     (dict(dry_heating_warm_c=50.0), 'dry_heating_warm_c must be'),
     (dict(dry_heating_mean_c=50.0), 'dry_heating_mean_c must be'),
+    (dict(shelf_air_coupling=1.5), 'shelf_air_coupling must be'),
+    (dict(shelf_air_coupling=0.5, shelf_air_lag_days=0.5), 'shelf_air_coupling must be'),
+    (dict(ebm_land_ice=1.5), 'ebm_land_ice must be'),
     (dict(ocean_column_air=0.5, column_saturation_scheme='pressure-moist'), 'ocean_column_air must be'),
     (dict(monsoon_westerly=0.7, monsoon_pressure_hpa=-1.0), 'monsoon_pressure_hpa must be'),
 ])
@@ -132,3 +136,22 @@ def test_r40_is_r39_plus_the_adopted_switches():
     assert changed == {'monsoon_westerly', 'monsoon_pressure_hpa', 'shelf_warm_currents', 'ocean_column_air',
                        'itcz_shift', 'precip_tau_days', 'monsoon_descent'}
     ClimateModel(p40)
+
+
+def test_land_ice_share_moves_only_seasonal_snow():
+    """e65: the band column's spring warms where snow is seasonal; ice sheets keep their albedo."""
+    import numpy as np
+    from rotclimate import ebm
+    solve = ebm._solve.__wrapped__
+    kw = dict(profile=ebm.EARTH_LAND, c_land_scale=0.942, c_ocean_scale=1.4, c_ocean_season=0.2, cross_transport=1.1)
+    lat, full, _, _ = solve(23.44, 0.0167, 13.0, 354.5, 365, **kw)
+    _, none, _, _ = solve(23.44, 0.0167, 13.0, 354.5, 365, land_ice=0.0, **kw)
+    _, same, _, _ = solve(23.44, 0.0167, 13.0, 354.5, 365, land_ice=1.0, **kw)
+    assert np.array_equal(full, same)
+    apr, oct_ = int(3.5 * 365 / 12), int(9.5 * 365 / 12)
+    j53, j85 = np.argmin(abs(lat - 53)), np.argmin(abs(lat - 85))
+    asym = lambda T, j: T[apr, j] - T[oct_, j]
+    assert asym(none, j53) > asym(full, j53) + 2.0        # Britain's April no longer has Siberia's snow
+    assert abs(none[:, j85].mean() - full[:, j85].mean()) < abs(none[:, j53].mean() - full[:, j53].mean())
+    p = Params(ebm_land_ice=0.5)
+    assert ebm.ZonalClimate(p).Tl.mean() > ebm.ZonalClimate(Params()).Tl.mean()
