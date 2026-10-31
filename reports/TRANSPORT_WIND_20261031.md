@@ -240,3 +240,34 @@ python -I scripts/gate_calibrate.py --plan calibration/transport_refit_20261031/
 python -I scripts/gate_calibrate.py --plan calibration/dry_heat_refit_20261031/plan.json --out calibration/dry_heat_refit_20261031/search
 OUT=output/transport_wind_20261031/dry_heat_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/dry_heat_refit_20261031/search/best_params.json SEALED_SPEC=calibration/sealed_20261031/regions.json bash scripts/validate_monsoon_refit.sh
 ```
+
+## 9. Dry heating only in warm climates (e54d) and what the sealed failure taught
+
+The first 31-October sealed set, run once in §7, is development data from
+now on; a fresh set b (Algerian Sahara, Sahel, Najd, Mongolia, Bengal,
+Deccan; `calibration/sealed_20261031b/`) was declared before any run of the
+design below. `dry_heating_mean_c` (e54d) lets dry heating act only where the
+cell's annual-mean land equilibrium (with its continental adjustments) is
+warm: full 8 K above the threshold, none below. Screens on the first refit's
+best candidate (`output/dry_heat_v2_20261031/`), scored against r40 on dev31
+and on the retired sealed set:
+
+| variant | dev31 S | T | rain loss | mid-latitude | retired set S | Kazakh steppe | Hokkaido |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| first refit's best (§7) | 0.9879 | −1.9 % | −0.5 % | 0.993 | 1.0405 | 1.162 | 1.065 |
+| without heat friction | 0.9880 | −1.7 % | −0.7 % | 0.998 | 1.0352 | 1.146 | 1.070 |
+| … + e54d at 12 °C | 0.9852 | −2.3 % | −0.7 % | 0.995 | 1.0319 | 1.124 | 1.083 |
+| … with r40's storm damping | — | | | | 1.0098 | 1.073 | 0.998 |
+| … without water friction | — | | | | 1.0150 | 1.044 | 1.088 |
+| **v1: no frictions, r40's damping, e54d 12 °C** | 0.9881 | −2.3 % | −0.1 % | 1.010 | **0.9936** | 0.994 | 1.004 |
+
+The cold-high storm damping (0.29 in the first refit) made Hokkaido more
+continental, the water-wind land friction starved the Kazakh steppe of
+westerly water, and gated dry heating harms neither. v1 fixes the retired set
+but fails the mid-latitude group (Manchuria 1.048, eastern Europe 1.029),
+which wanted the stronger damping. A frozen refit
+(`calibration/dry_heat_v2_refit_20261031/plan.json`) balances dry heating,
+its three gates, the storm damping, the winter overturning and the rain time
+scale with the retired set as an extra guarded group
+(`scripts/gate_calibrate.py` now takes `extra_groups`), to be validated on
+sealed set b.
