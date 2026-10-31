@@ -178,10 +178,14 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 
 ## Food, foraging and political reach side project (31 Oct)
 
-* Earth-fit atlas: "Climate for food and people" switch (#climate=corrected)
-  reruns farming, population and FORGE on the Earth-corrected climate
-  (scripts/add_corrected_food.py, data/corrected/; rerun it after any
-  rebuild of atlases/earth_fit or change to the food exporters).
+* Earth-fit atlas opens on the Earth-corrected climate (user, 31 Oct: no
+  separate "Corrected" topic): scripts/add_corrected_climate.py renders a full
+  corrected copy (climate layers, station packet, farming, population,
+  FORGE, political reach) with the normal exporters into data/corrected/;
+  one Climate switch (#climate=raw) shows the raw simulation; the change maps
+  sit under Fit checks. Supersedes add_corrected_layers.py (topic) and
+  add_corrected_food.py. Rerun it after any rebuild of atlases/earth_fit,
+  any change to an exporter, or export_reach.py (it needs winds12.npz).
 * FORGE's first Earth test (reports/FORAGING_EARTH_20261031.md; frozen plan
   and aquatic addendum in calibration/forager_binford_20261031/): Binford's
   hunter-gatherers with observed climate, North America fits, the rest of
@@ -191,9 +195,17 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   0.02 allowance), food storage (worsens the fit). Weak spot: California /
   Northwest Coast ~3x too sparse; marine scale at its grid edge.
   Data: data/cache/binford_dl (CRAN binford 0.1.0), data/cache/naturalearth.
-* Political reach (reports/POLITY_SEASONS_20261031.md): topsoil autumn mud
-  and an onshore-gale monsoon closure tested under a frozen addendum; neither
-  adopted. The Roman/Han extent tests, ORBIS and Casson checks need datasets
-  not in this container (Cliopatria, Hanson towns, Itiner-e roads, the Han
-  census, output/land_people/earth/earth.npz); re-fetch them before any
-  further political-reach change (including "state strength").
+* Political reach (reports/POLITY_SEASONS_20261031.md): autumn mud ADOPTED
+  by a second frozen addendum (addendum_mud_pet_20261031: topsoil layer gives
+  both rasputitsa seasons at 6 unseen stations, no mud at 10 dry controls;
+  polity.seasons.TOPSOIL_MM = 25; all three atlases' reach rebuilt).
+  Droogers-Allen PET changes nothing. Monsoon-coast closure not adopted.
+  State strength (reports/POLITY_STRENGTH_20261031.md): second design with
+  independent city networks (Parthian capitals; excavated Xiongnu centres)
+  is informative and chooses gamma 0: no strength term. Western Med sailing
+  diagnosed (scripts/polity_sea_west.py): the west is slow (light NCEP winds,
+  'uncertain' storminess in July), long upwind passages ~3x fast (no waiting
+  for fair winds). A waiting rule needs ORBIS (test T7) to be tested blind;
+  ORBIS is not in the container (o_sites.csv, new_routes.topojson under
+  data/cache/orbis). Earth polity data rebuilt by scripts/prepare_polity_data.py
+  (data/cache, not committed).
