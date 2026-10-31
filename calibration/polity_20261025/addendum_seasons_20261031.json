@@ -1,0 +1,24 @@
+{
+ "frozen": "2026-10-31, before any run of the changes below; the T8 station results and T5 Konkan result of plan.json (tests.json, sea.json) were known",
+ "autumn_mud": {
+   "change": "a 25 mm topsoil bucket in front of the 100 mm soil bucket: rain and melt fill it, PET empties it first when the ground is not frozen, what it cannot hold passes to the 100 mm bucket; mud = max(the present rule, clip((topsoil / 25 - 0.75) / 0.25, 0, 1)) when the ground is not frozen. 25 mm is the water the top ~10 cm of a loam holds against drainage; fixed, not fitted.",
+   "checks": {
+     "Kyiv": "mud >= 0.5 in Mar, Apr, Oct, Nov (plan.json T8; now Mar only)",
+     "Moscow": "mud >= 0.5 in Apr and in at least one of Oct, Nov (spring and autumn rasputitsa)",
+     "no_new_mud": "no month newly reaching mud >= 0.5 at Rome Jun-Sep, Patna Oct-May, Cairo any month, Beijing Oct-Feb"
+   },
+   "climate": "WorldClim 2.1 5' monthly tavg, tmax, tmin, prec at the station points, months from January (the T8 convention)",
+   "adopt_if": "Kyiv reaches at least 3 of its 4 months, Moscow passes, and no no_new_mud check fails; then the map's political-reach layers are rebuilt with it. The Roman and Han extent tests cannot be rerun in this container (their datasets are not cached); this is reported."
+ },
+ "monsoon_coasts_diagnostic": {
+   "rule": "sea cells within 100 km of land: onshore component of the monthly vector-mean wind >= 5.5 m/s (Beaufort 4) uncertain, >= 8.0 m/s (Beaufort 5) closed",
+   "earth_expectations": {
+     "Konkan (16 N, 71 E)": "not open in Jun, Jul, Aug; open in Dec, Jan, Feb (T5; its numbers were seen, so this is not blind)",
+     "Coromandel (13 N, 81 E)": "not open in Nov; open in Mar, Apr (north-east monsoon on the east coast)",
+     "Alexandria approaches (31.5 N, 29.9 E)": "open in Jun, Jul, Aug (Mediterranean summer sailing)",
+     "Gulf of Lion (42.5 N, 4.5 E)": "open in Jun, Jul, Aug"
+   },
+   "map_check": "share of the map's coastal sea cells (within 100 km of land) the rule would make uncertain or closed in each month with the model's winds",
+   "decision": "diagnostic only; adopted for the map only if all four Earth expectations hold and the rule leaves at least 90 % of the map's coastal sea open in the three summer months"
+ }
+}
