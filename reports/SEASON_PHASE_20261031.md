@@ -140,3 +140,47 @@ adopted; the atlases keep r40. e65 stays in the code (off). What blocks it is
 the subtropical east-coast spring (East China, and Japan in the holdout),
 already too warm, which any warmer land column worsens. The next physics step
 there is the East Asian spring itself, not the band's snow.
+
+## 7. East Asia's spring: what the warmth is not
+
+East Asia's springs are 3–4 °C too warm (r40, April: Korea +3.4, Japan
++3.5, East China +4.1 °C; autumns +2), the blocker of the e65 refit and of
+earlier ones. Previous sessions blamed the shelf seas. Swapping in
+observations (`scratchpad ea_obswind.py`; the existing diagnostic switches
+`sst_source` and `wind_source`):
+
+| run | Korea Apr / May | Japan Apr / May | East China Apr / May | British Isles MAE |
+|---|---|---|---|---:|
+| r40 | +3.4 / +4.0 | +3.5 / +3.6 | +4.1 / +2.8 | 2.46 |
+| WOA18 sea surface | +2.9 / +4.0 | +3.3 / +4.0 | +4.2 / +3.1 | — |
+| NCEP surface winds | +3.2 / +4.0 | +3.3 / +3.7 | +4.3 / +3.3 | 2.04 |
+| both | +2.9 / +4.0 | +3.6 / +4.3 | +4.3 / +3.3 | **1.26** |
+
+* **Not the sea and not the circulation.** With the observed sea and winds
+  together the spring warmth stays (the British Isles' error halves).
+* **Not the seas' own error, though that is real.** e67
+  (`continental_sea_air`: the sea follows the lagged air over it in
+  proportion to that air's continental share; opt-in, off) puts Korea's seas
+  right (March 9.7 °C against WOA18 10.3; r40 13.5) but leaves the land's
+  spring where it was, and cools the Baltic and North Sea enough to hurt
+  eastern Europe (S 1.0009–1.0113; `output/continental_sea_20261031`).
+* **Not the lapse rate.** Korea's April bias is +3.2 to +3.8 °C at every
+  elevation band from the coast to 1,000 m.
+* **Cloud shading helps only East China.** e4 `cloud_radiation` 2–6 against
+  the globe's land cloud (`cloud_reference` "earth"): East China improves to
+  0.93 of its error (April +3.4 at 4), Korea and Japan do not move (April
+  +3.3), East China's summer cools 1.5 °C too far (its modelled summer is too
+  wet and cloudy), and Mexico, Texas and the US south-east worsen (S 1.004 at
+  2, 1.029 at 6).
+
+What is left is the land's own spring energy balance: the springs of East
+China, Korea and Japan are among the cloudiest and wettest of the
+mid-latitudes (the spring persistent rains south of the Yangtze, the frontal
+rains ahead of the Meiyu and Baiu), and the model's spring rain there is
+0.5–0.7 of the observed (Japan 0.62–0.65, East China 0.54–0.70). The
+missing piece is spring frontal rain and cloud along the East Asian coast,
+which in the real atmosphere the westerly jet's passage around and over the
+Tibetan Plateau organises. That is rain-making physics, not sea or winds.
+The sea-surface diagnostic now records the sea surface each step actually
+uses (`ClimateModel.sst_record`), so terms applied after `ClimateModel.sst`
+(upwelling, e64, e67) are included.
