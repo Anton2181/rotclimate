@@ -89,3 +89,26 @@ continental depth, the cells' snowpack albedo and the land offset (56
 candidates), the retired sealed set as an extra guarded group; validation by
 `scripts/validate_monsoon_refit.sh` (fresh paired dev31 under policy v2, the
 paired 28 km check, then sealed set b once).
+
+## 5. Warm currents mostly in winter (e66, opt-in, not adopted)
+
+The model's British seas swing 4.0–17.3 °C against WOA18's 8.2–15.0. e66
+(`warm_current_seasonality` k) scales the warm current anomalies by
+(1 − k s), s = +1 at the lagged mid-summer, −1 at mid-winter: the North
+Atlantic Drift's heat reaches the surface through the deep winter mixed
+layer. Screens `output/warm_current_20261031` (default bit-identical):
+
+| run | S | T | P | British Isles | western Europe |
+|---|---:|---:|---:|---:|---:|
+| k 0.5 | 1.0100 | +0.2 % | +1.8 % | 1.103 | 1.101 |
+| k 1.0 | 1.0262 | +1.0 % | +4.2 % | 1.274 | 1.294 |
+| k 0.5 + e65 0.5 + continental_mean 7 | 0.9943 | −2.9 % | +1.8 % | 1.052 | 1.066 |
+
+At k 1.0 the British seas invert (13.6 °C in December, 6.8 in May: the
+subpolar drift adds ~9 °C, so the right k would be ~0.3), but the land gets
+worse at every k: its seasonal swing falls from 0.99 to 0.85 (k 0.5) of the
+observed and its phase moves later (+32 → +35 days). The British land air
+had the right swing only because a sea swinging twice too far drove it; the
+land itself follows the sea too closely (the "maritime lag" of HANDOFF.md).
+Mending the sea alone exposes that. Kept off; it belongs with a land surface
+that answers more to its own sunshine.
