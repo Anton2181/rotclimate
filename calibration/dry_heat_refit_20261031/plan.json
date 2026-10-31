@@ -1,0 +1,17 @@
+{
+ "frozen": "2026-10-31, before any result of this search; after the transport refit (calibration/transport_refit_20261031: 72 candidates, best cost 0.9992, S 0.9930, former holdout 1.0031; validation failed the holdout rule, sealed set not run) and the e54c warmth-gate screens recorded in reports/TRANSPORT_WIND_20261031.md section 6",
+ "why": "Dry-ground heating gives North India, Iran, Morocco and the Great Basin their missing warmth, but e54 heated the dry winter plains of North China and Manchuria too. e54c lets it act only on warm ground: on the transport refit's best candidate, warm-gated dry heating 1.5-2.0 with a stricter coastal gate reaches S 0.9886-0.9887 with every group better except the former holdout (1.0028-1.0037: Chile and SW Australia, cold-current coasts, and Japan with the cold-high damping). The search lets dry heating, both gates, the cold-high damping, the two land frictions and the winter overturning settle that last trade-off.",
+ "start": "calibration/transport_refit_20261031/search/best_params.json",
+ "set": {"dry_heating": 2.0, "dry_heating_warm_c": 15.0, "dry_heating_chi0": 0.78, "cold_high_storms": 0.3},
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "knobs": [["dry_heating", 0.5, 3.5], ["dry_heating_chi0", 0.6, 0.9], ["dry_heating_warm_c", 5.0, 20.0],
+           ["cold_high_storms", 0.13, 0.5], ["heat_land_friction", 0.0, 0.3], ["water_land_friction", 0.0, 0.3],
+           ["sea_winter_mixing", 0.0, 0.8]],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 59,
+ "evals": 56,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/transport_wind_20261031/dry_heat_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/dry_heat_refit_20261031/search/best_params.json SEALED_SPEC=calibration/sealed_20261031/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r40 (policy v2), then the paired 28 km check, then the fresh sealed six (declared 2026-10-31, never run) once only if both pass; adoption also requires the sealed six not to get worse. Failing any step means nothing is adopted; every result is reported."
+}
