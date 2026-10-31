@@ -288,6 +288,8 @@ class ClimateModel:
             raise ValueError('dry_heating_chi0 must be in [0, 1) and needs the advected land share (continentality > 0)')
         if params.dry_heating_warm_c != -99.0 and not -20.0 <= params.dry_heating_warm_c <= 30.0:
             raise ValueError('dry_heating_warm_c must be -99 (off) or in [-20, 30] C')
+        if params.dry_heating_mean_c != -99.0 and (not -20.0 <= params.dry_heating_mean_c <= 30.0 or params.continentality <= 0):
+            raise ValueError('dry_heating_mean_c must be -99 (off) or in [-20, 30] C, and needs continentality > 0')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
             raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
         if not isinstance(params.moisture_mass_balance, (bool, np.bool_)):
@@ -1040,6 +1042,7 @@ class ClimateModel:
                     dark = np.clip((np.abs(lat) - 25.0) / 20.0, 0.0, 1.0)
                     centre = centre - p.continental_mean * dark * self.pole_land * np.clip(chi, 0.0, 1.0)
                 Tl = centre + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
+                annual_eq = centre                  # e54d: the cell's annual-mean land equilibrium
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a
@@ -1084,6 +1087,15 @@ class ClimateModel:
                     # warm dry seasons keep it. Full above this equilibrium
                     # temperature plus 8 K, none below it.
                     dry = dry * np.clip((Tl - p.dry_heating_warm_c) / 8.0, 0.0, 1.0)
+                if p.dry_heating_mean_c != -99.0:
+                    # e54d: sun on dry ground heats the deserts' and the dry
+                    # subtropics' air, not the cold steppes': the Kazakh steppe
+                    # and Mongolia already reach their summer heat through the
+                    # continental column, and e54 warmed the Kazakh summer
+                    # (+0.9 to +1.3 C on a summer 1.5-2.2 C too warm). Full
+                    # where the cell's annual-mean equilibrium is 8 K above
+                    # this, none below it.
+                    dry = dry * np.clip((annual_eq - p.dry_heating_mean_c) / 8.0, 0.0, 1.0)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean

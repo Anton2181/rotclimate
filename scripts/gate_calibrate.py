@@ -42,8 +42,10 @@ POLICY = ROOT / "calibration/local_accuracy_20261023/policy_v2.json"
 
 
 def region_errors(job):
-    region, params = job
+    region, params = job[:2]
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
+    if len(job) > 2 and job[2]:
+        earth.REGIONS.update(job[2])           # extra development regions (plan["extra_groups"])
     p = Params(**params)
     case = earth.region_case(region, 56.0)
     try:
@@ -60,7 +62,7 @@ def region_errors(job):
     return region, (t["monthly_mae_C"], r["loss"])
 
 
-def score(errors, reference, groups):
+def score(errors, reference, groups, extra=None):
     def means(names):
         return (np.mean([errors[n][0] for n in names]), np.mean([errors[n][1] for n in names]))
 
@@ -74,6 +76,11 @@ def score(errors, reference, groups):
     tr, pr = np.mean([reference[n][0] for n in names]), np.mean([reference[n][1] for n in names])
     penalty = sum(2 * max(0.0, v - 1.0) for v in group.values())
     penalty += 2 * max(0.0, t / tr - 1.01) + 2 * max(0.0, p / pr - 1.01)
+    # extra development groups (e.g. a retired sealed set): penalised like the policy
+    # groups when they worsen, but outside S, which stays the policy's 31-region score
+    for g, members in (extra or {}).items():
+        group[g] = s(members)
+        penalty += 2 * max(0.0, group[g] - 1.0)
     return overall + penalty, dict(S=overall, groups=group, T=t, P=p, penalty=penalty)
 
 
@@ -90,6 +97,12 @@ def main():
     regions = [n for members in groups.values() for n in members]
     ref = json.loads((ROOT / plan["reference"] / "summary.json").read_text())["regions"]
     reference = {n: (ref[n]["temperature"]["monthly_mae_C"], ref[n]["rain"]["loss"]) for n in regions}
+    extra, extra_specs = {}, {}
+    for g, spec in plan.get("extra_groups", {}).items():
+        specs = json.loads((ROOT / spec["spec"]).read_text()); extra_specs.update(specs); extra[g] = list(specs)
+        er = json.loads((ROOT / spec["reference"] / "summary.json").read_text())["regions"]
+        reference.update({n: (er[n]["temperature"]["monthly_mae_C"], er[n]["rain"]["loss"]) for n in specs})
+    all_regions = regions + [n for members in extra.values() for n in members]
     base = load_params(ROOT / plan["start"]).replace(**plan.get("set", {}))
     knobs = plan["knobs"]                             # [[name, lo, hi], ...]
     lo = np.array([k[1] for k in knobs], float); hi = np.array([k[2] for k in knobs], float)
@@ -121,11 +134,11 @@ def main():
                 pending = list(es.ask())
             x = pending.pop(0)
             p = decode(x)
-            rows = dict(pool.map(region_errors, [(r, asdict(p)) for r in regions]))
+            rows = dict(pool.map(region_errors, [(r, asdict(p), extra_specs) for r in all_regions]))
             if any(v is None for v in rows.values()):
                 cost, info = 99.0, dict(failed=[r for r, v in rows.items() if v is None])
             else:
-                cost, info = score(rows, reference, groups)
+                cost, info = score(rows, reference, groups, extra)
             rec = dict(n=n, cost=cost, knobs={k[0]: getattr(p, k[0]) for k in knobs}, **info,
                        regions={r: v for r, v in rows.items()})
             log.write(json.dumps(rec, default=float) + "\n"); log.flush()
