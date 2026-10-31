@@ -1,0 +1,39 @@
+{
+ "frozen": "2026-10-31, before any result of this search; after the eddy-cap refit (calibration/eddy_cap_refit_20261030: gate 0.9946, 28 km 0.9981, sealed six 1.0135, not adopted) and the e60 screens recorded in reports/SUMMER_RAIN_20261030.md section 8",
+ "why": "e38b's humidity cap fixed the winter-wet regions but also capped mountain interiors in every season and the eddy water of eastern North America. e60 applies it only where a column's sea-level-equivalent air is colder than the eddies' surroundings (full at eddy_cap_contrast_k). Alone, cap 1.0 at 2.5 K gives S 0.9952 with every group better (T -0.15 %, rain -0.81 %); at 5 K, S 0.9962. Caveat, recorded before the search: e60 was designed after the sealed six had shown the ungated cap drying the north-east US, so for this mechanism the sealed six are not a fully blind test; the result is reported with that caveat.",
+ "start": "calibration/local_accuracy_20261023/r40_params.json",
+ "set": {
+  "eddy_rh_cap": 1.0,
+  "eddy_cap_contrast_k": 2.5
+ },
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "knobs": [
+  [
+   "eddy_rh_cap",
+   0.3,
+   1.0
+  ],
+  [
+   "eddy_cap_contrast_k",
+   1.5,
+   10.0
+  ],
+  [
+   "precip_tau_days",
+   9.0,
+   11.5
+  ],
+  [
+   "land_recycling",
+   0.35,
+   0.5
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 8,
+ "seed": 47,
+ "evals": 40,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every group's worsening and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/summer_rain_20261030/cold_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/cold_cap_refit_20261031/search/best_params.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs judged by scripts/gate_local.py against r40 (policy v2), then the paired 28 km check (S not worse by more than 1 %), then the sealed six once only if both pass. Adoption also requires the sealed six not to get worse (the rule applied to the eddy-cap refit). Failing any step means nothing is adopted; every result is reported."
+}

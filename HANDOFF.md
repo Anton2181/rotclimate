@@ -117,8 +117,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    of supersaturated columns. eddy_rh_cap (e38b) + land_recycling refit
    (calibration/eddy_cap_refit_20261030) passed gate 0.9946 and 28 km 0.9981
    but sealed six 1.0135 (NE US rain +27 %): NOT adopted (judgment; policy
-   lists sealed as a record). Sealed six seen once by it. Next: a cap only
-   for sea air onto much colder land. Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
+   lists sealed as a record). e60 eddy_cap_contrast_k (cap only for cold-air
+   outbreaks) refit: gate 0.9942, 28 km 0.9972, sealed six 1.0406 (NE US
+   winter 44 -> 12 mm vs 77): not adopted; the cap deletes real warm-frontal
+   precipitation. The sealed six have been run for 3 candidates: declare a
+   fresh sealed set before the next adoption. Next physics: direction-aware
+   eddy moisture transport (eddies weakened against strong offshore mean
+   flow: winter monsoon coasts). Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
 1. Retrain the Earth correction stages on r40; freeze a world refit for the
    invented map on r40 physics (r39's plan: calibration/map_world_r39/plan.json).

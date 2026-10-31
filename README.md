@@ -23,7 +23,8 @@ summers' deficit to columns 10–22 % short of water, beginning over the sea;
 adding sea water (e59, a frozen refit) or slowing the sea does not beat r40.
 Capping the eddies' humidity (e38b) with more land water passes the
 development gate and the 28 km check (S 0.9946) but makes the six sealed
-regions 1.35 % worse, so it is not adopted.
+regions 1.35 % worse, and a cold-air-only version (e60) 4 % worse (it
+removes the north-east US's winter snow), so neither is adopted.
 
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.

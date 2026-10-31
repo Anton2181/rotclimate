@@ -22,7 +22,10 @@ column humidity and the rain residence time finds nothing better than r40
 regions instead. A cap on the eddies' humidity (e38b) with more land
 water passes the development gate and the 28 km check (S 0.9946) but makes
 the sealed six 1.35 % worse (the north-east US loses its eddy water) and is
-not adopted. r40 stays.
+not adopted; a version only for cold-air outbreaks (e60) passes the gate
+(0.9942) but makes them 4 % worse (north-east US winter snow removed). r40
+stays: the wet monsoon winters come from direction-blind eddy mixing, not
+from the humidity the eddies carry.
 
 ## 1. The rain's factors (`scripts/rain_components.py`)
 
@@ -151,7 +154,7 @@ instead of keeping it (Japan 1.10 → 1.29, the British Isles 1.11 → 1.37,
 the Levant, Anatolia, South Brazil): in r40 the sea's fast uptake into dry
 air matters more than any upstream memory.
 
-## Conclusions and next step
+## Interim conclusions (after §6)
 
 * The humid summer deficit is real and measurable: 10–22 % too little column
   water, beginning over the sea, amplified ~3× by the rain gate.
@@ -257,9 +260,44 @@ not a fully blind test, and any result on them is reported with that caveat.
 A frozen search (`calibration/cold_cap_refit_20261031/plan.json`, committed
 before any result: eddy_rh_cap [0.3, 1], eddy_cap_contrast_k [1.5, 10],
 precip_tau_days [9, 11.5], land_recycling [0.35, 0.5]; 40 evaluations from
-cap 1.0 at 2.5 K) is in progress, validated against r40 into
-`output/summer_rain_20261030/cold_cap_refit/`; adoption also requires the
-sealed six not to get worse.
+cap 1.0 at 2.5 K) selects cap 0.79 in full at 1.5 K, precip_tau_days 10.20,
+land_recycling 0.430.
+
+| check against r40 | result |
+|---|---|
+| development gate, 31 regions | S **0.9942**; T −0.66 %, rain −0.51 %; training 0.9991, former holdout 0.9997, mid-latitude 0.9913, dev12 0.9909 → passes |
+| paired 28 km | S 0.9972 → passes |
+| sealed six | S **1.0406** → **worse**: north-east US rain loss 0.173 → 0.282 (winter 44 → 12 mm a month against 77), Tasmania 1.06, Caucasus 1.05, Norway 1.04 |
+
+**Not adopted** (the plan required the sealed six not to get worse). The
+north-east US shows why the cap is the wrong mechanism, not just badly
+tuned: its winter precipitation is sea air pushed onto cold land (coastal
+storms), exactly what the cap removes, and in nature the water that
+"condenses on the way" falls there as snow and rain instead of vanishing.
+The model's overflow of a supersaturated column is that precipitation. What
+is wrong on the winter monsoon coasts (Korea, Japan, Manchuria) is rather
+that the eddy mixing is isotropic: it brings sea air onshore against an
+offshore winter monsoon as readily as it does under onshore storms. A
+direction-aware eddy transport (eddies weakened against a strong offshore
+mean flow) is the structural fix; capping the humidity is not.
+
+The sealed six have now been run for three candidates (r40, the eddy-cap
+refit and this one), two of them for the same mechanism. They should be
+replaced by a newly declared sealed set before the next adoption.
+
+## Conclusions
+
+* r40 stays. Four frozen searches after it (summer sea moisture, the eddy
+  cap, the cold-air cap) and two screens (slower sea, warm-sea humidity,
+  land water) found nothing that improves the 31 regions and the regions
+  never used for tuning together.
+* The humid summer deficit (columns 10–22 % short, from the sea) and the
+  wet monsoon winters (eddies bringing sea air onshore against the winter
+  monsoon) are two faces of one structural limit: one column of water per
+  cell, moved by an isotropic eddy mixing and a relaxation to the sea's
+  target, with no notion of the season's flow direction for the eddies.
+* Next: direction-aware eddy moisture transport; a fresh sealed set; and,
+  downstream, retraining the Earth corrections on r40.
 
 ## Reproduce
 
@@ -275,6 +313,7 @@ python -I scripts/gate_calibrate.py --plan calibration/eddy_cap_refit_20261030/p
 OUT=output/summer_rain_20261030/eddy_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/eddy_cap_refit_20261030/search/best_params.json bash scripts/validate_monsoon_refit.sh
 python -I scripts/benchmark_local.py --fit calibration/local_accuracy_20261023/r40_params.json --regions dev31 --set '{"eddy_rh_cap": 1.0, "eddy_cap_contrast_k": 2.5}' --out output/summer_rain_20261030/cold10k25
 python -I scripts/gate_calibrate.py --plan calibration/cold_cap_refit_20261031/plan.json --out calibration/cold_cap_refit_20261031/search --hours 3
+OUT=output/summer_rain_20261030/cold_cap_refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/cold_cap_refit_20261031/search/best_params.json bash scripts/validate_monsoon_refit.sh
 ```
 
 ![Summer rain](../output/summer_rain_20261030/summer_rain.png)
