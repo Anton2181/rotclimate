@@ -1,0 +1,157 @@
+{
+ "fit": {
+  "parthian_sources": [
+   "Ctesiphon",
+   "Babylon",
+   "Susa",
+   "Ecbatana",
+   "Rhagae",
+   "Hecatompylos",
+   "Nisa",
+   "Merv",
+   "Spasinou Charax",
+   "Arbela",
+   "Istakhr",
+   "Ganzak",
+   "Hatra"
+  ],
+  "F_rome": 15693475.127891596,
+  "F_parthia": 628453.4696283345,
+  "gammas": {
+   "0": {
+    "balanced_accuracy": 0.9654457028194402,
+    "a_right": 1.0,
+    "b_right": 0.9308914056388804,
+    "k_a": 1.0,
+    "k_b": 1.0
+   },
+   "0.1": {
+    "balanced_accuracy": 0.9428629731660034,
+    "a_right": 1.0,
+    "b_right": 0.885725946332007,
+    "k_a": 1.1745521380567066,
+    "k_b": 0.8513883442028358
+   },
+   "0.2": {
+    "balanced_accuracy": 0.9278985137570996,
+    "a_right": 1.0,
+    "b_right": 0.8557970275141993,
+    "k_a": 1.3795727250135807,
+    "k_b": 0.7248621126444463
+   },
+   "0.3": {
+    "balanced_accuracy": 0.8487909397000306,
+    "a_right": 1.0,
+    "b_right": 0.6975818794000612,
+    "k_a": 1.620380093769418,
+    "k_b": 0.6171391538597246
+   },
+   "0.5": {
+    "balanced_accuracy": 0.6563956058905553,
+    "a_right": 1.0,
+    "b_right": 0.31279121178111075,
+    "k_a": 2.2354321815192373,
+    "k_b": 0.44734079086236606
+   }
+  }
+ },
+ "test_blind": {
+  "xiongnu_sources": [
+   "Noin-Ula",
+   "Gol Mod",
+   "Ivolga",
+   "Tsaraam",
+   "Terelj",
+   "Duurlig Nars",
+   "Egiin Gol"
+  ],
+  "F_han": 24422532.874577276,
+  "F_xiongnu": 229385.78549948748,
+  "gammas": {
+   "0": {
+    "balanced_accuracy": 0.72835239180792,
+    "a_right": 1.0,
+    "b_right": 0.45670478361584,
+    "k_a": 1.0,
+    "k_b": 1.0
+   },
+   "0.1": {
+    "balanced_accuracy": 0.6501452366069786,
+    "a_right": 1.0,
+    "b_right": 0.3002904732139574,
+    "k_a": 1.2628774543578902,
+    "k_b": 0.791842467809713
+   },
+   "0.2": {
+    "balanced_accuracy": 0.5936500349303232,
+    "a_right": 1.0,
+    "b_right": 0.1873000698606464,
+    "k_a": 1.5948594647254652,
+    "k_b": 0.6270144938269763
+   },
+   "0.3": {
+    "balanced_accuracy": 0.5565871235798066,
+    "a_right": 1.0,
+    "b_right": 0.11317424715961319,
+    "k_a": 2.0141120608710827,
+    "k_b": 0.496496704144411
+   },
+   "0.5": {
+    "balanced_accuracy": 0.5151303452586682,
+    "a_right": 1.0,
+    "b_right": 0.030260690517336472,
+    "k_a": 3.212225683297959,
+    "k_b": 0.31131062963586986
+   }
+  }
+ },
+ "test_seen_camps": {
+  "F_han": 24422532.874577276,
+  "F_camps": 5275535.154360156,
+  "gammas": {
+   "0": {
+    "balanced_accuracy": 0.9669508753644012,
+    "a_right": 0.9850838664033251,
+    "b_right": 0.9488178843254771,
+    "k_a": 1.0,
+    "k_b": 1.0
+   },
+   "0.1": {
+    "balanced_accuracy": 0.9599126745876259,
+    "a_right": 0.9878843262683136,
+    "b_right": 0.9319410229069383,
+    "k_a": 1.079633145098267,
+    "k_b": 0.9262405517468446
+   },
+   "0.2": {
+    "balanced_accuracy": 0.9503036704819405,
+    "a_right": 0.990065737110515,
+    "b_right": 0.9105416038533661,
+    "k_a": 1.1656077279947756,
+    "k_b": 0.8579215597002992
+   },
+   "0.3": {
+    "balanced_accuracy": 0.9411691739441737,
+    "a_right": 0.9924240191020841,
+    "b_right": 0.8899143287862632,
+    "k_a": 1.2584287373258451,
+    "k_b": 0.7946417388123186
+   },
+   "0.5": {
+    "balanced_accuracy": 0.9211444689958155,
+    "a_right": 0.9954308286413348,
+    "b_right": 0.846858109350296,
+    "k_a": 1.4668342613577128,
+    "k_b": 0.6817402799648221
+   }
+  }
+ },
+ "addendum": "calibration/polity_20261025/addendum_strength_cities_20261031.json",
+ "gamma_fitted": 0.0,
+ "blind_gain": 0.0,
+ "seen_camps_change": 0.0,
+ "seen_turgesh_change_first_run": 0.0,
+ "adopted": false,
+ "rule": "the fitted gamma > 0, the blind test gains >= 0.005 at that gamma, and neither seen contest loses more than 0.01. Otherwise nothing changes on the maps.",
+ "note": "all contests with the travel model as adopted at run time (polity.seasons.TOPSOIL_MM = 25)"
+}

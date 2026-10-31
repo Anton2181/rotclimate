@@ -29,6 +29,7 @@ from polity import network as N  # noqa: E402
 from polity import settle  # noqa: E402
 
 PLAN = ROOT / "calibration/polity_20261025/plan_strength_20261031.json"
+CITIES = ROOT / "calibration/polity_20261025/addendum_strength_cities_20261031.json"
 GAMMAS = [0.0, 0.1, 0.2, 0.3, 0.5]
 
 
@@ -128,10 +129,82 @@ def steppe(out):
     return res
 
 
+def named_sources(g, places):
+    """Flat indices of named places snapped to land (those inside the window), and the names kept."""
+    from polity_earth_check import snap
+    names = list(places)
+    r, c, ok = snap(g, np.array([places[n][0] for n in names]), np.array([places[n][1] for n in names]))
+    W = g["land"].shape[1]
+    kept = [(n, int(y) * W + int(x)) for n, y, x, k in zip(names, r, c, ok) if k]
+    return np.array([i for _, i in kept]), [n for n, _ in kept]
+
+
+def cities(out):
+    """addendum_strength_cities_20261031.json: networks independent of the polygons scored."""
+    from polity_earth_check import apply_sea, snap, world_of
+    add = json.loads(CITIES.read_text())
+    apply_sea()
+    res = {}
+    # fit: Rome AD 150 (Hanson's towns, Itiner-e roads) against Parthia AD 150 (royal and vassal capitals)
+    g = cached_window(out / "rome_parthia.npz", 35.0, 42.0, 3600, 2400, 9.0)
+    land = g["land"].astype(bool); W = land.shape[1]
+    road = E.draw_lines(g, [l for _, l in E.itinere_roads(150)]) & land
+    towns = E.hanson_towns(150)
+    r, c, ok = snap(g, np.array([t["lat"] for t in towns]), np.array([t["lon"] for t in towns]))
+    roman_places = [(int(y), int(x)) for y, x, k in zip(r, c, ok) if k]
+    rome = E.inside_polygons(g, E.cliopatria("Roman Empire", 150)) & land
+    parthia = E.inside_polygons(g, E.cliopatria("Parthian Empire", 150)) & land & ~rome
+    world = world_of(g, road); st = N.statics(world); cl = N.climate(world, st)
+    rome_src = np.unique(np.r_[[y * W + x for y, x in roman_places], np.flatnonzero(road.ravel())])
+    parthia_src, kept = named_sources(g, add["parthia_sources"])
+    seats = [(int(i // W), int(i % W)) for i in parthia_src]
+    d_r, d_p = year_days(world, st, cl, [rome_src, parthia_src], roman_places + seats)
+    F_r, F_p = base(world, d_r, g["cell_km"]), base(world, d_p, g["cell_km"])
+    res["fit"] = dict(parthian_sources=kept, F_rome=F_r, F_parthia=F_p, gammas=contest(d_r, d_p, F_r, F_p, rome, parthia))
+    print("Rome-Parthia (cities)", json.dumps(res["fit"]["gammas"]), flush=True)
+    del world, st, cl, d_r, d_p
+    # steppe window: Han AD 2 against the Xiongnu, with the excavated centres (blind) and the density camps (seen)
+    g = cached_window(out / "steppe.npz", 41.0, 106.0, 4200, 2800, 9.0)
+    world = world_of(g); land = world["land"]; W = land.shape[1]
+    st = N.statics(world); cl = N.climate(world, st)
+    seats_h = E.han_seats("2AD")
+    r, c, ok = snap(g, np.array([s["lat"] for s in seats_h]), np.array([s["lon"] for s in seats_h]))
+    places = [(int(a_), int(b_)) for a_, b_, k in zip(r, c, ok) if k]
+    ids, _ = E.han_commanderies(g, "2AD")
+    farm = (ids >= 0) & land
+    herd = E.inside_polygons(g, E.cliopatria("Xiongnu", 2)) & land & ~farm
+    x_src, x_kept = named_sources(g, add["xiongnu_sources"])
+    camps = np.flatnonzero((herd & (g["density"] >= 0.5)).ravel())
+    han_src = np.array([p[0] * W + p[1] for p in places])
+    d_f, d_x, d_c = year_days(world, st, cl, [han_src, x_src, camps], places)
+    F_f, F_x, F_c = (base(world, d, g["cell_km"]) for d in (d_f, d_x, d_c))
+    res["test_blind"] = dict(xiongnu_sources=x_kept, F_han=F_f, F_xiongnu=F_x, gammas=contest(d_f, d_x, F_f, F_x, farm, herd))
+    res["test_seen_camps"] = dict(F_han=F_f, F_camps=F_c, gammas=contest(d_f, d_c, F_f, F_c, farm, herd))
+    print("Han-Xiongnu (centres)", json.dumps(res["test_blind"]["gammas"]), flush=True)
+    best = max(GAMMAS, key=lambda gm: (round(res["fit"]["gammas"][f"{gm:g}"]["balanced_accuracy"], 6), -gm))
+    key = f"{best:g}"
+    gain = res["test_blind"]["gammas"][key]["balanced_accuracy"] - res["test_blind"]["gammas"]["0"]["balanced_accuracy"]
+    seen = res["test_seen_camps"]["gammas"][key]["balanced_accuracy"] - res["test_seen_camps"]["gammas"]["0"]["balanced_accuracy"]
+    first = json.loads((out / "strength.json").read_text()) if (out / "strength.json").exists() else None
+    turg = None
+    if first and key in first["tests"]["Tang AD 742 against the Turgesh"]["gammas"]:
+        t_ = first["tests"]["Tang AD 742 against the Turgesh"]["gammas"]
+        turg = t_[key]["balanced_accuracy"] - t_["0"]["balanced_accuracy"]
+    adopted = best > 0 and gain >= 0.005 and seen >= -0.01 and (turg is None or turg >= -0.01)
+    res.update(addendum=str(CITIES.relative_to(ROOT)), gamma_fitted=best, blind_gain=gain, seen_camps_change=seen,
+               seen_turgesh_change_first_run=turg, adopted=bool(adopted), rule=add["adopt_if"],
+               note="all contests with the travel model as adopted at run time (polity.seasons.TOPSOIL_MM = %g)" % __import__("polity.seasons", fromlist=["x"]).TOPSOIL_MM)
+    (out / "strength_cities.json").write_text(json.dumps(res, indent=1))
+    print(json.dumps(dict(gamma=best, blind_gain=gain, seen=seen, turgesh=turg, adopted=adopted), indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--out", type=Path, default=ROOT / "output/polity_strength_20261031")
+    ap.add_argument("--cities", action="store_true", help="the cities addendum (networks independent of the polygons)")
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
+    if a.cities:
+        return cities(a.out)
     plan = json.loads(PLAN.read_text())
     fit = rome_parthia(a.out)
     print("Rome-Parthia", json.dumps(fit["gammas"]), flush=True)

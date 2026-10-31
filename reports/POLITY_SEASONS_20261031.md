@@ -6,8 +6,10 @@ under an addendum frozen before any run:
 climate: WorldClim 2.1 5′ monthly mean, maximum and minimum temperature and
 rain (`scripts/polity_season_stations.py`, results
 `output/polity_seasons_20261031/stations.json`); winds: NCEP/NCAR
-1981–2010 monthly vector means. **Neither change is adopted; the atlases'
-political reach is unchanged.**
+1981–2010 monthly vector means. **Neither change was adopted under this
+addendum. Update, same day: a second frozen addendum tested the topsoil layer
+on six unseen stations and adopted it (section "Autumn mud, second test"
+below); the atlases' political reach now has autumn mud.**
 
 ## Autumn mud (topsoil layer, opt-in, not adopted)
 
@@ -55,11 +57,75 @@ carried to the map (the map has no monsoon coast, and its model sea winds
 run stronger than NCEP's, which would make an onshore-gale rule close west
 coasts too readily).
 
-## Western Mediterranean sailing (not addressed)
+## Autumn mud, second test (adopted)
 
-Casson's western routes come out 2–4× too slow (Rome–Narbo 12 days against
-3, Rome–Carthage 7.5 against 3) and the long passages upwind to Rome 2.5×
-too fast (`calibration/polity_20261025/sea.json`, T6). Diagnosing it needs
-the Rome window's world, which is built from Earth datasets not in this
-container (the land and people grid, ORBIS, Hanson's towns); recorded as
-open.
+Addendum `calibration/polity_20261025/addendum_mud_pet_20261031.json`,
+frozen before its runs (Kyiv and Moscow, seen, are reported but do not gate).
+Variants: A, the 25 mm topsoil layer above; B, Droogers & Allen's (2002)
+evaporation, which lowers Hargreaves' demand in rainy months (constants as
+published); C, both. Blind checks: six stations of the East European plain
+must have mud (≥ 0.5) in at least one thaw month (Mar–May) and one autumn
+month (Oct–Nov); six dry controls (Seville Jun–Sep, Baghdad, Tehran,
+Alexandria all year, Delhi Oct–May, Xi'an Nov–Feb) and the first addendum's
+four must have none. Script `scripts/polity_mud_pet.py`, results
+`output/polity_mud_20261031/mud_pet.json`.
+
+| variant | rasputitsa stations passing (of 6) | control failures | Kyiv | Moscow |
+|---|---:|---|---|---|
+| current | 0 (spring only) | none | Mar | Apr |
+| A topsoil | **6** | none | Mar, Nov | Apr, Oct |
+| B Droogers–Allen | 0 | none | Mar | Apr |
+| C both | 6 | none | Mar, Nov | Apr, Oct |
+
+Under A: Minsk Apr + Nov, Warsaw Mar + Nov–Dec, Smolensk Apr + Oct, Kharkiv
+Mar–Apr + Nov, Vilnius Apr + Nov, Kazan Apr + Oct. Droogers–Allen lowers
+Kyiv's demand only 8–10 % (October 40 → 36 mm against 35 mm of rain), so B
+changes nothing. By the rule (simplest passing variant, in the order B, A, C)
+**A is adopted**: `polity.seasons.TOPSOIL_MM = 25`. Recorded honestly: A had
+failed the first addendum's stricter rule (Kyiv in 3 of its 4 months; it
+reaches 2); the second rule asks less of each station (one thaw and one
+autumn month) but was frozen before any of its twelve new stations ran.
+
+On the maps the layer adds autumn and early-winter mud to the wet-winter
+lands: share of the Earth-fit map's land in mud, current → A, October 5 →
+18 %, November 20 → 57 %, December 50 → 85 % (free fit: November 41 → 69 %;
+Whittaker fit: 25 → 53 %); summer is unchanged. The political-reach layers
+of all three atlases are rebuilt with it.
+
+## Western Mediterranean sailing (diagnosed, not changed)
+
+The Rome window is buildable again (the land and people grid, Hanson's
+towns and Itiner-e are cached). `scripts/polity_sea_west.py` traces the
+fastest sea path of each of Casson's routes in June and July and splits its
+days (`output/polity_sea_west_20261031/sea_west.json`; July):
+
+| route | Casson | model | km made per day | wind factor | point of sailing | season factor | upwind share |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| Rome–Narbo | 3.0 | 11.7 | 81 | 0.71 | 0.69 | 0.84 | 1.00 |
+| Narbo–Rome | 3.0 | 7.6 | 109 | 0.72 | 0.92 | 0.83 | 0.00 |
+| Rome–Carthage | 3.0 | 5.9 | 100 | 0.71 | 0.91 | 0.78 | 0.00 |
+| Rome–Tarraco | 4.0 | 13.1 | 80 | 0.68 | 0.72 | 0.83 | 0.81 |
+| Rome–Gibraltar | 7.0 | 18.3 | 98 | 0.70 | 0.89 | 0.80 | 0.08 |
+| Rome–Alexandria | 11.5 | 12.2 | 177 | 0.87 | 0.97 | 1.00 | 0.00 |
+| Alexandria–Rome | 63 | 19.7 | 135 | 0.86 | 0.74 | 1.00 | 0.95 |
+| Rhodes–Rome | 54 | 16.4 | 130 | 0.82 | 0.76 | 1.00 | 0.83 |
+| Alexandria–Massilia | 68 | 26.6 | 122 | 0.84 | 0.72 | 0.98 | 0.99 |
+
+* **The west is slow for three reasons together**: NCEP's 2.5° mean scalar
+  wind over the western basin in July is 4.2 m/s (wind factor 0.70 against
+  the full speed at 6 m/s); the western basin's storminess makes 15–22 % of
+  its passage "uncertain" (half speed) even in July (season factor
+  0.78–0.84); and the western winds are unsteady (steadiness 0.49 against
+  0.84 in the east). Casson's western figures are fast passages before a
+  fair wind (~200–230 km a day, ~5 knots), the model's ~80–110.
+* **The long passages upwind are fast for one reason**: the model has no
+  waiting. Against the Etesians the fastest path detours (1.37–1.42 × the
+  great circle) on courses the polar still sails at 0.72–0.76 of fair speed,
+  and makes ~130 km a day; Casson's 50–70 days are ~40 km a day of great
+  circle, port stays waiting for a shift of wind included.
+* Both point the same way: a voyage is a choice of when to sail as much as
+  how fast. A short passage leaves on a fair wind and makes near-fair speed;
+  a long one cannot avoid foul winds and waits in port for them. A
+  candidate rule (expected waiting for a fair wind, by the share of days the
+  wind serves a course) needs data not used in its design to test: ORBIS's
+  sea edges (test T7) are not cached in this container. Nothing is changed.

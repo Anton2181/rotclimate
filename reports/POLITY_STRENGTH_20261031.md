@@ -4,7 +4,8 @@ Idea: larger, richer polities hold land farther from their own roads and
 towns. Plan frozen before any run: `calibration/polity_20261025/plan_strength_20261031.json`;
 script `scripts/polity_strength_check.py`; results
 `output/polity_strength_20261031/strength.json`. **Not adopted; political
-reach on the maps is unchanged.**
+reach on the maps is unchanged.** A second design with networks independent
+of the polygons (below) confirms it: no strength term.
 
 ## Data, restored for this test
 
@@ -46,3 +47,32 @@ A better fit case needs two polities whose networks come from independent
 data (both from towns and roads, not from seats placed inside the polygons
 being tested). The ORBIS dataset (sailing and river times, test T7) was not
 re-fetched.
+
+## Second design: networks independent of the polygons (not adopted)
+
+Addendum `calibration/polity_20261025/addendum_strength_cities_20261031.json`,
+frozen before its runs. Parthia's network is now its royal and vassal
+capitals from the literature (Ctesiphon, Babylon, Susa, Ecbatana, Rhagae,
+Hecatompylos, Nisa, Merv, Spasinou Charax, Arbela, Istakhr, Ganzak, Hatra);
+the blind test sets Han's AD 2 county seats
+against the excavated Xiongnu elite centres (Noin-Ula, Gol Mod, Ivolga,
+Tsaraam, Terelj, Duurlig Nars, Egiin Gol) instead of density camps inside the
+Xiongnu polygon. All contests use the travel model as adopted at run time
+(with the autumn-mud topsoil layer). Results
+`output/polity_strength_20261031/strength_cities.json`.
+
+| contest | γ = 0 | 0.1 | 0.2 | 0.3 | 0.5 |
+|---|---:|---:|---:|---:|---:|
+| Rome vs Parthia AD 150, Parthian capitals (fit) | **0.965** | 0.943 | 0.928 | 0.849 | 0.656 |
+| Han vs Xiongnu AD 2, excavated centres (blind test) | **0.728** | 0.650 | 0.594 | 0.557 | 0.515 |
+| Han vs Xiongnu AD 2, density camps (seen) | **0.967** | 0.960 | 0.950 | 0.941 | 0.921 |
+
+The fit is now informative (Parthia right 93 % at γ = 0, 31 % at 0.5) and it
+chooses γ = 0: within two days of its own network Rome's taxable base is
+15.7 M people against 0.63 M for Parthia's thirteen capitals, and every
+strength term pushes Rome past the Euphrates. The blind test agrees. The plain
+nearest-network rule stays. One thing it shows: with only seven Xiongnu
+centres, all far north of the Gobi, Han's reach takes half of the Xiongnu
+polygon (Xiongnu right 46 %); a pastoral polity's reach comes from its
+herds and seasonal camps, which the camps version represents and the
+centres do not.

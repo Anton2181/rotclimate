@@ -36,7 +36,14 @@ SOIL_MM = 100.0
 # Topsoil wetness (calibration/polity_20261025/addendum_seasons_20261031.json): the
 # top ~10 cm, 25 mm, is a partition of the same bucket that rain and melt fill
 # first and evaporation empties first; mud also when it is nearly full. 0 = off.
-TOPSOIL_MM = 0.0
+# Adopted by addendum_mud_pet_20261031.json (variant A): the spring and autumn
+# rasputitsa at six unseen stations of the East European plain, no mud in ten
+# dry controls (output/polity_mud_20261031/mud_pet.json).
+TOPSOIL_MM = 25.0
+# Evaporation demand (calibration/polity_20261025/addendum_mud_pet_20261031.json):
+# "hargreaves" (Hargreaves 1985, temperature and its daily range) or
+# "droogers_allen" (Droogers & Allen 2002: the month's rain as a cloudiness term).
+PET_METHOD = "hargreaves"
 FROZEN_C = -2.0
 MUD_COEFFICIENT = 1.8          # Soule & Goldman (1972): swampy bog
 MUD_ROAD = 1.1                 # the marked roads: built and drained
@@ -62,6 +69,17 @@ def hargreaves(T, Tmax, Tmin, lat, tilt=23.44):
     pet = np.zeros_like(np.asarray(T, float))
     for m in range(12):
         pet[m] = 0.0023 * extraterrestrial_mm(lat, m, tilt) * (T[m] + 17.8) * np.sqrt(np.maximum(Tmax[m] - Tmin[m], 0))
+    return np.maximum(pet, 0.0) * DAYS
+
+
+def droogers_allen(T, Tmax, Tmin, P, lat, tilt=23.44):
+    """Monthly PET (mm), Droogers & Allen (2002) modified Hargreaves: the
+    month's rain lowers the demand as cloud does (fitted by them on CRU
+    stations against Penman-Monteith; constants as published)."""
+    pet = np.zeros_like(np.asarray(T, float))
+    for m in range(12):
+        td = np.maximum(np.asarray(Tmax[m], float) - np.asarray(Tmin[m], float) - 0.0123 * np.asarray(P[m], float), 0.0)
+        pet[m] = 0.0013 * extraterrestrial_mm(lat, m, tilt) * (T[m] + 17.0) * td ** 0.76
     return np.maximum(pet, 0.0) * DAYS
 
 
@@ -92,13 +110,19 @@ def water_year(T, P, pet, spin=3, topsoil_mm=0.0):
     return out
 
 
-def fields(T, Tmax, Tmin, P, lat, tilt=23.44, topsoil_mm=None):
+def fields(T, Tmax, Tmin, P, lat, tilt=23.44, topsoil_mm=None, pet_method=None):
     """All monthly travel fields: lasting snow (0/1), mud (0-1), heat factor,
-    runoff (mm), PET (mm), soil (mm), frozen (bool). topsoil_mm: None = the
-    module's TOPSOIL_MM."""
+    runoff (mm), PET (mm), soil (mm), frozen (bool). topsoil_mm, pet_method:
+    None = the module's TOPSOIL_MM, PET_METHOD."""
     T = np.asarray(T, float)
     topsoil_mm = TOPSOIL_MM if topsoil_mm is None else topsoil_mm
-    pet = hargreaves(T, Tmax, Tmin, lat, tilt)
+    pet_method = PET_METHOD if pet_method is None else pet_method
+    if pet_method == "hargreaves":
+        pet = hargreaves(T, Tmax, Tmin, lat, tilt)
+    elif pet_method == "droogers_allen":
+        pet = droogers_allen(T, Tmax, Tmin, P, lat, tilt)
+    else:
+        raise ValueError(f"unknown PET method {pet_method!r}")
     w = water_year(T, P, pet, topsoil_mm=topsoil_mm)
     frozen = T < FROZEN_C
     mud = np.where(frozen, 0.0, np.clip((w["soil"] / SOIL_MM - 0.75) / 0.25, 0.0, 1.0))
