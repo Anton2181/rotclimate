@@ -50,18 +50,26 @@ def main():
     for path in a.out.rglob("*.bin"):          # .bin is not a served type; .wasm is
         path.with_suffix(".wasm").write_bytes(gzip.compress(path.read_bytes(), 9, mtime=0))
         path.unlink()
+    for path in a.out.rglob("*.npz"):          # model inputs for later exports (winds); no page reads them
+        path.unlink()
     meta_path = a.out / "data" / "atlas.json"
     meta = json.loads(meta_path.read_text())
-    for part in ("harvest", "population"):
-        if meta.get(part, {}).get("binary", "").endswith(".bin"):
-            meta[part]["binary"] = meta[part]["binary"][:-4] + ".wasm"
+    # every packet the page fetches by its "binary" entry (harvest, population,
+    # FORGE foraging and any later one) must follow its renamed file
+    renamed = [part for part, spec in meta.items()
+               if isinstance(spec, dict) and str(spec.get("binary", "")).endswith(".bin")]
+    for part in renamed:
+        meta[part]["binary"] = meta[part]["binary"][:-4] + ".wasm"
+    missing = [part for part in renamed if not (a.out / "data" / meta[part]["binary"]).is_file()]
+    if missing:
+        raise SystemExit(f"Renamed packet binaries are missing: {missing}")
     meta_path.write_text(json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
     page = a.out / "index.html"
     page.write_text(rewrite_nav(page.read_text(), links))
     files = sorted(p for p in a.out.rglob("*") if p.is_file())
     big = [(p.relative_to(a.out), p.stat().st_size) for p in files if p.stat().st_size > 15e6]
     total = sum(p.stat().st_size for p in files)
-    print(f"{a.out}: {len(files)} files, {total / 1e6:.1f} MB" + (f"; over 15 MB: {big}" if big else ""))
+    print(f"{a.out}: {len(files)} files, {total / 1e6:.1f} MB; packets {renamed}" + (f"; over 15 MB: {big}" if big else ""))
 
 
 if __name__ == "__main__":

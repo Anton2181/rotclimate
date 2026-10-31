@@ -17,7 +17,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FITS = {
     'free_fit': ('Free fit', 'World and physics fitted to the seasonal painted zones.'),
-    'earth_fit': ('Earth fit', 'World fitted with Earth r38 physics held fixed.'),
+    'earth_fit': ('Earth fit', "Earth r40 physics, the best on the 31-region Earth test, on the published world's geometry."),
     'whittaker_fit': ('Whittaker fit', 'World and physics fitted to the proposed annual-biome targets.')}
 
 STYLE = '''
@@ -93,6 +93,7 @@ def main():
         (a.artifact / 'img').mkdir(parents=True, exist_ok=True)
     plates, rows, population_rows, density_plates, cored, margins = [], [], [], [], [], []
     has_sensitivity = False
+    foraging_fits, foraging_rows = [], []
     for name, (title, description) in FITS.items():
         folder = ROOT / 'atlases' / name
         summary = json.loads((folder / 'summary.json').read_text())
@@ -109,6 +110,13 @@ def main():
             cored.append(title)
         if json.loads((folder / 'data/harvest_model.json').read_text()).get('margin_reliability'):
             margins.append(title)
+        if metadata.get('foraging'):
+            foraging_fits.append(title)
+            forage = json.loads((folder / 'data' / metadata['foraging']['metadata']).read_text()).get('summary', {})
+            foraging_rows.append(f'<tr><th scope="row">{escape(title)}</th><td>{forage.get("total_scenario_people", float("nan")) / 1e6:.2f} M</td>'
+                                 f'<td>{forage.get("mean_foraging_hours_day", float("nan")):.1f} h</td>'
+                                 f'<td>{forage.get("mean_scarcity_days_year", float("nan")):.0f} days</td>'
+                                 f'<td>{forage.get("mean_meat_fraction", float("nan")):.0%}</td></tr>')
         if artifact:
             href = links.get(name, '')
             biome_img, density_img = f'img/{name}_whittaker.webp', f'img/{name}_density.webp'
@@ -144,6 +152,21 @@ def main():
     else:
         harvest = 'Low-input Han, Roman and Parthian technology' + (
             f' (the {who(margins)} atlas{"es" if len(margins) > 1 else ""} add{"" if len(margins) > 1 else "s"} poor-year limits on cold and dry margins)' if margins else '')
+    topics = ['Overview', 'Population', 'Political reach', 'Farming', 'Health and ecology', 'Temperature', 'Water',
+              'Air and sea', 'Month by month', 'Fit checks']
+    if len(foraging_fits) == len(FITS):
+        topics.insert(2, 'Foraging')
+    numbers = {10: 'ten', 11: 'eleven'}
+    topic_text = f'Every atlas has {numbers.get(len(topics), len(topics))} map topics: {", ".join(topics[:-1])} and {topics[-1]}.'
+    foraging_section = ('' if not foraging_rows else
+        '<p>The Foraging topic runs a terrestrial hunter-gatherer scenario on each climate, adapted from the FORGE human model '
+        '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation). '
+        'Four maps show scenario density, daily food-procurement hours, days of food shortfall a year and the share of food from meat; '
+        'select any place for its readouts. It is separate from the farming model, both draw on the same land, and fishing and marine food are not included.</p>'
+        '<div class="table"><table><thead><tr><th>Atlas</th><th>Foraging scenario people</th><th>Procurement per day</th>'
+        '<th>Shortfall per year</th><th>Meat share</th></tr></thead><tbody>' + ''.join(foraging_rows) + '</tbody></table></div>'
+        '<div class="notes"><p class="note">Finite-horizon scenarios, not validated carrying capacities or censuses. Means are weighted by scenario people. '
+        'Food shortfall includes ordinary reserve drawdown; it is not famine mortality.</p></div>')
     updated = datetime.date.today().strftime('%-d %B %Y').upper()
     sensitivity_note = ('<p class="note">The Earth atlas also offers Rain sensitivity and Temperature sensitivity under Fit checks, with grid values to download. These show spread across nine hypothetical surroundings at the screening resolution; they are conditional boundary sensitivities, not weather variability or measured climate error.</p>'
                         if has_sensitivity and not artifact else '')
@@ -157,8 +180,9 @@ def main():
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
         reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
                    '<a href="../reports/SEASONAL_CYCLE_20261026.md">Seasonal settling checks</a> · '
-                   '<a href="../reports/CONSTRAINED_BLEND_R39_20261025.md">Earth r39 calibration</a> · '
-                   '<a href="../reports/R39_WORLD_TRANSFER_20261026.md">World refit and atlas release checks</a> · '
+                   '<a href="../reports/PHYSICS_GAPS_20261030.md">Earth r40 calibration</a> · '
+                   '<a href="../reports/R40_WORLD_20261031.md">r40 world refit and atlas release</a> · '
+                   '<a href="../reports/FORAGING_20261027.md">Foraging scenarios</a> · '
                    '<a href="../reports/ITERATION_20261023.md">Population lab</a> · '
                    '<a href="../reports/HARVEST_MIGRATION_20261022.md">Food, disease and settlement models</a> · '
                    '<a href="../reports/THREE_FIT_20261022.md">Campaign report</a> · <a href="../docs/BIOMES.md">Biome methods</a></p>')
@@ -172,7 +196,7 @@ def main():
 <header><span class="eyebrow">Rotclimate · three calibration objectives · updated {updated}</span>
 <h1>One world, three climate fits</h1>
 <p class="lede">The seasonal map fit, the fit held to Earth physics, and the fit to proposed Whittaker biomes. Each atlas uses the mean climate over the same three layouts of the unknown surroundings.</p></header>
-{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements, rainfall-source maps, and why the published Earth atlas retains r38.</p>'}
+{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.</p>'}
 <section aria-label="The three atlases"><div class="plates">{''.join(plates)}</div></section>
 <section aria-labelledby="measures-h"><h2 id="measures-h">The same measures</h2>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Seasonal zone objective</th><th>Whittaker objective</th><th>Exact zone agreement</th><th>Mean biome agreement</th><th>Land outside diagram</th><th>Med. dry</th><th>Med. Cs</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
@@ -181,12 +205,14 @@ def main():
 <p class="note">The Whittaker atlas adds the proposed biome target map and a match layer. Annual temperature and rainfall do not decide Mediterranean summer drought or swamp hydrology, so those seasonal checks stay separate.</p></div></section>
 {sensitivity_note}
 <section aria-labelledby="people-h"><h2 id="people-h">Land and people around 200 AD</h2>
-<p>Every atlas has ten map topics: Overview, Population, Political reach, Farming, Health and ecology, Temperature, Water, Air and sea, Month by month and Fit checks. {overview} Select any place for its climate chart, farming readouts and the real cities whose climate feels most alike.</p>
+<p>{topic_text} {overview} Select any place for its climate chart, farming readouts and the real cities whose climate feels most alike.</p>
 <p>Political reach measures how far each polity's hold extends beyond its roads, towns, forts and legions: days of travel over the terrain, month by month (snow, mud, heat and floods on land; ships by each month's winds, shut in the storm season; river boats), control fading by a factor of e per day and averaged over the year, the hardest month and what closes the roads then, and which polity's own network reaches each place first. The travel model was fitted on Han China in AD 2 and tested on the Roman empire of AD 150, on ancient sailing times and on Chinese county seats from AD 742 to 1820. De facto and de jure sets the held land against the painted claims, with a gap fill you choose (none, ½, 1 or 2 days) and the people each polity claims and holds; Trade prices freight as the Price Edict did (sea : river : road = 1 : 5 : 28) and routes shipments separately in each direction. Its Trade view selector also maps inbound market hinterlands and the countryside population each market serves; those people are not estimates of town inhabitants. Sea lanes are continuous, with widths indicating relative traffic. Every layer also comes as vector files (GeoJSON and a layered SVG in the source map's pixels) for making your own maps.</p>
 <p>The Population topic is a lab: supply a total and choose even occupation, water and terrain, or market access. Six maps then show allocated residents, local pressure, spare food support, redistribution, walking to markets and settlement attraction, with province totals. {compare}</p>
 <div class="plates">{''.join(density_plates)}</div>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Mixed food ceiling</th><th>Frontier scenario</th><th>Central scenario</th><th>Settled-core scenario</th></tr></thead><tbody>{''.join(population_rows)}</tbody></table></div>
-<div class="notes"><p class="note">{harvest}; environmental malaria potential included. Occupation scenarios are historical analogues, not confidence intervals or reconstructed censuses. Each atlas can remove the malaria penalty. All three density maps share one colour scale.</p>{reports}</div></section>
+<div class="notes"><p class="note">{harvest}; environmental malaria potential included. Occupation scenarios are historical analogues, not confidence intervals or reconstructed censuses. Each atlas can remove the malaria penalty. All three density maps share one colour scale.</p></div>
+{foraging_section}
+<div class="notes">{reports}</div></section>
 </div>
 '''
     out = (a.artifact if artifact else ROOT / 'atlases') / 'index.html'

@@ -6,14 +6,14 @@ no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 
 ## State
 
-* Adopted Earth physics is now **r40** (`calibration/local_accuracy_20261023/r40_params.json`):
+* Adopted Earth physics is now **r40** (`calibration/local_accuracy_20261023/r40_params.json`), also in the Earth-fit atlas:
   r39 plus e55/e55b monsoon westerlies, e56 shelf rule, e58 sea column under
   cold air, and refitted itcz_shift / precip_tau_days / monsoon_descent.
   Gate S 0.9932, 28 km 0.9953, sealed six 0.9671 (used once for r40).
   Evidence: `output/physics_gaps_20261030/refit3/`, report §12.
-  Normal atlases still publish verified r38 world fields; no world refit on
-  r40 yet. New switches in `rotclimate/model.py` (e54-e58) all default off;
-  r39 cells reproduce bit for bit.
+  The Earth-fit atlas publishes r40 on the r38 world geometry (see Next 1).
+  New switches in `rotclimate/model.py` (e54-e61) all default off;
+  r39 and r40 cells reproduce bit for bit.
 * The Earth corrections below were trained on **r39**; r40 versions are in
   `calibration/earth_correction_r40_20261031/{temperature,rain_pattern}`
   (`scripts/retrain_earth_corrections.sh`; held out T 1.807 -> 1.548 C,
@@ -137,7 +137,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    0.1895 but every better candidate breaks a zone/Mediterranean guard; the
    start fails every native protection (zonefit 0.1796 vs 0.1828, strict
    33.1 vs 35.0 %, Med dry 9.0 vs 6.4 %). Audit layouts 590xxx unused.
-   reports/R40_WORLD_20261031.md. Atlas stays r38.
+   reports/R40_WORLD_20261031.md.
+   RULE (user, 31 Oct): a release better on the Earth test updates the atlas.
+   So atlases/earth_fit is now r40 physics + r38 geometry (reports/ATLAS_R40_20261031.md;
+   r38 backup in output/atlas_r40/previous_atlases/). Hosted artifacts (hub,
+   free, earth, whittaker; URLs in atlases/artifact_links.json) republished
+   with all local features (FORGE etc.): scripts/package_atlas_artifact.py ->
+   Artifact publish per atlas; check with scripts/check_atlas_smoke.js.
 2. Fresh sealed set declared 2026-10-31: calibration/sealed_20261031/
    (hokkaido, canadian_prairies, kazakh_steppe, namibia_kalahari,
    southern_italy, north_queensland; no model run on them yet). Use

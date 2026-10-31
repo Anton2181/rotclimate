@@ -1,0 +1,119 @@
+{
+  "decision": "Earth r40 published in the Earth-fit atlas: the user rule (31 October 2026) is that a release better on the Earth test updates the atlas. r40 is the adopted Earth profile (31-region gate S 0.9932, 28 km 0.9953, sealed six 0.9671). The map-zone protections of the r40 world refit (reports/R40_WORLD_20261031.md) failed and are reported, not used as a publication gate.",
+  "geometry": "Published r38 world geometry (latitude, orientation, tiers, surroundings) with r40 shared physics: calibration/map_world_r40/finalists/candidate_001.json, verified native checkpoint output/r40_world/candidate_001.pkl.",
+  "previous": {
+    "zonefit": 0.182806338810661,
+    "strict_accuracy": 0.3499243315957626,
+    "recall": {
+      "cold_wet": 0.7099767981438515,
+      "cold_dry": 0.0,
+      "warm_wet": 0.4149947201689546,
+      "med": 0.687374749498998,
+      "swamp": 0.0,
+      "tree": 0.06794055201698514,
+      "hot_dry": 0.24411764705882352
+    },
+    "mediterranean": {
+      "dry_share": 0.06412825651302605,
+      "cs_share": 0.7454909819639278
+    },
+    "whittaker_strict": 0.3480122436747317,
+    "harvest_central": 59906361.79115939
+  },
+  "published": {
+    "zonefit": 0.17963120242039832,
+    "strict_accuracy": 0.3308390785269884,
+    "recall": {
+      "cold_wet": 0.685614849187935,
+      "cold_dry": 0.0020222446916076846,
+      "warm_wet": 0.36888419570573744,
+      "med": 0.6646626586506346,
+      "swamp": 0.0,
+      "tree": 0.07006369426751592,
+      "hot_dry": 0.23137254901960785
+    },
+    "mediterranean": {
+      "dry_share": 0.08984635938543754,
+      "cs_share": 0.7247828991315965
+    },
+    "whittaker_strict": 0.3461913130174219,
+    "harvest_central": 60171208.169615194
+  },
+  "numerics": true,
+  "checks": {
+    "packet": "passed (119 layer assets)",
+    "food": "passed",
+    "population": "passed",
+    "trade": "inbound-directed, 3 views",
+    "diagnostics": {
+      "surroundings": {
+        "status": "passed",
+        "atlas": "atlases/earth_fit_r40_stage",
+        "added_layers": [
+          "surroundings_rain",
+          "surroundings_temperature"
+        ],
+        "metadata_sha256": "b528b6c515b8418312564e445974d1434528e036d37a0442f10ba4067470e25b",
+        "summaries": {
+          "rain": {
+            "median": 13.682859607388705,
+            "p90": 19.233930680808214,
+            "maximum": 36.99243520522397
+          },
+          "temperature": {
+            "median": 0.7505140709728355,
+            "p90": 0.8850603708504622,
+            "maximum": 1.256940496954805
+          }
+        },
+        "member_group": "reference"
+      },
+      "initialization": {
+        "status": "passed",
+        "message": "Initialization check (layout 1, screening grid): three extra years changed monthly rain by at most 0.05 mm on mapped model-grid land. This is a settling check, not measured climate accuracy.",
+        "domain_repeats": true,
+        "land_repeats": true
+      }
+    },
+    "browser_local": [
+      [
+        "http://127.0.0.1:8765/atlases/free_fit/",
+        true
+      ],
+      [
+        "http://127.0.0.1:8765/atlases/earth_fit/",
+        true
+      ],
+      [
+        "http://127.0.0.1:8765/atlases/whittaker_fit/",
+        true
+      ]
+    ],
+    "browser_packaged": [
+      [
+        "http://127.0.0.1:8767/free_fit/",
+        true
+      ],
+      [
+        "http://127.0.0.1:8767/earth_fit/",
+        true
+      ],
+      [
+        "http://127.0.0.1:8767/whittaker_fit/",
+        true
+      ]
+    ]
+  },
+  "artifacts": {
+    "hub": "https://claude.ai/artifact/GPxfbcEiUkiWUr9ubYdMaw (version 8)",
+    "earth_fit": "https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF (version 13; previously an r37 build)",
+    "free_fit": "https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY (version 20)",
+    "whittaker_fit": "https://claude.ai/artifact/XipEjxEomSAqXS4KhAy3RD (version 9)",
+    "features_added": "FORGE foraging topic and packet, political variant selector (gap fills, trade views), directed-trade status, grid downloads, surroundings sensitivity and initialization check (Earth fit), vector downloads"
+  },
+  "hashes": {
+    "params": "5a917332aa51d7306edb2dafd2a5d8fe56338a3499ba673d5d4f2f6487a019c6",
+    "atlas_json": "db8785fc1da72238cb4cd49c8b0eb1ec704e023c2853f4fa6272ab3909db0269",
+    "atlas_bin": "645f935a671f88cf4b6738f47ed5f186df2f43fba7583176a990285df46ed16e"
+  }
+}
