@@ -103,3 +103,32 @@ model now predicts which groups depended on fishing (rank correlation 0.78
 on unseen continents) and no longer overfeeds the terrestrial foragers of
 Australia, Africa and South America, which is what the fantasy map's
 c.200 AD frontier peoples are closest to.
+
+## In the atlases
+
+All three atlases (and the Earth fit's corrected-climate variant) now run the
+adopted configuration D with the atlas's 300-year, final-50-year summary
+(A's, since B and B2 were not adopted). The map's aquatic inputs follow the
+addendum's definitions: coast weight averaged over each cell's land (sea and
+lakes as water, as WorldClim leaves both empty), the drawn rivers (both
+classes) scaled by 0.418 / 0.73 to Natural Earth 1:10m's level of detail on
+Earth (0.42 km per 100 km² of land against the drawing's 0.73), and lakes.
+**Deviation, recorded:** the climate packet carries land values over the sea,
+so the map's sea temperature is the model's zonal sea surface
+(energy-balance ocean column + `sst_offset`) at each cell's latitude, annual
+mean. A fifth Foraging map shows the fish share; the place card and the
+totals report it.
+
+| atlas | foraging scenario people, terrestrial only → with fish | fish share of food | animal share |
+|---|---:|---:|---:|
+| free fit | 1.67 M → 0.55 M | 9 % | 80 % |
+| Earth fit | 1.31 M → 0.45 M | 15 % | 75 % |
+| Whittaker fit | 1.31 M → 0.44 M | 12 % | 78 % |
+| Earth fit, corrected climate | 1.31 M → 0.46 M | 15 % | — |
+
+The totals fall by about two-thirds because the Earth test found terrestrial
+food about twice too generous; fish keep the coasts and lake shores denser.
+Checks: foraging verification (ledgers to 1e-16, fish share never above the
+animal share), the browser smoke check on all three local and packaged
+atlases including the corrected mode. Hosted: free fit v21, Earth fit v16,
+Whittaker fit v10, hub v10.

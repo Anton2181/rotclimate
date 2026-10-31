@@ -38,6 +38,7 @@ if __name__=='__main__':
                     destination=args.out/'staging'/atlas.name;(destination/'data').mkdir(parents=True,exist_ok=True)
                     for file in ['atlas.json','atlas.bin','harvest.json','harvest.bin']:
                         shutil.copyfile(atlas/'data'/file,destination/'data'/file)
+                    shutil.copyfile(atlas/'params.json',destination/'params.json')   # the world's sea surface (aquatic food)
                 status['atlases'][atlas.name]=dict(status='running',destination=str(destination));save(status_path,status)
                 info=export(destination,coarsen=args.coarsen,chunk_cells=args.chunk_cells,years=args.years,force=args.force)
                 status['atlases'][atlas.name]=dict(status='passed',destination=str(destination),fingerprint=info['fingerprint'],

@@ -52,7 +52,10 @@ def verify(data, climate=None):
     assert len(rows)==len(m['provinces'])
     np.testing.assert_allclose(sum(float(r['scenario_people']) for r in rows),summary['total_scenario_people'],rtol=3e-12,atol=1e-8)
     layers=[l for l in climate['layers'] if l['id'].startswith('forage_')]
-    assert len(layers)==4 and all(l['group']=='Foraging' and l['controls']==[] for l in layers)
+    modes=5 if 'fish_share' in arrays else 4            # the fish-share map comes with the aquatic food stock
+    assert len(layers)==modes and all(l['group']=='Foraging' and l['controls']==[] for l in layers)
+    if 'fish_share' in arrays:
+        assert np.all((arrays['fish_share'][land]>=0)&(arrays['fish_share'][land]<=arrays['meat_fraction'][land]+1e-6))
     for layer in layers:
         for name in [layer['file'],layer['tiers']['file']]:
             with Image.open(data/name) as image:
@@ -62,4 +65,4 @@ def verify(data, climate=None):
         converged_land_share=summary['converged_land_share'],
         maximum_relative_resource_residual=float(arrays['maximum_relative_resource_residual'][land].max()),
         maximum_relative_energy_residual=float(arrays['maximum_relative_energy_residual'][land].max()),
-        climate_unchanged=True,map_modes=4,provinces=len(rows))
+        climate_unchanged=True,map_modes=modes,provinces=len(rows))

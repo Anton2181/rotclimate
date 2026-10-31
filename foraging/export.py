@@ -17,18 +17,20 @@ from PIL import Image
 from scipy.sparse import csr_matrix
 from harvest.export import (climate_arrays, color_image, geometry, physical_metadata,
                             surface_months, tiers)
-from .forcing import ROOT, daily_resources, miami_npp, specification
+from .forcing import ROOT, aquatic_annual, daily_resources, miami_npp, specification
 
 MODES = [
     ('density_people_km2','forage_density','Foraging density','people/km² · finite-horizon foraging scenario',.001,10.,True),
     ('foraging_hours_day','forage_effort','Foraging effort','hours/person/day · final-window annual mean',0.,8.,False),
     ('scarcity_days_year','forage_shortfall','Food shortfall','days/year with an energy shortfall',0.,365.,False),
-    ('meat_fraction','forage_carnivory','Meat share','annual meat-energy fraction · final-window mean',0.,1.,False)]
+    ('meat_fraction','forage_carnivory','Meat share','annual animal-food energy fraction (prey and fish) · final-window mean',0.,1.,False),
+    ('fish_share','forage_fish','Fish share','share of food energy from coastal and freshwater fish · final-window mean',0.,1.,False)]
 PALETTES = {
     'density_people_km2':['#f2eed6','#b9cf91','#639c7b','#2d6b75','#253d5d'],
     'foraging_hours_day':['#e9eed9','#c8d78c','#e4bd62','#c77b43','#903c43'],
     'scarcity_days_year':['#f0eedc','#ead8a2','#dba45e','#c46848','#842f45'],
-    'meat_fraction':['#e7e5d5','#bdc19a','#8e9c8c','#5f7a89','#354d73']}
+    'meat_fraction':['#e7e5d5','#bdc19a','#8e9c8c','#5f7a89','#354d73'],
+    'fish_share':['#eef0e6','#b9d6d3','#6fb0bd','#2f7f9e','#1f4b72']}
 
 
 def sha(path):
@@ -123,6 +125,7 @@ def aggregates(fields, land_fraction, cell_area_km2, province_names, province_fr
         mean_foraging_hours_day=mean('foraging_hours_day',density*area),
         mean_scarcity_days_year=mean('scarcity_days_year',density*area),
         mean_meat_fraction=mean('meat_fraction',density*area),
+        mean_fish_share=mean('fish_share',density*area) if 'fish_share' in fields else None,
         aggregation='Scenario people are density times coastal land area. Effort, scarcity and diet means are weighted by scenario people; convergence shares are weighted by land area.')
     provinces=[]
     for name,fraction in zip(province_names,province_fraction):
@@ -136,6 +139,48 @@ def aggregates(fields, land_fraction, cell_area_km2, province_names, province_fr
     np.testing.assert_allclose(sum(p['area_km2'] for p in provinces),total_area,rtol=2e-13,atol=1e-7)
     np.testing.assert_allclose(sum(p['scenario_people'] for p in provinces),population,rtol=2e-13,atol=1e-7)
     return summary,provinces
+
+
+def map_aquatic_inputs(atlas, meta, native_shape, shape, aquatic):
+    """The aquatic addendum's inputs on the map: coast weight, sea surface and freshwater index per analysis cell."""
+    from scipy import ndimage as ndi
+    from rotclimate.config import Params
+    from rotclimate.ebm import ZonalClimate
+    from rotclimate.geography import source_layers
+    from scripts.vector_rivers import river_classes
+    layers = source_layers(); land = layers['land']; H, W = land.shape
+    km_px = meta['mi_per_px']*1.609344*meta['width']/W
+    water = ~land                                         # sea and lakes, as WorldClim leaves both empty
+    coast = np.exp(-ndi.distance_transform_edt(~water)*km_px/aquatic['coast_scale_km'])
+    radius = aquatic['radius_km']/km_px
+    r = int(np.ceil(radius)); yy, xx = np.mgrid[-r:r+1, -r:r+1]; disc = (np.hypot(yy, xx) <= radius).astype(float)
+    original = np.asarray(Image.open(ROOT/'data/source/original/rivers.png'))[..., 3]/255.
+    streams, navigable = river_classes(original)
+    lines = streams | navigable
+    sampling = meta['mi_per_px']*1.609344*meta['width']/original.shape[1]
+    ys, xs = np.nonzero(lines)
+    river_km = np.zeros((H, W))
+    np.add.at(river_km, (np.minimum((ys+.5)*H/original.shape[0], H-1).astype(int),
+                         np.minimum((xs+.5)*W/original.shape[1], W-1).astype(int)), 1.12*sampling*aquatic['map_river_scale'])
+    from scipy.signal import fftconvolve
+    disc_km2 = disc.sum()*km_px**2
+    rivers = np.maximum(fftconvolve(river_km, disc, mode='same'), 0)*100./disc_km2
+    lakes = np.clip(fftconvolve(layers['lake'].astype(float), disc, mode='same')/disc.sum(), 0, 1)
+    fresh = rivers + aquatic['lake_weight']*lakes
+    fine_fraction = land.astype(float)
+    def to_analysis(value):
+        return land_average(value, fine_fraction, shape)
+    p = Params.from_json(atlas/'params.json'); zonal = ZonalClimate(p)
+    h, w = shape
+    py, px = np.mgrid[:h, :w]
+    px = (px+.5)*meta['width']/w; py = (py+.5)*meta['height']/h
+    bearing = np.radians(meta.get('north_bearing', 0))
+    latitude = (meta['lat_center']+((px-meta['width']/2)*np.sin(bearing)+(meta['height']/2-py)*np.cos(bearing))
+                *meta['mi_per_px']*1.609344/meta['km_per_deg'])
+    days = (np.arange(36)+.5)*p.year_days/36
+    sst = np.mean([zonal.ocean(latitude, d) for d in days], axis=0)+p.sst_offset
+    return dict(coast_weight=to_analysis(coast), sst_c=sst, w_fresh=to_analysis(fresh),
+                river_index=to_analysis(rivers), lake_share=to_analysis(lakes))
 
 
 def images_and_layers(data, fields, land, elevation, meta):
@@ -171,7 +216,11 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
              ROOT/'harvest/export.py',ROOT/'rotclimate/geography.py',ROOT/'scripts/land_people.py',
              ROOT/'scripts/vector_rivers.py',ROOT/'data/source/elevation.png',ROOT/'data/source/rivers.png',
              ROOT/'data/source/original/rivers.png']
+    aquatic=spec.get('aquatic')
+    if aquatic:
+        sources+=[ROOT/'rotclimate/ebm.py',ROOT/'rotclimate/config.py']
     inputs=dict(climate_sha256=sha(data/'atlas.bin'),physical_metadata=physical_metadata(meta),
+        world_params_sha256=sha(atlas/'params.json') if aquatic else None,
         province_metadata_sha256=sha(data/'harvest.json'),province_binary_sha256=sha(data/'harvest.bin'),
         native_shape=list(native_shape),analysis_shape=list(shape),run=run,
         sources={str(p.relative_to(ROOT)):sha(p) for p in sources})
@@ -194,6 +243,9 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
     np.testing.assert_allclose((npp*land_fraction).sum()*cell_area,
         (fine_npp*fine_fraction).sum()*width_km*height_km/np.prod(native_shape),rtol=3e-13)
     adapter=dict(spec['adapter'])
+    aq=map_aquatic_inputs(atlas,meta,native_shape,shape,aquatic) if aquatic else None
+    if aq is not None:
+        aq['annual_aquatic_kgdm_km2']=aquatic_annual(aq['coast_weight'],aq['sst_c'],aq['w_fresh'],aquatic)
     kernel_keys={f.name for f in dataclass_fields(ForagingParams)}
     kernel=spec['kernel_parameters']
     if set(kernel)-kernel_keys:raise ValueError('Unknown kernel parameter names: '+str(set(kernel)-kernel_keys))
@@ -202,7 +254,12 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
     for start in range(0,len(index),chunk_cells):
         selected=index[start:start+chunk_cells]
         forcing=daily_resources(temperature.reshape(12,-1)[:,selected],precipitation.reshape(12,-1)[:,selected],npp.ravel()[selected],adapter)
-        output=simulate_foraging(forcing['plant_supply'],forcing['meat_supply'],params=params,**run)
+        plant,meat,fish=forcing['plant_supply'],forcing['meat_supply'],None
+        if aq is not None:
+            plant=plant*aquatic['terrestrial_scale'];meat=meat*aquatic['terrestrial_scale']
+            fish=np.broadcast_to(aq['annual_aquatic_kgdm_km2'].ravel()[selected]/plant.shape[0],plant.shape).copy()
+        output=simulate_foraging(plant,meat,params=params,aquatic_supply=fish,**run)
+        output['fish_share']=output['mean_fish_share']
         for key,value in output.items():
             array=np.asarray(value)
             if array.shape!=(len(selected),):continue
@@ -222,6 +279,8 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
     for key in ['converged','floor_limited','unsupported']:
         if key not in fields:raise ValueError('Kernel did not produce required status: '+key)
     fields.update(land_fraction=land_fraction,annual_npp_gdm_m2=npp,cell_area_km2=land_fraction*cell_area)
+    if aq is not None:
+        fields.update({'aquatic_'+k:np.where(land,v,0.) for k,v in aq.items()})
     # Match stored precision before computing every published total or map.
     fields={k:np.asarray(v,dtype=np.uint8 if k in ['converged','floor_limited','unsupported'] else np.float32) for k,v in fields.items()}
     names,province_fraction=province_fractions(data,fine_fraction,shape)

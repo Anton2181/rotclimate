@@ -47,6 +47,16 @@
       "url": "https://doi.org/10.1093/qje/qjae012",
       "use": "Research context for future explicit storage experiments; plant biomass turnover in the current adapter is not a human storage model. No adoption equation from this paper is implemented.",
       "used_for": "Research context for future explicit storage experiments; plant biomass turnover in the current adapter is not a human storage model. No adoption equation from this paper is implemented."
+    },
+    {
+      "title": "Binford (2001) hunter-gatherer data, CRAN package binford 0.1.0 (Marwick, Johnson, White, Eff; GPL-3)",
+      "url": "https://cran.r-project.org/package=binford",
+      "used_for": "Earth test and fitting of the aquatic and terrestrial resource scales"
+    },
+    {
+      "title": "Natural Earth 1:10m rivers, lake centrelines and lakes",
+      "url": "https://www.naturalearthdata.com/",
+      "used_for": "freshwater index at the Earth test sites"
     }
   ],
   "published_human_parameters": {
@@ -111,7 +121,7 @@
   "limitations": [
     "No reproduced ORCHIDEE vegetation, plant functional types, soil carbon, grazer/browser demography or original global FORGE calibration.",
     "Monthly mean climate cannot resolve daily weather or resource covariance. Any daily timing is a scenario interpolation.",
-    "No fishing, small game, migration, trade, food sharing between cells, institutions or crop production is represented by these foraging maps.",
+    "No small game, migration, trade, food sharing between cells, institutions or crop production is represented by these foraging maps. Fish and other aquatic foods enter as one coastal and freshwater supply (aquatic block), fitted on North American foragers and tested on the rest of the world; seasonal fish runs and food storage are not represented.",
     "Environmental pathogen exposure is not inferred from meat or foraging effort. The Tallavaara empirical pathogen predictor is not the atlas malaria index.",
     "Foraging density and effort concern subsistence under stated resources. They do not predict surplus appropriation, social complexity, innovation or political development.",
     "Alternative resource parameters are sensitivity scenarios, not calibrated probabilities or statistical confidence intervals."
@@ -145,7 +155,7 @@
     "meat_decay_day": 0.0,
     "reset_meat_each_year": true
   },
-  "model_note": "Independent implementation of published FORGE human energy, effort and demographic equations with an explicitly simplified resource adapter. It is not the original ORCHIDEE-FORGE simulation, an agricultural carrying capacity, a c.200 AD census or a ranking of societal development.",
+  "model_note": "Independent implementation of published FORGE human energy, effort and demographic equations with an explicitly simplified resource adapter. It is not the original ORCHIDEE-FORGE simulation, an agricultural carrying capacity, a c.200 AD census or a ranking of societal development. Terrestrial food is scaled by 0.5 and coastal and freshwater fish are a third food stock, both fitted on Binford's North American hunter-gatherers and tested on the rest of the world (reports/FORAGING_EARTH_20261031.md).",
   "run": {
     "years": 300,
     "min_years": 20,
@@ -161,5 +171,21 @@
     "food_stock": "kg dry matter per km2",
     "population_density": "persons per km2",
     "area_conversion": "1 g dry matter per m2 = 1000 kg dry matter per km2; search area converts m2 to km2 internally"
+  },
+  "aquatic": {
+    "source": "calibration/forager_binford_20261031/addendum_aquatic.json; adopted by its frozen rule (reports/FORAGING_EARTH_20261031.md)",
+    "terrestrial_scale": 0.5,
+    "a_marine_kgdm_km2_year": 3000.0,
+    "a_fresh_kgdm_km2_year": 100.0,
+    "coast_scale_km": 25.0,
+    "sst_zero_c": 28.0,
+    "sst_span_c": 20.0,
+    "sst_floor": 0.2,
+    "lake_weight": 10.0,
+    "radius_km": 25.0,
+    "map_river_scale": 0.5726,
+    "map_river_scale_note": "The map draws rivers in more detail than Natural Earth 1:10m: 0.73 against 0.418 km per 100 km2 of land (both classes of the drawing against Natural Earth on Earth), so map river length is scaled by 0.418/0.73 before the freshwater index is formed. Fixed from the two datasets before any atlas result.",
+    "map_sst_note": "The atlas climate packet carries land values over the sea (coastal fill), so the map uses the model's zonal sea surface (energy-balance ocean column plus sst_offset) at each cell's latitude, annual mean. Deviation from the addendum, recorded.",
+    "supply": "a_marine * exp(-d_coast/coast_scale_km) * clip((sst_zero_c - SST)/sst_span_c, sst_floor, 1) + a_fresh * W_fresh, kg dry matter per km2 of land per year, spread evenly over the year; W_fresh = river and lake-centre line length within radius_km in km per 100 km2 + lake_weight x lake-covered share of that disc"
   }
 }

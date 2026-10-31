@@ -118,7 +118,9 @@ def main():
             foraging_rows.append(f'<tr><th scope="row">{escape(title)}</th><td>{forage.get("total_scenario_people", float("nan")) / 1e6:.2f} M</td>'
                                  f'<td>{forage.get("mean_foraging_hours_day", float("nan")):.1f} h</td>'
                                  f'<td>{forage.get("mean_scarcity_days_year", float("nan")):.0f} days</td>'
-                                 f'<td>{forage.get("mean_meat_fraction", float("nan")):.0%}</td></tr>')
+                                 f'<td>{forage.get("mean_meat_fraction", float("nan")):.0%}</td>'
+                                 + (f'<td>{forage["mean_fish_share"]:.0%}</td>' if forage.get("mean_fish_share") is not None else '<td>—</td>')
+                                 + '</tr>')
         if artifact:
             href = links.get(name, '')
             biome_img, density_img = f'img/{name}_whittaker.webp', f'img/{name}_density.webp'
@@ -167,12 +169,14 @@ def main():
                        f'(exact zone agreement {100 * fit["raw"]["strict_accuracy"]:.1f} % raw, '
                        f'{100 * fit["corrected"]["strict_accuracy"]:.1f} % corrected).')
     foraging_section = ('' if not foraging_rows else
-        '<p>The Foraging topic runs a terrestrial hunter-gatherer scenario on each climate, adapted from the FORGE human model '
-        '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation). '
-        'Four maps show scenario density, daily food-procurement hours, days of food shortfall a year and the share of food from meat; '
-        'select any place for its readouts. It is separate from the farming model, both draw on the same land, and fishing and marine food are not included.</p>'
+        '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
+        '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '
+        'with coastal and freshwater fish as a third food. Its terrestrial and aquatic food scales were fitted on Binford\'s North '
+        'American hunter-gatherers and tested on the rest of the world (density error a factor 1.8, rank correlation 0.74, and which '
+        'groups fished, 0.78). Five maps show scenario density, daily food-procurement hours, days of food shortfall a year, the share '
+        'of food from animals and the share from fish; select any place for its readouts. It is separate from the farming model and both draw on the same land.</p>'
         '<div class="table"><table><thead><tr><th>Atlas</th><th>Foraging scenario people</th><th>Procurement per day</th>'
-        '<th>Shortfall per year</th><th>Meat share</th></tr></thead><tbody>' + ''.join(foraging_rows) + '</tbody></table></div>'
+        '<th>Shortfall per year</th><th>Animal share</th><th>Fish share</th></tr></thead><tbody>' + ''.join(foraging_rows) + '</tbody></table></div>'
         '<div class="notes"><p class="note">Finite-horizon scenarios, not validated carrying capacities or censuses. Means are weighted by scenario people. '
         'Food shortfall includes ordinary reserve drawdown; it is not famine mortality.</p></div>')
     updated = datetime.date.today().strftime('%-d %B %Y').upper()
@@ -191,6 +195,7 @@ def main():
                    '<a href="../reports/PHYSICS_GAPS_20261030.md">Earth r40 calibration</a> · '
                    '<a href="../reports/R40_WORLD_20261031.md">r40 world refit and atlas release</a> · '
                    '<a href="../reports/FORAGING_20261027.md">Foraging scenarios</a> · '
+                   '<a href="../reports/FORAGING_EARTH_20261031.md">Foraging against Binford\'s hunter-gatherers</a> · '
                    '<a href="../reports/ITERATION_20261023.md">Population lab</a> · '
                    '<a href="../reports/HARVEST_MIGRATION_20261022.md">Food, disease and settlement models</a> · '
                    '<a href="../reports/THREE_FIT_20261022.md">Campaign report</a> · <a href="../docs/BIOMES.md">Biome methods</a></p>')

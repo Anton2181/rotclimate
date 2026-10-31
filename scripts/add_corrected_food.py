@@ -153,6 +153,7 @@ def add(atlas, checkpoint, corrections, staging):
         shutil.rmtree(staging)
     (staging / 'data').mkdir(parents=True)
     shutil.copyfile(data / 'atlas.json', staging / 'data' / 'atlas.json')
+    shutil.copyfile(atlas / 'params.json', staging / 'params.json')     # the foraging export's sea surface
     record = corrected_packet(atlas, result, Path(corrections), staging / 'data' / 'atlas.bin')
     harvest_export(staging)
     population_export(staging)

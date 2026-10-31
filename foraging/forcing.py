@@ -25,6 +25,17 @@ def miami_npp(temperature, precipitation):
                       3000.*(-np.expm1(-.000664*p.sum(0))))
 
 
+def aquatic_annual(coast_weight, sst_c, w_fresh, aquatic):
+    """Coastal and freshwater food supply, kg dry matter per km² of land per year
+    (calibration/forager_binford_20261031/addendum_aquatic.json). coast_weight is
+    exp(-distance to water / coast_scale_km), already averaged over the cell's land."""
+    coast, sst, fresh = (np.asarray(a, float) for a in (coast_weight, sst_c, w_fresh))
+    if coast.shape != sst.shape or fresh.shape != sst.shape or not all(np.isfinite(a).all() for a in (coast, sst, fresh)):
+        raise ValueError('Need matching finite aquatic inputs')
+    marine = coast * np.clip((aquatic['sst_zero_c'] - sst) / aquatic['sst_span_c'], aquatic['sst_floor'], 1.0)
+    return aquatic['a_marine_kgdm_km2_year'] * marine + aquatic['a_fresh_kgdm_km2_year'] * np.maximum(fresh, 0.0)
+
+
 def daily_resources(temperature, precipitation, annual_npp, adapter):
     """Return 365 daily plant/prey inputs in kg dry matter/km²/day.
 

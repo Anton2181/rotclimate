@@ -1,4 +1,4 @@
-/* Optional terrestrial-foraging scenarios, separate from agricultural support. */
+/* Optional foraging scenarios (terrestrial and aquatic food), separate from agricultural support. */
 (function(root,factory){
   const api=factory();
   if(typeof module==='object'&&module.exports)module.exports=api;
@@ -57,11 +57,12 @@
       status:'The whole window was unsupported. The numerical population floor is not a positive density estimate.',rows:[]};
     const years=value('averaging_years_used');
     const window=years>0?`final ${number(years,0)}-year mean`:'final-window mean';
-    const density=value('density_people_km2'),effort=value('foraging_hours_day'),meat=value('meat_fraction'),scarcity=value('scarcity_days_year');
+    const density=value('density_people_km2'),effort=value('foraging_hours_day'),meat=value('meat_fraction'),scarcity=value('scarcity_days_year'),fish=value('fish_share');
     const rows=[];
     if(density!==null)rows.push([`${number(density,3)} /km²`,`${window} scenario density`]);
     if(effort!==null)rows.push([`${number(effort,2)} h/person/day`,'mean food procurement only']);
-    if(meat!==null)rows.push([`${number(meat*100,1)}%`,'animal-food energy share']);
+    if(meat!==null)rows.push([`${number(meat*100,1)}%`,fish!==null?'animal-food energy share (prey and fish)':'animal-food energy share']);
+    if(fish!==null)rows.push([`${number(fish*100,1)}%`,'fish and other aquatic food']);
     if(scarcity!==null)rows.push([`${number(scarcity,0)} days/year`,'mean modeled food shortfall']);
     const variation=value('density_cv');
     if(variation!==null)rows.push([`${number(variation*100,0)}%`,'annual density variation (CV)']);
@@ -94,12 +95,13 @@
       const [x,y,name,sea]=selection,index=indexAt(x,y,meta.width,meta.height,packet.shape);
       $('foraging-place').textContent=name?`Foraging near ${name}`:'At the selected place';
       const value=key=>packet.at(key,index),land=value('land_fraction');
+      const aquatic=packet.at('fish_share',index)!==null;
       if(sea||!(land>0)){
-        $('foraging-readouts').textContent='Choose land to inspect the terrestrial-foraging scenario.';
-        $('foraging-status').textContent='Fishing and marine food are not included.';return;
+        $('foraging-readouts').textContent='Choose land to inspect the foraging scenario.';
+        $('foraging-status').textContent=aquatic?'Coastal and freshwater fish enter through the nearby land cells.':'Fishing and marine food are not included.';return;
       }
       const local=describePoint(Object.fromEntries(['unsupported','floor_limited','converged','density_people_km2',
-        'foraging_hours_day','meat_fraction','scarcity_days_year','density_cv','averaging_years_used'].map(key=>[key,value(key)])));
+        'foraging_hours_day','meat_fraction','scarcity_days_year','density_cv','averaging_years_used','fish_share'].map(key=>[key,value(key)])));
       if(local.message)$('foraging-readouts').textContent=local.message;
       else $('foraging-readouts').innerHTML=readouts(local.rows);
       $('foraging-status').textContent=local.status;
@@ -109,8 +111,9 @@
     if(Number.isFinite(summary.converged_scenario_people))totals.push([people(summary.converged_scenario_people),'people in converged subset']);
     if(Number.isFinite(summary.converged_land_share))totals.push([`${number(summary.converged_land_share*100,1)}%`,'modeled land meeting convergence']);
     if(Number.isFinite(summary.unsupported_land_share))totals.push([`${number(summary.unsupported_land_share*100,1)}%`,'modeled land unsupported over window']);
+    if(Number.isFinite(summary.mean_fish_share))totals.push([`${number(summary.mean_fish_share*100,1)}%`,'of food from fish (people-weighted)']);
     $('foraging-totals').innerHTML=readouts(totals);
-    $('foraging-context').textContent=metadata.model_note||'FORGE-inspired terrestrial-foraging scenarios with declared climate-to-resource proxies. These are not the published ORCHIDEE-driven global simulations.';
+    $('foraging-context').textContent=metadata.model_note||'FORGE-inspired foraging scenarios with declared climate-to-resource proxies. These are not the published ORCHIDEE-driven global simulations.';
     const report=metadata.report_url||'../../reports/FORAGING_20261027.md';
     $('foraging-method').href=report;
     $('foraging-parameters').href='data/'+specification.metadata;
