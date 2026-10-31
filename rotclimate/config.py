@@ -164,6 +164,7 @@ class Params:
     wet_cooling: float = 0.0          # v8: share of the summer warmth that wet ground evaporates away
     dry_heating: float = 0.0          # e54: K of land warmth on bone-dry soil under 480 W/m2 of sunshine, x (1 - soil wetness)
     dry_heating_chi0: float = 0.0     # e54b: ... only in continental air: x clip((chi - this) / (1 - this), 0, 1); 0 = everywhere
+    dry_heating_warm_c: float = -99.0 # e54c: ... only on warm ground: x clip((land equilibrium - this) / 8 K, 0, 1); -99 = always
     # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
     # flow toward the pole rises, flow toward the equator sinks: rain x
     # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km

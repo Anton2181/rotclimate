@@ -286,6 +286,8 @@ class ClimateModel:
             raise ValueError('dry_heating must be >= 0 and needs the soil bucket (soil_bucket_mm > 0)')
         if not 0 <= params.dry_heating_chi0 < 1 or (params.dry_heating_chi0 > 0 and params.continentality <= 0):
             raise ValueError('dry_heating_chi0 must be in [0, 1) and needs the advected land share (continentality > 0)')
+        if params.dry_heating_warm_c != -99.0 and not -20.0 <= params.dry_heating_warm_c <= 30.0:
+            raise ValueError('dry_heating_warm_c must be -99 (off) or in [-20, 30] C')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
             raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
         if not isinstance(params.moisture_mass_balance, (bool, np.bool_)):
@@ -1073,6 +1075,15 @@ class ClimateModel:
                     # air that has crossed land (the advected share chi) keeps
                     # the dry ground's heat
                     dry = dry * np.clip((chi - p.dry_heating_chi0) / (1.0 - p.dry_heating_chi0), 0.0, 1.0)
+                if p.dry_heating_warm_c != -99.0:
+                    # e54c: dry ground heats the air through the day's sensible
+                    # heat, which a low winter sun and long clear nights cancel:
+                    # the dry winter plains of North China and Manchuria are
+                    # cold, not warm (e54 warmed them 0.5-0.9 C on winters and
+                    # springs already too warm), while North India's and Iran's
+                    # warm dry seasons keep it. Full above this equilibrium
+                    # temperature plus 8 K, none below it.
+                    dry = dry * np.clip((Tl - p.dry_heating_warm_c) / 8.0, 0.0, 1.0)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean

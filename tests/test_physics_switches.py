@@ -16,10 +16,11 @@ def test_new_switches_default_off_and_are_classified():
     assert p.zonal_land_friction == 0.0 and p.ocean_column_air == 0.0 and p.ocean_column_warm == 0.0
     assert p.eddy_cap_contrast_k == 0.0 and p.eddy_upwind_days == 0.0
     assert p.heat_land_friction == 0.0 and p.water_land_friction == 0.0 and p.inland_sea_lag_days == 0.0
+    assert p.dry_heating_warm_c == -99.0
     validate_partition()
     assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
             'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air', 'ocean_column_warm', 'eddy_cap_contrast_k', 'eddy_upwind_days',
-            'heat_land_friction', 'water_land_friction', 'inland_sea_lag_days'} <= SHARED_FIELDS
+            'heat_land_friction', 'water_land_friction', 'inland_sea_lag_days', 'dry_heating_warm_c'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -41,6 +42,7 @@ def test_new_switches_default_off_and_are_classified():
     (dict(heat_land_friction=1.0), 'heat_land_friction and water_land_friction must be'),
     (dict(water_land_friction=-0.1), 'heat_land_friction and water_land_friction must be'),
     (dict(inland_sea_lag_days=200.0), 'inland_sea_lag_days must be'),
+    (dict(dry_heating_warm_c=50.0), 'dry_heating_warm_c must be'),
     (dict(ocean_column_air=0.5, column_saturation_scheme='pressure-moist'), 'ocean_column_air must be'),
     (dict(monsoon_westerly=0.7, monsoon_pressure_hpa=-1.0), 'monsoon_pressure_hpa must be'),
 ])
