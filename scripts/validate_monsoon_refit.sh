@@ -3,7 +3,9 @@
 # fresh paired dev31 runs and the frozen gate, then the paired 28 km check, then the sealed six
 # once (only for a candidate that passed both).
 #   bash scripts/validate_monsoon_refit.sh
-# OUT, BEST and the reference (REF_NAME, REF_FIT; default r39) come from the environment.
+# OUT, BEST and the reference (REF_NAME, REF_FIT; default r39) come from the environment;
+# SEALED_SPEC names the sealed regions (default the original six; from 31 October use
+# calibration/sealed_20261031/regions.json).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=${PY:-.venv/bin/python}
@@ -12,6 +14,8 @@ OUT=${OUT:-output/physics_gaps_20261030/refit}
 BEST=${BEST:-calibration/monsoon_refit_20261030/search/best_params.json}
 REF_NAME=${REF_NAME:-r39}
 REF_FIT=${REF_FIT:-calibration/local_accuracy_20261023/r39_params.json}
+SEALED_SPEC=${SEALED_SPEC:-calibration/local_accuracy_20261023/regions_sealed6.json}
+SEALED_REGIONS=$($PY -c "import json,sys; print(' '.join(json.load(open(sys.argv[1]))))" "$SEALED_SPEC")
 mkdir -p "$OUT"
 cp "$BEST" "$OUT/candidate_params.json"
 CAND="$OUT/candidate_params.json"
@@ -30,8 +34,8 @@ done
 if $PY -I scripts/summarize_refit.py "$OUT" checks "$REF_NAME"; then
   # 3. sealed six, once, only for a candidate that passed both checks
   for fit in "$REF_NAME":"$REF_FIT" candidate:"$CAND"; do
-    $PY -I scripts/benchmark_local.py --fit "${fit#*:}" --regions norway southeast_africa caucasus yunnan northeast_us tasmania \
-        --region-specs calibration/local_accuracy_20261023/regions_sealed6.json --out "$OUT/${fit%%:*}_sealed6" > "$OUT/${fit%%:*}_sealed6.log" 2>&1
+    $PY -I scripts/benchmark_local.py --fit "${fit#*:}" --regions $SEALED_REGIONS \
+        --region-specs "$SEALED_SPEC" --out "$OUT/${fit%%:*}_sealed6" > "$OUT/${fit%%:*}_sealed6.log" 2>&1
   done
   $PY -I scripts/summarize_refit.py "$OUT" sealed "$REF_NAME"
 fi

@@ -128,9 +128,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    eddy moisture transport (eddies weakened against strong offshore mean
    flow: winter monsoon coasts). Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
-1. Freeze a world refit for the invented map on r40 physics (r39's plan:
-   calibration/map_world_r39/plan.json), then preview it with the r40
-   corrections. Declare a fresh sealed set before the next physics adoption.
+1. World refit for the invented map on r40: calibration/map_world_r40/plan.json,
+   scripts/world_campaign_r40.py (search, review), evidence output/r40_world/.
+2. Fresh sealed set declared 2026-10-31: calibration/sealed_20261031/
+   (hokkaido, canadian_prairies, kazakh_steppe, namibia_kalahari,
+   southern_italy, north_queensland; no model run on them yet). Use
+   SEALED_SPEC=calibration/sealed_20261031/regions.json with
+   scripts/validate_monsoon_refit.sh; the old sealed six are development data.
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.

@@ -1,0 +1,8 @@
+{
+ "declared": "2026-10-31, before any model run on these regions (only their grids and WorldClim coverage were built: hokkaido 53, canadian_prairies 256, kazakh_steppe 256, namibia_kalahari 245, southern_italy 70, north_queensland 175 scored land cells at 56 km)",
+ "why": "The previous sealed six (calibration/local_accuracy_20261023/regions_sealed6.json) were run for three candidates on 30-31 October (r40, the eddy-cap refit, the cold-cap refit), and e60 was designed after seeing one of those results. They are development data from now on.",
+ "regions": "calibration/sealed_20261031/regions.json",
+ "chosen_for": "six climates the 37 earlier regions cover thinly or not at all, none overlapping any earlier region's scored box: cold maritime winter-monsoon coast (Hokkaido), cold semi-arid continental (Canadian prairies), cold steppe (northern Kazakhstan), hot coastal desert by a cold current (Namib/Kalahari), Mediterranean (southern Italy), tropical monsoon coast and savanna (north Queensland)",
+ "rules": "Never tuned on and never used to design a mechanism. Run once per candidate that has already passed the development gate and the 28 km check, paired against the current adopted profile, with the result reported whether it helps or not. Adoption requires them not to get worse (S <= 1), the rule applied to the eddy-cap and cold-cap refits. Report how many candidates have seen them; replace them once they have informed a design decision.",
+ "seen_by": []
+}
