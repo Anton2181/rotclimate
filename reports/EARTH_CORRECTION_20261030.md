@@ -289,6 +289,33 @@ mean membership 0.300 / 0.303 / 0.307; tree recall 0.064 → 0.175 and warm-wet
    entirely sea-controlled (a land surface layer or two-tile coast) plus a
    recalibration; a two-scale relief lapse is a small, cheap follow-up.
 
+## Retrained on r40 (31 October 2026)
+
+r40 (reports/PHYSICS_GAPS_20261030.md §12) changes the physics, so both
+stages were retrained on it with the same protocol
+(`scripts/retrain_earth_corrections.sh`; models in
+`calibration/earth_correction_r40_20261031/{temperature,rain_pattern}`,
+evidence in `output/earth_correction_r40_20261031/`). The r39 models stay
+for r39.
+
+| set | monthly T MAE raw → corrected, r39 | r40 | rain loss raw → corrected, r39 | r40 |
+|---|---|---|---|---|
+| 31 regions, clusters held out | 1.793 → 1.540 | 1.807 → **1.548** | 0.4424 → 0.4281 | 0.4329 → **0.4201** |
+| 28 km pairs | 1.896 → 1.274 | 1.902 → **1.268** | 0.4371 → 0.4288 | 0.4317 → **0.4257** |
+| 14 km pairs (atlas scale) | 1.908 → 1.288 | 1.913 → **1.283** | 0.4523 → 0.4448 | 0.4479 → **0.4424** |
+| Norway, SE Africa | 2.621 → 2.143 | 2.666 → **2.165** | 0.5798 → 0.5663 | 0.5887 → **0.5782** |
+
+The corrections keep their size on r40 (temperature −14 % held out, −33 %
+on the fine pairs; rain −1.2 to −3 %), so r40's physics gain carries
+through: with both stages, r40 against r39 is 0.5 % worse in temperature
+and 1.9 % better in rain loss over the 31 regions (S 0.993), better in both
+at 28 and 14 km, and worse in both on Norway and SE Africa, where r40's raw
+physics is worse (Norway, §12 of the physics report). Every policy group
+improves with the corrections (held out: training 1.698 → 1.561, former
+holdout 1.388 → 1.375, mid-latitude 1.881 → 1.392, dev12 2.017 → 1.690 °C);
+Köppen exact agreement 0.468 → 0.485 with both stages, main group
+0.740 → 0.744.
+
 ## Reproduce
 
 ```sh
@@ -307,6 +334,7 @@ norway southeast_africa) runs follow the same pattern. The rain stage:
 python -I scripts/collect_earth_fields.py --run output/earth_correction_20261030/r39_dev31 --params calibration/local_accuracy_20261023/r39_params.json --out output/earth_correction_20261030/fields_dev31
 python -I scripts/train_rain_pattern.py --run output/earth_correction_20261030/r39_dev31 --fields output/earth_correction_20261030/fields_dev31 --params calibration/local_accuracy_20261023/r39_params.json --out calibration/earth_rain_pattern_20261030
 python -I scripts/evaluate_rain_pattern.py --run output/earth_correction_20261030/r39_dev31 --fields output/earth_correction_20261030/fields_dev31 --rain calibration/earth_rain_pattern_20261030 --temperature calibration/earth_correction_20261030 --holdout --out output/earth_correction_20261030/eval_rain_dev31_holdout.json
+TAG=r40 PARAMS=calibration/local_accuracy_20261023/r40_params.json OUT=output/earth_correction_r40_20261031 CAL=calibration/earth_correction_r40_20261031 bash scripts/retrain_earth_corrections.sh
 python -I scripts/preview_map_correction.py --params calibration/map_world_r39/world/best_params.json --correction calibration/earth_correction_20261030 --rain calibration/earth_rain_pattern_20261030 --downsample 16 --out output/earth_correction_20261030/map_preview
 ```
 

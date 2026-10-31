@@ -14,8 +14,11 @@ no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
   Normal atlases still publish verified r38 world fields; no world refit on
   r40 yet. New switches in `rotclimate/model.py` (e54-e58) all default off;
   r39 cells reproduce bit for bit.
-* The Earth corrections below were trained on **r39** and must be retrained
-  for r40 (they check the physics hash).
+* The Earth corrections below were trained on **r39**; r40 versions are in
+  `calibration/earth_correction_r40_20261031/{temperature,rain_pattern}`
+  (`scripts/retrain_earth_corrections.sh`; held out T 1.807 -> 1.548 C,
+  rain 0.4329 -> 0.4201; 14 km T 1.283, rain 0.4424). Use the pair that
+  matches the physics (they check its hash).
 * Fresh-container setup: `python3 -m venv .venv && .venv/bin/pip install -r requirements.txt scikit-learn`;
   WorldClim 2.1 5′ `tavg prec elev vapr` zips into `data/cache/worldclim/`
   (geodata.ucdavis.edu); `python -I scripts/prepare_woa18.py --download`.
@@ -125,8 +128,9 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    eddy moisture transport (eddies weakened against strong offshore mean
    flow: winter monsoon coasts). Then North India's pre-monsoon cold. Gate any change against r40 (REF_NAME=r40 REF_FIT=...
    in scripts/validate_monsoon_refit.sh).
-1. Retrain the Earth correction stages on r40; freeze a world refit for the
-   invented map on r40 physics (r39's plan: calibration/map_world_r39/plan.json).
+1. Freeze a world refit for the invented map on r40 physics (r39's plan:
+   calibration/map_world_r39/plan.json), then preview it with the r40
+   corrections. Declare a fresh sealed set before the next physics adoption.
 2. Physics for the maritime lag: the land air is ~95 % sea-controlled because
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.
