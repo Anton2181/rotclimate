@@ -1,0 +1,13 @@
+{
+ "frozen": "2026-10-31, before any run of a strength rule; the E3 border results (eras_e3.json: walking balanced accuracy 0.967 Han-Xiongnu, 0.934 Tang-Turgesh) were known",
+ "question": "Do larger, richer polities hold land farther from their own places? (idea 5: state strength in political reach)",
+ "rule": "Each polity p in a two-polity contest has a taxable base F_p = modelled people (Earth land/people grid x central occupation, as the other polity checks) within 2 year-round days of its own sources. Its reach is scaled by k_p = (F_p / sqrt(F_A F_B))^gamma: a land cell goes to A when d_A / k_A < d_B / k_B (d = year-round effective days on foot, boats and the sea as in polity v2, from each polity's own sources). gamma = 0 is the present rule (nearest network).",
+ "contests": {
+   "fit": {"Roman Empire against the Parthian Empire, AD 150": "window centred 35 N 42 E, 3600 x 2400 km, 9 km cells; Roman sources: Hanson (2016) towns standing in AD 150 and Itiner-e roads of AD 150 as in T1; Parthian sources: seats placed by polity.settle.place_towns (the map's seat rule) on the modelled people inside the Cliopatria Parthian polygon"},
+   "test": {"Han AD 2 against the Xiongnu": "the E3 window and sources (Han county and commandery seats; Xiongnu camps = cells of the Xiongnu polygon with at least 0.5 people per km2), walking",
+            "Tang AD 742 against the Turgesh": "the same, with the 742 seats"}
+ },
+ "metric": "balanced accuracy of the polity assignment over the land of the two Cliopatria polygons (for the steppe contests, the E3 farm and herd masks)",
+ "fitting": "gamma over {0, 0.1, 0.2, 0.3, 0.5} on the fit contest, highest balanced accuracy (ties to the smaller gamma)",
+ "decision": "The strength rule goes to the map (k_p = (F_p / median F)^gamma*, held within HELD_DAYS of scaled days, land to the polity with the smallest scaled days) only if gamma* > 0, both test contests are not worse than gamma = 0, and their mean balanced accuracy gains at least 0.005. Otherwise nothing changes on the map. Every result is reported."
+}

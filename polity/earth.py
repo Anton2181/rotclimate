@@ -98,11 +98,23 @@ def earth_people(lat, lon):
 
 
 def _ncep(var):
-    import h5py
-    with h5py.File(CACHE / "ncep_ltm" / f"{var}.mon.ltm.nc", "r") as f:
-        a = np.asarray(f[var][:], float)
-        lat = np.asarray(f["lat"][:], float); lon = np.asarray(f["lon"][:], float)
-    return a, lat, lon
+    nc = CACHE / "ncep_ltm" / f"{var}.mon.ltm.nc"
+    if nc.exists():
+        import h5py
+        with h5py.File(nc, "r") as f:
+            a = np.asarray(f[var][:], float)
+            lat = np.asarray(f["lat"][:], float); lon = np.asarray(f["lon"][:], float)
+        return a, lat, lon
+    # the same NCEP/NCAR long-term means as OPeNDAP text (scripts/prepare_ncep_reference.py):
+    # vector means in ncep_surface_ltm.npz, the scalar mean speed in wspd.sig995.ascii
+    lat = 90.0 - 2.5 * np.arange(73); lon = 2.5 * np.arange(144)
+    if var in ("uwnd", "vwnd"):
+        with np.load(CACHE / "ncep_ltm/ncep_surface_ltm.npz") as z:
+            return np.asarray(z["u" if var == "uwnd" else "v"], float), lat, lon
+    import sys
+    sys.path.insert(0, str(ROOT / "scripts"))
+    from prepare_ncep_reference import parse
+    return np.asarray(parse((CACHE / "ncep_ltm" / f"{var}.sig995.ascii").read_text(), var), float), lat, lon
 
 
 def winds(lat, lon):
