@@ -41,6 +41,7 @@ def main():
     ap.add_argument("--rain", help="rain-pattern training folder")
     ap.add_argument("--downsample", type=int, default=16)
     ap.add_argument("--out", required=True)
+    ap.add_argument("--label", default="r39", help="physics name for the figure titles")
     args = ap.parse_args()
     corr = TemperatureCorrection.load(Path(args.correction) / "correction.npz")
     rain = RainPatternCorrection.load(Path(args.rain) / "correction.npz") if args.rain else None
@@ -86,9 +87,9 @@ def main():
                        rain_total_change=float(Pc[:, mask].sum() / Pm[:, mask].sum() - 1.0))
         summary["painted_zones"]["both"] = zone_fit(Tc, Pc, st["summer"], g)
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
-    plot(out, st["Tm"], Tc, mask, p)
+    plot(out, st["Tm"], Tc, mask, p, args.label)
     if rain is not None:
-        plot_rain(out, Pm, Pc, mask)
+        plot_rain(out, Pm, Pc, mask, args.label)
     print(json.dumps({k: v for k, v in summary.items() if k != "monthly_mean_change_C"}, indent=1))
 
 
@@ -111,7 +112,7 @@ def zone_fit(Tm, Pm, summer, g):
                 membership=per, recall=recall)
 
 
-def plot_rain(out, Pm, Pc, mask):
+def plot_rain(out, Pm, Pc, mask, label):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -120,7 +121,7 @@ def plot_rain(out, Pm, Pc, mask):
     sl = (slice(rows.min(), rows.max() + 1), slice(cols.min(), cols.max() + 1))
     fig, axes = plt.subplots(1, 2, figsize=(15, 4.6))
     im0 = axes[0].imshow(np.where(mask, Pm.sum(0), np.nan)[sl], cmap="YlGnBu", interpolation="nearest")
-    axes[0].set_title("r39 raw annual rain (mm)", fontsize=10)
+    axes[0].set_title(f"{label} raw annual rain (mm)", fontsize=10)
     ratio = np.log2((Pc.sum(0) + 50.0) / (Pm.sum(0) + 50.0))
     im1 = axes[1].imshow(np.where(mask, ratio, np.nan)[sl], cmap="BrBG", vmin=-1, vmax=1, interpolation="nearest")
     axes[1].set_title("rain-pattern correction: log2(corrected / raw) annual rain", fontsize=10)
@@ -132,7 +133,7 @@ def plot_rain(out, Pm, Pc, mask):
     plt.close(fig)
 
 
-def plot(out, Tm, Tc, mask, p):
+def plot(out, Tm, Tc, mask, p, label):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -149,11 +150,11 @@ def plot(out, Tm, Tc, mask, p):
         im = ax.imshow(np.where(mask, field, np.nan)[sl], cmap="RdBu_r", vmin=-3, vmax=3, interpolation="nearest")
         ax.set_title(f"correction: {title}", fontsize=10); ax.set_xticks([]); ax.set_yticks([])
     ax = axes.flat[5]
-    ax.plot(Tm[:, mask].mean(1), "-o", color="#c0392b", ms=3, label="r39 raw (map mean)")
+    ax.plot(Tm[:, mask].mean(1), "-o", color="#c0392b", ms=3, label=f"{label} raw (map mean)")
     ax.plot(Tc[:, mask].mean(1), "-o", color="#2471a3", ms=3, label="corrected")
     ax.set_xticks(range(12)); ax.set_xlabel("equal month of the local year"); ax.set_ylabel("°C"); ax.grid(alpha=.3); ax.legend(fontsize=8)
     fig.colorbar(im, ax=axes.flat[:5], orientation="horizontal", fraction=.04, pad=.04, label="corrected minus raw temperature (°C)")
-    fig.suptitle("What the Earth-trained temperature correction changes on the map (unadopted r39 world candidate, one layout)", fontsize=11)
+    fig.suptitle(f"What the Earth-trained temperature correction changes on the map (unadopted {label} world candidate, one layout)", fontsize=11)
     plt.savefig(out / "map_correction.png", dpi=85, bbox_inches="tight")
     plt.close(fig)
 
