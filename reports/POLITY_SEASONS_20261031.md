@@ -129,3 +129,33 @@ days (`output/polity_sea_west_20261031/sea_west.json`; July):
   candidate rule (expected waiting for a fair wind, by the share of days the
   wind serves a course) needs data not used in its design to test: ORBIS's
   sea edges (test T7) are not cached in this container. Nothing is changed.
+
+## Towns in the dry south (user observation; not adopted)
+
+The user noticed the maps' proposed settlements scattered evenly through
+the southern deserts. Earth fit: 94 unmarked towns in the model's BSh/BSk
+steppe. The model makes the painted desert a semi-arid steppe (median 320 mm
+of rain, aridity 0.21, a 120-day growing period), not a desert: only 142
+cells are BW, and none holds a town. The farming model rates that steppe at
+~50 people per km² rain-fed (after its fitted dry-margin factor), the
+central scenario at ~14, and the town rule spaces towns by people with no
+regard to water: one every ~50 km, median 48 km from any river, lake or sea.
+
+Addendum `calibration/polity_20261025/addendum_dry_towns_20261031.json`
+(frozen before its run): where rain over evaporation is below 0.35 a town
+site must lie within W km of water. `scripts/polity_dry_towns.py`,
+`output/polity_dry_towns_20261031/dry_towns.json`:
+
+| W | F3 Han AD 2 seats (fit), deviance | of which dry commanderies (placed / actual) | T3 Roman towns AD 150 (blind), deviance | dry blocks (placed / actual) |
+|---|---:|---|---:|---|
+| none (today) | 1739.6 | 33.7 (45 / 65) | 1481.2 | 151.2 (153 / 136) |
+| 40 km | 1734.7 | 29.9 (43 / 65) | 1458.3 | 127.1 (103 / 136) |
+| 25 km | 1736.2 | 32.2 (39 / 65) | — | — |
+| 15 km | 1737.1 | 33.7 (38 / 65) | — | — |
+
+The fit chooses 40 km but gains only 0.3 % (the rule asked for 2 %: Han
+China has little dry land), so it is not adopted, although the blind Roman
+test improves by 1.5 % (dry blocks by 16 %, there with too few towns
+instead of too many). The rule stays in `polity.settle` (DRY_WATER_KM =
+None, off). The larger cause on the map is the climate: the painted desert
+is simulated as steppe (the hot-dry zone's recall is 23 %).
