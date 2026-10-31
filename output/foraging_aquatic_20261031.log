@@ -1,0 +1,27 @@
+Building adapted foraging scenario on (116, 250) grid: output/foraging_aquatic_20261031/staging/earth_fit
+  512/16254 land cells; 6.8s
+  5632/16254 land cells; 76.3s
+  10752/16254 land cells; 144.9s
+  15872/16254 land cells; 214.7s
+  16254/16254 land cells; 219.6s
+{
+  "total_scenario_people": 454404.1170813718,
+  "land_km2": 3290735.211683004,
+  "mean_density_people_km2": 0.13808589505108576,
+  "converged_scenario_people": 19425.290517522895,
+  "converged_land_share": 0.08402346526019493,
+  "unsupported_land_share": 0.0,
+  "mean_foraging_hours_day": 6.706945631396782,
+  "mean_scarcity_days_year": 203.20105054137073,
+  "mean_meat_fraction": 0.7445378966902102,
+  "mean_fish_share": 0.15215342321885258,
+  "aggregation": "Scenario people are density times coastal land area. Effort, scarcity and diet means are weighted by scenario people; convergence shares are weighted by land area."
+}
+Traceback (most recent call last):
+  File "/home/user/rotclimate/scripts/add_foraging_to_atlas.py", line 45, in <module>
+    verification=verify(destination/'data'),summary=info['summary'],seconds=info['seconds'])
+                 ~~~~~~^^^^^^^^^^^^^^^^^^^^
+  File "/home/user/rotclimate/foraging/validation.py", line 55, in verify
+    assert len(layers)==4 and all(l['group']=='Foraging' and l['controls']==[] for l in layers)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+AssertionError
