@@ -43,6 +43,17 @@ gate (S 0.9879) and the 28 km check but made the fresh sealed regions 4 % worse
 (the Kazakh steppe and Hokkaido), so r40 stays
 ([transport wind report](reports/TRANSPORT_WIND_20261031.md)).
 
+**Foragers and food, 31 October 2026:** the FORGE foraging scenario has its
+first Earth test against Binford's (2001) hunter-gatherers (observed
+climate; fitted on North America, tested on the rest of the world). Coastal
+and freshwater fish and a halved terrestrial food supply pass it (density
+error on unseen continents a factor 3.0 → 1.8, and it predicts which groups
+fished), so all three atlases now include fish and a Fish share map
+([foraging Earth test](reports/FORAGING_EARTH_20261031.md)). The Earth-fit
+atlas can also rerun farming, population and foraging on the Earth-corrected
+climate. Autumn mud and monsoon-coast closures for political reach were
+tested and not adopted ([report](reports/POLITY_SEASONS_20261031.md)).
+
 **Earth corrections, 30 October 2026:** two new output stages learn r39's
 repeatable errors from the 31 Earth regions, using only inputs every map has.
 Scored with whole geographic clusters held out (the Earth stand-in for an

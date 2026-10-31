@@ -169,3 +169,25 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
    the land equilibrium is the latitude's continental column (2.3 °C mean over
    Britain). Needs a land surface layer / two-tile coast and recalibration.
 3. Small: two-scale relief lapse (+~0.8 % T alone).
+
+## Food, foraging and political reach side project (31 Oct)
+
+* Earth-fit atlas: "Climate for food and people" switch (#climate=corrected)
+  reruns farming, population and FORGE on the Earth-corrected climate
+  (scripts/add_corrected_food.py, data/corrected/; rerun it after any
+  rebuild of atlases/earth_fit or change to the food exporters).
+* FORGE's first Earth test (reports/FORAGING_EARTH_20261031.md; frozen plan
+  and aquatic addendum in calibration/forager_binford_20261031/): Binford's
+  hunter-gatherers with observed climate, North America fits, the rest of
+  the world tests. Adopted: terrestrial food x0.5 + coastal/freshwater fish
+  (test error x3.0 -> x1.8, fish-share rank 0.78); all atlases rebuilt with a
+  Fish share map. Not adopted: long-window median/mean summaries (missed the
+  0.02 allowance), food storage (worsens the fit). Weak spot: California /
+  Northwest Coast ~3x too sparse; marine scale at its grid edge.
+  Data: data/cache/binford_dl (CRAN binford 0.1.0), data/cache/naturalearth.
+* Political reach (reports/POLITY_SEASONS_20261031.md): topsoil autumn mud
+  and an onshore-gale monsoon closure tested under a frozen addendum; neither
+  adopted. The Roman/Han extent tests, ORBIS and Casson checks need datasets
+  not in this container (Cliopatria, Hanson towns, Itiner-e roads, the Han
+  census, output/land_people/earth/earth.npz); re-fetch them before any
+  further political-reach change (including "state strength").
