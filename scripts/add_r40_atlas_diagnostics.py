@@ -1,6 +1,6 @@
 """Rebuild the Earth atlas's two Fit-check diagnostics for its current physics.
 
-    python -I scripts/add_r40_atlas_diagnostics.py atlases/earth_fit_r40_stage --out output/atlas_r40/diagnostics
+    python -I scripts/add_r40_atlas_diagnostics.py atlases/earth_fit_r40_stage --out output/atlas_r40/diagnostics [--release r40]
 
 The r38 atlas carried a surroundings-sensitivity pair (rain and temperature
 spread over nine generated surroundings layouts at ds16, from the r39 audit's
@@ -45,10 +45,10 @@ def sources():
     return {str(p.relative_to(ROOT)): file_hash(p) for p in paths}
 
 
-def surroundings(atlas, out):
+def surroundings(atlas, out, release='r40'):
     p = load_params(atlas / 'params.json').replace(downsample=16)
     folder = out / 'sensitivity'; (folder / 'members').mkdir(parents=True, exist_ok=True)
-    run = 'r40-atlas-surroundings-sensitivity'
+    run = 'r40-atlas-surroundings-sensitivity' if release == 'r40' else release + '-atlas-surroundings-sensitivity'
     jobs = [(asdict(p), int(s), str(folder / 'members' / f'audit_reference_seed{s}.pkl'), run) for s in LAYOUTS]
     with Pool(2) as pool:
         pool.map(member, jobs)
@@ -64,7 +64,7 @@ def monthly_rain(result):
     return st['Pm'], st['Tm']
 
 
-def initialization(atlas, out):
+def initialization(atlas, out, release='r40'):
     p = load_params(atlas / 'params.json').replace(downsample=16, beyond_seed=1, seasonal_spinup_years=0,
                                                    seasonal_require_convergence=False)
     folder = out / 'initialization'; folder.mkdir(parents=True, exist_ok=True)
@@ -104,7 +104,7 @@ def initialization(atlas, out):
         ax.text(j, 0, f'{v:.2g}', ha='center', va='center', fontsize=10, color='#222222',
                 bbox=dict(facecolor='white', alpha=.65, edgecolor='none', pad=1))
     ax.set(xticks=np.arange(len(FIELDS)), xticklabels=['T', 'Rain', 'Vapor', 'Soil', 'Rain memory', 'Snow'], yticks=[0],
-           yticklabels=['Earth atlas, r40' + (' · land passes' if last.get('map_land_repeats') else '')],
+           yticklabels=['Earth atlas, ' + release + (' · land passes' if last.get('map_land_repeats') else '')],
            title='Do the annual cycles repeat? 3 extra years · final two complete cycles')
     fig.colorbar(im, ax=ax, shrink=.9, label='Maximum / limit (>1 fails)')
     image = folder / 'annual_repeatability.png'
@@ -130,9 +130,10 @@ def initialization(atlas, out):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('atlas', type=Path); ap.add_argument('--out', type=Path, required=True)
+    ap.add_argument('--release', default='r40', help='physics release named in the run id and figure')
     a = ap.parse_args()
     atlas = a.atlas.resolve(); a.out.mkdir(parents=True, exist_ok=True)
-    result = dict(surroundings=surroundings(atlas, a.out), initialization=initialization(atlas, a.out))
+    result = dict(surroundings=surroundings(atlas, a.out, a.release), initialization=initialization(atlas, a.out, a.release))
     write_json(a.out / 'diagnostics.json', result)
     print(json.dumps(result, indent=1, default=str))
 
