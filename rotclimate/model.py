@@ -262,6 +262,8 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.warm_current_seasonality <= 1:
+            raise ValueError('warm_current_seasonality must be in [0, 1]')
         if not 0 <= params.ebm_land_ice <= 1:
             raise ValueError('ebm_land_ice must be in [0, 1]')
         if not 0 <= params.shelf_air_coupling <= 1 or not 1 <= params.shelf_air_lag_days <= 180:
@@ -889,6 +891,17 @@ class ClimateModel:
             # band above only reaches its subpolar sign slowly (1-2 C at 50 N)
             sub = np.clip((np.abs(lat) - 42.0) / 10.0, 0.0, 1.0) * np.clip((72.0 - np.abs(lat)) / 8.0, 0.0, 1.0)
             cur = cur - sign * p.subpolar_current * self.side * sub
+        if p.warm_current_seasonality > 0:
+            # e66: a warm current's heat reaches the surface through the winter
+            # mixed layer, 100-500 m deep in the subpolar North Atlantic, and
+            # is sealed under a 20-30 m summer layer the sun heats on its own:
+            # the North Atlantic Drift holds the sea off Britain at 8-9 C in
+            # March (the latitude's open ocean ~4) but adds little in August
+            # (WOA18 15 C; the model's seas swung 4.0-17.3 C against
+            # 8.2-15.0). Warm anomalies x (1 - k s), s = +1 at the lagged
+            # mid-summer, -1 at mid-winter; cold currents unchanged
+            s_cur = self.season_index(day, p.circulation_lag_days) * np.sign(lat)
+            cur = np.where(cur > 0, cur * (1.0 - p.warm_current_seasonality * s_cur), cur)
         pull = self.enclosure * p.inland_sea_warming * 0.1 * (Tl - To)
         if p.sea_winter_mixing > 0:
             # e19: a sea cooled from above turns over: the dense cold surface

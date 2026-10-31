@@ -186,6 +186,7 @@ class Params:
     subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
+    warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect
     ebm_land_ice: float = 1.0         # e65: share of the latitude-mean land column's seasonal snow albedo kept (1 = all; ice sheets keep all)
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)

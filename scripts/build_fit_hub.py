@@ -164,8 +164,9 @@ def main():
     topic_text = f'Every atlas has {numbers.get(len(topics), len(topics))} map topics: {", ".join(topics[:-1])} and {topics[-1]}.'
     if corrected:
         fit = corrected['zone_fit']
-        topic_text += (' The Earth atlas adds a Corrected topic: Köppen, biome, zone, temperature and rain maps after the '
-                       'corrections learned from the 31 Earth regions, and maps of the changes themselves '
+        topic_text += (' The Earth atlas opens on its Earth-corrected climate: every climate map, the station card, farming, '
+                       'population, foraging and political reach use the simulation after the corrections learned from the 31 '
+                       'Earth regions, with the raw simulation one switch away and maps of the changes under Fit checks '
                        f'(exact zone agreement {100 * fit["raw"]["strict_accuracy"]:.1f} % raw, '
                        f'{100 * fit["corrected"]["strict_accuracy"]:.1f} % corrected).')
     foraging_section = ('' if not foraging_rows else
