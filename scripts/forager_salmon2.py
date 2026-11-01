@@ -249,6 +249,7 @@ def main():
     ap.add_argument("--cv", action="store_true", help="addendum_salmon6: outlets 2-15 C, leave-one-area-out cross-validation")
     ap.add_argument("--ice", action="store_true", help="addendum_salmon7: marine supply x open-sea share of the year")
     ap.add_argument("--outlet-ice", action="store_true", help="addendum_salmon8: salmon systems x their outlet's open-water share")
+    ap.add_argument("--threshold", action="store_true", help="addendum_salmon9: keep the 2 C outlet threshold with --outlet-ice")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -272,7 +273,7 @@ def main():
     if a.cv:
         SST_MIN = 2.0
     if a.outlet_ice:
-        SST_MIN, OUTLET_ICE = -99.0, True
+        SST_MIN, OUTLET_ICE = (2.0 if a.threshold else -99.0), True
     rp, rw, stats, rd = salmon_points()
     tree = cKDTree(unit(rp[:, 0], rp[:, 1])); disc = math.pi * 25.0 ** 2
     near = [tree.query_ball_point(unit(la, lo), chord(25.0)) for la, lo in zip(sites["lat"], sites["lon"])]
@@ -296,7 +297,7 @@ def main():
         base_no_ice = run_D(sites, spec, 0, 0)["density_people_km2"]
         sites["open_share"] = (np.asarray(v) > -1.0).sum(0) / 12.0
         print("open share by area", {k: round(float(np.median(sites['open_share'][sites['area'] == k])), 2) for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}, flush=True)
-        return crossval(a, sites, spec, stats, base_override=base_no_ice, tag="salmon8" if a.outlet_ice else "salmon7")
+        return crossval(a, sites, spec, stats, base_override=base_no_ice, tag=("salmon9" if a.threshold else "salmon8") if a.outlet_ice else "salmon7")
     if a.cv:
         return crossval(a, sites, spec, stats)
     for g in GAMMAS:
