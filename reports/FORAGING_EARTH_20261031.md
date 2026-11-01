@@ -132,3 +132,27 @@ Checks: foraging verification (ledgers to 1e-16, fish share never above the
 animal share), the browser smoke check on all three local and packaged
 atlases including the corrected mode. Hosted: free fit v21, Earth fit v16,
 Whittaker fit v10, hub v10.
+
+## Marine scale beyond its grid edge (addendum 2, not adopted)
+
+`calibration/forager_binford_20261031/addendum_aquatic2_20261101.json`
+(frozen before its run): the marine scale had been fitted at the top of its
+grid (3,000), so the grid was extended to 13,500 (a_fresh 30–300), fitted on
+North America again and tested on the rest of the world
+(`scripts/forager_earth_test.py --aquatic2`,
+`output/forager_binford_20261031/binford_aquatic2.json`).
+
+| marine scale (fresh 100) | fit error (NA) | test error | test density rank | test bias | test fish-share rank |
+|---:|---:|---:|---:|---:|---:|
+| 3,000 (adopted D) | 0.504 | 0.251 | 0.736 | −0.04 | 0.775 |
+| 6,000 | 0.469 | — | — | — | — |
+| 13,500 (fitted, grid top again) | 0.443 | 0.252 | 0.769 | +0.15 | 0.779 |
+
+The fit keeps asking for more sea food, at the top of any grid: that is the
+Northwest Coast and California (about three times too sparse), not the
+world's coasts. On the other continents the larger scale ranks groups better
+but makes them too dense, and the typical error does not fall (the rule asked
+for 0.01). Not adopted; the atlases keep 3,000. What North America's richest
+foragers have that the model lacks is specific: salmon runs up cold-coast
+rivers and stored acorns, neither of which the test continents can check (no
+native anadromous salmon in the south).

@@ -133,6 +133,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--out', type=Path, default=ROOT / 'output/forager_binford_20261031')
     ap.add_argument('--aquatic', action='store_true', help='run the frozen aquatic addendum (B2 and D) instead of A-C')
+    ap.add_argument('--aquatic2', action='store_true', help='the second aquatic addendum (the marine-scale grid extended)')
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
     plan = json.loads(PLAN.read_text())
     df = binford()
@@ -156,6 +157,8 @@ def main():
     spec = specification()
     if a.aquatic:
         return aquatic(a, sites, fit, test, spec, rows, df)
+    if a.aquatic2:
+        return aquatic2(a, sites, fit, test, spec, rows)
     report = dict(plan=str(PLAN.relative_to(ROOT)), sites=len(rows), fit_sites=int(fit.sum()), test_sites=int(test.sum()),
                   excluded_no_climate=int(len(df) - len(rows)), configurations={})
     results = {}
@@ -243,6 +246,39 @@ def aquatic(a, sites, fit, test, spec, rows, df):
     plot(sites, A['density_people_km2'], D['density_people_km2'], fit, best['a_marine'], a.out / 'binford_aquatic.png',
          right=f"D: terrestrial x{k_terr}, marine {best['a_marine']}, fresh {best['a_fresh']}")
     print(json.dumps({k: v for k, v in report.items() if k not in ('by_culture_area',)}, indent=1, default=float)[:6000])
+
+
+def aquatic2(a, sites, fit, test, spec, rows):
+    add = json.loads((PLAN.parent / 'addendum_aquatic2_20261101.json').read_text())
+    inputs = {(s['name'], round(s['lat'], 4), round(s['lon'], 4)): s
+              for s in json.loads((a.out / 'aquatic_inputs.json').read_text())['sites']}
+    keyed = [inputs[(r['name'], round(r['lat'], 4), round(r['lon'], 4))] for r in rows]
+    for key in ('d_coast_km', 'sst_annual_c', 'w_fresh'):
+        sites[key] = np.array([float(s[key]) for s in keyed])
+    grid, results = [], {}
+    for am in [3000, 4500, 6000, 9000, 13500]:
+        for af in [30, 100, 300]:
+            res = run(sites, 'D', spec, k_terr=0.5, a_marine=am, a_fresh=af); results[(am, af)] = res
+            grid.append(dict(a_marine=am, a_fresh=af, fit=metrics(res['density_people_km2'], sites, fit, res),
+                             test=metrics(res['density_people_km2'], sites, test, res)))
+            print(am, af, round(grid[-1]['fit']['median_abs_log10_error'], 4), flush=True)
+    best = min(grid, key=lambda s: s['fit']['median_abs_log10_error'])
+    cur = next(s for s in grid if s['a_marine'] == 3000 and s['a_fresh'] == 100)
+    tb, tc = best['test'], cur['test']
+    ok = ((best['a_marine'], best['a_fresh']) != (3000, 100)
+          and tb['median_abs_log10_error'] <= tc['median_abs_log10_error'] - 0.01
+          and tb['density_spearman'] >= tc['density_spearman'] - 0.02
+          and tb.get('fish_share_spearman', float('nan')) >= tc.get('fish_share_spearman', float('nan')) - 0.02)
+    areas = {}
+    B = results[(best['a_marine'], best['a_fresh'])]; Cc = results[(3000, 100)]
+    for area in sorted(set(sites['area'])):
+        m = sites['area'] == area
+        areas[area] = dict(current=metrics(Cc['density_people_km2'], sites, m, Cc), best=metrics(B['density_people_km2'], sites, m, B))
+    report = dict(addendum='calibration/forager_binford_20261031/addendum_aquatic2_20261101.json', grid=grid,
+                  best=dict(a_marine=best['a_marine'], a_fresh=best['a_fresh']), current=dict(a_marine=3000, a_fresh=100),
+                  adopted=bool(ok), rule=add['adopt_if'], by_culture_area=areas)
+    (a.out / 'binford_aquatic2.json').write_text(json.dumps(report, indent=1, default=float))
+    print(json.dumps(dict(best=report['best'], adopted=ok, test_best=tb, test_current=tc), indent=1, default=float)[:3000])
 
 
 def plot(sites, dA, dC, fit, capacity, path, right=None):
