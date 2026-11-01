@@ -1,0 +1,77 @@
+{
+ "addendum": "calibration/forager_binford_20261031/addendum_lifeways14_20261101.json",
+ "n": 280,
+ "accuracy": 0.6535714285714286,
+ "kappa": 0.4842091269916631,
+ "confusion": [
+  [
+   58,
+   14,
+   2
+  ],
+  [
+   23,
+   57,
+   17
+  ],
+  [
+   26,
+   15,
+   68
+  ]
+ ],
+ "classes": [
+  "hunting",
+  "gathering",
+  "fishing"
+ ],
+ "area_majority_reference": {
+  "accuracy": 0.7178571428571429,
+  "kappa": 0.5704103629760541
+ },
+ "majority_class_baseline": 0.3892857142857143,
+ "by_area": {
+  "AFR": {
+   "n": 7,
+   "accuracy": 0.42857142857142855
+  },
+  "ARC": {
+   "n": 30,
+   "accuracy": 0.7666666666666667
+  },
+  "ASIA": {
+   "n": 4,
+   "accuracy": 0.5
+  },
+  "AUS": {
+   "n": 47,
+   "accuracy": 0.6170212765957447
+  },
+  "BC NWC": {
+   "n": 42,
+   "accuracy": 0.7380952380952381
+  },
+  "ENA": {
+   "n": 1,
+   "accuracy": 1.0
+  },
+  "NNA": {
+   "n": 32,
+   "accuracy": 0.8125
+  },
+  "SOAM": {
+   "n": 8,
+   "accuracy": 0.375
+  },
+  "SW": {
+   "n": 92,
+   "accuracy": 0.5652173913043478
+  },
+  "WNA": {
+   "n": 17,
+   "accuracy": 0.7647058823529411
+  }
+ },
+ "adopted": true,
+ "rule": "held-out accuracy >= 0.60 and kappa >= 0.40. Then the model fitted on all groups is stored in data/forager_lifeways.json and the three atlases get a 'Forager lifeways' layer (hunters / gatherers / fishers with the class probability as confidence; mobility shown as expected residential moves per year from Binford's density-moves relation fitted on the same groups) beside the FORGE layers, raw and corrected climate."
+}
