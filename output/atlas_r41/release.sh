@@ -18,6 +18,9 @@ mkdir -p output/atlas_r41/previous_atlases
 rm -rf output/atlas_r41/previous_atlases/earth_fit_r40
 mv atlases/earth_fit output/atlas_r41/previous_atlases/earth_fit_r40
 mv atlases/earth_fit_r41_stage atlases/earth_fit
+# (missing from the first run, done afterwards by hand: the correction-change maps and held-out scores)
+$PY -I scripts/add_corrected_layers.py atlases/earth_fit --checkpoint output/r41_world/candidate_001.pkl \
+  --corrections calibration/earth_correction_r41_20261101 --evals output/earth_correction_r41_20261101 > output/atlas_r41/layers.log 2>&1
 echo "corrected climate $(date +%H:%M)"
 $PY -I scripts/add_corrected_climate.py atlases/earth_fit --checkpoint output/r41_world/candidate_001.pkl \
   --corrections calibration/earth_correction_r41_20261101 > output/atlas_r41/corrected.log 2>&1
