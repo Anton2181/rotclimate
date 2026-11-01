@@ -263,6 +263,10 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
+            raise ValueError('wet_sun must be >= 0 and wet_sun_ref in [0, 1]')
+        if params.wet_sun > 0 and params.soil_bucket_mm <= 0:
+            raise ValueError('wet_sun needs the soil bucket (soil_bucket_mm > 0)')
         if not 0 <= params.storm_baroclinic <= 1:
             raise ValueError('storm_baroclinic must be in [0, 1]')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
@@ -1096,6 +1100,21 @@ class ClimateModel:
                     # dried by a rainless summer heats)
                     wet = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
+            if p.wet_sun > 0:
+                # e69: the latitude-mean land column evaporates like an average
+                # land whatever the season; ground wetter than that spends more
+                # of its sunshine on evaporation, drier ground less (the Bowen
+                # ratio). wet_cooling acts only above the latitude's annual
+                # mean, which a wet spring never reaches: East China, Korea and
+                # Japan, among the wettest springs of the mid-latitudes, stayed
+                # 3-4 C too warm with the sea, the winds and the storms right.
+                # Tl -= wet_sun x (soil wetness - wet_sun_ref) x sunshine / 480 W m-2.
+                S_w = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                       p.solar_flux * distance_factor(d, p.eccentricity,
+                                                       p.winter_solstice_day + p.perihelion_after_solstice,
+                                                       p.year_days))
+                wet_s = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                Tl = Tl - np.where(land, p.wet_sun * (wet_s - p.wet_sun_ref) * S_w / LAND_COUPLING_SREF, 0.0)
             if p.dry_heating > 0:
                 # e54: the latitude-mean land column evaporates like an average
                 # land. Dry ground puts its sunshine into heating the air

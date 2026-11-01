@@ -186,6 +186,8 @@ class Params:
     subcloud_evaporation: float = 0.0  # e2: rain evaporating below the cloud base: x exp(-this * z_LCL / 3 km)
     land_coupling_insolation: float = 0.0  # e2: land air coupling x (sunshine / 480 W m-2)^this (+ 1/30 d)
     ebm_land: str = "uniform"         # planet's land by latitude: uniform 30 %, or "earth" (Earth mode)
+    wet_sun: float = 0.0              # e69: K of land cooling per unit of soil wetness above wet_sun_ref at 480 W m-2 of sunshine (drier: warming)
+    wet_sun_ref: float = 0.5          # e69: the average land's soil wetness (bucket share of 75 %)
     storm_baroclinic: float = 0.0     # e68: storm band centred (by this share) on each meridian's baroclinic zone instead of the planet's latitude
     storm_baroclinic_cold_c: float = -99.0  # e68: count the contrast only where the smoothed air is below this (C; -99 = everywhere)
     storm_baroclinic_max_deg: float = 0.0  # e68: at most this many degrees from the planet's storm latitude (0 = no limit)
