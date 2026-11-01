@@ -210,3 +210,36 @@ everywhere makes it worse; not adopted. Recorded for the next attempt: the
 Arctic's scatter follows sea mammals and fish (the coastal Inuit against the
 inland Caribou Inuit), and western North America improves markedly at γ 1
 (0.215 → 0.141), which a later design with the coasts' food can test.
+
+## Salmon rivers with HydroRIVERS (eight frozen attempts; not adopted)
+
+HydroRIVERS v1.0 (Lehner & Grill 2013; North America, Asia and Arctic tiles,
+`data/cache/hydrorivers`) gives every river segment its system's outlet, an
+endorheic flag, its distance to the outlet and its discharge, and draws the
+Northwest Coast's short rivers that Natural Earth leaves out. Salmon streams:
+segments ≥ 1 m³/s, not endorheic, ≤ 1,500 km from an outlet on a Northern
+Hemisphere sea below 15 °C annual. Each attempt was frozen before its run
+(`calibration/forager_binford_20261031/addendum_salmon{2..9}_20261101.json`,
+`scripts/forager_salmon2.py`, `output/forager_binford_20261031/binford_salmon{2..9}.json`).
+
+| attempt | design | result |
+|---|---|---|
+| 2 | salmon + cold limit fitted on the interior | fit chooses neither (the interior needs less food); the coasts would gain 0.577 → 0.285 |
+| 3 | salmon fitted on California, cold limit on the interior | NW Coast (blind) 0.577 → 0.372, world 0.256; interior 0.435 → 0.783 |
+| 4 | + salmon thinning upstream, L fitted on the interior (200 km) | NW Coast 0.377, world 0.251; interior 0.474 (guard misses by 0.04) |
+| 5 | thinning + cold limit together | the same (cold limit not chosen) |
+| 6 | outlets 2–15 °C (no ice-covered seas); leave-one-culture-area-out CV (no area was blind any more) | CV 0.442 → 0.377; Arctic and Subarctic folds worse |
+| 7 | + marine supply × the open-sea share at the group (sea ice) | CV 0.442 → **0.372**; Arctic 0.650 → 0.520, NW Coast 0.577 → 0.302, California 0.508 → 0.439, world 0.251 → 0.253; **Subarctic 0.437 → 0.559 fails** |
+| 8 | outlet open-water weighting instead of the 2 °C cut | CV 0.390; Arctic and Subarctic worse |
+| 9 | both | as 7 |
+
+The coasts are mended (the Northwest Coast's error halves, California's falls
+by 0.07, the Arctic's by 0.13 with the sea-ice factor) and the rest of the
+world does not move, but one fold fails every time: the Subarctic, which is
+~2.3× too dense before any salmon (median bias +0.36) and gets denser with it
+(Cook Inlet's Tanaina at 14 times Binford's density). Binford's Subarctic
+densities were recorded after the contact epidemics, a depopulation no food
+model can see; the per-fold guard is doing its job. Not adopted by the rule.
+If the Subarctic fold is accepted as unrepresentative, attempt 7's
+configuration (sea-ice factor; a_salmon 300, L 800 km, outlets 2–15 °C) is
+the one to carry to the maps; that decision is recorded here, not taken.
