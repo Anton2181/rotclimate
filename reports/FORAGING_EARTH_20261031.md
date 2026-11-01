@@ -368,3 +368,51 @@ What the failures name for the next FORGE design:
    food go together, so the two belong in one design.
 3. **Mobility.** No FORGE output measures it directly. Density alone already
    carries the moves-per-year signal.
+
+## Can FORGE say where culture areas emerge? (probe, not a frozen test)
+
+`scripts/forager_lifeway_probe.py`. This uses configuration D as adopted:
+the 280 Binford groups' food shares from FORGE, set against the shares
+Binford recorded.
+
+| share | Spearman ρ | FORGE median | Binford median |
+|---|---:|---:|---:|
+| hunting | −0.18 | 0.55 | 0.30 |
+| gathering | +0.54 | 0.34 | 0.28 |
+| fishing | +0.71 | 0.07 | 0.30 |
+
+FORGE ranks the fishers and the gatherers well, but its absolute split
+leans to meat. Taking its largest share calls almost every group a hunter
+(accuracy 0.42, κ 0.20).
+
+A multinomial map from FORGE's outputs (density, the three shares, scarcity
+days, NPP) to the dominant food, fitted on the other culture areas and
+applied to each held-out one, gives accuracy **0.65** and κ **0.48**
+(always guessing the commonest class: 0.39).
+
+| observed dominant food | predicted hunting | gathering | fishing |
+|---|---:|---:|---:|
+| hunting (74) | **58** | 14 | 2 |
+| gathering (97) | 23 | **57** | 17 |
+| fishing (109) | 26 | 15 | **68** |
+
+Culture areas are another matter. k-means clustering of the groups,
+scored against Binford's culture areas with the adjusted Rand index:
+
+| clustering | world (8 areas) | North America (5 areas) |
+|---|---:|---:|
+| location only | **0.512** | **0.726** |
+| location + climate | 0.465 | 0.264 |
+| location + FORGE lifeway | 0.438 | 0.452 |
+| FORGE lifeway only | 0.178 | |
+
+Binford's culture areas are geographic blocks within which lifeways vary,
+so food-getting alone cannot recover them. They should emerge as contact
+basins instead: land within which travel is easy, bounded by mountains,
+deserts and sea, refined by lifeway similarity.
+
+The project already has the pieces. The political travel model gives
+walking and boat days, and FORGE gives lifeways. Two tasks follow:
+- **F14:** a forager lifeway map, frozen and validated leave-one-area-out.
+- **F15:** contact-basin culture areas, validated against Binford's areas
+  and D-PLACE regions, with location-only clustering as the baseline to beat.
