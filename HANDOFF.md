@@ -330,3 +330,17 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   and British coasts, hurts East Asia (+0.4-1.2 C MAE); blocked by P6.
 * P6 evidence (r41): East Asia spring rain 0.5-0.7 of observed, winter rain
   2-3x (Japan, Korea, North China Plain); warm bias peaks Mar-May.
+
+## 1 November 2026, evening: policy v3 and r42
+
+* The owner set aside "no group may get worse": adoption now follows overall
+  accuracy (calibration/local_accuracy_20261023/policy_v3.json): S over the 49
+  development regions (dev31 + retired sealed a, b, c) improves >= 0.5 %, T and
+  P within +1 %, paired 28 km within 1 %, the next unseen sealed set not worse.
+  Groups are reported only. scripts/gate_v3.py + scripts/validate_v3.sh.
+* r42 = desert refit #3 candidate 1 (e71 compression warming + e70b/c branch
+  drying): S49 0.9626, 28 km 0.990, sealed set d 0.941 (rain -11 %). Holdout
+  1.039 and mid-latitude 1.022 as groups (Manchuria, NZ, southern coasts).
+  reports/R42_20261101.md; release output/atlas_r42/release.sh.
+* Sealed set d is spent; declare sealed set e before the next search.
+* Future searches: score on S49 (no group penalty) to match policy v3.
