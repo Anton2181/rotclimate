@@ -27,7 +27,7 @@ def test_new_switches_default_off_and_are_classified():
             'dry_heating_mean_c', 'shelf_air_coupling', 'shelf_air_lag_days', 'shelf_air_enclosed', 'ebm_land_ice',
             'warm_current_seasonality', 'continental_sea_air', 'continental_sea_lag_days',
             'storm_baroclinic', 'storm_baroclinic_max_deg', 'storm_baroclinic_cold_c',
-            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid', 'subsidence_warming', 'subsidence_warming_taper', 'subsidence_warming_wet', 'subsidence_warming_chi0', 'subsidence_warming_rain', 'subsidence_warming_top_m'} <= SHARED_FIELDS
+            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid', 'subsidence_warming', 'subsidence_warming_taper', 'subsidence_warming_wet', 'subsidence_warming_chi0', 'subsidence_warming_rain', 'subsidence_warming_top_m', 'subsidence_branch_drying'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -59,6 +59,7 @@ def test_new_switches_default_off_and_are_classified():
     (dict(storm_baroclinic=1.5), 'storm_baroclinic must be'),
     (dict(wet_sun=-1.0), 'wet_sun must be'),
     (dict(subsidence_branch=1.5), 'subsidence_branch must be'),
+    (dict(subsidence_branch_drying=-0.1), 'subsidence_branch_drying must be'),
     (dict(dry_heating_arid=1.0), 'dry_heating_arid must be'),
     (dict(subsidence_warming=-1.0), 'subsidence_warming must be'),
     (dict(subsidence_warming=2.0, subsidence_warming_wet=1.5), 'subsidence_warming must be'),

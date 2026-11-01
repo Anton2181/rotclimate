@@ -267,6 +267,8 @@ class ClimateModel:
                 or not 0.0 <= params.subsidence_warming_wet <= 1.0 or not 0.0 <= params.subsidence_warming_chi0 < 1.0 \
                 or params.subsidence_warming_rain < 0 or params.subsidence_warming_top_m < 0:
             raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg, its wet gate in [0, 1] and chi0 in [0, 1)')
+        if not 0.0 <= params.subsidence_branch_drying <= 2.0:
+            raise ValueError('subsidence_branch_drying must be in [0, 2] per day')
         if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
             raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
         if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
@@ -1940,6 +1942,17 @@ class ClimateModel:
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
+            if p.subsidence_branch_drying > 0:
+                # e70b: the descending branch brings down dry air from aloft:
+                # the deserts' rain was a recycling loop (Najd: rain ~ evaporation
+                # ~ 1 mm/day all year under a column at RH 0.5-0.75). Dry the
+                # column along the branch core only, fading over the last 10 deg
+                # to the Hadley edge (raising subsidence_drying instead dried the
+                # mid-latitudes, which the summer edge band reaches)
+                core = (np.clip((lat - (phi_i + p.subsidence_branch_gap)) / 5.0, 0.0, 1.0)
+                        * np.clip((phi_h - lat) / 10.0, 0.0, 1.0))
+                extra = p.subsidence_branch_drying * core / DAY
+                sink = extra if sink is None else sink + extra
             if p.monsoon_descent > 0:
                 # e49: the monsoons' latent heating drives air down ~4,000 km
                 # to their west and a little poleward (Rodwell & Hoskins 1996):
