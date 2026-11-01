@@ -91,7 +91,7 @@ def corrected_view(result, dT, ratio, scale):
     return fr
 
 
-def add(atlas, checkpoint, corrections, scale=2):
+def add(atlas, checkpoint, corrections, scale=2, evals=None):
     atlas = Path(atlas).resolve(); data = atlas / 'data'
     with Path(checkpoint).open('rb') as stream:
         cached = pickle.load(stream)
@@ -123,9 +123,16 @@ def add(atlas, checkpoint, corrections, scale=2):
     land = fc.land
     shares = {c: float((k[land] == i).mean()) for i, c in enumerate(CODES)}
     present = [c for c in CODES if shares[c] >= 0.005]
+    heldout = dict(temperature_c=[1.807, 1.548], temperature_14km_c=[1.913, 1.283], rain_loss=[0.4329, 0.4201])
+    if evals is not None:              # the retrained corrections' own held-out scores (scripts/retrain_earth_corrections.sh)
+        ev = lambda name: json.loads((Path(evals) / f'{name}.json').read_text())['groups']['all']
+        heldout = dict(temperature_c=[ev('eval_dev31')['monthly_mae_C'][k] for k in ('raw', 'corrected')],
+                       temperature_14km_c=[ev('eval_fine14')['monthly_mae_C'][k] for k in ('raw', 'corrected')],
+                       rain_loss=[ev('eval_rain_dev31')['rain']['loss'][k] for k in ('raw', 'corrected')])
+    pct = lambda v: f'{100 * (v[1] / v[0] - 1):+.0f} %'.replace('-', '−')
     note = ('Earth-trained corrections (temperature, local rain pattern) applied to this climate; learned from 31 Earth '
-            'regions and scored with whole clusters held out (temperature error −14 %, rain loss −3 %). The station card '
-            'and every other topic show the raw simulation.')
+            f'regions and scored with whole clusters held out (temperature error {pct(heldout["temperature_c"])}, rain loss '
+            f'{pct(heldout["rain_loss"])}). The station card and every other topic show the raw simulation.')
     layers = [
         dict(id='koppen_corrected', file='koppen_corrected.webp', label='Köppen, corrected', kind='categories', group='Corrected',
              items=[dict(color=mc.to_hex(np.array(COLORS[c]) / 255), label=f'{c} {DESCRIPTIONS.get(c, "")} · {100 * shares[c]:.0f}%'.strip())
@@ -151,7 +158,7 @@ def add(atlas, checkpoint, corrections, scale=2):
     meta['layers'] = [L for L in meta['layers'] if L['id'] not in ids] + layers
     meta['earth_correction'] = dict(
         note=note, physics=models['temperature'].get('physics_params'), zone_fit=fit, change=change,
-        heldout=dict(temperature_c=[1.807, 1.548], temperature_14km_c=[1.913, 1.283], rain_loss=[0.4329, 0.4201]),
+        heldout=heldout,
         models={k: dict(physics_sha256=v.get('physics_params_sha256'), trained_on=v.get('trained_on')) for k, v in models.items()})
     (data / 'atlas.json').write_text(json.dumps(meta, ensure_ascii=False), encoding='utf-8')
     record = dict(status='passed', atlas=str(atlas.relative_to(ROOT)), checkpoint=str(Path(checkpoint)),
@@ -167,8 +174,9 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('atlas', type=Path); ap.add_argument('--checkpoint', type=Path, required=True)
     ap.add_argument('--corrections', type=Path, required=True); ap.add_argument('--scale', type=int, default=2)
+    ap.add_argument('--evals', type=Path, help='the retrain output folder whose eval_*.json give the held-out scores')
     a = ap.parse_args()
-    print(json.dumps(add(a.atlas, a.checkpoint, a.corrections, a.scale), indent=1, default=str))
+    print(json.dumps(add(a.atlas, a.checkpoint, a.corrections, a.scale, a.evals), indent=1, default=str))
 
 
 if __name__ == '__main__':

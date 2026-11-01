@@ -201,11 +201,15 @@ def add(atlas, checkpoint, corrections, staging, image_scale=2, gifs=False):
         shutil.copytree(sdata / 'vectors', target / 'vectors')
     gif_files = {f: 'corrected/' + f for f in ('year_temperature.gif', 'year_precipitation.gif', 'year_growing.gif')
                  if f in copied}
+    # the held-out scores of the corrections in use (add_corrected_layers.py records them; r40's otherwise)
+    held = meta.get('earth_correction', {}).get('heldout', dict(temperature_c=[1.807, 1.548], rain_loss=[0.4329, 0.4201]))
+    pct = lambda v: f'{100 * (v[1] / v[0] - 1):+.0f} %'.replace('-', '−')
     cc = dict(
         label='Earth-corrected climate',
         note=('Every climate-drawn map, the station card, farming, population, foraging and political reach use the '
               'simulated climate after the Earth-trained corrections (temperature and local rain pattern; learned from '
-              '31 Earth regions, scored with whole clusters held out: temperature error −14 %, rain loss −3 %). Winds '
+              f'31 Earth regions, scored with whole clusters held out: temperature error {pct(held["temperature_c"])}, '
+              f'rain loss {pct(held["rain_loss"])}). Winds '
               'and the sea surface are as simulated. Switch to the raw simulation to see the model alone.'),
         binary='corrected/atlas.bin', arrays=smeta['arrays'],
         packet_sha256=file_hash(target / 'atlas.bin'),

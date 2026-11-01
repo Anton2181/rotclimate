@@ -102,7 +102,8 @@ async function checkPage(browser, url) {
   result.errors = errors; result.failed_requests = failed;
   result.passed = !errors.length && !failed.length && (!meta.foraging || /people/.test(result.checks.foraging.totals))
     && (!result.checks.corrected_climate || (result.checks.corrected_climate.choice === 'corrected' && result.checks.corrected_climate.control_visible
-        && result.checks.corrected_climate.no_corrected_topic && result.checks.corrected_climate.layers.every(L => L.corrected_image)))
+        && result.checks.corrected_climate.no_corrected_topic && result.checks.corrected_climate.layers.every(L => L.corrected_image)
+        && (!meta.earth_correction || result.checks.corrected_climate.change_maps.filter(L => L.group === 'Fit checks').length === 3)))
     && (!result.checks.raw_climate || (result.checks.raw_climate.choice === 'raw' && !/corrected\//.test(result.checks.raw_climate.image)
         && /climate=raw/.test(result.checks.raw_climate.hash) && (!meta.foraging || /people/.test(result.checks.raw_climate.foraging))));
   await page.close();
