@@ -304,5 +304,19 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
     Farming spreads by distance; crop rules decide only where it roots.
   - Layer 2b (Diamond's nine homelands): neither FORGE nor productivity
     places hearths (AUC 0.75-0.78 < 0.80). Hearths are the owner's choice.
-  - Layer 2c (Nichols / Michalopoulos: language density from terrain and
-    land-quality variation, leave-one-macroarea-out): running.
+  - Layer 2c (Nichols / Michalopoulos): ADOPTED. Terrain + land-quality
+    variation predict language density on held-out macroareas (R2 0.34 vs
+    0.28 climate only, 5/6 macroareas). Fantasy-map preview
+    (scripts/language_map_preview.py): ~130 languages, Xšāça ~48; polity
+    borders barely follow likely language edges (0.23 vs 0.19).
+* FORGE F13 (food store scored on Binford's storage): not adopted (held-out
+  rho 0.00); Binford's ET 15.25 threshold gives rho 0.72 (his own rule).
+* Polity A1 (steppe reach from herding land, no polygons): Xiongnu 0.950
+  (centres alone 0.728), Tang-Turgesh 0.900 vs bar 0.904; not adopted. Next:
+  Tang protectorate garrisons as sources.
+* P7 (reports/AUTUMN_PHASE_20261101.md): subtropical land peaks 4-9 days
+  early; the marine air does not follow the sea (eddy mixing 1.43/day vs
+  air-sea 0.37/day). Fast coupling (e51+e3 0.5 d) helps the Mediterranean
+  and British coasts, hurts East Asia (+0.4-1.2 C MAE); blocked by P6.
+* P6 evidence (r41): East Asia spring rain 0.5-0.7 of observed, winter rain
+  2-3x (Japan, Korea, North China Plain); warm bias peaks Mar-May.
