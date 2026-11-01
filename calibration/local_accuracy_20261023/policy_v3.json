@@ -1,0 +1,56 @@
+{
+  "frozen": "2026-11-01, by the map's owner's decision ('I don't care about [no group may get worse], I want the overall accuracy to keep getting better'), after desert refits #2 and #3 had been scored on development data and before any candidate was run on sealed set d.",
+  "benchmark": "scripts/benchmark_local.py --regions dev31 at 56 km: the 19 regions of policy.json plus the 12 predeclared in regions_dev12.json; equal-region means",
+  "development_regions": "the 31 dev31 regions plus the retired sealed sets a, b and c (calibration/sealed_20261031, sealed_20261031b, sealed_20261101c): 49 regions, all development data.",
+  "score": "S = 0.5 * T_monthly_mae / T_ref + 0.5 * P_loss / P_ref, equal-region means, the reference being the current adopted physics run on the same code and sources. S49 is this over all 49 development regions; S31 over dev31 alone (reported).",
+  "adopt_if": [
+    "S49 improves by at least 0.5 % (overall accuracy over every development region)",
+    "neither T_monthly_mae nor P_loss over the 49 worsens by more than 1 %",
+    "paired 28 km check on california, western_europe, japan, new_zealand: S not worse by more than 1 %",
+    "the next unseen sealed set (now calibration/sealed_20261101d), run once: S not worse (<= 1.0)"
+  ],
+  "groups": {
+    "training": [
+      "california",
+      "iberia",
+      "southeast_us",
+      "levant",
+      "central_asia",
+      "east_china",
+      "east_australia",
+      "mexico"
+    ],
+    "holdout": [
+      "chile",
+      "cape",
+      "sw_australia",
+      "south_brazil",
+      "japan"
+    ],
+    "midlatitude": [
+      "pacific_nw",
+      "western_europe",
+      "eastern_europe",
+      "us_midwest",
+      "manchuria",
+      "new_zealand"
+    ],
+    "dev12": [
+      "anatolia",
+      "iran_plateau",
+      "north_india",
+      "north_china_plain",
+      "korea",
+      "texas_plains",
+      "great_basin",
+      "british_isles",
+      "alps",
+      "morocco",
+      "patagonia",
+      "victoria"
+    ]
+  },
+  "group_gate": false,
+  "group_note": "group scores (training, holdout, mid-latitude, dev12, each retired set) are reported but no longer block adoption.",
+  "sealed_regions": "one unseen set per adopted milestone, run once; once run it joins the development regions."
+}

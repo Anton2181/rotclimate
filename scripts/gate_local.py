@@ -71,7 +71,8 @@ def evaluate(ref, candidate, ref_protocol, candidate_protocol, policy):
     overall = score(current, baseline)
     failures = []
     if overall > .995: failures.append('Overall score did not improve by at least 0.5%')
-    failures += [g+': group score worsened' for g,s in group_scores.items() if s > 1]
+    if policy.get('group_gate', True):
+        failures += [g+': group score worsened' for g,s in group_scores.items() if s > 1]
     failures += [key+': error increased by more than 1%' for key,delta in ratios.items() if delta > .01]
     return dict(passes_development_gate=not failures, failures=failures, score=overall,
                 group_scores=group_scores, relative_changes=ratios, baseline=baseline, candidate=current,
