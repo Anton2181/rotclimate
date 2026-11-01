@@ -56,7 +56,9 @@ def capacity(cells):
         near = tree.query_ball_point(unit(a, o), chord(RADIUS_KM))
         fresh.append(100.0 * float(rw[near].sum()) / disc + 10.0 * lake_share(a, o, lakes))
     s["w_fresh"] = np.array(fresh); s["s_salmon"] = np.zeros(len(cells))
-    dens = run_D(s, specification(), 0)["density_people_km2"]
+    res_ = run_D(s, specification(), 0)
+    dens = res_["density_people_km2"]
+    capacity.scarcity = res_["mean_scarcity_days_year"]
     area = np.array([(111.2 * STEP) ** 2 * math.cos(math.radians(a)) * c[6] for a, c in zip(lat, cells)])
     return dens, area, lat, lon
 
@@ -83,7 +85,7 @@ def simulate(K, nbrs, coords, n_max, seed):
     return owner, groups, extra
 
 
-def simulate_fast(K, nbrs, coords, n_max, seed):
+def simulate_fast(K, nbrs, coords, n_max, seed, risk=None):
     """Layer 1b: frontier-driven fill (same rules, faster): a random empty cell next to occupied land joins a random neighbouring group."""
     rng = np.random.default_rng(seed)
     n = len(K); owner = -np.ones(n, int); groups = {}; pops = {}; gid = 0
@@ -109,7 +111,8 @@ def simulate_fast(K, nbrs, coords, n_max, seed):
         g = adj[int(rng.integers(len(adj)))]
         owner[c] = g; groups[g].append(c); pops[g] += float(K[c]); left -= 1
         for j in nbrs[c]: add_front(j)
-        if pops[g] > n_max and len(groups[g]) > 1:
+        limit = n_max if risk is None else n_max * np.exp(risk[1] * (float((K[groups[g]] * risk[0][groups[g]]).sum()) / max(pops[g], 1e-9) - 200.0) / 100.0)
+        if pops[g] > limit and len(groups[g]) > 1:
             cs = np.array(groups[g]); xy = coords[cs]; axis = int(np.ptp(xy[:, 0]) < np.ptp(xy[:, 1]))
             order = cs[np.argsort(xy[:, axis])]; cum = np.cumsum(K[order]); k = int(np.searchsorted(cum, cum[-1] / 2)) + 1
             k = min(max(k, 1), len(order) - 1)
@@ -127,7 +130,7 @@ def window_setup(window, region_filter):
     coords = np.column_stack([lon * np.cos(np.radians(lat)), lat])
     langs = [r for r in csv.DictReader(open(ROOT / "data/cache/glottolog/languages.csv")) if r["Level"] == "language" and r["Latitude"] and region_filter(r)]
     P = np.array([c[5].sum() for c in cells])
-    return dict(cells=cells, dens=dens, area=area, lat=lat, lon=lon, nbrs=nbrs, coords=coords, P=P,
+    return dict(scarcity=np.asarray(capacity.scarcity, float), cells=cells, dens=dens, area=area, lat=lat, lon=lon, nbrs=nbrs, coords=coords, P=P,
                 glat=np.array([float(r["Latitude"]) for r in langs]), glon=np.array([float(r["Longitude"]) for r in langs]))
 
 
@@ -194,6 +197,44 @@ def stage_1b(out):
     print(json.dumps(dict(adopted=res["adopted"]), indent=1))
 
 
+def stage_1c(out):
+    from scipy.stats import pearsonr, spearmanr
+    na_window = lambda la, lo: (((lo > -170) & (lo < -105) & (la > 32)) | ((lo > -170) & (lo < -52) & (la > 55))) & (la < 72)
+    na_filter = lambda r: r["Macroarea"] == "North America" and na_window(float(r["Latitude"]), float(r["Longitude"])) and \
+        any(c in r["Countries"] for c in ("US", "CA"))
+    au_filter = lambda r: r["Macroarea"] == "Australia" and -39.5 < float(r["Latitude"]) < -10 and 113 < float(r["Longitude"]) < 154 and "AU" in r["Countries"]
+    NA = window_setup(na_window, na_filter); AU = window_setup(None, au_filter)
+    Kna, Kau = NA["dens"] * NA["area"], AU["dens"] * AU["area"]
+    print("scarcity days median NA %.0f AU %.0f" % (np.median(NA["scarcity"]), np.median(AU["scarcity"])), flush=True)
+    target = len(NA["glat"]); grid_res = {}
+    for n0 in (1000, 1500, 2000, 3000, 4000):
+        for c in (-0.5, 0.0, 0.5, 1.0, 1.5):
+            counts, rich = [], []
+            for seed in range(10):
+                o, g, e = simulate_fast(Kna, NA["nbrs"], NA["coords"], float(n0), seed, risk=(NA["scarcity"], c))
+                counts.append(len(g) + int(e.sum())); sim, obs = richness(NA, o, e); rich.append(sim)
+            sim = np.mean(rich, 0); r2 = float(pearsonr(sim, obs)[0] ** 2)
+            grid_res[f"{n0}_{c}"] = dict(n0=n0, c=c, count=float(np.mean(counts)), r2=r2)
+            print("NA", n0, c, round(np.mean(counts), 1), round(r2, 3), flush=True)
+    ok = [v for v in grid_res.values() if abs(v["count"] - target) <= 0.15 * target]
+    best = max(ok, key=lambda v: (round(v["r2"], 6), -abs(v["c"]))) if ok else min(grid_res.values(), key=lambda v: abs(v["count"] - target))
+    counts, rich = [], []
+    for seed in range(50):
+        o, g, e = simulate_fast(Kau, AU["nbrs"], AU["coords"], float(best["n0"]), seed, risk=(AU["scarcity"], best["c"]))
+        counts.append(len(g) + int(e.sum())); sim, obs = richness(AU, o, e); rich.append(sim)
+    sim = np.mean(rich, 0)
+    res = dict(plan="calibration/language_areas_20261101/plan_1c.json", na_languages=target, grid=grid_res, chosen=best,
+               au_count_mean=float(np.mean(counts)), au_count_sd=float(np.std(counts)), au_richness_r2=float(pearsonr(sim, obs)[0] ** 2),
+               au_richness_spearman=float(spearmanr(sim, obs)[0]), scarcity_median=dict(na=float(np.median(NA["scarcity"])), au=float(np.median(AU["scarcity"]))))
+    res["adopted"] = bool(277 <= res["au_count_mean"] <= 461 and res["au_richness_r2"] >= 0.30)
+    (out / "layer1c.json").write_text(json.dumps(res, indent=1))
+    np.savez_compressed(out / "layer1c_cells.npz", na_lat=NA["lat"], na_lon=NA["lon"], na_dens=NA["dens"], na_scar=NA["scarcity"],
+                        na_owner=simulate_fast(Kna, NA["nbrs"], NA["coords"], float(best["n0"]), 0, risk=(NA["scarcity"], best["c"]))[0],
+                        au_lat=AU["lat"], au_lon=AU["lon"], au_owner=simulate_fast(Kau, AU["nbrs"], AU["coords"], float(best["n0"]), 0, risk=(AU["scarcity"], best["c"]))[0],
+                        na_glat=NA["glat"], na_glon=NA["glon"], au_glat=AU["glat"], au_glon=AU["glon"])
+    print(json.dumps({k: v for k, v in res.items() if k != "grid"}, indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=ROOT / "output/language_areas_20261101")
@@ -202,6 +243,8 @@ def main():
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
     if a.stage == "1b":
         return stage_1b(a.out)
+    if a.stage == "1c":
+        return stage_1c(a.out)
     cells = grid(); print(len(cells), "land cells", flush=True)
     dens, area, lat, lon = capacity(cells); K = dens * area
     print("FORGE population %.0f, density median %.3f /km2" % (K.sum(), np.median(dens)), flush=True)

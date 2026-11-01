@@ -1,0 +1,6 @@
+{
+ "frozen": "2026-11-01, after layer 1b (split size 3,000 calibrated on North America gave 251 languages on Australia against 369; richness R2 0.21) and before any run below.",
+ "change": "Nettle's ecological-risk hypothesis: language communities are larger where lean seasons are long. A group's split size is N_max = N0 x exp(c x (s_g - 200) / 100), s_g the population-weighted mean of FORGE's scarcity days over the group's cells (FORGE configuration D, as adopted). N0 in {1000, 1500, 2000, 3000, 4000} and c in {-0.5, 0, 0.5, 1, 1.5} are fitted on western and northern North America (the layer 1b window, 211 Glottolog languages): among settings whose mean count is within +-15 % of 211, the one with the highest richness R2 (2 deg blocks), 10 replicates each; then applied blind to mainland Australia (50 replicates).",
+ "adopt_if": "on Australia, mean count within +-25 % of 369 and richness R2 >= 0.30 (as layer 1).",
+ "script": "scripts/language_areas_earth.py --stage 1c"
+}
