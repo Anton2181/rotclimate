@@ -1,0 +1,8 @@
+{
+ "frozen": "2026-11-01, before any run below. Known before freezing: with the seven excavated Xiongnu centres as its only sources the Xiongnu keeps 46 % of its polygon (balanced accuracy 0.728); with camps drawn from modelled density inside its polygon (seen) 0.967; Tang AD 742 against the Turgesh with polygon camps (seen) as in output/polity_strength_20261031/strength.json.",
+ "question": "A1: can a steppe polity's reach start from the model's own herding land instead of points drawn inside its historical polygon?",
+ "rule": "the steppe polity's sources are every land cell in the window where the modelled herders' share of food is at least 0.5 and the modelled density at least 0.5 people per km2 (the seen camps' density threshold), with no polygon involved, plus the excavated centres where the addendum_strength_cities list has them (Xiongnu). The farming state's sources are its county seats as before. Walking travel, year-round effective days, the nearest-network rule (gamma 0), as adopted.",
+ "tests": "Han AD 2 against the Xiongnu and Tang AD 742 against the Turgesh, in the steppe window of scripts/polity_strength_check.py, scored as before: balanced accuracy over the farming state's commanderies and the steppe polygon outside them (Cliopatria).",
+ "adopt_if": "in both tests the herding-land rule scores at least 0.90 and at least the seen polygon camps' score minus 0.03. Then mobile polities on the maps take their reach from herding land inside their claims.",
+ "script": "scripts/polity_herding_a1.py"
+}
