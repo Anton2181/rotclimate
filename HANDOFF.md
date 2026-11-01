@@ -245,3 +245,25 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   0.45 rejected). Waiting rule halves ORBIS's error (0.522 -> 0.306) but adds
   Casson scatter (Etesian short passages; western Earth-only storminess); next
   design recorded in reports/POLITY_SEASONS_20261031.md.
+
+## 1 November 2026, after r41 (in flight)
+
+* r41 adopted (reports/R41_20261101.md); release pipeline
+  output/atlas_r41/release.sh rebuilds the Earth-fit atlas, retrains the
+  corrections and re-exports the corrected climate. Sailing waiting rule
+  adopted (SAILING_RULE "wait"), reach of free/whittaker fits rebuilt with it.
+* Sealed set b is spent; sealed set c declared
+  (calibration/sealed_20261101c: Nova Scotia, middle Volga, Tripolitania,
+  northern BC coast, Tibet, Ethiopian highlands; never run).
+* W2 frozen (calibration/map_world_r41_planet/plan.json,
+  scripts/world_campaign_r41.py): world refit with tilt, eccentricity,
+  perihelion, starlight, greenhouse and land-by-latitude free, 300 km
+  continuation fixed, guarded search inside the coarse screen. Needs the
+  'world_screen' guard form in rotclimate/calibrate.guard_penalty (patch kept
+  in the session scratchpad; apply after the r41 release finishes, since the
+  release hashes rotclimate sources).
+* P3 frozen (calibration/maritime_refit_20261101/plan.json): sea swing (e66,
+  e67, e64) + land coupling + wet_sun_ref (r41 warms dry ground); needs a
+  plain r41 run of retired sealed set a as its extra reference first.
+* FORGE attempt 10 frozen (addendum_forest10): game x (1 - c x closed-forest
+  share) for the eastern Subarctic's over-prediction, CV with salmon + ice.
