@@ -28,6 +28,7 @@ SALMON = [0, 30, 100, 300, 1000]
 
 
 SST_MIN = -99.0      # addendum salmon6 sets 2.0 (ice-covered seas excluded)
+OUTLET_ICE = False   # addendum salmon8: weight each system by its outlet's open-water share
 
 
 def salmon_points(step_km=1.0):
@@ -51,13 +52,16 @@ def salmon_points(step_km=1.0):
         if ids:
             pts = np.array([outlet_pt[k] for k in ids])            # lon, lat
             north = pts[:, 1] > 0
-            sst = np.full(len(ids), np.nan)
+            sst = np.full(len(ids), np.nan); open_ = np.ones(len(ids))
             if north.any():
                 v = observed_sst(pts[north, 1], pts[north, 0])
                 sst[north] = np.nanmean(v, axis=0) if v is not None else np.nan
+                if v is not None:
+                    open_[north] = (np.asarray(v) > -1.0).sum(0) / 12.0
             cold = {k for k, t, n in zip(ids, sst, north) if n and np.isfinite(t) and SST_MIN <= t < 15.0}
+            share = {k: float(o) for k, o in zip(ids, open_)}
         else:
-            cold = set()
+            cold = set(); share = {}
         n_seg = 0
         for i, r in enumerate(recs):
             if (r[ix["ENDORHEIC"]] != 0 or r[ix["DIS_AV_CMS"]] < 1.0 or r[ix["DIST_DN_KM"]] > 1500.0
@@ -68,7 +72,8 @@ def salmon_points(step_km=1.0):
                 length = 6371.0 * math.acos(max(-1.0, min(1.0, float(unit(y0, x0) @ unit(y1, x1)))))
                 k = max(1, int(math.ceil(length / step_km)))
                 t = (np.arange(k) + 0.5) / k
-                keep_pts.append(np.stack([y0 + (y1 - y0) * t, x0 + (x1 - x0) * t], -1)); keep_w.append(np.full(k, length / k))
+                wgt = share.get(r[ix["MAIN_RIV"]], 1.0) if OUTLET_ICE else 1.0
+                keep_pts.append(np.stack([y0 + (y1 - y0) * t, x0 + (x1 - x0) * t], -1)); keep_w.append(np.full(k, wgt * length / k))
                 keep_d.append(np.full(k, float(r[ix["DIST_DN_KM"]])))
             n_seg += 1
         stats[tile] = dict(outlets=len(ids), cold_systems=len(cold), salmon_segments=n_seg)
@@ -243,6 +248,7 @@ def main():
     ap.add_argument("--stage5", action="store_true", help="addendum_salmon5: upstream thinning and the cold limit on the interior")
     ap.add_argument("--cv", action="store_true", help="addendum_salmon6: outlets 2-15 C, leave-one-area-out cross-validation")
     ap.add_argument("--ice", action="store_true", help="addendum_salmon7: marine supply x open-sea share of the year")
+    ap.add_argument("--outlet-ice", action="store_true", help="addendum_salmon8: salmon systems x their outlet's open-water share")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -262,9 +268,11 @@ def main():
               for s in json.loads((a.out / "aquatic_inputs.json").read_text())["sites"]}
     for key in ("d_coast_km", "sst_annual_c", "w_fresh"):
         sites[key] = np.array([float(inputs[(r["name"], round(r["lat"], 4), round(r["lon"], 4))][key]) for r in rows])
-    global SST_MIN
+    global SST_MIN, OUTLET_ICE
     if a.cv:
         SST_MIN = 2.0
+    if a.outlet_ice:
+        SST_MIN, OUTLET_ICE = -99.0, True
     rp, rw, stats, rd = salmon_points()
     tree = cKDTree(unit(rp[:, 0], rp[:, 1])); disc = math.pi * 25.0 ** 2
     near = [tree.query_ball_point(unit(la, lo), chord(25.0)) for la, lo in zip(sites["lat"], sites["lon"])]
@@ -288,7 +296,7 @@ def main():
         base_no_ice = run_D(sites, spec, 0, 0)["density_people_km2"]
         sites["open_share"] = (np.asarray(v) > -1.0).sum(0) / 12.0
         print("open share by area", {k: round(float(np.median(sites['open_share'][sites['area'] == k])), 2) for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}, flush=True)
-        return crossval(a, sites, spec, stats, base_override=base_no_ice, tag="salmon7")
+        return crossval(a, sites, spec, stats, base_override=base_no_ice, tag="salmon8" if a.outlet_ice else "salmon7")
     if a.cv:
         return crossval(a, sites, spec, stats)
     for g in GAMMAS:
