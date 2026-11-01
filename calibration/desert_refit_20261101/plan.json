@@ -1,0 +1,70 @@
+{
+ "frozen": "2026-11-01, before any result of this search; after the desert screens on r41 (output/desert_heat_20261101: gated dry heating, e70 descending-branch subsidence, e54e annual-dryness gate, e71 compression warming with taper, wet and coastal gates). Best screen c7 (e71 4 K, taper 10 deg, chi0 0.7): dev31 S 0.9816 (T -3.3 %, rain loss -0.4 %), training 0.985, dev12 0.961, holdout 1.010 and mid-latitude 1.005 failing (Victoria, SW Australia, Chile 1.02-1.03; East China, North China Plain, Manchuria 1.04), retired sealed a 0.996, retired sealed b 0.935.",
+ "why": "r41's hot deserts and dry subtropics run 2.5-5 C too cold with summers too mild (Sahara -2.6, Najd -5.0, Sahel -3.1, Deccan -3.0, north India -2.8, Iran -3.1 C). Cutting their (too high) rain barely warms them, gated dry heating moves them little and costs East Asia, and the land offset shifts everyone; the missing piece is the descending branch's compression warming (e71), which reaches the ground inland but not under a coastal marine layer. The search balances its strength and gates with the land offset, the cold-air pool and the wet-ground sunshine term.",
+ "start": "calibration/local_accuracy_20261023/r41_params.json",
+ "set": {
+  "subsidence_warming": 4.0,
+  "subsidence_warming_taper": 10.0,
+  "subsidence_warming_chi0": 0.7
+ },
+ "reference": "output/spring_refit_20261101/refit41/candidate_dev31",
+ "extra_groups": {
+  "retired_sealed_b": {
+   "spec": "calibration/sealed_20261031b/regions.json",
+   "reference": "output/spring_refit_20261101/refit41/candidate_sealed6"
+  },
+  "retired_sealed_a": {
+   "spec": "calibration/sealed_20261031/regions.json",
+   "reference": "output/maritime_refit_20261101/r41_sealed_a"
+  }
+ },
+ "knobs": [
+  [
+   "subsidence_warming",
+   0.0,
+   6.0
+  ],
+  [
+   "subsidence_warming_taper",
+   0.0,
+   20.0
+  ],
+  [
+   "subsidence_warming_chi0",
+   0.3,
+   0.9
+  ],
+  [
+   "subsidence_warming_wet",
+   0.0,
+   1.0
+  ],
+  [
+   "subsidence_branch_gap",
+   4.0,
+   14.0
+  ],
+  [
+   "land_offset",
+   -1.5,
+   0.5
+  ],
+  [
+   "continental_mean",
+   4.0,
+   12.0
+  ],
+  [
+   "wet_sun",
+   0.0,
+   3.0
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 10,
+ "seed": 71,
+ "evals": 80,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r41 run, plus 2 x every policy group's worsening, 2 x each retired sealed set's worsening, and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/desert_refit_20261101/refit REF_NAME=r41 REF_FIT=calibration/local_accuracy_20261023/r41_params.json BEST=calibration/desert_refit_20261101/search/best_params.json SEALED_SPEC=calibration/sealed_20261101c/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs under policy v2, the paired 28 km check, then sealed set c (declared 2026-11-01, never run) once if both pass; adoption also requires sealed set c not to get worse (S <= 1). If adopted it becomes r42: the Earth-fit atlas is rebuilt and republished. Failing any step means nothing is adopted; every result is reported."
+}
