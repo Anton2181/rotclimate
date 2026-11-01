@@ -103,6 +103,19 @@ def polity_fills(shape):
     return ids, info
 
 
+def map_dry_water_km():
+    """The dry-town water reach on a drawn map. The rule was fitted with Natural
+    Earth 1:10m rivers; the map draws 0.73 km of river per 100 km2 of land
+    against Natural Earth's 0.418 on Earth (data/foraging_model.json
+    map_river_scale), and the distance to the nearest of randomly placed lines
+    falls as their density rises, so the reach is scaled by the same 0.573."""
+    from .settle import DRY_WATER_KM
+    if DRY_WATER_KM is None:
+        return None
+    spec = json.loads((ROOT / "data/foraging_model.json").read_text())
+    return DRY_WATER_KM * float(spec["aquatic"]["map_river_scale"])
+
+
 def map_climate(data, meta, arrays, shape):
     """Monthly temperature (mean, max, min), rain, winds and storminess of the
     atlas on the analysis grid, the latitude of each cell and the navigable
@@ -166,7 +179,7 @@ def compute(atlas, density=None):
     bare = travel_graph(elev, land, road, open_eta, cell_km, paths, ferry)
     marked = [(t["row"], t["col"]) for t in towns]
     suggested, coast_km, smooth_density = place_towns(density, land, geo["water_distance"], road, elev, cell_km, marked,
-                                                      allowed=claimed, aridity=hf["aridity"])
+                                                      allowed=claimed, aridity=hf["aridity"], dry_water_km=map_dry_water_km())
     tracks, routes, links = minor_roads(bare, shape, road, suggested, marked)
     towns = towns + [dict(kind="unmarked town", row=int(y), col=int(x)) for y, x in suggested]
 
