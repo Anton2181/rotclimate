@@ -76,3 +76,33 @@ centres, all far north of the Gobi, Han's reach takes half of the Xiongnu
 polygon (Xiongnu right 46 %); a pastoral polity's reach comes from its
 herds and seasonal camps, which the camps version represents and the
 centres do not.
+
+## Steppe reach from the model's herding land (A1, 1 November; not adopted, narrowly)
+
+Addendum `calibration/polity_20261025/addendum_herding_a1_20261101.json`,
+frozen before its run (`scripts/polity_herding_a1.py`,
+`output/polity_strength_20261031/herding_a1.json`).
+
+**The rule:** the steppe polity's sources are every land cell where the
+model's herders supply at least half the food and the density is at least
+0.5 people per km². No polygon is involved. The excavated centres are added
+where known (the Xiongnu). The farming state keeps its county seats.
+
+| contest | herding-land rule | farm right | steppe right | polygon camps (seen) | centres only |
+|---|---:|---:|---:|---:|---:|
+| Han AD 2 vs Xiongnu | **0.950** | 0.949 | 0.952 | 0.967 | 0.728 |
+| Tang AD 742 vs Türgesh | 0.900 | 0.802 | 0.999 | 0.934 | — |
+
+**Verdict: not adopted.** The bar was ≥ 0.90 and within 0.03 of the seen
+polygon camps, in both contests.
+- **Xiongnu: passes.** With no polygon at all, the herding land takes the
+  Xiongnu from 46 % of its polygon to 95 %. It nearly matches camps drawn
+  from inside the polygon.
+- **Tang: misses by 0.004.** Tang held herding land through its western
+  protectorates' garrisons. Under the rule that land goes to the Türgesh,
+  and Tang keeps only 80 % of its commanderies.
+
+So a steppe polity's reach can come from herding land, but a farming
+empire's garrisons on the steppe need their own term. That is the next
+design: military colonies as sources, from the literature's protectorate
+seats.
