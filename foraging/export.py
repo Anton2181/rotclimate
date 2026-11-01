@@ -183,6 +183,69 @@ def map_aquatic_inputs(atlas, meta, native_shape, shape, aquatic):
                 river_index=to_analysis(rivers), lake_share=to_analysis(lakes))
 
 
+LIFEWAY_COLORS = {'hunting': (0.66, 0.42, 0.22), 'gathering': (0.45, 0.60, 0.25), 'fishing': (0.20, 0.47, 0.66)}
+LIFEWAY_LABELS = {'hunting': 'Hunters', 'gathering': 'Gatherers', 'fishing': 'Fishers'}
+
+
+def lifeway_fields(fields):
+    """F14: class probabilities from the frozen lifeway model (data/forager_lifeways.json) and expected residential moves."""
+    path = ROOT/'data/forager_lifeways.json'
+    if not path.exists():
+        return None
+    model = json.loads(path.read_text())
+    fish = np.asarray(fields['mean_fish_share'], float); meat = np.asarray(fields['mean_meat_fraction'], float)
+    density = np.asarray(fields['density_people_km2'], float)
+    X = np.stack([np.log10(np.maximum(density, 1e-4)), (1-fish)*meat, (1-fish)*(1-meat), fish,
+                  np.asarray(fields['mean_scarcity_days_year'], float)/365.0,
+                  np.log10(np.maximum(np.asarray(fields['annual_npp_gdm_m2'], float), 1.0))], -1)
+    z = (X-np.array(model['mean']))/np.array(model['std'])
+    logits = z @ np.array(model['coef']).T + np.array(model['intercept'])
+    logits -= logits.max(-1, keepdims=True)
+    prob = np.exp(logits); prob /= prob.sum(-1, keepdims=True)
+    moves = 10**(model['moves']['a']+model['moves']['b']*np.log10(np.maximum(density, 1e-4)))
+    return dict(classes=model['classes'], prob=prob, moves=moves, source=model['source'])
+
+
+def lifeway_layers(data, fields, land, elevation, meta, coast):
+    lw = lifeway_fields(fields)
+    if lw is None:
+        return []
+    k = lw['prob'].argmax(-1); conf = lw['prob'].max(-1)
+    rgb = np.ones(land.shape+(3,))*np.array([0.93, 0.93, 0.90])
+    for i, name in enumerate(lw['classes']):
+        m = land & (k == i)
+        # paler where the classes are close (confidence 1/3 to 1)
+        w = np.clip((conf-1/3)/(2/3), 0.25, 1.0)[m][:, None]
+        rgb[m] = w*np.array(LIFEWAY_COLORS[name])+(1-w)*np.array([0.93, 0.93, 0.90])
+    rgb[~land] = [0.84, 0.89, 0.94]
+    image = Image.fromarray((np.clip(rgb, 0, 1)*255).astype('uint8')).resize((meta['width'], meta['height']), Image.Resampling.NEAREST)
+    pixels = np.asarray(image).copy()
+    if coast.shape == pixels.shape[:2]: pixels[~coast] = [214, 227, 240]
+    Image.fromarray(pixels).save(data/'forage_lifeway.webp', 'WEBP', quality=88, method=4)
+    shares = {name: float(((k == i) & land).sum()/max(land.sum(), 1)) for i, name in enumerate(lw['classes'])}
+    note = ('Which food a forager band would live on mostly, from the FORGE scenario: a map from its density, food shares, '
+            'shortfall and plant productivity to Binford\'s dominant food, fitted on 280 recorded hunter-gatherer groups and '
+            'tested on each culture area held out (65 % right, kappa 0.48). Paler where the classes are close.')
+    layers = [dict(id='forage_lifeway', file='forage_lifeway.webp', label='Forager lifeways', kind='categories', group='Foraging',
+                   items=[dict(color='#%02x%02x%02x' % tuple(int(255*c) for c in LIFEWAY_COLORS[n]),
+                               label=f"{LIFEWAY_LABELS[n]} · {100*shares[n]:.0f}%") for n in lw['classes']],
+                   note=note, controls=[])]
+    palette = ['#f3eedc', '#d8c48f', '#c08a52', '#9a5a3a', '#5e3430']; lo, hi = 0.5, 30.0
+    tier = tiers(palette, lo, hi, True)
+    for suffix, use in [('', None), ('_tiers', tier)]:
+        rgb = color_image(np.asarray(lw['moves'], np.float32), land, elevation, palette, lo, hi, True, tiered=use)
+        image = Image.fromarray((np.clip(rgb, 0, 1)*255).astype('uint8')).resize((meta['width'], meta['height']), Image.Resampling.NEAREST)
+        pixels = np.asarray(image).copy()
+        if coast.shape == pixels.shape[:2]: pixels[~coast] = [214, 227, 240]
+        Image.fromarray(pixels).save(data/('forage_moves'+suffix+'.webp'), 'WEBP', quality=88, method=4)
+    tier['file'] = 'forage_moves_tiers.webp'
+    layers.append(dict(id='forage_moves', file='forage_moves.webp', label='Camp moves', kind='ramp', group='Foraging',
+                       unit='expected residential moves per year (from the scenario density, as among Binford\'s groups)',
+                       vmin=lo, vmax=hi, stops=palette, log=True, tiers=tier, controls=[],
+                       note='Sparser foragers move camp more often (Spearman -0.45 among 211 recorded groups); a guide, not a prediction for any one band.'))
+    return layers
+
+
 def images_and_layers(data, fields, land, elevation, meta):
     layers=[]
     from rotclimate.geography import source_layers
@@ -199,6 +262,7 @@ def images_and_layers(data, fields, land, elevation, meta):
         layers.append(dict(id=id,file=id+'.webp',label=label,kind='ramp',group='Foraging',
             unit=unit,vmin=lo,vmax=hi,stops=palette,log=log,tiers=tier,controls=[],
             note='Adapted FORGE human model with Miami productivity and explicit vegetation/prey proxies. Finite-horizon scenario; check local convergence. It is separate from c.200 AD farming and census allocation.'))
+    layers+=lifeway_layers(data,fields,land,elevation,meta,coast)
     return layers
 
 
@@ -216,6 +280,8 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
              ROOT/'harvest/export.py',ROOT/'rotclimate/geography.py',ROOT/'scripts/land_people.py',
              ROOT/'scripts/vector_rivers.py',ROOT/'data/source/elevation.png',ROOT/'data/source/rivers.png',
              ROOT/'data/source/original/rivers.png']
+    if (ROOT/'data/forager_lifeways.json').exists():
+        sources.append(ROOT/'data/forager_lifeways.json')
     aquatic=spec.get('aquatic')
     if aquatic:
         sources+=[ROOT/'rotclimate/ebm.py',ROOT/'rotclimate/config.py']
@@ -230,6 +296,7 @@ def export(atlas, *, coarsen=4, chunk_cells=512, years=None, force=False):
         previous=json.loads(target.read_text())
         if (previous.get('fingerprint')==fingerprint and meta.get('foraging',{}).get('fingerprint')==fingerprint
                 and all((data/(id+s+'.webp')).exists() for _,id,*_ in MODES for s in ['', '_tiers'])
+                and (not (ROOT/'data/forager_lifeways.json').exists() or (data/'forage_lifeway.webp').exists())
                 and (data/'foraging.bin').exists() and sha(data/'foraging.bin')==previous.get('binary_sha256')):
             print('Foraging scenario already matches '+str(atlas),flush=True);return previous
     print('Building adapted foraging scenario on '+str(shape)+' grid: '+str(atlas),flush=True)

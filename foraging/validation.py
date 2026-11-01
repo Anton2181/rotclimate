@@ -53,11 +53,13 @@ def verify(data, climate=None):
     np.testing.assert_allclose(sum(float(r['scenario_people']) for r in rows),summary['total_scenario_people'],rtol=3e-12,atol=1e-8)
     layers=[l for l in climate['layers'] if l['id'].startswith('forage_')]
     modes=5 if 'fish_share' in arrays else 4            # the fish-share map comes with the aquatic food stock
+    if any(l['id']=='forage_lifeway' for l in layers):  # F14: lifeways and camp moves
+        modes+=2
     assert len(layers)==modes and all(l['group']=='Foraging' and l['controls']==[] for l in layers)
     if 'fish_share' in arrays:
         assert np.all((arrays['fish_share'][land]>=0)&(arrays['fish_share'][land]<=arrays['meat_fraction'][land]+1e-6))
     for layer in layers:
-        for name in [layer['file'],layer['tiers']['file']]:
+        for name in [layer['file']]+([layer['tiers']['file']] if 'tiers' in layer else []):
             with Image.open(data/name) as image:
                 assert image.size==(m['width'],m['height']);image.verify()
     return dict(status='passed',fields=len(arrays),binary_bytes=len(blob),analysis_shape=list(shape),
