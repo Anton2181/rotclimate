@@ -207,3 +207,14 @@ light-wind factor and the July storminess, not the polar. Next, if pursued:
 the wind on sailing days (a ship sails in its working breeze, not the
 month's mean scalar wind) and the storminess thresholds for the western
 basin, with ORBIS as the blind test again.
+
+**Sailing speed, a note (no test possible).** On the maps, sea storminess
+comes from the open-ocean table by latitude (F6), not cell by cell, so the
+western basin's July "uncertain" cells exist only in the Earth window; what
+the maps feel is the overall speed. Both references say the model sails too
+slowly (median ×1.30 against Casson, ×1.58 against ORBIS), and Casson's own
+range allows 6 knots before a fair wind instead of 5. But a uniform change of
+speed moves every sea time by the same factor, so its effect on ORBIS is
+known from today's result (×1.58 → ×1.32 at 6 knots) and ORBIS would no longer
+be a blind test of it. Without one it is not adopted; recorded as the
+first candidate if a further independent set of sailing times is found.
