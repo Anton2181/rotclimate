@@ -307,6 +307,8 @@ class ClimateModel:
             raise ValueError('dry_heating_chi0 must be in [0, 1) and needs the advected land share (continentality > 0)')
         if params.dry_heating_warm_c != -99.0 and not -20.0 <= params.dry_heating_warm_c <= 30.0:
             raise ValueError('dry_heating_warm_c must be -99 (off) or in [-20, 30] C')
+        if params.dry_heating_arid != -1.0 and not 0.0 <= params.dry_heating_arid < 1.0:
+            raise ValueError('dry_heating_arid must be -1 (off) or in [0, 1)')
         if params.dry_heating_mean_c != -99.0 and (not -20.0 <= params.dry_heating_mean_c <= 30.0 or params.continentality <= 0):
             raise ValueError('dry_heating_mean_c must be -99 (off) or in [-20, 30] C, and needs continentality > 0')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
@@ -995,6 +997,7 @@ class ClimateModel:
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         soilP = np.full(lat.shape, 1.5)
         soil_w = np.where(land, 0.5 * p.soil_bucket_mm, 0.0)    # e8: soil water (mm)
+        soil_ann = soil_w.copy()        # e54e: the soil water's running one-year mean
         swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
         self.t_iterations = []
         self.t_converged = []
@@ -1167,6 +1170,16 @@ class ClimateModel:
                     # where the cell's annual-mean equilibrium is 8 K above
                     # this, none below it.
                     dry = dry * np.clip((annual_eq - p.dry_heating_mean_c) / 8.0, 0.0, 1.0)
+                if p.dry_heating_arid >= 0.0:
+                    # e54e: deserts are dry all year; East China and Manchuria
+                    # only before the monsoon, when the spring there was already
+                    # 3-4 C too warm and e54 warmed it further (the dev31 holdout
+                    # and mid-latitude groups failed on Manchuria, East China and
+                    # the North China Plain). Gate on the soil's one-year mean
+                    # dryness instead of the month's: full where it is dry all
+                    # year, none where the mean dryness is below this.
+                    dry_ann = 1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                    dry = dry * np.clip((dry_ann - p.dry_heating_arid) / (1.0 - p.dry_heating_arid), 0.0, 1.0)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean
@@ -2079,6 +2092,7 @@ class ClimateModel:
             soilP = soil_keep * soilP + (1 - soil_keep) * P
             if p.soil_bucket_mm > 0:
                 soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
+                soil_ann = soil_ann + (soil_w - soil_ann) * min(dt_days / p.year_days, 1.0)
 
             if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
                 swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days
