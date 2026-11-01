@@ -227,3 +227,32 @@ reach is 40 × 0.573 = 22.9 km (`polity.fields.map_dry_water_km`). At 40 km
 86 % of the map's dry land was within reach of a drawn river, lake or sea
 (the dry-land towns sat a median 5 km from water) and only 4 of 94 dry-land
 towns went; at 22.9 km 59 % is within reach.
+
+## Sailing constants from CLIWOC logbooks (not adopted; the polar confirmed)
+
+CLIWOC 2.1 (García-Herrera et al. 2005; historicalclimatology.com, CC BY;
+`data/cache/cliwoc`) gives sailing ships' daily runs with the wind they logged.
+Addendum `calibration/polity_20261025/addendum_sailing_cliwoc_20261101.json`
+(frozen before any extraction; `scripts/polity_sail_cliwoc.py`,
+`output/polity_sail_20261101/cliwoc.json`): 199,692 consecutive-day runs;
+the fair run (track within 60° of downwind, wind ≥ 10 m/s) is 216 km a day.
+
+Relative run by the track's angle from downwind (wind ≥ full): 0–60° 1.05–0.95,
+60–90° 0.92–0.88, 90–105° 0.85, **105–120° 0.79**, 120–135° 0.66, 135–150°
+0.54, 150–165° 0.47, 165–180° 0.45. The close-hauled share by the frozen
+definition (95–115°) is **0.82**, against the model's 0.85 and the first
+addendum's Casson reading of 0.45, which the logbooks contradict (ORBIS was
+right to reject it). The ships made even better progress on near-upwind
+tracks than the model's tacking formula gives (0.45 against 0.26 at
+165–180°), so Casson's slow long passages against the Etesians are waiting and
+routing, not a polar too fast.
+
+The light-wind factor is not identifiable: CLIWOC's wind speeds come from the
+logged Beaufort words and take only a few values with data (6, 10, 12, 20
+m/s; relative runs 0.56, 0.66, 0.55, 0.98), so the frozen least squares ran
+to its grid edge (full speed from 15 m/s, at least 0.56 of it). With that
+degenerate pair the tests got worse (T6 median |log| 0.418 → 0.635; T7 ρ
+0.858 → 0.844, ×1.58 → ×2.06): not adopted. Kept: the polar (0.85) stands on
+independent evidence; the next sailing attempt is the waiting rule (a
+voyage waits in port for a wind that serves its course), with ORBIS as its
+blind test since it changes sea times non-uniformly.
