@@ -184,3 +184,21 @@ Tibetan Plateau organises. That is rain-making physics, not sea or winds.
 The sea-surface diagnostic now records the sea surface each step actually
 uses (`ClimateModel.sst_record`), so terms applied after `ClimateModel.sst`
 (upwelling, e64, e67) are included.
+
+### Where the model puts the spring storms
+
+The storm field (the lift and the eddy exchange of heat and water) is a
+Gaussian band around the planet's mean storm-track latitude: about 41 °N in
+January and February, 44.6 °N in April, 47.7 °N in May, 52 °N in July and
+August (width 14.7°). East coasts get only a secondary band, scaled by
+`storm_asym` (0.30), shifted equatorward by `storm_reach` (4.7°), on top of
+the main band. In April East China (29 °N) sits at 0.3 of the storm field's
+peak, where in the real atmosphere the East Asian jet and its frontal rain
+stay at 30–35 °N until late May or June (the land-sea contrast and the
+Tibetan Plateau hold them there; the "seasonal jump" north comes with the
+Meiyu's end). Screens of the existing switches do nothing: `storm_reach` 8
+and 12 give S 1.0001 and 1.0009, East Asia unchanged; with `storm_asym` 0.5,
+S 1.0107. A storm track that follows the model's own baroclinic zone (the
+latitude of the strongest north-south temperature gradient, smoothed over
+~2,000 km along the latitude) would put it there in spring and let it jump
+north in summer; that is the next physics change to design, freeze and test.
