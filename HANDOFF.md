@@ -313,7 +313,8 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
     gives 0.42 expected independent hearths on the map (66 % chance farming
     came from beyond); land beyond (SW 72 %, SE 45 %) and homeland
     latitudes point south; on-map best guess the west coast.
-    Owner: big seas beyond most edges -> P(on-map hearth | farming present)
+    Model's surroundings picture (layout 1) shows big seas; land link only to
+    the NW (cold) -> P(on-map hearth | farming present)
     = 0.34/(0.34+0.66 q), ~70-90 % unless a narrow crossing/land link exists.
   - The preview is in all three atlases (and hosted) as the 'Languages'
     topic: scripts/add_language_layers.py (density, one draw of territories,

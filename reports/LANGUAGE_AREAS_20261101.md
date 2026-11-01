@@ -419,12 +419,28 @@ the simulated one for the free and Whittaker fits. The expected counts
 are 130, 181 and 144 languages. Language families are not drawn, because
 the hearths are the owner's choice.
 
-### Owner input: big seas beyond most edges
+### The seas in the model's picture of the surroundings
 
-The map's owner says there are big seas beyond most of the map's edges.
-That overrides the climate model's invented surroundings for this
-question. Those surroundings were fitted only so that the climate
-matches the painted zones, and they put land on most sides.
+The map's owner noticed that the model's picture of the surroundings
+(`around_koppen.webp`) shows big seas in most directions. Two things
+reconcile this with the shares above:
+- **The picture is one of three random layouts** (layout 1). The fitted
+  land share of each sector fixes how much land the generator places
+  there, not where it sits. In layout 1 much of it lies far out, beyond
+  open water.
+- **This was corrected from a first reading,** which took the remark as
+  the owner's own geography.
+
+Read off layout 1:
+- **The map is joined by land only to the north-west,** where its
+  northern landmass runs on beyond the edge into colder country at higher
+  latitudes.
+- **The south-east peninsula only runs a little past the edge.**
+- **The land to the south-west, south and east lies across sea.**
+
+So taken at face value, layout 1 leaves only one way for farming to walk
+in: from the cold north-west, where Earth has no homelands. Anything from
+the south would have to cross the sea.
 
 **What changes.** The map clearly has farming by c.200 AD (its polities,
 towns and empire). So the question becomes: given that farming is there,
