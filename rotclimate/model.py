@@ -267,8 +267,8 @@ class ClimateModel:
                 or not 0.0 <= params.subsidence_warming_wet <= 1.0 or not 0.0 <= params.subsidence_warming_chi0 < 1.0 \
                 or params.subsidence_warming_rain < 0 or params.subsidence_warming_top_m < 0:
             raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg, its wet gate in [0, 1] and chi0 in [0, 1)')
-        if not 0.0 <= params.subsidence_branch_drying <= 2.0:
-            raise ValueError('subsidence_branch_drying must be in [0, 2] per day')
+        if not 0.0 <= params.subsidence_branch_drying <= 2.0 or params.subsidence_branch_dry_rain < 0:
+            raise ValueError('subsidence_branch_drying must be in [0, 2] per day (and its rain gate >= 0)')
         if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
             raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
         if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
@@ -1951,6 +1951,10 @@ class ClimateModel:
                 # mid-latitudes, which the summer edge band reaches)
                 core = (np.clip((lat - (phi_i + p.subsidence_branch_gap)) / 5.0, 0.0, 1.0)
                         * np.clip((phi_h - lat) / 10.0, 0.0, 1.0))
+                if p.subsidence_branch_dry_rain > 0 and rain_prev is not None:
+                    # e70c: where it rains the air rises (summer monsoon East
+                    # China, the US south): no dry-air descent there
+                    core = core * np.exp(-rain_prev / p.subsidence_branch_dry_rain)
                 extra = p.subsidence_branch_drying * core / DAY
                 sink = extra if sink is None else sink + extra
             if p.monsoon_descent > 0:
@@ -2162,7 +2166,7 @@ class ClimateModel:
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
                 heating_prev = gauss(P * warm, MONSOON_SMOOTH_KM / g.cell_km)
-            if p.subsidence_warming > 0 and p.subsidence_warming_rain > 0:
+            if (p.subsidence_warming > 0 and p.subsidence_warming_rain > 0) or (p.subsidence_branch_drying > 0 and p.subsidence_branch_dry_rain > 0):
                 rain_prev = gauss(P, 300.0 / g.cell_km)
             if p.cloud_radiation > 0 or p.cloud_longwave > 0:
                 rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)
