@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-11-01, after layer 2b (no index places Diamond's nine homelands well enough to pick hearths: productivity AUC 0.78, the best; bar 0.80) and before any computation below. Asked by the map's owner: can the hearths be figured out from the map alone?",
+ "question": "Layer 2d: from the map's own climate, how many independent farming hearths should the map expect, where are the likeliest places, and how likely is it that farming came in from beyond the map instead?",
+ "base_rate": "Earth's nine homelands (Diamond 2002) over the land of layer 2b's 1 deg grid (56 S - 72 N): homelands per km2 of land.",
+ "likelihood": "productivity (Miami NPP, layer 2b's B1, the best-scoring index) as the 500 km disc mean, binned into terciles of Earth's 2,000 random discs (layer 2b's discs, seed 0). Likelihood ratio of a bin = ((homelands in the bin + 0.5) / 10.5) / (share of random discs in the bin). No refitting: the nine homeland percentiles and the random discs are those already computed in layer 2b.",
+ "map": "the map's own NPP (the same Miami formula, from the Earth-corrected climate in atlases/earth_fit/data/corrected/harvest.bin), averaged over land within 500 km of each land cell, placed in Earth's terciles. Expected number of hearths = base rate x sum over land cells of LR x cell area. Probability of no independent hearth on the map = exp(-expected) (a Poisson count).",
+ "candidates": "local maxima of the map's 500 km disc-mean NPP, strongest first, at least 1,500 km apart (as in layer 2b), each with its Earth percentile.",
+ "beyond_the_map": "reported, not scored: the fitted land share beyond each edge (atlas world.beyond) and the latitudes of Earth's homelands (6 S - 37 N) against the map's (28-49 N). No rule picks the entry side; this is information for the owner.",
+ "limits": "nine homelands; present climate; productivity only (AUC 0.78); a hearth is an independent origin over the Holocene, not a date.",
+ "script": "scripts/farming_hearths_map.py"
+}
