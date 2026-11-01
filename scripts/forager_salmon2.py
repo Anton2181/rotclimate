@@ -82,6 +82,7 @@ def run_D(sites, spec, gamma, a_salmon):
     f = np.clip(sites["gs"] / 6.0, 0.1, 1.0) ** gamma
     plant, meat = forcing["plant_supply"] * 0.5 * f, forcing["meat_supply"] * 0.5 * f
     marine = np.exp(-sites["d_coast_km"] / 25.0) * np.clip((28.0 - sites["sst_annual_c"]) / 20.0, 0.2, 1.0)
+    marine = marine * sites.get("open_share", 1.0)
     annual = 3000.0 * marine + 100.0 * sites["w_fresh"] + a_salmon * sites["s_salmon"]
     fish = np.broadcast_to(annual / plant.shape[0], plant.shape).copy()
     return simulate_foraging(plant, meat, params=ForagingParams(**spec["kernel_parameters"]), display="mean",
@@ -189,8 +190,8 @@ def stage5(a, sites, sets, calif, spec):
                           calif=[z["calif"]["median_abs_log10_error"], b["calif"]["median_abs_log10_error"]]), indent=1))
 
 
-def crossval(a, sites, spec, stats):
-    plan = ROOT / "calibration/forager_binford_20261031/addendum_salmon6_20261101.json"
+def crossval(a, sites, spec, stats, base_override=None, tag="salmon6"):
+    plan = ROOT / f"calibration/forager_binford_20261031/addendum_{tag}_20261101.json"
     disc = math.pi * 25.0 ** 2
     area = sites["area"]
     folds = {k: area == k for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}
@@ -205,6 +206,8 @@ def crossval(a, sites, spec, stats):
             pred[(s, L)] = run_D(sites, spec, 0, s)["density_people_km2"]
             print(L, s, {k: round(float(np.median(np.abs(np.log10(np.maximum(pred[(s, L)][m], 1e-9) / obs[m])))), 3) for k, m in folds.items()}, flush=True)
     pred[(0, 0)] = base
+    if base_override is not None:          # judge against configuration D as adopted
+        base = base_override
     err = lambda d, m: float(np.median(np.abs(np.log10(np.maximum(d[m], 1e-9) / obs[m]))))
     held = np.zeros_like(obs); choice = {}
     for k, m in folds.items():
@@ -225,7 +228,9 @@ def crossval(a, sites, spec, stats):
     final = min(pred, key=lambda q: (round(err(pred[q], allm), 6), q))
     out = dict(addendum=str(plan.relative_to(ROOT)), hydrorivers=stats, cv_error=cv, baseline_error=cv0, folds=per,
                final_fit=dict(a_salmon=final[0], L_km=final[1]), adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
-    (a.out / "binford_salmon6.json").write_text(json.dumps(out, indent=1, default=float))
+    out["ice_only_error"] = err(pred[(0, 0)], allm)
+    out["ice_only_folds"] = {k: err(pred[(0, 0)], m) for k, m in folds.items()}
+    (a.out / f"binford_{tag}.json").write_text(json.dumps(out, indent=1, default=float))
     print(json.dumps(dict(cv=cv, baseline=cv0, folds={k: (round(v["heldout"], 3), round(v["baseline"], 3), v["choice"]) for k, v in per.items()},
                           final=out["final_fit"], adopted=ok), indent=1))
 
@@ -237,6 +242,7 @@ def main():
     ap.add_argument("--stage4", action="store_true", help="addendum_salmon4: salmon thins upstream (decay length on the interior)")
     ap.add_argument("--stage5", action="store_true", help="addendum_salmon5: upstream thinning and the cold limit on the interior")
     ap.add_argument("--cv", action="store_true", help="addendum_salmon6: outlets 2-15 C, leave-one-area-out cross-validation")
+    ap.add_argument("--ice", action="store_true", help="addendum_salmon7: marine supply x open-sea share of the year")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -276,6 +282,13 @@ def main():
         return stage4(a, sites, sets, calif, spec, stats)
     if a.stage5:
         return stage5(a, sites, sets, calif, spec)
+    if a.cv and a.ice:
+        from rotclimate.earth import observed_sst
+        v = observed_sst(sites["lat"], sites["lon"])          # [12, n] at each group's nearest sea point
+        base_no_ice = run_D(sites, spec, 0, 0)["density_people_km2"]
+        sites["open_share"] = (np.asarray(v) > -1.0).sum(0) / 12.0
+        print("open share by area", {k: round(float(np.median(sites['open_share'][sites['area'] == k])), 2) for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}, flush=True)
+        return crossval(a, sites, spec, stats, base_override=base_no_ice, tag="salmon7")
     if a.cv:
         return crossval(a, sites, spec, stats)
     for g in GAMMAS:

@@ -1,0 +1,8 @@
+{
+ "frozen": "2026-11-01, after addendum salmon6 (known: leave-one-area-out CV error 0.442 -> 0.377, the Northwest Coast 0.577 -> 0.302, California 0.508 -> 0.439, the world 0.251 -> 0.253, but the Arctic 0.650 -> 0.762 and the Subarctic 0.437 -> 0.559, failing the per-fold guard; the Arctic was already too dense, +0.24, before any salmon) and before any run below.",
+ "why": "The marine term lets Arctic coasts fish a full year of open sea; the Arctic Ocean and Hudson Bay are frozen eight to nine months, and the open-water harvest of fish and sea mammals is a summer harvest.",
+ "change": "the marine supply multiplied by the share of the year the nearest sea is open: open months = months with WOA18 monthly sea surface above -1.0 C at the group's nearest sea point (rotclimate.earth.observed_sst), share = open months / 12; nothing fitted. The salmon index and grid as addendum salmon6 (outlets 2-15 C).",
+ "cross_validation": "as addendum salmon6 (folds ARC, NNA, WNA, BC NWC, SW, rest of world; (a_salmon, L) fitted on the other folds), the baseline being configuration D with the ice factor and no salmon, and also reported against configuration D as adopted (no ice factor, no salmon)",
+ "adopt_if": "against configuration D as adopted: the CV error improves by at least 0.02, no fold's held-out median absolute log10 error worsens by more than 0.05, and the rest-of-world fold's not by more than 0.01. Then the ice factor and (a_salmon, L) fitted on all groups enter data/foraging_model.json (the map: open months from its climate packet's sea-level air over the nearest sea, drawn rivers to seas between 2 and 15 C) and the atlases' foraging is rebuilt.",
+ "script": "scripts/forager_salmon2.py --cv --ice"
+}

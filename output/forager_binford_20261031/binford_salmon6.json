@@ -1,0 +1,78 @@
+{
+ "addendum": "calibration/forager_binford_20261031/addendum_salmon6_20261101.json",
+ "hydrorivers": {
+  "na": {
+   "outlets": 18414,
+   "cold_systems": 11009,
+   "salmon_segments": 108983
+  },
+  "as": {
+   "outlets": 14174,
+   "cold_systems": 2871,
+   "salmon_segments": 29254
+  },
+  "ar": {
+   "outlets": 12920,
+   "cold_systems": 4191,
+   "salmon_segments": 29007
+  }
+ },
+ "cv_error": 0.37692278856271194,
+ "baseline_error": 0.44151772787561094,
+ "folds": {
+  "ARC": {
+   "heldout": 0.7618340879392775,
+   "baseline": 0.6495770223903656,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800
+   }
+  },
+  "NNA": {
+   "heldout": 0.5587789085861572,
+   "baseline": 0.4373625552746654,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800
+   }
+  },
+  "WNA": {
+   "heldout": 0.2150837653528886,
+   "baseline": 0.2150837653528886,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800
+   }
+  },
+  "BC NWC": {
+   "heldout": 0.30173866548947564,
+   "baseline": 0.5774233300970776,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800
+   }
+  },
+  "SW": {
+   "heldout": 0.43926202844634465,
+   "baseline": 0.5082484497231978,
+   "choice": {
+    "a_salmon": 100,
+    "L_km": 400
+   }
+  },
+  "world": {
+   "heldout": 0.2530444089788589,
+   "baseline": 0.251305034184623,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800
+   }
+  }
+ },
+ "final_fit": {
+  "a_salmon": 300,
+  "L_km": 800
+ },
+ "adopted": false,
+ "rule": "the CV error improves on the baseline by at least 0.02, no fold's held-out median absolute log10 error worsens by more than 0.05, and the rest-of-world fold's is not worse by more than 0.01. Then (a_salmon, L) are fitted on all groups and data/foraging_model.json takes them (the map: drawn rivers reaching a sea between 2 and 15 C annual, weighted by distance along them to the sea, scaled to HydroRIVERS' stream density), and the atlases' foraging is rebuilt."
+}
