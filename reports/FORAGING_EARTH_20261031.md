@@ -156,3 +156,34 @@ for 0.01). Not adopted; the atlases keep 3,000. What North America's richest
 foragers have that the model lacks is specific: salmon runs up cold-coast
 rivers and stored acorns, neither of which the test continents can check (no
 native anadromous salmon in the south).
+
+## Salmon rivers (addendum, not adopted)
+
+`calibration/forager_binford_20261031/addendum_salmon_20261101.json` (frozen
+before its run; `scripts/forager_salmon.py`,
+`output/forager_binford_20261031/binford_salmon.json`): S_salmon is the
+Natural Earth river length within 25 km that belongs to a river system
+reaching a Northern Hemisphere sea colder than 15 °C (annual, WOA18), fitted
+on the Arctic, Subarctic and western North American groups and tested on the
+Northwest Coast and California (held out) and the rest of the world.
+Deviations, recorded: the first run found only 22 such systems because
+Natural Earth's lines stop 10–40 km short of WorldClim's coast at deltas
+(the Yukon) and the Salish Sea breaks off WorldClim's ocean at 5′; mouths
+were then taken within 40 km (the addendum said 10) and the ocean as every
+water body that is not a Natural Earth lake. With that, 92 systems, 28 groups.
+
+| a_salmon | fit (ARC, NNA, WNA) error / bias | NW Coast + California error / bias | rest of world error |
+|---:|---|---|---:|
+| 0 | 0.435 / +0.27 | 0.577 / −0.58 | 0.251 |
+| 300 | 0.542 / +0.38 | 0.556 / −0.55 | 0.251 |
+| 1,000 | 0.597 / +0.38 | 0.551 / −0.54 | 0.251 |
+
+The fit set is already ~1.9× too dense, so it takes no salmon (a_salmon 0,
+not adopted), and the held-out coasts barely move: most Northwest Coast
+groups live on short coastal rivers that Natural Earth 1:10m does not draw.
+North America's error is two-sided, the cold interior too dense (Subarctic
++0.36, Arctic +0.24) and the rich coasts too sparse; a salmon term cannot
+mend the second while the first stands. Next attempt: terrestrial food that
+falls with the growing season in cold climates (the boreal interior), fitted
+on North America's interior and judged on the coasts' and the other
+continents' groups, and only then salmon again (with a finer river source).
