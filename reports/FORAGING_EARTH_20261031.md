@@ -187,3 +187,26 @@ mend the second while the first stands. Next attempt: terrestrial food that
 falls with the growing season in cold climates (the boreal interior), fitted
 on North America's interior and judged on the coasts' and the other
 continents' groups, and only then salmon again (with a finer river source).
+
+## Cold-climate land food (addendum, not adopted)
+
+`calibration/forager_binford_20261031/addendum_cold_20261101.json` (frozen
+before its run; `scripts/forager_cold.py`,
+`output/forager_binford_20261031/binford_cold.json`): land food x
+clip(GS / 6, 0.1, 1)^γ, GS = months with mean temperature ≥ 5 °C, γ fitted on
+the Subarctic (NNA) and judged on the Arctic (ARC), western North America
+and the rest of the world.
+
+| γ | Subarctic (fit) error / bias | Arctic (blind) error / bias | WNA error | rest of world error |
+|---:|---|---|---:|---:|
+| 0 | 0.437 / +0.36 | 0.650 / +0.24 | 0.215 | 0.251 |
+| 0.5 (fitted) | 0.417 / +0.20 | 0.690 / +0.09 | 0.213 | 0.251 |
+| 1 | 0.457 / +0.06 | 0.715 / −0.04 | 0.141 | 0.251 |
+
+The fit takes a mild limit, but the Arctic's error is scatter rather than
+level (median absolute error 0.65 with a bias of only +0.24: some Arctic
+groups three times too dense, others three times too sparse), so lowering it
+everywhere makes it worse; not adopted. Recorded for the next attempt: the
+Arctic's scatter follows sea mammals and fish (the coastal Inuit against the
+inland Caribou Inuit), and western North America improves markedly at γ 1
+(0.215 → 0.141), which a later design with the coasts' food can test.
