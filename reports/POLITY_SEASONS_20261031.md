@@ -179,3 +179,31 @@ Adopted: `polity.settle.DRY_WATER_KM = 40` (dry land: rain over Hargreaves
 evaporation < 0.35, the harvest model's own aridity layer on the maps; water:
 the drawn rivers and lakes or the sea). All three atlases' political reach is
 rebuilt with it (and with the autumn mud).
+
+## Sailing constants against Casson and ORBIS (not adopted)
+
+ORBIS v2 (Scheidel & Meeks; `emeeks/orbis_v2`, MIT: `sites.csv`,
+`new_routes.topojson`, cached in `data/cache/orbis/`) is back, so test T7 can
+run. Addendum `calibration/polity_20261025/addendum_sailing_20261031.json`
+(frozen before its runs): Casson's "less than 2 to 2.5 knots against the
+wind" sets the close-hauled share at 0.45 of fair speed instead of 0.85, with
+the fair speed refitted within Casson's 4–6 knots on T6 and tested blind on
+ORBIS's July coastal and overseas edges (`scripts/polity_sail_check.py`,
+`output/polity_sail_20261101/sail.json`):
+
+| variant | T6 Casson ρ | median model/Casson | west | long passages (≥ 20 days) | T7 ORBIS ρ | median model/ORBIS |
+|---|---:|---:|---:|---:|---:|---:|
+| V0 today (0.85, 5 kn) | 0.733 | ×1.30 | ×2.71 | ×0.44 | **0.858** | **×1.58** |
+| V1 (0.45, 5 kn) | 0.780 | ×1.54 | ×3.15 | ×0.64 | 0.836 | ×2.11 |
+| V2 (0.45, 6 kn), selected on T6 | 0.780 | ×1.29 | ×2.62 | ×0.53 | 0.836 | ×1.76 |
+
+Casson's ranking improves (ρ 0.73 → 0.78) and the long passages against the
+Etesians slow toward Casson's 50–70 days, but ORBIS (a model too, with its
+own polar and wind climatology) gets worse in rank (0.858 → 0.836, beyond the
+0.01 allowed) and in level, so by the frozen rule nothing changes. Both
+references agree the model is slow overall (×1.3 Casson, ×1.6 ORBIS), and the
+west stays 2.6–3.9× too slow in every variant: the western slowness is the
+light-wind factor and the July storminess, not the polar. Next, if pursued:
+the wind on sailing days (a ship sails in its working breeze, not the
+month's mean scalar wind) and the storminess thresholds for the western
+basin, with ORBIS as the blind test again.
