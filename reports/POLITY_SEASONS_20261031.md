@@ -256,3 +256,36 @@ degenerate pair the tests got worse (T6 median |log| 0.418 → 0.635; T7 ρ
 independent evidence; the next sailing attempt is the waiting rule (a
 voyage waits in port for a wind that serves its course), with ORBIS as its
 blind test since it changes sea times non-uniformly.
+
+## A waiting rule for voyages (two frozen attempts; not adopted)
+
+CLIWOC showed the polar is right, so Casson's slow long passages must be
+waiting. Addenda `addendum_sailing_wait_20261101.json` and
+`addendum_sailing_wait2_20261101.json` (frozen before their runs;
+`scripts/polity_sail_wait.py`, `output/polity_sail_20261101/sail_wait*.json`):
+a passage within one weather spell (4 days) at fair speed (the departure
+chosen for a fair wind); longer ones at fair speed × (1 + (1 − p)/p), p the
+chance the wind serves the course (steady part within 100° of downwind, the
+unsteady part's 100/180); the second attempt credits the first spell. Nothing
+fitted.
+
+| | today | rule 1 | rule 2 (first spell credited) |
+|---|---:|---:|---:|
+| ORBIS rank (blind) | 0.858 | 0.850 | 0.851 |
+| ORBIS median |log| | 0.522 | 0.309 | **0.306** |
+| ORBIS median ratio | ×1.58 | ×0.90 | ×0.90 |
+| Casson median ratio / long / short | ×1.30 / ×0.44 / ×1.36 | ×1.08 / ×0.92 / ×1.04 | ×1.05 / ×0.73 / ×1.04 |
+| Casson median |log| | **0.418** | 0.650 | 0.519 |
+
+The level comes right on both references (ORBIS's error falls by 40 %, the
+Etesian passages slow toward Casson's 50–70 days), but Casson's scatter
+grows, so neither is adopted. Two causes, seen route by route: short
+passages against the steady Etesians (the Levant and Alexandria to Rhodes
+and Crete, Casson 8–12 days) are treated as fair-wind departures (3–4 days),
+where a steady contrary wind seldom turns and real ships beat; and the
+western routes stay 2–3× slow even at fair speed because the Earth window's
+cell-by-cell storminess makes parts of the western basin "uncertain" (half
+speed) in July, which the maps (latitude-mean storminess) do not have. Next:
+a departure that waits for a serving wind only where one comes within a
+spell, beating otherwise; and the western storminess at the scale it was
+fitted on.
