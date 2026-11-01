@@ -416,3 +416,52 @@ walking and boat days, and FORGE gives lifeways. Two tasks follow:
 - **F14:** a forager lifeway map, frozen and validated leave-one-area-out.
 - **F15:** contact-basin culture areas, validated against Binford's areas
   and D-PLACE regions, with location-only clustering as the baseline to beat.
+
+## Forager lifeways on the maps (F14, adopted)
+
+`calibration/forager_binford_20261031/addendum_lifeways14_20261101.json`
+(frozen after the probe and before this run; `scripts/forager_lifeways.py`,
+`output/forager_binford_20261031/binford_lifeways.json`).
+
+The test maps FORGE's outputs to Binford's dominant food. The fit is a
+multinomial logistic, refitted with each culture area held out in turn:
+
+| measure | value |
+|---|---:|
+| held-out accuracy | **0.654** |
+| Cohen's κ | **0.484** |
+| always the commonest class | 0.39 |
+| knowing each held-out area's commonest class (reference) | 0.72 |
+
+The adoption rule was accuracy ≥ 0.60 and κ ≥ 0.40, so it is adopted. The
+model fitted on all 280 groups is stored in `data/forager_lifeways.json`,
+together with the density-to-camp-moves relation (log10 moves =
+0.31 − 0.30 log10 density).
+
+Feature note: FORGE's meat fraction includes fish (the export checks
+fish share ≤ meat fraction). The "hunting share" feature,
+(1 − fish) × meat, is therefore not a clean hunting share. It is identical
+on Earth and on the maps, so the test holds as frozen.
+
+The foraging export (`foraging/export.py`) now draws two layers in each
+atlas, on the raw and the corrected climate:
+
+- **Forager lifeways:** hunters, gatherers or fishers, paler where the
+  classes are close.
+- **Camp moves:** expected residential moves per year.
+
+Lifeway shares of land (raw climate; corrected Earth fit in parentheses):
+
+| atlas | fishers | gatherers | hunters |
+|---|---:|---:|---:|
+| free fit | 53 % | 38 % | 9 % |
+| Earth fit | 34 % (31 %) | 55 % (56 %) | 12 % (13 %) |
+| Whittaker fit | 43 % | 45 % | 12 % |
+
+Coasts and lake shores are confident fishers. The pale fishers of the free
+and Whittaker fits' interiors come from their dense drawn rivers and lakes.
+Hunters hold the uplands, the cold north and the eastern island.
+
+Browser checks pass locally and as packaged
+(`output/forager_binford_20261031/browser_lifeways_*.json`), and the hosted
+atlases are republished.
