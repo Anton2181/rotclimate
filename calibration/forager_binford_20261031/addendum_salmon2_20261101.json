@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, before any HydroRIVERS index is computed or any run. Known: the salmon addendum (Natural Earth rivers: a_salmon 0, the fit set already too dense) and the cold-climate addendum (gamma 0.5 on the Subarctic, worse on the Arctic) and their per-area errors.",
+ "data": "HydroRIVERS v1.0 (Lehner & Grill 2013, HydroSHEDS; North America, Asia and Arctic tiles, data.hydrosheds.org), cached in data/cache/hydrorivers",
+ "index": "S_salmon at a group: length (km per 100 km2) of HydroRIVERS segments within 25 km with mean discharge >= 1 m3/s (DIS_AV_CMS), not endorheic, at most 1,500 km upstream of their outlet (DIST_DN_KM), whose river system (MAIN_RIV) reaches the sea in the Northern Hemisphere where the WOA18 annual-mean sea surface at the outlet is below 15 C",
+ "model": "configuration D (600-year mean; a_marine 3000, a_fresh 100, k_terr 0.5) with land food x clip(GS / 6, 0.1, 1) ** gamma (GS = months >= 5 C) and the aquatic supply + a_salmon x S_salmon",
+ "fit": "gamma in {0, 0.5, 1, 1.5} x a_salmon in {0, 30, 100, 300, 1000} jointly on the Arctic, Subarctic and western North American groups (ARC, NNA, WNA), minimising their median absolute log10 density error",
+ "test_blind": "the Northwest Coast and California (as the salmon addendum defines them) and the rest of the world, the fitted pair against (0, 0)",
+ "adopt_if": "the fitted pair differs from (0, 0), the Northwest Coast + California median absolute log10 error improves by at least 0.05, and the rest of the world's median absolute log10 error and density rank are not worse by more than 0.01. Then data/foraging_model.json takes gamma and a_salmon (the map: months from its climate packet; drawn rivers reaching a sea below 15 C, scaled to the detail of HydroRIVERS' >= 1 m3/s streams) and the atlases' foraging is rebuilt.",
+ "script": "scripts/forager_salmon2.py"
+}
