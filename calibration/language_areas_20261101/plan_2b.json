@@ -1,0 +1,34 @@
+{
+ "frozen": "2026-11-01, after layer 2 (farming spreads by plain distance; the crop rules decide only where it can take root) and before any run below. No FORGE output has been computed on a global grid before this plan.",
+ "question": "Layer 2b: where does farming start? Testart (1982) and Bar-Yosef argued that farming grew out of dense, settled foragers who lived on stored plant food through a lean season. Does FORGE's version of that place the world's farming homelands better than plain productivity or plain forager density?",
+ "targets": {
+  "source": "Diamond 2002 (Nature 418: 700-707, Fig. 1) and Diamond & Bellwood 2003 (Science 300: 597-603): nine homelands of independent domestication.",
+  "points (lat, lon), placed here at each homeland's centre of early domestication": {
+   "Fertile Crescent": [[36.0, 39.0]],
+   "China (Yellow River and Yangzi)": [[35.0, 112.0], [30.0, 113.0]],
+   "New Guinea highlands": [[-5.8, 144.3]],
+   "Sahel": [[16.0, 2.0]],
+   "tropical West Africa": [[7.0, 5.0]],
+   "Ethiopia": [[9.0, 39.0]],
+   "eastern United States": [[37.0, -88.0]],
+   "Mesoamerica": [[18.0, -98.0]],
+   "Andes and Amazonia": [[-10.0, -76.0]]
+  }
+ },
+ "grid": "1 deg WorldClim 2.1 land cells (half land or more), 56 S to 72 N; FORGE configuration D exactly as in layer 1 (scripts/language_areas_earth.py capacity(): rivers, lakes, coast and observed sea temperature as inputs, no salmon).",
+ "indices": {
+  "B1": "Miami net primary productivity.",
+  "B2": "FORGE forager density.",
+  "B3": "plant-fed forager density: density x (1 - fish share) x (1 - meat fraction).",
+  "H": "Testart's storing plant foragers: plant-fed density x lean-season days / 365 (FORGE's mean scarcity days)."
+ },
+ "score": "For each homeland, the mean index over land cells within 500 km of its point (for China, the larger of its two points). Compared with 2,000 discs of the same radius centred on random land cells (seed 0) more than 1,000 km from every homeland point. AUC = the share of (homeland, random disc) pairs where the homeland scores higher, over the nine homelands. Each homeland's percentile is reported too.",
+ "adopt_if": {
+  "H": "AUC(H) >= 0.80 and AUC(H) >= max(AUC(B1), AUC(B2), AUC(B3)) + 0.05. Then the fantasy map's farming hearths are the local maxima of H's 500 km disc mean that exceed the 95th percentile of Earth's random-disc scores, kept strongest first at least 1,500 km apart.",
+  "B3": "if H fails but B3 passes the same test against B1 and B2, B3 places the hearths.",
+  "else": "hearths are not predicted from climate; the map's owner places them (or farming arrives from beyond the map's edge)."
+ },
+ "also_reported": "the strongest maxima of the winning index that are not homelands (false hearths such as California, whose storing acorn foragers never farmed), and a world map of H.",
+ "limits": "present climate, not the early Holocene (the Sahara was green); homeland points are placed by hand at the centre of each region's early sites.",
+ "script": "scripts/farming_hearths_earth.py"
+}
