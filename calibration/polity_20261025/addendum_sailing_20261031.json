@@ -1,0 +1,14 @@
+{
+ "frozen": "2026-10-31, before any run of the variants below. Known before freezing: T6 (Casson, seen: Spearman 0.733, median ratio model/Casson 1.30; western passages 2-4x too slow, long upwind passages ~3x too fast; output/polity_sea_west_20261031/sea_west.json) and T7 as run in the original container with the current constants (ORBIS July coastal and overseas edges: n 441, Spearman 0.848, median ratio 1.59; calibration/polity_20261025/sea.json). T7 has not been run with any variant below.",
+ "why": "plan.json's sail_note cites Casson (1951): 4-6 knots before a fair wind, 'less than 2 to 2.5 against the wind'; the polar then set the close-hauled share at 0.85 of fair speed (4.25 knots), which lets the model beat to windward at 70 % of fair speed 45 degrees off the wind and sail Alexandria-Rome against the Etesians in 20 days (Casson 50-70).",
+ "variants": {
+   "V0": "current: CLOSE_HAULED_SHARE 0.85, SAIL_FAIR_KNOTS 5.0",
+   "V1": "CLOSE_HAULED_SHARE 0.45 (Casson's 2-2.5 knots against the wind over 5 before it), SAIL_FAIR_KNOTS 5.0",
+   "V2": "CLOSE_HAULED_SHARE 0.45 and SAIL_FAIR_KNOTS refitted on T6 within Casson's 4-6 knots (grid 4.0, 4.5, 5.0, 5.5, 6.0)"
+ },
+ "selection": "on T6 (seen): the variant (V0, V1 or a V2 grid point) with the lowest median |log(model / Casson)| over Casson's routes, May-September mean as T6 defines it; ties to the earlier variant",
+ "test_blind": "T7: ORBIS (Scheidel & Meeks, ORBIS v2 new_routes.topojson, sites.csv; emeeks/orbis_v2, MIT) coastal and overseas edges, July, as polity_earth_check.stage_sea defines it, for the selected variant against V0",
+ "adopt_if": "the selected variant differs from V0, its T7 Spearman is at least V0's minus 0.01 and its T7 median |log(model / ORBIS)| is below V0's. Then polity.transport takes its constants and the three atlases' political reach is rebuilt. Otherwise nothing changes.",
+ "reported_not_gating": "Casson by route (west / east, upwind share), Pliny's record runs; a fair-wind departure reading of Casson (a passage whose fair-wind time is within 4 days is timed at fair speed), which is how ancient records of short passages were made",
+ "script": "scripts/polity_sail_check.py"
+}
