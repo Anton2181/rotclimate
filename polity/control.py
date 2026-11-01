@@ -175,6 +175,24 @@ class Network:
         return d[:self.n_cells]
 
 
+class DualNetwork:
+    """The waiting rule's two networks (polity.transport.SAILING_RULE "wait"): a trip
+    within one weather spell at fair-wind sea speed, longer ones paying the expected
+    waits beyond the first spell, d = d_fair + (d_beat - d_fair) x max(0, 1 - spell /
+    d_fair). Graph-based tools (trade, markets) see the beat-or-wait graph (`base`)."""
+
+    def __init__(self, fair, beat, spell_days):
+        self.fair, self.beat, self.spell = fair, beat, float(spell_days)
+        self.base, self.n_cells, self.n, self.virtual = beat.base, beat.n_cells, beat.n, beat.virtual
+
+    def days(self, sources, offsets=None, limit=np.inf):
+        df = self.fair.days(sources, offsets, limit)
+        db = self.beat.days(sources, offsets, limit)
+        w = np.clip(1.0 - self.spell / np.maximum(df, 1e-9), 0.0, 1.0)
+        out = np.where(np.isfinite(df), df + (db - df) * w, db)
+        return np.where(np.isfinite(db), out, df)
+
+
 def effective_days(days_by_month):
     """Year-round days: the days whose control equals the mean control over
     the months, -D ln(mean_m exp(-days_m / D))."""

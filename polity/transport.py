@@ -97,6 +97,47 @@ def sea_edges(water, u, v, wind, steadiness, season, cell_km, coast_km=None):
     return np.concatenate(rows), np.concatenate(cols), np.concatenate(cost)
 
 
+# Voyages wait for a serving wind (calibration/polity_20261025/addendum_sailing_wait4_20261101.json,
+# adopted): a passage within one weather spell sails on a fair wind chosen at departure; beyond it
+# each step either beats to windward (the polar) or waits for a serving wind, whichever is quicker.
+# CLIWOC's logbooks confirmed the polar (close-hauled 0.82); Casson's slow long passages were waiting.
+SAILING_RULE = "wait"            # "wait" (adopted) or "polar" (the earlier rule)
+SPELL_DAYS = 4.0                 # persistence of a weather regime (a fair wind lasts about this long)
+
+
+def sea_edges_rule(water, u, v, wind, steadiness, season, cell_km, coast_km, mode):
+    """Sea edges at fair speed (mode "fair": the departure chose a fair wind) or beating
+    or waiting, whichever is quicker (mode "beat"): the wait is fair time x (1 - p) / p,
+    p = s [theta <= CLOSE_HAULED] + (1 - s) CLOSE_HAULED / 180, at least 0.05."""
+    water = np.asarray(water, bool); h, w = water.shape
+    coastal = coast_km <= COAST_KM
+    speed = np.hypot(u, v)
+    ex = np.where(speed > 1e-6, u / np.maximum(speed, 1e-6), 0.0)
+    ny = np.where(speed > 1e-6, v / np.maximum(speed, 1e-6), 0.0)
+    nodes = np.arange(h * w).reshape(h, w)
+    fair_km_day = SAIL_FAIR_KNOTS * KNOT_KM_H * 24.0
+    rows, cols, cost = [], [], []
+    for dy, dx in NEIGHBOURS:
+        y0, y1 = max(0, -dy), min(h, h - dy); x0, x1 = max(0, -dx), min(w, w - dx)
+        src = np.s_[y0:y1, x0:x1]; dst = np.s_[y0 + dy:y1 + dy, x0 + dx:x1 + dx]
+        ok = water[src] & water[dst]
+        if dy and dx:
+            ok &= water[y0:y1, x0 + dx:x1 + dx] & water[y0 + dy:y1 + dy, x0:x1]
+        norm = np.hypot(dy, dx)
+        coast_ = coastal[src] & coastal[dst]; seas = np.minimum(season[src], season[dst])
+        km_day = fair_km_day * np.where(coast_, COAST_FACTOR, 1.0) * seas
+        days = cell_km * norm / np.maximum(km_day, 1e-6)
+        if mode == "beat":
+            cos_t = (dx * 0.5 * (ex[src] + ex[dst]) - dy * 0.5 * (ny[src] + ny[dst])) / norm
+            theta = np.degrees(np.arccos(np.clip(cos_t, -1.0, 1.0)))
+            s = np.clip(0.5 * (steadiness[src] + steadiness[dst]), 0.0, 1.0)
+            p = np.maximum(s * (theta <= CLOSE_HAULED) + (1.0 - s) * CLOSE_HAULED / 180.0, 0.05)
+            km_t = sail_km_day(cos_t, s, 0.5 * (wind[src] + wind[dst]), coast_, seas)
+            days = np.minimum(days * (1.0 + (1.0 - p) / p), cell_km * norm / np.maximum(km_t, 1e-6))
+        rows.append(nodes[src][ok]); cols.append(nodes[dst][ok]); cost.append(days[ok])
+    return np.concatenate(rows), np.concatenate(cols), np.concatenate(cost)
+
+
 def harbour_edges(land, water, ports, cell_km, reach=2):
     """Boarding at ports (to every water cell within `reach` cells, BOARD_DAYS
     plus the walk) and landing on any coast (water to each land neighbour,

@@ -289,3 +289,34 @@ speed) in July, which the maps (latitude-mean storminess) do not have. Next:
 a departure that waits for a serving wind only where one comes within a
 spell, beating otherwise; and the western storminess at the scale it was
 fitted on.
+
+## The waiting rule, third and fourth attempts (adopted)
+
+`addendum_sailing_wait3_20261101.json` and `addendum_sailing_wait4_20261101.json`
+(frozen before their runs; `scripts/polity_sail_wait.py --beat [--fit-p0]`,
+`output/polity_sail_20261101/sail_wait3.json`, `sail_wait4.json`): each step
+beats to windward (the polar) or waits for a serving wind, whichever is
+quicker; a passage leaves on a chosen fair wind only where one comes (the
+mean chance p along its fair route at least P0) and then sails its first
+4-day spell at fair speed, waiting only beyond it. Rule 3 set P0 = 0.5 by
+hand; rule 4 fitted it on Casson.
+
+| | today | rule 3 (P0 0.5) | rule 4 (P0 fitted: 0.3) |
+|---|---:|---:|---:|
+| Casson rank | 0.733 | 0.777 | **0.791** |
+| Casson median |log| | 0.418 | 0.295 | **0.295** |
+| ORBIS rank (blind) | 0.858 | 0.829 | **0.851** |
+| ORBIS median |log| | 0.522 | 0.377 | **0.326** |
+| ORBIS median ratio | ×1.58 | ×1.24 | ×1.06 |
+
+Rule 4 passes the frozen rule and is **adopted**. Recorded honestly: Casson
+scores P0 = 0.3, 0.5 and 0.6 alike (0.295), and the tie went to the smallest
+value, the code's default, which the addendum did not state; at 0.5 the ORBIS
+rank fails (rule 3). On the maps (`polity.transport.SAILING_RULE = "wait"`,
+`polity.control.DualNetwork`): each month's network is built twice, with
+fair-wind and with beat-or-wait sea edges (land and river legs alike), and a
+trip's days combine as fair + (beat − fair) × max(0, 1 − 4 days / fair). The
+map takes every departure as a fair-wind one (P0 = 0.3 admits nearly every
+route; tracing each route's winds on the map would double the work again),
+and trade and market tools see the beat-or-wait graph. All three atlases'
+political reach is rebuilt with it.

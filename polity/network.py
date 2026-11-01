@@ -96,9 +96,12 @@ def month_network(world, st, cl, m, ports=(), river_places=(), boats=True, horse
                           world.get("tracks"), road_factor=1.0 + (S.MUD_ROAD - 1.0) * mud,
                           track_factor=1.0 + (S.MUD_COEFFICIENT - 1.0) * mud, cross=cross)]
     extra = 0
+    dual = boats and sea and X.SAILING_RULE == "wait"
     if boats and sea:
-        edges.append(X.sea_edges(st["water"], world["u"][m], world["v"][m], world["wind"][m], cl["steadiness"][m],
-                                 cl["sea"][m], cell_km, st["coast_km"]))
+        sea_args = (st["water"], world["u"][m], world["v"][m], world["wind"][m], cl["steadiness"][m], cl["sea"][m],
+                    cell_km, st["coast_km"])
+        sea_slot = len(edges)
+        edges.append(X.sea_edges_rule(*sea_args, mode="beat") if dual else X.sea_edges(*sea_args))
         if len(ports):
             edges.append(X.harbour_edges(land, st["water"], list(ports), cell_km))
     if boats and len(st["river_cells"]):
@@ -106,4 +109,7 @@ def month_network(world, st, cl, m, ports=(), river_places=(), boats=True, horse
         edges.append((rr, rc, rd))
         edges.append(X.river_harbour_edges(cells, land.size, list(river_places), land.shape))
         extra = len(cells)
+    if dual:
+        fair = list(edges); fair[sea_slot] = X.sea_edges_rule(*sea_args, mode="fair")
+        return C.DualNetwork(C.Network(land.size, fair, extra), C.Network(land.size, edges, extra), X.SPELL_DAYS)
     return C.Network(land.size, edges, extra)
