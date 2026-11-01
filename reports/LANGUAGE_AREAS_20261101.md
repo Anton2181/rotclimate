@@ -474,3 +474,54 @@ then the best guess (35.8° N), with the south coast as runner-up.
 
 The open questions for the owner: is there any narrow crossing or land
 link, and is there farming across the seas?
+
+## Language families from the owner's provisional hearth (west coast)
+
+The owner chose the **west coast** (35.8° N), layer 2d's best guess, for
+now. The choice may change.
+- **Settings:** `calibration/language_areas_20261101/fantasy_hearths.json`.
+  To move the hearth, edit that file and re-run
+  `scripts/add_language_layers.py`.
+- **Script:** `scripts/language_families_map.py`.
+- **Output:** `output/language_areas_20261101/families/`.
+
+**The rules:**
+- **Spread:** farming spreads at layer 2's Earth rate of 1.0 km a year by
+  distance. Hills follow Tobler's walking speed, and sea crossings are as
+  easy as flat land, as every Earth fit chose. On this low map that is
+  plain distance.
+- **The family:** the farmers' languages form one family on the farmland.
+  Land where no crop takes root keeps its forager languages.
+- **Branches** (illustrative, not tested): the groups that left the
+  spreading front at 700 years, with the front cut into arcs of about
+  600 km. Sub-branches are the same at 1,600 years.
+
+**On the Earth-fit map:**
+- **Farming fills the farmland in about 3,300 years.**
+- **Of the draw's 144 languages,** 140 belong to the farming family and 4
+  are forager languages, in the unfarmable north. The family has 3
+  branches (the homeland around the hearth and two that left its front)
+  and 5 sub-branches.
+
+**Against the polities.** A language counts for a polity when at least a
+quarter of its territory lies inside.
+
+| polity | languages | branches | sub-branches | farming's median arrival (years) |
+|---|---:|---:|---:|---:|
+| Xšāça | 70 | 3 | 5 | ~1,900 |
+| Anušiya Cities | 10 | 1 | 1 | ~1,100 |
+| Avādāyā Tribes | 10 | 2 | 2 | ~1,000 |
+| Tribes of the Neck | 8 | 1 | 2 | ~1,900 |
+| Bekoni River Cities | 7 | 1 | 1 | ~550 |
+
+The empire spans every branch of the family. The western kingdoms sit
+inside the homeland branch, where farming arrived first.
+
+**For scale:** the Bantu expansion took about 3,000–4,000 years to cross
+about 4,000 km. It produced roughly 500 languages in Guthrie's 16 zones,
+about 30 languages a zone. 140 languages in 5 sub-branches is a similar
+ratio.
+
+**In the atlases:** two layers join the Languages topic in all three
+fits, "Farming's arrival" and "Language families". Both are labelled
+provisional, with the hearth named.

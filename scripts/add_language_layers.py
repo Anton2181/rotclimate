@@ -25,8 +25,9 @@ from scipy import ndimage as ndi  # noqa: E402
 
 from harvest.export import color_image, tiers  # noqa: E402
 from language_map_preview import compute  # noqa: E402
+from language_families_map import HEARTHS, families, palette, render  # noqa: E402
 
-IDS = ("language_density", "language_territories", "language_edges")
+IDS = ("language_density", "language_territories", "language_edges", "language_farming_arrival", "language_families")
 SEA = np.array([214, 227, 240], np.uint8)
 
 
@@ -109,11 +110,49 @@ def add(atlas: Path):
                   f"over all land: on this low, open map the drawn borders mostly cut across language country rather than "
                   f"following natural divides."),
     ]
+    if HEARTHS.exists():
+        layers += family_layers(atlas, R, meta, elev, land, coast, data)
     meta["layers"] = [L for L in meta["layers"] if L["id"] not in IDS] + layers
     meta["languages"] = dict(summary={k: v for k, v in summ.items() if k != "polities"}, polities=summ["polities"],
                              method="reports/LANGUAGE_AREAS_20261101.md (layers 1-2d)")
     (data / "atlas.json").write_text(json.dumps(meta))
     print(atlas, f"{summ['expected_languages']:.0f} languages; climate {summ['climate']}; edge share {summ['language_edge_frequency_on_polity_borders']:.2f} vs {summ['language_edge_frequency_on_land']:.2f}")
+
+
+def family_layers(atlas, R, meta, elev, land, coast, data):
+    """Farming's arrival from the owner's hearth(s) and the language families (provisional)."""
+    F = families(atlas, R)
+    S = F["summary"]
+    yrs = np.where(land, F["years"], np.nan).astype(np.float32)
+    hi = float(np.ceil(np.nanpercentile(yrs, 99) / 500.0) * 500.0)
+    pal = ["#fff6d8", "#f6c97a", "#e08a3a", "#b4521f", "#6e2b12"]
+    tier = tiers(pal, 0.0, hi, False)
+    for suffix, use in (("", None), ("_tiers", tier)):
+        rgb = color_image(yrs, land, elev, pal, 0.0, hi, False, tiered=use)
+        save(rgb, meta, coast, data / f"language_farming_arrival{suffix}.webp")
+    tier["file"] = "language_farming_arrival_tiers.webp"
+    save(render(F), meta, coast, data / "language_families.webp")
+    hearths = ", ".join(h["name"] for h in S["hearths"])
+    base = palette(S["primary_branches"])
+    items = [dict(color="#%02x%02x%02x" % tuple(int(255 * c) for c in base[0]), label="homeland branch (around the hearth)")]
+    items += [dict(color="#%02x%02x%02x" % tuple(int(255 * c) for c in base[i]), label=f"branch {i}") for i in range(1, S["primary_branches"])]
+    items += [dict(color="#cccbc7", label="hatched: forager languages (no crop roots)"), dict(color="#0d0d0d", label="de jure polity border")]
+    owner_note = ("Provisional: the hearth is the map owner's choice (" + hearths + "), the best guess from the map alone; it can move. ")
+    return [
+        dict(id="language_farming_arrival", file="language_farming_arrival.webp", label="Farming's arrival", kind="ramp",
+             group="Languages", unit="years after farming began at the hearth", vmin=0.0, vmax=hi, stops=pal, log=False,
+             tiers=tier, controls=[],
+             note=owner_note + f"Farming spreads at the Earth rate, {S['km_per_year']:.1f} km a year by distance (fitted on 726 dated "
+                  f"early-farming sites of the Near East and Europe; terrain and crop suitability did not improve it on regions held out). "
+                  f"The farmland is filled after about {S['farmland_filled_years']:,.0f} years."),
+        dict(id="language_families", file="language_families.webp", label="Language families", kind="categories",
+             group="Languages", items=items, controls=[],
+             note=owner_note + f"The farmers' languages form one family ({S['farming_family_languages']} languages in this draw), "
+                  f"spreading with farming; branches are the groups that left the spreading front at {S['primary_years']} years "
+                  f"(colours) and {S['secondary_years']} years (shades), the front cut into arcs of about {S['arc_km']} km "
+                  f"(illustrative, not tested). White lines: farming's arrival every 500 years. Shades within a branch are its "
+                  f"sub-branches ({S['sub_branches']} in all)."),
+    ]
 
 
 def main():

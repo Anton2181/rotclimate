@@ -62,7 +62,7 @@ def window_stats(v, land, ny, nx):
     return mean, sd
 
 
-def travel_graph(elev, land, cell_km):
+def travel_graph(elev, land, cell_km, sea_factor=SEA_FACTOR):
     h, w = land.shape
     idx = np.arange(h * w).reshape(h, w)
     flat = 6.0 * np.exp(-3.5 * 0.05)
@@ -74,7 +74,7 @@ def travel_graph(elev, land, cell_km):
         ea, eb = elev[np.ix_(ys, xa)], elev[np.ix_(ys + dy, xa + dx)]
         both = land[np.ix_(ys, xa)] & land[np.ix_(ys + dy, xa + dx)]
         slope = (eb - ea) / 1000.0 / dist
-        sea = SEA_FACTOR * dist / flat
+        sea = sea_factor * dist / flat
         t_ab = np.where(both, dist / (6.0 * np.exp(-3.5 * np.abs(slope + 0.05))), sea)
         t_ba = np.where(both, dist / (6.0 * np.exp(-3.5 * np.abs(-slope + 0.05))), sea)
         rows += [a.ravel(), b.ravel()]; cols += [b.ravel(), a.ravel()]; cost += [t_ab.ravel(), t_ba.ravel()]
