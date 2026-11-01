@@ -510,3 +510,48 @@ For the maps, the result means culture areas are best grown from distance
 and the drawn polities and lore, not from terrain barriers. A next attempt
 would cluster within each macro-region, so islands do not consume the
 cluster budget, and would weight sea crossings by their actual width.
+
+## FORGE's food store scored on storage itself (F13, not adopted)
+
+`calibration/forager_binford_20261031/addendum_storage13_20261101.json`
+(frozen before its run; `scripts/forager_storage.py`,
+`output/forager_binford_20261031/binford_storage13.json`).
+
+**Setup:**
+- FORGE configuration D, with its food store switched on. Food beyond the
+  fat ceiling is kept, then eaten before body fat.
+- Ten settings: capacity 250–4,000 MJ per person, decay 0 or 0.5 % a day.
+- Each setting was scored by the rank correlation of FORGE's stored share
+  of food with Binford's quantity of storage (qtstor, 1–4).
+- The setting was chosen with one Binford area left out at a time. The
+  density error could rise by at most 0.02.
+
+**Result: no relation.**
+- The held-out correlation is **0.00**. The bar was 0.30, and at least 0.10
+  above scarcity days alone, which score 0.17.
+- Every setting's correlation on all groups lies between −0.13 and −0.01.
+- Every setting with a store also worsens density, by +0.01 to +0.06 on
+  the median log error.
+- **California is the wrong way round.** Its acorn and seed gatherers
+  (qtstor 2.8) store 4.6 % of their food in the model. The rest of the
+  Southwest's desert groups store 8.6 %.
+
+**Why:**
+- **FORGE's store fills in the wrong place.** It fills where a short glut
+  overtops the fat ceiling: desert rains and monsoon greens.
+- **Real storage follows a long winter.** Binford's own published
+  threshold, the effective temperature ET = 15.25 (a growing-season
+  measure), separates his groups almost perfectly:
+  - below it, 86 % store substantially; above it, 6 %;
+  - the rank correlation of qtstor with −ET is 0.72.
+  
+  Binford drew that threshold from these same groups, so it is not an
+  independent test.
+- **Mass-harvested foods are missing.** FORGE has no acorn mast and no
+  salmon run (the salmon attempts were not adopted).
+
+**What it leaves:**
+- The store stays off. FORGE carries lean seasons on body fat alone.
+- If the maps want a storage layer, the defensible rule is Binford's
+  published ET threshold, labelled as such: a literature rule, not a FORGE
+  output.
