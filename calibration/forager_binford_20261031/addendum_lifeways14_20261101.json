@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, after the probe in scripts/forager_lifeway_probe.py (reports/FORAGING_EARTH_20261031.md, 'Can FORGE say where culture areas emerge?': leave-one-area-out accuracy 0.65, kappa 0.48) and before this frozen run.",
+ "why": "FORGE ranks fishers and gatherers but its absolute split leans to meat; a map from its outputs to Binford's dominant food turns its cells into lifeways the maps can show.",
+ "classes": "dominant food from Binford's hunting / gathering / fishing percentages (the largest; ties to fishing, then gathering)",
+ "features": "FORGE configuration D as adopted: log10 density, hunting share = (1 - fish share) x meat fraction, gathering share = (1 - fish share) x (1 - meat fraction), fish share, scarcity days / 365, log10 Miami NPP; standardised on the training groups",
+ "model": "multinomial logistic regression, balanced class weights, C = 1 (no tuning)",
+ "test": "leave one Binford culture area out (areas with >= 1 group; an area is predicted by the model fitted on all others); report accuracy, Cohen's kappa and the confusion matrix; repeat with each culture area's majority class as a geography-only baseline",
+ "adopt_if": "held-out accuracy >= 0.60 and kappa >= 0.40. Then the model fitted on all groups is stored in data/forager_lifeways.json and the three atlases get a 'Forager lifeways' layer (hunters / gatherers / fishers with the class probability as confidence; mobility shown as expected residential moves per year from Binford's density-moves relation fitted on the same groups) beside the FORGE layers, raw and corrected climate.",
+ "script": "scripts/forager_lifeways.py"
+}
