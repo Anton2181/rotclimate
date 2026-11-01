@@ -1,0 +1,12 @@
+{
+ "frozen": "2026-11-01, before any run below; FORGE configuration D as adopted (aquatic foods, data/foraging_model.json), nothing refitted",
+ "why": "FORGE has been tested on density (Binford) and on which groups fished (rank 0.78); storage, the plant/animal split and mobility are untested axes the same Binford records carry.",
+ "tests": {
+  "T1 storage": "Spearman rank correlation of FORGE's mean stored-food share against Binford's quantity of storage (qtstor, 1-4), all groups and by culture area",
+  "T2 animal food": "Spearman of FORGE's mean meat fraction (land food) against Binford's hunting share of the land food, hunting / (hunting + gathering)",
+  "T3 mobility": "Spearman of FORGE's mean foraging hours per day and of its density against Binford's residential moves per year (nomov); expected signs: more moves with lower density",
+  "T4 shortfall and storage": "Spearman of FORGE's scarcity days against qtstor (groups that face lean seasons store)"
+ },
+ "reading": "Diagnostic only, nothing is adopted: an axis with |rho| >= 0.3 in the expected direction over all groups is 'reproduced'; one below 0.15 or of the wrong sign names the next FORGE design.",
+ "script": "scripts/forager_axes.py"
+}
