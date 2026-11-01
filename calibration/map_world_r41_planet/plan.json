@@ -1,0 +1,44 @@
+{
+ "declared_before_world_results": true,
+ "declared": "2026-11-01, before any run of this campaign",
+ "physics": "calibration/local_accuracy_20261023/r41_params.json",
+ "old_atlas_params": "calibration/map_world_r41/params.json",
+ "old_atlas_note": "The r41 Earth-fit atlas (r41 shared physics, the published r38 world geometry). The review requires atlases/earth_fit/params.json to equal this file (the r41 release promoted) and uses atlases/earth_fit/summary.json as the native reference.",
+ "start": "calibration/map_world_r41_planet/start.json",
+ "start_note": "The r41 atlas parameters with beyond_continuity_km = 300 km (reports/OFFMAP_EARTH_20261101.md: a 300 km edge continuation beat the fitted 688 km on Earth) and downsample 32.",
+ "planet": "Earth's gravity, day length (rotation-rate magnitude), year length (365 days, the atlas calendar), planet radius, map scale, retrograde spin and every qualified r41 shared physical parameter stay fixed. Free world genes: latitude, orientation, the four terrain tiers, the six surrounding-land shares and their relief (as r40), plus the planet levers the user ruled legal: axial tilt (8-45 deg), orbital eccentricity (0-0.06), perihelion phase (-182.5 to +182.5 days after the winter solstice; the orbit is periodic), starlight at the planet (0.96-1.04 x Earth's), extra greenhouse forcing (-2 to +8 W m-2) and the planet's land fraction by latitude (Earth's pattern x 0.4-1.8, ebm_land_scale). Planet radius is left out: its circulation scalings are first-order theory, not Earth-tested. beyond_continuity_km is fixed at 300 km (measured on Earth, not fitted).",
+ "downsample": 32,
+ "layouts": [
+  1,
+  2,
+  3,
+  17,
+  23
+ ],
+ "objective": "Guarded zone fit of the five-layout mean climate (calibrate mode 'guarded', race=0): zonefit minus 2 x every point by which the candidate breaches the coarse screen against the matched r41 control (strict agreement -0.01, each painted zone's recall -0.03, Mediterranean dry share +0.01, Cs share -0.03). r40's search found zonefit gains that only traded zones and none survived the screen, so this campaign searches inside the screen. Rows record raw zonefit as score + guard_penalty.",
+ "evaluations": 241,
+ "popsize": 12,
+ "sigma": 0.1,
+ "seed": 41,
+ "workers": 4,
+ "stds": {
+  "north_bearing": 0.05
+ },
+ "coarse_control": "The r41 atlas parameters (688 km continuation) at ds32 on the five layouts with the strict numerical profile; its metrics define the guard reference.",
+ "native_selection": "At most the two highest raw-zonefit unique completed parameter sets with zero guard penalty and no numerical failure advance, ordered by raw zonefit, and only if their raw zonefit beats the coarse control.",
+ "native_check": "At downsample 8 and mean layouts 1-3, against atlases/earth_fit/summary.json (the r41 atlas): observed numerical success, zonefit at least +0.001, strict agreement no worse, no zone recall loss greater than 0.02 (tree included), Mediterranean dry-share increase at most 0.005 and Cs-share loss at most 0.02. Try the second finalist only if the first fails.",
+ "audit_layouts": [
+  590103,
+  590217,
+  590311,
+  590409,
+  590521,
+  590613,
+  590701,
+  590815,
+  590919
+ ],
+ "audit": "Only the first native-passing world: the r41 atlas and the candidate at ds16 on the nine layouts never run by any campaign (r40's audit did not run), every member saved. Ensemble gate: nine-layout mean-climate zonefit no worse than r41 and strict-agreement loss at most 0.01. Uncertainty gate: nine paired individual-layout zonefit differences with mean > 0 and the lower 2.5th percentile of 20000 paired bootstrap means > 0 (numpy default_rng(594901) on the sorted differences). No interim selection, added layouts or second candidate after the audit.",
+ "reporting": "Every result is reported, including the hot-dry (painted southern desert) recall, the planet levers' fitted values and the humid-heat realism guard share for every finalist.",
+ "publication": "Only a world passing the native check and both audit gates is staged as the Earth-fit atlas (full layers, corrected climate, identity, asset and server checks). Otherwise the r41 atlas keeps the published geometry."
+}
