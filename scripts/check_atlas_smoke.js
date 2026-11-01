@@ -16,6 +16,8 @@ async function checkPage(browser, url) {
   const errors = [], failed = [];
   page.on('pageerror', e => errors.push(String(e)));
   // atlas.bin first, atlas.wasm (published copies) second: a missing atlas.bin is the page's own fallback probe
+  const loaded = [];
+  page.on('response', r => { if (r.status() < 400) loaded.push(r.url()); });
   page.on('response', r => { if (r.status() >= 400 && !/r19_|favicon|data\/atlas\.bin/.test(r.url())) failed.push(`${r.status()} ${r.url()}`); });
   await page.goto(url, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => document.querySelector('#station-h')?.textContent !== '—', null, { timeout: 90000 });
@@ -62,8 +64,13 @@ async function checkPage(browser, url) {
     const shown = [];
     for (const id of ids) {
       await showLayer(id);
-      const ok = await page.waitForFunction(() => { const i = document.querySelector('#base'); return i.src.includes('/corrected/') && i.complete && i.naturalWidth > 0; },
-        null, { timeout: 20000 }).then(() => true, () => false);
+      // population layers are drawn in the page from the population packet: there the
+      // corrected packet must have loaded and the drawn image must be showing
+      const dynamic = meta.corrected_climate.layers.some(L => L.id === id && L.population_dynamic);
+      const ok = await page.waitForFunction(dyn => { const i = document.querySelector('#base');
+        return (i.src.includes('/corrected/') || (dyn && i.src.startsWith('data:'))) && i.complete && i.naturalWidth > 0; },
+        dynamic, { timeout: 20000 }).then(() => true, () => false)
+        && (!dynamic || loaded.some(u => /\/data\/corrected\/population\.(bin|wasm)/.test(u)));
       shown.push({ id, corrected_image: ok });
     }
     const changes = meta.layers.filter(L => L.id.startsWith('correction_')).map(L => ({ id: L.id, group: L.group }));
