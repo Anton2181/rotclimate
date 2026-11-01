@@ -107,16 +107,14 @@ def polity_raster(atlas: Path, shape, land):
     return lab, names, colours, rings
 
 
-def main():
-    ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument("atlas", type=Path); ap.add_argument("out", type=Path)
-    ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--draws", type=int, default=20)
-    a = ap.parse_args()
-    a.out.mkdir(parents=True, exist_ok=True)
-    data = a.atlas / "data"
+def compute(atlas: Path, seed: int = 0, draws: int = 20):
+    """Language density, one draw of territories, the edge frequency over more
+    draws and the polity comparison, from an atlas's corrected climate (or its
+    raw one when it has none)."""
+    data = atlas / "data"
     A = json.loads((data / "atlas.json").read_text())
-    blob = (data / "corrected" / "atlas.bin").read_bytes()
+    sub = "corrected" if (data / "corrected" / "atlas.bin").exists() else ""
+    blob = (data / sub / "atlas.bin").read_bytes()
 
     def arr(k):
         s = A["arrays"][k]; n = int(np.prod(s["shape"]))
@@ -142,7 +140,7 @@ def main():
     block_km2 = BLOCK_KM ** 2 * coslat
     farm = land & (s >= 0.05) & (Sm >= 0.05)
     dens_farm = np.expm1(y) / block_km2                 # languages per km2
-    F = load_foraging(data, "corrected")
+    F = load_foraging(data, sub)
     fd = np.kron(np.nan_to_num(F["density_people_km2"]), np.ones((4, 4)))[:h, :w]
     dens = np.where(farm, dens_farm, np.where(land, fd / 3000.0, 0.0))
     area = cell_km ** 2
@@ -165,13 +163,13 @@ def main():
         dy = (lab[1:, :] != lab[:-1, :]) & land[1:, :] & land[:-1, :]
         e[:, 1:] |= dx; e[:, :-1] |= dx; e[1:, :] |= dy; e[:-1, :] |= dy
         return e
-    owner, n_drawn = draw(a.seed)
+    owner, n_drawn = draw(seed)
     freq = np.zeros((h, w)); counts = []
-    for k in range(a.draws):
+    for k in range(draws):
         o, nk = draw(1000 + k); counts.append(nk)
         freq += ndi.binary_dilation(edges(o), iterations=2)
-    freq /= a.draws
-    pol, names, colours, rings = polity_raster(a.atlas, (h, w), land)
+    freq /= draws
+    pol, names, colours, rings = polity_raster(atlas, (h, w), land)
     edge_p = edges(np.where(land, pol, -2))
     rows = []
     for i, nm in enumerate(names):
@@ -184,7 +182,7 @@ def main():
                          drawn_languages_any=int(len(langs)), largest_language_share=float(share.max()),
                          effective_languages=float(1.0 / np.sum(share ** 2)), farmland_share=float(farm[cells].mean())))
     unclaimed = land & (pol < 0)
-    summary = dict(source=str(SUMMARY_2C.relative_to(ROOT)), seed=a.seed, draws=a.draws, cell_km=cell_km, block_cells=[ny, nx],
+    summary = dict(source=str(SUMMARY_2C.relative_to(ROOT)), climate=sub or "raw", seed=seed, draws=draws, cell_km=cell_km, block_cells=[ny, nx],
                    expected_languages=expected, expected_farmland_languages=exp_farm,
                    drawn_languages_mean=float(np.mean(counts)), farmland_share=float(farm[land].mean()),
                    unclaimed_land_share=float(unclaimed.sum() / land.sum()),
@@ -192,6 +190,20 @@ def main():
                    language_edge_frequency_on_polity_borders=float(freq[edge_p].mean()),
                    language_edge_frequency_on_land=float(freq[land].mean()),
                    polities=sorted(rows, key=lambda r: -r["expected_languages"]))
+    return dict(land=land, farm=farm, dens=dens, owner=owner, freq=freq, pol=pol, edge_p=edge_p, rows=rows, y=y,
+                summary=summary, meta=A)
+
+
+def main():
+    ap = argparse.ArgumentParser(description=__doc__)
+    ap.add_argument("atlas", type=Path); ap.add_argument("out", type=Path)
+    ap.add_argument("--seed", type=int, default=0)
+    ap.add_argument("--draws", type=int, default=20)
+    a = ap.parse_args()
+    a.out.mkdir(parents=True, exist_ok=True)
+    R = compute(a.atlas, a.seed, a.draws)
+    land, farm, dens, owner, freq, pol, edge_p, rows, y, summary = (R[k] for k in
+        ("land", "farm", "dens", "owner", "freq", "pol", "edge_p", "rows", "y", "summary"))
     (a.out / "fantasy_languages.json").write_text(json.dumps(summary, indent=1, ensure_ascii=False))
     np.savez_compressed(a.out / "fantasy_languages.npz", dens=dens.astype(np.float32), owner=owner.astype(np.int32),
                         farm=farm, pol=pol.astype(np.int16), y=y.astype(np.float32), edge_freq=freq.astype(np.float32))
