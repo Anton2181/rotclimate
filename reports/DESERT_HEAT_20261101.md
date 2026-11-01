@@ -266,10 +266,19 @@ The rest of both groups move by less than 0.5 %.
 **What it shows:**
 - **The desert physics works.** Retired set b, the deserts, improves by
   4 %, and dev31 by 0.6 %.
-- **It costs a little elsewhere.** Manchuria gets warmer and wetter, and
-  SW Australia warmer. Both sit just poleward of the descending branch,
-  which the warming term's taper reaches.
+- **Manchuria is not warmed directly.** Candidate 79's branch edge reaches
+  27.6° in winter, 33.6° on the annual mean and 39.6° in summer, while
+  Manchuria lies at 44.6°. So e71 never touches it. Its loss arrives
+  indirectly: the warmed and dried belt to the south reaches it through
+  eddy mixing (850 km) and moisture transport.
+- **Cutting the warming off at the branch edge would not help.**
 
-A next design would protect those edges explicitly: cut the e71 warming
-off poleward of the branch's annual-mean edge, not its seasonal edge. It
-would need a new frozen plan, and sealed set d is still unseen for it.
+**The headroom has to come from Manchuria's own errors:**
+- an annual warm bias of +1.9 °C, reaching +2 to +4 °C from September to
+  January;
+- winter rain at 1.6–3 times the observed.
+
+The rest of East Asia has the same error: winters too wet in Japan,
+Korea and the North China Plain, and springs too dry and warm. The dry,
+cold winter monsoon is missing. That is P6. Once it is fixed, the desert
+refit can be re-run against sealed set d, which is still unseen.
