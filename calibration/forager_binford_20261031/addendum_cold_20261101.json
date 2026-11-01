@@ -1,0 +1,9 @@
+{
+ "frozen": "2026-11-01, before any run below. Known: configuration D's errors by area (Subarctic NNA median log10 bias +0.36, Arctic ARC +0.24, western North America WNA +0.09, Northwest Coast -0.58, California -0.49) and the salmon addendum's result (the cold interior is already too dense, so it takes no salmon).",
+ "why": "Boreal and tundra land feeds few people: a short growing season limits plant food and the prey it carries (the Subarctic's foragers at 0.01-0.05 people per km2), while the model's Miami productivity and its prey relation treat a cold year's summer like a long one.",
+ "change": "configuration D (k_terr 0.5, a_marine 3000, a_fresh 100, 600-year mean) with the terrestrial plant and prey supply multiplied by f = clip(GS / 6, 0.1, 1) ** gamma, GS = the number of months whose mean temperature is at least 5 C at the group (WorldClim); f = 1 wherever six or more months reach 5 C",
+ "fit": "gamma in {0, 0.5, 1, 1.5, 2, 3} on the Subarctic groups (wc.area NNA), minimising their median absolute log10 density error",
+ "test_blind": "the Arctic groups (ARC; a different culture area), western North America (WNA) and the rest of the world (the 66 test groups), at the fitted gamma against gamma 0",
+ "adopt_if": "gamma > 0 is fitted, the Arctic's median absolute log10 error improves by at least 0.05, and WNA's and the rest of the world's median absolute log10 errors are not worse by more than 0.01 (their density rank not lower by more than 0.01). Then data/foraging_model.json takes gamma (the map's months from its climate packet) and the atlases' foraging is rebuilt; the salmon term is then retried.",
+ "script": "scripts/forager_cold.py"
+}
