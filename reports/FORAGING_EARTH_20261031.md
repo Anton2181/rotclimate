@@ -338,3 +338,33 @@ Mooney's estimates are low by modern standards. Ubelaker's 1988 total for
 North America north of Mexico is about 1.9 million. But the east–west
 contrast within the Subarctic comes from his sources' own band counts, and
 it is the contrast that matters here.
+
+## FORGE on untested axes: storage, animal food, mobility (F12, diagnostic)
+
+`calibration/forager_binford_20261031/addendum_axes12_20261101.json`
+(frozen before its run; `scripts/forager_axes.py`,
+`output/forager_binford_20261031/binford_axes.json`). This is
+configuration D as adopted, nothing refitted, scored against Binford's
+other records for 280 groups.
+
+| axis | test | Spearman ρ | reading |
+|---|---|---:|---|
+| mobility | density vs residential moves per year (n 211) | **−0.45** (p 5e-12) | reproduced; every area −0.26 to −0.65 |
+| mobility | foraging hours vs moves | 0.07 | not reproduced |
+| animal food | meat fraction vs hunting / (hunting + gathering) | 0.19 (p 0.001) | weak; wrong sign in the Southwest (−0.33) and Australia (−0.14) |
+| storage | scarcity days vs quantity of storage | 0.17 | weak |
+| storage | stored share vs quantity of storage | none | not testable: the adopted configuration stores nothing (stored share 0 everywhere) |
+
+What the failures name for the next FORGE design:
+
+1. **Storage.** 190 of Binford's 282 groups store substantially (qtstor 3–4).
+   The adopted FORGE has no store, so lean seasons are carried only by body
+   fat. The storage capacities tested in the robustness round (task 8)
+   should be re-tested as a mechanism scored on storage itself (T1), not on
+   density alone.
+2. **The plant/animal split.** Most of the Southwest's error is California,
+   where the acorn and seed gatherers lived on stored plant food. Groups
+   that gather heavily get too much meat in the model. Storage and plant
+   food go together, so the two belong in one design.
+3. **Mobility.** No FORGE output measures it directly. Density alone already
+   carries the moves-per-year signal.
