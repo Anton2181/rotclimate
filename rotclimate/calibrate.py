@@ -371,6 +371,15 @@ def guard_penalty(ev, med) -> float:
     import os
 
     ref = json.loads(Path(os.environ["ROTCLIMATE_GUARDS"]).read_text())
+    if ref.get("form") == "world_screen":
+        # The world campaigns' coarse screen as a penalty (map_world_r41_planet):
+        # strict agreement may fall 0.01, every painted zone's recall 0.03, the
+        # Mediterranean dry share may rise 0.01 and its Cs share fall 0.03
+        over = (max(0.0, ref["strict"] - ev["accuracy"] - 0.01)
+                + sum(max(0.0, value - ev["recall"][zone] - 0.03) for zone, value in ref["recall"].items())
+                + max(0.0, med["dry_share"] - ref["med_dry"] - 0.01)
+                + max(0.0, ref["med_cs"] - med["cs_share"] - 0.03))
+        return GUARD_WEIGHT * over
     over = (max(0.0, ref["strict"] - ev["accuracy"] - 0.01)
             + max(0.0, ref["cold_dry"] - ev["recall"]["cold_dry"] - 0.02)
             + max(0.0, ref["hot_dry"] - ev["recall"]["hot_dry"] - 0.03)
