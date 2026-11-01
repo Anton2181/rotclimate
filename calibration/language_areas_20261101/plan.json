@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, before any run below; after the user's direction that culture areas must grow from the land (not from the drawn, multicultural polities) and be compared with the polities at the end.",
+ "layer": "1: forager language territories",
+ "model": "Gavin et al. 2017 (Global Ecology and Biogeography 26: 584-591) process model: groups fill unoccupied land, the environment caps density, a group splits when its population passes a maximum. Carrying capacity from FORGE configuration D (as adopted) on each cell's WorldClim climate, aquatic inputs as in scripts/binford_aquatic_inputs.py; a cell whose own capacity exceeds the maximum holds ceil(K / N_max) groups.",
+ "grid": "0.5 deg over mainland Australia (land share >= 0.5, latitude > -39.5); one group seeded at a random cell; growth by a random empty neighbour of a random expandable group; a group above N_max splits into two along its longer axis at the population-weighted median; 50 replicates (seeds 0-49).",
+ "n_max": "the 75th percentile of the recorded total populations of Binford's Australian groups (tlpop, n 49): 1,296 people; sensitivity also reported at twice the median (1,124). Nothing fitted to languages.",
+ "test": "Glottolog 5 (glottolog-cldf) languages (level 'language') of the Australia macroarea on the mainland with coordinates (369). Total: mean simulated count. Pattern: language richness per 2 deg block (blocks with >= 50 % land): simulated distinct groups vs Glottolog language points; R^2 (squared Pearson) of the replicate-mean richness, and Spearman. Reference: a correlative model, richness ~ log10 FORGE density across blocks (fitted, in-sample).",
+ "adopt_if": "mean count within +-25 % of 369 (277-461) and richness R^2 >= 0.30 (Gavin et al. report 0.56 with rainfall). Then layer 1 is built on the invented maps from their FORGE density (raw and corrected climate) and kept for layers 2-4.",
+ "script": "scripts/language_areas_earth.py"
+}
