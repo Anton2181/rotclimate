@@ -129,3 +129,81 @@ None reaches the adoption bar. Two ways forward:
    language territories, labelled with this Earth performance.
 
 The decision belongs to the map's owner.
+
+## Layer 2: how farming spreads, the European Neolithic test (plain distance wins)
+
+**Plan:** `calibration/language_areas_20261101/plan_2.json`, frozen after
+the site table was parsed and before any distance or date was compared.
+**Script:** `scripts/farming_spread_earth.py`. **Output:**
+`output/language_areas_20261101/layer2/` (`summary.json`,
+`layer2_farming.png`).
+
+**The data** are the dated early-farming sites of Pinhasi, Fort &
+Ammerman (2005, *PLoS Biology* 3: e410), Supporting Information 1:
+- 726 sites of the Near East and Europe with a calibrated date;
+- one site (Yarim Tepe I) has coordinates outside the climate window
+  (56.8° E for a site in Iraq) and is left out of every model;
+- the paper's 37 candidate origins.
+
+**Four models,** each a straight line, date = a − b × distance:
+- **M0:** great-circle distance.
+- **M1:** the paper's own shortest-path distance.
+- **M2:** travel time over terrain (Tobler's hiking function), with sea
+  crossings at κ times the flat-land time.
+- **M3:** M2, slowed where wheat and barley do badly. The slowdown is
+  max(s, 0.05)^β, where s comes from the map's crop rules
+  (`scripts/land_people.py`) run on WorldClim's present climate.
+
+The origin, κ and β are fitted on six of seven regional blocks; the
+seventh is predicted.
+
+| | M0 distance | M1 paper path | M2 terrain + sea | M3 + crops |
+|---|---:|---:|---:|---:|
+| **held-out error, years** | **950** | 1,009 | 987 | 1,121 |
+| held-out correlation | **0.76** | 0.74 | 0.74 | 0.65 |
+| Near East & Anatolia | 1,712 | 1,788 | 1,753 | 2,152 |
+| Southeast Europe | 744 | **686** | 765 | 773 |
+| Italy | 477 | 553 | 469 | **465** |
+| Iberia & France | **766** | 898 | 851 | 923 |
+| Central Europe | **769** | 786 | 771 | 774 |
+| Britain & Ireland | 514 | 563 | 537 | **512** |
+| Denmark & Sweden | **913** | 1,089 | 1,057 | 1,018 |
+
+**Verdict: plain distance.** M3 beats M2 in only 3 of 7 blocks; M2 beats
+M0 in only 1. By the frozen rule, layer 2 spreads farming by distance from
+its hearths. The crop rules decide only where farming can take root
+(s ≥ 0.05), not how fast it gets there.
+
+**The distance model reproduces the paper.** On all sites:
+- correlation 0.83 (the paper reports about 0.83);
+- speed 1.0 km per year (the paper: 0.6–1.3);
+- sea crossings: every fit chooses κ = 1, so the sea is as easy as flat
+  land. That matches the fast maritime Cardial spread along the western
+  Mediterranean.
+
+The fitted crop exponent was β = 0.5, the Fisher-wave textbook value, in
+four of the seven folds. It made no difference.
+
+**What the errors show** (the right panel of the figure):
+- **Near East:** farming is earlier than any wave predicts, by about
+  1,100 years on average. The core's millennia of pre-pottery Neolithic
+  are local development, not spread.
+- **Iberia and France:** about 500 years earlier than predicted. This is
+  the Cardial maritime leapfrog.
+- **Denmark and Sweden:** about 900 years later than predicted. This is
+  the well-known stall at the northern edge of the loess.
+
+The crop rules cannot explain the stall. On present climate, wheat and
+barley do well in Denmark and southern Sweden. The usual explanation is
+people, not climate: the dense, settled Ertebølle fishers held out for
+about a thousand years (Zvelebil's availability model).
+
+That points to a FORGE-based follow-up: a wave slowed where foragers are
+dense. It was suggested by these residuals, so it cannot be tested on
+these sites. It needs an independent spread, such as Yayoi rice into
+Jōmon Japan, which stopped short of Hokkaido.
+
+**Limits:**
+- present climate, not the early Holocene;
+- one spread (west Eurasian wheat and barley);
+- the Near East block is extrapolation for every model.
