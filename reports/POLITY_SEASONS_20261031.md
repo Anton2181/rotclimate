@@ -320,3 +320,16 @@ map takes every departure as a fair-wind one (P0 = 0.3 admits nearly every
 route; tracing each route's winds on the map would double the work again),
 and trade and market tools see the beat-or-wait graph. All three atlases'
 political reach is rebuilt with it.
+
+### The painted desert after the r41 release (1 November)
+
+`scripts/figure_dry_towns.py` (figure
+`output/polity_dry_towns_20261031/south_towns_before_after.png`): proposed
+(unmarked) towns inside the painted hot-dry zone of the Earth-fit map, 91 on
+31 October (r40, before the water rule) and 86 now (r41, Earth-corrected
+climate, with the rule). The rule acts only on dry ground (rain / evaporation
+below 0.35), and on the Earth-fit map most of the painted desert is not dry
+in the model: its western lobe is a Mediterranean / temperate climate and
+only the far south a hot steppe. The towns there follow the climate; the
+fix is the world refit (calibration/map_world_r41_planet, which guards the
+hot-dry recall) or the free fit, not the town rule.
