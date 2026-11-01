@@ -90,3 +90,42 @@ communities are larger where lean seasons are long, because people need
 wider networks to share risk. The split size would rise with FORGE's
 scarcity days. It would be fitted on North America (count and richness),
 then tested blind on Australia.
+
+## Layer 1c: split size rising with lean seasons (Nettle), not adopted
+
+**Plan:** `calibration/language_areas_20261101/plan_1c.json`, frozen before
+the run. **Output:** `output/language_areas_20261101/layer1c.json` and
+`layer1c.png`.
+
+The split size is N0 × exp(c × (scarcity − 200) / 100), where scarcity is
+the group's population-weighted FORGE scarcity days. N0 and c were fitted
+on North America: among settings within ±15 % of the 211 languages, the one
+with the highest richness R². The search chose N0 = 3,000 and c = 1.0
+(184 languages, R² 0.22).
+
+Applied blind to Australia it gives **204 languages (369) and R² 0.17**.
+Not adopted.
+
+The North American grid shows why. The richness pattern is matched best by
+small groups (R² 0.33 at N0 1,000, c 1), but those give 2.5 times too many
+languages. The count needs groups of about 3,000. With Glottolog's
+one-point-per-language target, the model cannot match both, and the
+lean-season term does not change that. Median lean-season days are 266 in
+North America and 227 in Australia, so the term makes Australian groups
+larger relative to North America, the wrong direction for Australia's
+smaller languages.
+
+**Where layer 1 stands after three frozen tests:**
+- **Counts:** right to within a factor of 1.5–1.8.
+- **Richness pattern:** R² 0.17–0.28 against Glottolog points. A plain
+  density correlation scores 0.25.
+- **Density cap:** FORGE works better than rainfall.
+
+None reaches the adoption bar. Two ways forward:
+1. **A truer target.** Mapped language territories, not centroid points,
+   are what Gavin et al. scored, but no openly licensed polygon set covers
+   both continents.
+2. **Illustration.** Use layer 1 on the maps to show plausible forager
+   language territories, labelled with this Earth performance.
+
+The decision belongs to the map's owner.
