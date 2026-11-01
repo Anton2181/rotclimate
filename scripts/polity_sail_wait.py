@@ -54,7 +54,14 @@ def edges_rule(water, u, v, wind, steadiness, season, cell_km, coast_km, mode):
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=ROOT / "output/polity_sail_20261101")
+    ap.add_argument("--credit", action="store_true", help="addendum_sailing_wait2: the first spell sailed on the chosen wind")
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
+    plan = ROOT / "calibration/polity_20261025/addendum_sailing_wait2_20261101.json" if a.credit else PLAN
+
+    def combine(df, dw):
+        if a.credit:
+            return df + (dw - df) * max(0.0, 1.0 - TAU / max(df, 1e-9))
+        return df if df <= TAU else dw
     P.apply_sea()
     g = P.load_window("rome")
     world = P.world_of(g); st = N.statics(world); cl = N.climate(world, st)
@@ -91,7 +98,7 @@ def main():
                 if a_ != s_:
                     continue
                 model["today"].setdefault((a_, b_), []).append(float(dt[idx[b_]]))
-                model["rule"].setdefault((a_, b_), []).append(float(df[idx[b_]] if df[idx[b_]] <= TAU else dw[idx[b_]]))
+                model["rule"].setdefault((a_, b_), []).append(float(combine(df[idx[b_]], dw[idx[b_]])))
     res = {}
     for name in ("today", "rule"):
         mod = np.array([np.mean(model[name][k]) for k in casson]); cas = np.array([casson[k] for k in casson])
@@ -105,7 +112,7 @@ def main():
         for dst, e in lst:
             if np.isfinite(dt[dst]) and dt[dst] > 0:
                 o["today"].append((e["days"], float(dt[dst])))
-                o["rule"].append((e["days"], float(df[dst] if df[dst] <= TAU else dw[dst])))
+                o["rule"].append((e["days"], float(combine(df[dst], dw[dst]))))
     for name in ("today", "rule"):
         oa = np.array(o[name]); l7 = np.log(oa[:, 1] / oa[:, 0])
         res[name]["T7"] = dict(n=len(oa), spearman=P.spearman(oa[:, 1], oa[:, 0]), median_ratio=float(np.exp(np.median(l7))),
@@ -113,8 +120,8 @@ def main():
     t, r = res["today"], res["rule"]
     ok = (r["T7"]["spearman"] >= t["T7"]["spearman"] - 0.01 and r["T7"]["median_abs_log"] < t["T7"]["median_abs_log"]
           and r["T6"]["median_abs_log"] < t["T6"]["median_abs_log"])
-    out = dict(addendum=str(PLAN.relative_to(ROOT)), tau_days=TAU, results=res, adopted=bool(ok), rule=json.loads(PLAN.read_text())["adopt_if"])
-    (a.out / "sail_wait.json").write_text(json.dumps(out, indent=1))
+    out = dict(addendum=str(plan.relative_to(ROOT)), tau_days=TAU, results=res, adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
+    (a.out / ("sail_wait2.json" if a.credit else "sail_wait.json")).write_text(json.dumps(out, indent=1))
     print(json.dumps(out["results"], indent=1)); print("adopted", ok)
 
 

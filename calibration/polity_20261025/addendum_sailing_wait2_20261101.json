@@ -1,0 +1,7 @@
+{
+ "frozen": "2026-11-01, after addendum_sailing_wait (known: ORBIS median |log| 0.522 -> 0.309 at rank 0.858 -> 0.850; Casson medians right, long x0.44 -> x0.92, short x1.36 -> x1.04, but Casson's median |log| 0.418 -> 0.650: the rule switches at 4 days, so a 5-day passage pays the expected wait over all of it) and before any run below.",
+ "rule": "as addendum_sailing_wait, but the first weather spell is sailed on the chosen fair wind and the wait accrues only over the rest of the passage: time = d_fair + (d_wait - d_fair) x max(0, 1 - TAU / d_fair), TAU = 4 days. Nothing fitted.",
+ "tests": "as addendum_sailing_wait",
+ "adopt_if": "as addendum_sailing_wait",
+ "script": "scripts/polity_sail_wait.py --credit"
+}
