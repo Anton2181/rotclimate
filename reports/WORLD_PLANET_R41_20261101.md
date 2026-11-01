@@ -1,9 +1,16 @@
 # The invented world with planet levers, on r41 physics — 1 November 2026
 
-**Status:** the frozen search and review are complete. No world passed the
-plan's coarse screen. The amended review (coarse allowances scaled to zone
-cell counts) is running its native check. This report is finished when that
-check and, if one finalist passes, the audit are done.
+**Result:** not published. The atlas keeps r41 with the published world's
+geometry.
+
+- **Frozen search:** no world passes the plan's coarse screen.
+- **Amended review:** two finalists reached the native check and both fail
+  it on the painted hot-dry zone (the southern desert).
+- **Audit:** never run. Its nine layouts stay unseen.
+
+The best finalist would raise strict agreement on the painted map from
+32.6 % to 37.3 %, but it gives up the desert. No planet lever separates the
+two.
 
 ## Plan
 
@@ -90,6 +97,56 @@ Eval 213 motivated the amendment. That is why the unseen native check and
 audit remain the deciding tests. The finalists are 167 and 176, ordered by
 raw zone objective.
 
-## Native check and audit
+## Native check (downsample 8, layouts 1–3, against the r41 atlas)
 
-(pending)
+| | r41 atlas | 167 | 176 |
+|---|---:|---:|---:|
+| zone objective | 0.1771 | **0.1853** | 0.1801 |
+| strict agreement | 32.6 % | **37.3 %** | 34.1 % |
+| cold wet | 0.595 | 0.657 | **0.509 ✗** |
+| warm wet | 0.351 | 0.369 | 0.349 |
+| Mediterranean | 0.681 | 0.865 | 0.797 |
+| tree | 0.071 | 0.062 | 0.100 |
+| hot dry | 0.246 | **0.176 ✗** | **0.138 ✗** |
+| Mediterranean dry / Cs share | 11.4 % / 73.9 % | 6.3 % / 88.3 % | 5.0 % / 89.3 % |
+
+Both finalists fail (`output/r41_world_planet_amended/review.json`). The
+audit did not run, so its layouts remain prospective.
+
+## Why the desert goes
+
+Inside the painted hot-dry zone (1,020 native cells), r41 gives:
+- median annual rain 739 mm;
+- median annual mean 18.1 °C;
+- Köppen classes: 61 % Cfa (humid subtropical), 25 % BSh (hot steppe),
+  10 % Csa.
+
+So the painted desert is mostly humid subtropical in the model already.
+
+Candidate 167 warms the zone by 1.6 °C (84 % of cells now reach an annual
+mean of 18 °C, against 54 %). It also moves the rain into winter: Csa rises
+to 32 % and BSh falls to 18 %. The levers that win the cold-wet north and
+the Mediterranean (more greenhouse, more land, more northern land, the map
+further south) turn the south Mediterranean, not dry.
+
+This is the geometric limit reported in October
+(`reports/WORLD_KNOBS_20261023.md`): on the painted map the hot-dry south
+and the cold-wet north are closer together than Earth's climate belts
+allow, and the planet levers trade one against the other.
+
+## What it leaves
+
+The r41 atlas keeps the published geometry.
+
+Candidate 167 is recorded (`calibration/map_world_r41_planet/finalists/`)
+as a choice for the map's owner: much better strict agreement, Mediterranean
+and cold-wet zones, against a 0.07 loss of hot-dry recall. The rule does not
+allow it, so it is not taken.
+
+A next attempt would have to protect the desert in the search itself:
+- run at downsample 16 (about 280 hot-dry cells instead of 65);
+- allow no hot-dry loss.
+
+The cost is roughly four times the compute. Moving the desert's rain
+needs the subtropical high to reach the map's south, and that is shared
+physics, not a world lever.
