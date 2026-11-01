@@ -1,0 +1,11 @@
+{
+ "frozen": "2026-11-01, after addendum_salmon3_20261101.json (known: a_salmon 300 fitted on California, California 0.573 -> 0.214, the Northwest Coast 0.577 -> 0.372 blind, the world 0.251 -> 0.256, but the interior 0.435 -> 0.783: inland groups on long salmon rivers get as much salmon as the coasts; the cold limit cannot offset it) and before any run below.",
+ "why": "A salmon run thins upstream: fish stop to spawn in the lower and middle tributaries, and fewer reach the headwaters; the index counted a stream 1,400 km inland like one at the mouth.",
+ "index": "as addendum_salmon2 but each HydroRIVERS point weighted by exp(-DIST_DN_KM / L), DIST_DN_KM its distance to the river's outlet",
+ "model": "configuration D (600-year mean; a_marine 3000, a_fresh 100, k_terr 0.5, no cold-climate limit) + a_salmon x S_salmon(L)",
+ "stage_1": "a_salmon in {0, 30, 100, 300, 1000} on the California groups (with each L of stage 2; for each L the best a_salmon)",
+ "stage_2": "L in {100, 200, 400, 800, 1600} km: the (L, stage-1 a_salmon) pair with the lowest interior (ARC, NNA, WNA) median absolute log10 error",
+ "test_blind": "the Northwest Coast and the rest of the world, against no salmon",
+ "adopt_if": "a_salmon > 0, the Northwest Coast's median absolute log10 error improves by at least 0.05, the rest of the world's median absolute log10 error and density rank not worse by more than 0.01, and the interior's median absolute log10 error not worse than without salmon. Then data/foraging_model.json takes (a_salmon, L) (the map: drawn rivers reaching a sea below 15 C annual, weighted by distance along them to the sea, scaled to HydroRIVERS' stream density) and the atlases' foraging is rebuilt.",
+ "script": "scripts/forager_salmon2.py --stage4"
+}
