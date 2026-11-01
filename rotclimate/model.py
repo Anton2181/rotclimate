@@ -264,8 +264,8 @@ class ClimateModel:
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
         if not 0.0 <= params.subsidence_warming <= 10.0 or not 0.0 <= params.subsidence_warming_taper <= 30.0 \
-                or not 0.0 <= params.subsidence_warming_wet <= 1.0:
-            raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg and its wet gate in [0, 1]')
+                or not 0.0 <= params.subsidence_warming_wet <= 1.0 or not 0.0 <= params.subsidence_warming_chi0 < 1.0:
+            raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg, its wet gate in [0, 1] and chi0 in [0, 1)')
         if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
             raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
         if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
@@ -1128,6 +1128,12 @@ class ClimateModel:
                     # the North China Plain in summer): no compression warming
                     # on wet ground
                     warm = warm * (1.0 - p.subsidence_warming_wet * np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                if p.subsidence_warming_chi0 > 0 and chi is not None:
+                    # e71d: on coasts a marine layer under the subsidence
+                    # inversion keeps the ground cool (Chile, California, SW
+                    # Australia); only air that has crossed land (the advected
+                    # land share chi) carries the sinking air's warmth down
+                    warm = warm * np.clip((chi - p.subsidence_warming_chi0) / (1.0 - p.subsidence_warming_chi0), 0.0, 1.0)
                 Tl = Tl + np.where(land, warm, 0.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers

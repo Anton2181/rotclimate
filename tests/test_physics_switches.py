@@ -27,7 +27,7 @@ def test_new_switches_default_off_and_are_classified():
             'dry_heating_mean_c', 'shelf_air_coupling', 'shelf_air_lag_days', 'shelf_air_enclosed', 'ebm_land_ice',
             'warm_current_seasonality', 'continental_sea_air', 'continental_sea_lag_days',
             'storm_baroclinic', 'storm_baroclinic_max_deg', 'storm_baroclinic_cold_c',
-            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid', 'subsidence_warming', 'subsidence_warming_taper', 'subsidence_warming_wet'} <= SHARED_FIELDS
+            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid', 'subsidence_warming', 'subsidence_warming_taper', 'subsidence_warming_wet', 'subsidence_warming_chi0'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
