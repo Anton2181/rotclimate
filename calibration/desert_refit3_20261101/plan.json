@@ -1,0 +1,85 @@
+{
+ "frozen": "2026-11-01, before any result of this search and while desert refit #2 (gated e71 only) finishes its budget; after the branch-drying screens (output/desert_heat_20261101: e70b core drying with the e70c rain gate plus gated e71, screen bdr1w: dev31 S 0.9818 (T -3.2 %, rain -0.4 %), training 0.977, dev12 0.954, holdout 1.035 (South Brazil 1.11, SW Australia 1.09), mid-latitude 1.008, retired a 1.026 (Namibia-Kalahari rain loss 0.65 -> 0.90), retired b 0.876, retired c 1.003).",
+ "why": "The deserts need both pieces: the descending branch's compression warming (e71, inland, dry, below the plateaus) and its dry-air descent (e70b), the latter switched off under raining air (e70c). The search balances their strengths and gates against the downstream rain of the semi-arid summer-rain margins (Kalahari, South Brazil, SW Australia) and north-east China.",
+ "start": "calibration/local_accuracy_20261023/r41_params.json",
+ "set": {
+  "subsidence_branch_drying": 0.2,
+  "subsidence_branch_dry_rain": 1.0,
+  "subsidence_warming": 4.0,
+  "subsidence_warming_taper": 10.0,
+  "subsidence_warming_chi0": 0.7,
+  "subsidence_warming_rain": 2.0,
+  "subsidence_warming_top_m": 2500.0
+ },
+ "reference": "output/spring_refit_20261101/refit41/candidate_dev31",
+ "extra_groups": {
+  "retired_sealed_c": {
+   "spec": "calibration/sealed_20261101c/regions.json",
+   "reference": "output/desert_refit_20261101/refit/r41_sealed6"
+  },
+  "retired_sealed_b": {
+   "spec": "calibration/sealed_20261031b/regions.json",
+   "reference": "output/spring_refit_20261101/refit41/candidate_sealed6"
+  },
+  "retired_sealed_a": {
+   "spec": "calibration/sealed_20261031/regions.json",
+   "reference": "output/maritime_refit_20261101/r41_sealed_a"
+  }
+ },
+ "knobs": [
+  [
+   "subsidence_branch_drying",
+   0.0,
+   0.3
+  ],
+  [
+   "subsidence_branch_dry_rain",
+   0.2,
+   3.0
+  ],
+  [
+   "subsidence_warming",
+   0.0,
+   6.0
+  ],
+  [
+   "subsidence_warming_taper",
+   0.0,
+   20.0
+  ],
+  [
+   "subsidence_warming_chi0",
+   0.3,
+   0.9
+  ],
+  [
+   "subsidence_warming_rain",
+   0.3,
+   5.0
+  ],
+  [
+   "subsidence_branch_gap",
+   4.0,
+   14.0
+  ],
+  [
+   "wet_sun",
+   0.0,
+   3.0
+  ],
+  [
+   "precip_tau_days",
+   6.0,
+   14.0
+  ]
+ ],
+ "fixed_note": "land_offset, continental_mean and every other r41 setting stay at r41's values; subsidence_warming_top_m 2,500 m and subsidence_warming_wet 0",
+ "sigma": 0.25,
+ "popsize": 10,
+ "seed": 73,
+ "evals": 80,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r41 run, plus 2 x every policy group's worsening, 2 x each retired sealed set's worsening, and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/desert_refit3_20261101/refit REF_NAME=r41 REF_FIT=calibration/local_accuracy_20261023/r41_params.json BEST=calibration/desert_refit3_20261101/search/best_params.json SEALED_SPEC=calibration/sealed_20261101d/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 under policy v2, the paired 28 km check, then sealed set d (declared 2026-11-01, never run) once if both pass; adoption requires sealed set d not to get worse. If adopted it becomes r42 and the Earth-fit atlas is rebuilt and republished. If desert refit #2 has already run sealed set d, the validation uses a fresh sealed set declared before this search's first result is read.",
+ "run_hours": "the search runs to its 80 candidates (resumed across the time limit if needed)"
+}
