@@ -525,3 +525,21 @@ ratio.
 **In the atlases:** two layers join the Languages topic in all three
 fits, "Farming's arrival" and "Language families". Both are labelled
 provisional, with the hearth named.
+
+**Is the spot the same in the other fits?** It was computed on the
+Earth-fit atlas, using its Earth-corrected climate. The same calculation
+on the other two fits:
+
+| fit | expected hearths | land in Earth's top third | most productive spot |
+|---|---:|---:|---|
+| Earth fit | 0.42 | 85 % | west coast, row 294, column 119 |
+| free fit | 0.44 | 90 % | west coast, row 322, column 133 |
+| Whittaker fit | 0.38 | 71 % | west coast, row 322, column 133 |
+
+- **The west coast wins in all three.** The other two fits' best spot is
+  about 115 km south of the Earth fit's.
+- **The runners-up differ.** The free and Whittaker fits pick the
+  north-east and the south coast; the Earth fit picks the north edge and
+  the south coast.
+- **One hearth for all three.** The atlases share the Earth fit's spot,
+  so they tell the same history.
