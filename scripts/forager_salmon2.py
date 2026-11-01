@@ -27,6 +27,9 @@ GAMMAS = [0, 0.5, 1, 1.5]
 SALMON = [0, 30, 100, 300, 1000]
 
 
+SST_MIN = -99.0      # addendum salmon6 sets 2.0 (ice-covered seas excluded)
+
+
 def salmon_points(step_km=1.0):
     """Points along HydroRIVERS salmon streams (each standing for its length) for the frozen definition."""
     import shapefile
@@ -52,7 +55,7 @@ def salmon_points(step_km=1.0):
             if north.any():
                 v = observed_sst(pts[north, 1], pts[north, 0])
                 sst[north] = np.nanmean(v, axis=0) if v is not None else np.nan
-            cold = {k for k, t, n in zip(ids, sst, north) if n and np.isfinite(t) and t < 15.0}
+            cold = {k for k, t, n in zip(ids, sst, north) if n and np.isfinite(t) and SST_MIN <= t < 15.0}
         else:
             cold = set()
         n_seg = 0
@@ -186,12 +189,54 @@ def stage5(a, sites, sets, calif, spec):
                           calif=[z["calif"]["median_abs_log10_error"], b["calif"]["median_abs_log10_error"]]), indent=1))
 
 
+def crossval(a, sites, spec, stats):
+    plan = ROOT / "calibration/forager_binford_20261031/addendum_salmon6_20261101.json"
+    disc = math.pi * 25.0 ** 2
+    area = sites["area"]
+    folds = {k: area == k for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}
+    folds["world"] = ~np.isin(area, list(FIT_AREAS))
+    obs = sites["density_km2"]
+    pred = {}
+    base = run_D(sites, spec, 0, 0)["density_people_km2"]
+    for L in [100, 200, 400, 800]:
+        wL = sites["_rw"] * np.exp(-sites["_rd"] / L)
+        sites["s_salmon"] = np.array([100.0 * float(wL[n_].sum()) / disc for n_ in sites["_near"]])
+        for s in [30, 100, 300, 1000]:
+            pred[(s, L)] = run_D(sites, spec, 0, s)["density_people_km2"]
+            print(L, s, {k: round(float(np.median(np.abs(np.log10(np.maximum(pred[(s, L)][m], 1e-9) / obs[m])))), 3) for k, m in folds.items()}, flush=True)
+    pred[(0, 0)] = base
+    err = lambda d, m: float(np.median(np.abs(np.log10(np.maximum(d[m], 1e-9) / obs[m]))))
+    held = np.zeros_like(obs); choice = {}
+    for k, m in folds.items():
+        others = np.zeros_like(m)
+        for k2, m2 in folds.items():
+            if k2 != k:
+                others |= m2
+        best = min(pred, key=lambda q: (round(err(pred[q], others), 6), q))
+        choice[k] = dict(a_salmon=best[0], L_km=best[1])
+        held[m] = pred[best][m]
+    allm = np.zeros_like(obs, dtype=bool)
+    for m in folds.values():
+        allm |= m
+    cv = err(held, allm); cv0 = err(base, allm)
+    per = {k: dict(heldout=err(held, m), baseline=err(base, m), choice=choice[k]) for k, m in folds.items()}
+    ok = (cv <= cv0 - 0.02 and all(v["heldout"] <= v["baseline"] + 0.05 for v in per.values())
+          and per["world"]["heldout"] <= per["world"]["baseline"] + 0.01)
+    final = min(pred, key=lambda q: (round(err(pred[q], allm), 6), q))
+    out = dict(addendum=str(plan.relative_to(ROOT)), hydrorivers=stats, cv_error=cv, baseline_error=cv0, folds=per,
+               final_fit=dict(a_salmon=final[0], L_km=final[1]), adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
+    (a.out / "binford_salmon6.json").write_text(json.dumps(out, indent=1, default=float))
+    print(json.dumps(dict(cv=cv, baseline=cv0, folds={k: (round(v["heldout"], 3), round(v["baseline"], 3), v["choice"]) for k, v in per.items()},
+                          final=out["final_fit"], adopted=ok), indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=ROOT / "output/forager_binford_20261031")
     ap.add_argument("--stage2", action="store_true", help="addendum_salmon3: fit salmon on California, the cold limit on the interior")
     ap.add_argument("--stage4", action="store_true", help="addendum_salmon4: salmon thins upstream (decay length on the interior)")
     ap.add_argument("--stage5", action="store_true", help="addendum_salmon5: upstream thinning and the cold limit on the interior")
+    ap.add_argument("--cv", action="store_true", help="addendum_salmon6: outlets 2-15 C, leave-one-area-out cross-validation")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -211,6 +256,9 @@ def main():
               for s in json.loads((a.out / "aquatic_inputs.json").read_text())["sites"]}
     for key in ("d_coast_km", "sst_annual_c", "w_fresh"):
         sites[key] = np.array([float(inputs[(r["name"], round(r["lat"], 4), round(r["lon"], 4))][key]) for r in rows])
+    global SST_MIN
+    if a.cv:
+        SST_MIN = 2.0
     rp, rw, stats, rd = salmon_points()
     tree = cKDTree(unit(rp[:, 0], rp[:, 1])); disc = math.pi * 25.0 ** 2
     near = [tree.query_ball_point(unit(la, lo), chord(25.0)) for la, lo in zip(sites["lat"], sites["lon"])]
@@ -228,6 +276,8 @@ def main():
         return stage4(a, sites, sets, calif, spec, stats)
     if a.stage5:
         return stage5(a, sites, sets, calif, spec)
+    if a.cv:
+        return crossval(a, sites, spec, stats)
     for g in GAMMAS:
         for s in SALMON:
             r_ = run_D(sites, spec, g, s)
