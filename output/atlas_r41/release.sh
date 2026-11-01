@@ -24,6 +24,7 @@ $PY -I scripts/add_corrected_layers.py atlases/earth_fit --checkpoint output/r41
 echo "corrected climate $(date +%H:%M)"
 $PY -I scripts/add_corrected_climate.py atlases/earth_fit --checkpoint output/r41_world/candidate_001.pkl \
   --corrections calibration/earth_correction_r41_20261101 > output/atlas_r41/corrected.log 2>&1
+# update the Earth-fit page note in atlases/pages.json to the new release before refreshing (it was left at r40 in this release)
 echo "pages $(date +%H:%M)"
 $PY -I scripts/refresh_atlas_pages.py > output/atlas_r41/pages.log 2>&1
 $PY -I scripts/build_fit_hub.py >> output/atlas_r41/pages.log 2>&1
