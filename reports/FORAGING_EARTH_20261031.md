@@ -282,3 +282,59 @@ back at the data's epoch (Binford's eastern Subarctic densities come from
 and epidemics) rather than at a missing food term. Attempt 7 remains the
 configuration to carry to the maps if that fold is accepted as
 unrepresentative.
+
+## The epoch explanation tested with Mooney's early-contact estimates (F11)
+
+Attempts 7 and 10 left one explanation for the eastern Subarctic: Binford's
+densities were recorded after the fur trade and the epidemics. Mooney (1928,
+*The aboriginal population of America north of Mexico*, Smithsonian
+Miscellaneous Collections 80 (7); the archive.org scan of volume 80, cached
+in `data/cache/mooney1928`, not committed) gives tribe-level estimates at
+first disturbance (Eastern Canada c. 1600, Central Canada 1670) beside
+those for 1906.
+
+Ratios of early-contact to 1906 population:
+
+| group | ratio |
+|---|---:|
+| Montagnais and Naskapi | 1.02 |
+| Monsoni (James Bay Cree and Ojibwa bands) | 1.04 |
+| Cree | 1.06 |
+| Micmac | 0.78 (they grew) |
+| Kutchin | 1.29 |
+| Slave | 1.47 |
+| Chipewyan | 1.48 |
+| Hare | 1.67 |
+| Yellowknife | 1.72 |
+| Beaver | 1.79 |
+
+The eastern Algonquians barely declined; the western Athapaskans fell by
+1.3–1.8×.
+
+Scaling Binford's Subarctic densities by these ratios (1.03 east of
+100° W, 1.5 west of it; nothing fitted, configuration D's predictions
+unchanged):
+
+| observed densities | Subarctic error | bias | east bias (16) | west bias (16) |
+|---|---:|---:|---:|---:|
+| Binford, 20th century | 0.437 | +0.36 | +0.52 | +0.08 |
+| Mooney-corrected, early contact | 0.348 | +0.26 | **+0.50** | −0.10 |
+
+The overall error falls only because the western groups' densities rise.
+The eastern over-prediction (about 3×) stays, because Mooney sees no
+decline there.
+
+**Verdict.** The epoch explanation is not supported. The eastern
+Subarctic's over-prediction is a real error of the food model, regional to
+the wet Canadian Shield.
+
+**The next design** has to separate the Shield from the rest of the boreal
+zone. Climate alone cannot do it (attempt 10). The candidates are soil and
+landform: thin acid soils, muskeg and peatland cover. Natural Earth or
+HydroLAKES lake and wetland density could serve as a proxy. On the
+invented map, wetland density would come from the drawn rivers and lakes.
+
+Mooney's estimates are low by modern standards. Ubelaker's 1988 total for
+North America north of Mexico is about 1.9 million. But the east–west
+contrast within the Subarctic comes from his sources' own band counts, and
+it is the contrast that matters here.
