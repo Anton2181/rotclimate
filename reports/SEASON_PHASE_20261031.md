@@ -202,3 +202,38 @@ S 1.0107. A storm track that follows the model's own baroclinic zone (the
 latitude of the strongest north-south temperature gradient, smoothed over
 ~2,000 km along the latitude) would put it there in spring and let it jump
 north in summer; that is the next physics change to design, freeze and test.
+
+### e68: storms follow the baroclinic zone (opt-in, screened)
+
+`storm_baroclinic` k centres the storm band, by share k, on each meridian's
+baroclinicity-weighted latitude (last step's sea-level air smoothed ~2,000 km
+along and ~300 km across the latitude; weight = poleward cooling squared,
+20–70°), with optional limits: `storm_baroclinic_max_deg` (at most so far
+from the planet's storm latitude) and `storm_baroclinic_cold_c` (count the
+contrast only where the air is below this temperature). Off by default,
+bit-identical. Screens against r40 (`output/storm_baroclinic_20261101`):
+
+| run | S | T | P | groups (train / hold / midlat / dev12) | best | worst |
+|---|---:|---:|---:|---|---|---|
+| k 0.5 | 1.0339 | +3.0 % | +3.8 % | 1.066 / 0.979 / 0.994 / 1.052 | Japan 0.88, S Brazil 0.90, Anatolia 0.92, US Midwest 0.94 | E Australia 1.26, Cape 1.24, Iran 1.23 |
+| k 1.0 | 1.0842 | +6.6 % | +10.2 % | 1.162 / 0.991 / 0.999 / 1.107 | Japan 0.82, S Brazil 0.84 | E Australia 1.51, Cape 1.48, Iran 1.47 |
+| k 1.0, max 6° | 1.0424 | | | 1.072 / 0.974 / 0.997 / 1.069 | Japan 0.87 | Iran 1.31, E Australia 1.28 |
+| k 1.0, cold 15 °C | 1.0053 | +0.5 % | +0.6 % | 1.013 / 1.000 / 1.016 / 1.002 | Iberia 0.93, Manchuria 0.95 | E Australia 1.13, Cape 1.10 |
+| k 1.0, cold 10 °C | **0.9950** | −0.4 % | −0.6 % | 0.988 / 1.013 / 1.031 / 0.982 | Great Basin 0.91, Iberia 0.91, Manchuria 0.92, British Isles 0.94 | New Zealand 1.11, US Midwest 1.09 |
+| k 0.5, cold 15 °C | 1.0010 | | | 1.004 / 0.997 / 1.005 / 1.000 | Iberia 0.96 | E Australia 1.06 |
+
+Ungated, the baroclinic band brings East Asia's spring rain up (Japan April
+0.65 → 0.77 of observed at k 1) and Japan's error down 18 %, but the
+subtropical windows' strongest contrasts are the shallow hot edges of their
+deserts, which pull storms into Mexico, the Maghreb, Iran, the Cape and
+eastern Australia; a distance cap does not stop it. Counting only cool air
+removes that damage but also Japan's gain, and moves the benefit to Iberia,
+Manchuria, the Great Basin and the British Isles (S 0.9950 at 10 °C, with the
+mid-latitude group 3 % worse through New Zealand and the US Midwest). Even
+ungated, East Asia's spring warmth barely moves (Korea April +3.4 → +3.1 °C,
+East China +4.1 → +3.4): more spring rain alone does not cool the land,
+because the model's wet-ground cooling (`wet_cooling`) acts only above the
+latitude's annual mean (Tl − Tl_mean > 0), which a spring at the annual mean
+never reaches. A sunshine-based wet-ground cooling (the mirror of e54's dry
+heating) is the next candidate there; e68 (cold-gated) is a candidate for the
+next frozen refit beside e65.

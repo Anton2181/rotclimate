@@ -120,7 +120,8 @@ def ascent_weight(east_km, north_km):
     return np.exp(-(east_km ** 2 + north_km ** 2) / DESCENT_ASCENT_KM ** 2) / (np.pi * DESCENT_ASCENT_KM ** 2)
 FLUX_DIV_MAX = 1e-5              # e17: 1/s, cap on that divergence (~0.9 per day)
 MARITIME_KM = 400.0              # e28: reach of the nearby sea's annual mean onto land
-SNOW_COVER_MM = 10.0             # e16: snow water (mm) that covers 63 % of the ground
+SNOW_COVER_MM = 10.0
+BAROCLINIC_SMOOTH_KM = 2000.0    # e68: along-latitude smoothing of the baroclinic zone             # e16: snow water (mm) that covers 63 % of the ground
 LAND_COUPLING_SREF = 480.0      # W m-2: summer subtropical sunshine, where land coupling has its fitted strength
 LAND_RADIATIVE_DAYS = 30.0      # radiative relaxation of the air over land when the sun is low
 UPWELLING_KM = 150.0            # how far offshore upwelled water cools the sea surface
@@ -262,6 +263,8 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0 <= params.storm_baroclinic <= 1:
+            raise ValueError('storm_baroclinic must be in [0, 1]')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
             raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
         if params.continental_sea_air > 0 and params.continentality <= 0:
@@ -1323,7 +1326,43 @@ class ClimateModel:
             # surroundings (Gaussian of radius eddy_scale_km) at a rate that
             # peaks in the storm track
             sw, so = p.storm_width * self.synoptic_scale, 13.0 * self.synoptic_scale
-            storm = np.exp(-((lat - (phi_h + so)) / sw) ** 2) * (1 - p.storm_seasonality * s)
+            centre = phi_h + so
+            if p.storm_baroclinic > 0 and T_prev is not None:
+                # e68: storms grow where the north-south temperature contrast is
+                # sharpest, and that is not one latitude round the planet: over
+                # East Asia in spring the cold continent against the warming
+                # subtropics holds the jet and its fronts at 30-35 N until the
+                # Meiyu ends in July, while over the oceans and in summer they
+                # run far poleward. The planet-wide band put April's storms at
+                # 45 N, leaving East China and Japan's springs dry, sunny and
+                # 3-4 C too warm. Centre the band, by storm_baroclinic, on the
+                # baroclinicity-weighted latitude of each meridian (last step's
+                # sea-level air smoothed over ~2,000 km along the latitude and
+                # ~300 km across it; weight = poleward cooling squared, 20-70 deg),
+                # smoothed along the latitude again.
+                sx, sy = BAROCLINIC_SMOOTH_KM / g.cell_km, 300.0 / g.cell_km
+                Ts = ndi.gaussian_filter(T_prev, (sy, sx), mode="nearest")
+                dTdlat = np.gradient(Ts, axis=0) / np.where(np.abs(np.gradient(lat, axis=0)) > 1e-9, np.gradient(lat, axis=0), 1e-9)
+                cool = np.clip(-dTdlat * np.sign(lat), 0.0, None) * ((np.abs(lat) >= 20.0) & (np.abs(lat) <= 70.0))
+                if p.storm_baroclinic_cold_c != -99.0:
+                    # storms feed on the polar air mass: count the contrast only
+                    # where the air is cool (full 10 K below this, none above),
+                    # not the shallow hot edges of summer deserts (Mexico, the
+                    # Maghreb, Iran, the Cape went 12-50 % worse without it)
+                    cool = cool * np.clip((p.storm_baroclinic_cold_c - Ts) / 10.0, 0.0, 1.0)
+                wgt = cool ** 2
+                tot = wgt.sum(axis=0)
+                phi_b = np.where(tot > 1e-12, (wgt * lat).sum(axis=0) / np.maximum(tot, 1e-12), np.nan)
+                plan = np.nanmean(centre) if np.ndim(centre) else float(centre)
+                phi_b = np.where(np.isfinite(phi_b), phi_b, plan)
+                phi_b = ndi.gaussian_filter1d(phi_b, sx, mode="nearest")
+                if p.storm_baroclinic_max_deg > 0:
+                    # the subtropical deserts' hot edges are shallow contrasts
+                    # that steer no storms: let the band move at most this far
+                    # from the planet's storm latitude
+                    phi_b = np.clip(phi_b, plan - p.storm_baroclinic_max_deg, plan + p.storm_baroclinic_max_deg)
+                centre = (1.0 - p.storm_baroclinic) * centre + p.storm_baroclinic * phi_b[None, :]
+            storm = np.exp(-((lat - centre) / sw) ** 2) * (1 - p.storm_seasonality * s)
             if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
                 side = (1.0 if p.retrograde else -1.0) * self.basin_side
                 storm = storm * np.clip(1.0 + p.storm_asym * side, 0.15, 2.0)
