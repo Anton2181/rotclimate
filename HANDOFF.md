@@ -232,3 +232,16 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 * Off-map land: scripts/offmap_earth_test.py measures the skill an invented
   surrounding costs on Earth (British Isles 0.77 C RMS, mostly systematic, not
   layout noise); full run pending.
+* Data fetched for these tests (user-approved, data/cache, not committed):
+  HydroRIVERS v1.0 NA/AS/AR tiles (hydrorivers), CLIWOC 2.1 logbooks
+  (cliwoc), ORBIS v2 sites + routes (orbis).
+* FORGE salmon (reports/FORAGING_EARTH_20261031.md): eight frozen attempts
+  with HydroRIVERS; best = attempt 7 (sea-ice factor on the marine supply +
+  a_salmon 300, upstream thinning L 800 km, outlets 2-15 C): leave-one-area-out
+  CV 0.442 -> 0.372, NW Coast 0.577 -> 0.302, Arctic 0.65 -> 0.52, world
+  unchanged; the Subarctic fold always worsens (post-epidemic densities?), so
+  not adopted by the rule. A user decision could carry attempt 7 to the maps.
+* Sailing: CLIWOC confirms the polar (close-hauled 0.82 vs model 0.85; Casson's
+  0.45 rejected). Waiting rule halves ORBIS's error (0.522 -> 0.306) but adds
+  Casson scatter (Etesian short passages; western Earth-only storminess); next
+  design recorded in reports/POLITY_SEASONS_20261031.md.
