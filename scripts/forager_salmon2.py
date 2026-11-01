@@ -31,7 +31,7 @@ def salmon_points(step_km=1.0):
     """Points along HydroRIVERS salmon streams (each standing for its length) for the frozen definition."""
     import shapefile
     from rotclimate.earth import observed_sst
-    keep_pts, keep_w = [], []
+    keep_pts, keep_w, keep_d = [], [], []
     stats = {}
     for tile in ("na", "as", "ar"):
         rdr = shapefile.Reader(str(HR / f"HydroRIVERS_v10_{tile}_shp" / f"HydroRIVERS_v10_{tile}.shp"))
@@ -66,10 +66,11 @@ def salmon_points(step_km=1.0):
                 k = max(1, int(math.ceil(length / step_km)))
                 t = (np.arange(k) + 0.5) / k
                 keep_pts.append(np.stack([y0 + (y1 - y0) * t, x0 + (x1 - x0) * t], -1)); keep_w.append(np.full(k, length / k))
+                keep_d.append(np.full(k, float(r[ix["DIST_DN_KM"]])))
             n_seg += 1
         stats[tile] = dict(outlets=len(ids), cold_systems=len(cold), salmon_segments=n_seg)
         print(tile, stats[tile], flush=True)
-    return np.concatenate(keep_pts), np.concatenate(keep_w), stats
+    return np.concatenate(keep_pts), np.concatenate(keep_w), stats, np.concatenate(keep_d)
 
 
 def run_D(sites, spec, gamma, a_salmon):
@@ -112,10 +113,85 @@ def stage2(a, sites, sets, calif, spec, stats):
                           world=[z["world"]["median_abs_log10_error"], b["world"]["median_abs_log10_error"]]), indent=1))
 
 
+def stage4(a, sites, sets, calif, spec, stats):
+    plan = ROOT / "calibration/forager_binford_20261031/addendum_salmon4_20261101.json"
+    nwc = sites["area"] == "BC NWC"
+    groups = dict(calif=calif, interior=sets["fit"], nwc=nwc, world=sets["world"])
+    disc = math.pi * 25.0 ** 2
+    base = None; table = {}
+    for L in [100, 200, 400, 800, 1600]:
+        wL = sites["_rw"] * np.exp(-sites["_rd"] / L)
+        sites["s_salmon"] = np.array([100.0 * float(wL[n_].sum()) / disc for n_ in sites["_near"]])
+        rows = {}
+        for s in [0, 30, 100, 300, 1000]:
+            if s == 0 and base is not None:
+                rows[s] = base; continue
+            r_ = run_D(sites, spec, 0, s)
+            rows[s] = {k: metrics(r_["density_people_km2"], sites, m, r_) for k, m in groups.items()}
+            if s == 0:
+                base = rows[s]
+            print(L, s, {k: (round(v["median_abs_log10_error"], 3), round(v["median_log10_bias"], 2)) for k, v in rows[s].items()}, flush=True)
+        s1 = min(rows, key=lambda s: (round(rows[s]["calif"]["median_abs_log10_error"], 6), s))
+        table[L] = (s1, rows[s1], rows)
+    L2 = min(table, key=lambda L: (round(table[L][1]["interior"]["median_abs_log10_error"], 6), L))
+    s1, b, _ = table[L2]
+    z = base
+    ok = (s1 > 0 and b["nwc"]["median_abs_log10_error"] <= z["nwc"]["median_abs_log10_error"] - 0.05
+          and b["world"]["median_abs_log10_error"] <= z["world"]["median_abs_log10_error"] + 0.01
+          and b["world"]["density_spearman"] >= z["world"]["density_spearman"] - 0.01
+          and b["interior"]["median_abs_log10_error"] <= z["interior"]["median_abs_log10_error"])
+    out = dict(addendum=str(plan.relative_to(ROOT)), fitted=dict(L_km=L2, a_salmon=s1),
+               by_L={str(L): dict(a_salmon=v[0], best=v[1], grid={str(s): r for s, r in v[2].items()}) for L, v in table.items()},
+               none=z, adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
+    (a.out / "binford_salmon4.json").write_text(json.dumps(out, indent=1, default=float))
+    print(json.dumps(dict(fitted=out["fitted"], adopted=ok, nwc=[z["nwc"]["median_abs_log10_error"], b["nwc"]["median_abs_log10_error"]],
+                          interior=[z["interior"]["median_abs_log10_error"], b["interior"]["median_abs_log10_error"]],
+                          world=[z["world"]["median_abs_log10_error"], b["world"]["median_abs_log10_error"]],
+                          world_rank=[z["world"]["density_spearman"], b["world"]["density_spearman"]]), indent=1))
+
+
+def stage5(a, sites, sets, calif, spec):
+    plan = ROOT / "calibration/forager_binford_20261031/addendum_salmon5_20261101.json"
+    nwc = sites["area"] == "BC NWC"
+    groups = dict(calif=calif, interior=sets["fit"], nwc=nwc, world=sets["world"])
+    disc = math.pi * 25.0 ** 2
+    cache = {}
+
+    def ev(L, g, s):
+        key = (L if s else 0, g, s)
+        if key not in cache:
+            wL = sites["_rw"] * np.exp(-sites["_rd"] / L)
+            sites["s_salmon"] = np.array([100.0 * float(wL[n_].sum()) / disc for n_ in sites["_near"]])
+            r_ = run_D(sites, spec, g, s)
+            cache[key] = {k: metrics(r_["density_people_km2"], sites, m, r_) for k, m in groups.items()}
+            print(key, {k: (round(v["median_abs_log10_error"], 3), round(v["median_log10_bias"], 2)) for k, v in cache[key].items()}, flush=True)
+        return cache[key]
+    stage1 = {L: min([0, 30, 100, 300, 1000], key=lambda s: (round(ev(L, 0, s)["calif"]["median_abs_log10_error"], 6), s))
+              for L in [100, 200, 400, 800]}
+    pairs = [(L, g) for L in stage1 for g in [0, 0.5, 1, 1.5, 2]]
+    L2, g2 = min(pairs, key=lambda q: (round(ev(q[0], q[1], stage1[q[0]])["interior"]["median_abs_log10_error"], 6), q))
+    s1 = stage1[L2]
+    b, z = ev(L2, g2, s1), ev(100, 0, 0)
+    ok = (s1 > 0 and b["nwc"]["median_abs_log10_error"] <= z["nwc"]["median_abs_log10_error"] - 0.05
+          and b["world"]["median_abs_log10_error"] <= z["world"]["median_abs_log10_error"] + 0.01
+          and b["world"]["density_spearman"] >= z["world"]["density_spearman"] - 0.01
+          and b["interior"]["median_abs_log10_error"] <= z["interior"]["median_abs_log10_error"])
+    out = dict(addendum=str(plan.relative_to(ROOT)), stage1=stage1, fitted=dict(L_km=L2, gamma=g2, a_salmon=s1),
+               results={f"{k[0]}_{k[1]}_{k[2]}": v for k, v in cache.items()}, adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
+    (a.out / "binford_salmon5.json").write_text(json.dumps(out, indent=1, default=float))
+    print(json.dumps(dict(fitted=out["fitted"], adopted=ok, nwc=[z["nwc"]["median_abs_log10_error"], b["nwc"]["median_abs_log10_error"]],
+                          interior=[z["interior"]["median_abs_log10_error"], b["interior"]["median_abs_log10_error"]],
+                          world=[z["world"]["median_abs_log10_error"], b["world"]["median_abs_log10_error"]],
+                          world_rank=[z["world"]["density_spearman"], b["world"]["density_spearman"]],
+                          calif=[z["calif"]["median_abs_log10_error"], b["calif"]["median_abs_log10_error"]]), indent=1))
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument("--out", type=Path, default=ROOT / "output/forager_binford_20261031")
     ap.add_argument("--stage2", action="store_true", help="addendum_salmon3: fit salmon on California, the cold limit on the interior")
+    ap.add_argument("--stage4", action="store_true", help="addendum_salmon4: salmon thins upstream (decay length on the interior)")
+    ap.add_argument("--stage5", action="store_true", help="addendum_salmon5: upstream thinning and the cold limit on the interior")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -135,10 +211,11 @@ def main():
               for s in json.loads((a.out / "aquatic_inputs.json").read_text())["sites"]}
     for key in ("d_coast_km", "sst_annual_c", "w_fresh"):
         sites[key] = np.array([float(inputs[(r["name"], round(r["lat"], 4), round(r["lon"], 4))][key]) for r in rows])
-    rp, rw, stats = salmon_points()
+    rp, rw, stats, rd = salmon_points()
     tree = cKDTree(unit(rp[:, 0], rp[:, 1])); disc = math.pi * 25.0 ** 2
-    sites["s_salmon"] = np.array([100.0 * float(rw[tree.query_ball_point(unit(la, lo), chord(25.0))].sum()) / disc
-                                  for la, lo in zip(sites["lat"], sites["lon"])])
+    near = [tree.query_ball_point(unit(la, lo), chord(25.0)) for la, lo in zip(sites["lat"], sites["lon"])]
+    sites["s_salmon"] = np.array([100.0 * float(rw[n_].sum()) / disc for n_ in near])
+    sites["_near"], sites["_rw"], sites["_rd"] = near, rw, rd
     area = sites["area"]
     calif = (area == "SW") & (sites["lon"] < -119.5) & (sites["lat"] > 32) & (sites["lat"] < 42.5)
     sets = dict(fit=np.isin(area, ["ARC", "NNA", "WNA"]), coast=(area == "BC NWC") | calif, world=~np.isin(area, list(FIT_AREAS)))
@@ -147,6 +224,10 @@ def main():
     spec = specification(); res = {}
     if a.stage2:
         return stage2(a, sites, sets, calif, spec, stats)
+    if a.stage4:
+        return stage4(a, sites, sets, calif, spec, stats)
+    if a.stage5:
+        return stage5(a, sites, sets, calif, spec)
     for g in GAMMAS:
         for s in SALMON:
             r_ = run_D(sites, spec, g, s)

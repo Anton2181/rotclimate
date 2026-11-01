@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, after addendum_salmon4_20261101.json (known: L 200 km and a_salmon 300 fitted; the Northwest Coast 0.577 -> 0.377 blind; the world 0.251 unchanged, rank 0.736 -> 0.740; the interior 0.435 -> 0.474, failing its guard, because the interior is ~1.9x too dense before any salmon) and before any run below.",
+ "why": "The interior's own excess (short growing seasons feeding fewer people than the model gives; the cold-climate addendum) and the salmon runs' upstream thinning are both real; each alone failed on the other's account.",
+ "model": "configuration D (600-year mean; a_marine 3000, a_fresh 100, k_terr 0.5) with land food x clip(GS / 6, 0.1, 1) ** gamma and + a_salmon x S_salmon(L) (HydroRIVERS salmon streams weighted by exp(-distance to the outlet / L))",
+ "stage_1": "for each L in {100, 200, 400, 800}: a_salmon in {0, 30, 100, 300, 1000} on the California groups (GS 12, so gamma has no effect there)",
+ "stage_2": "(L, gamma) with gamma in {0, 0.5, 1, 1.5, 2} and stage 1's a_salmon for that L: the pair with the lowest interior (ARC, NNA, WNA) median absolute log10 error",
+ "test_blind": "the Northwest Coast and the rest of the world, against configuration D without salmon or cold limit",
+ "adopt_if": "a_salmon > 0, the Northwest Coast's median absolute log10 error improves by at least 0.05, the rest of the world's error and rank not worse by more than 0.01, and the interior's error not worse than without salmon or cold limit. Then data/foraging_model.json takes (a_salmon, L, gamma) and the atlases' foraging is rebuilt.",
+ "script": "scripts/forager_salmon2.py --stage5"
+}
