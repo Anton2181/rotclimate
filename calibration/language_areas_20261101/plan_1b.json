@@ -1,0 +1,8 @@
+{
+ "frozen": "2026-11-01, after layer 1's Australia test (not adopted: 625 languages vs 369 with Binford's group size, richness R2 0.27) and before any run below.",
+ "change": "The split size is no longer taken from Binford's groups (dialect-level units in Australia) but calibrated out of sample on another continent's foragers: western and northern North America (Glottolog languages of the North America macroarea west of 105 W and north of 32 N, plus everything north of 55 N; farmers of the Southwest, Plains villages and the east excluded by the window). N_max is chosen from {500, 750, 1000, 1500, 2000, 3000, 4000, 6000} as the value whose mean simulated count is closest to the window's Glottolog count; it is then applied blind to mainland Australia.",
+ "variants": "capacity from FORGE configuration D (as layer 1) and, for comparison, from a rainfall rule: log10 density = a + b log10 annual rain fitted on Binford's 280 groups (no languages involved), each calibrated the same way.",
+ "algorithm": "as layer 1 with a frontier-driven fill (a random unoccupied cell next to occupied land joins a random neighbouring group), equivalent in its rules, faster; Australia is re-run with the same algorithm so results compare; 20 replicates per setting in the calibration, 50 in the Australia test.",
+ "adopt_if": "on Australia, mean count within +-25 % of 369 and richness R2 >= 0.30 (as layer 1), for the FORGE capacity; the rainfall variant is reported for comparison only.",
+ "script": "scripts/language_areas_earth.py --stage 1b"
+}
