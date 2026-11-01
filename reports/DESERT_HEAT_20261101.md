@@ -227,3 +227,49 @@ before the 1.9-hour time limit; its best cost is 1.0026 (candidate 32).
 Mid-latitude 1.0018 and holdout 1.001 block it, both through Manchuria and
 the southern coasts. The remaining 17 candidates are queued; the frozen
 plan allows them.
+
+## Desert refits #2 and #3: the same answer twice (not adopted)
+
+Both frozen searches ran to their 80 candidates. Refit #3 was resumed
+twice after container restarts, which its plan allows.
+
+| | refit #2 (gated e71) | refit #3 (e70b core drying + e70c rain gate + gated e71) |
+|---|---:|---:|
+| best candidate | 32 | 79 |
+| dev31 S | 0.9938 | 0.9938 |
+| training / dev12 | 0.993 / 0.989 | 0.997 / 0.987 |
+| **holdout** | **1.0010** | **1.0002** |
+| **mid-latitude** | **1.0018** | **1.0020** |
+| retired sealed b (deserts) | 0.977 | **0.958** |
+| retired sealed a / c | 0.995 / 1.002 | 0.995 / 1.002 |
+| cost | 1.0026 | 1.0020 |
+
+In refit #3, 37 of the 80 candidates pass the overall bar (S ≤ 0.995),
+but none keeps every policy group from worsening.
+
+**Verdict:** the frozen gate fails any group above 1. The validation
+re-run is deterministic and would fail the same way, so neither candidate
+was validated. Sealed set d stays unseen and r41 stays.
+
+**What blocks both searches.** These are the per-region changes for
+refit #3's best candidate against r41, on the monthly temperature error
+and the rain loss:
+
+| region | temperature error | rain loss |
+|---|---:|---:|
+| Manchuria | 2.13 → 2.15 °C (+1.3 %) | 0.276 → 0.286 (+3.8 %) |
+| SW Australia | 0.66 → 0.67 °C (+2.3 %) | 0.522 → 0.528 |
+| Japan | 1.84 → 1.85 °C | slightly better |
+
+The rest of both groups move by less than 0.5 %.
+
+**What it shows:**
+- **The desert physics works.** Retired set b, the deserts, improves by
+  4 %, and dev31 by 0.6 %.
+- **It costs a little elsewhere.** Manchuria gets warmer and wetter, and
+  SW Australia warmer. Both sit just poleward of the descending branch,
+  which the warming term's taper reaches.
+
+A next design would protect those edges explicitly: cut the e71 warming
+off poleward of the branch's annual-mean edge, not its seasonal edge. It
+would need a new frozen plan, and sealed set d is still unseen for it.
