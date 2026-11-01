@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, before any run below. F12 found that the adopted FORGE configuration D stores nothing, so storage could not be scored; task 8 had tested a food store only on density (best capacity 0). No storage setting has been scored on Binford's storage records before this addendum.",
+ "question": "F13: with FORGE's food store switched on (food beyond the fat ceiling is kept and eaten before body fat; foraging/models.py storage_capacity_mj, storage_decay_day), does the stored share of food rank Binford's groups by how much they store (qtstor, 1-4), at no real cost to density?",
+ "settings": "configuration D exactly as adopted (scripts/forager_salmon.run_D, no salmon), with storage_capacity_mj in {250, 500, 1000, 2000, 4000} x storage_decay_day in {0, 0.005}; plus D itself (no store) as the reference.",
+ "sites": "Binford's 280 groups as in F12 (subpop n, density > 0, a WorldClim cell), with qtstor recorded.",
+ "selection": "leave one Binford area out (SW, AUS, BC NWC, NNA, ARC, WNA, and the rest of the world, SOAM + AFR + ASIA + ENA, as one area): for each held-out area the setting is chosen on the others as the highest Spearman rho of stored share vs qtstor among settings whose median absolute log10 density error is at most D's + 0.02 on those groups.",
+ "adopt_if": "pooled over the held-out areas, rho(stored share, qtstor) >= 0.30, at least 0.10 above rho(scarcity days, qtstor) under D (0.17 in F12), and the pooled median absolute log10 density error at most D's + 0.02. Then the store becomes part of configuration D and a storage layer joins the maps.",
+ "also_reported": "rho by area; the stored share of California's acorn and seed gatherers against the rest of the Southwest; meat fraction is unchanged by design (the store keeps any food) and is not scored.",
+ "script": "scripts/forager_storage.py"
+}
