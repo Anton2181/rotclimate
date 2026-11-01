@@ -1,0 +1,130 @@
+{
+ "addendum": "calibration/forager_binford_20261031/addendum_forest10_20261101.json",
+ "hydrorivers": {
+  "na": {
+   "outlets": 18414,
+   "cold_systems": 11009,
+   "salmon_segments": 108983
+  },
+  "as": {
+   "outlets": 14174,
+   "cold_systems": 2871,
+   "salmon_segments": 29254
+  },
+  "ar": {
+   "outlets": 12920,
+   "cold_systems": 4191,
+   "salmon_segments": 29007
+  }
+ },
+ "cv_error": 0.37168789078292047,
+ "baseline_error": 0.44151772787561094,
+ "folds": {
+  "ARC": {
+   "heldout": 0.5200680672217561,
+   "baseline": 0.6495770223903656,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800,
+    "c": 0.0
+   }
+  },
+  "NNA": {
+   "heldout": 0.5589982533471434,
+   "baseline": 0.4373625552746654,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800,
+    "c": 0.0
+   }
+  },
+  "WNA": {
+   "heldout": 0.2150837653528886,
+   "baseline": 0.2150837653528886,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800,
+    "c": 0.0
+   }
+  },
+  "BC NWC": {
+   "heldout": 0.30173866548947564,
+   "baseline": 0.5774233300970776,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800,
+    "c": 0.0
+   }
+  },
+  "SW": {
+   "heldout": 0.43926202844634465,
+   "baseline": 0.5082484497231978,
+   "choice": {
+    "a_salmon": 100,
+    "L_km": 400,
+    "c": 0.0
+   }
+  },
+  "world": {
+   "heldout": 0.2530444089788589,
+   "baseline": 0.251305034184623,
+   "choice": {
+    "a_salmon": 300,
+    "L_km": 800,
+    "c": 0.0
+   }
+  }
+ },
+ "final_fit": {
+  "a_salmon": 300,
+  "L_km": 800,
+  "c": 0.0
+ },
+ "adopted": false,
+ "rule": "against configuration D as adopted: the CV error improves by at least 0.02, no fold's held-out median absolute log10 error worsens by more than 0.05, and the rest-of-world fold's not by more than 0.01. Then the forest factor, the ice factor and (a_salmon, L, c) fitted on all groups enter data/foraging_model.json (the map: AI from its own monthly climate) and the atlases' foraging is rebuilt.",
+ "forest_only": {
+  "cv_error": 0.43801494972405974,
+  "folds": {
+   "ARC": {
+    "heldout": 0.5042281291405496,
+    "c": 0.0
+   },
+   "NNA": {
+    "heldout": 0.43793122165424253,
+    "c": 0.0
+   },
+   "WNA": {
+    "heldout": 0.2150837653528886,
+    "c": 0.0
+   },
+   "BC NWC": {
+    "heldout": 0.5774233300970776,
+    "c": 0.0
+   },
+   "SW": {
+    "heldout": 0.5082484497231978,
+    "c": 0.0
+   },
+   "world": {
+    "heldout": 0.251305034184623,
+    "c": 0.0
+   }
+  }
+ },
+ "forest_w_by_area": {
+  "ARC": 0.01189958712921202,
+  "NNA": 1.0,
+  "WNA": 0.5910862964532251,
+  "BC NWC": 1.0,
+  "SW": 0.3306693569115349,
+  "world": 0.4362721177492157
+ },
+ "bias_by_area_final": {
+  "ARC": 0.15980174741489217,
+  "NNA": 0.5361465485205189,
+  "WNA": 0.14099876275271372,
+  "BC NWC": 0.20648739811302153,
+  "SW": -0.17998348486497973,
+  "world": -0.02481612951304356
+ }
+}
