@@ -1,0 +1,14 @@
+{
+ "frozen": "2026-11-01, before any computation below; after the probe in reports/FORAGING_EARTH_20261031.md ('Can FORGE say where culture areas emerge?': Binford's culture areas are geographic, location-only clustering ARI 0.51 world / 0.73 North America, FORGE lifeway alone 0.18).",
+ "question": "Do culture areas emerge as contact basins: land within which travel is easy, bounded by mountains, deserts and sea, refined by way of life?",
+ "data": "D-PLACE Ethnographic Atlas (dplace-dataset-ea, CLDF, open): 1,291 societies with coordinates; the target is Murdock's culture area, the two-letter prefix of each society's EA ID (62 areas). Subsistence: EA001-EA005 (dependence on gathering, hunting, fishing, animal husbandry, agriculture).",
+ "travel": "0.5 deg grid from WorldClim 2.1 elevation (5 arc-min, block mean); 8-connected least-cost paths; land steps at Tobler walking speed on the step's slope; sea steps at 3 x the flat walking time per km (boat travel with portage and seasonality folded in); societies snapped to the nearest land cell. Pairwise travel times between all societies (one Dijkstra per society).",
+ "clusterings": {
+  "A_location": "great-circle distance",
+  "B_contact": "least-cost travel time",
+  "C_contact_lifeway": "travel time x (1 + w x subsistence distance), subsistence distance = L1 distance between the five EA001-EA005 dependence shares / 2, w = 1 (fixed, no tuning)"
+ },
+ "method": "average-linkage hierarchical clustering cut at k = 62; adjusted Rand index against Murdock's areas, world and per macro-region (EA ID first letter: A Africa, C Circum-Mediterranean, E East Eurasia, I Insular Pacific, N North America, S South America); 1,000 bootstrap resamples of societies for the ARI difference B - A and C - A.",
+ "adopt_if": "B or C beats A by >= 0.05 ARI over the world with a bootstrap 95 % interval above 0. Then the invented maps get a 'Culture areas' layer: contact basins from the maps' own travel model (the political travel days) and FORGE lifeways / farming, with k chosen from the map's land area at the Earth test's density of areas.",
+ "script": "scripts/culture_areas_earth.py"
+}
