@@ -1,0 +1,62 @@
+{
+ "plan": "calibration/culture_areas_20261101/plan.json",
+ "societies": 1291,
+ "areas": 62,
+ "results": {
+  "A_location": {
+   "world": 0.34750453631271855,
+   "by_macro": {
+    "A": 0.3361400503379118,
+    "C": 0.4565462134701777,
+    "E": 0.4125845119597712,
+    "I": 0.5015240532876923,
+    "N": 0.20707753634724188,
+    "S": 0.31725583919110895,
+    "c": 0.0,
+    "e": 0.0
+   }
+  },
+  "B_contact": {
+   "world": 0.32488117424967144,
+   "by_macro": {
+    "A": 0.274853902172392,
+    "C": 0.4924060177283091,
+    "E": 0.2715000871709297,
+    "I": 0.49886765777957054,
+    "N": 0.1969589442169979,
+    "S": 0.28401320260480356,
+    "c": 0.0,
+    "e": 0.0
+   }
+  },
+  "C_contact_lifeway": {
+   "world": 0.29046964065988257,
+   "by_macro": {
+    "A": 0.1964093840802843,
+    "C": 0.49448590674112197,
+    "E": 0.2749893054488073,
+    "I": 0.49307370540259543,
+    "N": 0.23669774098450222,
+    "S": 0.28640517003800237,
+    "c": 0.0,
+    "e": 0.0
+   }
+  }
+ },
+ "gain": {
+  "B-A": -0.022623362063047103,
+  "C-A": -0.05703489565283598
+ },
+ "bootstrap_95": {
+  "B-A": [
+   -0.0626322335514794,
+   0.011252973546422813
+  ],
+  "C-A": [
+   -0.0677653238400786,
+   0.021214749305299915
+  ]
+ },
+ "adopted": false,
+ "rule": "B or C beats A by >= 0.05 ARI over the world with a bootstrap 95 % interval above 0. Then the invented maps get a 'Culture areas' layer: contact basins from the maps' own travel model (the political travel days) and FORGE lifeways / farming, with k chosen from the map's land area at the Earth test's density of areas."
+}

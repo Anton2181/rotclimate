@@ -44,13 +44,9 @@ def societies():
 
 
 def elevation_grid(step_deg=0.5):
-    import rasterio
-    z = zipfile.ZipFile(ROOT / "data/cache/worldclim/wc2.1_5m_elev.zip")
-    name = [n for n in z.namelist() if n.endswith(".tif")][0]
-    with rasterio.open(f"/vsizip/{ROOT / 'data/cache/worldclim/wc2.1_5m_elev.zip'}/{name}") as src:
-        e = src.read(1).astype(float); nod = src.nodata
-    land = e != nod if nod is not None else np.isfinite(e)
-    e[~land] = np.nan
+    from rotclimate.earth import _wc
+    e = _wc("elev").astype(float)
+    land = np.isfinite(e)
     f = int(round(step_deg * 12))
     h, w = e.shape[0] // f, e.shape[1] // f
     blk = e[:h * f, :w * f].reshape(h, f, w, f)

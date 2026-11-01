@@ -465,3 +465,48 @@ Hunters hold the uplands, the cold north and the eastern island.
 Browser checks pass locally and as packaged
 (`output/forager_binford_20261031/browser_lifeways_*.json`), and the hosted
 atlases are republished.
+
+## Culture areas as contact basins (F15, not adopted)
+
+`calibration/culture_areas_20261101/plan.json` (frozen before any
+computation; `scripts/culture_areas_earth.py`,
+`output/culture_areas_20261101/`).
+
+The test asks whether Murdock's 62 Ethnographic Atlas culture areas can be
+recovered from geography. The data are the 1,291 societies of D-PLACE's
+Ethnographic Atlas, cached in `data/cache/dplace_ea` and not committed.
+
+Three distances between societies are compared:
+- straight-line distance;
+- least-cost travel time on a 0.5° world grid: Tobler walking on slopes,
+  with sea crossings at three times the flat walking time per km;
+- that travel time scaled by the difference in subsistence (EA001–EA005).
+
+Each is clustered by average linkage into 62 groups and scored with the
+adjusted Rand index (ARI):
+
+| distance | world | Africa | Circum-Med | East Eurasia | Pacific | N America | S America |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| straight line | **0.348** | **0.336** | 0.457 | **0.413** | **0.502** | 0.207 | **0.317** |
+| travel time | 0.325 | 0.275 | 0.492 | 0.272 | 0.499 | 0.197 | 0.284 |
+| travel time + subsistence | 0.290 | 0.196 | **0.494** | 0.275 | 0.493 | **0.237** | 0.286 |
+
+Against straight-line distance, with 1,000 bootstrap resamples:
+- travel time: −0.023 (95 % interval −0.063 to +0.011);
+- travel time + subsistence: −0.057.
+
+**Not adopted.** Travel time helps only around the Mediterranean, where the
+sea separates peoples, and subsistence only in North America.
+
+The travel-time clusterings do put more societies with the bulk of their
+Murdock area (68 % → 75–77 %), but they do it by merging neighbouring areas.
+The isolated islands and the Arctic take up clusters of their own, and the
+rest lumps together. The ARI penalises that lumping.
+
+Murdock drew his areas largely by language and history. Straight-line
+proximity, i.e. diffusion, predicts them better than physical barriers do.
+
+For the maps, the result means culture areas are best grown from distance
+and the drawn polities and lore, not from terrain barriers. A next attempt
+would cluster within each macro-region, so islands do not consume the
+cluster budget, and would weight sea crossings by their actual width.
