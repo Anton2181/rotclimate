@@ -1,0 +1,18 @@
+{
+ "frozen": "2026-11-01, after layers 2 and 2b (farming spreads by distance; hearths are not predicted) and before any run below. No language count has been compared with terrain or crop variation in this project before this plan.",
+ "question": "Layer 2c: on land where farming can take root, what sets how many languages a region holds? Nichols (1992) contrasted spread zones (open plains, few languages, repeatedly replaced) with residual zones (rugged country where languages accumulate); Michalopoulos (2012, American Economic Review 102: 1508-1539) found that variation in land quality and elevation predicts ethnolinguistic diversity. Does terrain and land-quality variation predict language density beyond climate alone, on continents the fit has not seen?",
+ "crop_rules": "scripts/land_people.py analyse() unchanged on WorldClim 2.1 (5 arc-min, 1970-2000) over 56 S - 72 N, all longitudes, with rivers and relief as in scripts/land_people_earth.py. s = max over the five crops of kcal_crop x arable share, divided by its 95th percentile over all land and clipped to [0, 1].",
+ "blocks": "2 x 2 deg blocks with at least half their 5 arc-min cells land and mean s >= 0.05 (crop-capable land).",
+ "target": "y = log(1 + n), n the number of Glottolog languages (level 'language', with coordinates) whose point lies in the block.",
+ "predictors": {
+  "C0 (climate)": "the block's mean annual temperature, log10 mean annual precipitation, and log10 mean Miami NPP.",
+  "C1 (climate + land)": "C0 plus log10(1 + standard deviation of elevation, m), the standard deviation of s within the block, and mean s."
+ },
+ "fit": "ordinary least squares with an intercept, predictors standardised on the training blocks.",
+ "test": "leave one Glottolog macroarea out (Africa, Eurasia, Papunesia, North America, South America, Australia; a language listed in several macroareas counts in its first, and a block belongs to the macroarea of most of its languages, or, with none, of the nearest language). Score: held-out R2 over all blocks, 1 - SSE/SST around the mean of all blocks' y; and each macroarea's root-mean-square error.",
+ "adopt_if": "R2(C1) >= R2(C0) + 0.05 and C1's error is lower than C0's in at least 4 of the 6 macroareas. Then the fantasy map's farmer language density is C1's prediction (refitted on all blocks) from the map's own climate, elevation and crop rules, and layer 1's group splitting is sized per block to reach it.",
+ "else": "language density on the map's farmland follows climate alone (C0), if C0's held-out R2 is at least 0.20; otherwise it is left to the owner.",
+ "also_reported": "the fitted signs (Nichols and Michalopoulos predict positive coefficients on elevation and land-quality variation), maps of the held-out residuals, and the same test with ruggedness alone added to C0.",
+ "limits": "Glottolog points are one per language, not territories; colonial-era losses thin the Americas and Australia; present climate.",
+ "script": "scripts/language_density_earth.py"
+}
