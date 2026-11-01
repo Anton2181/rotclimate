@@ -208,6 +208,7 @@ class Params:
     subgrid_orographic: float = 0.0  # e34: ascent from sub-grid hills, x relief (km) x wind speed / 5 m/s (0 = none)
     lee_drying: float = 0.0  # e35: descending lee air dries the column, rain ascent x exp(-this x downslope) (0 = none)
     subsidence_branch: float = 0.0    # e70: sinking along the Hadley cell's whole descending branch (ITCZ + gap to the edge), x this (0 = only the band at the edge)
+    subsidence_warming: float = 0.0   # e71: K of land warming by the descending branch's compression (the e70 plateau), x (1 + subsidence_summer x season)
     subsidence_branch_gap: float = 8.0  # e70: degrees poleward of the ITCZ where the descending branch's sinking begins
     dry_coupling: float = 0.0  # e36: dry ground couples the air to the land faster, sunshine coupling x (1 + this x dryness) (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)

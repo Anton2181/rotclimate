@@ -19,7 +19,7 @@ def test_new_switches_default_off_and_are_classified():
     assert p.dry_heating_warm_c == -99.0 and p.dry_heating_mean_c == -99.0
     assert p.shelf_air_coupling == 0.0 and p.shelf_air_enclosed is False and p.ebm_land_ice == 1.0
     assert p.warm_current_seasonality == 0.0 and p.continental_sea_air == 0.0 and p.storm_baroclinic == 0.0 and p.wet_sun == 0.0
-    assert p.subsidence_branch == 0.0 and p.dry_heating_arid == -1.0
+    assert p.subsidence_branch == 0.0 and p.dry_heating_arid == -1.0 and p.subsidence_warming == 0.0
     validate_partition()
     assert {'dry_heating', 'dry_heating_chi0', 'wind_source', 'monsoon_westerly', 'itcz_shift_ocean', 'monsoon_pressure_hpa',
             'shelf_warm_currents', 'zonal_land_friction', 'ocean_column_air', 'ocean_column_warm', 'eddy_cap_contrast_k', 'eddy_upwind_days',
@@ -27,7 +27,7 @@ def test_new_switches_default_off_and_are_classified():
             'dry_heating_mean_c', 'shelf_air_coupling', 'shelf_air_lag_days', 'shelf_air_enclosed', 'ebm_land_ice',
             'warm_current_seasonality', 'continental_sea_air', 'continental_sea_lag_days',
             'storm_baroclinic', 'storm_baroclinic_max_deg', 'storm_baroclinic_cold_c',
-            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid'} <= SHARED_FIELDS
+            'wet_sun', 'wet_sun_ref', 'subsidence_branch', 'subsidence_branch_gap', 'dry_heating_arid', 'subsidence_warming'} <= SHARED_FIELDS
     p = r39()
     assert p.dry_heating == 0.0 and p.wind_source == 'model'
 
@@ -60,6 +60,7 @@ def test_new_switches_default_off_and_are_classified():
     (dict(wet_sun=-1.0), 'wet_sun must be'),
     (dict(subsidence_branch=1.5), 'subsidence_branch must be'),
     (dict(dry_heating_arid=1.0), 'dry_heating_arid must be'),
+    (dict(subsidence_warming=-1.0), 'subsidence_warming must be'),
     (dict(subsidence_branch=0.5, subsidence_branch_gap=30.0), 'subsidence_branch must be'),
     (dict(wet_sun=2.0, soil_bucket_mm=0.0), 'needs the soil bucket'),
     (dict(continental_sea_air=0.5, continental_sea_lag_days=2.0), 'continental_sea_air must be'),
