@@ -1,5 +1,5 @@
 #!/bin/bash
-# Resume desert refit #3 after the container restart (it stopped at 10 of 80).
+# Resume desert refit #3 after the container restart (it stopped at 10, then 57, of 80).
 cd /home/user/rotclimate
 echo "resume $(date +%H:%M)"
 for k in 1 2 3; do
