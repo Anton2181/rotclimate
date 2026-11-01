@@ -1,0 +1,9 @@
+{
+ "frozen": "2026-11-01, before any run below. Known: the aquatic addendum's results (output/forager_binford_20261031/binford_aquatic.json): k_terr 0.5, a_marine 3000 (the top of its grid), a_fresh 100; test-set median absolute log10 error 0.251, density rank 0.736, fish-share rank 0.78; North America's richest coasts (California, the Northwest Coast) ~3x too sparse.",
+ "why": "The marine scale was chosen at the edge of its grid, so the fit may want more; the grid is extended before anything else is changed.",
+ "change": "Configuration D as the aquatic addendum defines it (same inputs, kernel, 600-year mean, k_terr 0.5 fixed), stage 2 regridded: a_marine in {3000, 4500, 6000, 9000, 13500} x a_fresh in {30, 100, 300}.",
+ "fit": "all North American fit-set groups (214), minimising the median absolute log10 density error",
+ "test": "the rest of the world (66 groups), never used for fitting",
+ "adopt_if": "the fitted (a_marine, a_fresh) differs from (3000, 100), its test-set median absolute log10 error improves on the current D's (0.251) by at least 0.01, and the test-set density rank correlation and fish-share rank correlation are not lower by more than 0.02. Then data/foraging_model.json takes the new scales and the three atlases' foraging (and the Earth fit's corrected copy) is rebuilt.",
+ "script": "scripts/forager_earth_test.py --aquatic2"
+}
