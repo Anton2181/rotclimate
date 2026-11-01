@@ -150,3 +150,37 @@ The next design needs three changes:
 Sealed set c is now development data
 (`calibration/sealed_20261101c/declaration.json`). A fresh set d is
 declared for the next adoption.
+
+## Second design: gates instead of a global offset
+
+Two new opt-in gates follow the sealed-set failure:
+- **e71e** `subsidence_warming_rain`: no warming under raining (rising) air,
+  × exp(−smoothed rain / this).
+- **e71f** `subsidence_warming_top_m`: none above this height, full
+  1,000 m below it.
+
+The land offset stays at r41's value. Screens: e71 4 K, taper 10°,
+chi0 0.7, top 2,500 m; columns as before plus the now-retired sealed set c.
+
+| rain gate | dev31 S | holdout | mid-lat. | dev12 | retired a | retired b | retired c |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| 2 mm/day (g1) | 0.9853 | 1.0051 | 1.0050 | 0.972 | 0.994 | 0.955 | 1.004 |
+| 1 mm/day (g2) | 0.9875 | 1.0047 | 1.0047 | 0.976 | 0.994 | 0.960 | 1.004 |
+| 1 mm/day, chi0 0.5 (g3) | 0.9876 | 1.0076 | 1.0047 | 0.976 | 0.993 | 0.956 | 1.004 |
+
+Sealed set c's damage is gone: Volga and the BC coast are unchanged, and
+Tibet moves only 2.41 → 2.51 °C. What remains:
+- **Manchuria (1.033–1.037):** mostly rain, 646 → 668 mm against 582
+  observed, downstream of the warmed interior.
+- **SW Australia, Victoria and Chile:** 0.1–0.3 °C each.
+
+The second refit, `calibration/desert_refit2_20261101/plan.json` (frozen
+before its search), starts at g1. Knobs:
+- the warming and its gates;
+- the branch gap;
+- `wet_sun`;
+- the rain-out time `precip_tau_days`.
+
+It has no land offset and no cold-air pool. All three retired sealed sets
+are guards. It will be validated on sealed set d
+(`calibration/sealed_20261101d`, never run).
