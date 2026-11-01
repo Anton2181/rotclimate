@@ -102,7 +102,37 @@ def search(plan, resume):
     print('World fit complete; run the review.', flush=True)
 
 
-def review(plan):
+def cell_allowances(plan, control_recall):
+    """amendment_cell_screen.json: each zone's coarse recall allowance, max(0.03, 2 binomial standard errors)."""
+    from rotclimate.geography import build_grid
+    from rotclimate.geography import TARGET_KEYS
+    g = build_grid(load_params(ROOT / plan['old_atlas_params']).replace(downsample=plan['downsample']))
+    land = g.inmap & g.land
+    out = {}
+    for k, zone in TARGET_KEYS.items():
+        n = int(((g.target == k) & land).sum()); r = control_recall[zone]
+        out[zone] = max(0.03, 2.0 * float(np.sqrt(max(r * (1 - r), 0.0) / max(n, 1))))
+    return out
+
+
+def coarse_failures(metric, old, allow):
+    failures = []
+    if metric['accuracy'] < old['accuracy'] - .01:
+        failures.append('Coarse strict accuracy lost more than 0.01')
+    for zone, value in old['recall'].items():
+        if metric['recall'][zone] < value - allow[zone]:
+            failures.append(zone + ': recall exceeded loss allowance')
+    if metric['mediterranean']['dry_share'] > old['mediterranean']['dry_share'] + .01:
+        failures.append('Mediterranean dry share exceeded allowance')
+    if metric['mediterranean']['cs_share'] < old['mediterranean']['cs_share'] - .03:
+        failures.append('Mediterranean Cs share exceeded loss allowance')
+    return failures
+
+
+def review(plan, amended=False):
+    global OUT
+    if amended:
+        OUT = ROOT / 'output/r41_world_planet_amended'
     if not (FOLDER / 'best_result.json').exists():
         raise SystemExit('The search must finish first')
     published = ROOT / 'atlases/earth_fit/params.json'
@@ -113,6 +143,7 @@ def review(plan):
         raise ValueError('World search exceeded its frozen budget')
     old = json.loads((FOLDER / 'coarse_old_control.json').read_text())
     old_metrics = dict(zonefit=old['score'], accuracy=old['accuracy'], recall=old['recall'], mediterranean=old['mediterranean'])
+    allow = cell_allowances(plan, old_metrics['recall']) if amended else None
     eligible, seen, screen = [], set(), []
     for row in sorted(rows, key=lambda r: (-(r['score'] + r.get('guard_penalty', 0.0)), r['eval'])):
         if row.get('error') or row.get('raced') or not row.get('observed_numerics', {}).get('all_checks_passed'):
@@ -122,9 +153,12 @@ def review(plan):
             continue
         seen.add(key)
         metric = metrics_of(row)
-        failures = world_failures(metric, old_metrics, native=False)
-        if row.get('guard_penalty', 0.0) > 0:
-            failures.append('Guard penalty above zero')
+        if amended:
+            failures = coarse_failures(metric, old_metrics, allow)
+        else:
+            failures = world_failures(metric, old_metrics, native=False)
+            if row.get('guard_penalty', 0.0) > 0:
+                failures.append('Guard penalty above zero')
         if metric['zonefit'] <= old_metrics['zonefit']:
             failures.append('Raw zonefit does not beat the coarse control')
         screen.append(dict(eval=row['eval'], zonefit=metric['zonefit'], guard_penalty=row.get('guard_penalty', 0.0),
@@ -135,8 +169,9 @@ def review(plan):
     OUT.mkdir(parents=True, exist_ok=True)
     sources = list((ROOT / 'rotclimate').glob('*.py')) + list((ROOT / 'data/source').glob('*')) + [
         Path(__file__), FOLDER / 'plan.json', FOLDER / 'protocol.json', FOLDER / 'world/evals.jsonl',
+        *([FOLDER / 'amendment_cell_screen.json'] if amended else []),
         published, ROOT / 'atlases/earth_fit/summary.json']
-    run = freeze(OUT / 'protocol.json', dict(plan=plan, coarse_screen=screen, finalists=[r['eval'] for r in eligible],
+    run = freeze(OUT / 'protocol.json', dict(plan=plan, amended=amended, allowances=allow, coarse_screen=screen, finalists=[r['eval'] for r in eligible],
                                             sources={str(p.relative_to(ROOT)): file_hash(p) for p in sources if p.is_file()}))
     write_json(OUT / 'coarse_selection.json', dict(control=old_metrics, screen=screen, selected=[r['eval'] for r in eligible]))
     pub = json.loads((ROOT / 'atlases/earth_fit/summary.json').read_text())
@@ -197,9 +232,10 @@ def review(plan):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('stage', choices=['search', 'review']); ap.add_argument('--resume', action='store_true')
+    ap.add_argument('--amended', action='store_true', help='amendment_cell_screen.json: coarse allowances scaled to zone cell counts')
     a = ap.parse_args()
     plan = json.loads((FOLDER / 'plan.json').read_text())
-    search(plan, a.resume) if a.stage == 'search' else review(plan)
+    search(plan, a.resume) if a.stage == 'search' else review(plan, a.amended)
 
 
 if __name__ == '__main__':
