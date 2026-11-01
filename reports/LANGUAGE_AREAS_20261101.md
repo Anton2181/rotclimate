@@ -418,3 +418,43 @@ Each fit uses its own climate: the Earth-corrected one for the Earth fit,
 the simulated one for the free and Whittaker fits. The expected counts
 are 130, 181 and 144 languages. Language families are not drawn, because
 the hearths are the owner's choice.
+
+### Owner input: big seas beyond most edges
+
+The map's owner says there are big seas beyond most of the map's edges.
+That overrides the climate model's invented surroundings for this
+question. Those surroundings were fitted only so that the climate
+matches the painted zones, and they put land on most sides.
+
+**What changes.** The map clearly has farming by c.200 AD (its polities,
+towns and empire). So the question becomes: given that farming is there,
+did it start on the map, or did it cross the sea?
+- From layer 2d, the chance of at least one hearth on the map is 0.34
+  (1 − e^−0.42).
+- Write q for the chance that farming crossed the seas from outside, if
+  no hearth formed. Then the chance it began on the map, given that it is
+  there, is 0.34 / (0.34 + 0.66 q).
+
+| chance farming crosses the seas (q) | chance it began on the map |
+|---:|---:|
+| 1 (as if land-linked, the earlier figure) | 34 % |
+| 0.5 | 51 % |
+| 0.25 | 68 % |
+| 0.1 | 84 % |
+| 0.05 | 91 % |
+
+**Earth's guide to q:**
+- **Narrow seas: q is high.** Neolithic farmers crossed gaps of up to about
+  100–150 km within a few centuries of reaching the shore (Cyprus, Crete,
+  Britain, Tsushima to Japan).
+- **Big open seas: q is low.** Only the Austronesians crossed hundreds of
+  kilometres with crops, from about 3,500 years ago, and late. Australia
+  never took farming from New Guinea, though the Torres Strait is 150 km of
+  islands; climate played its part there.
+
+**So unless a narrow crossing or a land link exists somewhere,** an on-map
+hearth becomes the likelier story, at roughly 70–90 %. The west coast is
+then the best guess (35.8° N), with the south coast as runner-up.
+
+The open questions for the owner: is there any narrow crossing or land
+link, and is there farming across the seas?
