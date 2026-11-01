@@ -207,3 +207,61 @@ Jōmon Japan, which stopped short of Hokkaido.
 - present climate, not the early Holocene;
 - one spread (west Eurasian wheat and barley);
 - the Near East block is extrapolation for every model.
+
+## Layer 2b: where farming starts (not predicted; hearths are the owner's choice)
+
+**Plan:** `calibration/language_areas_20261101/plan_2b.json`, frozen
+before any global FORGE run. **Script:** `scripts/farming_hearths_earth.py`.
+**Output:** `output/language_areas_20261101/layer2b/` (`summary.json`,
+`layer2b_hearths.png`).
+
+**Setup:**
+- FORGE configuration D ran on 14,820 one-degree land cells of WorldClim's
+  present climate.
+- Four indices were tested:
+  - **B1:** productivity;
+  - **B2:** forager density;
+  - **B3:** plant-fed forager density;
+  - **H:** Testart's storing plant foragers, plant-fed density × the
+    share of the year that is lean.
+- Each index is averaged over a 500 km disc around each of Diamond's nine
+  homelands of domestication. That mean is compared with 2,000 random land
+  discs more than 1,000 km from any homeland.
+
+| homeland (percentile among random discs) | B1 NPP | B2 density | B3 plant-fed | H storing |
+|---|---:|---:|---:|---:|
+| Fertile Crescent | 55 | 57 | 65 | 66 |
+| China | 86 | 85 | 85 | **93** |
+| New Guinea highlands | **98** | **98** | 92 | 83 |
+| Sahel | 39 | 36 | 45 | 47 |
+| tropical West Africa | **89** | **89** | 86 | 75 |
+| Ethiopia | **80** | 78 | 77 | 72 |
+| eastern United States | **86** | 84 | 80 | 72 |
+| Mesoamerica | 85 | 85 | **95** | 94 |
+| Andes and Amazonia | **86** | **86** | 77 | 74 |
+| **AUC** | **0.78** | 0.78 | 0.78 | 0.75 |
+
+**Verdict: not predicted.** No index reaches 0.80, and H falls below the
+plain baselines. By the frozen rule, the fantasy map's farming hearths
+are the owner's choice, or farming arrives from beyond the map's edge.
+
+**What it shows:**
+- **The homelands are productive land.** Productivity alone places them
+  about as well as any FORGE measure: about 78 % of the time a homeland
+  outranks a random place.
+- **The Fertile Crescent and the Sahel score poorly on present climate.**
+  Both were wetter in the early Holocene, which is a limit of the test.
+- **Storing plant foragers rank China and Mesoamerica higher, but the
+  tropics lower.** New Guinea, West Africa and Amazonia had no long lean
+  season.
+- **H's strongest false hearths are suggestive.** They include the
+  Deccan and Gujarat (19.5° N 74.5° E) and South Sudan. Both are regions
+  later argued to be further centres of domestication (Indian millets and
+  pulses; sorghum), though neither is on Diamond's list. The others are
+  in Hungary, Zambia, Guinea, northern Australia and Madagascar.
+- **Productivity's maxima are rainforests:** Borneo, the Solomons and the
+  Amazon.
+
+Climate sets where farming *can* go (layer 2's crop rules). It does not
+pick out where farming *began*: that took particular wild plants, and on
+these tests history.
