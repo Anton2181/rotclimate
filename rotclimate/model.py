@@ -263,6 +263,8 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
+        if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
+            raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
         if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
             raise ValueError('wet_sun must be >= 0 and wet_sun_ref in [0, 1]')
         if params.wet_sun > 0 and params.soil_bucket_mm <= 0:
@@ -586,11 +588,20 @@ class ClimateModel:
                             if p.subtropical_high > 0 else None)
 
     # ------------------------------------------------------------------ helpers
-    def _subsidence(self, phi_h, s):
+    def _subsidence(self, phi_h, s, phi_i=None):
         """Relative sinking under the subtropical highs (the band around the
         Hadley edge, asymmetric across ocean basins, stronger in summer)."""
         p, lat = self.p, self.lat
         sub = np.exp(-((lat - phi_h) / (p.subsidence_width * self.synoptic_scale)) ** 2)
+        if p.subsidence_branch > 0 and phi_i is not None:
+            # e70: the Hadley cell's air sinks along its whole descending
+            # branch, from a few degrees poleward of the ITCZ to the cell's
+            # edge (the 15-30 N dry belt: Sahara, Arabia, Thar), not only in a
+            # band at the edge. A plateau of sinking ramps up over 5 deg from
+            # ITCZ + gap and holds to the Hadley edge, where the band takes over.
+            start = phi_i + p.subsidence_branch_gap
+            plateau = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h)
+            sub = np.maximum(sub, p.subsidence_branch * plateau)
         # subtropical highs sink hardest over the eastern side of ocean
         # basins on a prograde planet (dry west coasts: California,
         # Sahara coast); the asymmetry flips for retrograde spin
@@ -1788,7 +1799,7 @@ class ClimateModel:
                 vertical_rms = (p.orographic_gust_ms * np.sqrt(np.maximum(storm, 0))
                                 * np.hypot(self.dhdx, self.dhdy))
                 up = expected_uplift(u*self.dhdx + v*self.dhdy, vertical_rms) / .05
-            sub = self._subsidence(phi_h, s)
+            sub = self._subsidence(phi_h, s, phi_i)
             A_dyn = (p.background_ascent + p.storm_track * storm + p.convective * conv + p.orographic * up)
             if tropical is not None:
                 A_dyn = A_dyn + p.storm_track * tropical
