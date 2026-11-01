@@ -184,3 +184,46 @@ before its search), starts at g1. Knobs:
 It has no land offset and no cold-air pool. All three retired sealed sets
 are guards. It will be validated on sealed set d
 (`calibration/sealed_20261101d`, never run).
+
+## The desert rain floor (P5): dry air brought down by the branch
+
+`scripts/trace_desert_rain.py` traces the rain step at the centre cells of
+Najd and the Algerian Sahara (r41).
+
+- **Najd:** rain and evaporation are both about 1 mm/day in most months, a
+  recycling loop. It runs under a column at relative humidity 0.48–0.76,
+  with background ascent of 0.75 and almost no summer damping from sinking
+  air (damping factor 0.97). The model's subsidence band lies north of 23° N
+  in summer.
+- **Sahara:** the same loop, in July–August. Rain is 1.0–1.2 mm/day against
+  evaporation of 0.6–1.2. Monsoon moisture raises the column's relative
+  humidity to 0.55–0.59.
+
+Screens (r41 plus each change), scored as before:
+
+| change | dev31 S | rain loss | holdout | mid-lat. | retired a | retired b (deserts) | retired c |
+|---|---:|---:|---:|---:|---:|---:|---:|
+| subsidence drying 0.1/day across the band and branch (e70) | 1.1964 (set a) | +36 % | | | 1.196 | 0.931 | 1.070 |
+| **e70b: branch-core drying 0.1/day** | 1.0037 | +1.1 % | 1.042 | 1.012 | 1.017 | 0.930 | 0.981 |
+| e70b 0.2/day | 1.0270 | +5.3 % | 1.088 | 1.027 | 1.030 | 0.907 | 0.970 |
+| e70b 0.2 + e71 gated | 1.0087 | +4.6 % | 1.092 | 1.030 | 1.016 | **0.848** | 0.974 |
+| **e70b 0.2 + rain gate 1 mm/day (e70c)** | **0.9986** | −0.03 % | 1.030 | 1.004 | 1.038 | 0.927 | 0.998 |
+
+What these runs show:
+- **Drying through the band dries the mid-latitudes.** The band sits at
+  34–40° in summer, so drying it ruins mid-latitude rain.
+- **Drying only the branch core works on the deserts.** It cuts their rain:
+  Najd 364 → 221 mm (0.1/day) and → 164 mm with the warming (observed 124);
+  the Sahara 176 → 116 and → 91 mm (observed 26).
+- **The rain gate spares the monsoons.** It switches the drying off under
+  rising, raining air, and East China and the North China Plain are spared.
+- **What remains is downstream.** South Brazil 1.11, SW Australia 1.075,
+  the Levant 1.08, Central Asia 1.06 and Anatolia 1.05 now lose rain. They
+  sit downstream of the dried deserts, and their moisture crosses the dried
+  column.
+
+Desert refit #2 (gated e71, without drying) ran 63 of its 80 candidates
+before the 1.9-hour time limit; its best cost is 1.0026 (candidate 32).
+Mid-latitude 1.0018 and holdout 1.001 block it, both through Manchuria and
+the southern coasts. The remaining 17 candidates are queued; the frozen
+plan allows them.
