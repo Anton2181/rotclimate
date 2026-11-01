@@ -1,0 +1,64 @@
+{
+ "frozen": "2026-11-01, before any result of this search; after the screens of e65 (band snow), e67 (continental sea air), e68 (baroclinic storm track) and e69 (sunshine-driven wet-ground cooling) on dev31 (reports/SEASON_PHASE_20261031.md sections 3-7; output/season_phase_20261031, output/continental_sea_20261031, output/storm_baroclinic_20261101, output/wet_sun_20261101) and the failed land-ice refit (calibration/land_ice_refit_20261031: dev31 0.9843 with training 1.0029 through East China; sealed set b unseen).",
+ "why": "Each new lever mends one group and breaks another: e65 the maritime mid-latitudes (Pacific NW, Alps, eastern Europe), e68 counted on cool air Iberia, Manchuria, the Great Basin and the British Isles (S 0.9950), e69 with less of the annual-mean wet cooling East China (2.00 -> 1.30 C), North India and the US Midwest. Their failures are in different places, so the search balances them together, starting from the land-ice refit's best candidate.",
+ "start": "calibration/land_ice_refit_20261031/search/best_params.json",
+ "set": {
+  "storm_baroclinic_cold_c": 10.0
+ },
+ "reference": "output/summer_rain_20261030/r40_dev31",
+ "extra_groups": {
+  "retired_sealed": {
+   "spec": "calibration/sealed_20261031/regions.json",
+   "reference": "output/transport_wind_20261031/dry_heat_refit/r40_sealed6"
+  }
+ },
+ "knobs": [
+  [
+   "ebm_land_ice",
+   0.0,
+   1.0
+  ],
+  [
+   "continental_mean",
+   4.0,
+   12.0
+  ],
+  [
+   "continentality",
+   0.25,
+   0.75
+  ],
+  [
+   "wet_cooling",
+   0.0,
+   0.6
+  ],
+  [
+   "wet_sun",
+   0.0,
+   10.0
+  ],
+  [
+   "storm_baroclinic",
+   0.0,
+   1.0
+  ],
+  [
+   "snow_albedo",
+   0.0,
+   4.0
+  ],
+  [
+   "land_offset",
+   -1.5,
+   0.5
+  ]
+ ],
+ "sigma": 0.25,
+ "popsize": 10,
+ "seed": 69,
+ "evals": 80,
+ "score": "scripts/gate_calibrate.py: S as scripts/gate_local.py over dev31 against the r40 run, plus 2 x every policy group's worsening, 2 x the retired sealed set's worsening, and 2 x any T or P worsening beyond 1 %",
+ "selection": "the lowest-cost completed candidate",
+ "validation": "OUT=output/spring_refit_20261101/refit REF_NAME=r40 REF_FIT=calibration/local_accuracy_20261023/r40_params.json BEST=calibration/spring_refit_20261101/search/best_params.json SEALED_SPEC=calibration/sealed_20261031b/regions.json bash scripts/validate_monsoon_refit.sh: fresh paired dev31 runs under policy v2, the paired 28 km check, then sealed set b (declared 2026-10-31, never run) once if both pass; adoption also requires sealed set b not to get worse. If adopted, it becomes r41: the Earth-fit atlas is rebuilt with it (world refit for the map, Earth corrections retrained, corrected climate re-exported) and the hosted atlases republished. Failing any step means nothing is adopted; every result is reported."
+}

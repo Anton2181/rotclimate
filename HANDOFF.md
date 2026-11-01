@@ -209,3 +209,26 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   ORBIS is not in the container (o_sites.csv, new_routes.topojson under
   data/cache/orbis). Earth polity data rebuilt by scripts/prepare_polity_data.py
   (data/cache, not committed).
+
+## 1 November 2026 round (reports/SEASON_PHASE_20261031.md sections 5-7)
+
+* East Asia's spring warmth (3-4 C, the refits' blocker) is NOT the sea, the
+  surface winds (observed WOA18 + NCEP swapped in: unchanged), the lapse rate
+  or cloud shading alone. The storm band is planet-wide (45 N in April) while
+  East Asia's jet and fronts stay at 30-35 N; and wet_cooling acts only above
+  the annual mean, flattening summers so springs/autumns end too warm.
+* New opt-in levers (all off, bit-identical): e66 warm_current_seasonality
+  (fixes British seas, worsens land: compensating error), e67
+  continental_sea_air (fixes Korea's seas, not the land), e68 storm_baroclinic
+  (+ _cold_c, _max_deg; storm band on the model's baroclinic zone), e69
+  wet_sun (+ _ref; sunshine-driven wet cooling; with wet_cooling 0 East China
+  2.00 -> 1.30 C), world lever ebm_land_scale (planet land by latitude).
+* Frozen refit calibration/spring_refit_20261101 (e65 + e68 + e69 + continental
+  terms) running; validate with sealed set b (still unseen) -> r41 if it passes.
+* Political reach: dry-land towns need water within 40 km on Earth (22.9 km on
+  drawn maps, scaled to Natural Earth river density); ORBIS cached
+  (data/cache/orbis); sailing constants not adopted (ORBIS blind test).
+* FORGE aquatic addendum 2 not adopted (marine scale grid-edge is the NW Coast).
+* Off-map land: scripts/offmap_earth_test.py measures the skill an invented
+  surrounding costs on Earth (British Isles 0.77 C RMS, mostly systematic, not
+  layout noise); full run pending.
