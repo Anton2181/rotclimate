@@ -212,6 +212,8 @@ class Params:
     subsidence_warming_taper: float = 0.0  # e71b: degrees over which the warming fades to zero at the Hadley edge (0 = none)
     subsidence_warming_wet: float = 0.0    # e71c: share of the warming that wet ground loses (rain means rising air)
     subsidence_warming_chi0: float = 0.0   # e71d: only air that has crossed land carries the warmth down: x clip((chi - this) / (1 - this), 0, 1); 0 = everywhere
+    subsidence_warming_rain: float = 0.0   # e71e: x exp(-recent smoothed rain / this, mm/day): no warming under rising (raining) air; 0 = off
+    subsidence_warming_top_m: float = 0.0  # e71f: none above this elevation, full 1,000 m below it (summer plateaus rise); 0 = off
     subsidence_branch_gap: float = 8.0  # e70: degrees poleward of the ITCZ where the descending branch's sinking begins
     dry_coupling: float = 0.0  # e36: dry ground couples the air to the land faster, sunshine coupling x (1 + this x dryness) (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)

@@ -264,7 +264,8 @@ class ClimateModel:
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
         if not 0.0 <= params.subsidence_warming <= 10.0 or not 0.0 <= params.subsidence_warming_taper <= 30.0 \
-                or not 0.0 <= params.subsidence_warming_wet <= 1.0 or not 0.0 <= params.subsidence_warming_chi0 < 1.0:
+                or not 0.0 <= params.subsidence_warming_wet <= 1.0 or not 0.0 <= params.subsidence_warming_chi0 < 1.0 \
+                or params.subsidence_warming_rain < 0 or params.subsidence_warming_top_m < 0:
             raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg, its wet gate in [0, 1] and chi0 in [0, 1)')
         if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
             raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
@@ -998,6 +999,7 @@ class ClimateModel:
         air_cont = None                 # e67: the air over the sea, lagged, for continental outbreaks
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
+        rain_prev = None                # e71e: last step's rain, smoothed (rising air)
         soilP = np.full(lat.shape, 1.5)
         soil_w = np.where(land, 0.5 * p.soil_bucket_mm, 0.0)    # e8: soil water (mm)
         soil_ann = soil_w.copy()        # e54e: the soil water's running one-year mean
@@ -1128,6 +1130,16 @@ class ClimateModel:
                     # the North China Plain in summer): no compression warming
                     # on wet ground
                     warm = warm * (1.0 - p.subsidence_warming_wet * np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                if p.subsidence_warming_rain > 0 and rain_prev is not None:
+                    # e71e: where the recent (smoothed) rain is heavy the air
+                    # rises: the monsoon (East China, north China's summer, the
+                    # Sahel's wet season); no compression warming there
+                    warm = warm * np.exp(-rain_prev / p.subsidence_warming_rain)
+                if p.subsidence_warming_top_m > 0:
+                    # e71f: high plateaus heat the air above them in summer and
+                    # draw it up (Tibet: sealed set c warmed a plateau already
+                    # too warm); none above top, full 1,000 m below it
+                    warm = warm * np.clip((p.subsidence_warming_top_m - g.elev) / 1000.0, 0.0, 1.0)
                 if p.subsidence_warming_chi0 > 0 and chi is not None:
                     # e71d: on coasts a marine layer under the subsidence
                     # inversion keeps the ground cool (Chile, California, SW
@@ -2137,6 +2149,8 @@ class ClimateModel:
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
                 heating_prev = gauss(P * warm, MONSOON_SMOOTH_KM / g.cell_km)
+            if p.subsidence_warming > 0 and p.subsidence_warming_rain > 0:
+                rain_prev = gauss(P, 300.0 / g.cell_km)
             if p.cloud_radiation > 0 or p.cloud_longwave > 0:
                 rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)
                 cloud_prev = (np.clip(0.2 * np.sqrt(np.clip(P, 0.0, 10.0)) + np.clip((rh - 0.3) / 0.7, 0.0, 1.0) ** 2,
