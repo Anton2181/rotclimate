@@ -309,6 +309,12 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
     0.28 climate only, 5/6 macroareas). Fantasy-map preview
     (scripts/language_map_preview.py): ~130 languages, Xšāça ~48; polity
     borders barely follow likely language edges (0.23 vs 0.19).
+  - Layer 2d (hearths from the map alone): Earth base rate x productivity
+    gives 0.42 expected independent hearths on the map (66 % chance farming
+    came from beyond); land beyond and homeland latitudes point south/SE.
+  - The preview is in all three atlases (and hosted) as the 'Languages'
+    topic: scripts/add_language_layers.py (density, one draw of territories,
+    likely boundaries vs de jure borders), labelled illustrative.
 * FORGE F13 (food store scored on Binford's storage): not adopted (held-out
   rho 0.00); Binford's ET 15.25 threshold gives rho 0.72 (his own rule).
 * Polity A1 (steppe reach from herding land, no polygons): Xiongnu 0.950

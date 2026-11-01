@@ -397,3 +397,17 @@ tested rule:
 Both point to the **south or southeast** as the natural entry, as Europe
 got farming from the Near East to its southeast. The choice stays with
 the owner.
+
+## In the atlases
+
+The preview is in all three atlases, and in their hosted copies, as a new
+**Languages** topic (`scripts/add_language_layers.py`). It is labelled
+illustrative and has three layers:
+- **Language density;**
+- **Language territories,** one draw;
+- **Likely language boundaries,** drawn against the de jure borders.
+
+Each fit uses its own climate: the Earth-corrected one for the Earth fit,
+the simulated one for the free and Whittaker fits. The expected counts
+are 130, 181 and 144 languages. Language families are not drawn, because
+the hearths are the owner's choice.
