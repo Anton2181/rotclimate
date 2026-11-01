@@ -1,0 +1,10 @@
+{
+ "frozen": "2026-11-01, after addendum_salmon2_20261101.json (its grid results by area are known: the Northwest Coast + California improve from 0.577 to 0.285 at a_salmon 100 while the interior fit set worsens from 0.435 to 0.521, so its joint fit chose (0, 0)) and before any run below.",
+ "why": "The salmon scale cannot be identified on interior groups that need less food, not more; it is fitted where salmon fed people (California), the interior's cold limit is fitted on the interior with that salmon present, and the Northwest Coast, a different culture area, is the blind test.",
+ "index_and_model": "as addendum_salmon2_20261101.json (HydroRIVERS salmon streams; configuration D with the cold-climate limit and a_salmon)",
+ "stage_1": "a_salmon in {0, 30, 100, 300, 1000} with gamma 0 on the California groups (SW groups west of 119.5 W and between 32 and 42.5 N), minimising their median absolute log10 density error",
+ "stage_2": "gamma in {0, 0.5, 1, 1.5, 2} with stage 1's a_salmon on the interior groups (ARC, NNA, WNA), minimising their median absolute log10 density error",
+ "test_blind": "the Northwest Coast (BC NWC) and the rest of the world, the fitted pair against (0, 0)",
+ "adopt_if": "a_salmon > 0, the Northwest Coast's median absolute log10 error improves by at least 0.05, the rest of the world's median absolute log10 error and density rank are not worse by more than 0.01, and the interior's median absolute log10 error is not worse than at (0, 0). Then data/foraging_model.json takes the pair (the map: months from its climate packet; drawn rivers reaching a sea below 15 C annual, scaled to HydroRIVERS' >= 1 m3/s stream density) and the atlases' foraging is rebuilt.",
+ "script": "scripts/forager_salmon2.py --stage2"
+}
