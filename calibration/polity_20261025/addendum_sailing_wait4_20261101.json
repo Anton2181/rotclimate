@@ -1,0 +1,7 @@
+{
+ "frozen": "2026-11-01, after waiting rule 3 (known: Casson rank 0.733 -> 0.777, median |log| 0.418 -> 0.295; ORBIS median |log| 0.522 -> 0.377 but rank 0.858 -> 0.829, failing the 0.01 allowance; departure threshold p_route >= 0.5 set by hand) and before any run below.",
+ "change": "waiting rule 3 with the departure threshold P0 fitted on Casson: P0 in {0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.01 (no fair departures)}, the lowest T6 median |log(model / Casson)|",
+ "tests": "T7 (ORBIS July edges) at the fitted P0 against today's constants",
+ "adopt_if": "as waiting rule 3 (T7 Spearman not lower by more than 0.01, T7 median |log| lower, T6 median |log| lower)",
+ "script": "scripts/polity_sail_wait.py --beat --fit-p0"
+}

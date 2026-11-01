@@ -21,6 +21,7 @@ from polity import transport as X  # noqa: E402
 
 PLAN = ROOT / "calibration/polity_20261025/addendum_sailing_wait_20261101.json"
 TAU = 4.0
+P0 = 0.5
 
 
 def edges_rule(water, u, v, wind, steadiness, season, cell_km, coast_km, mode, today=None):
@@ -62,6 +63,7 @@ def main():
     ap.add_argument("--out", type=Path, default=ROOT / "output/polity_sail_20261101")
     ap.add_argument("--credit", action="store_true", help="addendum_sailing_wait2: the first spell sailed on the chosen wind")
     ap.add_argument("--beat", action="store_true", help="addendum_sailing_wait3: beat or wait per step; fair departures only where p_route >= 0.5")
+    ap.add_argument("--fit-p0", action="store_true", help="addendum_sailing_wait4: the departure threshold fitted on Casson")
     a = ap.parse_args(); a.out.mkdir(parents=True, exist_ok=True)
     plan = ROOT / ("calibration/polity_20261025/addendum_sailing_wait3_20261101.json" if a.beat else
                    "calibration/polity_20261025/addendum_sailing_wait2_20261101.json" if a.credit else str(PLAN.relative_to(ROOT)))
@@ -118,7 +120,7 @@ def main():
             while node != -9999 and pred[node] >= 0:
                 ps.append(self.Pm[pred[node], node]); node = pred[node]
             p_route = float(np.mean(ps)) if ps else 1.0
-            if p_route >= 0.5:
+            if p_route >= P0:
                 return float(df[dst] + (db[dst] - df[dst]) * max(0.0, 1.0 - TAU / max(df[dst], 1e-9)))
             return float(db[dst])
 
@@ -129,6 +131,25 @@ def main():
         wait = Beat(args) if a.beat else C.Network(st["land"].size, [edges_rule(*args, mode="wait")])
         return today, fair, wait
     casson = {(s, t): (lo + hi) / 2 for s, t, lo, hi in P.CASSON}
+    global P0
+    if a.fit_p0:
+        plan = ROOT / "calibration/polity_20261025/addendum_sailing_wait4_20261101.json"
+        outs = {}
+        for m in (4, 5, 6, 7, 8):
+            today, fair, wait = nets(m)
+            for s_ in sources:
+                outs[(m, s_)] = wait.days([idx[s_]])
+            del today, fair
+            outs[("net", m)] = wait
+        scores = {}
+        for p0 in (0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 1.01):
+            P0 = p0
+            mod = np.array([np.mean([outs[("net", m)].time(outs[(m, a_)], idx[b_]) for m in (4, 5, 6, 7, 8)]) for (a_, b_) in casson])
+            cas = np.array([casson[k] for k in casson])
+            scores[p0] = float(np.median(np.abs(np.log(mod / cas))))
+            print("P0", p0, "T6 median |log|", round(scores[p0], 4), flush=True)
+        P0 = min(scores, key=lambda k: (round(scores[k], 6), k))
+        print("fitted P0", P0, flush=True)
     model = {"today": {}, "rule": {}}
     for m in (4, 5, 6, 7, 8):
         today, fair, wait = nets(m)
@@ -160,8 +181,8 @@ def main():
     t, r = res["today"], res["rule"]
     ok = (r["T7"]["spearman"] >= t["T7"]["spearman"] - 0.01 and r["T7"]["median_abs_log"] < t["T7"]["median_abs_log"]
           and r["T6"]["median_abs_log"] < t["T6"]["median_abs_log"])
-    out = dict(addendum=str(plan.relative_to(ROOT)), tau_days=TAU, results=res, adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
-    (a.out / ("sail_wait3.json" if a.beat else "sail_wait2.json" if a.credit else "sail_wait.json")).write_text(json.dumps(out, indent=1))
+    out = dict(addendum=str(plan.relative_to(ROOT)), tau_days=TAU, p0=P0, results=res, adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"])
+    (a.out / ("sail_wait4.json" if a.fit_p0 else "sail_wait3.json" if a.beat else "sail_wait2.json" if a.credit else "sail_wait.json")).write_text(json.dumps(out, indent=1))
     print(json.dumps(out["results"], indent=1)); print("adopted", ok)
 
 
