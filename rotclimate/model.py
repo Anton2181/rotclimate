@@ -277,6 +277,8 @@ class ClimateModel:
             raise ValueError('wet_sun needs the soil bucket (soil_bucket_mm > 0)')
         if not 0 <= params.storm_baroclinic <= 1:
             raise ValueError('storm_baroclinic must be in [0, 1]')
+        if not 0 <= params.storm_baroclinic_humid_rh < 1:
+            raise ValueError('storm_baroclinic_humid_rh must be in [0, 1)')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
             raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
         if params.continental_sea_air > 0 and params.continentality <= 0:
@@ -1440,6 +1442,15 @@ class ClimateModel:
                     # not the shallow hot edges of summer deserts (Mexico, the
                     # Maghreb, Iran, the Cape went 12-50 % worse without it)
                     cool = cool * np.clip((p.storm_baroclinic_cold_c - Ts) / 10.0, 0.0, 1.0)
+                if p.storm_baroclinic_humid_rh > 0 and W_prev is not None:
+                    # e68h: fronts that grow and rain are where moist air meets
+                    # the contrast: the Meiyu-Baiu front is a sharp moisture
+                    # front with a weak temperature step, while a summer
+                    # desert's hot edge is a dry contrast that steers no storms
+                    # (count the contrast only under a humid column, full 0.2
+                    # above the threshold relative humidity)
+                    rh_s = ndi.gaussian_filter(W_prev, (sy, sx), mode="nearest") / np.maximum(w_sat(Ts), 1e-6)
+                    cool = cool * np.clip((rh_s - p.storm_baroclinic_humid_rh) / 0.2, 0.0, 1.0)
                 wgt = cool ** 2
                 tot = wgt.sum(axis=0)
                 phi_b = np.where(tot > 1e-12, (wgt * lat).sum(axis=0) / np.maximum(tot, 1e-12), np.nan)

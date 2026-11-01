@@ -192,6 +192,7 @@ class Params:
     storm_baroclinic: float = 0.0     # e68: storm band centred (by this share) on each meridian's baroclinic zone instead of the planet's latitude
     storm_baroclinic_cold_c: float = -99.0  # e68: count the contrast only where the smoothed air is below this (C; -99 = everywhere)
     storm_baroclinic_max_deg: float = 0.0  # e68: at most this many degrees from the planet's storm latitude (0 = no limit)
+    storm_baroclinic_humid_rh: float = 0.0  # e68h: count the contrast only where the smoothed column is humid (full 0.2 above this relative humidity; 0 = everywhere)
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
     warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect
