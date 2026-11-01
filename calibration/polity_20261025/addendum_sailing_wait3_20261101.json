@@ -1,0 +1,7 @@
+{
+ "frozen": "2026-11-01, after the two waiting-rule addenda (known: ORBIS median |log| 0.522 -> 0.306; Casson's level right but its median |log| 0.418 -> 0.519, from short passages against the steady Etesians treated as fair-wind departures, and from the Earth window's western storminess) and before any run below.",
+ "rule": "Per step, a ship beats or waits, whichever is quicker: cost = min(today's sailing cost with the polar, fair-wind cost x (1 + (1 - p) / p)), p as before. A passage may leave on a chosen fair wind only where one comes: p_route, the mean p over the steps of its fair-wind route, must be at least 0.5. Then its time is the fair-wind time credited over the first spell, d_fair + (d_min - d_fair) x max(0, 1 - TAU / d_fair), TAU = 4 days; otherwise it is the beat-or-wait network's time d_min. Nothing fitted. The Earth window's storminess is left as it is (the maps do not have it; both sides of the comparison carry it).",
+ "tests": "T6 (Casson, seen) and T7 (ORBIS July edges, blind for this rule), against today's constants",
+ "adopt_if": "T7 Spearman not lower by more than 0.01, T7 median |log| lower, and T6 median |log| lower. Then the maps' sea travel takes the rule and the atlases' political reach is rebuilt.",
+ "script": "scripts/polity_sail_wait.py --beat"
+}
