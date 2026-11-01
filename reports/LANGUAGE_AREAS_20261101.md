@@ -353,3 +353,47 @@ Warmth stays the strongest term: this is the tropical diversity gradient.
 - **Spread-zone replacement on the open plains.** A large farming or
   herding dispersal would erase the residual pattern there.
 - **The polities' own languages of rule.**
+
+## Layer 2d: can the map alone say where farming began? (asked by the owner)
+
+**Plan:** `calibration/language_areas_20261101/plan_2d.json`, frozen before
+the run. **Script:** `scripts/farming_hearths_map.py atlases/earth_fit`.
+**Output:** `output/language_areas_20261101/layer2d/` (`hearths_map.json`,
+`hearths_map.png`).
+
+**Method:**
+- **Base rate:** Earth has nine homelands of domestication on 135
+  million km² of land, or 0.067 per million km².
+- **Productivity weight:** layer 2b's best predictor, productivity
+  averaged within 500 km, weights each place by its Earth tercile. The top
+  third of Earth's random discs holds 7 of the 9 homelands, a likelihood of
+  ×2.1; the middle third ×0.7; the lowest ×0.14.
+- **Applied to the map:** the same weights on the map's own Earth-corrected
+  productivity.
+
+**Result:**
+- **Expected independent hearths on the map: 0.42.** The map has 3.3
+  million km² of land, about one fortieth of Earth's, and 85 % of it is in
+  Earth's top productivity third.
+- **So there is about a two-in-three chance (66 %) that farming arrived
+  from beyond the map** rather than starting on it.
+- **The map cannot say where a hearth would be.** Nearly all its land
+  ranks alike, and productivity is only a weak guide (AUC 0.78). The most
+  productive places on large landmasses, at least 1,500 km apart, are:
+  1. the wet west coast (35.8° N);
+  2. the north edge (48.6° N);
+  3. the south coast (29.7° N).
+
+  These are ties more than predictions.
+
+**If farming came from beyond, which side?** This is information, not a
+tested rule:
+- **Land beyond each edge** (the off-map neighbourhood fitted with the
+  climate): south 72 %, east 68 %, north 52 %, southeast 45 %, west 33 %,
+  northeast almost none.
+- **Latitude:** Earth's homelands lie between 6° S and 37° N, and the map
+  spans 28–49° N. Only its southern third is in that belt.
+
+Both point to the **south or southeast** as the natural entry, as Europe
+got farming from the Near East to its southeast. The choice stays with
+the owner.
