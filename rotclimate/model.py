@@ -263,8 +263,9 @@ class ClimateModel:
             raise ValueError('monsoon_westerly must be in [0, 1]')
         if not 0 <= params.zonal_land_friction < 1:
             raise ValueError('zonal_land_friction must be in [0, 1)')
-        if not 0.0 <= params.subsidence_warming <= 10.0:
-            raise ValueError('subsidence_warming must be in [0, 10] K')
+        if not 0.0 <= params.subsidence_warming <= 10.0 or not 0.0 <= params.subsidence_warming_taper <= 30.0 \
+                or not 0.0 <= params.subsidence_warming_wet <= 1.0:
+            raise ValueError('subsidence_warming must be in [0, 10] K, its taper in [0, 30] deg and its wet gate in [0, 1]')
         if not 0.0 <= params.subsidence_branch <= 1.0 or not 0.0 <= params.subsidence_branch_gap <= 20.0:
             raise ValueError('subsidence_branch must be in [0, 1] and subsidence_branch_gap in [0, 20] deg')
         if params.wet_sun < 0 or not 0 <= params.wet_sun_ref <= 1:
@@ -1115,7 +1116,19 @@ class ClimateModel:
                 _, _, phi_i_w, phi_h_w = self.zonal_wind(s)
                 start = phi_i_w + p.subsidence_branch_gap
                 branch = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h_w)
-                Tl = Tl + np.where(land, p.subsidence_warming * branch * (1.0 + p.subsidence_summer * s), 0.0)
+                if p.subsidence_warming_taper > 0:
+                    # e71b: the deepest sinking is in the 15-30 deg core of the
+                    # branch; it fades over the last taper degrees to the edge
+                    # (which reaches ~40 deg in summer: SW Australia, Victoria,
+                    # Chile and South Brazil were warmed 20-80 % too far)
+                    branch = branch * np.clip((phi_h_w - lat) / p.subsidence_warming_taper, 0.0, 1.0)
+                warm = p.subsidence_warming * branch * (1.0 + p.subsidence_summer * s)
+                if p.subsidence_warming_wet > 0 and p.soil_bucket_mm > 0:
+                    # e71c: where it rains the air rises (monsoon East China,
+                    # the North China Plain in summer): no compression warming
+                    # on wet ground
+                    warm = warm * (1.0 - p.subsidence_warming_wet * np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                Tl = Tl + np.where(land, warm, 0.0)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a
