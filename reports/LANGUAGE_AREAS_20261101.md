@@ -53,3 +53,40 @@ Two lessons:
 another continent's foragers (Glottolog languages over North America's
 forager regions), then test on Australia. It also adds a rainfall-capacity
 variant, so FORGE can be compared with Gavin et al.'s own cap.
+
+## Layer 1b: split size calibrated on North America, tested blind on Australia (not adopted)
+
+**Plan:** `calibration/language_areas_20261101/plan_1b.json`, frozen before
+the run. **Script:** `scripts/language_areas_earth.py --stage 1b`.
+**Output:** `output/language_areas_20261101/layer1b.json` and
+`layer1b.png`.
+
+The split size is chosen in western and northern North America (6,968
+cells at 0.5°, 211 Glottolog languages): the value whose mean simulated
+count is nearest 211. It is then applied blind to mainland Australia. The
+fill is now frontier-driven: the same rules, run faster.
+
+| density cap | calibrated split size | North American population | Australian languages (369) | richness R² | Spearman |
+|---|---:|---:|---:|---:|---:|
+| FORGE | 3,000 | 399 k | 251 ± 5 | 0.210 | 0.35 |
+| rainfall (fitted on Binford's groups) | 6,000 | 721 k | 137 ± 3 | 0.119 | 0.22 |
+
+**Verdict: not adopted.** The split size does not transfer between
+continents:
+- **North America:** about 1,900 people per language (FORGE's population
+  over 211 languages).
+- **Australia:** about 1,300 people per language.
+
+Australia's languages were smaller communities, and FORGE beats rainfall
+as the density cap.
+
+Across layers 1 and 1b the richness pattern stays at R² 0.21–0.28, below
+Gavin et al.'s 0.56. Part of the gap is the target. Glottolog gives one
+point per language, while Gavin et al. counted mapped language areas per
+cell, which is a less noisy measure of richness.
+
+**The next design** follows Nettle's ecological-risk hypothesis:
+communities are larger where lean seasons are long, because people need
+wider networks to share risk. The split size would rise with FORGE's
+scarcity days. It would be fitted on North America (count and richness),
+then tested blind on Australia.
