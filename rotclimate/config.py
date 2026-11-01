@@ -194,6 +194,7 @@ class Params:
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
     warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect
+    ebm_land_scale: float = 1.0       # w2 (world): the planet's land fraction by latitude = Earth's x this (clipped 0.02-0.95)
     ebm_land_ice: float = 1.0         # e65: share of the latitude-mean land column's seasonal snow albedo kept (1 = all; ice sheets keep all)
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)

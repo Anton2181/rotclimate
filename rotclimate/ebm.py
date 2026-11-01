@@ -221,6 +221,11 @@ class ZonalClimate:
         scale = round(getattr(params, "land_heat_capacity", 1.0), 3)
         extra = {} if scale == 1.0 else {"c_land_scale": scale}
         profile = land_profile(getattr(params, "ebm_land", "uniform"))
+        scale = round(getattr(params, "ebm_land_scale", 1.0), 3)
+        if profile is not None and scale != 1.0:
+            # w2: another planet's land by latitude: Earth's pattern with more or
+            # less land in every band (a world field, fitted for the map only)
+            profile = tuple(float(min(0.95, max(0.02, x * scale))) for x in profile)
         if profile is not None:
             extra["profile"] = profile
         if getattr(params, "ocean_transport", 0.0) > 0:

@@ -13,7 +13,7 @@ beyond_continuity_km beyond_east beyond_east_gap_km beyond_east_land beyond_nort
 beyond_north_gap_km beyond_north_land beyond_northeast_land beyond_relief_m beyond_seed
 beyond_south beyond_south_gap_km beyond_south_land beyond_southeast_land beyond_style
 beyond_west beyond_west_gap_km beyond_west_land ebm_land eccentricity far_pole_land
-greenhouse_wm2 lat_center map_height_mi map_width_mi north_bearing pad_km
+greenhouse_wm2 ebm_land_scale lat_center map_height_mi map_width_mi north_bearing pad_km
 perihelion_after_solstice planet_radius retrograde solar_flux tier_tops tilt winter_solstice_day
 year_days
 """.split())
