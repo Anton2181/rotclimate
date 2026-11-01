@@ -1,0 +1,7 @@
+{
+ "frozen": "2026-11-01, before any run of the rule below. Known: T6 and T7 with the current constants and with the earlier sailing addenda (Casson-based polar, CLIWOC-derived constants); CLIWOC confirms the polar (close-hauled 0.82), so Casson's slow long passages are waiting and routing.",
+ "rule": "A voyage chooses its departure: a passage whose fair-wind time is within one weather spell (TAU = 4 days, the persistence of Mediterranean summer wind regimes) is sailed at fair speed (5 knots x coastal factor x season; no polar or light-wind penalty). A longer passage cannot avoid foul winds: each step costs its fair-wind time x (1 + (1 - p) / p), the expected wait for a serving wind, with p = s x [theta <= 100 deg] + (1 - s) x 100 / 180 (s the wind's steadiness, theta the course from downwind, 100 deg the closest course a square-rigger holds), p at least 0.05. The passage time is the fair-wind network's if that is within TAU, else the waiting network's. Nothing fitted.",
+ "tests": "T6 (Casson; seen) and T7 (ORBIS July coastal and overseas edges; blind for this rule, whose effect is not uniform), as scripts/polity_sail_check.py defines them, against today's constants",
+ "adopt_if": "T7 Spearman not lower by more than 0.01, T7 median |log(model / ORBIS)| lower, and T6 median |log(model / Casson)| lower. Then the maps' sea travel takes the rule (two monthly sea networks combined as above) and the atlases' political reach is rebuilt.",
+ "script": "scripts/polity_sail_wait.py"
+}
