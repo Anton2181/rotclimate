@@ -218,3 +218,12 @@ speed moves every sea time by the same factor, so its effect on ORBIS is
 known from today's result (×1.58 → ×1.32 at 6 knots) and ORBIS would no longer
 be a blind test of it. Without one it is not adopted; recorded as the
 first candidate if a further independent set of sailing times is found.
+
+*On the maps.* The rule was fitted with Natural Earth 1:10m rivers; the map
+draws its rivers 1.7 times as densely (0.73 against 0.418 km per 100 km²,
+the ratio FORGE's freshwater index already uses), and the distance to the
+nearest of randomly placed lines falls in proportion, so on the maps the
+reach is 40 × 0.573 = 22.9 km (`polity.fields.map_dry_water_km`). At 40 km
+86 % of the map's dry land was within reach of a drawn river, lake or sea
+(the dry-land towns sat a median 5 km from water) and only 4 of 94 dry-land
+towns went; at 22.9 km 59 % is within reach.
