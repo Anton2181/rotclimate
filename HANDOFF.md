@@ -276,3 +276,13 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   unseen. FORGE attempt 10 (closed-forest game) not adopted: only the
   Subarctic wants it. P3 maritime refit search running; its validation (sealed
   set c) is queued in output/maritime_refit_20261101/after_search.sh.
+* P4 desert refit (reports/DESERT_HEAT_20261101.md): new opt-in e70, e54e,
+  e71 (+b/c/d). Candidate 39 passed dev31 (S 0.9826, every group) and 28 km
+  (0.9964) but failed sealed set c (S 1.0159: Tibet warmed, Volga/BC coast
+  cooled by the land-offset compensation). Not adopted; r41 stays. Sealed
+  set c is spent; set d declared (calibration/sealed_20261101d: Egypt,
+  Thailand, Finland, central Siberia, Yucatan, Kenya; never run). Next: e71
+  without summer-ascent areas (plateaus, monsoon) and without a global offset.
+* F11: Mooney (1928) early-contact estimates do not support the epoch
+  explanation for the eastern Subarctic (ratio ~1.0 east, 1.3-1.8 west);
+  the Shield over-prediction is a model error (soil/wetland, next).

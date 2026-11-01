@@ -98,4 +98,55 @@ search.
 **Validation:** fresh paired dev31 under policy v2, then the paired 28 km
 check, then sealed set c once.
 
-**Result:** (pending)
+**Result: not adopted.**
+
+| check | result |
+|---|---|
+| search | 80 candidates; best is candidate 39, cost 0.9927 |
+| fresh paired dev31, policy v2 | **S 0.9826**, every group passes; temperature 1.761 → 1.711 °C (−2.8 %), rain loss −0.7 % |
+| retired desert set b | 0.959 (during the search) |
+| retired set a | 1.005 (during the search) |
+| paired 28 km | **0.9964**, passes |
+| sealed set c, run once | **1.0159**, worse |
+
+Candidate 39's settings:
+- e71 3.8 K;
+- taper 1.4°;
+- chi0 0.89 (strongly inland air only);
+- wet gate 0.12;
+- branch gap 10.9°;
+- land offset −1.25 (r41: −0.98);
+- `continental_mean` 6.72;
+- `wet_sun` 0.69.
+
+Sealed set c by region (r41 → candidate):
+
+| region | S | temperature MAE | annual bias |
+|---|---:|---:|---:|
+| Tibet | **1.103** | 2.41 → 2.87 | +1.6 → +2.3 |
+| middle Volga | 1.051 | 1.80 → 1.96 | −1.1 → −1.5 |
+| northern BC coast | 1.032 | 3.24 → 3.44 | −2.9 → −3.1 |
+| Tripolitania | 1.009 | 1.71 → 1.79 | −0.6 → −0.7 |
+| Ethiopian highlands | 0.972 | 1.83 → 1.74 | +0.1 → −0.1 |
+| Nova Scotia | 0.952 | 2.57 → 2.23 | +2.6 → +2.2 |
+
+Two lessons:
+
+1. **A high plateau in summer is not sinking air.** Tibet lies inside the
+   branch in summer and its air counts as inland, so e71 warmed a plateau
+   already too warm. A summer plateau is an elevated heat source under
+   rising air.
+2. **The search paid for e71's spillover with a lower global land offset.**
+   That cooled continental and coastal mid-latitudes (Volga, the BC coast)
+   and the coastal desert edge (Tripolitania, which the inland gate
+   excludes from the warming).
+
+The next design needs three changes:
+- no compression warming under summer ascent: high plateaus and the
+  monsoon (task P6);
+- no global offset as compensation;
+- the coastal gate softened for the desert edge.
+
+Sealed set c is now development data
+(`calibration/sealed_20261101c/declaration.json`). A fresh set d is
+declared for the next adoption.
