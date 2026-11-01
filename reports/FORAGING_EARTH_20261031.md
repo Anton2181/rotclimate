@@ -243,3 +243,42 @@ model can see; the per-fold guard is doing its job. Not adopted by the rule.
 If the Subarctic fold is accepted as unrepresentative, attempt 7's
 configuration (sea-ice factor; a_salmon 300, L 800 km, outlets 2–15 °C) is
 the one to carry to the maps; that decision is recorded here, not taken.
+
+## Closed forest makes less game (attempt 10, not adopted)
+
+`calibration/forager_binford_20261031/addendum_forest10_20261101.json`
+(frozen before its run; `scripts/forager_salmon2.py --cv --ice --forest`,
+`output/forager_binford_20261031/binford_forest10.json`). Before it, the
+Subarctic's over-prediction was located: it is the eastern, Algonquian half
+on the wet Canadian Shield (Cree, Ojibwa, Montagnais, Naskapi: 3-10 times
+too dense) while the Yukon and Mackenzie Athabaskans fit, and within the
+Subarctic the error rises with satellite NPP (Spearman +0.64). Neither
+Binford's biomass-accumulation ratio (bar5), his expected-prey estimate nor
+the year of observation explains it.
+
+The test: game supply x (1 - c x W), W the closed-forest share from the
+group's own climate (annual rain over Thornthwaite PET between 0.5 and 1,
+where the warmest month reaches 10 °C), fitted with the salmon terms and the
+sea-ice factor by leaving one culture area out at a time.
+
+| c (no salmon) | Arctic | Subarctic | W N America | NW Coast | Southwest | rest of world |
+|---:|---:|---:|---:|---:|---:|---:|
+| 0 | 0.504 | 0.438 | 0.215 | 0.577 | 0.508 | 0.251 |
+| 0.3 | 0.579 | **0.253** | **0.160** | 0.799 | 0.620 | 0.290 |
+| 0.5 | 0.655 | 0.265 | 0.173 | 1.015 | 0.691 | 0.376 |
+
+The Subarctic wants a third less game, and western North America agrees,
+but every other area wants more: the Northwest Coast's and the rest of the
+world's forest groups are not over-predicted, and the boreal groups of the
+Arctic and Northwest Coast areas are under-predicted (interior Dfc: Arctic
+−0.23, NW Coast −0.42 log10, against the Subarctic's +0.24). Cross-validation
+therefore never chooses c > 0 and attempt 10 reproduces attempt 7 (CV 0.442
+→ 0.372; Subarctic fold 0.437 → 0.559, failing). Not adopted.
+
+What it shows: no climate term fitted on the other areas lowers the eastern
+Subarctic, since boreal groups elsewhere need the opposite. That points
+back at the data's epoch (Binford's eastern Subarctic densities come from
+20th-century hunting-territory studies after three centuries of fur trade
+and epidemics) rather than at a missing food term. Attempt 7 remains the
+configuration to carry to the maps if that fold is accepted as
+unrepresentative.
