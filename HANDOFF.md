@@ -267,3 +267,12 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   plain r41 run of retired sealed set a as its extra reference first.
 * FORGE attempt 10 frozen (addendum_forest10): game x (1 - c x closed-forest
   share) for the eastern Subarctic's over-prediction, CV with salmon + ice.
+* Results since (1 Nov, later): r41 atlas released and republished (corrected
+  climate default, change maps under Fit checks, r41-trained corrections:
+  T −11 %, rain −3 % held out). W2 world refit with planet levers: no world
+  qualifies (reports/WORLD_PLANET_R41_20261101.md); the best finalist gains
+  strict agreement 32.6 → 37.3 % and the Mediterranean but loses the painted
+  desert (hot-dry recall 0.246 → 0.176); the nine audit layouts are still
+  unseen. FORGE attempt 10 (closed-forest game) not adopted: only the
+  Subarctic wants it. P3 maritime refit search running; its validation (sealed
+  set c) is queued in output/maritime_refit_20261101/after_search.sh.
