@@ -311,7 +311,8 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
     borders barely follow likely language edges (0.23 vs 0.19).
   - Layer 2d (hearths from the map alone): Earth base rate x productivity
     gives 0.42 expected independent hearths on the map (66 % chance farming
-    came from beyond); land beyond and homeland latitudes point south/SE.
+    came from beyond); land beyond (SW 72 %, SE 45 %) and homeland
+    latitudes point south; on-map best guess the west coast.
   - The preview is in all three atlases (and hosted) as the 'Languages'
     topic: scripts/add_language_layers.py (density, one draw of territories,
     likely boundaries vs de jure borders), labelled illustrative.

@@ -389,14 +389,21 @@ the run. **Script:** `scripts/farming_hearths_map.py atlases/earth_fit`.
 **If farming came from beyond, which side?** This is information, not a
 tested rule:
 - **Land beyond each edge** (the off-map neighbourhood fitted with the
-  climate): south 72 %, east 68 %, north 52 %, southeast 45 %, west 33 %,
-  northeast almost none.
+  climate, by sector as the atlas labels them): south-west 72 %, east 68 %,
+  north-west 52 %, south-east 45 %, west 33 %, north-east almost none.
 - **Latitude:** Earth's homelands lie between 6° S and 37° N, and the map
   spans 28–49° N. Only its southern third is in that belt.
 
-Both point to the **south or southeast** as the natural entry, as Europe
-got farming from the Near East to its southeast. The choice stays with
-the owner.
+Both point to the **south** as the natural entry: the south-west sector
+(72 % land) more than the south-east (45 %). Europe got farming from the
+Near East to its south-east. The choice stays with the owner.
+
+(Corrected after the first figure: the atlas's `world.beyond` keys "north"
+and "south" are the north-west and south-west sectors, so "south or
+southeast" first read as more south-east than the shares support.) The best
+guess is drawn on the model's picture of the surroundings in
+`output/language_areas_20261101/layer2d/hearth_guess.png`
+(`scripts/figure_hearth_guess.py`).
 
 ## In the atlases
 

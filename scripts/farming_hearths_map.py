@@ -139,7 +139,8 @@ def figure(path, land, dm, cal, summ, cell_km):
     b = summ["beyond"]
     for side, (x, y, ha, va) in {"north": (w / 2 + 260, -14, "center", "bottom"), "south": (w / 2, h + 12, "center", "top"),
                                  "west": (-12, h / 2, "right", "center"), "east": (w + 12, h / 2, "left", "center")}.items():
-        ax.text(x, y, f"{side}: {100 * b[side]:.0f} % land beyond", ha=ha, va=va, fontsize=9, color="#333")
+        name = {"north": "north-west", "south": "south-west"}.get(side, side)   # the atlas's sectors
+        ax.text(x, y, f"{name}: {100 * b[side]:.0f} % land beyond", ha=ha, va=va, fontsize=9, color="#333")
     ax.set_xlim(-170, w + 170); ax.set_ylim(h + 60, -60); ax.set_xticks([]); ax.set_yticks([])
     top = 100 * summ["map_tercile_shares"][2]
     ax.set_title(f"Can the map say where farming began? Expected independent hearths here: {summ['expected_hearths']:.2f}, "
