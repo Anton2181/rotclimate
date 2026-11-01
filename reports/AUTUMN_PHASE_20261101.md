@@ -92,4 +92,48 @@ with NCEP's observed 995 hPa air temperature.
   Autumn on the coast is then as cold as the land behind it, instead of
   being held up by the still-warm sea.
 
-## 4. Screen: fast air–sea coupling (in progress)
+## 4. Screen: fast air–sea coupling (not taken forward)
+
+The two existing opt-in switches let air take the sea's temperature
+faster wherever the two differ. Both are off in r41:
+- **e51** (`ocean_tau_unstable`): cold air over a warm sea;
+- **e3** (`ocean_tau_stable`): warm air over a cold sea.
+
+Each was screened at a 0.5-day coupling time on nine regions
+(`output/autumn_phase_20261101/couple.json`). The table gives each region's
+mean error in °C and its phase error in days.
+
+| region | r41 | e51 0.5 d | e51 + e3 0.5 d |
+|---|---:|---:|---:|
+| Levant | 2.19 (−9.1 d) | 2.11 (−8.8) | **2.00** (−8.2) |
+| Anatolia | 1.80 (−7.9) | 1.68 (−7.5) | **1.51** (−6.6) |
+| Texas plains | 1.36 (−4.3) | 1.34 (−4.3) | **1.30** (−3.8) |
+| British Isles | 2.16 (+28.4) | 1.94 (+29.5) | **1.90** (+27.7) |
+| western Europe | 1.73 (+19.5) | 1.79 (+19.7) | **1.69** (+18.9) |
+| New Zealand | **1.83** (+30.5) | 1.84 (+30.4) | 1.92 (+31.2) |
+| Japan | **1.84** (−8.8) | 3.05 (−5.3) | 2.93 (−4.1) |
+| Korea | **2.04** (−5.1) | 2.95 (−3.3) | 2.81 (−2.4) |
+| East China | **2.06** (−8.1) | 2.51 (−8.0) | 2.50 (−7.8) |
+
+**What the screen shows:**
+- **Tying the marine air to the sea works where it should.** The
+  Levant's marine air now leads the sea by 26 days instead of 33, and the
+  Mediterranean coasts and the British Isles improve.
+- **It moves the land's phase by only about a day.** East Asia is the
+  exception, at 3–5 days.
+- **It warms East Asia's coasts.** Those coasts are already 2–4 °C too
+  warm in spring and autumn, and their error rises by 0.4–1.2 °C.
+
+So the coupling switch cannot be adopted while East Asia's warm seasons
+stand (P6). It was not run on dev31.
+
+## What it leaves
+
+- **The early phase of subtropical land is mostly the land's own.** In
+  r41 the land relaxes to its equilibrium in about 1.3 days
+  (`land_tau_days`), and that equilibrium follows the sun.
+- **The coupling is half of the answer.** It is the right physics for
+  the coasts, and it becomes usable once East Asia's spring warmth is
+  fixed.
+- **The next step is P6**, East Asia's spring: monsoon ascent and frontal
+  rain. Then rescreen e51 + e3 on dev31.
