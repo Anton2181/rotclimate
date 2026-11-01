@@ -286,3 +286,23 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
 * F11: Mooney (1928) early-contact estimates do not support the epoch
   explanation for the eastern Subarctic (ratio ~1.0 east, 1.3-1.8 west);
   the Shield over-prediction is a model error (soil/wetland, next).
+* Desert refits #2 and #3 (P4b/P5): #2 not adopted (sealed d not run);
+  #3 (calibration/desert_refit3_20261101, core drying e70b/c + gated e71 with
+  rain/top/chi0 gates) search in flight, output/desert_heat_20261101/
+  search3.log; validate the best on sealed set d by hand if it beats r41.
+* FORGE F14 lifeways (hunters / gatherers / fishers + camp moves) adopted and
+  live in the atlases (data/forager_lifeways.json). F15 contact-basin culture
+  areas not adopted (ARI vs Murdock areas).
+* Language areas from below (reports/LANGUAGE_AREAS_20261101.md; plans in
+  calibration/language_areas_20261101/): the owner wants languages grown from
+  the land and compared with the polities only at the end.
+  - Layer 1 (Gavin group splitting on FORGE density), 1b and 1c: counts within
+    x1.5-1.8, richness R2 0.17-0.28; not adopted. Owner to decide on
+    illustrative use.
+  - Layer 2 (Pinhasi 2005 Neolithic dates): plain distance beats terrain/sea
+    and crop-slowed waves held out (950 vs 987/1121 y); 1.0 km/yr, r 0.83.
+    Farming spreads by distance; crop rules decide only where it roots.
+  - Layer 2b (Diamond's nine homelands): neither FORGE nor productivity
+    places hearths (AUC 0.75-0.78 < 0.80). Hearths are the owner's choice.
+  - Layer 2c (Nichols / Michalopoulos: language density from terrain and
+    land-quality variation, leave-one-macroarea-out): running.

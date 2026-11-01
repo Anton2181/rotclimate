@@ -265,3 +265,91 @@ are the owner's choice, or farming arrives from beyond the map's edge.
 Climate sets where farming *can* go (layer 2's crop rules). It does not
 pick out where farming *began*: that took particular wild plants, and on
 these tests history.
+
+## Layer 2c: language density from terrain and land-quality variation (adopted)
+
+**Plan:** `calibration/language_areas_20261101/plan_2c.json`, frozen before
+the run. **Script:** `scripts/language_density_earth.py`. **Output:**
+`output/language_areas_20261101/layer2c/summary.json`.
+
+**The question:** on land where farming can take root, what sets how many
+languages a region holds? Two lines of work suggest an answer:
+- **Nichols (1992):** open plains are *spread zones*, with few languages,
+  each repeatedly replaced. Rugged country is a *residual zone*, where
+  languages accumulate.
+- **Michalopoulos (2012):** variation in land quality and elevation
+  predicts ethnolinguistic diversity.
+
+**Setup:**
+- **Crops:** the map's crop rules ran on WorldClim for the whole world.
+- **Blocks:** 2,733 two-degree blocks of crop-capable land, holding 6,533
+  Glottolog languages.
+- **Target:** log(1 + languages per block).
+- **Test:** each Glottolog macroarea is predicted from the other five.
+
+| | climate (C0) | + ruggedness | + ruggedness, land variation, land quality (C1) |
+|---|---:|---:|---:|
+| **held-out R²** | 0.28 | 0.33 | **0.34** |
+| Africa (RMSE) | **0.90** | 0.91 | 0.93 |
+| Eurasia | 0.59 | 0.58 | **0.57** |
+| Papunesia | 1.39 | 1.29 | **1.24** |
+| North America | 0.56 | 0.53 | **0.52** |
+| South America | 0.92 | 0.86 | **0.84** |
+| Australia | 0.58 | 0.58 | **0.56** |
+
+**Adopted.** C1 adds 0.056 to the held-out R² (the bar is 0.05) and is
+better in 5 of 6 macroareas; only Africa is worse.
+
+The fitted signs agree with Nichols and Michalopoulos. Each coefficient is
+per standard deviation of its predictor:
+
+| predictor | coefficient |
+|---|---:|
+| warmth | +0.38 |
+| elevation variation | +0.14 |
+| land-quality variation | +0.13 |
+| rain | +0.20 |
+
+Warmth stays the strongest term: this is the tropical diversity gradient.
+
+## On the fantasy map: languages grown from the land, then the polities (preview)
+
+**Script:** `scripts/language_map_preview.py atlases/earth_fit`. **Output:**
+`output/language_areas_20261101/fantasy/` (`fantasy_languages.png`,
+`fantasy_languages.json`, `fantasy_languages.npz`).
+
+**How the map is built:**
+- **Farmland (94 % of the land):** C1, refitted on all Earth blocks,
+  predicts language density from the map's own climate (corrected), its
+  elevation and its crop rules.
+- **Where no crop roots:** FORGE density divided by 3,000 people per
+  language. This is layer 1b's split size and is only illustrative.
+- **Territories:** each is one random draw. Seeds are placed at that
+  density, and each land cell joins the seed it reaches first on foot.
+- **Edges:** 20 more draws give the chance of a language edge at each
+  place.
+- **Polities:** the drawn de jure claims enter only at the end.
+
+**What comes out:**
+- **About 130 languages.** 125 are on farmland, and 24 lie on unclaimed
+  land, mostly the north.
+- **Xšāça, the empire,** covers 1.13 million km² of land and holds about
+  48 languages. Its largest language covers 6 % of it, which is about 42
+  effectively equal languages. It is multicultural by geography alone,
+  before any history.
+- **The kingdoms** hold 2–8 languages each: Anušiya Cities about 8, the
+  Tribes of the Neck and Kasos about 6, Yu'ež Tokar about 5.
+- **The small principalities** hold one or two. Seltar, the 1st Prince
+  and Olśkan are close to one language each.
+- **Polity borders barely follow likely language edges.** The edge share
+  is 0.23 along inland polity borders, against 0.19 over all land. The map
+  is low and open: its median elevation is 39 m. So the grown language
+  edges have few natural lines to follow, and the drawn borders cut
+  across language country rather than enclosing it.
+
+**What this does not yet include:**
+- **Language families.** These need the hearths, which are the owner's
+  choice.
+- **Spread-zone replacement on the open plains.** A large farming or
+  herding dispersal would erase the residual pattern there.
+- **The polities' own languages of rule.**
