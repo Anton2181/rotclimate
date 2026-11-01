@@ -81,11 +81,16 @@ def salmon_points(step_km=1.0):
     return np.concatenate(keep_pts), np.concatenate(keep_w), stats, np.concatenate(keep_d)
 
 
+FOREST_C = 0.0
+
+
 def run_D(sites, spec, gamma, a_salmon):
     run = dict(spec["run"]); run.update(years=600, averaging_years=300)
     forcing = daily_resources(sites["T"], sites["P"], sites["npp"], spec["adapter"])
     f = np.clip(sites["gs"] / 6.0, 0.1, 1.0) ** gamma
     plant, meat = forcing["plant_supply"] * 0.5 * f, forcing["meat_supply"] * 0.5 * f
+    if FOREST_C:                       # addendum forest10: closed forest makes less game per unit NPP
+        meat = meat * (1.0 - FOREST_C * sites["forest_w"])
     marine = np.exp(-sites["d_coast_km"] / 25.0) * np.clip((28.0 - sites["sst_annual_c"]) / 20.0, 0.2, 1.0)
     marine = marine * sites.get("open_share", 1.0)
     annual = 3000.0 * marine + 100.0 * sites["w_fresh"] + a_salmon * sites["s_salmon"]
@@ -195,6 +200,78 @@ def stage5(a, sites, sets, calif, spec):
                           calif=[z["calif"]["median_abs_log10_error"], b["calif"]["median_abs_log10_error"]]), indent=1))
 
 
+def thornthwaite_pet(T, lat):
+    """Annual Thornthwaite PET (mm) from monthly mean temperature [12, n] at latitudes [n]."""
+    T = np.asarray(T, float); Tp = np.maximum(T, 0.0)
+    I = ((Tp / 5.0) ** 1.514).sum(0)
+    a = 6.75e-7 * I ** 3 - 7.71e-5 * I ** 2 + 1.792e-2 * I + 0.49239
+    days = np.array([31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31], float)
+    doy = np.cumsum(days) - days / 2
+    decl = 23.44 * np.sin(np.radians(360.0 * (doy - 81.0) / 365.0))
+    x = np.clip(-np.tan(np.radians(np.asarray(lat, float)))[None, :] * np.tan(np.radians(decl))[:, None], -1.0, 1.0)
+    L = 24.0 * np.arccos(x) / np.pi
+    pet = 16.0 * (L / 12.0) * (days[:, None] / 30.0) * (10.0 * Tp / np.maximum(I, 1e-9)) ** a
+    hot = T > 26.5                     # Willmott et al. (1985) above 26.5 C
+    pet = np.where(hot, (-415.85 + 32.24 * T - 0.43 * T ** 2) * (L / 12.0) * (days[:, None] / 30.0), pet)
+    return np.where(I > 0, pet, 0.0).sum(0)
+
+
+def crossval_forest(a, sites, spec, stats, base_override):
+    """addendum forest10: (a_salmon, L, c) by leave-one-area-out cross-validation."""
+    global FOREST_C
+    plan = ROOT / "calibration/forager_binford_20261031/addendum_forest10_20261101.json"
+    disc = math.pi * 25.0 ** 2
+    area = sites["area"]
+    folds = {k: area == k for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}
+    folds["world"] = ~np.isin(area, list(FIT_AREAS))
+    obs = sites["density_km2"]
+    err = lambda d, m: float(np.median(np.abs(np.log10(np.maximum(d[m], 1e-9) / obs[m]))))
+    pred = {}
+    for c in [0.0, 0.3, 0.5, 0.7]:
+        FOREST_C = c
+        pred[(0, 0, c)] = run_D(sites, spec, 0, 0)["density_people_km2"]
+        print("c", c, "no salmon", {k: round(err(pred[(0, 0, c)], m), 3) for k, m in folds.items()}, flush=True)
+        for L in [100, 200, 400, 800]:
+            wL = sites["_rw"] * np.exp(-sites["_rd"] / L)
+            sites["s_salmon"] = np.array([100.0 * float(wL[n_].sum()) / disc for n_ in sites["_near"]])
+            for s_ in [30, 100, 300, 1000]:
+                pred[(s_, L, c)] = run_D(sites, spec, 0, s_)["density_people_km2"]
+                print("c", c, L, s_, {k: round(err(pred[(s_, L, c)], m), 3) for k, m in folds.items()}, flush=True)
+    FOREST_C = 0.0
+    base = base_override
+    held = np.zeros_like(obs); choice = {}
+    for k, m in folds.items():
+        others = np.zeros_like(m)
+        for k2, m2 in folds.items():
+            if k2 != k:
+                others |= m2
+        best = min(pred, key=lambda q: (round(err(pred[q], others), 6), q))
+        choice[k] = dict(a_salmon=best[0], L_km=best[1], c=best[2])
+        held[m] = pred[best][m]
+    allm = np.zeros_like(obs, dtype=bool)
+    for m in folds.values():
+        allm |= m
+    cv = err(held, allm); cv0 = err(base, allm)
+    per = {k: dict(heldout=err(held, m), baseline=err(base, m), choice=choice[k]) for k, m in folds.items()}
+    ok = (cv <= cv0 - 0.02 and all(v["heldout"] <= v["baseline"] + 0.05 for v in per.values())
+          and per["world"]["heldout"] <= per["world"]["baseline"] + 0.01)
+    final = min(pred, key=lambda q: (round(err(pred[q], allm), 6), q))
+    # the forest factor alone (no salmon), by the same folds
+    held_f = np.zeros_like(obs); choice_f = {}
+    for k, m in folds.items():
+        others = allm & ~m
+        best = min([q for q in pred if q[0] == 0], key=lambda q: (round(err(pred[q], others), 6), q))
+        choice_f[k] = best[2]; held_f[m] = pred[best][m]
+    out = dict(addendum=str(plan.relative_to(ROOT)), hydrorivers=stats, cv_error=cv, baseline_error=cv0, folds=per,
+               final_fit=dict(a_salmon=final[0], L_km=final[1], c=final[2]), adopted=bool(ok), rule=json.loads(plan.read_text())["adopt_if"],
+               forest_only=dict(cv_error=err(held_f, allm), folds={k: dict(heldout=err(held_f, m), c=choice_f[k]) for k, m in folds.items()}),
+               forest_w_by_area={k: float(np.median(sites["forest_w"][m])) for k, m in folds.items()},
+               bias_by_area_final={k: float(np.median(np.log10(np.maximum(pred[final][m], 1e-9) / obs[m]))) for k, m in folds.items()})
+    (a.out / "binford_forest10.json").write_text(json.dumps(out, indent=1, default=float))
+    print(json.dumps(dict(cv=cv, baseline=cv0, folds={k: (round(v["heldout"], 3), round(v["baseline"], 3), v["choice"]) for k, v in per.items()},
+                          final=out["final_fit"], forest_only=out["forest_only"], adopted=ok), indent=1))
+
+
 def crossval(a, sites, spec, stats, base_override=None, tag="salmon6"):
     plan = ROOT / f"calibration/forager_binford_20261031/addendum_{tag}_20261101.json"
     disc = math.pi * 25.0 ** 2
@@ -250,6 +327,7 @@ def main():
     ap.add_argument("--ice", action="store_true", help="addendum_salmon7: marine supply x open-sea share of the year")
     ap.add_argument("--outlet-ice", action="store_true", help="addendum_salmon8: salmon systems x their outlet's open-water share")
     ap.add_argument("--threshold", action="store_true", help="addendum_salmon9: keep the 2 C outlet threshold with --outlet-ice")
+    ap.add_argument("--forest", action="store_true", help="addendum_forest10: game x (1 - c x closed-forest share), with --cv --ice")
     a = ap.parse_args()
     df = binford(); df = df[(df["subpop"] == "n") & (df["density"].astype(float) > 0)].copy()
     tavg, prec = worldclim_months()
@@ -297,6 +375,11 @@ def main():
         base_no_ice = run_D(sites, spec, 0, 0)["density_people_km2"]
         sites["open_share"] = (np.asarray(v) > -1.0).sum(0) / 12.0
         print("open share by area", {k: round(float(np.median(sites['open_share'][sites['area'] == k])), 2) for k in ("ARC", "NNA", "WNA", "BC NWC", "SW")}, flush=True)
+        if a.forest:
+            ai = sites["P"].sum(0) / np.maximum(thornthwaite_pet(sites["T"], sites["lat"]), 1.0)
+            sites["forest_w"] = np.clip((ai - 0.5) / 0.5, 0.0, 1.0) * (sites["T"].max(0) >= 10.0)
+            print("closed-forest share by area", {k: round(float(np.median(sites['forest_w'][sites['area'] == k])), 2) for k in ("ARC", "NNA", "WNA", "BC NWC", "SW", "AUS")}, flush=True)
+            return crossval_forest(a, sites, spec, stats, base_no_ice)
         return crossval(a, sites, spec, stats, base_override=base_no_ice, tag=("salmon9" if a.threshold else "salmon8") if a.outlet_ice else "salmon7")
     if a.cv:
         return crossval(a, sites, spec, stats)
