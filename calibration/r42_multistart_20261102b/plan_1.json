@@ -1,0 +1,89 @@
+{
+  "frozen": "2026-11-02, after the initial r42 control stopped on a Tripolitania input mismatch, before any non-control candidate of this revised campaign",
+  "scoring_policy": "v3",
+  "start": "calibration/local_accuracy_20261023/r42_params.json",
+  "reference": "output/desert_refit3_20261101/v3/candidate_dev31",
+  "extra_groups": {
+    "retired_a": {
+      "spec": "calibration/sealed_20261031/regions.json",
+      "reference": "output/desert_refit3_20261101/v3/candidate_retired_a"
+    },
+    "retired_b": {
+      "spec": "calibration/sealed_20261031b/regions.json",
+      "reference": "output/desert_refit3_20261101/v3/candidate_retired_b"
+    },
+    "retired_c": {
+      "spec": "calibration/sealed_20261101c/regions.json",
+      "reference": "output/r42_reference_recovery_20261102/r42_retired_c"
+    }
+  },
+  "knobs": [
+    [
+      "subsidence_branch_drying",
+      0.0,
+      0.3
+    ],
+    [
+      "subsidence_branch_dry_rain",
+      0.2,
+      3.0
+    ],
+    [
+      "subsidence_warming",
+      0.0,
+      6.0
+    ],
+    [
+      "subsidence_warming_taper",
+      0.0,
+      20.0
+    ],
+    [
+      "subsidence_warming_chi0",
+      0.3,
+      0.9
+    ],
+    [
+      "subsidence_warming_rain",
+      0.3,
+      5.0
+    ],
+    [
+      "subsidence_branch_gap",
+      4.0,
+      14.0
+    ],
+    [
+      "wet_sun",
+      0.0,
+      3.0
+    ],
+    [
+      "precip_tau_days",
+      6.0,
+      14.0
+    ]
+  ],
+  "initial_mean": [
+    0.8108699294941519,
+    0.8184944447129692,
+    0.8232716379569701,
+    0.5658328153669404,
+    0.29262819274492485,
+    0.3525180456134033,
+    0.507677535720949,
+    0.1360473984182556,
+    0.32322412024393943
+  ],
+  "sigma": 0.22,
+  "popsize": 6,
+  "seed": 20261102,
+  "evals": 13,
+  "require_reference_reproduction": true,
+  "score": "Equal-region S49 relative to r42; groups reported only; 2x penalty for each T or P regression beyond 1%.",
+  "selection": "After all three 13-evaluation chains finish, choose the lowest S49 with both T and P <=+1%; require S49 <=0.995 before paired 28 km validation. No early selection, no sealed-set selection.",
+  "validation": "Fresh paired 49 development regions and 28 km using scripts/validate_v3.sh with REF_NAME=r42, REF_FIT=calibration/local_accuracy_20261023/r42_params.json, SEALED_SPEC=calibration/sealed_20261102e/regions.json. Freeze finalist before any sealed result. Never adopt from training score alone.",
+  "physics": "Only existing r42 Earth physics strengths, gates, wet-sun and precipitation timescale are varied within the previous frozen search bounds. Orbit, planet size, solar forcing and world geometry fixed. These are parameterized physical processes; gains do not validate each closure independently.",
+  "local_minima": "One chain centred on r42, two independent scrambled Sobol centres, independent CMA seeds. All chains first reproduce r42 on all 49 regions. This probes starting-point sensitivity within this parameter box; it cannot prove global optimality or rule out missing physics.",
+  "reference_recovery": "output/r42_reference_recovery_20261102/recovery.json; old campaign and every failure retained; same parameters, bounds, seeds, budget and selection, current matched reference inputs"
+}
