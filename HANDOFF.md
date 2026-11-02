@@ -1,3 +1,42 @@
+# r42 atlas PUBLISHED — 2 November 2026, 15:43 UTC
+
+* **Release commit c55e705c is pushed** to
+  `origin/claude/ecstatic-wozniak-rtrwd2`; remote HEAD was read back and matched.
+  The normal `atlases/earth_fit` folder and `.bat` launcher now serve r42.
+  Free-fit and Whittaker map data are byte-unchanged; Whittaker remains 1.44%
+  outside the diagram. Three final browser tests passed, Windows checkout
+  retained 1,000 byte-exact assets, and the portable bundle passed 560 links,
+  1,554 entries and the fresh extracted launcher. Receipts:
+  `output/atlas_r42/final_qa/{publication,completion,portable}.json`.
+* Earth atlas: 70 raw modes, 55 corrected modes, all five language layers
+  restored. Raw target-zone strict agreement 34.23%, corrected 36.56%; these
+  fantasy-world target agreements are separate from Earth validation skill.
+  R42-trained dev31 correction scores: temperature 1.7144 -> 1.5616 C,
+  rainfall loss 0.4347 -> 0.4233 with geographic clusters held out.
+* Release session 83151 and finalizer 95390 both finished successfully.
+  Do not rerun promotion. Old r41 atlas is retained in
+  `output/atlas_r42/previous_atlases/earth_fit_r41`; complete portable ZIP is
+  `output/atlas_r42/final_qa/rotclimate_r42_atlases.zip` (not in Git).
+  The prospective publication source freeze has completed.
+* Calibration session **75930** is running again. Its two workers were
+  temporarily SIGSTOPed at 15:37 to prioritize atlas export; watchdog session
+  33364 automatically resumed both at 15:43. This changed no model inputs,
+  tolerances or candidate order. Search still uses frozen source identities.
+  Do not edit canonical model code until the search completes.
+* Conservative replay session **61643** started its damped numerical control
+  at 15:43 after observing the verified publication marker. California has
+  completed. Watch `output/r42_conservative_replay_20261102/status.json` and
+  `reference_damped.log`. It must pass forcing/observation equality, strict
+  checks and declared monthly-field drift before any physical profiles.
+  Its canonical model sources remain frozen too. No candidate adoption or
+  sealed-e evaluation has occurred.
+* Posted rainfall/Whittaker preview is retained in
+  `output/r42_atlas_preview_20261102`; rendering now reads both exact published
+  Git revisions, so later atlas overwrites cannot invalidate the comparison.
+  User was told the atlas is ready and to pull then run start_atlases.bat.
+
+---
+
 # Current jobs — 2 November 2026, 15:35 UTC
 
 * The r42 release is still running in session **83151**. Raw export and
