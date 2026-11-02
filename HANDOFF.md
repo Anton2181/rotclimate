@@ -1,3 +1,39 @@
+# Current jobs — 2 November 2026, 15:35 UTC
+
+* The r42 release is still running in session **83151**. Raw export and
+  correction training finished; corrected climate, farming, population and
+  foraging exports finished. Corrected political reach is routing freight
+  (season 2/4 complete). Watch `output/atlas_r42/corrected.log` and
+  `output/atlas_r42/resumed_20261102.log`. The served Earth atlas remains r41
+  until staging is complete. Latest user ETA: 15–25 more minutes at 15:32 UTC,
+  including final checks and push; explain any overrun honestly.
+* Finalizer session **95390** waits on RELEASE DONE using committed
+  `calibration/r42_atlas_publication_20261102/plan_v2.json`. Do not edit its
+  guarded model/producer/template/research sources. It will promote/verify
+  the release, smoke-test all three atlases, test checkout/portable launch,
+  commit only its declared artifacts and push. Preserve the r41 backup.
+* The three-start search is still session **75930** (nice 10). First start
+  completed 13 evaluations; second has 11/13 logged. Best provisional S49
+  0.9913780 relative to r42 (temperature −0.27%, rain loss −1.46%). No adoption
+  or sealed-e run before all starts and finalist validation.
+* New conservative-moisture replay is committed and queued in persistent
+  session **61643**, nice 10, one worker. It waits for finalizer status
+  `finished_pushed`; see `output/r42_conservative_replay_20261102/status.json`
+  and its sibling `.log`. Prospective plan/README:
+  `calibration/r42_conservative_replay_20261102`. Eight existing development
+  regions, a damped numerical control first, then four existing conservative
+  transport/counterflow/reservoir profiles, maximum 40 new integrations.
+  Strict checks unchanged. All outcomes retained, no partial-profile averages,
+  no automatic adoption or map changes. It commits/pushes only its own results.
+  Three targeted tests passed. Canonical physics is unchanged.
+* Created and posted a comparison of r41/r42 corrected annual rainfall and
+  Whittaker maps: `output/r42_atlas_preview_20261102/`. Existing exported maps,
+  no model rerun; script and byte hashes retained. The final atlas still needs
+  trade export and final QA. Free/Whittaker map data are unchanged.
+* Latest pushed commit before this note: **031985b2** (queued physics screen).
+
+---
+
 # Release completion queued — 2 November 2026
 
 * Active publication declaration is
