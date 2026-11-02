@@ -1,0 +1,27 @@
+{
+  "declared": "2026-11-02, before these diagnostic integrations",
+  "purpose": "Explain remaining desert wet bias and seasonal monsoon errors without changing model coefficients, inputs or physics. Development data only; no adoption or tuning in this diagnostic.",
+  "params": "calibration/local_accuracy_20261023/r42_params.json",
+  "regions": {
+    "tripolitania": {
+      "reference": "output/r42_reference_recovery_20261102/r42_retired_c"
+    },
+    "manchuria": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    },
+    "north_india": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    },
+    "pacific_nw": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    }
+  },
+  "checks": [
+    "Exact benchmark input identity and scoring footprint",
+    "Strict existing numerical checks",
+    "Ordinary T and P benchmark losses reproduce to 1e-10",
+    "Recorded source terms reconstruct the recorded steady equation within float32 storage roundoff",
+    "All output packets, including adverse findings, are retained"
+  ],
+  "limitations": "The column transport is the existing parameterized concentration form; these diagnostics are not source-water tracers, observed evaporation or proof of a closed global budget. Trace ascent terms are nonlinear closure inputs, not additive rain fractions."
+}
