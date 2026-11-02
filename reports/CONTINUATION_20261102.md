@@ -112,3 +112,15 @@ same name). Bounds, seeds, budget and selection are unchanged. The original
 pilot and recording failure are retained as stopped diagnostic runs. Set e
 remains unseen. The r42 atlas simulation has completed and export is running;
 its browser atlas remains r41 until promotion finishes.
+
+
+The revised search has completed its first full control with S49 = S31 = 1.0
+and reproduced all 49 reference error pairs to 1e-10; non-control candidate
+evaluations have started. There is no new adoption.
+
+![Matched Tripolitania rainfall](../output/r42_reference_recovery_20261102/tripolitania_rainfall.png)
+
+On this matched 182-cell footprint, mean annual rain is 56 mm observed,
+304 mm for r41 and 235 mm for r42. The improvement leaves a large arid-region
+wet bias; a better overall score does not mean the dry-belt physics is solved.
+The coloured squares are scored land cells; the background is unscored.

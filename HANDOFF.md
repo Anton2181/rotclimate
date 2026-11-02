@@ -21,6 +21,10 @@ This supersedes the running-search details in the next section.
   the fresh run. Output `output/r42_multistart_20261102b`, execution session
   75930, two workers. Original `output/r42_multistart_20261102` is a STOPPED
   diagnostic run, not an active search. Sealed set e remains unseen.
+* The revised search's first full control completed: S49 = S31 = 1.0, all
+  49 reference error pairs reproduced to 1e-10. Candidate evaluations have
+  now started; no candidate is adopted. The first control and frozen search
+  identity are retained in `output/r42_multistart_20261102b/chain_1`.
 * The r42 atlas simulation completed and saved its verified checkpoint;
   export is running. Its persistent release session is still 83151. The
   served atlas stays r41 until staged corrections and exports finish.
