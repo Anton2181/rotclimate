@@ -46,7 +46,7 @@ def inbound_catchments(net, towns, people):
     return mass, owner
 
 
-def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale=6., progress=None):
+def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale=6., progress=None, checkpoint_dir=None):
     """Mean ordered gravity shipments per directed edge (from, to, volume).
 
     A pair is retained if at least one endpoint is among the largest `sources`
@@ -76,14 +76,35 @@ def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale
     selected = np.zeros(len(towns), dtype=bool)
     selected[top] = True
     accumulated = csr_matrix(shape, dtype=float)
+    from . import checkpoints
+    checkpoint = checkpoints.slot(checkpoint_dir, 'gravity', nets, [towns, mass],
+        dict(scale=float(scale), sources=sources, limit_scale=float(limit_scale)))
+    saved = checkpoints.read(checkpoint)
+    completed_season, completed_market = 0, 0
+    if saved is not None:
+        completed_season, completed_market = int(saved['season']), int(saved['market'])
+        if (tuple(saved['shape']) != shape or not 0 <= completed_season <= len(nets)
+                or not 0 <= completed_market <= len(top)):
+            raise ValueError('Invalid gravity checkpoint')
+        accumulated = csr_matrix((saved['data'], saved['indices'], saved['indptr']), shape=shape)
+        if not np.isfinite(accumulated.data).all() or (accumulated.data < 0).any():
+            raise ValueError('Invalid cached gravity traffic')
+    def save(season, market):
+        checkpoints.write(checkpoint, season=season, market=market, shape=np.array(shape),
+            data=accumulated.data, indices=accumulated.indices, indptr=accumulated.indptr)
     for season,net in enumerate(nets,1):
+        if season <= completed_season: continue
+        reverse_graph = None
         for ordinal,i in enumerate(top,1):
+            if season == completed_season + 1 and ordinal <= completed_market: continue
             for reverse in (False, True):
                 keep = (~selected if reverse else np.ones(len(towns), dtype=bool)).copy()
                 keep[i] = False
                 if not keep.any() or mass[i]==0:
                     continue
-                graph = net.base.T.tocsr() if reverse else net.base
+                if reverse and reverse_graph is None:
+                    reverse_graph = net.base.T.tocsr()
+                graph = reverse_graph if reverse else net.base
                 costs, parent = dijkstra(graph, directed=True, indices=int(towns[i]),
                                           limit=scale*limit_scale, return_predecessors=True)
                 values = mass[i]*mass*np.exp(-costs[towns]/scale)
@@ -103,11 +124,14 @@ def gravity_routes(nets, towns, mass, scale=COST_SCALE, sources=300, limit_scale
                 accumulated += csr_matrix((traffic[nodes], (origin, destination)), shape=shape)
             if progress is not None and (ordinal%25==0 or ordinal==len(top)):
                 progress(f'Freight season {season}/{len(nets)}: market {ordinal}/{len(top)}')
+            if ordinal%25==0 or ordinal==len(top):
+                save(season - 1, ordinal)
+        save(season, 0)
     out = (accumulated/len(nets)).tocoo()
     return out.row, out.col, out.data
 
 
-def map_fields(r, scale=COST_SCALE, sources=300, outward_access=None, progress=None):
+def map_fields(r, scale=COST_SCALE, sources=300, outward_access=None, progress=None, checkpoint_dir=None):
     """Directed trade fields with the same geography and population scenario.
 
     Existing outward market-access indicators retain their direction and are
@@ -121,13 +145,13 @@ def map_fields(r, scale=COST_SCALE, sources=300, outward_access=None, progress=N
     nets=[T.cost_network(r['world'],r['statics'],r['climate'],m,r['ports'],r['river_places']) for m in T.TRADE_MONTHS]
     mass,owner=inbound_catchments(nets[2],towns,people)
     if outward_access is None:
-        ma=T.market_access(nets,towns,people,[T.LOCAL_SCALE,scale])
+        ma=T.market_access(nets,towns,people,[T.LOCAL_SCALE,scale],checkpoint_dir=checkpoint_dir)
     else:
         ma=np.asarray(outward_access,dtype=float)
         if ma.shape!=(2,len(towns)) or not np.isfinite(ma).all() or (ma<0).any():
             raise ValueError('Invalid unchanged outward-access indicators')
     if progress:progress('Inbound catchments prepared; routing ordered shipments')
-    origin,destination,volume=gravity_routes(nets,towns,mass,scale,sources,progress=progress)
+    origin,destination,volume=gravity_routes(nets,towns,mass,scale,sources,progress=progress,checkpoint_dir=checkpoint_dir)
     n=nets[0].n_cells
     node_cell=np.arange(nets[0].base.shape[0])
     river=getattr(nets[0],'river_cells',np.zeros(0,dtype=np.int64))

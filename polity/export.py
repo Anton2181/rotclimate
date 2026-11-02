@@ -187,7 +187,8 @@ def export(atlas, trade_scheme='directed'):
     layers.append(defacto_layer(r, dfs, meta, data, elev, coast, note))
     if trade_scheme=='directed':
         from .directed_trade import map_fields
-        tr=map_fields(r,progress=lambda message:print(message,flush=True))
+        tr=map_fields(r,progress=lambda message:print(message,flush=True),
+                      checkpoint_dir=ROOT/'output/trade_checkpoints'/atlas.name)
     else:
         tr = TR.map_fields(r)
     layers.append(trade_layer(r, tr, meta, data, elev, coast))

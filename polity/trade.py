@@ -79,19 +79,33 @@ def costs_from(net, sources, limit=np.inf, batch=24, predecessors=False):
         yield (s,) + (out if predecessors else (out,))
 
 
-def market_access(nets, sources, people, scales, limit_scale=6.0):
+def market_access(nets, sources, people, scales, limit_scale=6.0, checkpoint_dir=None):
     """MA[k, i] = mean over the networks of sum_cells people * exp(-cost / scales[k])."""
     people = np.asarray(people, float).ravel()
     n = nets[0].n_cells
     ma = np.zeros((len(scales), len(sources)))
     limit = max(scales) * limit_scale
-    for net in nets:
-        j = 0
-        for s, c in costs_from(net, sources, limit):
+    from . import checkpoints
+    checkpoint = checkpoints.slot(checkpoint_dir, 'market_access', nets, [sources, people],
+                                  dict(scales=[float(s) for s in scales], limit_scale=float(limit_scale)))
+    saved = checkpoints.read(checkpoint)
+    season, offset = 0, 0
+    if saved is not None:
+        season, offset = int(saved['season']), int(saved['offset'])
+        if (not 0 <= season <= len(nets) or not 0 <= offset <= len(sources)
+                or saved['ma'].shape != ma.shape or not np.isfinite(saved['ma']).all() or (saved['ma'] < 0).any()):
+            raise ValueError('Invalid market-access checkpoint')
+        ma = saved['ma']
+    for index, net in enumerate(nets):
+        if index < season: continue
+        j = offset if index == season else 0
+        for s, c in costs_from(net, sources[j:], limit):
             c = c[:, :n]
             for k, sc in enumerate(scales):
                 ma[k, j:j + len(s)] += (np.exp(-c / sc) * people).sum(1)
             j += len(s)
+            checkpoints.write(checkpoint, season=index, offset=j, ma=ma)
+    checkpoints.write(checkpoint, season=len(nets), offset=0, ma=ma)
     return ma / len(nets)
 
 

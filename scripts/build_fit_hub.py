@@ -10,6 +10,7 @@ import argparse
 import datetime
 from html import escape
 import json
+import re
 from pathlib import Path
 
 from PIL import Image
@@ -94,12 +95,17 @@ def main():
     plates, rows, population_rows, density_plates, cored, margins = [], [], [], [], [], []
     has_sensitivity = False
     corrected = None
+    earth_profile, earth_report = 'r42', 'reports/R42_20261101.md'
     foraging_fits, foraging_rows = [], []
     for name, (title, description) in FITS.items():
         folder = ROOT / 'atlases' / name
         summary = json.loads((folder / 'summary.json').read_text())
         metadata = json.loads((folder / 'data/atlas.json').read_text())
         if name == 'earth_fit':
+            if re.fullmatch(r'r\d+', metadata.get('physics_profile', '')):
+                earth_profile = metadata['physics_profile']
+                earth_report = metadata['physics_report']
+                description = re.sub(r'Earth r\d+ physics', f'Earth {earth_profile} physics', description)
             has_sensitivity = bool(metadata.get('surroundings_sensitivity'))
             corrected = metadata.get('earth_correction')
         verified = bool(summary.get('observed_numerics', {}).get('all_checks_passed'))
@@ -193,7 +199,7 @@ def main():
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
         reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
                    '<a href="../reports/SEASONAL_CYCLE_20261026.md">Seasonal settling checks</a> · '
-                   '<a href="../reports/R42_20261101.md">Earth r42 calibration</a> · '
+                   f'<a href="../{escape(earth_report)}">Earth {earth_profile} calibration</a> · '
                    '<a href="../reports/R40_WORLD_20261031.md">World refit (r40, kept)</a> · '
                    '<a href="../reports/FORAGING_20261027.md">Foraging scenarios</a> · '
                    '<a href="../reports/FORAGING_EARTH_20261031.md">Foraging against Binford\'s hunter-gatherers</a> · '
@@ -233,9 +239,8 @@ def main():
     out.write_text(html)
     if not artifact:
         import hashlib
-        import re
         release = dict(
-            earth_physics=re.search(r'Earth (r\d+) physics', FITS['earth_fit'][1]).group(1),
+            earth_physics=earth_profile,
             published_branch='claude/ecstatic-wozniak-rtrwd2',
             hub_sha256=hashlib.sha256(out.read_text(encoding='utf-8').encode('utf-8')).hexdigest(),
             metadata_sha256={name: hashlib.sha256((ROOT / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
