@@ -14,6 +14,14 @@ export OPENBLAS_NUM_THREADS=1
 SEALED=calibration/climate_physics_20261023/rainfall_validation_regions.json
 PAIR="california western_europe japan new_zealand"
 mkdir -p "$OUT"
+# An atlas build and a prestarted independent training job may meet here.
+# Serialize all writers and reuse only a complete, byte-verified result.
+exec 9>"$OUT/.retrain.lock"
+flock -x 9
+if $PY -I scripts/correction_training_receipt.py check --params "$PARAMS" --tag "$TAG" --out "$OUT" --cal "$CAL"; then
+  echo "Reusing completed correction training for $TAG"
+  exit 0
+fi
 
 run() {  # name, extra benchmark arguments
   local name=$1; shift
@@ -39,4 +47,5 @@ for name in dev31 fine28 fine14 sealed; do
   $PY -I scripts/evaluate_rain_pattern.py --run "$OUT/${TAG}_$name" --fields "$OUT/fields_$name" --rain "$CAL/rain_pattern" \
       --temperature "$CAL/temperature" "${holdout[@]}" "${extra[@]}" --out "$OUT/eval_rain_$name.json" > "$OUT/eval_rain_$name.log" 2>&1
 done
+$PY -I scripts/correction_training_receipt.py write --params "$PARAMS" --tag "$TAG" --out "$OUT" --cal "$CAL"
 echo done
