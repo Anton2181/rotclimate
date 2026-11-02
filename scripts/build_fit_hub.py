@@ -231,6 +231,16 @@ def main():
 '''
     out = (a.artifact if artifact else ROOT / 'atlases') / 'index.html'
     out.write_text(html)
+    if not artifact:
+        import hashlib
+        import re
+        release = dict(
+            earth_physics=re.search(r'Earth (r\d+) physics', FITS['earth_fit'][1]).group(1),
+            published_branch='claude/ecstatic-wozniak-rtrwd2',
+            hub_sha256=hashlib.sha256(out.read_text(encoding='utf-8').encode('utf-8')).hexdigest(),
+            metadata_sha256={name: hashlib.sha256((ROOT / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
+                             for name in FITS})
+        (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 
 

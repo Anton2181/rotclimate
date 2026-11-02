@@ -1,21 +1,64 @@
 """Serve the atlas files locally and open them in your browser (standard library only)."""
 import argparse
+import hashlib
 import json
 from functools import partial
 from http.server import SimpleHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+import subprocess
+import uuid
 import webbrowser
+
+PUBLISHED_BRANCH = 'claude/ecstatic-wozniak-rtrwd2'
+
+
+def checkout_version(root):
+    """Report this checkout, never an enclosing repository around a ZIP."""
+    if not (root / '.git').exists():
+        return None
+    try:
+        def git(*args):
+            return subprocess.check_output(['git', '-C', str(root), *args], text=True,
+                                           stderr=subprocess.DEVNULL, timeout=5).strip()
+        return f'{git("rev-parse", "--abbrev-ref", "HEAD")} @ {git("rev-parse", "--short", "HEAD")}'
+    except (OSError, subprocess.SubprocessError):
+        return None
+
+
+def release_version(root):
+    """A release label is trusted only when it matches every atlas metadata file."""
+    path = root / 'atlases/release.json'
+    if not path.exists():
+        return 'Unlabelled atlas snapshot; update the complete checkout or portable bundle.', None
+    try:
+        release = json.loads(path.read_text(encoding='utf-8'))
+        hashes = release['metadata_sha256']
+        if set(hashes) != {'free_fit', 'earth_fit', 'whittaker_fit'}:
+            raise ValueError('Incomplete release manifest')
+        for name, digest in hashes.items():
+            actual = hashlib.sha256((root / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
+            if digest != actual:
+                raise ValueError('Metadata changed')
+        hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
+        if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
+            raise ValueError('Hub page changed')
+        stamp = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+        return f'Earth {release["earth_physics"]}; atlas snapshot {stamp}', stamp
+    except (OSError, ValueError, KeyError, TypeError):
+        return 'Release label does not match these local data; snapshot is unverified.', None
 
 
 class AtlasHandler(SimpleHTTPRequestHandler):
     def end_headers(self):
         self.send_header('Cache-Control', 'no-store')
+        self.send_header('Pragma', 'no-cache')
+        self.send_header('Expires', '0')
         super().end_headers()
 
 
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
-    ap.add_argument('--port', type=int, default=8000)
+    ap.add_argument('--port', type=int, default=0, help='server port; default chooses a fresh available port')
     ap.add_argument('--no-browser', action='store_true')
     ap.add_argument('--check', action='store_true', help='show the served folder and dataset versions, then exit')
     ap.add_argument('--atlas', choices=['free_fit', 'earth_fit', 'whittaker_fit'])
@@ -37,6 +80,12 @@ def main():
         ap.error('Atlas data are missing for '+', '.join(missing)+'. Extract the complete portable atlas '
                  'bundle, including its data folders, or build the atlas first.')
     print(f'Atlas folder: {root}', flush=True)
+    checkout = checkout_version(root)
+    if checkout:
+        print(f'Git checkout: {checkout}', flush=True)
+        print(f'Published atlas branch: origin/{PUBLISHED_BRANCH}', flush=True)
+    release, snapshot = release_version(root)
+    print(f'Atlas release: {release}', flush=True)
     for name in names:
         with (root/'atlases'/name/'data/atlas.json').open(encoding='utf-8') as file:
             metadata = json.load(file)
@@ -59,6 +108,11 @@ def main():
             raise
         server = ThreadingHTTPServer(('127.0.0.1', 0), handler)
     url = f'http://127.0.0.1:{server.server_address[1]}/{path}'
+    # Fresh origin and navigation URL avoid cached pages/assets from older
+    # servers that used this computer's fixed localhost:8000 address.
+    url += '?launch=' + uuid.uuid4().hex[:12]
+    if snapshot:
+        url += '&snapshot=' + snapshot
     print(f'Open {url}\nLeave this window open. Press Ctrl+C to stop.', flush=True)
     if not args.no_browser:
         webbrowser.open(url)

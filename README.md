@@ -242,13 +242,26 @@ load the data. The extracted portable bundle uses the same launchers.
 Share the atlas URL to preserve the selected layer and population scenarios;
 switching fits also carries those choices across.
 
-The launcher serves the files beside it; it does not download updates. It now
-prints the served folder and each atlas's outside-diagram percentage. If an old
-Windows copy still shows 8.5% for Whittaker, update the complete checkout from
-`claude/friendly-turing-43ygeu` or extract the new portable bundle into its own
-folder, close the old atlas window and launch that folder's `start_atlases.bat`.
-The loaded-data line should show **1.44%**. `python3 scripts/serve_atlases.py --check`
-prints the folder and data versions without opening a browser.
+The launcher serves the files beside it; it does not download updates. It prints
+the exact folder, Git branch/commit (for a checkout), verified atlas release and
+each atlas's outside-diagram percentage. The current Earth release is **r42**;
+Whittaker should show **1.44%** outside the diagram. To update a Git checkout:
+
+```sh
+git fetch origin
+git switch claude/ecstatic-wozniak-rtrwd2
+git pull --ff-only origin claude/ecstatic-wozniak-rtrwd2
+```
+
+Then close the old atlas tab and run that folder's `start_atlases.bat` again.
+The default branch is also brought forward at atlas publication; historical
+branches and hosted copies can still contain older data. For a ZIP, extract the
+complete new portable bundle into its own folder and launch it there.
+`python3 scripts/serve_atlases.py --check` (or `start_atlases.bat --check` on
+Windows) prints the folder and data versions without opening a browser.
+Each normal launch uses a fresh local port and a unique URL, so an older cached
+hub or image from localhost:8000 cannot replace the newly served files. Use the
+URL opened by the launcher; `--port` can still select a fixed port explicitly.
 
 The historical hosted [Earth test](https://claude.ai/artifact/WEDyXo2dTkSVPaPwHx5r1X),
 [free-fit atlas](https://claude.ai/artifact/Ko7QGWnekU4RLhcMzVwZBY) and

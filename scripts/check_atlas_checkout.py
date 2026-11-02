@@ -4,6 +4,7 @@ import hashlib
 import json
 from pathlib import Path
 import subprocess
+import sys
 import tempfile
 
 ROOT=Path(__file__).resolve().parents[1]
@@ -24,9 +25,14 @@ def check(snapshot,*,retained):
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
             assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
             assets.append(dict(file=str(relative),sha256=actual))
+    launcher=subprocess.run([sys.executable,str(snapshot/'scripts/serve_atlases.py'),'--check'],
+        capture_output=True,text=True,check=True)
+    if (snapshot/'atlases/release.json').exists() and ('unverified' in launcher.stdout or
+            'Atlas release: Earth ' not in launcher.stdout):
+        raise ValueError('Fresh Windows-style checkout has an unverified release: '+launcher.stdout)
     return dict(status='passed',snapshot=str(snapshot),snapshot_retained=retained,
         scope='tracked atlas site, documentation and standard-library launcher; no calibration outputs',
-        git_autocrlf=True,byte_exact_assets=len(assets),assets=assets)
+        git_autocrlf=True,byte_exact_assets=len(assets),assets=assets,launcher_output=launcher.stdout)
 
 
 def main():

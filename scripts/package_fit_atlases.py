@@ -93,7 +93,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'reports/THREE_FIT_20261022.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',
