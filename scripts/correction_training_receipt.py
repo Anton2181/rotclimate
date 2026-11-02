@@ -34,7 +34,8 @@ def inputs(params, tag):
              *(ROOT / 'data/cache/worldclim' / f'wc2.1_5m_{name}.zip' for name in ('tavg', 'prec', 'elev', 'vapr')),
              ROOT / 'scripts/train_earth_correction.py',
              ROOT / 'calibration/climate_physics_20261023/rainfall_validation_regions.json',
-             ROOT / 'calibration/local_accuracy_20261023/regions_dev12.json']
+             ROOT / 'calibration/local_accuracy_20261023/regions_dev12.json',
+             *sorted((ROOT / 'data/cache/earth').glob('*.npz'))]
     return dict(tag=tag, files={str(p.resolve().relative_to(ROOT)): file_hash(p) for p in files},
                 packages={name: importlib.metadata.version(name) for name in ('numpy', 'scipy', 'scikit-learn')})
 
@@ -44,9 +45,14 @@ def artifacts(out, cal, tag):
     for name in ('temperature', 'rain_pattern'):
         for leaf in ('correction.npz', 'protocol.json', 'evaluation.json'):
             files.append(cal / name / leaf)
-        files.extend(sorted((cal / name / 'folds').glob('*.npz')))
-        if not (cal / name / 'folds').is_dir():
+        trained = json.loads((cal / name / 'protocol.json').read_text())['files']
+        if not any(p.startswith('folds/') for p in trained):
             raise ValueError('Missing held-out correction models')
+        for relative, digest in trained.items():
+            model = cal / name / relative
+            if not model.is_file() or file_hash(model) != digest:
+                raise ValueError('Missing or changed trained correction model: ' + str(model))
+            files.append(model)
     for part in PARTS:
         folder = out / f'{tag}_{part}'
         summary = json.loads((folder / 'summary.json').read_text())

@@ -1,3 +1,59 @@
+# Iteration update — rainfall processes and atlas release, 2 November 2026
+
+This section supersedes the earlier job-stage notes.
+
+* Production physics is unchanged r42. The three-start 49-region campaign is
+  still active (`output/r42_multistart_20261102b`). First generation has one
+  provisional candidate S49 0.9944235 (T −0.96%, rain −0.15%); historical
+  holdout group +7.75%, retired desert group −8.37%. Do not adopt/select early:
+  all 39 evaluations, paired fine-grid and frozen finalist/sealed validation
+  remain required. Set e is untouched. Background search has nice=10.
+* Completed four **full-footprint r42 moisture diagnostics**, exactly
+  reproducing ordinary T/P benchmark errors. Plan and receipts:
+  `calibration/r42_rain_diagnosis_20261102`, `output/r42_rain_diagnosis_20261102`.
+  Tripolitania's main error is false summer rain (JJA 1.146 vs 0.007 mm/day),
+  whereas North India's monsoon is weak (2.623 vs 5.643). Signed column terms
+  are concentration-equation tendencies, not global mass conservation or
+  independent water-origin tracers. Monsoon drying is a subset of total drying.
+* Completed isolated **continuity-limited branch drying** probe. Frozen copy
+  lives under `experiments/descent_continuity_20261102`; it does NOT replace
+  or monkeypatch production. Ordinary / disabled / enabled runs in four regions
+  all pass; disabled reproduces all eight full-domain output arrays exactly.
+  Aggregate four-region error **worsens 1.50%** (rain +2.70%, T +0.30%); India
+  rain improves 2.56%, desert worsens 8.18%. Not adopted or advanced.
+  Source diff, raw fields and every result retained in
+  `output/descent_continuity_20261102`; report `reports/RAIN_PROCESSES_20261102.md`.
+* The served **Climate accuracy** companion now opens on these completed
+  results, with two figures and eight verified raw-packet downloads. Its old
+  r39 headline cards are explicitly historical; the current r42 overview
+  links the release/reference-recovery evidence. Publication script:
+  `scripts/publish_r42_rain_processes.py`. No normal map fields changed.
+* r42 raw atlas export has finished (14:19 UTC); diagnostics are running.
+  Release is still `output/atlas_r42/release.sh`, persistent session 83151,
+  `output/atlas_r42/resumed_20261102.log`. Raw trade export was expensive:
+  463,000 physical graph nodes, not the 116×250 climate grid. `py-spy` read-only
+  stack sampling confirmed progress in market access, then ordered shipments.
+* **Correction training is now running independently in parallel**, at nice=5:
+  session 75656, log `output/atlas_r42/corrections_early.log`, per-case logs
+  under `output/earth_correction_r42_20261101`. The release will call the same
+  script later. `scripts/retrain_earth_corrections.sh` now locks its output;
+  a complete artifact/source/input-cache checksum receipt permits reuse,
+  otherwise ordinary per-case source/reproduction checks apply. Never start
+  another unlocked writer to these folders. Canonical rotclimate/*.py remains
+  unchanged so the running atlas checkpoint/search source identities hold.
+* Eleven new unit tests passed for diagnostics, continuity bounds and training
+  receipts. The new research page passed browser checks before its historical
+  headline relabel; rerun after that text update. Finish Windows checkout,
+  portable package and current/final atlas browser QA before final publication.
+* On release completion: inspect corrected models/evaluations, raw/corrected
+  atlas browser flows, preserved language layers, page notes and hub. Commit
+  all r42 release assets and correction models (force-add required ignored NPZ
+  model files), retain previous r41 atlas outside publication. Push to
+  `claude/ecstatic-wozniak-rtrwd2`. Do not rerun the whole promotion script once
+  its r41 backup exists. Do not treat intermediate fit progress as adoption.
+
+---
+
 # Latest state — reference recovery, 2 November 2026
 
 This supersedes the running-search details in the next section.

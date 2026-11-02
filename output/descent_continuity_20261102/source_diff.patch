@@ -1,0 +1,31 @@
+--- r42/model.py
++++ probe/model.py
+@@ -215,7 +215,10 @@
+ 
+ 
+ class ClimateModel:
+-    def __init__(self, params: Params, grid=None):
++    def __init__(self, params: Params, grid=None, *, branch_continuity_strength=0.0):
++        if not np.isfinite(branch_continuity_strength) or not 0 <= branch_continuity_strength <= 1:
++            raise ValueError('Continuity strength must be finite and in [0, 1]')
++        self.branch_continuity_strength = branch_continuity_strength
+         if params.eddy_moisture_scheme not in ('legacy', 'conservative', 'conservative-rainout'):
+             raise ValueError('Unknown eddy_moisture_scheme')
+         if params.eddy_moisture_scheme == 'conservative' and params.eddy_rainout > 0:
+@@ -1967,6 +1970,16 @@
+                     # China, the US south): no dry-air descent there
+                     core = core * np.exp(-rain_prev / p.subsidence_branch_dry_rain)
+                 extra = p.subsidence_branch_drying * core / DAY
++                if self.branch_continuity_strength > 0:
++                    # Experimental e72: column-wind convergence implies ascent.
++                    # Subtract that competing rate from geometric downward
++                    # replacement; do not dry an ascending monsoon column as
++                    # though the two motions were independent. This is a
++                    # kinematic closure hypothesis, not a solved 3-D mass budget.
++                    from experiments.descent_continuity_20261102.closure import net_descent_rate
++                    column_div = (np.gradient(uq, axis=1) - np.gradient(vq, axis=0)) / dx
++                    convergence = -gauss(column_div, 300.0 / g.cell_km)
++                    extra = net_descent_rate(extra, convergence, self.branch_continuity_strength)
+                 sink = extra if sink is None else sink + extra
+             if p.monsoon_descent > 0:
+                 # e49: the monsoons' latent heating drives air down ~4,000 km

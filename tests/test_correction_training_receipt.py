@@ -1,4 +1,7 @@
-from scripts.correction_training_receipt import matches, record
+import json
+import pytest
+
+from scripts.correction_training_receipt import artifacts, matches, record
 
 
 def test_complete_training_is_reused_only_for_identical_inputs_and_artifacts(tmp_path):
@@ -17,3 +20,10 @@ def test_missing_artifacts_or_incomplete_receipts_are_never_reused(tmp_path):
     assert not matches({**receipt, 'status': 'running'}, receipt['inputs'], tmp_path)
     model.unlink()
     assert not matches(receipt, receipt['inputs'], tmp_path)
+
+
+def test_completion_requires_the_heldout_models_named_in_the_training_protocol(tmp_path):
+    cal = tmp_path / 'cal'; folder = cal / 'temperature'; folder.mkdir(parents=True)
+    (folder / 'protocol.json').write_text(json.dumps({'files': {'folds/withheld.npz': 'missing'}}))
+    with pytest.raises(ValueError, match='Missing or changed trained'):
+        artifacts(tmp_path / 'out', cal, 'r42')
