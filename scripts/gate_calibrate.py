@@ -106,7 +106,7 @@ def score(errors, reference, groups, extra=None, *, policy="v2"):
             penalty += 2 * max(0.0, group[g] - 1.0)
     info = dict(S=overall, groups=group, T=t, P=p, penalty=penalty)
     if policy == "v3":
-        info.update(S31=s(names), n=len(scored), T_relative=t / tr - 1, P_relative=p / pr - 1)
+        info.update(S31=s(names), n_regions=len(scored), T_relative=t / tr - 1, P_relative=p / pr - 1)
     return overall + penalty, info
 
 

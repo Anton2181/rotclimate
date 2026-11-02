@@ -1,3 +1,73 @@
+# Active continuation — 2 November 2026
+
+Read this section before the older handoff below.
+
+* Fetched `origin/claude/ecstatic-wozniak-rtrwd2` at `46db7674`, the newer
+  development branch. The old checkout's two terrain numerical-probe commits
+  remain on local branch `work`; its untracked outputs were preserved. Active
+  branch: `work-latest-20261102`, tracking the newer remote branch. Both remote
+  branch fetch refspecs are now configured locally.
+* Adopted physics **r42**, not r39. Archived paired 49-region raw results:
+  monthly T MAE **1.9770 -> 1.8849 C**, rain loss **0.51530 -> 0.50077**,
+  S49 **0.9626111** vs r41. 29 regions improve / 20 worsen under the combined
+  metric. Set d S **0.9406**. These are regional benchmarks, not global skill.
+* **The served Earth atlas is still r41 until the release completes.** The
+  inherited r42 release stopped during the simulation in the previous
+  environment. Its path was hardcoded to `/home/user/rotclimate`. The resumed
+  `output/atlas_r42/release.sh` is repository-relative and builds corrections,
+  corrected animations and language layers in staging before promotion;
+  the r41 atlas is retained. Do not label the atlas r42 before promotion.
+* Calibration mismatch fixed: `scripts/gate_calibrate.py` now accepts
+  `scoring_policy: v3`, equal-region S49 including retired a/b/c, reports
+  group regressions without penalties, keeps the individual T/P safeguards.
+  Legacy v2 plans retain their objective. v3 resumes freeze the plan,
+  references and source identities. r42's archived score matches the independent
+  release gate exactly. 69 targeted tests passed (calibration, guarded search,
+  physics switches and Earth corrections).
+* Frozen pilot `calibration/r42_multistart_20261102/campaign.json`: three
+  independent CMA starts (r42 and two scrambled Sobol centres), 13 evaluations
+  each, existing r42 parameter bounds, no orbital/world changes. Each start
+  first reproduces r42 over all 49 regions to 1e-10. No sealed evaluation
+  occurs in the runner. This tests starting-point sensitivity within one
+  parameter box; it cannot prove global optimality.
+* Fresh sealed set e: `calibration/sealed_20261102e`. Six scored rectangles
+  checked against all 61 earlier definitions, none overlapping; forcing halos
+  are not independent. Never use this set in search or mechanism design.
+  Freeze one finalist after the S49 / 28 km gates before its single evaluation.
+* Running jobs use persistent foreground execution sessions. In this executor,
+  shell-detached `nohup ... &` children were terminated after their launching
+  shell ended; those interrupted logs/output directories were preserved.
+  A subsequent clean restart has no completed candidate yet at this handoff's
+  initial writing. Check processes and receipts; do not trust stale PIDs.
+  - r42 release: `output/atlas_r42/resumed_20261102.log`, per-stage logs in the
+    same directory. Execution session 83151.
+  - search: `output/r42_multistart_20261102/status.json`, `chain_1.log`,
+    `chain_1/evals.jsonl`; execution session 90518. Two workers alongside the atlas build. Resume with `.venv/bin/python -u -I
+    scripts/run_calibration_portfolio.py --campaign
+    calibration/r42_multistart_20261102/campaign.json --out
+    output/r42_multistart_20261102 --workers 2` in a persistent session.
+* The first full control reached a logging integration error (`n` counted both
+  evaluations and regions), before metrics were persisted. Fixed by keeping
+  `n_regions` separate; a real CMA/log/checkpoint/resume integration test now
+  covers the path. The failed run and exact source are retained in
+  `output/r42_multistart_20261102_recording_failure`; the clean replacement
+  must reproduce its baseline before any candidate claim.
+* On finishing the atlas: browser-smoke raw/corrected views, package and verify
+  the portable bundle, then commit/push all release assets and update the
+  r42 report. Packager now includes r40-r42 and current foraging/language/reach
+  method reports, and avoids claiming the Earth atlas is still r38/r39.
+  Do not rerun the whole release over a promoted atlas/retained r41 backup.
+* Portable bundle verification passed: 543 links, 1537 archive entries, fresh
+  extracted launcher. Current browser smoke checks passed all three atlases.
+  Windows-style checkout passed 986 byte-exact atlas assets after fixing
+  `.gitattributes` to include nested corrected-climate JSON/CSV/binary files.
+* Dependencies restored: scikit-learn added to requirements; installed the
+  existing Playwright package's Chromium headless shell for browser checks.
+* Accuracy figure and paired aggregate details:
+  `output/r42_resume_20261102/{r42_accuracy.png,accuracy.json}`.
+
+---
+
 # Handoff — Earth corrections, physics gaps and r40 (30 October 2026)
 
 Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall

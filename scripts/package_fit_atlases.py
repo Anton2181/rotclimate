@@ -5,12 +5,50 @@ not file://. The bundle includes the report, biome methods and source license.
 """
 import argparse
 import hashlib
+from html.parser import HTMLParser
 import json
 from pathlib import Path
+from urllib.parse import unquote, urlsplit
 import zipfile
 
 ROOT = Path(__file__).resolve().parents[1]
 NAMES = ['free_fit', 'earth_fit', 'whittaker_fit']
+
+
+def page_dependencies(files, root=ROOT):
+    """Include the local documents/assets actually linked by packaged pages."""
+    class Links(HTMLParser):
+        def __init__(self):
+            super().__init__()
+            self.paths = []
+
+        def handle_starttag(self, tag, attrs):
+            self.paths.extend(v for k, v in attrs if k in ('href', 'src') and v)
+
+    included = {p.resolve() for p in files}
+    pending = [p for p in included if p.suffix == '.html']
+    root = root.resolve()
+    while pending:
+        page = pending.pop()
+        links = Links(); links.feed(page.read_text(encoding='utf-8'))
+        for link in links.paths:
+            url = urlsplit(link)
+            if url.scheme or url.netloc or not url.path:
+                continue
+            target = (root / unquote(url.path).lstrip('/') if url.path.startswith('/')
+                      else page.parent / unquote(url.path)).resolve()
+            target.relative_to(root)
+            if target.is_dir():
+                target /= 'index.html'
+            if not target.is_file():
+                raise ValueError(f'Broken local atlas link: {page.relative_to(root)} -> {link}')
+            if target not in included:
+                included.add(target)
+                if target.suffix == '.html':
+                    pending.append(target)
+    return sorted(included)
+
+
 INSTRUCTIONS = '''Rotclimate: three climate fits
 
 Extract this whole archive, then double-click start_atlases.command (macOS)
@@ -27,8 +65,9 @@ three classify the mean climate over surroundings layouts 1, 2 and 3.
 The report explains the scores, crosswalk assumptions and numerical checks.
 These are simulated potential climates, not observed vegetation maps.
 The hub's Climate accuracy and joint fit page includes measured Earth errors
-and rainfall-source maps. It distinguishes latest Earth r39 skill from the
-published r38 world; it is not measured accuracy of the fantasy geography.
+and rainfall-source maps. The Earth-fit page identifies its adopted physics
+release and distinguishes raw from Earth-corrected climate. Earth benchmark
+scores are not measured accuracy of the fantasy geography.
 See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
 See reports/CLIMATE_PHYSICS_20261023.md for subsequent physics experiments,
 paired calibration checks and the criteria used to select published climates.
@@ -152,6 +191,13 @@ def main():
              ROOT/'reports/BOUNDARY_RH_20261028.md', ROOT/'reports/HUMIDITY_PROCESS_NOTES_20261028.md',
              ROOT/'docs/FORAGING_MODELS.md', ROOT/'data/foraging_model.json',
              ROOT/'reports/FORAGING_20261027.md',
+             ROOT/'reports/PHYSICS_GAPS_20261030.md',
+             ROOT/'reports/EARTH_CORRECTION_20261030.md',
+             ROOT/'reports/ATLAS_R40_20261031.md',
+             ROOT/'reports/R41_20261101.md', ROOT/'reports/R42_20261101.md',
+             ROOT/'reports/FORAGING_EARTH_20261031.md',
+             ROOT/'reports/POLITY_SEASONS_20261031.md',
+             ROOT/'reports/LANGUAGE_AREAS_20261101.md',
              ROOT/'output/foraging_20261027/foraging_comparison.png',
              ROOT/'output/foraging_20261027/biomes.csv',
              ROOT/'reports/CONSTRAINED_BLEND_R39_20261025.md', ROOT/'reports/R39_WORLD_TRANSFER_20261026.md',
@@ -197,6 +243,7 @@ def main():
         assert summary['observed_numerics']['all_checks_passed'], name
         summaries[name] = summary
         files += sorted(f for f in directory.rglob('*') if f.is_file())
+    files = page_dependencies(files)
     manifest = dict(atlases=summaries, sha256={
         str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files})
     args.out.parent.mkdir(parents=True, exist_ok=True)

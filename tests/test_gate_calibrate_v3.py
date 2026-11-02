@@ -27,7 +27,7 @@ def test_v3_retired_regions_have_equal_weight_without_group_penalties():
     cost, info = score(candidate, ref, dict(dev=['a']), dict(retired=['b', 'c']), policy='v3')
     assert cost == pytest.approx(.9)
     assert info['S31'] == .5
-    assert info['n'] == 3
+    assert info['n_regions'] == 3
     assert info['penalty'] == 0
     # Legacy plans keep their original objective, including the extra-group penalty.
     assert score(candidate, ref, dict(dev=['a']), dict(retired=['b', 'c']))[0] == pytest.approx(.7)
@@ -68,7 +68,53 @@ def test_search_score_matches_independent_r42_release_gate():
         return {n: (r['temperature']['monthly_mae_C'], r['rain']['loss']) for n, r in rows.items()}
     cost, info = score(metrics(candidate), metrics(reference), policy['groups'], extra, policy='v3')
     release = release_score(reference, candidate, list(reference))
-    assert info['n'] == 49
+    assert info['n_regions'] == 49
     assert info['S'] == pytest.approx(release['S'], abs=1e-14)
     assert cost == pytest.approx(.9626111459489867, abs=1e-14)
 
+
+def test_full_search_records_control_and_resumes_without_changing_objective(tmp_path, monkeypatch):
+    """Exercise the real CMA/log/state path without running 49 climate models."""
+    import sys
+    from scripts import gate_calibrate as G
+    root = Path(__file__).resolve().parents[1]
+    frozen = json.loads((root / 'calibration/r42_multistart_20261102/plan_1.json').read_text())
+    frozen['evals'] = 2
+    paths = [frozen['reference'], *(v['reference'] for v in frozen['extra_groups'].values())]
+    errors = {}
+    for path in paths:
+        data = json.loads((root / path / 'summary.json').read_text())
+        dest = tmp_path / path; dest.mkdir(parents=True)
+        (dest / 'summary.json').write_text(json.dumps(data))
+        errors.update({n: (r['temperature']['monthly_mae_C'], r['rain']['loss']) for n, r in data['regions'].items()})
+    for path in [frozen['start'], *(v['spec'] for v in frozen['extra_groups'].values())]:
+        dest = tmp_path / path; dest.parent.mkdir(parents=True, exist_ok=True)
+        dest.write_bytes((root / path).read_bytes())
+    script = tmp_path / 'scripts/gate_calibrate.py'; script.parent.mkdir()
+    for name in ['gate_calibrate.py', 'rainfall_metrics.py', 'benchmark_local.py']:
+        (script.parent / name).write_bytes((root / 'scripts' / name).read_bytes())
+    monkeypatch.setattr(G, 'ROOT', tmp_path)
+    monkeypatch.setattr(G, '__file__', str(script))
+    class Pool:
+        def __init__(self, workers): pass
+        def __enter__(self): return self
+        def __exit__(self, *args): pass
+        def map(self, function, jobs): return [(n, errors[n]) for n, *_ in jobs]
+    monkeypatch.setattr(G, 'Pool', Pool)
+    plan = tmp_path / 'plan.json'; plan.write_text(json.dumps(frozen))
+    out = tmp_path / 'search'
+    args = ['gate_calibrate.py', '--plan', str(plan), '--out', str(out)]
+    monkeypatch.setattr(sys, 'argv', args)
+    G.main()
+    rows = [json.loads(line) for line in (out / 'evals.jsonl').read_text().splitlines()]
+    assert [r['n'] for r in rows] == [0, 1]
+    assert all(r['n_regions'] == 49 and r['S'] == 1 for r in rows)
+    assert (out / 'state.pkl').is_file()
+    monkeypatch.setattr(sys, 'argv', args + ['--resume'])
+    G.main()
+    assert len((out / 'evals.jsonl').read_text().splitlines()) == 2
+    frozen['scoring_policy'] = 'v3'
+    frozen['sigma'] = .3
+    plan.write_text(json.dumps(frozen))
+    with pytest.raises(ValueError, match='changed'):
+        G.main()
