@@ -1,3 +1,43 @@
+# Release completion queued — 2 November 2026
+
+* Active publication declaration is
+  `calibration/r42_atlas_publication_20261102/plan_v2.json` (committed).
+  `scripts/finalize_r42_atlas.py --run .../plan_v2.json` is running in persistent
+  session **95390**, at nice=5. Watch
+  `output/atlas_r42/final_qa/automation_status.json` and
+  `output/atlas_r42/finalization.log`. The older plan.json was NOT executed
+  and is superseded; its self-source guard no longer matches.
+* This job waits for the existing release's RELEASE DONE marker, checks source
+  identities (including the declared hub-label change), raw r42 checkpoint,
+  matching physics/correction models, language layers and unchanged other-fit
+  map data. It browser-tests the final atlases, tests Windows checkout and the
+  complete portable bundle, then commits only whitelisted release artifacts
+  using git commit --only and pushes the resulting commit. User's unrelated
+  staged work and already-staged deletions are covered by an actual Git test.
+  Eighteen new targeted tests pass in this iteration.
+* The publication plan guards producers, templates and the research companion.
+  Do not edit those files while waiting. Do not run another finalizer or
+  start the promotion script again. If the job fails, inspect its exact
+  receipt and retained logs; preserve the declaration and unfinished work.
+* Raw r42 atlas browser check passed; shared physical settings match the r42
+  profile exactly, strict world target agreement is 34.23% (r41 32.56%).
+  All nine surroundings checks and the three-extra-year repeatability check
+  passed. Production is waiting for the separately started correction job.
+* Temperature correction training is complete: dev31 raw monthly T MAE 1.7144
+  -> cluster-held-out 1.5616 C. Full-grid 14 km field reconstructions have
+  completed; rain pattern training/evaluation follows. Release and correction
+  jobs serialize their common output via flock and a verified receipt.
+* New research companion passed keyboard/deep-link, mobile/dark/light checks;
+  Windows checkout preserves 997 asset bytes exactly. Updated portable bundle
+  passed 560 links / 1551 archive entries / freshly extracted launcher. These
+  checks precede the final r42 corrected atlas; that gets its own final QA.
+* Best provisional search result is now S49 0.9913780 relative to r42 (T −0.27%,
+  rainfall loss −1.46%), still only partway through the first of three starts.
+  The old 0.56% candidate remains historical intermediate progress. No early
+  adoption, no sealed-e evaluation. Current campaign source hashes unchanged.
+
+---
+
 # Iteration update — rainfall processes and atlas release, 2 November 2026
 
 This section supersedes the earlier job-stage notes.
