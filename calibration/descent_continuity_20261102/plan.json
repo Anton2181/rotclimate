@@ -1,0 +1,26 @@
+{
+  "declared": "2026-11-02, after the declared four-region r42 moisture diagnostics, before any prototype result",
+  "purpose": "Test whether net branch descent should subtract column-wind convergence rather than independently drying an ascending monsoon column.",
+  "params": "calibration/local_accuracy_20261023/r42_params.json",
+  "prototype": "experiments/descent_continuity_20261102/model.py",
+  "base_model_sha256": "a82b8f0a7677698c7ecd80e001e29940993b5234ee9583a78517cd4aceeeecc3",
+  "strength": 1.0,
+  "regions": {
+    "tripolitania": {
+      "reference": "output/r42_reference_recovery_20261102/r42_retired_c"
+    },
+    "manchuria": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    },
+    "north_india": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    },
+    "pacific_nw": {
+      "reference": "output/desert_refit3_20261101/v3/candidate_dev31"
+    }
+  },
+  "formula": "extra = max(requested_extra - max(-Gaussian_300km(div(column_wind)), 0), 0), rates in s^-1; existing latitude and prior-rain gates retained, no enhanced drying under divergence.",
+  "controls": "Fresh ordinary r42, copied prototype disabled (all eight full-domain climate arrays must match exactly), then prototype enabled; each with identical declared Earth inputs and unchanged strict numerical checks.",
+  "selection": "Diagnostic hypothesis screen only. Report every region, including regressions. No candidate adoption from these four regions. Any promising mechanism requires the full 49-region policy-v3 search, paired fine grid and a prospectively frozen finalist before unseen set e.",
+  "limitations": "Kinematic net-rate closure, not a solved 3-D momentum or energy budget. Column convergence does not uniquely determine vertical motion at every height; the 300 km averaging scale is declared, not fitted here. No claim of global optimum or independent climate validation. Production physics and running search/release remain unchanged."
+}
