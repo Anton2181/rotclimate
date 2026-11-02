@@ -1,3 +1,31 @@
+# Post-publication physics continuation — 2 November 2026, 15:48 UTC
+
+* All atlases are published and verified; see release notes immediately below.
+  Latest pushed bookkeeping/preview commit **e95a9677**, release **c55e705c**.
+* Conservative replay session **61643** passed all eight damped numerical
+  controls (forcing/observations equal, strict checks passed, all monthly
+  field drifts within prospective limits). It is now integrating
+  `flux_conservative`, followed by counterflow and reservoir variants.
+  Live status: `output/r42_conservative_replay_20261102/status.json`.
+  This experiment cannot adopt physics or update the atlas. Its driver will
+  retain every profile outcome, commit its completed result packet, and push.
+* Three-start calibration session **75930** reached **chain 3** at 15:46.
+  Chains 1 and 2 completed 13 evaluations apiece. The best remains the chain-1
+  candidate S49 0.9913780 (T −0.27%, rain −1.46%). Wait for all 39 and the
+  selection.json finalist before validation. No sealed-e evaluation yet.
+  The portfolio driver itself does not commit, validate or adopt candidates.
+* Canonical model/benchmark sources remain frozen for BOTH active experiments.
+  Do not change their source hashes mid-run. Next after portfolio completion:
+  freeze/commit the one finalist, reproduce paired dev49 on current geometry,
+  paired fine28 (California, western Europe, Japan, NZ), then only if both
+  qualify run the declared unseen set e once, with r42 as its paired control.
+  `scripts/validate_v3.sh` defaults to r41 and spent set d: override these or
+  run its steps explicitly. Aggregate improvements count; regional/group
+  regressions are reported, not individual vetoes. Reproduction checks must
+  account for the recovered Tripolitania footprint, not its obsolete cache.
+
+---
+
 # r42 atlas PUBLISHED — 2 November 2026, 15:43 UTC
 
 * **Release commit c55e705c is pushed** to
