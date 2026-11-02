@@ -1,7 +1,10 @@
 # r42 release into the Earth-fit atlas (reports/R42_20261101.md): adopted under policy v3
-cd /home/user/rotclimate
-set -e
-PY=.venv/bin/python
+#!/usr/bin/env bash
+set -euo pipefail
+cd "$(dirname "$0")/../.."
+PY=${PY:-.venv/bin/python}
+mkdir -p output/atlas_r42
+trap 'code=$?; if [ "$code" != 0 ]; then echo "RELEASE FAILED exit=$code $(date -u +%FT%TZ)"; fi' EXIT
 export OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
 echo "build stage $(date +%H:%M)"
 $PY -u -I scripts/build_atlas_variant.py --params calibration/map_world_r42/params.json --name earth_fit_r42_stage \
@@ -14,19 +17,19 @@ $PY -I scripts/add_r40_atlas_diagnostics.py atlases/earth_fit_r42_stage --out ou
 echo "corrections $(date +%H:%M)"
 TAG=r42 PARAMS=calibration/local_accuracy_20261023/r42_params.json OUT=output/earth_correction_r42_20261101 CAL=calibration/earth_correction_r42_20261101 \
   bash scripts/retrain_earth_corrections.sh > output/atlas_r42/corrections.log 2>&1
-echo "promote $(date +%H:%M)"
-mkdir -p output/atlas_r42/previous_atlases
-rm -rf output/atlas_r42/previous_atlases/earth_fit_r41
-mv atlases/earth_fit output/atlas_r42/previous_atlases/earth_fit_r41
-mv atlases/earth_fit_r42_stage atlases/earth_fit
 echo "corrected layers $(date +%H:%M)"
-$PY -I scripts/add_corrected_layers.py atlases/earth_fit --checkpoint output/r42_world/candidate_001.pkl \
+$PY -I scripts/add_corrected_layers.py atlases/earth_fit_r42_stage --checkpoint output/r42_world/candidate_001.pkl \
   --corrections calibration/earth_correction_r42_20261101 --evals output/earth_correction_r42_20261101 > output/atlas_r42/layers.log 2>&1
 echo "corrected climate $(date +%H:%M)"
-$PY -I scripts/add_corrected_climate.py atlases/earth_fit --checkpoint output/r42_world/candidate_001.pkl \
-  --corrections calibration/earth_correction_r42_20261101 > output/atlas_r42/corrected.log 2>&1
+$PY -I scripts/add_corrected_climate.py atlases/earth_fit_r42_stage --checkpoint output/r42_world/candidate_001.pkl \
+  --corrections calibration/earth_correction_r42_20261101 --gif > output/atlas_r42/corrected.log 2>&1
 echo "languages $(date +%H:%M)"
-$PY -I scripts/add_language_layers.py atlases/earth_fit > output/atlas_r42/languages.log 2>&1
+$PY -I scripts/add_language_layers.py atlases/earth_fit_r42_stage > output/atlas_r42/languages.log 2>&1
+echo "promote $(date +%H:%M)"
+mkdir -p output/atlas_r42/previous_atlases
+test ! -e output/atlas_r42/previous_atlases/earth_fit_r41
+mv atlases/earth_fit output/atlas_r42/previous_atlases/earth_fit_r41
+mv atlases/earth_fit_r42_stage atlases/earth_fit
 echo "pages $(date +%H:%M)"
 $PY - <<'PYEOF'
 import json
