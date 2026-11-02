@@ -1,3 +1,36 @@
+# Latest state — reference recovery, 2 November 2026
+
+This supersedes the running-search details in the next section.
+
+* The original pilot stopped at its first logged r42 control: 48/49 error
+  pairs reproduced exactly, but Tripolitania did not. Auditing the actual
+  case hashes with the original float-valued `cell_km` confirms **48/49
+  input cases match exactly**, too. Tripolitania has 182 scored land cells
+  versus the archived 195 despite identical scientific-source and WorldClim
+  archive hashes. The exact old aggregation cache is unavailable; a legacy
+  name-only cache key is a possible cause, not a proved diagnosis.
+* Fresh **paired r41/r42 runs on all six retired-c regions** completed strict
+  checks and retained raw NPZ cell packets in
+  `output/r42_reference_recovery_20261102`. Reconstructing S49 with these
+  matched inputs gives **0.9628116258** vs r41, still a 3.72% improvement.
+  Every one of the 49 recovered r42 reference error pairs matches the saved
+  current control to 1e-10. Original scores and failed runs are retained.
+* Active search is now the prospectively frozen revision
+  `calibration/r42_multistart_20261102b/campaign.json`, same bounds, seeds,
+  39-evaluation budget and selection rules, with retired-c references from
+  the fresh run. Output `output/r42_multistart_20261102b`, execution session
+  75930, two workers. Original `output/r42_multistart_20261102` is a STOPPED
+  diagnostic run, not an active search. Sealed set e remains unseen.
+* The r42 atlas simulation completed and saved its verified checkpoint;
+  export is running. Its persistent release session is still 83151. The
+  served atlas stays r41 until staged corrections and exports finish.
+* Do not edit `rotclimate/*.py` while the release/checkpoint and calibration
+  sources are frozen. A future cache fix should include complete geometry
+  and source identity in aggregate cache keys or manifests and explicitly
+  handle legacy unmanifested NPZs. Do not silently relabel an old score.
+
+---
+
 # Active continuation — 2 November 2026
 
 Read this section before the older handoff below.

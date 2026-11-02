@@ -90,3 +90,25 @@ Live receipts: `output/atlas_r42/resumed_20261102.log` and
 and receipts when resuming. Shell-detached initial launches terminated before
 a complete result in this executor; their partial output is retained. The
 running replacements use persistent execution sessions.
+
+
+## Reference recovery before searching
+
+The first recorded r42 control stopped on a Tripolitania mismatch. Both
+scores and actual case hashes reproduce for the other 48 regions; source
+file and raw observation archive hashes match everywhere. Tripolitania's
+rebuilt declared box contains 182 scored land cells versus 195 in the old
+archive. A missing identity in the legacy aggregate cache key is a possible
+cause; it is not proved without the old cache.
+
+Fresh paired r41/r42 tests on the six retired-c regions passed and retained
+raw NPZ packets. The reconstructed S49 is **0.9628116258**, still 3.72% better
+than r41. All 49 recovered r42 reference pairs match the actually completed
+control. Receipts: `output/r42_reference_recovery_20261102`.
+
+The active search is the prospectively frozen revision **20261102b**
+(`calibration/r42_multistart_20261102b/campaign.json`, output directory of the
+same name). Bounds, seeds, budget and selection are unchanged. The original
+pilot and recording failure are retained as stopped diagnostic runs. Set e
+remains unseen. The r42 atlas simulation has completed and export is running;
+its browser atlas remains r41 until promotion finishes.
