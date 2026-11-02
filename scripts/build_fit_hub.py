@@ -17,7 +17,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FITS = {
     'free_fit': ('Free fit', 'World and physics fitted to the seasonal painted zones.'),
-    'earth_fit': ('Earth fit', "Earth r41 physics, the best on the 31-region Earth test, on the published world's geometry."),
+    'earth_fit': ('Earth fit', "Earth r42 physics, the best on the Earth test (49 development regions and an unseen sealed set), on the published world's geometry."),
     'whittaker_fit': ('Whittaker fit', 'World and physics fitted to the proposed annual-biome targets.')}
 
 STYLE = '''
@@ -193,7 +193,7 @@ def main():
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
         reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
                    '<a href="../reports/SEASONAL_CYCLE_20261026.md">Seasonal settling checks</a> · '
-                   '<a href="../reports/R41_20261101.md">Earth r41 calibration</a> · '
+                   '<a href="../reports/R42_20261101.md">Earth r42 calibration</a> · '
                    '<a href="../reports/R40_WORLD_20261031.md">World refit (r40, kept)</a> · '
                    '<a href="../reports/FORAGING_20261027.md">Foraging scenarios</a> · '
                    '<a href="../reports/FORAGING_EARTH_20261031.md">Foraging against Binford\'s hunter-gatherers</a> · '
