@@ -40,7 +40,12 @@ def stage_artifacts(root, names):
     names = sorted(set(names))
     if not names or any(not allowed(name) for name in names):
         raise ValueError('Refusing undeclared release artifacts')
-    subprocess.run(['git', 'add', '-f', '-A', '--', *names], cwd=root, check=True, capture_output=True)
+    indexed = set(subprocess.check_output(['git', 'ls-files', '-z'], cwd=root).decode().split('\0'))
+    # A deletion already staged by the QA snapshot has no remaining index/work
+    # path for git add, but must still be passed to the later --only commit.
+    unstaged = [name for name in names if (root / name).exists() or name in indexed]
+    if unstaged:
+        subprocess.run(['git', 'add', '-f', '-A', '--', *unstaged], cwd=root, check=True, capture_output=True)
     return names
 
 
@@ -73,6 +78,7 @@ def arm(path):
         raise ValueError('Retain existing declarations; use a new plan path')
     scripts = ['finalize_r42_atlas.py', 'build_atlas_variant.py', 'add_r40_atlas_diagnostics.py',
                'add_corrected_layers.py', 'add_corrected_climate.py', 'add_language_layers.py',
+               'language_map_preview.py', 'language_families_map.py', 'export_winds12.py', 'add_market_views.py',
                'refresh_atlas_pages.py', 'retrain_earth_corrections.sh', 'correction_training_receipt.py',
                'train_earth_correction.py', 'train_rain_pattern.py', 'evaluate_earth_correction.py',
                'evaluate_rain_pattern.py', 'collect_earth_fields.py', 'package_fit_atlases.py',
@@ -84,6 +90,9 @@ def arm(path):
     files.extend([ROOT / 'atlas/index.html', ROOT / 'output/atlas_r42/release.sh',
                   ROOT / 'calibration/local_accuracy_20261023/r42_params.json', ROOT / 'calibration/map_world_r42/params.json'])
     files.extend(sorted((ROOT / 'atlas').glob('*.js')))
+    files.extend(sorted((ROOT / 'data').glob('*.json')))
+    files.extend(sorted((ROOT / 'data').glob('*.csv')))
+    files.append(ROOT / 'calibration/language_areas_20261101/fantasy_hearths.json')
     files.extend(p for p in (ROOT / 'atlases/climate_accuracy').rglob('*') if p.is_file())
     hub = (ROOT / 'scripts/build_fit_hub.py').read_text()
     hub = hub.replace('Earth r41 physics, the best on the 31-region Earth test',
