@@ -1,3 +1,60 @@
+# Active continuation — 3 November 2026 (Warsaw)
+
+* The workspace restarted; old processes/sessions were gone. Resumed frozen
+  three-start search in persistent session **34654** (nice 5, two workers) and
+  conservative replay in **97823** (nice 10, one worker). No source or parameter
+  changes were made to either. Third search start has 9/13 records; starts 1/2
+  each have 13. Best still chain 1, n=7, S49 0.9913780. No sealed-e results.
+* **Automatic paired validation is now queued**, session **70465**, using
+  `calibration/r42_multistart_validation_20261102/plan.json`. It waits for all
+  39 records; freezes and commits one finalist plus all records; reproduces
+  both full dev49 vectors and actual reference footprints; runs paired fine28;
+  commits qualification before opening sealed e only if both gates pass.
+  Every outcome/raw packet is retained. It commits/pushes its own artifacts,
+  but does NOT adopt physics or rebuild an atlas. Four targeted tests passed.
+* **Launcher stale-page fix is published** in badaefe7 to BOTH branches:
+  `claude/ecstatic-wozniak-rtrwd2` and default `claude/friendly-turing-43ygeu`.
+  The default was an ancestor and was fast-forwarded, without history rewrite.
+  User's screenshots proved their metadata were current (70 Earth modes,
+  Whittaker 1.44%) but browser showed the old 22 October hub. Normal launches
+  now use a fresh available port plus unique URL; explicit ports remain
+  supported. Launcher prints folder, checkout branch/commit, and r42 release
+  only if all metadata and normalized hub hashes match atlases/release.json.
+  build_fit_hub regenerates that manifest; packaging includes it. Windows
+  line-ending normalization is tested. Real stale-cache/browser test, 1,000
+  Windows-checkout assets, portable launch and three unit tests passed.
+  Receipts/screenshot: output/launcher_refresh_20261102. User was told to pull,
+  close the old tab, rerun the .bat, and use its new URL. Never say the launcher
+  automatically downloads updates; it still serves local files only.
+* Conservative screen: numerical control and first THREE physical profiles
+  complete (4/5 total). Combined ratios vs r42 control: flux+storms 2.1144,
+  mass-balanced counterflow 1.4562, independent reservoirs 1.6166. The final
+  resolved-drying profile is running. None adopted; no partial-profile score.
+  Source review/figure: `scripts/review_r42_transport.py` and
+  `output/r42_transport_review_20261102`. Research companion now opens on
+  these results, explicitly marking pending outcomes, with 32 verified raw
+  packets. `scripts/publish_r42_transport.py` updates it; browser navigation,
+  dark/light, mobile, images and downloads passed before the fourth data row.
+* New prospective factorial, committed in e23ba585, queued in session **71498**
+  behind the original screen. Plan: calibration/r42_storm_factorial_20261102.
+  Four profiles: vapor flux alone; symmetric storms alone; accounted crest
+  condensation; flux+accounted condensation. Baseline r42 eddy_rainout is ZERO;
+  the latter two explicitly ADD eddy_rainout=1 (local saturation), not an
+  inherited active cap. All four construct with the same Earth planet, no
+  imposed wind/SST. Maximum 32 reused-region integrations, no retuning, unseen
+  evaluation, adoption or normal atlas changes. Driver will publish all results
+  to both branches. Report: reports/TRANSPORT_FACTORS_20261102.md.
+* `scripts/review_r42_multistart.py` is ready for selection.json after all starts.
+  It plots every start and estimates descriptive region-mix sensitivity. This
+  resampling is explicitly not selection-corrected generalization uncertainty.
+  Analytic scaled-error test passed. Do not run it before selection exists.
+* Canonical model/benchmark sources remain frozen for all active/queued studies.
+  Independent producers/plots may change. Keep the normal atlas on adopted r42
+  until a fully qualified candidate is reviewed and adopted. Future atlas
+  publication must keep BOTH remote branches current, not just development.
+
+---
+
 # Post-publication physics continuation — 2 November 2026, 15:48 UTC
 
 * All atlases are published and verified; see release notes immediately below.
