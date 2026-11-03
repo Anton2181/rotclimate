@@ -1,0 +1,14 @@
+Traceback (most recent call last):
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/correction_training_receipt.py", line 89, in <module>
+    main()
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/correction_training_receipt.py", line 82, in main
+    identity = inputs(a.params, a.tag)
+               ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/correction_training_receipt.py", line 39, in inputs
+    return dict(tag=tag, files={str(p.resolve().relative_to(ROOT)): file_hash(p) for p in files},
+                                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 682, in relative_to
+    raise ValueError(f"{str(self)!r} is not in the subpath of {str(other)!r}")
+ValueError: '/workspace/rotclimate/data/cache/worldclim/wc2.1_5m_tavg.zip' is not in the subpath of '/workspace/rotclimate/output/atlas_r43/snapshot'
+Reusing completed correction training for r43
+Reusing completed correction training for r43

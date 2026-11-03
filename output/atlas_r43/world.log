@@ -1,0 +1,355 @@
+Simulating climate...
+Saved simulation checkpoint
+Waiting for atlas export memory slot...
+Rendering atlas layers and station data...
+/workspace/rotclimate/output/atlas_r43/snapshot/rotclimate/atlas.py:180: RuntimeWarning: Mean of empty slice
+  D = np.nanmean(grid_dtr12(result), axis=0)
+Rendering seasonal animations...
+  week 10/33  week 20/33  week 30/33  week 33/33  simulated 25 steps on 132x199 cells in 60s
+Traceback (most recent call last):
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/build_atlas_variant.py", line 255, in <module>
+    main()
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/build_atlas_variant.py", line 236, in main
+    export_harvest(out)
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/harvest/export.py", line 407, in export
+    sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
+                                      ^^^^^^^^^
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/harvest/export.py", line 32, in digest
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/rotclimate/output/atlas_r43/snapshot/ravages/data.json'
+Loaded verified simulation checkpoint
+Waiting for atlas export memory slot...
+Rendering atlas layers and station data...
+/workspace/rotclimate/output/atlas_r43/snapshot/rotclimate/atlas.py:180: RuntimeWarning: Mean of empty slice
+  D = np.nanmean(grid_dtr12(result), axis=0)
+Rendering seasonal animations...
+  week 10/33  week 20/33  week 30/33  week 33/33  simulated 25 steps on 132x199 cells in 65s
+Traceback (most recent call last):
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/build_atlas_variant.py", line 255, in <module>
+    main()
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/scripts/build_atlas_variant.py", line 236, in main
+    export_harvest(out)
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/harvest/export.py", line 407, in export
+    sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
+                                      ^^^^^^^^^
+  File "/workspace/rotclimate/output/atlas_r43/snapshot/harvest/export.py", line 32, in digest
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+                          ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1019, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/pathlib.py", line 1013, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/workspace/rotclimate/output/atlas_r43/snapshot/land/earth.webp'
+Loaded verified simulation checkpoint
+Waiting for atlas export memory slot...
+Rendering atlas layers and station data...
+/workspace/rotclimate/output/atlas_r43/snapshot/rotclimate/atlas.py:180: RuntimeWarning: Mean of empty slice
+  D = np.nanmean(grid_dtr12(result), axis=0)
+Rendering seasonal animations...
+  week 10/33  week 20/33  week 30/33  week 33/33  simulated 25 steps on 132x199 cells in 63s
+Deriving crops, disease and settlement from /workspace/rotclimate/output/atlas_r43/snapshot/atlases/earth_fit_r43_stage
+{
+  "crop_capacity": 244802546.00819653,
+  "pastoral_capacity": 9255889.882933509,
+  "food_capacity": 254058433.9167061,
+  "settlement_base": 185536247.11537525,
+  "settlement_no_malaria": 196479995.30466253,
+  "land_km2": 3290735.211683006,
+  "population": {
+    "endemic": {
+      "frontier": 25862158.28263469,
+      "central": 60220848.56735176,
+      "core": 151921444.6968249
+    },
+    "absent": {
+      "frontier": 27387622.725712724,
+      "central": 63772940.477761455,
+      "core": 160882443.21417072
+    }
+  },
+  "crops": [
+    0.9836342888658628,
+    0.0029058012098587323,
+    0.012153122552989195,
+    0.0013067873712891609,
+    0.0
+  ],
+  "double_crop_share": 0.05223548102637342,
+  "mean_malaria": 0.12932921480669407
+}
+Building population allocation and walking access: /workspace/rotclimate/output/atlas_r43/snapshot/atlases/earth_fit_r43_stage
+{
+  "requested": 60221000,
+  "allocated": 60220999.99999994,
+  "unallocated": 5.960464477539063e-08,
+  "capacity": 185536256.230313,
+  "capacity_absent": 196479999.0027364,
+  "unreachable_land_km2": 4235.9560546875
+}
+Building adapted foraging scenario on (116, 250) grid: /workspace/rotclimate/output/atlas_r43/snapshot/atlases/earth_fit_r43_stage
+  512/16254 land cells; 12.1s
+  5632/16254 land cells; 65.4s
+  10752/16254 land cells; 121.1s
+  15872/16254 land cells; 183.1s
+  16254/16254 land cells; 186.7s
+{
+  "total_scenario_people": 458056.52043199725,
+  "land_km2": 3290735.211683004,
+  "mean_density_people_km2": 0.13919580001629184,
+  "converged_scenario_people": 22741.837590570743,
+  "converged_land_share": 0.0913266343597226,
+  "unsupported_land_share": 0.0,
+  "mean_foraging_hours_day": 6.7501661667591835,
+  "mean_scarcity_days_year": 201.48655519761652,
+  "mean_meat_fraction": 0.7518496759280395,
+  "mean_fish_share": 0.14874180207659718,
+  "aggregation": "Scenario people are density times coastal land area. Effort, scarcity and diet means are weighted by scenario people; convergence shares are weighted by land area."
+}
+earth_fit_r43_stage winds12 (12, 116, 250) mean speed by month [9.76, 9.93, 8.68, 6.31, 4.22, 3.53, 3.96, 3.78, 3.14, 3.39, 4.62, 7.76]
+/workspace/rotclimate/output/atlas_r43/snapshot/polity/control.py:192: RuntimeWarning: invalid value encountered in subtract
+  out = np.where(np.isfinite(df), df + (db - df) * w, db)
+Inbound catchments prepared; routing ordered shipments
+Freight season 1/4: market 25/300
+Freight season 1/4: market 50/300
+Freight season 1/4: market 75/300
+Freight season 1/4: market 100/300
+Freight season 1/4: market 125/300
+Freight season 1/4: market 150/300
+Freight season 1/4: market 175/300
+Freight season 1/4: market 200/300
+Freight season 1/4: market 225/300
+Freight season 1/4: market 250/300
+Freight season 1/4: market 275/300
+Freight season 1/4: market 300/300
+Freight season 2/4: market 25/300
+Freight season 2/4: market 50/300
+Freight season 2/4: market 75/300
+Freight season 2/4: market 100/300
+Freight season 2/4: market 125/300
+Freight season 2/4: market 150/300
+Freight season 2/4: market 175/300
+Freight season 2/4: market 200/300
+Freight season 2/4: market 225/300
+Freight season 2/4: market 250/300
+Freight season 2/4: market 275/300
+Freight season 2/4: market 300/300
+Freight season 3/4: market 25/300
+Freight season 3/4: market 50/300
+Freight season 3/4: market 75/300
+Freight season 3/4: market 100/300
+Freight season 3/4: market 125/300
+Freight season 3/4: market 150/300
+Freight season 3/4: market 175/300
+Freight season 3/4: market 200/300
+Freight season 3/4: market 225/300
+Freight season 3/4: market 250/300
+Freight season 3/4: market 275/300
+Freight season 3/4: market 300/300
+Freight season 4/4: market 25/300
+Freight season 4/4: market 50/300
+Freight season 4/4: market 75/300
+Freight season 4/4: market 100/300
+Freight season 4/4: market 125/300
+Freight season 4/4: market 150/300
+Freight season 4/4: market 175/300
+Freight season 4/4: market 200/300
+Freight season 4/4: market 225/300
+Freight season 4/4: market 250/300
+Freight season 4/4: market 275/300
+Freight season 4/4: market 300/300
+Political reach layers written to /workspace/rotclimate/output/atlas_r43/snapshot/atlases/earth_fit_r43_stage/data
+{
+ "params": "calibration/map_world_r43/params.json",
+ "downsample": 8,
+ "image_scale": 2,
+ "seeds": [
+  1,
+  2,
+  3
+ ],
+ "seconds": 266,
+ "strict_accuracy": 0.3447116193038507,
+ "zonefit": 0.1773678557318553,
+ "recall": {
+  "cold_wet": 0.5951276102088167,
+  "cold_dry": 0.0005055611729019212,
+  "warm_wet": 0.3646603308694122,
+  "med": 0.7558450233800935,
+  "swamp": 0.0,
+  "tree": 0.01592356687898089,
+  "hot_dry": 0.26666666666666666
+ },
+ "mediterranean": {
+  "dry_share": 0.08316633266533066,
+  "cs_share": 0.79124916499666
+ },
+ "numerics": {
+  "downsample": 8,
+  "steps_per_year": 25,
+  "seasonal_spinup_years": 0,
+  "seasonal_require_convergence": false,
+  "picard_iters": 256,
+  "t_iters": 192,
+  "t_relaxation": 0.25,
+  "transport_scheme": "upwind",
+  "t_adaptive_retries": 2,
+  "t_anderson": true,
+  "t_require_convergence": true,
+  "moisture_relaxation": 0.25,
+  "moisture_residual_tol": 0.01,
+  "moisture_require_convergence": true,
+  "solver_rtol": 1e-06,
+  "solver_max_iter": 2000,
+  "solver_require_convergence": true,
+  "solver_recover": true
+ },
+ "observed_numerics": {
+  "members": [
+   {
+    "linear_solves": 2114,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "sor": 2114
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.049797904027959916,
+    "accelerated_stages": 0,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   },
+   {
+    "linear_solves": 2147,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "sor": 2147
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.049988838080604836,
+    "accelerated_stages": 0,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   },
+   {
+    "linear_solves": 2035,
+    "linear_unconverged": 0,
+    "linear_methods": {
+     "sor": 2035
+    },
+    "temperature_steps": 33,
+    "temperature_unconverged": 0,
+    "temperature_max_update_c": 0.04997723937345988,
+    "accelerated_stages": 0,
+    "moisture_checked": true,
+    "moisture_unconverged": 0,
+    "all_checks_passed": true
+   }
+  ],
+  "all_checks_passed": true
+ },
+ "fit_objective": "zonefit",
+ "fit_score": 0.1773678557318553,
+ "whittaker": {
+  "strict": {
+   "profile": "strict",
+   "score": 0.3493135931358685,
+   "macro_hard": 0.15066032241300314,
+   "macro_soft": 0.5479668638587339,
+   "outside_share": 0.0,
+   "per_zone": {
+    "cold_wet": {
+     "cells": 862,
+     "hard": 0.0,
+     "soft": 0.2331120611383175
+    },
+    "cold_dry": {
+     "cells": 1978,
+     "hard": 0.023761375126390292,
+     "soft": 0.7248117491210697
+    },
+    "warm_wet": {
+     "cells": 2841,
+     "hard": 0.0007039774727208729,
+     "soft": 0.13033830318216555
+    },
+    "med": {
+     "cells": 2994,
+     "hard": 0.594188376753507,
+     "soft": 0.9795059882370275
+    },
+    "swamp": {
+     "cells": 1257,
+     "hard": 0.0,
+     "soft": 0.020162134328239094
+    },
+    "tree": {
+     "cells": 942,
+     "hard": 0.12420382165605096,
+     "soft": 0.8731278439344908
+    },
+    "hot_dry": {
+     "cells": 1020,
+     "hard": 0.31176470588235294,
+     "soft": 0.874709967069827
+    }
+   }
+  },
+  "broad": {
+   "profile": "broad",
+   "score": 0.6049564148766614,
+   "macro_hard": 0.32486626791800344,
+   "macro_soft": 0.8850465618353194,
+   "outside_share": 0.0,
+   "per_zone": {
+    "cold_wet": {
+     "cells": 862,
+     "hard": 0.7691415313225058,
+     "soft": 0.9808996083737117
+    },
+    "cold_dry": {
+     "cells": 1978,
+     "hard": 0.023761375126390292,
+     "soft": 0.7248117491210697
+    },
+    "warm_wet": {
+     "cells": 2841,
+     "hard": 0.43083421330517424,
+     "soft": 0.8836278459222403
+    },
+    "med": {
+     "cells": 2994,
+     "hard": 0.594188376753507,
+     "soft": 0.9795059882370275
+    },
+    "swamp": {
+     "cells": 1257,
+     "hard": 0.0,
+     "soft": 0.8258069564567958
+    },
+    "tree": {
+     "cells": 942,
+     "hard": 0.14437367303609341,
+     "soft": 0.9259638176665631
+    },
+    "hot_dry": {
+     "cells": 1020,
+     "hard": 0.31176470588235294,
+     "soft": 0.874709967069827
+    }
+   }
+  }
+ }
+}
+atlas written to /workspace/rotclimate/output/atlas_r43/snapshot/atlases/earth_fit_r43_stage
