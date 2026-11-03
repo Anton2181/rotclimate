@@ -1,0 +1,55 @@
+{
+  "status": "fixed_world_connector_preview",
+  "anchor_target_fractions": [
+    [
+      0.18,
+      0.72
+    ],
+    [
+      0.82,
+      0.62
+    ]
+  ],
+  "endpoint_rule": "Distinct marked ports nearest these fixed drawing fractions, chosen before routing; A/B labels, nearest place is context only",
+  "model_months": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10,
+    11,
+    12
+  ],
+  "display_months": [
+    1,
+    7
+  ],
+  "source_files": [
+    "polity/freight_corridors.py",
+    "polity/economic_world.py",
+    "polity/control.py",
+    "polity/transport.py",
+    "polity/trade.py",
+    "polity/network.py",
+    "polity/seasons.py",
+    "polity/fields.py",
+    "polity/settle.py",
+    "polity/food_transport.py",
+    "scripts/review_freight_corridors.py"
+  ],
+  "inputs_sha256": {
+    "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+    "atlases/earth_fit/data/atlas.bin": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2",
+    "atlases/earth_fit/data/harvest.json": "5fc2d0e05b81d80664e7512d281b5e372f3cf783e9484a0af56dd73c61fc631a",
+    "atlases/earth_fit/data/harvest.bin": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f",
+    "output/seasonal_food_system_20261103/receipt.json": "93c4db40a34926d84169a7e124f60f0dc459332924ea4722df71a10f89b476e2"
+  },
+  "adoption": false,
+  "tuning": false,
+  "scope": "Monthly same-path freight cost and time; no time inferred from road-km cost, no cargo capacity/production/town size inferred. Explicit manufactured food budget tests the connector in both directions."
+}
