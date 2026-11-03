@@ -1,3 +1,38 @@
+# Resumed after environment restart — 3 November 2026, 13:49 Warsaw
+
+* Host restarted between overnight and today's Continue: no overnight progress
+  after01:10UTC. Fetched origin; both remote refs are ancestors, no external
+  changes. Do not mistake stale running markers for live processes.
+* ACTIVE snapshot builder session35814; publisher47579. Raw world export is
+  COMPLETE and stages_completed=[world]. Diagnostics resumed (two workers);
+  corrected layers/full corrected export and language/QA/push follow. Matching
+  r43 correction training remains complete. Snapshot scientific model03 pinned.
+* ACTIVE storm61 session91042, one worker nice5. Full61 damped control PASSED:
+  max monthly drift .0035593 C/.0493469mm, same forcing/observations. First fixed
+  physical profile resumes after40 passed cases; second must also finish before
+  selection/fine/unopenedF. Private source03, active plan_v2 unchanged.
+* ACTIVE fitted-flux screen session40089 waits for full r43 publication, using
+  private sourcec20f99bd. The new default-upwind numerical implementation passed
+  111 focused tests. No climate result for fitted flux yet; do not imply one.
+* Retrospective search design audit:36 unique proposals, rank9, condition6.53;
+  whole-start linear prediction MAE .57/1.34/.65%, comparable to .86% gain.
+  No unseen data, new candidate selection or global-minimum certificate.
+  Public plot/evidence ready, browser71studies168images, no errors.
+* New prospective fixed bound-probe screen follows the completed fitted screen
+  (then reuses its exact fresh pinned-source r43 control). Four profiles:
+  positive marine threshold .15/.05, branch drying .4/day, .15/.4 combination.
+  Zero threshold is intentionally AVOIDED because it disables the marine gate.
+  Eight reused regions only, no selection/fine/F/adoption/atlas change.
+  Driver scripts/screen_parameter_bounds.py; plan calibration/parameter_bounds_20261103.
+* Space3.1GB after removing three superseded generated ZIPs; latest verified
+  r42 final bundle and all maps/source/results preserved. Cleanup receipt tracked.
+* Main atlas template now shows actual metadata physics_profile in loaded-data
+  status. Final r43 publisher will refresh normal pages from this template.
+  Both remote branches must be atomically pushed at milestones. Continue after
+  pushes, post generated maps, never claim a background job survived a restart.
+
+---
+
 # Latest running jobs — 3 November 2026, Warsaw
 
 * Main physical option c20f99bd: conservative fitted vapor face transport,

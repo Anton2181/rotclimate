@@ -56,3 +56,33 @@ adopt physics or overwrite atlas data. The served Earth atlas remains r42 until
 a qualified release is explicitly adopted and fully rebuilt. The current
 launcher prints its verified atlas snapshot rather than inferring a data update
 from newer simulation code.
+
+
+## Retrospective search-coverage audit — 3 November 2026
+
+The39 records comprise three exact r42 reproduction controls and36 unique
+proposals. Normalize the proposals to the declared bounds and subtract the r42
+anchor: the design has rank9, condition number6.53. All nine parameter directions
+are represented, but this does not densely cover their joint space or certify
+convergence to a local/global minimum. The per-parameter scatter plots mix
+changes in every other parameter and are not isolated causal effects.
+
+A fixed anchored linear ridge model (alpha0.01, no hyperparameter selection)
+trained on two complete search starts predicts the omitted start with combined
+score MAE0.57%,1.34%,0.65%. Identical reproduction controls are excluded from that
+error evaluation. Prediction errors are comparable to the winning0.86% gain;
+this retrospective emulator is not reliable evidence of unseen improvement.
+No new candidate or global optimum is selected by the audit.
+
+R43's marine-land heating threshold lies1.2% of its declared range above the
+old lower bound0.3; dry-branch strength is near the upper bound0.3/day. A separate
+prospective reused-region screen tests thresholds0.15/0.05 and drying0.4/day,
+including one fixed combination. The threshold stays strictly positive because
+zero disables the marine gate rather than giving its continuous limiting form.
+All planet/orbit settings, other strengths, imposed-forcing choices and strict
+numerical criteria remain fixed. No reserved observations, adoption or atlas
+promotion follow from that screen. Plans: calibration/parameter_bounds_20261103.
+
+Audit code, source hashes, plot and fold predictions: scripts/audit_search_geometry.py
+and output/search_geometry_20261103. The normal research companion includes the
+same coverage plot and explicitly retrospective interpretation.

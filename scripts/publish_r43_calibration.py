@@ -29,8 +29,14 @@ def main():
     if file_hash(preview_folder / 'raw_world_comparison.png') != preview['image_sha256']:
         raise ValueError('Raw world preview changed')
     shutil.copyfile(preview_folder / 'raw_world_comparison.png', destination / 'r43_raw_world.png')
+    geometry_folder = ROOT / 'output/search_geometry_20261103'
+    geometry = json.loads((geometry_folder / 'review.json').read_text())
+    if (geometry['climate_integrations'] != 0 or geometry['adoption'] or geometry['used_sealed_data']
+            or file_hash(geometry_folder / 'parameter_coverage.png') != geometry['image_sha256']):
+        raise ValueError('Invalid retrospective search-coverage audit')
+    shutil.copyfile(geometry_folder / 'parameter_coverage.png', destination / 'r43_parameter_coverage.png')
     write_json(destination / 'r43_calibration.json', dict(adoption=adoption, validation=result, search_review=review,
-        raw_world_preview=preview,
+        raw_world_preview=preview, search_geometry=geometry,
         publication_source_sha256=file_hash(Path(__file__))))
     rows = []
     for label, key in [('49-region development', 'dev49'), ('Paired 28 km', 'fine28'), ('Previously unseen e', 'sealed_e')]:
@@ -46,6 +52,8 @@ def main():
 <p><strong>The unseen combined score is effectively tied.</strong> Its temperature regression and rain-loss gain remain visible above. The finer-grid combined regression is within the declared 1% allowance. No individual-region or group veto was introduced after results; all regional errors and numerical receipts are retained.</p>
 <figure><a href="data/r43_search_starts.png"><img src="data/r43_search_starts.png" width="1885" height="667" loading="lazy" alt="All completed candidates from three independent calibration starts"></a><figcaption>The r42-centred basin produced the best qualifying proposal. Two generations per start in nine dimensions are sparse; this does not establish a global optimum or validate missing physics.</figcaption></figure>
 <p>The descriptive development-region resampling interval spans both gains and regressions. It is not corrected for selection or spatial dependence and is not a probability of improved unseen performance. Set e is now spent. The separately reserved set f remains unopened for a later finalist; the next storm-family campaign declares 61 development regions including spent d/e and reports historical S49 separately.</p>
+<figure><a href="data/r43_parameter_coverage.png"><img src="data/r43_parameter_coverage.png" width="1755" height="1215" loading="lazy" alt="The 36 actual proposals projected onto each of the nine declared parameter ranges, with the adopted point marked"></a><figcaption>All nine parameter directions are represented (design rank 9, condition number 6.53), but 36 proposals sparsely sample the joint space. Each panel mixes changes in all parameters; these are not isolated causal responses. The adopted heat-gate threshold is near its declared lower bound.</figcaption></figure>
+<p>A fixed, retrospective linear response fit predicts an entirely omitted search start with combined-score MAE of 0.57%, 1.34% and 0.65%. Those errors are comparable to the selected 0.86% development gain. The three identical reproduction controls are excluded from that error calculation. This checks emulator transfer across starts, not unseen climate skill, and supplies no global-optimum certificate or new selected candidate.</p>
 <p>The <a href="../earth_fit/">Earth atlas</a> and its launcher identify the actually served snapshot. A model adoption does not relabel older maps while a full verified rebuild runs. The r43 rebuild uses a pinned source worktree and new matching correction training; normal atlas publication waits for all climate, food, people, trade, language and browser/portable checks.</p>
 <figure><a href="data/r43_raw_world.png"><img src="data/r43_raw_world.png" width="2295" height="1080" loading="lazy" alt="Verified raw r42 and r43 biome and rainfall maps with temperature and rainfall differences"></a><figcaption>Raw world preview on identical geometry and three surroundings layouts. Target-zone agreement rises from 34.23% to 34.47%; this is agreement with proposed zones, not measured fantasy-world accuracy. These raw maps precede Earth correction and the complete atlas exports.</figcaption></figure>
 <p><a href="data/r43_calibration.json" download>Adoption, selection, uncertainty scope and validation scores</a> · <a href="../../reports/R43_20261103.md">r43 release</a> · <a href="../../reports/MULTISTART_20261103.md">Search and local-minimum limits</a> · <a href="https://github.com/Anton2181/rotclimate/tree/{commit}/{adoption['validation']}">All verified raw case packets and protocols at the validation commit</a></p>
