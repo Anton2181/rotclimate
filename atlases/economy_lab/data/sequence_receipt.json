@@ -1,0 +1,69 @@
+{
+  "status": "experimental_comparison",
+  "production_atlas_changed": false,
+  "independent_agronomic_validation": false,
+  "crop_coefficients_fitted": false,
+  "sample_cells": 4096,
+  "inherited_sample_receipt_sha256": "5e9bdd723a6c60a6b789ffe62fb08ad13d0e20374bae0924ec0a248df88eec20",
+  "single_crop_maxima_exactly_reproduced": true,
+  "windows": 216,
+  "water_gate_eligible_cells": 267,
+  "scenarios": {
+    "0": {
+      "improved_cells": 113,
+      "paired_cells": 263,
+      "ambiguous_cells": 3150,
+      "maximum_optimal_schedules": 117,
+      "unweighted_energy_sum": 10485496554.938211,
+      "example_choice_perennial_cells": 5
+    },
+    "1": {
+      "improved_cells": 110,
+      "paired_cells": 261,
+      "ambiguous_cells": 3094,
+      "maximum_optimal_schedules": 46,
+      "unweighted_energy_sum": 10481484182.580181,
+      "example_choice_perennial_cells": 5
+    }
+  },
+  "baseline_unweighted_energy_sum": 10414805867.71968,
+  "maximum_relative_gain": 0.47975532649699815,
+  "calendar_origin_check": {
+    "cells": 256,
+    "origins": 12,
+    "climate_and_soil_rolled_windows_regenerated": true,
+    "energy_count_and_boundary_union_exact": true
+  },
+  "inputs_sha256": {
+    "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+    "atlases/earth_fit/data/atlas.bin": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2",
+    "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3"
+  },
+  "geography_inputs": {
+    "shape": [
+      463,
+      1000
+    ],
+    "width_km": 3680.2478592000007,
+    "arable": {
+      "1": 0.85,
+      "2": 0.75,
+      "3": 0.45,
+      "4": 0.08
+    },
+    "sources": {
+      "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
+      "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
+      "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f"
+    }
+  },
+  "literature_manifest_sha256": "4edfefb6fdb5ea3ba2bfa9136841f5c6e05d4e701af9614f7ce09a2c232f65e4",
+  "sources_sha256": {
+    "harvest/crop_sequences.py": "9aab8015f8a94863eb798005fa7077c8d1d60f1c138126201430c824c7816e68",
+    "scripts/review_crop_sequences.py": "1c8414cb41e5bec70068f4b9c8be60daea26413415e392a69f5cd01e9d8153b9",
+    "harvest/export.py": "e702c0a5b4f8eda5a29ca31e5765f9f4541eb8b0504bcbf8ba9a03e5ab457296",
+    "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507"
+  },
+  "figure_sha256": "08db803effeffacd67a20705acb346dfe3903b85dbb31608e7ff9a93755b04b5",
+  "scope": "All annual windows, at most two occupancy-compatible different crops. Existing second weight and water gate held fixed. Zero/one-bin turnaround are sensitivity scenarios, not ancient estimates. Reference soil buckets do not form a sequential crop-water ledger. Fantasy sample, not whole-map areas or Earth/historical validation. Example choices are arbitrary at ties; count and boundary union retain ambiguity. No perennial harvest dates assigned."
+}

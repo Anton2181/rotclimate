@@ -1,0 +1,64 @@
+{
+  "status": "experimental_sequence_optimizer_not_adopted",
+  "literature_checked_date": "2026-11-03",
+  "sources": [
+    {
+      "id": "waha2013",
+      "title": "Waha et al. (2013), Adaptation to climate change through the choice of cropping system and sowing date in sub-Saharan Africa",
+      "doi": "10.1016/j.gloenvcha.2012.11.001",
+      "url": "https://publications.pik-potsdam.de/pubman/item/item_18135_1/component/file_18136/5630oa.pdf",
+      "supports": "Joint consideration of crop sequences, sowing date and thermal growing requirements.",
+      "does_not_establish": "This code is not LPJmL; neither ancient crop calendars nor our second-crop multiplier is validated by that study."
+    },
+    {
+      "id": "waha2020",
+      "title": "Waha et al. (2020), Multiple cropping systems of the world and the potential for increasing cropping intensity",
+      "doi": "10.1016/j.gloenvcha.2020.102131",
+      "url": "https://publications.pik-potsdam.de/rest/items/item_24561_5/component/file_24562/content",
+      "supports": "Non-overlapping sequential growing seasons, distinct crop combinations and location-specific limits on intensification.",
+      "does_not_establish": "Modern observed systems are not 200 AD reconstructions. Second-cycle yields, water, labour and environmental costs cannot be replaced by a universal coefficient."
+    },
+    {
+      "id": "fao33_response",
+      "title": "FAO irrigation scheduling, Annex II section 2.1: yield response to evapotranspiration deficit",
+      "url": "https://www.fao.org/4/X5647E/x5647e0e.htm",
+      "supports": "The relative yield-loss relationship discussed in FAO Irrigation and Drainage Paper 33.",
+      "does_not_establish": "The inherited severe-deficit cutoff, irrigation access, ancient absolute yields and reliability factors remain model assumptions. This URL is an annex discussing FAO33, not the full original paper."
+    },
+    {
+      "id": "fao56",
+      "title": "Allen et al. (1998), Crop evapotranspiration, FAO Irrigation and Drainage Paper 56",
+      "url": "https://www.fao.org/4/x0490e/x0490e00.htm",
+      "supports": "Reference evaporation, crop coefficients and soil-water balance as a process framework.",
+      "does_not_establish": "Summing water over a candidate season with a reference initial bucket is not a daily coupled crop-sequence water balance or a finite irrigation supply."
+    },
+    {
+      "id": "sacks2010",
+      "title": "Sacks et al. (2010), Crop planting dates: an analysis of global patterns",
+      "doi": "10.1111/j.1466-8238.2010.00551.x",
+      "url": "https://sage.nelson.wisc.edu/data-and-models/datasets/crop-calendar-dataset/",
+      "supports": "An observed crop-calendar comparison to design before adoption.",
+      "does_not_establish": "Not yet downloaded or scored in this experiment; modern region-level dates are not ancient observations or pointwise independent ground truth."
+    }
+  ],
+  "comparison_policy": {
+    "climate_bins": 12,
+    "maximum_annual_crops": 2,
+    "secondary_weight": 0.5,
+    "secondary_weight_status": "Inherited unvalidated production assumption, preserved solely to isolate calendar-selection effects",
+    "same_crop_repetition": false,
+    "same_crop_status": "Inherited restriction; real sequential cropping can repeat a crop, so this is not a general biological prohibition",
+    "water_gate": "Unchanged production gate: irrigation share >= 0.5 or growing-period length >= 300 days",
+    "turnaround_bins": [0, 1],
+    "turnaround_status": "Resolution sensitivity scenarios, not estimates of ancient farm turnaround time; one bin is about 30.4 days",
+    "perennials": "Annual output competes as a sole crop; no invented perennial harvest date or second crop"
+  },
+  "validation_scope": "Exact reproduction of the old single-crop response, calendar-origin invariance, paired comparisons on the previously fixed 4096-cell fantasy sample. These are implementation and diagnostic checks, not independent agronomic validation, estimated population gains or an adoption.",
+  "before_production": [
+    "Validate feasible seasons against observed calendars without tuning on the evaluation locations",
+    "Carry a crop-specific soil-water state through the whole sequence, with finite irrigation and growth-stage demand",
+    "Use period crop/cultivar, labour and historical yield evidence; review photoperiod and vernalization",
+    "Revalidate fallow and historical population-capacity calibration after changing crop mixtures",
+    "Evaluate storage across calendar alternatives instead of presenting a tie-broken date as observed"
+  ]
+}
