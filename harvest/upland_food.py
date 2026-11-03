@@ -64,6 +64,8 @@ def upland_food_year(rain,reference_et,seasons,*,total_available,fallow_coeffici
     harvest=np.zeros(days);results=[]
     for i,s in enumerate(seasons):
         idx=owner==i;potential=float(np.sum(et0[idx]*kc[idx]));actual=float(np.sum(water.et_path[idx]))
+        if potential==0 and s.potential_net_energy>0:
+            raise ValueError('Positive food potential requires positive crop ET demand')
         ratio=1. if potential==0 else min(actual/potential,1.)
         if ratio<minimum_et_ratio:
             raise ValueError(f'{s.crop}: ET ratio {ratio:.3f} lies outside the declared simple-yield analysis domain')

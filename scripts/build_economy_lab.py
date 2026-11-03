@@ -8,6 +8,7 @@ import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
 from local_benchmark_protocol import file_hash,write_json
+from economy_component_sections import component_sections
 
 STYLE='''
 :root{color-scheme:light dark;--bg:#eef2ee;--paper:#fafbf8;--ink:#203a40;--muted:#526a6d;--line:#c8d3cf;--link:#246b70}
@@ -75,6 +76,7 @@ def main():
         raise ValueError('Literature and assumption manifest changed')
     shutil.copyfile(manifest,data/'sequence_sources.json')
     sequences=newest['sequence'];storage=newest['storage']
+    current_sections,component_identity=component_sections(data)
     observed_origin=ROOT/'output/observed_crop_durations_20261103'
     observed=json.loads((observed_origin/'result.json').read_text())
     observed_plan=ROOT/'calibration/crop_calendar_observations_20261103/plan.json'
@@ -99,10 +101,10 @@ def main():
         capacity=receipt['minimum_zero_loss_capacity'][name]
         rows.append(f'<tr><td>{html.escape(name)}</td><td>{capacity:g}</td><td>{result["shortfall_days"]:g}</td></tr>')
     proposals=[
-        ('Seasonal food stocks','Hungry season, reserves, storage requirement','Numerical prototype'),
-        ('Grain provisioning for towns','Import dependence, food hinterlands, vulnerable supply routes','Proposed'),
+        ('Seasonal food stocks','Hungry season, reserves, storage requirement','Conserved prototype; map validation pending'),
+        ('Grain provisioning for towns','Import dependence, food hinterlands, vulnerable supply routes','Directed conserving prototype; world inputs pending'),
         ('Household labour','Food-production workload, harvest bottlenecks, labour vs land limits','Proposed'),
-        ('Finite irrigation water','Water-constrained irrigable land, downstream shortages','Proposed'),
+        ('Finite irrigation water','Water-constrained irrigable land, downstream shortages','Field budget prototype; basin allocation proposed'),
         ('Seasonal herds','Winter pasture, fodder deficits, transhumance corridors','Proposed'),
         ('State provisioning','Collectable surplus, capital and garrison supply','Proposed'),
     ]
@@ -113,10 +115,12 @@ def main():
 <header><p class="note">c.200 AD model workshop · 3 November 2026</p><h1>Food, farming and society</h1>
 <p class="lede">Connect the harvest, the hungry season, the work of farming and the food that reaches a town or a state.</p>
 <p><span class="status">Experimental calendars and food stocks</span> <span class="status">Agronomic validation pending</span></p></header>
+{current_sections}
+<details><summary>Earlier crop-calendar and reserve experiments</summary>
 <section aria-labelledby="observed-h"><h2 id="observed-h">What observed crop calendars reveal</h2>
 <p>A declared check against <a href="https://doi.org/10.1111/j.1466-8238.2010.00551.x">Sacks and colleagues’ published calendars (2010)</a> finds a gap in the current crop windows, especially for winter cereals. These are modern regional records, not ancient cultivars or pointwise yield validation. No model parameters were tuned.</p>
 <div class="table"><table><caption>Selected unflagged groups · complete qualifier groups and exclusions are downloadable</caption><thead><tr><th>Crop group</th><th>Records</th><th>Duration outside model range</th><th>Still outside with 30-day margin</th><th>Cold exposure /available climate summaries</th></tr></thead><tbody>{''.join(observed_rows)}</tbody></table></div>
-<p>The current evaluator has no explicit winter dormancy, vernalization or photoperiod development. A published next-process reference is <a href="https://doi.org/10.5194/gmd-11-1343-2018">Schaphoff and colleagues’ LPJmL4 description (2018)</a>. That module is not implemented here; improving calendar search alone does not supply it.</p>
+<p>This diagnostic identified missing winter-cereal development in the production evaluator. An isolated daily clock is now implemented and evaluated above, using <a href="https://doi.org/10.5194/gmd-11-1343-2018">Schaphoff and colleagues’ LPJmL4 description (2018)</a>. The complete crop/yield model still requires validation.</p>
 <details><summary>All observed crop and qualifier groups</summary>
 <figure><a href="data/observed_durations.png"><img src="data/observed_durations.png" width="1755" height="1161" alt="All parsed crop qualifier groups: observed duration ranges, model duration envelopes and available cold-exposure summaries"></a>
 <figcaption>{observed['unflagged_records']} unflagged records and {observed['source_flagged_records']} original Exclude-qualified records are retained separately. Missing climate summaries are unavailable, not zero. Cold exposure comes from interpolated source climatology; its percentage is not an exact model-rejection rate. Model duration coverage is a necessary timing check, not a predicted-date score.</figcaption></figure></details>
@@ -151,7 +155,7 @@ def main():
 <figcaption>Diagnostic sample results, not whole-map area estimates or observed agronomic accuracy. The right-hand histogram shows improved cells only. Different crops, the existing water gate and half-weight second crop are retained. No published yield or population estimate has changed.</figcaption></figure>
 <p>The next step is to preserve feasible season alternatives and choose compatible crop sequences together, then test the resulting calendars before feeding food stocks. A tie-breaking choice is not evidence of a real harvest date.</p>
 <div class="links"><a href="data/calendar_receipt.json" download>Calendar audit data and scope</a><a href="../../reports/CROP_CALENDARS_20261103.md">Calendar audit method and prerequisites</a></div></section>
-</details><section aria-labelledby="next-h"><h2 id="next-h">Proposed mechanics and maps</h2>
+</details></details><section aria-labelledby="next-h"><h2 id="next-h">Proposed mechanics and maps</h2>
 <div class="table"><table><thead><tr><th>Mechanic</th><th>Useful maps or views</th><th>Status</th></tr></thead><tbody>{options}</tbody></table></div>
 <p>The recommended first integration is crop calendars and food stocks, followed by actual grain provisioning over the existing directed road, river and sea network. Household labour then separates a productive environment from one that is easy to farm.</p>
 <div class="links"><a href="../../reports/ECONOMY_PROPOSALS_20261103.md">Full proposals, prerequisites and references</a><a href="data/proposal_sources.json" download>Existing-model and source audit</a></div></section>
@@ -172,6 +176,7 @@ def main():
         sequence_receipt_sha256=file_hash(ROOT/'output/crop_sequences_20261103/receipt.json'),
         storage_receipt_sha256=file_hash(ROOT/'output/calendar_storage_20261103/receipt.json'),
         observed_calendar_result_sha256=file_hash(observed_origin/'result.json'),
+        **component_identity,
         assets_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in sorted(data.iterdir()) if p.is_file()}))
     print('Built portable economy lab with manufactured prototype and proposals')
 

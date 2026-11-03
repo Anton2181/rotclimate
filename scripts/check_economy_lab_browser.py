@@ -20,6 +20,8 @@ def main():
         page.get_by_role('link',name='Food, farming and society →',exact=True).click()
         page.get_by_role('heading',name='Food, farming and society',exact=True).wait_for()
         assert page.locator('.status').all_inner_texts()==['Experimental calendars and food stocks','Agronomic validation pending']
+        older=page.locator('details > summary').filter(has_text='Earlier crop-calendar and reserve experiments')
+        older.focus();page.keyboard.press('Enter')
         receipt=page.request.get(args.base+'/atlases/economy_lab/data/receipt.json').json()
         assert receipt['status']=='numerical_prototype' and not receipt['production_atlas_changed']
         assert receipt['results']['One harvest']['shortfall_days']==164
@@ -40,8 +42,18 @@ def main():
         assert observed['unflagged_records']==472 and observed['source_flagged_records']==9
         assert observed['groups']['wheat · Winter']['outside_envelope']['0.0']['count']==55
         assert not observed['parameters_tuned'] and not observed['full_agronomic_validation']
+        page.get_by_role('heading',name='Daily cereal development: test the mechanisms',exact=True).wait_for()
+        cereal=page.request.get(args.base+'/atlases/economy_lab/data/cereal_development.json').json()
+        scores=cereal['result']['scores']
+        assert scores['published_heat_only']['evaluation']['country_mean_penalized_error_days']<scores['legacy_heat_only']['evaluation']['country_mean_penalized_error_days']
+        assert scores['selected_global']['evaluation']['nonmature_records']==2
+        food=page.request.get(args.base+'/atlases/economy_lab/data/seasonal_food_system.json').json()
+        assert len(food['cases'])==6 and not food['population_predicted']
+        assert food['cases']['Ample farm storage']['town_consumed']>food['cases']['Ample storage, seasonal closure']['town_consumed']
+        for case in food['cases'].values():
+            assert abs(case['food_ledger_residual'])<1e-6 and abs(case['water_ledger_residual'])<1e-6
         page.get_by_role('heading',name='What observed crop calendars reveal',exact=True).wait_for()
-        assert page.locator('tbody tr').count()==14
+        assert page.locator('tbody tr').count()==24
         summary=page.locator('details > summary').filter(has_text='Earlier checks:');summary.focus();page.keyboard.press('Enter')
         page.get_by_role('heading',name='Before harvest calendars can drive maps',exact=True).wait_for()
         for picture in page.locator('img').all():
@@ -58,7 +70,7 @@ def main():
             else:
                 response.json()
             downloads.append(link.inner_text())
-        assert len(downloads)==9
+        assert len(downloads)==11
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for viewport in [dict(width=1440,height=1000),dict(width=390,height=844)]:
@@ -69,6 +81,7 @@ def main():
         assert not errors,errors;browser.close()
     result=dict(status='passed',hub_link='passed',prototype_receipt='passed',calendar_receipt='passed',
         joint_calendar_and_storage_receipts='passed',observed_calendar_diagnostic='passed',
+        daily_cereal_evaluation='passed',closed_water_food_provisioning='passed',
         csv_unknowns_preserved=True,earlier_checks_keyboard='passed',downloads=downloads,
         viewports=['1440x1000','390x844'],themes=['light','dark'],mobile_overflow=False,page_errors=errors)
     (args.out/'checks.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

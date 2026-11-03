@@ -27,3 +27,9 @@ def test_same_field_cannot_hold_overlapping_crops_or_ponded_rice():
     options=dict(total_available=100,fallow_coefficient=.2,fallow_depletion_fraction=.55,minimum_et_ratio=.5)
     for crops in [[season('wheat',0,100,200),season('millet',90,100,300)],[season('rice',0,100,200)]]:
         with pytest.raises(ValueError):upland_food_year(np.ones(365),np.ones(365),crops,**options)
+
+
+def test_positive_food_is_not_created_when_the_supplied_crop_has_no_et_demand():
+    with pytest.raises(ValueError,match='positive crop ET demand'):
+        upland_food_year(np.ones(365),np.zeros(365),[season('wheat',0,100,200)],
+            total_available=100,fallow_coefficient=.2,fallow_depletion_fraction=.55,minimum_et_ratio=.5)

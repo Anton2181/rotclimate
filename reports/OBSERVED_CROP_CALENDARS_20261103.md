@@ -44,7 +44,9 @@ or photoperiod development. Simply moving the selected season or widening the
 duration bound does not supply those processes. A suitable next reference is
 [Schaphoff et al. (2018), LPJmL4 Part 1](https://doi.org/10.5194/gmd-11-1343-2018),
 which distinguishes spring/winter varieties and represents vernalization and
-photoperiod effects. That component has not been implemented or calibrated here.
+photoperiod effects. Since this diagnostic, an isolated clock has been
+[implemented and conditionally evaluated](CEREAL_DEVELOPMENT_20261103.md).
+Generic chilling did not improve that test; full crop-model validation remains pending.
 
 These are modern calendars and regional climate summaries, not 200 AD crop
 varieties or pointwise climate observations. The next development should test

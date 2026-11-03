@@ -27,8 +27,11 @@ It uses each crop's realized ET budget without a half-weight second crop or a
 second seed deduction. A declared ET-ratio guard refuses simple-yield inference
 under stronger deficits; this is an analysis-domain choice, not a universal
 biological threshold. Growth-stage effects still need a better crop model.
-Physiologically feasible crop windows must be supplied; the demonstrated
-windows are prescribed, not validated predictions of the new cereal clock.
+Physiologically feasible crop windows must be supplied to the water adapter.
+The linked example prescribes sowing and a manufactured temperature year, then
+uses the published heat-only clock to determine maturity before passing those
+windows onward. This is a component-link check, not independent cultivar or
+calendar validation; the failed generic-chilling proxy is not used.
 
 The provisioning solver uses a time-expanded directed flow formulation, building
 on [Ford and Fulkerson1958](https://doi.org/10.1287/opre.6.3.419).
@@ -43,7 +46,8 @@ cannot create food against a persistent production deficit.
 
 ## Integrated manufactured example
 
-One supplied accounting hectare grows wheat and millet in prescribed seasons.
+One supplied accounting hectare grows wheat and millet from prescribed sowing,
+with maturity determined by the daily development clock.
 Potential net edible energies are inherited from the existing low-input crop
 assumptions. One food unit is10,000kcal. Farm consumption is365 units/year;
 the town requests146. Granary capacities, route capacity/delay/closure,

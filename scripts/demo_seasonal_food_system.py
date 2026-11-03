@@ -15,16 +15,26 @@ def main():
     import matplotlib.pyplot as plt
     from harvest.upland_food import UplandSeason,upland_food_year
     from harvest.soil_water import available_water,soil_water_year
+    from harvest.phenology import CerealParameters,cereal_development
     from polity.food_transport import FoodRoute,provision_food
     from scripts.land_people import CROPS
     from local_benchmark_protocol import file_hash,write_json
     day=np.arange(365);rain=np.where(day<100,4.,1.5)
     et0=3.5+np.sin(2*np.pi*(day-80)/365)
+    temperature=np.where((day>=160)&(day<280),25.,22.)
     # One accounting hectare, inherited potential net edible crop energies;
     # energy unit is 10,000kcal. Consumption and capacities are supplied
     # illustrative budgets, not population or ancient granary estimates.
-    seasons=[]
-    for name,start,duration in [('wheat',10,122),('millet',165,100)]:
+    seasons=[];development_cases=[]
+    for name,start in [('wheat',10),('millet',165)]:
+        # Published heat-only rules (S10 /eq76), rather than the generic
+        # chilling proxy that performed poorly in the country evaluation.
+        parameters=CerealParameters(float(np.clip(temperature.mean()*200,1000,2648.4))) if name=='wheat' else CerealParameters(1500,base_temperature=10)
+        development=cereal_development(temperature[(start+day)%365],12.,parameters)
+        duration=int(development.maturity_days)
+        if duration<1:raise ValueError('No edible harvest from a crop without modeled maturity')
+        development_cases.append(dict(crop=name,assumed_sowing_day=start,maturity_duration_days=duration,
+            parameters=asdict(parameters)))
         c=CROPS[name]
         energy=c['grain']*1000*c['edible']*c['kcal']*(1-c['seed'])/10000
         seasons.append(UplandSeason(name,start,duration,energy,c['kc'],c['ky'],.55))
@@ -77,19 +87,25 @@ def main():
     axes[2].axvspan(0,130,color='#ccc',alpha=.25,label='Assumed departure closure')
     axes[2].legend(frameon=False,fontsize=7)
     for ax in axes:ax.spines[['top','right']].set_visible(False);ax.grid(axis='y',alpha=.2)
-    fig.suptitle('From field water to harvest, stored food and town supply\nManufactured example · prescribed seasons and needs · rural consumption prioritized · no predicted town population',fontsize=12)
+    fig.suptitle('Daily crop development, field water, stored food and town supply\nManufactured example · prescribed sowing/climate/needs · clock-derived maturity · no predicted town population',fontsize=12)
     image=out/'seasonal_food_system.png';fig.savefig(image,dpi=135);plt.close(fig)
     receipt=dict(status='manufactured_integrated_scenario',production_atlas_changed=False,population_predicted=False,
         energy_unit_kcal=10000.,cases=cases,
+        daily_development=development_cases,
         fao56_example37_max_depletion_error_mm=float(np.max(np.abs(benchmark.depletion_path[1:]-reference))),
         assumptions=dict(rain_mm=797.5,reference_et='3.5+sin(2pi(day-80)/365) mm/day',
             prescribed_seasons=[asdict(s) for s in seasons],fixed_root_zone_available_mm=100.,fallow_coefficient=.15,
+            temperature='22C, except days160..279 at25C; reference photoperiod-insensitive clock',
             severe_deficit_guard=.5,root_depletion_fraction=.55,inventory_steps=73,inventory_step_days=5,
             irrigation_net_supply_mm_day=[0,1],route_delay_steps=1,route_capacity_food_units_step=4,
             closure_steps=26,storage_survival=1.,route_retention=1.,priorities=[0,1]),
         sources_sha256={name:file_hash(ROOT/name) for name in ['harvest/soil_water.py','harvest/upland_food.py',
-            'polity/food_transport.py','scripts/demo_seasonal_food_system.py','scripts/land_people.py']},
-        figure_sha256=file_hash(image),scope='Conditional supplied upland seasons; no calendar search, frost survival or ancient cultivar validation. No half-weight secondary crop or repeated seed deduction. Water and food ledgers close separately. Finite field irrigation is an input, not routed river water. Scenario route costs/delays/capacities and granaries are assumed; current gravity weights are not grain quantities. No rice/perennial process or town-size prediction.')
+            'harvest/phenology.py','polity/food_transport.py','scripts/demo_seasonal_food_system.py','scripts/land_people.py']},
+        figure_sha256=file_hash(image),scope='Conditional prescribed sowing under manufactured temperature; published heat-only development determines maturity, not observed calendars. No sowing optimization, frost survival or ancient cultivar validation. No half-weight secondary crop or repeated seed deduction. Water and food ledgers close separately. Finite field irrigation is an input, not routed river water. Scenario route costs/delays/capacities and granaries are assumed; current gravity weights are not grain quantities. No rice/perennial process or town-size prediction.')
+    receipt['academic_sources']=[
+        dict(title='FAO56 chapter8, fixed root-zone water and yield response discussion',url='https://www.fao.org/4/x0490e/x0490e0e.htm'),
+        dict(title='Ford and Fulkerson1958, capacitated flows with transit time',url='https://doi.org/10.1287/opre.6.3.419'),
+    ]
     write_json(out/'receipt.json',receipt)
     print(json.dumps(cases,indent=2))
 

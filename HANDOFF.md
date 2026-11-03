@@ -1,3 +1,67 @@
+# Linked cereal, soil-water, food-stock and provisioning prototypes — 3 November 2026
+
+* Owner approved the four-step implementation (published cereal development,
+  continuous crop-sequence soil water, storage, directed town provisioning)
+  and asked to continue during work. Components now implemented and linked in
+  a manufactured end-to-end scenario, with explicit assumptions. Normal r43
+  climate and production farming/population layers remain adopted unchanged.
+  No claim of independently validated ancient town sizes or crop yields.
+* Daily development harvest/phenology.py independently implements LPJmL4
+  Schaphoff2018 eq73–79 and S10/S11 parameters; reference photoperiod disabled
+  as paper, explicit cultivar thresholds required to enable it. Source v4
+  checked for PVD<=10 and PHU lower-bound conventions, no upstream C imported.
+  Country-separated protocol calibration/cereal_phenology_20261103/plan.json
+  committed before fitting, selected global parameters frozen f805ea3c before
+  evaluation. 237training records/62countries;29evaluation/16countries;19QC
+  exclusions. The underlying Sacks dataset was previously inspected, NOT unseen.
+* Cereal eval complete/pushed79194116. Equal-country penalized duration error:
+  existing heat-only ablation train58.96/eval51.99days; published heat adaptation
+  with NO chilling36.96/28.56 (no nonmature eval); fixed45day winter chilling
+  97.28/74.05; training-selected global scale.8/PVD15 gives90.86/68.06 with2
+  nonmature eval cases (365day penalty retained). Generic chilling fails this
+  test; don't adopt that failed candidate or call old ablation atlas date skill.
+  Prescribed observed sowing, WorldClim centroid climate, no frost/biomass/yield
+  model. Eval pool now scored; don't retune and call it untouched.
+* harvest/soil_water.py: FAO56 eq81–88 daily fixed-root-zone conservation,
+  no refills between crops, explicit finite field irrigation, periodic state.
+  Reproduces published Example37 within.05mm rounding. Field budget != routed
+  river supply. No snow/frozen soil, dynamic roots, ponded rice or groundwater.
+* harvest/upland_food.py links supplied feasible upland seasons to the shared
+  water ledger and individual seasonal Ky responses; no half-weight second
+  crop or repeated seed deduction. Explicit analysis guard refuses severe
+  deficit extrapolation; no positive food from zero ET demand. The integrated
+  demo derives maturity using the new heat-only clock under manufactured
+  temperature and prescribed sowing; actual world calendars remain unvalidated.
+* polity/food_transport.py is a time-expanded cyclic capacitated food LP:
+  directed routes, delay, net retention, seasonal capacity, stocks/spoilage,
+  aggregate consumption priorities, then freight/holding-cost minimization.
+  Food quantities != gravity weights, costs don't consume calories; no food
+  from hidden initial/transit stocks. Ford/Fulkerson1958 is the flow foundation;
+  storage/priorities/losses are declared adaptations, not a price equilibrium.
+* Complete scenario backend pushed fefecd4b, then zero-ET guard added. Six
+  manufactured development->water->harvest->stores->town cases: town need met5.5/54.2/
+  69.2/69.2/100/84.9%. Last pair isolates seasonal closure with ample farm
+  storage. Initial cases expose a stronger storage bottleneck. No estimates of
+  actual granary capacities, famine frequencies or towns. Separate food/water
+  ledgers close to floating-point tolerance.97 focused tests pass.
+* Evidence reports CEREAL_DEVELOPMENT_20261103 /SEASONAL_FOOD_SYSTEM_20261103;
+  outputs output/cereal_phenology_20261103 and output/seasonal_food_system_20261103.
+  Economy lab now leads with both studies, methods, full-data downloads, and
+  folds previous experiments. Current producer helper
+  scripts/economy_component_sections.py verifies all source/result/image hashes.
+  Desktop/mobile/dark/light,11downloads, nested-details keyboard checks pass.
+  A workspace restart occurred after these checks; restart a local no-store
+  server on port8766 for final browser QA. No science jobs remain running.
+* Next world integration requires cost AND time for the SAME selected route,
+  cargo capacities, rural budgets and town-demand scenarios. Existing graph
+  costs are road-km equivalents: NEVER turn them into travel days or treat
+  gravity weights as grain. Historical storage/labour, actual cultivar chilling
+  and crop-specific soil-water/yield validation remain before production maps.
+  River irrigation needs basin/allocation accounting; current finite field
+  supply prototype does not create it. All Earth-climate F remains unused.
+
+---
+
 # Observed calendar diagnostic identifies winter-phenology gap — 3 November 2026
 
 * All source-backed joint-calendar and reserve prototypes were published and
