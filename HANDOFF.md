@@ -1,3 +1,33 @@
+# Owner's next priority and latest result — 3 November 2026
+
+* USER STEERING: after the next full physics update, return to the c.200 AD
+  state/farming/trade/anthropology model and PRESENT proposals for mechanics
+  or maps. Finish the current verified r43 atlas release and full61 report,
+  then present concrete researched choices. Draft prepared in
+  output/econ_proposals_20261103/proposals.md: seasonal food/storage, actual
+  grain provisioning, finite irrigation water, household labour, pastoral
+  transhumance and delivered fiscal surplus. Existing forager storage was
+  tested/rejected; avoid proposing it as a new proven gain. Modern papers
+  support mechanisms, not universal200AD coefficients or climate determinism.
+* Storm61 COMPLETE, auto-committed/pushed9d3d6ab1. Both profiles rejected:
+  storm-r42 S61=1.02655993 (rain+5.2287%), storm-r43=1.01661899 (rain+2.8546%).
+  No finalist, fine test or F run. F remains unopened. Source-pinned study
+  fully finished; no score from partial cases. Broad research producer
+  scripts/publish_storm_expansion.py verifies full raw packets and handles
+  failed profiles as unscored. Its public page/browser QA is ready.
+* R43 raw exports, nine-layout sensitivity and3-extra-year settling checks
+  COMPLETE; annual cycles repeat. Matching corrected layers COMPLETE.
+  Corrected full export is now freight season3/4 (13:24UTC). Then languages,
+  identity, promotion/browser/Windows/portable/push. Keep checking supervisor
+  status; final publisher waits for committed research at the package boundary.
+* Fitted transport and calibration-bound probes remain prospectively queued
+  after atlas publication, then sequentially. They can continue in background
+  while economic proposals are discussed; don't open further physics families
+  before honouring the user's priority. A geometric storm-conductance idea is
+  documented ONLY as backlog in reports/NEXT_PHYSICS_20261103.md, unimplemented.
+
+---
+
 # Resumed after environment restart — 3 November 2026, 13:49 Warsaw
 
 * One-command recovery/status now available:

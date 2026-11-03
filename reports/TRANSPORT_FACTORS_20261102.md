@@ -78,3 +78,26 @@ r42/r43 strengths. Historical S49 remains separately reported, spent d/e join
 development, and unopened f is used only after full development and paired
 fine-grid qualification. Setup revision B precedes all integrations and retains
 the original pre-integration setup failure. Parameters and thresholds unchanged.
+
+
+## Complete 61-region follow-up — 3 November 2026
+
+Both fixed storm-only families finish all 61 declared development regions,
+including spent d/e. The matched r43 numerical control passes first. All raw
+records are committed in9d3d6ab1; no finalist is selected, no fine-grid or
+reserved-f case runs, and neither family is adopted.
+
+| Strengths under conservative storms | S61 / r43 | T error change | Rain-loss change | Historical S49 |
+|---|---:|---:|---:|---:|
+| r42 |1.026560|+0.0833%|+5.2287%|1.025924|
+| r43 |1.016619|+0.4692%|+2.8546%|1.021821|
+
+The earlier reused-eight-region improvement did not survive the broader
+comparison. No group/region veto was applied: the aggregate itself worsens.
+Strong seasonal monsoon deficits and false summer rainfall in dry regions
+remain. Neither a conservation certificate nor the initial small-sample gain
+is sufficient evidence for adoption. Reserved f remains unopened.
+
+The normal launcher's research companion now includes the complete broad
+comparison, every regional error and immutable raw-packet links. Seasonal
+examples illustrate its failures without selecting or reweighting regions.
