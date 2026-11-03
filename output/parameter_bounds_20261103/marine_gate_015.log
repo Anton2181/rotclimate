@@ -1,0 +1,25 @@
+california: verified, rainfall loss 0.4976
+iberia: verified, rainfall loss 0.3851
+japan: verified, rainfall loss 0.3956
+pacific_nw: verified, rainfall loss 0.3484
+north_india: verified, rainfall loss 0.9238
+east_australia: verified, rainfall loss 0.4479
+mexico: verified, rainfall loss 0.6819
+tripolitania: verified, rainfall loss 0.6665
+region           T mMAE  T aMAE  T bias  rngErr  <=2C anom r |  P mMAE logRMSE  <=25%   rho   loss
+california         1.66    1.10   -0.12   +0.37   81%   0.96 |    21.8   0.486    17%  0.89  0.498
+iberia             1.39    1.01   -0.21   -1.29   91%   0.98 |    17.2   0.368    42%  0.92  0.385
+japan              1.85    1.06   +0.97   -1.24   94%   0.97 |    68.6   0.313    68%  0.24  0.396
+pacific_nw         1.78    1.09   -0.98   -1.17   87%   0.96 |    28.2   0.364    38%  0.95  0.348
+north_india        2.49    2.06   -1.44   +2.97   48%   1.00 |    47.0   1.207     9%  0.47  0.924
+east_australia     1.48    0.59   +0.14   -4.04  100%   0.97 |    29.9   0.424     9%  0.92  0.448
+mexico             1.47    0.84   -0.59   +2.55   95%   0.96 |    36.7   0.693    30%  0.18  0.682
+tripolitania       1.69    1.14   +0.71   +1.57   77%   0.59 |     9.9   0.662     0%  0.96  0.667
+[training] T_monthly_mae 1.499 T_annual_mae 0.887 T_within_2C 0.917 T_anomaly_r 0.965 P_monthly_mae 26.396 P_annual_log_rmse 0.492 P_within_25pct 0.246 P_spearman 0.729 P_loss 0.503
+[holdout] T_monthly_mae 1.845 T_annual_mae 1.058 T_within_2C 0.943 T_anomaly_r 0.973 P_monthly_mae 68.572 P_annual_log_rmse 0.313 P_within_25pct 0.677 P_spearman 0.239 P_loss 0.396
+[midlatitude] T_monthly_mae 1.785 T_annual_mae 1.087 T_within_2C 0.869 T_anomaly_r 0.961 P_monthly_mae 28.226 P_annual_log_rmse 0.364 P_within_25pct 0.378 P_spearman 0.951 P_loss 0.348
+[dev12] T_monthly_mae 2.487 T_annual_mae 2.063 T_within_2C 0.484 T_anomaly_r 0.996 P_monthly_mae 47.038 P_annual_log_rmse 1.207 P_within_25pct 0.085 P_spearman 0.470 P_loss 0.924
+[all] T_monthly_mae 1.725 T_annual_mae 1.113 T_within_2C 0.842 T_anomaly_r 0.923 P_monthly_mae 32.411 P_annual_log_rmse 0.564 P_within_25pct 0.266 P_spearman 0.692 P_loss 0.543
+-- by elevation_m: 0-300 n969 T -0.7/1.3 rng +0.4 P -0.12/0.73 | 300-1000 n1120 T -0.3/1.1 rng -0.5 P -0.02/0.61 | 1000-2000 n645 T -0.5/1.0 rng +0.4 P -0.05/0.58 | 2000-9000 n181 T +0.9/1.3 rng +1.2 P -0.50/0.92
+-- by coast_km: 50-200 n913 T +0.4/0.9 rng +0.5 P -0.05/0.50 | 200-500 n1063 T -0.5/1.1 rng -0.5 P +0.10/0.56 | 500-1e+09 n939 T -1.1/1.4 rng +0.4 P -0.35/0.89
+-- by relief_m: 0-300 n1629 T -0.6/1.2 rng -0.2 P -0.06/0.68 | 300-1000 n1175 T -0.1/1.1 rng +0.4 P -0.08/0.59 | 1000-2000 n101 T +0.3/1.1 rng +1.5 P -0.49/1.04
