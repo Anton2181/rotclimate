@@ -61,9 +61,9 @@ def main():
     downloads = ''.join(f'<li>{n.replace("_", " ")}: <a href="data/r42_processes_diagnostic_{n}.npz">process fields</a> · <a href="data/r42_processes_prototype_{n}.npz">ordinary / disabled / enabled full fields</a></li>' for n, *_ in rows)
     section = f'''<!--r42-processes-start--><section aria-labelledby="r42-processes-h">
 <h2 id="r42-processes-h">r42 rainfall processes and a failed continuity hypothesis</h2>
-<p>The adopted raw Earth model is r42. Its reconstructed 49-region comparison is 3.72% better than r41, with regional regressions reported. These completed diagnostics investigate the remaining seasonal errors; the older r39 subsystem studies below retain their original baselines and scopes.</p>
+<p>This completed study uses raw r42. Its reconstructed 49-region comparison is 3.72% better than r41, with regional regressions reported. These diagnostics investigate its remaining seasonal errors; later adopted releases and the older r39 subsystem studies retain their own baselines and scopes.</p>
 <p><strong>The new prototype is not adopted: four-region combined error worsens {100 * (.5 * (t + rain) - 1):.2f}%.</strong> Temperature error changes {100 * (t - 1):+.2f}% and rain loss {100 * (rain - 1):+.2f}%. This is an aggregate decision, not a requirement that every region improve. No unseen validation set was evaluated.</p>
-<p>All four process diagnostics reproduce ordinary r42 benchmark errors to 1e-10 on the complete scored land footprints. The copied experimental model, disabled, reproduces all eight full-domain output arrays exactly. All twelve ordinary/disabled/enabled integrations pass unchanged numerical checks. The live calibration and atlas release use unchanged production physics.</p>
+<p>All four process diagnostics reproduce ordinary r42 benchmark errors to 1e-10 on the complete scored land footprints. The copied experimental model, disabled, reproduces all eight full-domain output arrays exactly. All twelve ordinary/disabled/enabled integrations pass unchanged numerical checks. These probes did not change production physics; later calibration releases are reported separately.</p>
 {figures[0]}
 <p>Tripolitania has a false summer rainy season (JJA 1.146 versus 0.007 mm/day observed); North India has deficient monsoon rain (2.623 versus 5.643). Manchuria receives too much modeled eddy moisture in winter while its summer remains too dry. Annual totals alone hide these differences.</p>
 {figures[1]}
@@ -79,7 +79,10 @@ def main():
 <h2>Historical r39 benchmark · 27 October 2026</h2><p class="note">The cards and audit immediately below retain the original r39 measurements and sample definitions. They do not report r42 city accuracy. The newer completed experiments follow under Experiments.</p><!--current-earth-overview-end-->'''
     marker = r'<!--current-earth-overview-start-->[\s\S]*?<!--current-earth-overview-end-->'
     if re.search(marker, html):
-        html = re.sub(marker, overview, html)
+        # A later release publisher owns its newer current-model overview.
+        current = re.search(marker, html).group(0)
+        if 'Current adopted raw Earth physics: r42' in current:
+            html = re.sub(marker, overview, html)
     else:
         html, count = re.subn(r'<p>Temperature is closer than rainfall\.[\s\S]*?</p>', overview, html, count=1)
         if count != 1:
