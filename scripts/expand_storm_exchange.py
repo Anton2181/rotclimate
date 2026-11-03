@@ -20,7 +20,7 @@ from validate_r42_multistart import paired_score
 from run_r42_conservative_replay import numerical_drift
 from run_atlas_snapshot import link_missing
 
-PREFIX = 'output/storm_expansion_20261103/'
+PREFIX = 'output/storm_expansion_20261103b/'
 
 
 def prepare_model(plan):
@@ -29,7 +29,7 @@ def prepare_model(plan):
         subprocess.run(['git', 'worktree', 'add', '--detach', '--no-checkout', str(model), plan['model_commit']], cwd=ROOT, check=True)
     if not (model / 'scripts/benchmark_local.py').exists():
         subprocess.run(['git', 'sparse-checkout', 'set', '--no-cone',
-            '/scripts/', '/rotclimate/', '/data/', '/calibration/', '/.gitignore', '/.gitattributes'], cwd=model, check=True)
+            '/scripts/', '/rotclimate/', '/data/', '/calibration/', '/ravages/', '/.gitignore', '/.gitattributes'], cwd=model, check=True)
         subprocess.run(['git', 'checkout', plan['model_commit']], cwd=model, check=True, capture_output=True)
     link_missing(ROOT / 'data', model / 'data')
     if not (model / '.venv').exists(): (model / '.venv').symlink_to(ROOT / '.venv', target_is_directory=True)

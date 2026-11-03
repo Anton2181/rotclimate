@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_development_pool_adds_spent_sets_without_leaking_reserved_holdout():
-    plan = json.loads((ROOT / 'calibration/storm_expansion_20261103/plan.json').read_text())
+    plan = json.loads((ROOT / 'calibration/storm_expansion_20261103/plan_v2.json').read_text())
     old = set(plan['historical49'])
     spent_d = set(json.loads((ROOT / 'calibration/sealed_20261101d/regions.json').read_text()))
     spent_e = set(json.loads((ROOT / 'calibration/sealed_20261102e/regions.json').read_text()))
@@ -16,7 +16,7 @@ def test_development_pool_adds_spent_sets_without_leaking_reserved_holdout():
 
 
 def test_fixed_storm_families_preserve_planet_and_declared_strength_bases():
-    plan = json.loads((ROOT / 'calibration/storm_expansion_20261103/plan.json').read_text())
+    plan = json.loads((ROOT / 'calibration/storm_expansion_20261103/plan_v2.json').read_text())
     read = lambda p: json.loads((ROOT / p).read_text())
     raw = read(plan['raw_reference']); ref = read(plan['reference'])
     assert {k for k in raw if raw[k] != ref[k]} <= {'moisture_relaxation', 'picard_iters'}

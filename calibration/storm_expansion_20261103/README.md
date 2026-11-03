@@ -23,8 +23,13 @@ the scientific source stable while main-tree experiments may continue.
 ```sh
 OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -I \
   scripts/expand_storm_exchange.py \
-  --plan calibration/storm_expansion_20261103/plan.json --workers 2
+  --plan calibration/storm_expansion_20261103/plan_v2.json --workers 2
 ```
 
 All outcomes are retained and pushed to both branches. The driver does not
 adopt physics or modify normal atlas data.
+
+Setup revision B preserves plan A and its pre-integration failure. No climate
+case was run under A. Only orchestration hashes, export-data inclusion and
+the output location change; both fixed parameter families, region pool and
+prospective thresholds are identical. Results: `output/storm_expansion_20261103b`.
