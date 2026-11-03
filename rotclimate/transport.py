@@ -43,7 +43,19 @@ def vapor_face_fluxes(W,u,v,*,layers=None,mass=None):
             south*np.where(south>=0,W[:-1],W[1:]))
 
 
-def diffusion_face_fluxes(W,diffusion,dx,*,mass=None):
+def diffusion_face_fluxes(W,diffusion,dx,*,mass=None,scheme='upwind',u=None,v=None):
+    if scheme not in ('upwind','exponential'):
+        raise ValueError('Unknown flux scheme: '+scheme)
+    if scheme == 'exponential':
+        if mass is not None or u is None or v is None or np.ndim(diffusion) != 0:
+            raise ValueError('Fitted face flux needs winds, uniform diffusion and no mass weighting')
+        from .solver import AdvectionSolver
+        # This is the fitted diffusion part of the *combined* face flux;
+        # it is not an independently changed physical diffusivity.
+        east=.5*(u[:,1:]+u[:,:-1]); south=-.5*(v[1:]+v[:-1])
+        ke,ks=[AdvectionSolver._fitted_diffusion(np.abs(speed)*dx,
+                   np.full_like(speed,diffusion,dtype=float)) for speed in [east,south]]
+        return -ke*(W[:,1:]-W[:,:-1])/dx,-ks*(W[1:]-W[:-1])/dx
     if mass is None:
         return -diffusion*(W[:,1:]-W[:,:-1])/dx,-diffusion*(W[1:]-W[:-1])/dx
     q=W/mass
@@ -61,17 +73,19 @@ def boundary_supply(east,south,dx):
                          south[0,1:-1].sum()-south[-1,1:-1].sum()))
 
 
-def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,layers=None,mass=None):
+def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,layers=None,mass=None,scheme='upwind'):
     """Steady padded-domain vapor ledger, including physical border exchange.
 
     This is a local flat-grid ledger, not a closed planet or a transient
     atmosphere. Column drying counts in net evaporation. Storm exchange is
     only a boundary supply if that separate operator conserves water.
     """
+    if scheme != 'upwind' and layers is not None:
+        raise ValueError('Fitted flux budget does not support layers')
     east,south=vapor_face_fluxes(W,u,v,layers=layers,mass=mass)
     advection=-DAY*face_divergence(east,south,dx)
     adv_boundary=boundary_supply(east,south,dx)
-    de,ds=diffusion_face_fluxes(W,diffusion,dx,mass=mass)
+    de,ds=diffusion_face_fluxes(W,diffusion,dx,mass=mass,scheme=scheme,u=u,v=v)
     diff=-DAY*face_divergence(de,ds,dx)
     diff_boundary=boundary_supply(de,ds,dx)
     storm=DAY*exchange_rate*(mixed_water-W)
@@ -90,8 +104,8 @@ def flux_budget(W,u,v,dx,diffusion,evaporation,rain,exchange_rate,mixed_water,*,
                 transport_relative_cancellation=cancellation/transport_scale)
 
 
-def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration',layers=None,mass=None):
-    """Signed sources in mm/day; exact upwind/central discrete transport.
+def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mixed_water, *, form='concentration',layers=None,mass=None,scheme='upwind'):
+    """Signed sources in mm/day for the actual selected discrete operator.
 
     Evaporation and rain are mm/day, exchange_rate is 1/s, W is mm.
     Outer-ring terms are undefined and marked NaN. Production diagnostics crop
@@ -100,6 +114,10 @@ def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mix
     left, right = np.roll(W, 1, 1), np.roll(W, -1, 1)
     above, below = np.roll(W, 1, 0), np.roll(W, -1, 0)
     wr = -v
+    if scheme not in ('upwind','exponential'):
+        raise ValueError('Unknown flux scheme: '+scheme)
+    if scheme == 'exponential' and (form != 'flux' or layers is not None or mass is not None):
+        raise ValueError('Fitted moisture terms require single-column flux transport')
     if form == 'concentration':
         if layers is not None or mass is not None:raise ValueError('Layered/mass-aware transport requires flux form')
         adv = (np.maximum(u, 0) * (W - left) + np.minimum(u, 0) * (right - W)
@@ -111,9 +129,9 @@ def moisture_terms(W, u, v, dx, diffusion, evaporation, rain, exchange_rate, mix
         raise ValueError('Unknown moisture transport form: '+form)
     lap = (left + right + above + below - 4 * W) / dx**2
     diff=DAY*diffusion*lap
-    if mass is not None:
+    if mass is not None or scheme == 'exponential':
         diff=np.full_like(W,np.nan,dtype=float)
-        diff[1:-1,1:-1]=-DAY*face_divergence(*diffusion_face_fluxes(W,diffusion,dx,mass=mass),dx)
+        diff[1:-1,1:-1]=-DAY*face_divergence(*diffusion_face_fluxes(W,diffusion,dx,mass=mass,scheme=scheme,u=u,v=v),dx)
     terms = dict(advection=-DAY * adv, diffusion=diff,
                  storm_exchange=DAY * exchange_rate * (mixed_water - W))
     terms['residual'] = evaporation + sum(terms.values()) - rain
@@ -167,4 +185,6 @@ def save_transport(result, evaluation, path):
     note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
     if getattr(p,'moisture_transport_form','concentration')=='flux':
         note='Steady flat-grid regional vapor equation with shared-face conservative mean-wind transport. Column drying is negative, convergence import is disabled. Storm exchange conserves separately only when its scheme does; see the numerical ledger. Fixed borders supply or remove water. This is not a closed planet or transient water budget.'
+        if getattr(p,'moisture_flux_scheme','upwind')=='exponential':
+            note+=' Exponential face fitting is active: the diffusion term is the fitted part of the combined Scharfetter-Gummel flux, not standalone physical Fickian diffusion.'
     return dict(note=note,zones=zones)

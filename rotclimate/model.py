@@ -321,6 +321,11 @@ class ClimateModel:
             raise ValueError('dry_heating_mean_c must be -99 (off) or in [-20, 30] C, and needs continentality > 0')
         if params.moisture_transport_form == 'flux' and (params.flux_convergence != 0 or params.transport_scheme != 'upwind'):
             raise ValueError('Flux moisture transport requires flux_convergence=0 and upwind transport')
+        if params.moisture_flux_scheme not in ('upwind', 'exponential'):
+            raise ValueError('Unknown moisture_flux_scheme')
+        if params.moisture_flux_scheme == 'exponential' and (
+                params.moisture_transport_form != 'flux' or params.moisture_two_layer or params.moisture_mass_tracer):
+            raise ValueError('Fitted moisture flux requires single-column flux transport without mass weighting')
         if not isinstance(params.moisture_mass_balance, (bool, np.bool_)):
             raise ValueError('moisture_mass_balance must be boolean')
         if params.moisture_mass_balance and (params.moisture_transport_form != 'flux'
@@ -412,7 +417,7 @@ class ClimateModel:
                 from .layer_transport import LayerFluxSolver
                 self.moisture_solver=LayerFluxSolver(g.ny,g.nx,g.dx_m)
             else:
-                self.moisture_solver=AdvectionSolver(g.ny,g.nx,g.dx_m,scheme='upwind',form='flux')
+                self.moisture_solver=AdvectionSolver(g.ny,g.nx,g.dx_m,scheme=params.moisture_flux_scheme,form='flux')
             for attr in ['rtol','max_iter','require_convergence','recover']:
                 setattr(self.moisture_solver,attr,getattr(self.solver,attr))
         self._static_fields()
@@ -2146,7 +2151,8 @@ class ClimateModel:
                 if condensate is not None:
                     target=target+condensate(W)
                 net=E if sink is None else E-sink*W*DAY
-                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers,mass=tracer_mass))
+                self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers,mass=tracer_mass,
+                                                   scheme=p.moisture_flux_scheme))
             if self.trace_cells is not None and n >= spinup:
                 # diagnostics only: the rain step's inputs at a few cells
                 ti, tj = self.trace_cells
@@ -2196,7 +2202,8 @@ class ClimateModel:
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
-                                           form=p.moisture_transport_form,layers=layers,mass=tracer_mass)
+                                           form=p.moisture_transport_form,layers=layers,mass=tracer_mass,
+                                           scheme=p.moisture_flux_scheme)
                     # Expose the source/sink pieces already used above. These
                     # are observations of the local equation, not new physics.
                     terms['evaporation'] = E
@@ -2293,7 +2300,8 @@ class ClimateModel:
             if p.eddy_moisture_scheme != 'legacy':
                 numerics['all_checks_passed'] &= numerics['storm_exchange']['max_relative_closure'] <= 1e-10
         if self.flux_budgets:
-            ledger=dict(form='flux',scope='Steady flat-grid regional vapor equation, including fixed-border exchange',
+            ledger=dict(form='flux',scheme=p.moisture_flux_scheme,
+                scope='Steady flat-grid regional vapor equation, including fixed-border exchange',
                 horizontal_transport_conservative=p.eddy_rate==0 or p.eddy_moisture_scheme!='legacy',
                 max_relative_transport_cancellation=max(b['transport_relative_cancellation'] for b in self.flux_budgets),
                 max_scaled_equation_residual=max(b['scaled_equation_residual'] for b in self.flux_budgets),

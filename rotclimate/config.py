@@ -291,6 +291,7 @@ class Params:
     moisture_ocean_hydrostatic: bool = False  # opt-in absolute ocean target from the selected hydrostatic thermal profile
     moisture_ocean_rh_taper: float = 0.0  # pressure-dependent RH shape; 0 uniform, .5 partial, 1 full tropospheric taper
     moisture_transport_form: str = "concentration"  # opt-in "flux": conservative face transport; requires flux_convergence=0
+    moisture_flux_scheme: str = "upwind"  # opt-in "exponential" face fitting; single-column flux only
     eddy_moisture_scheme: str = "legacy"  # opt-in "conservative" or "conservative-rainout" (budgeted short storm hops)
 
     # ---------------------------------------------------------------- numerics

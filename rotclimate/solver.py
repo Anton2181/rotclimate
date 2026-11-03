@@ -3,7 +3,8 @@
 Solves   u . grad(phi) - K lap(phi) + lam * phi = S
 with first-order upwinding (default) or an optional exponentially fitted local
 stencil, and Dirichlet values on the outer ring. Opt-in form="flux" replaces
-the concentration derivative by shared-face div(u*phi), with upwind fluxes.
+the concentration derivative by shared-face div(u*phi). Its optional fitted
+stencil solves the constant-coefficient face advection/diffusion problem exactly.
 
 The discrete operator is an M-matrix, so symmetric Gauss-Seidel sweeps in
 the four diagonal directions ("fast sweeping") converge quickly for these
@@ -52,8 +53,8 @@ class AdvectionSolver:
         if scheme not in ("upwind", "exponential"):
             raise ValueError(f"Unknown transport scheme: {scheme}")
         self.scheme = scheme
-        if form not in ('concentration','flux') or (form == 'flux' and scheme != 'upwind'):
-            raise ValueError('Flux transport requires the upwind face stencil')
+        if form not in ('concentration','flux'):
+            raise ValueError('Unknown transport form')
         self.form = form
         self.ny, self.nx, self.dx = ny, nx, dx
         border = np.zeros((ny, nx), bool)
@@ -81,6 +82,15 @@ class AdvectionSolver:
             # Opposite signs at the adjacent cells make interior fluxes cancel.
             ue=.5*(u+np.roll(u,-1,axis=1)); uw=.5*(u+np.roll(u,1,axis=1))
             vs=.5*(wr+np.roll(wr,-1,axis=0)); vn=.5*(wr+np.roll(wr,1,axis=0))
+            if self.scheme == 'exponential':
+                # Scharfetter-Gummel flux: upwind drift plus a fitted face
+                # diffusivity. Use identical shared coefficients on both
+                # sides of each face, including when the wind varies.
+                de, dw, ds, dn = [self._fitted_diffusion(np.abs(a)/dx, Kd)
+                                  for a in [ue, uw, vs, vn]]
+                return (np.minimum(ue,0)/dx-de, -np.maximum(uw,0)/dx-dw,
+                        np.minimum(vs,0)/dx-ds, -np.maximum(vn,0)/dx-dn,
+                        lam+(np.maximum(ue,0)-np.minimum(uw,0)+np.maximum(vs,0)-np.minimum(vn,0))/dx+de+dw+ds+dn)
             ce=np.minimum(ue,0)/dx-Kd
             cw=-np.maximum(uw,0)/dx-Kd
             cs=np.minimum(vs,0)/dx-Kd
