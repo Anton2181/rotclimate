@@ -12,6 +12,7 @@ import re
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
     ('r43-calibration','r43 calibration, independent starts and unseen validation'),
+    ('storm-factorial','Isolated storm exchange, vapor flux and crest condensation'),
     ('r42-transport','r42 conservative transport results and remaining tests'),
     ('r42-processes','r42 rainfall processes and a failed continuity hypothesis'),
     ('regional-rainfall-results','Complete-month rainfall results, with missing cases kept pending'),

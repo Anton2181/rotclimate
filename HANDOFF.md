@@ -1,3 +1,31 @@
+# Latest running jobs — 3 November 2026, Warsaw
+
+* Main physical option c20f99bd: conservative fitted vapor face transport,
+  `moisture_flux_scheme="exponential"`, default upwind unchanged. 111 focused
+  tests plus 33 declaration/operator tests pass. Screen frozen in6bd040ae,
+  private modelc20f99bd, session12649 waits for r43 publication; no F/adoption.
+  Plan calibration/fitted_flux_20261103/plan.json. Main driver/helper hashes
+  are frozen; do not edit them during active studies.
+* Atlas source-data preflight restored pinned /land/ after /ravages/. Snapshot
+  scientific sources unchanged; all harvest provenance inputs verified present.
+  Current build session28453 and publisher37574 (older sessions failed). Raw
+  farming/population/foraging exports now complete; political/trade export runs.
+  Source-root repair remains8cfdf7b4, original validated model03c4351f.
+* Storm61 session62644 is integrating its full numerical control, no physical
+  candidate yet; see output/storm_expansion_20261103b/status.json. Main helper
+  scripts/run_atlas_snapshot.py cannot be edited while this frozen driver runs.
+  Future initial sparse-checkout setup must include /land/ as well as /ravages/;
+  current snapshot has them manually restored from its exact pinned commit.
+* Completed factorial now published to research companion, all four scores and
+  matched monthly curves; browser QA70 studies166images, no errors. Producer
+  scripts/publish_storm_factorial.py. Default model/atlas labels remain separate.
+* New zero-integration observer scripts/diagnose_face_convergence.py observes
+  fixed-state point-to-flux advection difference on verified raw r43 world.
+  It is not a rainfall prediction and does not include removing the old import
+  closure. Two analytic tests pass; outputs output/face_convergence_20261103.
+
+---
+
 # Active continuation — 3 November 2026, 01:40 Warsaw
 
 * r43 is adopted (58e19b16), after all 39 search records, paired reproduction,
