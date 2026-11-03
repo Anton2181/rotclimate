@@ -68,6 +68,8 @@ The hub's Climate accuracy and joint fit page includes measured Earth errors
 and rainfall-source maps. The Earth-fit page identifies its adopted physics
 release and distinguishes raw from Earth-corrected climate. Earth benchmark
 scores are not measured accuracy of the fantasy geography.
+The hub's Food, farming and society lab presents c.200 AD proposals and a
+manufactured seasonal-storage example, separately labelled from atlas results.
 See reports/ITERATION_20261022.md for the coverage refinement and its tradeoffs.
 See reports/CLIMATE_PHYSICS_20261023.md for subsequent physics experiments,
 paired calibration checks and the criteria used to select published climates.

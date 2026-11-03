@@ -216,7 +216,7 @@ def main():
 <header><span class="eyebrow">Rotclimate · three calibration objectives · updated {updated}</span>
 <h1>One world, three climate fits</h1>
 <p class="lede">The seasonal map fit, the fit held to Earth physics, and the fit to proposed Whittaker biomes. Each atlas uses the mean climate over the same three layouts of the unknown surroundings.</p></header>
-{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.</p>'}
+{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.<br><a href="economy_lab/">Food, farming and society →</a> · c.200 AD proposals and a seasonal food-stock prototype.</p>'}
 <section aria-label="The three atlases"><div class="plates">{''.join(plates)}</div></section>
 <section aria-labelledby="measures-h"><h2 id="measures-h">The same measures</h2>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Seasonal zone objective</th><th>Whittaker objective</th><th>Exact zone agreement</th><th>Mean biome agreement</th><th>Land outside diagram</th><th>Med. dry</th><th>Med. Cs</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>

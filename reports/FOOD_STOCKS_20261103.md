@@ -33,7 +33,7 @@ examples with zero spoilage, not ancient yields, actual calendars, famine
 probabilities or a map of food insecurity in this world. Crop calendars,
 period storage priors, complementary foods and trade remain future inputs.
 
-![Manufactured seasonal-storage comparison](../output/food_stock_prototype_20261103/seasonal_storage_demo.png)
+![Manufactured seasonal-storage comparison](../atlases/economy_lab/data/seasonal_storage_demo.png)
 
 The receipt and stock/shortfall arrays are in
 output/food_stock_prototype_20261103. The module passes manufactured periodic

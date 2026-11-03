@@ -19,7 +19,7 @@ def check(snapshot,*,retained):
     subprocess.run(['git','-c','core.autocrlf=true','checkout-index','-z','--stdin',
         '--prefix='+str(snapshot)+'/'],input=paths,cwd=ROOT,capture_output=True,check=True)
     assets=[]
-    for name in ['free_fit','earth_fit','whittaker_fit','climate_accuracy']:
+    for name in ['free_fit','earth_fit','whittaker_fit','climate_accuracy','economy_lab']:
         for path in sorted((ROOT/'atlases'/name/'data').rglob('*')):
             if not path.is_file() or path.suffix not in {'.bin','.json','.webp','.png','.gif','.csv','.npz'}:continue
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()

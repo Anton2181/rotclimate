@@ -42,7 +42,9 @@ def verify(bundle):
             if hashlib.sha256(archive.read(name)).hexdigest() != expected:
                 raise ValueError('Portable asset checksum failed: '+name)
         checked = 0
-        for name in ['atlases/index.html', 'atlases/climate_accuracy/index.html']:
+        pages=['atlases/index.html', 'atlases/climate_accuracy/index.html']
+        if 'atlases/economy_lab/index.html' in manifest: pages.append('atlases/economy_lab/index.html')
+        for name in pages:
             parser = Links(); parser.feed(archive.read(name).decode('utf-8'))
             for link in parser.paths:
                 url = urlsplit(link)

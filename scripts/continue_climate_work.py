@@ -26,6 +26,8 @@ JOBS=[
      'output/fitted_flux_20261103/status.json','finished_pushed',10,[]),
     ('bounds','screen_parameter_bounds.py','calibration/parameter_bounds_20261103/plan.json',
      'output/parameter_bounds_20261103/status.json','finished_pushed',10,[]),
+    ('dry_qualification','expand_storm_exchange.py','calibration/dry_branch_validation_20261103/plan.json',
+     'output/dry_branch_validation_20261103/status.json','finished_pushed',5,['--workers','2']),
 ]
 
 

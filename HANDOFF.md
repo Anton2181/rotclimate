@@ -1,3 +1,25 @@
+# Economy lab publication and one frozen climate qualification — 3 November 2026
+
+* Complete r43 is live. Normal .bat hub now links Food, farming and society
+  (atlases/economy_lab/): six researched proposals plus the isolated food-stock
+  example. Actual production climate/economic layers remain unchanged by this
+  lab. Desktop/mobile, both themes, downloads and no-overflow pass; portable
+  1,621 files /639 links and Windows 1,058 byte-exact assets pass. Source
+  outputs/receipts: output/food_stock_prototype_20261103 (ZIP stays local).
+* Existing dry-branch rate .4/day is prospectively frozen in
+  calibration/dry_branch_validation_20261103/plan.json (2cf3763a). Only one
+  parameter differs. Fresh baseline numerical reproduction PASSED; candidate
+  full61 running at 14:19 UTC. Session66825 / PID4148, supervisor20952;
+  output/dry_branch_validation_20261103.log. Scientific source c20f99bd private
+  model; do not edit its frozen orchestrator/shared source dependencies.
+  Pipeline: full61 gate -> paired fine28 -> reserved F ONCE if qualified.
+  No auto-adoption. F remains unopened as of this note. Supervisor --status
+  checks real process identity; environment shutdown stops work.
+* Public fixed-face section now includes the completed NEGATIVE fitted-flux
+  screen, browser checked. No fitted transport physics was adopted.
+
+---
+
 # Human-model prototype and final physics-screen outcomes — 3 November 2026
 
 * Economic proposals have been PRESENTED to the owner after complete r43

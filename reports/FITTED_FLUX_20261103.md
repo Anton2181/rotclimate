@@ -37,3 +37,23 @@ screen will compare unchanged r43, conservative upwind flux and fitted flux on
 the eight already-used development regions before any broader assessment.
 No reserved observations, adoption or normal atlas publication follow from
 this numerical implementation alone.
+
+
+## Complete coupled climate screen
+
+All three eight-region profiles finish with passing strict numerical checks;
+the fresh default r43 control reproduces the original monthly fields within
+the declared drift limits. Every raw packet is retained and pushed inb1691d33.
+
+| Fixed operator | S8 / production r43 | T error change | Rain-loss change |
+|---|---:|---:|---:|
+| Conservative upwind vapor + storms |2.111305|+3.0939%|+219.1672%|
+| Conservative fitted vapor + storms |2.186141|+2.8569%|+234.3714%|
+
+Relative to conservative upwind flux itself, fitting worsens the combined
+score2.2669% and rain loss4.7637%, while temperature MAE falls0.2299%.
+The new stencil is not adopted. No reserved region is opened. Its analytic
+conservation and exact constant-coefficient face solution remain valid, but
+reducing numerical smearing does not repair the incompatible column circulation
+or improve this coupled climate. This is a reused development screen, not a
+new global score or a tuned conservative model.
