@@ -1,3 +1,31 @@
+# Same-path seasonal freight connector — 3 November 2026
+
+* Continued after publication3b65b92b. New connector57ef94cb retains physical
+  time, freight cost and mode along identical directed legs. Actual raw-r43
+  geography recomputed from current atlas (not old Oct25 economic NPZ).
+* Fixed endpoints/drawing fractions committed before routing; 12months ×2
+  directions retained. A→B26.3–78.1days, B→A28.1–77.6days. These are monthly
+  snapshots holding conditions fixed throughout transit, edgewise sailing
+  expectation (not whole-voyage weather-spell model). One least-cost path,
+  not a fastest journey or cost/time Pareto set.
+* Food integration assigns SAME manufactured harvest/budget to either endpoint
+  in turn. Both directions meet365farm+146town need under assumed storage365/30
+  and departurecap4units/5days. Food ledgersclose2.85e-14; NOT inferred ancient
+  population/production/cargo. Finite ships/empty returns are not modeled.
+* Audit finds155directed endpointpairs with parallel alternatives permonth;
+  legacy CSR sumsduplicates. Isolated connector choosesleastcost thenfastesttie
+  and keeps that leg's time/mode. Maximum local summed/selected ratios4.48–20.10
+  across months are NOT path-level or map errors. Legacy graphs unchanged.
+* publish_freight_corridors.py verifies source/inputhashes and same-path totals,
+  renders stored paths with readable white-cased sea lines and correct transfer
+  legend. economy_freight_section.py publishes all24paths and assumptions.
+  Report FREIGHT_CORRIDORS_20261103.26 focused freight/food/directed tests pass.
+* Next: measure parallel-edge effect before production replacement; retain
+  faster/costlier paths before shortage inference; finite fleet/return-voyage
+  scenarios and actual-world crop/storage/labour validation remain separate.
+
+---
+
 # Linked cereal, soil-water, food-stock and provisioning prototypes — 3 November 2026
 
 * Owner approved the four-step implementation (published cereal development,

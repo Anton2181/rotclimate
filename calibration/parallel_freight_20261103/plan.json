@@ -1,0 +1,40 @@
+{
+  "status": "prospective_isolated_aggregation_audit",
+  "model_months": [
+    1,
+    4,
+    7,
+    10
+  ],
+  "marked_source_count": 8,
+  "source_rule": "Uniform indices in sorted distinct marked-settlement cell ids; plus both previously fixed corridor endpoints; chosen without looking at aggregation outcome",
+  "market_access_scales_road_km": [
+    30,
+    270
+  ],
+  "material_cost_change_road_km": 1.0,
+  "source_files": [
+    "polity/freight_corridors.py",
+    "polity/economic_world.py",
+    "polity/control.py",
+    "polity/transport.py",
+    "polity/trade.py",
+    "polity/network.py",
+    "polity/seasons.py",
+    "polity/fields.py",
+    "polity/settle.py",
+    "polity/food_transport.py",
+    "scripts/audit_parallel_freight.py"
+  ],
+  "inputs_sha256": {
+    "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+    "atlases/earth_fit/data/atlas.bin": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2",
+    "atlases/earth_fit/data/harvest.json": "5fc2d0e05b81d80664e7512d281b5e372f3cf783e9484a0af56dd73c61fc631a",
+    "atlases/earth_fit/data/harvest.bin": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f",
+    "output/seasonal_food_system_20261103/receipt.json": "93c4db40a34926d84169a7e124f60f0dc459332924ea4722df71a10f89b476e2",
+    "output/freight_corridors_20261103/review.json": "f7e6dc4caf93c728941aa95cd1348c83d05ae4976d10a5ecab37be891522af8c"
+  },
+  "adoption": false,
+  "tuning": false,
+  "scope": "Graph topology and coefficients must match; only sum versus choosing parallel alternatives changes. Full reachable-cell costs and claimed-population market access from fixed sources; sampled pairs retained. No inferred town sizes or observed trade validation."
+}
