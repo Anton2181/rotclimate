@@ -7,7 +7,9 @@ pass the unchanged rule; unseen combined performance is effectively tied.
 This is a small calibration gain, not a global-optimum or missing-physics claim.
 See the [r43 evidence](reports/R43_20261103.md),
 [search coverage](reports/MULTISTART_20261103.md) and
-[circulation diagnosis](reports/FACE_CONVERGENCE_20261103.md).
+[circulation diagnosis](reports/FACE_CONVERGENCE_20261103.md). The next human-model
+[mechanics/map proposals](reports/ECONOMY_PROPOSALS_20261103.md) build on the
+existing c.200 AD farming, FORGE, population, trade and language layers.
 
 The launcher identifies the **actually served atlas snapshot** from
 [its verified release manifest](atlases/release.json); newer source code does

@@ -1,3 +1,32 @@
+# Verified release complete — 3 November 2026, 14:30 Warsaw
+
+* R43 atlas publication COMPLETE and pushed to BOTH branches in1ac032ab.
+  The normal .bat-served Earth atlas is now actuallyr43 (70 raw /55 corrected
+  layers, all5 languages). Corrected strict target agreement37.4727%, raw34.4712%.
+  Matching corrections and ALL climate/food/people/foraging/political/trade/language
+  exports complete. Raw9-layout and3-extra-year diagnostics pass; cycles repeat.
+  Browser checks all3 atlases, Windows1,053 byte-exact assets, portable1,613
+  files/627links pass. Launcher and page display actual r43 metadata. Source
+  snapshot remains8cfdf7b4 with validated scientific model03c4351f.
+* Full61 storm study COMPLETE/REJECTED, results9d3d6ab1, public evidencefe7ffc46.
+  S61 1.026560 /1.016619. F remains unopened. Do not advertise the initial8-region
+  gain as broad improvement or select a failed family.
+* User's requested next phase: return to c.200AD state/farming/trade/anthropology
+  and present proposals. Concrete researched note now reports/ECONOMY_PROPOSALS_20261103.md,
+  with existing-feature/source audit research_notes/economy_proposals_20261103.json.
+  Recommend agricultural seasonal stocks + real grain provisioning, then labour;
+  finite irrigation needs audited catchments (current flow index is not m3/s).
+  Optional forager storage already exists and was rejected, so don't sell it as
+  new validated progress. Forager cycles need numerical checks before risk maps.
+* Fitted transport screen is now ACTIVE (source-pinnedc20 model), profile reference,
+  session40089. Bounds session47219 waits for that complete screen. Both reuse8
+  development regions, no F/adoption. Supervisor4645 monitors live processes;
+  status command .venv/bin/python -I scripts/continue_climate_work.py --status.
+  No new physics families have been launched; geometric conductance is backlog
+  only. Continue the user's human-model direction while the declared screens run.
+
+---
+
 # Owner's next priority and latest result — 3 November 2026
 
 * USER STEERING: after the next full physics update, return to the c.200 AD
