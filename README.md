@@ -1,5 +1,35 @@
 # rotclimate: a climate simulator for a hand-drawn world
 
+**Current adopted raw physics: r43 · 3 November 2026.** The completed three-start
+search improves 49-region combined error by 0.86%, monthly temperature MAE to
+1.8789°C and rain loss to 0.49315. Paired fine-grid and reserved-region checks
+pass the unchanged rule; unseen combined performance is effectively tied.
+This is a small calibration gain, not a global-optimum or missing-physics claim.
+See the [r43 evidence](reports/R43_20261103.md),
+[search coverage](reports/MULTISTART_20261103.md) and
+[circulation diagnosis](reports/FACE_CONVERGENCE_20261103.md).
+
+The launcher identifies the **actually served atlas snapshot** from
+[its verified release manifest](atlases/release.json); newer source code does
+not relabel older maps. Normal atlas publication includes matching Earth
+corrections and every climate, farming, population, foraging, trade and language
+export before browser/portable checks and the push to both published branches.
+
+For the declared ongoing work in a Linux/Codex execution workspace:
+
+```sh
+.venv/bin/python -I scripts/continue_climate_work.py --status
+.venv/bin/python -u -I scripts/continue_climate_work.py
+```
+
+The supervisor attaches to already running drivers or resumes their committed
+plans and saved checkpoints. It reports actual process presence, rather than
+calling an old running marker live. Re-run after a workspace shutdown; no job
+continues while its machine is stopped. This is separate from the normal
+Windows atlas launcher described below. Current job details: [handoff](HANDOFF.md).
+
+## Historical release notes
+
 **r40 adopted, 30 October 2026:** tracing North India's errors (256 mm of
 rain against 761) against reanalysis showed the model's circulation is the
 main gap: with observed surface winds North India gets 933 mm. Three new

@@ -1,5 +1,13 @@
 # Resumed after environment restart — 3 November 2026, 13:49 Warsaw
 
+* One-command recovery/status now available:
+  `.venv/bin/python -I scripts/continue_climate_work.py --status` reads actual
+  processes, never stale marker text. Run without --status to attach/resume
+  all five committed jobs and monitor them in the foreground. Supervisor
+  session4645 currently attaches to all five live drivers, without duplicates.
+  It cannot keep a shutdown workspace alive; rerun after environment restart.
+  Two process-identity/argument-matching tests pass. Do not claim overnight
+  computation merely because a saved marker says running.
 * Host restarted between overnight and today's Continue: no overnight progress
   after01:10UTC. Fetched origin; both remote refs are ancestors, no external
   changes. Do not mistake stale running markers for live processes.
