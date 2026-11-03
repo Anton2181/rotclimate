@@ -1,3 +1,42 @@
+# Food and work maps in normal atlases — 3 November 2026
+
+* User asked to work toward new maps. Delivered Food and work topic in normal
+  Free/Earth/Whittaker viewers, including Earth raw +corrected:4matchedpackets.
+  Cereal field work button has5views(hours, croppedland, reapingstaff10/20/30days);
+  Calendar alternatives button showsdistincttiedoptimalharvestboundarybins.
+* harvest/work_maps.py uses exactdecodedpublished kcal_wheat/barley, target1M
+  netkcal, Columella336/208listedhours/ha and48/32reapingh/ha under explicit8hday,
+  approx.25ha/iugerum. Least-work singlecereal, not totalwork/population or a
+  full seasonal household plan. All4packets choosebarley withcurrentinputs;
+  don't pretend cropchoicemap hasdiversity. Landmap is forwork-efficientcrop,
+  NOT independentlyminland; reapingstaff usesprescribedwindow, notrealdeadline.
+* Regenerated allcerealwindows onall245031landcells perpacket. Maxdifference
+  fromexportedcropenergy~20.9kcal/ha (packingprecision +float32rounding). Retains
+  allbestboundaryties(currentmonthlymodel), notnewdailyclock/observedcalendar.
+  Ambiguouscells free187932/Earthraw187398/Earthcorrected194256/Whittaker164414.
+  Manyties aremodelambiguity, notestimatedagriculturalflexibility/probabilities.
+* Builtsidecars data/farm_work.json, sixwebps perpacket, uint16calendarbin and
+  NPZvalues. Existingfrozen atlas.json/climate/harvest inputs unchanged andchecked.
+  Sourcehashprovenance frozen inmanifest. atlas/farm-work.js verifiesmatching
+  Harvestfingerprint/metadata/calendar/loadedbinaryhashes beforeexposingreadouts.
+  Mismatchremovesnewtopic/layers, keepsnormalclimateworking, visiblesourcemessage.
+  SharedHarvestUI exposesread-onlyfieldgetter/buffer forverifiedreuse,nodoublefetch.
+* UI:2buttons, oneviewselectoronlywhereused; nooccupation/malariacontrols inwork
+  maps. PlaceCSV/nullmissing values, fullNPZ+methoddownloads, shareablehashstate,
+  corrected/rawmatching, dark/light/mobile.73focusedcomponenttests pass; existing
+  atlasbrowser smoke passesall3. Newbrowserchecks4packets×6views and numerical
+  CSVagainstNPZ, controlhiding/restoration, badidentity fail-closed.
+* Source/report CEREAL_WORK_MAPS_20261103; outputs output/cereal_work_maps_20261103.
+  Figure work_maps.png posted. refresh_atlas_pages copiesnewoptionalJS andonly
+  enablesifmanifestexists; legacyearth_physics disabled. Launcherprintsnewtopic
+  andcounts67/72/69layers. Hubreleasealsoverifiesnewmanifesthashes.
+* Next: fulltask evidence, climate/workabilitydeadlines, crop-specificcultivars,
+  finitewater andjointseasonalfood/stores/work. Existingyield/rainwaterirrigation
+  proxy andcold/drymargins remainlimitations. Newmaps havenoindependenthistorical
+  validation, state/inequality inference, weatherprobabilities orclimateadoption.
+
+---
+
 # Minimum listed field work for required output — 3 November 2026
 
 * Continued after labour milestone d70c3e00 (pushedbothbranches). Added

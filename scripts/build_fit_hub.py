@@ -166,8 +166,9 @@ def main():
               'Air and sea', 'Month by month', 'Fit checks']
     if len(foraging_fits) == len(FITS):
         topics.insert(2, 'Foraging')
-    numbers = {10: 'ten', 11: 'eleven'}
-    topic_text = f'Every atlas has {numbers.get(len(topics), len(topics))} map topics: {", ".join(topics[:-1])} and {topics[-1]}.'
+    work_maps=all((ROOT/'atlases'/name/'data/farm_work.json').exists() for name in FITS)
+    if work_maps:topics.insert(topics.index('Farming')+1,'Food and work')
+    topic_text = f'Map topics include {", ".join(topics[:-1])} and {topics[-1]}.'
     if corrected:
         fit = corrected['zone_fit']
         topic_text += (' The Earth atlas opens on its Earth-corrected climate: every climate map, the station card, farming, '
@@ -175,6 +176,11 @@ def main():
                        'Earth regions, with the raw simulation one switch away and maps of the changes under Fit checks '
                        f'(exact zone agreement {100 * fit["raw"]["strict_accuracy"]:.1f} % raw, '
                        f'{100 * fit["corrected"]["strict_accuracy"]:.1f} % corrected).')
+    if work_maps:
+        topic_text+=(' Food and work adds partial cereal field-work hours, cropped land per food target, '
+            'reaping staffing for supplied harvest windows and calendar alternatives. These use the current crop model '
+            'and Columella’s listed tasks, with explicit assumptions; they do not estimate total survival work or population. '
+            'Choose the map view inside that topic. ')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '
@@ -245,6 +251,8 @@ def main():
             hub_sha256=hashlib.sha256(out.read_text(encoding='utf-8').encode('utf-8')).hexdigest(),
             metadata_sha256={name: hashlib.sha256((ROOT / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
                              for name in FITS})
+        if work_maps:
+            release['cereal_work_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/farm_work.json').read_bytes()).hexdigest() for name in FITS}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

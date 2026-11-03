@@ -83,6 +83,13 @@ malaria penalty. These are c.200 AD scenarios, not a reconstructed census.
 Source models, explicit coefficients, province totals and CSVs are inside
 each atlas. See reports/HARVEST_MIGRATION_20261022.md for the method.
 
+Food and work adds partial cereal field-work maps, cropped land per food
+target, reaping staffing under supplied harvest windows, and retained
+calendar alternatives. The work counts stop at the threshing floor; they
+do not estimate total subsistence work or population. Select a place for
+readouts and CSV, or download the grid arrays. The methods explain the
+historical source and scenario assumptions.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.

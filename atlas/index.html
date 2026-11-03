@@ -494,6 +494,14 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
       <p><a href="https://doi.org/10.5194/essd-9-927-2017" target="_blank" rel="noopener">HYDE 3.2 method</a> · <a href="https://escholarship.org/uc/item/05r820mz" target="_blank" rel="noopener">Tobler walking model</a> · <a href="data/population_model.json" download>All scenario parameters and sources</a></p>
     </details>
   </section>
+  <section id="farm-work-section" hidden aria-labelledby="farm-work-h">
+    <div class="section-head"><h2 id="farm-work-h">Cereal field work · experimental</h2>
+      <p>Partial field-work scenario per million net edible kcal. Current crop yields and <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html#12">Columella’s listed tasks</a>, with an assumed eight-hour workday and approximate 0.25 ha/iugerum.</p></div>
+    <p id="farm-work-view-note" class="note"></p><h3 id="farm-work-place">Choose a place</h3>
+    <div id="farm-work-readouts" class="readouts"></div><p id="farm-work-selection-note" class="note"></p>
+    <details><summary>Scope and assumptions</summary><p>Listed work stops at the threshing floor. Threshing, processing, storage, irrigation work, animal care and other household duties are not balanced. Draft services are assumed available. Crop output already deducts seed and edible-processing fractions. The maps use single cropped hectares; fallow, arable-land shares, occupation and malaria are not applied again. Harvest staffing uses an explicitly supplied window, not an inferred climate deadline. Calendar alternatives preserve ties in the current monthly crop model, rather than adopting the experimental daily clock. These are not total survival-work or population estimates.</p></details>
+    <p class="note"><a id="farm-work-method" href="../../reports/CEREAL_WORK_MAPS_20261103.md">Methods and sources</a> · <a id="farm-work-grid" download>Download grid arrays (NPZ)</a> · <a href="data/farm_work.json" download>Map assumptions and input identities</a> · <button id="farm-work-download" type="button" disabled>Download selected place CSV</button></p>
+  </section>
   <section id="harvest-section" hidden aria-labelledby="harvest-h">
     <div class="section-head"><h2 id="harvest-h">Land and people · c.200 AD</h2>
       <p>Food, environment and settlement under low-input Han, Roman and Parthian technology.</p></div>
@@ -611,6 +619,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 
 <script src="climate-comparison.js"></script>
 <script src="harvest.js"></script>
+<script src="farm-work.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -635,7 +644,7 @@ window.atlasSave = async (filename, blob) => {
     img.addEventListener("error", () => { img.closest("figure").hidden = true; });
   }
 
-  let meta, buf;
+  let meta, buf, farmWorkPacket=null, farmWorkUI=null, farmWorkError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -655,6 +664,10 @@ window.atlasSave = async (filename, blob) => {
                          "cell_px", "harvest", "population", "foraging", "reach"])
         if (cc[key] !== undefined && cc[key] !== null) meta[key] = cc[key];
     }
+    if(window.FarmWorkAtlas) {
+      try {farmWorkPacket=await FarmWorkAtlas.extend(meta,fresh,climateMode);}
+      catch(error) {farmWorkError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -665,6 +678,7 @@ window.atlasSave = async (filename, blob) => {
       const tradeViews = meta.layers.find(layer => layer.id === "reach_trade")?.variants?.options?.length || 1;
       $("atlas-data-status").textContent += ` Directed markets · ${tradeViews} trade views.`;
     }
+    if(farmWorkError) $("atlas-data-status").textContent+=' Cereal-work maps unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -729,7 +743,7 @@ window.atlasSave = async (filename, blob) => {
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
   };
-  const topicNames = ["Overview", "Population", "Foraging", "Languages", "Political reach", "Farming", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
+  const topicNames = ["Overview", "Population", "Foraging", "Languages", "Political reach", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
   const lastLayer = {};
   for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
     const option = document.createElement("option"); option.value = name; option.textContent = name;
@@ -872,6 +886,7 @@ window.atlasSave = async (filename, blob) => {
     $("harvest-section").hidden = population || foraging || !meta.harvest;
     $("foraging-section").hidden = !foraging;
     showVariants(L);
+    farmWorkUI?.show(id,L.variants?variantOf(L):null);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
@@ -1053,6 +1068,7 @@ window.atlasSave = async (filename, blob) => {
       if (best) { [x, y] = best; k = cls.data[pixIdx(x, y)]; }
     }
     harvestUI?.select(x, y, name, k === 255);
+    farmWorkUI?.select(x, y, name, k === 255);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2032,6 +2048,15 @@ window.atlasSave = async (filename, blob) => {
     }
   }
   const initialView = new URLSearchParams(location.hash.slice(1));
+  if(farmWorkPacket) {
+    try {farmWorkUI=await FarmWorkAtlas.attach(farmWorkPacket,harvestUI);}
+    catch(error) {
+      meta.layers=meta.layers.filter(L=>!L.id.startsWith('farm_cereal_'));
+      for(const button of [...layerBtns.children])if(button.id.startsWith('layer-farm_cereal_'))button.remove();
+      for(const option of [...$("map-topic").options])if(option.value==='Food and work')option.remove();
+      $("atlas-data-status").textContent+=' Cereal-work maps unavailable: packet verification failed.';console.error(error);
+    }
+  }
   try { $("tiers").checked = initialView.has("colours") ? initialView.get("colours") === "tiers" : localStorage.getItem("rotclimate-tiers") === "1"; }
   catch (e) { $("tiers").checked = initialView.get("colours") === "tiers"; }
   $("climate-mode").addEventListener("change", (e) => {

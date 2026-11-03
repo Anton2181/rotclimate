@@ -39,6 +39,9 @@ def release_version(root):
             actual = hashlib.sha256((root / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
             if digest != actual:
                 raise ValueError('Metadata changed')
+        for name,digest in release.get('cereal_work_sha256',{}).items():
+            if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/farm_work.json').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Cereal-work map metadata changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
@@ -91,7 +94,12 @@ def main():
             metadata = json.load(file)
         outside = next((b['share'] for b in metadata.get('biomes', []) if b['id'] == 0), None)
         coverage = f'{outside:.2%} outside the Whittaker diagram' if outside is not None else 'legacy data'
-        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))} map modes', flush=True)
+        work_path=root/'atlases'/name/'data/farm_work.json'
+        work=json.loads(work_path.read_text(encoding='utf-8')) if work_path.exists() else None
+        work_layers=work['packets']['raw']['layers'] if work else []
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)} map modes', flush=True)
+        if work_layers:
+            print('    Food and work: 6 views; partial cereal field-work scenarios',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

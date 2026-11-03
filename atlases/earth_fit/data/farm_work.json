@@ -1,0 +1,691 @@
+{
+  "version": 1,
+  "status": "experimental_partial_field_work_maps",
+  "food_target_kcal": 1000000.0,
+  "crops": [
+    "wheat",
+    "barley"
+  ],
+  "listed_hours_per_hectare": [
+    336.0,
+    208.0
+  ],
+  "reaping_hours_per_hectare": [
+    48.0,
+    32.0
+  ],
+  "hours_per_workday": 8.0,
+  "source_manifest_sha256": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985",
+  "sources_sha256": {
+    "harvest/work_maps.py": "58084f3babbc765c30b1bf72be2dde0f7094402491e52d1d4efd8bf3836fb963",
+    "harvest/crop_sequences.py": "9aab8015f8a94863eb798005fa7077c8d1d60f1c138126201430c824c7816e68",
+    "harvest/export.py": "e702c0a5b4f8eda5a29ca31e5765f9f4541eb8b0504bcbf8ba9a03e5ab457296",
+    "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507",
+    "population/export.py": "aa472c1a304217baad687a4c80265ff58b50ad8b6555d7fe4a0fb26e4dd746a0",
+    "scripts/build_cereal_work_maps.py": "c062fc8c891ce4688bb4aa0c2849ed47f84c8088794031089c870d7d524fda0d",
+    "research_notes/farm_labour_20261103.json": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985"
+  },
+  "packets": {
+    "raw": {
+      "layers": [
+        {
+          "id": "farm_cereal_work",
+          "label": "Cereal field work",
+          "group": "Food and work",
+          "kind": "categories",
+          "file": "farm_work_hours.webp",
+          "items": [
+            {
+              "color": "#e8efd0",
+              "label": "<100 h"
+            },
+            {
+              "color": "#c2d59a",
+              "label": "100\u2013150 h"
+            },
+            {
+              "color": "#8cb98e",
+              "label": "150\u2013250 h"
+            },
+            {
+              "color": "#51978a",
+              "label": "250\u2013500 h"
+            },
+            {
+              "color": "#387684",
+              "label": "500\u20131,000 h"
+            },
+            {
+              "color": "#4a5375",
+              "label": "1,000\u20132,000 h"
+            },
+            {
+              "color": "#713d60",
+              "label": "\u22652,000 h"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "No modeled wheat/barley output"
+            }
+          ],
+          "note": "Listed field hours per million net edible kcal; least-work single cereal. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate.",
+          "controls": [],
+          "variants": {
+            "label": "Work view",
+            "default": "hours",
+            "options": [
+              {
+                "value": "hours",
+                "label": "Listed field work",
+                "file": "farm_work_hours.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<100 h"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "100\u2013150 h"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "150\u2013250 h"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "250\u2013500 h"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "500\u20131,000 h"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "1,000\u20132,000 h"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22652,000 h"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Listed field hours per million net edible kcal; least-work single cereal.",
+                "note": "Listed field hours per million net edible kcal; least-work single cereal. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "land",
+                "label": "Cropped land required",
+                "file": "farm_work_land.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.5 ha"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.5\u20130.75 ha"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.75\u20131 ha"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132 ha"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20135 ha"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "5\u201310 ha"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u226510 ha"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Cropped hectares per million net edible kcal, for the least-work cereal; excludes fallow and landscape arable fractions.",
+                "note": "Cropped hectares per million net edible kcal, for the least-work cereal; excludes fallow and landscape arable fractions. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_10",
+                "label": "Harvest staffing \u00b7 10 days",
+                "file": "farm_work_staff_10.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 10 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 10 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_20",
+                "label": "Harvest staffing \u00b7 20 days",
+                "file": "farm_work_staff_20.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 20 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 20 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_30",
+                "label": "Harvest staffing \u00b7 30 days",
+                "file": "farm_work_staff_30.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 30 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 30 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              }
+            ]
+          }
+        },
+        {
+          "id": "farm_cereal_calendars",
+          "label": "Calendar alternatives",
+          "group": "Food and work",
+          "kind": "categories",
+          "file": "farm_work_calendar.webp",
+          "items": [
+            {
+              "color": "#76557b",
+              "label": "1 boundary"
+            },
+            {
+              "color": "#9e8195",
+              "label": "2 boundaries"
+            },
+            {
+              "color": "#c2afa7",
+              "label": "3\u20134 boundaries"
+            },
+            {
+              "color": "#c3d4be",
+              "label": "5\u20138 boundaries"
+            },
+            {
+              "color": "#5a9386",
+              "label": "9\u201312 boundaries"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "No modeled wheat/barley output"
+            }
+          ],
+          "note": "Distinct harvest-boundary climate bins across all tied maximum-energy windows of the least-work cereal. These are alternatives in the CURRENT monthly crop response, not harvest probabilities, actual dates, multiple crops or the new daily-development clock. Ties are retained rather than resolved to one arbitrary calendar. Gray means no modeled wheat/barley output.",
+          "controls": []
+        }
+      ],
+      "shape": [
+        463,
+        1000
+      ],
+      "cell_px": 2.0,
+      "expected_harvest_fingerprint": "3c8243172a922da1e8ae349acbfe2579d1aec6d419066786ea93c95ae26a30d8",
+      "harvest_metadata": "harvest.json",
+      "harvest_metadata_sha256": "5fc2d0e05b81d80664e7512d281b5e372f3cf783e9484a0af56dd73c61fc631a",
+      "harvest_binary_sha256": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f",
+      "calendar_binary": "farm_work_calendar.bin",
+      "calendar_binary_sha256": "2c2e7bee52594c079f85a78090c703959264a36923e9c1cc823662a737fde4f6",
+      "grid": "farm_work_grid.npz",
+      "grid_sha256": "dc72b73337edecce9f03c2078bcc48623250fc6392f50641b5bd63fa3a889cf1",
+      "inputs_sha256": {
+        "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+        "atlases/earth_fit/data/atlas.bin": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2",
+        "atlases/earth_fit/data/harvest.json": "5fc2d0e05b81d80664e7512d281b5e372f3cf783e9484a0af56dd73c61fc631a",
+        "atlases/earth_fit/data/harvest.bin": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f",
+        "atlases/earth_fit/data/crop_model.json": "1a9af17ae3db622be210493e55e7071d54927d34a49a61e1a66a46d8ce9d338d"
+      },
+      "image_sha256": {
+        "farm_work_hours.webp": "fc340b63cf00e242b0d8988b82c188eaf4a32151f6862eb319ca50649d140965",
+        "farm_work_land.webp": "d740d7c6cb999a3c89592befc89b0ea3ecd629b512f2d7bb24c655f9daa4333a",
+        "farm_work_staff_10.webp": "b4af2ada98a9f24cd6fbea8d10eebea0e8533f8fde7ef165375469e3ef4d5922",
+        "farm_work_staff_20.webp": "acab476c7c50b1fc7b6de7e20bcb757abbbe3d4ced94977e49799c45d4428332",
+        "farm_work_staff_30.webp": "82e5678637d370de91a9433ae1a30d7d8997e09c7978cf2fafd30691415e43d5",
+        "farm_work_calendar.webp": "f5a168366f31f009800261630a798de342c463547d0521414d871f4e93d9b79b"
+      },
+      "summary": {
+        "land_cells": 245031,
+        "cereal_cells": 242925,
+        "ambiguous_calendar_cells": 187398,
+        "max_export_quantization_difference_kcal_ha": 20.90192725881934,
+        "median_listed_hours_per_million_kcal": 76.74642391182427,
+        "wheat_choice_cells": 0,
+        "barley_choice_cells": 242925
+      }
+    },
+    "corrected": {
+      "layers": [
+        {
+          "id": "farm_cereal_work",
+          "label": "Cereal field work",
+          "group": "Food and work",
+          "kind": "categories",
+          "file": "corrected/farm_work_hours.webp",
+          "items": [
+            {
+              "color": "#e8efd0",
+              "label": "<100 h"
+            },
+            {
+              "color": "#c2d59a",
+              "label": "100\u2013150 h"
+            },
+            {
+              "color": "#8cb98e",
+              "label": "150\u2013250 h"
+            },
+            {
+              "color": "#51978a",
+              "label": "250\u2013500 h"
+            },
+            {
+              "color": "#387684",
+              "label": "500\u20131,000 h"
+            },
+            {
+              "color": "#4a5375",
+              "label": "1,000\u20132,000 h"
+            },
+            {
+              "color": "#713d60",
+              "label": "\u22652,000 h"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "No modeled wheat/barley output"
+            }
+          ],
+          "note": "Listed field hours per million net edible kcal; least-work single cereal. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate.",
+          "controls": [],
+          "variants": {
+            "label": "Work view",
+            "default": "hours",
+            "options": [
+              {
+                "value": "hours",
+                "label": "Listed field work",
+                "file": "corrected/farm_work_hours.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<100 h"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "100\u2013150 h"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "150\u2013250 h"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "250\u2013500 h"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "500\u20131,000 h"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "1,000\u20132,000 h"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22652,000 h"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Listed field hours per million net edible kcal; least-work single cereal.",
+                "note": "Listed field hours per million net edible kcal; least-work single cereal. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "land",
+                "label": "Cropped land required",
+                "file": "corrected/farm_work_land.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.5 ha"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.5\u20130.75 ha"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.75\u20131 ha"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132 ha"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20135 ha"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "5\u201310 ha"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u226510 ha"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Cropped hectares per million net edible kcal, for the least-work cereal; excludes fallow and landscape arable fractions.",
+                "note": "Cropped hectares per million net edible kcal, for the least-work cereal; excludes fallow and landscape arable fractions. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_10",
+                "label": "Harvest staffing \u00b7 10 days",
+                "file": "corrected/farm_work_staff_10.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 10 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 10 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_20",
+                "label": "Harvest staffing \u00b7 20 days",
+                "file": "corrected/farm_work_staff_20.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 20 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 20 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              },
+              {
+                "value": "staff_30",
+                "label": "Harvest staffing \u00b7 30 days",
+                "file": "corrected/farm_work_staff_30.webp",
+                "items": [
+                  {
+                    "color": "#e8efd0",
+                    "label": "<0.25 workers"
+                  },
+                  {
+                    "color": "#c2d59a",
+                    "label": "0.25\u20130.5"
+                  },
+                  {
+                    "color": "#8cb98e",
+                    "label": "0.5\u20131"
+                  },
+                  {
+                    "color": "#51978a",
+                    "label": "1\u20132"
+                  },
+                  {
+                    "color": "#387684",
+                    "label": "2\u20134"
+                  },
+                  {
+                    "color": "#4a5375",
+                    "label": "4\u20138"
+                  },
+                  {
+                    "color": "#713d60",
+                    "label": "\u22658 workers"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "No modeled wheat/barley output"
+                  }
+                ],
+                "caption": "Reaping worker equivalents for a million-kcal cereal target over 30 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate.",
+                "note": "Reaping worker equivalents for a million-kcal cereal target over 30 days at 8 hours/day. Supplied harvest window, not a climate-derived deadline or actual staffing estimate. Partial listed field tasks from Columella, to the threshing floor; current atlas single-cereal energy after seed. Assumed 8-hour workday and approximate 0.25 ha/iugerum. Other staples, threshing, processing, animal care, irrigation work and household duties are outside this budget. Gray means no positive modeled wheat/barley output, not zero work or uninhabitable land. No population or total subsistence-work estimate."
+              }
+            ]
+          }
+        },
+        {
+          "id": "farm_cereal_calendars",
+          "label": "Calendar alternatives",
+          "group": "Food and work",
+          "kind": "categories",
+          "file": "corrected/farm_work_calendar.webp",
+          "items": [
+            {
+              "color": "#76557b",
+              "label": "1 boundary"
+            },
+            {
+              "color": "#9e8195",
+              "label": "2 boundaries"
+            },
+            {
+              "color": "#c2afa7",
+              "label": "3\u20134 boundaries"
+            },
+            {
+              "color": "#c3d4be",
+              "label": "5\u20138 boundaries"
+            },
+            {
+              "color": "#5a9386",
+              "label": "9\u201312 boundaries"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "No modeled wheat/barley output"
+            }
+          ],
+          "note": "Distinct harvest-boundary climate bins across all tied maximum-energy windows of the least-work cereal. These are alternatives in the CURRENT monthly crop response, not harvest probabilities, actual dates, multiple crops or the new daily-development clock. Ties are retained rather than resolved to one arbitrary calendar. Gray means no modeled wheat/barley output.",
+          "controls": []
+        }
+      ],
+      "shape": [
+        463,
+        1000
+      ],
+      "cell_px": 2.0,
+      "expected_harvest_fingerprint": "2b6bf2288a1f228ec94b9f4449f003081d561c45af3fc9ad0610a03fd826bd29",
+      "harvest_metadata": "corrected/harvest.json",
+      "harvest_metadata_sha256": "c0621aa84aedccfa7f260e24f11cd17c692deab4109846337da01c03adda37b1",
+      "harvest_binary_sha256": "5d03be2368a1d5f8252bb30f026d9b0fc91ff483aab32de6d5282e805adb340e",
+      "calendar_binary": "corrected/farm_work_calendar.bin",
+      "calendar_binary_sha256": "8df1bdb3b49638e1662b73dc3394b73bce421489281502e5469aae10f4c3cdca",
+      "grid": "corrected/farm_work_grid.npz",
+      "grid_sha256": "e5eca741607ae2936405aee6ce26e8dc0eb8d740d15df35374ad8430156662d2",
+      "inputs_sha256": {
+        "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+        "atlases/earth_fit/data/corrected/atlas.bin": "00c012d20f6b42c5b02da388fa1c5df0913c987489a49e5f1c771ffa8bee17e3",
+        "atlases/earth_fit/data/corrected/harvest.json": "c0621aa84aedccfa7f260e24f11cd17c692deab4109846337da01c03adda37b1",
+        "atlases/earth_fit/data/corrected/harvest.bin": "5d03be2368a1d5f8252bb30f026d9b0fc91ff483aab32de6d5282e805adb340e",
+        "atlases/earth_fit/data/crop_model.json": "1a9af17ae3db622be210493e55e7071d54927d34a49a61e1a66a46d8ce9d338d"
+      },
+      "image_sha256": {
+        "corrected/farm_work_hours.webp": "9f5d99e623f23bee71bcb2dc8105d1fe3249ee4a5fe7fea0b7d5caa6124c283c",
+        "corrected/farm_work_land.webp": "822caf505c99e33953d5f71031c35cbf1f4f34bff325815307e0af0d29ee2ee7",
+        "corrected/farm_work_staff_10.webp": "8181965cac9b52a549512a37edc1a3e48ddda8abc8f7eaa6c5b7aa6d81d3eaa6",
+        "corrected/farm_work_staff_20.webp": "14abf84e3c1f219c6c2c06c1fe6391a5accbdb4f126764b6195e12e8e96749d6",
+        "corrected/farm_work_staff_30.webp": "a20487763850988ae1444b2eea02930013d1dcc234e62e0eb9bbbe8a5458818f",
+        "corrected/farm_work_calendar.webp": "fc4f7af4b2b81f05588b53110e2df7b599de0ab13c30bcd8b257dab46c19599b"
+      },
+      "summary": {
+        "land_cells": 245031,
+        "cereal_cells": 244110,
+        "ambiguous_calendar_cells": 194256,
+        "max_export_quantization_difference_kcal_ha": 20.889307705219835,
+        "median_listed_hours_per_million_kcal": 76.74642391182427,
+        "wheat_choice_cells": 0,
+        "barley_choice_cells": 244110
+      }
+    }
+  },
+  "scope": "Conditional partial cereal field work and current-model calendar ambiguity; no climate, yield, population or total-subsistence validation/adoption."
+}

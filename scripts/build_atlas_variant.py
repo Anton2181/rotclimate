@@ -202,6 +202,7 @@ def main():
     (out / "index.html").write_text(page(src, a.title, a.eyebrow, a.lede, a.note))
     shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
     shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
+    shutil.copy(ROOT / "atlas" / "farm-work.js", out / "farm-work.js")
     if (ROOT / "atlas" / "foraging.js").exists():
         shutil.copy(ROOT / "atlas" / "foraging.js", out / "foraging.js")
     p.to_json(out / "params.json")

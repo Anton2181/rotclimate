@@ -25,9 +25,13 @@ def main():
         out = ROOT / "atlases" / (name+'_next' if args.staging else name)
         if not out.exists():
             continue
-        (out / "index.html").write_text(page(src, h["title"], h["eyebrow"], h["lede"], h["note"]))
+        text=page(src, h["title"], h["eyebrow"], h["lede"], h["note"])
+        if (out/'data/farm_work.json').exists():
+            text=text.replace('<script src="farm-work.js"></script>','<script src="farm-work.js" data-farm-work-enabled></script>')
+        (out / "index.html").write_text(text)
         shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
+        shutil.copy(ROOT / "atlas" / "farm-work.js", out / "farm-work.js")
         if (ROOT / "atlas" / "population.js").exists():
             shutil.copy(ROOT / "atlas" / "population.js", out / "population.js")
         if (ROOT / "atlas" / "foraging.js").exists():
