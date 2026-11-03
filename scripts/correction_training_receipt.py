@@ -2,6 +2,7 @@
 import argparse
 import importlib.metadata
 import json
+import os
 from pathlib import Path
 import sys
 
@@ -16,9 +17,15 @@ SCRIPTS = ('retrain_earth_corrections.sh', 'benchmark_local.py', 'earth_benchmar
            'evaluate_rain_pattern.py', 'correction_training_receipt.py')
 
 
+def relative_name(path, root):
+    # Keep the in-snapshot alias of a deliberately linked observational file;
+    # its bytes, not its external resolved location, identify the input.
+    return str(Path(os.path.abspath(path)).relative_to(Path(os.path.abspath(root))))
+
+
 def record(inputs, files, root):
     return dict(status='complete', inputs=inputs,
-                artifacts={str(p.resolve().relative_to(root)): file_hash(p) for p in files})
+                artifacts={relative_name(p, root): file_hash(p) for p in files})
 
 
 def matches(receipt, inputs, root):
@@ -36,7 +43,7 @@ def inputs(params, tag):
              ROOT / 'calibration/climate_physics_20261023/rainfall_validation_regions.json',
              ROOT / 'calibration/local_accuracy_20261023/regions_dev12.json',
              *sorted((ROOT / 'data/cache/earth').glob('*.npz'))]
-    return dict(tag=tag, files={str(p.resolve().relative_to(ROOT)): file_hash(p) for p in files},
+    return dict(tag=tag, files={relative_name(p, ROOT): file_hash(p) for p in files},
                 packages={name: importlib.metadata.version(name) for name in ('numpy', 'scipy', 'scikit-learn')})
 
 

@@ -47,10 +47,12 @@ def prepare(plan, plan_path, out):
     actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=snapshot, text=True).strip()
     if actual != revision: raise ValueError('Snapshot revision changed')
     if not (snapshot / 'scripts/build_atlas_variant.py').exists():
-        patterns = ['/' + name + '/' for name in ['scripts', 'rotclimate', 'harvest', 'population', 'foraging', 'polity', 'atlas', 'data', 'calibration']]
+        patterns = ['/' + name + '/' for name in ['scripts', 'rotclimate', 'harvest', 'population', 'foraging', 'polity', 'atlas', 'data', 'calibration', 'ravages']]
         patterns += ['/atlases/pages.json', '/output/language_areas_20261101/layer2c/summary.json', '/.gitignore', '/.gitattributes']
         subprocess.run(['git', 'sparse-checkout', 'set', '--no-cone', *patterns], cwd=snapshot, check=True)
         subprocess.run(['git', 'checkout', revision], cwd=snapshot, check=True, capture_output=True)
+    if not (snapshot / 'ravages/data.json').exists():
+        subprocess.run(['git', 'sparse-checkout', 'add', '/ravages/'], cwd=snapshot, check=True)
     link_missing(ROOT / 'data', snapshot / 'data')
     if not (snapshot / '.venv').exists(): (snapshot / '.venv').symlink_to(ROOT / '.venv', target_is_directory=True)
     protocol = json.loads((ROOT / plan['validation_protocol']).read_text())
@@ -61,8 +63,10 @@ def prepare(plan, plan_path, out):
         raise ValueError('Snapshot scientific library versions changed')
     for name, digest in required.items():
         if file_hash(snapshot / name) != digest: raise ValueError('Snapshot differs from validated physics/input: ' + name)
-    write_json(manifest, dict(profile=plan['profile'], source_commit=revision, plan_sha256=file_hash(plan_path),
-                             validated_sources=required, libraries=libraries, snapshot=str(snapshot)))
+    record = saved if manifest.exists() else {}
+    record.update(profile=plan['profile'], source_commit=revision, plan_sha256=file_hash(plan_path),
+                  validated_sources=required, libraries=libraries, snapshot=str(snapshot))
+    write_json(manifest, record)
     return snapshot
 
 

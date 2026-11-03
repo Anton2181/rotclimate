@@ -1,7 +1,7 @@
 import json
 import pytest
 
-from scripts.correction_training_receipt import artifacts, matches, record
+from scripts.correction_training_receipt import artifacts, matches, record, relative_name
 
 
 def test_complete_training_is_reused_only_for_identical_inputs_and_artifacts(tmp_path):
@@ -27,3 +27,15 @@ def test_completion_requires_the_heldout_models_named_in_the_training_protocol(t
     (folder / 'protocol.json').write_text(json.dumps({'files': {'folds/withheld.npz': 'missing'}}))
     with pytest.raises(ValueError, match='Missing or changed trained'):
         artifacts(tmp_path / 'out', cal, 'r42')
+
+
+def test_linked_inputs_keep_the_snapshot_path_and_are_checked_by_content(tmp_path):
+    root = tmp_path / 'snapshot'; root.mkdir()
+    shared = tmp_path / 'observations.zip'; shared.write_bytes(b'original observations')
+    alias = root / 'observations.zip'; alias.symlink_to(shared)
+    assert relative_name(alias, root) == 'observations.zip'
+    receipt = record({'physics': 'r43'}, [alias], root)
+    assert matches(receipt, receipt['inputs'], root)
+    shared.write_bytes(b'changed observations')
+    assert not matches(receipt, receipt['inputs'], root)
+    with pytest.raises(ValueError): relative_name(shared, root)
