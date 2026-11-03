@@ -43,6 +43,16 @@ def main():
     if file_hash(proposal)!=json.loads(audit.read_text())['proposal_sha256']:
         raise ValueError('Proposal note and source audit differ')
     shutil.copyfile(audit,data/'proposal_sources.json')
+    calendar_source=ROOT/'output/crop_calendar_audit_20261103'
+    calendar=json.loads((calendar_source/'receipt.json').read_text())
+    if calendar['status']!='diagnostic_only' or calendar['production_atlas_changed']:
+        raise ValueError('Calendar audit must remain explicitly diagnostic')
+    for name,expected in {**calendar['sources_sha256'],**calendar['inputs_sha256']}.items():
+        if file_hash(ROOT/name)!=expected:raise ValueError('Calendar audit source/input changed: '+name)
+    if file_hash(calendar_source/'crop_calendar_ties.png')!=calendar['figure_sha256']:
+        raise ValueError('Calendar figure changed')
+    shutil.copyfile(calendar_source/'crop_calendar_ties.png',data/'crop_calendar_ties.png')
+    shutil.copyfile(calendar_source/'receipt.json',data/'calendar_receipt.json')
     rows=[]
     for name,result in receipt['results'].items():
         capacity=receipt['minimum_zero_loss_capacity'][name]
@@ -70,6 +80,12 @@ def main():
 <div class="table"><table><caption>Manufactured schedules · identical annual harvest and food need</caption><thead><tr><th>Supply schedule</th><th>Minimum no-loss storage, days of demand</th><th>Shortage days at assumed capacity</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
 <p>The food ledger closes: initial stocks plus harvest equal meals, spoilage, overflow and final stocks. Reserves are explicit; an enormous inherited store cannot feed an annual deficit forever in a repeating scenario.</p>
 <div class="links"><a href="data/receipt.json" download>Example data and scope</a><a href="data/seasonal_storage_demo.npz">Daily stock and shortage arrays</a><a href="../../reports/FOOD_STOCKS_20261103.md">Prototype method and tests</a></div></section>
+<section aria-labelledby="calendar-h"><h2 id="calendar-h">Before harvest calendars can drive maps</h2>
+<p>On {calendar['sample_cells']:,} systematic samples of the raw r43 fantasy geography, shifting only the calendar’s starting point changes the selected crop mix in <strong>{calendar['rotation_changed_mix_cells']} cells</strong>, although individual annual crop yields stay identical. Retaining alternative tied-best seasons finds a better feasible crop pair in <strong>{calendar['alternative_tied_calendar_pair_cells']} cells</strong>.</p>
+<figure><a href="data/crop_calendar_ties.png"><img src="data/crop_calendar_ties.png" width="1620" height="648" alt="Crop-calendar ambiguity by crop, and the distribution of attainable energy improvements in 58 sampled cells"></a>
+<figcaption>Diagnostic sample results, not whole-map area estimates or observed agronomic accuracy. The right-hand histogram shows improved cells only. Different crops, the existing water gate and half-weight second crop are retained. No published yield or population estimate has changed.</figcaption></figure>
+<p>The next step is to preserve feasible season alternatives and choose compatible crop sequences together, then test the resulting calendars before feeding food stocks. A tie-breaking choice is not evidence of a real harvest date.</p>
+<div class="links"><a href="data/calendar_receipt.json" download>Calendar audit data and scope</a><a href="../../reports/CROP_CALENDARS_20261103.md">Calendar audit method and prerequisites</a></div></section>
 <section aria-labelledby="next-h"><h2 id="next-h">Proposed mechanics and maps</h2>
 <div class="table"><table><thead><tr><th>Mechanic</th><th>Useful maps or views</th><th>Status</th></tr></thead><tbody>{options}</tbody></table></div>
 <p>The recommended first integration is crop calendars and food stocks, followed by actual grain provisioning over the existing directed road, river and sea network. Household labour then separates a productive environment from one that is easy to farm.</p>
@@ -87,6 +103,7 @@ def main():
     (atlas/'index.html').write_text(page,encoding='utf-8')
     write_json(source/'publication.json',dict(status='prepared',page_sha256=file_hash(atlas/'index.html'),
         prototype_receipt_sha256=file_hash(source/'receipt.json'),producer_sha256=file_hash(Path(__file__)),
+        calendar_receipt_sha256=file_hash(calendar_source/'receipt.json'),
         assets_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in sorted(data.iterdir()) if p.is_file()}))
     print('Built portable economy lab with manufactured prototype and proposals')
 

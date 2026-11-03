@@ -1,3 +1,35 @@
+# Calendar evidence and final drying qualification — 3 November 2026
+
+* Stronger dry-branch qualification is COMPLETE/REJECTED, a55cb748, pushed to
+  both branches. S61=1.0023168712, temperature +.05438%, rain loss +.40899%;
+  historical49 S=1.0054999951, rain +.94186%. No fine or reserved F case ran;
+  F remains unopened. All six declared physics/publication jobs now finished.
+  Normal r43 physics remains adopted. Public latest section and full paired
+  evidence: atlases/climate_accuracy/data/dry_branch_validation.json.
+* Actual crop-calendar ambiguity now quantified by a passive production-model
+  audit on4,096 systematic raw-r43 fantasy land samples. Original kcal mix
+  reproduced, individual crop yield drift0. Calendar origin changes mix in226
+  samples; alternative individually-optimal masks permit a better pair in58.
+  Largest local gain47.12%, unweighted sample energy sum+.151%; NOT whole-map
+  area/population forecasts. No production crop/yield/population layer changed.
+  harvest/calendar_audit.py, scripts/audit_crop_calendars.py,
+  reports/CROP_CALENDARS_20261103.md, output/crop_calendar_audit_20261103.
+  Five analytic/control tests plus Harvest/food stocks:31 tests pass.
+* Economy lab now includes this observed model diagnostic beside its explicitly
+  manufactured inventory experiment. Desktop/mobile dark/light browser passes.
+  Final publication QA: Windows1,061 byte-exact assets; portable1,625 files,
+  644links; climate companion73 studies/169 images with working keyboard and
+  deep links. Final receipts in output/crop_calendar_audit_20261103 and
+  output/dry_branch_validation_review_20261103. ZIP stays local under the
+  food_stock_prototype output folder; all bundle sources indexed and hashed.
+  Next: retain all feasible crop windows, jointly select compatible sequences
+  (turnaround, same-crop policy, perennial timing explicit), validate calendar
+  behavior, then connect to stocks. No precise harvest dates from tie-breaking.
+  Town grain balance, household labour, finite irrigation, seasonal herds and
+  state provisioning remain researched proposals, not quietly adopted models.
+
+---
+
 # Economy lab publication and one frozen climate qualification — 3 November 2026
 
 * Complete r43 is live. Normal .bat hub now links Food, farming and society
