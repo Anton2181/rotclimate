@@ -10,6 +10,7 @@ sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
 from local_benchmark_protocol import file_hash,write_json
 from economy_component_sections import component_sections
 from economy_freight_section import freight_section
+from economy_labour_section import labour_section
 
 STYLE='''
 :root{color-scheme:light dark;--bg:#eef2ee;--paper:#fafbf8;--ink:#203a40;--muted:#526a6d;--line:#c8d3cf;--link:#246b70}
@@ -79,6 +80,7 @@ def main():
     sequences=newest['sequence'];storage=newest['storage']
     current_sections,component_identity=component_sections(data)
     freight_html,freight_identity=freight_section(data)
+    labour_html,labour_identity=labour_section(data)
     observed_origin=ROOT/'output/observed_crop_durations_20261103'
     observed=json.loads((observed_origin/'result.json').read_text())
     observed_plan=ROOT/'calibration/crop_calendar_observations_20261103/plan.json'
@@ -105,7 +107,7 @@ def main():
     proposals=[
         ('Seasonal food stocks','Hungry season, reserves, storage requirement','Conserved prototype; map validation pending'),
         ('Grain provisioning for towns','Import dependence, food hinterlands, vulnerable supply routes','Conserving prototype and world-route connector; production inputs pending'),
-        ('Household labour','Food-production workload, harvest bottlenecks, labour vs land limits','Proposed'),
+        ('Household labour','Food-production workload, harvest bottlenecks, labour vs land limits','Partial field-operation scheduler; full household budget pending'),
         ('Finite irrigation water','Water-constrained irrigable land, downstream shortages','Field budget prototype; basin allocation proposed'),
         ('Seasonal herds','Winter pasture, fodder deficits, transhumance corridors','Proposed'),
         ('State provisioning','Collectable surplus, capital and garrison supply','Proposed'),
@@ -116,9 +118,10 @@ def main():
 <main><nav aria-label="Atlas navigation"><a href="../">Three climate atlases</a><a href="../earth_fit/">Earth-fit atlas</a><a href="../climate_accuracy/">Climate evidence</a></nav>
 <header><p class="note">c.200 AD model workshop · 3 November 2026</p><h1>Food, farming and society</h1>
 <p class="lede">Connect the harvest, the hungry season, the work of farming and the food that reaches a town or a state.</p>
-<p><span class="status">Experimental calendars and food stocks</span> <span class="status">Agronomic validation pending</span></p></header>
+<p><span class="status">Experimental seasonal food system</span> <span class="status">Agronomic validation pending</span></p></header>
 {current_sections}
 {freight_html}
+{labour_html}
 <details><summary>Earlier crop-calendar and reserve experiments</summary>
 <section aria-labelledby="observed-h"><h2 id="observed-h">What observed crop calendars reveal</h2>
 <p>A declared check against <a href="https://doi.org/10.1111/j.1466-8238.2010.00551.x">Sacks and colleagues’ published calendars (2010)</a> finds a gap in the current crop windows, especially for winter cereals. These are modern regional records, not ancient cultivars or pointwise yield validation. No model parameters were tuned.</p>
@@ -179,7 +182,7 @@ def main():
         sequence_receipt_sha256=file_hash(ROOT/'output/crop_sequences_20261103/receipt.json'),
         storage_receipt_sha256=file_hash(ROOT/'output/calendar_storage_20261103/receipt.json'),
         observed_calendar_result_sha256=file_hash(observed_origin/'result.json'),
-        **component_identity,**freight_identity,
+        **component_identity,**freight_identity,**labour_identity,
         assets_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in sorted(data.iterdir()) if p.is_file()}))
     print('Built portable economy lab with manufactured prototype and proposals')
 

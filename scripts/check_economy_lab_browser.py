@@ -19,7 +19,7 @@ def main():
         page.goto(args.base+'/atlases/',wait_until='domcontentloaded')
         page.get_by_role('link',name='Food, farming and society →',exact=True).click()
         page.get_by_role('heading',name='Food, farming and society',exact=True).wait_for()
-        assert page.locator('.status').all_inner_texts()==['Experimental calendars and food stocks','Agronomic validation pending']
+        assert page.locator('.status').all_inner_texts()==['Experimental seasonal food system','Agronomic validation pending']
         older=page.locator('details > summary').filter(has_text='Earlier crop-calendar and reserve experiments')
         older.focus();page.keyboard.press('Enter')
         receipt=page.request.get(args.base+'/atlases/economy_lab/data/receipt.json').json()
@@ -63,7 +63,12 @@ def main():
         audit=page.request.get(args.base+'/atlases/economy_lab/data/parallel_freight.json').json()
         assert not audit['production_atlas_changed'] and len(audit['pair_samples'])==360
         assert max(r['legacy_cost']-r['alternative_cost'] for r in audit['pair_samples'])==0
-        assert page.locator('tbody tr').count()==40
+        page.get_by_role('heading',name='Seasonal field work: the harvest bottleneck',exact=True).wait_for()
+        work=page.request.get(args.base+'/atlases/economy_lab/data/farm_labour.json').json()
+        assert not work['food_output_predicted'] and not work['independent_historical_validation']
+        assert abs(work['cases']['10-day reaping window']['feasible_area_hectares']-5/3)<1e-7
+        assert work['cases']['Same annual budget, harvest staffing']['available_annual_work_hours']==2920
+        assert page.locator('tbody tr').count()==47
         summary=page.locator('details > summary').filter(has_text='Earlier checks:');summary.focus();page.keyboard.press('Enter')
         page.get_by_role('heading',name='Before harvest calendars can drive maps',exact=True).wait_for()
         for picture in page.locator('img').all():
@@ -80,7 +85,7 @@ def main():
             else:
                 response.json()
             downloads.append(link.inner_text())
-        assert len(downloads)==13
+        assert len(downloads)==15
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for viewport in [dict(width=1440,height=1000),dict(width=390,height=844)]:
@@ -91,7 +96,7 @@ def main():
         assert not errors,errors;browser.close()
     result=dict(status='passed',hub_link='passed',prototype_receipt='passed',calendar_receipt='passed',
         joint_calendar_and_storage_receipts='passed',observed_calendar_diagnostic='passed',
-        daily_cereal_evaluation='passed',closed_water_food_provisioning='passed',same_path_world_routes='passed',
+        daily_cereal_evaluation='passed',closed_water_food_provisioning='passed',same_path_world_routes='passed',seasonal_field_operations='passed',
         csv_unknowns_preserved=True,earlier_checks_keyboard='passed',downloads=downloads,
         viewports=['1440x1000','390x844'],themes=['light','dark'],mobile_overflow=False,page_errors=errors)
     (args.out/'checks.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))

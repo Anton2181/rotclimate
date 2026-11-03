@@ -1,0 +1,91 @@
+{
+  "status": "source_transcription_and_explicit_scenarios",
+  "checked_date": "2026-11-03",
+  "sources": [
+    {
+      "title": "Columella, De re rustica2.12.1\u20132",
+      "url": "https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html",
+      "scope": "Listed workdays to the threshing floor; normative Roman estate advice, not full subsistence work or universal biome coefficients"
+    },
+    {
+      "title": "FAO Farm Management for Asia, chapter9",
+      "url": "https://www.fao.org/4/w7365e/w7365e0c.htm",
+      "scope": "Whole-farm activity budgets and resource-constrained planning; does not supply ancient rates"
+    },
+    {
+      "title": "Bogaard et al.2025",
+      "url": "https://doi.org/10.1073/pnas.2400694122",
+      "scope": "Labour/land conceptual distinction; LP constraints do not reconstruct historical institutions or economic inequality"
+    }
+  ],
+  "cached_sources_sha256": {
+    "data/cache/farm_labour/columella_2.html": "c3be3fab2adbee086844c7fca1a03aa6e13a34c6ac85f9fbe301182622cb96ee",
+    "data/cache/farm_labour/fao_farm_planning.html": "33c6934e76edc10f24abef4819503a05e6a47148f30f899cb51c45a83e83d6bb"
+  },
+  "workdays_per_iugerum": {
+    "wheat": {
+      "plough": 4.0,
+      "harrow": 1.0,
+      "hoe_first": 2.0,
+      "hoe_second": 1.0,
+      "weed": 1.0,
+      "reap": 1.5
+    },
+    "barley": {
+      "plough": 3.0,
+      "harrow": 1.0,
+      "hoe_first": 1.5,
+      "reap": 1.0
+    }
+  },
+  "published_totals_workdays_per_iugerum": {
+    "wheat": 10.5,
+    "barley": 6.5
+  },
+  "scenario": {
+    "iugerum_hectares": 0.25,
+    "hours_per_workday": 8.0,
+    "year_days": 365,
+    "step_days": 5,
+    "available_human_hours_per_step": 40.0,
+    "land_hectares": 4.0,
+    "operation_steps": {
+      "plough": [
+        0,
+        20
+      ],
+      "harrow": [
+        20,
+        24
+      ],
+      "hoe_first": [
+        28,
+        36
+      ],
+      "hoe_second": [
+        40,
+        44
+      ],
+      "weed": [
+        44,
+        48
+      ],
+      "reap": [
+        50,
+        52
+      ]
+    },
+    "maximum_workers": 3,
+    "max_hours_per_worker_day": 8.0,
+    "allocation_scope": "Farm-task hours are prescribed within a three-worker upper envelope. More harvest staffing requires a real seasonal allocation change; hours are not banked from winter."
+  },
+  "assumptions": [
+    "0.25ha is an approximate iugerum conversion; eight-hour workday is our unit-conversion scenario, not known Roman day length",
+    "Operation windows are manufactured and not inferred from climate or Columellas calendar",
+    "All availability is already allocated farm-task time, not total household time",
+    "Only listed field operations to the threshing floor: no threshing, processing, storage, water/fuel collection, care, draft animals feed or maintenance",
+    "Land is one complete annual crop activity per hectare; no automatic double cropping or fallow reconstruction",
+    "No observed yields, food adequacy, households, inequality or state formation are estimated",
+    "Matched annual-hours scenario changes seasonal farm staffing within a three-worker upper envelope; it does not store labour or establish feasibility of displaced nonfarm duties"
+  ]
+}

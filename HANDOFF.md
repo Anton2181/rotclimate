@@ -1,3 +1,35 @@
+# Seasonal field-operation scheduling — 3 November 2026
+
+* Continued after world-route8560dc0e and paired-audit5f6e55ff (both pushed).
+  New harvest/labour.py plans complete annual activity hectares and every
+  required operation within supplied windows. Shared seasonal human/team
+  resources, land budget, divisible LP activities, no implicit winter-to-harvest
+  labour transfer. Separate simultaneous resources supported; no task precedence
+  beyond supplied windows, weather workability, endogenous hiring or integers.
+* Historical task counts independently transcribed Columella2.12.1–2: wheat
+  4+1+2+1+1+1.5=10.5days/iugerum;barley3+1+1.5+1=6.5. These stop at threshing
+  floor, not full food/subsistence work. Approx .25ha/iugerum and8h/day are
+  explicit scenario conversions. FAO whole-farm LP is method foundation;
+  Bogaard2025 motivates constraints, not coefficients/inequality prediction.
+* Manufactured73×5day schedules: same2920annual farm-allocationhours,
+  wheat narrow10dayreap =>1.6667ha vs4ha if ignoreseasons or widenreaping30days.
+  Sameannualbudget withadditionalharveststaffing also4ha; within3workers×8h/day
+  upperenvelope, NOT banked wintertime. Moreland/fasterprep remain1.6667ha.
+  Barleynarrow2.5ha comparesworkablearea NOTfood/nutrition. Everytask/budget
+  checked;18focusedtests and61linkedcomponenttests pass. No ancientfarm-size,
+  foodadequacy, leisure/surpluslabour or population predicted.
+* research_notes/farm_labour_20261103.json stores sourcecounts/cachehashes and
+  allassumptions. outputs output/farm_labour_20261103; report FARM_LABOUR_20261103.
+  New economy_labour_section.py verifies source/input/figure/ledger identities.
+  Existing atlas farming/population/climate remain unchanged; published workshop
+  only. No climatebenchmark F used or new climatefit adopted.
+* Next integration: missing threshing/processing/storage tasks, complete household
+  and animalfeed/care budgets, crop-calendar/workability windows, parameter ranges
+  from evidence; then minimum work for a supplied food need, not a biome-driven
+  civilization score. Current numerical marginals are not historical regime labels.
+
+---
+
 # Same-path seasonal freight connector — 3 November 2026
 
 * Continued after publication3b65b92b. New connector57ef94cb retains physical
