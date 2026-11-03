@@ -1,3 +1,26 @@
+# Minimum listed field work for required output — 3 November 2026
+
+* Continued after labour milestone d70c3e00 (pushedbothbranches). Added
+  minimum_farm_work to the same shared LP; target>=need, minimizechosenwork
+  resource, keepallotherresource/season/landlimits. InfeasibleFarmPlan is an
+  explicit error, never hidden foodshortfall or zero requiredwork. Maximum-
+  output and minimum-work marginals separated.30focused analyticaltests pass.
+* demo_required_farm_work.py uses EXPLICIT hypothetical netfood/ha100wheat,
+  80barley, annualneed300arbitraryunits. Historical Columella listedfieldtasks
+  only. Fourha:barley3.75ha/780h;3.5ha:wheat1+barley2.5/856h;3ha:wheat3/1008h.
+  These are analytical controls, NOT historicalyield or subsistence estimates.
+  Insufficientland2.9ha ceiling290;10dayreap ceiling200 => bothinfeasible,
+  workloadnull NOTzero. No calorie/population conversion, seasonalconsumption
+  and foodstocks notyetjointlyoptimized, omittedhousehold/animalcare unchanged.
+* Allpriorseven field-area controls remain unchanged aftersharedsolverextension.
+  Sourcehashreceipts refreshed by rerunning, not manually patched. Published
+  workshop verifies bothstudies, fullschedules and missingvaluehandling.
+* Next: missingtask evidence and jointseasonalfood/stores/work formulation,
+  actualcrop/cultivar/workability validation. These LPs solve their supplied
+  linear scenarios, not the nonconvexclimatecalibration or globaloptimum question.
+
+---
+
 # Seasonal field-operation scheduling — 3 November 2026
 
 * Continued after world-route8560dc0e and paired-audit5f6e55ff (both pushed).

@@ -42,11 +42,27 @@ The baseline land limit is4ha. Operation windows are manufactured: ploughing ste
 
 The wheat bottleneck has a closed-form check:80hours available at reaping divided by48hours/ha permits5/3ha. For barley it is80/32=2.5ha. The annual aggregation control is deliberately not a seasonally feasible calendar; it demonstrates the overstatement made by ignoring deadlines. Faster preparation and more land cannot relax a still-binding reaping window. The barley comparison concerns workable area, not food production or nutritional adequacy.
 
+## Minimum listed work for a supplied annual food target
+
+`minimum_farm_work` uses the same operation, land and resource constraints, adds a minimum supplied output requirement, and minimizes one chosen work resource. Human work is the default resource; animal-team time can instead be the minimized resource. Other resource capacities remain enforced. If the declared output cannot be produced, it raises `InfeasibleFarmPlan`; it does not reduce the need, create spare labour, or silently return the maximum feasible output as if the need were met. Maximum-output and minimum-work marginals are kept separate.
+
+An explicit numerical example supplies wheat100 and barley80 arbitrary annual net-food units per hectare, with a target300units. These food coefficients are **hypothetical scenario inputs**, not measured ancient yields or output from the climate/crop model. Historical listed task counts and the manufactured work windows remain as above. With a thirty-day reaping window, the minimum listed human work is:
+
+| Available land | Selected wheat /barley, ha | Minimum listed work, hours |
+|---|---|---:|
+|4.0ha|0 /3.75|780|
+|3.5ha|1.0 /2.5|856|
+|3.0ha|3.0 /0|1,008|
+
+Barley has greater output per listed work-hour under these supplied coefficients, while wheat has greater output per land area. Tighter land changes the optimal crop mix and increases required work for the same annual food target. The two cases with insufficient resources remain explicit:2.9ha can produce at most290units; a ten-day reaping window with4ha permits at most200units. Their minimum-work entries are null, not zero. These ceilings and the feasible mixes have independent closed-form checks.
+
+This is a conditional minimum of the listed field operations, not total subsistence work, a survival threshold estimated from evidence, or an assurance of food availability through the year. Food stocks, harvest pulses, seasonal consumption, complete processing and household work are not yet jointly optimized with labour. Outputs are arbitrary common food units, without a population or calorie conversion. Evidence, assumptions, schedules and numerical marginals are in `output/farm_work_targets_20261103/review.json`; the figure is linked from the same atlas workshop.
+
 ## Validation and limits
 
-Eighteen focused tests cover seasonal bottlenecks, shared resources, coupled human/team availability, mixed activity allocation, analytical marginal values, rotation of calendar origin, zero resources, invalid inputs and relaxing constraints. Every demo checks operation completion, work capacity and independently derived analytical results. The historical task totals match the cited source; the scenario results are numerical controls, **not independent historical validation**.
+Thirty focused tests cover seasonal bottlenecks, shared resources, coupled human/team availability, mixed activity allocation, analytical marginal values, rotation of calendar origin, zero resources, invalid inputs and relaxing constraints. Every demo checks operation completion, work capacity and independently derived analytical results. The historical task totals match the cited source; the scenario results are numerical controls, **not independent historical validation**.
 
-Unused farm-allocation hours are not leisure or surplus labour. Threshing, processing, storage, drinking-water and fuel collection, care, animal feed, tool/structure maintenance and other essential work remain outside this budget. The module is not yet coupled to crop maturity, soil workability, yields or town provisioning. Its next integration needs those inputs and historically defensible task/window ranges before estimating food-production workload on the world map.
+Unused farm-allocation hours are not leisure or surplus labour. Threshing, processing, storage, drinking-water and fuel collection, care, animal feed, tool/structure maintenance and other essential work remain outside this budget. The module is not yet coupled to crop maturity, soil workability, inferred yields or town provisioning. Its next integration needs those inputs and historically defensible task/window ranges before estimating food-production workload on the world map.
 
 The normal r43 climate, crop-yield and population layers remain unchanged. The launcher-linked economy lab presents the partial prototype with full assumptions and schedules.
 
@@ -55,6 +71,7 @@ The normal r43 climate, crop-yield and population layers remain unchanged. The l
 ```
 .venv/bin/python -m pytest -q tests/test_farm_labour.py
 .venv/bin/python scripts/demo_farm_labour.py
+.venv/bin/python scripts/demo_required_farm_work.py
 .venv/bin/python scripts/build_economy_lab.py
 ```
 

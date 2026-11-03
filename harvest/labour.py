@@ -29,9 +29,16 @@ class FarmPlan:
     unused_resource_hours: np.ndarray
     output: float
     land_used: float
-    land_output_marginal: float  # objective units per extra hectare, local LP derivative
-    work_output_marginals: np.ndarray  # objective units per extra resource-hour
+    land_output_marginal: float | None  # maximum-output objective only
+    work_output_marginals: np.ndarray | None  # maximum-output objective only
     task_residual: np.ndarray
+    minimized_resource: int | None = None
+    required_output: float | None = None
+    required_output_work_marginal: float | None = None
+
+
+class InfeasibleFarmPlan(ValueError):
+    """The supplied output target cannot meet the declared land/work limits."""
 
 
 def plan_farm(output_per_hectare,operations,*,land_hectares,available_hours):
@@ -45,6 +52,28 @@ def plan_farm(output_per_hectare,operations,*,land_hectares,available_hours):
     Coefficients are linear scenario inputs, not an estimated yield response.
     Unused work availability is NOT leisure or a social-development score.
     """
+    return _solve_farm(output_per_hectare,operations,land_hectares=land_hectares,
+        available_hours=available_hours,required_output=None,minimized_resource=None)
+
+
+def minimum_farm_work(output_per_hectare,operations,*,required_output,
+                      land_hectares,available_hours,resource_index=0):
+    """Minimize one supplied work resource while meeting a fixed output need.
+
+    Output may be net food energy only when the caller supplies validated net
+    food coefficients. All other resources remain bounded; they are not free
+    substitutes. A failure raises InfeasibleFarmPlan rather than reducing need
+    or allowing work outside its window. This is not total subsistence labour.
+    """
+    if not np.isfinite(required_output) or required_output<0:
+        raise ValueError('Finite nonnegative required output needed')
+    if isinstance(resource_index,bool) or not isinstance(resource_index,(int,np.integer)):
+        raise ValueError('Integer work-resource index required')
+    return _solve_farm(output_per_hectare,operations,land_hectares=land_hectares,
+        available_hours=available_hours,required_output=float(required_output),minimized_resource=int(resource_index))
+
+
+def _solve_farm(output_per_hectare,operations,*,land_hectares,available_hours,required_output,minimized_resource):
     output=np.asarray(output_per_hectare,float);availability=np.asarray(available_hours,float)
     operations=tuple(operations)
     if output.ndim!=1 or not len(output) or not np.isfinite(output).all() or np.any(output<0):
@@ -54,6 +83,8 @@ def plan_farm(output_per_hectare,operations,*,land_hectares,available_hours):
     if not np.isfinite(land_hectares) or land_hectares<0:
         raise ValueError('Finite nonnegative land required')
     T,R=availability.shape;A=len(output);Q=len(operations)
+    if minimized_resource is not None and not 0<=minimized_resource<R:
+        raise ValueError('Work-resource index outside supplied resources')
     masks=[];requirements=[];owners=[]
     for op in operations:
         if isinstance(op.activity,bool) or not isinstance(op.activity,(int,np.integer)) or not 0<=op.activity<A:
@@ -77,18 +108,32 @@ def plan_farm(output_per_hectare,operations,*,land_hectares,available_hours):
         for r,hours in enumerate(requirements[q]):
             if hours:rows.append(1+t*R+r);cols.append(k);values.append(hours)
     equality=coo_matrix((eqval,(eqrow,eqcol)),shape=(Q,size)).tocsr()
-    inequalities=coo_matrix((values,(rows,cols)),shape=(1+T*R,size)).tocsr()
+    limits=np.r_[land_hectares,availability.ravel()]
     objective=np.r_[-output,np.zeros(len(pairs))]
-    solution=linprog(objective,A_ub=inequalities,b_ub=np.r_[land_hectares,availability.ravel()],
+    if required_output is not None:
+        target_row=1+T*R
+        for a,value in enumerate(output):
+            if value:rows.append(target_row);cols.append(a);values.append(-value)
+        limits=np.r_[limits,-required_output]
+        objective=np.r_[np.zeros(A),[requirements[q][minimized_resource] for q,t in pairs]]
+    inequalities=coo_matrix((values,(rows,cols)),shape=(len(limits),size)).tocsr()
+    solution=linprog(objective,A_ub=inequalities,b_ub=limits,
         A_eq=equality,b_eq=np.zeros(Q),bounds=(0,None),method='highs')
+    if required_output is not None and solution.status==2:
+        raise InfeasibleFarmPlan('Required output exceeds the supplied seasonal work/land limits')
     if not solution.success:raise RuntimeError('Farm-operation planning failed: '+solution.message)
     area=solution.x[:A];completed=np.zeros((T,Q))
     for k,(q,t) in enumerate(pairs,start=A):completed[t,q]=solution.x[k]
     requirements=np.asarray(requirements)
     used=completed@requirements;residual=completed.sum(axis=0)-area[np.asarray(owners)]
-    tolerance=1e-7*max(1.,land_hectares,float(availability.max()))
-    if np.max(np.abs(residual))>tolerance or np.max(used-availability)>tolerance or area.sum()>land_hectares+tolerance:
+    area_tolerance=1e-7*max(1.,land_hectares);work_tolerance=1e-7*max(1.,float(availability.max()))
+    if np.max(np.abs(residual))>area_tolerance or np.max(used-availability)>work_tolerance or area.sum()>land_hectares+area_tolerance:
         raise RuntimeError('Farm work/land budget failed')
+    produced=float(output@area)
+    if required_output is not None and produced<required_output-1e-7*max(1.,required_output):
+        raise RuntimeError('Farm output requirement failed')
     marginals=-solution.ineqlin.marginals
-    return FarmPlan(area,completed,used,np.maximum(availability-used,0),float(output@area),float(area.sum()),
-        float(marginals[0]),marginals[1:].reshape(T,R),residual)
+    return FarmPlan(area,completed,used,np.maximum(availability-used,0),produced,float(area.sum()),
+        float(marginals[0]) if required_output is None else None,
+        marginals[1:].reshape(T,R) if required_output is None else None,residual,
+        minimized_resource,required_output,None if required_output is None else float(marginals[-1]))

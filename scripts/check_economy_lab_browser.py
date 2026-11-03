@@ -68,7 +68,12 @@ def main():
         assert not work['food_output_predicted'] and not work['independent_historical_validation']
         assert abs(work['cases']['10-day reaping window']['feasible_area_hectares']-5/3)<1e-7
         assert work['cases']['Same annual budget, harvest staffing']['available_annual_work_hours']==2920
-        assert page.locator('tbody tr').count()==47
+        target=page.request.get(args.base+'/atlases/economy_lab/data/required_farm_work.json').json()
+        assert not target['historical_food_yields_estimated'] and not target['total_subsistence_work_estimated']
+        assert target['cases']['Insufficient land']['minimum_listed_work_hours'] is None
+        assert target['cases']['Narrow harvest window']['status']=='infeasible'
+        assert target['cases']['Ample land']['minimum_listed_work_hours']<target['cases']['Tighter land']['minimum_listed_work_hours']
+        assert page.locator('tbody tr').count()==52
         summary=page.locator('details > summary').filter(has_text='Earlier checks:');summary.focus();page.keyboard.press('Enter')
         page.get_by_role('heading',name='Before harvest calendars can drive maps',exact=True).wait_for()
         for picture in page.locator('img').all():
@@ -85,7 +90,7 @@ def main():
             else:
                 response.json()
             downloads.append(link.inner_text())
-        assert len(downloads)==15
+        assert len(downloads)==16
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for viewport in [dict(width=1440,height=1000),dict(width=390,height=844)]:
