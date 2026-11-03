@@ -20,7 +20,14 @@
   renders stored paths with readable white-cased sea lines and correct transfer
   legend. economy_freight_section.py publishes all24paths and assumptions.
   Report FREIGHT_CORRIDORS_20261103.26 focused freight/food/directed tests pass.
-* Next: measure parallel-edge effect before production replacement; retain
+* Paired audit then completed with prospective plan8560dc0e: ten fixedsources,
+  fourtrade months, identicaltopology/reachability, only155parallelpairweights
+  differ eachmonth. No costincrease; all360sampled directedtownpairs unchanged.
+  BroadMAmax+.0107%, localMAmax+.0735%; maxindividualroutecostdrop7.807roadkm,
+  up to2.654%reachableclaimedpeople have >1roadkm saving for a source/month.
+  Small sampled aggregateeffect, not a large trade-map discrepancy explanation.
+  Data output/parallel_freight_20261103/review.json. Legacy maps unchanged.
+* Next: historical seasonal labour and fixed operation windows; retain
   faster/costlier paths before shortage inference; finite fleet/return-voyage
   scenarios and actual-world crop/storage/labour validation remain separate.
 

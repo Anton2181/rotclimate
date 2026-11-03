@@ -60,7 +60,10 @@ def main():
         assert all(abs(r['annual_food_ledger_residual'])<1e-7 for r in freight['provisioning'].values())
         months=page.locator('details > summary').filter(has_text='All 12 months and both directions')
         months.focus();page.keyboard.press('Enter')
-        assert page.locator('tbody tr').count()==36
+        audit=page.request.get(args.base+'/atlases/economy_lab/data/parallel_freight.json').json()
+        assert not audit['production_atlas_changed'] and len(audit['pair_samples'])==360
+        assert max(r['legacy_cost']-r['alternative_cost'] for r in audit['pair_samples'])==0
+        assert page.locator('tbody tr').count()==40
         summary=page.locator('details > summary').filter(has_text='Earlier checks:');summary.focus();page.keyboard.press('Enter')
         page.get_by_role('heading',name='Before harvest calendars can drive maps',exact=True).wait_for()
         for picture in page.locator('img').all():
@@ -77,7 +80,7 @@ def main():
             else:
                 response.json()
             downloads.append(link.inner_text())
-        assert len(downloads)==12
+        assert len(downloads)==13
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for viewport in [dict(width=1440,height=1000),dict(width=390,height=844)]:
