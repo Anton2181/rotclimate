@@ -12,37 +12,20 @@ def main():
     import matplotlib
     matplotlib.use('Agg')
     import matplotlib.pyplot as plt
-    from harvest.crop_sequences import CropCatalogue,CropWindow,crop_windows,optimize_sequences
-    from harvest.export import climate_arrays,geometry,surface_months
-    from harvest.models import specification
-    from scripts.land_people import CROPS,analyse,bucket,hargreaves,sunlight_top
+    from harvest.crop_sequences import CropCatalogue,crop_windows,optimize_sequences
+    from harvest.calendar_sample import load_frozen_calendar_sample
+    from scripts.land_people import CROPS
     from local_benchmark_protocol import file_hash,write_json
     source=ROOT/'output/crop_calendar_audit_20261103/receipt.json'
-    previous=json.loads(source.read_text())
-    for name,expected in previous['inputs_sha256'].items():
-        if file_hash(ROOT/name)!=expected:raise ValueError('Frozen diagnostic input changed: '+name)
-    data=ROOT/'atlases/earth_fit/data';meta=json.loads((data/'atlas.json').read_text())
-    arrays=climate_arrays(data,meta);geo,geo_key=geometry(meta,arrays['elev'].shape)
-    if geo_key!=previous['geography_inputs']:
-        # JSON object keys stringify terrain-tier integers.
-        if json.loads(json.dumps(geo_key))!=previous['geography_inputs']:raise ValueError('Geography changed')
-    land=np.flatnonzero(geo['land_fraction']>0)
-    selected=land[np.linspace(0,len(land)-1,previous['sample_cells'],dtype=int)]
-    t,p,d,latitude=surface_months(meta,arrays)
-    t,p,d=[a.reshape(12,-1)[:,selected].copy() for a in (t,p,d)]
-    latitude=latitude.ravel()[selected];irr=geo['irr'].ravel()[selected];arable=geo['arable'].ravel()[selected]
-    margin=specification()['margin_reliability']
-    cold=margin['cold_mean_temperature_c'];dry=margin['dry_rain_over_evaporation']
-    baseline,_=analyse(t,p,latitude,meta['world']['tilt'],0,irr,arable,d,margins=(cold,dry))
-    pet=hargreaves(t,d,sunlight_top(latitude,meta['world']['tilt'],0));soil=bucket(p,pet)
-    keep=np.clip((t.mean(0)-cold[0])/(cold[1]-cold[0]),0,1)
-    rain_keep=np.clip((baseline['aridity']-dry[0])/(dry[1]-dry[0]),0,1)
+    sample=load_frozen_calendar_sample()
+    previous=sample.previous;geo_key=sample.geography;selected=sample.indices
+    t,p,pet,soil=sample.climate;irr=sample.irrigation;keep=sample.keep;rain_keep=sample.rain_keep;baseline=sample.baseline
     cat=crop_windows(t,p,pet,soil,irr,keep=keep,rain_keep=rain_keep)
     for name in CROPS:
         actual=cat.energy[[w.crop==name for w in cat.windows]].max(0)
         np.testing.assert_array_equal(actual,baseline['kcal_'+name])
     print('All per-crop maxima exactly reproduce production',flush=True)
-    can_double=(irr>=.5)|(baseline['lgp_days']>=300)
+    can_double=sample.can_double
     results={}
     for gap in [0,1]:
         results[gap]=optimize_sequences(cat,can_double,turnaround=gap,perennial_energy=baseline['kcal_dates'])
@@ -88,7 +71,7 @@ def main():
         calendar_origin_check=dict(cells=len(ix),origins=12,climate_and_soil_rolled_windows_regenerated=True,energy_count_and_boundary_union_exact=True),
         inputs_sha256=previous['inputs_sha256'],geography_inputs=geo_key,
         literature_manifest_sha256=file_hash(ROOT/'research_notes/crop_sequences_20261103.json'),
-        sources_sha256={name:file_hash(ROOT/name) for name in ['harvest/crop_sequences.py','scripts/review_crop_sequences.py','harvest/export.py','scripts/land_people.py']},
+        sources_sha256={name:file_hash(ROOT/name) for name in ['harvest/crop_sequences.py','harvest/calendar_sample.py','scripts/review_crop_sequences.py','harvest/export.py','scripts/land_people.py']},
         figure_sha256=file_hash(image),
         scope='All annual windows, at most two occupancy-compatible different crops. Existing second weight and water gate held fixed. Zero/one-bin turnaround are sensitivity scenarios, not ancient estimates. Reference soil buckets do not form a sequential crop-water ledger. Fantasy sample, not whole-map areas or Earth/historical validation. Example choices are arbitrary at ties; count and boundary union retain ambiguity. No perennial harvest dates assigned.'))
     print(json.dumps(counts,indent=2))

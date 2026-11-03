@@ -1,0 +1,44 @@
+{
+  "status": "conditional_inventory_scenario",
+  "production_atlas_changed": false,
+  "independent_agronomic_validation": false,
+  "granary_or_loss_coefficients_fitted": false,
+  "sample_cells": 4096,
+  "timed_annual_cells": 4091,
+  "unknown_perennial_timing_cells": 5,
+  "calendar_dependent_reserve_cells": 162,
+  "maximum_reserve_range_days": 30.815126744338613,
+  "single_pulse_reserve_days_5day_clock": 360,
+  "single_pulse_reserve_days_daily_clock": 364,
+  "maximum_5day_vs_daily_bound_difference_days": 4.0,
+  "minimum_timed_reserve_days": 239.1848732556614,
+  "maximum_timed_reserve_days": 360.0,
+  "clock_scenarios": [
+    {
+      "steps": 73,
+      "days_per_step": 5
+    },
+    {
+      "steps": 365,
+      "days_per_step": 1
+    }
+  ],
+  "csv_sha256": "d5e6d91400950d07f1fe5cf4f86045496ba17857dc2d6a1c6a9abf199c82292b",
+  "figure_sha256": "fb0403d111f492065c2acc556dab73e0d3213169acbd3c0668208f017822ef3a",
+  "inputs_sha256": {
+    "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+    "atlases/earth_fit/data/atlas.bin": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2",
+    "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3"
+  },
+  "literature_manifest_sha256": "4edfefb6fdb5ea3ba2bfa9136841f5c6e05d4e701af9614f7ce09a2c232f65e4",
+  "sources_sha256": {
+    "harvest/calendar_stocks.py": "693d6f45f94eeca7a54d4ab5cab144b234c92778e5cf76514176dc732eee0404",
+    "harvest/crop_sequences.py": "9aab8015f8a94863eb798005fa7077c8d1d60f1c138126201430c824c7816e68",
+    "harvest/calendar_sample.py": "3d75e0d5a1c7e6677c55da2cd048fec1b8dd4d0bce14a21a719b9858096e4ebc",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
+    "scripts/review_calendar_storage.py": "d59ffe72c8d172aae75572cfaa9e26fa5cf975631d0e7a965d8cfa59518709bd",
+    "harvest/export.py": "e702c0a5b4f8eda5a29ca31e5765f9f4541eb8b0504bcbf8ba9a03e5ab457296",
+    "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507"
+  },
+  "scope": "Bounds over tied optimal ANNUAL schedules under inherited crop comparison rules. Food pulses occur at rounded climate-bin maturity boundaries; annual consumption equals edible harvest and is uniform. No assumed ancient granary capacity, spoilage percentage, seed deduction, famine frequency, real harvest date or population. Perennial timing remains explicitly unknown; blank CSV bounds are not zeros. Formula independently checked against the existing cyclic food ledger; numeric agreement is not agronomic validation."
+}

@@ -53,6 +53,30 @@ def main():
         raise ValueError('Calendar figure changed')
     shutil.copyfile(calendar_source/'crop_calendar_ties.png',data/'crop_calendar_ties.png')
     shutil.copyfile(calendar_source/'receipt.json',data/'calendar_receipt.json')
+    newest={}
+    for key,folder,files in [
+        ('sequence','crop_sequences_20261103',['joint_crop_sequences.png']),
+        ('storage','calendar_storage_20261103',['calendar_storage_bounds.png','calendar_reserves.csv']),
+    ]:
+        origin=ROOT/'output'/folder
+        record=json.loads((origin/'receipt.json').read_text())
+        if record['production_atlas_changed'] or record['independent_agronomic_validation']:
+            raise ValueError('This page describes experimental comparisons')
+        for name,expected in {**record['sources_sha256'],**record['inputs_sha256']}.items():
+            if file_hash(ROOT/name)!=expected:raise ValueError('Experimental source/input changed: '+name)
+        for name in files:
+            expected=record['csv_sha256' if name.endswith('.csv') else 'figure_sha256']
+            if file_hash(origin/name)!=expected:raise ValueError('Experimental asset changed: '+name)
+            shutil.copyfile(origin/name,data/name)
+        shutil.copyfile(origin/'receipt.json',data/(key+'_receipt.json'))
+        newest[key]=record
+    manifest=ROOT/'research_notes/crop_sequences_20261103.json'
+    if any(file_hash(manifest)!=record['literature_manifest_sha256'] for record in newest.values()):
+        raise ValueError('Literature and assumption manifest changed')
+    shutil.copyfile(manifest,data/'sequence_sources.json')
+    sequences=newest['sequence'];storage=newest['storage']
+    sequence_rows=''.join(f'<tr><td>{label}</td><td>{sequences["scenarios"][key]["improved_cells"]}</td><td>{sequences["scenarios"][key]["paired_cells"]}</td></tr>'
+        for key,label in [('0','No turnaround bin'),('1','One bin after each crop')])
     rows=[]
     for name,result in receipt['results'].items():
         capacity=receipt['minimum_zero_loss_capacity'][name]
@@ -71,7 +95,23 @@ def main():
 <main><nav aria-label="Atlas navigation"><a href="../">Three climate atlases</a><a href="../earth_fit/">Earth-fit atlas</a><a href="../climate_accuracy/">Climate evidence</a></nav>
 <header><p class="note">c.200 AD model workshop · 3 November 2026</p><h1>Food, farming and society</h1>
 <p class="lede">Connect the harvest, the hungry season, the work of farming and the food that reaches a town or a state.</p>
-<p><span class="status">One numerical prototype</span> <span class="status">Production proposals under review</span></p></header>
+<p><span class="status">Experimental calendars and food stocks</span> <span class="status">Agronomic validation pending</span></p></header>
+<section aria-labelledby="sequences-h"><h2 id="sequences-h">Choose crop seasons together</h2>
+<p>The calendar prototype retains every annual growing window and compares compatible crop sequences. It can trade a little yield from one crop for a better annual combination. Each individual crop’s maximum still exactly matches the existing yield model.</p>
+<p><a href="https://doi.org/10.1016/j.gloenvcha.2012.11.001">Waha and colleagues (2013)</a> motivates considering sowing dates and crop sequences together; <a href="https://doi.org/10.1016/j.gloenvcha.2020.102131">their global multiple-cropping study (2020)</a> supports checking non-overlapping seasons and limits to intensification. This is our simplified prototype, not a reproduction of those models or a reconstruction of ancient farming.</p>
+<figure><a href="data/joint_crop_sequences.png"><img src="data/joint_crop_sequences.png" width="1620" height="648" alt="Energy changes from joint crop selection and two turnaround sensitivity scenarios"></a>
+<figcaption>The same {sequences['sample_cells']:,} raw-r43 fantasy sample cells. The inherited half-weight second crop and water-access gate are retained for comparison; neither is established here as a universal 200 AD rule. One climate bin is about 30 days, so the turnaround cases are coarse sensitivity scenarios.</figcaption></figure>
+<div class="table"><table><caption>Diagnostic sample counts · higher modeled energy is not independent agronomic validation</caption><thead><tr><th>Turnaround scenario</th><th>Higher-energy combination than current selection</th><th>Chosen crop pairs</th></tr></thead><tbody>{sequence_rows}</tbody></table></div>
+<p>Changing the calendar origin preserves optimal energy and the alternatives. There are still several equally good schedules in {sequences['scenarios']['0']['ambiguous_cells']:,} samples. The model retains those alternatives; its example schedule is not an observed harvest date.</p>
+<div class="links"><a href="data/sequence_receipt.json" download>Joint-calendar results and checks</a><a href="data/sequence_sources.json" download>Academic sources and our assumptions</a><a href="../../reports/CROP_SEQUENCES_20261103.md">Method, literature and validation requirements</a></div></section>
+<section aria-labelledby="reserve-h"><h2 id="reserve-h">Equal harvest totals, different reserve needs</h2>
+<p>Across equally productive annual calendars, {storage['calendar_dependent_reserve_cells']} samples have different minimum storage requirements, with a range of up to {storage['maximum_reserve_range_days']:.0f} days of the specified food need.</p>
+<p><strong>This is a conditional inventory scenario:</strong> harvests arrive at rounded climate-bin maturity boundaries, annual consumption equals the edible harvest, consumption is uniform and storage has zero loss. No ancient granary capacity, loss rate, famine frequency or population is fitted.</p>
+<figure><a href="data/calendar_storage_bounds.png"><img src="data/calendar_storage_bounds.png" width="1620" height="648" alt="Minimum and maximum reserve requirements across equally productive annual calendars"></a>
+<figcaption>Bounds use every tied-optimal annual schedule. Five-day and daily accounting differ by at most {storage['maximum_5day_vs_daily_bound_difference_days']:.0f} days here. {storage['unknown_perennial_timing_cells']} perennial-only samples retain unknown timing and blank CSV bounds. Reserve days are a food-budget unit, not a measured granary size.</figcaption></figure>
+<p>The reserve equation is derived from the food ledger and independently checked against its cyclic-deficit calculation. <a href="https://www.fao.org/4/ac301e/AC301e03.htm">FAO’s post-harvest framework</a> motivates separate production, storage and consumption accounts; it does not supply period-specific loss coefficients. Crop-water dynamics and observed-calendar checks remain necessary before food-security maps.</p>
+<div class="links"><a href="data/storage_receipt.json" download>Reserve scenario and numerical checks</a><a href="data/calendar_reserves.csv" download>Per-sample reserve ranges (CSV)</a><a href="../../reports/CALENDAR_STORAGE_20261103.md">Inventory assumptions and limits</a></div></section>
+<details><summary>Earlier checks: manufactured storage example and calendar tie audit</summary>
 <section aria-labelledby="stocks-h"><h2 id="stocks-h">Seasonality and storage</h2>
 <p>The prototype accounts for harvest, meals, stored food, spoilage, overflow and unmet demand. Annual food production alone does not tell us whether food is available through the whole year.</p>
 <p><strong>This is a manufactured example.</strong> Each schedule supplies 365 units of food against 365 units of demand per year, with storage for 200 days of that demand and zero spoilage. These are assumed schedules, not ancient crop yields, the world’s harvest dates or famine probabilities.</p>
@@ -86,7 +126,7 @@ def main():
 <figcaption>Diagnostic sample results, not whole-map area estimates or observed agronomic accuracy. The right-hand histogram shows improved cells only. Different crops, the existing water gate and half-weight second crop are retained. No published yield or population estimate has changed.</figcaption></figure>
 <p>The next step is to preserve feasible season alternatives and choose compatible crop sequences together, then test the resulting calendars before feeding food stocks. A tie-breaking choice is not evidence of a real harvest date.</p>
 <div class="links"><a href="data/calendar_receipt.json" download>Calendar audit data and scope</a><a href="../../reports/CROP_CALENDARS_20261103.md">Calendar audit method and prerequisites</a></div></section>
-<section aria-labelledby="next-h"><h2 id="next-h">Proposed mechanics and maps</h2>
+</details><section aria-labelledby="next-h"><h2 id="next-h">Proposed mechanics and maps</h2>
 <div class="table"><table><thead><tr><th>Mechanic</th><th>Useful maps or views</th><th>Status</th></tr></thead><tbody>{options}</tbody></table></div>
 <p>The recommended first integration is crop calendars and food stocks, followed by actual grain provisioning over the existing directed road, river and sea network. Household labour then separates a productive environment from one that is easy to farm.</p>
 <div class="links"><a href="../../reports/ECONOMY_PROPOSALS_20261103.md">Full proposals, prerequisites and references</a><a href="data/proposal_sources.json" download>Existing-model and source audit</a></div></section>
@@ -104,6 +144,8 @@ def main():
     write_json(source/'publication.json',dict(status='prepared',page_sha256=file_hash(atlas/'index.html'),
         prototype_receipt_sha256=file_hash(source/'receipt.json'),producer_sha256=file_hash(Path(__file__)),
         calendar_receipt_sha256=file_hash(calendar_source/'receipt.json'),
+        sequence_receipt_sha256=file_hash(ROOT/'output/crop_sequences_20261103/receipt.json'),
+        storage_receipt_sha256=file_hash(ROOT/'output/calendar_storage_20261103/receipt.json'),
         assets_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in sorted(data.iterdir()) if p.is_file()}))
     print('Built portable economy lab with manufactured prototype and proposals')
 

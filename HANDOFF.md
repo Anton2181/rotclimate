@@ -1,3 +1,38 @@
+# Joint crop calendars and reserve uncertainty — 3 November 2026
+
+* USER STEERING: keep new mechanics grounded in real academic literature.
+  Explicit source/assumption register research_notes/crop_sequences_20261103.json:
+  Waha2013/2020 (sequences and sowing), FAO33 response/FAO56 (water), Sacks2010
+  observed calendars as a future independent check, not yet scored. The code
+  is a simplified prototype, not LPJmL/GAEZ reproduction or ancient validation.
+* Joint window selector committed/pushed345793f2; retains all216 annual crop
+  windows and optimizes up to2 compatible crops; both-turnaround and year-wrap
+  constraints. Existing secondary weight.5, water gate and different-crop rule
+  held fixed ONLY to isolate selection. All per-crop maxima exactly reproduce
+  production. Same fixed4,096 raw-r43 fantasy samples:113 improved,263 example
+  pairs,3150 with tied optima. One-bin turnaround110/261/3094. All12 jointly
+  rolled climate/soil origins exactly match energy/count/boundary union on256
+  fixed cells. Production yields/population/physics remain unchanged.
+* New calendar_stock_bounds computes min/max no-loss reserve requirements
+  across ALL tied annual optima, retaining unknown perennial timing. Conditional
+  harvest pulses, uniform need equal to annual harvest, zero loss; no ancient
+  storage/loss/population coefficient fitted.162 samples show calendar-dependent
+  reserves, max range30.815days; five-day vs daily bounds differ≤4days. Five
+  perennial-only cases have blank CSV bounds (not zeros). Formula checked against
+  independent cyclic-deficit and repeating inventories in120 cases/3 clocks.
+  58 focused tests pass. Sources harvest/{crop_sequences,calendar_stocks,
+  calendar_sample}.py; reports CROP_SEQUENCES_20261103 /CALENDAR_STORAGE_20261103.
+  Outputs under output/crop_sequences_20261103 and output/calendar_storage_20261103.
+* Normal .bat hub's economy lab now presents both comparisons, academic source
+  register, CSV and explicit limits. Older manufactured/tie checks folded into
+  keyboard-operable details. Desktop/mobile/light/dark/downloads pass, no
+  overflow. Public models still require observed-calendar evaluation, coupled
+  crop-specific sequential soil water, historical labour/cultivar evidence and
+  revalidation of capacity/fallow before adoption. No new physics trials active;
+  r43 remains adopted and F remains unused.
+
+---
+
 # Calendar evidence and final drying qualification — 3 November 2026
 
 * Stronger dry-branch qualification is COMPLETE/REJECTED, a55cb748, pushed to
