@@ -36,8 +36,13 @@ def main():
         assert sequence['scenarios']['0']['improved_cells']==113 and not sequence['independent_agronomic_validation']
         assert reserve['calendar_dependent_reserve_cells']==162 and reserve['unknown_perennial_timing_cells']==5
         assert not reserve['production_atlas_changed']
-        assert page.locator('tbody tr').count()==11
-        summary=page.locator('details > summary');summary.focus();page.keyboard.press('Enter')
+        observed=page.request.get(args.base+'/atlases/economy_lab/data/observed_calendar_result.json').json()
+        assert observed['unflagged_records']==472 and observed['source_flagged_records']==9
+        assert observed['groups']['wheat · Winter']['outside_envelope']['0.0']['count']==55
+        assert not observed['parameters_tuned'] and not observed['full_agronomic_validation']
+        page.get_by_role('heading',name='What observed crop calendars reveal',exact=True).wait_for()
+        assert page.locator('tbody tr').count()==14
+        summary=page.locator('details > summary').filter(has_text='Earlier checks:');summary.focus();page.keyboard.press('Enter')
         page.get_by_role('heading',name='Before harvest calendars can drive maps',exact=True).wait_for()
         for picture in page.locator('img').all():
             page.wait_for_function('(el)=>el.complete && el.naturalWidth>0',arg=picture.element_handle())
@@ -53,7 +58,7 @@ def main():
             else:
                 response.json()
             downloads.append(link.inner_text())
-        assert len(downloads)==7
+        assert len(downloads)==9
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for viewport in [dict(width=1440,height=1000),dict(width=390,height=844)]:
@@ -63,7 +68,8 @@ def main():
                     page.screenshot(path=str(args.out/'economy_lab.png'),full_page=True)
         assert not errors,errors;browser.close()
     result=dict(status='passed',hub_link='passed',prototype_receipt='passed',calendar_receipt='passed',
-        joint_calendar_and_storage_receipts='passed',csv_unknowns_preserved=True,earlier_checks_keyboard='passed',downloads=downloads,
+        joint_calendar_and_storage_receipts='passed',observed_calendar_diagnostic='passed',
+        csv_unknowns_preserved=True,earlier_checks_keyboard='passed',downloads=downloads,
         viewports=['1440x1000','390x844'],themes=['light','dark'],mobile_overflow=False,page_errors=errors)
     (args.out/'checks.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
 

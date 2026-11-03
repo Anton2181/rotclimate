@@ -14,7 +14,7 @@ not adopted this scheduler.
 | [Waha et al. 2020](https://doi.org/10.1016/j.gloenvcha.2020.102131) | Compare non-overlapping seasons; distinguish intensification potential from realized practice | No modern sequence map is transferred into 200 AD |
 | [FAO irrigation scheduling, Annex II §2.1](https://www.fao.org/4/X5647E/x5647e0e.htm) | Relative yield loss responds to evapotranspiration deficit, following FAO33 | Inherited absolute yields, water access and severe-deficit cutoff are not independently established by that equation |
 | [FAO56, Allen et al. 1998](https://www.fao.org/4/x0490e/x0490e00.htm) | Crop evapotranspiration and soil-water accounting | The present seasonal water approximation still needs a sequential, crop-specific soil ledger |
-| [Sacks et al. 2010, observed calendars](https://doi.org/10.1111/j.1466-8238.2010.00551.x) | Provides a potential independent calendar comparison | Modern dates are not ancient observations; this round has not scored that dataset |
+| [Sacks et al. 2010, observed calendars](https://doi.org/10.1111/j.1466-8238.2010.00551.x) | Separate duration/exposure diagnostic now checks a necessary timing envelope | Full spatial date/yield validation and ancient cultivar assessment remain pending |
 
 The source and assumption register is
 `research_notes/crop_sequences_20261103.json`. Literature motivates the

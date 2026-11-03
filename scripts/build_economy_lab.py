@@ -75,6 +75,23 @@ def main():
         raise ValueError('Literature and assumption manifest changed')
     shutil.copyfile(manifest,data/'sequence_sources.json')
     sequences=newest['sequence'];storage=newest['storage']
+    observed_origin=ROOT/'output/observed_crop_durations_20261103'
+    observed=json.loads((observed_origin/'result.json').read_text())
+    observed_plan=ROOT/'calibration/crop_calendar_observations_20261103/plan.json'
+    if observed['parameters_tuned'] or observed['full_agronomic_validation'] or observed['production_atlas_changed']:
+        raise ValueError('Observed calendars are a descriptive check, not adoption')
+    for name,expected in [('scripts/check_observed_crop_durations.py',observed['observer_sha256']),
+                          ('scripts/land_people.py',observed['production_source_sha256'])]:
+        if file_hash(ROOT/name)!=expected:raise ValueError('Observed check source changed')
+    if file_hash(observed_plan)!=observed['plan_sha256'] or file_hash(observed_origin/'observed_durations.png')!=observed['figure_sha256']:
+        raise ValueError('Observed check plan or figure changed')
+    shutil.copyfile(observed_origin/'result.json',data/'observed_calendar_result.json')
+    shutil.copyfile(observed_origin/'observed_durations.png',data/'observed_durations.png')
+    shutil.copyfile(observed_plan,data/'observed_calendar_plan.json')
+    observed_rows=[]
+    for key,label in [('wheat · Winter','Winter wheat'),('barley · Winter','Winter barley'),('rice · Unqualified','Rice, unqualified')]:
+        g=observed['groups'][key];envelope=list(g['outside_envelope'].values())
+        observed_rows.append(f'<tr><td>{label}</td><td>{g["records"]}</td><td>{envelope[0]["count"]}</td><td>{envelope[-1]["count"]}</td><td>{g["cold_exposure_records"]}/{g["cold_summary_available"]}</td></tr>')
     sequence_rows=''.join(f'<tr><td>{label}</td><td>{sequences["scenarios"][key]["improved_cells"]}</td><td>{sequences["scenarios"][key]["paired_cells"]}</td></tr>'
         for key,label in [('0','No turnaround bin'),('1','One bin after each crop')])
     rows=[]
@@ -96,6 +113,14 @@ def main():
 <header><p class="note">c.200 AD model workshop · 3 November 2026</p><h1>Food, farming and society</h1>
 <p class="lede">Connect the harvest, the hungry season, the work of farming and the food that reaches a town or a state.</p>
 <p><span class="status">Experimental calendars and food stocks</span> <span class="status">Agronomic validation pending</span></p></header>
+<section aria-labelledby="observed-h"><h2 id="observed-h">What observed crop calendars reveal</h2>
+<p>A declared check against <a href="https://doi.org/10.1111/j.1466-8238.2010.00551.x">Sacks and colleagues’ published calendars (2010)</a> finds a gap in the current crop windows, especially for winter cereals. These are modern regional records, not ancient cultivars or pointwise yield validation. No model parameters were tuned.</p>
+<div class="table"><table><caption>Selected unflagged groups · complete qualifier groups and exclusions are downloadable</caption><thead><tr><th>Crop group</th><th>Records</th><th>Duration outside model range</th><th>Still outside with 30-day margin</th><th>Cold exposure /available climate summaries</th></tr></thead><tbody>{''.join(observed_rows)}</tbody></table></div>
+<p>The current evaluator has no explicit winter dormancy, vernalization or photoperiod development. A published next-process reference is <a href="https://doi.org/10.5194/gmd-11-1343-2018">Schaphoff and colleagues’ LPJmL4 description (2018)</a>. That module is not implemented here; improving calendar search alone does not supply it.</p>
+<details><summary>All observed crop and qualifier groups</summary>
+<figure><a href="data/observed_durations.png"><img src="data/observed_durations.png" width="1755" height="1161" alt="All parsed crop qualifier groups: observed duration ranges, model duration envelopes and available cold-exposure summaries"></a>
+<figcaption>{observed['unflagged_records']} unflagged records and {observed['source_flagged_records']} original Exclude-qualified records are retained separately. Missing climate summaries are unavailable, not zero. Cold exposure comes from interpolated source climatology; its percentage is not an exact model-rejection rate. Model duration coverage is a necessary timing check, not a predicted-date score.</figcaption></figure></details>
+<div class="links"><a href="data/observed_calendar_result.json" download>Observed-calendar records and full diagnostics</a><a href="data/observed_calendar_plan.json" download>Declared diagnostic and source identity</a><a href="../../reports/OBSERVED_CROP_CALENDARS_20261103.md">Findings, caveats and reproduction</a></div></section>
 <section aria-labelledby="sequences-h"><h2 id="sequences-h">Choose crop seasons together</h2>
 <p>The calendar prototype retains every annual growing window and compares compatible crop sequences. It can trade a little yield from one crop for a better annual combination. Each individual crop’s maximum still exactly matches the existing yield model.</p>
 <p><a href="https://doi.org/10.1016/j.gloenvcha.2012.11.001">Waha and colleagues (2013)</a> motivates considering sowing dates and crop sequences together; <a href="https://doi.org/10.1016/j.gloenvcha.2020.102131">their global multiple-cropping study (2020)</a> supports checking non-overlapping seasons and limits to intensification. This is our simplified prototype, not a reproduction of those models or a reconstruction of ancient farming.</p>
@@ -146,6 +171,7 @@ def main():
         calendar_receipt_sha256=file_hash(calendar_source/'receipt.json'),
         sequence_receipt_sha256=file_hash(ROOT/'output/crop_sequences_20261103/receipt.json'),
         storage_receipt_sha256=file_hash(ROOT/'output/calendar_storage_20261103/receipt.json'),
+        observed_calendar_result_sha256=file_hash(observed_origin/'result.json'),
         assets_sha256={str(p.relative_to(ROOT)):file_hash(p) for p in sorted(data.iterdir()) if p.is_file()}))
     print('Built portable economy lab with manufactured prototype and proposals')
 

@@ -1,3 +1,41 @@
+# Observed calendar diagnostic identifies winter-phenology gap — 3 November 2026
+
+* All source-backed joint-calendar and reserve prototypes were published and
+  pushed41b76ca9 after345793f2. Continued after pushing with an actual modern
+  observed-calendar diagnostic, as owner specifically requested academic basis.
+* Committed prospective diagnostic e6224742 BEFORE group-score inspection:
+  calibration/crop_calendar_observations_20261103/plan.json. Authors' Sacks2010
+  CSV cached locally (1.2MB), raw SHA fixed. Parser keeps all qualifiers; source
+  Exclude groups explicitly flagged and separate (notes explain crop weighting
+  or ambiguous sequential/spatial cropping). 1510raw ->481 mapped/basic-valid,
+  9source-flagged,472unflagged;1025unmapped +4invalid dates. Generic millet not
+  treated as foxtail. Source cold summaries missing != zero. No tuning/adoption.
+* Unflagged winter wheat138 records:55 outside current duration envelope,
+  22 still outside with full-bin30.4day tolerance;54/137 climate summaries have
+  below-zero exposure. Winter barley49:13/2 outside,13/48 exposure. Unqualified
+  rice145:36/2 outside,0/143 exposure. Every group and record retained publicly.
+  This is a necessary-duration/descriptive exposure check, NOT exact predicted
+  dates, full agronomic validation, ancient cultivars, independent CI, or an
+  exact monthly-model rejection rate. No Earth climate F data touched.
+  This Sacks dataset has now been inspected diagnostically; do not later call
+  aggregate reuse an unseen test. Freeze geography-separated training/evaluation
+  before phenology fitting, disclose prior inspection, and check dependencies
+  before treating MIRCA (shared calendar inputs) as independent evidence.
+* Next meaningful process: published spring/winter phenology, including dormancy,
+  vernalization and photoperiod (Schaphoff2018 LPJmL4 DOI10.5194/gmd-11-1343-2018).
+  Not implemented yet; don't claim the new selector solves these processes or
+  just widen bounds until all observations fit. Couple sequence soil-water and
+  assess period cultivars/labour/yields before adopting population or food maps.
+* New files scripts/check_observed_crop_durations.py (optional --download with
+  exact source hash), reports/OBSERVED_CROP_CALENDARS_20261103.md,
+  output/observed_crop_durations_20261103.62 focused tests pass. Economy lab
+  now leads with observed evidence and full-data/declared-plan downloads;
+  desktop/mobile/light/dark and all9downloads pass. Figure/source checksums
+  guarded in builder. Research manifest updated; sequence/storage numerical
+  comparisons rerun unchanged to keep their provenance current.
+
+---
+
 # Joint crop calendars and reserve uncertainty — 3 November 2026
 
 * USER STEERING: keep new mechanics grounded in real academic literature.
