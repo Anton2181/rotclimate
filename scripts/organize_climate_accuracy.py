@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('face-convergence','Fixed-state circulation compression and transport changes'),
     ('r43-calibration','r43 calibration, independent starts and unseen validation'),
     ('storm-factorial','Isolated storm exchange, vapor flux and crest condensation'),
     ('r42-transport','r42 conservative transport results and remaining tests'),
