@@ -60,7 +60,7 @@ def test_portable_quantizer_keeps_real_zero_distinct_from_ocean(tmp_path):
     # Interoperability: decode the descriptor exactly as the browser does.
     names=['crop_capacity','pastoral_capacity','food_capacity','kcal_ha','lgp_days','npp','irr',
            'aridity','malaria','malaria_months','clearance','access','health','settlement_base',
-           'settlement_no_malaria','livability','livability_no_malaria','arable',
+           'settlement_no_malaria','settlement_cored','livability','livability_no_malaria','arable',
            'kcal_wheat','kcal_barley','kcal_millet','kcal_rice','kcal_dates','crop','double_crop']
     field=np.array([[np.nan,0.],[.37,100.]])
     fields={key:field.copy() for key in names};fields['crop']=np.array([[0,1],[2,5]])

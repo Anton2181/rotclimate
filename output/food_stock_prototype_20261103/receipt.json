@@ -1,0 +1,69 @@
+{
+  "status": "numerical_prototype",
+  "production_atlas_changed": false,
+  "crop_or_storage_coefficients_fitted": false,
+  "annual_harvest_energy": 365,
+  "annual_food_need_energy": 365,
+  "daily_food_need_energy": 1,
+  "storage_capacity_energy": 200.0,
+  "loss_fraction_year": 0,
+  "results": {
+    "One harvest": {
+      "initial_stock": 18.000000016763806,
+      "final_stock": 18.0,
+      "peak_stock": 200.0,
+      "harvested": 365.0,
+      "needed": 365.0,
+      "consumed": 201.0000000167638,
+      "unmet": 163.9999999832362,
+      "spoiled": 0.0,
+      "overflow": 164.0,
+      "shortfall_days": 164.0,
+      "ledger_residual": 0.0,
+      "periodic_residual": 1.6763806343078613e-08,
+      "periodic_converged": true
+    },
+    "Two equal harvests": {
+      "initial_stock": 90.50000000279397,
+      "final_stock": 90.50000000279397,
+      "peak_stock": 182.00000000279397,
+      "harvested": 365.0,
+      "needed": 365.0,
+      "consumed": 365.0,
+      "unmet": 0.0,
+      "spoiled": 0.0,
+      "overflow": 0.0,
+      "shortfall_days": 0.0,
+      "ledger_residual": 0.0,
+      "periodic_residual": 0.0,
+      "periodic_converged": true
+    },
+    "Even daily supply (control)": {
+      "initial_stock": 0.0,
+      "final_stock": 0.0,
+      "peak_stock": 0.0,
+      "harvested": 365.0,
+      "needed": 365.0,
+      "consumed": 365.0,
+      "unmet": 0.0,
+      "spoiled": 0.0,
+      "overflow": 0.0,
+      "shortfall_days": 0.0,
+      "ledger_residual": 0.0,
+      "periodic_residual": 0.0,
+      "periodic_converged": true
+    }
+  },
+  "minimum_zero_loss_capacity": {
+    "One harvest": 364.0,
+    "Two equal harvests": 182.0,
+    "Even daily supply (control)": 0.0
+  },
+  "figure_sha256": "5afb4182afbe128155f716dae61a90b9810f4baec3181fc30cbbdfc8107aa8f7",
+  "arrays_sha256": "daf62c03c227ecbff8175315c44b26964e997adcc46616cf5abfd6bb12d6d96a",
+  "sources_sha256": {
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
+    "scripts/demo_food_stocks.py": "6758652c8abd2751a1689da57b3a1a0620d4dddfa15e0048b3b0da5f832f7b2b"
+  },
+  "scope": "Manufactured energy schedules only, not ancient crop yields, harvest calendars, famine probabilities, population estimates or added FORGE storage. Energy units may be MJ/km2; days-of-demand divide stock by the specified daily demand. Periodic inventory is distinct from meeting food needs."
+}

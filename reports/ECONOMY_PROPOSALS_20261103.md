@@ -1,8 +1,9 @@
 # Next c.200 AD development round: from annual capacity to a seasonal food system
 
 Prepared after the complete verified r43 atlas publication and the full
-61-region storm-family comparison. These are proposals, not implemented or
-adopted economic mechanics. The primary
+61-region storm-family comparison. These are proposals for production integration. An isolated
+[food-inventory prototype](FOOD_STOCKS_20261103.md) is implemented; no atlas
+economic mechanic has been replaced or adopted. The primary
 recommendation is agricultural food stocks and grain flows, followed by labour.
 
 ## What is already present

@@ -1,3 +1,30 @@
+# Human-model prototype and final physics-screen outcomes — 3 November 2026
+
+* Economic proposals have been PRESENTED to the owner after complete r43
+  publication. First bounded implementation now harvest/food_stocks.py:
+  net-edible energy inventory, explicit capacity/spoilage/overflow/unmet food,
+  finite-year and smallest-periodic-reserve modes, exact zero-loss minimum
+  capacity. No atlas economic model, crop yield, population or FORGE changed.
+  38 focused Harvest/FORGE/inventory checks pass; stale settlement_cored test
+  fixture repaired. Manufactured demo: identical annual365 harvest/demand,
+  capacity200 gives164 shortage days for one harvest vs0 for two; no actual
+  world prediction. Report reports/FOOD_STOCKS_20261103.md; full demo receipt
+  output/food_stock_prototype_20261103. Calendar ties/perennials/double crops
+  need validation before integration; don't manufacture exact harvest dates.
+* All five earlier pipeline jobs COMPLETE and pushed. Fitted-vs-upwind screen
+  b1691d33: fitted S8=2.18614 vs production, upwind-flux2.11131; fitted rain
+  loss4.76% worse than upwind flux, no adoption/F. Default numerical control
+  passes. Do not call reduced numerical smearing a climate improvement.
+* Bound probes0c142313: lower marine thresholds do not help. Stronger existing
+  dry-branch rate0.4/day gives S8=.97461255, T−.7879%, P−4.2896%; combination
+  S8=.97546346. Reused8-region evidence ONLY; not selected/adopted by that
+  screen. Any broader qualification must prospectively freeze one candidate,
+  reproduce full61 control, report historical49 separately, then fine/F gates.
+  F remains unopened. Keep the owner's human-model priority; no new physical
+  family such as geometric conductance has been implemented/launched.
+
+---
+
 # Verified release complete — 3 November 2026, 14:30 Warsaw
 
 * R43 atlas publication COMPLETE and pushed to BOTH branches in1ac032ab.
