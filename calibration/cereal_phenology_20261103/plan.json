@@ -1,0 +1,74 @@
+{
+  "status": "prospective_country_group_evaluation",
+  "raw_calendar": "data/cache/sacks2010/All_data_with_climate.csv",
+  "raw_sha256": "ed82ea969c523f779dbbcb29e5dc3c8efd8fe80d41bc53c8880a9813ca876032",
+  "forcing": "WorldClim2.1 5arcmin 1970\u20132000 monthly temperature, bilinear at source crop-area-weighted regional centroid; centroid is not a regional average",
+  "forcing_sha256": "dc963ba01132f42bcb8865c0475f7336b78fd14f65ea1bbfa394619a6770bdad",
+  "eligibility": "Unique source Data.ID; Wheat/Barley; no Exclude qualifier; valid medians/duration, Nation.code, finite centroid. All four WorldClim interpolation corners must be valid in every month; retain all QC exclusions.",
+  "split": {
+    "method": "country grouped",
+    "rule": "sha256(cereal-phenology-v1: + Nation.code) integer modulo 5 == 0 is evaluation; all other countries training",
+    "prior_inspection": "Full Sacks duration/exposure diagnostics already inspected. This is a prospective country-separated evaluation, not an untouched dataset or Earth climate holdout. Neighboring countries and regional records can remain correlated."
+  },
+  "interpolation": "Periodic linear interpolation of monthly means at actual Gregorian month centers to daily centers in a 365-day climatology; no daily weather reconstructed",
+  "conditioning": "Sowing midpoint is prescribed from observed calendars; predict physiological maturity elapsed days. No sowing date, absolute yield, frost survival, harvest operation or ancient population inferred.",
+  "source": {
+    "doi": "10.5194/gmd-11-1343-2018",
+    "equations": [
+      73,
+      74,
+      75,
+      76,
+      78,
+      79
+    ],
+    "supplement_tables": [
+      "S10",
+      "S11"
+    ],
+    "paper_sha256": "09b367e6f46a7622e700f02ebdf82ee781114bc1e53bbbc7aa0dc417d8e2b93c",
+    "supplement_sha256": "12a4776ec96b1d25e234b6b170f2d18d82d02576b4c279ec470fe5ff4566cf25",
+    "reference_commit": "d25d8739ad90",
+    "reference_boundary_files": {
+      "phen_variety.c": "52b74f6aede704982180e722b25f8858aaf0f143b056113f0591714a488b26d5",
+      "phenology_crop.c": "98cec96ac437ba381a363667acf9751f41ddd4ba8c0bd7ee93a687a22e36e92f"
+    },
+    "implementation": "Independent implementation of paper mathematics; reference source used to resolve PVD<=10 and PHU lower-bound conventions, no upstream C code imported"
+  },
+  "reference_parameters": {
+    "base_temperature": 0.0,
+    "winter_phu_min": 1700.0,
+    "winter_phu_max": 2876.9,
+    "spring_phu_min": 1000.0,
+    "spring_phu_max": 2648.4,
+    "spring_annual_temperature_multiplier": 200.0,
+    "senescence_fraction": 0.7,
+    "photoperiod_floor": 1.0,
+    "reference_winter_chilling_days": 45.0,
+    "chilling_status": "Explicit fixed proxy within published 0\u201360-day domain, not a claimed LPJmL default or reproduction of endogenous equation77"
+  },
+  "tuning": {
+    "heat_scales": [
+      0.8,
+      1.0,
+      1.2
+    ],
+    "winter_chilling_days": [
+      15.0,
+      30.0,
+      45.0,
+      60.0
+    ],
+    "scope": "One global scale, one global winter chilling requirement; crop/region-specific fitting prohibited. Scaled heat requirements clipped to published cultivar ranges.",
+    "objective": "Equal-country mean of record absolute maturity-duration error; no maturity within365 supplied days costs365days; all eligible records stay in denominator",
+    "tiebreak": "distance from scale1, then chilling45, then numerical values"
+  },
+  "fixed_comparators": [
+    "legacy_heat_only (wheat1500/barley1200; no chilling)",
+    "published_heat_only (paper heat adaptation; no chilling)",
+    "reference_chilling (same heat adaptation; winter45days)"
+  ],
+  "freeze": "Commit selected global parameters and training results before any evaluation-country maturity score. Evaluate selected parameters once; report all fixed comparators and failed maturity.",
+  "adoption": false,
+  "earth_climate_holdout_used": false
+}
