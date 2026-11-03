@@ -1,7 +1,16 @@
 import json
 from pathlib import Path
+import pytest
+from scripts.expand_storm_exchange import output_prefix
 
 ROOT = Path(__file__).resolve().parents[1]
+
+
+def test_independent_studies_cannot_overwrite_each_others_declared_output():
+    assert output_prefix({}) == 'output/storm_expansion_20261103b/'
+    assert output_prefix({'output':'output/new_qualification'}) == 'output/new_qualification/'
+    for value in ['/tmp/study','output/../old','output']:
+        with pytest.raises(ValueError): output_prefix({'output':value})
 
 
 def test_development_pool_adds_spent_sets_without_leaking_reserved_holdout():

@@ -1,4 +1,4 @@
-"""Prospective 61-region storm-family comparison on a pinned model snapshot.
+"""Prospective 61-region physics comparison on a pinned model snapshot.
 
 Only the selected full-development finalist can reach fine grids and unopened f.
 This experiment never adopts physics or changes normal atlas data.
@@ -23,6 +23,14 @@ from run_atlas_snapshot import link_missing
 PREFIX = 'output/storm_expansion_20261103b/'
 
 
+def output_prefix(plan):
+    prefix = plan.get('output', PREFIX).rstrip('/') + '/'
+    path = Path(prefix)
+    if path.is_absolute() or '..' in path.parts or len(path.parts) < 2 or path.parts[0] != 'output':
+        raise ValueError('Study output must be an owned output subdirectory')
+    return prefix
+
+
 def prepare_model(plan):
     model = ROOT / plan['model_root']
     if not (model / '.git').exists():
@@ -40,7 +48,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__); ap.add_argument('--plan', type=Path, required=True)
     ap.add_argument('--workers', type=int, default=2); a = ap.parse_args()
     if a.workers < 1: ap.error('workers must be positive')
-    plan = json.loads(a.plan.read_text()); out = ROOT / PREFIX; out.mkdir(parents=True, exist_ok=True)
+    plan = json.loads(a.plan.read_text()); prefix = output_prefix(plan)
+    out = ROOT / prefix; out.mkdir(parents=True, exist_ok=True)
     lock = (out / '.study.lock').open('a'); fcntl.flock(lock, fcntl.LOCK_EX | fcntl.LOCK_NB)
     marker = out / 'status.json'
     if marker.exists() and json.loads(marker.read_text()).get('stage') == 'finished_pushed': return
@@ -80,17 +89,17 @@ def main():
             if file_hash(folder / 'cells' / (name + '.npz')) != row['cells_sha256']: raise ValueError('Raw packet changed')
         return summary['regions']
     try:
-        status('waiting_for_r43_training'); deadline = time.monotonic() + 43200
+        status('waiting_for_dependency'); deadline = time.monotonic() + 43200
         while True:
             after = ROOT / plan['after_status']
             current = json.loads(after.read_text()) if after.exists() else {'stage': 'not_started'}
-            if current['stage'] == 'training_complete': break
-            if current['stage'] == 'failed' or time.monotonic() > deadline: raise RuntimeError('Snapshot training failed or timed out')
+            if current['stage'] == plan.get('after_stage', 'training_complete'): break
+            if current['stage'] == 'failed' or time.monotonic() > deadline: raise RuntimeError('Study dependency failed or timed out')
             time.sleep(15)
         d = bench('reference_d_undamped', plan['raw_reference'], plan['retired_d'], plan['region_specs'])
         reference = bench('reference61', plan['reference'], plan['regions'], plan['region_specs'])
         locations = dict(plan['raw_locations'])
-        locations.update({n: PREFIX + 'reference_d_undamped' for n in d})
+        locations.update({n: prefix + 'reference_d_undamped' for n in d})
         drift = numerical_drift({n: dict(reference=p) for n,p in locations.items()},
             {'regions': reference}, out / 'reference61', {'max_T_c': .01, 'max_P_mm_month': .05})
         write_json(out / 'numerical_control.json', drift)
@@ -110,10 +119,10 @@ def main():
                               for n, rows in packets.items() if rows is not None})
             write_json(out / 'development_selection.json', result)
             if chosen:
-                # Both full-development families are finished before this freeze.
+                # Every declared full-development family finishes before this freeze.
                 freeze(out / 'finalist.json', dict(name=chosen, params_sha256=file_hash(ROOT / plan['candidates'][chosen]),
                     scores=scores, model_commit=plan['model_commit'], holdout=plan['holdout']))
-                publish(out, plan, 'Freeze one storm-family finalist after both full development comparisons')
+                publish(out, plan, 'Freeze one physics finalist after all declared full development comparisons')
                 names = plan['fine_regions']
                 r = bench('reference_fine28', plan['reference'], names, plan['region_specs'], 28.)
                 c = bench('candidate_fine28', plan['candidates'][chosen], names, plan['region_specs'], 28., allow_failure=True)
@@ -129,7 +138,7 @@ def main():
                     result.update(sealed_run=True, sealed_f=sealed, sealed_pass=sealed is not None and sealed['S'] <= 1.)
             result['outcome'] = 'qualified_for_review' if result.get('sealed_pass') else 'rejected'
         write_json(out / 'result.json', result)
-        commit = publish(out, plan, 'Record complete 61-region storm-family comparison and all qualification outcomes')
+        commit = publish(out, plan, 'Record complete 61-region ' + plan.get('study_name', 'storm-family comparison') + ' and all qualification outcomes')
         status('finished_pushed', commit=commit, result=result)
     except Exception as error:
         status('failed', error=repr(error)); raise
@@ -142,7 +151,8 @@ def publish(folder, plan, message):
         names.extend(str((Path(parent) / n).relative_to(ROOT)) for n in files
             if Path(n).suffix in {'.json', '.npz', '.log'} and n not in {'status.json', 'push.log'})
     names.sort()
-    if not names or any(not n.startswith(PREFIX) or 'model' in Path(n).parts for n in names): raise ValueError('Unrelated publication paths')
+    prefix = output_prefix(plan)
+    if not names or any(not n.startswith(prefix) or 'model' in Path(n).parts for n in names): raise ValueError('Unrelated publication paths')
     subprocess.run(['git', 'add', '-f', '--', *names], cwd=ROOT, check=True, capture_output=True)
     changed = subprocess.run(['git', 'diff', '--cached', '--quiet', '--', *names], cwd=ROOT)
     if changed.returncode not in (0, 1): raise RuntimeError('Cannot inspect staged study files')

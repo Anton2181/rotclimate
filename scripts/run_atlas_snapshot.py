@@ -47,12 +47,15 @@ def prepare(plan, plan_path, out):
     actual = subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=snapshot, text=True).strip()
     if actual != revision: raise ValueError('Snapshot revision changed')
     if not (snapshot / 'scripts/build_atlas_variant.py').exists():
-        patterns = ['/' + name + '/' for name in ['scripts', 'rotclimate', 'harvest', 'population', 'foraging', 'polity', 'atlas', 'data', 'calibration', 'ravages']]
+        patterns = ['/' + name + '/' for name in ['scripts', 'rotclimate', 'harvest', 'population', 'foraging', 'polity', 'atlas', 'data', 'calibration', 'ravages', 'land']]
         patterns += ['/atlases/pages.json', '/output/language_areas_20261101/layer2c/summary.json', '/.gitignore', '/.gitattributes']
         subprocess.run(['git', 'sparse-checkout', 'set', '--no-cone', *patterns], cwd=snapshot, check=True)
         subprocess.run(['git', 'checkout', revision], cwd=snapshot, check=True, capture_output=True)
-    if not (snapshot / 'ravages/data.json').exists():
-        subprocess.run(['git', 'sparse-checkout', 'add', '/ravages/'], cwd=snapshot, check=True)
+    for directory, filename in [('ravages', 'data.json'), ('land', 'earth.webp')]:
+        if not (snapshot / directory / filename).exists():
+            subprocess.run(['git', 'sparse-checkout', 'add', '/' + directory + '/'], cwd=snapshot, check=True)
+        if not (snapshot / directory / filename).exists():
+            raise ValueError('Pinned atlas export input missing: ' + directory + '/' + filename)
     link_missing(ROOT / 'data', snapshot / 'data')
     if not (snapshot / '.venv').exists(): (snapshot / '.venv').symlink_to(ROOT / '.venv', target_is_directory=True)
     protocol = json.loads((ROOT / plan['validation_protocol']).read_text())
