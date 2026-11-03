@@ -1,0 +1,38 @@
+{
+  "status": "fixed_descriptive_diagnostic",
+  "raw_url": "https://sage-public-files.s3.amazonaws.com/crop-calendar-dataset/All_data_with_climate.csv",
+  "raw_sha256": "ed82ea969c523f779dbbcb29e5dc3c8efd8fe80d41bc53c8880a9813ca876032",
+  "source_doi": "10.1111/j.1466-8238.2010.00551.x",
+  "inspection_before_declaration": "Dataset documentation, CSV column names and first Albania winter-wheat record inspected; no group distributions or model comparison inspected.",
+  "production_source_sha256": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507",
+  "crop_map": {
+    "Wheat": "wheat",
+    "Barley": "barley",
+    "Rice": "rice"
+  },
+  "model_duration_days": {
+    "wheat": [
+      121.66666666666667,
+      273.75
+    ],
+    "barley": [
+      91.25,
+      243.33333333333334
+    ],
+    "rice": [
+      121.66666666666667,
+      182.5
+    ]
+  },
+  "qualifiers": "Retain original qualifier, report winter and primary/secondary seasons separately; generic millet excluded because crop identity need not be foxtail.",
+  "eligibility": "Mapped crop; unique Data.ID; finite planting/harvest medians in [1,365], finite tot.days in (0,365). Retain every eligible record; log all exclusions.",
+  "duration_metrics": "Distance from reported total growing days to the continuous range of model lengths; report outside exact endpoints and with fixed half-bin / full-bin tolerance. This interval is a necessary duration envelope, not an exact monthly-bin schedule or predicted harvest-date error.",
+  "tolerance_days": [
+    0.0,
+    15.208333333333334,
+    30.416666666666668
+  ],
+  "cold_diagnostic": "Summarize source ndays.growing.season.below.0 where available; it is based on source interpolated climatology, not daily frost extremes. Exposure flags a missing winter-dormancy process, but does not assign an exact model-rejection rate.",
+  "grouping": "Original crop and qualifier; report calendar-record and unique-location counts, no pixel replication or independent confidence intervals.",
+  "inference_limits": "Modern regional calendars and source CRU summary climate are not ancient cultivars, exact point observations, held-out Earth climate calibration, or a full date/yield validation. No parameter tuning, adoption, F use or population update."
+}
