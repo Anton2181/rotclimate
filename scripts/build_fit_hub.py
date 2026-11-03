@@ -18,7 +18,7 @@ from PIL import Image
 ROOT = Path(__file__).resolve().parents[1]
 FITS = {
     'free_fit': ('Free fit', 'World and physics fitted to the seasonal painted zones.'),
-    'earth_fit': ('Earth fit', "Earth r42 physics, the best on the Earth test (49 development regions and an unseen sealed set), on the published world's geometry."),
+    'earth_fit': ('Earth fit', "Adopted Earth r42 physics, checked on 49 development regions, finer grids and a separately reserved region set, on the published world's geometry."),
     'whittaker_fit': ('Whittaker fit', 'World and physics fitted to the proposed annual-biome targets.')}
 
 STYLE = '''
