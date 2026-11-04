@@ -21,6 +21,7 @@ window.PresenceMobilityAtlas=(()=>{
     const catchments=new Uint16Array(grid);
     if(catchments.some(v=>v>model.sites.length))throw Error('Invalid collection site index');
     const initial=new URLSearchParams(location.hash.slice(1));let active='',variant='stores90',records=[],skipInitial=true;
+    let insetFrame=initial.get('pm_frame')==='whole'?'whole':'detail';
     const fmt=(n,d=1)=>n===null||!Number.isFinite(n)?'Unscored':n.toLocaleString(undefined,{maximumFractionDigits:d});
     const pct=n=>n===null?'Unscored':fmt(n*100)+'%';
     const readouts=rows=>rows.map(([v,k])=>`<div class="readout"><div class="v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`).join('');
@@ -53,13 +54,22 @@ window.PresenceMobilityAtlas=(()=>{
         fraction_of_rural_overflow_for_collection:c.collection_fraction??ps.collection_fraction_of_rural_overflow,
         need_met:r.monthly_need_met[m],arrivals_kcal:r.monthly_arrivals_kcal[m],unmet_kcal:r.monthly_unmet_kcal[m],end_stock_kcal:r.stock_path_kcal[m+1],
         closed_dispatch:r.closed_dispatch_bins?.includes(m)||false,scope:'conditional cereal support, not actual staffing or sovereignty'});}
-      $('pm-inset').innerHTML='';$('pm-inset').hidden=true;$('pm-download').disabled=false;
+      $('pm-inset').innerHTML='';$('pm-inset').hidden=true;$('pm-inset-controls').hidden=true;$('pm-download').disabled=false;
     }
     function inset(experiment,scenario){
       const patches=experiment.patches,ground=experiment.ground_nodes||patches,cell=packet.cell_px,px=ground.map(p=>p.x),py=ground.map(p=>p.y);
-      const x0=Math.min(...px)-cell,y0=Math.min(...py)-cell,w=Math.max(...px)-x0+cell,h=Math.max(...py)-y0+cell;
-      const u=Math.max(1,w/22);
+      let x0=Math.min(...px)-cell,y0=Math.min(...py)-cell,w=Math.max(...px)-x0+cell,h=Math.max(...py)-y0+cell;
       const circuit=scenario.mobile,visited=circuit?circuit.locations:[],counts=patches.map((_,i)=>visited.filter(j=>i===j).length);
+      $('pm-inset-controls').hidden=!circuit;
+      $('pm-inset-frame').textContent=insetFrame==='detail'?'Show whole tested landscape':'Focus on route';
+      $('pm-inset-frame').setAttribute('aria-pressed',String(insetFrame==='whole'));
+      if(circuit&&insetFrame==='detail'){
+        const path=circuit.segments.flat().map(i=>ground[i]);
+        const a=Math.min(...path.map(p=>p.x)),b=Math.max(...path.map(p=>p.x)),c=Math.min(...path.map(p=>p.y)),d=Math.max(...path.map(p=>p.y));
+        const size=Math.max(8*cell,b-a+4*cell,d-c+4*cell);
+        x0=(a+b-size)/2;y0=(c+d-size)/2;w=size;h=size;
+      }
+      const u=Math.max(1,w/22);
       const palette=['#e5decd','#afc6ad','#5d9c8e','#285f72'];
       let svg=`<svg viewBox="${x0} ${y0} ${w} ${h}" role="img" aria-label="Selected resource landscape and closed route; schematic seasonal endpoints connected along model land paths" style="width:100%;max-width:620px;height:auto;max-height:390px;background:var(--chip)">`;
       if(experiment.ground_nodes)for(const p of ground)svg+=`<rect x="${p.x-cell/2}" y="${p.y-cell/2}" width="${cell}" height="${cell}" fill="#dadbd3"/>`;
@@ -80,7 +90,7 @@ window.PresenceMobilityAtlas=(()=>{
     function mobility(){
       const e=examples().find(e=>e.id===$('pm-landscape').value);$('pm-place').textContent=e.label+' · '+$('pm-scale').selectedOptions[0].textContent;
       records=[];$('pm-download').disabled=true;
-      if(e.status!=='scored_resource_landscape'){$('pm-readouts').textContent='Resource/home location unresolved; experiment unscored.';$('pm-months').textContent='';$('pm-inset').hidden=true;return;}
+      if(e.status!=='scored_resource_landscape'){$('pm-readouts').textContent='Resource/home location unresolved; experiment unscored.';$('pm-months').textContent='';$('pm-inset').hidden=true;$('pm-inset-controls').hidden=true;return;}
       const c=e.cases.find(c=>c.id===$('pm-water').value)||e.cases[0],m=c.mobile,s=c.stationary,best=c.best_fixed_base_continuous;
       inset(e,c);
       $('pm-readouts').innerHTML=readouts([[m?pct(m.annual_need_met):'Unscored','mobile · annual DM need met'],[s?pct(s.annual_need_met):'Unscored','fixed home · same reserve states'],
@@ -113,9 +123,10 @@ window.PresenceMobilityAtlas=(()=>{
       if(id==='pm-site'&&active==='presence_food'){const s=model.sites.find(s=>s.id===$('pm-site').value),w=packet.shape[1];choosePlace?.((s.node%w+.5)*packet.cell_px,(Math.floor(s.node/w)+.5)*packet.cell_px,s.name);}
       if(id==='pm-landscape'&&active==='mobility_circuits'){const e=examples().find(e=>e.id===$('pm-landscape').value);if(e.status==='scored_resource_landscape'){const p=e.patches[e.home];choosePlace?.(p.x,p.y,e.label);}}
     });
+    $('pm-inset-frame').addEventListener('click',()=>{insetFrame=insetFrame==='detail'?'whole':'detail';render();changed();});
     $('pm-download').addEventListener('click',()=>{if(!records.length)return;const keys=Object.keys(records[0]),quote=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
       const csv=[keys,...records.map(r=>keys.map(k=>r[k]))].map(r=>r.map(quote).join(',')).join('\r\n')+'\r\n';window.atlasSave('selected_'+(active==='presence_food'?'food_support':'seasonal_circuit')+'.csv',new Blob([csv],{type:'text/csv;charset=utf-8'}));});
-    return {state:()=>active==='presence_food'?{pm_site:$('pm-site').value}:{pm_landscape:$('pm-landscape').value,pm_water:$('pm-water').value,pm_scale:$('pm-scale').value},
+    return {state:()=>active==='presence_food'?{pm_site:$('pm-site').value}:{pm_landscape:$('pm-landscape').value,pm_water:$('pm-water').value,pm_scale:$('pm-scale').value,pm_frame:insetFrame},
       show:(id,v)=>{active=id;variant=v?.value||'stores90';const on=['presence_food','mobility_circuits'].includes(id);$('pm-section').hidden=!on;
         if(id==='mobility_circuits'&&v?.scale_files)v.file=v.scale_water_files?.[$('pm-scale').value]?.[$('pm-water').value]||v.scale_files[$('pm-scale').value];
         $('pm-site-control').hidden=id!=='presence_food';$('pm-mobility-controls').hidden=id!=='mobility_circuits';

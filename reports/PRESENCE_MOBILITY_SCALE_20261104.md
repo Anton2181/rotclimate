@@ -205,7 +205,11 @@ day to half a day checks both local and additional-base Earth-corrected cases.
 
 The browser exposes the landscape test in shareable URL state and CSVs, keeps
 irrelevant settlement controls hidden, and uses readable path/patch markers at
-both extents. All choices, water exclusions and optional-packet failure paths
+both extents. Its inset defaults to route detail, with a **Show whole tested
+landscape** toggle; framing is saved as `pm_frame` in the shareable URL. This
+changes only the view, never the ground domain, bases, optimization or ledgers.
+The inset keeps at least eight fine-cell widths of context around compact routes.
+All choices, water exclusions and optional-packet failure paths
 are checked against the public ledgers. Windows checkout and portable bundle
 checks remain part of publication.
 

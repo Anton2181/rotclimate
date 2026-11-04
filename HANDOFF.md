@@ -1,3 +1,21 @@
+# Readable circuit insets — 4 November 2026
+
+* Continued after pushing `5d953c4c`, per the user's preference to keep working.
+  A view-only follow-up makes compact circuits readable within regional tests.
+* Inset defaults to route detail (at least eight fine-cell widths of context),
+  with a Show whole tested landscape / Focus on route toggle. `pm_frame` is
+  preserved in shared URLs and across climate/atlas navigation. No new map
+  button or always-visible global selector was added; unscored cases hide it.
+* Browser checks all four packets, both framing states, URL reload, identical
+  food readouts/CSV before and after toggling, narrow/dark layouts, water cases,
+  and optional-packet failure isolation. Science/data are unchanged from
+  `5d953c4c`; its 122 tests and independent model review remain applicable.
+* Screenshots/receipts: `output/inset_readability_20261104`. Normal `.bat` atlas
+  copies and portable bundle are refreshed. Methods describe framing separately
+  from the tested landscape extent. No simulation, recalibration or agents.
+
+---
+
 # Origin storage and regional resource circuits — 4 November 2026
 
 * Continued `b919802e`. User said Continue. Same two normal atlas buttons,

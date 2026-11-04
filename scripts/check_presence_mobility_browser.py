@@ -86,6 +86,7 @@ def main():
                         page.wait_for_function('(file)=>{const i=document.querySelector("#base");return i.complete&&new URL(i.src).pathname.endsWith(file)}',arg=file)
                     if wc['mobile'] is None:
                         assert page.locator('#pm-download').is_disabled()
+                        assert not page.locator('#pm-inset-controls').is_visible()
                         assert 'unscored' in page.locator('#pm-readouts').inner_text().lower();unscored+=1;continue
                     records=download(page);assert len(records)==24
                     for record in records:
@@ -98,9 +99,17 @@ def main():
                     assert 'best fixed base anywhere' in page.locator('#pm-readouts').inner_text()
                     if scale!='local':assert 'optimistic resource-only upper bound' in page.locator('#pm-readouts').inner_text()
             page.select_option('#pm-landscape','tribal_claim');page.select_option('#pm-water','water10');page.select_option('#variant','circuits')
+            detail=page.locator('#pm-inset svg').get_attribute('viewBox');food_before=page.locator('#pm-readouts').inner_text();csv_before=download(page)
+            page.locator('#pm-section').screenshot(path=str(args.out/(name+'_'+mode+'_route_detail.png')))
+            page.click('#pm-inset-frame');whole=page.locator('#pm-inset svg').get_attribute('viewBox')
+            assert float(whole.split()[2])>=float(detail.split()[2])
+            assert 'pm_frame=whole' in page.url
+            assert page.locator('#pm-readouts').inner_text()==food_before and download(page)==csv_before
             saved=page.url;page.goto('about:blank');page.goto(saved,wait_until='domcontentloaded');ready(page)
             assert page.locator('#pm-landscape').input_value()=='tribal_claim' and page.locator('#pm-water').input_value()=='water10'
             assert page.locator('#pm-scale').input_value()=='regional_dense'
+            assert page.locator('#pm-inset-frame').inner_text()=='Focus on route'
+            assert page.locator('#pm-inset svg').get_attribute('viewBox')==whole
             assert page.locator('#pm-overlay circle').count()==4
             page.locator('#pm-section').screenshot(path=str(args.out/(name+'_'+mode+'_circuit.png')))
             page.set_viewport_size(dict(width=390,height=844));page.emulate_media(color_scheme='dark');page.wait_for_timeout(100)
