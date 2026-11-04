@@ -1,3 +1,78 @@
+# Sustained presence and seasonal resource circuits — 4 November 2026
+
+* Continued `6949ea71`. User approved proposals 1 (food support) and 3 (mobile
+  resource circuits). New normal atlas buttons: Political reach → Sustained
+  presence (7 scenarios); Livelihoods → Seasonal circuits (2 views, 4 fixed
+  landscapes, 2 water cases). All four matching climate packets are published.
+  No climate, food-capacity, population or ownership baseline was changed.
+* Methods/results: `reports/PRESENCE_MOBILITY_20261104.md`. Assumptions:
+  `data/presence_mobility_model.json`. Primary mobility framing is Turner &
+  Schlecht 2019; Roth 1999 was consulted only through metadata, not full text.
+  Research access and coefficient limitations are recorded explicitly.
+* `polity/sustained_presence.py`: all 151 verified marked sites, including 10
+  with unresolved affiliation. A single published wheat/barley crop supplies
+  protected rural meals, finite rural stores and separate on-farm export stores.
+  No export from a cell with unmet annual rural demand. Seed isn't deducted
+  twice; the legacy `NEED_KCAL` storage/draft allowance is never used.
+* One cell supplies at most one site through a fixed base-bin parent-tree path;
+  both directions along that same path must qualify each dispatch bin. Existing
+  roads/terrain/weather/ford costs, constant off-path pace; no density feedback,
+  generated tracks, ferries or river/sea freight. These are collection areas,
+  not control polygons. Permission across painted claims is assumed open.
+* Collection is 10% of rural overflow; origin stores hold a year of exportable
+  flow, freight 5 tonnes edible cereal-equivalent/bin, delivery delay one bin,
+  retention 95%, stored-energy loss 5%/year. Every quantity is a scenario, not
+  measured ancient logistics. Group sizes 100/500, destination stores 0/90 days,
+  two busy adjacent dispatch bins interrupted, alternative tied crop calendar,
+  and a fivefold freight sensitivity. All stocks and in-transit food repeat.
+* Earth corrected: 100-person baseline fully supplied at 151/151 sites; a
+  two-bin interruption without destination stores at 0/151, with 90-day stores
+  at 151/151. For 500 people, unchanged freight caps annual support around 41%
+  by construction; fivefold freight fully supplies 135/151 sites. Food support
+  does not establish actual staff, labour, shelter, pay, institutions or control.
+* `harvest/seasonal_mobility.py`: exact dynamic programming on the declared
+  finite location/reserve graph. One unsplit herd, 100 DM reference units,
+  6.25 kg/unit/day, 7-day carried reserve in one-day increments. Transit meals
+  use prior carried feed; destination food cannot feed the past. Only visited
+  current-bin growth is collected, once. Same home AND feed at year end.
+* Four previously fixed pasture examples, radius five cells (~18.4 km): Tarani,
+  two landscapes outside named claims, and Neck. Not observed camps or societies.
+  Reference movement 10 km/day modified by slope, maximum two travel-days/bin.
+  Water sensitivity applies to occupied bases within 10 km of mapped water;
+  an excluded home is unscored, not proof of no water or impossible occupation.
+  Enroute watering, potable volume, wells, carry effort, nutrition and herd
+  demography remain unknown. The assumed seven-day pack is 4,375 kg DM.
+* Critical control: Earth-corrected fixed home → circuit → best fixed base:
+  Tarani 36.6 → 75.1 → 76.0%; grassland 85.6 → 88.4 → 88.5%; mixed resources
+  98.2 → 98.3 → 98.4%; Neck 84.8 → 96.2 → 96.2%. NONE beats the best fixed
+  base (continuous reserve). Don't portray gains against arbitrary homes as
+  evidence that mobility wins. Half-day reserve refinement changes support by
+  at most 0.137 percentage points. Perfect foresight of a climatological year;
+  finite-graph optimality is not global physics or historical validation.
+* `scripts/build_presence_mobility.py` pins sources/inputs/public assets and
+  reuses matching complete packets. Public gzip JSON includes stocks, patch
+  production, adjacency and actual intermediate paths. Catchments are row-major
+  little-endian uint16, 0 unassigned, otherwise site index+1. No joint allocation
+  of the four independent herd experiments or addition to population totals.
+* `atlas/presence-mobility.js`: matching Harvest/gzip identities, conditional
+  controls, URL state, selected-site 84-row CSV and herd 24-row CSV, route inset
+  with patch letters and seasonal table. Site selection updates the climate at
+  the snapped source cell. Missing/bad packets remove only these two layers;
+  a pasture failure retains Livelihoods when circuits are available.
+* Validation: 116 analytical/component tests; independent public checks of
+  50,736 site-bin ledgers, 40 closed circuits and actual paths; four reserve
+  refinements. Combined food-ledger relative residual <4.1e-11. Browser covers
+  four packets ×9 views, 1,008 food/480 herd CSV rows, state, water exclusions,
+  narrow/light/dark layouts, conditional controls and failure fixtures. Existing
+  three-atlas smoke passed. Windows/portable receipts accompany publication.
+* Outputs: `output/presence_mobility_20261104`. Figures `food_support.png` and
+  `resource_circuits.png` were posted. Next: poorer origin stores/collection,
+  producer and clearing labour, independently declared wider seasonal gradients,
+  standing-feed quality, watering, real camps and competing users. Preserve the
+  negative controls: no biome-to-nomad or food-to-power rule. No agents spawned.
+
+---
+
 # Worldwide source/seasonal coverage audit — 4 November 2026
 
 * Continued1faf860c. User asked how to improve de facto maps, approved a

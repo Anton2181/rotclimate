@@ -200,6 +200,11 @@ def main():
     if coverage_maps:
         topic_text+=(' Political reach adds Coverage audit: six views for all 18 mapped actors, comparing linked, claim-assigned and generated sites. '
             'Select an actor and travel budget to inspect seasonal same-site return access, overlap and missing evidence; this does not assign sovereignty. ')
+    presence_maps=all((ROOT/'atlases'/name/'data/presence_mobility.json').exists() for name in FITS)
+    if presence_maps:
+        topic_text+=(' Sustained presence tests cereal provisioning, origin/destination stores and freight interruptions at all 151 verified marked sites. '
+            'Livelihoods adds Seasonal circuits: four independent resource landscapes with a single closed herd route, finite carried feed and water-proximity sensitivity. '
+            'Fixed-home and best-fixed-base controls distinguish movement from simply choosing a better base. These are explicit scenarios, not actual garrisons, camps, nutrition or control. ')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '
@@ -280,6 +285,8 @@ def main():
             release['pasture_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/pasture.json').read_bytes()).hexdigest() for name in FITS}
         if coverage_maps:
             release['coverage_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/coverage.json').read_bytes()).hexdigest() for name in FITS}
+        if presence_maps:
+            release['presence_mobility_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/presence_mobility.json').read_bytes()).hexdigest() for name in FITS}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

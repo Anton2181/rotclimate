@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "year_days": 365.0,
+  "presence": {
+    "rural_demand_fraction_of_single_cereal_energy": 0.6,
+    "rural_store_demand_days": 365.0,
+    "stored_energy_loss_fraction_year": 0.05,
+    "collection_fraction_of_rural_overflow": 0.1,
+    "export_store_days_of_annual_exportable_supply": 365.0,
+    "fixed_path_base_month": 0,
+    "maximum_collection_days_each_way": 1.0,
+    "freight_kcal_per_site_per_bin": 16500000.0,
+    "freight_description": "5000 kg of 3300 kcal/kg edible cereal equivalent per source per model bin; prescribed capacity, not a cart/ship estimate",
+    "delivery_retention": 0.95,
+    "delivery_delay_bins": 1,
+    "ration_kcal_person_day": 2500.0,
+    "scenarios": [
+      {"id": "stores90", "label": "100 people · 90-day store", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 0},
+      {"id": "stores0", "label": "100 people · no store", "people": 100, "reserve_days": 0, "calendar": "first", "closure_bins": 0},
+      {"id": "closure", "label": "100 people · two-bin interruption", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 2},
+      {"id": "closure_no_store", "label": "Interruption · no destination store", "people": 100, "reserve_days": 0, "calendar": "first", "closure_bins": 2},
+      {"id": "people500", "label": "500 people · same freight capacity", "people": 500, "reserve_days": 90, "calendar": "first", "closure_bins": 0},
+      {"id": "people500_freight25", "label": "500 people · five times the freight", "people": 500, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "freight_multiplier": 5},
+      {"id": "calendar_last", "label": "100 people · alternative tied calendar", "people": 100, "reserve_days": 90, "calendar": "last", "closure_bins": 0}
+    ]
+  },
+  "mobility": {
+    "reference_feed_units": 100.0,
+    "intake_kg_dm_reference_unit_day": 6.25,
+    "reserve_days": 7,
+    "reserve_quantum_days": 1.0,
+    "reference_level_speed_km_day": 10.0,
+    "maximum_move_days_per_bin": 2.0,
+    "landscape_radius_cells": 5,
+    "water_scenarios": [
+      {"id": "water_unknown", "label": "Water access unresolved", "maximum_mapped_water_distance_km": null},
+      {"id": "water10", "label": "Require mapped water within 10 km", "maximum_mapped_water_distance_km": 10.0}
+    ],
+    "scope": "Four fixed resource landscapes, one unsplit herd per independent experiment. Fresh growth plus finite carried feed; no unvisited standing-forage bank, fishing, human diet, herd demography or political classification. Water filter is proximity sensitivity, not known drinkable volume/permanence."
+  },
+  "scope": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions."
+}

@@ -393,6 +393,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
           <svg id="towns" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="placenames" class="names" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
           <svg id="province-overlay" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
+          <svg id="pm-overlay" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true" style="display:none"></svg>
           <svg id="marker" viewBox="0 0 2000 926" preserveAspectRatio="none" aria-hidden="true"></svg>
         </div>
         <div class="zoom" role="group" aria-label="Map tools">
@@ -535,6 +536,22 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     <div id="pasture-readouts" class="readouts" aria-live="polite"></div><p id="pasture-selection-note" class="note"></p>
     <details><summary>What this budget includes</summary><p>Forage production excludes the current model's assigned cropped area. A temperature/rainfall proxy distributes annual production across twelve equal seasonal bins. The reserve experiment consumes half annual usable dry matter at a constant rate, with zero storage loss and a repeating year; standing forage and cut fodder are not distinguished. A feed-equivalent unit uses a 250 kg reference animal consuming 6.25 kg dry matter/day. Protein, energy quality, herd reproduction, migration, animal products and household labour are not balanced. Mapped water distance does not establish drinkable supply, seasonal permanence or wells. Feed equivalents cannot be added to the existing farming or FORGE population estimates.</p></details>
     <p class="note"><a id="pasture-method" href="../../reports/PASTURE_RESOURCES_20261104.md">Methods and sources</a> · <a id="pasture-grid" download>Download resource grids (NPZ)</a> · <a href="data/pasture.json" download>Assumptions and input identities</a> · <button id="pasture-download" type="button" disabled>Download selected resource CSV</button></p>
+  </section>
+  <section id="pm-section" hidden aria-labelledby="pm-title">
+    <div class="section-head"><h2 id="pm-title">Sustained presence and seasonal resource circuits</h2>
+      <span class="note">Declared scenarios · no new ownership or population forecast</span></div>
+    <div class="monthctl">
+      <label id="pm-site-control">Marked site <select id="pm-site"></select></label>
+      <span id="pm-mobility-controls"><label>Resource landscape <select id="pm-landscape"></select></label>
+        <label>Water assumption <select id="pm-water"></select></label></span>
+    </div>
+    <h3 id="pm-place">Choose a site or resource landscape</h3>
+    <div id="pm-readouts" class="readouts" aria-live="polite"></div>
+    <p id="pm-point-note" class="note"></p>
+    <div id="pm-inset" hidden></div>
+    <div class="harvest-table"><table><caption>Repeating reference year · twelve equal climate bins, not the civil calendar</caption><thead id="pm-table-head"></thead><tbody id="pm-months"></tbody></table></div>
+    <p class="note">Marked-site food tests include unresolved affiliations. Communities without mapped sites remain unscored. The four herd experiments run independently across fixed resource landscapes; labels do not assign livelihoods, political organization or actual camps.</p>
+    <p class="note"><button id="pm-download" type="button" disabled>Download selected scenarios (CSV)</button> · <a id="pm-payload" download>Full food and circuit ledgers (JSON gzip)</a> · <a id="pm-catchments" download>Collection indices (uint16 gzip)</a> · <a href="data/presence_mobility.json" download>Layout and assumptions</a> · <a href="../../reports/PRESENCE_MOBILITY_20261104.md">Methods and academic sources</a></p>
   </section>
   <section id="coverage-section" hidden aria-labelledby="coverage-h">
     <div class="section-head"><h2 id="coverage-h">Worldwide coverage · source and seasonal audit</h2>
@@ -679,6 +696,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="administrative-hierarchy.js"></script>
 <script src="pasture.js"></script>
 <script src="coverage.js"></script>
+<script src="presence-mobility.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -708,6 +726,7 @@ window.atlasSave = async (filename, blob) => {
   let hierarchyPacket=null,hierarchyUI=null,hierarchyError=null;
   let pasturePacket=null,pastureUI=null,pastureError=null;
   let coveragePacket=null,coverageUI=null,coverageError=null,coverageGeneration=0;
+  let pmPacket=null,pmUI=null,pmError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -747,6 +766,10 @@ window.atlasSave = async (filename, blob) => {
       try{coveragePacket=await CoverageAtlas.extend(meta,fresh,climateMode);}
       catch(error){coverageError=error;console.error(error);}
     }
+    if(window.PresenceMobilityAtlas){
+      try{pmPacket=await PresenceMobilityAtlas.extend(meta,fresh,climateMode);}
+      catch(error){pmError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -762,6 +785,7 @@ window.atlasSave = async (filename, blob) => {
     if(hierarchyError) $("atlas-data-status").textContent+=' Administrative links unavailable: check the complete updated atlas folder.';
     if(pastureError) $("atlas-data-status").textContent+=' Pasture resources unavailable: check the complete updated atlas folder.';
     if(coverageError) $("atlas-data-status").textContent+=' Coverage audit unavailable: check the complete updated atlas folder.';
+    if(pmError) $("atlas-data-status").textContent+=' Presence/circuit scenarios unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -988,6 +1012,7 @@ window.atlasSave = async (filename, blob) => {
     hierarchyUI?.show(id,L.variants?variantOf(L):null);
     pastureUI?.show(id,L.variants?variantOf(L):null);
     coverageUI?.show(id,L.variants?variantOf(L):null);
+    pmUI?.show(id,L.variants?variantOf(L):null);
     $("coverage-message").hidden=!L.coverage_dynamic;
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
@@ -1010,6 +1035,7 @@ window.atlasSave = async (filename, blob) => {
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     if(id==='hierarchy_links'&&hierarchyUI)for(const [key,value] of Object.entries(hierarchyUI.state()))state.set(key,value);
     if(L.coverage_dynamic&&coverageUI)for(const [key,value] of Object.entries(coverageUI.state()))state.set(key,value);
+    if(['presence_food','mobility_circuits'].includes(id)&&pmUI)for(const [key,value] of Object.entries(pmUI.state()))state.set(key,value);
     history.replaceState(null, "", "#" + state.toString());
     for (const link of document.querySelectorAll(".atlas-nav a")) {
       if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
@@ -1179,6 +1205,7 @@ window.atlasSave = async (filename, blob) => {
     hierarchyUI?.select(x,y,name);
     pastureUI?.select(resourceX,resourceY,name);
     coverageUI?.select(resourceX,resourceY,name);
+    pmUI?.select(resourceX,resourceY,name);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -1714,7 +1741,7 @@ window.atlasSave = async (filename, blob) => {
     ctx.drawImage(base, 0, 0, fullW, fullH);
     // vector overlays that are switched on, rasterised at the same scale
     // the selection circle stays out of the copy: it marks a click, not the map
-    const overlays = ["simrivers", "matchsvg", "towns", "placenames", "province-overlay"]
+    const overlays = ["simrivers", "matchsvg", "towns", "placenames", "province-overlay", "pm-overlay"]
       .map((id) => $(id)).filter((el) => el && el.style.display !== "none" && el.innerHTML.trim());
     for (const el of overlays) {
       const st = el.getAttribute("style") || "";
@@ -2203,7 +2230,7 @@ window.atlasSave = async (filename, blob) => {
     catch(error){
       meta.layers=meta.layers.filter(L=>!L.id.startsWith('pasture_'));
       for(const button of [...layerBtns.children])if(button.id.startsWith('layer-pasture_'))button.remove();
-      for(const option of [...$("map-topic").options])if(option.value==='Livelihoods')option.remove();
+      if(!meta.layers.some(L=>topicOf(L)==='Livelihoods'))for(const option of [...$("map-topic").options])if(option.value==='Livelihoods')option.remove();
       $("atlas-data-status").textContent+=' Pasture resources unavailable: packet verification failed.';console.error(error);
     }
   }
@@ -2212,6 +2239,15 @@ window.atlasSave = async (filename, blob) => {
     catch(error){
       meta.layers=meta.layers.filter(L=>L.id!=='reach_coverage_audit');$("layer-reach_coverage_audit")?.remove();
       $("atlas-data-status").textContent+=' Coverage audit unavailable: packet verification failed.';console.error(error);
+    }
+  }
+  if(pmPacket){
+    try{pmUI=await PresenceMobilityAtlas.attach(pmPacket,harvestUI,()=>setLayer(current),(x,y,name)=>select(x,y,name));}
+    catch(error){
+      meta.layers=meta.layers.filter(L=>!['presence_food','mobility_circuits'].includes(L.id));
+      $("layer-presence_food")?.remove();$("layer-mobility_circuits")?.remove();
+      $("pm-section").hidden=true;$("pm-overlay").style.display='none';
+      $("atlas-data-status").textContent+=' Presence/circuit scenarios unavailable: matching packet or browser support missing.';console.error(error);
     }
   }
   for (const id of ["occupation", "disease"]) {
