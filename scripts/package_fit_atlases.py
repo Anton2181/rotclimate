@@ -98,6 +98,14 @@ allegiance, military strength or validated city populations. Three declared
 settlement-placement seeds show sensitivity, not probability. See the methods
 report and the in-view CSV/NPZ downloads.
 
+Administrative links adds six schematic hierarchy views under Administration:
+seasonal travel-only reply times via the 19 recorded provincial capitals,
+marked versus proposed transport, seasonal range and proposed-transport gain.
+Select a commandery and comparative reply budget for the seasonal table and
+CSV. Connectors are relationships, not routes; colours describe seats, not
+surrounding land or political control. Long trips hold the chosen month's
+conditions fixed and do not model courier relays or institutional delays.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.
@@ -110,7 +118,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/ADMINISTRATIVE_HIERARCHY_20261104.md', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
              ROOT/'reports/CONTROL_SETTLEMENT_PROPOSALS_20261104.md', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',

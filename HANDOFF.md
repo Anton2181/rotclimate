@@ -1,3 +1,63 @@
+# Recorded administrative hierarchy maps — 4 November 2026
+
+* Continued from 71b52b47. New Administration → Administrative links: one
+  button/six views on all normal fits, including matching Earth raw/corrected.
+  Recorded 72 seats →19 provincial capitals →Aēnaha. 70 verified seats,
+  51 nontrivial local links; Kudā and Thalamâtâs/Pitané remain unresolved.
+  No nearest-parent inference or game balance coefficients adopted.
+* Two controlled person-transport cases: marked-settlement coastal/river
+  interchange eligibility with no generated tracks; add proposed tracks and
+  proposed-town interchanges, explicitly retaining marked interchanges.
+  Both retain current central-density path friction. Interchanges inferred,
+  not proven harbours. Recorded authority sources/hierarchy held fixed.
+* Isolated polity/administrative_hierarchy.py selects MINIMUM directed
+  duration among parallel alternatives (legacy CSR sums them). Additive
+  beat-or-wait sea edges, NO legacy whole-voyage fair-spell blend. This is
+  a separate travel calculation; do not compare its absolute times as if
+  it differed from old access only by infrastructure. No legacy source
+  modules or frozen climate/food/political exports changed.
+* Four legs retained per seat/bin/case: capital→province, province→seat,
+  seat→province, province→capital. Provincial reply=sum middle2; imperial
+  reply=sum4 under SAME frozen monthly conditions. No courier relays,
+  institutional delay, changing weather during voyage, capacity/provisioning
+  or political-border permissions. Twelve model snapshots, not civil months.
+* Median worst-snapshot imperial reply over69 noncapital seats, marked→
+  proposed days: Free60.5→59.6;Earth raw62.7→61.0;Earth corrected62.7→61.6;
+  Whittaker61.8→60.0. All69 finite allbins both cases, not validated service.
+  Physical-transport benefit is modest versus old access's large gain from
+  adding proposed authority sources. Do not conflate those two mechanisms.
+* Six views: longest provincial reply ×2cases; longest imperial reply ×2;
+  marked seasonal range; worst imperial reply days saved by proposed transport.
+  Schematic connectors NOT paths or control polygons. Coloured dots only
+  describe seats; outer rings provincial capitals. Map views have fixed-day
+  scales. Select recorded seat +7/14/30/60day comparative reply budget for
+  within-budget bins and longest cyclic over-budget gap. No budget validated
+  as a political cutoff. Capital self-links explicitly zero, unknown seats
+  unscored, full directional seasonal CSV/NPZ and selected24rowCSV downloads.
+* Optional atlas/administrative-hierarchy.js verifies inventory, food binary
+  and travel JSON identities. Failure removes only new layer. Fixed old
+  Administration failure handling to retain topic if hierarchy remains valid.
+  Commandery/budget/view/climate URL state, normal climate-selection sync,
+  irrelevant core/frontier/malaria/month/tiers controls hidden on new maps.
+* Runner scripts/review_administrative_hierarchy.py hashes all inputs/source,
+  resumes only identical complete packets; 4-thread directional shortest paths.
+  Small links.npz perpacket retained in output/administrative_hierarchy_20261104.
+  Publisher, comparison-plot and browser scripts named administrative_hierarchy.
+  Methods reports/ADMINISTRATIVE_HIERARCHY_20261104.md cites Smith/Glatz/Evans-
+  Rivers/ORBIS as motivation, not validation of lore hierarchy or thresholds.
+* 91 linked analytical tests pass. New browser checks4packets×6views, directed
+  CSV versus NPZ, budget counts, capital self-links, unresolved searches,
+  state/downloads/mobile/control hiding and bad identity/data failure isolation.
+  Previous access browser4×12 and oldall3 atlas smoke pass. Windows checkout,
+  portable bundle and byte identities verified in publication receipt. Launcher
+  prints19 capitals/6 new views; release pins hierarchy manifests. Comparison
+  figure posted. Physics unchanged; no new climate-calibration claim.
+* Next: conserved provisioning/staffing before control inference; settlements
+  share population and food budgets. For communication itself, evidence-backed
+  courier relay/institutional delays and time-varying long voyages are missing.
+
+---
+
 # Workbook-backed administration and seasonal access — 4 November 2026
 
 * User supplied Imperial Commanderies.xlsx and Ravages Master sheet (1).xlsx,

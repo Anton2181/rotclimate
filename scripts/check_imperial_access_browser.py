@@ -91,7 +91,10 @@ def main():
         page.goto(args.base+'/atlases/earth_fit/#layer=admin_imperial_access',wait_until='domcontentloaded')
         page.wait_for_function('()=>document.querySelector("#station-h").textContent!=="—"',timeout=90000)
         assert 'Administrative access maps unavailable' in page.locator('#atlas-data-status').inner_text()
-        assert page.locator('#map-topic option[value="Administration"]').count()==0
+        assert page.locator('#layer-admin_imperial_access').count()==0
+        if (ROOT/'atlases/earth_fit/data/administrative_hierarchy.json').exists():
+            assert page.locator('#layer-hierarchy_links').count()==1
+        else:assert page.locator('#map-topic option[value="Administration"]').count()==0
         assert not page.locator('#administration-section').is_visible()
         assert page.locator('#layer-koppen').count()==1
         checks.append(dict(status='passed',mismatched_input='failed closed; climate remains usable'))

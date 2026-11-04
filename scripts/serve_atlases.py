@@ -45,6 +45,9 @@ def release_version(root):
         for name,digest in release.get('administrative_access_sha256',{}).items():
             if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/administrative_access.json').read_bytes()).hexdigest()!=digest:
                 raise ValueError('Administrative-access map metadata changed')
+        for name,digest in release.get('administrative_hierarchy_sha256',{}).items():
+            if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/administrative_hierarchy.json').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Administrative-hierarchy metadata changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
@@ -103,11 +106,16 @@ def main():
         admin_path=root/'atlases'/name/'data/administrative_access.json'
         admin=json.loads(admin_path.read_text(encoding='utf-8')) if admin_path.exists() else None
         admin_layers=admin['packets']['raw']['layers'] if admin else []
-        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)} map modes', flush=True)
+        hierarchy_path=root/'atlases'/name/'data/administrative_hierarchy.json'
+        hierarchy=json.loads(hierarchy_path.read_text(encoding='utf-8')) if hierarchy_path.exists() else None
+        hierarchy_layers=hierarchy['packets']['raw']['layers'] if hierarchy else []
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)+len(hierarchy_layers)} map modes', flush=True)
         if work_layers:
             print('    Food and work: 6 views; partial cereal field-work scenarios',flush=True)
         if admin_layers:
             print(f'    Administration: 12 views; {admin["matched_centres"]}/{admin["listed_centres"]} seats located; seasonal access scenarios',flush=True)
+        if hierarchy_layers:
+            print(f'    Administrative links: 6 views; {len(hierarchy["registry"]["provinces"])} provincial capitals; directed seasonal reply times',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

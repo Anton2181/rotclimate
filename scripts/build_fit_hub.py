@@ -169,6 +169,7 @@ def main():
     work_maps=all((ROOT/'atlases'/name/'data/farm_work.json').exists() for name in FITS)
     if work_maps:topics.insert(topics.index('Farming')+1,'Food and work')
     administrative_maps=all((ROOT/'atlases'/name/'data/administrative_access.json').exists() for name in FITS)
+    hierarchy_maps=all((ROOT/'atlases'/name/'data/administrative_hierarchy.json').exists() for name in FITS)
     if administrative_maps:topics.insert(topics.index('Political reach')+1,'Administration')
     topic_text = f'Map topics include {", ".join(topics[:-1])} and {topics[-1]}.'
     if corrected:
@@ -187,6 +188,9 @@ def main():
         topic_text+=(' Administration compares seasonal two-day access from documented commandery seats, '
             'marked places, proposed towns, tracks, roads and military markers, with a separate three-seed settlement comparison. '
             'The workbook-backed inventory retains disputed seats. These scenarios measure access, not allegiance or military strength. ')
+    if hierarchy_maps:
+        topic_text+=(' Administrative links adds six schematic views of directed seasonal communication through 19 recorded provincial capitals, '
+            'comparing marked interchanges with proposed transport. Reply budgets are adjustable scenarios, not limits that establish political control. ')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '
@@ -261,6 +265,8 @@ def main():
             release['cereal_work_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/farm_work.json').read_bytes()).hexdigest() for name in FITS}
         if administrative_maps:
             release['administrative_access_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/administrative_access.json').read_bytes()).hexdigest() for name in FITS}
+        if hierarchy_maps:
+            release['administrative_hierarchy_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/administrative_hierarchy.json').read_bytes()).hexdigest() for name in FITS}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

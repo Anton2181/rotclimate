@@ -508,6 +508,19 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
       <p>Unlocated commanderies have no invented coordinates. A name-list location without a matching marker remains inexact. Twelve equal model-month bins represent climatological seasons, not weather probabilities or the world's named civil months. Recurrence within 10 km across three placement seeds is scenario sensitivity. Proposed towns remain conditional on the existing density, site rules and painted-claim eligibility, not a complete village or city-population model.</p></details>
     <p class="note"><a id="administration-method" href="../../reports/IMPERIAL_ACCESS_20261104.md">Methods and sources</a> · <a id="administration-grid" download>Download access grids (NPZ)</a> · <a id="administration-centres" download>Download commandery matching CSV</a> · <a id="administration-inventory" download>Typed source inventory</a></p>
   </section>
+  <section id="hierarchy-section" hidden aria-labelledby="hierarchy-h">
+    <div class="section-head"><h2 id="hierarchy-h">Administrative communication · travel scenarios</h2>
+      <p>Recorded commandery → provincial capital → imperial capital. Lines show relationships, not routes; colours describe seats, not surrounding territory.</p></div>
+    <div class="controls"><label for="hierarchy-commandery">Commandery</label> <select id="hierarchy-commandery"></select>
+      <label for="hierarchy-budget">Imperial reply budget</label> <select id="hierarchy-budget"></select></div>
+    <p class="note">Reply budgets are comparison scenarios. Changing the budget updates the readouts; map colours continue to show travel days.</p>
+    <p id="hierarchy-view-note" class="note"></p><h3 id="hierarchy-place">Select a commandery</h3><p id="hierarchy-parent"></p>
+    <p id="hierarchy-selection-note" class="note"></p><div id="hierarchy-readouts" class="readouts" aria-live="polite"></div>
+    <div class="harvest-table"><table><caption>Frozen model-month journeys, days · marked interchanges versus proposed transport</caption>
+      <thead><tr><th>Bin</th><th>Province → seat · marked</th><th>Seat → province · marked</th><th>Imperial reply · marked</th><th>Province → seat · proposed</th><th>Seat → province · proposed</th><th>Imperial reply · proposed</th></tr></thead><tbody id="hierarchy-months"></tbody></table></div>
+    <details><summary>Assumptions and interpretation</summary><p>Reply time adds both directions through the recorded provincial seat under the same fixed seasonal conditions. It does not advance the weather during long trips or include processing delays, courier relays, transport capacity, provisioning or political permission to cross territory. Marked settlements supply inferred coastal and river interchange eligibility, not proven harbours. Both cases retain modelled density-based path friction. Proposed transport adds generated tracks and interchanges; neither case proves control. Provincial capitals have zero local self-links. Twelve bins are climatological snapshots, not the world's named civil months.</p></details>
+    <p class="note"><a id="hierarchy-method" href="../../reports/ADMINISTRATIVE_HIERARCHY_20261104.md">Methods and sources</a> · <a id="hierarchy-grid" download>Directed travel arrays (NPZ)</a> · <a id="hierarchy-csv" download>All seats and seasonal journeys (CSV)</a> · <button id="hierarchy-download" type="button" disabled>Download selected seat CSV</button></p>
+  </section>
   <section id="farm-work-section" hidden aria-labelledby="farm-work-h">
     <div class="section-head"><h2 id="farm-work-h">Cereal field work · experimental</h2>
       <p>Partial field-work scenario per million net edible kcal. Current crop yields and <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html#12">Columella’s listed tasks</a>, with an assumed eight-hour workday and approximate 0.25 ha/iugerum.</p></div>
@@ -635,6 +648,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="harvest.js"></script>
 <script src="farm-work.js"></script>
 <script src="administration.js"></script>
+<script src="administrative-hierarchy.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -661,6 +675,7 @@ window.atlasSave = async (filename, blob) => {
 
   let meta, buf, farmWorkPacket=null, farmWorkUI=null, farmWorkError=null;
   let administrationPacket=null,administrationUI=null,administrationError=null;
+  let hierarchyPacket=null,hierarchyUI=null,hierarchyError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -688,6 +703,10 @@ window.atlasSave = async (filename, blob) => {
       try{administrationPacket=await AdministrativeAtlas.extend(meta,fresh,climateMode);}
       catch(error){administrationError=error;console.error(error);}
     }
+    if(window.AdministrativeHierarchy){
+      try{hierarchyPacket=await AdministrativeHierarchy.extend(meta,fresh,climateMode);}
+      catch(error){hierarchyError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -700,6 +719,7 @@ window.atlasSave = async (filename, blob) => {
     }
     if(farmWorkError) $("atlas-data-status").textContent+=' Cereal-work maps unavailable: check the complete updated atlas folder.';
     if(administrationError) $("atlas-data-status").textContent+=' Administrative access maps unavailable: check the complete updated atlas folder.';
+    if(hierarchyError) $("atlas-data-status").textContent+=' Administrative links unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -909,6 +929,7 @@ window.atlasSave = async (filename, blob) => {
     showVariants(L);
     farmWorkUI?.show(id,L.variants?variantOf(L):null);
     administrationUI?.show(id,L.variants?variantOf(L):null);
+    hierarchyUI?.show(id,L.variants?variantOf(L):null);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
@@ -928,6 +949,7 @@ window.atlasSave = async (filename, blob) => {
     if (meta.corrected_climate && climateMode === "raw") state.set("climate", "raw");
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
+    if(id==='hierarchy_links'&&hierarchyUI)for(const [key,value] of Object.entries(hierarchyUI.state()))state.set(key,value);
     history.replaceState(null, "", "#" + state.toString());
     for (const link of document.querySelectorAll(".atlas-nav a")) {
       if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
@@ -1092,6 +1114,7 @@ window.atlasSave = async (filename, blob) => {
     harvestUI?.select(x, y, name, k === 255);
     farmWorkUI?.select(x, y, name, k === 255);
     administrationUI?.select(x, y, name, k === 255);
+    hierarchyUI?.select(x,y,name);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2098,8 +2121,17 @@ window.atlasSave = async (filename, blob) => {
     catch(error){
       meta.layers=meta.layers.filter(L=>!L.id.startsWith('admin_'));
       for(const button of [...layerBtns.children])if(button.id.startsWith('layer-admin_'))button.remove();
-      for(const option of [...$("map-topic").options])if(option.value==='Administration')option.remove();
+      if(!meta.layers.some(L=>topicOf(L)==='Administration'))for(const option of [...$("map-topic").options])if(option.value==='Administration')option.remove();
       $("atlas-data-status").textContent+=' Administrative access maps unavailable: packet verification failed.';console.error(error);
+    }
+  }
+  if(hierarchyPacket){
+    try{hierarchyUI=await AdministrativeHierarchy.attach(hierarchyPacket,harvestUI,()=>setLayer(current),(x,y,name)=>select(x,y,name));}
+    catch(error){
+      meta.layers=meta.layers.filter(L=>L.id!=='hierarchy_links');
+      $("layer-hierarchy_links")?.remove();
+      if(!meta.layers.some(L=>topicOf(L)==='Administration'))for(const option of [...$("map-topic").options])if(option.value==='Administration')option.remove();
+      $("atlas-data-status").textContent+=' Administrative links unavailable: packet verification failed.';console.error(error);
     }
   }
   for (const id of ["occupation", "disease"]) {
@@ -2111,7 +2143,11 @@ window.atlasSave = async (filename, blob) => {
   if (initialView.has("variant")) { const L0 = meta.layers.find(L => L.id === requestedLayer);
     if (L0?.variants) { showVariants(L0); $("variant").value = initialView.get("variant"); } }
   setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
-  const start0 = meta.places.find((p) => p.name === "Yasna") || meta.places[0];
-  select(start0.x, start0.y + 8, start0.name);
+  const selectedSeat=requestedLayer==='hierarchy_links'?hierarchyUI?.selectedPlace():null;
+  if(selectedSeat)select(selectedSeat.x,selectedSeat.y,selectedSeat.seat_name);
+  else{
+    const start0=meta.places.find(p=>p.name==='Yasna')||meta.places[0];
+    select(start0.x,start0.y+8,start0.name);
+  }
 })();
 </script>
