@@ -42,6 +42,9 @@ def release_version(root):
         for name,digest in release.get('cereal_work_sha256',{}).items():
             if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/farm_work.json').read_bytes()).hexdigest()!=digest:
                 raise ValueError('Cereal-work map metadata changed')
+        for name,digest in release.get('administrative_access_sha256',{}).items():
+            if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/administrative_access.json').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Administrative-access map metadata changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
@@ -97,9 +100,14 @@ def main():
         work_path=root/'atlases'/name/'data/farm_work.json'
         work=json.loads(work_path.read_text(encoding='utf-8')) if work_path.exists() else None
         work_layers=work['packets']['raw']['layers'] if work else []
-        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)} map modes', flush=True)
+        admin_path=root/'atlases'/name/'data/administrative_access.json'
+        admin=json.loads(admin_path.read_text(encoding='utf-8')) if admin_path.exists() else None
+        admin_layers=admin['packets']['raw']['layers'] if admin else []
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)} map modes', flush=True)
         if work_layers:
             print('    Food and work: 6 views; partial cereal field-work scenarios',flush=True)
+        if admin_layers:
+            print(f'    Administration: 12 views; {admin["matched_centres"]}/{admin["listed_centres"]} seats located; seasonal access scenarios',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

@@ -90,6 +90,14 @@ do not estimate total subsistence work or population. Select a place for
 readouts and CSV, or download the grid arrays. The methods explain the
 historical source and scenario assumptions.
 
+Administration adds seasonal access comparisons for recorded commandery seats,
+marked places, proposed towns/tracks, roads and military markers. The typed
+inventory links geographic spreadsheet evidence by ID and retains disputed
+seats. These are two-day travel-access scenarios, not territorial ownership,
+allegiance, military strength or validated city populations. Three declared
+settlement-placement seeds show sensitivity, not probability. See the methods
+report and the in-view CSV/NPZ downloads.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.
@@ -102,7 +110,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/THREE_FIT_20261022.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
+             ROOT/'reports/CONTROL_SETTLEMENT_PROPOSALS_20261104.md', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',
              ROOT/'reports/CONTINUE_20261022.md', ROOT/'data/biome_target_crosswalk.json',

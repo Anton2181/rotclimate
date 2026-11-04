@@ -494,6 +494,20 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
       <p><a href="https://doi.org/10.5194/essd-9-927-2017" target="_blank" rel="noopener">HYDE 3.2 method</a> · <a href="https://escholarship.org/uc/item/05r820mz" target="_blank" rel="noopener">Tobler walking model</a> · <a href="data/population_model.json" download>All scenario parameters and sources</a></p>
     </details>
   </section>
+  <section id="administration-section" hidden aria-labelledby="administration-h">
+    <div class="section-head"><h2 id="administration-h">Imperial administration · access scenarios</h2>
+      <p>Compare recorded centres, marked places, proposed towns, proposed tracks and road-source assumptions. Access is not allegiance, military strength or a replacement for the de facto map.</p></div>
+    <p id="administration-inventory-note" class="note"></p><p id="administration-view-note" class="note"></p>
+    <h3 id="administration-place">Choose a place</h3><div id="administration-readouts" class="readouts" aria-live="polite"></div>
+    <div class="harvest-table"><table><caption>Selected place · two-day person-travel threshold</caption><thead><tr><th>Source scenario</th><th>Accessible seasonal bins</th><th>Longest isolated spell, bins</th><th>Annual mean cutoff</th></tr></thead><tbody id="administration-point"></tbody></table></div>
+    <button id="administration-download" type="button" disabled>Download selected access CSV</button>
+    <details><summary>How assumptions change access inside painted imperial claims</summary>
+      <div class="harvest-table"><table><thead><tr><th>Source scenario</th><th>Source nodes</th><th>Mean accessible bins</th><th>Access in all 12 bins</th></tr></thead><tbody id="administration-scenarios"></tbody></table></div>
+      <p>These are area summaries of the existing imperial claim, not independently measured control. Proposed-town ports and river landings remain fixed between comparisons; proposed tracks change only at their named step. The existing central-density scenario drives placement and path assumptions. Positions of forts and legions are held fixed; founding numbers supply no troop counts or strength.</p></details>
+    <details><summary>Centre inventory and limits</summary><p id="administration-unresolved"></p>
+      <p>Unlocated commanderies have no invented coordinates. A name-list location without a matching marker remains inexact. Twelve equal model-month bins represent climatological seasons, not weather probabilities or the world's named civil months. Recurrence within 10 km across three placement seeds is scenario sensitivity. Proposed towns remain conditional on the existing density, site rules and painted-claim eligibility, not a complete village or city-population model.</p></details>
+    <p class="note"><a id="administration-method" href="../../reports/IMPERIAL_ACCESS_20261104.md">Methods and sources</a> · <a id="administration-grid" download>Download access grids (NPZ)</a> · <a id="administration-centres" download>Download commandery matching CSV</a> · <a id="administration-inventory" download>Typed source inventory</a></p>
+  </section>
   <section id="farm-work-section" hidden aria-labelledby="farm-work-h">
     <div class="section-head"><h2 id="farm-work-h">Cereal field work · experimental</h2>
       <p>Partial field-work scenario per million net edible kcal. Current crop yields and <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html#12">Columella’s listed tasks</a>, with an assumed eight-hour workday and approximate 0.25 ha/iugerum.</p></div>
@@ -607,6 +621,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="climate-comparison.js"></script>
 <script src="harvest.js"></script>
 <script src="farm-work.js"></script>
+<script src="administration.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -632,6 +647,7 @@ window.atlasSave = async (filename, blob) => {
   }
 
   let meta, buf, farmWorkPacket=null, farmWorkUI=null, farmWorkError=null;
+  let administrationPacket=null,administrationUI=null,administrationError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -655,6 +671,10 @@ window.atlasSave = async (filename, blob) => {
       try {farmWorkPacket=await FarmWorkAtlas.extend(meta,fresh,climateMode);}
       catch(error) {farmWorkError=error;console.error(error);}
     }
+    if(window.AdministrativeAtlas){
+      try{administrationPacket=await AdministrativeAtlas.extend(meta,fresh,climateMode);}
+      catch(error){administrationError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -666,6 +686,7 @@ window.atlasSave = async (filename, blob) => {
       $("atlas-data-status").textContent += ` Directed markets · ${tradeViews} trade views.`;
     }
     if(farmWorkError) $("atlas-data-status").textContent+=' Cereal-work maps unavailable: check the complete updated atlas folder.';
+    if(administrationError) $("atlas-data-status").textContent+=' Administrative access maps unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -730,7 +751,7 @@ window.atlasSave = async (filename, blob) => {
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
   };
-  const topicNames = ["Overview", "Population", "Foraging", "Languages", "Political reach", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
+  const topicNames = ["Overview", "Population", "Foraging", "Languages", "Political reach", "Administration", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
   const lastLayer = {};
   for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
     const option = document.createElement("option"); option.value = name; option.textContent = name;
@@ -874,6 +895,7 @@ window.atlasSave = async (filename, blob) => {
     $("foraging-section").hidden = !foraging;
     showVariants(L);
     farmWorkUI?.show(id,L.variants?variantOf(L):null);
+    administrationUI?.show(id,L.variants?variantOf(L):null);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
@@ -1056,6 +1078,7 @@ window.atlasSave = async (filename, blob) => {
     }
     harvestUI?.select(x, y, name, k === 255);
     farmWorkUI?.select(x, y, name, k === 255);
+    administrationUI?.select(x, y, name, k === 255);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2057,6 +2080,15 @@ window.atlasSave = async (filename, blob) => {
     try { localStorage.setItem("rotclimate-tiers", e.target.checked ? "1" : "0"); } catch (err) { /* storage off */ }
     setLayer(current);
   });
+  if(administrationPacket){
+    try{administrationUI=await AdministrativeAtlas.attach(administrationPacket,harvestUI);}
+    catch(error){
+      meta.layers=meta.layers.filter(L=>!L.id.startsWith('admin_'));
+      for(const button of [...layerBtns.children])if(button.id.startsWith('layer-admin_'))button.remove();
+      for(const option of [...$("map-topic").options])if(option.value==='Administration')option.remove();
+      $("atlas-data-status").textContent+=' Administrative access maps unavailable: packet verification failed.';console.error(error);
+    }
+  }
   for (const id of ["occupation", "disease"]) {
     const value = initialView.get(id);
     if ([...$(id).options].some(option => option.value === value)) $(id).value = value;

@@ -1,0 +1,93 @@
+{
+  "status": "verified_for_publication",
+  "base_commit": "78acb6561da561a7453872f39d9eaae95c548c18",
+  "feature": "workbook-backed administrative inventory and isolated seasonal access",
+  "source_workbooks_published": false,
+  "extract": "data/imperial_datasheet_evidence.json",
+  "component_tests": {
+    "passed": 87,
+    "command": "python -m pytest -q tests/test_administrative_inventory.py tests/test_seasonal_access.py tests/test_imperial_datasheet_import.py tests/test_cereal_work_maps.py tests/test_farm_labour.py tests/test_food_stocks.py tests/test_food_transport.py"
+  },
+  "browser_checks": "4 packets \u00d7 12 views, numerical CSV/NPZ, all4096 masks, controls, downloads, state, mobile, bad identity",
+  "old_cereal_browser": "passed all4 packets \u00d76views",
+  "old_atlas_smoke": "passed all3 atlases",
+  "checkout": "passed;1182 byte-exact assets; same snapshot identity across Windows and portable",
+  "portable": "passed;1760 manifest files also match disk and Git index;680 research links checked",
+  "archive": {
+    "file": "output/food_stock_prototype_20261103/atlases.zip",
+    "bytes": 436667186,
+    "sha256": "8cce8e5edbe050fd901cf90164f8a87ffea598f414411fbaa869cf282ea8bc81",
+    "files": 1762,
+    "integrity": "passed"
+  },
+  "unchanged_protected_inputs": [
+    {
+      "path": "atlases/free_fit/data/atlas.bin",
+      "sha256": "eda300fd9e08f51936a23f2a4f8c0702800ba3aed979f2b1c8d8f30acc726633"
+    },
+    {
+      "path": "atlases/free_fit/data/harvest.bin",
+      "sha256": "52b9b94c958488cb7b0d6383abcc9c7314c91f084a2b23ad6b3434ecb3ad16e1"
+    },
+    {
+      "path": "atlases/free_fit/data/harvest.json",
+      "sha256": "d36a35878377eb0ba9f32e571b5f79032eb072b951615f01e8b4ec975baba221"
+    },
+    {
+      "path": "atlases/free_fit/data/atlas.json",
+      "sha256": "b85451d479d0bda82406d886f140cf5d89e8e26c4cbe1bec434b68b59b92953e"
+    },
+    {
+      "path": "atlases/earth_fit/data/atlas.bin",
+      "sha256": "f144e026a11a4eeff9bd54c777475d35f154c5e606936596f4a65e18cffb7cf2"
+    },
+    {
+      "path": "atlases/earth_fit/data/harvest.bin",
+      "sha256": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f"
+    },
+    {
+      "path": "atlases/earth_fit/data/harvest.json",
+      "sha256": "5fc2d0e05b81d80664e7512d281b5e372f3cf783e9484a0af56dd73c61fc631a"
+    },
+    {
+      "path": "atlases/earth_fit/data/atlas.json",
+      "sha256": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51"
+    },
+    {
+      "path": "atlases/earth_fit/data/corrected/atlas.bin",
+      "sha256": "00c012d20f6b42c5b02da388fa1c5df0913c987489a49e5f1c771ffa8bee17e3"
+    },
+    {
+      "path": "atlases/earth_fit/data/corrected/harvest.bin",
+      "sha256": "5d03be2368a1d5f8252bb30f026d9b0fc91ff483aab32de6d5282e805adb340e"
+    },
+    {
+      "path": "atlases/earth_fit/data/corrected/harvest.json",
+      "sha256": "c0621aa84aedccfa7f260e24f11cd17c692deab4109846337da01c03adda37b1"
+    },
+    {
+      "path": "atlases/whittaker_fit/data/atlas.bin",
+      "sha256": "6e9f48b155441062efd19a2d345ed14a6d2331c0368b01abf180accd75c0acb5"
+    },
+    {
+      "path": "atlases/whittaker_fit/data/harvest.bin",
+      "sha256": "f1e5f73a0dc27e11491d6596dacf8f8af851abee10e6d8f8f3c86972f1aa25d0"
+    },
+    {
+      "path": "atlases/whittaker_fit/data/harvest.json",
+      "sha256": "0d78a022669b2285c50aad6ebd8a71267d993c1102e9b6e28e9f8e368476acd5"
+    },
+    {
+      "path": "atlases/whittaker_fit/data/atlas.json",
+      "sha256": "474b461b9eb6b76d52c84a4e165a520d4735c8f4f5a3f00b27d0dd923472ce93"
+    }
+  ],
+  "receipts_sha256": {
+    "output/imperial_access_20261104/browser/review.json": "118bd84cf4b0efbc95652fa943f39f6e168b10d8cbadfcc4ca274ec9a238a83e",
+    "output/imperial_access_20261104/cereal_browser/checks.json": "4581a90fe30f6acef72baa68044a354f52ed2f1f8a6cf409eee7c688df86b8b5",
+    "output/imperial_access_20261104/checkout.json": "037dede5a7518514537e93665378a239c8be83f34850c310409c3e54add80fe9",
+    "output/imperial_access_20261104/portable.json": "b712f962faf577b72e9e8a64d1653dfe9239df2e513ce6e8e93de62abe57fae6",
+    "output/imperial_access_20261104/atlas_smoke.json": "0fcd1be52f62aa7a784ef535650956b811685eb929e6b9a599d6ea7d636c628e",
+    "output/imperial_access_20261104/presentation.json": "4f5f67948fa4d6b3b9ead21f344b89df7dd5f22849d0d668aeaa8591c65e1586"
+  }
+}

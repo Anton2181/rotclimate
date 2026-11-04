@@ -1,3 +1,52 @@
+# Workbook-backed administration and seasonal access — 4 November 2026
+
+* User supplied Imperial Commanderies.xlsx and Ravages Master sheet (1).xlsx,
+  explicitly game-era evidence rather than authoritative physical parameters.
+  Originals remain local under /workspace/attachments; do not commit them.
+  scripts/import_imperial_datasheets.py extracts only geography/admin columns
+  to data/imperial_datasheet_evidence.json, with workbook hashes and sheet rows.
+  Excludes game supply/population caps, loyalty, wealth, factions, notes/players.
+* Owner list/key data/imperial_administration.json: all 72 names agree with
+  reference workbook. Stable IDs resolve split districts and differently named
+  temple seats. Preserve Tašar/Garaz town-sheet name conflict (IC4C5), Uγra/Uyra
+  spelling evidence. 70 verified marker seats. Kudā has no matching symbol,
+  Thalamâtâs conflicts with Pitané seat flag: both excluded as seat sources,
+  candidate evidence retained. Named inventory 152 vs 151 drawn symbols; Kudā
+  is an unmarked Elder Village, not a merged capital icon. 14 legion positions;
+  founding numbers untranscribed, never strength. 25 imperial fort markers.
+* New optional Administration topic in normal Free/Earth/Whittaker pages,
+  Earth raw+corrected matched: 4 packets, 3 buttons/12 views each. Six cases:
+  verified seats; add marked places; add proposed towns; add generated tracks;
+  add road cells as sources; separate forts+legion scenario. Same ports/river
+  landings incl proposed-town ports throughout, so NOT observed-only transport.
+  Threshold 2 person-days, 12 equal climatological frozen-condition bins. Count,
+  cyclic longest isolation, annual log-mean versus continuous access, paired
+  gains, plus placement seeds 1/2/3 recurrence within10km (not probability).
+* Earth corrected all-12-bin claim-area shares: seats14.8%, marked15.7%,
+  towns63.0%, tracks65.9%, roads70.7%, military7.0%. Main gain is adding proposed
+  sources, not tracks. Sparse seat inventory doesn't prove weak actual control.
+  Old de facto, climate/food/population binaries and legacy polity code unchanged.
+* Sources/scripts: polity/administration.py, administrative_world.py,
+  seasonal_access.py; scripts/audit_administrative_inventory.py,
+  review_imperial_access.py, publish_imperial_access.py, plot_imperial_access.py.
+  Full review/source hashes in output/administrative_inventory_20261104 and
+  output/imperial_access_20261104. Shared atlas/administration.js verifies food
+  binary/inventory/grid identities; mismatch removes topic, keeps climate usable.
+  Centre CSV, typed inventory, NPZ and selected-place CSV available in viewer.
+* 87 linked component tests pass. New browser verifies 4 packets x12 views,
+  CSV/NPZ consistency, all4096 masks, controls/state/downloads/mobile and bad
+  identity; prior cereal browser and all3 old smoke checks pass. Windows-style
+  checkout and portable bundle verified for publication (see receipt).
+  Launcher prints Administration/70-of72; release pins sidecar hashes. Methods:
+  reports/IMPERIAL_ACCESS_20261104.md; comparison PNG posted during work.
+* Next: use workbook province/commandery hierarchy for explicit capital-to-seat
+  continuity; threshold/source uncertainty; conserved food/staffing provisioning
+  before control claims. Recorded hex memberships are game evidence, not adopted
+  physical terrain or independently validated boundaries. No physics recalibration
+  this milestone. Keep literature proposals/negative controls in view.
+
+---
+
 # Food and work maps in normal atlases — 3 November 2026
 
 * User asked to work toward new maps. Delivered Food and work topic in normal

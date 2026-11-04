@@ -30,6 +30,8 @@ def check(snapshot,*,retained):
     if (snapshot/'atlases/release.json').exists() and ('unverified' in launcher.stdout or
             'Atlas release: Earth ' not in launcher.stdout):
         raise ValueError('Fresh Windows-style checkout has an unverified release: '+launcher.stdout)
+    if (snapshot/'atlases/release.json').exists():
+        assert (snapshot/'atlases/release.json').read_bytes()==(ROOT/'atlases/release.json').read_bytes(), 'Windows checkout changed the release snapshot identity'
     return dict(status='passed',snapshot=str(snapshot),snapshot_retained=retained,
         scope='tracked atlas site, documentation and standard-library launcher; no calibration outputs',
         git_autocrlf=True,byte_exact_assets=len(assets),assets=assets,launcher_output=launcher.stdout)
