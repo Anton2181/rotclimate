@@ -38,6 +38,8 @@ def main():
             text=text.replace('<script src="coverage.js"></script>','<script src="coverage.js" data-coverage-enabled></script>')
         if (out/'data/presence_mobility.json').exists():
             text=text.replace('<script src="presence-mobility.js"></script>','<script src="presence-mobility.js" data-presence-mobility-enabled></script>')
+        if (out/'data/settled_reach.json').exists():
+            text=text.replace('<script src="settled-reach.js"></script>','<script src="settled-reach.js" data-settled-reach-enabled></script>')
         (out / "index.html").write_text(text)
         shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
@@ -47,6 +49,7 @@ def main():
         shutil.copy(ROOT / "atlas" / "pasture.js", out / "pasture.js")
         shutil.copy(ROOT / "atlas" / "coverage.js", out / "coverage.js")
         shutil.copy(ROOT / "atlas" / "presence-mobility.js", out / "presence-mobility.js")
+        shutil.copy(ROOT / "atlas" / "settled-reach.js", out / "settled-reach.js")
         if (ROOT / "atlas" / "population.js").exists():
             shutil.copy(ROOT / "atlas" / "population.js", out / "population.js")
         if (ROOT / "atlas" / "foraging.js").exists():

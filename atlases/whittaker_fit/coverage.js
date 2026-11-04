@@ -124,7 +124,7 @@ window.CoverageAtlas=(()=>{
       state:()=>{const {s,a,b}=config();return {coverage_actor:a<0?'all':p.actors[a].name,coverage_sources:p.scenarios[s],coverage_budget:p.budgets_days[b]};},
       show:(id,variant)=>{
         active=id==='reach_coverage_audit';view=variant?.value||'coverage';$('coverage-controls').hidden=!active;$('coverage-section').hidden=!active;
-        $('coverage-baseline-note').hidden=!['reach_defacto','reach_polities'].includes(id);
+        $('coverage-baseline-note').hidden=!['reach_defacto','reach_polities'].includes(id)||!!variant?.integrated_support;
         if(active){$('harvest-section').hidden=true;$('coverage-actor-control').hidden=view==='unknown';$('coverage-source-control').hidden=['unknown','source_gain'].includes(view);}
       }};
   }

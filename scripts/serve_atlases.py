@@ -57,6 +57,9 @@ def release_version(root):
         for name,digest in release.get('presence_mobility_sha256',{}).items():
             if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/presence_mobility.json').read_bytes()).hexdigest()!=digest:
                 raise ValueError('Presence/mobility metadata changed')
+        for name,digest in release.get('settled_reach_sha256',{}).items():
+            if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/settled_reach.json').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Settlement integration metadata changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
@@ -141,6 +144,8 @@ def main():
         if pm_layers:
             scenarios=len(pm['specification']['presence']['scenarios']);scales=1+len(pm['specification']['mobility'].get('regional_scales',[]))
             print(f'    Sustained presence: {scenarios} food scenarios / 151 marked sites; Seasonal circuits: 4 independent landscapes / {scales} landscape tests / 2 water scenarios',flush=True)
+        if (root/'atlases'/name/'data/settled_reach.json').exists():
+            print('    Settlements -> supply-supported reach: one joint food budget; matched reference + storage/collection scenarios',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

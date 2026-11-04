@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "year_days": 365.0,
+  "ration_kcal_person_day": 2500.0,
+  "destination_store_demand_days": 90.0,
+  "annual_stored_energy_loss_fraction": 0.05,
+  "rural_demand_fraction_of_cereal_production": 0.6,
+  "rural_store_demand_days": 365.0,
+  "delivery_delay_bins": 1,
+  "delivery_retention": 0.95,
+  "collection_maximum_days_each_way": 1.0,
+  "collection_base_bin": 0,
+  "civilian_request_share_of_served_people": 0.075,
+  "minimum_civilian_request_people": 100.0,
+  "minimum_community_people": 50.0,
+  "institutional_request_people": 100.0,
+  "patrol_days_each_leg": 2.0,
+  "patrol_ration_days": 4.0,
+  "cases": [
+    {"id": "joint365", "label": "Joint food budget · year of origin stores", "origin_store_flow_days": 365.0, "collection_fraction": 0.1},
+    {"id": "joint90", "label": "Joint food budget · 90-day origin stores", "origin_store_flow_days": 90.0, "collection_fraction": 0.1},
+    {"id": "joint1", "label": "Joint food budget · collect 1% of surplus", "origin_store_flow_days": 365.0, "collection_fraction": 0.01},
+    {"id": "joint0", "label": "Joint food budget · no origin stores", "origin_store_flow_days": 0.0, "collection_fraction": 0.1},
+    {"id": "cohort25", "label": "Joint budget · smaller 25-person cohort", "origin_store_flow_days": 365.0, "collection_fraction": 0.1, "institutional_request_people": 25.0}
+  ],
+  "freight_scope": "Local cereal support envelope: path eligibility and finite food/storage are enforced; cargo capacity is bounded above by available annual grain rather than the earlier arbitrary 5-tonne/site/bin prototype. No maritime or long-distance grain imports, crew/draft budgets or measured freight throughput is inferred.",
+  "request_scope": "7.5% of legacy market-served people, with a 100-person minimum request, is a reference civilian demand scenario, not an empirically validated city-size model. The previous size/market-access failure remains a negative control. Food can only reduce this request; unused surplus does not invent residents.",
+  "institution_scope": "Declared resident cohort reserved only where at least 50 requested civilians can coexist in the same repeating food budget. Known affiliation or generated-site claim hypothesis supplies an actor, not evidence of actual staff or sovereignty. Unknown affiliation remains unscored for political reach.",
+  "population_scope": "Alternative cereal-dependent settlement scenario at existing marked/proposed nodes, not extra people added to farming, FORGE, pastoral or census totals. Generated nodes retain their administrative/market candidate scope; unclaimed land and mobile communities are not assigned empty-land scores."
+}

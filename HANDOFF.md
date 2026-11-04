@@ -1,3 +1,66 @@
+# Joint food → settlement → available reach sources — 4 November 2026
+
+* Implemented the user's requested loop into the EXISTING `reach_towns` and
+  `reach_defacto` modes, all four climate packets. Default is `joint365`, with
+  a transport-matched unconstrained reference, 90/no origin stores, 1% collection,
+  smaller 25-person cohort and explicitly labelled legacy comparisons.
+* New core `polity/settlement_support.py` solves a seasonal resident ceiling,
+  then allocates requested civilians and institutional residents from ONE
+  conserved pool. A community can persist without a cohort. Only available
+  affiliated cohorts emit same-site two-way reach; no population-power weights.
+* All 151 marked icons join bijectively using grid coordinates and kind, with
+  coastal snapping kept separate. Raw art pixels differ from atlas pixels.
+  Co-located markets merge. Unknown marked affiliation never inherits claims;
+  generated-site claim affiliation remains an explicit hypothesis.
+* Earth corrected: 1,085 candidates; year-store case has 1,082 communities and
+  1,064 staffed sources versus 1,074 reference sources. Civilian requests fall
+  from 3.44 M to a 0.79 M alternative allocation; this is NOT a census revision
+  or validated town-size prediction. 1% collection leaves 107 sources and
+  1.44 area-weighted access bins versus 7.40 reference / 7.36 year-store.
+* Candidate generation and path friction remain fixed across cases. Food
+  collection has local road/foot eligibility, no sea imports or measured freight
+  throughput. Staffed-source reach includes proposed person-transport links.
+  Compare food effects ONLY with the matched reference, not the legacy engine.
+* `scripts/review_settlement_integration.py` computes/reuses source/input-hashed
+  reviews. `publish_settlement_integration.py` publishes optional runtime mode
+  replacements without altering `atlas.json` or climate/crop/FORGE packets.
+  `atlas/settled-reach.js` lazy-loads ledgers/masks; manifest or Harvest failure
+  restores original modes. Missing detailed ledgers retain precomputed plates
+  with a visible explanation. Controls remain conditional.
+* Methods/scope: `reports/SETTLEMENT_INTEGRATION_20261104.md`; literature access
+  in `research_notes/settlement_integration_20261104.json` (Palmyra 2022 paper,
+  Erdkamp publisher introduction, FAO storage). Coefficients remain scenarios.
+* First integration only: other foods, household work, drinkable water volume,
+  livestock nutrition, grain exchange, camps and rights are NOT jointly solved.
+  Next work should constrain the same resident/source allocation with these
+  budgets, not add independent utility map families or infer institutions from
+  ecology. Retain broad polity/nonstate scope and explicit missing evidence.
+
+---
+
+# Required integration into settlements and control — user clarification
+
+* The user explicitly requires ALL utility/resource maps to feed back into
+  settlement and control predictions. Standalone diagnostics are intermediate
+  evidence, not the development endpoint. Prioritize integration before adding
+  further independent map families.
+* Food, feed, storage, water, labour and transport must constrain a shared,
+  conserved allocation: where communities can persist, their supportable size,
+  seasonal relocation/supply dependence, and provisioned institutional presence.
+  Apply this across imperial, other-state and nonstate/mobile scenarios.
+* Next implementation milestone: supply-constrained settlement scenarios that
+  consume the existing seasonal budgets, followed by supply-supported control
+  scenarios anchored to those settlements/institutions. Show the causal path
+  from resource constraint to changed settlement/presence/reach, alongside the
+  baseline and uncertainty. Do not substitute a food/population power multiplier
+  or assume that ecological feasibility proves staffing, allegiance or ownership.
+* The first local-cereal integration is now implemented (see milestone above).
+  Feed, household labour, water volumes, exchange and mobile-community
+  allocations still need to constrain this same system; those utility layers
+  must not be described as fully integrated. Missing evidence stays unscored.
+
+---
+
 # Readable circuit insets — 4 November 2026
 
 * Continued after pushing `5d953c4c`, per the user's preference to keep working.

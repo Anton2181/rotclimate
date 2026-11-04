@@ -217,6 +217,9 @@ def main():
         '<th>Shortfall per year</th><th>Animal share</th><th>Fish share</th></tr></thead><tbody>' + ''.join(foraging_rows) + '</tbody></table></div>'
         '<div class="notes"><p class="note">Finite-horizon scenarios, not validated carrying capacities or censuses. Means are weighted by scenario people. '
         'Food shortfall includes ordinary reserve drawdown; it is not famine mortality.</p></div>')
+    settled_maps=all((ROOT/'atlases'/name/'data/settled_reach.json').exists() for name in FITS)
+    if settled_maps:
+        topic_text+=(' Settlements and supply-supported reach now share one seasonal food ledger: local cereal caps civilian requests and available institutional cohorts, then changes which sites emit reach. A transport-matched unconstrained reference and legacy maps remain available. These are conditional scenarios, not validated populations or sovereignty. ')
     updated = datetime.date.today().strftime('%-d %B %Y').upper()
     sensitivity_note = ('<p class="note">The Earth atlas also offers Rain sensitivity and Temperature sensitivity under Fit checks, with grid values to download. These show spread across nine hypothetical surroundings at the screening resolution; they are conditional boundary sensitivities, not weather variability or measured climate error.</p>'
                         if has_sensitivity and not artifact else '')
@@ -288,6 +291,8 @@ def main():
             release['coverage_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/coverage.json').read_bytes()).hexdigest() for name in FITS}
         if presence_maps:
             release['presence_mobility_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/presence_mobility.json').read_bytes()).hexdigest() for name in FITS}
+        if settled_maps:
+            release['settled_reach_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/settled_reach.json').read_bytes()).hexdigest() for name in FITS}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

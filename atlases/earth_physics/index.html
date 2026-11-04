@@ -537,6 +537,19 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     <details><summary>What this budget includes</summary><p>Forage production excludes the current model's assigned cropped area. A temperature/rainfall proxy distributes annual production across twelve equal seasonal bins. The reserve experiment consumes half annual usable dry matter at a constant rate, with zero storage loss and a repeating year; standing forage and cut fodder are not distinguished. A feed-equivalent unit uses a 250 kg reference animal consuming 6.25 kg dry matter/day. Protein, energy quality, herd reproduction, migration, animal products and household labour are not balanced. Mapped water distance does not establish drinkable supply, seasonal permanence or wells. Feed equivalents cannot be added to the existing farming or FORGE population estimates.</p></details>
     <p class="note"><a id="pasture-method" href="../../reports/PASTURE_RESOURCES_20261104.md">Methods and sources</a> · <a id="pasture-grid" download>Download resource grids (NPZ)</a> · <a href="data/pasture.json" download>Assumptions and input identities</a> · <button id="pasture-download" type="button" disabled>Download selected resource CSV</button></p>
   </section>
+  <section id="settled-section" hidden aria-labelledby="settled-title">
+    <div class="section-head"><h2 id="settled-title">Food → settlements → sustained reach</h2>
+      <span class="note">Conditional local cereal scenario · all represented actors</span></div>
+    <p id="settled-global" class="note" aria-live="polite"></p>
+    <label>Settlement candidate <select id="settled-site" style="max-width:100%"></select></label>
+    <div id="settled-readouts" class="readouts" aria-live="polite"></div><p id="settled-site-note" class="note"></p>
+    <div class="harvest-table"><table><caption>One civilian + institutional food budget · million kcal</caption>
+      <thead><tr><th>Seasonal bin</th><th>Arrivals</th><th>Resident need</th><th>End stock</th></tr></thead><tbody id="settled-months"></tbody></table></div>
+    <div class="harvest-table"><table><caption>Selected land cell · same-source outward and return access within two days each</caption>
+      <thead><tr><th>Actor</th><th>Available / candidate sources</th><th>Access bins here</th></tr></thead><tbody id="settled-cell"></tbody></table></div>
+    <details><summary>What this changes, and what remains unknown</summary><p>Food limits reduce civilian requests and decide whether an affiliated institutional cohort can coexist with a minimum community. Only available cohorts emit reach; food or population never multiplies military strength. Roads are transport, not authority sources. All cases retain the same candidate places and transport. Proposed places inherit painted claims as hypotheses, and unresolved marked affiliations stay unscored. The old town-size/market-access negative result still applies: the 7.5% reference request is not an empirically validated city population. Other staples, livestock food, imported grain, labour, drinking-water volumes and political rights are not yet jointly balanced. Missing sources and unsupported local cereal scenarios do not establish absence of communities, abandonment or actual loss of control.</p></details>
+    <p class="note"><a href="../../reports/SETTLEMENT_INTEGRATION_20261104.md">Methods and literature</a> · <a id="settled-ledgers" download>All site ledgers (gzip JSON)</a> · <a id="settled-grid" download>Catchments and actor access masks (gzip binary)</a> · <button id="settled-download" type="button" disabled>Download selected settlement CSV</button></p>
+  </section>
   <section id="pm-section" hidden aria-labelledby="pm-title">
     <div class="section-head"><h2 id="pm-title">Sustained presence and seasonal resource circuits</h2>
       <span class="note">Declared scenarios · no new ownership or population forecast</span></div>
@@ -686,6 +699,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="pasture.js"></script>
 <script src="coverage.js"></script>
 <script src="presence-mobility.js"></script>
+<script src="settled-reach.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -716,6 +730,7 @@ window.atlasSave = async (filename, blob) => {
   let pasturePacket=null,pastureUI=null,pastureError=null;
   let coveragePacket=null,coverageUI=null,coverageError=null,coverageGeneration=0;
   let pmPacket=null,pmUI=null,pmError=null;
+  let settledPacket=null,settledUI=null,settledError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -759,6 +774,10 @@ window.atlasSave = async (filename, blob) => {
       try{pmPacket=await PresenceMobilityAtlas.extend(meta,fresh,climateMode);}
       catch(error){pmError=error;console.error(error);}
     }
+    if(window.SettledReachAtlas){
+      try{settledPacket=await SettledReachAtlas.extend(meta,fresh,climateMode);}
+      catch(error){settledError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -775,6 +794,7 @@ window.atlasSave = async (filename, blob) => {
     if(pastureError) $("atlas-data-status").textContent+=' Pasture resources unavailable: check the complete updated atlas folder.';
     if(coverageError) $("atlas-data-status").textContent+=' Coverage audit unavailable: check the complete updated atlas folder.';
     if(pmError) $("atlas-data-status").textContent+=' Presence/circuit scenarios unavailable: check the complete updated atlas folder.';
+    if(settledError) $("atlas-data-status").textContent+=' Settlement integration unavailable; original maps retained.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -893,7 +913,8 @@ window.atlasSave = async (filename, blob) => {
       const state = new URLSearchParams(location.hash.slice(1));
       for (const [key, value] of Object.entries(populationUI.state())) state.set(key, value);
       if ($("tiers").checked) state.set("colours", "tiers"); else state.delete("colours");
-      history.replaceState(null, "", "#" + state.toString());
+      if(variantOf(L)?.integrated_support&&settledUI)for(const [key,value] of Object.entries(settledUI.state()))state.set(key,value);
+    history.replaceState(null, "", "#" + state.toString());
       for (const link of document.querySelectorAll(".atlas-nav a"))
         if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href"))) link.href = link.href.split("#")[0] + "#" + state.toString();
       const totals = populationUI.stats();
@@ -976,7 +997,7 @@ window.atlasSave = async (filename, blob) => {
       $("atlas-data-status").textContent+=!window.DecompressionStream?' Coverage audit unavailable: this optional view needs an updated browser.':' Coverage audit unavailable: check the complete matching data bundle.';console.error(error);setLayer('koppen');
     }
   }
-  function setLayer(id) {
+  function setLayer(id,requestedVariant=null) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
     showTopic(topicOf(L)); lastLayer[topicOf(L)] = id;
@@ -996,12 +1017,14 @@ window.atlasSave = async (filename, blob) => {
     $("harvest-section").hidden = population || foraging || !meta.harvest;
     $("foraging-section").hidden = !foraging;
     showVariants(L);
+    if(requestedVariant&&L.variants?.options.some(o=>o.value===requestedVariant)){ $("variant").value=requestedVariant;showVariants(L); }
     farmWorkUI?.show(id,L.variants?variantOf(L):null);
     administrationUI?.show(id,L.variants?variantOf(L):null);
     hierarchyUI?.show(id,L.variants?variantOf(L):null);
     pastureUI?.show(id,L.variants?variantOf(L):null);
     coverageUI?.show(id,L.variants?variantOf(L):null);
     pmUI?.show(id,L.variants?variantOf(L):null);
+    settledUI?.show(id,L.variants?variantOf(L):null);
     $("coverage-message").hidden=!L.coverage_dynamic;
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
@@ -1025,6 +1048,7 @@ window.atlasSave = async (filename, blob) => {
     if(id==='hierarchy_links'&&hierarchyUI)for(const [key,value] of Object.entries(hierarchyUI.state()))state.set(key,value);
     if(L.coverage_dynamic&&coverageUI)for(const [key,value] of Object.entries(coverageUI.state()))state.set(key,value);
     if(['presence_food','mobility_circuits'].includes(id)&&pmUI)for(const [key,value] of Object.entries(pmUI.state()))state.set(key,value);
+    if(variantOf(L)?.integrated_support&&settledUI)for(const [key,value] of Object.entries(settledUI.state()))state.set(key,value);
     history.replaceState(null, "", "#" + state.toString());
     for (const link of document.querySelectorAll(".atlas-nav a")) {
       if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
@@ -1195,6 +1219,7 @@ window.atlasSave = async (filename, blob) => {
     pastureUI?.select(resourceX,resourceY,name);
     coverageUI?.select(resourceX,resourceY,name);
     pmUI?.select(resourceX,resourceY,name);
+    settledUI?.select(resourceX,resourceY,name);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2189,6 +2214,7 @@ window.atlasSave = async (filename, blob) => {
     // the packets load once per page, so switching climates reloads with the choice in the address
     const state = new URLSearchParams(location.hash.slice(1));
     if (e.target.value === "raw") state.set("climate", "raw"); else state.delete("climate");
+    if(variantOf(L)?.integrated_support&&settledUI)for(const [key,value] of Object.entries(settledUI.state()))state.set(key,value);
     history.replaceState(null, "", "#" + state.toString());
     location.reload();
   });
@@ -2224,7 +2250,7 @@ window.atlasSave = async (filename, blob) => {
     }
   }
   if(coveragePacket){
-    try{coverageUI=await CoverageAtlas.attach(coveragePacket,harvestUI,open=>setLayer(open?'reach_coverage_audit':current),()=>setLayer('reach_defacto'));}
+    try{coverageUI=await CoverageAtlas.attach(coveragePacket,harvestUI,open=>setLayer(open?'reach_coverage_audit':current),()=>setLayer('reach_defacto',settledUI?'legacy_0':'0'));}
     catch(error){
       meta.layers=meta.layers.filter(L=>L.id!=='reach_coverage_audit');$("layer-reach_coverage_audit")?.remove();
       $("atlas-data-status").textContent+=' Coverage audit unavailable: packet verification failed.';console.error(error);
@@ -2239,6 +2265,15 @@ window.atlasSave = async (filename, blob) => {
       $("atlas-data-status").textContent+=' Presence/circuit scenarios unavailable: matching packet or browser support missing.';console.error(error);
     }
   }
+  if(settledPacket){
+    try{settledUI=await SettledReachAtlas.attach(settledPacket,harvestUI,()=>setLayer(current),(x,y,name)=>select(x,y,name));}
+    catch(error){
+      settledPacket.restore();
+      for(const id of ['reach_towns','reach_defacto'])$('layer-'+id).textContent=meta.layers.find(l=>l.id===id).label;
+      $('settled-section').hidden=true;
+      $('atlas-data-status').textContent+=' Settlement integration unavailable: original maps restored.';console.error(error);
+    }
+  }
   for (const id of ["occupation", "disease"]) {
     const value = initialView.get(id);
     if ([...$(id).options].some(option => option.value === value)) $(id).value = value;
@@ -2246,7 +2281,7 @@ window.atlasSave = async (filename, blob) => {
   harvestUI?.refresh();
   const requestedLayer = initialView.get("layer");
   if (initialView.has("variant")) { const L0 = meta.layers.find(L => L.id === requestedLayer);
-    if (L0?.variants) { showVariants(L0); $("variant").value = initialView.get("variant"); } }
+    if (L0?.variants) { showVariants(L0); const requested=initialView.get("variant"); $("variant").value = L0.variants.options.some(o=>o.value===requested)?requested:L0.variants.options.some(o=>o.value==='legacy_'+requested)?'legacy_'+requested:L0.variants.default; } }
   setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
   const selectedSeat=requestedLayer==='hierarchy_links'?hierarchyUI?.selectedPlace():null;
   if(selectedSeat)select(selectedSeat.x,selectedSeat.y,selectedSeat.seat_name);
