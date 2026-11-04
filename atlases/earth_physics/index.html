@@ -360,6 +360,13 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
         <button type="button" id="population-reset">Reset budget</button>
       </div>
       <p class="note" id="population-message" role="status" hidden></p>
+      <div id="coverage-controls" class="monthctl" hidden>
+        <label id="coverage-source-control">Sources <select id="coverage-sources"></select></label>
+        <label id="coverage-actor-control">Actor <select id="coverage-actor"></select></label>
+        <label>Travel budget <select id="coverage-budget"></select></label>
+      </div>
+      <p id="coverage-message" class="note" role="status" hidden></p>
+      <p id="coverage-baseline-note" class="note" hidden>This ownership scenario depends on roads and towns assigned through painted claims. <button type="button" id="coverage-open-audit">Compare source and seasonal evidence</button></p>
       <div class="monthctl" id="monthctl" hidden>
         <button type="button" id="mplay" aria-pressed="false">Play</button>
         <input type="range" id="mslider" min="0" max="10" step="1" value="0" aria-label="Month of the local year">
@@ -529,6 +536,19 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     <details><summary>What this budget includes</summary><p>Forage production excludes the current model's assigned cropped area. A temperature/rainfall proxy distributes annual production across twelve equal seasonal bins. The reserve experiment consumes half annual usable dry matter at a constant rate, with zero storage loss and a repeating year; standing forage and cut fodder are not distinguished. A feed-equivalent unit uses a 250 kg reference animal consuming 6.25 kg dry matter/day. Protein, energy quality, herd reproduction, migration, animal products and household labour are not balanced. Mapped water distance does not establish drinkable supply, seasonal permanence or wells. Feed equivalents cannot be added to the existing farming or FORGE population estimates.</p></details>
     <p class="note"><a id="pasture-method" href="../../reports/PASTURE_RESOURCES_20261104.md">Methods and sources</a> · <a id="pasture-grid" download>Download resource grids (NPZ)</a> · <a href="data/pasture.json" download>Assumptions and input identities</a> · <button id="pasture-download" type="button" disabled>Download selected resource CSV</button></p>
   </section>
+  <section id="coverage-section" hidden aria-labelledby="coverage-h">
+    <div class="section-head"><h2 id="coverage-h">Worldwide coverage · source and seasonal audit</h2>
+      <p>Compare provisional linked sites, claim-assigned affiliations and generated sources for every mapped actor. Missing inventories remain unknown; access does not establish sovereignty, absence of communities or observed conflict.</p></div>
+    <h3 id="coverage-place">Choose a place</h3><div id="coverage-readouts" class="readouts" aria-live="polite"></div>
+    <p id="coverage-point-note" class="note"></p>
+    <div class="harvest-table"><table><caption>Selected cell · current source scenario and per-leg budget</caption><thead><tr><th>Actor</th><th>Sources</th><th>Outward bins</th><th>Same-site two-way bins</th><th>Longest gap</th></tr></thead><tbody id="coverage-point"></tbody></table></div>
+    <button type="button" id="coverage-download" disabled>Download all source scenarios at this cell (CSV)</button>
+    <details><summary>Source inventories and missing evidence</summary>
+      <div class="harvest-table"><table><thead><tr><th>Actor</th><th>Evidence-linked</th><th>Add claim-assigned</th><th>Add generated</th><th>Evidence status</th></tr></thead><tbody id="coverage-inventory"></tbody></table></div>
+      <p>These counts describe available site inventories, not state strength. Generic white symbols do not establish allegiance. Unknown marked sites remain a separate evidence signal. Generated administrative/market sites are conditional on the existing model and painted claims, not observed villages, seasonal camps or tribal institutions.</p></details>
+    <details><summary>Travel assumptions</summary><p>Both directed journeys must reach the same site within the selected budget in each of twelve fixed climatological snapshots. A return through another nearby site cannot substitute. Source cases share central-density friction, proposed tracks and proposed-town landings; this is not observed-only infrastructure. Roads carry travel but never emit authority here. Additive sailing and shortest parallel transport alternatives are reused from the hierarchy audit. Staffing, food supply, political permission, mobile camps and institutional ties are not inferred. Overlap is a travel diagnostic, not a war or border prediction.</p></details>
+    <p class="note"><button type="button" id="coverage-compare">Compare original de facto map</button> · <a id="coverage-method" href="../../reports/WORLD_COVERAGE_20261104.md">Methods and sources</a> · <a id="coverage-grid" download>Full coverage grids (gzip)</a> · <a href="data/coverage.json" download>Grid layout and scenarios (JSON)</a> · <a id="coverage-registry" download>Source evidence (JSON)</a> · <a id="coverage-source-csv" download>Site affiliation audit (CSV)</a></p>
+  </section>
   <section id="farm-work-section" hidden aria-labelledby="farm-work-h">
     <div class="section-head"><h2 id="farm-work-h">Cereal field work · experimental</h2>
       <p>Partial field-work scenario per million net edible kcal. Current crop yields and <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html#12">Columella’s listed tasks</a>, with an assumed eight-hour workday and approximate 0.25 ha/iugerum.</p></div>
@@ -645,6 +665,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="administration.js"></script>
 <script src="administrative-hierarchy.js"></script>
 <script src="pasture.js"></script>
+<script src="coverage.js"></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -673,6 +694,7 @@ window.atlasSave = async (filename, blob) => {
   let administrationPacket=null,administrationUI=null,administrationError=null;
   let hierarchyPacket=null,hierarchyUI=null,hierarchyError=null;
   let pasturePacket=null,pastureUI=null,pastureError=null;
+  let coveragePacket=null,coverageUI=null,coverageError=null,coverageGeneration=0;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -708,6 +730,10 @@ window.atlasSave = async (filename, blob) => {
       try{pasturePacket=await PastureAtlas.extend(meta,fresh,climateMode);}
       catch(error){pastureError=error;console.error(error);}
     }
+    if(window.CoverageAtlas){
+      try{coveragePacket=await CoverageAtlas.extend(meta,fresh,climateMode);}
+      catch(error){coverageError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -722,6 +748,7 @@ window.atlasSave = async (filename, blob) => {
     if(administrationError) $("atlas-data-status").textContent+=' Administrative access maps unavailable: check the complete updated atlas folder.';
     if(hierarchyError) $("atlas-data-status").textContent+=' Administrative links unavailable: check the complete updated atlas folder.';
     if(pastureError) $("atlas-data-status").textContent+=' Pasture resources unavailable: check the complete updated atlas folder.';
+    if(coverageError) $("atlas-data-status").textContent+=' Coverage audit unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -909,6 +936,20 @@ window.atlasSave = async (filename, blob) => {
     if (v.note) L.note = v.note;
   }
   $("variant").addEventListener("change", () => setLayer(current));
+  async function showCoverageMap(L){
+    const generation=++coverageGeneration;$("coverage-message").hidden=false;$("coverage-message").textContent='Loading coverage view…';
+    try{
+      const result=await coverageUI.render(variantOf(L));
+      if(current!==L.id||generation!==coverageGeneration)return;
+      $("base").src=result.url;$("base").alt=L.label+' · '+variantOf(L).label+' · '+result.context;
+      L.items=result.items;drawLegend(L);$("coverage-message").textContent=result.context;
+    }catch(error){
+      if(current!==L.id||generation!==coverageGeneration)return;
+      meta.layers=meta.layers.filter(l=>l.id!==L.id);$("layer-"+L.id)?.remove();coverageUI=null;
+      $("coverage-controls").hidden=true;$("coverage-section").hidden=true;$("coverage-message").hidden=true;$("coverage-baseline-note").hidden=true;
+      $("atlas-data-status").textContent+=!window.DecompressionStream?' Coverage audit unavailable: this optional view needs an updated browser.':' Coverage audit unavailable: check the complete matching data bundle.';console.error(error);setLayer('koppen');
+    }
+  }
   function setLayer(id) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
@@ -933,6 +974,8 @@ window.atlasSave = async (filename, blob) => {
     administrationUI?.show(id,L.variants?variantOf(L):null);
     hierarchyUI?.show(id,L.variants?variantOf(L):null);
     pastureUI?.show(id,L.variants?variantOf(L):null);
+    coverageUI?.show(id,L.variants?variantOf(L):null);
+    $("coverage-message").hidden=!L.coverage_dynamic;
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
@@ -953,6 +996,7 @@ window.atlasSave = async (filename, blob) => {
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
     if(id==='hierarchy_links'&&hierarchyUI)for(const [key,value] of Object.entries(hierarchyUI.state()))state.set(key,value);
+    if(L.coverage_dynamic&&coverageUI)for(const [key,value] of Object.entries(coverageUI.state()))state.set(key,value);
     history.replaceState(null, "", "#" + state.toString());
     for (const link of document.querySelectorAll(".atlas-nav a")) {
       if (/\/(free_fit|earth_fit|whittaker_fit)\//.test(link.getAttribute("href")))
@@ -960,6 +1004,7 @@ window.atlasSave = async (filename, blob) => {
     }
     if (population) showPopulationMap(L);
     if (foraging) showForagingPanel();
+    if(L.coverage_dynamic&&coverageUI)showCoverageMap(L);
   }
   $("names").addEventListener("change", (e) => {
     const show = e.target.checked ? "" : "none";
@@ -1120,6 +1165,7 @@ window.atlasSave = async (filename, blob) => {
     administrationUI?.select(x, y, name, k === 255);
     hierarchyUI?.select(x,y,name);
     pastureUI?.select(resourceX,resourceY,name);
+    coverageUI?.select(resourceX,resourceY,name);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2146,6 +2192,13 @@ window.atlasSave = async (filename, blob) => {
       for(const button of [...layerBtns.children])if(button.id.startsWith('layer-pasture_'))button.remove();
       for(const option of [...$("map-topic").options])if(option.value==='Livelihoods')option.remove();
       $("atlas-data-status").textContent+=' Pasture resources unavailable: packet verification failed.';console.error(error);
+    }
+  }
+  if(coveragePacket){
+    try{coverageUI=await CoverageAtlas.attach(coveragePacket,harvestUI,open=>setLayer(open?'reach_coverage_audit':current),()=>setLayer('reach_defacto'));}
+    catch(error){
+      meta.layers=meta.layers.filter(L=>L.id!=='reach_coverage_audit');$("layer-reach_coverage_audit")?.remove();
+      $("atlas-data-status").textContent+=' Coverage audit unavailable: packet verification failed.';console.error(error);
     }
   }
   for (const id of ["occupation", "disease"]) {

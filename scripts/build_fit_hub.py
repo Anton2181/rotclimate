@@ -196,6 +196,10 @@ def main():
     if pasture_maps:
         topic_text+=(' Livelihoods adds worldwide usable forage, seasonal feed reserves and mapped water proximity, including land outside state claims. '
             'These are dry-matter resource scenarios, not herd or human carrying capacities; the zero-loss reserve experiment uses explicitly stated demand. ')
+    coverage_maps=all((ROOT/'atlases'/name/'data/coverage.json').exists() for name in FITS)
+    if coverage_maps:
+        topic_text+=(' Political reach adds Coverage audit: six views for all 18 mapped actors, comparing linked, claim-assigned and generated sites. '
+            'Select an actor and travel budget to inspect seasonal same-site return access, overlap and missing evidence; this does not assign sovereignty. ')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '
@@ -274,6 +278,8 @@ def main():
             release['administrative_hierarchy_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/administrative_hierarchy.json').read_bytes()).hexdigest() for name in FITS}
         if pasture_maps:
             release['pasture_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/pasture.json').read_bytes()).hexdigest() for name in FITS}
+        if coverage_maps:
+            release['coverage_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/coverage.json').read_bytes()).hexdigest() for name in FITS}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

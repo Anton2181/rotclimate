@@ -51,6 +51,9 @@ def release_version(root):
         for name,digest in release.get('pasture_sha256',{}).items():
             if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/pasture.json').read_bytes()).hexdigest()!=digest:
                 raise ValueError('Pasture-resource metadata changed')
+        for name,digest in release.get('coverage_sha256',{}).items():
+            if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/coverage.json').read_bytes()).hexdigest()!=digest:
+                raise ValueError('Coverage-audit metadata changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
@@ -115,7 +118,10 @@ def main():
         pasture_path=root/'atlases'/name/'data/pasture.json'
         pasture=json.loads(pasture_path.read_text(encoding='utf-8')) if pasture_path.exists() else None
         pasture_layers=pasture['packets']['raw']['layers'] if pasture else []
-        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)+len(hierarchy_layers)+len(pasture_layers)} map modes', flush=True)
+        audit_path=root/'atlases'/name/'data/coverage.json'
+        audit=json.loads(audit_path.read_text(encoding='utf-8')) if audit_path.exists() else None
+        audit_layers=audit['packets']['raw']['layers'] if audit else []
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)+len(hierarchy_layers)+len(pasture_layers)+len(audit_layers)} map modes', flush=True)
         if work_layers:
             print('    Food and work: 6 views; partial cereal field-work scenarios',flush=True)
         if admin_layers:
@@ -124,6 +130,8 @@ def main():
             print(f'    Administrative links: 6 views; {len(hierarchy["registry"]["provinces"])} provincial capitals; directed seasonal reply times',flush=True)
         if pasture_layers:
             print('    Livelihoods: 6 views; worldwide forage, feed reserves and mapped water proximity',flush=True)
+        if audit_layers:
+            print(f'    Coverage audit: 6 views; {len(audit["packets"]["raw"]["actors"])} actors; source/seasonal uncertainty',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

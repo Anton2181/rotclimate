@@ -1,3 +1,66 @@
+# Worldwide source/seasonal coverage audit — 4 November 2026
+
+* Continued1faf860c. User asked how to improve de facto maps, approved a
+  worldwide evidence/seasonality audit retaining original ownership baseline.
+  Normal Political reach →Coverage audit is ONE extra button/six dynamic views,
+  all18 actors, 3source scenarios, 1/2/4day per-leg budgets; all4 climate packets.
+* Sources141 linked of151 verified marked sites;10 affiliation-unknown/conflict;
+  Kudā additionally position/symbol-unverified, not routed. Explicit aliases
+  data/polity_affiliation_aliases.json; workbook owner/commandery and icon
+  signals retained. Lakui conflicting signals stays unknown; OCR-unmatched
+  nonimperial sites not guessed by fuzzy joins. SourceCSV/JSON also shows claim.
+  All data provisional game-world evidence, not independent observations.
+* Source scenarios: evidence-linked; add unknown marked-site affiliations
+  from painted claims; add existing generated administrative/market sites.
+  Known affiliation isn't overwritten by a different claim. Roads NEVER
+  emit authority here, legions not fixed sources, no strength/rank/refuge
+  multiplier. Generated sites aren't observed villages/camps/institutions.
+* Avādāyā/Neck have0 linked inventories: selected evidence coverage unscored,
+  not zero actual control/empty land. Corrected expanded case supplies28/62
+  source nodes; Neck claim-only has4. Unknown marked-site access is a separate
+  evidence signal, NOT a new polity or an inferred local-autonomy footprint.
+* Coherent same-site condition: A→cell AND cell→A within B. Merge AFTER each
+  individual-site test; nearest out-A +nearest back-B does not qualify. Sites
+  fixed/assumed available; qualifying site/actor may vary across months. No
+  capacity/staffing/food/permissions/mobile-camp/sovereignty inference. Common
+  central-density transport incl proposed tracks/landings in all source cases.
+  Additive beat-or-wait/minparallel engine from hierarchy audit; differs from
+  legacy fair-spell/refuge metric, so not an engine-controlled old/new contrast.
+* Six views: paired seasonal bins, cyclic longest gap, simultaneous actor
+  overlap, source-addition sensitivity, outward-without-same-site-return bins,
+  unaffiliated marked-site access. Missing actor baseline makes gain unscored.
+  Aggregate12bins can involve different actors: not persistent single control.
+* Corrected2days/leg: all12bins ANYactor8.64%land linked →9.18%claim-added →
+  47.19%generated. Outward/no-return anybin2.94%linked. Overlap anybin0.11%
+  linked/7.16%generated. Land-fraction weights on majority-land travel grid.
+  These are source sensitivity, NOT accuracy or observed political shares.
+* polity/coverage_audit.py +scripts/review_world_coverage.py stream bounded
+  forward/reverse Dijkstra per unique source, checkpoint every3months; complete
+  packets reused only with source/input/binary identities. Old science modules,
+  climate/food/population and de facto ownership exports remain unchanged.
+* Gzip packets~1MB each, lazy browser load; uint32lookup +[3cases,18actors,
+  2directions,Nland]words +[2directions,Nland]unknown words. Eachword12×2bit
+  classes0>4days/1≤4/2≤2/3≤1. Do NOT bitwiseOR classes (1|2 givesfalse3);
+  merge monthclass MAX or thresholded seasonal masks. Read helper
+  scripts/read_coverage_grid.py usesNumPy; normal server remains stdlib.
+* UI actor/source/budget+view URL state, LRU mask cache, conditional controls;
+  original de facto/polity views now link to source audit. No new topic sprawl.
+  Bad identity/gzip/unsupported DecompressionStream removes only audit layer.
+  Source inventories/table show unscored missing actors;54row pointCSV allcases.
+* 103 linked analytical tests pass. Browser4×6views,648actor/scenario/budget
+  CSV checks,4096packing cases, missing baseline, lazy/reused fetch, URLs,
+  controls/mobile/downloads, original-baseline links and3 failure cases pass.
+  Oldall3 smoke passes. Independent grid-reader example checked. Windows/ZIP
+  verified in publication receipt; launcher6views/18actors, release pinsmanifest.
+  Gzip assets byte-exact in Windows checkout. Scientific figure and viewer posted.
+* Methods reports/WORLD_COVERAGE_20261104.md; outputs output/world_coverage_20261104.
+  Next: independently curate missing nonimperial affiliations/OCR aliases,
+  documented seasonal camps/mobile support, provisioned/staffed presence and
+  institutional ties. Do not infer these from biome or multiply power by food/
+  taxable people; previous negative controls still apply. No climate recalibration.
+
+---
+
 # Worldwide pasture/feed resource maps — 4 November 2026
 
 * Continued from e205c539 scope correction. New Livelihoods topic in all normal

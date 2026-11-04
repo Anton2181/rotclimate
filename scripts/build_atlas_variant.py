@@ -206,6 +206,7 @@ def main():
     shutil.copy(ROOT / "atlas" / "administration.js", out / "administration.js")
     shutil.copy(ROOT / "atlas" / "administrative-hierarchy.js", out / "administrative-hierarchy.js")
     shutil.copy(ROOT / "atlas" / "pasture.js", out / "pasture.js")
+    shutil.copy(ROOT / "atlas" / "coverage.js", out / "coverage.js")
     if (ROOT / "atlas" / "foraging.js").exists():
         shutil.copy(ROOT / "atlas" / "foraging.js", out / "foraging.js")
     p.to_json(out / "params.json")

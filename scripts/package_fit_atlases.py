@@ -113,6 +113,14 @@ proximity. These are dry-matter diagnostics, not herd or human carrying
 capacities. Protein/energy quality, mobility and drinkable water supply are
 not established. Selected-point CSV, full grids and methods are in the viewer.
 
+Political reach / Coverage audit adds six dynamic worldwide views for 18
+mapped actors: seasonal same-site outward/return access, longest gap, overlap,
+source dependence, directional gaps and unaffiliated-site access. Compare
+three source hypotheses and 1/2/4-day per-leg budgets. Missing inventories are
+unscored, not uncontrolled or empty territory. Compressed grids load only when
+the audit is opened (a modern browser with gzip DecompressionStream is needed).
+Original de facto ownership remains available as a labelled comparison.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.
@@ -125,7 +133,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PASTURE_RESOURCES_20261104.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/WORLD_COVERAGE_20261104.md', ROOT/'reports/PASTURE_RESOURCES_20261104.md',
              ROOT/'reports/WORLDWIDE_PROVISIONING_SCOPE_20261104.md', ROOT/'reports/ADMINISTRATIVE_HIERARCHY_20261104.md', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
              ROOT/'reports/CONTROL_SETTLEMENT_PROPOSALS_20261104.md', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
@@ -243,7 +251,7 @@ def main():
              ROOT/'output/r39_world_audit/audit_results.png',
              ROOT/'output/seasonal_cycle_20261026_verified/annual_repeatability.png',
              ROOT/'output/seasonal_cycle_20261026_verified/rainfall_initialization.png',
-             ROOT/'scripts/serve_atlases.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
+             ROOT/'scripts/serve_atlases.py', ROOT/'scripts/read_coverage_grid.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',

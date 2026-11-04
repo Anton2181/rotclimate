@@ -34,6 +34,8 @@ def main():
             text=text.replace('<script src="administrative-hierarchy.js"></script>','<script src="administrative-hierarchy.js" data-hierarchy-enabled></script>')
         if (out/'data/pasture.json').exists():
             text=text.replace('<script src="pasture.js"></script>','<script src="pasture.js" data-pasture-enabled></script>')
+        if (out/'data/coverage.json').exists():
+            text=text.replace('<script src="coverage.js"></script>','<script src="coverage.js" data-coverage-enabled></script>')
         (out / "index.html").write_text(text)
         shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
@@ -41,6 +43,7 @@ def main():
         shutil.copy(ROOT / "atlas" / "administration.js", out / "administration.js")
         shutil.copy(ROOT / "atlas" / "administrative-hierarchy.js", out / "administrative-hierarchy.js")
         shutil.copy(ROOT / "atlas" / "pasture.js", out / "pasture.js")
+        shutil.copy(ROOT / "atlas" / "coverage.js", out / "coverage.js")
         if (ROOT / "atlas" / "population.js").exists():
             shutil.copy(ROOT / "atlas" / "population.js", out / "population.js")
         if (ROOT / "atlas" / "foraging.js").exists():
