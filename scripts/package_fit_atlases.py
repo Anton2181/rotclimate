@@ -106,6 +106,13 @@ CSV. Connectors are relationships, not routes; colours describe seats, not
 surrounding land or political control. Long trips hold the chosen month's
 conditions fixed and do not model courier relays or institutional delays.
 
+Livelihoods adds six worldwide pasture-resource views, including outside
+state claims: usable annual forage, feed-equivalent units, lean-season new
+growth, minimum zero-loss reserves, a 90-day-buffer feed test and mapped water
+proximity. These are dry-matter diagnostics, not herd or human carrying
+capacities. Protein/energy quality, mobility and drinkable water supply are
+not established. Selected-point CSV, full grids and methods are in the viewer.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.
@@ -118,7 +125,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/ADMINISTRATIVE_HIERARCHY_20261104.md', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PASTURE_RESOURCES_20261104.md',
+             ROOT/'reports/WORLDWIDE_PROVISIONING_SCOPE_20261104.md', ROOT/'reports/ADMINISTRATIVE_HIERARCHY_20261104.md', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',
              ROOT/'reports/CONTROL_SETTLEMENT_PROPOSALS_20261104.md', ROOT/'reports/THREE_FIT_20261022.md',
              ROOT/'reports/WHITTAKER_TARGETS_20261022.md', ROOT/'docs/BIOMES.md',
              ROOT/'reports/HARVEST_MIGRATION_20261022.md', ROOT/'reports/ITERATION_20261022.md',

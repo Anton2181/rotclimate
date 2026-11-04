@@ -521,6 +521,14 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
     <details><summary>Assumptions and interpretation</summary><p>Reply time adds both directions through the recorded provincial seat under the same fixed seasonal conditions. It does not advance the weather during long trips or include processing delays, courier relays, transport capacity, provisioning or political permission to cross territory. Marked settlements supply inferred coastal and river interchange eligibility, not proven harbours. Both cases retain modelled density-based path friction. Proposed transport adds generated tracks and interchanges; neither case proves control. Provincial capitals have zero local self-links. Twelve bins are climatological snapshots, not the world's named civil months.</p></details>
     <p class="note"><a id="hierarchy-method" href="../../reports/ADMINISTRATIVE_HIERARCHY_20261104.md">Methods and sources</a> · <a id="hierarchy-grid" download>Directed travel arrays (NPZ)</a> · <a id="hierarchy-csv" download>All seats and seasonal journeys (CSV)</a> · <button id="hierarchy-download" type="button" disabled>Download selected seat CSV</button></p>
   </section>
+  <section id="pasture-section" hidden aria-labelledby="pasture-h">
+    <div class="section-head"><h2 id="pasture-h">Pasture, seasonal feed and water · resource scenarios</h2>
+      <p>Resources across all land, including outside mapped states. These maps do not assign a livelihood, population or political organization to the people living there.</p></div>
+    <p id="pasture-view-note" class="note"></p><h3 id="pasture-place">Choose a place</h3>
+    <div id="pasture-readouts" class="readouts" aria-live="polite"></div><p id="pasture-selection-note" class="note"></p>
+    <details><summary>What this budget includes</summary><p>Forage production excludes the current model's assigned cropped area. A temperature/rainfall proxy distributes annual production across twelve equal seasonal bins. The reserve experiment consumes half annual usable dry matter at a constant rate, with zero storage loss and a repeating year; standing forage and cut fodder are not distinguished. A feed-equivalent unit uses a 250 kg reference animal consuming 6.25 kg dry matter/day. Protein, energy quality, herd reproduction, migration, animal products and household labour are not balanced. Mapped water distance does not establish drinkable supply, seasonal permanence or wells. Feed equivalents cannot be added to the existing farming or FORGE population estimates.</p></details>
+    <p class="note"><a id="pasture-method" href="../../reports/PASTURE_RESOURCES_20261104.md">Methods and sources</a> · <a id="pasture-grid" download>Download resource grids (NPZ)</a> · <a href="data/pasture.json" download>Assumptions and input identities</a> · <button id="pasture-download" type="button" disabled>Download selected resource CSV</button></p>
+  </section>
   <section id="farm-work-section" hidden aria-labelledby="farm-work-h">
     <div class="section-head"><h2 id="farm-work-h">Cereal field work · experimental</h2>
       <p>Partial field-work scenario per million net edible kcal. Current crop yields and <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Columella/de_Re_Rustica/2%2A.html#12">Columella’s listed tasks</a>, with an assumed eight-hour workday and approximate 0.25 ha/iugerum.</p></div>
@@ -636,6 +644,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
 <script src="farm-work.js" data-farm-work-enabled></script>
 <script src="administration.js" data-administration-enabled></script>
 <script src="administrative-hierarchy.js" data-hierarchy-enabled></script>
+<script src="pasture.js" data-pasture-enabled></script>
 <script src="population.js"></script>
 <script src="foraging.js"></script>
 <script>
@@ -663,6 +672,7 @@ window.atlasSave = async (filename, blob) => {
   let meta, buf, farmWorkPacket=null, farmWorkUI=null, farmWorkError=null;
   let administrationPacket=null,administrationUI=null,administrationError=null;
   let hierarchyPacket=null,hierarchyUI=null,hierarchyError=null;
+  let pasturePacket=null,pastureUI=null,pastureError=null;
   let climateMode = "raw";             // "corrected": every climate-drawn topic on the Earth-corrected climate
   // Always load a matching set of newly generated atlas assets, not cached earlier runs.
   const assetVersion = Date.now().toString(36);
@@ -694,6 +704,10 @@ window.atlasSave = async (filename, blob) => {
       try{hierarchyPacket=await AdministrativeHierarchy.extend(meta,fresh,climateMode);}
       catch(error){hierarchyError=error;console.error(error);}
     }
+    if(window.PastureAtlas){
+      try{pasturePacket=await PastureAtlas.extend(meta,fresh,climateMode);}
+      catch(error){pastureError=error;console.error(error);}
+    }
     const outside = meta.biomes?.find(b => b.id === 0)?.share;
     $("atlas-data-status").textContent = Number.isFinite(outside)
       ? `Current data · ${(outside * 100).toFixed(2)}% of land outside the Whittaker diagram.`
@@ -707,6 +721,7 @@ window.atlasSave = async (filename, blob) => {
     if(farmWorkError) $("atlas-data-status").textContent+=' Cereal-work maps unavailable: check the complete updated atlas folder.';
     if(administrationError) $("atlas-data-status").textContent+=' Administrative access maps unavailable: check the complete updated atlas folder.';
     if(hierarchyError) $("atlas-data-status").textContent+=' Administrative links unavailable: check the complete updated atlas folder.';
+    if(pastureError) $("atlas-data-status").textContent+=' Pasture resources unavailable: check the complete updated atlas folder.';
     if (meta.reference.length && meta.reference[0].s !== undefined)
       for (const r of meta.reference) {                                   // tenths of a degree
         r.T = r.T.map((v) => v / 10);
@@ -771,7 +786,7 @@ window.atlasSave = async (filename, blob) => {
     if (L.id.startsWith("land_")) return ["land_malaria", "land_malaria_months", "land_npp", "land_aridity"].includes(L.id) ? "Health and ecology" : "Farming";
     return L.group || "Climate";
   };
-  const topicNames = ["Overview", "Population", "Foraging", "Languages", "Political reach", "Administration", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
+  const topicNames = ["Overview", "Population", "Foraging", "Livelihoods", "Languages", "Political reach", "Administration", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
   const lastLayer = {};
   for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
     const option = document.createElement("option"); option.value = name; option.textContent = name;
@@ -917,6 +932,7 @@ window.atlasSave = async (filename, blob) => {
     farmWorkUI?.show(id,L.variants?variantOf(L):null);
     administrationUI?.show(id,L.variants?variantOf(L):null);
     hierarchyUI?.show(id,L.variants?variantOf(L):null);
+    pastureUI?.show(id,L.variants?variantOf(L):null);
     $("base").alt = L.label + (L.scenario_files ? " · " + layerScenario(L) : "") + (L.variants ? " · " + variantOf(L).label : "");
     if (L.frames) {
       $("monthctl").hidden = false;
@@ -1086,6 +1102,7 @@ window.atlasSave = async (filename, blob) => {
   function select(x, y, name) {
     x = Math.max(0, Math.min(W - 1, Math.round(x)));
     y = Math.max(0, Math.min(H - 1, Math.round(y)));
+    const resourceX=x,resourceY=y; // resource cells retain the click before station coast snapping
     let k = cls.data[pixIdx(x, y)];
     if (k === 255 && !name) {
       // snap a click on the sea to the nearest coast within ~40 px
@@ -1102,6 +1119,7 @@ window.atlasSave = async (filename, blob) => {
     farmWorkUI?.select(x, y, name, k === 255);
     administrationUI?.select(x, y, name, k === 255);
     hierarchyUI?.select(x,y,name);
+    pastureUI?.select(resourceX,resourceY,name);
     populationSelection = [x, y, name]; populationUI?.select(x, y, name);
     foragingSelection = [x, y, name, k === 255]; foragingUI?.select(...foragingSelection);
     lastMarker = { x, y };
@@ -2119,6 +2137,15 @@ window.atlasSave = async (filename, blob) => {
       $("layer-hierarchy_links")?.remove();
       if(!meta.layers.some(L=>topicOf(L)==='Administration'))for(const option of [...$("map-topic").options])if(option.value==='Administration')option.remove();
       $("atlas-data-status").textContent+=' Administrative links unavailable: packet verification failed.';console.error(error);
+    }
+  }
+  if(pasturePacket){
+    try{pastureUI=await PastureAtlas.attach(pasturePacket,harvestUI);}
+    catch(error){
+      meta.layers=meta.layers.filter(L=>!L.id.startsWith('pasture_'));
+      for(const button of [...layerBtns.children])if(button.id.startsWith('layer-pasture_'))button.remove();
+      for(const option of [...$("map-topic").options])if(option.value==='Livelihoods')option.remove();
+      $("atlas-data-status").textContent+=' Pasture resources unavailable: packet verification failed.';console.error(error);
     }
   }
   for (const id of ["occupation", "disease"]) {

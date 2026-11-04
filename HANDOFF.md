@@ -1,3 +1,62 @@
+# Worldwide pasture/feed resource maps — 4 November 2026
+
+* Continued from e205c539 scope correction. New Livelihoods topic in all normal
+  atlases (Earth raw/corrected matched): 3 buttons/6 views for annual usable DM,
+  annual feed equivalents, lean-bin new growth, minimum zero-loss feed reserve,
+  90-demand-day buffer shortfalls and mapped water distance. ALL245031 land
+  cells included; polity claims only label illustrative geographic examples.
+  This is a feed-resource diagnostic, NOT a complete pastoral population model.
+* Primary sources researched: FAO2012 feed assessments; FAO Kenya Annex5§7.4
+  reference250kg TLU/6.25kgDMday; Mottet/Assouma2024 FBS DOI10.3389/fanim.2024.
+  1354728 (DM alone doesn't establish energy/protein adequacy); Illius/O'Connor
+  2000 heterogeneity abstract (publisher403, no equations/coefficients copied).
+  research_notes/pasture_20261104.json; config data/pasture_model.json.
+* harvest/pasture.py excludes assigned crop area from forage (arable×.6),
+  reuses published Miami NPP and existing Harvest forage shares .5aboveground,
+  .25usable, biome-dependent edible fraction. Annual coefficients remain
+  assumptions, not newly validated sustainable grazing. No crop-residue credit.
+* Uncalibrated seasonal weights clip(T/15,0,1)×P/(P+50), normalized to annualDM.
+  Positive annual supply with no active weight stays unknown, not uniform.
+  Current4packets happen to resolve all cells. Synthetic unknown case tested.
+* Constant test demand=.5annual usableDM. Cyclic minimum zero-loss capacity;
+  90-demand-day buffer uses minimal repeating inventory, explicit overflow
+  and consumption once, via existing food_stocks.py. Maxledgerresid<5e-11kg/km².
+  Standing forage/hay undifferentiated; no preservationlabour/quality, protein,
+  energy, herd dynamics, migration, water volume, animal products or new people.
+  365day reference accounting year/12equalbins, not the world's civil calendar.
+* Median minimum reserve days Free33.5/Earthraw37.2/Earthcorrected35.6/Whittaker47.
+  Land share >90days12.8/14.6/15.3/19.3%. Corrected Earth~25%annualDM outside
+  named claims. These are conditional resource figures, not herd counts/famine.
+  Waterdistance is mean land proximity to mapped rivers/lakes: no permanence,
+  salinity, wells, measured drinking capacity or species-specific gate assumed.
+* Four fixed-anchor examples from published Earthraw eligibility: Tarani
+  agricultural resources, nonimperial grassland outside named claims, mixed
+  resources outside named claims, Tribes of the Neck. Map labels do not assign
+  livelihoods or institutions. No selection on new reserve outcomes/validation.
+* scripts/build_pasture_maps.py pins inputs/sources, renders maps+publicNPZ and
+  compact binary; sources frozen climate/Harvest unchanged. atlas/pasture.js
+  checks loaded Harvest and binary identities, exposes CSV and NPZ downloads.
+  AnnualDM float32 to preserve tiny positives; ratios1/60000,reserve.01days,
+  water.1km and integer shortfall bins, explicit nodata. Coastal resource
+  readout retains original click before station-card snapping; other cards
+  retain their old selection behaviour. Conditional occupation controls hidden.
+* 97 analytical/component tests pass. Pasture browser4×6 views/16pilotCSV-NPZ
+  checks, outside-claim/tribal/nonimperial coverage, state/download/mobile,
+  corruptedidentity/binary isolation pass. Existing hierarchy browser4×6 and
+  all3 atlas smoke pass. Windows checkout/portable hashes in publication receipt.
+  Launcher prints Livelihoods6views; release pins manifests. Normal .bat viewer
+  updated. Figures world_resources.png and seasonal_profiles.png posted.
+* Methods reports/PASTURE_RESOURCES_20261104.md; output/pasture_maps_20261104.
+  Next: energy/protein/standing-forage quality and water dynamics; then conserved
+  herd/mobility and shared household food/land/labour scenarios. Do not add these
+  feed equivalents to old farming/pastoral/FORGE population totals. No cropfood/
+  human-consumption integration or physics recalibration adopted this milestone.
+  Integration caution: legacy scripts/land_people.py NEED_KCAL=1.1e6 already
+  includes a storage/draft-animal allowance. Replace that proxy explicitly
+  before charging those same requirements again in a joint household/feed LP.
+
+---
+
 # Scope correction: all societies, not only the Empire — 4 November 2026
 
 * User explicitly wants other polities (sparse spreadsheets) and communities
