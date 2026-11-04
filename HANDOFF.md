@@ -1,3 +1,25 @@
+# Scope correction: all societies, not only the Empire — 4 November 2026
+
+* User explicitly wants other polities (sparse spreadsheets) and communities
+  outside polities, including mobile pastoral/other tribal societies. Do not
+  focus subsequent provisioning/population work solely on imperial administration.
+* Separate livelihood, mobility, settlement form and political organization;
+  no automatic nomad=nonstate or tribe=pastoral equivalence. Sparse evidence
+  stays unknown/scenario-based, not an invented imperial hierarchy.
+* General food/feed/water/storage/exchange model must work outside claims.
+  Existing claimed-only proposed administrative-town generator is not a global
+  inhabitability or village/camp model. Do not simply remove its claim mask
+  and extrapolate administrative-seat counts. Unclaimed does not mean empty.
+* Farming/pastoral/FORGE capacities currently compare scenarios; do not sum
+  them into extra populations without shared land/resource accounting. Annual
+  grazing proxy is not a seasonal herd/mobility model. Institution collection
+  and garrison support become optional overlays on wider local livelihoods.
+* Next pilot should include nonimperial agricultural, mobile pastoral/mixed,
+  and settled nonstate cases. See reports/WORLDWIDE_PROVISIONING_SCOPE_20261104.md.
+  This is a recorded scope update, not newly implemented model/maps.
+
+---
+
 # Recorded administrative hierarchy maps — 4 November 2026
 
 * Continued from 71b52b47. New Administration → Administrative links: one
