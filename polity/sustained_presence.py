@@ -16,6 +16,12 @@ class RuralFood:
     overflow: np.ndarray
     year: object
 
+    @property
+    def exportable(self):
+        """Do not export an overflowing harvest while future rural meals fail."""
+        protected=self.year.unmet<=1e-8*np.maximum(self.harvest.sum(0),1)
+        return self.overflow*protected
+
 
 def rural_cereal(annual, boundaries, *, demand_fraction=.6, reserve_days=180.,
                  loss_fraction_year=.05, calendar='first', year_days=365.):

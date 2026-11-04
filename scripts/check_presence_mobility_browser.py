@@ -73,10 +73,17 @@ def main():
                 page.select_option('#variant',option['value'])
                 page.wait_for_function('(file)=>{const i=document.querySelector("#base");return i.complete&&new URL(i.src).pathname.endsWith(file)}',arg=option['file'])
             route_rows=0;unscored=0
-            for e in model['mobility']:
+            groups={'local':model['mobility'],**model.get('mobility_scales',{})}
+            for scale,examples in groups.items():
+              page.select_option('#pm-scale',scale)
+              for e in examples:
                 page.select_option('#pm-landscape',e['id'])
                 for wc in e['cases']:
                     page.select_option('#pm-water',wc['id'])
+                    for v in packet['layers'][1]['variants']['options']:
+                        page.select_option('#variant',v['value'])
+                        file=v.get('scale_water_files',{}).get(scale,{}).get(wc['id'],v.get('scale_files',{}).get(scale,v['file']))
+                        page.wait_for_function('(file)=>{const i=document.querySelector("#base");return i.complete&&new URL(i.src).pathname.endsWith(file)}',arg=file)
                     if wc['mobile'] is None:
                         assert page.locator('#pm-download').is_disabled()
                         assert 'unscored' in page.locator('#pm-readouts').inner_text().lower();unscored+=1;continue
@@ -84,13 +91,16 @@ def main():
                     for record in records:
                         t=int(record['seasonal_bin'])-1;expected=wc[record['case']];patch=e['patches'][expected['locations'][t]]
                         assert record['climate']==mode and int(record['patch_row'])==patch['row'] and int(record['patch_column'])==patch['column']
+                        assert record['landscape_scale']==scale
                         for key,field in [('collected_kg_dm','collected'),('consumed_kg_dm','consumed'),('unmet_kg_dm','unmet'),('travel_days','travel_days')]:near(record[key],expected[field][t])
                         near(record['start_reserve_kg_dm'],expected['reserves'][t]);near(record['end_reserve_kg_dm'],expected['reserves'][t+1]);route_rows+=1
                     assert page.locator('#pm-inset svg polyline').count()==2
                     assert 'best fixed base anywhere' in page.locator('#pm-readouts').inner_text()
+                    if scale!='local':assert 'optimistic resource-only upper bound' in page.locator('#pm-readouts').inner_text()
             page.select_option('#pm-landscape','tribal_claim');page.select_option('#pm-water','water10');page.select_option('#variant','circuits')
             saved=page.url;page.goto('about:blank');page.goto(saved,wait_until='domcontentloaded');ready(page)
             assert page.locator('#pm-landscape').input_value()=='tribal_claim' and page.locator('#pm-water').input_value()=='water10'
+            assert page.locator('#pm-scale').input_value()=='regional_dense'
             assert page.locator('#pm-overlay circle').count()==4
             page.locator('#pm-section').screenshot(path=str(args.out/(name+'_'+mode+'_circuit.png')))
             page.set_viewport_size(dict(width=390,height=844));page.emulate_media(color_scheme='dark');page.wait_for_timeout(100)
@@ -100,7 +110,7 @@ def main():
             page.select_option('#map-topic','Overview');page.click('#layer-koppen');assert not page.locator('#pm-section').is_visible()
             assert page.locator('#pm-overlay').evaluate('(e)=>getComputedStyle(e).display')=='none'
             assert not errors and not bad,(errors,bad)
-            checks.append(dict(atlas=name,climate=mode,presence_views=7,mobility_views=2,site_csv_rows=count,route_csv_rows=route_rows,unscored_water_cases=unscored,state_and_mobile_passed=True))
+            checks.append(dict(atlas=name,climate=mode,presence_views=len(model['presence']),mobility_views=2,scales=len(groups),site_csv_rows=count,route_csv_rows=route_rows,unscored_water_cases=unscored,state_and_mobile_passed=True))
             page.close()
         failures=[];manifest=json.loads((ROOT/'atlases/earth_fit/data/presence_mobility.json').read_text())
         for fixture in ['wrong_identity','corrupt_gzip','unsupported_browser','pasture_failure_retains_circuits']:

@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "year_days": 365.0,
   "presence": {
     "rural_demand_fraction_of_single_cereal_energy": 0.6,
@@ -21,7 +21,11 @@
       {"id": "closure_no_store", "label": "Interruption · no destination store", "people": 100, "reserve_days": 0, "calendar": "first", "closure_bins": 2},
       {"id": "people500", "label": "500 people · same freight capacity", "people": 500, "reserve_days": 90, "calendar": "first", "closure_bins": 0},
       {"id": "people500_freight25", "label": "500 people · five times the freight", "people": 500, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "freight_multiplier": 5},
-      {"id": "calendar_last", "label": "100 people · alternative tied calendar", "people": 100, "reserve_days": 90, "calendar": "last", "closure_bins": 0}
+      {"id": "calendar_last", "label": "100 people · alternative tied calendar", "people": 100, "reserve_days": 90, "calendar": "last", "closure_bins": 0},
+      {"id": "origin90", "label": "100 people · 90-day export stores", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "export_store_days": 90},
+      {"id": "origin0", "label": "100 people · no export stores", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "export_store_days": 0},
+      {"id": "collect1", "label": "100 people · collect 1% of surplus", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "collection_fraction": 0.01},
+      {"id": "rural180", "label": "Protect rural meals · 180-day rural stores", "people": 100, "reserve_days": 90, "calendar": "first", "closure_bins": 0, "rural_store_days": 180}
     ]
   },
   "mobility": {
@@ -32,6 +36,10 @@
     "reference_level_speed_km_day": 10.0,
     "maximum_move_days_per_bin": 2.0,
     "landscape_radius_cells": 5,
+    "regional_scales": [
+      {"id": "regional_sparse", "label": "Regional · sparse outer bases", "radius_cells": 20, "stride_cells": 4, "offsets": [[0, 0]]},
+      {"id": "regional_dense", "label": "Regional · additional outer bases", "radius_cells": 20, "stride_cells": 4, "offsets": [[0, 0], [2, 2]]}
+    ],
     "water_scenarios": [
       {"id": "water_unknown", "label": "Water access unresolved", "maximum_mapped_water_distance_km": null},
       {"id": "water10", "label": "Require mapped water within 10 km", "maximum_mapped_water_distance_km": 10.0}

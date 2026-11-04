@@ -204,7 +204,8 @@ def main():
     if presence_maps:
         topic_text+=(' Sustained presence tests cereal provisioning, origin/destination stores and freight interruptions at all 151 verified marked sites. '
             'Livelihoods adds Seasonal circuits: four independent resource landscapes with a single closed herd route, finite carried feed and water-proximity sensitivity. '
-            'Fixed-home and best-fixed-base controls distinguish movement from simply choosing a better base. These are explicit scenarios, not actual garrisons, camps, nutrition or control. ')
+            'Local and regional extents retain the same grazing footprint and travel budget, with nested candidate bases, an all-land fixed-base control and an optimistic resource bound. '
+            'Origin storage and collection sensitivities expose food-support assumptions. These are explicit scenarios, not actual garrisons, camps, nutrition or control. ')
     foraging_section = ('' if not foraging_rows else
         '<p>The Foraging topic runs a hunter-gatherer scenario on each climate, adapted from the FORGE human model '
         '(published equations, with climate-based productivity and seasonal resource proxies in place of its ORCHIDEE vegetation), '

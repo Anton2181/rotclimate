@@ -29,6 +29,7 @@ def main():
     from rotclimate.geography import target_fullres
     from scripts.land_people import FARMED_SHARE,FALLOW
     from local_benchmark_protocol import file_hash,write_json
+    from regional_resource_circuits import regional_experiments
 
     spec=json.loads((ROOT/'data/presence_mobility_model.json').read_text());ps=spec['presence'];ms=spec['mobility']
     graze=json.loads((ROOT/'data/harvest_model.json').read_text())['grazing']
@@ -38,10 +39,11 @@ def main():
         'polity/fields.py','polity/control.py','polity/seasons.py','polity/network.py','polity/transport.py',
         'scripts/land_people.py','rotclimate/geography.py','scripts/vector_rivers.py',
         'data/presence_mobility_model.json','data/harvest_model.json','data/pasture_model.json',
-        'research_notes/presence_mobility_20261104.json','data/source/elevation.png','data/source/rivers.png',
+        'research_notes/presence_mobility_20261104.json','research_notes/presence_mobility_scale_20261104.json',
+        'scripts/regional_resource_circuits.py','harvest/mobility_landscape.py','data/source/elevation.png','data/source/rivers.png',
         'data/source/original/rivers.png','data/source/ravages_v8/roads.png']
     sources={p:file_hash(ROOT/p) for p in sourcepaths}
-    origin=ROOT/'output/presence_mobility_20261104';origin.mkdir(exist_ok=True)
+    origin=ROOT/'output/presence_mobility_scale_20261104';origin.mkdir(exist_ok=True)
     # Reuse earlier geography-only examples: never select on mobility gains.
     pilots=json.loads((ROOT/'atlases/earth_fit/data/pasture.json').read_text())['packets']['raw']['pilots']
     write_json(origin/'protocol.json',dict(status='declared_before_run',specification=spec,pilots=[{k:p[k] for k in ['id','label','row','column','x','y','map_claim']} for p in pilots],
@@ -106,30 +108,33 @@ def main():
             annual=kcal*100*area*hf['arable']*FARMED_SHARE*FALLOW
             annual=np.where(land,annual,0);idx=np.flatnonzero(annual>0)
             rural={};supply={};exportable={};balances={}
-            for calendar in ['first','last']:
-                print(name,mode,'rural ledgers',calendar,flush=True)
+            ruralkeys=sorted({(c['calendar'],c.get('rural_store_days',ps['rural_store_demand_days'])) for c in ps['scenarios']})
+            for calendar,ruraldays in ruralkeys:
+                print(name,mode,'rural ledgers',calendar,ruraldays,flush=True)
                 rr=rural_cereal(annual.ravel()[idx],bits.ravel()[idx],demand_fraction=ps['rural_demand_fraction_of_single_cereal_energy'],
-                    reserve_days=ps['rural_store_demand_days'],loss_fraction_year=ps['stored_energy_loss_fraction_year'],calendar=calendar)
+                    reserve_days=ruraldays,loss_fraction_year=ps['stored_energy_loss_fraction_year'],calendar=calendar)
                 # Never export from a cell unable to meet its declared rural
                 # demand over the entire repeating year, even if it overflows.
                 protected=rr.year.unmet<=1e-8*np.maximum(annual.ravel()[idx],1)
-                available=rr.overflow*protected
+                available=rr.exportable
                 flow=stored_collection(available,assignment.ravel()[idx],access[:,idx],len(sites),
                     collection_fraction=ps['collection_fraction_of_rural_overflow'],freight_capacity=ps['freight_kcal_per_site_per_bin'],
                     retention=ps['delivery_retention'],delay_bins=ps['delivery_delay_bins'],
                     store_days=ps['export_store_days_of_annual_exportable_supply'],loss_fraction_year=ps['stored_energy_loss_fraction_year'])
-                rural[calendar]=dict(harvested=float(rr.harvest.sum()),rural_consumed=float(rr.year.consumed.sum()),rural_unmet=float(rr.year.unmet.sum()),
+                key=(calendar,ruraldays)
+                rural[key]=dict(harvested=float(rr.harvest.sum()),rural_consumed=float(rr.year.consumed.sum()),rural_unmet=float(rr.year.unmet.sum()),
                     rural_storage_loss=float(rr.year.spoiled.sum()),rural_overflow=float(rr.year.overflow.sum()),
                     max_cell_ledger_residual=float(np.max(np.abs(rr.year.ledger_residual))),export_withheld_for_rural_deficit=float(np.sum(rr.overflow[:,~protected])))
-                supply[calendar]=flow;exportable[calendar]=available;del rr
+                supply[key]=flow;exportable[key]=available;del rr
             variants=[]
             for case in ps['scenarios']:
-                flow=supply[case['calendar']];departures=flow['departures'].copy();closed=[]
-                if case.get('freight_multiplier',1)!=1:
-                    flow=stored_collection(exportable[case['calendar']],assignment.ravel()[idx],access[:,idx],len(sites),
-                        collection_fraction=ps['collection_fraction_of_rural_overflow'],freight_capacity=ps['freight_kcal_per_site_per_bin']*case['freight_multiplier'],
+                key=(case['calendar'],case.get('rural_store_days',ps['rural_store_demand_days']))
+                flow=supply[key];departures=flow['departures'].copy();closed=[]
+                if any(k in case for k in ['freight_multiplier','export_store_days','collection_fraction']):
+                    flow=stored_collection(exportable[key],assignment.ravel()[idx],access[:,idx],len(sites),
+                        collection_fraction=case.get('collection_fraction',ps['collection_fraction_of_rural_overflow']),freight_capacity=ps['freight_kcal_per_site_per_bin']*case.get('freight_multiplier',1),
                         retention=ps['delivery_retention'],delay_bins=ps['delivery_delay_bins'],
-                        store_days=ps['export_store_days_of_annual_exportable_supply'],loss_fraction_year=ps['stored_energy_loss_fraction_year'])
+                        store_days=case.get('export_store_days',ps['export_store_days_of_annual_exportable_supply']),loss_fraction_year=ps['stored_energy_loss_fraction_year'])
                     departures=flow['departures'].copy()
                 if case['closure_bins']:
                     # Interrupt the TWO BUSIEST consecutive dispatch bins at
@@ -138,7 +143,7 @@ def main():
                     opened=np.ones_like(departures,bool)
                     for site,startbin in enumerate(start):
                         bins=[int((startbin+k)%12) for k in range(case['closure_bins'])];opened[bins,site]=False;closed.append(bins)
-                    flow=stored_collection(exportable[case['calendar']],assignment.ravel()[idx],access[:,idx],len(sites),
+                    flow=stored_collection(exportable[key],assignment.ravel()[idx],access[:,idx],len(sites),
                         collection_fraction=ps['collection_fraction_of_rural_overflow'],freight_capacity=ps['freight_kcal_per_site_per_bin'],
                         retention=ps['delivery_retention'],delay_bins=ps['delivery_delay_bins'],
                         store_days=ps['export_store_days_of_annual_exportable_supply'],loss_fraction_year=ps['stored_energy_loss_fraction_year'],dispatch_open=opened)
@@ -156,7 +161,7 @@ def main():
                         annual_supply_insufficient=bool(not np.isfinite(minimum[j])),
                         shortfall_bins=int(np.sum(met[:,j]<1-1e-8)),closed_dispatch_bins=closed[j] if closed else [],
                         annual_delivered_kcal=float(arrivals[:,j].sum()),annual_site_loss_kcal=float(year.spoiled[j]),annual_site_unused_kcal=float(year.overflow[j])))
-                rr=rural[case['calendar']];unused=rr['rural_overflow']-float(departures.sum())-flow['collection_storage_loss']
+                rr=rural[key];unused=rr['rural_overflow']-float(departures.sum())-flow['collection_storage_loss']
                 transportloss=float(departures.sum()*(1-ps['delivery_retention']))
                 residual=rr['harvested']-rr['rural_consumed']-rr['rural_storage_loss']-unused-flow['collection_storage_loss']-transportloss-float(year.consumed.sum()+year.spoiled.sum()+year.overflow.sum())
                 if abs(residual)>1e-7*max(1,rr['harvested']):raise RuntimeError('Combined rural/freight/site ledger failed')
@@ -228,7 +233,8 @@ def main():
                         best_fixed_base_continuous=dict(patch=fixed_i,annual_need_met=float(fixed_met[fixed_i])) if fixed_i is not None else None))
                 experiments.append(dict(id=pilot['id'],label=pilot['label'],map_claim=pilot['map_claim'],home=home,status='scored_resource_landscape',patches=patchrecords,
                     ground_edges=[[int(a),int(b),float(d)] for a,b,d in zip(rr,cc,dd)],cases=cases))
-            payload=dict(version=1,atlas=name,climate=mode,sites=sites,presence=variants,mobility=experiments,
+            regional=regional_experiments(pilots,z,land,resolved,forage,area,geo['water_distance'],meta,spec)
+            payload=dict(version=2,atlas=name,climate=mode,sites=sites,presence=variants,mobility=experiments,mobility_scales=regional,
                 specification=spec,balances=balances,shape=list(shape),cell_px=meta['width']/w)
             payloadpath.write_bytes(gzip.compress(json.dumps(payload,ensure_ascii=False,separators=(',',':'),allow_nan=False).encode(),mtime=0))
             # One map button per mechanism; details in the scenario panel.
@@ -248,23 +254,34 @@ def main():
                 variants=dict(label='Provisioning scenario',default='stores90',options=options))]
             mobility_options=[]
             for view,label in [('circuits','Closed resource circuits'),('water','Water sensitivity')]:
-                rgb=np.empty((*shape,3));rgb[:]=to_rgb('#b7b4ae');rgb[~land]=[.84,.89,.94]
-                for experiment in experiments:
-                    if experiment['status']!='scored_resource_landscape':continue
-                    pp=experiment['patches'];values=np.array([p['water_distance_km'] for p in pp]);colors=['#286f70','#9eb599','#d0b27b','#a36a59']
-                    if view=='circuits':
-                        counts=np.bincount(experiment['cases'][0]['mobile']['locations'],minlength=len(pp));values=counts;bounds=[.5,3.5,8.5];colors=['#e5decd','#afc6ad','#5d9c8e','#285f72']
-                    else:bounds=[10,25,50]
-                    for p,c in zip(pp,np.searchsorted(bounds,values)):rgb[p['row'],p['column']]=to_rgb(colors[c])
-                filename='mobility_'+view+'.webp';Image.fromarray(np.rint(rgb*255).astype('u1')).resize((meta['width'],meta['height']),Image.Resampling.NEAREST).save(folder/filename,lossless=True)
-                images[prefix+filename]=file_hash(folder/filename)
+                scale_files={};scale_water_files={}
+                for scale,examples in [('local',experiments),*regional.items()]:
+                    scale_water_files[scale]={}
+                    for wc in ms['water_scenarios']:
+                        if view=='water' and wc['id']!='water_unknown':
+                            scale_water_files[scale][wc['id']]=scale_files[scale];continue
+                        rgb=np.empty((*shape,3));rgb[:]=to_rgb('#b7b4ae');rgb[~land]=[.84,.89,.94]
+                        for experiment in examples:
+                            if experiment['status']!='scored_resource_landscape':continue
+                            pp=experiment['patches'];values=np.array([p['water_distance_km'] for p in pp]);colors=['#286f70','#9eb599','#d0b27b','#a36a59']
+                            if view=='circuits':
+                                case=next(c for c in experiment['cases'] if c['id']==wc['id'])
+                                if case['mobile'] is None:continue
+                                counts=np.bincount(case['mobile']['locations'],minlength=len(pp));values=counts;bounds=[.5,3.5,8.5];colors=['#e5decd','#afc6ad','#5d9c8e','#285f72']
+                            else:bounds=[10,25,50]
+                            for p,c in zip(pp,np.searchsorted(bounds,values)):rgb[p['row'],p['column']]=to_rgb(colors[c])
+                        filename='mobility_'+('' if scale=='local' else scale+'_')+('' if wc['id']=='water_unknown' else wc['id']+'_')+view+'.webp'
+                        Image.fromarray(np.rint(rgb*255).astype('u1')).resize((meta['width'],meta['height']),Image.Resampling.NEAREST).save(folder/filename,lossless=True)
+                        images[prefix+filename]=file_hash(folder/filename);scale_water_files[scale][wc['id']]=prefix+filename
+                        if wc['id']=='water_unknown':scale_files[scale]=prefix+filename
                 labels2=['Not visited','1–3 bins','4–8 bins','9–12 bins'] if view=='circuits' else ['≤10 km','10–25 km','25–50 km','>50 km']
-                mobility_options.append(dict(value=view,label=label,file=prefix+filename,items=[dict(color=c,label=l) for c,l in zip(colors,labels2)]+[dict(color='#b7b4ae',label='Outside the four experiments / unscored')],
+                mobility_options.append(dict(value=view,label=label,file=scale_files['local'],scale_files=scale_files,scale_water_files=scale_water_files,items=[dict(color=c,label=l) for c,l in zip(colors,labels2)]+[dict(color='#b7b4ae',label='Outside sampled resource patches / unscored')],
                     caption='Four fixed resource landscapes only. Select a landscape below for its closed seasonal route and feed ledger.',
                     note='One unsplit herd of 100 dry-matter reference units; 7-day carried feed, actual transit meals before arrival, no free initial stock. Fresh growth at the selected destination is used once; unused growth expires. Water distances do not establish potable volume, permanence or access rights. Scenarios run independently; they are not jointly allocated herds or predicted communities.'))
             layers.append(dict(id='mobility_circuits',label='Seasonal circuits',group='Livelihoods',kind='categories',controls=[],file=mobility_options[0]['file'],items=mobility_options[0]['items'],note=mobility_options[0]['note'],
                 variants=dict(label='Mobility view',default='circuits',options=mobility_options)))
             packet=dict(layers=layers,shape=list(shape),cell_px=meta['width']/w,
+                scales=[dict(id='local',label='Local · all bases'),*ms['regional_scales']],
                 payload=prefix+payloadpath.name,payload_sha256=file_hash(payloadpath),catchments=prefix+gridpath.name,catchments_sha256=file_hash(gridpath),
                 image_sha256=images,
                 expected_harvest_fingerprint=meta['harvest']['fingerprint'],expected_harvest_binary_sha256=file_hash(folder/'harvest.bin'))
@@ -272,6 +289,9 @@ def main():
                 collection_land_cells=int(np.sum(assignment>0)),collection_area_km2=float(area[assignment>0].sum()),
                 fully_supplied_sites={v['id']:sum(s['shortfall_bins']==0 for s in v['sites']) for v in variants},
                 maximum_combined_ledger_relative_residual=max(abs(b['combined_ledger_residual'])/max(1,b['harvested']) for b in balances.values()),
+                regional_circuits={k:[dict(id=e['id'],bases=len(e['patches']),ground_cells=len(e['ground_nodes']),
+                    mobile=e['cases'][0]['mobile']['annual_need_met'],fixed=e['cases'][0]['best_fixed_base_continuous']['annual_need_met'],
+                    resource_upper_bound=e['cases'][0]['resource_upper_bound']['annual_need_met']) for e in values] for k,values in regional.items()},
                 circuits=[dict(id=e['id'],cases=[dict(water=c['id'],status=c['status'],mobile=c['mobile']['annual_need_met'] if c['mobile'] else None,stationary=c['stationary']['annual_need_met'] if c['stationary'] else None) for c in e.get('cases',[])]) for e in experiments])
             public={prefix+payloadpath.name:file_hash(payloadpath),prefix+gridpath.name:file_hash(gridpath),**images}
             write_json(reviewpath,dict(status='complete',inputs_sha256=inputs,sources_sha256=sources,public_sha256=public,packet=packet,summary=summary))

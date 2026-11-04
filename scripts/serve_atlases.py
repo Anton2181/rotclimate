@@ -139,7 +139,8 @@ def main():
         if audit_layers:
             print(f'    Coverage audit: 6 views; {len(audit["packets"]["raw"]["actors"])} actors; source/seasonal uncertainty',flush=True)
         if pm_layers:
-            print('    Sustained presence: 7 food scenarios / 151 marked sites; Seasonal circuits: 4 independent landscapes / 2 water scenarios',flush=True)
+            scenarios=len(pm['specification']['presence']['scenarios']);scales=1+len(pm['specification']['mobility'].get('regional_scales',[]))
+            print(f'    Sustained presence: {scenarios} food scenarios / 151 marked sites; Seasonal circuits: 4 independent landscapes / {scales} landscape tests / 2 water scenarios',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

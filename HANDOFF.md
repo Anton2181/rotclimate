@@ -1,3 +1,67 @@
+# Origin storage and regional resource circuits — 4 November 2026
+
+* Continued `b919802e`. User said Continue. Same two normal atlas buttons,
+  now 11 provisioning scenarios and 3 landscape tests (local; regional with
+  sparse outer bases; regional with additional outer bases), all 4 climates.
+  No climate, yield, ownership or population recalibration was adopted.
+* `harvest/mobility_landscape.py` and `scripts/regional_resource_circuits.py`:
+  regional radius 20 fine cells (~73.6 km), retaining the earlier radius-5
+  (~18.4 km) bases. Add a stride-4 outer lattice, then offset (2,2). Keep the
+  original herd, individual grazing footprint, 7-day pack, slope speed and
+  2 travel-days/bin. Transit land supplies paths, never extra food at a base.
+* Regional ground is the home-connected fine land component, with no water
+  corner cuts. Each move includes its actual fine-node path. Location indices
+  refer to candidate patches; segment indices refer to separate ground nodes.
+  Grassland/Neck: 157/233 bases on 1,257 cells. Tarani: 70/107 on 608. Mixed
+  resource anchor is an island with 13 connected cells; no overland expansion.
+* Controls: fixed home; best fixed base over EVERY connected fine cell,
+  including unsampled bases, with continuous reserves; optimistic per-bin
+  single-patch maximum ignoring travel, with continuous reserves. The last
+  is a RESOURCE UPPER BOUND, not a route. Both controls are unchanged between
+  sparse/additional outer samples. Local → sparse → additional choices cannot
+  reduce optimum feeding; independent review checks both nested comparisons.
+* Same grassland example, regional additional bases, mobile versus best fixed:
+  Free 88.60% vs82.74%; Earth raw86.73% vs88.42%; Earth corrected89.36% vs90.71%;
+  Whittaker81.87% vs71.33%. This is climate-fit sensitivity, not proof of actual
+  camps/nomads or ecological determinism. Anchors and return phase remain
+  assumptions. Half-day reserve refinement changes support by at most0.137pp.
+* Four new food cases vary ONLY origin stores (365→90/0 flow-days), collection
+  (10→1% of rural overflow), or rural stores(365→180 demand-days). Destination
+  stores/ration/paths/freight stay fixed. RuralFood.exportable centralizes the
+  no-export-if-annual-rural-deficit rule; an early-glut/future-deficit test guards
+  it. Original7 food cases/balances, local circuits and collection grids exactly
+  match baseline values. No new food/power multiplier or population sum.
+* Earth corrected fully supplied sites: baseline151;90-day origin store131;
+  no origin stores0;1%collection92;rural180store0. The last is a CEREAL-ONLY
+  rural ledger with protected meals, not actual famine. Origin tests retain
+  the SAME prescribed dispatch policy; they aren't maximum trade capacity.
+  Flow-days of annual exportable supply are not days of destination demand.
+* Research: Brottem et al.2014 publisher ABSTRACT only on forage connectivity;
+  Turner/Schlecht2019 mobility scale distinction; FAO bulk-storage sizing.
+  No coefficients copied from inaccessible text or claimed as ancient facts.
+  Protocol/limitations in research_notes/presence_mobility_scale_20261104.json.
+* UI keeps 2 buttons, adds landscape-test selector and URL/CSV pm_scale state;
+  origin assumptions visible in readouts/CSV. Main circuit image now follows
+  BOTH water case and landscape test, with matching inset/ledger. Water-excluded
+  home remains unscored. Core/frontier and irrelevant controls stay hidden.
+* Methods: reports/PRESENCE_MOBILITY_SCALE_20261104.md. Builder records new
+  receipts in output/presence_mobility_scale_20261104, preserving prior study
+  outputs. Config data/presence_mobility_model.json v2; payload adds mobility_scales
+  and complete fine-ground production/adjacency for independent controls.
+* Validation:122 analytical/component tests; public review79,728 site-bin food
+  ledgers,120 closed circuits,8 reserve refinements; exact baseline preservation;
+  nested-choice and upper-bound invariants. Browser4 packets,11 food scenarios,
+  2 mobility views×3 tests×2 water cases,3,024 CSV rows, URL/state/narrow/dark/
+  downloads and4 failure fixtures. Existing3-atlas smoke passes. Windows and
+  portable publication receipts accompany this milestone.
+* Figures regional_circuits.png and origin_storage.png were posted. Next:
+  standing forage/hay quality and its work/carry budget, home/return-phase
+  sensitivity, watering and shared competing users. Preserve perfect-foresight,
+  no-nutrition/no-demography/no-actual-camp caveats. Never infer polity types,
+  absence of communities or sovereignty from resource feasibility. No agents.
+
+---
+
 # Sustained presence and seasonal resource circuits — 4 November 2026
 
 * Continued `6949ea71`. User approved proposals 1 (food support) and 3 (mobile

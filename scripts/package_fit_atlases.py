@@ -121,7 +121,7 @@ unscored, not uncontrolled or empty territory. Compressed grids load only when
 the audit is opened (a modern browser with gzip DecompressionStream is needed).
 Original de facto ownership remains available as a labelled comparison.
 
-Political reach / Sustained presence adds seven cereal provisioning scenarios
+Political reach / Sustained presence adds eleven cereal provisioning scenarios
 at 151 marked sites, including unresolved affiliations: rural priority, origin
 and destination stores, finite freight slots, losses and two-bin interruptions.
 Livelihoods / Seasonal circuits adds four independent resource landscapes:
@@ -129,6 +129,10 @@ one closed herd route with finite carried feed, fixed-home and best-fixed-base
 controls, and mapped-water proximity sensitivity. These do not predict actual
 garrisons, camps, nutrition, human populations or political control. The viewer
 includes seasonal tables, actual land-path insets, CSVs, full ledgers and sources.
+Landscape tests compare local and regional extents while retaining local bases,
+the daily grazing footprint and travel budget. Regional controls inspect every
+connected fine cell. Origin storage and collection sensitivities remain explicit
+scenarios under the same dispatch rule, not measured ancient institutional power.
 
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
@@ -142,7 +146,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md',
+    files = [ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
+             ROOT/'research_notes/presence_mobility_scale_20261104.json',
              ROOT/'data/presence_mobility_model.json', ROOT/'research_notes/presence_mobility_20261104.json',
              ROOT/'reports/WORLD_COVERAGE_20261104.md', ROOT/'reports/PASTURE_RESOURCES_20261104.md',
              ROOT/'reports/WORLDWIDE_PROVISIONING_SCOPE_20261104.md', ROOT/'reports/ADMINISTRATIVE_HIERARCHY_20261104.md', ROOT/'reports/IMPERIAL_ACCESS_20261104.md',

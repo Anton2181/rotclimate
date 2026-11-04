@@ -1,5 +1,9 @@
 # Sustained presence and seasonal resource circuits
 
+This report records baseline milestone `b919802e`. The subsequent
+[origin-storage and regional-scale study](PRESENCE_MOBILITY_SCALE_20261104.md)
+adds sensitivities while preserving these original results.
+
 These are two new, isolated scenario layers in the normal `.bat` atlases:
 **Political reach → Sustained presence**, and **Livelihoods → Seasonal circuits**.
 Both use matching Free, Earth raw, Earth corrected and Whittaker climate packets.

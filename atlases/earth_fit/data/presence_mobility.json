@@ -2,7 +2,7 @@
   "version": 1,
   "status": "conditional_food_and_resource_circuits",
   "specification": {
-    "version": 1,
+    "version": 2,
     "year_days": 365.0,
     "presence": {
       "rural_demand_fraction_of_single_cereal_energy": 0.6,
@@ -74,6 +74,42 @@
           "reserve_days": 90,
           "calendar": "last",
           "closure_bins": 0
+        },
+        {
+          "id": "origin90",
+          "label": "100 people \u00b7 90-day export stores",
+          "people": 100,
+          "reserve_days": 90,
+          "calendar": "first",
+          "closure_bins": 0,
+          "export_store_days": 90
+        },
+        {
+          "id": "origin0",
+          "label": "100 people \u00b7 no export stores",
+          "people": 100,
+          "reserve_days": 90,
+          "calendar": "first",
+          "closure_bins": 0,
+          "export_store_days": 0
+        },
+        {
+          "id": "collect1",
+          "label": "100 people \u00b7 collect 1% of surplus",
+          "people": 100,
+          "reserve_days": 90,
+          "calendar": "first",
+          "closure_bins": 0,
+          "collection_fraction": 0.01
+        },
+        {
+          "id": "rural180",
+          "label": "Protect rural meals \u00b7 180-day rural stores",
+          "people": 100,
+          "reserve_days": 90,
+          "calendar": "first",
+          "closure_bins": 0,
+          "rural_store_days": 180
         }
       ]
     },
@@ -85,6 +121,36 @@
       "reference_level_speed_km_day": 10.0,
       "maximum_move_days_per_bin": 2.0,
       "landscape_radius_cells": 5,
+      "regional_scales": [
+        {
+          "id": "regional_sparse",
+          "label": "Regional \u00b7 sparse outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "id": "regional_dense",
+          "label": "Regional \u00b7 additional outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        }
+      ],
       "water_scenarios": [
         {
           "id": "water_unknown",
@@ -404,6 +470,154 @@
                 ],
                 "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
                 "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "origin90",
+                "label": "100 people \u00b7 90-day export stores",
+                "file": "presence_origin90.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "origin0",
+                "label": "100 people \u00b7 no export stores",
+                "file": "presence_origin0.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "collect1",
+                "label": "100 people \u00b7 collect 1% of surplus",
+                "file": "presence_collect1.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "rural180",
+                "label": "Protect rural meals \u00b7 180-day rural stores",
+                "file": "presence_rural180.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
               }
             ]
           }
@@ -434,7 +648,7 @@
             },
             {
               "color": "#b7b4ae",
-              "label": "Outside the four experiments / unscored"
+              "label": "Outside sampled resource patches / unscored"
             }
           ],
           "note": "One unsplit herd of 100 dry-matter reference units; 7-day carried feed, actual transit meals before arrival, no free initial stock. Fresh growth at the selected destination is used once; unused growth expires. Water distances do not establish potable volume, permanence or access rights. Scenarios run independently; they are not jointly allocated herds or predicted communities.",
@@ -446,6 +660,25 @@
                 "value": "circuits",
                 "label": "Closed resource circuits",
                 "file": "mobility_circuits.webp",
+                "scale_files": {
+                  "local": "mobility_circuits.webp",
+                  "regional_sparse": "mobility_regional_sparse_circuits.webp",
+                  "regional_dense": "mobility_regional_dense_circuits.webp"
+                },
+                "scale_water_files": {
+                  "local": {
+                    "water_unknown": "mobility_circuits.webp",
+                    "water10": "mobility_water10_circuits.webp"
+                  },
+                  "regional_sparse": {
+                    "water_unknown": "mobility_regional_sparse_circuits.webp",
+                    "water10": "mobility_regional_sparse_water10_circuits.webp"
+                  },
+                  "regional_dense": {
+                    "water_unknown": "mobility_regional_dense_circuits.webp",
+                    "water10": "mobility_regional_dense_water10_circuits.webp"
+                  }
+                },
                 "items": [
                   {
                     "color": "#e5decd",
@@ -465,7 +698,7 @@
                   },
                   {
                     "color": "#b7b4ae",
-                    "label": "Outside the four experiments / unscored"
+                    "label": "Outside sampled resource patches / unscored"
                   }
                 ],
                 "caption": "Four fixed resource landscapes only. Select a landscape below for its closed seasonal route and feed ledger.",
@@ -475,6 +708,25 @@
                 "value": "water",
                 "label": "Water sensitivity",
                 "file": "mobility_water.webp",
+                "scale_files": {
+                  "local": "mobility_water.webp",
+                  "regional_sparse": "mobility_regional_sparse_water.webp",
+                  "regional_dense": "mobility_regional_dense_water.webp"
+                },
+                "scale_water_files": {
+                  "local": {
+                    "water_unknown": "mobility_water.webp",
+                    "water10": "mobility_water.webp"
+                  },
+                  "regional_sparse": {
+                    "water_unknown": "mobility_regional_sparse_water.webp",
+                    "water10": "mobility_regional_sparse_water.webp"
+                  },
+                  "regional_dense": {
+                    "water_unknown": "mobility_regional_dense_water.webp",
+                    "water10": "mobility_regional_dense_water.webp"
+                  }
+                },
                 "items": [
                   {
                     "color": "#286f70",
@@ -494,7 +746,7 @@
                   },
                   {
                     "color": "#b7b4ae",
-                    "label": "Outside the four experiments / unscored"
+                    "label": "Outside sampled resource patches / unscored"
                   }
                 ],
                 "caption": "Four fixed resource landscapes only. Select a landscape below for its closed seasonal route and feed ledger.",
@@ -509,8 +761,42 @@
         1000
       ],
       "cell_px": 2.0,
+      "scales": [
+        {
+          "id": "local",
+          "label": "Local \u00b7 all bases"
+        },
+        {
+          "id": "regional_sparse",
+          "label": "Regional \u00b7 sparse outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "id": "regional_dense",
+          "label": "Regional \u00b7 additional outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        }
+      ],
       "payload": "presence_mobility.json.gz",
-      "payload_sha256": "864a03d61cdc1b5a7b21789e51465ec9f73406d98786d53d610a73a2bff7800b",
+      "payload_sha256": "a002bc298ebbd1b57a0dfbc049ffb2f38727d2269a69aa5aa97c309e800ec678",
       "catchments": "presence_catchments.bin.gz",
       "catchments_sha256": "90e6af861165cdf54ac6ad495e5bd06a6798f36acb0eb5744e1b26c0e122323d",
       "image_sha256": {
@@ -521,8 +807,19 @@
         "presence_people500.webp": "d3c75b057f4b7af6d119878f5ebf435a9f66b4c5b23b86ba01ea9cf808a3f4c6",
         "presence_people500_freight25.webp": "355804520bb0b868059ce4e8a6d9edb593e0115120a04b39cac4d6245b4fafa2",
         "presence_calendar_last.webp": "e2db9648fdeb38eae5d5cc48bfbf6943a00f25e413acf6c2fe272893fb5fdfc6",
+        "presence_origin90.webp": "2283eccec45f15728ddd52822a5ab09330efc16630d603b2a3799a0d668033a5",
+        "presence_origin0.webp": "366aeba81f917b7d65809918a99f6da233c89699a010b88f26d8e19838d6ff1f",
+        "presence_collect1.webp": "5ca8bb892bf14f184ae5845062526fe6e026fa3709493d75170e52beb68307a7",
+        "presence_rural180.webp": "366aeba81f917b7d65809918a99f6da233c89699a010b88f26d8e19838d6ff1f",
         "mobility_circuits.webp": "f4c83d38e571b2c2b7b7d2c13b72e08bc109fc1e51dd4b24b0e63820b7c37830",
-        "mobility_water.webp": "84ddf5088dc6b8a764eb870726fa48fc4e8d035cdcfba17f2c06708337c8467c"
+        "mobility_water10_circuits.webp": "5bc5db70d94d3110f58cb4df80a530a303a609878af8b62f724930645dfad00b",
+        "mobility_regional_sparse_circuits.webp": "6f782ef194fa2e493e8bae166333aedf0beb61a5140ad31b8425721b9d3f64c9",
+        "mobility_regional_sparse_water10_circuits.webp": "e3826cae29a599402bee8a5f45acb1e1007e49b76d4ac6efc92f3abbe1e9c69f",
+        "mobility_regional_dense_circuits.webp": "03848b2d940c2175065c3e96edeaf10a92a0be6e695943df40d991710c98422d",
+        "mobility_regional_dense_water10_circuits.webp": "6b451ca7b7b885b7174693ec442d2f289501f4e46f5506638f46870ddb369550",
+        "mobility_water.webp": "84ddf5088dc6b8a764eb870726fa48fc4e8d035cdcfba17f2c06708337c8467c",
+        "mobility_regional_sparse_water.webp": "a73f67d7d1c7564f9caba085480bcbda5b66eee55940bc3f85258db6e0cdf454",
+        "mobility_regional_dense_water.webp": "16e2ce7a020f5448bd605f5dab7a49d78eece580037f53699730e7b002c668a2"
       },
       "expected_harvest_fingerprint": "3c8243172a922da1e8ae349acbfe2579d1aec6d419066786ea93c95ae26a30d8",
       "expected_harvest_binary_sha256": "142fc11f8178731fcf3b3740436f3a33fc6ca3f10408a64474929bd32e4fbf3f"
@@ -829,6 +1126,154 @@
                 ],
                 "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
                 "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "origin90",
+                "label": "100 people \u00b7 90-day export stores",
+                "file": "corrected/presence_origin90.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "origin0",
+                "label": "100 people \u00b7 no export stores",
+                "file": "corrected/presence_origin0.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "collect1",
+                "label": "100 people \u00b7 collect 1% of surplus",
+                "file": "corrected/presence_collect1.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
+              },
+              {
+                "value": "rural180",
+                "label": "Protect rural meals \u00b7 180-day rural stores",
+                "file": "corrected/presence_rural180.webp",
+                "items": [
+                  {
+                    "color": "#914d55",
+                    "label": "<25% of need"
+                  },
+                  {
+                    "color": "#b47c64",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#d2af79",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#ced3a4",
+                    "label": "75\u201390%"
+                  },
+                  {
+                    "color": "#83ae98",
+                    "label": "90\u201399.9%"
+                  },
+                  {
+                    "color": "#287877",
+                    "label": "All bins supplied"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Outside fixed collection areas / unscored"
+                  }
+                ],
+                "caption": "Worst-bin food need met at the receiving marked site; its fixed collection area shares that site colour. These are not control polygons.",
+                "note": "Hypothetical food support and seasonal herd resource circuits, not actual staffing, nutrition, sovereignty, populations, ethnicities, camps or rights of access. No food/feed outputs added to existing carrying capacity totals. All numerical budgets are scenario assumptions. Single wheat/barley crop, rural meals protected before collection; no rice, millet, dates, second crop, animals, fish or external imports. Grey does not mean empty or uninhabitable."
               }
             ]
           }
@@ -859,7 +1304,7 @@
             },
             {
               "color": "#b7b4ae",
-              "label": "Outside the four experiments / unscored"
+              "label": "Outside sampled resource patches / unscored"
             }
           ],
           "note": "One unsplit herd of 100 dry-matter reference units; 7-day carried feed, actual transit meals before arrival, no free initial stock. Fresh growth at the selected destination is used once; unused growth expires. Water distances do not establish potable volume, permanence or access rights. Scenarios run independently; they are not jointly allocated herds or predicted communities.",
@@ -871,6 +1316,25 @@
                 "value": "circuits",
                 "label": "Closed resource circuits",
                 "file": "corrected/mobility_circuits.webp",
+                "scale_files": {
+                  "local": "corrected/mobility_circuits.webp",
+                  "regional_sparse": "corrected/mobility_regional_sparse_circuits.webp",
+                  "regional_dense": "corrected/mobility_regional_dense_circuits.webp"
+                },
+                "scale_water_files": {
+                  "local": {
+                    "water_unknown": "corrected/mobility_circuits.webp",
+                    "water10": "corrected/mobility_water10_circuits.webp"
+                  },
+                  "regional_sparse": {
+                    "water_unknown": "corrected/mobility_regional_sparse_circuits.webp",
+                    "water10": "corrected/mobility_regional_sparse_water10_circuits.webp"
+                  },
+                  "regional_dense": {
+                    "water_unknown": "corrected/mobility_regional_dense_circuits.webp",
+                    "water10": "corrected/mobility_regional_dense_water10_circuits.webp"
+                  }
+                },
                 "items": [
                   {
                     "color": "#e5decd",
@@ -890,7 +1354,7 @@
                   },
                   {
                     "color": "#b7b4ae",
-                    "label": "Outside the four experiments / unscored"
+                    "label": "Outside sampled resource patches / unscored"
                   }
                 ],
                 "caption": "Four fixed resource landscapes only. Select a landscape below for its closed seasonal route and feed ledger.",
@@ -900,6 +1364,25 @@
                 "value": "water",
                 "label": "Water sensitivity",
                 "file": "corrected/mobility_water.webp",
+                "scale_files": {
+                  "local": "corrected/mobility_water.webp",
+                  "regional_sparse": "corrected/mobility_regional_sparse_water.webp",
+                  "regional_dense": "corrected/mobility_regional_dense_water.webp"
+                },
+                "scale_water_files": {
+                  "local": {
+                    "water_unknown": "corrected/mobility_water.webp",
+                    "water10": "corrected/mobility_water.webp"
+                  },
+                  "regional_sparse": {
+                    "water_unknown": "corrected/mobility_regional_sparse_water.webp",
+                    "water10": "corrected/mobility_regional_sparse_water.webp"
+                  },
+                  "regional_dense": {
+                    "water_unknown": "corrected/mobility_regional_dense_water.webp",
+                    "water10": "corrected/mobility_regional_dense_water.webp"
+                  }
+                },
                 "items": [
                   {
                     "color": "#286f70",
@@ -919,7 +1402,7 @@
                   },
                   {
                     "color": "#b7b4ae",
-                    "label": "Outside the four experiments / unscored"
+                    "label": "Outside sampled resource patches / unscored"
                   }
                 ],
                 "caption": "Four fixed resource landscapes only. Select a landscape below for its closed seasonal route and feed ledger.",
@@ -934,8 +1417,42 @@
         1000
       ],
       "cell_px": 2.0,
+      "scales": [
+        {
+          "id": "local",
+          "label": "Local \u00b7 all bases"
+        },
+        {
+          "id": "regional_sparse",
+          "label": "Regional \u00b7 sparse outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ]
+          ]
+        },
+        {
+          "id": "regional_dense",
+          "label": "Regional \u00b7 additional outer bases",
+          "radius_cells": 20,
+          "stride_cells": 4,
+          "offsets": [
+            [
+              0,
+              0
+            ],
+            [
+              2,
+              2
+            ]
+          ]
+        }
+      ],
       "payload": "corrected/presence_mobility.json.gz",
-      "payload_sha256": "977d918e066be753a762a4c021c1a4aeb7217991b6e50589e5cea5e1fef391a8",
+      "payload_sha256": "9885ca6ed80641727747f45eefba2890176d9c4ce3008d773a147bf9ebaa45cc",
       "catchments": "corrected/presence_catchments.bin.gz",
       "catchments_sha256": "33c79d2b5c614d1122f14f57138e578430d260f92b19951c843464b9fc73626d",
       "image_sha256": {
@@ -946,16 +1463,27 @@
         "corrected/presence_people500.webp": "c63d7e0344a0977cf9e61ba4ccfc34e9f203de3f1b34cff21ea1f500b64a1f75",
         "corrected/presence_people500_freight25.webp": "404b4e46fbece7fb1ffb643b2d47427641d3e1bc194c090b1da6c034c13dcbda",
         "corrected/presence_calendar_last.webp": "4e2ea96ea2932f89ac976cddcdb89ba2a39609d92e34380438d0224447dab424",
+        "corrected/presence_origin90.webp": "8f6728352bde25122e2b444255a580ae802275ccb05f225aa3cdcba524401fce",
+        "corrected/presence_origin0.webp": "a31957557b0eb9bff57984088a458eb7b3590cde8b8424cd869a738caa438e3c",
+        "corrected/presence_collect1.webp": "f552eb1adb819b8b51860e541410fdfa031bf737ab1dc40ccaaa5153caf0fd62",
+        "corrected/presence_rural180.webp": "a31957557b0eb9bff57984088a458eb7b3590cde8b8424cd869a738caa438e3c",
         "corrected/mobility_circuits.webp": "b4024c64d2a2cd382b97681f65f3480e508bad8071116f68be8b4e09583c68d3",
-        "corrected/mobility_water.webp": "84ddf5088dc6b8a764eb870726fa48fc4e8d035cdcfba17f2c06708337c8467c"
+        "corrected/mobility_water10_circuits.webp": "5bc5db70d94d3110f58cb4df80a530a303a609878af8b62f724930645dfad00b",
+        "corrected/mobility_regional_sparse_circuits.webp": "86f9d1ea8b3a1224919b1c698f9c1c093786f4b637dac94b6fc513794179645d",
+        "corrected/mobility_regional_sparse_water10_circuits.webp": "8df0f066c582690c476d9e934c689c13d9533678a550554b2f6ced8192d79859",
+        "corrected/mobility_regional_dense_circuits.webp": "3c84b519a9e064073653f04e5345f5297054821628e18fbfe9a088e328cb902f",
+        "corrected/mobility_regional_dense_water10_circuits.webp": "8b2981b9b6ae97fd40dec9a1eacbc51aac4f50403da212233f200f6c5f5635d2",
+        "corrected/mobility_water.webp": "84ddf5088dc6b8a764eb870726fa48fc4e8d035cdcfba17f2c06708337c8467c",
+        "corrected/mobility_regional_sparse_water.webp": "a73f67d7d1c7564f9caba085480bcbda5b66eee55940bc3f85258db6e0cdf454",
+        "corrected/mobility_regional_dense_water.webp": "16e2ce7a020f5448bd605f5dab7a49d78eece580037f53699730e7b002c668a2"
       },
       "expected_harvest_fingerprint": "2b6bf2288a1f228ec94b9f4449f003081d561c45af3fc9ad0610a03fd826bd29",
       "expected_harvest_binary_sha256": "5d03be2368a1d5f8252bb30f026d9b0fc91ff483aab32de6d5282e805adb340e"
     }
   },
   "sources_sha256": {
-    "scripts/build_presence_mobility.py": "8a457685cd18362c70edd51d8721eeaca94c188ede6c409554e5882f3e8e67e3",
-    "polity/sustained_presence.py": "582e837fe151ff889567a07ecb822effdb565f75540796a4ff456be3f9543560",
+    "scripts/build_presence_mobility.py": "7d222e5921da9eef2c68aec75ae0e4150b49cbf40ed6fde53a173f12c9a938e1",
+    "polity/sustained_presence.py": "724ec1f1a31928dd09517736726d4f4705b2ab832ae119d72d376a14dad2746d",
     "harvest/seasonal_mobility.py": "bac366641ae99c39cac2556310de53d715989e3df9eda52b10031e0a7176f983",
     "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
     "harvest/pasture.py": "5b36973b3c3537678b2e22d31659aa42778722ae143c806424adcb74081aced8",
@@ -970,10 +1498,13 @@
     "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507",
     "rotclimate/geography.py": "2af647b688aecaa583a5f8b239e3ae202cce84192bf1be319824c31bd527e178",
     "scripts/vector_rivers.py": "186c978aaad33f1a1836514c243ca69f056a36b95d3a290033e50af5ad9b87ed",
-    "data/presence_mobility_model.json": "2ba1c596d76149ce87530f8138d4e525c56566d4708737cadcfb8404e1b8b1d2",
+    "data/presence_mobility_model.json": "1b8d6aa1b066b7e108f2958849fa0183ce935c5205c9d043eda1007643144018",
     "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3",
     "data/pasture_model.json": "389ac27900deac4fe8abd91c80e564984f965bea3b62c9790e2114736f1eff67",
     "research_notes/presence_mobility_20261104.json": "d36f6fd7d94d55d0b48d33ab29732efdf2a52332961b04c1a3f5bac7f54ba0d9",
+    "research_notes/presence_mobility_scale_20261104.json": "082be3415111af45321e7187cc31c5bdb8eba5331d10f918c8e765ab6f94aca3",
+    "scripts/regional_resource_circuits.py": "b9ac4591ea9f69e03dac82afa87b69b5402cb922ab8f71afa838bb4fc735693f",
+    "harvest/mobility_landscape.py": "43592e85b7c2639a57f5c42f28edd7eaadc2710ba5e44996192bff93ae3b23fb",
     "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
     "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
     "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f",

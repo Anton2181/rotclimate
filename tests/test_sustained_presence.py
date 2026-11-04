@@ -56,3 +56,12 @@ def test_origin_stores_bridge_harvest_and_respect_dispatch_closure():
     assert np.all(closed['departures'][[0,11]]==0)
     np.testing.assert_allclose(food.sum(),closed['arrivals'].sum()+closed['transport_loss']+closed['collection_storage_loss']+closed['uncollected'],rtol=1e-8)
     assert closed['max_collection_ledger_residual']<1e-6
+
+
+def test_protected_rural_meals_prevent_export_of_an_early_glut():
+    annual=np.array([1200.]);bits=np.array([1],np.uint16)
+    short=rural_cereal(annual,bits,reserve_days=180)
+    assert short.overflow.sum()>0 and short.year.unmet.sum()>0
+    assert short.exportable.sum()==0
+    full=rural_cereal(annual,bits,reserve_days=365)
+    assert full.exportable.sum()>0
