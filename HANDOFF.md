@@ -1,3 +1,52 @@
+# Historical wheat yield benchmark — 5 November 2026
+
+* Latest user priority remains Earth calibration of all components, with utility
+  budgets feeding shared settlements/control. No new independent map family.
+* New direct historical benchmark, not simulated climate: Broadbalk wheat yields
+  + Rothamsted observed monthly temperature/rain. Sources CC BY4.0, pinned under
+  `calibration/low_input_yields_20261105`; cache `data/cache/era_low_input_20261105`.
+* Preregistration `0ffa8aac`; disclosed input-availability amendment `0e016777`
+  BEFORE numerical yield scoring. Original complete-temp rule gave only15 train
+  years. Accept provider means missing at most1 daily temperature reading per
+  month; retain complete-record test subset. Keep20-year minimum and split.
+  Source harvest1883/sow1886 impossible date EXCLUDED, not silently repaired.
+* Selection+producer frozen `67b7aa1c`: 20 training primary years1879–1900, 25 test
+  years1901–1925. Same physical unfertilized plot3 in both: TEMPORAL at ONE SITE,
+  not independent geographic validation. FYM/mineral/other strata kept separate.
+* Grain source units t/ha/year already, ~85% dry matter (not measured). Unit in
+  workbook fields_metadata, absent JSON field schema. Do not divide by area
+  again or compare gross grain to calories after seed/milling losses.
+* Mean-temperature column blocks, NOT monthly extremes. DTR is monthly means of
+  daily Tmax–Tmin. Rain missing-day counts flagged; trace-only0.05mm/day bound is
+  conditional, not proved error bound. RAIN5 historical substitution retained.
+* Chronological Sep(previous year)–Aug(harvest year), no cyclic window wrap or
+  future autumn leakage. Existing wheat response with sequential100mm reference
+  soil state, still NOT a crop-specific transpiration/evaporation ledger.
+* RESULT: yield scale0.933. Test logMAE .21287 -> .19930 (6.4%); RMSE .40836 ->
+  .36911t/ha; r=-.37786; RMSE skill vs training-mean constant remains -15.3%.
+  FAILS qualification despite level improvement. Strict-complete23-year subset
+  also fails. NO AD200 or production crop/climate/population/control adoption.
+* Actual winter dates: only2/25 seasons meet current temperature/length/heat
+  rules;22 length failures,15 temperature failures (overlap),1 season outside
+  fixed crop-year. Doesn't prove dormancy/waterlogging/nutrients causal.
+* `check_earth_yields.py` independently replays metrics/grid/aggregate units and
+  optional source rows. Frozen producer snapshot67b7 supports later code edits.
+  180 year/management aggregates are45 shared weather years, not180 independent
+  experiments. Public packet/CSV/scores/plot in atlas Earth evidence page.
+* Broadbalk scored pool now SPENT. Woburn wheat+barley files pinned/downloaded,
+  targets UNOPENED/UNSCORED pending observed local weather (Rothamsted cannot be
+  silently treated as Woburn station). Hoosfield aggregate means already seen
+  during source discovery. Reserved climate f not opened/run.
+* Next mechanics: chronological conservative crop-water ledger, separating crop
+  transpiration from bare-soil evaporation/drainage (Allen et al1998 FAO56 ch8/9).
+  Verify conservation and no repeated soil-water spending before fitting yield.
+  Constrain winter phenology/management; earlier failed chilling-clock remains
+  rejected. New mechanisms may use Broadbalk explicitly as DEVELOPMENT, then
+  evaluate on genuinely reserved data once matched inputs exist.
+* Methods: reports/HISTORICAL_WHEAT_20261105.md. Standard `.bat` atlas hub links
+  evidence with result, figure, protocol/amendment/source identities/downloads.
+  Existing 4 production atlas folders unchanged; release/evidence hashes updated.
+
 # Earth calibration evidence programme and failed split audit — 5 November 2026
 
 * USER PRIORITY: calibrate every part on Earth as evidence permits. Prioritize

@@ -160,6 +160,8 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
+    # Historical yield evidence is served from the normal hub and travels offline.
+    yield_files = [ROOT/'reports/HISTORICAL_WHEAT_20261105.md', *sorted((ROOT/'calibration/low_input_yields_20261105').glob('*.json'))]
     files = [ROOT/'reports/EARTH_COMPONENT_CALIBRATION_20261105.md', *sorted((ROOT/'calibration/earth_components_20261105').glob('*.json')), ROOT/'reports/SETTLEMENT_LABOUR_20261105.md', ROOT/'research_notes/settlement_labour_20261105.json', ROOT/'data/settlement_labour_model.json', ROOT/'output/settlement_labour_20261105/fieldwork_settlement_reach.png', *sorted((ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz')), ROOT/'output/settlement_integration_20261104/settlement_reach_comparison.png', ROOT/'reports/SETTLEMENT_INTEGRATION_20261104.md', ROOT/'research_notes/settlement_integration_20261104.json', ROOT/'data/settlement_integration_model.json', ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
              ROOT/'research_notes/presence_mobility_scale_20261104.json',
              ROOT/'data/presence_mobility_model.json', ROOT/'research_notes/presence_mobility_20261104.json',
@@ -283,6 +285,7 @@ def main():
              ROOT/'output/seasonal_cycle_20261026_verified/rainfall_initialization.png',
              ROOT/'scripts/serve_atlases.py', ROOT/'scripts/read_coverage_grid.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
+    files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',

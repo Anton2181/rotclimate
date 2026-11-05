@@ -17,6 +17,13 @@ def main():
         assert page.locator('#benchmark').inner_text().find('0.459')>=0 and '0.176' in page.locator('#benchmark').inner_text()
         assert 'full split failed' in page.locator('body').inner_text().lower()
         assert 'no eligible case passes' in page.locator('body').inner_text().lower()
+        assert 'Failed annual-skill checks' in page.locator('#yield-verdict').inner_text()
+        assert '0.213' in page.locator('#yield-benchmark').inner_text()
+        assert '0.199' in page.locator('#yield-benchmark').inner_text()
+        assert '−0.38' in page.locator('#yield-benchmark').inner_text().replace('-','−')
+        assert page.request.get(a.base+'/reports/HISTORICAL_WHEAT_20261105.md').ok
+        with page.expect_download() as event: page.click('a[href="data/yields/cases.json.gz"]')
+        assert Path(event.value.path()).read_bytes()==(ROOT/'atlases/earth_evidence/data/yields/cases.json.gz').read_bytes()
         for component in ledger['components']:
             page.select_option('#component',component['id']);assert page.locator('#count').inner_text().startswith(str(sum(r['component']==component['id'] for r in ledger['parameters']))+' ')
         page.select_option('#component','labour');page.select_option('#status','scenario');page.fill('#search','worker_fraction')

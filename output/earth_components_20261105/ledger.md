@@ -5,7 +5,7 @@ Selected production configuration numeric leaves and literal top-level constants
 | Component | Numeric records | Evidence categories | Next empirical test |
 |---|---:|---|---|
 | Climate physics | 209 | earth_fit: 9, unreviewed: 200 | Audit remaining shared physics versus world-geometry fields; future heldout tests must respect the existing exposure ledger. |
-| Crop production, area and calendars | 67 | historical_fit: 1, published_relationship: 8, scenario: 58 | Fit process responses with observed climate and independent land/yield records before refitting population. |
+| Crop production, area and calendars | 67 | historical_fit: 1, published_relationship: 8, scenario: 58 | Chronological crop transpiration/soil evaporation/drainage budget and winter-season compatibility, constrained by documented management. Broadbalk now development/spent; Woburn reserved until local weather matching. See reports/HISTORICAL_WHEAT_20261105.md. |
 | Soil water, runoff and seasonality | 11 | unreviewed: 11 | Compare water budgets and discharge on Earth; separate measured soil heterogeneity from effective fitted storage. |
 | Vegetation, forage and water access | 9 | definition: 2, published_relationship: 1, scenario: 6 | Validate annual and lean-season resources before estimating animal products or mobile communities. |
 | Foraging physiology and resource adaptation | 73 | definition: 1, earth_fit: 3, published_relationship: 53, scenario: 16 | Keep geographic transfer tests; obtain independent prey/plant/fishing resource observations rather than fitting density alone. |

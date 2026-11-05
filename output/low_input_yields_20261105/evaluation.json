@@ -1,0 +1,190 @@
+{
+  "status": "evaluated_single_site_temporal_test",
+  "identity": {
+    "plan_sha256": "7ff585e52d9f4bfa06942d76dc5910d640eab23543297826a7e5293c7e3a2056",
+    "amendment_sha256": "12c883b9db41eb6ddd1058d9e13cb262ac8768fced25dd97967ba5513b6011d9",
+    "sources_manifest_sha256": "4319d98017505884e514531d1fae32495b1f51db21be0b55fb64dd21f070279a",
+    "producers_sha256": {
+      "harvest/earth_yields.py": "48ebd04e7a5292cf3bdff9479f16e8370e8e316f97920406c98931f45bb1faf6",
+      "harvest/crop_sequences.py": "9aab8015f8a94863eb798005fa7077c8d1d60f1c138126201430c824c7816e68",
+      "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507",
+      "scripts/benchmark_earth_yields.py": "f2683f41334166d364185eaf614aa73333abc3fe47d4c1f8f5bbe301727566b7"
+    },
+    "inputs_sha256": {
+      "broadbalk_0.zip": "a0af89d3ab5638bcc4a3cfdab1517427d326db9170121adee3cd698905db819c",
+      "roth_temperature_0.xlsx": "5eb9c6d646e124a378a36909d8908bfe1ffda925a9354ed46b07c7d782ed1c86",
+      "roth_rain_0.xlsx": "edf898fb32305adc91bee2eb9dd7c1f5d9cc26facba66193ac0b42cec122ddef",
+      "woburn_wheat_0.zip": "c9ee8c4d6ddc78659459b286a7496ae2aca07aa011edcdf9b1db2b28424d3b8e",
+      "woburn_barley_0.zip": "b0178f56bf16debde1910a94cc89e5bdda9b4fbc4e9b1ed3f4827a284f15827b"
+    }
+  },
+  "selection_sha256": "767f9bc1ab3bcd9484188a3eec60c203550085f7a40c71bef931a76970d5bf8d",
+  "baseline": {
+    "n": 25,
+    "MAE_log10": 0.21287085315148044,
+    "MAE_t_ha": 0.33686622100054725,
+    "RMSE_t_ha": 0.40836442410840174,
+    "Pearson_r": -0.3778603752995996,
+    "RMSE_skill_vs_training_mean": -0.275716252026869,
+    "observed_mean": 0.6875999999999999,
+    "predicted_mean": 0.9454608260284058,
+    "fraction_within_factor2": 0.76
+  },
+  "candidate": {
+    "n": 25,
+    "MAE_log10": 0.19929922375856454,
+    "MAE_t_ha": 0.30543881159642144,
+    "RMSE_t_ha": 0.3691056608166136,
+    "Pearson_r": -0.37786037529959976,
+    "RMSE_skill_vs_training_mean": -0.15307324149734436,
+    "observed_mean": 0.6875999999999999,
+    "predicted_mean": 0.8821461428901444,
+    "fraction_within_factor2": 0.76
+  },
+  "qualification_conditions": {
+    "enough_years": true,
+    "log_error_gain": true,
+    "positive_rmse_skill": false,
+    "positive_correlation": false
+  },
+  "temporal_comparator_qualified": false,
+  "evaluation_strata": {
+    "unmanured_plot3": {
+      "baseline": {
+        "n": 25,
+        "MAE_log10": 0.21287085315148044,
+        "MAE_t_ha": 0.33686622100054725,
+        "RMSE_t_ha": 0.40836442410840174,
+        "Pearson_r": -0.3778603752995996,
+        "RMSE_skill_vs_training_mean": -0.275716252026869,
+        "observed_mean": 0.6875999999999999,
+        "predicted_mean": 0.9454608260284058,
+        "fraction_within_factor2": 0.76
+      },
+      "candidate": {
+        "n": 25,
+        "MAE_log10": 0.19929922375856454,
+        "MAE_t_ha": 0.30543881159642144,
+        "RMSE_t_ha": 0.3691056608166136,
+        "Pearson_r": -0.37786037529959976,
+        "RMSE_skill_vs_training_mean": -0.15307324149734436,
+        "observed_mean": 0.6875999999999999,
+        "predicted_mean": 0.8821461428901444,
+        "fraction_within_factor2": 0.76
+      }
+    },
+    "fym_only": {
+      "baseline": {
+        "n": 25,
+        "MAE_log10": 0.34046876085611477,
+        "MAE_t_ha": 1.2195391739715944,
+        "RMSE_t_ha": 1.3822575454062895,
+        "Pearson_r": -0.36743046491046805,
+        "RMSE_skill_vs_training_mean": 0.051947383169450134,
+        "observed_mean": 2.1649999999999996,
+        "predicted_mean": 0.9454608260284058,
+        "fraction_within_factor2": 0.32
+      },
+      "candidate": {
+        "n": 25,
+        "MAE_log10": 0.370571760422513,
+        "MAE_t_ha": 1.2828538571098556,
+        "RMSE_t_ha": 1.4373341587035675,
+        "Pearson_r": -0.367430464910468,
+        "RMSE_skill_vs_training_mean": 0.014171841602555801,
+        "observed_mean": 2.1649999999999996,
+        "predicted_mean": 0.8821461428901444,
+        "fraction_within_factor2": 0.28
+      }
+    },
+    "mineral_only": {
+      "baseline": {
+        "n": 25,
+        "MAE_log10": 0.23321277514804412,
+        "MAE_t_ha": 0.6944051813927203,
+        "RMSE_t_ha": 0.8253351322773071,
+        "Pearson_r": -0.309881166323129,
+        "RMSE_skill_vs_training_mean": 0.07078191631757469,
+        "observed_mean": 1.5778780042640619,
+        "predicted_mean": 0.9454608260284058,
+        "fraction_within_factor2": 0.64
+      },
+      "candidate": {
+        "n": 25,
+        "MAE_log10": 0.25609105481850675,
+        "MAE_t_ha": 0.7416477824998156,
+        "RMSE_t_ha": 0.8734255948818137,
+        "Pearson_r": -0.309881166323129,
+        "RMSE_skill_vs_training_mean": 0.016638422654025486,
+        "observed_mean": 1.5778780042640619,
+        "predicted_mean": 0.8821461428901444,
+        "fraction_within_factor2": 0.64
+      }
+    },
+    "other_organic_or_mixed": {
+      "baseline": {
+        "n": 25,
+        "MAE_log10": 0.2176836918262375,
+        "MAE_t_ha": 0.6309078978438432,
+        "RMSE_t_ha": 0.8005513645970297,
+        "Pearson_r": -0.33403935526893674,
+        "RMSE_skill_vs_training_mean": 0.05425248199930033,
+        "observed_mean": 1.4512,
+        "predicted_mean": 0.9454608260284058,
+        "fraction_within_factor2": 0.68
+      },
+      "candidate": {
+        "n": 25,
+        "MAE_log10": 0.23359571985405228,
+        "MAE_t_ha": 0.6632003949366301,
+        "RMSE_t_ha": 0.8402972241911408,
+        "Pearson_r": -0.33403935526893674,
+        "RMSE_skill_vs_training_mean": 0.007297908283900867,
+        "observed_mean": 1.4512,
+        "predicted_mean": 0.8821461428901444,
+        "fraction_within_factor2": 0.64
+      }
+    }
+  },
+  "calendar": {
+    "records": 25,
+    "available": 25,
+    "representable": 2,
+    "failures": {
+      "length": 22,
+      "temperature": 15
+    },
+    "outside_fixed_crop_year": 1
+  },
+  "evaluation_targets_scored": true,
+  "evaluation_pool_now_spent": true,
+  "woburn_targets_opened": false,
+  "ancient_default_adoption": false,
+  "production_atlas_changed": false,
+  "scope": "Temporal transfer at one continuously cropped English wheat trial, not independent sites, barley or global AD200 farming. Scale changes mean level only; calendar/water/nutrients are not fitted.",
+  "complete_temperature_subset": {
+    "baseline": {
+      "n": 23,
+      "MAE_log10": 0.21921439570176035,
+      "MAE_t_ha": 0.3445457003138862,
+      "RMSE_t_ha": 0.4159658519140385,
+      "Pearson_r": -0.3576528888622385,
+      "RMSE_skill_vs_training_mean": -0.2651541860862221,
+      "observed_mean": 0.6856521739130436,
+      "predicted_mean": 0.9501576116741063,
+      "fraction_within_factor2": 0.7391304347826086
+    },
+    "candidate": {
+      "n": 23,
+      "MAE_log10": 0.20446262462250392,
+      "MAE_t_ha": 0.311017595891307,
+      "RMSE_t_ha": 0.37647644001973485,
+      "Pearson_r": -0.3576528888622385,
+      "RMSE_skill_vs_training_mean": -0.1450477049068828,
+      "observed_mean": 0.6856521739130436,
+      "predicted_mean": 0.8865283988517597,
+      "fraction_within_factor2": 0.7391304347826086
+    },
+    "refitted": false
+  }
+}

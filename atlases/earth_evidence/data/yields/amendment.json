@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "original_plan_commit": "0ffa8aac",
+  "original_plan_sha256": "f89c97eaf77df9241df10d0d15ae19f2116ba340bb1340f5c163e24f2daac24d",
+  "exposure": "Source schemas, category vocabularies, missingness counts, weather completeness counts and invalid sowing/harvest dates only. No training or evaluation numerical yield outcome inspected/scored; selection refused before reading training yield values because fewer than20 eligible primary years.",
+  "original_counts": {
+    "training": 15,
+    "evaluation": 23
+  },
+  "change": "Use provider monthly mean with at most1 missing daily temperature reading, retain missing-day flags and publish strict-complete test subset without refitting. No fold/cutoff/management/fit-bound change. Keep minimum20 eligible years each period.",
+  "rationale": "Dropping entire crop years for one missing daily reading discards valid provider monthly means. The complete-only comparison remains visible. This is a disclosed protocol revision after input-availability screening, not a second untouched study.",
+  "source_date_error": {
+    "harvest_year": 1883,
+    "sow_date": "1886-11-06",
+    "harvest_date": "1883-08-13",
+    "action": "Excluded under existing date rules. Do not silently repair the source without authoritative correction."
+  },
+  "revised_plan_sha256": "7ff585e52d9f4bfa06942d76dc5910d640eab23543297826a7e5293c7e3a2056"
+}

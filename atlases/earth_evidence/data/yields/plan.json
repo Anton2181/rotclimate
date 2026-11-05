@@ -1,0 +1,80 @@
+{
+  "version": 1,
+  "date": "2026-11-05",
+  "study": "Broadbalk historical wheat: observed-weather temporal transfer",
+  "exposure": "Schemas, field metadata, management factors and weather layout inspected; numerical yield outcomes not inspected or scored before this plan. Hoosfield published aggregate means have been seen and are not untouched data.",
+  "site": {
+    "id": "ERA:Broadbalk",
+    "latitude": 51.81,
+    "weather": "ERA:Rothamsted",
+    "scope": "One English site; temporal test with the same physical plot in both periods. Not spatially independent or a global/AD200 validation."
+  },
+  "split": {
+    "training": [
+      1879,
+      1900
+    ],
+    "evaluation": [
+      1901,
+      1925
+    ],
+    "group": "Whole harvest years, all treatments together; repeated plot across time is intentional and disclosed."
+  },
+  "primary": {
+    "plot": "3",
+    "factors": {
+      "fym": "nil",
+      "rape_cake": "nil",
+      "n": "nil",
+      "p": "nil",
+      "k": "nil",
+      "na": "nil",
+      "mg": "nil"
+    },
+    "units": "Harvested grain t/ha/year at field moisture (approximately 85% dry matter, not measured). No seed, edible fraction or kcal deductions from observations.",
+    "area": "Use supplied hectares to aggregate subplots within plot/year; reject duplicate year/plot/subplot. Grain already per hectare; never divide it by area."
+  },
+  "diagnostics": {
+    "strata": [
+      "unmanured_plot3",
+      "fym_only",
+      "mineral_only",
+      "other_organic_or_mixed"
+    ],
+    "management": "FYM-only requires FYM present and all other factors nil. 35t FYM/ha/year is intensive organic, not generic ancient low input. Mineral-only requires no FYM/rape cake and at least one non-nil mineral. Other strata never enter selection.",
+    "calendar": "Count inclusive sow-to-harvest calendar months using observed dates. Check existing 4–9 month length, every-month 3–24 C, warmest >=12 C, heat >=1500 at 365/12 days/month. Outside-window months flag unrepresentable seasons. Calendar audit is structural, not a refit or a daily phenology model."
+  },
+  "weather": {
+    "temperature": "Tmean sheet Mean Temperature (Mean), Jan–Dec columns19–30; mean daily Tmax/Tmin from Tmax Mean columns19–30 and Tmin Mean columns20–31. Do not use monthly extreme maxima/minima.",
+    "rain": "DATA Jan–Dec columns2–13; mm. Historical 1880–1914 RAIN5 substitution retained as documented. Gaps in daily rain counts retained and flagged: provider says many are traces <0.05mm, not proved exclusively trace.",
+    "quality": "Exclude crop-years with missing/nonfinite monthly weather, negative rain/DTR or fewer than calendar-days minus1 daily temperature records in a month. Accept provider monthly mean with at most1 missing day, flag total missing-temperature days, and report the zero-missing-day evaluation subgroup separately without refitting. Keep finite observed monthly rain totals despite missing daily counts; report counts and0.05mm*missing-days as a trace-only sensitivity bound, not a guaranteed error bound.",
+    "pet": "Existing Hargreaves + sunlight_top; Earth tilt23.44, solstice355; mean monthly bins 365/12 days retained. Not station-observed ET.",
+    "soil": "100mm reference bucket, half-full January1878; chronological monthly P minus reference PET with capacity clipping. Not root-specific crop water accounting.",
+    "crop_year": "September of previous calendar year through August of harvest year. No cyclic wrap; candidate windows must end within this 12-month series. Fixed crop-year is an environmental-capacity diagnostic, not observed sowing management or a prospective forecast."
+  },
+  "model": {
+    "baseline": "Existing crop_windows wheat response, rainfed, no dry/cold reliability factors; chronological observed weather and soil states, nonwrapping 4–9 month windows. Max energy converted back to gross grain with identical crop edible*kcal*(1-seed)*1000, hence 1t/ha baseline ceiling. No wheat response coefficient fitted.",
+    "candidate": "One shared grain-yield multiplier only. Does not repair nutrients, waterlogging, frost, weeds or winter dormancy.",
+    "scale_grid": {
+      "minimum": 0.25,
+      "maximum": 4.0,
+      "count": 401,
+      "spacing": "log; includes1.0"
+    },
+    "objective": "Mean absolute log10 error, both observed/predicted floored at0.05t/ha. Equal primary-year weights; deterministic minimum over complete grid; tie closest to1 then smaller. Global optimum only over this finite one-dimensional candidate set.",
+    "comparator": "Training arithmetic mean unmanured yield, constant across evaluation years. Not fitted on test outcomes."
+  },
+  "eligibility": {
+    "yield_observation": "Exclude missing, negative or nonfinite grain; retain zero with0.05 log floor. Require positive finite area, valid ISO sow/harvest dates with sow<harvest and harvest year matching record. Do not remove weather extremes, changing cultivar or poor-yield years.",
+    "minimum_training_years": 20,
+    "minimum_evaluation_years": 20,
+    "identity": "Canonical numeric plot IDs; unique year/plot/subplot; all records in a year share fold; each primary year produces exactly one aggregate. Reject conflicting dates/cultivars inside any primary year."
+  },
+  "qualification": {
+    "temporal_comparator": "At least20 train and20 evaluation primary years; candidate test log MAE <=0.95 baseline; positive RMSE skill against training mean and positive Pearson correlation. All conditions required. Not ancient adoption.",
+    "ancient_default_adoption": false,
+    "reason": "One continuously cropped, nutrient-depleted trial site cannot identify global AD200 yield or nutrient management. No population/control/production atlas defaults changed."
+  },
+  "integrity": "Commit exact source manifest and plan before preparation/selection. Commit selection, producer code and identities before evaluation. Raw historical data downloadable; evaluated pool becomes spent. Woburn yields reserved/unscored pending matching local weather; Rothamsted weather never silently substituted at Woburn. Reserved climate f untouched.",
+  "amendment": "Metadata-only amendment.json committed before yield targets were inspected or scored; original protocol retained in Git0ffa8aac."
+}
