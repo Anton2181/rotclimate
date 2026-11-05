@@ -1,0 +1,586 @@
+{
+  "version": 1,
+  "date": "2026-11-05",
+  "scope": "Selected production configuration numeric leaves and literal top-level constants. Counts are audit records, not independent degrees of freedom, evidence quality scores or percentages of the model calibrated. Unresolved code expressions and unreviewed coefficients remain explicit; function-body constants are outside this first inventory.",
+  "components": [
+    {
+      "id": "climate",
+      "label": "Climate physics",
+      "validation": "Earth-tested r43; dev49 and finer-grid checks; sealed e was scored and is spent. All unchanged coefficients are not automatically reclassified as fitted here.",
+      "observables": "Monthly temperature, rain amount/seasonality, SST; process budgets and resolution transfer.",
+      "next_test": "Audit remaining shared physics versus world-geometry fields; future heldout tests must respect the existing exposure ledger.",
+      "sources": [
+        {
+          "file": "calibration/local_accuracy_20261023/r43_params.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/precip_tau_days",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_branch_dry_rain",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_branch_drying",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_branch_gap",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_warming",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_warming_chi0",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_warming_rain",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/subsidence_warming_taper",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            },
+            {
+              "pattern": "/wet_sun",
+              "status": "earth_fit",
+              "note": "Shared r43 parameter prospectively selected in three-start development search.",
+              "evidence": [
+                "reports/R43_20261103.md"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "crops",
+      "label": "Crop production, area and calendars",
+      "validation": "Some historical aggregate fitting; crop physiological-clock candidate failed its evaluation. Modern/potential yield grids are not independent ancient observations.",
+      "observables": "Crop yield, cultivated area, dates and water response, separated by management and period.",
+      "next_test": "Fit process responses with observed climate and independent land/yield records before refitting population.",
+      "sources": [
+        {
+          "file": "atlases/earth_fit/data/crop_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+              "evidence": []
+            },
+            {
+              "pattern": "/single_crop_sown_share",
+              "status": "historical_fit",
+              "note": "Aggregate Han plains capacity normalization; does not separately identify sown share from arable share/yield.",
+              "evidence": [
+                "reports/land_people.md"
+              ]
+            },
+            {
+              "pattern": "/crops/*/kc",
+              "status": "published_relationship",
+              "note": "FAO-style water coefficient; literature attribution is not local empirical calibration.",
+              "evidence": [
+                "reports/HARVEST_MIGRATION_20261022.md"
+              ]
+            },
+            {
+              "pattern": "/crops/*/ky",
+              "status": "published_relationship",
+              "note": "FAO yield-response coefficient; local transfer unvalidated.",
+              "evidence": [
+                "reports/HARVEST_MIGRATION_20261022.md"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "hydrology",
+      "label": "Soil water, runoff and seasonality",
+      "validation": "Simplified buckets and selected regional checks; no comprehensive discharge or soil-storage calibration demonstrated.",
+      "observables": "ET, seasonal soil moisture, streamflow, snow and low flows.",
+      "next_test": "Compare water budgets and discharge on Earth; separate measured soil heterogeneity from effective fitted storage.",
+      "sources": [
+        {
+          "file": "polity/seasons.py",
+          "kind": "python_constants",
+          "rules": []
+        }
+      ]
+    },
+    {
+      "id": "vegetation_pasture",
+      "label": "Vegetation, forage and water access",
+      "validation": "Miami productivity and inherited allocation assumptions; seasonal proxy/resource circuits are not calibrated herd populations.",
+      "observables": "NPP, forage seasonality, energy/protein, sustainable intake and water permanence.",
+      "next_test": "Validate annual and lean-season resources before estimating animal products or mobile communities.",
+      "sources": [
+        {
+          "file": "data/pasture_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Resource scenario, not a fitted local herd model.",
+              "evidence": []
+            },
+            {
+              "pattern": "/reference_liveweight_kg",
+              "status": "definition",
+              "note": "Reference feed-equivalent animal; not inferred livestock population.",
+              "evidence": []
+            },
+            {
+              "pattern": "/reference_intake_kg_dm_day",
+              "status": "published_relationship",
+              "note": "Reference maintenance dry matter intake, not nutritional adequacy.",
+              "evidence": [
+                "reports/PASTURE_RESOURCES_20261104.md"
+              ]
+            },
+            {
+              "pattern": "/year_days",
+              "status": "definition",
+              "note": "Accounting year length.",
+              "evidence": []
+            }
+          ],
+          "roots": [
+            "/reference_liveweight_kg",
+            "/reference_intake_kg_dm_day",
+            "/year_days",
+            "/test_demand_fraction_of_annual_supply",
+            "/test_buffer_days",
+            "/stored_feed_loss_fraction_year",
+            "/phenology"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "foraging",
+      "label": "Foraging physiology and resource adaptation",
+      "validation": "Adapted kernel has continent-separated Binford tests; adopted aquatic calibration improves heldout error, with regional failures and later rejected variants.",
+      "observables": "Density, diet shares and procurement time; population dynamics and food balance.",
+      "next_test": "Keep geographic transfer tests; obtain independent prey/plant/fishing resource observations rather than fitting density alone.",
+      "sources": [
+        {
+          "file": "data/foraging_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/published_human_parameters/*",
+              "status": "published_relationship",
+              "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+              "evidence": [
+                "reports/FORAGING_EARTH_20261031.md"
+              ]
+            },
+            {
+              "pattern": "/kernel_parameters/*",
+              "status": "published_relationship",
+              "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+              "evidence": [
+                "reports/FORAGING_EARTH_20261031.md"
+              ]
+            },
+            {
+              "pattern": "/kernel_parameters/plant_decay_day",
+              "status": "scenario",
+              "note": "Uncalibrated plant-resource turnover proxy.",
+              "evidence": []
+            },
+            {
+              "pattern": "/kernel_parameters/meat_decay_day",
+              "status": "scenario",
+              "note": "Adapter storage/turnover assumption.",
+              "evidence": []
+            },
+            {
+              "pattern": "/kernel_parameters/initial_hours",
+              "status": "scenario",
+              "note": "Numerical initialization.",
+              "evidence": []
+            },
+            {
+              "pattern": "/adapter/*",
+              "status": "scenario",
+              "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+              "evidence": []
+            },
+            {
+              "pattern": "/adapter/year_days",
+              "status": "definition",
+              "note": "Accounting year length.",
+              "evidence": []
+            },
+            {
+              "pattern": "/aquatic/*",
+              "status": "scenario",
+              "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+              "evidence": []
+            },
+            {
+              "pattern": "/aquatic/terrestrial_scale",
+              "status": "earth_fit",
+              "note": "Fitted on North America; tested on other continents, now spent.",
+              "evidence": [
+                "reports/FORAGING_EARTH_20261031.md"
+              ]
+            },
+            {
+              "pattern": "/aquatic/a_marine_kgdm_km2_year",
+              "status": "earth_fit",
+              "note": "Fitted on North America; tested on other continents, now spent.",
+              "evidence": [
+                "reports/FORAGING_EARTH_20261031.md"
+              ]
+            },
+            {
+              "pattern": "/aquatic/a_fresh_kgdm_km2_year",
+              "status": "earth_fit",
+              "note": "Fitted on North America; tested on other continents, now spent.",
+              "evidence": [
+                "reports/FORAGING_EARTH_20261031.md"
+              ]
+            }
+          ],
+          "roots": [
+            "/published_human_parameters",
+            "/kernel_parameters",
+            "/adapter",
+            "/aquatic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "health",
+      "label": "Malaria and ecological population modifiers",
+      "validation": "Thermal trait equations are sourced; moisture gate and density penalty lack independent epidemiological/demographic calibration.",
+      "observables": "Vector/parasite responses, transmission season; separately illness, mortality and work loss.",
+      "next_test": "Validate suitability against appropriate pre-control data before fitting demographic effects.",
+      "sources": [
+        {
+          "file": "data/harvest_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/malaria_traits/*",
+              "status": "published_relationship",
+              "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+              "evidence": [
+                "reports/HARVEST_MIGRATION_20261022.md"
+              ]
+            },
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+              "evidence": []
+            },
+            {
+              "pattern": "/margin_reliability/*",
+              "status": "historical_fit",
+              "note": "Fitted using HYDE and Han; HYDE spatial allocation is partly model-derived. Roman settlement data subsequently evaluated and now spent.",
+              "evidence": [
+                "reports/POPULATION_20261023.md"
+              ]
+            }
+          ],
+          "roots": [
+            "/malaria_traits",
+            "/maximum_malaria_penalty",
+            "/irrigation_mosquito_water",
+            "/malaria_season_threshold",
+            "/margin_reliability",
+            "/biome_crop_realization",
+            "/grazing"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "population",
+      "label": "Population allocation and livability",
+      "validation": "Historical analogue occupancies and HYDE/Han comparisons; scenario allocation is not an independent census forecast.",
+      "observables": "Absolute people and spatial allocation, with urban/rural distinction and recorded uncertainty.",
+      "next_test": "Use direct censuses/surveys as anchors; distinguish independently measured counts from HYDE imputation.",
+      "sources": [
+        {
+          "file": "data/population_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+              "evidence": []
+            }
+          ],
+          "roots": [
+            "/walking_off_path_factor",
+            "/water_weight_floor",
+            "/water_distance_scale_km",
+            "/slope_scale",
+            "/market_weight_floor",
+            "/market_time_scale_hours",
+            "/minimum_attraction"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "transport_trade",
+      "label": "Travel and freight",
+      "validation": "Selected Earth comparisons and published/assumed rates; old market-access town-size test failed. ORBIS is a model comparator, not independent journey observations.",
+      "observables": "Observed travel duration, mode, cargo, monetary costs and seasonal restrictions.",
+      "next_test": "Fit transport to journeys/freight evidence before fitting trade outcomes; retain rejected scale identification.",
+      "sources": [
+        {
+          "file": "polity/control.py",
+          "kind": "python_constants",
+          "rules": []
+        },
+        {
+          "file": "polity/transport.py",
+          "kind": "python_constants",
+          "rules": []
+        },
+        {
+          "file": "polity/trade.py",
+          "kind": "python_constants",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+              "evidence": []
+            },
+            {
+              "pattern": "/SEA_PER_KM",
+              "status": "definition",
+              "note": "Freight-cost normalization.",
+              "evidence": []
+            },
+            {
+              "pattern": "/RIVER_DOWN_PER_KM",
+              "status": "published_relationship",
+              "note": "Price-Edict-derived comparative tariff, with temporal/commodity limits.",
+              "evidence": [
+                "reports/POLITY_V3_20261025.md"
+              ]
+            },
+            {
+              "pattern": "/RIVER_UP_PER_KM",
+              "status": "published_relationship",
+              "note": "Price-Edict-derived comparative tariff.",
+              "evidence": [
+                "reports/POLITY_V3_20261025.md"
+              ]
+            },
+            {
+              "pattern": "/ROAD_PER_KM",
+              "status": "published_relationship",
+              "note": "Price-Edict-derived comparative tariff.",
+              "evidence": [
+                "reports/POLITY_V3_20261025.md"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "settlements",
+      "label": "Settlement sites and administrative seats",
+      "validation": "Seat-count/spacing and dry-site rules have Earth fits and later-era checks. These are not all-village or urban-size models.",
+      "observables": "Seat counts, site locations and independently estimated settlement size.",
+      "next_test": "Validate types separately; stop using served people as measured town residents.",
+      "sources": [
+        {
+          "file": "polity/settle.py",
+          "kind": "python_constants",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Settlement-generator assumption; fitted rules are identified separately.",
+              "evidence": []
+            },
+            {
+              "pattern": "/SEAT_PEOPLE",
+              "status": "historical_fit",
+              "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+              "evidence": [
+                "polity/settle.py"
+              ]
+            },
+            {
+              "pattern": "/SEAT_BETA",
+              "status": "historical_fit",
+              "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+              "evidence": [
+                "polity/settle.py"
+              ]
+            },
+            {
+              "pattern": "/SEAT_REF_DENSITY",
+              "status": "historical_fit",
+              "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+              "evidence": [
+                "polity/settle.py"
+              ]
+            },
+            {
+              "pattern": "/DRY_WATER_KM",
+              "status": "historical_fit",
+              "note": "Roman dry-town fit, tested on Tang seats; mapped-water resolution matters.",
+              "evidence": [
+                "calibration/polity_20261025/addendum_dry_towns2_20261031.json"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "provisioning_control",
+      "label": "Shared grain, residents and sustained reach",
+      "validation": "Conserved ledgers and sensitivity tests; cohort/request/storage/collection assumptions have not been empirically fitted.",
+      "observables": "Rural meals, stored grain, marketed supply, supported residents, documented institutional presence and access.",
+      "next_test": "Independent rural household/land/work evidence, then storage/imports and institution records. Never infer de facto control from painted claims used as inputs.",
+      "sources": [
+        {
+          "file": "data/settlement_integration_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Declared coupled food/source scenario; no Earth fit.",
+              "evidence": []
+            },
+            {
+              "pattern": "/year_days",
+              "status": "definition",
+              "note": "Accounting year length.",
+              "evidence": []
+            }
+          ],
+          "roots": [
+            "/year_days",
+            "/ration_kcal_person_day",
+            "/destination_store_demand_days",
+            "/annual_stored_energy_loss_fraction",
+            "/rural_demand_fraction_of_cereal_production",
+            "/rural_store_demand_days",
+            "/delivery_delay_bins",
+            "/delivery_retention",
+            "/collection_maximum_days_each_way",
+            "/collection_base_bin",
+            "/civilian_request_share_of_served_people",
+            "/minimum_civilian_request_people",
+            "/minimum_community_people",
+            "/institutional_request_people",
+            "/patrol_days_each_leg",
+            "/patrol_ration_days",
+            "/cases"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "labour",
+      "label": "Shared rural workforce and listed field tasks",
+      "validation": "Normative Columella task counts plus uncalibrated workforce/time budgets. Food-derived reference workers are not observed residents.",
+      "observables": "Reported task hours, cultivated hectares, household members and labour sources.",
+      "next_test": "VDSA manual-reaping benchmark with independent household size; modern evidence is not automatic AD200 transfer.",
+      "sources": [
+        {
+          "file": "data/settlement_labour_model.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/*",
+              "status": "scenario",
+              "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+              "evidence": []
+            }
+          ],
+          "roots": [
+            "/worker_fraction_of_reference_rural_people",
+            "/hours_worker_day",
+            "/cases"
+          ]
+        },
+        {
+          "file": "research_notes/farm_labour_20261103.json",
+          "kind": "json",
+          "rules": [
+            {
+              "pattern": "/workdays_per_iugerum/*",
+              "status": "published_relationship",
+              "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+              "evidence": [
+                "research_notes/farm_labour_20261103.json"
+              ]
+            },
+            {
+              "pattern": "/scenario/*",
+              "status": "scenario",
+              "note": "Manufactured task windows, workday and conversion scenarios.",
+              "evidence": []
+            }
+          ],
+          "roots": [
+            "/workdays_per_iugerum",
+            "/scenario"
+          ]
+        }
+      ]
+    }
+  ]
+}
