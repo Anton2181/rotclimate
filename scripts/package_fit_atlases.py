@@ -142,6 +142,12 @@ sovereignty is inferred. Three field-work scenarios now cap grain by annual
 and reaping work of one reference workforce, keeping rural meals fixed. Other
 foods, complete household/draft labour and water volumes remain unbalanced.
 
+Earth calibration evidence adds the component ledger and first independent
+manual-harvest benchmark, reached from the hub. Its modern fit does not change
+AD200 defaults. The full ledger, benchmark plan, source identities and all
+held-out results are included; raw survey downloads require the repository
+fetcher and are not needed to browse.
+
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
 people remain explicitly unallocated. Province CSVs reflect the current choices.
@@ -154,7 +160,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'reports/SETTLEMENT_LABOUR_20261105.md', ROOT/'research_notes/settlement_labour_20261105.json', ROOT/'data/settlement_labour_model.json', ROOT/'output/settlement_labour_20261105/fieldwork_settlement_reach.png', *sorted((ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz')), ROOT/'output/settlement_integration_20261104/settlement_reach_comparison.png', ROOT/'reports/SETTLEMENT_INTEGRATION_20261104.md', ROOT/'research_notes/settlement_integration_20261104.json', ROOT/'data/settlement_integration_model.json', ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
+    files = [ROOT/'reports/EARTH_COMPONENT_CALIBRATION_20261105.md', *sorted((ROOT/'calibration/earth_components_20261105').glob('*.json')), ROOT/'reports/SETTLEMENT_LABOUR_20261105.md', ROOT/'research_notes/settlement_labour_20261105.json', ROOT/'data/settlement_labour_model.json', ROOT/'output/settlement_labour_20261105/fieldwork_settlement_reach.png', *sorted((ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz')), ROOT/'output/settlement_integration_20261104/settlement_reach_comparison.png', ROOT/'reports/SETTLEMENT_INTEGRATION_20261104.md', ROOT/'research_notes/settlement_integration_20261104.json', ROOT/'data/settlement_integration_model.json', ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
              ROOT/'research_notes/presence_mobility_scale_20261104.json',
              ROOT/'data/presence_mobility_model.json', ROOT/'research_notes/presence_mobility_20261104.json',
              ROOT/'reports/WORLD_COVERAGE_20261104.md', ROOT/'reports/PASTURE_RESOURCES_20261104.md',
@@ -277,6 +283,7 @@ def main():
              ROOT/'output/seasonal_cycle_20261026_verified/rainfall_initialization.png',
              ROOT/'scripts/serve_atlases.py', ROOT/'scripts/read_coverage_grid.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
+    files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())
     evidence = ROOT/'output/three_fit_20261022'
     for name in ['search_comparison.png', 'biome_comparison.png', 'search_review.json', 'search_evaluations.json',
                  'search_review.csv', 'atlas_validation.json', 'publication.json', 'settlement_comparison.png', 'harvest_tests.log',

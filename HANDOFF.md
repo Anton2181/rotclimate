@@ -1,3 +1,58 @@
+# Earth calibration evidence programme and failed split audit — 5 November 2026
+
+* USER PRIORITY: calibrate every part on Earth as evidence permits. Prioritize
+  observed processes and independent household/land/work evidence over more
+  scenario maps. Keep all utility budgets feeding shared residents/control.
+* First evidence ledger: 11 components / 551 selected numeric configuration
+  records. `rotclimate/evidence_audit.py` and
+  `calibration/earth_components_20261105/evidence_spec.json` distinguish
+  published relationships, actual fits, definitions, scenarios and unreviewed
+  evidence. Covers selected JSON and literal top-level constants, NOT every
+  function-body coefficient; counts are not degrees of freedom or % calibrated.
+* Open VDSA source DOI 10.5281/zenodo.8224522 (CC BY 4.0), files pinned with
+  publisher checksums + SHA256. Fetcher never executes downloaded Stata code.
+  Raw survey data remain cached, respondent names are not exported. Published
+  pseudonymous task records permit independent replay without cached raw files.
+* Preregistered plan/source in `e8e09152`, training selection/producer snapshot
+  in `5ddb6d20`, before evaluation. Modern 2009–2014 manual wheat/barley task
+  benchmark uses actual plot hectares, household size and human hours. Never
+  treat wages as hours, output value as grain, or bullock hours as human work.
+  Complete subplot/season keys; ambiguous repeats/bundled tasks excluded.
+* IMPORTANT FAILURE: initial name-based district split had MAHARASHTRA versus
+  MAHARASTRA (Akola) aliases. Independent replay found FIVE households in both
+  folds, 7 observations each. Original 1,635-case validation claim is withdrawn;
+  original computation retained. Entire affected evaluation district removed
+  (29 records), leaving 1,606 wheat observations / FOUR districts, no panel
+  overlap. Scale 3.432 not refitted. Restricted error .459 -> .176; within-factor
+  two 20.9% -> 80.8% (equal-district weights). This is POST-AUDIT DIAGNOSTIC,
+  not new untouched or fully prospective validation; no qualification claimed.
+* New `harvest/panel_validation.py` guard rejects cross-fold households.
+  Current benchmark runner refuses the flawed old split/stale identities; do
+  NOT bypass it for a new fit. Original archived runner is in `5ddb6d20`.
+  Publisher verifies historical producer identities against that Git snapshot.
+  `audit_earth_reaping_panels.py` records failure and restricted diagnostic;
+  `check_earth_component_results.py` independently replays both computations.
+* ZERO cases pass strict recorded low-input screen; no evaluation barley.
+  No AD200 default adopted, no model scientific outputs changed. 40% workforce,
+  annual/reaping availability, rural demand, stores, imports and institutions
+  remain scenario assumptions. Modern fit is not ancient technology calibration.
+* Dataset exposure register marks evaluated pools spent and original VDSA
+  evaluation flawed; reserved climate f was NOT opened or run. A new study
+  needs canonical place IDs/panel integrity and independent evaluation data.
+* Normal hub has Earth calibration evidence page (`atlases/earth_evidence/`):
+  searchable ledger, graphs, full source/plan/audit downloads and visible caveats.
+  Hub text corrected so legacy Han/Roman tests do not validate new food/control
+  coupling. Methods: `reports/EARTH_COMPONENT_CALIBRATION_20261105.md`.
+* Next: canonicalize geographic identities BEFORE any new fit; acquire matching
+  historical/low-input crop/area/work records. Investigate workload per area
+  versus harvest mass without selecting a mechanism on this spent pool. Replace
+  rural food claim + workforce together from independent compatible households;
+  then storage/imports/freight, settlement sizes and actual institutional reach.
+  Census capacity fits identify products of yield/area/cropped share/food need,
+  not each factor separately. Do not add independent final utility families.
+
+---
+
 # Listed cereal work → food → settlements → reach — 5 November 2026
 
 * Previous integration milestone `cbed21e5` is pushed to BOTH publication refs.

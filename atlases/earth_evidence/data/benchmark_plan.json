@@ -1,0 +1,102 @@
+{
+  "version": 1,
+  "declared_date": "2026-11-05",
+  "purpose": "Start a component-by-component Earth calibration programme, with independent household/land/work evidence before retuning the shared food/settlement/control chain.",
+  "source": {
+    "doi": "10.5281/zenodo.8224522",
+    "record": 8224522,
+    "license": "CC-BY-4.0",
+    "period": "2009–2014",
+    "status": "Schema, codebooks, source processing code and categorical vocabularies inspected; labour/yield outcomes not scored before this plan."
+  },
+  "first_observable": "Reported human reaping/harvesting hours per independently reported sole-cereal cropped hectare, with independent household size and management flags. This does not calibrate the entire annual-work or food-provisioning model.",
+  "period_transfer": "Modern field evidence can test units, allocation and manual-task plausibility. It cannot directly establish 200 AD workforce shares, work calendars, annual availability, yields, grain claims or rights.",
+  "keys": [
+    "source_region",
+    "household_id",
+    "survey_year",
+    "complete_plot_code",
+    "season"
+  ],
+  "data_rules": {
+    "years": [
+      2009,
+      2010,
+      2011,
+      2012,
+      2013,
+      2014
+    ],
+    "crops": [
+      "WHEAT",
+      "BARLEY"
+    ],
+    "sole_crop_percent": 100,
+    "area_unit": "acre; convert with 0.40468564224 hectare/acre, matching the source codebook",
+    "retain_complete_plot_code": true,
+    "drop_ambiguous_duplicate_crop_keys": true,
+    "human_labour_codes": [
+      "FM",
+      "FF",
+      "FC",
+      "HM",
+      "HF",
+      "HC",
+      "EM",
+      "EF",
+      "EC"
+    ],
+    "family_labour_codes": [
+      "FM",
+      "FF",
+      "FC"
+    ],
+    "harvest_operation_regex": "^(?:HARVESTING|REAPING)(?:[- ](?:WHEAT|BARLEY))?$",
+    "exclude_bundled_tasks": true,
+    "exclude_missing_or_negative_human_hours": true,
+    "require_independent_household_size_and_district": true,
+    "mechanization": "Exclude any machinery-coded harvest row, including an explicitly machinery-coded row with missing quantities; absent machinery records do not prove no machinery.",
+    "analogue_subgroup": "Report an additional strict recorded-input subgroup: zero recorded irrigation and no machinery, mineral fertilizer, pesticide or weedicide rows in the same plot-season. Not proof of ancient technology. Do not silently relax if small.",
+    "no_value_as_quantity": "Never substitute crop revenue for grain kg or wages for hours. Missing grain quantities or unrecognized units stay unscored. No household population inferred from crop output.",
+    "positive_hours_only_for_log_score": true,
+    "duplicate_work_events": "Exclude a plot-season when human harvest rows repeat the same operation, survey round, date and labour type; do not silently sum or deduplicate ambiguous event records.",
+    "mixed_harvest_operations": "Exclude plot-seasons with human harvesting/reaping rows outside the declared exact-task regex, including bundled harvesting/threshing or binding."
+  },
+  "split": {
+    "unit": "source_region + state + district",
+    "method": "SHA256 of 'rotclimate-vdsa-reaping-v1|' plus canonical district; first 8 hex digits divided by 2^32",
+    "training_below": 0.7,
+    "panel_rule": "All plots, households, villages and years in a district remain in one split. Do not tune splits to outcomes."
+  },
+  "selection": {
+    "model": "One shared multiplicative scale on Columella reaping coefficients: wheat 48, barley 32 human hours/ha under the existing 8 h/day and 0.25 ha/iugerum scenario.",
+    "objective": "Equal-district mean absolute log10 prediction error; median of log(observed/baseline) with each district given equal total weight.",
+    "scale_bounds": [
+      0.25,
+      4.0
+    ],
+    "minimum_training_cases": 30,
+    "minimum_training_districts": 3,
+    "minimum_evaluation_cases": 10,
+    "minimum_evaluation_districts": 2,
+    "heldout_access": "Commit plan before preparation/scoring; commit selection plus complete identities before evaluation. Never fit on evaluation targets."
+  },
+  "evaluation": {
+    "primary": "Equal-district mean absolute log10 error",
+    "also_report": [
+      "median_log10_bias",
+      "fraction_within_factor_two",
+      "per_district",
+      "per_crop",
+      "strict_recorded_input_subgroup"
+    ],
+    "qualification": "At least 5% lower primary error than the fixed baseline, subject to sample minima. All subgroup outcomes reported; no per-region universal-improvement veto.",
+    "adoption": "Never change production defaults from this modern-only experiment. Additional historical/technology-transfer evidence is required even if the modern comparator improves."
+  },
+  "protection": {
+    "climate": "No Earth physics tuning or sealed climate-set access",
+    "atlas": "Existing atlases remain scientifically unchanged",
+    "workforce": "Household size and working-age counts are not actual full-time farm-worker counts",
+    "food": "Actual rural diet, marketed surplus, stored food and import needs require independent measurements; do not infer them from potential yield."
+  }
+}

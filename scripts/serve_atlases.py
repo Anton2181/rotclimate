@@ -60,6 +60,9 @@ def release_version(root):
         for name,digest in release.get('settled_reach_sha256',{}).items():
             if name not in hashes or hashlib.sha256((root/'atlases'/name/'data/settled_reach.json').read_bytes()).hexdigest()!=digest:
                 raise ValueError('Settlement integration metadata changed')
+        for relative,digest in release.get('earth_evidence_sha256',{}).items():
+            if hashlib.sha256((root/'atlases/earth_evidence'/relative).read_bytes()).hexdigest()!=digest:
+                raise ValueError('Earth evidence dashboard changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')

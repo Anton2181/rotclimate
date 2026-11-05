@@ -1,0 +1,67 @@
+{
+  "version": 1,
+  "date": "2026-11-05",
+  "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
+  "datasets": [
+    {
+      "id": "climate_dev49",
+      "status": "development",
+      "evidence": "reports/R43_20261103.md"
+    },
+    {
+      "id": "climate_sealed_a_through_e",
+      "status": "spent_evaluation",
+      "evidence": "reports/R43_20261103.md",
+      "note": "Do not recover unseen status by choosing a different component or subregion."
+    },
+    {
+      "id": "climate_reserved_f",
+      "status": "reserved_unscored_per_existing_protocol",
+      "evidence": "reports/R43_20261103.md",
+      "note": "This audit does not open, run or change the reserved benchmark."
+    },
+    {
+      "id": "hyde_0_200",
+      "status": "development_and_historical_analogue",
+      "evidence": "reports/POPULATION_20261023.md",
+      "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
+    },
+    {
+      "id": "han_ad2",
+      "status": "used_for_fitting_and_evaluation",
+      "evidence": "reports/POPULATION_20261023.md",
+      "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
+    },
+    {
+      "id": "roman_town_areas",
+      "status": "spent_evaluation",
+      "evidence": "reports/POLITY_V3_20261025.md",
+      "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
+    },
+    {
+      "id": "binford_foragers",
+      "status": "development_and_spent_transfer_evaluation",
+      "evidence": "reports/FORAGING_EARTH_20261031.md",
+      "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
+    },
+    {
+      "id": "sacks_cereal_calendar_pool",
+      "status": "spent_evaluation",
+      "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
+      "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
+    },
+    {
+      "id": "vdsa_8224522_reaping",
+      "status": "development_and_spent_flawed_evaluation",
+      "evidence": "output/earth_components_20261105/reaping/evaluation.json",
+      "training_cases": 603,
+      "training_districts": 8,
+      "evaluation_cases": 1635,
+      "evaluation_districts": 5,
+      "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
+      "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
+      "restricted_diagnostic_cases": 1606,
+      "restricted_diagnostic_districts": 4
+    }
+  ]
+}

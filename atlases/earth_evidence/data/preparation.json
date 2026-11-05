@@ -1,0 +1,59 @@
+{
+  "status": "prepared_without_target_scoring",
+  "identity": {
+    "plan_sha256": "96d408b118cb3378ec6486adf97872efb9a7c1a8d97083af174d8c3e3286e485",
+    "source_manifest_sha256": "0f5355545f9345b21299a03fc4854472eed4dd34b65262cd2754421cba736381",
+    "sources_sha256": {
+      "harvest/earth_reaping.py": "5d6d30f86202f73bd334bfccac8f4cd39d6b50ac3762cb08f6fb8ce28ba7aa8f",
+      "scripts/benchmark_earth_reaping.py": "d3d888e2164b2ac0cc8186f70963264c83933f65ef4d5953b47ac17893e18113"
+    },
+    "inputs_sha256": {
+      "Cultivation.zip": "7fb063d63dbb4d5b1b55e0171ac2d7f09269eac4f34795406378b55f72872d6b",
+      "Data on VDSA agricultural productivity at hhlevel.zip": "57edbeaae4357736d1dbf3641aff991e523b3beb285ff712b0c196881faa3d8b",
+      "README.docx": "ad012502795c0fc64ed716f6360c55e04fde7272f40a3e25c07ec75b13dfd064",
+      "VDSA data management for agricultural performance.do": "1c03f0eb23d2970398278c1fd875d40e7cab7c1fd4a2ed3470950bd251a9dadd",
+      "General Endowments Schedule.zip": "3311106ee63a024aa41dc977c9b616c669512c12420dbf93e44ae4473bc70dab",
+      "2. Variable Descriptions.xlsx": "0c3823aeedc550930fb0d89f9a662554d8c3e9c5bc5adfc31bfad7d2e84b9aed",
+      "4. Data on VDSA agricultural productivity at plot level.zip": "5c264dfc5bd7a964b5e633698d6ec79ac9c3f789c77385193d95583569968c58"
+    }
+  },
+  "splits": {
+    "training": {
+      "cases": 603,
+      "districts": 8,
+      "households": 189,
+      "crops": {
+        "WHEAT": 600,
+        "BARLEY": 3
+      },
+      "strict_input_cases": 0
+    },
+    "evaluation": {
+      "cases": 1635,
+      "districts": 5,
+      "households": 239,
+      "crops": {
+        "WHEAT": 1635
+      },
+      "strict_input_cases": 0
+    }
+  },
+  "excluded": {
+    "ambiguous_or_mixed_crop_key": 70,
+    "not_documented_sole_crop": 1,
+    "machinery_harvest": 684,
+    "no_positive_exact_task_hours": 45,
+    "ambiguous_event": 22,
+    "bundled_task": 411,
+    "invalid_hours": 1
+  },
+  "source_rows_considered": {
+    "Data on Cropping Pattern and Output of East India.xlsx": 11786,
+    "Data on Cropping Pattern and Output of SAT India.xlsx": 18149,
+    "Data on Cultivation Input Details of East India.csv": 20029,
+    "Data on Cultivation Input Details of SAT India.csv": 27690
+  },
+  "prepared_sha256": "6cb7cd7188aabb462fcd4fb243d0d78171fb0bdf9a65bde533ea6b01086ee786",
+  "evaluation_targets_published": false,
+  "ancient_default_adoption": false
+}

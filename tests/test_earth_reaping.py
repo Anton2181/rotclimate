@@ -88,3 +88,11 @@ def test_whole_plot_code_keeps_subplots_separate(tmp_path,monkeypatch):
     extra=dict(Vdsid_hhid='11',Sur_yr=2010,Plot_code='A2',Season='Rabi',Operation='Harvesting',Lab_type='FM',Work_hr=40,Round_no=1,Dt_oper='1/1/2010',Type_mat='')
     rows,excluded,_=survey_fixture(tmp_path,monkeypatch,[extra],[crop])
     assert len(rows)==2 and sorted(r['human_reaping_hours'] for r in rows)==[40,70]
+
+
+def test_panel_guard_rejects_aliases_even_when_district_labels_are_disjoint():
+    import pytest
+    from harvest.panel_validation import require_independent_panels
+    rows=[dict(household_id='same family',district_id='MAHARASHTRA|AKOLA',split='training'),dict(household_id='same family',district_id='MAHARASTRA|AKOLA',split='evaluation')]
+    with pytest.raises(ValueError,match='1 households'):require_independent_panels(rows)
+    require_independent_panels([dict(household_id='one',split='training'),dict(household_id='two',split='evaluation')])

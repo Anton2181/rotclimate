@@ -22,19 +22,20 @@ def committed(path):
 
 def main():
     from harvest.earth_reaping import prepare,select_scale,metrics
+    from harvest.panel_validation import require_independent_panels
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--stage',choices=['prepare','select','evaluate'],required=True);ap.add_argument('--cache',type=Path,default=ROOT/'data/cache/vdsa_8224522');ap.add_argument('--out',type=Path,default=ROOT/'output/earth_components_20261105/reaping');a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
     plan=json.loads(PLAN.read_text());committed(PLAN);committed(SOURCE);source=json.loads(SOURCE.read_text())
-    producer=['harvest/earth_reaping.py','scripts/benchmark_earth_reaping.py'];identity=dict(plan_sha256=hashfile(PLAN),source_manifest_sha256=hashfile(SOURCE),sources_sha256={p:hashfile(ROOT/p) for p in producer},inputs_sha256={f['name']:hashfile(a.cache/f['name']) for f in source['files']})
+    producer=['harvest/earth_reaping.py','harvest/panel_validation.py','scripts/benchmark_earth_reaping.py'];identity=dict(plan_sha256=hashfile(PLAN),source_manifest_sha256=hashfile(SOURCE),sources_sha256={p:hashfile(ROOT/p) for p in producer},inputs_sha256={f['name']:hashfile(a.cache/f['name']) for f in source['files']})
     if any(identity['inputs_sha256'][f['name']]!=f['sha256'] for f in source['files']):raise ValueError('Survey source identity changed')
     cached=a.cache/'prepared_reaping.json';selection=a.out/'selection.json'
     def write(path,value):path.write_text(json.dumps(value,ensure_ascii=False,indent=2,allow_nan=False)+'\n')
     if a.stage=='prepare':
-        cases,excluded,counts=prepare(a.cache,plan);write(cached,dict(identity=identity,cases=cases))
+        cases,excluded,counts=prepare(a.cache,plan);require_independent_panels(cases);write(cached,dict(identity=identity,cases=cases))
         splits={s:dict(cases=sum(c['split']==s for c in cases),districts=len({c['district_id'] for c in cases if c['split']==s}),households=len({c['household_id'] for c in cases if c['split']==s}),crops=dict(Counter(c['crop'] for c in cases if c['split']==s)),strict_input_cases=sum(c['split']==s and c['strict_recorded_input_subgroup'] for c in cases)) for s in ['training','evaluation']}
         write(a.out/'preparation.json',dict(status='prepared_without_target_scoring',identity=identity,splits=splits,excluded=excluded,source_rows_considered=counts,prepared_sha256=hashfile(cached),evaluation_targets_published=False,ancient_default_adoption=False));print(json.dumps(splits,indent=2));return
     data=json.loads(cached.read_text())
     if data['identity']!=identity:raise ValueError('Preparation or producer changed; rerun preparation under the same declared rules')
-    cases=data['cases'];rule=plan['selection'];train=[c for c in cases if c['split']=='training'];evaluation=[c for c in cases if c['split']=='evaluation']
+    cases=data['cases'];require_independent_panels(cases);rule=plan['selection'];train=[c for c in cases if c['split']=='training'];evaluation=[c for c in cases if c['split']=='evaluation']
     train_ok=len(train)>=rule['minimum_training_cases'] and len({c['district_id'] for c in train})>=rule['minimum_training_districts']
     eval_ok=len(evaluation)>=rule['minimum_evaluation_cases'] and len({c['district_id'] for c in evaluation})>=rule['minimum_evaluation_districts']
     if a.stage=='select':

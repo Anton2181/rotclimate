@@ -17,17 +17,22 @@ def check(snapshot,*,retained):
         'start_atlases.bat','start_atlases.command','.gitattributes',
         'output/settlement_integration_20261104/settlement_reach_comparison.png',
         'output/settlement_labour_20261105/fieldwork_settlement_reach.png',
-        ':(glob)output/settlement_labour_20261105/*/field_support.npz'],cwd=ROOT,
+        ':(glob)output/settlement_labour_20261105/*/field_support.npz',
+        ':(glob)calibration/earth_components_20261105/*.json'],cwd=ROOT,
         capture_output=True,check=True).stdout
     subprocess.run(['git','-c','core.autocrlf=true','checkout-index','-z','--stdin',
         '--prefix='+str(snapshot)+'/'],input=paths,cwd=ROOT,capture_output=True,check=True)
     assets=[]
-    for name in ['free_fit','earth_fit','whittaker_fit','climate_accuracy','economy_lab']:
+    for name in ['free_fit','earth_fit','whittaker_fit','climate_accuracy','economy_lab','earth_evidence']:
         for path in sorted((ROOT/'atlases'/name/'data').rglob('*')):
             if not path.is_file() or path.suffix not in {'.bin','.json','.webp','.png','.gif','.csv','.npz','.gz'}:continue
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
             assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
             assets.append(dict(file=str(relative),sha256=actual))
+    for path in (ROOT/'calibration/earth_components_20261105').glob('*.json'):
+        relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
+        assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
+        assets.append(dict(file=str(relative),sha256=actual))
     for path in (ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz'):
         relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
         assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
@@ -46,14 +51,17 @@ def check(snapshot,*,retained):
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--out',required=True,type=Path)
-    ap.add_argument('--destination',type=Path,help='new persistent snapshot folder (must not exist)');a=ap.parse_args()
+    ap.add_argument('--destination',type=Path,help='new persistent snapshot folder (must not exist)')
+    ap.add_argument('--temporary-root',type=Path,default=ROOT/'output',help='scratch filesystem for automatically removed snapshots')
+    a=ap.parse_args()
     if a.destination:
         snapshot=a.destination.resolve();snapshot.mkdir(parents=True,exist_ok=False)
         result=check(snapshot,retained=True)
     else:
         # The default is a verification scratch copy, automatically removed on
         # success AND failure. Explicit --destination still supports browsers.
-        with tempfile.TemporaryDirectory(prefix='atlas-check-',dir=ROOT/'output') as directory:
+        a.temporary_root.mkdir(parents=True,exist_ok=True)
+        with tempfile.TemporaryDirectory(prefix='atlas-check-',dir=a.temporary_root) as directory:
             result=check(Path(directory),retained=False)
     a.out.parent.mkdir(parents=True,exist_ok=True);a.out.write_text(json.dumps(result,indent=2)+'\n')
     print(json.dumps({key:value for key,value in result.items() if key!='assets'},indent=2))

@@ -250,7 +250,7 @@ def main():
 <header><span class="eyebrow">Rotclimate · three calibration objectives · updated {updated}</span>
 <h1>One world, three climate fits</h1>
 <p class="lede">The seasonal map fit, the fit held to Earth physics, and the fit to proposed Whittaker biomes. Each atlas uses the mean climate over the same three layouts of the unknown surroundings.</p></header>
-{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.<br><a href="economy_lab/">Food, farming and society →</a> · c.200 AD proposals and a seasonal food-stock prototype.</p>'}
+{'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.<br><a href="economy_lab/">Food, farming and society →</a> · c.200 AD proposals and seasonal budgets.<br><a href="earth_evidence/">Earth calibration evidence →</a> · component ledger, independent tests and remaining assumptions.</p>'}
 <section aria-label="The three atlases"><div class="plates">{''.join(plates)}</div></section>
 <section aria-labelledby="measures-h"><h2 id="measures-h">The same measures</h2>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Seasonal zone objective</th><th>Whittaker objective</th><th>Exact zone agreement</th><th>Mean biome agreement</th><th>Land outside diagram</th><th>Med. dry</th><th>Med. Cs</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
@@ -260,7 +260,7 @@ def main():
 {sensitivity_note}
 <section aria-labelledby="people-h"><h2 id="people-h">Land and people around 200 AD</h2>
 <p>{topic_text} {overview} Select any place for its climate chart, farming readouts and the real cities whose climate feels most alike.</p>
-<p>Political reach measures how far each polity's hold extends beyond its roads, towns, forts and legions: days of travel over the terrain, month by month (snow, mud, heat and floods on land; ships by each month's winds, shut in the storm season; river boats), control fading by a factor of e per day and averaged over the year, the hardest month and what closes the roads then, and which polity's own network reaches each place first. The travel model was fitted on Han China in AD 2 and tested on the Roman empire of AD 150, on ancient sailing times and on Chinese county seats from AD 742 to 1820. De facto and de jure sets the held land against the painted claims, with a gap fill you choose (none, ½, 1 or 2 days) and the people each polity claims and holds; Trade prices freight as the Price Edict did (sea : river : road = 1 : 5 : 28) and routes shipments separately in each direction. Its Trade view selector also maps inbound market hinterlands and the countryside population each market serves; those people are not estimates of town inhabitants. Sea lanes are continuous, with widths indicating relative traffic. Every layer also comes as vector files (GeoJSON and a layered SVG in the source map's pixels) for making your own maps.</p>
+<p>Political reach now offers supply-supported scenarios: one grain budget supports requested civilians and institutional residents, and only available affiliated cohorts emit seasonal outward-and-return reach. Three listed-field-work cases also constrain the grain. These coupled scenarios remain uncalibrated for actual settlement sizes and sovereignty. Legacy views retain earlier source/reach rules and their historical Han/Roman comparisons; those tests do not validate the newer coupling. Trade routes bulk goods separately in each direction, with inbound hinterlands reporting people served rather than town inhabitants. The earlier Roman test did not establish that market access predicts town size. See the Earth evidence ledger for the distinction between measured inputs, empirical fits, literature relationships and scenario choices.</p>
 <p>The Population topic is a lab: supply a total and choose even occupation, water and terrain, or market access. Six maps then show allocated residents, local pressure, spare food support, redistribution, walking to markets and settlement attraction, with province totals. {compare}</p>
 <div class="plates">{''.join(density_plates)}</div>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Mixed food ceiling</th><th>Frontier scenario</th><th>Central scenario</th><th>Settled-core scenario</th></tr></thead><tbody>{''.join(population_rows)}</tbody></table></div>
@@ -293,6 +293,9 @@ def main():
             release['presence_mobility_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/presence_mobility.json').read_bytes()).hexdigest() for name in FITS}
         if settled_maps:
             release['settled_reach_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/settled_reach.json').read_bytes()).hexdigest() for name in FITS}
+        evidence=ROOT/'atlases/earth_evidence'
+        if evidence.exists():
+            release['earth_evidence_sha256']={str(p.relative_to(evidence)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(evidence.rglob('*')) if p.is_file()}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

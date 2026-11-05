@@ -44,6 +44,7 @@ def verify(bundle):
         checked = 0
         pages=['atlases/index.html', 'atlases/climate_accuracy/index.html']
         if 'atlases/economy_lab/index.html' in manifest: pages.append('atlases/economy_lab/index.html')
+        if 'atlases/earth_evidence/index.html' in manifest: pages.append('atlases/earth_evidence/index.html')
         for name in pages:
             parser = Links(); parser.feed(archive.read(name).decode('utf-8'))
             for link in parser.paths:

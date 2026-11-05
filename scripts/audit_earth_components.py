@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import csv
+import hashlib
 import json
 import sys
 ROOT=Path(__file__).resolve().parents[1]
@@ -12,6 +13,7 @@ def main():
     from rotclimate.evidence_audit import audit
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--out',type=Path,default=ROOT/'output/earth_components_20261105');a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True)
     spec=json.loads((ROOT/'calibration/earth_components_20261105/evidence_spec.json').read_text());result=audit(ROOT,spec)
+    result['specification_sha256']=hashlib.sha256((ROOT/'calibration/earth_components_20261105/evidence_spec.json').read_bytes()).hexdigest()
     (a.out/'ledger.json').write_text(json.dumps(result,ensure_ascii=False,indent=2)+'\n')
     with (a.out/'parameters.csv').open('w',newline='') as f:
         writer=csv.DictWriter(f,fieldnames=['component','source','pointer','value','status','note','evidence']);writer.writeheader()
