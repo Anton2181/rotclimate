@@ -14,7 +14,10 @@ def check(snapshot,*,retained):
     # Only the independently served site and launcher are needed. Copying every
     # tracked experiment/plot unnecessarily exhausted the small /tmp filesystem.
     paths=subprocess.run(['git','ls-files','-z','--','atlases','reports','docs','scripts/serve_atlases.py',
-        'start_atlases.bat','start_atlases.command','.gitattributes'],cwd=ROOT,
+        'start_atlases.bat','start_atlases.command','.gitattributes',
+        'output/settlement_integration_20261104/settlement_reach_comparison.png',
+        'output/settlement_labour_20261105/fieldwork_settlement_reach.png',
+        ':(glob)output/settlement_labour_20261105/*/field_support.npz'],cwd=ROOT,
         capture_output=True,check=True).stdout
     subprocess.run(['git','-c','core.autocrlf=true','checkout-index','-z','--stdin',
         '--prefix='+str(snapshot)+'/'],input=paths,cwd=ROOT,capture_output=True,check=True)
@@ -25,6 +28,10 @@ def check(snapshot,*,retained):
             relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
             assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
             assets.append(dict(file=str(relative),sha256=actual))
+    for path in (ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz'):
+        relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
+        assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
+        assets.append(dict(file=str(relative),sha256=actual))
     launcher=subprocess.run([sys.executable,str(snapshot/'scripts/serve_atlases.py'),'--check'],
         capture_output=True,text=True,check=True)
     if (snapshot/'atlases/release.json').exists() and ('unverified' in launcher.stdout or

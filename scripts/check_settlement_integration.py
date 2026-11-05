@@ -16,6 +16,7 @@ def main():
         for mode,p in manifest['packets'].items():
             for options in p['options'].values():
                 for option in options:assert hashlib.sha256((data/option['file']).read_bytes()).hexdigest()==option['file_sha256']
+            if p.get('field_support'):assert hashlib.sha256((data.parent/p['field_support']).read_bytes()).hexdigest()==p['field_support_sha256']
             a=(data/p['payload']).read_bytes();b=(data/p['binary']).read_bytes()
             assert hashlib.sha256(a).hexdigest()==p['payload_sha256'];assert hashlib.sha256(b).hexdigest()==p['binary_sha256']
             m=json.loads(gzip.decompress(a));raw=gzip.decompress(b);size=np.prod(p['shape']);n=len(m['sites']);spec=m['specification']
@@ -47,7 +48,7 @@ def main():
                 assert np.max(need-eaten)<1e-6*max(1,need.max())
                 for key,value in [('resident_consumed_kcal',eaten.sum()),('destination_loss_kcal',loss.sum()),('destination_unused_kcal',overflow.sum())]:
                     assert np.isclose(c['ledger'][key],value,rtol=1e-9,atol=1e-3),(key,c['ledger'][key],value)
-                r=m['rural_ledger'];l=c['ledger'];independent=r['harvested_kcal']-sum([r['consumed_kcal'],r['storage_loss_kcal'],l['uncollected_kcal'],l['origin_loss_kcal'],l['transport_loss_kcal'],eaten.sum(),loss.sum(),overflow.sum()])
+                r=c.get('rural_ledger',m['rural_ledger']);l=c['ledger'];independent=r['harvested_kcal']-sum([r['consumed_kcal'],r['storage_loss_kcal'],l['uncollected_kcal'],l['origin_loss_kcal'],l['transport_loss_kcal'],eaten.sum(),loss.sum(),overflow.sum()])
                 assert abs(independent)<1e-7*max(1,r['harvested_kcal'])
                 residual_max=max(residual_max,abs(independent));ledgers+=n*12
             a=cases['joint365'];assert np.all(np.array(cases['joint1']['food_ceiling_people'])<=np.array(a['food_ceiling_people'])+1e-6)
@@ -55,6 +56,14 @@ def main():
             assert not any(cases['joint0']['institutional_active'])
             assert sum(a['institutional_active'])<sum(cases['reference']['institutional_active'])
             assert masks[1].tobytes()!=masks[0].tobytes()
+            if 'labour_specification' in m:
+                case_indices={c['id']:i for i,c in enumerate(m['cases'])}
+                for c in m['cases']:
+                    if c.get('labour_constrained'):
+                        assert not np.any(masks[case_indices[c['id']]]&~masks[1])
+                        assert np.all(np.array(c['food_ceiling_people'])<=np.array(a['food_ceiling_people'])+1e-5)
+                high=case_indices['work600_30']
+                for key in ['work600_10','work300_30']:assert not np.any(masks[case_indices[key]]&~masks[high])
             reviews.append(dict(atlas=name,climate=mode,sites=n,site_bin_ledgers=ledgers,max_joint_residual_kcal=residual_max,changed_settlements=True,changed_reach_sources=True))
     args.out.parent.mkdir(parents=True,exist_ok=True);args.out.write_text(json.dumps(dict(status='passed',reviews=reviews),indent=2)+'\n');print(json.dumps(reviews,indent=2))
 

@@ -1,3 +1,43 @@
+# Listed cereal work → food → settlements → reach — 5 November 2026
+
+* Previous integration milestone `cbed21e5` is pushed to BOTH publication refs.
+* Added three explicit work sensitivities to the SAME settlement/reach modes:
+  `work600_30`, `work600_10`, `work300_30`. Keep food-only default `joint365`;
+  no empirical worker calibration selects a new default. All earlier six cases,
+  summaries, collection assignments and masks are preserved EXACTLY.
+* `harvest/field_support.py` limits complete annual cereal activities by listed
+  total and reaping work of the SAME reference workers. Reaping is a subset,
+  not double-counted hours. Rural meals remain fixed when grain production
+  falls; a deficit cell exports nothing. The resulting single grain ledger
+  changes residents, institutional availability and same-source paired reach.
+* Reference workers = 40% of the earlier fixed rural cereal-food claim divided
+  by 2,500 kcal/day. This is an internally testable food/work allocation, NOT
+  observed/census residents. It inherits the baseline claim's dependence on
+  potential production. Future population calibration must change the rural
+  food claim AND worker anchor together. Never add these scenario people to
+  census/occupation/FORGE/pastoral totals.
+* Earth corrected: 600 h / 30 d retains 99.79% of grain and 1,062 sources;
+  600 h / 10 d retains 1,059; 300 h / 30 d retains 994 versus food-only 1,064.
+  Food-only → tighter annual-work access: 7.36 → 6.83 area-weighted bins.
+  Other climates lose 31/80/53 sources in the tighter annual-work case.
+* `scripts/extend_settlement_labour.py` reuses the frozen first-stage cases;
+  sources/inputs hashed, checkpoints reusable. Publisher now takes `--origin`
+  and publishes this extension from `output/settlement_labour_20261105`.
+  IMPORTANT: invoking publisher with no origin republishes the earlier six-case
+  version; use the extension origin for the current release.
+* New source/cell work audits, figures and methods in
+  `reports/SETTLEMENT_LABOUR_20261105.md`. Normative Columella field counts and
+  FAO simultaneous-resource budgeting motivate the mechanism, not worker shares,
+  actual deadlines, complete household work or historical productivity.
+* Existing viewer selectors expose all three work cases, their budgets/fixed
+  rural deficit, CSV fields and downloadable cell audits. Work is partial:
+  draft services, other foods, household tasks, processing, water volumes,
+  labour exchange/mobile communities and political rights remain unresolved.
+  Future utility budgets must constrain this SAME allocation and broad actor
+  scope, not create independent final map families or ecology→institutions.
+
+---
+
 # Joint food → settlement → available reach sources — 4 November 2026
 
 * Implemented the user's requested loop into the EXISTING `reach_towns` and

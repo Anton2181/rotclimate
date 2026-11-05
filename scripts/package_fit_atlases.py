@@ -138,7 +138,9 @@ Settlements and supply-supported reach share one conserved local cereal budget.
 The existing two modes compare food-capped civilian/cohort allocations against
 a transport-matched unconstrained reference and explicit legacy views. Source
 availability changes reach; no population-to-power multiplier or validated
-sovereignty is inferred. Other foods, labour and water volumes remain unbalanced.
+sovereignty is inferred. Three field-work scenarios now cap grain by annual
+and reaping work of one reference workforce, keeping rural meals fixed. Other
+foods, complete household/draft labour and water volumes remain unbalanced.
 
 Population adds six census-allocation and walking-access maps. Choose a total
 population and settlement pattern; local support caps are enforced and excess
@@ -152,7 +154,7 @@ def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, required=True)
     args = ap.parse_args()
-    files = [ROOT/'output/settlement_integration_20261104/settlement_reach_comparison.png', ROOT/'reports/SETTLEMENT_INTEGRATION_20261104.md', ROOT/'research_notes/settlement_integration_20261104.json', ROOT/'data/settlement_integration_model.json', ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
+    files = [ROOT/'reports/SETTLEMENT_LABOUR_20261105.md', ROOT/'research_notes/settlement_labour_20261105.json', ROOT/'data/settlement_labour_model.json', ROOT/'output/settlement_labour_20261105/fieldwork_settlement_reach.png', *sorted((ROOT/'output/settlement_labour_20261105').glob('*/field_support.npz')), ROOT/'output/settlement_integration_20261104/settlement_reach_comparison.png', ROOT/'reports/SETTLEMENT_INTEGRATION_20261104.md', ROOT/'research_notes/settlement_integration_20261104.json', ROOT/'data/settlement_integration_model.json', ROOT/'atlases/index.html', ROOT/'atlases/release.json', ROOT/'reports/PRESENCE_MOBILITY_20261104.md', ROOT/'reports/PRESENCE_MOBILITY_SCALE_20261104.md',
              ROOT/'research_notes/presence_mobility_scale_20261104.json',
              ROOT/'data/presence_mobility_model.json', ROOT/'research_notes/presence_mobility_20261104.json',
              ROOT/'reports/WORLD_COVERAGE_20261104.md', ROOT/'reports/PASTURE_RESOURCES_20261104.md',

@@ -145,3 +145,5 @@ Only 9–19 candidate communities and 3–4 cohorts remain with 90 origin flow-d
 Independent replay checks 268,680 site-bin food ledgers across the five constrained cases and four climate packets. Lower collection/storage cannot increase the food ceiling, removed sources cannot increase reach, unresolved affiliations create no authority, and every constrained reach mask is a subset of the matched reference.
 
 Validation: 84 targeted model tests passed. The joint annual grain residual is below 2.2×10⁻¹¹ of harvested cereal across all four packets. Browser checks cover both existing modes, every case, exact site CSV values, actor-mask readouts, share links, mobile width, legacy comparisons and optional-data/browser failures.
+
+The [5 November field-work extension](SETTLEMENT_LABOUR_20261105.md) adds three controlled annual/reaping-work cases to these same modes. The six cases described here retain their original values and masks.

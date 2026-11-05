@@ -1,0 +1,1324 @@
+{
+  "version": 1,
+  "inputs_sha256": {
+    "atlases/earth_fit/data/atlas.json": "fe4d9e5c74f7f99622c773c20982185000090460bddfa4b0f3cce44da79f2e51",
+    "atlases/earth_fit/data/winds12.npz": "bcbb6ad30c2aba2e068cd8554f944e056983857dd24e48a8bad22c77bccd8fb8",
+    "atlases/earth_fit/data/corrected/atlas.bin": "00c012d20f6b42c5b02da388fa1c5df0913c987489a49e5f1c771ffa8bee17e3",
+    "atlases/earth_fit/data/corrected/harvest.json": "c0621aa84aedccfa7f260e24f11cd17c692deab4109846337da01c03adda37b1",
+    "atlases/earth_fit/data/corrected/harvest.bin": "5d03be2368a1d5f8252bb30f026d9b0fc91ff483aab32de6d5282e805adb340e",
+    "atlases/earth_fit/data/corrected/farm_work_grid.npz": "e5eca741607ae2936405aee6ce26e8dc0eb8d740d15df35374ad8430156662d2",
+    "atlases/earth_fit/data/corrected/coverage_sources.json": "fde2cb2a2c48b3f404982f25c7819a677f10605a7a0ffa7c3ee6e5db5b5dfcf2",
+    "atlases/earth_fit/data/corrected/market_hinterlands.csv": "dc3a692e1f8bc0f3b19399866de22bf4c955ebdcd563a54becfc1d4a7c0297eb",
+    "output/settlement_integration_20261104/earth_fit_corrected/review.json": "c914f88f6198650df16f7465e9787e6692a760283776c563a973acc95413f720",
+    "output/settlement_integration_20261104/earth_fit_corrected/settled_reach.json.gz": "173201dd825243d6bbe7e96680f351b894f95db40f6d818574878a8e4b5b4072",
+    "output/settlement_integration_20261104/earth_fit_corrected/settled_reach.bin.gz": "fc99221b3b8bd529016cd27666b3c8039b635e9b60e8423a0817c07f70141359",
+    "atlases/earth_fit/data/farm_work.json": "49a24c19443300beffe3f4f20fde5f2a40388c68b254105f6ef66fab8a5bb1c8"
+  },
+  "sources_sha256": {
+    "scripts/review_settlement_integration.py": "c292e16882dce34b2d7f5e47b3ed83fa3f8207152a836db4130de9dab8525b65",
+    "polity/settlement_support.py": "82b7a99949308e60194a20eb51b4067cdc156ea2b4d03ce1a8009d7b23d941c3",
+    "data/settlement_integration_model.json": "72e13220d1cec0e85238c6153c087107d85686560f69ba93b4d1ea8fe5888fb9",
+    "polity/administrative_world.py": "c01dc77fb7bf2edca1cfaaeb26dd16dc5d7087503b151e6ae019b309b211774b",
+    "polity/economic_world.py": "943762c69d08154d4b8c890c8e95afd999ec3645ddf4cfedb192316b07f464ed",
+    "polity/administrative_hierarchy.py": "f6c13623a62c753862bbfd5b41dd6a8838f70c9bcedbb720b9d16ba719a8af78",
+    "polity/fields.py": "9c133da4b01067e706fa271974d7ff30b7cb88d68bdb75f7da3dc2b5273aea61",
+    "polity/control.py": "9f13068b710d7d879368698dea6e551960b5e39287b67cb0f2a116ceb7ad21c4",
+    "polity/seasons.py": "4483451f8226f1b11f8cff4ad0e4040823f92710039e7ca9d0b9f3e4924d2622",
+    "polity/network.py": "d73f09f3959110e41acb05195ed48cc0a6e87575a49d98619b646277630a284f",
+    "polity/transport.py": "6f60aac3b3eaaf516cade55f90dd9679b35069e80c7afb824e79c781c4e3970c",
+    "polity/settle.py": "ab7889a3c5f9bd304ec7174678b9f80262d1a2c8771f556c5c057fbd794ce8a3",
+    "polity/sustained_presence.py": "724ec1f1a31928dd09517736726d4f4705b2ab832ae119d72d376a14dad2746d",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
+    "harvest/export.py": "e702c0a5b4f8eda5a29ca31e5765f9f4541eb8b0504bcbf8ba9a03e5ab457296",
+    "population/export.py": "aa472c1a304217baad687a4c80265ff58b50ad8b6555d7fe4a0fb26e4dd746a0",
+    "scripts/land_people.py": "21d5797c04a8dddaa6251856be31445e758c5e25c069bfe2c8e15c7eb808f507",
+    "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
+    "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
+    "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f",
+    "data/source/ravages_v8/roads.png": "8ae082c0f647774647e6c33ff349c40ee26b7bae4c8a750320f8f225b6e2c8df",
+    "data/source/ravages_v8/settlements.png": "3529476dd1abe99cd490d791391b39836609ed8211ce7eebda0a2368ccd53f14",
+    "data/source/ravages_v8/borders_fill.png": "377f2477b8f5db7075a38b2274e27ff970a2805b99ba6fb3b0360c125c813289",
+    "data/source/ravages_v8/polities.json": "aefd343b790eeb5473b30f16528e618661c76ffad0fdb08145386a462a71e50d",
+    "rotclimate/geography.py": "2af647b688aecaa583a5f8b239e3ae202cce84192bf1be319824c31bd527e178",
+    "polity/trade.py": "3ce4a0b917eed98d9becb69f64fb7e4e50bf7575be274b1536fb8ebc1d02d92e",
+    "scripts/extend_settlement_labour.py": "504441b7486abdc6ae843b42bab818d05540f3c728b44d6df7b7dd40fb9d1673",
+    "harvest/field_support.py": "9e2c03aaffc2d3b896fcb04f116dd5a55ecfb5f99b9b62b0689fdbf67de0e1af",
+    "data/settlement_labour_model.json": "0b0129d06e1ca0553cdc8e35376a529b9cc012fd293b2290c237240bfea8355d",
+    "research_notes/farm_labour_20261103.json": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985",
+    "harvest/work_maps.py": "58084f3babbc765c30b1bf72be2dde0f7094402491e52d1d4efd8bf3836fb963"
+  },
+  "artifacts_sha256": {
+    "settled_reach.bin.gz": "3899673eac8ea702957445d05d62761e564d0852364fdbfd649928e27a1f9131",
+    "settled_reach.json.gz": "bccd2aed52198ec9a13a7044b3e8ff96c0b98bd156507c3979d7131b307a7256",
+    "field_support.npz": "6bd2a0d0087df709ec00a33e8f7e618fe57f115c081ae274d2ad1cd3919f91a5"
+  },
+  "shape": [
+    463,
+    1000
+  ],
+  "cell_px": 2.0,
+  "land_cells": 241889,
+  "masks_shape": [
+    9,
+    18,
+    241889
+  ],
+  "offsets": {
+    "catchments": 1852000,
+    "masks": 2778000
+  },
+  "raw_bytes": 81150036,
+  "expected_harvest_fingerprint": "2b6bf2288a1f228ec94b9f4449f003081d561c45af3fc9ad0610a03fd826bd29",
+  "summary": {
+    "atlas": "earth_fit",
+    "climate": "corrected",
+    "candidate_sites": 1085,
+    "merged_market_rows": 0,
+    "marked_sites": 151,
+    "unaffiliated_sites": 11,
+    "cases": [
+      {
+        "id": "reference",
+        "civilian_people": 3441100.216632691,
+        "institutional_people": 107400.0,
+        "viable_communities": 1085,
+        "active_sources": 1074,
+        "all_bin_any_actor_area_km2": 1532518.75,
+        "any_bin_area_km2": 2368438.25,
+        "area_weighted_access_bins": 7.396554470062256,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 28,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 33345.8828125
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 50,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 57701.78515625
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 41,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 55541.4765625
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 20,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 17990.1171875
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 467,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 746953.875
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 47,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 63928.74609375
+          }
+        ]
+      },
+      {
+        "id": "joint365",
+        "civilian_people": 790919.162776365,
+        "institutional_people": 106400.0,
+        "viable_communities": 1082,
+        "active_sources": 1064,
+        "all_bin_any_actor_area_km2": 1525330.25,
+        "any_bin_area_km2": 2355574.5,
+        "area_weighted_access_bins": 7.360326290130615,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 24,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 30907.921875
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 49,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 56929.76171875
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 40,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 54092.24609375
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 20,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 17990.1171875
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 464,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 744583.5625
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 46,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 63661.25
+          }
+        ]
+      },
+      {
+        "id": "joint90",
+        "civilian_people": 1685.1547880541136,
+        "institutional_people": 400.0,
+        "viable_communities": 9,
+        "active_sources": 4,
+        "all_bin_any_actor_area_km2": 8478.685546875,
+        "any_bin_area_km2": 20153.80859375,
+        "area_weighted_access_bins": 0.051743119955062866,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 0,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 0,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 0,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 0,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 0,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 0,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 0,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 0,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 0,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 0,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 0,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 0,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 0,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 0,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 0,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 0,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 4,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 8478.685546875
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 0,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          }
+        ]
+      },
+      {
+        "id": "joint1",
+        "civilian_people": 79101.61979606966,
+        "institutional_people": 10700.0,
+        "viable_communities": 728,
+        "active_sources": 107,
+        "all_bin_any_actor_area_km2": 257573.9375,
+        "any_bin_area_km2": 501305.65625,
+        "area_weighted_access_bins": 1.437196969985962,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 3,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 7896.283203125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 2,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 5945.9140625
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 4,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 8261.978515625
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 0,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 4,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10527.2490234375
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 4,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 9067.859375
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 0,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 0,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 0,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 1,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 2228.02490234375
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 0,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 2,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 4605.03662109375
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 0,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 0,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 2,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 5526.0439453125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 1,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 2573.402587890625
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 83,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 199750.21875
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 1,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 3264.157958984375
+          }
+        ]
+      },
+      {
+        "id": "joint0",
+        "civilian_people": 0.0,
+        "institutional_people": 0.0,
+        "viable_communities": 0,
+        "active_sources": 0,
+        "all_bin_any_actor_area_km2": 0.0,
+        "any_bin_area_km2": 0.0,
+        "area_weighted_access_bins": 0.0,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 0,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 0,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 0,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 0,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 0,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 0,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 0,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 0,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 0,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 0,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 0,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 0,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 0,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 0,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 0,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 0,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 0,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 0,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 0.0
+          }
+        ]
+      },
+      {
+        "id": "cohort25",
+        "civilian_people": 870191.4180378022,
+        "institutional_people": 26725.0,
+        "viable_communities": 1082,
+        "active_sources": 1069,
+        "all_bin_any_actor_area_km2": 1528740.0,
+        "any_bin_area_km2": 2361300.5,
+        "area_weighted_access_bins": 7.376681327819824,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 26,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 31856.01953125
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 50,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 57701.78515625
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 41,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 55541.4765625
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 20,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 17990.1171875
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 464,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 744583.5625
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 47,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 63928.74609375
+          }
+        ]
+      },
+      {
+        "id": "work600_30",
+        "civilian_people": 788180.6592804622,
+        "institutional_people": 106200.0,
+        "viable_communities": 1081,
+        "active_sources": 1062,
+        "all_bin_any_actor_area_km2": 1523931.75,
+        "any_bin_area_km2": 2353560.0,
+        "area_weighted_access_bins": 7.353743076324463,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 24,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 30907.921875
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 49,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 56929.76171875
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 40,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 54092.24609375
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 20,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 17990.1171875
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 464,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 744583.5625
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 44,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 62262.8046875
+          }
+        ]
+      },
+      {
+        "id": "work600_10",
+        "civilian_people": 785910.5655576629,
+        "institutional_people": 105900.0,
+        "viable_communities": 1081,
+        "active_sources": 1059,
+        "all_bin_any_actor_area_km2": 1520342.625,
+        "any_bin_area_km2": 2348203.0,
+        "area_weighted_access_bins": 7.335798740386963,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 24,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 30907.921875
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 49,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 56929.76171875
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 40,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 54092.24609375
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 20,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 17990.1171875
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 464,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 744583.5625
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 41,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 58673.5859375
+          }
+        ]
+      },
+      {
+        "id": "work300_30",
+        "civilian_people": 752075.694099921,
+        "institutional_people": 99400.0,
+        "viable_communities": 1041,
+        "active_sources": 994,
+        "all_bin_any_actor_area_km2": 1431888.625,
+        "any_bin_area_km2": 2192163.5,
+        "area_weighted_access_bins": 6.83189058303833,
+        "actors": [
+          {
+            "actor": "1st Prince",
+            "active_sources": 7,
+            "candidate_sources": 7,
+            "inventory_scored": true,
+            "all_bin_area_km2": 12457.30078125
+          },
+          {
+            "actor": "2nd Prince",
+            "active_sources": 5,
+            "candidate_sources": 5,
+            "inventory_scored": true,
+            "all_bin_area_km2": 10347.7880859375
+          },
+          {
+            "actor": "Anu\u0161iya Cities",
+            "active_sources": 107,
+            "candidate_sources": 107,
+            "inventory_scored": true,
+            "all_bin_area_km2": 122375.46875
+          },
+          {
+            "actor": "Av\u0101d\u0101y\u0101 Tribes",
+            "active_sources": 24,
+            "candidate_sources": 28,
+            "inventory_scored": true,
+            "all_bin_area_km2": 30907.921875
+          },
+          {
+            "actor": "Bekoni River Cities",
+            "active_sources": 62,
+            "candidate_sources": 62,
+            "inventory_scored": true,
+            "all_bin_area_km2": 90678.578125
+          },
+          {
+            "actor": "Kingdom of Ar\u01e7os",
+            "active_sources": 29,
+            "candidate_sources": 29,
+            "inventory_scored": true,
+            "all_bin_area_km2": 45657.58203125
+          },
+          {
+            "actor": "Kingdom of Kasos",
+            "active_sources": 46,
+            "candidate_sources": 50,
+            "inventory_scored": true,
+            "all_bin_area_km2": 53817.9765625
+          },
+          {
+            "actor": "Kingdom of Khurze",
+            "active_sources": 42,
+            "candidate_sources": 42,
+            "inventory_scored": true,
+            "all_bin_area_km2": 48478.1640625
+          },
+          {
+            "actor": "Kingdom of Seltar",
+            "active_sources": 19,
+            "candidate_sources": 19,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16652.625
+          },
+          {
+            "actor": "Kingdom of Tarani",
+            "active_sources": 17,
+            "candidate_sources": 41,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21914.5546875
+          },
+          {
+            "actor": "Lasiros",
+            "active_sources": 40,
+            "candidate_sources": 40,
+            "inventory_scored": true,
+            "all_bin_area_km2": 52629.46875
+          },
+          {
+            "actor": "Ol\u015bkan",
+            "active_sources": 17,
+            "candidate_sources": 17,
+            "inventory_scored": true,
+            "all_bin_area_km2": 21653.830078125
+          },
+          {
+            "actor": "Princedom of Olbi",
+            "active_sources": 19,
+            "candidate_sources": 20,
+            "inventory_scored": true,
+            "all_bin_area_km2": 16920.125
+          },
+          {
+            "actor": "Selonken",
+            "active_sources": 27,
+            "candidate_sources": 27,
+            "inventory_scored": true,
+            "all_bin_area_km2": 42972.4375
+          },
+          {
+            "actor": "Third Prince",
+            "active_sources": 8,
+            "candidate_sources": 8,
+            "inventory_scored": true,
+            "all_bin_area_km2": 13706.7548828125
+          },
+          {
+            "actor": "Tribes of the Neck",
+            "active_sources": 58,
+            "candidate_sources": 58,
+            "inventory_scored": true,
+            "all_bin_area_km2": 95077.0703125
+          },
+          {
+            "actor": "X\u0161\u0101\u00e7a",
+            "active_sources": 444,
+            "candidate_sources": 467,
+            "inventory_scored": true,
+            "all_bin_area_km2": 716157.625
+          },
+          {
+            "actor": "Yu'e\u017e Tokar",
+            "active_sources": 23,
+            "candidate_sources": 47,
+            "inventory_scored": true,
+            "all_bin_area_km2": 34490.37109375
+          }
+        ]
+      }
+    ]
+  }
+}

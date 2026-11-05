@@ -145,7 +145,7 @@ def main():
             scenarios=len(pm['specification']['presence']['scenarios']);scales=1+len(pm['specification']['mobility'].get('regional_scales',[]))
             print(f'    Sustained presence: {scenarios} food scenarios / 151 marked sites; Seasonal circuits: 4 independent landscapes / {scales} landscape tests / 2 water scenarios',flush=True)
         if (root/'atlases'/name/'data/settled_reach.json').exists():
-            print('    Settlements -> supply-supported reach: one joint food budget; matched reference + storage/collection scenarios',flush=True)
+            print('    Settlements -> supply-supported reach: one joint food budget; matched reference + storage/collection/field-work scenarios',flush=True)
         trade = metadata.get('reach', {}).get('trade', {})
         if trade.get('model'):
             layer = next((item for item in metadata.get('layers', []) if item['id'] == 'reach_trade'), {})

@@ -28,6 +28,8 @@ def main():
                     page.select_option('#variant',c['id'])
                     page.wait_for_function('(id)=>document.querySelector("#settled-months").textContent.length>0 && document.querySelector("#base").complete && new URL(document.querySelector("#base").src).pathname.includes(id)',arg=('settled_towns_' if layer=='reach_towns' else 'settled_control_')+c['id'])
                     assert page.locator('#settled-section').is_visible()
+                    assert page.locator('#settled-work-note').is_visible()==bool(c.get('labour_constrained'))
+                    if c.get('labour_constrained'):assert page.locator('#settled-field-grid').is_visible()
                     assert not page.locator('#coverage-baseline-note').is_visible()
                     assert page.locator('#settled-months tr').count()==(12 if c['food_constrained'] else 1)
                 page.select_option('#variant','legacy_0')
@@ -47,6 +49,9 @@ def main():
                     c=next(c for c in model['cases'] if c['id']==record['scenario']);t=int(record['seasonal_bin'])-1
                     assert record['site_id']==s['id'] and record['climate']==mode
                     for key in ['civilian_people','institutional_people']:assert math.isclose(float(record[key]),c[key][j],rel_tol=1e-10,abs_tol=1e-6)
+                    if c.get('labour_constrained'):
+                        assert float(record['field_hours_worker_year'])==c['hours_worker_year']
+                        assert float(record['reaping_window_days'])==c['harvest_days']
                     if c['food_constrained']:
                         for key,field in [('arrivals_kcal','monthly_arrivals_kcal'),('need_kcal','monthly_need_kcal')]:assert math.isclose(float(record[key]),c[field][j][t],rel_tol=1e-10,abs_tol=1e-6)
                         assert math.isclose(float(record['end_stock_kcal']),c['stock_path_kcal'][j][t+1],rel_tol=1e-10,abs_tol=1e-6)
@@ -61,6 +66,9 @@ def main():
                 expected=str(int(masks[1,i,index]).bit_count())+' / 12' if model['summaries'][1]['actors'][i]['inventory_scored'] else 'Unscored'
                 assert text==expected,(actor['name'],text,expected)
             assert 'settled_site='+chosen[-1]['id'] in page.url
+            if p.get('field_support'):
+                reply=page.request.head(a.base+'/atlases/'+name+'/'+p['field_support'])
+                assert reply.ok and int(reply.headers['content-length'])==(data.parent/p['field_support']).stat().st_size
             # A shared link keeps the site selection despite the default
             # climate-card selection during initialization.
             page.reload(wait_until='domcontentloaded');page.locator('#settled-readouts .readout').first.wait_for(timeout=90000)
