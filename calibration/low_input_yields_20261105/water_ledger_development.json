@@ -1,0 +1,10 @@
+{
+ "declared": "2026-11-06, before the dual ledger was run on any Broadbalk season.",
+ "status": "DEVELOPMENT diagnostic on the spent Broadbalk pool (harvest years 1879-1925 as prepared by scripts/benchmark_earth_yields.py). No fitting, no qualification, no production change. Its purpose is to test the ledger on real weather and to motivate (not select) a candidate that must later be frozen and evaluated on reserved data with matched local weather.",
+ "ledger": "harvest/soil_water_dual.py (FAO56 chapters 7-8: transpiration and soil evaporation split, one root-zone store, drainage above field capacity).",
+ "soil": "FAO56 table 19, silty clay loam (Broadbalk's Batcombe series): field capacity 0.335, wilting point 0.205 (range midpoints); evaporation layer 0.10 m, TEW 23.3 mm (eq 73), REW 9.5 mm; root zone 1.5 m (table 22, wheat 1.5-1.8 m) giving TAW 195 mm; p 0.55 (table 22).",
+ "crop": "Kcb 0.15 / 1.10 / 0.15 (initial / mid / end; FAO56 table 17, wheat); Kcmax 1.20 (eq 72, standard climate); canopy cover from eq 76 (height 1 m). Season from each year's observed plot-3 sowing and harvest dates; stage shares 0.35 / 0.30 / 0.20 / 0.15 of the season (declared assumption, not table 11). Bare ground (Kcb 0) outside the season.",
+ "weather": "Rothamsted observed monthly values as prepared: reference ET = the benchmark's existing Hargreaves monthly value spread evenly over the month's days (Hargreaves overestimates humid-climate ET; disclosed, not corrected); rain = the monthly total split equally over events every 3 days (declared; sensitivities 1 and 7 days reported). One continuous run from 1 January 1878 at half TAW, no reset at sowing.",
+ "reported": "for each harvest year: season transpiration ratio T/Tp, soil evaporation, total ET, winter drainage (October-March before harvest), spring-summer T/Tp (April-July); Pearson and Spearman correlations of each with observed plot-3 and FYM-only grain, over all 45 years together and by the benchmark's two periods. Water closure for the whole run.",
+ "script": "scripts/broadbalk_water_ledger.py"
+}
