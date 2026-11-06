@@ -16,7 +16,7 @@
     "output/settlement_labour_20261105/whittaker_fit_raw/review.json": "a3c11911462da47bbafeff6aca5c6b92513f2a73c38c8a5d5769dd1203d6b50b",
     "output/settlement_labour_20261105/whittaker_fit_raw/settled_reach.json.gz": "4ff3ec49f93b75781012a0812b3de17e919111902826340c04019b9361440dfe",
     "output/settlement_labour_20261105/whittaker_fit_raw/settled_reach.bin.gz": "12713c0126cb359212464d53f4ba88a7e122f1dacbbadbe8ee5563b1dbddd0e2",
-    "output/fertility_integration_20261106/whittaker_fit_raw_factors.npz": "5bd82d6db8541768484e85f59fcdcef00395a296329952a7a002fb53fa4b523c"
+    "output/fertility_integration_20261106/whittaker_fit_raw_factors.npz": "e314eaa2313d2b3f519874d57857b0bb2a557537a971173f48211cecb78a24b6"
   },
   "sources_sha256": {
     "scripts/review_settlement_integration.py": "c292e16882dce34b2d7f5e47b3ed83fa3f8207152a836db4130de9dab8525b65",
@@ -51,17 +51,17 @@
     "research_notes/farm_labour_20261103.json": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985",
     "harvest/work_maps.py": "58084f3babbc765c30b1bf72be2dde0f7094402491e52d1d4efd8bf3836fb963",
     "scripts/extend_settlement_fertility.py": "37439019bc9789767f0fee7ad30f00e68cbfe9f20b8d6af7f0f3e3a6f0466d0e",
-    "data/settlement_fertility_model.json": "d708be93869e51060e96b2b223e81f058f06260a8456cb3fc5e677d1dcca574f",
-    "harvest/fertility_regimes.py": "1aa26f558d312616a0f297c2f7bfee26af541af8fe453e33fc35108de240af9e",
-    "harvest/soil_fertility.py": "fa9885492c39fe9453a43059dc0857558e90af0489434109a847a08e2b43d09d",
-    "scripts/fertility_integration.py": "c1d0bb9e89edd05bcc73fd968fff169e91064050972ff52f51cbfd1141d2e75f",
+    "data/settlement_fertility_model.json": "835e32cd09844f80262840ffa0cb7da112c26e75fb54a464a82cec50f7ab0e52",
+    "harvest/fertility_regimes.py": "c08dc30c57f5e4a4c5a9d2079687f2a3a913797d287bef6b213224c9ba535c69",
+    "harvest/soil_fertility.py": "237254a2b6eda8117dea58419d2dc3bed698b2b509feaffd92c1aa7454e801ea",
+    "scripts/fertility_integration.py": "efdc671788e4ba02956a2f22e3ba164cedfa6cae9e6596a3823553b0af4a6ace",
     "output/soil_fertility_round2_20261106/selection.json": "6ecec5301505f172dfd74f468c9e5bf1297abd3bb8a89b9de9ad2f1bc6689af1",
-    "output/fertility_integration_20261106/earth_census.json": "91db03f571c27c3ef748ef0162760cd3152fd0d44ed95dd3275bca9e7b8b9fdc"
+    "output/fertility_integration_20261106/earth_census.json": "c9de0333840a7bfd7f224b7e839d7cf80201f40567d4505ad0350d11d95f3bc6"
   },
   "artifacts_sha256": {
-    "settled_reach.bin.gz": "d3fda13d6107f3444a3366c4d64dc991b0cfae8f8939aea19c32c5bf426db2db",
-    "settled_reach.json.gz": "1c86a4d00221a973742a3a092d0b29afec03ccc0aff69460ac17fc723ef37fb3",
-    "fertility_support.npz": "d03ea433de64da788157dfc85e2127666214b5772081b7ddc003a501032ccbc7"
+    "settled_reach.bin.gz": "897f01d951b10c8378c7558e580c9541a95f6e496db067703933f87056e006fd",
+    "settled_reach.json.gz": "099ebda67826a322d09d3c118003cd5eb5a5d4aabd32ef8f4bdc9faea584146a",
+    "fertility_support.npz": "b4266081f71116a344f05ff7d1f736de0f9b650d6b1ab109f463ffdc72ee2cb7"
   },
   "shape": [
     463,
@@ -70,7 +70,7 @@
   "cell_px": 2.0,
   "land_cells": 241889,
   "masks_shape": [
-    12,
+    11,
     18,
     241889
   ],
@@ -78,7 +78,7 @@
     "catchments": 1852000,
     "masks": 2778000
   },
-  "raw_bytes": 107274048,
+  "raw_bytes": 98566044,
   "expected_harvest_fingerprint": "7563afe7657586208cb2f424ba8bae460b03f407bf7f944aaa3788cc3ce13808",
   "summary": {
     "atlas": "whittaker_fit",
@@ -1331,152 +1331,14 @@
         ]
       },
       {
-        "id": "fert_transfer",
-        "civilian_people": 556536.5327012856,
-        "institutional_people": 33200.0,
-        "viable_communities": 358,
-        "active_sources": 332,
-        "all_bin_any_actor_area_km2": 635508.625,
-        "any_bin_area_km2": 913608.75,
-        "area_weighted_access_bins": 3.049880266189575,
-        "actors": [
-          {
-            "actor": "1st Prince",
-            "active_sources": 0,
-            "candidate_sources": 10,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "2nd Prince",
-            "active_sources": 0,
-            "candidate_sources": 9,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Anu\u0161iya Cities",
-            "active_sources": 0,
-            "candidate_sources": 90,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Av\u0101d\u0101y\u0101 Tribes",
-            "active_sources": 1,
-            "candidate_sources": 32,
-            "inventory_scored": true,
-            "all_bin_area_km2": 1516.953125
-          },
-          {
-            "actor": "Bekoni River Cities",
-            "active_sources": 0,
-            "candidate_sources": 54,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Kingdom of Ar\u01e7os",
-            "active_sources": 4,
-            "candidate_sources": 31,
-            "inventory_scored": true,
-            "all_bin_area_km2": 3958.2998046875
-          },
-          {
-            "actor": "Kingdom of Kasos",
-            "active_sources": 15,
-            "candidate_sources": 69,
-            "inventory_scored": true,
-            "all_bin_area_km2": 34415.87890625
-          },
-          {
-            "actor": "Kingdom of Khurze",
-            "active_sources": 0,
-            "candidate_sources": 52,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Kingdom of Seltar",
-            "active_sources": 0,
-            "candidate_sources": 14,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Kingdom of Tarani",
-            "active_sources": 28,
-            "candidate_sources": 37,
-            "inventory_scored": true,
-            "all_bin_area_km2": 65208.67578125
-          },
-          {
-            "actor": "Lasiros",
-            "active_sources": 0,
-            "candidate_sources": 40,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Ol\u015bkan",
-            "active_sources": 0,
-            "candidate_sources": 26,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Princedom of Olbi",
-            "active_sources": 11,
-            "candidate_sources": 23,
-            "inventory_scored": true,
-            "all_bin_area_km2": 24660.646484375
-          },
-          {
-            "actor": "Selonken",
-            "active_sources": 0,
-            "candidate_sources": 36,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Third Prince",
-            "active_sources": 0,
-            "candidate_sources": 11,
-            "inventory_scored": true,
-            "all_bin_area_km2": 0.0
-          },
-          {
-            "actor": "Tribes of the Neck",
-            "active_sources": 14,
-            "candidate_sources": 40,
-            "inventory_scored": true,
-            "all_bin_area_km2": 21833.2890625
-          },
-          {
-            "actor": "X\u0161\u0101\u00e7a",
-            "active_sources": 236,
-            "candidate_sources": 468,
-            "inventory_scored": true,
-            "all_bin_area_km2": 440844.1875
-          },
-          {
-            "actor": "Yu'e\u017e Tokar",
-            "active_sources": 23,
-            "candidate_sources": 28,
-            "inventory_scored": true,
-            "all_bin_area_km2": 45752.390625
-          }
-        ]
-      },
-      {
         "id": "fert_bare",
-        "civilian_people": 556530.5164979417,
-        "institutional_people": 33200.0,
-        "viable_communities": 358,
-        "active_sources": 332,
-        "all_bin_any_actor_area_km2": 635508.625,
-        "any_bin_area_km2": 913608.75,
-        "area_weighted_access_bins": 3.049880266189575,
+        "civilian_people": 556476.8216737256,
+        "institutional_people": 33300.0,
+        "viable_communities": 359,
+        "active_sources": 333,
+        "all_bin_any_actor_area_km2": 637025.5625,
+        "any_bin_area_km2": 916239.75,
+        "area_weighted_access_bins": 3.0581488609313965,
         "actors": [
           {
             "actor": "1st Prince",
@@ -1543,10 +1405,10 @@
           },
           {
             "actor": "Kingdom of Tarani",
-            "active_sources": 28,
+            "active_sources": 29,
             "candidate_sources": 37,
             "inventory_scored": true,
-            "all_bin_area_km2": 65208.67578125
+            "all_bin_area_km2": 66725.625
           },
           {
             "actor": "Lasiros",
@@ -1608,9 +1470,9 @@
       },
       {
         "id": "fert_legume",
-        "civilian_people": 1646206.8726170175,
+        "civilian_people": 1646402.4833714112,
         "institutional_people": 71700.0,
-        "viable_communities": 741,
+        "viable_communities": 742,
         "active_sources": 717,
         "all_bin_any_actor_area_km2": 1192880.5,
         "any_bin_area_km2": 1704879.25,
