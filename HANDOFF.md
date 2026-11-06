@@ -12,6 +12,20 @@
   earth_fit drops tier twins (511-file cap). Smoke passes all three.
 * Report: reports/FERTILITY_INTEGRATION_20261106.md.
 
+# Atlas core view + evidence badges — PUBLISHED (3 atlases + hosted v26 / v17 / v28) — 6 November 2026
+
+* atlas/evidence.js: tier + Earth test for every layer id (fallback by topic) and for the settlement /
+  supply options (reach_defacto, reach_towns). Tiers: earth / partial / scenario (core view) and
+  experimental / diagnostic (behind the "Experimental & diagnostics" switch). Sources: evidence_spec.json
+  + reports (R43, POLITY_V3 / STRENGTH / SEASONS, FORAGING_EARTH, LANGUAGE_AREAS, FERTILITY_INTEGRATION).
+  Painted-world atlases (no corrected climate / physics_profile) mark climate "partly tested".
+* index.html: CSS-drawn badges (shape, not colour), topic names carry their best tier, legend ends with
+  "Evidence: <tier>. <test>", minor sensitivities hidden from the option list (core: fert_bare default,
+  fert_legume, joint365, legacy_0 = the only option scored on Earth as a control map, 0.81 / 0.80).
+  Deep links to hidden modes turn the switch on; #all=1 and localStorage rotclimate-all keep it.
+* Earth-fit core view: 56 of 82 layers, 11 of 15 topics. Smoke test records the core view, then checks
+  every layer with the switch on. Update evidence.js when a layer's test status changes.
+
 # Fertility integration (AD 200 N 27.5) — COMPUTED, NOT PUBLISHED, default undecided — 6 November 2026
 
 * harvest/fertility_regimes.py (vectorised emulator, validated within 4 %, bare-fallow 19 % low),
