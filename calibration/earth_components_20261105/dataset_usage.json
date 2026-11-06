@@ -1,87 +1,88 @@
 {
-  "version": 1,
-  "date": "2026-11-05",
-  "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
-  "datasets": [
-    {
-      "id": "climate_dev49",
-      "status": "development",
-      "evidence": "reports/R43_20261103.md"
-    },
-    {
-      "id": "climate_sealed_a_through_e",
-      "status": "spent_evaluation",
-      "evidence": "reports/R43_20261103.md",
-      "note": "Do not recover unseen status by choosing a different component or subregion."
-    },
-    {
-      "id": "climate_reserved_f",
-      "status": "reserved_unscored_per_existing_protocol",
-      "evidence": "reports/R43_20261103.md",
-      "note": "This audit does not open, run or change the reserved benchmark."
-    },
-    {
-      "id": "hyde_0_200",
-      "status": "development_and_historical_analogue",
-      "evidence": "reports/POPULATION_20261023.md",
-      "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
-    },
-    {
-      "id": "han_ad2",
-      "status": "used_for_fitting_and_evaluation",
-      "evidence": "reports/POPULATION_20261023.md",
-      "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
-    },
-    {
-      "id": "roman_town_areas",
-      "status": "spent_evaluation",
-      "evidence": "reports/POLITY_V3_20261025.md",
-      "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
-    },
-    {
-      "id": "binford_foragers",
-      "status": "development_and_spent_transfer_evaluation",
-      "evidence": "reports/FORAGING_EARTH_20261031.md",
-      "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
-    },
-    {
-      "id": "sacks_cereal_calendar_pool",
-      "status": "spent_evaluation",
-      "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
-      "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
-    },
-    {
-      "id": "vdsa_8224522_reaping",
-      "status": "development_and_spent_flawed_evaluation",
-      "evidence": "output/earth_components_20261105/reaping/evaluation.json",
-      "training_cases": 603,
-      "training_districts": 8,
-      "evaluation_cases": 1635,
-      "evaluation_districts": 5,
-      "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
-      "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
-      "restricted_diagnostic_cases": 1606,
-      "restricted_diagnostic_districts": 4
-    },
-    {
-      "id": "era_broadbalk_1852_1925",
-      "status": "development_and_spent_temporal_evaluation",
-      "training_years": 20,
-      "evaluation_years": 25,
-      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-      "note": "One physical site/primary plot; 1879–1900 training,1901–1925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
-    },
-    {
-      "id": "era_woburn_wheat_barley_1877_1926",
-      "status": "reserved_unscored",
-      "evidence": "calibration/low_input_yields_20261105/sources.json",
-      "note": "Archives downloaded and checksummed; yield targets not opened/scored. Await observed local weather; Rothamsted station not silently substituted."
-    },
-    {
-      "id": "era_hoosfield_published_aggregate_means",
-      "status": "source_discovery_exposure",
-      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-      "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
-    }
-  ]
+ "version": 1,
+ "date": "2026-11-06",
+ "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
+ "datasets": [
+  {
+   "id": "climate_dev49",
+   "status": "development",
+   "evidence": "reports/R43_20261103.md"
+  },
+  {
+   "id": "climate_sealed_a_through_e",
+   "status": "spent_evaluation",
+   "evidence": "reports/R43_20261103.md",
+   "note": "Do not recover unseen status by choosing a different component or subregion."
+  },
+  {
+   "id": "climate_reserved_f",
+   "status": "reserved_unscored_per_existing_protocol",
+   "evidence": "reports/R43_20261103.md",
+   "note": "This audit does not open, run or change the reserved benchmark."
+  },
+  {
+   "id": "hyde_0_200",
+   "status": "development_and_historical_analogue",
+   "evidence": "reports/POPULATION_20261023.md",
+   "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
+  },
+  {
+   "id": "han_ad2",
+   "status": "used_for_fitting_and_evaluation",
+   "evidence": "reports/POPULATION_20261023.md",
+   "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
+  },
+  {
+   "id": "roman_town_areas",
+   "status": "spent_evaluation",
+   "evidence": "reports/POLITY_V3_20261025.md",
+   "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
+  },
+  {
+   "id": "binford_foragers",
+   "status": "development_and_spent_transfer_evaluation",
+   "evidence": "reports/FORAGING_EARTH_20261031.md",
+   "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
+  },
+  {
+   "id": "sacks_cereal_calendar_pool",
+   "status": "spent_evaluation",
+   "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
+   "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
+  },
+  {
+   "id": "vdsa_8224522_reaping",
+   "status": "development_and_spent_flawed_evaluation",
+   "evidence": "output/earth_components_20261105/reaping/evaluation.json",
+   "training_cases": 603,
+   "training_districts": 8,
+   "evaluation_cases": 1635,
+   "evaluation_districts": 5,
+   "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
+   "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
+   "restricted_diagnostic_cases": 1606,
+   "restricted_diagnostic_districts": 4
+  },
+  {
+   "id": "era_broadbalk_1852_1925",
+   "status": "development_and_spent_temporal_evaluation",
+   "training_years": 20,
+   "evaluation_years": 25,
+   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+   "note": "One physical site/primary plot; 1879–1900 training,1901–1925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
+  },
+  {
+   "id": "era_woburn_wheat_barley_1877_1926",
+   "status": "spent_evaluation",
+   "evidence": "output/woburn_yields_20261106/evaluation.json; reports/CROP_WATER_WOBURN_20261106.md",
+   "note": "Weather is Rothamsted's record as a declared regional proxy (Woburn's own station starts 1928). Other Woburn strata and years were read in the same files and cannot be called unseen for this crop process.",
+   "scored": "unmanured (all nil, no lime) and FYM-only strata, wheat 1879-1900 and barley 1879-1899, 2026-11-06, under the frozen calibration/low_input_yields_20261105/woburn_plan.json and its pre-scoring amendment"
+  },
+  {
+   "id": "era_hoosfield_published_aggregate_means",
+   "status": "source_discovery_exposure",
+   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+   "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
+  }
+ ]
 }
