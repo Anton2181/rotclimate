@@ -262,5 +262,41 @@ def maps():
     (OUT / "map_factors.json").write_text(json.dumps(summary, indent=1))
 
 
-if __name__ == "__main__":
+if __name__ == "__main__" and sys.argv[1] in ("earth", "maps"):
     {"earth": earth, "maps": maps}[sys.argv[1]]()
+
+
+def earth_figure():
+    import matplotlib
+    matplotlib.use("Agg")
+    import matplotlib.pyplot as plt
+    d = json.loads((OUT / "earth_census.json").read_text())
+    names = list(d["regions"])
+    short = [n.split(" (")[0] for n in names]
+    cases = [("existing", "#888888", "previous chain"), ("transfer", "#2f7d32", f"three-field + {d['transfer_t_ha']:.1f} t/ha transfer (anchored on NCP)"),
+             ("bare", "#b5651d", "three-field, bare fallow"), ("legume", "#2b5d8a", "three-field, clover third")]
+    fig, axs = plt.subplots(1, 2, figsize=(15, 5.6), constrained_layout=True, gridspec_kw=dict(width_ratios=[1.4, 1]))
+    ax = axs[0]
+    y = np.arange(len(names))
+    for j, (k, col, lab) in enumerate(cases):
+        lo = [d["regions"][n]["ratio"][k][0] for n in names]; hi = [d["regions"][n]["ratio"][k][1] for n in names]
+        yy = y + (j - 1.5) * 0.18
+        ax.hlines(yy, lo, hi, color=col, lw=3)
+        ax.plot(lo, yy, "|", color=col, ms=8); ax.plot(hi, yy, "|", color=col, ms=8, label=lab)
+    ax.axvline(1, color="#444", lw=0.8, ls="--")
+    ax.set_xscale("log"); ax.set_yticks(y); ax.set_yticklabels(short, fontsize=9); ax.invert_yaxis()
+    ax.set_xlabel("historical population / modelled capacity (1 = capacity met; below 1 = capacity not reached)")
+    ax.set_title("Census regions around AD 1-200 (North China Plain is the anchor)", fontsize=10); ax.legend(fontsize=8, loc="upper left")
+    ax = axs[1]
+    for j, (k, col, lab) in enumerate(cases[1:]):
+        f = [d["regions"][n]["mean_F"][k] for n in names]
+        ax.barh(y + (j - 1) * 0.27, f, height=0.25, color=col, label=lab)
+    ax.axvline(1, color="#444", lw=0.8, ls="--")
+    ax.set_yticks(y); ax.set_yticklabels(short, fontsize=9); ax.invert_yaxis(); ax.set_xscale("log")
+    ax.set_xlabel("capacity-weighted fertility factor (x previous chain)"); ax.set_title("Grain factor by region and regime", fontsize=10)
+    fig.suptitle("Soil-fertility integration on Earth (WorldClim, AD 200 N input 27.5): the transfer level that keeps the Han census fit, and what the regimes do elsewhere", fontsize=11)
+    fig.savefig(OUT / "earth_census.png", dpi=95)
+
+
+if __name__ == "__main__" and sys.argv[1] == "earth_figure":
+    earth_figure()
