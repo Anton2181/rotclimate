@@ -4,11 +4,11 @@ Declared integration (reports/FERTILITY_INTEGRATION_20261106.md):
   * AD 200 non-fertilizer N input 27.5 kg N/ha/yr in model units: the middle of the
     20-35 band (the fitted 52.4 scaled by the literature pre-industrial/1850-1925 ratio
     0.4-0.65), chosen by the user.
-  * The existing chain's grain = A0 x arable x 0.6 fields x 0.68 sown share. Its A0
-    level is the industrial-era continuous unmanured floor (round 2: 0.87 t/ha at
-    Rothamsted vs A0 0.89). Per cell, the fertility factor
-        F = Y_land(regime, I = 27.5) / (0.68 x Y_crop(continuous unmanured, I = 52.4))
-    multiplies that grain; 0.68 sown share = the three-field rotation (2 crops in 3 years).
+  * The existing chain's grain = A0 x arable x 0.6 fields x 0.68 sown share (0.68 = the
+    three-field rotation, 2 crops in 3 years). Per cell, the fertility factor
+        F = Y_land(regime, I = 27.5) / (0.68 x A0)
+    multiplies that grain: the regime's absolute equilibrium grain per field hectare
+    (min(kappa x A0, N-limited), as validated) against the previous chain's.
   * Regimes on the three-field rotation: 'bare' (fallow third, no transfer), 'legume'
     (clover third), and 'transfer' (bare third + m t FYM-equivalent/ha before each crop:
     the nutrients carried from pasture, stalls and households). m is calibrated so the
@@ -75,11 +75,16 @@ def yields(T, P, PET, hb, A0, crop, regime, manure=0.0, input_n=I_AD200, years=3
 
 
 def factor(T, P, PET, hb, A0, crop, regime_name, manure=0.0, ref=None):
+    """F = Y_land(regime, I = 27.5) / (0.68 x A0): the regime's absolute equilibrium grain per
+    field hectare against the previous chain's A0 x sown share. (A first pass divided by the
+    model's own continuous-unmanured reference instead; that ratio explodes where the
+    N-limited reference approaches zero, so it was replaced before publication.) The
+    reference is still computed and stored as a diagnostic."""
     _, i_ref = params()
     if ref is None:
         ref, _ = yields(T, P, PET, hb, A0, crop, ["crop"], 0.0, i_ref)
     _, land = yields(T, P, PET, hb, A0, crop, REGIMES[regime_name], manure, I_AD200)
-    F = np.divide(land, SOWN * ref, out=np.ones_like(land), where=ref > 1e-6)
+    F = np.divide(land, SOWN * A0, out=np.ones_like(land), where=A0 > 1e-6)
     return F, ref
 
 
