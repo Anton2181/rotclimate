@@ -1,3 +1,30 @@
+# Soil fertility ROUND 2 — credible equilibrium, QUALIFIES blind on Broadbalk 1926-67 — 6 November 2026
+
+* Plan 517f33da (before fit/test read) -> amendment d5b57277 (crop N-demand curve; the
+  only one; superseded fit A kept) -> selection 4d282c4c -> single eval 47a05f5c.
+* Changes (options in harvest/soil_fertility.py; defaults reproduce round 1 bit-for-bit):
+  measured start SOC (Broadbalk 28.8 t C 1843 e-RA; Hoosfield 33.8 RothC), I = F + measured
+  wet deposition (Goulding 1998: 4 kg 1855 -> 18 kg 1980), thermal uptake in vegetated months
+  capped by demand curve, fitted FYM humification (returned RothC 0.02), clover residues cut.
+* Fit (spent data + Broadbalk SOC <=1914 + rwf3 aggregate): F 43.4, uptake 0.15, kappa 2.26,
+  M0_woburn 1.55. FYM SOC matched; fallow +0.29 vs +0.14 long run; plot-3 SOC stays ~30 vs 24.
+* Broadbalk 1926-67 (strips 3/21/22, 5 sections with fallow 1-in-5): T1 level 0.154 vs existing
+  0.219, bias -0.065 (round 1 0.259, FAILS); T2 manure 0.137 vs null 0.322 r .15; T3 fallow
+  0.135 vs 0.282 (obs x1.91, model x1.48; weeds not modelled). QUALIFIES. Now SPENT. Note 13
+  of that dataset quoted one strip-14 value (not a target).
+* Equilibrium (scripts/soil_fertility_regimes_r2.py sweep): at fitted ~52 kg input unmanured
+  continuous 0.87 t/ha (Broadbalk plateau). Bare fallow ~no per-crop gain in equilibrium,
+  halves per-land output. Clover rotation and FYM dominate.
+* AD200 HINGE: non-fertilizer N input. Fitted value lumps real inputs + model loss error.
+  Literature ratio pre-industrial / 1850-1925 ~0.4-0.65 -> 20-35 model kg -> per-land yield:
+  unmanured 0.2-0.5, bare-fallow systems 0.07-0.25, W/B/clover 0.8-1.0, 5 t FYM 0.8-1.1,
+  10 t FYM 1.4-1.7. Needs a decision or a further constraint.
+* Next: integration step (declared): AD200 input; regime as land shares (crop / fallow /
+  legume / pasture -> manure); per-cell equilibrium grain per land ha from climate + soil
+  class (replace Rothamsted soil); feed shared grain -> residents -> reach. Check kappa
+  outside England.
+* Report: reports/SOIL_FERTILITY_ROUND2_20261106.md.
+
 # Soil-fertility state (RothC + N) — QUALIFIES blind on Exhaustion Land — 6 November 2026
 
 * NEW `harvest/soil_fertility.py`: RothC-26.3 carbon (published constants, from
