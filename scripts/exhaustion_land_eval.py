@@ -181,7 +181,7 @@ def main():
     check_frozen(selection)
     params = Params(**selection["parameters"])
     pred, cal = predict(params)
-    ptxt = json.dumps({str(k): v for k, v in pred.items()}, indent=1, sort_keys=True)
+    ptxt = json.dumps({str(k): {str(y): v for y, v in d.items()} for k, d in pred.items()}, indent=1, sort_keys=True)
     (a.out / "predictions.json").write_text(ptxt)
     phash = hashlib.sha256(ptxt.encode()).hexdigest()
     print("predictions written", phash[:16], flush=True)
