@@ -52,7 +52,7 @@ def capacity(year, weather, crop_name):
 def stratum(row):
     lv = {f: row[f + "_factor_level"].strip() for f in FACTORS}
     lime = row["lime_factor_level"].strip()
-    if lime != "nil":
+    if lime not in ("nil", "L0"):        # woburn_amendment.json: both name the no-lime level
         return None
     if all(v == "nil" for v in lv.values()):
         return "unmanured"
@@ -71,7 +71,8 @@ def read_cases(crop, zipname, prefix):
             continue
         try:
             year = int(r["harvest_year"]); grain = float(r["grain"]); area = float(r["area_ha"])
-            sow = date.fromisoformat(r["sow_date"])
+            dd, mm, yy = (int(x) for x in r["sow_date"].strip().split("/"))   # DD/MM/YYYY (amendment)
+            sow = date(yy, mm, dd)
         except ValueError:
             continue
         if not (1879 <= year <= 1926) or not math.isfinite(grain) or grain < 0 or area <= 0:
