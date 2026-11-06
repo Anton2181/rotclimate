@@ -1,3 +1,44 @@
+# Crop-water ledger + Woburn reserved site — 6 November 2026
+
+* User priority: the Earth-calibrated basis for the control map (grain ->
+  residents -> institutions -> reach). Post every figure as it is made.
+* NEW `harvest/soil_water_dual.py`: FAO-56 dual coefficient (Allen et al 1998
+  ch7 eq69-79 evaporation layer, ch8 eq81-88 root zone). ONE store; T and E are
+  each debited once; drainage above field capacity; storage carries across seasons
+  (no free sowing refill). 6 tests in `tests/test_soil_water_dual.py` (closure,
+  bounds, bare soil <= TEW, no double spending, reduces to `soil_water_year`,
+  stage-1 rewetting). Production still uses `harvest/soil_water.py`.
+* Broadbalk DEVELOPMENT diagnostic (spent pool; declared in
+  `calibration/low_input_yields_20261105/water_ledger_development.json`;
+  `scripts/broadbalk_water_ledger.py`; output/broadbalk_water_20261106).
+  Closure 1e-12 mm over 48 yr. Wetter = LOWER yield on every measure (winter
+  drainage r -0.24 plot3 / -0.40 FYM; season E -0.43/-0.35; T ratio -0.19).
+  Water is not limiting; explains old r -0.38. Drainage only ~94 mm/yr (Hargreaves
+  high in humid climate, July 146 mm); drain gauges DR20/40/60 need an e-RA
+  account -> not used. Leaching fit k=0.109/100 mm, LOO skill ~0.
+* Woburn: own met starts 1928 (station WMS), trials end 1926 -> matched weather
+  will never exist. Frozen `woburn_plan.json` BEFORE reading yields declared
+  Rothamsted (~40 km) as a regional proxy (not silent). Amendment
+  `woburn_amendment.json` before scoring (lime coded L0, DD/MM/YYYY sow dates;
+  the first run selected 0 rows, nothing seen).
+* RESULT (`scripts/woburn_yields.py`, output/woburn_yields_20261106): wheat
+  unmanured n21, obs 0.98 t/ha: A0 logMAE .150 r -.23 skill -.12; A (x0.933) .154
+  skill -.16; B (A + leaching) .152 r -.11 skill -.18. NOT QUALIFIED; no
+  production change. Barley A0 r +.14 skill +.12, A/B worse.
+* KEY FINDING: unmanured plots RUN DOWN, manured hold. Barley unfertilised
+  1880-84 1.87 -> 1895-99 0.84 t/ha (-55 %), FYM 2.64 -> 2.23 (-16 %); wheat
+  1.21 -> 0.77 (-36 %) vs FYM 1.80 -> 1.60. Run-down floor at both sites
+  0.7-0.9 t/ha (Broadbalk 1901-25 0.69) ~ model level. Missing component is a
+  SOIL-FERTILITY (nitrogen) state driven by land-use history, not water.
+* Woburn strata now SPENT (dataset_usage.json `era_woburn_wheat_barley_1877_1926`).
+  Broadbalk already spent. Reserved climate f untouched.
+* Next: literature-grounded soil-N state (run-down under continuous cropping,
+  recovery under fallow/manure/legume rotation), developed on spent Broadbalk +
+  Woburn, evaluated on a genuinely separate record (e.g. other Rothamsted
+  classicals' early years, Hoosfield aggregates already seen -> not usable as
+  blind). Any qualifier feeds the shared grain -> residents -> reach chain.
+* Report: reports/CROP_WATER_WOBURN_20261106.md.
+
 # Historical wheat yield benchmark — 5 November 2026
 
 * Latest user priority remains Earth calibration of all components, with utility
