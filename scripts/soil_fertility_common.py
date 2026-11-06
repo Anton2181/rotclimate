@@ -213,17 +213,29 @@ def months_between(a, b):
     return out
 
 
+CURVES = dict(wheat=(0.02, 0.05, 0.07, 0.09, 0.12, 0.20, 0.40, 0.70, 0.95, 1.00),     # Oct..Jul (amendment_round2.json)
+              spring=(0.15, 0.55, 0.90, 1.00),                                       # Apr..Jul
+              potato=(0.10, 0.40, 0.75, 0.95, 1.00))                                 # May..Sep
+
+
+def _curve(months, shares):
+    return {m: s for m, s in zip(months, shares)}
+
+
 def season(kind, year):
     """Season objects with the plan's uptake and vegetated months."""
     if kind == "wheat":
+        veg = months_between((year - 1, 10), (year, 7))
         return Season("cereal", (year, 8), frozenset(months_between((year, 3), (year, 7))),
-                      frozenset(months_between((year - 1, 10), (year, 7))), potential(year, "wheat")[0], f"wheat {year}")
+                      frozenset(veg), potential(year, "wheat")[0], f"wheat {year}", _curve(veg, CURVES["wheat"]))
     if kind in ("barley", "oats"):
-        return Season("cereal", (year, 8), frozenset(months_between((year, 4), (year, 7))),
-                      frozenset(months_between((year, 4), (year, 7))), potential(year, "barley")[0], f"{kind} {year}")
+        veg = months_between((year, 4), (year, 7))
+        return Season("cereal", (year, 8), frozenset(veg), frozenset(veg), potential(year, "barley")[0], f"{kind} {year}",
+                      _curve(veg, CURVES["spring"]))
     if kind == "potato":
+        veg = months_between((year, 5), (year, 9))
         return Season("potato", (year, 9), frozenset(months_between((year, 4), (year, 9))),
-                      frozenset(months_between((year, 5), (year, 9))), None, f"potato {year}")
+                      frozenset(veg), None, f"potato {year}", _curve(veg, CURVES["potato"]))
     if kind == "clover":
         return Season("clover", (year, 12), frozenset(), frozenset(months_between((year, 1), (year, 12))), None, f"clover {year}")
     return Season("fallow", (year, 12), frozenset(), frozenset(), None, f"{kind} {year}")

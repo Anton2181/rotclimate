@@ -38,7 +38,8 @@ RAPE_CAKE_CN = 8.0
 BOUNDS = dict(input_n=(0.0, 60.0), uptake_rate=(0.05, 0.9), kappa=(1.0, 5.0), fym_hum=(0.02, 0.6), prior_manure=(0.0, 3.0))
 PRODUCERS = ("harvest/soil_fertility.py", "scripts/soil_fertility_common.py", "scripts/soil_fertility_round2.py",
              "harvest/soil_water_dual.py", "calibration/soil_fertility_20261106/plan_round2.json",
-             "calibration/soil_fertility_20261106/amendment_evaporation.json")
+             "calibration/soil_fertility_20261106/amendment_evaporation.json",
+             "calibration/soil_fertility_20261106/amendment_round2.json")
 SOC = {"3": {1865: 27.072, 1881: 26.784, 1893: 22.464, 1914: 24.192},       # e-RA 01-BKSOC1843, t C/ha 0-23 cm
        "2.2": {1865: 50.71, 1881: 53.038, 1893: 58.098, 1914: 71.176},
        "2.1": {1893: 44.64, 1914: 58.594}}
@@ -47,7 +48,7 @@ RWF = ((1857, 1866, 0.6), (1867, 1925, 0.14))                                 # 
 
 def params_from(v, names):
     d = dict(zip(names, v))
-    return Params(thermal_uptake=True, wet_deposition=True, **d)
+    return Params(thermal_uptake=True, wet_deposition=True, demand_curve=True, **d)
 
 
 def fym_events(first_harvest, last_harvest, month=10, tonnes=35.0, n=225.0, skip=()):

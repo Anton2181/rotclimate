@@ -203,6 +203,7 @@ class Season:
     vegetated: frozenset = frozenset()
     potential_t_ha: float | None = None     # cereals: kappa x A0 is applied by the simulator
     label: str = ''
+    curve: dict | None = None     # (year, month) -> cumulative share of season N demand (round-2 amendment)
 
 
 @dataclass
@@ -215,6 +216,7 @@ class Params:
     fym_hum: float | None = None  # FYM humified share (None: RothC 49/49/2)
     thermal_uptake: bool = False  # uptake in every vegetated month at r_u x min(1, T/10)
     wet_deposition: bool = False  # add Rothamsted's measured wet deposition W(year) to input_n
+    demand_curve: bool = False    # cap cumulative uptake by the season's demand curve (amendment_round2.json)
 
 
 def wet_deposition(year):
@@ -294,6 +296,8 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
             else:
                 continue
             got = crop_n.get(s.harvest, 0.0)
+            if params.demand_curve and s.curve is not None:
+                demand = demand * s.curve.get(key, 0.0)
             u = max(0.0, min(demand - got, g * params.uptake_rate * mineral))
             mineral -= u
             crop_n[s.harvest] = got + u
