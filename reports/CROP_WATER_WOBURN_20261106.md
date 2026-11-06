@@ -132,7 +132,15 @@ with complete weather, and 20 barley years.
   | wheat, manure only | 1.80 | 1.60 | −11 % |
 
   The same weather fell on both columns, so this is soil nitrogen being
-  mined where nothing is returned, a state the model does not have. Weather
+  mined where nothing is returned, a state the model does not have.
+
+  *Caveat found afterwards:* the "unmanured" stratum also takes in plots
+  10a and 11a in the years after their 1877–81 manure stopped. On the two
+  plots that were never manured (1 and 7), the run-down from 1880–84 to
+  1895–1900 is steeper: wheat −42 % and −44 %, barley −70 % and −51 %.
+  Meanwhile the plots manured only in 1877–81 still out-yielded them in the
+  late 1890s (wheat 0.95 against 0.65–0.70; barley 0.96–1.31 against
+  0.56–0.78). Old manure is remembered for at least 15 years. Weather
   explains little of the year-to-year scatter at either site.
 - **Once run down, unfertilised cereals on two different English soils settle
   at 0.7–0.9 t/ha.** Broadbalk's 1901–25 evaluation mean is 0.69 (after
