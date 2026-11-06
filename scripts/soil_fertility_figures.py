@@ -61,11 +61,13 @@ def evaluation(out):
             col, lab = style[pl]
             ys = sorted(y for (q, y) in obs if q == pl)
             ax.plot(ys, [obs[(pl, y)][0] for y in ys], "o", color=col, ms=4, label=f"plot {lab}, observed")
-            yp = sorted(int(y) for y in pred[str(pl)] if y.isdigit() and pred[str(pl)][y]["grain"] is not None and int(y) <= 1935)
-            ax.plot([y for y in yp if y <= 1922], [pred[str(pl)][str(y)]["grain"] for y in yp if y <= 1922], "-", color=col, lw=1.6)
+            span = list(range(1902, 1923))
+            line = [pred[str(pl)].get(str(y), {}).get("grain") for y in span]
+            ax.plot(span, [np.nan if v is None else v for v in line], "-", color=col, lw=1.6)
+            ax.plot([1935], [pred[str(pl)]["1935"]["grain"]], "x", color=col, ms=7, mew=1.8)
         if row == 1:
             ax.axvspan(1905, 1911.9, color="#cfe3cf", alpha=0.5, lw=0); ax.text(1906, ax.get_ylim()[1] * 0.92 if ax.get_ylim()[1] else 2, "clover", fontsize=8)
-        ax.set_title(title + "\n(points observed, lines the frozen model)", fontsize=9.5); ax.set_ylabel("grain, t/ha"); ax.legend(fontsize=7, ncol=2)
+        ax.set_title(title + "\n(points observed; lines and x the frozen model; 1923-34 not recorded)", fontsize=9.5); ax.set_ylabel("grain, t/ha"); ax.legend(fontsize=7, ncol=2)
     for ax, key, title in ((axs[0, 1], "M1_manure_memory", "M1 manure memory: plots 2-4 relative to plot 1"),
                            (axs[1, 1], "M2_legume_memory", "M2 legume memory: plots 5-6 relative to plot 1, 1912-1935")):
         m = ev[key]

@@ -187,7 +187,7 @@ def main():
     print("predictions written", phash[:16], flush=True)
     obs = observed()                                       # the single read of Phase II yields
     result = score(pred, obs)
-    result.update(selection=str((a.out / "selection.json").relative_to(ROOT)), predictions_sha256=phash,
+    result.update(selection=str(a.out / "selection.json"), predictions_sha256=phash,
                   parameters=selection["parameters"])
     (a.out / "evaluation.json").write_text(json.dumps(result, indent=1))
     for k in ("M1_manure_memory", "M2_legume_memory", "M2_reported_PK_plots", "reported_mineral_N_residue_1902_04"):
