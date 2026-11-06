@@ -9,6 +9,19 @@ ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
 
 
+EARTH_CONTROL=ROOT/'output/earth_control_20261106/results.json'
+
+
+def earth_test(case):
+    """One sentence with the end-to-end Earth control result of a food case, if that test has run."""
+    if not EARTH_CONTROL.exists():return ''
+    r=json.loads(EARTH_CONTROL.read_text())['regions']
+    if case not in r['rome']['cases']:return ''
+    a,b=r['rome']['cases'],r['han']['cases']
+    return (f" Earth control test (reports/EARTH_CONTROL_20261106.md): staffs {a[case]['staffed_share']:.0%} of Rome's towns and {b[case]['staffed_share']:.0%} of Han's county seats;"
+            f" extent balanced accuracy {a[case]['all']['ba']:.2f} (Rome) and {b[case]['all']['ba']:.2f} (Han) against {a['legacy_0']['all']['ba']:.2f} and {b['legacy_0']['all']['ba']:.2f} for the transport-only map.")
+
+
 def main():
     import numpy as np
     from PIL import Image,ImageDraw
@@ -36,14 +49,17 @@ def main():
             if len(raw)!=review['raw_bytes']:raise ValueError('Invalid settlement grid layout')
             pop=np.array([i.bit_count() for i in range(4096)],np.uint8);colors=np.array([to_rgb(a['color']) for a in model['actors']]);options={'reach_towns':[],'reach_defacto':[]}
             for k,c in enumerate(model['cases']):
+                c=dict(c,label=c['label'].replace('; default',''))   # the default is chosen in the viewer (Earth control test)
                 case_note=note
                 if c.get('labour_constrained'):case_note+=' Listed cereal field work also limits complete cropped hectares. Rural food claims remain fixed when production falls; see the field-work summary and cell audit.'
                 if c.get('fertility_constrained'):
                     fs=c['fertility_summary'];case_note+=(f" Soil fertility: equilibrium wheat/barley grain from the Earth-tested soil-fertility state at the AD 200 non-fertilizer N input ({c['input_n_kg_ha_yr']} kg N/ha/yr), "
                         f"{fs['production_ratio']*100:.1f}% of the previous chain's cereal (cell factor median {fs['factor_median']:.2f}, 10-90% {fs['factor_p10']:.2f}-{fs['factor_p90']:.2f})."
                         +(f" Three-field rotation with {c['transfer_t_ha']:.1f} t/ha FYM-equivalent carried to each crop." if c['regime']=='transfer' else
-                          ' Three-field rotation with bare fallow and no nutrient transfer: the default, which keeps the Han AD 2 census fit and improves the 11-region Earth census check.' if c['regime']=='bare' else ' Three-field rotation with a clover third, no manure (sensitivity).')
+                          ' Three-field rotation with bare fallow and no nutrient transfer; it keeps the Han AD 2 census fit and improves the 11-region Earth census check.' if c['regime']=='bare' else ' Three-field rotation with a clover third, no manure (sensitivity).')
+
                         +' Rothamsted soil assumed everywhere; rural food claims remain fixed. See reports/FERTILITY_INTEGRATION_20261106.md.')
+                case_note+=earth_test(c['id'])
                 residents=np.array(c['civilian_people'])+np.array(c['institutional_people']);request=np.array([s['civilian_request_people'] for s in model['sites']]);retained=np.minimum(1,np.array(c['civilian_people'])/request)
                 rgb=np.zeros((size,3));rgb[:]=[.84,.89,.94];rgb[land]=[.84,.83,.78]
                 assigned=assignment>0;ratio=retained[assignment[assigned]-1]

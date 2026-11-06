@@ -12,6 +12,19 @@
   earth_fit drops tier twins (511-file cap). Smoke passes all three.
 * Report: reports/FERTILITY_INTEGRATION_20261106.md.
 
+# Earth control test — transport-only map is the DEFAULT again (frozen rule) — 6 November 2026
+
+* Plan d1935f2b (before results); scripts/earth_control_test.py runs the atlas chain on the Rome (Hanson AD 150 +
+  Itiner-e) and Han (AD 2 seats) Earth windows. Report reports/EARTH_CONTROL_20261106.md; output/earth_control_20261106.
+* BA Rome / Han: legacy_0 0.820 / 0.700; reference 0.697 / 0.641; joint365 0.698 / 0.633; legume 0.689 / 0.630;
+  bare 0.606 / 0.603 (staffs 40 % of Roman towns, 76 % of Han seats). No food case passes G2; bare also fails G1.
+* Default -> legacy_0 on Supply-supported reach and Settlements (atlas/settled-reach.js); "; default" dropped from the
+  fert_bare label; every scored case's note carries its Earth result (publisher reads results.json); badges updated.
+* Cause (post hoc): the every-month staffed-source patrol rule (no roads) loses 0.06-0.12 BA before food; bare fallow
+  breaks the fixed rural claim (0.6 x old harvest) where F < 0.6 -> 23 % rural need unmet in Rome, no surplus.
+  Next: rural claim scaled by F (one ledger); reach rule closer to transport (roads, year-round days); blind pools.
+* Date palms: September harvest (perennial, no crop-window calendar), fixed before any Rome result.
+
 # Atlas core view + evidence badges — PUBLISHED (3 atlases + hosted v26 / v17 / v28) — 6 November 2026
 
 * atlas/evidence.js: tier + Earth test for every layer id (fallback by topic) and for the settlement /

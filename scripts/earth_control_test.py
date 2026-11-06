@@ -314,7 +314,7 @@ def figure():
             img[land & ~inside & held] = [0.55, 0.62, 0.85]     # held outside the polygon
             img[land & inside & held] = [0.45, 0.62, 0.38]      # held inside
             img[land & ~band] = img[land & ~band] * 0.94
-            ax = axes[i, j]; ax.imshow(img[::-1], interpolation="nearest"); ax.set_xticks([]); ax.set_yticks([])
+            ax = axes[i, j]; ax.imshow(img, interpolation="nearest"); ax.set_xticks([]); ax.set_yticks([])
             v = res["regions"][name]["cases"][c]
             staffed = f", staffed {v['staffed_share']:.0%}" if "staffed" in v else ""
             ax.set_title(f"{name.title()} · {c}\nBA {v['all']['ba']:.3f}{staffed}", fontsize=10)
