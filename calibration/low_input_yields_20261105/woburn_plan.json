@@ -1,0 +1,16 @@
+{
+ "frozen": "2026-11-06, at commit 1bac4760's successor, before any Woburn grain, straw or %N value was read. Only the files' checksums, column names, README and treatment vocabularies had been seen.",
+ "why_now": "Woburn's own meteorological records begin in 1928 (e-RA station WMS), after the continuous wheat and barley experiments ended (1877-1926). Matched local weather will never exist, so the only possible weather is a declared regional proxy: Rothamsted's observed monthly record, about 40 km away. This weakens the test and is disclosed in every result.",
+ "targets": "Woburn Continuous Wheat (DOI 10.23637/wxw6-yield7726-01) and Continuous Barley (10.23637/wxb6-yield7726-01), harvest years 1879-1926 (weather from September 1878). Grain at field moisture, t/ha/year, as at Broadbalk.",
+ "primary_stratum": "plots and sub-plots with every factor nil (fym, rape cake, N, P, K, Na, Mg) and lime nil, area-weighted within year. FYM-only (FYM not nil, all else nil, lime nil) reported as a secondary stratum. Other strata are not scored.",
+ "dates": "sowing: the recorded Woburn sow_date; harvest is not recorded at Woburn: the same year's Broadbalk plot-3 harvest date for wheat and barley alike (declared), the Broadbalk median day of year for 1926.",
+ "candidates": {
+  "A0": "the existing production response (harvest/earth_yields.capacity: best 4-9 month window in the September-August crop year, production crop rules for wheat, and the same function with the production barley rules for barley), unscaled.",
+  "A": "A0 x 0.933, the scale frozen on Broadbalk's training years in 67b7aa1c (output/low_input_yields_20261105/selection.json). Tests whether that low-input level transfers to a different, sandier soil.",
+  "B": "A x exp(-0.109 x (D - 91.98) / 100), D the dual ledger's October-March drainage (harvest/soil_water_dual.py, run continuously from January 1878 with Woburn's crop seasons) on FAO56 table 19 sandy loam (field capacity 0.23, wilting point 0.11, REW 8 mm, Ze 0.10 m -> TEW 17.5 mm; root zone 1.5 m -> TAW 180 mm; p 0.55); 0.109 per 100 mm and 91.98 mm are Broadbalk plot 3's development fit and mean winter drainage (scripts/broadbalk_water_ledger.py, rain every 3 days). Other ledger settings as calibration/low_input_yields_20261105/water_ledger_development.json."
+ },
+ "metrics": "as the Broadbalk protocol: mean absolute log10 error (both sides floored at 0.05 t/ha), MAE and RMSE in t/ha, Pearson correlation, RMSE skill against the constant 0.8445 t/ha (Broadbalk's training mean), share within a factor of two.",
+ "qualify_if": "wheat, primary stratum, at least 20 years: MAE log10 at most 0.95 x A0's, positive Pearson correlation and positive RMSE skill against the constant. Candidates A and B are judged separately. Barley and FYM-only are reported, not qualified.",
+ "consequence": "No production change either way. A qualifying A says the Broadbalk-trained low-input level transfers between two English soils under proxy weather; a qualifying B says the drainage modifier transfers. Either would then be proposed (not adopted) as the low-input anchor feeding the shared grain -> resident -> reach chain.",
+ "script": "scripts/woburn_yields.py"
+}
