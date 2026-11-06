@@ -1,3 +1,35 @@
+# Soil-fertility state (RothC + N) — QUALIFIES blind on Exhaustion Land — 6 November 2026
+
+* NEW `harvest/soil_fertility.py`: RothC-26.3 carbon (published constants, from
+  RothC_description.pdf) + SUNDIAL-style N (BIO/HUM C:N 8.5), one mineral pool,
+  uptake, Burns single-reservoir leaching with dual-ledger drainage. N ledger
+  closes. Drivers `scripts/soil_fertility_common.py`.
+* Protocol: plan 288d1eaa (before any fit or Phase II read) -> amendment 7aaddff3
+  (Hargreaves x monthly factors to RothC's Rothamsted 0.75*pan table, 448 vs 717
+  mm/yr; spin-up 25 t C vs RothC 31; drainage 190-250 mm/yr vs 94) -> selection
+  66c67e7b (fit on SPENT Broadbalk + Woburn: I 23.8 kg N/ha/yr, uptake 0.20/month,
+  kappa 2.26 x A0, prior manure 2.42 t C/yr) -> single eval 55774a8a.
+* Exhaustion Land 1902-1935 (rex4, CC BY; plots with 1856-1901 histories, nil
+  since 1902, clover 1905/06-11 on 5-10): M1 manure memory 0.163 vs null 0.322
+  r .68; M2 legume memory 0.212 vs 0.300 r .65; M3 level 0.161 vs existing 0.223
+  (r .61 vs existing -0.59). QUALIFIES. Now SPENT. Misses: manure memory decays
+  too fast (known RothC miss on Hoosfield 7-1), clover overpredicted, P/K adds.
+* Disclosed: rwf3 (wheat-fallow) page aggregates seen -> development only. Scorer
+  crashed twice before any output (serialisation; path); rerun deterministic.
+* Woburn caveat: "unmanured" stratum includes plots 10a/11a after their 1877-81
+  FYM; never-manured plots 1 and 7 run down MORE (wheat -42/-44 %, barley
+  -70/-51 %). Report amended.
+* NOT READY FOR PRODUCTION: regime preview (`scripts/soil_fertility_regimes.py`)
+  equilibrium continuous unmanured 0.46 t/ha (Broadbalk plot 3 held 0.7-1.0 for a
+  century with ~constant SOC); bare fallow no benefit (rwf3 says +0.14); floor
+  collapses at lower N input (AD200 pre-industrial deposition is lower).
+* Next: constrain equilibrium on development (Broadbalk plot-3 SOC stability +
+  yield plateau, rwf3 aggregate), revise clover residues, ground AD200 N input
+  (deposition + free-living fixation), then a fresh reserved test (Saxmundham
+  rotations?). Regime choice (fallow/manure/legume) belongs to the shared
+  settlement chain (manure <- livestock <- pasture), not a new map.
+* Report: reports/SOIL_FERTILITY_20261106.md.
+
 # Crop-water ledger + Woburn reserved site — 6 November 2026
 
 * User priority: the Earth-calibrated basis for the control map (grain ->
