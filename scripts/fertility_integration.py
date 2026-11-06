@@ -14,6 +14,8 @@ Declared integration (reports/FERTILITY_INTEGRATION_20261106.md):
     the nutrients carried from pasture, stalls and households). m is calibrated so the
     Han North China Plain keeps its AD 2 census fit, replacing the old 0.68 fit like for like;
     the other census regions are then compared (development, already seen in A2).
+  * Residues scale with the stand below 0.5 t grain (harvest/soil_fertility.STAND_T; rechecked on
+    spent data with the frozen round-2 parameters: scripts/recheck_stand_residues.py).
   * Paddy rice and date palms keep F = 1 (paddy N supply is not this model). Climate:
     Hargreaves PET x 0.625 (Rothamsted's open-pan ratio, amendment_evaporation.json);
     Rothamsted soil everywhere (no soil map).
@@ -69,7 +71,8 @@ def yields(T, P, PET, hb, A0, crop, regime, manure=0.0, input_n=I_AD200, years=3
         if not sel.any():
             continue
         r = equilibrium_yield(T[:, sel], P[:, sel], PET[:, sel] * PET_FACTOR, hb[sel], A0[sel], regime=regime, manure_t=manure,
-                              input_n=input_n, season_bins=L, curve=curve, years=years, report_years=30, start=START, **kw)
+                              input_n=input_n, season_bins=L, curve=curve, years=years, report_years=30, start=START,
+                              stand_residues=True, **kw)
         out_c[sel] = r["per_cropped_ha"]; out_l[sel] = r["per_rotation_ha"]
     return out_c, out_l
 
@@ -225,7 +228,10 @@ def map_factors(name, mode, data, folder, meta, m_star):
     hb = lowest_bit(bits.ravel()[cells])
     out = {}
     ref = np.full(len(cells), np.nan)
-    for k, (regime, man) in (("transfer", ("transfer", m_star)), ("bare", ("bare", 0.0)), ("legume", ("legume", 0.0))):
+    runs = [("bare", ("bare", 0.0)), ("legume", ("legume", 0.0))]
+    if m_star >= 0.05:                     # a transfer case only when the census anchor needs one
+        runs.insert(0, ("transfer", ("transfer", m_star)))
+    for k, (regime, man) in runs:
         Fk = np.ones(len(cells))
         for s0 in range(0, len(cells), 40000):
             sl = slice(s0, min(s0 + 40000, len(cells)))
@@ -254,10 +260,11 @@ def maps():
         bounds = [0, 0.25, 0.4, 0.55, 0.7, 0.85, 0.95, 1.05, 1.2, 1.5, 2.0, 4.0]
         cols = ["#6e2238", "#ad4a2f", "#d38a3a", "#e8c46a", "#f1e3a8", "#f4f0e2", "#e9eedf", "#c3d188", "#78b365", "#348a64", "#155b51"]
         cmap = ListedColormap(cols); cmap.set_bad("#d8d6cf"); norm = BoundaryNorm(bounds, cmap.N)
-        fig, axs = plt.subplots(1, 3, figsize=(18, 3.6), constrained_layout=True)
-        for ax, k, title in zip(axs, ("F_transfer", "F_bare", "F_legume"),
-                                (f"three-field + {m_star:.1f} t/ha transfer (census-anchored, default)", "three-field, bare fallow, no transfer",
-                                 "three-field with a clover third")):
+        panels = [(k, t) for k, t in (("F_transfer", f"three-field + {m_star:.1f} t/ha transfer"),
+                                      ("F_bare", "three-field, bare fallow, no transfer (default)"),
+                                      ("F_legume", "three-field with a clover third")) if k in out]
+        fig, axs = plt.subplots(1, len(panels), figsize=(6 * len(panels), 3.6), constrained_layout=True)
+        for ax, (k, title) in zip(axs, panels):
             im = ax.imshow(np.where(cereal > 0, out[k], np.nan), cmap=cmap, norm=norm, interpolation="nearest")
             ax.set_title(title, fontsize=9.5); ax.set_xticks([]); ax.set_yticks([])
         fig.colorbar(im, ax=axs, shrink=0.85, label="grain factor vs previous chain (x)")

@@ -26,7 +26,7 @@ from __future__ import annotations
 
 import numpy as np
 
-from harvest.soil_fertility import (CN_BIOHUM, GRAIN_N, K, RESIDUE_C, RESIDUE_CN, co2_ratio, max_tsmd,
+from harvest.soil_fertility import (CN_BIOHUM, GRAIN_N, K, RESIDUE_C, RESIDUE_CN, STAND_T, co2_ratio, max_tsmd,
                                     BIO_SHARE, DPM_SHARE_PLANT)
 
 FYM_C_PER_T, FYM_N_PER_T = 3.0 / 35.0, 225.0 / 35.0
@@ -48,7 +48,7 @@ def rate_temperature(t):
 
 def equilibrium_yield(T, P, PET, harvest_bin, A0, *, regime, manure_t=0.0, input_n, uptake_rate, kappa,
                       season_bins, curve, clay=23.4, taw_mm=195.0, water_mm=502.5, years=300, report_years=30,
-                      start=None, kc_crop=1.3, kc_bare=0.8):
+                      start=None, kc_crop=1.3, kc_bare=0.8, stand_residues=False):
     """Mean grain per cropped hectare and per hectare of the whole rotation over the last
     `report_years` (a multiple of the regime length), per cell.
 
@@ -81,7 +81,9 @@ def equilibrium_yield(T, P, PET, harvest_bin, A0, *, regime, manure_t=0.0, input
         sel = L == Lv
         c = stretched_curve(curve, int(Lv))
         share[12 - Lv:, sel] = c[:, None]
-    demand_full = GRAIN_N * kappa * A0 + 1000.0 * (RESIDUE_C[0] + RESIDUE_C[1] * kappa * A0) / RESIDUE_CN
+    target = kappa * A0
+    intercept = RESIDUE_C[0] * (np.minimum(1.0, target / STAND_T) if stand_residues else 1.0)
+    demand_full = GRAIN_N * target + 1000.0 * (intercept + RESIDUE_C[1] * target) / RESIDUE_CN
     s = start or {}
     dpm = np.full(n, s.get('dpm', 0.12)); rpm = np.full(n, s.get('rpm', 4.5)); bio = np.full(n, s.get('bio', 0.6))
     hum = np.full(n, s.get('hum', 21.3)); dpm_n = np.full(n, s.get('dpm_n', 3.0)); rpm_n = np.full(n, s.get('rpm_n', 112.0))
@@ -149,8 +151,12 @@ def equilibrium_yield(T, P, PET, harvest_bin, A0, *, regime, manure_t=0.0, input
         if kind == 'crop':
             base = 1000.0 * RESIDUE_C[0] / RESIDUE_CN
             per_t = GRAIN_N + 1000.0 * RESIDUE_C[1] / RESIDUE_CN
-            grain = np.minimum(np.maximum(0.0, (crop_n - base) / per_t), kappa * A0)
-            rc = RESIDUE_C[0] + RESIDUE_C[1] * grain
+            linear = np.maximum(0.0, (crop_n - base) / per_t)
+            if stand_residues:
+                knee = base + per_t * STAND_T
+                linear = np.where(crop_n < knee, crop_n * STAND_T / knee, linear)
+            grain = np.minimum(linear, kappa * A0)
+            rc = RESIDUE_C[0] * (np.minimum(1.0, grain / STAND_T) if stand_residues else 1.0) + RESIDUE_C[1] * grain
             rn = np.maximum(crop_n - GRAIN_N * grain, 0.0)
             dpm += rc * DPM_SHARE_PLANT; rpm += rc * (1 - DPM_SHARE_PLANT)
             dpm_n += rn * DPM_SHARE_PLANT; rpm_n += rn * (1 - DPM_SHARE_PLANT)

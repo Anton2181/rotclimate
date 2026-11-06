@@ -216,6 +216,7 @@ class Params:
     fym_hum: float | None = None  # FYM humified share (None: RothC 49/49/2)
     thermal_uptake: bool = False  # uptake in every vegetated month at r_u x min(1, T/10)
     wet_deposition: bool = False  # add Rothamsted's measured wet deposition W(year) to input_n
+    stand_residues: bool = False  # residue intercept scales with stand below 0.5 t grain (integration fix)
     demand_curve: bool = False    # cap cumulative uptake by the season's demand curve (amendment_round2.json)
 
 
@@ -227,15 +228,31 @@ def wet_deposition(year):
     return 4.0 + 14.0 * min(year - 1855, 125) / 125.0
 
 
-def cereal_uptake_for(grain):
-    return GRAIN_N * grain + 1000.0 * (RESIDUE_C[0] + RESIDUE_C[1] * grain) / RESIDUE_CN
+STAND_T = 0.5                     # stand-scaled residues (fertility integration fix): below this grain the
+                                  # root/stubble intercept shrinks in proportion (Bolinder et al. 2007:
+                                  # residue inputs scale with crop size). Unchanged at grain >= 0.5 t/ha.
 
 
-def cereal_from_uptake(u):
+def residue_carbon(grain, stand_scaled=False):
+    a = RESIDUE_C[0] * (min(1.0, grain / STAND_T) if stand_scaled else 1.0)
+    return a + RESIDUE_C[1] * grain
+
+
+def cereal_uptake_for(grain, stand_scaled=False):
+    return GRAIN_N * grain + 1000.0 * residue_carbon(grain, stand_scaled) / RESIDUE_CN
+
+
+def cereal_from_uptake(u, stand_scaled=False):
+    """Invert uptake -> grain. Linear (round 1-2): residues 1.03 + 0.63 grain t C, so no grain below
+    25.75 kg N. Stand-scaled: proportional below STAND_T, identical above."""
     base = cereal_uptake_for(0.0)
     per_t = cereal_uptake_for(1.0) - base
-    grain = max(0.0, (u - base) / per_t)
-    return grain, RESIDUE_C[0] + RESIDUE_C[1] * grain, u - GRAIN_N * grain
+    if stand_scaled:
+        knee = cereal_uptake_for(STAND_T, True)
+        grain = u / (knee / STAND_T) if u < knee else (u - base) / per_t
+    else:
+        grain = max(0.0, (u - base) / per_t)
+    return grain, residue_carbon(grain, stand_scaled), u - GRAIN_N * grain
 
 
 def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=None, depth_cm=23.0):
@@ -290,7 +307,7 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
             g = 1.0
         for s in active_now:
             if s.crop == 'cereal':
-                demand = cereal_uptake_for(params.kappa * (s.potential_t_ha or 0.0))
+                demand = cereal_uptake_for(params.kappa * (s.potential_t_ha or 0.0), params.stand_residues)
             elif s.crop == 'potato':
                 demand = POTATO['demand']
             else:
@@ -309,7 +326,7 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
         if s is not None:
             u = crop_n.pop(key, 0.0)
             if s.crop == 'cereal':
-                grain, rc, rn = cereal_from_uptake(u)
+                grain, rc, rn = cereal_from_uptake(u, params.stand_residues)
             elif s.crop == 'potato':
                 grain = None
                 rn = min(u, 1000.0 * POTATO['residue_c'] / POTATO['residue_cn'])

@@ -41,8 +41,8 @@ def main():
                 if c.get('fertility_constrained'):
                     fs=c['fertility_summary'];case_note+=(f" Soil fertility: equilibrium wheat/barley grain from the Earth-tested soil-fertility state at the AD 200 non-fertilizer N input ({c['input_n_kg_ha_yr']} kg N/ha/yr), "
                         f"{fs['production_ratio']*100:.1f}% of the previous chain's cereal (cell factor median {fs['factor_median']:.2f}, 10-90% {fs['factor_p10']:.2f}-{fs['factor_p90']:.2f})."
-                        +(f" Three-field rotation with {c['transfer_t_ha']:.1f} t/ha FYM-equivalent carried to each crop, calibrated to the Han AD 2 census." if c['regime']=='transfer' else
-                          ' Three-field rotation, bare fallow, no nutrient transfer (sensitivity).' if c['regime']=='bare' else ' Three-field rotation with a clover third, no manure (sensitivity).')
+                        +(f" Three-field rotation with {c['transfer_t_ha']:.1f} t/ha FYM-equivalent carried to each crop." if c['regime']=='transfer' else
+                          ' Three-field rotation with bare fallow and no nutrient transfer: the default, which keeps the Han AD 2 census fit and improves the 11-region Earth census check.' if c['regime']=='bare' else ' Three-field rotation with a clover third, no manure (sensitivity).')
                         +' Rothamsted soil assumed everywhere; rural food claims remain fixed. See reports/FERTILITY_INTEGRATION_20261106.md.')
                 residents=np.array(c['civilian_people'])+np.array(c['institutional_people']);request=np.array([s['civilian_request_people'] for s in model['sites']]);retained=np.minimum(1,np.array(c['civilian_people'])/request)
                 rgb=np.zeros((size,3));rgb[:]=[.84,.89,.94];rgb[land]=[.84,.83,.78]
