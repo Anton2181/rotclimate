@@ -1,0 +1,42 @@
+{
+  "version": 1,
+  "date": "2026-11-06",
+  "status": "frozen before any result of this test was computed",
+  "question": "Which option of the atlas's de facto control map (Supply-supported reach) should be the default for the AD 200 world, judged on Earth: the current default fert_bare, fert_legume, joint365 (previous default) or legacy_0 (transport only, the one option already scored on Earth)?",
+  "data_status": "Development comparison on seen data, not a blind test. Cliopatria Roman Empire AD 150, Hanson's towns AD 150, Itiner-e roads AD 150, Han AD 2 county seats and commanderies were all used in POLITY v2/v3 fits and tests and in A2. Nothing is fitted here: every chain parameter is the published atlas value (data/settlement_integration_model.json, data/settlement_fertility_model.json, output/fertility_integration_20261106).",
+  "windows": "output/polity_earth/rome.npz and han.npz (9 km azimuthal-equidistant Earth windows of scripts/polity_earth_check.py; WorldClim climate, NCEP winds, Natural Earth rivers, Earth land/people density).",
+  "sources": {
+    "rome": "Hanson (2016) towns dated to AD 150, snapped to land, one source per cell (1,315 cells); Itiner-e roads AD 150 as the road network.",
+    "han": "Han AD 2 county seats (1,276 cells); no road data, as in the existing Han tests."
+  },
+  "earth_chain": {
+    "same_as_atlas": "Collection partition (base-bin foot graph, 1 day each way), monthly collection access along fixed paths, fixed rural need = 0.6 x reference cereal production, rural stores 365 demand-days, stored_collection (10 %, year of origin stores, retention 0.95, one-bin delay, freight bounded by available grain), allocate_settlement (100 institutional + 50 minimum civilians, 90-day destination stores, 5 % yearly loss, 2,500 kcal), civilian request = max(100, 0.075 x served people), paired reach from staffed sources (2 days each leg, 4-day ration) on the monthly administrative graph with boats and rivers.",
+    "earth_analogues": [
+      "Cereal production per cell: the Earth land/people run (output/land_people/earth/earth.npz, nearest 5' cell) kcal per ha of the cell's main crop x 100 x 81 km2 x arable share x FARMED_SHARE x FALLOW, as the atlas formula.",
+      "Crops: wheat, barley and millet take the soil-fertility factor (SEASON of scripts/fertility_integration.py); rice and dates keep F = 1, as in the Earth census anchor. The atlas grids carry wheat and barley only; millet is the North China staple and is kept.",
+      "Harvest calendar: crop_windows + tied_harvest_boundaries on the window's WorldClim months (Hargreaves PET), as the Earth census anchor.",
+      "Fertility factor F per cell: fertility_integration.factor() on the window cells (AD 200 N 27.5, sown share 0.68, stand-scaled residues), bare and legume regimes; joint365 is F = 1 in the same fixed-rural-need ledger.",
+      "Served people: Earth density x cell area over the cells whose nearest source (base-bin foot travel) is the site, within 1 day.",
+      "Every source is affiliated with the window's polity; sea and river constants from calibration/polity_20261025/sea.json, as in the existing Earth tests."
+    ]
+  },
+  "cases": {
+    "legacy_0": "Year-round effective days (polity.control.effective_days over the 12 monthly networks) <= 2.0 from the sources (and, for Rome, the road cells): the atlas's legacy de facto map with no gap fill.",
+    "reference": "All sources staffed, paired reach, held in all 12 bins. Decomposition only (food unconstrained), not eligible.",
+    "joint365": "F = 1, food-constrained staffing, paired reach, held in all 12 bins.",
+    "fert_bare": "F_bare, as joint365 otherwise.",
+    "fert_legume": "F_legume, as joint365 otherwise."
+  },
+  "metrics": {
+    "M1_extent": "Balanced accuracy of held land against the polygon (Rome: Cliopatria Roman Empire AD 150; Han: the AD 2 commanderies), over the existing bands: Rome land within 15 walking days (v1 graph) of towns and roads, Han land within 15 year-round days of the seats. Rome also reported west / east of 20 E.",
+    "M2_network_support": "Share of the real source cells the case can staff (institutional cohort active). Every Han county seat housed a magistrate's office and every Hanson town was an urban settlement, so a food model that cannot feed most of them is too harsh. Diagnostic weights: Hanson area_ha and the Han county 'people' field.",
+    "diagnostics": "TPR, TNR, held area km2, AUC of the number of held bins, staffed sources, reproduction of the earlier legacy scores (Rome east 0.811, Han 0.796 at its fitted 5 days) under the current transport code."
+  },
+  "decision_rule": {
+    "eligible": ["fert_bare", "fert_legume", "joint365", "legacy_0"],
+    "G1": "A food-constrained case must staff at least 75 % of the real source cells, in Rome and in Han separately.",
+    "G2": "A food-constrained case's M1 must be no lower than legacy_0's M1 minus 0.02, in Rome (whole band) and in Han separately.",
+    "choice": "Among food-constrained cases passing G1 and G2, the default is the one with the lowest Earth census error already published (output/fertility_integration_20261106/earth_census.json, mean |log10(historical / capacity)| over the 11 census regions at the geometric midpoint of each historical range, recomputed from the published file at commit 9decd991: fert_bare 0.459, joint365 0.538, fert_legume 0.685; the report's earlier 0.407 / 0.682 predate the stand-residue fix and were corrected with this plan). If none passes, the default becomes legacy_0 and the supply cases stay as options.",
+    "note": "G1 guards against food models too harsh to feed the documented network; the census error guards against models too lenient. M1 alone cannot penalise leniency when every source sits inside the claim, so it is a gate, not the ranking."
+  }
+}

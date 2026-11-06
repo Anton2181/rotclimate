@@ -34,6 +34,7 @@
 * Factor F = Y_land(regime) / (0.68 A0) (absolute; first ratio pass exploded, superseded before publish).
 * Earth anchor: NCP needs no transfer (water-limited; m* = 0) -> transfer = bare. Census mean |log10|:
   previous 0.538, bare 0.407, legume 0.682 (Gaul 0.10-0.22 -> 0.55-1.24; Sichuan 0.09 -> 0.59).
+  [Superseded by the stand-residue rerun 9decd991: bare 0.459, legume 0.685; Gaul 0.31-0.69, Sichuan 0.29.]
 * Map: bare cuts wheat/barley grain to 0.42-0.77x and staffed sources ~1,000 -> ~200-330; legume
   1.2-1.5x grain. Zero-grain cells below 26 kg N uptake are a residue-relation artifact.
 * Viewer default reverted to joint365; nothing written into atlases. Waiting on user's default choice.

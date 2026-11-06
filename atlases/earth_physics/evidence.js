@@ -91,8 +91,8 @@
   // Settlement / supply options on Settlements and Supply-supported reach
   const notScored = " The control map itself is not yet scored on Earth (end-to-end test pending).";
   const OPTIONS = {
-    fert_bare: ["scenario", "Current default. Food budget with a bare-fallow three-field rotation at the AD 200 nitrogen input. The soil-fertility state passed two blind Rothamsted tests; farm capacity against Han and Roman censuses: mean |log10| error 0.41 (joint budget 0.54)." + notScored],
-    fert_legume: ["scenario", "Three-field rotation with a clover third at the AD 200 nitrogen input. Census check mean |log10| error 0.68, worse than bare fallow." + notScored],
+    fert_bare: ["scenario", "Current default. Food budget with a bare-fallow three-field rotation at the AD 200 nitrogen input. The soil-fertility state passed two blind Rothamsted tests; farm capacity against Han and Roman censuses: mean |log10| error 0.46 (joint budget 0.54)." + notScored],
+    fert_legume: ["scenario", "Three-field rotation with a clover third at the AD 200 nitrogen input. Census check mean |log10| error 0.69, worse than bare fallow." + notScored],
     joint365: ["scenario", "Previous default: joint food budget with a year of stores at the source." + notScored],
     reference: ["scenario", "Settlement sources matched to transport, food unconstrained." + notScored],
   };

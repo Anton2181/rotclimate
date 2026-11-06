@@ -17,24 +17,26 @@
 
 ## Earth census anchor (`output/fertility_integration_20261106/earth_census.json`)
 
-**No transfer is needed at the Han North China Plain.** It is water-limited, so bare three-field farming keeps its AD 2 fit (F 1.01) and the calibrated transfer m* is 0. The NCP therefore cannot identify the nutrient transfer that matters in wet climates, and fert_transfer and fert_bare are currently identical.
+**No transfer is needed at the Han North China Plain.** It is water-limited, so bare three-field farming keeps its AD 2 fit (F 1.05) and the calibrated transfer m* is 0. The NCP therefore cannot identify the nutrient transfer that matters in wet climates, and fert_transfer and fert_bare are currently identical.
 
 **Across the 11 census regions** (development: already seen in task A2), mean |log10(historical / capacity)| is:
 
 | case | mean \|log10 ratio\| |
 |---|---:|
 | previous chain | 0.538 |
-| bare three-field | **0.407** |
-| clover third | 0.682 |
+| bare three-field | **0.459** |
+| clover third | 0.685 |
+
+*Corrected 6 November 2026:* this table and the region rows below first quoted the run before the stand-scaled-residue fix (bare 0.407, clover 0.682; Gaul 0.55–1.24, Sichuan 0.59, Italy 1.08–2.03). The values here are those of the published `earth_census.json` (commit 9decd991; error at the geometric midpoint of each historical range). The ranking is unchanged.
 
 **Where the gain comes from:** wet regions where nitrogen, not water, limits yield.
 
 | region | historical / capacity, previous | historical / capacity, bare |
 |---|---|---|
-| Gaul | 0.10–0.22 | 0.55–1.24 |
-| Sichuan | 0.09 | 0.59 |
+| Gaul | 0.10–0.22 | 0.31–0.69 |
+| Sichuan | 0.09 | 0.29 |
 
-- **Italy** now sits above capacity (1.08–2.03). That is consistent with Rome's grain imports.
+- **Italy** now brackets capacity (0.88–1.66), with the upper end above it. That is consistent with Rome's grain imports.
 - **Dry regions** (Wei valley, Syria, Mesopotamia) get F above 1, because water limits there before nitrogen does.
 
 ## The map (`map_factors.json`, `settlement_fertility_20261106/*/review.json`)
