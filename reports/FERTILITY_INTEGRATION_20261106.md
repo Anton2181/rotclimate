@@ -1,4 +1,4 @@
-# Fertility integration: computed, not yet published (decision needed on the default)
+# Fertility integration: published, bare three-field at the AD 200 N input is the default
 
 **AD 200 nitrogen input:** 27.5 kg N/ha/yr, the middle of the 20–35 band, as you chose.
 
@@ -50,6 +50,35 @@ The map's wheat/barley cells are well watered (A0 at its 1 t/ha cap), so nitroge
 
 The bare 10th percentile is 0: there the model gives **zero grain** where uptake falls below the 26 kg N that the residue relation sends to stubble and roots first. That is an artifact at very low nitrogen. Real crops still set some grain, so the bare collapse is overstated.
 
-## Open decision
+## Decision and final run (user: fix the artifact, then bare three-field as default)
 
-Which regime should be the default on the map? The census favours low-transfer (bare) farming in the Roman world, but on the wet map it removes about three-quarters of staffed sources. The current default is unchanged (joint365), and the fertility cases are computed but not published.
+**Artifact fix.**
+- **The change:** root and stubble residues now scale with the stand below 0.5 t grain (Bolinder et al. 2007). This is `harvest/soil_fertility.STAND_T`, behind an option that is off by default for rounds 1–2.
+- **Recheck on spent data** with the frozen round-2 parameters (`scripts/recheck_stand_residues.py`):
+  - development loss 0.1711 → 0.1705;
+  - Broadbalk 1926–67 scores unchanged (still qualifies).
+
+**Census (Earth, with the fix).**
+- **North China Plain:** no transfer needed (F 1.05, ratio 0.96).
+- **Italy:** 0.88–1.66.
+- **Gaul:** 0.31–0.69.
+
+**Map, final:**
+
+| atlas | factor median (10th pct), bare | cereal vs previous, bare | staffed sources, bare | access months, bare | staffed sources, clover third | cereal vs previous, clover third |
+|---|---:|---:|---:|---:|---:|---:|
+| free_fit raw | 0.31 (0.05) | 0.61× | 201 (joint365 1,207) | 1.95 (7.31) | 614 | 1.27× |
+| earth_fit raw | 0.35 (0.18) | 0.54× | 278 (1,044) | 2.46 (7.24) | 975 | 1.53× |
+| earth_fit corrected | 0.35 (0.19) | 0.53× | 273 (1,064) | 2.40 (7.36) | 1,010 | 1.51× |
+| whittaker_fit raw | 0.60 (0.08) | 0.84× | 333 (1,053) | 3.06 (7.07) | 717 | 1.52× |
+
+**Published.**
+- `fert_bare` (default) and `fert_legume` are in the same Settlements / Supply-supported reach selector as the earlier cases, in all three atlases.
+- The hosted artifacts were republished, including the features added since the last hosted version: coverage, administration, presence, pasture and farm work.
+
+**Hosting fixes in `scripts/package_atlas_artifact.py`:**
+- feature packets keep raw bytes (their scripts hash what they fetch);
+- references in feature manifests follow the `.wasm` rename;
+- gzip packets are sent as `application/wasm`.
+
+The hosted Earth-fit atlas leaves out the optional tiered-colour twins (89 files), to stay under the host's 511-file limit; that toggle is absent there. All three packages pass `scripts/check_atlas_smoke.js` with no failed requests.

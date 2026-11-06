@@ -1,3 +1,17 @@
+# Fertility integration PUBLISHED — default bare three-field at AD 200 N 27.5 — 6 November 2026
+
+* User chose: fix low-N artifact, then bare three-field default. Fix: residues scale with stand
+  below 0.5 t grain (STAND_T; option, rounds 1-2 reproducible); recheck on spent data: dev loss
+  0.1711 -> 0.1705, Broadbalk 1926-67 unchanged.
+* Map (bare / joint365): sources free 201/1,207, earth raw 278/1,044, earth corr 273/1,064,
+  whittaker 333/1,053; cereal 0.53-0.84x; access 2-3 vs 7 bins. Clover third: 614-1,010 sources.
+* Published into atlases (publish_settlement_integration.py --origin
+  output/settlement_fertility_20261106); viewer default fert_bare. Hosted artifacts republished
+  (earth v25, free v27, whittaker v16) incl. coverage/administration/presence/pasture/farm-work.
+  Packager fixed (raw feature packets, manifest .wasm refs, .gz as application/wasm); hosted
+  earth_fit drops tier twins (511-file cap). Smoke passes all three.
+* Report: reports/FERTILITY_INTEGRATION_20261106.md.
+
 # Fertility integration (AD 200 N 27.5) — COMPUTED, NOT PUBLISHED, default undecided — 6 November 2026
 
 * harvest/fertility_regimes.py (vectorised emulator, validated within 4 %, bare-fallow 19 % low),

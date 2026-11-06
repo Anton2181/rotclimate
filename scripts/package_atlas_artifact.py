@@ -47,8 +47,26 @@ def main():
     if a.out.exists():
         shutil.rmtree(a.out)
     shutil.copytree(a.atlas, a.out)
-    for path in a.out.rglob("*.bin"):          # .bin is not a served type; .wasm is
-        path.with_suffix(".wasm").write_bytes(gzip.compress(path.read_bytes(), 9, mtime=0))
+    # .bin is not a served type; .wasm is. Packets named in atlas.json ("binary") go out
+    # gzip-compressed (the page inflates them). Feature packets named in other manifests
+    # (farm work, administration, pasture, ...) are hashed as fetched, so they keep raw bytes.
+    page_packets = set()
+
+    def collect(node, base):
+        if isinstance(node, dict):
+            b = str(node.get("binary", ""))
+            if b.endswith(".bin"):
+                page_packets.add((a.out / "data" / b).resolve())
+            for value in node.values():
+                collect(value, base)
+        elif isinstance(node, list):
+            for value in node:
+                collect(value, base)
+    collect(json.loads((a.out / "data" / "atlas.json").read_text()), None)
+    page_packets.add((a.out / "data" / "atlas.bin").resolve())      # the page's own climate packet
+    for path in a.out.rglob("*.bin"):
+        raw = path.read_bytes()
+        path.with_suffix(".wasm").write_bytes(gzip.compress(raw, 9, mtime=0) if path.resolve() in page_packets else raw)
         path.unlink()
     for path in a.out.rglob("*.npz"):          # model inputs for later exports (winds); no page reads them
         path.unlink()
@@ -71,6 +89,17 @@ def main():
     if missing:
         raise SystemExit(f"Renamed packet binaries are missing: {missing}")
     meta_path.write_text(json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
+    # other packet manifests (farm work, administration, pasture, ...) name their binaries
+    # relative to data/; follow the rename wherever the .wasm exists (source paths untouched)
+    data_dir = a.out / "data"
+    for manifest in data_dir.rglob("*.json"):
+        if manifest == meta_path:
+            continue
+        text = manifest.read_text()
+        fixed = re.sub(r'"([^"\s]+)\.bin"', lambda m: f'"{m.group(1)}.wasm"' if (data_dir / (m.group(1) + ".wasm")).is_file() else m.group(0), text)
+        if fixed != text:
+            manifest.write_text(fixed)
+            renamed.append(str(manifest.relative_to(a.out)))
     page = a.out / "index.html"
     page.write_text(rewrite_nav(page.read_text(), links))
     files = sorted(p for p in a.out.rglob("*") if p.is_file())
