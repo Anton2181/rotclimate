@@ -22,8 +22,17 @@ async function checkPage(browser, url) {
   await page.goto(url, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => document.querySelector('#station-h')?.textContent !== '—', null, { timeout: 90000 });
   const meta = await page.evaluate(async () => (await fetch('data/atlas.json')).json());
+  // Core view first (evidence badges, extra modes hidden), then switch the extra modes on so every layer is reachable
+  const core = await page.evaluate(() => ({
+    topics: [...document.querySelectorAll('#map-topic option')].map(o => o.textContent),
+    badged: document.querySelectorAll('#layers button[data-evidence]').length,
+    buttons: document.querySelectorAll('#layers button').length,
+    hidden_extra: [...document.querySelectorAll('#layers button')].filter(b => ['experimental', 'diagnostic'].includes(b.dataset.evidence)).length,
+    switch_present: !!document.querySelector('#experimental'),
+  }));
+  if (core.switch_present) await page.check('#experimental');
   const topics = await page.$$eval('#map-topic option', o => o.map(x => x.value));
-  const result = { url, topics, layers: meta.layers.length, checks: {} };
+  const result = { url, topics, layers: meta.layers.length, core, checks: {} };
   const showLayer = async id => {
     const topic = await page.getAttribute('#layer-' + id, 'data-topic');
     await page.selectOption('#map-topic', topic);

@@ -73,6 +73,24 @@ section { display: grid; gap: 16px; }
   border: 1px solid transparent; border-radius: 999px; padding: 5px 12px; cursor: pointer;
 }
 .layers button[aria-pressed="true"] { background: var(--ink); color: var(--plate); }
+/* Evidence badges: shape carries the tier (never colour alone); the legend note names the test */
+.layers button[data-evidence]::after, .ev { content: ""; display: inline-block; width: 0.62em; height: 0.62em;
+  border: 1.5px solid currentColor; border-radius: 50%; box-sizing: border-box; vertical-align: 0.02em; opacity: 0.9; }
+.layers button[data-evidence]::after { margin-left: 7px; }
+.layers button[data-evidence="earth"]::after, .ev-earth { background: currentColor; }
+.layers button[data-evidence="earth"]::after { content: "" / "Earth-tested"; }
+.layers button[data-evidence="partial"]::after, .ev-partial { background: linear-gradient(90deg, currentColor 50%, transparent 50%); }
+.layers button[data-evidence="partial"]::after { content: "" / "partly tested"; }
+.layers button[data-evidence="scenario"]::after { content: "" / "scenario"; }
+.layers button[data-evidence="experimental"]::after, .ev-experimental { border-style: dashed; }
+.layers button[data-evidence="experimental"]::after { content: "" / "experimental"; }
+.layers button[data-evidence="diagnostic"]::after, .ev-diagnostic { border-radius: 1px; }
+.layers button[data-evidence="diagnostic"]::after { content: "" / "diagnostic"; }
+.evidence-key { flex-basis: 100%; margin: 0; display: flex; flex-wrap: wrap; gap: 2px 14px; }
+.evidence-key span { white-space: nowrap; }
+.evidence-key .ev { margin-right: 3px; }
+#evidence-key-extra .ev-diagnostic { margin-left: 10px; }
+.evidence-note b { font-weight: 600; color: var(--ink); }
 .layers .layer-group { font: 500 0.7rem var(--font-data); letter-spacing: 0.06em; text-transform: uppercase;
   color: var(--ink-soft); align-self: center; margin: 0 2px 0 8px; }
 .layers .layer-group:first-child { margin-left: 0; }
@@ -334,8 +352,10 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
       <div class="controls">
         <label class="topic-control">Map topic <select id="map-topic" aria-controls="layers"></select></label>
         <div class="layers" id="layers" role="group" aria-label="Map layer"></div>
+        <p class="note evidence-key" id="evidence-key" hidden><span><i class="ev ev-earth" aria-hidden="true"></i> Earth-tested: scored against held-out Earth data</span><span><i class="ev ev-partial" aria-hidden="true"></i> partly tested</span><span><i class="ev" aria-hidden="true"></i> scenario: declared assumptions</span><span id="evidence-key-extra" hidden><i class="ev ev-experimental" aria-hidden="true"></i> experimental &nbsp;<i class="ev ev-diagnostic" aria-hidden="true"></i> diagnostic</span></p>
         <div class="toggles">
           <label class="toggle"><input type="checkbox" id="names" checked> Towns and names</label>
+          <label class="toggle" title="Also show map modes not yet tested on Earth (experimental) and the model's own check views (diagnostic)"><input type="checkbox" id="experimental"> Experimental &amp; diagnostics</label>
           <label class="toggle"><input type="checkbox" id="rivtoggle"> Simulated rivers</label>
           <label class="toggle" title="Add the current layer's legend below the map when copying it"><input type="checkbox" id="copylegend"> Legend in copies</label>
           <label class="toggle" id="tiers-control" title="Group the colours into classes with round edges instead of a smooth gradient" hidden><input type="checkbox" id="tiers"> Tiered colours</label>
@@ -691,6 +711,7 @@ details.card > * { margin-bottom:12px; min-width:0; max-width:100%; }
   <dialog id="lightbox" aria-label="Enlarged picture"><img id="lightbox-img" alt=""><button type="button" id="lightbox-close">Close</button></dialog>
 </div>
 
+<script src="evidence.js"></script>
 <script src="climate-comparison.js"></script>
 <script src="harvest.js"></script>
 <script src="farm-work.js"></script>
@@ -861,13 +882,45 @@ window.atlasSave = async (filename, blob) => {
   };
   const topicNames = ["Overview", "Population", "Foraging", "Livelihoods", "Languages", "Political reach", "Administration", "Farming", "Food and work", "Health and ecology", "Temperature", "Water", "Air and sea", "Month by month", "Corrected", "Fit checks"];
   const lastLayer = {};
-  for (const name of topicNames.filter(n => meta.layers.some(L => topicOf(L) === n))) {
-    const option = document.createElement("option"); option.value = name; option.textContent = name;
-    $("map-topic").appendChild(option);
+  // Evidence tiers (evidence.js): the core view shows Earth-tested, partly tested and scenario
+  // modes; experimental and diagnostic modes and minor options wait behind one switch.
+  const evidenceWorld = (meta.corrected_climate || meta.physics_profile) ? "earth" : "painted";
+  const evidenceOf = (L, option = null) => window.AtlasEvidence ? AtlasEvidence.of(L, topicOf(L), evidenceWorld, option) : ["scenario", ""];
+  const tierInfo = (tier) => window.AtlasEvidence?.TIERS[tier] || { label: "Scenario", core: true };
+  let showAll = !window.AtlasEvidence || (() => {
+    if (new URLSearchParams(location.hash.slice(1)).get("all") === "1") return true;
+    try { return localStorage.getItem("rotclimate-all") === "1"; } catch (e) { return false; }
+  })();
+  const isCore = (L) => !!L && tierInfo(evidenceOf(L)[0]).core;
+  const visible = (L) => showAll || isCore(L);
+  const optionVisible = (L, value) => showAll || !window.AtlasEvidence || AtlasEvidence.coreOption(L, value);
+  const tierRank = { earth: 0, partial: 1, scenario: 2, experimental: 3, diagnostic: 4 };
+  function buildTopics() {
+    const sel = $("map-topic"), keep = sel.value;
+    sel.innerHTML = "";
+    for (const name of topicNames) {
+      const shown = meta.layers.filter(L => topicOf(L) === name && visible(L));
+      if (!shown.length) continue;
+      const best = shown.map(L => evidenceOf(L)[0]).sort((a, b) => tierRank[a] - tierRank[b])[0];
+      sel.add(new Option(window.AtlasEvidence ? `${name} · ${tierInfo(best).label.toLowerCase()}` : name, name));
+    }
+    if ([...sel.options].some(o => o.value === keep)) sel.value = keep;
+    $("evidence-key").hidden = !window.AtlasEvidence;
+    $("evidence-key-extra").hidden = !showAll;
+  }
+  function badge(L) {
+    const b = $("layer-" + L.id); if (!b || !window.AtlasEvidence) return;
+    const own = L.variants && L.id === current ? variantOf(L) : L.variants ? (L.variants.options.find(o => o.value === L.variants.default) || L.variants.options[0]) : null;
+    const [tier, test] = evidenceOf(L, ["reach_defacto", "reach_towns"].includes(L.id) ? own : null);
+    b.dataset.evidence = tier; b.title = tierInfo(tier).label + (test ? ": " + test : "");
   }
   function showTopic(name) {
     $("map-topic").value = name;
-    for (const b of layerBtns.children) b.hidden = b.dataset.topic !== name;
+    for (const b of layerBtns.children) {
+      const L = meta.layers.find(l => "layer-" + l.id === b.id);
+      b.hidden = b.dataset.topic !== name || (L ? !visible(L) : false);
+      if (L) badge(L);
+    }
   }
   for (const L of meta.layers) {
     const b = document.createElement("button");
@@ -875,9 +928,26 @@ window.atlasSave = async (filename, blob) => {
     b.setAttribute("aria-pressed", "false");
     b.addEventListener("click", () => setLayer(L.id)); layerBtns.appendChild(b);
   }
+  buildTopics();
   $("map-topic").addEventListener("change", e => {
-    const name = e.target.value; setLayer(lastLayer[name] || meta.layers.find(L => topicOf(L) === name).id);
+    const name = e.target.value, last = meta.layers.find(L => L.id === lastLayer[name]);
+    setLayer(last && visible(last) ? last.id : meta.layers.find(L => topicOf(L) === name && visible(L)).id);
   });
+  $("experimental").checked = showAll;
+  $("experimental").addEventListener("change", (e) => {
+    showAll = e.target.checked;
+    try { localStorage.setItem("rotclimate-all", showAll ? "1" : "0"); } catch (err) { /* storage off */ }
+    buildTopics();
+    const L = meta.layers.find(l => l.id === current);
+    if (!visible(L)) { setLayer(meta.default_layer || "koppen"); return; }
+    if (L.variants && !optionVisible(L, variantOf(L).value)) $("variant").value = L.variants.default;
+    setLayer(current);
+  });
+  function revealFor(L, value = null) {
+    // a link or a panel asked for a mode outside the core view: switch the extra modes on
+    if (showAll || !L || (visible(L) && (value == null || !L.variants || optionVisible(L, value)))) return;
+    showAll = true; $("experimental").checked = true; buildTopics();
+  }
   const scenarioKey = () => $("occupation").value + "_" + $("disease").value;
   const scenarioLabel = () => `${$("occupation").selectedOptions[0].textContent}, ${$("disease").value === "absent" ? "no malaria penalty" : "environmental malaria potential"}`;
   const layerScenario = L => L.id === "land_livability"
@@ -969,12 +1039,14 @@ window.atlasSave = async (filename, blob) => {
   function showVariants(L) {
     $("variant-controls").hidden = !L.variants;
     if (!L.variants) return;
-    const sel = $("variant"), keep = sel.value;
-    if (sel.dataset.layer !== L.id) {
+    const sel = $("variant"), keep = sel.value, key = L.id + (showAll ? "+all" : "") + ":" + L.variants.options.length;
+    if (sel.dataset.layer !== key) {
       sel.innerHTML = "";
-      for (const o of L.variants.options) sel.add(new Option(o.label, o.value));
-      sel.dataset.layer = L.id;
-      sel.value = L.variants.options.some(o => o.value === keep) ? keep : L.variants.default;
+      const tiered = window.AtlasEvidence && ["reach_defacto", "reach_towns"].includes(L.id);
+      for (const o of L.variants.options.filter(o => optionVisible(L, o.value)))
+        sel.add(new Option(tiered ? `${o.label} — ${tierInfo(evidenceOf(L, o)[0]).label.toLowerCase()}` : o.label, o.value));
+      sel.dataset.layer = key;
+      sel.value = [...sel.options].some(o => o.value === keep) ? keep : L.variants.default;
     }
     $("variant-name").textContent = L.variants.label;
     const v = variantOf(L);
@@ -1000,6 +1072,7 @@ window.atlasSave = async (filename, blob) => {
   function setLayer(id,requestedVariant=null) {
     current = id;
     const L = meta.layers.find((l) => l.id === id);
+    revealFor(L, requestedVariant);
     showTopic(topicOf(L)); lastLayer[topicOf(L)] = id;
     // Show a selector only when changing it changes this map's image.
     const files = L.scenario_files || {};
@@ -1018,6 +1091,7 @@ window.atlasSave = async (filename, blob) => {
     $("foraging-section").hidden = !foraging;
     showVariants(L);
     if(requestedVariant&&L.variants?.options.some(o=>o.value===requestedVariant)){ $("variant").value=requestedVariant;showVariants(L); }
+    badge(L);
     farmWorkUI?.show(id,L.variants?variantOf(L):null);
     administrationUI?.show(id,L.variants?variantOf(L):null);
     hierarchyUI?.show(id,L.variants?variantOf(L):null);
@@ -1042,6 +1116,7 @@ window.atlasSave = async (filename, blob) => {
     const state = new URLSearchParams({ layer: id, occupation: $("occupation").value, disease: $("disease").value });
     if ($("tiers").checked) state.set("colours", "tiers");
     if (L.variants) state.set("variant", variantOf(L).value);
+    if (showAll && window.AtlasEvidence) state.set("all", "1");
     if (meta.corrected_climate && climateMode === "raw") state.set("climate", "raw");
     const popState = populationUI?.state() || Object.fromEntries([...new URLSearchParams(location.hash.slice(1))].filter(([key]) => ["population", "pattern"].includes(key)));
     for (const [key, value] of Object.entries(popState)) state.set(key, value);
@@ -1129,6 +1204,10 @@ window.atlasSave = async (filename, blob) => {
     if (topicOf(L) === "Fit checks" && meta.initialization_check) {
       const check = meta.initialization_check;
       el.insertAdjacentHTML("beforeend", `<span class="note">${esc(check.message)} <a data-initialization-check href="${esc(fresh("data/" + check.image))}" target="_blank" rel="noopener">Annual-cycle check</a></span>`);
+    }
+    if (window.AtlasEvidence) {
+      const [tier, test] = evidenceOf(L, ["reach_defacto", "reach_towns"].includes(L.id) && L.variants ? variantOf(L) : null);
+      el.insertAdjacentHTML("beforeend", `<span class="note evidence-note"><b>Evidence: ${esc(tierInfo(tier).label)}.</b> ${esc(test)}</span>`);
     }
   }
 
@@ -2281,7 +2360,8 @@ window.atlasSave = async (filename, blob) => {
   harvestUI?.refresh();
   const requestedLayer = initialView.get("layer");
   if (initialView.has("variant")) { const L0 = meta.layers.find(L => L.id === requestedLayer);
-    if (L0?.variants) { showVariants(L0); const requested=initialView.get("variant"); $("variant").value = L0.variants.options.some(o=>o.value===requested)?requested:L0.variants.options.some(o=>o.value==='legacy_'+requested)?'legacy_'+requested:L0.variants.default; } }
+    if (L0?.variants) { const asked=initialView.get("variant");revealFor(L0,L0.variants.options.some(o=>o.value===asked)?asked:'legacy_'+asked);
+      showVariants(L0); const requested=initialView.get("variant"); $("variant").value = L0.variants.options.some(o=>o.value===requested)?requested:L0.variants.options.some(o=>o.value==='legacy_'+requested)?'legacy_'+requested:L0.variants.default; } }
   setLayer(meta.layers.some(L => L.id === requestedLayer) ? requestedLayer : meta.default_layer || "koppen");
   const selectedSeat=requestedLayer==='hierarchy_links'?hierarchyUI?.selectedPlace():null;
   if(selectedSeat)select(selectedSeat.x,selectedSeat.y,selectedSeat.seat_name);

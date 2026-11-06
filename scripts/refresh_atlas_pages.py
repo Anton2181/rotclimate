@@ -42,6 +42,7 @@ def main():
             text=text.replace('<script src="settled-reach.js"></script>','<script src="settled-reach.js" data-settled-reach-enabled></script>')
         (out / "index.html").write_text(text)
         shutil.copy(ROOT / "atlas" / "climate-comparison.js", out / "climate-comparison.js")
+        shutil.copy(ROOT / "atlas" / "evidence.js", out / "evidence.js")
         shutil.copy(ROOT / "atlas" / "harvest.js", out / "harvest.js")
         shutil.copy(ROOT / "atlas" / "farm-work.js", out / "farm-work.js")
         shutil.copy(ROOT / "atlas" / "administration.js", out / "administration.js")
