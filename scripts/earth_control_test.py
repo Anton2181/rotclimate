@@ -80,8 +80,9 @@ def food_fields(g, land):
     bits = np.zeros(len(cells), np.uint16)
     for c in sorted(set(crop)):
         sel = crop == c
-        if c not in CROPS:            # date palms: a perennial with no crop-window calendar -> no calendar, dropped below
-            log(f"   {c}: {sel.sum():,} cells have no crop-window calendar (perennial); dropped")
+        if c not in CROPS:            # date palms: a perennial with no crop-window calendar; main harvest Aug-Oct
+            bits[sel] = 1 << 8         # supply arrives in the September bin (WorldClim month index, January = 0)
+            log(f"   {c}: {sel.sum():,} cells given the September date harvest (perennial, no crop-window calendar)")
             continue
         cat = crop_windows(T[:, sel], P_[:, sel], PET[:, sel], soil[:, sel], irr[sel], crops={c: CROPS[c]})
         _, b = tied_harvest_boundaries(cat)
