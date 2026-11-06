@@ -60,3 +60,24 @@ def test_plot_ledger_closes_and_manure_raises_yield():
     yf = [s['grain_t_ha'] for s in fym['seasons']][-10:]
     assert sum(yf) > 1.5 * sum(yn)
     assert all(g <= 3.0 + 1e-9 for g in yf)
+
+
+def test_round2_options_conserve_and_behave():
+    from harvest.soil_fertility import wet_deposition
+    assert wet_deposition(1850) == 4.0 and wet_deposition(1980) == pytest.approx(18.0) and wet_deposition(2000) == pytest.approx(18.0)
+    p, s = add_fym(Pools(), 3.0, 225.0, hum_share=0.3)
+    assert p.hum == pytest.approx(0.9) and p.dpm == pytest.approx(1.05) and p.rpm == pytest.approx(1.05)
+    assert p.organic_n - s == pytest.approx(225.0)
+    forcing = []
+    for y in range(1900, 1915):
+        for m, row in enumerate(MONTHS, 1):
+            forcing.append(dict(year=y, month=m, T=row['T'], rain=row['rain'], et=row['et'],
+                                drainage=max(row['rain'] - row['et'], 0) * 0.6))
+    seasons = [Season('cereal', (y, 8), frozenset((y, m) for m in range(3, 8)),
+                      frozenset([(y - 1, 10), (y - 1, 11), (y - 1, 12)] + [(y, m) for m in range(1, 8)]), 1.0)
+               for y in range(1901, 1915)]
+    par = Params(input_n=15.0, uptake_rate=0.4, kappa=3.0, fym_hum=0.3, thermal_uptake=True, wet_deposition=True)
+    out = simulate(forcing, seasons, par, 23.4, 500.0, start=Pools(bio=0.5, hum=25.0),
+                   events={(y - 1, 10): [('fym', 3.0, 225.0)] for y in range(1901, 1915)})
+    assert abs(out['residual']) < 1e-6
+    assert all(s['grain_t_ha'] > 0 for s in out['seasons'])

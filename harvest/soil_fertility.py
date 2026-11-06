@@ -106,8 +106,9 @@ def add_plant(pools, carbon, cn):
                    dpm_n=pools.dpm_n + n * d / carbon, rpm_n=pools.rpm_n + n * r / carbon)
 
 
-def add_fym(pools, carbon, nitrogen):
-    """Farmyard manure (t C/ha, kg N/ha): 49 % DPM, 49 % RPM, 2 % HUM.
+def add_fym(pools, carbon, nitrogen, hum_share=None):
+    """Farmyard manure (t C/ha, kg N/ha): 49 % DPM, 49 % RPM, 2 % HUM (RothC), or
+    hum_share to HUM and the rest split equally DPM/RPM (round-2 option).
 
     The HUM share takes N at 8.5; the remaining N is split between DPM and RPM
     in proportion to their carbon. Returns (pools, mineral N surplus): if the
@@ -116,7 +117,8 @@ def add_fym(pools, carbon, nitrogen):
     """
     if carbon <= 0:
         return pools, 0.0
-    d, r, h = (carbon * s for s in FYM_SPLIT)
+    split = FYM_SPLIT if hum_share is None else ((1 - hum_share) / 2, (1 - hum_share) / 2, hum_share)
+    d, r, h = (carbon * s for s in split)
     n_h = 1000.0 * h / CN_BIOHUM
     rest = nitrogen - n_h
     surplus = min(rest, 0.0)
@@ -209,6 +211,18 @@ class Params:
     uptake_rate: float            # fraction of the mineral pool taken per uptake month
     kappa: float                  # climate potential scale on A0
     prior_manure: float = 0.0     # t C/ha/yr FYM in the spin-up regime
+    # round-2 options (plan_round2.json); defaults reproduce round 1
+    fym_hum: float | None = None  # FYM humified share (None: RothC 49/49/2)
+    thermal_uptake: bool = False  # uptake in every vegetated month at r_u x min(1, T/10)
+    wet_deposition: bool = False  # add Rothamsted's measured wet deposition W(year) to input_n
+
+
+def wet_deposition(year):
+    """Goulding et al. (1998): NO3 + NH4 N in Rothamsted precipitation, 4 kg N/ha/yr in 1855
+    rising to 18 in 1980 (linear between; 4 before 1855)."""
+    if year <= 1855:
+        return 4.0
+    return 4.0 + 14.0 * min(year - 1855, 125) / 125.0
 
 
 def cereal_uptake_for(grain):
@@ -242,15 +256,18 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
     results = []
     veg = set()
     upt = {}
+    vegetated_by = {}
     for s in seasons:
         veg |= set(s.vegetated)
         for m in s.uptake:
             upt.setdefault(m, []).append(s)
+        for m in s.vegetated:
+            vegetated_by.setdefault(m, []).append(s)
     for row in forcing:
         key = (row['year'], row['month'])
         for ev in events.get(key, []):
             if ev[0] == 'fym':
-                pools, surplus = add_fym(pools, ev[1], ev[2])
+                pools, surplus = add_fym(pools, ev[1], ev[2], params.fym_hum)
                 mineral += surplus
                 totals['fym'] += ev[2]
             elif ev[0] == 'fert':
@@ -260,9 +277,16 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
                 pools = add_plant(pools, ev[1], ev[2])
                 totals['residue_added'] += 1000.0 * ev[1] / ev[2]
         pools, net, _, _ = rothc_month(pools, row['T'], row['rain'], row['et'], key in veg, clay, max(mineral, 0.0), depth_cm)
-        mineral += net + params.input_n / 12.0
-        totals['input'] += params.input_n / 12.0
-        for s in upt.get(key, []):
+        monthly_in = (params.input_n + (wet_deposition(row['year']) if params.wet_deposition else 0.0)) / 12.0
+        mineral += net + monthly_in
+        totals['input'] += monthly_in
+        if params.thermal_uptake:
+            active_now = [s for s in vegetated_by.get(key, []) if s.crop in ('cereal', 'potato')]
+            g = min(1.0, max(0.0, row['T']) / 10.0)
+        else:
+            active_now = upt.get(key, [])
+            g = 1.0
+        for s in active_now:
             if s.crop == 'cereal':
                 demand = cereal_uptake_for(params.kappa * (s.potential_t_ha or 0.0))
             elif s.crop == 'potato':
@@ -270,7 +294,7 @@ def simulate(forcing, seasons, params, clay, water_mm, *, start=None, events=Non
             else:
                 continue
             got = crop_n.get(s.harvest, 0.0)
-            u = max(0.0, min(demand - got, params.uptake_rate * mineral))
+            u = max(0.0, min(demand - got, g * params.uptake_rate * mineral))
             mineral -= u
             crop_n[s.harvest] = got + u
         d = max(row['drainage'], 0.0)

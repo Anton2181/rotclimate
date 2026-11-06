@@ -63,7 +63,7 @@ def _rain_before_1878():
 
 
 @lru_cache(maxsize=None)
-def monthly(first_year=1843, last_year=1939):
+def monthly(first_year=1843, last_year=1967):
     """Ordered monthly forcing (year, month, T, rain, et) and the observed weather dict."""
     obs = load_weather(CACHE, last_year, LAT)
     early_rain = _rain_before_1878()
@@ -185,9 +185,16 @@ def spin_parts(site):
     return plant, unit
 
 
-def start_pools(site, prior_manure):
+def start_pools(site, prior_manure, target_total=None):
+    """Spin-up state. With target_total (t C/ha incl. IOM, Falloon et al. 1998) the prior plant
+    input is scaled so active C + IOM equals the target, and prior manure is not used."""
     p, u = spin_parts(site)
     f = prior_manure
+    if target_total is not None:
+        from harvest.soil_fertility import inert
+        k = (target_total - inert(target_total)) / p.active_c
+        return Pools(dpm=k * p.dpm, rpm=k * p.rpm, bio=k * p.bio, hum=k * p.hum,
+                     dpm_n=k * p.dpm_n, rpm_n=k * p.rpm_n, tsmd=0.0)
     return Pools(dpm=p.dpm + f * u.dpm, rpm=p.rpm + f * u.rpm, bio=p.bio + f * u.bio, hum=p.hum + f * u.hum,
                  dpm_n=p.dpm_n + f * u.dpm_n, rpm_n=p.rpm_n + f * u.rpm_n, tsmd=0.0)
 
@@ -222,7 +229,7 @@ def season(kind, year):
     return Season("fallow", (year, 12), frozenset(), frozenset(), None, f"{kind} {year}")
 
 
-def run(site, first_year, last_year, calendar, events, params, drainage=None):
+def run(site, first_year, last_year, calendar, events, params, drainage=None, target_total=None):
     rows, _, _ = forcing_rows(first_year, last_year)
     if drainage is None:
         drainage, _ = monthly_drainage(site, first_year, last_year, calendar)
@@ -230,4 +237,4 @@ def run(site, first_year, last_year, calendar, events, params, drainage=None):
         r["drainage"] = drainage[(r["year"], r["month"])]
     seasons = [season(k, y) for y, k in sorted(calendar.items())]
     return simulate(rows, seasons, params, SOILS[site]["clay"], water_mm(site),
-                    start=start_pools(site, params.prior_manure), events=events)
+                    start=start_pools(site, params.prior_manure, target_total), events=events)
