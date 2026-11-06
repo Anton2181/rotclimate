@@ -1,3 +1,16 @@
+# Fertility integration (AD 200 N 27.5) — COMPUTED, NOT PUBLISHED, default undecided — 6 November 2026
+
+* harvest/fertility_regimes.py (vectorised emulator, validated within 4 %, bare-fallow 19 % low),
+  scripts/fertility_integration.py (earth / earth_figure / maps), scripts/extend_settlement_fertility.py
+  (fert_transfer/bare/legume cases on the SAME chain, all 9 earlier cases kept), publisher note.
+* Factor F = Y_land(regime) / (0.68 A0) (absolute; first ratio pass exploded, superseded before publish).
+* Earth anchor: NCP needs no transfer (water-limited; m* = 0) -> transfer = bare. Census mean |log10|:
+  previous 0.538, bare 0.407, legume 0.682 (Gaul 0.10-0.22 -> 0.55-1.24; Sichuan 0.09 -> 0.59).
+* Map: bare cuts wheat/barley grain to 0.42-0.77x and staffed sources ~1,000 -> ~200-330; legume
+  1.2-1.5x grain. Zero-grain cells below 26 kg N uptake are a residue-relation artifact.
+* Viewer default reverted to joint365; nothing written into atlases. Waiting on user's default choice.
+  Report: reports/FERTILITY_INTEGRATION_20261106.md.
+
 # Soil fertility ROUND 2 — credible equilibrium, QUALIFIES blind on Broadbalk 1926-67 — 6 November 2026
 
 * Plan 517f33da (before fit/test read) -> amendment d5b57277 (crop N-demand curve; the
