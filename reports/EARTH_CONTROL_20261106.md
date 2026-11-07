@@ -91,3 +91,55 @@
 - **The targets are claims.** The polygons are extents (Cliopatria) and administrative units, not measured presence. So the extent score cannot penalise a lenient food model, which is why it is a gate here and not the ranking.
 - **Resolution and data.** The windows are 9 km. Han has no roads. Millet is kept as a fertility crop on Earth; the atlas grids carry wheat and barley only.
 - **Sea and river constants** are the Earth tests' fitted values (`calibration/polity_20261025/sea.json`).
+
+## Round 2 (development) and the blind test, 7 November 2026
+
+### Round 2 on the seen Rome / Han pools
+
+**Plan:** `plan_round2.json`, frozen at d9d2ff99 before any round-2 result.
+
+**Two changes:**
+- **L1, the scaled rural claim:** the rural claim becomes 0.6 × the *produced* harvest.
+- **New reach rules P1–P3:** year-round days ≤ 2 from staffed towns.
+  - P1: staffed towns only;
+  - P2: plus the roads within 2 days of them;
+  - P3: plus all roads.
+
+| Rome / Han BA | P0 (round 1) | P1 | **P2** | P3 |
+|---|---:|---:|---:|---:|
+| fert_bare, fixed claim | 0.606 / 0.603 | 0.624 / 0.647 | 0.711 / 0.647 | 0.821 / 0.647 |
+| fert_bare, scaled claim (L1) | 0.696 / 0.629 | 0.725 / 0.682 | **0.835** / 0.682 | 0.821 / 0.682 |
+| joint365, L1 | 0.698 / 0.633 | 0.728 / 0.691 | 0.835 / 0.691 | 0.821 / 0.691 |
+| fert_legume, L1 | 0.697 / 0.634 | 0.727 / 0.692 | 0.835 / 0.692 | 0.821 / 0.692 |
+| legacy_0 (transport only) | 0.820 / 0.700 | | | |
+
+**What changed:**
+- **L1 brings bare fallow back.** It staffs 84 % of Rome's towns (40 % before) and 92 % of Han's seats (76 %), with no rural need unmet.
+- **R\* = P2**, mean BA 0.762. With all towns staffed, P3 reproduces legacy_0 exactly (0.820 / 0.700), which checks the code.
+- **P2 beats transport only in Rome (0.835).** It drops the desert roads that no fed town maintains.
+
+![round 2](../output/earth_control_20261106/round2/earth_control_round2.png)
+
+### Blind test
+
+**Plan:** `plan_blind.json`, frozen at 092f4ab4 before any outcome. The pools have never been used:
+- **B1:** 2,890 cells of Pleiades Hellenistic settlements, against the land held by any state in 200 BC;
+- **B2:** 188 cells of Neo-Assyrian settlements, against 700 BC.
+
+The windows have no roads, so P2 = P1.
+
+| | B1 BA | B1 staffed | B2 BA | B2 staffed | G1 (≥ 75 % both) | G2 (≥ legacy − 0.02 both) |
+|---|---:|---:|---:|---:|:---:|:---:|
+| legacy_0 | 0.649 | — | 0.606 | — | | |
+| joint365 (L1, P2) | 0.639 | 69 % | 0.604 | 82 % | ✗ | ✓ |
+| fert_bare (L1, P2) | 0.648 | 49 % | 0.612 | 82 % | ✗ | ✓ |
+| fert_legume (L1, P2) | **0.654** | 73 % | **0.612** | 87 % | ✗ | ✓ |
+
+**No case passes, so transport only stays the default.**
+- **G2 passes everywhere.** On extent, the round-2 chain is as good as transport only on unseen data, and the two fertility regimes are slightly better in both pools. It removes land that no state held at the desert edges, against some interior state land.
+- **G1 fails in B1.** The chain staffs 49–73 % of the Hellenistic settlements.
+- **Why G1 fails (post hoc).** G1 assumed every source is a town that housed an institution, which held for Han county seats and Hanson's towns. Pleiades "settlements" include villages and minor sites, so the gate measured something different here. This is noted for the next plan; the frozen rule stands.
+
+![blind](../output/earth_control_20261106/blind/earth_control_blind.png)
+
+**Next (queued in `CONTROL_MAP_V2_PLAN_20261107.md`):** a fresh blind pool whose sources are documented administrative or urban centres, so that G1 means what it meant on Rome and Han. G2 alone would need its own frozen rule. The B1 and B2 pools are now spent.

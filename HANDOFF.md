@@ -12,6 +12,16 @@
   earth_fit drops tier twins (511-file cap). Smoke passes all three.
 * Report: reports/FERTILITY_INTEGRATION_20261106.md.
 
+# Earth control round 2 + BLIND test — no food case passes; transport only stays default — 7 November 2026
+
+* Round 2 (dev, plan d9d2ff99): scaled rural claim L1 (0.6 x produced) + reach P2 (staffed towns + roads within 2 year-round
+  days): Rome 0.835 vs legacy 0.820, Han 0.682-0.692 vs 0.700; bare staffs 84 % / 92 % (40 / 76 % before).
+* Blind (plan 092f4ab4, Pleiades Hellenistic 200 BC + Neo-Assyrian 700 BC vs Cliopatria any-state; now SPENT): G2 passes
+  for all food cases (legume 0.654 vs 0.649, 0.612 vs 0.606), G1 fails in B1 (staffed 49-73 % of Pleiades settlements,
+  which include villages). No default change. Lesson: next blind pool needs documented administrative/urban centres.
+* e72 storm_plateau (P6) implemented opt-in (bit-for-bit off), dev31 screen running (output/east_asia_p6_20261107).
+* Queue: reports/CONTROL_MAP_V2_PLAN_20261107.md (control v2, settlement spread, population; Domesday 1086 blind).
+
 # Earth control test — transport-only map is the DEFAULT again (frozen rule) — 6 November 2026
 
 * Plan d1935f2b (before results); scripts/earth_control_test.py runs the atlas chain on the Rome (Hanson AD 150 +
