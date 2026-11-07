@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any outcome on these pools",
+  "purpose": "Second blind test of the round-2 chain (R* = P2, scaled rural claim L1) against transport only, on sources that are documented administrative centres (every county seat housed a magistrate's office), so that G1 means what it meant on the Han AD 2 development pool. The first blind test (plan_blind.json) failed G1 on Pleiades settlements, which include villages.",
+  "data": "CHGIS V6 Time Series County Points (Harvard Dataverse doi:10.7910/DVN/Q9VOF5, v6_time_cnty_pts_utf_wgs84.zip sha256 3b431d2e...c8d5c5, downloaded 2026-11-07; not redistributed), seats alive in the year (BEG_YR <= year <= END_YR); Cliopatria v0.21 extents.",
+  "pools": {
+    "C1_western_jin_280": {
+      "sources": "CHGIS county seats alive in AD 280",
+      "target": "Cliopatria 'Western Jin' and 'Eastern Wu' alive in 280 (the two states whose counties CHGIS lists that year)"
+    },
+    "C2_ming_1580": {
+      "sources": "CHGIS county seats alive in AD 1580",
+      "target": "Cliopatria 'Ming Dynasty' alive in 1580"
+    }
+  },
+  "window": "The Han Earth window (output/polity_earth/han.npz) with its round-1 food fields (output/earth_control_20261106/han_food.npz): same climate, crops and fertility factors as the development pool.",
+  "dependence": "Same geography, window and food fields as the Han AD 2 development pool, and county seats often at the same places; the sources (CHGIS, not the Zheng & Wu AD 2 points), the years and the targets are new. A pass here is evidence the chain transfers across eras within China, not across regions.",
+  "chain": "As plan_blind.json: L1, R* = P2 (no roads, so P1), cases joint365, fert_bare, fert_legume; legacy_0 = year-round days <= 2 from all seats; band = land within 15 walking days (v1) of the seats.",
+  "decision_rule": {
+    "G1": "staffs >= 75 % of the seat cells, in C1 and in C2",
+    "G2": "balanced accuracy >= legacy_0 - 0.02, in C1 and in C2",
+    "choice": "among cases passing G1 and G2 in both pools, the lowest published census error (fert_bare 0.459, joint365 0.538, fert_legume 0.685); if none passes, transport only stays the default"
+  },
+  "if_passing": "Build L1 and P2 into the atlas chain (CONTROL_MAP_V2_PLAN_20261107.md step 1) and make the passing case the default, badged 'blind-tested in China (two eras)'."
+}
