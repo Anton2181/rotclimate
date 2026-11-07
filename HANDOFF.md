@@ -12,6 +12,16 @@
   earth_fit drops tier twins (511-file cap). Smoke passes all three.
 * Report: reports/FERTILITY_INTEGRATION_20261106.md.
 
+# P6 East Asia: e72c (plateau-steered storms) QUALIFIES on development data — 7 November 2026
+
+* e72 (band meets plateau) inert: model band 40-53 N over East China all year. e72b (cold-season gate, window terrain):
+  East China x0.904, S Brazil x0.880 but East Asia short. e72c (global 0.5-deg plateau ring, earth.plateau_profile):
+  k10c East Asia rain x0.947, all-31 x0.987, T x0.990.
+* Policy v3 gate (plan_gate.json): S49 0.9912 (T -0.86 %, P -0.89 %), S28 0.9859: PASS. retired_b 1.013 (reported).
+* NOT adopted yet: the unseen sealed stage needs set f, which stays closed until the owner releases it.
+  Candidate: calibration/east_asia_p6_20261107/candidate_e72c_k10c_params.json. Map world unaffected (no plateau > 2.5 km).
+* Report: reports/EAST_ASIA_E72_20261107.md.
+
 # Earth control round 2 + BLIND test — no food case passes; transport only stays default — 7 November 2026
 
 * Round 2 (dev, plan d9d2ff99): scaled rural claim L1 (0.6 x produced) + reach P2 (staffed towns + roads within 2 year-round
