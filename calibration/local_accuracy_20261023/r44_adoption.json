@@ -1,0 +1,50 @@
+{
+ "adopted": "r44",
+ "adopted_utc": "2026-11-07T13:07:21.386615+00:00",
+ "reference": "r43",
+ "params": "calibration/local_accuracy_20261023/r44_params.json",
+ "params_sha256": "c269034f5d889c5ddb91d13da44d075820f3514406c80d422e2a7cd42f9076e1",
+ "validation": "output/east_asia_p6_20261107/gate_d15",
+ "validation_result_sha256": "7bbaed8826aeca38f4f66a87477086ebb5792172a8acf42ef0d4d9275df4c710",
+ "plans": [
+  "calibration/east_asia_p6_20261107/plan_e72d.json",
+  "calibration/east_asia_p6_20261107/plan_gate_d15.json",
+  "calibration/sealed_20261107g/declaration.json"
+ ],
+ "criteria": "Unchanged policy_v3: dev49 S<=.995; T/P<=+1%; fine28 S<=1.01; unseen sealed S<=1.0 (set g, five clean boxes after amendment_1).",
+ "scores": {
+  "dev49": {
+   "S": 0.9902277419269021,
+   "T": -0.009021839724032699,
+   "P": -0.01052267642216298,
+   "n": 49
+  },
+  "dev_pass": true,
+  "fine28": {
+   "S": 0.9859431895632129,
+   "T": -0.009298353380548074,
+   "P": -0.018815267493025978,
+   "n": 4
+  },
+  "fine_pass": true,
+  "sealed_g": {
+   "S": 0.9784735642288078,
+   "T": -0.019759653324378346,
+   "P": -0.023293218218006118,
+   "n": 5
+  },
+  "sealed_pass": true,
+  "outcome": "adopted"
+ },
+ "changed_fields": [
+  "storm_plateau",
+  "storm_plateau_season",
+  "storm_plateau_global",
+  "storm_plateau_reach_deg"
+ ],
+ "history": "e72 inert, e72b window-limited, e72c failed sealed set f (eastern Siberia), e72d (reach 15 deg) passed; see reports/EAST_ASIA_E72_20261107.md",
+ "planet_orbit_changed": false,
+ "imposed_observed_wind_or_sst": false,
+ "map_effect": "None on the atlas worlds: no land above 2,500 m (smoothed); the Earth-trained corrections can be retrained on r44.",
+ "atlas_served": "r43"
+}
