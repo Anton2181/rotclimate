@@ -1,0 +1,33 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any Earth reconstruction result (the map preview output/terrain_erosion_20261107/map_preview_f2.* is uncalibrated and used no Earth data)",
+ "question": "Does the steady-state erosion generator (scripts/terrain_erosion.py evolve) rebuild real terrain from a hand-map-like sketch (four tiers + the biggest rivers) better than today's tier ramps, in the properties that shape travel and borders?",
+ "data": "ETOPO 2022 surface elevation at 60 arc-seconds (NOAA NCEI, public domain) via OPeNDAP subsets, on a local equal-area grid of 1.85 km (the map's source pixel is 1.84 km); land = elevation > 0 within the window",
+ "windows": {
+  "development": {"D1_apennines": [40.5, 45.0, 10.0, 16.0], "D2_anatolia": [37.0, 41.0, 30.0, 36.0], "D3_sichuan_rim": [28.0, 33.0, 102.0, 108.0], "D4_massif_central": [43.5, 47.5, 1.0, 6.0]},
+  "blind": {"B1_balkans": [41.0, 45.0, 19.0, 24.0], "B2_zagros": [31.0, 35.5, 46.0, 51.0], "B3_guizhou": [25.0, 29.0, 106.0, 111.0], "B4_appalachians": [35.0, 39.5, -84.0, -78.0]},
+  "format": "[south, north, west, east] degrees"
+ },
+ "sketch": {
+  "tiers": "the true elevation smoothed over 5 km, cut into four classes at the window's quantiles that give the map's tier land shares (70.5 / 12.1 / 10.7 / 6.7 %)",
+  "tops": "tier k's top = the cut between k and k+1; tier 4's top = the 95th percentile of tier-4 elevation",
+  "h0": "today's construction (rotclimate.geography _tier_ramps + elevation_fullres logic) on the sketch tiers with those tops",
+  "rivers": "the true terrain's own routed channels (fastscapelib on the true DEM) with the largest drainage areas, as many channel cells per land cell as the map's marked rivers (27,875 px of the map's land)"
+ },
+ "candidates": "evolve() settings, grid: m in {0.35, 0.45, 0.55}; noise_km in {6, 12, 24}; noise_sigma in {0.2, 0.35, 0.6}; river_boost_km2 in {1000, 3000, 10000}; smooth_px in {0, 0.7}; burn_m 4, rounds 6, lowpass_km 14 fixed. Baseline: h0 itself (today's ramps).",
+ "metrics": {
+  "M1_divides": "symmetric mean distance (km) between drainage-divide cells of basins >= 500 km2 routed on the true and on the reconstructed surface",
+  "M2_slopes": "Kolmogorov-Smirnov distance between true and reconstructed slope distributions, mean over the four tiers",
+  "M3_new_rivers": "F1 within 5 km between reconstructed and true channels >= 500 km2 that are not sketch rivers",
+  "M4_isochrones": "mean intersection-over-union of 2-day walking reach (Tobler on slope, 8-neighbour, no land cover) from 30 fixed random land points per window, true against reconstructed",
+  "M5_tier_band": "share of each tier's cells within its band +/- 10 % on the true surface (the Earth reference for the map's faithfulness check) and on the reconstruction"
+ },
+ "selection": "C* = the setting with the best mean rank over M1, M2 and M4 across the development windows; M3 and M5 reported",
+ "blind_gates": {
+  "G1": "C* beats the ramps baseline on M1 in at least 3 of the 4 blind windows",
+  "G2": "C* beats the ramps baseline on M2 in at least 3 of 4",
+  "G3": "C* beats the ramps baseline on M4 in at least 3 of 4",
+  "adopt": "if G1-G3 pass, C* builds the map's height map v2 (plan B3), whose tier-band check uses the Earth M5 reference minus 5 points instead of a flat 90 %; the owner sees a hillshade preview before anything downstream changes; else the generator is revised and a new blind set declared"
+ }
+}
