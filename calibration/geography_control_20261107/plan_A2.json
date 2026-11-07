@@ -15,5 +15,69 @@
   "G1": "beta* BA >= beta 0 BA - 0.01 in all three blind pools",
   "G2": "beta* D < beta 0 D in at least 2 of the 3 blind pools",
   "adopt": "both: the map's reach networks take (1 + beta* R) with R from height map v2 and the chain is rebuilt (plan D); else the travel cost stays and the report says so"
+ },
+ "development_result": {
+  "mean_ba": {
+   "0.0": 0.7562304496244752,
+   "0.5": 0.7465832530832415,
+   "1.0": 0.7407218939840743,
+   "2.0": 0.7276513415658905,
+   "4.0": 0.7163907623582357,
+   "8.0": 0.7055640851034916
+  },
+  "beta_star": 0.0,
+  "rome": {
+   "0.0": [
+    0.849,
+    0.157
+   ],
+   "0.5": [
+    0.847,
+    0.208
+   ],
+   "1.0": [
+    0.847,
+    0.267
+   ],
+   "2.0": [
+    0.845,
+    0.333
+   ],
+   "4.0": [
+    0.843,
+    0.432
+   ],
+   "8.0": [
+    0.839,
+    0.508
+   ]
+  },
+  "han": {
+   "0.0": [
+    0.664,
+    0.184
+   ],
+   "0.5": [
+    0.646,
+    0.147
+   ],
+   "1.0": [
+    0.635,
+    0.094
+   ],
+   "2.0": [
+    0.61,
+    0.205
+   ],
+   "4.0": [
+    0.59,
+    0.565
+   ],
+   "8.0": [
+    0.572,
+    0.886
+   ]
+  },
+  "verdict": "beta* = 0: every beta > 0 lowers balanced accuracy (Rome 0.849 -> 0.839 at 8, Han 0.664 -> 0.572; rugged land drops out of the territory). Han's border enrichment gets closer to the real border at beta 1 (D 0.184 -> 0.094) at a 0.03 BA cost; Rome's moves away. No candidate qualifies, so the blind pools were not opened (prep processes stopped before writing any T mask; nothing scored) and are released unused. The travel cost stays."
  }
 }
