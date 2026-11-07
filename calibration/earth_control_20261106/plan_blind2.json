@@ -22,5 +22,43 @@
     "G2": "balanced accuracy >= legacy_0 - 0.02, in C1 and in C2",
     "choice": "among cases passing G1 and G2 in both pools, the lowest published census error (fert_bare 0.459, joint365 0.538, fert_legume 0.685); if none passes, transport only stays the default"
   },
-  "if_passing": "Build L1 and P2 into the atlas chain (CONTROL_MAP_V2_PLAN_20261107.md step 1) and make the passing case the default, badged 'blind-tested in China (two eras)'."
+  "if_passing": "Build L1 and P2 into the atlas chain (CONTROL_MAP_V2_PLAN_20261107.md step 1) and make the passing case the default, badged 'blind-tested in China (two eras)'.",
+  "result": {
+    "decision": {
+      "gates": {
+        "joint365": {
+          "G1": true,
+          "G2": true,
+          "census_error": 0.538
+        },
+        "fert_bare": {
+          "G1": true,
+          "G2": false,
+          "census_error": 0.459
+        },
+        "fert_legume": {
+          "G1": true,
+          "G2": true,
+          "census_error": 0.685
+        }
+      },
+      "passing": [
+        "joint365",
+        "fert_legume"
+      ],
+      "default": "joint365"
+    },
+    "C1": {
+      "legacy_0": 0.7097,
+      "joint365": 0.7067,
+      "fert_bare": 0.6903,
+      "fert_legume": 0.7037
+    },
+    "C2": {
+      "legacy_0": 0.789,
+      "joint365": 0.7869,
+      "fert_bare": 0.768,
+      "fert_legume": 0.783
+    }
+  }
 }

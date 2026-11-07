@@ -1,0 +1,128 @@
+{
+ "plan": "calibration/earth_control_20261106/plan_blind2.json",
+ "R_star": "P2",
+ "pools": {
+  "C1": {
+   "band_cells": 64397,
+   "inside_share": 0.676848300386664,
+   "legacy_0": {
+    "ba": 0.7097078253419864,
+    "tpr": 0.46564342579209395,
+    "tnr": 0.9537722248918789,
+    "held_km2": 1721898.0
+   },
+   "joint365": {
+    "ba": 0.7066624449378486,
+    "tpr": 0.45623695138458714,
+    "tnr": 0.9570879384911101,
+    "held_km2": 1683099.0,
+    "staffed_share": 0.9843444227005871
+   },
+   "fert_bare": {
+    "ba": 0.6902823256479083,
+    "tpr": 0.4224195287585748,
+    "tnr": 0.9581451225372417,
+    "held_km2": 1561923.0,
+    "staffed_share": 0.8933463796477495
+   },
+   "fert_legume": {
+    "ba": 0.703696969568681,
+    "tpr": 0.45107486177071143,
+    "tnr": 0.9563190773666507,
+    "held_km2": 1666170.0,
+    "staffed_share": 0.9657534246575342
+   },
+   "chain": {
+    "sources": 1022,
+    "seats": 1054,
+    "chain": {
+     "joint365": {
+      "production_ratio": 1.0,
+      "rural_unmet_share": 0.0
+     },
+     "fert_bare": {
+      "production_ratio": 1.0059429664669304,
+      "rural_unmet_share": 0.0
+     },
+     "fert_legume": {
+      "production_ratio": 1.3318605146987126,
+      "rural_unmet_share": 0.0
+     }
+    }
+   }
+  },
+  "C2": {
+   "band_cells": 58952,
+   "inside_share": 0.7526801465599131,
+   "legacy_0": {
+    "ba": 0.7889712144375579,
+    "tpr": 0.6373388623456233,
+    "tnr": 0.9406035665294925,
+    "held_km2": 2360826.0
+   },
+   "joint365": {
+    "ba": 0.7868576458639929,
+    "tpr": 0.6324258541422518,
+    "tnr": 0.9412894375857339,
+    "held_km2": 2342358.0,
+    "staffed_share": 0.9854014598540146
+   },
+   "fert_bare": {
+    "ba": 0.7679559935781743,
+    "tpr": 0.5857748129451005,
+    "tnr": 0.9501371742112483,
+    "held_km2": 2164239.0,
+    "staffed_share": 0.8642335766423358
+   },
+   "fert_legume": {
+    "ba": 0.7829827928164884,
+    "tpr": 0.6244703867303705,
+    "tnr": 0.9414951989026064,
+    "held_km2": 2313522.0,
+    "staffed_share": 0.9613138686131387
+   },
+   "chain": {
+    "sources": 1370,
+    "seats": 1416,
+    "chain": {
+     "joint365": {
+      "production_ratio": 1.0,
+      "rural_unmet_share": 0.0
+     },
+     "fert_bare": {
+      "production_ratio": 1.0059429664669304,
+      "rural_unmet_share": 0.0
+     },
+     "fert_legume": {
+      "production_ratio": 1.3318605146987126,
+      "rural_unmet_share": 0.0
+     }
+    }
+   }
+  }
+ },
+ "decision": {
+  "gates": {
+   "joint365": {
+    "G1": true,
+    "G2": true,
+    "census_error": 0.538
+   },
+   "fert_bare": {
+    "G1": true,
+    "G2": false,
+    "census_error": 0.459
+   },
+   "fert_legume": {
+    "G1": true,
+    "G2": true,
+    "census_error": 0.685
+   }
+  },
+  "passing": [
+   "joint365",
+   "fert_legume"
+  ],
+  "default": "joint365"
+ }
+}
