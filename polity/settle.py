@@ -52,23 +52,28 @@ DRY_WATER_KM = 40.0
 URBAN_SHARE = 0.075
 
 
-def site_score(density, land, water_km, coast_km, road, elev, cell_km):
+SITE_WEIGHTS = dict(a=1.0, w_r=1.0, w_c=0.5, w_d=0.5, k_f=20.0)   # density exponent, river, coast, road, slope
+
+
+def site_score(density, land, water_km, coast_km, road, elev, cell_km, weights=None):
+    w = SITE_WEIGHTS if weights is None else {**SITE_WEIGHTS, **weights}
     d = ndi.gaussian_filter(np.where(land, density, 0.0), 1.0)
-    river = 1.0 + np.exp(-np.maximum(np.nan_to_num(water_km, nan=99), 0) / 3.0)
-    coast = 1.0 + 0.5 * (coast_km <= 6.0)
-    near_road = 1.0 + 0.5 * (ndi.distance_transform_edt(~road) * cell_km <= 4.0)
+    river = 1.0 + w["w_r"] * np.exp(-np.maximum(np.nan_to_num(water_km, nan=99), 0) / 3.0)
+    coast = 1.0 + w["w_c"] * (coast_km <= 6.0)
+    near_road = 1.0 + w["w_d"] * (ndi.distance_transform_edt(~road) * cell_km <= 4.0)
     gy, gx = np.gradient(np.asarray(elev, float), cell_km * 1000.0)
-    flat = 1.0 / (1.0 + 20.0 * np.hypot(gx, gy))
-    return np.where(land, d * river * coast * near_road * flat, 0.0), d
+    flat = 1.0 / (1.0 + w["k_f"] * np.hypot(gx, gy))
+    dd = d if w["a"] == 1.0 else np.power(np.maximum(d, 0.0), w["a"])
+    return np.where(land, dd * river * coast * near_road * flat, 0.0), d
 
 
 def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
-                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default"):
+                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default", weights=None):
     seat_people = SEAT_PEOPLE if seat_people is None else seat_people
     beta = SEAT_BETA if beta is None else beta
     max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
     coast_km = ndi.distance_transform_edt(land) * cell_km
-    score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km)
+    score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km, weights)
     # local quirks of site (springs, fords, a defensible hill) that no map layer
     # holds: +-25 % on a ~10 km scale, fixed seed
     rng = np.random.default_rng(seed)
