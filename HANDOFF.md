@@ -1,3 +1,16 @@
+# A2 / C1 results: borders follow food, towns and enclosure, not slope, ruggedness or forest — 7 November 2026
+
+* A2 (plan_A2.json): ruggedness travel cost (1 + beta R) lowers dev BA for all beta > 0; beta* = 0; blind pools
+  1200/1820/1500 NOT opened (released unused in dataset_usage.json).
+* v2.1 cartography + painted claims (light tint + fine line where claimed but unheld). Hosted: earth v30, free v32,
+  whittaker v21. Smoke passes.
+* C1 (plan_C1.json + amendments 1-2, REVEALS TW6 in data/cache/reveals_20261107, CC BY 4.0): Whittaker biome lookup is
+  wrong for temperate Europe (woodland/shrubland -> 0 forest; open land overstated by 0.29). Adopted C1b: forest =
+  clip((P/PET - 0.3)/0.2) x clip((GDD5 - 300)/300) x 0.60 (blind open-land RMSE 0.326 vs 0.556). Population clearing
+  not adopted (0.346). No rank skill anywhere (|rho| <= 0.11). C1b not yet wired into the map (C2 travel test pending;
+  effect is a near-uniform ~10 % friction change).
+* Report section 8 lists options for the owner: D rebuild on height map v2; cartographic frontier smoothing; C2.
+
 # B done to owner review: height map v2; discs are the travel model, not the terrain — 7 November 2026
 
 * plan_B2 (amendment 1 before blind): C* (m 0.35, noise 24 km, sigma 0.6, boost 10,000 km2, no smoothing) adopted:

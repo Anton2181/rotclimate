@@ -311,3 +311,47 @@ The selected setting was fitted on four development windows and scored once on f
      pool declared first.
 2. **C (land cover).** Forests, marshes and clearings, which matter most in the 0–62 m lowlands where relief cannot.
 3. **D.** Rebuild the chain on height map v2 with the adopted travel and land-cover rules; then control v3.
+
+**A2: tested, not adopted** (`plan_A2.json`).
+* Ruggedness-sensitive travel, cost × (1 + β × local relief), lowers balanced accuracy for every β > 0 on development:
+  Rome 0.849 → 0.839, Han 0.664 → 0.572. Rugged land drops out of territory.
+* Han's border-feature statistics move closer to the real border at β = 1, but at a 0.03 accuracy cost.
+* No candidate qualified, so the three reserved blind pools (AD 1200, 1820, 1500) were never opened and stay unused.
+
+**Cartography: painted claims added to v2.1.** Claimed but unheld land is drawn as a light tint of the claimant with
+a fine line. Each polity now reads as its painted shape with the held core inside (presentation only; your own data).
+
+**C1: forest level fixed, no pattern found** (`plan_C1.json`).
+* *Target:* REVEALS pollen open land, 250 BCE–250 CE, 1° cells; 121 development cells and 147 blind.
+* *A problem found in development:* the map's Whittaker biome lookup counts most temperate-Europe climates as
+  woodland/shrubland, i.e. zero forest. It overstates AD 200 open land by about 0.29.
+* *Adopted (blind):* a moisture-index potential × (1 − 0.40 constant clearing), open-land RMSE 0.326 against 0.556
+  for the lookup.
+* *Not adopted:* population-driven clearing (Kaplan-type), RMSE 0.346 against 0.326.
+* *No pattern skill:* no rule ranks the cells (|ρ| ≤ 0.11). Open land is 35–46 % in every latitude band and is
+  unrelated to climate, density or latitude. Roman-era clearing was widespread and patchy below what these models
+  resolve.
+
+## 8. What the Earth tests say about geography and borders (7 November)
+
+Four independent tests point the same way. At these scales (1.85–9 km cells, Cliopatria extents), real borders are
+explained by:
+* **where food runs out** (desert edges: Rome's border is 4.7× enriched);
+* **where staffed towns are**;
+* **enclosure.**
+
+They are not explained by:
+* slope under walking travel (2-day zones on real terrain are discs too);
+* ruggedness-weighted travel (it costs accuracy);
+* the spatial pattern of AD 200 forest (not predictable from climate or population).
+
+The evidence-backed map is therefore v2.1 (held + enclosed + painted claims). Height map v2 adds real rivers, valleys
+and slopes for settlement, farming and the look of the map. Remaining frontier scallops are the 2-day reach of
+outlying towns; smoothing them would be cartographic generalization, not geography.
+
+**Open options:**
+1. Plan D: rebuild towns, farming and reach on height map v2 (valley sites, new rivers, arable land by slope). This
+   improves realism, though it changes the border shape little on this evidence.
+2. Cartographic frontier smoothing at ~10 km, labelled as generalization.
+3. C2: the new forest share in travel friction. It is small and roughly uniform (forest coefficient 1.5 against 1.1–1.2
+   open).
