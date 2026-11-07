@@ -1,3 +1,15 @@
+# r44 on the map: raw climate IDENTICAL; corrections retrained — 7 November 2026
+
+* scripts/check_r44_map.py (output/r44_map_check/summary.json): map world (seeds 1-3, downsample 8) under r43 and r44
+  (calibration/map_world_r44/params.json = r43 world + four e72 fields): T, P, u, v max |diff| 0 (bit-identical; no map
+  plateau). r44 corrections (calibration/earth_correction_r44_20261107; held-out T MAE 1.506 vs r43 1.537 C, rain loss
+  0.4318 vs 0.4384) move the corrected map -0.39 C mean (|d| 0.41, p95 0.77, max 1.30 C), rain ratio median 0.998
+  (5-95 % 0.925-1.083); corrected strict zone agreement 37.70 -> 37.83 %. r44 checkpoint: output/r44_world/ (local).
+* NOT yet released into atlases/earth_fit: the corrected-mode cascade (add_corrected_climate.py, then pasture, farm work,
+  administration, coverage, presence, settlement fertility chain + control v2) must rerun on the r44 corrections; the
+  atlas stays r43-labelled until then. Raw-mode packets need no change.
+* Sealed set h declared (calibration/sealed_20261107h, eight unseen climates) for the next climate milestone (P8).
+
 # Control map v2 PUBLISHED as the de facto default; settlement model blind-tested — 7 November 2026
 
 * Supply-supported reach opens on v2 (joint365 staffing + P2: staffed towns and the painted roads within 2 year-round
