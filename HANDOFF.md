@@ -7,6 +7,8 @@
   publish order); live r43 backup local in output/atlas_r44/previous_atlases/earth_fit_r43. Smoke passes all three.
 * free_fit / whittaker_fit keep the tier ramps (height map v2 is built on Earth-fit tier tops); their add-ons were
   recomputed consistently. Report: reports/R44_TERRAIN_20261107.md.
+* Hosted (republished 7 Nov): earth v35 (4 batches; 492 data files, *_tiers.webp left out for the 511-file cap),
+  free v34 and whittaker v23 (22 changed add-on files each; .gz sent as application/wasm).
 
 # Owner: unmarked hills allowed; deserts may be holes — done 7 November 2026
 
