@@ -72,7 +72,7 @@
     reach_control: ["partial", T.reach], reach_control_winter: ["partial", T.reach], reach_months: ["partial", T.reach],
     reach_days: ["partial", T.reach], reach_capital: ["partial", T.reach], reach_cause: ["partial", T.reach],
     reach_polities: ["partial", T.reach], reach_sea: ["partial", T.sea],
-    reach_defacto: ["partial", T.reach], reach_towns: ["partial", "Seat counts and spacing fitted on Earth, with later-era checks; not an all-village or town-size model."],
+    reach_defacto: ["partial", T.reach], reach_towns: ["partial", "Unmarked towns: the count rule is Earth-fitted and blind-checked (Sui county seats of AD 610 predicted within about 11 %); about half the towns land within a day's walk of a real seat (F1 0.48) and city sites rank above random land (AUC 0.63); site weights remain assumptions (a fitted set was not adopted). Not an all-village or town-size model."],
     reach_trade: ["experimental", T.trade],
     reach_coverage_audit: ["diagnostic", T.coverage], presence_food: ["experimental", T.presence],
     language_density: ["partial", T.langDensity], language_farming_arrival: ["partial", T.langSpread],
@@ -94,19 +94,21 @@
   const OPTIONS = {
     fert_bare: ["scenario", "Food budget with a bare-fallow three-field rotation at the AD 200 nitrogen input. Best census fit (mean |log10| error 0.46, joint budget 0.54), but in the end-to-end test it can staff only 40 % of Rome's real towns and 76 % of Han's county seats, and it holds less land (balanced accuracy 0.61 Rome, 0.60 Han, against 0.82 and 0.70 for transport only). Failed the frozen gates; no longer the default."],
     fert_legume: ["scenario", "Three-field rotation with a clover third at the AD 200 nitrogen input. Census error 0.69 (worse than bare fallow)." + scored + "staffs 93 % of real sources in both empires, balanced accuracy 0.69 Rome and 0.63 Han, against 0.82 and 0.70 for transport only."],
+    v2_joint365: ["partial", "Default. Blind-tested: on Chinese county seats of AD 280 and AD 1580, food-supported reach from the joint budget's staffed towns and the roads they keep holds the governed land as well as transport only (balanced accuracy 0.707 against 0.710 and 0.787 against 0.789), with 98-99 % of seats fed; on Rome AD 150 (development) it beats transport only, 0.835 against 0.820."],
     joint365: ["scenario", "Joint food budget with a year of stores at the source (census error 0.54)." + scored + "staffs 94-95 % of real sources, balanced accuracy 0.70 Rome and 0.63 Han, against 0.82 and 0.70 for transport only."],
     reference: ["scenario", "Settlement sources matched to transport, food unconstrained." + scored + "balanced accuracy 0.70 Rome and 0.64 Han: the staffed-source reach rule itself, before any food limit, holds less land than transport only."],
   };
   const SENSITIVITY = ["joint90", "joint1", "joint0", "cohort25", "work600_30", "work600_10", "work300_30"];
   const LEGACY = {
-    reach_defacto: { legacy_0: ["partial", "Default. Land within 2 days of the network over the year, no gap fill. Earth control test: balanced accuracy 0.82 on Rome (west 0.83, east 0.81, AD 150) and 0.70 on Han (AD 2; 0.79 at its fitted 5 days), the best of all options. Ignores food supply."] },
-    reach_towns: { legacy_0: ["partial", "Default. Original placement: seat counts and spacing fitted on Earth; food supply not modelled. The food-budget options were scored end to end in the Earth control test and none beat the transport-only map."] },
+    reach_defacto: { legacy_0: ["partial", "Transport only (the previous default). Land within 2 days of the network over the year, no gap fill. Earth control test: balanced accuracy 0.82 on Rome (west 0.83, east 0.81, AD 150) and 0.70 on Han (AD 2; 0.79 at its fitted 5 days), the v2 food-supported map now matches it on blind data. Ignores food supply."] },
+    reach_towns: { legacy_0: ["partial", "Original placement: seat counts and spacing fitted on Earth; food supply not modelled."] },
   };
-  const CORE_OPTIONS = ["legacy_0", "fert_bare", "fert_legume", "joint365"];
+  const CORE_OPTIONS = ["v2_joint365", "legacy_0", "fert_bare", "fert_legume", "joint365"];
   function pick(entry, world) { return typeof entry === "function" ? entry(world) : entry; }
   function of(L, topic, world, option) {
     if (option != null && ["reach_defacto", "reach_towns"].includes(L.id)) {
       const v = typeof option === "string" ? option : option.value;
+      if (L.id === "reach_towns" && v === "joint365") return ["partial", "Default. Settlements the joint food budget can staff. Blind-tested: it feeds 98-99 % of the documented Chinese county seats of AD 280 and AD 1580 (and 94-95 % of Rome's towns and Han's seats in development), while bare fallow feeds 86-89 %."];
       if (OPTIONS[v]) return OPTIONS[v];
       if (LEGACY[L.id]?.[v]) return LEGACY[L.id][v];
       if (SENSITIVITY.includes(v)) return ["experimental", "Sensitivity case of the joint food budget." + notScored];

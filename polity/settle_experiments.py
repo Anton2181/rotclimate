@@ -1,0 +1,186 @@
+"""Calibration copy of polity/settle.py with configurable site weights, spacing, a town cap and a fitted
+site score (scripts/settlement_model_earth.py). The atlas uses polity/settle.py, kept byte-identical so the
+settlement chain's source hashes hold; with default arguments this module places exactly the same towns.
+
+Where the unmarked towns and minor roads would be.
+
+The campaign map marks the main roads and the walled places. A populated
+countryside also has market towns and county seats, joined by tracks. Sites
+and spacing follow simple central-place rules:
+
+  where      among farming people (the Harvest density, central scenario),
+             beside rivers and lakes (x 2 at the water, fading over ~3 km), on
+             sheltered coasts (x 1.5), on flat ground, along the marked roads
+             (x 1.5), never inside a marked town's own catchment
+  how many   seats go with people^0.7 x area^0.3: one per 40,000 people at
+             Han China's mean density (14 per km2), a catchment of
+             A = 40,000 / 14 x (14 / density)^0.7 km2, so fewer, larger towns
+             than one-per-40,000 in rich valleys and more in thin country
+             (R ~16 km at 100 per km2, ~30 km at 14, ~60 km at 2); none below
+             2 people per km2. Fitted on the 1,294 seats of AD 2 (deviance 256
+             against 449 for one per 40,000 and 1,677 for one per fixed area)
+             and the best of the three on Tang 742, Song 1102 and Qing 1820,
+             whose seat counts stayed near 1,300-1,950 while their people grew
+             six-fold (scripts/polity_eras_check.py, E1)
+  spacing    greedy, best site first, no town within 1.6 R of another (a
+             hexagonal tiling of such catchments has its centres 1.9 R apart)
+  sites      +-25 % for the local quirks no layer holds (springs, fords, a
+             defensible hill), fixed seed; claimed land only; in dry land
+             (rain / evaporation < 0.35) only within 40 km of a river, lake or
+             sea (fitted on the Roman towns of AD 150, tested on the Tang seats
+             of AD 742)
+  tracks     a relative neighbourhood graph on travel days between the towns,
+             the marked settlements and the marked roads (minor_roads)
+
+A town's size is a guess: 5-10 % of its catchment (premodern urban shares).
+"""
+from __future__ import annotations
+
+import numpy as np
+from scipy import ndimage as ndi
+from scipy.sparse.csgraph import dijkstra
+
+SEAT_PEOPLE = 40000.0           # people per seat at the reference density
+SEAT_BETA = 0.7                 # seats ~ people^beta x area^(1 - beta)
+SEAT_REF_DENSITY = 14.1         # Han China AD 2: 57.7 M people on 4.09 M km2
+MAX_RADIUS_KM = 60.0            # no catchment wider than this, however thin the people
+MIN_DENSITY = 2.0
+SPACING = 1.6
+# Dry-land towns need water: where rain over Hargreaves evaporation is below
+# DRY_ARIDITY, a town site must lie within DRY_WATER_KM of a river, lake or sea.
+# Adopted by calibration/polity_20261025/addendum_dry_towns2_20261031.json
+# (fit on the Roman towns of AD 150: 40 km; blind on the Tang seats of AD 742:
+# deviance 1271 -> 1248, dry prefectures 75 -> 52). None = no such rule.
+DRY_ARIDITY = 0.35
+DRY_WATER_KM = 40.0
+URBAN_SHARE = 0.075
+
+
+SITE_WEIGHTS = dict(a=1.0, w_r=1.0, w_c=0.5, w_d=0.5, k_f=20.0)   # density exponent, river, coast, road, slope
+
+
+def site_score(density, land, water_km, coast_km, road, elev, cell_km, weights=None):
+    w = SITE_WEIGHTS if weights is None else {**SITE_WEIGHTS, **weights}
+    d = ndi.gaussian_filter(np.where(land, density, 0.0), 1.0)
+    river = 1.0 + w["w_r"] * np.exp(-np.maximum(np.nan_to_num(water_km, nan=99), 0) / 3.0)
+    coast = 1.0 + w["w_c"] * (coast_km <= 6.0)
+    near_road = 1.0 + w["w_d"] * (ndi.distance_transform_edt(~road) * cell_km <= 4.0)
+    gy, gx = np.gradient(np.asarray(elev, float), cell_km * 1000.0)
+    flat = 1.0 / (1.0 + w["k_f"] * np.hypot(gx, gy))
+    dd = d if w["a"] == 1.0 else np.power(np.maximum(d, 0.0), w["a"])
+    return np.where(land, dd * river * coast * near_road * flat, 0.0), d
+
+
+def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
+                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default", weights=None,
+                spacing=None, max_count=None, score_override=None):
+    seat_people = SEAT_PEOPLE if seat_people is None else seat_people
+    beta = SEAT_BETA if beta is None else beta
+    max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
+    coast_km = ndi.distance_transform_edt(land) * cell_km
+    score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km, weights)
+    if score_override is not None:              # a fitted site suitability (scripts/settlement_model_earth.py stage 3)
+        score = np.where(land, np.asarray(score_override, float), 0.0)
+    # local quirks of site (springs, fords, a defensible hill) that no map layer
+    # holds: +-25 % on a ~10 km scale, fixed seed
+    rng = np.random.default_rng(seed)
+    quirk = ndi.gaussian_filter(rng.standard_normal(land.shape), 1.5)
+    score = score * np.exp(0.25 * quirk / max(quirk.std(), 1e-9))
+    catchment = seat_people / SEAT_REF_DENSITY * (SEAT_REF_DENSITY / np.maximum(d, 1e-9)) ** beta      # km2
+    radius = np.sqrt(catchment / np.pi) / cell_km                                                       # cells
+    ok = land & (d >= MIN_DENSITY)
+    if allowed is not None:
+        ok &= allowed
+    dry_water_km = DRY_WATER_KM if dry_water_km == "default" else dry_water_km
+    if dry_water_km is not None and aridity is not None:
+        # a dry-land town lives on its water: wells and springs aside, rivers,
+        # lakes and the sea (the Hexi oases, the Nile, the Syrian river towns)
+        dry = np.asarray(aridity, float) < DRY_ARIDITY
+        near = np.minimum(np.nan_to_num(np.asarray(water_km, float), nan=1e9), coast_km)
+        ok &= ~dry | (near <= dry_water_km)
+    blocked = np.zeros(land.shape, bool)
+    h, w = land.shape
+
+    def block(y, x, rad):
+        r = int(np.ceil(rad))
+        y0, y1, x0, x1 = max(0, y - r), min(h, y + r + 1), max(0, x - r), min(w, x + r + 1)
+        yy, xx = np.mgrid[y0:y1, x0:x1]
+        blocked[y0:y1, x0:x1] |= (yy - y) ** 2 + (xx - x) ** 2 <= rad * rad
+    sp = SPACING if spacing is None else spacing   # count-limited placement uses a smaller spacing with max_count
+    for y, x in marked:                         # a marked town serves its own catchment
+        block(y, x, sp * min(radius[y, x], max_radius_km / cell_km))
+    towns = []
+    order = np.argsort(-score[ok]); cy, cx = np.nonzero(ok)
+    for k in order:
+        y, x = int(cy[k]), int(cx[k])
+        if blocked[y, x]:
+            continue
+        towns.append((y, x))
+        if max_count is not None and len(towns) >= max_count:
+            break
+        block(y, x, sp * min(radius[y, x], max_radius_km / cell_km))
+    return towns, coast_km, d
+
+
+def minor_roads(graph, shape, road, towns, marked, limit_days=4.0):
+    """Tracks between neighbouring places: a relative neighbourhood graph on
+    travel days (Toussaint 1980), the sparse mesh that real minor road networks
+    resemble. Two places within limit_days are joined unless a third place is
+    nearer to both; a place joins the marked roads directly only when no
+    neighbour lies between. Each link follows its cheapest walking route.
+    Returns the track mask and the routes (cell lists)."""
+    places = [(int(y), int(x)) for y, x in towns] + [(int(y), int(x)) for y, x in marked]
+    n_towns = len(towns); ROAD = len(places)
+    node_of = {y * shape[1] + x: i for i, (y, x) in enumerate(places)}
+    road_nodes = np.flatnonzero(road.ravel())
+    dist = {}                                     # i -> {j: days}
+    for i, (y, x) in enumerate(places):
+        d = dijkstra(graph, directed=True, indices=y * shape[1] + x, limit=limit_days)
+        near = {}
+        for node, j in node_of.items():
+            if j != i and np.isfinite(d[node]):
+                near[j] = float(d[node])
+        rd = d[road_nodes]
+        if i < n_towns and np.isfinite(rd).any():
+            near[ROAD] = float(rd.min())
+        dist[i] = near
+    def days(i, j):
+        a = dist.get(i, {}).get(j, np.inf); b = dist.get(j, {}).get(i, np.inf)
+        return min(a, b)
+    edges = set()
+    for i in range(n_towns):                      # links from each suggested town
+        for j, dij in dist[i].items():
+            if j == ROAD:
+                blocked = any(max(dist[i].get(k, np.inf), dist[k].get(ROAD, np.inf) if k < n_towns else 0.0) < dij
+                              for k in dist[i] if k != ROAD)
+            else:
+                if j >= n_towns and j < ROAD and False:
+                    pass
+                blocked = any(max(days(i, k), days(k, j)) < dij for k in dist[i] if k not in (j, ROAD))
+            if not blocked:
+                edges.add((min(i, j), max(i, j)) if j != ROAD else (i, ROAD))
+    tracks = np.zeros(shape, bool); routes = []
+    by_start = {}
+    for a, b in edges:
+        by_start.setdefault(a, []).append(b)
+    for a, targets in by_start.items():
+        y, x = places[a]
+        _, pred = dijkstra(graph, directed=True, indices=y * shape[1] + x, limit=limit_days, return_predecessors=True)
+        for b in targets:
+            if b == ROAD:
+                d = dijkstra(graph, directed=True, indices=y * shape[1] + x, limit=limit_days)
+                end = int(road_nodes[np.argmin(d[road_nodes])])
+            else:
+                end = places[b][0] * shape[1] + places[b][1]
+            path = []; node = end
+            while node >= 0:
+                path.append(divmod(int(node), shape[1]))
+                if node == y * shape[1] + x:
+                    break
+                node = pred[node]
+            if node < 0:
+                continue
+            for q, c in path:
+                tracks[q, c] = True
+            routes.append(path[::-1])
+    return tracks, routes, edges

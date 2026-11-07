@@ -87,6 +87,15 @@ def main():
                 filename='settled_control_'+c['id']+'.webp';im.save(folder/filename,lossless=True)
                 reachitems=[dict(color=a['color'],label=a['name']) for a in model['actors']]+[dict(color='#e3decf',label='No modelled reach; local organization unscored')]
                 options['reach_defacto'].append(dict(value=c['id'],label=c['label'],file=prefix+filename,file_sha256=file_hash(folder/filename),items=reachitems,note=case_note,integrated_support=True,caption='Hue: actor with most access bins (ties use fixed registry order). Tint: its 0–12 bins. Pale checks: multiple actors reach here at some time; this is not proof of conflict or sovereignty.'))
+            v2=folder/'settled_control_v2_joint365.webp'; v2s=ROOT/'output/control_v2_20261107'/f'{name}_{mode}'/'summary.json'
+            if v2.exists() and v2s.exists():
+                # control map v2 (scripts/build_control_v2.py): passed the frozen blind test plan_blind2.json
+                vs=json.loads(v2s.read_text())
+                options['reach_defacto'].insert(0,dict(value='v2_joint365',label='Food-supported reach v2 · joint budget + the roads staffed towns keep',file=prefix+v2.name,file_sha256=file_hash(v2),
+                    items=[dict(color=a['color'],label=a['name']) for a in model['actors']]+[dict(color='#e3decf',label='Not held: no staffed town or kept road within 2 year-round days')],
+                    note=(f"Held where the nearest polity's staffed towns (joint food budget: {vs['staffed']} of {vs['sites']} sites) or the painted roads within 2 year-round days of them are within 2 days over the year. "
+                          f"{vs['held_land_share']*100:.0f} % of land held. Earth tests: Rome AD 150 (development) 0.835 against 0.820 for transport only; blind on Chinese county seats, Western Jin AD 280 0.707 against 0.710 and Ming AD 1580 0.787 against 0.789, with 98-99 % of seats fed. See reports/EARTH_CONTROL_20261106.md."),
+                    integrated_support=False,caption='Hue: the polity whose staffed towns and kept roads are nearest (year-round days <= 2). Food decides which towns are staffed; extent rule from the Earth tests.'))
             for filename in ['settled_reach.json.gz','settled_reach.bin.gz']:shutil.copyfile(out/filename,folder/filename)
             packets[mode]=dict(shape=review['shape'],cell_px=review['cell_px'],land_cells=review['land_cells'],masks_shape=review['masks_shape'],offsets=review['offsets'],raw_bytes=review['raw_bytes'],options=options,
                 payload=prefix+'settled_reach.json.gz',payload_sha256=file_hash(folder/'settled_reach.json.gz'),binary=prefix+'settled_reach.bin.gz',binary_sha256=file_hash(folder/'settled_reach.bin.gz'),

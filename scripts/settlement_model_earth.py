@@ -64,7 +64,7 @@ def prepare():
 
 
 def place(x, weights, spacing=None, max_count=None, score_override=None):
-    from polity.settle import place_towns
+    from polity.settle_experiments import place_towns
     towns, _, _ = place_towns(x["density"], x["land"], x["water_km"], x["road"], x["elev"], float(x["cell_km"]), [],
                               allowed=x["allowed"], seed=1, aridity=x["aridity"], weights=weights, spacing=spacing, max_count=max_count,
                               score_override=score_override)
@@ -201,7 +201,7 @@ def blind():
     import polity_earth_check as P
     import earth_control_blind2 as B2
     from polity import earth as E
-    from polity.settle import site_score
+    from polity.settle_experiments import site_score
     from sklearn.metrics import roc_auc_score
     cand = json.loads((OUT / "grid.json").read_text())["candidate"]["weights"]
     res = dict(plan=str(PLAN.relative_to(ROOT)), candidate=cand, current=CURRENT)

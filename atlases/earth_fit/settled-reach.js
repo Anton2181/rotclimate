@@ -11,7 +11,7 @@ window.SettledReachAtlas=(()=>{
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
-      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:'legacy_0',options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id]]}};});
+      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id]]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
     return {p,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
   }
