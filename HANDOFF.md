@@ -1,3 +1,18 @@
+# Control map v2 PUBLISHED as the de facto default; settlement model blind-tested — 7 November 2026
+
+* Supply-supported reach opens on v2 (joint365 staffing + P2: staffed towns and the painted roads within 2 year-round
+  days of them; held where the nearest polity <= 2 days). Built by scripts/build_control_v2.py (output/control_v2_20261107):
+  held land free 65.2 %, earth raw 66.0 %, earth corrected 67.2 %, whittaker 63.8 %. The publisher adds the option
+  (publish_settlement_integration.py --origin output/settlement_fertility_20261106). Smoke passes all three (local + packed earth_fit).
+  Hosted: earth v28, free v30, whittaker v19 (only changed files sent: page, evidence.js, settled-reach.js,
+  data/settled_reach.json, v2 webp; earth_fit now 494 files).
+* polity/settle.py restored to its reviewed bytes (the settlement chain hashes it); the configurable calibration copy is
+  polity/settle_experiments.py (identical towns at default arguments).
+* Unmarked settlement model (calibration/settlement_model_20261107/plan.json, reports/SETTLEMENT_MODEL_EARTH_20261107.md):
+  fitted weights NOT adopted (G2 fails by 0.003). Current model blind: Sui 610 count +11 %, F1 0.48 at 25 km, block rank
+  0.29, AUC 0.63 for 1300 cities beyond the limes. Towns too even (spacing KS 0.76): real clustering is population
+  history, so next step is a time-dependent population ledger as the density input (task 83 + F15b). S1/S2 spent.
+
 # Fertility integration PUBLISHED — default bare three-field at AD 200 N 27.5 — 6 November 2026
 
 * User chose: fix low-N artifact, then bare three-field default. Fix: residues scale with stand
