@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any round-2 result was computed; round-1 results (results.json) are known and motivated these changes",
+  "purpose": "Development round on the spent Rome AD 150 / Han AD 2 Earth pools: fix the two causes found in round 1, choose one reach rule, then test the chosen chain blind on unseen pools declared in a separate plan (plan_blind.json) before any atlas default changes.",
+  "data_status": "Development use of seen data (dataset_usage.json id earth_control_rome150_han2). Selection here is not evidence of skill; only the blind test can promote a default.",
+  "changes": {
+    "L1_rural_ledger": "In equilibrium the rural population is what the regime's harvest feeds, so the fixed rural claim becomes 0.6 x produced (= 0.6 x F x reference production) instead of 0.6 x reference. The fixed claim stays the rule for short-term shocks (the labour cases); a fertility regime is a long-run state. Applied to joint365 (F = 1, identical to round 1), fert_bare and fert_legume.",
+    "reach_rules": {
+      "P0": "Round-1 rule: paired 2-day patrols from staffed sources, held in all 12 monthly bins (administrative month graph).",
+      "P1": "Year-round effective days (polity.control.effective_days over the 12 monthly networks of the legacy map) <= 2.0 from staffed sources only.",
+      "P2": "P1 plus road cells as sources where the road cell itself is within 2.0 year-round days of a staffed source (roads maintained from staffed towns).",
+      "P3": "P1 plus every road cell as a source (the legacy map with food-filtered towns)."
+    },
+    "note": "Han has no road data, so P2 and P3 equal P1 there."
+  },
+  "unchanged": "Everything else as plan.json: sources, windows, bands, collection, stores, allocation, census errors (fert_bare 0.459, joint365 0.538, fert_legume 0.685), M1 balanced accuracy, M2 staffed share.",
+  "selection": {
+    "R_star": "The reach rule with the highest balanced accuracy averaged over Rome (whole band), Han and the three food cases under L1.",
+    "report": "Every rule x case x ledger (fixed and scaled) result, legacy_0 and reference, TPR / TNR, staffed shares.",
+    "carried_to_blind_test": "R_star with L1; the three food cases; legacy_0 as the comparison. The blind plan applies the round-1 gates G1 (>= 75 % of real sources staffed) and G2 (BA >= legacy_0 - 0.02) per pool and the census-error choice among passing cases."
+  }
+}
