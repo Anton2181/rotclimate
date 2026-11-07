@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any workstream-A result (reports/GEOGRAPHY_CONTROL_PLAN_20261107.md section A; owner: 'go with what you think')",
+ "question": "Can the de facto control rule stop painting one 2-day disc per staffed town (circularity 0.96, 161 enclosed holes on the Earth-fit atlas) without losing Earth extent accuracy?",
+ "baseline": "control v2 = joint365 staffing with the scaled rural ledger (L1) + reach rule P2 (staffed sites and the painted roads within 2 year-round days of them; held <= 2 days)",
+ "candidates": {
+  "A1_grid": "summed influence G(x) = sum over staffed sites s of w_s x mean_m exp(-d_s,m(x) / tau), d the monthly travel days of the reach networks (polity_earth_check.monthly_nets, the same as v2); held where G >= theta. Grid: tau in {0.5, 1, 2} days; theta = exp(-r0 / tau) with the lone-site reach r0 in {1, 1.5, 2, 2.5, 3} days; mass w in {1 (equal), civilian request / its median (residents)}; roads in {off, on = union with v2's kept-road corridor (held <= 2 days from the painted roads within 2 days of staffed sites)}. 60 settings.",
+  "A2_pockets": "applied to every rule including the baseline: unheld land pockets (8-connected) that touch neither the window edge nor any non-held land of another state, i.e. bounded only by held land and sea, become territory. Reported, not gated: the share that is governable (pocket median slope <= the 90th percentile of held-land slope, median forest share <= the 90th percentile of held land, median food density >= the 10th percentile of held land); the rest is labelled 'unadministered upland / forest' (scenario tier on the map).",
+  "selection": "C* = the A1 setting (with A2) with the best mean balanced accuracy over the development pools; ties (within 0.002) go to the setting with fewer small isolated held patches. Fallback F = baseline v2 + A2."
+ },
+ "development": "rome_150 (Hanson towns AD 150, Itiner-e roads, Cliopatria Roman Empire 150) and han_2 (Han AD 2 seats, commanderies): the seen round-2 pools, joint365 scaled staffing, the same scoring band",
+ "blind": {
+  "T1_song_1080": "CHGIS V6 county seats alive in AD 1080, Han window, no roads; target = every Cliopatria polity alive in 1080 (state space, the convention of the Hellenistic blind pool); band = land within 15 days of the seats (blind2 convention); never used",
+  "T2_late_antique_550": "Pleiades settlements tagged late-antique (precise or rough location), Rome window with Itiner-e roads; target = every Cliopatria polity alive in AD 550; band = land within 15 days of the sources; never used"
+ },
+ "metrics": {
+  "BA": "balanced accuracy of territory (held + A2 pockets) against the target inside the band, as rounds 1-2 and the blind tests",
+  "shape_reported": "enclosed-hole share of territory before A2; count and median circularity of small held patches (20-2,000 cells); boundary cells per held cell; border enrichment on desert edges, top-quartile relief and rivers (as the diagnosis); for the model and for the target"
+ },
+ "blind_gates": {
+  "G1": "C* BA >= v2 BA - 0.01 in both blind pools",
+  "adopt": "if G1 passes, C* + A2 + the A4 cartography becomes the atlas default (control v2.1); else F if F passes G1 (v2 + A2 + A4); else v2 stays and only the A4 cartography (borders as lines over a hillshade, minimum mapping unit 3 cells) ships"
+ }
+}
