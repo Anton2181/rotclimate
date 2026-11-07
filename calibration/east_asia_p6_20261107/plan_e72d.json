@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any e72d result; after the e72c failure on sealed set f and after declaring sealed set g (948d3a14)",
+  "change": "e72d storm_plateau_reach_deg: the e72c pull acts only on rows within reach of the plateau, full up to the plateau's poleward edge + (reach - 5) deg, none beyond edge + reach: the plateau steers the subtropical branch of a split jet, storms far poleward keep the planet's band. 0 = e72c (whole column); r43 bit for bit when e72 is off.",
+  "motivation": "Sealed set f (now spent): e72c's whole-column pull starved eastern Siberia's storms (rain loss 0.38 -> 0.53).",
+  "screen": {
+    "tool": "scripts/benchmark_local.py --regions dev31 (56 km, r43 base, paired with the e72 baseline) and, as an explicit development check, the spent set f (calibration/sealed_20261103f, paired with the gate's r43 run)",
+    "profiles": {
+      "d10": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_global": true,
+        "storm_plateau_reach_deg": 10.0
+      },
+      "d6": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_global": true,
+        "storm_plateau_reach_deg": 6.0
+      },
+      "d15": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_global": true,
+        "storm_plateau_reach_deg": 15.0
+      }
+    }
+  },
+  "promising_if": "the plan_e72.json criteria on dev31, and S on the spent set f <= 1.0",
+  "selection": "among promising profiles, the lowest combined dev31 score (0.5 T + 0.5 P relative)",
+  "next": "policy v3 development (S49) and 28 km stages for the selected profile; then sealed set g once, only with the owner's release"
+}

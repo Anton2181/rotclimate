@@ -281,7 +281,8 @@ class ClimateModel:
             raise ValueError('storm_baroclinic_humid_rh must be in [0, 1)')
         if not 0 <= params.storm_plateau <= 1 or params.storm_plateau_km <= 0 or params.storm_plateau_m <= 0 \
                 or params.storm_plateau_area_km2 <= 0 or not 0 <= params.storm_plateau_offset_deg <= 15 \
-                or not (-1.25 <= params.storm_plateau_season <= 1.0 or params.storm_plateau_season == 9.0):
+                or not (-1.25 <= params.storm_plateau_season <= 1.0 or params.storm_plateau_season == 9.0) \
+                or not (params.storm_plateau_reach_deg == 0 or 5.0 <= params.storm_plateau_reach_deg <= 40.0):
             raise ValueError('storm_plateau must be in [0, 1] with positive height, distance and area, offset in [0, 15] deg')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
             raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
@@ -1534,7 +1535,13 @@ class ClimateModel:
                 else:
                     act = np.clip((ps["top"] + 2.0 - ccol) / 2.0, 0.0, 1.0) * np.clip((ccol - target) / 2.0, 0.0, 1.0)
                 pull = p.storm_plateau * ps["strength"] * act
-                centre = np.broadcast_to(centre, lat.shape) - (pull * (ccol - target) * ps["sign"])[None, :]
+                shift = (pull * (ccol - target) * ps["sign"])[None, :]
+                if p.storm_plateau_reach_deg > 0:
+                    # e72d: the plateau splits the jet: it steers the subtropical branch,
+                    # while storms far poleward of it keep the planet's band (on sealed set f
+                    # the whole-column pull starved eastern Siberia's storms at 60+ N)
+                    shift = shift * np.clip((ps["top"][None, :] + p.storm_plateau_reach_deg - np.abs(lat)) / 5.0, 0.0, 1.0)
+                centre = np.broadcast_to(centre, lat.shape) - shift
             storm = np.exp(-((lat - centre) / sw) ** 2) * (1 - p.storm_seasonality * s)
             if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
                 side = (1.0 if p.retrograde else -1.0) * self.basin_side
