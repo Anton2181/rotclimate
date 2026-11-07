@@ -116,6 +116,28 @@ def build(name, mode):
     tint = rgb[uu] * 0.75 + colors[terr_up[uu]] * 0.25
     tint[hatch] = tint[hatch] * 0.55 + colors[terr_up[uu]][hatch] * 0.45
     rgb[uu] = tint
+    # the owner's painted claims (polity/fields.polity_fills), each assigned to the actor most of its sites belong to:
+    # claimed land that no polity holds is tinted lightly in the claimant's colour, with the claim's edge as a fine line
+    from polity.fields import polity_fills
+    cids, _ = polity_fills(shape)
+    site_claim = cids.ravel()[nodes]; claim_actor = {}
+    for c in np.unique(site_claim[site_claim > 0]):
+        a_ = aidx[(site_claim == c) & (aidx >= 0)]
+        if len(a_):
+            claim_actor[int(c)] = int(np.bincount(a_).argmax())
+    claimant = np.full(shape, -1, int)
+    for c, a_ in claim_actor.items():
+        claimant[cids == c] = a_
+    cl_up = up((claimant + 1).astype(np.uint8)).astype(int) - 1
+    cu = land_up & (terr_up < 0) & (cl_up >= 0)
+    rgb[cu] = rgb[cu] * 0.80 + colors[cl_up[cu]] * 0.20
+    ce = np.zeros((H, W), bool)
+    for dy, dx in ((0, 1), (1, 0)):
+        a, b = cl_up[:H - dy, :W - dx], cl_up[dy:, dx:]
+        diff = (a != b) & ((a >= 0) | (b >= 0))
+        ce[:H - dy, :W - dx] |= diff; ce[dy:, dx:] |= diff
+    ce &= land_up & (terr_up < 0)
+    rgb[ce] = rgb[ce] * 0.55 + colors[np.maximum(cl_up[ce], 0)] * 0.45
     # borders: where the territory owner changes (between polities, and territory against unheld land)
     t = np.where(land_up, terr_up, -2)
     edge = np.zeros((H, W), bool)
@@ -130,6 +152,7 @@ def build(name, mode):
                    rule=("summed influence of staffed towns (plan_A C*)" if adopt == "C_star" else "control v2 (P2)") + "; pockets bounded by one polity are its territory",
                    staffed=int(active.sum()), sites=int(len(sites)), held_land_share=float(held.sum() / land.sum()),
                    territory_land_share=float((territory >= 0).sum() / land.sum()), unadministered_share=float(unadmin.sum() / land.sum()),
+                   claimed_unheld_share=float((land & (territory < 0) & (claimant >= 0)).sum() / land.sum()),
                    held_km2=float(held.sum() * km2), actors=[dict(actor=a["name"], staffed=n) for a, n in zip(actors, staffed_n)])
     (out / "summary.json").write_text(json.dumps(summary, indent=1))
     print(f"{name} {mode}: held {summary['held_land_share']:.1%}, territory {summary['territory_land_share']:.1%}, "
