@@ -12,6 +12,15 @@
   earth_fit drops tier twins (511-file cap). Smoke passes all three.
 * Report: reports/FERTILITY_INTEGRATION_20261106.md.
 
+# r44 ADOPTED (r43 + e72d plateau-steered storms) — 7 November 2026
+
+* e72c failed sealed set f (S 1.011, eastern Siberia); e72d (reach 15 deg, split jet) after declaring set g:
+  S49 0.9902, 28 km 0.9859, unseen set g 0.9785 (five boxes; yunnan excluded before outcome: overlaps policy-v2 sealed).
+* r44_params.json + r44_adoption.json (calibration/local_accuracy_20261023). Sets f and g spent; next unseen set must be
+  declared before further climate development. Audit now reads every calibration region file.
+* Map worlds unchanged (no plateau > 2.5 km). Next release step: retrain Earth corrections on r44, rebuild + republish
+  the Earth-fit atlas (corrected default climate changes).
+
 # P6 East Asia: e72c (plateau-steered storms) QUALIFIES on development data — 7 November 2026
 
 * e72 (band meets plateau) inert: model band 40-53 N over East China all year. e72b (cold-season gate, window terrain):
