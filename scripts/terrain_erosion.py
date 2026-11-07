@@ -84,6 +84,33 @@ def evolve(h0, land, rivers, dx_m, prm=None):
     return z, dict(params=p, drainage_area_m2=A, seconds=time.time() - t0)
 
 
+def hills(land, rivers, dx_m, height_m, scale_km=80.0, sigma=0.8, seed=3, prm=None):
+    """Unmarked hills (owner, 7 Nov: 'there can be hills outside of the marked heightmap tiers'): a second steady-state
+    run on a gentle uplift whose hilliness varies log-normally at scale_km (hilly country and plains), sharing the marked
+    rivers; returns its zero-mean detail (surface - 14 km lowpass). height_m is fitted on Earth's lowland slopes."""
+    rng = np.random.default_rng(seed); cells = dx_m / 1000.0
+    n = ndi.gaussian_filter(rng.standard_normal(land.shape), scale_km / cells); n /= n.std()
+    target = np.where(land, height_m * np.exp(sigma * n - 0.5 * sigma ** 2), 0.0)
+    p = dict(DEFAULTS, **(prm or {}))
+    z, info = evolve(target, land, rivers, dx_m, p)
+    lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), p["lowpass_km"] / cells) / np.maximum(
+        ndi.gaussian_filter(land.astype(float), p["lowpass_km"] / cells), 1e-6)
+    return np.where(land, z - lp(z), 0.0)
+
+
+def slopes_9km(z, land, dx_m, tier=None, k=1):
+    """Slopes (deg) of 5 x 5 source-pixel block means (~8.9 km, as WorldClim 5'), optionally in one tier."""
+    f = 5; H, W = (z.shape[0] // f) * f, (z.shape[1] // f) * f
+    bm = lambda a: a[:H, :W].reshape(H // f, f, W // f, f).mean((1, 3))
+    Z = bm(np.where(land, z, 0.0)); L = bm(land.astype(float)) > 0.99
+    gy, gx = np.gradient(Z, dx_m * f); s = np.degrees(np.arctan(np.hypot(gy, gx)))
+    m = L & ndi.binary_erosion(L, np.ones((3, 3)))
+    if tier is not None:
+        T = tier[:H, :W].reshape(H // f, f, W // f, f).max((1, 3)) == k
+        m &= T
+    return s[m]
+
+
 def fit_bands(z, land, rivers, tier, tops, ref, dx_m, lowpass_km=14.0, margin=0.05, base=None):
     """Owner faithfulness (plan B3): compress the sub-climate-scale relief of a tier only as much as needed for its
     band share to reach the Earth reference minus `margin` (plan_B2 earth_tier_band_reference), then re-route sink-free.
@@ -183,13 +210,30 @@ def build_v2():
     tops = json.loads((ROOT / "calibration/map_world_r43/params.json").read_text())["tier_tops"]
     L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
     tier = L["tier"].astype(int); dx = 1.143 * 1609.344
-    z, info = evolve(h0, land, rivers, dx, dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0))
-    raw_checks = checks(z, h0, land, rivers, tier, tops, info["drainage_area_m2"], dx)
-    z, alphas, info["drainage_area_m2"] = fit_bands(z, land, rivers, tier, tops, ref, dx, base=h0)
+    prm = dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0)
+    z, info = evolve(h0, land, rivers, dx, prm)
+    # owner, 7 Nov: unmarked hills are allowed outside the painted tiers -> no tier-band compression; the eroded
+    # detail and Earth-fitted lowland hills (output/terrain_erosion_20261107/hill_fit.json) lie on the tier ramps
+    hf = json.loads((OUT / "hill_fit.json").read_text())["best"]
+    cells = dx / 1000.0
+    lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), 14.0 / cells) / np.maximum(ndi.gaussian_filter(land.astype(float), 14.0 / cells), 1e-6)
+    hill = hills(land, rivers, dx, hf["height_m"], sigma=hf["sigma"], prm=prm)
+    cap = hf.get("cap_m")
+    if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
+        hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)
+    z = np.where(land, np.maximum(h0 + (z - lp(z)) + hill, 0.5), 0.0)
+    import fastscapelib as fs
+    status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
+    grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)
+    flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()])
+    zr = np.where(rivers, z - 4.0, z); zf = flow.update_routes(zr)
+    z = np.where(land, np.maximum(zf + (z - zr), 0.5), 0.0); info["drainage_area_m2"] = flow.accumulate(dx * dx)
     c = checks(z, h0, land, rivers, tier, tops, info["drainage_area_m2"], dx)
-    c["before_band_fit"] = raw_checks; c["relief_compression_by_tier"] = alphas
+    c["hills"] = hf; c["tier_band_note"] = "reported only: the owner allows unmarked hills outside the tiers"
+    c["tier1_elevation_pct_m"] = {q: float(np.percentile(z[land & (tier == 1)], q)) for q in (10, 50, 90, 99)}
+    c["tier1_slope_9km_median_deg"] = float(np.median(slopes_9km(z, land, dx, tier, 1)))
     c["tier_band_reference_earth"] = ref
-    c["tier_band_pass"] = {k: bool(c["tier_band_share"][int(k)] >= ref[k] - 0.05) for k in ref if int(k) in c["tier_band_share"]}
+    c["tier_band_share_vs_earth"] = {k: (round(c["tier_band_share"][int(k)], 3), ref[k]) for k in ref if int(k) in c["tier_band_share"]}
     c["rivers_pass"] = bool(c["rivers_on_channel"] >= 0.95)
     OUT.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(OUT / "map_height_v2.npz", z=z.astype(np.float32), area=info["drainage_area_m2"].astype(np.float32))
@@ -207,7 +251,7 @@ def build_v2():
         fig = plt.figure(figsize=(rgb.shape[1] / 100, rgb.shape[0] / 100 + 0.4)); ax = fig.add_axes([0, 0, 1, rgb.shape[0] / (rgb.shape[0] + 40)])
         ax.imshow(rgb); ax.axis("off"); fig.suptitle(title, fontsize=10, y=0.995); fig.savefig(path, dpi=100); plt.close(fig)
     full = np.s_[:, :]
-    panel(z, slice(None), slice(None), OUT / "map_height_v2_full.png", "Height map v2 (Earth-tested erosion; marked rivers dark, new rivers > 3,000 km2 light)")
+    panel(z, slice(None), slice(None), OUT / "map_height_v2_full.png", "Height map v2 with unmarked lowland hills (Earth-fitted); marked rivers dark, new rivers > 3,000 km2 light")
     panel(h0, slice(None), slice(None), OUT / "map_height_today_full.png", "Today: tier ramps", rivers_on=False)
     log("wrote previews")
 

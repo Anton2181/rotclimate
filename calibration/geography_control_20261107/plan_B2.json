@@ -201,5 +201,27 @@
   },
   "climate": "the climate keeps today's elevation (climate-grid block means of v2 differ by mean |d| 35 m, p95 179 m, max 911 m in deeply incised mountain blocks); v2 serves travel, rivers, farming and settlement, with a lapse-rate adjustment wherever fine-scale temperature is used",
   "status": "awaiting owner review of the hillshade preview before anything downstream reads it"
+ },
+ "map_v2_B3_revision_1": {
+  "date": "2026-11-07",
+  "owner": "\"there can be hills outside of the marked heightmap tiers, right now it's all flat\"",
+  "change": "no tier-band compression (bands reported only); Earth-fitted unmarked lowland hills added: a second steady-state run on a log-normal uplift (scale 80 km, sigma 1.2, height 1,000 m, soft cap 500 m), its zero-mean detail on the ramps; fitted so map tier-1 slopes of ~9 km block means match Earth lowlands (WorldClim 5 arc-min, 25-56 N, lowest 70.5 % of land): median 0.160 vs 0.167 deg, KS 0.069 (hill_fit.json)",
+  "checks": {
+   "rivers_on_channel": 1.0,
+   "tier1_elevation_pct_m": {
+    "10": 0.5000000000000009,
+    "50": 21.315912372505604,
+    "90": 163.8158918748117,
+    "99": 501.7613936113655
+   },
+   "tier1_slope_9km_median_deg": 0.1604467429917679,
+   "tier_band_share": {
+    "1": 0.7835474827707044,
+    "2": 0.9614149005973532,
+    "3": 0.49316867851081986,
+    "4": 0.8231754925825564
+   },
+   "climate_scale_mean_abs_m": 43.71158583766761
+  }
  }
 }
