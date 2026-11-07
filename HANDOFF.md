@@ -1,3 +1,14 @@
+# Owner: control v2 is dotty; geography should shape borders -> plan written — 7 November 2026
+
+* Diagnosis (output/control_v2_20261107/diagnostic_dots.json, reports/figures/control_v2_dots_diagnosis.png): map slope
+  median 0.025 deg vs Earth 0.30 (tier 1 = 70 % of land spans 0-62 m; tier ramps are smooth domes); small held patches
+  circularity 0.96 (2-day discs); 161 enclosed holes (141,000 km2) are uplands (765 m vs 39 m, forest 40 vs 20 %).
+  Earth: Roman/Han frontiers enriched on desert edges (56 vs 12 %, 25 vs 7 %); relief/rivers mixed.
+* Plan: reports/GEOGRAPHY_CONTROL_PLAN_20261107.md. A (summed influence, governable-hole rule, cartography), B (eroded
+  height map: stream power + imposed marked rivers + tier projection at climate scale; Earth "posterize and
+  reconstruct" test), C (forest: PNV + KK clearance, REVEALS blind), D (rebuild chain, control v3), E (crossings,
+  passes, soils, coasts, floods). Owner decisions listed in section 5 (tier strictness, river exactness, holes, scope).
+
 # r44 on the map: raw climate IDENTICAL; corrections retrained — 7 November 2026
 
 * scripts/check_r44_map.py (output/r44_map_check/summary.json): map world (seeds 1-3, downsample 8) under r43 and r44
