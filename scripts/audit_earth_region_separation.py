@@ -43,8 +43,10 @@ def main():
     ap.add_argument('--out', type=Path, required=True); a = ap.parse_args()
     from rotclimate import earth
     from benchmark_local import DEV12_SPECS
-    files = [DEV12_SPECS] + [p for p in (ROOT / 'calibration').glob('sealed_*/regions.json')
-                             if p.resolve() != a.regions.resolve()]
+    # every region definition anywhere under calibration/ (the policy-v2 sealed six live in
+    # local_accuracy_20261023/regions_sealed6.json, which a sealed_*/ glob missed for set g)
+    files = [DEV12_SPECS] + sorted({p for p in (ROOT / 'calibration').glob('**/regions*.json')
+                                    if p.resolve().parent != a.regions.resolve().parent and p.resolve() != DEV12_SPECS.resolve()})
     known = dict(earth.REGIONS)
     for p in files: known.update(json.loads(p.read_text()))
     result = audit(json.loads(a.regions.read_text()), known)
