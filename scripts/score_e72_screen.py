@@ -1,6 +1,7 @@
 """Score the e72 dev31 screen against calibration/east_asia_p6_20261107/plan_e72.json.
 
-    .venv/bin/python -I scripts/score_e72_screen.py
+    .venv/bin/python -I scripts/score_e72_screen.py                       # e72 profiles
+    .venv/bin/python -I scripts/score_e72_screen.py k05s k10s k10s_o5      # e72b profiles (plan_e72b.json)
 """
 import json
 from pathlib import Path
@@ -31,7 +32,9 @@ def main():
     group_regions = {g: [r for r in m if r in base["regions"]] for g, m in GROUPS.items()}
     res = dict(plan="calibration/east_asia_p6_20261107/plan_e72.json", profiles={})
     b_ea, b_all, b_t = loss(base, EAST_ASIA), loss(base, regions), tmae(base, regions)
-    for p in PROFILES[1:]:
+    import sys as _s
+    names = _s.argv[1:] or PROFILES[1:]
+    for p in names:
         s = load(p)
         ea, al, t = loss(s, EAST_ASIA), loss(s, regions), tmae(s, regions)
         row = dict(east_asia_loss=ea / b_ea, all_loss=al / b_all, all_tmae=t / b_t,
@@ -51,7 +54,7 @@ def main():
         print("        " + "  ".join(f"{r} {row['regions'][r]['loss']:.3f}/{row['regions'][r]['tmae']:+.2f}" for r in EAST_ASIA))
         moved = sorted(regions, key=lambda r: abs(row["regions"][r]["loss"] - 1), reverse=True)[:8]
         print("        largest changes: " + ", ".join(f"{r} {row['regions'][r]['loss']:.3f}" for r in moved))
-    (OUT / "e72_screen_score.json").write_text(json.dumps(res, indent=1))
+    (OUT / ("e72_screen_score.json" if names == PROFILES[1:] else "e72b_screen_score.json")).write_text(json.dumps(res, indent=1))
 
 
 if __name__ == "__main__":
