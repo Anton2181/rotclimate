@@ -45,5 +45,37 @@
     "change": "Development stage 3: site suitability fitted directly. Logistic regression of real-town presence (town cells against a random sample of allowed land, case-control) on map-derivable fields only: log(1 + food density), river proximity at 3 and 15 km, coast within 6 km, coast proximity at 30 km, elevation, slope, elevation relative to its 50 km mean, log aridity, road within 4 km; one intercept per pool. Site score = exp(linear predictor without the intercepts); placement keeps the E1 count and the 1.6 spacing.",
     "validation": "leave-one-pool-out: fit on two development pools, place and score on the third; the stage-3 candidate is the fit on all three pools, adopted for the blind test only if its leave-one-pool-out mean F1 beats the stage-1 candidate's in-sample mean F1 (0.463) and mean M1 is not below the current model's (0.274).",
     "gates": "unchanged G1-G4 on the blind pools, against the current model"
+  },
+  "blind_result": {
+    "S1_sui_610": {
+      "current": {
+        "F1": 0.4769,
+        "M1": 0.2859,
+        "M3": 0.758,
+        "M4": 0.0451,
+        "recall": 0.5866,
+        "precision": 0.4017
+      },
+      "candidate": {
+        "F1": 0.4841,
+        "M1": 0.318,
+        "M3": 0.758,
+        "M4": 0.047,
+        "recall": 0.6002,
+        "precision": 0.4056
+      }
+    },
+    "S2_beyond_limes_1300": {
+      "current": 0.6285,
+      "candidate": 0.6263
+    },
+    "gates": {
+      "G1": true,
+      "G2": false,
+      "G3": true,
+      "G4": true
+    },
+    "adopt": false,
+    "verdict": "Stage-1 weights not adopted (G2 fails by 0.003). Current model blind-scored: county-seat count within ~11 % (M4 0.045 on 1,072 Sui seats), F1 0.48 at 25 km, site AUC 0.63 for large cities beyond the Roman frontier."
   }
 }
