@@ -80,5 +80,42 @@
    "G1b": "C1b blind RMSE below the biome lookup's and below B0's",
    "adopt": "if G1b: the map's forest share becomes the moisture-index potential x 0.60 (scenario: uniform AD 200 clearing), and C2 tests it in travel and control; population-driven clearing stays untested-negative"
   }
+ },
+ "blind_result": {
+  "cells": 147,
+  "scores": {
+   "candidate": {
+    "rmse": 0.346,
+    "spearman": -0.026,
+    "mean_obs": 0.388,
+    "mean_pred": 0.451
+   },
+   "B0": {
+    "rmse": 0.407,
+    "spearman": -0.013,
+    "mean_obs": 0.388,
+    "mean_pred": 0.34
+   },
+   "B1": {
+    "rmse": 0.326,
+    "spearman": -0.04,
+    "mean_obs": 0.388,
+    "mean_pred": 0.457
+   },
+   "biome_potential_no_clearing": {
+    "rmse": 0.556,
+    "spearman": 0.111,
+    "mean_obs": 0.388,
+    "mean_pred": 0.675
+   }
+  },
+  "original_gates": {
+   "G1": false,
+   "G2": true
+  },
+  "original_adopt": false,
+  "G1b": true,
+  "adopt_C1b": true,
+  "verdict": "Population-driven clearing not adopted (blind RMSE 0.346 vs constant clearing 0.326). C1b adopted: moisture-index potential x 0.60 beats the map's current biome lookup (0.326 vs 0.556; the lookup overstates AD 200 open land by 0.29) and the uncleared potential (0.407). No rule has rank skill at 1 degree (|Spearman| <= 0.11): the new share fixes the level of forest, not its pattern."
  }
 }
