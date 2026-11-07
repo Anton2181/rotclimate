@@ -278,3 +278,36 @@ Every milestone ends committed and pushed. Maps and figures are sent as they are
   becomes the Earth-measured share, as plan_B2 specifies.
 * Early finding: tier 1 (0–62 m) stays low-relief by construction, so lowland borders will be shaped mainly by
   rivers, marshes and forests (C) rather than by relief.
+
+**B: done up to the owner's review** (`calibration/geography_control_20261107/plan_B2.json`).
+
+*Earth test.* Real terrain was reduced to a hand-map sketch (four tiers plus the biggest rivers) and rebuilt from it.
+The selected setting was fitted on four development windows and scored once on four blind windows.
+
+| Measure | Development windows | Blind windows | Blind wins |
+|---|---|---|---|
+| Watershed divide error | 15.6–34.9 → 7.8–23.6 km | 15.7–28.2 → 17.1–18.9 km | 3 of 4 (Guizhou worse) |
+| Slope-distribution distance (KS) | 0.56–0.80 → 0.11–0.23 | 0.59–0.68 → 0.18–0.27 | 4 of 4 |
+
+*Map height map v2* (`output/terrain_erosion_20261107/map_height_v2.npz`; figures `height_map_v2_review_*.png`):
+* 100 % of the marked rivers lie on channels, and new rivers appear.
+* Tier-band shares are 0.99 / 0.98 / 0.63 / 0.86 against the Earth reference minus 5 points. This took relief
+  compressed to 0.50 in tier 1 and 0.82 in tier 3.
+* The climate keeps today's elevation.
+
+**Main finding: the discs are the travel model, not the terrain.**
+* On real Earth terrain, 2-day walking zones (Tobler's hiking function at 1.85 km) overlap the smooth-ramp zones at
+  0.92–0.98, with the same area and the same disc circularity (about 1.15, the 8-neighbour disc).
+* So no realistic height map, even the true one, bends 2-day walking zones much under the present cost model. The
+  isochrone gate was dropped before the blind run for this reason (amendment 1).
+* What bends real zones is how strongly pre-modern movement was channelled: pack animals and carts on slopes, paths
+  along valleys and over passes, forests, marshes and river crossings.
+
+**Revised next steps.**
+1. **Terrain-channelled travel (new A2).** Fit a slope- and ruggedness-sensitive cost (a pack-animal or cart
+   response on top of Tobler, plus valley and pass preference) on the Earth control development pools.
+   * Shape metrics will be scored against real borders.
+   * A two-state border test is added: CHGIS AD 1200, Southern Song against Jin along the Huai and Qinling, a blind
+     pool declared first.
+2. **C (land cover).** Forests, marshes and clearings, which matter most in the 0–62 m lowlands where relief cannot.
+3. **D.** Rebuild the chain on height map v2 with the adopted travel and land-cover rules; then control v3.

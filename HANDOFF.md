@@ -1,3 +1,14 @@
+# B done to owner review: height map v2; discs are the travel model, not the terrain — 7 November 2026
+
+* plan_B2 (amendment 1 before blind): C* (m 0.35, noise 24 km, sigma 0.6, boost 10,000 km2, no smoothing) adopted:
+  blind divides better 3/4 (Guizhou worse), slope KS 4/4. Map v2 = ramps + compressed eroded detail (tier 1 x0.50,
+  tier 3 x0.82), rivers 100 % on channels, bands pass the Earth reference - 5 pts; climate keeps today's elevation.
+  output/terrain_erosion_20261107/map_height_v2.npz (committed); review figures reports/figures/height_map_v2_review_*.png.
+* KEY: real-terrain 2-day Tobler zones are discs too (IoU 0.92-0.98 vs ramps, circularity 1.15). Next: Earth-fit a
+  terrain-channelled travel cost (pack animal / cart slope response, valleys, passes) + two-state border test
+  (CHGIS 1200 Southern Song vs Jin, declare first), then C land cover, then D rebuild. Downstream waits for the owner's
+  look at the height map.
+
 # Geography plan: A shipped (control v2.1 default); B generator + Earth test running — 7 November 2026
 
 * Owner: "go with what you think" -> recommended defaults (tiers kept at climate scale with Earth-like relief inside,
