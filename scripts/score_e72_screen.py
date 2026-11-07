@@ -48,13 +48,21 @@ def main():
         row["groups"] = grp
         row["promising"] = bool(row["east_asia_loss"] <= 0.97 and row["all_loss"] <= 1.005 and row["all_tmae"] <= 1.005
                                 and all(v <= 1.01 for k, v in grp.items() if k in ("training", "holdout", "midlatitude")))
+        spent = OUT / f"{p}_spent_f" / "summary.json"
+        if spent.exists():                       # e72d: the spent set f as an explicit development check
+            sys.path.insert(0, str(ROOT / "scripts"))
+            import gate_v3 as G
+            R = G.load(OUT / "gate" / "r43_sealed_f"); C = G.load(OUT / f"{p}_spent_f")
+            row["spent_f"] = G.score(R, C, list(R))
+            row["promising"] = bool(row["promising"] and row["spent_f"]["S"] <= 1.0)
+            print(f"        spent set f: S {row['spent_f']['S']:.4f} (T {row['spent_f']['T']:+.4f}, P {row['spent_f']['P']:+.4f}); eastern_siberia rain x{C['eastern_siberia']['rain']['loss'] / R['eastern_siberia']['rain']['loss']:.3f}")
         res["profiles"][p] = row
         print(f"{p:7s} East Asia loss x{row['east_asia_loss']:.4f}  all loss x{row['all_loss']:.4f}  all T MAE x{row['all_tmae']:.4f}  groups "
               + " ".join(f"{k} {v:.4f}" for k, v in grp.items()) + f"  promising {row['promising']}")
         print("        " + "  ".join(f"{r} {row['regions'][r]['loss']:.3f}/{row['regions'][r]['tmae']:+.2f}" for r in EAST_ASIA))
         moved = sorted(regions, key=lambda r: abs(row["regions"][r]["loss"] - 1), reverse=True)[:8]
         print("        largest changes: " + ", ".join(f"{r} {row['regions'][r]['loss']:.3f}" for r in moved))
-    (OUT / ("e72_screen_score.json" if names == PROFILES[1:] else "e72b_screen_score.json")).write_text(json.dumps(res, indent=1))
+    (OUT / ("e72_screen_score.json" if names == PROFILES[1:] else ("e72d_screen_score.json" if names[0].startswith("d") else "e72b_screen_score.json"))).write_text(json.dumps(res, indent=1))
 
 
 if __name__ == "__main__":
