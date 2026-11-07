@@ -1,3 +1,13 @@
+# RELEASED: Earth-fit atlas r44 + height map v2 (task 84 + plan D) — 7 November 2026
+
+* Params.terrain_file (rotclimate/config.py; geography.elevation_fullres, climate grid, render.py, atlas.py) -> height
+  map v2 everywhere in the Earth-fit atlas (calibration/map_world_r44_terrain/params.json). Climate check (plan_D):
+  strict zone agreement +0.73 raw / +0.60 corrected, |dT| 0.39 C. r44 corrections in the corrected climate.
+* scripts/release_r44_terrain.sh (staged base) + scripts/release_r44_addons.sh (promote + all add-ons, compute ->
+  publish order); live r43 backup local in output/atlas_r44/previous_atlases/earth_fit_r43. Smoke passes all three.
+* free_fit / whittaker_fit keep the tier ramps (height map v2 is built on Earth-fit tier tops); their add-ons were
+  recomputed consistently. Report: reports/R44_TERRAIN_20261107.md.
+
 # Owner: unmarked hills allowed; deserts may be holes — done 7 November 2026
 
 * Height map v2 revised (plan_B2 map_v2_B3_revision_1): no tier compression; Earth-fitted unmarked lowland hills

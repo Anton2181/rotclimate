@@ -25,12 +25,17 @@ p.write_text(json.dumps(pages, indent=1, ensure_ascii=False) + '\n')
 PYEOF
   echo promote >> "$OUT/addons_done"; echo "promoted $(date -u +%H:%M:%S)"
 fi
+run admin_inventory $PY -I scripts/audit_administrative_inventory.py
+run coverage_review $PY -I scripts/review_world_coverage.py
 run coverage $PY -I scripts/publish_world_coverage.py
 run pasture $PY -I scripts/build_pasture_maps.py
 run farm_work $PY -I scripts/build_cereal_work_maps.py
 run presence $PY -I scripts/build_presence_mobility.py
+run imperial_review $PY -I scripts/review_imperial_access.py
 run imperial_access $PY -I scripts/publish_imperial_access.py
+run hierarchy_review $PY -I scripts/review_administrative_hierarchy.py
 run hierarchy $PY -I scripts/publish_administrative_hierarchy.py
+run fertility_maps $PY -I scripts/fertility_integration.py maps
 run settlement_review $PY -I scripts/review_settlement_integration.py
 run settlement_labour $PY -I scripts/extend_settlement_labour.py
 run settlement_fertility $PY -I scripts/extend_settlement_fertility.py
