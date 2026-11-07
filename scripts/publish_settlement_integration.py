@@ -96,6 +96,18 @@ def main():
                     note=(f"Held where the nearest polity's staffed towns (joint food budget: {vs['staffed']} of {vs['sites']} sites) or the painted roads within 2 year-round days of them are within 2 days over the year. "
                           f"{vs['held_land_share']*100:.0f} % of land held. Earth tests: Rome AD 150 (development) 0.835 against 0.820 for transport only; blind on Chinese county seats, Western Jin AD 280 0.707 against 0.710 and Ming AD 1580 0.787 against 0.789, with 98-99 % of seats fed. See reports/EARTH_CONTROL_20261106.md."),
                     integrated_support=False,caption='Hue: the polity whose staffed towns and kept roads are nearest (year-round days <= 2). Food decides which towns are staffed; extent rule from the Earth tests.'))
+            v21=folder/'settled_control_v21_joint365.webp'; v21s=ROOT/'output/control_v21_20261107'/f'{name}_{mode}'/'summary.json'
+            if v21.exists() and v21s.exists():
+                # control map v2.1 (scripts/build_control_v21.py): v2 + enclosed pockets, adopted by the blind test of
+                # calibration/geography_control_20261107/plan_A.json
+                vs=json.loads(v21s.read_text())
+                options['reach_defacto'].insert(0,dict(value='v21_joint365',label='Food-supported reach v2.1 · v2 with enclosed land as territory',file=prefix+v21.name,file_sha256=file_hash(v21),
+                    items=[dict(color=a['color'],label=a['name']) for a in model['actors']]+[dict(color='#c9b9c9',label='Hatched: unadministered upland / forest inside a polity (scenario)'),dict(color='#e3decf',label='Not held')],
+                    note=(f"Control v2, with every pocket wholly enclosed by one polity's held land as its territory: {vs['held_land_share']*100:.0f} % of land held, "
+                          f"{vs['unadministered_share']*100:.1f} % unadministered upland or forest (pockets steeper, more forested or emptier than the polity's held land). "
+                          "Earth tests (calibration/geography_control_20261107/plan_A.json): development Rome AD 150 + Han AD 2; blind Song China AD 1080 0.737 and the late-antique Mediterranean AD 550 0.774, against 0.697 and 0.766 for v2. "
+                          "Borders are drawn as lines over the relief; patches under 3 cells are merged. See reports/GEOGRAPHY_CONTROL_PLAN_20261107.md."),
+                    integrated_support=False,caption='Fill: the polity whose staffed towns and kept roads are nearest (year-round days <= 2), plus the land it wholly encloses. Hatching: enclosed but ungoverned. Lines: borders.'))
             for filename in ['settled_reach.json.gz','settled_reach.bin.gz']:shutil.copyfile(out/filename,folder/filename)
             packets[mode]=dict(shape=review['shape'],cell_px=review['cell_px'],land_cells=review['land_cells'],masks_shape=review['masks_shape'],offsets=review['offsets'],raw_bytes=review['raw_bytes'],options=options,
                 payload=prefix+'settled_reach.json.gz',payload_sha256=file_hash(folder/'settled_reach.json.gz'),binary=prefix+'settled_reach.bin.gz',binary_sha256=file_hash(folder/'settled_reach.bin.gz'),

@@ -94,7 +94,8 @@
   const OPTIONS = {
     fert_bare: ["scenario", "Food budget with a bare-fallow three-field rotation at the AD 200 nitrogen input. Best census fit (mean |log10| error 0.46, joint budget 0.54), but in the end-to-end test it can staff only 40 % of Rome's real towns and 76 % of Han's county seats, and it holds less land (balanced accuracy 0.61 Rome, 0.60 Han, against 0.82 and 0.70 for transport only). Failed the frozen gates; no longer the default."],
     fert_legume: ["scenario", "Three-field rotation with a clover third at the AD 200 nitrogen input. Census error 0.69 (worse than bare fallow)." + scored + "staffs 93 % of real sources in both empires, balanced accuracy 0.69 Rome and 0.63 Han, against 0.82 and 0.70 for transport only."],
-    v2_joint365: ["partial", "Default. Blind-tested: on Chinese county seats of AD 280 and AD 1580, food-supported reach from the joint budget's staffed towns and the roads they keep holds the governed land as well as transport only (balanced accuracy 0.707 against 0.710 and 0.787 against 0.789), with 98-99 % of seats fed; on Rome AD 150 (development) it beats transport only, 0.835 against 0.820."],
+    v21_joint365: ["partial", "Default. Control v2 with its geography fixed: land wholly enclosed by one polity's held land is its territory, held where it is governable (slope, forest and grain like its held land) and hatched as unadministered upland or forest where it is not; borders drawn as lines over the relief. Blind-tested on Song China AD 1080 and the late-antique Mediterranean AD 550: balanced accuracy 0.737 and 0.774 against 0.697 and 0.766 for v2. The unadministered label is a scenario: real atlases rarely map ungoverned hills."],
+    v2_joint365: ["partial", "Previous default. Blind-tested: on Chinese county seats of AD 280 and AD 1580, food-supported reach from the joint budget's staffed towns and the roads they keep holds the governed land as well as transport only (balanced accuracy 0.707 against 0.710 and 0.787 against 0.789), with 98-99 % of seats fed; on Rome AD 150 (development) it beats transport only, 0.835 against 0.820."],
     joint365: ["scenario", "Joint food budget with a year of stores at the source (census error 0.54)." + scored + "staffs 94-95 % of real sources, balanced accuracy 0.70 Rome and 0.63 Han, against 0.82 and 0.70 for transport only."],
     reference: ["scenario", "Settlement sources matched to transport, food unconstrained." + scored + "balanced accuracy 0.70 Rome and 0.64 Han: the staffed-source reach rule itself, before any food limit, holds less land than transport only."],
   };
@@ -103,7 +104,7 @@
     reach_defacto: { legacy_0: ["partial", "Transport only (the previous default). Land within 2 days of the network over the year, no gap fill. Earth control test: balanced accuracy 0.82 on Rome (west 0.83, east 0.81, AD 150) and 0.70 on Han (AD 2; 0.79 at its fitted 5 days), the v2 food-supported map now matches it on blind data. Ignores food supply."] },
     reach_towns: { legacy_0: ["partial", "Original placement: seat counts and spacing fitted on Earth; food supply not modelled."] },
   };
-  const CORE_OPTIONS = ["v2_joint365", "legacy_0", "fert_bare", "fert_legume", "joint365"];
+  const CORE_OPTIONS = ["v21_joint365", "v2_joint365", "legacy_0", "fert_bare", "fert_legume", "joint365"];
   function pick(entry, world) { return typeof entry === "function" ? entry(world) : entry; }
   function of(L, topic, world, option) {
     if (option != null && ["reach_defacto", "reach_towns"].includes(L.id)) {
