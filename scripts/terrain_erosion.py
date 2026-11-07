@@ -199,6 +199,25 @@ def preview(factor=2):
     fig.savefig(OUT / f"map_preview_f{f}.png", dpi=110); log("wrote", OUT / f"map_preview_f{f}.png")
 
 
+def compose(h0, land, rivers, dx, cs, hf):
+    """Height map v2's composition (plan_B2 map_v2_B3 + revision 1): the tier ramps h0 plus the Earth-adopted erosion
+    detail (setting cs, mountain spikes soft-capped at 1,500 m) plus the Earth-fitted unmarked hills hf (soft cap).
+    Returns (z, info) before any routing step; the drawn rivers are imposed afterwards (terrain_rivers.condition)."""
+    prm = dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0)
+    z, info = evolve(h0, land, rivers, dx, prm)
+    # owner, 7 Nov: unmarked hills are allowed outside the painted tiers -> no tier compression; the eroded
+    # detail and Earth-fitted lowland hills (output/terrain_erosion_20261107/hill_fit.json) lie on the tier ramps
+    cells = dx / 1000.0
+    lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), 14.0 / cells) / np.maximum(ndi.gaussian_filter(land.astype(float), 14.0 / cells), 1e-6)
+    hill = hills(land, rivers, dx, hf["height_m"], sigma=hf["sigma"], prm=prm)
+    cap = hf.get("cap_m")
+    if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
+        hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)
+    detail = z - lp(z)
+    detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)   # steady-state spikes (up to 5.9 km on tier 4) capped
+    return np.where(land, np.maximum(h0 + detail + hill, 0.5), 0.0), info
+
+
 def build_v2():
     """Plan B3: the map's height map v2 at source resolution with the Earth-adopted setting (plan_B2 C*), acceptance
     checks against the Earth tier-band reference, and hillshade previews for the owner. Nothing downstream reads it yet."""
@@ -210,20 +229,8 @@ def build_v2():
     tops = json.loads((ROOT / "calibration/map_world_r43/params.json").read_text())["tier_tops"]
     L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
     tier = L["tier"].astype(int); dx = 1.143 * 1609.344
-    prm = dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0)
-    z, info = evolve(h0, land, rivers, dx, prm)
-    # owner, 7 Nov: unmarked hills are allowed outside the painted tiers -> no tier-band compression; the eroded
-    # detail and Earth-fitted lowland hills (output/terrain_erosion_20261107/hill_fit.json) lie on the tier ramps
     hf = json.loads((OUT / "hill_fit.json").read_text())["best"]
-    cells = dx / 1000.0
-    lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), 14.0 / cells) / np.maximum(ndi.gaussian_filter(land.astype(float), 14.0 / cells), 1e-6)
-    hill = hills(land, rivers, dx, hf["height_m"], sigma=hf["sigma"], prm=prm)
-    cap = hf.get("cap_m")
-    if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
-        hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)
-    detail = z - lp(z)
-    detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)   # steady-state spikes (up to 5.9 km on tier 4) capped
-    z = np.where(land, np.maximum(h0 + detail + hill, 0.5), 0.0)
+    z, info = compose(h0, land, rivers, dx, cs, hf)
     import fastscapelib as fs
     status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
     grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)

@@ -150,5 +150,12 @@
   "metric": "joint loss = valley-profile loss (as frozen) + bed loss; bed loss = mean over q in (25, 50, 75) of |ln((rec_q + 0.05) / (true_q + 0.05))| of bed / tier ramp for river cells with ramp > 150 m",
   "selection": "lowest mean joint loss over D1-D4; ties within 0.01 go to the smaller W; B1-B4 reported as a check",
   "hill_refit": "after the form is chosen, the unmarked-hill height (sigma 1.2, cap 500 m) is refitted on the final conditioned map, height_m in (1000, 1300, 1600, 2000, 2500), by KS of tier-1 9 km slopes against the same Earth lowland reference (output/terrain_erosion_20261107/earth_lowland_slopes.npz), because the final surface is what must match Earth"
+ },
+ "amendment_2": {
+  "date": "2026-11-07",
+  "status": "frozen before the scan it governs",
+  "finding": "Earth-best form (ramp 0.6, W 11, p 1, b0 10) with the hill refit (height 1,600 m, tier-1 slope median 0.170 vs Earth 0.167): owner gates pass, but tier bands fail (tier 3 0.495 -> 0.426, tier 4 0.832 -> 0.805) and the climate-scale change is +5.6 m (limit 5): 20 km valley walls cut into the narrow tier-3 uplands",
+  "rule": "the do-no-harm gates are constraints (owner: faithful to the tiers): forms are taken in order of mean Earth joint loss on D1-D4; each is screened on the map with the hill height of the first refit (1,600 m); the first that passes all map gates is rebuilt with the full hill refit and adopted if it still passes every gate; otherwise the scan continues down the list",
+  "reported": "the Earth loss given up against the unconstrained best"
  }
 }
