@@ -21,5 +21,24 @@
  "blind_gates": {
   "G1": "C* BA >= v2 BA - 0.01 in both blind pools",
   "adopt": "if G1 passes, C* + A2 + the A4 cartography becomes the atlas default (control v2.1); else F if F passes G1 (v2 + A2 + A4); else v2 stays and only the A4 cartography (borders as lines over a hillshade, minimum mapping unit 3 cells) ships"
+ },
+ "development_result": "dev.json: v2 mean BA 0.763; F (v2 + A2) 0.756; C* tau 2 d, lone reach 2.5 d, equal mass, roads off: 0.820 (Rome 0.863, Han 0.777); Han boundary per cell 0.077 (target 0.074, v2 0.238)",
+ "blind_result": {
+  "T1": {
+   "v2": 0.6975,
+   "F": 0.7366,
+   "C_star": 0.7419
+  },
+  "T2": {
+   "v2": 0.7658,
+   "F": 0.7738,
+   "C_star": 0.7517
+  },
+  "gates": {
+   "G1_C_star": false,
+   "G1_F": true
+  },
+  "adopt": "F",
+  "verdict": "C* fails G1 on T2 (0.752 < 0.756: the 4,284 dense late-antique sources sum to too much grip, TPR 0.89 / TNR 0.62); F passes both (Song 1080 0.697 -> 0.737, late antique 550 0.766 -> 0.774). Adopted: F + A4 (v2 + pockets as territory, governable held / the rest 'unadministered upland / forest', borders as lines over a hillshade, minimum mapping unit 3 cells). Round-2 idea for A1: a saturating union of town influence (1 - prod(1 - p_s)) instead of a sum, so dense source lists do not inflate grip; needs a new blind pool."
  }
 }
