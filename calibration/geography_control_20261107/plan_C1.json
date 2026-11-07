@@ -25,5 +25,60 @@
   "status": "after the first development fit, before any blind cell was read",
   "finding": "The biome potential is broken for Europe: 75 % of central and western European Earth-run land (median 8.8 C, 687 mm) falls in Whittaker woodland/shrubland (forest share 0), so even with no clearing the model predicts 0.75 open land against 0.42 observed on the development cells (Spearman ~0); the fit runs to the grid edge (P0 300, k 0.5). Whittaker envelopes ignore evaporation; at low PET 700 mm carries deciduous forest.",
   "change": "potential forest f0 = clip((AI - a) / w, 0, 1) x clip((GDD5 - g0) / 300, 0, 1), AI = P_ann / PET_ann and GDD5 from the Earth run (the map computes both); a in {0.3, 0.4, 0.5, 0.6, 0.7}, w in {0.2, 0.4, 0.8}, g0 in {300, 600}, fitted jointly with the clearing curve on the development blocks. B0 and B1 use the same fitted potential (the potential is fitted for each baseline too), so the gates still test whether population-driven clearing adds skill. The biome potential is reported."
+ },
+ "development_result": {
+  "params": {
+   "candidate": {
+    "a": 0.3,
+    "w": 0.2,
+    "g0": 300.0,
+    "P0": 60.040738999234286,
+    "k": 0.5
+   },
+   "B0": {
+    "a": 0.3,
+    "w": 0.8,
+    "g0": 600.0
+   },
+   "B1": {
+    "a": 0.3,
+    "w": 0.2,
+    "g0": 300.0,
+    "cleared": 0.4
+   }
+  },
+  "development": {
+   "candidate": {
+    "rmse": 0.324,
+    "spearman": -0.066,
+    "mean_pred": 0.43
+   },
+   "B0": {
+    "rmse": 0.416,
+    "spearman": -0.024,
+    "mean_pred": 0.33
+   },
+   "B1": {
+    "rmse": 0.305,
+    "spearman": 0.019,
+    "mean_pred": 0.436
+   },
+   "biome_potential_no_clearing": {
+    "rmse": 0.555,
+    "spearman": 0.006,
+    "mean_pred": 0.748
+   }
+  },
+  "verdict": "Population-driven clearing does not qualify: development RMSE 0.324 against 0.305 for a constant cleared share (B1); no variant has rank skill (|Spearman| <= 0.07). REVEALS TW6 open land is 0.35-0.46 in every latitude band and unrelated to the moisture index (+0.06), model density (-0.10) or latitude (-0.02); its SE (median 0.06) is small against its spread (0.30): Europe was widely and patchily cleared by the Roman period in a way neither climate nor the population model resolves at 1 degree."
+ },
+ "amendment_2": {
+  "date": "2026-11-07",
+  "status": "after the development fit, before any blind cell was read",
+  "candidate": "C1b = B1: moisture-index potential (a 0.3, w 0.2, g0 300) x (1 - 0.40 constant cleared share), all fitted on development",
+  "question": "is it better than the map's current forest share (Whittaker biome lookup, no clearing) and than the fitted potential without clearing (B0)?",
+  "gates": {
+   "G1b": "C1b blind RMSE below the biome lookup's and below B0's",
+   "adopt": "if G1b: the map's forest share becomes the moisture-index potential x 0.60 (scenario: uniform AD 200 clearing), and C2 tests it in travel and control; population-driven clearing stays untested-negative"
+  }
  }
 }
