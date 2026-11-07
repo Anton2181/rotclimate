@@ -9,7 +9,11 @@
   "strict_check": {
    "drawn_river_cells_whose_steepest_descent_receiver_is_river_or_water": 0.3065,
    "downstream_steps_along_drawn_rivers_that_do_not_climb": 0.7975,
-   "climb_percentiles_m_p50_p90_p99": [26.3, 145.6, 384.6],
+   "climb_percentiles_m_p50_p90_p99": [
+    26.3,
+    145.6,
+    384.6
+   ],
    "cause": "the final composition (tier ramps + capped erosion detail + hills) is re-routed with a 4 m burn that is then removed, so nothing keeps the drawn rivers as flow paths"
   },
   "outlets": "107 drawn-river components on land; 106 touch the sea or a lake, 1 runs off the map's south edge (the map edge is an outlet, as in the erosion grid)"
@@ -28,7 +32,24 @@
    "5. banks below R2 + b0 (only where the near-sea floor binds) are raised to R2 + b0",
    "6. Priority-Flood + epsilon (epsilon = max(1e-4 m, 4 float32 ulps)) over all land from the sea, lakes and map edge at 1 m, so every land cell drains; river cells must come out unchanged"
   ],
-  "valley_form_grid": {"W_px": [0, 2, 4, 7, 11], "p": [0.5, 1.0], "b0_m": [1, 3, 10]},
+  "valley_form_grid": {
+   "W_px": [
+    0,
+    2,
+    4,
+    7,
+    11
+   ],
+   "p": [
+    0.5,
+    1.0
+   ],
+   "b0_m": [
+    1,
+    3,
+    10
+   ]
+  },
   "pixel": "map 1.84 km, Earth windows 1.85 km (ETOPO 2022 60 arc-second)"
  },
  "earth_fit_of_the_valley_form": {
@@ -52,5 +73,82 @@
   ],
   "reported": "carving depth along rivers (p50 / p90 / p99), raised-bank cells, PF-raised cells; climate-grid river recall (score.river_network_check routing on the 14.7 km grid) with the v2 run's runoff"
  },
- "release": "if the hard gates pass, height map v2.1 replaces v2 as the Earth-fit terrain_file; the plan_D climate check is re-run (adopt for the climate unless corrected strict zone agreement drops by more than 0.5 points against v2) and the Earth-fit atlas is rebuilt and republished (release drivers of r44)"
+ "release": "if the hard gates pass, height map v2.1 replaces v2 as the Earth-fit terrain_file; the plan_D climate check is re-run (adopt for the climate unless corrected strict zone agreement drops by more than 0.5 points against v2) and the Earth-fit atlas is rebuilt and republished (release drivers of r44)",
+ "amendment_1": {
+  "date": "2026-11-07",
+  "status": "frozen before any result of the amended method",
+  "finding": {
+   "what": "the step-2 bed (breach only: r = min(z - b0, upstream - dec)) collapses to the floor: one low cell of the composition next to the drawn line drags every cell downstream of it down, so upland rivers end up in trenches near sea level",
+   "earth_bed_over_ramp_median": {
+    "truth": {
+     "D1": 0.65,
+     "D2": 0.76,
+     "D3": 0.33,
+     "D4": 0.4,
+     "B1": 0.28,
+     "B2": 0.53,
+     "B3": 0.52,
+     "B4": 0.58
+    },
+    "composition": {
+     "D1": 0.65,
+     "D2": 0.92,
+     "D3": 0.97,
+     "D4": 0.85,
+     "B1": 0.85,
+     "B2": 0.89,
+     "B3": 0.93,
+     "B4": 0.86
+    },
+    "conditioned_v1": {
+     "D1": 0.0,
+     "D2": 0.21,
+     "D3": 0.68,
+     "D4": 0.06,
+     "B1": 0.14,
+     "B2": 0.06,
+     "B3": 0.1,
+     "B4": 0.31
+    }
+   },
+   "map": "height map v2.1 (v1 method): bed lowering p90 193 m, p99 631 m; tier-1 9 km slope median 0.138 deg (gate 0.150-0.184) -> lowland_slope gate failed; owner gates passed",
+   "gap": "the frozen valley-profile metric is relative to the river and cannot see the bed level; the earlier result (W = 11, p = 1, b0 = 1, at the edge of the grid) is superseded"
+  },
+  "method": [
+   "bed reference t: either alpha x tier ramp at the river cell (alpha in grid) or the local valley floor of the composition (minimum within 2 px); at least 1 m",
+   "two-sided monotone bed (hybrid breach-fill, Lindsay 2016): lower envelope L by breaching t from the sources down, upper envelope U by filling t from the mouth up, R = (L + U) / 2 (strictly falls downstream; floor as before)",
+   "valley within W px: cells above the nearest bed lowered as before; cells below it raised to bed + b0 (no parallel trench beside a drawn river)",
+   "banks: every non-river land cell adjacent to a river is at least the highest adjacent bed + b0",
+   "Priority-Flood + epsilon as before; owner gates unchanged"
+  ],
+  "grid": {
+   "reference": [
+    "ramp 0.3",
+    "ramp 0.4",
+    "ramp 0.5",
+    "ramp 0.6",
+    "ramp 0.7",
+    "ramp 0.85",
+    "valley floor 2 px"
+   ],
+   "W_px": [
+    4,
+    7,
+    11,
+    16
+   ],
+   "p": [
+    0.5,
+    1.0
+   ],
+   "b0_m": [
+    1,
+    3,
+    10
+   ]
+  },
+  "metric": "joint loss = valley-profile loss (as frozen) + bed loss; bed loss = mean over q in (25, 50, 75) of |ln((rec_q + 0.05) / (true_q + 0.05))| of bed / tier ramp for river cells with ramp > 150 m",
+  "selection": "lowest mean joint loss over D1-D4; ties within 0.01 go to the smaller W; B1-B4 reported as a check",
+  "hill_refit": "after the form is chosen, the unmarked-hill height (sigma 1.2, cap 500 m) is refitted on the final conditioned map, height_m in (1000, 1300, 1600, 2000, 2500), by KS of tier-1 9 km slopes against the same Earth lowland reference (output/terrain_erosion_20261107/earth_lowland_slopes.npz), because the final surface is what must match Earth"
+ }
 }
