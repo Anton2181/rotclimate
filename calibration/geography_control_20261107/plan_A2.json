@@ -1,0 +1,19 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any A2 result",
+ "question": "plan_B2 amendment 1 found that 2-day walking zones are discs even on real terrain under Tobler + Soule-Goldman at 1.85-9 km. Does a ruggedness-sensitive travel cost (old movement slowed in rough country, not only on steep cell-to-cell slopes) make control follow terrain without losing extent accuracy?",
+ "candidate": "the reach networks' terrain coefficient eta (polity.network statics) multiplied by (1 + beta x R), R = local relief in km: on Earth the window's relief (max - min of the 5' elevation over 3 x 3 cells, ~27 km; the population core term's relief cost, reports/POPULATION_20261023.md, uses the same measure at 1 per km); on the map the same statistic from height map v2 (block means at ~9 km, 3 x 3 max - min, back to the reach grid). beta in {0 (v2.1 baseline), 0.5, 1, 2, 4, 8}. Staffing (the joint365 chain) is unchanged; only the reach networks change; control rule = adopted v2.1 (P2 held mask + enclosed pockets, plan_A F).",
+ "development": "rome_150 and han_2 (seen); beta* = best mean balanced accuracy of territory; ties within 0.002 go to the beta whose border high-relief enrichment is closer to the target's",
+ "blind": {
+  "T3_song_jin_1200": "CHGIS V6 seats alive in AD 1200 (Southern Song, Jin and neighbours), Han window, no roads; target = every Cliopatria polity alive in 1200; band = land within 15 days of the seats",
+  "T4_qing_1820": "CHGIS V6 seats alive in AD 1820 with coordinates, Han window, no roads; target = every Cliopatria polity alive in 1820; same band rule",
+  "T5_bosker_1500": "Bosker, Buringh & van Zanden (2013) cities present in 1500, Rome window with Itiner-e roads; target = every Cliopatria polity alive in 1500; same band rule"
+ },
+ "metrics": "balanced accuracy of territory (held + enclosed pockets) inside the band; border enrichment on desert edges, top-quartile relief and rivers for model and target; shape distance D = mean over the three features of |ln(model enrichment / target enrichment)|",
+ "blind_gates": {
+  "G1": "beta* BA >= beta 0 BA - 0.01 in all three blind pools",
+  "G2": "beta* D < beta 0 D in at least 2 of the 3 blind pools",
+  "adopt": "both: the map's reach networks take (1 + beta* R) with R from height map v2 and the chain is rebuilt (plan D); else the travel cost stays and the report says so"
+ }
+}
