@@ -1,0 +1,18 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any A3 result; owner (7 Nov): 'there can be some holes inside the control map (like deserts)'",
+ "question": "Should enclosed pockets that are desert or empty land stay holes instead of becoming the enclosing polity's territory (control v2.1 fills every pocket)?",
+ "rule": "a pocket of plan_A's A2 rule stays a hole (not territory) if its median aridity index P/PET < 0.2 (UNEP arid and hyper-arid) or its median modelled density < 0.5 people/km2; other pockets are as in v2.1 (governable -> held, else 'unadministered upland / forest')",
+ "baseline": "v2.1 = P2 held + every enclosed pocket as territory (plan_A F)",
+ "development": "rome_150, han_2 (seen): report balanced accuracy and the share of territory returned to holes",
+ "blind": {
+  "T3_song_jin_1200": "CHGIS V6 seats AD 1200, Han window, every Cliopatria polity of 1200 (reserved for plan_A2, never opened)",
+  "T4_qing_1820": "CHGIS V6 seats AD 1820 with coordinates, Han window, every Cliopatria polity of 1820 (same)",
+  "T5_bosker_1500": "Bosker et al. cities of 1500, Rome window with Itiner-e roads, every Cliopatria polity of 1500 (same)"
+ },
+ "blind_gates": {
+  "G1": "A3 balanced accuracy >= v2.1's - 0.01 in all three blind pools",
+  "adopt": "G1 passes: v2.1 keeps desert and empty pockets as holes (shown as unheld land, or the painted-claim tint where claimed); else pockets stay as in v2.1 and the owner is told"
+ }
+}
