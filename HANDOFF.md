@@ -12,6 +12,10 @@
   fitted weights NOT adopted (G2 fails by 0.003). Current model blind: Sui 610 count +11 %, F1 0.48 at 25 km, block rank
   0.29, AUC 0.63 for 1300 cities beyond the limes. Towns too even (spacing KS 0.76): real clustering is population
   history, so next step is a time-dependent population ledger as the density input (task 83 + F15b). S1/S2 spent.
+* Round 2 (plan_round2.json): towns on the Earth-tested cored density (old heartlands, L 800 km). Dev mean F1 0.453 ->
+  0.533, block rank 0.274 -> 0.512. Blind Tang 742: F1 0.538 -> 0.551, M1 0.40 -> 0.50, KS 0.80 -> 0.74, but count -20 %
+  (G4) and 1300-city AUC inside the limes 0.771 -> 0.754 (G5) fail: NOT adopted. Round 3 idea: E1 count from the bare
+  density, sites from the cored; needs a new blind pool (no unspent AD~200 site pool known). Tang 742 + 1300-inside spent.
 
 # Fertility integration PUBLISHED — default bare three-field at AD 200 N 27.5 — 6 November 2026
 
