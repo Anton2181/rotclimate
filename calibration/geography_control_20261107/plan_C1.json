@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any C1 result (REVEALS downloaded and its column header read; no values inspected)",
+ "question": "Does AD 200 forest = potential forest x (1 - cleared share), with clearing driven by the population model's density (Kaplan, Krumhardt & Zimmermann 2009: clearing rises with people, per-capita land use falling), reproduce the pollen-based open-land share of Europe at the start of the era?",
+ "target": "REVEALS open land (OL, % of the 1-degree cell) in time window TW6 = 2.2-1.7 ka BP (c. 250 BCE - 250 CE), Fyfe et al. 2021, PANGAEA doi:10.1594/PANGAEA.937075 (CC BY 4.0; Githumbi et al. 2022, ESSD 14, 1581); cells inside the Earth run (output/land_people/earth/earth.npz: 0-56 N, 12 W-125 E) with >= 30 % land",
+ "model": {
+  "potential": "the map's forest share by Whittaker biome (harvest.models.FOREST_SHARE: savanna 0.5, forest biomes 1.0, others 0) on the Earth run's climate; not fitted",
+  "density": "the population model on Earth: settlement base x central occupation x old-core term (cradles + Rome, travel cost, L 800 km; reports/POPULATION_20261023.md), renormalized to the base's total over land (as harvest/export settlement_cored)",
+  "clearing": "c(P) = 1 - exp(-(P / P0)^k); open share of a cell = mean over its land of 1 - f0 x (1 - c)",
+  "fit": "P0 in a log grid 1-300 people/km2, k in {0.5, 0.75, 1, 1.5, 2}; minimum RMSE on the development cells"
+ },
+ "split": "5-degree blocks in a checkerboard: block = floor((lat - 30) / 5) + floor((lon + 25) / 5); even blocks development, odd blocks blind",
+ "baselines": {"B0": "no clearing (open = 1 - f0)", "B1": "one constant cleared share, fitted on the development cells"},
+ "blind_gates": {
+  "G1": "candidate RMSE below both B0 and B1 on the blind cells",
+  "G2": "candidate Spearman rank correlation above B1's on the blind cells",
+  "adopt": "both: the map's forest share at AD 200 = potential x (1 - c(P)) with the map's own population density, and C2 (forest share in travel cost and control) is tested next on Earth; else the clearing rule is revised"
+ }
+}
