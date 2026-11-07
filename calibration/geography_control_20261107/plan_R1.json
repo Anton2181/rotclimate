@@ -1,0 +1,56 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any Earth valley-profile result and before any conditioned map is built",
+ "owner_requirement": "'Remember that all of our drawn rivers also have to be there in the eroded map' (7 Nov 2026)",
+ "finding_that_motivates_it": {
+  "map": "output/terrain_erosion_20261107/map_height_v2.npz (released in the Earth-fit atlas r44)",
+  "old_check": "rivers_on_channel = share of drawn-river cells within 1 cell of any >= 200 km2 channel: 1.0 (too loose)",
+  "strict_check": {
+   "drawn_river_cells_whose_steepest_descent_receiver_is_river_or_water": 0.3065,
+   "downstream_steps_along_drawn_rivers_that_do_not_climb": 0.7975,
+   "climb_percentiles_m_p50_p90_p99": [26.3, 145.6, 384.6],
+   "cause": "the final composition (tier ramps + capped erosion detail + hills) is re-routed with a 4 m burn that is then removed, so nothing keeps the drawn rivers as flow paths"
+  },
+  "outlets": "107 drawn-river components on land; 106 touch the sea or a lake, 1 runs off the map's south edge (the map edge is an outlet, as in the erosion grid)"
+ },
+ "method": {
+  "references": [
+   "breaching rather than filling across obstacles: Lindsay 2016, Hydrological Processes 30, 846-857 (efficient hybrid breaching-filling); Soille 2004 (carving)",
+   "stream burning with a buffer (valley) around the vector streams: Hellweger 1997 (AGREE); Saunders 1999; Lindsay 2016, ESPL 41, 658-668 (stream burning revisited)",
+   "drainage of flats and pits: Priority-Flood + epsilon, Barnes, Lehman & Mulla 2014, Computers & Geosciences 62, 117-127"
+  ],
+  "steps": [
+   "1. order: geodesic distance g along drawn-river cells (8-neighbour) to an outlet (cell touching sea, lake or map edge)",
+   "2. bed R1: upstream to downstream, r = min(z - b0, min over upstream river neighbours (r_u - dec)); floor R = max(r, 1 + 2e-4 (g + 1)) m; dec = max(2e-4 m per px, 8 float32 ulps)",
+   "3. valley: non-river land within W px of a river is lowered toward the nearest bed, z' = R + (z - R) (d / W)^p where z > R",
+   "4. bed R2 with banks: r additionally <= min over adjacent non-river land of z' - b0; same order and floor",
+   "5. banks below R2 + b0 (only where the near-sea floor binds) are raised to R2 + b0",
+   "6. Priority-Flood + epsilon (epsilon = max(1e-4 m, 4 float32 ulps)) over all land from the sea, lakes and map edge at 1 m, so every land cell drains; river cells must come out unchanged"
+  ],
+  "valley_form_grid": {"W_px": [0, 2, 4, 7, 11], "p": [0.5, 1.0], "b0_m": [1, 3, 10]},
+  "pixel": "map 1.84 km, Earth windows 1.85 km (ETOPO 2022 60 arc-second)"
+ },
+ "earth_fit_of_the_valley_form": {
+  "windows": "plan_B2 development windows D1-D4 for the fit; B1-B4 reported as a check (they were the B2 blind windows; this valley-profile metric was never computed on them, but they are not unseen data, so this is labelled a check, not a blind test)",
+  "reconstruction": "the map pipeline on each window: sketch (4 quantile tiers + top-drainage rivers at the map's river density) -> erosion detail (plan_B2 C*) + Earth-fitted hills on the tier ramps, as in terrain_erosion.build_v2 -> conditioning",
+  "metric": "cross-valley profile: for every 'drawn' river cell, the mean elevation of non-river land at distance d px (rings d = 1..8) minus the river cell's elevation; median over river cells per d. Loss per window = mean over d of |ln((D_rec(d) + 2 m) / (D_true(d) + 2 m))|",
+  "selection": "the grid point with the lowest mean loss over D1-D4; ties within 0.01 go to the smaller W (less change)",
+  "side_effects_reported": "plan_B2 M1 divides, M2 slope KS by tier, M3 new-river F1 with and without conditioning (D and B windows)"
+ },
+ "map_gates": {
+  "hard_owner_requirement": [
+   "100 % of drawn-river land cells: steepest-descent receiver (D8, float32 as stored) is a drawn-river cell, the sea, a lake or off the map edge",
+   "100 % of drawn-river land cells: following receivers stays on drawn-river cells until the sea, a lake or the map edge",
+   "0 downstream steps along drawn rivers that climb",
+   "100 % of drawn-river land cells lie below every adjacent non-river land cell"
+  ],
+  "do_no_harm": [
+   "tier band share per tier (the B3 check) drops by no more than 0.02 against height map v2",
+   "climate-scale mean |lowpass(z) - lowpass(ramps)| rises by no more than 5 m",
+   "tier-1 9 km slope median stays within 10 % of Earth lowlands (0.167 deg)"
+  ],
+  "reported": "carving depth along rivers (p50 / p90 / p99), raised-bank cells, PF-raised cells; climate-grid river recall (score.river_network_check routing on the 14.7 km grid) with the v2 run's runoff"
+ },
+ "release": "if the hard gates pass, height map v2.1 replaces v2 as the Earth-fit terrain_file; the plan_D climate check is re-run (adopt for the climate unless corrected strict zone agreement drops by more than 0.5 points against v2) and the Earth-fit atlas is rebuilt and republished (release drivers of r44)"
+}
