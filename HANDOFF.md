@@ -1,3 +1,19 @@
+# Geography plan: A shipped (control v2.1 default); B generator + Earth test running — 7 November 2026
+
+* Owner: "go with what you think" -> recommended defaults (tiers kept at climate scale with Earth-like relief inside,
+  rivers within 1.8 km, ungoverned pockets as an explicit class, order A -> B -> C -> D).
+* A (plan_A.json): summed influence C* (tau 2 d, lone reach 2.5 d) dev mean BA 0.763 -> 0.820 but blind late antique 550
+  0.752 vs v2 0.766 (fails by 0.004; dense Pleiades sources inflate a sum). Fallback F = v2 + enclosed pockets passed
+  (Song 1080 0.697 -> 0.737, 550 0.766 -> 0.774) -> atlas default "v2.1" (scripts/build_control_v21.py; flat fill over
+  hillshade, border lines, hatched unadministered upland 2-3 % of land, MMU 3 cells). Hosted: earth v29, free v31,
+  whittaker v20. Round-2 idea: saturating union 1 - prod(1 - p_s) instead of a sum (needs a new blind pool).
+* B: scripts/terrain_erosion.py = steady-state stream power (chi integral of k_sn A^-m on fastscapelib routing, k_sn
+  rescaled to the tier ramps at 14 km; marked rivers burned + boosted). Map preview uncalibrated
+  (reports/figures/terrain_erosion_preview.png). Earth test scripts/terrain_earth_b2.py (plan_B2.json, ETOPO 60"
+  windows in data/cache/etopo2022_60s via OPeNDAP). First dev look (Apennines): divides 16.7 -> 11.5 km, slope KS
+  0.59 -> 0.11, isochrone IoU 0.932 -> 0.951. Real terrain keeps only ~50-60 % of middle tiers inside their bands, so the
+  map's faithfulness check uses the Earth M5 reference. M3 (new rivers at 500 km2) is degenerate (sketch covers them).
+
 # Owner: control v2 is dotty; geography should shape borders -> plan written — 7 November 2026
 
 * Diagnosis (output/control_v2_20261107/diagnostic_dots.json, reports/figures/control_v2_dots_diagnosis.png): map slope

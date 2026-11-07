@@ -258,3 +258,23 @@ Every milestone ends committed and pushed. Maps and figures are sent as they are
   have to stay scenario-tier.
 * **Compute.** The map has 2000 × 926 source pixels, about 1.9 million cells. FastScape steady states at that size
   take minutes per run, so fitting on Earth windows is feasible. The full chain rebuild (D) takes hours.
+
+## 7. Progress
+
+**A: done.**
+* The summed-influence rule (C*) won on development: balanced accuracy 0.763 → 0.820. It narrowly failed the blind
+  late-antique pool, 0.752 against the 0.756 limit: thousands of small Pleiades places summed into too much grip.
+* The fallback, v2 + enclosed pockets, passed both blind pools: Song AD 1080 0.697 → 0.737, late antique AD 550
+  0.766 → 0.774.
+* It is now the atlas default (control v2.1): enclosed land is territory, ungovernable pockets are hatched, borders
+  are drawn as lines over the relief.
+
+**B: generator built; Earth test running.**
+* The generator (`scripts/terrain_erosion.py`) is a steady-state stream-power model. It matches the tiers at climate
+  scale and keeps 100 % of the marked rivers on channels.
+* First development window (Apennines): divide error 16.7 → 11.5 km, slope-distribution distance 0.59 → 0.11,
+  2-day walking-zone overlap 0.932 → 0.951.
+* Real terrain itself keeps only about 50–60 % of the middle tiers inside their bands. So decision 1's "≥ 90 %"
+  becomes the Earth-measured share, as plan_B2 specifies.
+* Early finding: tier 1 (0–62 m) stays low-relief by construction, so lowland borders will be shaped mainly by
+  rivers, marshes and forests (C) rather than by relief.
