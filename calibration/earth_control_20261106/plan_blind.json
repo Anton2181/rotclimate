@@ -1,0 +1,32 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any outcome on these pools and before the round-2 development results were scored",
+  "purpose": "Blind Earth test of the round-2 chain (reach rule R* from plan_round2.json, scaled rural ledger L1) against the transport-only map, on pools never used in this project. Only a pass here can change the atlas default of Supply-supported reach.",
+  "pools": {
+    "B1_hellenistic_200BC": {
+      "window": {"lat0": 36.5, "lon0": 32.0, "width_km": 3600, "height_km": 2400, "cell_km": 9},
+      "sources": "Pleiades places (data/cache/pleiades_20261107/pleiades-places-latest.csv.gz, sha256 69baad2a...9c95034, downloaded 2026-11-07) with featureType 'settlement', timePeriodsKeys including 'hellenistic-republican' or 'hellenistic-middle-east', locationPrecision precise or rough; snapped to land, one source per cell (3,687 points in the window before snapping).",
+      "target": "Union of every Cliopatria v0.21 feature alive in 200 BC (FromYear <= -200 <= ToYear), i.e. land held by any state."
+    },
+    "B2_neo_assyrian_700BC": {
+      "window": {"lat0": 33.5, "lon0": 42.0, "width_km": 2400, "height_km": 1800, "cell_km": 9},
+      "sources": "Pleiades settlements with timePeriodsKeys including 'neo-assyrian-babylonian-middle-east' or 'early-1st-millennium-mesopotamia' (205 points in the window).",
+      "target": "Union of every Cliopatria feature alive in 700 BC."
+    }
+  },
+  "why_any_state": "The chain treats every source as one actor; sources here are not chosen by polity, so the target is state-held land against land held by no state (deserts, steppe, mountains, tribal land). Using one empire's polygon to pick sources would leak the target.",
+  "chain": "As plan.json / plan_round2.json: Earth window fields (WorldClim, NCEP winds, Natural Earth rivers, Earth land/people density), cereal from the Earth land/people run with date palms harvested in September, fertility factors bare / legume, scaled rural ledger L1, collection, stores and allocation unchanged. No roads (Itiner-e is Roman AD 150), so P2 and P3 equal P1.",
+  "cases": {
+    "legacy_0": "Year-round effective days <= 2.0 from all sources.",
+    "food cases": "joint365, fert_bare, fert_legume under L1, held by reach rule R*."
+  },
+  "metrics": "Balanced accuracy over land within 15 walking days (v1 graph) of the sources; TPR / TNR; share of source cells staffed.",
+  "decision_rule": {
+    "G1": "staffs >= 75 % of the source cells, in B1 and in B2",
+    "G2": "balanced accuracy >= legacy_0 - 0.02, in B1 and in B2",
+    "choice": "Among food cases passing G1 and G2 in both pools, the default is the one with the lowest published census error (fert_bare 0.459, joint365 0.538, fert_legume 0.685). If none passes, legacy_0 stays the default. Development results (Rome, Han) are reported but do not decide.",
+    "implementation": "A passing case is then built into the atlas chain (scaled rural ledger and R*) and checked against the current maps before the default changes."
+  },
+  "caveats": "Pleiades period tags are broad (Hellenistic 330-30 BC; Neo-Assyrian c. 1000-550 BC) against single target years; Cliopatria extents are claims. Modern WorldClim climate for 700 and 200 BC, as for AD 150."
+}
