@@ -28,5 +28,22 @@
     "G3": "candidate M1 on S1 not more than 0.02 below current",
     "adopt": "if G1, G2 and G3 pass, the fitted weights replace the assumptions in polity.settle and the atlases' unmarked towns are regenerated; else the current weights stay and the model is labelled 'count and spacing Earth-fitted, sites assumed'"
   },
-  "data_status": "Development pools are seen; S1 shares the Han window and many seat places with Han AD 2 (declared dependence); S2 is a new region (central and northern Europe beyond the Roman frontier) and era."
+  "data_status": "Development pools are seen; S1 shares the Han window and many seat places with Han AD 2 (declared dependence); S2 is a new region (central and northern Europe beyond the Roman frontier) and era.",
+  "development_result_1": "Grid (output/settlement_model_20261107/grid.json): current weights mean F1 0.453, M1 0.274; best a 1.5, w_r 3, w_c 0, w_d 1.5, k_f 60: F1 0.463, M1 0.288. Diagnosis: placed towns form a regular lattice (nearest-neighbour median 45 km, 10-90 % 37-57) while real towns cluster (median 20 km, 9-64): M3 KS 0.68-0.93. The E1 count is right (Han 1,303 vs 1,264).",
+  "amendment_1": {
+    "date": "2026-11-07",
+    "status": "before any blind outcome (the blind pools are unopened)",
+    "change": "Development stage 2: count-limited placement. The model keeps its E1 count N (the towns the current spacing rule places) but places them greedily best-site-first with a smaller minimum spacing factor s (blocking radius s x R instead of 1.6 R), so towns crowd into the best land and poor land stays empty, as real networks do.",
+    "grid": "s in {0.4, 0.6, 0.8, 1.0, 1.3, 1.6 (current)} x site weights {current, stage-1 candidate}",
+    "selection": "best mean F1 subject to mean M1 not below the current model's; M3 reported",
+    "gates_added": "G4: candidate M3 (spacing KS) on S1 not above the current model's."
+  },
+  "development_result_2": "Count-limited spacing grid (grid2.json): smaller spacing fixes the spacing distribution (M3 0.80 -> 0.38-0.42 at s 0.4-0.6) but lowers F1 (0.46 -> 0.23-0.31) and M1, because the crowded towns follow the density field, which correlates weakly with real towns per block (Rome 0.28, Han 0.15). Candidate stays s 1.6 with stage-1 weights (F1 0.463, M1 0.289).",
+  "amendment_2": {
+    "date": "2026-11-07",
+    "status": "before any blind outcome",
+    "change": "Development stage 3: site suitability fitted directly. Logistic regression of real-town presence (town cells against a random sample of allowed land, case-control) on map-derivable fields only: log(1 + food density), river proximity at 3 and 15 km, coast within 6 km, coast proximity at 30 km, elevation, slope, elevation relative to its 50 km mean, log aridity, road within 4 km; one intercept per pool. Site score = exp(linear predictor without the intercepts); placement keeps the E1 count and the 1.6 spacing.",
+    "validation": "leave-one-pool-out: fit on two development pools, place and score on the third; the stage-3 candidate is the fit on all three pools, adopted for the blind test only if its leave-one-pool-out mean F1 beats the stage-1 candidate's in-sample mean F1 (0.463) and mean M1 is not below the current model's (0.274).",
+    "gates": "unchanged G1-G4 on the blind pools, against the current model"
+  }
 }

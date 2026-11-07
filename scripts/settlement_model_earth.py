@@ -63,11 +63,90 @@ def prepare():
         log(f"{name}: {len(nodes)} real towns, allowed land {x['allowed'].sum():,} cells")
 
 
-def place(x, weights):
+def place(x, weights, spacing=None, max_count=None, score_override=None):
     from polity.settle import place_towns
     towns, _, _ = place_towns(x["density"], x["land"], x["water_km"], x["road"], x["elev"], float(x["cell_km"]), [],
-                              allowed=x["allowed"], seed=1, aridity=x["aridity"], weights=weights)
+                              allowed=x["allowed"], seed=1, aridity=x["aridity"], weights=weights, spacing=spacing, max_count=max_count,
+                              score_override=score_override)
     return towns
+
+
+SPACINGS = [0.4, 0.6, 0.8, 1.0, 1.3, 1.6]
+FEATURES = ["log_food", "river3", "river15", "coast6", "coast30", "elev_km", "slope", "rel_elev", "log_arid", "road4"]
+
+
+def features(x):
+    """Map-derivable site fields (amendment 2)."""
+    land = x["land"]; cell = float(x["cell_km"])
+    coast = ndi.distance_transform_edt(land) * cell
+    gy, gx = np.gradient(x["elev"], cell * 1000.0)
+    road = x["road"].astype(bool)
+    road_km = ndi.distance_transform_edt(~road) * cell if road.any() else np.full(land.shape, 1e9)
+    f = dict(log_food=np.log1p(ndi.gaussian_filter(x["density"], 1.0)), river3=np.exp(-x["water_km"] / 3.0), river15=np.exp(-x["water_km"] / 15.0),
+             coast6=(coast <= 6.0).astype(float), coast30=np.exp(-coast / 30.0), elev_km=x["elev"] / 1000.0, slope=np.hypot(gx, gy) * 100.0,
+             rel_elev=(x["elev"] - ndi.gaussian_filter(x["elev"], 50.0 / cell)) / 1000.0, log_arid=np.log(np.clip(x["aridity"], 0.02, 5.0)),
+             road4=(road_km <= 4.0).astype(float))
+    return np.stack([f[k] for k in FEATURES], -1)
+
+
+def fit_suitability(pools, names, seed=1):
+    from sklearn.linear_model import LogisticRegression
+    X, y, g = [], [], []
+    rng = np.random.default_rng(seed)
+    for i, p in enumerate(names):
+        x = pools[p]; F = features(x).reshape(-1, len(FEATURES)); W = x["land"].shape[1]
+        real = np.asarray(x["real"]); real = real[x["allowed"].ravel()[real]]
+        allowed = np.flatnonzero(x["allowed"].ravel())
+        bg = rng.choice(allowed, size=min(len(allowed), 10 * len(real)), replace=False)
+        X += [F[real], F[bg]]; y += [np.ones(len(real)), np.zeros(len(bg))]; g += [np.full(len(real) + len(bg), i)]
+    X = np.concatenate(X); y = np.concatenate(y); g = np.concatenate(g)
+    mu, sd = X.mean(0), X.std(0) + 1e-9
+    D = np.c_[(X - mu) / sd, np.eye(len(names))[g]]                 # one intercept per pool
+    m = LogisticRegression(C=1.0, fit_intercept=False, max_iter=2000).fit(D, y)
+    return dict(coef=m.coef_[0][:len(FEATURES)], mu=mu, sd=sd)
+
+
+def suitability(x, model):
+    F = features(x)
+    return np.exp(((F - model["mu"]) / model["sd"]) @ model["coef"])
+
+
+def fit3():
+    pools = {p: dict(np.load(OUT / f"{p}_inputs.npz")) for p in ("rome_150", "han_2", "hellenistic")}
+    names = list(pools); res = {}
+    for held in names:                                              # leave one pool out
+        model = fit_suitability(pools, [p for p in names if p != held])
+        res[held] = metrics(pools[held], place(pools[held], CURRENT, score_override=suitability(pools[held], model)))
+        log(f"held out {held}: F1 {res[held]['F1']:.3f} M1 {res[held]['M1']:.3f} M3 {res[held]['M3']:.3f} M4 {res[held]['M4']:.3f}")
+    full = fit_suitability(pools, names)
+    lopo = dict(F1=float(np.mean([r["F1"] for r in res.values()])), M1=float(np.mean([r["M1"] for r in res.values()])), M3=float(np.mean([r["M3"] for r in res.values()])))
+    passes = lopo["F1"] > 0.463 and lopo["M1"] >= 0.274
+    out = dict(features=FEATURES, coef=dict(zip(FEATURES, map(float, full["coef"]))), mu=full["mu"].tolist(), sd=full["sd"].tolist(),
+               leave_one_out=res, mean=lopo, adopted_for_blind=bool(passes))
+    (OUT / "fit3.json").write_text(json.dumps(out, indent=1))
+    log("leave-one-pool-out mean:", {k: round(v, 3) for k, v in lopo.items()}, "-> stage 3", "ADOPTED for the blind test" if passes else "not adopted")
+    log("coefficients (standardised):", {k: round(v, 2) for k, v in out["coef"].items()})
+
+
+
+def grid2():
+    """Amendment 1: count-limited placement (E1 count, smaller spacing) x {current, stage-1} weights."""
+    pools = {p: dict(np.load(OUT / f"{p}_inputs.npz")) for p in ("rome_150", "han_2", "hellenistic")}
+    stage1 = json.loads((OUT / "grid.json").read_text())["candidate"]["weights"]
+    counts = {p: len(place(x, CURRENT)) for p, x in pools.items()}           # the E1 count of the current model
+    rows = []
+    for wname, w in (("current", CURRENT), ("stage1", stage1)):
+        for sp in SPACINGS:
+            res = {p: metrics(x, place(x, w, sp, counts[p])) for p, x in pools.items()}
+            rows.append(dict(weights=wname, spacing=sp, pools=res, F1=float(np.mean([r["F1"] for r in res.values()])),
+                             M1=float(np.mean([r["M1"] for r in res.values()])), M3=float(np.mean([r["M3"] for r in res.values()]))))
+            log(f"{wname:8s} s {sp:.1f}: F1 {rows[-1]['F1']:.3f} M1 {rows[-1]['M1']:.3f} M3 {rows[-1]['M3']:.3f}  " +
+                "  ".join(f"{p} F1 {v['F1']:.3f}/M1 {v['M1']:.3f}/M3 {v['M3']:.3f}" for p, v in res.items()))
+    cur = next(r for r in rows if r["weights"] == "current" and r["spacing"] == 1.6)
+    ok = [r for r in rows if r["M1"] >= cur["M1"]]
+    best = max(ok, key=lambda r: r["F1"])
+    (OUT / "grid2.json").write_text(json.dumps(dict(counts=counts, stage1_weights=stage1, current=cur, candidate=best, rows=rows), indent=1))
+    log("candidate:", best["weights"], "spacing", best["spacing"], f"F1 {best['F1']:.3f} M1 {best['M1']:.3f} M3 {best['M3']:.3f}")
 
 
 def metrics(x, towns, block_km=100.0):
@@ -116,5 +195,47 @@ def grid():
             "  ".join(f"{p}: F1 {v['F1']:.3f} M1 {v['M1']:.3f} M3 {v['M3']:.3f} M4 {v['M4']:.3f}" for p, v in r["pools"].items()))
 
 
+def blind():
+    """The single blind evaluation (plan.json gates G1-G4): current weights against the stage-1 candidate."""
+    import pandas as pd
+    import polity_earth_check as P
+    import earth_control_blind2 as B2
+    from polity import earth as E
+    from polity.settle import site_score
+    from sklearn.metrics import roc_auc_score
+    cand = json.loads((OUT / "grid.json").read_text())["candidate"]["weights"]
+    res = dict(plan=str(PLAN.relative_to(ROOT)), candidate=cand, current=CURRENT)
+    # S1: CHGIS AD 610 seats in the Han window, allowed = Cliopatria Sui Dynasty 610
+    g = P.load_window("han"); land = g["land"].astype(bool); W = land.shape[1]
+    pts = B2.seats(610); r, c, ok = P.snap(g, pts[:, 0], pts[:, 1])
+    inside, n = B2.target(g, 610, ("Sui Dynasty",))
+    x = inputs(g, np.zeros(land.shape, bool), inside); x["real"] = np.unique((r * W + c)[ok])
+    s1 = {k: metrics(x, place(x, w)) for k, w in (("current", CURRENT), ("candidate", cand))}
+    res["S1_sui_610"] = dict(seats=int(len(pts)), polygons=int(n), **s1)
+    # S2: cities of 1300 (>= 5,000) beyond the Roman frontier in the Rome window: site-rank AUC
+    d = pd.read_stata(ROOT / "data/cache/bosker_cities_20261107/cities.tab"); y = d[(d["year"] == 1300) & (d["citypop_le5"] > 0)]
+    g = P.load_window("rome"); land = g["land"].astype(bool); W = land.shape[1]
+    roman = E.inside_polygons(g, E.cliopatria("Roman Empire", 150))
+    region = land & ~roman & (g["lat"] > 45) & (g["lon"] < 30)
+    r, c, ok = P.snap(g, y["latitude"].values.astype(float), y["longitude"].values.astype(float))
+    cells = (r * W + c)[ok & (y["latitude"].values > 45) & (y["longitude"].values < 30)]
+    cells = np.unique(cells[region.ravel()[cells]])
+    road = E.draw_lines(g, [l for _, l in E.itinere_roads(150)]) & land
+    x2 = inputs(g, road, region)
+    lab = np.zeros(land.size, bool); lab[cells] = True; sel = region.ravel()
+    s2 = {}
+    for k, w in (("current", CURRENT), ("candidate", cand)):
+        score, _ = site_score(x2["density"], land, x2["water_km"], ndi.distance_transform_edt(land) * x2["cell_km"], road, x2["elev"], x2["cell_km"], w)
+        s2[k] = dict(auc=float(roc_auc_score(lab[sel], score.ravel()[sel])))
+    res["S2_beyond_limes_1300"] = dict(cities=int(len(cells)), region_cells=int(region.sum()), **s2)
+    a, b = s1["current"], s1["candidate"]
+    gates = dict(G1=b["F1"] >= a["F1"], G2=s2["candidate"]["auc"] >= s2["current"]["auc"], G3=b["M1"] >= a["M1"] - 0.02, G4=b["M3"] <= a["M3"])
+    res["gates"] = {k: bool(v) for k, v in gates.items()}; res["adopt"] = bool(all(gates.values()))
+    (OUT / "blind.json").write_text(json.dumps(res, indent=1))
+    log(f"S1 Sui 610 ({len(pts)} seats): current F1 {a['F1']:.3f} M1 {a['M1']:.3f} M3 {a['M3']:.3f} M4 {a['M4']:.3f} | candidate F1 {b['F1']:.3f} M1 {b['M1']:.3f} M3 {b['M3']:.3f} M4 {b['M4']:.3f}")
+    log(f"S2 beyond the limes 1300 ({len(cells)} cities): AUC current {s2['current']['auc']:.3f}, candidate {s2['candidate']['auc']:.3f}")
+    log("gates:", res["gates"], "adopt:", res["adopt"])
+
+
 if __name__ == "__main__":
-    {"prepare": prepare, "grid": grid}[sys.argv[1]]()
+    {"prepare": prepare, "grid": grid, "grid2": grid2, "fit3": fit3, "blind": blind}[sys.argv[1]]()

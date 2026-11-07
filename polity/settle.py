@@ -68,12 +68,15 @@ def site_score(density, land, water_km, coast_km, road, elev, cell_km, weights=N
 
 
 def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=None, seed=1,
-                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default", weights=None):
+                seat_people=None, max_radius_km=None, beta=None, aridity=None, dry_water_km="default", weights=None,
+                spacing=None, max_count=None, score_override=None):
     seat_people = SEAT_PEOPLE if seat_people is None else seat_people
     beta = SEAT_BETA if beta is None else beta
     max_radius_km = MAX_RADIUS_KM if max_radius_km is None else max_radius_km
     coast_km = ndi.distance_transform_edt(land) * cell_km
     score, d = site_score(density, land, water_km, coast_km, road, elev, cell_km, weights)
+    if score_override is not None:              # a fitted site suitability (scripts/settlement_model_earth.py stage 3)
+        score = np.where(land, np.asarray(score_override, float), 0.0)
     # local quirks of site (springs, fords, a defensible hill) that no map layer
     # holds: +-25 % on a ~10 km scale, fixed seed
     rng = np.random.default_rng(seed)
@@ -99,8 +102,9 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
         y0, y1, x0, x1 = max(0, y - r), min(h, y + r + 1), max(0, x - r), min(w, x + r + 1)
         yy, xx = np.mgrid[y0:y1, x0:x1]
         blocked[y0:y1, x0:x1] |= (yy - y) ** 2 + (xx - x) ** 2 <= rad * rad
+    sp = SPACING if spacing is None else spacing   # count-limited placement uses a smaller spacing with max_count
     for y, x in marked:                         # a marked town serves its own catchment
-        block(y, x, SPACING * min(radius[y, x], max_radius_km / cell_km))
+        block(y, x, sp * min(radius[y, x], max_radius_km / cell_km))
     towns = []
     order = np.argsort(-score[ok]); cy, cx = np.nonzero(ok)
     for k in order:
@@ -108,7 +112,9 @@ def place_towns(density, land, water_km, road, elev, cell_km, marked, allowed=No
         if blocked[y, x]:
             continue
         towns.append((y, x))
-        block(y, x, SPACING * min(radius[y, x], max_radius_km / cell_km))
+        if max_count is not None and len(towns) >= max_count:
+            break
+        block(y, x, sp * min(radius[y, x], max_radius_km / cell_km))
     return towns, coast_km, d
 
 
