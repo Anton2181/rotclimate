@@ -81,6 +81,41 @@ weights, and `polity/settle.py` is unchanged; the configurable copy lives in `po
   China Plain, in the Sichuan basin and around Guangzhou in AD 610 (see the figure). The atlas's evidence text for
   Settlements already says "count Earth-fitted, sites assumed".
 
+## Round 2: towns on the old-heartlands density (`plan_round2.json`, frozen before results)
+
+Earlier work (`reports/POPULATION_20261023.md`) had already found the missing history: capacity multiplied by
+exp(−D / 800 km), where D is the travel cost to the nearest old core (the four river cradles, plus Rome). That
+model is Earth-tested: Han AD 2 census rank 0.29 → 0.84, Roman towns 0.19 → 0.62 (blind). The map already computes
+this density (`settlement_cored`), but its unmarked towns still use the bare base.
+
+Candidate C1 places the towns on the cored density, with the same total people inside the polity and nothing
+tuned. Here, as on the fantasy map, 75 % of the Han AD 2 seats lie north of 33° N, against 33 % of the bare density.
+
+| Development (`dev2.json`) | F1 | block rank M1 | spacing KS M3 |
+|---|---|---|---|
+| current, mean of 3 pools | 0.453 | 0.274 | 0.798 |
+| **C1 (L 800 km)** | **0.533** | **0.512** | **0.727** |
+| Han AD 2 alone | 0.424 → 0.578 | 0.107 → 0.614 | 0.782 → 0.720 |
+
+| Blind (`blind2.json`, scored once) | current | C1 | gate |
+|---|---|---|---|
+| T1 Tang AD 742 seats (1,334 inside Tang): F1 | 0.538 | 0.551 | G1 pass |
+| T1 block rank M1 | 0.400 | 0.504 | G2 pass |
+| T1 spacing KS M3 | 0.795 | 0.739 | G3 pass |
+| T1 count error M4 (towns placed) | 0.070 (1,135) | 0.099 (1,062) | **G4 fail** (> 0.08) |
+| T2 cities of 1300 inside the Roman frontier: site AUC | 0.771 | 0.754 | **G5 fail** |
+
+**Not adopted.** The cored density gives a better Chinese pattern on unseen data. But it places too few towns
+(−20 %), and it ranks medieval European city sites worse; the Rome-centred core does not match the urban map of
+1300 (Flanders, Iberia, southern France). Under the frozen gates, the atlas keeps the bare density.
+
+Two things a round 3 could test, both of which need a new blind pool declared first:
+
+* **Count.** Keep the E1 count from the bare density, and use the cored density only to rank and space the sites.
+  This would fix G4.
+* **Site ranking.** Score the cored density against an AD ≈ 200 target, not a medieval one. No unspent AD ≈ 200
+  site pool exists yet.
+
 ## Why, and what could fix it
 
 The clustering is mostly population history, not site quality. In AD 610 the Chinese population was still

@@ -21,5 +21,43 @@
   "G4": "C1 M4 <= 0.08 on T1 (count within ~20 %)",
   "G5": "C1 AUC >= current on T2",
   "adopt": "all five pass: the atlases' unmarked towns are placed on settlement_cored (polity/fields.py, administrative_world.py, economic_world.py) and the town-dependent chain is rebuilt (towns, minor roads, reach, settlement integration, control v2); else the bare base stays and the report says so"
+ },
+ "development_result": "dev2.json: mean F1 current 0.453 -> C1 0.533, M1 0.274 -> 0.512, M3 0.798 -> 0.727 (Han M1 0.107 -> 0.614, Rome 0.347 -> 0.538, Hellenistic 0.367 -> 0.383); qualifies. Sensitivity L 450: F1 0.551, M1 0.490; L 1500: F1 0.503, M1 0.462 (not selectable).",
+ "blind_result": {
+  "T1_tang_742": {
+   "current": {
+    "F1": 0.5375,
+    "M1": 0.3996,
+    "M3": 0.7947,
+    "M4": 0.0702,
+    "recall": 0.6207,
+    "precision": 0.474,
+    "n_real": 1334,
+    "n_model": 1135
+   },
+   "C1": {
+    "F1": 0.5509,
+    "M1": 0.5041,
+    "M3": 0.7387,
+    "M4": 0.099,
+    "recall": 0.5997,
+    "precision": 0.5094,
+    "n_real": 1334,
+    "n_model": 1062
+   }
+  },
+  "T2_cities_1300_inside_limes": {
+   "current": 0.7713390576218647,
+   "C1": 0.754466546020956
+  },
+  "gates": {
+   "G1": true,
+   "G2": true,
+   "G3": true,
+   "G4": false,
+   "G5": false
+  },
+  "adopt": false,
+  "verdict": "Not adopted: G4 (count error 0.099 > 0.08) and G5 (AUC 0.754 < 0.771) fail. The cored density improves the Tang pattern (F1 0.538 -> 0.551, M1 0.400 -> 0.504, M3 0.795 -> 0.739) but places too few seats (1,062 vs 1,334 real; current 1,135) and ranks the 1300 cities inside the old frontier worse."
  }
 }
