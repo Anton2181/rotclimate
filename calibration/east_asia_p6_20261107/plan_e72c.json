@@ -1,0 +1,28 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any e72c screen result; written after the e72b screen",
+  "change": "e72c storm_plateau_global: on Earth regions the plateau upwind comes from a global 0.5-degree ring (earth.plateau_profile: land above 2,500 m smoothed over ~150 km, 15-60 deg per hemisphere; area and 10th / 90th percentile |lat|), carried downwind by the model at the region's mid-latitude spacing, instead of the region's own window. Atlas worlds keep their own terrain. Off by default; r43 bit for bit (checked on east_china and japan, 56 km).",
+  "screen": {
+    "tool": "scripts/benchmark_local.py --regions dev31, 56 km, r43 base, paired with the e72 baseline",
+    "profiles": {
+      "k10c": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_global": true
+      },
+      "k10c_s25": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.25,
+        "storm_plateau_global": true
+      },
+      "k07c": {
+        "storm_plateau": 0.7,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_global": true
+      }
+    }
+  },
+  "promising_if": "the plan_e72.json criteria (East Asia rain loss <= 0.97 x; all-31 rain loss and T MAE <= 1.005 x; training, holdout, midlatitude <= 1.01 x)",
+  "next_if_promising": "policy v3 development gate on S49 (dev31 + retired a, b, c) and the paired 28 km check (scripts/gate_v3.py); the unseen set f stays closed until the owner releases it"
+}

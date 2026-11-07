@@ -580,6 +580,24 @@ class ClimateModel:
                 s_ = n[j] + decay * s_; e_ = n[j] * lo_edge[j] + decay * e_; p_ = n[j] * hi_edge[j] + decay * p_
                 S[j], E[j], P[j] = s_, e_, p_
             area = S * g.cell_km ** 2
+            prof = getattr(g, "plateau_profile", None)
+            if self.p.storm_plateau_global and prof is not None and abs(prof["height"] - self.p.storm_plateau_m) < 1e-6:
+                # e72c: carry the global 0.5-degree plateau ring downwind (twice round
+                # for the wrap) at the region's mid-latitude spacing, then read it at
+                # each column's longitude
+                L = len(prof["lon"]); dx = 111.2 * 0.5 * max(np.cos(np.radians(float(np.mean(np.abs(g.lat))))), 0.1)
+                dec = np.exp(-dx / self.p.storm_plateau_km)
+                ring = range(2 * L - 1, -1, -1) if self.p.retrograde else range(2 * L)
+                Sg = np.zeros(L); Eg = np.zeros(L); Pg = np.zeros(L); s_, e_, p_ = 0.0, 0.0, 0.0
+                for k in ring:
+                    q = k % L
+                    s_ = prof["area"][q] + dec * s_; e_ = prof["area"][q] * prof["edge"][q] + dec * e_; p_ = prof["area"][q] * prof["top"][q] + dec * p_
+                    Sg[q], Eg[q], Pg[q] = s_, e_, p_
+                col = ((np.asarray(g.column_lon) - prof["lon"][0]) % 360.0) / 0.5
+                lo = np.floor(col).astype(int) % L; hi_ = (lo + 1) % L; w = col - np.floor(col)
+                pick = lambda a: a[lo] * (1 - w) + a[hi_] * w
+                area, Ec, Pc = pick(Sg), pick(Eg), pick(Pg)
+                S = area / g.cell_km ** 2; E = Ec / g.cell_km ** 2; P = Pc / g.cell_km ** 2
             with np.errstate(invalid="ignore", divide="ignore"):
                 self.plateau_steer = dict(strength=1.0 - np.exp(-area / self.p.storm_plateau_area_km2),
                                           edge=np.where(S > 0, E / np.maximum(S, 1e-12), 0.0),

@@ -234,6 +234,11 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
+    prof = plateau_profile()                                   # e72c (used only with storm_plateau_global)
+    hem = "sh" if lat0 < 0 else "nh"
+    g.plateau_profile = dict(lon=prof["lon"], area=prof["area_" + hem], edge=prof["edge_" + hem], top=prof["top_" + hem],
+                             height=float(prof["height"]))
+    g.column_lon = lon[lon.shape[0] // 2, :]
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 
@@ -268,6 +273,41 @@ def west_fetch(fetch_km: float = FETCH_KM) -> tuple:
     CACHE.mkdir(parents=True, exist_ok=True)
     np.savez_compressed(key, fetch=out.astype(np.float32), lat=lat, lon=lon)
     return out, lat, lon
+
+
+PLATEAU_BAND = (15.0, 60.0)   # e72c: latitudes searched for high plateaus upwind of a region
+
+
+def plateau_profile(height_m: float = 2500.0) -> dict:
+    """e72c: high plateaus by longitude on a 0.5-degree ring, per hemisphere: the area
+    (km2) of land whose elevation, smoothed over ~150 km, exceeds height_m between
+    15 and 60 degrees, and the 10th / 90th percentile |latitude| of that land
+    (the plateau's equatorward and poleward edges). The model carries these
+    downwind itself (rotclimate.model, storm_plateau_global), so a region's storms
+    can feel a plateau beyond its own window, as the west fetch does for land."""
+    key = CACHE / f"plateau_profile_{height_m:g}m.npz"
+    if key.exists():
+        z = np.load(key)
+        return {k: z[k] for k in z.files}
+    from scipy import ndimage as ndi
+    elev = _wc("elev")
+    f = 6
+    H, W = elev.shape[0] // f, elev.shape[1] // f
+    e = np.nan_to_num(elev[:H * f, :W * f], nan=0.0).reshape(H, f, W, f).mean((1, 3))
+    lat = 90 - (np.arange(H) + 0.5) * 0.5
+    lon = -180 + (np.arange(W) + 0.5) * 0.5
+    sm = ndi.gaussian_filter(np.maximum(e, 0.0), (150.0 / 55.6, 150.0 / (55.6 * np.cos(np.radians(35.0)))), mode=("nearest", "wrap"))
+    hi = sm > height_m
+    area = (55.6 ** 2) * np.cos(np.radians(lat))[:, None] * np.ones((1, W))
+    out = dict(lon=lon, height=np.array(height_m))
+    for tag, sel in (("nh", (lat >= PLATEAU_BAND[0]) & (lat <= PLATEAU_BAND[1])), ("sh", (lat <= -PLATEAU_BAND[0]) & (lat >= -PLATEAU_BAND[1]))):
+        h, a, al = hi[sel], area[sel], np.abs(lat[sel])
+        out["area_" + tag] = (h * a).sum(0)
+        out["edge_" + tag] = np.array([np.percentile(al[h[:, j]], 10) if h[:, j].any() else 0.0 for j in range(W)])
+        out["top_" + tag] = np.array([np.percentile(al[h[:, j]], 90) if h[:, j].any() else 0.0 for j in range(W)])
+    CACHE.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(key, **out)
+    return out
 
 
 POLE_FETCH_KM = 2000.0  # e31
