@@ -2,7 +2,7 @@
 
     python -I scripts/gate_v3.py dev OUT REF_NAME      # REF/candidate _dev31 + _retired_{a,b,c} -> S49, T, P (and S31)
     python -I scripts/gate_v3.py fine OUT REF_NAME     # REF/candidate _fine28 -> S28
-    python -I scripts/gate_v3.py sealed OUT REF_NAME   # REF/candidate _sealed_d -> S
+    python -I scripts/gate_v3.py sealed OUT REF_NAME [PART]   # REF/candidate _PART (default sealed_d) -> S
 Writes OUT/v3_<stage>.json and exits 0 when the stage passes.
 """
 from __future__ import annotations
@@ -64,7 +64,7 @@ def main():
         R, C = paired(out, ref, None, ["fine28"])
         s = score(R, C, list(R)); res = dict(stage="fine", S28=s, passes=bool(s["S"] <= 1.01))
     elif stage == "sealed":
-        R, C = paired(out, ref, None, ["sealed_d"])
+        R, C = paired(out, ref, None, [sys.argv[4] if len(sys.argv) > 4 else "sealed_d"])   # e.g. sealed_f
         s = score(R, C, list(R))
         per = {n: dict(T=(C[n]["temperature"]["monthly_mae_C"], R[n]["temperature"]["monthly_mae_C"]),
                        P=(C[n]["rain"]["loss"], R[n]["rain"]["loss"])) for n in R}
