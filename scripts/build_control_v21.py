@@ -75,13 +75,26 @@ def build(name, mode):
     elev = np.asarray(world["elev"], float); km = float(np.mean(r["cell_km"]))
     gy, gx = np.gradient(elev, km * 1000); slope = np.degrees(np.arctan(np.hypot(gy, gx)))
     forest = np.isin(np.asarray(world["biome"]), A.FOREST).astype(float); density = np.asarray(world["density"], float)
-    territory = own.copy(); unadmin = np.zeros(shape, bool)
+    territory = own.copy(); unadmin = np.zeros(shape, bool); holes = np.zeros(shape, bool)
+    from population.export import decode_harvest
+    import geography_control_a3 as A3m
+    A3_AI, A3_EMPTY = A3m.AI_DESERT, A3m.EMPTY_DENSITY
+    ai = np.nan_to_num(np.asarray(decode_harvest(folder)[1]["aridity"], float))
     for a in range(len(actors)):
         mine = own == a
         if not mine.any():
             continue
         others = (own >= 0) & ~mine
         pk, plab, ok = A.pockets(mine, land, other=others)
+        if not pk.any():
+            continue
+        # plan_A3 (owner: holes such as deserts): desert or empty pockets stay holes
+        hole = np.zeros(shape, bool)
+        for k in np.flatnonzero(ok):
+            m = plab == k
+            if np.median(ai[m]) < A3_AI or np.median(density[m]) < A3_EMPTY:
+                hole |= m
+        pk = pk & ~hole; holes |= hole
         if not pk.any():
             continue
         gov = A.governable(plab, ok, mine, slope, forest, density)
@@ -99,8 +112,17 @@ def build(name, mode):
     W, H = meta["width"], meta["height"]
     def up(a, resample=Image.Resampling.NEAREST):
         return np.asarray(Image.fromarray(a).resize((W, H), resample))
-    shade = LightSource(azdeg=315, altdeg=45).hillshade(np.where(land, elev, 0.0), vert_exag=25, dx=km * 1000, dy=km * 1000)
-    shade_up = up((np.clip(shade, 0, 1) * 255).astype(np.uint8), Image.Resampling.BILINEAR) / 255.0
+    hv2 = ROOT / "output/terrain_erosion_20261107/map_height_v2.npz"
+    if hv2.exists() and name == "earth_fit":              # built with the Earth-fit tier tops (map_world_r43)
+        # relief shading from height map v2 (eroded, unmarked lowland hills; display only until plan D moves the chain
+        # onto it); it is at the source resolution (1.84 km), resized to the image if needed
+        zv = np.load(hv2)["z"].astype(float)
+        dxs = 1.143 * 1609.344
+        shade_src = LightSource(azdeg=315, altdeg=45).hillshade(zv, vert_exag=6, dx=dxs, dy=dxs)
+        shade_up = np.asarray(Image.fromarray((np.clip(shade_src, 0, 1) * 255).astype(np.uint8)).resize((W, H), Image.Resampling.BILINEAR)) / 255.0
+    else:
+        shade = LightSource(azdeg=315, altdeg=45).hillshade(np.where(land, elev, 0.0), vert_exag=25, dx=km * 1000, dy=km * 1000)
+        shade_up = up((np.clip(shade, 0, 1) * 255).astype(np.uint8), Image.Resampling.BILINEAR) / 255.0
     land_up = up(land.astype(np.uint8)) > 0
     terr_up = up((territory + 1).astype(np.uint8)) .astype(int) - 1
     held_up = up(held.astype(np.uint8)) > 0
@@ -152,6 +174,7 @@ def build(name, mode):
                    rule=("summed influence of staffed towns (plan_A C*)" if adopt == "C_star" else "control v2 (P2)") + "; pockets bounded by one polity are its territory",
                    staffed=int(active.sum()), sites=int(len(sites)), held_land_share=float(held.sum() / land.sum()),
                    territory_land_share=float((territory >= 0).sum() / land.sum()), unadministered_share=float(unadmin.sum() / land.sum()),
+                   desert_hole_share=float(holes.sum() / land.sum()),
                    claimed_unheld_share=float((land & (territory < 0) & (claimant >= 0)).sum() / land.sum()),
                    held_km2=float(held.sum() * km2), actors=[dict(actor=a["name"], staffed=n) for a, n in zip(actors, staffed_n)])
     (out / "summary.json").write_text(json.dumps(summary, indent=1))

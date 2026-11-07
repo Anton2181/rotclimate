@@ -104,7 +104,8 @@ def main():
                 options['reach_defacto'].insert(0,dict(value='v21_joint365',label='Food-supported reach v2.1 · v2 with enclosed land as territory',file=prefix+v21.name,file_sha256=file_hash(v21),
                     items=[dict(color=a['color'],label=a['name']) for a in model['actors']]+[dict(color='#c9b9c9',label='Hatched: unadministered upland / forest inside a polity (scenario)'),dict(color='#d9d2c6',label='Light tint and fine line: painted claim, not held'),dict(color='#e3decf',label='Not held, unclaimed')],
                     note=(f"Control v2, with every pocket wholly enclosed by one polity's held land as its territory: {vs['held_land_share']*100:.0f} % of land held, "
-                          f"{vs['unadministered_share']*100:.1f} % unadministered upland or forest (pockets steeper, more forested or emptier than the polity's held land). "
+                          f"{vs['unadministered_share']*100:.1f} % unadministered upland or forest (pockets steeper, more forested or emptier than the polity's held land); "
+                          f"desert or empty pockets ({vs.get('desert_hole_share', 0)*100:.1f} % of land; median P/PET < 0.2 or < 0.5 people/km2) stay holes. "
                           "Earth tests (calibration/geography_control_20261107/plan_A.json): development Rome AD 150 + Han AD 2; blind Song China AD 1080 0.737 and the late-antique Mediterranean AD 550 0.774, against 0.697 and 0.766 for v2. "
                           "Borders are drawn as lines over the relief; patches under 3 cells are merged. See reports/GEOGRAPHY_CONTROL_PLAN_20261107.md."),
                     integrated_support=False,caption='Fill: the polity whose staffed towns and kept roads are nearest (year-round days <= 2), plus the land it wholly encloses. Hatching: enclosed but ungoverned. Light tint: your painted claim where it is not held. Dark lines: borders of held territory.'))
