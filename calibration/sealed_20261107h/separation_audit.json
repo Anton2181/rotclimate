@@ -1,0 +1,632 @@
+{
+  "passes": true,
+  "known_regions": 78,
+  "proposed_regions": 8,
+  "conservative_margin_km_each_box": 56.0,
+  "bounds": {
+    "h_top_end": [
+      129.65753859856565,
+      135.34246140143435,
+      -17.25192229866451,
+      -11.748077701335491
+    ],
+    "h_new_guinea": [
+      140.68709002895196,
+      145.31290997104804,
+      -7.352601286029048,
+      -3.6473987139709516
+    ],
+    "h_congo_basin": [
+      19.298295283912744,
+      25.701704716087256,
+      -2.2519222986645087,
+      3.2519222986645087
+    ],
+    "h_zambia_plateau": [
+      24.663831372084456,
+      30.336168627915544,
+      -16.75192229866451,
+      -11.248077701335491
+    ],
+    "h_alaska_interior": [
+      -155.57559030174278,
+      -140.42440969825722,
+      62.697738207653224,
+      67.30226179234678
+    ],
+    "h_taimyr": [
+      84.91006674388387,
+      105.08993325611613,
+      69.19773820765322,
+      73.80226179234678
+    ],
+    "h_ivory_coast": [
+      -8.319551376567878,
+      -3.680448623432122,
+      5.147398713970952,
+      8.852601286029048
+    ],
+    "h_cerrado": [
+      -50.85578593899909,
+      -45.14421406100091,
+      -18.25192229866451,
+      -12.748077701335491
+    ]
+  },
+  "collisions": {
+    "h_top_end": [],
+    "h_new_guinea": [],
+    "h_congo_basin": [],
+    "h_zambia_plateau": [],
+    "h_alaska_interior": [],
+    "h_taimyr": [],
+    "h_ivory_coast": [],
+    "h_cerrado": []
+  },
+  "scope": "Metadata rectangles with an extra model-cell margin, including longitude wrapping. Not observations, model scores or independent forcing halos.",
+  "proposed_sha256": "4ff8ff5ca5b6954836ad138cc1c8c208f91050f6634819965930e51e99059075",
+  "auditor_sha256": "2868551611ed0490e9a3c39ed14d50b3f7e5da181532eb5f32a29ad60d9238d9",
+  "known_definitions": {
+    "california": {
+      "lat0": 37.0,
+      "lon0": -118.8,
+      "width_km": 900,
+      "height_km": 1270,
+      "note": "Mediterranean coast, Central Valley, Sierra Nevada, Mojave/Sonoran desert"
+    },
+    "iberia": {
+      "lat0": 37.1,
+      "lon0": -3.45,
+      "width_km": 2400,
+      "height_km": 1690,
+      "note": "Iberia, the western Mediterranean and north-west Africa"
+    },
+    "southeast_us": {
+      "lat0": 31.0,
+      "lon0": -89.0,
+      "width_km": 2000,
+      "height_km": 1300,
+      "note": "Gulf coast swamps, Florida, humid subtropical south, Appalachians, Texas plains"
+    },
+    "levant": {
+      "lat0": 36.0,
+      "lon0": 36.5,
+      "width_km": 1900,
+      "height_km": 1300,
+      "note": "Aegean/Levant Mediterranean coasts, Anatolian steppe, Syrian desert, Zagros"
+    },
+    "central_asia": {
+      "lat0": 42.0,
+      "lon0": 66.0,
+      "width_km": 2000,
+      "height_km": 1300,
+      "note": "Turan steppe and deserts, Tian Shan / Pamir foothills"
+    },
+    "east_china": {
+      "lat0": 29.0,
+      "lon0": 113.0,
+      "width_km": 1800,
+      "height_km": 1300,
+      "note": "monsoon humid subtropics: Yangtze, south China hills, Sichuan basin"
+    },
+    "chile": {
+      "lat0": -34.0,
+      "lon0": -71.0,
+      "width_km": 700,
+      "height_km": 1500,
+      "note": "central Chile: Mediterranean coast, Andes, Atacama edge"
+    },
+    "cape": {
+      "lat0": -33.4,
+      "lon0": 20.6,
+      "width_km": 780,
+      "height_km": 560,
+      "note": "Western Cape Mediterranean, Karoo, southern coast"
+    },
+    "sw_australia": {
+      "lat0": -32.0,
+      "lon0": 118.5,
+      "width_km": 1200,
+      "height_km": 1000,
+      "note": "south-west Australia: Mediterranean coast to the interior deserts"
+    },
+    "east_australia": {
+      "lat0": -29.0,
+      "lon0": 151.0,
+      "width_km": 1300,
+      "height_km": 1500,
+      "note": "humid subtropical east coast, Great Dividing Range, inland plains"
+    },
+    "south_brazil": {
+      "lat0": -31.0,
+      "lon0": -55.5,
+      "width_km": 1600,
+      "height_km": 1300,
+      "note": "Pampas and south Brazil: humid subtropical, no dry season"
+    },
+    "japan": {
+      "lat0": 35.0,
+      "lon0": 134.0,
+      "width_km": 1500,
+      "height_km": 1200,
+      "note": "maritime humid subtropics: southern Japan and the Korea Strait"
+    },
+    "mexico": {
+      "lat0": 27.0,
+      "lon0": -104.5,
+      "width_km": 1500,
+      "height_km": 1300,
+      "note": "northern Mexico: hot deserts and steppes, the Sierra Madre"
+    },
+    "pacific_nw": {
+      "lat0": 46.0,
+      "lon0": -121.5,
+      "width_km": 1100,
+      "height_km": 1100,
+      "note": "Pacific Northwest: oceanic and dry-summer coast, the Cascades' rain shadow"
+    },
+    "western_europe": {
+      "lat0": 49.0,
+      "lon0": 1.5,
+      "width_km": 1600,
+      "height_km": 1200,
+      "note": "France, the Low Countries and southern England: oceanic"
+    },
+    "eastern_europe": {
+      "lat0": 50.0,
+      "lon0": 28.0,
+      "width_km": 1600,
+      "height_km": 1200,
+      "note": "Ukraine, Poland and Belarus: cold continental"
+    },
+    "us_midwest": {
+      "lat0": 41.0,
+      "lon0": -91.0,
+      "width_km": 1800,
+      "height_km": 1200,
+      "note": "the Corn Belt: hot-summer continental"
+    },
+    "manchuria": {
+      "lat0": 44.0,
+      "lon0": 126.0,
+      "width_km": 1400,
+      "height_km": 1200,
+      "note": "north-east China and the Russian Far East: the Siberian High's winter monsoon"
+    },
+    "new_zealand": {
+      "lat0": -41.5,
+      "lon0": 173.0,
+      "width_km": 1000,
+      "height_km": 1300,
+      "note": "New Zealand: oceanic, the Southern Alps' rain shadow"
+    },
+    "anatolia": {
+      "lat0": 39.0,
+      "lon0": 33.0,
+      "width_km": 1300,
+      "height_km": 900,
+      "note": "continental Mediterranean plateau and Black Sea coast"
+    },
+    "iran_plateau": {
+      "lat0": 32.5,
+      "lon0": 54.0,
+      "width_km": 1500,
+      "height_km": 1200,
+      "note": "hot and cold deserts of the Iranian plateau, Zagros and Alborz"
+    },
+    "north_india": {
+      "lat0": 27.5,
+      "lon0": 78.0,
+      "width_km": 1500,
+      "height_km": 1100,
+      "note": "Ganges plain, Thar edge and Himalayan foothills: monsoon"
+    },
+    "north_china_plain": {
+      "lat0": 37.0,
+      "lon0": 115.5,
+      "width_km": 1300,
+      "height_km": 1100,
+      "note": "North China Plain, Loess Plateau edge, Shandong: winter-dry monsoon"
+    },
+    "korea": {
+      "lat0": 37.0,
+      "lon0": 127.5,
+      "width_km": 900,
+      "height_km": 1000,
+      "note": "Korean peninsula: cold-winter monsoon"
+    },
+    "texas_plains": {
+      "lat0": 32.0,
+      "lon0": -99.0,
+      "width_km": 1300,
+      "height_km": 1100,
+      "note": "Texas and Oklahoma: steppe to humid subtropical"
+    },
+    "great_basin": {
+      "lat0": 40.0,
+      "lon0": -115.5,
+      "width_km": 1100,
+      "height_km": 1000,
+      "note": "Great Basin and Wasatch: cold desert plateau"
+    },
+    "british_isles": {
+      "lat0": 54.0,
+      "lon0": -4.0,
+      "width_km": 1000,
+      "height_km": 1100,
+      "note": "Britain and Ireland: oceanic, Atlantic windward hills"
+    },
+    "alps": {
+      "lat0": 46.5,
+      "lon0": 10.0,
+      "width_km": 1000,
+      "height_km": 700,
+      "note": "the Alps and the Po plain: mountain climates"
+    },
+    "morocco": {
+      "lat0": 32.0,
+      "lon0": -6.5,
+      "width_km": 1100,
+      "height_km": 1000,
+      "note": "Atlantic Morocco, the Atlas and the Sahara edge"
+    },
+    "patagonia": {
+      "lat0": -44.0,
+      "lon0": -69.0,
+      "width_km": 1100,
+      "height_km": 1300,
+      "note": "southern Andes and the Patagonian lee desert (mirrored)"
+    },
+    "victoria": {
+      "lat0": -37.0,
+      "lon0": 145.5,
+      "width_km": 1000,
+      "height_km": 800,
+      "note": "south-east Australia: Victoria and the Great Dividing Range's south end (mirrored)"
+    },
+    "norway": {
+      "lat0": 61.0,
+      "lon0": 7.5,
+      "width_km": 900,
+      "height_km": 1200,
+      "note": "New geographic validation: Atlantic-facing Scandinavian mountains and lee-side Sweden"
+    },
+    "southeast_africa": {
+      "lat0": -28.5,
+      "lon0": 29.5,
+      "width_km": 900,
+      "height_km": 1200,
+      "note": "New geographic validation: Indian Ocean coast, Drakensberg and South African interior"
+    },
+    "caucasus": {
+      "lat0": 42.0,
+      "lon0": 44.5,
+      "width_km": 1100,
+      "height_km": 800,
+      "note": "SEALED: the Caucasus, Colchis rain coast and the Caspian lowlands"
+    },
+    "yunnan": {
+      "lat0": 24.5,
+      "lon0": 100.0,
+      "width_km": 400,
+      "height_km": 400,
+      "note": "SEALED set g: Subtropical monsoon highland south-east of Tibet"
+    },
+    "northeast_us": {
+      "lat0": 41.5,
+      "lon0": -76.0,
+      "width_km": 1100,
+      "height_km": 900,
+      "note": "SEALED: New England to the Appalachians: humid continental, cold coast"
+    },
+    "tasmania": {
+      "lat0": -42.0,
+      "lon0": 146.5,
+      "width_km": 600,
+      "height_km": 700,
+      "note": "SEALED: Tasmania, west-coast rain and the eastern lee (mirrored)"
+    },
+    "tripolitania": {
+      "lat0": 30.5,
+      "lon0": 15.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): Tripolitania, the Gulf of Sirte and the Fezzan edge, Mediterranean steppe to hot desert"
+    },
+    "hokkaido": {
+      "lat0": 44.5,
+      "lon0": 143.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: Hokkaido and southern Sakhalin, cold maritime coast under the winter monsoon"
+    },
+    "canadian_prairies": {
+      "lat0": 50.5,
+      "lon0": -106.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: Saskatchewan and Alberta prairies, cold continental semi-arid"
+    },
+    "kazakh_steppe": {
+      "lat0": 52.0,
+      "lon0": 72.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: northern Kazakh steppe, cold continental"
+    },
+    "namibia_kalahari": {
+      "lat0": -25.0,
+      "lon0": 19.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: Namib coast and Kalahari, hot desert by a cold current"
+    },
+    "southern_italy": {
+      "lat0": 39.0,
+      "lon0": 16.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: southern Italy, Sicily and the Ionian coast, Mediterranean"
+    },
+    "north_queensland": {
+      "lat0": -18.0,
+      "lon0": 145.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31: north Queensland, tropical monsoon coast and savanna"
+    },
+    "algeria_sahara": {
+      "lat0": 24.8,
+      "lon0": 4.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): central Algerian Sahara and the Hoggar, hyper-arid hot desert"
+    },
+    "sahel_niger": {
+      "lat0": 14.0,
+      "lon0": 5.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): Niger and northern Nigeria, hot semi-arid Sahel with a summer monsoon"
+    },
+    "najd_arabia": {
+      "lat0": 23.0,
+      "lon0": 44.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): Najd and the Arabian interior, hot desert"
+    },
+    "mongolia": {
+      "lat0": 47.0,
+      "lon0": 103.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): central Mongolia, cold steppe and desert"
+    },
+    "bengal": {
+      "lat0": 23.5,
+      "lon0": 91.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): Bengal delta, Meghalaya and the Bay coast, humid monsoon"
+    },
+    "deccan": {
+      "lat0": 17.5,
+      "lon0": 77.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-10-31 (set b): Deccan plateau, tropical dry and wet season"
+    },
+    "nova_scotia": {
+      "lat0": 46.0,
+      "lon0": -63.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): Nova Scotia, New Brunswick and the Gulf of St Lawrence, cold-sea humid continental east coast"
+    },
+    "middle_volga": {
+      "lat0": 53.0,
+      "lon0": 49.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): the middle Volga, forest steppe, humid continental"
+    },
+    "bc_coast": {
+      "lat0": 56.0,
+      "lon0": -130.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): northern British Columbia and the Alaska panhandle, hypermaritime fjord coast"
+    },
+    "tibet_plateau": {
+      "lat0": 34.0,
+      "lon0": 91.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): the central Tibetan plateau, cold alpine steppe"
+    },
+    "ethiopia_highlands": {
+      "lat0": 9.5,
+      "lon0": 39.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set c): the Ethiopian highlands and the Afar and Rift lowlands, tropical highland with a summer monsoon"
+    },
+    "egypt_nile": {
+      "lat0": 26.0,
+      "lon0": 31.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): Upper Egypt, the Nile valley and the Eastern and Western deserts, hyper-arid hot desert"
+    },
+    "thailand": {
+      "lat0": 15.5,
+      "lon0": 101.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): central and northeast Thailand, tropical savanna with a summer monsoon"
+    },
+    "finland": {
+      "lat0": 63.0,
+      "lon0": 27.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): central Finland and Karelia, boreal forest and lakes"
+    },
+    "central_siberia": {
+      "lat0": 60.0,
+      "lon0": 110.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): the upper Lena and Vilyuy basins, extreme continental boreal"
+    },
+    "yucatan": {
+      "lat0": 19.5,
+      "lon0": -89.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): the Yucatan peninsula, tropical wet-dry on limestone"
+    },
+    "kenya_highlands": {
+      "lat0": -0.5,
+      "lon0": 37.0,
+      "width_km": 900,
+      "height_km": 900,
+      "note": "SEALED 2026-11-01 (set d): the Kenyan highlands, the Rift and Lake Victoria's east shore, equatorial highland with two rainy seasons"
+    },
+    "labrador": {
+      "lat0": 55.0,
+      "lon0": -65.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: eastern Canadian boreal interior and Labrador coast"
+    },
+    "senegal": {
+      "lat0": 14.0,
+      "lon0": -15.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: West African summer monsoon and semi-arid Atlantic coast"
+    },
+    "southern_peru": {
+      "lat0": -15.0,
+      "lon0": -73.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: tropical Andes and Pacific coastal desert"
+    },
+    "northeast_brazil": {
+      "lat0": -7.0,
+      "lon0": -39.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: tropical semi-arid interior and humid eastern margin"
+    },
+    "sumatra": {
+      "lat0": 0.0,
+      "lon0": 101.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: equatorial maritime rainforest"
+    },
+    "angola": {
+      "lat0": -12.0,
+      "lon0": 16.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set e: tropical plateau, wet-dry season and Atlantic margin"
+    },
+    "iceland": {
+      "lat0": 65.5,
+      "lon0": -19.5,
+      "width_km": 500,
+      "height_km": 500,
+      "note": "SEALED set f: Cold maritime North Atlantic"
+    },
+    "sabah": {
+      "lat0": 6.0,
+      "lon0": 116.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set f: Equatorial maritime northern Borneo"
+    },
+    "interior_south_australia": {
+      "lat0": -30.0,
+      "lon0": 132.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set f: Arid continental interior and southern margin"
+    },
+    "west_madagascar": {
+      "lat0": -20.0,
+      "lon0": 45.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set f: Tropical seasonal island and highland rain shadow"
+    },
+    "western_amazon": {
+      "lat0": -5.0,
+      "lon0": -73.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set f: Equatorial continental rainforest"
+    },
+    "eastern_siberia": {
+      "lat0": 63.0,
+      "lon0": 130.0,
+      "width_km": 700,
+      "height_km": 700,
+      "note": "SEALED set f: Strongly seasonal cold continental interior"
+    },
+    "hexi_corridor": {
+      "lat0": 38.5,
+      "lon0": 102.0,
+      "width_km": 600,
+      "height_km": 400,
+      "note": "SEALED set g: Arid corridor along the north-east flank of the Tibetan Plateau"
+    },
+    "kamchatka": {
+      "lat0": 55.5,
+      "lon0": 159.0,
+      "width_km": 500,
+      "height_km": 600,
+      "note": "SEALED set g: Cold maritime peninsula under the Okhotsk-Aleutian storms"
+    },
+    "ob_basin": {
+      "lat0": 61.0,
+      "lon0": 70.0,
+      "width_km": 600,
+      "height_km": 600,
+      "note": "SEALED set g: Boreal continental lowland of western Siberia"
+    },
+    "mozambique": {
+      "lat0": -15.0,
+      "lon0": 37.5,
+      "width_km": 500,
+      "height_km": 500,
+      "note": "SEALED set g: Tropical savanna with one wet season"
+    },
+    "chaco": {
+      "lat0": -21.0,
+      "lon0": -61.0,
+      "width_km": 600,
+      "height_km": 500,
+      "note": "SEALED set g: Hot semi-arid plain east of the Andes"
+    }
+  },
+  "sources_sha256": {
+    "calibration/local_accuracy_20261023/regions_dev12.json": "8f117aa65c04aadab174bd4807814f1c2dd74c072d2c604809242818c7806774",
+    "calibration/local_accuracy_20261023/regions_sealed6.json": "be1d05b5a7710e6f900b043a14cdca68abde1e8f3b678eba81ac8d28ac91955a",
+    "calibration/r42_conservative_replay_20261102/regions.json": "091403d021fb76de8b0aa58ee490415fe14d3888036bf9b6fe6ba9d254bbaabe",
+    "calibration/r42_multistart_validation_20261102/regions.json": "2ad9c531f0139ea1ef1c7d49b56baf1af452be5523292b727f443b07b9157c4d",
+    "calibration/sealed_20261031/regions.json": "3e570a8faaa3d6165aa517e1a56c2022c0504cbe079712d27f058f86f5af0225",
+    "calibration/sealed_20261031b/regions.json": "0d868af8c1c32e2be23d5d63ff4be23a1d628df61d98f4f90592e96c889f1f31",
+    "calibration/sealed_20261101c/regions.json": "22121fa75dd48f3b7ef78028ace9cfaadb07eef83b40b4f1f6a425c50267c77d",
+    "calibration/sealed_20261101d/regions.json": "8654d6e265e85ea525163d1d0a0ac4a7d6e7cc9b21d11f3359ffc40911de4254",
+    "calibration/sealed_20261102e/regions.json": "85c86333ea4a6d91cec6dc96aa648428cd501823fea3ea7d927a2e1e05e12f3f",
+    "calibration/sealed_20261103f/regions.json": "af8b9fc94b63cc2630140907cb7df4617ad55a27923e2b1eef9cdc9b188127c9",
+    "calibration/sealed_20261107g/regions.json": "0cbda2b2fc0fede33ece4898faa0d298c3a7280bb11a5b376cc18143bc6ee94f",
+    "calibration/sealed_20261107g/regions_scored.json": "d42c9d163bb9f42e48a3fa80ff5f60daf6830b3ddec627656e166914a724b7a3",
+    "calibration/storm_expansion_20261103/regions.json": "3dbd18bae616d9351f4944d9d83d25fd2b1508bccb29bbe60b84858e190a70b0"
+  }
+}
