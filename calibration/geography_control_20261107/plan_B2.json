@@ -5,8 +5,58 @@
  "question": "Does the steady-state erosion generator (scripts/terrain_erosion.py evolve) rebuild real terrain from a hand-map-like sketch (four tiers + the biggest rivers) better than today's tier ramps, in the properties that shape travel and borders?",
  "data": "ETOPO 2022 surface elevation at 60 arc-seconds (NOAA NCEI, public domain) via OPeNDAP subsets, on a local equal-area grid of 1.85 km (the map's source pixel is 1.84 km); land = elevation > 0 within the window",
  "windows": {
-  "development": {"D1_apennines": [40.5, 45.0, 10.0, 16.0], "D2_anatolia": [37.0, 41.0, 30.0, 36.0], "D3_sichuan_rim": [28.0, 33.0, 102.0, 108.0], "D4_massif_central": [43.5, 47.5, 1.0, 6.0]},
-  "blind": {"B1_balkans": [41.0, 45.0, 19.0, 24.0], "B2_zagros": [31.0, 35.5, 46.0, 51.0], "B3_guizhou": [25.0, 29.0, 106.0, 111.0], "B4_appalachians": [35.0, 39.5, -84.0, -78.0]},
+  "development": {
+   "D1_apennines": [
+    40.5,
+    45.0,
+    10.0,
+    16.0
+   ],
+   "D2_anatolia": [
+    37.0,
+    41.0,
+    30.0,
+    36.0
+   ],
+   "D3_sichuan_rim": [
+    28.0,
+    33.0,
+    102.0,
+    108.0
+   ],
+   "D4_massif_central": [
+    43.5,
+    47.5,
+    1.0,
+    6.0
+   ]
+  },
+  "blind": {
+   "B1_balkans": [
+    41.0,
+    45.0,
+    19.0,
+    24.0
+   ],
+   "B2_zagros": [
+    31.0,
+    35.5,
+    46.0,
+    51.0
+   ],
+   "B3_guizhou": [
+    25.0,
+    29.0,
+    106.0,
+    111.0
+   ],
+   "B4_appalachians": [
+    35.0,
+    39.5,
+    -84.0,
+    -78.0
+   ]
+  },
   "format": "[south, north, west, east] degrees"
  },
  "sketch": {
@@ -29,5 +79,21 @@
   "G2": "C* beats the ramps baseline on M2 in at least 3 of 4",
   "G3": "C* beats the ramps baseline on M4 in at least 3 of 4",
   "adopt": "if G1-G3 pass, C* builds the map's height map v2 (plan B3), whose tier-band check uses the Earth M5 reference minus 5 points instead of a flat 90 %; the owner sees a hillshade preview before anything downstream changes; else the generator is revised and a new blind set declared"
+ },
+ "amendment_1": {
+  "date": "2026-11-07",
+  "status": "after the development grid, before any blind window was read or scored",
+  "finding": "M4 cannot discriminate: on the development windows the 2-day Tobler walking reach on the TRUE terrain overlaps the ramps baseline at IoU 0.915-0.980 and has the same median area (6,321-6,506 vs 6,573-6,657 km2) and circularity (1.144-1.158 vs 1.158-1.168, the 8-neighbour disc). Under this walking model realistic relief does not bend 2-day zones at 1.85 km, so no generator can beat the baseline on M4 (no setting wins in >= 3 of 4 development windows; best mean gain +0.001).",
+  "change": "G3 (M4) is dropped from the gates and reported only; adoption needs G1 (divides) and G2 (slopes). Recorded consequence for the border question: the disc shape of control is a property of the travel-cost model (Tobler + Soule-Goldman), not of the height map; terrain-channelled travel and land cover need their own Earth test (workstreams A2/C)."
+ },
+ "development_result": {
+  "C_star": {
+   "m": 0.35,
+   "noise_km": 24.0,
+   "noise_sigma": 0.6,
+   "river_boost_km2": 10000.0,
+   "smooth_px": 0.0
+  },
+  "windows": "divides 16.7->7.8, 20.0->19.7, 34.9->23.6, 15.6->12.8 km; slope KS 0.586->0.187, 0.565->0.113, 0.804->0.233, 0.564->0.112; IoU 0.932->0.946, 0.964->0.956, 0.915->0.914, 0.980->0.975; true-terrain tier-band shares tier 2: 0.49-0.88, tier 3: 0.58-0.82"
  }
 }

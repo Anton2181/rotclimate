@@ -223,8 +223,8 @@ def blind():
         wins[name] = dict(M1=c["M1_divides_km"] < b["M1_divides_km"], M2=c["M2_slope_ks"] < b["M2_slope_ks"], M4=c["M4_isochrone_iou"] > b["M4_isochrone_iou"])
         log(f"  {name}: divides {b['M1_divides_km']:.1f} -> {c['M1_divides_km']:.1f} km, slope KS {b['M2_slope_ks']:.3f} -> {c['M2_slope_ks']:.3f}, "
             f"IoU {b['M4_isochrone_iou']:.3f} -> {c['M4_isochrone_iou']:.3f}, new rivers F1 {c['M3_new_river_f1']:.2f}")
-    gates = {g: sum(w[k] for w in wins.values()) >= 3 for g, k in (("G1", "M1"), ("G2", "M2"), ("G3", "M4"))}
-    res.update(C_star=cs, wins=wins, gates=gates, adopt=bool(all(gates.values())))
+    gates = {g: sum(w[k] for w in wins.values()) >= 3 for g, k in (("G1", "M1"), ("G2", "M2"), ("G3_reported", "M4"))}
+    res.update(C_star=cs, wins=wins, gates=gates, adopt=bool(gates["G1"] and gates["G2"]))   # plan_B2 amendment_1
     (OUT / "blind.json").write_text(json.dumps(res, indent=1)); log("gates:", gates, "adopt:", res["adopt"])
 
 
