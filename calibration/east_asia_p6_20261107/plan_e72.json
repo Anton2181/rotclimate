@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any e72 screen result",
+  "change": "e72 storm_plateau: while the storm band would run into a high plateau upwind (band equatorward of the plateau's poleward edge + 2 deg), pull it toward the plateau's equatorward edge + offset, scaled by the plateau area upwind (1 - exp(-area / 1.5e6 km2)) with a 3,000 km downwind e-folding. Opt-in; r43 reproduces bit for bit with it off (checked on east_china and japan at 56 km).",
+  "motivation": "reports/EAST_ASIA_P6_20261101.md: the humid strong-contrast rule puts East Asia's spring storms over the Kuril-Okhotsk front; the Meiyu belt is held at 30-35 N by the jet's split around the Tibetan Plateau.",
+  "screen": {
+    "tool": "scripts/screen_climate_physics.py, Earth mode, 56 km, atlases/earth_fit/params.json (r43) as base, the 31 development regions, 2 workers",
+    "profiles": {"baseline": {}, "k05": {"storm_plateau": 0.5}, "k10": {"storm_plateau": 1.0}, "k10_o5": {"storm_plateau": 1.0, "storm_plateau_offset_deg": 5.0}},
+    "data_status": "development regions (reused benchmarks), not validation"
+  },
+  "promising_if": {
+    "east_asia": "mean rain loss over east_china, north_china_plain, korea, japan, manchuria at least 3 % below the paired baseline",
+    "overall": "mean rain loss and mean monthly temperature MAE over all 31 regions each no more than 0.5 % worse than the baseline",
+    "groups": "no screen group (training, former_holdout, midlatitude) more than 1 % worse in rain loss"
+  },
+  "next_if_promising": "a frozen refit of e72 with the storm and eddy terms it interacts with, judged by policy v3 on S49 and the 28 km check; the unseen climate set f stays closed until the owner releases it",
+  "known_limit": "Each region runs in its own window with an 1,100 km pad: Tibet lies inside the east_china window but not japan's, so Japan cannot respond to the term."
+}

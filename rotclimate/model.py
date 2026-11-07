@@ -279,6 +279,9 @@ class ClimateModel:
             raise ValueError('storm_baroclinic must be in [0, 1]')
         if not 0 <= params.storm_baroclinic_humid_rh < 1:
             raise ValueError('storm_baroclinic_humid_rh must be in [0, 1)')
+        if not 0 <= params.storm_plateau <= 1 or params.storm_plateau_km <= 0 or params.storm_plateau_m <= 0 \
+                or params.storm_plateau_area_km2 <= 0 or not 0 <= params.storm_plateau_offset_deg <= 15:
+            raise ValueError('storm_plateau must be in [0, 1] with positive height, distance and area, offset in [0, 15] deg')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
             raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
         if params.continental_sea_air > 0 and params.continentality <= 0:
@@ -558,6 +561,29 @@ class ClimateModel:
         # e34: sub-grid relief (km), the cell's highest minus its mean ground, on land
         self.subgrid_relief = np.where(g.land, np.maximum(g.elev_max - g.elev, 0.0), 0.0) / 1000.0
         self.lat = g.lat
+        # e72: high plateaus upwind of each meridian (column): how much plateau, and the
+        # latitudes of its equatorward and poleward edges, carried downwind with
+        # e-folding storm_plateau_km (westerlies blow from lower columns; retrograde
+        # spin reverses them)
+        self.plateau_steer = None
+        if self.p.storm_plateau > 0:
+            hi = g.land & (ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest") > self.p.storm_plateau_m)
+            alat = np.abs(g.lat)
+            n = hi.sum(axis=0).astype(float)
+            lo_edge = np.array([np.percentile(alat[hi[:, j], j], 10) if n[j] else 0.0 for j in range(hi.shape[1])])
+            hi_edge = np.array([np.percentile(alat[hi[:, j], j], 90) if n[j] else 0.0 for j in range(hi.shape[1])])
+            decay = np.exp(-g.cell_km / self.p.storm_plateau_km)
+            order = range(hi.shape[1] - 1, -1, -1) if self.p.retrograde else range(hi.shape[1])
+            S = np.zeros(hi.shape[1]); E = np.zeros(hi.shape[1]); P = np.zeros(hi.shape[1]); s_, e_, p_ = 0.0, 0.0, 0.0
+            for j in order:
+                s_ = n[j] + decay * s_; e_ = n[j] * lo_edge[j] + decay * e_; p_ = n[j] * hi_edge[j] + decay * p_
+                S[j], E[j], P[j] = s_, e_, p_
+            area = S * g.cell_km ** 2
+            with np.errstate(invalid="ignore", divide="ignore"):
+                self.plateau_steer = dict(strength=1.0 - np.exp(-area / self.p.storm_plateau_area_km2),
+                                          edge=np.where(S > 0, E / np.maximum(S, 1e-12), 0.0),
+                                          top=np.where(S > 0, P / np.maximum(S, 1e-12), 0.0),
+                                          sign=np.sign(np.where(np.abs(g.lat.mean(axis=0)) > 0, g.lat.mean(axis=0), 1.0)))
         self.col_sigma = 300.0 / g.cell_km
         # coastal upwelling geometry (e1): the offshore direction (map frame,
         # x right / y up) of sea cells near land and how close they are
@@ -1468,6 +1494,20 @@ class ClimateModel:
                     # from the planet's storm latitude
                     phi_b = np.clip(phi_b, plan - p.storm_baroclinic_max_deg, plan + p.storm_baroclinic_max_deg)
                 centre = (1.0 - p.storm_baroclinic) * centre + p.storm_baroclinic * phi_b[None, :]
+            if self.plateau_steer is not None:
+                # e72: downwind of a high plateau the cold-season jet splits around it
+                # and its storms run along the plateau's equatorward edge (the Meiyu-
+                # Baiu front holds at 30-35 N east of Tibet until the jet jumps north
+                # of the plateau in July); a zonal band put April's storms at 45 N.
+                # Pull the band to edge + offset while it would run into the plateau
+                # (band equatorward of the plateau's poleward edge + 2 deg, full 2 deg
+                # inside), scaled by how much plateau lies upwind.
+                ps = self.plateau_steer
+                ccol = np.abs(np.mean(np.broadcast_to(centre, lat.shape), axis=0))
+                target = ps["edge"] + p.storm_plateau_offset_deg
+                act = np.clip((ps["top"] + 2.0 - ccol) / 2.0, 0.0, 1.0) * np.clip((ccol - target) / 2.0, 0.0, 1.0)
+                pull = p.storm_plateau * ps["strength"] * act
+                centre = np.broadcast_to(centre, lat.shape) - (pull * (ccol - target) * ps["sign"])[None, :]
             storm = np.exp(-((lat - centre) / sw) ** 2) * (1 - p.storm_seasonality * s)
             if p.storm_asym > 0:     # v5: storms breed off the warm-current coasts
                 side = (1.0 if p.retrograde else -1.0) * self.basin_side

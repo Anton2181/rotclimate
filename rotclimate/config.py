@@ -193,6 +193,11 @@ class Params:
     storm_baroclinic_cold_c: float = -99.0  # e68: count the contrast only where the smoothed air is below this (C; -99 = everywhere)
     storm_baroclinic_max_deg: float = 0.0  # e68: at most this many degrees from the planet's storm latitude (0 = no limit)
     storm_baroclinic_humid_rh: float = 0.0  # e68h: count the contrast only where the smoothed column is humid (full 0.2 above this relative humidity; 0 = everywhere)
+    storm_plateau: float = 0.0        # e72: while the storm band would run into a high plateau upwind, pull it (by this share x plateau size) to the plateau's equatorward edge (0 = off)
+    storm_plateau_m: float = 2500.0   # e72: plateau = land above this height (smoothed over ~150 km)
+    storm_plateau_km: float = 3000.0  # e72: downwind e-folding distance of the plateau's steering
+    storm_plateau_offset_deg: float = 3.0  # e72: the band runs this far poleward of the plateau's equatorward edge
+    storm_plateau_area_km2: float = 1.5e6  # e72: plateau area for 63 % of the full steering (1 - exp(-area / this))
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
     warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect
