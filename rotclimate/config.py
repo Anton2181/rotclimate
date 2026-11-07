@@ -57,6 +57,9 @@ class Params:
     # unknown terrain tiers -> top elevation of each tier [m]
     # (lowland green, hill cream, upland orange, mountain red)
     tier_tops: tuple = (350.0, 900.0, 1800.0, 3300.0)
+    # optional eroded height map at source resolution built on these tier ramps (scripts/terrain_erosion.py build;
+    # repository-relative path); empty = the tier ramps themselves
+    terrain_file: str = ""
     lapse_rate: float = 6.0           # K / km (environmental)
     lapse_seasonal: float = 0.0       # e25: lapse rate x (1 + this x season index): steeper in summer, flatter in winter
     seasonal_column_lapse: bool = False  # opt-in: use that season's lapse in column/crest saturation too

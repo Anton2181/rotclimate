@@ -47,7 +47,7 @@ class HiRes:
                 del yy, xx
                 up = lambda a, o=1: ndi.map_coordinates(a, [sy, sx], order=o, mode="nearest")
                 self.land = up(ndi.gaussian_filter(L["land"].astype(np.float32), 0.8)) > 0.5
-                self.elev = np.where(self.land, up(elevation_fullres(p_tops(r)).astype(np.float32)), 0)
+                self.elev = np.where(self.land, up(elevation_fullres(p_tops(r), getattr(r.params, "terrain_file", "")).astype(np.float32)), 0)
                 self.rivers = up(ndi.gaussian_filter(L["rivers"].astype(np.float32), 0.6)) > 0.28
                 tgt = target_fullres()
                 stack = np.stack([up(ndi.gaussian_filter((tgt == c).astype(np.float32), 0.8))

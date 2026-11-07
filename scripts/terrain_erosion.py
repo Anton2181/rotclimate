@@ -221,7 +221,9 @@ def build_v2():
     cap = hf.get("cap_m")
     if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
         hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)
-    z = np.where(land, np.maximum(h0 + (z - lp(z)) + hill, 0.5), 0.0)
+    detail = z - lp(z)
+    detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)   # steady-state spikes (up to 5.9 km on tier 4) capped
+    z = np.where(land, np.maximum(h0 + detail + hill, 0.5), 0.0)
     import fastscapelib as fs
     status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
     grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)
@@ -236,7 +238,8 @@ def build_v2():
     c["tier_band_share_vs_earth"] = {k: (round(c["tier_band_share"][int(k)], 3), ref[k]) for k in ref if int(k) in c["tier_band_share"]}
     c["rivers_pass"] = bool(c["rivers_on_channel"] >= 0.95)
     OUT.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(OUT / "map_height_v2.npz", z=z.astype(np.float32), area=info["drainage_area_m2"].astype(np.float32))
+    np.savez_compressed(OUT / "map_height_v2.npz", z=z.astype(np.float32), area=info["drainage_area_m2"].astype(np.float32),
+                        tier_tops=np.asarray(tops, float))
     (OUT / "map_height_v2.json").write_text(json.dumps(dict(setting=cs, checks=c, seconds=info["seconds"]), indent=1))
     log(json.dumps(c, indent=1))
     ls = LightSource(azdeg=315, altdeg=38)

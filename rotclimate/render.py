@@ -41,7 +41,7 @@ class FullRes:
         L = source_layers()
         self.land = L["land"]
         self.H, self.W = self.land.shape
-        self.elev = elevation_fullres(result.params.tier_tops)
+        self.elev = elevation_fullres(result.params.tier_tops, getattr(result.params, "terrain_file", ""))
         yy, xx = np.mgrid[0:self.H, 0:self.W]
         self.cy = (yy + 0.5) / g.f - 0.5 + g.pad
         self.cx = (xx + 0.5) / g.f - 0.5 + g.pad

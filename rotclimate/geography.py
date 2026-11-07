@@ -24,6 +24,8 @@ import numpy as np
 from PIL import Image
 from scipy import ndimage as ndi
 
+from pathlib import Path
+
 from .config import DATA, SOURCE, Params
 
 EARTH_KM_PER_DEG = 111.195
@@ -101,8 +103,26 @@ def _tier_ramps():
     return ramps
 
 
-def elevation_fullres(tier_tops) -> np.ndarray:
-    """Continuous elevation [m] at source resolution from the tier map."""
+@lru_cache(maxsize=4)
+def _terrain_file(terrain_file: str, tier_tops: tuple) -> np.ndarray:
+    """An eroded height map (scripts/terrain_erosion.py build) at source resolution, checked against the map's land
+    and the tier tops it was built from."""
+    path = Path(terrain_file)
+    path = path if path.is_absolute() else DATA.parent / path
+    d = np.load(path)
+    land = source_layers()["land"]
+    if d["z"].shape != land.shape:
+        raise ValueError(f"terrain file {terrain_file}: shape {d['z'].shape} differs from the map's {land.shape}")
+    if "tier_tops" not in d.files or not np.allclose(np.asarray(d["tier_tops"], float), np.asarray(tier_tops, float)):
+        raise ValueError(f"terrain file {terrain_file} was built for other tier tops than {tuple(tier_tops)}")
+    return np.where(land, np.maximum(d["z"].astype(float), 1.0), 0.0)
+
+
+def elevation_fullres(tier_tops, terrain_file: str = "") -> np.ndarray:
+    """Continuous elevation [m] at source resolution from the tier map, or (terrain_file, plan B of
+    reports/GEOGRAPHY_CONTROL_PLAN_20261107.md) the eroded height map built on these tier ramps."""
+    if terrain_file:
+        return _terrain_file(str(terrain_file), tuple(float(t) for t in tier_tops))
     tier = source_layers()["tier"]
     tops = [0.0] + list(tier_tops)
     h = np.zeros(tier.shape)
@@ -322,7 +342,7 @@ def build_grid(params: Params) -> Grid:
             for side in ("north", "south", "west", "east"))
     g = _build_grid_cached(
         params.downsample, tuple(params.tier_tops), beyond, params.pad_km, params.lat_center,
-        params.map_width_mi, params.map_height_mi,
+        params.map_width_mi, params.map_height_mi, getattr(params, "terrain_file", ""),
     )._with_params(params)
     radius = getattr(params, "planet_radius", 1.0)
     if radius != 1.0:
@@ -458,12 +478,12 @@ def _procedural_offmap(core: dict, p: int, cell_km: float, low_fill: float, spec
 
 
 @lru_cache(maxsize=8)
-def _build_grid_cached(f, tier_tops, beyond, pad_km, lat_center, width_mi, height_mi):
+def _build_grid_cached(f, tier_tops, beyond, pad_km, lat_center, width_mi, height_mi, terrain_file=""):
     L = source_layers()
     px_km = width_mi * MI_KM / L["land"].shape[1]
     cell_km = px_km * f
     land_frac = _block(L["land"].astype(float), f)
-    h_full = elevation_fullres(tier_tops)
+    h_full = elevation_fullres(tier_tops, terrain_file)
     elev = _block(h_full, f)
     elev_max = _block(h_full, f, "max")
     tgt_full = target_fullres()
