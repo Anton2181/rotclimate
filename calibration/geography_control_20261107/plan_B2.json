@@ -95,5 +95,70 @@
    "smooth_px": 0.0
   },
   "windows": "divides 16.7->7.8, 20.0->19.7, 34.9->23.6, 15.6->12.8 km; slope KS 0.586->0.187, 0.565->0.113, 0.804->0.233, 0.564->0.112; IoU 0.932->0.946, 0.964->0.956, 0.915->0.914, 0.980->0.975; true-terrain tier-band shares tier 2: 0.49-0.88, tier 3: 0.58-0.82"
+ },
+ "blind_result": {
+  "windows": {
+   "B1_balkans": {
+    "baseline": {
+     "M1_divides_km": 19.535,
+     "M2_slope_ks": 0.632,
+     "M4_isochrone_iou": 0.937
+    },
+    "C_star": {
+     "M1_divides_km": 17.132,
+     "M2_slope_ks": 0.209,
+     "M4_isochrone_iou": 0.939
+    }
+   },
+   "B2_zagros": {
+    "baseline": {
+     "M1_divides_km": 28.228,
+     "M2_slope_ks": 0.586,
+     "M4_isochrone_iou": 0.949
+    },
+    "C_star": {
+     "M1_divides_km": 18.862,
+     "M2_slope_ks": 0.177,
+     "M4_isochrone_iou": 0.93
+    }
+   },
+   "B3_guizhou": {
+    "baseline": {
+     "M1_divides_km": 15.678,
+     "M2_slope_ks": 0.661,
+     "M4_isochrone_iou": 0.961
+    },
+    "C_star": {
+     "M1_divides_km": 18.029,
+     "M2_slope_ks": 0.215,
+     "M4_isochrone_iou": 0.958
+    }
+   },
+   "B4_appalachians": {
+    "baseline": {
+     "M1_divides_km": 23.125,
+     "M2_slope_ks": 0.679,
+     "M4_isochrone_iou": 0.988
+    },
+    "C_star": {
+     "M1_divides_km": 17.575,
+     "M2_slope_ks": 0.271,
+     "M4_isochrone_iou": 0.983
+    }
+   }
+  },
+  "gates": {
+   "G1": true,
+   "G2": true,
+   "G3_reported": false
+  },
+  "adopt": true,
+  "verdict": "Adopted: divides better in 3 of 4 blind windows (Guizhou worse), slope distributions better in 4 of 4; isochrones unchanged (reported). C* builds the map's height map v2 (B3)."
+ },
+ "earth_tier_band_reference": {
+  "1": 0.984,
+  "2": 0.638,
+  "3": 0.677,
+  "4": 0.897
  }
 }
