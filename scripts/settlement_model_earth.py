@@ -3,6 +3,8 @@
     .venv/bin/python -I scripts/settlement_model_earth.py prepare      # pool inputs (development pools only)
     .venv/bin/python -I scripts/settlement_model_earth.py grid         # development grid over the site weights
     .venv/bin/python -I scripts/settlement_model_earth.py blind        # the single blind evaluation (after the grid)
+    .venv/bin/python -I scripts/settlement_model_earth.py dev2         # round 2 (plan_round2.json): cored density, development pools
+    .venv/bin/python -I scripts/settlement_model_earth.py blind2       # round 2 single blind evaluation (only if dev2 qualifies)
 """
 from __future__ import annotations
 
@@ -237,5 +239,95 @@ def blind():
     log("gates:", res["gates"], "adopt:", res["adopt"])
 
 
+PLAN2 = ROOT / "calibration/settlement_model_20261107/plan_round2.json"
+CORES = "cradles + Rome"
+
+
+def core_field(scale_km):
+    """exp(-D / L) on the Earth run grid, D the adopted travel cost to the nearest old core (forest x2, relief 1/km,
+    sea as land; scripts/population_cores.py, harvest.models.core_term), cached per L."""
+    cache = OUT / "core_distance_earth.npz"
+    if cache.exists():
+        D = np.load(cache)["D"]
+    else:
+        import population_cores as PC
+        z = dict(np.load(ROOT / "output/land_people/earth/earth.npz"))
+        D = PC.travel_distance(z, PC.CORE_SETS[CORES], forest_cost=2.0, sea_cost=1.0, relief_cost=1.0)
+        np.savez_compressed(cache, D=D.astype(np.float32))
+    return np.exp(-D / scale_km)
+
+
+def sample_earth(field, lat, lon):
+    """An Earth-run grid field at window cells, nearest cell, as polity.earth.earth_people samples the density."""
+    z = np.load(ROOT / "output/land_people/earth/earth.npz"); zl, zo = z["lat"], z["lon"]
+    step = float(zl[0] - zl[1])
+    r = (zl[0] + step / 2 - lat) / step - 0.5; c = (lon - (zo[0] - step / 2)) / step - 0.5
+    return ndi.map_coordinates(np.asarray(field, float), [np.clip(r, 0, len(zl) - 1), np.clip(c, 0, len(zo) - 1)], order=0)
+
+
+def cored(x, scale_km=800.0):
+    """Candidate C1: the density times the core term, same total people inside the allowed region."""
+    t = sample_earth(core_field(scale_km), x["lat"], x["lon"])
+    d = x["density"] * t; a = x["allowed"]
+    y = dict(x); y["density"] = d * (x["density"][a].sum() / max(d[a].sum(), 1e-12)); return y
+
+
+def dev2():
+    plan = json.loads(PLAN2.read_text()); res = dict(plan=str(PLAN2.relative_to(ROOT)), pools={})
+    for name in ("rome_150", "han_2", "hellenistic"):
+        x = dict(np.load(OUT / f"{name}_inputs.npz"))
+        x["cell_km"] = float(x["cell_km"])
+        row = dict(current=metrics(x, place(x, CURRENT)))
+        for L in (800.0, 450.0, 1500.0):
+            row[f"C1_L{int(L)}"] = metrics(cored(x, L), place(cored(x, L), CURRENT))
+        res["pools"][name] = row
+        log(name, {k: (round(v["F1"], 3), round(v["M1"], 3), round(v["M3"], 3), round(v["M4"], 3)) for k, v in row.items()})
+    mean = lambda k, m: float(np.mean([res["pools"][p][k][m] for p in res["pools"]]))
+    res["mean"] = {k: dict(F1=mean(k, "F1"), M1=mean(k, "M1"), M3=mean(k, "M3")) for k in res["pools"]["rome_150"]}
+    res["qualifies"] = bool(res["mean"]["C1_L800"]["F1"] > res["mean"]["current"]["F1"] and res["mean"]["C1_L800"]["M1"] > res["mean"]["current"]["M1"])
+    (OUT / "dev2.json").write_text(json.dumps(res, indent=1)); log("mean", res["mean"], "qualifies:", res["qualifies"])
+
+
+def blind2():
+    """Round-2 single blind evaluation (plan_round2.json gates G1-G5): current model against C1 (cored, L 800 km)."""
+    import pandas as pd
+    import polity_earth_check as P
+    import earth_control_blind2 as B2
+    from polity import earth as E
+    from polity.settle_experiments import site_score
+    from sklearn.metrics import roc_auc_score
+    if not json.loads((OUT / "dev2.json").read_text())["qualifies"]:
+        raise SystemExit("C1 did not qualify on development; no blind evaluation")
+    res = dict(plan=str(PLAN2.relative_to(ROOT)))
+    # T1: CHGIS AD 742 seats in the Han window, allowed = Cliopatria Tang Dynasty (705-749)
+    g = P.load_window("han"); land = g["land"].astype(bool); W = land.shape[1]
+    pts = B2.seats(742); r, c, ok = P.snap(g, pts[:, 0], pts[:, 1])
+    inside, n = B2.target(g, 742, ("Tang Dynasty",))
+    x = inputs(g, np.zeros(land.shape, bool), inside); x["real"] = np.unique((r * W + c)[ok]); x["lat"], x["lon"] = g["lat"], g["lon"]
+    t1 = dict(current=metrics(x, place(x, CURRENT)), C1=metrics(cored(x), place(cored(x), CURRENT)))
+    res["T1_tang_742"] = dict(seats=int(len(pts)), polygons=int(n), **t1)
+    # T2: cities of 1300 inside the Roman Empire of AD 150 (Rome window): site-rank AUC
+    d = pd.read_stata(ROOT / "data/cache/bosker_cities_20261107/cities.tab"); y = d[(d["year"] == 1300) & (d["citypop_le5"] > 0)]
+    g = P.load_window("rome"); land = g["land"].astype(bool); W = land.shape[1]
+    region = land & E.inside_polygons(g, E.cliopatria("Roman Empire", 150))
+    r, c, ok = P.snap(g, y["latitude"].values.astype(float), y["longitude"].values.astype(float))
+    cells = (r * W + c)[ok]; cells = np.unique(cells[region.ravel()[cells]])
+    road = E.draw_lines(g, [l for _, l in E.itinere_roads(150)]) & land
+    x2 = inputs(g, road, region); x2["lat"], x2["lon"] = g["lat"], g["lon"]
+    lab = np.zeros(land.size, bool); lab[cells] = True; sel = region.ravel(); coast = ndi.distance_transform_edt(land) * x2["cell_km"]
+    auc = {}
+    for k, xx in (("current", x2), ("C1", cored(x2))):
+        score, _ = site_score(xx["density"], land, xx["water_km"], coast, road, xx["elev"], xx["cell_km"], CURRENT)
+        auc[k] = float(roc_auc_score(lab[sel], score.ravel()[sel]))
+    res["T2_cities_1300_inside_limes"] = dict(cities=int(len(cells)), region_cells=int(region.sum()), auc=auc)
+    a, b = t1["current"], t1["C1"]
+    gates = dict(G1=b["F1"] >= a["F1"], G2=b["M1"] >= a["M1"], G3=b["M3"] <= a["M3"], G4=b["M4"] <= 0.08, G5=auc["C1"] >= auc["current"])
+    res["gates"] = {k: bool(v) for k, v in gates.items()}; res["adopt"] = bool(all(gates.values()))
+    (OUT / "blind2.json").write_text(json.dumps(res, indent=1))
+    log(f"T1 Tang 742 ({len(pts)} seats): current F1 {a['F1']:.3f} M1 {a['M1']:.3f} M3 {a['M3']:.3f} M4 {a['M4']:.3f} | C1 F1 {b['F1']:.3f} M1 {b['M1']:.3f} M3 {b['M3']:.3f} M4 {b['M4']:.3f}")
+    log(f"T2 cities 1300 inside the limes ({len(cells)}): AUC current {auc['current']:.3f}, C1 {auc['C1']:.3f}")
+    log("gates:", res["gates"], "adopt:", res["adopt"])
+
+
 if __name__ == "__main__":
-    {"prepare": prepare, "grid": grid, "grid2": grid2, "fit3": fit3, "blind": blind}[sys.argv[1]]()
+    {"prepare": prepare, "grid": grid, "grid2": grid2, "fit3": fit3, "blind": blind, "dev2": dev2, "blind2": blind2}[sys.argv[1]]()
