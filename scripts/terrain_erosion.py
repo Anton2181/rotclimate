@@ -84,6 +84,42 @@ def evolve(h0, land, rivers, dx_m, prm=None):
     return z, dict(params=p, drainage_area_m2=A, seconds=time.time() - t0)
 
 
+def fit_bands(z, land, rivers, tier, tops, ref, dx_m, lowpass_km=14.0, margin=0.05, base=None):
+    """Owner faithfulness (plan B3): compress the sub-climate-scale relief of a tier only as much as needed for its
+    band share to reach the Earth reference minus `margin` (plan_B2 earth_tier_band_reference), then re-route sink-free.
+    base (the tier ramps h0): the eroded detail z - lowpass(z) is laid on the ramps themselves, which sit inside their
+    bands by construction (a 14 km lowpass spills across the narrow tier 1 and tier 3 bands); its climate-scale mean is
+    lowpass(h0) up to the detail's own small mean. Returns (z, alphas, drainage area)."""
+    import fastscapelib as fs
+    lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), lowpass_km * 1000 / dx_m) / np.maximum(
+        ndi.gaussian_filter(land.astype(float), lowpass_km * 1000 / dx_m), 1e-6)
+    hp = z - lp(z); zl = lp(z) if base is None else np.asarray(base, float); edges = [0.0] + list(tops); alphas = {}
+    def share(zz, k):
+        m = land & (tier == k); lo, hi = edges[k - 1], edges[k]; mg = 0.1 * (hi - lo)
+        return float(((zz[m] >= lo - mg) & (zz[m] <= hi + mg)).mean())
+    afield = np.ones(z.shape)
+    for k in range(1, 5):
+        need = ref[str(k)] - margin + 0.005
+        if not (land & (tier == k)).any() or share(z, k) >= need:
+            alphas[k] = 1.0; continue
+        lo_a, hi_a = 0.0, 1.0
+        for _ in range(14):
+            a = 0.5 * (lo_a + hi_a)
+            if share(zl + a * hp, k) >= need: lo_a = a
+            else: hi_a = a
+        alphas[k] = lo_a; afield[tier == k] = lo_a
+    afield = ndi.gaussian_filter(afield, 3.0)
+    for k, a in alphas.items():                                   # blending must not lift a tier back above its need
+        afield[tier == k] = np.minimum(afield[tier == k], a)
+    z2 = np.where(land, np.maximum(zl + afield * hp, 0.5), 0.0)
+    status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
+    grid = fs.RasterGrid(list(z.shape), [dx_m, dx_m], fs.NodeStatus.FIXED_VALUE, status)
+    flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()])
+    zr = np.where(rivers, z2 - 4.0, z2); zf = flow.update_routes(zr)
+    z3 = np.where(land, np.maximum(zf + (z2 - zr), 0.5), 0.0)
+    return z3, alphas, flow.accumulate(dx_m * dx_m)
+
+
 def checks(z, h0, land, rivers, tier, tops, A, dx_m, lowpass_km=14.0):
     """Plan B3 acceptance checks (reported)."""
     lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), lowpass_km * 1000 / dx_m) / np.maximum(
@@ -136,5 +172,45 @@ def preview(factor=2):
     fig.savefig(OUT / f"map_preview_f{f}.png", dpi=110); log("wrote", OUT / f"map_preview_f{f}.png")
 
 
+def build_v2():
+    """Plan B3: the map's height map v2 at source resolution with the Earth-adopted setting (plan_B2 C*), acceptance
+    checks against the Earth tier-band reference, and hillshade previews for the owner. Nothing downstream reads it yet."""
+    import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
+    from matplotlib.colors import LightSource
+    from rotclimate.geography import elevation_fullres, source_layers
+    plan = json.loads((ROOT / "calibration/geography_control_20261107/plan_B2.json").read_text())
+    cs = plan["development_result"]["C_star"]; ref = plan["earth_tier_band_reference"]
+    tops = json.loads((ROOT / "calibration/map_world_r43/params.json").read_text())["tier_tops"]
+    L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
+    tier = L["tier"].astype(int); dx = 1.143 * 1609.344
+    z, info = evolve(h0, land, rivers, dx, dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0))
+    raw_checks = checks(z, h0, land, rivers, tier, tops, info["drainage_area_m2"], dx)
+    z, alphas, info["drainage_area_m2"] = fit_bands(z, land, rivers, tier, tops, ref, dx, base=h0)
+    c = checks(z, h0, land, rivers, tier, tops, info["drainage_area_m2"], dx)
+    c["before_band_fit"] = raw_checks; c["relief_compression_by_tier"] = alphas
+    c["tier_band_reference_earth"] = ref
+    c["tier_band_pass"] = {k: bool(c["tier_band_share"][int(k)] >= ref[k] - 0.05) for k in ref if int(k) in c["tier_band_share"]}
+    c["rivers_pass"] = bool(c["rivers_on_channel"] >= 0.95)
+    OUT.mkdir(parents=True, exist_ok=True)
+    np.savez_compressed(OUT / "map_height_v2.npz", z=z.astype(np.float32), area=info["drainage_area_m2"].astype(np.float32))
+    (OUT / "map_height_v2.json").write_text(json.dumps(dict(setting=cs, checks=c, seconds=info["seconds"]), indent=1))
+    log(json.dumps(c, indent=1))
+    ls = LightSource(azdeg=315, altdeg=38)
+    def panel(e, rows, cols, path, title, rivers_on=True):
+        E = np.where(land, e, 0.0)[rows, cols]
+        rgb = ls.shade(E, cmap=plt.get_cmap("gist_earth"), vert_exag=5, dx=dx, dy=dx, blend_mode="soft", vmin=-300, vmax=3300)[..., :3]
+        rgb[~land[rows, cols]] = [0.78, 0.86, 0.93]
+        if rivers_on:
+            A = info["drainage_area_m2"][rows, cols]; new = (A >= 3000e6) & land[rows, cols] & ~rivers[rows, cols]
+            rgb[new] = rgb[new] * 0.35 + np.array([0.35, 0.62, 0.88]) * 0.65
+            mk = rivers[rows, cols]; rgb[mk] = rgb[mk] * 0.2 + np.array([0.07, 0.22, 0.55]) * 0.8
+        fig = plt.figure(figsize=(rgb.shape[1] / 100, rgb.shape[0] / 100 + 0.4)); ax = fig.add_axes([0, 0, 1, rgb.shape[0] / (rgb.shape[0] + 40)])
+        ax.imshow(rgb); ax.axis("off"); fig.suptitle(title, fontsize=10, y=0.995); fig.savefig(path, dpi=100); plt.close(fig)
+    full = np.s_[:, :]
+    panel(z, slice(None), slice(None), OUT / "map_height_v2_full.png", "Height map v2 (Earth-tested erosion; marked rivers dark, new rivers > 3,000 km2 light)")
+    panel(h0, slice(None), slice(None), OUT / "map_height_today_full.png", "Today: tier ramps", rivers_on=False)
+    log("wrote previews")
+
+
 if __name__ == "__main__":
-    {"preview": lambda: preview(*(sys.argv[2:3] or [2]))}[sys.argv[1]]()
+    {"preview": lambda: preview(*(sys.argv[2:3] or [2])), "build": build_v2}[sys.argv[1]]()

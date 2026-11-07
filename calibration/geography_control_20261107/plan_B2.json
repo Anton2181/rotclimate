@@ -160,5 +160,46 @@
   "2": 0.638,
   "3": 0.677,
   "4": 0.897
+ },
+ "map_v2_B3": {
+  "date": "2026-11-07",
+  "file": "output/terrain_erosion_20261107/map_height_v2.npz",
+  "composition": "tier ramps h0 + relief compression x (C* eroded surface - its 14 km lowpass), re-routed sink-free with the marked rivers burned (a 14 km lowpass base spilled across the narrow tier-1 and tier-3 bands even with no detail); development check of this composition: divides 8.4 / 18.7 / 23.4 / 13.6 km and slope KS 0.144 / 0.106 / 0.224 / 0.079 (vs eroded 7.8 / 19.7 / 23.6 / 12.8 and 0.187 / 0.113 / 0.233 / 0.112)",
+  "checks": {
+   "rivers_on_channel": 1.0,
+   "tier_band_share": {
+    "1": 0.9890462562784721,
+    "2": 0.9805966715238899,
+    "3": 0.6320098946298622,
+    "4": 0.8620309557709089
+   },
+   "tier_band_reference_earth": {
+    "1": 0.984,
+    "2": 0.638,
+    "3": 0.677,
+    "4": 0.897
+   },
+   "tier_band_pass": {
+    "1": true,
+    "2": true,
+    "3": true,
+    "4": true
+   },
+   "relief_compression_by_tier": {
+    "1": 0.5025634765625,
+    "2": 1.0,
+    "3": 0.82177734375,
+    "4": 1.0
+   },
+   "climate_scale_mean_abs_m": 18.58782555095467,
+   "slope_deg_pct": {
+    "25": 0.02789932601896237,
+    "50": 0.05590068427534128,
+    "75": 1.7811676549509574,
+    "90": 4.606280916267921
+   }
+  },
+  "climate": "the climate keeps today's elevation (climate-grid block means of v2 differ by mean |d| 35 m, p95 179 m, max 911 m in deeply incised mountain blocks); v2 serves travel, rivers, farming and settlement, with a lapse-rate adjustment wherever fine-scale temperature is used",
+  "status": "awaiting owner review of the hillshade preview before anything downstream reads it"
  }
 }
