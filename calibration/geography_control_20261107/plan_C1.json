@@ -11,10 +11,19 @@
   "fit": "P0 in a log grid 1-300 people/km2, k in {0.5, 0.75, 1, 1.5, 2}; minimum RMSE on the development cells"
  },
  "split": "5-degree blocks in a checkerboard: block = floor((lat - 30) / 5) + floor((lon + 25) / 5); even blocks development, odd blocks blind",
- "baselines": {"B0": "no clearing (open = 1 - f0)", "B1": "one constant cleared share, fitted on the development cells"},
+ "baselines": {
+  "B0": "no clearing (open = 1 - f0)",
+  "B1": "one constant cleared share, fitted on the development cells"
+ },
  "blind_gates": {
   "G1": "candidate RMSE below both B0 and B1 on the blind cells",
   "G2": "candidate Spearman rank correlation above B1's on the blind cells",
   "adopt": "both: the map's forest share at AD 200 = potential x (1 - c(P)) with the map's own population density, and C2 (forest share in travel cost and control) is tested next on Earth; else the clearing rule is revised"
+ },
+ "amendment_1": {
+  "date": "2026-11-07",
+  "status": "after the first development fit, before any blind cell was read",
+  "finding": "The biome potential is broken for Europe: 75 % of central and western European Earth-run land (median 8.8 C, 687 mm) falls in Whittaker woodland/shrubland (forest share 0), so even with no clearing the model predicts 0.75 open land against 0.42 observed on the development cells (Spearman ~0); the fit runs to the grid edge (P0 300, k 0.5). Whittaker envelopes ignore evaporation; at low PET 700 mm carries deciduous forest.",
+  "change": "potential forest f0 = clip((AI - a) / w, 0, 1) x clip((GDD5 - g0) / 300, 0, 1), AI = P_ann / PET_ann and GDD5 from the Earth run (the map computes both); a in {0.3, 0.4, 0.5, 0.6, 0.7}, w in {0.2, 0.4, 0.8}, g0 in {300, 600}, fitted jointly with the clearing curve on the development blocks. B0 and B1 use the same fitted potential (the potential is fitted for each baseline too), so the gates still test whether population-driven clearing adds skill. The biome potential is reported."
  }
 }
