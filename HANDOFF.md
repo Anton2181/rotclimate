@@ -1,3 +1,14 @@
+# Owner: unmarked hills allowed; deserts may be holes — done 7 November 2026
+
+* Height map v2 revised (plan_B2 map_v2_B3_revision_1): no tier compression; Earth-fitted unmarked lowland hills
+  (terrain_erosion.hills: 2nd steady-state run, log-normal uplift 80 km / sigma 1.2 / 1,000 m, soft cap 500 m) so
+  tier-1 slopes of ~9 km block means match Earth lowlands (median 0.160 vs 0.167 deg; KS 0.069; hill_fit.json).
+  Tier-1 elevation p90 164 m, p99 502 m. Rivers 100 % on channels. Climate still on today's elevation.
+* plan_A3: enclosed pockets with median P/PET < 0.2 or < 0.5 people/km2 stay holes. Blind 1200 / 1820 / 1500 (spent):
+  BA unchanged (0.744 / 0.360 / 0.600) -> adopted. Map: 0.1-0.85 % of land returns to holes.
+* Earth-fit control v2.1 shading now from height map v2 (display only; free/whittaker keep their own tier shading).
+  Hosted: earth v31, free v33, whittaker v22. Next for the owner to choose: plan D rebuild on height map v2.
+
 # A2 / C1 results: borders follow food, towns and enclosure, not slope, ruggedness or forest — 7 November 2026
 
 * A2 (plan_A2.json): ruggedness travel cost (1 + beta R) lowers dev BA for all beta > 0; beta* = 0; blind pools
