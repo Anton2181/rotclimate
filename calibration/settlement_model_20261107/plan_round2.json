@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "date": "2026-11-07",
+ "status": "frozen before any round-2 result; written after the round-1 blind (blind.json) and before computing any cored placement",
+ "question": "Round 1 found the unmarked-town count right but the pattern too even: the model's density is the bare capacity (settlement base), while real seats follow where people actually lived (Han AD 2: 75 % of seats north of 33 N, 33 % of the model's density). Does placing the towns on the atlas's own Earth-tested cored density (old heartlands) fix the pattern?",
+ "basis": "reports/POPULATION_20261023.md: capacity x exp(-D / 800 km), D the travel cost to the nearest old core (forest x2, relief 1/km, sea as land), cores = the four river-valley cradles + Rome; Han AD 2 census rank 0.29 -> 0.84, Roman towns (blind) 0.19 -> 0.62. The map already computes it (harvest/export.py 'settlement_cored', cores from data/lore_cores.json, same total as the base); the unmarked towns (polity/fields.py) still use the bare base.",
+ "candidate": {
+  "C1": "density' = density x core term, renormalized so the allowed region's total people is unchanged; core term = scripts/population_cores.travel_distance on the Earth run grid (output/land_people/earth/earth.npz) with forest_cost 2, sea_cost 1, relief_cost 1, cores 'cradles + Rome', L 800 km, sampled onto each window as polity.earth.earth_people samples the density. Everything else as the current model (polity.settle place_towns, current site weights, spacing 1.6, E1 count rule, dry-land water rule). No setting is tuned."
+ },
+ "sensitivity_reported_not_selectable": "L 450 and 1500 km on the development pools",
+ "development": "the round-1 pools rome_150, han_2, hellenistic (all seen); C1 goes to the blind test only if its mean F1 and mean M1 on them both beat the current model's (0.453, 0.274)",
+ "blind": {
+  "T1_tang_742": "CHGIS V6 county seats alive in AD 742 (Tang Tianbao) in the Han window, allowed = Cliopatria 'Tang Dynasty' (705-749); never used in this project; shares the window and many places with Han AD 2 and Sui 610 (declared dependence)",
+  "T2_cities_1300_inside_limes": "Bosker, Buringh & van Zanden (2013) cities present in 1300 (citypop >= 5,000 marker as in round 1) inside Cliopatria's Roman Empire AD 150 in the Rome window: site-rank AUC (round 1 used only cities outside the frontier)"
+ },
+ "metrics": "as plan.json: M1 block rank correlation (100 km), M2 F1 at 25 km (matched count), M3 spacing KS, M4 count error; M5 site-rank AUC of the site score with each density",
+ "blind_gates": {
+  "G1": "C1 F1 >= current on T1",
+  "G2": "C1 M1 >= current on T1",
+  "G3": "C1 M3 <= current on T1",
+  "G4": "C1 M4 <= 0.08 on T1 (count within ~20 %)",
+  "G5": "C1 AUC >= current on T2",
+  "adopt": "all five pass: the atlases' unmarked towns are placed on settlement_cored (polity/fields.py, administrative_world.py, economic_world.py) and the town-dependent chain is rebuilt (towns, minor roads, reach, settlement integration, control v2); else the bare base stays and the report says so"
+ }
+}
