@@ -6,7 +6,19 @@
   "motivation": "reports/EAST_ASIA_P6_20261101.md: the humid strong-contrast rule puts East Asia's spring storms over the Kuril-Okhotsk front; the Meiyu belt is held at 30-35 N by the jet's split around the Tibetan Plateau.",
   "screen": {
     "tool": "scripts/screen_climate_physics.py, Earth mode, 56 km, atlases/earth_fit/params.json (r43) as base, the 31 development regions, 2 workers",
-    "profiles": {"baseline": {}, "k05": {"storm_plateau": 0.5}, "k10": {"storm_plateau": 1.0}, "k10_o5": {"storm_plateau": 1.0, "storm_plateau_offset_deg": 5.0}},
+    "profiles": {
+      "baseline": {},
+      "k05": {
+        "storm_plateau": 0.5
+      },
+      "k10": {
+        "storm_plateau": 1.0
+      },
+      "k10_o5": {
+        "storm_plateau": 1.0,
+        "storm_plateau_offset_deg": 5.0
+      }
+    },
     "data_status": "development regions (reused benchmarks), not validation"
   },
   "promising_if": {
@@ -15,5 +27,6 @@
     "groups": "no screen group (training, former_holdout, midlatitude) more than 1 % worse in rain loss"
   },
   "next_if_promising": "a frozen refit of e72 with the storm and eddy terms it interacts with, judged by policy v3 on S49 and the 28 km check; the unseen climate set f stays closed until the owner releases it",
-  "known_limit": "Each region runs in its own window with an 1,100 km pad: Tibet lies inside the east_china window but not japan's, so Japan cannot respond to the term."
+  "known_limit": "Each region runs in its own window with an 1,100 km pad: Tibet lies inside the east_china window but not japan's, so Japan cannot respond to the term.",
+  "amendment_1": "Before any result was read: scripts/screen_climate_physics.py knows only 19 of the 31 development regions (north_china_plain and korea, both in the East Asia criterion, failed as unknown). The screen uses scripts/benchmark_local.py --regions dev31 (the tool of the earlier dev31 screens, e.g. output/storm_humid_20261101) with --set overrides for the same four profiles; criteria unchanged."
 }
