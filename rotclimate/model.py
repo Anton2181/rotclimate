@@ -280,7 +280,8 @@ class ClimateModel:
         if not 0 <= params.storm_baroclinic_humid_rh < 1:
             raise ValueError('storm_baroclinic_humid_rh must be in [0, 1)')
         if not 0 <= params.storm_plateau <= 1 or params.storm_plateau_km <= 0 or params.storm_plateau_m <= 0 \
-                or params.storm_plateau_area_km2 <= 0 or not 0 <= params.storm_plateau_offset_deg <= 15:
+                or params.storm_plateau_area_km2 <= 0 or not 0 <= params.storm_plateau_offset_deg <= 15 \
+                or not (-1.25 <= params.storm_plateau_season <= 1.0 or params.storm_plateau_season == 9.0):
             raise ValueError('storm_plateau must be in [0, 1] with positive height, distance and area, offset in [0, 15] deg')
         if not 0 <= params.continental_sea_air <= 1 or not 5 <= params.continental_sea_lag_days <= 180:
             raise ValueError('continental_sea_air must be in [0, 1] and continental_sea_lag_days in [5, 180]')
@@ -1505,7 +1506,15 @@ class ClimateModel:
                 ps = self.plateau_steer
                 ccol = np.abs(np.mean(np.broadcast_to(centre, lat.shape), axis=0))
                 target = ps["edge"] + p.storm_plateau_offset_deg
-                act = np.clip((ps["top"] + 2.0 - ccol) / 2.0, 0.0, 1.0) * np.clip((ccol - target) / 2.0, 0.0, 1.0)
+                if p.storm_plateau_season <= 1.0:
+                    # e72b: the model's band runs 40-53 N east of Tibet all year, always
+                    # poleward of the plateau, so the blocking trigger never fires; the
+                    # real jet sits south of the plateau from autumn to late spring and
+                    # jumps north of it in early summer: gate by the season instead
+                    gate = float(np.clip((p.storm_plateau_season + 0.25 - s) / 0.5, 0.0, 1.0))
+                    act = gate * np.clip((ccol - target) / 2.0, 0.0, 1.0)
+                else:
+                    act = np.clip((ps["top"] + 2.0 - ccol) / 2.0, 0.0, 1.0) * np.clip((ccol - target) / 2.0, 0.0, 1.0)
                 pull = p.storm_plateau * ps["strength"] * act
                 centre = np.broadcast_to(centre, lat.shape) - (pull * (ccol - target) * ps["sign"])[None, :]
             storm = np.exp(-((lat - centre) / sw) ** 2) * (1 - p.storm_seasonality * s)

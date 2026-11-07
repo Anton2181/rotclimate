@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "date": "2026-11-07",
+  "status": "frozen before any e72b screen result; written after the e72 screen (inert) and its diagnosis",
+  "change": "e72b storm_plateau_season: the e72 pull toward the plateau's equatorward edge + offset is gated by the cold season instead of by the band meeting the plateau: full while the season index s (-1 midwinter, +1 midsummer, circulation lag) is below storm_plateau_season - 0.25, none above + 0.25. Default 9 keeps the e72 trigger (bit for bit).",
+  "physics": "The subtropical westerly jet runs along the southern flank of the Tibetan Plateau from autumn to late spring and east of it forms the Japan jet near 32-35 N; it jumps north of the plateau in early summer (Schiemann et al. 2009 J. Climate 22:2940; Molnar et al. 2010 Annu. Rev. Earth Planet. Sci.).",
+  "screen": {
+    "tool": "scripts/benchmark_local.py --regions dev31, 56 km, atlases/earth_fit/params.json (r43), paired with the same baseline as the e72 screen",
+    "profiles": {
+      "k05s": {
+        "storm_plateau": 0.5,
+        "storm_plateau_season": 0.5
+      },
+      "k10s": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5
+      },
+      "k10s_o5": {
+        "storm_plateau": 1.0,
+        "storm_plateau_season": 0.5,
+        "storm_plateau_offset_deg": 5.0
+      }
+    }
+  },
+  "promising_if": "the same three criteria as plan_e72.json (East Asia rain loss <= 0.97 x baseline; all-31 rain loss and T MAE each <= 1.005 x; training, holdout, midlatitude groups <= 1.01 x)",
+  "next_if_promising": "frozen refit under policy v3 (S49, 28 km); set f stays closed until the owner releases it"
+}
