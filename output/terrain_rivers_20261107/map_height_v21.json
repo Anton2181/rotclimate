@@ -1,0 +1,130 @@
+{
+ "plan": "calibration/geography_control_20261107/plan_R1.json",
+ "form": {
+  "ref": "ramp",
+  "alpha": 0.6,
+  "W": 11,
+  "p": 1.0,
+  "b0": 10.0
+ },
+ "hills": {
+  "ks": 0.06810364682791135,
+  "sigma": 1.2,
+  "height_m": 1600,
+  "cap_m": 500.0,
+  "weight": "tier 1 only (amendment 3)"
+ },
+ "hill_refit": [
+  {
+   "hill_height_m": 1600,
+   "hill_ks": 0.04468881287217419
+  }
+ ],
+ "conditioning": {
+  "W": 11,
+  "p": 1.0,
+  "b0": 10.0,
+  "ref": "ramp",
+  "alpha": 0.6,
+  "river_cells": 27646,
+  "bed_change_m": {
+   "1": -531.6613480866591,
+   "10": -218.6508690220781,
+   "50": 4.4649868129290144,
+   "90": 31.35767335018944,
+   "99": 89.90114552698655
+  },
+  "valley_lowered_cells": 126225,
+  "valley_raised_cells": 139830,
+  "banks_raised": 15913,
+  "pf_raised_cells": 1992,
+  "pf_changed_river_cells": 0
+ },
+ "strict": {
+  "river_cells": 27646,
+  "receiver_on_river_or_water": 1.0,
+  "path_stays_on_river_to_outlet": 1.0,
+  "downstream_steps": 27281,
+  "climbing_steps": 0,
+  "climb_m_p50_p90_p99": [],
+  "below_every_bank": 1.0,
+  "components": 107,
+  "components_all_draining": 107,
+  "passes": true
+ },
+ "strict_v2": {
+  "river_cells": 27646,
+  "receiver_on_river_or_water": 0.3064819503725675,
+  "path_stays_on_river_to_outlet": 0.013202633292338856,
+  "downstream_steps": 27281,
+  "climbing_steps": 19602,
+  "climb_m_p50_p90_p99": [
+   0.0,
+   48.275362777709965,
+   252.9232409667981
+  ],
+  "below_every_bank": 0.2526224408594372,
+  "components": 107,
+  "components_all_draining": 0,
+  "passes": false
+ },
+ "checks": {
+  "rivers_on_channel": 0.8878680460102727,
+  "tier_band_share": {
+   "1": 0.7734420628431258,
+   "2": 0.9843205426455676,
+   "3": 0.5158630475843489,
+   "4": 0.8622299790260108
+  },
+  "climate_scale_mean_abs_m": 45.02070739691316,
+  "slope_deg_pct": {
+   "25": 0.012304779287967547,
+   "50": 0.7244946677051098,
+   "75": 3.0070343630534784,
+   "90": 5.5445658203550074
+  },
+  "channel_density_km_per_km2": 0.04086654539796073,
+  "tier1_slope_9km_median_deg": 0.165893684451995,
+  "river_bed_over_ramp": {
+   "25": 0.5974431504107964,
+   "50": 0.5999999962414245,
+   "75": 0.6002498565855992
+  }
+ },
+ "checks_v2": {
+  "rivers_on_channel": 1.0,
+  "tier_band_share": {
+   "1": 0.7835474827707044,
+   "2": 0.9616108938142837,
+   "3": 0.49526841101065205,
+   "4": 0.8322999433549197
+  },
+  "climate_scale_mean_abs_m": 43.09075990297641,
+  "slope_deg_pct": {
+   "25": 0.0462395355649043,
+   "50": 0.7972284423436439,
+   "75": 3.196739844043324,
+   "90": 6.022455061881007
+  },
+  "channel_density_km_per_km2": 0.5436318392277638,
+  "river_bed_over_ramp": {
+   "25": 0.5972497968290398,
+   "50": 0.8594010675046092,
+   "75": 1.106548377249
+  }
+ },
+ "tier_band_reference_earth": {
+  "1": 0.984,
+  "2": 0.638,
+  "3": 0.677,
+  "4": 0.897
+ },
+ "gates": {
+  "owner_rivers": true,
+  "tier_bands_2_4": true,
+  "climate_scale": true,
+  "lowland_slope": true
+ },
+ "adopt": true,
+ "composition_matches_v2_off_rivers": 16.942954201100992
+}

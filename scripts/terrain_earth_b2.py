@@ -87,7 +87,7 @@ def route(z, land, dx_m):
     grid = fs.RasterGrid(list(z.shape), [dx_m, dx_m], fs.NodeStatus.FIXED_VALUE, status)
     flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()])
     flow.update_routes(z.astype(float))
-    return flow.accumulate(dx_m * dx_m), flow.basins()
+    return flow.accumulate(1.0), flow.basins()
 
 
 def map_river_ratio():

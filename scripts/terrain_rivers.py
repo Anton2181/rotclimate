@@ -34,6 +34,7 @@ PLAN = ROOT / "calibration/geography_control_20261107/plan_R1.json"
 OUT = ROOT / "output/terrain_rivers_20261107"
 ERO = ROOT / "output/terrain_erosion_20261107"
 FLOOR0, FSTEP, DECMIN, EPS = 1.0, 2e-4, 2e-4, 1e-4
+FLAT_EPS = 2e-4                                                     # m per flat increment (amendment 4)
 GRID = dict(ref=(("ramp", 0.3), ("ramp", 0.4), ("ramp", 0.5), ("ramp", 0.6), ("ramp", 0.7), ("ramp", 0.85), ("floor", 1.0)),
             W=(4, 7, 11, 16), p=(0.5, 1.0), b0=(1.0, 3.0, 10.0))           # plan_R1 amendment 1
 RINGS = range(1, 9)
@@ -195,6 +196,134 @@ def _priority_flood(z, land, NB, EPS):
     return out, raised
 
 
+@numba.njit(cache=True)
+def _fill(z, land, NB):
+    """Plain Priority-Flood fill (no epsilon): depressions become exact flats at their spill level."""
+    ny, nx = z.shape
+    out = z.copy(); seen = ~land.copy()
+    hk = np.empty(ny * nx + 8); hc = np.empty(ny * nx + 8, np.int64); n = 0
+    for y in range(ny):
+        for x in range(nx):
+            if not land[y, x]:
+                continue
+            edge = y == 0 or y == ny - 1 or x == 0 or x == nx - 1
+            if not edge:
+                for k in range(8):
+                    if not land[y + NB[k, 0], x + NB[k, 1]]:
+                        edge = True
+                        break
+            if edge:
+                seen[y, x] = True; hk[n] = out[y, x]; hc[n] = y * nx + x; i = n; n += 1
+                while i > 0:
+                    pa = (i - 1) // 2
+                    if hk[pa] <= hk[i]:
+                        break
+                    hk[i], hk[pa] = hk[pa], hk[i]; hc[i], hc[pa] = hc[pa], hc[i]; i = pa
+    while n > 0:
+        h = hk[0]; c = hc[0]; n -= 1; hk[0] = hk[n]; hc[0] = hc[n]; i = 0
+        while True:
+            l = 2 * i + 1; r = l + 1; s = i
+            if l < n and hk[l] < hk[s]:
+                s = l
+            if r < n and hk[r] < hk[s]:
+                s = r
+            if s == i:
+                break
+            hk[i], hk[s] = hk[s], hk[i]; hc[i], hc[s] = hc[s], hc[i]; i = s
+        y = c // nx; x = c % nx
+        for k in range(8):
+            yy = y + NB[k, 0]; xx = x + NB[k, 1]
+            if yy < 0 or yy >= ny or xx < 0 or xx >= nx or seen[yy, xx]:
+                continue
+            seen[yy, xx] = True
+            if out[yy, xx] < h:
+                out[yy, xx] = h
+            hk[n] = out[yy, xx]; hc[n] = yy * nx + xx; i = n; n += 1
+            while i > 0:
+                pa = (i - 1) // 2
+                if hk[pa] <= hk[i]:
+                    break
+                hk[i], hk[pa] = hk[pa], hk[i]; hc[i], hc[pa] = hc[pa], hc[i]; i = pa
+    return out
+
+
+@numba.njit(cache=True)
+def _flat_increments(z, land, NB):
+    """Barnes, Lehman & Mulla 2014b (Computers & Geosciences 62, 128-135; after Garbrecht & Martz 1997): on every flat
+    (a cell with no lower land/water neighbour and an equal neighbour), increments that lead towards the flat's lower
+    edges and away from its higher edges. Returns 2 x towards + away (0 off flats)."""
+    ny, nx = z.shape; N = ny * nx
+    flat = np.zeros((ny, nx), np.bool_); low = np.zeros((ny, nx), np.bool_); high = np.zeros((ny, nx), np.bool_)
+    for y in range(ny):
+        for x in range(nx):
+            if not land[y, x]:
+                continue
+            haslow = False; haseq = False; hashigh = False
+            for k in range(8):
+                yy = y + NB[k, 0]; xx = x + NB[k, 1]
+                if yy < 0 or yy >= ny or xx < 0 or xx >= nx or not land[yy, xx]:
+                    haslow = True; continue
+                if z[yy, xx] < z[y, x]:
+                    haslow = True
+                elif z[yy, xx] == z[y, x]:
+                    haseq = True
+                else:
+                    hashigh = True
+            if haseq and not haslow:
+                flat[y, x] = True
+                if hashigh:
+                    high[y, x] = True
+            elif haseq and haslow:
+                low[y, x] = True                       # drains, and borders a flat of its own elevation
+    # BFS distances within each flat (same elevation) from the low edges and from the high edges
+    def_d = -1
+    dl = np.full(N, def_d, np.int64); dh = np.full(N, def_d, np.int64)
+    q = np.empty(N, np.int64)
+    for which in range(2):
+        d = dl if which == 0 else dh; src = low if which == 0 else high
+        head = 0; tail = 0
+        for y in range(ny):
+            for x in range(nx):
+                if src[y, x]:
+                    c = y * nx + x; d[c] = 0 if which == 0 else 1; q[tail] = c; tail += 1
+        while head < tail:
+            c = q[head]; head += 1; y = c // nx; x = c % nx
+            for k in range(8):
+                yy = y + NB[k, 0]; xx = x + NB[k, 1]
+                if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                    continue
+                cc = yy * nx + xx
+                if flat[yy, xx] and d[cc] == def_d and z[yy, xx] == z[y, x]:
+                    d[cc] = d[c] + 1; q[tail] = cc; tail += 1
+    # away from higher terrain: per flat, (max distance from its high edges) - distance; flats labelled by BFS
+    lab = np.full(N, -1, np.int64); mx = np.zeros(N, np.int64); nl = 0
+    for c0 in range(N):
+        y0 = c0 // nx; x0 = c0 % nx
+        if not flat[y0, x0] or lab[c0] >= 0:
+            continue
+        head = 0; tail = 0; q[tail] = c0; tail += 1; lab[c0] = nl; m = 0
+        while head < tail:
+            c = q[head]; head += 1; y = c // nx; x = c % nx
+            if dh[c] > m:
+                m = dh[c]
+            for k in range(8):
+                yy = y + NB[k, 0]; xx = x + NB[k, 1]
+                if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                    continue
+                cc = yy * nx + xx
+                if flat[yy, xx] and lab[cc] < 0 and z[yy, xx] == z[y, x]:
+                    lab[cc] = nl; q[tail] = cc; tail += 1
+        mx[nl] = m; nl += 1
+    inc = np.zeros((ny, nx))
+    for c in range(N):
+        y = c // nx; x = c % nx
+        if flat[y, x]:
+            towards = dl[c] if dl[c] >= 0 else 0
+            away = (mx[lab[c]] - dh[c]) if dh[c] >= 0 else 0
+            inc[y, x] = 2.0 * towards + away
+    return inc
+
+
 def outlets(land, riv):
     """Drawn-river land cells touching the sea, a lake or the map edge."""
     water = ndi.binary_dilation(~land, np.ones((3, 3)), border_value=1)
@@ -236,7 +365,11 @@ def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=
     Rmax = ndi.maximum_filter(np.where(riv, R, -np.inf), size=3)
     bank = land & ~riv & np.isfinite(Rmax) & (zc < Rmax + b0)
     zc[bank] = (Rmax + b0)[bank]
-    zf, raised = _priority_flood(np.where(land, zc, 0.0), land, NB, EPS)
+    # amendment 4: flats drain towards their lower edges and away from higher ones (Barnes et al. 2014b), then PF + eps
+    zfill = _fill(np.where(land, zc, 0.0), land, NB)
+    inc = _flat_increments(zfill, land, NB)
+    zfl = np.where(riv, zc, zfill + FLAT_EPS * inc)
+    zf, raised = _priority_flood(np.where(land, zfl, 0.0), land, NB, EPS)
     rec = dict(W=W, p=p, b0=b0, ref=ref, alpha=alpha, river_cells=int(riv.sum()),
                bed_change_m={q: float(np.percentile((R - z)[riv], q)) for q in (1, 10, 50, 90, 99)},
                valley_lowered_cells=int((zv < z - 1e-9).sum()), valley_raised_cells=int((zv > z + 1e-9).sum()),
@@ -444,31 +577,74 @@ def scan():
     log("chosen:", out["chosen"], "Earth loss given up:", round(out["earth_loss_given_up"], 3))
 
 
+def tier1_weight(tier):
+    """Amendment 3: hills fade to zero at the edge of tier 1."""
+    return np.clip(2.0 * ndi.gaussian_filter((tier == 1).astype(float), 3.0) - 1.0, 0.0, 1.0)
+
+
+HILL_HEIGHTS = (1000, 1300, 1600, 2000, 2500)
+
+
+def map_gates3(z, h0, land, rivers, tier, tops, dx, c2):
+    c, _ = map_gates(z, h0, land, rivers, tier, tops, dx, c2)
+    gates = dict(tier_bands_2_4=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in (2, 3, 4)),
+                 climate_scale=c["climate_scale_mean_abs_m"] <= c2["climate_scale_mean_abs_m"] + 5.0,
+                 lowland_slope=abs(c["tier1_slope_9km_median_deg"] / 0.167 - 1) <= 0.10)
+    return c, gates
+
+
+def scan3():
+    """Amendment 3: Earth-ranked forms, each with its hill height refitted (hills in tier 1 only); first that passes."""
+    import terrain_erosion as TE
+    from scipy.stats import ks_2samp
+    from rotclimate.geography import elevation_fullres, source_layers
+    fit = json.loads((OUT / "earth_valley_fit.json").read_text()); grid, mean = fit["grid"], fit["mean_loss"]
+    plan = json.loads((ROOT / "calibration/geography_control_20261107/plan_B2.json").read_text()); cs = plan["development_result"]["C_star"]
+    tops = json.loads((ROOT / "calibration/map_world_r44_terrain/params.json").read_text())["tier_tops"]
+    L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
+    tier = L["tier"].astype(int); dx = 1.143 * 1609.344; w = tier1_weight(tier)
+    hf0 = json.loads((ERO / "hill_fit.json").read_text())["best"]; ref9 = np.load(ERO / "earth_lowland_slopes.npz")["s9"]
+    z0s = {hm: TE.compose(h0, land, rivers, dx, cs, dict(hf0, height_m=hm), hill_weight=w)[0] for hm in HILL_HEIGHTS}
+    v2 = np.load(ERO / "map_height_v2.npz")["z"].astype(float)
+    c2 = TE.checks(v2, h0, land, rivers, tier, tops, np.zeros(v2.shape), dx)
+    rows = []
+    for rank, i in enumerate(np.argsort(mean)):
+        f = grid[i]; hrows = []
+        for hm, z0 in z0s.items():
+            z, _ = condition(z0, land, rivers, ramp=h0, **f); z = np.asarray(z, np.float32).astype(float)
+            s9 = TE.slopes_9km(z, land, dx, tier, 1)
+            hrows.append((float(ks_2samp(s9, ref9).statistic), hm, z))
+        ks, hm, z = min(hrows, key=lambda r: r[0])
+        c, gates = map_gates3(z, h0, land, rivers, tier, tops, dx, c2)
+        rows.append(dict(f, rank=rank, earth_loss=mean[i], hill_height_m=hm, hill_ks=ks, gates=gates, tier_bands=c["tier_band_share"],
+                         climate_scale=c["climate_scale_mean_abs_m"], tier1_slope=c["tier1_slope_9km_median_deg"]))
+        log(f"#{rank} {f['ref']} {f['alpha']} W{f['W']} p{f['p']} b{f['b0']} Earth {mean[i]:.3f}: hills {hm} m (KS {ks:.3f}) bands "
+            f"{ {k: round(v, 3) for k, v in c['tier_band_share'].items()} } scale {c['climate_scale_mean_abs_m']:.1f} slope {c['tier1_slope_9km_median_deg']:.3f} {gates}")
+        if all(gates.values()):
+            break
+    ok = all(rows[-1]["gates"].values())
+    out = dict(rule="plan_R1 amendment 3", v2_bands=c2["tier_band_share"], v2_scale=c2["climate_scale_mean_abs_m"], rows=rows,
+               chosen={k: rows[-1][k] for k in ("ref", "alpha", "W", "p", "b0")} if ok else None,
+               hill_height_m=rows[-1]["hill_height_m"] if ok else None,
+               earth_loss_given_up=rows[-1]["earth_loss"] - float(np.min(mean)))
+    (OUT / "map_form_scan3.json").write_text(json.dumps(out, indent=1, default=float))
+    log("chosen:", out["chosen"], "hills", out["hill_height_m"], "Earth loss given up:", round(out["earth_loss_given_up"], 3))
+
+
 def build():
     """Height map v2.1: the released v2 composition with the drawn rivers conditioned in (Earth-fitted valley form,
     map tier gates as constraints: plan_R1 amendment 2)."""
     import terrain_erosion as TE
     from rotclimate.geography import elevation_fullres, source_layers
-    form = json.loads((OUT / "map_form_scan.json").read_text())["chosen"]
+    scan = json.loads((OUT / "map_form_scan3.json").read_text()); form = scan["chosen"]            # amendment 3
     plan = json.loads((ROOT / "calibration/geography_control_20261107/plan_B2.json").read_text())
     cs = plan["development_result"]["C_star"]; ref = plan["earth_tier_band_reference"]
     tops = json.loads((ROOT / "calibration/map_world_r44_terrain/params.json").read_text())["tier_tops"]
     L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
     tier = L["tier"].astype(int); dx = 1.143 * 1609.344
-    hf0 = json.loads((ERO / "hill_fit.json").read_text())["best"]
-    # amendment 1: the unmarked-hill height refitted on the final conditioned surface (tier-1 9 km slopes vs Earth)
-    from scipy.stats import ks_2samp
-    ref9 = np.load(ERO / "earth_lowland_slopes.npz")["s9"]; hill_rows = []
-    for hm in (1000, 1300, 1600, 2000, 2500):
-        hf = dict(hf0, height_m=hm)
-        z0, info = TE.compose(h0, land, rivers, dx, cs, hf)
-        z, rec = condition(z0, land, rivers, ramp=h0, **form)
-        s9 = TE.slopes_9km(np.asarray(z, np.float32).astype(float), land, dx, tier, 1)
-        hill_rows.append(dict(height_m=hm, ks=float(ks_2samp(s9, ref9).statistic), median=float(np.median(s9)),
-                              p90=float(np.percentile(s9, 90))))
-        log("hill refit:", hill_rows[-1])
-    hbest = min(hill_rows, key=lambda r: r["ks"]); hf = dict(hf0, height_m=hbest["height_m"])
-    z0, info = TE.compose(h0, land, rivers, dx, cs, hf)
+    hf = dict(json.loads((ERO / "hill_fit.json").read_text())["best"], height_m=scan["hill_height_m"], weight="tier 1 only (amendment 3)")
+    hill_rows = [{k: r[k] for k in ("hill_height_m", "hill_ks")} for r in scan["rows"][-1:]]
+    z0, info = TE.compose(h0, land, rivers, dx, cs, hf, hill_weight=tier1_weight(tier))
     v2 = np.load(ERO / "map_height_v2.npz")["z"].astype(float)
     z, rec = condition(z0, land, rivers, ramp=h0, **form)
     z32 = np.where(land, z, 0.0).astype(np.float32)
@@ -476,14 +652,14 @@ def build():
     status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
     grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)
     flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()]); flow.update_routes(z32.astype(float))
-    A = flow.accumulate(dx * dx)
+    A = flow.accumulate(1.0)
     strict = strict_check(z32, land, rivers); strict_v2 = strict_check(v2, land, rivers)
     c = TE.checks(z32.astype(float), h0, land, rivers, tier, tops, A, dx)
     c2 = TE.checks(v2, h0, land, rivers, tier, tops, np.load(ERO / "map_height_v2.npz")["area"].astype(float), dx)
     c["tier1_slope_9km_median_deg"] = float(np.median(TE.slopes_9km(z32.astype(float), land, dx, tier, 1)))
     gates = dict(
         owner_rivers=strict["passes"],
-        tier_bands=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in c2["tier_band_share"]),
+        tier_bands_2_4=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in (2, 3, 4)),
         climate_scale=c["climate_scale_mean_abs_m"] <= c2["climate_scale_mean_abs_m"] + 5.0,
         lowland_slope=abs(c["tier1_slope_9km_median_deg"] / 0.167 - 1) <= 0.10)
     c["river_bed_over_ramp"] = bed_ratio(z32.astype(float), h0, rivers); c2["river_bed_over_ramp"] = bed_ratio(v2, h0, rivers)
@@ -506,22 +682,24 @@ def preview(z, v2, land, rivers, dx, A):
     ls = LightSource(azdeg=315, altdeg=38)
     def shade(e, rows, cols, mark):
         E = np.where(land, e, 0.0)[rows, cols]
-        rgb = ls.shade(E, cmap=plt.get_cmap("gist_earth"), vert_exag=5, dx=dx, dy=dx, blend_mode="soft", vmin=-300, vmax=3300)[..., :3]
-        rgb[~land[rows, cols]] = [0.78, 0.86, 0.93]
+        from matplotlib.colors import LinearSegmentedColormap
+        cm = LinearSegmentedColormap.from_list("land", ["#8fb87a", "#b9c98a", "#d9cf9c", "#c9a77c", "#a1816a", "#e8e2dc"])
+        rgb = ls.shade(np.clip(E, 0, 2900), cmap=cm, vert_exag=5, dx=dx, dy=dx, blend_mode="soft", vmin=0, vmax=2900)[..., :3]
+        rgb[~land[rows, cols]] = [0.74, 0.84, 0.92]
         if mark:
             new = (A[rows, cols] >= 3000e6) & land[rows, cols] & ~rivers[rows, cols]
-            rgb[new] = rgb[new] * 0.35 + np.array([0.35, 0.62, 0.88]) * 0.65
-            mk = rivers[rows, cols]; rgb[mk] = rgb[mk] * 0.2 + np.array([0.07, 0.22, 0.55]) * 0.8
+            rgb[new] = rgb[new] * 0.25 + np.array([0.20, 0.70, 0.90]) * 0.75
+            mk = rivers[rows, cols]; rgb[mk] = rgb[mk] * 0.1 + np.array([0.05, 0.25, 0.70]) * 0.9
         return rgb
     rows, cols = slice(250, 650), slice(700, 1300)
     fig, ax = plt.subplots(1, 2, figsize=(16, 5.6), constrained_layout=True)
-    ax[0].imshow(shade(v2, rows, cols, False)); ax[0].set_title("Height map v2 (released): drawn rivers not imposed at the end", fontsize=10)
-    ax[1].imshow(shade(z, rows, cols, True)); ax[1].set_title("Height map v2.1: every drawn river (dark) drains along itself; new rivers > 3,000 km² light", fontsize=10)
+    ax[0].imshow(shade(v2, rows, cols, False)); ax[0].set_title("Height map v2 (released): drawn rivers not kept as flow paths", fontsize=10)
+    ax[1].imshow(shade(z, rows, cols, True)); ax[1].set_title("Height map v2.1: every drawn river (blue) drains along itself; undrawn rivers > 3,000 km² cyan", fontsize=10)
     for a in ax:
         a.axis("off")
     fig.savefig(OUT / "map_height_v21_detail.png", dpi=110); plt.close(fig)
     fig = plt.figure(figsize=(20, 9.6)); a = fig.add_axes([0, 0, 1, 0.96]); a.imshow(shade(z, slice(None), slice(None), True)); a.axis("off")
-    fig.suptitle("Height map v2.1: eroded terrain with every drawn river as a flow path (dark); new rivers > 3,000 km² light", fontsize=12)
+    fig.suptitle("Height map v2.1: eroded terrain with every drawn river as a flow path (blue); undrawn rivers > 3,000 km² cyan", fontsize=12)
     fig.savefig(OUT / "map_height_v21_full.png", dpi=100); plt.close(fig)
     log("wrote", OUT / "map_height_v21_detail.png", OUT / "map_height_v21_full.png")
 
@@ -533,4 +711,4 @@ def check_cmd(path):
 
 
 if __name__ == "__main__":
-    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "scan": scan, "build": build}[sys.argv[1]]()
+    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "scan": scan, "scan3": scan3, "build": build}[sys.argv[1]]()

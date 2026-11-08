@@ -171,5 +171,12 @@
    "tier-1 band share reported only (owner allows hills outside the tiers; as plan_B2 map_v2_B3_revision_1); gates on tiers 2-4 bands (drop <= 0.02 vs v2), climate-scale change (<= +5 m vs v2), tier-1 9 km slope median within 10 % of Earth",
    "scan: forms in order of Earth joint loss; for each, hill height refitted in (1000, 1300, 1600, 2000, 2500) by KS against Earth lowlands; the first form whose refitted map passes every gate is adopted"
   ]
+ },
+ "amendment_4": {
+  "date": "2026-11-08",
+  "status": "implementation of step 6, after the amendment-3 build",
+  "finding": "34 % of land (47 % of tier 1) is flat at the source pixel (steepest drop < 1 cm): closed hollows of the hill layer filled to their spill level (height map v2 had them as undrained pits); Priority-Flood + epsilon drained them in parallel straight lines",
+  "change": "before Priority-Flood + epsilon, every flat gets increments towards its lower edges and away from its higher edges (Barnes, Lehman & Mulla 2014b, Computers & Geosciences 62, 128-135; Garbrecht & Martz 1997), 2e-4 m per increment; river cells untouched; all gates re-checked",
+  "also": "drainage areas: fastscapelib accumulate() already multiplies by the cell area, so areas passed as accumulate(dx^2) were m^4. Reported areas, the B3 checks, the previews and plan_B2 M3 now use m^2. Inside evolve() the m^4 numerics are kept because every Earth fit (plan_B2 C*, hill fit, plan_R1) was made with them (verified bit-identical); in them the river boost was inactive (about 0.003 km2) and the first-round rescale clipped. Earlier channel-based checks (rivers_on_channel = 1.0, plan_B2 M3 F1 = 1.00) were therefore not informative."
  }
 }

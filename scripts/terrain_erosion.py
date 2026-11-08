@@ -62,6 +62,9 @@ def evolve(h0, land, rivers, dx_m, prm=None):
     for r in range(p["rounds"]):
         zr = np.where(rivers, z - p["burn_m"], z)
         flow.update_routes(zr)
+        # A here is accumulate(dx^2) = area x dx^2 (m^4), as every Earth fit (plan_B2 C*, hill fit, plan_R1) was made
+        # with it: the river boost (m^2) is then negligible and the first-round rescale clips; kept so the fitted
+        # numerics are reproduced exactly (found 8 Nov 2026; fixing it needs those fits re-run)
         A = flow.accumulate(dx_m * dx_m).ravel() + boost.ravel()
         rec = impl.receivers[:, 0]; dist = impl.receivers_distance[:, 0]
         incr = ksn.ravel() * np.power(np.maximum(A, dx_m * dx_m), -p["m"]) * dist
@@ -79,7 +82,7 @@ def evolve(h0, land, rivers, dx_m, prm=None):
         log(f"   round {r + 1}: mean |lowpass(z) - lowpass(h0)| {np.abs(lp(z) - target)[land].mean():.1f} m ({time.time() - t0:.0f}s)")
     z = np.where(land, np.maximum(z + (target - lp(z)), 0.5), 0.0)  # last smooth correction: climate-scale faithful
     zr = np.where(rivers, z - p["burn_m"], z); zf = flow.update_routes(zr)
-    A = flow.accumulate(dx_m * dx_m)
+    A = flow.accumulate(1.0)                                     # drainage area (m^2) for reporting
     z = np.where(land, np.maximum(zf + (z - zr), 0.5), 0.0)       # sink-free surface (lakes filled), rivers not left burned
     return z, dict(params=p, drainage_area_m2=A, seconds=time.time() - t0)
 
@@ -144,7 +147,7 @@ def fit_bands(z, land, rivers, tier, tops, ref, dx_m, lowpass_km=14.0, margin=0.
     flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()])
     zr = np.where(rivers, z2 - 4.0, z2); zf = flow.update_routes(zr)
     z3 = np.where(land, np.maximum(zf + (z2 - zr), 0.5), 0.0)
-    return z3, alphas, flow.accumulate(dx_m * dx_m)
+    return z3, alphas, flow.accumulate(1.0)
 
 
 def checks(z, h0, land, rivers, tier, tops, A, dx_m, lowpass_km=14.0):
@@ -199,7 +202,7 @@ def preview(factor=2):
     fig.savefig(OUT / f"map_preview_f{f}.png", dpi=110); log("wrote", OUT / f"map_preview_f{f}.png")
 
 
-def compose(h0, land, rivers, dx, cs, hf):
+def compose(h0, land, rivers, dx, cs, hf, hill_weight=None):
     """Height map v2's composition (plan_B2 map_v2_B3 + revision 1): the tier ramps h0 plus the Earth-adopted erosion
     detail (setting cs, mountain spikes soft-capped at 1,500 m) plus the Earth-fitted unmarked hills hf (soft cap).
     Returns (z, info) before any routing step; the drawn rivers are imposed afterwards (terrain_rivers.condition)."""
@@ -213,6 +216,8 @@ def compose(h0, land, rivers, dx, cs, hf):
     cap = hf.get("cap_m")
     if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
         hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)
+    if hill_weight is not None:                             # plan_R1 amendment 3: hills only where the weight is (tier 1)
+        hill = hill * hill_weight
     detail = z - lp(z)
     detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)   # steady-state spikes (up to 5.9 km on tier 4) capped
     return np.where(land, np.maximum(h0 + detail + hill, 0.5), 0.0), info
@@ -236,7 +241,7 @@ def build_v2():
     grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)
     flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()])
     zr = np.where(rivers, z - 4.0, z); zf = flow.update_routes(zr)
-    z = np.where(land, np.maximum(zf + (z - zr), 0.5), 0.0); info["drainage_area_m2"] = flow.accumulate(dx * dx)
+    z = np.where(land, np.maximum(zf + (z - zr), 0.5), 0.0); info["drainage_area_m2"] = flow.accumulate(1.0)
     c = checks(z, h0, land, rivers, tier, tops, info["drainage_area_m2"], dx)
     c["hills"] = hf; c["tier_band_note"] = "reported only: the owner allows unmarked hills outside the tiers"
     c["tier1_elevation_pct_m"] = {q: float(np.percentile(z[land & (tier == 1)], q)) for q in (10, 50, 90, 99)}
