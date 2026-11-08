@@ -130,5 +130,25 @@
    "applied": "scripts/land_people.py FALLOW 0.599; scripts/land_people_earth.py --arable slope by default (output/land_people/earth rebuilt); Earth windows output/polity_earth/{rome,han}.npz people and output/earth_control_20261106/{rome,han}_food.npz refreshed; older Earth intermediates (blind pools, settlement-model harness) are as they were when those tests ran",
    "checks_file": "output/arable_slope_d1/d1b_checks.json"
   }
+ },
+ "D2": {
+  "date": "2026-11-08",
+  "status": "frozen before the Earth irrigation data are downloaded",
+  "question": "which land near a river can be irrigated? Today: exp(-d/6 km) from navigable rivers and 0.6 exp(-d/2.5 km) from streams, by distance only, so a slope 300 m above its river counts as much as the floodplain beside it",
+  "earth_reference": "Historical Irrigation Dataset (Siebert et al. 2015, HESS 19, 1521-1545; CC0; doi:10.13019/M20599): area equipped for irrigation in 1900 at 5 arc-min, the authors' main (HYDE-based) estimate, as a fraction of cell area. 1900 is before pumped irrigation spread, so it shows where river water reaches fields by gravity, not how much was irrigated c. AD 200",
+  "candidates": {
+   "baseline": "the distance rule above (Natural Earth 10 m rivers, as in scripts/land_people_earth.py)",
+   "hand": "distance rule x exp(-max(H, 0) / H0), H = height of the ~1.85 km cell above its nearest river cell (ETOPO 2022 60 arc-second), averaged to 5 arc-min; H0 in (10, 20, 40, 80, 160) m"
+  },
+  "cells": "land cells of the Earth harness window (0-56 N, 12 W-125 E) with annual P / PET < 0.65 (where irrigation decides farming), within 30 km of a mapped river",
+  "split": {
+   "development": "12 W - 45 E (Mediterranean, Near East)",
+   "blind": "60 E - 125 E (South, Central and East Asia)"
+  },
+  "metric": "AUC of the candidate score for cells with >= 10 % of their area equipped for irrigation in 1900 against the rest",
+  "selection": "H0 with the best development AUC",
+  "blind_gate": "blind AUC of the chosen H0 above the baseline by >= 0.01",
+  "if_it_passes": "the map: irrigation x exp(-H / H0) with H above the nearest drawn river on height map v2.1; the Earth harness the same; FALLOW refitted and the D1b no-harm checks repeated (regional populations, control dev pools) before any release",
+  "if_it_fails": "irrigation stays distance-only; reported"
  }
 }
