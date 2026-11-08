@@ -83,5 +83,23 @@
    "map_effect": "land-weighted arable share 0.744 -> 0.739; per tier 0.85 / 0.58 / 0.44 / 0.30 (constants 0.85 / 0.75 / 0.45 / 0.08); tier-1 valley floors 0.91",
    "wired": "harvest/export.py geometry (atlases with a terrain file, recorded in atlas.json world.terrain_file by rotclimate/atlas.py); data/arable_slope_model.json; takes effect at the next release"
   }
+ },
+ "D1b": {
+  "date": "2026-11-08",
+  "status": "frozen before the Earth harness is rebuilt",
+  "why": "the arable share feeds farm capacity, people, towns and control on Earth too; the Earth harness (scripts/land_people_earth.py, 5 arc-min WorldClim) still takes it from relief tiers, and FALLOW = 0.68 was fitted on that rule (North China Plain AD 2 census at capacity). A map on D1 and an Earth harness on relief tiers would no longer be one calibrated chain.",
+  "change": [
+   "Earth harness arable = mean of a(S) (D1 parameters) over each 5 arc-min cell, S from ETOPO 2022 60 arc-second slopes (the ~1.85 km scale a(S) was fitted at), land where ETOPO > 0",
+   "FALLOW refitted by the same rule as before: North China Plain capacity = its AD 2 census density (80.7 per km2)"
+  ],
+  "checks": {
+   "population": "the 10 unfitted regions of land_people_earth.REGIONS (Egypt ... Mesopotamian alluvium): RMS of ln(historical mid / capacity), before and after",
+   "control": "the Earth control development pools (Rome AD 150, Han AD 2), v2.1 rules without ruggedness (beta 0 of geography_control_a2): balanced accuracy before (0.849 / 0.664) and after, the whole Earth chain rebuilt in a separate worktree (harness, windows, food fields, staffing chain, territory)"
+  },
+  "gates": {
+   "population_no_harm": "RMS not worse by more than 0.05",
+   "control_no_harm": "each pool loses no more than 0.01 balanced accuracy"
+  },
+  "decision": "both pass: D1 on the map and on Earth, FALLOW replaced; either fails: D1 is withdrawn from the map as well (one calibrated chain) and the result is reported"
  }
 }
