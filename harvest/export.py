@@ -136,11 +136,21 @@ def surface_months(meta, arrays):
     return t,p,d,latitude
 
 
-def derive(meta, arrays):
+def derive(meta, arrays, year_days=365.0):
     from scripts.land_people import analyse
     geo,geo_inputs = geometry(meta,arrays['elev'].shape)
     land = geo['land_fraction']>0
     t,p,d,latitude = surface_months(meta,arrays)
+    # deltas (owner, 8 Nov 2026; calibration/delta_fans_20261108): river-mouth fans sized by the Earth fit
+    from harvest.deltas import fans
+    fan,built = fans(meta,arrays,t,p,year_days/12.0)
+    if fan is not None:
+        H,W = fan.shape;h,w = land.shape
+        from rotclimate.geography import source_layers
+        src_land = source_layers()['land'].astype(float)
+        fan_block = (fan*src_land).reshape(h,H//h,w,W//w).mean((1,3))/np.maximum(geo['land_fraction'],1e-12)
+        geo = dict(geo); geo['irr'] = np.maximum(geo['irr'],fan_block.astype(np.float32))
+        geo_inputs = dict(geo_inputs,deltas=built)
     if not all(np.isfinite(a[:,land]).all() for a in [t,p,d]):
         raise ValueError('Nonfinite climate on analysis land')
     # T12/P12 start at the winter solstice, so radiation uses solstice day 0.
@@ -432,7 +442,7 @@ def export(atlas):
              'scripts/land_people_hexes.py','scripts/vector_rivers.py','data/harvest_model.json',
              'data/harvest_sources.json','data/settlement_reference_regions.json','data/hexgrid.json','ravages/data.json',
              'data/source/elevation.png','data/source/rivers.png','data/source/original/rivers.png',
-             'land/earth.webp','data/arable_slope_model.json']]
+             'land/earth.webp','data/arable_slope_model.json','harvest/deltas.py','rotclimate/routing.py']]+[ROOT/'data/delta_fan_model.json']*(ROOT/'data/delta_fan_model.json').exists()
     identity=dict(climate_sha256=digest(data/'atlas.bin'),metadata=physical_metadata(meta),
                   sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()
@@ -447,7 +457,8 @@ def export(atlas):
         if meta.get('harvest',{}).get('fingerprint')==fingerprint and all((data/name).is_file() for name in required):
             print('Harvest export already matches climate and source fingerprint',flush=True);return
     print('Deriving crops, disease and settlement from '+str(atlas),flush=True)
-    fields,geo,names,geo_inputs=derive(meta,arrays)
+    year_days=float(json.loads((atlas/'params.json').read_text()).get('year_days',365)) if (atlas/'params.json').exists() else 365.0
+    fields,geo,names,geo_inputs=derive(meta,arrays,year_days)
     info,index,area=aggregates(fields,geo,meta)
     binary=pack_fields(fields,area>0,index,data/'harvest.bin')
     layers=images_and_layers(fields,geo,meta,arrays,data)
