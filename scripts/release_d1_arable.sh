@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
-# D1 release (calibration/geography_control_20261107/plan_D1.json; reports/ARABLE_SLOPE_20261108.md): the arable share
-# from slope and FALLOW 0.599. Earth-fit: staged base build from the height map v2.1 checkpoint (the climate is
+# D1 + D2 release (calibration/geography_control_20261107/plan_D1.json; reports/ARABLE_SLOPE_20261108.md): the arable share
+# from slope, irrigation gated by height above the river, and FALLOW 0.600. Earth-fit: staged base build from the height map v2.1 checkpoint (the climate is
 # unchanged). Free and Whittaker: farming, population, foraging, reach and language layers refreshed in place, after a
 # local backup. Resumable: finished stages are recorded in output/atlas_d1/stages_done.
 set -euo pipefail

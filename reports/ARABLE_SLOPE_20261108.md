@@ -1,4 +1,4 @@
-# Arable land from slope (block D, step D1) — 8 November 2026
+# Arable land from slope and irrigation by height above the river (block D, D1 + D2) — 8 November 2026
 
 Plan: `calibration/geography_control_20261107/plan_D1.json` (D1, D1b). Code: `scripts/arable_slope_d1.py`,
 `scripts/arable_slope_earth.py`, `harvest/export.py` (`geometry`), `scripts/land_people_earth.py --arable slope`.
@@ -69,6 +69,39 @@ and territory. A baseline worktree reproduced 0.8488 and 0.6637.
 * A first slope run was not consistent: it took the window people from a harness computed before the `FALLOW` refit. It was
   re-run; the numbers above are from the consistent run (`output/arable_slope_d1/d1b_checks.json`).
 * Older Earth intermediates stay as they were when their tests ran: the spent blind pools and the settlement-model harness.
+
+## D2: irrigation gated by height above the river
+
+* **Old rule.** Irrigable share by distance alone: exp(−d / 6 km) from navigable rivers and 0.6·exp(−d / 2.5 km) from
+  streams. A slope 300 m above its river counted as much as the floodplain.
+* **Candidate.** The old rule × exp(−H / H0), where H is the height of the ~1.85 km cell above its nearest river cell.
+* **Earth reference.** The Historical Irrigation Dataset (Siebert et al. 2015, CC0): area equipped for irrigation in 1900 at
+  5′, `AEI_HYDE_FINAL_IR`. Cells count as irrigated at ≥ 10 % equipped.
+* **Cells scored.** Dry land (P/PET < 0.65) within 30 km of a mapped river.
+
+| | Development (12° W – 45° E) AUC | Blind (60° E – 125° E) AUC |
+|---|---|---|
+| Distance only | 0.663 | 0.539 |
+| × exp(−H / 10 m) | 0.720 | 0.671 |
+
+* H0 = 10 m was the narrowest value in the frozen grid.
+* The cropland-placed HID variant ranks the candidates the same way.
+* On the map, H is measured against the drawn rivers on height map v2.1. The irrigable share falls from 0.032 to 0.019
+  (land mean): irrigation now stays on valley floors.
+* On Earth, the distance-only field is kept as `irr_distance` for the settlement water distance.
+
+### Refit and checks (D1 + D2 together)
+
+* **FALLOW:** 0.600 (the North China Plain census, as before).
+* **10 regions:** RMS of ln(historical / capacity) goes from 1.701 (the original rules) to 1.652.
+* **Weak spot, Egypt:** +0.32 → +0.64; capacity is now about half the 1st-century population. The gate correctly removes
+  the desert cliffs within 6 km of the Nile (cells there sit at a median 2.5 m above the river, but the upper quarter at
+  20–57 m). The distance rule's 6 km decay is too narrow for the Nile's 10–20 km floodplain, an older problem that the gate
+  now exposes.
+* **Note on the D2 metric:** AUC measures ranking, not the absolute level of irrigation. The population check is the one
+  that tests the level.
+* **Earth control development pools (balanced accuracy, D1 + D2 against the original chain):** Rome 0.8488 → 0.8485, Han
+  0.6637 → 0.6628. Both lose less than 0.01, so the gate passes and D1 + D2 is adopted together (`output/arable_slope_d1/`).
 
 ## Release
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Stage 2 of the D1 release (arable share from slope; reports/ARABLE_SLOPE_20261108.md): promote the staged Earth-fit atlas
+# Stage 2 of the D1 + D2 release (arable share from slope, irrigation by height above the river; reports/ARABLE_SLOPE_20261108.md): promote the staged Earth-fit atlas
 # (live copy backed up) and rebuild the add-on layers on it in dependency order. Resumable (output/atlas_d1/addons_done).
 set -euo pipefail
 cd "$(dirname "$0")/.."
@@ -19,7 +19,7 @@ import json
 from pathlib import Path
 p = Path('atlases/pages.json'); pages = json.loads(p.read_text())
 pages['earth_fit']['note'] = ('Earth r44 physics on the published world geometry with the eroded height map v2.1 (Earth-tested erosion, every drawn river a flow path in an Earth-fitted valley, '
-    'unmarked lowland hills); arable land from slope (Earth-fitted GAEZ rule). Climate averages surroundings layouts 1–3 with verified numerical '
+    'unmarked lowland hills); arable land from slope and river irrigation by height above the river (both Earth-tested). Climate averages surroundings layouts 1–3 with verified numerical '
     'checks. The map opens on Earth-trained corrected climate; raw climate remains available. Food, population and foraging are c.200 AD scenarios.')
 p.write_text(json.dumps(pages, indent=1, ensure_ascii=False) + '\n')
 PYEOF
