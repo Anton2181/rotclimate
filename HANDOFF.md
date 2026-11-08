@@ -1,4 +1,15 @@
 # Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
+# Population ledger P3, blind on Domesday 1086 — 8 November 2026
+
+* Plan calibration/population_ledger_20261108/plan.json (+ amendment 1); scripts/population_ledger_p3.py; report
+  reports/POPULATION_LEDGER_20261108.md. Owner supplied the Hull places + statistics databases (Access .mdb, CC BY-NC-SA)
+  -> data/cache/domesday/ (gitignored; access_parser in .venv).
+* Dev (seen): Han AD 2 rank P0 capacity 0.287, P1 base 0.428, P2 heartland occupancy 0.820; ten-region RMS ln 1.653 -> 0.965.
+* Blind (once): 20 km blocks rank P0 0.395, P1 0.431, P2 0.630 (all pass >= 0.30); England total P0 9.95 M, P2 0.79 M
+  vs 1.2-2.6 M (fail) -> atlas keeps the supplied budget. Badges: land_density partial (0.43), land_density_cores
+  experimental -> partial (0.63, now in the core view). Hosted Earth fit v43 (evidence.js). Domesday SPENT.
+* Next for the level: occupancy that grows with time since first farmed/governed (F15b + polity age), fresh blind pool.
+
 # Owner decision (8 Nov 2026): the free and Whittaker fits are RETIRED; work focuses on the Earth fit only.
 * scripts/atlas_set.py (ACTIVE = earth_fit) filters every add-on loop and scripts/refresh_atlas_pages.py; atlases/free_fit and
   atlases/whittaker_fit stay as their last published snapshot (hosted pages untouched, not deleted; URLs in
