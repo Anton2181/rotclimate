@@ -80,7 +80,9 @@ def earth_people(lat, lon):
     from rotclimate import biomes
     z = np.load(ROOT / "output/land_people/earth/earth.npz")
     biome = biomes.classify(np.nan_to_num(z["T_ann"]), np.nan_to_num(z["P_ann"]), z["land"])
-    water_km = np.minimum(-6.0 * np.log(np.maximum(np.nan_to_num(z["irr"]), 1e-12)), 300.0)
+    # distance to water from the distance-only irrigation rule (plan_D1 D2 gates "irr" by height above the river)
+    irr_d = z["irr_distance"] if "irr_distance" in z.files else z["irr"]
+    water_km = np.minimum(-6.0 * np.log(np.maximum(np.nan_to_num(irr_d), 1e-12)), 300.0)
     f = settlement_fields(np.nan_to_num(z["capacity"]), np.nan_to_num(z["npp"]), biome, np.nan_to_num(z["arable"]),
                           water_km, np.nan_to_num(z["malaria"]))
     base = np.nan_to_num(f["settlement_base"]) * OCCUPATION_CENTRAL

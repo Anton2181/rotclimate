@@ -131,13 +131,27 @@ def river_masks(shape):
     return np.array(nav) > 0, np.array(stream) > 0
 
 
-def irrigation(shape):
+HAND_H0 = 10.0                # plan_D1 D2: irrigation gate scale (m above the nearest mapped river), HID 1900 blind
+
+
+def irrigation(shape, gate=True):
     """The map's rule, exp(-d/6 km) from navigable rivers and
     0.6 exp(-d/2.5 km) from streams, averaged to 5 arc-min cells; distances
-    in latitude bands so a degree of longitude has its local length."""
+    in latitude bands so a degree of longitude has its local length. With
+    gate (plan_D1 D2), times exp(-H / 10 m), H the height of the 1' cell
+    above its nearest mapped river cell (ETOPO 2022 60"). Returns (gated or
+    not, distance-only)."""
     nav, stream = river_masks(shape)
     H = nav.shape[0]
     irr = np.zeros(nav.shape, np.float32)
+    irr_d = np.zeros(nav.shape, np.float32)
+    z = None
+    if gate:
+        from arable_slope_earth import etopo_window
+        z = etopo_window().astype(float)
+        if z.shape != nav.shape:
+            raise ValueError("ETOPO window does not match the river rasters")
+        river = nav | stream
     band, pad = 4 * RES * SUB, RES * SUB // 2
     for b0 in range(0, H, band):
         lo, hi = max(b0 - pad, 0), min(b0 + band + pad, H)
@@ -146,8 +160,14 @@ def irrigation(shape):
         d_nav = ndi.distance_transform_edt(~nav[lo:hi], sampling=samp)
         d_st = ndi.distance_transform_edt(~stream[lo:hi], sampling=samp)
         part = np.maximum(np.exp(-d_nav / 6.0), 0.6 * np.exp(-d_st / 2.5))
+        irr_d[b0:min(b0 + band, H)] = part[b0 - lo:b0 - lo + min(band, H - b0)]
+        if gate:
+            _, (iy, ix) = ndi.distance_transform_edt(~river[lo:hi], sampling=samp, return_indices=True)
+            zz = z[lo:hi]
+            part = part * np.exp(-np.maximum(zz - zz[iy, ix], 0.0) / HAND_H0)
         irr[b0:min(b0 + band, H)] = part[b0 - lo:b0 - lo + min(band, H - b0)]
-    return irr.reshape(shape[0], SUB, shape[1], SUB).mean((1, 3))
+    blk = lambda a: a.reshape(shape[0], SUB, shape[1], SUB).mean((1, 3))
+    return blk(irr), blk(irr_d)
 
 
 def arable_share(elev):
@@ -165,7 +185,7 @@ def arable_from_slope(shape, fallback):
     return np.where(np.isfinite(a), a, fallback).astype(np.float32)
 
 
-def compute(out, margins=None, arable_rule="relief"):
+def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance"):
     t0 = time.time()
     rs, cs = window_slices()
     elev = wc("elev")[rs, cs]
@@ -178,7 +198,7 @@ def compute(out, margins=None, arable_rule="relief"):
     lon = WINDOW["lon"][0] + (np.arange(shape[1]) + 0.5) / RES
     LAT = np.broadcast_to(lat[:, None], shape)
     print(f"climate {shape} read ({time.time() - t0:.0f}s)", flush=True)
-    irr = irrigation(shape)
+    irr, irr_distance = irrigation(shape, gate=(irrigation_rule == "hand"))
     arable, relief = arable_share(elev)
     if arable_rule == "slope":
         arable = arable_from_slope(arable.shape, arable)
@@ -191,7 +211,7 @@ def compute(out, margins=None, arable_rule="relief"):
         g = np.full(shape, -1 if k == "main_crop" else np.nan, np.float32)
         g[land] = v
         full[k] = g
-    np.savez_compressed(out / "earth.npz", **full, land=land, irr=irr, arable=arable, relief=relief,
+    np.savez_compressed(out / "earth.npz", **full, land=land, irr=irr, irr_distance=irr_distance, arable=arable, relief=relief,
                         lat=lat, lon=lon, crops=np.array(names))
     return full, land, irr, arable, lat, lon
 
@@ -203,6 +223,7 @@ def main():
     ap.add_argument("--margins", help="T0,T1,A0,A1: apply harvest.models.margin_reliability to the crop capacity")
     ap.add_argument("--crop-margins", help="T0,T1,A0,A1 (or T0,T1 for cold only): margins inside the crop model, the dry one on the rain-fed share only")
     ap.add_argument("--arable", choices=("relief", "slope"), default="slope", help="arable share rule (slope: plan_D1 D1b, adopted)")
+    ap.add_argument("--irrigation", choices=("distance", "hand"), default="hand", help="irrigation rule (hand: plan_D1 D2, adopted)")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -214,7 +235,7 @@ def main():
     else:
         cm = [float(x) for x in a.crop_margins.split(",")] if a.crop_margins else None
         margins = ((cm[0], cm[1]), (cm[2], cm[3]) if len(cm) == 4 else None) if cm else None
-        full, land, irr, arable, lat, lon = compute(out, margins, a.arable)
+        full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation)
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     cell_km2 = (KM_DEG / RES) ** 2 * np.cos(np.radians(LAT))

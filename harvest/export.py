@@ -44,6 +44,9 @@ def physical_metadata(meta):
                                      'lat_center','north_bearing','world','arrays']}
 
 
+IRRIGATION_HAND_H0 = 10.0          # plan_D1 D2 (calibration/geography_control_20261107/plan_D1.json)
+
+
 def geometry(meta, shape):
     """Static coast, arable land and river access, shared by all three fits."""
     from rotclimate.geography import source_layers
@@ -54,7 +57,8 @@ def geometry(meta, shape):
     if terrain:                                   # plan_D1: arable share from the slope of the eroded terrain
         sources += [ROOT/terrain, ROOT/'data/arable_slope_model.json']
     key = dict(shape=list(shape), width_km=meta['width']*meta['mi_per_px']*1.609344,
-               arable=ARABLE_BY_TIER if not terrain else 'slope', sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
+               arable=ARABLE_BY_TIER if not terrain else 'slope', irrigation='distance' if not terrain else f'hand{IRRIGATION_HAND_H0:g}',
+               sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
     stamp = hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest()
     cache = ROOT/'data/cache'/('harvest_geography_'+stamp[:20]+'.npz')
     if cache.exists():
@@ -94,9 +98,20 @@ def geometry(meta, shape):
     dn = ndi.distance_transform_edt(~navigable)*sampling if navigable.any() else np.full(original.shape,np.inf)
     ds = ndi.distance_transform_edt(~streams)*sampling if streams.any() else np.full(original.shape,np.inf)
     irrigated = np.maximum(np.exp(-dn/6), .6*np.exp(-ds/2.5))
-    yy,xx = np.mgrid[:h,:w]
-    coordinates = [(yy+.5)*original.shape[0]/h-.5,(xx+.5)*original.shape[1]/w-.5]
-    irrigation = ndi.map_coordinates(irrigated,coordinates,order=1,mode='nearest')
+    if terrain:
+        # plan_D1 D2: x exp(-H / 10 m), H the height above the nearest drawn river cell (HID 1900 blind AUC
+        # 0.539 -> 0.671), at the source resolution the Earth test used (~1.85 km), then block-averaged
+        Y,X = np.mgrid[:H,:W]
+        full_irr = ndi.map_coordinates(irrigated,[(Y+.5)*original.shape[0]/H-.5,(X+.5)*original.shape[1]/W-.5],order=1,mode='nearest')
+        river = layers['rivers'] & land
+        _,(iy,ix) = ndi.distance_transform_edt(~river,return_indices=True)
+        hand = np.where(land, z-z[iy,ix], 0.0)
+        gated = full_irr*np.exp(-np.maximum(hand,0.0)/IRRIGATION_HAND_H0)
+        irrigation = block(np.where(land,gated,0.0))/np.maximum(fraction,1e-12)
+    else:
+        yy,xx = np.mgrid[:h,:w]
+        coordinates = [(yy+.5)*original.shape[0]/h-.5,(xx+.5)*original.shape[1]/w-.5]
+        irrigation = ndi.map_coordinates(irrigated,coordinates,order=1,mode='nearest')
     result = dict(land_fraction=fraction.astype(np.float32), arable=arable.astype(np.float32),
                   water_distance=water_distance.astype(np.float32), irr=irrigation.astype(np.float32))
     cache.parent.mkdir(parents=True,exist_ok=True)
