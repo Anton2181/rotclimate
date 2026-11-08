@@ -30,8 +30,11 @@
   vs 5.2k model: distributaries) + arid rivers over-irrigated where 1900 is history-shaped (Mesopotamia, Niger).
   Exploration scripts/explore_irrigation_discharge.py (dev only; route over a domain 8 deg wider; burn NE rivers; WorldClim
   lakes passable). Map refresh: scripts/release_d2b.sh (Earth-fit only; it alone has a terrain file).
-* Open: D5 control v3 needs a fresh blind pool (all identified pools spent); the evolve() m^4 units refit (B2, hill fit,
-  plan_R1); delta-fan irrigation rule (Egypt), needs a reference/blind pool not shaped by 1900 history.
+* Block D CLOSED (plan_D1.json closing_note): delta rule not for the map (map coasts sit at ~1 m by construction, so a
+  height-based delta rule would irrigate every coastal lowland); D3 covered by the settlement model's fitted suitability
+  (slope / relative elevation lost LOPO) + D1 density; D5 = v2.1 on the terrain-aware chain, dev unchanged, released.
+  Next per reports/CONTROL_MAP_V2_PLAN_20261107.md: Steps 2-3 (village-scale settlement + predicted population ledger),
+  Domesday 1086 blind declared before download. Still open: the evolve() m^4 units refit (B2, hill fit, plan_R1).
 
 # Drawn rivers kept in the eroded map (plan_R1) + height map as climate lever (plan_T1) — 8 November 2026
 
