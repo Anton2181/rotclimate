@@ -1,0 +1,34 @@
+{
+ "id": "P8a coast coupling refit (e3 stable coupling; e51 convective coupling with the e51b heating-rate ceiling)",
+ "date": "2026-11-08",
+ "status": "frozen before any dev49 run of these candidates",
+ "reference": {
+  "name": "r44",
+  "params": "calibration/local_accuracy_20261023/r44_params.json"
+ },
+ "evidence_so_far": "12-region development screen on r44 (output/autumn_phase_20261108/couple_r44.json, couple2_r44.json; reports/AUTUMN_PHASE_20261101.md addendum): e51 alone overheats East Asia's winter (Japan Dec-Jan +3.9 C); e3 alone and e51 + e3 with a 2 K/day ceiling improve the 12-region mean (1.843 -> 1.787 / 1.778) without East Asia harm",
+ "candidates": {
+  "C1_st025": {
+   "ocean_tau_stable": 0.25
+  },
+  "C2_st05": {
+   "ocean_tau_stable": 0.5
+  },
+  "C3_u05s05_cap2": {
+   "ocean_tau_unstable": 0.5,
+   "ocean_tau_stable": 0.5,
+   "ocean_unstable_cap": 2.0
+  },
+  "C4_u05s025_cap2": {
+   "ocean_tau_unstable": 0.5,
+   "ocean_tau_stable": 0.25,
+   "ocean_unstable_cap": 2.0
+  }
+ },
+ "stage_1": "fresh paired runs of r44 and each candidate on the 49 development regions (dev31 + retired sealed a, b, c) at 56 km and the 28 km check (california, western_europe, japan, new_zealand); scripts/gate_v3.py dev and fine per candidate; driver scripts/p8_dev49.sh",
+ "gates": "unchanged policy_v3: S49 <= 0.995, T and P over the 49 not worse by more than 1 %, 28 km S <= 1.01",
+ "finalist": "the candidate with the lowest S49 among those passing both gates (ties: fewer changed fields); none passing -> reported, nothing adopted",
+ "stage_2": "sealed set h (calibration/sealed_20261107h), once, for the finalist only, paired with r44, and only after the owner releases set h; pass if S <= 1.0",
+ "if_adopted": "r45 = r44 + the finalist's overrides; then retrain the Earth corrections on r45 and release the Earth-fit atlas (a separate step)",
+ "note": "the e51b ceiling is new code (rotclimate/model.py, default off), so r44 itself is unchanged; screens used development regions only"
+}
