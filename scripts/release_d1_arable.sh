@@ -29,4 +29,5 @@ run food_fw $PY -I scripts/add_harvest_to_atlas.py atlases/free_fit atlases/whit
 run foraging_fw $PY -I scripts/add_foraging_to_atlas.py atlases/free_fit atlases/whittaker_fit
 run reach_fw $PY -I scripts/export_reach.py atlases/free_fit atlases/whittaker_fit
 run languages_fw $PY -I scripts/add_language_layers.py atlases/free_fit atlases/whittaker_fit
+run sim_rivers_fw $PY -I scripts/refresh_sim_rivers.py atlases/free_fit atlases/whittaker_fit
 echo "base stages complete"

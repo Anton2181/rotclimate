@@ -4,7 +4,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=.venv/bin/python; OUT=output/atlas_d1
-grep -qx languages_fw "$OUT/stages_done" || { echo "base stages not complete"; exit 1; }
+grep -qx sim_rivers_fw "$OUT/stages_done" || { echo "base stages not complete"; exit 1; }
 touch "$OUT/addons_done"
 run() { local name=$1; shift; if grep -qx "$name" "$OUT/addons_done"; then echo "skip $name"; return; fi
   echo "== $name $(date -u +%H:%M:%S)"; "$@" > "$OUT/addon_$name.log" 2>&1; echo "$name" >> "$OUT/addons_done"; echo "done $name $(date -u +%H:%M:%S)"; }

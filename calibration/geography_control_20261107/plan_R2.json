@@ -34,5 +34,40 @@
   "climate check against v2.1 (adopt unless corrected strict agreement drops by more than 0.5 points)",
   "release with D1 + D2 and the fine-resolution simulated rivers"
  ],
- "display": "rotclimate/atlas.py river_segments now routes at source resolution (rotclimate/routing.py) whatever the outcome; the coarse network stays the climate model's own (score.river_network_check unchanged)"
+ "display": "rotclimate/atlas.py river_segments now routes at source resolution (rotclimate/routing.py) whatever the outcome; the coarse network stays the climate model's own (score.river_network_check unchanged)",
+ "amendment_1": {
+  "date": "2026-11-08",
+  "status": "after the boost scan, before any map rebuild",
+  "boost_result": {
+   "dev_capture_error": {
+    "0": 0.089,
+    "1000": 0.082,
+    "3000": 0.081,
+    "10000": 0.083,
+    "30000": 0.083
+   },
+   "check_capture_error": {
+    "0": 0.06,
+    "1000": 0.061,
+    "3000": 0.061,
+    "10000": 0.059,
+    "30000": 0.058
+   },
+   "rule_choice": 3000
+  },
+  "finding": "the boost does not move capture (dev 0.089 -> 0.081 at the rule's choice, check 0.060 -> 0.061): it is not the lever. Further diagnosis on the map: the drawn rivers' catchments at their mouths are a median 3.2 x Hack's law (Earth main rivers in the B2 windows: 4.1 x), so the terrain does not steal their water; measured along the flow thread (2-px-wide drawn rivers carry the flow on one thread), 64 % of drawn-river length carries > 15 m3/s and 79 % > 5, falling from a median 68 m3/s near the mouths to 10 m3/s near the sources; 82 of 107 rivers reach the sea with > 15 m3/s. The earlier \"median 0.7 m3/s\" was a per-pixel artefact of the second thread.",
+  "decision": "the corrected-units terrain is not rebuilt (no measurable gain; the whole terrain chain would need refitting). Height map v2.1 stays. The owner's complaint is answered by the display: simulated rivers routed at source resolution (rotclimate/routing.py) - Earth-fit from the simulation at build, free and Whittaker from their stored monthly climate (scripts/refresh_sim_rivers.py; q > 15 m3/s network overlap with the simulation-based one 0.97)",
+  "display_agreement": {
+   "earth_fit": {
+    "coarse": {
+     "sim_near_drawn": 0.24,
+     "drawn_near_sim": 0.44
+    },
+    "fine": {
+     "sim_near_drawn": 0.3,
+     "drawn_near_sim": 0.71
+    }
+   }
+  }
+ }
 }

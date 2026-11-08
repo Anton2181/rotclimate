@@ -83,61 +83,72 @@ def _accumulate(order, recv, src):
     return acc
 
 
-def surface(params):
+def surface(tier_tops, terrain_file=""):
     """The routing surface at source resolution, the land mask and the drawn rivers."""
     from .geography import elevation_fullres, source_layers
     L = source_layers(); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
-    terrain = getattr(params, "terrain_file", "")
-    z = elevation_fullres(tuple(params.tier_tops), terrain)
-    if not terrain:
+    z = elevation_fullres(tuple(tier_tops), terrain_file or "")
+    if not terrain_file:
         z = np.where(rivers, z - BURN_M, z)
     return z, land, rivers
 
 
-def fine_discharge(result):
-    """Discharge (m3/s) and receivers at source resolution from the model's annual runoff."""
-    from .hydrology import annual_runoff
-    g, p = result.grid, result.params
-    z, land, rivers = surface(p)
+def discharge(runoff_px_mm, tier_tops, terrain_file, map_width_mi):
+    """Discharge (m3/s) at source resolution from annual runoff (mm/yr) given per source pixel."""
+    z, land, rivers = surface(tier_tops, terrain_file)
     H, W = land.shape
-    ro = annual_runoff(result)                                         # mm/yr on the model grid (0 over water)
-    # land-only runoff, nearest land value carried over water so coastal pixels are not diluted by the sea
-    gl = g.land & g.inmap
-    _, (iy, ix) = ndi.distance_transform_edt(~gl, return_indices=True)
-    ro_l = ro[iy, ix]
-    f = W / (g.nx - 2 * g.pad)                                         # source pixels per model cell
-    yy, xx = np.mgrid[0:H, 0:W].astype(float)
-    ro_px = ndi.map_coordinates(ro_l, [(yy + 0.5) / f - 0.5 + g.pad, (xx + 0.5) / f - 0.5 + g.pad], order=1, mode="nearest")
-    px_m = p.map_width_mi * 1609.344 / W
-    src = np.where(land, np.maximum(ro_px, 0.0), 0.0) / 1000.0 * px_m * px_m / (365.0 * 86400.0)
+    px_m = map_width_mi * 1609.344 / W
+    src = np.where(land, np.maximum(runoff_px_mm, 0.0), 0.0) / 1000.0 * px_m * px_m / (365.0 * 86400.0)
     recv, order = _flood(np.where(land, z, -1e9), land, NB)
     q = _accumulate(order, recv, src.ravel()).reshape(H, W)
     return q, recv, land, rivers
 
 
-def river_segments_fine(result, q_min=15.0):
+def fine_discharge(result):
+    """Discharge (m3/s) and receivers at source resolution from the model's annual runoff."""
+    from .geography import source_layers
+    from .hydrology import annual_runoff
+    g, p = result.grid, result.params
+    H, W = source_layers()["land"].shape
+    ro = annual_runoff(result)                                         # mm/yr on the model grid (0 over water)
+    gl = g.land & g.inmap                                              # carry the nearest land value over water
+    _, (iy, ix) = ndi.distance_transform_edt(~gl, return_indices=True)
+    ro_l = ro[iy, ix]
+    f = W / (g.nx - 2 * g.pad)                                         # source pixels per model cell
+    yy, xx = np.mgrid[0:H, 0:W].astype(float)
+    ro_px = ndi.map_coordinates(ro_l, [(yy + 0.5) / f - 0.5 + g.pad, (xx + 0.5) / f - 0.5 + g.pad], order=1, mode="nearest")
+    return discharge(ro_px, p.tier_tops, getattr(p, "terrain_file", ""), p.map_width_mi)
+
+
+def segments(q, recv, land, q_min=15.0):
     """[x1, y1, x2, y2, q] in map pixels, pixel centre to downstream pixel centre, for land pixels with q > q_min;
-    straight runs of the same flow class are merged into one segment."""
-    q, recv, land, rivers = fine_discharge(result)
+    straight runs of one direction and flow class are merged into one segment."""
     H, W = land.shape
-    classes = np.digitize(q, [50.0, 200.0, 800.0])
+    cls = np.digitize(q, [50.0, 200.0, 800.0]).ravel()
     sel = np.flatnonzero((q.ravel() > q_min) & land.ravel() & (recv >= 0))
     keep = np.zeros(H * W, bool); keep[sel] = True
-    # merge collinear runs: a segment whose upstream partner continues in the same direction and class is absorbed
-    nxt = recv
     dirn = np.where(recv >= 0, recv - np.arange(H * W), 0)
-    has_up_same = np.zeros(H * W, bool)
-    up_ok = keep & (recv >= 0)
-    r = recv[up_ok]; src_idx = np.flatnonzero(up_ok)
-    same = keep[r] & (dirn[r] == dirn[src_idx]) & (classes.ravel()[r] == classes.ravel()[src_idx])
-    # a cell r is "continued" from upstream when exactly one upstream kept cell feeds it in the same direction
-    cnt = np.bincount(r[same], minlength=H * W); has_up_same[cnt == 1] = True
-    segs = []
-    starts = sel[~has_up_same[sel]]
-    for c in starts:
-        a = c; b = nxt[c]
-        while b >= 0 and keep[b] and has_up_same[b] and dirn[b] == dirn[a] and classes.ravel()[b] == classes.ravel()[a] and nxt[b] >= 0:
-            b = nxt[b]
+    src_idx = np.flatnonzero(keep); r = recv[src_idx]
+    same = (r >= 0) & keep[np.maximum(r, 0)] & (dirn[np.maximum(r, 0)] == dirn[src_idx]) & (cls[np.maximum(r, 0)] == cls[src_idx])
+    continued = np.zeros(H * W, bool); continued[r[same]] = True          # fed by its own straight run
+    out = []
+    for c in sel[~continued[sel]]:
+        b = recv[c]
+        while b >= 0 and keep[b] and continued[b] and dirn[b] == dirn[c] and cls[b] == cls[c] and recv[b] >= 0:
+            b = recv[b]
         y1, x1 = divmod(int(c), W); y2, x2 = divmod(int(b), W)
-        segs.append([x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, round(float(q.ravel()[c]), 1)])
-    return segs
+        out.append([x1 + 0.5, y1 + 0.5, x2 + 0.5, y2 + 0.5, round(float(q.ravel()[c]), 1)])
+    return out
+
+
+def river_segments_fine(result, q_min=15.0):
+    q, recv, land, _ = fine_discharge(result)
+    return segments(q, recv, land, q_min)
+
+
+def runoff_from_months(t, p, days_per_bin):
+    """Annual runoff (mm/yr) from 12 monthly surface temperatures (C) and precipitation totals (mm per bin), with the
+    climate model's rule (rotclimate.hydrology.annual_runoff: evaporation capped by rain and 0.75 x a Hargreaves-like
+    potential)."""
+    pet = np.clip(0.0023 * 17.8 * (t + 17.8) * 1.9, 0.1, None) * days_per_bin
+    return np.maximum(p - np.minimum(p, 0.75 * pet), 0.0).sum(0)

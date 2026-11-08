@@ -65,7 +65,8 @@ def evolve(h0, land, rivers, dx_m, prm=None):
         # A here is accumulate(dx^2) = area x dx^2 (m^4), as every Earth fit (plan_B2 C*, hill fit, plan_R1) was made
         # with it: the river boost (m^2) is then negligible and the first-round rescale clips; kept so the fitted
         # numerics are reproduced exactly (found 8 Nov 2026; fixing it needs those fits re-run)
-        A = flow.accumulate(dx_m * dx_m).ravel() + boost.ravel()
+        # plan_R2: p["area_m2"] = True accumulates in m^2 so the boost acts
+        A = (flow.accumulate(1.0) if p.get("area_m2") else flow.accumulate(dx_m * dx_m)).ravel() + boost.ravel()
         rec = impl.receivers[:, 0]; dist = impl.receivers_distance[:, 0]
         incr = ksn.ravel() * np.power(np.maximum(A, dx_m * dx_m), -p["m"]) * dist
         zz = np.zeros(A.size)
@@ -210,11 +211,11 @@ def hill_noise(shape, dx_m, scale_km=80.0, seed=3):
     n = ndi.gaussian_filter(rng.standard_normal(shape), scale_km / cells); return n / n.std()
 
 
-def compose(h0, land, rivers, dx, cs, hf, hill_weight=None, hill_field=None):
+def compose(h0, land, rivers, dx, cs, hf, hill_weight=None, hill_field=None, extra=None):
     """Height map v2's composition (plan_B2 map_v2_B3 + revision 1): the tier ramps h0 plus the Earth-adopted erosion
     detail (setting cs, mountain spikes soft-capped at 1,500 m) plus the Earth-fitted unmarked hills hf (soft cap).
     Returns (z, info) before any routing step; the drawn rivers are imposed afterwards (terrain_rivers.condition)."""
-    prm = dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0)
+    prm = dict(cs, rounds=6, burn_m=4.0, lowpass_km=14.0, **(extra or {}))      # extra: plan_R2 area_m2 + boost
     z, info = evolve(h0, land, rivers, dx, prm)
     # owner, 7 Nov: unmarked hills are allowed outside the painted tiers -> no tier compression; the eroded
     # detail and Earth-fitted lowland hills (output/terrain_erosion_20261107/hill_fit.json) lie on the tier ramps

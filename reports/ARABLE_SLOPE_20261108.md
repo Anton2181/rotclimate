@@ -103,6 +103,30 @@ and territory. A baseline worktree reproduced 0.8488 and 0.6637.
 * **Earth control development pools (balanced accuracy, D1 + D2 against the original chain):** Rome 0.8488 → 0.8485, Han
   0.6637 → 0.6628. Both lose less than 0.01, so the gate passes and D1 + D2 is adopted together (`output/arable_slope_d1/`).
 
+## Simulated rivers drawn at the map's resolution (plan_R2)
+
+Owner: "The Simulated Rivers are still wildly different from the Target ones".
+
+* **Cause.** The atlas drew the climate grid's own network: 14.7 km cells, cell centre to cell centre, routed over cell
+  means. In Earth-fit only 24 % of its length lay within 5 km of a drawn river, and 44 % of drawn-river pixels had a
+  simulated river nearby.
+* **Fix.** The model's annual runoff is now routed at source resolution (`rotclimate/routing.py`):
+  * over height map v2.1, where every drawn river is a flow path;
+  * or, in the free and Whittaker worlds, over their tier ramps with the drawn rivers burned in.
+* **Result in Earth-fit:** 71 % of drawn-river pixels now have a simulated river nearby.
+* **The water is there.**
+  * 64 % of drawn-river length carries more than 15 m³/s, falling from a median 68 m³/s near the mouths to 10 m³/s near
+    the sources.
+  * 82 of 107 drawn rivers reach the sea with more than 15 m³/s.
+  * Their basins match Hack's law as Earth's main rivers do (3.2× against 4.1×).
+* **What still differs.**
+  * Small headwaters and short coastal rivers below the 15 m³/s display threshold.
+  * Undrawn tributaries in wet uplands.
+* **Rejected lever.** The river boost (a corrected-units erosion solve) did not change how much land drains into the main
+  rivers on Earth, so height map v2.1 stays (`calibration/geography_control_20261107/plan_R2.json`, amendment 1).
+
+![Simulated rivers before and after](figures/sim_rivers_before_after.png)
+
 ## Release
 
 * **Drivers:** `scripts/release_d1_arable.sh` (Earth-fit base from the height map v2.1 checkpoint, plus the free and
