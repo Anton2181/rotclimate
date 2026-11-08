@@ -6,7 +6,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -27,7 +27,7 @@ def main():
         'scripts/land_people.py','population/export.py','scripts/build_cereal_work_maps.py',str(sourcepath.relative_to(ROOT))]
     sources={p:file_hash(ROOT/p) for p in producer_files}
     overall=[];all_inputs={};out=ROOT/'output/cereal_work_maps_20261103';out.mkdir(exist_ok=True)
-    for name in active(['free_fit','earth_fit','whittaker_fit']):
+    for name in active_atlases(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';original=json.loads((data/'atlas.json').read_text())
         packets={}
         modes=['raw']+(['corrected'] if original.get('corrected_climate') else [])

@@ -6,7 +6,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -25,7 +25,7 @@ def main():
         'polity/economic_world.py','polity/fields.py','polity/control.py','polity/network.py','polity/transport.py',
         'polity/seasons.py','polity/settle.py','scripts/review_administrative_hierarchy.py']}
     all_inputs={};packets=[]
-    for name,mode in active([('free_fit','raw'),('earth_fit','raw'),('earth_fit','corrected'),('whittaker_fit','raw')]):
+    for name,mode in active_atlases([('free_fit','raw'),('earth_fit','raw'),('earth_fit','corrected'),('whittaker_fit','raw')]):
         atlas=ROOT/'atlases'/name;data=atlas/'data';prefix='' if mode=='raw' else 'corrected/'
         folder=origin/(name+'_'+mode);folder.mkdir(exist_ok=True)
         paths=[ip,ROOT/'data/imperial_datasheet_evidence.json',data/'atlas.json',data/prefix/'atlas.bin',

@@ -19,7 +19,7 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "scripts")]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 OUT = ROOT / "output/control_v2_20261107"
 CASE = "joint365"
 HELD_DAYS = 2.0
@@ -74,7 +74,7 @@ def build(name, mode):
 
 def main():
     done = []
-    for name in active(("free_fit", "earth_fit", "whittaker_fit")):
+    for name in active_atlases(("free_fit", "earth_fit", "whittaker_fit")):
         meta = json.loads((ROOT / "atlases" / name / "data/atlas.json").read_text())
         for mode in ["raw"] + (["corrected"] if meta.get("corrected_climate") else []):
             done.append(build(name, mode))

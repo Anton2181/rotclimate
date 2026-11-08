@@ -5,7 +5,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 CASES=['recorded_centres','marked_places','proposed_towns','proposed_tracks','road_sources','forts_legions']
 
@@ -28,7 +28,7 @@ def main():
         'polity/network.py','polity/transport.py','polity/seasons.py','polity/settle.py','scripts/review_imperial_access.py']}
     out=ROOT/'output/imperial_access_20261104';out.mkdir(exist_ok=True)
     summaries=[];all_inputs={}
-    for name in active(['free_fit','earth_fit','whittaker_fit']):
+    for name in active_atlases(['free_fit','earth_fit','whittaker_fit']):
         atlas=ROOT/'atlases'/name;original=json.loads((atlas/'data/atlas.json').read_text())
         modes=['raw']+(['corrected'] if original.get('corrected_climate') else [])
         for mode in modes:

@@ -7,7 +7,7 @@ import shutil
 import sys
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 EARTH_CONTROL=ROOT/'output/earth_control_20261106/results.json'
@@ -34,7 +34,7 @@ def main():
         'Only feasible affiliated cohorts emit two-way seasonal reach. Same candidates and transport in every case; no population-to-power multiplier. '
         'Proposed sites inherit painted-claim hypotheses; marked evidence takes precedence. Missing sources or local grain support do not prove empty land or lost sovereignty. '
         'Other staples, livestock food, maritime grain imports, water volumes and complete household/draft labour are not yet integrated. See the selected-site ledger and methods.')
-    for name in active(['free_fit','earth_fit','whittaker_fit']):
+    for name in active_atlases(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';meta=json.loads((data/'atlas.json').read_text());packets={}
         for mode in ['raw']+(['corrected'] if meta.get('corrected_climate') else []):
             out=origin/(name+'_'+mode);review=json.loads((out/'review.json').read_text())

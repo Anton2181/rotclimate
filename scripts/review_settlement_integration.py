@@ -10,7 +10,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import active as active_atlases  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def candidates(r,registry,shape,cell_px,market_rows):
@@ -80,7 +80,7 @@ def main():
     sourcepaths+=['rotclimate/geography.py','polity/trade.py','polity/inventory.py'] if (ROOT/'polity/inventory.py').exists() else ['rotclimate/geography.py','polity/trade.py']
     sources={p:file_hash(ROOT/p) for p in sourcepaths}
     reviews=[]
-    for name in active(['free_fit','earth_fit','whittaker_fit']):
+    for name in active_atlases(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';original=json.loads((data/'atlas.json').read_text())
         for mode in ['raw']+(['corrected'] if original.get('corrected_climate') else []):
             folder=data/('corrected' if mode=='corrected' else '');out=origin/(name+'_'+mode);out.mkdir(exist_ok=True)
