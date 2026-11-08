@@ -404,11 +404,52 @@ def dev():
     log("check: bed/ramp median true vs chosen", {n: (round(v["true_bed"][50], 2), round(v["chosen"]["bed"][50], 2)) for n, v in chk_loss.items()})
 
 
-def build():
-    """Height map v2.1: the released v2 composition with the drawn rivers conditioned in (Earth-fitted valley form)."""
+def map_gates(z, h0, land, rivers, tier, tops, dx, c2):
+    import terrain_erosion as TE
+    c = TE.checks(z, h0, land, rivers, tier, tops, np.zeros(z.shape), dx)
+    c["tier1_slope_9km_median_deg"] = float(np.median(TE.slopes_9km(z, land, dx, tier, 1)))
+    gates = dict(tier_bands=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in c2["tier_band_share"]),
+                 climate_scale=c["climate_scale_mean_abs_m"] <= c2["climate_scale_mean_abs_m"] + 5.0,
+                 lowland_slope=abs(c["tier1_slope_9km_median_deg"] / 0.167 - 1) <= 0.10)
+    return c, gates
+
+
+def scan():
+    """Amendment 2: the first Earth-ranked form that passes every map gate (hill height of the first refit)."""
     import terrain_erosion as TE
     from rotclimate.geography import elevation_fullres, source_layers
-    fit = json.loads((OUT / "earth_valley_fit.json").read_text()); form = fit["chosen"]
+    fit = json.loads((OUT / "earth_valley_fit.json").read_text()); grid, mean = fit["grid"], fit["mean_loss"]
+    plan = json.loads((ROOT / "calibration/geography_control_20261107/plan_B2.json").read_text()); cs = plan["development_result"]["C_star"]
+    tops = json.loads((ROOT / "calibration/map_world_r44_terrain/params.json").read_text())["tier_tops"]
+    L = source_layers(); h0 = elevation_fullres(tuple(tops)); land = L["land"].astype(bool); rivers = L["rivers"].astype(bool) & land
+    tier = L["tier"].astype(int); dx = 1.143 * 1609.344
+    hf = dict(json.loads((ERO / "hill_fit.json").read_text())["best"], height_m=1600)
+    z0, _ = TE.compose(h0, land, rivers, dx, cs, hf)
+    v2 = np.load(ERO / "map_height_v2.npz")["z"].astype(float)
+    c2 = TE.checks(v2, h0, land, rivers, tier, tops, np.zeros(v2.shape), dx)
+    rows = []
+    for rank, i in enumerate(np.argsort(mean)):
+        f = grid[i]; z, _ = condition(z0, land, rivers, ramp=h0, **f)
+        c, gates = map_gates(np.asarray(z, np.float32).astype(float), h0, land, rivers, tier, tops, dx, c2)
+        rows.append(dict(f, rank=rank, earth_loss=mean[i], gates=gates, tier_bands=c["tier_band_share"],
+                         climate_scale=c["climate_scale_mean_abs_m"], tier1_slope=c["tier1_slope_9km_median_deg"]))
+        log(f"#{rank} {f['ref']} {f['alpha']} W{f['W']} p{f['p']} b{f['b0']} Earth {mean[i]:.3f}: bands "
+            f"{ {k: round(v, 3) for k, v in c['tier_band_share'].items()} } scale {c['climate_scale_mean_abs_m']:.1f} slope {c['tier1_slope_9km_median_deg']:.3f} {gates}")
+        if all(gates.values()):
+            break
+    out = dict(rule="plan_R1 amendment 2", v2_bands=c2["tier_band_share"], v2_scale=c2["climate_scale_mean_abs_m"], rows=rows,
+               chosen={k: rows[-1][k] for k in ("ref", "alpha", "W", "p", "b0")} if all(rows[-1]["gates"].values()) else None,
+               earth_loss_given_up=rows[-1]["earth_loss"] - float(np.min(mean)))
+    (OUT / "map_form_scan.json").write_text(json.dumps(out, indent=1, default=float))
+    log("chosen:", out["chosen"], "Earth loss given up:", round(out["earth_loss_given_up"], 3))
+
+
+def build():
+    """Height map v2.1: the released v2 composition with the drawn rivers conditioned in (Earth-fitted valley form,
+    map tier gates as constraints: plan_R1 amendment 2)."""
+    import terrain_erosion as TE
+    from rotclimate.geography import elevation_fullres, source_layers
+    form = json.loads((OUT / "map_form_scan.json").read_text())["chosen"]
     plan = json.loads((ROOT / "calibration/geography_control_20261107/plan_B2.json").read_text())
     cs = plan["development_result"]["C_star"]; ref = plan["earth_tier_band_reference"]
     tops = json.loads((ROOT / "calibration/map_world_r44_terrain/params.json").read_text())["tier_tops"]
@@ -492,4 +533,4 @@ def check_cmd(path):
 
 
 if __name__ == "__main__":
-    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "build": build}[sys.argv[1]]()
+    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "scan": scan, "build": build}[sys.argv[1]]()
