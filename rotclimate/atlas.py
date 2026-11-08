@@ -403,8 +403,15 @@ def agreement_layer(fr, outdir: Path = ATLAS / "data"):
 
 
 def river_segments(result, q_min=15.0):
-    """Simulated river network as [x1, y1, x2, y2, q] segments in map pixels
-    (cell centre to downstream cell centre, discharge q in m3/s)."""
+    """Simulated river network as [x1, y1, x2, y2, q] segments in map pixels (discharge q in m3/s): the model's
+    annual runoff routed at the drawing's own resolution (rotclimate.routing; the eroded height map when the world
+    has one, else the tier ramps with the drawn rivers burned in)."""
+    from .routing import river_segments_fine
+    return river_segments_fine(result, q_min)
+
+
+def river_segments_coarse(result, q_min=15.0):
+    """The model grid's own network (cell centre to downstream cell centre), as drawn before 8 Nov 2026."""
     from .hydrology import analyse
 
     g = result.grid

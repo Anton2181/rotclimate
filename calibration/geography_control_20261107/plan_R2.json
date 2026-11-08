@@ -1,0 +1,38 @@
+{
+ "version": 1,
+ "date": "2026-11-08",
+ "status": "frozen before any boosted terrain is built or scored",
+ "owner": "\"The Simulated Rivers are still wildly different from the Target ones\" (8 Nov 2026)",
+ "findings_before_the_plan": {
+  "display": "the atlas drew the climate grid's own network (14.7 km cells, cell centre to cell centre): Earth-fit 24 % of simulated length within 5 km of a drawn river, 44 % of drawn-river pixels near a simulated river; free / Whittaker 11-12 %",
+  "fine_routing": "routing the model runoff at source resolution over height map v2.1 (rotclimate/routing.py): 30 % / 71 %; the tier-ramp worlds with drawn rivers burned in: 51 % / 65 %",
+  "capture": "the drawn rivers collect too little land: on v2.1 only 54 % of land drains into a drawn river; median discharge on drawn-river pixels 0.7 m3/s. On the B2 Earth windows the true main rivers collect 66-92 % of land, the v2.1 pipeline's 54-85 % (8-12 points short in every window)",
+  "cause": "terrain_erosion.evolve accumulated drainage area in m^4 (fastscapelib accumulate already multiplies by the cell area), so the designed river boost (extra catchment on drawn-river cells, to make them trunk valleys) was ~0.003 km2: the erosion grew its own trunks"
+ },
+ "change": "evolve() in correct units: A = accumulate(1.0) in m^2 and the boost in m^2, so it acts (the first-round rescale no longer clips either)",
+ "earth_fit": {
+  "windows": "plan_B2 D1-D4 for selection, B1-B4 reported as a check (spent as blind for B2)",
+  "pipeline": "compose (plan_B2 C* with the boost under test; hills tier 1 only, 1,600 m) + plan_R1 conditioning with the adopted form (ramp 0.6, W 11, p 1, b0 10)",
+  "boost_grid_km2": [
+   0,
+   1000,
+   3000,
+   10000,
+   30000
+  ],
+  "metrics": {
+   "capture": "|share of land draining into the drawn rivers - truth| (routing: rotclimate.routing Priority-Flood)",
+   "divides": "plan_B2 M1 (km)",
+   "slope": "plan_B2 M2 (mean KS by tier)"
+  },
+  "selection": "lowest mean capture error on D1-D4 among boosts whose mean divides and slope KS are no worse than boost 0 by more than 10 %"
+ },
+ "then": [
+  "plan_R1 valley form re-selected on the new composition (amendment-1 grid and joint loss, D1-D4)",
+  "map: hills refitted (tier 1, Earth lowland slopes) and the plan_R1 amendment-3 gates (owner rivers 100 %, tiers 2-4 bands, climate scale, lowland slope)",
+  "reported on the map: share of land draining into drawn rivers, discharge on drawn rivers, simulated-vs-drawn agreement",
+  "climate check against v2.1 (adopt unless corrected strict agreement drops by more than 0.5 points)",
+  "release with D1 + D2 and the fine-resolution simulated rivers"
+ ],
+ "display": "rotclimate/atlas.py river_segments now routes at source resolution (rotclimate/routing.py) whatever the outcome; the coarse network stays the climate model's own (score.river_network_check unchanged)"
+}
