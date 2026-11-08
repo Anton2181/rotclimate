@@ -1,0 +1,35 @@
+{
+ "id": "P3 predicted population ledger, Domesday 1086 blind",
+ "date": "2026-11-08",
+ "status": "frozen before the Domesday statistics database is opened (only the places database's column names and five place rows had been read)",
+ "queue": "reports/CONTROL_MAP_V2_PLAN_20261107.md Step 3; pool reserved in calibration/earth_components_20261105/dataset_usage.json (domesday_1086_blind)",
+ "question": "Does the Earth-calibrated chain predict where people lived, and how many, in a long-settled low-input farming landscape? The atlas today spreads a supplied budget; this tests whether it can predict the total itself.",
+ "candidates": {
+  "P0_capacity": "people/km2 = the Earth harness capacity (scripts/land_people_earth.py, output/land_people/earth/earth.npz 'capacity': crops on arable from slope + D2/D2b irrigation, FALLOW 0.600 fitted so the North China Plain AD 2 census sits at capacity) - full occupation",
+  "P1_base": "people/km2 = harvest.models settlement base x the central occupation share (polity.earth.earth_people) - the density the atlas allocates by; distribution only (its level is a share)",
+  "P2_cored": "people/km2 = capacity x exp(-D / 800 km), D the travel cost to the nearest old core (Uruk, Memphis, Harappa, Zhengzhou, Rome; forest x2, relief +1 per km, sea as land; scripts/population_cores.py travel_distance, coarsen 3) - the Earth-tested occupancy rule (reports/POPULATION_20261023.md), level anchored at the North China Plain",
+  "fixed": "no parameter is fitted on Domesday; foraging is taken as zero in England 1086 (fully farmed); towns are inside the recorded population"
+ },
+ "truth": {
+  "places": "data/cache/domesday/places_content.mdb (owner upload, sha256 6359d8b15b60caecd35de310c269dd2c461ddbc5b6a8dc4c4d041181346f0356): table Places, located by OSrefs (1-km Ordnance Survey reference; the centre of the square; British National Grid on OSGB36 converted to latitude/longitude, datum shift ignored at block scale); the first reference when several",
+  "people": "the statistics database's recorded population per holding (its total field if it has one, else the sum of all recorded person categories: villans, bordars, cottars, slaves, freemen, sokemen, burgesses and other recorded people; no livestock, ploughs or values), joined to places by the shared place key; a holding naming several places is split equally among them; holdings that cannot be joined are counted and reported, not imputed",
+  "multiplier": "none for the rank test; the level test compares with published totals instead"
+ },
+ "area_and_blocks": {
+  "surveyed_mask": "Earth-harness land cells (5 arc-min) within 15 km of a located Domesday place",
+  "blocks": "British National Grid 20 km squares (by cell centre); a block counts if it has >= 4 land cells and >= 50 % of them in the mask; density = people / land km2 over its masked cells",
+  "secondary": "40 km squares (reported, not gated)"
+ },
+ "metrics": {
+  "R_rank": "Spearman rank correlation between model and Domesday recorded density over the 20 km blocks (ties averaged); also the share of people that would have to move (half the L1 distance of normalized shares)",
+  "L_level": "predicted people in the surveyed mask (P0 and P2) against the published range for England in 1086, 1.2-2.6 M (lower estimates multiply the ~269,000 recorded heads by 4-5; upper about 2.25-2.5 M; Broadberry et al. 2015 central 1.71 M); score |ln(predicted / 1.71 M)|. The total is common knowledge, so this part is semi-blind; the block pattern is the unseen part"
+ },
+ "gates": {
+  "R": "a candidate's distribution counts as Earth-tested at the 20 km block scale if its Spearman >= 0.30",
+  "L": "a candidate's predicted level counts as Earth-tested (one region) if its total is inside 1.2-2.6 M",
+  "atlas": "if P2 passes R and L, the atlas population layer gets a predicted-total mode on the map (capacity x the lore-core occupancy, unnormalized) next to the supplied budget, badged by this result; otherwise the supplied budget stays and the result is reported with the badges updated"
+ },
+ "development_seen": "report only, nothing selected: Han AD 2 commandery Spearman for P0/P1/P2 on the current harness (published: base 0.29, cored travel 0.84) and the ten-region RMS of ln(historical / predicted) for P0 and P2",
+ "step2_note": "village-scale settlement (Step 2) is not scored here: the atlas has no village generator yet and no development village pool. After this scoring Domesday counts as seen for any later village test.",
+ "scored_once": true
+}
