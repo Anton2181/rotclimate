@@ -61,6 +61,12 @@ cells, at the map's river density.
   data, so they count as a check, not a blind test.
 * On the check windows the loss falls on Balkans and Guizhou and rises a little on Zagros and the Appalachians.
 * River beds sit at a median 0.6 of the tier ramp; Earth's eight windows range from 0.28 to 0.76.
+* Undrawn rivers, recomputed with areas in m² (`output/terrain_rivers_20261107/side_effects_m2.json`):
+  * Do the reconstructed rivers over 500 km², more than 5 px from a drawn river, sit where Earth's do? F1 is 0.17–0.31
+    before conditioning and 0.17–0.27 after; conditioning lowers it in 5 of 8 windows and leaves 3 unchanged.
+  * The new rivers are therefore plausible, but not predictions: a four-tier sketch does not carry where Earth's smaller
+    rivers run.
+  * The earlier "F1 = 1.00" came from the m⁴ areas and meant nothing.
 
 Amendments, each frozen before its own results:
 1. **Amendment 1.** Earth bed level was added after breach-only carving drove upland beds to sea level.
