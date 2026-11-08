@@ -14,6 +14,8 @@
   +0.29 pts corrected (uplands low in their bands, both halves better) < frozen +0.5; ceiling of the lever +0.44.
   Steering tier-1 hills hurts (hills are zero-mean relief). Not adopted. The painted-zone misfit is lowland moisture.
 * RELEASED 8 Nov 02:22 (smoke passes free/earth/whittaker; live r44-on-v2 backed up in output/atlas_r44r/previous_atlases).
+  Hosted: earth v39 (447 changed files in 4 batches; *_tiers.webp still left out for the 511-file cap), free v35,
+  whittaker v24 (13 changed add-on files each).
   Release: scripts/release_r44_rivers.sh + release_r44_rivers_addons.sh (checkpoint output/r44_rivers_world from the
   v2.1 climate check via scripts/make_release_checkpoint.py; params calibration/map_world_r44_terrain21). build_control_v21
   now shades with the atlas's own terrain_file.
