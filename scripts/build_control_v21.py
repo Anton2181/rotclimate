@@ -24,6 +24,7 @@ from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "scripts")]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 OUT = ROOT / "output/control_v21_20261107"
 CASE = "joint365"
 MMU = 3                                    # minimum mapping unit, cells
@@ -186,7 +187,7 @@ def build(name, mode):
 
 def main():
     done = []
-    names = sys.argv[1:] or ["free_fit", "earth_fit", "whittaker_fit"]
+    names = sys.argv[1:] or active(["free_fit", "earth_fit", "whittaker_fit"])
     for name in names:
         meta = json.loads((ROOT / "atlases" / name / "data/atlas.json").read_text())
         for mode in ["raw"] + (["corrected"] if meta.get("corrected_climate") else []):

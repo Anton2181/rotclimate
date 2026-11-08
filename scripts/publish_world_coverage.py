@@ -8,6 +8,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 VIEWS=[('coverage','Seasonal access','Bins with outward and return access to the same site, within the selected per-leg budget.'),
        ('isolation','Longest access gap','Longest cyclic run without that same-site two-way access, including across the year boundary.'),
@@ -40,7 +41,7 @@ def main():
     items=[dict(color=c,label=l) for c,l in zip(['#eee9df','#d8c8b2','#c6b593','#a1b8a3','#69998a','#286f70'],
         ['No modelled access bins','1–3 bins','4–6','7–9','10–11','All 12 bins'])]
     pop=np.array([i.bit_count() for i in range(4096)],np.uint8)
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in active(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';meta=json.loads((data/'atlas.json').read_text());packets={}
         for mode in ['raw']+(['corrected'] if meta.get('corrected_climate') else []):
             folder=origin/(name+'_'+mode);review=json.loads((folder/'review.json').read_text())

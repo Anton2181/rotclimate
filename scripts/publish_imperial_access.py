@@ -7,6 +7,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -22,7 +23,7 @@ def main():
     cases=['recorded_centres','marked_places','proposed_towns','proposed_tracks','road_sources','forts_legions']
     palette=['#eee9df','#d8c8b2','#c6b593','#a1b8a3','#69998a','#286f70']
     summaries=[]
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in active(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';base=json.loads((data/'atlas.json').read_text());packets={}
         shutil.copyfile(inventory_path,data/'administrative_inventory.json')
         with (data/'imperial_centres.csv').open('w',newline='',encoding='utf-8') as stream:

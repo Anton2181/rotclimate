@@ -32,6 +32,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path[:0] = [str(ROOT), str(ROOT / "scripts")]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 import numpy as np  # noqa: E402
 
 from harvest.fertility_regimes import SPRING_CURVE, WHEAT_CURVE, equilibrium_yield  # noqa: E402
@@ -194,7 +195,7 @@ def earth():
 # --- map atlases ----------------------------------------------------------------------------------
 
 def atlas_modes():
-    for name in ("free_fit", "earth_fit", "whittaker_fit"):
+    for name in active(("free_fit", "earth_fit", "whittaker_fit")):
         data = ROOT / "atlases" / name / "data"
         meta = json.loads((data / "atlas.json").read_text())
         yield name, "raw", data, data, meta

@@ -11,6 +11,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -32,7 +33,7 @@ def main():
         'harvest/export.py','population/export.py','scripts/review_world_coverage.py','data/polity_affiliation_aliases.json',
         'data/source/ravages_v8/borders_fill.png','data/source/ravages_v8/polities.json']}
     summaries=[];all_inputs={};popcount=np.array([i.bit_count() for i in range(4096)],np.uint8)
-    for name,mode in [('free_fit','raw'),('earth_fit','raw'),('earth_fit','corrected'),('whittaker_fit','raw')]:
+    for name,mode in active([('free_fit','raw'),('earth_fit','raw'),('earth_fit','corrected'),('whittaker_fit','raw')]):
         atlas=ROOT/'atlases'/name;data=atlas/'data';prefix='' if mode=='raw' else 'corrected/'
         folder=origin/(name+'_'+mode);folder.mkdir(exist_ok=True)
         paths=[ip,ap,data/'atlas.json',data/prefix/'atlas.bin',data/prefix/'harvest.json',data/prefix/'harvest.bin',data/'winds12.npz']

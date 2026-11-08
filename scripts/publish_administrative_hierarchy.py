@@ -8,6 +8,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 VIEWS=[('local_marked','Provincial reply · marked interchanges',0,'local'),
        ('local_proposed','Provincial reply · proposed transport',1,'local'),
@@ -32,7 +33,7 @@ def main():
         'Budgets update seat readouts, not political control. Uses a separate travel calculation from Imperial access. '
         'Two unresolved seats have no assigned times; see the methods for assumptions.')
     registry=None
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in active(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';meta=json.loads((data/'atlas.json').read_text());packets={}
         for mode in ['raw']+(['corrected'] if meta.get('corrected_climate') else []):
             folder=origin/(name+'_'+mode);review=json.loads((folder/'review.json').read_text())

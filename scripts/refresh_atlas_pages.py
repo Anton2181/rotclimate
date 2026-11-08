@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_atlas_variant import page  # noqa: E402
+from atlas_set import RETIRED  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 PAGES = json.loads((ROOT / "atlases" / "pages.json").read_text())
 
@@ -22,6 +23,8 @@ def main():
     args=parser.parse_args()
     src = (ROOT / "atlas" / "index.html").read_text()
     for name, h in PAGES.items():
+        if name in RETIRED:
+            continue
         out = ROOT / "atlases" / (name+'_next' if args.staging else name)
         if not out.exists():
             continue

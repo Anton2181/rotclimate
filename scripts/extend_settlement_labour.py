@@ -10,6 +10,7 @@ import sys
 from concurrent.futures import ThreadPoolExecutor
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -29,7 +30,7 @@ def main():
     origin=ROOT/'output/settlement_labour_20261105';origin.mkdir(exist_ok=True)
     baseline=ROOT/'output/settlement_integration_20261104';ls=json.loads((ROOT/'data/settlement_labour_model.json').read_text());reviews=[]
     new_sources=['scripts/extend_settlement_labour.py','harvest/field_support.py','data/settlement_labour_model.json','research_notes/farm_labour_20261103.json','harvest/work_maps.py']
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in active(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';original=json.loads((data/'atlas.json').read_text())
         for mode in ['raw']+(['corrected'] if original.get('corrected_climate') else []):
             folder=data/('corrected' if mode=='corrected' else '');old=baseline/(name+'_'+mode);out=origin/(name+'_'+mode);out.mkdir(exist_ok=True)

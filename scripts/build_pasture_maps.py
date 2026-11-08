@@ -6,6 +6,7 @@ import sys
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from atlas_set import active  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
 
 
 def main():
@@ -49,7 +50,7 @@ def main():
         pilots=pilots,sources_sha256=sources)
     write_json(out/'protocol.json',protocol)
     all_inputs={};overall=[]
-    for name in ['free_fit','earth_fit','whittaker_fit']:
+    for name in active(['free_fit','earth_fit','whittaker_fit']):
         data=ROOT/'atlases'/name/'data';original=json.loads((data/'atlas.json').read_text());packets={}
         for mode in ['raw']+(['corrected'] if original.get('corrected_climate') else []):
             print('Building',name,mode,flush=True);prefix='' if mode=='raw' else 'corrected/';folder=data/prefix
