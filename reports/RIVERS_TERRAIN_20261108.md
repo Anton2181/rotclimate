@@ -128,3 +128,25 @@ The tier tops, the tier membership of every cell, the drawn rivers and the Earth
 * Height map v2.1 stays as it is.
 * The height map cannot do much for the painted-zone fit, because the misfit lies in the lowland moisture field. That is the
   climate model's work: P8 maritime lag and the W3 fantasy-map desert.
+
+## 3. Release (8 November 2026)
+
+Drivers:
+* `scripts/release_r44_rivers.sh` (base);
+* `scripts/release_r44_rivers_addons.sh` (promotion and add-ons).
+
+Logs are in `output/atlas_r44r/`. The checkpoint is the 3-seed v2.1 climate-check run, made with
+`scripts/make_release_checkpoint.py`, which checks that its parameters equal `calibration/map_world_r44_terrain21/params.json`.
+
+* **Base build.** The base build ran 00:45–01:37: world, diagnostics, corrected layers and climate (r44 corrections),
+  languages and the physics tag.
+* **Promotion.**
+  * The live atlas was backed up to `output/atlas_r44r/previous_atlases/earth_fit_r44v2`.
+  * The promoted atlas has exactly the previous file set.
+  * Its `params.json` names `map_height_v21.npz`.
+* **Add-ons.** All add-ons were rebuilt in dependency order (01:37–02:22). The free and Whittaker atlases were recomputed too,
+  through the shared pilots and the joint administrative inventory.
+* **Control v2.1 on v2.1 terrain.** It holds 68.2 % (raw) and 68.0 % (corrected) of Earth-fit land; r44 on v2 held 68.1 % and
+  67.8 %. The hillshade now comes from the atlas's own terrain file.
+* **Smoke.** The smoke test (`scripts/check_atlas_smoke.js`) passes on all three atlases: 65 / 70 / 67 layers, as in r44, with
+  no errors and no failed requests.
