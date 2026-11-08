@@ -184,10 +184,31 @@ Owner: "The Simulated Rivers are still wildly different from the Target ones".
 
 ![Simulated rivers before and after](figures/sim_rivers_before_after.png)
 
-## Release
+## Release (8 November 2026, Earth fit only)
 
-* **Drivers:** `scripts/release_d1_arable.sh` (Earth-fit base from the height map v2.1 checkpoint, plus the free and
-  Whittaker food chain refreshed in place) and `scripts/release_d1_arable_addons.sh` (promotion and add-ons).
+* **Owner decision:** the free and Whittaker fits are retired. Their atlases stay as the last published snapshot, and only
+  the Earth fit is rebuilt (`scripts/atlas_set.py`).
+* **Drivers.**
+  * `scripts/release_d1_arable.sh`: Earth-fit base from the height map v2.1 checkpoint, 11:46–12:44. It was stopped before
+    its free and Whittaker stages, and their partial refresh was reverted.
+  * `scripts/release_earth_fit_d1.sh`: the D2b re-export on the staged atlas (farming raw and corrected, foraging, reach,
+    languages), promotion, and the add-on layers, 13:34–14:47.
 * **Climate:** unchanged.
-* **Changed:** the arable share, `FALLOW`, and everything downstream of them (farming, population, settlement, institutions,
-  control).
+* **Changed:** the arable share, the irrigation gate (5 m), simulated rivers at the drawing's resolution, and everything
+  downstream (farming, population, settlement, institutions, control). The previous live atlas is in
+  `output/atlas_d1/previous_atlases/earth_fit_rivers`.
+
+| Earth fit | Before | After |
+|---|---|---|
+| Food capacity (people) | 255.4 M | 225.3 M |
+| Crop capacity | 246.2 M | 216.0 M |
+| c.200 AD settlement scenario | 185.9 M | 164.7 M |
+| Double-cropped share | 5.5 % | 5.0 % |
+| Control v2.1, land held (raw / corrected) | 68.2 % / 68.0 % | 67.0 % / 67.4 % |
+| Staffed sites (raw) | 1,039 of 1,072 | 987 of 1,034 |
+
+* **Why capacity falls.** Steep tier-3/4 land loses arable share to the Earth-fitted slope rule, and irrigation narrows to
+  valley floors. Population now follows the valleys instead of the flat tier blocks.
+* **Smoke test** (`scripts/check_atlas_smoke.js`): passes, 70 layers, no errors, no failed requests.
+
+![Earth fit before and after](figures/earth_fit_d1_before_after.png)
