@@ -137,3 +137,29 @@ stand (P6). It was not run on dev31.
   fixed.
 - **The next step is P6**, East Asia's spring: monsoon ascent and frontal
   rain. Then rescreen e51 + e3 on dev31.
+
+## Addendum, 8 November 2026: the coupling re-screened on r44 (after P6)
+
+Same nine regions and settings, on the released r44 physics (`scripts/diag_autumn_phase.py --params
+calibration/local_accuracy_20261023/r44_params.json`; `output/autumn_phase_20261108/couple_r44.json`). Mean error, °C:
+
+| region | r44 | e51 0.5 d | e51 + e3 0.5 d |
+|---|---:|---:|---:|
+| Levant | 2.01 | 1.94 | **1.76** |
+| Anatolia | 1.78 | 1.68 | **1.44** |
+| Iran plateau | 2.47 | **2.39** | 2.42 |
+| Morocco | 1.72 | 1.72 | **1.65** |
+| Texas plains | 1.10 | 1.08 | **1.06** |
+| south-east US | 1.13 | 1.13 | 1.13 |
+| Japan | **1.77** | 2.96 | 2.86 |
+| East China | **2.06** | 2.60 | 2.59 |
+| Korea | **2.01** | 2.89 | 2.77 |
+| mean | **1.78** | 2.05 | 1.97 |
+
+* **P6 did not remove the conflict.** The fast coupling still helps the Mediterranean and Texas, and still overheats
+  East Asia's coasts. Korea's autumn bias goes from +1.8 to +2.8 °C, and Japan's from +0.7 to +2.1 °C.
+* **Why East Asia.** Cold continental air crosses a warm sea there, the Sea of Japan and the Kuroshio. A 0.5-day
+  unstable coupling brings it almost to sea temperature before it reaches land. The real outflow stays cold in its
+  deep boundary layer.
+* **Verdict.** A global switch is not adoptable. P8 needs a coupling that depends on the air mass's depth or fetch,
+  not on the sea alone. No dev49 run and no sealed set were spent.
