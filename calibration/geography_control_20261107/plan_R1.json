@@ -216,6 +216,17 @@
    "note": "all changes come from the lake handling (same composition conditioned with and without lakes reproduces v2.1 and v2.2 exactly); about half lie along the lake systems and half are low basins whose fill level follows a changed river bed"
   },
   "simulated_rivers": "rotclimate/routing.py: lakes with a level are part of the drainage, so outflows carry the inflows (lake 8 outflow 8.7 -> 1,830 m3/s; lake chain 2-3-5-4 outflow 7 -> 1,069)",
-  "file": "output/terrain_erosion_20261107/map_height_v22.npz"
+  "file": "output/terrain_erosion_20261107/map_height_v22.npz",
+  "climate_check": {
+   "script": "scripts/check_terrain_v22_climate.py",
+   "delta_strict_points": {
+    "raw": -0.00840760047082778,
+    "corrected": 0.01681520094165001
+   },
+   "raw_T_mean_abs_diff_c": 0.0010944520942355112,
+   "raw_P_ratio_median": 0.9999999701460398,
+   "adopt_for_climate": true,
+   "checkpoint": "output/r44_lakes_world/candidate_001.pkl"
+  }
  }
 }
