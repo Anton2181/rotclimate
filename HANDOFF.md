@@ -1,3 +1,21 @@
+# Block D: arable land from slope (D1) + irrigation by height above the river (D2) — 8 November 2026
+
+* D1 (calibration/geography_control_20261107/plan_D1.json): arable share a(S) = 0.018 + 0.982 / (1 + (S / 2.75 deg)^1.29)
+  of the ~1.85 km slope, fitted on Copernicus GLO-90 with the GAEZ slope rule; blind tiles 12/12 better (RMSE 0.308 ->
+  0.184, bias +0.036). Map (harvest/export.py geometry, atlases with a terrain file): tiers 0.85/0.58/0.44/0.30 (were
+  constants 0.85/0.75/0.45/0.08); land mean unchanged (0.744 -> 0.739). data/arable_slope_model.json.
+* D2: irrigation x exp(-H / 10 m), H = height above nearest river; HID 1900 (Siebert et al. 2015) blind AUC 0.539 -> 0.671.
+* Earth harness on both (scripts/land_people_earth.py defaults --arable slope --irrigation hand; ETOPO 60" via
+  scripts/arable_slope_earth.py; irr_distance kept for water distance in polity/earth.py). FALLOW 0.68 -> 0.600 (NCP AD 2
+  census). No-harm: regional populations RMS 1.701 -> 1.652 (Egypt worse: Nile floodplain wider than the 6 km distance
+  rule); control dev BA Rome 0.8488 -> 0.8485, Han 0.6637 -> 0.6628 (whole Earth chain rebuilt in a worktree).
+* D4 (roads) already on the eroded terrain by construction (travel graphs use the atlas elevation). D3 (valley towns)
+  inherits through density (D1) and the site score's flat-ground and river terms; no separate Earth refit yet.
+* Release: scripts/release_d1_arable.sh + release_d1_arable_addons.sh (Earth-fit from the v2.1 checkpoint; free and
+  Whittaker food chain refreshed in place, backups in output/atlas_d1/previous_atlases). Report: reports/ARABLE_SLOPE_20261108.md.
+* Open: D5 control v3 needs a fresh blind pool (all identified pools spent); the evolve() m^4 units refit (B2, hill fit,
+  plan_R1); Egypt/Nile floodplain irrigation reach.
+
 # Drawn rivers kept in the eroded map (plan_R1) + height map as climate lever (plan_T1) — 8 November 2026
 
 * Owner: "all of our drawn rivers also have to be there in the eroded map". Strict check (scripts/terrain_rivers.py check):
