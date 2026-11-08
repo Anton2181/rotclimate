@@ -46,5 +46,13 @@
    "P2_cored": 0.965
   },
   "note": "seen data, nothing selected; grid conversion verified on the Ordnance Survey worked example (TG 51408 13177 -> 52.65757 N, 1.71792 E)"
+ },
+ "amendment_1": {
+  "date": "2026-11-08",
+  "made": "after reading the statistics database schema, flag values and the Notes of flagged rows; before any population column was opened",
+  "source": "data/cache/domesday/statistics_content.mdb (owner upload of the Hull Domesday statistics database, Access .mdb; sha256 3fc452b4fb66f898cd8fcb8c713704393b44d5db10e65f395bbe09735b3146e1)",
+  "people": "per holding (table Manors) the sum of Villagers, Smallholders, Slaves, Female slaves, Freemen, free men, Priests, cottagers, OtherPop, MiscPop and Burgesses (missing = 0); there is no total field",
+  "duplicates": "holdings flagged Duplicates = X (whole entry duplicated in another entry, whose partner carries E) are excluded so each entry counts once; G (geld duplicated) and P (mills or land possibly duplicated) keep their people; Subholdings = Y entries already include their subholdings and are kept",
+  "join": "Manors.StructIdx -> ByPlace.StructIdx -> ByPlace.PlacesIdx -> Places.OSrefs (places database); a holding with several distinct places is split equally; ByPlace place keys missing from the places database are counted and reported, not imputed"
  }
 }
