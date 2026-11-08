@@ -15,8 +15,15 @@
   inherits through density (D1) and the site score's flat-ground and river terms; no separate Earth refit yet.
 * Release: scripts/release_d1_arable.sh + release_d1_arable_addons.sh (Earth-fit from the v2.1 checkpoint; free and
   Whittaker food chain refreshed in place, backups in output/atlas_d1/previous_atlases). Report: reports/ARABLE_SLOPE_20261108.md.
+* D2b (plan_D1 "D2b", scripts/irrigation_reach_d2b.py): reach 6/12/24/48 km x H0 5/10/20 m scored on AUC + amount vs
+  HID 1900 (arid cells); dev chose 6 km x 5 m; blind Americas (now spent) amount 2.51x -> 2.33x, AUC 0.725 -> 0.726: H0
+  10 -> 5 m (harvest/export.py IRRIGATION_HAND_H0, land_people_earth.HAND_H0). FALLOW kept 0.600; regions RMS 1.652 ->
+  1.653; Egypt +0.64 -> +0.72. Wider reach ranks better but over-irrigates more. Residual = Nile delta fan (12.5k km2 HID
+  vs 5.2k model: distributaries) + arid rivers over-irrigated where 1900 is history-shaped (Mesopotamia, Niger).
+  Exploration scripts/explore_irrigation_discharge.py (dev only; route over a domain 8 deg wider; burn NE rivers; WorldClim
+  lakes passable). Map refresh: scripts/release_d2b.sh (Earth-fit only; it alone has a terrain file).
 * Open: D5 control v3 needs a fresh blind pool (all identified pools spent); the evolve() m^4 units refit (B2, hill fit,
-  plan_R1); Egypt/Nile floodplain irrigation reach.
+  plan_R1); delta-fan irrigation rule (Egypt), needs a reference/blind pool not shaped by 1900 history.
 
 # Drawn rivers kept in the eroded map (plan_R1) + height map as climate lever (plan_T1) — 8 November 2026
 
