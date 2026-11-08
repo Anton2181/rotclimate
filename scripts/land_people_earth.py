@@ -157,7 +157,15 @@ def arable_share(elev):
     return np.vectorize(ARABLE_BY_TIER.get)(tier).astype(np.float32), relief
 
 
-def compute(out, margins=None):
+def arable_from_slope(shape, fallback):
+    """plan_D1 D1b: the D1 slope rule on this grid (scripts/arable_slope_earth.py); relief tiers where ETOPO has no land."""
+    a = np.load(ROOT / "data/cache/arable_slope_earth/arable_5m.npz")["arable"]
+    if a.shape != shape:
+        raise ValueError(f"slope arable grid {a.shape} does not match the window {shape}")
+    return np.where(np.isfinite(a), a, fallback).astype(np.float32)
+
+
+def compute(out, margins=None, arable_rule="relief"):
     t0 = time.time()
     rs, cs = window_slices()
     elev = wc("elev")[rs, cs]
@@ -172,6 +180,8 @@ def compute(out, margins=None):
     print(f"climate {shape} read ({time.time() - t0:.0f}s)", flush=True)
     irr = irrigation(shape)
     arable, relief = arable_share(elev)
+    if arable_rule == "slope":
+        arable = arable_from_slope(arable.shape, arable)
     print(f"rivers and relief ({time.time() - t0:.0f}s)", flush=True)
     res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land],
                          margins=margins)
@@ -192,6 +202,7 @@ def main():
     ap.add_argument("--reuse", action="store_true", help="reuse earth.npz")
     ap.add_argument("--margins", help="T0,T1,A0,A1: apply harvest.models.margin_reliability to the crop capacity")
     ap.add_argument("--crop-margins", help="T0,T1,A0,A1 (or T0,T1 for cold only): margins inside the crop model, the dry one on the rain-fed share only")
+    ap.add_argument("--arable", choices=("relief", "slope"), default="relief", help="arable share rule (slope: plan_D1 D1b)")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
@@ -203,7 +214,7 @@ def main():
     else:
         cm = [float(x) for x in a.crop_margins.split(",")] if a.crop_margins else None
         margins = ((cm[0], cm[1]), (cm[2], cm[3]) if len(cm) == 4 else None) if cm else None
-        full, land, irr, arable, lat, lon = compute(out, margins)
+        full, land, irr, arable, lat, lon = compute(out, margins, a.arable)
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     cell_km2 = (KM_DEG / RES) ** 2 * np.cos(np.radians(LAT))
