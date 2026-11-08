@@ -4,6 +4,9 @@
   atlases/whittaker_fit stay as their last published snapshot (hosted pages untouched, not deleted; URLs in
   atlases/artifact_links_retired.json, removed from artifact_links.json so the Earth-fit pack drops its links to them).
 * Release driver for the Earth fit only: scripts/release_earth_fit_d1.sh (D2b re-export on the staged atlas, promote, add-ons).
+* RELEASED + HOSTED 8 Nov 14:47 / 15:00: Earth fit with D1 + D2 + D2b + fine simulated rivers (smoke passes, 70 layers);
+  hosted https://claude.ai/artifact/ABFAoyPzTuMNVWmByPxctF versions 40-42 (pack diffed against scratchpad pack_r44r; next
+  diff base: pack_d1). Food capacity 255 -> 225 M, settlement scenario 186 -> 165 M, control held 68.2 -> 67.0 % (raw).
 
 # Block D: arable land from slope (D1) + irrigation by height above the river (D2) — 8 November 2026
 
