@@ -1,0 +1,35 @@
+{
+ "version": 1,
+ "date": "2026-11-08",
+ "status": "frozen before any Earth tile is downloaded",
+ "context": "block D of reports/GEOGRAPHY_CONTROL_PLAN_20261107.md (G-D2): the chain on the eroded height map. Height map v2.1 (every drawn river a flow path, Earth-fitted valleys) is live in the Earth-fit atlas; the farming layer (harvest/export.py geometry) still takes the arable share as one constant per drawn tier (scripts/land_people.py ARABLE_BY_TIER = 0.85 / 0.75 / 0.45 / 0.08) and irrigation as distance to the drawn rivers.",
+ "order_of_work": [
+  "D1 arable share from slope (this plan)",
+  "D2 river irrigation gated by height above the drawn river (HAND)",
+  "D3 settlement sites with terrain covariates (valley, slope) in the settlement-model harness",
+  "D4 minor roads on the eroded terrain",
+  "D5 control v3 = v2.1 rules on the terrain-aware chain; Earth dev pools, then a fresh blind pool declared first",
+  "release once, after the parts that pass"
+ ],
+ "D1": {
+  "question": "what share of a 1.84 km map cell can be ploughed, given the slope the map resolves?",
+  "rule_kept": "the GAEZ terrain-slope rule the tier constants already encode (Fischer et al. 2012, GAEZ v3/v4 slope classes on 90 m SRTM): land under 8 % slope fully arable, 8-16 % 0.6, 16-30 % 0.3, steeper 0.05",
+  "earth_target": "for every ~1.85 km Earth cell, the GAEZ rule applied to the share of its 90 m pixels in each slope class (Copernicus GLO-90 DEM, 3 arc-seconds, open data); sea and flat water (elevation <= 0, or exactly flat over > 50 % of the cell) excluded",
+  "predictors": "what the map has at its own resolution: slope of the ~1.85 km block-mean surface (central differences, degrees), and the block-mean elevation",
+  "candidates": {
+   "baseline": "today's rule: ARABLE_BY_TIER by the map's tier tops applied to the block-mean elevation (62 / 814 / 1135 / 2528 m)",
+   "S": "a(S) = lo + (hi - lo) / (1 + (S / S0)^k), fitted (lo, hi, S0, k) by least squares on development cells",
+   "S_band": "a(S) as above with hi set per elevation band (lowland / upland) - adopted over S only if it lowers development RMSE by >= 0.01"
+  },
+  "tiles": {
+   "format": "1 x 1 degree, south-west corner",
+   "development": ["N44E010", "N48E002", "N37E022", "N41E014", "N36E036", "N33E044", "N30E031", "N34E113", "N30E103", "N25E085", "N39E033", "N52E013"],
+   "blind": ["N45E006", "N47E019", "N38E015", "N40E022", "N32E035", "N29E031", "N35E112", "N26E118", "N28E077", "N40E044", "N51E000", "N37E027"],
+   "why": "old-world farming land of c. AD 200 and its margins, each set mixing plains, hills and mountains; none has been used for any fit"
+  },
+  "blind_gate": "on the blind tiles, the chosen candidate's RMSE against the Earth target is below the baseline's in at least 8 of 12 tiles and in total, and its mean bias is within +/- 0.05",
+  "map_check": "the map's own 1.84 km slope distribution in tier 1 is compared with Earth lowland slopes at the same scale (output/terrain_erosion_20261107/earth_lowland_slopes.json ref2) and reported, since a(S) is applied to the map's slopes",
+  "if_it_passes": "harvest/export.py geometry takes the arable share from a(S) on the atlas's terrain file (tier constants stay for atlases without one); the farming, population, settlement and control layers inherit it at the next release",
+  "if_it_fails": "the tier constants stay and the result is reported"
+ }
+}
