@@ -11,5 +11,36 @@
  "fit": "log10 A = log10 a + b log10 Q by least squares on the development deltas: Africa, Europe and Asia (river mouth east of 30 W, excluding Oceania: south of 10 S and east of 110 E)",
  "check": "held out: the Americas and Oceania. Reported: RMSE of log10 A against a constant (the development median) and the fit's own RMSE; the fit is used if it beats the constant on the held-out deltas, otherwise A = the development median for every river",
  "s_fan": "HID 1900 equipped share inside the Nile delta polygon (convex hull of the Edmonds points; development region of D2/D2b, not a blind pool); one number, reported with the dry-delta values it rests on",
- "map": "harvest/export.py geometry (Earth-fit atlas with a terrain file); simulated discharge from rotclimate.routing (rivers flow through open lakes, height map v2.2)"
+ "map": "harvest/export.py geometry (Earth-fit atlas with a terrain file); simulated discharge from rotclimate.routing (rivers flow through open lakes, height map v2.2)",
+ "result_discharge_only": {
+  "a": 0.10190750623714089,
+  "b": 1.0554523009548855,
+  "dev": 884,
+  "held": 382,
+  "held_r2": 0.1957852726810112,
+  "held_rmse_fit": 1.283342423890974,
+  "held_rmse_constant": 1.4314591518391604,
+  "nile": {
+   "q": 1934.082,
+   "area_km2": 28344.8042197238,
+   "predicted_km2": 299.86353161305027
+  },
+  "note": "discharge alone explains ~20 % of the variance in delta area; the Nile is at about the 94th percentile for its discharge"
+ },
+ "amendment_1": {
+  "date": "2026-11-08",
+  "by": "owner choice (\"Earth-fitted drivers\"), after the discharge-only result",
+  "predictors": {
+   "sediment": "BQART pristine sediment load (Syvitski & Milliman 2007): Qs = w Q^0.31 A^0.5 R T for basin T >= 2 C, 2 w Q^0.31 A^0.5 R below, w = 0.0006 (Qs Mt/yr, Q km3/yr, A km2, R km, T C), B = 1; Earth: Q and A from HydroRIVERS (DIS_AV_CMS, UPLAND_SKM), R = highest reach head upstream minus the mouth, T = catchment-area-weighted mean of WorldClim 2.1 annual temperature at the reach heads (5 arc-min); map: the same from simulated discharge, routed upstream area, the height map and the model climate",
+   "exposure": "share of 32 directions from the mouth whose open-water fetch reaches 1,500 km (land from WorldClim 5 arc-min on Earth, the map land mask on the map, the map edge counted as open sea)"
+  },
+  "candidates": {
+   "M1": "log10 A_delta ~ log10 Qs",
+   "M2": "log10 A_delta ~ log10 Qs + exposure",
+   "M3": "log10 A_delta ~ log10 Q + log10 Qs + exposure"
+  },
+  "selection": "5-fold cross-validated RMSE on the development deltas (Old World); the lowest wins",
+  "check": "held-out Americas + Oceania once more (already used once for the discharge-only fit, so not fully unseen); reported against the discharge-only fit and the constant; the chosen model replaces the discharge-only rule if it beats it there",
+  "s_fan": "unchanged (Nile HID 1900 share inside the Edmonds polygon)"
+ }
 }
