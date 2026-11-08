@@ -186,5 +186,39 @@
     "weak_spot": "Egypt ln(hist/cap) +0.32 -> +0.64: the gate removes desert cliffs within 6 km of the Nile; the 6 km distance decay is narrower than the 10-20 km floodplain (older limitation)"
    }
   }
+ },
+ "D2b": {
+  "date": "2026-11-08",
+  "status": "frozen before any D2b candidate is scored",
+  "question": "irrigation reach on wide floodplains: the D2 rule keeps the distance decay (exp(-d / 6 km) from navigable rivers, 0.6 exp(-d / 2.5 km) from streams) and multiplies by exp(-H / 10 m); the 6 km decay is narrower than floodplains like the Nile (10-20 km), and D2 was chosen on ranking (AUC) only, never on the amount",
+  "candidates": {
+   "L_nav_km": [
+    6,
+    12,
+    24,
+    48
+   ],
+   "L_stream": "L_nav x 2.5 / 6",
+   "H0_m": [
+    5,
+    10,
+    20
+   ],
+   "cutoff": "no irrigation beyond 60 km of a mapped river",
+   "note": "L_nav 6 km, H0 10 m is today's D2 rule"
+  },
+  "metrics": {
+   "ranking": "AUC as in D2 (HID 1900 AEI_HYDE_FINAL_IR >= 10 % of the cell; dry cells P/PET < 0.65 within 30 km of a mapped river)",
+   "amount": "|ln(sum of model irrigable area / sum of HID 1900 equipped area)| over arid cells (P/PET < 0.2) within 30 km of a mapped river, where farming is irrigation or nothing and 1900 equipment approximates the potential; model irrigable area = irr x cell land area"
+  },
+  "regions": {
+   "development": "12 W - 45 E, 0 - 56 N (as D2 development)",
+   "check": "60 E - 125 E (the D2 blind region: spent, reported only)",
+   "blind": "the Americas, 10 S - 50 N, 125 W - 35 W (never used): ETOPO 2022 60\", Natural Earth 10 m rivers, WorldClim 2.1 5' for P/PET (Hargreaves, as the harness)"
+  },
+  "selection": "among candidates whose development AUC is at least today's rule minus 0.01, the lowest development amount error",
+  "blind_gate": "on the Americas, the chosen candidate's amount error is below today's rule's and its AUC is not more than 0.01 below it",
+  "if_it_passes": "the map and the Earth harness take the new reach; FALLOW refitted; the D1b no-harm checks repeated (regional populations incl. Egypt reported, control dev pools) before a release",
+  "if_it_fails": "the D2 rule stays; reported"
  }
 }
