@@ -1,0 +1,15 @@
+{
+ "id": "DF deltas on the map (owner, 8 Nov 2026: \"I don't see why we couldn't have a Nile-like delta in our world, we shouldn't prevent it\")",
+ "date": "2026-11-08",
+ "status": "frozen before any delta area is joined to a discharge",
+ "why_not_height": "a height rule (low land near a mouth) cannot find deltas on this map: its coasts sit at ~1 m by construction (plan_D1 closing_note). A delta is tied to a river's mouth and to the water it brings.",
+ "rule": "every drawn river that ends at the sea or a lake builds a fan: land within r of its mouth, r = sqrt(2 A / pi) (a half disc of area A), A = a Q^b from the river's simulated mean discharge Q at the mouth; inside the fan the irrigable share is s_fan x exp(-H / 5 m) (H the height above the mouth's bed, the D2b gate); the map takes the larger of this and the river-distance rule",
+ "earth_data": {
+  "deltas": "Edmonds et al. 2020 (Nat. Commun. 11:4741, CC BY 4.0) supplementary table: river mouth point and geomorphic area of each delta (data/cache/deltas/edmonds2020_deltas.xlsx)",
+  "discharge": "HydroRIVERS v1.0 (Lehner & Grill 2013) DIS_AV_CMS of outlet reaches (NEXT_DOWN = 0); a delta takes the largest outlet discharge within 30 km of its river-mouth point; deltas without one >= 10 m3/s are left out and counted"
+ },
+ "fit": "log10 A = log10 a + b log10 Q by least squares on the development deltas: Africa, Europe and Asia (river mouth east of 30 W, excluding Oceania: south of 10 S and east of 110 E)",
+ "check": "held out: the Americas and Oceania. Reported: RMSE of log10 A against a constant (the development median) and the fit's own RMSE; the fit is used if it beats the constant on the held-out deltas, otherwise A = the development median for every river",
+ "s_fan": "HID 1900 equipped share inside the Nile delta polygon (convex hull of the Edmonds points; development region of D2/D2b, not a blind pool); one number, reported with the dry-delta values it rests on",
+ "map": "harvest/export.py geometry (Earth-fit atlas with a terrain file); simulated discharge from rotclimate.routing (rivers flow through open lakes, height map v2.2)"
+}
