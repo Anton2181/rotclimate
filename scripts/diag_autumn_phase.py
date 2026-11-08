@@ -65,8 +65,11 @@ def main():
     ap.add_argument("--confs", help="JSON {name: overrides} in place of the observed-forcing set")
     ap.add_argument("--regions", help="comma-separated regions in place of the early-phase set")
     ap.add_argument("--tag", default="diag")
+    ap.add_argument("--params", type=Path, help="parameter file in place of r41 (e.g. the r44 release)")
     a = ap.parse_args()
-    global CONF, REGIONS
+    global CONF, REGIONS, PARAMS
+    if a.params:
+        PARAMS = a.params
     if a.confs:
         CONF = json.loads(a.confs)
     if a.regions:
