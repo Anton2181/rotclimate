@@ -100,6 +100,35 @@
    "population_no_harm": "RMS not worse by more than 0.05",
    "control_no_harm": "each pool loses no more than 0.01 balanced accuracy"
   },
-  "decision": "both pass: D1 on the map and on Earth, FALLOW replaced; either fails: D1 is withdrawn from the map as well (one calibrated chain) and the result is reported"
+  "decision": "both pass: D1 on the map and on Earth, FALLOW replaced; either fails: D1 is withdrawn from the map as well (one calibrated chain) and the result is reported",
+  "result": {
+   "date": "2026-11-08",
+   "fallow": {
+    "old": 0.68,
+    "exact_old_fit": 0.687,
+    "new": 0.599
+   },
+   "population_rms": {
+    "before": 1.701,
+    "after": 1.648
+   },
+   "control_ba": {
+    "rome": {
+     "before": 0.8488,
+     "after": 0.8486
+    },
+    "han": {
+     "before": 0.6637,
+     "after": 0.663
+    }
+   },
+   "gates": {
+    "population_no_harm": true,
+    "control_no_harm": true
+   },
+   "adopted": true,
+   "applied": "scripts/land_people.py FALLOW 0.599; scripts/land_people_earth.py --arable slope by default (output/land_people/earth rebuilt); Earth windows output/polity_earth/{rome,han}.npz people and output/earth_control_20261106/{rome,han}_food.npz refreshed; older Earth intermediates (blind pools, settlement-model harness) are as they were when those tests ran",
+   "checks_file": "output/arable_slope_d1/d1b_checks.json"
+  }
  }
 }

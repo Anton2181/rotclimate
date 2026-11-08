@@ -202,7 +202,7 @@ def main():
     ap.add_argument("--reuse", action="store_true", help="reuse earth.npz")
     ap.add_argument("--margins", help="T0,T1,A0,A1: apply harvest.models.margin_reliability to the crop capacity")
     ap.add_argument("--crop-margins", help="T0,T1,A0,A1 (or T0,T1 for cold only): margins inside the crop model, the dry one on the rain-fed share only")
-    ap.add_argument("--arable", choices=("relief", "slope"), default="relief", help="arable share rule (slope: plan_D1 D1b)")
+    ap.add_argument("--arable", choices=("relief", "slope"), default="slope", help="arable share rule (slope: plan_D1 D1b, adopted)")
     a = ap.parse_args()
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)

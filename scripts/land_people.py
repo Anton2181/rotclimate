@@ -75,8 +75,10 @@ FARMED_SHARE = 0.6                         # of arable land: fields (the rest pa
 # of the fields, sown in a given year: between a two-field fallow (0.5) and
 # annual cropping (1), set so that the same rules on Earth's climate put the
 # Han North China Plain's AD 2 census population (29.4 M on 365,000 km²,
-# about 81 per km²) at its capacity (scripts/land_people_earth.py)
-FALLOW = 0.68
+# about 81 per km²) at its capacity (scripts/land_people_earth.py). Refitted
+# 8 Nov 2026 with the arable share from slope (plan_D1 D1b; 0.68 under the
+# relief-tier shares): the plain's flat land is ~0.99 arable, not 0.85
+FALLOW = 0.599
 # arable share by drawn terrain tier (lowland .. mountain): the GAEZ slope
 # classes (0-8 % fully, 8-16 % 0.6, 16-30 % 0.3, steeper 0.05) weighted by
 # the slopes typical of each landform
