@@ -1,7 +1,7 @@
 {
  "id": "P8a coast coupling refit (e3 stable coupling; e51 convective coupling with the e51b heating-rate ceiling)",
  "date": "2026-11-08",
- "status": "frozen before any dev49 run of these candidates",
+ "status": "closed: finalist failed sealed set h (S 1.0014)",
  "reference": {
   "name": "r44",
   "params": "calibration/local_accuracy_20261023/r44_params.json"
@@ -75,5 +75,17 @@
   "finalist": "C3_u05s05_cap2",
   "note": "all four pass; the gain is mostly on the retired sets a-c (S31 alone 0.999-1.006)",
   "stage_2": "waiting for the owner to release sealed set h"
+ },
+ "stage_2_result": {
+  "date": "2026-11-08",
+  "set": "h (calibration/sealed_20261107h), released by the owner, run once paired with r44",
+  "output": "output/maritime_p8_20261108/C3_u05s05_cap2/v3_sealed_h.log",
+  "S": 1.0014,
+  "T": 0.0172,
+  "P": -0.0145,
+  "n": 8,
+  "passes": false,
+  "by_region": "temperature worse on the tropical coasts: Top End 2.02 -> 2.24 C (cool bias -1.79 -> -2.05), New Guinea 1.58 -> 1.73, Ivory Coast 0.71 -> 0.76; Taimyr better 5.71 -> 5.61; rain better at Top End and New Guinea",
+  "verdict": "not adopted; r44 stays. The stable (e3) coupling cools dry-season tropical coasts, which the 49 development regions barely sample. Set h is spent and joins the development regions."
  }
 }

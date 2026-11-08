@@ -163,3 +163,30 @@ calibration/local_accuracy_20261023/r44_params.json`; `output/autumn_phase_20261
   deep boundary layer.
 * **Verdict.** A global switch is not adoptable. P8 needs a coupling that depends on the air mass's depth or fetch,
   not on the sea alone. No dev49 run and no sealed set were spent.
+
+## Addendum 2, 8 November 2026: plan P8a (frozen refit), not adopted
+
+Plan: `calibration/maritime_p8_20261108/plan.json`. A new switch, e51b (`ocean_unstable_cap`), puts a K/day ceiling on
+e51's convective warming, because a deep cold outbreak warms only so fast. It is default off.
+
+| Candidate | S49 | T | P | 28 km |
+|---|---|---|---|---|
+| C1: e3 at 0.25 days | 0.9931 | −1.7 % | +0.3 % | 0.990 |
+| C2: e3 at 0.5 days | 0.9921 | −1.7 % | +0.1 % | 0.991 |
+| **C3: e51 at 0.5 days + 2 K/day ceiling + e3 at 0.5 days** | **0.9910** | −2.1 % | +0.3 % | 0.992 |
+| C4: as C3, with e3 at 0.25 days | 0.9914 | −2.2 % | +0.5 % | 0.990 |
+
+* **Stage 1.** All four pass the development (S49) and 28 km gates. C3 is the finalist.
+* **Stage 2.** Sealed set h was released by the owner and run once, paired with r44. It scored **S 1.0014: fail**
+  (T +1.7 %, P −1.5 %).
+* **Where it failed.** The temperature loss is on the tropical coasts:
+  * Top End 2.02 → 2.24 °C, its cool bias deepening from −1.79 to −2.05;
+  * New Guinea 1.58 → 1.73 °C;
+  * Ivory Coast 0.71 → 0.76 °C.
+  Taimyr improves, and rain improves where the temperature worsens.
+* **Why.** The stable coupling (e3) pulls the dry-season air of tropical coasts down to the sea's temperature. The 49
+  development regions barely sample such coasts.
+* **Verdict.** r44 stays. Set h is spent. A next attempt should:
+  * restrict e3 to seas cooler than the tropical warm pool, or to the cool season;
+  * develop on h's tropical coasts, now seen;
+  * declare a fresh unseen set before its milestone.

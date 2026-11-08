@@ -1,4 +1,13 @@
 # Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
+# P8a coast coupling refit — 8 November 2026 (NOT adopted)
+
+* New switch e51b `ocean_unstable_cap` (K/day ceiling on e51 convective warming; default off; rotclimate/model.py).
+* Screen (12 dev regions): e51 alone overheats East Asia winter; e3 alone and e51+e51b(2 K/d)+e3 help.
+* Plan calibration/maritime_p8_20261108: 4 candidates all pass dev49 (S49 0.991-0.993) + 28 km; finalist C3
+  (e51 0.5 d, cap 2 K/d, e3 0.5 d). Owner released sealed set h: S 1.0014 FAIL (Top End 2.02 -> 2.24, New Guinea
+  1.58 -> 1.73; tropical coasts cooled by e3). r44 stays; set h SPENT. Next climate milestone needs a new sealed set.
+* Note: joint.validate_partition() already fails on 9 unclassified older fields (storm_plateau_*, terrain_file).
+
 # Tiered colours on the hosted atlas — 8 November 2026
 
 * Cause: the host caps an artifact at 511 files, so earlier publishes left every *_tiers.webp out (89 files); the hosted
