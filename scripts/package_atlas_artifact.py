@@ -38,6 +38,36 @@ def rewrite_nav(html: str, links: dict) -> str:
     return html.replace(nav.group(0), nav.group(1) + " ".join(kept) + "</nav>", 1)
 
 
+TIER_PART_BYTES = 8_000_000
+
+
+def bundle_tiers(out: Path) -> dict | None:
+    """The host caps the files per artifact (511), so the tier twins (*_tiers.webp, one per ramp image) go out
+    concatenated in a few data/tiers_bundle_<k>.wasm parts; the page cuts each image out by offset
+    (atlas/index.html tierImage). Returns the index {parts: [...], files: {"data/...": [part, offset, length]}}."""
+    files = sorted(p for p in (out / "data").rglob("*_tiers.webp") if p.is_file())
+    if not files:
+        return None
+    parts, index, chunks, size = [], {}, [], 0
+
+    def flush():
+        nonlocal chunks, size
+        if chunks:
+            name = f"tiers_bundle_{len(parts)}.wasm"
+            (out / "data" / name).write_bytes(b"".join(chunks))
+            parts.append(name)
+            chunks, size = [], 0
+    for path in files:
+        raw = path.read_bytes()
+        if size and size + len(raw) > TIER_PART_BYTES:
+            flush()
+        index[path.relative_to(out).as_posix()] = [len(parts), size, len(raw)]
+        chunks.append(raw); size += len(raw)
+        path.unlink()
+    flush()
+    return dict(parts=parts, files=index)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--atlas", type=Path, required=True)
@@ -88,6 +118,9 @@ def main():
     missing = [part for part in renamed if not (a.out / "data" / specs[part]["binary"]).is_file()]
     if missing:
         raise SystemExit(f"Renamed packet binaries are missing: {missing}")
+    bundle = bundle_tiers(a.out)
+    if bundle:
+        meta["tiers_bundle"] = bundle
     meta_path.write_text(json.dumps(meta, ensure_ascii=False, separators=(",", ":")))
     # other packet manifests (farm work, administration, pasture, ...) name their binaries
     # relative to data/; follow the rename wherever the .wasm exists (source paths untouched)

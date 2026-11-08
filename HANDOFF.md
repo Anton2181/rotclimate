@@ -1,4 +1,15 @@
 # Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
+# Tiered colours on the hosted atlas — 8 November 2026
+
+* Cause: the host caps an artifact at 511 files, so earlier publishes left every *_tiers.webp out (89 files); the hosted
+  page then asked for missing images whenever "Tiered colours" was on. Locally it always worked.
+* Fix: scripts/package_atlas_artifact.py bundle_tiers() concatenates the tier images into data/tiers_bundle_<k>.wasm
+  (8 MB parts; 2 parts, 14.5 MB) and writes meta.tiers_bundle {parts, files: path -> [part, offset, length]} into
+  data/atlas.json; atlas/index.html tierImage() cuts the image out in the browser (smooth ramp while loading). No
+  bundle locally, so the local atlas still loads the files. Checked all 33 tiered layers, both climate modes:
+  27 from files / bundle (pixel-identical) + 6 drawn by population.js; smoke passes. Hosted Earth fit v44
+  (496 files). Next pack diff base: scratchpad pack_d2. Month layers have 11 frames by design (11-month year).
+
 # Population ledger P3, blind on Domesday 1086 — 8 November 2026
 
 * Plan calibration/population_ledger_20261108/plan.json (+ amendment 1); scripts/population_ledger_p3.py; report

@@ -1030,6 +1030,25 @@ window.atlasSave = async (filename, blob) => {
   // Tiered colours: layers with a tiers record have a twin image per file
   // (one colour per class) and a stepped legend; the rest keep their ramp.
   const tieredOn = (L) => $("tiers").checked && !!L.tiers;
+  // Hosted copies carry the tier images in a few bundle files (meta.tiers_bundle, written by
+  // scripts/package_atlas_artifact.py) because the host caps the number of files per artifact; each
+  // image is cut out of its bundle in the browser. The local atlas has no bundle and loads the files.
+  const tierParts = {}, tierUrls = {};
+  function tierImage(path) {
+    const bundle = meta.tiers_bundle, entry = bundle?.files?.[path];
+    if (!entry) return fresh(path);
+    if (tierUrls[path]) return tierUrls[path];
+    const [part, offset, length] = entry;
+    (tierParts[part] ||= fetch(fresh("data/" + bundle.parts[part])).then((r) => {
+      if (!r.ok) throw new Error(`tier bundle HTTP ${r.status}`);
+      return r.arrayBuffer();
+    })).then((data) => {
+      if (tierUrls[path]) return;
+      tierUrls[path] = URL.createObjectURL(new Blob([data.slice(offset, offset + length)], { type: "image/webp" }));
+      if (current) setLayer(current);
+    }).catch((err) => console.error(err));
+    return null;
+  }
   // Layers with variants (e.g. the de facto gap fill) have one image, legend and note per option
   const variantOf = (L) => L.variants ? (L.variants.options.find(o => o.value === $("variant").value)
     || L.variants.options.find(o => o.value === L.variants.default) || L.variants.options[0]) : null;
@@ -1108,7 +1127,9 @@ window.atlasSave = async (filename, blob) => {
     } else {
       stopPlay();
       $("monthctl").hidden = true;
-      $("base").src = fresh("data/" + layerFile(L));
+      const file = "data/" + layerFile(L);
+      // hosted copies keep the tier images in bundles: show the smooth ramp until the bundle is in
+      $("base").src = (tieredOn(L) ? tierImage(file) : fresh(file)) || fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
     }
     $("tiers-control").hidden = !L.tiers;
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");
