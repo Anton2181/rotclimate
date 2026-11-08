@@ -131,14 +131,14 @@ def river_masks(shape):
     return np.array(nav) > 0, np.array(stream) > 0
 
 
-HAND_H0 = 10.0                # plan_D1 D2: irrigation gate scale (m above the nearest mapped river), HID 1900 blind
+HAND_H0 = 5.0                 # irrigation gate scale (m above the nearest mapped river): plan_D1 D2 (10 m), D2b (5 m, HID 1900 amount, Americas blind)
 
 
 def irrigation(shape, gate=True):
     """The map's rule, exp(-d/6 km) from navigable rivers and
     0.6 exp(-d/2.5 km) from streams, averaged to 5 arc-min cells; distances
     in latitude bands so a degree of longitude has its local length. With
-    gate (plan_D1 D2), times exp(-H / 10 m), H the height of the 1' cell
+    gate (plan_D1 D2, D2b), times exp(-H / HAND_H0), H the height of the 1' cell
     above its nearest mapped river cell (ETOPO 2022 60"). Returns (gated or
     not, distance-only)."""
     nav, stream = river_masks(shape)

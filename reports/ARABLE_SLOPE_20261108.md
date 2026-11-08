@@ -142,6 +142,21 @@ and territory. A baseline worktree reproduced 0.8488 and 0.6637.
 
 ![D2b: irrigation vs HID 1900](figures/irrigation_reach_d2b.png)
 
+**Exploration after D2b (development region only, not a test).** Does 1900 irrigation follow river discharge?
+`scripts/explore_irrigation_discharge.py` routes WorldClim runoff, using the climate model's own runoff rule, over ETOPO 60″
+with the Natural Earth rivers burned in. The routing domain is 8° wider than the scoring window, so basins are whole.
+
+* **Delta distributaries.** About 10,000 km² of 1900 irrigation lies beside Nile delta distributaries, which single-path
+  routing leaves dry. A delta fan needs its own rule (low land near a large river's mouth), not a discharge rule.
+* **Large over-irrigated rivers.** The over-irrigation is on rivers with ample water: the Euphrates, Tigris and Niger,
+  at 300 to over 1,000 m³/s. There, 1900 equipment was low for historical reasons. Mesopotamia's canals had decayed, and
+  Sahel flood-recession farming is not counted as equipped. In AD 200 Mesopotamia was among the most irrigated land on
+  Earth, so HID 1900 cannot score that part fairly for an AD 200 model.
+* **Discharge overshoot.** The runoff rule gives the Nile about 27,000 m³/s at Aswan, against about 2,800 m³/s observed.
+  It has no Sudd or lake evaporation and no channel losses.
+* **Next lever.** A delta rule is the clean candidate. A discharge cap would need a reference less shaped by 1900 history.
+
+
 ## Simulated rivers drawn at the map's resolution (plan_R2)
 
 Owner: "The Simulated Rivers are still wildly different from the Target ones".
