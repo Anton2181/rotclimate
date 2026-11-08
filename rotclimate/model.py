@@ -1649,7 +1649,15 @@ class ClimateModel:
                     # and rained as much as the snow coast). Warm air over a
                     # cold sea keeps its own rate (ocean_tau_stable).
                     cold = np.clip((T_eq - T_state) / 2.0, 0.0, 1.0) * ocean
-                    lam = lam + cold * (1.0 / (p.ocean_tau_unstable * DAY) - lamT)
+                    rate = 1.0 / (p.ocean_tau_unstable * DAY)
+                    if p.ocean_unstable_cap > 0:
+                        # e51b: the convective layer deepens with the contrast, so a
+                        # cold outbreak over a warm sea (Sea of Japan, Yellow Sea in
+                        # December) warms only so many degrees a day; mild autumn
+                        # contrasts keep the fast rate. Never slower than lamT.
+                        contrast = np.maximum(T_eq - T_state, 1e-6)
+                        rate = np.maximum(np.minimum(rate, p.ocean_unstable_cap / DAY / contrast), lamT)
+                    lam = lam + cold * (rate - lamT)
                 if p.land_stable_rate > 0:
                     # e52: air warmer than the ground under it is stable: mild
                     # sea air over winter land forms a shallow layer (~300 m)
