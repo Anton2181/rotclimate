@@ -1,3 +1,22 @@
+# Drawn rivers kept in the eroded map (plan_R1) + height map as climate lever (plan_T1) — 8 November 2026
+
+* Owner: "all of our drawn rivers also have to be there in the eroded map". Strict check (scripts/terrain_rivers.py check):
+  released v2 failed (1.3 % of drawn-river cells drained along the river; 0/107 rivers). Height map v2.1
+  (output/terrain_erosion_20261107/map_height_v21.npz): 100 % / 107 of 107, 0 climbs, below every bank. Hybrid
+  breach-fill bed at 0.6 x tier ramp + 11 px valley + banks +10 m + Barnes 2014b flats + PF-eps; Earth-fitted on the
+  B2 ETOPO windows (joint loss 1.70 -> 0.72 dev, 1.35 -> 0.93 check); hills now tier-1 only, 1,600 m (Earth lowland
+  KS 0.045). Tiers 2-4 band shares 0.984/0.516/0.862 (v2 0.962/0.495/0.832). Climate: +0.12 pts corrected vs v2,
+  climate-grid river recall 0.65 -> 0.77. Report: reports/RIVERS_TERRAIN_20261108.md.
+* Bug found: fastscapelib accumulate() multiplies by cell area; areas passed accumulate(dx^2) were m^4 (river boost
+  inactive; "rivers_on_channel 1.0" and B2 M3 = 1.00 meaningless). Reported areas fixed; evolve() numerics kept
+  bit-identical because every Earth fit used them. Fixing evolve properly = re-run B2 dev, hill fit, plan_R1 fit.
+* plan_T1 (owner: height map helping the climate calibration, tiers intact): band position per upland tier gives
+  +0.29 pts corrected (uplands low in their bands, both halves better) < frozen +0.5; ceiling of the lever +0.44.
+  Steering tier-1 hills hurts (hills are zero-mean relief). Not adopted. The painted-zone misfit is lowland moisture.
+* Release: scripts/release_r44_rivers.sh + release_r44_rivers_addons.sh (checkpoint output/r44_rivers_world from the
+  v2.1 climate check via scripts/make_release_checkpoint.py; params calibration/map_world_r44_terrain21). build_control_v21
+  now shades with the atlas's own terrain_file.
+
 # RELEASED: Earth-fit atlas r44 + height map v2 (task 84 + plan D) — 7 November 2026
 
 * Params.terrain_file (rotclimate/config.py; geography.elevation_fullres, climate grid, render.py, atlas.py) -> height
