@@ -1,0 +1,34 @@
+{
+ "version": 1,
+ "date": "2026-11-08",
+ "status": "frozen before any candidate is scored",
+ "owner_request": "'can we have the height map also help our climate calibration? As long as it doesn't break our height map tier system' (8 Nov 2026)",
+ "diagnosis_before_the_plan": {
+  "climate": "r44 map world with height map v2 (output/terrain_v2_climate_check/terrain_v2_result.pkl), raw strict zone agreement 0.352",
+  "where_the_zones_are": "64-94 % of each painted zone's cells lie in tier 1 (0-62 m); tiers 2-4 hold 27-37 % of warm-wet, hot-dry, tree and med cells",
+  "what_fails": {
+   "cold_dry": "aridity membership 0.03 (moisture)", "tree": "humidity 0.35 (moisture)", "swamp": "hot_year 0.00 (annual mean 16.6 C, rule ~21 C: out of reach at sea level)",
+   "hot_dry": "hot_year 0.51 and aridity 0.32", "warm_wet": "mild_winter 0.57", "cold_wet": "cold_winter 0.69"},
+  "upper_bounds_lapse_only": {
+   "every painted cell of tiers 2-4 at its best band position (per cell)": 0.370,
+   "plus tier-1 cells raised 150 / 300 / 500 m wherever that helps (per cell)": [0.388, 0.405, 0.413],
+   "one band position for all of tiers 2 and 4 (best, at the bottom)": 0.3576},
+  "conclusion": "the terrain lever is small: within-band placement can add at most ~2 points and realistically ~0.5; lowland hills placed where the target wants cooler ground could add more, but hills are Earth-fitted in amount, so only their placement may move"
+ },
+ "levers": {
+  "L1_band_position": "the tier ramp inside every upland tier becomes lo + (hi - lo) s^gamma_k (k = 2, 3, 4; s is today's 0-1 ramp); every cell stays inside its own band by construction; gamma_k in (0.6, 0.8, 1.0, 1.25, 1.6)",
+  "L2_hill_placement": "the tier-1 hilliness field (log-normal at 80 km, terrain_erosion.hills) is mixed with a preference field and rank-matched back to its own distribution, so the amount of hills (the Earth lowland-slope fit) is unchanged and only where they stand moves; preference = +1 where raising a tier-1 climate cell 300 m turns a wrong painted cell right, -1 where it turns a right one wrong (lapse-only, on the v2.1 climate run), smoothed at 80 km; weight w in (0, 0.5, 1.0)",
+  "unchanged": "erosion detail, the drawn rivers and their Earth-fitted valleys (plan_R1), tier tops, every world parameter"
+ },
+ "screening": "lapse-only emulator on the height map v2.1 climate run (block-mean elevation change x the model's lapse rate, indices and strict zones recomputed): all 125 L1 combinations; the best L1 and each w of L2 are carried to full runs",
+ "confirmation": "full climate runs (3 seeds, downsample 8, r44 physics) of: best L1 alone; best w of L2 alone (if the emulator gains >= 0.3 points); both together. Score: strict zone agreement raw and with the r44 Earth corrections, total and in the west and east halves of the map (split at the map's centre column)",
+ "adoption": {
+  "gain": "corrected strict agreement >= +0.5 points against height map v2.1",
+  "no_half_worse": "neither half loses more than 0.3 points (corrected)",
+  "tiers": "tier band shares of tiers 2-4 not below v2.1 - 0.02; tier tops unchanged",
+  "earth_realism": "tier-1 9 km slope median within 10 % of Earth lowlands (0.167 deg); slope KS against Earth lowlands not worse than v2.1 + 0.02",
+  "rivers": "plan_R1 owner check passes (100 %)",
+  "otherwise": "height map v2.1 stays; the result is reported"
+ },
+ "honesty": "the owner's painted zones are the only target (as in the world refits); there is no Earth test of where hills should stand, so L2 is a fit to the owner's map, labelled as such in the atlas"
+}
