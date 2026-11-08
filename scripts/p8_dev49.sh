@@ -9,7 +9,7 @@ OUT=output/maritime_p8_20261108; PLAN=calibration/maritime_p8_20261108
 mkdir -p "$OUT"
 names() { $PY -c "import json,sys; print(' '.join(json.load(open(sys.argv[1]))))" "$1"; }
 bench() {  # name params outdir
-  local n=$1 f=$2 o=$3
+  local n=$1 f=$2 o=$3; mkdir -p "$o"
   [ -f "$o/${n}_dev31/summary.json" ] || $PY -I scripts/benchmark_local.py --fit "$f" --regions dev31 --workers 4 --out "$o/${n}_dev31" > "$o/${n}_dev31.log" 2>&1
   for part in a:calibration/sealed_20261031/regions.json b:calibration/sealed_20261031b/regions.json c:calibration/sealed_20261101c/regions.json; do
     spec=${part#*:}; d="$o/${n}_retired_${part%%:*}"
