@@ -35,6 +35,10 @@
   (slope / relative elevation lost LOPO) + D1 density; D5 = v2.1 on the terrain-aware chain, dev unchanged, released.
   Next per reports/CONTROL_MAP_V2_PLAN_20261107.md: Steps 2-3 (village-scale settlement + predicted population ledger),
   Domesday 1086 blind declared before download. Still open: the evolve() m^4 units refit (B2, hill fit, plan_R1).
+* Domesday pool reserved (dataset_usage.json domesday_1086_blind), NOT downloaded. Access (8 Nov): the Open Domesday API
+  (opendomesday.org/api/1.0/...) returns 404 on every endpoint; the Hull data moved to digitalcollections.hull.ac.uk
+  (collection 3t945r28b: Places database + statistics content.accdb, CC BY-NC-SA 2.0 UK) behind a browser bot check;
+  UK Data Service SN 5694 needs a registered login. Needs the owner to download the files (or choose another pool).
 
 # Drawn rivers kept in the eroded map (plan_R1) + height map as climate lever (plan_T1) — 8 November 2026
 
