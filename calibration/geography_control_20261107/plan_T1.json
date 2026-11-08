@@ -7,12 +7,22 @@
   "climate": "r44 map world with height map v2 (output/terrain_v2_climate_check/terrain_v2_result.pkl), raw strict zone agreement 0.352",
   "where_the_zones_are": "64-94 % of each painted zone's cells lie in tier 1 (0-62 m); tiers 2-4 hold 27-37 % of warm-wet, hot-dry, tree and med cells",
   "what_fails": {
-   "cold_dry": "aridity membership 0.03 (moisture)", "tree": "humidity 0.35 (moisture)", "swamp": "hot_year 0.00 (annual mean 16.6 C, rule ~21 C: out of reach at sea level)",
-   "hot_dry": "hot_year 0.51 and aridity 0.32", "warm_wet": "mild_winter 0.57", "cold_wet": "cold_winter 0.69"},
+   "cold_dry": "aridity membership 0.03 (moisture)",
+   "tree": "humidity 0.35 (moisture)",
+   "swamp": "hot_year 0.00 (annual mean 16.6 C, rule ~21 C: out of reach at sea level)",
+   "hot_dry": "hot_year 0.51 and aridity 0.32",
+   "warm_wet": "mild_winter 0.57",
+   "cold_wet": "cold_winter 0.69"
+  },
   "upper_bounds_lapse_only": {
-   "every painted cell of tiers 2-4 at its best band position (per cell)": 0.370,
-   "plus tier-1 cells raised 150 / 300 / 500 m wherever that helps (per cell)": [0.388, 0.405, 0.413],
-   "one band position for all of tiers 2 and 4 (best, at the bottom)": 0.3576},
+   "every painted cell of tiers 2-4 at its best band position (per cell)": 0.37,
+   "plus tier-1 cells raised 150 / 300 / 500 m wherever that helps (per cell)": [
+    0.388,
+    0.405,
+    0.413
+   ],
+   "one band position for all of tiers 2 and 4 (best, at the bottom)": 0.3576
+  },
   "conclusion": "the terrain lever is small: within-band placement can add at most ~2 points and realistically ~0.5; lowland hills placed where the target wants cooler ground could add more, but hills are Earth-fitted in amount, so only their placement may move"
  },
  "levers": {
@@ -30,5 +40,63 @@
   "rivers": "plan_R1 owner check passes (100 %)",
   "otherwise": "height map v2.1 stays; the result is reported"
  },
- "honesty": "the owner's painted zones are the only target (as in the world refits); there is no Earth test of where hills should stand, so L2 is a fit to the owner's map, labelled as such in the atlas"
+ "honesty": "the owner's painted zones are the only target (as in the world refits); there is no Earth test of where hills should stand, so L2 is a fit to the owner's map, labelled as such in the atlas",
+ "result": {
+  "date": "2026-11-08",
+  "screen": {
+   "baseline_v21_lapse_emulator": {
+    "all": 0.3531192197746763,
+    "west": 0.39351446099912357,
+    "east": 0.31588301825820003
+   },
+   "L1_best": {
+    "g2": 1.6,
+    "g3": 1.6,
+    "g4": 1.6,
+    "all": 0.35606187993946525,
+    "west": 0.3970201577563541,
+    "east": 0.3183066731297463
+   },
+   "L2": [
+    {
+     "w": 0.0,
+     "all": 0.3531192197746763,
+     "west": 0.39351446099912357,
+     "east": 0.31588301825820003
+    },
+    {
+     "w": 0.5,
+     "all": 0.34782243147805614,
+     "west": 0.3807186678352322,
+     "east": 0.3174987881725642
+    },
+    {
+     "w": 1.0,
+     "all": 0.34513199932739197,
+     "west": 0.3768624014022787,
+     "east": 0.31588301825820003
+    }
+   ],
+   "L2_note": "steering the hills lowers agreement: hills are relief around a local mean (zero mean at 14 km), so moving them barely changes climate-cell elevation; the +300 m ceiling assumed a mean rise hills cannot give. Not carried to full runs (emulator gain < 0.3)."
+  },
+  "confirmation": {
+   "candidate": "L1 gamma 1.6 / 1.6 / 1.6 (uplands low in their bands)",
+   "delta_points": {
+    "raw": 0.386749621657978,
+    "corrected": 0.2942660164788946,
+    "corrected_halves": {
+     "west": 0.19281332164767795,
+     "east": 0.4039424785910517
+    }
+   },
+   "gates": {
+    "gain": false,
+    "no_half_worse": true,
+    "tiers": true,
+    "slope": true,
+    "rivers": true
+   }
+  },
+  "decision": "not adopted: +0.29 points corrected (+0.39 raw), both halves better, below the frozen +0.5; the lapse-only ceiling of this lever (all uplands at the bottom of their bands) is +0.44, so no setting of it can pass. Height map v2.1 stays; the terrain cannot move the painted-zone fit much because 64-94 % of painted cells are tier-1 lowland (0-62 m) and their failures are mostly moisture."
+ }
 }

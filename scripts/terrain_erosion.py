@@ -87,12 +87,14 @@ def evolve(h0, land, rivers, dx_m, prm=None):
     return z, dict(params=p, drainage_area_m2=A, seconds=time.time() - t0)
 
 
-def hills(land, rivers, dx_m, height_m, scale_km=80.0, sigma=0.8, seed=3, prm=None):
+def hills(land, rivers, dx_m, height_m, scale_km=80.0, sigma=0.8, seed=3, prm=None, field=None):
     """Unmarked hills (owner, 7 Nov: 'there can be hills outside of the marked heightmap tiers'): a second steady-state
     run on a gentle uplift whose hilliness varies log-normally at scale_km (hilly country and plains), sharing the marked
     rivers; returns its zero-mean detail (surface - 14 km lowpass). height_m is fitted on Earth's lowland slopes."""
     rng = np.random.default_rng(seed); cells = dx_m / 1000.0
     n = ndi.gaussian_filter(rng.standard_normal(land.shape), scale_km / cells); n /= n.std()
+    if field is not None:                                   # plan_T1 L2: a steered hilliness field (same distribution)
+        n = field
     target = np.where(land, height_m * np.exp(sigma * n - 0.5 * sigma ** 2), 0.0)
     p = dict(DEFAULTS, **(prm or {}))
     z, info = evolve(target, land, rivers, dx_m, p)
@@ -202,7 +204,13 @@ def preview(factor=2):
     fig.savefig(OUT / f"map_preview_f{f}.png", dpi=110); log("wrote", OUT / f"map_preview_f{f}.png")
 
 
-def compose(h0, land, rivers, dx, cs, hf, hill_weight=None):
+def hill_noise(shape, dx_m, scale_km=80.0, seed=3):
+    """The hilliness field hills() draws by default (for plan_T1 L2 steering)."""
+    rng = np.random.default_rng(seed); cells = dx_m / 1000.0
+    n = ndi.gaussian_filter(rng.standard_normal(shape), scale_km / cells); return n / n.std()
+
+
+def compose(h0, land, rivers, dx, cs, hf, hill_weight=None, hill_field=None):
     """Height map v2's composition (plan_B2 map_v2_B3 + revision 1): the tier ramps h0 plus the Earth-adopted erosion
     detail (setting cs, mountain spikes soft-capped at 1,500 m) plus the Earth-fitted unmarked hills hf (soft cap).
     Returns (z, info) before any routing step; the drawn rivers are imposed afterwards (terrain_rivers.condition)."""
@@ -212,7 +220,7 @@ def compose(h0, land, rivers, dx, cs, hf, hill_weight=None):
     # detail and Earth-fitted lowland hills (output/terrain_erosion_20261107/hill_fit.json) lie on the tier ramps
     cells = dx / 1000.0
     lp = lambda a: ndi.gaussian_filter(np.where(land, a, 0.0), 14.0 / cells) / np.maximum(ndi.gaussian_filter(land.astype(float), 14.0 / cells), 1e-6)
-    hill = hills(land, rivers, dx, hf["height_m"], sigma=hf["sigma"], prm=prm)
+    hill = hills(land, rivers, dx, hf["height_m"], sigma=hf["sigma"], prm=prm, field=hill_field)
     cap = hf.get("cap_m")
     if cap:                                                 # soft cap: hills, not unmarked mountains (hill_fit.json)
         hill = np.where(hill > 0, cap * np.tanh(hill / cap), hill)

@@ -112,10 +112,11 @@ def build(name, mode):
     W, H = meta["width"], meta["height"]
     def up(a, resample=Image.Resampling.NEAREST):
         return np.asarray(Image.fromarray(a).resize((W, H), resample))
-    hv2 = ROOT / "output/terrain_erosion_20261107/map_height_v2.npz"
-    if hv2.exists() and name == "earth_fit":              # built with the Earth-fit tier tops (map_world_r43)
-        # relief shading from height map v2 (eroded, unmarked lowland hills; display only until plan D moves the chain
-        # onto it); it is at the source resolution (1.84 km), resized to the image if needed
+    ap = ROOT / "atlases" / name / "params.json"
+    tf = json.loads(ap.read_text()).get("terrain_file", "") if ap.exists() else ""
+    hv2 = ROOT / tf if tf else None
+    if hv2 is not None and hv2.exists():                   # the eroded height map the atlas was built on
+        # relief shading at the source resolution (1.84 km), resized to the image if needed
         zv = np.load(hv2)["z"].astype(float)
         dxs = 1.143 * 1609.344
         shade_src = LightSource(azdeg=315, altdeg=45).hillshade(zv, vert_exag=6, dx=dxs, dy=dxs)
