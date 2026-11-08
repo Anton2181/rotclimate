@@ -1,3 +1,5 @@
+# Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
+
 # Block D: arable land from slope (D1) + irrigation by height above the river (D2) — 8 November 2026
 
 * D1 (calibration/geography_control_20261107/plan_D1.json): arable share a(S) = 0.018 + 0.982 / (1 + (S / 2.75 deg)^1.29)
