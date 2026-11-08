@@ -30,5 +30,50 @@
  "finalist": "the candidate with the lowest S49 among those passing both gates (ties: fewer changed fields); none passing -> reported, nothing adopted",
  "stage_2": "sealed set h (calibration/sealed_20261107h), once, for the finalist only, paired with r44, and only after the owner releases set h; pass if S <= 1.0",
  "if_adopted": "r45 = r44 + the finalist's overrides; then retrain the Earth corrections on r45 and release the Earth-fit atlas (a separate step)",
- "note": "the e51b ceiling is new code (rotclimate/model.py, default off), so r44 itself is unchanged; screens used development regions only"
+ "note": "the e51b ceiling is new code (rotclimate/model.py, default off), so r44 itself is unchanged; screens used development regions only",
+ "stage_1_result": {
+  "date": "2026-11-08",
+  "outputs": "output/maritime_p8_20261108/<candidate>/v3_{dev,fine}.log",
+  "candidates": {
+   "C1_st025": {
+    "S49": 0.9931,
+    "T": -0.0173,
+    "P": 0.0034,
+    "S31": 1.0057,
+    "dev_pass": true,
+    "fine28": 0.9897,
+    "fine_pass": true
+   },
+   "C2_st05": {
+    "S49": 0.9921,
+    "T": -0.0168,
+    "P": 0.0009,
+    "S31": 1.0024,
+    "dev_pass": true,
+    "fine28": 0.9911,
+    "fine_pass": true
+   },
+   "C3_u05s05_cap2": {
+    "S49": 0.991,
+    "T": -0.0209,
+    "P": 0.0029,
+    "S31": 0.9989,
+    "dev_pass": true,
+    "fine28": 0.9922,
+    "fine_pass": true
+   },
+   "C4_u05s025_cap2": {
+    "S49": 0.9914,
+    "T": -0.0222,
+    "P": 0.0049,
+    "S31": 1.0017,
+    "dev_pass": true,
+    "fine28": 0.9897,
+    "fine_pass": true
+   }
+  },
+  "finalist": "C3_u05s05_cap2",
+  "note": "all four pass; the gain is mostly on the retired sets a-c (S31 alone 0.999-1.006)",
+  "stage_2": "waiting for the owner to release sealed set h"
+ }
 }
