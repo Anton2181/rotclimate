@@ -139,6 +139,9 @@ and territory. A baseline worktree reproduced 0.8488 and 0.6637.
   not floodplain width.
 * **Population check.** `FALLOW` refit 0.5997, kept at 0.600. Ten regions RMS 1.652 → 1.653 (gate ≤ +0.05). Egypt
   +0.64 → +0.72: the delta shortfall, as above.
+* **Earth control development pools** (balanced accuracy; the whole Earth chain rebuilt in a worktree): Rome 0.8485 →
+  0.8485, Han 0.6628 → 0.6628 (original chain 0.8488 / 0.6637; gate: lose ≤ 0.01). Both pass, so the 5 m gate is adopted
+  on the map (`harvest/export.py`) and in the Earth harness.
 
 ![D2b: irrigation vs HID 1900](figures/irrigation_reach_d2b.png)
 

@@ -44,7 +44,7 @@ def physical_metadata(meta):
                                      'lat_center','north_bearing','world','arrays']}
 
 
-IRRIGATION_HAND_H0 = 10.0          # plan_D1 D2 (calibration/geography_control_20261107/plan_D1.json)
+IRRIGATION_HAND_H0 = 5.0           # plan_D1 D2 (10 m), D2b (5 m; HID 1900 amount, Americas blind; calibration/geography_control_20261107/plan_D1.json)
 
 
 def geometry(meta, shape):
