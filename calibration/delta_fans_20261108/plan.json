@@ -42,5 +42,55 @@
   "selection": "5-fold cross-validated RMSE on the development deltas (Old World); the lowest wins",
   "check": "held-out Americas + Oceania once more (already used once for the discharge-only fit, so not fully unseen); reported against the discharge-only fit and the constant; the chosen model replaces the discharge-only rule if it beats it there",
   "s_fan": "unchanged (Nile HID 1900 share inside the Edmonds polygon)"
+ },
+ "amendment_1_result": {
+  "date": "2026-11-08",
+  "output": "output/delta_fans_20261108/fit2.json",
+  "models": {
+   "M1": {
+    "cv_rmse": 1.369,
+    "dev_r2": 0.077,
+    "coef": [
+     1.059,
+     0.506
+    ]
+   },
+   "M2": {
+    "cv_rmse": 1.371,
+    "dev_r2": 0.077,
+    "coef": [
+     1.034,
+     0.498,
+     0.485
+    ]
+   },
+   "M3": {
+    "cv_rmse": 1.28,
+    "dev_r2": 0.196,
+    "coef": [
+     -1.57,
+     1.332,
+     -0.276,
+     0.556
+    ]
+   }
+  },
+  "chosen": "M3",
+  "held": {
+   "rmse_chosen": 1.3358508003635128,
+   "rmse_discharge_only": 1.283342423890974,
+   "rmse_constant": 1.4314591518391604,
+   "r2_chosen": 0.12862954666106108
+  },
+  "use_drivers": false,
+  "nile": {
+   "area_km2": 28344.8042197238,
+   "qs_mt": 370.27129817914647,
+   "exposure": 0.03125,
+   "q": 1934.082,
+   "predicted_km2": 130.97386978857574
+  },
+  "bugs_fixed_before_this_result": "WorldClim marks the sea as -32768 in elevation: the first exposure run saw no sea (all 0) and the land mask was fixed; a reader in my own command first printed a stale fit2.json",
+  "verdict": "the drivers do not beat discharge alone on the held-out deltas (1.336 vs 1.283 log10 RMSE); BQART sediment load alone is worse than discharge (dev R2 0.08 vs 0.19); the discharge-only rule stays. Delta size on Earth is mostly not predictable from these global drivers: the Nile stays a ~94th-percentile delta for its discharge"
  }
 }

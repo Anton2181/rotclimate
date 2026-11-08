@@ -94,7 +94,10 @@ def fit():
 def _wc_grid(var):
     """WorldClim 2.1 5 arc-min global grid (rows from 90 N, columns from 180 W); NaN at sea."""
     import land_people_earth as E
-    return E.wc(var)
+    a = E.wc(var)
+    if var == "elev":                      # WorldClim marks the sea with -32768 in elevation (NaN elsewhere)
+        a = np.where(a < -1000, np.nan, a)
+    return a
 
 
 def _sample(grid, lat, lon):
@@ -187,7 +190,7 @@ def drivers():
     land = np.isfinite(_wc_grid("elev"))
     for r in rows:
         la, lo = np.radians(r["lat"]), np.radians(r["lon"])
-        d = 6371.0 * 2 * np.arcsin(np.sqrt(np.sin((blat - la) / 2) ** 2 + np.cos(la) * np.cos(blat) * np.sin((blo - lo) / 2) ** 2))
+        d = 6371.0 * 2 * np.arcsin(np.sqrt(np.sin((blat - la) / 2) ** 2 + np.cos(la) * np.cos(blat) * np.sin((blon - lo) / 2) ** 2))
         near = np.flatnonzero(d <= 30.0)
         if near.size:
             k = near[np.argmax(b["q"][near])]
