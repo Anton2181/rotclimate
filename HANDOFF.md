@@ -1,4 +1,9 @@
 # Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
+# Owner decision (8 Nov 2026): the free and Whittaker fits are RETIRED; work focuses on the Earth fit only.
+* scripts/atlas_set.py (ACTIVE = earth_fit) filters every add-on loop and scripts/refresh_atlas_pages.py; atlases/free_fit and
+  atlases/whittaker_fit stay as their last published snapshot (hosted pages untouched, not deleted; URLs in
+  atlases/artifact_links_retired.json, removed from artifact_links.json so the Earth-fit pack drops its links to them).
+* Release driver for the Earth fit only: scripts/release_earth_fit_d1.sh (D2b re-export on the staged atlas, promote, add-ons).
 
 # Block D: arable land from slope (D1) + irrigation by height above the river (D2) — 8 November 2026
 
@@ -18,7 +23,7 @@
 * D2b (plan_D1 "D2b", scripts/irrigation_reach_d2b.py): reach 6/12/24/48 km x H0 5/10/20 m scored on AUC + amount vs
   HID 1900 (arid cells); dev chose 6 km x 5 m; blind Americas (now spent) amount 2.51x -> 2.33x, AUC 0.725 -> 0.726: H0
   10 -> 5 m (harvest/export.py IRRIGATION_HAND_H0, land_people_earth.HAND_H0). FALLOW kept 0.600; regions RMS 1.652 ->
-  1.653; Egypt +0.64 -> +0.72. Wider reach ranks better but over-irrigates more. Residual = Nile delta fan (12.5k km2 HID
+  1.653; Egypt +0.64 -> +0.72; control dev BA Rome 0.8485 -> 0.8485, Han 0.6628 -> 0.6628. ADOPTED. Wider reach ranks better but over-irrigates more. Residual = Nile delta fan (12.5k km2 HID
   vs 5.2k model: distributaries) + arid rivers over-irrigated where 1900 is history-shaped (Mesopotamia, Niger).
   Exploration scripts/explore_irrigation_discharge.py (dev only; route over a domain 8 deg wider; burn NE rivers; WorldClim
   lakes passable). Map refresh: scripts/release_d2b.sh (Earth-fit only; it alone has a terrain file).
