@@ -112,7 +112,7 @@ def main():
     identity = dict(params=json.loads(json.dumps(asdict(p))), seeds=seeds, sources={
         f.name: hashlib.sha256(f.read_bytes()).hexdigest()
         for f in (ROOT / "rotclimate").glob("*.py")
-        if f.name not in {"atlas.py", "render.py", "biomes.py", "climate_fields.py"}})
+        if f.name not in {"atlas.py", "render.py", "biomes.py", "climate_fields.py", "routing.py"}})
     identity["map_inputs"] = {f.name: hashlib.sha256(f.read_bytes()).hexdigest()
                               for f in (ROOT / "data/source").iterdir() if f.is_file()}
     checkpoint = Path(a.checkpoint) if a.checkpoint else None
