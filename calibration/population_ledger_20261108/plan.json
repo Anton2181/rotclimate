@@ -54,5 +54,47 @@
   "people": "per holding (table Manors) the sum of Villagers, Smallholders, Slaves, Female slaves, Freemen, free men, Priests, cottagers, OtherPop, MiscPop and Burgesses (missing = 0); there is no total field",
   "duplicates": "holdings flagged Duplicates = X (whole entry duplicated in another entry, whose partner carries E) are excluded so each entry counts once; G (geld duplicated) and P (mills or land possibly duplicated) keep their people; Subholdings = Y entries already include their subholdings and are kept",
   "join": "Manors.StructIdx -> ByPlace.StructIdx -> ByPlace.PlacesIdx -> Places.OSrefs (places database); a holding with several distinct places is split equally; ByPlace place keys missing from the places database are counted and reported, not imputed"
+ },
+ "blind_result": {
+  "date": "2026-11-08",
+  "output": "output/population_ledger_20261108/blind.json",
+  "scored_once": true,
+  "join": {
+   "recorded_people": 277969,
+   "unlocated_people": 20242,
+   "places_located": 13430,
+   "x_duplicates_excluded": 73
+  },
+  "rank_20km": {
+   "P0_capacity": 0.395,
+   "P1_base": 0.431,
+   "P2_cored": 0.63
+  },
+  "rank_40km": {
+   "P0_capacity": 0.525,
+   "P1_base": 0.531,
+   "P2_cored": 0.687
+  },
+  "level_m": {
+   "P0_capacity": 9.95,
+   "P2_cored": 0.79
+  },
+  "gates": {
+   "P0_capacity": {
+    "R_pass": true,
+    "L_pass": false
+   },
+   "P1_base": {
+    "R_pass": true,
+    "L_pass": null
+   },
+   "P2_cored": {
+    "R_pass": true,
+    "L_pass": false
+   }
+  },
+  "atlas_predicted_total": false,
+  "disclosure": "a dry run of the scoring code on synthetic truth (each place given the P1 model density) printed the models' England totals before this run; those totals depend on the model only and nothing was tunable, and the comparison range is public, so the level part was known in advance (the plan already called it semi-blind); the block pattern was first seen in this run",
+  "verdict": "distribution Earth-tested blind at the 20 km block scale for all three ledgers, best by far the old-heartland occupancy (P2, 0.63); the predicted level fails for both (capacity 9.95 M, 5.8x the central 1.71 M; heartland occupancy 0.79 M, 0.46x): the atlas keeps the supplied population budget and its badges record the pattern result"
  }
 }

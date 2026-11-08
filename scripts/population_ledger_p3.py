@@ -133,21 +133,89 @@ def latlon_to_en_grid(lat, lon):
 
 
 # ------------------------------------------------------------------ the blind test
+PEOPLE = ("Villagers", "Smallholders", "Slaves", "Female slaves", "Freemen", "free men", "Priests", "cottagers", "OtherPop",
+          "MiscPop", "Burgesses")
+
+
 def domesday_points():
-    """Located places with their recorded people (statistics database joined by the shared place key)."""
+    """Located places with their recorded people (plan amendment 1): easting, northing (m), people, and the join report."""
+    from collections import defaultdict
     from access_parser import AccessParser
-    places = AccessParser(str(DD / "places_content.mdb")).parse_table("Places")
-    stats_files = sorted(p for p in DD.iterdir() if p.suffix.lower() in (".accdb", ".mdb") and p.name != "places_content.mdb")
-    if not stats_files:
-        raise SystemExit("the Domesday statistics database is not in data/cache/domesday/ yet")
-    raise SystemExit(f"statistics database found ({stats_files[0].name}): inspect its schema and write the join before scoring "
-                     "(plan: recorded population per holding, joined by the shared place key)")
+    P = AccessParser(str(DD / "places_content.mdb")).parse_table("Places")
+    st = AccessParser(str(DD / "statistics_content.mdb")); M = st.parse_table("Manors"); B = st.parse_table("ByPlace")
+    loc = {}
+    for idx, ref in zip(P["PlacesIdx"], P["OSrefs"]):
+        en = osref_to_en(str(ref or "").split(",")[0].split(";")[0].split("/")[0])
+        if en is not None:
+            loc[idx] = en
+    places_of = defaultdict(set)
+    for s, p in zip(B["StructIdx"], B["PlacesIdx"]):
+        places_of[s].add(p)
+    num = lambda v: float(v) if v not in (None, "") else 0.0  # noqa: E731
+    people_at = defaultdict(float); rep = dict(holdings=len(M["StructIdx"]), excluded_x_duplicates=0, people_recorded=0.0,
+                                               people_unlocated=0.0, holdings_without_place=0)
+    for i, s in enumerate(M["StructIdx"]):
+        if str(M["Duplicates"][i]) == "X":
+            rep["excluded_x_duplicates"] += 1; continue
+        heads = sum(num(M[c][i]) for c in PEOPLE)
+        rep["people_recorded"] += heads
+        ps = places_of.get(s, set())
+        if not ps:
+            rep["holdings_without_place"] += 1; rep["people_unlocated"] += heads; continue
+        share = heads / len(ps)
+        for p in ps:
+            if p in loc:
+                people_at[p] += share
+            else:
+                rep["people_unlocated"] += share
+    keys = sorted(people_at)
+    E = np.array([loc[k][0] for k in keys]); N = np.array([loc[k][1] for k in keys]); pop = np.array([people_at[k] for k in keys])
+    allE = np.array([v[0] for v in loc.values()]); allN = np.array([v[1] for v in loc.values()])
+    rep.update(places_located=len(loc), places_with_people=int((pop > 0).sum()))
+    return E, N, pop, allE, allN, rep
 
 
 def blind():
+    from scipy.spatial import cKDTree
+    from scipy.stats import spearmanr
     if (OUT / "blind.json").exists():
         raise SystemExit("already scored once (output/population_ledger_20261108/blind.json)")
-    domesday_points()
+    Ep, Np, pop, allE, allN, rep = domesday_points()
+    C, lat, lon, land, km2 = candidates()
+    ri = np.nonzero((lat >= 49.8) & (lat <= 56.0))[0]; ci = np.nonzero((lon >= -6.5) & (lon <= 2.1))[0]
+    LA, LO = np.meshgrid(lat[ri], lon[ci], indexing="ij")
+    Ec, Nc = latlon_to_en_grid(LA, LO)
+    ld = land[np.ix_(ri, ci)]; ar = km2[np.ix_(ri, ci)]
+    d, _ = cKDTree(np.column_stack([allE, allN])).query(np.column_stack([Ec.ravel(), Nc.ravel()]))
+    mask = ld & (d.reshape(ld.shape) <= 15000.0)
+    res = dict(plan=str(PLAN.relative_to(ROOT)), join=rep, surveyed_land_km2=float(ar[mask].sum()), blocks={}, level={})
+    for size in (20000, 40000):
+        bc = (np.floor(Ec / size).astype(int), np.floor(Nc / size).astype(int)); bp = (np.floor(Ep / size).astype(int), np.floor(Np / size).astype(int))
+        keys = sorted(set(zip(bc[0][ld], bc[1][ld])))
+        obs, mod = [], {k: [] for k in C}
+        for kx, ky in keys:
+            inb = (bc[0] == kx) & (bc[1] == ky)
+            nl, nm = int((inb & ld).sum()), int((inb & mask).sum())
+            if nl < 4 or nm < 0.5 * nl:
+                continue
+            area = float(ar[inb & mask].sum())
+            obs.append(float(pop[(bp[0] == kx) & (bp[1] == ky)].sum()) / area)
+            for k, dens in C.items():
+                sub = dens[np.ix_(ri, ci)]
+                mod[k].append(float((sub * ar)[inb & mask].sum()) / area)
+        obs = np.array(obs); out = dict(n_blocks=len(obs))
+        for k in C:
+            m = np.array(mod[k]); w = m / max(m.sum(), 1e-12); o = obs / max(obs.sum(), 1e-12)
+            out[k] = dict(spearman=float(spearmanr(m, obs).statistic), moved_share=float(0.5 * np.abs(w - o).sum()))
+        res["blocks"][f"{size // 1000}km"] = out
+    for k in ("P0_capacity", "P2_cored"):
+        tot = float((C[k][np.ix_(ri, ci)] * ar)[mask].sum())
+        res["level"][k] = dict(people_m=tot / 1e6, ln_vs_1p71=float(np.log(tot / 1.71e6)), inside_1p2_2p6=bool(1.2e6 <= tot <= 2.6e6))
+    b20 = res["blocks"]["20km"]
+    res["gates"] = {k: dict(R_pass=b20[k]["spearman"] >= 0.30, L_pass=res["level"].get(k, {}).get("inside_1p2_2p6")) for k in C}
+    res["atlas_predicted_total"] = bool(res["gates"]["P2_cored"]["R_pass"] and res["gates"]["P2_cored"]["L_pass"])
+    (OUT / "blind.json").write_text(json.dumps(res, indent=1))
+    log(json.dumps(res, indent=1))
 
 
 if __name__ == "__main__":
