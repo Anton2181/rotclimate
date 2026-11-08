@@ -1,0 +1,22 @@
+{
+ "model": "arable share of a source-pixel (~1.84 km) cell = lo + (hi - lo) / (1 + (S / S0)^k), S = slope of the cell surface in degrees",
+ "params": {
+  "lo": 0.017966512663571743,
+  "hi": 0.9999999999986673,
+  "S0": 2.754042901671169,
+  "k": 1.2886107831801539
+ },
+ "rule": "GAEZ slope classes on 90 m: < 8 % 1.0, 8-16 % 0.6, 16-30 % 0.3, steeper 0.05 (Fischer et al. 2012)",
+ "earth_data": "Copernicus GLO-90 DEM, 12 development + 12 blind 1-degree tiles (calibration/geography_control_20261107/plan_D1.json)",
+ "development_tile_mean_rmse": {
+  "tier_constants": 0.23987810351004688,
+  "slope": 0.11877786195855494
+ },
+ "blind_rmse": {
+  "tier_constants": 0.3083006306708157,
+  "slope": 0.1843689101219709,
+  "bias": 0.036325056859976744,
+  "tiles_better": 12
+ },
+ "applies": "atlases built on an eroded terrain file; atlases without one keep scripts/land_people.py ARABLE_BY_TIER"
+}

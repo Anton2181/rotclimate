@@ -50,8 +50,11 @@ def geometry(meta, shape):
     from scripts.land_people import ARABLE_BY_TIER
     from scripts.vector_rivers import river_classes
     sources = [ROOT/'data/source'/name for name in ['elevation.png','rivers.png','original/rivers.png']]
+    terrain = meta.get('world',{}).get('terrain_file','')
+    if terrain:                                   # plan_D1: arable share from the slope of the eroded terrain
+        sources += [ROOT/terrain, ROOT/'data/arable_slope_model.json']
     key = dict(shape=list(shape), width_km=meta['width']*meta['mi_per_px']*1.609344,
-               arable=ARABLE_BY_TIER, sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
+               arable=ARABLE_BY_TIER if not terrain else 'slope', sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
     stamp = hashlib.sha256(json.dumps(key,sort_keys=True).encode()).hexdigest()
     cache = ROOT/'data/cache'/('harvest_geography_'+stamp[:20]+'.npz')
     if cache.exists():
@@ -65,8 +68,20 @@ def geometry(meta, shape):
     block = lambda a: np.asarray(a).reshape(h,sy,w,sx).mean((1,3))
     fraction = block(land.astype(float))
     arable = np.zeros(land.shape, dtype=np.float32)
-    for tier,share in ARABLE_BY_TIER.items():
-        arable[layers['tier']==tier] = share
+    if terrain:
+        # GAEZ slope rule applied at 90 m on Earth, expressed through the slope a ~1.84 km cell resolves
+        # (Copernicus GLO-90 fit, blind-tested: data/arable_slope_model.json)
+        m = json.loads((ROOT/'data/arable_slope_model.json').read_text())['params']
+        z = np.load(ROOT/terrain)['z'].astype(float)
+        if z.shape != land.shape:
+            raise ValueError('terrain file does not match the source map')
+        dx = meta['mi_per_px']*1609.344
+        gy,gx = np.gradient(np.where(land,z,0.0),dx)
+        slope = np.degrees(np.arctan(np.hypot(gy,gx)))
+        arable[land] = (m['lo']+(m['hi']-m['lo'])/(1+np.power(np.maximum(slope,1e-6)/m['S0'],m['k'])))[land]
+    else:
+        for tier,share in ARABLE_BY_TIER.items():
+            arable[layers['tier']==tier] = share
     arable = block(arable)/np.maximum(fraction,1e-12)
     km_px = meta['mi_per_px']*1.609344
     water = layers['rivers'] | layers['lake']
@@ -402,7 +417,7 @@ def export(atlas):
              'scripts/land_people_hexes.py','scripts/vector_rivers.py','data/harvest_model.json',
              'data/harvest_sources.json','data/settlement_reference_regions.json','data/hexgrid.json','ravages/data.json',
              'data/source/elevation.png','data/source/rivers.png','data/source/original/rivers.png',
-             'land/earth.webp']]
+             'land/earth.webp','data/arable_slope_model.json']]
     identity=dict(climate_sha256=digest(data/'atlas.bin'),metadata=physical_metadata(meta),
                   sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()

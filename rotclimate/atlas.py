@@ -369,7 +369,8 @@ def build(result, fr, ev, outdir: Path = ATLAS / "data", image_scale=3):
         north_bearing=p.north_bearing,
         world=dict(lat_south=map_lat_range(p)[0], lat_north=map_lat_range(p)[1],
                    north_bearing=p.north_bearing, tilt=p.tilt, retrograde=p.retrograde, tier_tops=list(p.tier_tops),
-                   beyond=_beyond_facts(p) if p.beyond_style == "procedural" else None),
+                   beyond=_beyond_facts(p) if p.beyond_style == "procedural" else None,
+                   **({"terrain_file": p.terrain_file} if getattr(p, "terrain_file", "") else {})),
     )
     (outdir / "atlas.json").write_text(json.dumps(meta, ensure_ascii=False))
     return meta

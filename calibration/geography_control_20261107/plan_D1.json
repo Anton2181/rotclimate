@@ -23,13 +23,65 @@
   },
   "tiles": {
    "format": "1 x 1 degree, south-west corner",
-   "development": ["N44E010", "N48E002", "N37E022", "N41E014", "N36E036", "N33E044", "N30E031", "N34E113", "N30E103", "N25E085", "N39E033", "N52E013"],
-   "blind": ["N45E006", "N47E019", "N38E015", "N40E022", "N32E035", "N29E031", "N35E112", "N26E118", "N28E077", "N40E044", "N51E000", "N37E027"],
+   "development": [
+    "N44E010",
+    "N48E002",
+    "N37E022",
+    "N41E014",
+    "N36E036",
+    "N33E044",
+    "N30E031",
+    "N34E113",
+    "N30E103",
+    "N25E085",
+    "N39E033",
+    "N52E013"
+   ],
+   "blind": [
+    "N45E006",
+    "N47E019",
+    "N38E015",
+    "N40E022",
+    "N32E035",
+    "N29E031",
+    "N35E112",
+    "N26E118",
+    "N28E077",
+    "N40E044",
+    "N51E000",
+    "N37E027"
+   ],
    "why": "old-world farming land of c. AD 200 and its margins, each set mixing plains, hills and mountains; none has been used for any fit"
   },
   "blind_gate": "on the blind tiles, the chosen candidate's RMSE against the Earth target is below the baseline's in at least 8 of 12 tiles and in total, and its mean bias is within +/- 0.05",
   "map_check": "the map's own 1.84 km slope distribution in tier 1 is compared with Earth lowland slopes at the same scale (output/terrain_erosion_20261107/earth_lowland_slopes.json ref2) and reported, since a(S) is applied to the map's slopes",
   "if_it_passes": "harvest/export.py geometry takes the arable share from a(S) on the atlas's terrain file (tier constants stay for atlases without one); the farming, population, settlement and control layers inherit it at the next release",
-  "if_it_fails": "the tier constants stay and the result is reported"
+  "if_it_fails": "the tier constants stay and the result is reported",
+  "result": {
+   "date": "2026-11-08",
+   "chosen": "S",
+   "params": {
+    "lo": 0.017966512663571743,
+    "hi": 0.9999999999986673,
+    "S0": 2.754042901671169,
+    "k": 1.2886107831801539
+   },
+   "development_tile_mean_rmse": {
+    "baseline": 0.23987810351004688,
+    "S": 0.11877786195855494,
+    "S_band": 0.1182334847306884
+   },
+   "blind": {
+    "rmse_baseline": 0.3083006306708157,
+    "rmse_S": 0.1843689101219709,
+    "bias": 0.036325056859976744,
+    "tiles_better": "12 of 12",
+    "adopt": true
+   },
+   "weak_spots": "over-estimates arable land in finely dissected hill country whose 1.85 km slope is moderate (Shanxi loess +0.19, Fujian hills +0.20)",
+   "map_check": "map slopes vs Earth cells in the same absolute elevation band: tiers 3-4 match (arable 0.44 / 0.30 vs Earth 0.47 / 0.29); tiers 1-2 are steeper than Earth land at 0-62 m / 62-814 m, but the tiers are relative bands (tier 1 = the lowest 70 % of land), so the band comparison is indicative only; output/terrain_erosion_20261107/earth_lowland_slopes.json ref2 was not used because its scale is undocumented",
+   "map_effect": "land-weighted arable share 0.744 -> 0.739; per tier 0.85 / 0.58 / 0.44 / 0.30 (constants 0.85 / 0.75 / 0.45 / 0.08); tier-1 valley floors 0.91",
+   "wired": "harvest/export.py geometry (atlases with a terrain file, recorded in atlas.json world.terrain_file by rotclimate/atlas.py); data/arable_slope_model.json; takes effect at the next release"
+  }
  }
 }
