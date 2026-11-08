@@ -103,6 +103,45 @@ and territory. A baseline worktree reproduced 0.8488 and 0.6637.
 * **Earth control development pools (balanced accuracy, D1 + D2 against the original chain):** Rome 0.8488 → 0.8485, Han
   0.6637 → 0.6628. Both lose less than 0.01, so the gate passes and D1 + D2 is adopted together (`output/arable_slope_d1/`).
 
+## D2b: irrigation reach on wide floodplains
+
+* **Question.** Is the 6 km distance decay too narrow for floodplains like the Nile's (10–20 km)? D2 was chosen on
+  ranking only; D2b also scores the amount.
+* **Candidates.** Reach 6, 12, 24 or 48 km from navigable rivers (streams scaled alike) × height gate exp(−H / 5, 10 or
+  20 m); nothing beyond 60 km of a mapped river.
+* **Amount metric.** |ln(model irrigable area / HID 1900 equipped area)| over arid cells (P/PET < 0.2) within 30 km of a
+  mapped river, where farming is irrigation or nothing.
+* **Regions.** Development 12° W – 45° E; the spent D2 blind region (60° E – 125° E) reported only; fresh blind: the
+  Americas, 10° S – 50° N.
+* **Selection (frozen).** Among candidates with development AUC at most 0.01 below today's rule, the lowest amount error.
+
+| Rule | Dev AUC | Dev amount | Blind (Americas) AUC | Blind amount |
+|---|---|---|---|---|
+| Today: 6 km × exp(−H / 10 m) | 0.720 | 2.30× | 0.725 | 2.51× |
+| **Chosen: 6 km × exp(−H / 5 m)** | 0.726 | 2.00× | 0.726 | 2.33× |
+| 24 km × exp(−H / 10 m) | 0.747 | 4.62× | 0.742 | 4.20× |
+| 48 km × exp(−H / 20 m) | 0.747 | 7.06× | 0.751 | 5.99× |
+
+* **Blind gate passes** (amount better, AUC not lower), so the gate scale becomes 5 m; the reach stays 6 km.
+* **The finding is the bigger result: reach is not the lever.** Every candidate already irrigates too much in arid land,
+  and a wider reach only adds more. By region (development, arid cells within 30 km of a river, today's rule against
+  1900):
+
+| Region | HID 1900 | Today's rule |
+|---|---|---|
+| Nile valley | 8,200 km² | 7,600 km² |
+| Nile delta | 12,500 km² | 5,200 km² |
+| Mesopotamia (1900 canals decayed) | 2,300 km² | 10,300 km² |
+| Rest of Sahara and Arabia | 2,200 km² | 34,800 km² |
+
+* The Nile valley is about right. The delta is a solid irrigated fan that a distance-to-two-branches rule cannot reach,
+  and every small arid river irrigates as much as the Nile. Both are water-supply questions: discharge and distributaries,
+  not floodplain width.
+* **Population check.** `FALLOW` refit 0.5997, kept at 0.600. Ten regions RMS 1.652 → 1.653 (gate ≤ +0.05). Egypt
+  +0.64 → +0.72: the delta shortfall, as above.
+
+![D2b: irrigation vs HID 1900](figures/irrigation_reach_d2b.png)
+
 ## Simulated rivers drawn at the map's resolution (plan_R2)
 
 Owner: "The Simulated Rivers are still wildly different from the Target ones".

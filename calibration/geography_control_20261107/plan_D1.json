@@ -219,6 +219,186 @@
   "selection": "among candidates whose development AUC is at least today's rule minus 0.01, the lowest development amount error",
   "blind_gate": "on the Americas, the chosen candidate's amount error is below today's rule's and its AUC is not more than 0.01 below it",
   "if_it_passes": "the map and the Earth harness take the new reach; FALLOW refitted; the D1b no-harm checks repeated (regional populations incl. Egypt reported, control dev pools) before a release",
-  "if_it_fails": "the D2 rule stays; reported"
+  "if_it_fails": "the D2 rule stays; reported",
+  "result": {
+   "script": "scripts/irrigation_reach_d2b.py",
+   "outputs": "output/irrigation_reach_d2b/{dev,blind}.json",
+   "development": {
+    "L6_H5": {
+     "auc": 0.726,
+     "amount_ratio": 2.0
+    },
+    "L6_H10": {
+     "auc": 0.72,
+     "amount_ratio": 2.3
+    },
+    "L6_H20": {
+     "auc": 0.71,
+     "amount_ratio": 2.63
+    },
+    "L12_H5": {
+     "auc": 0.74,
+     "amount_ratio": 2.88
+    },
+    "L12_H10": {
+     "auc": 0.736,
+     "amount_ratio": 3.4
+    },
+    "L12_H20": {
+     "auc": 0.728,
+     "amount_ratio": 4.05
+    },
+    "L24_H5": {
+     "auc": 0.748,
+     "amount_ratio": 3.84
+    },
+    "L24_H10": {
+     "auc": 0.747,
+     "amount_ratio": 4.62
+    },
+    "L24_H20": {
+     "auc": 0.742,
+     "amount_ratio": 5.64
+    },
+    "L48_H5": {
+     "auc": 0.749,
+     "amount_ratio": 4.69
+    },
+    "L48_H10": {
+     "auc": 0.75,
+     "amount_ratio": 5.71
+    },
+    "L48_H20": {
+     "auc": 0.747,
+     "amount_ratio": 7.06
+    }
+   },
+   "check_reported": {
+    "L6_H5": {
+     "auc": 0.675,
+     "amount_ratio": 1.01
+    },
+    "L6_H10": {
+     "auc": 0.671,
+     "amount_ratio": 1.08
+    },
+    "L6_H20": {
+     "auc": 0.659,
+     "amount_ratio": 1.14
+    },
+    "L12_H5": {
+     "auc": 0.694,
+     "amount_ratio": 1.61
+    },
+    "L12_H10": {
+     "auc": 0.699,
+     "amount_ratio": 1.75
+    },
+    "L12_H20": {
+     "auc": 0.694,
+     "amount_ratio": 1.87
+    },
+    "L24_H5": {
+     "auc": 0.709,
+     "amount_ratio": 2.43
+    },
+    "L24_H10": {
+     "auc": 0.722,
+     "amount_ratio": 2.66
+    },
+    "L24_H20": {
+     "auc": 0.726,
+     "amount_ratio": 2.89
+    },
+    "L48_H5": {
+     "auc": 0.719,
+     "amount_ratio": 3.32
+    },
+    "L48_H10": {
+     "auc": 0.738,
+     "amount_ratio": 3.67
+    },
+    "L48_H20": {
+     "auc": 0.749,
+     "amount_ratio": 4.01
+    }
+   },
+   "hid_arid_km2": {
+    "development": 25179,
+    "check": 42426,
+    "blind": 6011
+   },
+   "chosen": "L6_H5",
+   "blind": {
+    "L6_H5": {
+     "auc": 0.726,
+     "amount_ratio": 2.33
+    },
+    "L6_H10": {
+     "auc": 0.725,
+     "amount_ratio": 2.51
+    },
+    "L6_H20": {
+     "auc": 0.718,
+     "amount_ratio": 2.78
+    },
+    "L12_H5": {
+     "auc": 0.732,
+     "amount_ratio": 3.02
+    },
+    "L12_H10": {
+     "auc": 0.736,
+     "amount_ratio": 3.31
+    },
+    "L12_H20": {
+     "auc": 0.736,
+     "amount_ratio": 3.77
+    },
+    "L24_H5": {
+     "auc": 0.735,
+     "amount_ratio": 3.79
+    },
+    "L24_H10": {
+     "auc": 0.742,
+     "amount_ratio": 4.2
+    },
+    "L24_H20": {
+     "auc": 0.747,
+     "amount_ratio": 4.89
+    },
+    "L48_H5": {
+     "auc": 0.734,
+     "amount_ratio": 4.55
+    },
+    "L48_H10": {
+     "auc": 0.743,
+     "amount_ratio": 5.08
+    },
+    "L48_H20": {
+     "auc": 0.751,
+     "amount_ratio": 5.99
+    }
+   },
+   "gate": {
+    "amount_better": true,
+    "auc_ok": true
+   },
+   "adopt": true,
+   "finding": "wider reach ranks slightly better but every candidate already over-irrigates arid river cells (2.0-7.1x on development, 2.3-6.0x blind); the reach is not the lever. By region (development, arid cells within 30 km, today vs HID): Nile valley 7.6k vs 8.2k km2, Nile delta 5.2k vs 12.5k, Mesopotamia 10.3k vs 2.3k (1900 canals decayed), rest of Sahara/Arabia 34.8k vs 2.2k. The errors are water supply (small arid rivers irrigate as much as the Nile) and delta distributaries, not floodplain width.",
+   "population_check": {
+    "fallow": 0.5997,
+    "fallow_kept": 0.6,
+    "rms": {
+     "original": 1.701,
+     "d2": 1.652,
+     "d2b": 1.653
+    },
+    "egypt": {
+     "d2": 0.64,
+     "d2b": 0.72
+    },
+    "gate_pass": true
+   }
+  }
  }
 }
