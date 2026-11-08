@@ -178,5 +178,44 @@
   "finding": "34 % of land (47 % of tier 1) is flat at the source pixel (steepest drop < 1 cm): closed hollows of the hill layer filled to their spill level (height map v2 had them as undrained pits); Priority-Flood + epsilon drained them in parallel straight lines",
   "change": "before Priority-Flood + epsilon, every flat gets increments towards its lower edges and away from its higher edges (Barnes, Lehman & Mulla 2014b, Computers & Geosciences 62, 128-135; Garbrecht & Martz 1997), 2e-4 m per increment; river cells untouched; all gates re-checked",
   "also": "drainage areas: fastscapelib accumulate() already multiplies by the cell area, so areas passed as accumulate(dx^2) were m^4. Reported areas, the B3 checks, the previews and plan_B2 M3 now use m^2. Inside evolve() the m^4 numerics are kept because every Earth fit (plan_B2 C*, hill fit, plan_R1) was made with them (verified bit-identical); in them the river boost was inactive (about 0.003 km2) and the first-round rescale clipped. Earlier channel-based checks (rivers_on_channel = 1.0, plan_B2 M3 F1 = 1.00) were therefore not informative."
+ },
+ "amendment_5": {
+  "date": "2026-11-08",
+  "why": "owner: \"there is a number of cases on the drawn map where a river goes into a lake then goes back to a river - in the erosion map, they always end at the lake and do not re-start to the sea\"",
+  "diagnosis": "outlets() counted every lake as a river end like the sea, so a river leaving a lake for the sea had water at both ends and split halfway: its upper half drained back into the lake (v2.1 fails the lake-aware check: none of the 11 pass-through lakes drains out, 655 climbing steps)",
+  "change": "lake network (scripts/terrain_rivers.py lake_network): lakes linked to the sea through drawn rivers are pass-through (rivers flow through them; the geodesic runs through the lake on to the sea); a cluster of lakes with no link to the sea drains into its largest lake (terminal); each pass-through lake is flat at the head of its outflow (stored as lake_level; the atlas loader still zeroes water); shores kept at least b0 above the lake; the strict check takes lake levels and also requires every pass-through lake to drain out",
+  "result": {
+   "strict_passes": true,
+   "climbing_steps": 0,
+   "pass_through_lakes": [
+    2,
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    11,
+    12,
+    13,
+    14
+   ],
+   "all_drain_out": true,
+   "terminal_sinks": [
+    1,
+    9,
+    10
+   ],
+   "gates": {
+    "owner_rivers": true,
+    "tier_bands_2_4": true,
+    "climate_scale": true,
+    "lowland_slope": true
+   },
+   "changed_cells_over_half_m": 32610,
+   "note": "all changes come from the lake handling (same composition conditioned with and without lakes reproduces v2.1 and v2.2 exactly); about half lie along the lake systems and half are low basins whose fill level follows a changed river bed"
+  },
+  "simulated_rivers": "rotclimate/routing.py: lakes with a level are part of the drainage, so outflows carry the inflows (lake 8 outflow 8.7 -> 1,830 m3/s; lake chain 2-3-5-4 outflow 7 -> 1,069)",
+  "file": "output/terrain_erosion_20261107/map_height_v22.npz"
  }
 }

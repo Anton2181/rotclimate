@@ -83,6 +83,19 @@ def _accumulate(order, recv, src):
     return acc
 
 
+def lake_levels(terrain_file=""):
+    """Levels (m) of the lakes rivers flow through, from a height map that stores them (lake_level, height map v2.2);
+    zero elsewhere and for maps without them (their lakes stay river ends)."""
+    from .geography import DATA, source_layers
+    from pathlib import Path
+    shape = source_layers()["land"].shape
+    if not terrain_file:
+        return np.zeros(shape)
+    path = Path(terrain_file); path = path if path.is_absolute() else DATA.parent / path
+    d = np.load(path)
+    return np.asarray(d["lake_level"], float) if "lake_level" in d.files else np.zeros(shape)
+
+
 def surface(tier_tops, terrain_file=""):
     """The routing surface at source resolution, the land mask and the drawn rivers."""
     from .geography import elevation_fullres, source_layers
@@ -94,12 +107,17 @@ def surface(tier_tops, terrain_file=""):
 
 
 def discharge(runoff_px_mm, tier_tops, terrain_file, map_width_mi):
-    """Discharge (m3/s) at source resolution from annual runoff (mm/yr) given per source pixel."""
+    """Discharge (m3/s) at source resolution from annual runoff (mm/yr) given per source pixel. Lakes with a level
+    (rivers flow through them, owner 8 Nov 2026) are part of the drainage at that level, so their outflow carries
+    the inflows on to the sea; other lakes and the sea end the flow."""
     z, land, rivers = surface(tier_tops, terrain_file)
     H, W = land.shape
     px_m = map_width_mi * 1609.344 / W
+    level = lake_levels(terrain_file)
+    through = ~land & (level > 0)
+    net = land | through
     src = np.where(land, np.maximum(runoff_px_mm, 0.0), 0.0) / 1000.0 * px_m * px_m / (365.0 * 86400.0)
-    recv, order = _flood(np.where(land, z, -1e9), land, NB)
+    recv, order = _flood(np.where(land, z, np.where(through, level, -1e9)), net, NB)
     q = _accumulate(order, recv, src.ravel()).reshape(H, W)
     return q, recv, land, rivers
 

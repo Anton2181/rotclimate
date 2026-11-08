@@ -330,6 +330,54 @@ def outlets(land, riv):
     return riv & water
 
 
+def lake_network(land, lake, riv):
+    """Lakes and drawn rivers as one network (owner, 8 Nov 2026: a river that flows into a lake and out of it again
+    continues to the sea). Water bodies are nodes (0 = the sea and the map edge, i = lake i); a drawn-river component
+    touching two or more of them links them. Lakes linked to the sea are open: rivers flow through them. A cluster of
+    lakes with no link to the sea drains into its largest lake (terminal, endorheic). Returns (outlet, passable,
+    lake_label, info): outlet = river cells draining to the sea, the map edge or a terminal sink lake; passable = cells of
+    the lakes the rivers flow through."""
+    from collections import deque
+    land = land.astype(bool); lake = lake.astype(bool) & ~land; riv = riv.astype(bool) & land
+    K = np.ones((3, 3)); sea = ~land & ~lake
+    edge = np.zeros_like(land); edge[0, :] = edge[-1, :] = edge[:, 0] = edge[:, -1] = True
+    lab, n = ndi.label(lake)
+    rl, _ = ndi.label(riv, structure=K)
+    water_of = {}
+    for i in range(1, n + 1):
+        for r in set(np.unique(rl[riv & ndi.binary_dilation(lab == i, K)])) - {0}:
+            water_of.setdefault(int(r), set()).add(i)
+    for r in set(np.unique(rl[riv & (ndi.binary_dilation(sea, K) | edge)])) - {0}:
+        water_of.setdefault(int(r), set()).add(0)
+    links = {r: s for r, s in water_of.items() if len(s) > 1}
+    area = ndi.sum(np.ones_like(lab), lab, index=np.arange(n + 1))
+
+    def reach(start):
+        seen = {start: None}; q = deque([start])
+        while q:
+            w = q.popleft()
+            for r, s in links.items():
+                if w in s:
+                    for v in s:
+                        if v not in seen:
+                            seen[v] = (r, w); q.append(v)
+        return seen
+    drains = reach(0); sinks = [0]
+    rest = [i for i in range(1, n + 1) if i not in drains]
+    while rest:                                             # terminal clusters: the largest lake is the sink
+        cluster = reach(rest[0]); sink = max(cluster, key=lambda i: area[i])
+        for k, v in reach(sink).items():
+            drains.setdefault(k, v)
+        sinks.append(sink); rest = [i for i in rest if i not in cluster]
+    passable = np.isin(lab, [i for i in range(1, n + 1) if i not in sinks])
+    sink_water = sea | np.isin(lab, [i for i in sinks if i > 0])
+    outlet = riv & (ndi.binary_dilation(sink_water, K) | edge)
+    info = dict(lakes=n, open_lakes=sorted(i for i in drains if i and i not in sinks and 0 in reach(i)),
+                terminal_sinks=[i for i in sinks if i], pass_through=sorted(i for i in range(1, n + 1) if i not in sinks),
+                drains_into={int(k): (None if v is None else int(v[1])) for k, v in drains.items() if k})
+    return outlet, passable, lab, info
+
+
 def connected(land, rivers):
     """Drawn-river cells joined to an outlet along the drawing (Earth sketches can leave fragments where the routing
     jumped a sink)."""
@@ -337,12 +385,18 @@ def connected(land, rivers):
     return riv & np.isfinite(_geodesic(riv, outlets(land, riv), NB, ND))
 
 
-def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=0.5):
-    """The conditioned height map (float64) and a record of what changed (plan_R1 with amendment 1)."""
+def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=0.5, lake=None):
+    """The conditioned height map (float64) and a record of what changed (plan_R1 with amendment 1). With `lake` (plan_R1
+    amendment 5), rivers flow through open lakes on to the sea; the record then carries each open lake's level."""
     land = land.astype(bool); riv = rivers.astype(bool) & land
     z = np.where(land, np.maximum(z.astype(float), 1.0), 0.0)            # the atlas loader's land floor (geography._terrain_file)
-    g = _geodesic(riv, outlets(land, riv), NB, ND)
-    ok = riv & np.isfinite(g)
+    if lake is not None:
+        out_cells, passable, lake_lab, net = lake_network(land, lake, riv)
+    else:
+        out_cells, passable, lake_lab, net = outlets(land, riv), np.zeros_like(land), None, None
+    flow = riv | passable                                                 # rivers plus the lakes they flow through
+    g = _geodesic(flow, out_cells, NB, ND)
+    ok = flow & np.isfinite(g)
     if (riv & ~ok).any():
         raise ValueError(f"{int((riv & ~ok).sum())} drawn-river cells are not connected to an outlet along the drawing")
     order = np.flatnonzero(ok.ravel())[np.argsort(-g[ok], kind="stable")]
@@ -350,9 +404,18 @@ def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=
         t = np.maximum(alpha * ramp, 1.0)
     else:                                                                  # the composition's local valley floor
         t = np.maximum(-ndi.maximum_filter(np.where(land, -z, -np.inf), size=5), 1.0)
+    if passable.any():                                                     # a lake's reference is its lowest shore's
+        for i in np.unique(lake_lab[passable]):
+            m = lake_lab == i; shore = land & ndi.binary_dilation(m, np.ones((3, 3)))
+            t = np.where(m, t[shore].min(), t)
     gg = np.where(ok, g, -1.0)
-    Lo, Up = _envelopes(np.where(riv, t, 0.0), riv, gg, order, NB, ND, FLOOR0, FSTEP, DECMIN)
-    R = np.where(riv, 0.5 * (np.where(riv, Lo, 0.0) + np.where(riv, Up, 0.0)), 0.0)
+    Lo, Up = _envelopes(np.where(flow, t, 0.0), flow, gg, order, NB, ND, FLOOR0, FSTEP, DECMIN)
+    R = np.where(flow, 0.5 * (np.where(flow, Lo, 0.0) + np.where(flow, Up, 0.0)), 0.0)
+    level = np.zeros(z.shape)
+    if passable.any():                                                     # flat lake surface at the head of its outflow
+        for i in np.unique(lake_lab[passable]):
+            m = lake_lab == i; level[m] = R[m].min()
+    R = np.where(riv, R, 0.0)
     zv = z.copy()
     if W > 0:
         d, (iy, ix) = ndi.distance_transform_edt(~riv, return_indices=True)
@@ -365,6 +428,11 @@ def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=
     Rmax = ndi.maximum_filter(np.where(riv, R, -np.inf), size=3)
     bank = land & ~riv & np.isfinite(Rmax) & (zc < Rmax + b0)
     zc[bank] = (Rmax + b0)[bank]
+    shore_raised = 0
+    if passable.any():                                                     # no shore below its lake (rivers excepted)
+        lv = ndi.maximum_filter(level, size=3)
+        shore = land & ~riv & (lv > 0) & (zc < lv + b0)
+        zc[shore] = (lv + b0)[shore]; shore_raised = int(shore.sum())
     # amendment 4: flats drain towards their lower edges and away from higher ones (Barnes et al. 2014b), then PF + eps
     zfill = _fill(np.where(land, zc, 0.0), land, NB)
     inc = _flat_increments(zfill, land, NB)
@@ -375,14 +443,25 @@ def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=
                valley_lowered_cells=int((zv < z - 1e-9).sum()), valley_raised_cells=int((zv > z + 1e-9).sum()),
                banks_raised=int(bank.sum()), pf_raised_cells=int(raised),
                pf_changed_river_cells=int((np.abs(zf - zc) > 1e-9)[riv].sum()))
+    if net is not None:
+        rec.update(lakes=net, shore_raised_cells=shore_raised,
+                   lake_levels_m={int(i): float(level[lake_lab == i].max()) for i in np.unique(lake_lab[passable])})
+        return np.where(land, zf, 0.0), rec, level
     return np.where(land, zf, 0.0), rec
 
 
-def strict_check(z, land, rivers):
-    """The owner requirement on the stored (float32) surface."""
+def strict_check(z, land, rivers, lake=None, level=None):
+    """The owner requirement on the stored (float32) surface. With `lake` and `level` (plan_R1 amendment 5), a lake
+    rivers flow through is water at its own level, so its inflows end in it and its outflow carries on to the sea."""
     land = land.astype(bool); riv = rivers.astype(bool) & land; ny, nx = z.shape
     z = np.where(land, np.asarray(z, np.float32).astype(float), 0.0)
-    zz = np.where(land, z, -1.0); pad = np.pad(zz, 1, constant_values=-1.0)       # water and off-map = outlets
+    zz = np.where(land, z, -1.0)
+    through = None
+    if lake is not None:
+        out_cells, passable, lake_lab, net = lake_network(land, lake, riv)
+        lv = np.asarray(level, np.float32).astype(float)
+        zz = np.where(passable, lv, zz); through = (out_cells, passable, lake_lab, net, lv)
+    pad = np.pad(zz, 1, constant_values=-1.0)                                     # water and off-map = outlets
     best = np.zeros(z.shape); arg = np.full(z.shape, -1)
     for k, (dy, dx) in enumerate(NB):
         s = (zz - pad[1 + dy:1 + dy + ny, 1 + dx:1 + dx + nx]) / ND[k]
@@ -408,7 +487,24 @@ def strict_check(z, land, rivers):
             path.append((y, x)); k = arg[y, x]; y, x = y + NB[k, 0], x + NB[k, 1]
         for q in path:
             state[q] = res
-    g = _geodesic(riv, outlets(land, riv), NB, ND)
+    if through is None:
+        g = _geodesic(riv, outlets(land, riv), NB, ND)
+    else:
+        g = _geodesic(riv | through[1], through[0], NB, ND)
+    lake_report = {}
+    if through is not None:                                  # every lake the rivers flow through must drain out
+        _, passable, lake_lab, net, lv = through
+        for i in np.unique(lake_lab[passable]):
+            m = lake_lab == i; lvl = float(lv[m].max())
+            outs = riv & ndi.binary_dilation(m, np.ones((3, 3))) & (z < lvl)
+            ends = []
+            for y, x in zip(*np.nonzero(outs)):
+                for _ in range(ny * nx):
+                    if not (0 <= y < ny and 0 <= x < nx) or not land[y, x] or arg[y, x] < 0:
+                        break
+                    k = arg[y, x]; y, x = y + NB[k, 0], x + NB[k, 1]
+                ends.append(bool(not (0 <= y < ny and 0 <= x < nx) or lake_lab[y, x] != i))
+            lake_report[int(i)] = dict(level_m=lvl, outflow_cells=int(outs.sum()), outflow_leaves_lake=bool(ends) and all(ends))
     climbs, steps = [], 0
     for y, x in zip(*np.nonzero(riv & np.isfinite(g) & (g > 0))):
         best_d = None
@@ -425,12 +521,14 @@ def strict_check(z, land, rivers):
     below = (z < lowest_bank) | ~np.isfinite(lowest_bank)
     lab, n = ndi.label(riv, structure=np.ones((3, 3)))
     comp_ok = sum(1 for i in range(1, n + 1) if (state[lab == i] == 1).all())
+    lakes_ok = all(v["outflow_leaves_lake"] for v in lake_report.values())
     return dict(river_cells=int(riv.sum()), receiver_on_river_or_water=float(rec_ok[riv].mean()),
                 path_stays_on_river_to_outlet=float((state[riv] == 1).mean()),
                 downstream_steps=steps, climbing_steps=len(climbs),
                 climb_m_p50_p90_p99=[float(v) for v in np.percentile(climbs, [50, 90, 99])] if climbs else [],
                 below_every_bank=float(below[riv].mean()), components=int(n), components_all_draining=int(comp_ok),
-                passes=bool(rec_ok[riv].all() and (state[riv] == 1).all() and not climbs and below[riv].all()))
+                **({"through_lakes": lake_report, "through_lakes_drain_out": lakes_ok} if through is not None else {}),
+                passes=bool(rec_ok[riv].all() and (state[riv] == 1).all() and not climbs and below[riv].all() and lakes_ok))
 
 
 def cross_profile(z, land, rivers, rings=RINGS):
@@ -631,9 +729,11 @@ def scan3():
     log("chosen:", out["chosen"], "hills", out["hill_height_m"], "Earth loss given up:", round(out["earth_loss_given_up"], 3))
 
 
-def build():
+def build(version="v21"):
     """Height map v2.1: the released v2 composition with the drawn rivers conditioned in (Earth-fitted valley form,
-    map tier gates as constraints: plan_R1 amendment 2)."""
+    map tier gates as constraints: plan_R1 amendment 2). version="v22" (amendment 5): the same, with rivers flowing
+    through open lakes on to the sea and each such lake at its own level (stored as lake_level); gated against v2.1."""
+    lakes = version == "v22"
     import terrain_erosion as TE
     from rotclimate.geography import elevation_fullres, source_layers
     scan = json.loads((OUT / "map_form_scan3.json").read_text()); form = scan["chosen"]            # amendment 3
@@ -645,17 +745,26 @@ def build():
     hf = dict(json.loads((ERO / "hill_fit.json").read_text())["best"], height_m=scan["hill_height_m"], weight="tier 1 only (amendment 3)")
     hill_rows = [{k: r[k] for k in ("hill_height_m", "hill_ks")} for r in scan["rows"][-1:]]
     z0, info = TE.compose(h0, land, rivers, dx, cs, hf, hill_weight=tier1_weight(tier))
-    v2 = np.load(ERO / "map_height_v2.npz")["z"].astype(float)
-    z, rec = condition(z0, land, rivers, ramp=h0, **form)
+    base = "map_height_v21.npz" if lakes else "map_height_v2.npz"
+    v2 = np.load(ERO / base)["z"].astype(float)
+    if lakes:
+        lake = L["lake"].astype(bool) & ~land
+        z, rec, level = condition(z0, land, rivers, ramp=h0, lake=lake, **form)
+    else:
+        z, rec = condition(z0, land, rivers, ramp=h0, **form)
     z32 = np.where(land, z, 0.0).astype(np.float32)
     import fastscapelib as fs
     status = {(int(i), int(j)): fs.NodeStatus.FIXED_VALUE for i, j in zip(*np.nonzero(~land))}
     grid = fs.RasterGrid(list(z.shape), [dx, dx], fs.NodeStatus.FIXED_VALUE, status)
     flow = fs.FlowGraph(grid, [fs.SingleFlowRouter(), fs.MSTSinkResolver()]); flow.update_routes(z32.astype(float))
     A = flow.accumulate(1.0)
-    strict = strict_check(z32, land, rivers); strict_v2 = strict_check(v2, land, rivers)
+    if lakes:
+        lv32 = level.astype(np.float32)
+        strict = strict_check(z32, land, rivers, lake=lake, level=lv32); strict_v2 = strict_check(v2, land, rivers, lake=lake, level=np.zeros(z.shape))
+    else:
+        strict = strict_check(z32, land, rivers); strict_v2 = strict_check(v2, land, rivers)
     c = TE.checks(z32.astype(float), h0, land, rivers, tier, tops, A, dx)
-    c2 = TE.checks(v2, h0, land, rivers, tier, tops, np.load(ERO / "map_height_v2.npz")["area"].astype(float), dx)
+    c2 = TE.checks(v2, h0, land, rivers, tier, tops, np.load(ERO / base)["area"].astype(float), dx)
     c["tier1_slope_9km_median_deg"] = float(np.median(TE.slopes_9km(z32.astype(float), land, dx, tier, 1)))
     gates = dict(
         owner_rivers=strict["passes"],
@@ -667,13 +776,19 @@ def build():
                checks=c, checks_v2=c2, tier_band_reference_earth=ref, gates=gates, adopt=bool(all(gates.values())),
                composition_matches_v2_off_rivers=float(np.median(np.abs(z0 - v2)[land & ~ndi.binary_dilation(rivers, iterations=12)])))
     OUT.mkdir(parents=True, exist_ok=True)
-    np.savez_compressed(ERO / "map_height_v21.npz", z=z32, area=A.astype(np.float32), tier_tops=np.asarray(tops, float))
-    (OUT / "map_height_v21.json").write_text(json.dumps(out, indent=1, default=float))
+    extra = dict(lake_level=lv32) if lakes else {}
+    np.savez_compressed(ERO / f"map_height_{version}.npz", z=z32, area=A.astype(np.float32), tier_tops=np.asarray(tops, float), **extra)
+    (OUT / f"map_height_{version}.json").write_text(json.dumps(out, indent=1, default=float))
     log(json.dumps(dict(strict=strict, gates=gates, conditioning=rec, hills=hf, bed_over_ramp=(c["river_bed_over_ramp"], c2["river_bed_over_ramp"]),
                         tier_bands=(c["tier_band_share"], c2["tier_band_share"]),
                         climate_scale=(c["climate_scale_mean_abs_m"], c2["climate_scale_mean_abs_m"]),
                         tier1_slope=c["tier1_slope_9km_median_deg"]), indent=1, default=float))
     preview(z32.astype(float), v2, land, rivers, dx, A)
+    if lakes:                                                # keep the v2.1 previews; name these v2.2
+        for kind in ("detail", "full"):
+            src = OUT / f"map_height_v21_{kind}.png"
+            if src.exists():
+                src.replace(OUT / f"map_height_v22_{kind}.png")
 
 
 def preview(z, v2, land, rivers, dx, A):
@@ -706,9 +821,12 @@ def preview(z, v2, land, rivers, dx, A):
 
 def check_cmd(path):
     from rotclimate.geography import source_layers
-    L = source_layers(); z = np.load(path)["z"]
-    log(json.dumps(strict_check(z, L["land"], L["rivers"]), indent=1))
+    L = source_layers(); d = np.load(path); z = d["z"]
+    if "lake_level" in d.files:                              # amendment 5: rivers flow through open lakes
+        log(json.dumps(strict_check(z, L["land"], L["rivers"], lake=L["lake"], level=d["lake_level"]), indent=1, default=float))
+    else:
+        log(json.dumps(strict_check(z, L["land"], L["rivers"]), indent=1))
 
 
 if __name__ == "__main__":
-    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "scan": scan, "scan3": scan3, "build": build}[sys.argv[1]]()
+    {"check": lambda: check_cmd(sys.argv[2]), "dev": dev, "scan": scan, "scan3": scan3, "build": build, "build22": lambda: build("v22")}[sys.argv[1]]()
