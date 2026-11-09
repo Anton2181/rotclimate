@@ -1,3 +1,22 @@
+# P8b heat-exchange diagnostic — 9 November 2026
+
+* Frozen plan calibration/air_sea_audit_20261109/plan.json: six known/spent regions x r44/failed P8a C3,
+  56km; no new coefficient, fit, sealed pool or adoption. Driver scripts/audit_air_sea_exchange.py.
+* Added opt-in model.heat_record: final output-year last linear heat solve's actual SST, solved air,
+  rate-evaluation air, relaxation rate and heat winds. No physics equation changed. Four tests PASS:
+  r44/C3 observer-on/off every field and numerics bit-identical, units and southern calendar/wind frame.
+* Audit output output/air_sea_audit_20261109. Driver downloads sigma0.995 air/winds, verifies NOAA DAS
+  period1991-2020 and units, hashes sources, freezes protocol, compares WOA SST separately. NCEP is sigma
+  0.995, NOT a fixed995hPa level; older report mislabels the coordinate. Do not infer observed flux from
+  mixed-period NCEP/WOA climatologies. Recorded model flux is conditional on assumed slab depths.
+* Code observation: P8a nominal2K/day cap retains baseline lambda floor, so is not a universal hard cap.
+  Quantify on actual solver states; preserve rate-state vs solved-air difference within .05C convergence.
+* Run: OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 .venv/bin/python -u -I scripts/audit_air_sea_exchange.py
+  --workers3 --out output/air_sea_audit_20261109 (use actual CLI --workers 3).
+  Keep model modules + driver fixed while running; each region/config JSON and final summary are resumable
+  only against the same protocol. Add plots/report and development-only diagnostic to accuracy page after.
+* Active Earth atlas remains r44/v2.2, both branches at029ef42a before this audit; no map regeneration needed.
+
 # v2.2 Earth atlas released — 9 November 2026
 
 * Complete r44/v2.2 lake + delta atlas, including both raw/corrected food, administration, work, fertility,

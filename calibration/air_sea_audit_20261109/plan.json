@@ -1,0 +1,41 @@
+{
+  "id": "P8b diagnostic audit; no new physics candidate",
+  "date": "2026-11-09",
+  "status": "frozen before regional runs",
+  "regions": [
+    "levant",
+    "japan",
+    "korea",
+    "h_top_end",
+    "h_new_guinea",
+    "h_ivory_coast"
+  ],
+  "configs": {
+    "r44": "calibration/local_accuracy_20261023/r44_params.json",
+    "failed_p8a_C3": "calibration/maritime_p8_20261108/C3_u05s05_cap2_params.json"
+  },
+  "cell_km": 56,
+  "masked_sea": "Ocean within 300 km of scored land; no observation-based mask. Also report scored land and mapped ocean counts.",
+  "observations": "NCEP/NCAR sigma0.995 air and winds 1991-2020; WOA18 SST separately. Check source metadata and units. Mixed-period climatologies cannot establish observed instantaneous air-sea flux.",
+  "instrument": "Last linear temperature solve: rate-evaluation air, solved air, actual SST, surface relaxation rate and heat winds. Record only final output year; no equation changed.",
+  "diagnostics": [
+    "monthly land temperature/rain scores and biases",
+    "monthly modeled SST vs WOA; modeled marine air vs NCEP sigma0.995 separately",
+    "mean actual lambda*(SST-Ta) before monthly aggregation; stable/cold share",
+    "illustrative equivalent slab flux at depths250,500,1000,2000m, rho1.225kg/m3 cp1004J/kg/K",
+    "illustrative h=CH*U/lambda at CH0.001; not a COARE result or observed boundary-layer depth",
+    "exceedance of nominal2K/day cold-air cap; baseline-rate floor remains",
+    "verify all solver numerical checks; observational metadata hashes and actual case/input hashes"
+  ],
+  "guardrails": [
+    "No fit, objective retuning, new sealed pool, or adopted coefficients.",
+    "All regions are development/spent h; these are mechanistic diagnostics, not fresh validation.",
+    "Use same Earth forcing/geography; model SST/winds stay active. Existing observed large-scale monsoon driver remains conditional.",
+    "Keep r44 atlases and correction models until independently qualified replacement."
+  ],
+  "interpretation": "Separate surface thermal exchange from eddy/lateral temperature tendencies and from a coupled ocean energy budget; diagnostic flux is conditional on an assumed air slab.",
+  "params_sha256": {
+    "r44": "c269034f5d889c5ddb91d13da44d075820f3514406c80d422e2a7cd42f9076e1",
+    "failed_p8a_C3": "9920148048181080fadb89ffc784604bc79373dbd4f5c11a2addfcb330397a0d"
+  }
+}

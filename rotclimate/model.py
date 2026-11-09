@@ -479,6 +479,7 @@ class ClimateModel:
             self.sea_deep = np.clip((depth - DEEP_SEA_M[0]) / (DEEP_SEA_M[1] - DEEP_SEA_M[0]), 0.0, 1.0)
         self.shelf_share = None
         self.sst_record = None          # diagnostics: {day: the sea surface each step uses} when set to a dict
+        self.heat_record = None         # optional final-year surface relaxation inputs; never fed back
         if p.shelf_air_coupling > 0:
             # e64: the shelf share of each sea cell (e50's depth rule, inverted)
             if g.sea_depth is not None:
@@ -1598,8 +1599,9 @@ class ClimateModel:
             else:
                 T_ref = T_prev
             u=v=uh=vh=None
+            heat_inputs = None
             def solve_temperature(T_state, first_iteration):
-                nonlocal u,v,uh,vh
+                nonlocal u,v,uh,vh,heat_inputs
                 # ---- winds
                 T_anom = T_state - Tz
                 if p.slp_large > 0 or p.slp_local > 0:
@@ -1674,6 +1676,8 @@ class ClimateModel:
                     warm = np.clip((T_state - T_eq) / 2.0, 0.0, 1.0) * land
                     lam = lam + warm * np.maximum(p.land_stable_rate / DAY - lamT, 0.0)
 
+                if self.heat_record is not None:
+                    heat_inputs = (T_state, lam, uh, vh)
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
                     Tmix = gauss(T_state, sigE)
@@ -1697,6 +1701,15 @@ class ClimateModel:
             self.t_update_inmap_max.append(float(update[g.inmap].max()))
             if not temperature.converged and p.t_require_convergence:
                 raise TemperatureConvergenceError(n+1,d,temperature,update[g.inmap].max())
+            if self.heat_record is not None and n >= spinup:
+                state, rate, heat_u, heat_v = heat_inputs
+                # The last linear solve's coefficients act on its solved air
+                # temperature. Keep the rate-evaluation state separate: they
+                # agree only within the fixed-point convergence tolerance.
+                self.heat_record[round(float(d), 6)] = dict(
+                    surface_c=SST.copy(), air_c=Tsl.copy(), rate_state_c=state.copy(),
+                    lambda_s=np.broadcast_to(rate, Tsl.shape).copy(),
+                    u_ms=heat_u.copy(), v_ms=heat_v.copy())
             lapse = p.lapse_rate
             if p.lapse_seasonal != 0:
                 # e25: summer sunshine mixes the lowest kilometres nearly dry-
