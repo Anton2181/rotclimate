@@ -71,6 +71,18 @@ def test_plateau_response_is_shared_but_heightmap_is_world_geography():
         joint.update_block(p, 'world', {'storm_plateau': .9})
 
 
+def test_r43_corrections_cannot_silently_apply_to_r44_plateau_physics(monkeypatch):
+    from types import SimpleNamespace
+    from pathlib import Path
+    from scripts.add_corrected_layers import corrected_fields, TemperatureCorrection, RainPatternCorrection
+    old_model = SimpleNamespace(meta={'physics_params': 'calibration/local_accuracy_20261023/r43_params.json'})
+    monkeypatch.setattr(TemperatureCorrection, 'load', staticmethod(lambda path: old_model))
+    monkeypatch.setattr(RainPatternCorrection, 'load', staticmethod(lambda path: old_model))
+    result = SimpleNamespace(params=Params.from_json('calibration/local_accuracy_20261023/r44_params.json'), grid=None)
+    with pytest.raises(SystemExit, match='storm_plateau'):
+        corrected_fields(result, Path('not-used'))
+
+
 @pytest.mark.parametrize('block,changes', [
     ('physics', dict(solar_flux=1.1)), ('world', dict(orographic=3)),
     ('physics', dict(solver_rtol=.1)), ('world', dict(solver_require_convergence=False)),
