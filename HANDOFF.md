@@ -1,3 +1,37 @@
+# v2.2 Earth atlas released — 9 November 2026
+
+* Complete r44/v2.2 lake + delta atlas, including both raw/corrected food, administration, work, fertility,
+  settlements and control, is published locally under atlases/earth_fit. Hub + release manifest refreshed;
+  normal .bat launcher verifies Earth r44 snapshot572564df73bd. Free/Whittaker folders remain EXACT archives.
+* Missing r44 correction final/fold models and portable release dependencies were recovered, tracked and pushed
+  in 9a95cf71. Replayed original rounded CV scores, not new unseen gains; do not relabel models as old bytes.
+* Full driver completed output/atlas_v22_calendar_fix/stages_done. Original output/atlas_v22 climate stages
+  reused under an explicit receipt; only failed cereal-work CLI producer changed. Fix2b84be09 uses Harvest's
+  full delta irrigation, not geometry() alone. Both crop-parity checks pass (max20.9kcal/ha packet rounding).
+* Publisher now preserves labour-grid downloads through the hash-pinned ancestor review; six provenance
+  tests cover missing/ambiguous/changed grids. Canonical browser checker tests ACTIVE atlas, both control
+  variants, current scenarios/CSVs, mobile and failure isolation. Archives are kept exact, not upgraded to
+  current UI requirements. Mobile scenario-label overflow fixed in shared template, copied to Earth only.
+* QA in output/atlas_v22_calendar_fix: browser_smoke.json PASS; settlement_browser/review.json PASS
+  (raw/corrected,792 CSV rows, defaultv2.1, work grids, four failure modes); ledger_audit.json PASS
+  (529080 site-bin ledgers, includes historical packets); windows_checkout.json PASS1545byte-exact assets;
+  portable.json PASS2135files/696links/fresh launcher; publication_tests.log8pass (6 provenance+2packaging).
+* Bundle /tmp/rotclimate_v22_atlases.zip includes active Earth + retired snapshots, current release/recovery/
+  cereal methods and lake/delta figures. README now correctly calls Earth active. Dataset exposures f/g/h SPENT.
+* Comparison output/atlas_v22_calendar_fix/release_comparison.json: corrected food ceiling226.340->226.412M;
+  default held land67.4078->67.4735%, sources1010->1011. These are scenario outputs, not Earth-validation gains.
+  EXPORTED corrected target38.4480->38.4564%; MONTHLY correction gate38.5488->38.5657%. Don't conflate them.
+  River check107systems/11through-lakes passes; extra3years land monthly rain change<=.15mm.
+* Next small code milestone: tests/test_joint_inputs.py has2 pending observed-wind rejection regressions.
+  Add wind_source != model rejection in joint.require_strict, keep explicit Earth diagnostics allowed,
+  run joint/release/launcher tests, commit/push separately. No atlas regeneration needed: model-wind behavior
+  unchanged. Next actual physics design: reports/PHYSICS_NEXT_20261109.md; P8a failed h, r44 remains adopted.
+* Source freeze has ended. Completed build identities deliberately retained; future source changes require
+  a NEW ROTCLIMATE_V22_OUT rather than rewriting these successful runs' manifests.
+* Cache preservation: output/atlas_v22/cache_archives.json records verified gzip copies of new checkpoint
+  PKLs. Raw paths symlink to /tmp; if lost, restore from gzip+SHA (no re-simulation). Old ZIPs/atlas backups
+  also preserved in /tmp; locations output/atlas_v22/prior_backup_locations.json. Active site stays in workspace.
+
 # r44 models RECOVERED; v2.2 release ready — 9 November 2026
 
 * Full original reconstruction pipeline completed and its receipt verified.

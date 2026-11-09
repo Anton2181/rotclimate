@@ -6,36 +6,60 @@ import gzip
 import json
 import math
 import numpy as np
+import sys
 from playwright.sync_api import sync_playwright
 ROOT=Path(__file__).resolve().parents[1]
+sys.path[:0] = [str(ROOT), str(ROOT/'scripts')]
+from atlas_set import ACTIVE
 
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--base',default='http://127.0.0.1:8766');ap.add_argument('--out',required=True,type=Path);a=ap.parse_args();a.out.mkdir(parents=True,exist_ok=True);reviews=[]
     with sync_playwright() as pw:
         browser=pw.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
-        for name,mode in [('free_fit','raw'),('earth_fit','raw'),('earth_fit','corrected'),('whittaker_fit','raw')]:
+        for name,mode in [(name, mode) for name in ACTIVE for mode in json.loads((ROOT/'atlases'/name/'data/settled_reach.json').read_text())['packets']]:
             data=ROOT/'atlases'/name/'data';manifest=json.loads((data/'settled_reach.json').read_text());p=manifest['packets'][mode];model=json.loads(gzip.decompress((data/p['payload']).read_bytes()))
             url=a.base+'/atlases/'+name+'/#layer=reach_towns'+('&climate=raw' if mode=='raw' else '')
             page=browser.new_page(viewport=dict(width=1440,height=1100));errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
             page.goto(url,wait_until='domcontentloaded');page.locator('#settled-readouts .readout').first.wait_for(timeout=90000)
+            if page.locator('#experimental').count(): page.locator('#experimental').check()
             assert page.locator('#variant').input_value()=='joint365'
             assert not page.locator('#settlement-controls').is_visible()
             assert not page.locator('#coverage-baseline-note').is_visible()
+            control_variants = []
             for layer in ['reach_towns','reach_defacto']:
                 page.click('#layer-'+layer)
+                if layer == 'reach_defacto':
+                    calibrated = [o for o in p['options'][layer] if o['value'] in ['v21_joint365', 'v2_joint365']]
+                    for o in calibrated:
+                        page.select_option('#variant', o['value'])
+                        page.wait_for_function('(file)=>document.querySelector("#base").complete && new URL(document.querySelector("#base").src).pathname.endsWith("/data/"+file)', arg=o['file'])
+                        control_variants.append(o['value'])
                 for c in model['cases']:
                     page.select_option('#variant',c['id'])
-                    page.wait_for_function('(id)=>document.querySelector("#settled-months").textContent.length>0 && document.querySelector("#base").complete && new URL(document.querySelector("#base").src).pathname.includes(id)',arg=('settled_towns_' if layer=='reach_towns' else 'settled_control_')+c['id'])
+                    expected = next(o['file'] for o in p['options'][layer] if o['value'] == c['id'])
+                    page.wait_for_function('(file)=>document.querySelector("#settled-months").textContent.length>0 && document.querySelector("#base").complete && new URL(document.querySelector("#base").src).pathname.endsWith("/data/"+file)', arg=expected)
                     assert page.locator('#settled-section').is_visible()
                     assert page.locator('#settled-work-note').is_visible()==bool(c.get('labour_constrained'))
-                    if c.get('labour_constrained'):assert page.locator('#settled-field-grid').is_visible()
+                    if c.get('labour_constrained'):
+                        assert page.locator('#settled-field-grid').is_visible() == bool(p.get('field_support'))
+                        if name == 'earth_fit': assert p.get('field_support'), 'Active work scenarios lost their grid download'
                     assert not page.locator('#coverage-baseline-note').is_visible()
                     assert page.locator('#settled-months tr').count()==(12 if c['food_constrained'] else 1)
                 page.select_option('#variant','legacy_0')
                 assert not page.locator('#settled-section').is_visible()
                 if layer=='reach_defacto':assert page.locator('#coverage-baseline-note').is_visible()
                 page.select_option('#variant','joint365')
+            # The main page deliberately retains compatible choices across
+            # layers. Check the active control default on a fresh navigation.
+            if name == 'earth_fit':
+                option = next(o for o in p['options']['reach_defacto'] if o['value'] == 'v21_joint365')
+                fresh = browser.new_page(viewport=dict(width=1440,height=1100))
+                fresh.on('pageerror', lambda e: errors.append(str(e)))
+                fresh.goto(a.base+'/atlases/'+name+'/#layer=reach_defacto'+('&climate=raw' if mode=='raw' else ''), wait_until='domcontentloaded')
+                fresh.wait_for_function('(o)=>document.querySelector("#variant")?.value===o.value && document.querySelector("#base")?.complete && new URL(document.querySelector("#base").src).pathname.endsWith("/data/"+o.file)', arg=option, timeout=90000)
+                fresh.locator('.mapwrap').first.screenshot(path=str(a.out/(name+'_'+mode+'_default_control.png')))
+                fresh.close()
             # Values for imperial, nonimperial and unknown marked evidence.
             chosen=[next(s for s in model['sites'] if s['marked'] and (s['actor'] or '').startswith('Xšāça')),next(s for s in model['sites'] if s['marked'] and s['actor'] and not s['actor'].startswith('Xšāça')),next(s for s in model['sites'] if s['marked'] and not s['actor'])]
             count=0
@@ -78,16 +102,16 @@ def main():
             page.set_viewport_size(dict(width=390,height=844));assert page.evaluate('document.documentElement.scrollWidth<=innerWidth+1')
             page.set_viewport_size(dict(width=1440,height=1100));page.select_option('#map-topic','Overview');page.click('#layer-koppen');assert not page.locator('#settled-section').is_visible()
             assert not errors,errors
-            reviews.append(dict(atlas=name,climate=mode,rows_checked=count,existing_modes_updated=True,legacy_and_share_link=True,mobile=True));page.close()
+            reviews.append(dict(atlas=name,climate=mode,rows_checked=count,existing_modes_updated=True,calibrated_control_variants=control_variants,field_grid_download=bool(p.get('field_support')),legacy_and_share_link=True,mobile=True));page.close()
         # A wrong manifest must keep both original modes available.
         for failure in ['manifest','harvest_identity','grid','browser']:
             page=browser.new_page();errors=[];page.on('pageerror',lambda e:errors.append(str(e)))
             if failure in ['manifest','harvest_identity']:
-                bad=json.loads((ROOT/'atlases/free_fit/data/settled_reach.json').read_text());p=bad['packets']['raw'];p['expected_harvest_fingerprint' if failure=='manifest' else 'expected_harvest_binary_sha256']='bad'
+                bad=json.loads((ROOT/'atlases'/ACTIVE[0]/'data/settled_reach.json').read_text());p=bad['packets']['raw'];p['expected_harvest_fingerprint' if failure=='manifest' else 'expected_harvest_binary_sha256']='bad'
                 page.route('**/data/settled_reach.json?*',lambda r:r.fulfill(json=bad))
             elif failure=='grid':page.route('**/settled_reach.bin.gz?*',lambda r:r.fulfill(body=b'corrupt',content_type='application/octet-stream'))
             else:page.add_init_script('window.DecompressionStream=undefined')
-            page.goto(a.base+'/atlases/free_fit/#layer=reach_towns',wait_until='domcontentloaded')
+            page.goto(a.base+'/atlases/'+ACTIVE[0]+'/#layer=reach_towns&climate=raw',wait_until='domcontentloaded')
             if failure in ['manifest','harvest_identity']:
                 page.wait_for_function('document.querySelector("#atlas-data-status").textContent.includes("Settlement integration unavailable")')
                 page.locator('#layer-reach_towns').wait_for(state='attached')

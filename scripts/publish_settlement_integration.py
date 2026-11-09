@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import gzip
+import hashlib
 import json
 import shutil
 import sys
@@ -21,6 +22,34 @@ def earth_test(case):
     a,b=r['rome']['cases'],r['han']['cases']
     return (f" Earth control test (reports/EARTH_CONTROL_20261106.md): staffs {a[case]['staffed_share']:.0%} of Rome's towns and {b[case]['staffed_share']:.0%} of Han's county seats;"
             f" extent balanced accuracy {a[case]['all']['ba']:.2f} (Rome) and {b[case]['all']['ba']:.2f} (Han) against {a['legacy_0']['all']['ba']:.2f} and {b['legacy_0']['all']['ba']:.2f} for the transport-only map.")
+
+
+def field_support_artifact(out, review, model, *, root):
+    """Resolve the work grid from this review or its hash-pinned ancestors."""
+    out, root = Path(out), Path(root)
+    digest = lambda p: hashlib.sha256(p.read_bytes()).hexdigest()
+    local = out / 'field_support.npz'
+    if local.is_file():
+        if digest(local) != review['artifacts_sha256'].get(local.name):
+            raise ValueError('Changed or unregistered local field-work grid')
+        return local
+    if not model.get('labour_specification'):
+        return None
+    inherited = []
+    for name, expected in review['inputs_sha256'].items():
+        parent = root / name
+        grid = parent.parent / 'field_support.npz'
+        if parent.name != 'review.json' or parent.parent == out or not grid.is_file():
+            continue
+        if not parent.is_file() or digest(parent) != expected:
+            raise ValueError('Changed field-work ancestor review: ' + name)
+        ancestor = json.loads(parent.read_text())
+        if digest(grid) != ancestor['artifacts_sha256'].get(grid.name):
+            raise ValueError('Changed or unregistered inherited field-work grid: ' + str(grid))
+        inherited.append(grid)
+    if len(inherited) != 1:
+        raise ValueError('Work scenarios require exactly one verified field-work grid')
+    return inherited[0]
 
 
 def main():
@@ -114,7 +143,10 @@ def main():
             packets[mode]=dict(shape=review['shape'],cell_px=review['cell_px'],land_cells=review['land_cells'],masks_shape=review['masks_shape'],offsets=review['offsets'],raw_bytes=review['raw_bytes'],options=options,
                 payload=prefix+'settled_reach.json.gz',payload_sha256=file_hash(folder/'settled_reach.json.gz'),binary=prefix+'settled_reach.bin.gz',binary_sha256=file_hash(folder/'settled_reach.bin.gz'),
                 expected_harvest_fingerprint=review['expected_harvest_fingerprint'],expected_harvest_binary_sha256=review['inputs_sha256'][str((folder/'harvest.bin').relative_to(ROOT))],summary=review['summary'],review_sha256=file_hash(out/'review.json'))
-            if (out/'field_support.npz').exists():packets[mode]['field_support']='../../'+str((out/'field_support.npz').relative_to(ROOT));packets[mode]['field_support_sha256']=file_hash(out/'field_support.npz')
+            support = field_support_artifact(out, review, model, root=ROOT)
+            if support is not None:
+                packets[mode]['field_support']='../../'+str(support.relative_to(ROOT))
+                packets[mode]['field_support_sha256']=file_hash(support)
         write_json(data/'settled_reach.json',dict(version=1,packets=packets,publisher_sha256=file_hash(Path(__file__)),status='conditional_food_settlement_source_integration'))
         published.append(dict(atlas=name,manifest_sha256=file_hash(data/'settled_reach.json')))
     write_json(origin/'presentation.json',dict(status='published',atlases=published))

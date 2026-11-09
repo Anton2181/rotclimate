@@ -1,4 +1,4 @@
-"""Package the three active atlas variants with a local HTTP entry page.
+"""Package the active Earth atlas and two retired snapshots with a local HTTP entry page.
 
 Data remain external files: open the extracted bundle through an HTTP server,
 not file://. The bundle includes the report, biome methods and source license.
@@ -49,7 +49,7 @@ def page_dependencies(files, root=ROOT):
     return sorted(included)
 
 
-INSTRUCTIONS = '''Rotclimate: three climate fits
+INSTRUCTIONS = '''Rotclimate: Earth atlas and retired snapshots
 
 Extract this whole archive, then double-click start_atlases.command (macOS)
 or start_atlases.bat (Windows), with Python 3 installed. Or run:
@@ -58,11 +58,14 @@ or start_atlases.bat (Windows), with Python 3 installed. Or run:
 
 The launcher opens your browser. Keep its terminal window open while browsing.
 
-The free and Earth fits optimize the seasonal target zones. The separate
-Whittaker fit optimizes the proposed strict target-to-biome crosswalk with
-an explicit penalty for land outside the original Whittaker diagram. All
-three classify the mean climate over surroundings layouts 1, 2 and 3.
-The report explains the scores, crosswalk assumptions and numerical checks.
+Earth fit is the active atlas. Free fit and Whittaker fit are retired
+snapshots, kept for reference; they stopped receiving updates on 8 November
+2026. The Earth atlas identifies its adopted physics and terrain release.
+The launcher verifies the release and opens the current hub. The methods
+explain the scores, assumptions and numerical checks.
+See reports/LAKES_DELTAS_20261108.md for the lake and delta update,
+reports/R44_RECONSTRUCTION_20261109.md for recovered correction models, and
+reports/CEREAL_DELTA_IRRIGATION_20261109.md for the calendar integration fix.
 These are simulated potential climates, not observed vegetation maps.
 The hub's Climate accuracy and joint fit page includes measured Earth errors
 and rainfall-source maps. The Earth-fit page identifies its adopted physics
@@ -322,6 +325,9 @@ def main():
         assert summary['observed_numerics']['all_checks_passed'], name
         summaries[name] = summary
         files += sorted(f for f in directory.rglob('*') if f.is_file())
+    files += [ROOT/'reports/LAKES_DELTAS_20261108.md', ROOT/'reports/R44_RECONSTRUCTION_20261109.md',
+              ROOT/'reports/CEREAL_DELTA_IRRIGATION_20261109.md', ROOT/'reports/figures/lakes_through_v22.png',
+              ROOT/'reports/figures/delta_candidates.png']
     files = page_dependencies(files)
     manifest = dict(atlases=summaries, sha256={
         str(f.relative_to(ROOT)): hashlib.sha256(f.read_bytes()).hexdigest() for f in files})
