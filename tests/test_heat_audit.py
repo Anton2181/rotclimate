@@ -52,3 +52,22 @@ def test_southern_reference_rotates_months_and_reverses_only_northward_wind():
     np.testing.assert_array_equal(south['air'][:,0,0],expected)
     np.testing.assert_array_equal(south['u'][:,0,0],expected+10)
     np.testing.assert_array_equal(south['v'][:,0,0],-(expected+20))
+
+
+def test_static_reference_decodes_length_one_attributes_and_checks_cached_bytes(tmp_path, monkeypatch):
+    import h5py
+    from scripts import audit_air_sea_exchange as audit
+    monkeypatch.setattr(audit,'REFERENCE',tmp_path)
+    for prefix in ['air','uwnd','vwnd']:
+        with h5py.File(tmp_path/(prefix+'.sig995.mon.ltm.nc'),'w') as f:
+            time=f.create_dataset('time',data=np.arange(12));time.attrs['climo_period']=b'1991/01/01 - 2020/12/31'
+            f.create_dataset('lat',data=90-2.5*np.arange(73));f.create_dataset('lon',data=2.5*np.arange(144))
+            var=f.create_dataset(prefix,data=np.full((12,73,144),2.,dtype=np.float32))
+            var.attrs['level_desc']=b'0.995 sigma';var.attrs['units']=b'degC' if prefix=='air' else b'm/s'
+            var.attrs['scale_factor']=np.array([2.]);var.attrs['add_offset']=np.array([-1.])
+    archive,receipt=audit.prepare_reference()
+    with np.load(archive) as f:
+        for key in ['air','u','v']: np.testing.assert_array_equal(f[key],np.full((12,73,144),3.))
+    assert receipt['period']=='1991-2020'
+    archive.write_bytes(b'changed')
+    with pytest.raises(ValueError,match='Changed reference'):audit.prepare_reference()

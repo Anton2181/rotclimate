@@ -69,7 +69,9 @@ def prepare_reference():
                 raise ValueError('Unexpected NCEP period or vertical reference')
             if units != ('degC' if key == 'air' else 'm/s'):
                 raise ValueError('Unexpected '+prefix+' units')
-            arrays[key] = np.asarray(nc[prefix],dtype=np.float32) * float(nc[prefix].attrs.get('scale_factor',1.)) + float(nc[prefix].attrs.get('add_offset',0.))
+            scale = np.asarray(nc[prefix].attrs.get('scale_factor',1.)).item()
+            offset = np.asarray(nc[prefix].attrs.get('add_offset',0.)).item()
+            arrays[key] = np.asarray(nc[prefix],dtype=np.float32) * scale + offset
             if (arrays[key].shape != (12,73,144) or not np.isfinite(arrays[key]).all()
                     or np.max(np.abs(arrays[key])) > 1000
                     or not np.allclose(nc['lat'][:],90-2.5*np.arange(73))
