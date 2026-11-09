@@ -1,3 +1,32 @@
+# Resume / joint-boundary repair / missing r44 corrections — 9 November 2026
+
+* Fetched and fast-forwarded from a3b07756 to latest21e7c215. Earth fit only;
+  retain free/Whittaker snapshots. Uncommitted old crop-water draft superseded
+  by Nov6 soil_water_dual/fertility work; preserved under ignored
+  output/local_drafts_20261109/abandoned_water_prototype.
+* Reproduced14 failures in tests/test_joint_inputs.py: nine Params fields not
+  partitioned. Fixed terrain_file as WORLD geography and eight storm_plateau
+  response/switch fields as SHARED physics. Tests prove invented terrain never
+  enters Earth, stale world physics cannot replace shared values, and real
+  solver output is identical under irrelevant world changes.36 targeted tests
+  pass. No physical equation, r44 coefficient or Earth forcing changed.
+* v2.2 terrain/lake+delta release is NOT yet in the local atlas. Its checkpoint
+  output/r44_lakes_world/candidate_001.pkl is absent (regenerable). More critically
+  calibration/earth_correction_r44_20261107/{temperature,rain_pattern}/correction.npz
+  were never committed/saved; owner confirms no separate copy. Do NOT substitute
+  r43 models or change their metadata to r44.
+* Recovery plan pinned before retraining at
+  calibration/earth_correction_r44_20261107/reconstruction_plan.json. Use existing
+  scripts/retrain_earth_corrections.sh, TAG=r44, canonical r44 OUT/CAL. Original
+  rounded cluster-CV reference T1.506C / rain.4318; not a tuning target. New
+  hashes and model protocols must be committed (force-add ignored calibration
+  folders). Whole-cluster dev31 CV; old Norway/SE Africa checks are SPENT
+  reproduction, not fresh validation. No new sealed pool opened.
+* Workspace is tight. Three generated portable ZIP backups moved to /tmp
+  (rotclimate-atlases-before-20261109.zip, rotclimate-r43-before-20261109.zip,
+  rotclimate-r42-before-20261109.zip) to preserve them while freeing build space.
+  Rebuild the current portable bundle after release; do not delete science inputs.
+
 # Owner preference (8 Nov 2026): post every new map or figure in chat (SendUserFile) as soon as it is generated.
 # P8a coast coupling refit — 8 November 2026 (NOT adopted)
 

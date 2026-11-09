@@ -14,6 +14,7 @@ def physics():
     dict(solar_flux=1.08), dict(greenhouse_wm2=7.4), dict(planet_radius=.8),
     dict(tilt=33.5, retrograde=True, year_days=400, winter_solstice_day=22),
     dict(lat_center=50, north_bearing=70, tier_tops=(200, 500, 1500, 5000), ebm_land='uniform'),
+    dict(terrain_file='output/terrain_erosion_20261107/map_height_v22.npz'),
 ])
 def test_invented_planet_never_changes_earth_inputs(changes):
     p = physics()
@@ -49,6 +50,27 @@ def test_world_keeps_shared_physics_and_strict_numerics_from_theta():
     assert description['ignored_world_profile_values']['solver_require_convergence'] is False
 
 
+def test_plateau_response_is_shared_but_heightmap_is_world_geography():
+    p = physics().replace(storm_plateau=.4, storm_plateau_m=2200.,
+        storm_plateau_km=2500., storm_plateau_offset_deg=2.,
+        storm_plateau_area_km2=1e6, storm_plateau_season=.5,
+        storm_plateau_global=True, storm_plateau_reach_deg=15.,
+        terrain_file='must-not-open-on-earth.npz')
+    world = Params(storm_plateau=.9, storm_plateau_global=False,
+        terrain_file='invented-heightmap.npz')
+    earth_inputs = joint.earth_profile(p)
+    composed = joint.world_profile(p, world)
+    for name in vars(p):
+        if name == 'storm_plateau' or name.startswith('storm_plateau_'):
+            assert getattr(earth_inputs, name) == getattr(composed, name) == getattr(p, name)
+    assert earth_inputs.terrain_file == ''
+    assert composed.terrain_file == world.terrain_file
+    with pytest.raises(ValueError, match='outside'):
+        joint.update_block(p, 'physics', {'terrain_file': 'invented-heightmap.npz'})
+    with pytest.raises(ValueError, match='outside'):
+        joint.update_block(p, 'world', {'storm_plateau': .9})
+
+
 @pytest.mark.parametrize('block,changes', [
     ('physics', dict(solar_flux=1.1)), ('world', dict(orographic=3)),
     ('physics', dict(solver_rtol=.1)), ('world', dict(solver_require_convergence=False)),
@@ -80,7 +102,8 @@ def test_real_solver_is_identical_when_only_world_forcing_changes():
     p = physics().replace(steps_per_year=13)
     reference = earth.earth_params(joint.earth_profile(p), case)
     changed = earth.earth_params(joint.earth_profile(p.replace(
-        solar_flux=1.08, greenhouse_wm2=7.4, planet_radius=.8)), case)
+        solar_flux=1.08, greenhouse_wm2=7.4, planet_radius=.8,
+        terrain_file='nonexistent-invented-terrain.npz')), case)
     a = ClimateModel(reference, grid=case.grid).run()
     b = ClimateModel(changed, grid=case.grid).run()
     assert a.numerics['all_checks_passed'] and b.numerics['all_checks_passed']

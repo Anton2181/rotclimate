@@ -14,7 +14,7 @@ beyond_north_gap_km beyond_north_land beyond_northeast_land beyond_relief_m beyo
 beyond_south beyond_south_gap_km beyond_south_land beyond_southeast_land beyond_style
 beyond_west beyond_west_gap_km beyond_west_land ebm_land eccentricity far_pole_land
 greenhouse_wm2 ebm_land_scale lat_center map_height_mi map_width_mi north_bearing pad_km
-perihelion_after_solstice planet_radius retrograde solar_flux tier_tops tilt winter_solstice_day
+perihelion_after_solstice planet_radius retrograde solar_flux terrain_file tier_tops tilt winter_solstice_day
 year_days
 """.split())
 
@@ -49,7 +49,13 @@ subsidence_drying subsidence_summer subsidence_width subtropical_high subtropica
 subtropical_high_seasonality subtropical_high_width sverdrup terrain_drag trade_land trade_speed
 tropical_storm_km tropical_storms upslope_free_wind upwelling westerly_speed wet_cooling
 wind_cap winter_mixing_deep
+storm_plateau storm_plateau_m storm_plateau_km storm_plateau_offset_deg storm_plateau_area_km2
+storm_plateau_season storm_plateau_global storm_plateau_reach_deg
 """.split())
+
+# The height-map file selects invented geography, never an Earth input. Plateau
+# steering thresholds/response are shared physical hypotheses, including the
+# switch that supplies Earth's observed far-upwind terrain to regional windows.
 
 # Fixed reference for the WorldClim-era Earth benchmark, not an assertion
 # about 200 AD CO2. greenhouse_wm2 is an anomaly relative to this model baseline.
