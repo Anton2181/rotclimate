@@ -1,0 +1,46 @@
+{
+  "id": "P8c coordinated shared-SST screen; development only",
+  "date": "2026-11-09",
+  "status": "frozen before candidate runs",
+  "evidence": "reports/AIR_SEA_AUDIT_20261109.md; development-only coastal SST compensation diagnostic",
+  "regions": [
+    "levant",
+    "japan",
+    "korea",
+    "h_top_end",
+    "h_new_guinea",
+    "h_ivory_coast"
+  ],
+  "cell_km": 56,
+  "configs": {
+    "r44": "calibration/shared_sst_screen_20261109/r44_params.json",
+    "rejected_C3": "calibration/shared_sst_screen_20261109/rejected_C3_params.json",
+    "warm15": "calibration/shared_sst_screen_20261109/warm15_params.json",
+    "warm15_C3": "calibration/shared_sst_screen_20261109/warm15_C3_params.json",
+    "warm30": "calibration/shared_sst_screen_20261109/warm30_params.json",
+    "warm30_C3": "calibration/shared_sst_screen_20261109/warm30_C3_params.json"
+  },
+  "params_sha256": {
+    "r44": "71893d13ad10187498a3f2268c5bbcc7f19bcf6ad41d0d2593a68d11a586049d",
+    "rejected_C3": "27d87191712a7d4601ceed7f3ac108332e8fec379f66f36f185d42f5b2d6d0c7",
+    "warm15": "9c0875925b352654b2ab05d05ee0f052311d29e42b883b6118e122d559891d14",
+    "warm15_C3": "b92bc9cf3ae0d50500bfe3f9a360e2e721d35fd28fea41848545bc12751bd9a7",
+    "warm30": "eae55f865586b9ff996764df20fae4c13c0617d559cfd5eb84def1460038745c",
+    "warm30_C3": "be3dfe845a9f8d030bdfdb77e5b4ba5b4f81ce929b99bf0347ab4e4829ca4849"
+  },
+  "directions": "Existing shared sst_offset +1.5 or+3K together with current_strength -1.5 or-3K; each with r44 exchange or rejected C3. Same response everywhere, no regional masks or observations substituted. Existing phenomenological parameters, not a new resolved ocean budget.",
+  "physical_bounds": {
+    "sst_offset_c": [
+      -5,
+      0
+    ],
+    "current_strength_k": [
+      2,
+      6
+    ]
+  },
+  "fixed": "Earth orbital/radiative forcing and geography; model SST/winds; all other r44 or C3 physics and numerical tolerances. joint.earth_profile verifies boundary.",
+  "comparison": "Fresh paired baselines r44 and C3 on same source; report equal-region T and canonical P_loss, S6=.5T/Tref+.5P/Pref; separate coastal monthly-curve marine-air/SST metrics.",
+  "screen": "Report every candidate. A possible broad-refit starting point has S6<=.995 and neither aggregate T nor P worsens>1%; SST improvement is diagnostic and cannot override land-score harm.",
+  "limits": "Six selected, previously-seen regions are not dev49 or independent validation. This is four coordinated directions, not optimized multi-start convergence or a global minimum proof. No adoption or correction retraining. Any finalist needs broad49, spent-region sensitivity, finer checks and a newly declared independent milestone."
+}

@@ -24,6 +24,7 @@ from rotclimate.config import Params
 from rotclimate.koppen import monthly_stats, monthly_weights
 from rotclimate.model import ClimateModel
 from local_benchmark_protocol import case_hash, file_hash, freeze, write_json
+from rainfall_metrics import local_metrics
 
 DAY = 86400.
 PLAN = ROOT/'calibration/air_sea_audit_20261109/plan.json'
@@ -108,14 +109,14 @@ def reference_at(case, reference):
 
 
 def one(job):
-    region, config, params_path, output, specs, run_id = job
+    region, config, params_path, output, specs, run_id, cell_km = job
     output = Path(output); path = output/(config+'__'+region+'.json')
     if path.exists():
         row=json.loads(path.read_text())
         if row['identity'] != run_id: raise ValueError('Changed audit inputs')
         if row['status']=='passed': return row
     earth.REGIONS.update(specs)
-    case = earth.region_case(region,56.); g=case.grid
+    case = earth.region_case(region,cell_km); g=case.grid
     p = earth.earth_params(joint.earth_profile(Params.from_json(ROOT/params_path)),case)
     model = ClimateModel(p,g); model.heat_record = {}
     result = model.run()
@@ -129,6 +130,7 @@ def one(job):
     W = monthly_weights(result.days,p.year_days)
     mean = lambda a: (W @ np.asarray(a).reshape(len(result.days),-1)[:,sea.ravel()]).mean(1).tolist()
     st = monthly_stats(result.T,result.P,result.days,p.year_days,summer_solstice=p.winter_solstice_day+p.year_days/2)
+    rain = local_metrics(np.maximum(st['Pm'],0.),np.nan_to_num(case.obs_P),land)
     contrast = fields['surface_c']-fields['air_c']
     tendency = fields['lambda_s']*contrast*DAY
     speed = np.hypot(fields['u_ms'],fields['v_ms'])
@@ -142,6 +144,7 @@ def one(job):
     row = dict(status='passed',identity=run_id,region=region,config=config,
         params=asdict(p),case_sha256=case_hash(case,observed_sea=True),numerics=result.numerics,
         cells=dict(scored_land=int(land.sum()),mapped_sea=int((g.inmap & ~g.land).sum()),coastal_sea=int(sea.sum())),
+        land_metrics=dict(temperature_mae_c=float(np.mean(np.abs(st['Tm'][:,land]-case.obs_T[:,land]))),rain_loss=rain['loss']),
         monthly=dict(land_bias_c=(st['Tm'][:,land]-case.obs_T[:,land]).mean(1).tolist(),
             land_temperature_mae_c=np.abs(st['Tm'][:,land]-case.obs_T[:,land]).mean(1).tolist(),
             land_rain_model_mm=st['Pm'][:,land].mean(1).tolist(),land_rain_obs_mm=case.obs_P[:,land].mean(1).tolist(),
@@ -164,19 +167,20 @@ def one(job):
 
 def main():
     ap=argparse.ArgumentParser(description=__doc__);ap.add_argument('--workers',type=int,default=3)
+    ap.add_argument('--plan',type=Path,default=PLAN)
     ap.add_argument('--out',type=Path,default=ROOT/'output/air_sea_audit_20261109');a=ap.parse_args()
-    a.out.mkdir(exist_ok=True,parents=True);plan=json.loads(PLAN.read_text());_,reference=prepare_reference()
-    sources={str(p.relative_to(ROOT)):file_hash(p) for p in [PLAN,Path(__file__).resolve(),*sorted((ROOT/'rotclimate').glob('*.py'))]}
+    a.out.mkdir(exist_ok=True,parents=True);plan=json.loads(a.plan.read_text());_,reference=prepare_reference()
+    sources={str(p.resolve().relative_to(ROOT)):file_hash(p) for p in [a.plan,Path(__file__).resolve(),ROOT/'scripts/rainfall_metrics.py',*sorted((ROOT/'rotclimate').glob('*.py'))]}
     for config,path in plan['configs'].items():
         if file_hash(ROOT/path)!=plan['params_sha256'][config]: raise ValueError('Changed fixed candidate')
     specs={}
-    for path in ['calibration/local_accuracy_20261023/regions_dev12.json','calibration/sealed_20261107h/regions.json']:
+    for path in plan.get('region_spec_files',['calibration/local_accuracy_20261023/regions_dev12.json','calibration/sealed_20261107h/regions.json']):
         specs.update(json.loads((ROOT/path).read_text()));sources[path]=file_hash(ROOT/path)
     protocol=dict(plan=plan,sources_sha256=sources,reference=reference,
         cap_count_definition='Coefficient-state and solved-air exceedances separated; old audit retained. Avoid counting fixed-point tolerance as baseline-floor activation.',
         scope='Development diagnosis; all h regions already spent; no fit/adoption/new sealed pool')
     run_id=freeze(a.out/'protocol.json',protocol)
-    jobs=[(r,n,p,str(a.out),specs,run_id) for n,p in plan['configs'].items() for r in plan['regions']]
+    jobs=[(r,n,p,str(a.out),specs,run_id,float(plan['cell_km'])) for n,p in plan['configs'].items() for r in plan['regions']]
     with Pool(a.workers) as pool: rows=list(pool.imap_unordered(one,jobs))
     if any(file_hash(ROOT/p)!=h for p,h in sources.items()): raise ValueError('Sources changed during audit')
     write_json(a.out/'summary.json',dict(status='passed',identity=run_id,rows=sorted(rows,key=lambda r:(r['region'],r['config']))))
