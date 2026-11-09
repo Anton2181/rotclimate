@@ -17,6 +17,14 @@ def test_release_label_requires_matching_metadata_for_all_three_atlases(tmp_path
     manifest.write_text(json.dumps(release))
     label, stamp = release_version(tmp_path)
     assert 'r42' in label and len(stamp) == 12
+    release.update(active_atlases=['earth_fit'], retired_atlases=['free_fit', 'whittaker_fit'])
+    manifest.write_text(json.dumps(release))
+    assert release_version(tmp_path)[1] is not None
+    release['retired_atlases'].append('earth_fit')
+    manifest.write_text(json.dumps(release))
+    assert release_version(tmp_path)[1] is None
+    release['retired_atlases'].pop()
+    manifest.write_text(json.dumps(release))
     hub.write_bytes(b'current\r\nhub')
     assert release_version(tmp_path)[1] is not None
     hub.write_bytes(b'old hub')

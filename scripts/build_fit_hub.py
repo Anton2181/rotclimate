@@ -1,4 +1,4 @@
-"""Write the entry page comparing the three completed atlas fits.
+"""Write the active atlas entry page, retaining links to retired snapshots.
 
     python3 -I scripts/build_fit_hub.py                       # atlases/index.html, local links
     python3 -I scripts/build_fit_hub.py --artifact <dir>      # <dir>/index.html + img/, artifact links
@@ -11,15 +11,20 @@ import datetime
 from html import escape
 import json
 import re
+import sys
 from pathlib import Path
 
 from PIL import Image
 
 ROOT = Path(__file__).resolve().parents[1]
-FITS = {
+sys.path.insert(0, str(ROOT / 'scripts'))
+from atlas_set import ACTIVE, RETIRED
+
+ALL_FITS = {
     'free_fit': ('Free fit', 'World and physics fitted to the seasonal painted zones.'),
     'earth_fit': ('Earth fit', "Adopted Earth r42 physics, checked on 49 development regions, finer grids and a separately reserved region set, on the published world's geometry."),
     'whittaker_fit': ('Whittaker fit', 'World and physics fitted to the proposed annual-biome targets.')}
+FITS = {name: ALL_FITS[name] for name in ACTIVE}
 
 STYLE = '''
 /* Layout: an atlas title page; three plates side by side, then the shared measures. Same tokens as the atlases. */
@@ -59,7 +64,7 @@ p { margin: 0; max-width: 75ch; }
 .note { font-size: var(--step--1); color: var(--ink-soft); }
 a { color: var(--brass); text-underline-offset: 3px; }
 a:focus-visible { outline: 2px solid var(--brass); outline-offset: 3px; border-radius: 2px; }
-.plates { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.plates { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); gap: 20px; }
 @media (max-width: 900px) { .plates { grid-template-columns: minmax(0, 1fr); } }
 .plate { display: grid; grid-template-rows: auto 1fr; background: var(--plate); border: 1px solid var(--rule);
   border-radius: 6px; overflow: hidden; min-width: 0; color: inherit; text-decoration: none; }
@@ -224,8 +229,7 @@ def main():
     sensitivity_note = ('<p class="note">The Earth atlas also offers Rain sensitivity and Temperature sensitivity under Fit checks, with grid values to download. These show spread across nine hypothetical surroundings at the screening resolution; they are conditional boundary sensitivities, not weather variability or measured climate error.</p>'
                         if has_sensitivity and not artifact else '')
     if artifact:
-        compare = ('Each atlas opens with the same Population lab, so the same total can be tried in all three: '
-                   'open the Population topic and set the population budget.')
+        compare = 'Open the Population topic and set the population budget.'
         reports = ''
         head = '<meta charset="utf-8">\n'
     else:
@@ -247,16 +251,17 @@ def main():
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Spectral+SC:wght@500;600&family=Alegreya+Sans:ital,wght@0,400;0,500;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>{STYLE}</style>
 <div class="wrap">
-<header><span class="eyebrow">Rotclimate · three calibration objectives · updated {updated}</span>
-<h1>One world, three climate fits</h1>
-<p class="lede">The seasonal map fit, the fit held to Earth physics, and the fit to proposed Whittaker biomes. Each atlas uses the mean climate over the same three layouts of the unknown surroundings.</p></header>
+<header><span class="eyebrow">Rotclimate · Earth-fit atlas · updated {updated}</span>
+<h1>Climate, land and people</h1>
+<p class="lede">Explore the active Earth fit: climate checked against Earth observations, with farming, settlement and control models around 200 AD. The climate averages three layouts of the unknown surroundings. Each model retains its stated evidence and scenario limits.</p></header>
 {'' if artifact else '<p><a href="climate_accuracy/">Climate accuracy and joint fit →</a> · Earth measurements and rainfall-source maps.<br><a href="economy_lab/">Food, farming and society →</a> · c.200 AD proposals and seasonal budgets.<br><a href="earth_evidence/">Earth calibration evidence →</a> · component ledger, independent tests and remaining assumptions.</p>'}
-<section aria-label="The three atlases"><div class="plates">{''.join(plates)}</div></section>
-<section aria-labelledby="measures-h"><h2 id="measures-h">The same measures</h2>
+<section aria-label="Active atlas"><div class="plates">{''.join(plates)}</div></section>
+{'' if artifact else '<section aria-labelledby="archive-h"><h2 id="archive-h">Retired snapshots</h2><p>The free and Whittaker fits stopped receiving updates on 8 November 2026. Their last snapshots remain available: <a href="free_fit/">Free fit archive</a> · <a href="whittaker_fit/">Whittaker fit archive</a>.</p></section>'}
+<section aria-labelledby="measures-h"><h2 id="measures-h">Atlas measures</h2>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Seasonal zone objective</th><th>Whittaker objective</th><th>Exact zone agreement</th><th>Mean biome agreement</th><th>Land outside diagram</th><th>Med. dry</th><th>Med. Cs</th></tr></thead><tbody>{''.join(rows)}</tbody></table></div>
 <div class="notes"><p class="note">Each target zone counts equally in mean biome agreement. Objective scores measure different definitions of a match and are not interchangeable. These figures classify the mean climate fields; calibration logs average scores across individual layouts.</p>
 <p class="note">Med. dry and Med. Cs are the shares of the painted Mediterranean zone classified as Köppen dry climates and Mediterranean climates.</p>
-<p class="note">The Whittaker atlas adds the proposed biome target map and a match layer. Annual temperature and rainfall do not decide Mediterranean summer drought or swamp hydrology, so those seasonal checks stay separate.</p></div></section>
+<p class="note">Annual temperature and rainfall do not decide Mediterranean summer drought or swamp hydrology, so those seasonal checks stay separate.</p></div></section>
 {sensitivity_note}
 <section aria-labelledby="people-h"><h2 id="people-h">Land and people around 200 AD</h2>
 <p>{topic_text} {overview} Select any place for its climate chart, farming readouts and the real cities whose climate feels most alike.</p>
@@ -264,7 +269,7 @@ def main():
 <p>The Population topic is a lab: supply a total and choose even occupation, water and terrain, or market access. Six maps then show allocated residents, local pressure, spare food support, redistribution, walking to markets and settlement attraction, with province totals. {compare}</p>
 <div class="plates">{''.join(density_plates)}</div>
 <div class="table"><table><thead><tr><th>Atlas</th><th>Mixed food ceiling</th><th>Frontier scenario</th><th>Central scenario</th><th>Settled-core scenario</th></tr></thead><tbody>{''.join(population_rows)}</tbody></table></div>
-<div class="notes"><p class="note">{harvest}; environmental malaria potential included. Occupation scenarios are historical analogues, not confidence intervals or reconstructed censuses. Each atlas can remove the malaria penalty. All three density maps share one colour scale.</p></div>
+<div class="notes"><p class="note">{harvest}; environmental malaria potential included. Occupation scenarios are historical analogues, not confidence intervals or reconstructed censuses. The atlas can remove the malaria penalty.</p></div>
 {foraging_section}
 <div class="notes">{reports}</div></section>
 </div>
@@ -275,10 +280,11 @@ def main():
         import hashlib
         release = dict(
             earth_physics=earth_profile,
+            active_atlases=list(ACTIVE), retired_atlases=list(RETIRED),
             published_branch='claude/ecstatic-wozniak-rtrwd2',
             hub_sha256=hashlib.sha256(out.read_text(encoding='utf-8').encode('utf-8')).hexdigest(),
             metadata_sha256={name: hashlib.sha256((ROOT / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
-                             for name in FITS})
+                             for name in ALL_FITS})
         if work_maps:
             release['cereal_work_sha256']={name:hashlib.sha256((ROOT/'atlases'/name/'data/farm_work.json').read_bytes()).hexdigest() for name in FITS}
         if administrative_maps:

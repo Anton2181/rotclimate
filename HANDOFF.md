@@ -1,3 +1,31 @@
+# Local hub / release preflight — 9 November 2026
+
+* Joint repair + reconstruction preregistration pushed8a3871c7 to both refs.
+* r44 correction reconstruction RUNNING through existing retrain driver. Main
+  log output/earth_correction_r44_20261107/reconstruction.log; per-stage logs in
+  same folder. Dev31/fine28/fine14 simulations complete; old correction cases
+  and fitting/field collection follow. These are REPLAYS, not fresh validation.
+* Preparing v2.2 verified world checkpoint with new --simulate-only option in
+  scripts/build_atlas_variant.py. Tool session91680; log same reconstruction
+  folder/world_checkpoint.log; checkpoint output/r44_lakes_world/candidate_001.pkl.
+  No live atlas touched. Model source files must stay fixed while these run.
+* Latest checkout had stale local hub/release manifest (unverified startup), even
+  though Earth atlas data are r44. build_fit_hub now uses atlas_set.ACTIVE for
+  the main plate and explicitly archives free/Whittaker. All3 data snapshots
+  remain checksummed. Launcher marks retired snapshots and defaults to Earth
+  if no hub exists. Browser desktop/mobile + archived URLs passed; launcher
+  now verifies Earth r44. No scientific map data changed by this refresh.
+* scripts/check_v22_release_inputs.py blocks missing/mislabelled correction
+  models and stale resume identities BEFORE simulation/export. Release driver
+  calls it and accepts ROTCLIMATE_V22_OUT for a new run directory. Do not
+  promote v2.2 until recovered models/receipt verified. R43 metadata relabelling
+  is rejected by an actual-model/protocol hash test.
+* After fitting, force-add recovered final/fold NPZ and protocol/evaluation
+  JSONs so future checkouts contain them; write a reconstruction result that
+  compares actual hashes with lost original hashes, and CV with prior rounded
+  reference T1.506C / rain.4318. Then complete v2.2 lake/delta release, normal
+  browser/Windows/portable checks and push. No new sealed f/g/h pool to open.
+
 # Resume / joint-boundary repair / missing r44 corrections — 9 November 2026
 
 * Fetched and fast-forwarded from a3b07756 to latest21e7c215. Earth fit only;

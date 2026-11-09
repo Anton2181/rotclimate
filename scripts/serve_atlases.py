@@ -35,6 +35,10 @@ def release_version(root):
         hashes = release['metadata_sha256']
         if set(hashes) != {'free_fit', 'earth_fit', 'whittaker_fit'}:
             raise ValueError('Incomplete release manifest')
+        if 'active_atlases' in release:
+            active, retired = release['active_atlases'], release['retired_atlases']
+            if not active or len(active + retired) != len(set(active + retired)) or set(active + retired) != set(hashes):
+                raise ValueError('Invalid active/retired atlas partition')
         for name, digest in hashes.items():
             actual = hashlib.sha256((root / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
             if digest != actual:
@@ -88,11 +92,11 @@ def main():
     ap.add_argument('--atlas', choices=['free_fit', 'earth_fit', 'whittaker_fit'])
     args = ap.parse_args()
     here = Path(__file__).resolve().parent
-    root = next((p for p in (here, here.parent) if (p/'atlases/free_fit/index.html').exists()), None)
+    root = next((p for p in (here, here.parent) if (p/'atlases/earth_fit/index.html').exists()), None)
     if root is None:
         ap.error('Keep this launcher beside the atlases folder, or in the repository scripts folder.')
     path = 'atlases/'+args.atlas+'/' if args.atlas else (
-        'atlases/' if (root/'atlases/index.html').exists() else 'atlases/free_fit/')
+        'atlases/' if (root/'atlases/index.html').exists() else 'atlases/earth_fit/')
     if not (root/path/'index.html').exists():
         ap.error('That atlas has not been built yet.')
     names = [args.atlas] if args.atlas else ([name for name in ['free_fit', 'earth_fit', 'whittaker_fit']
@@ -110,6 +114,8 @@ def main():
         print(f'Published atlas branch: origin/{PUBLISHED_BRANCH}', flush=True)
     release, snapshot = release_version(root)
     print(f'Atlas release: {release}', flush=True)
+    release_path = root/'atlases/release.json'
+    retired = set(json.loads(release_path.read_text(encoding='utf-8')).get('retired_atlases', [])) if release_path.exists() and snapshot else set()
     for name in names:
         with (root/'atlases'/name/'data/atlas.json').open(encoding='utf-8') as file:
             metadata = json.load(file)
@@ -133,7 +139,7 @@ def main():
         pm_path=root/'atlases'/name/'data/presence_mobility.json'
         pm=json.loads(pm_path.read_text(encoding='utf-8')) if pm_path.exists() else None
         pm_layers=pm['packets']['raw']['layers'] if pm else []
-        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)+len(hierarchy_layers)+len(pasture_layers)+len(audit_layers)+len(pm_layers)} map modes', flush=True)
+        print(f'  {name}: {coverage}; {len(metadata.get("layers", []))+len(work_layers)+len(admin_layers)+len(hierarchy_layers)+len(pasture_layers)+len(audit_layers)+len(pm_layers)} map modes' + ('; retired snapshot' if name in retired else ''), flush=True)
         if work_layers:
             print('    Food and work: 6 views; partial cereal field-work scenarios',flush=True)
         if admin_layers:

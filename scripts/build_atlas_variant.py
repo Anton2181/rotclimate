@@ -91,7 +91,10 @@ def main():
     ap.add_argument("--image-scale", type=int, choices=[1, 2, 3], default=3,
                     help="image resolution multiplier; does not change the simulation grid")
     ap.add_argument("--checkpoint", help="local result cache, verified against parameters, seeds and model sources")
+    ap.add_argument('--simulate-only', action='store_true', help='prepare/verify a checkpoint without exporting atlas assets')
     a = ap.parse_args()
+    if a.simulate_only and not a.checkpoint:
+        ap.error('--simulate-only requires --checkpoint')
     for label,value in [('max-outside',a.max_outside),('minimum-biome-score',a.minimum_biome_score)]:
         if value is not None and not 0 <= value <= 1:
             ap.error('--'+label+' must be between zero and one')
@@ -140,6 +143,9 @@ def main():
     numerics = getattr(r, 'numerics', None)
     if a.require_verified and not (numerics and numerics.get('all_checks_passed')):
         raise RuntimeError('Atlas export requires observed successful linear, temperature and moisture checks')
+    if a.simulate_only:
+        print('Simulation checkpoint ready; no atlas assets exported', flush=True)
+        return
     ev = evaluate(r)
     from rotclimate import biome_targets
     valid = r.grid.inmap & r.grid.land

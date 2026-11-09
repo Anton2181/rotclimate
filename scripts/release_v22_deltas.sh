@@ -5,9 +5,10 @@
 # Earth fit only (free and Whittaker retired). Resumable: output/atlas_v22/stages_done.
 set -euo pipefail
 cd "$(dirname "$0")/.."
-PY=.venv/bin/python; OUT=output/atlas_v22; STAGE=earth_fit_v22_stage; ATLAS=atlases/$STAGE
+PY=.venv/bin/python; OUT=${ROTCLIMATE_V22_OUT:-output/atlas_v22}; STAGE=earth_fit_v22_stage; ATLAS=atlases/$STAGE
 CK=output/r44_lakes_world/candidate_001.pkl; CAL=calibration/earth_correction_r44_20261107; EVALS=output/earth_correction_r44_20261107
 REPORT=reports/LAKES_DELTAS_20261108.md
+$PY -I scripts/check_v22_release_inputs.py --out "$OUT" --record
 mkdir -p "$OUT"; touch "$OUT/stages_done"
 run() { local name=$1; shift; if grep -qx "$name" "$OUT/stages_done"; then echo "skip $name"; return; fi
   echo "== $name $(date -u +%H:%M:%S)"; "$@" > "$OUT/$name.log" 2>&1; echo "$name" >> "$OUT/stages_done"; echo "done $name $(date -u +%H:%M:%S)"; }
