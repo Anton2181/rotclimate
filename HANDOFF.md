@@ -1,3 +1,23 @@
+# P8b audit COMPLETE — 9 November 2026
+
+* Frozen6regions x r44/rejectedC3 audit complete; no fit or new sealed pool. All12 numerical checks pass.
+* Final outputs output/air_sea_audit_20261109_operator_state; original outputs output/air_sea_audit_20261109
+  retained. Cap count at coefficient state is78.7%Japan/75.3%Korea vs solved-air90.6/88.2 (small fixed-point
+  differences counted in original); replay_check proves all climate/flux monthly arrays EXACTLY identical.
+* Four original hook/frame/unit tests plus new NOAA decoding and cap-state tests:6pass. Observer on/off all
+  model fields bit-identical on r44 andC3. NOAA static netCDF4 references metadata-verified1991-2020 sigma.995;
+  h5py optional dependency added. Raw reference cache ignored, reference.json + URL/hash metadata tracked.
+* Strong compensation evidence: TopEnd SST−4.25C; Levant SST−3.48C, C3 landMAE2.006->1.792 but marine-air
+  bias−.13->−1.17C. NewGuinea land worsens while marine air warms .37C. Not one universal cooling mechanism.
+* Reports/AIR_SEA_AUDIT_20261109.md; scripts/publish_air_sea_audit.py adds two plots + JSON to normal local
+  climate-accuracy page, newest study first. Browser74studies/172images passes, light/dark mobile/downloads.
+  Exposure register explicitly marks reused/spent cases. Earth r44/v2.2 map data remain unchanged.
+* Next: screen four shared SST-offset/current-strength directions, with/without C3, under fixed Earth
+  forcing/geography and verified numerics. Need rainfall_loss alongside T and marine monthly-curve MAEs.
+  Before changing audit CLI for configurable plans, commit this exact audited source/version and results.
+  Pilot only; no adoption from six development regions. Broad49/finer gates + new independent milestone
+  needed before any future r45. No regional masks or observed SST/wind inputs allowed.
+
 # P8b heat-exchange diagnostic — 9 November 2026
 
 * Frozen plan calibration/air_sea_audit_20261109/plan.json: six known/spent regions x r44/failed P8a C3,

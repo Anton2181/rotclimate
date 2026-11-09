@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('air-sea-exchange','Actual surface heat exchange: r44 and the rejected coastal scheme'),
     ('dry-branch-validation','Complete 61-region drying-bound qualification'),
     ('storm-expansion','Complete 61-region storm-family comparison'),
     ('face-convergence','Fixed-state circulation compression and transport changes'),

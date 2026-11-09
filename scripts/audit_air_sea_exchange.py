@@ -42,6 +42,14 @@ def equivalent_depth_m(rate_s, speed_ms, coefficient=.001):
     return coefficient * speed / rate
 
 
+def cap_exceedance_masks(surface, rate_state, solved_air, rate, cap):
+    """Separate the coefficient-state cap from its fixed-point residual."""
+    eligible = (np.asarray(surface)-rate_state >= 2.) & (cap > 0)
+    evaluated = np.asarray(rate)*(np.asarray(surface)-rate_state)*DAY
+    solved = np.asarray(rate)*(np.asarray(surface)-solved_air)*DAY
+    return eligible & (evaluated > cap+1e-6), eligible & (solved > cap+1e-6)
+
+
 def prepare_reference():
     REFERENCE.mkdir(exist_ok=True, parents=True)
     archive = REFERENCE/'sigma995.npz'; receipt = REFERENCE/'reference.json'
@@ -129,7 +137,8 @@ def one(job):
     # Only cold-air states engage the unstable cap; positive tendencies elsewhere
     # are not cap violations. The baseline rate floor is explicitly disclosed.
     capped_cold = cold & (p.ocean_unstable_cap > 0)
-    exceed = capped_cold & (tendency > p.ocean_unstable_cap+1e-6)
+    exceed, solved_exceed = cap_exceedance_masks(fields['surface_c'],fields['rate_state_c'],
+        fields['air_c'],fields['lambda_s'],p.ocean_unstable_cap)
     row = dict(status='passed',identity=run_id,region=region,config=config,
         params=asdict(p),case_sha256=case_hash(case,observed_sea=True),numerics=result.numerics,
         cells=dict(scored_land=int(land.sum()),mapped_sea=int((g.inmap & ~g.land).sum()),coastal_sea=int(sea.sum())),
@@ -141,10 +150,11 @@ def one(job):
             wind_ms=mean(speed),ncep_wind_ms=np.hypot(obs['u'],obs['v'])[:,sea].mean(1).tolist(),
             surface_tendency_k_day=mean(tendency),warm_air_share=mean(contrast<0),cold_air_share=mean(cold),
             flux_1000m_wm2=mean(slab_flux_wm2(fields['lambda_s'],contrast,1000.)),
-            equivalent_depth_proxy_m=mean(depth),cap_exceedance_share=mean(exceed)),
+            equivalent_depth_proxy_m=mean(depth),cap_exceedance_share=mean(exceed),solved_cap_exceedance_share=mean(solved_exceed)),
         distributions=dict(tendency_k_day=np.percentile(tendency[:,sea],[0,5,50,95,100]).tolist(),
             equivalent_depth_proxy_m=np.percentile(depth[:,sea],[5,50,95]).tolist(),
-            nominal_cap_exceedance_fraction_cold=float(exceed[:,sea].sum()/max(1,capped_cold[:,sea].sum()))),
+            nominal_cap_exceedance_fraction_cold=float(exceed[:,sea].sum()/max(1,capped_cold[:,sea].sum())),
+            solved_cap_exceedance_fraction_cold=float(solved_exceed[:,sea].sum()/max(1,capped_cold[:,sea].sum()))),
         references='Separate WOA18 SST and NCEP sigma0.995 air/winds. Mixed periods; no observed flux inferred.')
     write_json(path,row)
     print(config,region,'T MAE',round(np.mean(row['monthly']['land_temperature_mae_c']),3),
@@ -162,7 +172,9 @@ def main():
     specs={}
     for path in ['calibration/local_accuracy_20261023/regions_dev12.json','calibration/sealed_20261107h/regions.json']:
         specs.update(json.loads((ROOT/path).read_text()));sources[path]=file_hash(ROOT/path)
-    protocol=dict(plan=plan,sources_sha256=sources,reference=reference,scope='Development diagnosis; all h regions already spent; no fit/adoption/new sealed pool')
+    protocol=dict(plan=plan,sources_sha256=sources,reference=reference,
+        cap_count_definition='Coefficient-state and solved-air exceedances separated; old audit retained. Avoid counting fixed-point tolerance as baseline-floor activation.',
+        scope='Development diagnosis; all h regions already spent; no fit/adoption/new sealed pool')
     run_id=freeze(a.out/'protocol.json',protocol)
     jobs=[(r,n,p,str(a.out),specs,run_id) for n,p in plan['configs'].items() for r in plan['regions']]
     with Pool(a.workers) as pool: rows=list(pool.imap_unordered(one,jobs))

@@ -41,6 +41,15 @@ def test_heat_flux_and_depth_have_the_declared_physical_units():
     with pytest.raises(ValueError): equivalent_depth_m(0.,10.)
 
 
+def test_nominal_cap_counts_do_not_confuse_fixed_point_tolerance_with_a_rate_floor():
+    from scripts.audit_air_sea_exchange import cap_exceedance_masks
+    surface=np.array([10.,10.,10.]);state=np.array([7.,2.,8.]);solved=np.array([6.97,2.,8.03])
+    rates=np.array([2/3,1/2.7381993028417,1.])/86400
+    actual,perturbed=cap_exceedance_masks(surface,state,solved,rates,2.)
+    np.testing.assert_array_equal(actual,[False,True,False])
+    np.testing.assert_array_equal(perturbed,[True,True,False])
+
+
 def test_southern_reference_rotates_months_and_reverses_only_northward_wind():
     from types import SimpleNamespace
     # Spatially uniform references make this an exact calendar/frame test,
