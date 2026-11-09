@@ -1,3 +1,28 @@
+# Shared SST screen COMPLETE — 9 November 2026
+
+* Frozen calibration/shared_sst_screen_20261109/plan.json committed4fba2f09 before runs. Four coordinated
+  directions (+1.5/+3K global SST offset and -1.5/-3K current strength), with r44 or C3 exchange, plus fresh
+  paired r44/C3:36/36 numerical checks pass. Six selected known regions, not new validation or optimization.
+* output/shared_sst_screen_20261109/{protocol,summary,comparison}.json stores full rows/metrics and verifies
+  identical cases + changes only in the predeclared shared fields. Earth forcing/geography/numerics fixed.
+* Results: reference T1.6836/P.42662, S6=1, coastal SSTcurveMAE2.271. warm15 S1.0336/SST1.741;
+  warm15_C3 S1.0188/SST1.746; warm30 S1.0803/SST1.611; warm30_C3 S1.0678/SST1.612. SST improves23-29%,
+  land aggregate worsens1.9-8.0%. None passes screen. RejectedC3 S.9938 but T+1.4% fails component guard.
+* Reports/SHARED_SST_SCREEN_20261109.md; scripts/publish_shared_sst_screen.py adds plot/table/JSON as newest
+  study in normal local climate-accuracy page. Observer/decode/frame/cap tests6pass; all new figures posted.
+* Do NOT call this a global minimum or a six-coast improvement. It reveals joint sea/land compensation;
+  any broader refit needs multiple starts (r44 and warm15_C3 useful contrast), aggregate v3 scoring without
+  old per-group penalties, broader49+spent sensitivity, marine adequacy reported, finer checks + newly
+  declared independent milestone. No new sealed pool or atlas climate replacement. r44/v2.2 remains adopted.
+* Audit CLI now accepts --plan/plan.cell_km and records canonical full-field rain_loss beside T/marine
+  diagnostics. Exact previous audit source retained in d0099f9e; current pilot source in4fba2f09. Use NEW
+  output directories after source changes, do not overwrite historical protocols. Dataset register updated.
+* Frozen new plan/candidate JSONs and reference receipt have -text attributes for Windows byte hashes.
+* Final QA: browser75studies/173images PASS, light/dark/mobile/JSON downloads; Windows1550byte-exact
+  assets PASS; portable2142files/703links/fresh launcher PASS. Nine new frozen plan/candidate/reference
+  files separately pass Windows core.autocrlf byte-hash check. Evidence in output/shared_sst_screen_20261109.
+  Bundle /tmp/rotclimate_v22_atlases.zip refreshed. Main Earth/free/Whittaker map folders unchanged this round.
+
 # P8b audit COMPLETE — 9 November 2026
 
 * Frozen6regions x r44/rejectedC3 audit complete; no fit or new sealed pool. All12 numerical checks pass.
