@@ -1,0 +1,27 @@
+{
+  "status": "reused_completed_stages",
+  "previous_run": "output/atlas_v22",
+  "new_run": "output/atlas_v22_calendar_fix",
+  "old_identity_sha256": "fdc63dfea0ea4e86b5b64047ead361ff6c300cc77f1cbe897a03e3ffe472a094",
+  "new_identity_sha256": "e0009816f74433648176e54d1de9df92c0c9b4a6e44f5b3931d300b589bec560",
+  "changed_sources": {
+    "scripts/build_cereal_work_maps.py": {
+      "before": "fa8e656a89e40fd76e1e0f31f10ae0633d8e230fb7ec25425d9a4641df7d49a4",
+      "after": "868f1421a78e2e7fd1c8720fc89c651cee8c772920abb55c7e11efbddf5736b6"
+    }
+  },
+  "reused_stages": [
+    "world",
+    "diagnostics",
+    "corrected_layers",
+    "corrected_climate",
+    "languages",
+    "release_identity",
+    "promote",
+    "admin_inventory",
+    "coverage_review",
+    "coverage",
+    "pasture"
+  ],
+  "reason": "Only the failed farm_work CLI producer changed. Physical model, corrections, prior exporters and inputs are byte-identical. Old identity retained unchanged; new run explicitly records reuse."
+}

@@ -15,7 +15,7 @@ def main():
     from matplotlib.colors import to_rgb
     from harvest.work_maps import cereal_work,tied_harvest_boundaries,boundary_count
     from harvest.crop_sequences import crop_windows
-    from harvest.export import climate_arrays,geometry,surface_months
+    from harvest.export import climate_arrays,derive,surface_months
     from population.export import decode_harvest
     from scripts.land_people import CROPS,hargreaves,sunlight_top,bucket
     from local_benchmark_protocol import file_hash,write_json
@@ -44,7 +44,12 @@ def main():
             energy=np.nan_to_num(np.stack([hf['kcal_'+c] for c in crops]),nan=0.)
             work=cereal_work(energy,hours,reap,food_target=1e6)
             work.crop[~land]=0
-            arrays=climate_arrays(folder,meta);geo,_=geometry(meta,shape)
+            arrays=climate_arrays(folder,meta)
+            # Use the same complete irrigation as the producer: geometry()
+            # alone omits the discharge-dependent delta fans added by derive().
+            # Recomputing also avoids quantizing irrigation before the crop
+            # response; the published kcal packet is checked below per cell.
+            _,geo,_,_=derive(meta,arrays)
             temperature,rain,dtr,latitude=surface_months(meta,arrays)
             selected=np.flatnonzero(land);mask=np.zeros(land.size,np.uint16)
             margin=hm['parameters'].get('margin_reliability');max_drift=0.
