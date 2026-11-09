@@ -1,0 +1,30 @@
+FF                                                                       [100%]
+=================================== FAILURES ===================================
+________ test_observed_winds_cannot_enter_either_joint_boundary[earth] _________
+
+profile = 'earth'
+
+    @pytest.mark.parametrize('profile', ['earth', 'world'])
+    def test_observed_winds_cannot_enter_either_joint_boundary(profile):
+        p = physics().replace(wind_source='observed')
+>       with pytest.raises(ValueError, match='modelled winds'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_joint_inputs.py:107: Failed
+________ test_observed_winds_cannot_enter_either_joint_boundary[world] _________
+
+profile = 'world'
+
+    @pytest.mark.parametrize('profile', ['earth', 'world'])
+    def test_observed_winds_cannot_enter_either_joint_boundary(profile):
+        p = physics().replace(wind_source='observed')
+>       with pytest.raises(ValueError, match='modelled winds'):
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E       Failed: DID NOT RAISE ValueError
+
+tests/test_joint_inputs.py:107: Failed
+=========================== short test summary info ============================
+FAILED tests/test_joint_inputs.py::test_observed_winds_cannot_enter_either_joint_boundary[earth]
+FAILED tests/test_joint_inputs.py::test_observed_winds_cannot_enter_either_joint_boundary[world]
+2 failed, 23 deselected in 0.58s

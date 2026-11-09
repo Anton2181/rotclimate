@@ -101,6 +101,22 @@ def test_relaxed_or_observation_substituted_profiles_cannot_enter_a_joint_fit(ch
         joint.world_profile(physics().replace(**changes), Params())
 
 
+@pytest.mark.parametrize('profile', ['earth', 'world'])
+def test_observed_winds_cannot_enter_either_joint_boundary(profile):
+    p = physics().replace(wind_source='observed')
+    with pytest.raises(ValueError, match='modelled winds'):
+        if profile == 'earth':
+            joint.earth_profile(p)
+        else:
+            joint.world_profile(p, Params())
+
+
+def test_observed_winds_remain_available_for_explicit_earth_diagnostics():
+    from types import SimpleNamespace
+    p = earth.earth_params(physics().replace(wind_source='observed'), SimpleNamespace(name='japan'))
+    assert p.wind_source == 'observed'
+
+
 def test_new_uncategorized_parameter_fails_closed(monkeypatch):
     monkeypatch.setattr(joint, 'SHARED_FIELDS', joint.SHARED_FIELDS - {'orographic'})
     with pytest.raises(ValueError, match='Classify'):

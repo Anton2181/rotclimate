@@ -83,6 +83,8 @@ def require_strict(params):
         raise ValueError("Joint experiments require the verified numerical profile")
     if params.sst_source != "model":
         raise ValueError("Joint experiments require modelled SST; observed SST is diagnostic")
+    if params.wind_source != "model":
+        raise ValueError("Joint experiments require modelled winds; observed winds are diagnostic")
     if params.cloud_radiation > 0 and params.cloud_reference != "domain":
         raise ValueError("Joint cloud radiation requires the shared domain reference")
 

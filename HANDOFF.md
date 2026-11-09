@@ -22,10 +22,13 @@
   default held land67.4078->67.4735%, sources1010->1011. These are scenario outputs, not Earth-validation gains.
   EXPORTED corrected target38.4480->38.4564%; MONTHLY correction gate38.5488->38.5657%. Don't conflate them.
   River check107systems/11through-lakes passes; extra3years land monthly rain change<=.15mm.
-* Next small code milestone: tests/test_joint_inputs.py has2 pending observed-wind rejection regressions.
-  Add wind_source != model rejection in joint.require_strict, keep explicit Earth diagnostics allowed,
-  run joint/release/launcher tests, commit/push separately. No atlas regeneration needed: model-wind behavior
-  unchanged. Next actual physics design: reports/PHYSICS_NEXT_20261109.md; P8a failed h, r44 remains adopted.
+* Joint guard follow-up COMPLETE: require_strict now rejects observed winds (as it already rejects observed
+  SST). 27 joint/input tests PASS; both Earth/world boundaries reject substitutions, direct Earth diagnostics
+  remain available, real solver invariance passes. Adopted r44 model-wind outputs unchanged; no atlas rebuild.
+* Page refresher now selects ACTIVE rather than merely excluding the two named retired fits; older
+  earth_physics page also stays byte-identical. Actual refresh verified all3 inactive pages preserved.
+* Next actual physics design: reports/PHYSICS_NEXT_20261109.md (heat-flux audit then multiple starts under
+  fixed Earth forcing). P8a failed h, r44 remains adopted. No new independent Earth accuracy claim this round.
 * Source freeze has ended. Completed build identities deliberately retained; future source changes require
   a NEW ROTCLIMATE_V22_OUT rather than rewriting these successful runs' manifests.
 * Cache preservation: output/atlas_v22/cache_archives.json records verified gzip copies of new checkpoint

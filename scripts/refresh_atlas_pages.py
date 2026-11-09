@@ -1,4 +1,4 @@
-"""Re-copy the atlas page template (atlas/index.html) into the separate atlases
+"""Re-copy the atlas page template (atlas/index.html) into the active atlases
 in atlases/, keeping each one's heading. No simulation is re-run.
 
     python -I scripts/refresh_atlas_pages.py
@@ -12,7 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 from build_atlas_variant import page  # noqa: E402
-from atlas_set import RETIRED  # noqa: E402  (free and Whittaker fits retired, 8 Nov 2026)
+from atlas_set import ACTIVE  # noqa: E402
 
 PAGES = json.loads((ROOT / "atlases" / "pages.json").read_text())
 
@@ -23,7 +23,7 @@ def main():
     args=parser.parse_args()
     src = (ROOT / "atlas" / "index.html").read_text()
     for name, h in PAGES.items():
-        if name in RETIRED:
+        if name not in ACTIVE:
             continue
         out = ROOT / "atlases" / (name+'_next' if args.staging else name)
         if not out.exists():
