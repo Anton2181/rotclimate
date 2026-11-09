@@ -19,7 +19,9 @@ def check(snapshot,*,retained):
         'output/settlement_labour_20261105/fieldwork_settlement_reach.png',
         ':(glob)output/settlement_labour_20261105/*/field_support.npz',
         ':(glob)calibration/earth_components_20261105/*.json',
-        ':(glob)calibration/low_input_yields_20261105/*.json'],cwd=ROOT,
+        ':(glob)calibration/low_input_yields_20261105/*.json',
+        'calibration/earth_correction_r44_20261107',
+        'calibration/local_accuracy_20261023/r44_params.json'],cwd=ROOT,
         capture_output=True,check=True).stdout
     subprocess.run(['git','-c','core.autocrlf=true','checkout-index','-z','--stdin',
         '--prefix='+str(snapshot)+'/'],input=paths,cwd=ROOT,capture_output=True,check=True)
@@ -35,6 +37,13 @@ def check(snapshot,*,retained):
         assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
         assets.append(dict(file=str(relative),sha256=actual))
     for path in (ROOT/'calibration/low_input_yields_20261105').glob('*.json'):
+        relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
+        assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
+        assets.append(dict(file=str(relative),sha256=actual))
+    recovered=list((ROOT/'calibration/earth_correction_r44_20261107').rglob('*.json'))
+    recovered+=list((ROOT/'calibration/earth_correction_r44_20261107').rglob('*.npz'))
+    recovered+=[ROOT/'calibration/local_accuracy_20261023/r44_params.json']
+    for path in recovered:
         relative=path.relative_to(ROOT);actual=hashlib.sha256(path.read_bytes()).hexdigest()
         assert hashlib.sha256((snapshot/relative).read_bytes()).hexdigest()==actual,str(relative)
         assets.append(dict(file=str(relative),sha256=actual))

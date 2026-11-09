@@ -1,0 +1,79 @@
+{
+  "profile": "r44",
+  "date": "2026-11-09",
+  "raw_development49": {
+    "regions": 49,
+    "monthly_temperature_mae_C": 1.8614832013111198,
+    "rain_loss": 0.4882608911334709
+  },
+  "correction_cluster_cv31": {
+    "regions": 31,
+    "raw_temperature_mae_C": 1.6995883892233026,
+    "corrected_temperature_mae_C": 1.506243078798866,
+    "raw_rain_loss": 0.44264643225490685,
+    "corrected_rain_loss": 0.4317780916530946
+  },
+  "adoption": {
+    "adopted": "r44",
+    "adopted_utc": "2026-11-07T13:07:21.386615+00:00",
+    "reference": "r43",
+    "params": "calibration/local_accuracy_20261023/r44_params.json",
+    "params_sha256": "c269034f5d889c5ddb91d13da44d075820f3514406c80d422e2a7cd42f9076e1",
+    "validation": "output/east_asia_p6_20261107/gate_d15",
+    "validation_result_sha256": "7bbaed8826aeca38f4f66a87477086ebb5792172a8acf42ef0d4d9275df4c710",
+    "plans": [
+      "calibration/east_asia_p6_20261107/plan_e72d.json",
+      "calibration/east_asia_p6_20261107/plan_gate_d15.json",
+      "calibration/sealed_20261107g/declaration.json"
+    ],
+    "criteria": "Unchanged policy_v3: dev49 S<=.995; T/P<=+1%; fine28 S<=1.01; unseen sealed S<=1.0 (set g, five clean boxes after amendment_1).",
+    "scores": {
+      "dev49": {
+        "S": 0.9902277419269021,
+        "T": -0.009021839724032699,
+        "P": -0.01052267642216298,
+        "n": 49
+      },
+      "dev_pass": true,
+      "fine28": {
+        "S": 0.9859431895632129,
+        "T": -0.009298353380548074,
+        "P": -0.018815267493025978,
+        "n": 4
+      },
+      "fine_pass": true,
+      "sealed_g": {
+        "S": 0.9784735642288078,
+        "T": -0.019759653324378346,
+        "P": -0.023293218218006118,
+        "n": 5
+      },
+      "sealed_pass": true,
+      "outcome": "adopted"
+    },
+    "changed_fields": [
+      "storm_plateau",
+      "storm_plateau_season",
+      "storm_plateau_global",
+      "storm_plateau_reach_deg"
+    ],
+    "history": "e72 inert, e72b window-limited, e72c failed sealed set f (eastern Siberia), e72d (reach 15 deg) passed; see reports/EAST_ASIA_E72_20261107.md",
+    "planet_orbit_changed": false,
+    "imposed_observed_wind_or_sst": false,
+    "map_effect": "None on the atlas worlds: no land above 2,500 m (smoothed); the Earth-trained corrections can be retrained on r44.",
+    "atlas_served": "r43"
+  },
+  "recovered_model_sha256": {
+    "temperature": "e12e5ea8d3cd2152735074e539fd1b14e6f9229f526932ea65eade84af6fb369",
+    "rain_pattern": "d98dfd7dd85496f7793ea73dc26c8ac697583bd73f366ddfefa2bfc1d5c300f7"
+  },
+  "source_files_sha256": {
+    "output/east_asia_p6_20261107/gate_d15/candidate_dev31/summary.json": "94870d475c4a8504b050fefc00484fb1ec5ed401d42b2c68d7cbfe0de122014b",
+    "output/east_asia_p6_20261107/gate_d15/candidate_retired_a/summary.json": "aa73faee6c4a1ac39721a441e0adbefcfd3b47126cd29500ea00156279c4097f",
+    "output/east_asia_p6_20261107/gate_d15/candidate_retired_b/summary.json": "772554ce70a4ac82e440c67ebbb23df628cf04b3454d6718542ee4f51890c2f3",
+    "output/east_asia_p6_20261107/gate_d15/candidate_retired_c/summary.json": "a470af1b02fbf0b270bf7c9805643b25ca6c9c6c1020d39455919a6abd66a180",
+    "calibration/local_accuracy_20261023/r44_params.json": "c269034f5d889c5ddb91d13da44d075820f3514406c80d422e2a7cd42f9076e1",
+    "calibration/earth_correction_r44_20261107/release_receipt.json": "82c76966c7ccec5aba55dd9d158ae91f3caa8e9fb6dc0f42e8ec4db827dc0f16"
+  },
+  "interpretation": "Original r44 adoption evidence plus correction-reconstruction replay. 49 raw regions and31 correction regions are different pools; never subtract their errors as a paired improvement. No new unseen validation."
+}

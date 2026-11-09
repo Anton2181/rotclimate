@@ -302,6 +302,9 @@ def main():
         evidence=ROOT/'atlases/earth_evidence'
         if evidence.exists():
             release['earth_evidence_sha256']={str(p.relative_to(evidence)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(evidence.rglob('*')) if p.is_file()}
+        accuracy=ROOT/'atlases/climate_accuracy'
+        if accuracy.exists():
+            release['climate_accuracy_sha256']={str(p.relative_to(accuracy)):hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted(accuracy.rglob('*')) if p.is_file()}
         (ROOT / 'atlases/release.json').write_text(json.dumps(release, indent=2) + '\n')
     print('wrote', out)
 

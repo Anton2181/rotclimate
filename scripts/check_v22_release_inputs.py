@@ -34,14 +34,13 @@ def verify_correction(folder, physics_path):
 def check(root, out, *, record=False):
     from rotclimate.config import Params
     from rotclimate import joint
-    from correction_training_receipt import inputs, matches
     physics_path = root / 'calibration/local_accuracy_20261023/r44_params.json'
     world_path = root / 'calibration/map_world_r44_terrain22/params.json'
     cal = root / 'calibration/earth_correction_r44_20261107'
     evals = root / 'output/earth_correction_r44_20261107'
     terrain = root / json.loads(world_path.read_text())['terrain_file']
     required = [physics_path, world_path, terrain, root / 'data/delta_fan_model.json',
-        root / 'reports/LAKES_DELTAS_20261108.md', evals / 'training_receipt.json']
+        root / 'reports/LAKES_DELTAS_20261108.md', cal / 'release_receipt.json']
     for component in ['temperature', 'rain_pattern']:
         required += [cal / component / name for name in ['correction.npz', 'protocol.json', 'evaluation.json']]
     missing = [str(p.relative_to(root)) for p in required if not p.is_file()]
@@ -54,12 +53,21 @@ def check(root, out, *, record=False):
         raise ValueError('World parameters differ from adopted r44 shared physics: ' + str(different))
     for component in ['temperature', 'rain_pattern']:
         verify_correction(cal / component, physics_path)
-    receipt = json.loads((evals / 'training_receipt.json').read_text())
-    if not matches(receipt, inputs(physics_path.relative_to(root), 'r44'), root):
-        raise ValueError('Correction reconstruction receipt is incomplete or stale')
+    receipt = json.loads((cal / 'release_receipt.json').read_text())
+    if receipt.get('status') != 'complete' or not receipt.get('full_training_receipt_verified') or receipt.get('physics_params_sha256') != sha(physics_path):
+        raise ValueError('Correction release receipt is incomplete or stale')
+    needed = {str((cal/component/name).relative_to(root)) for component in ['temperature','rain_pattern']
+        for name in ['correction.npz','protocol.json','evaluation.json']}
+    needed |= {str((evals/name).relative_to(root)) for name in ['training_receipt.json','eval_dev31.json','eval_fine14.json','eval_rain_dev31.json']}
+    if not needed <= set(receipt.get('artifacts', {})):
+        raise ValueError('Correction release receipt omits required models or scores')
+    for name, digest in receipt['artifacts'].items():
+        path = root / name
+        if not path.is_file() or sha(path) != digest:
+            raise ValueError('Missing or changed correction release artifact: ' + name)
     # This identity covers both physical inputs and export/add-on code. An old
     # stages_done file cannot silently skip work after any of them changes.
-    sources = [*required, *sorted((root / 'scripts').glob('*.py')),
+    sources = [*[p for p in required if p.suffix != '.md'], *[root/name for name in receipt['artifacts']], *sorted((root / 'scripts').glob('*.py')),
         root / 'scripts/release_v22_deltas.sh', *sorted((root / 'data').glob('*.json'))]
     for package in ['rotclimate', 'harvest', 'polity', 'atlas']:
         sources += sorted(p for p in (root / package).rglob('*') if p.is_file() and p.suffix in {'.py', '.js', '.html'})

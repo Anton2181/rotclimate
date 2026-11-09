@@ -1,11 +1,24 @@
 {
-  "status": "temperature_recovered_rain_in_progress",
+  "status": "reconstruction_complete",
   "date": "2026-11-09",
-  "model_sha256": "e12e5ea8d3cd2152735074e539fd1b14e6f9229f526932ea65eade84af6fb369",
-  "lost_original_sha256": "0dc997b9a625c67e3505ee50c4e57f99117a72faa8b388c931f042b2d50f58a4",
-  "byte_identical_to_lost_original": false,
   "temperature_cluster_cv_mae_C": 1.506243078798866,
-  "raw_mae_C": 1.6995883892233026,
-  "reported_rounded_reference_C": 1.506,
-  "interpretation": "Reconstructed using unchanged recipe, repeated development data and fresh artifact identities; not a new unseen-accuracy claim. Rain model/complete receipt still required before release."
+  "rain_cluster_cv_loss": 0.4317780916530946,
+  "reference_consistency": {
+    "temperature_matches_published_rounding": true,
+    "rain_matches_published_rounding": true
+  },
+  "recovered_sha256": {
+    "temperature": "e12e5ea8d3cd2152735074e539fd1b14e6f9229f526932ea65eade84af6fb369",
+    "rain_pattern": "d98dfd7dd85496f7793ea73dc26c8ac697583bd73f366ddfefa2bfc1d5c300f7"
+  },
+  "lost_original_sha256": {
+    "temperature": "0dc997b9a625c67e3505ee50c4e57f99117a72faa8b388c931f042b2d50f58a4",
+    "rain_pattern": "c1630268c4e98611a011778d76a66e40384ca9becbf571c43ca2682f7564afce"
+  },
+  "byte_identical_to_lost_original": {
+    "temperature": false,
+    "rain_pattern": false
+  },
+  "release_receipt_sha256": "82c76966c7ccec5aba55dd9d158ae91f3caa8e9fb6dc0f42e8ec4db827dc0f16",
+  "interpretation": "Existing fixed training recipe replayed on spent development/evaluation pools. Recovered artifacts have new identities; no new unseen-accuracy claim."
 }

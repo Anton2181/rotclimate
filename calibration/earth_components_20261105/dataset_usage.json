@@ -1,210 +1,216 @@
 {
- "version": 1,
- "date": "2026-11-06",
- "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
- "datasets": [
-  {
-   "id": "climate_dev49",
-   "status": "development",
-   "evidence": "reports/R43_20261103.md"
-  },
-  {
-   "id": "climate_sealed_a_through_e",
-   "status": "spent_evaluation",
-   "evidence": "reports/R43_20261103.md",
-   "note": "Do not recover unseen status by choosing a different component or subregion."
-  },
-  {
-   "id": "climate_reserved_f",
-   "status": "spent_evaluation",
-   "evidence": "reports/R43_20261103.md",
-   "note": "Scored once 2026-11-07 for r43 + e72c (owner release): S 1.0107, fail. Development use from now on must be explicit."
-  },
-  {
-   "id": "hyde_0_200",
-   "status": "development_and_historical_analogue",
-   "evidence": "reports/POPULATION_20261023.md",
-   "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
-  },
-  {
-   "id": "han_ad2",
-   "status": "used_for_fitting_and_evaluation",
-   "evidence": "reports/POPULATION_20261023.md",
-   "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
-  },
-  {
-   "id": "roman_town_areas",
-   "status": "spent_evaluation",
-   "evidence": "reports/POLITY_V3_20261025.md",
-   "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
-  },
-  {
-   "id": "binford_foragers",
-   "status": "development_and_spent_transfer_evaluation",
-   "evidence": "reports/FORAGING_EARTH_20261031.md",
-   "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
-  },
-  {
-   "id": "sacks_cereal_calendar_pool",
-   "status": "spent_evaluation",
-   "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
-   "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
-  },
-  {
-   "id": "vdsa_8224522_reaping",
-   "status": "development_and_spent_flawed_evaluation",
-   "evidence": "output/earth_components_20261105/reaping/evaluation.json",
-   "training_cases": 603,
-   "training_districts": 8,
-   "evaluation_cases": 1635,
-   "evaluation_districts": 5,
-   "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
-   "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
-   "restricted_diagnostic_cases": 1606,
-   "restricted_diagnostic_districts": 4
-  },
-  {
-   "id": "era_broadbalk_1852_1925",
-   "status": "development_and_spent_temporal_evaluation",
-   "training_years": 20,
-   "evaluation_years": 25,
-   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-   "note": "One physical site/primary plot; 1879\u20131900 training,1901\u20131925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
-  },
-  {
-   "id": "era_woburn_wheat_barley_1877_1926",
-   "status": "spent_evaluation",
-   "evidence": "output/woburn_yields_20261106/evaluation.json; reports/CROP_WATER_WOBURN_20261106.md",
-   "note": "Weather is Rothamsted's record as a declared regional proxy (Woburn's own station starts 1928). Other Woburn strata and years were read in the same files and cannot be called unseen for this crop process.",
-   "scored": "unmanured (all nil, no lime) and FYM-only strata, wheat 1879-1900 and barley 1879-1899, 2026-11-06, under the frozen calibration/low_input_yields_20261105/woburn_plan.json and its pre-scoring amendment"
-  },
-  {
-   "id": "era_hoosfield_published_aggregate_means",
-   "status": "source_discovery_exposure",
-   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-   "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
-  },
-  {
-   "id": "era_exhaustion_land_phase2_1902_1939",
-   "status": "spent_evaluation",
-   "evidence": "output/soil_fertility_20261106/evaluation.json; reports/SOIL_FERTILITY_20261106.md",
-   "note": "Phase II cereal grain yields (10.23637/REX4-YLD0239-01) unread until the single frozen evaluation. Phase I (10.23637/REX4-YLD5601-01) management columns used as forcing only; Phase I yields not read. Johnston and Poulton (1977) and Warren and Johnston (1960) not opened. The scorer crashed twice before writing output (serialisation, then a path); no value was printed or seen before the completed deterministic run.",
-   "scored": "cereal grain, plots 1-10, 1902-1922 and 1935, 2026-11-06, once, under plan.json + amendment_evaporation.json with selection 66c67e7b"
-  },
-  {
-   "id": "era_alternate_wheat_fallow_rwf3",
-   "status": "seen_aggregate",
-   "evidence": "https://www.era.rothamsted.ac.uk/experiment/rwf3",
-   "note": "The experiment page states aggregate fallow effects (+0.6 t/ha first 10 years, +0.14 t/ha next 60); not usable as a blind test."
-  },
-  {
-   "id": "era_broadbalk_1926_1967",
-   "status": "spent_evaluation",
-   "evidence": "output/soil_fertility_round2_20261106/evaluation.json; reports/SOIL_FERTILITY_ROUND2_20261106.md",
-   "note": "Strips 3, 21, 22 grain are the targets; management columns read. Note 13 quotes one strip-14 1930 grain value (not a target).",
-   "scored": "strips 3, 21, 22 (and N strips 5-8 as secondary), 1926-1967, 2026-11-06, once, under plan_round2.json + amendment_round2.json with selection 4d282c4c"
-  },
-  {
-   "id": "era_broadbalk_soc_1843_2010",
-   "status": "development_partial",
-   "evidence": "calibration/soil_fertility_20261106/plan_round2.json",
-   "note": "Samples 1843-1914 used as development constraints; 1936 and later not printed or used (they fall in or after the 1926-1967 test period)."
-  },
-  {
-   "id": "earth_control_rome150_han2",
-   "status": "development_comparison_on_seen_data",
-   "evidence": "reports/EARTH_CONTROL_20261106.md; calibration/earth_control_20261106/plan.json",
-   "note": "Cliopatria Roman Empire AD 150, Hanson towns AD 150, Itiner-e roads AD 150, Han AD 2 seats and commanderies: already used in POLITY v2/v3 and A2; scored 2026-11-06 for the atlas control-map default (frozen gates). Spent for this question; a blind control test needs unseen polities/years declared first."
-  },
-  {
-   "id": "blind_control_pleiades_cliopatria_bc",
-   "status": "spent_evaluation",
-   "evidence": "calibration/earth_control_20261106/plan_blind.json",
-   "note": "Pleiades Hellenistic (200 BC) and Neo-Assyrian (700 BC) settlements with Cliopatria any-state extents; declared 2026-11-07 before any outcome; one scoring of the round-2 chain and legacy_0, then spent. Scored once 2026-11-07 (results_blind.json): G2 passed for all food cases, G1 failed in B1 (staffed 49-73 %); no default change."
-  },
-  {
-   "id": "climate_sealed_g",
-   "status": "spent_evaluation",
-   "evidence": "calibration/sealed_20261107g/declaration.json",
-   "note": "Declared 2026-11-07 after f was spent; yunnan excluded before any comparative outcome (overlaps the policy-v2 sealed yunnan); five boxes scored once for r43 + e72d: S 0.9785, pass -> r44."
-  },
-  {
-   "id": "blind_control_chgis_280_1580",
-   "status": "spent_evaluation",
-   "evidence": "calibration/earth_control_20261106/plan_blind2.json",
-   "note": "CHGIS V6 county seats (AD 280, 1580) with Cliopatria Western Jin + Eastern Wu / Ming extents in the Han window; declared before any outcome; geography shared with the Han AD 2 development pool. Scored once 2026-11-07 (results_blind2.json): joint365 and fert_legume pass G1 and G2 in both pools, fert_bare fails G2 by <= 0.001; default -> joint365 with L1 + P2."
-  },
-  {
-   "id": "settlement_blind_chgis_610",
-   "status": "spent_evaluation",
-   "evidence": "calibration/settlement_model_20261107/plan.json",
-   "note": "CHGIS V6 county seats alive in AD 610 (Han window); reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
-  },
-  {
-   "id": "settlement_blind_bosker_1300_beyond_limes",
-   "status": "spent_evaluation",
-   "evidence": "calibration/settlement_model_20261107/plan.json",
-   "note": "Bosker et al. cities of 1300 north of 45 N, west of 30 E, outside the Roman Empire of AD 150; reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
-  },
-  {
-   "id": "settlement_blind_chgis_742",
-   "status": "spent",
-   "evidence": "calibration/settlement_model_20261107/plan_round2.json",
-   "note": "CHGIS V6 county seats alive in AD 742 (Tang) in the Han window; reserved 2026-11-07 for the settlement model round-2 blind test, before any round-2 result. Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
-  },
-  {
-   "id": "settlement_blind_bosker_1300_inside_limes",
-   "status": "spent",
-   "evidence": "calibration/settlement_model_20261107/plan_round2.json",
-   "note": "Bosker et al. cities of 1300 inside Cliopatria's Roman Empire AD 150 (Rome window); reserved 2026-11-07 for the settlement model round-2 blind test (site AUC). Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
-  },
-  {
-   "id": "geo_control_blind_chgis_1080",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_A.json",
-   "note": "CHGIS V6 seats alive AD 1080 + Cliopatria polities of 1080 (Han window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
-  },
-  {
-   "id": "geo_control_blind_pleiades_late_antique_550",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_A.json",
-   "note": "Pleiades late-antique settlements + Cliopatria polities of AD 550 (Rome window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
-  },
-  {
-   "id": "geo_a2_blind_chgis_1200",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_A2.json",
-   "note": "CHGIS V6 seats AD 1200 + Cliopatria polities 1200 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-  },
-  {
-   "id": "geo_a2_blind_chgis_1820",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_A2.json",
-   "note": "CHGIS V6 seats AD 1820 + Cliopatria polities 1820 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-  },
-  {
-   "id": "geo_a2_blind_bosker_1500",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_A2.json",
-   "note": "Bosker et al. cities of 1500 + Cliopatria polities 1500 (Rome window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-  },
-  {
-   "id": "forest_reveals_tw6_blind_blocks",
-   "status": "spent",
-   "evidence": "calibration/geography_control_20261107/plan_C1.json",
-   "note": "REVEALS TW6 (2.2-1.7 ka BP) open land, odd 5-degree checkerboard blocks inside the Earth run (147 cells); scored once 2026-11-07 (output/forest_c1_20261107/blind.json). Even blocks (121) are development."
-  },
-  {
-   "id": "domesday_1086_blind",
-   "status": "spent_evaluation",
-   "evidence": "calibration/population_ledger_20261108/plan.json; output/population_ledger_20261108/blind.json",
-   "note": "Domesday survey of England 1086 (Open Domesday, A. Powell-Smith, from the Hull Domesday Project data, J.J.N. Palmer; CC BY-SA): recorded households and settlement points per place. Reserved 2026-11-08, before any download, for the single blind test of the predicted population ledger (Step 3) and village-scale settlement spread (Step 2). Development uses only seen data (Han AD 2 commanderies/counties, census regions, Roman provinces). The England total (~1.7-2.5 M) is common knowledge; the per-block distribution is the unseen part. Scored once 2026-11-08 (plan P3): 20 km block rank P0 0.395, P1 0.431, P2 0.630; level P0 9.95 M, P2 0.79 M (band 1.2-2.6 M fails). Any later village-scale or population use of Domesday is development on seen data."
-  },
-  {
-   "id": "climate_sealed_h",
-   "status": "spent_evaluation",
-   "evidence": "calibration/maritime_p8_20261108/plan.json",
-   "note": "Released by the owner and scored once 2026-11-08 for P8a finalist C3 (e51 + e51b ceiling + e3): S 1.0014, fail (tropical coasts). Development use from now on must be explicit; the next climate milestone needs a newly declared set."
-  }
- ]
+  "version": 1,
+  "date": "2026-11-09",
+  "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
+  "datasets": [
+    {
+      "id": "climate_dev49",
+      "status": "development",
+      "evidence": "reports/R43_20261103.md"
+    },
+    {
+      "id": "climate_sealed_a_through_e",
+      "status": "spent_evaluation",
+      "evidence": "reports/R43_20261103.md",
+      "note": "Do not recover unseen status by choosing a different component or subregion."
+    },
+    {
+      "id": "climate_reserved_f",
+      "status": "spent_evaluation",
+      "evidence": "reports/R43_20261103.md",
+      "note": "Scored once 2026-11-07 for r43 + e72c (owner release): S 1.0107, fail. Development use from now on must be explicit."
+    },
+    {
+      "id": "hyde_0_200",
+      "status": "development_and_historical_analogue",
+      "evidence": "reports/POPULATION_20261023.md",
+      "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
+    },
+    {
+      "id": "han_ad2",
+      "status": "used_for_fitting_and_evaluation",
+      "evidence": "reports/POPULATION_20261023.md",
+      "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
+    },
+    {
+      "id": "roman_town_areas",
+      "status": "spent_evaluation",
+      "evidence": "reports/POLITY_V3_20261025.md",
+      "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
+    },
+    {
+      "id": "binford_foragers",
+      "status": "development_and_spent_transfer_evaluation",
+      "evidence": "reports/FORAGING_EARTH_20261031.md",
+      "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
+    },
+    {
+      "id": "sacks_cereal_calendar_pool",
+      "status": "spent_evaluation",
+      "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
+      "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
+    },
+    {
+      "id": "vdsa_8224522_reaping",
+      "status": "development_and_spent_flawed_evaluation",
+      "evidence": "output/earth_components_20261105/reaping/evaluation.json",
+      "training_cases": 603,
+      "training_districts": 8,
+      "evaluation_cases": 1635,
+      "evaluation_districts": 5,
+      "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
+      "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
+      "restricted_diagnostic_cases": 1606,
+      "restricted_diagnostic_districts": 4
+    },
+    {
+      "id": "era_broadbalk_1852_1925",
+      "status": "development_and_spent_temporal_evaluation",
+      "training_years": 20,
+      "evaluation_years": 25,
+      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+      "note": "One physical site/primary plot; 1879\u20131900 training,1901\u20131925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
+    },
+    {
+      "id": "era_woburn_wheat_barley_1877_1926",
+      "status": "spent_evaluation",
+      "evidence": "output/woburn_yields_20261106/evaluation.json; reports/CROP_WATER_WOBURN_20261106.md",
+      "note": "Weather is Rothamsted's record as a declared regional proxy (Woburn's own station starts 1928). Other Woburn strata and years were read in the same files and cannot be called unseen for this crop process.",
+      "scored": "unmanured (all nil, no lime) and FYM-only strata, wheat 1879-1900 and barley 1879-1899, 2026-11-06, under the frozen calibration/low_input_yields_20261105/woburn_plan.json and its pre-scoring amendment"
+    },
+    {
+      "id": "era_hoosfield_published_aggregate_means",
+      "status": "source_discovery_exposure",
+      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+      "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
+    },
+    {
+      "id": "era_exhaustion_land_phase2_1902_1939",
+      "status": "spent_evaluation",
+      "evidence": "output/soil_fertility_20261106/evaluation.json; reports/SOIL_FERTILITY_20261106.md",
+      "note": "Phase II cereal grain yields (10.23637/REX4-YLD0239-01) unread until the single frozen evaluation. Phase I (10.23637/REX4-YLD5601-01) management columns used as forcing only; Phase I yields not read. Johnston and Poulton (1977) and Warren and Johnston (1960) not opened. The scorer crashed twice before writing output (serialisation, then a path); no value was printed or seen before the completed deterministic run.",
+      "scored": "cereal grain, plots 1-10, 1902-1922 and 1935, 2026-11-06, once, under plan.json + amendment_evaporation.json with selection 66c67e7b"
+    },
+    {
+      "id": "era_alternate_wheat_fallow_rwf3",
+      "status": "seen_aggregate",
+      "evidence": "https://www.era.rothamsted.ac.uk/experiment/rwf3",
+      "note": "The experiment page states aggregate fallow effects (+0.6 t/ha first 10 years, +0.14 t/ha next 60); not usable as a blind test."
+    },
+    {
+      "id": "era_broadbalk_1926_1967",
+      "status": "spent_evaluation",
+      "evidence": "output/soil_fertility_round2_20261106/evaluation.json; reports/SOIL_FERTILITY_ROUND2_20261106.md",
+      "note": "Strips 3, 21, 22 grain are the targets; management columns read. Note 13 quotes one strip-14 1930 grain value (not a target).",
+      "scored": "strips 3, 21, 22 (and N strips 5-8 as secondary), 1926-1967, 2026-11-06, once, under plan_round2.json + amendment_round2.json with selection 4d282c4c"
+    },
+    {
+      "id": "era_broadbalk_soc_1843_2010",
+      "status": "development_partial",
+      "evidence": "calibration/soil_fertility_20261106/plan_round2.json",
+      "note": "Samples 1843-1914 used as development constraints; 1936 and later not printed or used (they fall in or after the 1926-1967 test period)."
+    },
+    {
+      "id": "earth_control_rome150_han2",
+      "status": "development_comparison_on_seen_data",
+      "evidence": "reports/EARTH_CONTROL_20261106.md; calibration/earth_control_20261106/plan.json",
+      "note": "Cliopatria Roman Empire AD 150, Hanson towns AD 150, Itiner-e roads AD 150, Han AD 2 seats and commanderies: already used in POLITY v2/v3 and A2; scored 2026-11-06 for the atlas control-map default (frozen gates). Spent for this question; a blind control test needs unseen polities/years declared first."
+    },
+    {
+      "id": "blind_control_pleiades_cliopatria_bc",
+      "status": "spent_evaluation",
+      "evidence": "calibration/earth_control_20261106/plan_blind.json",
+      "note": "Pleiades Hellenistic (200 BC) and Neo-Assyrian (700 BC) settlements with Cliopatria any-state extents; declared 2026-11-07 before any outcome; one scoring of the round-2 chain and legacy_0, then spent. Scored once 2026-11-07 (results_blind.json): G2 passed for all food cases, G1 failed in B1 (staffed 49-73 %); no default change."
+    },
+    {
+      "id": "climate_sealed_g",
+      "status": "spent_evaluation",
+      "evidence": "calibration/sealed_20261107g/declaration.json",
+      "note": "Declared 2026-11-07 after f was spent; yunnan excluded before any comparative outcome (overlaps the policy-v2 sealed yunnan); five boxes scored once for r43 + e72d: S 0.9785, pass -> r44."
+    },
+    {
+      "id": "blind_control_chgis_280_1580",
+      "status": "spent_evaluation",
+      "evidence": "calibration/earth_control_20261106/plan_blind2.json",
+      "note": "CHGIS V6 county seats (AD 280, 1580) with Cliopatria Western Jin + Eastern Wu / Ming extents in the Han window; declared before any outcome; geography shared with the Han AD 2 development pool. Scored once 2026-11-07 (results_blind2.json): joint365 and fert_legume pass G1 and G2 in both pools, fert_bare fails G2 by <= 0.001; default -> joint365 with L1 + P2."
+    },
+    {
+      "id": "settlement_blind_chgis_610",
+      "status": "spent_evaluation",
+      "evidence": "calibration/settlement_model_20261107/plan.json",
+      "note": "CHGIS V6 county seats alive in AD 610 (Han window); reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
+    },
+    {
+      "id": "settlement_blind_bosker_1300_beyond_limes",
+      "status": "spent_evaluation",
+      "evidence": "calibration/settlement_model_20261107/plan.json",
+      "note": "Bosker et al. cities of 1300 north of 45 N, west of 30 E, outside the Roman Empire of AD 150; reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
+    },
+    {
+      "id": "settlement_blind_chgis_742",
+      "status": "spent",
+      "evidence": "calibration/settlement_model_20261107/plan_round2.json",
+      "note": "CHGIS V6 county seats alive in AD 742 (Tang) in the Han window; reserved 2026-11-07 for the settlement model round-2 blind test, before any round-2 result. Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
+    },
+    {
+      "id": "settlement_blind_bosker_1300_inside_limes",
+      "status": "spent",
+      "evidence": "calibration/settlement_model_20261107/plan_round2.json",
+      "note": "Bosker et al. cities of 1300 inside Cliopatria's Roman Empire AD 150 (Rome window); reserved 2026-11-07 for the settlement model round-2 blind test (site AUC). Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
+    },
+    {
+      "id": "geo_control_blind_chgis_1080",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_A.json",
+      "note": "CHGIS V6 seats alive AD 1080 + Cliopatria polities of 1080 (Han window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
+    },
+    {
+      "id": "geo_control_blind_pleiades_late_antique_550",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_A.json",
+      "note": "Pleiades late-antique settlements + Cliopatria polities of AD 550 (Rome window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
+    },
+    {
+      "id": "geo_a2_blind_chgis_1200",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_A2.json",
+      "note": "CHGIS V6 seats AD 1200 + Cliopatria polities 1200 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+    },
+    {
+      "id": "geo_a2_blind_chgis_1820",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_A2.json",
+      "note": "CHGIS V6 seats AD 1820 + Cliopatria polities 1820 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+    },
+    {
+      "id": "geo_a2_blind_bosker_1500",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_A2.json",
+      "note": "Bosker et al. cities of 1500 + Cliopatria polities 1500 (Rome window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+    },
+    {
+      "id": "forest_reveals_tw6_blind_blocks",
+      "status": "spent",
+      "evidence": "calibration/geography_control_20261107/plan_C1.json",
+      "note": "REVEALS TW6 (2.2-1.7 ka BP) open land, odd 5-degree checkerboard blocks inside the Earth run (147 cells); scored once 2026-11-07 (output/forest_c1_20261107/blind.json). Even blocks (121) are development."
+    },
+    {
+      "id": "domesday_1086_blind",
+      "status": "spent_evaluation",
+      "evidence": "calibration/population_ledger_20261108/plan.json; output/population_ledger_20261108/blind.json",
+      "note": "Domesday survey of England 1086 (Open Domesday, A. Powell-Smith, from the Hull Domesday Project data, J.J.N. Palmer; CC BY-SA): recorded households and settlement points per place. Reserved 2026-11-08, before any download, for the single blind test of the predicted population ledger (Step 3) and village-scale settlement spread (Step 2). Development uses only seen data (Han AD 2 commanderies/counties, census regions, Roman provinces). The England total (~1.7-2.5 M) is common knowledge; the per-block distribution is the unseen part. Scored once 2026-11-08 (plan P3): 20 km block rank P0 0.395, P1 0.431, P2 0.630; level P0 9.95 M, P2 0.79 M (band 1.2-2.6 M fails). Any later village-scale or population use of Domesday is development on seen data."
+    },
+    {
+      "id": "climate_sealed_h",
+      "status": "spent_evaluation",
+      "evidence": "calibration/maritime_p8_20261108/plan.json",
+      "note": "Released by the owner and scored once 2026-11-08 for P8a finalist C3 (e51 + e51b ceiling + e3): S 1.0014, fail (tropical coasts). Development use from now on must be explicit; the next climate milestone needs a newly declared set."
+    },
+    {
+      "id": "r44_correction_reconstruction",
+      "status": "repeated_development_and_spent_evaluation",
+      "evidence": "reports/R44_RECONSTRUCTION_20261109.md",
+      "note": "Existing dev31 cluster CV and 28/14km pairs plus OLD Norway/SE Africa correction checks replayed to reconstruct missing models. Not new unseen validation. No new sealed pool opened."
+    }
+  ]
 }

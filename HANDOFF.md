@@ -1,3 +1,34 @@
+# r44 models RECOVERED; v2.2 release ready — 9 November 2026
+
+* Full original reconstruction pipeline completed and its receipt verified.
+  New T cluster-CV1.5062430788C, rain loss0.43177809165: both reproduce the old
+  rounded1.506 / .4318 references. New hashes, NOT byte-identical originals.
+  All final/fold models, protocols, metrics and release dependencies now tracked.
+* scripts/freeze_r44_corrections.py first verifies full training/source/observation
+  receipt, then freezes a small release manifest so applying models does not
+  require an untracked raw training cache. check_v22_release_inputs verifies this
+  manifest plus actual model physics and stale resume identities. Actual artifact
+  preflight passes; intentional stale resume was rejected.
+* v2.2 world checkpoint regenerated: output/r44_lakes_world/candidate_001.pkl
+  (87MB, intentionally local simulation cache). Strict observed numerical checks
+  passed. --simulate-only exported no site assets. No physical model source
+  changed during generation; keep them fixed for release checkpoint identity.
+* Current local accuracy page now correctly says r44 (it said current r43).
+  49-region RAW original development: T1.861483C / rain.488261; separate31-region
+  correction replay raw T1.699588->1.506243 / rain.442646->.431778. Do NOT mix the
+  two pools into a paired improvement. Earlier labelled studies retained.
+* scripts/publish_current_earth.py reproduces overview/figure/data; dataset
+  exposure download now matches current source register (f/g/h SPENT). Recovery
+  figure posted in chat. Methods reports/R44_RECONSTRUCTION_20261109.md.
+* release_v22_deltas now refreshes current accuracy + hub after pages, so the
+  normal .bat release fingerprint is updated after data promotion. See existing
+  driver stages for pending world export/diagnostics/add-ons. Earth only; free
+  and Whittaker folders remain exact retired snapshots.
+* Tests this round:36 joint+soil/fertility before integration addition, then27
+  joint/release/launcher (includes actual rejection of r43 corrections on r44).
+  Hub browser desktop/mobile/archived links passed; Windows checkout1509 assets
+  passed before recovered model byte-check extension (rerun final staged site).
+
 # Local hub / release preflight — 9 November 2026
 
 * Joint repair + reconstruction preregistration pushed8a3871c7 to both refs.

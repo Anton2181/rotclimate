@@ -56,4 +56,6 @@ run control_v2 $PY -I scripts/build_control_v2.py
 run control_v21 $PY -I scripts/build_control_v21.py
 run settlement_publish $PY -I scripts/publish_settlement_integration.py --origin output/settlement_fertility_20261106
 run pages python3 -I scripts/refresh_atlas_pages.py
+run accuracy $PY -I scripts/publish_current_earth.py
+run hub $PY -I scripts/build_fit_hub.py
 echo "v2.2 + deltas release complete"

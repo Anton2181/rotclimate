@@ -67,6 +67,9 @@ def release_version(root):
         for relative,digest in release.get('earth_evidence_sha256',{}).items():
             if hashlib.sha256((root/'atlases/earth_evidence'/relative).read_bytes()).hexdigest()!=digest:
                 raise ValueError('Earth evidence dashboard changed')
+        for relative,digest in release.get('climate_accuracy_sha256',{}).items():
+            if hashlib.sha256((root/'atlases/climate_accuracy'/relative).read_bytes()).hexdigest()!=digest:
+                raise ValueError('Climate accuracy dashboard changed')
         hub = (root / 'atlases/index.html').read_text(encoding='utf-8').encode('utf-8')
         if hashlib.sha256(hub).hexdigest() != release['hub_sha256']:
             raise ValueError('Hub page changed')
