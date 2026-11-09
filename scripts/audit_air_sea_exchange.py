@@ -24,7 +24,6 @@ from rotclimate.config import Params
 from rotclimate.koppen import monthly_stats, monthly_weights
 from rotclimate.model import ClimateModel
 from local_benchmark_protocol import case_hash, file_hash, freeze, write_json
-from prepare_ncep_reference import BASE, parse
 
 DAY = 86400.
 PLAN = ROOT/'calibration/air_sea_audit_20261109/plan.json'
@@ -51,24 +50,32 @@ def prepare_reference():
         if r['archive_sha256'] != file_hash(archive):
             raise ValueError('Changed reference cache')
         return archive, r
+    import h5py  # diagnostic-only dependency for NOAA's static netCDF4 files
     sources, arrays = {}, {}
     for key, prefix in [('air', 'air'), ('u', 'uwnd'), ('v', 'vwnd')]:
-        base = BASE + prefix + '.sig995.mon.ltm.nc'
-        texts = {}
-        for suffix in ['.das', '.ascii?'+prefix+'[0:1:11][0:1:72][0:1:143]']:
-            url = base + suffix
+        filename = prefix + '.sig995.mon.ltm.nc'
+        url = 'https://downloads.psl.noaa.gov/Datasets/ncep.reanalysis.derived/surface/' + filename
+        path = REFERENCE/filename
+        if not path.exists():
             with urllib.request.urlopen(urllib.request.Request(url, headers={'User-Agent':'rotclimate-diagnostic/1.0'}), timeout=30) as response:
-                texts[suffix] = response.read().decode()
-        das = texts['.das']
-        if '1991/01/01 - 2020/12/31' not in das or '0.995 sigma' not in das:
-            raise ValueError('Unexpected NCEP period or vertical reference')
-        units = 'degC' if key == 'air' else 'm/s'
-        block = das.split('    '+prefix+' {', 1)[1].split('    }', 1)[0]
-        if 'String units "'+units+'"' not in block:
-            raise ValueError('Unexpected '+prefix+' units')
-        arrays[key] = parse(next(v for k,v in texts.items() if k.startswith('.ascii')), prefix)
-        sources[key] = {suffix:dict(url=base+suffix,sha256=hashlib.sha256(text.encode()).hexdigest()) for suffix,text in texts.items()}
-        (REFERENCE/(prefix+'.das')).write_text(das)
+                payload = response.read()
+            temporary = path.with_suffix('.part'); temporary.write_bytes(payload); temporary.replace(path)
+        text = lambda value: value.decode() if isinstance(value, bytes) else str(value)
+        with h5py.File(path, 'r') as nc:
+            period = text(nc['time'].attrs['climo_period'])
+            level = text(nc[prefix].attrs['level_desc'])
+            units = text(nc[prefix].attrs['units'])
+            if period != '1991/01/01 - 2020/12/31' or level != '0.995 sigma':
+                raise ValueError('Unexpected NCEP period or vertical reference')
+            if units != ('degC' if key == 'air' else 'm/s'):
+                raise ValueError('Unexpected '+prefix+' units')
+            arrays[key] = np.asarray(nc[prefix],dtype=np.float32) * float(nc[prefix].attrs.get('scale_factor',1.)) + float(nc[prefix].attrs.get('add_offset',0.))
+            if (arrays[key].shape != (12,73,144) or not np.isfinite(arrays[key]).all()
+                    or np.max(np.abs(arrays[key])) > 1000
+                    or not np.allclose(nc['lat'][:],90-2.5*np.arange(73))
+                    or not np.allclose(nc['lon'][:],2.5*np.arange(144))):
+                raise ValueError('Unexpected NCEP coordinates or missing fields')
+        sources[key] = dict(url=url,sha256=file_hash(path),period=period,level=level,units=units)
         print('Reference ready:', key, flush=True)
     np.savez_compressed(archive, **arrays)
     r = dict(period='1991-2020', level='sigma0.995', air_units='degC', wind_units='m/s', sources=sources,
