@@ -63,9 +63,13 @@ Earth qualification.
   rural-Britain records, role multiplicity and date/size fields audited without
   predictions or scores. [Report](ROMAN_RURAL_PREPARATION_20261110.md) and
   [consumer contract](SETTLEMENT_ROLE_CONTRACT_20261110.md).
-- [ ] Resolve physical-place grouping, exported MAP coordinates, phase semantics
-  and missing taxonomy labels; record IDs and investigated area are not settlement
-  counts/population. Source overlap/selection remains explicit.
+- [x] Compile role-context observations and exact-association validation blocks;
+  resolve missing lookup labels from the official search and document date censoring.
+  [Role compiler](ROMAN_RURAL_ROLES_20261110.md): no scores, allocations or adoption.
+- [ ] Resolve actual physical places, exported CSV MAP CRS/precision and extra phase
+  semantics; association blocks are not site merges, and site dates are not role dates.
+  Record IDs/investigated area are not settlement counts/population. Keep source
+  overlap, coverage and spatial leakage explicit before role-specific scoring.
 
 - [ ] Separate villages, markets, ports, administrative seats and garrisons;
   roles may overlap. Preserve known anchors; do not classify from icon size alone.
@@ -158,9 +162,13 @@ The [data queue](SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md) records this exposur
 and now includes the completed initial Roman rural Britain preparation for S2.
 Its3652 core/site IDs join,608 records have multiple major roles,2641 date spans
 are AD200-compatible; these are not unique settlements or dated institutions.
-The exported MAP fields differ from documented OSGB fields, so no transform or
-target map is made. Resolve grouping/phase/coordinate/taxonomy before role-specific
-calibration. Source raw tables are cached only; aggregate diagnostics are public.
+The follow-up [role compiler](ROMAN_RURAL_ROLES_20261110.md) resolves all observed
+source labels, retains11 overlapping context channels and documents628 left-censored
+starts/1295 end-period conventions. Exact-association blocking connects153 records
+in65 nontrivial components without physical merges or assigned folds. CSV MAP CRS/
+precision and extra phase semantics remain unresolved despite a documented3857
+map client; no CSV transform or target map. Resolve places/phase/coordinates and
+coverage before role-specific calibration. Source raw tables are cached only; aggregate diagnostics are public.
 Phased crop/collection evidence for S4 remains metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
 medieval/Domesday pools cannot be relabelled unseen. Additional development use
 is allowed if declared. Next source acquisition should audit role/phase/coverage
@@ -187,3 +195,5 @@ after qualification. S2–S5 remain required. No parent stage is complete or dro
 |2026-11-10|Vidarbha preparation completed, no predictions scored|Zero coordinate/settlement joins and conflicting axes; source not ready|Resolve or replace source; keep S1d and S2–S5 open|
 |2026-11-10|S2 rural preparation frozen066db539 and completed|3652 joined observation records, multiple roles, date/size/schema audit; no predictions or scores|Resolve place/coordinate/phase/taxonomy and declare calibration|
 |2026-11-10|CSV escaping reader corrected and both sources rechecked|Original source/audit preserved; Vidarbha primary findings unchanged, no model results changed|Keep lineage and regression cases; continue full programme|
+
+|2026-11-10|S2 executable role-evidence compiler and association blocks|All observed labels mapped explicitly; source date conventions documented; no scores, allocations or production changes|Resolve place/MAP/phase/coverage gates, then declare role calibration; retain S1 and S3–S5|

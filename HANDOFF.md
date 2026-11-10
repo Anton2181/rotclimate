@@ -1,3 +1,41 @@
+# S2 role evidence implemented; physical-place calibration gates remain — 10 November 2026
+
+* Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md on every continuation. S1c
+  occupation history, S1d credible transfer, S1e coupled resident/food/control rebuild,
+  S2 hierarchy and S3–S5 remain open. Do not replace them with evidence-only overlays.
+* New polity/role_evidence.py and scripts/prepare_roman_rural_roles.py compile the
+  pinned rural-Britain observations into11 overlapping context channels. Each
+  channel counts once per record, never people/staff/actor authority. All3652
+  records retained;3002 multi-channel; no unknown observed source labels. Explicit
+  domestic observation stays separate from residential/morphological context.
+* Official advanced-search UI confirms roadside settlement/jetty omitted from the
+  old lookup; taxonomy discrepancy resolved. Official date help documents start−100
+  = Middle Iron Age or earlier (628 records), end400 = end-Roman-period convention
+  (1295).2641 spans AD200-compatible,117unknown,892 outside recorded span,2zero-
+  ambiguous. Every specific role remains UNDATED; extra phase fields unresolved.
+* Exact TYPE/HER_NAME/DESCR associations yield3564 validation blocking components:
+ 3499singletons,65nontrivial/153records, largest8. All keys stay inside components.
+  These are NOT physical-place merges or independent folds; only88 record units
+  linked vs published approx3600records/2500settlements. No folds/scores assigned.
+* Official map.html uses client3857/display4326 and loads27700, but directly requests
+  WMS layers. This does NOT establish CSV X_REF_MAP/Y_REF_MAP CRS/precision. One-
+  record query500/WFS schema404 documented; no CSV transform or source target map.
+* New report ROMAN_RURAL_ROLES_20261110.md, explicit crosswalk/semantic source URLs
+  and pinned local content hashes under calibration/roman_rural_roles_20261110.
+  Raw CSVs and HTML remain cache-only, not redistributed. No place/population/staff/
+  affiliation/control or physics changes; initial preparation and both numerical
+  settlement studies byte-exact vs7835271d. Role audit fresh-output byte-exact.
+* Earth evidence page (normal .bat launcher) has nested collapsed role panel,
+ 11overlapping channels and11aggregate/doc downloads; crosswalk and source semantics
+  included in packaging recipe. Browser keyboard/mobile/dark, filters and downloads
+  pass.64 focused tests pass;37 Windows-style critical files byte-exact and638
+  local dependencies resolve. Full portable ZIP not rebuilt under disk quota.
+* NEXT: resolve actual physical-place identities, CSV CRS/precision, PHASE_DATE1/2
+  and coverage before role-specific grouped/spatial calibration protocol. Association
+  blocks already implemented but not sufficient spatial independence. S1 history/
+  transfer can proceed independently; S1e must rebuild SAME resident/food/staff/
+  institution/control consumers after qualification. Keep all actors/nonstate groups.
+
 # S2 rural preparation complete; roles/coordinates still unresolved — 10 November 2026
 
 * FULL queue remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md; do not drop

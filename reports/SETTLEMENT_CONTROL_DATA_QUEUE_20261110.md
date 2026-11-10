@@ -82,3 +82,9 @@ and phases before combining evidence or declaring separate tests.
 
 S3 differentiated authority and S5 mobile/nonstate communities remain required
 stages. These candidate sources do not establish their political mechanisms.
+
+Rural-Britain follow-up: [executable role evidence](ROMAN_RURAL_ROLES_20261110.md)
+resolves missing lookup labels from source search, documents −100/400 date
+conventions and builds exact-association blocking components. No folds or scores.
+Actual places, exported CSV CRS/precision, extra phases and coverage remain gates
+before calibration; shared event/project IDs are not site identity.

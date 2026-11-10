@@ -10,6 +10,40 @@ sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
 from settlement_locations_earth import sha,write
 
 
+def role_section(data):
+    out=ROOT/'output/roman_rural_roles_20261110';config=ROOT/'calibration/roman_rural_roles_20261110'
+    if not (out/'audit.json').exists():return ''
+    audit=json.loads((out/'audit.json').read_text())
+    checks={'source_snapshot_sha256':ROOT/'output/roman_rural_preparation_20261110/source_snapshot.json',
+        'crosswalk_sha256':config/'crosswalk.json','semantic_sources_sha256':config/'semantic_sources.json',
+        'producer_sha256':ROOT/'scripts/prepare_roman_rural_roles.py',
+        'role_module_sha256':ROOT/'polity/role_evidence.py',
+        'parser_sha256':ROOT/'scripts/audit_vidarbha_preparation.py',
+        'table_reader_sha256':ROOT/'scripts/audit_roman_rural_preparation.py'}
+    for key,path in checks.items():
+        if audit[key]!=sha(path):raise ValueError('Stale role-evidence lineage: '+key)
+    if any(audit[k] for k in ['adopt','population_allocated','institution_staff_or_actor_assigned',
+                              'model_scores_computed','target_maps_generated']):
+        raise ValueError('Role preparation unexpectedly changed into adoption/evaluation')
+    for src,name in [(out/'audit.json','roman_rural_roles.json'),(config/'crosswalk.json','roman_rural_role_crosswalk.json'),
+                     (config/'semantic_sources.json','roman_rural_role_semantics.json')]:
+        shutil.copyfile(src,data/name)
+    labels={'agricultural_context':'Agricultural context','domestic_observation':'Domestic occupation recorded',
+        'enclosure_context':'Enclosure/morphology','military_context':'Military context',
+        'nucleated_context':'Nucleated settlement context','production_context':'Production context',
+        'residential_context':'Residential context','ritual_funerary_context':'Ritual/funerary context',
+        'settlement_context':'Broad rural-settlement category','site_context':'Other site context',
+        'transport_context':'Transport context'}
+    rows=''.join(f'<tr><th>{labels[key]}</th><td>{value:,}</td><td>{audit["span_compatible_records_per_channel"].get(key,0):,}</td></tr>'
+        for key,value in audit['records_per_channel'].items())
+    return '''<details id="rural-role-evidence"><summary>Role-aware evidence · overlapping observations, no population or authority estimate</summary>
+<p>The new compiler counts each evidence channel once per source record and preserves simultaneous roles. The source search confirms roadside settlement and jetty labels omitted by the CSV lookup; all observed labels now have an explicit context mapping. A roadside settlement does not establish a market, a villa an administrator, or a hillfort a staffed garrison.</p>
+<div class="table"><table id="rural-role-results"><thead><tr><th>Evidence channel</th><th>Records, all dates</th><th>AD200 span compatible</th></tr></thead><tbody>'''+rows+'''</tbody></table></div>
+<p>Columns overlap and must not be summed as settlements or residents. AD200 compatibility concerns the site span; it does not date individual roles. The official guide uses −100 for Middle Iron Age or earlier starts (628 records) and 400 for continuation to the end of the Roman period (1,295 records). Two zero endpoints remain ambiguous; extra phase fields remain uninterpreted.</p>
+<p>Exact association identifiers connect153 records into65 nontrivial blocking groups. These prevent related observations crossing future validation folds; they are not physical-place merges or proof of spatial independence. No folds or scores have been assigned. The official map client uses EPSG:3857, but that alone does not identify the CSV MAP coordinate system or precision.</p>
+<p><a href="../../reports/ROMAN_RURAL_ROLES_20261110.md">Role compiler and calibration gates</a> · <a href="data/roman_rural_roles.json" download>Aggregate role audit</a> · <a href="data/roman_rural_role_crosswalk.json" download>Explicit context crosswalk</a> · <a href="data/roman_rural_role_semantics.json" download>Source semantics and identities</a></p></details>'''
+
+
 def main():
     out=ROOT/'output/roman_rural_preparation_20261110';audit=json.loads((out/'audit.json').read_text())
     plan=ROOT/'calibration/roman_rural_preparation_20261110/plan.json'
@@ -37,11 +71,12 @@ def main():
     section='''<!--rural-preparation-start--><section aria-labelledby="rural-preparation-h"><h2 id="rural-preparation-h">Next settlement stage: records, roles and dates</h2><details class="panel" id="rural-preparation"><summary>Rural Britain preparation · source audit, no model evaluation</summary>
 <p>The new S2 source has joined record-level data and multiple functions per record. These are excavation observations, not a census of unique settlements or independently staffed institutions. Raw tables remain locally cached and are not redistributed.</p>
 <div class="table"><table id="rural-preparation-results"><thead><tr><th>Preparation check</th><th>Records</th></tr></thead><tbody>'''+table+'''</tbody></table></div>
-<p>All declared table primary keys are unique and role/association references have no missing parent records. Minor classification lookups omit356 observed labels, which remain explicit rather than guessed. Site occupation intervals do not date every function or prove uninterrupted AD200 occupation.</p>
+<p>All declared table primary keys are unique and role/association references have no missing parent records. The original minor CSV lookup omits356 observations; the role compiler below resolves their labels against the official source search. Site occupation intervals do not date every function or prove uninterrupted AD200 occupation.</p>
 <p><strong>Size and coordinates:</strong> AREA means investigated hectares, not complete settlement extent. The separate size wordlist includes1,466 uncertain records. Exported X_REF_MAP/Y_REF_MAP fields differ from the documented OSGB fields; their units remain unresolved and no projection or map was generated. Record IDs have not been merged into unique physical settlements.</p>
 <p><strong>Reader correction:</strong> automatic CSV sniffing misread escaped quotes. Standard comma/Excel parsing preserves the fields; all five British tables now have zero nonconforming rows. The earlier Vidarbha audit was rechecked: its zero joins and axis conflict remain, while a parser-induced unnamed-cell warning is removed. Climate and settlement predictions are unchanged.</p>
-<p>Next: resolve place grouping, MAP/phase semantics and taxonomy before role-specific calibration, then connect residents and institutions through the same food/population/control ledger. The full S1–S5 programme remains open; no production adoption or new independent validation is claimed.</p>
+<p>Next: resolve physical places and MAP/phase semantics before role-specific calibration, then connect residents and institutions through the same food/population/control ledger. The full S1–S5 programme remains open; no production adoption or new independent validation is claimed.</p>
 <p><a href="../../reports/ROMAN_RURAL_PREPARATION_20261110.md">Methods and source scope</a> · <a href="../../reports/SETTLEMENT_ROLE_CONTRACT_20261110.md">Settlement/control role contract</a> · <a href="../../reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md">Full roadmap</a> · <a href="data/roman_rural_preparation.json" download>Aggregate preparation audit</a> · <a href="data/roman_rural_preparation_plan.json" download>Frozen protocol</a> · <a href="data/roman_rural_sources.json" download>Source identities</a> · <a href="data/source_csv_correction.json" download>CSV correction and preserved before/after hashes</a></p></details></section><!--rural-preparation-end-->'''
+    section=section.replace('</details></section><!--rural-preparation-end-->',role_section(data)+'</details></section><!--rural-preparation-end-->')
     html=page.read_text();pattern=r'<!--rural-preparation-start-->[\s\S]*?<!--rural-preparation-end-->'
     if re.search(pattern,html):html=re.sub(pattern,lambda m:section,html)
     else:
@@ -51,7 +86,7 @@ def main():
     page.write_text(html)
     path=ROOT/'calibration/earth_components_20261105/dataset_usage.json';exposure=json.loads(path.read_text())
     entry=dict(id='rural_roman_britain',status='prepared_unscored_roles_and_chronology',evidence='reports/ROMAN_RURAL_PREPARATION_20261110.md',
-        note='Five observation tables read under frozen preparation-only protocol. Record/role joins valid; physical places, MAP coordinates and phase roles unresolved. Excavation-selected Britain overlaps Roman development; no predictions, scores or sealed status. Raw source tables not redistributed.')
+        note='Five tables prepared without scoring; explicit role-context compiler and association leakage blocks added. Taxonomy checked against source search; date censoring documented. Physical places, CSV MAP coordinates and phase roles unresolved. Excavation-selected Britain overlaps Roman development; no sealed status or raw redistribution.')
     exposure['datasets']=[e for e in exposure['datasets'] if e['id']!=entry['id']]+[entry]
     write(path,exposure);shutil.copyfile(path,data/'dataset_usage.json')
     print('Published aggregate rural-role preparation and source-reader correction; no model evaluation.')

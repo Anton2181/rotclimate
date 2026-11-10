@@ -85,3 +85,12 @@ support. [Archive introduction](https://archaeologydataservice.ac.uk/archives/vi
 [ADS terms](https://archaeologydataservice.ac.uk/about/policies/use-access-to-data/ads-terms-of-use-and-access/).
 This model's interpretations are our own; the original collectors are not
 responsible for them. Raw archival tables are not redistributed here.
+
+## Executable observation contract
+
+The [role compiler](ROMAN_RURAL_ROLES_20261110.md) implements deduplicated context
+channels, explicit unknown labels, site-span states, censoring flags and exact-
+association blocking. Every compiled role remains undated and its physical place
+unresolved. It supplies no population, staffing or affiliation. Blocking components
+are validation constraints, not physical-place IDs or automatically independent
+folds. The downstream allocation/control work above remains required.

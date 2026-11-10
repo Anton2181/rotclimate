@@ -1,0 +1,80 @@
+{
+  "source_doi": "10.5284/1030449",
+  "inspected": "2026-11-10",
+  "scope": "Official source search help, role options and map client; no model predictions or scores.",
+  "pages": [
+    {
+      "cache_name": "query_structured.html",
+      "url": "https://archaeologydataservice.ac.uk/archives/view/romangl/query.cfm?queryType=structured",
+      "sha256": "04ae92fe40864fbbda677f321a8708f73810e097e034adc38e105c6ce4371ed2",
+      "bytes": 72547
+    },
+    {
+      "cache_name": "map.html",
+      "url": "https://archaeologydataservice.ac.uk/archives/view/romangl/map.html",
+      "sha256": "d39e577b7afc8566892e06d7f70c501723fa7bd4a8f8f7b73e2eb0bbd2a950af",
+      "bytes": 36114
+    },
+    {
+      "cache_name": "map_about.cfm",
+      "url": "https://archaeologydataservice.ac.uk/archives/view/romangl/map_about.cfm",
+      "sha256": "aae6999e0c38c1b5a3de3f2ed5483f3a591204d4dd7c5946bcf277cb0c558e24",
+      "bytes": 32009
+    }
+  ],
+  "findings": [
+    {
+      "subject": "taxonomy",
+      "source": "query_structured.html",
+      "locator": "select[name=siteMinor] option",
+      "finding": "The live source search explicitly lists roadside settlement and jetty, omitted from the CSV minor lookup. Both are preserved in the crosswalk, with no market/authority inference."
+    },
+    {
+      "subject": "start_censoring",
+      "source": "query_structured.html",
+      "locator": "Date range help, Start date",
+      "quote": "Start date: Date of commencement of activity within the excavated area. Note that sites beginning in the middle Iron Age or earlier will show as ‘-100’."
+    },
+    {
+      "subject": "end_convention",
+      "source": "query_structured.html",
+      "locator": "Date range help, End date",
+      "quote": "End date: Date of cessation of activity. Note that an end date of 400 is given when sites are described as ‘continuing until the end of the Roman period’."
+    },
+    {
+      "subject": "function_timing",
+      "source": "query_structured.html",
+      "locator": "Date range help",
+      "quote": "Please note, that these dates apply to the settlement phasing, not individual features."
+    },
+    {
+      "subject": "map_client_only",
+      "source": "map.html",
+      "locator": "options.projection, lines104–106; WMS layers",
+      "finding": "Official client map projection is EPSG:3857, display projection EPSG:4326, and includes EPSG:27700 definition. This establishes client CRS only; no use of CSV X_REF_MAP/Y_REF_MAP traced, so exported CRS and positional precision remain unresolved."
+    },
+    {
+      "subject": "record_vs_place",
+      "source": "map_about.cfm",
+      "locator": "Layer descriptions refer to records classified by type",
+      "finding": "Map categories include records rather than independent, dated institutions. Association components only conservatively block related records; no physical-place merge is established."
+    }
+  ],
+  "unresolved": [
+    "CSV_MAP_crs_and_precision",
+    "physical_place_identity",
+    "PHASE_DATE1_and_PHASE_DATE2_meaning",
+    "role_specific_activity_intervals",
+    "coverage_and_spatial_blocking_for_calibration"
+  ],
+  "failed_read_only_requests": [
+    {
+      "url": "https://archaeologydataservice.ac.uk/archives/view/romangl/results.cfm?dbid=1&searchadv=Submit+query&display=list&defended=Idef",
+      "http_status": 500
+    },
+    {
+      "url": "https://archaeologydataservice.ac.uk/wfs?service=WFS&version=1.0.0&request=DescribeFeatureType&typeName=archaeologydataservice%3Aall_sites_new",
+      "http_status": 404
+    }
+  ]
+}

@@ -98,3 +98,8 @@ Windows-style checkout preserves26 critical files;634 local page dependencies
 resolve, and the standard launcher verifies the refreshed release. Full portable
 ZIP/full-site copies remain unbuilt under the disk quota; the packaging recipe
 contains the new documents and metadata.
+
+Follow-up: the [role compiler](ROMAN_RURAL_ROLES_20261110.md) resolves the missing
+lookup labels through the official search, documents date censoring and builds
+conservative association blocks. The initial audit above remains unchanged. CSV
+MAP CRS/precision, actual physical places and extra phase semantics remain open.

@@ -299,6 +299,9 @@ def main():
     files += [ROOT/'reports/ROMAN_RURAL_PREPARATION_20261110.md',ROOT/'reports/SETTLEMENT_ROLE_CONTRACT_20261110.md',
               ROOT/'calibration/roman_rural_preparation_20261110/plan.json',
               ROOT/'calibration/roman_rural_preparation_20261110/metadata_sources.json']
+    files += [ROOT/'reports/ROMAN_RURAL_ROLES_20261110.md',
+              ROOT/'calibration/roman_rural_roles_20261110/crosswalk.json',
+              ROOT/'calibration/roman_rural_roles_20261110/semantic_sources.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())
