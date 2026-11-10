@@ -1,14 +1,41 @@
-# Settlement/control programme approved — 10 November 2026
+# Settlement/control S1a/b complete; S1c/d next — 10 November 2026
 
-* Durable queue: reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. Read it at every
-  continuation: S1 count-separated clustered sites; S2 settlement roles/hierarchy;
-  S3 local versus central authority; S4 surplus-supported institutions; S5 mobile
-  and nonstate communities. Failed candidates do not complete or cancel stages.
-* Starting S1a/b. Preserve count independently of site/history assumptions; do not
-  relabel exposed Han/Rome/Sui/Tang/Domesday pools as blind. Original settlement
-  input NPZs and several source caches are absent; recovery is part of this step.
-* User explicitly approved the full programme, with all successive steps tracked.
-  Physics remains a separate active queue; this programme does not erase it.
+* Owner approved the WHOLE programme. Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md
+  at every continuation: S1 count-separated locations/occupancy; S2 roles/hierarchy;
+  S3 local versus central authority; S4 collectible surplus/institutions; S5 mobile
+  and nonstate communities. Do not drop later stages after a failed candidate.
+* Initial S1a/b COMPLETE: new polity/settlement_locations.py, frozen12-variant plan
+  committed17c73556, 72 evaluations (two exposed pools; five seeds where stochastic).
+  Counts stay1202Han/1292Rome; no eligibility/food/population change. NOT ADOPTED.
+* New current-source slope/HAND/FALLOW.600 Earth inputs were reconstructed; they
+  are NOT exact Nov7 inputs. Prepared han/rome_inputs.npz plus receipts/results/
+  positions are tracked under output/settlement_locations_20261110 for exact replay.
+  Never use old Nov7 JSON metrics as controls against these new arrays.
+* Frozen composite lead: draw_9km_old_cores_L800. Han proximityF1 .430→.592,
+  blockrank .170→.577, spacingKS .771→.195, uniqueF1 .336→.473. Rome proximity
+  .432→.460, rank .383→.473, KS .683→.184, BUT uniqueF1 .367→.358. Means over
+  five seeds; plot alwaysseed1. No new blind/independent validation.
+* IMPORTANT retained alternative: greedy_18km_old_cores_L800 improves UNIQUEF1 in
+  BOTH pools (Han.591/Rome.422), at worse spacingKS .472/.407 than the9km lead.
+  Next S1c: study this location/spacing tradeoff and historical occupancy/roles;
+  do not silently replace the frozen lead or call inspected tradeoffs unseen.
+* S1d needs a defensible prospective protocol/new pool before adoption. Han/Rome,
+  Sui/Tang/Hellenistic/medieval/Domesday remain exposed. 9km exclusion rejects
+  exactly9km pairs, creating a spacing-error floor; this is not village validation.
+* If qualified, S1e rebuilds towns/tracks + shared food/staffing + control TOGETHER.
+  Then S2–S5 remain mandatory. Current parent S1 unfinished; production maps/r44
+  unchanged. Normal Earth evidence page now shows comparison and full roadmap;
+  base evidence publisher preserves this section, portable recipe includes docs.
+* QA:31 focused tests, served evidence/settlement browsers, exact fresh-directory
+  results+positions replay,21 critical CRLF-checkout assets and620 linked research
+  dependencies pass. Standard launcher verifies release. Full portable ZIP/full
+  site Windows snapshot not rebuilt under disk quota; packaging recipe updated.
+* Recovery: scripts/recover_settlement_sources.py han/rome; optional pyshp dependency
+  added. Full sources need WorldClim + arable_slope_earth + land_people_earth. Raw
+  scratch caches are large; disk quota nearly full. Only NEW reproducible source
+  downloads/ETOPO scratch and an old temporary bundle were pruned, not experiment
+  records. Source receipts remain. Future preparation uses --out NEW_ID; replay
+  tracked prepared arrays needs no source download. Physics has its separate queue.
 
 # Mixing reuse INTEGRATED; physical climate stays r44 — 10 November 2026
 

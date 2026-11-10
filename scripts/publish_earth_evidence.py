@@ -54,6 +54,8 @@ def main():
     (out/'index.html').write_text(html)
     if (ROOT/'output/low_input_yields_20261105/evaluation.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_earth_yields.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_locations_20261110/results.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_locations.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

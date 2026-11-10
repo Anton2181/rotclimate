@@ -32,10 +32,10 @@ silently replaces the other.
 
 ### S1 — Count-separated, clustered settlement placement [IN PROGRESS]
 
-- [ ] S1a: Preserve the current Earth-tested count as a separate budget; implement
+- [x] S1a: Preserve the current Earth-tested count as a separate budget; implement
   candidate placement with explicit eligibility, marked anchors, reproducible
   seeds and reported shortfalls. Count must not change with the history prior.
-- [ ] S1b: Compare clustering and locations on declared development Earth pools;
+- [x] S1b: Compare clustering and locations on declared development Earth pools;
   isolate count separation, spacing and history-prior effects. Report seed spread,
   counts, 25 km matching, 100 km block rank and nearest-neighbour spacing.
 - [ ] S1c: Resolve historical occupancy assumptions. Do not equate food capacity
@@ -119,10 +119,37 @@ Appropriability motivates a hypothesis to test, not a cereal-to-state shortcut.
 
 ## Current resumption point
 
-Start S1a and freeze a development-only S1b protocol. The original November 7
-settlement input NPZs and several source caches are missing from this workspace;
-recover reproducible Earth inputs rather than treating saved metric JSON as raw
-data. Synthetic checks can establish invariants but cannot qualify adoption.
+S1a/b initial milestone completed on10November: count-separated allocator,
+72 prespecified evaluations across two exposed Earth pools, five-seed comparisons,
+unique matching, retained prepared NPZs and research-page publication. Details:
+[SETTLEMENT_LOCATIONS_20261110.md](SETTLEMENT_LOCATIONS_20261110.md).
 
-No stage is complete yet. Next after S1a/b is occupancy/transfer qualification
-(S1c/d), then coupled atlas integration (S1e), then S2–S5 in the order above.
+The original November7 inputs were not recovered exactly. Reconstructed current
+slope/HAND inputs have newly computed paired baselines; historical JSON scores
+were not reused as controls. All variants preserve1202 Han/1292 Roman proposals.
+The development lead improves clustering strongly and Han unique matching, while
+Roman unique F1 slips0.367→0.358. **Not adopted.** S1 as a parent remains unfinished.
+
+Next: S1c, resolve historical occupancy and evaluation resolution/roles. Preserve
+the distinction between known historical inputs and generated priors; examine the
+Roman unique-match loss rather than optimizing proximity scores alone. Compare
+the frozen grid's deterministic18km history alternative: it improves uniqueF1 in
+both pools (Han0.591, Rome0.422), but has worse spacingKS than the selected9km
+stochastic lead. Preserve both; do not silently replace the frozen winner or
+claim this inspected tradeoff is fresh validation. The9km
+raster/exclusion has an explicit spacing-error floor and is not a village test.
+Then S1d needs a frozen defensible prospective transfer protocol; exposed Han,
+Rome, Sui, Tang, Hellenistic, medieval-city and Domesday pools cannot qualify as
+new unseen tests. Hellenistic source recovery/extra development comparison also
+remains available; it was not a recovered pool in this two-pool protocol.
+
+After qualification, S1e rebuilds the shared settlement/food/staffing/control chain.
+Then continue S2–S5 above. No parent stage is complete; no later stage is dropped.
+
+## Milestone log
+
+|Date|Milestone|Evidence/decision|Next|
+|---|---|---|---|
+|2026-11-10|Full programme persisted and pushed; commit67f68aad|Five stages, completion criteria, cross-cutting requirements|S1a/b|
+|2026-11-10|Development protocol frozen; commit17c73556|Twelve variants, fixed counts, exposed data only, no adoption|Recover inputs and run|
+|2026-11-10|S1a/b initial comparison complete|See settlement-locations report; no production adoption|S1c/d, then S1e; retain S2–S5|

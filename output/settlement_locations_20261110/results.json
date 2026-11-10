@@ -1,0 +1,3213 @@
+{
+  "status": "development_only",
+  "adopt": false,
+  "plan_sha256": "a41787926da4482d59ab10be61a195cb1db81871b310900564ca2f3f2956fff5",
+  "positions_sha256": "788c7391f7424605d46e6953f9b09482b51eb10cd6564f84777233b6c3080e85",
+  "sources": {
+    "scripts/settlement_locations_earth.py": "5a85687b35cef38a13d3a9079466d43a97a375130bbdc4d5b4e3e151c10953aa",
+    "polity/settlement_locations.py": "6ff07b9627507b38629bb3ddc9f189759fb79e27b7ac0ab1cbe82c19ebb9fb43",
+    "polity/settle.py": "ab7889a3c5f9bd304ec7174678b9f80262d1a2c8771f556c5c057fbd794ce8a3"
+  },
+  "pools": {
+    "han": {
+      "pool": "han",
+      "status": "exposed_development",
+      "shape": [
+        378,
+        400
+      ],
+      "input_sha256": "f4a97680a89fff2153a2de4d3912e6500ad82122e1ee8d306132863c6fd34bbf",
+      "original_source_sites": 1294,
+      "snapped_inside_window": 1292,
+      "sources": {
+        "output/land_people/earth/earth.npz": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+        "data/cache/arable_slope_earth/arable_5m.npz": "1a4133ae06e739715e20f190bcbb74c5a5e1e4bd984147a72c569bcdc83e0b1c",
+        "data/arable_slope_model.json": "7022190bd0fb0c0f2c71a823418089e09200655fe8ba7858f78bbfb51980b2be",
+        "data/cache/naturalearth_dl/ne_10m_rivers_lake_centerlines.geojson": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+        "data/cache/han_ad2/shp/CountyPointsWithPopulation.shx": "77e98b9967d3690bb7598d0eff7bfdb4f5716d32366a27aa1829fb17bf7f0a86",
+        "data/cache/han_ad2/shp/CountyPointsWithPopulation.dbf": "07a6153ac94597610af906b3753edda3d95df50b58a6be233ac2c712c6cdde35",
+        "data/cache/han_ad2/shp/ResearchArea.shx": "b5bc1b657b6e60990c973a6b508f7c1d89ccdadd36b98bf2be93473deb210418",
+        "data/cache/han_ad2/shp/CountyPointsWithPopulation.cpg": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824",
+        "data/cache/han_ad2/shp/CountyPointsWithPopulation.prj": "6a189a7542f5fd9cb3b608575de4abb9ae46824fc9d8cfe711c04324994d651e",
+        "data/cache/han_ad2/shp/ResearchArea.prj": "2c0b40935d9160de3f2721dac711e5d185de1fb888d8eb07577ac55fba948468",
+        "data/cache/han_ad2/shp/CountyPointsWithPopulation.shp": "720291e846c9e7a8e2ba14d4a39e3570656485b8327126b6bcec12b1ae650533",
+        "data/cache/han_ad2/shp/ResearchArea.cpg": "3ad3031f5503a4404af825262ee8232cc04d4ea6683d42c5dd0a2f2a27ac9824",
+        "data/cache/han_ad2/shp/ResearchArea.shp": "0ba2c00fe5d703c3e86ea6d7facfe28551a342286000e12a0af6947e3fb389b9",
+        "data/cache/han_ad2/shp/ResearchArea.dbf": "92b78e5c8af8fe2468892c901c50c851bec73598def3f5d2ab8636a6cbedf7ac"
+      },
+      "reconstruction": "Current slope/HAND/FALLOW0.600 inputs; newly paired baseline, not exact Nov7 input restoration."
+    },
+    "rome": {
+      "pool": "rome",
+      "status": "exposed_development",
+      "shape": [
+        400,
+        600
+      ],
+      "input_sha256": "dd98cc76af9aa5e7a68f771647546df1ec2116b5315ec830f6e4b2c9e888ac9e",
+      "original_source_sites": 1354,
+      "snapped_inside_window": 1353,
+      "sources": {
+        "output/land_people/earth/earth.npz": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+        "data/cache/arable_slope_earth/arable_5m.npz": "1a4133ae06e739715e20f190bcbb74c5a5e1e4bd984147a72c569bcdc83e0b1c",
+        "data/arable_slope_model.json": "7022190bd0fb0c0f2c71a823418089e09200655fe8ba7858f78bbfb51980b2be",
+        "data/cache/naturalearth_dl/ne_10m_rivers_lake_centerlines.geojson": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+        "data/cache/hanson2016/cities.xlsx": "5b9fc0195c3b5f2df71d6380174974215280cafd3bf5fa463fbf96969b549b6c",
+        "data/cache/itinere/itinere_roads.gpkg": "1b9470aaec696b0827e7aecad20badc74df2652ae8a62464baea4f07ae4855e7"
+      },
+      "reconstruction": "Current slope/HAND/FALLOW0.600 inputs; newly paired baseline, not exact Nov7 input restoration."
+    }
+  },
+  "baseline": {
+    "han": {
+      "F1": 0.43030582538264206,
+      "precision": 0.3469217970049917,
+      "recall": 0.5664556962025317,
+      "M1": 0.1700817797133196,
+      "M3": 0.7705446091956444,
+      "composite": 0.4149340353478858,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 414,
+      "unique_F1": 0.3357664233576642,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5664556962025317,
+        "precision": 0.3469217970049917,
+        "F1": 0.43030582538264206
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        37.107950630558946,
+        45.89117562233506,
+        57.62811813689564
+      ],
+      "requested": 1202,
+      "shortfall": 0
+    },
+    "rome": {
+      "F1": 0.4317843141750155,
+      "precision": 0.33900928792569657,
+      "recall": 0.5944700460829493,
+      "M1": 0.3826657014340544,
+      "M3": 0.6829286213636558,
+      "composite": 0.4800628478427957,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 436,
+      "unique_F1": 0.3668489692890198,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5198156682027649,
+        "precision": 0.3576036866359447,
+        "F1": 0.4237152925686403
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        45.0,
+        45.89117562233506,
+        57.62811813689564
+      ],
+      "requested": 1292,
+      "shortfall": 0
+    }
+  },
+  "rows": [
+    {
+      "pool": "han",
+      "variant": "greedy_9km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.25607891400014915,
+      "precision": 0.3685524126455907,
+      "recall": 0.1962025316455696,
+      "M1": 0.11369562063728542,
+      "M3": 0.5340071399987363,
+      "composite": 0.4263065281066852,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 211,
+      "unique_F1": 0.1711273317112733,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.1962025316455696,
+        "precision": 0.3685524126455907,
+        "F1": 0.25607891400014915
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        12.727922061357855,
+        18.0
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "greedy_9km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5232307536757859,
+      "precision": 0.8610648918469218,
+      "recall": 0.37579113924050633,
+      "M1": 0.5439908234265667,
+      "M3": 0.5531419153731123,
+      "composite": 0.5806947500053189,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 452,
+      "unique_F1": 0.36658556366585565,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.37579113924050633,
+        "precision": 0.8610648918469218,
+        "F1": 0.5232307536757859
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        12.727922061357855,
+        12.727922061357855
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "greedy_18km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.3017474793491434,
+      "precision": 0.34359400998336104,
+      "recall": 0.2689873417721519,
+      "M1": 0.07904705240741758,
+      "M3": 0.4723101265822785,
+      "composite": 0.4563202929901913,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 271,
+      "unique_F1": 0.2197891321978913,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.2689873417721519,
+        "precision": 0.34359400998336104,
+        "F1": 0.3017474793491434
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        20.12461179749811,
+        25.45584412271571
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "greedy_18km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.7172953003458589,
+      "precision": 0.8044925124792013,
+      "recall": 0.6471518987341772,
+      "M1": 0.6233561456643618,
+      "M3": 0.4723101265822785,
+      "composite": 0.6855544155319203,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 729,
+      "unique_F1": 0.5912408759124088,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6471518987341772,
+        "precision": 0.8044925124792013,
+        "F1": 0.7172953003458589
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        20.12461179749811,
+        20.12461179749811
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "greedy_27km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4680462560078335,
+      "precision": 0.41098169717138106,
+      "recall": 0.5435126582278481,
+      "M1": 0.2019805959503495,
+      "M3": 0.6867088607594937,
+      "composite": 0.46077589774117156,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 446,
+      "unique_F1": 0.36171938361719386,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5435126582278481,
+        "precision": 0.41098169717138106,
+        "F1": 0.4680462560078335
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        28.460498941515414,
+        36.0
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "greedy_27km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.6839758121156404,
+      "precision": 0.6189683860232945,
+      "recall": 0.7642405063291139,
+      "M1": 0.6716503548586307,
+      "M3": 0.6867088607594937,
+      "composite": 0.611030709595154,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 663,
+      "unique_F1": 0.537712895377129,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.7642405063291139,
+        "precision": 0.6189683860232945,
+        "F1": 0.6839758121156404
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        28.460498941515414,
+        32.449961479175904
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.3959488519736467,
+      "precision": 0.34775374376039936,
+      "recall": 0.4596518987341772,
+      "M1": 0.18279712354811994,
+      "M3": 0.22938167400324355,
+      "composite": 0.5859885799148211,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 378,
+      "unique_F1": 0.30656934306569344,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.4596518987341772,
+        "precision": 0.34775374376039936,
+        "F1": 0.3959488519736467
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        27.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_none",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4136522124073764,
+      "precision": 0.36605657237936773,
+      "recall": 0.4754746835443038,
+      "M1": 0.21340870407021184,
+      "M3": 0.20608716485182926,
+      "composite": 0.6047564665302176,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 380,
+      "unique_F1": 0.308191403081914,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.4754746835443038,
+        "precision": 0.36605657237936773,
+        "F1": 0.4136522124073764
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        27.0,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_none",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4264137348514893,
+      "precision": 0.37437603993344426,
+      "recall": 0.495253164556962,
+      "M1": 0.21810587933961795,
+      "M3": 0.2144066324059058,
+      "composite": 0.6070200140384642,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 397,
+      "unique_F1": 0.3219789132197891,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.495253164556962,
+        "precision": 0.37437603993344426,
+        "F1": 0.4264137348514893
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        27.0,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_none",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.3844557809857136,
+      "precision": 0.35108153078202997,
+      "recall": 0.4248417721518987,
+      "M1": 0.12757289244723416,
+      "M3": 0.23270946102487416,
+      "composite": 0.5718442553948189,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 363,
+      "unique_F1": 0.2944038929440389,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.4248417721518987,
+        "precision": 0.35108153078202997,
+        "F1": 0.3844557809857136
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        27.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_none",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.43717579890102576,
+      "precision": 0.3860232945091514,
+      "recall": 0.5039556962025317,
+      "M1": 0.2566186792876861,
+      "M3": 0.22438999347079763,
+      "composite": 0.613698381691357,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 409,
+      "unique_F1": 0.33171127331711275,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5039556962025317,
+        "precision": 0.3860232945091514,
+        "F1": 0.43717579890102576
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5922514367625393,
+      "precision": 0.5540765391014975,
+      "recall": 0.6360759493670886,
+      "M1": 0.5652864176491716,
+      "M3": 0.19541139240506328,
+      "composite": 0.7264944177273541,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 582,
+      "unique_F1": 0.4720194647201946,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6360759493670886,
+        "precision": 0.5540765391014975,
+        "F1": 0.5922514367625393
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.6070568129220617,
+      "precision": 0.56738768718802,
+      "recall": 0.6526898734177216,
+      "M1": 0.5847640538162928,
+      "M3": 0.19541139240506328,
+      "composite": 0.7346758158083816,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 605,
+      "unique_F1": 0.4906731549067315,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6526898734177216,
+        "precision": 0.56738768718802,
+        "F1": 0.6070568129220617
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        20.12461179749811,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.579897509279123,
+      "precision": 0.5391014975041597,
+      "recall": 0.627373417721519,
+      "M1": 0.5428932121180544,
+      "M3": 0.19541139240506328,
+      "composite": 0.7186442409776957,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 562,
+      "unique_F1": 0.4557988645579886,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.627373417721519,
+        "precision": 0.5391014975041597,
+        "F1": 0.579897509279123
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        20.12461179749811,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5820895018560422,
+      "precision": 0.5440931780366056,
+      "recall": 0.6257911392405063,
+      "M1": 0.5720964081236763,
+      "M3": 0.19541139240506328,
+      "composite": 0.7242421045042725,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 567,
+      "unique_F1": 0.45985401459854014,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6257911392405063,
+        "precision": 0.5440931780366056,
+        "F1": 0.5820895018560422
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        20.12461179749811,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.6009860322988785,
+      "precision": 0.5615640599001663,
+      "recall": 0.6463607594936709,
+      "M1": 0.6194970484546248,
+      "M3": 0.19541139240506328,
+      "composite": 0.7384410547070427,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 598,
+      "unique_F1": 0.48499594484995945,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6463607594936709,
+        "precision": 0.5615640599001663,
+        "F1": 0.6009860322988785
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        20.12461179749811,
+        45.0
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.42289778572755854,
+      "precision": 0.3610648918469218,
+      "recall": 0.5102848101265823,
+      "M1": 0.2223097351150596,
+      "M3": 0.4723101265822785,
+      "composite": 0.5205808422342699,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 405,
+      "unique_F1": 0.3284671532846715,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5102848101265823,
+        "precision": 0.3610648918469218,
+        "F1": 0.42289778572755854
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_none",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4237634999305761,
+      "precision": 0.3627287853577371,
+      "recall": 0.509493670886076,
+      "M1": 0.21945713541917683,
+      "M3": 0.4723101265822785,
+      "composite": 0.5203939803526286,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 399,
+      "unique_F1": 0.3236009732360097,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.509493670886076,
+        "precision": 0.3627287853577371,
+        "F1": 0.4237634999305761
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.20895250002322
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_none",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.43409170221444104,
+      "precision": 0.37104825291181365,
+      "recall": 0.5229430379746836,
+      "M1": 0.22597534099350347,
+      "M3": 0.4723101265822785,
+      "composite": 0.5249230820429714,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 409,
+      "unique_F1": 0.33171127331711275,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5229430379746836,
+        "precision": 0.37104825291181365,
+        "F1": 0.43409170221444104
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_none",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4015777628922119,
+      "precision": 0.3519134775374376,
+      "recall": 0.4675632911392405,
+      "M1": 0.1598432421914206,
+      "M3": 0.4723101265822785,
+      "composite": 0.5030630858018813,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 382,
+      "unique_F1": 0.3098134630981346,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.4675632911392405,
+        "precision": 0.3519134775374376,
+        "F1": 0.4015777628922119
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_none",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.43517813412918155,
+      "precision": 0.37104825291181365,
+      "recall": 0.5261075949367089,
+      "M1": 0.2451547246882003,
+      "M3": 0.4723101265822785,
+      "composite": 0.5284817899636677,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 416,
+      "unique_F1": 0.33738848337388483,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5261075949367089,
+        "precision": 0.37104825291181365,
+        "F1": 0.43517813412918155
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5887958087569553,
+      "precision": 0.5207986688851913,
+      "recall": 0.6772151898734177,
+      "M1": 0.5631280368255244,
+      "M3": 0.4723101265822785,
+      "composite": 0.6326832335291462,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 571,
+      "unique_F1": 0.4630981346309814,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6772151898734177,
+        "precision": 0.5207986688851913,
+        "F1": 0.5887958087569553
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        27.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5878243721873054,
+      "precision": 0.521630615640599,
+      "recall": 0.6732594936708861,
+      "M1": 0.5844740398410159,
+      "M3": 0.4723101265822785,
+      "composite": 0.6359170885085116,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 577,
+      "unique_F1": 0.46796431467964317,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6732594936708861,
+        "precision": 0.521630615640599,
+        "F1": 0.5878243721873054
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        27.730249470757705,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5838241708480806,
+      "precision": 0.519134775374376,
+      "recall": 0.6669303797468354,
+      "M1": 0.5457531249644938,
+      "M3": 0.4723101265822785,
+      "composite": 0.6281302022493497,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 572,
+      "unique_F1": 0.46390916463909165,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6669303797468354,
+        "precision": 0.519134775374376,
+        "F1": 0.5838241708480806
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        27.0,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.581474910596104,
+      "precision": 0.5183028286189684,
+      "recall": 0.6621835443037974,
+      "M1": 0.5809908682057909,
+      "M3": 0.4723101265822785,
+      "composite": 0.6332200727055736,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 564,
+      "unique_F1": 0.45742092457420924,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6621835443037974,
+        "precision": 0.5183028286189684,
+        "F1": 0.581474910596104
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        27.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5839754098814943,
+      "precision": 0.5174708818635607,
+      "recall": 0.6700949367088608,
+      "M1": 0.5971458230171269,
+      "M3": 0.4723101265822785,
+      "composite": 0.6367460649359263,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 569,
+      "unique_F1": 0.46147607461476076,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6700949367088608,
+        "precision": 0.5174708818635607,
+        "F1": 0.5839754098814943
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        27.0,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_none",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.44521139156637574,
+      "precision": 0.36772046589018303,
+      "recall": 0.5640822784810127,
+      "M1": 0.25428185378446694,
+      "M3": 0.6867088607594937,
+      "composite": 0.4618811525663718,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 425,
+      "unique_F1": 0.3446877534468775,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5640822784810127,
+        "precision": 0.36772046589018303,
+        "F1": 0.44521139156637574
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_none",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.42972194462406677,
+      "precision": 0.3577371048252912,
+      "recall": 0.5379746835443038,
+      "M1": 0.20040329911832488,
+      "M3": 0.6867088607594937,
+      "composite": 0.4477382444745784,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 410,
+      "unique_F1": 0.33252230332522303,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5379746835443038,
+        "precision": 0.3577371048252912,
+        "F1": 0.42972194462406677
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_none",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4436147617622063,
+      "precision": 0.3668885191347754,
+      "recall": 0.5609177215189873,
+      "M1": 0.26409873405548434,
+      "M3": 0.6867088607594937,
+      "composite": 0.4629850893434848,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 424,
+      "unique_F1": 0.34387672343876724,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5609177215189873,
+        "precision": 0.3668885191347754,
+        "F1": 0.4436147617622063
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.20895250002322
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_none",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.40657824620494754,
+      "precision": 0.3386023294509151,
+      "recall": 0.5087025316455697,
+      "M1": 0.16451725584051527,
+      "M3": 0.6867088607594937,
+      "composite": 0.4340426711219038,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 387,
+      "unique_F1": 0.31386861313868614,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.5087025316455697,
+        "precision": 0.3386023294509151,
+        "F1": 0.40657824620494754
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_none",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.4351687132926411,
+      "precision": 0.3577371048252912,
+      "recall": 0.555379746835443,
+      "M1": 0.23752818511700338,
+      "M3": 0.6867088607594937,
+      "composite": 0.45574131503054965,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 415,
+      "unique_F1": 0.33657745336577455,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.555379746835443,
+        "precision": 0.3577371048252912,
+        "F1": 0.4351687132926411
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 1,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5552706491290372,
+      "precision": 0.4600665557404326,
+      "recall": 0.7001582278481012,
+      "M1": 0.5569821086793928,
+      "M3": 0.6867088607594937,
+      "composite": 0.5490176142364133,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 531,
+      "unique_F1": 0.4306569343065693,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.7001582278481012,
+        "precision": 0.4600665557404326,
+        "F1": 0.5552706491290372
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        32.449961479175904,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 7,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5450295814768825,
+      "precision": 0.454242928452579,
+      "recall": 0.6811708860759493,
+      "M1": 0.5614911831285601,
+      "M3": 0.6867088607594937,
+      "composite": 0.5463554374272229,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 523,
+      "unique_F1": 0.42416869424168696,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6811708860759493,
+        "precision": 0.454242928452579,
+        "F1": 0.5450295814768825
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        32.449961479175904,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 19,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5605393561436035,
+      "precision": 0.46422628951747086,
+      "recall": 0.7072784810126582,
+      "M1": 0.5625217504913014,
+      "M3": 0.6867088607594937,
+      "composite": 0.5516971235432534,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 535,
+      "unique_F1": 0.43390105433901055,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.7072784810126582,
+        "precision": 0.46422628951747086,
+        "F1": 0.5605393561436035
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        32.449961479175904,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 43,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5383962260827289,
+      "precision": 0.4492512479201331,
+      "recall": 0.6716772151898734,
+      "M1": 0.5365786696714805,
+      "M3": 0.6867088607594937,
+      "composite": 0.5399922333863251,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 511,
+      "unique_F1": 0.4144363341443633,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.6716772151898734,
+        "precision": 0.4492512479201331,
+        "F1": 0.5383962260827289
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        32.449961479175904,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "han",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 97,
+      "requested": 1202,
+      "shortfall": 0,
+      "F1": 0.5608484193461226,
+      "precision": 0.4667221297836938,
+      "recall": 0.7025316455696202,
+      "M1": 0.5888319776663982,
+      "M3": 0.6867088607594937,
+      "composite": 0.5561851824732759,
+      "n_real": 1264,
+      "n_model": 1202,
+      "unique_matches": 536,
+      "unique_F1": 0.43471208434712083,
+      "historical_best_prefix": {
+        "n_model": 1202,
+        "recall": 0.7025316455696202,
+        "precision": 0.4667221297836938,
+        "F1": 0.5608484193461226
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        45.89117562233506
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        32.449961479175904,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_9km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.2928854975804514,
+      "precision": 0.38854489164086686,
+      "recall": 0.2350230414746544,
+      "M1": 0.2137418293966248,
+      "M3": 0.4867372415859384,
+      "composite": 0.4710063902309418,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 224,
+      "unique_F1": 0.18847286495582669,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.21751152073732719,
+        "precision": 0.3972350230414747,
+        "F1": 0.2811018453906687
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        12.727922061357855,
+        20.12461179749811
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_9km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.480981705956929,
+      "precision": 0.6160990712074303,
+      "recall": 0.39447004608294933,
+      "M1": 0.38819315180185826,
+      "M3": 0.5023540825498282,
+      "composite": 0.5575747331026766,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 392,
+      "unique_F1": 0.3298275136726967,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.35944700460829493,
+        "precision": 0.6304147465437788,
+        "F1": 0.4578431120150349
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        12.727922061357855,
+        20.12461179749811
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_18km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3400397762403397,
+      "precision": 0.35835913312693496,
+      "recall": 0.32350230414746545,
+      "M1": 0.22726280375234129,
+      "M3": 0.4064516129032258,
+      "composite": 0.5157398550710949,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 295,
+      "unique_F1": 0.24821203197307531,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.28755760368663597,
+        "precision": 0.3705069124423963,
+        "F1": 0.32380436045385896
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        20.12461179749811,
+        27.0
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_18km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.5341041851646627,
+      "precision": 0.5247678018575851,
+      "recall": 0.543778801843318,
+      "M1": 0.44615267442194734,
+      "M3": 0.4064516129032258,
+      "composite": 0.6169096364908035,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 502,
+      "unique_F1": 0.4223811527135044,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4986175115207373,
+        "precision": 0.5400921658986175,
+        "F1": 0.5185268176595423
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        20.12461179749811,
+        27.0
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_27km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4066607368039867,
+      "precision": 0.3521671826625387,
+      "recall": 0.48110599078341015,
+      "M1": 0.321041190962635,
+      "M3": 0.6018433179723502,
+      "composite": 0.4884460047709845,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 391,
+      "unique_F1": 0.32898611695414387,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4,
+        "precision": 0.35207373271889403,
+        "F1": 0.3745098039215687
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        28.460498941515414,
+        37.107950630558946
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "greedy_27km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.5263248698852689,
+      "precision": 0.44272445820433437,
+      "recall": 0.6488479262672812,
+      "M1": 0.49034731426827505,
+      "M3": 0.6018433179723502,
+      "composite": 0.5565517363490188,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 509,
+      "unique_F1": 0.428270929743374,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.6055299539170507,
+        "precision": 0.4682027649769585,
+        "F1": 0.5280844919997627
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        28.460498941515414,
+        37.107950630558946
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3734352747170377,
+      "precision": 0.3281733746130031,
+      "recall": 0.43317972350230416,
+      "M1": 0.3233791194721651,
+      "M3": 0.18433179723502305,
+      "composite": 0.6169310124060324,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 348,
+      "unique_F1": 0.29280605805637355,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.38525345622119817,
+        "precision": 0.32534562211981566,
+        "F1": 0.35277424136467683
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        45.89117562233506
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_none",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3707274518504035,
+      "precision": 0.3219814241486068,
+      "recall": 0.4368663594470046,
+      "M1": 0.28364663876501844,
+      "M3": 0.19515130330570254,
+      "composite": 0.6057998226424034,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 344,
+      "unique_F1": 0.2894404711821624,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.391705069124424,
+        "precision": 0.3271889400921659,
+        "F1": 0.3565520501004373
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        27.0,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_none",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3773372033057359,
+      "precision": 0.33591331269349844,
+      "recall": 0.4304147465437788,
+      "M1": 0.33048402297868745,
+      "M3": 0.18433179723502305,
+      "composite": 0.6194158058533521,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 347,
+      "unique_F1": 0.2919646613378208,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.3741935483870968,
+        "precision": 0.33732718894009217,
+        "F1": 0.35480528163128866
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_none",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.37732882635012976,
+      "precision": 0.32894736842105265,
+      "recall": 0.4423963133640553,
+      "M1": 0.3744442036887332,
+      "M3": 0.18433179723502305,
+      "composite": 0.6267397103198245,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 340,
+      "unique_F1": 0.2860748843079512,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.3972350230414747,
+        "precision": 0.3225806451612903,
+        "F1": 0.35603651232910666
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        52.478567053607705
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_none",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.36005781950386195,
+      "precision": 0.31811145510835914,
+      "recall": 0.4147465437788018,
+      "M1": 0.29386037023412026,
+      "M3": 0.18433179723502305,
+      "composite": 0.607552069128633,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 321,
+      "unique_F1": 0.27008834665544806,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.3622119815668203,
+        "precision": 0.32350230414746545,
+        "F1": 0.34176453099449977
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4853324441499746,
+      "precision": 0.4280185758513932,
+      "recall": 0.56036866359447,
+      "M1": 0.4714121709345306,
+      "M3": 0.18433179723502305,
+      "composite": 0.6789022441274056,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 454,
+      "unique_F1": 0.38199411022297014,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5023041474654378,
+        "precision": 0.43317972350230416,
+        "F1": 0.4651880774556764
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.47253601099754955,
+      "precision": 0.41099071207430343,
+      "recall": 0.5557603686635945,
+      "M1": 0.4507828222085894,
+      "M3": 0.18433179723502305,
+      "composite": 0.6711985416222737,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 444,
+      "unique_F1": 0.37358014303744214,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.49585253456221196,
+        "precision": 0.4073732718894009,
+        "F1": 0.4472792250540769
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.44689207583056295,
+      "precision": 0.4001547987616099,
+      "recall": 0.5059907834101383,
+      "M1": 0.48364705367304095,
+      "M3": 0.18433179723502305,
+      "composite": 0.6681279351440201,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 410,
+      "unique_F1": 0.34497265460664706,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4599078341013825,
+        "precision": 0.40921658986175113,
+        "F1": 0.43308394133831135
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.45409439933272816,
+      "precision": 0.3931888544891641,
+      "recall": 0.5373271889400921,
+      "M1": 0.5076713878825786,
+      "M3": 0.18433179723502305,
+      "composite": 0.6745327653463314,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 417,
+      "unique_F1": 0.3508624316365166,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4728110599078341,
+        "precision": 0.38433179723502303,
+        "F1": 0.42400475694960604
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        20.12461179749811,
+        54.0
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_9km_old_cores_L800",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.44194110346132653,
+      "precision": 0.3939628482972136,
+      "recall": 0.5032258064516129,
+      "M1": 0.45321268860082026,
+      "M3": 0.18433179723502305,
+      "composite": 0.6614052168422379,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 404,
+      "unique_F1": 0.33992427429533023,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4525345622119816,
+        "precision": 0.3953917050691244,
+        "F1": 0.42203766780204366
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        12.727922061357855,
+        25.45584412271571,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3973052028227896,
+      "precision": 0.33746130030959753,
+      "recall": 0.48294930875576036,
+      "M1": 0.3418032603428964,
+      "M3": 0.4064516129032258,
+      "composite": 0.5539184066970041,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 378,
+      "unique_F1": 0.3180479596129575,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.40829493087557606,
+        "precision": 0.33087557603686635,
+        "F1": 0.36553087327763545
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_none",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3895146857563954,
+      "precision": 0.32894736842105265,
+      "recall": 0.4774193548387097,
+      "M1": 0.3025749576534544,
+      "M3": 0.4064516129032258,
+      "composite": 0.5447835172266322,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 371,
+      "unique_F1": 0.3121581825830879,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4009216589861751,
+        "precision": 0.3262672811059908,
+        "F1": 0.35976240121953357
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_none",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.38376087393024405,
+      "precision": 0.32972136222910214,
+      "recall": 0.4589861751152074,
+      "M1": 0.3330193211775205,
+      "M3": 0.4064516129032258,
+      "composite": 0.5479396405385929,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 364,
+      "unique_F1": 0.3062684055532183,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.38433179723502303,
+        "precision": 0.3244239631336406,
+        "F1": 0.35184601463388326
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        50.667167747309556
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_none",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.38624005780022796,
+      "precision": 0.32430340557275544,
+      "recall": 0.4774193548387097,
+      "M1": 0.38249919840828767,
+      "M3": 0.4064516129032258,
+      "composite": 0.5570126813670486,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 357,
+      "unique_F1": 0.30037862852334873,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4202764976958525,
+        "precision": 0.328110599078341,
+        "F1": 0.3685183083244421
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        54.0
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_none",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3703772687016261,
+      "precision": 0.31346749226006193,
+      "recall": 0.4525345622119816,
+      "M1": 0.30485673883533143,
+      "M3": 0.4064516129032258,
+      "composite": 0.5387846750720219,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 345,
+      "unique_F1": 0.2902818679007152,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.38894009216589864,
+        "precision": 0.3142857142857143,
+        "F1": 0.3476502527616551
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4753356127616022,
+      "precision": 0.40325077399380804,
+      "recall": 0.5788018433179724,
+      "M1": 0.45524131193893963,
+      "M3": 0.4064516129032258,
+      "composite": 0.5988348852759487,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 451,
+      "unique_F1": 0.37946992006731173,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5317972350230414,
+        "precision": 0.4129032258064516,
+        "F1": 0.4648686073957513
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.47185173359650523,
+      "precision": 0.3931888544891641,
+      "recall": 0.5898617511520737,
+      "M1": 0.44050022815626977,
+      "M3": 0.4064516129032258,
+      "composite": 0.5952167449238047,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 446,
+      "unique_F1": 0.3752629364745477,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5198156682027649,
+        "precision": 0.4009216589861751,
+        "F1": 0.45269232366006557
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4552465770805522,
+      "precision": 0.3877708978328173,
+      "recall": 0.5511520737327189,
+      "M1": 0.47742440930204777,
+      "M3": 0.4064516129032258,
+      "composite": 0.5958357229427834,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 426,
+      "unique_F1": 0.3584350021034918,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.48110599078341015,
+        "precision": 0.3880184331797235,
+        "F1": 0.4295771412933524
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        48.20895250002322
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4559443976827871,
+      "precision": 0.3784829721362229,
+      "recall": 0.5732718894009217,
+      "M1": 0.5142095377082473,
+      "M3": 0.4064516129032258,
+      "composite": 0.6021991845445617,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 436,
+      "unique_F1": 0.3668489692890198,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5170506912442396,
+        "precision": 0.3797235023041475,
+        "F1": 0.43787232228700257
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_18km_old_cores_L800",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4570397797398652,
+      "precision": 0.38544891640866874,
+      "recall": 0.5612903225806452,
+      "M1": 0.4585994075558601,
+      "M3": 0.4064516129032258,
+      "composite": 0.5932959568715231,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 432,
+      "unique_F1": 0.3634833824148086,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4847926267281106,
+        "precision": 0.376036866359447,
+        "F1": 0.42354473598515874
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        20.12461179749811,
+        28.460498941515414,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_none",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4101830901847559,
+      "precision": 0.32894736842105265,
+      "recall": 0.5447004608294931,
+      "M1": 0.3508165008098722,
+      "M3": 0.6018433179723502,
+      "composite": 0.49458267420578056,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 402,
+      "unique_F1": 0.33824148085822464,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4700460829493088,
+        "precision": 0.3382488479262673,
+        "F1": 0.39340230887661654
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_none",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4063518150936627,
+      "precision": 0.32739938080495357,
+      "recall": 0.535483870967742,
+      "M1": 0.32060513444718297,
+      "M3": 0.6018433179723502,
+      "composite": 0.48827035478163455,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 397,
+      "unique_F1": 0.33403449726546064,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.45806451612903226,
+        "precision": 0.3271889400921659,
+        "F1": 0.3817204301075269
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        52.32187917279022
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_none",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.3867042405712216,
+      "precision": 0.31656346749226005,
+      "recall": 0.4967741935483871,
+      "M1": 0.36732235607881286,
+      "M3": 0.6018433179723502,
+      "composite": 0.4895073668794258,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 385,
+      "unique_F1": 0.3239377366428271,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4184331797235023,
+        "precision": 0.3087557603686636,
+        "F1": 0.3553234859502491
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_none",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4003933345912504,
+      "precision": 0.31811145510835914,
+      "recall": 0.5400921658986175,
+      "M1": 0.3619036639829449,
+      "M3": 0.6018433179723502,
+      "composite": 0.4931672828701242,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 388,
+      "unique_F1": 0.3264619267984855,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.46543778801843316,
+        "precision": 0.3216589861751152,
+        "F1": 0.3804163653827474
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        54.0
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_none",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.39124034966505444,
+      "precision": 0.31501547987616096,
+      "recall": 0.5161290322580645,
+      "M1": 0.344369853173275,
+      "M3": 0.6018433179723502,
+      "composite": 0.487193986093114,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 378,
+      "unique_F1": 0.3180479596129575,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.4414746543778802,
+        "precision": 0.31152073732718893,
+        "F1": 0.3652838021535459
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        52.478567053607705
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 1,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.4640024376489684,
+      "precision": 0.37229102167182665,
+      "recall": 0.6156682027649769,
+      "M1": 0.47377664798934627,
+      "M3": 0.6018433179723502,
+      "composite": 0.5330158145570971,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 452,
+      "unique_F1": 0.38031131678586455,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5474654377880185,
+        "precision": 0.38341013824884795,
+        "F1": 0.45098142994022905
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 7,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.44240058739421106,
+      "precision": 0.35526315789473684,
+      "recall": 0.5861751152073733,
+      "M1": 0.4369106255903436,
+      "M3": 0.6018433179723502,
+      "composite": 0.5196708607390108,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 429,
+      "unique_F1": 0.3609591922591502,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5308755760368664,
+        "precision": 0.36774193548387096,
+        "F1": 0.4345012406947891
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        50.91168824543142
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 19,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.44122937311130456,
+      "precision": 0.3498452012383901,
+      "recall": 0.5972350230414747,
+      "M1": 0.4678558769621695,
+      "M3": 0.6018433179723502,
+      "composite": 0.5244379978733463,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 434,
+      "unique_F1": 0.3651661758519142,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5253456221198156,
+        "precision": 0.35944700460829493,
+        "F1": 0.4268433179723502
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        48.46648326421054
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 43,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.43937809437012465,
+      "precision": 0.3475232198142415,
+      "recall": 0.5972350230414747,
+      "M1": 0.46669151629398675,
+      "M3": 0.6018433179723502,
+      "composite": 0.5236268448482558,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 426,
+      "unique_F1": 0.3584350021034918,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5317972350230414,
+        "precision": 0.3474654377880184,
+        "F1": 0.420309345081104
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        52.478567053607705
+      ]
+    },
+    {
+      "pool": "rome",
+      "variant": "draw_27km_old_cores_L800",
+      "seed": 97,
+      "requested": 1292,
+      "shortfall": 0,
+      "F1": 0.44631929355209216,
+      "precision": 0.35371517027863775,
+      "recall": 0.6046082949308755,
+      "M1": 0.4675659582763735,
+      "M3": 0.6018433179723502,
+      "composite": 0.5260863182393095,
+      "n_real": 1085,
+      "n_model": 1292,
+      "unique_matches": 425,
+      "unique_F1": 0.357593605384939,
+      "historical_best_prefix": {
+        "n_model": 1085,
+        "recall": 0.5336405529953917,
+        "precision": 0.36589861751152075,
+        "F1": 0.4341297121704314
+      },
+      "observed_nn_km": [
+        9.0,
+        20.12461179749811,
+        63.63961030678928
+      ],
+      "model_nn_km": [
+        28.460498941515414,
+        36.0,
+        52.478567053607705
+      ]
+    }
+  ],
+  "ranking": [
+    {
+      "variant": "draw_9km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.592456258623729,
+          "M1": 0.576907428032364,
+          "M3": 0.19541139240506328,
+          "composite": 0.7284995267449494,
+          "unique_F1": 0.47266828872668293,
+          "seed_range": {
+            "F1": [
+              0.579897509279123,
+              0.6070568129220617
+            ],
+            "M1": [
+              0.5428932121180544,
+              0.6194970484546248
+            ],
+            "M3": [
+              0.19541139240506328,
+              0.19541139240506328
+            ],
+            "composite": [
+              0.7186442409776957,
+              0.7384410547070427
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.46015920675442834,
+          "M1": 0.47334522465991197,
+          "M3": 0.18433179723502305,
+          "composite": 0.6708333406164537,
+          "unique_F1": 0.3582667227597812,
+          "seed_range": {
+            "F1": [
+              0.44194110346132653,
+              0.4853324441499746
+            ],
+            "M1": [
+              0.4507828222085894,
+              0.5076713878825786
+            ],
+            "M3": [
+              0.18433179723502305,
+              0.18433179723502305
+            ],
+            "composite": [
+              0.6614052168422379,
+              0.6789022441274056
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.6996664336807016,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_18km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.7172953003458589,
+          "M1": 0.6233561456643618,
+          "M3": 0.4723101265822785,
+          "composite": 0.6855544155319203,
+          "unique_F1": 0.5912408759124088,
+          "seed_range": {
+            "F1": [
+              0.7172953003458589,
+              0.7172953003458589
+            ],
+            "M1": [
+              0.6233561456643618,
+              0.6233561456643618
+            ],
+            "M3": [
+              0.4723101265822785,
+              0.4723101265822785
+            ],
+            "composite": [
+              0.6855544155319203,
+              0.6855544155319203
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.5341041851646627,
+          "M1": 0.44615267442194734,
+          "M3": 0.4064516129032258,
+          "composite": 0.6169096364908035,
+          "unique_F1": 0.4223811527135044,
+          "seed_range": {
+            "F1": [
+              0.5341041851646627,
+              0.5341041851646627
+            ],
+            "M1": [
+              0.44615267442194734,
+              0.44615267442194734
+            ],
+            "M3": [
+              0.4064516129032258,
+              0.4064516129032258
+            ],
+            "composite": [
+              0.6169096364908035,
+              0.6169096364908035
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.651232026011362,
+      "feasible": true
+    },
+    {
+      "variant": "draw_18km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.5851789344539878,
+          "M1": 0.5742983785707902,
+          "M3": 0.4723101265822785,
+          "composite": 0.6333393323857015,
+          "unique_F1": 0.46277372262773725,
+          "seed_range": {
+            "F1": [
+              0.581474910596104,
+              0.5887958087569553
+            ],
+            "M1": [
+              0.5457531249644938,
+              0.5971458230171269
+            ],
+            "M3": [
+              0.4723101265822785,
+              0.4723101265822785
+            ],
+            "composite": [
+              0.6281302022493497,
+              0.6367460649359263
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.4630836201722624,
+          "M1": 0.4691949789322729,
+          "M3": 0.4064516129032258,
+          "composite": 0.5970764989117243,
+          "unique_F1": 0.3687000420698359,
+          "seed_range": {
+            "F1": [
+              0.4552465770805522,
+              0.4753356127616022
+            ],
+            "M1": [
+              0.44050022815626977,
+              0.5142095377082473
+            ],
+            "M3": [
+              0.4064516129032258,
+              0.4064516129032258
+            ],
+            "composite": [
+              0.5932959568715231,
+              0.6021991845445617
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.6152079156487129,
+      "feasible": true
+    },
+    {
+      "variant": "draw_9km_none",
+      "pools": {
+        "han": {
+          "F1": 0.41152927582385035,
+          "M1": 0.199700655738574,
+          "M3": 0.22139498515133008,
+          "composite": 0.5966615395139356,
+          "unique_F1": 0.3125709651257097,
+          "seed_range": {
+            "F1": [
+              0.3844557809857136,
+              0.43717579890102576
+            ],
+            "M1": [
+              0.12757289244723416,
+              0.2566186792876861
+            ],
+            "M3": [
+              0.20608716485182926,
+              0.23270946102487416
+            ],
+            "composite": [
+              0.5718442553948189,
+              0.613698381691357
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.3717773151454338,
+          "M1": 0.3211628710277449,
+          "M3": 0.18649569844915895,
+          "composite": 0.6152876840700491,
+          "unique_F1": 0.2860748843079512,
+          "seed_range": {
+            "F1": [
+              0.36005781950386195,
+              0.3773372033057359
+            ],
+            "M1": [
+              0.28364663876501844,
+              0.3744442036887332
+            ],
+            "M3": [
+              0.18433179723502305,
+              0.19515130330570254
+            ],
+            "composite": [
+              0.6057998226424034,
+              0.6267397103198245
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.6059746117919924,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_27km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.6839758121156404,
+          "M1": 0.6716503548586307,
+          "M3": 0.6867088607594937,
+          "composite": 0.611030709595154,
+          "unique_F1": 0.537712895377129,
+          "seed_range": {
+            "F1": [
+              0.6839758121156404,
+              0.6839758121156404
+            ],
+            "M1": [
+              0.6716503548586307,
+              0.6716503548586307
+            ],
+            "M3": [
+              0.6867088607594937,
+              0.6867088607594937
+            ],
+            "composite": [
+              0.611030709595154,
+              0.611030709595154
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.5263248698852689,
+          "M1": 0.49034731426827505,
+          "M3": 0.6018433179723502,
+          "composite": 0.5565517363490188,
+          "unique_F1": 0.428270929743374,
+          "seed_range": {
+            "F1": [
+              0.5263248698852689,
+              0.5263248698852689
+            ],
+            "M1": [
+              0.49034731426827505,
+              0.49034731426827505
+            ],
+            "M3": [
+              0.6018433179723502,
+              0.6018433179723502
+            ],
+            "composite": [
+              0.5565517363490188,
+              0.5565517363490188
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.5837912229720864,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_9km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.5232307536757859,
+          "M1": 0.5439908234265667,
+          "M3": 0.5531419153731123,
+          "composite": 0.5806947500053189,
+          "unique_F1": 0.36658556366585565,
+          "seed_range": {
+            "F1": [
+              0.5232307536757859,
+              0.5232307536757859
+            ],
+            "M1": [
+              0.5439908234265667,
+              0.5439908234265667
+            ],
+            "M3": [
+              0.5531419153731123,
+              0.5531419153731123
+            ],
+            "composite": [
+              0.5806947500053189,
+              0.5806947500053189
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.480981705956929,
+          "M1": 0.38819315180185826,
+          "M3": 0.5023540825498282,
+          "composite": 0.5575747331026766,
+          "unique_F1": 0.3298275136726967,
+          "seed_range": {
+            "F1": [
+              0.480981705956929,
+              0.480981705956929
+            ],
+            "M1": [
+              0.38819315180185826,
+              0.38819315180185826
+            ],
+            "M3": [
+              0.5023540825498282,
+              0.5023540825498282
+            ],
+            "composite": [
+              0.5575747331026766,
+              0.5575747331026766
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.5691347415539978,
+      "feasible": true
+    },
+    {
+      "variant": "draw_27km_old_cores_L800",
+      "pools": {
+        "han": {
+          "F1": 0.552016846435675,
+          "M1": 0.5612811379274266,
+          "M3": 0.6867088607594937,
+          "composite": 0.5486495182132981,
+          "unique_F1": 0.4275750202757502,
+          "seed_range": {
+            "F1": [
+              0.5383962260827289,
+              0.5608484193461226
+            ],
+            "M1": [
+              0.5365786696714805,
+              0.5888319776663982
+            ],
+            "M3": [
+              0.6867088607594937,
+              0.6867088607594937
+            ],
+            "composite": [
+              0.5399922333863251,
+              0.5561851824732759
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.4466659572153402,
+          "M1": 0.4625601250224439,
+          "M3": 0.6018433179723502,
+          "composite": 0.525367567251404,
+          "unique_F1": 0.3644930584770719,
+          "seed_range": {
+            "F1": [
+              0.43937809437012465,
+              0.4640024376489684
+            ],
+            "M1": [
+              0.4369106255903436,
+              0.47377664798934627
+            ],
+            "M3": [
+              0.6018433179723502,
+              0.6018433179723502
+            ],
+            "composite": [
+              0.5196708607390108,
+              0.5330158145570971
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.537008542732351,
+      "feasible": true
+    },
+    {
+      "variant": "draw_18km_none",
+      "pools": {
+        "han": {
+          "F1": 0.4235017769787938,
+          "M1": 0.21454803568147213,
+          "M3": 0.4723101265822785,
+          "composite": 0.5194885560790837,
+          "unique_F1": 0.3261962692619627,
+          "seed_range": {
+            "F1": [
+              0.4015777628922119,
+              0.43517813412918155
+            ],
+            "M1": [
+              0.1598432421914206,
+              0.2451547246882003
+            ],
+            "M3": [
+              0.4723101265822785,
+              0.4723101265822785
+            ],
+            "composite": [
+              0.5030630858018813,
+              0.5284817899636677
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.38543961780225666,
+          "M1": 0.3329506952834981,
+          "M3": 0.4064516129032258,
+          "composite": 0.54848778418026,
+          "unique_F1": 0.3054270088346655,
+          "seed_range": {
+            "F1": [
+              0.3703772687016261,
+              0.3973052028227896
+            ],
+            "M1": [
+              0.3025749576534544,
+              0.38249919840828767
+            ],
+            "M3": [
+              0.4064516129032258,
+              0.4064516129032258
+            ],
+            "composite": [
+              0.5387846750720219,
+              0.5570126813670486
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.5339881701296718,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_18km_none",
+      "pools": {
+        "han": {
+          "F1": 0.3017474793491434,
+          "M1": 0.07904705240741758,
+          "M3": 0.4723101265822785,
+          "composite": 0.4563202929901913,
+          "unique_F1": 0.2197891321978913,
+          "seed_range": {
+            "F1": [
+              0.3017474793491434,
+              0.3017474793491434
+            ],
+            "M1": [
+              0.07904705240741758,
+              0.07904705240741758
+            ],
+            "M3": [
+              0.4723101265822785,
+              0.4723101265822785
+            ],
+            "composite": [
+              0.4563202929901913,
+              0.4563202929901913
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.3400397762403397,
+          "M1": 0.22726280375234129,
+          "M3": 0.4064516129032258,
+          "composite": 0.5157398550710949,
+          "unique_F1": 0.24821203197307531,
+          "seed_range": {
+            "F1": [
+              0.3400397762403397,
+              0.3400397762403397
+            ],
+            "M1": [
+              0.22726280375234129,
+              0.22726280375234129
+            ],
+            "M3": [
+              0.4064516129032258,
+              0.4064516129032258
+            ],
+            "composite": [
+              0.5157398550710949,
+              0.5157398550710949
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.4860300740306431,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_27km_none",
+      "pools": {
+        "han": {
+          "F1": 0.4680462560078335,
+          "M1": 0.2019805959503495,
+          "M3": 0.6867088607594937,
+          "composite": 0.46077589774117156,
+          "unique_F1": 0.36171938361719386,
+          "seed_range": {
+            "F1": [
+              0.4680462560078335,
+              0.4680462560078335
+            ],
+            "M1": [
+              0.2019805959503495,
+              0.2019805959503495
+            ],
+            "M3": [
+              0.6867088607594937,
+              0.6867088607594937
+            ],
+            "composite": [
+              0.46077589774117156,
+              0.46077589774117156
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.4066607368039867,
+          "M1": 0.321041190962635,
+          "M3": 0.6018433179723502,
+          "composite": 0.4884460047709845,
+          "unique_F1": 0.32898611695414387,
+          "seed_range": {
+            "F1": [
+              0.4066607368039867,
+              0.4066607368039867
+            ],
+            "M1": [
+              0.321041190962635,
+              0.321041190962635
+            ],
+            "M3": [
+              0.6018433179723502,
+              0.6018433179723502
+            ],
+            "composite": [
+              0.4884460047709845,
+              0.4884460047709845
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.474610951256078,
+      "feasible": true
+    },
+    {
+      "variant": "draw_27km_none",
+      "pools": {
+        "han": {
+          "F1": 0.4320590114900475,
+          "M1": 0.22416586558315896,
+          "M3": 0.6867088607594937,
+          "composite": 0.4524776945073777,
+          "unique_F1": 0.3343065693430657,
+          "seed_range": {
+            "F1": [
+              0.40657824620494754,
+              0.44521139156637574
+            ],
+            "M1": [
+              0.16451725584051527,
+              0.26409873405548434
+            ],
+            "M3": [
+              0.6867088607594937,
+              0.6867088607594937
+            ],
+            "composite": [
+              0.4340426711219038,
+              0.4629850893434848
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.398974566021189,
+          "M1": 0.3490035016984176,
+          "M3": 0.6018433179723502,
+          "composite": 0.4905443329660158,
+          "unique_F1": 0.32814472023559105,
+          "seed_range": {
+            "F1": [
+              0.3867042405712216,
+              0.4101830901847559
+            ],
+            "M1": [
+              0.32060513444718297,
+              0.36732235607881286
+            ],
+            "M3": [
+              0.6018433179723502,
+              0.6018433179723502
+            ],
+            "composite": [
+              0.487193986093114,
+              0.49458267420578056
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.47151101373669674,
+      "feasible": true
+    },
+    {
+      "variant": "greedy_9km_none",
+      "pools": {
+        "han": {
+          "F1": 0.25607891400014915,
+          "M1": 0.11369562063728542,
+          "M3": 0.5340071399987363,
+          "composite": 0.4263065281066852,
+          "unique_F1": 0.1711273317112733,
+          "seed_range": {
+            "F1": [
+              0.25607891400014915,
+              0.25607891400014915
+            ],
+            "M1": [
+              0.11369562063728542,
+              0.11369562063728542
+            ],
+            "M3": [
+              0.5340071399987363,
+              0.5340071399987363
+            ],
+            "composite": [
+              0.4263065281066852,
+              0.4263065281066852
+            ]
+          },
+          "max_shortfall": 0
+        },
+        "rome": {
+          "F1": 0.2928854975804514,
+          "M1": 0.2137418293966248,
+          "M3": 0.4867372415859384,
+          "composite": 0.4710063902309418,
+          "unique_F1": 0.18847286495582669,
+          "seed_range": {
+            "F1": [
+              0.2928854975804514,
+              0.2928854975804514
+            ],
+            "M1": [
+              0.2137418293966248,
+              0.2137418293966248
+            ],
+            "M3": [
+              0.4867372415859384,
+              0.4867372415859384
+            ],
+            "composite": [
+              0.4710063902309418,
+              0.4710063902309418
+            ]
+          },
+          "max_shortfall": 0
+        }
+      },
+      "composite": 0.44865645916881347,
+      "feasible": true
+    }
+  ],
+  "development_lead": "draw_9km_old_cores_L800",
+  "pending": "Occupancy assumptions, other development pools and prospective transfer; no atlas settlement/control replacement."
+}
