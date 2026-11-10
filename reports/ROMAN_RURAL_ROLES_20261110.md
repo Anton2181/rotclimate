@@ -135,3 +135,10 @@ verifies the refreshed release; full ZIP/site copies are not rebuilt under quota
 Focused Windows-style checkout preserves 37 critical files byte for byte; all
 638 local dependencies of the evidence page resolve. Receipts are retained in
 `output/roman_rural_roles_20261110/`.
+
+Coordinate follow-up: the [declared named-site check](ROMAN_RURAL_COORDINATES_20261110.md)
+supports operational OSGB-compatible X=easting/Y=northing in metres. All eight
+references across six sites lie within188m; this is not whole-source survey
+accuracy or official export-CRS certification. Physical places, precision, extra
+phases and coverage still constrain role calibration. Earlier audit artifacts
+remain unchanged.

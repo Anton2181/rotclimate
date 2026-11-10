@@ -94,3 +94,10 @@ association blocking. Every compiled role remains undated and its physical place
 unresolved. It supplies no population, staffing or affiliation. Blocking components
 are validation constraints, not physical-place IDs or automatically independent
 folds. The downstream allocation/control work above remains required.
+
+Coordinate follow-up: the [declared named-site check](ROMAN_RURAL_COORDINATES_20261110.md)
+supports operational OSGB-compatible X=easting/Y=northing in metres. All eight
+references across six sites lie within188m; this is not whole-source survey
+accuracy or official export-CRS certification. Physical places, precision, extra
+phases and coverage still constrain role calibration. Earlier audit artifacts
+remain unchanged.

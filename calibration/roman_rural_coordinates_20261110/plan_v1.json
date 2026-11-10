@@ -1,0 +1,49 @@
+{
+  "date": "2026-11-10",
+  "status": "exploratory_coordinate_interpretation_no_model_evaluation",
+  "previous_role_milestone": "9ad8a181",
+  "source_doi": "10.5284/1030449",
+  "known_before_protocol": "Source tables and their ranges, and named source-site coordinates already inspected. Search results exposed official grid references for Fishbourne, Chedworth, Lullingstone and Rudston; external pages for all six anchors found. This is exposed schema investigation, not a preregistered independent accuracy test. No candidate model predictions loaded or scored.",
+  "rationale": "Source DDL documents X_REF/Y_REF OSGB but export uses MAP suffix. Official map client3857 is not evidence of CSV CRS. Reynolds thesis Table4.6 labels MAP X as Northing and Y as Easting, contrary to an alternative X-easting interpretation; verify against independent official site references rather than silently choosing.",
+  "candidates": [
+    "X_easting_Y_northing_metres",
+    "X_northing_Y_easting_metres",
+    "EPSG3857_XY_region_plausibility_only"
+  ],
+  "anchors": [
+    {
+      "source_name": "Fishbourne Palace",
+      "heritage_list_entry": "1001211"
+    },
+    {
+      "source_name": "Chedworth",
+      "heritage_list_entry": "1003324"
+    },
+    {
+      "source_name": "Lullingstone",
+      "heritage_list_entry": "1007463"
+    },
+    {
+      "source_name": "Beadlam villa",
+      "heritage_list_entry": "1011365"
+    },
+    {
+      "source_name": "Rudston",
+      "heritage_list_entry": "1005222"
+    },
+    {
+      "source_name": "Chysauster",
+      "heritage_list_entry": "1006726"
+    }
+  ],
+  "matching": "Exact casefolded site name only, one unique source record per declared name; fail ambiguous/missing matches, no fuzzy matching or nearest-candidate selection. Extract official NGR field; fail multiple references instead of choosing closest.",
+  "comparison": "Convert official two-letter British National Grid references to metric easting/northing arithmetically. Report all per-hypothesis aggregate residuals and count within1km; no offset fitting, scale tuning, dropped outliers or threshold selection after calculation. Treat independent listed point and investigated point as different point definitions; distances do not certify survey precision.",
+  "decision": "Require all six named-site references within1km for an operational OSGB-compatible XY interpretation. Never declare whole-source metre accuracy, official export CRS certification or validation of the climate/settlement model. Retain map precision/physical-place/function dates/coverage as separate gates.",
+  "output": "Aggregate interpretation audit, source URLs and local hashes only; raw CSV/site coordinates/HTML/PDF remain cache-only. No source target map, transformation of all records, model score, allocation, actor/control/physics change or sealed status.",
+  "research_source": {
+    "url": "https://orca.cardiff.ac.uk/id/eprint/122869/1/2019reynoldslphd.pdf",
+    "sha256": "ec5f7edea28e487c82485fbaa4ab500a3d67c414dcd3b52b0b1451720b73687f",
+    "locator": "Printed pages65\u201366,Table4.6",
+    "finding": "MAP field names reused for GIS, but axis labels reverse the X-easting/Y-northing interpretation. Source is thesis reuse, not official ADS CRS metadata."
+  }
+}

@@ -103,3 +103,10 @@ Follow-up: the [role compiler](ROMAN_RURAL_ROLES_20261110.md) resolves the missi
 lookup labels through the official search, documents date censoring and builds
 conservative association blocks. The initial audit above remains unchanged. CSV
 MAP CRS/precision, actual physical places and extra phase semantics remain open.
+
+Coordinate follow-up: the [declared named-site check](ROMAN_RURAL_COORDINATES_20261110.md)
+supports operational OSGB-compatible X=easting/Y=northing in metres. All eight
+references across six sites lie within188m; this is not whole-source survey
+accuracy or official export-CRS certification. Physical places, precision, extra
+phases and coverage still constrain role calibration. Earlier audit artifacts
+remain unchanged.

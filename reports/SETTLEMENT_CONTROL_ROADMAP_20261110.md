@@ -66,8 +66,13 @@ Earth qualification.
 - [x] Compile role-context observations and exact-association validation blocks;
   resolve missing lookup labels from the official search and document date censoring.
   [Role compiler](ROMAN_RURAL_ROLES_20261110.md): no scores, allocations or adoption.
-- [ ] Resolve actual physical places, exported CSV MAP CRS/precision and extra phase
-  semantics; association blocks are not site merges, and site dates are not role dates.
+- [x] Test coordinate interpretations against six declared sites/eight official
+  references: [OSGB-compatible X=easting/Y=northing supported](ROMAN_RURAL_COORDINATES_20261110.md),
+  not whole-source precision or model accuracy.
+- [ ] Resolve actual physical places, CSV positional precision and extra phase
+  semantics; retain the operational coordinate interpretation with explicit
+  uncertainty, not official export-CRS certification. Association blocks are not
+  site merges, and site dates are not role dates.
   Record IDs/investigated area are not settlement counts/population. Keep source
   overlap, coverage and spatial leakage explicit before role-specific scoring.
 
@@ -165,10 +170,12 @@ are AD200-compatible; these are not unique settlements or dated institutions.
 The follow-up [role compiler](ROMAN_RURAL_ROLES_20261110.md) resolves all observed
 source labels, retains11 overlapping context channels and documents628 left-censored
 starts/1295 end-period conventions. Exact-association blocking connects153 records
-in65 nontrivial components without physical merges or assigned folds. CSV MAP CRS/
-precision and extra phase semantics remain unresolved despite a documented3857
-map client; no CSV transform or target map. Resolve places/phase/coordinates and
-coverage before role-specific calibration. Source raw tables are cached only; aggregate diagnostics are public.
+in65 nontrivial components without physical merges or assigned folds. A follow-up
+[six-site/eight-point coordinate audit](ROMAN_RURAL_COORDINATES_20261110.md) supports
+operational OSGB-compatible X=easting/Y=northing in metres (all references within188m;
+reversed axes minimum29km), despite conflicting thesis labels. Whole-source precision
+and extra phases remain unresolved; no whole-source projection/target map. Resolve
+places/phase/precision and coverage before role-specific calibration. Source raw tables are cached only; aggregate diagnostics are public.
 Phased crop/collection evidence for S4 remains metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
 medieval/Domesday pools cannot be relabelled unseen. Additional development use
 is allowed if declared. Next source acquisition should audit role/phase/coverage
@@ -197,3 +204,5 @@ after qualification. S2–S5 remain required. No parent stage is complete or dro
 |2026-11-10|CSV escaping reader corrected and both sources rechecked|Original source/audit preserved; Vidarbha primary findings unchanged, no model results changed|Keep lineage and regression cases; continue full programme|
 
 |2026-11-10|S2 executable role-evidence compiler and association blocks|All observed labels mapped explicitly; source date conventions documented; no scores, allocations or production changes|Resolve place/MAP/phase/coverage gates, then declare role calibration; retain S1 and S3–S5|
+
+|2026-11-10|Coordinate interpretations tested after role milestone9ad8a181|Six exposed named sites/eight official references support OSGB-compatible XY metres; all points retained, no offset fit or model score|Place identities, extra phases, positional uncertainty and coverage before calibration; preserve full roadmap|

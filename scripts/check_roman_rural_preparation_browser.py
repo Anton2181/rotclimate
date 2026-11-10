@@ -22,6 +22,11 @@ def main():
         role.locator('summary').focus();page.keyboard.press('Enter')
         assert role.locator('tbody tr').count()==11
         assert '153 records' in role.inner_text() and 'not physical-place merges' in role.inner_text()
+        coord=detail.locator('#rural-coordinate-evidence');assert coord.get_attribute('open') is None
+        coord.locator('summary').focus();page.keyboard.press('Enter')
+        assert 'all three references' in coord.inner_text() and 'median 54 m' in coord.inner_text()
+        figure=coord.locator('img');figure.scroll_into_view_if_needed()
+        assert figure.evaluate('(el)=>el.complete && el.naturalWidth===1600')
         links=[]
         for link in detail.locator('a').all():
             url=link.evaluate('(el)=>el.href');response=page.request.get(url);assert response.ok,url
@@ -35,8 +40,12 @@ def main():
                 audit=response.json();assert audit['unknown_source_labels']=={}
                 assert not audit['population_allocated'] and not audit['model_scores_computed']
                 assert audit['association_blocking']['all_keys_contained']
+            if url.endswith('roman_rural_coordinates.json'):
+                audit=response.json();assert audit['all_declared_anchors_retained']
+                assert not audit['settlement_climate_model_scored'] and not audit['production_adopted']
+                assert audit['hypotheses']['X_easting_Y_northing_metres']['reference_points_within_1km']==8
             links.append(url)
-        assert len(links)==11
+        assert len(links)==15
         detail.screenshot(path=str(args.out/'rural_preparation_desktop.png'))
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme);page.set_viewport_size(dict(width=390,height=844))
@@ -44,7 +53,7 @@ def main():
         browser.close()
     assert not errors,errors
     result=dict(status='passed',default_collapsed=True,keyboard_open=True,aggregate_links=links,
-        no_raw_tables=True,no_model_evaluation=True,role_channels=11,nested_keyboard_open=True,
+        no_raw_tables=True,no_model_evaluation=True,role_channels=11,coordinate_figure_loaded=True,nested_keyboard_open=True,
         light_dark_mobile=True,page_errors=errors)
     (args.out/'checks.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
 

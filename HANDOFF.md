@@ -1,3 +1,43 @@
+# Operational rural-coordinate interpretation verified; no model adoption — 10 November 2026
+
+* Full programme remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. First
+  current-turn milestone9ad8a181 (role evidence) pushed/verified on BOTH branches;
+  continued immediately with coordinate investigation. Do not drop S1c/history,
+  S1d/credible transfer, S1e/shared-ledger integration, or S2–S5.
+* NEW audit scripts/audit_roman_rural_coordinates.py compares six declared exact
+  named sites with eight Historic England official National Grid references.
+  Operational CSV X_REF_MAP=easting/Y_REF_MAP=northing in British-grid metres:
+  all8 references/all6 sites within1km; min11m/median54m/max188m. Reversed axes
+  min29km,0/8 within1km. Web-Mercator-Y interpretation gives0.094–5.877deg latitude,
+  outside published49.74–55.82 envelope for ALL3652 records. No whole-source projection.
+* This is exposed schema investigation, NOT a sealed/model accuracy test. Known
+  values/search results disclosed in calibration/roman_rural_coordinates_20261110/
+  plan.json. Preserve plan_v1.json and its recorded hash: before any distances,
+  official Chysauster had3refs; amendment retains/compares ALL3, never nearest/drop.
+  Keep8point/all6site accounting distinct. Point definitions differ; precision and
+  official export-CRS certification NOT established. Do not call54m global accuracy.
+* Reynolds Cardiff thesis cached15.5MB, Table4.6 printed65–66 uses same MAP labels
+  but reverses axes. Checked PDF directly; URL/SHA in plan, not redistributed. HE
+  six source HTMLs in data/cache/roman_rural_britain_metadata/anchors; pins in output
+  source_snapshot.json; changed pages fail, missing pages can be reacquired.
+* New report ROMAN_RURAL_COORDINATES_20261110.md and aggregate figure under
+  reports/figures/roman_rural_coordinates_20261110.png, posted in chat. Atlas source
+  panel now adds collapsed coordinate details/figure/4downloads (15total); raw CSV/
+  HTML/PDF not included. Role/preparation audits and both numerical settlement
+  studies remain byte-exact vs9ad8a181. No model maps/physics/pop/staff/actor changes.
+*77 focused tests pass. Fresh-output audit/source receipt byte-exact; tampered anchor
+  page rejected. Browser nested keyboard/mobile/dark/figure/15links pass. Full ZIP/
+  site copy still not rebuilt under quota; recipe includes new report/figure/plans.
+*49 Windows-style critical files byte-exact,643 local links resolve; publisher
+  idempotent and standard launcher verifies the refreshed release.
+* NEXT: actual place identities (association blocks alone insufficient), PHASE_DATE1/2
+  and function dates, and positional uncertainty/coverage. Operational grid/axis
+  interpretation is now usable with explicit source/inference limits; do not keep
+  treating its basic identity as totally unknown. Before any score, declare grouped/
+  spatial role-specific calibration/resolution/sensitivity. Do not fit farms to
+  county-seat targets or turn roles into authority. S1 history/transfer remain open;
+  qualified changes must enter SAME resident/food/staff/institution/control chain.
+
 # S2 role evidence implemented; physical-place calibration gates remain — 10 November 2026
 
 * Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md on every continuation. S1c

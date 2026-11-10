@@ -88,3 +88,10 @@ resolves missing lookup labels from source search, documents −100/400 date
 conventions and builds exact-association blocking components. No folds or scores.
 Actual places, exported CSV CRS/precision, extra phases and coverage remain gates
 before calibration; shared event/project IDs are not site identity.
+
+Coordinate follow-up: the [declared named-site check](ROMAN_RURAL_COORDINATES_20261110.md)
+supports operational OSGB-compatible X=easting/Y=northing in metres. All eight
+references across six sites lie within188m; this is not whole-source survey
+accuracy or official export-CRS certification. Physical places, precision, extra
+phases and coverage still constrain role calibration. Earlier audit artifacts
+remain unchanged.
