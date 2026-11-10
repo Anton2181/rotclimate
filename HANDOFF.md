@@ -1,3 +1,15 @@
+# Settlement/control programme approved — 10 November 2026
+
+* Durable queue: reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. Read it at every
+  continuation: S1 count-separated clustered sites; S2 settlement roles/hierarchy;
+  S3 local versus central authority; S4 surplus-supported institutions; S5 mobile
+  and nonstate communities. Failed candidates do not complete or cancel stages.
+* Starting S1a/b. Preserve count independently of site/history assumptions; do not
+  relabel exposed Han/Rome/Sui/Tang/Domesday pools as blind. Original settlement
+  input NPZs and several source caches are absent; recovery is part of this step.
+* User explicitly approved the full programme, with all successive steps tracked.
+  Physics remains a separate active queue; this programme does not erase it.
+
 # Mixing reuse INTEGRATED; physical climate stays r44 — 10 November 2026
 
 * After ALL frozen P8d search/coastal/publication steps completed and were committed4d89cf1c, integrated
