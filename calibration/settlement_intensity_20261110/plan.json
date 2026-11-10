@@ -1,0 +1,21 @@
+{
+  "date": "2026-11-10",
+  "status": "frozen_before_any_new_family_Earth_scores",
+  "stage": "S1c development; occupancy scenario sensitivity and density-dependent spacing, not occupation-age dynamics",
+  "question": "Can spacing implied by local expected centre intensity retain the unique-location gains of the fixed18km alternative while better reproducing clustered spacing?",
+  "inputs": "Exact tracked Han/Roman NPZs from output/settlement_locations_20261110, with their original hashes. Both exposed development data. Old 12-variant study and its winner remain immutable.",
+  "counts": "Same fixed1202Han/1292Roman compatibility budgets. No evaluation count supplied to allocator. Base population, food and environmental eligibility unchanged.",
+  "mechanism": "Relative centre weight w=existing site_score*history^(800/L); normalize sum(lambda*cell_area)=requested_count over eligible positive-weight cells. Separation field r=min(45km,c/sqrt(lambda)), with no9km lower cutoff. Greedily accept ranked candidates only if each accepted pair has distance>(r_i+r_j)/2. One site per raster cell. This is relative location intensity, not a new population field, an estimated historical occupation age or territorial authority.",
+  "grid": {
+    "history_scale_km": [450,800,1500],
+    "spacing_coefficient": [0.25,0.35,0.5],
+    "stochastic": [false,true],
+    "seeds_stochastic": [1,7,19,43,97],
+    "seeds_deterministic": [1],
+    "evaluations": 108
+  },
+  "metrics": "Reuse unchanged natural-count proximity/unique one-to-one F1 at25km,100km block rank,spacingKS,NNquantiles and count/shortfall. Report history-scale and seed sensitivity; do not call ensembles confidence intervals.",
+  "development_selection": "Among variants filling all budgets, maximize equal-pool seed-mean Q=0.6*unique_F1+0.2*(M1+1)/2+0.2*(1-M3). Compare production baseline and ALL12 saved old variants under the same Q. No every-region veto and no retrospective replacement of the old composite winner. Report unique-location/spacing Pareto alternatives and changes under location weights0.4,0.6,0.8 with remaining weights split equally.",
+  "qualification": "Development only. No default change. First require aggregate Q gain vs the best of the old12 references, with per-pool changes reported. Then S1d needs defensible prospective transfer and S1e must recompute shared food/staffing/control before adoption. Vidarbha is not scored by this experiment.",
+  "literature": "Spatial point-process/spatial-interaction framing: Bevan and Wilson2013 doi:10.1016/j.jas.2012.12.025. Inverse-square-root separation is dimensional scaling of point intensity, not a fitted ancient administrative service law or reproduction of that paper."
+}
