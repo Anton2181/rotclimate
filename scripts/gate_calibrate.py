@@ -44,6 +44,7 @@ from rainfall_metrics import local_metrics  # noqa: E402
 from rotclimate import earth  # noqa: E402
 from rotclimate.config import Params  # noqa: E402
 from rotclimate.koppen import monthly_stats  # noqa: E402
+from local_benchmark_protocol import case_hash  # noqa: E402
 
 POLICY = ROOT / "calibration/local_accuracy_20261023/policy_v2.json"
 
@@ -55,6 +56,8 @@ def region_errors(job):
         earth.REGIONS.update(job[2])           # extra development regions (plan["extra_groups"])
     p = Params(**params)
     case = earth.region_case(region, 56.0)
+    if len(job) > 3 and job[3] is not None and case_hash(case) != job[3]:
+        raise ValueError('Candidate geography/observations differ from the reference: ' + region)
     try:
         res = earth.run_case(p, case, steps=p.steps_per_year)
         if res.numerics.get("all_checks_passed") is not True:
@@ -67,6 +70,23 @@ def region_errors(job):
     t = temperature_metrics(st["Tm"][:, m], np.asarray(case.obs_T)[:, m])
     r = local_metrics(np.maximum(st["Pm"], 0.0), np.nan_to_num(case.obs_P), m)
     return region, (t["monthly_mae_C"], r["loss"])
+
+
+def verified_search_profile(base, knobs):
+    """Policy-v3 searches change shared response laws, with Earth forcing fixed."""
+    from rotclimate import joint
+    names = [k[0] for k in knobs]
+    if not names or len(names) != len(set(names)):
+        raise ValueError('Search knobs must be nonempty and unique')
+    if set(names) - joint.SHARED_FIELDS:
+        raise ValueError('Search knobs must be shared physics, not forcing or numerics')
+    for name, lo, hi in knobs:
+        value = getattr(base, name)
+        if isinstance(value, bool) or not isinstance(value, (float, int)):
+            raise ValueError('Continuous search knobs must be numeric response parameters')
+        if not np.isfinite([lo,hi,value]).all() or not lo < hi or not lo <= value <= hi:
+            raise ValueError('Finite ordered bounds must contain the declared start: ' + name)
+    return joint.earth_profile(base)
 
 
 def score(errors, reference, groups, extra=None, *, policy="v2"):
@@ -117,26 +137,35 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--resume", action="store_true")
     ap.add_argument("--hours", type=float, default=1.9, help="stop cleanly after this long (resume later)")
+    ap.add_argument('--through-eval',type=int,help='pause after this many evaluations, within the frozen total budget')
     a = ap.parse_args()
     plan = json.loads(a.plan.read_text())
+    if a.through_eval is not None and a.through_eval < 1:
+        ap.error('through-eval must be positive')
+    evaluation_limit=min(plan['evals'],a.through_eval) if a.through_eval is not None else plan['evals']
     scoring_policy = plan.get("scoring_policy", "v2")
     if scoring_policy not in {"v2", "v3"}:
         ap.error("scoring_policy must be v2 or v3")
-    groups = json.loads(POLICY.read_text())["groups"]
+    policy_path = ROOT/'calibration/local_accuracy_20261023/policy_v3.json' if scoring_policy == 'v3' else POLICY
+    groups = json.loads(policy_path.read_text())["groups"]
     regions = [n for members in groups.values() for n in members]
     ref = json.loads((ROOT / plan["reference"] / "summary.json").read_text())["regions"]
     reference = {n: (ref[n]["temperature"]["monthly_mae_C"], ref[n]["rain"]["loss"]) for n in regions}
+    reference_cases = {n: ref[n].get('case_identity') for n in regions}
     extra, extra_specs = {}, {}
     for g, spec in plan.get("extra_groups", {}).items():
         specs = json.loads((ROOT / spec["spec"]).read_text()); extra_specs.update(specs); extra[g] = list(specs)
         er = json.loads((ROOT / spec["reference"] / "summary.json").read_text())["regions"]
         reference.update({n: (er[n]["temperature"]["monthly_mae_C"], er[n]["rain"]["loss"]) for n in specs})
+        reference_cases.update({n:er[n].get('case_identity') for n in specs})
     all_regions = regions + [n for members in extra.values() for n in members]
     if scoring_policy == "v3":
         # Catch weighting/coverage mistakes before running any climate cases.
         score(reference, reference, groups, extra, policy="v3")
         if len(all_regions) != 49:
             ap.error("Policy v3 requires exactly the declared 49 development regions")
+        if any(not reference_cases[n] for n in all_regions):
+            ap.error('Policy v3 requires actual reference geography/observation identities')
         for folder in [plan["reference"], *(s["reference"] for s in plan.get("extra_groups", {}).values())]:
             summary = json.loads((ROOT / folder / "summary.json").read_text())
             if summary.get("complete") is not True or any(
@@ -146,11 +175,16 @@ def main():
                 ap.error("Policy v3 requires complete, numerically verified references: " + folder)
     base = load_params(ROOT / plan["start"]).replace(**plan.get("set", {}))
     knobs = plan["knobs"]                             # [[name, lo, hi], ...]
+    if scoring_policy == 'v3': base = verified_search_profile(base, knobs)
     lo = np.array([k[1] for k in knobs], float); hi = np.array([k[2] for k in knobs], float)
 
     def decode(x):
         v = lo + np.clip(x, 0, 1) * (hi - lo)
-        return base.replace(**{k[0]: float(val) for k, val in zip(knobs, v)})
+        candidate = base.replace(**{k[0]: float(val) for k, val in zip(knobs, v)})
+        if scoring_policy == 'v3':
+            from rotclimate import joint
+            joint.require_strict(candidate)
+        return candidate
     x0 = np.clip((np.array([getattr(base, k[0]) for k in knobs], float) - lo) / (hi - lo), 0, 1)
     initial_mean = np.asarray(plan.get("initial_mean", x0), float)
     if initial_mean.shape != x0.shape or not np.isfinite(initial_mean).all() or ((initial_mean < 0) | (initial_mean > 1)).any():
@@ -162,17 +196,24 @@ def main():
     if scoring_policy == "v3":
         # A resume must never mix objectives, source revisions or reference data.
         from local_benchmark_protocol import file_hash, freeze
-        refs = [ROOT / plan["reference"] / "summary.json"]
+        refs = [ROOT / plan['start'], ROOT / plan["reference"] / "summary.json"]
         for spec in plan.get("extra_groups", {}).values():
             refs.extend([ROOT / spec["spec"], ROOT / spec["reference"] / "summary.json"])
-        refs.extend([Path(__file__), ROOT / "scripts/rainfall_metrics.py", ROOT / "scripts/benchmark_local.py"])
+        refs.extend([Path(__file__), ROOT / "scripts/rainfall_metrics.py", ROOT / "scripts/benchmark_local.py",
+            ROOT/'scripts/local_benchmark_protocol.py',ROOT/'scripts/earth_benchmark.py',policy_path])
         refs.extend((ROOT / "rotclimate").glob("*.py"))
         if state_path.exists() and not (a.out / "search_identity.json").exists():
             ap.error("Cannot resume a legacy search under v3; use a new output directory")
-        freeze(a.out / "search_identity.json", dict(plan=plan, sources={str(f.relative_to(ROOT)): file_hash(f) for f in refs}))
+        from importlib.metadata import version
+        freeze(a.out / "search_identity.json", dict(plan=plan, sources={str(f.relative_to(ROOT)): file_hash(f) for f in refs},
+            software=dict(numpy=np.__version__,scipy=version('scipy'),cma=version('cma'))))
     if a.resume and state_path.exists():
         with state_path.open("rb") as f:
-            es, pending, best, n = pickle.load(f)
+            saved = pickle.load(f)
+        es, pending, best, n = saved[:4]
+        if len(saved) == 5: np.random.set_state(saved[4])
+        elif scoring_policy == 'v3':
+            ap.error('V3 resume needs the saved random state; preserve this run and start a new directory')
         print(f"resumed at {n} evaluations, best {best['cost']:.4f}", flush=True)
     else:
         if log_path.exists():
@@ -184,12 +225,12 @@ def main():
         pending, best, n = [x0], None, 0      # the start point is scored first, outside the search
     t0 = time.time()
     with Pool(a.workers) as pool, log_path.open("a") as log:
-        while n < plan["evals"] and time.time() - t0 < a.hours * 3600:
+        while n < evaluation_limit and time.time() - t0 < a.hours * 3600:
             if not pending:
                 pending = list(es.ask())
             x = pending.pop(0)
-            p = decode(x)
-            rows = dict(pool.map(region_errors, [(r, asdict(p), extra_specs) for r in all_regions]))
+            p = base if n == 0 and scoring_policy == 'v3' else decode(x)
+            rows = dict(pool.map(region_errors, [(r, asdict(p), extra_specs, reference_cases[r] if scoring_policy == 'v3' else None) for r in all_regions]))
             if any(v is None for v in rows.values()):
                 cost, info = 99.0, dict(failed=[r for r, v in rows.items() if v is None])
             else:
@@ -213,7 +254,8 @@ def main():
             print(f"[{n:3d}] cost {cost:.4f} S {info.get('S', float('nan')):.4f} best {best['cost']:.4f} | "
                   + " ".join(f"{k[0]}={getattr(p, k[0]):.3g}" for k in knobs), flush=True)
             with (a.out / "state.tmp").open("wb") as f:
-                pickle.dump((es, pending, best, n), f)
+                saved=(es,pending,best,n,np.random.get_state()) if scoring_policy == 'v3' else (es,pending,best,n)
+                pickle.dump(saved, f)
             (a.out / "state.tmp").replace(state_path)
     print(f"stopped at {n} evaluations; best cost {best['cost']:.4f}: " + json.dumps(best["knobs"]), flush=True)
 

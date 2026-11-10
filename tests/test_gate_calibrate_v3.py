@@ -87,11 +87,11 @@ def test_full_search_records_control_and_resumes_without_changing_objective(tmp_
         dest = tmp_path / path; dest.mkdir(parents=True)
         (dest / 'summary.json').write_text(json.dumps(data))
         errors.update({n: (r['temperature']['monthly_mae_C'], r['rain']['loss']) for n, r in data['regions'].items()})
-    for path in [frozen['start'], *(v['spec'] for v in frozen['extra_groups'].values())]:
+    for path in [frozen['start'], 'calibration/local_accuracy_20261023/policy_v3.json', *(v['spec'] for v in frozen['extra_groups'].values())]:
         dest = tmp_path / path; dest.parent.mkdir(parents=True, exist_ok=True)
         dest.write_bytes((root / path).read_bytes())
     script = tmp_path / 'scripts/gate_calibrate.py'; script.parent.mkdir()
-    for name in ['gate_calibrate.py', 'rainfall_metrics.py', 'benchmark_local.py']:
+    for name in ['gate_calibrate.py', 'rainfall_metrics.py', 'benchmark_local.py','local_benchmark_protocol.py','earth_benchmark.py']:
         (script.parent / name).write_bytes((root / 'scripts' / name).read_bytes())
     monkeypatch.setattr(G, 'ROOT', tmp_path)
     monkeypatch.setattr(G, '__file__', str(script))
@@ -118,3 +118,63 @@ def test_full_search_records_control_and_resumes_without_changing_objective(tmp_
     plan.write_text(json.dumps(frozen))
     with pytest.raises(ValueError, match='changed'):
         G.main()
+
+
+def test_resume_at_generation_boundary_preserves_the_random_trajectory(tmp_path, monkeypatch):
+    import sys
+    from scripts import gate_calibrate as G
+    root=Path(__file__).resolve().parents[1]
+    frozen=json.loads((root/'calibration/r42_multistart_20261102/plan_1.json').read_text())
+    frozen.update(evals=5,popsize=2,seed=883)
+    errors={}
+    for path in [frozen['reference'],*(v['reference'] for v in frozen['extra_groups'].values())]:
+        data=json.loads((root/path/'summary.json').read_text());dest=tmp_path/path;dest.mkdir(parents=True)
+        (dest/'summary.json').write_text(json.dumps(data))
+        errors.update({n:(r['temperature']['monthly_mae_C'],r['rain']['loss']) for n,r in data['regions'].items()})
+    for path in [frozen['start'],'calibration/local_accuracy_20261023/policy_v3.json',*(v['spec'] for v in frozen['extra_groups'].values())]:
+        dest=tmp_path/path;dest.parent.mkdir(parents=True,exist_ok=True);dest.write_bytes((root/path).read_bytes())
+    script=tmp_path/'scripts/gate_calibrate.py';script.parent.mkdir()
+    for name in ['gate_calibrate.py','rainfall_metrics.py','benchmark_local.py','local_benchmark_protocol.py','earth_benchmark.py']:
+        (script.parent/name).write_bytes((root/'scripts'/name).read_bytes())
+    monkeypatch.setattr(G,'ROOT',tmp_path);monkeypatch.setattr(G,'__file__',str(script))
+    class Pool:
+        def __init__(self, workers):pass
+        def __enter__(self):return self
+        def __exit__(self,*args):pass
+        def map(self,function,jobs):return [(n,errors[n]) for n,*_ in jobs]
+    monkeypatch.setattr(G,'Pool',Pool)
+    plan=tmp_path/'plan.json';plan.write_text(json.dumps(frozen))
+    def run(out,*extra):
+        monkeypatch.setattr(sys,'argv',['gate_calibrate.py','--plan',str(plan),'--out',str(out),*extra]);G.main()
+    run(tmp_path/'continuous')
+    run(tmp_path/'split','--through-eval','3')
+    np.random.seed(999999)   # simulate a new process, not the original generator state
+    run(tmp_path/'split','--resume')
+    a=(tmp_path/'continuous/evals.jsonl').read_text();b=(tmp_path/'split/evals.jsonl').read_text()
+    assert a==b
+
+
+@pytest.mark.parametrize('knobs',[[['tilt',20,30]],[['solver_rtol',1e-8,1e-5]],[['wind_source',0,1]],
+    [['sst_offset',-5,0],['sst_offset',-5,0]],[['sst_offset',0,1]]])
+def test_verified_search_rejects_forcing_numerics_enums_and_changed_start(knobs):
+    from rotclimate.config import Params
+    from scripts.gate_calibrate import verified_search_profile
+    p=Params.from_json('calibration/local_accuracy_20261023/r44_params.json')
+    with pytest.raises(ValueError):verified_search_profile(p,knobs)
+
+
+def test_actual_reference_case_mismatch_aborts_before_running_or_scoring(monkeypatch):
+    from dataclasses import asdict
+    from scripts import gate_calibrate as G
+    from local_benchmark_protocol import case_hash
+    from rotclimate.config import Params
+    from test_earth import _toy_case
+    case=_toy_case();called=[]
+    monkeypatch.setattr(G.earth,'region_case',lambda *args:case)
+    def failed(*args,**kw):called.append(True);raise RuntimeError('Numerical failure')
+    monkeypatch.setattr(G.earth,'run_case',failed)
+    with pytest.raises(ValueError,match='differ'):
+        G.region_errors(('california',asdict(Params()),{},'wrong observations'))
+    assert not called
+    assert G.region_errors(('california',asdict(Params()),{},case_hash(case)))==('california',None)
+    assert called==[True]
