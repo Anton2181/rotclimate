@@ -57,7 +57,15 @@ without an unacceptable aggregate location loss, transfer has been assessed, and
 the downstream consumer chain has been reviewed. A passing unit test is not an
 Earth qualification.
 
-### S2 — Rural settlements, market hierarchy and institutional roles [PENDING]
+### S2 — Rural settlements, market hierarchy and institutional roles [PREPARATION IN PROGRESS]
+
+- [x] Initial source preparation: frozen066db539 before observations;3652 joined
+  rural-Britain records, role multiplicity and date/size fields audited without
+  predictions or scores. [Report](ROMAN_RURAL_PREPARATION_20261110.md) and
+  [consumer contract](SETTLEMENT_ROLE_CONTRACT_20261110.md).
+- [ ] Resolve physical-place grouping, exported MAP coordinates, phase semantics
+  and missing taxonomy labels; record IDs and investigated area are not settlement
+  counts/population. Source overlap/selection remains explicit.
 
 - [ ] Separate villages, markets, ports, administrative seats and garrisons;
   roles may overlap. Preserve known anchors; do not classify from icon size alone.
@@ -147,14 +155,22 @@ role/coverage-appropriate source before a located transfer test. Do not silently
 swap axes or fuzzy-match IDs, and do not label the model failed/successful here.
 
 The [data queue](SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md) records this exposure
-and retains Roman rural Britain for S2 roles and phased crop/collection evidence
-for S4. These two remain metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
+and now includes the completed initial Roman rural Britain preparation for S2.
+Its3652 core/site IDs join,608 records have multiple major roles,2641 date spans
+are AD200-compatible; these are not unique settlements or dated institutions.
+The exported MAP fields differ from documented OSGB fields, so no transform or
+target map is made. Resolve grouping/phase/coordinate/taxonomy before role-specific
+calibration. Source raw tables are cached only; aggregate diagnostics are public.
+Phased crop/collection evidence for S4 remains metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
 medieval/Domesday pools cannot be relabelled unseen. Additional development use
 is allowed if declared. Next source acquisition should audit role/phase/coverage
 and overlap before freezing any scoring protocol.
 S2's rural-source schema/phase/role audit can proceed while S1d seeks a usable
-transfer source; this is preparation of a later stage, not closure of S1 or a
-reason to abandon the deferred coupled integration.
+transfer source; its initial record-level preparation is complete, while the
+remaining interpretation and calibration are open. This is not closure of S1 or
+a reason to abandon deferred coupled integration. Standard CSV-reader correction
+removed a false unnamed-cell warning in Vidarbha; zero joins/axis conflict remain,
+and all climate/settlement results are unchanged.
 
 Then S1e rebuilds towns/tracks and the SAME resident/food/staffing/control chain
 after qualification. S2–S5 remain required. No parent stage is complete or dropped.
@@ -169,3 +185,5 @@ after qualification. S2–S5 remain required. No parent stage is complete or dro
 |2026-11-10|Next Earth data candidates audited at metadata/schema level|Vidarbha, Roman rural Britain, Cambridge crop/collection evidence; no target tables/scores or sealed status|Occupancy/tradeoff work and preparation-only source audit|
 |2026-11-10|S1c adaptive spacing/history study; protocols a9a4a635|108 exposed evaluations, all budgets/pair constraints pass; no adoption|History/role robustness and S1d transfer|
 |2026-11-10|Vidarbha preparation completed, no predictions scored|Zero coordinate/settlement joins and conflicting axes; source not ready|Resolve or replace source; keep S1d and S2–S5 open|
+|2026-11-10|S2 rural preparation frozen066db539 and completed|3652 joined observation records, multiple roles, date/size/schema audit; no predictions or scores|Resolve place/coordinate/phase/taxonomy and declare calibration|
+|2026-11-10|CSV escaping reader corrected and both sources rechecked|Original source/audit preserved; Vidarbha primary findings unchanged, no model results changed|Keep lineage and regression cases; continue full programme|

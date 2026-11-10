@@ -26,8 +26,10 @@ def read_table(data):
         try:text=data.decode(encoding);break
         except UnicodeDecodeError:continue
     else:raise ValueError('Unsupported text encoding')
-    dialect=csv.Sniffer().sniff(text[:8000],delimiters=',;\t')
-    reader=csv.reader(io.StringIO(text,newline=''),dialect=dialect)
+    # The audited source exports use comma-separated Excel/Access CSV. Sniffer
+    # can infer doublequote=False from a short prefix and then misread later
+    # escaped quotes/commas in free text. Use the source's standard dialect.
+    reader=csv.reader(io.StringIO(text,newline=''),dialect='excel')
     raw=next(reader);named=[(i,h.strip()) for i,h in enumerate(raw) if h.strip()]
     headers=[h for _,h in named]
     if len(set(headers))!=len(headers):raise ValueError('Duplicate named CSV headers')
@@ -38,7 +40,7 @@ def read_table(data):
         unnamed_cells+=sum(bool(values[i].strip()) for i in unnamed if i<len(values))
         extra_cells+=sum(bool(v.strip()) for v in values[len(raw):])
         rows.append({h:values[i] if i<len(values) else '' for i,h in named})
-    return headers,rows,dict(encoding=encoding,delimiter=dialect.delimiter,total_columns=len(raw),
+    return headers,rows,dict(encoding=encoding,delimiter=',',dialect='excel_doublequote',total_columns=len(raw),
         blank_header_columns=len(unnamed),nonempty_unnamed_cells=unnamed_cells,nonempty_extra_cells=extra_cells)
 
 

@@ -296,6 +296,9 @@ def main():
     files += [ROOT/'reports/SETTLEMENT_INTENSITY_20261110.md',ROOT/'reports/VIDARBHA_PREPARATION_20261110.md',
               ROOT/'reports/figures/settlement_intensity_maps_20261110.png',ROOT/'reports/figures/settlement_intensity_tradeoffs_20261110.png',
               ROOT/'calibration/settlement_intensity_20261110/plan.json',ROOT/'calibration/vidarbha_preparation_20261110/plan.json']
+    files += [ROOT/'reports/ROMAN_RURAL_PREPARATION_20261110.md',ROOT/'reports/SETTLEMENT_ROLE_CONTRACT_20261110.md',
+              ROOT/'calibration/roman_rural_preparation_20261110/plan.json',
+              ROOT/'calibration/roman_rural_preparation_20261110/metadata_sources.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

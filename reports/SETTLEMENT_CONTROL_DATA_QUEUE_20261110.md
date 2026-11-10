@@ -11,7 +11,7 @@ At the initial metadata review no target tables were loaded. A subsequent frozen
 [preparation-only audit](VIDARBHA_PREPARATION_20261110.md) loaded the Vidarbha master
 and settlement CSVs, without predictions, maps or model scores. It found zero ID
 joins and conflicting coordinate documentation, so this version is not ready for
-located transfer. Other candidates remain metadata-only. None has sealed status.
+located transfer. The Roman rural source has since completed a separate preparation-only audit, also without scores; crop/collection evidence remains metadata-only. None has sealed status.
 
 ## 1. Vidarbha: a non-Roman geographical transfer candidate
 
@@ -54,8 +54,7 @@ chronology and available economic evidence. Archaeological recording effort must
 be modelled or controlled when evaluating spatial density. Britain overlaps the
 existing Roman training geography, and sites may overlap other catalogues; this
 is not automatically an independent global transfer pool. It cannot validate
-administrative-seat counts by treating every rural excavation as a seat. Verify
-the archive's file licence, schema and version before acquisition.
+administrative-seat counts by treating every rural excavation as a seat. The [initial record-level preparation](ROMAN_RURAL_PREPARATION_20261110.md) is now complete under a frozen protocol; grouping, MAP/phase semantics and taxonomy still need resolution before calibration.
 
 ## 3. Roman crop collection: material evidence for the shared ledger
 
@@ -76,8 +75,9 @@ and phases before combining evidence or declaring separate tests.
 1. Preserve the frozen12-variant result and both its location/spacing alternatives.
 2. S1c: examine occupancy assumptions and unique-location versus spacing losses;
    address rasterized site roles/resolution without changing past selection rules.
-3. Audit Vidarbha schema/coverage before declaring a prospective transfer protocol.
-4. S2: acquire role-appropriate rural evidence; keep it separate from county seats.
+3. Resolve or replace Vidarbha's audited source before a prospective located test.
+4. S2: rural preparation complete; resolve place/MAP/phase/taxonomy semantics
+   before role-specific calibration, keeping rural evidence separate from county seats.
 5. S4: integrate crop/collection evidence into the same food/institution ledger.
 
 S3 differentiated authority and S5 mobile/nonstate communities remain required

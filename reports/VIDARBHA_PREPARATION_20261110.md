@@ -23,8 +23,8 @@ no newer corrected version was found through that check.
 Case-folding IDs still produces no joins. The master contains only SiteCode and
 two coordinate columns, not the wider metadata fields described in the readme.
 All389 settlement IDs lack a matching row in the supplied master. The settlement
-table has41 named columns plus16334 blank-header columns and one nonempty cell in
-an unnamed column; those layout defects are reported, not silently treated as data.
+table has41 named columns plus16334 blank-header columns; those layout details
+are reported, not silently treated as meaningful data.
 
 The readme defines `YCoord=longitude`, `XCoord=latitude`. Under those definitions,
 **zero** of the60 coordinate pairs lies in the broad declared Vidarbha envelope.
@@ -49,3 +49,18 @@ remains queued for S4. A rejected data source does not cancel those stages.
 
 Reproduce with `.venv/bin/python -I scripts/audit_vidarbha_preparation.py`.
 The checksum/schema/join receipt is `output/vidarbha_preparation_20261110/audit.json`.
+
+## CSV correction
+
+During the subsequent rural-Britain preparation, automatic CSV sniffing was found
+to infer `doublequote=False` from a file prefix, misreading later escaped quotes.
+The reader now uses the sources' standard comma/Excel dialect. The earlier source
+and audit are preserved as `source_before_csv_fix.py` / `audit_before_csv_fix.json`;
+`parser_correction.json` records the exact old/new hashes and aggregate changes.
+
+Rechecking removes the previously reported nonempty unnamed cell and changes a
+few distinct-text counts. All row/ID counts, chronology flags, zero joins,
+coordinate-axis findings and the not-ready decision remain unchanged. No climate,
+settlement prediction or model score changes. The regression test includes escaped
+quotation marks, commas and embedded newlines so this is not attributed to the
+archaeological source again.

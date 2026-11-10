@@ -33,3 +33,11 @@ def test_duplicate_ids_are_retained_and_reported_not_merged():
 def test_duplicate_named_headers_are_rejected():
     with pytest.raises(ValueError,match='Duplicate named'):
         read_table(b'SiteCode,YCoord,YCoord\na,80,20\n')
+
+
+def test_escaped_quotes_commas_and_embedded_newlines_preserve_field_alignment():
+    raw=b'SiteCode,Notes,RecordedDate\na,"A ""quoted"" term, and\na second line",Early Historic\n'
+    headers,rows,format_=read_table(raw)
+    assert len(rows)==1 and rows[0]['RecordedDate']=='Early Historic'
+    assert rows[0]['Notes']=='A "quoted" term, and\na second line'
+    assert format_['nonempty_extra_cells']==0

@@ -7,8 +7,9 @@ S1's history, transfer and coupled-integration gaps remain open on the
 
 The [Roman rural archive](https://doi.org/10.5284/1030449) supplies useful
 role/chronology metadata. Its published introduction distinguishes roughly3600
-excavation records from roughly2500 settlements. We have inspected its schema
-and role lookups, **not** its site/coordinate observations. Schema/lookup hashes
+excavation records from roughly2500 settlements. Before the preparation protocol
+was frozen, only schema/role lookups were inspected; the later observation-table
+audit is linked below and has not computed model scores. Schema/lookup hashes
 and exact source URLs are retained with the
 [preparation protocol](../calibration/roman_rural_preparation_20261110/plan.json).
 
@@ -40,10 +41,14 @@ settlements; their namespaces must be audited before grouping.
   Metadata names farms, villas, villages, small towns, forts, route features and
   religious/industrial sites; the source does not make them interchangeable.
 
-The metadata schema and lookups were read through the archive's exact published
+The metadata schema and lookups were initially read through the archive's exact published
 encoded download links. Guessed unencoded URLs returned403, so those failures
 should not be mistaken for evidence that the public CSV archive is unavailable.
-No raw site table has been acquired or scored at this checkpoint.
+At that initial checkpoint no raw site table was acquired. The subsequent
+[frozen preparation audit](ROMAN_RURAL_PREPARATION_20261110.md) now reports3652
+joined records, multiple roles and schema differences, without model scores.
+In particular the export's MAP fields are not automatically equated with the
+documented OSGB fields, and site occupation dates do not date every function.
 
 ## Settlement and control consumers
 
@@ -65,9 +70,9 @@ relationships remain worldbuilding evidence/scenarios, not Earth calibration tru
 
 ## Next concrete work
 
-Execute the preparation-only protocol: audit record identities, joins, role
-multiplicity, dates, coordinate formats, size fields and recording coverage.
-Then declare role-appropriate calibration units and splits; repeated observations
+The initial preparation-only audit is complete. Resolve physical-place grouping,
+exported MAP fields, phase/role timing and taxonomy differences, then declare
+role-appropriate calibration units and splits; repeated observations
 of one settlement must not leak between fitting and evaluation. Do not evaluate
 the county-seat model against every excavated farmstead as though they were the
 same target. S1 transfer qualification and the S1e shared-ledger/control rebuild

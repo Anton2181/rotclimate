@@ -1,0 +1,281 @@
+{
+  "status": "preparation_only_no_model_evaluation",
+  "adopt": false,
+  "plan_sha256": "de61e749509a734a6f327589659740de25ced18a73a6b6086df5b2c5834d2352",
+  "source_snapshot_sha256": "6c98275418774637eb0389cbb3466b2b90191465fb28215f4221af39fc5ddf76",
+  "producer_sha256": "0d93fb0bcc0b64e5b70684b035bfe7cf0cfaa30607a9dad03d5d4a3025429fe1",
+  "parser_source_sha256": "a65d1efbaf58eb307ae536cc211c4cc5dcd4a7cbb1deecbf03eb53167c9fb034",
+  "tables": {
+    "rrs_core_data.csv": {
+      "rows": 3652,
+      "nonempty_ids": 3652,
+      "unique_ids": 3652,
+      "repeated_reference_id_rows": 0,
+      "primary_key": "ID",
+      "nonempty_primary_keys": 3652,
+      "unique_primary_keys": 3652,
+      "duplicate_primary_key_rows": 0,
+      "malformed_rows": 0,
+      "headers": [
+        "ID",
+        "COUNTY",
+        "REGION",
+        "SITE_NAME",
+        "FIELDWORK_TYPE",
+        "AREA",
+        "ORGANISATION",
+        "NOTES",
+        "X_REF_MAP",
+        "Y_REF_MAP"
+      ],
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "dialect": "excel_doublequote",
+        "total_columns": 10,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      }
+    },
+    "rrs_site_data.csv": {
+      "rows": 3652,
+      "nonempty_ids": 3652,
+      "unique_ids": 3652,
+      "repeated_reference_id_rows": 0,
+      "primary_key": "ID",
+      "nonempty_primary_keys": 3652,
+      "unique_primary_keys": 3652,
+      "duplicate_primary_key_rows": 0,
+      "malformed_rows": 0,
+      "headers": [
+        "ID",
+        "DATE_START",
+        "DATE_END",
+        "PHASE_DATE1",
+        "PHASE_DATE2",
+        "SETTLEMENT_SIZE",
+        "RURAL_SETTLEMENT_FORM",
+        "DOMESTIC_OCCUPATION",
+        "NO_CIRC_BUILDING",
+        "NO_RECT_BUILDING",
+        "OTHER_BUILDINGS",
+        "PADDOCKS",
+        "MULTI_ROOM_BUILDING",
+        "VILLA_BUILDING",
+        "AISLED_BUILDING",
+        "MASONRY_BUILDING",
+        "TOPOGRAPHY",
+        "AGRICULTURAL_ECONOMY",
+        "TRACKWAY_ROAD",
+        "STRUCTURED_DEPOSITS",
+        "EARLY_SAXON_ACTIVITY",
+        "SITE_SUMMARY"
+      ],
+      "format": {
+        "encoding": "cp1252",
+        "delimiter": ",",
+        "dialect": "excel_doublequote",
+        "total_columns": 22,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      }
+    },
+    "rrs_site_t_major.csv": {
+      "rows": 4365,
+      "nonempty_ids": 4365,
+      "unique_ids": 3652,
+      "repeated_reference_id_rows": 713,
+      "primary_key": "STMID",
+      "nonempty_primary_keys": 4365,
+      "unique_primary_keys": 4365,
+      "duplicate_primary_key_rows": 0,
+      "malformed_rows": 0,
+      "headers": [
+        "STMID",
+        "ID",
+        "SITE_TYPE_MAJOR"
+      ],
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "dialect": "excel_doublequote",
+        "total_columns": 3,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      }
+    },
+    "rrs_site_t_minor.csv": {
+      "rows": 5970,
+      "nonempty_ids": 5970,
+      "unique_ids": 3651,
+      "repeated_reference_id_rows": 2319,
+      "primary_key": "STMID",
+      "nonempty_primary_keys": 5970,
+      "unique_primary_keys": 5970,
+      "duplicate_primary_key_rows": 0,
+      "malformed_rows": 0,
+      "headers": [
+        "STMID",
+        "ID",
+        "SITE_TYPE_MINOR"
+      ],
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "dialect": "excel_doublequote",
+        "total_columns": 3,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      }
+    },
+    "rrs_associd.csv": {
+      "rows": 3054,
+      "nonempty_ids": 3054,
+      "unique_ids": 1961,
+      "repeated_reference_id_rows": 1093,
+      "primary_key": "PRN",
+      "nonempty_primary_keys": 3054,
+      "unique_primary_keys": 3054,
+      "duplicate_primary_key_rows": 0,
+      "malformed_rows": 0,
+      "headers": [
+        "PRN",
+        "ID",
+        "TYPE",
+        "DESCR",
+        "HGATEID",
+        "URL",
+        "HER_NAME"
+      ],
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "dialect": "excel_doublequote",
+        "total_columns": 7,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      }
+    }
+  },
+  "record_joins": {
+    "core_unique_ids": 3652,
+    "site_unique_ids": 3652,
+    "common_ids": 3652,
+    "site_ids_without_core": 0,
+    "core_ids_without_site": 0,
+    "association_orphan_rows": 0
+  },
+  "coordinates": {
+    "exported_MAP_numeric_pairs": 3652,
+    "documented_X_REF_Y_REF_present": false,
+    "exported_MAP_fields_present": true,
+    "MAP_units_assigned": false
+  },
+  "coordinate_transform_performed": false,
+  "clean_joined_record_ids": 3652,
+  "occupation_intervals": {
+    "both_numeric": 3535,
+    "ordered_interval": 3535,
+    "apparent_AD200_compatible": 2641,
+    "BC_endpoint": 963,
+    "missing_or_nonnumeric_endpoint": 117,
+    "zero_valued_endpoint": 2
+  },
+  "major_roles": {
+    "rows": 4365,
+    "records_with_roles": 3652,
+    "multi_role_records": 608,
+    "orphan_rows": 0,
+    "unknown_label_rows": 0,
+    "blank_label_rows": 1,
+    "duplicate_role_rows": 7,
+    "records_per_role": {
+      "communications": 58,
+      "industry": 415,
+      "military": 116,
+      "nucleated settlement": 543,
+      "religious ritual and funerary": 472,
+      "rural landscape": 461,
+      "rural settlement": 2292
+    },
+    "roles_are_not_independent_populations": true
+  },
+  "minor_roles": {
+    "rows": 5970,
+    "records_with_roles": 3651,
+    "multi_role_records": 1549,
+    "orphan_rows": 0,
+    "unknown_label_rows": 356,
+    "blank_label_rows": 0,
+    "duplicate_role_rows": 1,
+    "records_per_role": {
+      "agricultural building": 79,
+      "cave": 15,
+      "farm": 2025,
+      "field system": 802,
+      "fort": 82,
+      "funerary site": 589,
+      "hillfort": 70,
+      "iron production": 214,
+      "isolated building": 21,
+      "jetty": 1,
+      "jetty/bridge": 29,
+      "mansio": 22,
+      "mill": 16,
+      "oppidum": 22,
+      "other industry": 50,
+      "other metal production": 95,
+      "other military": 40,
+      "port": 12,
+      "pottery production": 258,
+      "quarry": 192,
+      "rc temple": 53,
+      "road": 118,
+      "roadside settlement": 355,
+      "salt production": 58,
+      "shrine": 200,
+      "tile production": 46,
+      "unwalled 'small town'": 8,
+      "vicus": 94,
+      "villa": 328,
+      "village": 75
+    },
+    "roles_are_not_independent_populations": true
+  },
+  "size_fields": {
+    "investigated_AREA": {
+      "positive_investigated_area": 2987,
+      "missing_or_nonnumeric": 665
+    },
+    "settlement_size_nonempty": 3646,
+    "settlement_size_distinct": 4,
+    "short_size_wordlist_counts": {
+      "large (9+ ha)": 288,
+      "medium (4 - 8 ha)": 364,
+      "small (<1 - 3 ha)": 1528,
+      "uncertain": 1466
+    },
+    "long_size_label_records": 0,
+    "population_estimated": false
+  },
+  "shared_association_identifiers": {
+    "HERMON": 44,
+    "HERID": 5,
+    "OASIS": 10,
+    "SITE": 4,
+    "HEREV": 7,
+    "HERSO": 5,
+    "NMR": 1,
+    "MUSEUM": 2
+  },
+  "physical_settlement_groups_inferred": false,
+  "model_predictions_loaded": false,
+  "model_scores_computed": false,
+  "target_maps_generated": false,
+  "limits": "Record IDs are not proven unique settlements; size/roles/date intervals do not establish population, phase-specific functions or political authority. British source overlaps Roman development; no independent/sealed status."
+}

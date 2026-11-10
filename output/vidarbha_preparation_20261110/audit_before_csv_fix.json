@@ -1,0 +1,185 @@
+{
+  "status": "preparation_only_no_model_scores",
+  "adopt": false,
+  "plan_sha256": "64ab7c73965aa932a2af13ab076cddec415ac148cec46a8ba16b84d796a4c861",
+  "source": {
+    "doi": "10.5281/zenodo.3667657",
+    "license": {
+      "id": "cc-by-4.0"
+    },
+    "api": "https://zenodo.org/api/records/3667657",
+    "files": [
+      {
+        "name": "Vidarbha_SiteMasterList.csv",
+        "bytes": 1620,
+        "source": {
+          "id": "b5d04164-1e0f-4ad8-a9a9-b344d70897c9",
+          "key": "Vidarbha_SiteMasterList.csv",
+          "size": 1620,
+          "checksum": "md5:95e8bea8c7cd3905c4993e1ce75fde81",
+          "links": {
+            "self": "https://zenodo.org/api/records/3667657/files/Vidarbha_SiteMasterList.csv/content"
+          }
+        },
+        "sha256": "40f0e557b82141698d291c67609bc7947df37bf672594dcd9d2fd08d025be534"
+      },
+      {
+        "name": "Vidarbha_SettlementSites.csv",
+        "bytes": 6520660,
+        "source": {
+          "id": "ca8fbcb7-285a-4c3c-9345-d9eda738e608",
+          "key": "Vidarbha_SettlementSites.csv",
+          "size": 6520660,
+          "checksum": "md5:f097468107872ccbe4ad3380d1a70c7a",
+          "links": {
+            "self": "https://zenodo.org/api/records/3667657/files/Vidarbha_SettlementSites.csv/content"
+          }
+        },
+        "sha256": "daec3b011167dd77b11b68cadc0530087c87fbc270b6ccef65789efc2ece07e3"
+      }
+    ]
+  },
+  "tables": {
+    "Vidarbha_SiteMasterList.csv": {
+      "headers": [
+        "SiteCode",
+        "YCoord",
+        "Xcoord"
+      ],
+      "rows": 60,
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "total_columns": 3,
+        "blank_header_columns": 0,
+        "nonempty_unnamed_cells": 0,
+        "nonempty_extra_cells": 0
+      },
+      "site_id_nonempty": 60,
+      "unique_site_ids": 60,
+      "duplicate_site_id_rows": 0,
+      "site_id_styles": {
+        "digits_only": 0,
+        "prefixed": 60
+      },
+      "documented_coordinate_columns_present": true,
+      "numeric_coordinate_pairs": 60,
+      "plausible_documented_axis_pairs": 0,
+      "plausible_swapped_axis_pairs": 60,
+      "metadata_field_completeness": {},
+      "date_text_flags": {
+        "early_historic": 0,
+        "megalithic": 0,
+        "medieval": 0,
+        "explicit_era_text": 0
+      }
+    },
+    "Vidarbha_SettlementSites.csv": {
+      "headers": [
+        "SiteCode",
+        "SiteName",
+        "SiteArea(ha)",
+        "Mound(s)?",
+        "MoundElevation(m)",
+        "MoundExtentNS(m)",
+        "MoundExtentEW(m)",
+        "SurfaceScatter(s)?",
+        "ScatterExtentNS(m)",
+        "ScatterExtentEW(m)",
+        "VisibleArchFeatures?",
+        "ExcavationMethod",
+        "ExcavatedArea(m2)",
+        "ExcavatedAreaDetails",
+        "ExFeatureType(s)",
+        "ExFeatureNotes",
+        "Pottery",
+        "PotteryDetails",
+        "Brick",
+        "BrickDetails",
+        "Bone",
+        "BoneDetails",
+        "Glass",
+        "GlassDetails",
+        "Metal",
+        "MetalDetails",
+        "Shell",
+        "ShellDetails",
+        "Slag",
+        "SlagDetails",
+        "Stone",
+        "StoneDetails",
+        "Teracotta",
+        "TeracottaDetails",
+        "Enviro",
+        "EnviroDetails",
+        "OtherFinds",
+        "ArtefactNotes",
+        "RecordedDate",
+        "BasisOfDate(s)",
+        "SiteInterp"
+      ],
+      "rows": 390,
+      "format": {
+        "encoding": "utf-8-sig",
+        "delimiter": ",",
+        "total_columns": 16375,
+        "blank_header_columns": 16334,
+        "nonempty_unnamed_cells": 1,
+        "nonempty_extra_cells": 0
+      },
+      "site_id_nonempty": 390,
+      "unique_site_ids": 389,
+      "duplicate_site_id_rows": 1,
+      "site_id_styles": {
+        "digits_only": 0,
+        "prefixed": 390
+      },
+      "documented_coordinate_columns_present": false,
+      "numeric_coordinate_pairs": 0,
+      "plausible_documented_axis_pairs": 0,
+      "plausible_swapped_axis_pairs": 0,
+      "metadata_field_completeness": {
+        "RecordedDate": {
+          "nonempty": 307,
+          "distinct_nonempty": 110
+        },
+        "BasisOfDate(s)": {
+          "nonempty": 390,
+          "distinct_nonempty": 12
+        },
+        "SiteInterp": {
+          "nonempty": 308,
+          "distinct_nonempty": 4
+        }
+      },
+      "date_text_flags": {
+        "early_historic": 79,
+        "megalithic": 0,
+        "medieval": 69,
+        "explicit_era_text": 19
+      }
+    }
+  },
+  "joins": {
+    "master_unique_ids": 60,
+    "settlement_unique_ids": 389,
+    "common_ids": 0,
+    "casefold_common_ids": 0,
+    "settlement_ids_missing_from_master": 389
+  },
+  "decision": {
+    "ready_for_located_transfer": false,
+    "reasons": [
+      "No settlement IDs join the supplied coordinate master list",
+      "No coordinate row passes the documented-axis regional envelope; swapped-axis plausibility is diagnostic only",
+      "Duplicate settlement IDs need source-level resolution"
+    ],
+    "no_automatic_axis_swap": true,
+    "no_fuzzy_id_join": true
+  },
+  "targets_prepared": true,
+  "model_predictions_loaded": false,
+  "model_scores_computed": false,
+  "source_sha256": "5c6c48f9ee82c5a9159c17aaf7f0e263245745fdb338bcd093d1541d76981fe0",
+  "interpretation": "Archaeological literature records, not a complete settlement/population census. No automatic independent or sealed status. No AD200 date invented from broad eras."
+}

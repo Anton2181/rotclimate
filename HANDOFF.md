@@ -1,3 +1,45 @@
+# S2 rural preparation complete; roles/coordinates still unresolved — 10 November 2026
+
+* FULL queue remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md; do not drop
+  S1c history, S1d transfer, S1e shared-ledger/control integration or S2–S5. Physics
+  has its separate queue. Adaptive settlement milestone88ea2104 is pushed to BOTH
+  maintained branches; exact108 results and all climate/map fields remain unchanged.
+* Rural preparation plan frozen066db539 BEFORE site tables read. Public exact ADS
+  encoded download links work; unencoded guessed links403. Metadata/schema/role
+  lookups verified; five raw tables cached locally under reviewed ADS research terms,
+  NOT redistributed. Only aggregate outputs/source hashes published.
+* source output/roman_rural_preparation_20261110:3652 core/site IDs join; all declared
+  PKs unique, role/association orphans0. Major-role observations4365,608multi-role
+  records; minor5970,1549multi-role. Minor lookup omits356 observations (principally
+  roadside settlement), retained explicitly. Raw IDs are NOT unique physical places.
+* 3535 numeric ordered occupation spans,117missing;2641 compatibleAD200, not proof
+  each role active then. AREA means EXCAVATED/INVESTIGATED area; never full urban
+  area/population. Separate settlement-size wordlist has1466uncertain records.
+* Actual core export has X_REF_MAP/Y_REF_MAP, NOT documented X_REF/Y_REF OSGB fields.
+  No automatic alias, projection or target map; units/precision remain unresolved.
+  Extra PHASE_DATE1/2 also need interpretation. Sources overlap Roman geography and
+  excavation selection: no independent/sealed status and NO model score.
+* CSV correctness fix: Sniffer inferred doublequote=False, misreading later escaped
+  quotes. Shared reader now standard comma/Excel. Regression includes quotes,
+  commas,newlines. Vidarbha old source/audit preserved; parser_correction.json proves
+  unchanged row counts/zero joins/axis findings/decision. Removed false unnamed-cell
+  warning, corrected some distinct-text counts. No climate/settlement runs change.
+* New reports ROMAN_RURAL_PREPARATION_20261110.md and SETTLEMENT_ROLE_CONTRACT_20261110.md
+  distinguish record/place/dated function/institution actor. Do NOT treat all villages,
+  farms/roads/roles as authority sources, convert icon diameter to area, or read a
+  legion founding number as troop strength. Shared people/food ledger must consume
+  roles once; no automatic Empire owner from a Roman-period source.
+* QA:52 focused tests pass; fresh preparation snapshot/audit byte-exact; both
+  numerical settlement studies unchanged vs88ea2104. Normal source/adaptive/evidence
+  browsers pass; native collapsed panel, keyboard, aggregate downloads and mobile/
+  dark tested. Focused Windows26critical files/634local dependencies pass; launcher
+  release verifies. Full ZIP/site copy not rebuilt under quota.
+* NEXT concrete work: document exported MAP CRS/precision from official mapping
+  metadata, resolve physical-place grouping (association/project IDs are not proven
+  site groups), phase/role timing and taxonomy. Then freeze role-appropriate
+  calibration/splits, controlling repeated observations/coverage. No role-only overlay
+  without settlement/population and institutional/control consumers. S1 remains open.
+
 # Adaptive settlement spacing complete; no adoption; transfer source rejected — 10 November 2026
 
 * Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md at every continuation. Full
