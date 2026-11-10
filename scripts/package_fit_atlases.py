@@ -288,9 +288,11 @@ def main():
              ROOT/'output/seasonal_cycle_20261026_verified/rainfall_initialization.png',
              ROOT/'scripts/serve_atlases.py', ROOT/'scripts/read_coverage_grid.py', ROOT/'start_atlases.command', ROOT/'start_atlases.bat']
     files += [ROOT/'reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md',
+              ROOT/'reports/SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md',
               ROOT/'reports/SETTLEMENT_LOCATIONS_20261110.md',
               ROOT/'reports/figures/settlement_locations_20261110.png',
               ROOT/'calibration/settlement_locations_20261110/plan.json']
+    files += sorted(p for p in (ROOT/'calibration/settlement_locations_20261110/data_queue').glob('*') if p.is_file())
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

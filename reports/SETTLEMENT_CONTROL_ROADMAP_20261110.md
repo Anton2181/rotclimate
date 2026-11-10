@@ -138,6 +138,13 @@ both pools (Han0.591, Rome0.422), but has worse spacingKS than the selected9km
 stochastic lead. Preserve both; do not silently replace the frozen winner or
 claim this inspected tradeoff is fresh validation. The9km
 raster/exclusion has an explicit spacing-error floor and is not a village test.
+Concrete next data candidates are recorded in
+[SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md](SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md)
+and its machine-readable registry: Vidarbha for geographical/role transfer audit,
+Roman rural Britain for S2, and phased crop/collection evidence for S4. These have
+metadata-only exposure, no target CSVs or scores, and no sealed status. The
+Vidarbha readme reverses usual X/Y coordinate naming; verify it before loading.
+
 Then S1d needs a frozen defensible prospective transfer protocol; exposed Han,
 Rome, Sui, Tang, Hellenistic, medieval-city and Domesday pools cannot qualify as
 new unseen tests. Hellenistic source recovery/extra development comparison also
@@ -153,3 +160,4 @@ Then continue S2–S5 above. No parent stage is complete; no later stage is drop
 |2026-11-10|Full programme persisted and pushed; commit67f68aad|Five stages, completion criteria, cross-cutting requirements|S1a/b|
 |2026-11-10|Development protocol frozen; commit17c73556|Twelve variants, fixed counts, exposed data only, no adoption|Recover inputs and run|
 |2026-11-10|S1a/b initial comparison complete|See settlement-locations report; no production adoption|S1c/d, then S1e; retain S2–S5|
+|2026-11-10|Next Earth data candidates audited at metadata/schema level|Vidarbha, Roman rural Britain, Cambridge crop/collection evidence; no target tables/scores or sealed status|Occupancy/tradeoff work and preparation-only source audit|

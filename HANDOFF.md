@@ -19,6 +19,13 @@
   BOTH pools (Han.591/Rome.422), at worse spacingKS .472/.407 than the9km lead.
   Next S1c: study this location/spacing tradeoff and historical occupancy/roles;
   do not silently replace the frozen lead or call inspected tradeoffs unseen.
+* Follow-up metadata queue: reports/SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md and
+  calibration/settlement_locations_20261110/data_queue/candidates.json. Vidarbha
+  archaeological inventory (non-Roman geography) for S1d/S2 audit; Roman rural
+  Britain for S2 roles; Wiseman/Cambridge phased archaeobotany for S4. NO target
+  CSVs/coordinates or scores loaded, NO sealed status granted. Vidarbha methods
+  readme/source receipt tracked: YCoord=longitude, XCoord=latitude (counterintuitive).
+  Audit schema/date/coverage/recording effort before any prospective score.
 * S1d needs a defensible prospective protocol/new pool before adoption. Han/Rome,
   Sui/Tang/Hellenistic/medieval/Domesday remain exposed. 9km exclusion rejects
   exactly9km pairs, creating a spacing-error floor; this is not village validation.
