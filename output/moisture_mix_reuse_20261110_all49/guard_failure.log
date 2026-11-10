@@ -1,0 +1,24 @@
+multiprocessing.pool.RemoteTraceback:
+"""
+Traceback (most recent call last):
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/pool.py", line 125, in worker
+    result = (True, func(*args, **kwds))
+                    ^^^^^^^^^^^^^^^^^^^
+  File "/workspace/rotclimate/scripts/check_moisture_mix_reuse_all49.py", line 29, in one
+    if case_hash(case)!=record['case_identity']:raise ValueError('Changed case: '+name)
+                                                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Changed case: iberia
+"""
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/workspace/rotclimate/scripts/check_moisture_mix_reuse_all49.py", line 98, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/rotclimate/scripts/check_moisture_mix_reuse_all49.py", line 91, in main
+    rows=list(pool.imap_unordered(one,[(n,specs,r,a,identity) for n,(r,a) in records.items()],chunksize=1))
+         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/opt/codex/runtimes/codex-primary-runtime/dependencies/python/lib/python3.12/multiprocessing/pool.py", line 873, in next
+    raise value
+ValueError: Changed case: iberia

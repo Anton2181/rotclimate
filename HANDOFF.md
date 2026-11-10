@@ -70,6 +70,34 @@
   C3 branch still running first generation. Direct seeded first-population replay for r44/warm exactly
   matches all actual proposed parameters (0 difference); uneven draws are seed variation, not resume drift.
 
+# Isolated moisture-mixing reuse candidate — 10 November 2026
+
+* NOT integrated into rotclimate; leave all model/scoring modules unchanged until the full P8d search,
+  finalist diagnostics and research publication finish. Separate interpreter compiles a small proposed
+  solve_moisture function; caches the previous residual check's vapor mixing target for the next Picard
+  solve at that identical W. Cache is saved before adding condensate. Legacy non-residual calls unchanged.
+* scripts/probe_moisture_mix_reuse.py, _expanded.py; output/moisture_mix_reuse_20261110 and _expanded
+  retain exact before/proposed source snippets, frozen protocols and ABBA CPU measurements. Warmup then
+  baseline/reuse/reuse/baseline; compare ALL result arrays and complete numerics, not merely T/P scores.
+* Japan r44 pilot CPUratio .9350; expanded Bengal .9179, Queensland .9619, Patagonia .9524, warmC3Japan
+  .9757; expanded pooled CPUratio .9539. Every output field + numerical history EXACT. Wall times suffer
+  concurrent-search contention; do not report wall-speed claims. No climate-accuracy gain or adoption.
+* Four new tests cover residual checks on/off x condensation on/off; exact W/P, iterations/residuals,
+  linear histories, fewer mixing calls only when residual checks active. Combined tests25pass.
+* reports/MOISTURE_MIX_REUSE_20261110.md. If integrating later, extend exact replay to full dev set and
+  preserve old function as immutable reference; move prototype-specific tests to integrated function.
+  Probe helper deliberately expects the old source shape and refuses silent reinterpretation after a
+  core edit. It must be adapted/retired when core integration occurs. Current published atlas unchanged.
+* Full49 paired byte/numerical replay NOW RUNNING in separate workers (session25704), while C3 finishes
+  calibration. scripts/check_moisture_mix_reuse_all49.py; output suffix _all49_float_resolution; log under
+  joint_ocean_land_20261110/mix_reuse_all49_float_resolution.log. All9 result arrays hashed byte-for-byte,
+  full numerics compared, control T/P tied to original fresh reference archives. Equality only, NOT timing.
+  Do NOT edit any rotclimate module or helper source until this also finishes.
+* Initial all49 attempt aborted at case identity: caller used int56 while reference uses float56.0;
+  case_hash JSON metadata distinguishes numeric representation. Float56.0 matches frozen Iberia hash
+  exactly; no geographic/cache data changed and current calibration is unaffected. Old failed namespace
+  _all49 retains protocol, original source-exact driver and reason; corrected run has a NEW directory.
+
 # Joint ocean/land refit frozen plan — 10 November 2026
 
 * Campaign calibration/joint_ocean_land_20261110/campaign.json frozen BEFORE optimizer candidates:3starts,
