@@ -1,4 +1,28 @@
-# Joint ocean/land refit READY — 10 November 2026
+# Joint ocean/land refit RUNNING — 10 November 2026
+
+* Search launched 10:06 UTC; driver PID1256 on this host (inspect actual processes after resume, never assume
+  a PID survived). Frozen driver identity a87f03c6e88d1c8f275973592132c48948715deedc1fcfc59eda503608fcc9ac.
+  Three controls complete: r44 S1.0000, warm S1.024742, warmC3 S1.015645. First r44 offspring are worse;
+  search still running, no conclusion until all51. Planned two generations/start are NOT convergence.
+* New read-only report/publisher scripts: report_joint_ocean_land_refit.py checks all49 raw error pairs,
+  recomputes aggregate scores, rejects duplicate/gapped trial indices, verifies frozen source hashes,
+  plots every trial. publish_joint_ocean_land_refit.py publishes saved progress OUTSIDE completed studies
+  until both search and follow-up finish. Three downloadable JSONL journals are exact snapshot records.
+* check_joint_ocean_land_finalists.py implements predeclared followup_plan.json: after clean completion,
+  verify state n17 / two generations / JSONL best consistency; freeze all3 cost-best profiles; run fresh
+  r44+3 marine audits. Only cost-best profiles passing existing S49/T/P screen get fresh paired49 replay,
+  fixed fine28 and all spent-h stress. No substitute finalist, unseen pool, tuning, or adoption. Driver is
+  resumable against its frozen input identity; avoid editing its source once follow-up begins.
+* Tests20pass (16 optimizer/source/RNG +4 reporting/pair/replay). Browser checker now parses JSONL as
+  per-line JSON, requiring sequential indices, rather than attempting a single JSON object.
+* Active physics/maps remain r44/v2.2. Progress panel changes research/evidence assets only; regenerate hub
+  release hashes after publication and check normal launcher/Windows/portable. No raw atlas rebuild.
+* First saved panel (6/51 evaluations, 10:20UTC): browser75completed studies/174images PASS; Windows1552
+  byte-exact assets PASS; portable2148files/709links/fresh launcher PASS. Bundle refreshed in /tmp.
+* After search: `.venv/bin/python -u -I scripts/check_joint_ocean_land_finalists.py`, then publish with
+  `.venv/bin/python -I scripts/publish_joint_ocean_land_refit.py` and `scripts/build_fit_hub.py`.
+
+# Joint ocean/land refit frozen plan — 10 November 2026
 
 * Campaign calibration/joint_ocean_land_20261110/campaign.json frozen BEFORE optimizer candidates:3starts,
   six shared numeric parameters (SST offset/current strength + land offset/amplitude/thermal/radiative time),

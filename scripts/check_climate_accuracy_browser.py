@@ -2,6 +2,7 @@
 from pathlib import Path
 import argparse
 import json
+from urllib.parse import urlparse
 from playwright.sync_api import sync_playwright
 
 
@@ -45,9 +46,14 @@ def main():
         assert page.locator('.number').all_inner_texts()==expected
         downloads=[]
         for link in page.locator('a[download]').all():
-            response=page.request.get(link.evaluate('(el)=>el.href'))
+            url=link.evaluate('(el)=>el.href')
+            response=page.request.get(url)
             assert response.ok and response.headers['cache-control']=='no-store'
-            response.json()
+            if urlparse(url).path.endswith('.jsonl'):
+                rows=[json.loads(line) for line in response.text().splitlines() if line.strip()]
+                assert rows and [row['n'] for row in rows]==list(range(len(rows)))
+            else:
+                response.json()
             downloads.append(link.inner_text())
         assert len(downloads)>=2
         for theme in ['light','dark']:

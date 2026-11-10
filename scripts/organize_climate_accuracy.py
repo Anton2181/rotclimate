@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('joint-ocean-land','Joint ocean/land refit: three equal-budget starting profiles'),
     ('shared-sst-screen','Shared SST/current changes: better sea temperatures, worse land climate'),
     ('air-sea-exchange','Actual surface heat exchange: r44 and the rejected coastal scheme'),
     ('dry-branch-validation','Complete 61-region drying-bound qualification'),
