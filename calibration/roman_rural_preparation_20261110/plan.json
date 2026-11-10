@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-10",
+  "status": "frozen_before_site_or_coordinate_tables_loaded",
+  "stage": "S2 source preparation only; not closure of S1 transfer or adoption",
+  "source_doi": "10.5284/1030449",
+  "source_version": "ADS Roman rural settlement archive,2015 updated2018, collection1352",
+  "known_before_plan": "Public introduction/download list plus database DDL metadata and major/minor classification lookups inspected. No core/site/association/role observation table loaded. Published approx3600 records describe approx2500 settlements, not a full census. Exact encoded public download links work; guessed unencoded paths return403.",
+  "access": "Research preparation using official archive URLs and reviewed ADS Terms of Use and Access. Cache original CSVs locally, retain citations/URLs/SHA256; do not redistribute raw source tables. Locally computed hashes are not independently published source checksums.",
+  "requested_tables": ["rrs_core_data.csv","rrs_site_data.csv","rrs_site_t_major.csv","rrs_site_t_minor.csv","rrs_associd.csv"],
+  "checks": {
+    "identity": "Audit source record ID/primary-key uniqueness and joins; major/minor role rows reference site-data ID, association records reference core-data ID. Do not claim core IDs are unique physical settlements, or merge records by nearest location or an unverified shared project identifier.",
+    "coordinates": "X_REF/Y_REF are source-documented OSGB easting/northing text fields. Retain leading zero/format evidence; report missing/non-numeric/length/plausibility counts without automatic projection, lat/lon guessing or target maps.",
+    "time": "DATE_START/DATE_END have negative BC values. Report missing/inverted/zero-valued dates and apparent interval compatibility with AD200 separately. Broad span compatibility does not establish continuous or precisely dated occupation; unknown is not absent or always active.",
+    "roles": "Keep simultaneous major/minor categories by source-record ID; audit unknown labels, duplicates and orphan rows. Farms/villas/villages/towns/forts/religious/industrial/route observations are not all administrative centres or independent authority sources.",
+    "size": "AREA measures investigated/excavated hectares, not full settlement or urban area. SETTLEMENT_SIZE is a separate source wordlist; inspect completeness/distinct bins but do not convert to population or treat graphic markers as measured extents.",
+    "coverage": "Retain region/fieldwork metadata and multi-record/association patterns. This is excavation-selected Britain overlapping the existing Roman development geography, not complete site counts or automatically independent/global transfer evidence."
+  },
+  "forbidden": "No climate lookup, candidate fitting, validation score, coordinate map, population/control update, actor assignment from role or geography, or automatic sealed status. No de facto source can be created from a record count alone.",
+  "output": "Aggregate schema/join/date/role/coverage audit and source identities, with no individual coordinates/site rows; decide preparation readiness for separately declared S2 role-specific calibration. All S1c/S1d/S1e and S3–S5 work remains open."
+}
