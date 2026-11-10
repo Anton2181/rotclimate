@@ -1,6 +1,23 @@
-# Joint ocean/land refit RUNNING — 10 November 2026
+# Joint ocean/land refit COMPLETE — 10 November 2026
 
-* 11:09UTC: all starts finished phase9; second-generation r44 running. Phase9 best S: r44 1.0000,
+* FINAL: all3 starts finish17 evaluations (51profiles/2499regional solves), no failed trial; all48 actual
+  optimized proposal vectors replay EXACTLY from the seeds/costs, max difference0. All checkpoint states
+  n17/two generations/no pending and JSON-normalized best/full params verified. Final journals, full
+  best params, identities and resumable optimizer/RNG states now retained at their original chain paths.
+* Best S49: r44 1.0000; warm1.0132434; warmC3 .99613647. C3 T−1.6533%, P+0.8806%, combined−.3864%:
+  misses the required .5% improvement. None advances; no extra fine28/spent-h run, unseen pool or adoption.
+* All24 predeclared marine runs PASS. SSTcurveMAE r44 2.27124, warm1.91636, C3 2.12623; marine-aircurve
+  MAE1.62089,1.71053,1.47838 respectively. Separate WOA/NCEP references, not observed fluxes or ocean budget.
+* Automatic continuation FINISHED (continuation.log says DONE); do not restart its old PID/session.
+  Search/followup summary+status completed. Publisher moves study into completed experiments; full report
+  and plots in normal climate-accuracy page. r44/v2.2 Earth map fields/corrections stay adopted/unchanged.
+* 49-region mixing-cache equality study also COMPLETE/PASS: every byte of T/Tsl/P/W/u/v/E/snow/days,
+  complete numerical histories and original fresh-reference monthly T/P match. It is still an ISOLATED
+  proposal until core integration; all frozen-source checks/publication must finish first. No accuracy gain.
+* Model/scoring source remained exactly frozen for this campaign. Any subsequent cache integration must
+  preserve this original source lineage; old checkpoint resume requires the matching pre-integration code.
+
+* Historical11:09UTC checkpoint: all starts finished phase9; second-generation r44 running. Phase9 best S: r44 1.0000,
   warm1.024742, C3 1.002804; none qualifies. Immutable phase9_checkpoint contains all3 matching journals,
   full best params, search identities and optimizer+RNG pickles, with a16-file SHA manifest and recovery
   directions. Verified n9/one generation/no pending candidates, JSON-normalized best and full params.

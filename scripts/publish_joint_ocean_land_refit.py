@@ -191,8 +191,27 @@ a distinct fixed exchange branch rather than a continuous variable of the same s
     if marine is not None:
         with REPORT.open('a') as stream:
             stream.write('\n![Separate sea and air diagnostics](../atlases/climate_accuracy/data/joint_refit_marine.png)\n\n')
-            stream.write('Final follow-up measurements (h is spent, not independent):\n\n```json\n'+
-                         json.dumps(follow['checks'], indent=2)+'\n```\n')
+            stream.write('| Profile | Coastal SST curve MAE, °C | Coastal air curve MAE, °C |\n'
+                         '|---|---:|---:|\n')
+            for name in ['r44',*LABELS]:
+                label=LABELS.get(name,'r44 reference')
+                stream.write(f'| {label} | {metrics[name]["sst_curve_mae_c"]:.6f} | '
+                             f'{metrics[name]["air_curve_mae_c"]:.6f} |\n')
+            if follow['checks']:
+                stream.write('\nFinal development follow-up (h is spent, not independent):\n\n```json\n'+
+                             json.dumps(follow['checks'], indent=2)+'\n```\n')
+            else:
+                stream.write('\nNo cost-best profile cleared the 0.5% development threshold with the '
+                    'aggregate component guards. Accordingly, no additional 28-km or spent-h stress '
+                    'runs were triggered. All 24 predeclared marine runs passed numerical checks. '
+                    'No new independent pool was opened and r44 remains adopted.\n')
+            stream.write('\nThe best C3 profile improves aggregate temperature MAE by about 1.65%, '
+                'while rain loss worsens about 0.88%; the combined gain is about 0.39%. Its six-coast '
+                'SST and air curve errors are lower, but this does not establish a qualified new '
+                'climate or a global optimum. The earlier unwarmer C3 already passed development '
+                'and finer checks before failing the then-unseen h test; this is not the first '
+                'C3 development gain, and h remains spent. These new profiles use fresh paired '
+                'inputs, including the recovered Tripolitania footprint.\n')
     register=ROOT/'calibration/earth_components_20261105/dataset_usage.json'
     exposure=json.loads(register.read_text());exposure['date']='2026-11-10'
     entry=dict(id='joint_ocean_land_refit_p8d',status='development_and_spent_diagnostics',

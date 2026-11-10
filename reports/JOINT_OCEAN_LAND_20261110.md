@@ -1,6 +1,6 @@
 # Joint ocean/land response refit — 10 November 2026
 
-**Calibration in progress. Saved 2026-11-10 10:51 UTC; 21/51 evaluations. r44 remains adopted.**
+**Completed search and development checks. Saved 2026-11-10 12:01 UTC; 51/51 evaluations. r44 remains adopted.**
 
 Three frozen starts receive equal budgets of one starting control plus two CMA generations of eight:
 r44, a +1.5 K SST-offset/-1.5 K current-strength start, and the same warmer sea with previously rejected
@@ -17,9 +17,9 @@ reported without vetoes. Cost-best profiles must meet S49 <= 0.995 and both aggr
 
 | Start | Evaluations | Best T MAE, °C | Best rain loss | S49 | Search cost | Development screen |
 |---|---:|---:|---:|---:|---:|---|
-| r44 start | 9/17 | 1.861975 | 0.487956 | 1.000000 | 1.000000 | Does not clear development screen |
-| Warmer-sea start | 9/17 | 1.893630 | 0.503807 | 1.024742 | 1.083711 | Does not clear development screen |
-| Warmer-sea + C3 start | 3/17 | 1.838326 | 0.506808 | 1.012967 | 1.070235 | Does not clear development screen |
+| r44 start | 17/17 | 1.861975 | 0.487956 | 1.000000 | 1.000000 | Does not clear development screen |
+| Warmer-sea start | 17/17 | 1.881691 | 0.495714 | 1.013243 | 1.026217 | Does not clear development screen |
+| Warmer-sea + C3 start | 17/17 | 1.831191 | 0.492253 | 0.996136 | 0.996136 | Does not clear development screen |
 
 ![Every completed trial](../atlases/climate_accuracy/data/joint_refit_progress.png)
 
@@ -54,3 +54,16 @@ This is an early bounded multistart refit, not a convergence test or a global-op
 and starting profiles compare attainable candidates under equal budgets; they cannot isolate starting-point
 effects from random-seed effects. Agreement within two generations cannot exclude other basins. C3 is also
 a distinct fixed exchange branch rather than a continuous variable of the same search.
+
+![Separate sea and air diagnostics](../atlases/climate_accuracy/data/joint_refit_marine.png)
+
+| Profile | Coastal SST curve MAE, °C | Coastal air curve MAE, °C |
+|---|---:|---:|
+| r44 reference | 2.271243 | 1.620890 |
+| r44 start | 2.271243 | 1.620890 |
+| Warmer-sea start | 1.916357 | 1.710532 |
+| Warmer-sea + C3 start | 2.126232 | 1.478385 |
+
+No cost-best profile cleared the 0.5% development threshold with the aggregate component guards. Accordingly, no additional 28-km or spent-h stress runs were triggered. All 24 predeclared marine runs passed numerical checks. No new independent pool was opened and r44 remains adopted.
+
+The best C3 profile improves aggregate temperature MAE by about 1.65%, while rain loss worsens about 0.88%; the combined gain is about 0.39%. Its six-coast SST and air curve errors are lower, but this does not establish a qualified new climate or a global optimum. The earlier unwarmer C3 already passed development and finer checks before failing the then-unseen h test; this is not the first C3 development gain, and h remains spent. These new profiles use fresh paired inputs, including the recovered Tripolitania footprint.
