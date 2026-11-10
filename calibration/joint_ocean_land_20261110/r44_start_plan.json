@@ -1,0 +1,59 @@
+{
+  "id": "Joint ocean/land response refit: r44_start",
+  "frozen": "2026-11-10, before optimizer candidates",
+  "scoring_policy": "v3",
+  "start": "calibration/joint_ocean_land_20261110/r44_start_params.json",
+  "reference": "output/joint_ocean_land_20261110/reference_dev31",
+  "extra_groups": {
+    "retired_a": {
+      "spec": "calibration/sealed_20261031/regions.json",
+      "reference": "output/joint_ocean_land_20261110/reference_retired_a"
+    },
+    "retired_b": {
+      "spec": "calibration/sealed_20261031b/regions.json",
+      "reference": "output/joint_ocean_land_20261110/reference_retired_b"
+    },
+    "retired_c": {
+      "spec": "calibration/sealed_20261101c/regions.json",
+      "reference": "output/joint_ocean_land_20261110/reference_retired_c"
+    }
+  },
+  "knobs": [
+    [
+      "sst_offset",
+      -5.0,
+      0.0
+    ],
+    [
+      "current_strength",
+      2.0,
+      6.0
+    ],
+    [
+      "land_offset",
+      -3.0,
+      1.0
+    ],
+    [
+      "land_amplitude",
+      0.7,
+      1.2
+    ],
+    [
+      "land_tau_days",
+      0.5,
+      4.0
+    ],
+    [
+      "land_radiative_days",
+      10.0,
+      60.0
+    ]
+  ],
+  "sigma": 0.12,
+  "popsize": 8,
+  "seed": 4410,
+  "evals": 17,
+  "require_reference_reproduction": true,
+  "selection": "Lowest existing v3 cost (S49 plus aggregate T/P penalties only); groups reported, never vetoed. No automatic adoption."
+}

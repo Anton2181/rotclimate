@@ -1,3 +1,24 @@
+# Joint ocean/land refit READY — 10 November 2026
+
+* Campaign calibration/joint_ocean_land_20261110/campaign.json frozen BEFORE optimizer candidates:3starts,
+  six shared numeric parameters (SST offset/current strength + land offset/amplitude/thermal/radiative time),
+  v3S49 objective, no per-group veto. Starts r44, warm15/r44-exchange, warm15/C3-exchange. Fixed Earth
+  forcing, model SST/winds, geography and strict numerics. Existing phenomenological response parameters.
+* Budget17each = start +2CMAgenerations x8, total51evaluations/2499regional solves; phases1/9/17 interleave
+  equally. No dropping weak starts. This is an early bounded refit, not convergence/global-optimum proof.
+* Fresh49 references verified.48exactly reproduce original r44; Tripolitania matches known Nov2 recovered
+  footprint182cells instead of historical195. Direct WorldClim raw rebuild EXACTLY matches current cache;
+  originals retained. reference_reproduction.json records both; use FRESH paired references, no free gain.
+* gate_calibrate v3: shared numeric knobs only, fixed Earth boundary, start inside bounds; candidate case
+  hashes checked before model solve; start/policy/code/software frozen. NumPy RNG saved/restored so exact
+  sampling survives generation-boundary pauses; tests16pass. Legacyv2 objective behavior retained.
+* Driver scripts/run_joint_ocean_land_refit.py runs interleaved phases. Root output/joint_ocean_land_20261110;
+  run.log, status.json, eachstart/evals.jsonl +state.pkl. Model/benchmark/scoring sources/start profiles/policy
+  must stay FIXED while running. Plotting/UI helpers may be developed separately. No new blind pool.
+* After51: report all trajectories/failures, marine diagnostics on six known coasts for all3best profiles.
+  Qualifiers S49<=.995 and aggregate T/P<=1% get fresh dev benchmark/finer28 +spent-h stress, as declared.
+  No adoption/independent validation in this campaign; keep r44/v2.2 atlas +corrections until qualified.
+
 # Shared SST screen COMPLETE — 9 November 2026
 
 * Frozen calibration/shared_sst_screen_20261109/plan.json committed4fba2f09 before runs. Four coordinated

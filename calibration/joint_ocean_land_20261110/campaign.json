@@ -1,0 +1,42 @@
+{
+  "id": "P8d joint ocean-land multistart development campaign",
+  "date": "2026-11-10",
+  "status": "frozen before candidates",
+  "hypothesis": "Sea-only corrections expose land responses tuned around wrong seas. Joint shared responses may improve both; different starts test dependence on the fitted basin.",
+  "starts": {
+    "r44_start": "calibration/joint_ocean_land_20261110/r44_start_plan.json",
+    "warm_start": "calibration/joint_ocean_land_20261110/warm_start_plan.json",
+    "warm_C3_start": "calibration/joint_ocean_land_20261110/warm_C3_start_plan.json"
+  },
+  "budget": {
+    "per_start": 17,
+    "population": 8,
+    "generations_after_control": 2,
+    "total_evaluations": 51,
+    "regional_solves": 2499,
+    "phases": [
+      1,
+      9,
+      17
+    ],
+    "continuation": "All starts receive identical budget; no dropping weak first generations or changing knobs after results."
+  },
+  "objective": "Existing policy_v3 S49 and aggregate temperature/rain safeguards. No regional/group veto. All 49 development regions; h/f/g remain spent.",
+  "forcing": "joint.earth_profile holds Earth orbital/radiative forcing/geography and modeled SST/winds; only six continuous shared response parameters vary. Numerical criteria unchanged.",
+  "bounds_basis": "Existing model response ranges and prior maritime-refit thermal timescale/amplitude bounds. Offsets/current anomalies are phenomenological parameters, not a resolved ocean heat budget.",
+  "reference_sha256": {
+    "output/joint_ocean_land_20261110/reference_dev31/summary.json": "a9bbe64c1d0a3d2e4cce7c3b15867583e4785f995174c858c12c2866291f31b4",
+    "output/joint_ocean_land_20261110/reference_retired_a/summary.json": "7cfadb562ee10488ec6da98049a65550ef0542d3bc275c1330135f3388d52c3f",
+    "output/joint_ocean_land_20261110/reference_retired_b/summary.json": "96d990eef12ed9d1e7e6c83aadf94b19d7a3d19c41079cd7c5d7ef50b2b065cd",
+    "output/joint_ocean_land_20261110/reference_retired_c/summary.json": "4ce0cf3299ba402a9b7b5056d5f03736f87edefe913f367f9c9db91129a7e510"
+  },
+  "source_knobs_sha256": {
+    "calibration/joint_ocean_land_20261110/warm_C3_start_params.json": "b92bc9cf3ae0d50500bfe3f9a360e2e721d35fd28fea41848545bc12751bd9a7",
+    "calibration/joint_ocean_land_20261110/reference_params.json": "71893d13ad10187498a3f2268c5bbcc7f19bcf6ad41d0d2593a68d11a586049d",
+    "calibration/joint_ocean_land_20261110/r44_start_params.json": "71893d13ad10187498a3f2268c5bbcc7f19bcf6ad41d0d2593a68d11a586049d",
+    "calibration/joint_ocean_land_20261110/warm_start_params.json": "9c0875925b352654b2ab05d05ee0f052311d29e42b883b6118e122d559891d14"
+  },
+  "followup": "Report all trajectories and failures. Compare marine diagnostics on same six known coasts for all three best profiles. Candidates passing S49<=.995 and T/P changes<=1% advance to fresh paired dev/finer28 checks and spent-h stress. No new independent pool or adoption in this campaign.",
+  "limits": "Two CMA generations per start are an early bounded refit, not convergence or global-minimum proof. r44/v2.2 and its corrections remain published unless independently qualified replacement.",
+  "reference_context": "All49 fresh paired references. 48 reproduce historical r44 errors; Tripolitania uses documented Nov2 recovered182-cell footprint instead of archived195. Direct WorldClim rebuild verified. No optimizer candidate run before this declaration."
+}
