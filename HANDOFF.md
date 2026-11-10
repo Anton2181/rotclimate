@@ -33,8 +33,31 @@
   1.95x; Patagonia .95x regional annual but only10% wet cells within25%. Regional means hide local error.
   Four illustrated monthly archives are tracked so a fresh checkout can regenerate these figures.
 * Saved 11/51 panel: r44 first generation finished with no gain. Browser75completed studies/175images,
-  Windows1554byte-exact assets, portable2150files/712links and extracted launcher all PASS. No active or
+  Windows1554byte-exact assets, portable2150files/711links and extracted launcher all PASS. No active or
   retired climate-map folders changed. Subsequent optimizer records are still advancing outside Git.
+
+# Current r44 moisture-source audit COMPLETE — 10 November 2026
+
+* Separate unchanged-baseline observer audit, NOT new P8d optimizer evaluations. Four known regions
+  (Japan/Bengal/NorthQueensland/Patagonia) reproduce saved monthly climate/observations bit for bit,
+  pass actual case hashes/all numerics; signed terms reconstruct residual within .000023mm/month.
+  Regional-mean integrated absolute equation residuals <.6mm/year, versus large climate errors.
+* Bengal modeled444 vs observed2143mm/year: advection−32, convergence+319, storm+516, evaporation+284,
+  diffusion+90, drying−732. Queensland1707vs874: parameterized convergence+1183, advection+744,
+  drying−944. Current signed concentration-equation contributions, NOT causal effects of switching off
+  terms or proof of globally conserved water/energy. Monsoon drying is subset of drying, never add twice.
+* Frozen plan calibration/r44_rainfall_sources_20261110/plan.json; wrapper audit_r44_rainfall_sources.py
+  reuses existing check_moisture_sources.audit_one. Artifacts output/r44_rainfall_sources_20261110.
+  New publisher adds source chart + two actual rain-ratio maps, downloadable data, completed study and
+  dataset exposure entry. Both figures posted in chat. No physics coefficients/maps adopted or changed.
+* Reports/R44_RAINFALL_SOURCES_20261110.md. Separate CALIBRATION_STRATEGY_20261110.md verifies primary
+  literature (Petrov2025 LiMMo, Williamson2013 history matching, Couvreux2021 process calibration);
+  proposals only, not changes to current search/selection or an implemented emulator/LES boundary layer.
+* Browser76completed studies/177images, Windows1557exact assets and portable fresh-launcher checks PASS.
+  Research/evidence publication only; main r44/v2.2 Earth and retired atlas map folders unchanged.
+* Current campaign continues: r44 and warm first generations have no improvement over their controls;
+  C3 branch still running first generation. Direct seeded first-population replay for r44/warm exactly
+  matches all actual proposed parameters (0 difference); uneven draws are seed variation, not resume drift.
 
 # Joint ocean/land refit frozen plan — 10 November 2026
 

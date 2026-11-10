@@ -1,6 +1,6 @@
 # Joint ocean/land response refit — 10 November 2026
 
-**Calibration in progress. Saved 2026-11-10 10:31 UTC; 11/51 evaluations. r44 remains adopted.**
+**Calibration in progress. Saved 2026-11-10 10:51 UTC; 21/51 evaluations. r44 remains adopted.**
 
 Three frozen starts receive equal budgets of one starting control plus two CMA generations of eight:
 r44, a +1.5 K SST-offset/-1.5 K current-strength start, and the same warmer sea with previously rejected
@@ -18,8 +18,8 @@ reported without vetoes. Cost-best profiles must meet S49 <= 0.995 and both aggr
 | Start | Evaluations | Best T MAE, °C | Best rain loss | S49 | Search cost | Development screen |
 |---|---:|---:|---:|---:|---:|---|
 | r44 start | 9/17 | 1.861975 | 0.487956 | 1.000000 | 1.000000 | Does not clear development screen |
-| Warmer-sea start | 1/17 | 1.893630 | 0.503807 | 1.024742 | 1.083711 | Does not clear development screen |
-| Warmer-sea + C3 start | 1/17 | 1.846609 | 0.507189 | 1.015581 | 1.074409 | Does not clear development screen |
+| Warmer-sea start | 9/17 | 1.893630 | 0.503807 | 1.024742 | 1.083711 | Does not clear development screen |
+| Warmer-sea + C3 start | 3/17 | 1.838326 | 0.506808 | 1.012967 | 1.070235 | Does not clear development screen |
 
 ![Every completed trial](../atlases/climate_accuracy/data/joint_refit_progress.png)
 

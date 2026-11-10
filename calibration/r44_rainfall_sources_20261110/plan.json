@@ -1,0 +1,20 @@
+{
+  "id": "Current-baseline moisture-source attribution for the four illustrated rainfall failures",
+  "date": "2026-11-10",
+  "physics": "calibration/joint_ocean_land_20261110/reference_params.json",
+  "cell_km": 56,
+  "archives": {
+    "japan": "output/joint_ocean_land_20261110/reference_dev31",
+    "bengal": "output/joint_ocean_land_20261110/reference_retired_b",
+    "north_queensland": "output/joint_ocean_land_20261110/reference_retired_a",
+    "patagonia": "output/joint_ocean_land_20261110/reference_dev31"
+  },
+  "spec_files": [
+    "calibration/local_accuracy_20261023/regions_dev12.json",
+    "calibration/sealed_20261031/regions.json",
+    "calibration/sealed_20261031b/regions.json"
+  ],
+  "control": "Existing observer only. Require all numerical checks, matching actual case hashes, bit-identical float32 monthly climate/observation arrays, and source-term reconstruction of the equation residual.",
+  "scope": "Four reused development regions, unchanged r44 control runs only. Separate from the 51-evaluation P8d candidate budget; no search, coefficients, objective, selection, independent pool or adoption changes.",
+  "interpretation": "Signed contributions to the current discrete concentration-transport equation. Convergence import and storm exchange are parameterized. This is neither causal counterfactual attribution nor proof of a globally conserved water or energy budget. Monsoon drying is a subset of column drying and must not be counted twice."
+}
