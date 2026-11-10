@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "date": "2026-11-10",
+  "status": "development protocol frozen before any candidate Earth scores",
+  "roadmap": "reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md",
+  "stage": "S1a/b; not an atlas adoption protocol",
+  "question": "Can fixed-count weighted site draws reproduce clustered centres better than greedy catchment tiling, without changing the count when the history prior changes?",
+  "count_budget": "Number returned by current polity.settle.place_towns on identical inputs and mask, seed=1. Compatibility budget only: preserves the existing E1-informed count, not a newly fitted analytic count model. No observed evaluation count supplied to placement.",
+  "inputs": "Recover the adopted slope arability/HAND-irrigation Earth land-and-people run under current source. Rebuild Earth windows from WorldClim 2.1 and Natural Earth rivers. Han 2AD uses Zheng/Wu seats and commandery masks. Roman150 uses Hanson towns, Cliopatria extent and Itiner-e roads only if their sources are recovered. Old Nov7 raw NPZ inputs are absent: paired newly recomputed baselines are mandatory, not old JSON metrics.",
+  "data_use": "HanAD2 and RomeAD150 are exposed development data. Hellenistic, Sui610, Tang742, medieval cities and Domesday are also spent, not fresh validation. No independent qualification or default change here. Missing pools remain explicitly incomplete.",
+  "eligibility": "Current base-density threshold, dry-land water restriction and marked-anchor catchments; independent of history. Evaluation seats are not marked anchors.",
+  "location_variants": {
+    "baseline": "Unchanged production greedy catchment placement, seed=1",
+    "candidate_grid": "Cross stochastic={false,true}, minimum_spacing_km={9,18,27}, history={none,old_cores_L800}: 12 prespecified variants; 5 seeds for stochastic variants, one for deterministic variants.",
+    "sampler": "Gumbel-ranked weighted sampling without replacement followed by declared minimum-distance exclusion; deterministic ablation ranks suitability without noise. Retain constraints, report shortfalls, never silently relax exclusions.",
+    "history": "External relative weight exp(-D/800km), existing population_cores.travel_distance with cradles+Rome, forest_cost=2, sea_cost=1, relief_cost=1. Changes no base population, eligibility or count budget. Historical scenario, not farming-spread model; Rome is not a timeless medieval attractor.",
+    "seeds": [1,7,19,43,97]
+  },
+  "metrics": "Natural-count precision/recall/F1 within25km, 100km-block rank, spacing KS, nearest-neighbour quantiles, count and shortfall. Separately report historical best-prefix matching for comparability: not one-to-one matching. One site per grid cell; 9km cannot resolve every village.",
+  "development_ranking": "No every-region veto. Among variants meeting all requested counts, rank equal-pool ensemble-mean [F1+(M1+1)/2+(1-M3)]/3. Retain all pool changes and seed min/max. Development lead only, no prospective qualification.",
+  "qualification": "S1c/d must resolve occupancy and freeze a defensible prospective transfer protocol before adoption. Production settlements, tracks, staffing and de-facto control remain unchanged until then.",
+  "sources": ["https://doi.org/10.1016/j.jas.2012.12.025","https://doi.org/10.6084/m9.figshare.30518417","https://www.worldclim.org/data/worldclim21.html","https://www.naturalearthdata.com/"]
+}
