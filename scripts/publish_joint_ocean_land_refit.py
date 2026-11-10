@@ -12,6 +12,7 @@ sys.path[:0] = [str(ROOT), str(ROOT/'scripts')]
 from local_benchmark_protocol import write_json
 from report_joint_ocean_land_refit import SOURCE, LABELS, COLORS, eligible, summarize, plot
 from organize_climate_accuracy import organize
+from plot_joint_reference_seasons import main as plot_reference_seasons
 
 DATA = ROOT/'atlases/climate_accuracy/data'
 REPORT = ROOT/'reports/JOINT_OCEAN_LAND_20261110.md'
@@ -62,6 +63,7 @@ def marine_plot(metrics, path):
 
 
 def main():
+    plot_reference_seasons()
     result = summarize()
     stamp = datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M UTC')
     follow_path = SOURCE/'followup/summary.json'
@@ -115,6 +117,7 @@ def main():
             section += '<div class="table"><table><thead><tr><th>Cost-best profile</th><th>Fresh S49</th><th>Paired S28</th><th>Spent-h stress S</th></tr></thead><tbody>'+''.join(check_rows)+'</tbody></table></div><p>The h regions were already evaluated; their scores are stress checks, never new independent validation.</p>'
         else:
             section += '<p>No cost-best profile cleared the development screen, so no finalist advanced to additional 28-km or spent-h checks.</p>'
+    section += '''<figure><img src="data/joint_refit_reference_rainfall.png" alt="Current r44 monthly rainfall in Japan, Bengal, North Queensland and Patagonia versus observations"><figcaption>Baseline examples separate total moisture shortage, seasonal timing and spatial error. Patagonia's nearly correct regional annual total hides large local errors. Curves are regional means; canonical metrics still score every cell and month. Southern examples are restored to the actual Earth calendar.</figcaption></figure><p><a href="data/joint_refit_reference_rainfall.json" download>Verified baseline curves and rainfall metrics</a></p>'''
     section += f'''<p><strong>r44/v2.2 remains adopted.</strong> This campaign cannot replace the physical atlas or retrain its correction models automatically.</p>
 <p><a href="data/joint_refit_progress.json" download>Snapshot and all regional trial scores</a> · {' · '.join(links)} · <a href="../../reports/JOINT_OCEAN_LAND_20261110.md">Methods, input reconstruction and limits</a></p></section>'''
     page=ROOT/'atlases/climate_accuracy/index.html';html=page.read_text()
@@ -152,6 +155,14 @@ reported without vetoes. Cost-best profiles must meet S49 <= 0.995 and both aggr
 {chr(10).join(report_rows)}
 
 ![Every completed trial](../atlases/climate_accuracy/data/joint_refit_progress.png)
+
+![Current rainfall timing and amount failures](../atlases/climate_accuracy/data/joint_refit_reference_rainfall.png)
+
+The illustrative baseline regions show distinct errors: Japan is too wet in winter and dry in summer;
+Bengal has a large annual moisture shortage; North Queensland is too wet; Patagonia's nearly correct
+regional annual total hides large local errors. These reused examples diagnose failures, not a new test
+pool or a replacement objective. Curves use stored float32 monthly fields, restoring southern regions
+to the actual Earth calendar; canonical local metrics remain the original full-precision summary values.
 
 The baseline is freshly paired: T MAE {result['reference']['T_mae_c']:.12f} °C, rainfall loss
 {result['reference']['P_loss']:.12f}. Forty-eight regional pairs reproduce the historical r44 scores.

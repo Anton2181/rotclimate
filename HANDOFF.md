@@ -2,7 +2,7 @@
 
 * Search launched 10:06 UTC; driver PID1256 on this host (inspect actual processes after resume, never assume
   a PID survived). Frozen driver identity a87f03c6e88d1c8f275973592132c48948715deedc1fcfc59eda503608fcc9ac.
-  Three controls complete: r44 S1.0000, warm S1.024742, warmC3 S1.015645. First r44 offspring are worse;
+  Three controls complete: r44 S1.0000, warm S1.024742, warmC3 S1.015581. First r44 offspring are worse;
   search still running, no conclusion until all51. Planned two generations/start are NOT convergence.
 * New read-only report/publisher scripts: report_joint_ocean_land_refit.py checks all49 raw error pairs,
   recomputes aggregate scores, rejects duplicate/gapped trial indices, verifies frozen source hashes,
@@ -21,6 +21,20 @@
   byte-exact assets PASS; portable2148files/709links/fresh launcher PASS. Bundle refreshed in /tmp.
 * After search: `.venv/bin/python -u -I scripts/check_joint_ocean_land_finalists.py`, then publish with
   `.venv/bin/python -I scripts/publish_joint_ocean_land_refit.py` and `scripts/build_fit_hub.py`.
+* Automatic continuation already running (session21009; inspect process after resume). Its log is
+  output/joint_ocean_land_20261110/continuation.log. Waits for current driver PID1256 clean completion,
+  checks finalists, publishes research, rebuilds hub; stops on any failure. Does NOT stage/commit/push
+  final results; review and run final browser/Windows/portable QA before that milestone. Never launch a
+  duplicate follow-up while this wrapper runs. Its Python command is visible in process list/session.
+* Baseline rainfall figure added: plot_joint_reference_seasons.py verifies monthly-archive SHA and solver
+  receipts, plots Japan/Bengal/NorthQueensland/Patagonia; southern calendars restored by six-month roll.
+  Equal-region49 monthly MAE32.454mm, annual-within25% .37559, median relative-error regional mean .41724.
+  Illustration only, no changed score: Japan winter-wet/summer-dry; Bengal .21x observed annual; Queensland
+  1.95x; Patagonia .95x regional annual but only10% wet cells within25%. Regional means hide local error.
+  Four illustrated monthly archives are tracked so a fresh checkout can regenerate these figures.
+* Saved 11/51 panel: r44 first generation finished with no gain. Browser75completed studies/175images,
+  Windows1554byte-exact assets, portable2150files/712links and extracted launcher all PASS. No active or
+  retired climate-map folders changed. Subsequent optimizer records are still advancing outside Git.
 
 # Joint ocean/land refit frozen plan — 10 November 2026
 

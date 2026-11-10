@@ -1,6 +1,6 @@
 # Joint ocean/land response refit — 10 November 2026
 
-**Calibration in progress. Saved 2026-11-10 10:20 UTC; 6/51 evaluations. r44 remains adopted.**
+**Calibration in progress. Saved 2026-11-10 10:31 UTC; 11/51 evaluations. r44 remains adopted.**
 
 Three frozen starts receive equal budgets of one starting control plus two CMA generations of eight:
 r44, a +1.5 K SST-offset/-1.5 K current-strength start, and the same warmer sea with previously rejected
@@ -17,11 +17,19 @@ reported without vetoes. Cost-best profiles must meet S49 <= 0.995 and both aggr
 
 | Start | Evaluations | Best T MAE, °C | Best rain loss | S49 | Search cost | Development screen |
 |---|---:|---:|---:|---:|---:|---|
-| r44 start | 4/17 | 1.861975 | 0.487956 | 1.000000 | 1.000000 | Does not clear development screen |
+| r44 start | 9/17 | 1.861975 | 0.487956 | 1.000000 | 1.000000 | Does not clear development screen |
 | Warmer-sea start | 1/17 | 1.893630 | 0.503807 | 1.024742 | 1.083711 | Does not clear development screen |
 | Warmer-sea + C3 start | 1/17 | 1.846609 | 0.507189 | 1.015581 | 1.074409 | Does not clear development screen |
 
 ![Every completed trial](../atlases/climate_accuracy/data/joint_refit_progress.png)
+
+![Current rainfall timing and amount failures](../atlases/climate_accuracy/data/joint_refit_reference_rainfall.png)
+
+The illustrative baseline regions show distinct errors: Japan is too wet in winter and dry in summer;
+Bengal has a large annual moisture shortage; North Queensland is too wet; Patagonia's nearly correct
+regional annual total hides large local errors. These reused examples diagnose failures, not a new test
+pool or a replacement objective. Curves use stored float32 monthly fields, restoring southern regions
+to the actual Earth calendar; canonical local metrics remain the original full-precision summary values.
 
 The baseline is freshly paired: T MAE 1.861974515852 °C, rainfall loss
 0.487956196884. Forty-eight regional pairs reproduce the historical r44 scores.
@@ -43,5 +51,6 @@ no new physics. A later qualified replacement would require a separately declare
 before retraining corrections and rebuilding the physical atlas.
 
 This is an early bounded multistart refit, not a convergence test or a global-optimum proof. Different seeds
-and starting profiles diagnose some start dependence. Agreement within two generations cannot exclude
-other basins, and C3 is a distinct exchange branch rather than a continuous variable of the same search.
+and starting profiles compare attainable candidates under equal budgets; they cannot isolate starting-point
+effects from random-seed effects. Agreement within two generations cannot exclude other basins. C3 is also
+a distinct fixed exchange branch rather than a continuous variable of the same search.
