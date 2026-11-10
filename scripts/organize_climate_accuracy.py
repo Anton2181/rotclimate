@@ -11,6 +11,7 @@ import re
 
 ROOT=Path(__file__).resolve().parents[1]
 STUDIES=[
+    ('moisture-mix-reuse','Identical climate with fewer repeated moisture-mixing calculations'),
     ('joint-ocean-land','Joint ocean/land refit: three equal-budget starting profiles'),
     ('r44-rainfall-sources','Current rainfall errors: exact-control moisture-source diagnosis'),
     ('shared-sst-screen','Shared SST/current changes: better sea temperatures, worse land climate'),

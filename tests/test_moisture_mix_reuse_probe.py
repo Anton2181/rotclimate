@@ -8,7 +8,7 @@ from scipy.ndimage import gaussian_filter
 
 ROOT=Path(__file__).resolve().parents[1]
 sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
-from probe_moisture_mix_reuse import proposed_function
+from rotclimate import moisture
 from rotclimate.moisture import solve_moisture
 from rotclimate.config import Params
 from rotclimate.solver import AdvectionSolver
@@ -18,9 +18,14 @@ from rotclimate.storms import RainoutExchange
 @pytest.mark.parametrize('tolerance',[0.,1e-7])
 @pytest.mark.parametrize('condensation',[False,True])
 def test_mix_reuse_retains_legacy_and_residual_checked_solutions(tolerance,condensation):
-    proposal=proposed_function()[2]
+    # Immutable pre-optimization function, using the same current constitutive
+    # helpers. This checks the integrated cache against uncached arithmetic.
+    source=(ROOT/'output/moisture_mix_reuse_20261110/source_before.py').read_text()
+    namespace=dict(vars(moisture))
+    exec(compile(source,'<pre_reuse_moisture_reference>','exec'),namespace)
+    reference=namespace['solve_moisture']
     results=[];histories=[];calls=[]
-    for function in (solve_moisture,proposal):
+    for function in (reference,solve_moisture):
         shape=(5,6);zero=np.zeros(shape)
         solver=AdvectionSolver(*shape,dx=1.)
         solver.rtol,solver.max_iter,solver.require_convergence=1e-12,2000,True

@@ -1,3 +1,33 @@
+# Mixing reuse INTEGRATED; physical climate stays r44 — 10 November 2026
+
+* After ALL frozen P8d search/coastal/publication steps completed and were committed4d89cf1c, integrated
+  the EXACT proposed solve_moisture function. Three cache lines only; no physical coefficients, forcing,
+  equation, tolerance or climate adoption change. Whole49 development paired runs match every result
+  array byte + numerical histories + original monthly climate. Integrated Japan replay matches all9
+  array hashes/diagnostics too. Core field bytes themselves remain the same mathematical r44 model.
+* 64 focused tests PASS (moisture/condensation/exchange, integrated cache, observer, fitter/RNG/report).
+  Regression now loads immutable output/moisture_mix_reuse_20261110/source_before.py and compares the
+  INTEGRATED function against uncached arithmetic. Original source/proposed snippets protected -text.
+* CPU timing: five known profiles only; Japan pilot6.5% less, expanded four4.6% less pooled CPU. No
+  general wall-speed or climate-accuracy gain claimed. integration.json records old/new source SHA,
+  proposal/body equality and exact49 summary SHA; report MOISTURE_MIX_REUSE_20261110.md.
+* Historical shape-specific probes and P8d source guards deliberately reject running against changed
+  model source. To reproduce/resume those frozen experiments/checkpoints use recorded pre-integration
+  revision4d89cf1c; do not weaken their guards. Keep their original protocol/results intact. Future
+  experiments need NEW output identities on current source; no parameters/corrections retrained here.
+* New publisher publish_moisture_mix_reuse.py adds implementation study + compact field-hash/timing
+  JSON to normal accuracy companion, preserving previous scientific sections. Final QA PASS:
+  browser78studies/178images (light/dark/mobile/downloads), Windows1560exact assets, refreshed portable
+  bundle/extracted launcher. Main Earth/free/Whittaker map folders have ZERO diff; research assets current.
+* Full-model replay compares every result-array byte and every reported Result.numerics diagnostic;
+  detailed linear-solver iteration histories are also compared in small regression cases. Do not
+  overstate the archived Result.numerics summaries as full internal per-iteration traces.
+* Next physics work: a NEW predeclared designed monthly-field/process calibration (see
+  reports/CALIBRATION_STRATEGY_20261110.md); 51 short CMA trials are not global-minimum proof. Use the
+  rainfall-source audit to distinguish missing circulation/drying/import from temperature compensation.
+  Keep aggregate v3 scoring/comparability, no every-region veto, no relabelling spent f/g/h as unseen.
+  Any actual physics replacement still needs separate qualification before corrections/atlas rebuild.
+
 # Joint ocean/land refit COMPLETE — 10 November 2026
 
 * FINAL: all3 starts finish17 evaluations (51profiles/2499regional solves), no failed trial; all48 actual
@@ -12,7 +42,7 @@
   Search/followup summary+status completed. Publisher moves study into completed experiments; full report
   and plots in normal climate-accuracy page. r44/v2.2 Earth map fields/corrections stay adopted/unchanged.
 * 49-region mixing-cache equality study also COMPLETE/PASS: every byte of T/Tsl/P/W/u/v/E/snow/days,
-  complete numerical histories and original fresh-reference monthly T/P match. It is still an ISOLATED
+  all reported numerical diagnostics and original fresh-reference monthly T/P match. It is still an ISOLATED
   proposal until core integration; all frozen-source checks/publication must finish first. No accuracy gain.
 * Model/scoring source remained exactly frozen for this campaign. Any subsequent cache integration must
   preserve this original source lineage; old checkpoint resume requires the matching pre-integration code.
@@ -95,7 +125,7 @@
   solve at that identical W. Cache is saved before adding condensate. Legacy non-residual calls unchanged.
 * scripts/probe_moisture_mix_reuse.py, _expanded.py; output/moisture_mix_reuse_20261110 and _expanded
   retain exact before/proposed source snippets, frozen protocols and ABBA CPU measurements. Warmup then
-  baseline/reuse/reuse/baseline; compare ALL result arrays and complete numerics, not merely T/P scores.
+  baseline/reuse/reuse/baseline; compare ALL result arrays and all reported numerics, not merely T/P scores.
 * Japan r44 pilot CPUratio .9350; expanded Bengal .9179, Queensland .9619, Patagonia .9524, warmC3Japan
   .9757; expanded pooled CPUratio .9539. Every output field + numerical history EXACT. Wall times suffer
   concurrent-search contention; do not report wall-speed claims. No climate-accuracy gain or adoption.

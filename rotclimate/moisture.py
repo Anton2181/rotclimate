@@ -74,6 +74,7 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
     converged = None if p.moisture_residual_tol == 0 else False
     residual = None
     lamE_all = lamE
+    previous_mixed = None
     for n in range(p.picard_iters):
         lamE = ocean_rate(p, lamE_all, W, ocean_water)
         lamP = rain_coefficient(W, saturation, dynamics, instability, p.rh_threshold, p.precip_tau_days, closure,
@@ -82,7 +83,7 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             lamP = lamP + sink
         source = land_source if gain is None else land_source + gain * W
         if mix is not None:
-            mixed = mix(W)
+            mixed = mix(W) if previous_mixed is None else previous_mixed
             new = solver.solve(u, v, p.moisture_diffusion, lamE + lamP + exchange,
                                lamE * ocean_water + source + exchange * mixed, boundary, guess=W)
         else:
@@ -102,6 +103,7 @@ def solve_moisture(solver, p, u, v, lamE, ocean_water, land_source, saturation,
             if gain is not None:
                 E = E + gain * W * DAY
             mixed = mix(W) if mix is not None else W
+            previous_mixed = mixed if mix is not None else None
             if condensate is not None:
                 condensed = condensate(W)
                 P = P + exchange * condensed * DAY
