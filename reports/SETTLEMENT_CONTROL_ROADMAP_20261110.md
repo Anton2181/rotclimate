@@ -40,6 +40,12 @@ silently replaces the other.
   counts, 25 km matching, 100 km block rank and nearest-neighbour spacing.
 - [ ] S1c: Resolve historical occupancy assumptions. Do not equate food capacity
   with actual population or use Rome as a timeless medieval urban attractor.
+- [x] S1c initial mechanism study: distinguish centre intensity from people,
+  test adaptive local spacing and450/800/1500km history scenarios on exposed
+  Earth pools, retain exact-location/spacing alternatives and review all counts.
+- [ ] S1c remaining: historical occupation-age/role evidence and further
+  robustness at the selected prior's grid boundary; scenarios do not establish
+  actual past occupancy. Preserve this gap through later population/control work.
 - [ ] S1d: Freeze a finalist and identify a defensible prospective transfer pool
   before evaluating it. Record coverage, site roles, shared geography and dates.
 - [ ] S1e: If qualified, rebuild settlements, tracks, food-supported institutions
@@ -119,39 +125,39 @@ Appropriability motivates a hypothesis to test, not a cereal-to-state shortcut.
 
 ## Current resumption point
 
-S1a/b initial milestone completed on10November: count-separated allocator,
-72 prespecified evaluations across two exposed Earth pools, five-seed comparisons,
-unique matching, retained prepared NPZs and research-page publication. Details:
-[SETTLEMENT_LOCATIONS_20261110.md](SETTLEMENT_LOCATIONS_20261110.md).
+S1a/b's original72-evaluation fixed-count study remains unchanged. S1c now adds
+the [108-evaluation adaptive intensity study](SETTLEMENT_INTENSITY_20261110.md):
+all1202Han/1292Roman counts preserved; expected centre intensity explicitly is
+not population/food or occupation age. No production adoption. The selected
+adaptive0.35/450km variant has uniqueF1 .521Han/.402Rome, spacingKS .060/.055;
+best fixed18km has higher uniqueF1 .591/.422 at worse spacingKS .472/.407.
+Both remain on the Pareto frontier. New Q .621 vs best fixed .570 is a declared
+development tradeoff, not percentage accuracy or prospective validation.
 
-The original November7 inputs were not recovered exactly. Reconstructed current
-slope/HAND inputs have newly computed paired baselines; historical JSON scores
-were not reused as controls. All variants preserve1202 Han/1292 Roman proposals.
-The development lead improves clustering strongly and Han unique matching, while
-Roman unique F1 slips0.367→0.358. **Not adopted.** S1 as a parent remains unfinished.
+Actual history/occupation-age interpretation and role/resolution evidence remain
+unfinished S1c work. The selected450km prior is a tested-grid boundary, not a
+universal calibrated historical scale. Do not mistake unchanged population totals
+or an intensity normalization for calibrated demographic occupancy.
 
-Next: S1c, resolve historical occupancy and evaluation resolution/roles. Preserve
-the distinction between known historical inputs and generated priors; examine the
-Roman unique-match loss rather than optimizing proximity scores alone. Compare
-the frozen grid's deterministic18km history alternative: it improves uniqueF1 in
-both pools (Han0.591, Rome0.422), but has worse spacingKS than the selected9km
-stochastic lead. Preserve both; do not silently replace the frozen winner or
-claim this inspected tradeoff is fresh validation. The9km
-raster/exclusion has an explicit spacing-error floor and is not a village test.
-Concrete next data candidates are recorded in
-[SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md](SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md)
-and its machine-readable registry: Vidarbha for geographical/role transfer audit,
-Roman rural Britain for S2, and phased crop/collection evidence for S4. These have
-metadata-only exposure, no target CSVs or scores, and no sealed status. The
-Vidarbha readme reverses usual X/Y coordinate naming; verify it before loading.
+S1d source audit: [Vidarbha](VIDARBHA_PREPARATION_20261110.md) is NOT ready as
+supplied:60 coordinate rows,390 settlement rows/389 unique IDs,zero joins; axes
+conflict with the readme. This is a frozen preparation-only source-quality result:
+no model predictions, maps or scores. Resolve the source or obtain another
+role/coverage-appropriate source before a located transfer test. Do not silently
+swap axes or fuzzy-match IDs, and do not label the model failed/successful here.
 
-Then S1d needs a frozen defensible prospective transfer protocol; exposed Han,
-Rome, Sui, Tang, Hellenistic, medieval-city and Domesday pools cannot qualify as
-new unseen tests. Hellenistic source recovery/extra development comparison also
-remains available; it was not a recovered pool in this two-pool protocol.
+The [data queue](SETTLEMENT_CONTROL_DATA_QUEUE_20261110.md) records this exposure
+and retains Roman rural Britain for S2 roles and phased crop/collection evidence
+for S4. These two remain metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
+medieval/Domesday pools cannot be relabelled unseen. Additional development use
+is allowed if declared. Next source acquisition should audit role/phase/coverage
+and overlap before freezing any scoring protocol.
+S2's rural-source schema/phase/role audit can proceed while S1d seeks a usable
+transfer source; this is preparation of a later stage, not closure of S1 or a
+reason to abandon the deferred coupled integration.
 
-After qualification, S1e rebuilds the shared settlement/food/staffing/control chain.
-Then continue S2–S5 above. No parent stage is complete; no later stage is dropped.
+Then S1e rebuilds towns/tracks and the SAME resident/food/staffing/control chain
+after qualification. S2–S5 remain required. No parent stage is complete or dropped.
 
 ## Milestone log
 
@@ -161,3 +167,5 @@ Then continue S2–S5 above. No parent stage is complete; no later stage is drop
 |2026-11-10|Development protocol frozen; commit17c73556|Twelve variants, fixed counts, exposed data only, no adoption|Recover inputs and run|
 |2026-11-10|S1a/b initial comparison complete|See settlement-locations report; no production adoption|S1c/d, then S1e; retain S2–S5|
 |2026-11-10|Next Earth data candidates audited at metadata/schema level|Vidarbha, Roman rural Britain, Cambridge crop/collection evidence; no target tables/scores or sealed status|Occupancy/tradeoff work and preparation-only source audit|
+|2026-11-10|S1c adaptive spacing/history study; protocols a9a4a635|108 exposed evaluations, all budgets/pair constraints pass; no adoption|History/role robustness and S1d transfer|
+|2026-11-10|Vidarbha preparation completed, no predictions scored|Zero coordinate/settlement joins and conflicting axes; source not ready|Resolve or replace source; keep S1d and S2–S5 open|

@@ -7,9 +7,11 @@ replace any model. The repository's reports/calibrations/scripts/research notes
 were searched for these identifiers, with no previous use found. That search
 does not prove their observations are independent of every source already used.
 
-**No target CSVs, coordinates or model scores from these candidates were loaded.**
-Only source descriptions and the Vidarbha methods/schema readme were inspected.
-These are candidates to audit, not sealed tests or complete archaeological censuses.
+At the initial metadata review no target tables were loaded. A subsequent frozen
+[preparation-only audit](VIDARBHA_PREPARATION_20261110.md) loaded the Vidarbha master
+and settlement CSVs, without predictions, maps or model scores. It found zero ID
+joins and conflicting coordinate documentation, so this version is not ready for
+located transfer. Other candidates remain metadata-only. None has sealed status.
 
 ## 1. Vidarbha: a non-Roman geographical transfer candidate
 
@@ -34,9 +36,9 @@ documented definitions and verify the regional bounds, not infer axes from names
 The manifest's very small master-list file also warrants checking actual records
 and join structure; metadata alone does not establish a usable site table.
 
-Next: declare a preparation-only schema/chronology audit without fitting or site
-scores. Only after that audit can a candidate and a role-appropriate prospective
-comparison be frozen. Do not substitute raw known-site counts for total settlements
+Preparation audit now completed: the coordinate master and settlement table have
+zero joins, and documented axes conflict with source values. Resolve the source
+or choose another before freezing a role-appropriate located transfer comparison. Do not substitute raw known-site counts for total settlements
 unless survey coverage supports that interpretation.
 
 ## 2. Roman Britain: rural settlements and settlement roles

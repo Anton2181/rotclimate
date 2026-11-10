@@ -1,3 +1,50 @@
+# Adaptive settlement spacing complete; no adoption; transfer source rejected — 10 November 2026
+
+* Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md at every continuation. Full
+  S1–S5 programme persists: locations/occupancy; roles/hierarchy; differentiated
+  authority; shared surplus/institutions; mobile/nonstate communities. S1 remains
+  unfinished, not dropped. Physics has its separate queue below.
+* New S1c plan calibration/settlement_intensity_20261110/plan.json committed a9a4a635
+  before outcomes. New isolated polity/settlement_intensity.py leaves frozen old
+  allocator/source hashes and72-evaluation study UNCHANGED. Relative centre weight
+  normalized to requested count, local separation c/sqrt(lambda) capped45km;
+  symmetric pair distances>(r_i+r_j)/2, no9km cutoff. This is NOT population or
+  occupation-age dynamics. Same prepared inputs and1202Han/1292Rome counts.
+* Completed108 evaluations: L450/800/1500 x c.25/.35/.5 x greedy/draw; stochastic
+  five fixed seeds. All counts/eligibility/pair constraints/intensity budgets pass
+  independent review. Selected draw_c0.35_L450 Q .6214 vs best old fixed .5697
+  under NEW declared .6 uniqueF1 +.2 rankNormalized +.2(1-KS). No per-pool veto.
+* Lead means: uniqueF1 Han .5213/Rome .4020 (production .3358/.3668), spacingKS
+  .0601/.0552 (production .7705/.6829), blockrank .6207/.4981. Fixed18 alternative
+  retains HIGHER uniqueF1 .5912/.4224 at worse spacingKS .4723/.4065; retain Pareto
+  alternatives, do not claim universal dominance. Lead L450 is a grid boundary,
+  not a universal calibrated historical scale. No new blind/transfer qualification.
+* New reports SETTLEMENT_INTENSITY_20261110.md, VIDARBHA_PREPARATION_20261110.md;
+  two maps/plots in reports/figures. Research published in normal Earth evidence
+  page; older study remains. Main Earth/free/Whittaker maps/r44 defaults unchanged.
+* IMPORTANT S1d preparation source result: plan vidarbha_preparation_20261110 frozen
+  at same a9a4a635 BEFORE CSV read. API/file checksums pass, but master60 coordinate
+  rows join ZERO of389 settlement IDs (390 rows,one duplicate); documented axes
+  yield0 plausible pairs, swapped interpretation60. Never silently swap/fuzzyjoin.
+  No target maps, climate/prediction lookup or model scores computed. Source is
+  prepared/unscored and NOT READY for located transfer, not a model test failure.
+  Current registry/data queue updated; other two candidates remain metadata-only.
+* Next: S1c history/role/resolution robustness and credible S1d source resolution or
+  alternative. Audit Roman rural Britain for S2 role/phase/coverage if useful; no
+  reuse of old sites as unseen. S1e must later rebuild towns/tracks plus the same
+  people/food/staffing/control ledger. No generated town is independent authority.
+* QA:45 focused tests pass; all108 draws reviewed; fresh-directory JSON/positions
+  replay exact; normal atlas browsers pass (new/old studies, source labels, filters,
+  downloads, light/dark/mobile). Focused Windows29critical files and628local page
+  dependencies pass; launcher release verifies. No full ZIP/site copy under quota.
+* S2 rural-source preparation can proceed while resolving S1d. Audit source role,
+  phase and coverage without using a rural inventory as an administrative census;
+  retain all S1c/history and S1e shared-ledger requirements.
+* Source/input/result hashes and positions retained in output/settlement_intensity_20261110;
+  review_settlement_intensity.py checks all108. Old prepared NPZs remain required
+  and tracked; no raw-source download needed for repeat. Vidarbha raw CSVs cached,
+  only aggregate audit published. Disk still tight; avoid full-site copies/ZIPs.
+
 # Settlement/control S1a/b complete; S1c/d next — 10 November 2026
 
 * Owner approved the WHOLE programme. Read reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md
