@@ -47,6 +47,12 @@ def eligible(row):
 
 
 def summarize(source=SOURCE, campaign_path=CAMPAIGN):
+    driver_path = source / 'driver_identity.json'
+    if driver_path.exists():
+        driver = json.loads(driver_path.read_text())
+        for filename, digest in driver['inputs_sha256'].items():
+            if file_hash(ROOT / filename) != digest:
+                raise ValueError('Changed frozen campaign/driver input: ' + filename)
     campaign = json.loads(campaign_path.read_text())
     references = {}
     for name, digest in campaign['reference_sha256'].items():

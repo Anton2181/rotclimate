@@ -62,6 +62,19 @@ def verify_replay(rows, expected, label):
             raise ValueError(f'{label} replay differs: {region}')
 
 
+def verify_optimizer_checkpoint(folder, chain, *, evaluations=17, generations=2):
+    """Check a trusted local pickle against its public, JSON-normalized history."""
+    with (folder/'state.pkl').open('rb') as stream:
+        es, pending, best, n, _rng = pickle.load(stream)
+    if (n != evaluations or len(chain['records']) != evaluations or pending or es._told
+            or es.countiter != generations):
+        raise ValueError('Search did not finish the declared generations: ' + folder.name)
+    # Pickle retains region-error tuples; JSONL serializes those as lists.
+    normalized_best = json.loads(json.dumps(best, default=float))
+    if normalized_best != chain['best']:
+        raise ValueError('Search state disagrees with JSONL best: ' + folder.name)
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__)
     ap.add_argument('--out', type=Path, default=SOURCE / 'followup')
@@ -72,7 +85,15 @@ def main():
     execution = json.loads(EXECUTION.read_text())
     campaign = json.loads(CAMPAIGN.read_text())
     out.mkdir(parents=True, exist_ok=True)
+    command(['scripts/audit_joint_refit_sampling.py'], out/'sampling.log')
+    sampling_path=SOURCE/'sampling_replay.json'
+    sampling=json.loads(sampling_path.read_text())
+    if (sampling['status']!='passed' or sampling['search_status']!='completed_development_search'
+            or any(r['proposals_verified']!=16 or r['complete_generations']!=2
+                   for r in sampling['starts'].values())):
+        raise ValueError('Incomplete seeded proposal replay')
     inputs = [Path(__file__), EXECUTION, CAMPAIGN, ROOT/'scripts/report_joint_ocean_land_refit.py',
+              ROOT/'scripts/audit_joint_refit_sampling.py',sampling_path,
               ROOT/'scripts/audit_air_sea_exchange.py', ROOT/'scripts/gate_v3.py',
               ROOT/'scripts/benchmark_local.py', ROOT/'scripts/rainfall_metrics.py',
               ROOT/'scripts/earth_benchmark.py', ROOT/'scripts/local_benchmark_protocol.py',
@@ -80,12 +101,7 @@ def main():
     for name in campaign['starts']:
         inputs.extend([SOURCE/name/'evals.jsonl', SOURCE/name/'best_params.json',
                        SOURCE/name/'search_identity.json'])
-        with (SOURCE/name/'state.pkl').open('rb') as stream:
-            es, pending, best, n, _rng = pickle.load(stream)
-        if n != 17 or pending or es._told or es.countiter != 2:
-            raise ValueError('Search did not finish exactly two generations: ' + name)
-        if best != search['starts'][name]['best']:
-            raise ValueError('Search state disagrees with JSONL best: ' + name)
+        verify_optimizer_checkpoint(SOURCE/name, search['starts'][name])
     inputs.extend(ROOT/p for p in execution['spec_files'].values())
     identity = freeze(out/'identity.json', dict(execution=execution,
         sources={str(p.relative_to(ROOT)): file_hash(p) for p in inputs}))

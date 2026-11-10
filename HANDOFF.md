@@ -1,5 +1,16 @@
 # Joint ocean/land refit RUNNING — 10 November 2026
 
+* 11:09UTC: all starts finished phase9; second-generation r44 running. Phase9 best S: r44 1.0000,
+  warm1.024742, C3 1.002804; none qualifies. Immutable phase9_checkpoint contains all3 matching journals,
+  full best params, search identities and optimizer+RNG pickles, with a16-file SHA manifest and recovery
+  directions. Verified n9/one generation/no pending candidates, JSON-normalized best and full params.
+* audit_joint_refit_sampling.py replays actual proposals from frozen seeds/costs, no climate runs.
+  All first generations match exactly; run at end for all48 optimizer proposals. Finalist checker now
+  requires this replay before freezing follow-up identity. Reader tuple/list mismatch fixed and regression
+  tested: pickle regional pairs are tuples; normalize to JSON before comparing to JSONL. Tests21pass.
+* Report helper also verifies the frozen driver/campaign/plan hashes, beyond model/reference guards.
+  These are read/checkpoint changes only; frozen optimizer/model/scoring sources remain unchanged.
+
 * Search launched 10:06 UTC; driver PID1256 on this host (inspect actual processes after resume, never assume
   a PID survived). Frozen driver identity a87f03c6e88d1c8f275973592132c48948715deedc1fcfc59eda503608fcc9ac.
   Three controls complete: r44 S1.0000, warm S1.024742, warmC3 S1.015581. First r44 offspring are worse;
