@@ -56,6 +56,14 @@ update. None of these milestones is complete merely because code tests pass.
    See SETTLEMENT_VIDARBHA_TRANSFER_20261111.md. Next: audit count/role and resident
    size evidence on existing Earth pools; do not relabel another tuning run on
    this survey as a fresh geographic holdout.
+   Count/size audit now completed on exposed pools (SETTLEMENT_COUNTS_20261111.md):
+   the frozen Han inputs silently zero-filled 1,586 land cells beyond the global
+   population raster, including 13 source cells. Full-region count fits unqualified;
+   a declared supported-domain sensitivity improves count deviance only 1.86%
+   with beta0.5 versus0.7, with large spatial errors. CountyPOP is not seat residents;
+   Roman positive areas and median fills remain separate. NEXT extend missing
+   ecological inputs consistently, verify overlapping existing values, then rerun
+   full-region count development and continue shared-ledger resident allocation.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

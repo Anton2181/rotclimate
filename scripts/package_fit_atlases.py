@@ -343,6 +343,12 @@ def main():
               ROOT/'calibration/vidarbha_survey_20261111/plan.json',
               ROOT/'calibration/vidarbha_survey_20261111/methods.json',
               ROOT/'calibration/settlement_vidarbha_transfer_20261111/plan.json']
+    files += [ROOT/'reports/SETTLEMENT_COUNTS_20261111.md',
+              ROOT/'reports/figures/settlement_counts_20261111.png',
+              ROOT/'reports/figures/settlement_population_coverage_20261111.png',
+              ROOT/'calibration/settlement_counts_20261111/plan.json',
+              ROOT/'calibration/settlement_counts_20261111/multiplicity_correction.json',
+              ROOT/'calibration/settlement_counts_20261111/coverage_domain.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

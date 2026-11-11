@@ -1,3 +1,62 @@
+# Count/size audit finds missing population input, not an ecological zero — 11 November 2026
+
+* User wants continuous work after pushing. Single canonical/default remote remains
+  claude/friendly-turing-43ygeu; never recreate ecstatic. Vidarbha transfer was
+  committed/pushed55cce3df; count protocol f0b14adb, multiplicity correction4799a588,
+  coverage sensitivity3f56dd58 all pushed before their respective corrected fits.
+* NEW scripts settlement_counts_earth.py/review_settlement_counts.py and modules
+  polity/settlement_counts.py,population_coverage.py. Full results under
+  output/settlement_counts_20261111. No fantasy ledger,point,track,staff/control or
+  r44 physics changes. Count/size report SETTLEMENT_COUNTS_20261111.md.
+* BIG FOUND INPUT BUG: old Earth global output covers0–56N,-12–125E. E.earth_people
+  returns density0 ANDcovered=False beyond;Nov10 input preparation ignored covered.
+  Han allowedland50349cells:1586missing (128466km²),13sourcecells/13records outside.
+  Six99kmblocks positive count/zero P (11records) entirely outside coverage.
+  NOT proof no ecological food/local people/administrative seats. Rome all covered.
+* Count primary multiplicity recovered from original sources + EXACT old matching:
+  raw1294Han/1354Roman,allowed1280/1115records,1264/1085distinctcells. Frozenreal
+  arrays alreadynp.unique; initial mistaken record==cell attempt preserved under
+  invalid_deduplicated_target_attempt with invalid-unit status,not modelselection.
+  Legacy nearest-land rescues14Roman inside records,0Han; explicit inheritedlimit.
+* Full_frozen and covered_only sensitivity both retain100/300nominal blocks
+  (actual99/297km),all4fixedquadrants,beta[0,.5,.7,1,1.5],role-specific/sharedscales,
+  record/distinctcelltargets,all176rows. Fullregionunqualified and retainsinfinite
+  losses;no floor/area-only adoption. Covered-only1267Han/1115Romanrecords:
+  role-specific beta.5 dev/recordHan2.678864/Rome1.867583,mean2.273223 vsbeta.7
+  mean2.316263(1.86%gain),stillcountmass relocation~63.6/50.9%.Sharedcontrols can
+  improve more;not retroactively selectednewvalidatedwinner. Cataloguecounts not
+  true complete urban census;no observationmodel/independent qualification.
+* Resident-size sourceaudit:RomanAD1501354records,862positivearea,492missingarea,
+  56exact20/30ha candidates,806otherpositive(not automaticallymeasured/contemporary).
+  Oldreaderfillsmissingrankmedians.1338AD150missingenddateflags.CountyPOPdistrict
+  population,not seatresidentlabels.All sourceyears/types/adjustmentflagsretained.
+* Independent review:2780directblocks,704heldfoldcases,9680metrics,rawsourceunits,
+  independentfrozenE.samplercoverage,multiplicity and all176rows. Fresh replay
+  results +bothNPZbyte-exact.133relatedtests pass;newcoverageguardtwo tests included.
+* New figures counts +population_coverage_20261111 posted(user saw initial plotting
+  pool-filter bug then corrected figure;numeric results unaffected). Publisher wired
+  basepublisher/package;newpanel5rows/9localdownloads. Browsernew+previous passes
+  mobile344/390/lightdark. FinishstagedWindows/linkclosure andpush before next step.
+* NEXT ACTUAL WORK:extend missing ecological population inputs,not anotherparameter
+  search on zero-filled area. Missing required Han bbox37.5976–42.4898N,
+  125.00017–129.03504E. No cached old output/polity_earth/han.npz. Existing source
+  global32MBNPZ,WorldClimelev/prec/tavg zips,arable5m2.7MBonly;NOetopo60window.npy,
+  NOlocalTmin/Tmax zip. ~87MBfree;do not download120MBarchive to disk/fullZIPsitecopy.
+* Feasible next:declare extension BEFOREnewsourcevalues,regional5m tile32–48N,
+  120–134E (lat top aligns original4deg irrigation bands). OfficialTmin/Tmax archive
+  can be boundedreadinRAM then cacheonlyregionalmonths;ETOPO60s OPeNDAP regional
+  subset~3MB. Reuse exactland_people.analyse/FALLOW0.6,slopearabilityparameters,
+  distance/HANDirrigation,settlement_fields/centraloccupation. Buildallfieldswithhalo,
+  compareoverlap36–44N122–124E tooriginalglobal (awayfromtileandold125Eboundary),
+  gatesbeforeusingnewdensity. PreserveeveryoriginalcoveredHaninputcell exactly,
+  replaceonlymissingdensity/aridity withqualifiedextension inNEWartifact,never
+  overwritefrozeninputs/global. Requireallallowedlandcovered. Coretravelhistory
+  alsoclipsold125boundary;countfitdoesnotuseit,butfuturepointcomparison mustnot
+  pretendclippedhistoryisfullphysicalextension. Extendhydro/terrainconsistently.
+* Firstmap queue:1refs/rulesdone;2count/placement/sizeinprogress;3fantasysharedledger
+  and4normalnumericatlaspending. FullS1c/d/e,S2–S5,all18actors/mobile/nonstate scope
+  persists. Sourceprivatecoords notGit. Exactgit-add only;olduntrackedlogsneveradd.
+
 # Primary survey transfer completed: candidate fails capture margin — 11 November 2026
 
 * Owner wants continuous work after each commit/push. ONLY maintained/default
