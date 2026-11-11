@@ -276,3 +276,18 @@ recorded village, vicus and small-town contexts without assigning military,
 market or dated functions automatically. Keep observation selection, timing,
 spatial/effort and transfer gaps. S3–S5 and the shared downstream ledger remain
 required; all actors, unaffiliated and mobile/nonstate groups stay in scope.
+
+## Source-role composition completed,11 November2026
+
+[Protocol5e650062 and results](SETTLEMENT_ROLE_COMPOSITION_20261111.md) distinguish
+five source-label groups in both old cohorts;five cases pass the fixed30unit gate,
+five stay explicitly unscored.2970globalAUCs,6270stratumAUCs and330blockmeans checked
+independently. Village/vicus one-day history serviceglobal.3930/.8822,local.4748/
+.5557;strict differences persist. No fitted/selected predictor or world adoption.
+Smith2016chapter2p38 explicitly distinguishes civilianfort-origin vici and differing
+possible functions. Labels do not date actual staffed institutions or authority.
+
+Next implement capacity-limited potential services with finite staff-hours and
+food-supported inputs,unmet requests and shared consumers. Do not promote a scalar
+centre-intensity or archive label directly into institutions/control. Timing,
+coverage,prospective transfer,S1c/d/e,S2qualification and S3–S5 remain required.

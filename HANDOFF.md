@@ -1,3 +1,30 @@
+# Source composition complete, ready to push — 11 November 2026
+
+* Protocol5e650062 committed before supportcounts/scores. Five of ten declared
+  group/cohort cases pass30positive/negativeunit gate. Sourcepartition full65village,
+  84vicus,7smalltown,1mixed,269roadside-only =426. Strict64/81/7/1/0 =153.
+* Fullpositivecellunits47/47/6/1/154;strict46/44/6/1/0. Failedsmalltown/mixed and
+  strictroadside remain explicitly unscored; no outcome-directed merges/gaterepair.
+* Fixedone-day history serviceglobalAUCvillage.3930/vicus.8822;strict.3884/.8899.
+  Localfull.4748/.5557,strict.4723/.5533,below respective suitability. Corpus
+  composition/geography matters; no qualified economic/military/AD200role claims.
+* polity/role_composition.py,two tests,evaluator/reviewer/plot/publisher/browser
+  scripts;output/settlement_role_composition_20261111. Review2970globalAUCs,
+  6270stratumAUCs,330blockmeans,10partition/gates,21oldartifacts unchanged.
+* SourceSmith2016chapter2p38 reread from pinned text: road association defines
+  village/roadside,vici civilianfort-origin,authorsrecommendseparatefunctions.
+  Newsemantic_sources.json captureshash/anchors,not an inventedempiricalcoefficient.
+* Report/figure made and imageposted;newindependentcollapsedatlaspanel10rows,
+  5explicitunscored,5aggregate links. Basepublisher/package/attributeswired.
+*110tests pass;freshresults/reviewbyte-exact,21earlierartifactsunchanged. Browser
+  new10rows/5unscored/figure/5links,byte-matchedreview,344/390light-dark;previous
+  controls/general evidence pass. Publisheridempotent,142Windowscriticalfiles
+  byteexact/679activehubdependenciesresolve. No fullZIPunder~125MBquota.
+* NOW commit/pushBOTH;then continue
+  capacity-limited service primitive with explicit staff-hours/food-supported
+  inputs,unmet demand and SAME resident/food/staff/institution/control ledger.
+  No production adoption. Preserve full S1c/d/e,S2–S5 and activeclimater44.
+
 # Source composition protocol declared after controls push — 11 November 2026
 
 * Controls milestonee567dec2 and protocol720fcaa2 pushed/verified on BOTH branches.
