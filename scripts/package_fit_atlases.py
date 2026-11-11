@@ -306,6 +306,12 @@ def main():
               ROOT/'reports/figures/roman_rural_coordinates_20261110.png',
               ROOT/'calibration/roman_rural_coordinates_20261110/plan.json',
               ROOT/'calibration/roman_rural_coordinates_20261110/plan_v1.json']
+    files += [ROOT/'reports/SETTLEMENT_HISTORY_BOUNDARY_20261111.md',
+              ROOT/'reports/SETTLEMENT_PHASE_EVIDENCE_20261111.md',
+              ROOT/'reports/figures/settlement_history_boundary_20261111.png',
+              ROOT/'calibration/settlement_history_boundary_20261111/plan.json',
+              ROOT/'calibration/settlement_phase_evidence_20261111/plan.json',
+              ROOT/'calibration/settlement_phase_evidence_20261111/semantic_sources.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

@@ -1,3 +1,55 @@
+# History boundary tested; successive-role chronology documented — 11 November 2026
+
+* FULL queue remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. No stage is
+  abandoned: S1c actual occupation/role evidence, S1d credible transfer, S1e shared
+  resident/food/staff/control rebuild, and S2–S5 remain. Active physics stays r44.
+* New S1c protocol/driver committed710af13a BEFORE new boundary results. Reuses
+  frozen adaptive producer/scorer/allocator unchanged. L150/225/300/450/650 x c.35/.5
+  x5seeds x2exposed pools =100evaluations. ALL1202Han/1292Rome counts, eligibility,
+  intensity normalization and pair constraints pass.20 overlapping450km runs replay
+  old metric rows and actual coordinates EXACTLY. Old studies remain immutable.
+* Results output/settlement_history_boundary_20261111: old c.35/L450 remains combined
+  lead Q.62140955, gain0; now interior to tested range. New c.5/L300 is Pareto:
+  uniqueF1 .5236Han/.4034Rome, spacingKS .0778/.1373. Five combined Pareto alternatives
+  retain old c.35/L450,c.5/L450,fixed18/fixed27. Weights.4/.6 retain oldlead; .8c.5/L450.
+  Not global optimum, actual occupation age, unseen transfer, significance or adoption.
+* New chronology source: authors2016 Britannia Monograph29 Chapter1 printed10–11
+  documents phase-date fields as major settlement changes and farm->villa successive
+  labels; Chapter2 printed20 discusses palimpsest/classification limits. Metadata
+  calibration/settlement_phase_evidence_20261111/semantic_sources.json records PDF
+  byte/text hashes and URLs. Large PDFs streamed to pdftotext, not retained; text
+  stays private under data/cache/roman_rural_britain_metadata/book. Raw not redistributed.
+* New polity/settlement_phase_evidence.py/audit_settlement_phase_evidence.py retain
+  date order, flag review cases, NEVER assign role intervals.1031 consistent change
+  records,10requiringreview (4missingbounds,3reversed,3outofspan),2611nochangerecorded.
+ 146 records bothfarm/villa. General purpose now documented; direct export-column
+  dictionary and role-to-change mapping still absent. Do not keep calling all phase
+  meaning unknown; do not equate source tags with contemporaneous AD200 functions.
+* Review blocks add exact numericXY and normalizedcounty+name to old associations:
+ 83nontrivial/189records,3546totalcomponents,largest8. ALL3652observations retained.
+  Blocks are NOT physical-place merges, population units or independent spatial folds.
+  Sharedname can describe villa+nearbycemetery; centroid can represent investigations.
+  Approx2500publishedsettlements is NOT a de-duplication target or duplicate count.
+* New reports SETTLEMENT_HISTORY_BOUNDARY_20261111.md and
+  SETTLEMENT_PHASE_EVIDENCE_20261111.md; history sensitivity figure posted in chat.
+  Earth evidence page has two collapsed research panels/10aggregate-doc links.
+  Existing rural roles/coordinate panels retained; normal launcher release refreshed.
+  Narrow344px check caught old inventorycard word overflow; scoped wrapping fixed in
+  base publisher and standalone continuation. No actual world/control/physics map change.
+*89 focused tests pass. Independent review100/20; source audit fresh-output byte-
+  exact, all7prior source/numerical artifacts unchanged vs32ca2173. New and old rural/
+  evidence browsers pass, keyboard/figure/344&390px/light-dark tested. Full ZIP/site
+  copy not rebuilt under quota; package recipe includes new docs/figure/protocols.
+*70 Windows-style critical files byte-exact;652 local page dependencies
+  resolve, standalone publisher idempotent, launcher release verifies.
+* NEXT: declare role-specific conditional evidence units/targets BEFORE scores:
+  broad-period archaeological role footprints vs dated residential nuclei vs dated
+  institutions. Undated records cannot be used as precise AD200 functions or true
+  absence; excavated evidence frequencies are not a census. Define coverage/grouped
+  spatial splits and uncertainty sensitivity without waiting for a perfect gazetteer.
+  Preserve actual history/transfer gaps, then wire qualified allocations into SAME
+  people/food/staff/institution/control consumers across all actors/nonstate areas.
+
 # Operational rural-coordinate interpretation verified; no model adoption — 10 November 2026
 
 * Full programme remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. First

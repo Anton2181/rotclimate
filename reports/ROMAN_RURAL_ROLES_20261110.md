@@ -142,3 +142,9 @@ references across six sites lie within188m; this is not whole-source survey
 accuracy or official export-CRS certification. Physical places, precision, extra
 phases and coverage still constrain role calibration. Earlier audit artifacts
 remain unchanged.
+
+The [11 November methodology audit](SETTLEMENT_PHASE_EVIDENCE_20261111.md)
+clarifies that major change dates and multiple labels can describe successive
+roles. Earlier wording about preserving simultaneous functions should not be
+read as evidence of contemporaneity. All source observations remain distinct;
+new exact-point/name validation blocks are not physical-place merges.

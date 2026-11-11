@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-11",
+  "status": "declared_before_new_boundary_grid_outcomes",
+  "stage": "S1c exposed development robustness; not historical age, S1d transfer or production adoption",
+  "question": "Does the apparent benefit at L450 persist or turn over at shorter spatial history scales while retaining spacing/location alternatives?",
+  "inputs": "Exact tracked Han/Roman NPZs from output/settlement_locations_20261110, with their original hashes. Both exposed development data. Old 12-variant study and its winner remain immutable.",
+  "counts": "Same fixed1202Han/1292Roman compatibility budgets. No evaluation count supplied to allocator. Base population, food and environmental eligibility unchanged.",
+  "mechanism": "Relative centre weight w=existing site_score*history^(800/L); normalize sum(lambda*cell_area)=requested_count over eligible positive-weight cells. Separation field r=min(45km,c/sqrt(lambda)), with no9km lower cutoff. Greedily accept ranked candidates only if each accepted pair has distance>(r_i+r_j)/2. One site per raster cell. This is relative location intensity, not a new population field, an estimated historical occupation age or territorial authority.",
+  "grid": {
+    "history_scale_km": [
+      150,
+      225,
+      300,
+      450,
+      650
+    ],
+    "spacing_coefficient": [
+      0.35,
+      0.5
+    ],
+    "stochastic": [
+      true
+    ],
+    "seeds_stochastic": [
+      1,
+      7,
+      19,
+      43,
+      97
+    ],
+    "seeds_deterministic": [
+      1
+    ],
+    "evaluations": 100
+  },
+  "metrics": "Reuse unchanged natural-count proximity/unique one-to-one F1 at25km,100km block rank,spacingKS,NNquantiles and count/shortfall. Report history-scale and seed sensitivity; do not call ensembles confidence intervals.",
+  "development_selection": "Same equal-pool seed-mean Q and0.4/0.6/0.8 location-weight sensitivity. Compare all old fixed variants AND all saved adaptive variants, preserve originals. Retain location/spacing Pareto alternatives and per-pool tradeoffs; no every-region veto.",
+  "qualification": "Development robustness only. Even a gain does not establish occupation history or a global optimum; a new boundary winner is a new boundary. No production adoption, new world town maps, independent transfer claim or coupled-food/control recomputation in this experiment.",
+  "literature": "Spatial point-process/spatial-interaction framing: Bevan and Wilson2013 doi:10.1016/j.jas.2012.12.025. Inverse-square-root separation is dimensional scaling of point intensity, not a fitted ancient administrative service law or reproduction of that paper.",
+  "known_before_plan": "Both old Earth pools and all108 adaptive outcomes already exposed. Old draw_c0.35_L450 lead Q0.62140955 is a grid-boundary development choice. No new150/225/300/650 grid outcomes computed. Same frozen scorer and allocator; no modifications to physics, populations, history raster or target counts.",
+  "control": "Every450km coefficient/seed/pool result and coordinate array must replay its prior adaptive result exactly. All other old artifacts remain immutable. Counts1202Han/1292Rome, all original eligibility/intensity normalization/pair-separation invariants remain required."
+}

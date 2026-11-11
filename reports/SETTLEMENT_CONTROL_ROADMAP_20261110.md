@@ -43,9 +43,11 @@ silently replaces the other.
 - [x] S1c initial mechanism study: distinguish centre intensity from people,
   test adaptive local spacing and450/800/1500km history scenarios on exposed
   Earth pools, retain exact-location/spacing alternatives and review all counts.
-- [ ] S1c remaining: historical occupation-age/role evidence and further
-  robustness at the selected prior's grid boundary; scenarios do not establish
-  actual past occupancy. Preserve this gap through later population/control work.
+- [x] S1c grid-boundary robustness: [100 shorter-scale evaluations](SETTLEMENT_HISTORY_BOUNDARY_20261111.md),
+  protocol710af13a,20 exact overlap controls; old450km lead retained inside the
+  expanded range. No accuracy gain or global-optimum proof.
+- [ ] S1c remaining: historical occupation-age/role evidence; spatial-prior scenarios
+  do not establish actual past occupancy. Preserve this gap through population/control work.
 - [ ] S1d: Freeze a finalist and identify a defensible prospective transfer pool
   before evaluating it. Record coverage, site roles, shared geography and dates.
 - [ ] S1e: If qualified, rebuild settlements, tracks, food-supported institutions
@@ -69,7 +71,11 @@ Earth qualification.
 - [x] Test coordinate interpretations against six declared sites/eight official
   references: [OSGB-compatible X=easting/Y=northing supported](ROMAN_RURAL_COORDINATES_20261110.md),
   not whole-source precision or model accuracy.
-- [ ] Resolve actual physical places, CSV positional precision and extra phase
+- [x] Document general phase-date purpose from authors2016 methodology and audit
+  internal date integrity: [1031 consistent/10 requiring review](SETTLEMENT_PHASE_EVIDENCE_20261111.md).
+  Roles may be successive; exact-point/name review blocks retain189 observations
+  without physical merges or assigned function intervals.
+- [ ] Resolve actual physical-place scope, CSV positional precision and specific phase
   semantics; retain the operational coordinate interpretation with explicit
   uncertainty, not official export-CRS certification. Association blocks are not
   site merges, and site dates are not role dates.
@@ -152,8 +158,9 @@ Both remain on the Pareto frontier. New Q .621 vs best fixed .570 is a declared
 development tradeoff, not percentage accuracy or prospective validation.
 
 Actual history/occupation-age interpretation and role/resolution evidence remain
-unfinished S1c work. The selected450km prior is a tested-grid boundary, not a
-universal calibrated historical scale. Do not mistake unchanged population totals
+unfinished S1c work. The initial450km minimum is now bracketed by the declared150–650km sweep;
+all100 evaluations preserve counts and20 overlap controls replay exactly. The old
+lead is retained with no Q gain, not a universal historical scale or global optimum. Do not mistake unchanged population totals
 or an intensity normalization for calibrated demographic occupancy.
 
 S1d source audit: [Vidarbha](VIDARBHA_PREPARATION_20261110.md) is NOT ready as
@@ -174,8 +181,13 @@ in65 nontrivial components without physical merges or assigned folds. A follow-u
 [six-site/eight-point coordinate audit](ROMAN_RURAL_COORDINATES_20261110.md) supports
 operational OSGB-compatible X=easting/Y=northing in metres (all references within188m;
 reversed axes minimum29km), despite conflicting thesis labels. Whole-source precision
-and extra phases remain unresolved; no whole-source projection/target map. Resolve
-places/phase/precision and coverage before role-specific calibration. Source raw tables are cached only; aggregate diagnostics are public.
+and individual function intervals remain unresolved; the later source-methodology
+audit documents the general purpose of phase fields as major settlement changes; no whole-source projection/target map. Resolve
+place scope/function dates/precision and coverage before role-specific calibration.
+The11 November audit retains1031 internally consistent change records and flags10
+for review, without sorting/clipping or assigning roles. New point/name blocking
+includes189 related observations, not physical-place merges. Do not force the
+approximate published settlement total through automatic de-duplication. Source raw tables are cached only; aggregate diagnostics are public.
 Phased crop/collection evidence for S4 remains metadata-only. Exposed Han/Rome/Sui/Tang/Hellenistic/
 medieval/Domesday pools cannot be relabelled unseen. Additional development use
 is allowed if declared. Next source acquisition should audit role/phase/coverage
@@ -206,3 +218,6 @@ after qualification. S2–S5 remain required. No parent stage is complete or dro
 |2026-11-10|S2 executable role-evidence compiler and association blocks|All observed labels mapped explicitly; source date conventions documented; no scores, allocations or production changes|Resolve place/MAP/phase/coverage gates, then declare role calibration; retain S1 and S3–S5|
 
 |2026-11-10|Coordinate interpretations tested after role milestone9ad8a181|Six exposed named sites/eight official references support OSGB-compatible XY metres; all points retained, no offset fit or model score|Place identities, extra phases, positional uncertainty and coverage before calibration; preserve full roadmap|
+
+|2026-11-11|Declared shorter history-scale experiment completed|100 exposed evaluations,20 exact overlap controls, no Q gain;450km now interior and300km alternative retained|Prioritize actual occupation/role evidence and appropriate transfer over more L tuning; keep S1e/S2–S5|
+|2026-11-11|Source-methodology chronology and identity audit|Major changes documented;1031 internally consistent/10 review records;189 observations blocked, no physical merges or role intervals|Declare role-specific conditional/dated targets and grouped/spatial coverage before scoring|
