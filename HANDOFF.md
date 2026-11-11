@@ -1,3 +1,24 @@
+# Provider audit and Earth institution-source preparation declared — 11 November 2026
+
+* Capacityd27700b2/protocol3d3a6c4e pushed/verified BOTH branches. Continuedafterpush.
+* Inputaudit found~86% year-store staffatgeneratedpainted-claimhypotheses,not observed
+  institutions:raw84600/98700,corrected87000/101100. Actualsitecounts1034raw/1053
+  corrected,151marked and12unresolvedeach. Capacityreport/HANDOFFsitecountcorrected.
+* PRIORITYbefore monthlyserviceclaims:providerrole/staff evidence and scenario
+  eligibility,notbetterroutesaroundunqualifiedall-town100personcohorts. Do not
+  equatefortifiedtownwithprofessionalsoldiers,monasterywithgarrison,missinginfo
+  withabsenceoflocal/nonstategovernance. All18actors+unresolvedmuststayvisible.
+* NEXT calibration/institution_evidence_20261111/plan.json declared BEFOREPolaris
+  workbookrows/values ornewproviderfields. OfficialSeshatdata linksPolaris2026
+  2.76MBxlsx onGithub;metadataonlyknown. Preparation-only:pincommit/hash/license,
+  schema/time/uncertainty/coverage;NOmodelmatching/scores/fitsorancientstaffcounts.
+* UCLTurchin2018PDFdownloaded/privatepdftotext,DOI10.1073/pnas.1708800115,cache
+  data/cache/institution_sources_20261111/turchin2018.txt+download.json. RawPDF
+  removed. CodebookURLisPDF11.15MB,first8MBboundedfetchrejected;retry16MBbound
+  if needed,retaintext/hashonly. Primarycodebooklivewebsite403;officialOxford
+  methods/data pagesread. No rawthirdpartyworkbookorarticletextinGit/portable.
+* Full S1c/d/e,S2–S5,activeclimater44 andallactor/nonstate/mobilescopepersist.
+
 # Capacity consumer complete, ready to push — 11 November 2026
 
 * Protocol3d3a6c4e before results. Newpolity/service_capacity.py supported_staff_hours
@@ -6,7 +27,7 @@
   people/staff,no automaticrerouting/maxflow.8unit tests pass,includinglimits.
 * Builder/reviewer/plotter/publisher under scripts/*settlement_service_capacity.py;
   output/settlement_service_capacity_20261111:fields.npz/results/review/figureprovenance.
-  FrozenactualEarth raw/corrected1053sites x10foodcases x3commitments=60cases.
+  FrozenactualEarth raw/corrected1034/1053sites x10foodcases x3commitments=60cases.
  20periodicfoodchecks matcholdledgers;60perorigin/providerhourcases independently
   recomputed,twoatlaspackets byteexactvsa9b3858c. No worldchanges,r44staysactive.
 * Arbitraryworkunits:600grosshours/cohortresident/year;0/50/100%otherduties;each

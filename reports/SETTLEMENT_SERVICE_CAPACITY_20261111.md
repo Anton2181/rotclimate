@@ -38,8 +38,8 @@ participation, subsistence work and existing-duty information.
 
 ## Coupling to the current atlas
 
-Both frozen raw/corrected Earth settlement packets contain 1,053 marked/proposed
-sites and ten food-constrained alternatives. The unconstrained reference is
+The frozen raw/corrected Earth settlement packets contain 1,034 / 1,053
+marked/proposed sites respectively and ten food-constrained alternatives each. The unconstrained reference is
 excluded. The diagnostic reconstructs all 20 repeating food years from the
 recorded arrivals, resident needs and stores; consumption, losses and unused
 food match the recorded ledgers. No food reallocation or settlement placement
