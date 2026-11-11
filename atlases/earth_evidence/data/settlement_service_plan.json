@@ -1,0 +1,65 @@
+{
+  "date": "2026-11-11",
+  "status": "declared_before_new_service_fields_or_nonroadside_scores",
+  "stage": "S2 finite request allocation and conditional role diagnostics; not role/population/control adoption",
+  "known_before_protocol": "Previous selected-archive context scores exposed: suitabilityAUC.54784/history-intensity.51904, block means.60146/.58590. Existing full source labels and matches already exposed. No new service fields, strict-nonroadside class counts/AUC or service scores computed.",
+  "question": "Can path-based accessible demand and competition separate recorded nucleated contexts better than centre-placement intensity, including strict exclusion of roadside-tagged records?",
+  "inputs": "Unchanged frozen Roman Earth400x600 inputs, original1292centre budget, priorL450intensity and private2475matched source records. All prior artifacts immutable; no new climate/population estimation.",
+  "demand": "D_i=existing reference-density_i*cell_area within original allowed land. One potential request unit per reference-resident equivalent. It is not extra residents, actual rural population, money, consumed food or completed service. No food is produced or staff inferred.",
+  "candidate_mass": "m_j=existing L450intensity_j*cell_area on eligible cells, globally normalized to original1292expected centres. Fractional candidate opportunities, not actual staffed places. Use unchanged fields; no source sites/labels supply candidates/counts.",
+  "transport": {
+    "road_scenarios": [
+      "no_roads",
+      "recorded_roads"
+    ],
+    "one_way_budgets_days": [
+      0.5,
+      1.0,
+      2.0
+    ],
+    "method": "Reuse existing directional Tobler walking edges,7walking hours/offpathfactor.6, road30km/day. Terrain eta1 annual dry scenario. No ships,ferries,horses,generated roads,seasonal closures or political barriers. All land passable for paths, demand/candidates remain original allowed mask. Existing corner-cut prevention retained.",
+    "kernel": "For candidate j and origin i, require BOTH shortest directed legs <=B. effective t=(out+return)/2; K_ji=exp(-t/(B/2)) within cutoff,zero otherwise. No symmetry assumption for slopes. Budgets/decay are declared scenarios, not empirically fitted ancient market schedules."
+  },
+  "allocation": "Z_i=sum_j m_j K_ji. Potential choice flow_ji=D_i*m_j*K_ji/Z_i if Z_i>0,else0. A_j=sum_i flow_ji; unallocated=sum_{Z_i=0}D_i. SumA+unallocated must equal inputD; each origin apportions at most its own demand. No capacity or institutional service fulfilment is established.",
+  "predictors": [
+    "uniform and unchanged suitability/history intensity references",
+    "overlapping accessible potential P_j=sum_i D_i*K_ji (not additive allocated demand)",
+    "allocated potential requests A_j",
+    "requests per expected centre A_j/m_j, zero where m_j=0"
+  ],
+  "computation": "Core all model-grid cells within lat49..57/lon-7..3, fixed before scores, not archival target sites. Build a bounding crop plus halo >=ceil(2*Bmax*maximum_edge_speed/cell)+2cells. Verify actual maximum edge speed<=30km/day. Demand origins/rivals for every core candidate then fit within halo; halo scores are boundary diagnostics, only core valid. Require every formerly-included source match to be in core; do not drop sites to fit crop.",
+  "contrasts": {
+    "full": "Exact previous426/2049record contrast and original nine coordinate scenarios; same cell/class unit weighting and mixed ties.",
+    "strict_nonroadside": "Exclude EVERY matched source record with roadside settlement among any minor labels, even if also village/vicus. Comparison remains farm/villa. No road-derived type imputation; gate >=30representedcell/class units each at central coordinates before scoring this subset."
+  },
+  "metrics": "Same conditional rankAUC with tied cell/class units. Report full/strict subsets, all9offsets, all road/budget/field scenarios, central50km-block and region/fieldwork/AREA strata. No best-case coordinate or predictor selection, fitted coefficients, p-value claim or independent transfer.",
+  "invariants": "Finite/nonnegative fields and normalized choices; per-origin request budgets, aggregate demand balance, unallocated demand, no sea/corner crossing and directed return cutoff. Compare actual sparse allocations against small dense toy fixtures. Physical outside-window/land exclusions inherited, no nearest-land rescue.",
+  "selection": "Diagnostic comparison only; report all outcomes, including weak/reversed results. No default/adoption if even higherAUC. Need functional/observation model plus timing/coverage/transfer and shared food/staff/control qualification. S1c/d/e and S3\u2013S5 remain.",
+  "literature": [
+    {
+      "doi": "10.1016/j.jas.2012.12.025",
+      "title": "Models of settlement hierarchy based on partial evidence",
+      "authors": "Bevan and Wilson2013",
+      "use": "Spatial interaction,partial evidence and realistic route framework; not replication or borrowed parameters."
+    },
+    {
+      "doi": "10.1177/002224296402800307",
+      "title": "Defining and Estimating a Trading Area",
+      "authors": "Huff1964",
+      "use": "Competing destination choice normalization; our finite cutoff/exponential travel kernel is a declared scenario, not original coefficient calibration."
+    },
+    {
+      "doi": "10.1080/01944365908978307",
+      "title": "How Accessibility Shapes Land Use",
+      "authors": "Hansen1959",
+      "use": "Overlapping accessibility as a comparator; not a conserved allocation."
+    },
+    {
+      "url": "https://stg.esri.com/news/arcuser/1003/files/huff.pdf",
+      "authors": "Huff2003",
+      "title": "Parameter Estimation in the Huff Model",
+      "use": "Author explanation of normalized choice and empirical parameter estimation; no retail parameters transferred to200AD."
+    }
+  ],
+  "consumers": "The request-allocation primitive can later accept actual supported-resident demand and staffed centres from the shared ledger. It creates neither people nor political power. Any proposed functional/role map must loop into typed settlements and the SAME food/staffing/control consumers before adoption; all actors/nonstate areas included."
+}

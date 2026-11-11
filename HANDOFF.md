@@ -1,3 +1,69 @@
+# Finite service demand published after recovery — 11 November 2026
+
+* Full S1c/d/e,S2–S5 and separate physics queue persist. Environment returned with
+  all core files/results intact. Local protocol192c7eb3 frozen BEFORE service fields
+  or strict-subset scores; no production adoption, active physics remainsr44.
+* New primitive polity/service_demand.py partitions each origin's finite potential
+  requests across competing expected opportunities. Requests are NOT extra people,
+  food,staff or completed services. service_access.py reuses directed Tobler land
+  routes, both legs constrained, no water/corner shortcut or political travel wall.
+* Fields/scoring/review scripts under scripts/*settlement_service_demand.py; output/
+  settlement_service_demand_20261111 has fields.npz,manifest,results,review.6 scenarios
+  (roads/no roads x .5/1/2days),21predictors,9offsets,full/strict context contrasts.
+* Strict context subset153source/147included nucleated records,97positive cellunits
+  vs797farm/villa,45mixed. Per-centre globalAUC≈.64–.65 but2day local50km≈.55–.56,
+  below suitability≈.575 locally. No chosen predictor; geography/opportunity effect
+  may explain gain. All scenarios/strata retained, no fitting or role-date inference.
+*104 combined tests pass. Independent review378direct AUCs,6requestledgers,27exact
+  previous refs,18actual FULL original-window graph/rival checks vs crop. Fresh-output
+  replay4artifacts byte-exact;13 previous source/numerical artifacts unchanged.
+* Standalone publisher/base restoration/package recipe now complete. Native service
+  panel8rows/2figures/6links, downloaded modelNPZ byte-exact, mobile344/390/light-dark,
+  previous role panel and general evidence functionality pass. Figures posted last
+  round, corrected map bounds1965x930; no raw archive locations/cache redistributed.
+* Recovery note below is historical. Current source dataset remains exposed,
+  conditional development. New service exposure tracked; do not label independent.
+  FullZIP/sitecopy unbuilt under quota;108 Windows-style critical files byte-
+  exact,666 local dependencies resolve,publisher idempotent. No actual world
+  settlement/control map changed.
+* NEXT (continue after commit/push): predeclare and run candidate-availability
+  uniform/environment/history masses, zero-travel D/m and inverse-mass controls,
+  plus local reference-demand comparator. Keep same full/strict cohorts and all
+  old geography/effort/offset checks. Need show interaction adds more than a
+  geographic division by sparse opportunities before promoting functional roles.
+  Qualified roles must feed SAME population/food/staff/institution/control ledger,
+  all actors/nonstate/mobile populations. No every-region veto introduced.
+
+# Service-demand recovery in progress — 11 November 2026
+
+* Environment interruption occurred DURING publication patch; core source/results/
+  figures survived intact. New publisher/base/packaging/attributes edits did NOT
+  land. Current localHEAD192c7eb3 is protocol-only; last verified remote56c9f3ff.
+* New modules polity/service_demand.py and service_access.py, builder/evaluator/
+  reviewer/plotter under scripts/*settlement_service_demand.py; report under reports.
+  Protocol calibration/settlement_service_demand_20261111/plan.json frozen192c7eb3
+  BEFORE fields or strict-nonroadside scores. No production adoption.
+* output/settlement_service_demand_20261111:fields.npz/fields.json/results.json/
+  review.json. Review passes378directAUCs,6requestledgers,27exactoldreferences and
+  18 actual FULL original-window graph/rival checks versus cropped fields.
+* Nine new unit tests passed before interruption; combined104 suite still pending.
+  Fields implement finite potential requests, not people/food/staff/completed services;
+  both directed walking legs constrained; all scenarios preserved.
+* Strict subset153source/147included nucleated records,97cellunits vs797farm/villa,
+ 45mixedcells. Requests-per-centre≈.64–.65 overall, but only≈.55–.56 local50km versus
+  suitability≈.575. Broad opportunity/geography effect; no chosen predictor/default.
+* Two figures generated and posted: settlement_service_demand_scores_20261111.png
+  (2100x870), maps (1965x930 after tightbboxfix). No raw archive positions shown.
+  Map fixed roads/B1; hatched outside modelwindow,blue water,grey no displayed value.
+* NOW finish standalone publisher + base restoration + package recipe/attributes;
+  browser/mobile/links; combinedtests/replays/Windowsfocusedcheck; update exposure/
+  full roadmap; commit/push BOTH maintained branches. Rawcache NOT Git. FullZIP
+  unavailable under~155MB free quota. Preserve S1c/d/e,S2–S5 and physicsqueue.
+* AFTER: test candidate opportunity masses(uniform/environment/history),zero-travel
+  and inverse-mass controls BEFORE attributing gain to service interaction. No
+  after-outcome predictor reversal/adoption. Must feed SAME ledger before qualified
+  world settlement/control changes; all actors/mobile/nonstate scope persists.
+
 # Conditional role diagnostic complete: weak, no fitting/adoption — 11 November 2026
 
 * Full S1c/d/e and S2–S5 programme remains on roadmap. Protocolcccab768 pushed to

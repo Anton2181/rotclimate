@@ -246,3 +246,17 @@ relabel this pool unscored or independent. Prior protocols/audits remain histori
 checkpoints. Next, define an explicit role/service-demand and observation model,
 with a non-roadside contrast before road-based predictors, grouped spatial/effort
 checks, and the SAME downstream population/food/staff/control consumers.
+
+## Finite service-demand mechanism tested,11 November2026
+
+[Protocol192c7eb3 and results](SETTLEMENT_SERVICE_DEMAND_20261111.md): competing
+reachable opportunities partition finite potential requests; no people/staff/food
+created. Both directed land legs constrained.378AUCs,6requestledgers,27oldrefs and
+18full-window checks pass. Strict global gains≈.65 weaken locally≈.55–.56; no
+predictor/default or world role/control adoption. This completes the initial
+service-allocation primitive/test, not S2's qualified role model or S1c/d/e.
+
+Next predeclare availability-mass and zero-travel/inverse-mass controls before
+attributing improvements to interaction. Keep source observation/timing and
+transfer gaps explicit. S3–S5 remain required and actual consumers must share the
+same resident/food/staff/institution/control ledger across all actors.
