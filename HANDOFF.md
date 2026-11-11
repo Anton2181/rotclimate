@@ -1,3 +1,44 @@
+# Supported core histories checked; joint point experiment declared — 11 November 2026
+
+* Source repair/completecount/atlaspublication bbc31fd0 committed+pushed;continued.
+  Core-source protocol5136c09e pushed BEFORE newhistoryfields. Only maintained
+  branch friendly-turing43ygeu;no oldbranchrecreation,keepgoing aftereachpush.
+* NEW polity/core_travel.py excludesunsupportedcoarsenednodes,requirescoveredcores,
+  keepsoldcosts/forestshares/coarsen3/8neighbourgeometry.4meaningfultests pass:
+  full-support exactoldkernel forfloat32ANDfloat64,unknownwatercorridorblocked,
+  unsupportedcorethrows(no nearestvalid rescue). FirstEarthcompatibility run found
+  implicitfloat64relief conversion;fixedpreserveactualsourcefloat32mean;A nowEXACT.
+* build_core_population_inputs.py cases Aoldglobal,Bonlycorrectedcoastalrelief,
+  Ccorrectedoldprefix+regionalNEappend32–48N125–134E,supportnonrectangular,unknown
+  excludednotcheapwater. AlloldnodesB<=A,C<=B under1e-7kmguards. Oldarchived800
+  histories replay EXACT onbothpoolgridsincloldclippedHanextent. New450/800fields
+  cover/connect ALLrequired50349Han/56378Romanlandcells. No pointscore computed.
+* Output/core_population_inputs_20261111 distances.npz +han_history/rome_history,
+  results/review/replay. HanDchanges[-79.8258,+671.2788]km,mean+6.4708,1564cells
+  longer(oldedgeclampingbiasfixed);Rome[-136.3097,0],mean-27.0384. Fixedcosts
+  forest2/sea1/relief1;theseareeffectivekmprior,not calibratedoccupationage.
+* Independent review_core_population_inputs.py certifiesedgeBellmanbounds and
+  tightdescendingpredecessorsforallfinitecoverednodes(positiveweights) across
+  2,950,384directedarcs,withoutsecondnewkernelDijkstrarun;bothconsumergridschecked.
+  Freshdistances/bothhistoryNPZ/resultsJSON byteexact. Normalatlaspopulation-source
+  panelnow includesnestedcorestatus+3downloads,14local links total,browserpass.
+* NEXT ACTUALPOINTEXPERIMENT already declared calibration/
+  settlement_joint_locations_20261111/plan.json BEFOREANYnewplacements/scores:
+  samecompleteHan+oldRomanpopulationinputs,bothcheckedcorehistoryfields;
+  commonnaturalproductioncounts,existingeligibility,adaptivec.35/max45km,seeds
+  [1,7,19,43,97]. Densitypower[.5,.7,1] inlegacydensityterm;historyL[450,800],
+  floor[0,.1,.3,1] withfloor1Lduplicateomitted=21variants;210draws +10oldclipped
+  L450power1ablation +4production/fixed18controls=224placements. No observedcount
+  budget,parameterselectiononIndia,sourcepointanchors orplanet/climatefit.
+  Meanseed/equalpoolQ old .6weight,frontier,weight.4/.8sensitivity;aggregate
+  tradeoffsallowed,engineering/accountingconstraintshard. AllpoolsSPENT,noblindclaim.
+* NOW stage/commit/pushcorechecks+declaredpointplan,thenRUN224comparison promptly,
+  independentreview/plots/normalatlasresearch/pushandcontinue. Do notstallatmetadata
+  ornewinstitutiondetour. Sourcepipeline corrections notthemselves new pointskill.
+  Count/size release2inprogress;residentallocation/sharedledgerfantasyrelease3/
+  normalNUMERICatlas4pending. Fullroadmapallactors/mobile/nonstate unchanged.
+  ~56MBfree,no fullZIP/sitecopy. Exactstagepaths only,olduntrackedlogsnotours.
+
 # Population coverage repaired; coastal NoData fixed; complete count replay — 11 November 2026
 
 * Latest pushed source/protocol snapshot e552238f on single maintained/default

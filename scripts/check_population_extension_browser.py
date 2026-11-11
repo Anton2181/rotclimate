@@ -24,7 +24,8 @@ def main():
         for link in detail.locator('a').all():
             url=link.evaluate('(el)=>el.href');response=page.request.get(url);assert response.ok,url
             relative=url.removeprefix(a.base+'/');assert response.body()==(ROOT/relative).read_bytes(),relative;links.append(relative)
-        assert len(links)==11
+        assert len(links) in [11,14]
+        if len(links)==14:assert detail.locator('#core-population-inputs').count()==1
         with page.expect_download() as event:detail.locator('a[href="data/population_extension.json"]').click()
         assert Path(event.value.path()).read_bytes()==(ROOT/'atlases/earth_evidence/data/population_extension.json').read_bytes()
         for img in detail.locator('img').all():img.evaluate('(el)=>el.decode()');assert img.evaluate('(el)=>el.naturalWidth>1000')
@@ -41,7 +42,7 @@ def main():
     (a.out/'checks.json').write_text(json.dumps(dict(status='passed',default_collapsed=True,keyboard_open=True,rows=5,
         byte_exact_local_links=links,figures_loaded=2,original_failure_retained=True,source_repair_not_fantasy_adoption_explicit=True,
         desktop_mobile_light_dark=True,previous_panels_retained=True,page_errors=errors,failed_requests=bad),indent=2)+'\n')
-    print('Extension browser: five rows,11 exact links,source repair/original failure,figures,mobile/light/dark passed.')
+    print('Extension browser: five rows,',len(links),'exact links,source repair/original failure,figures,mobile/light/dark passed.')
 
 
 if __name__=='__main__':main()

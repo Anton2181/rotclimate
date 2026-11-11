@@ -1,0 +1,84 @@
+{
+  "status": "supported_core_input_reconstruction_no_point_fit",
+  "adopt": false,
+  "plan_sha256": "62c95c23999635176d657fe37ae3aad6c2883139aea63929a2f384ce284fc876",
+  "producer_sha256": "c0af7b486b177cbdb0d829b59b13e4e692c54d43bf8d7ec0fb725ab3e73a9aee",
+  "sources": {
+    "output/land_people/earth/earth.npz": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+    "output/earth_population_extension_20261111/tile.npz": "e3768a0b1b9589ffffcb6fc6570ef0f8e42ceb82cb3c6ac2c3fe6512ef590aca",
+    "output/earth_population_extension_20261111/global_nodata_patch.npz": "1dd55a647003f26498628b8f80c0d4536dc3c2b487c0b937b8c2dc0835a83b55",
+    "output/earth_population_extension_20261111/correction.json": "2fe574a09b5848b9dc7b9acbb770f68b0c3aa2512a84c68e510386f6c99bf14b",
+    "output/earth_population_extension_20261111/review.json": "9aa717db10243c0fff4a9c1d3afcff73dd609c1766a2ff2ff86f296d629d3e03",
+    "scripts/population_cores.py": "d875d579e772e0d24994fe86a2765b1c422a112ef178e82dab3843cd7d15070b",
+    "polity/core_travel.py": "e1b9c041b43b832da018391204ac0e46358cc6af0bbe6e1defde5d3dd0d8a645",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "scripts/correct_population_extension.py": "692d364843d15844a67f745a9c636e98dbdbd28a16020800a52c84003e75d311"
+  },
+  "distance_archive_sha256": "b742679975f924945078c13e146dc62aa0e56596bec135dd7c0084aa41f1c779",
+  "baseline_exact": true,
+  "coast_monotonic_max_increase_km": 0.0,
+  "extension_old_node_max_increase_km": 0.0,
+  "cases": {
+    "A_original": {
+      "coarse_nodes": 122752,
+      "coarse_directed_edges": 977388,
+      "sources": 5,
+      "covered_fine_cells": 1104768,
+      "connected_fine_cells": 1104768
+    },
+    "B_coast_corrected": {
+      "coarse_nodes": 122752,
+      "coarse_directed_edges": 977388,
+      "sources": 5,
+      "covered_fine_cells": 1104768,
+      "connected_fine_cells": 1104768
+    },
+    "C_supported_extension": {
+      "coarse_nodes": 125056,
+      "coarse_directed_edges": 995608,
+      "sources": 5,
+      "covered_fine_cells": 1125504,
+      "connected_fine_cells": 1125504
+    }
+  },
+  "pools": {
+    "han": {
+      "input_path": "output/earth_population_extension_20261111/han_corrected_inputs.npz",
+      "input_sha256": "f55e244d6d1c7a5a2d7d0b847be95a31ae0f732d7daa1b5169e22d296659cdab",
+      "history_sha256": "a6b6131ae03f7df2bc0908c40c0fcee44ee140bbd746e5221419c8b3204c1713",
+      "required_land_cells": 50349,
+      "required_land_covered_and_connected": true,
+      "original_history_exactly_reproduced": true,
+      "maximum_distance_change_km": 671.2787750746168,
+      "minimum_distance_change_km": -79.82583277110064,
+      "mean_distance_change_km": 6.470776021180512,
+      "longer_than_old_clipped_distance_cells": 1564,
+      "point_placement_scores_computed": false
+    },
+    "rome": {
+      "input_path": "output/settlement_locations_20261110/rome_inputs.npz",
+      "input_sha256": "dd98cc76af9aa5e7a68f771647546df1ec2116b5315ec830f6e4b2c9e888ac9e",
+      "history_sha256": "a348eb63cb72ee6b270b615b9bdbf77c58b8c10c2cca6b9e8619119fa82bf45c",
+      "required_land_cells": 56378,
+      "required_land_covered_and_connected": true,
+      "original_history_exactly_reproduced": true,
+      "maximum_distance_change_km": 0.0,
+      "minimum_distance_change_km": -136.3096786621013,
+      "mean_distance_change_km": -27.038370802835114,
+      "longer_than_old_clipped_distance_cells": 0,
+      "point_placement_scores_computed": false
+    }
+  },
+  "history_scales_km": [
+    450,
+    800
+  ],
+  "forest_cost": 2.0,
+  "sea_cost": 1.0,
+  "relief_cost": 1.0,
+  "coarsen": 3,
+  "point_placement_scores_computed": false,
+  "history_or_occupation_age_calibrated": false,
+  "atlas_or_food_staff_control_changed": false,
+  "limits": "Fixed spatial-prior scenario,not politicalauthority or datedoccupation. Shortestpaths restricted to knownsourcegeometry. Alloldpools andVidarbhaspent. Nextfreezeandrunactualpointcomparison;no adoptionfromsourcechecks."
+}
