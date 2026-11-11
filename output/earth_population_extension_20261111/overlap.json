@@ -1,0 +1,114 @@
+{
+  "status": "overlap_failed_no_stitching",
+  "adopt": false,
+  "plan_sha256": "18adb530d5d22606def39b493366ea2bb916826c7f702829104893f051f96edf",
+  "sources_sha256": "dcb713a2e550b85ffe080c42a1c0f8ca35851b09b3d535e4e53a5ccc59aa6a43",
+  "producer_sha256": "2744271e120226c42f8ff669f2773e9ab8e7a8ef99b578fef23ca3c0efd6fd38",
+  "frozen_sources": {
+    "scripts/land_people.py": "b344faae07f411b125fb09f5838f6d9d893fa6bf4017ab62cd0707bd0025d1ae",
+    "scripts/land_people_earth.py": "801c88c0c3beb20ad103d9dbc55a129e436ebad4557025bb995ebb8362b852a8",
+    "scripts/arable_slope_earth.py": "212a65e4938d1382043d0a9efbd0e02595d751fcac88be8f950d507c447516d3",
+    "data/arable_slope_model.json": "7022190bd0fb0c0f2c71a823418089e09200655fe8ba7858f78bbfb51980b2be",
+    "harvest/models.py": "06a02977cd72677f9d1fb06b86f966d8f5449331fbddcb280117df7339f83194",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "data/cache/naturalearth_dl/ne_10m_rivers_lake_centerlines.geojson": "bb854a900ecbd3b408df46d5e16e3e0f974ba55993f9d8b5c26e855273c0905a",
+    "output/land_people/earth/earth.npz": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+    "output/settlement_locations_20261110/han_inputs.npz": "f4a97680a89fff2153a2de4d3912e6500ad82122e1ee8d306132863c6fd34bbf"
+  },
+  "tile_sha256": "e3768a0b1b9589ffffcb6fc6570ef0f8e42ceb82cb3c6ac2c3fe6512ef590aca",
+  "crop_margins": null,
+  "fallow": 0.6,
+  "overlap_land": {
+    "compared_cells": 2304,
+    "parent_land_cells": 1370,
+    "tile_land_cells": 1370,
+    "mismatched_land_cells": 0,
+    "passed": true
+  },
+  "overlap_fields": {
+    "T_ann": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "max_guard_error": 0.0,
+      "tolerance": 0.0001,
+      "guard_metric": "absolute",
+      "passed": true
+    },
+    "P_ann": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "max_guard_error": 0.0,
+      "tolerance": 0.0001,
+      "guard_metric": "absolute",
+      "passed": true
+    },
+    "PET_ann": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "max_guard_error": 0.0,
+      "tolerance": 0.0001,
+      "guard_metric": "relative_where_parent_positive_else_absolute",
+      "passed": true
+    },
+    "aridity": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 0.0,
+      "mean_absolute_difference": 0.0,
+      "max_guard_error": 0.0,
+      "tolerance": 0.0001,
+      "guard_metric": "relative_where_parent_positive_else_absolute",
+      "passed": true
+    },
+    "arable": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 0.7700000256299973,
+      "mean_absolute_difference": 0.002810219071642326,
+      "max_guard_error": 0.7700000256299973,
+      "tolerance": 0.0001,
+      "guard_metric": "absolute",
+      "passed": false
+    },
+    "irr": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 5.806144250485794e-18,
+      "mean_absolute_difference": 3.382723336778573e-20,
+      "max_guard_error": 5.806144250485794e-18,
+      "tolerance": 0.0001,
+      "guard_metric": "absolute",
+      "passed": true
+    },
+    "capacity": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 68.29764986038208,
+      "mean_absolute_difference": 0.2492614958408105,
+      "max_guard_error": 9.625000915591224,
+      "tolerance": 0.0001,
+      "guard_metric": "relative_where_parent_positive_else_absolute",
+      "passed": false
+    },
+    "density": {
+      "compared_cells": 1370,
+      "finite_cells": 1370,
+      "max_absolute_difference": 15.157382609542092,
+      "mean_absolute_difference": 0.054202595901421464,
+      "max_guard_error": 5.834642516682713,
+      "tolerance": 0.0001,
+      "guard_metric": "relative_where_parent_positive_else_absolute",
+      "passed": false
+    }
+  },
+  "overlap_pass": false,
+  "new_han_input_created": false,
+  "physics_calibration_changed": false,
+  "population_ledger_changed": false
+}
