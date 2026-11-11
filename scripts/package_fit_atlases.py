@@ -336,6 +336,13 @@ def main():
     files += [ROOT/'reports/INSTITUTION_SCOPE_20261111.md',
               ROOT/'calibration/institution_scope_20261111/plan.json',
               ROOT/'calibration/institution_scope_20261111/sources.json']
+    files += [ROOT/'reports/VIDARBHA_SURVEY_20261111.md',
+              ROOT/'reports/SETTLEMENT_VIDARBHA_TRANSFER_20261111.md',
+              ROOT/'reports/figures/settlement_vidarbha_transfer_20261111.png',
+              ROOT/'reports/figures/settlement_vidarbha_geography_20261111.png',
+              ROOT/'calibration/vidarbha_survey_20261111/plan.json',
+              ROOT/'calibration/vidarbha_survey_20261111/methods.json',
+              ROOT/'calibration/settlement_vidarbha_transfer_20261111/plan.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

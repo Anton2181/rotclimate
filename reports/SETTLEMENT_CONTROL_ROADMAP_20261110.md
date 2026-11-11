@@ -36,17 +36,26 @@ tracked; detailed institutional roles and differentiated control are subsequent
 releases, rather than reasons to keep postponing a settlement-location/population
 update. None of these milestones is complete merely because code tests pass.
 
-1. **Freeze usable Earth references and comparison rules [IN PROGRESS].** Finish
+1. **Freeze usable Earth references and comparison rules [COMPLETE for this release].** Finish
    the declared date-scope preparation for settlement hierarchy/largest-settlement
    evidence, retain uncertainty and role/source limits, and secure a defensible
    located transfer pool. Seshat's polity attributes do not supply settlement
    coordinates. Previously exposed Roman/Han pools remain development data.
-2. **Fit and test counts, placement and population sizes [PENDING].** Keep count
+   Completed the dated Seshat support comparison and prepared the separate primary
+   Vidarbha field survey. Frozen transfer rules committed in d0c65f94 before new
+   model scores; source now spent after its first parameter-transfer comparison.
+2. **Fit and test counts, placement and population sizes [IN PROGRESS].** Keep count
    budgets separate from placement, compare the existing Pareto alternatives,
    inspect geographic/local errors and run a frozen geographic transfer test.
    Select on declared aggregate tradeoffs with physical/accounting constraints;
    do not require every region to improve. Failure means another fit iteration,
    not calling an unqualified map calibrated.
+   First Vidarbha test: 53 primary cell–frame units; all 24 placement constraints
+   pass, but adaptive L450 loses 10.42 percentage points of 10 km capture against
+   the fixed L800 control, beyond the declared 10 point margin. No adoption.
+   See SETTLEMENT_VIDARBHA_TRANSFER_20261111.md. Next: audit count/role and resident
+   size evidence on existing Earth pools; do not relabel another tuning run on
+   this survey as a fresh geographic holdout.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

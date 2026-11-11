@@ -1,3 +1,50 @@
+# Primary survey transfer completed: candidate fails capture margin — 11 November 2026
+
+* Owner wants continuous work after each commit/push. ONLY maintained/default
+  remote branch claude/friendly-turing-43ygeu; never recreate the retired branch.
+* Preparation plan 5d7d0b00 and actual transfer protocol d0c65f94 were committed
+  before new source records / regional environmental lookup and scores respectively.
+  Read calibration/settlement_vidarbha_transfer_20261111/plan.json exactly.
+* NEW PRIMARY source Zenodo3670055 v2: 268 AllSites, 134 exact settlement joins,
+  all usable coordinates; 82 EH-S yes /41 no /9? /2blank. Independent preparation
+  review passed. One religious orphan does not affect settlement cohort. Old failed
+  literature catalogue3667657 remains unchanged; shared ID strings not place merges.
+* Transfer run output/settlement_vidarbha_transfer_20261111/results.json:
+  121/134 inside assigned nominal 13km frames; 13 excluded, never reassigned.
+  Primary EH-S:74 records,53 distinct cell-frame units (21/16/16); support passes.
+  Natural legacy budgets419(3km),375(9km),not observed-source count fitting.
+  FixedL800 mean local percentile .460951 vs leadL450 .469767 (+.008816).
+  Fixed capture10km16.6667% vs lead five-seed mean6.25% (delta-.104167): FAIL
+  predeclared-.10 engineering tolerance. All24 numerical placement constraints pass.
+  No adoption; no fantasy population/food/tracks/staff/control/physics changes.
+* Independent review:134 joins,2412 full-grid matches (pyproj/direct sphere vs
+  producer projection/KDtree),7290 scalar metrics,24 constraints. Fresh replay
+  byte-exact results.json plus4 exact numerical NPZ identities.25 targeted tests
+  pass. Do not claim a new full-suite result until run.
+* Producer settlement_vidarbha_transfer.py reuses exact frozen allocators/scorer.
+  Both3/9km grids common inputs:globalEarthdensity/occupation+annualaridity,
+  bilinearWorldClimelevation/nearestfinite land,NaturalEarthrivers,roadszero,
+  oldglobalcoretravel. One-cell smoothing changesphysicalscale;coarserglobalaridity
+  commoninput limitation;3km does not create 3km climate. Private IDs/coordinates
+  only data/cache/vidarbha_survey_2016/transfer_matches_*;public NPZ model-only.
+* New figures reports/figures/settlement_vidarbha_{transfer,geography}_20261111.png
+  posted to user. Reports VIDARBHA_SURVEY / SETTLEMENT_VIDARBHA_TRANSFER_20261111.md.
+  Publisher wired to basepublisher/package; normal Earth evidence panel has6rows,
+  all sensitivities/downloads, explicit failed verdict. Hub manifest refreshed.
+* IMPORTANT Reba/Modelski AD100-200 already exposed in great_cities_check.py,
+  POPULATION_20261023 and population_density_research_20261023. Exposure registry
+  corrected. Source freshness never inferred from missing registry entry.
+* Four-milestone release queue:1 Earthreferences/rules COMPLETE for release;
+  2 count/location/size fit INPROGRESS (regional lead fails);3 sharedledger fantasy
+  rebuild PENDING;4 normal atlas publication of new numeric map PENDING. Research
+  page publication is not the final map milestone. Full S1c/d/e,S2-S5,all18actors,
+  unaffiliated/mobile/nonstate programme persists. Active climate r44 unchanged.
+* NEXT finish browser/mobile/link closure/focused Windows-byte QA, commit/push ONLY
+  friendly, THEN KEEP GOING: audit count/role and resident-size Earth reference
+  support, compare opportunity geography and realization separately. Vidarbha now
+  spent; no retuning then fresh-holdout claim. Do not detour into new institutions.
+  ~80MBdiskfree: no full portable ZIP/sitecopy. Old untracked logs must not be added.
+
 # Geographic-transfer field source declared — 11 November 2026
 
 * Latestpush2ef81095 verifiedonsinglecanonical/defaultfriendly-turing43ygeu.
