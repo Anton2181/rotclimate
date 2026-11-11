@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-11",
+  "status": "declared_before_prediction_matching_or_contrast_scores",
+  "stage": "S2 conditional development diagnostic; no dated-role calibration or production qualification",
+  "question": "Does the existing environmental/centre-intensity model distinguish recorded nucleated contexts from recorded farm/villa contexts within the excavated archive, without using unsurveyed space as absence?",
+  "known_before_plan": "All source observations already exposed through preparation. Initial schemas and full-source class counts inspected:527records have a nucleated minor label,2207farm/villa,23overlap. Requiring DOMESTIC_OCCUPATION=Yes and exclusive class labels gives426nucleated-only and2049farm/villa-only records. Existing Rome input keys/shapes inspected; no source-to-grid matching, role-contrast predictor scores or AUC computed. Earth city pools remain exposed; this is not blind.",
+  "source": "Pinned five-table rural-Britain snapshot plus original Roman400x600 Earth input, using its existing source hashes. Preserve every previous numerical/source artifact.",
+  "target": {
+    "positive_labels": [
+      "village",
+      "vicus",
+      "roadside settlement",
+      "unwalled 'small town'"
+    ],
+    "comparison_labels": [
+      "farm",
+      "villa"
+    ],
+    "require": "DOMESTIC_OCCUPATION=Yes; at least one label in exactly one class. Keep overlap/unknown/non-domestic exclusions visible. Labels describe recorded contexts across the archive, not AD200 functions, markets or true absence.",
+    "timing": "Whole-record archival contrast only; no role-date imputation or claim of contemporaneous occupation. Site date/phase flags reported for sensitivity; do not turn lack of dated evidence into absence."
+  },
+  "matching": "Operational OSGB-compatible X-easting/Y-northing metres. Use a documented trusted EPSG27700->WGS84 library pipeline, report installed/version/transform accuracy and missing-grid limits. Match nearest point of the full original lat/lon model grid using spherical distances, BEFORE checking land/allowed. No nearest-land rescue. Keep out-of-window, nonland and disallowed outcomes by class. No new source map required.",
+  "unit": "Retain distinct source records and review blocks. Primary weights give each represented (model cell,class) unit total weight1; repeated excavations in that unit do not increase its mass. Mixed cells retain both classes and hence ties; never drop them to improve discrimination. These are observation units, not unique settlements or resident counts.",
+  "predictors": [
+    "uniform tie baseline AUC0.5",
+    "unchanged environmental site_score without history",
+    "unchanged existing target centre intensity with historyL450 and spacingc0.35; no source label supplies a centre count"
+  ],
+  "metrics": "Report weighted pairwise-rank AUC (ties0.5), class/record/cell overlap and inclusion counts, plus 50km spatial-block diagnostics. This is conditional discrimination within a selected archive, not census accuracy, settlement completeness or political control. No label-based fitting, threshold optimization, offset fit, source reclassification or best-parameter selection.",
+  "coverage": "Report region,fieldwork and investigated-AREA strata; AREA is investigation effort, not full settlement extent or population. Use preregistered AREA bins missing,positive<0.1ha,0.1\u2013<1ha,>=1ha; source fieldwork strings remain explicit. Do not claim stratification removes excavation-selection bias.",
+  "uncertainty": "Report membership/sampling sensitivity to coordinate offsets of0,\u00b12km and\u00b15km along each grid axis, retaining every scenario rather than picking best. These are sensitivity scenarios, not a calibrated location-error distribution. Old exact-association/point/name blocks are future leakage constraints, not independent transfer.",
+  "preparation_gate": "Before scores, require at least30 represented cell/class units in each class in the original allowed-land footprint; report failure/inclusion counts if not met. Do not tune extent or threshold to pass.",
+  "decision": "Diagnostic only; report all predictors and scenarios even if weak/reversed. A gain does not qualify world role assignment or complete S2. A failure prioritizes a role/observation mechanism rather than endless history-scale retuning.",
+  "consumers": "Evidence for future typed residential/nucleated role allocation, then SAME resident/food/staffing/institution/control ledger. No administrator/market/garrison/actor from category alone. S1c actual history,S1d transfer,S1e joint rebuild and S3\u2013S5 remain open."
+}

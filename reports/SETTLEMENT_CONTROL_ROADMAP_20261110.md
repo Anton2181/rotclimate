@@ -221,3 +221,13 @@ after qualification. S2–S5 remain required. No parent stage is complete or dro
 
 |2026-11-11|Declared shorter history-scale experiment completed|100 exposed evaluations,20 exact overlap controls, no Q gain;450km now interior and300km alternative retained|Prioritize actual occupation/role evidence and appropriate transfer over more L tuning; keep S1e/S2–S5|
 |2026-11-11|Source-methodology chronology and identity audit|Major changes documented;1031 internally consistent/10 review records;189 observations blocked, no physical merges or role intervals|Declare role-specific conditional/dated targets and grouped/spatial coverage before scoring|
+
+## Next declared experiment: conditional role contrast
+
+[Protocol](../calibration/settlement_role_contrast_20261111/plan.json),11 November:
+compare recorded nucleated versus farm/villa contexts among domestic-observation
+records, with cell/class weighting, no background absence and no AD200 role claim.
+Source-only counts426/2049 are known; no source-to-grid matching or contrast scores
+yet. Test existing predictors without tuning, report coverage/effort and positional
+sensitivity, keep mixed-cell ties. This is the next S2 diagnostic, not closure of
+S1, dated-role calibration or permission to turn categories into political sources.

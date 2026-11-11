@@ -1,3 +1,24 @@
+# Next conditional role diagnostic declared — 11 November 2026
+
+* Completed history/phase milestone54fcb2f3 and protocol710af13a are pushed and
+  verified on BOTH maintained branches. Full programme remains below/on roadmap.
+* NEXT executable protocol calibration/settlement_role_contrast_20261111/plan.json
+  declared BEFORE source-to-grid prediction matching or role AUC. No contrast scores
+  exist yet. Source-only preparation counts426domestic-nucleated-only vs2049domestic-
+  farm/villa-only;23any-label overlaps excluded from this contrast, not deleted.
+* Target is WHOLE-RECORD selected-archive context, not contemporaneous AD200 roles,
+  true absence, market activity, census or institutional authority. Mixed model cells
+  retain both classes/ties. Primary unit weighting cell/class; source rows remain
+  distinct. Uniform, existingenvironmental and fixedL450centre-intensity predictors;
+  no tuning/fitting or background land absence. Needs trusted grid transform and
+  explicit coverage/effort/coordinate-offset diagnostics BEFORE any interpretation.
+* Original Rome400x600 input schema inspected; no matched source/predictor values
+  computed. No pyproj/cs2cs currently installed; choose documented library pipeline
+  rather than hand-coded geodesy. Read runtime package skill before installing.
+* Protocol gives preparation gate30cell-class units/eachclass; report failures, do
+  not move extent/threshold. Frozen diagnostics may be weak/reversed; report all.
+  No production adoption merely for positive AUC. All S1c/d/e and S2–S5 remain open.
+
 # History boundary tested; successive-role chronology documented — 11 November 2026
 
 * FULL queue remains reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md. No stage is
