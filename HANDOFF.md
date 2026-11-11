@@ -1,3 +1,39 @@
+# Provider audit/Earth institution source complete, ready to push — 11 November 2026
+
+* Protocol831d0b11 BEFORE newproviderfields or Polarisrows. Newhelper
+  polity/institution_evidence.py preservesrawcodes/valueintervals/datebounds;
+  3tests added. prepare_institution_evidence.py produces aggregateearth_preparation
+  andprovider_audit underoutput/institution_evidence_20261111;NOmodelmatching/scores.
+* PinnedPolarisrepo55ca5fbc2b563ddbbc1a3413071d4bd243d0a5fa;workbook2899093bytes.
+  sources.json identifies7privatefiles (workbook,license/readme,codebook/article
+  texts,releaseutils/notebookreadONLY). RepoMITwordingsoftware/docsdoesnotalone
+  establishdatascope;rawworkbook/text stayprivate,noapprovalquestionneeded.
+* 8sheets,626polities/uniqueIDs,10targetvars5007rows,alltargetpolityjoinsmatch.
+  Mostvariabletimeboundsmissing(e.gbureaucrats470/492);sourceexportcopiesAPI
+  boundsbutnull-defaultsemanticsNOTestablished. DoNOTsilentlyinheritpolityspans
+  orclaimAD200fit. UnexpectedSA/A~Pcodesunresolved,1reversedpopulationrange,
+  1malformedmilitaryrange,duplicatekeys and10outofparentintervalrecords preserved.
+* Metadata suspiciousaliasprofessional_military_officer -> 'Professional Lawyers'
+  in legacyEquinoxcolumn. Canonicalname/APIjoinsused;nocrossreleasealiasjoin.
+* Readcodebook:professionalabsence≠nogovernance;hierarchyofpeople≠settlement
+  hierarchy;buildingsalone≠specialistbureaucracy. Unknown/inferred/transition/
+  disagreement notcollapsed. UCLpaperTurchin2018DOI10.1073/pnas.1708800115read.
+* Independentreview5007targetrecords/8sheets/38actorcohorts,all4atlasinputs
+  unchanged. Report/figuremade/posted,publisher/base/package/attributeswired.
+ 121tests pass;fresh3artifactprep/reviewbyteexact;new/previous/evidencebrowsers,
+ 344/390light-dark,downloadreviewSHA,sourceexposurepass;publisheridempotent.
+*179Windowscriticalfilesbyteexact,693activehublinksresolve,rawthirdpartysources
+  excluded. NOWcommit/pushBOTH. SourceprepNOTsealed/independent/calibrated.
+  THENresolvenulldates/code/aliassemanticsandprovider evidencebefore
+  monthlyserviceclaims. OfficialSeshatdata page linksSeshatDatasetAnalysis;
+  officiallinkedrepo matildaperuzzo/SeshatDatasetAnalysisREADMEactuallydocuments
+  singlenodatevalues ANDdisputednodatevalues spanningparentstart/end. Thisis
+  documentedanalysispolicy,notindividualdatedroles. Needpinrepocommit/codeand
+  verifyimplementation,noforeigncodeexecution. DoNOTcopyrandomsampling/interpolation
+  orrange/disputeimputation. Declarestrictvsdocumentedparent-scope policyBEFORE
+  newAD200counts;keeppartial/malformed/conflictingandout-of-parentdatesexplicit.
+  Full S1c/d/e,S2–S5,r44scopepreserved.
+
 # Provider audit and Earth institution-source preparation declared — 11 November 2026
 
 * Capacityd27700b2/protocol3d3a6c4e pushed/verified BOTH branches. Continuedafterpush.

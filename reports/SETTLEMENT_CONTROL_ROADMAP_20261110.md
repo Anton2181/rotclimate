@@ -306,3 +306,22 @@ Next monthly actualsupported-provider access plus explicit pooled labour claims
 for collection,patrol and services. Binarypatrolreach currentlyhasnohourledger;
 do not silently reuse allstaff for eachactivity. Keep source-time/coverage/transfer
 qualification and full S1c/d/e,S2–S5,allactor/mobile/nonstate scope.
+
+## Provider evidence and new Earth institution source,11 November2026
+
+[Protocol831d0b11 and preparation](INSTITUTION_EVIDENCE_20261111.md) expose an
+importantprior:85.71%/86.05% of raw/corrected year-store staffcomesfromgenerated
+painted-claimhypotheses. All18actors/unresolvedretained;markedaffiliation also
+isnotmeasuredworkforce. Foodfeasibilitycannotproveastaffedinstitution.
+
+SeshatPolaris2026pinned55ca5fbc,8sheets/626polities/5007targetinstitutionhierarchy
+records preparedwithoutpredictions/scores. Unknown/inferred/absent/ranges retained.
+4511lackcompleteexplicitrowtimebounds;neednull-scopepolicy,code/alias/range/duplicate
+reviewbeforeAD200comparison. Independent5007records/38actorcohortschecked,
+4atlasinputsunchanged,121tests. Rawthirdpartyworkbook/textprivate;notsealedorfit.
+
+Prioritybefore monthlyserviceclaims:separateproviderrole/evidence/timefromstaff
+quantity,resolveEarthsourcesemantics,anddeclareactualinstitutiondevelopment/
+transfercomparisons. Hierarchyofplacesisnothierarchyofpeople;absenceoffulltime
+specialistsisnotabsenceofgeneralist/nonstategovernance. Keep SAMEfinitepeople/
+food/staff/controlledgerandfull S1c/d/e,S2–S5. No productionadoptionornewphysics.
