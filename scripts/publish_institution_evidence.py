@@ -57,7 +57,7 @@ def main():
     entry=dict(id='seshat_polaris2026',status='prepared_institution_schema_no_model_scores',evidence='reports/INSTITUTION_EVIDENCE_20261111.md',
         note='Pinned release;aggregate schema/time/uncertainty preparation only,no model matching/scores or staffing fit. Raw data private;not sealed/independent. Null dates,codes,aliases and interval review gates remain.')
     previous=next((e for e in usage['datasets'] if e['id']==entry['id']),None)
-    if previous and previous['status'].startswith('exposed_'):entry=previous
+    if previous and (previous['status'].startswith('exposed_') or previous['status']=='prepared_institution_date_scopes_no_model_scores'):entry=previous
     usage['datasets']=[e for e in usage['datasets'] if e['id']!=entry['id']]+[entry]
     write(path,usage);shutil.copyfile(path,data/'dataset_usage.json')
     print('Published provider assumptions and Earth institution preparation;no scores/adoption.')

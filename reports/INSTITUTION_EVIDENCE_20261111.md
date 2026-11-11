@@ -1,5 +1,9 @@
 # Provider assumptions and Earth institution evidence, 11 November 2026
 
+The subsequent [declared date-scope comparison](INSTITUTION_SCOPE_20261111.md)
+now tests the author's documented parent-duration convention. The preparation
+below remains the original schema/assumption checkpoint, with raw dates intact.
+
 The current service illustration is dominated by hypothetical providers:
 85.71% / 86.05% of year-store institutional staff in the raw/corrected atlas are
 assigned to proposed settlements with painted-claim affiliations. Better routes

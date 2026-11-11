@@ -359,3 +359,18 @@ quantity,resolveEarthsourcesemantics,anddeclareactualinstitutiondevelopment/
 transfercomparisons. Hierarchyofplacesisnothierarchyofpeople;absenceoffulltime
 specialistsisnotabsenceofgeneralist/nonstategovernance. Keep SAMEfinitepeople/
 food/staff/controlledgerandfull S1c/d/e,S2–S5. No productionadoptionornewphysics.
+
+## Dated references and bounded map-release path,11 November2026
+
+[Protocolf0f3b892 and scope comparison](INSTITUTION_SCOPE_20261111.md) reconstruct
+10014row-policy cases without sampling,interpolation or value fitting. Documented
+parent scopes give26year200hierarchy groups and18largest-population groups,
+with24/14numeric source rows;explicit-only gives0/4groups. Original dates and
+competing/unknown values remain. This advances release milestone1's references,
+not map calibration. Located transfer and frozen comparison rules remain open.
+
+Owner requested four milestones to a new settlement location/population release:
+the explicit path is at the top of this roadmap. Detailed institution/control
+work remains tracked for later releases. Consolidated development now uses ONLY
+`claude/friendly-turing-43ygeu`;redundant publication branch retired with history
+preserved. Do not push both or recreate the retired branch from old plans.

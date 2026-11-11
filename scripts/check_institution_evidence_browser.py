@@ -32,7 +32,7 @@ def main():
         img=detail.locator('img');assert img.count()==1;img.scroll_into_view_if_needed();img.evaluate('(el)=>el.decode()');assert img.evaluate('(el)=>el.naturalWidth==1950')
         usage=page.request.get(a.base+'/atlases/earth_evidence/data/dataset_usage.json').json()
         assert next(e for e in usage['datasets'] if e['id']=='rural_roman_britain')['status']=='exposed_conditional_context_diagnostic'
-        assert next(e for e in usage['datasets'] if e['id']=='seshat_polaris2026')['status']=='prepared_institution_schema_no_model_scores'
+        assert next(e for e in usage['datasets'] if e['id']=='seshat_polaris2026')['status'] in ['prepared_institution_schema_no_model_scores','prepared_institution_date_scopes_no_model_scores']
         for theme in ['light','dark']:
             page.emulate_media(color_scheme=theme)
             for width in [390,344]:

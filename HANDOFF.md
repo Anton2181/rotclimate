@@ -1,3 +1,39 @@
+# Branch consolidation complete; dated references checked — 11 November 2026
+
+* CANONICALONLY:claude/friendly-turing-43ygeu (existingGitHubdefault). b7809a32
+  atomicallypushedallhistorythereanddeletedredundantecstatic-wozniakwith24b0a505
+  expectedtipguard. Botholdhistoriesareancestors,nouniquecommitslost. RemoteHEAD/
+  branchabsenceverified;localfetch/upstreamrepairedafterretiredrefcausedfetcherror.
+* GitHubadminsettingPATCHwas403;usingexistingdefaultcompletedconsolidationwithout
+  adminintervention. Launcher/hub/READMEtargetfriendly,verifiedr44releaseunchanged
+  inallclimate/settlementidentities;onlybranch/evidencemetadatarefreshed.5launcher/
+  packagingtests pass. output/branch_consolidation_20261111/checks.jsonrecordsproof.
+* LATESTOWNERasks4remainingmilestonesuntilnewcalibratedsettlementmap:releasepath
+  fixedinroadmaptop. Stillmilestone1:Earthrefs+locatedtransferpool/comparisonfreeze.
+  Roles/controlS2–S5laternotblanketprerequisitesforfirstlocation/populationrelease.
+* f0f3b892scopecomparisonimplemented polity/institution_scope.py+5tests;
+  prepare/review/publish_institution_scope.py,report INSTITUTION_SCOPE_20261111.md.
+  Output/institution_scope_20261111/results/review/replay. Authorpolicyhashesin
+  calibration/institution_scope_20261111/sources.json.5007rows/4675groups,
+  independent10014row-policychecks. Explicitvsdocumentedpositive200groups:
+  hierarchy0->26(with24numericrows),largestpop4->18(with14numericrows).
+  Preserveunknowns/ranges/alternatives. NOTnewmaporfit. Nochosenpolicy/modelscores.
+*131tests pass (126settlement/evidence+5launcher/packaging);fresh2artifactreplay
+  byteexact,3initialparentartifactsunchanged. Newscopepanel2rows/5downloads,
+  basepublisher/packagewired,strongerSeshatdate-prepstatuspreserved. Browsernew/
+  previous/general evidence,344/390light-dark,downloadSHA/exposureallpassafter
+  restartingstoppedHTTPserver. Server8766currentsession26470. Publisheridempotent.
+*196Windowscriticalfilesbyteexact,698activehublinksresolve;normalstandard-library
+  launcherverifiedEarthr44andcanonicalfriendlyguidance. FullZIPnotbuiltunderquota.
+* NOWcommit/pushONLYfriendly. Thenprioritize
+  locatedprospectivetransferpool/frozencomparisonforrelease1,notnewinstitution
+  mechanismdetours. Seshatprovidespolityattributesnotcoordinates;alloldlocation
+  poolsspent(exposedHan/Rome/CHGIS/Bosker/Pleiades/Domesday),Vidarbhaunready.
+  Reba/ChandlerglobalhistoriccitysourceNOTlistedinexposureregister/localsearch,
+  possibleSouthAsiatransfercandidate:metadataaudit/protocolBEFOREtargetvalues/
+  scores,checkactualoverlap/coveragefirst. Noindependentclaimfromabsenceofregistry.
+* Full S1c/d/e,S2–S5,allactors/mobile/nonstate,r44physicsremain;singlebranchonly.
+
 # Single development branch and four-milestone settlement release — 11 November 2026
 
 * LATEST OWNER REQUEST:continue,and consolidatebranches;do NOTkeeppushingboth.

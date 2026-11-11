@@ -284,10 +284,14 @@ check which snapshot is served; archived fits can retain older data. To update
 a Git checkout:
 
 ```sh
+git config --replace-all remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 git fetch origin
 git switch claude/friendly-turing-43ygeu
 git pull --ff-only origin claude/friendly-turing-43ygeu
 ```
+
+The fetch setting also repairs single-branch checkouts that still name the
+retired publication branch. Local branches and commits are preserved.
 
 Then close the old atlas tab and run that folder's `start_atlases.bat` again.
 New releases use this single default branch; historical
