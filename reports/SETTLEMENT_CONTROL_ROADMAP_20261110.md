@@ -9,7 +9,7 @@ silently replaces the other.
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
   decision, atlas consequences, and the next unfinished task. Commit and push
-  milestones to the single maintained branch, `claude/ecstatic-wozniak-rtrwd2`
+  milestones to the single maintained/default branch, `claude/friendly-turing-43ygeu`
   (owner consolidation request,11 November2026). A failed experiment does not complete
   its parent stage or cancel later stages.
 * Follow the dependency chain: environment → occupancy and land use → settlements

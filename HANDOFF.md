@@ -1,11 +1,14 @@
 # Single development branch and four-milestone settlement release — 11 November 2026
 
 * LATEST OWNER REQUEST:continue,and consolidatebranches;do NOTkeeppushingboth.
-  Canonicalbranch claude/ecstatic-wozniak-rtrwd2 (alreadyusedbyWindowslauncher).
+  Canonicalbranch claude/friendly-turing-43ygeu (existingGitHubdefault).
   Fetchedbothremotetips:c851ad63f586f59ac69c0cc4127b8c3e88de7050,0uniquecommits
   eitherway. Localf0f3b892addsdeclaredscopeprotocol,fullydescendedfromboth.
-* Consolidation:pushcanonicalfirst,changeGitHubdefaultfromfriendly-turingto
-  canonical,thenretireredundantbranchONLYwitholdtipguardandancestrycheck. Preserve
+* Triedcanonicalecstaticfirst(24b0a505pushedthere);GitHubdefault-settingPATCH
+  rejectedHTTP403 Resource not accessible by integration. Safefallback:useexisting
+  defaultfriendly-turing,so noadminsettingschangeoruserinterventionneeded.
+  Launcher/hub/READMEbranchguidanceupdatedtofriendly;retireecstaticONLYwith
+  expected24b0a5059add3b18c0bfa9fdb691d03d50771c86tipguard+ancestrycheck. Preserve
   history;oldplans/receiptsretainoriginalbranchrefs,don'trewritefrozenprotocols.
   FuturemilestonespushONLYcanonical. Do notrecreateretiredbranchfromoldautodrivers.
 * Useraskedhowmanyuntilnewcalibratedsettlementmap:FOURremainingreleasemilestones,

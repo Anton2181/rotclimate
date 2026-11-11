@@ -16,7 +16,7 @@ The launcher identifies the **actually served atlas snapshot** from
 not relabel older maps. Normal atlas publication includes matching Earth
 corrections and every climate, farming, population, foraging, trade and language
 export before browser/portable checks and the push to the maintained branch,
-`claude/ecstatic-wozniak-rtrwd2`. The two former publication branches were
+`claude/friendly-turing-43ygeu` (the repository's default branch). The two former publication branches were
 consolidated on 11 November 2026; historical experiment records retain their
 original branch names for provenance.
 
@@ -285,12 +285,12 @@ a Git checkout:
 
 ```sh
 git fetch origin
-git switch claude/ecstatic-wozniak-rtrwd2
-git pull --ff-only origin claude/ecstatic-wozniak-rtrwd2
+git switch claude/friendly-turing-43ygeu
+git pull --ff-only origin claude/friendly-turing-43ygeu
 ```
 
 Then close the old atlas tab and run that folder's `start_atlases.bat` again.
-The default branch is also brought forward at atlas publication; historical
+New releases use this single default branch; historical
 branches and hosted copies can still contain older data. For a ZIP, extract the
 complete new portable bundle into its own folder and launch it there.
 `python3 scripts/serve_atlases.py --check` (or `start_atlases.bat --check` on

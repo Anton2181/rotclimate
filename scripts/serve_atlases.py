@@ -9,7 +9,7 @@ import subprocess
 import uuid
 import webbrowser
 
-PUBLISHED_BRANCH = 'claude/ecstatic-wozniak-rtrwd2'
+PUBLISHED_BRANCH = 'claude/friendly-turing-43ygeu'
 
 
 def checkout_version(root):
