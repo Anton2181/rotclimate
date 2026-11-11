@@ -1,3 +1,14 @@
+# Source composition protocol declared after controls push — 11 November 2026
+
+* Controls milestonee567dec2 and protocol720fcaa2 pushed/verified on BOTH branches.
+* NEXT calibration/settlement_role_composition_20261111/plan.json declared before
+  new subclass supportcounts/scores. Five-part source-label partition x full/strict,
+  central30unit gate eachclass,all66oldfields,all9coordinates/spatial/effort checks.
+  Failed groups stay failed; no outcome-directed merging,subset/winner selection.
+* THEN capacity-limited service primitive with explicit real staffing/food inputs,
+  unmet requests and shared ledger,not more arbitrary scalar-role promotion.
+* Full S1c/d/e,S2–S5,activeclimater44,allactors/nonstate/mobile scope unchanged.
+
 # Service opportunity controls complete, ready to push — 11 November 2026
 
 * First milestone70e50882 and protocol192c7eb3 pushed/verified on BOTH maintained
