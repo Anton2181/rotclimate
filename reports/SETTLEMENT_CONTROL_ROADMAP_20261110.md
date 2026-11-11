@@ -291,3 +291,18 @@ Next implement capacity-limited potential services with finite staff-hours and
 food-supported inputs,unmet requests and shared consumers. Do not promote a scalar
 centre-intensity or archive label directly into institutions/control. Timing,
 coverage,prospective transfer,S1c/d/e,S2qualification and S3–S5 remain required.
+
+## Shared finite service-work consumer implemented,11 November2026
+
+[Protocol3d3a6c4e and diagnostic](SETTLEMENT_SERVICE_CAPACITY_20261111.md):food-
+supported staff remain inside SAMEresident/food ledger;otherduties reserve hours
+beforeallservicechannels share the remainder. Unreachable/capacity deficits and
+unused hours explicit,no rerouting/maxflow/extra population.20originalfoodcases
+replayed,60workscenarios independently checked,sourcepackets unchanged.8unit tests.
+Illustrative600hours/staff and1/2hourrequestcosts are NOT Earth-calibrated rates;
+no empirical/production role/control adoption. Lightworkmostlynonbinding,not a fit.
+
+Next monthly actualsupported-provider access plus explicit pooled labour claims
+for collection,patrol and services. Binarypatrolreach currentlyhasnohourledger;
+do not silently reuse allstaff for eachactivity. Keep source-time/coverage/transfer
+qualification and full S1c/d/e,S2–S5,allactor/mobile/nonstate scope.

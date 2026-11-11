@@ -1,3 +1,28 @@
+# Capacity consumer complete, ready to push — 11 November 2026
+
+* Protocol3d3a6c4e before results. Newpolity/service_capacity.py supported_staff_hours
+  validates SAMESettlementPlan resident/foodcohort;explicitotherdutiesreservedfirst.
+  fulfil_services rations requestedHOURS acrossallchannels together,no extrafood/
+  people/staff,no automaticrerouting/maxflow.8unit tests pass,includinglimits.
+* Builder/reviewer/plotter/publisher under scripts/*settlement_service_capacity.py;
+  output/settlement_service_capacity_20261111:fields.npz/results/review/figureprovenance.
+  FrozenactualEarth raw/corrected1053sites x10foodcases x3commitments=60cases.
+ 20periodicfoodchecks matcholdledgers;60perorigin/providerhourcases independently
+  recomputed,twoatlaspackets byteexactvsa9b3858c. No worldchanges,r44staysactive.
+* Arbitraryworkunits:600grosshours/cohortresident/year;0/50/100%otherduties;each
+  SAMEresident2neutralrequests/yearcost1&2h;identitylocalchoice. Noncalibrated.
+  joint365raw/corrected98.26%/98.39%fulfilledunder0and50commit,0under100commit;
+  toyworkloadmostlynonbinding,substantialunusedhours. Noparameterretuningafteroutcome.
+* Newfixedlocalmapmade/posted,allmodelsitesoriginalpositions/residents;coastline
+  fromsamebinarylandlookup. Newcollapsedresearchpanel6rows/figure/6downloads.
+  Basepublisher/package/attributeswired.118tests pass,fresh3artifactreplay byteexact.
+  New/previous/evidencebrowser,mobile344/390/light-dark,NPZdownloadSHA pass;publisher
+  idempotent.161Windowscriticalfilesbyteexact,686activehublinksresolve. FullZIP
+  unbuiltunder~120MBquota. NOWcommit/pushBOTH;continueactualmonthlynetwork/shared
+  commitmentinputaudit/design ratherthanassumepatrol/collectionworkisfree.
+* Full S1c/d/e,S2–S5 and prospectivequalification remain. Staffaffiliationstilllegacy
+  scenario,notactualinstitution. Includeallactors/unaffiliated/mobile/nonstate.
+
 # Capacity consumer declared after composition push — 11 November 2026
 
 * Compositiona9b3858c and protocol5e650062 pushed/verified BOTH branches. Continue

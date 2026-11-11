@@ -70,6 +70,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_service_controls.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_role_composition_20261111/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_role_composition.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_service_capacity_20261111/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_service_capacity.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

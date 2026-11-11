@@ -1,0 +1,2186 @@
+{
+  "status": "shared_service_work_implementation_diagnostic",
+  "adopt": false,
+  "earth_calibrated_service_rates": false,
+  "plan_sha256": "725a88b971d58821bba562c93c12c216211b9d880b35d0f7f0622531e87cd446",
+  "fields_sha256": "2120ee3bfcf8b8e3e342a34b1e04e5dc0bb93ee65d6af0427022a3fea54cbbd6",
+  "sources": {
+    "atlases/earth_fit/data/settled_reach.json.gz": "20f8f9f4568edc7bd89f6dd688c16bbfe6d0eda7722dbf142e0043826e8804c0",
+    "atlases/earth_fit/data/corrected/settled_reach.json.gz": "b039184a57f178355272ad9cd0c62ee8be83fbeeac66dc9c3b10d54001a72f5f"
+  },
+  "producers": {
+    "scripts/build_settlement_service_capacity.py": "e886580049dcdcf979499b3676fa80fa50c1dcb45a29755fb1f56db715a0b223",
+    "polity/service_capacity.py": "feb5830a9acdb248444cac771079476e018db8ff1b79f38901134a650a90cde7",
+    "polity/service_demand.py": "5d244f66dc4e3783d7fd37e869a649c6eca4bead26615334264b6beaa0f1e915",
+    "polity/settlement_support.py": "82b7a99949308e60194a20eb51b4067cdc156ea2b4d03ce1a8009d7b23d941c3",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef"
+  },
+  "food_replays": [
+    {
+      "climate": "raw",
+      "case": "joint365",
+      "sites": 1034,
+      "residents": 807769.7697056165,
+      "supported_staff": 98700.0,
+      "periodic_resident_consumption_kcal": 737089914856.375,
+      "destination_loss_kcal": 564025759.995815,
+      "destination_unused_kcal": 318509294.6748545,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.3113021850585938e-06
+    },
+    {
+      "climate": "raw",
+      "case": "joint90",
+      "sites": 1034,
+      "residents": 2664.8391033446283,
+      "supported_staff": 500.0,
+      "periodic_resident_consumption_kcal": 2431665681.801974,
+      "destination_loss_kcal": 18171153.888682794,
+      "destination_unused_kcal": 246312046312.8153,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 2.384185791015625e-07
+    },
+    {
+      "climate": "raw",
+      "case": "joint1",
+      "sites": 1034,
+      "residents": 80822.54642193139,
+      "supported_staff": 9800.0,
+      "periodic_resident_consumption_kcal": 73750573610.01237,
+      "destination_loss_kcal": 46671381.07012122,
+      "destination_unused_kcal": 0.0,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 9.778887033462524e-08
+    },
+    {
+      "climate": "raw",
+      "case": "joint0",
+      "sites": 1034,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "periodic_resident_consumption_kcal": 0.0,
+      "destination_loss_kcal": 0.0,
+      "destination_unused_kcal": 62217597245.49541,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 2.9802322387695312e-08
+    },
+    {
+      "climate": "raw",
+      "case": "cohort25",
+      "sites": 1034,
+      "residents": 807427.7476918944,
+      "supported_staff": 25275.0,
+      "periodic_resident_consumption_kcal": 736777819768.8535,
+      "destination_loss_kcal": 591079953.8494408,
+      "destination_unused_kcal": 603550188.5042408,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.0356307029724121e-06
+    },
+    {
+      "climate": "raw",
+      "case": "work600_30",
+      "sites": 1034,
+      "residents": 803657.3599699305,
+      "supported_staff": 98200.0,
+      "periodic_resident_consumption_kcal": 733337340972.5616,
+      "destination_loss_kcal": 556756546.5880593,
+      "destination_unused_kcal": 318509294.64143294,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.6689300537109375e-06
+    },
+    {
+      "climate": "raw",
+      "case": "work600_10",
+      "sites": 1034,
+      "residents": 800889.4735621468,
+      "supported_staff": 97800.0,
+      "periodic_resident_consumption_kcal": 730811644625.459,
+      "destination_loss_kcal": 553644498.8071067,
+      "destination_unused_kcal": 318821743.2818526,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.6689300537109375e-06
+    },
+    {
+      "climate": "raw",
+      "case": "work300_30",
+      "sites": 1034,
+      "residents": 758781.675747952,
+      "supported_staff": 91000.0,
+      "periodic_resident_consumption_kcal": 692388279120.0061,
+      "destination_loss_kcal": 466145242.94843173,
+      "destination_unused_kcal": 105011576.84763104,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.341104507446289e-06
+    },
+    {
+      "climate": "raw",
+      "case": "fert_bare",
+      "sites": 1034,
+      "residents": 283596.39694868383,
+      "supported_staff": 23900.0,
+      "periodic_resident_consumption_kcal": 258781712215.67398,
+      "destination_loss_kcal": 812122363.2697518,
+      "destination_unused_kcal": 11053736162.446548,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.6689300537109375e-06
+    },
+    {
+      "climate": "raw",
+      "case": "fert_legume",
+      "sites": 1034,
+      "residents": 1903313.397407486,
+      "supported_staff": 94000.0,
+      "periodic_resident_consumption_kcal": 1736773475134.331,
+      "destination_loss_kcal": 9969767460.772758,
+      "destination_unused_kcal": 403809832619.9519,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 4.5299530029296875e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "joint365",
+      "sites": 1053,
+      "residents": 812545.8725859231,
+      "supported_staff": 101100.0,
+      "periodic_resident_consumption_kcal": 741448108734.6548,
+      "destination_loss_kcal": 468324579.6510624,
+      "destination_unused_kcal": 253978732.47562158,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.0356307029724121e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "joint90",
+      "sites": 1053,
+      "residents": 2593.2728876432675,
+      "supported_staff": 500.0,
+      "periodic_resident_consumption_kcal": 2366361509.9744816,
+      "destination_loss_kcal": 16038898.341038309,
+      "destination_unused_kcal": 247424306623.15884,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.7136335372924805e-07
+    },
+    {
+      "climate": "corrected",
+      "case": "joint1",
+      "sites": 1053,
+      "residents": 81283.8915075863,
+      "supported_staff": 9200.0,
+      "periodic_resident_consumption_kcal": 74171551000.6725,
+      "destination_loss_kcal": 45490204.00164642,
+      "destination_unused_kcal": 0.0,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.0896474123001099e-07
+    },
+    {
+      "climate": "corrected",
+      "case": "joint0",
+      "sites": 1053,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "periodic_resident_consumption_kcal": 0.0,
+      "destination_loss_kcal": 0.0,
+      "destination_unused_kcal": 62508540275.31803,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.4901161193847656e-08
+    },
+    {
+      "climate": "corrected",
+      "case": "cohort25",
+      "sites": 1053,
+      "residents": 812387.741059372,
+      "supported_staff": 25850.0,
+      "periodic_resident_consumption_kcal": 741303813716.6769,
+      "destination_loss_kcal": 482021384.0288298,
+      "destination_unused_kcal": 384576946.0910859,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.0356307029724121e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_30",
+      "sites": 1053,
+      "residents": 808966.5089240494,
+      "supported_staff": 100500.0,
+      "periodic_resident_consumption_kcal": 738181939393.1951,
+      "destination_loss_kcal": 462549867.308681,
+      "destination_unused_kcal": 253978732.47562158,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.341104507446289e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_10",
+      "sites": 1053,
+      "residents": 807069.7045252826,
+      "supported_staff": 100100.0,
+      "periodic_resident_consumption_kcal": 736451105379.3203,
+      "destination_loss_kcal": 460649416.5634748,
+      "destination_unused_kcal": 254279717.32337716,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.341104507446289e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "work300_30",
+      "sites": 1053,
+      "residents": 773405.7262557298,
+      "supported_staff": 94700.0,
+      "periodic_resident_consumption_kcal": 705732725208.3535,
+      "destination_loss_kcal": 437274718.7861682,
+      "destination_unused_kcal": 111255054.8079467,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.341104507446289e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_bare",
+      "sites": 1053,
+      "residents": 246679.63093872834,
+      "supported_staff": 21900.0,
+      "periodic_resident_consumption_kcal": 225095163231.5896,
+      "destination_loss_kcal": 431120664.520896,
+      "destination_unused_kcal": 6202719152.431309,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 1.5869736671447754e-06
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_legume",
+      "sites": 1053,
+      "residents": 1915999.5205121893,
+      "supported_staff": 95000.0,
+      "periodic_resident_consumption_kcal": 1748349562467.3726,
+      "destination_loss_kcal": 9598480819.435024,
+      "destination_unused_kcal": 328165868498.8132,
+      "maximum_food_unmet_kcal": 0.0,
+      "maximum_food_ledger_residual_kcal": 4.172325134277344e-06
+    }
+  ],
+  "scenarios": [
+    {
+      "climate": "raw",
+      "case": "joint365",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 807769.7697056165,
+      "supported_staff": 98700.0,
+      "gross_staff_hours": 59220000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 59220000.0,
+      "used_staff_hours": 2381026.4794540554,
+      "unused_staff_hours": 56838973.520545945,
+      "requested_by_channel": [
+        807769.7697056165,
+        807769.7697056165
+      ],
+      "fulfilled_by_channel": [
+        793675.4931513518,
+        793675.4931513518
+      ],
+      "unmet_by_channel": [
+        14094.276554264681,
+        14094.276554264681
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9825516167070708,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint365",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 807769.7697056165,
+      "supported_staff": 98700.0,
+      "gross_staff_hours": 59220000.0,
+      "committed_staff_hours": 29610000.0,
+      "available_staff_hours": 29610000.0,
+      "used_staff_hours": 2381026.4794540554,
+      "unused_staff_hours": 27228973.520545945,
+      "requested_by_channel": [
+        807769.7697056165,
+        807769.7697056165
+      ],
+      "fulfilled_by_channel": [
+        793675.4931513518,
+        793675.4931513518
+      ],
+      "unmet_by_channel": [
+        14094.276554264681,
+        14094.276554264681
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9825516167070708,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint365",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 807769.7697056165,
+      "supported_staff": 98700.0,
+      "gross_staff_hours": 59220000.0,
+      "committed_staff_hours": 59220000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        807769.7697056165,
+        807769.7697056165
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        807769.7697056165,
+        807769.7697056165
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint90",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 2664.8391033446283,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 300000.0,
+      "used_staff_hours": 4202.824650883224,
+      "unused_staff_hours": 295797.1753491168,
+      "requested_by_channel": [
+        2664.8391033446283,
+        2664.8391033446283
+      ],
+      "fulfilled_by_channel": [
+        1400.9415502944082,
+        1400.9415502944082
+      ],
+      "unmet_by_channel": [
+        1263.8975530502203,
+        1263.8975530502203
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.525713371788973,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint90",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 2664.8391033446283,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 150000.0,
+      "available_staff_hours": 150000.0,
+      "used_staff_hours": 4202.824650883224,
+      "unused_staff_hours": 145797.17534911676,
+      "requested_by_channel": [
+        2664.8391033446283,
+        2664.8391033446283
+      ],
+      "fulfilled_by_channel": [
+        1400.9415502944082,
+        1400.9415502944082
+      ],
+      "unmet_by_channel": [
+        1263.8975530502203,
+        1263.8975530502203
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.525713371788973,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint90",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 2664.8391033446283,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 300000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        2664.8391033446283,
+        2664.8391033446283
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        2664.8391033446283,
+        2664.8391033446283
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint1",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 80822.54642193139,
+      "supported_staff": 9800.0,
+      "gross_staff_hours": 5880000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 5880000.0,
+      "used_staff_hours": 57541.59357527882,
+      "unused_staff_hours": 5822458.406424722,
+      "requested_by_channel": [
+        80822.54642193139,
+        80822.54642193139
+      ],
+      "fulfilled_by_channel": [
+        19180.53119175961,
+        19180.53119175961
+      ],
+      "unmet_by_channel": [
+        61642.015230171775,
+        61642.015230171775
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.23731659098722638,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint1",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 80822.54642193139,
+      "supported_staff": 9800.0,
+      "gross_staff_hours": 5880000.0,
+      "committed_staff_hours": 2940000.0,
+      "available_staff_hours": 2940000.0,
+      "used_staff_hours": 57541.59357527882,
+      "unused_staff_hours": 2882458.4064247217,
+      "requested_by_channel": [
+        80822.54642193139,
+        80822.54642193139
+      ],
+      "fulfilled_by_channel": [
+        19180.53119175961,
+        19180.53119175961
+      ],
+      "unmet_by_channel": [
+        61642.015230171775,
+        61642.015230171775
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.23731659098722638,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint1",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 80822.54642193139,
+      "supported_staff": 9800.0,
+      "gross_staff_hours": 5880000.0,
+      "committed_staff_hours": 5880000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        80822.54642193139,
+        80822.54642193139
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        80822.54642193139,
+        80822.54642193139
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint0",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint0",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "joint0",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "cohort25",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 807427.7476918944,
+      "supported_staff": 25275.0,
+      "gross_staff_hours": 15165000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 15165000.0,
+      "used_staff_hours": 2388115.1660180474,
+      "unused_staff_hours": 12776884.833981952,
+      "requested_by_channel": [
+        807427.7476918944,
+        807427.7476918944
+      ],
+      "fulfilled_by_channel": [
+        796038.3886726825,
+        796038.3886726825
+      ],
+      "unmet_by_channel": [
+        11389.359019211937,
+        11389.359019211937
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9858942684942776,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "cohort25",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 807427.7476918944,
+      "supported_staff": 25275.0,
+      "gross_staff_hours": 15165000.0,
+      "committed_staff_hours": 7582500.0,
+      "available_staff_hours": 7582500.0,
+      "used_staff_hours": 2383058.6310456037,
+      "unused_staff_hours": 5199441.368954396,
+      "requested_by_channel": [
+        807427.7476918944,
+        807427.7476918944
+      ],
+      "fulfilled_by_channel": [
+        794352.8770152014,
+        794352.8770152014
+      ],
+      "unmet_by_channel": [
+        13074.870676693097,
+        13074.870676693097
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9838067607732472,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "cohort25",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 807427.7476918944,
+      "supported_staff": 25275.0,
+      "gross_staff_hours": 15165000.0,
+      "committed_staff_hours": 15165000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        807427.7476918944,
+        807427.7476918944
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        807427.7476918944,
+        807427.7476918944
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_30",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 803657.3599699305,
+      "supported_staff": 98200.0,
+      "gross_staff_hours": 58920000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 58920000.0,
+      "used_staff_hours": 2367261.0308136176,
+      "unused_staff_hours": 56552738.96918638,
+      "requested_by_channel": [
+        803657.3599699305,
+        803657.3599699305
+      ],
+      "fulfilled_by_channel": [
+        789087.0102712059,
+        789087.0102712059
+      ],
+      "unmet_by_channel": [
+        14570.349698724589,
+        14570.349698724589
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9818699480344836,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_30",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 803657.3599699305,
+      "supported_staff": 98200.0,
+      "gross_staff_hours": 58920000.0,
+      "committed_staff_hours": 29460000.0,
+      "available_staff_hours": 29460000.0,
+      "used_staff_hours": 2367261.0308136176,
+      "unused_staff_hours": 27092738.96918638,
+      "requested_by_channel": [
+        803657.3599699305,
+        803657.3599699305
+      ],
+      "fulfilled_by_channel": [
+        789087.0102712059,
+        789087.0102712059
+      ],
+      "unmet_by_channel": [
+        14570.349698724589,
+        14570.349698724589
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9818699480344836,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_30",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 803657.3599699305,
+      "supported_staff": 98200.0,
+      "gross_staff_hours": 58920000.0,
+      "committed_staff_hours": 58920000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        803657.3599699305,
+        803657.3599699305
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        803657.3599699305,
+        803657.3599699305
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_10",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 800889.4735621468,
+      "supported_staff": 97800.0,
+      "gross_staff_hours": 58680000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 58680000.0,
+      "used_staff_hours": 2358353.923958246,
+      "unused_staff_hours": 56321646.07604175,
+      "requested_by_channel": [
+        800889.4735621468,
+        800889.4735621468
+      ],
+      "fulfilled_by_channel": [
+        786117.9746527487,
+        786117.9746527487
+      ],
+      "unmet_by_channel": [
+        14771.49890939805,
+        14771.49890939805
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9815561330283212,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_10",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 800889.4735621468,
+      "supported_staff": 97800.0,
+      "gross_staff_hours": 58680000.0,
+      "committed_staff_hours": 29340000.0,
+      "available_staff_hours": 29340000.0,
+      "used_staff_hours": 2358353.923958246,
+      "unused_staff_hours": 26981646.076041754,
+      "requested_by_channel": [
+        800889.4735621468,
+        800889.4735621468
+      ],
+      "fulfilled_by_channel": [
+        786117.9746527487,
+        786117.9746527487
+      ],
+      "unmet_by_channel": [
+        14771.49890939805,
+        14771.49890939805
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9815561330283212,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work600_10",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 800889.4735621468,
+      "supported_staff": 97800.0,
+      "gross_staff_hours": 58680000.0,
+      "committed_staff_hours": 58680000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        800889.4735621468,
+        800889.4735621468
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        800889.4735621468,
+        800889.4735621468
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work300_30",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 758781.675747952,
+      "supported_staff": 91000.0,
+      "gross_staff_hours": 54600000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 54600000.0,
+      "used_staff_hours": 2228116.811876663,
+      "unused_staff_hours": 52371883.18812334,
+      "requested_by_channel": [
+        758781.675747952,
+        758781.675747952
+      ],
+      "fulfilled_by_channel": [
+        742705.6039588875,
+        742705.6039588875
+      ],
+      "unmet_by_channel": [
+        16076.07178906439,
+        16076.07178906439
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9788133104648081,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work300_30",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 758781.675747952,
+      "supported_staff": 91000.0,
+      "gross_staff_hours": 54600000.0,
+      "committed_staff_hours": 27300000.0,
+      "available_staff_hours": 27300000.0,
+      "used_staff_hours": 2228116.811876663,
+      "unused_staff_hours": 25071883.188123338,
+      "requested_by_channel": [
+        758781.675747952,
+        758781.675747952
+      ],
+      "fulfilled_by_channel": [
+        742705.6039588875,
+        742705.6039588875
+      ],
+      "unmet_by_channel": [
+        16076.07178906439,
+        16076.07178906439
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9788133104648081,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "work300_30",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 758781.675747952,
+      "supported_staff": 91000.0,
+      "gross_staff_hours": 54600000.0,
+      "committed_staff_hours": 54600000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        758781.675747952,
+        758781.675747952
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        758781.675747952,
+        758781.675747952
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_bare",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 283596.39694868383,
+      "supported_staff": 23900.0,
+      "gross_staff_hours": 14340000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 14340000.0,
+      "used_staff_hours": 821330.5284774739,
+      "unused_staff_hours": 13518669.471522525,
+      "requested_by_channel": [
+        283596.39694868383,
+        283596.39694868383
+      ],
+      "fulfilled_by_channel": [
+        273776.8428258246,
+        273776.8428258246
+      ],
+      "unmet_by_channel": [
+        9819.554122859196,
+        9819.554122859196
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9653748981703881,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_bare",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 283596.39694868383,
+      "supported_staff": 23900.0,
+      "gross_staff_hours": 14340000.0,
+      "committed_staff_hours": 7170000.0,
+      "available_staff_hours": 7170000.0,
+      "used_staff_hours": 821330.5284774739,
+      "unused_staff_hours": 6348669.471522526,
+      "requested_by_channel": [
+        283596.39694868383,
+        283596.39694868383
+      ],
+      "fulfilled_by_channel": [
+        273776.8428258246,
+        273776.8428258246
+      ],
+      "unmet_by_channel": [
+        9819.554122859196,
+        9819.554122859196
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9653748981703881,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_bare",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 283596.39694868383,
+      "supported_staff": 23900.0,
+      "gross_staff_hours": 14340000.0,
+      "committed_staff_hours": 14340000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        283596.39694868383,
+        283596.39694868383
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        283596.39694868383,
+        283596.39694868383
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_legume",
+      "committed_fraction": 0.0,
+      "sites": 1034,
+      "residents": 1903313.397407486,
+      "supported_staff": 94000.0,
+      "gross_staff_hours": 56400000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 56400000.0,
+      "used_staff_hours": 5635280.178956334,
+      "unused_staff_hours": 50764719.82104367,
+      "requested_by_channel": [
+        1903313.397407486,
+        1903313.397407486
+      ],
+      "fulfilled_by_channel": [
+        1878426.726318778,
+        1878426.726318778
+      ],
+      "unmet_by_channel": [
+        24886.671088707917,
+        24886.671088707917
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9869245542417732,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_legume",
+      "committed_fraction": 0.5,
+      "sites": 1034,
+      "residents": 1903313.397407486,
+      "supported_staff": 94000.0,
+      "gross_staff_hours": 56400000.0,
+      "committed_staff_hours": 28200000.0,
+      "available_staff_hours": 28200000.0,
+      "used_staff_hours": 5635280.178956334,
+      "unused_staff_hours": 22564719.821043666,
+      "requested_by_channel": [
+        1903313.397407486,
+        1903313.397407486
+      ],
+      "fulfilled_by_channel": [
+        1878426.726318778,
+        1878426.726318778
+      ],
+      "unmet_by_channel": [
+        24886.671088707917,
+        24886.671088707917
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9869245542417732,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "raw",
+      "case": "fert_legume",
+      "committed_fraction": 1.0,
+      "sites": 1034,
+      "residents": 1903313.397407486,
+      "supported_staff": 94000.0,
+      "gross_staff_hours": 56400000.0,
+      "committed_staff_hours": 56400000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        1903313.397407486,
+        1903313.397407486
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        1903313.397407486,
+        1903313.397407486
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint365",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 812545.8725859231,
+      "supported_staff": 101100.0,
+      "gross_staff_hours": 60660000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 60660000.0,
+      "used_staff_hours": 2398381.2174301534,
+      "unused_staff_hours": 58261618.78256984,
+      "requested_by_channel": [
+        812545.8725859231,
+        812545.8725859231
+      ],
+      "fulfilled_by_channel": [
+        799460.4058100511,
+        799460.4058100511
+      ],
+      "unmet_by_channel": [
+        13085.466775872046,
+        13085.466775872046
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9838957193466167,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint365",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 812545.8725859231,
+      "supported_staff": 101100.0,
+      "gross_staff_hours": 60660000.0,
+      "committed_staff_hours": 30330000.0,
+      "available_staff_hours": 30330000.0,
+      "used_staff_hours": 2398381.2174301534,
+      "unused_staff_hours": 27931618.782569848,
+      "requested_by_channel": [
+        812545.8725859231,
+        812545.8725859231
+      ],
+      "fulfilled_by_channel": [
+        799460.4058100511,
+        799460.4058100511
+      ],
+      "unmet_by_channel": [
+        13085.466775872046,
+        13085.466775872046
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9838957193466167,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint365",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 812545.8725859231,
+      "supported_staff": 101100.0,
+      "gross_staff_hours": 60660000.0,
+      "committed_staff_hours": 60660000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        812545.8725859231,
+        812545.8725859231
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        812545.8725859231,
+        812545.8725859231
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint90",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 2593.2728876432675,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 300000.0,
+      "used_staff_hours": 4837.177044309014,
+      "unused_staff_hours": 295162.82295569096,
+      "requested_by_channel": [
+        2593.2728876432675,
+        2593.2728876432675
+      ],
+      "fulfilled_by_channel": [
+        1612.3923481030045,
+        1612.3923481030045
+      ],
+      "unmet_by_channel": [
+        980.8805395402633,
+        980.8805395402633
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.6217596134158968,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint90",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 2593.2728876432675,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 150000.0,
+      "available_staff_hours": 150000.0,
+      "used_staff_hours": 4837.177044309014,
+      "unused_staff_hours": 145162.822955691,
+      "requested_by_channel": [
+        2593.2728876432675,
+        2593.2728876432675
+      ],
+      "fulfilled_by_channel": [
+        1612.3923481030045,
+        1612.3923481030045
+      ],
+      "unmet_by_channel": [
+        980.8805395402633,
+        980.8805395402633
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.6217596134158968,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint90",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 2593.2728876432675,
+      "supported_staff": 500.0,
+      "gross_staff_hours": 300000.0,
+      "committed_staff_hours": 300000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        2593.2728876432675,
+        2593.2728876432675
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        2593.2728876432675,
+        2593.2728876432675
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint1",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 81283.8915075863,
+      "supported_staff": 9200.0,
+      "gross_staff_hours": 5520000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 5520000.0,
+      "used_staff_hours": 52819.02641110728,
+      "unused_staff_hours": 5467180.973588892,
+      "requested_by_channel": [
+        81283.8915075863,
+        81283.8915075863
+      ],
+      "fulfilled_by_channel": [
+        17606.34213703576,
+        17606.34213703576
+      ],
+      "unmet_by_channel": [
+        63677.549370550536,
+        63677.549370550536
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.21660309085217141,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint1",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 81283.8915075863,
+      "supported_staff": 9200.0,
+      "gross_staff_hours": 5520000.0,
+      "committed_staff_hours": 2760000.0,
+      "available_staff_hours": 2760000.0,
+      "used_staff_hours": 52819.02641110728,
+      "unused_staff_hours": 2707180.9735888923,
+      "requested_by_channel": [
+        81283.8915075863,
+        81283.8915075863
+      ],
+      "fulfilled_by_channel": [
+        17606.34213703576,
+        17606.34213703576
+      ],
+      "unmet_by_channel": [
+        63677.549370550536,
+        63677.549370550536
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.21660309085217141,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint1",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 81283.8915075863,
+      "supported_staff": 9200.0,
+      "gross_staff_hours": 5520000.0,
+      "committed_staff_hours": 5520000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        81283.8915075863,
+        81283.8915075863
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        81283.8915075863,
+        81283.8915075863
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint0",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint0",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "joint0",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 0.0,
+      "supported_staff": 0.0,
+      "gross_staff_hours": 0.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": null,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "cohort25",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 812387.741059372,
+      "supported_staff": 25850.0,
+      "gross_staff_hours": 15510000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 15510000.0,
+      "used_staff_hours": 2405969.9504754893,
+      "unused_staff_hours": 13104030.04952451,
+      "requested_by_channel": [
+        812387.741059372,
+        812387.741059372
+      ],
+      "fulfilled_by_channel": [
+        801989.9834918297,
+        801989.9834918297
+      ],
+      "unmet_by_channel": [
+        10397.757567542165,
+        10397.757567542165
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9872009915437875,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "cohort25",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 812387.741059372,
+      "supported_staff": 25850.0,
+      "gross_staff_hours": 15510000.0,
+      "committed_staff_hours": 7755000.0,
+      "available_staff_hours": 7755000.0,
+      "used_staff_hours": 2404670.8548582196,
+      "unused_staff_hours": 5350329.14514178,
+      "requested_by_channel": [
+        812387.741059372,
+        812387.741059372
+      ],
+      "fulfilled_by_channel": [
+        801556.9516194065,
+        801556.9516194065
+      ],
+      "unmet_by_channel": [
+        10830.789439965514,
+        10830.789439965514
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9866679555924344,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 1.8189894035458565e-12
+    },
+    {
+      "climate": "corrected",
+      "case": "cohort25",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 812387.741059372,
+      "supported_staff": 25850.0,
+      "gross_staff_hours": 15510000.0,
+      "committed_staff_hours": 15510000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        812387.741059372,
+        812387.741059372
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        812387.741059372,
+        812387.741059372
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_30",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 808966.5089240494,
+      "supported_staff": 100500.0,
+      "gross_staff_hours": 60300000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 60300000.0,
+      "used_staff_hours": 2385986.3189813755,
+      "unused_staff_hours": 57914013.68101862,
+      "requested_by_channel": [
+        808966.5089240494,
+        808966.5089240494
+      ],
+      "fulfilled_by_channel": [
+        795328.7729937918,
+        795328.7729937918
+      ],
+      "unmet_by_channel": [
+        13637.735930257628,
+        13637.735930257628
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9831417793198928,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_30",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 808966.5089240494,
+      "supported_staff": 100500.0,
+      "gross_staff_hours": 60300000.0,
+      "committed_staff_hours": 30150000.0,
+      "available_staff_hours": 30150000.0,
+      "used_staff_hours": 2385986.3189813755,
+      "unused_staff_hours": 27764013.681018624,
+      "requested_by_channel": [
+        808966.5089240494,
+        808966.5089240494
+      ],
+      "fulfilled_by_channel": [
+        795328.7729937918,
+        795328.7729937918
+      ],
+      "unmet_by_channel": [
+        13637.735930257628,
+        13637.735930257628
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9831417793198928,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_30",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 808966.5089240494,
+      "supported_staff": 100500.0,
+      "gross_staff_hours": 60300000.0,
+      "committed_staff_hours": 60300000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        808966.5089240494,
+        808966.5089240494
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        808966.5089240494,
+        808966.5089240494
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_10",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 807069.7045252826,
+      "supported_staff": 100100.0,
+      "gross_staff_hours": 60060000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 60060000.0,
+      "used_staff_hours": 2379418.0904208673,
+      "unused_staff_hours": 57680581.90957913,
+      "requested_by_channel": [
+        807069.7045252826,
+        807069.7045252826
+      ],
+      "fulfilled_by_channel": [
+        793139.3634736224,
+        793139.3634736224
+      ],
+      "unmet_by_channel": [
+        13930.341051660236,
+        13930.341051660236
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9827396060420158,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_10",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 807069.7045252826,
+      "supported_staff": 100100.0,
+      "gross_staff_hours": 60060000.0,
+      "committed_staff_hours": 30030000.0,
+      "available_staff_hours": 30030000.0,
+      "used_staff_hours": 2379418.0904208673,
+      "unused_staff_hours": 27650581.909579135,
+      "requested_by_channel": [
+        807069.7045252826,
+        807069.7045252826
+      ],
+      "fulfilled_by_channel": [
+        793139.3634736224,
+        793139.3634736224
+      ],
+      "unmet_by_channel": [
+        13930.341051660236,
+        13930.341051660236
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9827396060420158,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work600_10",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 807069.7045252826,
+      "supported_staff": 100100.0,
+      "gross_staff_hours": 60060000.0,
+      "committed_staff_hours": 60060000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        807069.7045252826,
+        807069.7045252826
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        807069.7045252826,
+        807069.7045252826
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work300_30",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 773405.7262557298,
+      "supported_staff": 94700.0,
+      "gross_staff_hours": 56820000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 56820000.0,
+      "used_staff_hours": 2275822.6879236903,
+      "unused_staff_hours": 54544177.312076315,
+      "requested_by_channel": [
+        773405.7262557298,
+        773405.7262557298
+      ],
+      "fulfilled_by_channel": [
+        758607.5626412302,
+        758607.5626412302
+      ],
+      "unmet_by_channel": [
+        14798.163614499701,
+        14798.163614499701
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9808662347431256,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work300_30",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 773405.7262557298,
+      "supported_staff": 94700.0,
+      "gross_staff_hours": 56820000.0,
+      "committed_staff_hours": 28410000.0,
+      "available_staff_hours": 28410000.0,
+      "used_staff_hours": 2275822.6879236903,
+      "unused_staff_hours": 26134177.31207631,
+      "requested_by_channel": [
+        773405.7262557298,
+        773405.7262557298
+      ],
+      "fulfilled_by_channel": [
+        758607.5626412302,
+        758607.5626412302
+      ],
+      "unmet_by_channel": [
+        14798.163614499701,
+        14798.163614499701
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9808662347431256,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "work300_30",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 773405.7262557298,
+      "supported_staff": 94700.0,
+      "gross_staff_hours": 56820000.0,
+      "committed_staff_hours": 56820000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        773405.7262557298,
+        773405.7262557298
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        773405.7262557298,
+        773405.7262557298
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_bare",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 246679.63093872834,
+      "supported_staff": 21900.0,
+      "gross_staff_hours": 13140000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 13140000.0,
+      "used_staff_hours": 711203.6717962284,
+      "unused_staff_hours": 12428796.328203771,
+      "requested_by_channel": [
+        246679.63093872834,
+        246679.63093872834
+      ],
+      "fulfilled_by_channel": [
+        237067.8905987428,
+        237067.8905987428
+      ],
+      "unmet_by_channel": [
+        9611.740339985558,
+        9611.740339985558
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.961035532997157,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_bare",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 246679.63093872834,
+      "supported_staff": 21900.0,
+      "gross_staff_hours": 13140000.0,
+      "committed_staff_hours": 6570000.0,
+      "available_staff_hours": 6570000.0,
+      "used_staff_hours": 711203.6717962284,
+      "unused_staff_hours": 5858796.328203772,
+      "requested_by_channel": [
+        246679.63093872834,
+        246679.63093872834
+      ],
+      "fulfilled_by_channel": [
+        237067.8905987428,
+        237067.8905987428
+      ],
+      "unmet_by_channel": [
+        9611.740339985558,
+        9611.740339985558
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.961035532997157,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_bare",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 246679.63093872834,
+      "supported_staff": 21900.0,
+      "gross_staff_hours": 13140000.0,
+      "committed_staff_hours": 13140000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        246679.63093872834,
+        246679.63093872834
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        246679.63093872834,
+        246679.63093872834
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_legume",
+      "committed_fraction": 0.0,
+      "sites": 1053,
+      "residents": 1915999.5205121893,
+      "supported_staff": 95000.0,
+      "gross_staff_hours": 57000000.0,
+      "committed_staff_hours": 0.0,
+      "available_staff_hours": 57000000.0,
+      "used_staff_hours": 5663348.5597810205,
+      "unused_staff_hours": 51336651.440218985,
+      "requested_by_channel": [
+        1915999.5205121893,
+        1915999.5205121893
+      ],
+      "fulfilled_by_channel": [
+        1887782.8532603397,
+        1887782.8532603397
+      ],
+      "unmet_by_channel": [
+        28216.66725184949,
+        28216.66725184949
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9852731344920658,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_legume",
+      "committed_fraction": 0.5,
+      "sites": 1053,
+      "residents": 1915999.5205121893,
+      "supported_staff": 95000.0,
+      "gross_staff_hours": 57000000.0,
+      "committed_staff_hours": 28500000.0,
+      "available_staff_hours": 28500000.0,
+      "used_staff_hours": 5663348.5597810205,
+      "unused_staff_hours": 22836651.440218978,
+      "requested_by_channel": [
+        1915999.5205121893,
+        1915999.5205121893
+      ],
+      "fulfilled_by_channel": [
+        1887782.8532603397,
+        1887782.8532603397
+      ],
+      "unmet_by_channel": [
+        28216.66725184949,
+        28216.66725184949
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.9852731344920658,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    },
+    {
+      "climate": "corrected",
+      "case": "fert_legume",
+      "committed_fraction": 1.0,
+      "sites": 1053,
+      "residents": 1915999.5205121893,
+      "supported_staff": 95000.0,
+      "gross_staff_hours": 57000000.0,
+      "committed_staff_hours": 57000000.0,
+      "available_staff_hours": 0.0,
+      "used_staff_hours": 0.0,
+      "unused_staff_hours": 0.0,
+      "requested_by_channel": [
+        1915999.5205121893,
+        1915999.5205121893
+      ],
+      "fulfilled_by_channel": [
+        0.0,
+        0.0
+      ],
+      "unmet_by_channel": [
+        1915999.5205121893,
+        1915999.5205121893
+      ],
+      "unreachable_by_channel": [
+        0.0,
+        0.0
+      ],
+      "fulfilled_request_fraction": 0.0,
+      "maximum_origin_request_balance_error": 0.0,
+      "maximum_provider_hour_excess": 0.0
+    }
+  ],
+  "population_food_staff_control_changed": false,
+  "chosen_scenario": null,
+  "units": "Same annual residents;2neutral potential requests/person/year,cost1and2hours;600grosshours/supportedstaff/year,0/50/100%alreadycommitted;identitylocalchoice only.",
+  "limits": "Single-pass rationing,no rerouting/maxflow,dated roles,market/patrol inference or actual service observations. Staff envelope and requests are stress units,not ancient empirical rates. Other-duty commitments remain unquantified in production;no free-budget default adopted."
+}
