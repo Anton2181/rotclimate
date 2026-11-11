@@ -1,3 +1,28 @@
+# Service opportunity controls complete, ready to push — 11 November 2026
+
+* First milestone70e50882 and protocol192c7eb3 pushed/verified on BOTH maintained
+  branches. User explicitly wants continuation AFTER pushes; continue autonomously.
+* Next protocol720fcaa2 committed BEFORE opportunity/null fields or scores. New
+  polity/service_opportunity.py, four unit tests; builder/evaluator/reviewer scripts
+  and output/settlement_service_controls_20261111. All66predictors,9coordinates,
+  both full/strict cohorts, all travel/mass cases retained. No fitting/adoption.
+* Strict one-day recorded-road history interactionAUC.6453 versus inverse-mass.6462;
+  corresponding local.5059 versus suitability.5748. Global denominator effect,
+  not qualified roles. Uniform/environment/history allsame1292globalopportunities.
+* Independent review1188directAUCs,378old diagnostics,18oldfields,18requestledgers,
+  9nulls and54actualFULL-window rival-normalization comparisons. New report/figure
+  made and posted; publisher/base/package/attributes wired.108focusedtests pass;
+  fresh4artifact replay byte-exact,17previous artifacts unchanged vs70e50882.
+* Browser9rows/figure/6links,byte-exact modelNPZ,mobile344/390/light-dark pass;
+  previous service/evidence panels pass. Publisher idempotent. Focused Windows
+  checkout/linkclosure receipt underoutput; nofullZIPunder~145MBquota.
+* AFTER PUSH predeclare source-role composition check before new subclass scores:
+  village/vicus/smalltown distinct, noautomaticmilitary/market/AD200functions. Same
+  cohorts/offsets/support/sourceeffort and all declared controls, no bestcase tuning.
+* Full S1c/d/e,S2–S5 and physicsqueue remain. Active climate r44; no production
+  settlement/control changes. Qualified future roles must feed SAME finite
+  people/food/staff/institution/control ledger, allactors/nonstate/mobile scope.
+
 # Finite service demand published after recovery — 11 November 2026
 
 * Full S1c/d/e,S2–S5 and separate physics queue persist. Environment returned with

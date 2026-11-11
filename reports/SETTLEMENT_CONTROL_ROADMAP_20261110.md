@@ -260,3 +260,19 @@ Next predeclare availability-mass and zero-travel/inverse-mass controls before
 attributing improvements to interaction. Keep source observation/timing and
 transfer gaps explicit. S3–S5 remain required and actual consumers must share the
 same resident/food/staff/institution/control ledger across all actors.
+
+## Opportunity controls completed,11 November2026
+
+[Protocol720fcaa2 and results](SETTLEMENT_SERVICE_CONTROLS_20261111.md) keep all
+three mass assumptions, six travel cases, nine coordinate cases and both source
+cohorts. Strict global one-day history interaction.6453 is almost reproduced by
+inverse opportunities alone.6462; local interaction.5059 remains below existing
+suitability.5748. No fitting, winner selection or production role/control adoption.
+1188AUCs,378exact old diagnostics,18old fields,18requestledgers,9nulls and54full-
+window comparisons pass. This closes the declared ablation, not S2 or S1c/d/e.
+
+Next declare source-role composition before new subclass scores: distinguish
+recorded village, vicus and small-town contexts without assigning military,
+market or dated functions automatically. Keep observation selection, timing,
+spatial/effort and transfer gaps. S3–S5 and the shared downstream ledger remain
+required; all actors, unaffiliated and mobile/nonstate groups stay in scope.
