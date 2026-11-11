@@ -1,0 +1,331 @@
+{
+  "status": "conditional_source_grid_preparation_no_predictor_scores",
+  "adopt": false,
+  "plan_sha256": "b8feae2552d4a1553d0a3e5c0d5176f73a5251c615d68cc2a15cbc28a5d293ff",
+  "producer_sha256": "b56a93e9c9ceb47394eb9fcf6fd86e9dcd797cc2e04f86afe4f7e7f3beff50a1",
+  "matching_module_sha256": "6904294a59d4421d921956a2ba4bff40b20f8a8747ffa349eb0f40a8cd02ca6c",
+  "parser_sha256": "a65d1efbaf58eb307ae536cc211c4cc5dcd4a7cbb1deecbf03eb53167c9fb034",
+  "table_reader_sha256": "0d93fb0bcc0b64e5b70684b035bfe7cf0cfaa30607a9dad03d5d4a3025429fe1",
+  "original_source_snapshot_sha256": "6c98275418774637eb0389cbb3466b2b90191465fb28215f4221af39fc5ddf76",
+  "roman_input_sha256": "dd98cc76af9aa5e7a68f771647546df1ec2116b5315ec830f6e4b2c9e888ac9e",
+  "original_results_sha256": "66ca38150d56e4c93fed35e4ff0dd0242f354ee178c85bc9b1d9da5a086e22c1",
+  "private_matches_sha256": "4ba8000600673b511d8e855f51992db9761b93c482baf70cfcff43bfdfb03145",
+  "private_matches_redistributed": false,
+  "records": 2475,
+  "source_class_counts": {
+    "0": 2049,
+    "1": 426
+  },
+  "class_meaning": {
+    "0": "recorded farm/villa context",
+    "1": "recorded nucleated context"
+  },
+  "transform": {
+    "pyproj_version": "3.7.2",
+    "PROJ_version": "9.5.1",
+    "description": "Inverse of British National Grid + OSGB36 to WGS 84 (6) + axis order change (2D)",
+    "pipeline": "proj=pipeline step inv proj=tmerc lat_0=49 lon_0=-2 k=0.9996012717 x_0=400000 y_0=-100000 ellps=airy step proj=push v_3 step proj=cart ellps=airy step proj=helmert x=446.448 y=-125.157 z=542.06 rx=0.15 ry=0.247 rz=0.842 s=-20.489 convention=position_vector step inv proj=cart ellps=WGS84 step proj=pop v_3 step proj=unitconvert xy_in=rad xy_out=deg",
+    "reported_accuracy_metres": 2.0,
+    "most_accurate_operation_available": false,
+    "network_grid_downloads": false,
+    "warnings": [
+      "Best transformation is not available due to missing Grid(short_name=uk_os_OSTN15_NTv2_OSGBtoETRS.tif, full_name=, package_name=, url=https://cdn.proj.org/uk_os_OSTN15_NTv2_OSGBtoETRS.tif, direct_download=True, open_license=True, available=False)"
+    ],
+    "accuracy_is_not_source_survey_precision": true
+  },
+  "grid": {
+    "shape": [
+      400,
+      600
+    ],
+    "cell_km": 9.0,
+    "window_spec": {
+      "lat0": 40.0,
+      "lon0": 17.0,
+      "width_km": 5400,
+      "height_km": 3600,
+      "cell_km": 9.0
+    },
+    "geometry_reconstruction_max_error_km": 2.7284841053187847e-12,
+    "nearest_full_grid_before_land_check": true
+  },
+  "scenarios": [
+    {
+      "included_records": {
+        "0": 1938,
+        "1": 419
+      },
+      "represented_cell_class_units": {
+        "0": 797,
+        "1": 249
+      },
+      "mixed_cells": 155,
+      "represented_cells": 891,
+      "preparation_gate_passed": true,
+      "name": "central",
+      "easting_offset_metres": 0,
+      "northing_offset_metres": 0,
+      "coverage_by_class": {
+        "0": {
+          "included": 1938,
+          "outside_window": 54,
+          "nonland": 5,
+          "disallowed": 52
+        },
+        "1": {
+          "included": 419,
+          "outside_window": 2,
+          "nonland": 1,
+          "disallowed": 4
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1954,
+        "1": 420
+      },
+      "represented_cell_class_units": {
+        "0": 806,
+        "1": 242
+      },
+      "mixed_cells": 150,
+      "represented_cells": 898,
+      "preparation_gate_passed": true,
+      "name": "east_-2km",
+      "easting_offset_metres": -2000,
+      "northing_offset_metres": 0,
+      "coverage_by_class": {
+        "0": {
+          "included": 1954,
+          "outside_window": 54,
+          "nonland": 4,
+          "disallowed": 37
+        },
+        "1": {
+          "included": 420,
+          "outside_window": 2,
+          "nonland": 1,
+          "disallowed": 3
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1926,
+        "1": 418
+      },
+      "represented_cell_class_units": {
+        "0": 786,
+        "1": 244
+      },
+      "mixed_cells": 154,
+      "represented_cells": 876,
+      "preparation_gate_passed": true,
+      "name": "east_+2km",
+      "easting_offset_metres": 2000,
+      "northing_offset_metres": 0,
+      "coverage_by_class": {
+        "0": {
+          "included": 1926,
+          "outside_window": 54,
+          "nonland": 8,
+          "disallowed": 61
+        },
+        "1": {
+          "included": 418,
+          "outside_window": 2,
+          "nonland": 1,
+          "disallowed": 5
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1921,
+        "1": 417
+      },
+      "represented_cell_class_units": {
+        "0": 797,
+        "1": 244
+      },
+      "mixed_cells": 149,
+      "represented_cells": 892,
+      "preparation_gate_passed": true,
+      "name": "north_-2km",
+      "easting_offset_metres": 0,
+      "northing_offset_metres": -2000,
+      "coverage_by_class": {
+        "0": {
+          "included": 1921,
+          "outside_window": 53,
+          "nonland": 11,
+          "disallowed": 64
+        },
+        "1": {
+          "included": 417,
+          "outside_window": 2,
+          "nonland": 3,
+          "disallowed": 4
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1945,
+        "1": 419
+      },
+      "represented_cell_class_units": {
+        "0": 805,
+        "1": 246
+      },
+      "mixed_cells": 159,
+      "represented_cells": 892,
+      "preparation_gate_passed": true,
+      "name": "north_+2km",
+      "easting_offset_metres": 0,
+      "northing_offset_metres": 2000,
+      "coverage_by_class": {
+        "0": {
+          "included": 1945,
+          "outside_window": 54,
+          "nonland": 6,
+          "disallowed": 44
+        },
+        "1": {
+          "included": 419,
+          "outside_window": 2,
+          "nonland": 2,
+          "disallowed": 3
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1962,
+        "1": 417
+      },
+      "represented_cell_class_units": {
+        "0": 807,
+        "1": 247
+      },
+      "mixed_cells": 160,
+      "represented_cells": 894,
+      "preparation_gate_passed": true,
+      "name": "east_-5km",
+      "easting_offset_metres": -5000,
+      "northing_offset_metres": 0,
+      "coverage_by_class": {
+        "0": {
+          "included": 1962,
+          "outside_window": 54,
+          "nonland": 8,
+          "disallowed": 25
+        },
+        "1": {
+          "included": 417,
+          "outside_window": 2,
+          "nonland": 5,
+          "disallowed": 2
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1906,
+        "1": 415
+      },
+      "represented_cell_class_units": {
+        "0": 778,
+        "1": 234
+      },
+      "mixed_cells": 151,
+      "represented_cells": 861,
+      "preparation_gate_passed": true,
+      "name": "east_+5km",
+      "easting_offset_metres": 5000,
+      "northing_offset_metres": 0,
+      "coverage_by_class": {
+        "0": {
+          "included": 1906,
+          "outside_window": 54,
+          "nonland": 13,
+          "disallowed": 76
+        },
+        "1": {
+          "included": 415,
+          "outside_window": 2,
+          "nonland": 5,
+          "disallowed": 4
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1898,
+        "1": 414
+      },
+      "represented_cell_class_units": {
+        "0": 776,
+        "1": 236
+      },
+      "mixed_cells": 145,
+      "represented_cells": 867,
+      "preparation_gate_passed": true,
+      "name": "north_-5km",
+      "easting_offset_metres": 0,
+      "northing_offset_metres": -5000,
+      "coverage_by_class": {
+        "0": {
+          "included": 1898,
+          "outside_window": 50,
+          "nonland": 22,
+          "disallowed": 79
+        },
+        "1": {
+          "included": 414,
+          "outside_window": 2,
+          "nonland": 2,
+          "disallowed": 8
+        }
+      }
+    },
+    {
+      "included_records": {
+        "0": 1945,
+        "1": 419
+      },
+      "represented_cell_class_units": {
+        "0": 815,
+        "1": 238
+      },
+      "mixed_cells": 157,
+      "represented_cells": 896,
+      "preparation_gate_passed": true,
+      "name": "north_+5km",
+      "easting_offset_metres": 0,
+      "northing_offset_metres": 5000,
+      "coverage_by_class": {
+        "0": {
+          "included": 1945,
+          "outside_window": 54,
+          "nonland": 16,
+          "disallowed": 34
+        },
+        "1": {
+          "included": 419,
+          "outside_window": 3,
+          "nonland": 1,
+          "disallowed": 3
+        }
+      }
+    }
+  ],
+  "preparation_gate_passed": true,
+  "selected_source_projection_performed": true,
+  "whole_archive_projection_performed": false,
+  "model_predictor_scores_computed": false,
+  "AUC_computed": false,
+  "source_map_generated": false,
+  "limits": "Selected archive-context contrast, not AD200 roles/census/true absence. Source coordinates operationally interpreted; missing best transform grid and source positional uncertainty remain explicit. Mixed cells retain both classes; no source observation or population is merged."
+}

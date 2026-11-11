@@ -1,3 +1,47 @@
+# Conditional role diagnostic complete: weak, no fitting/adoption — 11 November 2026
+
+* Full S1c/d/e and S2–S5 programme remains on roadmap. Protocolcccab768 pushed to
+  BOTH branches BEFORE matching/predictor scores. Current diagnostics now exist;
+  older "no scores yet" entries are historical checkpoints. Do NOT relabel rural
+  Britain unscored or independent. Physics staysr44, production world maps unchanged.
+* New code polity/observed_role_contrast.py; scripts/prepare_,evaluate_,review_
+  settlement_role_contrast.py. Optional requirements-settlement-research.txt pins
+  pyproj3.7.2, installed locally without pip cache. Standard atlas launcher unchanged.
+* Target: selected-archive WHOLE-RECORD nucleated vs farm/villa DOMESTIC=yes exclusive
+  context labels;426/2049source rows, not datedAD200 roles or true absence. Central
+  included419/1938; exclusions byclass retained (window/nonland/disallowed), no
+  nearest-land rescue.9km original Roman400x600 grid verified by AEQD reconstruction.
+* Primary797farm/villa and249nucleated cell/class units across891cells;155mixed cells
+  kept in BOTHclasses/ties. Repeated excavations do not add primary mass.30unit/class
+  gate passes. Private matches/data/cache/settlement_role_contrast_20261111/matched.npz
+  NOT redistributed. Public prep/results/review allaggregate.2475selected points
+  projected, NOT whole3652archive or a source map.
+* Transformer: offline available OSGB36->WGS84(6), reported2m, NOT source precision.
+  Best OSTN15grid unavailable, recordedpipeline/warning/software versions. All9offsets
+  central,±2/±5km EACH British-grid axis preserved; no best-coordinate selection.
+* RESULTS: uniformAUC.5; existing suitability.547840 vs historyL450intensity.519037.
+  Equal50km-block means.601456/.585896,63bothclassblocks/81observed; NOT heldout.
+  Coordinate ranges.5209–.5478 vs.5038–.5190. All region/fieldwork/AREA strata retained;
+  single-class strata null. RankAUC reviewed independently with direct pairwise
+  comparisons,27values. No parameters fitted, thresholds tuned, institution assigned
+  or production changed. Centre placement quality does not qualify role inference.
+* New report SETTLEMENT_ROLE_CONTRAST_20261111.md and secondfigure posted in chat.
+  Dedicated collapsed Earth evidence panel has3rows/5aggregate-doc links. Current
+  dataset_usage and data_queue mark source scored conditional development. Older
+  publishers now preserve stronger exposure rather than downgrade it on rerun.
+*95 tests pass. Preparation AND private matches fresh-output byte-exact;10 previous
+  artifacts unchanged vs54fcb2f3. New/previous/evidence browser panels/figure/filter/
+  download/error/mobile344&390/light-dark pass. Raw source/caches not inGit/portable.
+*88 Windows-style critical files byte-exact;658 local dependencies resolve;
+  normal launcher release verifies. Full ZIP/site copy not rebuilt under quota.
+* NEXT: explicit functional/service-demand mechanism AND source observation model,
+  not more historyL tuning or automatic promotion of intensity into role labels.
+  Before road-derived candidates, freeze robustness excluding roadside labels to
+  avoid a definitional route association. Accessible rural demand/competition/
+  finite surplus are hypotheses, not proved causes. Keep timing/source selection
+  and independent-transfer gaps; qualified roles must feed SAME people/food/staff/
+  institution/control ledger for all actors and mobile/nonstate populations.
+
 # Next conditional role diagnostic declared — 11 November 2026
 
 * Completed history/phase milestone54fcb2f3 and protocol710af13a are pushed and

@@ -62,6 +62,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_roman_rural_preparation.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_history_boundary_20261111/review.json').exists() and (ROOT/'output/settlement_phase_evidence_20261111/audit.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_continuation.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_role_contrast_20261111/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_role_contrast.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

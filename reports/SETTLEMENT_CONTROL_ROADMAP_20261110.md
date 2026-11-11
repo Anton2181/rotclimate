@@ -82,6 +82,10 @@ Earth qualification.
   Record IDs/investigated area are not settlement counts/population. Keep source
   overlap, coverage and spatial leakage explicit before role-specific scoring.
 
+- [x] Initial conditional context diagnostic: [weak existing predictors](SETTLEMENT_ROLE_CONTRAST_20261111.md),
+  no fitting/adoption; source exposure updated, all mixed cells and scenarios retained.
+- [ ] Explicit functional/service-demand and observation model, including a declared
+  non-roadside robustness contrast before road-derived predictors; no intensity-to-role shortcut.
 - [ ] Separate villages, markets, ports, administrative seats and garrisons;
   roles may overlap. Preserve known anchors; do not classify from icon size alone.
 - [ ] Allocate resident populations and service catchments from the same rural
@@ -231,3 +235,14 @@ Source-only counts426/2049 are known; no source-to-grid matching or contrast sco
 yet. Test existing predictors without tuning, report coverage/effort and positional
 sensitivity, keep mixed-cell ties. This is the next S2 diagnostic, not closure of
 S1, dated-role calibration or permission to turn categories into political sources.
+
+## Conditional role contrast completed,11 November2026
+
+The [declared diagnostic](SETTLEMENT_ROLE_CONTRAST_20261111.md) passes preparation
+and is now scored: suitabilityAUC.548 versus history-intensity.519; all coordinate
+scenarios retained, no fitting/adoption. Selected-archive contexts are not a
+settlement census or datedAD200 functions. Source exposure is updated; do not
+relabel this pool unscored or independent. Prior protocols/audits remain historical
+checkpoints. Next, define an explicit role/service-demand and observation model,
+with a non-roadside contrast before road-based predictors, grouped spatial/effort
+checks, and the SAME downstream population/food/staff/control consumers.

@@ -101,3 +101,8 @@ clarifies that major change dates and multiple labels can describe successive
 roles. Earlier wording about preserving simultaneous functions should not be
 read as evidence of contemporaneity. All source observations remain distinct;
 new exact-point/name validation blocks are not physical-place merges.
+
+The [conditional context diagnostic](SETTLEMENT_ROLE_CONTRAST_20261111.md) now
+scores rural-Britain source labels. Current exposure is conditional development,
+not unscored preparation or independent transfer. Earlier preparation checkpoints
+remain unchanged; other source candidates are not thereby scored.

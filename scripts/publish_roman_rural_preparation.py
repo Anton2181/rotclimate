@@ -111,6 +111,8 @@ def main():
     path=ROOT/'calibration/earth_components_20261105/dataset_usage.json';exposure=json.loads(path.read_text())
     entry=dict(id='rural_roman_britain',status='prepared_unscored_roles_and_chronology',evidence='reports/ROMAN_RURAL_PREPARATION_20261110.md',
         note='Five tables prepared without scoring; role-context compiler, date conventions and association blocks implemented. Six-site/eight-point official-anchor check supports operational OSGB-compatible X-easting/Y-northing metres; not whole-source positional accuracy or export-CRS certification. Physical places, precision, phases and coverage unresolved. Britain overlaps Roman development; no sealed status or raw redistribution.')
+    previous=next((e for e in exposure['datasets'] if e['id']==entry['id']),None)
+    if previous and previous['status']=='exposed_conditional_context_diagnostic':entry=previous
     exposure['datasets']=[e for e in exposure['datasets'] if e['id']!=entry['id']]+[entry]
     write(path,exposure);shutil.copyfile(path,data/'dataset_usage.json')
     print('Published aggregate rural-role preparation and source-reader correction; no model evaluation.')

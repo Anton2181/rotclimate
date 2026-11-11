@@ -80,7 +80,7 @@ def main():
         evidence='reports/SETTLEMENT_HISTORY_BOUNDARY_20261111.md',note='100 declared exposed evaluations,20 exact overlap controls. Old lead retained; no global-optimum, occupation-age, transfer or production-adoption claim.')
     usage['datasets']=[e for e in usage['datasets'] if e['id']!=entry['id']]+[entry]
     for e in usage['datasets']:
-        if e['id']=='rural_roman_britain':e['note']='Prepared source only, unscored. Published methodology documents successive roles and major change dates; no role intervals imputed.1031 consistent change records/10 requiring review; exact-name/point review blocks include189 observations, not place merges. Operational grid interpretation retained; precision/coverage and dated-role targets remain open.'
+        if e['id']=='rural_roman_britain' and e['status']=='prepared_unscored_roles_and_chronology':e['note']='Prepared source only, unscored. Published methodology documents successive roles and major change dates; no role intervals imputed.1031 consistent change records/10 requiring review; exact-name/point review blocks include189 observations, not place merges. Operational grid interpretation retained; precision/coverage and dated-role targets remain open.'
     write(path,usage);shutil.copyfile(path,data/'dataset_usage.json')
     print('Published100-evaluation boundary study and chronology/identity evidence; no production map change.')
 
