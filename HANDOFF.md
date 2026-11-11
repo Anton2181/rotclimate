@@ -1,3 +1,19 @@
+# Documented institution-scope comparison declared after source push — 11 November 2026
+
+* c851ad63/providerprep and protocol831d0b11 pushed/verified BOTHbranches;continued.
+* NEXT calibration/institution_scope_20261111/plan.json declaredBEFOREnewscope/
+  AD200counts. Compareexplicit_only vsdocumented_parent_scope,all10vars/5007rows;
+  nofit/modelscores. Authorrepo292b042cef3dde3d43b2c7723dec41a173c2a163 pinnedin
+  data/cache/institution_date_policy_20261111/repository.json,README+Template.py.
+* AuthorREADME+check_dataframe confirmsfullyundatedsingle ORflaggedmultiple
+  ->parentduration;dated/undatedmixture rejected. ImplementONLYdeclaredscopepolicy,
+  noauthorpackageexecution,randomrange/disputesampling,interpolationorclipping.
+* Keepone-sided/reversed/outofparent/invaliddatesexplicit,multialternatives
+  unmerged,rawunknowns/rangespreserved. Parent-scoped≠directlydatedrole. Need
+  independentreview,tests,freshreplay,publication/QA andpushBOTHafterresults.
+* All oldsource/atlasresultsfrozen;providerrole/staffgatespersist,fullS1c/d/e,
+  S2–S5,allactors/mobile/nonstate,r44physics. Noproductionadoption.
+
 # Provider audit/Earth institution source complete, ready to push — 11 November 2026
 
 * Protocol831d0b11 BEFORE newproviderfields or Polarisrows. Newhelper
