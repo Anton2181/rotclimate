@@ -1,3 +1,31 @@
+# Geographic-transfer field source declared — 11 November 2026
+
+* Latestpush2ef81095 verifiedonsinglecanonical/defaultfriendly-turing43ygeu.
+  Ecstaticremotebranchretired,don'trecreateit. Userexplicitlywantscontinuationafter
+  eachpush;do notpauseatmilestones. Fullfour-releasemilestonespersistonroadmap.
+* Runtime/networkchecksread,currentspec36running/unrestricted,noVPN/secrets.
+  Workspaceclean;remoteHEAD==local2ef81095. ~108MBfree,no fullbundle/sitecopies.
+* IMPORTANTnewhistorysearchFOUNDReba/Modelski alreadyused:research_notes/
+  population_density_research_20261023.md and reports/POPULATION_20261023.md.
+  Absencefromexposure-registerwasnotproofnew. DoNOTuseasfreshblindsource.
+* NEXTplan calibration/vidarbha_survey_20261111/plan.json declaredBEFORECSVzip
+  records/modellookup. NEWseparateprimary2016fieldsurveyZenodo3670055(v2),
+  CCBY4.0,139013byteSiteRecords.zip,5CSVtableswithSiteCode joins,Northlatitude,
+  Eastlongitude,SiteType,SurveyZone,phaseflags. DoesNOTrepairfailed3667657census.
+* Onlynewreadme/schema/Zenodometadatareadsofar;old60mastercoords/390censusrows
+  exposedthroughpreviouspreparation. CompareactualID/coordinateoverlap explicitly.
+  Private readme+SHAatdata/cache/vidarbha_survey_docs_20261111;paperPDFfetchfailed
+  boundedPDFcheck,relevantpublisher/searchmethodsread(joAD61),don'tclaimfullpaper.
+* Paper/readmedescribe3targetedframesChammak/Mandhal/Pauni,about7.5%area surveyed;
+  notcompletecitycensusorbackgroundabsence. SiteType=settlementrequiredforpositive
+  contexts;EH-S Satavahanaperiod-compatible,notexactAD200date. Need chronology/
+  coverage/unit gatesbeforecomparison. Newrealrecordsnotyetloadedorcounted.
+* NOWcommit/pushdeclaredpreparationplan,downloadONLYsmallreadme/recordzip,prepare
+  5tables/hash/joins/coordinate/phase/overlapchecks,independentreview. Ifusable,
+  freezeactualtransfercomparisonBEFOREmodelscoringandRUNit(no metadata-onlystall).
+  Singlefriendlybranchonly. Physicsr44unchanged;fullS1c/d/e,S2–S5/allactor/mobile/
+  nonstatescopepreserved. Firstlocation/populationreleaseisthepriority.
+
 # Branch consolidation complete; dated references checked — 11 November 2026
 
 * CANONICALONLY:claude/friendly-turing-43ygeu (existingGitHubdefault). b7809a32
