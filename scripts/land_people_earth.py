@@ -98,6 +98,9 @@ def wc(var, month=None):
     member = f"wc2.1_5m_{var}.tif" if month is None else f"wc2.1_5m_{var}_{month:02d}.tif"
     im = Image.open(io.BytesIO(zipfile.ZipFile(WC / f"wc2.1_5m_{var}.zip").read(member)))
     a = np.array(im, dtype=np.float32)
+    nodata = im.tag_v2.get(42113)
+    if nodata is not None:
+        a[a == np.float32(float(str(nodata).strip("\x00 ")))]=np.nan
     a[a < -1e30] = np.nan
     return a
 

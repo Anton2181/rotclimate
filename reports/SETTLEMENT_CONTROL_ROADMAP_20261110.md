@@ -64,6 +64,16 @@ update. None of these milestones is complete merely because code tests pass.
    Roman positive areas and median fills remain separate. NEXT extend missing
    ecological inputs consistently, verify overlapping existing values, then rerun
    full-region count development and continue shared-ledger resident allocation.
+   This repair is now complete for the Han population input family: strict source
+   overlap exposed a coastal NoData decoder bug; legacy provenance and explicitly
+   corrected-reference checks both pass without changing thresholds. All1,586
+   required missing cells filled; count replay retains all1,280Han/1,115Roman
+   records. Same-domain count results unchanged; new full-domain beta0.5 mean
+   deviance2.2542 versusbeta0.7 2.2971,development only. See
+   EARTH_POPULATION_EXTENSION_20261111.md. NEXT rebuild supported core-travel
+   inputs with corrected relief/eastern coverage before new placement comparison;
+   then resident-size and shared-ledger fantasy rebuild. Do not mistake source
+   repair for final map qualification or silently apply the patch to old datasets.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

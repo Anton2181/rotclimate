@@ -1,0 +1,5404 @@
+{
+  "version": 1,
+  "scope": "Selected production configuration numeric leaves and literal top-level constants. Counts are audit records, not independent degrees of freedom, evidence quality scores or percentages of the model calibrated. Unresolved code expressions and unreviewed coefficients remain explicit; function-body constants are outside this first inventory.",
+  "components": [
+    {
+      "id": "climate",
+      "label": "Climate physics",
+      "validation": "Earth-tested r43; dev49 and finer-grid checks; sealed e was scored and is spent. All unchanged coefficients are not automatically reclassified as fitted here.",
+      "observables": "Monthly temperature, rain amount/seasonality, SST; process budgets and resolution transfer.",
+      "next_test": "Audit remaining shared physics versus world-geometry fields; future heldout tests must respect the existing exposure ledger.",
+      "parameters_reviewed": 209,
+      "counts": {
+        "unreviewed": 200,
+        "earth_fit": 9
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "crops",
+      "label": "Crop production, area and calendars",
+      "validation": "Historical wheat test: observed-weather yield-scale candidate failed annual-skill checks (25 test years at one site, r=-0.378). Only2/25 recorded winter seasons fit current temperature/length rules. Prior physiological-clock candidate also failed. No AD200 yield default promoted.",
+      "observables": "Crop yield, cultivated area, dates and water response, separated by management and period.",
+      "next_test": "Chronological crop transpiration/soil evaporation/drainage budget and winter-season compatibility, constrained by documented management. Broadbalk now development/spent; Woburn reserved until local weather matching. See reports/HISTORICAL_WHEAT_20261105.md.",
+      "parameters_reviewed": 67,
+      "counts": {
+        "scenario": 58,
+        "published_relationship": 8,
+        "historical_fit": 1
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "hydrology",
+      "label": "Soil water, runoff and seasonality",
+      "validation": "Simplified buckets and selected regional checks; no comprehensive discharge or soil-storage calibration demonstrated.",
+      "observables": "ET, seasonal soil moisture, streamflow, snow and low flows.",
+      "next_test": "Compare water budgets and discharge on Earth; separate measured soil heterogeneity from effective fitted storage.",
+      "parameters_reviewed": 11,
+      "counts": {
+        "unreviewed": 11
+      },
+      "unresolved_expressions": [
+        {
+          "file": "polity/seasons.py",
+          "name": "DAYS",
+          "line": 32,
+          "expression": "365.0 / 12"
+        }
+      ]
+    },
+    {
+      "id": "vegetation_pasture",
+      "label": "Vegetation, forage and water access",
+      "validation": "Miami productivity and inherited allocation assumptions; seasonal proxy/resource circuits are not calibrated herd populations.",
+      "observables": "NPP, forage seasonality, energy/protein, sustainable intake and water permanence.",
+      "next_test": "Validate annual and lean-season resources before estimating animal products or mobile communities.",
+      "parameters_reviewed": 9,
+      "counts": {
+        "definition": 2,
+        "published_relationship": 1,
+        "scenario": 6
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "foraging",
+      "label": "Foraging physiology and resource adaptation",
+      "validation": "Adapted kernel has continent-separated Binford tests; adopted aquatic calibration improves heldout error, with regional failures and later rejected variants.",
+      "observables": "Density, diet shares and procurement time; population dynamics and food balance.",
+      "next_test": "Keep geographic transfer tests; obtain independent prey/plant/fishing resource observations rather than fitting density alone.",
+      "parameters_reviewed": 73,
+      "counts": {
+        "published_relationship": 53,
+        "definition": 1,
+        "scenario": 16,
+        "earth_fit": 3
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "health",
+      "label": "Malaria and ecological population modifiers",
+      "validation": "Thermal trait equations are sourced; moisture gate and density penalty lack independent epidemiological/demographic calibration.",
+      "observables": "Vector/parasite responses, transmission season; separately illness, mortality and work loss.",
+      "next_test": "Validate suitability against appropriate pre-control data before fitting demographic effects.",
+      "parameters_reviewed": 51,
+      "counts": {
+        "scenario": 26,
+        "published_relationship": 21,
+        "historical_fit": 4
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "population",
+      "label": "Population allocation and livability",
+      "validation": "Historical analogue occupancies and HYDE/Han comparisons; scenario allocation is not an independent census forecast.",
+      "observables": "Absolute people and spatial allocation, with urban/rural distinction and recorded uncertainty.",
+      "next_test": "Use direct censuses/surveys as anchors; distinguish independently measured counts from HYDE imputation.",
+      "parameters_reviewed": 7,
+      "counts": {
+        "scenario": 7
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "transport_trade",
+      "label": "Travel and freight",
+      "validation": "Selected Earth comparisons and published/assumed rates; old market-access town-size test failed. ORBIS is a model comparator, not independent journey observations.",
+      "observables": "Observed travel duration, mode, cargo, monetary costs and seasonal restrictions.",
+      "next_test": "Fit transport to journeys/freight evidence before fitting trade outcomes; retain rejected scale identification.",
+      "parameters_reviewed": 50,
+      "counts": {
+        "unreviewed": 40,
+        "definition": 1,
+        "published_relationship": 3,
+        "scenario": 6
+      },
+      "unresolved_expressions": [
+        {
+          "file": "polity/transport.py",
+          "name": "NEIGHBOURS",
+          "line": 47,
+          "expression": "[(a, b) for a in (-1, 0, 1) for b in (-1, 0, 1) if a or b]"
+        },
+        {
+          "file": "polity/transport.py",
+          "name": "POLAR_MEAN",
+          "line": 59,
+          "expression": "float(polar(np.linspace(0.0, 180.0, 1801)).mean())"
+        },
+        {
+          "file": "polity/trade.py",
+          "name": "SEA_KM_DAY",
+          "line": 32,
+          "expression": "X.SAIL_FAIR_KNOTS * 24 * 1.852"
+        }
+      ]
+    },
+    {
+      "id": "settlements",
+      "label": "Settlement sites and administrative seats",
+      "validation": "Seat-count/spacing and dry-site rules have Earth fits and later-era checks. These are not all-village or urban-size models.",
+      "observables": "Seat counts, site locations and independently estimated settlement size.",
+      "next_test": "Validate types separately; stop using served people as measured town residents.",
+      "parameters_reviewed": 9,
+      "counts": {
+        "historical_fit": 4,
+        "scenario": 5
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "provisioning_control",
+      "label": "Shared grain, residents and sustained reach",
+      "validation": "Conserved ledgers and sensitivity tests; cohort/request/storage/collection assumptions have not been empirically fitted.",
+      "observables": "Rural meals, stored grain, marketed supply, supported residents, documented institutional presence and access.",
+      "next_test": "Independent rural household/land/work evidence, then storage/imports and institution records. Never infer de facto control from painted claims used as inputs.",
+      "parameters_reviewed": 27,
+      "counts": {
+        "definition": 1,
+        "scenario": 26
+      },
+      "unresolved_expressions": []
+    },
+    {
+      "id": "labour",
+      "label": "Shared rural workforce and listed field tasks",
+      "validation": "Normative Columella counts and scenario workforce budgets. The new modern reaping comparison failed its original panel-independence audit; only a restricted post-audit diagnostic remains, with no prospective qualification or AD200 adoption.",
+      "observables": "Reported task hours, cultivated hectares, household members and labour sources.",
+      "next_test": "VDSA manual-reaping benchmark with independent household size; modern evidence is not automatic AD200 transfer.",
+      "parameters_reviewed": 38,
+      "counts": {
+        "scenario": 28,
+        "published_relationship": 10
+      },
+      "unresolved_expressions": []
+    }
+  ],
+  "parameters": [
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/lat_center",
+      "value": 37.949912213280044,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/north_bearing",
+      "value": -15.13630778010841,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tilt",
+      "value": 30.708221254128137,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eccentricity",
+      "value": 0.0167,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/perihelion_after_solstice",
+      "value": 13.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/year_days",
+      "value": 365,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/solar_flux",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/greenhouse_wm2",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/planet_radius",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/winter_solstice_day",
+      "value": 22.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/map_width_mi",
+      "value": 2286.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/map_height_mi",
+      "value": 1058.2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tier_tops/0",
+      "value": 50,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tier_tops/1",
+      "value": 834,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tier_tops/2",
+      "value": 1138,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tier_tops/3",
+      "value": 2619,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/lapse_rate",
+      "value": 4.4142078309475306,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/lapse_seasonal",
+      "value": 0.15,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_north_land",
+      "value": 0.5218784838332069,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_south_land",
+      "value": 0.7797262902405816,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_west_land",
+      "value": 0.23141575283370677,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_east_land",
+      "value": 0.7027200079038486,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_southeast_land",
+      "value": 0.4425543052622135,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_northeast_land",
+      "value": 0.043549961655240096,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_continuity_km",
+      "value": 711.5218543971068,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_relief_m",
+      "value": 16.35527328768612,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_seed",
+      "value": 1,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/far_pole_land",
+      "value": -1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_north_gap_km",
+      "value": 727.9185365176538,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_south_gap_km",
+      "value": 352.5505015768525,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_west_gap_km",
+      "value": 18.61759185731694,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/beyond_east_gap_km",
+      "value": 247.0982050069382,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/pad_km",
+      "value": 1100.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_tau_days",
+      "value": 1.2977062637544587,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_radiative_days",
+      "value": 26.01270901368483,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_tau_days",
+      "value": 2.7381993028417,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/heat_diffusion",
+      "value": 40000.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/current_strength",
+      "value": 5.481952078680322,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/current_scale_km",
+      "value": 900.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subpolar_current",
+      "value": 9.155653452635175,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/current_gyre",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/shelf_warm_currents",
+      "value": 0.47186373475516297,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/sst_offset",
+      "value": -4.432542575075954,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_offset",
+      "value": -0.9794671903450312,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/inland_sea_warming",
+      "value": 3.880724030435667,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/lake_coupling",
+      "value": 0.6686924947790456,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/sea_winter_mixing",
+      "value": 0.13152579104056292,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_amplitude",
+      "value": 0.9274535284743188,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_asym",
+      "value": 0.3026932600906564,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_reach",
+      "value": 4.688131279001152,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tropical_storms",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/tropical_storm_km",
+      "value": 600.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cold_high_storms",
+      "value": 0.13324679227620187,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_descent",
+      "value": 0.01984074784518624,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_tau_unstable",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_stable_rate",
+      "value": 0.1420060155383946,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/instability",
+      "value": 2.5204588569083555,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/soil_memory_days",
+      "value": 50.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/t_iters",
+      "value": 192,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/t_relaxation",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/t_adaptive_retries",
+      "value": 2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/hadley_edge",
+      "value": 33.590636492301385,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/hadley_shift",
+      "value": 6.027970293264813,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/itcz_mean",
+      "value": 6.726377335669385,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/itcz_shift",
+      "value": 15.791379875059679,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/itcz_shift_ocean",
+      "value": -1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_westerly",
+      "value": 0.8688830059773649,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_pressure_hpa",
+      "value": 3.583236032041529,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/trade_speed",
+      "value": 9.377285792105285,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/westerly_speed",
+      "value": 8.760247102945932,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/polar_speed",
+      "value": 3.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_strength",
+      "value": 3.894783853353596,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_scale_km",
+      "value": 1499.627706066449,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cross_isobar_deg",
+      "value": 30.122343869604947,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/terrain_drag",
+      "value": 1.440741588958033,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_rh",
+      "value": 0.7547460305996778,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_column_air",
+      "value": 0.18225397345636124,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_column_warm",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/evap_tau_days",
+      "value": 0.4047316552518218,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_recycling",
+      "value": 0.39920932715342805,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/precip_tau_days",
+      "value": 8.318155307818898,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/rh_threshold",
+      "value": 0.36774492725507657,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/rh_spread",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_track",
+      "value": 4.392637239362748,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_width",
+      "value": 14.673873037843284,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/convective",
+      "value": 0.014161596536314148,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/orographic",
+      "value": 2.657882106689769,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/orographic_gust_ms",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence",
+      "value": 0.15923901104827515,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_asym",
+      "value": 0.9976090824574222,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_summer",
+      "value": 0.5184985513995239,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/wet_cooling",
+      "value": 0.4256647250253665,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_heating",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_heating_chi0",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_heating_warm_c",
+      "value": -99.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_heating_arid",
+      "value": -1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_heating_mean_c",
+      "value": -99.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/sverdrup",
+      "value": 1.2044177847550401,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_width",
+      "value": 11.891554121008305,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_seasonality",
+      "value": 0.004426783245909501,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/circulation_lag_days",
+      "value": 45.248631949284665,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_drying",
+      "value": 0.019548865912820436,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_heat_capacity",
+      "value": 0.9420733827136455,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continentality",
+      "value": 0.44309993220653127,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continental_depth",
+      "value": 0.31407230321455437,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/maritime_mean",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/upwelling",
+      "value": 0.6148930955132041,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/background_ascent",
+      "value": 0.75,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/convective_rain",
+      "value": 0.3647612418951105,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/convective_rh",
+      "value": 0.6829148729649469,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subcloud_evaporation",
+      "value": 0.3772388409328513,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_coupling_insolation",
+      "value": 1.7062520279160875,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/wet_sun",
+      "value": 1.7056550099110037,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/wet_sun_ref",
+      "value": 0.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_baroclinic",
+      "value": 0.25221309410064896,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_baroclinic_cold_c",
+      "value": 10.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_baroclinic_max_deg",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/storm_baroclinic_humid_rh",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continental_sea_air",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continental_sea_lag_days",
+      "value": 60.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/warm_current_seasonality",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ebm_land_scale",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ebm_land_ice",
+      "value": 0.4663687768283866,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_transport",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_heat_capacity",
+      "value": 1.4,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_mixed_seasonality",
+      "value": 0.2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cross_equatorial_transport",
+      "value": 1.1,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cross_transport_ocean",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continental_mean",
+      "value": 6.290157381217415,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continental_depth_lat",
+      "value": 30.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/continentality_lat",
+      "value": 25.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subgrid_orographic",
+      "value": 2.7877970542108406,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/lee_drying",
+      "value": 0.5966138558932341,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_branch",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming",
+      "value": 4.679822103487044,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming_taper",
+      "value": 14.457447712770307,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming_wet",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming_chi0",
+      "value": 0.30729819109520673,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming_rain",
+      "value": 2.708243482003979,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_warming_top_m",
+      "value": 2500.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_branch_drying",
+      "value": 0.27836152419906135,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_branch_dry_rain",
+      "value": 2.3637118106260777,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subsidence_branch_gap",
+      "value": 5.582784966194307,
+      "status": "earth_fit",
+      "note": "Shared r43 parameter prospectively selected in three-start development search.",
+      "evidence": [
+        "reports/R43_20261103.md"
+      ]
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/dry_coupling",
+      "value": 2.4872118818891362,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_tau_stable",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_heat",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_moisture_height_km",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cloud_radiation",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/cloud_longwave",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/snow_albedo",
+      "value": 0.21321891790294195,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/flux_convergence",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/flux_scale_km",
+      "value": 2000.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/slp_large",
+      "value": 1.7624748922658129,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/slp_local",
+      "value": 0.47185338191279136,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/slp_scale_km",
+      "value": 2050.5811112277306,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/slp_local_km",
+      "value": 209.69879410108845,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/bl_drag_ocean",
+      "value": 2.231865077424554e-05,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/bl_drag_land",
+      "value": 5.2852345498785046e-05,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/divergence_drying",
+      "value": 0.053592542495144835,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_heating",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/monsoon_rain0",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/trade_land",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/zonal_land_friction",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/heat_land_friction",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/shelf_air_coupling",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/shelf_air_lag_days",
+      "value": 45.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/inland_sea_lag_days",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/water_land_friction",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/far_fetch",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/wind_cap",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/soil_bucket_mm",
+      "value": 75.3110415899167,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_sink",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/land_edge_rh",
+      "value": 0.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/edge_continental_drying",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/high_drying",
+      "value": 0.05,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/marine_layer",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/marine_reach_km",
+      "value": 40.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/marine_inversion_m",
+      "value": 700.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/marine_contrast",
+      "value": 5.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_rainout",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subtropical_high",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subtropical_high_scale_km",
+      "value": 1000.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subtropical_high_width",
+      "value": 10.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/subtropical_high_seasonality",
+      "value": 0.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_diffusion",
+      "value": 60000.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_rate",
+      "value": 1.434152674408984,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_seasonality",
+      "value": 0.21578530626276712,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_scale_km",
+      "value": 851.6123690222877,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_moisture_scale_km",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/upslope_free_wind",
+      "value": 0.24969886825312815,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_rh_cap",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_upwind_days",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/eddy_cap_contrast_k",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/ocean_rh_warm",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_wind_factor",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_pressure_drag_ratio",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_thermal_height_km",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_upper_q_ratio",
+      "value": 0.15,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_reservoir_mixing_days",
+      "value": 5.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_reservoir_lapse_k_km",
+      "value": 6.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_ocean_rh_taper",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/downsample",
+      "value": 8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/steps_per_year",
+      "value": 25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/seasonal_spinup_years",
+      "value": 0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/picard_iters",
+      "value": 256,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_relaxation",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/moisture_residual_tol",
+      "value": 0.01,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/solver_rtol",
+      "value": 1e-06,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "climate",
+      "source": "calibration/local_accuracy_20261023/r43_params.json",
+      "pointer": "/solver_max_iter",
+      "value": 2000,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/window/0",
+      "value": 3.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/window/1",
+      "value": 24.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/base",
+      "value": 0.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/heat",
+      "value": 1500.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/months/0",
+      "value": 4,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/months/1",
+      "value": 9,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/kc",
+      "value": 0.8,
+      "status": "published_relationship",
+      "note": "FAO-style water coefficient; literature attribution is not local empirical calibration.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/ky",
+      "value": 1.05,
+      "status": "published_relationship",
+      "note": "FAO yield-response coefficient; local transfer unvalidated.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/grain",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/edible",
+      "value": 0.9,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/kcal",
+      "value": 3300.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/seed",
+      "value": 0.14,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/wheat/need_warm",
+      "value": 12.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/window/0",
+      "value": 2.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/window/1",
+      "value": 25.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/base",
+      "value": 0.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/heat",
+      "value": 1200.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/months/0",
+      "value": 3,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/months/1",
+      "value": 8,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/kc",
+      "value": 0.75,
+      "status": "published_relationship",
+      "note": "FAO-style water coefficient; literature attribution is not local empirical calibration.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/ky",
+      "value": 0.9,
+      "status": "published_relationship",
+      "note": "FAO yield-response coefficient; local transfer unvalidated.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/grain",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/edible",
+      "value": 0.87,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/kcal",
+      "value": 3540.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/seed",
+      "value": 0.12,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/barley/need_warm",
+      "value": 10.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/window/0",
+      "value": 14.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/window/1",
+      "value": 33.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/base",
+      "value": 10.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/heat",
+      "value": 1100.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/months/0",
+      "value": 3,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/months/1",
+      "value": 5,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/kc",
+      "value": 0.7,
+      "status": "published_relationship",
+      "note": "FAO-style water coefficient; literature attribution is not local empirical calibration.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/ky",
+      "value": 0.8,
+      "status": "published_relationship",
+      "note": "FAO yield-response coefficient; local transfer unvalidated.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/grain",
+      "value": 0.9,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/edible",
+      "value": 0.78,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/kcal",
+      "value": 3780.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/seed",
+      "value": 0.02,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/millet/need_warm",
+      "value": 18.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/window/0",
+      "value": 19.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/window/1",
+      "value": 35.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/base",
+      "value": 10.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/heat",
+      "value": 1700.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/months/0",
+      "value": 4,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/months/1",
+      "value": 6,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/kc",
+      "value": 1.15,
+      "status": "published_relationship",
+      "note": "FAO-style water coefficient; literature attribution is not local empirical calibration.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/ky",
+      "value": 1.2,
+      "status": "published_relationship",
+      "note": "FAO yield-response coefficient; local transfer unvalidated.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/grain",
+      "value": 1.8,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/edible",
+      "value": 0.68,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/kcal",
+      "value": 3600.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/seed",
+      "value": 0.03,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/need_warm",
+      "value": 22.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/crops/rice/flood_mm",
+      "value": 300.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/date_palm/grain",
+      "value": 3.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/date_palm/kcal",
+      "value": 2800.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/date_palm/dry_mm/0",
+      "value": 300.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/date_palm/dry_mm/1",
+      "value": 500.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/farmed_share",
+      "value": 0.6,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/single_crop_sown_share",
+      "value": 0.6,
+      "status": "historical_fit",
+      "note": "Aggregate Han plains capacity normalization; does not separately identify sown share from arable share/yield.",
+      "evidence": [
+        "reports/land_people.md"
+      ]
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/kcal_per_person_year",
+      "value": 1100000.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/arable_by_terrain_tier/1",
+      "value": 0.85,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/arable_by_terrain_tier/2",
+      "value": 0.75,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/arable_by_terrain_tier/3",
+      "value": 0.45,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/arable_by_terrain_tier/4",
+      "value": 0.08,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/soil_bucket_mm",
+      "value": 100.0,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/effective_rain_fraction",
+      "value": 0.8,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "crops",
+      "source": "atlases/earth_fit/data/crop_model.json",
+      "pointer": "/second_crop_weight",
+      "value": 0.5,
+      "status": "scenario",
+      "note": "Exported period crop/land coefficient; trace direct measurements before calibration.",
+      "evidence": []
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/SNOW_LASTING_MM",
+      "value": 10.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/MELT_MM_C_DAY",
+      "value": 4.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/SOIL_MM",
+      "value": 100.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/TOPSOIL_MM",
+      "value": 25.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/FROZEN_C",
+      "value": -2.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/MUD_COEFFICIENT",
+      "value": 1.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/MUD_ROAD",
+      "value": 1.1,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/HEAT_GAIN",
+      "value": 0.4,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/CROSS_DAYS",
+      "value": 0.1,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/FLOOD_GAIN",
+      "value": 4.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "hydrology",
+      "source": "polity/seasons.py",
+      "pointer": "/LOW_WATER",
+      "value": 0.4,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/reference_liveweight_kg",
+      "value": 250,
+      "status": "definition",
+      "note": "Reference feed-equivalent animal; not inferred livestock population.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/reference_intake_kg_dm_day",
+      "value": 6.25,
+      "status": "published_relationship",
+      "note": "Reference maintenance dry matter intake, not nutritional adequacy.",
+      "evidence": [
+        "reports/PASTURE_RESOURCES_20261104.md"
+      ]
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/year_days",
+      "value": 365,
+      "status": "definition",
+      "note": "Accounting year length.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/test_demand_fraction_of_annual_supply",
+      "value": 0.5,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/test_buffer_days",
+      "value": 90,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/stored_feed_loss_fraction_year",
+      "value": 0,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/phenology/temperature_floor_c",
+      "value": 0,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/phenology/temperature_span_c",
+      "value": 15,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "vegetation_pasture",
+      "source": "data/pasture_model.json",
+      "pointer": "/phenology/rain_half_saturation_mm",
+      "value": 50,
+      "status": "scenario",
+      "note": "Resource scenario, not a fitted local herd model.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/body_mass_kg",
+      "value": 50.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/search_area_m2_per_hour",
+      "value": 4000.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/maximum_capture_efficiency",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/crowding_coefficient_standard",
+      "value": 200.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/crowding_coefficient_text_alternative",
+      "value": 100.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/basal_energy_mj_per_day",
+      "value": 8.37,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/gathering_energy_mj_per_hour",
+      "value": 1.25,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/hunting_energy_mj_per_hour",
+      "value": 1.25,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/plant_food_energy_mj_per_kg_dry_matter",
+      "value": 9.8,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/animal_food_energy_mj_per_kg_dry_matter",
+      "value": 9.8,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/fat_catabolism_mj_per_kg",
+      "value": 39.3,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/fat_anabolism_mj_per_kg",
+      "value": 54.6,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/maximum_fat_reserve_kg",
+      "value": 15.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/minimum_foraging_hours_per_day",
+      "value": 0.5,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/maximum_foraging_hours_per_day",
+      "value": 8.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/foraging_hours_adjustment_per_day",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/meat_preference_coefficient",
+      "value": 2.5,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/minimum_hunting_time_fraction",
+      "value": 0.05,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/maximum_hunting_time_fraction",
+      "value": 0.95,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/low_meat_intake_trigger_fraction",
+      "value": 0.1,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/edible_plant_fraction",
+      "value": 0.015,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/npp_fruit_allocation_fraction",
+      "value": 0.065,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/minimum_grass_belowground_allocation_fraction",
+      "value": 0.2,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/birth_rate_maximum_per_year",
+      "value": 0.1,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/birth_sigmoid_steepness",
+      "value": 15.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/birth_sigmoid_midpoint_reserve_fraction",
+      "value": 0.5,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/starvation_reserve_standard_deviation_fraction",
+      "value": 0.125,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/background_mortality_per_year",
+      "value": 0.0125,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/annual_reproduction_energy_mj_per_birth_rate",
+      "value": 478.0,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/published_human_parameters/population_numerical_floor_persons_per_km2",
+      "value": 0.001,
+      "status": "published_relationship",
+      "note": "Published FORGE parameter transcription; not individually estimated in this project.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/year_days",
+      "value": 365,
+      "status": "definition",
+      "note": "Accounting year length.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/grass_npp_fraction",
+      "value": 0.5,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/plant_decay_day",
+      "value": 0.02,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/annual_meat_fraction_of_npp",
+      "value": 0.0005,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/phenology_temperature_floor_c",
+      "value": 0.0,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/phenology_temperature_span_c",
+      "value": 15.0,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/adapter/phenology_rain_half_saturation_mm",
+      "value": 50.0,
+      "status": "scenario",
+      "note": "Explicit resource/phenology adapter; original vegetation/herbivore model not reproduced.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/basal_mj_day",
+      "value": 8.37,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/activity_mj_hour",
+      "value": 1.25,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/food_mj_kg_dm",
+      "value": 9.8,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/body_mass_kg",
+      "value": 50.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/max_fat_kg",
+      "value": 15.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/fat_deficit_mj_kg",
+      "value": 39.3,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/fat_surplus_mj_kg",
+      "value": 54.6,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/search_area_m2_hour",
+      "value": 4000.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/maximum_efficiency",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/crowding",
+      "value": 200.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/min_hours",
+      "value": 0.5,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/max_hours",
+      "value": 8.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/hours_step",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/initial_hours",
+      "value": 4.0,
+      "status": "scenario",
+      "note": "Numerical initialization.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/carnivory_response",
+      "value": 2.5,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/min_hunt_fraction",
+      "value": 0.05,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/max_hunt_fraction",
+      "value": 0.95,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/meat_fraction_floor",
+      "value": 0.1,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/maximum_birth_rate",
+      "value": 0.1,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/birth_sigmoid",
+      "value": 15.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/starvation_sd_fat_fraction",
+      "value": 0.125,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/background_mortality_year",
+      "value": 0.0125,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/reproduction_mj_birth",
+      "value": 478.0,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/population_floor_people_km2",
+      "value": 0.001,
+      "status": "published_relationship",
+      "note": "Adapted kernel coefficient; inspect adapter exceptions and numerical settings.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/plant_decay_day",
+      "value": 0.02,
+      "status": "scenario",
+      "note": "Uncalibrated plant-resource turnover proxy.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/kernel_parameters/meat_decay_day",
+      "value": 0.0,
+      "status": "scenario",
+      "note": "Adapter storage/turnover assumption.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/terrestrial_scale",
+      "value": 0.5,
+      "status": "earth_fit",
+      "note": "Fitted on North America; tested on other continents, now spent.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/a_marine_kgdm_km2_year",
+      "value": 3000.0,
+      "status": "earth_fit",
+      "note": "Fitted on North America; tested on other continents, now spent.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/a_fresh_kgdm_km2_year",
+      "value": 100.0,
+      "status": "earth_fit",
+      "note": "Fitted on North America; tested on other continents, now spent.",
+      "evidence": [
+        "reports/FORAGING_EARTH_20261031.md"
+      ]
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/coast_scale_km",
+      "value": 25.0,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/sst_zero_c",
+      "value": 28.0,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/sst_span_c",
+      "value": 20.0,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/sst_floor",
+      "value": 0.2,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/lake_weight",
+      "value": 10.0,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/radius_km",
+      "value": 25.0,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "foraging",
+      "source": "data/foraging_model.json",
+      "pointer": "/aquatic/map_river_scale",
+      "value": 0.5726,
+      "status": "scenario",
+      "note": "Aquatic geometry/resource response assumption; only the three scale parameters below were fitted.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/maximum_malaria_penalty",
+      "value": 0.35,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/irrigation_mosquito_water",
+      "value": 0.75,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_season_threshold",
+      "value": 0.25,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/0",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/1",
+      "value": 0.85,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/2",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/3",
+      "value": 0.75,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/4",
+      "value": 0.55,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/5",
+      "value": 0.95,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/6",
+      "value": 0.9,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/7",
+      "value": 0.7,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/8",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/biome_crop_realization/9",
+      "value": 0.85,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/aboveground_npp_share",
+      "value": 0.5,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/sustainable_use",
+      "value": 0.25,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/human_kcal_per_kg_consumed_forage",
+      "value": 100.0,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/0",
+      "value": 0.2,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/1",
+      "value": 0.5,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/2",
+      "value": 0.35,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/3",
+      "value": 0.12,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/4",
+      "value": 0.1,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/5",
+      "value": 0.45,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/6",
+      "value": 0.3,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/7",
+      "value": 0.15,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/8",
+      "value": 0.65,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/grazing/edible_forage_share/9",
+      "value": 0.25,
+      "status": "scenario",
+      "note": "Composite scenario coefficient; population matching cannot independently identify this mechanism.",
+      "evidence": []
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/biting/c",
+      "value": 0.000203,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/biting/minimum",
+      "value": 11.7,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/biting/maximum",
+      "value": 42.3,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/competence_percent/q",
+      "value": -0.54,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/competence_percent/r",
+      "value": 25.2,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/competence_percent/s",
+      "value": -206.0,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/daily_survival/q",
+      "value": -0.000828,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/daily_survival/r",
+      "value": 0.0367,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/daily_survival/s",
+      "value": 0.522,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/parasite_development/c",
+      "value": 0.000111,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/parasite_development/minimum",
+      "value": 14.7,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/parasite_development/maximum",
+      "value": 34.4,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/egg_adult_survival/q",
+      "value": -0.00924,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/egg_adult_survival/r",
+      "value": 0.453,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/egg_adult_survival/s",
+      "value": -4.77,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/mosquito_development/c",
+      "value": 0.000111,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/mosquito_development/minimum",
+      "value": 14.7,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/mosquito_development/maximum",
+      "value": 34.0,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/eggs_per_day/q",
+      "value": -0.153,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/eggs_per_day/r",
+      "value": 8.61,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/malaria_traits/eggs_per_day/s",
+      "value": -97.7,
+      "status": "published_relationship",
+      "note": "Mordecai thermal traits; not prevalence or population-loss estimates.",
+      "evidence": [
+        "reports/HARVEST_MIGRATION_20261022.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/margin_reliability/cold_mean_temperature_c/0",
+      "value": -2.0,
+      "status": "historical_fit",
+      "note": "Fitted using HYDE and Han; HYDE spatial allocation is partly model-derived. Roman settlement data subsequently evaluated and now spent.",
+      "evidence": [
+        "reports/POPULATION_20261023.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/margin_reliability/cold_mean_temperature_c/1",
+      "value": 10.0,
+      "status": "historical_fit",
+      "note": "Fitted using HYDE and Han; HYDE spatial allocation is partly model-derived. Roman settlement data subsequently evaluated and now spent.",
+      "evidence": [
+        "reports/POPULATION_20261023.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/margin_reliability/dry_rain_over_evaporation/0",
+      "value": 0.0,
+      "status": "historical_fit",
+      "note": "Fitted using HYDE and Han; HYDE spatial allocation is partly model-derived. Roman settlement data subsequently evaluated and now spent.",
+      "evidence": [
+        "reports/POPULATION_20261023.md"
+      ]
+    },
+    {
+      "component": "health",
+      "source": "data/harvest_model.json",
+      "pointer": "/margin_reliability/dry_rain_over_evaporation/1",
+      "value": 0.35,
+      "status": "historical_fit",
+      "note": "Fitted using HYDE and Han; HYDE spatial allocation is partly model-derived. Roman settlement data subsequently evaluated and now spent.",
+      "evidence": [
+        "reports/POPULATION_20261023.md"
+      ]
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/walking_off_path_factor",
+      "value": 0.6,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/water_weight_floor",
+      "value": 0.35,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/water_distance_scale_km",
+      "value": 15,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/slope_scale",
+      "value": 0.15,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/market_weight_floor",
+      "value": 0.25,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/market_time_scale_hours",
+      "value": 24,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "population",
+      "source": "data/population_model.json",
+      "pointer": "/minimum_attraction",
+      "value": 0.02,
+      "status": "scenario",
+      "note": "Explicit attraction/access scenario; not a fitted HYDE parameter.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/ROAD_KM_DAY",
+      "value": 30.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/TRACK_KM_DAY",
+      "value": 25.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/FERRY_KM_DAY",
+      "value": 40.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/MARCH_HOURS",
+      "value": 7.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/OFF_PATH",
+      "value": 0.6,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/CONTROL_DAYS",
+      "value": 1.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/SNOW_COEFFICIENT",
+      "value": 2.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/0",
+      "value": 1.2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/1",
+      "value": 1.2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/2",
+      "value": 1.6,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/3",
+      "value": 1.7,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/4",
+      "value": 1.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/5",
+      "value": 1.2,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/6",
+      "value": 1.3,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/7",
+      "value": 1.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/8",
+      "value": 1.1,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/BIOME_COEFFICIENT/9",
+      "value": 1.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/SWAMP_COEFFICIENT",
+      "value": 1.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/HORSE_KM_DAY",
+      "value": 50.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/HORSE_SNOW_COEFFICIENT",
+      "value": 2.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/STRONG_WIND/0",
+      "value": 8.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/STRONG_WIND/1",
+      "value": 10.8,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/RANK_OFFSET_DAYS",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/control.py",
+      "pointer": "/REFUGE_PER_KM",
+      "value": 0.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/KNOT_KM_H",
+      "value": 1.852,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/SAIL_FAIR_KNOTS",
+      "value": 5.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/COAST_KM",
+      "value": 20.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/COAST_FACTOR",
+      "value": 0.7,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/CLOSE_HAULED",
+      "value": 100.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/CLOSE_HAULED_SHARE",
+      "value": 0.85,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/FULL_WIND",
+      "value": 6.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/LIGHT_AIRS",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/BOARD_DAYS",
+      "value": 0.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/LAND_DAYS",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/RIVER_BOARD_DAYS",
+      "value": 0.25,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/RIVER_DOWN_KM_DAY",
+      "value": 70.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/RIVER_UP_KM_DAY",
+      "value": 17.9,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/UNCERTAIN_FACTOR",
+      "value": 0.5,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/CLOSED_FACTOR",
+      "value": 0.15,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/transport.py",
+      "pointer": "/SPELL_DAYS",
+      "value": 4.0,
+      "status": "unreviewed",
+      "evidence": [],
+      "note": "Not assigned to a reviewed evidence entry in this inventory."
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/SEA_PER_KM",
+      "value": 1.0,
+      "status": "definition",
+      "note": "Freight-cost normalization.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/RIVER_DOWN_PER_KM",
+      "value": 5.0,
+      "status": "published_relationship",
+      "note": "Price-Edict-derived comparative tariff, with temporal/commodity limits.",
+      "evidence": [
+        "reports/POLITY_V3_20261025.md"
+      ]
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/RIVER_UP_PER_KM",
+      "value": 10.0,
+      "status": "published_relationship",
+      "note": "Price-Edict-derived comparative tariff.",
+      "evidence": [
+        "reports/POLITY_V3_20261025.md"
+      ]
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/ROAD_PER_KM",
+      "value": 28.0,
+      "status": "published_relationship",
+      "note": "Price-Edict-derived comparative tariff.",
+      "evidence": [
+        "reports/POLITY_V3_20261025.md"
+      ]
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/COST_SCALE",
+      "value": 270.0,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/TRADE_MONTHS/0",
+      "value": 0,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/TRADE_MONTHS/1",
+      "value": 3,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/TRADE_MONTHS/2",
+      "value": 6,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/TRADE_MONTHS/3",
+      "value": 9,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "transport_trade",
+      "source": "polity/trade.py",
+      "pointer": "/LOCAL_SCALE",
+      "value": 30.0,
+      "status": "scenario",
+      "note": "Inherited trade scenario or literature conversion, not independently fitted here.",
+      "evidence": []
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/SEAT_PEOPLE",
+      "value": 40000.0,
+      "status": "historical_fit",
+      "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+      "evidence": [
+        "polity/settle.py"
+      ]
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/SEAT_BETA",
+      "value": 0.7,
+      "status": "historical_fit",
+      "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+      "evidence": [
+        "polity/settle.py"
+      ]
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/SEAT_REF_DENSITY",
+      "value": 14.1,
+      "status": "historical_fit",
+      "note": "Han administrative-seat calibration and later-era comparisons; no universal urban-size interpretation.",
+      "evidence": [
+        "polity/settle.py"
+      ]
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/MAX_RADIUS_KM",
+      "value": 60.0,
+      "status": "scenario",
+      "note": "Settlement-generator assumption; fitted rules are identified separately.",
+      "evidence": []
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/MIN_DENSITY",
+      "value": 2.0,
+      "status": "scenario",
+      "note": "Settlement-generator assumption; fitted rules are identified separately.",
+      "evidence": []
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/SPACING",
+      "value": 1.6,
+      "status": "scenario",
+      "note": "Settlement-generator assumption; fitted rules are identified separately.",
+      "evidence": []
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/DRY_ARIDITY",
+      "value": 0.35,
+      "status": "scenario",
+      "note": "Settlement-generator assumption; fitted rules are identified separately.",
+      "evidence": []
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/DRY_WATER_KM",
+      "value": 40.0,
+      "status": "historical_fit",
+      "note": "Roman dry-town fit, tested on Tang seats; mapped-water resolution matters.",
+      "evidence": [
+        "calibration/polity_20261025/addendum_dry_towns2_20261031.json"
+      ]
+    },
+    {
+      "component": "settlements",
+      "source": "polity/settle.py",
+      "pointer": "/URBAN_SHARE",
+      "value": 0.075,
+      "status": "scenario",
+      "note": "Settlement-generator assumption; fitted rules are identified separately.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/year_days",
+      "value": 365.0,
+      "status": "definition",
+      "note": "Accounting year length.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/ration_kcal_person_day",
+      "value": 2500.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/destination_store_demand_days",
+      "value": 90.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/annual_stored_energy_loss_fraction",
+      "value": 0.05,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/rural_demand_fraction_of_cereal_production",
+      "value": 0.6,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/rural_store_demand_days",
+      "value": 365.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/delivery_delay_bins",
+      "value": 1,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/delivery_retention",
+      "value": 0.95,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/collection_maximum_days_each_way",
+      "value": 1.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/collection_base_bin",
+      "value": 0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/civilian_request_share_of_served_people",
+      "value": 0.075,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/minimum_civilian_request_people",
+      "value": 100.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/minimum_community_people",
+      "value": 50.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/institutional_request_people",
+      "value": 100.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/patrol_days_each_leg",
+      "value": 2.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/patrol_ration_days",
+      "value": 4.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/0/origin_store_flow_days",
+      "value": 365.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/0/collection_fraction",
+      "value": 0.1,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/1/origin_store_flow_days",
+      "value": 90.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/1/collection_fraction",
+      "value": 0.1,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/2/origin_store_flow_days",
+      "value": 365.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/2/collection_fraction",
+      "value": 0.01,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/3/origin_store_flow_days",
+      "value": 0.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/3/collection_fraction",
+      "value": 0.1,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/4/origin_store_flow_days",
+      "value": 365.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/4/collection_fraction",
+      "value": 0.1,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "provisioning_control",
+      "source": "data/settlement_integration_model.json",
+      "pointer": "/cases/4/institutional_request_people",
+      "value": 25.0,
+      "status": "scenario",
+      "note": "Declared coupled food/source scenario; no Earth fit.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/worker_fraction_of_reference_rural_people",
+      "value": 0.4,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/hours_worker_day",
+      "value": 8,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/0/hours_worker_year",
+      "value": 600,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/0/harvest_days",
+      "value": 30,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/1/hours_worker_year",
+      "value": 600,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/1/harvest_days",
+      "value": 10,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/2/hours_worker_year",
+      "value": 300,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "data/settlement_labour_model.json",
+      "pointer": "/cases/2/harvest_days",
+      "value": 30,
+      "status": "scenario",
+      "note": "Explicit field-work allocation; not an observed workforce or deadline.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/plough",
+      "value": 4.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/harrow",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/hoe_first",
+      "value": 2.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/hoe_second",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/weed",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/wheat/reap",
+      "value": 1.5,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/barley/plough",
+      "value": 3.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/barley/harrow",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/barley/hoe_first",
+      "value": 1.5,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/workdays_per_iugerum/barley/reap",
+      "value": 1.0,
+      "status": "published_relationship",
+      "note": "Columella normative task counts to the threshing floor, not universal observed hours.",
+      "evidence": [
+        "research_notes/farm_labour_20261103.json"
+      ]
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/iugerum_hectares",
+      "value": 0.25,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/hours_per_workday",
+      "value": 8.0,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/year_days",
+      "value": 365,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/step_days",
+      "value": 5,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/available_human_hours_per_step",
+      "value": 40.0,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/land_hectares",
+      "value": 4.0,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/plough/0",
+      "value": 0,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/plough/1",
+      "value": 20,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/harrow/0",
+      "value": 20,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/harrow/1",
+      "value": 24,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/hoe_first/0",
+      "value": 28,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/hoe_first/1",
+      "value": 36,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/hoe_second/0",
+      "value": 40,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/hoe_second/1",
+      "value": 44,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/weed/0",
+      "value": 44,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/weed/1",
+      "value": 48,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/reap/0",
+      "value": 50,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/operation_steps/reap/1",
+      "value": 52,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/maximum_workers",
+      "value": 3,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    },
+    {
+      "component": "labour",
+      "source": "research_notes/farm_labour_20261103.json",
+      "pointer": "/scenario/max_hours_per_worker_day",
+      "value": 8.0,
+      "status": "scenario",
+      "note": "Manufactured task windows, workday and conversion scenarios.",
+      "evidence": []
+    }
+  ],
+  "sources_sha256": {
+    "calibration/local_accuracy_20261023/r43_params.json": "b8c2ee894ac0fdc0898f5746cf87b78c86b34bbf67551e12ab327cebb3c9c16d",
+    "atlases/earth_fit/data/crop_model.json": "3dec5f6fbe40eb678a8c149c6272c56237068892d7a87ca47d7b633c4335fb32",
+    "polity/seasons.py": "4483451f8226f1b11f8cff4ad0e4040823f92710039e7ca9d0b9f3e4924d2622",
+    "data/pasture_model.json": "389ac27900deac4fe8abd91c80e564984f965bea3b62c9790e2114736f1eff67",
+    "data/foraging_model.json": "ab8f89b38ed550e7f61fd6ca5e87fc687df3e2375b757551a155e27633f7c1d6",
+    "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3",
+    "data/population_model.json": "2903f4c6cc8d41888318d0320e5580cf46301e354b21020dfb6ee5527e142a6d",
+    "polity/control.py": "9f13068b710d7d879368698dea6e551960b5e39287b67cb0f2a116ceb7ad21c4",
+    "polity/transport.py": "6f60aac3b3eaaf516cade55f90dd9679b35069e80c7afb824e79c781c4e3970c",
+    "polity/trade.py": "3ce4a0b917eed98d9becb69f64fb7e4e50bf7575be274b1536fb8ebc1d02d92e",
+    "polity/settle.py": "ab7889a3c5f9bd304ec7174678b9f80262d1a2c8771f556c5c057fbd794ce8a3",
+    "data/settlement_integration_model.json": "72e13220d1cec0e85238c6153c087107d85686560f69ba93b4d1ea8fe5888fb9",
+    "data/settlement_labour_model.json": "0b0129d06e1ca0553cdc8e35376a529b9cc012fd293b2290c237240bfea8355d",
+    "research_notes/farm_labour_20261103.json": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985"
+  },
+  "evidence_sha256": {
+    "reports/R43_20261103.md": "dbfb41a713831d16f2fd2a5768e0cd896b480d8d1e5636a97a33e65b4e312051",
+    "reports/HARVEST_MIGRATION_20261022.md": "ff0a2620783ee4ba3b8380d5454aa22dab31c97bb4499de5f31fe0cc8fddcb11",
+    "reports/land_people.md": "bb4d52f5078573a6b0b4d614edd81ac7a7cf6f1742327a66a0369fe2f4b8d669",
+    "reports/PASTURE_RESOURCES_20261104.md": "f48cabd6e62afcf99ad23cda05be3efdaf2e194bab9520c3cc088523aa2a0d39",
+    "reports/FORAGING_EARTH_20261031.md": "f6d568028b80e1ee262eedb4808da381216fedbb246ee815e61ad373ecbef806",
+    "reports/POPULATION_20261023.md": "4cad6c062ba65a7dbf2d1ad5467a6a0df15cc445fb2e5e860ff5e3ed6e370e5c",
+    "reports/POLITY_V3_20261025.md": "c2670f7930e324f2f8a8b1cb39ea6ca8652f5240476c363aba278922cef7cdae",
+    "polity/settle.py": "ab7889a3c5f9bd304ec7174678b9f80262d1a2c8771f556c5c057fbd794ce8a3",
+    "calibration/polity_20261025/addendum_dry_towns2_20261031.json": "97fdec72251d388b1ea7b5f75f69cd2e650c9166634247cf6b41d767261603a5",
+    "research_notes/farm_labour_20261103.json": "66ee391a98d736a778de4d73177844efac54652bf8076b19f5beedff0c2ec985"
+  },
+  "specification_sha256": "52c4fb0086e08a16246cba88c8cb907203c37800b986dc520987bcd1257aa5df"
+}

@@ -1,3 +1,71 @@
+# Population coverage repaired; coastal NoData fixed; complete count replay — 11 November 2026
+
+* Latest pushed source/protocol snapshot e552238f on single maintained/default
+  claude/friendly-turing-43ygeu. New source correction/count/publication now ready
+  for final QA/commit/push. User explicitly wants continuation AFTER pushing.
+* Old ND bug FIX in scripts/land_people_earth.py.wc: honour TIFFGDALNoData tag42113;
+  keep valid negative elevations andzero.2regressiontests. Existing physicalclimate
+  rotclimate.earth._wc already handled tag;bug affected food/arable/relief harness,
+  NOT a new atmospheric/rainfall skill gain. Allworldr44/ledger defaults unchanged.
+* Private regional sources ready(data/cache/earth_population_extension_20261111):
+  WCmonthly tavg/prec/elev localarchives;Tmin/Tmax downloaded bounded192MiB inRAM,
+  onlyregionalarrayscached.ETOPO60s 960x840 DODSsourcecoords validatedall8chunks.
+  Corrected sourceparser includes bothFloat64maparrays,strictcounts/byte/schema.
+  New script prepare_population_extension.py and1parser test;no rawZIPdisk copies.
+* Original plan25a83318 +failedoverlap/source/compute artifacts +NoDatacorrection
+  protocol e552238f preserved BEFORE newcorrection. Initial1370landcontrolcells:
+  T/P/PET/aridityexact,irr diff5.8e-18;5arablefallbackcells mismatch .77. All5 have
+  cachedslopeNaN and0fineland;oldglobalrelief32774–32861m versuscorrect6–93m.
+  Causeoldwc onlymasked<-1e30,ignoredactual-32768seaNoData. Failedv1 remainsfailed.
+* correct_population_extension.py implements2NAMEDguards original8fields/thresholds:
+  legacyNoDatafallback EXACTLYreproducesfrozenglobal;correctlydecodedtile EXACTLY
+  matchesexplicitcorrectedreference(exceptirr5.8e-18).No loosening/dropcells.
+  Global sparsepatch17,903landcells:arable/density1274,capacity1183,relief17903.
+  Capacityratiofirst(newarable/oldarable) thenmultiply avoids1ulp churn inunchanged
+  cells. OriginalglobNPZneveroverwritten;oldvintage decoder recoverablee552snapshot.
+* NEW output/earth_population_extension_20261111/han_corrected_inputs.npz fillsall
+  1586missingrequiredcells;128oldcoveredlanddensitycellschangetraceablyfromcoastfix,
+  ZEROwithinHanallowedmask.Allotherarraysinclregionalaridity/elev/roads fixed.
+  originalinsidepopulation exactlyreconstructs fromglobalbefore correction.
+  population_covered flag reflectsoldcoverage plusactualfilledrequiredcells;
+  history_covered onlygeographicflag,ALLcorehistoryrequiresrebuildbeforepointfit
+  becauseoldglobalrelief changed andoldhistoryclips125E. Do not useforqualification.
+* Source review review_population_extension.py:17,903directglobalpatchcells,
+  cropcapacityfromoriginalfullformula,21,920overlapfield-cellcases,allinputlineage,
+  oldartifactsunchanged. Freshreplay patch/newHan/correctionJSON byteexact.
+* count_population_extension.py reusesfrozencountfamilies oncompleteHan +ORIGINAL
+  Romanpairedcontrol (Rome populationnotyetpatched;explicitscope).160cases:
+  2domains(full_corrected/old_supported_corrected),2blockscales,2responses,5betas,
+  separate/sharedscales,2pools. No archived production-rate means innewfit.
+  Fullprimary1280Han/1115Romanrecords;allpositive-countblockpredictionspositive.
+  Fullrole-specificbeta.5 devHan2.640869/Rome1.867583/mean2.254226;
+  beta.7 mean2.297089. Same-domainALLcomparisonsreproducepreviousscores exactly
+  (coastchangesoutsideHanallowed);doNOTcallwider-domainvalueaccuracygainoversmaller.
+* Count review review_count_population_extension.py:2780blocks,640foldcases,
+  8800metrics/all160rows +multiplicity/unchangednonpopblocks. Freshcountreplay
+  results/blocks/predictions byteexact. Both replayreceipts underrespectiveoutputs.
+* New report EARTH_POPULATION_EXTENSION_20261111 +figures
+  population_nodata_correction_20261111.png, population_extension_han_20261111.png
+  posted. Publisher publish_population_extension.py wiredbasepublisher/package;
+  normalatlasEarthevidence latestsourcepanel5rows/11localdownloads. Hubrefreshed.
+* Browsernew+previouscount+generalevidence pass (including344/390/lightdark and
+  missingoptionalinventoryUI).136relatedtests +6evidenceaudit tests pass. Fullbase
+  publisher initiallycaught PREEXISTINGstaleinventorycrop_model .68 vsactive.60.
+  Refreshed VERSIONED output/earth_components_refresh_20261111 (oldledgerpreserved),
+  551records,exactlyonevaluechange /single_crop_sown_share .68->.60,no newfit/default
+  changes. Basepublisher choosesfreshinventory;alloldandnewpanelsnowrebuildpass.
+  Currentdata ledger/CSV +inventory_refresh.json preservecomparison. Hubrefreshed.
+* NOW finishfocusedstagedWindows/linkclosure,no fullZIP/sitecopy (~69MBfree);commit/push ONLY
+  friendly. ThenKEEPGOING supportedcoretravel rebuild withsameoldcostparameters,
+  supported-domainmask(nonrectangularoldglobal+NEtile) ratherthanclamp/unknownsea;
+  proveoldalgorithmcompatibility beforepointfit. Correctedglobalpatchreliefmatters
+  forcoastaltravelprior. No newholdoutclaimfromspentHan/Rome/Vidarbha.
+* Future completepointcomparison mustsupplynewhistorywithnewfoodinputs,distinguish
+  countbudget/roles/residentpop,andfeedSAMEpeople/food/staff/controlledger.
+  Fullroadmapallactors/mobile/nonstate unchanged;firstmaprelease2stillINPROGRESS,
+  release3fantasyrebuild/4normalNUMERICatlaspending. No institutional detour.
+  Exactgit-addpaths only;hundredsofolduntrackedlogsnotours. Do not stopatpush.
+
 # Count/size audit finds missing population input, not an ecological zero — 11 November 2026
 
 * User wants continuous work after pushing. Single canonical/default remote remains

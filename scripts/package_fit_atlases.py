@@ -349,6 +349,11 @@ def main():
               ROOT/'calibration/settlement_counts_20261111/plan.json',
               ROOT/'calibration/settlement_counts_20261111/multiplicity_correction.json',
               ROOT/'calibration/settlement_counts_20261111/coverage_domain.json']
+    files += [ROOT/'reports/EARTH_POPULATION_EXTENSION_20261111.md',
+              ROOT/'reports/figures/population_nodata_correction_20261111.png',
+              ROOT/'reports/figures/population_extension_han_20261111.png',
+              ROOT/'calibration/earth_population_extension_20261111/plan.json',
+              ROOT/'calibration/earth_population_extension_20261111/nodata_correction.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())
