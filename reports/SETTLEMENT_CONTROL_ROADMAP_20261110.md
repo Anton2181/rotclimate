@@ -9,7 +9,8 @@ silently replaces the other.
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
   decision, atlas consequences, and the next unfinished task. Commit and push
-  milestones to both maintained branches. A failed experiment does not complete
+  milestones to the single maintained branch, `claude/ecstatic-wozniak-rtrwd2`
+  (owner consolidation request,11 November2026). A failed experiment does not complete
   its parent stage or cancel later stages.
 * Follow the dependency chain: environment → occupancy and land use → settlements
   → shared people/food allocation → institutions and transport → differentiated
@@ -27,6 +28,39 @@ silently replaces the other.
 * Publish qualified changes through the normal Windows launcher atlas; preserve
   previous defaults when evidence is insufficient. Expose experimental results
   as research, with their status, rather than silently replacing the main map.
+
+## Next settlement-map release: four milestones
+
+This is the near-term release path. The longer S1–S5 programme below remains
+tracked; detailed institutional roles and differentiated control are subsequent
+releases, rather than reasons to keep postponing a settlement-location/population
+update. None of these milestones is complete merely because code tests pass.
+
+1. **Freeze usable Earth references and comparison rules [IN PROGRESS].** Finish
+   the declared date-scope preparation for settlement hierarchy/largest-settlement
+   evidence, retain uncertainty and role/source limits, and secure a defensible
+   located transfer pool. Seshat's polity attributes do not supply settlement
+   coordinates. Previously exposed Roman/Han pools remain development data.
+2. **Fit and test counts, placement and population sizes [PENDING].** Keep count
+   budgets separate from placement, compare the existing Pareto alternatives,
+   inspect geographic/local errors and run a frozen geographic transfer test.
+   Select on declared aggregate tradeoffs with physical/accounting constraints;
+   do not require every region to improve. Failure means another fit iteration,
+   not calling an unqualified map calibrated.
+3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
+   marked anchors, distinguish occupancy from carrying capacity, allocate
+   residents/food once and rebuild affected tracks and downstream inputs.
+   Unsupported institutional roles/staff remain uncertain; the legacy fixed
+   cohort at every eligible town is not an empirical staffing calibration.
+4. **Publish and check the normal atlas [PENDING].** Regenerate the Earth atlas
+   served by start_atlases.bat, verify identities/links/browser/mobile/Windows
+   behaviour, show before/after maps and calibration limits, then commit/push
+   the single maintained branch.
+
+These are four release milestones, not four guaranteed commits or a promise
+that one calibration run will pass. S1c/d/e qualification and the shared ledger
+still apply. Keep S2–S5 and all actors/unaffiliated/mobile/nonstate communities
+on the durable queue after this first release.
 
 ## Successive stages
 

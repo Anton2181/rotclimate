@@ -1,3 +1,25 @@
+# Single development branch and four-milestone settlement release — 11 November 2026
+
+* LATEST OWNER REQUEST:continue,and consolidatebranches;do NOTkeeppushingboth.
+  Canonicalbranch claude/ecstatic-wozniak-rtrwd2 (alreadyusedbyWindowslauncher).
+  Fetchedbothremotetips:c851ad63f586f59ac69c0cc4127b8c3e88de7050,0uniquecommits
+  eitherway. Localf0f3b892addsdeclaredscopeprotocol,fullydescendedfromboth.
+* Consolidation:pushcanonicalfirst,changeGitHubdefaultfromfriendly-turingto
+  canonical,thenretireredundantbranchONLYwitholdtipguardandancestrycheck. Preserve
+  history;oldplans/receiptsretainoriginalbranchrefs,don'trewritefrozenprotocols.
+  FuturemilestonespushONLYcanonical. Do notrecreateretiredbranchfromoldautodrivers.
+* Useraskedhowmanyuntilnewcalibratedsettlementmap:FOURremainingreleasemilestones,
+  nowpersistedattopof reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md:
+  (1)finish/freezeEarthreferences+transferpool,(2)fit/testcount-placement-sizes,
+  (3)couplefantasyrebuildtoSAMEpeople/food,(4)normalHTMLatlaspublication/QA.
+  Stillin(1);calibrationfailurecanadditerations,nofixedpassdatepromised.
+* Detailedinstitution/de-factocontrolcalibrationandS2–S5remainlaterqueue,notblanket
+  prerequisiteblockingfirstsettlementlocation/populationsrelease. DoNOTdropfull
+  roadmaporclaimcurrentcandidatecalibrated. Seshatdoesnotsupplylocationtransfer
+  coordinates;exposedHan/Romearenotprospective. Preserveallactors/nonstate/mobile.
+* NEXTcontinuealreadyfrozenf0f3b892scopecomparison (below);prioritizesettlement
+  hierarchy/largestpopulationdatepreparationforrelease1,notendlesssideprobes.
+
 # Documented institution-scope comparison declared after source push — 11 November 2026
 
 * c851ad63/providerprep and protocol831d0b11 pushed/verified BOTHbranches;continued.

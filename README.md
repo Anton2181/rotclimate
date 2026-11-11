@@ -15,7 +15,10 @@ The launcher identifies the **actually served atlas snapshot** from
 [its verified release manifest](atlases/release.json); newer source code does
 not relabel older maps. Normal atlas publication includes matching Earth
 corrections and every climate, farming, population, foraging, trade and language
-export before browser/portable checks and the push to both published branches.
+export before browser/portable checks and the push to the maintained branch,
+`claude/ecstatic-wozniak-rtrwd2`. The two former publication branches were
+consolidated on 11 November 2026; historical experiment records retain their
+original branch names for provenance.
 
 For the declared ongoing work in a Linux/Codex execution workspace:
 
@@ -276,8 +279,9 @@ switching fits also carries those choices across.
 
 The launcher serves the files beside it; it does not download updates. It prints
 the exact folder, Git branch/commit (for a checkout), verified atlas release and
-each atlas's outside-diagram percentage. The current Earth release is **r42**;
-Whittaker should show **1.44%** outside the diagram. To update a Git checkout:
+each atlas's outside-diagram percentage. Use that verified release identity to
+check which snapshot is served; archived fits can retain older data. To update
+a Git checkout:
 
 ```sh
 git fetch origin
