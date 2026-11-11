@@ -1,3 +1,19 @@
+# Capacity consumer declared after composition push — 11 November 2026
+
+* Compositiona9b3858c and protocol5e650062 pushed/verified BOTH branches. Continue
+  afterpushasuserrequested. All110tests/browser/replay/142Windows/679links passed.
+* NEXT calibration/settlement_service_capacity_20261111/plan.json declares BEFORE
+  capacityresults:shared multi-channel proportionalhourrationing,explicit committed
+  hours,food-supported SettlementPlanstaff,no rerouting/maxflow/extraresidents.
+* Exercise BOTH frozen Earth raw/corrected settled_reach.json.gz,allfoodcases;
+  replayrecordedperiodicfoodwithoutnewfoodalloc. Fixedidentityproviderchoice,
+  2neutralrequests/resident/year,cost1&2hours,gross600hours/staff,other-duty
+  commitments0/50/100%. Arbitrary stressunits,NOT empiricancientrates or worldmaps.
+* Publishaggregatecouplingchecks/figure,replaytests/QA,commit/pushBOTH;then monthly
+  actualsupportedprovidernetwork/sharedpatrol-collection-servicecommitments. Legacy
+  controlhoursunquantified;don'tassumefreebudgetorpromotearbitrarycapacities.
+* Full S1c/d/e,S2–S5,activephysicsr44andallactor/nonstate/mobilescopepersist.
+
 # Source composition complete, ready to push — 11 November 2026
 
 * Protocol5e650062 committed before supportcounts/scores. Five of ten declared
