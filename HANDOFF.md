@@ -1,3 +1,36 @@
+# Spare-provider audit published; continue declared target-grid audit — 12 November 2026
+
+* Continued immediately after75e7fd16 map push per DONOTPAUSEAFTERPUSH. Same canonical
+  claude/friendly-turing-43ygeu. Spare-assignment declaration75e7fd16 BEFOREoutputs.
+* New polity/spare_visits.py leaves alloriginalcompletions/providers immutable.
+  ONLYremaining reservedpatrolslice funds originalcapacity-unmet pointtasks on
+  checked sameactor,crew-supported routes. Sortpending bymincrewcost/actor/target,
+  choosecheapestcurrentlyaffordableprovider once. No reroutingoriginals,borrowing
+  collection/services/grossunusedhours,crossbins orglobaloptimumclaim.
+* All8cases independentlyscalar/routecost/request/wholeproviderledgers reviewed;
+  freshresults/fields BYTEEXACT. Sixnewmeaningfulcontrols,17focusedtotal pass.
+  Raw600crew1/4 additions414/1087;raw300233/709. Corrected600297/1117;300192/795.
+  Overallcompletion +0.07–0.43percentagepoints. Onepersoncrews recover19.7–22.8%
+  oforiginalcapacitymisses;fourperson4.9–6.9%. Unreachable/initialcrewgates unchanged.
+  Feasiblelowerbound,remainingmisses NOTprovedunavoidable. Alloriginalmaps intact.
+* Normal research8rowtable/1chart/5bytelinks,keyboard/344/390/themes/inventoryfailure
+  pass. ChartPOSTED. Report NETWORK_VISIT_SPARE_ASSIGNMENT_20261112.md andexact
+  results/review/replay/prior-declaration downloads. No mapfamily/defaultadoption.
+* Fullrelease1–4/S1–S5programme revisitedinroadmap;release2datedsize/occupation/
+  prospectivetransfer open,3 partialcereal/monthlytasks,4nocalibrateddefault. All
+  actors/unaffiliated/mobile/nonstate,completediets/household/draftwork anddaily
+  individualroster/provisioning/providerfunction evidence remainopen.
+* NEXT aftercheckpoint: calibration/network_visit_target_grid_20261112/plan.json
+  committedBEFOREoutputs. Five designs:b2_p0,b3_p0,b3_p1,b3_p2,b5_p0. Clippedtiles
+  startatnegativephase;nearestlandcenter lowestglobalIDtie,coveralllandexactlyonce.
+  All8parents/originalassigner for40cases;NOspareextension so grid effects isolated.
+  b3_p0exactoriginaltargets/routes/allocations mandatory. Reuse monthlyfootgraphs/
+  searches acrossdesigns,recordpaths inpermonth/design packetstoboundmemory/files.
+  Independentreview/freshreplay,all40results,phase/spacing charts andpointcomparison
+  figures,normalresearch/browser/Windows,wholeplan,pushandCONTINUE. Spacingchanges
+  taskdensity,notpure numericalconvergence;phase probespointgeography. No winner
+  selection/default ornewmapfamily withoutseparatedeclaration.
+
 # Conditional walking point-visit maps ready; continue spare-provider audit — 12 November 2026
 
 * Continued after9c3e7420 per owner DONOTPAUSEAFTERPUSH. Canonical branch

@@ -1,0 +1,1631 @@
+{
+  "status": "constructive_spare_provider_assignment_diagnostic",
+  "adopt": false,
+  "producers": {
+    "scripts/check_spare_visit_assignment.py": "a6751c1c170daccafecf01ceb800b0587ffd8e1ac1bc1414df789e9033707f36",
+    "polity/spare_visits.py": "d185fcfbd0a7832a6a6532d71a6f8c696a28cc16a77c91d981cbaf69005cda6b",
+    "calibration/network_visit_spare_assignment_20261112/plan.json": "eae3372cbdb6e01bd99bf51c4c9f0a7d4d4d880196b9cd0fa879aa2d16c0b0a9"
+  },
+  "sources": {
+    "output/network_duty_visits_20261112/results.json": "0c8eecfac6acb2915f5f3e5df520b2568a7d0702e3d948b8137e64f6503b3da2",
+    "output/network_duty_visits_20261112/fields.npz": "fe174601289b5f8179ed441af1ed91041feb01b40b4c4da32c0adb6e89e8e72f",
+    "output/network_duty_visits_20261112/review.json": "9a06b524b3034bd9d6f8d7faf777687ac4889467bfa7d5fa30c388e87387fba4",
+    "output/settlement_feedback_20261112/raw_inputs.npz": "7ee8b92a81b28ebc5493534ec7bc977f4ed94bac00bfef3ed4c829184e7a3138",
+    "output/network_duty_visits_20261112/raw_paths.npz": "d8c7f6f445e6d30c9e859de60c06337369736920ed3e08d57a9ffe23c46f6f9f",
+    "output/settlement_dispatch_seeded_20261112/raw_h600_load120000_all_open/fields.npz": "df70471b7dfccbf304aed393f74dab395123110eac6c1a012d18522017197c48",
+    "output/settlement_dispatch_seeded_20261112/raw_h300_load120000_all_open/fields.npz": "f93c850769fe2ade8ac9e9cddc07477c784c6af5b8defe867511975096158485",
+    "output/settlement_feedback_20261112/corrected_inputs.npz": "013520662cab31f533d18c37c645e0de376fd5d173078288247512cef6dcf2c2",
+    "output/network_duty_visits_20261112/corrected_paths.npz": "c75fe971fb0605e4fd22ed0e49c23707c8f7aa31c3a66afc9a4a547043bce177",
+    "output/settlement_dispatch_seeded_20261112/corrected_h600_load120000_all_open/fields.npz": "bf8f8a2301680954ae69c9132d0c41dc33b346733120e1f63a919e4462bc5ab5",
+    "output/settlement_dispatch_seeded_20261112/corrected_h300_load120000_all_open/fields.npz": "19c2251df187b173dec73e1214c97995d606e42fc7275855851e031abced6e84"
+  },
+  "fields_sha256": "e96b12d34b12e1b69d99007491d6fce3b02686ca7c49a7ce2ee45528ea45e3d2",
+  "unchanged_map_sha256": {
+    "atlases/earth_fit/data/atlas.json": "5c0376bf6718527c35ae41992d686147f96a42a6e9ff4e6b9d116b18fdd9895f",
+    "atlases/earth_fit/data/settled_reach.json": "a683b5b0cca5432dd5c219aaf4652c91e037515d85055d401f5040bd49f1c47b",
+    "atlases/earth_fit/data/settlement_feedback.json": "7c8b9b83b923e40a9e2130b59bae3ac473f2d151e116603feed0f3f62a877e4f",
+    "atlases/earth_fit/data/settled_reach.json.gz": "20f8f9f4568edc7bd89f6dd688c16bbfe6d0eda7722dbf142e0043826e8804c0",
+    "atlases/earth_fit/data/settled_reach.bin.gz": "33cb86c8d390dbadbd9f1956716a66765fa44d9ab387ddddac4b3891c4a504a4",
+    "atlases/earth_fit/data/corrected/settled_reach.json.gz": "b039184a57f178355272ad9cd0c62ee8be83fbeeac66dc9c3b10d54001a72f5f",
+    "atlases/earth_fit/data/corrected/settled_reach.bin.gz": "789cf3988af004c86e7b181f07b4a349e595551fac0e4c9d065664e0388cc247",
+    "atlases/earth_fit/data/settlement_dispatch.json": "d6c25edcc50dae1d0e934a1230d43d44754b3e0fd935f213d31cc01e6cf4facb",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_closed.npz": "d715239605f4b9657e67743bd7ead5bfc9dafbcac6df9284b0f9685b290e04d9",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_closed.npz": "1a26e0eaaa8a8d365fbaf8e7d71b4205df38e403186b134924a3dca5f6c0a9a2",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_open_reach.webp": "24e439407d5bb51a84d7dc0224da77d37d6a15b518fb24d9757d51e0138168e8",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_open.npz": "8216b17db70f1b8e77ad270758723a69f9dfecae691131501c1e2b5ecd7f5938",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_open.npz": "88d07210885f4e05ccf601fd98466504e64bc089d2ec90beb4e01d748e076193",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_closed.npz": "771e0c1539aefa6a7aeee5eabf216f8579c917f1346cc987ed8476047fb23742",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_open.npz": "e9c6827a9f4ea6ae07a7b7c74dd7dd4fd371d0a0f366c33c715b1fad495bd717",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_open_towns.webp": "d521ee1c91e1d7cb9b8d8ce560f076ad5a6129f19ab88b6af00ce18d4dc7e530",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_open_towns.webp": "623d4d4c05e7565978dfa3d24988f3893b2afa79abe833670b38cff23246b29c",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_open_reach.webp": "2695097a21872593ebb29bf281999a50da8532df2b18e93b9f6ea9114d4b7277",
+    "atlases/earth_fit/data/dispatch/corrected/settled_reach.bin.gz": "4955cf8f6ca28afdbd0ddaeecceedac6bc4b16deee0d4cfe4a72539462cbb4b1",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_60000_closed.npz": "ca85797d318c2037436fd57a3940bb943a35b8ff2d90e052748091a4ce988482",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_open_towns.webp": "5425a41fa0bc4e0f891efe78f37aa4d1e1338bc873c1aa61f0e97eb3f0a5b39f",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_60000_open.npz": "57facf7e3c08f91f5a31825e09cf56aa39cd36d276171ff5d4ca833710ba48bd",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch300_120000_open_reach.webp": "24e439407d5bb51a84d7dc0224da77d37d6a15b518fb24d9757d51e0138168e8",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_open_towns.webp": "91ab8b6b8d4029a745f72b27607bdfe4e0d46e3af2089e27b09f3a78b0b23558",
+    "atlases/earth_fit/data/dispatch/corrected/dispatch600_120000_open_reach.webp": "2695097a21872593ebb29bf281999a50da8532df2b18e93b9f6ea9114d4b7277",
+    "atlases/earth_fit/data/dispatch/corrected/settled_reach.json.gz": "06a37bbbcc99ec0e24410fcadce415f2ef6007b0d932cacc07ad3783df0f79ce",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_closed.npz": "bcdabc5414f72c1195711c81b0aeac52f1c1c53454857b4946600745c328002e",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_closed.npz": "98829564f4f7abf523cebe36cd72e9258dbcc103f882252a3dfa207e6124a072",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_open_reach.webp": "10501606b33e264034c94a5f6592ffe872ac57ef21bf0535ffbd4e8a1f194e89",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_open.npz": "fe860d5994e213f0083a91e76fc40b53a670989439f1bc5232063e80f652fa70",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_open.npz": "7df1a17a2500723e2c7463ce7a1fe021e545c282e9dec4646562bc8ede173cf0",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_closed.npz": "364fa17f63f0da57882477f84e35cda594a48ad0b21043921c8b1e579a246e09",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_open.npz": "2f92868eff365d05a9040cc3bbb96d6d7b4ef82256754bc471cc915d14011fef",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_open_towns.webp": "2dbb1cc318b9898603afd151806256f562153545a6060712594676c11418e465",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_open_towns.webp": "42eec2091f42e742cf662c896deada9aaf81a03ec07927835181782c63d6212e",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_open_reach.webp": "fcc2cc48bc39bba525857572a4761b51ba783b09cd963ed85881c4fd7e6bd24a",
+    "atlases/earth_fit/data/dispatch/raw/settled_reach.bin.gz": "77d8baf3233d3d497ebc47ff32eec763ba2778b1668685e9f230d44d8879fd8b",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_60000_closed.npz": "33e5401d6ef6210d420407a79496898c0cc5b62f17a3b064a8b458200dfed9d6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_open_towns.webp": "7f354d3542d4fde52d0873e3cfbb695640a8a9abe7272c0485a8ee96768a2fb6",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_60000_open.npz": "54dccb6e14a363ea5d0c57ca5cadb8acc8d23c804c742a201f673d3807482716",
+    "atlases/earth_fit/data/dispatch/raw/dispatch300_120000_open_reach.webp": "10501606b33e264034c94a5f6592ffe872ac57ef21bf0535ffbd4e8a1f194e89",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_open_towns.webp": "bc823cf2688f1e9e3befabbb8ed445deb299fe8946ec60f8653e980ef10c26c8",
+    "atlases/earth_fit/data/dispatch/raw/dispatch600_120000_open_reach.webp": "fcc2cc48bc39bba525857572a4761b51ba783b09cd963ed85881c4fd7e6bd24a",
+    "atlases/earth_fit/data/dispatch/raw/settled_reach.json.gz": "60093a96c95fb5d3ab0a79e40244eb103fe41e24130617dd1f817f02ed20c390",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_75.npz": "40119731b2540ddcff267f50d645ce567c7428d4cdd18052752ef210f0498e75",
+    "atlases/earth_fit/data/feedback/corrected/feedback300_75_reach.webp": "f22f866ec3039ac54d327dbbd1ff7d2044a4337cb7b1362f59ba312ac15703eb",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_50_reach.webp": "07bcb109299fffe6840b0523a69e87d1908c21b06a2e3f86545b27fee8b28965",
+    "atlases/earth_fit/data/feedback/corrected/settled_reach.bin.gz": "819ed1469e92868deed2b22e698ab74a578359fa9a0f87a3e556383375e6e5d6",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_100_towns.webp": "558a2ba839a8c455bd93f155e1ffd5588aaca5a2289d093ff6c7e5a12a7b6034",
+    "atlases/earth_fit/data/feedback/corrected/feedback300_75_towns.webp": "eeec9a9f36869cc1a2ae23257c183144bd44a5be0183f68c59016316bb9d60c5",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_75_reach.webp": "2695097a21872593ebb29bf281999a50da8532df2b18e93b9f6ea9114d4b7277",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_100.npz": "faaef7d8b4991013ffdb63a2912ceab7983b5337e91bad6b8adda49ef877b823",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_75_towns.webp": "3a88d9ea441d5e43518500aa6474f2e41d16cebf7b089c11f2053199a4787ed8",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_50.npz": "01be98aa90d443e76c6675693b70830e4bdb466414b843e4856370cb5e82189e",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_100_reach.webp": "c5085c31988fc76a72b1a01b879e33b60dc279d99079fbaef3f29e5fda7d5d7d",
+    "atlases/earth_fit/data/feedback/corrected/feedback300_75.npz": "e642a5d437e47a9cec47cc4be2e591d2e605b54c9910234948cbac26b72fd31b",
+    "atlases/earth_fit/data/feedback/corrected/feedback600_50_towns.webp": "9f55a84db3215d399ae4e54133799bb244258ae9507ec3d96be29fddc1223fc0",
+    "atlases/earth_fit/data/feedback/corrected/settled_reach.json.gz": "99358c00d8a8d7909705d6b40c310cd42bff454d931535fc09f8df053440ab5e",
+    "atlases/earth_fit/data/feedback/raw/feedback600_75.npz": "b67b4b52b0bbc5534ffdfdf6b35d01f4a84f02d0617937a014150999b1e78b1f",
+    "atlases/earth_fit/data/feedback/raw/feedback300_75_reach.webp": "d1d5e569dae243753809c2ad6ac7f5593f4d0731ad19f35de40eeda17a76cff0",
+    "atlases/earth_fit/data/feedback/raw/feedback600_50_reach.webp": "24cc294839ca8d28aee881733d3168e6476ccb209e378b943b2ae30c2e3f2b5f",
+    "atlases/earth_fit/data/feedback/raw/settled_reach.bin.gz": "e585f5afd2165c9c20b126067b22868047137873406b21dc33b29356489a6964",
+    "atlases/earth_fit/data/feedback/raw/feedback600_100_towns.webp": "2427b6e98c649adc4c4191ba8651a4695236592ce782f01ff8edf25d135a7d4b",
+    "atlases/earth_fit/data/feedback/raw/feedback300_75_towns.webp": "be9388b378c1c5e3d7e17bf2407ae38f72cebf42184cc97699dbe941b798fd88",
+    "atlases/earth_fit/data/feedback/raw/feedback600_75_reach.webp": "fcc2cc48bc39bba525857572a4761b51ba783b09cd963ed85881c4fd7e6bd24a",
+    "atlases/earth_fit/data/feedback/raw/feedback600_100.npz": "8f7bb3783ce9e68c9cb0430bd9aaf8eefd95db9a1258a26ef42a987c4abadb27",
+    "atlases/earth_fit/data/feedback/raw/feedback600_75_towns.webp": "6021174a32ab1b16f9c4c85ed78ca61b8e03ee60e070d3a5b123075d6161eedf",
+    "atlases/earth_fit/data/feedback/raw/feedback600_50.npz": "d641a7b3be57d0a291b8a32eb1968ce60c2a69a550e82e0989e406e61426b257",
+    "atlases/earth_fit/data/feedback/raw/feedback600_100_reach.webp": "161c0ae09d9196365f91f36115d0bac1ab798f75b2f3d715159e1783ff4c0320",
+    "atlases/earth_fit/data/feedback/raw/feedback300_75.npz": "015465757af1f4e5d30e5c46cfde5035438bca117b732f034e717797b191940e",
+    "atlases/earth_fit/data/feedback/raw/feedback600_50_towns.webp": "cfb08e6febbc2fad9c1d1652a690a6823b2af01763ffc694739c16f38e67c9aa",
+    "atlases/earth_fit/data/feedback/raw/settled_reach.json.gz": "5f016808db1a580f7de64c0977026b325f1ef244ae3063d6315f1382bdb5b181",
+    "atlases/earth_fit/data/settlement_dispatch_seeded.json": "725fc118cd1a0403cfb751c47c6b3792bd4ffbd9748fce5261fedec720acb695",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_closed.npz": "f70744a654674ac8a16e3596d535bb6f42e209e37207349a092d8ac355fc6dab",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_open.npz": "bf8f8a2301680954ae69c9132d0c41dc33b346733120e1f63a919e4462bc5ab5",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_open.npz": "308bc52e856e0e91b19c33fe2532c22c8ec91297b42eed21c96905f3f4f09d20",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_open_reach.webp": "f22f866ec3039ac54d327dbbd1ff7d2044a4337cb7b1362f59ba312ac15703eb",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_closed.npz": "9950b5eba2f634067a982524ad6dce980079973a3c37002928ac18ee8322ce4f",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_open_reach.webp": "2695097a21872593ebb29bf281999a50da8532df2b18e93b9f6ea9114d4b7277",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_open.npz": "780636dbcb607bd407d2c148904914bdf916adf45a2cb3a5575d7652b323b127",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_open_towns.webp": "9c515d53548165e86c527b63023576259a6f2009162110237f93e0a3e0533e62",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_open_reach.webp": "2695097a21872593ebb29bf281999a50da8532df2b18e93b9f6ea9114d4b7277",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/settled_reach.bin.gz": "cf74110856584eaca46de06e92142b9d3a374f395f30ae452333d29e9d611ccd",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_open_towns.webp": "623d4d4c05e7565978dfa3d24988f3893b2afa79abe833670b38cff23246b29c",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_closed.npz": "99737ce28977d6251473074391f91eea926b339255c76dcabd2bc8ef4d896bd6",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_60000_open_reach.webp": "f22f866ec3039ac54d327dbbd1ff7d2044a4337cb7b1362f59ba312ac15703eb",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_open.npz": "19c2251df187b173dec73e1214c97995d606e42fc7275855851e031abced6e84",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_closed.npz": "94b557bbba63ab58f6cb5ed0636c6e7ef52f6172ad5c0c7466e273dbfbc3e221",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2300_120000_open_towns.webp": "77f987f4b035be447edebc8dc70d81fca07c2e918c308d3b6b04a8532187fd19",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_open_towns.webp": "91ab8b6b8d4029a745f72b27607bdfe4e0d46e3af2089e27b09f3a78b0b23558",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_120000_closed_towns.webp": "9887241b581500571011142d61ea2aee1187b260825276c5869faccfcbfc64ad",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/dispatchv2600_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/corrected/settled_reach.json.gz": "69d140023cce73a5f9397d5fcf8f05b7d3330346e7562db5b926f0940ed43060",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_closed.npz": "150058819059cfd86e3826995d18e4374e148698e25de008198d6e21818b9acb",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_open.npz": "df70471b7dfccbf304aed393f74dab395123110eac6c1a012d18522017197c48",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_open.npz": "efc366ae5094eb4de4fd5d620c97e5d404e9b7b2226d32b1e978ccd43027a980",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_open_reach.webp": "d1d5e569dae243753809c2ad6ac7f5593f4d0731ad19f35de40eeda17a76cff0",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_closed.npz": "b95f758ab4f4932a97c0a59c8ca1f3d713d8e744722ae16ac7cea605c1c93184",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_open_reach.webp": "fcc2cc48bc39bba525857572a4761b51ba783b09cd963ed85881c4fd7e6bd24a",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_open.npz": "3a1594e0b19b40de87ee86cfb8d7d606f06667f7b1245a4d0a6d0c4d359a2745",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_open_towns.webp": "045e8b5ae807739024a73de4d57cfc01af3a5d8d5c445c3ac341cfd8b0ed3cd7",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_open_reach.webp": "fcc2cc48bc39bba525857572a4761b51ba783b09cd963ed85881c4fd7e6bd24a",
+    "atlases/earth_fit/data/dispatch_seeded/raw/settled_reach.bin.gz": "7deaa8f000c641d9ca915e574cadea4e56239039a4c4f5aba675f31ffb02df56",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_open_towns.webp": "42eec2091f42e742cf662c896deada9aaf81a03ec07927835181782c63d6212e",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_closed.npz": "f42adde02e2b2d271837a60f8df1e6f58c1422d2e0f3ab42afed508221b78f60",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_60000_open_reach.webp": "d1d5e569dae243753809c2ad6ac7f5593f4d0731ad19f35de40eeda17a76cff0",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_open.npz": "f93c850769fe2ade8ac9e9cddc07477c784c6af5b8defe867511975096158485",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_closed.npz": "5e9afd708fa763bfbc57ab052e812893b176affb6c5c871cd479b7157948edcd",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2300_120000_open_towns.webp": "c3e1d5e7a2a527f009e0887de26ed3e70fb952dcc30fda97c1bde379f8be4890",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_open_towns.webp": "bc823cf2688f1e9e3befabbb8ed445deb299fe8946ec60f8653e980ef10c26c8",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_120000_closed_towns.webp": "c063dbf5e01ff5d918963362c5ad5a1970cf1e91c5a04205e2e89177ce71aaa6",
+    "atlases/earth_fit/data/dispatch_seeded/raw/dispatchv2600_60000_closed_reach.webp": "c43af89b376c78174ea65fb271fe3373038deca720ad03041cd8347626ec1344",
+    "atlases/earth_fit/data/dispatch_seeded/raw/settled_reach.json.gz": "994041f23b44b595649139be3aad49d77811f48ada8d7cd6695b96d3c952f2c7",
+    "atlases/earth_fit/data/network_duty_visits.json": "8dd7f6d0a39e7862fc3402020da4adb1100ff4b5ec89fab302e97fb1df71cff4",
+    "atlases/earth_fit/data/network_visits/fields.npz": "fe174601289b5f8179ed441af1ed91041feb01b40b4c4da32c0adb6e89e8e72f",
+    "atlases/earth_fit/data/network_visits/corrected/visits600_crew4.webp": "0ed467b43c70a78947c0a5d87a492da4ab4faca881a0f22ab74d03c4b588f328",
+    "atlases/earth_fit/data/network_visits/corrected/visits300_crew4.webp": "12b01a637dd7e3d155fa8c2abacc496ad9c569d04e0076217a138cb1d5094afa",
+    "atlases/earth_fit/data/network_visits/corrected/visits300_crew1.webp": "486111290daceb79617e1a54d69d9f7a69e8172179bf665ee36d1b147b9c7608",
+    "atlases/earth_fit/data/network_visits/corrected/visits300_crew4_points.csv.gz": "8bfce54b2b2ab99c74b90b56ec9c8102bb0a4d4494e8906306140c59b4668736",
+    "atlases/earth_fit/data/network_visits/corrected/visits600_crew4_points.csv.gz": "5035626eff0c83630b6141e88ed724560aca8cfc49f5b217a140787dd267d03e",
+    "atlases/earth_fit/data/network_visits/corrected/settled_reach.bin.gz": "14462fd6689e15172e59b7ae02ca48da6ae98c40016be2b2aac9d4e988b8171a",
+    "atlases/earth_fit/data/network_visits/corrected/visits600_crew1_points.csv.gz": "03af3fbe65831335ce131537d710b6ecf347da3b44624ec65559db592ff2ad79",
+    "atlases/earth_fit/data/network_visits/corrected/visits600_crew1.webp": "96d8ed7204c4ab06ea29f7f6e8a1c14a711f9ba3c9138b8097a3238cfe3f6da1",
+    "atlases/earth_fit/data/network_visits/corrected/visits300_crew1_points.csv.gz": "c36cda7408ba1d7ba52f05e91797560514124d6946756318ced2059e525cadcc",
+    "atlases/earth_fit/data/network_visits/corrected/settled_reach.json.gz": "41c0b7a6246f13120781c68bcaeba5e1fb6c40bf22130c0bf29bde110e3dc7a9",
+    "atlases/earth_fit/data/network_visits/raw/visits600_crew4.webp": "b157b67c18580ef950276593e78190059903f6f4570e9239799a0dae2ad09954",
+    "atlases/earth_fit/data/network_visits/raw/visits300_crew4.webp": "e7786f34956a0dc745dbee565af06709a2ef0c152d346d7921b27b12b798bafe",
+    "atlases/earth_fit/data/network_visits/raw/visits300_crew1.webp": "61ad2801aa47800983e3376c9e6c5f89f9e0435300d0b1520dac74aa2f6b50d5",
+    "atlases/earth_fit/data/network_visits/raw/visits300_crew4_points.csv.gz": "86d7ca50f1a8f5a1b03140d1b8155ed39531d0f9c46b8f5fc592f9117ee939f2",
+    "atlases/earth_fit/data/network_visits/raw/visits600_crew4_points.csv.gz": "ef75b633c6a5240e4e483d22e907aa880d5179fe7e868d029ed0f6ec31a4470f",
+    "atlases/earth_fit/data/network_visits/raw/settled_reach.bin.gz": "4fb5e604c55bc6b8adb19bce2bd43fdc1ed024db956c9b70797a50bfbf28f79d",
+    "atlases/earth_fit/data/network_visits/raw/visits600_crew1_points.csv.gz": "c414cf95996f4312d01cfd80491b4a7b2471adc1f61053439c282776d7ff7867",
+    "atlases/earth_fit/data/network_visits/raw/visits600_crew1.webp": "9b0fdd0530361ab1953d2e9cd7d5595133d70b36f7eda8d82268a00fc4a73058",
+    "atlases/earth_fit/data/network_visits/raw/visits300_crew1_points.csv.gz": "d6f2885e228d41701011b8b336f3b004377af605c842c0a0ec0a613a0cbbed69",
+    "atlases/earth_fit/data/network_visits/raw/settled_reach.json.gz": "048b8e03a52e85d5be8b68ecaa78c653071d4e5cfea1c9d63f4405597231755b"
+  },
+  "rows": [
+    {
+      "key": "raw_h600_crew1",
+      "climate": "raw",
+      "hours_worker_year": 600,
+      "crew": 1,
+      "requested_visits": 258696,
+      "original_completed": 171885,
+      "added_visits": 414,
+      "final_completed": 172299,
+      "original_capacity_unmet": 2104,
+      "remaining_capacity_unmet": 1690,
+      "route_unreachable": 80959,
+      "provider_work_unavailable": 3748,
+      "added_by_bin": [
+        39,
+        38,
+        48,
+        31,
+        28,
+        31,
+        9,
+        47,
+        22,
+        30,
+        64,
+        27
+      ],
+      "added_crew_hours": 9989.51273114766,
+      "spare_patrol_hours_before": 10494754.02411837,
+      "spare_patrol_hours_after": 10484764.511387222,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 2808,
+          "original_completed": 1740,
+          "added_visits": 1,
+          "final_completed": 1741,
+          "remaining_capacity_unmet": 22
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1812,
+          "original_completed": 1207,
+          "added_visits": 0,
+          "final_completed": 1207,
+          "remaining_capacity_unmet": 36
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20700,
+          "original_completed": 16128,
+          "added_visits": 3,
+          "final_completed": 16131,
+          "remaining_capacity_unmet": 3
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8508,
+          "original_completed": 2971,
+          "added_visits": 0,
+          "final_completed": 2971,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 13128,
+          "original_completed": 10116,
+          "added_visits": 4,
+          "final_completed": 10120,
+          "remaining_capacity_unmet": 71
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7500,
+          "original_completed": 5293,
+          "added_visits": 0,
+          "final_completed": 5293,
+          "remaining_capacity_unmet": 20
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11604,
+          "original_completed": 5448,
+          "added_visits": 0,
+          "final_completed": 5448,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 10092,
+          "original_completed": 5633,
+          "added_visits": 0,
+          "final_completed": 5633,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2251,
+          "added_visits": 0,
+          "final_completed": 2251,
+          "remaining_capacity_unmet": 3
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10116,
+          "original_completed": 5279,
+          "added_visits": 0,
+          "final_completed": 5279,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9792,
+          "original_completed": 6563,
+          "added_visits": 0,
+          "final_completed": 6563,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4500,
+          "original_completed": 2977,
+          "added_visits": 0,
+          "final_completed": 2977,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4956,
+          "original_completed": 2279,
+          "added_visits": 0,
+          "final_completed": 2279,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 8004,
+          "original_completed": 5326,
+          "added_visits": 0,
+          "final_completed": 5326,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2436,
+          "original_completed": 1639,
+          "added_visits": 1,
+          "final_completed": 1640,
+          "remaining_capacity_unmet": 12
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15504,
+          "original_completed": 11548,
+          "added_visits": 145,
+          "final_completed": 11693,
+          "remaining_capacity_unmet": 455
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 113160,
+          "original_completed": 79410,
+          "added_visits": 146,
+          "final_completed": 79556,
+          "remaining_capacity_unmet": 812
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11244,
+          "original_completed": 6077,
+          "added_visits": 114,
+          "final_completed": 6191,
+          "remaining_capacity_unmet": 256
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "raw_h600_crew4",
+      "climate": "raw",
+      "hours_worker_year": 600,
+      "crew": 4,
+      "requested_visits": 258696,
+      "original_completed": 155572,
+      "added_visits": 1087,
+      "final_completed": 156659,
+      "original_capacity_unmet": 17547,
+      "remaining_capacity_unmet": 16460,
+      "route_unreachable": 80959,
+      "provider_work_unavailable": 4618,
+      "added_by_bin": [
+        63,
+        49,
+        51,
+        99,
+        107,
+        115,
+        122,
+        117,
+        108,
+        102,
+        109,
+        45
+      ],
+      "added_crew_hours": 107145.41505866099,
+      "spare_patrol_hours_before": 3783924.9953818005,
+      "spare_patrol_hours_after": 3676779.580323139,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 2808,
+          "original_completed": 1410,
+          "added_visits": 0,
+          "final_completed": 1410,
+          "remaining_capacity_unmet": 327
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1812,
+          "original_completed": 844,
+          "added_visits": 0,
+          "final_completed": 844,
+          "remaining_capacity_unmet": 355
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20700,
+          "original_completed": 15591,
+          "added_visits": 38,
+          "final_completed": 15629,
+          "remaining_capacity_unmet": 492
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8508,
+          "original_completed": 2407,
+          "added_visits": 1,
+          "final_completed": 2408,
+          "remaining_capacity_unmet": 563
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 13128,
+          "original_completed": 9496,
+          "added_visits": 25,
+          "final_completed": 9521,
+          "remaining_capacity_unmet": 579
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7500,
+          "original_completed": 4733,
+          "added_visits": 38,
+          "final_completed": 4771,
+          "remaining_capacity_unmet": 514
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11604,
+          "original_completed": 5135,
+          "added_visits": 22,
+          "final_completed": 5157,
+          "remaining_capacity_unmet": 291
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 10092,
+          "original_completed": 5382,
+          "added_visits": 12,
+          "final_completed": 5394,
+          "remaining_capacity_unmet": 239
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2140,
+          "added_visits": 10,
+          "final_completed": 2150,
+          "remaining_capacity_unmet": 104
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10116,
+          "original_completed": 4691,
+          "added_visits": 8,
+          "final_completed": 4699,
+          "remaining_capacity_unmet": 580
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9792,
+          "original_completed": 5872,
+          "added_visits": 12,
+          "final_completed": 5884,
+          "remaining_capacity_unmet": 671
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4500,
+          "original_completed": 2691,
+          "added_visits": 6,
+          "final_completed": 2697,
+          "remaining_capacity_unmet": 280
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4956,
+          "original_completed": 2091,
+          "added_visits": 2,
+          "final_completed": 2093,
+          "remaining_capacity_unmet": 186
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 8004,
+          "original_completed": 4691,
+          "added_visits": 8,
+          "final_completed": 4699,
+          "remaining_capacity_unmet": 627
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2436,
+          "original_completed": 1325,
+          "added_visits": 7,
+          "final_completed": 1332,
+          "remaining_capacity_unmet": 308
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15504,
+          "original_completed": 10068,
+          "added_visits": 83,
+          "final_completed": 10151,
+          "remaining_capacity_unmet": 1928
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 113160,
+          "original_completed": 72034,
+          "added_visits": 747,
+          "final_completed": 72781,
+          "remaining_capacity_unmet": 7034
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11244,
+          "original_completed": 4971,
+          "added_visits": 68,
+          "final_completed": 5039,
+          "remaining_capacity_unmet": 1382
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "raw_h300_crew1",
+      "climate": "raw",
+      "hours_worker_year": 300,
+      "crew": 1,
+      "requested_visits": 258696,
+      "original_completed": 150501,
+      "added_visits": 233,
+      "final_completed": 150734,
+      "original_capacity_unmet": 1121,
+      "remaining_capacity_unmet": 888,
+      "route_unreachable": 105597,
+      "provider_work_unavailable": 1477,
+      "added_by_bin": [
+        18,
+        14,
+        24,
+        21,
+        20,
+        21,
+        7,
+        34,
+        13,
+        20,
+        26,
+        15
+      ],
+      "added_crew_hours": 5485.270253836988,
+      "spare_patrol_hours_before": 9158337.59482219,
+      "spare_patrol_hours_after": 9152852.324568354,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 2808,
+          "original_completed": 1740,
+          "added_visits": 1,
+          "final_completed": 1741,
+          "remaining_capacity_unmet": 22
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1812,
+          "original_completed": 1207,
+          "added_visits": 0,
+          "final_completed": 1207,
+          "remaining_capacity_unmet": 36
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20700,
+          "original_completed": 14377,
+          "added_visits": 3,
+          "final_completed": 14380,
+          "remaining_capacity_unmet": 9
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8508,
+          "original_completed": 2971,
+          "added_visits": 0,
+          "final_completed": 2971,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 13128,
+          "original_completed": 10222,
+          "added_visits": 3,
+          "final_completed": 10225,
+          "remaining_capacity_unmet": 15
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7500,
+          "original_completed": 5329,
+          "added_visits": 0,
+          "final_completed": 5329,
+          "remaining_capacity_unmet": 8
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11604,
+          "original_completed": 4040,
+          "added_visits": 0,
+          "final_completed": 4040,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 10092,
+          "original_completed": 4403,
+          "added_visits": 0,
+          "final_completed": 4403,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2311,
+          "added_visits": 9,
+          "final_completed": 2320,
+          "remaining_capacity_unmet": 3
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10116,
+          "original_completed": 1582,
+          "added_visits": 0,
+          "final_completed": 1582,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9792,
+          "original_completed": 6449,
+          "added_visits": 0,
+          "final_completed": 6449,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4500,
+          "original_completed": 2231,
+          "added_visits": 0,
+          "final_completed": 2231,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4956,
+          "original_completed": 1241,
+          "added_visits": 0,
+          "final_completed": 1241,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 8004,
+          "original_completed": 4887,
+          "added_visits": 0,
+          "final_completed": 4887,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2436,
+          "original_completed": 1468,
+          "added_visits": 0,
+          "final_completed": 1468,
+          "remaining_capacity_unmet": 22
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15504,
+          "original_completed": 10828,
+          "added_visits": 152,
+          "final_completed": 10980,
+          "remaining_capacity_unmet": 399
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 113160,
+          "original_completed": 71288,
+          "added_visits": 13,
+          "final_completed": 71301,
+          "remaining_capacity_unmet": 202
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11244,
+          "original_completed": 3927,
+          "added_visits": 52,
+          "final_completed": 3979,
+          "remaining_capacity_unmet": 172
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "raw_h300_crew4",
+      "climate": "raw",
+      "hours_worker_year": 300,
+      "crew": 4,
+      "requested_visits": 258696,
+      "original_completed": 136787,
+      "added_visits": 709,
+      "final_completed": 137496,
+      "original_capacity_unmet": 14540,
+      "remaining_capacity_unmet": 13831,
+      "route_unreachable": 105597,
+      "provider_work_unavailable": 1772,
+      "added_by_bin": [
+        52,
+        53,
+        47,
+        50,
+        74,
+        80,
+        64,
+        64,
+        74,
+        71,
+        62,
+        18
+      ],
+      "added_crew_hours": 71675.00291182453,
+      "spare_patrol_hours_before": 3267097.681016142,
+      "spare_patrol_hours_after": 3195422.6781043177,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 2808,
+          "original_completed": 1410,
+          "added_visits": 0,
+          "final_completed": 1410,
+          "remaining_capacity_unmet": 327
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1812,
+          "original_completed": 864,
+          "added_visits": 0,
+          "final_completed": 864,
+          "remaining_capacity_unmet": 335
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20700,
+          "original_completed": 13775,
+          "added_visits": 37,
+          "final_completed": 13812,
+          "remaining_capacity_unmet": 577
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8508,
+          "original_completed": 2407,
+          "added_visits": 1,
+          "final_completed": 2408,
+          "remaining_capacity_unmet": 563
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 13128,
+          "original_completed": 9713,
+          "added_visits": 20,
+          "final_completed": 9733,
+          "remaining_capacity_unmet": 476
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7500,
+          "original_completed": 4810,
+          "added_visits": 35,
+          "final_completed": 4845,
+          "remaining_capacity_unmet": 480
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11604,
+          "original_completed": 3852,
+          "added_visits": 21,
+          "final_completed": 3873,
+          "remaining_capacity_unmet": 167
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 10092,
+          "original_completed": 4034,
+          "added_visits": 3,
+          "final_completed": 4037,
+          "remaining_capacity_unmet": 366
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2301,
+          "added_visits": 6,
+          "final_completed": 2307,
+          "remaining_capacity_unmet": 13
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10116,
+          "original_completed": 1326,
+          "added_visits": 5,
+          "final_completed": 1331,
+          "remaining_capacity_unmet": 251
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9792,
+          "original_completed": 5714,
+          "added_visits": 17,
+          "final_completed": 5731,
+          "remaining_capacity_unmet": 714
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4500,
+          "original_completed": 1945,
+          "added_visits": 11,
+          "final_completed": 1956,
+          "remaining_capacity_unmet": 275
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4956,
+          "original_completed": 1075,
+          "added_visits": 0,
+          "final_completed": 1075,
+          "remaining_capacity_unmet": 166
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 8004,
+          "original_completed": 4182,
+          "added_visits": 10,
+          "final_completed": 4192,
+          "remaining_capacity_unmet": 695
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2436,
+          "original_completed": 1181,
+          "added_visits": 4,
+          "final_completed": 1185,
+          "remaining_capacity_unmet": 305
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15504,
+          "original_completed": 9434,
+          "added_visits": 74,
+          "final_completed": 9508,
+          "remaining_capacity_unmet": 1832
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 113160,
+          "original_completed": 65452,
+          "added_visits": 442,
+          "final_completed": 65894,
+          "remaining_capacity_unmet": 5486
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11244,
+          "original_completed": 3312,
+          "added_visits": 23,
+          "final_completed": 3335,
+          "remaining_capacity_unmet": 803
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "corrected_h600_crew1",
+      "climate": "corrected",
+      "hours_worker_year": 600,
+      "crew": 1,
+      "requested_visits": 260496,
+      "original_completed": 179097,
+      "added_visits": 297,
+      "final_completed": 179394,
+      "original_capacity_unmet": 1454,
+      "remaining_capacity_unmet": 1157,
+      "route_unreachable": 76332,
+      "provider_work_unavailable": 3613,
+      "added_by_bin": [
+        33,
+        51,
+        54,
+        27,
+        12,
+        5,
+        4,
+        7,
+        16,
+        13,
+        48,
+        27
+      ],
+      "added_crew_hours": 7179.68985332883,
+      "spare_patrol_hours_before": 10987218.29713706,
+      "spare_patrol_hours_after": 10980038.607283728,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 3132,
+          "original_completed": 2056,
+          "added_visits": 1,
+          "final_completed": 2057,
+          "remaining_capacity_unmet": 26
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1644,
+          "original_completed": 1148,
+          "added_visits": 0,
+          "final_completed": 1148,
+          "remaining_capacity_unmet": 4
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20652,
+          "original_completed": 15906,
+          "added_visits": 0,
+          "final_completed": 15906,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8208,
+          "original_completed": 2922,
+          "added_visits": 0,
+          "final_completed": 2922,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 12744,
+          "original_completed": 9836,
+          "added_visits": 8,
+          "final_completed": 9844,
+          "remaining_capacity_unmet": 44
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7284,
+          "original_completed": 5687,
+          "added_visits": 5,
+          "final_completed": 5692,
+          "remaining_capacity_unmet": 19
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11916,
+          "original_completed": 7145,
+          "added_visits": 1,
+          "final_completed": 7146,
+          "remaining_capacity_unmet": 9
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 9900,
+          "original_completed": 5108,
+          "added_visits": 0,
+          "final_completed": 5108,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2291,
+          "added_visits": 1,
+          "final_completed": 2292,
+          "remaining_capacity_unmet": 21
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10800,
+          "original_completed": 6399,
+          "added_visits": 0,
+          "final_completed": 6399,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9552,
+          "original_completed": 6766,
+          "added_visits": 0,
+          "final_completed": 6766,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4488,
+          "original_completed": 2991,
+          "added_visits": 0,
+          "final_completed": 2991,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4944,
+          "original_completed": 1845,
+          "added_visits": 0,
+          "final_completed": 1845,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 7896,
+          "original_completed": 4926,
+          "added_visits": 0,
+          "final_completed": 4926,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2424,
+          "original_completed": 1619,
+          "added_visits": 0,
+          "final_completed": 1619,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15420,
+          "original_completed": 11987,
+          "added_visits": 11,
+          "final_completed": 11998,
+          "remaining_capacity_unmet": 18
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 115212,
+          "original_completed": 83915,
+          "added_visits": 178,
+          "final_completed": 84093,
+          "remaining_capacity_unmet": 888
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11448,
+          "original_completed": 6550,
+          "added_visits": 92,
+          "final_completed": 6642,
+          "remaining_capacity_unmet": 128
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "corrected_h600_crew4",
+      "climate": "corrected",
+      "hours_worker_year": 600,
+      "crew": 4,
+      "requested_visits": 260496,
+      "original_completed": 163423,
+      "added_visits": 1117,
+      "final_completed": 164540,
+      "original_capacity_unmet": 16182,
+      "remaining_capacity_unmet": 15065,
+      "route_unreachable": 76332,
+      "provider_work_unavailable": 4559,
+      "added_by_bin": [
+        56,
+        50,
+        56,
+        104,
+        118,
+        112,
+        127,
+        141,
+        115,
+        114,
+        87,
+        37
+      ],
+      "added_crew_hours": 110945.05950331339,
+      "spare_patrol_hours_before": 3921984.4187519737,
+      "spare_patrol_hours_after": 3811039.3592486605,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 3132,
+          "original_completed": 1714,
+          "added_visits": 1,
+          "final_completed": 1715,
+          "remaining_capacity_unmet": 349
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1644,
+          "original_completed": 835,
+          "added_visits": 11,
+          "final_completed": 846,
+          "remaining_capacity_unmet": 306
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20652,
+          "original_completed": 15401,
+          "added_visits": 25,
+          "final_completed": 15426,
+          "remaining_capacity_unmet": 471
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8208,
+          "original_completed": 2390,
+          "added_visits": 0,
+          "final_completed": 2390,
+          "remaining_capacity_unmet": 532
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 12744,
+          "original_completed": 9295,
+          "added_visits": 13,
+          "final_completed": 9308,
+          "remaining_capacity_unmet": 540
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7284,
+          "original_completed": 5194,
+          "added_visits": 28,
+          "final_completed": 5222,
+          "remaining_capacity_unmet": 460
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11916,
+          "original_completed": 6592,
+          "added_visits": 59,
+          "final_completed": 6651,
+          "remaining_capacity_unmet": 498
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 9900,
+          "original_completed": 4877,
+          "added_visits": 2,
+          "final_completed": 4879,
+          "remaining_capacity_unmet": 229
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2172,
+          "added_visits": 14,
+          "final_completed": 2186,
+          "remaining_capacity_unmet": 106
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10800,
+          "original_completed": 5529,
+          "added_visits": 43,
+          "final_completed": 5572,
+          "remaining_capacity_unmet": 827
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9552,
+          "original_completed": 6195,
+          "added_visits": 12,
+          "final_completed": 6207,
+          "remaining_capacity_unmet": 559
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4488,
+          "original_completed": 2686,
+          "added_visits": 15,
+          "final_completed": 2701,
+          "remaining_capacity_unmet": 290
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4944,
+          "original_completed": 1623,
+          "added_visits": 0,
+          "final_completed": 1623,
+          "remaining_capacity_unmet": 222
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 7896,
+          "original_completed": 4135,
+          "added_visits": 2,
+          "final_completed": 4137,
+          "remaining_capacity_unmet": 789
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2424,
+          "original_completed": 1317,
+          "added_visits": 1,
+          "final_completed": 1318,
+          "remaining_capacity_unmet": 301
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15420,
+          "original_completed": 10995,
+          "added_visits": 71,
+          "final_completed": 11066,
+          "remaining_capacity_unmet": 942
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 115212,
+          "original_completed": 76817,
+          "added_visits": 764,
+          "final_completed": 77581,
+          "remaining_capacity_unmet": 6690
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11448,
+          "original_completed": 5656,
+          "added_visits": 56,
+          "final_completed": 5712,
+          "remaining_capacity_unmet": 954
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "corrected_h300_crew1",
+      "climate": "corrected",
+      "hours_worker_year": 300,
+      "crew": 1,
+      "requested_visits": 260496,
+      "original_completed": 157726,
+      "added_visits": 192,
+      "final_completed": 157918,
+      "original_capacity_unmet": 841,
+      "remaining_capacity_unmet": 649,
+      "route_unreachable": 100712,
+      "provider_work_unavailable": 1217,
+      "added_by_bin": [
+        20,
+        28,
+        32,
+        13,
+        12,
+        1,
+        3,
+        5,
+        7,
+        12,
+        44,
+        15
+      ],
+      "added_crew_hours": 4698.212693841783,
+      "spare_patrol_hours_before": 9648070.174583172,
+      "spare_patrol_hours_after": 9643371.961889332,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 3132,
+          "original_completed": 2056,
+          "added_visits": 1,
+          "final_completed": 2057,
+          "remaining_capacity_unmet": 26
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1644,
+          "original_completed": 1152,
+          "added_visits": 0,
+          "final_completed": 1152,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20652,
+          "original_completed": 13773,
+          "added_visits": 0,
+          "final_completed": 13773,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8208,
+          "original_completed": 2922,
+          "added_visits": 0,
+          "final_completed": 2922,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 12744,
+          "original_completed": 9931,
+          "added_visits": 32,
+          "final_completed": 9963,
+          "remaining_capacity_unmet": 76
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7284,
+          "original_completed": 5598,
+          "added_visits": 8,
+          "final_completed": 5606,
+          "remaining_capacity_unmet": 13
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11916,
+          "original_completed": 6440,
+          "added_visits": 0,
+          "final_completed": 6440,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 9900,
+          "original_completed": 2985,
+          "added_visits": 0,
+          "final_completed": 2985,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2324,
+          "added_visits": 0,
+          "final_completed": 2324,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10800,
+          "original_completed": 2967,
+          "added_visits": 0,
+          "final_completed": 2967,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9552,
+          "original_completed": 6766,
+          "added_visits": 0,
+          "final_completed": 6766,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4488,
+          "original_completed": 2186,
+          "added_visits": 0,
+          "final_completed": 2186,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4944,
+          "original_completed": 363,
+          "added_visits": 0,
+          "final_completed": 363,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 7896,
+          "original_completed": 4926,
+          "added_visits": 0,
+          "final_completed": 4926,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2424,
+          "original_completed": 1454,
+          "added_visits": 0,
+          "final_completed": 1454,
+          "remaining_capacity_unmet": 20
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15420,
+          "original_completed": 10825,
+          "added_visits": 0,
+          "final_completed": 10825,
+          "remaining_capacity_unmet": 0
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 115212,
+          "original_completed": 77122,
+          "added_visits": 71,
+          "final_completed": 77193,
+          "remaining_capacity_unmet": 388
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11448,
+          "original_completed": 3936,
+          "added_visits": 80,
+          "final_completed": 4016,
+          "remaining_capacity_unmet": 126
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    },
+    {
+      "key": "corrected_h300_crew4",
+      "climate": "corrected",
+      "hours_worker_year": 300,
+      "crew": 4,
+      "requested_visits": 260496,
+      "original_completed": 144383,
+      "added_visits": 795,
+      "final_completed": 145178,
+      "original_capacity_unmet": 13737,
+      "remaining_capacity_unmet": 12942,
+      "route_unreachable": 100712,
+      "provider_work_unavailable": 1664,
+      "added_by_bin": [
+        45,
+        47,
+        52,
+        72,
+        86,
+        87,
+        72,
+        78,
+        82,
+        84,
+        60,
+        30
+      ],
+      "added_crew_hours": 80437.37981878717,
+      "spare_patrol_hours_before": 3418736.6825443,
+      "spare_patrol_hours_after": 3338299.302725513,
+      "zero_spare_budget_visits": 0,
+      "actors": [
+        {
+          "actor_index": 0,
+          "requested_visits": 3132,
+          "original_completed": 1714,
+          "added_visits": 1,
+          "final_completed": 1715,
+          "remaining_capacity_unmet": 349
+        },
+        {
+          "actor_index": 1,
+          "requested_visits": 1644,
+          "original_completed": 875,
+          "added_visits": 3,
+          "final_completed": 878,
+          "remaining_capacity_unmet": 274
+        },
+        {
+          "actor_index": 2,
+          "requested_visits": 20652,
+          "original_completed": 13124,
+          "added_visits": 14,
+          "final_completed": 13138,
+          "remaining_capacity_unmet": 635
+        },
+        {
+          "actor_index": 3,
+          "requested_visits": 8208,
+          "original_completed": 2390,
+          "added_visits": 0,
+          "final_completed": 2390,
+          "remaining_capacity_unmet": 532
+        },
+        {
+          "actor_index": 4,
+          "requested_visits": 12744,
+          "original_completed": 9467,
+          "added_visits": 13,
+          "final_completed": 9480,
+          "remaining_capacity_unmet": 479
+        },
+        {
+          "actor_index": 5,
+          "requested_visits": 7284,
+          "original_completed": 5102,
+          "added_visits": 39,
+          "final_completed": 5141,
+          "remaining_capacity_unmet": 459
+        },
+        {
+          "actor_index": 6,
+          "requested_visits": 11916,
+          "original_completed": 6037,
+          "added_visits": 39,
+          "final_completed": 6076,
+          "remaining_capacity_unmet": 364
+        },
+        {
+          "actor_index": 7,
+          "requested_visits": 9900,
+          "original_completed": 2658,
+          "added_visits": 0,
+          "final_completed": 2658,
+          "remaining_capacity_unmet": 327
+        },
+        {
+          "actor_index": 8,
+          "requested_visits": 2832,
+          "original_completed": 2310,
+          "added_visits": 5,
+          "final_completed": 2315,
+          "remaining_capacity_unmet": 6
+        },
+        {
+          "actor_index": 9,
+          "requested_visits": 10800,
+          "original_completed": 2621,
+          "added_visits": 23,
+          "final_completed": 2644,
+          "remaining_capacity_unmet": 323
+        },
+        {
+          "actor_index": 10,
+          "requested_visits": 9552,
+          "original_completed": 6207,
+          "added_visits": 12,
+          "final_completed": 6219,
+          "remaining_capacity_unmet": 547
+        },
+        {
+          "actor_index": 11,
+          "requested_visits": 4488,
+          "original_completed": 1905,
+          "added_visits": 0,
+          "final_completed": 1905,
+          "remaining_capacity_unmet": 281
+        },
+        {
+          "actor_index": 12,
+          "requested_visits": 4944,
+          "original_completed": 311,
+          "added_visits": 0,
+          "final_completed": 311,
+          "remaining_capacity_unmet": 52
+        },
+        {
+          "actor_index": 13,
+          "requested_visits": 7896,
+          "original_completed": 4135,
+          "added_visits": 2,
+          "final_completed": 4137,
+          "remaining_capacity_unmet": 789
+        },
+        {
+          "actor_index": 14,
+          "requested_visits": 2424,
+          "original_completed": 1171,
+          "added_visits": 5,
+          "final_completed": 1176,
+          "remaining_capacity_unmet": 298
+        },
+        {
+          "actor_index": 15,
+          "requested_visits": 15420,
+          "original_completed": 9949,
+          "added_visits": 58,
+          "final_completed": 10007,
+          "remaining_capacity_unmet": 816
+        },
+        {
+          "actor_index": 16,
+          "requested_visits": 115212,
+          "original_completed": 70948,
+          "added_visits": 531,
+          "final_completed": 71479,
+          "remaining_capacity_unmet": 5872
+        },
+        {
+          "actor_index": 17,
+          "requested_visits": 11448,
+          "original_completed": 3459,
+          "added_visits": 50,
+          "final_completed": 3509,
+          "remaining_capacity_unmet": 539
+        }
+      ],
+      "original_completed_tasks_and_providers_unchanged": true,
+      "constructive_lower_bound_not_global_optimum": true
+    }
+  ],
+  "limits": "Feasible additional whole point tasks only;not global optimality,unavoidable residual deficits,observed visits,territory,individual rosters or empirical authority."
+}

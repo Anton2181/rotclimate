@@ -23,7 +23,7 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Eight walking point-task scenarios independently check directed paths,integer visits and SAMEreservedpatrolhours aftercollection/services;fresh paths/results/fields exact|Quantify assign-once misses using spare-provider hours under prior declaration;then target-grid sensitivity. Individual rosters/daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
+|S4: complete resources and work|Eight walking point-task scenarios use SAMEpatrolreservations;spare-provider diagnostic recovers192–1117additional tasks while preserving everyoriginalcompletion/provider|Audit declared target-grid spacing/phase withoriginal allocator;keep feasible-gain lowerbound separate from globaloptimality. Individual rosters/daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -91,12 +91,19 @@ Immediate sequence:
    Eight optional POINTmaps,providerhour/pointdeficit downloads,normal3figure
    evidencepanel. Allfive packetfamilies andoptional failures checked. See
    NETWORK_DUTY_VISITS_20261112.md. No heldblock/dailyroster/observeddemand/authority.
-11. **Next declared assignment diagnostic:** keep originalcompleted visits and
-   providers immutable;offer originalcapacity-unmet tasks once tospare sameactor
-   providers using ONLYremaining patrolslice. Count feasible additional visits,
-   not a globaloptimum. Declaration network_visit_spare_assignment_20261112 before
-   outputs. Target-grid sensitivity follows;datedsizes/roles/transfer,complete
-   diets/household/draftwork/mobile scope persist across the full programme.
+11. **Completed spare-provider diagnostic:** declaration75e7fd16 precedesoutputs.
+   Original completions/providers immutable;onlyremaining patrolslice funds
+   originalcapacity-unmet tasks. All8cases independentlyreviewed/freshbytes exact;
+   192–1117additional visits,0.07–0.43percentagepoint overallgains. No route/crew
+   impossibility claim from remaining misses;constructive lowerbound only. Normal
+   table/chart/downloads published;alloriginalpointmaps/defaults unchanged.
+12. **Next declared target-grid audit:** five fixed designs:block2/3/5 atphase0,
+   plus3cell phases1/2. Sameeight parents andoriginalassigner;40cases. Require
+   exactoriginal b3_p0 routes/allocations,allactor/route/task/workgates,fullreplay.
+   Spacingchanges suppliedtaskdensity,not justnumericalresolution;phasesprobe
+   geographic sampling. Declare beforeoutputs;no best-design selection/adoption.
+   Datedsizes/roles/transfer,complete diets/work andmobile/unaffiliated/nonstate
+   scope persist across allrelease1–4/S1–S5parts.
 
 ### Whole-plan review log
 
@@ -114,6 +121,7 @@ Immediate sequence:
 |Declared finergrid andstaffthreshold audit,12November|396overlaparrays exact;300h32grid missed15raw/12corrected sources thatfinergrid+150probe certify.Independent16completephysicalrecords andfreshbytes pass;fullrelease/S1–S5/allactor/mobile scope reviewed. No originalsource loss promoted asphysicaltruth|Implementdeclaredthresholdseeding onall16cases andpublish correctedversionedmaps;retain actualnetworkduty andempirical/resource dependencies|
 |Threshold-seeded correctedmaps,12November,declaration354f9a52|16physical/thresholdreviews andfreshbytepairs pass;all8open sourceflags/masks equaloldfoodsets,source-countloss repaired.32newmapoptions/workCSV/fourfamilies/mobile/failures and60focusedtests pass. Fullrelease/S1–S5/allactor/mobileprogramme reviewed;no empirical/default/patrolqualification|Freeze andconnect actualnetworktask destinations toexistingreservedpatrolhours;retain complete resource/provider/occupation/transfer evidence gaps|
 |Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
+|Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
 
 ## Working rules
 
