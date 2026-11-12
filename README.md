@@ -16,7 +16,7 @@ The launcher identifies the **actually served atlas snapshot** from
 not relabel older maps. Normal atlas publication includes matching Earth
 corrections and every climate, farming, population, foraging, trade and language
 export before browser/portable checks and the push to the maintained branch,
-`claude/project-continuation-a484h1` (the repository's default branch). The two former publication branches were
+`claude/project-continuation-a484h1` (maintained since 12 November 2026; the earlier default was `claude/friendly-turing-43ygeu`). The two former publication branches were
 consolidated on 11 November 2026; historical experiment records retain their
 original branch names for provenance.
 
