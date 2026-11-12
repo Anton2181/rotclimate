@@ -1,3 +1,69 @@
+# Coherent provider-year maps ready; continue destination timing after push — 12 November 2026
+
+Latest owner: "Continue,dont stop after pushing". Push is NOT a stopping point.
+Canonical claude/friendly-turing-43ygeu. Lastpushed00d70d62 joint-order comparison
+contains the provider-year declaration BEFOREallnewoutputs. No subagents.
+
+* Newpolity/provider_year_schedule.py choosesONE full12bin calendar/provider.
+  Baselineyear retained unlessjointalso complete,contains EVERYbaseline packed
+  (month,actor,target)identity andadds>=1. Equalsets/losttask retainbaseline;
+  onlyjointcomplete choosesjoint;neithercomplete keepsbaseline unqualifiedtrace.
+  Inactive sources cannotpass emptyobligations;selectedtasks mustbe originalfunded.
+* All8cases independentlyreviewed WITHOUTselectorimport;100176selectedprovider/
+  bin worker blocks checked againstcurrent sourcephysical/food certificates.
+  Everybaseline gatedtaskretained elementwise;no originalfunded taskbounds crossed.
+  Allactor/bin requestpartitions remainwithseparatecalendar-unqualified channel.
+  Actualphysicalwork stayscharged evenwhenyearunqualified. Ninecontrols pass.
+  Freshresults/fields BYTEEXACT;22freshmap/model/CSV/gridexports BYTEEXACT.
+* Gains raw600crew1/4=9572/4147,raw300=8597/2933,corrected600=9846/4496,
+  corrected300=7772/2810. Qualifiedcounts raw148477/133196/140515/125199;
+  corrected157989/142318/148380/133488. Qualifiedproviderflags EXACTbaseline
+  inall8cases (734/671raw,779/711corrected);gains are tasks,notnew institutions.
+* Newdata/network_visit_year_complete.json+year_complete/packets,IDs yearvisits
+  {600|300}_crew{1|4}. ExistingSupply-supportedreachselector,experimentalonly,
+  defaultunchanged. Sixth packetfamily inatlas/settled-reach.js;14readouts add
+  provider-year policy andnecessary12binflag. Conditionalparentpeople/food
+  remainunchanged whenrosterfails. Pointtasksnotblocks/territory. Annualgate
+  necessaryonly,NOT dailyfood/within-bin grain timing/fullannualfood/observedroles.
+* Newpublish_provider_year_visits.py supports --out-data scratch exports without
+  activatingUI;export_replay.json has22exactfiles. Independentexportreview checks
+  everyactor/pointmask,visitedpixelcolor/overlap,unchangedconditionalpeople/food,
+  allCSVrows/fivepartitions/sourceIDs/yearchoices. ProviderCSV fullphysicalhours
+  remaincharged atfailedsources. Pointproviderscanvarybybin underOLDassignment;
+  theyare neverreassigned. Fullfields4.9MB exported once foralleight scenarios.
+* Newnormal#provider-year8row/3figure evidence with9workingbytelinks;maps under
+  Experimental &diagnostics -> Supply-supportedreach -> Complete-yearcollection
+  schedule. ThreefiguresPOSTED. Browser8newmaps/exactcomplete+incompleteprovider
+  CSV/pointmasks+pixelclick/sixfamilies/344/390/themes/reload/optionalmanifest/
+  parent/binaryfailure pass. Old8pointmaps+32seededoptions/workCSVregressions
+  andgeneralevidencefilters/failure pass. Windows1900assets byteexact;860hubdependencies resolve. Finalhashes
+  rechecked275sources/3producers/243schedules/163maps/22exports. Earlierresearch
+  pageexactafterremovingnewpanel. Receipts inoutput/network_visit_year_complete_20261112.
+* Wholeprogramme reviewed:release2 datedoccupation/size/providerfunctions and
+  prospective transferopen;release3partialresource/work/yearcalendar;release4
+  no calibrateddefault. AllS1–S5/allactors/unaffiliated/mobile/nonstate,complete
+  diets/household/draftwork,dailyfood/sourceavailability andfoodlocation stayopen.
+  Fullhistoricalpublisher stillneedsomittedprivateVidarbhacache;directpublishers.
+* NEXT IMMEDIATELYAFTERPUSH: committed calibration/network_visit_delivery_timing_
+  20261112/plan.json BEFOREoutputs. All8cases andalreadyqualifiedproviders,24rows:
+  A exactparentmonthly periodicfood recurrence;B continuousmeals/decay withsame
+  arrival-bin-start pulses;C SAMEcontinuousinventory withselectedcollectorreturn
+  timing insidearrivalbin. KEEPONE-BINdelay and0.95transportretentionONCE.
+  Cargo=min120k/remainder byorigin+tripserial;allorigin/month/bintotals exact.
+  Sameparentresidentmeals2500/day,90daycap,5%storage loss,365days. Sourcefood
+  staysmonthly;crewcarriedrations/foodlocation/dailysourceavailability unqualified.
+  Separate A->B timestep/capacity convention fromB->C phase. No map/defaultchange.
+  Independentcontinuousinventory/periodic/ledger/cargo/clockreview,freshbytes,
+  all24results andfigures/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Timingimplementation note from readonlysourceinspection:oldfood_stocks food_year
+  eats ENTIREstep meals BEFOREcapacity clip andthenstoreloss. Continuousmodel must
+  clip immediatelyaftersupply,soBcontrol isessential. Fixedhazard continuousflow
+  ds/dt=-r-h*s. Annualmap isclampedaffine;can derive minimalperiodicstock fromtwo
+  boundarymaps andunclippedaffinebalance instead of96spinups/bisections. Verify
+  independently;periodicconvergence distinct fromfood sufficiency. No timedfood
+  model/results produced before declaration. Originalfood_stocks.py MUSTstaybyte
+  unchanged becausemany previous certificates bindit;use a newversionedmodule.
+
 # Fixed-order comparison ready; continue provider-year point maps after push — 12 November 2026
 
 Latest owner instruction: "Continue,dont stop after pushing". A checkpoint push
