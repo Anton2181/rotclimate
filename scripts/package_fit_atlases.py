@@ -359,6 +359,8 @@ def main():
                   ROOT/'reports/figures/settlement_joint_maps_20261112.png',
                   ROOT/'reports/figures/settlement_joint_tradeoffs_20261112.png',
                   ROOT/'calibration/settlement_joint_locations_20261111/plan.json']
+    if (ROOT/'output/settlement_residents_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_RESIDENTS_20261112.md']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

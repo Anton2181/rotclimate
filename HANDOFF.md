@@ -1,3 +1,46 @@
+# Finite resident consumer and source-food gate — 12 November 2026
+
+* Continued AFTER pushing placement milestone702a6dfe, per owner instruction.
+  Single canonical branch remains claude/friendly-turing-43ygeu. Both new map/
+  chart figures from the224-placement comparison were posted in chat.
+* New polity/settlement_residents.py WRAPS unchanged SettlementPlan allocator.
+  Origin people and a caller-supplied transfer share fund civilian ANDstaff
+  residents once. One owner per origin; unassigned/unused people remain rural.
+  Zero/tiny budgets cannot create a minimum town or staff. Population partition
+  and destination seasonal food are checked. No old producer sources changed.
+* audit_origin_food hard gate binds declared origin departures to destination
+  arrivals (retention/delay), protects meals of returned rural people, and closes
+  one grain ledger including stocks/losses/unused food. Mutated records refused.
+  Large shipments cannot hide rural meals through loose relative tolerances or
+  floating-point range. Source grain must already reflect remaining field work.
+* build/review_settlement_residents.py:20existing atlas food cases, shares5/7.5/10%
+  =60sensitivities. Reference catchment people are SCENARIO envelope, not measured
+  inhabitants. Market IDs disjoint. All20old allocations replay with ZERO civil/
+  staff difference. Independent scalar caps review62,610site/scenario records.
+  Fresh results.json/fields.npz byteexact.94focused tests pass,not fullsuite.
+* Corrected joint365 at7.5%: town total812545.873 ->812204.400; conditional sources
+  1011->1010. Rural remainder40263180.758 fromsame41075385.158referencepeople.
+  At5% newtown801473.333. These are bookkeeping sensitivities,NOT newcensus fits.
+* Manufactured100-person rural/town examples balance grain (with/without20% freight
+  loss) below1e-6kcal; insufficient ruralmeals rejected. Actualatlas cases STILL
+  use old-arrival rural-food claim: ruralfood/production/collection/reach NOT
+  recomputed and actualsource-food gate NOT qualified. Do not adopt these as the
+  normal numeric map. Expose this gap plainly; manufactured proof is not Earthfit.
+* Normal evidence page newcollapsed residentpanel6rows/5downloads, retained joint
+  and old source panels, publisher/package wired. Browser/mobile/dark/download/
+  optional-inventory failure checks passed. Production source packets unchanged.
+* Final QA: resident+joint browser panels, mobile/light/dark/failure UI pass;
+  Windows-style checkout1652byte-exact assets; active hub750local dependencies
+  resolve, including5new resident files. Both fresh outputs byteexact.
+* NEXT actual integration: recover compatible CELL origin people, remaining field
+  work and net crop harvests; recompute rural meals and collection under relocation.
+  Solve feedback between fewer town people ->more rural needs ->less export;
+  refuse unresolved/nonconverged cases. Pass source-food gate before SAMEplan feeds
+  staff/reach. CountyPOP/footprint imputations still not resident-size truth.
+  Release2stillinprogress,3fantasyrebuild/4numericpublicationpending;allactors,
+  unaffiliated/mobile/nonstate and S1–S5 remain. Continue after push, no new
+  independent utility map family. Details SETTLEMENT_RESIDENTS_20261112.md.
+
 # Complete-input joint placement comparison finished — 12 November 2026
 
 * Resumed from canonical remote4c6af479 after fetching the newer work; local Nov5

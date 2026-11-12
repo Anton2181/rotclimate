@@ -81,6 +81,12 @@ update. None of these milestones is complete merely because code tests pass.
    and fresh replay. This does not repair the earlier geographic-transfer failure
    or qualify resident sizes. NEXT finite resident/catchment allocation feeding
    the same seasonal food budget, with all rural/urban/staff transfers conserved.
+   A finite resident consumer now wraps the same seasonal SettlementPlan and
+   partitions one origin population across rural/civilian/staff residents
+   (SETTLEMENT_RESIDENTS_20261112.md). Sixty conditional atlas sensitivities and
+   manufactured source-food audits pass, with no default adoption. Actual rural
+   food, labour, collection and relocation feedback remain unrecomputed; connect
+   those cell budgets and pass the source-food gate before fantasy rebuilding.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

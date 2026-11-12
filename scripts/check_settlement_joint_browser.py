@@ -13,6 +13,7 @@ def main():
     parser.add_argument('--out', type=Path, required=True)
     args = parser.parse_args(); args.out.mkdir(parents=True, exist_ok=True)
     errors, bad, links = [], [], []
+    resident_links = []
     with sync_playwright() as pw:
         browser = pw.chromium.launch(executable_path='/usr/bin/chromium', headless=True, args=['--no-sandbox'])
         page = browser.new_page(viewport=dict(width=1440, height=1000))
@@ -45,6 +46,25 @@ def main():
         page.screenshot(path=str(args.out / 'joint_desktop.png'))
         usage = page.request.get(args.base + '/atlases/earth_evidence/data/dataset_usage.json').json()
         assert next(e for e in usage['datasets'] if e['id'] == 'settlement_joint_locations_20261112')['status'] == 'exposed_development_only'
+        if page.locator('#settlement-residents').count():
+            residents = page.locator('#settlement-residents')
+            assert residents.get_attribute('open') is None
+            residents.locator('summary').focus(); page.keyboard.press('Enter')
+            assert residents.locator('tbody tr').count() == 6
+            assert 'not calibrated resident sizes' in residents.inner_text()
+            assert 'have not recomputed rural meals' in residents.inner_text()
+            assert '812,204' in residents.inner_text()
+            for link in residents.locator('a').all():
+                url = link.evaluate('(el)=>el.href'); response = page.request.get(url)
+                assert response.ok, url
+                relative = url.removeprefix(args.base + '/')
+                assert response.body() == (ROOT / relative).read_bytes(), relative
+                resident_links.append(relative)
+            assert len(resident_links) == 5
+            with page.expect_download() as event:
+                residents.locator('a[href="data/settlement_residents_fields.npz"]').click()
+            assert Path(event.value.path()).read_bytes() == (ROOT / 'output/settlement_residents_20261112/fields.npz').read_bytes()
+            assert next(e for e in usage['datasets'] if e['id'] == 'settlement_residents_20261112')['status'] == 'conditional_population_budget_implementation_not_calibrated'
         for theme in ('light', 'dark'):
             page.emulate_media(color_scheme=theme)
             for width in (344, 390):
@@ -61,9 +81,13 @@ def main():
         page.wait_for_function('document.querySelector("#count").textContent.includes("Detailed inventory unavailable")')
         page.locator('#settlement-joint summary').click()
         assert page.locator('#settlement-joint-results').is_visible()
+        if resident_links:
+            page.locator('#settlement-residents summary').click()
+            assert page.locator('#settlement-residents-results').is_visible()
         browser.close()
     receipt = dict(status='passed', default_collapsed=True, keyboard_open=True, rows=6,
         byte_exact_local_links=links, figures_loaded=2, exact_positions_download=True,
+        resident_rows=6 if resident_links else 0, resident_byte_exact_links=resident_links,
         desktop_mobile_light_dark=True, previous_panels_retained=True, optional_inventory_failure_isolated=True,
         page_errors=errors, failed_requests=bad)
     (args.out / 'checks.json').write_text(json.dumps(receipt, indent=2) + '\n')
