@@ -115,6 +115,14 @@ Immediate sequence:
    network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
    dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
 
+**Owner usage-limit checkpoint:** calendar implementation and 145-file fresh
+replay are saved; normal-atlas publication/figures/browser/Windows remain pending.
+Resume step 13 before another experiment. These per-bin packing outputs do not
+certify unchanged annual food deliveries when any mandatory collector trip is
+unpacked. Collection-first fragmentation is an algorithm restriction, not a
+physical-impossibility result. All release1–4/S1–S5 empirical/resource/mobile
+obligations above remain open. See NETWORK_VISIT_CALENDAR_20261112.md.
+
 ### Whole-plan review log
 
 |Completed step|Whole-plan reassessment|Expansion / next action|

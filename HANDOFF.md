@@ -1,3 +1,37 @@
+# Usage-limit checkpoint — push calendar work, publication pending — 12 November 2026
+
+Owner latest instruction: "Almost out of usage, get pushing". This overrides
+starting another experiment after the checkpoint. Map/grid work already pushed
+through bdd6135c on canonical claude/friendly-turing-43ygeu. Save current calendar
+work and resume HERE next session; do not restart or repeat completed maps.
+
+* Calendar declarationbdd6135c BEFOREoutputs. Newpolity/worker_calendar.py and
+  build_visit_calendars.py implement original8plans/4parents. Integerfloorstaff,
+  50h/bin dutycap,common7*365/12hcalendar;divisiblehome services first;wholecollector
+  trips LPT/earliestworker viaheap,then originalcrew1/4visits synchronized atsame
+  providers. Alljob/member intervals recorded. No partialcrews,extra visits or
+  budget borrowing. Collectionfailure blocks provider/bin visits.
+* Sevennewcontrols pass;145freshfiles (144scheduleNPZ+results) BYTEEXACT.
+  Independentreview_visit_calendars.py uses sortedlists,notnewallocator,andchecks
+  everycollectoridentity/worker interval,originalvisit/provider,crew nonoverlap,
+  calendar/duty caps andwholemonthlyledgers. Finalreceipt review.json records
+  completion:FINALCERTIFICATEPASSED for all4parents/8cases. Sourcecode mustremainhash-compatible.
+* Raw600/300unpackedcollectortrips11630/4825;corrected10932/4214. Packedwithin-bin
+  visits raw600crew1/4=147819/137796;raw300=135630/125940;corrected600=156465/145972;
+  corrected300=143809/133867. These are GREEDY per-bin packing outputs,NOT annual
+  food/visit qualification. ANYunpackedmandatorytrip leaves unchangedannualfood
+  deliveries uncertified. Collection-first fragmentation can cause visitmisses;
+  no physicalimpossibility,abandonment orauthorityloss inferred.
+* Report NETWORK_VISIT_CALENDAR_20261112.md saves complete4+8tables/method/limits.
+  PENDING: normalresearchpublisher,calendar/shortfallfigures (postall),downloads,
+  browser/mobile/Windows checks andwhole-programme review atpublication. No new
+  calendarfigures oratlasoptions created;all previousmaps/defaults unchanged.
+  No next alternative-ordering experiment declared orrun. Predeclare separately
+  if advancing after publication. Keep release2/S1 datedsize/occupation/transfer,
+  complete diets/household/draftwork,dailyprovisioning/providerfunctions and
+  S5/allactors/unaffiliated/mobile/nonstate scope open. Fullhistoricalpublisher
+  stillblockedbyomittedprivateVidarbhaEarthcache;use reviewed directpublisher.
+
 # Forty target-grid scenarios published; continue worker-calendar audit — 12 November 2026
 
 * Continued after4f592bfe per DONOTPAUSEAFTERPUSH. Canonicalfriendly-turing-43ygeu.
