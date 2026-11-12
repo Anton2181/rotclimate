@@ -67,13 +67,18 @@ Immediate sequence:
    oldfood419264/889. Corrected300h:313740/755->280212/743,access5.551->5.492bins.
    NewoptionalSettlements/Supply-supportedreachmaps;actualpatrolcoverage still
    unqualified. See SETTLEMENT_DISPATCH_20261112.md. Alloldpackets/defaults persist.
-8. **Next search dependency:** predeclare64vs32resident intervals on four central
-   open/larger-load cases,retain exactoverlap checks,and explicitly probe known
-   staffactivation at150totalpeople before attributing source loss to physical
-   infeasibility. Do not overwrite original16maps or call finite search globally
-   optimal. Then actualnetworkpatrol/service destinations and dispatch-family
-   restrictions;alternative labour must share SAMEfinitepeople/work. Datedsizes,
-   roles,prospective transfer,complete diets/household/draft work remain open.
+8. **Completed search audit:** declared ind302ac74 BEFOREoutputs.396overlaparrays
+   exact;600h changes<.0001people/no sourceflags.300h64grid recovers10sources
+   eachclimate;explicit150probe finds5more raw/2corrected feasiblefine-zero sites.
+   Independent16completefine/probe people/work/food records andfreshbytes pass.
+   The original300hsource lossesincludegridmisses,NOTestablishedphysicalfailures.
+   Normal evidence nowwarns;alloriginal16map/sourcefiles preserved.
+9. **Next implementation declared:** threshold-seeded64grid onall16cases,refine
+   fromexisting150-person activation to nextfailedgridpoint. Preserveoldoutputs/
+   sources andpublish distinctlyversionedcorrectedmaps afterallphysicalgates.
+   No globaloptimum claim. Thenactualnetworkpatrol/service destinations and
+   dispatch-familyrestrictions;alternative labour sharesSAMEfinitepeople/work.
+   Datedsizes/roles/prospectivetransfer andcomplete diets/household/draftwork remain.
 
 ### Whole-plan review log
 
@@ -88,6 +93,7 @@ Immediate sequence:
 |Monthly collection and competing staff work, 12 November, declaration7ccd5891|16fixedplan cases show major staff-only collection shortfalls;one monthly budget correctly limits all secondary duties. Independent path/trip/work/request checks and sixfile replay pass. All release1–4/S1–S5/allactor/mobile dependencies reviewed;no new reach/default|Joint dispatch/storage/work/resident feedback before accepting new cohorts;keep empirical labour/provider/occupancy and complete resource gaps explicit|
 |Monthly-work publication and whole-plan checkpoint, 12 November|69focusedtests,9newbyteexactlinks,previoushousingandgeneralbrowser/mobile/failurechecks pass;Windows1706assets exact,r44verified,784hublinksresolve. Source/consumer/default boundaries retained|Keep jointdispatch/work/foodsolver next;datedsize/role evidence,prospectivetransfer,complete diets/work and actualmobileoccupancy remain on fullprogramme|
 |Jointdispatch/resident/work maps,12November,declarationde42d1c3|16jointcases independently reviewed,16freshresult/fieldpairs exact;32newmapoptions/exactworkCSV/familyswitch/mobile/failure checks pass. Allrelease1–4/S1–S5/allactor/unaffiliated/mobile dependencies reviewed;no calibrateddefault or geographicpatrolwork claim|Double resident scan andprobe explicitstaffthreshold before family/physical impossibility claims;continue actualduty-destination andempirical/resource dependencies afterpush|
+|Declared finergrid andstaffthreshold audit,12November|396overlaparrays exact;300h32grid missed15raw/12corrected sources thatfinergrid+150probe certify.Independent16completephysicalrecords andfreshbytes pass;fullrelease/S1–S5/allactor/mobile scope reviewed. No originalsource loss promoted asphysicaltruth|Implementdeclaredthresholdseeding onall16cases andpublish correctedversionedmaps;retain actualnetworkduty andempirical/resource dependencies|
 
 ## Working rules
 

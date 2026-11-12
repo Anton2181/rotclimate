@@ -1,3 +1,32 @@
+# Finer grid finds missed staffed branches; implement declared correction — 12 November 2026
+
+* ContinuedIMMEDIATELYAFTERmapmilestonepushd302ac74,perownerDONOTPAUSEAFTERPUSH.
+  Canonicalfriendly-turing-43ygeu. Searchprotocol includedind302 BEFOREauditoutputs.
+* Fourcentralopen120kloadcases:64vs32intervals,same24/40refinements. ALL396overlap
+  arraysBITEXACT.600hchanges<.0001people,ZEROsourceflags.300hfinergrid recovers10
+  sources eachclimate:raw710->720,corrected743->753. ExplicitEXISTING150staff
+  activationprobe finds5more raw/2corrected fine-zero feasible sites. Probe150±1e-6
+  alluppereligible sitesretained;notresidualselected. Largestfinechange153.836/
+  156.343people. SOURCELOSSESINOLD300MAPSWEREPARTLYNUMERICAL,NOTphysicalimpossibility.
+* Independent16completefine/probe recordscheckoriginpeople/work,rural/export/town
+  recurrences,integertrips/monthlyhours/sourcefood;allpositivefinecasesalso pass
+  originalsourceaudit. Freshresults/fieldsBYTEEXACT. Old16mapsandallsourcehashes
+  preserved. Newreport SETTLEMENT_DISPATCH_SEARCH_20261112.md,normalresearchpanel
+  andexplicitcorrectionwarningontheoldmapsevidence. ThisisnotnewEarthskill.
+  Searchpanel4rows/5workinglinks/keyboard/344/390/light/darkpass;Windows1768
+  assetsBYTEEXACT,r44verified,798hublocaldependenciesresolve.
+* NEXT threshold-seededsolverdeclaredcalibration/settlement_dispatch_seeded_20261112/
+  plan.jsonBEFOREnewseededscores.64grid+explicitexistingstaffactivationpoint,
+  24refinementsfromnewseedtonextfailedgrid;recomputeeveryfood/work/sourcegate.
+  Newsubclass/versionedartifactskeeporiginalDispatchFeedback/builderbyteunchanged;
+  distinctoptionalmapversion,notquietlyoverwritingold16maps. Runall16cases/review/
+  replay/plots/normalatlas/browser/Windows,thenCONTINUEafterpush.
+* Entireprogramme reviewedagain;release2empiricalsize/occupation/transferopen,
+  release3partialcereal/resourceimplementation,4nocalibrateddefault. FullS1-S5,
+  actors/unaffiliated/mobile/nonstate remain;actualgeographicpatrolwork,nextafter
+  searchcorrection,stillunqualified. Datedroles/complete diets/household/draftwork
+  andalternativecollectorpopulationbudgetsremainopen.
+
 # Joint dispatch/collection/resident maps; continue after pushing — 12 November 2026
 
 * Owner explicitly says CONTINUE,DONOTPAUSEAFTERPUSHING. Push isonlycheckpoint.
