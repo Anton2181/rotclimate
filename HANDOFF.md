@@ -1,3 +1,49 @@
+# Joint dispatch/collection/resident maps; continue after pushing — 12 November 2026
+
+* Owner explicitly says CONTINUE,DONOTPAUSEAFTERPUSHING. Push isonlycheckpoint.
+  Canonical claude/friendly-turing-43ygeu. Declarationde42d1c3 BEFORE16jointoutputs.
+* NEWpolity/settlement_dispatch.py wraps originalCerealFeedback withoutchanging
+  itsproducer. EVERYtrial recomputes ruralpeople/work/cereal/meals and workcaps
+  uniformcatchmentdispatchwithintegertrips.40workrefinements,old33residentpoints+
+  24refinements;final40foodrefinements removeoverdelivery. Actualorigin/export/
+  destination inventoriesand SAMEplan feedexistingmonthlyshared secondaryduties.
+*16cases:raw/corrected,farm600/300h,load60000/120000kcal,allopen/3binsclosed.
+  Samefinitepeople/food/path/freight/store/loss/delay,600staffh/year,7walkh/day.
+  Suppliedscenariofamily,NOTglobaloptimizer/empiricalsize/authorityqualification.
+* Corrected600/120kopen:378280.833townpeople/889staffsources;fixedaudit95358.736/368,
+  oldfood419264.390/889. SAMEfinalruralallocationreference957.424Bdepartedkcal->
+  363.569B,zero destinationunusedfood;collection22.172M/53.340Mstaffhours.
+  Corrected300:313740/755oldfood->280212/743,access5.551->5.492bins. 600source
+  footprintsunchanged,sizesshipmentschange. All8closedcaseszero under90daystores.
+* Independentpopulation/work/monthlyinventory/referenceexport/trip/hour/request/
+  oldresidentcontrol checks passALL16. Source-food audit additionallypasses every
+  positivecatchment. Sixteencase results+fieldsBYTEEXACTfresh. Residualcomparison
+  usesactualtermroundoffbound,oldjointbalancegate unchanged. Outsidepeople preserved.
+* ReusedEXACToldsourcefootprints;independentlyassembledall18actor/cell/binmasks,
+  originalall-source reference exact. ThesearePOTENTIALtwo-waytravel footprints,
+  NOT actualgeographicpatrolstaffing. No newclimate/sites/tracks/data ordefault.
+* Newoptionaldata/settlement_dispatch.json +dispatch/packets;oldfeedback/ andall
+  originalpackets/mapfiles preserved. ExistingSettlements/Supply-supportedreach
+  selectors+8cases/climate behindExperimentals.10readouts/worknote,monthlyworkCSV,
+  percasefielddownloads. Newoptionalpacketfailureisolated;all3packetfamilieswork.
+* Threefiguresposted(raw/correctedmaps+scenariochart),normalresearchpanel16rows,
+  reportSETTLEMENT_DISPATCH_20261112.md.32newmapoptions/exactCSV/fielddownloads,
+  switching/reload/344/390/light/dark and3failurecases pass.56focusedmodel/evidence/
+  launcher/package tests pass;notfullsuite. Oldprivateglobalcache stillomitted;
+  nofullhistoricalbasepublisherclaim. Standardnewdirectpublishers used.
+  FinalQA:previous16feedbackoptions/CSVs/failures retained,newnormal evidence9
+  localbytelinks/16rows/3figures/keyboard/mobile/themes/failurepass;generalpanel
+  filters/downloads/paginationpass. Windows1764assetsBYTEEXACT,r44launcherverified;
+  activehub793localdependenciesresolve. SearchcheckdeclaredBEFOREnewauditoutputs.
+* Wholeprogramme reviewed inSETTLEMENT_CONTROL_ROADMAP_20261110.md;Release2open,
+  3partialcereal,4nocalibrateddefault;fullS1-S5/allactors/unaffiliated/mobile/nonstate.
+* NEXT IMMEDIATELYAFTERCHECKPOINT: declare64vs32residentintervals onfourcentral
+  open/largerloadcases plusEXPLICIT150totalpeople staffactivation probe. Known
+  discontinuitycanhidefeasibleislands;certifyoverlapandanyrecoveredpositivesbefore
+  inferring physical/sourceimpossibility. Preserveoriginal16maps. Thenactual
+  networkduty-destination work anddispatch-familylimits;datedempiricalsize/role/
+  occupancy/prospectivetransfer andcomplete diets/household/draftwork remainopen.
+
 # Monthly collection, patrol and services share one staff-hour budget — 12 November 2026
 
 * Continued afterhousingmilestonea00c1140;canonical friendly-turing-43ygeu only.

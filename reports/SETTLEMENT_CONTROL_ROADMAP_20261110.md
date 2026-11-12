@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach; fixed-plan monthly collection audit exposes refusals|Put collection hours and selectable dispatch volumes inside feedback before accepting revised food/staff plans. Empirical requests and adopted placement/role choices must consume this ledger; preserve anchors and outside rural people|
-|Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
+|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation now jointly checks residents,rural work,grain,dispatch and monthly collection in16cases;newoptional settlement/potential-access maps published|Check search-resolution/staff-threshold and dispatch-family limits;actual geographic patrol/service work remains unqualified. Empirical requests and adopted placement/role choices must consume this ledger; preserve anchors and outside rural people|
+|Release 4: normal numeric publication|16joint dispatch optional maps added to existingselectors;originaldefaults/oldmaps preserved;calibrateddefault pending|Complete publication/browser/Windows checks and retain experimental status. Only adopt empirically qualified changes;post maps and continue after push|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Partial cereal ledger and source-food gate audited; monthly collection/patrol/service pool audited on16fixedplan scenarios|Joint dispatch/work/food reallocation next;many fixed shipments fail staff-only collection. Do not infer fewer residents from unoptimized surplus shipments. Actual provider-network duty destinations, complete diets and household/draft work remain open|
+|S4: complete resources and work|Joint proportional dispatch/work/food reallocation audited on16cases;integercollection precedes shared secondarywork|Examine known staff activation threshold and dispatch-family restrictions,then actualnetwork duty destinations before fundedpatrolcoverage claims. Complete diets,household/draftwork and datedprovider roles remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -58,13 +58,22 @@ Immediate sequence:
    Corrected600farmhours:368/889staffsitespass at120000kcal/trip,72at60000;
    threeclosedbinsrefuseallfixedcases. Allsixfreshpacketsbyteexact. Nofood,
    staff,reach ordefaultreallocation/adoption. See SETTLEMENT_MONTHLY_WORK_20261112.md.
-7. **Next coupling:** selectable dispatch volumes and collection hours must enter
-   resident/food feedback together, including destination stores and original
-   source-food gates. Fixed shipments may overdeliver unused food: their failure
-   does not prove fewer residents necessary. Any alternative collector labour
-   must partition SAMEpeople/work,never a fresh rural/civilian/staff population.
-   Actual network service/patrol destinations, empirical roles and complete
-   diets/household/draft work remain open; full release/S1–S5 criteria persist.
+7. **Completed joint coupling:** declarationde42d1c3 precedes16newcases. A uniform
+   catchment dispatch scalar fits monthly integer-trip collection hours at EVERY
+   resident trial;remainingworkers/production/ruralandtownmeals/stores recompute.
+   Finaldispatch removesoverdelivery then SAMEplanfeeds shared secondaryduties.
+   Independentcell/work/control/reach review and16freshresult/fieldreplays pass.
+   Corrected600h/120000load:378281townpeople/889sources vsfixedaudit95359/368 and
+   oldfood419264/889. Corrected300h:313740/755->280212/743,access5.551->5.492bins.
+   NewoptionalSettlements/Supply-supportedreachmaps;actualpatrolcoverage still
+   unqualified. See SETTLEMENT_DISPATCH_20261112.md. Alloldpackets/defaults persist.
+8. **Next search dependency:** predeclare64vs32resident intervals on four central
+   open/larger-load cases,retain exactoverlap checks,and explicitly probe known
+   staffactivation at150totalpeople before attributing source loss to physical
+   infeasibility. Do not overwrite original16maps or call finite search globally
+   optimal. Then actualnetworkpatrol/service destinations and dispatch-family
+   restrictions;alternative labour must share SAMEfinitepeople/work. Datedsizes,
+   roles,prospective transfer,complete diets/household/draft work remain open.
 
 ### Whole-plan review log
 
@@ -78,6 +87,7 @@ Immediate sequence:
 |Province-blocked housing density comparison, 12 November, declaration0161dae2|All50cities retained;average area gain trades against median error;coverage effects cohort-sensitive.228predictions/117fits independently reviewed, fresh bytes exact. NoAD150qualification or default; full release1–4/S1–S5/allactor/mobile scope reviewed|Keep dated housing acquisition open; advance monthly collection/patrol/service pooled work on same ledger, predeclaring controls before outputs|
 |Monthly collection and competing staff work, 12 November, declaration7ccd5891|16fixedplan cases show major staff-only collection shortfalls;one monthly budget correctly limits all secondary duties. Independent path/trip/work/request checks and sixfile replay pass. All release1–4/S1–S5/allactor/mobile dependencies reviewed;no new reach/default|Joint dispatch/storage/work/resident feedback before accepting new cohorts;keep empirical labour/provider/occupancy and complete resource gaps explicit|
 |Monthly-work publication and whole-plan checkpoint, 12 November|69focusedtests,9newbyteexactlinks,previoushousingandgeneralbrowser/mobile/failurechecks pass;Windows1706assets exact,r44verified,784hublinksresolve. Source/consumer/default boundaries retained|Keep jointdispatch/work/foodsolver next;datedsize/role evidence,prospectivetransfer,complete diets/work and actualmobileoccupancy remain on fullprogramme|
+|Jointdispatch/resident/work maps,12November,declarationde42d1c3|16jointcases independently reviewed,16freshresult/fieldpairs exact;32newmapoptions/exactworkCSV/familyswitch/mobile/failure checks pass. Allrelease1–4/S1–S5/allactor/unaffiliated/mobile dependencies reviewed;no calibrateddefault or geographicpatrolwork claim|Double resident scan andprobe explicitstaffthreshold before family/physical impossibility claims;continue actualduty-destination andempirical/resource dependencies afterpush|
 
 ## Working rules
 
