@@ -1,0 +1,331 @@
+{
+  "status": "cohort_protected_forwarding_scenario",
+  "adopt": false,
+  "key": "raw_range12_share50_excess",
+  "climate": "raw",
+  "hours_worker_year": 600,
+  "transfer_fraction": 0.075,
+  "forward_share": 0.5,
+  "range_days_each_way": 12,
+  "rule": "excess",
+  "floor_people": 150.0,
+  "link_rule": "at most 12 days each way in all 12 bins on the seasonal transport graph, same actor",
+  "plan_sha256": "4d21892dd9a986ae59f38d0f26eb702a439b2d4d960a7ee7fc93273b7f02b147",
+  "inputs_sha256": "7ee8b92a81b28ebc5493534ec7bc977f4ed94bac00bfef3ed4c829184e7a3138",
+  "footprints_sha256": "63b87ef241384acfb738528619c1cadc9f29743e3148306f462eb200f62771de",
+  "travel_sha256": "c1fbcb804350e08641bcc0166f136dea7cf25113d82c3d32a462a3842b375047",
+  "base_fields_sha256": "b67b4b52b0bbc5534ffdfdf6b35d01f4a84f02d0617937a014150999b1e78b1f",
+  "flat_share_fields_sha256": "ada328b0e2561a642dc7656e8f506e8f735c6f0436d252b5c8fbdf0a28ebe0c2",
+  "shape_results_sha256": "00e907c882cbdb0fe8ddd9aa00f754ddf58c052aa7e5a56e35498876ed1421fd",
+  "fields_sha256": "26d8c669314a4912b8b47b0ea2579cbcf518042e526e94cf9e81a279ac99bdd3",
+  "producers": {
+    "scripts/build_settlement_cohort_forwarding.py": "d6e08816a0c0900c0ba426f2e1814dfae015004e210cab6925c60596f863fb12",
+    "polity/settlement_cohort_forwarding.py": "56b2315e57b3ee5dd5033b2a791a8091e76b8ff5894ff4d76214cdd672c781b9",
+    "polity/settlement_hierarchy.py": "142c7007ebafff7b7b64fa67bff81287f81b95cbe83059a61316f5300cef41af",
+    "polity/settlement_feedback.py": "f18b4ed341f0598095379555cd341945aba4fb877f627f47a355d9943a96a02c",
+    "polity/settlement_residents.py": "6adcbd94425abecb028d06e3a085de83819e95713ada0422f1d7d15535f1d5af",
+    "polity/settlement_support.py": "82b7a99949308e60194a20eb51b4067cdc156ea2b4d03ce1a8009d7b23d941c3",
+    "polity/settlement_size_shape.py": "3e13c21f866c7f5189e4a01ffb2e1cd10e43979abdb0cb5b01c801a08257d52b",
+    "harvest/field_support.py": "9e2c03aaffc2d3b896fcb04f116dd5a55ecfb5f99b9b62b0689fdbf67de0e1af",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef"
+  },
+  "draws_equal_published_flat_share_case": true,
+  "zero_floor_reproduces_published_flat_share_case": true,
+  "legs": {
+    "distance_scaled": true,
+    "count": 970,
+    "days_median": 7.847333192825317,
+    "days_max": 11.998373985290527,
+    "retention_min": 0.5404051575463653,
+    "chain_retention_min": 0.12511988187266354
+  },
+  "forest": {
+    "towns": 1034,
+    "linked_pairs_year_round": 27624,
+    "towns_with_parent": 970,
+    "roots_with_children": 49,
+    "isolated_towns": 15,
+    "without_actor": 12,
+    "maximum_depth": 5,
+    "maximum_children": 53
+  },
+  "cohort_capable_towns": 1022,
+  "capable_towns_holding_floor_before_passing": 785,
+  "towns_left_exactly_at_floor": 0,
+  "towns_passing_people": 785,
+  "town_people": 392892.2533528862,
+  "base_town_people": 416832.36818066036,
+  "flat_share_town_people": 392892.2533528862,
+  "civilian_people": 309892.2533528862,
+  "staff_people": 83000.0,
+  "active_sources": 830,
+  "base_active_sources": 861,
+  "flat_share_active_sources": 550,
+  "cohorts_lost_against_base": 32,
+  "cohorts_gained_against_base": 1,
+  "cohorts_kept_that_flat_share_lost": 282,
+  "viable_communities": 982,
+  "base_viable_communities": 985,
+  "positive_sites": 1007,
+  "people_passed_up": 118683.37775132974,
+  "flat_share_people_passed_up": 196152.13052755906,
+  "grain_lost_on_forwarding_legs_kcal": 74752636046.8281,
+  "grain_sent_on_forwarding_legs_kcal": 255761966208.1723,
+  "local_collection_loss_kcal": 46624525268.26269,
+  "rural_people": 52726986.61909584,
+  "population_residual": -1.1641532182693481e-10,
+  "grain_residual_kcal": -0.0014974000505389995,
+  "destination_food_unmet_kcal": 2.2966498993337154,
+  "local_rural_unmet_kcal": 2573077327.1697254,
+  "outside_rural_unmet_kcal": 50058783315.819595,
+  "local_rural_deficit_origins": 185,
+  "local_production_retained": 0.697205005311756,
+  "source_gate": {
+    "status": "passed",
+    "positive_sites": 1005,
+    "source_origins": 18700,
+    "joint_residual_kcal": -0.00023761484771966934,
+    "scope": "Additional pooled-store feasibility gate on positive catchments; detailed two-store ledger separately retained."
+  },
+  "shape_metrics": {
+    "all_places": {
+      "places": 1007,
+      "gini": 0.5027959357141185,
+      "share_largest_1_percent": 0.2305391678893697,
+      "share_largest_10_percent": 0.453728199356839,
+      "log10_sd": 0.3381053846432341,
+      "largest_over_median": 64.55130385493698,
+      "rank_size_slope_top100": -0.9038614554436128,
+      "rank_size_places": 100
+    },
+    "largest_50_percent": {
+      "places": 504,
+      "gini": 0.4712694518481071,
+      "share_largest_1_percent": 0.20179561011740554,
+      "share_largest_10_percent": 0.47462847004812797,
+      "log10_sd": 0.2731954776339478,
+      "largest_over_median": 46.172959677649686,
+      "rank_size_slope_top100": -0.9038614554436128,
+      "rank_size_places": 100
+    },
+    "largest_25_percent": {
+      "places": 252,
+      "gini": 0.5151143332099997,
+      "share_largest_1_percent": 0.16268647409164536,
+      "share_largest_10_percent": 0.5205313457040385,
+      "log10_sd": 0.3119466985626603,
+      "largest_over_median": 33.97410669670634,
+      "rank_size_slope_top100": -0.9038614554436128,
+      "rank_size_places": 100
+    }
+  },
+  "flat_share_shape_metrics": {
+    "all_places": {
+      "places": 1007,
+      "gini": 0.6580450167170195,
+      "share_largest_1_percent": 0.31531313141481565,
+      "share_largest_10_percent": 0.6002152223112305,
+      "log10_sd": 0.440220608088803,
+      "largest_over_median": 109.19137032072118,
+      "rank_size_slope_top100": -1.027298464828646,
+      "rank_size_places": 100
+    },
+    "largest_50_percent": {
+      "places": 504,
+      "gini": 0.6033966834358135,
+      "share_largest_1_percent": 0.24492949003026396,
+      "share_largest_10_percent": 0.5934477159019672,
+      "log10_sd": 0.34842718984294346,
+      "largest_over_median": 70.87221168369229,
+      "rank_size_slope_top100": -1.027298464828646,
+      "rank_size_places": 100
+    },
+    "largest_25_percent": {
+      "places": 252,
+      "gini": 0.6176665808494268,
+      "share_largest_1_percent": 0.17658782150042485,
+      "share_largest_10_percent": 0.5915291289255277,
+      "log10_sd": 0.38521515011257024,
+      "largest_over_median": 45.85098014564294,
+      "rank_size_slope_top100": -1.027298464828646,
+      "rank_size_places": 100
+    }
+  },
+  "base_shape_metrics": {
+    "all_places": {
+      "places": 1005,
+      "gini": 0.3647575609964877,
+      "share_largest_1_percent": 0.043590677900257745,
+      "share_largest_10_percent": 0.2563413106112328,
+      "log10_sd": 0.324092446685991,
+      "largest_over_median": 8.035601259818616,
+      "rank_size_slope_top100": -0.21481554549182658,
+      "rank_size_places": 100
+    },
+    "largest_50_percent": {
+      "places": 503,
+      "gini": 0.2145822477453363,
+      "share_largest_1_percent": 0.03746007685168145,
+      "share_largest_10_percent": 0.19628986249951444,
+      "log10_sd": 0.15668648798265258,
+      "largest_over_median": 5.472004589242156,
+      "rank_size_slope_top100": -0.21481554549182658,
+      "rank_size_places": 100
+    },
+    "largest_25_percent": {
+      "places": 252,
+      "gini": 0.16556538636566076,
+      "share_largest_1_percent": 0.03590415604985926,
+      "share_largest_10_percent": 0.17369620373482278,
+      "log10_sd": 0.12318056894568874,
+      "largest_over_median": 3.852782167058291,
+      "rank_size_slope_top100": -0.21481554549182658,
+      "rank_size_places": 100
+    }
+  },
+  "shape_verdict": {
+    "all_places": {
+      "gini": {
+        "value": 0.5027959357141185,
+        "reference_band": [
+          0.4774582163639407,
+          0.8758564237206814
+        ],
+        "state": "within_reference_band"
+      },
+      "log10_sd": {
+        "value": 0.3381053846432341,
+        "reference_band": [
+          0.40916451465243414,
+          0.7598073794990935
+        ],
+        "state": "more_equal_than_every_reference"
+      }
+    },
+    "largest_50_percent": {
+      "gini": {
+        "value": 0.4712694518481071,
+        "reference_band": [
+          0.33171044578721887,
+          0.814916919576405
+        ],
+        "state": "within_reference_band"
+      },
+      "log10_sd": {
+        "value": 0.2731954776339478,
+        "reference_band": [
+          0.2397957030783422,
+          0.4763875217234796
+        ],
+        "state": "within_reference_band"
+      }
+    },
+    "largest_25_percent": {
+      "gini": {
+        "value": 0.5151143332099997,
+        "reference_band": [
+          0.25581407469952366,
+          0.7909100321794693
+        ],
+        "state": "within_reference_band"
+      },
+      "log10_sd": {
+        "value": 0.3119466985626603,
+        "reference_band": [
+          0.1879664478630818,
+          0.49171789355031936
+        ],
+        "state": "within_reference_band"
+      }
+    }
+  },
+  "shape_checks_within_band": 5,
+  "shape_supported": false,
+  "largest_towns": [
+    {
+      "site": 826,
+      "residents": 15761.691954916494,
+      "own_catchment": 2905.658054134121,
+      "forwarded_in": 12856.033900782373,
+      "children": 39,
+      "depth": 0
+    },
+    {
+      "site": 411,
+      "residents": 12361.234378586523,
+      "own_catchment": 1236.650917484341,
+      "forwarded_in": 11124.583461102182,
+      "children": 53,
+      "depth": 0
+    },
+    {
+      "site": 245,
+      "residents": 10960.541261921675,
+      "own_catchment": 1626.3118605275838,
+      "forwarded_in": 9334.229401394092,
+      "children": 48,
+      "depth": 0
+    },
+    {
+      "site": 228,
+      "residents": 8584.67456679812,
+      "own_catchment": 1066.2594986369857,
+      "forwarded_in": 7518.415068161134,
+      "children": 35,
+      "depth": 0
+    },
+    {
+      "site": 96,
+      "residents": 8410.82136688875,
+      "own_catchment": 1466.4625359869128,
+      "forwarded_in": 6944.358830901836,
+      "children": 34,
+      "depth": 0
+    },
+    {
+      "site": 657,
+      "residents": 7087.670518034232,
+      "own_catchment": 1087.2421494423795,
+      "forwarded_in": 6000.428368591853,
+      "children": 38,
+      "depth": 0
+    },
+    {
+      "site": 993,
+      "residents": 6792.841642703364,
+      "own_catchment": 1124.6766694052844,
+      "forwarded_in": 5668.16497329808,
+      "children": 23,
+      "depth": 0
+    },
+    {
+      "site": 307,
+      "residents": 6283.776093648128,
+      "own_catchment": 1131.8295963375704,
+      "forwarded_in": 5151.946497310558,
+      "children": 21,
+      "depth": 0
+    },
+    {
+      "site": 956,
+      "residents": 5198.937474693898,
+      "own_catchment": 924.3809939758761,
+      "forwarded_in": 4274.556480718023,
+      "children": 20,
+      "depth": 0
+    },
+    {
+      "site": 749,
+      "residents": 4759.682461412784,
+      "own_catchment": 1035.7693414602493,
+      "forwarded_in": 3723.9131199525345,
+      "children": 38,
+      "depth": 0
+    }
+  ],
+  "search": "Largest certified scanned/bracketed point; feasible islands can be missed, no global optimum claim.",
+  "partial_cereal_only": true,
+  "empirical_resident_size_fit": false,
+  "production_atlas_changed": false,
+  "limits": "Declared floor, share, range and rule on same-actor year-round links. Relative shape only; no absolute size, date, location or sovereignty claim."
+}
