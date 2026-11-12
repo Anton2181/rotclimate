@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation jointly checks residents/work/food/dispatch/collection;threshold-checked16case versions repair missedstaffbranches|Actual geographic patrol/service work and dispatch-family limits remain unqualified. Empirical requests and adopted placement/role choices must consume this ledger;preserve anchors/outside ruralpeople|
-|Release 4: normal numeric publication|16joint dispatch optional maps added to existingselectors;originaldefaults/oldmaps preserved;calibrateddefault pending|Complete publication/browser/Windows checks and retain experimental status. Only adopt empirically qualified changes;post maps and continue after push|
+|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 conditional walking point-task scenarios now spend the SAME patrol reservations|Individual rosters/daily provisioning,actual demand/provider roles,other geographic services and dispatch/assignment/grid limits remain open. Preserve anchors/outside ruralpeople;point visits do not qualify territory|
+|Release 4: normal numeric publication|16 threshold-checked dispatch versions plus8 point-visit maps in existingselectors;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Threshold-seeded64grid fixes knownstaffactivationmisses;all16physical/replaycases pass,integercollection precedesshared secondarywork|Connect actualnetwork destinations/tripcosts to SAMEreservedpatrolhours;keep unreachable/capacity deficits. Dispatch-family restrictions,complete diets/household/draftwork anddatedproviderroles remainopen|
+|S4: complete resources and work|Eight walking point-task scenarios independently check directed paths,integer visits and SAMEreservedpatrolhours aftercollection/services;fresh paths/results/fields exact|Quantify assign-once misses using spare-provider hours under prior declaration;then target-grid sensitivity. Individual rosters/daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -81,11 +81,22 @@ Immediate sequence:
    people. 600hcounts/sizesstable;allclosedcaseszero. Newdistinctoptionalversions
    and32mapoptions checked,oldmaps/defaults retained;60focusedtests pass. Numerical
    correction isNOT newphysical/empiricalskill or globaloptimality.
-10. **Next actualnetwork duty dependency:** freeze target-point/route-cost and
-   crew/visit rules before outputs;charge endpoint visits to SAMEalreadyreserved
-   patrolhours,without borrowing collection/service/rural/civilian work. Qualify
-   actualtask destinations before fundedcoverage claims. Dispatchfamilylimits,
-   datedsizes/roles/transfer,complete diets/household/draftwork/mobile scope persist.
+10. **Completed conditional network point tasks:** declaration9c3e7420 precedes
+   outputs. Fixed27,843targets,raw/correctedIDs exact;walking-only directed paths
+   stay within old full-network footprints. Eight600/300farm-hour,crew1/4cases
+   spend ONLYsame reserved patrol slice,retaining collection/services. Corrected
+   600h completes179,097/260,496crew1 tasks and163,423crew4. Independent geometry,
+   everyrecorded path edge,scalar assignment,integer completion,allactor partitions
+   andfull monthly ledgers pass;allzero-budget controls zero;freshsixfiles exact.
+   Eight optional POINTmaps,providerhour/pointdeficit downloads,normal3figure
+   evidencepanel. Allfive packetfamilies andoptional failures checked. See
+   NETWORK_DUTY_VISITS_20261112.md. No heldblock/dailyroster/observeddemand/authority.
+11. **Next declared assignment diagnostic:** keep originalcompleted visits and
+   providers immutable;offer originalcapacity-unmet tasks once tospare sameactor
+   providers using ONLYremaining patrolslice. Count feasible additional visits,
+   not a globaloptimum. Declaration network_visit_spare_assignment_20261112 before
+   outputs. Target-grid sensitivity follows;datedsizes/roles/transfer,complete
+   diets/household/draftwork/mobile scope persist across the full programme.
 
 ### Whole-plan review log
 
@@ -102,6 +113,7 @@ Immediate sequence:
 |Jointdispatch/resident/work maps,12November,declarationde42d1c3|16jointcases independently reviewed,16freshresult/fieldpairs exact;32newmapoptions/exactworkCSV/familyswitch/mobile/failure checks pass. Allrelease1–4/S1–S5/allactor/unaffiliated/mobile dependencies reviewed;no calibrateddefault or geographicpatrolwork claim|Double resident scan andprobe explicitstaffthreshold before family/physical impossibility claims;continue actualduty-destination andempirical/resource dependencies afterpush|
 |Declared finergrid andstaffthreshold audit,12November|396overlaparrays exact;300h32grid missed15raw/12corrected sources thatfinergrid+150probe certify.Independent16completephysicalrecords andfreshbytes pass;fullrelease/S1–S5/allactor/mobile scope reviewed. No originalsource loss promoted asphysicaltruth|Implementdeclaredthresholdseeding onall16cases andpublish correctedversionedmaps;retain actualnetworkduty andempirical/resource dependencies|
 |Threshold-seeded correctedmaps,12November,declaration354f9a52|16physical/thresholdreviews andfreshbytepairs pass;all8open sourceflags/masks equaloldfoodsets,source-countloss repaired.32newmapoptions/workCSV/fourfamilies/mobile/failures and60focusedtests pass. Fullrelease/S1–S5/allactor/mobileprogramme reviewed;no empirical/default/patrolqualification|Freeze andconnect actualnetworktask destinations toexistingreservedpatrolhours;retain complete resource/provider/occupation/transfer evidence gaps|
+|Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
 
 ## Working rules
 

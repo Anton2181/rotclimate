@@ -1,3 +1,47 @@
+# Conditional walking point-visit maps ready; continue spare-provider audit — 12 November 2026
+
+* Continued after9c3e7420 per owner DONOTPAUSEAFTERPUSH. Canonical branch
+  claude/friendly-turing-43ygeu. The9c3e7420 duty protocol preceded all outputs.
+* Eight raw/corrected ×600/300farmhours ×crew1/4 cases use SAME threshold-checked
+  open120k-load parents. Fixed27,843landtargetIDs match across climates;~11.04km
+  grid. Conditional one task per retained actor/point/bin,not observed demand.
+  Walking-only graphs preserve original roads/tracks/seasonal costs,exclude all
+  ferries/sea/river auxiliaries. Every eligible land cell within old full-network
+  footprint;recorded two directed legs +on-site work pass ration limits.
+* ONLY parent work_secondary_hours[0] funds whole visits. Collection/services
+  unchanged;no borrowing unusedgross orotherchannels. Sameactor cheapest initially
+  affordable provider assigned once;each provider rations cost/target sorted tasks.
+  Independent reviewer imports neither new selector nor allocator:targetgeometry,
+  every recorded directed path edge,endpoints,costs,scalar assignment,integer
+  tasks,actor/target/bin partitions,zero-budgetcontrols andfullmonthlyledgers pass.
+  Freshraw/correctedpathJSON/NPZ plusresults/fields BYTEEXACT.11focusedtests pass.
+* Corrected600h completes179097/260496crew1 visits(68.8%),163423crew4(62.7%).
+  Corrected300h157726/144383. Raw600h171885/155572;raw300h150501/136787,denominator
+  258696. Most unmet tasks lack an eligible walking route under these assumptions;
+  crew4 exposes more provider competition. Spare hours coexist with unmet tasks.
+* Eight optional POINTmaps in existing Supply-supportedreach selector;no filled
+  territorialblocks. Three map/chartfigures POSTED. PerproviderCSV hasmonthly
+  completed visits andreserved/used/unused patrolhours;pointCSV retainsallrequested
+  actor/points,fourbinmasks andchosenproviderindexes;fullfields downloadable.
+  Eight maps/exactCSV+point downloads/five packetfamilies/reload/344/390/themes/
+  optionalmanifest,parent,gridfailures pass;older32seededoptions pass;normal
+  evidence8rows/3figures/8byteexactlinks/keyboard/mobile/themes/inventoryfailure
+  andgeneralfilter/downloadfailure checks pass. Windows1853assetsBYTEEXACT,r44
+  launcherverified;activehub816localdependenciesresolve. Oldmaps/defaultspreserved.
+* Full release1–4/S1–S5programme reviewed in roadmap. Release2 empiricalsize/
+  occupation/transfer open;3 partialcereal/monthlyconditionaltaskimplementation;
+  4 no calibrateddefault. Individual dailyrosters/provisioning,datedproviderroles,
+  completediets/household/draftwork,allactors/unaffiliated/mobile/nonstate persist.
+  Full historicalpublisher stillblocked by omittedprivateVidarbhaEarthcache;
+  direct reviewedpublisher preservesalloldpanels,nofullrebuildclaim.
+* NEXT IMMEDIATELY aftercheckpoint: committed declaration
+  calibration/network_visit_spare_assignment_20261112/plan.json. Keep original
+  servedtasks/providers immutable;use ONLYremaining patrolhours toaccept original
+  capacity-unmet tasks fromspare sameactor providers. Independentlycheck/replay,
+  diagnosticchart/normalpublication,wholeprogrammemonitoring;pushandCONTINUE.
+  Feasible additionalvisits are a lowerbound,notglobaloptimum. Target-grid
+  sensitivity follows. Originalpointmaps stayunchanged unlessseparatelydeclared.
+
 # Threshold-checked map versions ready; continue with actual duty destinations — 12 November 2026
 
 * Continuedafter354f9a52push,perownerDONOTPAUSEAFTERPUSH. Seededprotocol354f9a52
