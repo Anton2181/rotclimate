@@ -1,3 +1,34 @@
+# Cohort-protected forwarding published — 12 November 2026 (late)
+
+* Owner chose this test first. Declaration 8e798f32 preceded all distributions.
+  Branch claude/project-continuation-a484h1 (contains friendly-turing to
+  4b42b703; see the merge entry below).
+* Finding recorded BEFORE running: reach is binary per staffed site and staff
+  numbers may not become a travel-strength multiplier, so larger cohorts living
+  at a centre cannot change reach. The test is a retention floor of 150
+  residents at cohort-capable towns (affiliated, request >= 50), two rules:
+  'excess' = pass 50% of what is above 150; 'capped' = flat 50% but never below
+  150 (below-floor towns pass the flat share).
+* New polity/settlement_cohort_forwarding.py (older modules untouched so their
+  recorded hashes stay valid), scripts build/review/replay_settlement_cohort_
+  forwarding.py, publish_settlement_cohort_evidence.py, 17 unit tests.
+  build_hierarchy_reach.py and publish_settlement_market.py now include the 4
+  cohort cases per climate: market family = 10 cases per climate, 40 options.
+* RESULT (corrected, 6-day legs, capped): 888/889 sources (flat share 657),
+  reach 6.383 vs base 6.382, largest town 10,625, Gini 0.568, 6/6 shape checks.
+  Raw: 865 sources vs base 861, 6/6. Excess rule: 884/856 sources, Gini
+  0.47/0.48, 4-5 of 6. Twelve days capped: 867/833 sources, Gini 0.61/0.61,
+  5-6 of 6; the remaining loss is grain lost on long legs. Viable 50-civilian
+  communities still fall under capped (1024 -> 975 corrected, 6 d).
+  Draws equal the published flat-share cases; zero floor reproduces them exactly.
+* Gotcha fixed during the run: empty towns still collect grain; under flat and
+  capped rules that grain moves up at the flat share (as published), under
+  excess it stays. Documented in passed_fraction.
+* NOT calibrated, NOT adopted; original coupled parents only. Figures posted.
+* NEXT (new declaration): forwarding on the other line's dispatch-limited,
+  continuous-inventory parents. Other line's own NEXT: continuous collection
+  calendar. Release 2 sizes/occupation/transfer, diets, S5 remain open.
+
 # Second merge of the two active lines — 12 November 2026 (late)
 
 * friendly-turing-43ygeu advanced to 4b42b703 while this branch published the

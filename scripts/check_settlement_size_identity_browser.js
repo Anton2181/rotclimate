@@ -17,9 +17,9 @@ const PANELS = {
   market: { id: 'settlement-market', folder: 'settlement_market_range_20261112/evidence',
     phrases: ['Two-day links do almost nothing; 6- and 12-day market legs produce a hierarchy.', 'no fit'],
     retained: ['visit-calendar', 'visit-grid', 'settlement-size-shape', 'settlement-size-identity'] },
-  calendar: { id: 'visit-calendar', folder: 'network_visit_calendar_20261112',
-    phrases: ['of planned visits fit inside their month.', 'no map change'],
-    retained: ['visit-grid', 'spare-visits', 'network-visits', 'settlement-size-shape', 'settlement-size-identity'] } };
+  cohort: { id: 'settlement-cohort', folder: 'settlement_cohort_forwarding_20261112',
+    phrases: ['A size hierarchy does not have to cost reach.', 'no fit'],
+    retained: ['settlement-market', 'visit-calendar', 'settlement-size-shape', 'settlement-size-identity'] } };
 const PANEL = PANELS[process.argv[2] || 'identity'];
 
 (async () => {

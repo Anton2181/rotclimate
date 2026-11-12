@@ -13,13 +13,17 @@ from settlement_locations_earth import sha, write
 
 OUT = ROOT / 'output/settlement_market_range_20261112'
 TWO_DAY = ROOT / 'output/settlement_hierarchy_20261112'
+COHORT = ROOT / 'output/settlement_cohort_forwarding_20261112'
 
 
 def scenarios(mode):
-    """Publication order: the two-day test, then the longer legs."""
+    """Publication order: the two-day test, the longer legs, then the cohort-protected variants."""
     rows = [dict(id=f'market2_{s}', folder=TWO_DAY / f'{mode}_share{s}', range_days=2, share=s / 100) for s in (25, 50)]
     rows += [dict(id=f'market{d}_{s}', folder=OUT / f'{mode}_range{d}_share{s}', range_days=d, share=s / 100)
              for d in (6, 12) for s in (25, 50)]
+    if (COHORT / 'review.json').exists():
+        rows += [dict(id=f'market{d}_50_{rule}', folder=COHORT / f'{mode}_range{d}_share50_{rule}', range_days=d, share=.5, rule=rule)
+                 for d in (6, 12) for rule in ('excess', 'capped')]
     return rows
 
 
@@ -31,7 +35,9 @@ def build(mode):
         raise ValueError('Reviewed source footprints changed')
     cache = dict(np.load(footprints)); actors = x['actor']; landnodes = cache['landnodes']
     cases = scenarios(mode); fields = []; sources = {}
-    for family in (TWO_DAY, OUT):
+    for family in (TWO_DAY, OUT, COHORT):
+        if not (family / 'review.json').exists():
+            continue
         review = json.loads((family / 'review.json').read_text())
         if review['status'] != 'passed' or any(sha(ROOT / p) != d for p, d in review['results_sha256'].items()):
             raise ValueError('Current independent scenario review required')

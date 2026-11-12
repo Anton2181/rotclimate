@@ -129,6 +129,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_continuous_destination.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_market_range_20261112/atlas_publication.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_market_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_cohort_forwarding_20261112/replay.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_cohort_evidence.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_size_identity.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_shape_20261112/review.json').exists():

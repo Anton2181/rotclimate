@@ -230,6 +230,26 @@ before outputs:
     (S3). No share or range is calibrated. Known page issue, not from this
     line: the default Settlements view scrolls sideways at 344 and 390 px.
 
+19. **Completed and published cohort-protected forwarding** (declaration 8e798f32;
+    owner's chosen next test). A cohort-capable town keeps 150 residents (the
+    existing cohort plus civilian minimum) and forwards from the rest. Larger
+    cohorts living at a centre were not tested because the binary source rule
+    gives them no effect on reach. Eight cases: 6/12-day legs, 50% share, two
+    rules, both climates. Flat share capped at the floor, 6 days, corrected:
+    888 of 889 sources staffed (657 under the plain flat share), reach 6.38 of
+    6.38 bins, largest town 10,625, Gini 0.57, 6 of 6 shape checks inside the
+    band; raw 865 sources against 861 base. Share-of-excess rule: sources kept
+    but Gini 0.47–0.50 and 4–5 of 6 checks. Twelve-day legs keep 867/833
+    sources; the rest is grain lost on long legs. Draws equal the published
+    flat-share cases; a zero floor reproduces them exactly. Independent
+    recursion-based review, 16-file byte replay, 17 unit tests; the market
+    family now has 10 cases per climate (40 map options). See
+    SETTLEMENT_COHORT_FORWARDING_20261112.md. No rule is calibrated or adopted.
+20. **Next on this line (declare first, after the other line's continuous
+    collection calendar):** re-run forwarding on the dispatch-limited,
+    continuous-inventory parents so collection work and worker calendars
+    constrain forwarded grain.
+
 ### Whole-plan review log
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
@@ -259,6 +279,7 @@ before outputs:
 |Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Published as 24 optional map options with report, figures and panel; next a declared re-run on the threshold-seeded dispatch parents and a cohort-scaling test|
 |Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
 |Second branch merge, 12 November (late)|friendly-turing advanced to 4b42b703 (worker-calendar publication, joint job orders, provider-year visit maps, destination timing, meal bounds, continuous destination replans) while this line published the market-hierarchy maps. Merged again without dropping either; the other line's calendar publication replaces this line's duplicate; map scripts carry both new families. Whole release 1–4 / S1–S5 queue reviewed across both lines|Finish and publish the cohort-protected forwarding test (step 19); the other line continues with its declared continuous collection calendar|
+|Cohort-protected forwarding, 12 November (8e798f32)|Hierarchy does not have to cost reach within this ledger: with the cohort kept, sources and reach return to the no-forwarding level and the 6-day case keeps all six shape checks. 8 cases reviewed by recursion from the roots; reach for all 20 hierarchy cases rebuilt by the dense implementation; 40 atlas options checked. Release 2 still has no calibrated size model; release 3/4 and S1c–S5 unchanged and reviewed|Re-run on the other line's dispatch-limited parents under a new declaration; absolute sizes, occupancy, transfer, diets, S5 remain open|
 
 ## Working rules
 

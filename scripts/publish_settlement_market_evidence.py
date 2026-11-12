@@ -24,6 +24,7 @@ def rows(mode):
     reach = {s['id']: s for s in json.loads((OUT / f'{mode}_reach.json').read_text())['summaries']}
     base = json.loads((BASE / f'{mode}_h600_f0.075/results.json').read_text()); out = []
     for c in scenarios(mode):
+        if c.get('rule'):continue                      # cohort-protected variants have their own report
         r = json.loads((c['folder'] / 'results.json').read_text()); m = r['shape_metrics']['all_places']
         states = [r['shape_verdict'][t][n]['state'] for t in r['shape_verdict'] for n in ('gini', 'log10_sd')]
         out.append(dict(id=c['id'], climate=mode, range_days=c['range_days'], share=c['share'], residents=r['town_people'],

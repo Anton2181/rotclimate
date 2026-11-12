@@ -15,7 +15,7 @@ from PIL import Image, ImageDraw
 from matplotlib.colors import to_rgb
 
 ROOT = Path(__file__).resolve().parents[1]; sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
-from build_hierarchy_reach import BASE, DATA, OUT, TWO_DAY, scenarios
+from build_hierarchy_reach import BASE, COHORT, DATA, OUT, TWO_DAY, scenarios
 from settlement_locations_earth import sha, write
 from harvest.food_stocks import periodic_food_year
 from polity.settlement_support import permanent_food_ceiling
@@ -51,7 +51,7 @@ def main():
     review = json.loads((OUT / 'reach_review.json').read_text())
     if review['status'] != 'passed' or any(sha(OUT / f'{m}_reach.json') != d for m, d in review['results_sha256'].items()):
         raise ValueError('Current hierarchy reach review required')
-    for family in (TWO_DAY, OUT):
+    for family in (TWO_DAY, OUT, COHORT):
         checked = json.loads((family / 'review.json').read_text()); replay = json.loads((family / 'replay.json').read_text())
         if checked['status'] != 'passed' or replay['status'] != 'passed':raise ValueError('Scenario review and replay required')
         for path, digest in checked['results_sha256'].items():
@@ -85,7 +85,9 @@ def main():
             food = periodic_food_year(arrivals, need, total * 2500 * 90, loss_fraction_year=.05, step_days=365 / 12, record=True)
             np.testing.assert_allclose(food.consumed, f['town_consumed'], rtol=1e-11, atol=1e-4)
             share = round(100 * c['share'])
-            label = f"Market hierarchy · {c['range_days']}-day legs / {share}% passed up · research"
+            rule = c.get('rule')
+            label = f"Market hierarchy · {c['range_days']}-day legs / {share}% passed up" + (
+                ' above the cohort' if rule == 'excess' else ', cohort kept' if rule == 'capped' else '') + ' · research'
             viable = f['civilian'] >= 50
             case = dict(id=c['id'], label=label, feedback_coupled=True, food_constrained=True, labour_constrained=True,
                 hours_worker_year=600, harvest_days=30, transfer_fraction=.075,
@@ -100,7 +102,7 @@ def main():
                 market_hierarchy=dict(range_days=c['range_days'], forward_share=c['share'], distance_scaled=result['legs']['distance_scaled'],
                     towns_with_parent=result['forest']['towns_with_parent'], parent_site=f['parent'].tolist(),
                     own_catchment_people=f['own_catchment_residents'].tolist(), forwarded_in_people=f['forwarded_in_residents'].tolist(),
-                    passed_up_people=f['passed_people'].tolist(), leg_days=f['leg_days'].tolist(),
+                    passed_up_people=f['passed_people'].tolist(), leg_days=f['leg_days'].tolist(), cohort_rule=rule,
                     gini=result['shape_metrics']['all_places']['gini'], shape_within_reference_band=result['shape_supported']),
                 empirical_resident_size_fit=False, whole_world_food_supported=False)
             model['cases'].append(case)
@@ -111,8 +113,10 @@ def main():
             town_file = target / (c['id'] + '_towns.webp')
             town_image(meta, land, assignment, model['sites'], model['actors'], total, viable, f['active'], ratio, f['parent']).save(town_file, lossless=True)
             largest = result['largest_towns'][0]
+            protect = (' A town that can hold a cohort passes only from what it holds above 150 residents.' if rule == 'excess' else
+                       ' A town that can hold a cohort never passes so much that it falls below 150 residents.' if rule == 'capped' else '')
             note = (f"Research scenario: every town passes {share}% of the residents and collected grain it holds to the largest same-actor town it can reach "
-                f"within {c['range_days']} days each way all year. {result['forest']['towns_with_parent']:,} of {result['forest']['towns']:,} towns have such a market; "
+                f"within {c['range_days']} days each way all year.{protect} {result['forest']['towns_with_parent']:,} of {result['forest']['towns']:,} towns have such a market; "
                 f"the largest town holds {largest['residents']:,.0f} residents. People are counted once and every forwarding leg loses grain. "
                 'Built on the original coupled cell scenario (600 h, 7.5%), not the later dispatch versions. Share and range are scenarios, not calibrated values; '
                 'sizes are relative and imply no historical city size, date or sovereignty. Other foods, household and draft work and mobile occupancy remain unresolved.')
@@ -155,8 +159,8 @@ def main():
     for name in ('settled-reach.js', 'evidence.js'):shutil.copyfile(ROOT / 'atlas' / name, DATA.parent / name)
     write(OUT / 'atlas_publication.json', dict(status='published_optional_market_hierarchy_scenarios', manifest_sha256=sha(DATA / 'settlement_market.json'),
         publisher_sha256=sha(Path(__file__)), existing_data_files_unchanged=len(preserved), modes=['reach_towns', 'reach_defacto'],
-        defaults_unchanged=True, cases_per_climate=6))
-    print('Published twelve market-hierarchy scenarios as a separate optional family; existing packets and defaults preserved.')
+        defaults_unchanged=True, cases_per_climate=len(scenarios('raw'))))
+    print('Published', 2 * len(scenarios('raw')), 'market-hierarchy scenarios as a separate optional family; existing packets and defaults preserved.')
 
 
 if __name__ == '__main__':main()
