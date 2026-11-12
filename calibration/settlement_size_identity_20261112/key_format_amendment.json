@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-12",
+  "status": "key_format_clarification_before_any_joined_row_is_read",
+  "parent_declaration_commit": "94e7266c",
+  "finding": "First producer run joined 0 of 50 keys. The recovery consistency gate passed (1388/885/503/1354/862/492). A type-only check then showed every Cities and Areas Primary Key is a string of the form 'Hanson2016_<integer>' (first 'Hanson2016_1', last Cities value 'Hanson2016_1388'; 1388 and 885 unique values), while Table 2 prints bare integers.",
+  "clarified_rule": "Table 2 city_key k joins exactly the catalogue Primary Key 'Hanson2016_k'. Before joining, every Cities and Areas key must match ^Hanson2016_[1-9][0-9]*$ and the integer suffixes must be unique within each sheet; otherwise stop. No other key transformation, and still no name, coordinate or fuzzy joins.",
+  "check_on_the_clarification": "The declared name and province agreement classes test whether the numeric suffix is the authors' key. Disagreements are reported, not repaired; a key whose catalogue name differs remains joined by key and is flagged.",
+  "seen_before_this_amendment": "No catalogue name, province, area, date or coordinate for any housing key. The zero-join run did print the sampling associations for all 50 rows, which use only the already-exposed Table 2 values and do not depend on the join: density vs sampled fraction rho -0.239 (permutation p 0.096), vs stated site area rho +0.359 (p 0.012), vs investigated area rho -0.206 (p 0.153). These are unchanged by this amendment and no declared class, subset or interpretation is altered.",
+  "unchanged": "All other join rules, gates, sampling diagnostics, review requirements and prohibitions of plan.json."
+}
