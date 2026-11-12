@@ -16,7 +16,7 @@ The launcher identifies the **actually served atlas snapshot** from
 not relabel older maps. Normal atlas publication includes matching Earth
 corrections and every climate, farming, population, foraging, trade and language
 export before browser/portable checks and the push to the maintained branch,
-`claude/friendly-turing-43ygeu` (the repository's default branch). The two former publication branches were
+`claude/project-continuation-a484h1` (the repository's default branch). The two former publication branches were
 consolidated on 11 November 2026; historical experiment records retain their
 original branch names for provenance.
 
@@ -286,8 +286,8 @@ a Git checkout:
 ```sh
 git config --replace-all remote.origin.fetch "+refs/heads/*:refs/remotes/origin/*"
 git fetch origin
-git switch claude/friendly-turing-43ygeu
-git pull --ff-only origin claude/friendly-turing-43ygeu
+git switch claude/project-continuation-a484h1
+git pull --ff-only origin claude/project-continuation-a484h1
 ```
 
 The fetch setting also repairs single-branch checkouts that still name the

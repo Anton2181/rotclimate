@@ -281,7 +281,7 @@ def main():
         release = dict(
             earth_physics=earth_profile,
             active_atlases=list(ACTIVE), retired_atlases=list(RETIRED),
-            published_branch='claude/friendly-turing-43ygeu',
+            published_branch='claude/project-continuation-a484h1',
             hub_sha256=hashlib.sha256(out.read_text(encoding='utf-8').encode('utf-8')).hexdigest(),
             metadata_sha256={name: hashlib.sha256((ROOT / 'atlases' / name / 'data/atlas.json').read_bytes()).hexdigest()
                              for name in ALL_FITS})

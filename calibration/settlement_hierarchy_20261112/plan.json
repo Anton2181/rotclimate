@@ -1,0 +1,40 @@
+{
+  "date": "2026-11-12",
+  "status": "mechanism_test_declared_before_any_hierarchy_link_or_size_is_computed",
+  "parent": "Live roadmap step 6(a); size-shape diagnostic 09a2101b (allocator more equal than every reference; flatness is in the catchment budgets and requests)",
+  "purpose": "Test one size-hierarchy mechanism inside the existing finite people, work and cereal ledger: lower-order towns pass a fixed share of their residents and of their collected grain up to a larger market centre they can reach all year. Publish every declared scenario as an optional research map. No fit and no default change.",
+  "owner_direction": "Owner asked on 12 November to continue on claude/project-continuation-a484h1 and to see actual atlas map updates soon. This test therefore ends in optional maps in the normal Earth atlas, whatever the metrics show.",
+  "known_before_declaration": [
+    "Base coupled scenarios: town size is bounded by 7.5% of the people in a one-day foot catchment; the summed budget (425,643 corrected) almost equals the supported residents (419,264), so catchment population sets sizes and requests rarely bind.",
+    "Shape reference band and the base scenarios' metrics from output/settlement_size_shape_20261112.",
+    "Cached, reviewed source footprints exist per affiliated site and month (two-day leg each way, four-day ration; 12,492 corrected and 12,264 raw site-months) and reproduce the published reach reference exactly. Their contents have not been inspected for town-to-town links. Nothing is known yet about how many towns are linked, chain depths or resulting sizes."
+  ],
+  "mechanism": {
+    "links": "Town B is linked to town A when B's node lies inside A's cached two-way footprint in all 12 monthly bins. A link also requires the same actor index. Sites without an actor have no cached footprint and stay unlinked: missing evidence, not a claim that they have no markets.",
+    "parent": "Each town's parent is the linked town with the largest catchment resident budget, provided that budget is strictly larger than its own; ties go to the lower site index. Towns with no larger linked town are roots. Budgets strictly increase along a chain, so the links form a forest.",
+    "people": "Each catchment's draw D (people leaving its origin cells) is found by the existing coupled solver with its existing upper bound min(budget, request plus cohort). A share s of what a town holds is passed to its parent, and the parent passes the same share of everything it holds to its own parent. The root keeps the remainder. Residents are counted once; rural remainders and origin work are computed from D exactly as before.",
+    "food": "Grain collected at a town is passed up in the same proportion as the people. Every forwarding leg applies the existing delivery retention 0.95 and the existing one-bin delay. No new freight parameter, no water or long-distance import, no distance scaling of the loss.",
+    "feasibility": "A catchment's draw is feasible only if its least-supplied stream, the one that travels the full chain to the root, still meets every monthly need with the existing 90-day destination store. All rural source-food gates are unchanged. After the solve, pooled food at every town is audited with the monthly inventory recurrence and must show no unmet need.",
+    "cohorts": "The 100-person institutional cohort and the 50-person civilian minimum are applied to the residents actually present at each town after forwarding. A town that falls below the threshold loses its cohort; none is added beyond one per town."
+  },
+  "scenarios": {
+    "climate_modes": ["raw", "corrected"],
+    "hours_worker_year": 600,
+    "transfer_fraction": 0.075,
+    "forward_share": [0.25, 0.5],
+    "regression": "forward_share 0 must reproduce the published base scenario's town totals, staff and arrivals exactly; otherwise stop."
+  },
+  "reported": [
+    "Forest: linked towns, roots, isolated towns, maximum depth, children per parent.",
+    "The six declared shape metrics at the three tail levels, with the unchanged reference band and support rule of calibration/settlement_size_shape_20261112. Verdict per scenario.",
+    "Costs: change in total town residents, grain lost on forwarding legs, towns losing or gaining the cohort, towns falling below the civilian minimum, rural deficits, and the change in area-weighted seasonal reach from the same cohorts.",
+    "Largest towns with their own-catchment and forwarded residents."
+  ],
+  "interpretation_fixed_in_advance": "Reaching the reference band would show that this mechanism can produce a Roman-like relative hierarchy under these assumptions; it would not validate the share, the link rule, absolute sizes or locations. Staying below the band means local forwarding alone is insufficient and the next candidates (supply from beyond the reach range, administrative concentration) are tested next. Either way both shares are published side by side; neither is selected as calibrated.",
+  "atlas": "All four scenarios are appended to the optional coupled-scenario supplement, selectable under Experimental and diagnostics, Settlements and Supply-supported reach. Original packets, the four published coupled scenarios and all defaults stay unchanged. Before and after maps are shown to the owner.",
+  "review": "Independent reviewer rebuilds links and the forest from the cached footprints with its own code, walks every chain explicitly to redistribute people and grain, recomputes pooled food with a separate monthly recurrence, checks whole-world population and grain closure, the cohort rule, the regression case and all metrics. Fresh producer replay must be byte exact.",
+  "prohibited": [
+    "No tuning of the share, link rule, leg retention, transfer fraction, cohort or minimum after seeing results; no additional scenarios beyond the two shares.",
+    "No absolute-size, urban-share, historical or sovereignty claim; no default change; no blind claim. Fantasy towns are generated hypotheses."
+  ]
+}

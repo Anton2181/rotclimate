@@ -84,8 +84,8 @@ Immediate sequence:
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
   decision, atlas consequences, and the next unfinished task. Commit and push
-  milestones to the single maintained/default branch, `claude/friendly-turing-43ygeu`
-  (owner consolidation request,11 November2026). A failed experiment does not complete
+  milestones to the single maintained branch, `claude/project-continuation-a484h1`
+  (owner decision,12 November2026; `claude/friendly-turing-43ygeu` stops at 061e6ef8). A failed experiment does not complete
   its parent stage or cancel later stages.
 * Follow the dependency chain: environment → occupancy and land use → settlements
   → shared people/food allocation → institutions and transport → differentiated
