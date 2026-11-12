@@ -111,6 +111,7 @@
   function of(L, topic, world, option) {
     if (option != null && ["reach_defacto", "reach_towns"].includes(L.id)) {
       const v = typeof option === "string" ? option : option.value;
+      if (v.startsWith("feedback")) return ["experimental", "Cell residents, remaining farm workers, rural meals and grain shipments share audited budgets. Numerical/source-food checks pass; resident sizes, diets, work availability and institutional roles are not calibrated on Earth. Rural deficits elsewhere remain unqualified."];
       if (L.id === "reach_towns" && v === "joint365") return ["partial", "Default. Settlements the joint food budget can staff. Blind-tested: it feeds 98-99 % of the documented Chinese county seats of AD 280 and AD 1580 (and 94-95 % of Rome's towns and Han's seats in development), while bare fallow feeds 86-89 %."];
       if (OPTIONS[v]) return OPTIONS[v];
       if (LEGACY[L.id]?.[v]) return LEGACY[L.id][v];

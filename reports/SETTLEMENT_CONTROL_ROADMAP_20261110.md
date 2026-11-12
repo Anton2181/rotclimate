@@ -87,6 +87,13 @@ update. None of these milestones is complete merely because code tests pass.
    manufactured source-food audits pass, with no default adoption. Actual rural
    food, labour, collection and relocation feedback remain unrecomputed; connect
    those cell budgets and pass the source-food gate before fantasy rebuilding.
+   Actual cell feedback now recomputes remaining workers, rural meals, production,
+   export inventories and destination residents in eight scenarios. The SAME
+   audited cohorts feed new optional settlement/reach maps, with original
+   transport reference reproduced exactly (SETTLEMENT_FEEDBACK_20261112.md).
+   This advances shared-ledger implementation but does not empirically qualify
+   resident sizes, complete rural diets, mobile occupancy or a new default.
+   Next: declared finer-scan robustness, then compatible empirical calibration.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

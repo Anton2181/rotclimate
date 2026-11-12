@@ -1,3 +1,53 @@
+# Actual cell population/work/food feedback now feeds optional settlement and reach maps — 12 November 2026
+
+* Owner explicitly requests continuous development after pushes. Protocol a59cf567
+  was committed/pushed before actual cell-feedback outputs; continued directly.
+  Only canonical branch claude/friendly-turing-43ygeu is maintained.
+* Current r44 raw/corrected inputs reconstructed from PUBLISHED packets, not old
+  Nov5 production caches. Administrative density exact; existing local foot owners
+  EXACT, all12 parent-forest outward/return months rebuilt. Local origins19371/
+  19295; populations5.691M/5.675M from full reference53.120M/53.429M. Outside
+  people stay rural. Harvest any-land and transport majority-land masks both
+  checked exactly,3142partial coastal cells retained under their own rules.
+* NEW polity/settlement_feedback.py changes remaining workers ANDrural meals on
+  every relocation trial.40%workers;600/300annual listed hours;30-day reap within
+  same annual budget. Actual net crop energy, rural/export stores, path access,
+  source departures/delivery loss/delay and destination stores feed SAMEplan.
+  Deficit origins export zero; anypositive town requires whole origin catchment
+  rural support. Earlier audit_origin_food additionally passes positive groups.
+*8declared cases: raw/corrected x600h shares5/7.5/10% +300h7.5%. Corrected7.5%600h:
+  419264townresidents/889conditional sources; frozen-rural reference421484/894.
+  300h313740/755. Local source deficits163corrected/185raw at600h remain visible,
+  outside deficits also retained. NO global/all-diet or real-famine qualification.
+* Nonmonotone feedback:33fraction points +24bracket refinements per independent
+  site. Final points independently certified; NOT global optimality. All8JSON+
+  cellNPZ byte-exact fresh replay. Direct independent work/monthly inventory
+  review passes, including per-origin shipments and whole-world population.
+  Original annual-throughput convergence tolerance preserved; source float32
+  area arithmetic independently reproduced.107model checks +5launcher/package pass.
+* Same audited cohorts now select seasonal two-way reach. Reconstructed town/
+  tracks plusALLsources reproduce published actor/cell/season reference EXACTLY
+  in both climates. Independent footprint assembly passes all18actors. Corrected
+  600h7.5% access6.382bins vs6.413frozen-rural;300h5.551. Footprints cached with
+  hashes. No population-to-power multiplier, new affiliation or changed defaults.
+* Separate optional data/settlement_feedback.json+feedback/ packets; ORIGINAL
+  atlas.json,settled_reach.json and original model/grid GZ bytes preserved. Active
+  Earth UI Experimentals exposes4new scenarios perclimate in SAMESettlements and
+  Supply-supported reach modes. New packet cache permits safe family switching.
+  Readouts include origin budget/source-food gate; same ledger/CSV/cell audits.
+  Evidence badge explicitly Experimental,not inherited old partly-tested claim.
+* Both new figures reports/figures/settlement_feedback_{maps,scenarios}_20261112.png
+  posted in chat. Browser all16mapoptions, exactCSV/cell downloads, reload/mobile/
+  dark/failure isolation passes; original22cases/792CSV rows and v2/v2.1 defaults
+  regressions pass. Normal evidence page new8row panel/directmaplinks and methods.
+* NEXT after this milestone push: already-declared scan_check.json freezes4central
+  7.5% cases,64intervals vs32, same24refinements. Require all33overlap points EXACT,
+  report any hidden feasible branch/changes; do not silently alter original8maps.
+  Then empirical resident-size/occupation and complete resource calibration remain
+  open. Release2not complete; release3shared ledger advanced as partial cereal
+  scenarios; release4new calibrated default pending. FullS1-S5/allactors/mobile/
+  nonstate scope persists. Keep developing after pushes; no metadata-only detour.
+
 # Finite resident consumer and source-food gate — 12 November 2026
 
 * Continued AFTER pushing placement milestone702a6dfe, per owner instruction.

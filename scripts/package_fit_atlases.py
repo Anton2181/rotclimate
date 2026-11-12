@@ -361,6 +361,9 @@ def main():
                   ROOT/'calibration/settlement_joint_locations_20261111/plan.json']
     if (ROOT/'output/settlement_residents_20261112/review.json').exists():
         files += [ROOT/'reports/SETTLEMENT_RESIDENTS_20261112.md']
+    if (ROOT/'output/settlement_feedback_20261112/atlas_publication.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_FEEDBACK_20261112.md', ROOT/'calibration/settlement_feedback_20261112/plan.json',
+                  ROOT/'reports/figures/settlement_feedback_maps_20261112.png', ROOT/'reports/figures/settlement_feedback_scenarios_20261112.png']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

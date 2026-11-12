@@ -8,41 +8,58 @@ window.SettledReachAtlas=(()=>{
     if(!document.querySelector('script[data-settled-reach-enabled]'))return null;
     const manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settled_reach.json')))),p=manifest.packets[mode];
     if(!p||p.expected_harvest_fingerprint!==meta.harvest?.fingerprint)throw Error('Settlement support climate mismatch');
+    let feedback=null;
+    if(document.querySelector('script[data-settlement-feedback-enabled]')){
+      try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settlement_feedback.json'))));
+        const candidate=supplement.packets[mode];
+        if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Feedback parent/climate mismatch');
+        feedback=candidate;
+      }catch(e){feedback=null;}
+    }
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
-      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id]]}};});
+      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(feedback?.options[l.id]||[])]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
-    return {p,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
+    return {p,feedback,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
   }
   async function attach(state,harvest,changed,choosePlace){
-    const {p,fresh,mode}=state;
+    const {fresh,mode}=state;let p=state.p;
     if(!harvest||await digest(harvest.binaryBuffer)!==p.expected_harvest_binary_sha256)throw Error('Settlement Harvest identity changed');
-    let model=null,lookup=null,catchments=null,masks=null,pending=null,active=false,layer='',variant='joint365',siteId=new URLSearchParams(location.hash.slice(1)).get('settled_site'),selected=null,generation=0,skipInitial=true;
+    let model=null,lookup=null,catchments=null,masks=null,active=false,layer='',variant='joint365',siteId=new URLSearchParams(location.hash.slice(1)).get('settled_site'),selected=null,generation=0,skipInitial=true;
+    const packetJobs=new Map();
     const fmt=(v,d=0)=>Number(v).toLocaleString(undefined,{maximumFractionDigits:d}),pop=v=>{let n=0;for(;v;v&=v-1)n++;return n;};
     const readouts=rows=>rows.map(([v,k])=>`<div class="readout"><div class="v">${esc(v)}</div><div class="k">${esc(k)}</div></div>`).join('');
     function clear(message){$('settled-readouts').textContent='';$('settled-site-note').textContent=message;$('settled-global').textContent='';$('settled-months').textContent='';$('settled-cell').textContent='';$('settled-download').disabled=true;}
     async function load(){
-      if(model)return;if(pending)return pending;
-      pending=(async()=>{
-        const [a,b]=await Promise.all([bytes(fresh('data/'+p.payload)),bytes(fresh('data/'+p.binary))]);
-        if(await digest(a)!==p.payload_sha256||await digest(b)!==p.binary_sha256)throw Error('Settlement packet checksum mismatch');
+      if(model)return;const packet=p,key=packet.payload_sha256;
+      let job=packetJobs.get(key);
+      if(!job){job=(async()=>{
+        const [a,b]=await Promise.all([bytes(fresh('data/'+packet.payload)),bytes(fresh('data/'+packet.binary))]);
+        if(await digest(a)!==packet.payload_sha256||await digest(b)!==packet.binary_sha256)throw Error('Settlement packet checksum mismatch');
         const [ar,br]=await Promise.all([unpack(a),unpack(b)]),m=JSON.parse(new TextDecoder().decode(ar));
-        if(m.climate!==mode||JSON.stringify(m.shape)!==JSON.stringify(p.shape)||br.byteLength!==p.raw_bytes)throw Error('Invalid settlement packet layout');
-        const size=p.shape[0]*p.shape[1];lookup=new Uint32Array(br,0,size);catchments=new Uint16Array(br,p.offsets.catchments,size);masks=new Uint16Array(br,p.offsets.masks);
-        if(catchments.some(i=>i>m.sites.length)||lookup.some(i=>i>p.land_cells)||masks.some(v=>v>4095))throw Error('Invalid settlement resource indices');
-        model=m;$('settled-site').innerHTML=m.sites.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.actor||'unresolved affiliation')}</option>`).join('');
-        if(!m.sites.some(s=>s.id===siteId))siteId=m.sites.find(s=>s.marked)?.id||m.sites[0].id;
-        $('settled-site').value=siteId;$('settled-ledgers').href='data/'+p.payload;$('settled-grid').href='data/'+p.binary;
-      })().catch(e=>{pending=null;throw e;});return pending;
+        if(m.climate!==mode||JSON.stringify(m.shape)!==JSON.stringify(packet.shape)||br.byteLength!==packet.raw_bytes)throw Error('Invalid settlement packet layout');
+        const size=packet.shape[0]*packet.shape[1],l=new Uint32Array(br,0,size),c=new Uint16Array(br,packet.offsets.catchments,size),v=new Uint16Array(br,packet.offsets.masks);
+        if(c.some(i=>i>m.sites.length)||l.some(i=>i>packet.land_cells)||v.some(n=>n>4095))throw Error('Invalid settlement resource indices');
+        return {model:m,lookup:l,catchments:c,masks:v};
+      })().catch(e=>{packetJobs.delete(key);throw e;});packetJobs.set(key,job);}
+      const bundle=await job;if(p!==packet)return;
+      ({model,lookup,catchments,masks}=bundle);const m=model;
+      $('settled-site').innerHTML=m.sites.map(s=>`<option value="${s.id}">${esc(s.name)} · ${esc(s.actor||'unresolved affiliation')}</option>`).join('');
+      if(!m.sites.some(s=>s.id===siteId))siteId=m.sites.find(s=>s.marked)?.id||m.sites[0].id;
+      $('settled-site').value=siteId;$('settled-ledgers').href='data/'+p.payload;$('settled-grid').href='data/'+p.binary;
     }
     function render(){
       if(!active||!model)return;
       const k=model.cases.findIndex(c=>c.id===variant),c=model.cases[k],j=model.sites.findIndex(s=>s.id===siteId),s=model.sites[j],sum=model.summaries[k],reference=model.summaries[0];
       $('settled-global').textContent=`${fmt(sum.viable_communities)} / ${fmt(model.sites.length)} candidate communities meet the declared minimum; ${fmt(sum.active_sources)} / ${fmt(reference.active_sources)} affiliated sources staffed. Modelled two-way access: ${fmt(sum.area_weighted_access_bins,2)} / 12 area-weighted bins (matched reference ${fmt(reference.area_weighted_access_bins,2)}). These are alternative scenarios, not extra census people.`;
       $('settled-readouts').innerHTML=readouts([[fmt(s.civilian_request_people),'reference civilian request'],[c.food_constrained?fmt(c.food_ceiling_people[j]):'Unconstrained','seasonal food ceiling · all residents'],[fmt(c.civilian_people[j]),'allocated civilian scenario'],[fmt(c.institutional_people[j]),'institutional residents · same food pool'],[c.institutional_active[j]?'Available':'Unavailable / unassigned','source for this reach scenario'],[c.community_viable[j]?'Meets minimum':'Below scenario minimum','50 civilian reference people']]);
+      if(c.feedback_coupled)$('settled-readouts').innerHTML+=readouts([[fmt(c.resident_budget_people[j]),'shared origin allowance · civilians and staff'],[c.source_supported[j]?'Supported':'Unmet rural meals','rural source-food gate']]);
       $('settled-work-note').hidden=!c.labour_constrained;
-      if(c.labour_constrained){const w=c.work_summary;
+      if(c.feedback_coupled){const w=c.work_summary;
+        $('settled-work-note').textContent=`Coupled cell budget: ${c.hours_worker_year} listed field hours per remaining rural worker/year; 40% worker share and a 30-day reaping window. Moving people changes BOTH workers and rural meals before grain is collected. Local cereal production retains ${fmt(w.production_retained*100,2)}% of potential. The ${(100*c.transfer_fraction).toFixed(1)}% allowance caps civilians and staff together. ${fmt(c.rural_ledger.deficit_origins)} local origins still have unmet cereal meals; they export nothing and block positive allocations in their catchments. Diets, work availability and staff roles remain scenarios; this is not a census or sovereignty validation.`;
+        $('settled-field-grid').href='data/'+p.fields[c.id];$('settled-field-grid').hidden=false;
+      }else if(c.labour_constrained){const w=c.work_summary;
         $('settled-work-note').textContent=`Field-work scenario: ${c.hours_worker_year} listed hours per reference worker/year; ${c.harvest_days}-day reaping window at ${model.labour_specification.hours_worker_day} hours/day. Worker share ${100*model.labour_specification.worker_fraction_of_reference_rural_people}% of the earlier fixed rural cereal-food claim (${fmt(w.scenario_workers/1e6,2)} M reference workers), not census residents. Produces ${fmt(w.production_retained*100,2)}% of baseline cereal. Rural meals remain fixed; ${fmt(c.rural_ledger.unmet_kcal/1e12,3)} trillion kcal of scenario rural need is unmet, so affected cells export nothing. This is a partial cereal/work test, not evidence of actual famine or total household labour.`;
         $('settled-field-grid').href=p.field_support;$('settled-field-grid').hidden=!p.field_support;
       }else $('settled-field-grid').hidden=true;
@@ -63,6 +80,7 @@ window.SettledReachAtlas=(()=>{
     });
     return {state:()=>({settled_site:siteId||''}),show:(id,v)=>{
       layer=id;variant=v?.value||'joint365';active=['reach_towns','reach_defacto'].includes(id)&&!!v?.integrated_support;const gen=++generation;$('settled-section').hidden=!active;
+      const desired=v?.feedback_support?state.feedback:state.p;if(desired&&p!==desired){p=desired;model=null;lookup=null;catchments=null;masks=null;}
       if(active){$('harvest-section').hidden=true;clear('Loading the joint settlement and food ledger…');load().then(()=>{if(gen===generation)render();}).catch(e=>{if(gen===generation){clear('Detailed ledger unavailable: '+e.message+'. The precomputed map remains a conditional scenario.');console.error(e);}});}
     },select:(x,y)=>{selected=[x,y];if(skipInitial){skipInitial=false;return;}if(!active||!model)return;const row=Math.floor(y/p.cell_px),col=Math.floor(x/p.cell_px),i=row>=0&&row<p.shape[0]&&col>=0&&col<p.shape[1]?catchments[row*p.shape[1]+col]:0;if(i){siteId=model.sites[i-1].id;$('settled-site').value=siteId;}render();changed();}};
   }
