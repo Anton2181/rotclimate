@@ -116,9 +116,12 @@ Immediate sequence:
    network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
    dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
 
-**Owner usage-limit checkpoint:** calendar implementation and 145-file fresh
-replay are saved; normal-atlas publication/figures/browser/Windows remain pending.
-Resume step 13 before another experiment. These per-bin packing outputs do not
+**Step 13 published after the merge:** the worker-calendar audit now has its
+normal evidence panel, two figures, four downloads and browser checks
+(scripts/publish_visit_calendars.py). 86.0–92.7% of planned visits pack inside
+their month; 1.7–4.3% of relevant provider-months miss a collector trip.
+The earlier usage-limit checkpoint wording follows for the record: calendar
+implementation and 145-file fresh replay were saved with publication pending. These per-bin packing outputs do not
 certify unchanged annual food deliveries when any mandatory collector trip is
 unpacked. Collection-first fragmentation is an algorithm restriction, not a
 physical-impossibility result. All release1–4/S1–S5 empirical/resource/mobile
@@ -179,6 +182,7 @@ before outputs:
 |City workbook recovery and key join, 12 November (94e7266c, 79bb070f; merged line)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check and byte replay pass. Extents conflict for 7, 4 places predate AD150, sample selection visible. Release 2 open|Catalogue available again: declare catalogue-area comparison before scores|
 |Size-shape diagnostic, 12 November (e52e6d89; merged line)|First size result, and negative: no original coupled scenario produces large centres; flatness is in catchment budgets and requests. 63 Roman sets, 378 resampling ranges and 78 allocator sets recomputed|Declare one hierarchy mechanism at a time against the same metrics; no transfer-share tuning|
 |Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Publish optional maps; consider a declared re-run on the threshold-seeded dispatch parents|
+|Worker-calendar publication, 12 November (after merge)|Pending publication from the other line completed: panel, 2 figures, 4 byte-exact downloads, keyboard/mobile/theme checks; 163 map files verified unchanged; no new map family. Whole release 1–4 / S1–S5 queue reviewed|Hierarchy maps next; any alternative packing order needs its own declaration|
 |Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
 |Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
 

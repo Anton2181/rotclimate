@@ -114,6 +114,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_spare_visit_assignment.py')],cwd=ROOT,check=True)
     if (ROOT/'output/network_visit_target_grid_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_target_grid.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_calendar_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_calendars.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_size_identity.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_shape_20261112/review.json').exists():

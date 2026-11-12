@@ -13,7 +13,10 @@ const PANELS = {
     retained: ['settlement-sizes', 'settlement-feedback', 'settlement-feedback-scan'] },
   shape: { id: 'settlement-size-shape', folder: 'settlement_size_shape_20261112',
     phrases: ['The allocator is more equal than every reference.', 'development diagnostic, no fit'],
-    retained: ['settlement-size-identity', 'settlement-sizes', 'settlement-feedback', 'settlement-feedback-scan'] } };
+    retained: ['settlement-size-identity', 'settlement-sizes', 'settlement-feedback', 'settlement-feedback-scan'] },
+  calendar: { id: 'visit-calendar', folder: 'network_visit_calendar_20261112',
+    phrases: ['of planned visits fit inside their month.', 'no map change'],
+    retained: ['visit-grid', 'spare-visits', 'network-visits', 'settlement-size-shape', 'settlement-size-identity'] } };
 const PANEL = PANELS[process.argv[2] || 'identity'];
 
 (async () => {
@@ -31,7 +34,7 @@ const PANEL = PANELS[process.argv[2] || 'identity'];
   for (const phrase of PANEL.phrases) {
     if (!text.includes(phrase)) throw new Error('Missing text: ' + phrase);
   }
-  await panel.locator('img').scrollIntoViewIfNeeded();
+  await panel.locator('img').first().scrollIntoViewIfNeeded();
   await page.waitForFunction((id) => document.querySelector('#' + id + ' img').naturalWidth > 0, PANEL.id);
   let links = 0;
   for (const link of await panel.locator('a').all()) {
