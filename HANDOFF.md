@@ -1,3 +1,41 @@
+# Size-shape diagnostic: allocator has no large centres — 12 November 2026
+
+* Continued after pushing the key join (08147b13). Declaration e52e6d89 was
+  committed and pushed BEFORE any metric; it recorded the expected outcome, the
+  support rule and the consequences in advance.
+* New polity/settlement_size_shape.py: scale-free metrics (Gini, top 1%/10%
+  shares, log10 sd, largest/median, rank-size slope of top 100), extent-basis
+  groups, relative sizes area^(1+g), and a whole-site date gate that refuses
+  ended/unfounded places and flags an unrecorded end. It refuses 22 ended and
+  12 unfounded catalogue places and the four ended housing places.
+* Roman references: 862 measured of 1354 AD150 cohort (492 unmeasured, NOT
+  filled); bases walls 382, inhabited area 228, urban grid 166, other 86;
+  g = 0, 0.2, 0.5 (scaling-theory bounds, not fitted). Allocator: 8 coupled
+  scenarios, town totals, civilian only, frozen-rural references, requests.
+* RESULT: allocator more equal than every reference, all 12 declared checks.
+  Corrected 600 h 7.5%: Gini 0.35 vs 0.53/0.62/0.74 (all measured) and
+  0.48-0.88 (all sets); largest/median 7.6 vs 58/129/436; top 1% hold 4% vs
+  11-29%; rank-size slope -0.22 vs -0.45 to -0.67. All 8 scenarios Gini
+  0.35-0.37; requests before finite budget Gini 0.20. Transfer share cannot
+  change these metrics. NO fit, NO adoption, NO absolute-size claim.
+* Reviewer rebuilds cohort from raw XML, 63 Roman sets (pairwise Gini), 378
+  resampling ranges (Lorenz Gini), 78 allocator/request sets, band and
+  conclusion. Fresh replay byte exact; 15 analytic tests; 50 focused tests in
+  total. New evidence panel above the identity panel; both panels pass Node
+  browser checks (links byte exact, keyboard, mobile, themes). release.json
+  refreshed. Both figures posted in chat. Windows-style clone check after the
+  join commit: 1725 atlas files byte exact, 76 line-ending-only text files, 134
+  of 134 release-pinned evidence files exact, launcher verifies r44.
+* Report reports/SETTLEMENT_SIZE_SHAPE_20261112.md; roadmap live review step 5
+  complete, step 6 next.
+* NEXT: declare ONE size-hierarchy mechanism test before running it, inside the
+  same finite ledger: (a) higher-order markets drawing on lower-order towns,
+  (b) supply of a centre from beyond its catchment, (c) administrative
+  residents at marked seats. Score on the same metrics/tails; report costs to
+  rural people and small towns. Do not tune transfer share, minimum or staffing.
+  Release 3 rebuild should not proceed on flat sizes. Absolute sizes, urban
+  share, phases, failed transfer, complete diets/work, S5 all remain open.
+
 # City catalogue recovered; all 50 housing samples joined by key — 12 November 2026
 
 * Resumed after the usage pause. Branch note: this session can push only to

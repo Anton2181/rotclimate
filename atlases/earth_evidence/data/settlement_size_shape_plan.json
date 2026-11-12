@@ -1,0 +1,42 @@
+{
+  "date": "2026-11-12",
+  "status": "comparison_declared_before_any_size_shape_metric_is_computed",
+  "parent": "Live roadmap step 5; calibration/settlement_size_identity_20261112 (join 08147b13)",
+  "purpose": "Compare how unequal town sizes are in the allocator's coupled scenarios with how unequal conditional Roman size references are. Scale-free development diagnostic on exposed evidence. It tests the shape of the size distribution only; it cannot qualify absolute resident numbers, urban share, locations or dates.",
+  "why_scale_free": "A conditional reference is density x area. Household size and the density constant are unknown multipliers and cancel in every declared metric. The allocator's absolute scale is set by a scenario transfer share. Only relative sizes are compared.",
+  "known_before_declaration": [
+    "Catalogue: 1388 cities; AD150 count-audit cohort 1354, of which 862 have one positive area record and 492 none; Estimate Basis label counts for all cities and 57 exact 20 or 30 ha values are published in output/settlement_counts_20261111. Areas of the 50 housing-joined places were read in the identity step (12 to 263 ha). No other area value has been read in this continuation; earlier sessions used catalogue areas in exposed development plots.",
+    "Allocator, corrected 600 h 7.5% scenario fields: 1037 positive towns, 419264 residents in total, eight largest 1232 to 2789, staff fixed at 100 in 889 towns; civilian requests sum 3.08 million with minimum 100 and largest about 7089. The other seven scenarios were not inspected at site level in this continuation.",
+    "Expectation recorded in advance: the allocator is probably much more equal than the Roman references, because the largest allocator town is about seven times the mean while catalogue areas span more than two orders of magnitude."
+  ],
+  "roman_reference": {
+    "cohort": "Cities with numeric start <= 150 and (numeric end >= 150 or non-numeric end), exactly one Areas record, numeric and positive. Must be 862 or the run stops. The 492 cohort cities without an area are unmeasured, not small and not zero: no rank-median or other fill. Their Barrington ranks are tabulated beside the measured ones to describe the censoring.",
+    "date_flags": "A new typed gate reports place_not_yet_founded, place_ended_before_year and catalogue_end_unrecorded. Ended or unfounded places are refused; an unrecorded end is kept and flagged, matching the earlier audit cohort. The four ended housing places must be refused by this gate.",
+    "extent_basis_groups": "From the Estimate Basis text, case-insensitive prefix: walls ('walls' or 'ramparts'), inhabited_area ('inhabited area'), urban_grid ('urban grid'), other_or_unspecified (everything else). Mixed descriptions take the group of their first words.",
+    "density_scenarios": "people proportional to area^(1+g) with g = 0 (constant density), 0.2 and 0.5. The two non-zero values are the bounds implied by settlement scaling theory's area-population exponents 5/6 and 2/3; they are scenario bounds, not fitted here. The housing-sample slope of log density on log site area (50 exposed, selected samples) is reported for context only and defines no scenario.",
+    "sets": "Primary: all 862. Declared sensitivities: each basis group with at least 30 places; all except other_or_unspecified; all except exact 20 or 30 ha values. No other subsets."
+  },
+  "allocator_sets": {
+    "scenarios": "The eight coupled cases of output/settlement_feedback_20261112 (raw and corrected climate; 600 h at 5, 7.5 and 10%; 300 h at 7.5%), fields.npz verified against the published hashes.",
+    "quantities": "Primary: positive town totals (civilian plus staff). Also reported: civilian residents only; the frozen-rural reference totals; and the civilian requests before the finite budget, per climate.",
+    "units": "One marked or generated town node is one place. Fantasy towns are generated hypotheses, not evidence."
+  },
+  "metrics": [
+    "Gini coefficient of sizes.",
+    "Share of all residents held by the largest 1% and the largest 10% of places (ceil of the count).",
+    "Standard deviation of log10 size.",
+    "Largest size divided by median size.",
+    "Rank-size slope: least-squares slope of log10 size on log10 rank over the largest 100 places."
+  ],
+  "tail_matching": "The catalogue lists places with urban characteristics and measures the larger ones more often; the allocator keeps every supported town down to 100 residents. Each metric is therefore computed on all positive places (primary) and again on the largest 50% and the largest 25% of each set.",
+  "resampling": "Roman metrics: 2000 bootstrap resamples of places, numpy default_rng seed 20261112, 2.5 to 97.5 percentile range reported as sensitivity to which places are listed. It is not a confidence interval for historical truth. Allocator outputs are deterministic.",
+  "support_rule_fixed_in_advance": "For each climate's 600 h 7.5% case and each tail level, the allocator is 'within the reference band' on a metric when its value lies between the smallest and largest Roman value across the three density scenarios and the primary and sensitivity sets. Shape support requires Gini and log10 standard deviation both within the band at all three tail levels in both climates. Otherwise the result is reported as 'more equal' or 'more unequal' than every reference, with the ratio to the nearest band edge.",
+  "consequences_fixed_in_advance": "Neither outcome adopts or changes a default. If the allocator is more equal than every reference, record a missing size mechanism (hierarchical markets, long-distance supply of large centres, administrative concentration) as an explicit S2/S4 dependency before any size fit, and do not tune the transfer share to hide it. If within the band, the next step is still an absolute-size and prospective check, not adoption.",
+  "review": "Independent reviewer re-reads the workbook XML, rebuilds the cohort and basis groups, recomputes every metric with its own routines for all sets, tails and scenarios, and reproduces the bootstrap ranges from the declared seed. Fresh producer replay must be byte exact. Analytic unit tests for each metric.",
+  "prohibited": [
+    "No fit of any allocator parameter, no change of transfer share, town minimum or staffing to match a metric, no default change.",
+    "No absolute population or urban-share claim, no area fill, no AD150 label from a housing sample, no blind or transfer claim. All sources are exposed development evidence.",
+    "No subset, metric, tail level or exponent beyond those listed."
+  ],
+  "publication": "Only aggregate metrics, counts and one figure. No per-city catalogue rows beyond the 50 already published."
+}

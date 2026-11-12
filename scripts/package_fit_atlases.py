@@ -375,6 +375,11 @@ def main():
                   ROOT/'reports/figures/settlement_size_identity_20261112.png',
                   ROOT/'output/settlement_size_identity_20261112/replay.json']
         files += list((ROOT/'calibration/settlement_size_identity_20261112').glob('*.json'))
+    if (ROOT/'output/settlement_size_shape_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_SIZE_SHAPE_20261112.md',
+                  ROOT/'reports/figures/settlement_size_shape_20261112.png',
+                  ROOT/'output/settlement_size_shape_20261112/replay.json',
+                  ROOT/'calibration/settlement_size_shape_20261112/plan.json']
     if (ROOT/'output/settlement_feedback_20261112/scan_check/replay.json').exists():
         files += [ROOT/'output/settlement_feedback_20261112/scan_check/results.json',
                   ROOT/'output/settlement_feedback_20261112/scan_check/replay.json']

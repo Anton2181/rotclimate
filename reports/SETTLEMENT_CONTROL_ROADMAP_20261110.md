@@ -16,14 +16,14 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |Programme part|Current state|Next dependency / completion test|
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
-|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified. Housing samples now joined to the recovered city catalogue (50 of 50), still zero AD150 labels|Declare the catalogue-area size comparison before scores (extent basis, groups, baselines, metrics, exclusions); add an explicit refusal for samples from places ended before the comparison year; retain count/location Pareto alternatives and plan a genuinely prospective transfer|
+|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified. Housing samples now joined to the recovered city catalogue (50 of 50), still zero AD150 labels. Declared size-shape diagnostic complete: allocator town sizes are more equal than every Roman reference (Gini 0.35 against 0.48–0.88)|Sizes need a hierarchy mechanism before any size fit: declare and test market hierarchy, beyond-catchment supply of large centres and administrative concentration against the same shape metrics; do not tune transfer share. Retain count/location Pareto alternatives and plan a genuinely prospective transfer|
 |Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach|Empirical size requests and adopted placement/role choices must consume this ledger; rebuild affected tracks when actual locations change; preserve anchors and outside rural people|
 |Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
-|S2: settlement sizes, services and roles|Finite resource primitives implemented; housing adapter, source review and place-identity grouping complete; source selection and dated functions unresolved|Predeclare size comparisons using place groups. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
-|S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete|Add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
+|S2: settlement sizes, services and roles|Finite resource primitives implemented; housing adapter, source review and place-identity grouping complete; source selection and dated functions unresolved|Civilian requests are nearly flat (Gini 0.20), so role and service hierarchy now has a measured consumer: declare a higher-order market mechanism and test it on the shape metrics. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
+|S3: differentiated institutions/control|Pending qualification; administrative concentration at seats is one candidate source of large centres|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
+|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete; one-catchment supply cannot produce large centres|Add supply of large centres from beyond one local catchment within the same ledger; add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -48,17 +48,24 @@ Immediate sequence:
    Smaller samples report denser housing (rank correlation -0.24; -0.30 without
    the two whole-extent samples). All AD150 gates retained; zero eligible.
    See SETTLEMENT_SIZE_IDENTITY_20261112.md.
-5. **Next:** declare a catalogue-area size comparison before any score. State the
-   accepted extent bases, the density scenarios (constant and area-dependent),
-   the allocator outputs compared, place groups, baselines, metrics, exclusions
-   and what would count as support. Catalogue areas are exposed development
-   evidence and conditional references, never census truth. Add an explicit
-   refusal for housing samples from places that ended before the comparison year.
-   Do not manufacture confidence intervals from household sensitivity scenarios.
-6. If no defensible comparison can be declared, preserve the source result and
-   advance a concrete unresolved resource/occupation dependency (complete diets,
-   draft and household work, monthly collection/patrol capacity).
-7. Carry qualified requests into the existing finite allocator and coupled grain/
+5. **Completed:** scale-free size-shape comparison, declared e52e6d89 before any
+   metric. 862 measured AD150 catalogue areas under three density scenarios
+   against the eight coupled scenarios. Allocator more equal than every
+   reference at all three tail levels in both climates (Gini 0.35–0.37 against
+   0.48–0.88; largest town 8 times the median against 58–436). Requests before
+   the finite budget are flatter still (Gini 0.20). New date gate refuses ended
+   and unfounded places. No fit, no adoption. See SETTLEMENT_SIZE_SHAPE_20261112.md.
+6. **Next:** declare a size-hierarchy mechanism test before running it. Candidates,
+   one at a time and inside the same finite people/food/work ledger: (a) higher-
+   order market centres drawing requests from lower-order towns; (b) supply of a
+   centre from beyond its own catchment along existing freight paths; (c)
+   administrative residents concentrated at marked seats. Score each on the same
+   declared shape metrics and tail levels, report what it costs rural people and
+   smaller towns, and keep absolute sizes and urban share unclaimed. Do not tune
+   the transfer share, town minimum or staffing to move a metric.
+7. In parallel when blocked: complete diets, draft and household work, monthly
+   collection/patrol capacity; phase evidence for housing samples.
+8. Carry qualified requests into the existing finite allocator and coupled grain/
    work pipeline. Follow the full release and S1–S5 completion criteria above.
 
 ### Whole-plan review log
@@ -71,6 +78,7 @@ Immediate sequence:
 |Housing preparation and typed adapter, 12 November|50 rows/150 scenarios reviewed,18 checks and byte replay pass; none qualified for AD150; release2 remains open|Resolve phase/extent/representativeness and city joins; declare any later comparisons before scores|
 |Housing evidence publication and requested usage pause, 12 November|Research panel/chart/downloads preserve defaults;23 focused checks,9 served links,mobile/keyboard/themes and1695 Windows assets pass; entire release/S1–S5 queue reviewed|Handoff saved; commit/push and pause; next session starts at unresolved measurement/resource dependencies|
 |City workbook recovery and key join, 12 November (94e7266c, 79bb070f)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check, byte replay and 30 focused tests pass. Release 2 still open: extents conflict for 7, 4 places predate AD150, sample selection is visible. Release 3/4 and S1c–S5 unchanged; whole queue reviewed|Catalogue is available again, so the size comparison no longer rests on housing samples alone: declare the catalogue-area comparison before scores, add the ended-place refusal, keep complete diets/work and mobile/nonstate tasks queued|
+|Size-shape diagnostic, 12 November (e52e6d89)|Release 2 gains its first size result, and it is negative: no scenario produces large centres, and the flatness is in the requests, not the ledger. Reviewer recomputes 63 Roman sets, 378 resampling ranges and 78 allocator sets; byte replay and 15 analytic tests pass. Release 3 rebuild should not proceed on flat sizes; S2 hierarchy, S3 seats and S4 beyond-catchment supply each gain a concrete dependency. S1c–S1e, S5 and physics unchanged|Declare one hierarchy mechanism test at a time against the same metrics; no transfer-share tuning; absolute sizes and urban share remain unclaimed|
 
 ## Working rules
 
@@ -523,3 +531,14 @@ comparison; see step 5 of the live review. This session pushes to
 `claude/project-continuation-a484h1`, which already held the three preceding
 commits; `claude/friendly-turing-43ygeu` stops at 061e6ef8 until the owner
 decides which branch is canonical.
+
+12 November whole-plan review after the size-shape diagnostic: the allocator's
+town sizes are more equal than every conditional Roman reference at every
+declared tail level, and its civilian requests are flatter still. The finite
+ledger is not the cause and the transfer share cannot change it. The programme
+therefore gains an explicit dependency ahead of any size fit or fantasy rebuild:
+a mechanism that makes some centres much larger than others. Market hierarchy
+(S2), administrative concentration (S3) and supply from beyond one catchment
+(S4) are the candidates; each must be declared and tested separately against
+the same metrics. Absolute sizes, urban share, dated occupancy, the failed
+transfer, complete diets and work, and S5 remain open and were revisited.
