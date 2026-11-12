@@ -421,3 +421,10 @@ the explicit path is at the top of this roadmap. Detailed institution/control
 work remains tracked for later releases. Consolidated development now uses ONLY
 `claude/friendly-turing-43ygeu`;redundant publication branch retired with history
 preserved. Do not push both or recreate the retired branch from old plans.
+
+12November finer-scan follow-through: declared64-interval check of all four7.5%
+coupled cases completed after061e6ef8 push.132 shared trial points replay EXACT,
+maximum total delta0.000294719people and zero source-flag changes; independent
+work/food gates and fresh byte replay pass. Original eight maps preserved. This
+checks tested grids rather than global optimality; resident-size evidence remains
+open. See SETTLEMENT_FEEDBACK_20261112.md.

@@ -116,12 +116,22 @@ site ledgers, CSVs, origin-budget readouts and cell audits use a separate verifi
 packet, with caching that safely switches between original and feedback families.
 Missing or corrupt optional data leave the original scenarios available.
 
+The separately committed finer-scan declaration in061e6ef8 doubled the scan
+from32 to64 intervals for all four7.5% cases, retaining24 refinements. All132
+shared trial points reproduce feasibility, rural support and destination unmet
+arrays bit for bit. The largest total resident change is0.000294719 people;
+no site changes by one person and no institutional source flag changes. Final
+work, monthly food and source-food checks pass. A fresh repeat reproduces both
+result JSON and field NPZ bytes. Original eight scenarios and maps are unchanged.
+This supports numerical robustness on the tested grids; it cannot exclude every
+narrow feasible island or establish global optimality. See
+[scan results](../output/settlement_feedback_20261112/scan_check/results.json) and
+[replay](../output/settlement_feedback_20261112/scan_check/replay.json).
+
 Release2 still needs empirical resident-size/occupation qualification. This work
 advances the shared-ledger part of release3 and publishes optional numeric maps,
-without claiming the new calibrated default of release4. The next numerical
-check should quantify whether finer feasible-point scans alter these certified
-allocations; the next empirical work still needs compatible population, farming
-and resident-size observations. Keep the fullS1–S5/all-actor programme.
+without claiming the new calibrated default of release4. The declared finer scan is complete; the next empirical work needs compatible
+population, farming and resident-size observations. Keep the fullS1–S5/all-actor programme.
 
 ```sh
 .venv/bin/python -I scripts/prepare_settlement_feedback.py --mode raw

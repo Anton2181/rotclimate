@@ -29,6 +29,21 @@ def main():
     for source, name in [(OUT/'results.json','settlement_feedback.json'),(PLAN,'settlement_feedback_plan.json'),
         (OUT/'replay.json','settlement_feedback_replay.json'),(OUT/'atlas_publication.json','settlement_feedback_publication.json')]:
         shutil.copyfile(source,data/name)
+    scan_note = ''
+    scan_dir = OUT / 'scan_check'
+    if (scan_dir / 'results.json').exists():
+        scan = json.loads((scan_dir / 'results.json').read_text())
+        scan_replay = json.loads((scan_dir / 'replay.json').read_text())
+        for name, digest in scan_replay['files'].items():
+            if sha(scan_dir / name) != digest:raise ValueError('Finer scan replay changed')
+        if scan_replay['status'] != 'passed' or scan['total_exact_overlap_points'] != 132:
+            raise ValueError('Complete finer scan and fresh replay required')
+        for name, target in [('results.json','settlement_feedback_scan.json'),('replay.json','settlement_feedback_scan_replay.json')]:
+            shutil.copyfile(scan_dir / name, data / target)
+        shutil.copyfile(PLAN.parent/'scan_check.json',data/'settlement_feedback_scan_plan.json')
+        difference = max(abs(r['difference_people']) for r in scan['rows'])
+        switches = sum(r['source_flags_changed'] for r in scan['rows'])
+        scan_note = f'<p id="settlement-feedback-scan">The declared finer scan doubles intervals from 32 to 64 for the four 7.5% scenarios. All 132 overlapping trial points replay exactly; the largest total change is {difference:.7f} people, with {switches} source switches changed. Final work and food checks and a byte-exact fresh replay pass. This checks the tested grid, not every possible feasible branch or a global optimum. <a href="data/settlement_feedback_scan.json" download>Finer-scan results</a> · <a href="data/settlement_feedback_scan_plan.json" download>Prior scan declaration</a> · <a href="data/settlement_feedback_scan_replay.json" download>Scan replay</a></p>'
     table = ''.join(f'<tr><th>{r["climate"].capitalize()}</th><td>{r["hours_worker_year"]}</td><td>{r["transfer_fraction"]:.1%}</td><td>{r["town_people"]:,.0f}</td><td>{r["active_sources"]:,}</td></tr>' for r in rows)
     section = f'''<!--settlement-feedback-start--><section><h2>Cell people, workers and rural meals now change settlements and reach together</h2><details id="settlement-feedback" class="panel"><summary>Eight coupled scenarios · independently audited · optional maps in the normal atlas</summary>
 <p><strong>Actual rural-food feedback is now recomputed.</strong> Moving a resident changes remaining workers, cereal output, rural meals and export inventories before that same person's destination food and institutional availability are accepted. Every positive town passes its origin catchment's source-food gate. Deficit rural cells export nothing and remain visible in the ledger.</p>
@@ -38,6 +53,7 @@ def main():
 <img src="../../reports/figures/settlement_feedback_scenarios_20261112.png" alt="All eight transfer and work scenarios, conditional sources, retained grain and unhidden rural deficits">
 <p><strong>Research scenarios, not calibrated city sizes.</strong> Reference populations, work availability, diets and cohorts remain assumptions. Rural cereal deficits elsewhere persist; these results do not establish a complete food system, real famine or sovereignty. Missing/mobile/nonstate communities are not declared empty. The finite scan certifies examined feasible allocations and does not prove a global optimum.</p>
 <p><a href="../earth_fit/#layer=reach_towns&amp;variant=feedback600_75&amp;climate=corrected&amp;all=1">Open the coupled settlement map</a> · <a href="../earth_fit/#layer=reach_defacto&amp;variant=feedback600_75&amp;climate=corrected&amp;all=1">Open its SAME-cohort reach</a> · <a href="../../reports/SETTLEMENT_FEEDBACK_20261112.md">Methods and next checks</a> · <a href="data/settlement_feedback.json" download>All eight results</a> · <a href="data/settlement_feedback_plan.json" download>Prior declaration</a> · <a href="data/settlement_feedback_replay.json" download>Fresh replay</a> · <a href="data/settlement_feedback_publication.json" download>Original-packet preservation</a></p>
+{scan_note}
 <p>The original defaults and parent model packets are unchanged. Enable Experimental &amp; diagnostics to compare the new entries inside Settlements and Supply-supported reach. Site CSVs and per-case cell inventories are available in those existing panels.</p></details></section><!--settlement-feedback-end-->'''
     html = page.read_text(); pattern = r'<!--settlement-feedback-start-->[\s\S]*?<!--settlement-feedback-end-->'
     if re.search(pattern,html):html = re.sub(pattern,lambda m:section,html)

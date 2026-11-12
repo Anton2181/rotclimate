@@ -1,3 +1,16 @@
+# Finer cell-feedback scan completed — 12 November 2026
+
+* Continued after061e6ef8 was pushed. Committed scan declaration preceded outputs.
+* Four7.5% cases doubled intervals32->64 with same24 refinements. All132 overlap
+  feasibility/source-support/destination-unmet arrays BIT EXACT. Largest total
+  delta0.000294719people, no site changes1person, ZEROsource flags changed.
+* Independent final work/monthly food and positive source-food audits pass;
+  fresh results.json/fields.npz BYTE EXACT. No original scenario/map/default changes.
+  This is tested-grid robustness, NOT proof no narrow feasible islands or optimum.
+* Continuing actual resident-size evidence: inspect housing-derived observations
+  and occupation/date provenance before treating derived-area estimates as labels.
+  Current shared ledger remains partial cereal; release2/S1–S5/allactors retained.
+
 # Actual cell population/work/food feedback now feeds optional settlement and reach maps — 12 November 2026
 
 * Owner explicitly requests continuous development after pushes. Protocol a59cf567
