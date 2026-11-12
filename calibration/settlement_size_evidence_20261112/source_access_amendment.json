@@ -1,0 +1,35 @@
+{
+  "status": "source_access_amendment_before_new_table_extraction",
+  "parent_declaration_commit": "8745b931",
+  "failures": [
+    {
+      "url": "https://www.colorado.edu/socialreactors/node/113/attachment",
+      "result": "HTTP404; no original housing table recovered"
+    },
+    {
+      "url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/32413192CB46847949394D750342B5D4/S1047759400074134a.pdf/div-class-title-a-systematic-method-for-estimating-the-populations-of-greek-and-roman-settlements-div.pdf",
+      "result": "HTTP200 HTML abstract redirect, not a PDF; reject as data"
+    },
+    {
+      "url": "https://oxrep.web.ox.ac.uk/sites/default/files/oxrep/documents/media/hanson2016_citiesdatabase_oxrep.xlsx",
+      "result": "HTTP404 after redirect; original pinned workbook still unavailable"
+    }
+  ],
+  "additional_source": {
+    "work": "Ortman and Hanson2023,Estimating the Missing Houses of Silchester,doi10.1017/S0068113X23000375",
+    "pdf": {
+      "requested_url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C0B137A161BB338EC31D4ACBC9F4DCDE/S0068113X23000375a.pdf/estimating_the_missing_houses_of_silchester.pdf",
+      "resolved_url": "https://www.cambridge.org/core/services/aop-cambridge-core/content/view/C0B137A161BB338EC31D4ACBC9F4DCDE/S0068113X23000375a.pdf/estimating_the_missing_houses_of_silchester.pdf",
+      "content_type": "application/pdf",
+      "bytes": 461340,
+      "sha256": "648928e26e1694303ea56251c4ea5afae3551ed2e51072e4630587fe2903479b"
+    },
+    "license": "CC BY4.0,article publisher",
+    "use": "Reproduced cleared/excavated housing comparison table, source dates and detection-bias measurement discussion; do not infer direct whole-city censuses from sample densities."
+  },
+  "known_before_table_extraction": [
+    "Abstract/method prose inspected: housing counts can miss timber buildings,5people/household is assumed, late-first-century Silchester sample4buildings/0.25ha, old45ha extrapolation3600 is superseded; later infrastructure model5500,95%4500-6900,43ha. These overlapping estimates are one place, not independent targets.",
+    "Original52-case source has not been acquired. The later source may reproduce only a subset; retain distinction and omissions."
+  ],
+  "unchanged_rules": "Preparation, measurement/date gates and identity candidates only; no size-model scores/fits/default adoption. Explicitly preserve sample-density estimates, visible minimum counts and infrastructure-derived estimates as distinct evidence families. Record table rounding; never reverse rounded density into purported exact building counts. No invented dates or area fills."
+}
