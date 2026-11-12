@@ -1,3 +1,55 @@
+# Fixed-order comparison ready; continue provider-year point maps after push — 12 November 2026
+
+Latest owner instruction: "Continue,dont stop after pushing". A checkpoint push
+is NOT a stopping condition. Continue immediately with the declared next task.
+Canonical branch claude/friendly-turing-43ygeu;original map/certificate code stays
+byte unchanged. No subagents permitted unless explicitly requested.
+
+* Joint-order declaratione4d274da BEFOREoutputs. Newpolity/joint_worker_calendar.py
+  merges SAMEcollector/point jobs bydecreasing per-worker duration;collectionwins
+  ties,thenorigin/serial oractor/target. Same100-supportedworkers whereactive,
+  50dutyh/bin,212.92calendar coordinates,divisiblehomeservices. Physicallyscheduled
+  visits keepintervals/work evenif latercollectionfails;binqualification separate.
+* All8cases×2fixedpolicies=16rows;bothpolicy12bin flags recomputed requiringactive
+  sourceandALLmandatorycollection/servicebins. Necessary delivery-schedule gate,
+  NOT daily provisioning,within-bin grain timing,completeannualfood oractualroles.
+  Nine newcontrols +7oldcontrols pass. Independent sorted-listmixed job replay,
+  everyworker/crew interval andchannel ledger passes:21,509,178collectorrecords,
+  1,259,374original visits,7,752,000worker-bins.98freshoutputs BYTEEXACT. Old145
+  baselinefiles/currentphysicalreviews and163mapfiles unchanged.
+* All8bin-qualifiedcounts rise;collector omissionsalso rise. Raw600crew4 monthly
+  137796->141624 but12bingate129049->118884. Corrected600crew4 145972->150104
+  but137822->126369. Allfourperson12bin counts decline6850–11453;oneperson gated
+  counts rise6350–7640 while fewerprovidersfinishyear. No winningpolicy adopted.
+* Published NETWORK_VISIT_JOINT_ORDER_20261112.md,normal#joint-order16rowpanel,
+  3figures andresults/review/replay/plan/matchedworkerCSV. ThreefiguresPOSTED.
+  Browser16exactrows/3figures/6byte-exactlinks/24worker-policyCSVcalendars,
+  344/390/light/dark/keyboard/inventoryfailure andgeneralevidencefilters pass.
+  Windows1872assets byteexact,850hubdependencies resolve;final
+  receipts inoutput/network_visit_joint_order_20261112.
+  Use direct reviewedpublishers;historicalfullpublisher lacksprivateVidarbhacache.
+* Entireprogramme reviewed:release2datedsize/occupation/providerrole/transferopen;
+  release3partialresource/scheduling;release4nocalibrateddefault. S1–S5/allactors/
+  unaffiliated/mobile/nonstate,completediets/household/draftwork,daily provisioning
+  andwithin-bin grain timing remainopen. Neither greedyfailure norcohortfilter
+  establishesphysicalimpossibility,absentcommunities orpoliticalauthority.
+* NEXT IMMEDIATELYAFTERPUSH: calibration/network_visit_year_complete_20261112/
+  plan.json committedBEFOREnewoutputs. Choose ONE full12bin policy/provider.
+  Ifbaselineyearcomplete retainit unlessjointalso complete,contains EVERYbaseline
+  packedactor/target/binidentity andadds>=1task. Equalsets orlostbaseline task
+  keepbaseline. Ifonlyjointcomplete choosejoint;neithercomplete keepsbaseline
+  asunqualifiedtrace,mapsnoqualifiedvisits. Neverunionjob successes acrosscalendars.
+  Prove elementwisebaselinegatedtaskinclusion andsubsetofORIGINALhour-fundedtasks.
+* Newoptionalexperimentalpointfamily inexistingSupply-supportedreach,all8cases;
+  keepalloldmaps/defaults/cohorts. Displayselectedpolicy/yearstatus andqualified
+  pointcounts;addcalendar-unqualified deficit tooldroute/crew/capacity partitions.
+  Entireselectedphysicalworkerwork stayscharged evenwhenproviderunqualified.
+  Gateisnecessarydeliveryschedule,notannualfood/roles/territoryqualification.
+  Raw/correctedpairedpointfigures+chart,allnewfiguresPOSTED;independent review,
+  byteexactfreshcases/exports,pointCSV/providerCSV/fullfields,normalresearch,
+  sixfamilyUI/mobile/failure/Windows,wholeplan,pushandCONTINUE. Readexactprotocol.
+  No year-selection outputs have been produced before this declaration.
+
 # Worker-calendar publication complete — 12 November 2026
 
 Resumed the latest remote branch claude/friendly-turing-43ygeu at a60e853f;
