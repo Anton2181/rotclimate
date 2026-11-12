@@ -1,3 +1,51 @@
+# Forty target-grid scenarios published; continue worker-calendar audit — 12 November 2026
+
+* Continued after4f592bfe per DONOTPAUSEAFTERPUSH. Canonicalfriendly-turing-43ygeu.
+  Griddeclaration4f592bfe BEFOREoutputs. No subagents used/permittedbycurrentrules.
+* Five designs b2_p0,b3_p0,b3_p1,b3_p2,b5_p0 timesoriginaleightfood/collection/visit
+  scenarios=40. Same originalallocator andreservedpatrolslice;no spare-extension
+  mixing/winnerselection. phased_land_targets clips negativephase-anchoredtiles,
+  nearestlandtocentre/gridIDtie;alllandarea countedonce;raw/correctedIDs exact.
+* Prepare reuses same directed footgraphs/searches acrossdesigns;permonth/design
+  target/path packets bound memory/files. Everywalkinglandcell within oldfullnet
+  footprint. Independent geometrygroups,allrecordededges/endpoints/costs,new
+  eligibilityDijkstra onindependently rebuiltgraphs,scalarallocation,integerjobs,
+  allactor/bin partitions/zero-budgetcontrols/fullproviderledgers passall40.
+  Same establishedSciPypathalgorithm acknowledged. Fournewgeometrycontrols;
+  21focusedchecks pass. Fresh132target/routefiles+6results/fieldfiles BYTEEXACT.
+  b3_p0baseline targets/routes/allarrays EXACT;entire15MB NPZbyteidenticaloldfile.
+* Phasecompletion spreads0.185–0.265pp acrossthreeDIAGONALphasesonly. Corrected
+  600h/crew4 spacing7.36/11.04/18.40km completes254850/163423/66645 of575040/
+  260496/97212requests. Densergrid raisesabsolutecompletedcount butlowersfraction
+  oflargerworkload. Notnumericalconvergence orreasonselectcoarsestgrid. All40
+  reported;normalresearch40rows/4figures/6bytelinks/keyboard/mobile/themes/failure
+  pass;alloldmaps/defaults remainintact. AllfourfiguresPOSTED.
+* Fullprogramme reviewed:release2 empiricalsize/occupation/prospectivetransfer
+  open;3partialcereal/monthlytaskimplementation;4nocalibrateddefault. S1–S5/all
+  actors/unaffiliated/mobile/nonstate,completediets/household/draftwork anddaily
+  provisioning/providerfunction evidence persist. Historicalfullpublisherstill
+  blockedbyomittedprivateVidarbhaEarthcache;direct reviewedpublishersused.
+* Windows1862assetsBYTEEXACT,r44launcherverified;832hubdependenciesresolve.
+* NEXT IMMEDIATELY aftercheckpoint: committedprior declaration
+  calibration/network_visit_calendar_20261112/plan.json. Originaleightb3_p0visit
+  plans/fourfoodparents only. Integerfloorstaff each50h/bin,commoncalendar7*365/12
+  working-hourcoordinates;servicesA/B equallysharedmandatoryhomeintervalfirst.
+  EVERY origin_trips collectorjob useschecked monthlyout/in7dayhours+.25handling;
+  LPTduration/origin/serial,earliestavailableeligibleworker. Explicitmandatory
+  collectionshortfalls;blockplannedvisitsifany mandatoryjobunpacked. Thenoriginal
+  crew1/4plannedvisits,originalprovider,LPTduration/actor/target;chooseearliest
+  calendaravailable crew withremaining50h/member,startsynchronizedmaxavailability.
+  Dutyhours excludeidle;calendarsincludeit. No overlap/fractionalcrews/movedvisits
+  oraddedtasks. Greedypackingfailure NOTproofno scheduleexists. Recordalljob/worker
+  intervals/sourcehashes;independentscalar/interval/ledgerreview,freshreplay,
+  charts/normalpublication/browser/Windows,wholeplan,pushandCONTINUE.
+* Readactualsourcearrays ratherthanoldsummarycounts:rawinputs1034providers,
+  corrected1053. Raw600 institutionalstaff values0/100,861active. Raw600has3063143
+  annualcollectortrips. Oldmonthlywork raw_paths.npz owner/local_index/out/in match
+  parentorigins;originalpointfields supplychosen_cost_hours/served/provider. Split
+  collectionschedulesbyparent/month toboundmemory/files. No dailyfood/observed
+  availability/institutionalroleclaim evenifconstructive workerpacking succeeds.
+
 # Spare-provider audit published; continue declared target-grid audit — 12 November 2026
 
 * Continued immediately after75e7fd16 map push per DONOTPAUSEAFTERPUSH. Same canonical

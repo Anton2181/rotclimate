@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 conditional walking point-task scenarios now spend the SAME patrol reservations|Individual rosters/daily provisioning,actual demand/provider roles,other geographic services and dispatch/assignment/grid limits remain open. Preserve anchors/outside ruralpeople;point visits do not qualify territory|
-|Release 4: normal numeric publication|16 threshold-checked dispatch versions plus8 point-visit maps in existingselectors;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
+|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 point-task maps plus assignment and40case target-grid audits retain SAME patrol reservations|Construct individual worker calendars for whole collector trips and crews before stronger roster claims. Actual demand/provider roles,daily provisioning and other resource/services remain open;point visits do not qualify territory|
+|Release 4: normal numeric publication|16 threshold-checked dispatch versions,8 optional point maps andall40gridcomparison results/4figures published;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Eight walking point-task scenarios use SAMEpatrolreservations;spare-provider diagnostic recovers192–1117additional tasks while preserving everyoriginalcompletion/provider|Audit declared target-grid spacing/phase withoriginal allocator;keep feasible-gain lowerbound separate from globaloptimality. Individual rosters/daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
+|S4: complete resources and work|Eight point-task maps,spare-provider feasible gains and40matched gridcases reviewed;phase spreads0.185–0.265pp,spacing materially changes supplied workloads|Construct declared integer worker/crew calendars for alloriginal collectors andplanned visits. Greedy packing failures do not prove infeasibility;daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -97,13 +97,23 @@ Immediate sequence:
    192–1117additional visits,0.07–0.43percentagepoint overallgains. No route/crew
    impossibility claim from remaining misses;constructive lowerbound only. Normal
    table/chart/downloads published;alloriginalpointmaps/defaults unchanged.
-12. **Next declared target-grid audit:** five fixed designs:block2/3/5 atphase0,
-   plus3cell phases1/2. Sameeight parents andoriginalassigner;40cases. Require
-   exactoriginal b3_p0 routes/allocations,allactor/route/task/workgates,fullreplay.
-   Spacingchanges suppliedtaskdensity,not justnumericalresolution;phasesprobe
-   geographic sampling. Declare beforeoutputs;no best-design selection/adoption.
-   Datedsizes/roles/transfer,complete diets/work andmobile/unaffiliated/nonstate
-   scope persist across allrelease1–4/S1–S5parts.
+12. **Completed target-grid audit:** declaration4f592bfe precedesalloutputs.
+   Five designs:block2/3/5 atphase0,plus3cell phases1/2;all40originalassignercases
+   independently reviewed. Geometry,allpath edges,recomputed eligibility/scalar
+   assignments,allactor partitions andfull monthly ledgers pass;138fresh files
+   byteexact. Baseline target/routes/allocationarrays andentireNPZ EXACToriginal.
+   Phase spreads0.185–0.265pp. Corrected600h/crew4 spacing7.36/11.04/18.40km:
+   completions254850/163423/66645 of575040/260496/97212 tasks. Densergrid raises
+   completedcounts butlowers fraction;workload/geography effect,not convergence
+   or reason toselectcoarsest. Normal40row/4figure evidence;no oldmap replacement.
+13. **Next declared worker-calendar audit:** original b3_p0 eightvisitplans/four
+   foodparents only. Integer supportedworkers each50h/bin,sharedmonthcalendar,
+   mandatorydivisiblehomeservices andeverywholecollectortrip beforevisits.
+   Construct greedy nonoverlapping sameprovider crews;record unfilledcollection
+   andblocked/unpackedvisits explicitly. No newfoodsupport claim whenmandatory
+   collectiondoesnotpack;greedyfailureisnotprovenimpossibility. Prior declaration
+   network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
+   dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
 
 ### Whole-plan review log
 
@@ -122,6 +132,7 @@ Immediate sequence:
 |Threshold-seeded correctedmaps,12November,declaration354f9a52|16physical/thresholdreviews andfreshbytepairs pass;all8open sourceflags/masks equaloldfoodsets,source-countloss repaired.32newmapoptions/workCSV/fourfamilies/mobile/failures and60focusedtests pass. Fullrelease/S1–S5/allactor/mobileprogramme reviewed;no empirical/default/patrolqualification|Freeze andconnect actualnetworktask destinations toexistingreservedpatrolhours;retain complete resource/provider/occupation/transfer evidence gaps|
 |Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
 |Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
+|Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
 
 ## Working rules
 
