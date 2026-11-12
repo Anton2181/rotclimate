@@ -114,6 +114,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_spare_visit_assignment.py')],cwd=ROOT,check=True)
     if (ROOT/'output/network_visit_target_grid_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_target_grid.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_calendar_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_calendars.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

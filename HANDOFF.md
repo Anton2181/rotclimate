@@ -1,3 +1,49 @@
+# Worker-calendar publication complete — 12 November 2026
+
+Resumed the latest remote branch claude/friendly-turing-43ygeu at a60e853f;
+fetch found no newer remote work and the checkout was clean. The owner asked
+to continue,so the earlier usage-limit publication pause is now resolved.
+
+* Finished the pending calendar publication without changing the physical
+  model,original result/review/replay files or any of 163 protected map files.
+  Original declaration bdd6135c;four collection/eight visit cases,seven controls,
+  145 fresh-file replay and independent sorted-list/interval/crew/hour review
+  retained. No need to rerun the multi-million-job experiment just to publish.
+* New scripts/plot_visit_calendars.py and publish_visit_calendars.py validate
+  current producers,sources,reviewer,schedules and replay hashes before output.
+  Normal Earth evidence panel #visit-calendar has four collection/eight visit
+  rows,three figures and results/review/replay/plan plus worker/task CSV downloads.
+  All earlier evidence panels are checked unchanged. Figure illustration uses
+  first eligible four-person case/bin and lowest provider with both job types;
+  first12 visit workers,filled with lowest others. Figure IDs start at1;CSV at0.
+* Three new figures POSTED. Browser checks exact12rows,3loaded figures,6byte-exact
+  local links,real CSV download,12workers'interval nonoverlap/duty/calendar caps,
+  keyboard,344/390px,light/dark,older panels andisolated inventory failure.
+  General evidence filters/downloads also checked. Seven worker controls pass.
+  Windows checkout/launcher and complete hub link closure recorded in the final
+  publication_verification.json under output/network_visit_calendar_20261112:
+  Windows1867assets byte exact,r44 verified,and841hub dependencies resolved.
+* These are per-bin model packing counts,not annual food-supported visits.
+  Any missed mandatory collector trip leaves the unchanged annual delivery plan
+  uncertified. Collection-first fragmentation is an algorithm restriction;
+  greedy failure is NOT proof no schedule exists,abandonment or authority loss.
+  Supplied availability/divisible services do not qualify actual staffing roles,
+  complete service-job rosters or daily provisioning. No new Earth data/default.
+* Entire release1–4/S1–S5 programme revisited in roadmap. Release2 dated size/
+  occupation/provider functions and prospective transfer remain open;release3
+  partial cereal/resource/scheduling implementation;release4 no calibrated
+  default. All actors/unaffiliated/mobile/nonstate,complete diets/household/
+  draft work and daily provisioning remain in scope.
+* NEXT: before new allocation scores,commit a separate declaration comparing
+  alternative packing order on SAME original jobs,providers,crews andworker caps.
+  Keep original collection-first results/maps;distinguish bin-level calendars
+  from annual mandatory-delivery qualification. No alternative-ordering protocol
+  or outcome was added during this publication. Source/phase/measurement and
+  mobile/resource dependencies remain open;do not treat scheduling as calibration.
+* Full historical evidence publisher still needs omitted private Vidarbha Earth
+  cache. This change uses its reviewed direct publisher and registers the hook;
+  it does not claim a full historical rebuild.
+
 # Usage-limit checkpoint — push calendar work, publication pending — 12 November 2026
 
 Owner latest instruction: "Almost out of usage, get pushing". This overrides

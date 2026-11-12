@@ -12,7 +12,7 @@ def main():
     with sync_playwright() as pw:
         browser=pw.chromium.launch(executable_path='/usr/bin/chromium',headless=True,args=['--no-sandbox'])
         page=browser.new_page(viewport=dict(width=1440,height=1100));errors=[];bad=[];page.on('pageerror',lambda e:errors.append(str(e)));page.on('response',lambda r:bad.append(r.url) if r.status>=400 else None)
-        page.goto(a.base+'/atlases/',wait_until='domcontentloaded');page.click('a[href="earth_evidence/"]');page.wait_for_function('document.querySelector("#rows").children.length===40')
+        page.goto(a.base+'/atlases/',wait_until='domcontentloaded');page.click('a[href="earth_evidence/"]');page.wait_for_url('**/atlases/earth_evidence/');page.wait_for_function('document.querySelector("#rows")?.children.length===40')
         assert page.locator('#count').inner_text()==str(len(ledger['parameters']))+' matching numeric records'
         assert page.locator('#benchmark').inner_text().find('0.459')>=0 and '0.176' in page.locator('#benchmark').inner_text()
         assert 'full split failed' in page.locator('body').inner_text().lower()

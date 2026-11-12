@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 point-task maps plus assignment and40case target-grid audits retain SAME patrol reservations|Construct individual worker calendars for whole collector trips and crews before stronger roster claims. Actual demand/provider roles,daily provisioning and other resource/services remain open;point visits do not qualify territory|
-|Release 4: normal numeric publication|16 threshold-checked dispatch versions,8 optional point maps andall40gridcomparison results/4figures published;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
+|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation now includes independently checked individual worker calendars for four collection/eight visit plans,alongside the point-task and grid audits|Collection-first packing leaves mandatory-trip and crew gaps;test ordering before treating them as resource limits. Annual delivery qualification,actual demand/provider roles,daily provisioning and other resources remain open|
+|Release 4: normal numeric publication|Existing map families plus worker-calendar tables,three figures and interval downloads published in the normal evidence atlas;original maps/defaults preserved|Retain experimental status and publication/browser/Windows checks. No calibrated default or annual delivery claim follows from per-bin packing|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Eight point-task maps,spare-provider feasible gains and40matched gridcases reviewed;phase spreads0.185–0.265pp,spacing materially changes supplied workloads|Construct declared integer worker/crew calendars for alloriginal collectors andplanned visits. Greedy packing failures do not prove infeasibility;daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
+|S4: complete resources and work|Four collection/eight visit calendars reviewed and published;10,812,121 collector trips,1,259,374 planned visits and7,752,000 worker-bins checked;145freshfiles exact|Compare a separately declared packing order on unchanged jobs and distinguish bin-level schedules from annual mandatory-delivery qualification. Daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -106,22 +106,25 @@ Immediate sequence:
    completions254850/163423/66645 of575040/260496/97212 tasks. Densergrid raises
    completedcounts butlowers fraction;workload/geography effect,not convergence
    or reason toselectcoarsest. Normal40row/4figure evidence;no oldmap replacement.
-13. **Next declared worker-calendar audit:** original b3_p0 eightvisitplans/four
-   foodparents only. Integer supportedworkers each50h/bin,sharedmonthcalendar,
-   mandatorydivisiblehomeservices andeverywholecollectortrip beforevisits.
-   Construct greedy nonoverlapping sameprovider crews;record unfilledcollection
-   andblocked/unpackedvisits explicitly. No newfoodsupport claim whenmandatory
-   collectiondoesnotpack;greedyfailureisnotprovenimpossibility. Prior declaration
-   network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
-   dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
+13. **Completed worker-calendar audit and publication:** declarationbdd6135c
+   preceded outputs;checkpointa60e853f retained all four collection/eight visit
+   cases. Seven controls,independent sorted-list/worker-interval/crew/hour checks
+   and145freshfile replays pass. Collector trips left unpacked:raw600/300
+   11,630/4,825;corrected10,932/4,214. Corrected600h visits packed within bins:
+   156,465crew1 and145,972crew4. These do not certify annual unchanged deliveries.
+   Normal evidence now publishes all12rows,3figures,results/review/replay/plan
+   andthe shown12worker intervalCSV. Earlier panels and163protected map files
+   remain byte identical. See NETWORK_VISIT_CALENDAR_20261112.md.
+14. **Next dependency:** predeclare a different packing order on the SAME jobs,
+   providers,crews andworker caps before new outcomes;retain collection-first
+   results. Separate per-bin packing certificates from annual mandatory-delivery
+   qualification. Greedy failure is not proof no schedule exists. No alternative
+   ordering experiment has been declared or scored in this publication.
 
-**Owner usage-limit checkpoint:** calendar implementation and 145-file fresh
-replay are saved; normal-atlas publication/figures/browser/Windows remain pending.
-Resume step 13 before another experiment. These per-bin packing outputs do not
-certify unchanged annual food deliveries when any mandatory collector trip is
-unpacked. Collection-first fragmentation is an algorithm restriction, not a
-physical-impossibility result. All release1–4/S1–S5 empirical/resource/mobile
-obligations above remain open. See NETWORK_VISIT_CALENDAR_20261112.md.
+The usage-limit checkpoint is resolved by the owner's continuation request.
+All release1–4/S1–S5 empirical/resource/mobile obligations above remain open;
+calendar publication does not complete dated size/occupation/provider evidence,
+prospective transfer,complete diets/household/draft work or daily provisioning.
 
 ### Whole-plan review log
 
@@ -141,6 +144,7 @@ obligations above remain open. See NETWORK_VISIT_CALENDAR_20261112.md.
 |Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
 |Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
 |Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
+|Worker-calendar publication,12November,declarationbdd6135c/checkpointa60e853f|Four collection/eight visit calendars independently reviewed;145fresh files exact. Normal12row/3figure publication andworker-interval downloads preserve oldpanels/163mapfiles. Entire release1–4/S1–S5/allactor/unaffiliated/mobile scope reviewed;per-bin packing is not annual delivery or empirical staffing qualification|Predeclare alternative packing order before new scores;retain alloriginal jobs/workcaps andexplicit annual mandatory-delivery gap. Dated occupancy/provider/size evidence,prospective transfer,complete resources anddaily provisioning remain open|
 
 ## Working rules
 
