@@ -33,6 +33,12 @@ calling an old running marker live. Re-run after a workspace shutdown; no job
 continues while its machine is stopped. This is separate from the normal
 Windows atlas launcher described below. Current job details: [handoff](HANDOFF.md).
 
+**Default Settlements map (12 November 2026).** The Earth atlas opens its
+Settlements layer on the cohort-kept market-hierarchy scenario by owner
+decision. It is development-fitted, not prospectively validated; the previous
+default stays selectable and Supply-supported reach keeps its Earth-tested
+default. See `reports/SETTLEMENT_DEFAULT_20261112.md`.
+
 ## Historical release notes
 
 **r40 adopted, 30 October 2026:** tracing North India's errors (256 mm of

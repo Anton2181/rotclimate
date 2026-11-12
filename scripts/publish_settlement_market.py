@@ -20,6 +20,7 @@ from settlement_locations_earth import sha, write
 from harvest.food_stocks import periodic_food_year
 from polity.settlement_support import permanent_food_ceiling
 
+DEFAULT_SETTLEMENTS = 'market6_50_capped'
 AUDIT = ('total', 'civilian', 'staff', 'active', 'draw', 'own_catchment_residents', 'forwarded_in_residents', 'passed_people',
     'parent', 'depth', 'children', 'leg_days', 'leg_retention', 'chain_retention', 'arrivals', 'local_arrivals', 'leg_loss',
     'budget', 'upper', 'source_supported', 'base_total', 'base_active')
@@ -121,7 +122,11 @@ def main():
                 'Built on the original coupled cell scenario (600 h, 7.5%), not the later dispatch versions. Share and range are scenarios, not calibrated values; '
                 'sizes are relative and imply no historical city size, date or sovereignty. Other foods, household and draft work and mobile occupancy remain unresolved.')
             common = dict(value=c['id'], label=label, note=note, integrated_support=True, market_support=True)
-            options['reach_towns'].append(dict(common, file=str(town_file.relative_to(DATA)), file_sha256=sha(town_file),
+            towns = dict(common)
+            if c['id'] == DEFAULT_SETTLEMENTS:                 # owner decision of 12 November 2026
+                towns.update(label=f"Default · market hierarchy with cohorts kept ({c['range_days']}-day legs, {share}%) · development-fitted",
+                    note='Default Settlements map since 12 November 2026 by owner decision: development-fitted, not prospectively validated. ' + note)
+            options['reach_towns'].append(dict(towns, file=str(town_file.relative_to(DATA)), file_sha256=sha(town_file),
                 items=[dict(color='#78a895', label='Local catchment: share of its civilian request drawn'),
                        dict(color='#59636b', label='Circles: residents after forwarding; dark centre: conditional cohort'),
                        dict(color='#3b4248', label='Lines: a town passing its share to a larger market'),
@@ -150,7 +155,9 @@ def main():
     for path, digest in preserved.items():
         if sha(ROOT / path) != digest:raise ValueError('Existing atlas packet modified: ' + path)
     write(DATA / 'settlement_market.json', dict(version=1, status='optional_market_hierarchy_research', packets=packets,
-        producer_sha256=sha(Path(__file__)), existing_packets_unchanged=True, default_adoption=False))
+        producer_sha256=sha(Path(__file__)), existing_packets_unchanged=True, default_adoption=True,
+        default_settlements=DEFAULT_SETTLEMENTS, default_basis='owner decision; development-fitted, not prospectively validated',
+        default_decision='calibration/settlement_default_adoption_20261112/decision.json'))
     page = DATA.parent / 'index.html'; html = page.read_text()
     if 'data-settlement-market-enabled' not in html:
         assert html.count('data-network-duty-visits-enabled') == 1
@@ -159,8 +166,9 @@ def main():
     for name in ('settled-reach.js', 'evidence.js'):shutil.copyfile(ROOT / 'atlas' / name, DATA.parent / name)
     write(OUT / 'atlas_publication.json', dict(status='published_optional_market_hierarchy_scenarios', manifest_sha256=sha(DATA / 'settlement_market.json'),
         publisher_sha256=sha(Path(__file__)), existing_data_files_unchanged=len(preserved), modes=['reach_towns', 'reach_defacto'],
-        defaults_unchanged=True, cases_per_climate=len(scenarios('raw'))))
-    print('Published', 2 * len(scenarios('raw')), 'market-hierarchy scenarios as a separate optional family; existing packets and defaults preserved.')
+        defaults_unchanged=False, default_settlements=DEFAULT_SETTLEMENTS, reach_default_unchanged=True,
+        cases_per_climate=len(scenarios('raw'))))
+    print('Published', 2 * len(scenarios('raw')), 'market-hierarchy scenarios as a separate optional family; existing packets preserved; Settlements default is', DEFAULT_SETTLEMENTS)
 
 
 if __name__ == '__main__':main()

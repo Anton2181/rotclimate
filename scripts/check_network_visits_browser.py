@@ -22,7 +22,7 @@ def main():
             page = browser.new_page(viewport=dict(width=1440, height=1000)); errors = []
             page.on('pageerror', lambda error: errors.append(str(error))); base = args.base + '/atlases/earth_fit/'
             model = json.loads(gzip.decompress((ROOT / 'atlases/earth_fit/data' / packet['payload']).read_bytes()))
-            page.goto(base + '#layer=reach_towns&climate=' + mode, wait_until='domcontentloaded')
+            page.goto(base + '#layer=reach_towns&variant=joint365&climate=' + mode, wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             assert not page.locator('#variant option[value^="visits"]').count()
             page.locator('#experimental').check(); page.click('#layer-reach_defacto')
@@ -86,7 +86,7 @@ def main():
                 for packet in bad['packets'].values(): packet['parent_payload_sha256'] = 'wrong'
                 page.route('**/network_duty_visits.json*', lambda route: route.fulfill(json=bad))
             else: page.route('**/network_visits/raw/settled_reach.bin.gz*', lambda route: route.fulfill(body=b'corrupt'))
-            page.goto(args.base + '/atlases/earth_fit/#layer=reach_towns&climate=raw', wait_until='domcontentloaded')
+            page.goto(args.base + '/atlases/earth_fit/#layer=reach_towns&variant=joint365&climate=raw', wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             page.locator('#experimental').check(); page.click('#layer-reach_defacto')
             if failure != 'corrupt_grid': assert not page.locator('#variant option[value^="visits"]').count()

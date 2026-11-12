@@ -111,7 +111,7 @@ def main():
                 page.route('**/data/settled_reach.json?*',lambda r:r.fulfill(json=bad))
             elif failure=='grid':page.route('**/settled_reach.bin.gz?*',lambda r:r.fulfill(body=b'corrupt',content_type='application/octet-stream'))
             else:page.add_init_script('window.DecompressionStream=undefined')
-            page.goto(a.base+'/atlases/'+ACTIVE[0]+'/#layer=reach_towns&climate=raw',wait_until='domcontentloaded')
+            page.goto(a.base+'/atlases/'+ACTIVE[0]+'/#layer=reach_towns&variant=joint365&climate=raw',wait_until='domcontentloaded')
             if failure in ['manifest','harvest_identity']:
                 page.wait_for_function('document.querySelector("#atlas-data-status").textContent.includes("Settlement integration unavailable")')
                 page.locator('#layer-reach_towns').wait_for(state='attached')

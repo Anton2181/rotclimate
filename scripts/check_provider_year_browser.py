@@ -42,7 +42,7 @@ def main():
             model = json.loads(gzip.decompress((DATA / packet['payload']).read_bytes()))
             page = browser.new_page(viewport=dict(width=1440, height=1100)); errors = []
             page.on('pageerror', lambda error: errors.append(str(error)))
-            page.goto(BASE + '#layer=reach_towns&climate=' + mode, wait_until='domcontentloaded')
+            page.goto(BASE + '#layer=reach_towns&variant=joint365&climate=' + mode, wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             assert not page.locator('#variant option[value^="yearvisits"]').count()
             page.locator('#experimental').check(); page.click('#layer-reach_defacto')
@@ -96,7 +96,7 @@ def main():
                 for p in bad['packets'].values(): p['parent_payload_sha256'] = 'wrong'
                 page.route('**/network_visit_year_complete.json*', lambda route: route.fulfill(json=bad))
             else: page.route('**/year_complete/raw/settled_reach.bin.gz*', lambda route: route.fulfill(body=b'corrupt'))
-            page.goto(BASE + '#layer=reach_towns&climate=raw', wait_until='domcontentloaded')
+            page.goto(BASE + '#layer=reach_towns&variant=joint365&climate=raw', wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             page.locator('#experimental').check(); page.click('#layer-reach_defacto')
             if failure != 'corrupt_binary': assert not page.locator('#variant option[value^="yearvisits"]').count()

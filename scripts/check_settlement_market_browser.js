@@ -20,9 +20,13 @@ const fmt = (v) => Number(v).toLocaleString(undefined, { maximumFractionDigits: 
     page.on('pageerror', (e) => errors.push(String(e)));
     const model = JSON.parse(zlib.gunzipSync(fs.readFileSync(path.join(DATA, packet.payload))));
     await page.goto(BASE + '#layer=reach_towns&climate=' + mode, { waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 6, null, { timeout: 90000 });
+    await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 11, null, { timeout: 90000 });
     const initial = await page.locator('#variant').inputValue();
-    if (await page.locator('#variant option[value^="market"]').count()) throw new Error('Market options visible before the experimental switch');
+    if (initial !== manifest.default_settlements) throw new Error('Settlements does not open on the adopted default: ' + initial);
+    if (await page.locator('#variant option[value^="market"]').count() !== 1) throw new Error('Only the default market option may show before the experimental switch');
+    if (!await page.locator('#variant option[value="joint365"]').count()) throw new Error('Previous default is not selectable in the core view');
+    const badge = (await page.locator('#variant option:checked').innerText()).toLowerCase();
+    if (badge.includes('experimental') || !badge.includes('default')) throw new Error('Default option mislabelled: ' + badge);
     await page.locator('#experimental').check();
     let maps = 0;
     for (const layer of ['reach_towns', 'reach_defacto']) {
@@ -32,7 +36,8 @@ const fmt = (v) => Number(v).toLocaleString(undefined, { maximumFractionDigits: 
         await page.waitForFunction((file) => document.querySelectorAll('#settled-readouts .readout').length === 11 && document.querySelector('#base').complete
           && document.querySelector('#base').naturalWidth > 0 && new URL(document.querySelector('#base').src).pathname.endsWith('/data/' + file), option.file, { timeout: 90000 });
         const label = (await page.locator('#variant option:checked').innerText()).toLowerCase();
-        if (!label.includes('experimental')) throw new Error('Market option not marked experimental: ' + label);
+        const isDefault = layer === 'reach_towns' && option.value === manifest.default_settlements;
+        if (label.includes('experimental') === isDefault) throw new Error('Wrong evidence tier for ' + option.value + ': ' + label);
         const c = model.cases.find((x) => x.id === option.value); const h = c.market_hierarchy;
         const totals = c.civilian_people.map((v, i) => v + c.institutional_people[i]); const j = totals.indexOf(Math.max(...totals));
         await page.selectOption('#settled-site', model.sites[j].id);
@@ -59,8 +64,16 @@ const fmt = (v) => Number(v).toLocaleString(undefined, { maximumFractionDigits: 
     await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 8, null, { timeout: 90000 });
     await page.reload({ waitUntil: 'domcontentloaded' });
     await page.goto(BASE + '#layer=reach_towns&climate=' + mode, { waitUntil: 'domcontentloaded' }); await page.reload({ waitUntil: 'domcontentloaded' });
-    await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 6, null, { timeout: 90000 });
+    await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 11, null, { timeout: 90000 });
     if (await page.locator('#variant').inputValue() !== initial) throw new Error('Default scenario changed');
+    // The previous default is one selection away, and reach keeps its Earth-tested default.
+    await page.locator('#experimental').uncheck();            // the normal view; with the switch on, scenarios carry across layers by design
+    await page.click('#layer-reach_defacto');
+    await page.waitForFunction(() => document.querySelector('#variant')?.value === 'v21_joint365', null, { timeout: 90000 });
+    await page.click('#layer-reach_towns');
+    await page.waitForFunction((value) => document.querySelector('#variant')?.value === value, initial, { timeout: 90000 });
+    await page.selectOption('#variant', 'joint365');
+    await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 6, null, { timeout: 90000 });
     // Phone widths with a market option selected, as for the other optional families.
     await page.locator('#experimental').check(); await page.selectOption('#variant', 'market6_50');
     await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 11, null, { timeout: 90000 });
@@ -75,12 +88,14 @@ const fmt = (v) => Number(v).toLocaleString(undefined, { maximumFractionDigits: 
   const page = await browser.newPage(); await page.route('**/data/settlement_market.json*', (route) => route.abort());
   await page.goto(BASE + '#layer=reach_towns&climate=corrected', { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => document.querySelectorAll('#settled-readouts .readout').length === 6, null, { timeout: 90000 });
+  if (await page.locator('#variant').inputValue() !== 'joint365') throw new Error('Missing manifest did not fall back to the previous default');
   await page.locator('#experimental').check();
   if (await page.locator('#variant option[value^="market"]').count()) throw new Error('Market options listed without their manifest');
   if (!await page.locator('#variant option[value="feedback600_75"]').count()) throw new Error('Other families lost when the market manifest is missing');
   await browser.close();
   fs.writeFileSync(path.join(OUT, 'review.json'), JSON.stringify({ status: 'passed', cases: checks, readouts_per_market_case: 11,
-    audit_grids_byte_exact: true, csv_rows_checked: true, other_families_still_load: true, default_unchanged: true,
+    audit_grids_byte_exact: true, csv_rows_checked: true, other_families_still_load: true, settlements_default: manifest.default_settlements, previous_default_selectable: true,
+    reach_default: 'v21_joint365', missing_manifest_falls_back_to: 'joint365',
     mobile_widths: [344, 390], missing_manifest_isolated: true,
     note: 'The default, non-experimental Settlements view scrolls sideways at 344 and 390 px (page width 400 and 423 px); measured independently of this family and not changed here.' }, null, 2) + '\n');
   console.log('Market hierarchy atlas check passed', JSON.stringify(checks));

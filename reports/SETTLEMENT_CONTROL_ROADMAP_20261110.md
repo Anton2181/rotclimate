@@ -250,6 +250,22 @@ before outputs:
     continuous-inventory parents so collection work and worker calendars
     constrain forwarded grain.
 
+21. **Default Settlements map changed by owner decision** (decision record
+    62ef5706, committed first). The Earth atlas Settlements layer now opens on
+    market6_50_capped (cohort-kept forwarding, 6-day legs, 50%), shown as a
+    scenario: development-fitted, not prospectively validated. This overrides,
+    for this one layer, the rule that defaults change only on qualified
+    evidence; the rule stands otherwise. Previous default joint365 remains in
+    the core view; Supply-supported reach keeps control v2.1; a missing market
+    packet falls back to joint365; no data file modified. Against the previous
+    default (corrected): town residents 812,546 to 415,045 and staffed sources
+    1,011 to 888, because residents now come out of a finite population;
+    largest town 2,804 to 10,625. Release 4 is therefore PARTLY met for
+    settlements, without calibration. See SETTLEMENT_DEFAULT_20261112.md.
+    Six older browser checks now request joint365 explicitly in the URL
+    (edited, not run here). Revisit after forwarding on dispatch-limited
+    parents or when qualified size or transfer evidence exists.
+
 ### Whole-plan review log
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
@@ -280,6 +296,7 @@ before outputs:
 |Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
 |Second branch merge, 12 November (late)|friendly-turing advanced to 4b42b703 (worker-calendar publication, joint job orders, provider-year visit maps, destination timing, meal bounds, continuous destination replans) while this line published the market-hierarchy maps. Merged again without dropping either; the other line's calendar publication replaces this line's duplicate; map scripts carry both new families. Whole release 1–4 / S1–S5 queue reviewed across both lines|Finish and publish the cohort-protected forwarding test (step 19); the other line continues with its declared continuous collection calendar|
 |Cohort-protected forwarding, 12 November (8e798f32)|Hierarchy does not have to cost reach within this ledger: with the cohort kept, sources and reach return to the no-forwarding level and the 6-day case keeps all six shape checks. 8 cases reviewed by recursion from the roots; reach for all 20 hierarchy cases rebuilt by the dense implementation; 40 atlas options checked. Release 2 still has no calibrated size model; release 3/4 and S1c–S5 unchanged and reviewed|Re-run on the other line's dispatch-limited parents under a new declaration; absolute sizes, occupancy, transfer, diets, S5 remain open|
+|Default Settlements map adopted by owner decision, 12 November (62ef5706)|Release 4 gains a new default for one layer on an explicitly development-fitted basis; release 2 remains uncalibrated (failed transfer, no dated sizes) and release 3 partial. Reach default, all packets and all other layers unchanged; fallback and previous default checked in the browser. Whole S1–S5 queue reviewed|Re-run forwarding on dispatch-limited parents and reconsider the default; seek a transfer region and dated size evidence|
 
 ## Working rules
 

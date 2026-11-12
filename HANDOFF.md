@@ -1,3 +1,35 @@
+# DEFAULT Settlements map changed by owner decision — 12 November 2026 (late)
+
+* Owner: "Let's get a better default map for now and we can develop further
+  later." Decision record calibration/settlement_default_adoption_20261112/
+  decision.json committed FIRST (62ef5706). Branch claude/project-continuation-a484h1.
+* Earth atlas Settlements (reach_towns) now defaults to market6_50_capped in both
+  climates, tier "Scenario", text "development-fitted, not prospectively
+  validated". Implemented in atlas/settled-reach.js (default prefers the market
+  option when its manifest loaded; otherwise joint365) and atlas/evidence.js
+  (tier text; core visibility for this option in reach_towns only; joint365 is
+  "Previous default"). Manifest data/settlement_market.json records
+  default_settlements. NO data file modified.
+* NOT changed: Supply-supported reach default v21_joint365 (Earth blind-tested);
+  every other layer. With Experimental ON the page carries a scenario across
+  layers by design; with it OFF reach opens on v21_joint365.
+* Against the previous default (corrected / raw): town residents 812,546 ->
+  415,045 / 807,770 -> 411,514; staffed sources 1,011 -> 888 / 987 -> 865;
+  largest town 2,804 -> 10,625 / 2,918 -> 11,525; Gini 0.33 -> 0.57 / 0.34 -> 0.57.
+  Fewer residents and sources because residents now come out of a finite
+  population. Owner was told this.
+* Six older check scripts assumed joint365 as the opening scenario
+  (check_dispatch/feedback/network_visits/provider_year/seeded_dispatch/
+  settlement_integration_browser.py). Their URLs now carry &variant=joint365.
+  EDITED BUT NOT RUN (no Python Playwright here): run them once locally.
+* scripts/check_settlement_market_browser.js covers the default path, previous
+  default, reach default, all 40 options, other families and the fallback.
+  scripts/publish_settlement_default.py writes the report, before/after figure
+  (posted) and the settlement-default evidence panel.
+* This is NOT calibration: release 2 still open (failed transfer, no dated
+  sizes). REVISIT the default after forwarding runs on the dispatch-limited
+  parents (new declaration) or when qualified evidence exists.
+
 # Cohort-protected forwarding published — 12 November 2026 (late)
 
 * Owner chose this test first. Declaration 8e798f32 preceded all distributions.

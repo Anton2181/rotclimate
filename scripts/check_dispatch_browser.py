@@ -23,7 +23,7 @@ def main():
             page.on('pageerror', lambda error: errors.append(str(error)))
             base = args.base + '/atlases/earth_fit/'
             model = json.loads(gzip.decompress((ROOT / 'atlases/earth_fit/data' / packet['payload']).read_bytes()))
-            page.goto(base + '#layer=reach_towns&climate=' + mode, wait_until='domcontentloaded')
+            page.goto(base + '#layer=reach_towns&variant=joint365&climate=' + mode, wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             assert page.locator('#variant').input_value() == 'joint365'
             assert not page.locator('#variant option[value^="dispatch"]').count()
@@ -83,7 +83,7 @@ def main():
                 page.route('**/settlement_dispatch.json*', lambda route: route.fulfill(json=bad))
             else:
                 page.route('**/dispatch/raw/settled_reach.bin.gz*', lambda route: route.fulfill(body=b'corrupt'))
-            page.goto(args.base + '/atlases/earth_fit/#layer=reach_towns&climate=raw', wait_until='domcontentloaded')
+            page.goto(args.base + '/atlases/earth_fit/#layer=reach_towns&variant=joint365&climate=raw', wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             page.locator('#experimental').check()
             if failure != 'corrupt_grid':

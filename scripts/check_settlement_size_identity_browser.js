@@ -17,6 +17,9 @@ const PANELS = {
   market: { id: 'settlement-market', folder: 'settlement_market_range_20261112/evidence',
     phrases: ['Two-day links do almost nothing; 6- and 12-day market legs produce a hierarchy.', 'no fit'],
     retained: ['visit-calendar', 'visit-grid', 'settlement-size-shape', 'settlement-size-identity'] },
+  default: { id: 'settlement-default', folder: 'settlement_default_adoption_20261112',
+    phrases: ['development-fitted, not prospectively validated', 'What is different.'],
+    retained: ['settlement-cohort', 'settlement-market', 'settlement-size-shape', 'settlement-size-identity'] },
   cohort: { id: 'settlement-cohort', folder: 'settlement_cohort_forwarding_20261112',
     phrases: ['A size hierarchy does not have to cost reach.', 'no fit'],
     retained: ['settlement-market', 'visit-calendar', 'settlement-size-shape', 'settlement-size-identity'] } };

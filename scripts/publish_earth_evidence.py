@@ -131,6 +131,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_market_evidence.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_cohort_forwarding_20261112/replay.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_cohort_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_default_adoption_20261112/comparison.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_default.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_size_identity.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_shape_20261112/review.json').exists():

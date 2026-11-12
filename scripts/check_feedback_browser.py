@@ -19,7 +19,7 @@ def main():
         for mode, packet in manifest['packets'].items():
             page = browser.new_page(viewport=dict(width=1440, height=1000)); errors = []
             page.on('pageerror', lambda e: errors.append(str(e)))
-            base = a.base + '/atlases/earth_fit/'; url = base + '#layer=reach_towns&climate=' + mode
+            base = a.base + '/atlases/earth_fit/'; url = base + '#layer=reach_towns&variant=joint365&climate=' + mode
             page.goto(url, wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             assert page.locator('#variant').input_value() == 'joint365'
@@ -83,7 +83,7 @@ def main():
                 page.route('**/settlement_feedback.json*', lambda r:r.fulfill(json=bad))
             else:
                 page.route('**/feedback/raw/settled_reach.bin.gz*', lambda r:r.fulfill(body=b'corrupt'))
-            page.goto(a.base + '/atlases/earth_fit/#layer=reach_towns&climate=raw', wait_until='domcontentloaded')
+            page.goto(a.base + '/atlases/earth_fit/#layer=reach_towns&variant=joint365&climate=raw', wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             page.locator('#experimental').check()
             if failure != 'corrupt_grid':

@@ -111,12 +111,13 @@
   function of(L, topic, world, option) {
     if (option != null && ["reach_defacto", "reach_towns"].includes(L.id)) {
       const v = typeof option === "string" ? option : option.value;
+      if (L.id === "reach_towns" && v === "market6_50_capped") return ["scenario", "Default since 12 November 2026, by owner decision. Development-fitted, not prospectively validated. Cell people, farm work, rural meals and grain share one ledger; towns pass half of what they hold to the largest same-actor market within 6 days, and a town that can hold a cohort keeps 150 residents. Relative town sizes match Roman references used in development. It staffs fewer sources and holds about half the town residents of the previous default, because town residents are now taken out of a finite rural population. The share, range and floor are declared values, not fitted ones; placement is unchanged and no absolute city size, date or authority is implied."];
       if (v.startsWith("market")) return ["experimental", "Towns pass a declared share of their residents and collected grain up to the largest same-actor town they can reach all year. People are counted once and every leg loses grain. Share and range are scenarios; relative sizes were compared with Roman references in development only. No city size, date, location or authority is calibrated."];
       if (v.startsWith("yearvisits")) return ["experimental", "One checked calendar is chosen for each provider across all twelve mandatory collection/service bins,retaining every baseline gated visit task. This is a necessary delivery-scheduling gate under supplied staff availability,not daily provisioning,within-bin grain timing,complete annual food validation,observed roles or authority. Dots are qualified point tasks;unaffiliated/mobile contexts remain unscored."];
       if (v.startsWith("visits")) return ["experimental", "Conditional walking visits to fixed target points spend only the same reserved patrol hours after collection and services. Crew and task frequency are supplied scenarios. Dots show completed point tasks,not whole-block territory,observed patrols,complete daily rosters or authority. Unaffiliated and mobile communities remain unscored."];
       if (v.startsWith("dispatch")) return ["experimental", "Resident transfers, rural field work, source meals, dispatch volumes and monthly collection hours share checked budgets. Remaining staff hours are shared across neutral patrol/service requests. Map footprints show potential travel access, not work-funded geographic patrols, calibrated resident sizes or authority."];
       if (v.startsWith("feedback")) return ["experimental", "Cell residents, remaining farm workers, rural meals and grain shipments share audited budgets. Numerical/source-food checks pass; resident sizes, diets, work availability and institutional roles are not calibrated on Earth. Rural deficits elsewhere remain unqualified."];
-      if (L.id === "reach_towns" && v === "joint365") return ["partial", "Default. Settlements the joint food budget can staff. Blind-tested: it feeds 98-99 % of the documented Chinese county seats of AD 280 and AD 1580 (and 94-95 % of Rome's towns and Han's seats in development), while bare fallow feeds 86-89 %."];
+      if (L.id === "reach_towns" && v === "joint365") return ["partial", "Previous default. Settlements the joint food budget can staff. Blind-tested: it feeds 98-99 % of the documented Chinese county seats of AD 280 and AD 1580 (and 94-95 % of Rome's towns and Han's seats in development), while bare fallow feeds 86-89 %."];
       if (OPTIONS[v]) return OPTIONS[v];
       if (LEGACY[L.id]?.[v]) return LEGACY[L.id][v];
       if (SENSITIVITY.includes(v)) return ["experimental", "Sensitivity case of the joint food budget." + notScored];
@@ -128,6 +129,7 @@
   function coreOption(L, value) {
     if (!["reach_defacto", "reach_towns"].includes(L.id)) return true;
     if (!L.variants.options.some(o => o.value === "fert_bare")) return true;   // settlement integration not attached
+    if (value === "market6_50_capped") return L.id === "reach_towns";   // the default Settlements map; its reach map stays experimental
     return CORE_OPTIONS.includes(value);
   }
   window.AtlasEvidence = { TIERS, of, coreOption };
