@@ -1,0 +1,31 @@
+{
+  "date": "2026-11-12",
+  "status": "mechanism_test_declared_before_any_longer_leg_link_or_size_is_computed",
+  "parent": "calibration/settlement_hierarchy_20261112/plan.json (f17deb2a). Its four scenarios ran: within the existing two-day year-round range only 31 of 1053 corrected and 39 of 1034 raw towns have a larger linked town, and the Gini coefficient moves from 0.35 to 0.36 (corrected) and 0.37 to 0.38 (raw). That result stands as declared and is published.",
+  "purpose": "Roadmap candidate (b): let the same forwarding mechanism use market legs longer than the two-day patrol range, with grain loss that grows with travel time. Isolates the effect of range; the mechanism, shares, ledger and cohort rules are unchanged.",
+  "known_before_declaration": [
+    "The four two-day scenarios and their forests, as above.",
+    "A timing probe on the corrected January transport graph for the first 20 town nodes: a town reaches on average 1.1 towns (itself) within 2 days, 4.3 within 6 days and 11.3 within 12 days, one direction, one month. No link matrix, forest or size has been computed for any longer range."
+  ],
+  "mechanism_changes_only": {
+    "travel": "Town-to-town travel days in both directions for each of the 12 monthly bins on the existing seasonal transport graph (foot, roads, tracks, ferries, rivers, harbours and sailing), rebuilt by the same audited reconstruction used for the published reach footprints. The reconstruction must reproduce the published town nodes and land mask or the run stops.",
+    "links": "Town B is linked to town A when travel A to B and B to A is at most R days in every monthly bin, and both have the same actor index. Sites without an actor now have travel times but remain unlinked under the same-actor rule, because actor index -1 is absence of evidence and not a shared polity.",
+    "leg_loss": "Each forwarding leg keeps 0.95 per day of the slowest monthly child-to-parent travel time, with a minimum of one day. The existing collection leg (at most one day) keeps 0.95, so the same daily rate is extended, not a new fitted value. Delay stays one monthly bin.",
+    "everything_else": "Parent rule, forwarding of people and grain, full-chain feasibility test, pooled town audit, cohort and minimum rules, ledger closures and the zero-share regression are exactly those of the parent declaration."
+  },
+  "scenarios": {
+    "climate_modes": ["raw", "corrected"],
+    "hours_worker_year": 600,
+    "transfer_fraction": 0.075,
+    "range_days_each_way": [6, 12],
+    "forward_share": [0.25, 0.5]
+  },
+  "reported": "The same forest, shape, verdict, cost and largest-town tables as the parent declaration, for all eight scenarios, plus the grain lost per leg-day and the distribution of leg lengths.",
+  "interpretation_fixed_in_advance": "If sizes enter the reference band, longer market legs can produce a Roman-like relative hierarchy under these assumptions, at the reported grain cost; the range and share are still scenarios, not calibrated values. If sizes stay below the band, forwarding along land-and-water legs of up to 12 days is insufficient and administrative concentration is tested next. A scenario that strips most towns of residents or cohorts is reported as such and is not preferred for matching a metric.",
+  "atlas": "All eight scenarios are appended to the optional coupled-scenario supplement after the four two-day scenarios, with the same selectors, defaults unchanged, and before/after maps shown to the owner.",
+  "review": "As the parent declaration. Travel times are additionally spot-checked: for 40 towns chosen by numpy default_rng seed 20261112 and three monthly bins (0, 4, 8), outward times are recomputed by reverse searches on the transposed graph and must equal the stored matrix.",
+  "prohibited": [
+    "No tuning of range, share, daily retention, link or parent rule after seeing results; no additional scenarios.",
+    "No absolute-size, urban-share, historical or sovereignty claim; no default change; no blind claim."
+  ]
+}

@@ -1,3 +1,39 @@
+# Calendar audit and market-hierarchy maps published after the merge — 12 November 2026
+
+* On claude/project-continuation-a484h1, which contains friendly-turing up to
+  a60e853f plus the merged line (see the next entry for the merge itself).
+* Worker-calendar audit PUBLISHED (the other line's pending item): panel
+  visit-calendar, 2 figures, 4 downloads, report rewritten;
+  scripts/publish_visit_calendars.py. 86.0-92.7% of planned visits pack in
+  their month; 1.7-4.3% of relevant provider-months miss a collector trip.
+* Market-hierarchy family PUBLISHED: 12 cases per the two declarations
+  (2-day links f17deb2a; 6/12-day legs 2b2fea71), shares 25/50%, both climates,
+  600 h, 7.5%. New separate atlas family data/settlement_market.json +
+  data/market/<mode>/, enabled by data-settlement-market-enabled; 24 options in
+  Settlements and Supply-supported reach under Experimental. atlas/settled-reach.js
+  and atlas/evidence.js gained the family, readouts and note. No existing data
+  file changed (220 verified); defaults unchanged.
+* Results: 2-day links inert (31/1053 corrected towns linked; Gini 0.35->0.36).
+  50% share: Gini 0.60 (6 d) and 0.65 (12 d) corrected, 0.60/0.66 raw; all six
+  declared checks inside the Roman relative band in both climates. 25% share:
+  mixed (3-5 of 6). Costs at 50%: cohorts 889->657/597, reach 6.38->5.26/4.84
+  bins, residents -1.0%/-3.7%, 19%/30% of forwarded grain lost. NOT calibrated,
+  NOT adopted; built on the ORIGINAL coupled parents, not the dispatch versions.
+* Review: scripts/review_settlement_hierarchy.py (links, forest, chain walks,
+  pooled and full-chain food, closures, cohorts, production, metrics; travel
+  spot-check ~9,900 pairs per climate), review_hierarchy_reach.py (dense second
+  implementation), replay_settlement_hierarchy.py (24 files byte exact), 10 unit
+  tests, Node atlas check scripts/check_settlement_market_browser.js (24 maps,
+  downloads, other families, default, missing manifest, phone widths).
+* Reusable: scripts/check_windows_style_clone.py --receipt <path> (run after
+  committing). Evidence-panel checks: scripts/check_settlement_size_identity_browser.js
+  <identity|shape|calendar|market>.
+* Known, not from this work: the DEFAULT Settlements view scrolls sideways at
+  344/390 px (page width 400/423). Optional-family views do not.
+* NEXT (declare first): (a) forwarding on the threshold-seeded dispatch parents;
+  (b) cohort scaling at larger centres; or any alternative calendar packing
+  order. Release 2 sizes/occupation/transfer, complete diets and work, S5 open.
+
 # Two 12 November lines merged on claude/project-continuation-a484h1 — 12 November 2026
 
 * TWO sessions worked in parallel from 2179335e. friendly-turing-43ygeu (to

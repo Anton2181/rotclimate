@@ -51,8 +51,8 @@ def run(mode, days_each_way, share, out=OUT):
     plan = json.loads(PLAN.read_text())['scenarios']
     if mode not in plan['climate_modes'] or days_each_way not in plan['range_days_each_way'] or share not in plan['forward_share']:
         raise ValueError('Scenario outside the declared test')
-    x, _, hashes = load(mode); receipt = json.loads((out / f'{mode}_travel.json').read_text())
-    path = out / f'{mode}_travel.npz'
+    x, _, hashes = load(mode); receipt = json.loads((OUT / f'{mode}_travel.json').read_text())
+    path = OUT / f'{mode}_travel.npz'                      # the reviewed travel matrix, also for fresh replays
     if sha(path) != receipt['travel_sha256']:
         raise ValueError('Travel matrix changed')
     days = np.load(path)['days'].astype(float); n = days.shape[1]

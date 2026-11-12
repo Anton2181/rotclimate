@@ -14,6 +14,9 @@ const PANELS = {
   shape: { id: 'settlement-size-shape', folder: 'settlement_size_shape_20261112',
     phrases: ['The allocator is more equal than every reference.', 'development diagnostic, no fit'],
     retained: ['settlement-size-identity', 'settlement-sizes', 'settlement-feedback', 'settlement-feedback-scan'] },
+  market: { id: 'settlement-market', folder: 'settlement_market_range_20261112/evidence',
+    phrases: ['Two-day links do almost nothing; 6- and 12-day market legs produce a hierarchy.', 'no fit'],
+    retained: ['visit-calendar', 'visit-grid', 'settlement-size-shape', 'settlement-size-identity'] },
   calendar: { id: 'visit-calendar', folder: 'network_visit_calendar_20261112',
     phrases: ['of planned visits fit inside their month.', 'no map change'],
     retained: ['visit-grid', 'spare-visits', 'network-visits', 'settlement-size-shape', 'settlement-size-identity'] } };
@@ -42,6 +45,7 @@ const PANEL = PANELS[process.argv[2] || 'identity'];
     if (url.host !== '127.0.0.1:8766') continue;
     const response = await page.request.get(url.href);
     if (!response.ok()) throw new Error('Not served: ' + url.href);
+    if (url.pathname.endsWith('/')) continue;                      // a page link, not a download
     const local = fs.readFileSync(path.join(ROOT, decodeURIComponent(url.pathname)));
     if (!local.equals(await response.body())) throw new Error('Served bytes differ: ' + url.pathname);
     links += 1;

@@ -8,7 +8,7 @@ window.SettledReachAtlas=(()=>{
     if(!document.querySelector('script[data-settled-reach-enabled]'))return null;
     const manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settled_reach.json')))),p=manifest.packets[mode];
     if(!p||p.expected_harvest_fingerprint!==meta.harvest?.fingerprint)throw Error('Settlement support climate mismatch');
-    let feedback=null,dispatch=null,seededDispatch=null,networkVisits=null;
+    let feedback=null,dispatch=null,seededDispatch=null,networkVisits=null,market=null;
     if(document.querySelector('script[data-settlement-feedback-enabled]')){
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settlement_feedback.json'))));
         const candidate=supplement.packets[mode];
@@ -37,13 +37,20 @@ window.SettledReachAtlas=(()=>{
         networkVisits=candidate;
       }catch(e){networkVisits=null;}
     }
+    if(document.querySelector('script[data-settlement-market-enabled]')){
+      try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settlement_market.json'))));
+        const candidate=supplement.packets[mode];
+        if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Market hierarchy parent/climate mismatch');
+        market=candidate;
+      }catch(e){market=null;}
+    }
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
-      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
+      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[]),...(market?.options[l.id]||[])]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
     for(const l of changed)l.variants.options.push(...(networkVisits?.options[l.id]||[]));
-    return {p,feedback,dispatch,seededDispatch,networkVisits,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
+    return {p,feedback,dispatch,seededDispatch,networkVisits,market,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
   }
   async function attach(state,harvest,changed,choosePlace){
     const {fresh,mode}=state;let p=state.p;
@@ -78,6 +85,8 @@ window.SettledReachAtlas=(()=>{
       $('settled-global').textContent=`${fmt(sum.viable_communities)} / ${fmt(model.sites.length)} candidate communities meet the declared minimum; ${fmt(sum.active_sources)} / ${fmt(reference.active_sources)} affiliated sources staffed. Modelled two-way access: ${fmt(sum.area_weighted_access_bins,2)} / 12 area-weighted bins (matched reference ${fmt(reference.area_weighted_access_bins,2)}). These are alternative scenarios, not extra census people.`;
       $('settled-readouts').innerHTML=readouts([[fmt(s.civilian_request_people),'reference civilian request'],[c.food_constrained?fmt(c.food_ceiling_people[j]):'Unconstrained','seasonal food ceiling · all residents'],[fmt(c.civilian_people[j]),'allocated civilian scenario'],[fmt(c.institutional_people[j]),'institutional residents · same food pool'],[c.institutional_active[j]?'Available':'Unavailable / unassigned','source for this reach scenario'],[c.community_viable[j]?'Meets minimum':'Below scenario minimum','50 civilian reference people']]);
       if(c.feedback_coupled)$('settled-readouts').innerHTML+=readouts([[fmt(c.resident_budget_people[j]),'shared origin allowance · civilians and staff'],[c.source_supported[j]?'Supported':'Unmet rural meals','rural source-food gate']]);
+      if(c.market_hierarchy){const h=c.market_hierarchy,q=h.parent_site[j];
+        $('settled-readouts').innerHTML+=readouts([[fmt(h.own_catchment_people[j]),'residents drawn from its own catchment'],[fmt(h.forwarded_in_people[j]),'residents passed up from smaller linked towns'],[q>=0?model.sites[q].name:'None · keeps all it holds','larger linked market receiving its share']]);}
       if(c.dispatch_work)$('settled-readouts').innerHTML+=readouts([[fmt(c.dispatch_work.collection_hours[j].reduce((a,b)=>a+b,0)),'collector hours / year · same staff'],[fmt(c.dispatch_work.unused_hours[j].reduce((a,b)=>a+b,0)),'unused staff hours after all modeled duties']]);
       if(c.point_visits){const v=c.point_visits;
         $('settled-global').textContent=`${fmt(v.completed)} / ${fmt(v.requested)} requested point visits completed (${fmt(100*v.completed/v.requested,1)}%). ${fmt(v.route_unreachable)} lack a walking round trip; ${fmt(v.provider_work_unavailable)} lack an initially affordable crew; ${fmt(v.capacity_unmet)} lose out to competing tasks. Requests are supplied monthly tasks at fixed points, not observed demand, occupation or territorial control. Unaffiliated and mobile communities remain unscored.`;
@@ -90,6 +99,8 @@ window.SettledReachAtlas=(()=>{
       if(c.feedback_coupled){const w=c.work_summary;
         $('settled-work-note').textContent=`Coupled cell budget: ${c.hours_worker_year} listed field hours per remaining rural worker/year; 40% worker share and a 30-day reaping window. Moving people changes BOTH workers and rural meals before grain is collected. Local cereal production retains ${fmt(w.production_retained*100,2)}% of potential. The ${(100*c.transfer_fraction).toFixed(1)}% allowance caps civilians and staff together. ${fmt(c.rural_ledger.deficit_origins)} local origins still have unmet cereal meals; they export nothing and block positive allocations in their catchments. Diets, work availability and staff roles remain scenarios; this is not a census or sovereignty validation.`;
         $('settled-field-grid').href='data/'+p.fields[c.id];$('settled-field-grid').hidden=false;
+        if(c.market_hierarchy){const h=c.market_hierarchy;
+          $('settled-work-note').textContent+=` Market forwarding: every town passes ${fmt(100*h.forward_share)}% of the residents and collected grain it holds to the largest same-actor town it can reach within ${fmt(h.range_days)} days each way in all twelve bins; ${h.distance_scaled?'each leg keeps 95% of the grain per travel day':'each leg keeps 95% of the grain'}. ${fmt(h.towns_with_parent)} towns have such a market. The share and range are scenarios, not calibrated values; sizes are relative, and no historical city size is implied.`;}
         if(c.dispatch_work){const d=c.dispatch_work;
           $('settled-work-note').textContent+=` Collection also fits every monthly staff budget: ${fmt(d.load_kcal)} kcal per collector trip, seven walking hours per graph day, and 600 supplied staff hours/year. Dispatch volumes were reduced before accepting food support. ${d.availability==='all_open'?'All collection bins are open.':'Collection bins 7–9 are closed.'} Remaining hours are shared across patrol and services.`;
           $('settled-work-note').textContent+=c.point_visits?` Walking visits use only that same reserved patrol slice; collection and other services retain their hours. Crew ${c.point_visits.crew};one on-site hour,seven duty hours per walking day,both directed legs at most two days,round trip plus on-site work at most four days. One requested visit per retained actor/point/bin;targets are about ${fmt(c.point_visits.actual_block_edge_km,2)} km apart. Cheapest initially affordable provider is assigned once,then whole visits compete for its hours. Dots mark visited points,not held blocks or intervening land. Monthly hours do not establish individual crew rosters,daily provisioning,observed patrols or authority.`:' These requests do not establish geographic patrol coverage; the map shows potential travel access from qualified sources.';
@@ -121,7 +132,7 @@ window.SettledReachAtlas=(()=>{
     });
     return {state:()=>({settled_site:siteId||''}),show:(id,v)=>{
       layer=id;variant=v?.value||'joint365';active=['reach_towns','reach_defacto'].includes(id)&&!!v?.integrated_support;const gen=++generation;$('settled-section').hidden=!active;
-      const desired=v?.network_visit_support?state.networkVisits:(v?.seeded_dispatch_support?state.seededDispatch:(v?.dispatch_support?state.dispatch:(v?.feedback_support?state.feedback:state.p)));if(desired&&p!==desired){p=desired;model=null;lookup=null;catchments=null;masks=null;}
+      const desired=v?.market_support?state.market:v?.network_visit_support?state.networkVisits:(v?.seeded_dispatch_support?state.seededDispatch:(v?.dispatch_support?state.dispatch:(v?.feedback_support?state.feedback:state.p)));if(desired&&p!==desired){p=desired;model=null;lookup=null;catchments=null;masks=null;}
       if(active){$('harvest-section').hidden=true;clear('Loading the joint settlement and food ledger…');load().then(()=>{if(gen===generation)render();}).catch(e=>{if(gen===generation){clear('Detailed ledger unavailable: '+e.message+'. The precomputed map remains a conditional scenario.');console.error(e);}});}
     },select:(x,y)=>{selected=[x,y];if(skipInitial){skipInitial=false;return;}if(!active||!model)return;const row=Math.floor(y/p.cell_px),col=Math.floor(x/p.cell_px),i=row>=0&&row<p.shape[0]&&col>=0&&col<p.shape[1]?catchments[row*p.shape[1]+col]:0;if(i){siteId=model.sites[i-1].id;$('settled-site').value=siteId;}render();changed();}};
   }

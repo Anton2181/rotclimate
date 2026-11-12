@@ -148,7 +148,7 @@ before outputs:
     share of residents and collected grain to the largest same-actor town inside
     the cached two-day year-round footprint. Only 31 of 1053 corrected and 39 of
     1034 raw towns have such a parent; Gini moves 0.35→0.36 and 0.37→0.38. Inert.
-17. **Completed longer-leg test, publication pending** (2b2fea71): same mechanism
+17. **Completed and published longer-leg test** (2b2fea71): same mechanism
     with 6- and 12-day year-round legs on the seasonal transport graph and grain
     retention 0.95 per travel day. Eight scenarios independently reviewed. At a
     50% share the Gini is 0.60 (6 days) and 0.65–0.66 (12 days) and both tail
@@ -156,11 +156,16 @@ before outputs:
     result is mixed. Costs: 889→657/597 corrected cohorts, total residents
     419,264→415,045/403,950, area-weighted reach 6.38→5.26/4.84 bins. These use
     the ORIGINAL coupled parents of 061e6ef8, not the later threshold-seeded
-    dispatch versions. Atlas maps, report and figures are pending.
-18. **Next on this line:** publish step 17 as optional maps; then decide with a
-    separate declaration whether the forwarding mechanism should be re-run on
-    the threshold-seeded dispatch parents so that collection work also limits
-    forwarded grain. No share or range is calibrated.
+    dispatch versions. All 12 cases (steps 16–17) are published as a separate
+    optional atlas family (data/settlement_market.json; 24 map options, exact
+    audit downloads), with report SETTLEMENT_HIERARCHY_20261112.md, two figures
+    and an evidence panel. 220 existing atlas data files verified unchanged.
+18. **Next on this line, each with its own prior declaration:** (a) re-run the
+    forwarding on the threshold-seeded dispatch parents so collection work also
+    limits forwarded grain; (b) test whether larger centres should carry larger
+    or additional cohorts, which decides whether hierarchy must cost reach
+    (S3). No share or range is calibrated. Known page issue, not from this
+    line: the default Settlements view scrolls sideways at 344 and 390 px.
 
 ### Whole-plan review log
 
@@ -181,7 +186,7 @@ before outputs:
 |Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
 |City workbook recovery and key join, 12 November (94e7266c, 79bb070f; merged line)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check and byte replay pass. Extents conflict for 7, 4 places predate AD150, sample selection visible. Release 2 open|Catalogue available again: declare catalogue-area comparison before scores|
 |Size-shape diagnostic, 12 November (e52e6d89; merged line)|First size result, and negative: no original coupled scenario produces large centres; flatness is in catchment budgets and requests. 63 Roman sets, 378 resampling ranges and 78 allocator sets recomputed|Declare one hierarchy mechanism at a time against the same metrics; no transfer-share tuning|
-|Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Publish optional maps; consider a declared re-run on the threshold-seeded dispatch parents|
+|Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Published as 24 optional map options with report, figures and panel; next a declared re-run on the threshold-seeded dispatch parents and a cohort-scaling test|
 |Worker-calendar publication, 12 November (after merge)|Pending publication from the other line completed: panel, 2 figures, 4 byte-exact downloads, keyboard/mobile/theme checks; 163 map files verified unchanged; no new map family. Whole release 1–4 / S1–S5 queue reviewed|Hierarchy maps next; any alternative packing order needs its own declaration|
 |Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
 |Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
