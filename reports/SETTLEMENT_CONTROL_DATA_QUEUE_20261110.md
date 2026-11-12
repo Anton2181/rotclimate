@@ -120,3 +120,15 @@ uncertified. Original52case housing source not recovered. See
 [measurement report](SETTLEMENT_SIZE_EVIDENCE_20261112.md). Revisit entire plan
 after each completed step; next recover compatible phases/extents and observation
 sampling or advance concrete complete-resource dependencies,not invented labels.
+
+
+## 12 November: city catalogue recovered and housing keys joined
+
+The pinned Hanson (2016) Cities Database workbook is available again at
+`https://oxrep.classics.ox.ac.uk/oxrep/docs/Hanson2016/Hanson2016_CitiesDatabase_OxREP.xlsx`
+with the pinned SHA-256; the copy under the database DOI is a different file and
+is unused. Raw workbook and legacy CSV export stay in the local cache under the
+archive's terms of use. All 50 housing samples join by author key
+`Hanson2016_<n>`; see the [identity report](SETTLEMENT_SIZE_IDENTITY_20261112.md).
+Both sources remain exposed development evidence. The original 52-case housing
+table and the 2023 supplementary CSV are still unavailable.

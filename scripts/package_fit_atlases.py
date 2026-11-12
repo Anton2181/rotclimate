@@ -370,6 +370,11 @@ def main():
         files += list((ROOT/'calibration/settlement_size_evidence_20261112').glob('*.json'))
         files += list((ROOT/'data/source/roman_housing_2023').glob('*'))
         files += [ROOT/'output/settlement_size_evidence_20261112/replay.json']
+    if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_SIZE_IDENTITY_20261112.md',
+                  ROOT/'reports/figures/settlement_size_identity_20261112.png',
+                  ROOT/'output/settlement_size_identity_20261112/replay.json']
+        files += list((ROOT/'calibration/settlement_size_identity_20261112').glob('*.json'))
     if (ROOT/'output/settlement_feedback_20261112/scan_check/replay.json').exists():
         files += [ROOT/'output/settlement_feedback_20261112/scan_check/results.json',
                   ROOT/'output/settlement_feedback_20261112/scan_check/replay.json']

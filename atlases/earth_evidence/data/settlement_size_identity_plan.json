@@ -1,0 +1,68 @@
+{
+  "date": "2026-11-12",
+  "status": "join_and_sampling_audit_declared_before_any_workbook_row_is_opened",
+  "parent": "calibration/settlement_size_evidence_20261112/plan.json and source_access_amendment.json; live roadmap step 4",
+  "purpose": "Join the 50 housing samples to the pinned city catalogue by author-supplied primary key, audit shared identities, catalogue areas and dates, and describe sample selection before any rank/size comparison. Identity and measurement audit only.",
+  "source_recovery": {
+    "pinned_workbook": {
+      "requested_url": "https://oxrep.classics.ox.ac.uk/oxrep/docs/Hanson2016/Hanson2016_CitiesDatabase_OxREP.xlsx",
+      "found_via": "https://oxrep.classics.ox.ac.uk/databases/cities/",
+      "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      "bytes": 360677,
+      "sha256": "5b9fc0195c3b5f2df71d6380174974215280cafd3bf5fa463fbf96969b549b6c",
+      "identity": "Exactly the SHA256 pinned by the earlier Roman count audit and by the parent declaration; this satisfies the parent rule to recover the workbook only on an exact match.",
+      "local_cache": "data/cache/hanson2016/cities.xlsx, not committed"
+    },
+    "legacy_csv_export": {
+      "requested_url": "https://oxrep.classics.ox.ac.uk/oxrep/docs/Hanson2016/Hanson2016_Cities_OxREP.csv",
+      "content_type": "text/csv",
+      "bytes": 226452,
+      "sha256": "5df8a1b95cece8ffdc0b8f12b3f6850ed56d7665af2c4fc392d8a6fd91497081",
+      "use": "Reviewer cross-check of the Cities sheet for the 50 joined keys only. Disagreements are reported, never resolved in favour of either file.",
+      "local_cache": "data/cache/hanson2016/cities_legacy_export.csv, not committed"
+    },
+    "not_used": {
+      "url": "https://doi.org/10.5287/bodleian:eqapevAn8 -> https://ora.ox.ac.uk/objects/uuid:25abf5a2-4efe-4890-b264-770865f6423c",
+      "file": "OxREP data.xlsx, 340440 bytes",
+      "sha256": "ddde385d1b3985fee5d67c0c9a8d01938cb60b56b289a9b6a08f7190764167ce",
+      "reason": "Different byte identity from the pinned workbook. Not opened and not represented as the pinned source."
+    },
+    "still_unavailable": "Original 2017 housing paper table (52 cases) and the 2023 supplementary CSV (HTTP 403). The earlier pinned URL on oxrep.web.ox.ac.uk still returns 404.",
+    "terms": "Archive record states Terms and Conditions of Use for Oxford University Research Archive, copyright 2017. Raw workbook and CSV stay in the local cache; only the attributed fields of the 50 joined records and aggregate counts are published."
+  },
+  "known_before_declaration": [
+    "Sheet names and header rows only: Cities (1389 rows including header; Primary Key, Ancient Toponym, Modern Toponym, Province, Country, Barrington Atlas Rank, Barrington Atlas Reference, Start Date, End Date, Longitude (X), Latitude (Y), Select Bibliography), Areas (Primary Key, Area, Estimate Basis), Monuments, Civic Status, Bibliography. First line of the CSV export has the same twelve Cities headers.",
+    "No data row of either recovered file has been read in this continuation. Earlier audits used this workbook: 1388 cities, AD150 operational cohort 1354, 862 single positive numeric area records.",
+    "The 50 housing rows, their sampled fractions and the 150 household scenarios are already exposed (results sha256 recorded by the producer)."
+  ],
+  "recovery_consistency_gate": "Before any join output is written the recovered workbook must reproduce the published counts of output/settlement_counts_20261111/results.json: 1388 cities with 885 single positive numeric area records and 503 without an area record, 1354 in the AD150 operational cohort (numeric start <= 150 and end >= 150 or non-numeric; coordinates are NOT required for this count, matching review_settlement_counts.py) with 862 single positive numeric area records and 492 without one. Any difference stops the run and is reported as a failed recovery.",
+  "join_rules": [
+    "Join only integer Table 2 city_key == Cities Primary Key. Exactly one catalogue row is required; zero or several is reported as unjoined. No name, coordinate or fuzzy joins and no manual re-keying.",
+    "Name agreement classes, all rows retained: exact string; equal after Unicode NFKD accent removal, case folding and removal of non-alphanumerics; otherwise different. Table 2 footnote digits are already stripped in the committed transcription. Province agreement uses the same three classes. A differing name or province is reported with both spellings and is not corrected.",
+    "Area records: count Areas rows per key (0, 1, several). With exactly one numeric positive value, compare with Table 2 site area: 'equal' when it rounds to the Table 2 value at the number of decimals Table 2 prints, otherwise 'different' with the ratio table/catalogue. Estimate Basis text is retained verbatim. Missing, non-numeric and ambiguous records keep those labels. No fills.",
+    "Catalogue dates are copied as given. AD150 class: covers (numeric start <= 150 <= numeric end), excludes (numeric start > 150 or numeric end < 150), open_or_nonnumeric otherwise. These describe catalogue-wide occupation only.",
+    "Duplicate-place audit: housing keys that share identical catalogue coordinates or identical normalised ancient toponyms are grouped and reported; they are not merged."
+  ],
+  "gates_unchanged": [
+    "A catalogue occupation interval never sets HousingSample.phase_start/phase_end, never clears sample_phase_unresolved and never overrides an explicit source phase exclusion.",
+    "Equality of Table 2 and catalogue area certifies only that both state the same extent; it does not certify a contemporaneous extent or representativeness. Both certifications stay False for all 50.",
+    "Expected result of this step for year-specific fitting: still zero AD150-eligible references. The step changes identity status only."
+  ],
+  "exposure_overlap": "For each joined key report membership of the exposed AD150 Roman development cohort used by the count and placement studies, whether the earlier loader would have used its catalogue area or a rank-median fill, and Barrington rank. All 50 remain exposed development evidence; no blind or transfer claim.",
+  "sampling_audit": {
+    "kind": "Source-internal descriptive diagnostics of sample selection. No model, no prediction, no fitted parameter.",
+    "quantity": "property density = properties / investigated hectares; independent of the household assumption.",
+    "fixed_classes": "sampled fraction < 1%, 1% to < 10%, 10% to < 100%, exactly 100%. Report count, median and range of property density per class.",
+    "associations": "Spearman rank correlation, all 50 rows, of property density with (a) sampled fraction, (b) stated site area, (c) investigated area. Two-sided permutation p from 20000 shuffles, numpy default_rng seed 20261112, reported as description of this selected sample.",
+    "declared_sensitivities": "Repeat the three correlations excluding the rows whose sample equals the stated extent, and separately for Britannia (10) and the other provinces (40). No other subsets and no residual-selected exclusions.",
+    "interpretation_fixed_in_advance": "A negative association between sampled fraction and density is evidence that small samples sit in denser-than-average parts of sites or periods and supports keeping site_representativeness_unresolved; absence of an association does not certify representativeness. Neither outcome changes a gate or a default."
+  },
+  "consumer": "HousingSample records gain an identity status (catalogue_key_joined or unjoined) for later group-aware comparisons, so that repeated estimates for one place stay in one group. The finite resident allocator and coupled grain/work ledger remain the consumers of any later qualified size request.",
+  "review": "Independent reviewer reads the workbook XML directly (zip parts and shared strings) without the producer's spreadsheet library, recomputes every join class, the recovery gate counts and all correlations by its own rank routine, and cross-checks the twelve Cities fields of the 50 keys against the legacy CSV export. Fresh producer replay must be byte exact.",
+  "prohibited": [
+    "No fantasy or Earth model scores, no size fit, no default change, no AD150 size labels.",
+    "No date, phase, area or coordinate fills; no inheritance of catalogue dates as sample phases; no exclusion chosen from results.",
+    "No claim that the original 52-case housing table or the 2023 supplement was recovered."
+  ],
+  "next": "Revisit the whole roadmap. If phases remain unresolved, either declare a mixed-period housing diagnostic with groups, baselines, metrics and exclusions before scores, or advance a concrete resource/occupation dependency."
+}

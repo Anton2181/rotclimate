@@ -1,3 +1,45 @@
+# City catalogue recovered; all 50 housing samples joined by key — 12 November 2026
+
+* Resumed after the usage pause. Branch note: this session can push only to
+  claude/project-continuation-a484h1, which already held 8745b931, fef3e9e8 and
+  2179335e. claude/friendly-turing-43ygeu stops at 061e6ef8. Owner to decide
+  which is canonical; do not push both without being asked.
+* Environment in a fresh container: `python3 -m venv .venv` then
+  `pip install -r requirements-settlement-research.txt`. Browser checks: Python
+  playwright is absent; use Node with NODE_PATH=/opt/node-tools/node_modules.
+  The clone is shallow, so scripts/publish_earth_evidence.py fails on old
+  commits; run the single panel publisher instead and then build_fit_hub.py.
+* Pinned Hanson 2016 workbook RECOVERED from the older OxREP host, SHA-256
+  identical to 5b9fc019...; recover_settlement_sources.py now uses that URL and
+  checks the hash. The DOI/ORA copy is a different file and stays unused. Cache
+  only: data/cache/hanson2016/cities.xlsx and cities_legacy_export.csv.
+* Declaration 94e7266c before any row was read; key-format amendment 79bb070f
+  after a zero-join first run (keys are 'Hanson2016_<n>'). Recovery gate
+  reproduces 1388/885/503 and AD150 1354/862/492.
+* Result: 50 of 50 joined; 49 names and 50 provinces identical (Corinium is
+  'Corinium Dobunnorum'); no duplicate places; 43 extents equal, 7 different
+  (Metapontum 150 vs 14 ha); catalogue dates: 4 ended before AD150 (Cassope,
+  Morgantina, Herculaneum, Pompeii), 2 cover it, 44 have end 'NULL'. 46 are in
+  the exposed AD150 cohort. Still ZERO AD150-eligible; catalogue dates clear no
+  gate. Models and defaults unchanged.
+* Sampling: median properties per investigated ha 40.8 (<1% of site), 20.0
+  (1-10%), 31.3 (10-100%), 43.5 (whole). Spearman density vs investigated share
+  -0.24 (p 0.10), -0.30 (p 0.04) without the 2 whole-extent rows; vs site area
+  +0.36 (p 0.01). Descriptive, 12 declared correlations all reported.
+* New: polity/settlement_place_groups.py (kept separate so the earlier reviewed
+  hash of settlement_size_evidence.py stays valid); join/review/replay/plot/
+  publish scripts; Node browser check. Independent raw-XML review, 600-field
+  CSV cross-check, byte-exact replay, 35 focused tests, 6 served links, keyboard,
+  mobile and themes pass. Figure posted in chat. New evidence panel above the
+  housing panel; release.json refreshed.
+* Report reports/SETTLEMENT_SIZE_IDENTITY_20261112.md. Roadmap live review and
+  log updated (step 4 complete, step 5 next).
+* NEXT: declare the catalogue-area size comparison BEFORE scores: extent bases,
+  constant and area-dependent density scenarios, allocator outputs, place
+  groups, baselines, metrics, exclusions, support rule. Add explicit refusal for
+  samples from places ended before the comparison year. Otherwise advance
+  complete diets/draft/household work. S1-S5, all actors, mobile/nonstate remain.
+
 # Usage pause: reviewed housing evidence and living whole-plan checkpoint — 12 November 2026
 
 * Owner asked to tie up and commit/push for now due usage. No new experiment or

@@ -16,12 +16,12 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |Programme part|Current state|Next dependency / completion test|
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
-|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified|Prepare housing references, resolve phase/extent and sampling limits; declare comparisons before scores; retain count/location Pareto alternatives and plan a genuinely prospective transfer|
+|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified. Housing samples now joined to the recovered city catalogue (50 of 50), still zero AD150 labels|Declare the catalogue-area size comparison before scores (extent basis, groups, baselines, metrics, exclusions); add an explicit refusal for samples from places ended before the comparison year; retain count/location Pareto alternatives and plan a genuinely prospective transfer|
 |Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach|Empirical size requests and adopted placement/role choices must consume this ledger; rebuild affected tracks when actual locations change; preserve anchors and outside rural people|
 |Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
-|S2: settlement sizes, services and roles|Finite resource primitives implemented; source selection and dated functions unresolved|Finish housing measurement adapter and independent source review; then predeclare size comparisons. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
+|S2: settlement sizes, services and roles|Finite resource primitives implemented; housing adapter, source review and place-identity grouping complete; source selection and dated functions unresolved|Predeclare size comparisons using place groups. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
 |S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete|Add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
@@ -40,14 +40,25 @@ Immediate sequence:
    whole-city extrapolation and infrastructure estimates. All 50 source rows and
    150 scenario calculations reviewed independently; 18 focused tests pass. Reject missing phases, unsupported sample-to-site
    representativeness and unmatched extents as year-specific calibration labels.
-4. **New dependency:** audit sampling fractions, household assumptions and shared
-   city identities before any rank/size comparison. Author-supplied catalogue
-   keys are identity candidates; unavailable workbook/date joins remain open.
+4. **Completed:** the pinned city workbook was recovered from the project's
+   older host with an identical SHA-256 and reproduces the earlier audit counts.
+   All 50 housing samples join it by author key (declaration 94e7266c, key-format
+   amendment 79bb070f). 49 names and 50 provinces identical, no duplicate places,
+   7 differing extents, 4 places ended before AD150, 44 with no recorded end.
+   Smaller samples report denser housing (rank correlation -0.24; -0.30 without
+   the two whole-extent samples). All AD150 gates retained; zero eligible.
+   See SETTLEMENT_SIZE_IDENTITY_20261112.md.
+5. **Next:** declare a catalogue-area size comparison before any score. State the
+   accepted extent bases, the density scenarios (constant and area-dependent),
+   the allocator outputs compared, place groups, baselines, metrics, exclusions
+   and what would count as support. Catalogue areas are exposed development
+   evidence and conditional references, never census truth. Add an explicit
+   refusal for housing samples from places that ended before the comparison year.
    Do not manufacture confidence intervals from household sensitivity scenarios.
-5. Once a usable comparison exists, commit its grouping, exclusions, baselines,
-   metrics and adoption rules before scores. Otherwise preserve the source
-   result and advance a concrete unresolved resource/occupation dependency.
-6. Carry qualified requests into the existing finite allocator and coupled grain/
+6. If no defensible comparison can be declared, preserve the source result and
+   advance a concrete unresolved resource/occupation dependency (complete diets,
+   draft and household work, monthly collection/patrol capacity).
+7. Carry qualified requests into the existing finite allocator and coupled grain/
    work pipeline. Follow the full release and S1–S5 completion criteria above.
 
 ### Whole-plan review log
@@ -59,6 +70,7 @@ Immediate sequence:
 |Source-access check and open-paper recovery, fef3e9e8|Original source links fail; 2023 housing sample offers measurement evidence with exposed overlapping sites|Add explicit sample/phase/extent/detection gates and source-recovery dependency; no new blind pool|
 |Housing preparation and typed adapter, 12 November|50 rows/150 scenarios reviewed,18 checks and byte replay pass; none qualified for AD150; release2 remains open|Resolve phase/extent/representativeness and city joins; declare any later comparisons before scores|
 |Housing evidence publication and requested usage pause, 12 November|Research panel/chart/downloads preserve defaults;23 focused checks,9 served links,mobile/keyboard/themes and1695 Windows assets pass; entire release/S1–S5 queue reviewed|Handoff saved; commit/push and pause; next session starts at unresolved measurement/resource dependencies|
+|City workbook recovery and key join, 12 November (94e7266c, 79bb070f)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check, byte replay and 30 focused tests pass. Release 2 still open: extents conflict for 7, 4 places predate AD150, sample selection is visible. Release 3/4 and S1c–S5 unchanged; whole queue reviewed|Catalogue is available again, so the size comparison no longer rests on housing samples alone: declare the catalogue-area comparison before scores, add the ended-place refusal, keep complete diets/work and mobile/nonstate tasks queued|
 
 ## Working rules
 
@@ -498,3 +510,16 @@ publication is a research result, not a new size/default adoption. All S1–S5,
 shared-ledger consumer, prospective transfer, complete diets/work and mobile/
 nonstate tasks were revisited and remain on the live queue. Owner requested a
 usage pause: finish this checkpoint,commit/push,then resume from step4 above.
+
+12 November whole-plan review after the city-key join: the pinned Hanson (2016)
+workbook is recovered with an identical SHA-256, and all 50 housing samples join
+it by author key. This settles place identity and adds `place_groups` for
+group-aware comparisons. It qualifies no resident size: seven samples state a
+different extent from the catalogue, four places had ended before AD150, 44 have
+no recorded end date, and smaller samples report denser housing. Catalogue dates
+are whole-site spans and clear no phase gate. Release 2, S1c–S1e and S2–S5 were
+revisited and remain open. The next step is a declared catalogue-area size
+comparison; see step 5 of the live review. This session pushes to
+`claude/project-continuation-a484h1`, which already held the three preceding
+commits; `claude/friendly-turing-43ygeu` stops at 061e6ef8 until the owner
+decides which branch is canonical.
