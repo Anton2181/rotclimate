@@ -364,6 +364,15 @@ def main():
     if (ROOT/'output/settlement_feedback_20261112/atlas_publication.json').exists():
         files += [ROOT/'reports/SETTLEMENT_FEEDBACK_20261112.md', ROOT/'calibration/settlement_feedback_20261112/plan.json',
                   ROOT/'reports/figures/settlement_feedback_maps_20261112.png', ROOT/'reports/figures/settlement_feedback_scenarios_20261112.png']
+    if (ROOT/'output/settlement_size_evidence_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_SIZE_EVIDENCE_20261112.md',
+                  ROOT/'reports/figures/settlement_size_evidence_20261112.png']
+        files += list((ROOT/'calibration/settlement_size_evidence_20261112').glob('*.json'))
+        files += list((ROOT/'data/source/roman_housing_2023').glob('*'))
+        files += [ROOT/'output/settlement_size_evidence_20261112/replay.json']
+    if (ROOT/'output/settlement_feedback_20261112/scan_check/replay.json').exists():
+        files += [ROOT/'output/settlement_feedback_20261112/scan_check/results.json',
+                  ROOT/'output/settlement_feedback_20261112/scan_check/replay.json']
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

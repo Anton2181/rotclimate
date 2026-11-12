@@ -106,3 +106,17 @@ The [conditional context diagnostic](SETTLEMENT_ROLE_CONTRAST_20261111.md) now
 scores rural-Britain source labels. Current exposure is conditional development,
 not unscored preparation or independent transfer. Earlier preparation checkpoints
 remain unchanged; other source candidates are not thereby scored.
+
+
+## 12 November: housing measurement evidence prepared
+
+[Ortman and Hanson2023](https://doi.org/10.1017/S0068113X23000375),CC BY4.0,
+Table2 supplies50 property-count/sample-area/site-area records. Allsource fields
+and150 household scenarios independently reviewed; no size-model scores. This
+exposed mixed-period source overlaps Roman development. Three reported phases
+excludeAD150,47 remain unresolved; none clears date/extent/representativeness
+gates. Author-supplied catalogue keys retained,unavailable originalworkbook joins
+uncertified. Original52case housing source not recovered. See
+[measurement report](SETTLEMENT_SIZE_EVIDENCE_20261112.md). Revisit entire plan
+after each completed step; next recover compatible phases/extents and observation
+sampling or advance concrete complete-resource dependencies,not invented labels.

@@ -5,6 +5,61 @@ not just its first experiment. Read this alongside the current entry in HANDOFF.
 at every continuation. Physics development has its own queue; neither queue
 silently replaces the other.
 
+## Live review — 12 November 2026
+
+Owner instruction: after **each completed step**, revisit this entire programme,
+expand it when findings create dependencies, and save the revised plan here.
+Update this live section and the review log before proceeding. The historical
+checkpoints below remain evidence of what was known then; this section controls
+the current queue. A push is a checkpoint, not a stopping condition.
+
+|Programme part|Current state|Next dependency / completion test|
+|---|---|---|
+|Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
+|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified|Prepare housing references, resolve phase/extent and sampling limits; declare comparisons before scores; retain count/location Pareto alternatives and plan a genuinely prospective transfer|
+|Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach|Empirical size requests and adopted placement/role choices must consume this ledger; rebuild affected tracks when actual locations change; preserve anchors and outside rural people|
+|Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
+|S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
+|S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
+|S2: settlement sizes, services and roles|Finite resource primitives implemented; source selection and dated functions unresolved|Finish housing measurement adapter and independent source review; then predeclare size comparisons. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
+|S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
+|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete|Add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
+|S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
+|Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
+
+Immediate sequence:
+
+1. **Completed:** finer scan doubles intervals for four central coupled cases;
+   132 shared trial points exact, largest total change 0.000294719 people, zero
+   source flags changed. Independent final work/food and fresh replay pass.
+2. **Completed initial preparation:** housing evidence, declared in 8745b931 with source
+   amendment fef3e9e8. Original 2017 author link and pinned catalogue download are
+   unavailable. The open 2023 paper provides 50 sample-property/area records and
+   explicit phase/detection cautions. This is not the original 52-case table.
+3. **Completed:** typed conditional size references separate observed properties from
+   whole-city extrapolation and infrastructure estimates. All 50 source rows and
+   150 scenario calculations reviewed independently; 18 focused tests pass. Reject missing phases, unsupported sample-to-site
+   representativeness and unmatched extents as year-specific calibration labels.
+4. **New dependency:** audit sampling fractions, household assumptions and shared
+   city identities before any rank/size comparison. Author-supplied catalogue
+   keys are identity candidates; unavailable workbook/date joins remain open.
+   Do not manufacture confidence intervals from household sensitivity scenarios.
+5. Once a usable comparison exists, commit its grouping, exclusions, baselines,
+   metrics and adoption rules before scores. Otherwise preserve the source
+   result and advance a concrete unresolved resource/occupation dependency.
+6. Carry qualified requests into the existing finite allocator and coupled grain/
+   work pipeline. Follow the full release and S1–S5 completion criteria above.
+
+### Whole-plan review log
+
+|Completed step|Whole-plan reassessment|Expansion / next action|
+|---|---|---|
+|Coupled cell-feedback and optional atlas, 061e6ef8|Advances release 3 and S4 implementation; does not complete empirical release 2, S1 transfer or S2–S5|Check nonmonotone search resolution, then resident-size/occupation evidence|
+|Finer scan and publication, 8745b931|Tested-grid robustness supports retaining eight original cases; no new default or global-optimum claim|Return to size evidence; retain complete-diet/work/mobile gaps|
+|Source-access check and open-paper recovery, fef3e9e8|Original source links fail; 2023 housing sample offers measurement evidence with exposed overlapping sites|Add explicit sample/phase/extent/detection gates and source-recovery dependency; no new blind pool|
+|Housing preparation and typed adapter, 12 November|50 rows/150 scenarios reviewed,18 checks and byte replay pass; none qualified for AD150; release2 remains open|Resolve phase/extent/representativeness and city joins; declare any later comparisons before scores|
+|Housing evidence publication and requested usage pause, 12 November|Research panel/chart/downloads preserve defaults;23 focused checks,9 served links,mobile/keyboard/themes and1695 Windows assets pass; entire release/S1–S5 queue reviewed|Handoff saved; commit/push and pause; next session starts at unresolved measurement/resource dependencies|
+
 ## Working rules
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
@@ -93,7 +148,9 @@ update. None of these milestones is complete merely because code tests pass.
    transport reference reproduced exactly (SETTLEMENT_FEEDBACK_20261112.md).
    This advances shared-ledger implementation but does not empirically qualify
    resident sizes, complete rural diets, mobile occupancy or a new default.
-   Next: declared finer-scan robustness, then compatible empirical calibration.
+   Finer-scan robustness is complete; housing preparation now retains 50 conditional
+   references with explicit phase/extent/sampling gates. Compatible empirical
+   calibration remains open. See the live review at the top.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.
@@ -428,3 +485,16 @@ maximum total delta0.000294719people and zero source-flag changes; independent
 work/food gates and fresh byte replay pass. Original eight maps preserved. This
 checks tested grids rather than global optimality; resident-size evidence remains
 open. See SETTLEMENT_FEEDBACK_20261112.md.
+
+
+12 November whole-plan review after housing preparation: all 50 source rows and
+150 household scenarios independently checked, fresh compilation byte exact and
+18 focused checks pass. No AD150 references yet qualify; this preparation does
+not complete release2/S1/S2. Median investigated fraction1.11% adds observation
+selection and sample representativeness as explicit dependencies. Original2017
+housing table and pinned city workbook remain unavailable. Typed adapter refuses
+unresolved sample phases/extents before year-specific fitting. Normal evidence
+publication is a research result, not a new size/default adoption. All S1–S5,
+shared-ledger consumer, prospective transfer, complete diets/work and mobile/
+nonstate tasks were revisited and remain on the live queue. Owner requested a
+usage pause: finish this checkpoint,commit/push,then resume from step4 above.

@@ -1,0 +1,35 @@
+{
+  "date": "2026-11-12",
+  "status": "preparation_declared_before_housing_table_extraction",
+  "purpose": "Prepare housing-supported resident-size evidence and explicit date/measurement gates for the finite allocator; do not treat district counts or area-regression estimates as independent resident labels.",
+  "known_before_declaration": [
+    "Prior audit:1388 Roman cities,AD150 operational cohort1354,862 positive numeric area records; source workbook SHA5b9fc0195c3b5f2df71d6380174974215280cafd3bf5fa463fbf96969b549b6c.",
+    "2017 author paper uses more than50 housing-based cases, described as52 in later2025 paper; dates span Classical through Late Roman periods.",
+    "2020 republished Table1 is a relationship summary, not assumed to be52 direct observations. No original housing table values inspected in this continuation."
+  ],
+  "sources": [
+    {
+      "url": "https://www.colorado.edu/socialreactors/node/113/attachment",
+      "work": "Hanson and Ortman2017,doi10.1017/S1047759400074134",
+      "use": "Author-hosted original method, tables, household and inhabited-area assumptions; local cache only."
+    },
+    {
+      "url": "https://oxrep.web.ox.ac.uk/sites/default/files/oxrep/documents/media/hanson2016_citiesdatabase_oxrep.xlsx",
+      "work": "Hanson2016 Cities Database,doi10.5287/bodleian:eqapevAn8",
+      "use": "Same pinned city keys/area basis/date fields; no missing-area fills, no generated labels."
+    }
+  ],
+  "preparation": [
+    "Record resolved URLs, content type, byte count andSHA256. Recover original workbook only if SHA exactly matches prior source.",
+    "Extract each housing observation with raw units, number or density of units, sampled versus total inhabited extent, household assumption, derived population and source-page provenance; unknown remains null.",
+    "Preserve source dates as given. No missing start/end becomes occupation atAD150. Do not infer housing phase from a catalogue-wide occupation interval.",
+    "Join only exact normalized unambiguous ancient-name candidates; preserve alternatives and unmatched observations; no nearest-coordinate or fuzzy autoaccept. A name match is an identity candidate, not a date/extent certification.",
+    "Detect repeated site/phase observations. Report overlap with exposed Roman development; no blind claim.",
+    "Produce machine-readable typed observations/eligibility gates and independent extraction/arithmetic review; report aggregate counts only publicly if raw redistribution unclear."
+  ],
+  "prohibited": [
+    "No fantasy fit, no candidate score, no new calibrated default, no regression-derived city populations as independent census truth.",
+    "No area-rank median fill,CountyPOP urban labels,continuous-occupation assumption,unknown phase fixes or source-based exclusion selected using model residuals."
+  ],
+  "next": "After extraction and source review, declare any size-model comparison and group-aware splits BEFORE computing scores. Preserve coupled population/food/work ledger and full S1-S5/all actors/mobile/nonstate scope."
+}

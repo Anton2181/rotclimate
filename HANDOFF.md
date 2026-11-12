@@ -1,3 +1,42 @@
+# Usage pause: reviewed housing evidence and living whole-plan checkpoint — 12 November 2026
+
+* Owner asked to tie up and commit/push for now due usage. No new experiment or
+  background simulation is left running. Canonical branch friendly-turing-43ygeu.
+* Owner also requires revisiting ENTIREplan after EACHcompleted step and expanding
+  as needed. Saved authoritative live review/queue and whole-plan reviewlog at
+  reports/SETTLEMENT_CONTROL_ROADMAP_20261110.md; read it at EVERYcontinuation.
+  Full release1–4 and S1–S5/allactors/unaffiliated/mobile/nonstate remain in scope.
+* Finer scan complete,pushed8745b931:132overlap arrays exact,max0.000294719people
+  change,zero source switches; independent food/work,fresh replay,browser and
+  Windows1688assets pass. Original eight feedback scenarios/maps unchanged.
+* Housing preparation declared8745b931,source-access amendment fef3e9e8 BEFORE
+  table extraction. Original2017authorlink404,publisherPDFreturnsHTML;original
+  pinnedHansonworkbook404. No false claim these were recovered. Open2023primary
+  PDF pinned648928e26e1694303ea56251c4ea5afae3551ed2e51072e4630587fe2903479b;
+  supplementaryCSV403. Normalized licensedTable2 now retained under data/source/
+  roman_housing_2023,50rows not original52. Authorcitykeys,no coordinates/fuzzyjoins.
+* New polity/settlement_size_evidence.py returns conditional sampled-density
+  population at declared household size; refuses unresolved/mismatched phase,
+  unverifiedrepresentativeness/extent before year-specificcalibration. Missing
+  endpoint not continuousoccupation. No annualfit,labelimputation or defaultchange.
+* Source50rows/150numericfields all matchPDF,150conditional3/5/7household scenarios
+  independentdecimalchecked;18focusedtests pass; freshresults BYTEEXACT. Source
+  page visually reviewed. Median investigatedfraction1.1108%,24below1%,39below10%.
+  Three explicitAD150exclusions(Calleva/Verulamium/Corinium),47phaseunknown;all50
+  stilllacksite-representativeness/contemporaneous-extentcertificate. ZEROeligible
+  means unresolvedmeasurement,not zeropeople. NoCountyPOP/cityarea-to-census shortcut.
+* New sizeevidencechart postedinchat;report SETTLEMENT_SIZE_EVIDENCE_20261112.md.
+  Normal evidence panel/downloads and basepublisher/package hooks added. Models
+  unchanged. Final QA:23focused size/launcher/package checks pass;9served local
+  links byteexact,keyboard/mobile/light/dark pass;Windows-style1695assets byteexact
+  and standardlauncher verifies r44. Receipts under newoutputfolder.
+* NEXT per liveplan: phase/extent/representativeness and authorcitykey joins before
+  year-specificsizefit; if a mixed-period diagnostic is worthwhile,freeze groups,
+  baselines/metrics/exclusions BEFOREscores and labeldevelopment,notAD150validation.
+  Keep existing finitepeople/ruralworkers/grain/food/staff/reach consumer. Full
+  diets/draft/household/collection/patrolwork and actualmobileoccupancy remain open.
+  Never call sourceprep a calibrated fantasyrelease or repairedVidarbhatransfer.
+
 # Finer cell-feedback scan completed — 12 November 2026
 
 * Continued after061e6ef8 was pushed. Committed scan declaration preceded outputs.
