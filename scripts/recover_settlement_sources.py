@@ -80,7 +80,7 @@ def rome():
         record=json.load(r)
     road=next(f for f in record['files'] if f['key']=='itinere_roads.gpkg')
     targets=[(CACHE/'itinere/itinere_roads.gpkg',road['links']['self']),
-             (CACHE/'hanson2016/cities.xlsx','https://oxrep.web.ox.ac.uk/sites/default/files/oxrep/documents/media/hanson2016_citiesdatabase_oxrep.xlsx')]
+             (CACHE/'hanson2016/cities.xlsx','https://oxrep.classics.ox.ac.uk/oxrep/docs/Hanson2016/Hanson2016_CitiesDatabase_OxREP.xlsx')]
     for path,url in targets:
         path.parent.mkdir(parents=True,exist_ok=True)
         if not path.exists():
@@ -90,6 +90,9 @@ def rome():
                 kind,digest=road['checksum'].split(':')
                 if hashlib.new(kind,data).hexdigest()!=digest:
                     raise ValueError('Road source checksum mismatch')
+            elif hashlib.sha256(data).hexdigest()!='5b9fc0195c3b5f2df71d6380174974215280cafd3bf5fa463fbf96969b549b6c':
+                # Earlier oxrep.web.ox.ac.uk address returns 404 since 12 November 2026.
+                raise ValueError('City workbook differs from the pinned source')
             path.write_bytes(data)
         rows.append(dict(path=str(path.relative_to(ROOT)),url=url,sha256=hashlib.sha256(path.read_bytes()).hexdigest()))
         print(path.name,path.stat().st_size,flush=True)
