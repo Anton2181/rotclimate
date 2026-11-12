@@ -16,14 +16,14 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |Programme part|Current state|Next dependency / completion test|
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
-|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified|Prepare housing references, resolve phase/extent and sampling limits; declare comparisons before scores; retain count/location Pareto alternatives and plan a genuinely prospective transfer|
+|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
 |Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach|Empirical size requests and adopted placement/role choices must consume this ledger; rebuild affected tracks when actual locations change; preserve anchors and outside rural people|
 |Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
-|S2: settlement sizes, services and roles|Finite resource primitives implemented; source selection and dated functions unresolved|Finish housing measurement adapter and independent source review; then predeclare size comparisons. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
+|S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete|Add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
+|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete; monthly pooled work next|Declare and implement monthly collection/patrol/service claims on the SAME supported cohorts, with existing grain/people gates; then add non-overlapping diets, household and draft work. Residual deficits remain visible|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -40,15 +40,23 @@ Immediate sequence:
    whole-city extrapolation and infrastructure estimates. All 50 source rows and
    150 scenario calculations reviewed independently; 18 focused tests pass. Reject missing phases, unsupported sample-to-site
    representativeness and unmatched extents as year-specific calibration labels.
-4. **New dependency:** audit sampling fractions, household assumptions and shared
-   city identities before any rank/size comparison. Author-supplied catalogue
-   keys are identity candidates; unavailable workbook/date joins remain open.
-   Do not manufacture confidence intervals from household sensitivity scenarios.
-5. Once a usable comparison exists, commit its grouping, exclusions, baselines,
-   metrics and adoption rules before scores. Otherwise preserve the source
-   result and advance a concrete unresolved resource/occupation dependency.
-6. Carry qualified requests into the existing finite allocator and coupled grain/
-   work pipeline. Follow the full release and S1–S5 completion criteria above.
+4. **Completed development diagnostic:** declaration `0161dae2` preceded all
+   province-blocked sampled-density scores. All50cities/23provinces retained;
+   ≥1%coverage26cities/16provinces sensitivity scored; ≥10%11cities stays unscored
+   under the frozen training minimum. Area MAE .493316→.451165 but median worsens;
+   15provincewins/8losses; coverage association changes with cohort. All228predictions,
+   117fits and684household controls independently reviewed and freshly replayed.
+   See SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md. NoAD150labels or adoption.
+5. **Empirical dependency remains:** exact author keys and normalized name/province
+   pairs unique in this table; original workbook/date joins still unavailable.
+   Recover dated phases, compatible extents and sampling evidence; do not treat
+   another exponent fit as their substitute or household scenarios as confidence.
+6. **Next concrete resource dependency:** declare monthly shared work for grain
+   collection, patrol and services on the existing supported cohorts before
+   outputs. Walking access is not free work or freight; never give each activity
+   a fresh full staff budget. Keep unsupported providers and unmet requests explicit.
+   Qualified future size requests still feed the existing finite allocator and
+   coupled grain/work pipeline; full release and S1–S5 criteria persist.
 
 ### Whole-plan review log
 
@@ -59,6 +67,7 @@ Immediate sequence:
 |Source-access check and open-paper recovery, fef3e9e8|Original source links fail; 2023 housing sample offers measurement evidence with exposed overlapping sites|Add explicit sample/phase/extent/detection gates and source-recovery dependency; no new blind pool|
 |Housing preparation and typed adapter, 12 November|50 rows/150 scenarios reviewed,18 checks and byte replay pass; none qualified for AD150; release2 remains open|Resolve phase/extent/representativeness and city joins; declare any later comparisons before scores|
 |Housing evidence publication and requested usage pause, 12 November|Research panel/chart/downloads preserve defaults;23 focused checks,9 served links,mobile/keyboard/themes and1695 Windows assets pass; entire release/S1–S5 queue reviewed|Handoff saved; commit/push and pause; next session starts at unresolved measurement/resource dependencies|
+|Province-blocked housing density comparison, 12 November, declaration0161dae2|All50cities retained;average area gain trades against median error;coverage effects cohort-sensitive.228predictions/117fits independently reviewed, fresh bytes exact. NoAD150qualification or default; full release1–4/S1–S5/allactor/mobile scope reviewed|Keep dated housing acquisition open; advance monthly collection/patrol/service pooled work on same ledger, predeclaring controls before outputs|
 
 ## Working rules
 

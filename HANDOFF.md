@@ -1,3 +1,36 @@
+# Province-blocked housing density comparison — 12 November 2026
+
+* Resumed latest remote2179335e,not stale local a59cf567;checked out canonical
+  claude/friendly-turing-43ygeu. Owner requests continuing development.
+* Declaration0161dae2 committed/pushed BEFOREscores. Three equal-city-weight
+  log sampled-property-density models,leave-province-out. All50cities/23provinces;
+  predeclared>=1%26cities/16provinces;>=10%11cities explicitly unscored because
+  a held-province fold leaves<10trainingcities. Allsource records retained.
+* Allcohort areaMAE.493316->.451165,provinceMAE.538533->.487090;15provincewins/8losses.
+  Medianfactor WORSENS1.5061->1.5244. Coverage adds nofullcohortaveragegain;its
+  coefficient changes-.008547 to+.118668 on>=1%cohort. No universal/scaling/adoption
+  claim. AllAD150gates unchanged,no censuszeros or requests sent to allocator.
+* Independent scalar normal-equation review:228predictions,117fits,234training
+  coefficients,684household-unit checks; fresh results.json BYTEEXACT.29focused
+  housing/launcher/package tests pass. PriorPDF50rows/150fields rechecked. Raw/
+  corrected atlasfood/model bytes and previous preparation/review/replay unchanged.
+* Newreport SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md and chart postedinchat.
+  Normalcollapsed evidencepanel6rows/7byteexact locallinks;keyboard/344/390/light/
+  dark/optionalinventoryfailure pass. Previoushousing9links and generalfilter/
+  pagination/download/failureUI pass. Publisher/package hooks wired. Staged
+  Windows-style checkout1699assets BYTEEXACT;standardlauncher verifies r44.
+* Fullhistoricalbasepublisher hits omitted PRIVATE output/land_people/earth/
+  earth.npz inoldVidarbhapublisher;cannotclaimfullsource rebuild. Restored oldpage/
+  registry then applied newdirectpublisher;allpreviouspanelsretained. No invented
+  global replacement. Originalcataloguelinks404/ORA403;no cityjoin certificate.
+* Wholeplanreview saved in SETTLEMENT_CONTROL_ROADMAP_20261110.md. Release2still
+  open,3partialcereal,4nocalibrateddefault;S1-S5/allactors/unaffiliated/mobile/
+  nonstate remain. Furtherdensitytuning cannot replace datedphase/extent/sampling.
+* NEXT concreteimplementation: declare monthly collection/patrol/service claims
+  against SAME supported cohorts andhours,not a fresh fullstaffbudget peractivity.
+  Retain origin grain/population/food gates,unsupportedprovider andunmetwork;all
+  rates remain suppliedscenarios. Datedhousingacquisition stays separate/open.
+
 # Usage pause: reviewed housing evidence and living whole-plan checkpoint — 12 November 2026
 
 * Owner asked to tie up and commit/push for now due usage. No new experiment or
