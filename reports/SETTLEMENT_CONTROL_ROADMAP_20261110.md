@@ -74,6 +74,13 @@ update. None of these milestones is complete merely because code tests pass.
    inputs with corrected relief/eastern coverage before new placement comparison;
    then resident-size and shared-ledger fantasy rebuild. Do not mistake source
    repair for final map qualification or silently apply the patch to old datasets.
+   The supported core reconstruction and declared224-placement comparison are now
+   complete (SETTLEMENT_JOINT_LOCATIONS_20261112.md). The development lead remains
+   density exponent1/history450km/floor0; Q0.622264 versus fixed18km0.570611,
+   with exact-location versus spacing tradeoffs retained. All224draws pass review
+   and fresh replay. This does not repair the earlier geographic-transfer failure
+   or qualify resident sizes. NEXT finite resident/catchment allocation feeding
+   the same seasonal food budget, with all rural/urban/staff transfers conserved.
 3. **Rebuild fantasy settlements on the shared ledger [PENDING].** Preserve
    marked anchors, distinguish occupancy from carrying capacity, allocate
    residents/food once and rebuild affected tracks and downstream inputs.

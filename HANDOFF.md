@@ -1,3 +1,40 @@
+# Complete-input joint placement comparison finished — 12 November 2026
+
+* Resumed from canonical remote4c6af479 after fetching the newer work; local Nov5
+  snapshot was stale. ONLY maintained branch remains claude/friendly-turing-43ygeu.
+  User explicitly requests continuing after commits/pushes and posting every map.
+* Ran the already-declared224placements:21variants x5seeds x2pools,10old-clipped
+  history ablations and4paired controls. Sources/people/eligibility fixed. Natural
+  budgets1239Han/1292Rome, never observed-site counts. Han corrected coverage,
+  Rome original paired population control, both checked supported histories.
+* Lead remains b1_L450_f0: meanQ .622264 vs fixed18 .570611 and production .392029.
+  UniqueF1 .522733Han/.401515Rome; spacingKS .059990/.054013. Fixed18 has higher
+  uniqueF1 .592089/.422381. Pareto: b1_L450_f0,b0.7_L450_f0,fixed18_L800. Weight.8
+  prefers b0.7; .4/.6 prefer b1. Source-history repair Qdelta only+.000479/+.000462
+  on current common inputs. No claim of large new skill or rescued Vidarbha guard.
+* New polity/settlement_joint.py, driver/reviewer/plot/publisher/browser scripts.
+  Independent dense-distance/min-cost matching replays ALL224metric sets, budgets,
+  eligibility, uniqueness, adaptive symmetric/fixed/legacy spacing, ranking/ranges,
+  frontier/sensitivity. Fresh224producer replay results+positions BYTE EXACT.
+* Exact derived population/history NPZs are committed and verified. This resumed
+  checkout omits upstream private output/land_people/earth/earth.npz; input scope
+  explicitly records this. No claim raw/global preprocessing rerun; prior source
+  certificates remain archived/unchanged. Do not invent a replacement global file.
+* Figures reports/figures/settlement_joint_{maps,tradeoffs}_20261112.png posted.
+  Normal atlas evidence new collapsed panel6rows/7downloads, all224positions,
+  protocol/scores/review/replay; basepublisher/package wired. Browser new+previous+
+  general inventory passes344/390/light/dark/download/failure checks.71related
+  tests passed. Frozen source/production atlas packets unchanged; r44 active.
+* NEXT substantive consumer: finite resident/catchment allocation into SAME
+  seasonal-food SettlementPlan. Never add 7.5% town residents or100-person minima
+  on top of all existing rural people; cap civilian ANDstaff transfers by one
+  origin budget, leave residual rural and unreachable people explicit. Urban
+  share remains a scenario; no resident-size qualification from district POP or
+  imputed Roman areas. Do not detour into new institution mechanisms.
+* Release2(count/location/size) still IN PROGRESS; shared-ledger fantasy rebuild3
+  and normal numeric map4 PENDING. All actors/unaffiliated/mobile/nonstate, S1–S5
+  persist. No default adoption or fresh/blind claim. Continue after push.
+
 # Supported core histories checked; joint point experiment declared — 11 November 2026
 
 * Source repair/completecount/atlaspublication bbc31fd0 committed+pushed;continued.
