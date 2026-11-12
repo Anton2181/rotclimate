@@ -389,6 +389,9 @@ def main():
         files += [ROOT/'reports/SETTLEMENT_DISPATCH_SEARCH_20261112.md',
                   ROOT/'calibration/settlement_dispatch_search_20261112/plan.json',
                   ROOT/'calibration/settlement_dispatch_seeded_20261112/plan.json']
+    if (ROOT/'output/settlement_dispatch_seeded_20261112/atlas_publication.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_DISPATCH_SEEDED_20261112.md']
+        files += list((ROOT/'reports/figures').glob('settlement_dispatch_seeded_*_20261112.png'))
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

@@ -1,3 +1,45 @@
+# Threshold-checked map versions ready; continue with actual duty destinations — 12 November 2026
+
+* Continuedafter354f9a52push,perownerDONOTPAUSEAFTERPUSH. Seededprotocol354f9a52
+  BEFOREoutputs. Canonicalfriendly-turing-43ygeu. Oldmodel/writer BYTEUNCHANGED.
+* NEWpolity/settlement_seeded_dispatch.py:64residentgridplusEXISTINGstaffactivation
+  seed(100staff+50civilian),24refinements towardnextgrid,thenmergedpoint/fullfood/
+  work/sourcegates and40finaldispatchrefinements. No newfitparameter/globaloptimum.
+  Versionedadapterscopeseffectiveclassperworker,restoresfactoryonfailure,hashesall
+  actualcodeandbothdeclarations;old16outputs/producersremainvalid. Meaningfulunit
+  testrecovers15.0–15.1personstaffedbandmissedby64grid;factoryfailuretestpasses.
+* All16cases independentlyreviewed:population,ruralfield/reapingwork,threefood
+  recurrences,originintegertrips,monthlyhours,secondaryrequests,oldresidentcontrols
+  ANDindependentlyreconstructedthresholdfeasibility/seedselection/overlap. Source
+  foodgatepassesallpositivecases.16freshresult/fieldpairsBYTEEXACT.60focusedtests.
+* All8open activeflagsAND18actor/cell/binmasks EXACToldfoodsets. Raw600/300sources
+  861/725,corrected889/755. Corrected300/120k=282044.846934townpeople;raw275447.276027.
+  Corrected300/60k236034.648262;raw226104.287230. Original600pop stable<.0001.
+  All8closedcaseszero. SourcecountlosswasNUMERICAL,notphysicaldecline/authorityloss.
+* Newseparate data/settlement_dispatch_seeded.json+dispatch_seeded/packets,distinct
+  dispatchv2...IDs. Existingselectors exposeThreshold-checkedfood+collection first
+  amongexperimentals. Originalfeedback/coarsepacketfiles/defaults untouched.
+  Earlierworknotesexplicitlywarnnarrowrangemisses;newnotesshowboundarycheck.
+* Newraw/correctedmapfigures+scenariochartPOSTED;reportSETTLEMENT_DISPATCH_SEEDED_
+  20261112.md andnormal16row/3figure evidencepanel,withsearch-errorhistoryretained.
+  32newmapoptions/exactCSV/monthlywork/celldownloads/fourfamilies/reload/344/390/
+  light/dark/3failurecases pass;sourceindexnoall-v2disablefromoldprefixchecks.
+  Previous32coarseand16feedbackoptions/CSVs/failuresalso pass;normalnewpanel8
+  bytelinks/16rows/3figures/keyboard/mobile/themes/inventoryfailure pass;general
+  inventoryfilter/download/paginationpass. Windows1826assetsBYTEEXACT,r44verified,
+  activehub807localdependenciesresolve;88original/base/feedback/coarsefilespreserved.
+  Actualnetworkpoint-visitprotocoldeclaredBEFOREanynewtarget/cost/taskoutputs.
+* Entireprogramme reviewed inSETTLEMENT_CONTROL_ROADMAP_20261110.md. Release2
+  empiricalsize/occupation/prospectivetransferopen;3partialcereal/work;4nocalibrated
+  default. S1-S5/allactors/unaffiliated/mobile/nonstate,complete diets/household/
+  draftwork andproviderfunctionevidence persist. Neither knownseednoruniform
+  dispatchfamilyprovesglobaloptimum;staff-onlycollector assumptions explicit.
+* NEXT IMMEDIATELYAFTERCHECKPOINT: predeclareactualnetwork duty targetpoints and
+  roundtripcosts;chargevisits ONLYtoSAMEalreadyreservedpatrolhoursslice,notfresh
+  staffbudgetsorcollection/servicehours. CurrentcoloredmapsarePOTENTIALtravel
+  access,notactualvisiteddestinations/fundedpatrolcoverage/authority. Preserve
+  unknownmobile/nonstate/unaffiliatedscope andmissionassumptions;continueafterpush.
+
 # Finer grid finds missed staffed branches; implement declared correction — 12 November 2026
 
 * ContinuedIMMEDIATELYAFTERmapmilestonepushd302ac74,perownerDONOTPAUSEAFTERPUSH.

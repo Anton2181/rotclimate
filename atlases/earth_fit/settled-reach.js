@@ -8,7 +8,7 @@ window.SettledReachAtlas=(()=>{
     if(!document.querySelector('script[data-settled-reach-enabled]'))return null;
     const manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settled_reach.json')))),p=manifest.packets[mode];
     if(!p||p.expected_harvest_fingerprint!==meta.harvest?.fingerprint)throw Error('Settlement support climate mismatch');
-    let feedback=null,dispatch=null;
+    let feedback=null,dispatch=null,seededDispatch=null;
     if(document.querySelector('script[data-settlement-feedback-enabled]')){
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settlement_feedback.json'))));
         const candidate=supplement.packets[mode];
@@ -23,12 +23,19 @@ window.SettledReachAtlas=(()=>{
         dispatch=candidate;
       }catch(e){dispatch=null;}
     }
+    if(document.querySelector('script[data-settlement-dispatch-seeded-enabled]')){
+      try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/settlement_dispatch_seeded.json'))));
+        const candidate=supplement.packets[mode];
+        if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Threshold-checked dispatch parent/climate mismatch');
+        seededDispatch=candidate;
+      }catch(e){seededDispatch=null;}
+    }
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
-      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
+      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
-    return {p,feedback,dispatch,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
+    return {p,feedback,dispatch,seededDispatch,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
   }
   async function attach(state,harvest,changed,choosePlace){
     const {fresh,mode}=state;let p=state.p;
@@ -69,6 +76,7 @@ window.SettledReachAtlas=(()=>{
         $('settled-field-grid').href='data/'+p.fields[c.id];$('settled-field-grid').hidden=false;
         if(c.dispatch_work){const d=c.dispatch_work;
           $('settled-work-note').textContent+=` Collection also fits every monthly staff budget: ${fmt(d.load_kcal)} kcal per collector trip, seven walking hours per graph day, and 600 supplied staff hours/year. Dispatch volumes were reduced before accepting food support. ${d.availability==='all_open'?'All collection bins are open.':'Collection bins 7–9 are closed.'} Remaining hours are shared across patrol and services. These requests do not establish geographic patrol coverage; the map shows potential travel access from qualified sources.`;
+          $('settled-work-note').textContent+=d.threshold_seeded?' This version explicitly checks the existing staff-activation boundary.':' This earlier search can miss narrow staffed ranges; compare the threshold-checked version.';
         }
       }else if(c.labour_constrained){const w=c.work_summary;
         $('settled-work-note').textContent=`Field-work scenario: ${c.hours_worker_year} listed hours per reference worker/year; ${c.harvest_days}-day reaping window at ${model.labour_specification.hours_worker_day} hours/day. Worker share ${100*model.labour_specification.worker_fraction_of_reference_rural_people}% of the earlier fixed rural cereal-food claim (${fmt(w.scenario_workers/1e6,2)} M reference workers), not census residents. Produces ${fmt(w.production_retained*100,2)}% of baseline cereal. Rural meals remain fixed; ${fmt(c.rural_ledger.unmet_kcal/1e12,3)} trillion kcal of scenario rural need is unmet, so affected cells export nothing. This is a partial cereal/work test, not evidence of actual famine or total household labour.`;
@@ -92,7 +100,7 @@ window.SettledReachAtlas=(()=>{
     });
     return {state:()=>({settled_site:siteId||''}),show:(id,v)=>{
       layer=id;variant=v?.value||'joint365';active=['reach_towns','reach_defacto'].includes(id)&&!!v?.integrated_support;const gen=++generation;$('settled-section').hidden=!active;
-      const desired=v?.dispatch_support?state.dispatch:(v?.feedback_support?state.feedback:state.p);if(desired&&p!==desired){p=desired;model=null;lookup=null;catchments=null;masks=null;}
+      const desired=v?.seeded_dispatch_support?state.seededDispatch:(v?.dispatch_support?state.dispatch:(v?.feedback_support?state.feedback:state.p));if(desired&&p!==desired){p=desired;model=null;lookup=null;catchments=null;masks=null;}
       if(active){$('harvest-section').hidden=true;clear('Loading the joint settlement and food ledger…');load().then(()=>{if(gen===generation)render();}).catch(e=>{if(gen===generation){clear('Detailed ledger unavailable: '+e.message+'. The precomputed map remains a conditional scenario.');console.error(e);}});}
     },select:(x,y)=>{selected=[x,y];if(skipInitial){skipInitial=false;return;}if(!active||!model)return;const row=Math.floor(y/p.cell_px),col=Math.floor(x/p.cell_px),i=row>=0&&row<p.shape[0]&&col>=0&&col<p.shape[1]?catchments[row*p.shape[1]+col]:0;if(i){siteId=model.sites[i-1].id;$('settled-site').value=siteId;}render();changed();}};
   }

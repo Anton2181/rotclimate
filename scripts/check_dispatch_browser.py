@@ -86,7 +86,12 @@ def main():
             page.goto(args.base + '/atlases/earth_fit/#layer=reach_towns&climate=raw', wait_until='domcontentloaded')
             page.wait_for_function('document.querySelectorAll("#settled-readouts .readout").length===6', timeout=90000)
             page.locator('#experimental').check()
-            if failure != 'corrupt_grid': assert not page.locator('#variant option[value^="dispatch"]').count()
+            if failure != 'corrupt_grid':
+                # A failed original supplement must not remove independent,
+                # threshold-checked versions that share the dispatch prefix.
+                unavailable = {o['value'] for o in manifest['packets']['raw']['options']['reach_towns']}
+                displayed = set(page.locator('#variant option').evaluate_all('(els)=>els.map(e=>e.value)'))
+                assert unavailable.isdisjoint(displayed)
             else:
                 page.select_option('#variant', 'dispatch600_120000_open')
                 page.wait_for_function('document.querySelector("#settled-site-note").textContent.includes("Detailed ledger unavailable")', timeout=90000)
