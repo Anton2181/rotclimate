@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-12",
+  "status": "mechanism_test_declared_before_any_cohort_protected_distribution_is_computed",
+  "parent": "calibration/settlement_market_range_20261112/plan.json; published market-hierarchy family (6e995732). Owner chose this test first on 12 November.",
+  "question": "Does a size hierarchy have to cost staffed sources and reach? In the published scenarios it does, because towns pass up a flat share of everything they hold and many fall below the 150-resident threshold for a cohort.",
+  "why_not_simply_larger_cohorts_at_centres": "A staffed town is a source of reach or it is not; the reach rule is binary per site and project rules forbid turning staff numbers into a travel-strength multiplier. A larger cohort living at a centre therefore changes no reach. Larger institutions at centres matter for reach only if their people are posted at the smaller towns. Posting a cohort at a tributary town, with its grain, is the same final distribution as that town not sending those people and that grain up in the first place, and it avoids losing grain twice on the leg. The test is therefore a retention floor: a town that can hold a cohort keeps it and forwards from what is above it.",
+  "known_before_declaration": [
+    "The twelve published scenarios: at a 50% share the Gini is 0.60 (6-day legs) and 0.65 (12-day legs) in the corrected climate with all six declared shape checks inside the reference band, staffed sources fall from 889 to 657 and 597, and reach from 6.38 to 5.26 and 4.84 bins.",
+    "The catchment draw found by the solver does not depend on the share or on how forwarded people are split, only on the full-chain grain retention. Total town residents will therefore equal the published cases at the same range. This is used as a hard regression gate.",
+    "Not known: how many towns hold at least 150 residents before passing, how much is passed under either rule, the resulting sizes, cohorts or reach."
+  ],
+  "mechanism": {
+    "unchanged": "Links, forest, leg retention 0.95 per travel day, one-bin delay, solver, full-chain feasibility test, pooled town audit, cohort and minimum rules, ledgers: exactly those of the parent declaration. People and grain are passed in the same proportion at every town.",
+    "floor": "150 residents: the existing 100-person cohort plus the existing 50-person civilian minimum. It applies only at towns that can hold a cohort under the existing rule (affiliated, civilian request at least 50). Other towns pass the flat share as before.",
+    "rule_excess": "A cohort-capable town passes the share of what it holds above the floor: share x max(held - 150, 0).",
+    "rule_capped": "A cohort-capable town passes the full flat share, reduced only as far as needed to stay at the floor: min(share x held, held - 150) when it holds at least 150; the flat share when it holds less, since there is no cohort to protect.",
+    "held": "What a town holds is its own catchment draw plus everything received from smaller towns, as in the parent mechanism."
+  },
+  "scenarios": {
+    "climate_modes": ["raw", "corrected"],
+    "hours_worker_year": 600,
+    "transfer_fraction": 0.075,
+    "range_days_each_way": [6, 12],
+    "forward_share": [0.5],
+    "rules": ["excess", "capped"],
+    "why_only_the_50_percent_share": "It is the share at which the published scenarios reach the reference band; the question is whether that hierarchy survives protecting cohorts. The 25% share was already mixed and is not re-run.",
+    "regression": "Each case's catchment draws must equal the published 50% case at the same range and climate exactly; with the floor set to zero the distribution must reproduce the published residents and grain exactly. Otherwise stop."
+  },
+  "reported": [
+    "The six declared shape checks against the unchanged reference band, with verdict per case.",
+    "Staffed sources, cohorts lost and gained against the no-forwarding base and against the published flat-share case, viable communities, area-weighted reach from the same cohorts.",
+    "People passed up, grain sent and lost on legs, largest towns, towns held at the floor."
+  ],
+  "interpretation_fixed_in_advance": "If a rule keeps staffed sources and reach close to the no-forwarding base while the shape checks stay inside the band, hierarchy does not have to cost reach under these assumptions, and the flat-share cost was a consequence of the passing rule. If the shape falls back below the band, protecting cohorts and producing large centres compete for the same people, and that trade-off is reported as real within this ledger. Neither rule is selected as calibrated; all eight cases are published beside the earlier twelve.",
+  "atlas": "The eight cases are added to the existing optional market-hierarchy family and its selectors. All other packets and all defaults stay unchanged.",
+  "review": "Independent reviewer recomputes what every town holds and passes by recursion from the roots rather than the producer's ordered pass, applies both rules with its own code, redistributes grain, recomputes pooled food with the separate monthly recurrence, checks population and grain closure, the cohort rule, the draw regression, reach masks by the dense second implementation, and all metrics. Fresh producer replay must be byte exact.",
+  "prohibited": [
+    "No tuning of the floor, share, range or rules after seeing results; no additional rules or scenarios.",
+    "No travel-strength multiplier from staff numbers; no cohort added beyond one per town; no absolute-size, historical or sovereignty claim; no default change."
+  ]
+}
