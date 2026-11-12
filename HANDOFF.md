@@ -1,3 +1,60 @@
+# Continuous destination resident replans published; continue NEW calendars — 12 November 2026
+
+Owner “Continue,dont stop after pushing”. Canonical claude/friendly-turing-43ygeu.
+No subagents. Lastpushedaacf2ddb includes continuous-resident declaration BEFORE
+outputs. Earlier pushes970bd428 maps,ed6ae653timing,aacf2ddbmealbounds. PushNOTstop.
+
+* New polity/continuous_destination.py extendsThresholdSeededDispatchFeedback:
+  _food usesversionedvectorcontinuousbin inventories;solve overwritesdisplayceil
+  withcontinuousnormalized42-step/downward-margin helper. Alloldmodel/writerbytes
+  intact. New scopedfactoryadapter build_continuous_destination.py restoresold
+  factory evenonfailure. Currentnewtrialpeople changesruralmeals/fieldwork/crops/
+  sourceexportstocks/dispatch/integertrips/staff. Same64scan/150seed/24resident/
+  40work-foodrefinements;90daycapacity scalesCURRENTtrialpeople,notoldmealbound.
+* output/settlement_continuous_destination_20261112 all4 replans independently
+  source/field/food/people/grain/dispatch/wholetrip/work reviewed. Scalarcontinuous
+  inventories/minperiodicstocks/thresholdtrial/displayceil independentlychecked;
+  reviewer importsno solver/newfoodprimitive. Fresh11files EXACT (4results/4fields,
+  summary,comparison,providerCSV). Newpreparer+separatecomparisonreview all8rows/
+  144actors/8348providers;zero providers retained. Oldunrecordedpeak/duration/
+  periodicfields stayNULL inCSV. Newfullfieldpackets havepeak/days/periodicity.
+* Newtownpeople raw600369668.076(-195.871),raw300274737.734(-709.542),corrected600
+  378116.797(-164.036),corrected300281323.342(-721.505). Active861/724/889/754;
+  each300hcase losesonesource underunchangedsearchedfamily,NOTimpossibility.
+  Allpositivecontinuousbinstartfood/source/monthlyintegerwork pass. NO new
+  collector-returnfood qualification;oldrosters cannotfitnewactualshipments.
+* Normal #continuous-destination8rows/2figures BOTHPOSTED,14data downloads+methods,
+  fullold/newfieldpackets andeveryproviderCSV. Preserveall769Earthatlasfiles/maps/
+  defaults. 72focusedtests pass (12newprimitive/factorycontrols;11beforeproduction,
+  restorationfailure controladdedafter). Browser8exactrows/2figures/15byte links/
+  mobile/themes/keyboard/failure pass (longphraseoverflowfixed). Windows1936assets
+  byteexact;906hubdependencies resolve;48modelsource/producer hashes,28comparison
+  sources and769Earthfiles current. Earlierresearchpageexactexceptnewpanel. Fullhistoricalpublisher missingprivateVidarbha
+  cache;directpublisher->build_fit_hub AFTERfinalpublish->stage->Windowscheck.
+* Managedenvready afterstartupnotification;files persisted. HTTP8766 restarted
+  session11719. Scientific .venv/bin/python;Playwright globalpython. Do notpoll
+  stale process84936 (completed beforeenvironmentresume). Results/reviews/replays
+  exist. Browser checker script check_continuous_destination_browser.py running
+  session12820 atlastwrite;inspectreceiptifsessiongone.
+* NEXT afterpush: committed calibration/continuous_collection_calendar_20261112/
+  plan.json BEFOREoutputs. FourNEWcases,allACTIVEproviders retained including
+  failed/partialdeliverysources. pack_worker_calendar originalcollection-first,
+  no visits;NEWorigintrips,costs,staff50h/bin/fullcalendar,NEWfundedhomeservices=
+  work_secondary_hours[1:,month].sum(axis0),equallyshared/divisible. No newworkers.
+  Twelvefoodrows:Aallplannedcargo/binstart;BONLYpackedcargo/binstart;C SAMEpacked
+  cargo/actualreturnphase inONE-binlaggedbin. A->B omissions separatefromB->Cphase.
+  Proveplanned=packed+unpackedcargo origin/month;retainallmissingserials. Old
+  trip_delivery_events rejectsmissingtrips:useNEWversionedpartialpartitionhelper,
+  doNOTeditoldimmutableprimitive. 0.95retentionONCE,end/7 clock365/12 wrap.
+  Reuseeventcontinuousfoodmodel;ALLactiveprovidersscored forA/B/C,notonlycomplete.
+  Reportmandatory12bins/foodflags/conjunction necessaryonly. Newcollector-only
+  calendarsDO NOTqualifynewvisitmaps;NEWvisittasks/fullrosters/returnfoodstillopen.
+  Independentworker/cargo/clock/scalarfood/ledger checks,freshbytes,all12rows/
+  actors/providers/figuresPosted/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Entire release1–4/S1–S5 programme revisited;datedoccupation,size/providerroles,
+  prospective transfer,source withinbin food,crewcarriedrations/location,complete
+  diets/household/draftwork andmobile/nonstate/unaffiliated resources remainopen.
+
 # Fixed-staff meal bounds published; continue continuous resident feedback — 12 November 2026
 
 Owner: “Continue, dont stop after pushing”. Canonical branch
