@@ -1,3 +1,46 @@
+# Monthly collection, patrol and services share one staff-hour budget — 12 November 2026
+
+* Continued afterhousingmilestonea00c1140;canonical friendly-turing-43ygeu only.
+  Workprotocol7ccd5891 committed/pushedBEFOREnewpaths/workoutputs. No newEarthdata.
+* NEWpolity/monthly_work.py prices integercollectortrips against originaldepartures,
+  two-waypathdays,7walkinghours/day,.25handlinghours,and60000/120000kcal/load supplied
+  stressunits. SAMEinstitutionalresidents supply600annualhours split12;allopen or
+  zero-basedbins6/7/8closed. No rural/civilian/newstaff,animalwork or freetransport.
+* prepare_monthly_work.py reproducesoriginalnodes/localorigins/owners/12accessmasks
+  EXACTforbothclimates. Newparentedge/timepackets retained;no town/track/climatesolve.
+  Fourcentral7.5%foodcases(raw/corrected,farm600/300h),2loads,2profiles=16cases.
+* Wholeyearworkqualification requires originalsourcefoodgate ANDcollectionfits
+  EVERYmonth. ReservecollectionONCEthenrationpatrol14h/session andtwo neutral
+  servicechannels1/2h/request together. Unsupported/unreachable/capacityunmet and
+  unusedhours explicit. Nevercutshipmentswhileclaimingoldfedresidents;refused
+  fixedcasesarenot newpopulations,famine,zeroinstitutions or authoritymasks.
+* Corrected600farmh:368/889staffsitespass at120000kcal/load,72at60000. Collection
+  shortfalls16.85M/63.88Mhours. Allthreeclosedmonthprofilesrefuseeveryfixedcase.
+  Corrected300hpasses724/755atlargeloadbecauseoriginalexportsarelower,notnewwelfare
+  skill. Fixedshipmentsmayoverdeliverunusedfood;refusal doesNOTprove fewerresidents
+  necessary afternewdispatchallocation. Largerloadqualifiedcaseswouldoverspend
+  50770hoursifsecondarychannelsindependentlyreusedfullsparebudgets;newpoolprevents.
+* Independentscalarreview:463992ancestorpathbins,1855968origintripbins,200352
+  providerbins;all16cases/actorandunknownaffiliation/requestledgerschecked. Sixfresh
+  files(results,fields,bothpathNPZ/JSON)BYTEEXACT.69focusedmonthly/service/feedback/
+  resident/housing/launcher/package tests pass;notfullsuite. Originalfood/people/
+  staff/modelpacketsunchanged;noactualpatrolfootprintsornewdefaults.
+* Newreport SETTLEMENT_MONTHLY_WORK_20261112.md;chartpostedinchat. Normal evidence
+  panel16rows/downloads plusbasepublisher/packagehooks. Fullhistoricalpublisher
+  stillrequiresomittedprivateEarthcache;newdirectpublisherpreservesoldpanels.
+  FinalQA:9newbytedownloads,oldhousing7+9links,generalfilters/pagination/failure,
+  keyboard/344/390/light/darkpass;Windows1706assetsBYTEEXACT,launcherverifiesr44.
+  Activehub784localdependenciesresolve. No backgroundnumericaljobleft running.
+* Entireprogramme reviewedagain in SETTLEMENT_CONTROL_ROADMAP_20261110.md:
+  release2empiricalsizes/occupation/prospectivetransferopen;3partialcereal;4noadopted
+  default. S1-S5/allactors/unaffiliated/mobile/nonstate scope remains.
+* NEXT jointsolverdependency:collectionhoursANDselectabledispatchvolumesINSIDE
+  resident/ruralwork/grain/storagefeedback,withsamefoodsourcegates. Avoidwasteful
+  fixedshipmentsbeforeinferresidentreductions;alternativecollectorsmustpartition
+  SAMEfinitepeople/work. Actualnetworkprovider/patroldestinations,datedroles,
+  complete diets/household/draftwork andmobileoccupancyremainopen. No newindependent
+  utilitymapfamily. Datedhousingmeasurementacquisitionstaysopen,separately.
+
 # Province-blocked housing density comparison — 12 November 2026
 
 * Resumed latest remote2179335e,not stale local a59cf567;checked out canonical
