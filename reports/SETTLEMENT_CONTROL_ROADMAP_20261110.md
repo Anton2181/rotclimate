@@ -16,14 +16,14 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |Programme part|Current state|Next dependency / completion test|
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
-|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; sizes unqualified. Housing samples now joined to the recovered city catalogue (50 of 50), still zero AD150 labels. Declared size-shape diagnostic complete: allocator town sizes are more equal than every Roman reference (Gini 0.35 against 0.48–0.88)|Sizes need a hierarchy mechanism before any size fit: declare and test market hierarchy, beyond-catchment supply of large centres and administrative concentration against the same shape metrics; do not tune transfer share. Retain count/location Pareto alternatives and plan a genuinely prospective transfer|
-|Release 3: shared-ledger fantasy rebuild|Partial implementation: eight cell-level cereal feedback cases feed the same residents/staff/reach|Empirical size requests and adopted placement/role choices must consume this ledger; rebuild affected tracks when actual locations change; preserve anchors and outside rural people|
-|Release 4: normal numeric publication|Optional coupled maps published and checked; calibrated default pending|Only adopt qualified changes; keep original defaults until evidence supports replacement, then repeat end-to-end browser/Windows checks and show maps|
+|Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
+|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 point-task maps plus assignment and40case target-grid audits retain SAME patrol reservations|Construct individual worker calendars for whole collector trips and crews before stronger roster claims. Actual demand/provider roles,daily provisioning and other resource/services remain open;point visits do not qualify territory|
+|Release 4: normal numeric publication|16 threshold-checked dispatch versions,8 optional point maps andall40gridcomparison results/4figures published;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
-|S2: settlement sizes, services and roles|Finite resource primitives implemented; housing adapter, source review and place-identity grouping complete; source selection and dated functions unresolved|Civilian requests are nearly flat (Gini 0.20), so role and service hierarchy now has a measured consumer: declare a higher-order market mechanism and test it on the shape metrics. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
-|S3: differentiated institutions/control|Pending qualification; administrative concentration at seats is one candidate source of large centres|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Partial cereal ledger and source-food gate audited; finer scan complete; one-catchment supply cannot produce large centres|Add supply of large centres from beyond one local catchment within the same ledger; add non-overlapping dietary/land/work claims, household and draft work, monthly collection/patrol/service capacity; residual deficits remain visible|
+|S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
+|S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
+|S4: complete resources and work|Eight point-task maps,spare-provider feasible gains and40matched gridcases reviewed;phase spreads0.185–0.265pp,spacing materially changes supplied workloads|Construct declared integer worker/crew calendars for alloriginal collectors andplanned visits. Greedy packing failures do not prove infeasibility;daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -40,33 +40,124 @@ Immediate sequence:
    whole-city extrapolation and infrastructure estimates. All 50 source rows and
    150 scenario calculations reviewed independently; 18 focused tests pass. Reject missing phases, unsupported sample-to-site
    representativeness and unmatched extents as year-specific calibration labels.
-4. **Completed:** the pinned city workbook was recovered from the project's
-   older host with an identical SHA-256 and reproduces the earlier audit counts.
-   All 50 housing samples join it by author key (declaration 94e7266c, key-format
-   amendment 79bb070f). 49 names and 50 provinces identical, no duplicate places,
-   7 differing extents, 4 places ended before AD150, 44 with no recorded end.
-   Smaller samples report denser housing (rank correlation -0.24; -0.30 without
-   the two whole-extent samples). All AD150 gates retained; zero eligible.
-   See SETTLEMENT_SIZE_IDENTITY_20261112.md.
-5. **Completed:** scale-free size-shape comparison, declared e52e6d89 before any
-   metric. 862 measured AD150 catalogue areas under three density scenarios
-   against the eight coupled scenarios. Allocator more equal than every
-   reference at all three tail levels in both climates (Gini 0.35–0.37 against
-   0.48–0.88; largest town 8 times the median against 58–436). Requests before
-   the finite budget are flatter still (Gini 0.20). New date gate refuses ended
-   and unfounded places. No fit, no adoption. See SETTLEMENT_SIZE_SHAPE_20261112.md.
-6. **Next:** declare a size-hierarchy mechanism test before running it. Candidates,
-   one at a time and inside the same finite people/food/work ledger: (a) higher-
-   order market centres drawing requests from lower-order towns; (b) supply of a
-   centre from beyond its own catchment along existing freight paths; (c)
-   administrative residents concentrated at marked seats. Score each on the same
-   declared shape metrics and tail levels, report what it costs rural people and
-   smaller towns, and keep absolute sizes and urban share unclaimed. Do not tune
-   the transfer share, town minimum or staffing to move a metric.
-7. In parallel when blocked: complete diets, draft and household work, monthly
-   collection/patrol capacity; phase evidence for housing samples.
-8. Carry qualified requests into the existing finite allocator and coupled grain/
-   work pipeline. Follow the full release and S1–S5 completion criteria above.
+4. **Completed development diagnostic:** declaration `0161dae2` preceded all
+   province-blocked sampled-density scores. All50cities/23provinces retained;
+   ≥1%coverage26cities/16provinces sensitivity scored; ≥10%11cities stays unscored
+   under the frozen training minimum. Area MAE .493316→.451165 but median worsens;
+   15provincewins/8losses; coverage association changes with cohort. All228predictions,
+   117fits and684household controls independently reviewed and freshly replayed.
+   See SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md. NoAD150labels or adoption.
+5. **Empirical dependency remains:** exact author keys and normalized name/province
+   pairs unique in this table. (Merged line, step 14: the pinned workbook has since
+   been recovered and all 50 keys joined; phases and extents are still missing.)
+   Recover dated phases, compatible extents and sampling evidence; do not treat
+   another exponent fit as their substitute or household scenarios as confidence.
+6. **Completed fixed-plan work audit:** declaration7ccd5891 preceded16scenarios.
+   Original local owners/nodes andall12accessmasks EXACT;directedancestor checks
+   463992pathbins,1855968tripbins,200352providerbins. Samefoodsupportedstaffreserve
+   integercollectortrips then shareone monthly remainder acrosspatrol/services.
+   Corrected600farmhours:368/889staffsitespass at120000kcal/trip,72at60000;
+   threeclosedbinsrefuseallfixedcases. Allsixfreshpacketsbyteexact. Nofood,
+   staff,reach ordefaultreallocation/adoption. See SETTLEMENT_MONTHLY_WORK_20261112.md.
+7. **Completed joint coupling:** declarationde42d1c3 precedes16newcases. A uniform
+   catchment dispatch scalar fits monthly integer-trip collection hours at EVERY
+   resident trial;remainingworkers/production/ruralandtownmeals/stores recompute.
+   Finaldispatch removesoverdelivery then SAMEplanfeeds shared secondaryduties.
+   Independentcell/work/control/reach review and16freshresult/fieldreplays pass.
+   Corrected600h/120000load:378281townpeople/889sources vsfixedaudit95359/368 and
+   oldfood419264/889. Corrected300h:313740/755->280212/743,access5.551->5.492bins.
+   NewoptionalSettlements/Supply-supportedreachmaps;actualpatrolcoverage still
+   unqualified. See SETTLEMENT_DISPATCH_20261112.md. Alloldpackets/defaults persist.
+8. **Completed search audit:** declared ind302ac74 BEFOREoutputs.396overlaparrays
+   exact;600h changes<.0001people/no sourceflags.300h64grid recovers10sources
+   eachclimate;explicit150probe finds5more raw/2corrected feasiblefine-zero sites.
+   Independent16completefine/probe people/work/food records andfreshbytes pass.
+   The original300hsource lossesincludegridmisses,NOTestablishedphysicalfailures.
+   Normal evidence nowwarns;alloriginal16map/sourcefiles preserved.
+9. **Completed threshold-seeded correction:** declaration354f9a52 BEFOREscores.
+   All16cases use64grid+known150point and24branchrefinements;oldmodel/writerfiles
+   unchanged,effectiveclass/provenance explicit. Independentfullphysical/threshold
+   checks and16freshbytepairs pass. Open sourceflagsANDactor/cell/binmasks exactly
+   equal oldfoodsets:raw861/725,corrected889/755. Corrected300/120k:282044.847town
+   people. 600hcounts/sizesstable;allclosedcaseszero. Newdistinctoptionalversions
+   and32mapoptions checked,oldmaps/defaults retained;60focusedtests pass. Numerical
+   correction isNOT newphysical/empiricalskill or globaloptimality.
+10. **Completed conditional network point tasks:** declaration9c3e7420 precedes
+   outputs. Fixed27,843targets,raw/correctedIDs exact;walking-only directed paths
+   stay within old full-network footprints. Eight600/300farm-hour,crew1/4cases
+   spend ONLYsame reserved patrol slice,retaining collection/services. Corrected
+   600h completes179,097/260,496crew1 tasks and163,423crew4. Independent geometry,
+   everyrecorded path edge,scalar assignment,integer completion,allactor partitions
+   andfull monthly ledgers pass;allzero-budget controls zero;freshsixfiles exact.
+   Eight optional POINTmaps,providerhour/pointdeficit downloads,normal3figure
+   evidencepanel. Allfive packetfamilies andoptional failures checked. See
+   NETWORK_DUTY_VISITS_20261112.md. No heldblock/dailyroster/observeddemand/authority.
+11. **Completed spare-provider diagnostic:** declaration75e7fd16 precedesoutputs.
+   Original completions/providers immutable;onlyremaining patrolslice funds
+   originalcapacity-unmet tasks. All8cases independentlyreviewed/freshbytes exact;
+   192–1117additional visits,0.07–0.43percentagepoint overallgains. No route/crew
+   impossibility claim from remaining misses;constructive lowerbound only. Normal
+   table/chart/downloads published;alloriginalpointmaps/defaults unchanged.
+12. **Completed target-grid audit:** declaration4f592bfe precedesalloutputs.
+   Five designs:block2/3/5 atphase0,plus3cell phases1/2;all40originalassignercases
+   independently reviewed. Geometry,allpath edges,recomputed eligibility/scalar
+   assignments,allactor partitions andfull monthly ledgers pass;138fresh files
+   byteexact. Baseline target/routes/allocationarrays andentireNPZ EXACToriginal.
+   Phase spreads0.185–0.265pp. Corrected600h/crew4 spacing7.36/11.04/18.40km:
+   completions254850/163423/66645 of575040/260496/97212 tasks. Densergrid raises
+   completedcounts butlowers fraction;workload/geography effect,not convergence
+   or reason toselectcoarsest. Normal40row/4figure evidence;no oldmap replacement.
+13. **Next declared worker-calendar audit:** original b3_p0 eightvisitplans/four
+   foodparents only. Integer supportedworkers each50h/bin,sharedmonthcalendar,
+   mandatorydivisiblehomeservices andeverywholecollectortrip beforevisits.
+   Construct greedy nonoverlapping sameprovider crews;record unfilledcollection
+   andblocked/unpackedvisits explicitly. No newfoodsupport claim whenmandatory
+   collectiondoesnotpack;greedyfailureisnotprovenimpossibility. Prior declaration
+   network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
+   dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
+
+**Owner usage-limit checkpoint:** calendar implementation and 145-file fresh
+replay are saved; normal-atlas publication/figures/browser/Windows remain pending.
+Resume step 13 before another experiment. These per-bin packing outputs do not
+certify unchanged annual food deliveries when any mandatory collector trip is
+unpacked. Collection-first fragmentation is an algorithm restriction, not a
+physical-impossibility result. All release1–4/S1–S5 empirical/resource/mobile
+obligations above remain open. See NETWORK_VISIT_CALENDAR_20261112.md.
+
+**Merged parallel line, 12 November.** While steps 4–13 ran on
+`claude/friendly-turing-43ygeu`, a second session worked on
+`claude/project-continuation-a484h1` from the same parent (2179335e). Both lines
+are now merged on `claude/project-continuation-a484h1`. Its steps, each declared
+before outputs:
+
+14. **Completed city-key join** (94e7266c, 79bb070f): pinned Hanson 2016 workbook
+    recovered from the older OxREP host with identical SHA-256; all 50 housing
+    samples joined by author key; 7 extents differ from the catalogue, 4 places
+    ended before AD150, 44 have no recorded end; smaller samples report denser
+    housing. Zero AD150 labels. See SETTLEMENT_SIZE_IDENTITY_20261112.md.
+15. **Completed size-shape diagnostic** (e52e6d89): 862 measured AD150 catalogue
+    areas under three density scenarios against the eight original coupled
+    scenarios. Allocator more equal than every reference at all tail levels
+    (Gini 0.35–0.37 against 0.48–0.88; largest town 8 times the median against
+    58–436). Requests before the finite budget are flatter still. See
+    SETTLEMENT_SIZE_SHAPE_20261112.md.
+16. **Completed two-day market-hierarchy test** (f17deb2a): lower towns pass a
+    share of residents and collected grain to the largest same-actor town inside
+    the cached two-day year-round footprint. Only 31 of 1053 corrected and 39 of
+    1034 raw towns have such a parent; Gini moves 0.35→0.36 and 0.37→0.38. Inert.
+17. **Completed longer-leg test, publication pending** (2b2fea71): same mechanism
+    with 6- and 12-day year-round legs on the seasonal transport graph and grain
+    retention 0.95 per travel day. Eight scenarios independently reviewed. At a
+    50% share the Gini is 0.60 (6 days) and 0.65–0.66 (12 days) and both tail
+    checks sit inside the Roman reference band in both climates; at 25% the
+    result is mixed. Costs: 889→657/597 corrected cohorts, total residents
+    419,264→415,045/403,950, area-weighted reach 6.38→5.26/4.84 bins. These use
+    the ORIGINAL coupled parents of 061e6ef8, not the later threshold-seeded
+    dispatch versions. Atlas maps, report and figures are pending.
+18. **Next on this line:** publish step 17 as optional maps; then decide with a
+    separate declaration whether the forwarding mechanism should be re-run on
+    the threshold-seeded dispatch parents so that collection work also limits
+    forwarded grain. No share or range is calibrated.
 
 ### Whole-plan review log
 
@@ -77,15 +168,27 @@ Immediate sequence:
 |Source-access check and open-paper recovery, fef3e9e8|Original source links fail; 2023 housing sample offers measurement evidence with exposed overlapping sites|Add explicit sample/phase/extent/detection gates and source-recovery dependency; no new blind pool|
 |Housing preparation and typed adapter, 12 November|50 rows/150 scenarios reviewed,18 checks and byte replay pass; none qualified for AD150; release2 remains open|Resolve phase/extent/representativeness and city joins; declare any later comparisons before scores|
 |Housing evidence publication and requested usage pause, 12 November|Research panel/chart/downloads preserve defaults;23 focused checks,9 served links,mobile/keyboard/themes and1695 Windows assets pass; entire release/S1–S5 queue reviewed|Handoff saved; commit/push and pause; next session starts at unresolved measurement/resource dependencies|
-|City workbook recovery and key join, 12 November (94e7266c, 79bb070f)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check, byte replay and 30 focused tests pass. Release 2 still open: extents conflict for 7, 4 places predate AD150, sample selection is visible. Release 3/4 and S1c–S5 unchanged; whole queue reviewed|Catalogue is available again, so the size comparison no longer rests on housing samples alone: declare the catalogue-area comparison before scores, add the ended-place refusal, keep complete diets/work and mobile/nonstate tasks queued|
-|Size-shape diagnostic, 12 November (e52e6d89)|Release 2 gains its first size result, and it is negative: no scenario produces large centres, and the flatness is in the requests, not the ledger. Reviewer recomputes 63 Roman sets, 378 resampling ranges and 78 allocator sets; byte replay and 15 analytic tests pass. Release 3 rebuild should not proceed on flat sizes; S2 hierarchy, S3 seats and S4 beyond-catchment supply each gain a concrete dependency. S1c–S1e, S5 and physics unchanged|Declare one hierarchy mechanism test at a time against the same metrics; no transfer-share tuning; absolute sizes and urban share remain unclaimed|
+|Province-blocked housing density comparison, 12 November, declaration0161dae2|All50cities retained;average area gain trades against median error;coverage effects cohort-sensitive.228predictions/117fits independently reviewed, fresh bytes exact. NoAD150qualification or default; full release1–4/S1–S5/allactor/mobile scope reviewed|Keep dated housing acquisition open; advance monthly collection/patrol/service pooled work on same ledger, predeclaring controls before outputs|
+|Monthly collection and competing staff work, 12 November, declaration7ccd5891|16fixedplan cases show major staff-only collection shortfalls;one monthly budget correctly limits all secondary duties. Independent path/trip/work/request checks and sixfile replay pass. All release1–4/S1–S5/allactor/mobile dependencies reviewed;no new reach/default|Joint dispatch/storage/work/resident feedback before accepting new cohorts;keep empirical labour/provider/occupancy and complete resource gaps explicit|
+|Monthly-work publication and whole-plan checkpoint, 12 November|69focusedtests,9newbyteexactlinks,previoushousingandgeneralbrowser/mobile/failurechecks pass;Windows1706assets exact,r44verified,784hublinksresolve. Source/consumer/default boundaries retained|Keep jointdispatch/work/foodsolver next;datedsize/role evidence,prospectivetransfer,complete diets/work and actualmobileoccupancy remain on fullprogramme|
+|Jointdispatch/resident/work maps,12November,declarationde42d1c3|16jointcases independently reviewed,16freshresult/fieldpairs exact;32newmapoptions/exactworkCSV/familyswitch/mobile/failure checks pass. Allrelease1–4/S1–S5/allactor/unaffiliated/mobile dependencies reviewed;no calibrateddefault or geographicpatrolwork claim|Double resident scan andprobe explicitstaffthreshold before family/physical impossibility claims;continue actualduty-destination andempirical/resource dependencies afterpush|
+|Declared finergrid andstaffthreshold audit,12November|396overlaparrays exact;300h32grid missed15raw/12corrected sources thatfinergrid+150probe certify.Independent16completephysicalrecords andfreshbytes pass;fullrelease/S1–S5/allactor/mobile scope reviewed. No originalsource loss promoted asphysicaltruth|Implementdeclaredthresholdseeding onall16cases andpublish correctedversionedmaps;retain actualnetworkduty andempirical/resource dependencies|
+|Threshold-seeded correctedmaps,12November,declaration354f9a52|16physical/thresholdreviews andfreshbytepairs pass;all8open sourceflags/masks equaloldfoodsets,source-countloss repaired.32newmapoptions/workCSV/fourfamilies/mobile/failures and60focusedtests pass. Fullrelease/S1–S5/allactor/mobileprogramme reviewed;no empirical/default/patrolqualification|Freeze andconnect actualnetworktask destinations toexistingreservedpatrolhours;retain complete resource/provider/occupation/transfer evidence gaps|
+|Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
+|Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
+|City workbook recovery and key join, 12 November (94e7266c, 79bb070f; merged line)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check and byte replay pass. Extents conflict for 7, 4 places predate AD150, sample selection visible. Release 2 open|Catalogue available again: declare catalogue-area comparison before scores|
+|Size-shape diagnostic, 12 November (e52e6d89; merged line)|First size result, and negative: no original coupled scenario produces large centres; flatness is in catchment budgets and requests. 63 Roman sets, 378 resampling ranges and 78 allocator sets recomputed|Declare one hierarchy mechanism at a time against the same metrics; no transfer-share tuning|
+|Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Publish optional maps; consider a declared re-run on the threshold-seeded dispatch parents|
+|Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
+|Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
 
 ## Working rules
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
   decision, atlas consequences, and the next unfinished task. Commit and push
-  milestones to the single maintained branch, `claude/project-continuation-a484h1`
-  (owner decision,12 November2026; `claude/friendly-turing-43ygeu` stops at 061e6ef8). A failed experiment does not complete
+  milestones to `claude/project-continuation-a484h1`, which since the 12 November
+  merge contains both lines of work (`claude/friendly-turing-43ygeu` up to a60e853f
+  included; the cloud session cannot push to that branch). A failed experiment does not complete
   its parent stage or cancel later stages.
 * Follow the dependency chain: environment → occupancy and land use → settlements
   → shared people/food allocation → institutions and transport → differentiated
@@ -519,26 +622,11 @@ shared-ledger consumer, prospective transfer, complete diets/work and mobile/
 nonstate tasks were revisited and remain on the live queue. Owner requested a
 usage pause: finish this checkpoint,commit/push,then resume from step4 above.
 
-12 November whole-plan review after the city-key join: the pinned Hanson (2016)
-workbook is recovered with an identical SHA-256, and all 50 housing samples join
-it by author key. This settles place identity and adds `place_groups` for
-group-aware comparisons. It qualifies no resident size: seven samples state a
-different extent from the catalogue, four places had ended before AD150, 44 have
-no recorded end date, and smaller samples report denser housing. Catalogue dates
-are whole-site spans and clear no phase gate. Release 2, S1c–S1e and S2–S5 were
-revisited and remain open. The next step is a declared catalogue-area size
-comparison; see step 5 of the live review. This session pushes to
-`claude/project-continuation-a484h1`, which already held the three preceding
-commits; `claude/friendly-turing-43ygeu` stops at 061e6ef8 until the owner
-decides which branch is canonical.
-
-12 November whole-plan review after the size-shape diagnostic: the allocator's
-town sizes are more equal than every conditional Roman reference at every
-declared tail level, and its civilian requests are flatter still. The finite
-ledger is not the cause and the transfer share cannot change it. The programme
-therefore gains an explicit dependency ahead of any size fit or fantasy rebuild:
-a mechanism that makes some centres much larger than others. Market hierarchy
-(S2), administrative concentration (S3) and supply from beyond one catchment
-(S4) are the candidates; each must be declared and tested separately against
-the same metrics. Absolute sizes, urban share, dated occupancy, the failed
-transfer, complete diets and work, and S5 remain open and were revisited.
+12 November, merged line: the pinned Hanson (2016) workbook is recovered and all
+50 housing samples join it by author key; this settles place identity and
+qualifies no resident size. A declared scale-free comparison then showed the
+original coupled allocator has no large centres, and two declared mechanism
+tests showed that forwarding along two-day links is inert while 6- and 12-day
+market legs can reach the Roman relative band at a 50% share, at a cost in
+cohorts and reach. None of this is calibrated or adopted. See the merged-line
+steps 14–18 in the live review.

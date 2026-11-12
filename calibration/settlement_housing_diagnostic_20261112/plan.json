@@ -1,0 +1,32 @@
+{
+  "date": "2026-11-12",
+  "status": "declared_before_diagnostic_scores",
+  "parent_checkpoint": "2179335ef6913f25c05f0de9fca3a52561d45591",
+  "purpose": "Mixed-period observation diagnostic: does site area predict encountered residential-property density beyond a constant-density baseline in this selected housing archive? This is not AD150 population calibration, a fantasy allocator comparison, or prospective transfer.",
+  "known_before_declaration": "All50 Table2 rows, household3/5/7 calculations and sampling fractions already exposed. Three phases explicitly excludeAD150;47 unresolved;all50 lack phase-compatible extent and representativeness certificates. Workbook links404,ORA403;no certified city join. No new regression, prediction or score computed.",
+  "sources": {
+    "table": "data/source/roman_housing_2023/table2.csv",
+    "metadata": "data/source/roman_housing_2023/source.json",
+    "prepared": "output/settlement_size_evidence_20261112/results.json",
+    "pdf_sha256": "648928e26e1694303ea56251c4ea5afae3551ed2e51072e4630587fe2903479b"
+  },
+  "units": "One author-supplied city key per row. Require unique keys AND unique exact normalized ancient-name/province pairs. No fuzzy joins, dates or missing extents filled;all source rows retained in primary analysis. Catalogue joins remain uncertified and no cross-archive independence is asserted.",
+  "response": "Natural logarithm(properties/sample_area_ha), a sampled property density. Site area is a predictor, never part of the response. Do not fit extrapolated population against area and describe the shared area factor as independent evidence. No random-sampling likelihood, inferential confidence interval or census assumption.",
+  "models": [
+    {"id": "constant", "design": "intercept"},
+    {"id": "area", "design": "intercept + ln(site_area_ha)"},
+    {"id": "area_coverage", "design": "intercept + ln(site_area_ha) + ln(sample_area_ha/site_area_ha)", "status": "Observation-selection diagnostic only. Coverage includes the response denominator; association cannot certify representativeness or a causal urban effect. Not an allocator predictor."}
+  ],
+  "fit": "Ordinary least squares with one equal weight per city and no tuning/clipping. Refuse rank-deficient/nonfinite fits. Fit every coefficient using training rows only.",
+  "groups": "Leave one exact source province label out at a time. Italia regions remain distinct source labels. Report every fold, training/test sizes and coefficient ranges. This is coarse geography blocking of exposed observations, not proof of independent sampling or global transfer. Household and other same-city scenarios never become extra samples.",
+  "cohorts": [
+    {"id": "all", "minimum_sample_fraction": 0},
+    {"id": "coverage_1pct", "minimum_sample_fraction": 0.01},
+    {"id": "coverage_10pct", "minimum_sample_fraction": 0.10}
+  ],
+  "cohort_rule": "Coverage thresholds are predeclared observation-selection sensitivities, not retrospective exclusions from primary. Retain every eligible fold;require at least10 training cities and2 provinces per fit,otherwise mark whole cohort unscored with reason and retain its records. No comparison across cohorts described as same-target improvement.",
+  "metrics": "Pooled held-province predictions:mean absolute log error,root mean square log error,median multiplicative error exp(median absolute log error),and equal-province mean absolute log error. Report paired per-province absolute-log-error differences versus constant,not just pooled winner. No selection/adoption threshold;all models remain visible.",
+  "controls": "Household3/5/7 shifts density and predictions by same log factor:held-out errors must remain identical within1e-12. Verify population prediction = density_prediction * site_area * household only as conditional algebra,not observed inhabitants. Source PDF/CSV,prior outputs,atlas model packet hashes unchanged;no climate solve,placement,resource or staff defaults changed.",
+  "review": "Independent scalar normal equations and explicit2x2 centered solve (no producer lstsq),independent fold membership and metrics,all predictions and coefficients,source hashes,household invariance and fresh byte-exact replay. Numerical unit checks prevent held-out target leakage and rank-deficient fits. Publish chart/report/downloads in normal evidence page and post chart in chat.",
+  "limits_and_next": "Results cannot repair missing sample phases,contemporaneous extents,detection or site representativeness. Keep allAD150 qualification gates;no calibrated resident requests reach allocator. Review whole programme after completion. Next prioritize compatible phase/extent evidence or concrete complete-resource/work dependencies;keep releases1-4,S1-S5,allactors/unaffiliated/mobile/nonstate and failedVidarbha guard intact. No repeated exponent tuning to manufacture qualification."
+}

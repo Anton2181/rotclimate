@@ -1,0 +1,2637 @@
+{
+  "status": "fixed_food_plan_monthly_work_diagnostic",
+  "adopt": false,
+  "sources_sha256": {
+    "calibration/settlement_monthly_work_20261112/plan.json": "e9c60dc915278fd16f45d9677cc1b0918e0fa3eaad20f8129266bde72e3133de",
+    "scripts/build_monthly_work.py": "95b2f853c043d31b6a71260abc8547b3adb57331a7244998940dff1b7391ef3b",
+    "polity/monthly_work.py": "19fdb724a19aa7ce9ac6c674119772640d72d44ecd6955c3067ce5100c7d2693",
+    "polity/service_capacity.py": "feb5830a9acdb248444cac771079476e018db8ff1b79f38901134a650a90cde7",
+    "polity/settlement_support.py": "82b7a99949308e60194a20eb51b4067cdc156ea2b4d03ce1a8009d7b23d941c3",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
+    "output/settlement_monthly_work_20261112/raw_paths.npz": "be53f239c4c36f5b0ef691e9e448797bd992f26a981875d337ef02bbb69589f9",
+    "output/settlement_monthly_work_20261112/raw_paths.json": "b2cefaf638258524df94d365de7c6d404c13fedff9eb74fc0eb41c5bdde0c15f",
+    "output/settlement_feedback_20261112/raw_h600_f0.075/results.json": "3aa6fdde725b9a777e3a4a4602be85a3fcc6ff43b5fcaf7380cf9e9f84ff8f72",
+    "output/settlement_feedback_20261112/raw_h600_f0.075/fields.npz": "b67b4b52b0bbc5534ffdfdf6b35d01f4a84f02d0617937a014150999b1e78b1f",
+    "output/settlement_feedback_20261112/raw_h600_f0.075/review.json": "cad0ab30cab22bb42735b368308a946fc2469d08b9b4b5589a3dd398d05e6337",
+    "output/settlement_feedback_20261112/raw_h300_f0.075/results.json": "7be878c983a39475941b8be868e2855abb75ba5b04154974e2649c8abb3eceb4",
+    "output/settlement_feedback_20261112/raw_h300_f0.075/fields.npz": "015465757af1f4e5d30e5c46cfde5035438bca117b732f034e717797b191940e",
+    "output/settlement_feedback_20261112/raw_h300_f0.075/review.json": "0aa16ab235557d0a327818420c4b08f1eecf1e1d1f0c1062cb8dd9c438d2c2be",
+    "output/settlement_monthly_work_20261112/corrected_paths.npz": "b5bb02fddac8b5ac687ff80818fe284c6a1018651d528a74cf6ebe6ca76b9217",
+    "output/settlement_monthly_work_20261112/corrected_paths.json": "2cf011db28aa16c4c7809f8260aecd7f037f7fc39a4ba94bb7b6bcd1bde333fe",
+    "output/settlement_feedback_20261112/corrected_h600_f0.075/results.json": "be3e2e7921fc6ebb77c64c562d0427cfdc1b3f87bdfa73e06f7156ab3f40d42d",
+    "output/settlement_feedback_20261112/corrected_h600_f0.075/fields.npz": "40119731b2540ddcff267f50d645ce567c7428d4cdd18052752ef210f0498e75",
+    "output/settlement_feedback_20261112/corrected_h600_f0.075/review.json": "cd0bedf59a0da8a70a1caad1529781ed898ca5923a4135e729fc63d82f2ccd4e",
+    "output/settlement_feedback_20261112/corrected_h300_f0.075/results.json": "c838549ec678fd2531bda7a3135bcec8388687f84c8dec73f3014129a0c5fe7f",
+    "output/settlement_feedback_20261112/corrected_h300_f0.075/fields.npz": "e642a5d437e47a9cec47cc4be2e591d2e605b54c9910234948cbac26b72fd31b",
+    "output/settlement_feedback_20261112/corrected_h300_f0.075/review.json": "117314c1eb5119166cded938a1997a192a4a12084fdf63fd26b300ca60f4e6df"
+  },
+  "unchanged_atlas_sha256": {
+    "atlases/earth_fit/data/atlas.json": "5c0376bf6718527c35ae41992d686147f96a42a6e9ff4e6b9d116b18fdd9895f",
+    "atlases/earth_fit/data/settled_reach.json": "a683b5b0cca5432dd5c219aaf4652c91e037515d85055d401f5040bd49f1c47b",
+    "atlases/earth_fit/data/settled_reach.json.gz": "20f8f9f4568edc7bd89f6dd688c16bbfe6d0eda7722dbf142e0043826e8804c0",
+    "atlases/earth_fit/data/settled_reach.bin.gz": "33cb86c8d390dbadbd9f1956716a66765fa44d9ab387ddddac4b3891c4a504a4",
+    "atlases/earth_fit/data/corrected/settled_reach.json.gz": "b039184a57f178355272ad9cd0c62ee8be83fbeeac66dc9c3b10d54001a72f5f",
+    "atlases/earth_fit/data/corrected/settled_reach.bin.gz": "789cf3988af004c86e7b181f07b4a349e595551fac0e4c9d065664e0388cc247"
+  },
+  "fields_sha256": "d8eb4dbcf73850e9aa158e2c04b949a50fa06d2a9f341b778f9283fbe6b93a92",
+  "original_food_checks": [
+    {
+      "key": "raw_h600_f0.075",
+      "people": 416832.36818066036,
+      "staff": 86100.0,
+      "source_food_review_passed": true,
+      "destination_food_replayed": true
+    },
+    {
+      "key": "raw_h300_f0.075",
+      "people": 307917.5248671757,
+      "staff": 72500.0,
+      "source_food_review_passed": true,
+      "destination_food_replayed": true
+    },
+    {
+      "key": "corrected_h600_f0.075",
+      "people": 419264.3900164723,
+      "staff": 88900.0,
+      "source_food_review_passed": true,
+      "destination_food_replayed": true
+    },
+    {
+      "key": "corrected_h300_f0.075",
+      "people": 313740.13479918963,
+      "staff": 75500.0,
+      "source_food_review_passed": true,
+      "destination_food_replayed": true
+    }
+  ],
+  "rows": [
+    {
+      "key": "raw_h600_f0.075_load60000_all_open",
+      "parent": "raw_h600_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 600,
+      "load_kcal": 60000.0,
+      "availability": "all_open",
+      "original_town_people": 416832.36818066036,
+      "original_active_sites": 861,
+      "positive_sites": 1005,
+      "qualified_positive_sites": 69,
+      "qualified_active_sites": 69,
+      "conditional_qualified_town_people": 14401.211066179734,
+      "collection_deficit_sites": 936,
+      "positive_sites_without_staff": 144,
+      "required_collection_hours": 112336550.70560676,
+      "collection_unmet_hours": 64145006.66580944,
+      "gross_hours": 51660000.0,
+      "fundable_collection_hours": 48191544.039797336,
+      "secondary_hours": 1067249.9465219458,
+      "unused_hours": 2401206.0136807235,
+      "secondary_requested": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_served": [
+        73510.36579349828,
+        12701.608470989922,
+        12701.608470989922
+      ],
+      "secondary_unreachable": [
+        950400.0,
+        402431.1571144806,
+        402431.1571144806
+      ],
+      "secondary_capacity_unmet": [
+        9289.634206501727,
+        1699.6025951898137,
+        1699.6025951898137
+      ],
+      "invalid_independent_budget_excess_hours": 10539.905598008838,
+      "invalid_independent_budget_excess_site_bins": 193,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5852.4680878823065,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3123.9025953224454,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2488.2937551033756,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 36469.145207506575,
+          "qualified_town_people": 1262.9545178674698,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4983.24646942455,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 48972.58841718259,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 12748.705716867733,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 9129.14221391911,
+          "qualified_town_people": 827.9393046682737,
+          "qualified_active_sites": 4
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 8563.804379067595,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12633.207832425333,
+          "qualified_town_people": 187.4113508765279,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 7075.277853500684,
+          "qualified_town_people": 2693.419238741546,
+          "qualified_active_sites": 14
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12841.9819148209,
+          "qualified_town_people": 152.24359387010395,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4155.359324208712,
+          "qualified_town_people": 498.62198806392564,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 3174.793619107512,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 8185.9122168220165,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3408.0712444067376,
+          "qualified_town_people": 170.29262530445826,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 27063.59644634961,
+          "qualified_town_people": 352.4281265637524,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 192704.79481551022,
+          "qualified_town_people": 6530.376657750699,
+          "qualified_active_sites": 31
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13258.076071232328,
+          "qualified_town_people": 1725.5236624729766,
+          "qualified_active_sites": 7
+        }
+      ]
+    },
+    {
+      "key": "raw_h600_f0.075_load60000_bins6_7_8_closed",
+      "parent": "raw_h600_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 600,
+      "load_kcal": 60000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 416832.36818066036,
+      "original_active_sites": 861,
+      "positive_sites": 1005,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 1005,
+      "positive_sites_without_staff": 144,
+      "required_collection_hours": 112336550.70560676,
+      "collection_unmet_hours": 75963588.33787599,
+      "gross_hours": 38745000.0,
+      "fundable_collection_hours": 36372962.36773078,
+      "secondary_hours": 0.0,
+      "unused_hours": 2372037.6322692176,
+      "secondary_requested": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5852.4680878823065,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3123.9025953224454,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2488.2937551033756,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 36469.145207506575,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4983.24646942455,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 48972.58841718259,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 12748.705716867733,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 9129.14221391911,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 8563.804379067595,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12633.207832425333,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 7075.277853500684,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12841.9819148209,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4155.359324208712,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 3174.793619107512,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 8185.9122168220165,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3408.0712444067376,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 27063.59644634961,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 192704.79481551022,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13258.076071232328,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "raw_h600_f0.075_load120000_all_open",
+      "parent": "raw_h600_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 600,
+      "load_kcal": 120000.0,
+      "availability": "all_open",
+      "original_town_people": 416832.36818066036,
+      "original_active_sites": 861,
+      "positive_sites": 1005,
+      "qualified_positive_sites": 360,
+      "qualified_active_sites": 360,
+      "conditional_qualified_town_people": 92940.86864809395,
+      "collection_deficit_sites": 645,
+      "positive_sites_without_staff": 144,
+      "required_collection_hours": 56575284.96145311,
+      "collection_unmet_hours": 17544269.544946097,
+      "gross_hours": 51660000.0,
+      "fundable_collection_hours": 39031015.41650702,
+      "secondary_hours": 5975040.296311052,
+      "unused_hours": 6653944.287181927,
+      "secondary_requested": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_served": [
+        408239.62694305426,
+        86561.83970276383,
+        86561.83970276383
+      ],
+      "secondary_unreachable": [
+        601200.0,
+        323891.4995325664,
+        323891.4995325664
+      ],
+      "secondary_capacity_unmet": [
+        23760.373056945708,
+        6379.028945330113,
+        6379.028945330113
+      ],
+      "invalid_independent_budget_excess_hours": 46956.61574262953,
+      "invalid_independent_budget_excess_site_bins": 652,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5852.4680878823065,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3123.9025953224454,
+          "qualified_town_people": 627.8096388603292,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2488.2937551033756,
+          "qualified_town_people": 302.95039929513587,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 36469.145207506575,
+          "qualified_town_people": 22810.696406602274,
+          "qualified_active_sites": 78
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4983.24646942455,
+          "qualified_town_people": 1161.0052505407539,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 48972.58841718259,
+          "qualified_town_people": 4765.286725868197,
+          "qualified_active_sites": 13
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 12748.705716867733,
+          "qualified_town_people": 1444.5866268978216,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 9129.14221391911,
+          "qualified_town_people": 4712.837583869719,
+          "qualified_active_sites": 20
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 8563.804379067595,
+          "qualified_town_people": 5523.787106592894,
+          "qualified_active_sites": 27
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12633.207832425333,
+          "qualified_town_people": 1005.3038826692376,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 7075.277853500684,
+          "qualified_town_people": 4586.702811226558,
+          "qualified_active_sites": 20
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12841.9819148209,
+          "qualified_town_people": 5306.085929890507,
+          "qualified_active_sites": 17
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4155.359324208712,
+          "qualified_town_people": 2290.061767014493,
+          "qualified_active_sites": 12
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 3174.793619107512,
+          "qualified_town_people": 2584.8370006348623,
+          "qualified_active_sites": 14
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 8185.9122168220165,
+          "qualified_town_people": 1818.5284195600416,
+          "qualified_active_sites": 8
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3408.0712444067376,
+          "qualified_town_people": 170.29262530445826,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 27063.59644634961,
+          "qualified_town_people": 3058.8717457101766,
+          "qualified_active_sites": 12
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 192704.79481551022,
+          "qualified_town_people": 27873.09306178247,
+          "qualified_active_sites": 109
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13258.076071232328,
+          "qualified_town_people": 2898.131665774024,
+          "qualified_active_sites": 12
+        }
+      ]
+    },
+    {
+      "key": "raw_h600_f0.075_load120000_bins6_7_8_closed",
+      "parent": "raw_h600_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 600,
+      "load_kcal": 120000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 416832.36818066036,
+      "original_active_sites": 861,
+      "positive_sites": 1005,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 1005,
+      "positive_sites_without_staff": 144,
+      "required_collection_hours": 56575284.96145311,
+      "collection_unmet_hours": 26814769.981341723,
+      "gross_hours": 38745000.0,
+      "fundable_collection_hours": 29760514.98011139,
+      "secondary_hours": 0.0,
+      "unused_hours": 8984485.019888608,
+      "secondary_requested": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        1033200.0,
+        416832.36818066036,
+        416832.36818066036
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5852.4680878823065,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3123.9025953224454,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2488.2937551033756,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 36469.145207506575,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4983.24646942455,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 48972.58841718259,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 12748.705716867733,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 9129.14221391911,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 8563.804379067595,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12633.207832425333,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 7075.277853500684,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12841.9819148209,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4155.359324208712,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 3174.793619107512,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 8185.9122168220165,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3408.0712444067376,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 27063.59644634961,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 192704.79481551022,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13258.076071232328,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "raw_h300_f0.075_load60000_all_open",
+      "parent": "raw_h300_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 300,
+      "load_kcal": 60000.0,
+      "availability": "all_open",
+      "original_town_people": 307917.5248671757,
+      "original_active_sites": 725,
+      "positive_sites": 950,
+      "qualified_positive_sites": 445,
+      "qualified_active_sites": 445,
+      "conditional_qualified_town_people": 117295.15379755467,
+      "collection_deficit_sites": 505,
+      "positive_sites_without_staff": 225,
+      "required_collection_hours": 36425701.49552049,
+      "collection_unmet_hours": 7939122.420898899,
+      "gross_hours": 43500000.0,
+      "fundable_collection_hours": 28486579.074621588,
+      "secondary_hours": 7291023.209665582,
+      "unused_hours": 7722397.7157128295,
+      "secondary_requested": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_served": [
+        497923.079007584,
+        106700.03451980205,
+        106700.03451980205
+      ],
+      "secondary_unreachable": [
+        336000.0,
+        190622.37106962112,
+        190622.37106962112
+      ],
+      "secondary_capacity_unmet": [
+        36076.92099241602,
+        10595.119277752627,
+        10595.119277752627
+      ],
+      "invalid_independent_budget_excess_hours": 66218.13051720918,
+      "invalid_independent_budget_excess_site_bins": 822,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4304.764995397567,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 2466.122576279581,
+          "qualified_town_people": 1490.86386464044,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 1963.8635709046068,
+          "qualified_town_people": 551.9712181186089,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 28669.520144938637,
+          "qualified_town_people": 17154.759175914554,
+          "qualified_active_sites": 69
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3674.8609230273587,
+          "qualified_town_people": 2128.0892760506636,
+          "qualified_active_sites": 9
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 38963.310572523944,
+          "qualified_town_people": 6262.020232829407,
+          "qualified_active_sites": 21
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 9012.394748054234,
+          "qualified_town_people": 4318.703362169215,
+          "qualified_active_sites": 16
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 5716.166468248027,
+          "qualified_town_people": 5034.852468533988,
+          "qualified_active_sites": 23
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 6725.275588382867,
+          "qualified_town_people": 4825.374782827732,
+          "qualified_active_sites": 23
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10022.811993494583,
+          "qualified_town_people": 626.8155418870463,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 2332.7832002032183,
+          "qualified_town_people": 1290.0159989628705,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 10142.499731265694,
+          "qualified_town_people": 6935.981072785824,
+          "qualified_active_sites": 26
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3274.6226398480726,
+          "qualified_town_people": 1805.4365327573464,
+          "qualified_active_sites": 9
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2478.775049125699,
+          "qualified_town_people": 1130.2479304858557,
+          "qualified_active_sites": 7
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 6482.799177282354,
+          "qualified_town_people": 3932.505623426908,
+          "qualified_active_sites": 14
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2700.0551698702243,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20973.465478539772,
+          "qualified_town_people": 7558.360250907249,
+          "qualified_active_sites": 26
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 140040.47496411737,
+          "qualified_town_people": 49359.315691750264,
+          "qualified_active_sites": 176
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 7972.9578756719575,
+          "qualified_town_people": 2889.840773506693,
+          "qualified_active_sites": 10
+        }
+      ]
+    },
+    {
+      "key": "raw_h300_f0.075_load60000_bins6_7_8_closed",
+      "parent": "raw_h300_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 300,
+      "load_kcal": 60000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 307917.5248671757,
+      "original_active_sites": 725,
+      "positive_sites": 950,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 950,
+      "positive_sites_without_staff": 225,
+      "required_collection_hours": 36425701.49552049,
+      "collection_unmet_hours": 14512728.322997477,
+      "gross_hours": 32625000.0,
+      "fundable_collection_hours": 21912973.17252301,
+      "secondary_hours": 0.0,
+      "unused_hours": 10712026.82747699,
+      "secondary_requested": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4304.764995397567,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 2466.122576279581,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 1963.8635709046068,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 28669.520144938637,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3674.8609230273587,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 38963.310572523944,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 9012.394748054234,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 5716.166468248027,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 6725.275588382867,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10022.811993494583,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 2332.7832002032183,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 10142.499731265694,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3274.6226398480726,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2478.775049125699,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 6482.799177282354,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2700.0551698702243,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20973.465478539772,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 140040.47496411737,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 7972.9578756719575,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "raw_h300_f0.075_load120000_all_open",
+      "parent": "raw_h300_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 300,
+      "load_kcal": 120000.0,
+      "availability": "all_open",
+      "original_town_people": 307917.5248671757,
+      "original_active_sites": 725,
+      "positive_sites": 950,
+      "qualified_positive_sites": 681,
+      "qualified_active_sites": 681,
+      "conditional_qualified_town_people": 241863.89536502177,
+      "collection_deficit_sites": 269,
+      "positive_sites_without_staff": 225,
+      "required_collection_hours": 18600093.994568065,
+      "collection_unmet_hours": 1914043.7212878196,
+      "gross_hours": 43500000.0,
+      "fundable_collection_hours": 16686050.27328024,
+      "secondary_hours": 11868779.515319224,
+      "unused_hours": 14945170.211400535,
+      "secondary_requested": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_served": [
+        798313.6120830427,
+        230796.31538554182,
+        230796.31538554182
+      ],
+      "secondary_unreachable": [
+        52800.0,
+        66053.62950215398,
+        66053.62950215398
+      ],
+      "secondary_capacity_unmet": [
+        18886.387916957276,
+        11067.579979479959,
+        11067.579979479959
+      ],
+      "invalid_independent_budget_excess_hours": 80580.57675096116,
+      "invalid_independent_budget_excess_site_bins": 551,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4304.764995397567,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 2466.122576279581,
+          "qualified_town_people": 1490.86386464044,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 1963.8635709046068,
+          "qualified_town_people": 1060.0861287401394,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 28669.520144938637,
+          "qualified_town_people": 23706.818416852402,
+          "qualified_active_sites": 81
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3674.8609230273587,
+          "qualified_town_people": 2924.621391076918,
+          "qualified_active_sites": 11
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 38963.310572523944,
+          "qualified_town_people": 18234.266946196036,
+          "qualified_active_sites": 44
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 9012.394748054234,
+          "qualified_town_people": 7997.417708053222,
+          "qualified_active_sites": 23
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 5716.166468248027,
+          "qualified_town_people": 5034.852468533988,
+          "qualified_active_sites": 23
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 6725.275588382867,
+          "qualified_town_people": 4825.374782827732,
+          "qualified_active_sites": 23
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10022.811993494583,
+          "qualified_town_people": 9681.20043176395,
+          "qualified_active_sites": 18
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 2332.7832002032183,
+          "qualified_town_people": 1290.0159989628705,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 10142.499731265694,
+          "qualified_town_people": 8873.356480419288,
+          "qualified_active_sites": 30
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3274.6226398480726,
+          "qualified_town_people": 2354.321375993908,
+          "qualified_active_sites": 10
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2478.775049125699,
+          "qualified_town_people": 1130.2479304858557,
+          "qualified_active_sites": 7
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 6482.799177282354,
+          "qualified_town_people": 6015.39324094422,
+          "qualified_active_sites": 19
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2700.0551698702243,
+          "qualified_town_people": 2541.9015185747817,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20973.465478539772,
+          "qualified_town_people": 16092.342599657639,
+          "qualified_active_sites": 43
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 140040.47496411737,
+          "qualified_town_people": 122848.07471168118,
+          "qualified_active_sites": 313
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 7972.9578756719575,
+          "qualified_town_people": 5762.739369617199,
+          "qualified_active_sites": 16
+        }
+      ]
+    },
+    {
+      "key": "raw_h300_f0.075_load120000_bins6_7_8_closed",
+      "parent": "raw_h300_f0.075",
+      "climate": "raw",
+      "field_worker_hours": 300,
+      "load_kcal": 120000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 307917.5248671757,
+      "original_active_sites": 725,
+      "positive_sites": 950,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 950,
+      "positive_sites_without_staff": 225,
+      "required_collection_hours": 18600093.994568065,
+      "collection_unmet_hours": 5663556.058092984,
+      "gross_hours": 32625000.0,
+      "fundable_collection_hours": 12936537.936475076,
+      "secondary_hours": 0.0,
+      "unused_hours": 19688462.063524924,
+      "secondary_requested": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        870000.0,
+        307917.5248671757,
+        307917.5248671757
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4304.764995397567,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 2466.122576279581,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 1963.8635709046068,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 28669.520144938637,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3674.8609230273587,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 38963.310572523944,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 9012.394748054234,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 5716.166468248027,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 6725.275588382867,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10022.811993494583,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 2332.7832002032183,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 10142.499731265694,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3274.6226398480726,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2478.775049125699,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 6482.799177282354,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2700.0551698702243,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20973.465478539772,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 140040.47496411737,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 7972.9578756719575,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "corrected_h600_f0.075_load60000_all_open",
+      "parent": "corrected_h600_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 600,
+      "load_kcal": 60000.0,
+      "availability": "all_open",
+      "original_town_people": 419264.3900164723,
+      "original_active_sites": 889,
+      "positive_sites": 1037,
+      "qualified_positive_sites": 72,
+      "qualified_active_sites": 72,
+      "conditional_qualified_town_people": 14530.43953939687,
+      "collection_deficit_sites": 965,
+      "positive_sites_without_staff": 148,
+      "required_collection_hours": 113676217.00000158,
+      "collection_unmet_hours": 63880788.06741811,
+      "gross_hours": 53340000.0,
+      "fundable_collection_hours": 49795428.93258345,
+      "secondary_hours": 1107039.4253777538,
+      "unused_hours": 2437531.642038791,
+      "secondary_requested": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_served": [
+        76330.48177857231,
+        12804.226825913775,
+        12804.226825913775
+      ],
+      "secondary_unreachable": [
+        980400.0,
+        404733.9504770754,
+        404733.9504770754
+      ],
+      "secondary_capacity_unmet": [
+        10069.518221427694,
+        1726.2127134830976,
+        1726.2127134830976
+      ],
+      "invalid_independent_budget_excess_hours": 10140.132774810812,
+      "invalid_independent_budget_excess_site_bins": 201,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5811.671034330555,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 4143.880073296078,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2568.651815908115,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 34040.19726877286,
+          "qualified_town_people": 1440.83701673615,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4820.380454838824,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 39810.426183094925,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 13346.765903936403,
+          "qualified_town_people": 159.16520144786358,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 12248.130259661215,
+          "qualified_town_people": 480.9103025463163,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 7286.399898642927,
+          "qualified_town_people": 310.6891659145135,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12857.04598889967,
+          "qualified_town_people": 357.6125053442315,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 9398.021597456223,
+          "qualified_town_people": 1810.94325738165,
+          "qualified_active_sites": 9
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 15645.20982238735,
+          "qualified_town_people": 223.86275097109416,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4427.068629948519,
+          "qualified_town_people": 333.59718911756005,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2823.7044098044103,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 7151.55461705161,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3404.552156495958,
+          "qualified_town_people": 159.18219650017429,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 26426.789954940377,
+          "qualified_town_people": 556.3617982470428,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 199998.5503012467,
+          "qualified_town_people": 7053.395897764972,
+          "qualified_active_sites": 34
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13055.389645759518,
+          "qualified_town_people": 1643.8822574253034,
+          "qualified_active_sites": 8
+        }
+      ]
+    },
+    {
+      "key": "corrected_h600_f0.075_load60000_bins6_7_8_closed",
+      "parent": "corrected_h600_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 600,
+      "load_kcal": 60000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 419264.3900164723,
+      "original_active_sites": 889,
+      "positive_sites": 1037,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 1037,
+      "positive_sites_without_staff": 148,
+      "required_collection_hours": 113676217.00000158,
+      "collection_unmet_hours": 76023889.73894367,
+      "gross_hours": 40005000.0,
+      "fundable_collection_hours": 37652327.26105789,
+      "secondary_hours": 0.0,
+      "unused_hours": 2352672.7389421077,
+      "secondary_requested": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5811.671034330555,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 4143.880073296078,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2568.651815908115,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 34040.19726877286,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4820.380454838824,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 39810.426183094925,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 13346.765903936403,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 12248.130259661215,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 7286.399898642927,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12857.04598889967,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 9398.021597456223,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 15645.20982238735,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4427.068629948519,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2823.7044098044103,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 7151.55461705161,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3404.552156495958,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 26426.789954940377,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 199998.5503012467,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13055.389645759518,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "corrected_h600_f0.075_load120000_all_open",
+      "parent": "corrected_h600_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 600,
+      "load_kcal": 120000.0,
+      "availability": "all_open",
+      "original_town_people": 419264.3900164723,
+      "original_active_sites": 889,
+      "positive_sites": 1037,
+      "qualified_positive_sites": 368,
+      "qualified_active_sites": 368,
+      "conditional_qualified_town_people": 95358.73569741343,
+      "collection_deficit_sites": 669,
+      "positive_sites_without_staff": 148,
+      "required_collection_hours": 57239389.59635075,
+      "collection_unmet_hours": 16852509.76689782,
+      "gross_hours": 53340000.0,
+      "fundable_collection_hours": 40386879.82945293,
+      "secondary_hours": 6074886.217097473,
+      "unused_hours": 6878233.953449595,
+      "secondary_requested": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_served": [
+        415084.86034353485,
+        87899.39076266187,
+        87899.39076266187
+      ],
+      "secondary_unreachable": [
+        625200.0,
+        323905.6543190588,
+        323905.6543190588
+      ],
+      "secondary_capacity_unmet": [
+        26515.139656465137,
+        7459.344934751549,
+        7459.344934751549
+      ],
+      "invalid_independent_budget_excess_hours": 50769.54821563987,
+      "invalid_independent_budget_excess_site_bins": 689,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5811.671034330555,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 4143.880073296078,
+          "qualified_town_people": 1254.86759939697,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2568.651815908115,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 34040.19726877286,
+          "qualified_town_people": 21618.95148434017,
+          "qualified_active_sites": 77
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4820.380454838824,
+          "qualified_town_people": 1127.251751596263,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 39810.426183094925,
+          "qualified_town_people": 4970.047123711304,
+          "qualified_active_sites": 14
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 13346.765903936403,
+          "qualified_town_people": 1830.853092650873,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 12248.130259661215,
+          "qualified_town_people": 4419.748991649492,
+          "qualified_active_sites": 20
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 7286.399898642927,
+          "qualified_town_people": 5764.666836682041,
+          "qualified_active_sites": 29
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12857.04598889967,
+          "qualified_town_people": 841.3779766787377,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 9398.021597456223,
+          "qualified_town_people": 3989.122649286851,
+          "qualified_active_sites": 16
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 15645.20982238735,
+          "qualified_town_people": 7781.409558048506,
+          "qualified_active_sites": 22
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4427.068629948519,
+          "qualified_town_people": 2457.8479967777944,
+          "qualified_active_sites": 12
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2823.7044098044103,
+          "qualified_town_people": 1693.2680468674735,
+          "qualified_active_sites": 10
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 7151.55461705161,
+          "qualified_town_people": 2043.8759760362832,
+          "qualified_active_sites": 8
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3404.552156495958,
+          "qualified_town_people": 159.18219650017429,
+          "qualified_active_sites": 1
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 26426.789954940377,
+          "qualified_town_people": 2835.155153126643,
+          "qualified_active_sites": 11
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 199998.5503012467,
+          "qualified_town_people": 29373.09353110326,
+          "qualified_active_sites": 115
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13055.389645759518,
+          "qualified_town_people": 3198.0157329605945,
+          "qualified_active_sites": 14
+        }
+      ]
+    },
+    {
+      "key": "corrected_h600_f0.075_load120000_bins6_7_8_closed",
+      "parent": "corrected_h600_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 600,
+      "load_kcal": 120000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 419264.3900164723,
+      "original_active_sites": 889,
+      "positive_sites": 1037,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 1037,
+      "positive_sites_without_staff": 148,
+      "required_collection_hours": 57239389.59635075,
+      "collection_unmet_hours": 26355580.38535016,
+      "gross_hours": 40005000.0,
+      "fundable_collection_hours": 30883809.211000595,
+      "secondary_hours": 0.0,
+      "unused_hours": 9121190.788999405,
+      "secondary_requested": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        1066800.0,
+        419264.39001647226,
+        419264.39001647226
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 5811.671034330555,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 4143.880073296078,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2568.651815908115,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 34040.19726877286,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 4820.380454838824,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 39810.426183094925,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 13346.765903936403,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 12248.130259661215,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 7286.399898642927,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 12857.04598889967,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 9398.021597456223,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 15645.20982238735,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 4427.068629948519,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2823.7044098044103,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 7151.55461705161,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 3404.552156495958,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 26426.789954940377,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 199998.5503012467,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 13055.389645759518,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "corrected_h300_f0.075_load60000_all_open",
+      "parent": "corrected_h300_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 300,
+      "load_kcal": 60000.0,
+      "availability": "all_open",
+      "original_town_people": 313740.13479918963,
+      "original_active_sites": 755,
+      "positive_sites": 992,
+      "qualified_positive_sites": 470,
+      "qualified_active_sites": 470,
+      "conditional_qualified_town_people": 124655.84799916958,
+      "collection_deficit_sites": 522,
+      "positive_sites_without_staff": 237,
+      "required_collection_hours": 36509346.69584365,
+      "collection_unmet_hours": 7155098.02843673,
+      "gross_hours": 45300000.0,
+      "fundable_collection_hours": 29354248.667406924,
+      "secondary_hours": 7671144.640979977,
+      "unused_hours": 8274606.6916131005,
+      "secondary_requested": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_served": [
+        523747.97413073527,
+        112891.00104989493,
+        112891.00104989493
+      ],
+      "secondary_unreachable": [
+        342000.0,
+        189084.28680002005,
+        189084.28680002005
+      ],
+      "secondary_capacity_unmet": [
+        40252.02586926479,
+        11764.846949274637,
+        11764.846949274637
+      ],
+      "invalid_independent_budget_excess_hours": 72363.48536647431,
+      "invalid_independent_budget_excess_site_bins": 889,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4350.703786060131,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3282.0356640602818,
+          "qualified_town_people": 1264.1144783051293,
+          "qualified_active_sites": 6
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2051.278618123834,
+          "qualified_town_people": 576.1444979303146,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 26897.415917371756,
+          "qualified_town_people": 16144.114385137416,
+          "qualified_active_sites": 65
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3533.970862804224,
+          "qualified_town_people": 2112.2849676335377,
+          "qualified_active_sites": 9
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 31531.234686984804,
+          "qualified_town_people": 6349.042365900747,
+          "qualified_active_sites": 22
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 10125.802414324402,
+          "qualified_town_people": 5009.549752068831,
+          "qualified_active_sites": 18
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 8902.409678277363,
+          "qualified_town_people": 7503.071660620124,
+          "qualified_active_sites": 33
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 5730.4909410171385,
+          "qualified_town_people": 2877.1017002037656,
+          "qualified_active_sites": 15
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10225.491022225302,
+          "qualified_town_people": 547.4004157683282,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 4378.779764306687,
+          "qualified_town_people": 2977.163412374784,
+          "qualified_active_sites": 11
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12409.084348205673,
+          "qualified_town_people": 9028.637828051535,
+          "qualified_active_sites": 31
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3483.19379658087,
+          "qualified_town_people": 1918.4436528822403,
+          "qualified_active_sites": 9
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2190.020486857926,
+          "qualified_town_people": 312.9440800461096,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 5669.698143875654,
+          "qualified_town_people": 4178.59518185904,
+          "qualified_active_sites": 16
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2702.466678705722,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20802.756785016732,
+          "qualified_town_people": 6282.647507428808,
+          "qualified_active_sites": 21
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 147007.71401577536,
+          "qualified_town_people": 55477.59599028874,
+          "qualified_active_sites": 200
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 8465.587188615773,
+          "qualified_town_people": 2096.9961226701234,
+          "qualified_active_sites": 8
+        }
+      ]
+    },
+    {
+      "key": "corrected_h300_f0.075_load60000_bins6_7_8_closed",
+      "parent": "corrected_h300_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 300,
+      "load_kcal": 60000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 313740.13479918963,
+      "original_active_sites": 755,
+      "positive_sites": 992,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 992,
+      "positive_sites_without_staff": 237,
+      "required_collection_hours": 36509346.69584365,
+      "collection_unmet_hours": 13821379.818224978,
+      "gross_hours": 33975000.0,
+      "fundable_collection_hours": 22687966.877618674,
+      "secondary_hours": 0.0,
+      "unused_hours": 11287033.122381324,
+      "secondary_requested": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4350.703786060131,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3282.0356640602818,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2051.278618123834,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 26897.415917371756,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3533.970862804224,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 31531.234686984804,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 10125.802414324402,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 8902.409678277363,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 5730.4909410171385,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10225.491022225302,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 4378.779764306687,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12409.084348205673,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3483.19379658087,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2190.020486857926,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 5669.698143875654,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2702.466678705722,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20802.756785016732,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 147007.71401577536,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 8465.587188615773,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    },
+    {
+      "key": "corrected_h300_f0.075_load120000_all_open",
+      "parent": "corrected_h300_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 300,
+      "load_kcal": 120000.0,
+      "availability": "all_open",
+      "original_town_people": 313740.13479918963,
+      "original_active_sites": 755,
+      "positive_sites": 992,
+      "qualified_positive_sites": 724,
+      "qualified_active_sites": 724,
+      "conditional_qualified_town_people": 258089.58229764522,
+      "collection_deficit_sites": 268,
+      "positive_sites_without_staff": 237,
+      "required_collection_hours": 18648054.605152242,
+      "collection_unmet_hours": 1770461.7421830262,
+      "gross_hours": 45300000.0,
+      "fundable_collection_hours": 16877592.862969212,
+      "secondary_hours": 12628148.05662657,
+      "unused_hours": 15794259.080404215,
+      "secondary_requested": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_served": [
+        849176.7656862191,
+        246557.77900650087,
+        246557.77900650087
+      ],
+      "secondary_unreachable": [
+        37200.0,
+        55650.55250154439,
+        55650.55250154439
+      ],
+      "secondary_capacity_unmet": [
+        19623.234313780893,
+        11531.80329114433,
+        11531.80329114433
+      ],
+      "invalid_independent_budget_excess_hours": 81277.48765099277,
+      "invalid_independent_budget_excess_site_bins": 539,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4350.703786060131,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3282.0356640602818,
+          "qualified_town_people": 2287.047229402899,
+          "qualified_active_sites": 8
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2051.278618123834,
+          "qualified_town_people": 1145.543741856248,
+          "qualified_active_sites": 3
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 26897.415917371756,
+          "qualified_town_people": 22829.210304365097,
+          "qualified_active_sites": 77
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3533.970862804224,
+          "qualified_town_people": 2909.4203148347665,
+          "qualified_active_sites": 11
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 31531.234686984804,
+          "qualified_town_people": 19641.783447567057,
+          "qualified_active_sites": 48
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 10125.802414324402,
+          "qualified_town_people": 8359.873565562855,
+          "qualified_active_sites": 24
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 8902.409678277363,
+          "qualified_town_people": 8150.9351861779705,
+          "qualified_active_sites": 34
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 5730.4909410171385,
+          "qualified_town_people": 2877.1017002037656,
+          "qualified_active_sites": 15
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10225.491022225302,
+          "qualified_town_people": 9936.966201272697,
+          "qualified_active_sites": 18
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 4378.779764306687,
+          "qualified_town_people": 3372.9232604615795,
+          "qualified_active_sites": 12
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12409.084348205673,
+          "qualified_town_people": 12183.277555614495,
+          "qualified_active_sites": 38
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3483.19379658087,
+          "qualified_town_people": 2467.7900712815035,
+          "qualified_active_sites": 10
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2190.020486857926,
+          "qualified_town_people": 312.9440800461096,
+          "qualified_active_sites": 2
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 5669.698143875654,
+          "qualified_town_people": 5416.835271501853,
+          "qualified_active_sites": 19
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2702.466678705722,
+          "qualified_town_people": 2551.5559734294197,
+          "qualified_active_sites": 5
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20802.756785016732,
+          "qualified_town_people": 18758.918483007066,
+          "qualified_active_sites": 46
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 147007.71401577536,
+          "qualified_town_people": 128793.68153258285,
+          "qualified_active_sites": 337
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 8465.587188615773,
+          "qualified_town_people": 6093.774378476977,
+          "qualified_active_sites": 17
+        }
+      ]
+    },
+    {
+      "key": "corrected_h300_f0.075_load120000_bins6_7_8_closed",
+      "parent": "corrected_h300_f0.075",
+      "climate": "corrected",
+      "field_worker_hours": 300,
+      "load_kcal": 120000.0,
+      "availability": "bins6_7_8_closed",
+      "original_town_people": 313740.13479918963,
+      "original_active_sites": 755,
+      "positive_sites": 992,
+      "qualified_positive_sites": 0,
+      "qualified_active_sites": 0,
+      "conditional_qualified_town_people": 0.0,
+      "collection_deficit_sites": 992,
+      "positive_sites_without_staff": 237,
+      "required_collection_hours": 18648054.605152242,
+      "collection_unmet_hours": 5498881.963873064,
+      "gross_hours": 33975000.0,
+      "fundable_collection_hours": 13149172.641279178,
+      "secondary_hours": 0.0,
+      "unused_hours": 20825827.358720824,
+      "secondary_requested": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_served": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "secondary_unreachable": [
+        906000.0,
+        313740.13479918963,
+        313740.13479918963
+      ],
+      "secondary_capacity_unmet": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "invalid_independent_budget_excess_hours": 0.0,
+      "invalid_independent_budget_excess_site_bins": 0,
+      "actors": [
+        {
+          "actor_index": -1,
+          "original_town_people": 4350.703786060131,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 0,
+          "original_town_people": 3282.0356640602818,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 1,
+          "original_town_people": 2051.278618123834,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 2,
+          "original_town_people": 26897.415917371756,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 3,
+          "original_town_people": 3533.970862804224,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 4,
+          "original_town_people": 31531.234686984804,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 5,
+          "original_town_people": 10125.802414324402,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 6,
+          "original_town_people": 8902.409678277363,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 7,
+          "original_town_people": 5730.4909410171385,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 8,
+          "original_town_people": 10225.491022225302,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 9,
+          "original_town_people": 4378.779764306687,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 10,
+          "original_town_people": 12409.084348205673,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 11,
+          "original_town_people": 3483.19379658087,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 12,
+          "original_town_people": 2190.020486857926,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 13,
+          "original_town_people": 5669.698143875654,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 14,
+          "original_town_people": 2702.466678705722,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 15,
+          "original_town_people": 20802.756785016732,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 16,
+          "original_town_people": 147007.71401577536,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        },
+        {
+          "actor_index": 17,
+          "original_town_people": 8465.587188615773,
+          "qualified_town_people": 0.0,
+          "qualified_active_sites": 0
+        }
+      ]
+    }
+  ],
+  "requests": [
+    "patrol_sessions",
+    "service_A",
+    "service_B"
+  ],
+  "people_food_staff_reallocated": false,
+  "actual_patrol_reach_recomputed": false,
+  "limits": "Supplied staff-only collection/load/work/request scenarios. Refused fixed plans keep deficits visible;no reduced shipments with old food claims,no new equilibrium,census,authority or adoption."
+}

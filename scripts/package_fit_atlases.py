@@ -383,6 +383,25 @@ def main():
     if (ROOT/'output/settlement_feedback_20261112/scan_check/replay.json').exists():
         files += [ROOT/'output/settlement_feedback_20261112/scan_check/results.json',
                   ROOT/'output/settlement_feedback_20261112/scan_check/replay.json']
+    if (ROOT/'output/settlement_housing_diagnostic_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md',
+                  ROOT/'reports/figures/settlement_housing_diagnostic_20261112.png',
+                  ROOT/'calibration/settlement_housing_diagnostic_20261112/plan.json']
+    if (ROOT/'output/settlement_monthly_work_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_MONTHLY_WORK_20261112.md',
+                  ROOT/'reports/figures/settlement_monthly_work_20261112.png',
+                  ROOT/'calibration/settlement_monthly_work_20261112/plan.json']
+    if (ROOT/'output/settlement_dispatch_20261112/atlas_publication.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_DISPATCH_20261112.md',
+                  ROOT/'calibration/settlement_dispatch_20261112/plan.json']
+        files += list((ROOT/'reports/figures').glob('settlement_dispatch_*_20261112.png'))
+    if (ROOT/'output/settlement_dispatch_search_20261112/review.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_DISPATCH_SEARCH_20261112.md',
+                  ROOT/'calibration/settlement_dispatch_search_20261112/plan.json',
+                  ROOT/'calibration/settlement_dispatch_seeded_20261112/plan.json']
+    if (ROOT/'output/settlement_dispatch_seeded_20261112/atlas_publication.json').exists():
+        files += [ROOT/'reports/SETTLEMENT_DISPATCH_SEEDED_20261112.md']
+        files += list((ROOT/'reports/figures').glob('settlement_dispatch_seeded_*_20261112.png'))
     files += sorted(p for p in (ROOT/'atlases/climate_accuracy').rglob('*') if p.is_file())
     files += yield_files
     files += sorted(p for p in (ROOT/'atlases/earth_evidence').rglob('*') if p.is_file())

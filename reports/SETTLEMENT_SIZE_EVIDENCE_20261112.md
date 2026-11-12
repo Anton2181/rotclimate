@@ -105,3 +105,7 @@ Reproduce:
 
 The independent PDF review requires the pinned local source PDF and `pdftotext`;
 the compiler and prepared reference data do not require the unavailable workbook.
+
+Follow-up: the separately declared [province-blocked density diagnostic](SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md)
+now scores these exposed observations. The preparation above remains its historical
+checkpoint; none of the year-specific measurement gates has been cleared.

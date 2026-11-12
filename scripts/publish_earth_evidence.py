@@ -98,6 +98,22 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_feedback_evidence.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_evidence_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_sizes.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_housing_diagnostic_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_housing_density.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_monthly_work_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_monthly_work.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_dispatch_20261112/atlas_publication.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_dispatch_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_dispatch_search_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_dispatch_search.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_dispatch_seeded_20261112/atlas_publication.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_seeded_dispatch_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_duty_visits_20261112/atlas_publication.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_network_visits_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_spare_assignment_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_spare_visit_assignment.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_target_grid_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_target_grid.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_size_identity.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_shape_20261112/review.json').exists():
