@@ -1,3 +1,62 @@
+# Destination timing audit completed; continue meal headroom after push — 12 November 2026
+
+Owner: “Continue, dont stop after pushing”. Push is a checkpoint, not a stop.
+Canonical branch: claude/friendly-turing-43ygeu. No subagents permitted.
+Provider-year map release pushed in970bd428, including the timing declaration
+BEFORE outputs. Full prior milestones follow below. No PR requested.
+
+* New harvest/event_food_stocks.py integrates continuous destination meals and
+  exponential grain decay between supply pulses;capacity clips at arrival.
+  Smallest periodic stock from the clamped affine map,independent of sufficiency.
+  Original harvest/food_stocks.py and all older scheduling/food code unchanged.
+* New polity/delivery_events.py validates every original origin/month/serial,
+  owner,cargo remainder,original ONE-BIN lag and0.95retention applied ONCE.
+  Ten manufactured controls pass BEFORE production,including zero loss/demand/
+  capacity,minimal reserve,periodic shortage,split events,convention/lag/wrap/
+  invalid serials. Previous nine provider-year controls also pass.
+* output/network_visit_delivery_timing_20261112:all8 coherent calendars and ALL
+  already-qualified providers. A=exact12bin original meals-first model;B=same
+  supply at bin starts with continuous meals;C=same continuous model but return
+  phases. Same people,cargo,90day original capacity,5%stored loss. A->B convention
+  changes separate from B->C phase. Every provider passes A numeric food check;
+  zero pass B/C. B unmet about0.2083% annual meals;C0.1909–0.1964%. Phases reduce
+  gaps but do not eliminate them. Not physical impossibility or actual hunger.
+* Independent review imports neither model nor cargo primitive:17,427,262trip
+  identities,2,532,803aggregated pulses,17,370scalar provider/accounting stocks.
+  Separate scalar bracketing,all ledgers/providerCSV/18actors eachcase pass.
+  Fresh11files BYTE EXACT:results/fields/providerCSV/eight aggregated eventNPZs.
+  controls.json runtime text is intentionally not a byte-replay claim.
+* New normal #delivery-timing panel:24 exact rows,three figures ALL POSTED,
+  methods and15data downloads (including every eventpacket). Direct publisher
+  scripts/publish_delivery_timing.py preserves all previous panels. Every Earth
+  atlas file stays byte unchanged. No maps/defaults/residents changed by timing.
+  Browser24rows/3figures/16byte links/keyboard/344/390/themes/ledgerfailure passes.
+  See report NETWORK_VISIT_DELIVERY_TIMING_20261112.md and results/review/replay.
+* Runtime skill read;environment ready,unrestricted network. Local HTTP server
+  python -m http.server8766 session89347 serves repo. Reuse if alive. Browser
+  python global has Playwright;scientific commands .venv/bin/python.
+* General andeightmap browser regressions pass;54focusedcontrols pass. Windows
+  1915assets byteexact;879hubdependencies resolve;281sources/5producers/769Earth
+  atlasfiles current. Earlierresearchpage exactafterremoving newpanel. Release
+  verifiedafterfinalpublish/buildhub. Checkpoint ready tostageandpush. Full evidence
+  publisher remains blocked on omitted private Vidarbha cache;use direct reviewed
+  publisher + build_fit_hub.py. Do not claim historical full rebuild.
+* NEXT IMMEDIATELY AFTER PUSH: calibration/network_visit_meal_headroom_20261112/
+  plan.json must be committed BEFORE outputs. All8cases × B/C=16rows. Keep all
+  original institutional meals/workers AND ORIGINAL physical capacity fixed.
+  Multiply only civilian meals byalpha0..1;zero staff-only feasibility checked.
+  Full-demand pass keeps1;staff-only failure explicit;otherwise48deterministic
+  bisections retain pass/fail bounds under SAME numeric unmet threshold1e-8.
+  This is a conditional meal-equivalent bound,NOT a valid resident reallocation:
+  source food/field work are frozen. No maps or default change. All providers,
+  actors,fields,bounds,independent scalar bracket/review,freshbytes,figures posted,
+  normal research/browser/Windows,whole-programme review,push then CONTINUE.
+* Entire release1–4/S1–S5 programme reviewed:dated occupancy,size/provider roles,
+  prospective transfer,source within-bin food,crew rations/location,complete diets/
+  household/draft work and mobile/nonstate/unaffiliated integration remain open.
+  Actual resident replanning must recouple the finite source/food/work ledger,
+  integer shipments and worker calendar;meal headroom is not that replan.
+
 # Coherent provider-year maps ready; continue destination timing after push — 12 November 2026
 
 Latest owner: "Continue,dont stop after pushing". Push is NOT a stopping point.

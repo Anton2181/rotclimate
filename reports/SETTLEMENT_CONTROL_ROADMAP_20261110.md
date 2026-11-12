@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Eight coherent provider-year cases choose one checked calendar across12bins,retaining every baseline gated task;independent worker/source/food/mask/export checks pass|Audit destination food timing under fixed cargo/one-bin lag,keeping continuous-meal semantics separate from delivery phase. Source within-bin availability,crew ration issues,actual roles andfull annual food validation remain open|
-|Release 4: normal numeric publication|Eight new optional Complete-year collection schedule point maps in existing selector,plus normalresearch tables/threefigures/downloads;earlier maps/defaults preserved|Retain necessary delivery-gate limits and experimental status. Food timing audits must not silently replace current maps or claim calibrated authority|
+|Release 3: shared-ledger fantasy rebuild|Eight coherent calendars reviewed;24 destination inventory rows now independently checked. Every calendar-qualified provider passes the old bin model but has a continuous cereal gap of about0.19–0.21%|Declare fixed-shipment civilian meal headroom while keeping staff meals and original physical stores fixed. This is conditional accounting,not resident reoptimization. Source timing,crew rations/location and complete resource validation stay open|
+|Release 4: normal numeric publication|Eight optional Complete-year collection schedule point maps plus all24 timing outcomes/three new figures/downloads;earlier map packets/defaults unchanged|Keep the calendar gate necessary only and publish the continuous-food failures explicitly. Meal-headroom diagnostics must not silently replace resident maps or claim calibrated authority|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|One complete provider-year calendar retains allbaseline gated tasks andadds2810–9846visits/case;9controls,independent selection/workerledger/pixel/mask/CSV checks andfreshmodel/exportbytes pass|Test destination event-time food inventories withunchanged shipments/90day stores andretained lag. Keep source/daily ration/complete diet/household/draftwork/provider-role gaps explicit|
+|S4: complete resources and work|17,427,262 trip identities,2,532,803 event pulses and17,370 provider/accounting inventories independently checked;all24 rows/fresh11files retained. Continuous food gaps remain at every scored provider|Bound civilian meal headroom with unchanged staff/storage/cargo before shared-ledger replanning. Source timing,daily ration/location,complete diets/household/draft work and provider-role gaps remain explicit|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -134,15 +134,26 @@ Immediate sequence:
    checks andeightnewmap/sixfamily/complete-and-incompleteproviderCSV/mobile/
    failurechecks pass. Newoptionalpointfamily andnormal8row/3figure evidence;
    alloldmaps/defaults preserved. Necessarygate only,not fullannualfoodvalidation.
-16. **Next declared destination timing audit:** all8coherent-year scenarios and
-   their alreadyqualified providers;24matched rows. A replays oldmonthlyfood;
-   B usescontinuousmeals/loss withoriginaldestination-bin-start pulses;
-   C usesselectedcollectorreturn-phase pulses while retainingONE-bin lag and
-   95%transport retention. A-to-B conventionchanges separate fromB-to-C phase.
-   Samepeople,shipments,90day stores and5%storage loss;no ration/location/source
-   intrabin foodvalidation inferred. Predeclare network_visit_delivery_timing_
-   20261112 beforeoutputs;sourcecargo/clock,independentinventory/periodic/ledger
-   review,freshreplay,all24outcomes,normalfigures/browser/Windows,pushandCONTINUE.
+16. **Completed destination timing audit:** declaration970bd428 preceded outputs.
+   All8 scenarios/24 rows retain every calendar-qualified provider. A exact old
+   monthly meals pass;B continuous/bin-start pulses and C continuous/collector
+   returns fail the same numeric no-shortage check at every scored provider.
+   B aggregate gap about0.2083%;C0.1909–0.1964%. A-to-B inventory convention and
+   B-to-C phase effects are separate. Same people/shipments/90day stores/loss,
+   original one-bin lag and0.95retention ONCE. Independent17,427,262trip IDs,
+   2,532,803aggregated events/17,370inventories;10controls and11freshfiles pass.
+   All24 normal research rows/threefigures/providerCSV/fields/events published;
+   old map packets/defaults unchanged. Not observed hunger or source/ration/
+   location/full-diet validation. See NETWORK_VISIT_DELIVERY_TIMING_20261112.md.
+17. **Next declared fixed-shipment meal headroom:** all8 cases × B/C =16 rows.
+   Keep institutional residents/meals,physical ORIGINAL capacity,food/shipments,
+   lag and every worker job fixed. Bound only a civilian meal multiplier;retain
+   staff-only infeasibility and every provider/actor. No people are actually
+   reallocated;this is NOT a valid resident rebuild while source work stays
+   frozen. Declare network_visit_meal_headroom_20261112 BEFORE outputs;independent
+   passing/failing bounds,source hashes,freshbytes,all outcomes/figures/normal
+   research/browser/Windows,whole-programme review,pushandCONTINUE. Actual
+   resident replanning must recouple source food/work/shipments/calendars.
 
 The usage-limit checkpoint is resolved by the owner's continuation request.
 All release1–4/S1–S5 empirical/resource/mobile obligations above remain open;
@@ -170,6 +181,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 |Worker-calendar publication,12November,declarationbdd6135c/checkpointa60e853f|Four collection/eight visit calendars independently reviewed;145fresh files exact. Normal12row/3figure publication andworker-interval downloads preserve oldpanels/163mapfiles. Entire release1–4/S1–S5/allactor/unaffiliated/mobile scope reviewed;per-bin packing is not annual delivery or empirical staffing qualification|Predeclare alternative packing order before new scores;retain alloriginal jobs/workcaps andexplicit annual mandatory-delivery gap. Dated occupancy/provider/size evidence,prospective transfer,complete resources anddaily provisioning remain open|
 |Fixed mixed-job order anddelivery gates,12November,declaratione4d274da|16fixed-policy rows independentlychecked;21,509,178packedcollector records,1,259,374original visits and7,752,000worker-bins reviewed;98freshfiles exact. Monthlygains coexistwith collectorlosses/four-person12bin declines. Entire release1–4/S1–S5/allactor/mobileprogramme reviewed;no winner/default/authority adoption|Declare coherent provider-year choice preserving everybaseline12bin-gated task;optionalpointmaps require necessarygate limits. Keep datedprovider/occupation/size,prospectivetransfer,daily provisioning,complete resources andmobile/nonstate scope open;pushandCONTINUE|
 |Coherent provider-year pointmaps,12November,declaration00d70d62|All8cases preserve EVERYbaseline gated task andoriginal fundedjob bounds;2810–9846added tasks. Ninecontrols,independent100176provider/bin worker blocks,map pixels/masks/CSV,model/export freshbytes andsixfamily browser checks pass. Entire release1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;qualifiedcohorts/defaults unchanged,no annualfood/roles/authority adoption|Freeze destination inventory convention/arrival-phase comparison,retaining1bin lag andmatched cargo;keep within-bin source food/crew ration/complete resources anddated evidence/transfer dependencies open;pushandCONTINUE|
+|Destination continuous inventory audit,12 November,declaration970bd428|All24 rows retain every provider;all pass A,none pass B/C. A-to-B convention versus B-to-C phase separated. Independent17.4Mtrip IDs/2.53Mevents/17,370inventories and11freshfiles pass;all figures posted,old maps/defaults preserved. Entire release1–4/S1–S5/allactor/mobile programme reviewed;no famine/authority/adoption claim|Declare fixed-staff/fixed-capacity civilian meal headroom,then shared-ledger replanning. Keep dated occupancy/size/provider evidence,prospective transfer,source timing,crew food/location,complete diets/work andmobile/nonstate/unaffiliated integration open;pushandCONTINUE|
 
 ## Working rules
 
