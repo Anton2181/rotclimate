@@ -1,3 +1,77 @@
+# Fixed-staff meal bounds published; continue continuous resident feedback — 12 November 2026
+
+Owner: “Continue, dont stop after pushing”. Canonical branch
+claude/friendly-turing-43ygeu. A push is a checkpoint, NOT a stop. No subagents.
+Latest pushed before this checkpoint ed6ae653 (timing audit plus meal protocol).
+
+* All16 B/C meal bounds complete:ALL5790calendar-qualified provider-years retained
+  twice=11580bounds,46320endpoint inventories. Fixedstaff/originalphysicalcapacity/
+  cargo/jobs. Staff-only demand feasible everywhere;full demand fails everywhere.
+  Civilian meal-equivalent reductions463.824–627.013/case,0.26649–0.29931% original
+  civilian meals. This is CONDITIONAL accounting,not a valid resident rebuild.
+* New harvest/meal_headroom.py uses48bisections underunchanged numeric fooddiag.
+  Independent review imports neither meal nor eventprimitive;scalar integration,
+  separate24alpha bisections andbrent stockroots (optionalnumba independentstock
+  endmap only) checkall11580bounds. Everyendpointfield exact underseparatescalar
+  arithmetic;near-threshold roundoff explicit,indepalphainterval2^-24. Allactor/
+  providerCSVfields/source/cap/staff checks pass. Fresh3files BYTEEXACT.
+* Normal #meal-headroom16rows/2figures,7data downloads+methods. BOTHfiguresPOSTED;
+  summarylegend fixedafterinspection. No oldEarthmap/file/defaultchanged.
+  Scientificcommands .venv/bin/python;Playwright globalpython. HTTP8766 serving
+  repo session89347. Fullpublisher stillblockedprivateVidarbha cache;direct
+  reviewedpublishers + build_fit_hub.py AFTERfinalpublish. Stage thenWindowscheck.
+* 67focusedchecks pass,including7 newvectorprimitivecontrols. Browser16exactrows/
+  2figures/8byte links/mobile/themes/failure passes;Windows1922assets byteexact;
+  889hubdependencies resolve;298sources/4producers/769Earthfiles current. Earlier
+  researchpageexactafterremovingnewpanel. Receipts inoutput/network_visit_meal_
+  headroom_20261112. Push thenCONTINUE nextdeclaredwork,notpause.
+* NEXT: calibration/settlement_continuous_destination_20261112/plan.json MUSTbe
+  committed BEFOREresident outputs. New harvest/continuous_food_stocks.py is
+  manufactured-only vectorbinstart inventory,compatibleFoodYear withabsolute
+  periodicresidual;7controls/scalarparity/interiorreserve/varyingrates/mixedzero
+  loss/capacity/overflow pass. Original food_stocks/event_food_stocks unchanged.
+  Implement newversioned ThresholdSeededDispatchFeedback-derived factory overriding
+  _food AND displayed continuousfoodceil (oldnormalized42bisection/downwardmargin
+  conventions). Keepoldwriter/classbytes. Scopedfactoryrestore onfailure.
+* Four SAME raw/corrected600/300h load120k allopen parentcases (underlying8maps),
+  old4/new4rows. AtEVERYtrial recompute ruralmeals/civilianfieldwork/sourcecrop/
+  exportstocks/dispatch/integerjobs/staff;90daystores scaleswithtrialtotal now.
+  Keep64scan/150threshold/24residentrefines/40work-foodrefines. No newmap until
+  NEWsource jobs/repackedcoherentyears ANDNEWcollector-returnfood pass. Bpass
+  cannotqualifyC. Independentfullsharedledger/work/source/destinationreview,
+  freshbytes,alloutcomes/figures/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Entire release1–4/S1–S5 programme reviewed;dated occupation/size/provider roles,
+  prospective transfer,source withinbin food,crew-carriedrations/location,complete
+  diets/household/draftwork andmobile/nonstate/unaffiliated integration stayopen.
+
+# Active follow-through after ed6ae653 — 12 November 2026
+
+Do not stop after push. ed6ae653 pushed destination timing audit and committed
+meal-headroom declaration BEFORE outputs. New harvest/meal_headroom.py + six
+controls implemented;16 bound rows completed in output/network_visit_meal_headroom_
+20261112,all staff feasible,full meals fail. Civilian meal-equivalent reduction
+463.824–627.013/case (~0.2665–0.2993% original civilians),NOT a resident replan.
+Fresh builder still running session28995;independent scalar/bracket reviewer
+session27312 (earlier slow session22868 terminated before results;new review
+uses optional numba only for scalar stock end map inside brent root search).
+Reviewer uses24independentalpha bisections and48-step producer endpoints;grain
+roundoff explicit. Finish review+freshbytes before publication. Prepared scripts:
+publish_meal_headroom.py,plot_meal_headroom.py,check_meal_headroom_browser.py.
+Do direct publisher -> build_fit_hub AFTERfinalpublish -> stage -> Windowscheck
+(release checksum fails ifhub runs before lastpublish). All oldmapfiles protected.
+Need normalresearch all16rows,2figures POSTBOTH,8links/browser/mobile/Windows,
+roadmap/livewholeprogramme+handoff,thenpushCONTINUE. controls67focused passed.
+Next prepared calibration/settlement_continuous_destination_20261112/plan.json
+MUSTcommit BEFORE resident outputs. New harvest/continuous_food_stocks.py is
+manufactured-only vectorizedbinstart continuous inventory;7controls inclscalar
+parity/interiorperiodicreserve/variable rates/zeroloss/overflow pass. No resident
+outputs for it yet. After nextpush implement new versioned threshold-seeded
+factory overriding_food and new continuous displayedfoodceil;oldcodebyteunchanged.
+Four raw/corrected600/300h load120k allopen parents (same8mapcohort) replanfinite
+source/food/work withcurrenttrialpeople/capacity. 64scan+staffthreshold+24resident
+refines,40dispatchwork/food;old4/new4rows. No maps until NEWjobcalendar ANDNEW
+return-phasefoodrecheck. Fullprogramme/empirical/source/ration/diet/mobileopen.
+
 # Destination timing audit completed; continue meal headroom after push — 12 November 2026
 
 Owner: “Continue, dont stop after pushing”. Push is a checkpoint, not a stop.
