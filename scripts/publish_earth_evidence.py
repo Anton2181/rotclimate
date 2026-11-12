@@ -116,6 +116,17 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_target_grid.py')],cwd=ROOT,check=True)
     if (ROOT/'output/network_visit_calendar_20261112/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_visit_calendars.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_joint_order_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_joint_visit_order.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_year_complete_20261112/atlas_publication.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_provider_year_visits.py')],cwd=ROOT,check=True)
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_provider_year_evidence.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_delivery_timing_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_delivery_timing.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/network_visit_meal_headroom_20261112/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_meal_headroom.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/settlement_continuous_destination_20261112/comparison_review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_continuous_destination.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_market_range_20261112/atlas_publication.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_market_evidence.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_size_identity_20261112/review.json').exists():

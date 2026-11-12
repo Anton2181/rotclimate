@@ -108,7 +108,7 @@ byte. Ten unit tests cover the forwarding rules.
 In the atlas, all 24 map options (12 per climate, Settlements and
 Supply-supported reach) load with exact audit downloads; other scenario
 families still load, the default is unchanged and a missing manifest leaves
-everything else available. 732 existing atlas data files are verified
+everything else available. 754 existing atlas data files are verified
 unchanged.
 
 ## Whole-plan review and next work

@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Partial cereal implementation checks residents/work/food/dispatch/collection;8 point-task maps plus assignment and40case target-grid audits retain SAME patrol reservations|Construct individual worker calendars for whole collector trips and crews before stronger roster claims. Actual demand/provider roles,daily provisioning and other resource/services remain open;point visits do not qualify territory|
-|Release 4: normal numeric publication|16 threshold-checked dispatch versions,8 optional point maps andall40gridcomparison results/4figures published;originaldefaults/oldmaps preserved;calibrateddefault pending|Retain experimental status and exact evidence/download/browser/Windows checks. Only adopt empirically qualified changes;post maps and continue after push|
+|Release 3: shared-ledger fantasy rebuild|Eight coherent calendars reviewed;24 destination inventory rows now independently checked. Every calendar-qualified provider passes the old bin model but has a continuous cereal gap of about0.19–0.21%|Four continuous destination resident replans complete;all source/field/food/work/dispatch constraints independently checked. Next pack NEW actual collector jobs and separate omitted cargo from return phase. Source timing,rations/location and complete resources stay open|
+|Release 4: normal numeric publication|Eight optional Complete-year collection schedule point maps plus all24 timing outcomes/three new figures/downloads;earlier map packets/defaults unchanged|Keep the calendar gate necessary only and publish the continuous-food failures explicitly. Four old/four new resident rows,all144actors/8348providers and fullfield packets published. Earlier point maps stay unchanged;new calendar/return-food checks precede any replacement|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|Eight point-task maps,spare-provider feasible gains and40matched gridcases reviewed;phase spreads0.185–0.265pp,spacing materially changes supplied workloads|Construct declared integer worker/crew calendars for alloriginal collectors andplanned visits. Greedy packing failures do not prove infeasibility;daily provisioning,complete diets/household/draftwork anddatedproviderroles remainopen|
+|S4: complete resources and work|17,427,262 trip identities,2,532,803 event pulses and17,370 provider/accounting inventories independently checked;all24 rows/fresh11files retained. Continuous food gaps remain at every scored provider|Continuous destination food now inside the finite shared ledger at every resident trial;164.036–721.505 fewer proposed town residents,one fewer source in each300hcase. Next actual worker/cargo/food clocks;source timing,rations/location and complete resources remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -48,8 +48,7 @@ Immediate sequence:
    117fits and684household controls independently reviewed and freshly replayed.
    See SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md. NoAD150labels or adoption.
 5. **Empirical dependency remains:** exact author keys and normalized name/province
-   pairs unique in this table. (Merged line, step 14: the pinned workbook has since
-   been recovered and all 50 keys joined; phases and extents are still missing.)
+   pairs unique in this table; original workbook/date joins still unavailable.
    Recover dated phases, compatible extents and sampling evidence; do not treat
    another exponent fit as their substitute or household scenarios as confidence.
 6. **Completed fixed-plan work audit:** declaration7ccd5891 preceded16scenarios.
@@ -107,25 +106,89 @@ Immediate sequence:
    completions254850/163423/66645 of575040/260496/97212 tasks. Densergrid raises
    completedcounts butlowers fraction;workload/geography effect,not convergence
    or reason toselectcoarsest. Normal40row/4figure evidence;no oldmap replacement.
-13. **Next declared worker-calendar audit:** original b3_p0 eightvisitplans/four
-   foodparents only. Integer supportedworkers each50h/bin,sharedmonthcalendar,
-   mandatorydivisiblehomeservices andeverywholecollectortrip beforevisits.
-   Construct greedy nonoverlapping sameprovider crews;record unfilledcollection
-   andblocked/unpackedvisits explicitly. No newfoodsupport claim whenmandatory
-   collectiondoesnotpack;greedyfailureisnotprovenimpossibility. Prior declaration
-   network_visit_calendar_20261112. Datedsizes/roles/transfer,complete diets/work,
-   dailyprovisioning andmobile/unaffiliated/nonstate scope remain acrossallparts.
+13. **Completed worker-calendar audit and publication:** declarationbdd6135c
+   preceded outputs;checkpointa60e853f retained all four collection/eight visit
+   cases. Seven controls,independent sorted-list/worker-interval/crew/hour checks
+   and145freshfile replays pass. Collector trips left unpacked:raw600/300
+   11,630/4,825;corrected10,932/4,214. Corrected600h visits packed within bins:
+   156,465crew1 and145,972crew4. These do not certify annual unchanged deliveries.
+   Normal evidence now publishes all12rows,3figures,results/review/replay/plan
+   andthe shown12worker intervalCSV. Earlier panels and163protected map files
+   remain byte identical. See NETWORK_VISIT_CALENDAR_20261112.md.
+14. **Completed fixed-order comparison:** declaratione4d274da precedesoutputs.
+   All8original scenarios ×2fixed policies=16rows. Mixed per-worker-duration order
+   retains physical visit work even when collectionlaterfails. Independent scalar
+   job/interval/crew/channel checks andboth12bin gates pass;98freshfiles exact.
+   All8bin-qualified visitcounts increase butmore collectortrips remainunpacked.
+   Four-person12bin-gated counts decline6,850–11,453;one-person counts increase
+   6,350–7,640 whilefewer providers finishall12bins. Alloutcomes published,3figures,
+   matchedworkerCSV;no winningpolicy/map/default adoption. Original145baseline
+   files and163protected maps retained. See NETWORK_VISIT_JOINT_ORDER_20261112.md.
+15. **Completed coherent provider-year construction:** declaration00d70d62
+   BEFOREoutputs. One policy/provider/ALL12bins;strict task-identity superset
+   required toreplace acomplete baseline. All8cases independentlyreviewed;
+   everybaseline gatedtaskretained,finaltasks subsetoforiginalfundedjobs.
+   Gains2810–9846;qualifiedproviderflags equalbaseline intheseeightcases.
+   Ninecontrols pass;sourceworker/food certificates current;freshresult/fields
+   and22point/model/CSV/gridexports byteexact. Independentmask/pixel/allpointCSV
+   checks andeightnewmap/sixfamily/complete-and-incompleteproviderCSV/mobile/
+   failurechecks pass. Newoptionalpointfamily andnormal8row/3figure evidence;
+   alloldmaps/defaults preserved. Necessarygate only,not fullannualfoodvalidation.
+16. **Completed destination timing audit:** declaration970bd428 preceded outputs.
+   All8 scenarios/24 rows retain every calendar-qualified provider. A exact old
+   monthly meals pass;B continuous/bin-start pulses and C continuous/collector
+   returns fail the same numeric no-shortage check at every scored provider.
+   B aggregate gap about0.2083%;C0.1909–0.1964%. A-to-B inventory convention and
+   B-to-C phase effects are separate. Same people/shipments/90day stores/loss,
+   original one-bin lag and0.95retention ONCE. Independent17,427,262trip IDs,
+   2,532,803aggregated events/17,370inventories;10controls and11freshfiles pass.
+   All24 normal research rows/threefigures/providerCSV/fields/events published;
+   old map packets/defaults unchanged. Not observed hunger or source/ration/
+   location/full-diet validation. See NETWORK_VISIT_DELIVERY_TIMING_20261112.md.
+17. **Completed fixed-shipment meal headroom:** declarationed6ae653 BEFOREoutputs.
+   All8cases×B/C=16rows retain every calendar-qualified provider. Institutional
+   meals,ORIGINAL physical capacity,cargo and worker jobs stay fixed. Staff-only
+   demand feasible at every scored provider;no full-demand passes. Conditional
+   civilian meal reductions463.824–627.013/case (0.26649–0.29931% original civilian
+   meals). Forty-eight iterations retain passing/failing endpoints;independent
+   scalar inventories/24-step demand brackets and every provider/actor checked.
+   Floating-point threshold uncertainty explicit;fresh3files exact. Sixnew+ten
+   event controls pass. Normalresearch all16rows/twofigures/fields/CSV;oldmaps and
+   defaults unchanged. NOT a valid resident replan while source work staysfrozen.
+   See NETWORK_VISIT_MEAL_HEADROOM_20261112.md.
+18. **Completed continuous destination feedback:** declarationaacf2ddb BEFORE
+   residentoutputs. Four SAMEraw/corrected600/300h load120k allopen parentcases;
+   all4old/all4new rows retained. Source/rural meals,civilian fieldwork,crops,
+   exportstocks,dispatch/wholetrips/staff recomputed at EVERYtrial;90daycapacity
+   scaleswithcurrentpeople. Same64scan/150seed/24resident/40work-foodrefinements.
+   Newversioned vectorinventory/class/scopedfactory andcontinuous displayedceil;
+   alloldmodel/writerbytes intact. Twelvecontrols pass (elevenbeforeproduction,
+   factoryfailure-restoration addedafter). Independentall4source/field/food/
+   people/dispatch/trip/work/scalarperiodic/threshold/ceil checks pass. Fresh11
+   model/comparison/providerCSVfiles exact;144actor summaries/8348providers checked.
+   Town counts raw600369668.076(-195.871),raw300274737.734(-709.542),corrected600
+   378116.797(-164.036),corrected300281323.342(-721.505). Active861/724/889/754;
+   each300h losesoneunderfixedsearchedfamily. Allpositivebin-startfoodpasses;
+   NOT newcollector-returnqualification ornewmaps. Normalresearchall8rows/two
+   figures/fullold-newfieldpackets;earliermaps/defaults unchanged. See
+   SETTLEMENT_CONTINUOUS_DESTINATION_20261112.md.
+19. **Next declared NEW collection calendars and return food:** all4continuous
+   replans;ALLactiveproviders retained,including missing/partial deliveries.
+   Unchangedcollection-firstworkerpolicy with NEWtrips/actualfundedhomeservices,
+   no visitjobs. Twelvefoodrows: Aallplannedcargo/binstart;Bpackedcargo/binstart;
+   C SAMEpackedcargo/actualreturnphase withoriginalONE-binlag/retentionONCE.
+   A->Bomissions separate fromB->Cphase. Proveplanned=packed+unpacked cargo per
+   origin/month;keepallmissing IDs. Report12mandatorybins,foodflags,separate
+   conjunction;no provider selectionbyfoodsuccess. Commit continuous_collection_
+   calendar_20261112 BEFOREoutputs;independentworker/cargo/clock/scalarfoodreview,
+   freshbytes,all12outcomes/actors/providers/figures/normalresearch/browser/
+   Windows,wholeprogramme,pushCONTINUE. Collector-onlycalendar cannotqualify new
+   visit/controlmaps;NEWvisittasks/fullcalendars/returnfoodstill needed.
 
-**Step 13 published after the merge:** the worker-calendar audit now has its
-normal evidence panel, two figures, four downloads and browser checks
-(scripts/publish_visit_calendars.py). 86.0–92.7% of planned visits pack inside
-their month; 1.7–4.3% of relevant provider-months miss a collector trip.
-The earlier usage-limit checkpoint wording follows for the record: calendar
-implementation and 145-file fresh replay were saved with publication pending. These per-bin packing outputs do not
-certify unchanged annual food deliveries when any mandatory collector trip is
-unpacked. Collection-first fragmentation is an algorithm restriction, not a
-physical-impossibility result. All release1–4/S1–S5 empirical/resource/mobile
-obligations above remain open. See NETWORK_VISIT_CALENDAR_20261112.md.
+The usage-limit checkpoint is resolved by the owner's continuation request.
+All release1–4/S1–S5 empirical/resource/mobile obligations above remain open;
+calendar publication does not complete dated size/occupation/provider evidence,
+prospective transfer,complete diets/household/draft work or daily provisioning.
 
 **Merged parallel line, 12 November.** While steps 4–13 ran on
 `claude/friendly-turing-43ygeu`, a second session worked on
@@ -184,20 +247,27 @@ before outputs:
 |Threshold-seeded correctedmaps,12November,declaration354f9a52|16physical/thresholdreviews andfreshbytepairs pass;all8open sourceflags/masks equaloldfoodsets,source-countloss repaired.32newmapoptions/workCSV/fourfamilies/mobile/failures and60focusedtests pass. Fullrelease/S1–S5/allactor/mobileprogramme reviewed;no empirical/default/patrolqualification|Freeze andconnect actualnetworktask destinations toexistingreservedpatrolhours;retain complete resource/provider/occupation/transfer evidence gaps|
 |Conditionalwalkingpointtasks,12November,declaration9c3e7420|Eight scenarios check actual target routes and whole visits against SAMEpatrol reservations;independent geometry/path/scalar/ledger reviews andfreshsixfilebytes pass. Fullrelease1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;no empiricaldefault,territory orindividualroster qualification|Measure assign-once restriction using feasible spare-provider additions under prior declaration;keep target-grid sensitivity,complete resources anddated provider/occupation/transfer dependencies open;continueafterpush|
 |Spare-provider constructiveassignmentaudit,12November,declaration75e7fd16|192–1117extra feasible visits percase,all8scalar/physicalreviews andfreshbytes pass;original completedtasks/providers/maps immutable. Fullrelease1–4/S1–S5/allactor/mobile dependencies reviewed;noglobaloptimum,empiricaldefault orauthority qualification|Freeze five targetgrid designs and40matched scenarios beforeoutputs;phase/spacing effects andtaskdensity distinguished. Preserve complete resource/dailyroster/provider/occupation/transfer gaps;continueafterpush|
+|Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
+|Worker-calendar publication,12November,declarationbdd6135c/checkpointa60e853f|Four collection/eight visit calendars independently reviewed;145fresh files exact. Normal12row/3figure publication andworker-interval downloads preserve oldpanels/163mapfiles. Entire release1–4/S1–S5/allactor/unaffiliated/mobile scope reviewed;per-bin packing is not annual delivery or empirical staffing qualification|Predeclare alternative packing order before new scores;retain alloriginal jobs/workcaps andexplicit annual mandatory-delivery gap. Dated occupancy/provider/size evidence,prospective transfer,complete resources anddaily provisioning remain open|
+|Fixed mixed-job order anddelivery gates,12November,declaratione4d274da|16fixed-policy rows independentlychecked;21,509,178packedcollector records,1,259,374original visits and7,752,000worker-bins reviewed;98freshfiles exact. Monthlygains coexistwith collectorlosses/four-person12bin declines. Entire release1–4/S1–S5/allactor/mobileprogramme reviewed;no winner/default/authority adoption|Declare coherent provider-year choice preserving everybaseline12bin-gated task;optionalpointmaps require necessarygate limits. Keep datedprovider/occupation/size,prospectivetransfer,daily provisioning,complete resources andmobile/nonstate scope open;pushandCONTINUE|
+|Coherent provider-year pointmaps,12November,declaration00d70d62|All8cases preserve EVERYbaseline gated task andoriginal fundedjob bounds;2810–9846added tasks. Ninecontrols,independent100176provider/bin worker blocks,map pixels/masks/CSV,model/export freshbytes andsixfamily browser checks pass. Entire release1–4/S1–S5/allactor/unaffiliated/mobileprogramme reviewed;qualifiedcohorts/defaults unchanged,no annualfood/roles/authority adoption|Freeze destination inventory convention/arrival-phase comparison,retaining1bin lag andmatched cargo;keep within-bin source food/crew ration/complete resources anddated evidence/transfer dependencies open;pushandCONTINUE|
+|Destination continuous inventory audit,12 November,declaration970bd428|All24 rows retain every provider;all pass A,none pass B/C. A-to-B convention versus B-to-C phase separated. Independent17.4Mtrip IDs/2.53Mevents/17,370inventories and11freshfiles pass;all figures posted,old maps/defaults preserved. Entire release1–4/S1–S5/allactor/mobile programme reviewed;no famine/authority/adoption claim|Declare fixed-staff/fixed-capacity civilian meal headroom,then shared-ledger replanning. Keep dated occupancy/size/provider evidence,prospective transfer,source timing,crew food/location,complete diets/work andmobile/nonstate/unaffiliated integration open;pushandCONTINUE|
+|Fixed-staff civilian meal bounds,12 November,declarationed6ae653|All16 matched cases and every scored provider retained;staff-only demand feasible throughout. Civilian meal-equivalent reductions463.824–627.013 percase close the numeric destination gap with original physical stores;source work/exports remain frozen. Independent scalar endpoints/separate brackets,fresh3files,all outcomes/twofigures published. Entire release1–4/S1–S5/allactor/mobile scope reviewed;no resident-map or empirical adoption|Declare continuous destination food inside full resident/source/field-work/dispatch feedback. New maps additionally require new jobs/coherentyears/return-phase food. Keep dated size/occupation/provider roles,prospective transfer,source timing,crew ration/location,complete diets/work andmobile/nonstate/unaffiliated resources open;pushandCONTINUE|
+|Continuous destination resident feedback,12 November,declarationaacf2ddb|Allfour old/four new rows and144actor/8348provider comparisons retained. Finite source/rural/field/crop/export/dispatch/staff ledger recomputed everytrial;164.036–721.505 fewer town residents,one source fewer each300h case. Independentphysical/continuousstock/threshold/ceil/export review and11freshfiles pass. Entire release1–4/S1–S5/allactor/mobile scope reviewed;no newmaps/default/empirical adoption|Freeze NEWcollector calendars and planned/packed/return food comparison,retaining partial-delivery providers and separating omissions fromphase. Keep newvisit jobs/calendar/food gate and datedsize/occupation/provider evidence,transfer,source timing,rations/location,complete diets/work,mobile/nonstate/unaffiliated resources open;pushCONTINUE|
 |City workbook recovery and key join, 12 November (94e7266c, 79bb070f; merged line)|Identity dependency closed: 50 of 50 joined, independent raw-XML review, 600-field CSV cross-check and byte replay pass. Extents conflict for 7, 4 places predate AD150, sample selection visible. Release 2 open|Catalogue available again: declare catalogue-area comparison before scores|
 |Size-shape diagnostic, 12 November (e52e6d89; merged line)|First size result, and negative: no original coupled scenario produces large centres; flatness is in catchment budgets and requests. 63 Roman sets, 378 resampling ranges and 78 allocator sets recomputed|Declare one hierarchy mechanism at a time against the same metrics; no transfer-share tuning|
 |Market-hierarchy tests, 12 November (f17deb2a, 2b2fea71; merged line)|Two-day links are nearly inert; 6- and 12-day legs with distance-scaled loss reach the Roman relative band at a 50% share, at a visible cost in cohorts, residents and reach. 12 cases independently reviewed for links, chains, people, grain, cohorts and metrics; reach masks rebuilt by a second implementation|Published as 24 optional map options with report, figures and panel; next a declared re-run on the threshold-seeded dispatch parents and a cohort-scaling test|
-|Worker-calendar publication, 12 November (after merge)|Pending publication from the other line completed: panel, 2 figures, 4 byte-exact downloads, keyboard/mobile/theme checks; 163 map files verified unchanged; no new map family. Whole release 1–4 / S1–S5 queue reviewed|Hierarchy maps next; any alternative packing order needs its own declaration|
 |Branch merge, 12 November|Both 12 November lines combined without dropping either; evidence page, registry and release manifest regenerated; whole release 1–4 / S1–S5 queue reviewed across both lines|Finish the pending calendar publication (step 13) and the hierarchy maps (step 17)|
-|Target-grid spacing/phaseaudit,12November,declaration4f592bfe|All40geometry/path/eligibility/scalar/ledger cases independentlychecked;138freshfiles exact,originalbaseline NPZbyteidentical. Phase0.185–0.265pp;spacingchanges workloadandgeography. Allrelease1–4/S1–S5/allactor/mobiledependencies reviewed;no winner/default/authorityadoption|Construct integer worker/calendars forwhole collectiontrips andoriginal visitcrews under prior declaration;retain dailyprovisioning,complete resource anddatedprovider/occupation/transfer gaps;pushandcontinue|
+|Second branch merge, 12 November (late)|friendly-turing advanced to 4b42b703 (worker-calendar publication, joint job orders, provider-year visit maps, destination timing, meal bounds, continuous destination replans) while this line published the market-hierarchy maps. Merged again without dropping either; the other line's calendar publication replaces this line's duplicate; map scripts carry both new families. Whole release 1–4 / S1–S5 queue reviewed across both lines|Finish and publish the cohort-protected forwarding test (step 19); the other line continues with its declared continuous collection calendar|
 
 ## Working rules
 
 * Every milestone records code, Earth data exposure, results, limitations, adoption
   decision, atlas consequences, and the next unfinished task. Commit and push
-  milestones to `claude/project-continuation-a484h1`, which since the 12 November
-  merge contains both lines of work (`claude/friendly-turing-43ygeu` up to a60e853f
-  included; the cloud session cannot push to that branch). A failed experiment does not complete
+  milestones to the branch your session can push. Two sessions are active:
+  `claude/friendly-turing-43ygeu` (local sessions) and `claude/project-continuation-a484h1`
+  (cloud session, which merges friendly-turing in at every resumption and so
+  contains both lines). Fetch and merge the other branch before starting work. A failed experiment does not complete
   its parent stage or cancel later stages.
 * Follow the dependency chain: environment → occupancy and land use → settlements
   → shared people/food allocation → institutions and transport → differentiated

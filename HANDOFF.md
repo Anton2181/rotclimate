@@ -1,3 +1,374 @@
+# Second merge of the two active lines — 12 November 2026 (late)
+
+* friendly-turing-43ygeu advanced to 4b42b703 while this branch published the
+  market-hierarchy maps; merged again on claude/project-continuation-a484h1.
+  BOTH sessions are active. The cloud session can push only to this branch and
+  merges friendly-turing at every resumption; local sessions should fetch and
+  merge this branch too, or the owner should fast-forward friendly-turing to it.
+* Resolution: the other line's worker-calendar publication (script, report,
+  figures, panel) REPLACES this line's duplicate. Map scripts atlas/settled-reach.js
+  and atlas/evidence.js are the other line's versions plus the market-hierarchy
+  family. Evidence page = other line's page plus the identity, shape and market
+  panels re-run by their publishers. Registry is the union; release.json rebuilt.
+* The other line's own NEXT (see its entry below): declared continuous
+  collection calendar. This line's NEXT: finish the declared cohort-protected
+  forwarding test (calibration/settlement_cohort_forwarding_20261112; 8 cases
+  built and independently reviewed in 127fbab5; replay, reach, maps, report
+  pending at the time of the merge).
+
+# Continuous destination resident replans published; continue NEW calendars — 12 November 2026
+
+Owner “Continue,dont stop after pushing”. Canonical claude/friendly-turing-43ygeu.
+No subagents. Lastpushedaacf2ddb includes continuous-resident declaration BEFORE
+outputs. Earlier pushes970bd428 maps,ed6ae653timing,aacf2ddbmealbounds. PushNOTstop.
+
+* New polity/continuous_destination.py extendsThresholdSeededDispatchFeedback:
+  _food usesversionedvectorcontinuousbin inventories;solve overwritesdisplayceil
+  withcontinuousnormalized42-step/downward-margin helper. Alloldmodel/writerbytes
+  intact. New scopedfactoryadapter build_continuous_destination.py restoresold
+  factory evenonfailure. Currentnewtrialpeople changesruralmeals/fieldwork/crops/
+  sourceexportstocks/dispatch/integertrips/staff. Same64scan/150seed/24resident/
+  40work-foodrefinements;90daycapacity scalesCURRENTtrialpeople,notoldmealbound.
+* output/settlement_continuous_destination_20261112 all4 replans independently
+  source/field/food/people/grain/dispatch/wholetrip/work reviewed. Scalarcontinuous
+  inventories/minperiodicstocks/thresholdtrial/displayceil independentlychecked;
+  reviewer importsno solver/newfoodprimitive. Fresh11files EXACT (4results/4fields,
+  summary,comparison,providerCSV). Newpreparer+separatecomparisonreview all8rows/
+  144actors/8348providers;zero providers retained. Oldunrecordedpeak/duration/
+  periodicfields stayNULL inCSV. Newfullfieldpackets havepeak/days/periodicity.
+* Newtownpeople raw600369668.076(-195.871),raw300274737.734(-709.542),corrected600
+  378116.797(-164.036),corrected300281323.342(-721.505). Active861/724/889/754;
+  each300hcase losesonesource underunchangedsearchedfamily,NOTimpossibility.
+  Allpositivecontinuousbinstartfood/source/monthlyintegerwork pass. NO new
+  collector-returnfood qualification;oldrosters cannotfitnewactualshipments.
+* Normal #continuous-destination8rows/2figures BOTHPOSTED,14data downloads+methods,
+  fullold/newfieldpackets andeveryproviderCSV. Preserveall769Earthatlasfiles/maps/
+  defaults. 72focusedtests pass (12newprimitive/factorycontrols;11beforeproduction,
+  restorationfailure controladdedafter). Browser8exactrows/2figures/15byte links/
+  mobile/themes/keyboard/failure pass (longphraseoverflowfixed). Windows1936assets
+  byteexact;906hubdependencies resolve;48modelsource/producer hashes,28comparison
+  sources and769Earthfiles current. Earlierresearchpageexactexceptnewpanel. Fullhistoricalpublisher missingprivateVidarbha
+  cache;directpublisher->build_fit_hub AFTERfinalpublish->stage->Windowscheck.
+* Managedenvready afterstartupnotification;files persisted. HTTP8766 restarted
+  session11719. Scientific .venv/bin/python;Playwright globalpython. Do notpoll
+  stale process84936 (completed beforeenvironmentresume). Results/reviews/replays
+  exist. Browser checker script check_continuous_destination_browser.py running
+  session12820 atlastwrite;inspectreceiptifsessiongone.
+* NEXT afterpush: committed calibration/continuous_collection_calendar_20261112/
+  plan.json BEFOREoutputs. FourNEWcases,allACTIVEproviders retained including
+  failed/partialdeliverysources. pack_worker_calendar originalcollection-first,
+  no visits;NEWorigintrips,costs,staff50h/bin/fullcalendar,NEWfundedhomeservices=
+  work_secondary_hours[1:,month].sum(axis0),equallyshared/divisible. No newworkers.
+  Twelvefoodrows:Aallplannedcargo/binstart;BONLYpackedcargo/binstart;C SAMEpacked
+  cargo/actualreturnphase inONE-binlaggedbin. A->B omissions separatefromB->Cphase.
+  Proveplanned=packed+unpackedcargo origin/month;retainallmissingserials. Old
+  trip_delivery_events rejectsmissingtrips:useNEWversionedpartialpartitionhelper,
+  doNOTeditoldimmutableprimitive. 0.95retentionONCE,end/7 clock365/12 wrap.
+  Reuseeventcontinuousfoodmodel;ALLactiveprovidersscored forA/B/C,notonlycomplete.
+  Reportmandatory12bins/foodflags/conjunction necessaryonly. Newcollector-only
+  calendarsDO NOTqualifynewvisitmaps;NEWvisittasks/fullrosters/returnfoodstillopen.
+  Independentworker/cargo/clock/scalarfood/ledger checks,freshbytes,all12rows/
+  actors/providers/figuresPosted/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Entire release1–4/S1–S5 programme revisited;datedoccupation,size/providerroles,
+  prospective transfer,source withinbin food,crewcarriedrations/location,complete
+  diets/household/draftwork andmobile/nonstate/unaffiliated resources remainopen.
+
+# Fixed-staff meal bounds published; continue continuous resident feedback — 12 November 2026
+
+Owner: “Continue, dont stop after pushing”. Canonical branch
+claude/friendly-turing-43ygeu. A push is a checkpoint, NOT a stop. No subagents.
+Latest pushed before this checkpoint ed6ae653 (timing audit plus meal protocol).
+
+* All16 B/C meal bounds complete:ALL5790calendar-qualified provider-years retained
+  twice=11580bounds,46320endpoint inventories. Fixedstaff/originalphysicalcapacity/
+  cargo/jobs. Staff-only demand feasible everywhere;full demand fails everywhere.
+  Civilian meal-equivalent reductions463.824–627.013/case,0.26649–0.29931% original
+  civilian meals. This is CONDITIONAL accounting,not a valid resident rebuild.
+* New harvest/meal_headroom.py uses48bisections underunchanged numeric fooddiag.
+  Independent review imports neither meal nor eventprimitive;scalar integration,
+  separate24alpha bisections andbrent stockroots (optionalnumba independentstock
+  endmap only) checkall11580bounds. Everyendpointfield exact underseparatescalar
+  arithmetic;near-threshold roundoff explicit,indepalphainterval2^-24. Allactor/
+  providerCSVfields/source/cap/staff checks pass. Fresh3files BYTEEXACT.
+* Normal #meal-headroom16rows/2figures,7data downloads+methods. BOTHfiguresPOSTED;
+  summarylegend fixedafterinspection. No oldEarthmap/file/defaultchanged.
+  Scientificcommands .venv/bin/python;Playwright globalpython. HTTP8766 serving
+  repo session89347. Fullpublisher stillblockedprivateVidarbha cache;direct
+  reviewedpublishers + build_fit_hub.py AFTERfinalpublish. Stage thenWindowscheck.
+* 67focusedchecks pass,including7 newvectorprimitivecontrols. Browser16exactrows/
+  2figures/8byte links/mobile/themes/failure passes;Windows1922assets byteexact;
+  889hubdependencies resolve;298sources/4producers/769Earthfiles current. Earlier
+  researchpageexactafterremovingnewpanel. Receipts inoutput/network_visit_meal_
+  headroom_20261112. Push thenCONTINUE nextdeclaredwork,notpause.
+* NEXT: calibration/settlement_continuous_destination_20261112/plan.json MUSTbe
+  committed BEFOREresident outputs. New harvest/continuous_food_stocks.py is
+  manufactured-only vectorbinstart inventory,compatibleFoodYear withabsolute
+  periodicresidual;7controls/scalarparity/interiorreserve/varyingrates/mixedzero
+  loss/capacity/overflow pass. Original food_stocks/event_food_stocks unchanged.
+  Implement newversioned ThresholdSeededDispatchFeedback-derived factory overriding
+  _food AND displayed continuousfoodceil (oldnormalized42bisection/downwardmargin
+  conventions). Keepoldwriter/classbytes. Scopedfactoryrestore onfailure.
+* Four SAME raw/corrected600/300h load120k allopen parentcases (underlying8maps),
+  old4/new4rows. AtEVERYtrial recompute ruralmeals/civilianfieldwork/sourcecrop/
+  exportstocks/dispatch/integerjobs/staff;90daystores scaleswithtrialtotal now.
+  Keep64scan/150threshold/24residentrefines/40work-foodrefines. No newmap until
+  NEWsource jobs/repackedcoherentyears ANDNEWcollector-returnfood pass. Bpass
+  cannotqualifyC. Independentfullsharedledger/work/source/destinationreview,
+  freshbytes,alloutcomes/figures/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Entire release1–4/S1–S5 programme reviewed;dated occupation/size/provider roles,
+  prospective transfer,source withinbin food,crew-carriedrations/location,complete
+  diets/household/draftwork andmobile/nonstate/unaffiliated integration stayopen.
+
+# Active follow-through after ed6ae653 — 12 November 2026
+
+Do not stop after push. ed6ae653 pushed destination timing audit and committed
+meal-headroom declaration BEFORE outputs. New harvest/meal_headroom.py + six
+controls implemented;16 bound rows completed in output/network_visit_meal_headroom_
+20261112,all staff feasible,full meals fail. Civilian meal-equivalent reduction
+463.824–627.013/case (~0.2665–0.2993% original civilians),NOT a resident replan.
+Fresh builder still running session28995;independent scalar/bracket reviewer
+session27312 (earlier slow session22868 terminated before results;new review
+uses optional numba only for scalar stock end map inside brent root search).
+Reviewer uses24independentalpha bisections and48-step producer endpoints;grain
+roundoff explicit. Finish review+freshbytes before publication. Prepared scripts:
+publish_meal_headroom.py,plot_meal_headroom.py,check_meal_headroom_browser.py.
+Do direct publisher -> build_fit_hub AFTERfinalpublish -> stage -> Windowscheck
+(release checksum fails ifhub runs before lastpublish). All oldmapfiles protected.
+Need normalresearch all16rows,2figures POSTBOTH,8links/browser/mobile/Windows,
+roadmap/livewholeprogramme+handoff,thenpushCONTINUE. controls67focused passed.
+Next prepared calibration/settlement_continuous_destination_20261112/plan.json
+MUSTcommit BEFORE resident outputs. New harvest/continuous_food_stocks.py is
+manufactured-only vectorizedbinstart continuous inventory;7controls inclscalar
+parity/interiorperiodicreserve/variable rates/zeroloss/overflow pass. No resident
+outputs for it yet. After nextpush implement new versioned threshold-seeded
+factory overriding_food and new continuous displayedfoodceil;oldcodebyteunchanged.
+Four raw/corrected600/300h load120k allopen parents (same8mapcohort) replanfinite
+source/food/work withcurrenttrialpeople/capacity. 64scan+staffthreshold+24resident
+refines,40dispatchwork/food;old4/new4rows. No maps until NEWjobcalendar ANDNEW
+return-phasefoodrecheck. Fullprogramme/empirical/source/ration/diet/mobileopen.
+
+# Destination timing audit completed; continue meal headroom after push — 12 November 2026
+
+Owner: “Continue, dont stop after pushing”. Push is a checkpoint, not a stop.
+Canonical branch: claude/friendly-turing-43ygeu. No subagents permitted.
+Provider-year map release pushed in970bd428, including the timing declaration
+BEFORE outputs. Full prior milestones follow below. No PR requested.
+
+* New harvest/event_food_stocks.py integrates continuous destination meals and
+  exponential grain decay between supply pulses;capacity clips at arrival.
+  Smallest periodic stock from the clamped affine map,independent of sufficiency.
+  Original harvest/food_stocks.py and all older scheduling/food code unchanged.
+* New polity/delivery_events.py validates every original origin/month/serial,
+  owner,cargo remainder,original ONE-BIN lag and0.95retention applied ONCE.
+  Ten manufactured controls pass BEFORE production,including zero loss/demand/
+  capacity,minimal reserve,periodic shortage,split events,convention/lag/wrap/
+  invalid serials. Previous nine provider-year controls also pass.
+* output/network_visit_delivery_timing_20261112:all8 coherent calendars and ALL
+  already-qualified providers. A=exact12bin original meals-first model;B=same
+  supply at bin starts with continuous meals;C=same continuous model but return
+  phases. Same people,cargo,90day original capacity,5%stored loss. A->B convention
+  changes separate from B->C phase. Every provider passes A numeric food check;
+  zero pass B/C. B unmet about0.2083% annual meals;C0.1909–0.1964%. Phases reduce
+  gaps but do not eliminate them. Not physical impossibility or actual hunger.
+* Independent review imports neither model nor cargo primitive:17,427,262trip
+  identities,2,532,803aggregated pulses,17,370scalar provider/accounting stocks.
+  Separate scalar bracketing,all ledgers/providerCSV/18actors eachcase pass.
+  Fresh11files BYTE EXACT:results/fields/providerCSV/eight aggregated eventNPZs.
+  controls.json runtime text is intentionally not a byte-replay claim.
+* New normal #delivery-timing panel:24 exact rows,three figures ALL POSTED,
+  methods and15data downloads (including every eventpacket). Direct publisher
+  scripts/publish_delivery_timing.py preserves all previous panels. Every Earth
+  atlas file stays byte unchanged. No maps/defaults/residents changed by timing.
+  Browser24rows/3figures/16byte links/keyboard/344/390/themes/ledgerfailure passes.
+  See report NETWORK_VISIT_DELIVERY_TIMING_20261112.md and results/review/replay.
+* Runtime skill read;environment ready,unrestricted network. Local HTTP server
+  python -m http.server8766 session89347 serves repo. Reuse if alive. Browser
+  python global has Playwright;scientific commands .venv/bin/python.
+* General andeightmap browser regressions pass;54focusedcontrols pass. Windows
+  1915assets byteexact;879hubdependencies resolve;281sources/5producers/769Earth
+  atlasfiles current. Earlierresearchpage exactafterremoving newpanel. Release
+  verifiedafterfinalpublish/buildhub. Checkpoint ready tostageandpush. Full evidence
+  publisher remains blocked on omitted private Vidarbha cache;use direct reviewed
+  publisher + build_fit_hub.py. Do not claim historical full rebuild.
+* NEXT IMMEDIATELY AFTER PUSH: calibration/network_visit_meal_headroom_20261112/
+  plan.json must be committed BEFORE outputs. All8cases × B/C=16rows. Keep all
+  original institutional meals/workers AND ORIGINAL physical capacity fixed.
+  Multiply only civilian meals byalpha0..1;zero staff-only feasibility checked.
+  Full-demand pass keeps1;staff-only failure explicit;otherwise48deterministic
+  bisections retain pass/fail bounds under SAME numeric unmet threshold1e-8.
+  This is a conditional meal-equivalent bound,NOT a valid resident reallocation:
+  source food/field work are frozen. No maps or default change. All providers,
+  actors,fields,bounds,independent scalar bracket/review,freshbytes,figures posted,
+  normal research/browser/Windows,whole-programme review,push then CONTINUE.
+* Entire release1–4/S1–S5 programme reviewed:dated occupancy,size/provider roles,
+  prospective transfer,source within-bin food,crew rations/location,complete diets/
+  household/draft work and mobile/nonstate/unaffiliated integration remain open.
+  Actual resident replanning must recouple the finite source/food/work ledger,
+  integer shipments and worker calendar;meal headroom is not that replan.
+
+# Coherent provider-year maps ready; continue destination timing after push — 12 November 2026
+
+Latest owner: "Continue,dont stop after pushing". Push is NOT a stopping point.
+Canonical claude/friendly-turing-43ygeu. Lastpushed00d70d62 joint-order comparison
+contains the provider-year declaration BEFOREallnewoutputs. No subagents.
+
+* Newpolity/provider_year_schedule.py choosesONE full12bin calendar/provider.
+  Baselineyear retained unlessjointalso complete,contains EVERYbaseline packed
+  (month,actor,target)identity andadds>=1. Equalsets/losttask retainbaseline;
+  onlyjointcomplete choosesjoint;neithercomplete keepsbaseline unqualifiedtrace.
+  Inactive sources cannotpass emptyobligations;selectedtasks mustbe originalfunded.
+* All8cases independentlyreviewed WITHOUTselectorimport;100176selectedprovider/
+  bin worker blocks checked againstcurrent sourcephysical/food certificates.
+  Everybaseline gatedtaskretained elementwise;no originalfunded taskbounds crossed.
+  Allactor/bin requestpartitions remainwithseparatecalendar-unqualified channel.
+  Actualphysicalwork stayscharged evenwhenyearunqualified. Ninecontrols pass.
+  Freshresults/fields BYTEEXACT;22freshmap/model/CSV/gridexports BYTEEXACT.
+* Gains raw600crew1/4=9572/4147,raw300=8597/2933,corrected600=9846/4496,
+  corrected300=7772/2810. Qualifiedcounts raw148477/133196/140515/125199;
+  corrected157989/142318/148380/133488. Qualifiedproviderflags EXACTbaseline
+  inall8cases (734/671raw,779/711corrected);gains are tasks,notnew institutions.
+* Newdata/network_visit_year_complete.json+year_complete/packets,IDs yearvisits
+  {600|300}_crew{1|4}. ExistingSupply-supportedreachselector,experimentalonly,
+  defaultunchanged. Sixth packetfamily inatlas/settled-reach.js;14readouts add
+  provider-year policy andnecessary12binflag. Conditionalparentpeople/food
+  remainunchanged whenrosterfails. Pointtasksnotblocks/territory. Annualgate
+  necessaryonly,NOT dailyfood/within-bin grain timing/fullannualfood/observedroles.
+* Newpublish_provider_year_visits.py supports --out-data scratch exports without
+  activatingUI;export_replay.json has22exactfiles. Independentexportreview checks
+  everyactor/pointmask,visitedpixelcolor/overlap,unchangedconditionalpeople/food,
+  allCSVrows/fivepartitions/sourceIDs/yearchoices. ProviderCSV fullphysicalhours
+  remaincharged atfailedsources. Pointproviderscanvarybybin underOLDassignment;
+  theyare neverreassigned. Fullfields4.9MB exported once foralleight scenarios.
+* Newnormal#provider-year8row/3figure evidence with9workingbytelinks;maps under
+  Experimental &diagnostics -> Supply-supportedreach -> Complete-yearcollection
+  schedule. ThreefiguresPOSTED. Browser8newmaps/exactcomplete+incompleteprovider
+  CSV/pointmasks+pixelclick/sixfamilies/344/390/themes/reload/optionalmanifest/
+  parent/binaryfailure pass. Old8pointmaps+32seededoptions/workCSVregressions
+  andgeneralevidencefilters/failure pass. Windows1900assets byteexact;860hubdependencies resolve. Finalhashes
+  rechecked275sources/3producers/243schedules/163maps/22exports. Earlierresearch
+  pageexactafterremovingnewpanel. Receipts inoutput/network_visit_year_complete_20261112.
+* Wholeprogramme reviewed:release2 datedoccupation/size/providerfunctions and
+  prospective transferopen;release3partialresource/work/yearcalendar;release4
+  no calibrateddefault. AllS1–S5/allactors/unaffiliated/mobile/nonstate,complete
+  diets/household/draftwork,dailyfood/sourceavailability andfoodlocation stayopen.
+  Fullhistoricalpublisher stillneedsomittedprivateVidarbhacache;directpublishers.
+* NEXT IMMEDIATELYAFTERPUSH: committed calibration/network_visit_delivery_timing_
+  20261112/plan.json BEFOREoutputs. All8cases andalreadyqualifiedproviders,24rows:
+  A exactparentmonthly periodicfood recurrence;B continuousmeals/decay withsame
+  arrival-bin-start pulses;C SAMEcontinuousinventory withselectedcollectorreturn
+  timing insidearrivalbin. KEEPONE-BINdelay and0.95transportretentionONCE.
+  Cargo=min120k/remainder byorigin+tripserial;allorigin/month/bintotals exact.
+  Sameparentresidentmeals2500/day,90daycap,5%storage loss,365days. Sourcefood
+  staysmonthly;crewcarriedrations/foodlocation/dailysourceavailability unqualified.
+  Separate A->B timestep/capacity convention fromB->C phase. No map/defaultchange.
+  Independentcontinuousinventory/periodic/ledger/cargo/clockreview,freshbytes,
+  all24results andfigures/normalresearch/browser/Windows,wholeplan,pushCONTINUE.
+* Timingimplementation note from readonlysourceinspection:oldfood_stocks food_year
+  eats ENTIREstep meals BEFOREcapacity clip andthenstoreloss. Continuousmodel must
+  clip immediatelyaftersupply,soBcontrol isessential. Fixedhazard continuousflow
+  ds/dt=-r-h*s. Annualmap isclampedaffine;can derive minimalperiodicstock fromtwo
+  boundarymaps andunclippedaffinebalance instead of96spinups/bisections. Verify
+  independently;periodicconvergence distinct fromfood sufficiency. No timedfood
+  model/results produced before declaration. Originalfood_stocks.py MUSTstaybyte
+  unchanged becausemany previous certificates bindit;use a newversionedmodule.
+
+# Fixed-order comparison ready; continue provider-year point maps after push — 12 November 2026
+
+Latest owner instruction: "Continue,dont stop after pushing". A checkpoint push
+is NOT a stopping condition. Continue immediately with the declared next task.
+Canonical branch claude/friendly-turing-43ygeu;original map/certificate code stays
+byte unchanged. No subagents permitted unless explicitly requested.
+
+* Joint-order declaratione4d274da BEFOREoutputs. Newpolity/joint_worker_calendar.py
+  merges SAMEcollector/point jobs bydecreasing per-worker duration;collectionwins
+  ties,thenorigin/serial oractor/target. Same100-supportedworkers whereactive,
+  50dutyh/bin,212.92calendar coordinates,divisiblehomeservices. Physicallyscheduled
+  visits keepintervals/work evenif latercollectionfails;binqualification separate.
+* All8cases×2fixedpolicies=16rows;bothpolicy12bin flags recomputed requiringactive
+  sourceandALLmandatorycollection/servicebins. Necessary delivery-schedule gate,
+  NOT daily provisioning,within-bin grain timing,completeannualfood oractualroles.
+  Nine newcontrols +7oldcontrols pass. Independent sorted-listmixed job replay,
+  everyworker/crew interval andchannel ledger passes:21,509,178collectorrecords,
+  1,259,374original visits,7,752,000worker-bins.98freshoutputs BYTEEXACT. Old145
+  baselinefiles/currentphysicalreviews and163mapfiles unchanged.
+* All8bin-qualifiedcounts rise;collector omissionsalso rise. Raw600crew4 monthly
+  137796->141624 but12bingate129049->118884. Corrected600crew4 145972->150104
+  but137822->126369. Allfourperson12bin counts decline6850–11453;oneperson gated
+  counts rise6350–7640 while fewerprovidersfinishyear. No winningpolicy adopted.
+* Published NETWORK_VISIT_JOINT_ORDER_20261112.md,normal#joint-order16rowpanel,
+  3figures andresults/review/replay/plan/matchedworkerCSV. ThreefiguresPOSTED.
+  Browser16exactrows/3figures/6byte-exactlinks/24worker-policyCSVcalendars,
+  344/390/light/dark/keyboard/inventoryfailure andgeneralevidencefilters pass.
+  Windows1872assets byteexact,850hubdependencies resolve;final
+  receipts inoutput/network_visit_joint_order_20261112.
+  Use direct reviewedpublishers;historicalfullpublisher lacksprivateVidarbhacache.
+* Entireprogramme reviewed:release2datedsize/occupation/providerrole/transferopen;
+  release3partialresource/scheduling;release4nocalibrateddefault. S1–S5/allactors/
+  unaffiliated/mobile/nonstate,completediets/household/draftwork,daily provisioning
+  andwithin-bin grain timing remainopen. Neither greedyfailure norcohortfilter
+  establishesphysicalimpossibility,absentcommunities orpoliticalauthority.
+* NEXT IMMEDIATELYAFTERPUSH: calibration/network_visit_year_complete_20261112/
+  plan.json committedBEFOREnewoutputs. Choose ONE full12bin policy/provider.
+  Ifbaselineyearcomplete retainit unlessjointalso complete,contains EVERYbaseline
+  packedactor/target/binidentity andadds>=1task. Equalsets orlostbaseline task
+  keepbaseline. Ifonlyjointcomplete choosejoint;neithercomplete keepsbaseline
+  asunqualifiedtrace,mapsnoqualifiedvisits. Neverunionjob successes acrosscalendars.
+  Prove elementwisebaselinegatedtaskinclusion andsubsetofORIGINALhour-fundedtasks.
+* Newoptionalexperimentalpointfamily inexistingSupply-supportedreach,all8cases;
+  keepalloldmaps/defaults/cohorts. Displayselectedpolicy/yearstatus andqualified
+  pointcounts;addcalendar-unqualified deficit tooldroute/crew/capacity partitions.
+  Entireselectedphysicalworkerwork stayscharged evenwhenproviderunqualified.
+  Gateisnecessarydeliveryschedule,notannualfood/roles/territoryqualification.
+  Raw/correctedpairedpointfigures+chart,allnewfiguresPOSTED;independent review,
+  byteexactfreshcases/exports,pointCSV/providerCSV/fullfields,normalresearch,
+  sixfamilyUI/mobile/failure/Windows,wholeplan,pushandCONTINUE. Readexactprotocol.
+  No year-selection outputs have been produced before this declaration.
+
+# Worker-calendar publication complete — 12 November 2026
+
+Resumed the latest remote branch claude/friendly-turing-43ygeu at a60e853f;
+fetch found no newer remote work and the checkout was clean. The owner asked
+to continue,so the earlier usage-limit publication pause is now resolved.
+
+* Finished the pending calendar publication without changing the physical
+  model,original result/review/replay files or any of 163 protected map files.
+  Original declaration bdd6135c;four collection/eight visit cases,seven controls,
+  145 fresh-file replay and independent sorted-list/interval/crew/hour review
+  retained. No need to rerun the multi-million-job experiment just to publish.
+* New scripts/plot_visit_calendars.py and publish_visit_calendars.py validate
+  current producers,sources,reviewer,schedules and replay hashes before output.
+  Normal Earth evidence panel #visit-calendar has four collection/eight visit
+  rows,three figures and results/review/replay/plan plus worker/task CSV downloads.
+  All earlier evidence panels are checked unchanged. Figure illustration uses
+  first eligible four-person case/bin and lowest provider with both job types;
+  first12 visit workers,filled with lowest others. Figure IDs start at1;CSV at0.
+* Three new figures POSTED. Browser checks exact12rows,3loaded figures,6byte-exact
+  local links,real CSV download,12workers'interval nonoverlap/duty/calendar caps,
+  keyboard,344/390px,light/dark,older panels andisolated inventory failure.
+  General evidence filters/downloads also checked. Seven worker controls pass.
+  Windows checkout/launcher and complete hub link closure recorded in the final
+  publication_verification.json under output/network_visit_calendar_20261112:
+  Windows1867assets byte exact,r44 verified,and841hub dependencies resolved.
+* These are per-bin model packing counts,not annual food-supported visits.
+  Any missed mandatory collector trip leaves the unchanged annual delivery plan
+  uncertified. Collection-first fragmentation is an algorithm restriction;
+  greedy failure is NOT proof no schedule exists,abandonment or authority loss.
+  Supplied availability/divisible services do not qualify actual staffing roles,
+  complete service-job rosters or daily provisioning. No new Earth data/default.
+* Entire release1–4/S1–S5 programme revisited in roadmap. Release2 dated size/
+  occupation/provider functions and prospective transfer remain open;release3
+  partial cereal/resource/scheduling implementation;release4 no calibrated
+  default. All actors/unaffiliated/mobile/nonstate,complete diets/household/
+  draft work and daily provisioning remain in scope.
+* NEXT: before new allocation scores,commit a separate declaration comparing
+  alternative packing order on SAME original jobs,providers,crews andworker caps.
+  Keep original collection-first results/maps;distinguish bin-level calendars
+  from annual mandatory-delivery qualification. No alternative-ordering protocol
+  or outcome was added during this publication. Source/phase/measurement and
+  mobile/resource dependencies remain open;do not treat scheduling as calibration.
+* Full historical evidence publisher still needs omitted private Vidarbha Earth
+  cache. This change uses its reviewed direct publisher and registers the hook;
+  it does not claim a full historical rebuild.
 # Calendar audit and market-hierarchy maps published after the merge — 12 November 2026
 
 * On claude/project-continuation-a484h1, which contains friendly-turing up to
