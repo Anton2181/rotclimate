@@ -1,3 +1,23 @@
+# DOWNSTREAM LAYERS REBUILT ON RELEASE-3 TOWNS — 13 November 2026 (fourth pass)
+
+Report: reports/SETTLEMENT_DOWNSTREAM_20261113.md. Plan: calibration/settlement_downstream_20261113.
+Reach, trade, imperial access, administrative links and supply-supported reach (control v2/v2.1)
+are rebuilt on release-3 POSITIONS and shown by default through manifests under
+atlases/earth_fit/data/release3* (release3_layers.json, release3/admin, release3/hierarchy,
+release3_reach.json). atlas.json, release.json and all earlier files are byte-identical.
+
+HOW: polity/release3_placement.py routes F.place_towns to the reviewed positions;
+scripts/run_on_release3.py executes any existing builder with output folders redirected.
+Publishers that write into the atlas were run IN PLACE, outputs moved to data/release3/, then
+`git checkout` restored the published files. export_reach takes ~17 min per climate; staging
+atlas names must be unique (trade checkpoints and polity_map cache are keyed by folder name).
+Unmodified-exporter controls reproduced published layers byte for byte.
+
+NOT DONE: calibrated residents are NOT fed into the supply chain (kept 7.5% request: owner
+decision needed, it would be an untested model); no interactive ledger packet for the release-3
+supply reach; work-calendar/visit experiments not rerun; earth_evidence hub not regenerated.
+output/fertility_integration_20261106/*_factors.npz was regenerated (ignored cache).
+
 # RELEASE 3 PUBLISHED AS DEFAULT SETTLEMENTS MAP — 13 November 2026 (third pass)
 
 Reports: reports/SETTLEMENT_RELEASE3_20261113.md (positions) and SETTLEMENT_RELEASE2_20261113.md

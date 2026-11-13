@@ -52,12 +52,12 @@ window.SettledReachAtlas=(()=>{
       }catch(e){foodCheckedVisits=null;}
     }
     let release2=null;
-    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json']]){
+    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json'],['data-release3-reach-enabled','data/release3_reach.json']]){
       if(!document.querySelector('script['+flag+']'))continue;
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh(file))));
         const candidate=supplement.packets[mode];
         if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Calibrated settlement parent/climate mismatch');
-        release2={options:{reach_towns:[...candidate.options.reach_towns,...(release2?.options.reach_towns||[])]}};
+        release2={options:{reach_towns:[...(candidate.options.reach_towns||[]),...(release2?.options.reach_towns||[])],reach_defacto:[...(candidate.options.reach_defacto||[]),...(release2?.options.reach_defacto||[])]}};
       }catch(e){}
     }
     if(document.querySelector('script[data-release3-layers-enabled]')){
@@ -71,7 +71,7 @@ window.SettledReachAtlas=(()=>{
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
-      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release3_central'))?'release3_central':(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release2_central'))?'release2_central':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
+      return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release3_central'))?'release3_central':(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release2_central'))?'release2_central':(l.id==='reach_defacto'&&release2?.options.reach_defacto?.some(o=>o.value==='release3_v21'))?'release3_v21':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
     for(const l of changed)l.variants.options.push(...(networkVisits?.options[l.id]||[]),...(yearCompleteVisits?.options[l.id]||[]),...(foodCheckedVisits?.options[l.id]||[]),...(release2?.options[l.id]||[]));
     return {p,feedback,dispatch,seededDispatch,networkVisits,yearCompleteVisits,foodCheckedVisits,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};

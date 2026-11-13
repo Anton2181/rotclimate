@@ -3,7 +3,7 @@
     run_on_release3.py <script.py> ['OLD=>NEW' ...] [-- script args]
 
 Installs polity.release3_placement, then executes the script's own source with
-the given literal replacements (each must occur exactly once), typically to
+the given literal replacements (each must occur at least once; all occurrences change), typically to
 redirect its output folder. The original script file is never modified.
 """
 import sys
@@ -18,8 +18,8 @@ if __name__ == '__main__':
     script = (ROOT / args[0]).resolve(); source = script.read_text()
     for pair in args[1:]:
         old, new = pair.split('=>', 1)
-        if source.count(old) != 1:
-            raise ValueError(f'Expected exactly one occurrence of {old!r} in {script.name}, found {source.count(old)}')
+        if source.count(old) < 1:
+            raise ValueError(f'{old!r} does not occur in {script.name}')
         source = source.replace(old, new)
     from polity.release3_placement import install
     used = install(); sys.argv = [str(script)] + rest

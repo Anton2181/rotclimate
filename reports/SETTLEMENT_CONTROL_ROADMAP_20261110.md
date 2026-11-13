@@ -27,6 +27,12 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Downstream, 13 November 2026: reach, trade, imperial access, administrative links and
+supply-supported reach are rebuilt on the release-3 town positions with unchanged rules and
+shown by default; see [SETTLEMENT_DOWNSTREAM_20261113.md](SETTLEMENT_DOWNSTREAM_20261113.md).
+Open: whether calibrated residents should enter the food-budget chain; ledger packet for the new
+supply reach; blind transfer.
+
 Release-3 result, 13 November 2026: placement family B (density-adaptive spacing plus an
 800 km heartland prior, count fixed) passed its declared cross-pool rule in 8 of 8 quadrants;
 fantasy towns, tracks, sizes and ledgers are rebuilt and published as the default Settlements
