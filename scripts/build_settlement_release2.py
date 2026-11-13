@@ -96,10 +96,10 @@ def build(mode, earth, out):
         raise ValueError('Reviewed collection catchments do not match these sites')
     if not np.allclose(x['people'], people.ravel(), rtol=1e-12, atol=1e-9):
         raise ValueError('Reviewed ledger people differ from the population grid')
-    local = x['local_index']; own = x['owner']
+    local = x['local_index']; catchment = x['owner']
     need = rural[local] * KCAL_YEAR
     surplus = np.maximum(x['potential_kcal'][local] - need, 0.0)
-    collectable = np.bincount(own, weights=surplus, minlength=len(sites)) * COLLECTION * RETENTION
+    collectable = np.bincount(catchment, weights=surplus, minlength=len(sites)) * COLLECTION * RETENTION
     support = np.divide(collectable, res * KCAL_YEAR, out=np.zeros_like(res), where=res > 0)
     deficit_cells = int(np.sum(x['potential_kcal'][local] < need - 1e-6))
 
