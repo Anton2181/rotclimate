@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]; sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
-from polity.settlement_locations import site_fields, fixed_count_sites
+from polity.settlement_locations import site_fields, fixed_count_sites, prior_tiling_sites, match_count
 from polity.settlement_joint import history_prior
 from settlement_locations_earth import baseline, metrics, sha, write
 from settlement_intensity_earth import quality
@@ -25,7 +25,9 @@ def masks(allowed):
                 south_west=(yy > mr) & (xx <= mc), south_east=(yy > mr) & (xx > mc))
 
 
-def run(out):
+def run(out, family='A'):
+    global PLAN
+    if family == 'B': PLAN = PLAN.with_name('plan_b.json')
     if subprocess.check_output(['git', 'show', 'HEAD:' + str(PLAN.relative_to(ROOT))], cwd=ROOT) != PLAN.read_bytes():
         raise ValueError('Commit the exact declaration first')
     plan = json.loads(PLAN.read_text()); out.mkdir(parents=True, exist_ok=True)
@@ -38,14 +40,31 @@ def run(out):
         if not np.array_equal(production, old[f'{pool}__production__1']):
             raise ValueError('Production control not reproduced')
         placed = {'production': production}
-        for L in plan['family']['values']:
-            prior = None if L == 'none' else history_prior(h['distance_km'], float(L), 0.)
-            p = fixed_count_sites(score, eligible, n, cell, min_spacing_km=18., history=prior, stochastic=False)
-            if p.shortfall:
-                raise ValueError('Shortfall')
-            placed[f'L{L}'] = np.asarray(p.towns)
-        if not np.array_equal(placed['L800'], old[f'{pool}__fixed18_L800__1']):
-            raise ValueError('L800 control does not reproduce fixed18_L800')
+        achieved = {}
+        if family == 'A':
+            for L in plan['family']['values']:
+                prior = None if L == 'none' else history_prior(h['distance_km'], float(L), 0.)
+                p = fixed_count_sites(score, eligible, n, cell, min_spacing_km=18., history=prior, stochastic=False)
+                if p.shortfall:
+                    raise ValueError('Shortfall')
+                placed[f'L{L}'] = np.asarray(p.towns)
+            if not np.array_equal(placed['L800'], old[f'{pool}__fixed18_L800__1']):
+                raise ValueError('L800 control does not reproduce fixed18_L800')
+        else:
+            kw = dict(allowed=x['allowed'], aridity=x['aridity'])
+            control = prior_tiling_sites(x['density'], x['land'], x['water_km'], x['road'], x['elev'], cell, **kw)
+            if not np.array_equal(np.asarray(control), production):
+                raise ValueError('Family B control does not reproduce production')
+            for L in plan['family_B']['values']:
+                if L == 'none':
+                    placed['Lnone'] = production; achieved['Lnone'] = dict(count=n, seat_people=40000.0); continue
+                prior = history_prior(h['distance_km'], float(L), 0.)
+                seat, towns = match_count(lambda sp: prior_tiling_sites(x['density'], x['land'], x['water_km'], x['road'],
+                    x['elev'], cell, prior=prior, seat_people=sp, **kw), n)
+                if abs(len(towns) - n) > 0.01 * n:
+                    raise ValueError('Count budget not matched within 1%')
+                placed[f'L{L}'] = np.asarray(towns); achieved[f'L{L}'] = dict(count=len(towns), seat_people=seat)
+            counts.setdefault('achieved', {})[pool] = achieved
         mk = masks(x['allowed']); obs = np.column_stack(np.unravel_index(x['real'], x['allowed'].shape))
         counts[pool] = dict(observed={q: int((x['allowed'] & m)[obs[:, 0], obs[:, 1]].sum()) for q, m in mk.items()})
         for name, towns in placed.items():
@@ -57,15 +76,16 @@ def run(out):
                 row[q] = quality(metrics(sub, inside)); cnt[q] = len(inside)
             row['quadrant_mean'] = float(np.mean([row[q] for q in QUADS]))
             table[f'{pool}__{name}'] = row; counts[pool][name] = cnt
-    variants = [f'L{L}' for L in plan['family']['values']]
+    variants = [f'L{L}' for L in plan['family' if family == 'A' else 'family_B']['values']]
+    achieved_all = counts.pop('achieved', None)
     best = lambda pool: max(reversed(variants), key=lambda v: table[f'{pool}__{v}']['quadrant_mean'])   # ties to weaker prior
     chosen = {'han': best('rome'), 'rome': best('han')}; in_pool = {p: best(p) for p in ('han', 'rome')}
     wins = sum(table[f'{p}__{chosen[p]}'][q] > table[f'{p}__production'][q] for p in chosen for q in QUADS)
     whole = all(table[f'{p}__{chosen[p]}']['whole'] > table[f'{p}__production']['whole'] for p in chosen)
     overall = max(reversed(variants), key=lambda v: np.mean([table[f'{p}__{v}'][q] for p in ('han', 'rome') for q in QUADS]))
     np.savez_compressed(out / 'positions.npz', **positions)
-    result = dict(status='placement_iteration_cross_pool_development', plan_sha256=sha(PLAN), producer_sha256=sha(__file__),
-        controls=dict(production_reproduced=True, L800_equals_fixed18_L800=True),
+    result = dict(status='placement_iteration_cross_pool_development', family=family, achieved_counts=achieved_all, plan_sha256=sha(PLAN), producer_sha256=sha(__file__),
+        controls=dict(production_reproduced=True, family_control_reproduced=True),
         inputs={p: dict(path=str(v.relative_to(ROOT)), sha256=sha(v)) for p, v in paths.items()}, scores=table, centre_counts=counts,
         cross_selected=chosen, in_pool_selected=in_pool, quadrant_wins=int(wins), both_pools_better=bool(whole),
         passed=bool(wins >= 6 and whole), best_over_all_eight_quadrants=overall,
@@ -75,7 +95,9 @@ def run(out):
 
 
 if __name__ == '__main__':
-    a = argparse.ArgumentParser(); a.add_argument('--out', type=Path, default=OUT); r = run(a.parse_args().out)
+    a = argparse.ArgumentParser(); a.add_argument('--out', type=Path); a.add_argument('--family', choices='AB', default='A')
+    g = a.parse_args(); r = run(g.out or (OUT if g.family == 'A' else OUT / 'family_b'), g.family)
     for k, v in r['scores'].items(): print(k.ljust(20), ' '.join(f'{v[q]:.3f}' for q in ('whole',) + QUADS + ('quadrant_mean',)))
     print({k: r[k] for k in ('cross_selected', 'in_pool_selected', 'quadrant_wins', 'both_pools_better', 'passed', 'best_over_all_eight_quadrants', 'wins_by_variant')})
     for p, c in r['centre_counts'].items(): print(p, {k: list(v.values()) for k, v in c.items()})
+    print(r['achieved_counts'])
