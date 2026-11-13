@@ -1,0 +1,69 @@
+{
+  "date": "2026-11-13",
+  "status": "declared_before_any_size_covariate_fit_or_new_placement_score",
+  "purpose": "Close release milestone 2 (fit/test counts, placement and sizes) with what the recovered evidence can support, then rebuild the fantasy settlements (milestone 3) and publish them in the normal atlas (milestone 4). Detailed institutions, differentiated control and S2-S5 stay on the later queue.",
+  "known_before_declaration": [
+    "Placement: 224 reviewed draws on Han/Rome (SETTLEMENT_JOINT_LOCATIONS_20261112); equal-pool Q production 0.3920, fixed18_L800 0.5706, adaptive lead 0.6223. Vidarbha: the adaptive lead failed its declared capture margin against the fixed18_L800 control.",
+    "Counts: beta 0.5 improves held-quadrant deviance 1.86% over beta 0.7 (SETTLEMENT_COUNTS_20261111).",
+    "Sizes: official Hanson2016 tables audited today (1388 cities, 885 positive areas, 862 in the catalogue-AD150 cohort, 57 values of exactly 20 or 30 ha, quantiles 6/16/31/62/162 ha). Area marginal summaries are therefore exposed. No relation between area and any model covariate has been computed in this programme's current inputs; an older market-access study (POLITY_V3_20261025) reported near-zero relations on earlier inputs.",
+    "No fresh geography is reachable in this checkout: the private global population cache is absent, so only the committed Han and Rome windows have complete model inputs. Every pool used here is exposed development data. The hold-outs below are province-blocked or quadrant-blocked internal tests declared before fitting, not blind external validation."
+  ],
+  "counts": {
+    "decision": "Keep the production count budget (people^0.7 x area^0.3, one seat per 40,000 people at 14.1 per km2). The 1.86% development gain of beta 0.5 is too small to justify changing a budget whose total error is already 1.6-2.3%.",
+    "new_fit": false
+  },
+  "placement": {
+    "finalist": "fixed18_L800: natural production count, legacy site score times exp(-core travel distance / 800 km), greedy best-first, no two centres within 18 km. Deterministic.",
+    "why": "The adaptive lead failed the frozen Vidarbha transfer against this control, so the control is the surviving alternative. It is Pareto-undominated on the development pools.",
+    "confirmation_test": {
+      "description": "Quadrant-blocked robustness of finalist versus production on the committed positions (output/settlement_joint_locations_20261112/positions.npz). Each pool's allowed land is split at the median row and median column of its allowed cells into four quadrants. In each quadrant compute unique 25 km F1, 100 km block rank M1, nearest-neighbour KS M3 and Q = 0.6*uniqueF1 + 0.2*((M1+1)/2) + 0.2*(1-M3), using only observed and proposed centres inside that quadrant.",
+      "pass_rule": "Finalist Q exceeds production Q in at least 6 of the 8 pool-quadrants AND in each whole pool. Otherwise placement stays the production allocator.",
+      "status_if_pass": "Development-qualified with internal geographic robustness; not externally validated. The failed Vidarbha result stays on record for the adaptive lead."
+    }
+  },
+  "sizes": {
+    "response": "ln(area in hectares) from the official Areas table.",
+    "cohort": "Cities whose catalogue interval contains AD 150 (start <= 150 and end null or >= 150), with an area record, snapped by the legacy rule (forward projection, nearest land cell) into the committed Rome window and lying on allowed land. Primary cohort excludes the exact 20 and 30 ha default-like values; the all-values cohort is a reported sensitivity. Exclusions are counted, never filled.",
+    "predictors_from_committed_rome_inputs": {
+      "lnH": "ln of hinterland people: model density x cell area summed over land cells whose nearest catalogue-AD150 city cell (all 1354-cohort cities in the window, with or without an area) is this city's cell and lies within 60 km.",
+      "coast": "city cell within one cell (9 km) of the sea",
+      "river": "mapped water within 3 km",
+      "road": "city cell on or adjacent to a mapped road cell",
+      "core": "supported core travel distance in thousands of km"
+    },
+    "models": {
+      "M0": "intercept only",
+      "M1": "intercept + lnH",
+      "M2": "M1 + coast + river + road",
+      "M3": "M2 + core"
+    },
+    "blocked_cross_validation": "Four folds of whole provinces: fold = first byte of sha256(province name as in the Cities table, UTF-8) modulo 4. Ordinary least squares on three folds predicts the fourth. All folds reported.",
+    "selection_rule": "Lowest pooled held-out mean absolute error of ln area. A richer model replaces a simpler one only if it lowers that error by at least 2% relative. Ties go to the simpler model. The selected model is refitted on the whole primary cohort for use on the fantasy map.",
+    "generator": "ln A = selected model prediction + sigma * e, where sigma is the standard deviation of that model's pooled held-out residuals and e is a standard normal draw clipped to [-2.5, 2.5]. Areas are clipped to the observed range of the cohort.",
+    "gate": {
+      "test": "For each held-out fold generate areas for its cities from the model fitted on the other three folds (seeds 1,7,19,43,97) and pool the folds. Compare the generated and observed held-out area distributions.",
+      "pass_rule": "Mean two-sample KS distance over the five seeds <= 0.10 AND mean ratio of generated to observed total held-out area within [0.80, 1.25].",
+      "if_fail": "Sizes are not adopted; the fantasy map keeps legacy 7.5% sizes and is published as experimental only."
+    },
+    "residents": {
+      "central": "Sliding density after Hanson 2016: 100 persons/ha at <= 50 ha rising log-linearly in area to 500 persons/ha at >= 400 ha. Only the endpoints are taken from the published description; the interpolation between them is this project's assumption.",
+      "low": "100 persons/ha at every size",
+      "consistency_check": "Central scenario summed over all 885 official areas, reported against Hanson's published 10.6-12.2 million. Report only; no parameter is tuned to it.",
+      "status": "A density scenario converts calibrated areas to residents. Residents are not independently observed and no AD 150 housing label is qualified."
+    },
+    "not_done": "No use of housing samples as dated labels; no fuzzy joins; no area fill; no claim of continuous occupation."
+  },
+  "fantasy_rebuild": {
+    "grid": "Published r44 earth_fit raw and corrected climates, 463 x 1000 analysis grid, central occupation density.",
+    "anchors": "All marked places kept at their cells.",
+    "count": "Number of unmarked towns equals the legacy allocator's natural count on the same inputs.",
+    "placement": "If the confirmation test passes: fixed18_L800 using the lore-core exp(-D/800 km) term already used by the population model, same eligibility (claimed land, minimum density, dry-land water rule, marked-town catchment exclusion). Otherwise legacy positions.",
+    "sizes": "If the size gate passes: selected model with fantasy hinterlands computed by the same nearest-centre 60 km rule over marked plus generated centres, seed 1. Among marked places only, the drawn residuals are reassigned in lore-rank order (imperial capital, major imperial city, fortified city, imperial fort, fortified town, imperial monastery) so the campaign's own ordering is respected without changing the size distribution. This ordering is lore, not Earth evidence.",
+    "people_ledger": "Town residents are taken from their own hinterland cells, never created: residents are capped at half of hinterland people, and the cap count is reported. Rural people = cell people minus those moved.",
+    "food_ledger": "Local cereal support of each town is reported from the existing reviewed annual cereal potential within one day's foot collection: share of the town's annual ration that the catchment's collectable surplus (after rural meals of the remaining rural people, 10% collection, 0.95 retention) can cover. Towns below full local support are flagged as import-dependent, not shrunk. The monthly worker-calendar machinery is not rerun in this release.",
+    "tracks": "Minor tracks rebuilt by the existing relative-neighbourhood rule on the new centres.",
+    "not_rebuilt": "Political reach, trade, administration, dispatch, visits and all other downstream layers keep their published legacy inputs and are labelled as such."
+  },
+  "publication": "New Settlements map options and an evidence report in the normal earth_fit atlas, with before/after maps, per-town CSV, calibration limits and this declaration. The new option becomes the Settlements default only if both the placement test and the size gate pass. All earlier options, packets and defaults for other layers are preserved.",
+  "review": "Independent reimplementation of the cohort join, hinterlands, fold assignment, fits, gate statistics and fantasy ledgers; fresh deterministic replay of every numeric output."
+}
