@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-13",
+  "status": "declared_before_any_score_of_family_B",
+  "made_after": "Family A (plan.json) failed: cross-selected L800/L1600 win 5 of 8; no L wins more than 5. L1200 nearly reproduces Han quadrant counts (100/909/87/143 vs observed 217/841/87/119) but still loses the thin Han quadrants and Rome north-east to production. Reading: fixed 18 km spacing is wrong in thin country; production's density-adaptive catchments are right there but ignore history.",
+  "family_B": {
+    "allocator": "The production catchment tiling (polity.settle.place_towns logic: best site first, no town within 1.6 catchment radii, radius from people^0.7 x area^0.3, 60 km cap, same quirk noise seed 1, same eligibility from the unmodified density) with the heartland prior p = exp(-D/L) applied to BOTH the site score (score x p) and the density used for the catchment radius (density x p). Eligibility is never changed by the prior.",
+    "count": "The count budget stays separate: seat_people is rescaled by bisection so the number of centres equals the natural production count as closely as the greedy tiling allows (within 1%; the achieved count is reported).",
+    "only_free_parameter": "L in km",
+    "values": [800, 1200, 1600, 2400, 3200, 4800, "none"],
+    "control": "L none with unscaled seat_people must reproduce the committed production positions exactly."
+  },
+  "metric_selection_and_pass_rule": "Identical to plan.json: quadrant Q against production; for each pool use the L with the best quadrant-mean Q on the other pool; pass if at least 6 of 8 quadrants and both whole pools beat production.",
+  "if_pass": "As plan.json: adopt the L best over all eight quadrants for the fantasy map and rebuild.",
+  "if_fail": "Positions stay. No further prior/spacing variants will be tried on these two pools in this programme without new Earth data: two families on the same exposed pools is the limit before the test itself is overfitted.",
+  "status_note": "Second family on the same exposed pools; cross-pool development evidence only."
+}
