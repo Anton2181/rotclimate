@@ -1,3 +1,96 @@
+# NEW collector/food audit verified; continue food-checked visits — 13 November 2026
+
+Owner “Continue,dont stop after pushing”. Canonicalclaude/friendly-turing-43ygeu.
+No subagents. Lastpushed4b42b703 (continuousresidents+nextcollectorprotocol BEFORE
+outputs). Currentcheckpoint collectoronly,no newvisitmaps yet. PushNOTstop.
+
+* New polity/delivery_partition.py validatesrawpacked+missingcargo byoriginal
+  origin/serial/owner;retainsEVERYmissingID/partialload. lagged_return_times keeps
+  imposedONE-binlag,end/7phase,365day wrap. Originaloldprimitives untouched.
+  7new+10event+7workercontrols=24 passedBEFOREproduction. Fullsuite79expected.
+* New build_continuous_collection_calendar.py all4continuousparentcases,NEW
+  actualtrips,fundedhomeservices=work_secondary_hours[1:].sum,staff50h/bin.
+  No visitjobs. ALLactiveproviders scored forAallplanned/binstart,Bpacked/binstart,
+  C SAMEpacked/returnphase. A->Bomissions separatefromB->Cphase. Allrawmissing
+  cargoidentifiedatsource;missing_arrivals/missingdestinationpotential areONLY
+  counterfactualretainedsupply,NOTactualtransportlossonunshippedgrain. Source
+  monthlyplannedexportledgerfrozen,notactualeventsourceinventory. No inventedfood.
+* All12rows independent sorted-listphysicalworker/service/wholetripintervals,
+  cargo+clock+scalarfood/minperiodic/conservation/216actorchecks pass. Checked
+  10,820,096packed/31,767missing IDs,3,873,600worker-bins,9684foodinventories.
+  Eachfoodcase includes ALLactiveproviders,includingincomplete/partialdelivery.
+* Afoodpassesraw600861/raw300724/corr600889/corr300754. Bfood=734/670/778/710
+  (same12mandatorycounts). Cfood688/627/720/671;C BOTH687/625/717/671. Across
+  FOURALTERNATIVEscenarios Cfood2706entries,BOTH2700;notdistinctcommunitycount.
+  SixfoodpassedCentriesmissingmandatorywork. AggregateCenergygapsSMALLERthanB
+  ineverycase BUTmoreindividualfailures;bothsides retained,notbestcaseselection.
+* output/continuous_collection_calendar_20261112:48monthlycalendarNPZs+4event/
+  4fieldNPZs=56packets;results+packets57freshbytes;4deterministicZIParchives+
+  providerCSV+exportmanifest make63freshfiles EXACT. Exportreview all56archive
+  bytes/12522providerrecords (inactiveexplicitlyunscored) checked. Newdatafolder
+  atlases/earth_evidence/data/continuous_collection_calendar has12downloadfiles,
+  localmanifestbasenamesresolve. Checker extendedassetsettoZIP forWindowsbytes.
+* Normal #continuous-collection12rows/2figures BOTHPOSTED,12data links+methods.
+  Old769Earthfiles/maps/defaults preserved. Browser12exactrows/2figures/13byte
+  links/mobile/themes/keyboard/ledgerfailure andglobaldashboard pass. Full79tests
+  pass. Windows1948assets byteexactINCLUDINGZIP;921hubdependencies resolve;60source/
+  6producer/769Earth hashes current;earlierresearchpageexactexceptnewpanel.
+  Checkpointreadytopush,thenCONTINUE. Environmentreadyafter13Novemberresume. Scientific.venv/bin/python;
+  globalPlaywright. HTTP8766session11719. FullhistoricalpublisherprivateVidarbha
+  cachemissing;directpublish->build_fit_hub AFTERfinalpublish->stage->Windowscheck.
+* NEXT: calibration/continuous_food_visit_calendars_20261112/plan.json MUSTcommit
+  BEFOREoutputs. All8newraw/corr600/300 crew1/4,exactoldb3_p0target paths. FundNEW
+  pointjobs withUNCHANGEDallocate_reserved_visits usingNEWparentstaff/active and
+  work_secondary_hours[0,month] ONLY (no missingtriptime reused). 8fundedrows,
+  collection-first+jnt-duration-first16policyrows,8selectedyearrows=32visitrows;
+  all16policiesA/B/C=48foodrows. Baselinecollectionprefixexactcurrentcollector
+  packets despiteaftercollectionvisits. Bothordersactualjobs/worker/foodchecked.
+* Newversioned food-yearselectorwrapper:OLD strict select_provider_years canuse
+  physicalbinflags & OWNfoodCflag[None,:] ascombinedeligibility,but expose
+  selectedphysical12bin,selectedfood,qualifiedSEPARATELY. BaseBoth staysunless
+  jointBoth+EVERYbasequalifiedtaskidentity+adds1. OnlyjointBothrecovers;neither
+  keepsbaselinephysicaltracebut0qualifiedpoints. No mergingpolicyjobs/food.
+  Everyselectedtask subsetNEWfundedjobs. ALLactivefoodrecordsretainedforallorders.
+* EIGHTnewOPTIONALexperimentalpointmaps onlyafterallindep allocator/worker/crew/
+  cargo/food/selectedyear/mask/pixel/CSV/fresh/browser/mobile/Windows checks. Existing
+  sourcepeople remainconditionalifqualificationfails;no people reallocation here.
+  Keepoldmaps/defaults (likelyseventhfamilynewmanifest). Necessarydestination
+  cereal+suppliedwholecalendaronly,notfullprovisioning/sourceintrabin/rations/
+  location/complete diets/observedroles/authority. New map labels muststate scope.
+* Entire release1–4/S1–S5programme revisited;datedoccupation/size/providerroles,
+  prospectivetransfer,source/ration/location,complete diets/household/draftwork and
+  mobile/nonstate/unaffiliated resources remainopen. Wholeplan,pushthenCONTINUE.
+
+# Active NEW collector audit after 4b42b703 — 12 November 2026
+
+Do NOTstopafterpush. 4b42b703 pushed continuous resident replans/fullpublication/
+1936Windowsassets/906hubdeps and committed calibration/continuous_collection_
+calendar_20261112/plan.json BEFORE nextoutputs. Allprevious milestonesbelow.
+New polity/delivery_partition.py retains raw packed+missing cargo and exact
+missingorigin/serials;clockhelper retainsONE-binlag. Sevennewcontrols plus10event/
+7worker=24pass BEFOREproduction. Existingoldprimitives untouched. New builder
+scripts/build_continuous_collection_calendar.py launched4jobs session68023;
+freshout2jobs sessionpending (inspectshell/toolreturn,notassume). Outputroot
+output/continuous_collection_calendar_20261112. EveryACTIVEnewprovider retained
+forfoodAallplanned/binstart,Bpacked/binstart,C SAMEpacked/actualreturnphase.
+A->Bcollectoromissions separatefromB->Cphase. AllmissingIDs/cargo retained;
+mandatory12bins separatefromfood andconjunction. Collector-only,no visitjobs.
+No newmaps. Need independentreview now:sorted-listcollector replay/service/
+worker50h/nonoverlap,alloriginaltripserialpartition,actualend/7clock+lag,
+B/Csamecargo,ALLactiveprovider scalarstocks/minperiodicity/conservation/actors.
+Use old reviewer integrate fromreview_delivery_timing.py and optionalcompiled
+stock_end fromreview_meal_headroom.py forindep stockroot;NOproductionprimitive
+imports. Everymonthpacket fields collection_origin/serial/worker/start/end/site,
+worker_work_hours/calendar_end/idle_hours,worker_offsets/counts,services/flags,
+required/unpackedcounts,packedrawcargo,missingorigin/serial/rawcargo. Per-case
+fields containsallactive/residents/staff/cap/mandatoryflags/collection/services/
+work/planned-arrivals/packed-arrivals/missing-arrivals,A/B/Cinventoryfields/flags.
+Events.npz aggregateprovider/time/cargo/tripcounts. Cases+12rows/results producers
+andcurrentparent+oldatlas hashpins. Fresh fields/results/all54casepackets exact;
+normalresearch all12/actors/providerCSV/figures posted/packets/downloads/browser/
+Windows/wholequeue thenpushCONTINUE. CurrentpriorHTTP8766session11719 afterenv
+resume ready;oldserver89347dead. Scientific .venv/bin/python,globalPlaywright.
+
 # Continuous destination resident replans published; continue NEW calendars — 12 November 2026
 
 Owner “Continue,dont stop after pushing”. Canonical claude/friendly-turing-43ygeu.

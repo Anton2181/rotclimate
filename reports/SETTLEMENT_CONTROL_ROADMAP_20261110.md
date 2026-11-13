@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Eight coherent calendars reviewed;24 destination inventory rows now independently checked. Every calendar-qualified provider passes the old bin model but has a continuous cereal gap of about0.19–0.21%|Four continuous destination resident replans complete;all source/field/food/work/dispatch constraints independently checked. Next pack NEW actual collector jobs and separate omitted cargo from return phase. Source timing,rations/location and complete resources stay open|
-|Release 4: normal numeric publication|Eight optional Complete-year collection schedule point maps plus all24 timing outcomes/three new figures/downloads;earlier map packets/defaults unchanged|Keep the calendar gate necessary only and publish the continuous-food failures explicitly. Four old/four new resident rows,all144actors/8348providers and fullfield packets published. Earlier point maps stay unchanged;new calendar/return-food checks precede any replacement|
+|Release 3: shared-ledger fantasy rebuild|Eight coherent calendars reviewed;24 destination inventory rows now independently checked. Every calendar-qualified provider passes the old bin model but has a continuous cereal gap of about0.19–0.21%|NEW collector-only calendars and all12 planned/packed/return food comparisons independently checked. All active providers retained;2700 scenario entries pass both gates. Next include NEW funded visit jobs and qualify one whole year with its OWN food inventory;source timing/rations/location/complete resources remain open|
+|Release 4: normal numeric publication|Eight optional Complete-year collection schedule point maps plus all24 timing outcomes/three new figures/downloads;earlier map packets/defaults unchanged|Keep the calendar gate necessary only and publish the continuous-food failures explicitly. Normalresearch now includesall12collector food rows,twofigures,all56calendar/event/field packets and12522provider records. Earlier point maps unchanged. Optional food-checked visit maps require new jobs/full calendars and independent exports|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|17,427,262 trip identities,2,532,803 event pulses and17,370 provider/accounting inventories independently checked;all24 rows/fresh11files retained. Continuous food gaps remain at every scored provider|Continuous destination food now inside the finite shared ledger at every resident trial;164.036–721.505 fewer proposed town residents,one fewer source in each300hcase. Next actual worker/cargo/food clocks;source timing,rations/location and complete resources remain open|
+|S4: complete resources and work|17,427,262 trip identities,2,532,803 event pulses and17,370 provider/accounting inventories independently checked;all24 rows/fresh11files retained. Continuous food gaps remain at every scored provider|10,820,096packed+31,767missingtrip IDs,3,873,600worker-bins and9684active food inventories reviewed. Caggregate gaps shrink whilemoreprovidersfail;food andmandatorywork distinct. Nextfullvisitcalendars/ownfood gate;source timing/rations/location/complete resources remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -172,18 +172,34 @@ Immediate sequence:
    NOT newcollector-returnqualification ornewmaps. Normalresearchall8rows/two
    figures/fullold-newfieldpackets;earliermaps/defaults unchanged. See
    SETTLEMENT_CONTINUOUS_DESTINATION_20261112.md.
-19. **Next declared NEW collection calendars and return food:** all4continuous
-   replans;ALLactiveproviders retained,including missing/partial deliveries.
-   Unchangedcollection-firstworkerpolicy with NEWtrips/actualfundedhomeservices,
-   no visitjobs. Twelvefoodrows: Aallplannedcargo/binstart;Bpackedcargo/binstart;
-   C SAMEpackedcargo/actualreturnphase withoriginalONE-binlag/retentionONCE.
-   A->Bomissions separate fromB->Cphase. Proveplanned=packed+unpacked cargo per
-   origin/month;keepallmissing IDs. Report12mandatorybins,foodflags,separate
-   conjunction;no provider selectionbyfoodsuccess. Commit continuous_collection_
-   calendar_20261112 BEFOREoutputs;independentworker/cargo/clock/scalarfoodreview,
-   freshbytes,all12outcomes/actors/providers/figures/normalresearch/browser/
-   Windows,wholeprogramme,pushCONTINUE. Collector-onlycalendar cannotqualify new
-   visit/controlmaps;NEWvisittasks/fullcalendars/returnfoodstill needed.
+19. **Completed NEW collection calendars and return food:** declaration4b42b703
+   BEFOREoutputs. All4newresidentplans/allactiveproviders retained evenwithpartial
+   delivery. Collection-first NEWactualtrips/fundedhomeservices,50h/worker/bin,
+   originalsource/lag assumptions. All12rows Aplanned/binstart,Bpacked/binstart,
+   C SAMEpacked/returnphase;A->Bomissions separatefromB->Cphase. Independent
+   10,820,096packed/31,767missing IDs,3,873,600worker-bins and9684scalarfoodstocks;
+   all216actor summaries,56archiveentries/12522providerrecords checked. 24controls
+   beforeoutputs;63freshmodel/exportfiles exact. Acrossalternativecases Afood
+   passes3228entries,B2892,C2706;C BOTH2700. SixCfoodpassesstillmissingmandatory
+   work. Caggregate gaps shrink BUTmoreindividualfoodfailures. Rawmissingcargo
+   retainedatsource;missingdestinationpotentialcounterfactual,NOTtransportloss.
+   Normalresearch12rows/2figures/fullpacketZIPs;oldmaps/defaults preserved. These
+   collector-onlycalendars omitvisits. See CONTINUOUS_COLLECTION_CALENDAR_20261112.md.
+20. **Next declared food-checked NEW visit calendars and optional maps:** all8
+   continuousparent raw/corrected600/300h crew1/4. Reuseexact b3_p0 paths/targets;
+   fundNEWwholevisits ONLYfromNEWparentreservedpatrolhours,neverfreedmissingtrip
+   hours. Twofixed reviewedorders,identicalnewjobs/workers/services/cargo;baseline
+   collectionprefix exactcurrentcollectorpackets. Allactiveproviders foodA/B/C
+   forEACHorder;ownfoodflag distinctfrom12mandatorybins. Onepolicy/provider/ALL
+   bins:baselineBoth staysunlessjointBoth+strictbaselinequalifiedtaskidentity
+   superset;onlyjointBoth recovers;neitherretainsbaselinephysicaltrace/unqualified
+   points. Retain8funded+16policy+8selectedvisitrows and48policyfoodrows,allactors/
+   providers/masks/worker/foodCSV. Precommit continuous_food_visit_calendars_
+   20261112 BEFOREoutputs. Independentallocator/sortedworkers/food/selectedyear,
+   freshbytes;EIGHTdistinctoptionalexperimentalPOINTmaps onlyafterallfood/gates/
+   export/pixel/CSV/browser/mobile/Windowschecks. Preserveoldmaps/defaults. Scope
+   destinationcereal+suppliedcalendars necessaryonly;no sourceintrabin/rations/
+   complete diets/observedroles/authority claim. Wholeprogramme,pushCONTINUE.
 
 The usage-limit checkpoint is resolved by the owner's continuation request.
 All release1–4/S1–S5 empirical/resource/mobile obligations above remain open;
@@ -214,6 +230,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 |Destination continuous inventory audit,12 November,declaration970bd428|All24 rows retain every provider;all pass A,none pass B/C. A-to-B convention versus B-to-C phase separated. Independent17.4Mtrip IDs/2.53Mevents/17,370inventories and11freshfiles pass;all figures posted,old maps/defaults preserved. Entire release1–4/S1–S5/allactor/mobile programme reviewed;no famine/authority/adoption claim|Declare fixed-staff/fixed-capacity civilian meal headroom,then shared-ledger replanning. Keep dated occupancy/size/provider evidence,prospective transfer,source timing,crew food/location,complete diets/work andmobile/nonstate/unaffiliated integration open;pushandCONTINUE|
 |Fixed-staff civilian meal bounds,12 November,declarationed6ae653|All16 matched cases and every scored provider retained;staff-only demand feasible throughout. Civilian meal-equivalent reductions463.824–627.013 percase close the numeric destination gap with original physical stores;source work/exports remain frozen. Independent scalar endpoints/separate brackets,fresh3files,all outcomes/twofigures published. Entire release1–4/S1–S5/allactor/mobile scope reviewed;no resident-map or empirical adoption|Declare continuous destination food inside full resident/source/field-work/dispatch feedback. New maps additionally require new jobs/coherentyears/return-phase food. Keep dated size/occupation/provider roles,prospective transfer,source timing,crew ration/location,complete diets/work andmobile/nonstate/unaffiliated resources open;pushandCONTINUE|
 |Continuous destination resident feedback,12 November,declarationaacf2ddb|Allfour old/four new rows and144actor/8348provider comparisons retained. Finite source/rural/field/crop/export/dispatch/staff ledger recomputed everytrial;164.036–721.505 fewer town residents,one source fewer each300h case. Independentphysical/continuousstock/threshold/ceil/export review and11freshfiles pass. Entire release1–4/S1–S5/allactor/mobile scope reviewed;no newmaps/default/empirical adoption|Freeze NEWcollector calendars and planned/packed/return food comparison,retaining partial-delivery providers and separating omissions fromphase. Keep newvisit jobs/calendar/food gate and datedsize/occupation/provider evidence,transfer,source timing,rations/location,complete diets/work,mobile/nonstate/unaffiliated resources open;pushCONTINUE|
+|NEW collector calendars and food,12 November,declaration4b42b703|Everyactiveprovider retained inall12 A/B/Crows;independent10.82Mpacked/31767missing IDs,3.87Mworker-bins/9684foods/216actors;63freshoutputs andall56archive/12522provider exports pass. Caggregate foodgaps shrinkwhilemoreindividualfoodchecks fail;6Cfoodpass entrieslackmandatorywork. Entire release1–4/S1–S5/allactor/mobile scope reviewed;no newmaps/defaultadoption|Freeze NEWreservedpointjobs,two fulljoborders andONEwholeprovider-year requiringOWNfood+12mandatorybins. Preserveeverybaseline BOTHqualifiedtask andoriginalfundedjobs;optionalpointmaps needallchecks. Keepdatedoccupation/size/providerroles,transfer,source timing,ration/location,complete diets/work andmobile/nonstate/unaffiliated scope open;pushCONTINUE|
 
 ## Working rules
 

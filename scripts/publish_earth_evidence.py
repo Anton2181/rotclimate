@@ -127,6 +127,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_meal_headroom.py')],cwd=ROOT,check=True)
     if (ROOT/'output/settlement_continuous_destination_20261112/comparison_review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_continuous_destination.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/continuous_collection_calendar_20261112/export_review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_continuous_collection_calendar.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 
