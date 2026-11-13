@@ -1,3 +1,41 @@
+# Fixed rural source meal audit complete — 13 November 2026
+
+KEEP GOING AFTER PUSH. Canonical claude/friendly-turing-43ygeu. Latest pushed
+38d918bd publishes8foodchecked optional point maps/32visit+48food rows. Current
+source_continuous_meals_20261113 phase declared in38d918bd and completed ALL
+16local/outside oldmonthly(A)/continuous(B) cases. ALLpositive-person origins
+failB atoriginal365day physicalcapacity:oneannualharvest cannotcoverannual
+meals PLUSstorage loss. Baggregate gap2.5275–3.1579%,includingexistingproduction
+deficits. Noobservedfamine/abandonment,capacitytuning,newexports,residents ormaps.
+
+Independentonepulseclosedforms/scalarledgers/pathschecked1,935,112originaccount
+inventories,967,556CSVrows/144localactors;largestpatherror5.821e-11annualmeals.
+32controls beforeproduction;9model/field/CSVfreshfilesbyteexact (testtiminglogs
+not deterministic data). Fullannualfields+13stockpath/12unmetbins perorigin in
+4NPZs;4CSVgzipfiles withIDs/people/production/bothgaps/flags. All791Earthassets
+byteexact. Windows2011assets and5UItemplates/integrations exact;browser16rows/
+2figures/14byteexactlinks/keyboard/mobile/themes/failure passes. Normal16row/2figure/13downloadpanel #source-continuous-meals,report
+reports/SOURCE_CONTINUOUS_MEALS_20261113.md. Postedbothfigures. Noappcodechanged.
+
+NEXT declaredcalibration/source_food_events_20261113/plan.json:two-store rural
+andexporteventprimitive. Ruralharvest/continuousmeals/clip/loss;ONLYactualrural
+overflow×0.1entersexportstore,quota/excessuncollectedexplicit;discreteRAWpickup
+requests,partial/unfilled cargo,no sourcetransportretention. Minimumperiodic
+ruralstockthenexplicitquotapulses/minperiodicexportstock. Prototypeharvest/source_food_events.py and21newcontrols alreadyimplemented
+UNCOMMITTED;37source/event/chronologytests pass. Needindependent scalarreview
+BEFOREnewcohorts. Laterall8cases×baseline/joint+8selected
+plans,actualpickupatstart+outward+.25handling,allruralfailuresretained. Preserve
+oldsourceclasses/writers/maps. Seeplanforfixed capacities/chronology/priority.
+
+Wholeprogramme currentroadmap updated release1–4/S1–S5. Destinationfood/mandatory
+calendar conjunction cannotrepairsourcefood. Datedoccupation/roles/sizes,failed
+prospectivetransfer,complete diets/household/draftwork,crew-carriedfood/location,
+mobile/nonstate/unaffiliatedintegrationandindependentphysicsqueue remainopen.
+Scientific.venv/bin/python;globalpythonPlaywright+/usr/bin/chromium;HTTP8766.
+Directreviewedpublisherthenbuild_fit_hubAFTERfinalpublication;stageallassets/
+releasebeforeWindowschecker. Historicalall-evidencepublisherstillmissingprivate
+Vidarbha cache. No subagents. Pushisacheckpoint,CONTINUE.
+
 # Food-checked visit maps complete — 13 November 2026
 
 CONTINUE AFTER PUSH. Canonical branch claude/friendly-turing-43ygeu only.

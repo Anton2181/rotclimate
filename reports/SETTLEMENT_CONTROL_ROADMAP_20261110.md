@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Eight NEW funded visit plans,16 full physical calendars and48 policy food outcomes independently reviewed. Each selected provider uses ONE whole calendar and its OWN cereal test|Source rural meals still use the old monthly convention. Next fixed-plan local/outside continuous-meal audit;then source export chronology and crew rations/location before any complete provisioning claim|
+|Release 3: shared-ledger fantasy rebuild|Eight NEW funded visit plans,16 full physical calendars and48 policy food outcomes independently reviewed. Each selected provider uses ONE whole calendar and its OWN cereal test|Fixed local/outside rural audit complete: all positive-person origins fail immediate physical clipping with continuous meals at365day capacity. Next explicit rural/export source events and crew rations/location;destination checks cannot qualify complete provisioning|
 |Release 4: normal numeric publication|All32visit/48food rows,2figures,58,436provider outcomes and240calendar/food packets published;8optional food-checked point maps|Independent map masks,pixels,provider stock/food flags/CSVs and fresh244model+22map+12download files pass. Preserve all766earlier data/assets;3UI integration files tracked before/after. No calibrated/default adoption|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|43,164,640packed trip checks,15,494,400worker-bins and38,736active food inventories independently reviewed in new baseline/joint calendars;physical work and own food flags separate|Next audit continuous rural meals with fixed source harvests/people/capacities,including outside origins. Source event exports,crew-carried food/location,complete diets/household/draft work and empirical work availability remain open|
+|S4: complete resources and work|43,164,640packed trip checks,15,494,400worker-bins and38,736active food inventories independently reviewed in new baseline/joint calendars;physical work and own food flags separate|All1,935,112origin/account inventories and967,556CSVrows independently checked;16rows/2figures/9freshfiles. Existing365day capacity cannot cover annual meals plus decay under one harvest/immediate clip. Next two-store rural/export event primitive and actual pickup requests;crew rations/location,complete work/diets and empirical availability remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -695,3 +695,24 @@ continuous meals with immediate capacity clip. No new harvest dates,exports,
 calendars,residents or maps. Follow with separately declared source withdrawals
 and carried-ration/location work,not a claim that destination stocks complete S4.
 A push is a checkpoint. CONTINUE after pushing.
+
+## Whole-programme review after fixed source meals — 13 November 2026
+
+Protocol38d918bd preceded all16local/outside A/B outcomes. Same people,production,
+harvest bits and365day store. B changes meals ANDimmediate clipping convention;
+everypositive-person origin fails. Aggregate B gaps2.5275–3.1579%,includingexisting
+production deficits. A one-harvest control stores365meal-days butfeeds355.947249days
+at5%loss;capacity-only bound374.52meal-days is NOTadopted. No observed famine or
+historicalimpossibility inference. Independent1,935,112inventories/967,556CSVrows/
+144localactors pass;largestnormalized pathdifference5.821e-11annualmeals.
+32controls precede production;9freshdata files exact. All791Earthassets unchanged.
+
+Revisited release1–4/S1–S5: conditional point maps retain monthlysource assumption;
+newdestination food/work conjunction cannotrepairsource meals. No capacity/date
+tuning,export/resident solve or newmapqualification. Datedoccupancy/sizes/roles,
+failed transfer,household/draft/diet/crewfoodlocation and mobile/nonstate/unaffiliated
+integration remain open. Independentphysics queue persists. Next declared
+source_food_events_20261113 implements two physical stores,quota-only transfers,
+explicit raw withdrawals/missing cargo and independentperiodic/mass controls;
+then all16fixedpolicies/8selected actualrequest plans,withoutfilteringruralfailures.
+Push andCONTINUE.
