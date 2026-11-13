@@ -6,7 +6,12 @@ window.AdministrativeAtlas=(()=>{
   async function bytes(url){const r=await fetch(url);if(!r.ok)throw Error(`Administration HTTP ${r.status}`);return r.arrayBuffer();}
   async function extend(meta,fresh,mode){
     if(!document.querySelector('script[data-administration-enabled]'))return null;
-    const manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/administrative_access.json'))));
+    let manifest=null;
+    if(document.querySelector('script[data-administration-release3]')){      // audit rebuilt on the release-3 towns; earlier audit is the fallback
+      try{const candidate=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/release3/admin/administrative_access.json'))));
+        if(candidate.packets[mode]?.expected_harvest_fingerprint===meta.harvest?.fingerprint)manifest=candidate;}catch(e){manifest=null;}
+    }
+    if(!manifest)manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/administrative_access.json'))));
     const packet=manifest.packets[mode];
     if(!packet || packet.expected_harvest_fingerprint!==meta.harvest?.fingerprint)throw Error('Administrative access climate does not match');
     const inventoryBytes=await bytes(fresh('data/'+manifest.inventory));
