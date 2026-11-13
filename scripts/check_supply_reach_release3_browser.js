@@ -11,13 +11,13 @@ const sha = b => crypto.createHash('sha256').update(b).digest('hex'); const asse
     page.on('pageerror', e => errors.push(String(e)));
     await page.goto(base + '#layer=reach_defacto&climate=' + mode, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => document.querySelectorAll('#variant option').length > 2, null, { timeout: 120000 });
-    assert(await page.locator('#variant').inputValue() === 'release3_v21', 'default is not the release-3 control map');
+    assert(await page.locator('#variant').inputValue() === 'release3_fed_v21', 'default is not the supply-fed release-3 control map');
     console.log(mode, 'default ok');
     for (const option of packet.options.reach_defacto) {
       await page.selectOption('#variant', option.value);
       await page.waitForFunction(f => { const i = document.querySelector('#base'); return i.complete && i.naturalWidth > 0 && new URL(i.src).pathname.endsWith('/data/' + f); }, option.file, { timeout: 120000 });
       const reply = await page.request.get(base + 'data/' + option.file); assert(reply.ok() && sha(await reply.body()) === option.file_sha256, 'bytes');
-      assert((await page.locator('body').innerText()).includes('release-3 town POSITIONS'), 'note');
+      assert(/release-3 town(s AND residents| POSITIONS)/.test(await page.locator('body').innerText()), 'note');
       await page.screenshot({ path: path.join(out, `${mode}_${option.value}.png`) }); checks.push({ climate: mode, option: option.value });
     }
     await page.selectOption('#variant', 'v21_joint365');          // earlier default still selectable, with its own image

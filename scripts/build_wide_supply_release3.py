@@ -10,11 +10,13 @@ from scipy.sparse.csgraph import dijkstra
 
 ROOT = Path(__file__).resolve().parents[1]; sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
 from polity import trade as T, wide_supply as W
+from harvest.field_support import field_support
 from settlement_locations_earth import sha, write
 
 PLAN = ROOT / 'calibration/settlement_wide_supply_20261113/plan.json'
 R3 = ROOT / 'output/settlement_release3_20261113'; OUT = ROOT / 'output/settlement_wide_supply_20261113'
-KCAL = 2500.0 * 365.0; EXTRACTION = (0.10, 0.33); DENSITY = ('central', 'low')
+KCAL = 2500.0 * 365.0; EXTRACTION = (1.0 / 3.0, 0.10); DENSITY = ('central', 'low'); HOURS = (600.0, 300.0)
+HEADLINE = 'central_x33'
 
 
 def network(mode):
@@ -54,15 +56,16 @@ def plan_for(grain, need, owner, share, between):
 def build(mode, out):
     r, sites, nodes, owner, share, between = network(mode)
     f = np.load(R3 / f'placed_{mode}_fields.npz'); x = np.load(ROOT / f'output/settlement_feedback_20261112/{mode}_inputs.npz')
-    land = f['land'].ravel(); potential = x['potential_kcal']
+    land = f['land'].ravel(); potential = np.where(land, x['potential_kcal'], 0.0)
     if not np.array_equal(f['land'], r['land']):
         raise ValueError('Land grids differ')
     summary = {}; arrays = dict(owner=owner.astype(np.int32), share=share.astype(np.float32), between=between, nodes=nodes); rows = None
     for density in DENSITY:
         res = f['residents_' + density]; need = res * KCAL; rural = f['rural_' + density].ravel()
-        surplus = np.where(land, np.maximum(potential - rural * KCAL, 0.0), 0.0)
-        for fraction in EXTRACTION:
-            key = f'{density}_x{int(round(fraction * 100)):02d}'; grain = surplus * fraction
+        for hours, fraction in [(HOURS[0], e) for e in EXTRACTION] + [(HOURS[1], EXTRACTION[0])]:
+            work = field_support(potential, x['listed_hours'], x['reaping_hours'], rural_need_kcal=rural * KCAL, hours_worker_year=hours)
+            surplus = np.where(land, np.maximum(work.produced_kcal - rural * KCAL, 0.0), 0.0)
+            key = f'{density}_x{int(round(fraction * 100)):02d}' + ('' if hours == HOURS[0] else f'_h{int(hours)}'); grain = surplus * fraction
             p = plan_for(grain, need, owner, share, between); fedshare = np.divide(p['fed'], need, out=np.ones_like(need), where=need > 0)
             self_fed = p['delivered'] >= need * (1 - 1e-9); full = fedshare >= 1 - 1e-6
             ship_sent = float(sum(p['shipments'].values())); ship_got = float(p['received'].sum())
@@ -75,7 +78,9 @@ def build(mode, out):
                 - ledger['between_town_transport'] - ledger['received_between_towns'] - ledger['unused_excess']
             if abs(ledger['residual']) > 1e-6 * ledger['available']:
                 raise ValueError('Grain ledger does not close')
-            summary[key] = dict(density=density, extraction=fraction, towns=len(need), residents=float(res.sum()),
+            summary[key] = dict(density=density, extraction=fraction, hours_worker_year=hours, towns=len(need), residents=float(res.sum()),
+                produced_person_years=float(work.produced_kcal[land].sum() / KCAL), rural_people=float(rural.sum()),
+                marketed_per_rural_person=float(grain.sum() / KCAL / rural.sum()),
                 residents_fed=float(p['fed'].sum() / KCAL), fed_share_of_residents=float(p['fed'].sum() / need.sum()),
                 self_sufficient_towns=int(self_fed.sum()), fed_with_imports_towns=int((full & ~self_fed).sum()), short_towns=int((~full).sum()),
                 residents_in_short_towns=float(res[~full].sum()), shipments=len(p['shipments']),
@@ -84,7 +89,7 @@ def build(mode, out):
             arrays.update({f'{key}_delivered': p['delivered'], f'{key}_received': p['received'], f'{key}_exported': p['exported'],
                 f'{key}_fed_share': fedshare,
                 f'{key}_shipments': np.array([[i, j, v, v * between[i, j]] for (i, j), v in sorted(p['shipments'].items())]).reshape(-1, 4)})
-            if key == 'central_x10':
+            if key == HEADLINE:
                 rows = []
                 for i, s in enumerate(sites):
                     partners = [(j, v) for (a, j), v in p['shipments'].items() if a == i] if p['exported'][i] > 0 else \
@@ -113,7 +118,7 @@ def run(out):
     from polity.release3_placement import install
     install(); out.mkdir(parents=True, exist_ok=True)
     result = dict(status='wide_grain_supply_scenario_release3_towns_not_fitted', plan_sha256=sha(PLAN), producer_sha256=sha(__file__),
-        model_sha256=sha(ROOT / 'polity/wide_supply.py'), value_limit_road_km=W.VALUE_LIMIT_ROAD_KM, headline='central_x10',
+        model_sha256=sha(ROOT / 'polity/wide_supply.py'), value_limit_road_km=W.VALUE_LIMIT_ROAD_KM, headline=HEADLINE,
         fantasy_sha256=sha(R3 / 'fantasy.json'), climates={m: build(m, out) for m in ('raw', 'corrected')})
     write(out / 'results.json', result); return result
 

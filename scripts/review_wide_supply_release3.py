@@ -22,7 +22,14 @@ for mode, c in R['climates'].items():
         problems.append(mode + ' share bounds')
     for key, s in c['scenarios'].items():
         res = f['residents_' + s['density']]; need = res * KCAL
-        grain = np.where(land, np.clip(x['potential_kcal'] - f['rural_' + s['density']].ravel() * KCAL, 0, None), 0.) * s['extraction']
+        need_r = f['rural_' + s['density']].ravel() * KCAL; pot = np.where(land, x['potential_kcal'], 0.)
+        workers = need_r / KCAL * .4; annual = workers * s['hours_worker_year']; peak = np.minimum(annual, workers * 8. * 30.)
+        with np.errstate(divide='ignore', invalid='ignore'):
+            kept = np.minimum(1., np.minimum(np.where(pot * x['listed_hours'] > 0, annual / (pot * x['listed_hours'] / 1e6), 1.),
+                                             np.where(pot * x['reaping_hours'] > 0, peak / (pot * x['reaping_hours'] / 1e6), 1.)))
+        produced = np.where(pot > 0, pot * kept, 0.)
+        if not np.isclose(produced[land].sum() / KCAL, s['produced_person_years'], rtol=1e-9): problems.append(f'{mode} {key} production')
+        grain = np.where(land, np.clip(produced - need_r, 0, None), 0.) * s['extraction']
         delivered = np.zeros(len(need))
         for season in range(owner.shape[0]):
             t = pd.DataFrame(dict(o=owner[season], g=grain / owner.shape[0] * share[season]))
@@ -52,7 +59,7 @@ for mode, c in R['climates'].items():
             problems.append(f'{mode} {key} ledger')
         checked += 1
     t = pd.read_csv(OUT / f'supply_{mode}_towns.csv', keep_default_na=False)
-    if not np.allclose(t.fed_share, z['central_x10_fed_share'], atol=6e-5) or (t.status == 'short').sum() != c['scenarios']['central_x10']['short_towns']:
+    if not np.allclose(t.fed_share, z[R['headline'] + '_fed_share'], atol=6e-5) or (t.status == 'short').sum() != c['scenarios'][R['headline']]['short_towns']:
         problems.append(mode + ' csv')
     for name, digest in c['outputs'].items():
         if sha(OUT / name) != digest: problems.append(mode + ' stale ' + name)
