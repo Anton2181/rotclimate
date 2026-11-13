@@ -1,3 +1,36 @@
+# RELEASE 2 SIZES PUBLISHED; PLACEMENT STILL OPEN — 13 November 2026 (later session)
+
+Working branch this session: claude/wonderful-mayer-uqbwtb (session-mandated; NOT yet merged
+into claude/friendly-turing-43ygeu). Full account: reports/SETTLEMENT_RELEASE2_20261113.md.
+
+Done: (1) declared official Hanson table audit + exact housing-key join
+(output/roman_city_source_recovery_20261113/audit.json, review passed). (2) Release-2
+declaration calibration/settlement_release2_20261113/plan.json committed b13f7a3a BEFORE fits.
+(3) Earth calibration output/settlement_release2_20261113/results.json: size gate PASSED
+(held-out KS 0.058, area ratio 0.945; model lnA = 2.157 + 0.127 lnH, sigma 1.057, R2 ~ 0);
+placement finalist fixed18_L800 FAILED (5 of 8 quadrants, needed 6) so legacy positions stay.
+(4) Fantasy sizes rebuilt on legacy sites with closed people ledger and local cereal flag;
+amendments A1 (wide regional draw) and A2 (lore rank gets largest draws) are post-hoc and
+disclosed. (5) Published as Settlements options release2_central / release2_low in earth_fit
+(data/settlement_release2*), NOT default. Browser check 8 cases passed.
+
+Milestones: 2 = sizes qualified internally, placement NOT qualified; 3 = sizes only (tracks,
+reach, trade, administration not rebuilt); 4 = optional maps published, default unchanged.
+
+NEXT: (a) placement iteration: fix the regional count split (finalist over-concentrates in the
+dense core, production under-concentrates) before spacing; declare before scoring.
+(b) A blind transfer needs the private cache output/land_people/earth/earth.npz restored.
+(c) Feed release-2 residents into reach/trade/administration. (d) Owner decisions: central vs
+low density as headline; whether lore ranking A2 is wanted. (e) earth_evidence hub panel and
+build_fit_hub were NOT regenerated this session. Windows checkout check passed (2111 assets).
+
+Environment notes: fresh container; .venv rebuilt with pip (numpy/scipy/matplotlib/pillow/numba/
+pytest/scikit-learn/pyshp/openpyxl/pandas). No Python Playwright: use Node Playwright
+(scripts/check_settlement_release2_browser.js) with python3 -m http.server 8766;
+serve_atlases.py hung at startup here. Raw Hanson CSVs live only in ignored data/cache
+(pinned URLs/hashes in the recovery plan). *.npz outputs are gitignored: fantasy_*_fields.npz
+are reproducible with build_settlement_release2.py.
+
 # HANDOFF REQUESTED — 13 November 2026
 
 Owner is running out of usage and explicitly requests wrap-up, commit/push and

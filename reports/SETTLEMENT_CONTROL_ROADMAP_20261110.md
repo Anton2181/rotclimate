@@ -27,6 +27,14 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Release-2 result, 13 November 2026 (later session): town SIZES pass a declared
+province-blocked gate on the official Roman areas and are published as optional
+Settlements maps; the placement finalist fixed18_L800 failed its declared quadrant
+rule (5 of 8), so positions and the default map are unchanged. Milestone 2 stays
+open for placement only. See [SETTLEMENT_RELEASE2_20261113.md](SETTLEMENT_RELEASE2_20261113.md).
+Next: regional count split in placement, a blind transfer once the global cache is
+restored, then downstream layers on the new sizes.
+
 Immediate release priority — owner clarification, 13 November 2026:
 
 The owner asks when the NEXT EARTH-CALIBRATED SETTLEMENT ATLAS will arrive.
