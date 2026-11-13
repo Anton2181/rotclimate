@@ -22,7 +22,7 @@ OUT = ROOT / 'output/settlement_supply_calibration_20261113'
 KCAL = 2500.0 * 365.0; HOURS = np.array([336.0, 208.0]); REAP = np.array([48.0, 32.0]); FARMED, SOWN = 0.6, 0.6
 
 
-HARVEST = ROOT / 'output/land_people/earth/earth.npz'; PEOPLE = 'committed'
+HARVEST = ROOT / 'output/land_people/earth/earth.npz'; PEOPLE = 'committed'; NO_EGYPT = False
 
 
 def rebuilt_people(lat, lon):
@@ -56,6 +56,10 @@ def prepare(x):
     g['density'] = density                           # committed field, or the selected harvest grid's own people (amendment A1)
     world = P.world_of(g, x['road']); st = N.statics(world); cl = N.climate(world, st)
     nodes, res, lon, info = PILOT.cities(x); width = x['land'].shape[1]
+    egypt = (x['lon'] >= 29.0) & (x['lat'] <= 32.0)
+    if NO_EGYPT:
+        keep = ~egypt.ravel()[nodes]; info = dict(info, egypt_cities_removed=int((~keep).sum()), egypt_residents_removed=float(res[~keep].sum()))
+        nodes, res, lon = nodes[keep], res[keep], lon[keep]; info['city_cells'] = len(nodes); info['residents'] = float(res.sum())
     places = [(int(n // width), int(n % width)) for n in nodes]
     ports = X.ports_of(places, st['water']); near = ndi.binary_dilation(st['basin'] > 0, iterations=1)
     river_places = [p for p in places if near[p]]
@@ -71,13 +75,13 @@ def prepare(x):
     wheat, barley, arable, inside = earth_fields(x['lat'], x['lon'])
     work = cereal_work(np.stack([wheat, barley]), HOURS, REAP, food_target=1e6)
     kcal_ha = np.where(work.crop > 0, 1e6 / np.where(work.crop > 0, work.land, 1.0), 0.0)
-    supply_land = x['land'] & x['allowed']
+    supply_land = x['land'] & x['allowed'] & (~egypt if NO_EGYPT else True)
     potential = np.where(supply_land, kcal_ha * 100.0 * float(x['cell_km']) ** 2 * arable * FARMED * SOWN, 0.0).ravel()
     people = np.where(supply_land, density, 0.0).ravel() * float(x['cell_km']) ** 2
     rural = people * (1 - res.sum() / people.sum())
     grown = field_support(potential, np.nan_to_num(work.hours).ravel(), np.nan_to_num(work.reaping).ravel(), rural_need_kcal=rural * KCAL)
     surplus = np.maximum(grown.produced_kcal - rural * KCAL, 0.0) / KCAL            # person-years
-    meta = dict(harvest_grid=str(HARVEST.relative_to(ROOT)), people_field=PEOPLE, cities=info, ports=len(ports), river_landings=len(river_places), model_people=float(people.sum()), rural_people=float(rural.sum()),
+    meta = dict(without_egypt=NO_EGYPT, harvest_grid=str(HARVEST.relative_to(ROOT)), people_field=PEOPLE, cities=info, ports=len(ports), river_landings=len(river_places), model_people=float(people.sum()), rural_people=float(rural.sum()),
         urban_share=float(res.sum() / people.sum()), potential_person_years=float(potential.sum() / KCAL),
         grown_person_years=float(grown.produced_kcal.sum() / KCAL), surplus_person_years=float(surplus.sum()),
         surplus_per_rural_person=float(surplus.sum() / rural.sum()), cells_below_rural_need=int(((grown.produced_kcal < rural * KCAL - 1) & (rural > 0)).sum()),
@@ -155,10 +159,10 @@ def run(out):
 
 if __name__ == '__main__':
     ap = argparse.ArgumentParser(); ap.add_argument('--out', type=Path, default=OUT)
-    ap.add_argument('--harvest', type=Path); ap.add_argument('--people', choices=('committed', 'rebuilt'), default='committed')
+    ap.add_argument('--harvest', type=Path); ap.add_argument('--people', choices=('committed', 'rebuilt'), default='committed'); ap.add_argument('--without-egypt', action='store_true')
     g_ = ap.parse_args()
     if g_.harvest: HARVEST = g_.harvest.resolve()
-    PEOPLE = g_.people; r = run(g_.out)
+    PEOPLE = g_.people; NO_EGYPT = g_.without_egypt; r = run(g_.out)
     print(json.dumps(r['world'], indent=1)); print(json.dumps(r['decision'], indent=1))
     for L, row in r['surface'].items():
         print(L, 'all', [round(f, 2) for f in row['all']['fed_share']], 'e95 all/west/east', row['all']['e95'], row['west']['e95'], row['east']['e95'])

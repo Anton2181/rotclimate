@@ -57,6 +57,14 @@
       "people": "With delta irrigation the people field changes where deltas are (Egypt above all). The rerun therefore takes BOTH cereal harvests and model people from the new grid (polity.earth.earth_people logic on it), so that labour and land are consistent; the committed people field is reported as a sensitivity. The 0.35% rebuild difference is thereby carried into the primary case and is stated.",
       "checks_declared": "Report every historical region's capacity before and after (regions.json), not just Egypt. The delta rule must not be tuned: s_fan, the 5 m gate and the 10 m3/s threshold are the map's values.",
       "decision_rules": "Unchanged. The rerun is judged by the same west/east and transfer rules, with all cities in the score including Egypt's."
+    },
+    {
+      "id": "A2_empire_without_egypt",
+      "date": "2026-11-13",
+      "made_after": "A1 was run: delta irrigation raises Egypt's capacity only from 2.3 M to 2.8 M (irrigated-equivalent area about 14,500 km2 against roughly 25,000 km2 historically cultivated) and the declared test is unchanged (fed at 270 km and one third: 78% -> 79%; east never reaches 95%). Model people in Egypt are about 1 M against 4.5-5 M. Also known: the post-hoc score without Egyptian cities (west 0.38, east 0.47 at 270 km).",
+      "variant": "Remove Egypt from the system: city cells and supply land at longitude >= 29 E and latitude <= 32 N neither demand nor supply grain. Everything else, and every decision rule, as declared. Base harvest grid and committed people, as in the original declaration.",
+      "status": "Not blind: its approximate outcome was visible in the post-hoc diagnostic. It removes the empire's granary, so Rome and other importers are judged without Egyptian grain, which is conservative for them.",
+      "what_it_cannot_do": "It does not repair the harvest model. A flood-basin irrigation rule for desert rivers, fitted and tested on Earth, is the outstanding upstream work."
     }
   ]
 }
