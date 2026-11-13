@@ -107,8 +107,10 @@ Fully watered seasons can tie in the current crop optimizer; choosing the best
 flood window after inspecting yields would add hidden selection. Find defensible
 independent test regions before scoring irrigated area or population capacity.
 
-Earth climate/topography caches from the previous agent are absent in this
-executor. Restore public inputs before a field build; do not overwrite committed
-reference regional summaries with an unreviewed rebuild. Require Nile gain and
+Earth climate/topography inputs have since been restored and independently
+checked in a separate baseline; see
+[restoration audit](EARTH_HARVEST_RESTORATION_20261113.md). The rebuilt Roman
+field retains the previously recorded +0.354% drift, and default reference
+summaries remain unchanged. Require Nile gain and
 Mesopotamian non-inflation together, then rerun the whole-empire calibration.
 Timing by itself is not authorization for a default production increase.

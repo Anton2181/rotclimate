@@ -22,6 +22,14 @@ where capacity is already too high. New gauge source/timing preflight is reviewe
 check is UNSCORED (source begins1936), so no transfer success or adoption.
 Report: FLOOD_BASIN_SEASONALITY_20261113.md.
 
+Public Earth inputs now restored with pinned source digests and a separate
+harvest baseline. Arable hash exactly matches earlier calibration;11regional
+aggregates independently checked;Roman field drift+0.353876%reproduces the earlier
+rebuild. Egyptstillunderproduces. Default regional summary andall904Earthfit files
+unchanged. Report:EARTH_HARVEST_RESTORATION_20261113.md. Cache restoration is now
+reproducible after executor resets;freight wind caches remain a later
+supply-calibration dependency (Roman city/area CSVs are already present).
+
 Next dependency: explicit water budget and cropcalendar/tie policy, qualified
 independent region evidence, then frozen field test of Nile gain AND Mesopotamian
 noninflation before wholeempire supply calibration. Timing is not irrigable area.

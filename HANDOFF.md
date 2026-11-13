@@ -1,4 +1,18 @@
-# FLOOD TIMING INPUTS REVIEWED; WATER-BUDGET RULE NEXT — 13 November 2026
+# EARTH INPUTS RESTORED; FLOOD TIMING REVIEWED; WATER-BUDGET RULE NEXT — 13 November 2026
+
+After timing checkpoint7987fb33,persisted with public-input restoration.
+WorldClim5m all5ZIPs,NaturalEarthrivers,ETOPOwindow andslope arable cache restored.
+Separate harvest baseline output/land_people/earth_restored_20261113/earth.npz
+(ignored32MB),with committed regions.json and audit receipts. ArableSHA matches
+previous calibration EXACTLY. Independent11region audit:areas andirrigation shares
+match reference;capacity differences0–1.44%;Roman field drift+0.353876%,sameas
+previous agent'srebuild. Egyptstill2.32M,notfixed. Originalregions.json andall904
+Earthfitfiles unchanged. Report reports/EARTH_HARVEST_RESTORATION_20261113.md.
+Recreate afterreset with scripts/restore_earth_harvest_inputs.py,then
+scripts/review_earth_harvest_restoration.py. Pinmanifest:
+data/earth_harvest_public_sources_20261113.json. No full supplyrerun yet;freight
+wind caches are missing;Roman cities.csv/areas.csv ARE present. Use explicit restored
+harvest path;never silentlyreplace anoldnumericbaseline.
 
 Resumed latest remote ec0d09c0 on canonical claude/friendly-turing-43ygeu, not the
 older source-audit queue. Release-3 settlements and owner-adopted marketed share
@@ -29,9 +43,9 @@ despite the repository's general *.npz ignore rule.
 NEXT: water-budget/delivery/cropcalendar primitive and defensible independent
 test regions; declare before new area/capacity scores. Do not multiply terrain
 area by phase diagnostic and call it full irrigation. Cropoptimizer has fully
-watered season ties; calendar tie policy must be explicit. Restore ignored Earth
-WorldClim/ETOPO/rivers caches (absent in THIS executor), preserve committed region
-summaries. Require Nile gain AND Mesopotamian noninflation, then unchanged
+watered season ties; calendar tie policy must be explicit. Earth
+WorldClim/ETOPO/rivers caches are NOW restored in THIS executor;preserve committed
+region summaries. Require Nile gain AND Mesopotamian noninflation, then unchanged
 wholeempire supply calibration. Find qualified independent gauge/irrigation
 evidence; Indus is not validated by the current source.
 
