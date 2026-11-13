@@ -76,15 +76,16 @@ def main():
     for path, digest in preserved.items():
         if sha(ROOT / path) != digest: raise ValueError('Original atlas packet modified: ' + path)
     write(DATA / 'settlement_release2.json', dict(version=1, status='earth_calibrated_sizes_legacy_placement_optional',
-        default_adoption=False, placement_test_passed=earth['placement']['passed'], size_gate_passed=g['gate']['passed'],
+        default_adoption=True, default_option='release2_central', default_basis='owner instruction, plan amendment A5', placement_test_passed=earth['placement']['passed'], size_gate_passed=g['gate']['passed'],
         packets=packets, fantasy_sha256=sha(OUT / 'fantasy.json'), earth_results_sha256=sha(OUT / 'results.json'),
         publisher_sha256=sha(Path(__file__)), report='../../reports/SETTLEMENT_RELEASE2_20261113.md'))
     page = DATA.parent / 'index.html'; html = page.read_text()
     tag = re.search(r'<script src="settled-reach\.js"[^>]*></script>', html).group(0)
     if 'data-settlement-release2-enabled' not in tag:
         page.write_text(html.replace(tag, tag.replace('></script>', ' data-settlement-release2-enabled></script>')))
-    shutil.copyfile(ROOT / 'atlas/settled-reach.js', DATA.parent / 'settled-reach.js')
-    write(OUT / 'atlas_publication.json', dict(status='published_optional_release2_sizes', defaults_unchanged=True,
+    for name in ('settled-reach.js', 'evidence.js'):
+        shutil.copyfile(ROOT / 'atlas' / name, DATA.parent / name)
+    write(OUT / 'atlas_publication.json', dict(status='published_release2_sizes_default_settlements_map', defaults_unchanged=False,
         manifest_sha256=sha(DATA / 'settlement_release2.json'), original_packets_sha256=preserved, publisher_sha256=sha(Path(__file__))))
     print('published', {m: [o['value'] for o in p['options']['reach_towns']] for m, p in packets.items()})
 

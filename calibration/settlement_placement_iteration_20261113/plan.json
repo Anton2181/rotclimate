@@ -1,0 +1,23 @@
+{
+  "date": "2026-11-13",
+  "status": "declared_before_any_new_placement_score",
+  "purpose": "Next placement iteration after fixed18_L800 failed its quadrant rule (5 of 8). Test whether a weaker heartland prior fixes the regional split of town counts, with the strength chosen on one Earth pool and judged on the other.",
+  "known_before_declaration": [
+    "Quadrant results of production and fixed18_L800 (output/settlement_release2_20261113/results.json): the finalist loses Han south-west, Han south-east and Rome north-east. Centre counts per quadrant against observed cells: Han finalist 97/1012/24/106, production 160/377/394/308, observed 217/841/87/119.",
+    "Whole-pool scores of the 224 earlier draws. Among them, fixed spacing was only run with L 800 km or no prior on older inputs; intermediate strengths at fixed 18 km spacing have not been scored on the current inputs.",
+    "All pools are exposed. The family below was chosen after seeing where L800 fails, so this is development with a cross-pool check, not blind validation."
+  ],
+  "family": {
+    "allocator": "Unchanged fixed-count greedy allocator: natural production count, legacy site score, no two centres within 18 km, weight multiplied by exp(-D/L) with D the supported core travel distance.",
+    "only_free_parameter": "L in km",
+    "values": [800, 1200, 1600, 2400, 3200, 4800, "none"],
+    "control": "L 800 must reproduce the committed fixed18_L800 positions exactly."
+  },
+  "metric": "Same quadrant definition and Q as the release-2 confirmation test. For each variant, pool and quadrant: Q of the variant and Q of production.",
+  "cross_pool_selection": "For each pool, choose the L with the highest mean of the four quadrant Qs on the OTHER pool (ties to the larger L, i.e. weaker prior). Judge this pool's four quadrants and whole-pool Q with that L.",
+  "pass_rule": "The cross-selected variants beat production in at least 6 of the 8 pool-quadrants AND in both whole pools.",
+  "if_pass": "Adopt for the fantasy map the single L with the highest mean of all eight quadrant Qs; rebuild positions, tracks, hinterlands, sizes, collection catchments and ledgers, publish as the Settlements default and say plainly that the test is cross-pool development, not blind.",
+  "if_fail": "Positions stay as they are. Report every variant and the count split by quadrant. The next step is then a regional count model, not another prior strength.",
+  "reported_regardless": "All 7 variants x 2 pools x 4 quadrants, centre counts against observed cells per quadrant, whole-pool Q, and what an in-pool (non-crossed) selection would have chosen.",
+  "review": "Independent recomputation of placements and scores; byte replay."
+}

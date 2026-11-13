@@ -1,4 +1,4 @@
-// Browser check: release-2 size maps load as normal Settlements options; defaults unchanged.
+// Browser check: release-2 size maps; the sliding map is the Settlements default (owner decision A5).
 // Usage: node scripts/check_settlement_release2_browser.js <out-dir> [base-url]
 const { chromium } = require('playwright'); const fs = require('fs'); const path = require('path'); const crypto = require('crypto');
 const root = path.resolve(__dirname, '..'); const out = process.argv[2]; const base = (process.argv[3] || 'http://127.0.0.1:8766') + '/atlases/earth_fit/';
@@ -15,7 +15,8 @@ const assert = (c, m) => { if (!c) throw new Error(m); };
       await page.goto(base + '#layer=reach_towns&climate=' + mode, { waitUntil: 'domcontentloaded' });
       await page.waitForFunction(() => document.querySelectorAll('#variant option').length > 2, null, { timeout: 120000 });
       const initial = await page.locator('#variant').inputValue();
-      assert(initial === 'joint365', 'default changed: ' + initial);
+      assert(initial === 'release2_central', 'default is not the release-2 sliding map: ' + initial);
+      assert(await page.locator('#settled-section').isHidden(), 'ledger panel shown on default');
       const values = await page.$$eval('#variant option', o => o.map(x => x.value));
       for (const option of packet.options.reach_towns) {
         assert(values.includes(option.value), 'option hidden without the experimental switch');
