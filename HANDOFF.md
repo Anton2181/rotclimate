@@ -1,3 +1,45 @@
+# Source-filled destination audit complete — 13 November 2026
+
+CONTINUE AFTER PUSH. Canonicalclaude/friendly-turing-43ygeu only. Latestremote
+203fc49b sourcepickupaudit;earlier049ba98e ruralmeals,38d918bd 8newoptional
+foodcheckedpointmaps. Current source_filled_destination_20261113 declared203fc49b
+BEFOREoutputs,ALL48A/Brows complete. AexactpriorOWNcalendarC packedraw*.95;
+Bsource-withdrawnraw*.95ONCE atSAMEreturns/onebinlag. IDsjoinonce. All24plans
+includeallactive/partialproviders. Conditionalpeople/capacities/jobs/maps unchanged.
+
+Independent64,804,832joins/9,816,816returnevents/38,736foodinventories/864actors
+passedscalarstocks/bracketedroots/conservation. Aexact, BfoodpasssubsetA. ALL
+source ruralfailuresretained;allsource/work/destinationconjunctionZERO. Selected
+300hfoodpassesraw652->14/671->15,corr696->16/710->17;aggregate gap+0.0141–0.0151pp.
+Not observedhunger/mortality. 50controls BEFOREproduction. Fresh49model/field/
+eventfiles+3exports exact. 50,088providerCSVrows+24scoped local-source/active-
+destinationmassledgersreviewed. Transportloss .05ONLYwithdrawnraw,unfillednot
+actualloss;outside/inactivedestmealsunscored. All791Earthassets unchanged.
+
+Normal48rows/2figures/58downloads #source-filled-destination;report
+reports/SOURCE_FILLED_DESTINATION_20261113.md. Bothfiguresposted. Browser48rows/
+2figures/59links/keyboard/mobile/themes/failurepassed. Windows2104byte-exactassets andverifiedr44release passed;finalpins/52fresh
+files/58publishedbytes pass.
+Output source_filled_destination_20261113:24events+24fields NPZ,results,controls,
+review,replay,providersCSV,transport_and_chain_massJSON,exports/reviews/replay,
+presentation,browser/evidence/review. Headers0basedactor/providerIDs.
+
+NEXT declaredcalibration/loss_aware_source_reserve_20261113/plan.json:derive
+minimum initial physical reserve r*expm1(hT)/h, zerolossrT. Rates/days/loss units
+explicit;no extrafood orfit tooldcases. Needversionedprimitive,zero/finite/
+monotonicity/insufficientharvest/quota-mass controls andindependentrootchecks
+BEFOREanynewcohort. Laterfixedsourcevariantusesanalytic365daycoveragecapacity,
+SAMEproduction/people/harvest/exportcapacity/quota/all24jobs;reportcapacityextra
+andproduction/surplusfailures. Itis mathematicalscenario,not actualbuildings/
+utilization/cost/adoption. DoNOTjusttune capacityuntilearlierrows pass.
+
+Wholeprogramme release1–4/S1–S5,datedoccupation/sizes/roles/failedtransfer,crew
+foodlocation/complete diets/household/draftwork,mobile/nonstate/unaffiliated and
+independentphysicsqueue remainopen. Readcurrentroadmapatcontinuations.
+Scientific.venv/bin/python;globalpythonPlaywright+/usr/bin/chromium,HTTP8766.
+Directreviewedpubthenbuild_fit_hubAFTERfinalpub;stageassets/releasebeforeWindows
+checker. Historicalall-evidencewriterstillmissingprivateVidarbha cache. No subagents.
+
 # Physical source pickup audit complete — 13 November 2026
 
 KEEPGOING AFTER PUSH. Canonical claude/friendly-turing-43ygeu only. Latestpushed
