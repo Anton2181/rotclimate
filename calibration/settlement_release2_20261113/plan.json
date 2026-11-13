@@ -76,6 +76,15 @@
       "new_rule": "Each town first draws residents from its own hinterland cells up to half of hinterland people. Any excess is then drawn from the remaining rural people of all land cells within the smallest radius among 120, 240, 480, 960 and 1920 km of the town that holds at least four times the excess, proportionally to remaining rural people, largest excess first. If no radius suffices the town is capped at what a quarter of the 1920 km pool supplies and the shortfall is reported. No people are created; rural people stay nonnegative.",
       "not_changed": "Size model, coefficients, sigma, seed, lore ordering, density scenarios, cereal check definition, publication rule. The local cereal check uses the final rural people.",
       "status": "Post-hoc change to an unfitted accounting rule; both the capped first build (in the commit history of this output) and this version are disclosed in the report."
+    },
+    {
+      "id": "A2_lore_rank_over_unmarked",
+      "date": "2026-11-13",
+      "made_after": "The A1 fantasy build (not published). Known outcomes: seven unmarked proposed sites drew 230,000-253,000 central residents, at or above the imperial capital (239,642); the 90 marked fortified towns (median 22 ha) came out smaller than the typical unmarked town (32 ha), because the original rule ordered residuals among marked places only.",
+      "reason": "On Earth the size model explains almost none of which city is large (held-out R2 about 0), so the assignment of the calibrated sizes to particular places is not an Earth result at all. The campaign map's own premise is that it marks the notable walled places; an unmarked metropolis contradicts it.",
+      "replaces": "fantasy_rebuild.sizes lore-ordering sentence",
+      "new_rule": "The same seeded residual draws are used. The largest residuals go, in order, to imperial capital, major imperial cities, fortified cities, then fortified towns (ties by larger hinterland). All remaining residuals go to unmarked towns, imperial forts and imperial monasteries in site order, in their original draw sequence. The set of residuals, hence the calibrated size distribution, is unchanged.",
+      "status": "A lore assumption with no Earth evidence, disclosed as such. The A1-only assignment remains in the commit history."
     }
   ]
 }
