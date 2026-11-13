@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Eight NEW funded visit plans,16 full physical calendars and48 policy food outcomes independently reviewed. Each selected provider uses ONE whole calendar and its OWN cereal test|Fixed local/outside rural audit complete: all positive-person origins fail immediate physical clipping with continuous meals at365day capacity. Next explicit rural/export source events and crew rations/location;destination checks cannot qualify complete provisioning|
+|Release 3: shared-ledger fantasy rebuild|Eight NEW funded visit plans,16 full physical calendars and48 policy food outcomes independently reviewed. Each selected provider uses ONE whole calendar and its OWN cereal test|Fixed local/outside rural audit complete: all positive-person origins fail immediate physical clipping with continuous meals at365day capacity. All24two-store source pickup plans reviewed;64.8M raw pickup requests retain deficits and rural failures. Next propagate source-filled cargo into matched destination diagnostics;crew rations/location and complete provisioning remain open|
 |Release 4: normal numeric publication|All32visit/48food rows,2figures,58,436provider outcomes and240calendar/food packets published;8optional food-checked point maps|Independent map masks,pixels,provider stock/food flags/CSVs and fresh244model+22map+12download files pass. Preserve all766earlier data/assets;3UI integration files tracked before/after. No calibrated/default adoption|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|43,164,640packed trip checks,15,494,400worker-bins and38,736active food inventories independently reviewed in new baseline/joint calendars;physical work and own food flags separate|All1,935,112origin/account inventories and967,556CSVrows independently checked;16rows/2figures/9freshfiles. Existing365day capacity cannot cover annual meals plus decay under one harvest/immediate clip. Next two-store rural/export event primitive and actual pickup requests;crew rations/location,complete work/diets and empirical availability remain open|
+|S4: complete resources and work|43,164,640packed trip checks,15,494,400worker-bins and38,736active food inventories independently reviewed in new baseline/joint calendars;physical work and own food flags separate|All1,935,112origin/account inventories and967,556CSVrows independently checked;16rows/2figures/9freshfiles. Existing365day capacity cannot cover annual meals plus decay under one harvest/immediate clip. Two-store primitive21controls and200independent synthetic cases pass;all24fixedplans/64,804,832requests/463,992originyears/432actors independently checked. Source rural+export conjunction ZERO throughout. Next source-filled destination propagation;crew rations/location and complete work/diets remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -716,3 +716,29 @@ source_food_events_20261113 implements two physical stores,quota-only transfers,
 explicit raw withdrawals/missing cargo and independentperiodic/mass controls;
 then all16fixedpolicies/8selected actualrequest plans,withoutfilteringruralfailures.
 Push andCONTINUE.
+
+## Whole-programme review after physical source pickups — 13 November 2026
+
+Protocol049ba98e precedes all24fixed source event cases. Rural harvest/continuous
+meals/physicalclip precede overflow×0.1quota into a separate fixed export store;
+raw pickup=start+outward+.25handling,no source0.95 retention. Original job IDs/
+paths/cargo/partial sources retained;all64,804,832requests and463,992two-store
+originyears/432actorrows independently checked. 21newprimitive controls plus
+event/chronology=37pass beforecohorts;200independent synthetic cases pass.
+Fresh25model files and3CSVexports exact;all463,992origin/25,044provider CSVrows
+checked. All791Earthassets anddestinationstocks remain byteexact.
+
+Export-only provider passes840/861raw600h,44/724raw300h,869/889corrected600h,
+31/754corrected300h. Sameflags acrosscrews/policies,but rawunfilled amounts differ
+with pickup phase. Aggregate unfilled0.000342–0.035840% doesNOTqualify every source.
+Everypositive-person rural origin STILLfails the frozen365-day source convention;
+sourceboth-pass providersZERO inALL24plans. No newcapacity/date/resident fit or
+actualshipment qualification. Normal24rows/2figures/fullrequestNPZ/CSVs published.
+
+Revisited release1–4/S1–S5: destinationcalendar/food necessarygate cannotrepair
+sourcefood. Counts/placement preparation doesnotqualify datedoccupation/sizes/
+roles;failedtransfer staysfailed;complete diets/household/draftwork,crewcarried
+food/location,mobile/nonstate/unaffiliated resources andphysicsqueue remainopen.
+Next declaredsource_filled_destination_20261113 keepsall24jobs/returntimes/imposed
+lag,residents/stores fixed;compareoldpackedC food tosource-withdrawn raw×.95ONCE.
+Retain ruralfailures before conjunction;no newmap/default adoption. PushCONTINUE.

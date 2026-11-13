@@ -1,3 +1,45 @@
+# Physical source pickup audit complete — 13 November 2026
+
+KEEPGOING AFTER PUSH. Canonical claude/friendly-turing-43ygeu only. Latestpushed
+049ba98e ruralmeal audit;38d918bd published8new foodchecked optionalpointmaps.
+Current source_food_events_20261113 declared049ba98e,ALL24fixed baseline/joint/
+previouslyselected calendars now independentlyreviewed. 64,804,832rawrequest
+IDs/clocks/cargo,463,992origin two-storeyears/432actors. Ruralharvest fillsphysical
+365day store,overflow×.1only entersexportstore;rawsourcepickupsnot.95retained.
+Parentexportcapacity fixed export_harvested (365day reserve);no tune/date/replan.
+
+Everypositiveperson ruralorigin STILLfails exposed365day sourceconvention.
+SourceBOTHprovidersZERO inall24. Export-only passes840/861raw600,44/724raw300,
+869/889corr600,31/754corr300;sameflags acrosspolicies/crews,butrawunfilledamounts
+differ0.000342–0.035840%. Not observedfamine/actualauthority. Deststocks/maps
+unchanged791assets. Fullperorigin/source/store/eachpickup request/time/ID/raw
+withdrawal/deficit NPZs;463992origin+25044providerCSVrows allindependentlychecked.
+
+21newprimitivecontrols+event/chronology=37beforecohorts. Independent200synthetic
+cases/1539requests passedbisection+scalar review,largest1.407e-13energy. Full
+actualreviewerror4.523e-15energy. Fresh25model+3CSVexportfilesbyteexact. Normal
+24rows/2figures/35downloads in #source-pickup-calendars;reportSOURCE_PICKUP_
+CALENDARS_20261113.md. Bothfiguresposted. Browser24rows/2figures/36links/keyboard/mobile/themes/failurepassed.
+Windows2046assets/verifiedr44release passed.
+
+NEXT declared calibration/source_filled_destination_20261113/plan.json BEFORE
+nextoutputs. All24sourceplans compareAexactpriorC packedraw*.95 versusBSAMEjobs/
+returntimes butsourcewithdrawnraw*.95ONCE. Desttime=((month+1)*365/12+end/7)%365.
+Originalonebinlagretained;sourcepickup andreturndifferentclocks. Keep allactive/
+partialproviders,48A/Brows,fullfields/events/CSV. A priorbaseline/joint andselected
+foodEXACT, BfoodpasssubsetA. Propagatesourceexport/ruralfail flags separately:ALL
+sourceboth stillfail,nonewdestpassrepairsit. Noauto map/default/capacity/resident
+adoption. Source-filledjoinprototype polity/source_filled_deliveries.py has12newcontrols;
+combinedjoin/event/partition/source50tests pass. Needfullcohortbuilder,indep
+scalarroots/fullcargo/mass,bytefresh,normalpub.
+
+Allrelease1–4/S1–S5/datedoccupancy/sizes/roles/failedtransfer/completeworkdiets/
+crewcarriedfoodlocation/mobile/nonstate/unaffiliated andphysicsqueue remainopen.
+Readcurrentroadmapwholeprogramme everycontinuation. .venv/bin/pythonscience,global
+pythonPlaywright+/usr/bin/chromium,HTTP8766. Directreviewedpubthenbuild_fit_hub
+AFTERlastpub;stageassets/releasebeforeWindowschecker. Oldhistoricalwriterstill
+missingprivateVidarbha cache. No subagents. Pushisacheckpoint;CONTINUE.
+
 # Fixed rural source meal audit complete — 13 November 2026
 
 KEEP GOING AFTER PUSH. Canonical claude/friendly-turing-43ygeu. Latest pushed
