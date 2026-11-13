@@ -1,3 +1,18 @@
+# WIDER GRAIN SUPPLY SCENARIO PUBLISHED — 13 November 2026 (fifth pass)
+
+Report: reports/SETTLEMENT_WIDE_SUPPLY_20261113.md. Plan: calibration/settlement_wide_supply_20261113.
+polity/wide_supply.py + scripts/build|review|publish_wide_supply_release3.py. Transport paid in
+grain (1 - c/270 road-km eq., existing trade costs), hinterland to cheapest town, then
+cheapest-first shipments between towns. NOT fitted or Earth-tested.
+Corrected headline (sliding density, 10% of surplus marketed): 816 self-fed, 171 with imports,
+66 largest short, 73% of residents fed. At 33% marketed, or with flat density, all fed.
+Atlas: Settlements options release3_supply / release3_supply_x33 (data/release3_supply.json);
+default maps' white centre now = fed including imports.
+
+OPEN OWNER DECISION: extraction share (10% legacy vs about one third) before calibrated residents
+drive the reach chain; at 10% the 66 largest cities would be cut. Not yet done: feeding
+supply-limited residents into review_settlement_integration (civilian_request).
+
 # DOWNSTREAM LAYERS REBUILT ON RELEASE-3 TOWNS — 13 November 2026 (fourth pass)
 
 Report: reports/SETTLEMENT_DOWNSTREAM_20261113.md. Plan: calibration/settlement_downstream_20261113.

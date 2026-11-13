@@ -52,12 +52,12 @@ window.SettledReachAtlas=(()=>{
       }catch(e){foodCheckedVisits=null;}
     }
     let release2=null;
-    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json'],['data-release3-reach-enabled','data/release3_reach.json']]){
+    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json'],['data-release3-reach-enabled','data/release3_reach.json'],['data-release3-supply-enabled','data/release3_supply.json']]){
       if(!document.querySelector('script['+flag+']'))continue;
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh(file))));
         const candidate=supplement.packets[mode];
         if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Calibrated settlement parent/climate mismatch');
-        release2={options:{reach_towns:[...(candidate.options.reach_towns||[]),...(release2?.options.reach_towns||[])],reach_defacto:[...(candidate.options.reach_defacto||[]),...(release2?.options.reach_defacto||[])]}};
+        release2={options:{reach_towns:[...(release2?.options.reach_towns||[]),...(candidate.options.reach_towns||[])],reach_defacto:[...(candidate.options.reach_defacto||[]),...(release2?.options.reach_defacto||[])]}};
       }catch(e){}
     }
     if(document.querySelector('script[data-release3-layers-enabled]')){

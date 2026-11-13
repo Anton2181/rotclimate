@@ -27,6 +27,11 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Wider supply, 13 November 2026: a declared grain-supply scenario (transport paid in grain on
+existing freight costs) feeds 987 of 1,053 release-3 towns at 10% extraction and all at one third;
+see [SETTLEMENT_WIDE_SUPPLY_20261113.md](SETTLEMENT_WIDE_SUPPLY_20261113.md). Not Earth-tested.
+Open: extraction share, then calibrated residents in the reach chain.
+
 Downstream, 13 November 2026: reach, trade, imperial access, administrative links and
 supply-supported reach are rebuilt on the release-3 town positions with unchanged rules and
 shown by default; see [SETTLEMENT_DOWNSTREAM_20261113.md](SETTLEMENT_DOWNSTREAM_20261113.md).

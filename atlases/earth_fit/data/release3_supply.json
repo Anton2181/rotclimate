@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "status": "wide_grain_supply_scenario_not_fitted",
+  "packets": {
+    "raw": {
+      "shape": [
+        463,
+        1000
+      ],
+      "parent_payload_sha256": "20f8f9f4568edc7bd89f6dd688c16bbfe6d0eda7722dbf142e0043826e8804c0",
+      "expected_harvest_fingerprint": "860ad09ef670f956f827a211ec1ec0f4960b0df1236cc7bc632600f4fec1b197",
+      "options": {
+        "reach_towns": [
+          {
+            "value": "release3_supply",
+            "label": "Release 3 \u00b7 grain supply \u00b7 10% of surplus grain marketed",
+            "note": "Scenario, not an Earth test: can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets 10% of its cereal surplus to the town it reaches most cheaply; towns with excess ship to towns in need, cheapest link first. Transport is paid in grain: road haulage eats a load's whole value at about 270 km (Duncan-Jones), and sea and river carriage cost 1/28 and 1/5 as much per km (Diocletian's Price Edict). Result: 801 towns are fed by their own hinterland, 166 with imports and 67 stay short; 72% of town residents are fed. Of 19.7 M person-years of marketed grain, 6.4 M are consumed by transport. Wheat and barley only; no other foods, prices, shipping capacity, storage or state grain fleets. Town sizes are not changed by this map.",
+            "integrated_support": false,
+            "release3": true,
+            "file": "release3/supply/raw/supply_central_x10.webp",
+            "file_sha256": "cc82f088da8e4d3d64fee4c45717c629747cd42e2db25758761ddc5e9aa09b9a",
+            "download": "release3/supply/raw/towns.csv",
+            "items": [
+              {
+                "color": "#3f8f5f",
+                "label": "Fed by its own freight hinterland"
+              },
+              {
+                "color": "#3f78b4",
+                "label": "Fed with grain shipped from other towns"
+              },
+              {
+                "color": "#c8503a",
+                "label": "Still short of grain"
+              },
+              {
+                "color": "#5a6f8a",
+                "label": "Lines: the 400 largest grain shipments"
+              },
+              {
+                "color": "#ccc7bd",
+                "label": "Darker land: beyond grain-carrying reach of any town"
+              }
+            ],
+            "caption": "A declared scenario on existing freight costs; nothing is fitted to Earth."
+          },
+          {
+            "value": "release3_supply_x33",
+            "label": "Release 3 \u00b7 grain supply \u00b7 one third of surplus grain marketed",
+            "note": "Scenario, not an Earth test: can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets one third of its cereal surplus to the town it reaches most cheaply; towns with excess ship to towns in need, cheapest link first. Transport is paid in grain: road haulage eats a load's whole value at about 270 km (Duncan-Jones), and sea and river carriage cost 1/28 and 1/5 as much per km (Diocletian's Price Edict). Result: 963 towns are fed by their own hinterland, 71 with imports and 0 stay short; 100% of town residents are fed. Of 65.2 M person-years of marketed grain, 11.3 M are consumed by transport. Wheat and barley only; no other foods, prices, shipping capacity, storage or state grain fleets. Town sizes are not changed by this map.",
+            "integrated_support": false,
+            "release3": true,
+            "file": "release3/supply/raw/supply_central_x33.webp",
+            "file_sha256": "5fa9b64786801012a3cf2b81586ea2f6c5f5451ef6c4d5e7156b2732c0eae850",
+            "download": "release3/supply/raw/towns.csv",
+            "items": [
+              {
+                "color": "#3f8f5f",
+                "label": "Fed by its own freight hinterland"
+              },
+              {
+                "color": "#3f78b4",
+                "label": "Fed with grain shipped from other towns"
+              },
+              {
+                "color": "#c8503a",
+                "label": "Still short of grain"
+              },
+              {
+                "color": "#5a6f8a",
+                "label": "Lines: the 400 largest grain shipments"
+              },
+              {
+                "color": "#ccc7bd",
+                "label": "Darker land: beyond grain-carrying reach of any town"
+              }
+            ],
+            "caption": "A declared scenario on existing freight costs; nothing is fitted to Earth."
+          }
+        ]
+      },
+      "towns_csv": "release3/supply/raw/towns.csv",
+      "towns_csv_sha256": "a1ca4e83cb7735f26dc495bda96bf63cbd7d854201bf89e6ac006a346b8c53d3",
+      "summary": {
+        "central_x10": {
+          "density": "central",
+          "extraction": 0.1,
+          "towns": 1034,
+          "residents": 13450305.944174133,
+          "residents_fed": 9724874.313680153,
+          "fed_share_of_residents": 0.7230225359960967,
+          "self_sufficient_towns": 801,
+          "fed_with_imports_towns": 166,
+          "short_towns": 67,
+          "residents_in_short_towns": 6633672.408903594,
+          "shipments": 938,
+          "exporters": 777,
+          "importers": 227,
+          "ledger_person_years": {
+            "available": 19746925.600059666,
+            "sent_to_towns": 16426906.228907637,
+            "left_in_cells": 3320019.371152029,
+            "delivered_to_towns": 13413898.959424974,
+            "hinterland_transport": 3013007.269482663,
+            "eaten_from_hinterland": 5452234.394810518,
+            "shipped_between_towns": 7670499.276161896,
+            "received_between_towns": 4272639.918869637,
+            "between_town_transport": 3397859.357292259,
+            "unused_excess": 291165.28845256206,
+            "residual": -2.1404109589041095e-09
+          }
+        },
+        "central_x33": {
+          "density": "central",
+          "extraction": 0.33,
+          "towns": 1034,
+          "residents": 13450305.944174133,
+          "residents_fed": 13450305.944174131,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 963,
+          "fed_with_imports_towns": 71,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 232,
+          "exporters": 211,
+          "importers": 71,
+          "ledger_person_years": {
+            "available": 65164854.4801969,
+            "sent_to_towns": 54208790.55539521,
+            "left_in_cells": 10956063.924801696,
+            "delivered_to_towns": 44265866.56610242,
+            "hinterland_transport": 9942923.989292782,
+            "eaten_from_hinterland": 9574817.540399954,
+            "shipped_between_towns": 5219439.579259973,
+            "received_between_towns": 3875488.403774179,
+            "between_town_transport": 1343951.1754857942,
+            "unused_excess": 29471609.446442492,
+            "residual": 8.561643835616438e-09
+          }
+        },
+        "low_x10": {
+          "density": "low",
+          "extraction": 0.1,
+          "towns": 1034,
+          "residents": 5503952.209486345,
+          "residents_fed": 5503952.209486347,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 896,
+          "fed_with_imports_towns": 138,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 305,
+          "exporters": 248,
+          "importers": 138,
+          "ledger_person_years": {
+            "available": 18952927.608869918,
+            "sent_to_towns": 15643158.900127282,
+            "left_in_cells": 3309768.708742635,
+            "delivered_to_towns": 12747696.925967714,
+            "hinterland_transport": 2895461.9741595676,
+            "eaten_from_hinterland": 4632087.976241233,
+            "shipped_between_towns": 1142192.7714724499,
+            "received_between_towns": 871864.2332451124,
+            "between_town_transport": 270328.5382273376,
+            "unused_excess": 6973416.178254032,
+            "residual": 0.0
+          }
+        },
+        "low_x33": {
+          "density": "low",
+          "extraction": 0.33,
+          "towns": 1034,
+          "residents": 5503952.209486345,
+          "residents_fed": 5503952.209486347,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 1022,
+          "fed_with_imports_towns": 12,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 14,
+          "exporters": 14,
+          "importers": 12,
+          "ledger_person_years": {
+            "available": 62544661.10927072,
+            "sent_to_towns": 51622424.37042003,
+            "left_in_cells": 10922236.738850685,
+            "delivered_to_towns": 42067399.85569345,
+            "hinterland_transport": 9555024.514726585,
+            "eaten_from_hinterland": 5436261.536445762,
+            "shipped_between_towns": 76252.72143952722,
+            "received_between_towns": 67690.67304058406,
+            "between_town_transport": 8562.048398943156,
+            "unused_excess": 36554885.59780816,
+            "residual": 4.280821917808219e-09
+          }
+        }
+      }
+    },
+    "corrected": {
+      "shape": [
+        463,
+        1000
+      ],
+      "parent_payload_sha256": "b039184a57f178355272ad9cd0c62ee8be83fbeeac66dc9c3b10d54001a72f5f",
+      "expected_harvest_fingerprint": "2a1d449565288d50ca85ff4d9a64f710e053b10a0436b239cbdcbe67fca83ab4",
+      "options": {
+        "reach_towns": [
+          {
+            "value": "release3_supply",
+            "label": "Release 3 \u00b7 grain supply \u00b7 10% of surplus grain marketed",
+            "note": "Scenario, not an Earth test: can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets 10% of its cereal surplus to the town it reaches most cheaply; towns with excess ship to towns in need, cheapest link first. Transport is paid in grain: road haulage eats a load's whole value at about 270 km (Duncan-Jones), and sea and river carriage cost 1/28 and 1/5 as much per km (Diocletian's Price Edict). Result: 816 towns are fed by their own hinterland, 171 with imports and 66 stay short; 73% of town residents are fed. Of 20.0 M person-years of marketed grain, 6.5 M are consumed by transport. Wheat and barley only; no other foods, prices, shipping capacity, storage or state grain fleets. Town sizes are not changed by this map.",
+            "integrated_support": false,
+            "release3": true,
+            "file": "release3/supply/corrected/supply_central_x10.webp",
+            "file_sha256": "ccb34f73ccc0200c22a0d96c72e0e38d44fa8e0c600120371cd06b343fd014a5",
+            "download": "release3/supply/corrected/towns.csv",
+            "items": [
+              {
+                "color": "#3f8f5f",
+                "label": "Fed by its own freight hinterland"
+              },
+              {
+                "color": "#3f78b4",
+                "label": "Fed with grain shipped from other towns"
+              },
+              {
+                "color": "#c8503a",
+                "label": "Still short of grain"
+              },
+              {
+                "color": "#5a6f8a",
+                "label": "Lines: the 400 largest grain shipments"
+              },
+              {
+                "color": "#ccc7bd",
+                "label": "Darker land: beyond grain-carrying reach of any town"
+              }
+            ],
+            "caption": "A declared scenario on existing freight costs; nothing is fitted to Earth."
+          },
+          {
+            "value": "release3_supply_x33",
+            "label": "Release 3 \u00b7 grain supply \u00b7 one third of surplus grain marketed",
+            "note": "Scenario, not an Earth test: can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets one third of its cereal surplus to the town it reaches most cheaply; towns with excess ship to towns in need, cheapest link first. Transport is paid in grain: road haulage eats a load's whole value at about 270 km (Duncan-Jones), and sea and river carriage cost 1/28 and 1/5 as much per km (Diocletian's Price Edict). Result: 981 towns are fed by their own hinterland, 72 with imports and 0 stay short; 100% of town residents are fed. Of 66.1 M person-years of marketed grain, 11.1 M are consumed by transport. Wheat and barley only; no other foods, prices, shipping capacity, storage or state grain fleets. Town sizes are not changed by this map.",
+            "integrated_support": false,
+            "release3": true,
+            "file": "release3/supply/corrected/supply_central_x33.webp",
+            "file_sha256": "635a8d51d9b166b963645384e3b6e7876235b5f70e200bc0b427f65faaca7c5a",
+            "download": "release3/supply/corrected/towns.csv",
+            "items": [
+              {
+                "color": "#3f8f5f",
+                "label": "Fed by its own freight hinterland"
+              },
+              {
+                "color": "#3f78b4",
+                "label": "Fed with grain shipped from other towns"
+              },
+              {
+                "color": "#c8503a",
+                "label": "Still short of grain"
+              },
+              {
+                "color": "#5a6f8a",
+                "label": "Lines: the 400 largest grain shipments"
+              },
+              {
+                "color": "#ccc7bd",
+                "label": "Darker land: beyond grain-carrying reach of any town"
+              }
+            ],
+            "caption": "A declared scenario on existing freight costs; nothing is fitted to Earth."
+          }
+        ]
+      },
+      "towns_csv": "release3/supply/corrected/towns.csv",
+      "towns_csv_sha256": "a9f1131f131acf0ccbde5c0d0a0c65989df298d357ccd5b4aa5316b7ef63fb0a",
+      "summary": {
+        "central_x10": {
+          "density": "central",
+          "extraction": 0.1,
+          "towns": 1053,
+          "residents": 13621475.227176737,
+          "residents_fed": 9975133.507814266,
+          "fed_share_of_residents": 0.7323093381187149,
+          "self_sufficient_towns": 816,
+          "fed_with_imports_towns": 171,
+          "short_towns": 66,
+          "residents_in_short_towns": 6531425.024789101,
+          "shipments": 959,
+          "exporters": 793,
+          "importers": 230,
+          "ledger_person_years": {
+            "available": 20029009.936272107,
+            "sent_to_towns": 16741259.954079662,
+            "left_in_cells": 3287749.982192444,
+            "delivered_to_towns": 13734246.203176817,
+            "hinterland_transport": 3007013.7509028446,
+            "eaten_from_hinterland": 5664990.385766559,
+            "shipped_between_towns": 7758649.746152208,
+            "received_between_towns": 4310143.122047707,
+            "between_town_transport": 3448506.6241045003,
+            "unused_excess": 310606.0712580501,
+            "residual": 0.0
+          }
+        },
+        "central_x33": {
+          "density": "central",
+          "extraction": 0.33,
+          "towns": 1053,
+          "residents": 13621475.227176737,
+          "residents_fed": 13621475.227176733,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 981,
+          "fed_with_imports_towns": 72,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 228,
+          "exporters": 210,
+          "importers": 72,
+          "ledger_person_years": {
+            "available": 66095732.789697945,
+            "sent_to_towns": 55246157.84846288,
+            "left_in_cells": 10849574.94123507,
+            "delivered_to_towns": 45323012.4704835,
+            "hinterland_transport": 9923145.377979383,
+            "eaten_from_hinterland": 9780928.487651877,
+            "shipped_between_towns": 5022412.827182445,
+            "received_between_towns": 3840546.7395248576,
+            "between_town_transport": 1181866.0876575867,
+            "unused_excess": 30519671.15564917,
+            "residual": 4.280821917808219e-09
+          }
+        },
+        "low_x10": {
+          "density": "low",
+          "extraction": 0.1,
+          "towns": 1053,
+          "residents": 5585044.2805299545,
+          "residents_fed": 5585044.280529955,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 925,
+          "fed_with_imports_towns": 128,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 286,
+          "exporters": 232,
+          "importers": 128,
+          "ledger_person_years": {
+            "available": 19225541.351575516,
+            "sent_to_towns": 15949334.826074658,
+            "left_in_cells": 3276206.5255008605,
+            "delivered_to_towns": 13060300.180001104,
+            "hinterland_transport": 2889034.6460735532,
+            "eaten_from_hinterland": 4729866.388430614,
+            "shipped_between_towns": 1089204.5020846473,
+            "received_between_towns": 855177.8920993406,
+            "between_town_transport": 234026.60998530663,
+            "unused_excess": 7241229.289485846,
+            "residual": -2.1404109589041095e-09
+          }
+        },
+        "low_x33": {
+          "density": "low",
+          "extraction": 0.33,
+          "towns": 1053,
+          "residents": 5585044.2805299545,
+          "residents_fed": 5585044.280529955,
+          "fed_share_of_residents": 1.0,
+          "self_sufficient_towns": 1047,
+          "fed_with_imports_towns": 6,
+          "short_towns": 0,
+          "residents_in_short_towns": 0.0,
+          "shipments": 8,
+          "exporters": 8,
+          "importers": 6,
+          "ledger_person_years": {
+            "available": 63444286.460199215,
+            "sent_to_towns": 52632804.92604637,
+            "left_in_cells": 10811481.534152843,
+            "delivered_to_towns": 43098990.59400365,
+            "hinterland_transport": 9533814.332042722,
+            "eaten_from_hinterland": 5511629.813903879,
+            "shipped_between_towns": 82102.41884811092,
+            "received_between_towns": 73414.46662607635,
+            "between_town_transport": 8687.95222203457,
+            "unused_excess": 37505258.36125166,
+            "residual": 0.0
+          }
+        }
+      }
+    }
+  },
+  "results_sha256": "21c291d3c4693a82227db59c653cf089b55d26ceb89d8f03cbcf6f70266162ab",
+  "publisher_sha256": "9cdd9df84bafa4789b59e5011fda97eb6b3bdef8e5ad4b34a533fdb71f86d953",
+  "report": "../../reports/SETTLEMENT_WIDE_SUPPLY_20261113.md"
+}
