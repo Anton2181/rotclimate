@@ -27,6 +27,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Release-3 result, 13 November 2026: placement family B (density-adaptive spacing plus an
+800 km heartland prior, count fixed) passed its declared cross-pool rule in 8 of 8 quadrants;
+fantasy towns, tracks, sizes and ledgers are rebuilt and published as the default Settlements
+map by owner decision. Development/cross-pool evidence only. See
+[SETTLEMENT_RELEASE3_20261113.md](SETTLEMENT_RELEASE3_20261113.md). Next: downstream reach,
+trade and administration on the new towns; blind transfer when the global cache returns.
+
 Release-2 result, 13 November 2026 (later session): town SIZES pass a declared
 province-blocked gate on the official Roman areas and are published as optional
 Settlements maps; the placement finalist fixed18_L800 failed its declared quadrant

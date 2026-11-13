@@ -5,16 +5,18 @@ import numpy as np
 import pandas as pd
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'output/settlement_release2_20261113'; DATA = ROOT / 'atlases/earth_fit/data'
+EARTH = ROOT / 'output/settlement_release2_20261113'; DATA = ROOT / 'atlases/earth_fit/data'
+R3 = len(sys.argv) > 1 and sys.argv[1] == 'release3'      # rebuilt positions
+OUT = ROOT / 'output/settlement_release3_20261113' if R3 else EARTH; PREFIX = 'placed' if R3 else 'fantasy'
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
-R = json.loads((OUT / 'fantasy.json').read_text()); E = json.loads((OUT / 'results.json').read_text())
+R = json.loads((OUT / 'fantasy.json').read_text()); E = json.loads((EARTH / 'results.json').read_text())
 problems = []; checked = {}
 coef = E['sizes']['primary']['models']['M1']['full_coefficients']; sigma = E['sizes']['primary']['models']['M1']['heldout_sigma']
 lo, hi = E['sizes']['primary']['area_range_ha']
 for mode in ('raw', 'corrected'):
     folder = DATA / ('corrected' if mode == 'corrected' else '')
-    sites = json.loads(gzip.decompress((folder / 'settled_reach.json.gz').read_bytes()))['sites']
-    f = np.load(OUT / f'fantasy_{mode}_fields.npz'); t = pd.read_csv(OUT / f'fantasy_{mode}_towns.csv', keep_default_na=False)
+    sites = json.loads((OUT / f'placed_{mode}_sites.json').read_text())['sites'] if R3 else json.loads(gzip.decompress((folder / 'settled_reach.json.gz').read_bytes()))['sites']
+    f = np.load(OUT / f'{PREFIX}_{mode}_fields.npz'); t = pd.read_csv(OUT / f'{PREFIX}_{mode}_towns.csv', keep_default_na=False)
     g = np.load(folder / 'administration_grid.npz'); land = g['land']; cell = float(f['cell_km'])
     people = np.where(land, g['density'], 0.) * cell ** 2
     cr = np.array([s['row'] for s in sites]); cc = np.array([s['column'] for s in sites]); n = len(sites)
@@ -37,7 +39,8 @@ for mode in ('raw', 'corrected'):
     for a in range(3):       # A3: areas strictly follow campaign rank among ranked places
         if area[cls == a].min() < area[(cls > a) & (cls < 9)].max(): problems.append(f'{mode} lore area order {a}')
     if int((cls < 9).sum()) != R['climates'][mode]['lore_ordering']['marked_reassigned']: problems.append(mode + ' ranked count')
-    x = np.load(ROOT / f'output/settlement_feedback_20261112/{mode}_inputs.npz'); loc = x['local_index']
+    x = np.load(ROOT / f'output/settlement_feedback_20261112/{mode}_inputs.npz')
+    loc, own_ = (f['collection_local'], f['collection_owner']) if R3 else (x['local_index'], x['owner'])
     t_ = np.clip((np.log(area) - np.log(50)) / (np.log(400) - np.log(50)), 0, 1)
     for k, wanted in (('central', area * (100 + 400 * t_)), ('low', area * 100.)):
         res = f['residents_' + k]; rural = f['rural_' + k]; moved = f['moved_' + k]; c = R['climates'][mode]['residents'][k]
@@ -46,7 +49,7 @@ for mode in ('raw', 'corrected'):
         if rural.min() < -1e-6 or not np.allclose(rural + moved, people, rtol=1e-12, atol=1e-6): problems.append(f'{mode} {k} cell ledger')
         if abs(moved.sum() - res.sum()) > 1e-6 * res.sum() or moved[~land].any(): problems.append(f'{mode} {k} people conservation')
         surplus = np.clip(x['potential_kcal'][loc] - rural.ravel()[loc] * 912500., 0, None)
-        col = pd.Series(surplus).groupby(x['owner']).sum().reindex(range(n), fill_value=0.).to_numpy() * .095
+        col = pd.Series(surplus).groupby(own_).sum().reindex(range(n), fill_value=0.).to_numpy() * .095
         share = col / (res * 912500.)
         if not np.allclose(share, f['local_support_share_' + k], rtol=1e-9): problems.append(f'{mode} {k} cereal support')
         for got, want, what in ((t['residents_' + k].sum(), c['total'], 'csv total'),

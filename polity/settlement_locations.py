@@ -122,7 +122,7 @@ def fixed_count_sites(score, eligible, count, cell_km, *, min_spacing_km=0.0,
 
 
 def prior_tiling_sites(density, land, water_km, road, elev, cell_km, *, prior=None, allowed=None,
-                       aridity=None, marked=(), seat_people=None, seed=1):
+                       aridity=None, marked=(), seat_people=None, seed=1, dry_water_km='default'):
     """Production catchment tiling with an optional occupation prior (family B).
 
     The prior multiplies the site score and the density that sets catchment
@@ -139,9 +139,10 @@ def prior_tiling_sites(density, land, water_km, road, elev, cell_km, *, prior=No
     ok = land & (d >= settle.MIN_DENSITY)
     if allowed is not None:
         ok &= np.asarray(allowed, bool)
-    if aridity is not None:
+    dry_water_km = settle.DRY_WATER_KM if dry_water_km == 'default' else dry_water_km
+    if aridity is not None and dry_water_km is not None:
         near = np.minimum(np.nan_to_num(np.asarray(water_km, float), nan=1e9), coast_km)
-        ok &= ~(np.asarray(aridity, float) < settle.DRY_ARIDITY) | (near <= settle.DRY_WATER_KM)
+        ok &= ~(np.asarray(aridity, float) < settle.DRY_ARIDITY) | (near <= dry_water_km)
     d_eff = d
     if prior is not None:
         p = np.asarray(prior, float)

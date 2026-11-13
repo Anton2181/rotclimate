@@ -1,3 +1,28 @@
+# RELEASE 3 PUBLISHED AS DEFAULT SETTLEMENTS MAP — 13 November 2026 (third pass)
+
+Reports: reports/SETTLEMENT_RELEASE3_20261113.md (positions) and SETTLEMENT_RELEASE2_20261113.md
+(sizes). Both branches (claude/wonderful-mayer-uqbwtb, claude/friendly-turing-43ygeu) at the
+same commit.
+
+OWNER DECISIONS (binding): lore ranking of marked places MUST stand; sliding 100-500/ha is the
+headline density (published Hanson method); the calibrated map is the Settlements default.
+
+Placement: family A (fixed 18 km + heartland prior strength) FAILED 5/8. Family B (production
+catchment tiling with exp(-D/L) on score and catchment density, count held by rescaling
+seat_people; polity.settlement_locations.prior_tiling_sites) PASSED 8/8 with cross-pool L=800.
+Declared limit: NO third family on Han/Rome without new Earth data. Fantasy: unmarked towns
+re-placed (420/902 corrected moved), tracks rebuilt, sizes/ledgers recomputed, published as
+release3_central (default) / release3_low in earth_fit (data/settlement_release3*).
+Milestones 2, 3 (settlements+tracks only) and 4 (settlement map) are met at
+development/cross-pool level; NOT blind validation.
+
+NEXT: (a) feed release-3 towns and residents into reach, trade, administration (they still use
+legacy towns). (b) Blind transfer when output/land_people/earth/earth.npz is restored.
+(c) earth_evidence hub panel / build_fit_hub not regenerated. (d) Wider food supply for
+import-dependent towns. Scripts: settlement_fantasy_inputs.py reassembles fantasy placement and
+collection inputs with exact controls. Older browser checks that assert joint365 as the
+Settlements default will now fail by design.
+
 # RELEASE 2 SIZES PUBLISHED; PLACEMENT STILL OPEN — 13 November 2026 (later session)
 
 Working branch this session: claude/wonderful-mayer-uqbwtb; fast-forwarded into the canonical

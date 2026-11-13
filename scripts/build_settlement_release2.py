@@ -31,10 +31,12 @@ WIDE_RADII_KM = (120.0, 240.0, 480.0, 960.0, 1920.0)
 SCENARIOS = ('central', 'low')        # headline first (amendment A4)
 
 
-def build(mode, earth, out):
+def build(mode, earth, out, custom=None):
+    """custom: dict(sites, local, catchment, prefix, extra) for rebuilt positions; None keeps the published sites."""
     folder = DATA / ('corrected' if mode == 'corrected' else '')
     packet = json.loads(gzip.decompress((folder / 'settled_reach.json.gz').read_bytes()))
-    sites = packet['sites']; shape = tuple(packet['shape']); h, w = shape
+    sites = custom['sites'] if custom else packet['sites']; shape = tuple(packet['shape']); h, w = shape
+    prefix = custom['prefix'] if custom else 'fantasy'
     meta = json.loads((DATA / 'atlas.json').read_text())
     cell = meta['width'] / w * meta['mi_per_px'] * 1.609344
     with np.load(folder / 'administration_grid.npz') as z:
@@ -73,11 +75,11 @@ def build(mode, earth, out):
     area[ranked] = np.sort(area[ranked])[::-1]
 
     x = dict(np.load(LEDGER / f'{mode}_inputs.npz'))
-    if not np.array_equal(x['nodes'], [s['node'] for s in sites]) or not np.array_equal(x['land'], land):
+    if (not custom and not np.array_equal(x['nodes'], [s['node'] for s in sites])) or not np.array_equal(x['land'], land):
         raise ValueError('Reviewed collection catchments do not match these sites')
     if not np.allclose(x['people'], people.ravel(), rtol=1e-12, atol=1e-9):
         raise ValueError('Reviewed ledger people differ from the population grid')
-    local = x['local_index']; catchment = x['owner']
+    local, catchment = (custom['local'], custom['catchment']) if custom else (x['local_index'], x['owner'])
     yy, xx = np.indices(shape); L = {}; summary = {}
     q = lambda v: {str(p): float(np.quantile(v, p)) for p in (.05, .25, .5, .75, .95)}
     for scenario in SCENARIOS:
@@ -124,7 +126,7 @@ def build(mode, earth, out):
                 collection_origin_cells=int(len(local)),
                 origin_cells_below_rural_need=int(np.sum(x['potential_kcal'][local] < need - 1e-6))))
 
-    legacy = np.array([s['civilian_request_people'] for s in sites])
+    legacy = np.array([s.get('civilian_request_people', 0.0) for s in sites])
     rows = []
     for i, s in enumerate(sites):
         row = dict(id=s['id'], name=s['name'], row=s['row'], column=s['column'], marked=bool(s['marked']),
@@ -136,7 +138,7 @@ def build(mode, earth, out):
                 f'local_cereal_support_share_{k}': round(float(min(v['support'][i], 99.0)), 4),
                 f'import_dependent_{k}': bool(v['res'][i] > 0 and v['support'][i] < 1.0)})
         row['legacy_request_people'] = round(float(legacy[i]), 1); rows.append(row)
-    target = out / f'fantasy_{mode}_towns.csv'
+    target = out / f'{prefix}_{mode}_towns.csv'
     with target.open('w', newline='', encoding='utf-8') as f:
         wr = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator='\r\n'); wr.writeheader(); wr.writerows(rows)
     arrays = {}
@@ -144,7 +146,8 @@ def build(mode, earth, out):
         arrays.update({f'residents_{k}': v['res'], f'from_own_hinterland_{k}': v['own'], f'from_wider_region_{k}': v['wide'],
             f'wider_radius_km_{k}': v['radius'], f'rural_{k}': v['rural'].reshape(shape), f'moved_{k}': v['moved'].reshape(shape),
             f'local_support_share_{k}': v['support']})
-    np.savez_compressed(out / f'fantasy_{mode}_fields.npz', land=land, people=people, hinterland_people=H, area_ha=area,
+    arrays.update(custom['extra'] if custom else {})
+    np.savez_compressed(out / f'{prefix}_{mode}_fields.npz', collection_local=local, collection_owner=catchment, land=land, people=people, hinterland_people=H, area_ha=area,
         residual=e, cell_km=cell, lore_class=np.array([LORE_RANK.get(k, 9) for k in kind]), **arrays)
     return dict(climate=mode, sites=len(sites), marked=int(sum(s['marked'] for s in sites)), cell_km=cell,
         world_people=float(people.sum()), sites_without_hinterland_people=int((~valid).sum()), headline_scenario=SCENARIOS[0],
@@ -154,7 +157,7 @@ def build(mode, earth, out):
         legacy=dict(request_total=float(legacy.sum()), share_of_world_people=float(legacy.sum() / people.sum()),
                     quantiles=q(legacy), largest=float(legacy.max())),
         lore_ordering=dict(marked_reassigned=len(order), rule='largest residuals to ranked walled places (A2); their areas then strictly follow campaign rank (A3)'),
-        outputs={p.name: sha(p) for p in (target, out / f'fantasy_{mode}_fields.npz')},
+        outputs={p.name: sha(p) for p in (target, out / f'{prefix}_{mode}_fields.npz')},
         inputs={str(p.relative_to(ROOT)): sha(p) for p in (folder / 'settled_reach.json.gz', folder / 'administration_grid.npz',
                 LEDGER / f'{mode}_inputs.npz', DATA / 'atlas.json')})
 

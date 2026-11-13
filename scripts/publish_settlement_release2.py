@@ -21,6 +21,8 @@ def render(mode, scenario, sites, actors, f, meta):
     rgb = np.empty((h, w, 3)); rgb[:] = [.84, .89, .94]
     drawn = np.clip(1 - rural, 0, .8)[land][:, None] / .8
     rgb[land] = np.array([.90, .88, .82]) * (1 - drawn) + np.array([.80, .66, .52]) * drawn
+    if 'tracks' in f:
+        rgb[f['tracks'] & land] = rgb[f['tracks'] & land] * .55 + np.array([.42, .33, .24]) * .45
     image = Image.fromarray(np.rint(rgb * 255).astype('u1')).resize((W, H), Image.Resampling.NEAREST)
     draw = ImageDraw.Draw(image); px = W / w
     people = f['residents_' + scenario]; support = f['local_support_share_' + scenario]
