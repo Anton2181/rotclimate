@@ -1,85 +1,82 @@
 # Wider grain supply for the release-3 towns
 
-**Outcome.** When grain is allowed to travel, 987 of the 1,053 release-3 towns
-can be fully fed at the ledgers' existing 10% grain extraction. The 66 largest
-cities cannot: they hold 6.5 M of the 13.6 M town residents, and the capital is
-only 23% fed. At one-third extraction every town is fed. This is a declared
-scenario on the atlas's existing freight costs; nothing is fitted to Earth.
+**Outcome.** With grain allowed to travel and one third of the rural surplus
+marketed, 1,012 of the 1,053 release-3 towns are fully fed and 85% of town
+residents eat. The 41 largest cities stay short; the capital is 37% fed. At 10%
+marketed only 35% of residents are fed. A first Roman pilot supports the
+one-third level ([Earth pilot](SETTLEMENT_SUPPLY_EARTH_20261113.md)).
 
-Protocol: [plan](../calibration/settlement_wide_supply_20261113/plan.json),
-committed before any output.
+Protocol: [plan and amendment](../calibration/settlement_wide_supply_20261113/plan.json).
 
-![Grain supply, corrected climate, 10% of surplus marketed](figures/settlement_wide_supply_20261113.png)
+![Grain supply, corrected climate, one third of surplus marketed](figures/settlement_wide_supply_20261113.png)
 
 Green: fed by its own freight hinterland. Blue: fed with shipments from other
 towns. Red: still short. Lines: the 400 largest shipments.
 
-## Results (corrected climate; raw is within a point)
+## Results (corrected climate, 600 field hours a worker; raw is within two points)
 
 | Town sizes | Surplus marketed | Own hinterland | With imports | Short | Residents fed |
 |---|---|---:|---:|---:|---:|
-| **Sliding density (headline)** | **10%** | **816** | **171** | **66** | **73%** |
-| Sliding density | 33% | 981 | 72 | 0 | 100% |
-| Flat 100/ha | 10% | 925 | 128 | 0 | 100% |
-| Flat 100/ha | 33% | 1,047 | 6 | 0 | 100% |
+| **Sliding density (headline)** | **one third** | **832** | **180** | **41** | **85%** |
+| Sliding density | 10% | 651 | 106 | 296 | 35% |
+| Sliding density, 300 field hours | one third | 632 | 98 | 323 | 35% |
+| Flat 100/ha | one third | 982 | 70 | 1 | 100% |
+| Flat 100/ha | 10% | 730 | 261 | 62 | 93% |
 
-Grain ledger for the headline case, in person-years of food: 20.0 M marketed;
-3.3 M never leaves cells beyond any town's reach; 6.5 M is consumed by
-transport; 10.0 M is eaten in towns; 0.3 M is excess nobody can use. The ledger
-closes exactly.
+Grain ledger for the headline, in millions of person-years of food: 127.9
+grown; 39.8 eaten by rural people; 29.4 marketed. Of the marketed grain, 6.0
+never leaves cells beyond any town's reach, 9.9 is consumed by transport, 11.5
+is eaten in towns and 2.0 is excess nobody can use. The ledger closes exactly.
 
-- **What limits the big cities is the 10% share, not distance.** Marketed grain
-  (20 M) only modestly exceeds what towns need (13.6 M), and a third of it is
-  spent on carriage. The short towns have a median of 90,000 residents.
-- **Most towns need no imports.** The freight hinterland (up to 270 road-km
-  equivalents, much farther by river or sea) feeds 816 towns, against about 250
-  for the earlier one-day foot collection.
-- **Exporters are small towns in rich country**, shipping up to 48,000
-  person-years each to a nearby city.
-- 86% of land lies within grain-carrying reach of some town.
+- **The largest cities are the ones that stay short.** The 41 short towns hold
+  4.3 M of the 13.6 M town residents and have a median of 95,000 residents.
+- **Field labour matters as much as the marketed share.** Halving field hours
+  has the same effect as cutting the share from one third to 10%.
+- **Most towns need no imports**: 832 are fed by their own freight hinterland.
+
+## Correction after the first published build
+
+The first build (commit `87d19b43`) took the full cereal *potential* above rural
+needs as surplus: 240 M person-years, which the 40 M rural people could not have
+grown. It reported every town fed at one third. Production is now limited by the
+published field-work rule (40% of rural people work the fields, 600 listed hours
+a year, 30-day reaping window), which gives 128 M. The numbers above replace the
+earlier ones.
 
 ## How it works
 
-1. **Grain available.** Each cell markets 10% of its cereal potential above what
-   its remaining rural people eat (the fraction the published ledgers use).
-2. **Transport is paid in grain.** A path costing c road-km equivalents delivers
-   1 − c/270. The 270 km is the atlas's existing figure for road haulage eating a
-   staple's whole value (Duncan-Jones 1982). Sea, downstream river and road cost
-   1 : 5 : 28 per km (Diocletian's Price Edict). Costs come from the seasonal
-   freight network, rebuilt on the release-3 towns and tracks, averaged over four
-   trade months.
-3. **Hinterland.** Every cell sends its grain to the town it reaches most cheaply.
-4. **Between towns.** Towns with excess ship to towns in need, cheapest link
+1. **Grain grown** per cell: cereal potential, limited by the field hours of the
+   rural people who remain after towns are populated.
+2. **Grain marketed**: a share of what is grown beyond rural needs.
+3. **Transport is paid in grain.** A path costing c road-km equivalents delivers
+   1 − c/270 (road haulage eats a staple's whole value at about 270 km,
+   Duncan-Jones 1982). Sea, downstream river and road cost 1 : 5 : 28 per km
+   (Diocletian's Price Edict). Costs come from the atlas's seasonal freight
+   network on the release-3 towns and tracks, averaged over four trade months.
+4. **Hinterland.** Every cell sends its grain to the town it reaches most cheaply.
+5. **Between towns.** Towns with excess ship to towns in need, cheapest link
    first. Imported grain is not shipped on.
 
-## What changed in the atlas
+## In the atlas
 
-- Two new Settlements options: grain supply at 10% and at one third.
-- On the default settlement maps the white centre now means "fed, including
-  grain shipped in" (10% case). Town sizes are unchanged.
+- Settlements options "grain supply" at one third (headline) and 10%.
+- On the default settlement maps the white centre means "fed, including grain
+  shipped in" at one third. **Town sizes on the map are not reduced** where a
+  city is short; the shortfall is shown, not applied.
+- The supply-supported reach now takes its staffed towns from these fed
+  residents ([downstream report](SETTLEMENT_DOWNSTREAM_20261113.md)).
 
 ## Limits
 
-- **Not an Earth test.** No Earth pool in this checkout has both harvests and a
-  freight network, so the scenario could not be fitted or checked against real
-  cities. The roadmap's earlier checks that the food budget feeds 94–99% of real
-  Chinese and Roman seats used the local-collection rule, not this one.
-- **The extraction share decides the answer** and is an assumption. 10% is the
-  existing ledger value; one third is the order of rents plus taxes in agrarian
-  empires. No source here pins it down.
-- The shipment plan is feasible, not optimal: a different order could feed
-  slightly more.
+- A scenario on existing coefficients. The Earth pilot tests only the overall
+  marketed amount, with a proxy for production.
+- 600 field hours covers listed field tasks only, not threshing, transport or
+  other household work, so labour is if anything too generous.
+- The shipment plan is feasible, not optimal.
 - Wheat and barley only. No fish, livestock, other crops, prices, shipping
   capacity, storage through the year, or state grain fleets.
-- Independent review recomputes the allocation and ledgers, not the freight
-  costs, which come from the atlas network.
-
-## Decision this leaves
-
-Feeding calibrated residents into the reach chain now has a food model to stand
-on, but the outcome depends on the extraction share: at 10% the 66 largest
-cities would be cut to roughly a quarter to a half of their size; at one third
-nothing is cut. The flat-density sizes are fed either way.
+- The independent review recomputes production, allocation and ledgers, not the
+  freight costs, which come from the atlas network.
 
 ## Reproduce
 
@@ -87,8 +84,4 @@ nothing is cut. The flat-density sizes are fed either way.
 .venv/bin/python -I scripts/build_wide_supply_release3.py
 .venv/bin/python -I scripts/review_wide_supply_release3.py
 .venv/bin/python -I scripts/publish_wide_supply_release3.py
-python3 -m http.server 8766 & node scripts/check_wide_supply_release3_browser.js output/settlement_wide_supply_20261113/browser
 ```
-
-Review passes on all 8 scenario-climate cases; a fresh build reproduces every
-output byte for byte; the browser check passes 8 cases.

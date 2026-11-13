@@ -1,3 +1,25 @@
+# ONE-THIRD SUPPLY, SUPPLY-FED REACH, AND ROMAN SUPPLY PILOT — 13 November 2026 (sixth pass)
+
+OWNER DECISIONS: one third of surplus marketed; calibrated residents feed the reach chain;
+work towards an Earth-calibratable supply method.
+
+1. SUPPLY CORRECTED (plan amendment A1): production is labour-limited (harvest.field_support,
+   600 h/worker); the first build used cereal potential and overstated supply. Corrected
+   headline: 832 self-fed + 180 with imports + 41 short of 1,053; 85% of residents fed.
+   reports/SETTLEMENT_WIDE_SUPPLY_20261113.md. Map sizes are NOT reduced for short cities.
+2. REACH: scripts/build_supply_fed_reach_release3.py overrides institutional_active in the
+   release-3 chain packet (affiliated and fed residents >= 150), then build_control_v2/v21 via
+   run_on_release3 with folders *_supplyfed_release3_20261113. Default option release3_fed_v21.
+3. EARTH PILOT: scripts/settlement_supply_earth.py on the Roman window (static network, grain
+   proportional to rural people). m95 about 0.6-0.8 person-years marketed per rural resident;
+   fantasy m = 0.74 (one third) / 0.22 (10%). Supports one third. Weak: haul limit sensitivity
+   (x5), west/east differ x2, proxy production. reports/SETTLEMENT_SUPPLY_EARTH_20261113.md.
+
+NEXT for a real calibration: restore output/land_people/earth/earth.npz (Earth cereal potential
+and labour), build the seasonal sea network on the Roman window, fit haul limit and marketed
+share on one half and test on the other and on Han. Also open: apply shortfalls to town sizes?
+ledger packet for the new reach; evidence hub.
+
 # WIDER GRAIN SUPPLY SCENARIO PUBLISHED — 13 November 2026 (fifth pass)
 
 Report: reports/SETTLEMENT_WIDE_SUPPLY_20261113.md. Plan: calibration/settlement_wide_supply_20261113.

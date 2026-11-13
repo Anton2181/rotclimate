@@ -49,6 +49,16 @@ The pattern is consistent: towns moved towards the old heartlands, so the
 heartlands are slightly better connected and the far periphery slightly thinner.
 No headline number moves by more than about one and a half points.
 
+## Update: residents now drive the supply-supported reach
+
+By owner decision the default supply-supported reach takes its staffed towns from
+the calibrated residents as fed by the [wide grain supply scenario](SETTLEMENT_WIDE_SUPPLY_20261113.md)
+(one third of surplus marketed). A town is staffed when it has a polity and at
+least 150 fed residents. Corrected climate: 1,042 of 1,053 towns staffed (1,013
+under the 7.5% rule), 68.2% of land held (67.0%), 8.3% claimed but unheld (9.2%).
+The 7.5% version stays available. The first two limits below now apply to that
+earlier version only; the new default instead rests on an untested supply scenario.
+
 ## Limits
 
 - **Sizes are not fed in.** The supply-supported reach keeps the chain's original

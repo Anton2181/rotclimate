@@ -27,6 +27,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Supply and Earth pilot, 13 November 2026 (later): supply corrected for field labour and set to
+one third marketed (85% of town residents fed; 41 largest cities short); supply-fed residents
+now staff the default reach; a Roman pilot puts the marketed grain needed for real cities at
+0.6-0.8 person-years per rural resident, matching one third. See
+[SETTLEMENT_SUPPLY_EARTH_20261113.md](SETTLEMENT_SUPPLY_EARTH_20261113.md). Full calibration
+needs Earth harvests and a seasonal sea network. (The paragraph below predates the correction.)
+
 Wider supply, 13 November 2026: a declared grain-supply scenario (transport paid in grain on
 existing freight costs) feeds 987 of 1,053 release-3 towns at 10% extraction and all at one third;
 see [SETTLEMENT_WIDE_SUPPLY_20261113.md](SETTLEMENT_WIDE_SUPPLY_20261113.md). Not Earth-tested.
