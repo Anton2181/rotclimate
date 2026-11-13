@@ -20,5 +20,5 @@ if __name__ == '__main__':
     from polity.export import export
     from add_market_views import render_views
     t = time.time(); export(staging)
-    render_views(staging, staging / 'polity_cache.npz')
+    render_views(staging, ROOT / 'output/polity_map' / f'{staging.name}.npz')
     print('done', staging, 'legacy' if legacy else used, round(time.time() - t), 's', flush=True)

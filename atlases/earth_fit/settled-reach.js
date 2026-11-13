@@ -60,6 +60,14 @@ window.SettledReachAtlas=(()=>{
         release2={options:{reach_towns:[...candidate.options.reach_towns,...(release2?.options.reach_towns||[])]}};
       }catch(e){}
     }
+    if(document.querySelector('script[data-release3-layers-enabled]')){
+      try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/release3_layers.json'))));
+        const candidate=supplement.packets[mode];
+        if(!candidate||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint)throw Error('Release-3 layer climate mismatch');
+        const swap=new Map(candidate.layers.map(l=>[l.id,l]));
+        meta.layers=meta.layers.map(L=>swap.has(L.id)?{...L,...swap.get(L.id)}:L);
+      }catch(e){}
+    }
     const originals=meta.layers.filter(l=>['reach_towns','reach_defacto'].includes(l.id));
     if(originals.length!==2)throw Error('Missing original settlement/reach modes');
     const changed=originals.map(l=>{const options=l.variants?.options||[{value:'0',label:'Original placement',file:l.file,items:l.items,note:l.note}];
