@@ -22,8 +22,24 @@ OUT = ROOT / 'output/settlement_supply_calibration_20261113'
 KCAL = 2500.0 * 365.0; HOURS = np.array([336.0, 208.0]); REAP = np.array([48.0, 32.0]); FARMED, SOWN = 0.6, 0.6
 
 
+HARVEST = ROOT / 'output/land_people/earth/earth.npz'; PEOPLE = 'committed'
+
+
+def rebuilt_people(lat, lon):
+    """polity.earth.earth_people on the selected harvest grid (it hard-codes the default path)."""
+    from harvest.models import settlement_fields
+    from rotclimate import biomes
+    z = np.load(HARVEST); biome = biomes.classify(np.nan_to_num(z['T_ann']), np.nan_to_num(z['P_ann']), z['land'])
+    water_km = np.minimum(-6.0 * np.log(np.maximum(np.nan_to_num(z['irr_distance']), 1e-12)), 300.0)
+    f = settlement_fields(np.nan_to_num(z['capacity']), np.nan_to_num(z['npp']), biome, np.nan_to_num(z['arable']), water_km, np.nan_to_num(z['malaria']))
+    base = np.nan_to_num(f['settlement_base']) * E.OCCUPATION_CENTRAL; zl, zo = z['lat'], z['lon']; step = float(zl[0] - zl[1])
+    r = (zl[0] + step / 2 - lat) / step - 0.5; c = (lon - (zo[0] - step / 2)) / step - 0.5
+    inside = (r >= -0.5) & (r <= len(zl) - 0.5) & (c >= -0.5) & (c <= len(zo) - 0.5)
+    return np.where(inside, ndi.map_coordinates(base, [np.clip(r, 0, len(zl) - 1), np.clip(c, 0, len(zo) - 1)], order=0), 0.0)
+
+
 def earth_fields(lat, lon):
-    z = np.load(ROOT / 'output/land_people/earth/earth.npz'); zl, zo = z['lat'], z['lon']; step = float(zl[0] - zl[1])
+    z = np.load(HARVEST); zl, zo = z['lat'], z['lon']; step = float(zl[0] - zl[1])
     r = (zl[0] + step / 2 - lat) / step - 0.5; c = (lon - (zo[0] - step / 2)) / step - 0.5
     inside = (r >= -0.5) & (r <= len(zl) - 0.5) & (c >= -0.5) & (c <= len(zo) - 0.5)
     rc = [np.clip(r, 0, len(zl) - 1), np.clip(c, 0, len(zo) - 1)]
@@ -36,7 +52,8 @@ def prepare(x):
     w = PILOT.WINDOW; g = E.window(w['lat0'], w['lon0'], w['width_km'], w['height_km'], w['cell_km'])
     if not np.array_equal(g['land'], x['land']):
         raise ValueError('Rebuilt window land differs from the committed Roman inputs')
-    g['density'] = x['density']                      # committed people field (plan: rebuilt grid is not byte-identical)
+    density = x['density'] if PEOPLE == 'committed' else rebuilt_people(x['lat'], x['lon']) * x['land']
+    g['density'] = density                           # committed field, or the selected harvest grid's own people (amendment A1)
     world = P.world_of(g, x['road']); st = N.statics(world); cl = N.climate(world, st)
     nodes, res, lon, info = PILOT.cities(x); width = x['land'].shape[1]
     places = [(int(n // width), int(n % width)) for n in nodes]
@@ -56,11 +73,11 @@ def prepare(x):
     kcal_ha = np.where(work.crop > 0, 1e6 / np.where(work.crop > 0, work.land, 1.0), 0.0)
     supply_land = x['land'] & x['allowed']
     potential = np.where(supply_land, kcal_ha * 100.0 * float(x['cell_km']) ** 2 * arable * FARMED * SOWN, 0.0).ravel()
-    people = np.where(supply_land, x['density'], 0.0).ravel() * float(x['cell_km']) ** 2
+    people = np.where(supply_land, density, 0.0).ravel() * float(x['cell_km']) ** 2
     rural = people * (1 - res.sum() / people.sum())
     grown = field_support(potential, np.nan_to_num(work.hours).ravel(), np.nan_to_num(work.reaping).ravel(), rural_need_kcal=rural * KCAL)
     surplus = np.maximum(grown.produced_kcal - rural * KCAL, 0.0) / KCAL            # person-years
-    meta = dict(cities=info, ports=len(ports), river_landings=len(river_places), model_people=float(people.sum()), rural_people=float(rural.sum()),
+    meta = dict(harvest_grid=str(HARVEST.relative_to(ROOT)), people_field=PEOPLE, cities=info, ports=len(ports), river_landings=len(river_places), model_people=float(people.sum()), rural_people=float(rural.sum()),
         urban_share=float(res.sum() / people.sum()), potential_person_years=float(potential.sum() / KCAL),
         grown_person_years=float(grown.produced_kcal.sum() / KCAL), surplus_person_years=float(surplus.sum()),
         surplus_per_rural_person=float(surplus.sum() / rural.sum()), cells_below_rural_need=int(((grown.produced_kcal < rural * KCAL - 1) & (rural > 0)).sum()),
@@ -137,7 +154,11 @@ def run(out):
 
 
 if __name__ == '__main__':
-    ap = argparse.ArgumentParser(); ap.add_argument('--out', type=Path, default=OUT); r = run(ap.parse_args().out)
+    ap = argparse.ArgumentParser(); ap.add_argument('--out', type=Path, default=OUT)
+    ap.add_argument('--harvest', type=Path); ap.add_argument('--people', choices=('committed', 'rebuilt'), default='committed')
+    g_ = ap.parse_args()
+    if g_.harvest: HARVEST = g_.harvest.resolve()
+    PEOPLE = g_.people; r = run(g_.out)
     print(json.dumps(r['world'], indent=1)); print(json.dumps(r['decision'], indent=1))
     for L, row in r['surface'].items():
         print(L, 'all', [round(f, 2) for f in row['all']['fed_share']], 'e95 all/west/east', row['all']['e95'], row['west']['e95'], row['east']['e95'])

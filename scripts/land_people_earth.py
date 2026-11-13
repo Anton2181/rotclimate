@@ -134,6 +134,24 @@ def river_masks(shape):
     return np.array(nav) > 0, np.array(stream) > 0
 
 
+DELTAS = None                 # [(lat, lon, radius km)] when --deltas observed
+S_FAN = 0.456                 # irrigable share inside a delta fan (data/delta_fan_model.json)
+
+
+def observed_deltas():
+    """Edmonds et al. (2020) deltas in the window with mouth discharge >= the rule's threshold: half-disc radius from OBSERVED area."""
+    model = json.loads((ROOT / "data/delta_fan_model.json").read_text())
+    rows = json.loads((ROOT / "output/delta_fans_20261108/deltas.json").read_text())
+    out = []
+    for r in rows:
+        area, q = r.get("area_km2"), r.get("q", 0.0)
+        if area is None or not np.isfinite(area) or area <= 0 or q < model["min_q_m3s"]:
+            continue
+        if WINDOW["lat"][0] <= r["lat"] <= WINDOW["lat"][1] and WINDOW["lon"][0] <= r["lon"] <= WINDOW["lon"][1]:
+            out.append((float(r["lat"]), float(r["lon"]), float(np.sqrt(2.0 * area / np.pi))))
+    return out, float(model["s_fan"])
+
+
 HAND_H0 = 5.0                 # irrigation gate scale (m above the nearest mapped river): plan_D1 D2 (10 m), D2b (5 m, HID 1900 amount, Americas blind)
 
 
@@ -167,7 +185,23 @@ def irrigation(shape, gate=True):
         if gate:
             _, (iy, ix) = ndi.distance_transform_edt(~river[lo:hi], sampling=samp, return_indices=True)
             zz = z[lo:hi]
-            part = part * np.exp(-np.maximum(zz - zz[iy, ix], 0.0) / HAND_H0)
+            hand = np.maximum(zz - zz[iy, ix], 0.0)
+            part = part * np.exp(-hand / HAND_H0)
+            if DELTAS:                       # the map's delta-fan rule (harvest/deltas.py) with observed delta areas
+                fan = np.zeros(part.shape, bool)
+                rows_lat = WINDOW["lat"][1] - (np.arange(lo, hi) + 0.5) / (RES * SUB)
+                for dlat, dlon, r_km in DELTAS:
+                    if dlat + r_km / KM_DEG < rows_lat[-1] or dlat - r_km / KM_DEG > rows_lat[0]:
+                        continue
+                    kx = KM_DEG * np.cos(np.radians(dlat)); half = r_km / kx
+                    c0 = max(int((dlon - half - WINDOW["lon"][0]) * RES * SUB), 0)
+                    c1 = min(int((dlon + half - WINDOW["lon"][0]) * RES * SUB) + 2, part.shape[1])
+                    if c1 <= c0:
+                        continue
+                    cols_lon = WINDOW["lon"][0] + (np.arange(c0, c1) + 0.5) / (RES * SUB)
+                    d2 = ((rows_lat[:, None] - dlat) * KM_DEG) ** 2 + ((cols_lon[None, :] - dlon) * kx) ** 2
+                    fan[:, c0:c1] |= d2 <= r_km ** 2
+                part = np.maximum(part, np.where(fan, S_FAN * np.exp(-hand / HAND_H0), 0.0))
         irr[b0:min(b0 + band, H)] = part[b0 - lo:b0 - lo + min(band, H - b0)]
     blk = lambda a: a.reshape(shape[0], SUB, shape[1], SUB).mean((1, 3))
     return blk(irr), blk(irr_d)
@@ -227,7 +261,12 @@ def main():
     ap.add_argument("--crop-margins", help="T0,T1,A0,A1 (or T0,T1 for cold only): margins inside the crop model, the dry one on the rain-fed share only")
     ap.add_argument("--arable", choices=("relief", "slope"), default="slope", help="arable share rule (slope: plan_D1 D1b, adopted)")
     ap.add_argument("--irrigation", choices=("distance", "hand"), default="hand", help="irrigation rule (hand: plan_D1 D2, adopted)")
+    ap.add_argument("--deltas", choices=("none", "observed"), default="none", help="observed: also irrigate inside the observed delta fans (the map's delta rule)")
     a = ap.parse_args()
+    global DELTAS, S_FAN
+    if a.deltas == "observed":
+        DELTAS, S_FAN = observed_deltas()
+        print(f"delta fans: {len(DELTAS)} observed deltas, s_fan {S_FAN}", flush=True)
     out = Path(a.out)
     out.mkdir(parents=True, exist_ok=True)
     if a.reuse and (out / "earth.npz").exists():
