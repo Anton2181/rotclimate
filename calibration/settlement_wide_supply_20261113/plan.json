@@ -14,5 +14,16 @@
   "not_modelled": "Other foods, fish and livestock; prices and markets; shipping capacity; storage through the year; state grain fleets; reshipment hubs. Cereal potential is the published wheat/barley potential, not observed harvests.",
   "publication": "A Settlements map option showing supply status and the main grain shipments, per-town CSV, and a report. The default map changes only in its legend: the white centre will mean fed including imports, with locally fed towns distinguished.",
   "next_step_not_in_this_plan": "Whether supply-fed calibrated residents should replace the 7.5% request inside the blind-tested control chain remains a separate decision after these results.",
-  "review": "Independent recomputation of hinterland delivery and the between-town plan with a separately written allocator; conservation checks; byte replay."
+  "review": "Independent recomputation of hinterland delivery and the between-town plan with a separately written allocator; conservation checks; byte replay.",
+  "amendments": [
+    {
+      "id": "A1_labour_limited_production_and_one_third",
+      "date": "2026-11-13",
+      "made_after": "The first published build (87d19b43) and the owner's decision to use one third. Known: with cereal POTENTIAL as production, 10% marketed fed 987 of 1,053 towns and one third fed all.",
+      "flaw_found": "The first build took cereal potential above rural needs as surplus. Potential is 240 M person-years against 40 M rural people; that much grain cannot be grown by the people present. With the published field-work rule (40% of rural people work the fields, 600 listed hours a year each, 30-day reaping window) production is 128 M and surplus 88 M.",
+      "change": "Production per cell = harvest.field_support at 600 hours per worker on the remaining rural people; available grain = extraction share x (production - rural needs), never negative. 600 hours is the reference scenario the published food-budget chain already uses; 300 hours is reported as a sensitivity.",
+      "headline": "One third of surplus marketed (owner decision). 10% is kept as the alternative.",
+      "not_changed": "Transport rule, 270 road-km limit, hinterland and shipment rules, town sizes."
+    }
+  ]
 }
