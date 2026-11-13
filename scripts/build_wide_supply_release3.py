@@ -15,8 +15,10 @@ from settlement_locations_earth import sha, write
 
 PLAN = ROOT / 'calibration/settlement_wide_supply_20261113/plan.json'
 R3 = ROOT / 'output/settlement_release3_20261113'; OUT = ROOT / 'output/settlement_wide_supply_20261113'
-KCAL = 2500.0 * 365.0; EXTRACTION = (1.0 / 3.0, 0.10); DENSITY = ('central', 'low'); HOURS = (600.0, 300.0)
-HEADLINE = 'central_x33'
+KCAL = 2500.0 * 365.0; DENSITY = ('central', 'low'); HOURS = (600.0, 300.0)
+EARTH = ROOT / 'output/settlement_supply_calibration_20261113/without_egypt/results.json'
+EXTRACTION = (float(json.loads(EARTH.read_text())['decision']['e95_all_at_L_used']), 0.10)     # Earth-calibrated share (plan A2), alternative
+HEADLINE = 'central_x39'
 
 
 def network(mode):
@@ -118,7 +120,7 @@ def run(out):
     from polity.release3_placement import install
     install(); out.mkdir(parents=True, exist_ok=True)
     result = dict(status='wide_grain_supply_scenario_release3_towns_not_fitted', plan_sha256=sha(PLAN), producer_sha256=sha(__file__),
-        model_sha256=sha(ROOT / 'polity/wide_supply.py'), value_limit_road_km=W.VALUE_LIMIT_ROAD_KM, headline=HEADLINE,
+        model_sha256=sha(ROOT / 'polity/wide_supply.py'), earth_calibration_sha256=sha(EARTH), marketed_share=EXTRACTION[0], value_limit_road_km=W.VALUE_LIMIT_ROAD_KM, headline=HEADLINE,
         fantasy_sha256=sha(R3 / 'fantasy.json'), climates={m: build(m, out) for m in ('raw', 'corrected')})
     write(out / 'results.json', result); return result
 

@@ -8,7 +8,7 @@ from settlement_locations_earth import sha, write
 
 SRC = ROOT / 'output/settlement_fertility_release3_20261113'; R3 = ROOT / 'output/settlement_release3_20261113'
 SUP = ROOT / 'output/settlement_wide_supply_20261113'; OUT = ROOT / 'output/settlement_supplyfed_release3_20261113'
-THRESHOLD, STAFF, KEY = 150.0, 100.0, 'central_x33'
+THRESHOLD, STAFF, KEY = 150.0, 100.0, 'central_x39'
 
 if __name__ == '__main__':
     review = json.loads((SUP / 'review.json').read_text())
@@ -25,7 +25,7 @@ if __name__ == '__main__':
         affiliated = np.array([s['actor_index'] >= 0 for s in model['sites']]); active = affiliated & (fed >= THRESHOLD)
         case['institutional_active'] = active.tolist(); case['institutional_people'] = np.where(active, STAFF, 0.).tolist()
         case['civilian_people'] = (fed - np.where(active, STAFF, 0.)).tolist(); case['community_viable'] = (fed >= 50.).tolist()
-        case['staffing_basis'] = 'supply-fed calibrated residents, one third marketed (downstream plan amendment A1)'
+        case['staffing_basis'] = 'supply-fed calibrated residents, Earth-calibrated 39% marketed (downstream plan amendment A1)'
         for s, r in zip(model['sites'], res):
             s['civilian_request_people'] = float(r)
         target = OUT / f'earth_fit_{mode}'; target.mkdir(parents=True, exist_ok=True)

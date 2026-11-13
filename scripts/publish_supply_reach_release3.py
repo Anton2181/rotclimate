@@ -13,7 +13,7 @@ NOTE = ('Rebuilt on the release-3 town POSITIONS: market hinterlands, joint food
 
 
 NOTE_FED = ('Rebuilt on the release-3 towns AND residents: a town is a staffed source when it has a polity and its calibrated residents, as far as '
-            'the wide grain supply scenario can feed them (one third of surplus marketed), reach the rule\'s 150-person threshold. The control rule '
+            'the wide grain supply scenario can feed them (39% of surplus marketed, the Earth-calibrated share), reach the rule\'s 150-person threshold. The control rule '
             'is unchanged and was blind-tested on Earth; the grain supply scenario that now decides staffing is not Earth-tested. The place-by-place '
             'food ledger below the map is not rebuilt for this version. ')
 

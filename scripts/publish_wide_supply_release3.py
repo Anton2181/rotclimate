@@ -41,17 +41,17 @@ def main():
         (target / mode).mkdir(parents=True, exist_ok=True); old = parent['packets'][mode]; c = results['climates'][mode]['scenarios']
         model = json.loads((R3 / f'placed_{mode}_sites.json').read_text()); f = dict(np.load(R3 / f'placed_{mode}_fields.npz')); z = np.load(OUT / f'supply_{mode}.npz')
         csv_file = target / mode / 'towns.csv'; shutil.copyfile(OUT / f'supply_{mode}_towns.csv', csv_file); options = []
-        for key, label in (('central_x33', 'one third of surplus grain marketed'), ('central_x10', '10% of surplus grain marketed')):
+        for key, label in (('central_x39', '39% of surplus grain marketed (Earth-calibrated)'), ('central_x10', '10% of surplus grain marketed')):
             s = c[key]; L = s['ledger_person_years']; file = target / mode / f'supply_{key}.webp'
             supply_map(model['sites'], f, z, key, f['residents_central'], meta).save(file, lossless=True)
-            note = (f"Scenario, not an Earth test: can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets {label.split(' of ')[0]} of "
+            note = (f"Grain supply scenario; the marketed share and haul limit are checked against the Roman Empire without Egypt. Can the release-3 towns (sliding density) be fed if grain may travel? Each cell markets {label.split(' of ')[0]} of "
                 f"the grain its rural people can grow beyond their own needs (600 field hours a worker) to the town it reaches most cheaply; towns with excess ship to towns in need, cheapest link first. Transport is paid in grain: "
                 f"road haulage eats a load's whole value at about 270 km (Duncan-Jones), and sea and river carriage cost 1/28 and 1/5 as much per km (Diocletian's Price Edict). "
                 f"Result: {s['self_sufficient_towns']} towns are fed by their own hinterland, {s['fed_with_imports_towns']} with imports and {s['short_towns']} stay short; "
                 f"{100*s['fed_share_of_residents']:.0f}% of town residents are fed. Of {L['available']/1e6:.1f} M person-years of marketed grain, "
                 f"{(L['hinterland_transport']+L['between_town_transport'])/1e6:.1f} M are consumed by transport. Wheat and barley only; no other foods, prices, "
                 f"shipping capacity, storage or state grain fleets. Town sizes are not changed by this map.")
-            options.append(dict(value='release3_supply' + ('' if key.endswith('33') else '_x10'), label=f'Release 3 · grain supply · {label}', note=note,
+            options.append(dict(value='release3_supply' + ('' if key.endswith('39') else '_x10'), label=f'Release 3 · grain supply · {label}', note=note,
                 integrated_support=False, release3=True, file=str(file.relative_to(DATA)), file_sha256=sha(file), download=str(csv_file.relative_to(DATA)),
                 items=[dict(color=COLORS['self'], label='Fed by its own freight hinterland'), dict(color=COLORS['imports'], label='Fed with grain shipped from other towns'),
                        dict(color=COLORS['short'], label='Still short of grain'), dict(color='#5a6f8a', label='Lines: the 400 largest grain shipments'),
@@ -62,16 +62,16 @@ def main():
             towns_csv=str(csv_file.relative_to(DATA)), towns_csv_sha256=sha(csv_file), summary=c)
         # default settlement maps: white centre now means fed including imports (declared legend change)
         for option in towns['packets'][mode]['options']['reach_towns']:
-            density = option['value'].split('_')[1]; key = f'{density}_x33'; s = c[key]
+            density = option['value'].split('_')[1]; key = f'{density}_x39'; s = c[key]
             g = dict(f); g['local_support_share_' + density] = z[key + '_fed_share']
             file = DATA / option['file']; render(mode, density, model['sites'], model['actors'], g, meta).save(file, lossless=True)
             option['file_sha256'] = sha(file)
             sentence = (f"{s['self_sufficient_towns'] + s['fed_with_imports_towns']} of {s['towns']} towns (white centre) can be fed when grain may travel "
-                        f"(one third of surplus marketed; see the grain supply map); " + (f"{s['short_towns']} of the largest stay short. " if s['short_towns'] else "none stay short. "))
+                        f"(39% of surplus marketed, the share that feeds Roman cities; see the grain supply map); " + (f"{s['short_towns']} of the largest stay short. " if s['short_towns'] else "none stay short. "))
             option['note'], n = OLD_SENTENCE.subn(sentence, option['note']) if OLD_SENTENCE.search(option['note']) else (option['note'], 1)
             for item in option['items']:
                 if item['label'].startswith('White centre'): item['label'] = 'White centre: fed, including grain shipped in'
-    towns['supply_legend'] = 'white centre = fed including imports (wide supply, one third marketed)'
+    towns['supply_legend'] = 'white centre = fed including imports (wide supply, 39% marketed)'
     write(DATA / 'settlement_release3.json', towns)
     write(DATA / 'release3_supply.json', dict(version=1, status='wide_grain_supply_scenario_not_fitted', packets=packets,
         results_sha256=sha(OUT / 'results.json'), publisher_sha256=sha(Path(__file__)), report='../../reports/SETTLEMENT_WIDE_SUPPLY_20261113.md'))

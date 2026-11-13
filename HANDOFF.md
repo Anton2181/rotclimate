@@ -1,3 +1,14 @@
+# MARKETED SHARE 0.39 ADOPTED — 13 November 2026 (ninth pass)
+
+OWNER: adopt Earth-calibrated marketed share. build_wide_supply_release3.py reads 0.3923 from
+output/settlement_supply_calibration_20261113/without_egypt/results.json; headline key
+central_x39. Corrected: 850 self-fed, 174 with imports, 29 short, 91% fed. Reach staffing set
+identical (1,042) so control maps were not rebuilt. Supply maps, default-map legends and notes
+republished; browser checks pass.
+
+NEXT UPDATE (groundwork started): flood-basin irrigation for desert rivers, see
+calibration/flood_basin_irrigation_20261113/ and its notes.
+
 # SUPPLY CALIBRATION PASSES WITHOUT EGYPT; EGYPT HARVEST STILL OPEN — 13 November 2026 (eighth pass)
 
 Report: reports/SETTLEMENT_SUPPLY_CALIBRATION_20261113.md (rewritten). Plan amendments A1, A2.

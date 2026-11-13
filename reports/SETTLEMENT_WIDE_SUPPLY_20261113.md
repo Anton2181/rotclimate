@@ -1,5 +1,12 @@
 # Wider grain supply for the release-3 towns
 
+> **Update, 13 November 2026 (adopted by the owner).** The marketed share is now the
+> Earth-calibrated **39%** ([calibration](SETTLEMENT_SUPPLY_CALIBRATION_20261113.md)) instead
+> of one third. Corrected climate, sliding sizes: 850 towns fed by their own
+> hinterland, 174 with imports, 29 short; 91% of town residents fed.
+> The staffed towns of the reach chain are unchanged (1,042), so the reach maps are identical.
+> The one-third figures below are kept as the record of the previous setting.
+
 **Outcome.** With grain allowed to travel and one third of the rural surplus
 marketed, 1,012 of the 1,053 release-3 towns are fully fed and 85% of town
 residents eat. The 41 largest cities stay short; the capital is 37% fed. At 10%
