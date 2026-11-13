@@ -30,7 +30,14 @@ unchanged. Report:EARTH_HARVEST_RESTORATION_20261113.md. Cache restoration is no
 reproducible after executor resets;freight wind caches remain a later
 supply-calibration dependency (Roman city/area CSVs are already present).
 
-Next dependency: explicit water budget and cropcalendar/tie policy, qualified
+Monthly conserved water routing is now implemented in harvest/flood_water.py:
+upstream withdrawals reduce downstream supply, delivery losses consume the same
+water, and graph validation prevents cycles or partial routing. 22 new / 37
+combined controls pass; independent edge balances and demand complementarity
+hold on 200 synthetic forests / 80,544 monthly node balances. This is a primitive,
+not a calibrated irrigation field rule. See docs/FLOOD_WATER_BUDGET.md.
+
+Next dependency: monthly river flow, flood storage/access and cropcalendar/tie policy, qualified
 independent region evidence, then frozen field test of Nile gain AND Mesopotamian
 noninflation before wholeempire supply calibration. Timing is not irrigable area.
 No completion claim for S3–S5, complete resources/work, or actual sovereignty.

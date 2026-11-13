@@ -101,7 +101,10 @@ Raw downloads remain in ignored `data/cache/flood_basin_seasonality_20261113/`.
 
 ## Next map dependency
 
-Declare an Earth-and-fantasy-compatible water-budget and delivery rule, including
+The [conserved routing primitive](../docs/FLOOD_WATER_BUDGET.md) now subtracts
+upstream withdrawals and accounts for delivery losses. Its synthetic mass-balance
+tests do not supply a field irrigation rule. Declare the Earth-and-fantasy-compatible
+water-budget and delivery adapter, including
 upstream routing, flood timing/travel, crop calendars and drainage constraints.
 Fully watered seasons can tie in the current crop optimizer; choosing the best
 flood window after inspecting yields would add hidden selection. Find defensible

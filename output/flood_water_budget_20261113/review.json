@@ -1,0 +1,26 @@
+{
+  "status": "passed",
+  "scope": "synthetic_water_routing_accounting_only",
+  "producers": {
+    "scripts/review_flood_water_budget.py": "2c0ef79649af473a079496dca42c5eebd3c56057b6315e9064f96bd60890c6d4",
+    "harvest/flood_water.py": "79dfe1d1cd0f020a8aafda1409e9b2d08526fb602b7172a7a22af3c8860051cb",
+    "tests/test_flood_water.py": "7167d92015dd06dfef3fca4ab4fc7fd1b3257f780aea655edd936162a5c269ce"
+  },
+  "controls_output": ".....................................                                    [100%]\n37 passed in 1.68s\n",
+  "random_forests": 200,
+  "nodes": 6712,
+  "monthly_node_balances": 80544,
+  "numeric_repeat_sha256": "4b12bb2849a1afa0434a22767da121bab96b1a3c1a3682f5bdbfc9b8397b406a",
+  "checks": [
+    "independent edge incidence balances",
+    "useful delivery plus paid loss",
+    "demand complementarity",
+    "separate outlet accounting",
+    "global monthly conservation",
+    "exact repeated numeric outputs"
+  ],
+  "unchanged_earth_atlas_files": 904,
+  "irrigation_area_or_harvest_computed": false,
+  "default_adoption": false,
+  "limitations": "Monthly instantaneous routing, upstream-first demands, no storage, return flow, flood access or crop-calendar selection; no empirical efficiency fitted."
+}

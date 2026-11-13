@@ -1,56 +1,66 @@
-# EARTH INPUTS RESTORED; FLOOD TIMING REVIEWED; WATER-BUDGET RULE NEXT — 13 November 2026
+# FLOOD-WATER LEDGER IMPLEMENTED; FIELD ADAPTER NEXT — 13 November 2026
 
-After timing checkpoint7987fb33,persisted with public-input restoration.
-WorldClim5m all5ZIPs,NaturalEarthrivers,ETOPOwindow andslope arable cache restored.
-Separate harvest baseline output/land_people/earth_restored_20261113/earth.npz
-(ignored32MB),with committed regions.json and audit receipts. ArableSHA matches
-previous calibration EXACTLY. Independent11region audit:areas andirrigation shares
-match reference;capacity differences0–1.44%;Roman field drift+0.353876%,sameas
-previous agent'srebuild. Egyptstill2.32M,notfixed. Originalregions.json andall904
-Earthfitfiles unchanged. Report reports/EARTH_HARVEST_RESTORATION_20261113.md.
-Recreate afterreset with scripts/restore_earth_harvest_inputs.py,then
-scripts/review_earth_harvest_restoration.py. Pinmanifest:
-data/earth_harvest_public_sources_20261113.json. No full supplyrerun yet;freight
-wind caches are missing;Roman cities.csv/areas.csv ARE present. Use explicit restored
-harvest path;never silentlyreplace anoldnumericbaseline.
+Canonical branch: claude/friendly-turing-43ygeu. Resumed latest remote ec0d09c0.
+Release-3 settlements and owner-adopted marketed share 0.3923 remain current:
+850 self-fed towns, 174 with imports, 29 short, 91% fed; reach staffing 1,042.
+All 904 existing Earth-fit files remain byte-identical. Whole-empire supply
+calibration still fails because of Egypt. No flood irrigation adoption yet.
 
-Resumed latest remote ec0d09c0 on canonical claude/friendly-turing-43ygeu, not the
-older source-audit queue. Release-3 settlements and owner-adopted marketed share
-0.3923 remain current (850 self-fed,174 imports,29 short,91% fed). No map change
-in this preflight; all904 Earth-fit files remain byte-identical.
+LATEST IMPLEMENTATION: harvest/flood_water.py routes monthly volumes through a
+validated drainage forest. Upstream withdrawals are subtracted before downstream
+use; useful delivery, paid losses, remaining river volume and outlet volume are
+separate. Supplied efficiency is explicit; default 1 is accounting, not fitted.
+No storage, return flow, travel delay, crop selection or floodplain adapter yet.
+22 new tests / 37 combined controls pass. Separate edge-incidence and demand
+complementarity audit: 200 synthetic forests, 80,544 monthly node balances,
+exact repeated numeric outputs. No area/harvest scores or default changes.
+Read docs/FLOOD_WATER_BUDGET.md; rerun scripts/review_flood_water_budget.py.
+Receipt: output/flood_water_budget_20261113/review.json.
 
-Declaration2aaa35f9 preceded numeric gauges/phase outputs. Source preparation,
-complete-year quality gate and cyclic timing primitive DONE. Aswan1871–1901
-(31 complete years) vsHit1965–67/1969–71(6). Fixed November/five-month timing
-compatibility0.9443 vs0.0494. These are dimensionless timing diagnostics,NOT
-irrigated shares. IndusKotri starts1936,so pre1932 check staysUNSCORED; no postdam
-substitute,no heldout success,no irrigation/harvest adoption. Wholeempire stillfails.
+EARTH RESTORATION (9b258cc6): WorldClim 5m (five ZIPs), Natural Earth rivers,
+ETOPO window and slope-arable cache are present. Separate baseline:
+output/land_people/earth_restored_20261113/earth.npz (ignored, 32 MB).
+Its regions.json and audit receipts are committed. Arable SHA matches previous
+calibration exactly. Independent 11-region audit: areas and irrigation shares
+match reference; capacity differences 0–1.44%; Roman field drift +0.353876%, as
+previously recorded. Egypt remains 2.32 M. Original regional summary unchanged.
+Recreate after reset: scripts/restore_earth_harvest_inputs.py, then
+scripts/review_earth_harvest_restoration.py. Source pins:
+data/earth_harvest_public_sources_20261113.json. Report:
+reports/EARTH_HARVEST_RESTORATION_20261113.md. Use the explicit restored harvest
+path in development; do not silently replace an old numeric baseline. Freight
+wind caches remain missing; Roman cities.csv and areas.csv ARE present.
 
+TIMING PREFLIGHT (7987fb33): declaration 2aaa35f9 preceded numerical inspection.
+Aswan 1871–1901 (31 complete years); Hit 1965–67 and 1969–71 (6 complete years).
+Fixed November/five-month compatibility: 0.9443 vs 0.0494. Dimensionless timing
+shares are NOT irrigated fractions or delivery efficiencies. Indus Kotri starts
+1936: declared pre-1932 check remains UNSCORED, with no post-dam substitution.
+Both scored gauges are development inputs, not independent validation.
 Report reports/FLOOD_BASIN_SEASONALITY_20261113.md; evidence page
-atlases/earth_evidence/flood_basin/. scripts/fetch_flood_gauges.py pins source
-bytes; flood_basin_seasonality.py produces; review_flood_basin_seasonality.py
-independently parses raw HTML and uses Decimal/scalar arithmetic.15controls,
-1469source rows,168season combinations/504phase values;5freshfiles byteexact.
-Numeric source CSV,NPZ,all phases,all excludedyears,source URLs/licenses shipped.
-publish_flood_basin_seasonality.py publishes; then build_fit_hub.py refreshes hub.
-Full publish_earth_evidence.py now includes the new panel hook; do not invoke the
-whole historical publisher chain just to refresh this one page.
-Publication checks:6mobile/desktop light/dark cases,keyboard,download bytehashes,
-hub/evidence/return links and zero browser errors. Fresh Windows-style checkout
-passes with2217byte-exact assets and verified release. NewNPZ fields are tracked
-despite the repository's general *.npz ignore rule.
+atlases/earth_evidence/flood_basin/. Fetch/produce/review/publish scripts:
+fetch_flood_gauges.py, flood_basin_seasonality.py,
+review_flood_basin_seasonality.py, publish_flood_basin_seasonality.py.
+15 controls, 1,469 source rows, 168 season combinations / 504 phase values;
+five fresh output files byte-exact. Source CSV, NPZ, exclusions and licenses ship.
+Six viewport/theme checks, keyboard, real download hashes and navigation pass;
+Windows-style checkout verifies the release and 2,217 data assets. New fields
+NPZs are tracked despite the general ignore rule. The evidence publisher hook is
+installed; refresh this panel directly, then build_fit_hub.py. The full historical
+publisher chain needs other caches and is unnecessary for this panel.
 
-NEXT: water-budget/delivery/cropcalendar primitive and defensible independent
-test regions; declare before new area/capacity scores. Do not multiply terrain
-area by phase diagnostic and call it full irrigation. Cropoptimizer has fully
-watered season ties; calendar tie policy must be explicit. Earth
-WorldClim/ETOPO/rivers caches are NOW restored in THIS executor;preserve committed
-region summaries. Require Nile gain AND Mesopotamian noninflation, then unchanged
-wholeempire supply calibration. Find qualified independent gauge/irrigation
-evidence; Indus is not validated by the current source.
+NEXT: connect the conserved routing ledger to qualified monthly river flow,
+flood storage/delivery and physically admissible crop-water demands. Declare
+aggregation/priority, crop-calendar tie policy and independent test regions
+BEFORE new area/capacity scores. Fully watered seasons can tie in the existing
+crop optimizer; do not silently maximize flood timing across those ties.
+Do not turn terrain times phase into fully irrigated area. Require Nile gain
+AND Mesopotamian non-inflation, then rerun unchanged whole-empire supply tests.
+Indus is still unvalidated by the current source. Complete resources/work and
+actual sovereignty remain unresolved.
 
-The older entries below are chronological history. Their open owner decision
-about39% and their parked source-audit priorities are superseded.
+The entries below are chronological history. Their pending 39% owner decision
+and parked source-audit priorities are superseded by the current releases.
 
 # MARKETED SHARE 0.39 ADOPTED — 13 November 2026 (ninth pass)
 

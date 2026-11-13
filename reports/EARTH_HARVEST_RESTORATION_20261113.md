@@ -55,7 +55,9 @@ rebuild. The existing Roman cities.csv and areas.csv caches are present.
 
 ## Next dependency
 
-Declare a conserved flood-water budget and crop-calendar policy before scoring
+The [conserved monthly routing ledger](../docs/FLOOD_WATER_BUDGET.md) is now
+implemented and tested on synthetic networks. Declare its flood storage,
+field-delivery adapter and crop-calendar policy before scoring
 new area/capacity outcomes. Timing alone must not turn low terrain into fully
 watered cropland. Nile improvement and Mesopotamian non-inflation must both be
 tested, with qualified independent regions, before map adoption or a new
