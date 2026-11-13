@@ -1,3 +1,50 @@
+# HANDOFF REQUESTED — 13 November 2026
+
+Owner is running out of usage and explicitly requests wrap-up, commit/push and
+handoff to another agent. STOP ongoing work after this checkpoint. No jobs remain
+running apart from the local HTTP server. Resume only when the next agent is asked.
+
+Canonical/default branch: claude/friendly-turing-43ygeu; remote Anton2181/rotclimate.
+Latest pre-handoff HEAD ab66b509. Earlier:dadbcc46 resets release priority;46d8aaf6
+source-filled destination audit;203fc49b source pickup audit;049ba98e rural meals;
+38d918bd eight OPTIONAL experimental point maps. All science/review/replay/browser/
+Windows checks for these checkpoints passed and were pushed. Latest portable
+release:Earthr44,2104byte-exact assets. No PR,merge or default-model adoption.
+
+OWNER'S ACTUAL GOAL: next EARTH-CALIBRATED settlement location/population atlas.
+Still milestone2of4:fit/test counts,placement,SIZES. Vidarbha transfer FAILED;
+50housing samples haveZEROqualifiedAD150population labels. Do not describe the
+eight experimental maps or food/work audits as that release. No credible release
+ETA was promised. Further food/staff/storage experiments are PARKED. Detailed
+institutions/control/S2–S5 are later work,not blanket blockers for first settlement
+release. See roadmap 'Immediate release priority' and four-milestone contract.
+
+Concrete last recovery (preparation only; protocol committed BEFORE inspection):
+calibration/roman_city_source_recovery_20261113/plan.json,commitab66b509.
+output/roman_city_source_recovery_20261113/source_access.json preserves URLs,
+SHA256,encodings,headers and counts. Official Oxford CSVs AREaccessible despite
+the broken XLSX and2017PDF links. Cities:1388rows,cp1252;Areas:885rows,UTF8-BOM.
+Raw files exist ONLY in ignored data/cache/roman_city_source_recovery_20261113/
+(cities.csv,areas.csv,initial_schema.json);redownload using pinned URLs/hashes
+if new environment omits them. No requests package installed;stdliburllib works.
+No table joins,measurement gate changes,new model fits or scores have been run.
+Areas has key/Area/Estimate Basis,NOphase fields. City Start/End does NOT date
+housing samples. Do NOT infer all-date occupancy or certify size labels from keys.
+
+NEXT: implement the declared official-table audit and exact author-key join to
+data/source/roman_housing_2023/table2.csv;preserve unmatched/ambiguous names,
+units,unknown dates and sampling/extent limits. Independently review and freshly
+replay before publication. Then freeze a defensible calibration/validation cohort
+and genuinely new transfer test BEFORE fitting/scoring. Old Vidarbha is spent.
+Only after qualifying the empirical fit:rebuild fantasy settlements on the shared
+ledger,then publish/check the normal atlas. Do not add later S4 detours.
+
+Scientific .venv/bin/python;globalpython has Playwright,/usr/bin/chromium.
+HTTP8766may still run;restart after environment reset. Private Vidarbha earth.npz
+cache missing:full historical evidence writer blocked;use reviewed direct writers
+and build_fit_hub AFTER final publication. Stage all assets/release BEFORE
+check_atlas_checkout.py. No subagents unless explicitly authorized.
+
 # OWNER PRIORITY: next Earth-calibrated settlement atlas — 13 November 2026
 
 LatestowneraskswhengettingnextEarthcalibratedsettlementatlas. Weansweredhonestly:

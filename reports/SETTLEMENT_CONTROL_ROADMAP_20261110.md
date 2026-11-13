@@ -789,3 +789,14 @@ withunitsandindependentcontrols,not evidenceofactualbuildings/utilization/costs
 or permissiontoenlargecapacityuntiltheseoldcasespass. Anyfixedlosssourcevariant
 mustpreserveproduction/actualjobs/exportcapacity/quota andkeepreducedsurplus/
 insufficientharvest failures. Pushisacheckpoint,CONTINUE.
+
+## Handoff checkpoint — 13 November 2026
+
+Owner requests stop/wrap-up for usage and handoff to another agent. No further
+experiment started. Official Oxford Cities and Areas CSVs recovered under the
+ab66b509 preparation declaration:1388/885rows,source hashes/schema recorded in
+output/roman_city_source_recovery_20261113/source_access.json. Raw bytes stay in
+ignored cache. This restores access,not measurement/phase qualification. No joins,
+new labels,fits,scores or atlas adoption. Next agent should execute this declared
+source audit,then the empirical milestone2 calibration path. Later food/staff/
+loss-aware-reserve work remains parked.
