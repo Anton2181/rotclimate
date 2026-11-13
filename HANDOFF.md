@@ -1,3 +1,63 @@
+# FIXED-CALENDAR FIELD WATER MAPS REVIEWED — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued from 71f1f192.
+Declaration 29b39784 preceded new climate extraction, storage runs and ET scores.
+New report: reports/FLOOD_BASIN_STORAGE_20261114.md.
+New normal evidence page: atlases/earth_evidence/flood_storage/.
+
+Implemented harvest/flood_storage.py: finite field water, rain spill, pre-sowing
+capture, shared-node proportional rationing, paid delivery losses, crop/bare ET,
+carry between months and zero-stock periodic spin-up. Uses flood_water.py for
+river withdrawals; every monthly source and field ledger closes. All 96 declared
+region/crop/store/bare-ET/efficiency/capture combinations retained. Fixed November
+five-month calendar on both rivers; no optimizer or tie-based season selection.
+
+FINDING: Nile barley with bare ET=PET and efficiency1 has mean crop ET coverage
+9.8%,70.0%,100% at100/300/600mm stores (rain-only9.7%). At600mm,efficiency0.5
+reduces coverage to95.4%. With zero bare evaporation,300mm reaches95.0%.
+These are UNCALIBRATED storage/evaporation scenarios,not measured root-zone
+capacities or crop yields. Do not adopt600mm because it passes water adequacy.
+Mesopotamia uses EUPHRATES ONLY; Tigris is absent. Bare ET=PET cases remain33.7%
+water-covered with or without capture. This is NOT a complete regional budget
+or proof of harvest non-inflation. Both regions remain development; Indus unscored.
+
+Exact old terrain mask:8179Nile /21925Mesopotamian arc-minute candidates,area-
+aggregated to489/1018five-minute climate fields. Constant-area totals reproduce
+old24553.920/64003.538km². Actual row-latitude area is24497.044/63986.271km².
+Whole terrain mask is treated as test fields; no farmed/fallow-area inference.
+Optimistic shared river access,negativeHAND and noncontemporaneous climate/gauges
+remain explicit limitations. Soil storage,groundwater,drainage/access unqualified.
+
+VERIFIED: 52 combined controls (15 new storage), 96 periodic rows (all 2-year spinups),
+72,336 field CSV rows, 868,032 monthly field balances. Independent dictionary terrain
+aggregation,raw climate/PET/eligibility checks,scalar simulation from empty stock,
+river/soil closure and3fresh numeric files byte-exact.6viewport/theme cases,
+all96numeric rows and54filter combinations,real download hashes/navigation pass.
+No default map/harvest parameter changed; all 904 Earth-fit files byte-identical.
+Fresh Windows-style checkout verifies the release, including new field downloads.
+
+Reproduce: scripts/flood_basin_storage.py,review_flood_basin_storage.py,
+publish_flood_basin_storage.py,then build_fit_hub.py; run browser check with
+system python scripts/check_flood_storage_browser.py (server on8766). Full field
+NPZ and gzip CSV are committed in output and normal evidence page. Public climate
+and ETOPO caches remain present; restore with restore_earth_harvest_inputs.py
+if reset. New publisher is hooked after the gauge-timing publisher; use the direct
+publisher for this page instead of the full historical chain.
+
+NEXT: qualify real field water retention/bare evaporation and groundwater/flood
+recession before selecting capacity; add missing Tigris/independent region flow
+and access/drainage evidence. Build shared Earth/fantasy river-flow adapter with
+explicit monthly units/calendar,then freeze harvest rule and independent tests.
+Require Nile gain AND Mesopotamian non-inflation,then unchanged whole-empire supply
+calibration. No blind success or adoption follows from these development maps.
+
+CURRENT ATLAS remains release3 with owner-adopted marketed share0.3923:
+850self-fed,174imports,29short,91%residentsfed; reach staffing1042. Whole-empire
+Egypt failure still open. Complete resources/work, actual occupancy and political
+authority remain unresolved; this water diagnostic does not qualify those scopes.
+
+Older entries below are chronological history; this entry controls the next step.
+
 # FLOOD-WATER LEDGER IMPLEMENTED; FIELD ADAPTER NEXT — 13 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Resumed latest remote ec0d09c0.

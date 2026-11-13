@@ -5,7 +5,30 @@ not just its first experiment. Read this alongside the current entry in HANDOFF.
 at every continuation. Physics development has its own queue; neither queue
 silently replaces the other.
 
-## Live review — 13 November 2026
+## Live review — 14 November 2026
+
+Latest step: fixed-calendar field storage feasibility is complete and published
+in reports/FLOOD_BASIN_STORAGE_20261114.md and the normal Earth evidence page.
+Declaration29b39784 preceded field outputs. The generic storage adapter couples
+rain, finite carry, pre-sowing river capture, paid losses and crop/bare ET.
+All96 development rows and matched rain-only controls are retained.52controls,
+72336field rows,868032monthly balances and3fresh numeric files independently
+verified; six viewport/theme checks and54filter combinations pass.
+
+Nile barley water coverage at bareET=PET/efficiency1:9.8%,70.0%,100% under
+100/300/600mm stores. The capacities are UNCALIBRATED sensitivity limits, not
+an adoption result.600mm must not be selected just because it gives full ET.
+The Mesopotamian case omits the Tigris, so it cannot establish total regional
+supply or the required non-inflation gate. Both regions remain development;
+Indus is unscored. Current atlas and all904Earth-fit files remain unchanged.
+
+Current next dependency: qualified field retention, evaporation/groundwater,
+missing river/access/drainage evidence, shared Earth/fantasy flow adapter and
+independent test regions before a frozen harvest rule. Whole-empire Egypt
+calibration failure remains open. Crop ET adequacy does not establish grain
+yield, historical cultivated area, actual occupancy, institutions or sovereignty.
+S3–S5 and complete joint resources/work remain unresolved; keep their separate
+programmes and constraints. Earlier checkpoints below remain historical evidence.
 
 Latest continuation (after ec0d09c0): release-2 sliding100–500people/ha sizes and
 release-3 prior-weighted catchment positions have been published after the newer

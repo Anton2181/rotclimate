@@ -101,6 +101,11 @@ Raw downloads remain in ignored `data/cache/flood_basin_seasonality_20261113/`.
 
 ## Next map dependency
 
+Update 14 November: the [fixed-calendar storage experiment](FLOOD_BASIN_STORAGE_20261114.md)
+now tests retained floodwater against crop demand and matched rain-only controls.
+All 96 development scenarios are published; storage/access and independent
+validation remain unqualified, so no harvest parameter or atlas default changes.
+
 The [conserved routing primitive](../docs/FLOOD_WATER_BUDGET.md) now subtracts
 upstream withdrawals and accounts for delivery losses. Its synthetic mass-balance
 tests do not supply a field irrigation rule. Declare the Earth-and-fantasy-compatible

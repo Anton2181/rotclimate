@@ -81,6 +81,11 @@ Repeated outputs match exactly. [Audit receipt](../output/flood_water_budget_202
 
 ## Remaining field work
 
+The companion [field-storage experiment](../reports/FLOOD_BASIN_STORAGE_20261114.md)
+now couples this ledger to finite monthly field stocks and fixed crop demand.
+Its 96 Earth development scenarios retain all uncalibrated storage and loss
+assumptions. It does not adopt an irrigated-area or harvest rule.
+
 This component has instantaneous travel within each month and upstream-first
 allocation. It does not infer runoff, choose crops, identify flood access, move
 water from rivers to fields, retain pre-sowing water in soil, or simulate return
