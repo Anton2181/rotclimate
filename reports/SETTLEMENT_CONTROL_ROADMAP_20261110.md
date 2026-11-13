@@ -7,6 +7,18 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
+After the field-map checkpoint, primary-source qualification narrows the next
+implementation to separate shallow evaporation and deeper root-zone storage,
+with depletion stress and an inundation/drainage clock. FAO56 generic table
+envelopes give300mm barley /360mm winter wheat; these do not measure Nile soils
+or qualify the successful600mm sensitivity member. Butzer's seasonal dates also
+do not justify the fixed bin boundaries as a calibrated local crop calendar.
+Source facts from two parsing paths and18envelope calculations are committed;
+all96field outcomes and atlas defaults remain unchanged. Declare and verify the
+new structure before more field scores; local profiles, independent regions,
+Tigris/shared-flow evidence and broader programme qualification remain open.
+See FLOOD_STORAGE_SOURCE_QUALIFICATION_20261114.md.
+
 Latest step: fixed-calendar field storage feasibility is complete and published
 in reports/FLOOD_BASIN_STORAGE_20261114.md and the normal Earth evidence page.
 Declaration29b39784 preceded field outputs. The generic storage adapter couples

@@ -1,5 +1,26 @@
 # FIXED-CALENDAR FIELD WATER MAPS REVIEWED — 14 November 2026
 
+AFTER checkpoint e1d88d57, continued with primary-source qualification:
+reports/FLOOD_STORAGE_SOURCE_QUALIFICATION_20261114.md. FAO56 Chapters7/8
+separate a shallow evaporation layer from deeper root-zone water. Generic
+Table19+22 envelopes reach300mm barley /360mm winter wheat; these are NOT Nile
+soil measurements and do not qualify600mm for adoption. Both source-table parses
+and Decimal/float arithmetic agree;18derived envelopes/fresh export byteexact.
+scripts/qualify_flood_storage_sources.py reproduces source facts and hashes.
+Butzer1984 p105 describes flooding through mid-November in the north and a high
+post-flood water table; do not treat standing-water depth as root-zone TAW or
+derive a universal exact Roman crop calendar from seasonal descriptions.
+
+FIRST NEXT IMPLEMENTATION: declare surface-evaporation/root-zone separation,
+depletion stress and explicit drainage, with an inundation/sowing clock. Validate
+against FAO drying examples before new field outputs. Keep all water paid once,
+including transfers/groundwater; do not change crop duration or operator order
+to close Egypt's score. Local soils, Tigris, independent regions and shared
+Earth/fantasy flow remain required. All96field results remain byte-identical.
+Normal page now includes generic source constraints and9byte-checked downloads.
+Build hub with scripts/build_fit_hub.py --date 2026-11-14; explicit publication date
+avoids the UTC host displaying yesterday relative to the owner in Warsaw.
+
 Canonical branch: claude/friendly-turing-43ygeu. Continued from 71f1f192.
 Declaration 29b39784 preceded new climate extraction, storage runs and ET scores.
 New report: reports/FLOOD_BASIN_STORAGE_20261114.md.

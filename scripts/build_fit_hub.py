@@ -92,6 +92,7 @@ def thumbnail(src: Path, dst: Path, width=1200):
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument('--artifact', type=Path, help='write the artifact version into this folder')
+    ap.add_argument('--date', type=datetime.date.fromisoformat, help='publication date YYYY-MM-DD; overrides the build host date')
     a = ap.parse_args()
     artifact = a.artifact is not None
     links = json.loads((ROOT / 'atlases/artifact_links.json').read_text()) if artifact else {}
@@ -225,7 +226,7 @@ def main():
     settled_maps=all((ROOT/'atlases'/name/'data/settled_reach.json').exists() for name in FITS)
     if settled_maps:
         topic_text+=(' Settlements and supply-supported reach now share one seasonal food ledger: local cereal caps civilian requests and available institutional cohorts, then changes which sites emit reach. A transport-matched unconstrained reference and legacy maps remain available. Three listed-field-work scenarios also cap cereal by annual/reaping budgets while keeping rural meals fixed. These are conditional scenarios, not validated populations or sovereignty. ')
-    updated = datetime.date.today().strftime('%-d %B %Y').upper()
+    updated = (a.date or datetime.date.today()).strftime('%-d %B %Y').upper()
     sensitivity_note = ('<p class="note">The Earth atlas also offers Rain sensitivity and Temperature sensitivity under Fit checks, with grid values to download. These show spread across nine hypothetical surroundings at the screening resolution; they are conditional boundary sensitivities, not weather variability or measured climate error.</p>'
                         if has_sensitivity and not artifact else '')
     if artifact:

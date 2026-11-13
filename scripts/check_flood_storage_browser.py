@@ -30,14 +30,15 @@ def main(base):
                         assert page.locator('#count').inner_text()==f'{count} scenarios'
                         assert page.locator('tbody tr:not([hidden])').count()==count
                 page.select_option('#region','');page.select_option('#crop','')
-                for a in page.locator('a[download]').all():
+                links=page.locator('a[download]').all()
+                for a in links:
                     url=urljoin(target,a.get_attribute('href'));reply=page.request.get(url);assert reply.ok,url
                     assert hashlib.sha256(reply.body()).hexdigest()==hashlib.sha256((ROOT/urlsplit(url).path.lstrip('/')).read_bytes()).hexdigest(),url
                 with page.expect_download() as d:page.locator('a[href="fields.csv.gz"]').click()
                 actual=d.value;assert actual.suggested_filename=='fields.csv.gz'
                 assert Path(actual.path()).read_bytes()==(ROOT/'atlases/earth_evidence/flood_storage/fields.csv.gz').read_bytes()
                 page.screenshot(path=str(OUT/f'{width}_{theme}.png'),full_page=True)
-                checks.append(dict(width=width,theme=theme,numeric_rows=96,filter_combinations=9,download_hashes=8,keyboard_focus=True,no_page_overflow=True));page.close()
+                checks.append(dict(width=width,theme=theme,numeric_rows=96,filter_combinations=9,download_hashes=len(links),keyboard_focus=True,no_page_overflow=True));page.close()
         page=browser.new_page()
         for path,selector in [('/atlases/','a[href="earth_evidence/flood_storage/"]'),('/atlases/earth_evidence/','#flood-storage-feasibility a')]:
             page.goto(base+path,wait_until='networkidle');page.locator(selector).click();page.wait_for_url(target)

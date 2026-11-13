@@ -126,7 +126,7 @@ downloads; both field NPZ copies are tracked despite the general ignore rule.
 .venv/bin/python scripts/flood_basin_storage.py
 .venv/bin/python scripts/review_flood_basin_storage.py
 .venv/bin/python scripts/publish_flood_basin_storage.py
-.venv/bin/python scripts/build_fit_hub.py
+.venv/bin/python scripts/build_fit_hub.py --date 2026-11-14
 python scripts/check_flood_storage_browser.py
 ```
 
@@ -135,6 +135,12 @@ publisher hook runs after the gauge-timing panel. Both figures can be downloaded
 at full resolution; the webpage retains all 96 scenarios with filters.
 
 ## What remains before a new settlement map
+
+Subsequent [source qualification](FLOOD_STORAGE_SOURCE_QUALIFICATION_20261114.md)
+narrows the next implementation to separate surface drying, deeper root storage
+and a drainage/sowing clock. Generic FAO constraints do not qualify the successful
+600 mm sensitivity case as an ordinary cereal root-zone store. All 96 field
+results above remain unchanged.
 
 Both regions are development observations. Modern WorldClim climate and the
 earlier gauge records are noncontemporaneous. Shared access is optimistic and
