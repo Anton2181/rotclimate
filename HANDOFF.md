@@ -1,3 +1,95 @@
+# Food-checked visit maps complete — 13 November 2026
+
+CONTINUE AFTER PUSH. Canonical branch claude/friendly-turing-43ygeu only.
+Latest previous remote4d496baf; current checkpoint publishes EIGHT optional
+foodvisits600/300_crew1/4 point maps, ONE complete provider policy/year AND its
+OWN C destination cereal. All32visit/48policyfood rows,2figures and28downloads
+are normal research in atlases/earth_evidence/#food-checked-visits;full methods
+reports/FOOD_CHECKED_VISITS_20261112.md. No default/calibrated adoption.
+
+Full independent review passed43,164,640trip checks,15,494,400worker-bins,
+38,736active food inventories,strict task identities,own food and physical flags.
+Summaryreview32rows;mapreview8cases/all173064pointCSVrows/scalar provider stock
+paths/masks/pixels. Download review240entries/58436provider outcomes/80rows.
+Fresh244model,22map,12download files byte exact. 76focused tests pass. Windows1998byte-exact assets/verifiedr44release. Browser
+8maps/7families/providerCSV/foodfail witnesses in6cases/point clicks/mobile/themes/
+reload/optional failure/defaultv21;research80rows/2figures/30byte-exact links/
+keyboard/mobile/failure/deep link passed. Read receipts in output/continuous_
+food_visit_calendars_20261112. Old766data/assets exact;3UIintegration files
+explicitly before/after hashed. Source algorithms/pinned prior writers untouched.
+
+Next protocol calibration/source_continuous_meals_20261113/plan.json is declared
+BEFORE outputs. Audit SAME fixed rural harvests,people and365day capacities in
+ALL local ANDoutside origins of4parents. A oldmonthly versus Bcontinuous meals
+and immediate capacity clip;whole inventory convention change,not timingalone.
+No newexports/residents/calendars/maps. Keep all16rows/failures/full originfields.
+Implementcontrols,independentscalar/oneannualpulseclosedform review,freshreplay,
+normalpublication/figures. Then separately declare actual source export event
+withdrawals and carried-ration/food-location work. All release1–4/S1–S5/dates/
+sizes/roles/transfer/complete resources/mobile/nonstate/unaffiliated remain open.
+Read current roadmap live review at every continuation;push is a checkpoint.
+
+Scientific .venv/bin/python;globalpython Playwright + /usr/bin/chromium. Server
+8766 local;restart after environment resets. Full historical all-evidence writer
+still missing private Vidarbha cache;use reviewed direct publishers then
+scripts/build_fit_hub.py AFTER finalpublication. Stage assets/release before
+Windows checkout checker. No subagents.
+
+# Active food-checked NEW visit phase after 4d496baf — 13 November 2026
+
+OwnerCONTINUE,doNOTstopafterpushing. 4d496baf pushedcollector-onlyaudit (79tests,
+1948Windowsassets/921hubdeps,all769Earthfilespreserved) andcommitted continuous_
+food_visit_calendars_20261112/plan.json BEFORE nextoutputs. No subagents.
+
+Newpolity/food_checked_provider_year.py wrapsunchangedstrictselect_provider_years
+withcombinedworkbins&OWNfoodC flags,thenexposesphysical12bin,food,qualified
+SEPARATELY. Sixnewcontrols+oldyear/partition=22passed beforefundedoutputs.
+NEWpointjobs produced by scripts/build_continuous_point_jobs.py (adaptedcopyold
+immutablewriter,NEWphysicalparentandnewreservedbudgets,oldexactpathfiles).
+Output output/continuous_food_visit_calendars_20261112/funded_results.json and
+funded_fields.npz. Countsraw600crew1/4=171871/155548,raw300=150386/136654,
+corrected600=179063/163389,corrected300=157533/144167. Allrequests unchanged.
+Pointinlinezerobudget/wholeledger controlsranbeforeeachsavedcase. BeforeFULL
+calendarproduction,55point/foodwrapper/joint/year/worker/partition/eventtests
+passed. Newreview_continuous_point_jobs.py importsunchangedoldindepgraph/scalar
+review check_paths/scalar_allocation;session21515 wasrunning24graphs/8scalarcases.
+Finish/inspect funded_review.json. NO fullvisitcalendar outputs yet.
+
+NEXT implement build_continuous_food_visits.py:all8fundedcases,each2orders,12bins.
+Readonlykey'sfundedarrays toboundmemory. Pointjobsfromfundedserved true;owners=
+provider_for_target,crew-personcost=chosen_cost_hours. Passvisit_duration=cost/crew.
+Collection-first pack_worker_calendar:physicalvisit=visit_packed. Jointoriginal
+pack_joint_worker_calendar:physical=visit_scheduled,binqualified=visit_bin_qualified.
+Physicalpointworkcharged evenlatermandatoryfails. Allservicesbeforejobs exactly
+NEWf work_secondary_hours[1:,month].sum. CollectionprefixinbaselineMUSTfieldexact
+currentcollector-onlycalendar (allcollectionrows/flags;workerendnowincludesvisits,
+soverifyadditionalworkbyvisitintervals ratherthancomparingworkerend directly).
+
+EverypolicyALLactive sourcefoodA/B/C (notonlycomplete),samecargo helperslag/retention.
+Saveper-policy monthlyfullcollection+visit+workerpackets;fields/events foodscalars.
+FoodC selectedonlywithphysicalALL12;wrapperoneWHOLEyear/provider strictbaseline
+qualifiedtaskidentitypreservation. Produce32visitrows(8funded/16policy/8selected)
+AND48policyfoodrows (baselinefoodduplicatesbetweencrews explicit,shouldexactmatch
+currentcollector-onlyfoodfields). Keepall18actors/provider/point partitions.
+NEWselectedfields shouldseparate selected_mandatory_complete,selected_food_no_shortage,
+qualified;use schedule_unqualified (funded&~finalserved),notcalendar-onlylabel.
+Preserveoriginalfunded route/work/capacity channels;all5sumrequestgrid exactly.
+Modelselectedphysicalmonthlywork/visit/collection/missing/hours ANDownCfood
+initial/final/peak/needed/consumed/unmet/spoil/overflow/duration/period/ledger fields
+perprovider. ConditionalNEWparentpeople stayunchangedifqualfails. BaselineQpoints
+retained;allfinaltasks subsetNEWhourfundedjobs. Nootherpolicyfood/cargo borrowed.
+
+Thenindep scalarpointallocator/sorted-listworker&crew/cargo/stock/selectedyear
+review,freshallresult/fields/calendars/exports bytes,normalresearchall32/48+figs
+POSTeveryfigure,methods/review/replay/plan. EIGHTnewdistinctoptionalexperimental
+pointmaps afterallQ/mask/pixel/CSV/browser/families/mobile/Windows checks. Likely
+seventhpacketfamily. Existingpublisher sourceoldnetworkDuty modelcontainsOLDparent
+people/food:mustreplaceALLconditionalnewparentfields/ledgerscorrectly,NOTjustgate
+flags;considernewscopedcontinuous-parent baseexport orcarefulfullmodelupdate with
+indepreview. No newmaps/defaults untilallfood+job+export checks. Fullhistorical
+publisherprivateVidarbhacache stillmissing;directreviewedpublishers only.
+Whole release1–4/S1–S5 empirical/mobile/source/rations/diets gaps remainopen.
+
 # NEW collector/food audit verified; continue food-checked visits — 13 November 2026
 
 Owner “Continue,dont stop after pushing”. Canonicalclaude/friendly-turing-43ygeu.

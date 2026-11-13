@@ -5,7 +5,7 @@ not just its first experiment. Read this alongside the current entry in HANDOFF.
 at every continuation. Physics development has its own queue; neither queue
 silently replaces the other.
 
-## Live review — 12 November 2026
+## Live review — 13 November 2026
 
 Owner instruction: after **each completed step**, revisit this entire programme,
 expand it when findings create dependencies, and save the revised plan here.
@@ -17,13 +17,13 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|
 |Release 2 / S1: counts, placement, sizes|In progress; corrected inputs and 224 placement comparisons reviewed; earlier Vidarbha transfer failed; mixed-period density diagnostic reviewed, sizes still unqualified|Acquire dated phase/extent and sampling evidence; retain count/location Pareto alternatives and plan a genuinely prospective transfer; further density tuning cannot supply missing observations|
-|Release 3: shared-ledger fantasy rebuild|Eight coherent calendars reviewed;24 destination inventory rows now independently checked. Every calendar-qualified provider passes the old bin model but has a continuous cereal gap of about0.19–0.21%|NEW collector-only calendars and all12 planned/packed/return food comparisons independently checked. All active providers retained;2700 scenario entries pass both gates. Next include NEW funded visit jobs and qualify one whole year with its OWN food inventory;source timing/rations/location/complete resources remain open|
-|Release 4: normal numeric publication|Eight optional Complete-year collection schedule point maps plus all24 timing outcomes/three new figures/downloads;earlier map packets/defaults unchanged|Keep the calendar gate necessary only and publish the continuous-food failures explicitly. Normalresearch now includesall12collector food rows,twofigures,all56calendar/event/field packets and12522provider records. Earlier point maps unchanged. Optional food-checked visit maps require new jobs/full calendars and independent exports|
+|Release 3: shared-ledger fantasy rebuild|Eight NEW funded visit plans,16 full physical calendars and48 policy food outcomes independently reviewed. Each selected provider uses ONE whole calendar and its OWN cereal test|Source rural meals still use the old monthly convention. Next fixed-plan local/outside continuous-meal audit;then source export chronology and crew rations/location before any complete provisioning claim|
+|Release 4: normal numeric publication|All32visit/48food rows,2figures,58,436provider outcomes and240calendar/food packets published;8optional food-checked point maps|Independent map masks,pixels,provider stock/food flags/CSVs and fresh244model+22map+12download files pass. Preserve all766earlier data/assets;3UI integration files tracked before/after. No calibrated/default adoption|
 |S1c: historical occupancy|Still unresolved; spatial history priors are scenarios|Acquire dated occupancy/role evidence; ecological capacity and area-derived population cannot establish actual occupation|
 |S1d/e: transfer and adoption|Failed prospective margin remains a failure|Freeze appropriate new role/geography/date coverage before first scoring; new development diagnostics do not repair this gate|
 |S2: settlement sizes, services and roles|Finite resource primitives and housing measurement adapter implemented; province-blocked density diagnostic completed; source selection and dated functions unresolved|Keep conditional density predictions out of dated resident calibration; acquire qualified measurements. Keep villages/markets/ports/seats/garrisons distinct and multiple roles possible|
 |S3: differentiated institutions/control|Pending qualification|Separate local persistence, central connection, fiscal collection and military access; provider evidence precedes staffing; no cereal-to-authority shortcut|
-|S4: complete resources and work|17,427,262 trip identities,2,532,803 event pulses and17,370 provider/accounting inventories independently checked;all24 rows/fresh11files retained. Continuous food gaps remain at every scored provider|10,820,096packed+31,767missingtrip IDs,3,873,600worker-bins and9684active food inventories reviewed. Caggregate gaps shrink whilemoreprovidersfail;food andmandatorywork distinct. Nextfullvisitcalendars/ownfood gate;source timing/rations/location/complete resources remain open|
+|S4: complete resources and work|43,164,640packed trip checks,15,494,400worker-bins and38,736active food inventories independently reviewed in new baseline/joint calendars;physical work and own food flags separate|Next audit continuous rural meals with fixed source harvests/people/capacities,including outside origins. Source event exports,crew-carried food/location,complete diets/household/draft work and empirical work availability remain open|
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
@@ -670,3 +670,28 @@ publication is a research result, not a new size/default adoption. All S1–S5,
 shared-ledger consumer, prospective transfer, complete diets/work and mobile/
 nonstate tasks were revisited and remain on the live queue. Owner requested a
 usage pause: finish this checkpoint,commit/push,then resume from step4 above.
+
+## Whole-programme review after food-checked visit maps — 13 November 2026
+
+Protocol4d496baf preceded outputs. All8NEW funded plans and16full calendars pass
+independent worker/cargo/food/task-identity review. One whole policy/provider/year
+passes BOTH all12mandatory bins and its OWN C cereal. Every NEWbaseline-BOTH
+task retained;gains9,575–15,484. Conditional residents unchanged. All32visit and
+48food rows,2figures,complete58,436provider rows and240archived packets retained.
+244model,22map and12download fresh files exact. Eight OPTIONAL experimental
+point maps add a seventh family;the planning ceiling remains explicitly the
+parent bin-start convention,actual tables show selected return stocks/gaps.
+All766prior data/assets preserved;only3UI integration files exempted explicitly.
+
+Revisited release1–4/S1–S5: count/placement preparation does not qualify dated
+occupancy/sizes/roles;failed transfer stays failed;provider roles precede fiscal/
+military claims. New conjunction is necessary under supplied work/uniform meals,
+not source-event food/ration-location/complete diets/work validation. Unaffiliated,
+mobile/nonstate and overlapping contexts remain in scope. Physics queue separate.
+
+Next declared source_continuous_meals_20261113 audits ALL local/outside origins
+under the SAME fixed rural harvests,people and365-day capacity,old monthly versus
+continuous meals with immediate capacity clip. No new harvest dates,exports,
+calendars,residents or maps. Follow with separately declared source withdrawals
+and carried-ration/location work,not a claim that destination stocks complete S4.
+A push is a checkpoint. CONTINUE after pushing.
