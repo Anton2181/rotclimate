@@ -65,5 +65,17 @@
     "not_rebuilt": "Political reach, trade, administration, dispatch, visits and all other downstream layers keep their published legacy inputs and are labelled as such."
   },
   "publication": "New Settlements map options and an evidence report in the normal earth_fit atlas, with before/after maps, per-town CSV, calibration limits and this declaration. The new option becomes the Settlements default only if both the placement test and the size gate pass. All earlier options, packets and defaults for other layers are preserved.",
-  "review": "Independent reimplementation of the cohort join, hinterlands, fold assignment, fits, gate statistics and fantasy ledgers; fresh deterministic replay of every numeric output."
+  "review": "Independent reimplementation of the cohort join, hinterlands, fold assignment, fits, gate statistics and fantasy ledgers; fresh deterministic replay of every numeric output.",
+  "amendments": [
+    {
+      "id": "A1_people_ledger_wide_draw",
+      "date": "2026-11-13",
+      "made_after": "The first fantasy build under the original rule (not published). Known outcomes at amendment time: the half-hinterland cap bound 142 raw / 152 corrected sites, cut central residents from 13.4 M to 7.0 M, and left the imperial capital at 23,900 residents, below several unmarked sites. Earth calibration results, gates and the placement decision were already final and are unaffected.",
+      "reason": "The cap was a bookkeeping device to conserve people, not Earth evidence. It truncated the calibrated upper tail that the size gate had just qualified, and large cities do draw residents from beyond their nearest-centre hinterland.",
+      "replaces": "fantasy_rebuild.people_ledger",
+      "new_rule": "Each town first draws residents from its own hinterland cells up to half of hinterland people. Any excess is then drawn from the remaining rural people of all land cells within the smallest radius among 120, 240, 480, 960 and 1920 km of the town that holds at least four times the excess, proportionally to remaining rural people, largest excess first. If no radius suffices the town is capped at what a quarter of the 1920 km pool supplies and the shortfall is reported. No people are created; rural people stay nonnegative.",
+      "not_changed": "Size model, coefficients, sigma, seed, lore ordering, density scenarios, cereal check definition, publication rule. The local cereal check uses the final rural people.",
+      "status": "Post-hoc change to an unfitted accounting rule; both the capped first build (in the commit history of this output) and this version are disclosed in the report."
+    }
+  ]
 }
