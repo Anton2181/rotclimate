@@ -14,7 +14,12 @@ window.AdministrativeHierarchy=(()=>{
   }
   async function extend(meta,fresh,mode){
     if(!document.querySelector('script[data-hierarchy-enabled]'))return null;
-    const manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/administrative_hierarchy.json'))));
+    let manifest=null;
+    if(document.querySelector('script[data-hierarchy-release3]')){      // links rebuilt on the release-3 towns; earlier audit is the fallback
+      try{const candidate=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/release3/hierarchy/administrative_hierarchy.json'))));
+        if(candidate.packets[mode]?.expected_harvest_fingerprint===meta.harvest?.fingerprint)manifest=candidate;}catch(e){manifest=null;}
+    }
+    if(!manifest)manifest=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/administrative_hierarchy.json'))));
     const packet=manifest.packets[mode];
     if(!packet||packet.expected_harvest_fingerprint!==meta.harvest?.fingerprint)throw Error('Hierarchy climate does not match');
     if(await hash(await bytes(fresh('data/administrative_inventory.json')))!==manifest.inventory_sha256)throw Error('Hierarchy inventory changed');
