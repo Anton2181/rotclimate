@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-13",
+  "status": "declared_before_any_calibration_output",
+  "purpose": "Owner request: continue from the Roman pilot to a real Earth calibration of the grain supply model. The pilot's two proxies are replaced: production now comes from Earth cereal harvests and field labour, and transport from the same seasonal freight network code the fantasy map uses.",
+  "known_before_declaration": "Pilot results (SETTLEMENT_SUPPLY_EARTH_20261113): with grain proportional to rural people and a static network, 95% of Roman city residents are fed at about 0.6-0.8 person-years marketed per rural resident; west needs half what east does; the answer moves fivefold with the haulage limit. No output of the method below has been computed.",
+  "inputs_rebuilt_from_public_sources": {
+    "worldclim_2_1_5m": "tavg, tmax, tmin, prec, elev from geodata.ucdavis.edu; the elevation archive matches the hash recorded for the lost cache.",
+    "natural_earth_rivers": "matches the recorded hash.",
+    "etopo_2022_60s": "NOAA; the derived arable-share grid matches the recorded hash exactly.",
+    "ncep_ncar_1981_2010_surface_winds": "NOAA PSL monthly long-term means.",
+    "earth_harvest_grid": "scripts/land_people_earth.py rerun with adopted options. Not byte-identical to the lost cache: sampled on the Roman window its people field differs by 0.35% in total and locally by more. The committed Roman people field is therefore kept for people; the rebuilt grid supplies cereal energy and arable share only.",
+    "not_recovered": "Itiner-e roads and the Cliopatria empire outline are taken from the committed Roman inputs (road and allowed masks), not re-downloaded."
+  },
+  "method_identical_to_fantasy": {
+    "production": "Cereal potential per cell = energy of the less laborious of wheat and barley (harvest.work_maps.cereal_work with the atlas's Columella hours) x arable share x 0.6 farmed x 0.6 sown x cell area. Grown grain = harvest.field_support at 600 hours per worker on rural people. Surplus = grown - rural needs.",
+    "network": "polity.trade.cost_network on the Roman window for the four trade months (winds, sailing season, river flow, mud), Roman roads as roads, ports and river landings at city cells.",
+    "transport_and_allocation": "polity.wide_supply unchanged: delivered share 1 - c/L averaged over the four months; cells supply their cheapest city; cheapest-first shipments between cities."
+  },
+  "demand_and_people": "As in the pilot: catalogue cities containing AD 150 on Roman land, official area x sliding density, 25th-percentile area where none is recorded; rural people = committed model people x (1 - urban share). Land outside the empire supplies nothing.",
+  "parameters": {"marketed_share_e": [0.05, 0.1, 0.15, 0.2, 0.25, 0.3333, 0.4, 0.5, 0.67, 1.0], "haul_limit_L_road_km": [135, 200, 270, 400, 540]},
+  "statistics": "F(e, L) = share of city residents fed, for all cities and for west and east halves (median longitude). e95(L) = smallest e with F >= 0.95, linearly interpolated between grid points; likewise for each half.",
+  "identification": "An existence test alone gives a frontier of (e, L) pairs, not a point. The second, declared criterion: the marketed share is an empire-wide institution, so a correct transport rule should need the same share in west and east. L* = the grid L with the smallest absolute log ratio of e95(west) to e95(east), among L where both exist.",
+  "decision_rules": {
+    "haul_limit": "If the west/east ratio at the cited 270 km is within a factor 1.25 of 1, or within 10% of the best grid value, the cited 270 km is kept. Otherwise L* is reported as indicated by Earth and offered to the owner; the fantasy map is not changed automatically.",
+    "marketed_share": "The fantasy one third is called Earth-supported if it lies between e95 and twice e95 at the retained L; called low if below e95; called more than needed if above twice e95.",
+    "transfer": "(e95, L) chosen on the west alone must feed at least 90% of eastern city residents, and the reverse, for the method to be called transferable."
+  },
+  "status_of_result": "A calibration on one exposed pool with an internal west/east transfer. Han China cannot be used: it has seat counts but no city sizes. City sizes are themselves areas x a density reading.",
+  "review": "Independent recomputation of production, demand, the fed-share surface from stored cost arrays with a separately written allocator, e95 interpolation and the decision rules; byte replay."
+}
