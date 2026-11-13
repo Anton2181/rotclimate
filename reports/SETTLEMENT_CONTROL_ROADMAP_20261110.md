@@ -27,6 +27,11 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Supply calibration follow-up, 13 November 2026: a delta-irrigation option for the Earth build does
+not repair Egypt; with Egypt removed the supply calibration passes its declared rules (270 km
+confirmed, west/east transfer 92%/98%, 95% fed at a marketed share of 0.39). Next: flood-basin
+irrigation upstream; owner decision on 0.39.
+
 Supply calibration, 13 November 2026 (latest): Earth caches rebuilt from public sources; the
 supply model run on the Roman Empire with real harvests and the seasonal network fails its
 declared west/east test because the harvest model halves Egypt's output; outside Egypt the cited

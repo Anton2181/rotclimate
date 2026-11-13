@@ -1,3 +1,19 @@
+# SUPPLY CALIBRATION PASSES WITHOUT EGYPT; EGYPT HARVEST STILL OPEN — 13 November 2026 (eighth pass)
+
+Report: reports/SETTLEMENT_SUPPLY_CALIBRATION_20261113.md (rewritten). Plan amendments A1, A2.
+A1: scripts/land_people_earth.py --deltas observed (map's delta-fan rule with observed Edmonds
+areas) -> output/land_people/earth_deltas. Egypt capacity 2.3 -> 2.8 M only (hist 4.5-5);
+calibration unchanged. Option is OFF by default; committed Earth inputs untouched.
+A2: settlement_supply_calibration.py --without-egypt (lon >= 29 E and lat <= 32 N removed from
+demand and supply) PASSES the declared rules: 270 km kept (west/east 1.11), transfer 92%/98%,
+e95 = 0.39. Fantasy one third is "low"; at 0.39 fantasy feeds 91% (29 towns short) vs 85% (41).
+NOTHING changed on the fantasy map.
+
+OPEN OWNER DECISION: adopt marketed share 0.39 (Earth value) in place of one third?
+NEXT UPSTREAM: flood-basin irrigation for desert rivers in the harvest model (Nile gets ~14,500
+km2 irrigated vs ~25,000 historical; model people ~1 M vs 4.5-5 M), fitted/tested on Earth, then
+rerun the whole-empire calibration. Calibration script options: --harvest, --people, --without-egypt.
+
 # EARTH SUPPLY CALIBRATION RUN; BLOCKED BY EGYPT HARVEST — 13 November 2026 (seventh pass)
 
 OWNER: leave town sizes as they are; continue towards a real calibration.

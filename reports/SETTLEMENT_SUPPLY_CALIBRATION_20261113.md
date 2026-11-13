@@ -1,17 +1,21 @@
 # Earth calibration of grain supply: real harvests and the seasonal freight network
 
 **Outcome.** The grain supply model now runs on the Roman Empire with the same
-production, network and allocation code as the fantasy map. As declared, the
-calibration **does not pass**: at the cited 270 km haulage limit the eastern
-cities can never be 95% fed, and west and east need very different settings.
-The cause is identified: the upstream harvest model gives Egypt less than half
-its historical output. With Egyptian cities left out of the score (a post-hoc
-check), the cited limit holds, west and east agree, and the fantasy setting
-behaves like Rome: one third marketed feeds 88% of Roman city residents and
-85% of fantasy ones. No fantasy parameter is changed.
+production, network and allocation code as the fantasy map.
 
-Protocol: [plan](../calibration/settlement_supply_calibration_20261113/plan.json),
-committed before any output.
+- **Whole empire: fails.** Egypt cannot be fed in the model, so the east never
+  reaches 95% and west and east disagree.
+- **Empire without Egypt: passes its declared rules.** The cited 270 km haulage
+  limit is confirmed, the setting transfers between west and east, and 95% of
+  city residents are fed at a marketed share of **0.39**.
+- **Fantasy map:** one third is slightly below 0.39. At 0.39 the fantasy towns
+  are 91% fed instead of 85%. No fantasy parameter has been changed.
+- **Open upstream problem:** the harvest model gives Egypt about half its
+  historical output. A delta rule was added and is not enough.
+
+Protocol: [plan and amendments](../calibration/settlement_supply_calibration_20261113/plan.json).
+The original plan preceded all output; amendments A1 and A2 followed results and
+say what was known.
 
 ![Fed share of Roman city residents by marketed share and haul limit](figures/settlement_supply_calibration_20261113.png)
 
@@ -20,9 +24,7 @@ committed before any output.
 The inputs the pilot lacked are back, from public sources: WorldClim climate,
 ETOPO relief, Natural Earth rivers and NCEP winds. Three recorded hashes match
 (elevation, rivers, arable shares). The Earth harvest grid is a rebuild, not the
-lost file: it reproduces the committed Roman people field to 0.35% in total, so
-people still come from the committed field and only cereal energy and arable
-share come from the rebuild.
+lost file: it reproduces the committed Roman people field to 0.35% in total.
 
 ## Earth and fantasy production agree
 
@@ -32,82 +34,86 @@ share come from the rebuild.
 | Grown as a share of cereal potential (600 field hours) | 57% | 53% |
 | Urban share of people | 16.8% | 25.5% |
 
-The field-work rule gives almost the same surplus per head on both, which is
-the first direct evidence that the fantasy grain ledger is Earth-like.
-
-## Declared test (all cities)
+## 1. Whole empire (original declaration): fails
 
 | Haul limit (road-km) | Fed at one third | Share needed for 95%: all | west | east |
 |---:|---:|---:|---:|---:|
-| 135 | 62% | not reached | not reached | not reached |
 | 200 | 70% | not reached | 0.62 | not reached |
 | **270 (cited)** | **78%** | 0.81 | 0.38 | not reached |
 | 400 | 91% | 0.44 | 0.22 | 0.57 |
 | 540 | 96% | 0.31 | 0.14 | 0.35 |
 
-- **West/east agreement** is best at 540 km, the edge of the declared grid, and
-  even there the two halves differ by a factor 2.5.
-- **Transfer fails:** the western setting feeds only 53% of eastern residents.
-- By the declared rules: the cited 270 km is not confirmed; one third counts as
-  Earth-supported only at 540 km; the method is not transferable.
+West/east agreement is best at the edge of the grid and still off by a factor
+2.5; the western setting feeds only 53% of eastern residents.
 
-## Why: Egypt
+**Cause: Egypt.** At 270 km and one third, Egyptian cities are 22% fed, Greece
+and the Balkans 71%, Italy 84%, Asia Minor 94%, the Levant 99%, the north-west
+100%. Egypt was the empire's granary; in the model it has a capacity of 2.3 M
+people and about 1 M inhabitants, against 4.5–5 M historically.
 
-| Region (270 km, one third) | Cities | Residents | Fed |
-|---|---:|---:|---:|
-| Egypt | 55 | 1.36 M | 22% |
-| Greece and Balkans | 141 | 1.59 M | 71% |
-| Italy | 406 | 2.44 M | 84% |
-| Asia Minor | 121 | 0.90 M | 94% |
-| Levant and Syria | 40 | 0.75 M | 99% |
-| North-west provinces | 129 | 1.37 M | 100% |
+## 2. Delta irrigation added to the Earth build (amendment A1): not enough
 
-Egypt was the empire's granary. The harvest model gives it a capacity of 2.3 M
-people against a historical 4.5–5 M (`output/land_people/earth/regions.json`),
-the only region where history exceeds the model twofold. So Egyptian cities
-starve in the model and Rome loses its main supplier: Rome is 62% fed.
+The fantasy map irrigates land inside a river's delta fan; the Earth build did
+not. Applying the same rule on Earth with the observed delta areas (465 deltas
+in the window) doubles the irrigated area of the Nile delta but lifts Egypt only
+to 2.8 M. The model irrigates about 14,500 km² in Egypt; roughly 25,000 km² were
+cultivated. The calibration is unchanged (79% fed at 270 km and one third).
 
-## Post-hoc: Egyptian cities left out of the score
+Other regions barely move (North China Plain 34.06 → 34.12 M), so the option is
+harmless but does not solve the problem. It is off by default
+(`--deltas observed`); no committed Earth input changed.
 
-| Haul limit | Fed at one third | Share needed for 95%: all | west | east | west/east |
-|---:|---:|---:|---:|---:|---:|
-| 200 | 79% | 0.63 | 0.62 | 0.65 | 0.96 |
-| **270 (cited)** | **88%** | **0.42** | 0.38 | 0.47 | 0.82 |
-| 400 | 99% | 0.28 | 0.22 | 0.31 | 0.70 |
-| 540 | 100% | 0.21 | 0.14 | 0.23 | 0.61 |
+## 3. Empire without Egypt (amendment A2): passes
 
-Here west and east agree best at 200–270 km, the cited limit is inside the
-declared 1.25 tolerance, and 95% feeding needs a marketed share of about 0.42.
-This was not declared in advance and Egyptian cities still draw grain in it.
+Egyptian cities and land are removed from both demand and supply. This is not
+blind: a post-hoc score had already shown the direction. It also deprives Rome
+of Egyptian grain, which makes the test harder for the importers.
+
+| Haul limit | Fed at one third | Share needed for 95%: all | west | east |
+|---:|---:|---:|---:|---:|
+| 200 | 80% | 0.59 | 0.60 | 0.57 |
+| **270 (cited)** | **90%** | **0.39** | 0.37 | 0.42 |
+| 400 | 100% | 0.25 | 0.22 | 0.29 |
+| 540 | 100% | 0.19 | 0.14 | 0.21 |
+
+| Declared rule | Result |
+|---|---|
+| West/east agreement at the cited 270 km within a factor 1.25 | 1.11: **cited limit kept** |
+| Western setting feeds ≥ 90% of eastern residents | 92% |
+| Eastern setting feeds ≥ 90% of western residents | 98% |
+| Fantasy one third between the 95% share and twice it | below it (0.33 < 0.39): **"low"** |
+
+1,030 city cells, 7.7 M residents, 14.6% urban. Rome is fully fed from a
+marketed share of 0.5 and 65% fed at one third.
 
 ## What this means for the fantasy map
 
-| Fantasy headline (sliding sizes, one third) | Residents fed | Towns short |
+| Fantasy headline (sliding sizes, 270 km) | Residents fed | Towns short |
 |---|---:|---:|
-| Haul limit 270 km (current) | 85% | 41 |
-| 400 km | 96% | 16 |
-| 540 km | 100% | 1 |
+| One third marketed (current) | 85% | 41 |
+| 0.39 marketed (Earth value) | 91% | 29 |
 
-- The current setting (one third, 270 km) is in line with Rome outside Egypt.
-- Feeding 95% would take a marketed share of about 0.42, or a 400 km limit.
-  Neither is adopted; this is an owner decision once Egypt is fixed.
+The haul limit needs no change. The marketed share that Earth supports is 0.39
+rather than one third. Adopting it is an owner decision; nothing has been changed.
 
 ## Limits
 
-- One pool, already used in development, with an internal west/east check.
-  Han China has no city sizes and cannot test this.
-- The decisive Egypt exclusion is post-hoc.
-- The least-work rule picks barley everywhere on Earth (it needs fewer hours),
-  as the atlas rule prescribes; Roman farming was wheat-heavy.
+- One pool, already used in development, with an internal west/east check. Han
+  China has no city sizes and cannot test this.
+- The passing variant excludes the empire's largest grain exporter and was
+  declared after a post-hoc look.
+- The least-work rule picks barley on every Earth cell; Roman farming was
+  wheat-heavy.
 - City sizes are areas times a density reading; 600 field hours covers listed
   field tasks only.
 - No state grain fleet, no other foods, no shipping capacity.
 
 ## Next step
 
-Fix Egypt in the harvest model (Nile flood irrigation gives it half its
-historical output), then rerun this calibration unchanged. That is the single
-change most likely to turn the declared test from fail to pass.
+A flood-basin irrigation rule for desert rivers in the harvest model, fitted and
+tested on Earth (Nile, Mesopotamia, Indus), then this calibration rerun on the
+whole empire. That is upstream work and would also change the fantasy map's
+harvests along desert rivers.
 
 ## Reproduce
 
@@ -115,11 +121,13 @@ change most likely to turn the declared test from fail to pass.
 # public inputs: WorldClim 2.1 5m (tavg,tmax,tmin,prec,elev), Natural Earth rivers, NCEP 1981-2010 surface winds
 .venv/bin/python -I scripts/arable_slope_earth.py
 .venv/bin/python -I scripts/land_people_earth.py --out output/land_people/earth   # then: git checkout output/land_people/earth/regions.json
+.venv/bin/python -I scripts/land_people_earth.py --out output/land_people/earth_deltas --deltas observed
 .venv/bin/python -I scripts/settlement_supply_calibration.py
-.venv/bin/python -I scripts/review_settlement_supply_calibration.py
-.venv/bin/python -I scripts/settlement_supply_calibration_diagnostics.py --fantasy
+.venv/bin/python -I scripts/settlement_supply_calibration.py --out output/settlement_supply_calibration_20261113/without_egypt --without-egypt
+.venv/bin/python -I scripts/review_settlement_supply_calibration.py [without_egypt]
 ```
 
-The review recomputes production, the whole fed-share surface, the interpolated
-thresholds and the decision rules; it passes. A fresh run reproduces the results
-byte for byte.
+The review recomputes production, the whole fed-share surface, the thresholds
+and the decision rules for the whole-empire and without-Egypt runs; both pass.
+Fresh runs reproduce both byte for byte. The three delta-grid runs are recorded
+but not separately reviewed.

@@ -11,7 +11,7 @@ import numpy as np, pandas as pd
 from scipy import ndimage as ndi
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'output/settlement_supply_calibration_20261113'; sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
+OUT = ROOT / 'output/settlement_supply_calibration_20261113' / (sys.argv[1] if len(sys.argv) > 1 else ''); sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest()
 R = json.loads((OUT / 'results.json').read_text()); z = np.load(OUT / 'calibration.npz'); problems = []
 x = np.load(ROOT / 'output/settlement_locations_20261110/rome_inputs.npz'); K = 912500.
 
@@ -22,7 +22,9 @@ wheat, barley, arable = [np.nan_to_num(e[k]).astype(float)[r, c] for k in ('kcal
 hw = np.where(wheat > 0, 336. / np.where(wheat > 0, wheat, 1), np.inf); hb = np.where(barley > 0, 208. / np.where(barley > 0, barley, 1), np.inf)
 use_b = hb <= hw; kcal = np.where(np.isfinite(np.minimum(hw, hb)), np.where(use_b, barley, wheat), 0.)
 hours = np.where(kcal > 0, np.where(use_b, 208., 336.) / np.where(kcal > 0, kcal, 1) * 1e6, 0.); reap = np.where(kcal > 0, np.where(use_b, 32., 48.) / np.where(kcal > 0, kcal, 1) * 1e6, 0.)
-ok = x['land'] & x['allowed']; pot = np.where(ok, kcal * 100 * 81. * arable * .36, 0.).ravel()
+ok = x['land'] & x['allowed']
+if R['world'].get('without_egypt'): ok = ok & ~((x['lon'] >= 29.) & (x['lat'] <= 32.))
+pot = np.where(ok, kcal * 100 * 81. * arable * .36, 0.).ravel()
 people = np.where(ok, x['density'], 0.).ravel() * 81.; res = z['residents']; rural = people * (1 - res.sum() / people.sum())
 workers = rural * .4; annual = workers * 600.; peak = np.minimum(annual, workers * 240.)
 with np.errstate(divide='ignore', invalid='ignore'):
