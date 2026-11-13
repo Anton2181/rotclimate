@@ -27,6 +27,25 @@ the current queue. A push is a checkpoint, not a stopping condition.
 |S5: mobile/nonstate occupancy|Pending integration; existing livelihood/circuit experiments retained|Connect seasonal water/feed/camp rights and actual occupancy to the same resources; all actors, unaffiliated and overlapping communities remain in scope|
 |Cross-cutting / physics|Source identities, exposure, independent reviews, fresh replay and atlas consistency ongoing; physics queue remains separate|Record new data exposure and uncertainty, protect reserved inputs, post every new map/chart and retain a reproducible handoff|
 
+Immediate release priority — owner clarification, 13 November 2026:
+
+The owner asks when the NEXT EARTH-CALIBRATED SETTLEMENT ATLAS will arrive.
+The first-release path below explicitly puts detailed institutions/control and
+S2–S5 on later releases. Do not keep adding food/calendar/storage experiments
+as new prerequisites for the settlement location/population release. The latest
+source/destination audits are complete and preserved. The declared loss-aware
+source-reserve experiment is PARKED; no prototype/cohort outputs were run.
+
+We remain at milestone2of4: empirical count/location/size qualification. The
+Vidarbha transfer failed its declared capture margin; all50housing records still
+lack AD150 phase/extent/representativeness qualification. Code/ledger/browser
+passes and optional point maps do not complete this milestone. Next recover and
+qualify usable measurements, declare fit/comparison and fresh transfer rules
+before new scores, then rebuild fantasy settlements and publish the normal atlas.
+There is no defensible calendar release ETA until the empirical gate is resolved.
+Do not promise that another diagnostic push is a calibrated map. Keep the full
+long-term S1–S5/physics queue, but prioritize this first settlement release.
+
 Immediate sequence:
 
 1. **Completed:** finer scan doubles intervals for four central coupled cases;

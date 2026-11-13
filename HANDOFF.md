@@ -1,3 +1,34 @@
+# OWNER PRIORITY: next Earth-calibrated settlement atlas — 13 November 2026
+
+LatestowneraskswhengettingnextEarthcalibratedsettlementatlas. Weansweredhonestly:
+no defensiblereleaseETA, stillmilestone2of4 empiricalcount/location/sizefit.
+PriortransferFAILED;50housingrecordsstillzeroqualifiedAD150labels. Eightmaps
+pushed38d918bd areEXPERIMENTAL,not thepromisedcalibratedrelease. Too muchwork
+wentintofood/staffdiagnostics;STOPdetouring. Thefourmilestonecontract explicitly
+leavesdetailedinstitution/control/S2–S5tolaterreleases. Preservefullprogramme,
+butmakeempiricalcalibrationthereleasecriticalpath.
+
+Latestpush46d8aaf6 completes48source-filled destination outcomes,normalpub,
+2104Windowsassets/allcurrentpins/52freshfiles;workingtreecleanbeforethispriority
+update. Earlier203fc49b sourcepickups,049ba98e ruralmealconvention,38d918bd8maps.
+ALLarepreserved. Loss-aware reserveplanwasdeclared46d8aaf6 BUTNOprototypeor
+cohortoutputsrun;PARKIT whilecalibrationrelease2 unresolved.
+
+NEXT recover/qualifyusablecount/location/residentmeasurements andfreeze fit/
+comparison/newtransfer BEFOREscores;oldVidarbhaisspent,failure stays. Original
+housing2017/workbookaccess404/403;2023table50samplecities has47unknownsample
+phases/3incompatibleAD150,alllackcertifiedsampling/extent. No invented dates or
+regressionpopulationsasindependentlabels. Websource-recoverycheckinprogress:
+Oxfordofficialcitiesdatabase,SocialReactorspublications,DOIeqapevAn8. Exact
+originalworkbookSHA5b9fc0195c3b5f2df71d6380174974215280cafd3bf5fa463fbf96969b549b6c.
+ThirdpartycsvmirrorfoundbywebsearchbutNOTverified/loaded;notoriginalworkbook.
+
+Milestone1refscomplete;2fit/testcountlocationSIZEpending;3sharedledgerfantasy
+rebuildafterqualifiedfit;4normalatlaspublish/QA. No crediblecalendarETAyet.
+Prioritize thispath,doNOTclaimexperimentalpointmapsorbalancedledgersareEarth
+calibration. Source-role/date/mobile/complete-resource/physicslongtermqueuekept.
+Canonicalbranch claude/friendly-turing-43ygeu;pushsinglebranchonly,thenCONTINUE.
+
 # Source-filled destination audit complete — 13 November 2026
 
 CONTINUE AFTER PUSH. Canonicalclaude/friendly-turing-43ygeu only. Latestremote
