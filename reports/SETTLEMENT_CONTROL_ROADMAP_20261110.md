@@ -7,6 +7,26 @@ silently replaces the other.
 
 ## Live review — 13 November 2026
 
+Latest continuation (after ec0d09c0): release-2 sliding100–500people/ha sizes and
+release-3 prior-weighted catchment positions have been published after the newer
+official source audit; downstream maps rebuilt. Owner adopted marketed share
+0.3923 (850self-fed/174imports/29short,91%fed); reach staffing remains1042.
+The dated checkpoint table below predates those newer releases and is retained
+as history. It does not supersede the current HANDOFF entry or reopen adoption.
+
+Current upstream dependency is Egypt harvest / flood-basin irrigation. Terrain
+groundwork rejects a terrain-only uplift: Egypt24600km² vsMesopotamia64000km²,
+where capacity is already too high. New gauge source/timing preflight is reviewed:
+15controls,1469observations,168season combinations,504independent phase values,
+5fresh files byteexact. Both scored gauges are development; the pre1932Indus
+check is UNSCORED (source begins1936), so no transfer success or adoption.
+Report: FLOOD_BASIN_SEASONALITY_20261113.md.
+
+Next dependency: explicit water budget and cropcalendar/tie policy, qualified
+independent region evidence, then frozen field test of Nile gain AND Mesopotamian
+noninflation before wholeempire supply calibration. Timing is not irrigable area.
+No completion claim for S3–S5, complete resources/work, or actual sovereignty.
+
 Owner instruction: after **each completed step**, revisit this entire programme,
 expand it when findings create dependencies, and save the revised plan here.
 Update this live section and the review log before proceeding. The historical

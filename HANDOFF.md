@@ -1,3 +1,43 @@
+# FLOOD TIMING INPUTS REVIEWED; WATER-BUDGET RULE NEXT — 13 November 2026
+
+Resumed latest remote ec0d09c0 on canonical claude/friendly-turing-43ygeu, not the
+older source-audit queue. Release-3 settlements and owner-adopted marketed share
+0.3923 remain current (850 self-fed,174 imports,29 short,91% fed). No map change
+in this preflight; all904 Earth-fit files remain byte-identical.
+
+Declaration2aaa35f9 preceded numeric gauges/phase outputs. Source preparation,
+complete-year quality gate and cyclic timing primitive DONE. Aswan1871–1901
+(31 complete years) vsHit1965–67/1969–71(6). Fixed November/five-month timing
+compatibility0.9443 vs0.0494. These are dimensionless timing diagnostics,NOT
+irrigated shares. IndusKotri starts1936,so pre1932 check staysUNSCORED; no postdam
+substitute,no heldout success,no irrigation/harvest adoption. Wholeempire stillfails.
+
+Report reports/FLOOD_BASIN_SEASONALITY_20261113.md; evidence page
+atlases/earth_evidence/flood_basin/. scripts/fetch_flood_gauges.py pins source
+bytes; flood_basin_seasonality.py produces; review_flood_basin_seasonality.py
+independently parses raw HTML and uses Decimal/scalar arithmetic.15controls,
+1469source rows,168season combinations/504phase values;5freshfiles byteexact.
+Numeric source CSV,NPZ,all phases,all excludedyears,source URLs/licenses shipped.
+publish_flood_basin_seasonality.py publishes; then build_fit_hub.py refreshes hub.
+Full publish_earth_evidence.py now includes the new panel hook; do not invoke the
+whole historical publisher chain just to refresh this one page.
+Publication checks:6mobile/desktop light/dark cases,keyboard,download bytehashes,
+hub/evidence/return links and zero browser errors. Fresh Windows-style checkout
+passes with2217byte-exact assets and verified release. NewNPZ fields are tracked
+despite the repository's general *.npz ignore rule.
+
+NEXT: water-budget/delivery/cropcalendar primitive and defensible independent
+test regions; declare before new area/capacity scores. Do not multiply terrain
+area by phase diagnostic and call it full irrigation. Cropoptimizer has fully
+watered season ties; calendar tie policy must be explicit. Restore ignored Earth
+WorldClim/ETOPO/rivers caches (absent in THIS executor), preserve committed region
+summaries. Require Nile gain AND Mesopotamian noninflation, then unchanged
+wholeempire supply calibration. Find qualified independent gauge/irrigation
+evidence; Indus is not validated by the current source.
+
+The older entries below are chronological history. Their open owner decision
+about39% and their parked source-audit priorities are superseded.
+
 # MARKETED SHARE 0.39 ADOPTED — 13 November 2026 (ninth pass)
 
 OWNER: adopt Earth-calibrated marketed share. build_wide_supply_release3.py reads 0.3923 from

@@ -8,8 +8,9 @@ production, network and allocation code as the fantasy map.
 - **Empire without Egypt: passes its declared rules.** The cited 270 km haulage
   limit is confirmed, the setting transfers between west and east, and 95% of
   city residents are fed at a marketed share of **0.39**.
-- **Fantasy map:** one third is slightly below 0.39. At 0.39 the fantasy towns
-  are 91% fed instead of 85%. No fantasy parameter has been changed.
+- **Fantasy map:** the owner adopted the fitted share 0.3923 in commit `7d9e418a`.
+  The current headline is 91% fed, with 850 self-fed towns, 174 supplied by
+  imports and 29 short. The previous one-third scenario was 85% fed.
 - **Open upstream problem:** the harvest model gives Egypt about half its
   historical output. A delta rule was added and is not enough.
 
@@ -90,11 +91,12 @@ marketed share of 0.5 and 65% fed at one third.
 
 | Fantasy headline (sliding sizes, 270 km) | Residents fed | Towns short |
 |---|---:|---:|
-| One third marketed (current) | 85% | 41 |
-| 0.39 marketed (Earth value) | 91% | 29 |
+| One third marketed (previous) | 85% | 41 |
+| 0.3923 marketed (Earth value, adopted) | 91% | 29 |
 
-The haul limit needs no change. The marketed share that Earth supports is 0.39
-rather than one third. Adopting it is an owner decision; nothing has been changed.
+The owner adopted the Earth-supported share 0.3923; the cited 270 km haul limit
+is retained. These fantasy outputs are published. The Egypt failure and the
+limits of the without-Egypt calibration remain unchanged.
 
 ## Limits
 
