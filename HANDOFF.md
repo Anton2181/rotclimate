@@ -1,3 +1,26 @@
+# EARTH SUPPLY CALIBRATION RUN; BLOCKED BY EGYPT HARVEST — 13 November 2026 (seventh pass)
+
+OWNER: leave town sizes as they are; continue towards a real calibration.
+Report: reports/SETTLEMENT_SUPPLY_CALIBRATION_20261113.md. Plan: calibration/settlement_supply_calibration_20261113.
+
+EARTH CACHES REBUILT (all public, all in ignored data/cache or ignored npz):
+  data/cache/worldclim/wc2.1_5m_{tavg,tmax,tmin,prec,elev}.zip  https://geodata.ucdavis.edu/climate/worldclim/2_1/base/
+  data/cache/naturalearth_dl/ne_10m_rivers_lake_centerlines.geojson  raw.githubusercontent.com/nvkelso/natural-earth-vector/master/geojson/
+  data/cache/ncep_ltm/{uwnd,vwnd,wspd}.mon.ltm.nc  downloads.psl.noaa.gov/Datasets/ncep.reanalysis.derived/surface/<v>.sig995.mon.ltm.1981-2010.nc
+  scripts/arable_slope_earth.py (ETOPO via NOAA; arable_5m.npz hash MATCHES the recorded one)
+  scripts/land_people_earth.py --out output/land_people/earth  (earth.npz REBUILT, not byte-identical:
+  Roman people field differs 0.35% in total; it rewrites tracked regions.json -> git checkout it). pip install h5py.
+  Still missing: itinere roads gpkg, Cliopatria, Han shapefile (committed pool masks are used instead).
+
+RESULT: declared test FAILS (east never 95% fed at 270 km; best west/east agreement at grid edge
+540; transfer 53%). Cause: harvest model gives Egypt 2.3 M capacity vs 4.5-5 M historical.
+Post-hoc without Egyptian cities in the score: 270 km holds (west 0.38 / east 0.47), e95 = 0.42,
+one third feeds 88% (fantasy 85%). Earth surplus per rural head 2.15 vs fantasy 2.2.
+No fantasy parameter changed.
+
+NEXT: fix Egypt/Nile irrigation in the Earth harvest model, rerun the calibration unchanged;
+then owner decision between marketed share 0.42 and haul limit 400 if 95% feeding is wanted.
+
 # ONE-THIRD SUPPLY, SUPPLY-FED REACH, AND ROMAN SUPPLY PILOT — 13 November 2026 (sixth pass)
 
 OWNER DECISIONS: one third of surplus marketed; calibrated residents feed the reach chain;
