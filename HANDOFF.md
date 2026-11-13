@@ -8,6 +8,12 @@ republished; browser checks pass.
 
 NEXT UPDATE (groundwork started): flood-basin irrigation for desert rivers, see
 calibration/flood_basin_irrigation_20261113/ and its notes.
+GROUNDWORK DONE: scripts/flood_basin_groundwork.py -> output/flood_basin_irrigation_20261113/groundwork.json.
+Land <= 5 m above the nearest navigable river and within 30 km: Egypt 24,600 km2 (history ~25,000;
+model irrigates 9,700). BUT the same test gives Lower Mesopotamia 64,000 km2 where the model is
+already too high (capacity 8.2 M vs 0.7-2 M). So terrain alone cannot be the rule; a second factor
+is needed (flood timing vs crop season is the first candidate). Plan file is groundwork, NOT a
+frozen test declaration: freeze rule and held-out rivers before scoring.
 
 # SUPPLY CALIBRATION PASSES WITHOUT EGYPT; EGYPT HARVEST STILL OPEN — 13 November 2026 (eighth pass)
 

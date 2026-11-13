@@ -1,0 +1,25 @@
+{
+  "date": "2026-11-13",
+  "status": "groundwork_only_not_yet_a_frozen_test_plan",
+  "purpose": "Next update: a flood-basin irrigation rule for desert rivers in the harvest model, so that the whole-empire grain supply calibration can be rerun with Egypt included.",
+  "why": "The Earth harvest build gives Egypt a capacity of 2.3 M (2.8 M with the observed delta-fan option) against 4.5-5 M historically, and about 1 M inhabitants. The supply calibration therefore passes only with Egypt removed (SETTLEMENT_SUPPLY_CALIBRATION_20261113.md).",
+  "groundwork_result": {
+    "file": "output/flood_basin_irrigation_20261113/groundwork.json",
+    "finding_1": "Terrain already sees the Nile floodplain. Land no more than 5 m above the nearest mapped navigable river and within 30 km of it: 14,300 km2 in the delta and 10,300 km2 in the valley, 24,600 km2 together, close to the roughly 25,000 km2 usually given for cultivated Roman Egypt. The current rules irrigate the equivalent of 9,700 km2 (14,500 km2 with delta fans).",
+    "finding_2": "The same terrain test gives Lower Mesopotamia 64,000 km2, where the model already has too much: 16,900 km2 irrigated-equivalent and a capacity of 8.2 M against 0.7-2 M historically.",
+    "implication": "Low land beside a big river is necessary but not sufficient. A rule that fixes Egypt by terrain alone would make Mesopotamia worse. The rule needs a second factor that separates the two."
+  },
+  "candidate_second_factors_to_test": [
+    "Flood timing against the crop calendar: the Nile floods in late summer before the winter cereal; Tigris and Euphrates flood in spring on a standing crop. Computable on any map from the river's monthly flow and the crop season the harvest model already derives.",
+    "Flood reliability and size relative to the plain: discharge per km2 of low land.",
+    "Drainage and salinity risk: very flat plains with no gradient to the sea."
+  ],
+  "earth_evidence_to_assemble_before_freezing_a_test": [
+    "Historical irrigated area by country around 1900 (the HID dataset the existing irrigation gate was scored against).",
+    "Regional populations already in output/land_people/earth/regions.json (Egypt, Mesopotamian alluvium) plus the Indus plain.",
+    "Monthly river flow at the mouth: HydroRIVERS discharge is annual only, so a monthly source or the model's own runoff routing is needed."
+  ],
+  "rules_for_the_eventual_test": "Declare the rule and its held-out regions before scoring. Fit on some desert rivers and test on others; Egypt alone must not set a parameter. Report every historical region before and after, as the delta option did. Keep the rule off by default until it passes.",
+  "consumers": "The Earth harvest grid (people and cereal potential), then the whole-empire supply calibration. If adopted for the map it changes fantasy harvests along desert rivers and everything downstream, so it needs the normal atlas publication path.",
+  "already_in_place": "scripts/land_people_earth.py has the 1 arc-minute HAND computation inside irrigation() and the --deltas option as a template for an off-by-default rule; scripts/flood_basin_groundwork.py reproduces the measurements above."
+}
