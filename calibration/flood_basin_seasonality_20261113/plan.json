@@ -1,0 +1,53 @@
+{
+  "date": "2026-11-13",
+  "status": "source_preparation_and_phase_preflight_declared_before_discharge_values",
+  "purpose": "Continue ec0d09c0 flood-basin groundwork: establish defensible monthly river-flow timing inputs and a cyclic pre-sowing compatibility primitive before any new harvest/irrigated-area fit.",
+  "known": "Nile and Euphrates regimes are qualitatively known from cited historical/agricultural literature;groundwork already exposedNile24600km2/Mesopotamia64000km2 atHAND<=5m/30km. No new station discharge values or seasonal scores inspected. Latest owner-adopted marketed share0.3923 and release3 atlas remain unchanged.",
+  "sources": [
+    {
+      "id": "aswan",
+      "doi": "10.1594/PANGAEA.218345",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.218345?format=textfile",
+      "role": "development",
+      "primary_years": [
+        1869,
+        1901
+      ],
+      "reason": "Before first Aswan dam1902;modern regulated observations retained only as labelled sensitivity."
+    },
+    {
+      "id": "hit",
+      "doi": "10.1594/PANGAEA.218668",
+      "url": "https://doi.pangaea.de/10.1594/PANGAEA.218668?format=textfile",
+      "role": "development",
+      "primary_years": [
+        1932,
+        1972
+      ],
+      "reason": "Before Tabqa/Keban major upstream impoundment;downstream gauge recordmetadata1964-1972 limits coverage. Earlier local management not assumed absent."
+    },
+    {
+      "id": "dai_global",
+      "doi": "10.5281/zenodo.17379716",
+      "url": "https://zenodo.org/records/17379716/files/coastal-stns-Vol-monthly.updated-Aug2025.nc?download=1",
+      "role": "station_metadata_and_possible_Indus_check",
+      "primary_years": [
+        1900,
+        1931
+      ],
+      "reason": "Inspect station/time/missingness metadata first;use uniqueIndus entry only if >=5completeyears beforeSukkurBarrage1932. No replacement by post-regulation Kotri1973-1979 as natural holdout. If unsupported,check staysunscored."
+    }
+  ],
+  "quality": "Every calendar year needs exactly12unique nonnegative finite monthly means;drop incomplete years without filling and list all exclusions. Use >=5completeyears for phase preflight,not reliability/flood-risk estimation. Preserve units m3/s and actualcalendar months;poolcompleteyears equally. Flag source qualifiers or nonnumeric values instead of treatingaszero. No modern-to-ancient natural-flow identity claim.",
+  "primitive": "For each of12possible sowing months and supplied cropduration3..9months,compute pre-sowing high-flow opportunity from positive excess over the annual monthly mean in the1..3preceding months;separately report the excess share overlapping the standing crop. Primary no-fit compatibility=max(0,pre_excess_share-standing_excess_share),bounded0..1. Full12sowing spectra retained;no month selected from observed crop/output residuals. FrozenNovember winter-sowing illustration,5month crop,for BOTHdevelopment rivers;allothermonths anddurations retained as sensitivities.",
+  "scope": "This is a phase/input preflight,NOTa floodplain water-volume model or calibrated irrigable share. No production increase from timing alone,no modifications to defaultcropselection,capacity,marketed share,settlements ornormalmap. Futurefield rule must handle cropseason ties,runoff routing/travel and water budgets;freeze candidate/held-out irrigationregions before population/area scores.",
+  "review": "Independent raw source parsing,complete-year arithmetic and scalar cyclic phase calculation;year/missingness/duplicate/rotation/flat-flow controls before reportedphase outputs;source/code hashes andfresh byte replay. Normal report/figures/downloads with unscoredchecksandregulationlimits. Keepoldmaps/data/defaultsbyteexact.",
+  "public_sources": [
+    "https://doi.org/10.1594/PANGAEA.218345",
+    "https://doi.org/10.1594/PANGAEA.218668",
+    "https://doi.org/10.5281/zenodo.17379716",
+    "https://sites.utexas.edu/butzer/wp-content/uploads/sites/6106/2017/07/Butzer-1984-LongTermNile.pdf"
+  ],
+  "licenses": "PANGAEA recordsCC-BY3.0;Dai datasetattribution perZenodo/NCARdocumentation. Rawdownloadsincache,sourceURLs/hashes/aggregatesandderivedphasefieldscommitted.",
+  "next": "Afterinputpreflight,declareEarth+fantasy-compatibleflood-basinfieldruleandheldoutregions;testNilegainandMesopotamianon-inflation,thenrerunwhole-empiresupplycalibration. Noautomaticadoption."
+}
