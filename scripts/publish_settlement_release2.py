@@ -17,13 +17,13 @@ def radius(people):
 
 def render(mode, scenario, sites, actors, f, meta):
     land = f['land']; h, w = land.shape; W, H = meta['width'] * SCALE, meta['height'] * SCALE
-    rural = np.divide(f['rural'], f['people'], out=np.ones_like(f['rural']), where=f['people'] > 0)
+    rural = np.divide(f['rural_' + scenario], f['people'], out=np.ones_like(f['people']), where=f['people'] > 0)
     rgb = np.empty((h, w, 3)); rgb[:] = [.84, .89, .94]
     drawn = np.clip(1 - rural, 0, .8)[land][:, None] / .8
     rgb[land] = np.array([.90, .88, .82]) * (1 - drawn) + np.array([.80, .66, .52]) * drawn
     image = Image.fromarray(np.rint(rgb * 255).astype('u1')).resize((W, H), Image.Resampling.NEAREST)
     draw = ImageDraw.Draw(image); px = W / w
-    people = f['residents_' + scenario]; support = f['local_support_share']
+    people = f['residents_' + scenario]; support = f['local_support_share_' + scenario]
     for j in np.argsort(-people):
         s = sites[j]; x, y = (s['column'] + .5) * px, (s['row'] + .5) * px; r = radius(people[j]) * SCALE
         color = actors[s['actor_index']]['color'] if s['actor_index'] >= 0 else '#59636b'
@@ -50,19 +50,19 @@ def main():
         f = dict(np.load(OUT / f'fantasy_{mode}_fields.npz')); c = fantasy['climates'][mode]
         csv_file = target / mode / 'towns.csv'; shutil.copyfile(OUT / f'fantasy_{mode}_towns.csv', csv_file)
         options = []
-        for scenario, label in (('central', 'sliding 100–500 people/ha'), ('low', '100 people/ha')):
+        for scenario, label, role in (('central', 'sliding 100–500 people/ha', 'published method'), ('low', 'flat 100 people/ha', 'cautious alternative')):
             r = c['residents'][scenario]; file = target / mode / f'towns_{scenario}.webp'
             render(mode, scenario, model['sites'], model['actors'], f, meta).save(file, lossless=True)
             note = (f"Release 2: town SIZES calibrated on Earth, on the existing town positions. Built-up areas follow the official "
                 f"catalogue of Roman cities (Hanson 2016): held-out distribution distance {g['gate']['mean_ks']:.3f} against a 0.10 limit. "
-                f"Residents = area × {label}, a density scenario, not a census: {r['total']/1e6:.2f} M town residents, "
+                f"Residents = area × {label} ({role}; Hanson 2016 and Hanson & Ortman 2017 find density rising with city size and a 20–30% urban share), a density scenario, not a census: {r['total']/1e6:.2f} M town residents, "
                 f"{100*r['share_of_world_people']:.1f}% of the world's people, largest {r['largest']:,.0f}. Which place is large is "
-                f"almost unexplained on Earth, so the largest sizes are given to the campaign's marked capital, cities and fortified towns (a lore choice). "
-                f"Every resident is taken from surrounding rural cells; nobody is created. Only {c['local_cereal']['fully_supported_sites']} of "
-                f"{c['sites']} towns (white centre) could be fed from one day's local grain collection in the central scenario; the rest depend on wider supply. "
+                f"almost unexplained on Earth, so sizes follow the campaign's own ranking: capital, major cities, fortified cities, fortified towns, then unmarked towns (a lore choice). "
+                f"Every resident is taken from surrounding rural cells; nobody is created. Only {r['local_cereal']['fully_supported_sites']} of "
+                f"{c['sites']} towns (white centre) could be fed from one day's local grain collection; the rest depend on wider supply. "
                 f"Town positions were NOT changed: the tested new placement rule won 5 of 8 regions, short of its declared 6. "
                 f"Reach, trade and administration layers still use the earlier settlement sizes.")
-            options.append(dict(value=f'release2_{scenario}', label=f'Release 2 · Earth-calibrated sizes · {label}', note=note,
+            options.append(dict(value=f'release2_{scenario}', label=f'Release 2 · Earth-calibrated sizes · {label} ({role})', note=note,
                 integrated_support=False, release2=True, file=str(file.relative_to(DATA)), file_sha256=sha(file),
                 download=str(csv_file.relative_to(DATA)),
                 items=[dict(color='#59636b', label='Circle area ∝ town residents (1,000 · 10,000 · 100,000 → radius 2.0 · 3.6 · 8.7 px)'),

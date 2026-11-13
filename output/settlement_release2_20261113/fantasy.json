@@ -1,8 +1,8 @@
 {
   "status": "release2_fantasy_settlements_calibrated_sizes_legacy_placement",
-  "plan_sha256": "61111bb26188627bc610daa1d5151da0e3ca4cbc8feb79be943352e4c3e1973a",
+  "plan_sha256": "0856eace134af2465493209ec1f74cc10c8a8da4be0e9db34f9de58947d2c279",
   "earth_results_sha256": "71e3f25d4f861954b0aae1b918a6b61b90221d933e9d2158457bad2a5db3e201",
-  "producer_sha256": "77f66aaf0145cafb527c16089f07cae0a37395f580304058e703df71fbcd4095",
+  "producer_sha256": "08033f4911a4423a3326fc7d83599761d57f0984575da458fe1797e4a201709a",
   "model_sha256": "bd70de4a60627b2a616aff28fda6cf92afd009a2696a49e6a42a6c36cec758df",
   "placement": "legacy published sites retained: fixed18_L800 won 5 of 8 quadrants, below the declared 6",
   "tracks_rebuilt": false,
@@ -15,6 +15,7 @@
       "cell_km": 3.680247859200001,
       "world_people": 53119878.87244873,
       "sites_without_hinterland_people": 0,
+      "headline_scenario": "central",
       "size_model": {
         "name": "M1",
         "coefficients": [
@@ -45,7 +46,7 @@
       "total_area_ha": 55170.059820861505,
       "residents": {
         "central": {
-          "total": 13487841.455065953,
+          "total": 13487841.455065954,
           "share_of_world_people": 0.2539132569833774,
           "quantiles": {
             "0.05": 581.134665961419,
@@ -54,11 +55,38 @@
             "0.75": 9388.777203821157,
             "0.95": 68115.77920974608
           },
-          "largest": 255325.6241021107
+          "largest": 255325.6241021107,
+          "people_ledger": {
+            "moved": 13487841.455065954,
+            "rural": 39632037.41738278,
+            "residual": -3.725290298461914e-09,
+            "from_own_hinterland": 6793766.444364504,
+            "from_wider_region": 6694075.010701449,
+            "sites_drawing_wider": 164,
+            "unmet_shortfall": 0.0,
+            "wider_radius_counts": {
+              "120": 150,
+              "240": 14,
+              "480": 0,
+              "960": 0,
+              "1920": 0
+            },
+            "minimum_cell_rural_share": 0.23923684878888699
+          },
+          "local_cereal": {
+            "collection_fraction": 0.1,
+            "retention": 0.95,
+            "fully_supported_sites": 245,
+            "import_dependent_sites": 789,
+            "supported_resident_equivalents": 1554451.4072323982,
+            "median_support_share": 0.42985485657674527,
+            "collection_origin_cells": 19371,
+            "origin_cells_below_rural_need": 50
+          }
         },
         "low": {
-          "total": 5517005.982086151,
-          "share_of_world_people": 0.10385953618858143,
+          "total": 5517005.98208615,
+          "share_of_world_people": 0.10385953618858142,
           "quantiles": {
             "0.05": 581.134665961419,
             "0.25": 1528.4375392604875,
@@ -66,7 +94,34 @@
             "0.75": 6385.183461935223,
             "0.95": 19058.5611830216
           },
-          "largest": 51065.12482042214
+          "largest": 51065.12482042214,
+          "people_ledger": {
+            "moved": 5517005.98208615,
+            "rural": 47602872.890362576,
+            "residual": 1.862645149230957e-09,
+            "from_own_hinterland": 5192366.120143672,
+            "from_wider_region": 324639.8619424785,
+            "sites_drawing_wider": 42,
+            "unmet_shortfall": 0.0,
+            "wider_radius_counts": {
+              "120": 42,
+              "240": 0,
+              "480": 0,
+              "960": 0,
+              "1920": 0
+            },
+            "minimum_cell_rural_share": 0.43987743776917054
+          },
+          "local_cereal": {
+            "collection_fraction": 0.1,
+            "retention": 0.95,
+            "fully_supported_sites": 237,
+            "import_dependent_sites": 797,
+            "supported_resident_equivalents": 1479274.6392257786,
+            "median_support_share": 0.42342648853209586,
+            "collection_origin_cells": 19371,
+            "origin_cells_below_rural_need": 50
+          }
         }
       },
       "legacy": {
@@ -81,41 +136,13 @@
         },
         "largest": 8232.590793708536
       },
-      "people_ledger": {
-        "moved": 13487841.455065953,
-        "rural": 39632037.41738278,
-        "residual": -1.862645149230957e-09,
-        "from_own_hinterland": 6793766.444364504,
-        "from_wider_region": 6694075.01070145,
-        "sites_drawing_wider": 164,
-        "unmet_shortfall": 0.0,
-        "wider_radius_counts": {
-          "120": 148,
-          "240": 16,
-          "480": 0,
-          "960": 0,
-          "1920": 0
-        },
-        "minimum_cell_rural_share": 0.24876775748353308
-      },
-      "local_cereal": {
-        "collection_fraction": 0.1,
-        "retention": 0.95,
-        "fully_supported_sites": 245,
-        "import_dependent_sites": 789,
-        "residents_in_fully_supported_sites": 291940.87355743913,
-        "supported_resident_equivalents": 1554782.5175031335,
-        "median_support_share": 0.4293503015946576,
-        "collection_origin_cells": 19371,
-        "origin_cells_below_rural_need": 50
-      },
       "lore_ordering": {
         "marked_reassigned": 121,
-        "rule": "largest residuals to capital, major cities, fortified cities, fortified towns; rest pooled (amendment A2)"
+        "rule": "largest residuals to ranked walled places (A2); their areas then strictly follow campaign rank (A3)"
       },
       "outputs": {
-        "fantasy_raw_towns.csv": "e2f5b9aadcc89695c96a9bc599e4ff21477db057bce51bef8b94c35e435a3ab5",
-        "fantasy_raw_fields.npz": "5a84e56ef869d9c9ec625f125f67af86e5c77bdba31be97da396f571b4a00bba"
+        "fantasy_raw_towns.csv": "50b5562ff28c6516e45c050a2b9d4c42d550da3f25ab9b62038d603379d3ce9d",
+        "fantasy_raw_fields.npz": "a51df14d0dc4e719dbd2ee502c237e4fb8b509737343dbb21399d8cb3f5a89e4"
       },
       "inputs": {
         "atlases/earth_fit/data/settled_reach.json.gz": "20f8f9f4568edc7bd89f6dd688c16bbfe6d0eda7722dbf142e0043826e8804c0",
@@ -131,6 +158,7 @@
       "cell_km": 3.680247859200001,
       "world_people": 53428650.08831206,
       "sites_without_hinterland_people": 0,
+      "headline_scenario": "central",
       "size_model": {
         "name": "M1",
         "coefficients": [
@@ -170,7 +198,34 @@
             "0.75": 9639.410500678205,
             "0.95": 66708.66275836954
           },
-          "largest": 255267.34635203425
+          "largest": 255267.34635203425,
+          "people_ledger": {
+            "moved": 13621940.351737652,
+            "rural": 39806709.73657441,
+            "residual": -3.725290298461914e-09,
+            "from_own_hinterland": 6916761.024999028,
+            "from_wider_region": 6705179.326738625,
+            "sites_drawing_wider": 156,
+            "unmet_shortfall": 0.0,
+            "wider_radius_counts": {
+              "120": 140,
+              "240": 16,
+              "480": 0,
+              "960": 0,
+              "1920": 0
+            },
+            "minimum_cell_rural_share": 0.22306415203119423
+          },
+          "local_cereal": {
+            "collection_fraction": 0.1,
+            "retention": 0.95,
+            "fully_supported_sites": 248,
+            "import_dependent_sites": 805,
+            "supported_resident_equivalents": 1587587.4821412968,
+            "median_support_share": 0.41187459180127095,
+            "collection_origin_cells": 19295,
+            "origin_cells_below_rural_need": 12
+          }
         },
         "low": {
           "total": 5584805.573131908,
@@ -182,7 +237,34 @@
             "0.75": 6458.791125649992,
             "0.95": 18802.290445961473
           },
-          "largest": 51053.46927040685
+          "largest": 51053.46927040685,
+          "people_ledger": {
+            "moved": 5584805.573131908,
+            "rural": 47843844.515180156,
+            "residual": -3.725290298461914e-09,
+            "from_own_hinterland": 5249191.846423345,
+            "from_wider_region": 335613.72670856275,
+            "sites_drawing_wider": 40,
+            "unmet_shortfall": 0.0,
+            "wider_radius_counts": {
+              "120": 40,
+              "240": 0,
+              "480": 0,
+              "960": 0,
+              "1920": 0
+            },
+            "minimum_cell_rural_share": 0.4426096810423157
+          },
+          "local_cereal": {
+            "collection_fraction": 0.1,
+            "retention": 0.95,
+            "fully_supported_sites": 229,
+            "import_dependent_sites": 824,
+            "supported_resident_equivalents": 1511326.3792815,
+            "median_support_share": 0.4089192686568211,
+            "collection_origin_cells": 19295,
+            "origin_cells_below_rural_need": 12
+          }
         }
       },
       "legacy": {
@@ -197,41 +279,13 @@
         },
         "largest": 7088.946151650874
       },
-      "people_ledger": {
-        "moved": 13621940.351737652,
-        "rural": 39806709.73657441,
-        "residual": -3.725290298461914e-09,
-        "from_own_hinterland": 6916761.024999028,
-        "from_wider_region": 6705179.326738625,
-        "sites_drawing_wider": 156,
-        "unmet_shortfall": 0.0,
-        "wider_radius_counts": {
-          "120": 140,
-          "240": 16,
-          "480": 0,
-          "960": 0,
-          "1920": 0
-        },
-        "minimum_cell_rural_share": 0.22262418271810583
-      },
-      "local_cereal": {
-        "collection_fraction": 0.1,
-        "retention": 0.95,
-        "fully_supported_sites": 249,
-        "import_dependent_sites": 804,
-        "residents_in_fully_supported_sites": 287718.8325320436,
-        "supported_resident_equivalents": 1587397.2656478127,
-        "median_support_share": 0.41313021612447304,
-        "collection_origin_cells": 19295,
-        "origin_cells_below_rural_need": 12
-      },
       "lore_ordering": {
         "marked_reassigned": 121,
-        "rule": "largest residuals to capital, major cities, fortified cities, fortified towns; rest pooled (amendment A2)"
+        "rule": "largest residuals to ranked walled places (A2); their areas then strictly follow campaign rank (A3)"
       },
       "outputs": {
-        "fantasy_corrected_towns.csv": "ccec5c7339bded1b7c23c828cda0624216ddc355031578957aa50c002fe4677c",
-        "fantasy_corrected_fields.npz": "53a37530f45715cc2735c5ad7eb54dd81e431825faf2deca25536ce4512859fb"
+        "fantasy_corrected_towns.csv": "01269c58f6b80fe11f890a2481e02d7ff725badfb7382af0deb0d05904231d60",
+        "fantasy_corrected_fields.npz": "3c87f68910b33b00e939d4c7b7125c6f84c0e04539d6f0a00829367ca29a97e5"
       },
       "inputs": {
         "atlases/earth_fit/data/corrected/settled_reach.json.gz": "b039184a57f178355272ad9cd0c62ee8be83fbeeac66dc9c3b10d54001a72f5f",

@@ -45,16 +45,21 @@ scatter of 1.057. It reproduces the *distribution* of city sizes on held-out
 provinces. It does **not** predict which city is large: held-out R² is zero.
 Coast, river, road and heartland distance add nothing.
 
-Residents are area times a density scenario. Central: 100 people/ha up to 50 ha
-rising to 500 at 400 ha (endpoints from Hanson 2016; the interpolation is ours).
-Applied to all 885 official areas it gives 11.1 M, inside Hanson's published
-10.6–12.2 M. Low: 100 people/ha throughout.
+Residents are area times a density reading. **Headline: sliding density**, 100
+people/ha up to 50 ha rising to 500 at 400 ha (endpoints from Hanson 2016; the
+interpolation is ours). Applied to all 885 official areas it gives 11.1 M, inside
+Hanson's published 10.6–12.2 M. This is the published method for these areas, and
+Hanson & Ortman (2017) show density rising with settlement size; they report a
+20–30% urban share and Hanson (2022) about a fifth. **Alternative: flat 100
+people/ha**, the lowest band only. It lands near the older 10–15% estimates
+(Scheidel), which were not derived from city areas, and matches no published
+method; it is kept as a cautious lower reading.
 
 ## The fantasy map
 
 ![Earlier default (top) and release 2, central scenario (bottom)](figures/settlement_release2_maps_20261113.png)
 
-| | Earlier sizes | Release 2 low | Release 2 central |
+| | Earlier sizes | Release 2 flat 100/ha | Release 2 sliding (headline) |
 |---|---:|---:|---:|
 | Town residents (corrected climate, 1,053 towns) | 3.08 M | 5.58 M | 13.62 M |
 | Share of the world's 53.4 M people | 5.8% | 10.5% | 25.5% |
@@ -64,20 +69,22 @@ Applied to all 885 official areas it gives 11.1 M, inside Hanson's published
 Fantasy built-up areas match the Roman quantiles (5/15/32/65/188 ha against
 5/15/33/63/165). Raw climate: 1,034 towns, 13.49 M central.
 
-- **People are conserved.** Every resident is taken from rural cells; the ledger
-  closes to 10⁻⁹. 156 towns (164 raw) need more than half of their own 60 km
-  hinterland and draw 6.7 M people from 120–240 km around. No cell loses more
-  than 78% of its people.
-- **Food.** Only 249 towns (245 raw) can be fed in the central scenario from one
-  day's local grain collection; that collection covers about 1.6 M residents.
-  The rest are flagged import-dependent, not shrunk. Wider supply is not modelled.
+- **People are conserved.** Each reading has its own ledger; every resident is
+  taken from rural cells and the ledger closes to 10⁻⁹. In the headline reading
+  156 towns (164 raw) need more than half of their own 60 km hinterland and draw
+  6.7 M people from 120–240 km around; no cell loses more than 78% of its people.
+  The flat reading needs this for 40 towns and 0.3 M people.
+- **Food.** Only 248 towns (245 raw) in the headline reading, 229 in the flat
+  one, can be fed from one day's local grain collection; that collection covers
+  about 1.6 M residents. The rest are flagged import-dependent, not shrunk.
+  Wider supply is not modelled.
 - **Not rebuilt.** Tracks (positions did not move), political reach, trade,
   administration and the work-calendar layers still use the earlier sizes.
 
-## Two rules changed after first results
+## Rules changed after first results
 
-Both concern bookkeeping on the fantasy side, not the Earth calibration, and both
-earlier builds remain in the commit history.
+All concern the fantasy side, not the Earth calibration; earlier builds remain
+in the commit history.
 
 1. **A1.** The original rule capped every town at half of its own hinterland. It
    removed 48% of calibrated residents and left the capital at 23,900. Replaced
@@ -86,8 +93,14 @@ earlier builds remain in the commit history.
    draws now go to the campaign's capital, major cities, fortified cities and
    fortified towns, in that order; unmarked towns, forts and monasteries share
    the rest. This is a lore choice. Without it seven unmarked sites exceeded the
-   capital. The capital still ranks sixth (239,642), behind four fortified cities
-   with larger hinterlands.
+   capital.
+3. **A3 (owner decision).** Lore ranking is strict on final size: the ranked
+   places' areas are reassigned among themselves so the capital (255,267) is the
+   largest, then the two major cities, 28 fortified cities and 90 fortified towns.
+   The set of areas is unchanged. Each density reading now has its own ledger.
+4. **A4 (owner decision).** The owner asked for the better-argued reading. A3 had
+   briefly chosen the flat density as headline; that reasoning is withdrawn and
+   the sliding density is the headline, for the reasons given above.
 
 ## Limits
 
@@ -98,8 +111,9 @@ earlier builds remain in the commit history.
   grid 172, other 84) and catalogue dates; 1,350 of 1,388 cities have no end
   date. No housing sample is a qualified AD 150 label (all 50 keys join; 43 site
   areas equal the official value, 7 differ).
-- An individual town's size is one seeded draw. The central density scenario
-  implies Hanson's high urban share; the low scenario is the cautious reading.
+- An individual town's size is one seeded draw. The fantasy sizes are drawn from
+  cities that have a recorded area (492 of 1,354 catalogue cities have none and
+  are probably smaller), so the total town population may lean high.
 
 ## Reproduce
 

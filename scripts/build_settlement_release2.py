@@ -28,6 +28,7 @@ LORE_RANK = {'imperial capital': 0, 'major imperial city': 1, 'fortified city': 
 KCAL_YEAR = 2500.0 * 365.0
 COLLECTION, RETENTION, MAX_SHARE, SEED = 0.10, 0.95, 0.5, 1
 WIDE_RADII_KM = (120.0, 240.0, 480.0, 960.0, 1920.0)
+SCENARIOS = ('central', 'low')        # headline first (amendment A4)
 
 
 def build(mode, earth, out):
@@ -67,29 +68,9 @@ def build(mode, earth, out):
     e = e_new; order = ranked
     area = np.where(valid, Z.generate_area(np.nan_to_num(mean), sigma, e, low_ha, high_ha), 0.0)
 
-    # People ledger (amendment A1): own hinterland first, then the wider region.
-    wanted = np.where(valid, Z.residents(area, 'central'), 0.0)
-    own = np.minimum(wanted, MAX_SHARE * H); excess = wanted - own
-    frac = np.divide(own, H, out=np.zeros_like(own), where=H > 0)
-    moved_own = np.bincount(cells, weights=weight * people.ravel()[cells] * frac[owner], minlength=h * w)
-    rural = (people.ravel() - moved_own).reshape(shape)
-    yy, xx = np.indices(shape); wide = np.zeros(len(sites)); radius_used = np.zeros(len(sites)); shortfall = np.zeros(len(sites))
-    for i in np.argsort(-excess, kind='stable'):
-        if excess[i] <= 0:
-            break
-        d2 = ((yy - centres[i, 0]) ** 2 + (xx - centres[i, 1]) ** 2) * cell ** 2
-        for radius in WIDE_RADII_KM:
-            mask = land & (d2 <= radius ** 2); pool = float(rural[mask].sum())
-            if pool >= 4.0 * excess[i]:
-                break
-        draw = min(excess[i], 0.25 * pool)
-        rural[mask] *= 1.0 - draw / pool
-        wide[i] = draw; radius_used[i] = radius; shortfall[i] = excess[i] - draw
-    res = own + wide
-    town = {'central': res, 'low': np.minimum(np.where(valid, Z.residents(area, 'low'), 0.0), res)}
-    rural = rural.ravel(); moved = people.ravel() - rural
-    if rural.min() < -1e-6 or abs(moved.sum() - res.sum()) > 1e-6 * max(1.0, res.sum()):
-        raise ValueError('People ledger does not close')
+    # Strict lore order (amendment A3): the ranked places' own areas, reassigned so
+    # area follows campaign rank. Same set of areas, same distribution.
+    area[ranked] = np.sort(area[ranked])[::-1]
 
     x = dict(np.load(LEDGER / f'{mode}_inputs.npz'))
     if not np.array_equal(x['nodes'], [s['node'] for s in sites]) or not np.array_equal(x['land'], land):
@@ -97,57 +78,82 @@ def build(mode, earth, out):
     if not np.allclose(x['people'], people.ravel(), rtol=1e-12, atol=1e-9):
         raise ValueError('Reviewed ledger people differ from the population grid')
     local = x['local_index']; catchment = x['owner']
-    need = rural[local] * KCAL_YEAR
-    surplus = np.maximum(x['potential_kcal'][local] - need, 0.0)
-    collectable = np.bincount(catchment, weights=surplus, minlength=len(sites)) * COLLECTION * RETENTION
-    support = np.divide(collectable, res * KCAL_YEAR, out=np.zeros_like(res), where=res > 0)
-    deficit_cells = int(np.sum(x['potential_kcal'][local] < need - 1e-6))
+    yy, xx = np.indices(shape); L = {}; summary = {}
+    q = lambda v: {str(p): float(np.quantile(v, p)) for p in (.05, .25, .5, .75, .95)}
+    for scenario in SCENARIOS:
+        # People ledger (amendment A1): own hinterland first, then the wider region.
+        wanted = np.where(valid, Z.residents(area, scenario), 0.0)
+        own = np.minimum(wanted, MAX_SHARE * H); excess = wanted - own
+        frac = np.divide(own, H, out=np.zeros_like(own), where=H > 0)
+        moved_own = np.bincount(cells, weights=weight * people.ravel()[cells] * frac[owner], minlength=h * w)
+        rural = (people.ravel() - moved_own).reshape(shape)
+        wide = np.zeros(len(sites)); radius_used = np.zeros(len(sites)); shortfall = np.zeros(len(sites))
+        for i in np.argsort(-excess, kind='stable'):
+            if excess[i] <= 0:
+                break
+            d2 = ((yy - centres[i, 0]) ** 2 + (xx - centres[i, 1]) ** 2) * cell ** 2
+            for radius in WIDE_RADII_KM:
+                mask = land & (d2 <= radius ** 2); pool = float(rural[mask].sum())
+                if pool >= 4.0 * excess[i]:
+                    break
+            draw = min(excess[i], 0.25 * pool)
+            rural[mask] *= 1.0 - draw / pool
+            wide[i] = draw; radius_used[i] = radius; shortfall[i] = excess[i] - draw
+        res = own + wide; rural = rural.ravel(); moved = people.ravel() - rural
+        if rural.min() < -1e-6 or abs(moved.sum() - res.sum()) > 1e-6 * max(1.0, res.sum()):
+            raise ValueError('People ledger does not close')
+        need = rural[local] * KCAL_YEAR
+        surplus = np.maximum(x['potential_kcal'][local] - need, 0.0)
+        collectable = np.bincount(catchment, weights=surplus, minlength=len(sites)) * COLLECTION * RETENTION
+        support = np.divide(collectable, res * KCAL_YEAR, out=np.zeros_like(res), where=res > 0)
+        positive = res > 0
+        L[scenario] = dict(res=res, own=own, wide=wide, radius=radius_used, rural=rural, moved=moved, support=support)
+        summary[scenario] = dict(total=float(res.sum()), share_of_world_people=float(res.sum() / people.sum()),
+            quantiles=q(res[positive]), largest=float(res.max()),
+            people_ledger=dict(moved=float(moved.sum()), rural=float(rural.sum()),
+                residual=float(people.sum() - rural.sum() - res.sum()),
+                from_own_hinterland=float(own.sum()), from_wider_region=float(wide.sum()),
+                sites_drawing_wider=int((wide > 0).sum()), unmet_shortfall=float(shortfall.sum()),
+                wider_radius_counts={str(int(r)): int((radius_used == r).sum()) for r in WIDE_RADII_KM},
+                minimum_cell_rural_share=float(np.min(np.divide(rural, people.ravel(), out=np.ones_like(rural), where=people.ravel() > 0)))),
+            local_cereal=dict(collection_fraction=COLLECTION, retention=RETENTION,
+                fully_supported_sites=int(np.sum(positive & (support >= 1.0))),
+                import_dependent_sites=int(np.sum(positive & (support < 1.0))),
+                supported_resident_equivalents=float(np.minimum(collectable / KCAL_YEAR, res).sum()),
+                median_support_share=float(np.median(support[positive])),
+                collection_origin_cells=int(len(local)),
+                origin_cells_below_rural_need=int(np.sum(x['potential_kcal'][local] < need - 1e-6))))
 
     legacy = np.array([s['civilian_request_people'] for s in sites])
     rows = []
     for i, s in enumerate(sites):
-        rows.append(dict(id=s['id'], name=s['name'], row=s['row'], column=s['column'], marked=bool(s['marked']),
+        row = dict(id=s['id'], name=s['name'], row=s['row'], column=s['column'], marked=bool(s['marked']),
             campaign_symbol=kind[i] or '', actor=s['actor'] or '', hinterland_people=round(float(H[i]), 1),
-            calibrated_area_ha=round(float(area[i]), 2), residents_central=round(float(town['central'][i]), 1),
-            residents_low=round(float(town['low'][i]), 1), from_own_hinterland=round(float(own[i]), 1),
-            from_wider_region=round(float(wide[i]), 1), wider_radius_km=float(radius_used[i]),
-            local_cereal_support_share=round(float(min(support[i], 99.0)), 4),
-            import_dependent=bool(res[i] > 0 and support[i] < 1.0),
-            legacy_request_people=round(float(legacy[i]), 1)))
+            calibrated_area_ha=round(float(area[i]), 2))
+        for k in SCENARIOS:
+            v = L[k]
+            row.update({f'residents_{k}': round(float(v['res'][i]), 1), f'from_wider_region_{k}': round(float(v['wide'][i]), 1),
+                f'local_cereal_support_share_{k}': round(float(min(v['support'][i], 99.0)), 4),
+                f'import_dependent_{k}': bool(v['res'][i] > 0 and v['support'][i] < 1.0)})
+        row['legacy_request_people'] = round(float(legacy[i]), 1); rows.append(row)
     target = out / f'fantasy_{mode}_towns.csv'
     with target.open('w', newline='', encoding='utf-8') as f:
         wr = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator='\r\n'); wr.writeheader(); wr.writerows(rows)
-    np.savez_compressed(out / f'fantasy_{mode}_fields.npz', land=land, people=people, moved=moved.reshape(shape),
-        rural=rural.reshape(shape), hinterland_people=H, area_ha=area, residents_central=town['central'],
-        residents_low=town['low'], from_own_hinterland=own, from_wider_region=wide, wider_radius_km=radius_used,
-        local_support_share=support, residual=e, cell_km=cell,
-        hinterland_cells=cells, hinterland_owner=owner, hinterland_weight=weight)
-    positive = res > 0
-    q = lambda v: {str(p): float(np.quantile(v, p)) for p in (.05, .25, .5, .75, .95)}
+    arrays = {}
+    for k, v in L.items():
+        arrays.update({f'residents_{k}': v['res'], f'from_own_hinterland_{k}': v['own'], f'from_wider_region_{k}': v['wide'],
+            f'wider_radius_km_{k}': v['radius'], f'rural_{k}': v['rural'].reshape(shape), f'moved_{k}': v['moved'].reshape(shape),
+            f'local_support_share_{k}': v['support']})
+    np.savez_compressed(out / f'fantasy_{mode}_fields.npz', land=land, people=people, hinterland_people=H, area_ha=area,
+        residual=e, cell_km=cell, lore_class=np.array([LORE_RANK.get(k, 9) for k in kind]), **arrays)
     return dict(climate=mode, sites=len(sites), marked=int(sum(s['marked'] for s in sites)), cell_km=cell,
-        world_people=float(people.sum()), sites_without_hinterland_people=int((~valid).sum()),
+        world_people=float(people.sum()), sites_without_hinterland_people=int((~valid).sum()), headline_scenario=SCENARIOS[0],
         size_model=dict(name=name, coefficients=coef, sigma=sigma, area_range_ha=[low_ha, high_ha], seed=SEED),
         area_quantiles_ha=q(area[valid]), earth_observed_quantiles_ha=size['observed_quantiles_ha'],
-        total_area_ha=float(area.sum()),
-        residents={k: dict(total=float(v.sum()), share_of_world_people=float(v.sum() / people.sum()),
-                           quantiles=q(v[positive]), largest=float(v.max()))
-                   for k, v in town.items()},
+        total_area_ha=float(area.sum()), residents=summary,
         legacy=dict(request_total=float(legacy.sum()), share_of_world_people=float(legacy.sum() / people.sum()),
                     quantiles=q(legacy), largest=float(legacy.max())),
-        people_ledger=dict(moved=float(moved.sum()), rural=float(rural.sum()),
-                           residual=float(people.sum() - rural.sum() - res.sum()),
-                           from_own_hinterland=float(own.sum()), from_wider_region=float(wide.sum()),
-                           sites_drawing_wider=int((wide > 0).sum()), unmet_shortfall=float(shortfall.sum()),
-                           wider_radius_counts={str(int(r)): int((radius_used == r).sum()) for r in WIDE_RADII_KM},
-                           minimum_cell_rural_share=float(np.min(np.divide(rural, people.ravel(), out=np.ones_like(rural), where=people.ravel() > 0)))),
-        local_cereal=dict(collection_fraction=COLLECTION, retention=RETENTION,
-            fully_supported_sites=int(np.sum(positive & (support >= 1.0))),
-            import_dependent_sites=int(np.sum(positive & (support < 1.0))),
-            residents_in_fully_supported_sites=float(res[positive & (support >= 1.0)].sum()),
-            supported_resident_equivalents=float(np.minimum(collectable / KCAL_YEAR, res).sum()),
-            median_support_share=float(np.median(support[positive])),
-            collection_origin_cells=int(len(local)), origin_cells_below_rural_need=deficit_cells),
-        lore_ordering=dict(marked_reassigned=len(order), rule='largest residuals to capital, major cities, fortified cities, fortified towns; rest pooled (amendment A2)'),
+        lore_ordering=dict(marked_reassigned=len(order), rule='largest residuals to ranked walled places (A2); their areas then strictly follow campaign rank (A3)'),
         outputs={p.name: sha(p) for p in (target, out / f'fantasy_{mode}_fields.npz')},
         inputs={str(p.relative_to(ROOT)): sha(p) for p in (folder / 'settled_reach.json.gz', folder / 'administration_grid.npz',
                 LEDGER / f'{mode}_inputs.npz', DATA / 'atlas.json')})
@@ -175,5 +181,4 @@ if __name__ == '__main__':
     p = argparse.ArgumentParser(description=__doc__); p.add_argument('--out', type=Path, default=OUT)
     r = run(p.parse_args().out)
     for mode, c in r['climates'].items():
-        print(json.dumps({k: c[k] for k in ('climate', 'sites', 'sites_without_hinterland_people', 'area_quantiles_ha',
-              'earth_observed_quantiles_ha', 'residents', 'legacy', 'people_ledger', 'local_cereal')}, indent=1))
+        print(mode, {k: (round(v['total']), round(v['share_of_world_people'], 4), round(v['largest']), v['local_cereal']['fully_supported_sites'], v['people_ledger']['sites_drawing_wider']) for k, v in c['residents'].items()})
