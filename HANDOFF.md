@@ -14,8 +14,12 @@ UNCHANGED (diff <1e-17); delivered 0.595 -> 0.86 km3, all extra spent as bare-so
 before sowing; 10.2 km3 flows past (spring peak, Aug-Oct capture window).
 Rain-only cases equal archived arrays exactly. review_tigris_fields.py passes (3,078,432
 field-steps, max 1.7e-12 mm); fresh files byte-exact.
-NEXT (this lane): declare a spring/canal capture-season sensitivity for BOTH regions before
-any harvest rule; Mesopotamian non-inflation currently holds by timing.
+CAPTURE SEASON DONE (0042b81b declared; reports/CAPTURE_SEASON_20261114.md): pre-sowing /
+in-crop canal / both, 24 runs, 8 exact archived controls. Nile +3-6 points with both; Meso
+2.5->3.5% (H), 0.7->1.0% (PM) max. No season inflates Mesopotamia.
+NEXT (this lane): declare a BASE-FLOW diversion scenario for both regions together (the one change
+that could inflate Mesopotamia), then freeze the harvest translation for the Nile-gain AND
+Mesopotamian non-inflation test.
 Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
 
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
