@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "owner_instruction": "Fix the people side first, then port to the fantasy map.",
+  "problem": "With the floodplain rule in production (calibration/floodplain_rule_20261114 A2), the whole-empire supply calibration fails narrowly (west->east transfer 89.2% < 90%). The heartland people pattern was rescaled to the committed field's window total, which puts 6.65 M people in Egypt proper (historical 4.5-5 M), so Egyptian farmers eat more of their own grain.",
+  "known_before_declaration": "Egypt capacity with the rule 5.83 M; committed window total and the P2 totals inside the Roman 'allowed' mask have NOT been computed.",
+  "people_level_variants": {
+    "frier": "PRIMARY. Heartland pattern P2 = capacity (floodplain grid) x exp(-D/800) scaled so its total on the pool's Roman 'allowed' land equals 61.4 M (Frier 2000, Cambridge Ancient History XI, AD 164). The same factor applies off allowed land.",
+    "absolute": "P2 with no rescaling (capacity x occupancy as computed). Sensitivity."
+  },
+  "production": "Floodplain rule in supply production exactly as amendment A2 (scripts/floodplain_supply.py machinery), harvest grid output/land_people/earth_floodplain/earth.npz.",
+  "runs": "For each level: whole empire and without Egypt.",
+  "rules": "Original supply-calibration decision unchanged (270 km kept within ln 1.25 or 1.1 x best; transfer >= 0.90 both ways). Report Egypt-proper people against 4.5-5 M and e95 against the adopted 0.3923 (robust if within x1.25).",
+  "interpretation_declared": "PASS on 'frier' whole empire = the Earth supply calibration passes with Egypt in development; its e95 is the Earth-supported share with Egypt. Then the floodplain rule is ported to the fantasy map as a separate declared step. A pass only on 'absolute' is reported but not used. A fail on both leaves Egypt open and the port still proceeds as the owner asked, with this result stated.",
+  "outputs": "output/supply_people_level_20261114/{results.json, review.json}"
+}
