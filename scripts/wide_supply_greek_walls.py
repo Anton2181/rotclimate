@@ -6,7 +6,9 @@ import build_wide_supply_release3 as B
 
 E = json.loads((ROOT / 'output/greek_walls_20261114/results.json').read_text())['variants']['greece']['decision']['e95_all_at_L_used']
 B.R3 = ROOT / 'output/sizes_greek_walls_20261114/release3'; B.EARTH = ROOT / 'output/greek_walls_20261114/results.json'
-B.EXTRACTION = (E, 0.10); B.HEADLINE = f'central_x{int(round(E * 100)):02d}'
+LOW = json.loads((ROOT / 'output/supply_low_reading_20261114/results.json').read_text())['low_e95']
+B.EXTRACTION = (E, 0.10, LOW);   # LOW: the flat-reading Earth share (calibration/supply_low_reading_20261114)
+ B.HEADLINE = f'central_x{int(round(E * 100)):02d}'
 OUT = ROOT / 'output/sizes_greek_walls_20261114/supply'
 if __name__ == '__main__':
     r = B.run(OUT)
