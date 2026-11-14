@@ -109,6 +109,12 @@ Update this live section and the review log before proceeding. The historical
 checkpoints below remain evidence of what was known then; this section controls
 the current queue. A push is a checkpoint, not a stopping condition.
 
+Rain timing, 14 November 2026: the declared within-month rain-timing sensitivity is complete
+([RAIN_TIMING_20261114.md](RAIN_TIMING_20261114.md)). Conserved 1/2/4-event rain changes root-water
+coverage by under one percentage point, so uniform rain does not explain the Nile shortfall.
+Next: declare the soil/root-development and crop-coefficient sensitivity, then Tigris and
+independent regions, before any harvest translation or whole-empire supply calibration.
+
 |Programme part|Current state|Next dependency / completion test|
 |---|---|---|
 |Release 1: reference/comparison preparation|Complete for the earlier declared release scope|New size evidence needs its own measurement and phase review; earlier completion is not universal source qualification|

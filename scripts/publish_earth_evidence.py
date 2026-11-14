@@ -137,6 +137,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_soil_drying.py')],cwd=ROOT,check=True)
     if (ROOT/'output/daily_river_fields_20261114/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_daily_river_fields.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/rain_timing_20261114/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_rain_timing.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

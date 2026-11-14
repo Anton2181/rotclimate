@@ -1,3 +1,45 @@
+# RAIN-TIMING SENSITIVITY COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu (claude/wonderful-mayer-uqbwtb is kept at the
+same commit). Continued from e045ab5a, whose declaration
+calibration/rain_timing_20261114/plan.json preceded all timing code and outputs.
+Full report: reports/RAIN_TIMING_20261114.md. Normal page: atlases/earth_evidence/rain_timing/.
+
+RESULT: on the eight mapped illustrations, delivering each field's monthly rain as 1, 2 or 4
+one-day events instead of uniformly changes root-water coverage by at most 0.76 percentage
+points (Euphrates-only), at most 0.19 on the Nile with capture (65.3% / 79.0% unchanged).
+Not monotone in event count. Uniform within-bin rain is NOT what limits the Nile result.
+No pattern preferred; nothing adopted. Development only.
+
+IMPLEMENTED: harvest/rain_timing.py (event windows, common-clock edges, conserved per-step
+rain). scripts/rain_timing_fields.py runs the PINNED daily_river_fields.run_case with only the
+clock and rain array replaced (the pinned producer, reviewer and coupling are unmodified;
+their hashes are asserted). One common clock per calendar holds every event edge.
+
+VERIFIED: 12 preflight controls committed before Earth output (tests/test_rain_timing.py).
+Independent review rebuilds pulse rain with plain loops and reuses the reviewed scalar
+reference from review_daily_river_fields.py via two declared text substitutions (per-step
+rain); 13,165,152 field-steps, max annual field difference 1.6e-12 mm, fresh files
+byte-identical, all protected files unchanged. Clock control: uniform on the common clock
+matches archived original-clock coverage within 0.021 points (annual field fluxes differ up
+to 10 mm in capture cases: operator step-size effect, reported separately). Page checks:
+four viewport/theme cases, 32 rows, filters, five download hashes, hub/evidence links.
+Staged Windows-style checkout check and release verification pass.
+
+ENVIRONMENT NOTE: this container has Node Playwright only, so the page check is
+scripts/check_rain_timing_browser.js (python3 -m http.server 8766), not a Python runner.
+Hooked into scripts/publish_earth_evidence.py and the hub link list in build_fit_hub.py.
+
+FIRST NEXT: rain timing can be set aside. Remaining candidates for the Nile shortfall, as the
+daily-coupling entry lists: soil/root development, stage basal crop coefficients, bare
+diffusion, pond/infiltration/access/drainage and local dates. Declare the next sensitivity
+before scores; do not tune to make Egypt pass. Then Tigris and independent regions, shared
+Earth/fantasy flow, freeze the harvest translation, and test Nile gain AND Mesopotamian
+non-inflation before the whole-empire supply calibration.
+
+Current atlas unchanged: release 3, marketed share 0.3923; 850 self-fed, 174 importers,
+29 short, 91% fed; reach staffing 1042. Earlier entries below are history.
+
 # DAILY RIVER-TO-FIELD COUPLING REVIEWED — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued from 31b87d48.
