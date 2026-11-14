@@ -1,3 +1,69 @@
+# DAILY RIVER-TO-FIELD COUPLING REVIEWED — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued from 31b87d48.
+Declarations 30726ae4 (operator/grid) and e4e26b46 (candidate-area policy)
+preceded the new Earth outputs. This is exposed development, not independent
+regional validation. Full report: reports/DAILY_RIVER_FIELDS_20261114.md.
+Normal page: atlases/earth_evidence/daily_fields/ (new water maps, all 256 rows).
+
+IMPLEMENTED: harvest/river_fields.py couples upstream conserved river withdrawal,
+area-weighted useful delivery/losses, finite infiltration/ponds, surface drying,
+deep bare diffusion and root uptake on the exact supplied fractional clock.
+Three soil stocks plus pond carry through zero-initialized periodic spin-up;
+all 256 cases converge in 2–12 cycles. Full FAO31 bare total ET is now paid:
+background diffusion spends deep water separately, with zero crop uptake.
+Whole-step pond shielding and bounded post-depletion diffusion remain explicit
+approximations. No groundwater/return-flow credit. Every candidate remains a
+water consumer even if thermally crop-ineligible. Rain-only controls matched.
+
+VERIFIED: 105 controls; independent core scalar comparison on 100 forests /
+7,532 joint steps, max history difference 1.14e-13 mm. Independent Earth scalar
+replay reconstructs 72,914,688 final-cycle field-steps and spin-up convergence;
+compares annual per-field states/fluxes, monthly basin ledgers, daily basin
+stocks, eligibility and all 192,896 CSV rows. Full daily field trajectories are
+not exported/directly compared. Max annual field difference 4.89e-12 mm; three
+fresh numeric files byte-identical. All 910 protected files unchanged, including
+904 Earth-fit assets and old 96-case/component numeric outputs. Browser checks:
+all 256 rows, six viewport/theme cases, 162 filters, nine downloads and navigation;
+staged Windows checkout/release check retained alongside other receipts.
+
+DEVELOPMENT FINDING: fixed illustrated barley/1.5 m roots (TAW 225 mm), bare
+coefficient 0.15, pond 200 mm, efficiency 1 gives Nile root-demand coverage
+65.3% (five-bin crop) / 79.0% (four-bin fractional crop), versus rain-only
+0.46% / 0.58%. Euphrates-only 3.69% / 4.76%, unchanged by capture in that member.
+These are ROOT transpiration diagnostics, NOT earlier total-crop ET coverage,
+grain yield, historical irrigation or residents. No preferred case adopted.
+
+FIRST NEXT: declare a volume-preserving rainfall-timing sensitivity before
+new scores. Uniform within-bin monthly rain can continually evaporate from the
+surface instead of infiltrating like storms; timing must not be tuned to make
+Egypt pass. Qualify local rain events, soil/root development, stage basal crop
+coefficients, bare diffusion, pond/infiltration/access/drainage and local dates.
+The legacy kc is only a supplied constant root-demand coefficient here, not a
+qualified basal curve or the old yield model. One ideal river pool per region;
+Mesopotamia still omits Tigris. Add Tigris/shared Earth-fantasy flow and independent
+regions, freeze harvest translation, then test Nile gain AND Mesopotamian
+non-inflation before whole-empire supply calibration. Do not reimplement the
+completed daily coupling or infer a harvest rule from closure alone.
+
+REPRODUCE: scripts/audit_river_fields.py (core before Earth),
+scripts/daily_river_fields.py (about eight minutes per 256 cases, four workers),
+then same producer --out output/daily_river_fields_20261114/fresh;
+scripts/review_daily_river_fields.py, publish_daily_river_fields.py, and
+build_fit_hub.py --date 2026-11-14. System Python runs
+scripts/check_daily_river_fields_browser.py against localhost:8766.
+For verification-only core reruns use --out output/daily_river_fields_20261114/core/fresh;
+do not overwrite pinned canonical core/review.json without regenerating
+Earth provenance. Main NPZ/CSV and core synthetic NPZ are tracked; fresh copies
+and browser screenshots are ignored. The publisher is hooked into the normal
+evidence build. See report for exact controls, artifacts and remaining limits.
+
+Current atlas: release 3, adopted marketed share 0.3923; 850 self-fed,
+174 importers, 29 short, 91% fed; reach staffing 1042. Whole-empire Egypt failure,
+actual occupancy/provider evidence, S3–S5, complete resources/diets/work,
+mobile actors and political authority remain unresolved. Roadmap live queue and
+review log updated. Earlier entries below are history; this entry controls next steps.
+
 # LAYERED SOIL AND EXACT SUPPLIED CLOCK VERIFIED — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued from bf0804f0.

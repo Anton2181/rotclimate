@@ -7,20 +7,31 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: shared-pool soil drying/root stress and an exact supplied
-daily clock.90controls,140FAO daily table cells,36000scalar profile-days and
-108000compartment checks pass;3fresh numeric files byte-exact. The clock preserves
-supplied partial-month boundaries and bin totals without inferring local dates.
-No new Earth/harvest score or default adoption;904Earth-fit files and all96prior
-field cases remain unchanged. Report:SOIL_DRYING_20261114.md.
+Current completed step: daily river-to-field coupling with paid delivery,
+finite ponds/infiltration, shared soil stocks, separate bare diffusion and root
+uptake on the supplied fractional clock. All 256 development cases and matched
+controls retained; all reach periodic stocks. 105 controls, independent core
+forest histories and scalar replay of 72,914,688 final-cycle field-steps pass.
+Annual field states/fluxes, monthly basin ledgers, daily basin stocks and 192,896
+CSV rows agree; three fresh numeric files byte-exact. All 910 protected files
+remain unchanged. New water maps and complete grid are published; no calibrated
+harvest/population/settlement adoption. Report: DAILY_RIVER_FIELDS_20261114.md.
 
-Next: declared daily river-to-field coupling with paid transfers, forcing
-disaggregation and pond/drainage policy. Actual soil/root-development inputs,
-crop calendars, Tigris/shared-flow and independent regions remain required before
-new field/capacity validation. Published component agreement does not validate
-combined uptake allocation, occupancy, institutions or authority. S3–S5 and the
-complete joint resources/work programme remain unresolved. Earlier checkpoints
-below retain what was known then; current HANDOFF controls the next dependency.
+Next: predeclare a volume-preserving rainfall-timing sensitivity; uniform bin
+rainfall can materially change surface evaporation versus root infiltration.
+Qualify local weather, soil/root development, stage basal crop coefficients,
+bare diffusion, infiltration/pond access/drainage and calendar before selecting
+any rule. Add Tigris and shared Earth/fantasy flow plus independent regions;
+freeze harvest translation before Nile gain AND Mesopotamian non-inflation and
+whole-empire supply checks. Root coverage cannot substitute for the old total-ET
+yield input unchanged. Closure and exposed scenarios do not provide validation.
+
+Full-programme review: current release-3 settlements and marketed share 0.3923
+remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
+and size evidence, prospective transfer, complete diets/resources/work and
+mobile actors remain separate obligations. Water adequacy does not establish
+political authority. Earlier checkpoints below retain what was known then;
+current HANDOFF controls the next dependency.
 
 After the field-map checkpoint, primary-source qualification narrows the next
 implementation to separate shallow evaporation and deeper root-zone storage,
@@ -359,6 +370,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Daily river-to-field coupling, 14 November; declarations 30726ae4/e4e26b46|All 256 exposed water scenarios retained; 105 controls, full bare FAO31 and independent scalar field/basin/CSV checks pass; fresh bytes exact. Uniform rain timing and unqualified local inputs limit interpretation. Full release/S1–S5/all-actor/mobile programme reviewed; no harvest or settlement adoption|Declare volume-preserving rain-event sensitivity; qualify soil/root/stage coefficients, pond/access/drainage and dates; add Tigris/shared flow and independent regions before frozen harvest/whole-empire calibration. Keep empirical occupancy/resources/work/authority gaps open|
 |Coupled cell-feedback and optional atlas, 061e6ef8|Advances release 3 and S4 implementation; does not complete empirical release 2, S1 transfer or S2–S5|Check nonmonotone search resolution, then resident-size/occupation evidence|
 |Finer scan and publication, 8745b931|Tested-grid robustness supports retaining eight original cases; no new default or global-optimum claim|Return to size evidence; retain complete-diet/work/mobile gaps|
 |Source-access check and open-paper recovery, fef3e9e8|Original source links fail; 2023 housing sample offers measurement evidence with exposed overlapping sites|Add explicit sample/phase/extent/detection gates and source-recovery dependency; no new blind pool|
