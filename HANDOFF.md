@@ -1,3 +1,11 @@
+# ADOPTED SHARE 0.39 ROBUST TO PEOPLE PATTERN; EGYPT STILL OPEN — 14 November 2026 (settlement lane)
+
+Report: reports/SUPPLY_HEARTLAND_PEOPLE_20261114.md; plan declared before output. scripts/supply_heartland_people.py,
+review_supply_heartland_people.py passed (68), fresh exact. People = blind-tested heartland pattern capacity x
+exp(-D/800) rescaled to the window total. Without Egypt: PASS, e95 0.372 vs adopted 0.392. With Egypt: fails
+(Egypt proper 2.55 M people; +yield x2.16 east e95 0.81, transfer 0.86). Crash/OOM fixes in the cache disclosed.
+Two-part Egypt fix: part 2 (people follow capacity) = existing heartland pattern; part 1 (floodplain output per km2) open.
+
 # EGYPT HARVEST ALONE DOES NOT FIX THE WHOLE-EMPIRE SUPPLY CALIBRATION — 14 November 2026 (settlement lane)
 
 Report: reports/EGYPT_SUFFICIENCY_20261114.md; plan 45f3d8de declared before outputs. scripts/egypt_sufficiency.py
