@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "question": "The supply calibration uses the committed Roman people field (settlement base x one occupation share, 0.32 of capacity everywhere). The heartland-occupancy field P2 = capacity x exp(-D/800 km) (D = travel cost to the old cores incl. Memphis and Rome) was blind-tested on Domesday 1086 as the best population PATTERN (rank 0.63; total failed). With P2 as the people pattern, does the Earth supply calibration pass with Egypt, and does the adopted share 0.39 (without Egypt) hold?",
+  "known_before_declaration": "Committed field: whole empire fails, without Egypt passes at e95 0.392. Egypt yield or people scaling alone fails (EGYPT_SUFFICIENCY_20261114). Population ledger dev: P2 Egypt 1.74 M vs P0 capacity 2.32 M, historical 4.75 M; Han commandery rank P2 0.82 vs P1 0.43. No supply output with P2 has been computed.",
+  "people_field": "P2 on the Roman pool grid: Earth harvest capacity (output/land_people/earth/earth.npz, nearest-cell sampling as earth_fields does) x the pool's own 'history' array (exp(-D/800), reproduced exactly by build_core_population_inputs.py), on pool land, then rescaled to the committed field's land total (pattern tested, total supplied, as in the atlas).",
+  "variants": {"control": "committed field (must reproduce the archived whole-empire surface exactly)", "P2": "P2 pattern, whole empire", "P2_egypt_yield_2.16": "P2 and Egypt-proper (lon 29-32.6 E, lat <= 32 N) wheat and barley energy x 2.16", "P2_without_egypt": "P2 with the archived without-Egypt removal (lon >= 29, lat <= 32)"},
+  "rules": "Original declared decision unchanged (270 km kept within ln 1.25 or 1.1 x best; transfer >= 0.90 both ways). For P2_without_egypt also report e95 against the adopted 0.3923: robust if within a factor 1.25.",
+  "interpretation_declared": "Sensitivity of the calibration to the people pattern. Nothing adopted; fantasy map unchanged. If P2 passes with Egypt, the people pattern (not the harvest) was the main blocker and a follow-up decision on switching the supply people field is the owner's.",
+  "outputs": "output/supply_heartland_people_20261114/{results.json, review.json}"
+}
