@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_tigris_discharge_values",
+  "purpose": "Every recent handoff lists the Tigris as absent: Mesopotamia receives only Euphrates water, so a Mesopotamian non-inflation test cannot yet be fair. This step qualifies a Tigris gauge on the same source, quality rule and epoch as the existing Hit (Euphrates) gauge, and computes the same flood-phase diagnostic. It does not add Tigris water to any field run.",
+  "known": "PANGAEA metadata only (not values): RivDIS record 10.1594/PANGAEA.218902, Tigris at 36.32 N 43.15 E (Mosul), 1964-10-15 to 1972-03-15, the same span as Hit (10.1594/PANGAEA.218668); record 10.1594/PANGAEA.218359, Tigris at 33.30 N 44.38 E (Baghdad), 1968-04-15 to 1972-03-15. No Tigris discharge values inspected.",
+  "coordination": "Parallel to the field-water work on this branch (latest e.g. 3bf6bb2e). New files only; the existing seasonality producer, reviewer, sources and outputs are imported or read, never modified.",
+  "sources": [
+    {"id": "mosul", "doi": "10.1594/PANGAEA.218902", "role": "development_second_river", "primary_years": [1932, 1972],
+     "reason": "Same window as Hit: before Mosul Dam (1986) and the large Turkish Tigris dams. Lake Tharthar diversion (1956) and Dokan (1959, Lesser Zab) lie DOWNSTREAM of Mosul. Earlier local management not assumed absent."},
+    {"id": "baghdad", "doi": "10.1594/PANGAEA.218359", "role": "check_only", "primary_years": [1932, 1972],
+     "reason": "Downstream of the Zab and Adhaim tributaries and of the Tharthar diversion (regulated). Used only if it has at least 5 complete years; otherwise retained as unscored with its exclusions listed."}
+  ],
+  "quality": "Identical to calibration/flood_basin_seasonality_20261113: every calendar year needs exactly 12 unique nonnegative finite monthly means; incomplete years are dropped and listed, never filled; at least 5 complete years; complete years pooled equally; m3/s and calendar months kept.",
+  "primitive": "The same harvest.flood_timing.crop_flood_timing for crop durations 3-9 months and all 12 sowing months; frozen November 5-month illustration reported as for Aswan and Hit.",
+  "comparison": "Report Mosul beside Hit on the complete years common to both, and on each gauge's own complete years: mean annual flow, peak month, positive-excess volume above the annual mean (the quantity the field runs use as river source), and the November compatibility.",
+  "stated_limits": "Mosul lies upstream of the Greater Zab, Lesser Zab, Adhaim and Diyala, which add a large share of lower Tigris flow, so a Mosul source understates the water reaching the alluvium. Nothing is scaled to correct this: the understatement is reported. 1964-1972 flows are modern and not a reconstruction of ancient flow.",
+  "outputs": "Source receipts with hashes; complete-year tables; phase fields and CSV; comparison table; an evidence figure. No field, harvest, population, settlement or atlas default change.",
+  "review": "Independent raw HTML parse (separately written), complete-year arithmetic, scalar recomputation of the phase primitive and of the excess volumes; fresh byte replay; existing seasonality outputs and protected atlas files unchanged.",
+  "next": "If the gauge qualifies, declare a Mesopotamia Euphrates-plus-Tigris river pool and the candidate-area policy for Tigris land before any field score; keep the Euphrates-only cases as controls."
+}
