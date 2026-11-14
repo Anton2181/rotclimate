@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "question": "Is Egypt's farm labour the sufficient fix? With Egypt proper's people raised to the historical total, does the unchanged whole-empire supply calibration pass, and at what marketed share?",
+  "known_before_declaration": "calibration/egypt_sufficiency_20261114: yield x1.94/x2.16 (+/- people x k) all fail, east e95 0.61-0.67 vs west 0.38. Post-hoc: Egypt proper (lon >= 29, lat <= 32, lon <= 32.6) has 0.71 M people in the committed field vs 1.21 M city residents; production is labour-limited.",
+  "method": "scripts/settlement_supply_calibration.py unchanged (whole empire) through scripts/egypt_people_sufficiency.py, which reuses the reviewed egypt_sufficiency machinery. On Egypt proper only, the committed people field is multiplied by one factor so its total equals T (T in {4.5 M, 5.0 M}; Bagnall and Frier, Rathbone, as in regions.json; total includes city residents). Yield factor y in {1.0, 2.16} applied to wheat and barley energy on the same cells. Four variants plus control (T = model, y = 1) which must reproduce the archived surface exactly. Southern Levant and Sinai untouched.",
+  "rules": "Original declared decision unchanged: cited 270 km kept if west/east e95 log ratio <= ln 1.25 (or within 1.1 x best); transfer >= 0.90 both ways.",
+  "interpretation_declared": "PASS on a variant with y = 1 means Egypt's people field is the sufficient fix, and its e95 is the Earth-supported share with Egypt; PASS only with y = 2.16 means both are needed; FAIL means a further blocker. Sensitivity only: T is the historical figure itself, nothing is adopted, the fantasy map is unchanged.",
+  "outputs": "output/egypt_people_sufficiency_20261114/{results.json, review.json}"
+}

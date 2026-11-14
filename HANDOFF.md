@@ -3,10 +3,10 @@
 Report: reports/EGYPT_SUFFICIENCY_20261114.md; plan 45f3d8de declared before outputs. scripts/egypt_sufficiency.py
 (network memoised; control = archive exactly), review_egypt_sufficiency.py passed, fresh byte-exact.
 Egypt yield x1.94/x2.16 (+/- farmers): all FAIL. East e95 0.61-0.67 vs west 0.38 (x1.6-1.75 > 1.25).
-Post-hoc diagnostic (egypt_sufficiency_diagnostic.py -> output/egypt_sufficiency_20261114/diagnostic.json): surplus in the delta,
-hungry cities up the valley/Fayum (Arsinoe 126k fed 0%, Memphis 19%). Candidates: Fayum not cropland in the grid;
-Nile boat freight. Mask lon>=29,lat<=32 also includes the southern Levant.
-NEXT: inspect Fayum/valley cells in output/land_people/earth/earth.npz and Nile freight in the trade network; rerun unchanged.
+Post-hoc diagnostic (egypt_sufficiency_diagnostic.py -> diagnostic.json): the mask includes Sinai/S. Levant, which
+supplied most surplus. Egypt proper (lon<=32.6): committed people field 0.71 M (history 4.5-5 M, x6.5 low), city
+residents 1.21 M; labour-limited production, so yield barely helps. Nile freight is cheap (Alex-Arsinoe ~30 vs 270).
+Fayum barely cropland (4/56 cells irrigated). NEXT: declared follow-up raising Egypt-proper people to 4.5-5 M.
 
 # FLOOD-BASIN RULE GROUNDWORK: NORTH CHINA PLAIN IS A CONSTRAINT — 14 November 2026 (settlement lane)
 

@@ -31,6 +31,12 @@ def main():
     excess_eg = float(np.maximum(delivered - res, 0)[egc].sum()); deficit_eg = float(np.maximum(res - delivered, 0)[egc].sum())
     unshipped_eg = excess_eg - flows['egypt_to_egypt'] - flows['egypt_to_abroad']
     zero_share_eg = int(((between[np.ix_(idx, idx)] == 0).sum() - len(idx)))
+    proper = (eg & (x['lon'] <= 32.6)).ravel()                                   # Egypt proper: mask without Sinai and the southern Levant
+    pc = proper[a['nodes']]; fed_all = np.minimum(delivered, res) + received
+    egypt_proper = dict(residents=float(res[pc].sum()), fed=float(fed_all[pc].sum()), marketed_surplus=float((a['surplus'] * e)[proper & (a['surplus'] > 0)].sum()),
+                        excess_after_hinterland=float(np.maximum(delivered - res, 0)[pc].sum()), deficit_after_hinterland=float(np.maximum(res - delivered, 0)[pc].sum()),
+                        excess_left_unshipped=float(np.maximum(delivered - res, 0)[pc].sum() - sum(m for (i, j), m in sent.items() if pc[i])),
+                        shipped_to_outside=float(sum(m for (i, j), m in sent.items() if pc[i] and not pc[j])))
     surplus_cells = eg.ravel() & (a['surplus'] > 0)
     # where Egyptian surplus goes: owner city of each surplus cell, by month-average reach
     own = a['owner'][0]; reach = (own >= 0) & surplus_cells
@@ -43,7 +49,7 @@ def main():
                            fed_share=float((min(delivered[i], res[i]) + received[i]) / res[i]), egyptian_cities_reachable=int((between[idx, i] > 0).sum()), mean_cost_to_nearest_egypt_city=float(np.sort(a['between'][:, i, idx].mean(0))[1])))
     out = dict(status='post_hoc_exploratory_diagnostic', variant='YP_2.16', haul_limit=L, marketed_share=e,
         egypt_marketed_surplus=float((a['surplus'] * e)[surplus_cells].sum()), egypt_marketed_surplus_owned_by_egyptian_cities=to_egypt, egypt_marketed_surplus_with_no_city_within_limit=lost_no_owner,
-        surplus_weighted_delivered_share=mean_share, egypt_residents=float(res[egc].sum()), flows_sent=flows, egypt_city_excess_after_hinterland=excess_eg, egypt_city_deficit_after_hinterland=deficit_eg, egypt_excess_unshipped=unshipped_eg, egypt_city_pairs_beyond_haul_limit=zero_share_eg, egypt_city_pairs=len(idx) * (len(idx) - 1), egypt_fed=float((np.minimum(delivered, res) + received)[egc].sum()), largest_egyptian_cities=cities)
+        surplus_weighted_delivered_share=mean_share, egypt_proper=egypt_proper, egypt_residents=float(res[egc].sum()), flows_sent=flows, egypt_city_excess_after_hinterland=excess_eg, egypt_city_deficit_after_hinterland=deficit_eg, egypt_excess_unshipped=unshipped_eg, egypt_city_pairs_beyond_haul_limit=zero_share_eg, egypt_city_pairs=len(idx) * (len(idx) - 1), egypt_fed=float((np.minimum(delivered, res) + received)[egc].sum()), largest_egyptian_cities=cities)
     write(ES.OUT / 'diagnostic.json', out); print(json.dumps({k: v for k, v in out.items() if k != 'largest_egyptian_cities'}, indent=1))
     for c in cities: print({k: round(v, 3) if abs(v) < 100 else round(v) for k, v in c.items()})
 

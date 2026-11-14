@@ -9,7 +9,8 @@ If Egyptian harvests were raised to the historical level, would the unchanged de
 **Answer: no.** Every variant fails. Egyptian yield ×1.94 or ×2.16 (historical/model capacity), with or without
 also scaling Egypt's farmers, lets eastern cities reach 95% fed, but only at a marketed share of 0.61–0.67 against
 0.38 in the west. That is a factor 1.6–1.75, outside the declared ×1.25, and transfer west→east is 87–89% (<90%).
-So harvest is necessary but not sufficient: a second blocker remains in getting grain to eastern cities.
+So harvest is necessary but not sufficient. The post-hoc reading below points to Egypt's farm labour: the
+model has too few people there to grow the grain.
 
 ![figure](figures/egypt_sufficiency_20261114.png)
 
@@ -22,19 +23,28 @@ So harvest is necessary but not sufficient: a second blocker remains in getting 
 | Yield and farmers ×2.16 | 0.38 | 0.65 | 0.88 | no |
 | Egypt removed (archived) | 0.37 | 0.42 | 0.92 | yes |
 
-## Where the grain gets stuck (post-hoc, exploratory)
+## Why: Egypt has too few farmers in the model (post-hoc, exploratory)
 
-`scripts/egypt_sufficiency_diagnostic.py` (not declared) on yield and farmers ×2.16 at 270 km and share 0.5:
-the cities inside the Egypt mask hold 1.42 M person-years of excess after their own hinterlands, against
-a 1.05 M deficit among the others; 1.29 M is shipped between them, yet only 0.97 M of 1.36 M residents are fed.
-Alexandria is fully fed. Arsinoe in the Fayum (126,000 residents) gets nothing: it owns no surplus land and
-receives no shipment. Memphis is 19% fed and several Middle Egypt towns 15–39%. The surplus sits in the delta
-while the hungry cities are up the valley and in the Fayum. Two things the model lacks are candidates: the Fayum
-basin as cropland (the Bahr Yusuf irrigated it), and Nile boat freight up the valley, which the network may price
-as road. Neither is tested here.
+`scripts/egypt_sufficiency_diagnostic.py` (not declared) on yield and farmers ×2.16 at 270 km and share 0.5.
+A first reading of the declared Egypt mask suggested surplus stuck in the delta. That was wrong: the mask
+(lon ≥ 29° E, lat ≤ 32° N) includes Sinai and the southern Levant, which supplied most of its surplus. For **Egypt
+proper** (the mask west of 32.6° E):
 
-Caveat: the declared Egypt mask (lon ≥ 29° E, lat ≤ 32° N, inherited from the without-Egypt variant) also
-contains the southern Levant (for example Jerusalem), so "Egyptian" flows include some Levantine cities.
+| Egypt proper, yield and farmers ×2.16, share 0.5 | Person-years |
+|---|---:|
+| City residents (Hanson areas × sliding density) | 1.21 M |
+| Marketed surplus from Egyptian land | 0.55 M |
+| Excess left in cities after own hinterland / deficit | 0.28 M / 1.00 M |
+| Residents fed | 0.87 M (71%) |
+
+The committed Roman people field holds only **0.71 M people in Egypt proper**, fewer than its own city residents
+and about a seventh of the historical 4.5–5 M. Production is labour-limited (600 field hours per worker), so doubling
+yield adds little grain; ×2.16 farmers still gives only 1.5 M people. The declared k was the capacity gap
+(×2), but the people field lags history by about ×6.5. Alexandria–Arsinoe freight costs about 30 against the
+270 km limit, so Nile transport is not the blocker. The Fayum is barely cropland in the Earth grid (4 of 56 cells
+irrigated; pool density 2.6 per km²), part of the same people deficit.
+
+Caveat: the declared mask is kept for comparability with the without-Egypt variant, which removed the same area.
 
 ## Checks
 
@@ -46,6 +56,5 @@ without-Egypt calibration.
 
 ## Next
 
-Fix the intra-Egypt geometry before the floodplain crop rule is worth fitting: check that the Fayum and Nile
-valley cells are crop land with water in the Earth harvest grid, and that the freight network carries Nile boats
-in the trade months. Then rerun this sensitivity unchanged.
+A declared follow-up (calibration/egypt_people_sufficiency_20261114) raises Egypt proper's people to the historical
+4.5–5 M, with and without the yield factor, to test whether farm labour is the sufficient fix.
