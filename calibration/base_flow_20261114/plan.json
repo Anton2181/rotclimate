@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_base_flow_output",
+  "baseline": "d6bf067c capture-season sensitivity",
+  "known": "With the flood-only source rule (positive excess above the annual mean) and capture in both windows, Nile root coverage is 77.1 / 85.0% (Hargreaves) and 59.2 / 70.9% (Penman-Monteith); Mesopotamia 3.5 / 3.1% and 1.0 / 0.9% (5-bin / 4-bin fractional). Mean monthly flows of Aswan, Hit and Mosul are known. No output with any other source rule has been computed.",
+  "question": "If fields may divert a share of the TOTAL monthly river flow, base flow included, does the Nile still gain more than Mesopotamia, or does Mesopotamia inflate?",
+  "source_rules": {
+    "flood_excess": "Archived: positive excess above the annual mean of the mean monthly flow.",
+    "total_share": "A fixed share s of the total mean monthly flow volume in every month, s in {0.10, 0.25, 0.50}. Declared sensitivities, not fitted; the rest of the flow passes the node."
+  },
+  "cases": "Nile (Aswan) and Mesopotamia (Hit + Mosul pooled on their common years); matched meteorology; Hargreaves and Penman-Monteith; both calendars; capture permitted in both windows (pre-sowing and in-crop), the most permissive timing. flood_excess recomputed must reproduce the archived capture-season 'both' arrays exactly (8 controls); 24 new total_share runs.",
+  "metrics": "Root-water coverage, area with at least 95% of root demand met (km2), delivered volume, and the ratio of Nile to Mesopotamian adequate area. Reported, not scored against history: a harvest translation is not frozen.",
+  "reference_for_reading_only": "output/land_people/earth/regions.json gives historical populations Egypt 4.5-5 M and Mesopotamian alluvium 0.7-2 M around AD 1-200; used only to describe the direction of any inflation, not as a target.",
+  "fixed": "Barley, 1.5 m roots, bare 0.15, pond 200 mm, efficiency 1, one ideal pool per region, all candidates consume water, eligibility from matched temperature. No share is chosen by results.",
+  "stated_limits": "Mosul understates the lower Tigris (Mesopotamia's water is therefore if anything too low); a single pool ignores canal command areas, salinity and drainage, which historically limited Mesopotamia; modern flows.",
+  "review": "Independent scalar reference with separate capture mask (as in the capture-season review) and sources rebuilt from gauge pages; annual field stocks/fluxes, monthly basin ledgers and daily stocks for all 32 runs; fresh byte replay; protected outputs unchanged.",
+  "adopt": false
+}
