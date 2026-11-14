@@ -24,9 +24,10 @@ at 50%; Nile saturates first. Nile/Meso fully-watered-equivalent area: flood-onl
 WATER-TO-FOOD TEST DONE (d497bc38 declared; reports/WATER_TO_FOOD_20261114.md): people = root share x
 candidate area x model full-water barley energy (1 t/ha) x arable x 0.6 farmed x sown / 1.1M. Pass rule
 Egypt >= 3.6 M and Meso <= 2.5 M: 0/32 pass. Meso not inflated 30/32. Egypt CEILING with every field fully
-watered: 2.12 M (fallow) / 3.53 M (annual). Egypt is now limited by the 1 t/ha low-input yield and
-farmed share, NOT water. NEXT: a declared, independently tested irrigated-yield rule in the crop model
-(crop lane); do not tune it to Egypt.
+watered: 2.12 M (fallow) / 3.53 M (annual). Egypt is now limited by three rain-fed constants (1 t/ha yield,
+0.6 farmed share, 0.6 fallow), NOT water. Papyri hints: tax ~8.3 art/aroura, rents up to 15 (~1.6 t/ha).
+NEXT: a declared floodplain-land rule (yield, farmed share, cropping frequency) in the crop model, tested
+on regions other than Egypt; do not tune it to Egypt.
 Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
 
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
