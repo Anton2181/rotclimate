@@ -5,6 +5,9 @@ Primary cohort: 10 km capture release 3 = production = 0.121; mean percentile 0.
 Rank delta +0.017, capture delta 0.000, support 53, constraints pass. No harm, no measurable gain.
 All percentiles < 0.5 but within ~1.4 SE of chance (n~53); post-hoc component breakdown shows no driver. Vidarbha cannot calibrate the site score.
 Reviewer scripts/review_vidarbha_release3.py passed (4,536 scalar checks, 794 towns spacing); fresh byte-exact.
+EVIDENCE PAGE: atlases/earth_evidence/settlement_calibration/ (scripts/publish_settlement_calibration.py, hooked in
+publish_earth_evidence.py; hub link in build_fit_hub.py): layer-by-layer calibration status of the default map.
+Browser check scripts/check_settlement_calibration_browser.js passes; Windows checkout check passed (2,217 assets).
 Note: pyproj was pip-installed into .venv for the reviewer (the 2026-11-11 reviewer also needs it).
 
 # TIGRIS ADDED: NO CHANGE TO MESOPOTAMIAN ROOT WATER — 14 November 2026 (parallel lane)
