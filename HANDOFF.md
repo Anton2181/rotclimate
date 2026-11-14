@@ -17,9 +17,13 @@ field-steps, max 1.7e-12 mm); fresh files byte-exact.
 CAPTURE SEASON DONE (0042b81b declared; reports/CAPTURE_SEASON_20261114.md): pre-sowing /
 in-crop canal / both, 24 runs, 8 exact archived controls. Nile +3-6 points with both; Meso
 2.5->3.5% (H), 0.7->1.0% (PM) max. No season inflates Mesopotamia.
-NEXT (this lane): declare a BASE-FLOW diversion scenario for both regions together (the one change
-that could inflate Mesopotamia), then freeze the harvest translation for the Nile-gain AND
-Mesopotamian non-inflation test.
+BASE FLOW DONE (5a718dc8 declared; reports/BASE_FLOW_20261114.md): source = flood excess or 10/25/50%
+of TOTAL monthly flow, capture both windows, 32 runs (8 exact controls). Meso root water up to 18-29%
+at 50%; Nile saturates first. Nile/Meso fully-watered-equivalent area: flood-only 8.5-21.7x,
+10-25% total 1.7-3.4x, 50% 1.3-2.2x; historical pop ratio ~2.3-7.1 (orientation only, post-hoc).
+NEXT (this lane): freeze a harvest translation (root water -> grain) and DECLARE the Nile-gain AND
+Mesopotamian non-inflation test with a pass rule before scoring; then rerun whole-empire supply
+calibration with Egypt included. Coordinate with the crop-phenology lane before changing crop curves.
 Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
 
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
