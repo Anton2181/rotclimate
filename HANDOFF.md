@@ -1,3 +1,11 @@
+# FLOODPLAIN RULE PORTED: NO FANTASY RIVER QUALIFIES; MAP UNCHANGED — 14 November 2026
+
+Report reports/FANTASY_FLOODPLAIN_20261114.md; plan calibration/fantasy_floodplain_20261114. harvest/floodplain.py (rule),
+scripts/fantasy_floodplain.py (wrapper on derive(); export.py untouched), review_fantasy_floodplain.py passed.
+All 26 atlas basins flood months 0-4 after the winter solstice with 350-560 mm rain: local winter-rain rivers (Tigris-like),
+none Nile-like. Settlement base, placement, sizes, supply, reach unchanged; no atlas file rewritten.
+Calibration status: share 0.39 inside all near-passes (0.36-0.43); whole-empire supply with Egypt misses transfer 0.884 vs 0.90.
+
 # PEOPLE LEVEL: EGYPT FED, WHOLE EMPIRE STILL JUST SHORT — 14 November 2026
 
 OWNER: "Fix the people side first, then port to the fantasy map." Report reports/SUPPLY_PEOPLE_LEVEL_20261114.md, plan 3244339a.
