@@ -141,6 +141,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_rain_timing.py')],cwd=ROOT,check=True)
     if (ROOT/'output/base_flow_20261114/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_river_sources.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/vidarbha_release3_20261114/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_settlement_calibration.py')],cwd=ROOT,check=True)
     if (ROOT/'output/crop_stage_20261114/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_crop_stage.py')],cwd=ROOT,check=True)
     if (ROOT/'output/reference_eto_20261114/review.json').exists():

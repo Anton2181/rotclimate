@@ -237,6 +237,7 @@ def main():
         compare = ('Compare the same 50 million people: ' + ' · '.join(
             f'<a href="{n}/#layer=pop_density&amp;population=50000000&amp;pattern=markets">{FITS[n][0]}</a>' for n in FITS) + '.')
         reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
+                   '<a href="earth_evidence/settlement_calibration/">What the settlement map is calibrated against</a> · '
                    '<a href="earth_evidence/river_sources/">Tigris, capture season and base flow</a> · '
                    '<a href="earth_evidence/rain_timing/">Rain timing sensitivity</a> · '
                    '<a href="earth_evidence/crop_stage/">Crop-stage source constraints</a> · '
