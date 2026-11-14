@@ -1,0 +1,18 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_capture_season_output",
+  "baseline": "ee0e76be (Tigris pool) on the 3bf6bb2e matched-weather field code",
+  "known": "Archived matched-weather capture cases use a pre-sowing August-October capture window. Nile capture coverage: Hargreaves 70.827 / 81.521%, Penman-Monteith 53.930 / 67.850% (5-bin / 4-bin fractional). Mesopotamia with the Tigris pool: 2.524 / 2.604% and 0.674 / 0.728%, identical to Euphrates-only; 10.2 of 11.05 km3 of flood water flows past because both rivers peak in March-July. Monthly source excess is known for all three gauges. No output with any other capture window has been computed.",
+  "question": "Does letting fields draw river water while the crop stands (canal-style refilling of the root zone) change the Nile gain or inflate Mesopotamia, with the river source rule and everything else unchanged?",
+  "windows": {
+    "pre_sowing": "Archived rule: capture during August-October (flood day to sowing day), ponds permitted then.",
+    "in_crop": "Capture only during the supplied crop window. Ponds are not permitted on a standing crop (existing rule), so a request refills the soil up to capacity at the 20 mm/day infiltration limit.",
+    "both": "Union of the two."
+  },
+  "cases": "Nile (Aswan) and Mesopotamia (Hit + Mosul pooled source); matched meteorology; Hargreaves and Penman-Monteith; both supplied calendars; capture on. pre_sowing is recomputed and must reproduce the archived arrays exactly (8 controls: Nile from 3bf6bb2e, Mesopotamia from ee0e76be). in_crop and both are new: 16 cases.",
+  "fixed": "River source = positive excess above the annual mean of the mean monthly flow (no base-flow diversion); one ideal pool per region; barley, 1.5 m roots, bare 0.15, pond 200 mm, efficiency 1; all candidates consume water; eligibility from matched temperature. No window is chosen by results.",
+  "test_framing": "Report Nile gain and Mesopotamia change for each window. A window that raises Mesopotamia while leaving the Nile unchanged would be the inflation the planned test guards against; a window that helps neither shows the source rule, not timing, as the next limit.",
+  "stated_limits": "Excess-only source means winter base flow cannot be diverted; Mosul understates the lower Tigris; root coverage is a water diagnostic, not grain or area.",
+  "review": "Independent scalar reference (the reviewed one, with the capture mask separated from the pond mask by a declared substitution); annual field stocks/fluxes, monthly basin ledgers, daily stocks for all 24 runs; fresh byte replay; protected outputs unchanged.",
+  "adopt": false
+}
