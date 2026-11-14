@@ -1,3 +1,12 @@
+# RELEASE-3 PLACEMENT ON VIDARBHA: GUARD PASSES — 14 November 2026 (settlement lane)
+
+Report: reports/VIDARBHA_RELEASE3_20261114.md; plan 3af474e0 declared before outputs (exposed region, not blind).
+Primary cohort: 10 km capture release 3 = production = 0.121; mean percentile 0.461 vs environment 0.444.
+Rank delta +0.017, capture delta 0.000, support 53, constraints pass. No harm, no measurable gain.
+All percentiles < 0.5: the environmental site score is weak in Vidarbha (open item, not caused by the prior).
+Reviewer scripts/review_vidarbha_release3.py passed (4,536 scalar checks, 794 towns spacing); fresh byte-exact.
+Note: pyproj was pip-installed into .venv for the reviewer (the 2026-11-11 reviewer also needs it).
+
 # TIGRIS ADDED: NO CHANGE TO MESOPOTAMIAN ROOT WATER — 14 November 2026 (parallel lane)
 
 Parallel to the field-water lane (crop phenology is that lane's FIRST NEXT; not touched here).
