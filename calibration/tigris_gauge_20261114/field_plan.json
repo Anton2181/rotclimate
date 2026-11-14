@@ -1,0 +1,14 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_tigris_field_output",
+  "baseline": "3bf6bb2e matched-weather fields (scripts/matched_regional_fields.py) and 67be3ac4 Tigris gauge",
+  "known": "Archived matched-weather Mesopotamia (Euphrates only) rows: root coverage identical with and without capture (Hargreaves 2.524% / 2.604%, Penman-Monteith 0.674% / 0.728%) although 0.595 km3 is delivered; the field river source is 6.239 km3/yr. Tigris gauge results are known: Mosul peaks in May, Hit+Mosul excess 11.05 km3/yr on the same six years. No field output with Tigris water has been computed.",
+  "question": "With the Tigris added to Mesopotamia's single river pool, how much more water is delivered to the candidate fields and how much does root-water coverage change?",
+  "change": "Only the Mesopotamian river source: positive excess above the annual mean of the summed mean monthly flows of Hit and Mosul on their six common complete years (the pooled river at the single basin node, by the existing source rule), instead of Hit alone. Candidate fields are unchanged: the existing terrain rule already selects land near any Natural Earth navigable river in the box, Tigris included.",
+  "cases": "Mesopotamia, matched meteorology, both supplied calendars, capture and rain-only, Hargreaves and Penman-Monteith: 8 cases. Every other setting exactly as the archived matched-weather rows (barley, 1.5 m roots, bare 0.15, pond 200 mm, efficiency 1, all candidates consume water, thermal eligibility from matched temperature).",
+  "controls": "The 4 rain-only cases must reproduce the archived matched-weather arrays exactly (the river is not used). Each capture case is reported against its archived Euphrates-only pair. The Nile is not rerun.",
+  "stated_limits": "Mosul understates lower-Tigris flow (tributaries below it are excluded, nothing scaled); one ideal shared pool, not a canal network; modern flows; root coverage is a water diagnostic, not grain, area or residents.",
+  "review": "Independent: reuse the previously reviewed scalar river/soil/pond reference from scripts/review_daily_river_fields.py with the matched forcing and the pooled source rebuilt from the raw gauge pages; compare annual field stocks and fluxes, monthly basin ledgers and daily basin stocks; fresh byte replay; protected outputs unchanged.",
+  "interpretation": "Development diagnostic toward the planned Nile-gain and Mesopotamia-non-inflation test. No harvest, population, settlement or atlas default change.",
+  "adopt": false
+}
