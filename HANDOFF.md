@@ -1,3 +1,23 @@
+# TIGRIS ADDED: NO CHANGE TO MESOPOTAMIAN ROOT WATER — 14 November 2026 (parallel lane)
+
+Parallel to the field-water lane (crop phenology is that lane's FIRST NEXT; not touched here).
+Report: reports/TIGRIS_GAUGE_20261114.md. Plans: calibration/tigris_gauge_20261114/plan.json
+(4e19dbee) and field_plan.json (224fe579), both before outputs.
+
+GAUGE: RivDIS Tigris at Mosul (PANGAEA.218902) qualifies on the Hit rules: same six complete
+years 1965-67,1969-71, May peak, flood excess 4.82 km3/yr; Hit+Mosul pooled 11.05 vs Hit 6.24.
+Baghdad (PANGAEA.218359) only 3 complete years, unscored. Mosul is above the Zab/Adhaim/Diyala:
+understated, NOT scaled. scripts/tigris_gauge.py, review_tigris_gauge.py (regex/Decimal/scalar).
+FIELDS: scripts/tigris_fields.py reruns the pinned matched-weather case code for the 8
+Mesopotamia matched cases with only source_m3 replaced by the pooled excess. Root coverage
+UNCHANGED (diff <1e-17); delivered 0.595 -> 0.86 km3, all extra spent as bare-soil evaporation
+before sowing; 10.2 km3 flows past (spring peak, Aug-Oct capture window).
+Rain-only cases equal archived arrays exactly. review_tigris_fields.py passes (3,078,432
+field-steps, max 1.7e-12 mm); fresh files byte-exact.
+NEXT (this lane): declare a spring/canal capture-season sensitivity for BOTH regions before
+any harvest rule; Mesopotamian non-inflation currently holds by timing.
+Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
+
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
 
 Canonical branch: `claude/friendly-turing-43ygeu`. Continued through paid
