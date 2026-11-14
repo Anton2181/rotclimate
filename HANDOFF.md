@@ -1,3 +1,13 @@
+# EARTH SUPPLY CALIBRATION PASSES WITH EGYPT (DEVELOPMENT) — 14 November 2026
+
+Report reports/GREEK_WALLS_20261114.md; plan 0612e043; source Hansen GRBS 48 (2008) 259-286 (owner-supplied PDF, not committed).
+scripts/greek_walls.py: 58 Greek (Achaea/Macedonia/Epirus) wall-basis Hanson areas -> inhabited share 1/2 (1/3 if >= 100 ha),
+sliding density on the inhabited area; with floodplain rule + Frier 61.4 M heartland people: PASS. W/E x1.003, 270 km best,
+transfer 0.950/0.951, e95 0.337 (adopted 0.3923, within x1.25). Variants (Asia Minor; literal 150/ha) also pass.
+Review passed (280), fresh exact. Fantasy map unchanged.
+OPEN OWNER DECISIONS: (1) marketed share 0.39 (without-Egypt) vs 0.337 (with Egypt, development); (2) whether the size
+model should discount Greek wall circuits (sizes currently left as owner set).
+
 # EAST/WEST GAP LOCATED: GREECE AND THE FAYUM — 14 November 2026
 
 scripts/east_gap_diagnostic.py (post-hoc) -> output/supply_people_level_20261114/east_gap_diagnostic.json; section in
