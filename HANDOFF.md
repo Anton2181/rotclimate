@@ -1,3 +1,29 @@
+# ACTIVE: REGIONAL REFERENCE FORCING / PAIRED FIELDS — 14 November 2026
+
+Canonical branch unchanged. Declaration6366d34d fixes30one-degree sampling
+cells and24paired field cases;source/preflight7a645ea7 preceded regional ETo.
+Regional weather stage is now independently reviewed:54810complete source days,
+931770computed cells,1507field assignments;four fresh weather exports exact.
+All923protected files unchanged. No regional field results have been generated.
+
+NEXT within the SAME declared step: run scripts/regional_reference_fields.py,
+then its fresh output in output/regional_reference_forcing_20261114/fresh.
+Independent field reviewer/publication still to implement. Eight legacy cases
+must match archived field states/fluxes exactly. All24cases retain identical
+WorldClimT/P, crops, soils, calendars and river water;only ETo changes between
+legacy_archive,power_hargreaves,power_penman_monteith. Modern POWER2020–24 ETo
+with WorldClim1970–2000T/P is a declared forcing-only sensitivity, not a climate
+reconstruction or calibrated harvest. Do not select a winner/default.
+
+Regional source data and weather proofs: data/source/regional_reference_forcing_20261114/
+and output/regional_reference_forcing_20261114/{weather.json,weather_review.json,
+forcing.npz,assignments.csv,weather_daily.csv.gz}. Scripts regional_reference_weather.py
+and review_regional_reference_weather.py reproduce them. Shared supplied-world
+radiation adapter harvest/reference_forcing.py has182controls; fantasy near-
+surface wind/vapour/solar inputs remain absent from the old harvest adapter.
+Continue through field review/maps/handoff; commits/pushes are checkpoints.
+Earlier completed entry below controls the broader programme obligations.
+
 # MATCHED-WEATHER REFERENCE EVAPORATION AUDIT COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued from 60e60c3d.

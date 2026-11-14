@@ -7,6 +7,15 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
+Active continuation: declaration6366d34d / source-preflight7a645ea7 fixes a
+full-coverage regional ETo substitution and24paired fields. Weather stage now
+reviewed:30cells,54810days,931770numeric cells,1507assignments;four fresh
+exports exact. Next execute/review/publish all24field cases with eight exact
+legacy replays; keep periods/epochs/source resolutions explicit and no default
+adoption. The current shared adapter requires supplied world radiation/weather;
+it does not invent missing fantasy near-surface inputs. Full programme gates
+below remain in force; final live queue/review log will update after field stage.
+
 Current completed step: matched-weather reference evaporation audit at Cairo,
 Aswan and Hit. Protocol4d93e88b precedes source/model exposure;15010e41 freezes
 weather/preflight. On5481modern NASA gridded days, daily Hargreaves totals are
