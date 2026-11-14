@@ -32,7 +32,9 @@ def main(out):
     costs = {}                                                    # city-to-city costs depend on the city list (without-Egypt removes cities)
     def cf(net, nodes, limit, batch):
         key = (id(net), np.asarray(nodes).tobytes(), limit, batch)
-        if key not in costs: costs[key] = list(costs_from(net, nodes, limit=limit, batch=batch))
+        if key not in costs:
+            for k in [k for k in costs if k[1:] != key[1:]]: del costs[k]          # keep one city list in memory
+            costs[key] = list(costs_from(net, nodes, limit=limit, batch=batch))
         return iter(costs[key])
     S.T.costs_from = cf
     def scaled(lat, lon):
