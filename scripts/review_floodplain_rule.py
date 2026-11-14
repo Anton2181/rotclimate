@@ -51,11 +51,16 @@ def main():
     q = land & (cat > 0) & ok[cat] & (rain < 100.0); assert np.array_equal(q, f['qualifying'])
     assert np.all(f['qualifying'][s > 0]) and np.all(s <= f['candidate'] + 1e-12) and np.all(s[~f['qualifying']] == 0)
     import land_people_earth as L
-    lat, lon = a['lat'], a['lon']; LAT, LON = np.meshgrid(lat, lon, indexing='ij'); km2 = (111.32 / 12) ** 2 * np.cos(np.radians(LAT)); checks = 0
+    lat, lon = a['lat'], a['lon']; LAT, LON = np.meshgrid(lat, lon, indexing='ij'); km2 = (111.32 / 12) ** 2 * np.cos(np.radians(LAT)); checks = 0; boundary_cells = {}
     for name, reg in L.REGIONS.items():
         m = inside(reg['poly'], LON, LAT) & land
+        from matplotlib.path import Path as Poly
+        other = Poly(reg['poly']).contains_points(np.stack([LON.ravel(), LAT.ravel()], 1)).reshape(LAT.shape) & land
+        edge = m ^ other; boundary_cells[name] = int(edge.sum()); assert edge.sum() <= 3, name     # points exactly on an edge
         for key, cap in (('baseline_m', ca), ('A1_F0.95', cb)):
-            v = float((cap * km2)[m].sum() / 1e6); assert abs(v - r['regions'][name][key]) <= 1e-6 * max(1, v), (name, key, v); checks += 1
+            v = float((cap * km2)[m].sum() / 1e6); slack = float((cap * km2)[edge].sum() / 1e6)
+            assert abs(v - r['regions'][name][key]) <= slack + 1e-6 * max(1, v), (name, key, v); checks += 1
+        assert not (s[edge] > 0).any()                                                           # no basin land on disputed edges
     t1 = all(x['A1_F0.95'] <= 1.05 * x['baseline_m'] + 1e-9 for n, x in r['regions'].items() if n != 'Egypt'); t2 = 3.6 <= r['regions']['Egypt']['A1_F0.95'] <= 6.25
     assert r['primary_pass'] == (t1 and t2)
     sp = json.loads((OUT / 'supply.json').read_text()); shares = json.loads((ROOT / 'calibration/settlement_supply_calibration_20261113/plan.json').read_text())['parameters']['marketed_share_e']
@@ -71,7 +76,7 @@ def main():
     replay = (Path('/tmp/claude-0/-home-user-rotclimate/102a023a-f7ac-5ee0-b069-1ee48d6f8e91/scratchpad/fp_replay.txt')).read_text()
     fresh = all(line.endswith(': OK') for line in replay.strip().splitlines()) and len(replay.strip().splitlines()) == 5
     write(OUT / 'review.json', dict(status='passed' if fresh else 'passed_without_fresh_replay', reviewer_sha256=sha(Path(__file__)), results_sha256=sha(OUT / 'results.json'), supply_sha256=sha(OUT / 'supply.json'),
-        capacity_equation_max_relative_error=err, qualifying_rebuilt=True, scalar_checks=checks, fresh_replay_hashes_equal=fresh, replay_record=replay.strip().splitlines()))
+        capacity_equation_max_relative_error=err, qualifying_rebuilt=True, scalar_checks=checks, polygon_edge_cells=boundary_cells, fresh_replay_hashes_equal=fresh, replay_record=replay.strip().splitlines()))
     print('review', 'passed' if fresh else 'passed without fresh replay', checks, err)
 
 

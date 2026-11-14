@@ -1,3 +1,15 @@
+# FLOODPLAIN LAND RULE (DEVELOPMENT): EGYPT CAPACITY FIXED, SUPPLY NARROWLY FAILS — 14 November 2026
+
+OWNER: "Go ahead with the floodplain rule." Report: reports/FLOODPLAIN_RULE_20261114.md. Plan b5dd9b73 + A1 + A2 (post-hoc, disclosed).
+Rule (scripts/floodplain_earth.py, off-by-default wrapper -> output/land_people/earth_floodplain/earth.npz, ignored; rebuild ~20 min):
+HAND<=5 m & <=30 km of navigable river; atlas flood ends Jul-Oct; <100 mm rain in flood months -> full water, annual,
+winter cereal (A1), farmed 0.95. T1 PASS (all other regions 0.00%). T2 PASS after A1: Egypt 2.32 -> 5.83 M (orig 10.12 fail).
+T3 after A2 (rule in supply production, scripts/floodplain_supply.py): 270 kept (x1.23) but transfer 89.2% < 90%: NARROW FAIL;
+e95 all 0.43; without Egypt 0.365. Side effects: Sudan Nile, Hetao (Han-era irrigated; untested), Yarlung Tsangpo.
+Review passed (82), full fresh rebuild byte-exact. Fantasy map NOT changed.
+NEXT: owner decision whether to port the rule to the fantasy harvest (changes desert-river harvests + downstream);
+remaining Egypt gap is people (heartland pattern gives Egypt 6.65 M vs 4.5-5 M).
+
 # ADOPTED SHARE 0.39 ROBUST TO PEOPLE PATTERN; EGYPT STILL OPEN — 14 November 2026 (settlement lane)
 
 Report: reports/SUPPLY_HEARTLAND_PEOPLE_20261114.md; plan declared before output. scripts/supply_heartland_people.py,
