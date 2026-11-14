@@ -21,9 +21,12 @@ BASE FLOW DONE (5a718dc8 declared; reports/BASE_FLOW_20261114.md): source = floo
 of TOTAL monthly flow, capture both windows, 32 runs (8 exact controls). Meso root water up to 18-29%
 at 50%; Nile saturates first. Nile/Meso fully-watered-equivalent area: flood-only 8.5-21.7x,
 10-25% total 1.7-3.4x, 50% 1.3-2.2x; historical pop ratio ~2.3-7.1 (orientation only, post-hoc).
-NEXT (this lane): freeze a harvest translation (root water -> grain) and DECLARE the Nile-gain AND
-Mesopotamian non-inflation test with a pass rule before scoring; then rerun whole-empire supply
-calibration with Egypt included. Coordinate with the crop-phenology lane before changing crop curves.
+WATER-TO-FOOD TEST DONE (d497bc38 declared; reports/WATER_TO_FOOD_20261114.md): people = root share x
+candidate area x model full-water barley energy (1 t/ha) x arable x 0.6 farmed x sown / 1.1M. Pass rule
+Egypt >= 3.6 M and Meso <= 2.5 M: 0/32 pass. Meso not inflated 30/32. Egypt CEILING with every field fully
+watered: 2.12 M (fallow) / 3.53 M (annual). Egypt is now limited by the 1 t/ha low-input yield and
+farmed share, NOT water. NEXT: a declared, independently tested irrigated-yield rule in the crop model
+(crop lane); do not tune it to Egypt.
 Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
 
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
