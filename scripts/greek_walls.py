@@ -47,7 +47,7 @@ def main(out):
         f, changed = factors(scope)
         Z.residents = (lambda area, reading, f=f: np.where(f < 1, 150.0 * np.asarray(area) * f, residents(np.asarray(area), reading))) if literal else (lambda area, reading, f=f: residents(np.asarray(area) * f, reading))
         try:
-            x = dict(np.load(S.PILOT.POOL)); land = x['land']; cell = float(x['cell_km'])
+            x = dict(np.load(S.PILOT.POOL)); land = x['land']; cell = float(x['cell_km']) ** 2
             p2 = np.where(land, SH.capacity(x['lat'], x['lon']) * x['history'], 0.0); allowed = land & x['allowed']
             x['density'] = p2 * PL.FRIER / float((p2[allowed] * cell).sum())
             a, meta = S.prepare(x)
