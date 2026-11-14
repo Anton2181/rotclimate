@@ -1,3 +1,12 @@
+# EAST/WEST GAP LOCATED: GREECE AND THE FAYUM — 14 November 2026
+
+scripts/east_gap_diagnostic.py (post-hoc) -> output/supply_people_level_20261114/east_gap_diagnostic.json; section in
+reports/SUPPLY_PEOPLE_LEVEL_20261114.md. At the west's 95% share: Greece/Aegean 74% fed (339k short; Peloponnese towns
+6-15%), Egypt 83% (Arsinoe/Fayum 3%), Asia Minor 96%, Levant/Syria/Cyrenaica/Balkans 100%.
+Hypotheses (untested): Greek Hanson areas are 65% wall circuits (37% elsewhere) -> residents overstated; Fayum needs Bahr Yusuf
+canal basin. Need a source for the inhabited share of Greek circuits (Hansen, Shotgun Method) before any sensitivity.
+Owner earlier: map sizes stay as they are.
+
 # FLOODPLAIN RULE PORTED: NO FANTASY RIVER QUALIFIES; MAP UNCHANGED — 14 November 2026
 
 Report reports/FANTASY_FLOODPLAIN_20261114.md; plan calibration/fantasy_floodplain_20261114. harvest/floodplain.py (rule),
