@@ -8,7 +8,7 @@ E = json.loads((ROOT / 'output/greek_walls_20261114/results.json').read_text())[
 B.R3 = ROOT / 'output/sizes_greek_walls_20261114/release3'; B.EARTH = ROOT / 'output/greek_walls_20261114/results.json'
 LOW = json.loads((ROOT / 'output/supply_low_reading_20261114/results.json').read_text())['low_e95']
 B.EXTRACTION = (E, 0.10, LOW);   # LOW: the flat-reading Earth share (calibration/supply_low_reading_20261114)
- B.HEADLINE = f'central_x{int(round(E * 100)):02d}'
+B.HEADLINE = f'central_x{int(round(E * 100)):02d}'
 OUT = ROOT / 'output/sizes_greek_walls_20261114/supply'
 if __name__ == '__main__':
     r = B.run(OUT)
