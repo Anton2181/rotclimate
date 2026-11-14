@@ -7,9 +7,11 @@
     "file": "output/flood_basin_irrigation_20261113/groundwork.json",
     "finding_1": "Terrain already sees the Nile floodplain. Land no more than 5 m above the nearest mapped navigable river and within 30 km of it: 14,300 km2 in the delta and 10,300 km2 in the valley, 24,600 km2 together, close to the roughly 25,000 km2 usually given for cultivated Roman Egypt. The current rules irrigate the equivalent of 9,700 km2 (14,500 km2 with delta fans).",
     "finding_2": "The same terrain test gives Lower Mesopotamia 64,000 km2, where the model already has too much: 16,900 km2 irrigated-equivalent and a capacity of 8.2 M against 0.7-2 M historically.",
-    "implication": "Low land beside a big river is necessary but not sufficient. A rule that fixes Egypt by terrain alone would make Mesopotamia worse. The rule needs a second factor that separates the two."
+    "implication": "Low land beside a big river is necessary but not sufficient. A rule that fixes Egypt by terrain alone would make Mesopotamia worse. The rule needs a second factor that separates the two.",
+    "finding_3_20261114": "scripts/flood_basin_constraints.py -> output/flood_basin_irrigation_20261113/constraints.json. The same terrain test gives the North China Plain 35,800 km2 of low riverside land, more than Egypt (24,600), and that plain's census already set FALLOW (fitted). A terrain-only rule would therefore inflate a fitted region as well as Mesopotamia. Rain in the flood months separates the Nile (0-4 mm) from the Yellow and Wei rivers (330-380 mm, flood during the rain-fed summer crop), but not from Mesopotamia (26 mm), where the flood instead comes at harvest, about five months before sowing."
   },
   "candidate_second_factors_to_test": [
+    "Two-part driver suggested by the constraint diagnostic: (a) the flood falls outside the local rain-fed growing season (little rain in flood months), AND (b) the flood recedes shortly before the cool-season sowing (Nile: October flood end, November sowing; Mesopotamia: May flood end, autumn sowing). Both parts are computable on the fantasy map from monthly river flow and the crop calendar. Not yet declared or scored.",
     "Flood timing against the crop calendar: the Nile floods in late summer before the winter cereal; Tigris and Euphrates flood in spring on a standing crop. Computable on any map from the river's monthly flow and the crop season the harvest model already derives.",
     "Flood reliability and size relative to the plain: discharge per km2 of low land.",
     "Drainage and salinity risk: very flat plains with no gradient to the sea."
@@ -21,5 +23,11 @@
   ],
   "rules_for_the_eventual_test": "Declare the rule and its held-out regions before scoring. Fit on some desert rivers and test on others; Egypt alone must not set a parameter. Report every historical region before and after, as the delta option did. Keep the rule off by default until it passes.",
   "consumers": "The Earth harvest grid (people and cereal potential), then the whole-empire supply calibration. If adopted for the map it changes fantasy harvests along desert rivers and everything downstream, so it needs the normal atlas publication path.",
-  "already_in_place": "scripts/land_people_earth.py has the 1 arc-minute HAND computation inside irrigation() and the --deltas option as a template for an off-by-default rule; scripts/flood_basin_groundwork.py reproduces the measurements above."
+  "already_in_place": "scripts/land_people_earth.py has the 1 arc-minute HAND computation inside irrigation() and the --deltas option as a template for an off-by-default rule; scripts/flood_basin_groundwork.py reproduces the measurements above.",
+  "constraint_regions_for_the_eventual_test": [
+    "North China Plain (fitted: must not move more than the declared tolerance)",
+    "Wei valley",
+    "Lower Mesopotamia (must not rise above historical)",
+    "A held-out desert river still to be qualified (Indus/Sindh inundation, or the Niger inland delta)"
+  ]
 }

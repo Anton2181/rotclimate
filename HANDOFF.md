@@ -1,3 +1,15 @@
+# FLOOD-BASIN RULE GROUNDWORK: NORTH CHINA PLAIN IS A CONSTRAINT — 14 November 2026 (settlement lane)
+
+scripts/flood_basin_constraints.py -> output/flood_basin_irrigation_20261113/constraints.json; figure
+reports/figures/flood_basin_constraints_20261114.png. Diagnostic only, nothing fitted or changed.
+Low land <=5 m above a navigable river within 30 km: Nile 24,600 km2, Lower Mesopotamia 64,000, North China
+Plain 35,800 (its census set FALLOW: fitted), Wei 900. A terrain-only basin rule would inflate the fitted NCP.
+Rain in flood months: Nile 0-4 mm, Meso 26, NCP 382, Wei 328 (Yellow/Wei flood months from literature).
+Candidate driver now listed first in calibration/flood_basin_irrigation_20261113/plan.json: flood outside the
+rain-fed season AND receding shortly before cool-season sowing (separates Nile from both). NOT declared.
+NEXT: qualify a held-out desert river (Indus/Sindh inundation or Niger inland delta) and monthly flow for the
+Yellow River, then declare the rule with NCP/Wei/Meso as constraints before any scoring.
+
 # RELEASE-3 PLACEMENT ON VIDARBHA: GUARD PASSES — 14 November 2026 (settlement lane)
 
 Report: reports/VIDARBHA_RELEASE3_20261114.md; plan 3af474e0 declared before outputs (exposed region, not blind).
