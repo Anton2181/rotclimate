@@ -7,38 +7,30 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Active continuation: declaration6366d34d / source-preflight7a645ea7 fixes a
-full-coverage regional ETo substitution and24paired fields. Weather stage now
-reviewed:30cells,54810days,931770numeric cells,1507assignments;four fresh
-exports exact. Next execute/review/publish all24field cases with eight exact
-legacy replays; keep periods/epochs/source resolutions explicit and no default
-adoption. The current shared adapter requires supplied world radiation/weather;
-it does not invent missing fantasy near-surface inputs. Full programme gates
-below remain in force; final live queue/review log will update after field stage.
+Current completed step: full regional reference forcing with paired field-water
+maps. Declaration6366d34d, source/preflight7a645ea7 and reviewed forcing dadf8859
+precede field outputs. Thirty fixed weather samples cover all1507candidates;
+54810modern gridded dates,931770independent weather cells and all assignments
+reviewed. All24paired field cases retained; eight exact archived controls,
+6835752scalar final-cycle field-steps and18084CSV rows pass. Seven fresh numeric
+exports exact;923protected files unchanged. New water maps published, no harvest
+or settlement adoption. Report: REGIONAL_REFERENCE_FORCING_20261114.md.
 
-Current completed step: matched-weather reference evaporation audit at Cairo,
-Aswan and Hit. Protocol4d93e88b precedes source/model exposure;15010e41 freezes
-weather/preflight. On5481modern NASA gridded days, daily Hargreaves totals are
-19–30% below FAO56 PM with identical weather. Method, monthly aggregation and
-legacy geometry effects kept separate; no field multiplier/default adopted.
-159controls; independent scalar/Decimal checks of98658daily cells and every
-aggregate;two fresh exports byte-exact;920protected files unchanged. Raw weather
-and complete results published. Report: REFERENCE_ETO_20261114.md.
+Finding: Nile capture root coverage65.3/79.0% archived,68.3/80.8% regional
+Hargreaves,52.4/66.1% regional PM. This does not close Egypt's calibration. Modern
+ETo with frozen1970–2000T/P is an exposed forcing-only sensitivity, not a climate
+reconstruction. Source period/grid consistency still needs review before forcing
+adoption. Shared supplied-world algebra is implemented; fantasy near-surface
+weather inputs and shared river flow remain unqualified.
 
-Next: declare regional reference-forcing policy with spatial/period/input
-qualification and matched legacy controls before new field scores. NASA point
-ratios are development diagnostics, not correction factors for every field.
-Daily mean humidity does not provide crop Equation70 minimum RH. Qualify local
-phenology, basal diffusion versus root uptake, canopy/root development and
-inundation/drainage before a stage-curve comparison. Retain the shared
-Earth/fantasy forcing dependency. Tigris and independent regions, frozen harvest
-translation, Nile gain AND Mesopotamian non-inflation and whole-empire supply
-checks remain required. No new calibrated settlement map or crop yield.
-
-Earlier source-qualified stage curves and completed rain-timing sensitivity
-remain baseline evidence: no large timing effect in the eight fixed water
-illustrations, but no general daily-weather validation. Legacy field forcing
-is conditional; no harvest direction is inferred from method differences alone.
+Next: source-check post-flood support, local phenology, soil/root/canopy and
+basal diffusion, especially the documented high water table/capillary mechanism.
+Any extension must pay finite recharge/storage from the same water ledger;
+no unlimited groundwater or parameter choice to make Egypt pass. Pond access/
+infiltration/drainage remain open. Add Tigris/shared Earth-fantasy flow and
+independent regions; freeze harvest translation before Nile gain AND
+Mesopotamian non-inflation and whole-empire supply checks. Water diagnostics
+remain separate from the next calibrated settlement map.
 
 Full-programme review: current release-3 settlements and marketed share 0.3923
 remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
@@ -390,6 +382,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Regional reference forcing and paired fields,14 November,declaration6366d34d/source-preflight7a645ea7/forcing dadf8859|All1507fields/30weather samples/24cases retained;182controls, full independent weather/field/CSV/mapping/fresh/publication checks pass;923protected files unchanged. PM gives lower Nile root coverage in fixed members;period/grid/crop inputs unqualified. Full release/S1–S5/all-actor/mobile programme reviewed;no harvest/settlement adoption|Source-check local post-flood support and high water table, then declare only finite paid groundwater if justified;retain phenology/soil/root/canopy/pond/drainage and period/grid qualification. Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates remain open;continue beyond checkpoints|
 |Matched-weather reference evaporation,14 November,declaration4d93e88b/source-preflight15010e41|Three fixed locations/5481gridded days show Hargreaves19–30%below reference PM;159controls and independent scalar/Decimal/source/aggregate/fresh/publication checks pass;920protected files unchanged. Method comparison is not measured ETo or harvest validation. Full release/S1–S5/all-actor/mobile programme reviewed|Declare regional forcing policy and input/period/grid qualification with matched legacy controls; do not use point ratios as field multipliers. Keep phenology/basal/root/canopy/pond/drainage,Tigris/shared flow,independent regions,frozen harvest and empirical resources/work/authority gates open|
 |Crop-stage source and component checks,14 November,declaration e470de0a|Fetched completed rain handoff3e649793, then verified FAO contextual cereal coefficients/stages and exact curve integration;137 controls, Decimal/fresh/publication checks pass;917 protected files unchanged. Kcb includes basal soil diffusion; no Earth adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local phenology/ETo/climatic adjustment and basal-diffusion/root/canopy/pond/drainage policy before declaring Earth stage comparison. Keep Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates open|
 |Daily river-to-field coupling, 14 November; declarations 30726ae4/e4e26b46|All 256 exposed water scenarios retained; 105 controls, full bare FAO31 and independent scalar field/basin/CSV checks pass; fresh bytes exact. Uniform rain timing and unqualified local inputs limit interpretation. Full release/S1–S5/all-actor/mobile programme reviewed; no harvest or settlement adoption|Declare volume-preserving rain-event sensitivity; qualify soil/root/stage coefficients, pond/access/drainage and dates; add Tigris/shared flow and independent regions before frozen harvest/whole-empire calibration. Keep empirical occupancy/resources/work/authority gaps open|

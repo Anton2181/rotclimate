@@ -1,28 +1,81 @@
-# ACTIVE: REGIONAL REFERENCE FORCING / PAIRED FIELDS — 14 November 2026
+# REGIONAL FORCING AND PAIRED FIELD-WATER MAPS COMPLETE — 14 November 2026
 
-Canonical branch unchanged. Declaration6366d34d fixes30one-degree sampling
-cells and24paired field cases;source/preflight7a645ea7 preceded regional ETo.
-Regional weather stage is now independently reviewed:54810complete source days,
-931770computed cells,1507field assignments;four fresh weather exports exact.
-All923protected files unchanged. No regional field results have been generated.
+Canonical branch: claude/friendly-turing-43ygeu. Continued from e6e0f920.
+Declaration 6366d34d preceded regional weather and field outputs; 7a645ea7 froze
+30 raw sources/preflight; dadf8859 froze independently reviewed regional forcing
+before field scores. Full report: reports/REGIONAL_REFERENCE_FORCING_20261114.md.
+Normal page: atlases/earth_evidence/regional_forcing/. New water-diagnostic maps;
+no harvest, resident or settlement adoption. Commits/pushes remain checkpoints.
 
-NEXT within the SAME declared step: run scripts/regional_reference_fields.py,
-then its fresh output in output/regional_reference_forcing_20261114/fresh.
-Independent field reviewer/publication still to implement. Eight legacy cases
-must match archived field states/fluxes exactly. All24cases retain identical
-WorldClimT/P, crops, soils, calendars and river water;only ETo changes between
-legacy_archive,power_hargreaves,power_penman_monteith. Modern POWER2020–24 ETo
-with WorldClim1970–2000T/P is a declared forcing-only sensitivity, not a climate
-reconstruction or calibrated harvest. Do not select a winner/default.
+RESULT: Nile capture root-demand coverage for five-bin/fractional four-bin crops:
+archived 65.33% / 79.00%; regional Hargreaves 68.27% / 80.82%; regional PM
+52.44% / 66.15%. Euphrates-only five/four-bin coverage: archived 3.69% / 4.76%;
+regional Hargreaves 2.80% / 3.61%; PM 0.89% / 1.18%, unchanged by capture in these
+members. All 24 outcomes retained. Not old total-crop ET, grain, irrigated area
+or residents. No winner or season selected; Egypt calibration still fails.
 
-Regional source data and weather proofs: data/source/regional_reference_forcing_20261114/
-and output/regional_reference_forcing_20261114/{weather.json,weather_review.json,
-forcing.npz,assignments.csv,weather_daily.csv.gz}. Scripts regional_reference_weather.py
-and review_regional_reference_weather.py reproduce them. Shared supplied-world
-radiation adapter harvest/reference_forcing.py has182controls; fantasy near-
-surface wind/vapour/solar inputs remain absent from the old harvest adapter.
-Continue through field review/maps/handoff; commits/pushes are checkpoints.
-Earlier completed entry below controls the broader programme obligations.
+FULL COVERAGE: 1,507 fields assigned to 30 fixed one-degree tile centres before
+weather capture, 15 samples per region. 54,810 complete 2020–2024 NASA gridded
+weather dates, not station/ancient measurements. Raw sources/URLs/units/grid
+metadata/hashes: data/source/regional_reference_forcing_20261114/. Source ZIP
+and all numeric files ship with the normal page. Mean/max field-sample distance:
+Nile 41.10/67.78 km; Euphrates-only 39.01/67.21 km. Sampling completeness is not
+local representativeness or a claim of one-degree native resolution.
+
+POLICY: only ETo changes among legacy_archive, power_hargreaves and
+power_penman_monteith. Crops, soils, calendars, WorldClim T/P, thermal eligibility,
+all candidate consumers and gauge volumes stay fixed. Five-year mean Gregorian
+month totals map conservatively into equal model bins, retaining leap-day amounts.
+Modern POWER2020–24 ETo with WorldClim1970–2000 T/P is a declared forcing-only
+sensitivity, not a consistent climate reconstruction. Hargreaves/PM share weather,
+geometry and assignment; legacy/regional also changes source/period/aggregation.
+No point multipliers, local soil fit or crop climate adjustment applied.
+
+SHARED ADAPTER: harvest/reference_forcing.py receives supplied world radiation
+and all near-surface weather, with no Earth geometry/default weather invented.
+FAO empirical assumptions/time units still need qualification for another world.
+Old fantasy harvest adapter exports Tm/Pm, geometry and learned DTR; it does not
+supply all vapour/2m wind/solar inputs. Shared algebra is tested; a qualified
+fantasy weather connection and shared Earth/fantasy river flow remain open.
+
+VERIFIED: 182 controls; 17,000 scalar/Decimal world-radiation cells and 3,600 bin
+cells before outputs. Independent weather review reconstructs 931,770 computed
+cells and all 1,507 assignments. Independent field kernel replays 6,835,752
+final-cycle field-steps, annual field states/fluxes, monthly ledgers, daily basin
+stocks and 18,084 CSV rows. Full daily field trajectories are not exported.
+All 24 cases reach periodic stocks in two cycles. Eight legacy cases exactly
+match archived arrays; seven fresh numeric files byte-identical; 923 protected
+files unchanged. Max annual field difference 3.64e-12 mm; scalar daily mass
+residual 1.35e-13 mm. Six browser viewport/theme cases, 26 exact rows, 162 filters,
+14 download hashes, 31 raw ZIP members, real field CSV, image/keyboard/width/
+navigation checks; staged Windows checkout/release proof retained.
+
+FIRST NEXT: source-check post-flood crop support: local phenology, soil/root
+and canopy/basal diffusion, especially the documented high water table and
+capillary support. Any groundwater extension must pay for recharge from the
+same finite river/field ledger and retain finite storage; no unlimited inflow
+or depth/rate chosen to close Egypt. Source recovery is starting in ignored
+cache data/cache/recession_groundwater_20261114/. No new groundwater model or
+regional outputs declared yet. Period/grid consistency still requires review
+before ETo adoption; do not apply point ratios. Add Tigris and independent
+regions, freeze harvest translation, then Nile gain AND Mesopotamian
+non-inflation and whole-empire supply checks. Pond/access/drainage remain open.
+
+REPRODUCE: scripts/regional_reference_weather.py; same --out
+output/regional_reference_forcing_20261114/fresh; review_regional_reference_weather.py.
+Then regional_reference_fields.py (canonical reviewed forcing, four workers),
+same --out .../fresh; review_regional_reference_fields.py;
+publish_regional_reference_forcing.py; build_fit_hub.py --date 2026-11-14.
+System Python check_regional_reference_browser.py uses localhost:8766. Source
+capture reuses frozen files. Core-only reruns: audit_reference_forcing.py --out
+output/regional_reference_forcing_20261114/core/fresh; do not overwrite pinned
+canonical core receipt without rebuilding downstream provenance. See full report.
+
+Atlas remains release 3 / marketed share 0.3923: 850 self-fed, 174 importers,
+29 short, 91% fed; reach staffing 1042. S3–S5, dated occupancy/provider/size,
+complete resources/diets/work, mobile actors and political authority remain
+open. Whole-plan live queue/review log updated. Earlier entries are history;
+this entry controls the next dependency.
 
 # MATCHED-WEATHER REFERENCE EVAPORATION AUDIT COMPLETE — 14 November 2026
 

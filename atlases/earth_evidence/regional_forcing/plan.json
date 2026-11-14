@@ -1,0 +1,238 @@
+{
+  "date": "2026-11-14",
+  "baseline": "e6e0f920",
+  "status": "declared_before_regional_weather_capture_and_field_outputs",
+  "known": "All prior daily fields, rain timing, stage and three-location weather results are exposed development. Three-location Hargreaves/PM ratios are known; no new regional grid weather or field comparisons inspected. The candidate mask alone was used to enumerate the fixed grid.",
+  "scope": "Full spatial coverage of the existing two candidate regions, a common reference-weather adapter requiring supplied world radiation, and a paired evaporation-only field experiment. No stage/root/soil/calendar tuning, inferred farmed area, crop yield, population or default adoption.",
+  "candidate_archive": {
+    "file": "output/flood_basin_storage_20261114/fields.npz",
+    "sha256": "ecb3d8f858989f2436f6a84f1d721a3aa0215136aa0002bc47a4ebc945e8a6ca"
+  },
+  "regions": {
+    "nile": {
+      "fields": 489,
+      "weather_cells": [
+        "n24_e032",
+        "n25_e032",
+        "n26_e031",
+        "n26_e032",
+        "n27_e030",
+        "n27_e031",
+        "n28_e030",
+        "n28_e031",
+        "n29_e030",
+        "n29_e031",
+        "n30_e030",
+        "n30_e031",
+        "n31_e030",
+        "n31_e031",
+        "n31_e032"
+      ]
+    },
+    "mesopotamia_euphrates_only": {
+      "fields": 1018,
+      "weather_cells": [
+        "n30_e045",
+        "n30_e046",
+        "n30_e047",
+        "n31_e044",
+        "n31_e045",
+        "n31_e046",
+        "n31_e047",
+        "n32_e043",
+        "n32_e044",
+        "n32_e045",
+        "n32_e046",
+        "n32_e047",
+        "n33_e043",
+        "n33_e044",
+        "n33_e045"
+      ]
+    }
+  },
+  "weather_grid": {
+    "degrees": 1,
+    "assignment": "Half-open one-degree tile containing each field; request tile-centre latitude=floor(field_lat)+0.5 and longitude=floor(field_lon)+0.5. No interpolation, point-ratio scaling or terrain correction. Retain every candidate.",
+    "cells": [
+      {
+        "id": "n24_e032",
+        "latitude": 24.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n25_e032",
+        "latitude": 25.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n26_e031",
+        "latitude": 26.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n26_e032",
+        "latitude": 26.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n27_e030",
+        "latitude": 27.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n27_e031",
+        "latitude": 27.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n28_e030",
+        "latitude": 28.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n28_e031",
+        "latitude": 28.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n29_e030",
+        "latitude": 29.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n29_e031",
+        "latitude": 29.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n30_e030",
+        "latitude": 30.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n30_e031",
+        "latitude": 30.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n30_e045",
+        "latitude": 30.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n30_e046",
+        "latitude": 30.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n30_e047",
+        "latitude": 30.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n31_e030",
+        "latitude": 31.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n31_e031",
+        "latitude": 31.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n31_e032",
+        "latitude": 31.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n31_e044",
+        "latitude": 31.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n31_e045",
+        "latitude": 31.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n31_e046",
+        "latitude": 31.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n31_e047",
+        "latitude": 31.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n32_e043",
+        "latitude": 32.5,
+        "longitude": 43.5
+      },
+      {
+        "id": "n32_e044",
+        "latitude": 32.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n32_e045",
+        "latitude": 32.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n32_e046",
+        "latitude": 32.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n32_e047",
+        "latitude": 32.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n33_e043",
+        "latitude": 33.5,
+        "longitude": 43.5
+      },
+      {
+        "id": "n33_e044",
+        "latitude": 33.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n33_e045",
+        "latitude": 33.5,
+        "longitude": 45.5
+      }
+    ],
+    "provider": "NASA POWER agricultural daily point API; fixed sampling lattice, NOT a claim of one-degree native data resolution",
+    "start": "20200101",
+    "end": "20241231",
+    "time_standard": "LST",
+    "parameters": [
+      "T2M",
+      "T2M_MAX",
+      "T2M_MIN",
+      "T2MDEW",
+      "RH2M",
+      "WS2M",
+      "ALLSKY_SFC_SW_DWN",
+      "PS"
+    ],
+    "capture": "Retain raw source bytes, URLs, units, provider/grid elevations and semantic hashes for all30cells. Same declared QA as the three-location audit. Report all missingness. If any assigned positive-area cell lacks complete qualified weather, preserve it and leave the affected basin comparison unscored; no selective removal or silent fallback. Retry transient requests without changing cells or years; maximum4concurrent requests."
+  },
+  "shared_adapter": "New shared daily reference function receives explicit tmean/min/max, ea, 2m wind, pressure, measured/model solar radiation, elevation AND supplied extraterrestrial radiation in MJ/m2/day. It uses the previously verified daily FAO algebra and Hargreaves coefficients. Earth supplies FAO astronomical radiation; a fantasy caller must supply its own world geometry and all meteorological variables. Never substitute Earth latitude/day geometry or invented humidity/wind for missing fantasy inputs. Existing immutable audited kernel and legacy atlas remain unchanged.",
+  "temporal_mapping": "Compute daily Hargreaves and PM from identical weather at each fixed grid point. Sum each actual Gregorian calendar month within each year, then average the five same-month totals. The12totals map conservatively to the existing12equal model bins; spread by actual model-bin/step duration. Annual bin sum exactly reproduces mean of the five annual daily totals, including leap days. This is an explicit climatology/phase approximation, not observed model-calendar daily weather.",
+  "forcing_cases": [
+    "legacy_archive",
+    "power_hargreaves",
+    "power_penman_monteith"
+  ],
+  "field_grid": "Exactly the eight prior mapped illustrations:2regions x2supplied calendars x2capture/control, barley,root1.5m,bare0.15,pond200mm,efficiency1. Each has all3forcing choices=24cases. Fix existing WorldClim T/P, candidate consumers, thermal eligibility, all soil/infiltration/pond/root settings, gauge volumes, clocks and periodic criteria. Only ETo array changes. Legacy replay must reproduce every archived field/flux/state array exactly. POWER-Hargreaves versus POWER-PM isolates method; legacy versus POWER-Hargreaves additionally changes weather source, period, geometry and aggregation.",
+  "representativeness": "Export every field-to-grid assignment, distance, area and source grid elevation. Report area-weighted distance and maximum; no outcome-selected distance threshold. NASA2020\u20132024evaporation is deliberately paired with frozen WorldClim1970\u20132000T/P only as forcing substitution, not a fully consistent climate reconstruction. No default qualification follows from complete coverage.",
+  "preflight": "Before regional ETo/field outputs, verify common adapter against unchanged FAO module and independent scalar/Decimal samples, including arbitrary supplied-world radiation, explicit units/ranges and missing inputs. Test tile-boundary assignment and conserved monthly/yearly aggregation including leap years. Keep prior protected and three-location numeric results byte-identical. Freeze grid/source receipts and preflight before field outputs.",
+  "review": "Independent raw-weather/solar/algebra/QA/monthly aggregation and field-to-grid mapping; no producer/shared-adapter import. Reuse the reviewed independent scalar soil/pond/node kernel with only declared per-step ETo substitution. Compare all24cases annual field states/fluxes, eligibility/root diagnostics, monthly ledgers/daily basin stocks; all CSV cells and legacy baseline identities. Fresh numeric exports byte-exact; retain all outcomes and source/code pins.",
+  "outputs": "Regional forcing maps and reference-demand arrays; complete24case table, field maps and numeric stocks/fluxes; all assignments and source receipts. These are conditional water diagnostics, not crop yields or a calibrated settlement atlas.",
+  "next": "Review input-period/grid consistency and shared fantasy weather availability; qualify local phenology, basal diffusion/root/canopy development, soil and pond/drainage. Add Tigris and independent regions, freeze harvest translation, then Nile gain AND Mesopotamian non-inflation and whole-empire supply checks.",
+  "adopt": false
+}
