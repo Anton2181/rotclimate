@@ -1,0 +1,16 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "owner_instruction": "Fix the people side first, then port to the fantasy map.",
+  "earth_status": "Earth rule (calibration/floodplain_rule_20261114, A1, A2): T1 pass, T2 pass after A1 (development), whole-empire supply narrowly fails (people-level fix: transfer 0.884). Ported as the owner asked, with that stated.",
+  "rule_ported_unchanged": {
+    "candidate": "Fantasy source-resolution land within 30 km of a drawn navigable river (scripts.vector_rivers.river_classes of data/source/original/rivers.png) and <= 5 m above it on the world terrain file; block-averaged share per analysis cell.",
+    "timing": "Analysis cell's basin from the atlas's own network (polity.network.statics/climate on F.map_climate, F.navigable_rivers); flood months = flow index > 1; qualifies if the longest cyclic run ends 6-9 months after the winter solstice (the map's months start at the winter solstice; Earth July-October). Same 2-month allowance as Earth.",
+    "dry": "Rain on the cell summed over the flood months < 100 mm (surface_months P).",
+    "basin_capacity": "Full water, sown every year, better of wheat and barley (scripts.land_people.analyse at irr = 1), farmed share 0.95; blended by basin share before harvest.models.settlement_fields; cored fields recomputed as derive does."
+  },
+  "implementation": "harvest/floodplain.py (new) and scripts/fantasy_floodplain.py; harvest/export.py untouched. Control: the wrapper with no basin land must reproduce derive() fields exactly.",
+  "report": "Which drawn rivers qualify, basin area, change in crop capacity and settlement base in total and by province, for the published corrected and raw climates. No atlas file is changed in this step.",
+  "next_step_declared": "If basin land is found, the downstream fantasy chain (release-3 placement inputs, sizes, wide supply, reach) is rebuilt on the new settlement base as a separate publication step with the existing controls, and the lore ranking of marked places stays binding.",
+  "outputs": "output/fantasy_floodplain_20261114/{results.json, review.json, fields_<mode>.npz (ignored)}"
+}
