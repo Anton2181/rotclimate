@@ -28,6 +28,11 @@ watered: 2.12 M (fallow) / 3.53 M (annual). Egypt is now limited by three rain-f
 0.6 farmed share, 0.6 fallow), NOT water. Papyri hints: tax ~8.3 art/aroura, rents up to 15 (~1.6 t/ha).
 NEXT: a declared floodplain-land rule (yield, farmed share, cropping frequency) in the crop model, tested
 on regions other than Egypt; do not tune it to Egypt.
+FLOODPLAIN EVIDENCE GATHERED (calibration/floodplain_constants_20261114/sources.json, groundwork only): Egypt
+basin land one crop/yr (EB1911/Willcocks); Egypt c.1911 cultivated ~2.33 M ha vs HAND candidates 2.46 M ha
+(~0.95, upper bound for antiquity); Mesopotamian alternate-year fallow (weak sources); Roman Egypt rent
+bounds ~1.6 t/ha. Arithmetic with these constants already known informally -> any test on Egypt/Meso is
+development. OWNER DECISION PENDING: floodplain constants change harvests on every map river.
 Restore pinned gauge pages with scripts/fetch_flood_gauges.py logic (hit/aswan) and tigris_gauge.fetch().
 
 # Matched meteorology and 32 paired water maps complete — 14 November 2026
