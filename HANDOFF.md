@@ -5,6 +5,9 @@ review_supply_heartland_people.py passed (68), fresh exact. People = blind-teste
 exp(-D/800) rescaled to the window total. Without Egypt: PASS, e95 0.372 vs adopted 0.392. With Egypt: fails
 (Egypt proper 2.55 M people; +yield x2.16 east e95 0.81, transfer 0.86). Crash/OOM fixes in the cache disclosed.
 Two-part Egypt fix: part 2 (people follow capacity) = existing heartland pattern; part 1 (floodplain output per km2) open.
+FLOOD TIMING CHECK (scripts/earth_flood_timing.py -> output/flood_basin_irrigation_20261113/flood_timing.json): the atlas's own
+monthly river flow on Earth floods in the right order but 1-3 months early (Nile Aug vs Sep; Euphrates/Tigris Apr vs May,
+r 0.15; Niger Aug vs Oct-Dec: no travel lag). A timing driver needs a lag or a declared ~2-month tolerance.
 
 # EGYPT HARVEST ALONE DOES NOT FIX THE WHOLE-EMPIRE SUPPLY CALIBRATION — 14 November 2026 (settlement lane)
 
