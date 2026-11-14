@@ -1,0 +1,30 @@
+{
+  "date": "2026-11-14",
+  "baseline": "60e60c3d",
+  "status": "declared_before_weather_capture_and_model_outputs",
+  "known": "Daily field, rain-timing and crop-stage development results are exposed. FAO56 Example18 Uccle daily ETo3.9mm and component intermediates have been inspected; this is a published benchmark. Atlas sunlight_top uses equal climate bins and a circular-orbit radiation approximation without the Earth-Sun distance factor. No NASA POWER weather values or site-method differences inspected.",
+  "scope": "Audit reference evaporation forcing at three fixed development locations, using identical modern weather for FAO56 Penman-Monteith and Hargreaves comparisons. No local phenology selection, crop/soil fitting, Earth water-model rerun, harvest translation or default atlas adoption.",
+  "sites": [
+    {"id":"cairo","latitude":30.04,"longitude":31.24},
+    {"id":"aswan","latitude":24.09,"longitude":32.90},
+    {"id":"hit","latitude":33.64,"longitude":42.83}
+  ],
+  "weather": {
+    "provider":"NASA POWER daily point API, agricultural community; gridded model/satellite products, not station measurements or ancient weather",
+    "url":"https://power.larc.nasa.gov/api/temporal/daily/point",
+    "start":"20200101","end":"20241231","time_standard":"LST",
+    "parameters":["T2M","T2M_MAX","T2M_MIN","T2MDEW","RH2M","WS2M","ALLSKY_SFC_SW_DWN","PS"],
+    "capture":"Retain full raw responses, request URLs, returned units/metadata, site grid elevation, raw byte digests and semantic parameter-data digests. Use returned geometry elevation; do not invent elevation if absent. Freeze source receipt before weather ETo outputs. Three sites x1827days=5481expected daily rows. Keep all dates; source fills and invalid values explicit, no imputation or selective period/site replacement. Retry transient transport errors without changing source or period."
+  },
+  "sources": {
+    "fao56_ch2.html":{"url":"https://www.fao.org/4/x0490e/x0490e06.htm","sha256":"097e3aa9223ef69cf589549c445083eb78b1549b099459b448f01a5e7337c68b","locator":"Equation6 daily grass-reference Penman-Monteith; standard reference surface"},
+    "fao56_ch3.html":{"url":"https://www.fao.org/4/x0490e/x0490e07.htm","sha256":"63d52d7c2858df69e6423312e17a631b8c6495575f8a2598915bcdf597a35cbe","locator":"Equations7/8/11/13/14/21-25/37-40/42/47; Examples8,11; radiation/pressure/wind units"},
+    "fao56_ch4.html":{"url":"https://www.fao.org/4/x0490e/x0490e08.htm","sha256":"0090a52ad4a16e639b2376d71e623f1636ed8b439dd2ea5ec91d89191f376828","locator":"Example18 daily Uccle calculation; Equation52 Hargreaves; local calibration and missing-data limitations"}
+  },
+  "operator": "Daily FAO56 grass reference: supplied Tmean/Tmin/Tmax, actual vapour pressure from mean dewpoint via Equation14, supplied2m wind, supplied surface pressure kPa, solar radiation converted from declared provider units to MJ/m2/day. Delta at supplied Tmean; saturation pressure mean of Tmin/Tmax. Extraterrestrial radiation uses Gregorian day-of-year with FAO365-day trigonometric denominator, including Earth-Sun distance factor; source grid elevation in Rso. Albedo0.23, G0, sigma4.903e-9, Kelvin273.16 in longwave, denominatorT+273 in Equation6. Explicit Rs/Rso clamp0.3..1 to bound the empirical cloud term; report every clamped value. Negative daily raw ETo is retained diagnostically and clamped to0 for reported ETo; report counts. Daily Hargreaves uses the SAME temperature and FAO radiation, coefficient0.0023 and Ra evaporation-equivalent factor0.408. Do not fit a site coefficient.",
+  "comparisons": "Export all daily rows with QA flags, intermediates and both methods; 180 site/year/month aggregates,15site/year sums,36site/month climatological rows and3site pooled summaries including Nov-March calendar-month diagnostics (not the supplied equal-bin crop calendars). On monthly climatological mean weather, also compare the unchanged atlas hargreaves/sunlight_top implementation at Earth tilt23.44 and winter-solstice355, divided by365/12 to obtain mm/day. Keep method, temporal aggregation and orbital geometry effects labelled separately; no comparison of mismatched site weather as if collocated. Report method bias/MAE/RMSE and ratios without pass thresholds or selecting a winner.",
+  "preflight": "Before weather-derived outputs, verify FAO Example18 final rounded3.9mm/day and intermediates, Example8 radiation32.2MJ/m2/day, wind/pressure/radiation conversions, zero demand, fractional-day integration not used in daily forcing audit, vector shape/finite/range errors. Independent scalar/Decimal calculation and synthetic controls before site outputs. Crop-stage and all previous numeric assets remain byte-identical.",
+  "review": "Separate scalar reference, no producer/component import, reconstructs daily weather parsing and every retained intermediate/method/aggregation. Raw/source/code hashes verified; two fresh numeric exports byte-exact; complete-date/missingness and monthly/yearly sums checked. Weather source receipt frozen before site results. All three sites are development, no independent regional harvest validation.",
+  "limits": "POWER daily average RH2M is not observed daily minimum RH for Equation70. No field climate adjustment inferred from it. Gridded modern weather and a second reference equation cannot establish ancient ETo accuracy or lysimeter validation; generic PM is the declared reference method, not observed truth. Local phenology, basal diffusion/root uptake, canopy/root development, pond/drainage, Tigris/shared-flow and independent regions remain open.",
+  "adopt": false
+}
