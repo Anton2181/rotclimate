@@ -1,0 +1,231 @@
+{
+  "status": "declared_before_matched_rain_capture_and_joint_meteorological_arrays",
+  "known": "Existing ETo-only regional outputs, synthetic groundwater and two modern groundwater source studies are exposed development. No new rainfall or joint meteorological forcing arrays inspected.",
+  "scope": "Source/input preflight only: same30fixed samples, all1507existing candidates,2020\u20132024LST. Build common-period temperature/rain/ETo arrays before any new field comparison. No groundwater, crop/yield/default adoption.",
+  "parent_plan_sha256": "62dfae92b21982d82693997573c167ebe1dfe7971f2d0f5461e2d4bba01a51ee",
+  "weather_grid": {
+    "degrees": 1,
+    "assignment": "Half-open one-degree tile containing each field; request tile-centre latitude=floor(field_lat)+0.5 and longitude=floor(field_lon)+0.5. No interpolation, point-ratio scaling or terrain correction. Retain every candidate.",
+    "cells": [
+      {
+        "id": "n24_e032",
+        "latitude": 24.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n25_e032",
+        "latitude": 25.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n26_e031",
+        "latitude": 26.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n26_e032",
+        "latitude": 26.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n27_e030",
+        "latitude": 27.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n27_e031",
+        "latitude": 27.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n28_e030",
+        "latitude": 28.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n28_e031",
+        "latitude": 28.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n29_e030",
+        "latitude": 29.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n29_e031",
+        "latitude": 29.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n30_e030",
+        "latitude": 30.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n30_e031",
+        "latitude": 30.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n30_e045",
+        "latitude": 30.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n30_e046",
+        "latitude": 30.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n30_e047",
+        "latitude": 30.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n31_e030",
+        "latitude": 31.5,
+        "longitude": 30.5
+      },
+      {
+        "id": "n31_e031",
+        "latitude": 31.5,
+        "longitude": 31.5
+      },
+      {
+        "id": "n31_e032",
+        "latitude": 31.5,
+        "longitude": 32.5
+      },
+      {
+        "id": "n31_e044",
+        "latitude": 31.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n31_e045",
+        "latitude": 31.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n31_e046",
+        "latitude": 31.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n31_e047",
+        "latitude": 31.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n32_e043",
+        "latitude": 32.5,
+        "longitude": 43.5
+      },
+      {
+        "id": "n32_e044",
+        "latitude": 32.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n32_e045",
+        "latitude": 32.5,
+        "longitude": 45.5
+      },
+      {
+        "id": "n32_e046",
+        "latitude": 32.5,
+        "longitude": 46.5
+      },
+      {
+        "id": "n32_e047",
+        "latitude": 32.5,
+        "longitude": 47.5
+      },
+      {
+        "id": "n33_e043",
+        "latitude": 33.5,
+        "longitude": 43.5
+      },
+      {
+        "id": "n33_e044",
+        "latitude": 33.5,
+        "longitude": 44.5
+      },
+      {
+        "id": "n33_e045",
+        "latitude": 33.5,
+        "longitude": 45.5
+      }
+    ],
+    "provider": "NASA POWER agricultural daily point API; fixed sampling lattice, NOT a claim of one-degree native data resolution",
+    "start": "20200101",
+    "end": "20241231",
+    "time_standard": "LST",
+    "parameters": [
+      "T2M",
+      "T2M_MAX",
+      "T2M_MIN",
+      "T2MDEW",
+      "RH2M",
+      "WS2M",
+      "ALLSKY_SFC_SW_DWN",
+      "PS",
+      "PRECTOTCORR"
+    ],
+    "capture": "Retain raw source bytes, URLs, units, provider/grid elevations and semantic hashes for all30cells. Same declared QA as the three-location audit. Report all missingness. If any assigned positive-area cell lacks complete qualified weather, preserve it and leave the affected basin comparison unscored; no selective removal or silent fallback. Retry transient requests without changing cells or years; maximum4concurrent requests."
+  },
+  "regions": {
+    "nile": {
+      "fields": 489,
+      "weather_cells": [
+        "n24_e032",
+        "n25_e032",
+        "n26_e031",
+        "n26_e032",
+        "n27_e030",
+        "n27_e031",
+        "n28_e030",
+        "n28_e031",
+        "n29_e030",
+        "n29_e031",
+        "n30_e030",
+        "n30_e031",
+        "n31_e030",
+        "n31_e031",
+        "n31_e032"
+      ]
+    },
+    "mesopotamia_euphrates_only": {
+      "fields": 1018,
+      "weather_cells": [
+        "n30_e045",
+        "n30_e046",
+        "n30_e047",
+        "n31_e044",
+        "n31_e045",
+        "n31_e046",
+        "n31_e047",
+        "n32_e043",
+        "n32_e044",
+        "n32_e045",
+        "n32_e046",
+        "n32_e047",
+        "n33_e043",
+        "n33_e044",
+        "n33_e045"
+      ]
+    }
+  },
+  "candidate_archive": {
+    "file": "output/flood_basin_storage_20261114/fields.npz",
+    "sha256": "ecb3d8f858989f2436f6a84f1d721a3aa0215136aa0002bc47a4ebc945e8a6ca"
+  },
+  "overlap": "Compare all eight old weather variables, every date, provider coordinates/elevation and units against the frozen regional source. Reuse reviewed ETo only for exact-equal overlapping numerical inputs. Preserve any changed sample and leave affected forcing unqualified until a new full joint evaporation review; no fallback or cherry-picking.",
+  "rain_policy": "PRECTOTCORR must contain all1827dates at each30samples with finite nonnegative data and declared mm/day. Each full LST day contributes rate times one day. Sum actual Gregorian month amounts,average five same-month totals,spread unchanged totals across equal model bins; preserve mean annual total including leap days.",
+  "temperature_policy": "For each sample/year/Gregorian month,average daily T2M degreesC,then equal-weight the five same-month means. These physical temperature means map to the12existing bins. Do not scale degreesC to conserve a Celsius integral; constant temperature remains constant. Daily variance/thermal extremes and interannual variability are not represented by monthly means.",
+  "assignment": "Exactly reuse all1507prior field/sample indices and distances. Do not reselect candidates or local grid thresholds.",
+  "review": "Independent raw dates/units/missingness/overlap and scalar/Decimal aggregation checks; every sample bin and field assignment,full CSV and four fresh files. Pin prior942protected outputs plus all local-source numeric exports and review. No model fields until this source preflight is frozen and reviewed.",
+  "limits": "Modern gridded short-period meteorology,not ancient reconstruction,station validation or a long climatic normal. Frozen Aswan1871\u20131901 and Hit1965\u20131971 selected-year flow means remain different epochs; a later paired field sensitivity must state that. Crop/soil/phenology,shared fantasy weather/flow,Tigris and independent validation remain open.",
+  "adopt": false
+}
