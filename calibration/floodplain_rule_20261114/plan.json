@@ -24,6 +24,13 @@
       "known": "T1 passed (no other region changed: 0%). T2 FAILED by overshoot: Egypt 10.12 M (F_b 0.95), 6.65 M (F_b 0.60) against [3.6, 6.25] M. Diagnosis: the basin crop was the highest-energy crop at full water (mean 5.6 M kcal/ha: irrigated rice or dates).",
       "change": "Basin land grows the better of wheat and barley at full water (the cool-season cereal sown on the receding flood). Rice and millet are summer crops standing in the flood season; date palms are trees, not basin field crops. Everything else unchanged.",
       "status": "post-hoc correction of an under-specified rule; the original failure stays on record and the amended rule is development, not a pass of the original declaration"
+    },
+    {
+      "id": "A2",
+      "made_after": "T3 run as declared",
+      "known": "T3 as declared: whole empire fails (east never 95% at 270; transfer 0.60), without Egypt passes at e95 0.365. But the supply model computes production from per-crop energy (kcal_wheat, kcal_barley) with its own farmed 0.6 and sown 0.6, which the rule did not change; only the people pattern (through capacity) moved. T3 therefore did not exercise the rule.",
+      "change": "Apply the same basin rule to supply production: on the qualifying share s of each cell, wheat and barley energy are replaced by the full-water winter-cereal energy W x F_b / (0.6 x 0.6) (so that the supply model's farmed 0.6 x sown 0.6 becomes F_b x 1.0), F_b = 0.95. Field hours per hectare are unchanged, so basin grain costs fewer hours per kcal; disclosed. Same declared rules.",
+      "status": "post-hoc correction of the T3 wiring; development"
     }
   ]
 }
