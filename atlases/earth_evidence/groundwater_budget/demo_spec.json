@@ -1,0 +1,16 @@
+{
+  "status":"synthetic_demonstration_fixed_before_outputs",
+  "purpose":"Illustrate five-stock accounting and finite exhaustion, not a Nile field or parameter fit",
+  "flood_steps":20,"crop_steps":40,"step_days":1,
+  "area_m2":1000,"source_flood_m3_per_step":30,"source_crop_m3_per_step":0,
+  "rain_mm_per_step":0,"eto_mm_day":4,
+  "profile":{"theta_fc":0.25,"theta_wp":0.10,"root_depth_m":1,"evaporation_depth_m":0.1,"rew_mm":9},
+  "crop_kcb":0.75,"bare_background":0.15,"pond_capacity_mm":40,"infiltration_mm_day":20,"efficiency":1,
+  "cases":[
+    {"id":"groundwater_disabled","aquifer_capacity_mm":0,"recharge_mm_day":0,"crop_permission_mm_day":0},
+    {"id":"stored_no_permission","aquifer_capacity_mm":40,"recharge_mm_day":5,"crop_permission_mm_day":0},
+    {"id":"finite_groundwater","aquifer_capacity_mm":40,"recharge_mm_day":5,"crop_permission_mm_day":3}
+  ],
+  "aquifer_loss_mm_day":0,
+  "policy":"Recharge only during pond-permitted flood steps; permission zero during flood, supplied value during crop. Empty first cycle and separate all-five-stock periodic replay. All cases retained; no rate/capacity adopted for a real region."
+}

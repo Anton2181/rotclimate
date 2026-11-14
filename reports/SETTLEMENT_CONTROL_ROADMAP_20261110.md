@@ -7,25 +7,25 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: capillary source qualification and stationary hydraulic
-component, declaration3ce2c453 following regional maps074363c0. All246published
-FAO61 profile heights reproduce within rounding;28source profiles/896hydraulic
-sample cells independently reviewed with50-digit Decimal. 208controls,three
-fresh exports exact,932protected files unchanged; source/page/publication checks
-pass. No water supplied or regional/harvest/default change. Historical context
-preserves floodplain analogies and summer/winter distinctions. Report:
-CAPILLARY_HYDRAULICS_20261114.md; normal page: capillary/.
+Current completed step: finite PAID pond–groundwater–soil accounting, declarations
+6e7490d2 and2a072eb8 before implementation/fixed demonstrations. Five accounted
+stocks, previous-pond recharge and shared infiltration; upward transfer limited
+by supplied permission, stock and deficit. No duplicate percolation/return
+credit.223controls,100forests/4680field-steps/105552history values independently
+checked;10exact full-history legacy cases,three fresh files exact,937protected
+files unchanged. Synthetic40mmstorage costs40m³extra delivery per1000m² and is
+exhausted under permission. No Earth field/harvest/default change. Report:
+PAID_GROUNDWATER_20261114.md; normal page: groundwater_budget/.
 
-Next: declare finite PAID groundwater recharge/storage and coupling to the same
-river/soil ledger, with empty starts and explicit accessible stocks, floors,
-capacities, areas and durations. Upward transfer must satisfy hydraulic and
-stock limits; percolation cannot be credited twice. Preserve zero-groundwater/
-legacy/all-candidate controls. Qualify local soil/pressure-retention, water-table
-history, root/canopy, drainage and transient/high-water-table effects before
-field adoption. No universal rate, Dutch-soil transfer or summer-to-winter depth
-substitution to make Egypt pass. Keep period/grid forcing and shared fantasy
-weather/river inputs, Tigris and independent regions open; freeze harvest before
-Nile gain AND Mesopotamian non-inflation and whole-empire supply checks.
+Next: qualify local soil/hydraulic profiles, seasonal water-table/root history,
+recharge and drainage. Separate measurements from model-derived fluxes; modern
+managed plots are not ancient defaults. Declare consistent soil/root/hydraulic
+inputs before regional groundwater fields. Keep high-water-table oxygen/salinity/
+transient, phenology/canopy, period/grid, shared fantasy weather/river, Tigris
+and independent regions open. No universal rate, Dutch-soil transfer or summer-
+to-winter substitution to make Egypt pass. Freeze harvest translation before
+Nile gain AND Mesopotamian non-inflation and whole-empire supply checks; root
+coverage cannot silently replace total-crop ET in legacy Ky yield.
 
 Latest actual field update remains all24regional forcing scenarios:1507fields,
 30samples, exact archived controls. Nile capture root coverage65.3/79.0% archived,
@@ -382,6 +382,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Paid groundwater budget,14 November,declarations6e7490d2/2a072eb8|223controls;100forests/4680steps/105552histories,three fixed demos and all-five-stock periodic states independently checked.10exact legacy cases;three fresh files exact,937protected unchanged. Recharge spends paid pond/infiltration;rise spends finite storage. No Earth/default adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local soil/root/hydraulic and seasonal water-table/recharge/drainage evidence before new regional fields;separate measured/model-derived fluxes. Retain transient/high-water-table constraints,period/grid/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates;continue beyond checkpoints|
 |Capillary hydraulic source/component checks,14 November,declaration3ce2c453|All246published heights match rounding;28source profiles/896function cells independently checked;208controls,three fresh exports/source/publication proofs pass;932protected files unchanged. Historical analogy/summer-depth contexts preserved. No groundwater supplied or field/default adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Declare finite paid groundwater transfer/storage before new fields;qualify soil/root/water-table/drainage/transient inputs with zero-groundwater/legacy controls. Retain period/grid/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates;continue beyond checkpoints|
 |Regional reference forcing and paired fields,14 November,declaration6366d34d/source-preflight7a645ea7/forcing dadf8859|All1507fields/30weather samples/24cases retained;182controls, full independent weather/field/CSV/mapping/fresh/publication checks pass;923protected files unchanged. PM gives lower Nile root coverage in fixed members;period/grid/crop inputs unqualified. Full release/S1–S5/all-actor/mobile programme reviewed;no harvest/settlement adoption|Source-check local post-flood support and high water table, then declare only finite paid groundwater if justified;retain phenology/soil/root/canopy/pond/drainage and period/grid qualification. Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates remain open;continue beyond checkpoints|
 |Matched-weather reference evaporation,14 November,declaration4d93e88b/source-preflight15010e41|Three fixed locations/5481gridded days show Hargreaves19–30%below reference PM;159controls and independent scalar/Decimal/source/aggregate/fresh/publication checks pass;920protected files unchanged. Method comparison is not measured ETo or harvest validation. Full release/S1–S5/all-actor/mobile programme reviewed|Declare regional forcing policy and input/period/grid qualification with matched legacy controls; do not use point ratios as field multipliers. Keep phenology/basal/root/canopy/pond/drainage,Tigris/shared flow,independent regions,frozen harvest and empirical resources/work/authority gates open|

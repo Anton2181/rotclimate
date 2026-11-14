@@ -147,6 +147,8 @@ def main():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_regional_reference_forcing.py')],cwd=ROOT,check=True)
     if (ROOT/'output/capillary_hydraulics_20261114/review.json').exists():
         subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_capillary_hydraulics.py')],cwd=ROOT,check=True)
+    if (ROOT/'output/paid_groundwater_20261114/review.json').exists():
+        subprocess.run([sys.executable,'-I',str(ROOT/'scripts/publish_paid_groundwater.py')],cwd=ROOT,check=True)
     (origin/'presentation.json').write_text(json.dumps(dict(status='published',page='atlases/earth_evidence/index.html',page_sha256=hashlib.sha256((out/'index.html').read_bytes()).hexdigest(),publisher_sha256=hashlib.sha256(Path(__file__).read_bytes()).hexdigest()),indent=2)+'\n')
     print('Published Earth evidence dashboard; production map values unchanged')
 

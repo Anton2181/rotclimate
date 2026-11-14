@@ -1,3 +1,51 @@
+# FINITE PAID GROUNDWATER ACCOUNTING COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Declarations6e7490d2 and2a072eb8
+preceded implementation and fixed synthetic outputs respectively. Report:
+reports/PAID_GROUNDWATER_20261114.md. Normal page:
+atlases/earth_evidence/groundwater_budget/. Continue beyond commit/push checkpoints.
+
+IMPLEMENTED: harvest/groundwater_fields.py wraps unchanged field kernel one
+actual step at a time. Five stocks: top/deep available, surface below-WP, pond
+and accessible aquifer above a supplied floor. Empty defaults; bounded supplied
+starts. Loss then permission/stock/deficit-limited upward transfer, deep→bound→top;
+then previous-pond-only recharge. Recharge and soil infiltration share ONE
+allowance. Fresh delivery cannot recharge until next step. Percolation/overflow/
+pond release do not return or receive duplicate credit. All five periodic stocks
+must converge. Permissions/capacities supplied; no water-table inference.
+
+VERIFIED:223controls;100synthetic forests/4680field-steps/105552history values
+independently replayed;max difference1.60e-13. Ten zero-groundwater cases reproduce
+EVERY original array exactly. Three empty-start demos,180CSVrows and five-stock
+periodic states checked;three fresh files byteexact,937protected files unchanged.
+Synthetic40mmstorage costs40m³extra river delivery per1000m²;root uptake
+105.416→119.140mm of120mm potential. Stored/no-permission adds no uptake;finite
+stock empties. No Earth groundwater field, harvest or settlement adoption.
+
+FIRST NEXT: recover/qualify local soil/hydraulic profiles, seasonal water-table
+history, root suction/development, recharge and drainage. Separate measurements
+from model-derived fluxes; modern managed plots are not ancient basin defaults.
+Do not graft Dutch O8 onto the synthetic soil, infer winter from summer depths,
+or select rates/capacities to close Egypt's gap. Declare consistent soil/root/
+hydraulic inputs and finite supplies before regional groundwater experiments.
+Retain high-water-table oxygen/salinity/transient constraints, forcing period/
+grid, shared fantasy weather/river qualification, Tigris and independent regions.
+Root uptake cannot replace total-crop ET in legacy Ky without a consistent rule.
+
+REPRODUCE: scripts/paid_groundwater_benchmarks.py; same producer --out
+output/paid_groundwater_20261114/fresh; scripts/review_paid_groundwater.py;
+scripts/publish_paid_groundwater.py; scripts/build_fit_hub.py --date 2026-11-14.
+System Python scripts/check_groundwater_browser.py uses localhost:8766. Canonical
+controls runtime receipt pinned separately; fresh reuses it. Force-add primary
+synthetic.npz; fresh and screenshots ignored. Browser/Windows receipts retained.
+
+Regional water maps remain latest field update,24cases/all1507candidates.
+Nile PM root coverage52.4/66.1% versus archived65.3/79.0%, conditional diagnostics.
+Default release3/marketed share0.3923 stays:850self-fed/174imports/29short,91%fed;
+reach staffing1042. Egypt calibration, S3–S5, empirical occupancy/provider/size,
+complete resources/diets/work, mobile actors and political authority remain open.
+Earlier entries below are history; this entry controls the next dependency.
+
 # CAPILLARY HYDRAULIC SOURCE/COMPONENT CHECKS COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued beyond regional maps

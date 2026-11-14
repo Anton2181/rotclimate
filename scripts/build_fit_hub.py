@@ -242,6 +242,7 @@ def main():
                    '<a href="earth_evidence/reference_eto/">Reference evaporation audit</a> · '
                    '<a href="earth_evidence/regional_forcing/">Regional forcing and paired water maps</a> · '
                    '<a href="earth_evidence/capillary/">Capillary hydraulic source checks</a> · '
+                   '<a href="earth_evidence/groundwater_budget/">Finite groundwater budget</a> · '
                    '<a href="earth_evidence/daily_fields/">Daily river-to-field water</a> · '
                    '<a href="earth_evidence/soil_drying/">Soil drying and supplied daily clock</a> · '
                    '<a href="earth_evidence/flood_storage/">Flood storage and winter crop water</a> · '
