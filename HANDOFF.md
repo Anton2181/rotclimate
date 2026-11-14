@@ -1,3 +1,61 @@
+# LAYERED SOIL AND EXACT SUPPLIED CLOCK VERIFIED — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued from bf0804f0.
+Component declaration ab8afa29 preceded implementation/model outputs; clock
+amendment d0739f3f preceded calendar outputs. These are known published component
+checks and synthetic tests, not blind regional validation or a local soil fit.
+
+IMPLEMENTED: harvest/soil_drying.py separates top plant-available, deeper
+plant-available and surface below-WP evaporable water. TEW and TAW overlap in the
+top pool, which is stored once. Water refills explicit pools, pays drainage,
+surface evaporation and root uptake. Roots cannot use below-WP water; bare
+evaporation cannot directly spend the deep root store. Wetting order, drainage
+before ET, evaporation priority and proportional root uptake are explicit
+approximations. No pond, groundwater recharge, root growth or free refill.
+
+harvest/field_clock.py splits supplied climate/event boundaries into <=1day
+steps, conserves bin totals and repeats rates/state values without scaling.
+The soil step receives actual segment duration. Example clock: 379 segments over
+365 days, supplied capture 106.458333 days/crop 121.666667 days with no overlap.
+These are mathematical phase windows, NOT qualified local dates or daily forcing.
+
+VERIFIED: 90 controls (52 earlier + 23 soil + 15 clock); all 140 numeric daily cells in
+FAO56 Examples31/37 match published rounding. Independent HTMLParser/40-digit
+Decimal review plus scalar pools: 36,000 profile-days / 108,000 compartment checks,
+daily/global closure and Decimal calendar integration. Max model daily balance
+error ~1e-13 mm; all 3 fresh numeric files byte-exact. 904 Earth-fit assets AND the
+3 numeric files for all 96 earlier Earth field cases remain byte-identical.
+No Earth/crop-yield/population scores or default adoption in this stage.
+Publication checks pass: six viewport/theme combinations, all 20 displayed
+numeric rows and clock metrics, nine download hashes, actual CSV download,
+keyboard/navigation, and a fresh Windows-style checkout with verified release.
+
+Report reports/SOIL_DRYING_20261114.md; normal page
+atlases/earth_evidence/soil_drying/. Source/benchmark producer:
+scripts/soil_drying_benchmarks.py; independent reviewer review_soil_drying.py;
+direct publisher publish_soil_drying.py, then build_fit_hub.py --date 2026-11-14.
+Browser runner: system python
+scripts/check_soil_drying_browser.py on localhost8766. Full numeric states/clock
+NPZ and CSV are shipped in output and the normal page; raw FAO caches can be
+restored by qualify_flood_storage_sources.py. Normal evidence publisher hook
+runs after the earlier field-storage panel; no need to rerun its historical chain.
+
+FIRST NEXT: declare and implement daily river-to-field coupling, with paid water
+transfers, net-infiltration/area/volume units, within-bin forcing and pond/drainage
+policy. Use the supplied clock without treating all fractional steps as days.
+Qualify soil profiles, root development, crop/drainage dates and any groundwater
+rate; add Tigris and independent regions and shared Earth/fantasy river flow
+before new field/capacity claims. Component equations do not qualify the uptake
+operator or a new harvest rule. Keep old96Earth results as development history.
+The synthetic pure-bare Kcb=0 case omits deeper diffusive evaporation; do not
+infer real indefinite deep-water retention or classify FAO31's basal bare ET
+as crop uptake. A future adapter must declare and pay that flux separately.
+
+Current atlas remains release3 with adopted marketed share0.3923:850self-fed,
+174imports,29short,91%fed; reach staffing1042. Whole-empire Egypt failure,
+actual occupancy, complete resources/work and political authority remain open.
+Earlier entries below are chronological history; this entry controls next steps.
+
 # FIXED-CALENDAR FIELD WATER MAPS REVIEWED — 14 November 2026
 
 AFTER checkpoint e1d88d57, continued with primary-source qualification:

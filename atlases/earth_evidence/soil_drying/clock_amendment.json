@@ -1,0 +1,11 @@
+{
+  "date": "2026-11-14",
+  "status": "mathematical_calendar_extension_declared_before_clock_outputs",
+  "known": "Component FAO31/37 gates and synthetic soil balances already inspected; no Earth runs. Published storage experiments used whole-month capture/crop windows. No new clock outputs inspected.",
+  "scope": "Supply an exact fractional-boundary clock for the daily soil adapter. This adds no local crop calendar, soil profile or river-flow calibration.",
+  "rule": "Caller supplies13strictlyincreasing climate-bin edges starting0 and endingyearlength,plus explicit event boundaries. Split at their union with a regular grid of steps<=1day. Each step belongs to one climate bin; spread nonnegative monthly volumes/totals by exact duration fraction,without creation/loss. State variables/rates repeat without scaling. Caller-supplied cyclic windows require their endpoints in the clock; start==stop means empty. No mid-bin event is silently rounded to a month/day.",
+  "fixed_example": "365day year with12equal climate bins. Supplied capture interval from phase7/12 to10.5/12;supplied crop interval10.5/12 to2.5/12 wrappingJanuary. These are mathematical examples,NOTqualifiedlocaldates. Two monthly source columns are integers1..24 arranged12x2. Retain all step edges,bin identities,durations,fractions,masks and distributed volumes. No source hydrograph or crop response scores.",
+  "gates": "Exact event inclusion,stepdurationin(0,1],no step crosses a climate bin,event masks disjoint and correct analyticduration,per-bin and annual volume closure,multidimensional/scalar values,invalidedges/windows rejected;independent overlap/Decimal integration and freshnumericreplay.",
+  "adopt": false,
+  "next": "Daily river-to-field model still requires a declared input disaggregation/ponding policy,paid withdrawals/transfers,qualified soil/access/drainage and independent region evidence. Clock exactness does not validate prescribed dates or uniform within-bin forcing."
+}

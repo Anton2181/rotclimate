@@ -46,6 +46,11 @@ to improve the Nile score would introduce an undeclared model choice.
 
 ## Concrete next implementation
 
+Update: [soil drying and the supplied clock](SOIL_DRYING_20261114.md) are now
+implemented and independently checked at component/synthetic scope. This does
+not supply local parameters or new Earth field validation; daily river/field
+coupling and pond/drainage policy remain next.
+
 1. Declare a separate surface-evaporation and root-zone ledger, with water
    stress and explicit drainage/percolation. Neither store may duplicate water.
 2. Verify it against FAO's drying examples and independent conservation checks

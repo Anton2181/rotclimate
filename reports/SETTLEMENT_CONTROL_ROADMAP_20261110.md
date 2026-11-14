@@ -7,6 +7,21 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
+Current completed step: shared-pool soil drying/root stress and an exact supplied
+daily clock.90controls,140FAO daily table cells,36000scalar profile-days and
+108000compartment checks pass;3fresh numeric files byte-exact. The clock preserves
+supplied partial-month boundaries and bin totals without inferring local dates.
+No new Earth/harvest score or default adoption;904Earth-fit files and all96prior
+field cases remain unchanged. Report:SOIL_DRYING_20261114.md.
+
+Next: declared daily river-to-field coupling with paid transfers, forcing
+disaggregation and pond/drainage policy. Actual soil/root-development inputs,
+crop calendars, Tigris/shared-flow and independent regions remain required before
+new field/capacity validation. Published component agreement does not validate
+combined uptake allocation, occupancy, institutions or authority. S3–S5 and the
+complete joint resources/work programme remain unresolved. Earlier checkpoints
+below retain what was known then; current HANDOFF controls the next dependency.
+
 After the field-map checkpoint, primary-source qualification narrows the next
 implementation to separate shallow evaporation and deeper root-zone storage,
 with depletion stress and an inundation/drainage clock. FAO56 generic table
