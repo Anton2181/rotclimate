@@ -1,3 +1,14 @@
+# BLIND-POOL SEARCH FOR POSITIONS/SIZES: NOTHING USABLE FOUND YET — 14 November 2026
+
+Calibration page updated (reach rule v2.1 blind: CHGIS 1080 0.737 vs 0.697, Pleiades 550 0.774 vs 0.766; population pattern
+blind: Domesday 0.63; trade/administration untested; positions/sizes development only).
+Searched for an unseen AD 200-era pool with site positions AND areas:
+ - Hartwell CHGIS v5 (doi:10.7910/DVN/29302): schema only, no historical population fields (registered in dataset_usage).
+ - Adams/Heartland of Cities, FloodPlains Web GIS (JAMT 2024, doi:10.1007/s10814-024-09197-3; paywalled here), QADIS,
+   Hritz digitized maps: no public dataset found (Zenodo API searched).
+Spent pools (dataset_usage.json): CHGIS 280/610/742/1080/1200/1580/1820, Bosker 1300/1500, Pleiades -200/550, Domesday.
+Candidates still to check: owner-supplied FloodPlains/QADIS site table (Parthian/Sasanian sizes), Bosker 800-1200 (era gap).
+
 # SIZES REFIT WITH GREEK WALLS + SUPPLY AT 0.337: BUILT AND REVIEWED, NOT YET PUBLISHED — 14 November 2026
 
 OWNER: "keep improving our model". Report reports/SIZES_GREEK_WALLS_20261114.md; plan calibration/sizes_greek_walls_20261114.
