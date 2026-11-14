@@ -1,3 +1,13 @@
+# EGYPT HARVEST ALONE DOES NOT FIX THE WHOLE-EMPIRE SUPPLY CALIBRATION — 14 November 2026 (settlement lane)
+
+Report: reports/EGYPT_SUFFICIENCY_20261114.md; plan 45f3d8de declared before outputs. scripts/egypt_sufficiency.py
+(network memoised; control = archive exactly), review_egypt_sufficiency.py passed, fresh byte-exact.
+Egypt yield x1.94/x2.16 (+/- farmers): all FAIL. East e95 0.61-0.67 vs west 0.38 (x1.6-1.75 > 1.25).
+Post-hoc diagnostic (egypt_sufficiency_diagnostic.py -> output/egypt_sufficiency_20261114/diagnostic.json): surplus in the delta,
+hungry cities up the valley/Fayum (Arsinoe 126k fed 0%, Memphis 19%). Candidates: Fayum not cropland in the grid;
+Nile boat freight. Mask lon>=29,lat<=32 also includes the southern Levant.
+NEXT: inspect Fayum/valley cells in output/land_people/earth/earth.npz and Nile freight in the trade network; rerun unchanged.
+
 # FLOOD-BASIN RULE GROUNDWORK: NORTH CHINA PLAIN IS A CONSTRAINT — 14 November 2026 (settlement lane)
 
 scripts/flood_basin_constraints.py -> output/flood_basin_irrigation_20261113/constraints.json; figure
