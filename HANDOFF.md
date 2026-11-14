@@ -1,3 +1,69 @@
+# Matched meteorology and 32 paired water maps complete — 14 November 2026
+
+Canonical branch: `claude/friendly-turing-43ygeu`. Continued through paid
+groundwater, local source qualification and matched weather without pausing at
+pushes. Input declaration `df1e174c` / reviewed freeze `6e720369`; field declaration
+`1189eb46` preceded new scores. Report: `reports/MATCHED_REGIONAL_FIELDS_20261114.md`.
+Normal page: `atlases/earth_evidence/matched_weather/`. This is the latest field
+water update. No harvest, population or settlement change is adopted.
+
+Results for Nile capture, five-bin / fractional four-bin root-demand coverage:
+PM 52.437 / 66.149% → 53.930 / 67.850%; Hargreaves 68.273 / 80.820% →
+70.827 / 81.521%. Euphrates-only PM 0.889 / 1.176% → 0.674 / 0.728%; Hargreaves
+2.799 / 3.612% → 2.524 / 2.604%. All 32 cases retained: two regions × two calendars
+× capture/control × two reference methods × two meteorological policies. No
+winner/calendar selected. Tigris absent. Root coverage is not total-crop ET,
+Ky yield, grain, cultivated area or residents. All candidates remain eligible.
+
+Inputs: same 30 samples / all 1,507 assignments, 54,810 complete 2020–2024 LST
+dates. All 438,480 overlapping weather values, units and provider geometries
+exactly match the old ETo input; reuse reviewed HAR/PM. New rainfall and T2M share
+the packet/period. Conserve Gregorian monthly/yearly rain and both leap days.
+Temperature: mean within each year/month, then equal-average five years; do not
+scale Celsius by month length. Daily extremes/interannual variance are absent.
+Annual rain: Nile 38.454 → 110.046 mm; Euphrates 139.958 → 157.692 mm. Historical
+river means remain Aswan 1871–1901 / selected Hit 1965–1971, different epochs.
+
+Verified: independent input raw/50-digit Decimal/scalar assignment/CSV checks;
+four fresh files exact. Independent scalar field review: 9,114,336 final-cycle
+field-steps, 24,112 CSV rows, all annual/monthly/daily arrays, 16 exact archived
+controls. All 32 periodic: 31 in two cycles; matched Nile five-bin rain-only in
+16. Unchanged 1e-6 mm / 50-cycle rule. Maximum annual-field difference 5.69e-12 mm,
+scalar daily residual 1.33e-13 mm, annual joint residual 1.91e-5 m³. Three fresh
+field files exact; 952 protected files unchanged. Six browser width/theme cases,
+32 numerical rows, 54 filters, 14 downloads, 31 source ZIP members, actual CSV,
+images/keyboard/width/navigation and staged Windows/release proof retained.
+
+First next: source-qualify LOCAL crop phenology, stage lengths/thermal time,
+basal demand and canopy/root development before declaring regional stage curves.
+Generic stage component/source envelopes are already verified; do not redo them.
+Keep consistent soil/retention/depletion/drainage and basal diffusion versus soil
+evaporation explicit. Regional groundwater remains disabled: the local-source
+audit below lacks consistent inputs. No free flux or rate/depth fit to Egypt.
+Some observed tables lie inside the supplied 1.5 m root profile: a future local
+model needs consistent saturated/unsaturated roots and oxygen/drainage handling.
+Historical flow compatibility, shared fantasy weather/river, Tigris, independent
+regions and frozen harvest/whole-empire checks remain open. Root uptake cannot
+directly replace total-crop ET in the legacy Ky relationship.
+
+Reproduce:
+
+```sh
+.venv/bin/python scripts/matched_regional_fields.py --workers 4
+.venv/bin/python scripts/matched_regional_fields.py --out output/matched_regional_fields_20261114/fresh --workers 4
+.venv/bin/python scripts/review_matched_regional_fields.py
+.venv/bin/python scripts/publish_matched_regional_fields.py
+.venv/bin/python scripts/build_fit_hub.py --date 2026-11-14
+python scripts/check_matched_weather_browser.py
+```
+
+Browser uses localhost:8766. Force-add primary NPZs; fresh/screenshots ignored.
+Weather preflight commands are in the next entry. Default release 3 / marketed
+share 0.3923 stays: 850 self-fed / 174 importers / 29 short, 91% fed; reach staffing
+1042. Egypt calibration, S3–S5, empirical occupancy/provider/size, complete
+resources/diets/work, mobile actors and political authority remain open. Earlier
+entries are history; this entry controls next work. Commits are checkpoints.
+
 # MATCHED REGIONAL METEOROLOGICAL INPUTS VERIFIED — 14 November 2026
 
 Continued beyond source-auditc315ac23. Declarationdf1e174c preceded new rainfall

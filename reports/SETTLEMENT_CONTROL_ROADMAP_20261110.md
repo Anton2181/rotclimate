@@ -7,35 +7,33 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: local Nile groundwater source qualification, declared
-5b3b3af6 following paid-budget5ca4ae91. Two modern studies provide40water-table
-depths/fitted factors,three soil layers and four INFERRED seasonal uptake rows.
-All source cells retained;captured Sakha HTML/XML percentage layout/prose and
-stated-ET arithmetic conflict. FC/WP basis/layer assignment and full finite
-boundaries remain insufficient. No regional groundwater parameters or scores
-adopted. Independent80PDFcells/24soil cells/Decimal/four fresh exports pass;
-942protected files unchanged. Report:NILE_GROUNDWATER_SOURCES_20261114.md.
+Current completed step: matched meteorology and32paired water maps. Input
+declarationdf1e174c/freeze6e720369;field declaration1189eb46 before new scores.
+All30samples/1507candidates;54810complete dates,438480exact overlapping weather
+values,matched T/P/ETo2020–2024. Independent input/Decimal/CSV/four fresh exports;
+field scalar9,114,336steps/24112rows/16exact archived controls/three fresh exports;
+952protected unchanged. Nile PM52.437/66.149%→53.930/67.850%;Euph-only
+.889/1.176%→.674/.728%. All32outcomes retained and periodic in2–16cycles.
+Published maps/browser/Windows release proofs;no harvest/default adoption.
+Report:MATCHED_REGIONAL_FIELDS_20261114.md;normal page:matched_weather/.
 
-Paid pond–aquifer–soil accounting is complete:223controls,100forests/4680steps/
-105552histories,10exact legacy cases,all-five-stock periodic states. Finite
-storage/recharge consumes the same paid water and shared infiltration allowance.
-Normal page:groundwater_budget/. Component capability is distinct from local
-input qualification.
+Paid groundwater component is verified(223controls),but local source qualification
+does not supply consistent field inputs. Modern depths/soil layers remain useful;
+modeled percentages and unresolved captured table arithmetic are not capillary
+boundary measurements. Regional groundwater stays disabled. No rate/depth fit.
 
-Next: keep regional groundwater disabled; pursue matched meteorology/period/grid
-and qualified crop phenology/canopy while recovering missing consistent soil/
-hydraulic/root and seasonal recharge/storage/drainage evidence. Modern managed
-plots and inferred percentages are not ancient defaults. Check a primary PDF
-before classifying the digital table discrepancy as a printed-paper error.
-Retain high-water-table oxygen/salinity/transient,shared fantasy weather/river,
-Tigris and independent regions. Freeze harvest translation before Nile gain AND
-Mesopotamian non-inflation/whole-empire checks;root coverage cannot replace total-
-crop ET in legacy Ky. No rate/depth selection toward Egypt's deficit.
+Next: source-qualify LOCAL phenology/stage lengths/thermal time,basal demand and
+canopy/root development before declared regional stage curves. Generic stage
+component/source benchmarks already complete;do not redo them. Keep consistent
+soil/retention/depletion/drainage and basal diffusion/soil evaporation explicit.
+Historical Aswan1871–1901/selectedHit1965–1971flow still differs from modern
+meteorology. Retain transient/high-water-table/salinity,shared fantasy weather/
+river,Tigris,independent regions and frozen harvest/whole-empire checks. Root
+coverage cannot directly replace total-cropET in legacy Ky. Egypt still fails.
 
-Latest actual field update remains all24regional forcing scenarios:1507fields,
-30samples, exact archived controls. Nile capture root coverage65.3/79.0% archived,
-68.3/80.8% regional Hargreaves,52.4/66.1% regional PM. These are conditional water
-maps with an explicit source-period mismatch, not a calibrated harvest map.
+Latest field update supersedes the earlier24ETo-only scenarios as a comparison
+page;all earlier outputs remain byte-identical. Matching meteorology does not
+qualify historical river compatibility,local crop inputs or calibrated harvest.
 
 Full-programme review: current release-3 settlements and marketed share 0.3923
 remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
@@ -387,6 +385,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Matched meteorology and paired fields,14 November,inputdf1e174c/freeze6e720369/field1189eb46|All32cases/1507candidates retained;independent weather/Decimal/assignment and9.1million field-step/24112CSV/full-history checks pass,16exact controls,seven fresh exports,952protected unchanged. Nile PM53.93/67.85%;historicalflow/localcrop unqualified. Full programme reviewed;no harvest/default adoption|Source-qualify local phenology/stages/thermal time,basal demand and canopy/root/soil/drainage before regional stage curves. Groundwater input gaps remain;historicalflow/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates stay open;continue beyond checkpoints|
 |Local Nile groundwater sources,14 November,declaration5b3b3af6|40depths/fitted factors,three soil layers and four inferred uptake rows retained. Independent80PDF/24soil cells,Decimal/four fresh exports pass;942protected files unchanged. Captured table/prose/ET inconsistencies and FC-WP/boundary gaps preserved. Full programme reviewed;no regional/default adoption|Keep regional groundwater disabled. Pursue matched meteorology/period-grid and crop phenology/canopy while recovering consistent hydraulic/root/seasonal finite-boundary evidence. Qualify printed PDF discrepancy,oxygen/salinity/transient,Tigris/shared flow,independent regions,frozen harvest and empirical resources/work/authority;continue beyond checkpoints|
 |Paid groundwater budget,14 November,declarations6e7490d2/2a072eb8|223controls;100forests/4680steps/105552histories,three fixed demos and all-five-stock periodic states independently checked.10exact legacy cases;three fresh files exact,937protected unchanged. Recharge spends paid pond/infiltration;rise spends finite storage. No Earth/default adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local soil/root/hydraulic and seasonal water-table/recharge/drainage evidence before new regional fields;separate measured/model-derived fluxes. Retain transient/high-water-table constraints,period/grid/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates;continue beyond checkpoints|
 |Capillary hydraulic source/component checks,14 November,declaration3ce2c453|All246published heights match rounding;28source profiles/896function cells independently checked;208controls,three fresh exports/source/publication proofs pass;932protected files unchanged. Historical analogy/summer-depth contexts preserved. No groundwater supplied or field/default adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Declare finite paid groundwater transfer/storage before new fields;qualify soil/root/water-table/drainage/transient inputs with zero-groundwater/legacy controls. Retain period/grid/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates;continue beyond checkpoints|
