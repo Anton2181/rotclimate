@@ -1,3 +1,58 @@
+# LOCAL NILE GROUNDWATER SOURCE QUALIFICATION COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued beyond paid-budget
+checkpoint5ca4ae91. Declaration5b3b3af6 preceded source extraction/arithmetic;
+abstract/snippet results already exposed and explicitly known development.
+Report: reports/NILE_GROUNDWATER_SOURCES_20261114.md. No new fields or adoption.
+
+RETAINED: Amer2019 Table3 printed89/PDF11:40measured water-table depths plus
+40EMPIRICALLY FITTED m values,four modern cultivated Delta sites,ten months
+November2014–August2015. Wheat/clover/maize/citrus differ;modern furrow irrigation.
+Seasonal20–40% contribution and ETa are modeled,not measured capillary flux.
+Sakha2023 DOI10.1007/s40333-023-0095-3:three soil layers and all four Table2
+inferred seasonal uptake/percentage rows. Real drains1.2m;0.4/0.8m are weir/outlet
+elevations,not drain burial depths or fixed observed water tables. One field per
+drainage treatment;cultivar replicates within each field. Modern wheat/fertilizer.
+
+FOUND: captured HTML/XML Table2 middle percentages conflict with prose;all four
+percentage cells fail uptake/stated actualET arithmetic beyond printed rounding.
+Keep cells exactly as source. All-treatment ET is assumed from free-drainage
+control and groundwater is inferred residual,not independent measured flux.
+Methods give FC39.98%/WP21.70% but no explicit basis/layer assignment there;
+TDR monitors field moisture. No invented volumetric/gravimetric storage or root
+depth. Equation3 also describes ΔS as moisture% beside mm water depths without
+the conversion there. PDF routes returned HTML/errors;finding concerns captured
+HTML/XML,not an inspected printed PDF. Do not resolve by silently swapping cells.
+
+VERIFIED: independent PDFplumber geometry vs pdftotext checks80PDFcells;
+stdlib HTMLParser/ElementTree vs lxml checks selected tables/24soil numeric
+cells;50digitDecimal checks all four discrepancies. Four fresh exports byteexact;
+942protected files unchanged,including paid-budget results/controls/review.
+Journal HTML/XML tracked under data/source/nile_groundwater_sources_20261114/
+(live HTML tokens change);AmerPDF cached/restorable by pinned mirror SHA.
+
+FIRST NEXT: local seasonal groundwater remains DISABLED in regional fields.
+Both sources lack a complete consistent soil/root/hydraulic and finite boundary
+set;do not keep cycling generic rates/depths toward Egypt's score. Pursue matched
+meteorology/period/grid and qualified crop phenology/canopy next while seeking
+the missing local retention/FC-WP basis,full root/water-table/irrigation/drainage
+series,accessible aquifer specific yield/recharge and salinity/oxygen/transient
+constraints. Inspect another primary PDF version before treating the digital
+table discrepancy as a printed-paper error. No Dutch O8 graft/free groundwater.
+
+REPRODUCE with SYSTEM python: scripts/nile_groundwater_sources.py; same producer
+--out output/nile_groundwater_sources_20261114/fresh; then
+scripts/review_nile_groundwater_sources.py. lxml/pdfplumber and pdftotext needed.
+Plan/URLs/hashes:calibration/nile_groundwater_sources_20261114/. Fresh ignored.
+
+Latest field update remains regional water maps,24cases/all1507candidates;NilePM
+root coverage52.4/66.1% versus archived65.3/79.0%. Root uptake is not totalET/Ky
+yield. Default release3/marketed share0.3923:850self-fed/174imports/29short,91%fed;
+reach staffing1042. Egypt calibration,shared fantasy flow,Tigris,independent
+regions,frozen harvest,S3–S5,empirical occupancy/provider/size,complete resources/
+diets/work,mobile actors and political authority remain open. Commits/pushes are
+checkpoints. Earlier entries below are history;this entry controls next work.
+
 # FINITE PAID GROUNDWATER ACCOUNTING COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Declarations6e7490d2 and2a072eb8
