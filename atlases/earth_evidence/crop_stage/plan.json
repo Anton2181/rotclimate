@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-14",
+  "baseline": "3e649793",
+  "status": "declared_before_component_code_and_outputs",
+  "known": "Rain timing sensitivity and daily field outputs are exposed development. FAO56 Table17 cereal coefficients, Table11 location-specific stage lengths and Example30 dry-bean point values have been inspected. Example30 is a published component benchmark, not independent regional validation.",
+  "scope": "Qualify source facts and implement a supplied four-stage basal-coefficient curve with exact time integrals. No Earth field reruns, soil/root fitting, locally selected stage lengths, yield translation or settlement adoption in this step.",
+  "sources": {
+    "fao56_ch6.html": {"url": "https://www.fao.org/4/x0490e/x0490e0b.htm", "sha256": "cad0afe7873296b2a91c1a70b0d1fdf4cb37b5ee94a892521a478b2b1a4a2e3c", "locator": "Table11 cereal stage durations and regional/planting context; Equation66"},
+    "fao56_ch7.html": {"url": "https://www.fao.org/4/x0490e/x0490e0c.htm", "sha256": "81e7f9c06f2cae152bcc0c58b3710f6e4919fefc0d8c5a6404fac917616381b0", "locator": "Table17 cereals and footnotes10/11; Equation70 climatic adjustment; Example30; Kcb definition including residual below-surface diffusion"}
+  },
+  "operator": "Four positive finite supplied stage durations. Kcb is constant at initial level; linear initial-to-mid during development; constant mid-season; linear mid-to-end during late season. Nonnegative finite coefficients. Evaluate only within supplied crop age0..total. Integrate exactly across stage boundaries; step means are integral divided by actual positive duration. No inferred start dates, thermal-stage progression, climate adjustment, zero stage length, root-growth curve or locally fitted parameters.",
+  "checks": "Match published Example30 days12/37/65/90 and rounding0.15/0.63/1.14/0.70 from25/25/30/20days and0.15/1.14/0.25. Independent Decimal arithmetic, arbitrary boundary-crossing interval integration/additivity, fractional steps, limiting constant curve, invalid inputs. Two independent HTML table parsers; separate footnote text and inherited cereal initial coefficient instead of treating blank as zero.",
+  "source_limits": "Table11 examples retain their original planting month and geographic label; no generic cereal row is asserted to be ancient Nile barley. Table17 assumes subhumid RHmin45percent and wind2m/s with climatic adjustment required outside reference conditions. Kcb includes residual soil diffusion, so all Kcb*ETo cannot be claimed as measured root transpiration. Current legacy kc used as constant root demand remains a declared approximation.",
+  "replay": "Export source facts and component benchmark CSV/JSON with source/code pins; independent reviewer recomputes numeric component values/integrals and compares two fresh outputs byte for byte. Keep all prior Earth-fit, daily-coupling and rain-timing numeric files byte-identical.",
+  "next": "Declare any Earth crop-stage comparison separately after qualification of local phenology, reference ETo/climatic adjustment, basal diffusion versus root uptake, canopy exposure/root development and irrigation dates. Do not choose stage ratios because they improve Egypt.",
+  "adopt": false
+}

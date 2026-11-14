@@ -1,3 +1,57 @@
+# CROP-STAGE SOURCE AND COMPONENT CHECKS COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Fetched latest remote handoff
+3e649793; its completed rain experiment superseded the overlapping local draft,
+which is preserved in a Git stash. Declaration e470de0a preceded this component
+code and outputs. Report: reports/CROP_STAGE_20261114.md. Normal page:
+atlases/earth_evidence/crop_stage/. No new Earth field or harvest scores.
+
+IMPLEMENTED: harvest/crop_stage.py, a supplied four-stage StageCurve with point
+values, exact interval integrals and actual-duration means. Positive stage
+lengths, nonnegative coefficients, bounded crop-age domain; initial/mid constant,
+development/late linear. No inferred local phenology or adopted cereal curve.
+FAO56 Example30 (dry beans) reproduces all four printed values, exact integral
+67.975 coefficient-days and mean0.67975. This is a published arithmetic check.
+
+SOURCE FINDING: Table17 barley Kcb0.15/1.10/0.15, with initial inherited from
+cereal heading. Wheat initial/end alternatives retain footnotes and context;
+Table11 exports11 stage-duration rows with original planting/region labels,
+not a Nile barley calendar. Tables assume RHmin45%/wind2m/s; Equation70 adjusts
+mid/end>0.45 outside reference conditions. Kcb includes residual below-surface
+soil diffusion: substituting it as pure root transpiration is NOT qualified.
+See source facts/claims in output/crop_stage_20261114/reference.json.
+
+VERIFIED: 137 controls (20 new); two source table parses, four published point
+checks, independent Decimal review of277 exported intervals and4000 intervals
+on100 synthetic curves. Two fresh numeric files byte-exact;917 protected files
+unchanged, including prior daily/rain outputs. Six browser viewport/theme cases,
+18 exact source/benchmark rows, five download hashes and actual CSV download,
+keyboard/width/images/navigation; staged Windows checkout/release check retained.
+
+FIRST NEXT: qualify local crop phenology and ETo/climatic adjustment; declare
+basal diffusion versus root uptake, stage canopy exposure/root development and
+inundation/drainage treatment BEFORE an Earth stage-curve comparison. Do not
+scale generic stage ratios or select location examples because they improve
+Egypt. Rain timing has only a small effect in the32 declared cases (eight fixed
+illustrations); it does not settle all rain scenarios. Tigris/shared Earth-fantasy
+flow and independent regions remain open. Freeze harvest translation before
+Nile gain AND Mesopotamian non-inflation and whole-empire supply checks.
+
+REPRODUCE: scripts/crop_stage_benchmarks.py, same producer --out
+output/crop_stage_20261114/fresh, scripts/review_crop_stage.py,
+scripts/publish_crop_stage.py, scripts/build_fit_hub.py --date 2026-11-14.
+System Python runs scripts/check_crop_stage_browser.py against localhost:8766.
+Raw FAO sources restore with pinned digests into data/cache/crop_stage_20261114;
+the prior Chapter7 cache is reused. HTTP browser user-agent required here.
+New publisher is hooked into the normal evidence build. Fresh numeric copies
+and browser screenshots are ignored. See report for the exact command sequence.
+
+Atlas remains release3, marketed share0.3923;850self-fed/174imports/29short,
+91%fed;reach staffing1042. Whole-empire Egypt calibration, S3–S5, empirical
+occupancy/providers/size, complete resources/diets/work, mobile actors and
+political authority remain unresolved. Whole-programme roadmap reviewed and
+updated. Earlier entries below are history; this entry controls next steps.
+
 # RAIN-TIMING SENSITIVITY COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu (claude/wonderful-mayer-uqbwtb is kept at the

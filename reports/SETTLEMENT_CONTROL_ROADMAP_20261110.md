@@ -7,24 +7,27 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: daily river-to-field coupling with paid delivery,
-finite ponds/infiltration, shared soil stocks, separate bare diffusion and root
-uptake on the supplied fractional clock. All 256 development cases and matched
-controls retained; all reach periodic stocks. 105 controls, independent core
-forest histories and scalar replay of 72,914,688 final-cycle field-steps pass.
-Annual field states/fluxes, monthly basin ledgers, daily basin stocks and 192,896
-CSV rows agree; three fresh numeric files byte-exact. All 910 protected files
-remain unchanged. New water maps and complete grid are published; no calibrated
-harvest/population/settlement adoption. Report: DAILY_RIVER_FIELDS_20261114.md.
+Current completed step: source-qualified four-stage basal-coefficient component.
+Declaration e470de0a preceded code/results. FAO56 Example30, exact interval means
+and integrals verified; 137 controls, 277 exported Decimal interval checks and
+4000 intervals on100 synthetic curves pass. Two fresh files byte-exact;917
+protected files unchanged. Source tables retain cereal footnotes and11 original
+stage-duration contexts. No new Earth field/harvest score or default adoption.
+Report: CROP_STAGE_20261114.md; normal evidence page: crop_stage/.
 
-Next: predeclare a volume-preserving rainfall-timing sensitivity; uniform bin
-rainfall can materially change surface evaporation versus root infiltration.
-Qualify local weather, soil/root development, stage basal crop coefficients,
-bare diffusion, infiltration/pond access/drainage and calendar before selecting
-any rule. Add Tigris and shared Earth/fantasy flow plus independent regions;
-freeze harvest translation before Nile gain AND Mesopotamian non-inflation and
-whole-empire supply checks. Root coverage cannot substitute for the old total-ET
-yield input unchanged. Closure and exposed scenarios do not provide validation.
+Latest remote handoff3e649793 already completed the32-case rainfall sensitivity:
+under0.2 percentage points across Nile capture patterns, under0.76 across all
+fixed illustrations. The local overlapping draft was preserved, not reapplied.
+Rain timing is a limited effect in those declared cases; no general weather
+validation follows. Daily coupling and its256 cases remain the previous baseline.
+
+Next: qualify local phenology, reference ETo and climatic adjustment; specify
+basal diffusion versus root uptake, stage canopy exposure/root development and
+inundation/drainage before declaring an Earth crop-stage comparison. FAO Kcb
+includes residual soil diffusion and regional stage lengths cannot be scaled or
+chosen to make Egypt pass. Add Tigris/shared Earth-fantasy flow and independent
+regions; freeze harvest translation before Nile gain AND Mesopotamian
+non-inflation and whole-empire supply checks. No new calibrated settlement map.
 
 Full-programme review: current release-3 settlements and marketed share 0.3923
 remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
@@ -376,6 +379,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Crop-stage source and component checks,14 November,declaration e470de0a|Fetched completed rain handoff3e649793, then verified FAO contextual cereal coefficients/stages and exact curve integration;137 controls, Decimal/fresh/publication checks pass;917 protected files unchanged. Kcb includes basal soil diffusion; no Earth adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local phenology/ETo/climatic adjustment and basal-diffusion/root/canopy/pond/drainage policy before declaring Earth stage comparison. Keep Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates open|
 |Daily river-to-field coupling, 14 November; declarations 30726ae4/e4e26b46|All 256 exposed water scenarios retained; 105 controls, full bare FAO31 and independent scalar field/basin/CSV checks pass; fresh bytes exact. Uniform rain timing and unqualified local inputs limit interpretation. Full release/S1–S5/all-actor/mobile programme reviewed; no harvest or settlement adoption|Declare volume-preserving rain-event sensitivity; qualify soil/root/stage coefficients, pond/access/drainage and dates; add Tigris/shared flow and independent regions before frozen harvest/whole-empire calibration. Keep empirical occupancy/resources/work/authority gaps open|
 |Coupled cell-feedback and optional atlas, 061e6ef8|Advances release 3 and S4 implementation; does not complete empirical release 2, S1 transfer or S2–S5|Check nonmonotone search resolution, then resident-size/occupation evidence|
 |Finer scan and publication, 8745b931|Tested-grid robustness supports retaining eight original cases; no new default or global-optimum claim|Return to size evidence; retain complete-diet/work/mobile gaps|
