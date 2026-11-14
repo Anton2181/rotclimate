@@ -28,7 +28,13 @@ def capacity(lat, lon):
 def main(out):
     if subprocess.check_output(['git', 'show', 'HEAD:' + str(PLAN.relative_to(ROOT))], cwd=ROOT) != PLAN.read_bytes():
         raise ValueError('Commit the exact declaration first')
-    out.mkdir(parents=True, exist_ok=True); ES.memoise(); fields = S.earth_fields
+    out.mkdir(parents=True, exist_ok=True); costs_from = S.T.costs_from; ES.memoise(); fields = S.earth_fields
+    costs = {}                                                    # city-to-city costs depend on the city list (without-Egypt removes cities)
+    def cf(net, nodes, limit, batch):
+        key = (id(net), np.asarray(nodes).tobytes(), limit, batch)
+        if key not in costs: costs[key] = list(costs_from(net, nodes, limit=limit, batch=batch))
+        return iter(costs[key])
+    S.T.costs_from = cf
     def scaled(lat, lon):
         a, b, c, d = fields(lat, lon); f = np.where(proper(lat, lon), STATE['y'], 1.0); return a * f, b * f, c, d
     S.earth_fields = scaled
