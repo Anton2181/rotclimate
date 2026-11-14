@@ -7,27 +7,29 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: source-qualified four-stage basal-coefficient component.
-Declaration e470de0a preceded code/results. FAO56 Example30, exact interval means
-and integrals verified; 137 controls, 277 exported Decimal interval checks and
-4000 intervals on100 synthetic curves pass. Two fresh files byte-exact;917
-protected files unchanged. Source tables retain cereal footnotes and11 original
-stage-duration contexts. No new Earth field/harvest score or default adoption.
-Report: CROP_STAGE_20261114.md; normal evidence page: crop_stage/.
+Current completed step: matched-weather reference evaporation audit at Cairo,
+Aswan and Hit. Protocol4d93e88b precedes source/model exposure;15010e41 freezes
+weather/preflight. On5481modern NASA gridded days, daily Hargreaves totals are
+19–30% below FAO56 PM with identical weather. Method, monthly aggregation and
+legacy geometry effects kept separate; no field multiplier/default adopted.
+159controls; independent scalar/Decimal checks of98658daily cells and every
+aggregate;two fresh exports byte-exact;920protected files unchanged. Raw weather
+and complete results published. Report: REFERENCE_ETO_20261114.md.
 
-Latest remote handoff3e649793 already completed the32-case rainfall sensitivity:
-under0.2 percentage points across Nile capture patterns, under0.76 across all
-fixed illustrations. The local overlapping draft was preserved, not reapplied.
-Rain timing is a limited effect in those declared cases; no general weather
-validation follows. Daily coupling and its256 cases remain the previous baseline.
+Next: declare regional reference-forcing policy with spatial/period/input
+qualification and matched legacy controls before new field scores. NASA point
+ratios are development diagnostics, not correction factors for every field.
+Daily mean humidity does not provide crop Equation70 minimum RH. Qualify local
+phenology, basal diffusion versus root uptake, canopy/root development and
+inundation/drainage before a stage-curve comparison. Retain the shared
+Earth/fantasy forcing dependency. Tigris and independent regions, frozen harvest
+translation, Nile gain AND Mesopotamian non-inflation and whole-empire supply
+checks remain required. No new calibrated settlement map or crop yield.
 
-Next: qualify local phenology, reference ETo and climatic adjustment; specify
-basal diffusion versus root uptake, stage canopy exposure/root development and
-inundation/drainage before declaring an Earth crop-stage comparison. FAO Kcb
-includes residual soil diffusion and regional stage lengths cannot be scaled or
-chosen to make Egypt pass. Add Tigris/shared Earth-fantasy flow and independent
-regions; freeze harvest translation before Nile gain AND Mesopotamian
-non-inflation and whole-empire supply checks. No new calibrated settlement map.
+Earlier source-qualified stage curves and completed rain-timing sensitivity
+remain baseline evidence: no large timing effect in the eight fixed water
+illustrations, but no general daily-weather validation. Legacy field forcing
+is conditional; no harvest direction is inferred from method differences alone.
 
 Full-programme review: current release-3 settlements and marketed share 0.3923
 remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
@@ -379,6 +381,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Matched-weather reference evaporation,14 November,declaration4d93e88b/source-preflight15010e41|Three fixed locations/5481gridded days show Hargreaves19–30%below reference PM;159controls and independent scalar/Decimal/source/aggregate/fresh/publication checks pass;920protected files unchanged. Method comparison is not measured ETo or harvest validation. Full release/S1–S5/all-actor/mobile programme reviewed|Declare regional forcing policy and input/period/grid qualification with matched legacy controls; do not use point ratios as field multipliers. Keep phenology/basal/root/canopy/pond/drainage,Tigris/shared flow,independent regions,frozen harvest and empirical resources/work/authority gates open|
 |Crop-stage source and component checks,14 November,declaration e470de0a|Fetched completed rain handoff3e649793, then verified FAO contextual cereal coefficients/stages and exact curve integration;137 controls, Decimal/fresh/publication checks pass;917 protected files unchanged. Kcb includes basal soil diffusion; no Earth adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local phenology/ETo/climatic adjustment and basal-diffusion/root/canopy/pond/drainage policy before declaring Earth stage comparison. Keep Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates open|
 |Daily river-to-field coupling, 14 November; declarations 30726ae4/e4e26b46|All 256 exposed water scenarios retained; 105 controls, full bare FAO31 and independent scalar field/basin/CSV checks pass; fresh bytes exact. Uniform rain timing and unqualified local inputs limit interpretation. Full release/S1–S5/all-actor/mobile programme reviewed; no harvest or settlement adoption|Declare volume-preserving rain-event sensitivity; qualify soil/root/stage coefficients, pond/access/drainage and dates; add Tigris/shared flow and independent regions before frozen harvest/whole-empire calibration. Keep empirical occupancy/resources/work/authority gaps open|
 |Coupled cell-feedback and optional atlas, 061e6ef8|Advances release 3 and S4 implementation; does not complete empirical release 2, S1 transfer or S2–S5|Check nonmonotone search resolution, then resident-size/occupation evidence|

@@ -239,6 +239,7 @@ def main():
         reports = ('<p class="note"><a href="climate_accuracy/">Climate accuracy and joint fit</a> · '
                    '<a href="earth_evidence/rain_timing/">Rain timing sensitivity</a> · '
                    '<a href="earth_evidence/crop_stage/">Crop-stage source constraints</a> · '
+                   '<a href="earth_evidence/reference_eto/">Reference evaporation audit</a> · '
                    '<a href="earth_evidence/daily_fields/">Daily river-to-field water</a> · '
                    '<a href="earth_evidence/soil_drying/">Soil drying and supplied daily clock</a> · '
                    '<a href="earth_evidence/flood_storage/">Flood storage and winter crop water</a> · '

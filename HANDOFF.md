@@ -1,3 +1,73 @@
+# MATCHED-WEATHER REFERENCE EVAPORATION AUDIT COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued from 60e60c3d.
+Protocol 4d93e88b preceded weather capture and site model outputs; 15010e41
+froze raw weather and preflight before site results. Full report:
+reports/REFERENCE_ETO_20261114.md. Normal page:
+atlases/earth_evidence/reference_eto/. No field, harvest or settlement adoption.
+
+FINDING: on identical 2020–2024 NASA POWER daily gridded weather, Hargreaves /
+FAO56 Penman–Monteith annual ratios are 0.8077 Cairo / 0.6986 Aswan / 0.7180 Hit.
+PM mean annual totals are 2160.3 / 3043.8 / 2381.0 mm; daily Hargreaves gives
+1744.8 / 2126.5 / 1709.6 mm. November–March ratios 0.8387 / 0.7116 / 0.7713
+are Gregorian-month diagnostics, not the supplied field crop calendars. This
+is a method comparison, not measured ETo error, ancient weather or regional
+harvest validation. No winner or multiplier adopted.
+
+IMPLEMENTED: harvest/reference_eto.py, daily FAO solar geometry, pressure/wind/
+radiation and grass-reference PM, plus matched daily Hargreaves. Supplied 2 m
+wind/pressure, dewpoint-derived vapour pressure, albedo 0.23 and G=0; explicit
+cloud-ratio bound 0.3–1 (213 days; all raw ratios retained), raw signed ETo and
+zero bound (no negative raw ETo in weather rows). Atlas-style monthly comparison
+reuses unchanged land_people functions on the same modern monthly weather;
+aggregation and solar-geometry effects are separated. Legacy geometry omits
+Earth–Sun distance and uses equal-bin/cosine seasonal conventions; unchanged.
+
+INPUTS: all 5,481 requested dates are present and valid at the three declared
+coordinates, 2020–2024 local solar time. Full raw NASA JSON, URLs, units, headers,
+grid elevations and raw/semantic digests: data/source/reference_eto_20261114/.
+Model/satellite grids, not station observations. Provider solar units are
+MJ/m²/day (conversion factor 1). Daily mean RH2M is not minimum RH for FAO crop
+Equation 70; no field coefficient adjustment inferred. The frozen plan's
+Equation 52 chapter locator was a bibliographic error: actual Chapter 3,
+corrected in results metadata. Both sources were pinned before capture; no
+numerical rule changed.
+
+VERIFIED: 159 controls (22 new), FAO18 rounded 3.9 mm/day, FAO8 radiation 32.2
+and 1,000 synthetic days / 18,000 scalar-Decimal cells BEFORE site ETo. The
+independent weather reviewer checks raw parsing, QA/units, all 98,658 computed
+daily cells, 180 site-year-month rows, 15 annual rows, 36 climatologies and
+legacy geometry. Maximum PM difference 1.43e-14 mm/day; fresh results.json and
+daily.csv byte-identical; 920 protected files unchanged. Browser: 39 displayed
+rows, six viewport/theme cases, 312 filters, ten download hashes, actual daily
+CSV, keyboard/width/images/navigation. Staged Windows checkout and release
+check retained under output/reference_eto_20261114/.
+
+FIRST NEXT: declare a regional reference-forcing policy before new field scores.
+Qualify spatial/period representativeness and humidity, wind and solar inputs,
+with matched legacy-forcing controls and the shared Earth/fantasy adapter in
+view. Do not multiply all fields by these point ratios or choose a crop calendar
+to make Egypt pass. Earlier water adequacy remains conditional on its forcing.
+Local phenology, basal diffusion versus root uptake, canopy/root development,
+pond access/infiltration/drainage, Tigris and independent regions remain open.
+Freeze harvest translation before Nile gain AND Mesopotamian non-inflation and
+whole-empire supply checks. No harvest direction inferred from ETo ratios alone.
+
+REPRODUCE: scripts/reference_eto_weather.py, same producer with --out
+output/reference_eto_20261114/fresh, scripts/review_reference_eto_weather.py,
+scripts/publish_reference_eto.py, then scripts/build_fit_hub.py --date 2026-11-14.
+System Python runs scripts/check_reference_eto_browser.py on localhost:8766.
+Tracked weather responses are reused; capture_reference_eto_sources.py verifies
+them. For core-only checks use audit_reference_eto.py --out
+output/reference_eto_20261114/core/fresh; overwriting canonical core/review.json
+requires regenerating pinned weather provenance. See report for full sequence.
+
+Current atlas: release 3, marketed share 0.3923; 850 self-fed, 174 importers,
+29 short, 91% fed; reach staffing 1042. Egypt calibration, S3–S5, empirical
+occupancy/provider/size evidence, complete resources/diets/work, mobile actors
+and political authority remain open. Whole-plan live queue and review log
+updated. Earlier entries below are history; this entry controls the next step.
+
 # CROP-STAGE SOURCE AND COMPONENT CHECKS COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Fetched latest remote handoff
