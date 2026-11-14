@@ -1,3 +1,11 @@
+# PEOPLE LEVEL: EGYPT FED, WHOLE EMPIRE STILL JUST SHORT — 14 November 2026
+
+OWNER: "Fix the people side first, then port to the fantasy map." Report reports/SUPPLY_PEOPLE_LEVEL_20261114.md, plan 3244339a.
+scripts/supply_people_level.py (heartland pattern on floodplain grid; Frier 61.4 M on Roman land = primary; absolute = sensitivity).
+Frier: Egypt 5.77 M, Egyptian cities 89-96% fed at 0.4-0.5, e95 all 0.388, W/E x1.24 kept, transfer 0.884 < 0.90: FAIL (narrow).
+Absolute: Egypt 4.83 M but 270 km not kept (W/E x1.33, also without Egypt). Review passed (60), fresh exact.
+NEXT: port floodplain rule to the fantasy harvest (declared step, controls), as the owner asked.
+
 # FLOODPLAIN LAND RULE (DEVELOPMENT): EGYPT CAPACITY FIXED, SUPPLY NARROWLY FAILS — 14 November 2026
 
 OWNER: "Go ahead with the floodplain rule." Report: reports/FLOODPLAIN_RULE_20261114.md. Plan b5dd9b73 + A1 + A2 (post-hoc, disclosed).
