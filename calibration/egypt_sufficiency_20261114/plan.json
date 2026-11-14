@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "question": "Is Egypt the only thing that stops the whole-empire Roman grain-supply calibration (calibration/settlement_supply_calibration_20261113) from passing? If Egyptian harvests reached their historical level, would the unchanged declared rules pass, and at what marketed share?",
+  "known_before_declaration": "Whole empire fails (east never 95% fed at 270 km; west/east disagree). Without Egypt it passes at e95 = 0.392 with the cited 270 km kept. Egyptian cities are 22% fed at 270 km and one third. output/land_people/earth/regions.json gives Egypt historical/capacity = 1.94-2.16. Nothing below has been computed.",
+  "method": "scripts/settlement_supply_calibration.py run unchanged (whole empire, committed people field) except two declared substitutions on Egyptian land only (lon >= 29 E and lat <= 32 N, the same mask the without-Egypt variant uses): (Y) wheat and barley energy per hectare multiplied by k; (YP) the same and the Egyptian rural people field also multiplied by k, so the extra grain must also feed more farmers. k in {1.94, 2.16} (historical range / model capacity). k = 1 is a control and must reproduce the archived whole-empire surface exactly.",
+  "rules": "The original declared decision unchanged: cited 270 km kept if west/east e95 log ratio <= ln 1.25 (or within 1.1 x best); transfer >= 0.90 both ways; e95 reported for all cities.",
+  "interpretation_declared": "PASS on a variant means Egypt's harvest is sufficient to explain the whole-empire failure, and the e95 there is the Earth-supported share with Egypt included. FAIL means another blocker remains. This is a sensitivity, not an adopted rule: k is the observed gap itself, and no crop rule is implied. Nothing on the fantasy map changes.",
+  "outputs": "output/egypt_sufficiency_20261114/{results.json, review.json}"
+}
