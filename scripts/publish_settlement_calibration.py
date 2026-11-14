@@ -34,6 +34,7 @@ def main():
               'supply_without_egypt__results.json': 'settlement_supply_calibration_20261113/without_egypt/results.json', 'supply_without_egypt__review.json': 'settlement_supply_calibration_20261113/without_egypt/review.json',
               'supply_fantasy_at_calibrated_share.json': 'settlement_supply_calibration_20261113/without_egypt/fantasy_at_calibrated_share.json',
               'vidarbha_release3__results.json': 'vidarbha_release3_20261114/results.json', 'vidarbha_release3__review.json': 'vidarbha_release3_20261114/review.json'}
+    bl = load('geography_control_20261107/blind.json')['pools']
     copies.update(copies_extra)
     for target, source in copies.items(): shutil.copyfile(O / source, PAGE / target)
     for name in FIGS: shutil.copyfile(ROOT / 'reports/figures' / name, PAGE / name)
@@ -48,7 +49,9 @@ def main():
         ('Grain supply', 'Earth-fitted, whole empire (development)', f'Whole Roman empire with Egypt, on real harvests with a floodplain rule for the Nile, heartland people at Frier\'s 61.4 M and Greek wall circuits at their inhabited share: 95% of residents fed at a marketed share of {gwd["e95_all_at_L_used"]:.3f} with the cited 270 km haul; west/east settings feed each other {100 * gwd["transfer"]["west_setting_feeds_east"]:.0f}% / {100 * gwd["transfer"]["east_setting_feeds_west"]:.0f}%', f'Passed (development: each fix followed a failure). Without Egypt, the original test gives {d["e95_all_at_L_used"]:.2f}', 'GREEK_WALLS_20261114.md'),
         ('Floodplain land', 'Earth rule (development)', 'Low land by a river whose flood ends Jul-Oct with little flood-season rain: full water, yearly winter cereal, 95% farmed', 'Egypt capacity 2.3 → 5.8 M, no other census region changes; no fantasy river qualifies (all flood in winter)', 'FLOODPLAIN_RULE_20261114.md'),
         ('Fantasy supply', 'Earth value applied', f'Marketed share {sup["marketed_share"]:.3f}: {100 * s34["fed_share_of_residents"]:.0f}% of residents fed, {s34["short_towns"]} towns short (corrected climate)', 'Published default', 'SIZES_GREEK_WALLS_20261114.md'),
-        ('Reach, trade, administration', 'Rebuilt, not calibrated', 'Run on release-3 towns and supply-fed residents (staffing ≥150 fed residents)', 'No Earth test yet', 'SETTLEMENT_DOWNSTREAM_20261113.md'),
+        ('Political reach', 'Earth-tested blind (rule)', f'Control rule v2.1 (held + enclosed land) scored once on unseen pools: CHGIS seats of 1080 BA {bl["T1"]["F"]["ba"]:.3f} vs {bl["T1"]["v2"]["ba"]:.3f} for v2; Pleiades AD 550 {bl["T2"]["F"]["ba"]:.3f} vs {bl["T2"]["v2"]["ba"]:.3f}', 'Passed and adopted. The map staffs every affiliated town from its supply-fed residents (the blind runs staffed 99% / 84%)', 'GEOGRAPHY_CONTROL_PLAN_20261107.md'),
+        ('Population pattern', 'Earth-tested blind (pattern)', 'Heartland occupancy, capacity × exp(−D/800 km): Domesday England 1086 block rank 0.63 (20 km); Han commanderies 0.82 in development', 'Pattern passed; level not predicted (supplied)', 'POPULATION_LEDGER_20261108.md'),
+        ('Trade, administration', 'Rebuilt, not calibrated', 'Run on the release-3 towns and supply-fed residents', 'No Earth test of their own', 'SETTLEMENT_DOWNSTREAM_20261113.md'),
     ]
     trs = ''.join(f'<tr><th scope="row">{a}</th><td><span class="tag">{t}</span></td><td>{m}</td><td>{o}</td><td><a href="../../../reports/{rep}">report</a></td></tr>' for a, t, m, o, rep in rows)
     links = ' · '.join(f'<a href="{n}" download>{n}</a>' for n in sorted(copies))
@@ -72,7 +75,7 @@ def main():
 <figure><a href="floodplain_rule_20261114.png" download><img src="floodplain_rule_20261114.png" alt="Qualifying Nile flood-basin land, Egypt capacity rising into its historical range with no other region changing, and the whole-empire supply test before and after."></a></figure>
 <figure><a href="greek_walls_20261114.png" download><img src="greek_walls_20261114.png" alt="The share of grain that must be marketed to feed 95% of west and east city residents at each step of the day: the east goes from never fed to agreeing with the west at 0.34."></a></figure>
 <figure><a href="fantasy_floodplain_20261114.png" download><img src="fantasy_floodplain_20261114.png" alt="All fantasy rivers flood in winter, while the Nile in the same model floods in late summer."></a></figure></section>
-<section><h2>Not yet calibrated</h2><p>Reach, trade and administration are rebuilt on the calibrated towns but have no Earth test of their own. No region has yet been held out blind.</p><p>{links}</p></section></main></html>'''
+<section><h2>Not yet calibrated</h2><p>Trade and administration are rebuilt on the calibrated towns but have no Earth test of their own. Town positions and sizes have only been checked on development pools (cross-pool quadrants, province folds, Vidarbha); the reach rule and the population pattern have each passed one blind test.</p><p>{links}</p></section></main></html>'''
     (PAGE / 'index.html').write_text(html)
     evidence = ROOT / 'atlases/earth_evidence/index.html'; old = re.sub(r'<section id="settlement-calibration">.*?</section>', '', evidence.read_text(), flags=re.S)
     panel = '<section id="settlement-calibration"><h2>What the settlement map is calibrated against</h2><p>Count, positions, sizes and grain supply of the default Settlements map, each with its Earth test and outcome; Egypt remains the open gap. <a href="settlement_calibration/">Open the calibration status →</a></p></section>'

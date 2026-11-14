@@ -10,7 +10,7 @@ const { chromium } = require('playwright');
       imgs: [...document.images].every(i => i.complete && i.naturalWidth > 0), bg: getComputedStyle(document.body).backgroundColor }));
     const links = await p.$$eval('a[href]', a => a.map(x => x.href).filter(h => !h.endsWith('.md')));
     for (const h of links) { const r = await p.request.get(h); if (r.status() >= 400) bad.push(h); }
-    if (s.over > 0 || s.rows !== 9 || !s.imgs || bad.length) { console.error('FAIL', w, scheme, s, bad); process.exit(1); }
+    if (s.over > 0 || s.rows !== 11 || !s.imgs || bad.length) { console.error('FAIL', w, scheme, s, bad); process.exit(1); }
     if (w === 390) await p.screenshot({ path: `/tmp/claude-0/-home-user-rotclimate/102a023a-f7ac-5ee0-b069-1ee48d6f8e91/scratchpad/sc_${scheme}.png`, fullPage: false });
     console.log('ok', w, scheme, s.bg, links.length, 'links'); await p.close();
   }
