@@ -30,9 +30,12 @@ cohort and offset at 3 km; at 9 km one zone (Chamak) drops 0.1 → 0.0.
 
 - Release 3 does no harm outside its calibration region. It also adds nothing measurable on capture here;
   the prior's range on Vidarbha land is only 0.037–0.431 and smooth, so it reshuffles towns locally.
-- Every percentile is below 0.5: surveyed early-historic sites sit in cells the environment scores
-  *below* the regional median. That is a weakness of the environmental score in this region, not of the prior,
-  and it is unchanged by this release.
+- Every percentile is below 0.5, but with ~53 site cells the standard error of a mean percentile is about
+  0.29/sqrt(53) ≈ 0.04, so 0.444 is ~1.4 SE below chance: **not distinguishable from chance**, in either direction.
+  A post-hoc component breakdown (exploratory, not declared; EH-S yes, central, 3 km / 9 km) found no single
+  driver: smoothed density 0.445/0.459, flatness 0.443/0.441, river proximity 0.51/0.46, road 0.50/0.50,
+  herder share 0.56/0.59, heartland prior 0.59/0.52. Vidarbha cannot calibrate the environmental score; it
+  can only confirm that release 3 does no harm.
 - Archived production and fixed-prior captures were reproduced exactly on rebuilt inputs (input drift: none).
 
 ## Reproduction
