@@ -1,0 +1,20 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "owner_instruction": "Go ahead with the floodplain rule.",
+  "rule": {
+    "candidate_land": "1-arc-minute land cells no more than 5 m above their nearest Natural Earth navigable-river cell (scalerank <= 4, ETOPO 2022) and within 30 km of it (the flood_basin groundwork definition).",
+    "flood_timing": "Per 5' cell: its basin = nearest navigable river within 150 km (polity.transport.catchments); flood months M = months whose atlas flow index (polity.seasons.basin_flow of polity.seasons.fields runoff) exceeds 1. The flood qualifies if the last month of the longest cyclic run of M is July-October (cool-season sowing Oct-Dec; the model floods 1-3 months early, finding_4, so up to two months of lag are allowed).",
+    "flood_season_dry": "WorldClim rain at the cell summed over M is below 100 mm (Nile 0-4 mm, Mesopotamia 26 mm, North China Plain 382 mm, Wei 328 mm in the groundwork; the threshold sits in the empty range and was chosen before any capacity was computed).",
+    "basin_land_capacity": "On qualifying candidate land: full water (irrigation access 1), sown every year (sown 1.0), first crop only (no second crop: one flood, one crop), farmed share F_b of arable. Cell capacity = (1 - s) x existing capacity + s x basin capacity, s = qualifying share of the 5' cell's 1' land cells.",
+    "F_b": "0.95 primary: Egypt c.1911 cultivated about 2.33 M ha vs 2.46 M ha candidate land (calibration/floodplain_constants_20261114/sources.json; an upper bound for antiquity, and Egypt-derived). 0.60 (the global farmed share) reported as a sensitivity only."
+  },
+  "honesty": "This is development, not validation. F_b comes from Egypt's own 1911 land use, Egypt's historical population is known, and the timing and dry thresholds were set after seeing the groundwork diagnostics. Constraint regions guard against inflating other regions; no held-out floodplain population is qualified.",
+  "tests_in_order": {
+    "T1_constraints": "Capacity in every regions.json region other than Egypt changes by at most +5% (North China Plain fitted, Wei, Sichuan, Hunan-Jiangxi, Italy, Gaul, Iberia, Asia Minor, Syria, Mesopotamian alluvium). Scored first.",
+    "T2_egypt": "Egypt capacity with F_b 0.95 inside [3.6, 6.25] M (0.8 x 4.5 to 1.25 x 5.0).",
+    "T3_supply": "Whole-empire grain-supply calibration rerun with the new harvest grid (cereal energy and arable) and the heartland people pattern (capacity x exp(-D/800) on the new capacity, rescaled to the committed window total), declared rules unchanged; also without Egypt. Reported; a pass means the Egypt blocker is resolved in development."
+  },
+  "adoption": "If T1 and T2 pass, the rule is proposed for the fantasy map's harvest as an option (separate declared step with its own controls). Nothing on the map changes here. The Earth rule is an off-by-default wrapper; committed Earth inputs are untouched.",
+  "outputs": "output/land_people/earth_floodplain/{earth.npz (ignored), regions.json}, output/floodplain_rule_20261114/{results.json, review.json}"
+}
