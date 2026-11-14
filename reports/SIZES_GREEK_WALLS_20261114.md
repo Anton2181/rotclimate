@@ -44,3 +44,12 @@ The default Settlements maps (release3_central/low) now use the refitted sizes. 
 `release3_supply` at 34% marketed. The reach note now gives 34%, with the same staffed towns. The release-3 browser
 checks pass (settlements, supply and supply-fed reach, 8 cases each), as does the Windows-style checkout check
 (2,217 assets).
+
+## Flat-density option at its own Earth share
+
+Plan `calibration/supply_low_reading_20261114/plan.json` (declared before output). The share 0.337 was calibrated with
+Earth city residents at the sliding reading. At the flat 100/ha reading Roman cities hold 4.06 M residents instead of
+8.37 M. The same whole-empire setting then passes at **0.140** (270 km best, transfer 0.92 / 0.97); the sliding-reading
+control reproduces the published calibration exactly. Review passed; fresh run byte-identical. The map's flat option now uses
+14% (corrected climate: 1,042 of 1,053 towns fed, 99.2% of residents; raw 98.8%, 14 short). The default sliding option
+keeps 34%. Browser checks and the Windows checkout check (2,217 assets) pass.

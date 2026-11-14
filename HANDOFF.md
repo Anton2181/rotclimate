@@ -6,6 +6,8 @@ build_sizes_greek_walls.py (release-3 sizes; positions identical; 13.62 -> 12.74
 (0.337: corrected 89% fed, 33 short; staffed set identical 1042/1023). Existing reviewers pass via scripts/exec_with.py.
 PUBLISHED (owner permission): default Settlements = refit sizes + 34% supply; reach note updated (staffed set unchanged);
 old supply_central_x39.webp removed. Browser checks (3 x 8) and Windows checkout (2,217 assets) passed.
+FLAT READING: calibration/supply_low_reading_20261114 PASSES at 0.140 (flat 100/ha Earth residents); map's release3_low
+now uses low_x14 (corrected 99.2% fed, 11 short). Default sliding option keeps central_x34.
 
 # EARTH SUPPLY CALIBRATION PASSES WITH EGYPT (DEVELOPMENT) — 14 November 2026
 
