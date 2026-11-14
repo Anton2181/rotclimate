@@ -1,3 +1,38 @@
+# MATCHED REGIONAL METEOROLOGICAL INPUTS VERIFIED — 14 November 2026
+
+Continued beyond source-auditc315ac23. Declarationdf1e174c preceded new rainfall
+capture and common-period meteorological arrays. Report:
+reports/MATCHED_REGIONAL_WEATHER_20261114.md. No NEW field score at this checkpoint.
+
+All30samples/54810dates complete;all438480overlapping weather values,units and
+provider geometries EXACTLY match the previous audited ETo inputs. Reuse reviewed
+HAR/PM;new PRECTOTCORR rain and same-packet T2M. Rain:sum Gregorian month/year,
+average five totals,conserve annual amount including both leap days. Temperature:
+mean each year/month then equally average five means;do NOT scale degreesC by
+month length. Same1507assignments/no candidate removal. Monthly means omit
+daily/interannual thermal variation. Whole source/weather/input set tracked.
+
+Independent raw/50digitDecimal/scalar assignment/CSV/full-array checks pass;
+360bins/36168mapped T/P cells,four fresh files exact,947protected unchanged.
+Area-weighted annual rain: Nile38.454→110.046mm,Euph139.958→157.692mm. Not a local
+precipitation accuracy result. Aswan1871–1901/selectedHit1965–1971flow epochs
+remain different;modern5yearweather is not a historical reconstruction.
+
+FIRST NEXT: DECLARE paired field comparison before outputs. Matched T/P/ETo
+versus prior ETo-only HAR/PM,each2regions×2calendars×2capture/control;all32cases
+retained. Keep all candidates as consumers,recompute thermal eligibility only
+from declared T choice;fix root/soil/pond/routing/crop assumptions and gauge
+volumes. Exact16archived controls,independent full scalar field/CSV/fresh checks.
+Groundwater remains disabled:local source audit below leaves inputs unqualified.
+No yield/settlement adoption;Tigris/shared flow,independent regions and frozen
+harvest remain required. Default release3/marketed share0.3923 unchanged;
+Egypt calibration fails. Full S3–S5/resources/work/authority queue remains open.
+
+REPRODUCE: scripts/capture_matched_regional_weather.py; then venvPython
+scripts/matched_regional_weather.py; same --out
+output/matched_regional_weather_20261114/fresh; scripts/review_matched_regional_weather.py.
+Primary forcing.npz must be force-added;fresh ignored. Earlier entries are history.
+
 # LOCAL NILE GROUNDWATER SOURCE QUALIFICATION COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued beyond paid-budget
