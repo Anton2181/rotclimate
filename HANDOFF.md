@@ -4,7 +4,8 @@ OWNER: "keep improving our model". Report reports/SIZES_GREEK_WALLS_20261114.md;
 scripts/sizes_greek_walls.py (M1 refit 1.915 + 0.147 lnH, sigma 1.048, KS 0.063 PASS; control reproduces archive),
 build_sizes_greek_walls.py (release-3 sizes; positions identical; 13.62 -> 12.74 M residents), wide_supply_greek_walls.py
 (0.337: corrected 89% fed, 33 short; staffed set identical 1042/1023). Existing reviewers pass via scripts/exec_with.py.
-PUBLISH PENDING owner confirmation (auto-mode denied overwriting atlas defaults). Commands in the report.
+PUBLISHED (owner permission): default Settlements = refit sizes + 34% supply; reach note updated (staffed set unchanged);
+old supply_central_x39.webp removed. Browser checks (3 x 8) and Windows checkout (2,217 assets) passed.
 
 # EARTH SUPPLY CALIBRATION PASSES WITH EGYPT (DEVELOPMENT) — 14 November 2026
 

@@ -38,10 +38,9 @@ The raw climate is 87% fed with 40 short. The staffed towns of the control rule 
 are identical: 1,042 corrected and 1,023 raw. So the published reach, trade and administration maps stay valid. The
 reviewer `review_wide_supply_release3.py` passes on the new supply.
 
-## Step 4: publication — waiting for the owner
+## Step 4: published (owner permission)
 
-Publishing replaces the default Settlements and grain-supply maps in `atlases/earth_fit/data`. That write was not
-permitted automatically, so it waits for the owner's confirmation. The prepared commands rerun
-`publish_settlement_release3.py` and `publish_wide_supply_release3.py` on `output/sizes_greek_walls_20261114/`
-through `scripts/exec_with.py`, with notes naming the Greek correction and the 34% share. The reach note's "39%"
-becomes 34% (same staffed towns).
+The default Settlements maps (release3_central/low) now use the refitted sizes. The grain-supply option is
+`release3_supply` at 34% marketed. The reach note now gives 34%, with the same staffed towns. The release-3 browser
+checks pass (settlements, supply and supply-fed reach, 8 cases each), as does the Windows-style checkout check
+(2,217 assets).
