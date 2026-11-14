@@ -1,3 +1,65 @@
+# CAPILLARY HYDRAULIC SOURCE/COMPONENT CHECKS COMPLETE — 14 November 2026
+
+Canonical branch: claude/friendly-turing-43ygeu. Continued beyond regional maps
+074363c0; declaration 3ce2c453 preceded component code/outputs. Full report:
+reports/CAPILLARY_HYDRAULICS_20261114.md. Normal page:
+atlases/earth_evidence/capillary/. No extra water, field or settlement adoption.
+
+IMPLEMENTED: harvest/capillary_hydraulics.py, supplied Van Genuchten retention/
+conductivity and FAO midpoint stationary profile. Suction magnitude cm; height
+positive above water table; conductivity cm/day, upward prescribed flux mm/day
+converted once. Stable log/Se form; zero flux exactly hydrostatic. This relation
+creates no water and is not an aquifer or a field supply model.
+
+VERIFIED: 208 controls (26 new). Two source table parses agree on 28 Dutch
+hydraulic profiles and all 41x6 source profile heights. O8 supplied silty-soil
+example reproduces all 246 heights within published rounding, with no tuning.
+Independent 50-digit Decimal DIRECT source-equation powers/signed-head recurrence
+checks 896 hydraulic sample cells and all profile cells; max numeric errors
+5.18e-14 in retained units / 1.04e-13 cm. Three fresh numeric exports exact;
+932 protected files unchanged, including all regional forcing/field outputs.
+Six browser viewport/theme cases, 34 exact rows, seven downloads, actual CSV,
+image/keyboard/width/navigation, staged Windows checkout and release proof.
+
+HISTORICAL CONTEXT: recovered official Butzer1976 PDF (current ISAC link points
+to a versioned S3 asset; old .pdf URL returned HTML and was not accepted).
+Printed p19/PDF35 concerns Omo/Senegal/Chari-Logone analogies, not measured Roman
+Nile flux. Printed p90/PDF106 has SUMMER water table at least3–4m, not winter
+depth. Butzer1984p105 post-flood high water table is qualitative. FAO56's
+approximate1m-below-root convention is distinct from soil-specific FAO61 curves.
+No Dutch profile, universal rate, larger root TAW or free groundwater inferred.
+
+FIRST NEXT: declare finite PAID groundwater recharge/storage and its transfer
+to the same existing soil/river ledger. Empty initial stocks, explicit accessible
+floor/capacity/areas/time units; recharge consumes paid river/rain water; upward
+transfer limited by hydraulic permission AND stored stock. No double-credit of
+percolation or instant downstream reuse; preserve zero-groundwater/legacy and
+all-candidate controls. Local water-table history, storage/soil hydraulic profile,
+root suction/development, canopy/drainage and transient/high-water-table crop
+constraints remain unqualified. Do not graft Dutch O8 onto the old synthetic
+field soil or choose rates/depths to make Egypt pass. Regional forcing-period/
+grid consistency and shared fantasy weather inputs remain open. Then Tigris,
+independent regions, frozen harvest and whole-empire supply checks.
+
+REPRODUCE: scripts/capillary_source_benchmarks.py; same producer --out
+output/capillary_hydraulics_20261114/fresh; scripts/review_capillary_hydraulics.py;
+scripts/publish_capillary_hydraulics.py; scripts/build_fit_hub.py --date 2026-11-14.
+System Python scripts/check_capillary_browser.py uses localhost:8766. Source
+caches restore with pinned hashes; pdftotext required for historical context.
+Canonical controls.json holds test-runtime text and is pinned by reference.json;
+fresh exports reuse that receipt. Regenerating canonical producer intentionally
+requires its downstream review/publication refresh. All source locators/digests
+are in calibration/capillary_hydraulics_20261114/plan.json. PDFs stay cached.
+
+Regional water maps remain the latest field update: 24 paired cases, all1507
+candidates, exact archived controls; Nile PM root coverage52.4/66.1% versus
+archived65.3/79.0%. These are conditional water diagnostics, not crop yields or
+residents. Default settlements remain release3/marketed share0.3923:850self-fed,
+174imports,29short,91%fed;reach staffing1042. Egypt calibration, S3–S5, empirical
+occupancy/provider/size, complete resources/diets/work, mobile actors and
+political authority remain open. Full programme live queue/review log updated.
+Earlier entries below are history; this entry controls the next dependency.
+
 # REGIONAL FORCING AND PAIRED FIELD-WATER MAPS COMPLETE — 14 November 2026
 
 Canonical branch: claude/friendly-turing-43ygeu. Continued from e6e0f920.

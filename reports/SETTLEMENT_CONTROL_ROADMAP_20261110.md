@@ -7,30 +7,30 @@ silently replaces the other.
 
 ## Live review — 14 November 2026
 
-Current completed step: full regional reference forcing with paired field-water
-maps. Declaration6366d34d, source/preflight7a645ea7 and reviewed forcing dadf8859
-precede field outputs. Thirty fixed weather samples cover all1507candidates;
-54810modern gridded dates,931770independent weather cells and all assignments
-reviewed. All24paired field cases retained; eight exact archived controls,
-6835752scalar final-cycle field-steps and18084CSV rows pass. Seven fresh numeric
-exports exact;923protected files unchanged. New water maps published, no harvest
-or settlement adoption. Report: REGIONAL_REFERENCE_FORCING_20261114.md.
+Current completed step: capillary source qualification and stationary hydraulic
+component, declaration3ce2c453 following regional maps074363c0. All246published
+FAO61 profile heights reproduce within rounding;28source profiles/896hydraulic
+sample cells independently reviewed with50-digit Decimal. 208controls,three
+fresh exports exact,932protected files unchanged; source/page/publication checks
+pass. No water supplied or regional/harvest/default change. Historical context
+preserves floodplain analogies and summer/winter distinctions. Report:
+CAPILLARY_HYDRAULICS_20261114.md; normal page: capillary/.
 
-Finding: Nile capture root coverage65.3/79.0% archived,68.3/80.8% regional
-Hargreaves,52.4/66.1% regional PM. This does not close Egypt's calibration. Modern
-ETo with frozen1970–2000T/P is an exposed forcing-only sensitivity, not a climate
-reconstruction. Source period/grid consistency still needs review before forcing
-adoption. Shared supplied-world algebra is implemented; fantasy near-surface
-weather inputs and shared river flow remain unqualified.
+Next: declare finite PAID groundwater recharge/storage and coupling to the same
+river/soil ledger, with empty starts and explicit accessible stocks, floors,
+capacities, areas and durations. Upward transfer must satisfy hydraulic and
+stock limits; percolation cannot be credited twice. Preserve zero-groundwater/
+legacy/all-candidate controls. Qualify local soil/pressure-retention, water-table
+history, root/canopy, drainage and transient/high-water-table effects before
+field adoption. No universal rate, Dutch-soil transfer or summer-to-winter depth
+substitution to make Egypt pass. Keep period/grid forcing and shared fantasy
+weather/river inputs, Tigris and independent regions open; freeze harvest before
+Nile gain AND Mesopotamian non-inflation and whole-empire supply checks.
 
-Next: source-check post-flood support, local phenology, soil/root/canopy and
-basal diffusion, especially the documented high water table/capillary mechanism.
-Any extension must pay finite recharge/storage from the same water ledger;
-no unlimited groundwater or parameter choice to make Egypt pass. Pond access/
-infiltration/drainage remain open. Add Tigris/shared Earth-fantasy flow and
-independent regions; freeze harvest translation before Nile gain AND
-Mesopotamian non-inflation and whole-empire supply checks. Water diagnostics
-remain separate from the next calibrated settlement map.
+Latest actual field update remains all24regional forcing scenarios:1507fields,
+30samples, exact archived controls. Nile capture root coverage65.3/79.0% archived,
+68.3/80.8% regional Hargreaves,52.4/66.1% regional PM. These are conditional water
+maps with an explicit source-period mismatch, not a calibrated harvest map.
 
 Full-programme review: current release-3 settlements and marketed share 0.3923
 remain adopted; Egypt calibration still fails. S3–S5, empirical occupancy/provider
@@ -382,6 +382,7 @@ prospective transfer,complete diets/household/draft work or daily provisioning.
 
 |Completed step|Whole-plan reassessment|Expansion / next action|
 |---|---|---|
+|Capillary hydraulic source/component checks,14 November,declaration3ce2c453|All246published heights match rounding;28source profiles/896function cells independently checked;208controls,three fresh exports/source/publication proofs pass;932protected files unchanged. Historical analogy/summer-depth contexts preserved. No groundwater supplied or field/default adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Declare finite paid groundwater transfer/storage before new fields;qualify soil/root/water-table/drainage/transient inputs with zero-groundwater/legacy controls. Retain period/grid/shared fantasy,Tigris,independent regions,frozen harvest and empirical resources/work/authority gates;continue beyond checkpoints|
 |Regional reference forcing and paired fields,14 November,declaration6366d34d/source-preflight7a645ea7/forcing dadf8859|All1507fields/30weather samples/24cases retained;182controls, full independent weather/field/CSV/mapping/fresh/publication checks pass;923protected files unchanged. PM gives lower Nile root coverage in fixed members;period/grid/crop inputs unqualified. Full release/S1–S5/all-actor/mobile programme reviewed;no harvest/settlement adoption|Source-check local post-flood support and high water table, then declare only finite paid groundwater if justified;retain phenology/soil/root/canopy/pond/drainage and period/grid qualification. Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates remain open;continue beyond checkpoints|
 |Matched-weather reference evaporation,14 November,declaration4d93e88b/source-preflight15010e41|Three fixed locations/5481gridded days show Hargreaves19–30%below reference PM;159controls and independent scalar/Decimal/source/aggregate/fresh/publication checks pass;920protected files unchanged. Method comparison is not measured ETo or harvest validation. Full release/S1–S5/all-actor/mobile programme reviewed|Declare regional forcing policy and input/period/grid qualification with matched legacy controls; do not use point ratios as field multipliers. Keep phenology/basal/root/canopy/pond/drainage,Tigris/shared flow,independent regions,frozen harvest and empirical resources/work/authority gates open|
 |Crop-stage source and component checks,14 November,declaration e470de0a|Fetched completed rain handoff3e649793, then verified FAO contextual cereal coefficients/stages and exact curve integration;137 controls, Decimal/fresh/publication checks pass;917 protected files unchanged. Kcb includes basal soil diffusion; no Earth adoption. Full release/S1–S5/all-actor/mobile programme reviewed|Qualify local phenology/ETo/climatic adjustment and basal-diffusion/root/canopy/pond/drainage policy before declaring Earth stage comparison. Keep Tigris/shared flow, independent regions, frozen harvest and empirical resources/work/authority gates open|

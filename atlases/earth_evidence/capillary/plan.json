@@ -1,0 +1,52 @@
+{
+  "date": "2026-11-14",
+  "baseline": "074363c0",
+  "status": "declared_before_hydraulic_component_code_and_outputs",
+  "known": "Regional forcing/field results and source text are exposed development. FAO61 O8 parameters, six published stationary fluxes and TableA5.5 profile values have been inspected. This is a known published mathematical benchmark, not independent regional validation.",
+  "purpose": "Qualify historical/source context and verify supplied-soil capillary hydraulics before any paid finite-groundwater extension. No new regional field/harvest scores or local parameter fit.",
+  "sources": {
+    "fao61_ch5.html": {
+      "url": "https://www.fao.org/4/y4263e/y4263e08.htm",
+      "sha256": "154c7cb96d5c8223ca94b0a366605aae698eaebc4820b7af443f1f35da411bf8",
+      "locator": "Water-table management; generic capillary support depends on soil and root-zone boundary conditions"
+    },
+    "fao61_annex5.html": {
+      "url": "https://www.fao.org/4/y4263e/y4263e0i.htm",
+      "sha256": "76d2044efb7ca9b657d1c30ce25b9199111ec5cdb34b91a641f7a884d01f08f8",
+      "locator": "Equations4/6; TablesA5.4/A5.5; O8 generic Dutch silty subsoil worked example"
+    },
+    "y4263e1d.gif": {
+      "url": "https://www.fao.org/4/y4263e/y4263e1d.gif",
+      "sha256": "5ce51ca7bd35076cdefa39ec697d9ed40ac62e294ba32073b649e4cbcfd65df4",
+      "locator": "Source equation4, Van Genuchten conductivity expression"
+    },
+    "y4263e1f.gif": {
+      "url": "https://www.fao.org/4/y4263e/y4263e1f.gif",
+      "sha256": "7726f64e1fcd345944ed88cb8cf6848468a05b55235b0d269aceef3954ccdd5b",
+      "locator": "Source equation6, midpoint stationary head-profile recurrence"
+    },
+    "butzer1976.pdf": {
+      "url": "https://isac-assets.s3.amazonaws.com/isac-publications/early_hydraulic.pdf?VersionId=XPx94T73erTo09b.Hoov3VRlxl7YphQx",
+      "sha256": "28414339a87455fb1b679782d7877acdb1f22dace59e8778529036f430e869c8",
+      "locator": "Printedp19/PDF35: floodplain analogies, not an observed Nile flux; printedp90/PDF106: summer water table3\u20134m, not winter depth"
+    },
+    "fao56_ch8.html": {
+      "url": "https://www.fao.org/4/x0490e/x0490e0e.htm",
+      "sha256": "f7eabb739742734c411a8d31527b709fba004a943e373ed406587017b3be0e98",
+      "locator": "Equation85 capillary term; approximate1m-below-root convention is not a universal hydraulic cutoff"
+    },
+    "butzer1984.pdf": {
+      "url": "https://sites.utexas.edu/butzer/wp-content/uploads/sites/6106/2017/07/Butzer-1984-LongTermNile.pdf",
+      "sha256": "689e753dbe637736505f84973c393c56055021a8b9558b4e00ec5b76c3d6e0e8",
+      "locator": "Printedp105/PDF4: traditional post-flood high water table and seasonal cycle; no quantitative flux inferred"
+    }
+  },
+  "operator": "Use supplied Van Genuchten parameters theta_r/theta_s/Ksat_cm_day/alpha_cm_inv/l/n, m=1-1/n. Effective saturation=(1+(alpha*abs_head_cm)^n)^(-m); conductivity from sourceEq4 (equivalently Mualem saturation form). For ordered supplied suction-magnitude edges starting0, use conductivity at interval midpoint and delta_z_cm=delta_abs_head_cm*K/(K+q_mm_day/10). Stationary q is nonnegative upward; q0 gives hydrostatic z=abs_head exactly. Report lengths and flux units separately. No water stock, supply, recharge or crop benefit is created by this relation.",
+  "source_exports": "Two independent HTML parsing paths for all28TableA5.4 parameter profiles and all41x6TableA5.5 z-values; preserve O8worked context, head step10cm, and source units. Keep raw source text cells and digests; do not interpret Dutch profiles as measured Nile soils.",
+  "benchmark": "O8:theta_r0,theta_s0.47,Ksat9.08cm/day,alpha0.0136cm^-1,l-0.803,n1.342. Head edges0..400cm in10cm steps; q10/7.5/5/2.5/1/0mm/day. Compare all246published z-cells with half-last-digit rounding tolerance (0.05cm for one decimal, exact integer zero rows). Report agreement/disagreement without changing parameters, recurrence, or tolerances to obtain a pass. Retain any source-rounding discrepancy explicitly; published agreement alone does not validate a local aquifer.",
+  "controls": "Boundary saturation/conductivity, finite/physical parameters, cm/mm conversion, zero-flux hydrostatic profile, monotone depth versus flux, variable head increments, shape/broadcasting and rejected invalid inputs. Independent high-precision Decimal conductivity and midpoint recurrence on supplied soils; no producer/component import in reviewer. Fresh numeric source/benchmark outputs byte-exact.",
+  "limits": "Steady unsaturated flow is a mathematical approximation; no field water-table history, root suction, hydraulic profile or aquifer geometry fitted. Butzer1976p19 describes analogues; p90summer depth cannot be reused as winter depth. FAO56approximate1m convention is distinct from soil-specific FAO61 curves. No universal capillary rate, extra root-zone TAW or unlimited groundwater inferred.",
+  "protected": "Keep prior protected files plus all nine regional weather/field numeric files and reviews byte-identical.",
+  "next": "Only after this component/source audit, declare a finite paid groundwater/river recharge contract if justified; qualify depth/storage/root/crop/drainage and consistent forcing before field comparisons. Tigris/shared Earth-fantasy flow, independent regions and frozen harvest/whole-empire calibration remain open.",
+  "adopt": false
+}
