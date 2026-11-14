@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_scored_outputs",
+  "purpose": "First declared translation from field root water to supported people, so the Nile-gain and Mesopotamia-non-inflation test that precedes the whole-empire supply calibration can be scored. Deliberately simple and transparent; it can be replaced when the crop-stage and phenology work freezes a better yield response.",
+  "known_before_declaration": [
+    "All base-flow runs (69b52254): root coverage and crop-eligible candidate areas (Nile 24,497 km2, Mesopotamia 63,986 km2).",
+    "Historical regions in output/land_people/earth/regions.json: Egypt 4.5-5.0 M, Mesopotamian alluvium 0.7-2.0 M around AD 1-200; current harvest-model capacities 2.32 M and 7.28 M.",
+    "Rough arithmetic done before this declaration: with the model's own constants, even every Nile candidate field fully watered supports only about 2 M people (3.3 M with annual cropping), below the Egyptian range."
+  ],
+  "translation": "people_i = coverage_i x eligible_i x candidate_area_km2_i x 100 ha/km2 x E_full x arable_i x FARMED_SHARE x sown / NEED_KCAL. E_full = the harvest model's own fully watered barley energy, grain 1.0 t/ha x 1000 x edible 0.87 x 3540 kcal/kg x (1 - seed 0.12) = 2,710,152 kcal/ha. arable_i = the base Earth harvest grid's arable share at the candidate's 5-arcmin cell. FARMED_SHARE 0.6 and NEED_KCAL 1.1e6 from scripts/land_people.py. sown: 0.6 (the model's FALLOW for single-cropped land, primary) and 1.0 (annual cropping renewed by flood or canal water, sensitivity). Coverage stands in for the water-limited share of a full crop: a linear assumption, stated, not fitted.",
+  "regions": "The candidate fields themselves (Nile delta and valley boxes; Lower Mesopotamia box). They approximate, not equal, the regions.json polygons; rain-fed land outside the candidates is negligible in both deserts and is not added.",
+  "cases": "Every run of the base-flow step (2 regions x 4 source rules x 2 calendars x 2 reference-ET methods) x sown {0.6, 1.0}. Also each region's ceiling: every eligible candidate fully watered.",
+  "pass_rule": "For a given source rule, calendar, reference ET and sown value, the pair passes when BOTH: Nile gain, Egypt supported people >= 0.8 x 4.5 M = 3.6 M; and Mesopotamian non-inflation, Mesopotamia supported people <= 1.25 x 2.0 M = 2.5 M. All pairs reported; none is chosen to adopt.",
+  "status_of_result": "Development: both regions and their historical figures are exposed, and no held-out region is qualified (the Indus pre-1932 gauge is unscored). A pass would justify a held-out test, not adoption; a failure identifies what binds.",
+  "review": "Independent recomputation from the stored per-field arrays and the Earth grid with separately written arithmetic; byte replay.",
+  "adopt": false
+}
