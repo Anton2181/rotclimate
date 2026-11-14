@@ -83,8 +83,9 @@ def main():
         assert nb == names
         main_crop = ob['main_crop']; first = np.zeros(len(idx))
         for k, nme in enumerate(names): first = np.where(main_crop == k, ob[f'kcal_{nme}'], first)
-        unit = first * arable[idx] * 1.0 * 100.0 / LP.NEED_KCAL                      # basin capacity per unit farmed share
-        store.update(idx=idx, unit=unit, base=out['capacity'][idx].copy(), s=sl[idx])
+        winter = np.maximum(ob['kcal_wheat'], ob['kcal_barley'])                     # amendment A1: cool-season cereal on the receding flood
+        unit_first = first * arable[idx] * 100.0 / LP.NEED_KCAL; unit = winter * arable[idx] * 100.0 / LP.NEED_KCAL   # per unit farmed share
+        store.update(idx=idx, unit=unit, unit_first=unit_first, main_crop=main_crop, base=out['capacity'][idx].copy(), s=sl[idx])
         cap = out['capacity'].copy(); cap[idx] = (1 - sl[idx]) * cap[idx] + sl[idx] * unit * F_B; out['capacity'] = cap
         return out, names
 
@@ -93,7 +94,7 @@ def main():
     def grid(v):
         g = np.zeros(shape); g.ravel()[np.flatnonzero(land.ravel())[store['idx']]] = v; return g
     np.savez_compressed(OUT / 'fields.npz', s=s, candidate=cand, qualifying=q, catchment=info['catchment'], flood_rain=info['flood_rain'], flow=info['flow'],
-                        basin_unit_capacity=grid(store['unit']), base_capacity_on_basin=grid(store['base']))
+                        basin_unit_capacity=grid(store['unit']), basin_unit_capacity_original_first_crop=grid(store['unit_first']), basin_main_crop_original=grid(store['main_crop']), base_capacity_on_basin=grid(store['base']))
     json.dump(dict(last_flood_month={str(k): v for k, v in info['last'].items()}, timing_ok=[int(b) for b in np.flatnonzero(info['timing_ok'])]), open(OUT / 'basins.json', 'w'), indent=1)
     print('done', flush=True)
 

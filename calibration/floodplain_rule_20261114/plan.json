@@ -16,5 +16,14 @@
     "T3_supply": "Whole-empire grain-supply calibration rerun with the new harvest grid (cereal energy and arable) and the heartland people pattern (capacity x exp(-D/800) on the new capacity, rescaled to the committed window total), declared rules unchanged; also without Egypt. Reported; a pass means the Egypt blocker is resolved in development."
   },
   "adoption": "If T1 and T2 pass, the rule is proposed for the fantasy map's harvest as an option (separate declared step with its own controls). Nothing on the map changes here. The Earth rule is an off-by-default wrapper; committed Earth inputs are untouched.",
-  "outputs": "output/land_people/earth_floodplain/{earth.npz (ignored), regions.json}, output/floodplain_rule_20261114/{results.json, review.json}"
+  "outputs": "output/land_people/earth_floodplain/{earth.npz (ignored), regions.json}, output/floodplain_rule_20261114/{results.json, review.json}",
+  "amendments": [
+    {
+      "id": "A1",
+      "made_after": "T1 and T2 scored with the original rule",
+      "known": "T1 passed (no other region changed: 0%). T2 FAILED by overshoot: Egypt 10.12 M (F_b 0.95), 6.65 M (F_b 0.60) against [3.6, 6.25] M. Diagnosis: the basin crop was the highest-energy crop at full water (mean 5.6 M kcal/ha: irrigated rice or dates).",
+      "change": "Basin land grows the better of wheat and barley at full water (the cool-season cereal sown on the receding flood). Rice and millet are summer crops standing in the flood season; date palms are trees, not basin field crops. Everything else unchanged.",
+      "status": "post-hoc correction of an under-specified rule; the original failure stays on record and the amended rule is development, not a pass of the original declaration"
+    }
+  ]
 }
