@@ -1,4 +1,4 @@
-# Would fixing Egypt's harvest be enough? No — 14 November 2026
+# Would fixing Egypt's harvest or people be enough? No — 14 November 2026
 
 Plan: `calibration/egypt_sufficiency_20261114/plan.json`, committed (45f3d8de) before any output.
 
@@ -56,5 +56,32 @@ without-Egypt calibration.
 
 ## Next
 
-A declared follow-up (calibration/egypt_people_sufficiency_20261114) raises Egypt proper's people to the historical
-4.5–5 M, with and without the yield factor, to test whether farm labour is the sufficient fix.
+Done: see the follow-up below.
+
+## Follow-up: historical people in Egypt proper — also fails
+
+Plan `calibration/egypt_people_sufficiency_20261114/plan.json`, declared before output. Egypt proper's people field
+scaled to 4.5 M or 5.0 M (×6.3–7.1), with yield ×1 or ×2.16. Control reproduces the archive exactly; review passed
+(85 checks, people arithmetic), fresh run byte-identical.
+
+| Variant | Egypt proper surplus | Egyptian cities fed (share 0.5, 270 km) | East ever 95% at 270 km |
+|---|---:|---:|---|
+| Control | 0.23 M | 46% | no (93.9% at share 1.0) |
+| 4.5 M people, yield ×1 | 0.00 M | 41% | no |
+| 5.0 M people, yield ×1 | 0.00 M | 41% | no |
+| 4.5 M people, yield ×2.16 | 0.39 M | 46% | no |
+| 5.0 M people, yield ×2.16 | 0.32 M | 45% | no |
+
+With historical numbers of farmers, the farmers eat their own land's potential: the model's land output per km²
+(1 t/ha × 0.6 farmed × 0.6 sown) is the binding limit, and doubling the yield barely lifts it above their own need.
+Neither more farmers nor higher yield is enough on its own. Together with the first test, this confirms the
+water-to-food finding (WATER_TO_FOOD_20261114.md): Egypt needs a floodplain land rule that raises output per km²
+(farmed share, annual cropping, yield) AND a people field that follows it. The model's occupation factor keeps
+Egypt's people at about 0.3 of capacity, while historical Egypt was close to capacity.
+
+## What this means for the map
+
+The supply calibration with Egypt cannot pass through any single knob. The required fix is upstream and two-part:
+a declared floodplain land rule (tested against the North China Plain, Wei and Mesopotamia constraints, see
+`calibration/flood_basin_irrigation_20261113/plan.json`) and a check of how people follow capacity on such land.
+The adopted marketed share 0.39 remains supported only by the without-Egypt calibration.

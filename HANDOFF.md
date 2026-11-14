@@ -6,7 +6,11 @@ Egypt yield x1.94/x2.16 (+/- farmers): all FAIL. East e95 0.61-0.67 vs west 0.38
 Post-hoc diagnostic (egypt_sufficiency_diagnostic.py -> diagnostic.json): the mask includes Sinai/S. Levant, which
 supplied most surplus. Egypt proper (lon<=32.6): committed people field 0.71 M (history 4.5-5 M, x6.5 low), city
 residents 1.21 M; labour-limited production, so yield barely helps. Nile freight is cheap (Alex-Arsinoe ~30 vs 270).
-Fayum barely cropland (4/56 cells irrigated). NEXT: declared follow-up raising Egypt-proper people to 4.5-5 M.
+Fayum barely cropland (4/56 cells irrigated).
+FOLLOW-UP DONE (calibration/egypt_people_sufficiency_20261114, review passed, fresh exact): Egypt-proper people
+4.5/5.0 M with yield x1/x2.16: ALL FAIL, east never 95% at 270. Farmers eat the land's potential (surplus 0 at
+y=1). Binding: output per km2 (1 t/ha x 0.6 farmed x 0.6 sown) AND people at ~0.3 of capacity (occupation).
+NEXT: two-part upstream fix: declared floodplain land rule (NCP/Wei/Meso constraints) + people following capacity there.
 
 # FLOOD-BASIN RULE GROUNDWORK: NORTH CHINA PLAIN IS A CONSTRAINT — 14 November 2026 (settlement lane)
 
