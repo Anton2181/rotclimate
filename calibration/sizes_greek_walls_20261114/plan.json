@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-14",
+  "status": "declared_before_any_output",
+  "owner_instruction": "Do what fits best with the idea of an earth-calibrated settlement map and continue.",
+  "why": "The Earth supply calibration passes with Egypt only when Greek wall-circuit areas are read as inhabited areas (calibration/greek_walls_20261114, Hansen 2008). The map's town sizes come from the release-2 size model fitted on the same Hanson areas without that correction. For one consistent Earth calibration, the size model is refitted on the corrected areas and the map's marketed share is taken from the passing with-Egypt calibration.",
+  "step_1_size_refit": {
+    "method": "scripts/settlement_release2_earth.py cohort and evaluate unchanged (province-blocked folds, M0-M3, selection rule, 5-seed KS gate), except that cohort rows in Achaea, Macedonia and Epirus whose Hanson Estimate Basis starts with 'Walls' use inhabited area = area x 1/2 (x 1/3 if area >= 100 ha). The primary cohort's exclusion of the 20 and 30 ha placeholder values is applied to the original areas.",
+    "gate": "Unchanged: selected model M1 (the builder implements M1 only), mean held-out KS <= 0.10, total-area ratio 0.80-1.25. If M1 is not selected or the gate fails, nothing on the map changes."
+  },
+  "step_2_fantasy_sizes": "scripts/build_settlement_release3.py rerun with the refitted results (positions unchanged; sliding 100-500/ha density; lore ranking of marked places strict and binding).",
+  "step_3_supply": "Wide supply on the new sizes at marketed share 0.3372 (output/greek_walls_20261114 primary e95) in place of 0.3923; haul 270 km unchanged. Report fed share and short towns against the current default.",
+  "step_4_publish": "If steps 1-3 run cleanly, publish as the default Settlements option (positions identical, sizes and supply updated) with the existing browser and checkout checks; the previous default stays available.",
+  "honesty": "Development: the Greek correction was introduced after seeing the calibration fail. The size gate is internal (province-blocked), not blind.",
+  "outputs": "output/sizes_greek_walls_20261114/{results.json, review.json, ...}"
+}
