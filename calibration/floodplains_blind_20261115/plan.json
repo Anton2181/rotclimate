@@ -25,5 +25,13 @@
     "pass": "Mean KS <= 0.20 AND mean total-area ratio in [0.67, 1.50]."
   },
   "reporting": "Both tests are scored once and reported whatever the outcome; the pool is then marked spent. No parameter is fitted on it. A failure is a finding about the model, not a reason to tune it on this pool.",
-  "outputs": "output/floodplains_blind_20261115/{inputs_*.npz (ignored), results.json, review.json}"
+  "outputs": "output/floodplains_blind_20261115/{inputs_*.npz (ignored), results.json, review.json}",
+  "amendments": [
+    {
+      "id": "A1",
+      "made_after": "a first run matched no site to the window (0 of the AD 200 sites, 1 surveyed cell); no score was computed",
+      "known": "Only column ranges were read: \"Latitude\" spans 41.87-49.72 and \"Longitude\" 30.64-34.48, i.e. the two columns are swapped (southern Mesopotamia lies at 30-35 N, 42-50 E). Dates span -4500 to 1600 (calendar years, as declared).",
+      "change": "Read latitude from the \"Longitude\" column and longitude from the \"Latitude\" column. Nothing else changes."
+    }
+  ]
 }

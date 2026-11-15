@@ -30,7 +30,7 @@ def rows():
     lo, hi = np.nanmin(np.r_[start, end]), np.nanmax(np.r_[start, end])
     if not (-10000 <= lo and hi <= 2100):
         raise ValueError(f'Date convention not calendar years ({lo}, {hi}): amend the plan before scoring')
-    lat = np.array([num(x['Latitude']) for x in r]); lon = np.array([num(x['Longitude']) for x in r]); size = np.array([num(x['SizeHa']) for x in r])
+    lat = np.array([num(x['Longitude']) for x in r]); lon = np.array([num(x['Latitude']) for x in r]);   # amendment A1: columns swapped in the source size = np.array([num(x['SizeHa']) for x in r])
     ids = np.array([x['Id'] for x in r])
     return dict(ids=ids, start=start, end=end, lat=lat, lon=lon, size=size, date_range=[float(lo), float(hi)])
 
