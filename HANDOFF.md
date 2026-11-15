@@ -1,3 +1,9 @@
+# r45 ADOPTED (Earth); ATLAS STAYS r44 (OWNER) — 15 November 2026
+r45 = e79 moisture carry + refitted rain settings (calibration/local_accuracy_20261023/r45_adoption.json; dev49 0.9901, fine28 1.0098,
+sealed i 0.9833, set i spent). Owner: skip the atlas rebuild. Next climate iteration (reports/MONSOON_R45_20261115.md): Bengal
+(worst, 1.23) is a spring-circulation error (northerly winds and e70b branch drying until June, land 4 C too hot); e40/e47 trade
+with Australia; new e80/e80b heat-low damping fails (deserts). No new sealed set declared yet. NEXT (owner): maize.
+
 # CLIMATE: NORTHERN STEPPE + RAIN SHADOWS — 15 November 2026 (settlement WP5 parked; owner: switch to climate)
 reports/NORTHERN_STEPPE_20261115.md. Painted cold_dry zone (40-46 N): atlas median 830 mm, 2.3x the dry threshold, Csa-like
 (winter rain on easterlies; planet retrograde, tilt 33.5). r44 on Earth steppes is NOT too wet (Caspian lee 167 vs 128 mm; cold
