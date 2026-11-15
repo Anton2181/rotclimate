@@ -1,3 +1,9 @@
+# OWNER TO-DO LIST (standing)
+- ADD MAIZE to the crop model (owner request 15 Nov 2026). Unlocks the Valley of Mexico blind pool (data/cache/valley_of_mexico,
+  headers only read) together with New World heartland cores; needs Earth sources for maize yields/phenology first.
+- Allchin (ed.) 1995 The Archaeology of Early Historic South Asia (data/cache/allchin_1995, owner-supplied): no compiled table of
+  city areas (areas scattered in prose, several seen while searching); not usable as a blind pool.
+
 # REBA/MODELSKI CITY TEST: TOO SPARSE (6 CITIES), NOT SCORED — 15 November 2026
 calibration/reba_cities_blind_20261115 (declared before values); scripts/reba_cities_blind.py; output/reba_cities_blind_20261115.
 Only 6 Modelski AD 200 cities outside the Roman/Han pools (+2 Chandler AD 100) < declared minimum 10 -> not scored; pool spent.
