@@ -1,6 +1,7 @@
 """Review of the capital-term map build: the reviewed release-2 fantasy checks (scripts/review_settlement_release2_fantasy.py)
 run on output/capital_term_map_20261115 with declared substitutions for M1C (capital term), plan A1 (no top-draw promotion)
-and plan A2 (3-town permutation: full area multiset unchanged, at most that many unranked towns differ), plus the imperial
+and plan A2 and the owner lore-neighbourhood rule (area permutations: full area multiset unchanged; no proposed town larger than its
+nearest marked place within 75 km, checked with separate distance code), plus the imperial
 capital being the largest town."""
 import sys
 from pathlib import Path
@@ -16,7 +17,10 @@ SUBS = [("output/settlement_release2_20261113", N), ("output/settlement_release3
  ("if (cls == a).any() and (cls > a).any() and e[cls == a].min() < e[cls > a].max(): problems.append(f'{mode} lore residual order {a}')", "pass"),
  ("    if not np.allclose(area[cls == 9], drawn[cls == 9], rtol=1e-9): problems.append(mode + ' unranked areas')",
   "    _top = int(np.isin(sym, ['imperial capital', 'major imperial city']).sum())\n"
-  "    if (~np.isclose(area[cls == 9], drawn[cls == 9], rtol=1e-9)).sum() > _top: problems.append(mode + ' unranked areas')\n"
+  "    _rc = np.array([[s['row'], s['column']] for s in sites]); _mk = np.array([bool(s['marked']) for s in sites]); _M = np.flatnonzero(_mk); _U = np.flatnonzero(~_mk)\n"
+  "    _dd = np.hypot(_rc[_U][:, None, 0] - _rc[_M][None, :, 0], _rc[_U][:, None, 1] - _rc[_M][None, :, 1]) * cell\n"
+  "    _own = np.where(_dd.min(1) <= 75.0, _M[_dd.argmin(1)], -1)\n"
+  "    if any(o >= 0 and area[u] > area[o] for u, o in zip(_U, _own)): problems.append(mode + ' lore neighbourhood rule')\n"
   "    if not np.allclose(np.sort(area), np.sort(drawn), rtol=1e-9): problems.append(mode + ' area multiset changed')\n"
   "    _c0 = np.flatnonzero(sym == 'imperial capital')\n"
   "    if len(_c0) != 1 or area[_c0[0]] < area.max(): problems.append(mode + ' imperial capital not the largest town')"),
