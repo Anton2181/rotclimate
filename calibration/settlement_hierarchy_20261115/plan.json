@@ -16,6 +16,12 @@
       "made_after": "scoring the declared delta form (kept as results_delta_form.json): KS 0.096 and area ratio 1.04 pass, but share of subordinates larger than their centre 12.6% vs observed 6.3% and median ratio 0.082 vs 0.11 fail; M1C alone gives 21.5% and 0.37",
       "known": "The delta form models y_u - y_c; its scatter (sd 1.75) mixes the subordinate's and the centre's residuals, so generating it on top of an already drawn centre double-counts the centre's randomness.",
       "change": "Conditional form: ln area_u = g0 + g1 ln area_c + g2 lnH_u + g3 distance/100 + scatter, fitted on subordinates (centre size observed as a predictor), generated given the generated centre. Same folds, seeds, metrics and pass rule. Development data; post-hoc reformulation disclosed."
+    },
+    {
+      "id": "A2",
+      "made_after": "scoring the A1 conditional form (kept as results_conditional_form.json: 31% of subordinates larger than their capital, median ratio 0.52, fail) and a diagnostic of held-out M1C residuals by distance from capitals",
+      "known": "Subordinate size does not follow centre size (coefficient -0.19), and towns near capitals are not smaller than M1C predicts (mean held-out residual -0.12 to +0.03 within 75 km; no shadow). With independent residuals M1C gives 21% of subordinates larger than their capital vs 6% observed.",
+      "change": "Centre selection (order statistic): each centre and the towns assigned to it (nearest centre within 75 km) form a cluster; residual draws are generated as before, and the centre takes the largest residual of its cluster (the town that drew it takes the centre's). Means (M1C, with each town's own hinterland and the capital term) are unchanged. Same folds, seeds, metrics and pass rule; post-hoc reformulation on development data, disclosed."
     }
   ]
 }

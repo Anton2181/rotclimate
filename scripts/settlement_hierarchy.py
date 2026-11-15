@@ -50,12 +50,12 @@ def main():
         sd[f] = float(np.std(delta[s_tr] - design(s_tr) @ beta))
         BETA = getattr(main, 'BETA', {}); BETA[f] = beta; main.BETA = BETA
     sig_m1c = m1c['heldout_sigma']; runs = []
-    for seed in SEEDS:
-        e = Z.draws(n, seed); gen = np.clip(np.exp(pred_m1c + sig_m1c * e), area.min(), area.max())          # centres and towns beyond 75 km
-        e2 = Z.draws(n, seed + 1000)
-        for i in np.flatnonzero(sub):
-            b = main.BETA[fold[i]]; mu = b[0] + b[1] * np.log(gen[centre[i]]) + b[2] * lnH[i] + b[3] * dist[i] / 100.0
-            gen[i] = np.clip(np.exp(mu + sd[fold[i]] * e2[i]), area.min(), area.max())
+    for seed in SEEDS:                                              # A2: the centre takes the largest residual of its cluster
+        e = Z.draws(n, seed).copy()
+        for c in C:
+            members = np.r_[c, np.flatnonzero(centre == c)]; j = members[np.argmax(e[members])]
+            e[c], e[j] = e[j], e[c]
+        gen = np.clip(np.exp(pred_m1c + sig_m1c * e), area.min(), area.max())
         runs.append(dict(seed=seed, ks=float(ks_2samp(gen, area).statistic), total_ratio=float(gen.sum() / area.sum()),
                          share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]]))))
     obs = dict(subordinates=int(sub.sum()), share_sub_larger=float(np.mean(area[sub] > area[centre[sub]])), median_ratio=float(np.median(area[sub] / area[centre[sub]])))
