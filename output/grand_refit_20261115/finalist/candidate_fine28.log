@@ -1,0 +1,16 @@
+new_zealand: verified, rainfall loss 0.5501
+california: verified, rainfall loss 0.4774
+western_europe: verified, rainfall loss 0.2714
+japan: verified, rainfall loss 0.4040
+region           T mMAE  T aMAE  T bias  rngErr  <=2C anom r |  P mMAE logRMSE  <=25%   rho   loss
+california         1.69    1.10   -0.10   -0.21   82%   0.96 |    21.7   0.467    19%  0.89  0.477
+western_europe     1.86    0.42   -0.10   -1.76  100%   0.97 |    25.0   0.243    61%  0.50  0.271
+japan              1.80    0.90   +0.66   -1.37   98%   0.97 |    71.6   0.306    68%  0.19  0.404
+new_zealand        1.94    0.81   -0.40   -1.23   96%   0.96 |    67.6   0.652    21%  0.58  0.550
+[training] T_monthly_mae 1.687 T_annual_mae 1.096 T_within_2C 0.820 T_anomaly_r 0.956 P_monthly_mae 21.737 P_annual_log_rmse 0.467 P_within_25pct 0.186 P_spearman 0.893 P_loss 0.477
+[holdout] T_monthly_mae 1.799 T_annual_mae 0.901 T_within_2C 0.985 T_anomaly_r 0.971 P_monthly_mae 71.643 P_annual_log_rmse 0.306 P_within_25pct 0.683 P_spearman 0.190 P_loss 0.404
+[midlatitude] T_monthly_mae 1.902 T_annual_mae 0.616 T_within_2C 0.982 T_anomaly_r 0.968 P_monthly_mae 46.308 P_annual_log_rmse 0.447 P_within_25pct 0.411 P_spearman 0.537 P_loss 0.411
+[all] T_monthly_mae 1.823 T_annual_mae 0.807 T_within_2C 0.942 T_anomaly_r 0.966 P_monthly_mae 46.499 P_annual_log_rmse 0.417 P_within_25pct 0.423 P_spearman 0.539 P_loss 0.426
+-- by elevation_m: 0-300 n1820 T +0.0/0.6 rng -0.8 P +0.00/0.34 | 300-1000 n1086 T +0.0/0.9 rng -1.5 P -0.05/0.40 | 1000-2000 n692 T -0.2/0.7 rng -1.7 P +0.25/0.48 | 2000-9000 n137 T +0.8/0.9 rng -0.9 P +0.28/0.35
+-- by coast_km: 0-50 n781 T +0.1/0.8 rng +0.4 P -0.21/0.44 | 50-200 n1637 T +0.1/0.7 rng -1.2 P -0.02/0.35 | 200-500 n1064 T -0.2/0.8 rng -2.2 P +0.25/0.39 | 500-1e+09 n253 T -0.4/0.5 rng -1.4 P +0.36/0.38
+-- by relief_m: 0-300 n2717 T +0.0/0.7 rng -1.2 P +0.04/0.36 | 300-1000 n992 T -0.0/0.9 rng -1.1 P +0.04/0.45

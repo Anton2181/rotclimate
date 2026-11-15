@@ -4,7 +4,10 @@ fine28 S<=1.01, then ONE run on an unseen sealed set (now set j, calibration/sea
 instruction for the first dev+fine finalist).
 - [done, near miss] Step 1 grand refit on r45 (calibration/grand_refit_20261115/plan.json): best S49 0.995097 (T -0.16%, P -0.82%)
   misses 0.995 by 0.0001. Best: storm_convection 0.52, ice_saturation 1.0, eddy_rate 1.65, instability 1.83, edge_carry ~0.01.
-- [running] Step 1b disclosed extension (extension_1.json): 20 more evals at half steps from the best.
+- [done] Step 1b extension: finalist S49 0.99458, fine28 0.982 PASS; sealed set j S 1.016 (rain +4.2%; Java, Cuba, Pilbara,
+  Cameroon worse) FAIL. Set j spent. Not adopted. Lesson: dev49 is mid-latitude/subtropical; the free sealed boxes are tropical.
+- [next] Step 3: major rework. Before more refits: (i) add tropical development regions (r45 is unscored in the wet tropics),
+  (ii) declare sealed set k from remaining free boxes, (iii) rework a: South Asian spring circulation.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
