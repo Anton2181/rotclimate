@@ -1,0 +1,21 @@
+{
+ "title": "Grand refit v3: minimax of the 49-region and extra-tropical scores (declared before any evaluation)",
+ "date": "2026-11-15",
+ "made_after": "v1 finalist: S49 0.9946, extra-tropical pool 1.0229 (failed sealed j); v2 finalist: S49 1.0023 (fails the dev gate), pool 0.9658. No evaluated v2 point has S49 <= 0.995.",
+ "start": "calibration/grand_refit_20261115/midpoint_v1_v2_params.json",
+ "start_set": {},
+ "reference": "output/grand_refit_20261115/ref",
+ "reference_name": "r45",
+ "extra_parts": {"pool_x": "calibration/grand_refit_20261115/pool_extratropical.json"},
+ "objective_mode": "max_dev_pool",
+ "knobs": {
+  "storm_convection": ["add", 0.15], "edge_carry": ["add", 0.05], "instability": ["mul", 1.1], "eddy_rate": ["mul", 1.07],
+  "rh_threshold": ["add", 0.01], "precip_tau_days": ["mul", 1.05], "land_recycling": ["add", 0.025], "convective_rain": ["mul", 1.15],
+  "storm_track": ["mul", 1.05], "cold_high_storms": ["add", 0.05], "ice_saturation": ["add", 0.15]
+ },
+ "bounds": {"storm_convection": [0.0, 2.0], "edge_carry": [0.0, 1.0], "ice_saturation": [0.0, 1.0], "cold_high_storms": [0.0, 1.0]},
+ "max_evaluations": 50,
+ "search": "Coordinate descent (scripts/joint_refit.py, objective_mode max_dev_pool): minimise max(S49, S_pool) against r45; at most 50 evaluations.",
+ "selection": "Lowest max(S49, S_pool). It must pass policy_v3 dev (S49<=0.995, T,P<=+1%) and fine28; then sealed set k once.",
+ "caveat": "Only fine28 and sealed set k are independent."
+}

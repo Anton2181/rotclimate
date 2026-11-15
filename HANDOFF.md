@@ -10,7 +10,8 @@ instruction for the first dev+fine finalist).
   Angola 5 %, Cameroon 25 % of observed rain); dry-state lock (RH 0.45, soil dry); edge_inner (e81), deeper soil (e82 start
   share) only reach Congo 38 %. Out of the map's band; recorded as an open problem.
 - [done] Sealed set k declared inside the map's band (six 300 km boxes, 25-55 deg).
-- [running] Step 4 grand refit v2 (plan_v2.json): objective dev49 + 16 extra-tropical spent-pool regions; then fine28, set k.
+- [done] Step 4 grand refit v2: dev49 1.0023 FAIL (pool 0.966, fine 0.999). Trade-off: v1 (dev 0.9946 / pool 1.023) vs v2.
+- [running] Step 5 grand refit v3 (plan_v3.json): from the v1-v2 midpoint, minimise max(S49, S_pool); then fine28, set k.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
