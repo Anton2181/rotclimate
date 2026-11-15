@@ -1,0 +1,22 @@
+{
+ "title": "Rain-shadow contrast screen on r44 (declared before any knob is scored)",
+ "date": "2026-11-15",
+ "motivation": "reports/NORTHERN_STEPPE_20261115.md section 7: r44 lee boxes 1.35-2.05x observed, windward boxes 0.65-0.73x (seen on r44 only; this is the diagnosis that motivates the screen).",
+ "reference": "calibration/local_accuracy_20261023/r44_params.json",
+ "pairs": {
+  "pacific_nw": {"windward": [-124, -122, 45, 49], "lee": [-120.5, -118, 45.5, 48]},
+  "california": {"windward": [-123, -120, 36, 40], "lee": [-118.5, -115, 37, 40.5]},
+  "iberia": {"windward": [-9, -7, 40.5, 43], "lee": [-2, 0.5, 41, 42.3]}
+ },
+ "box_rule": "lon_min, lon_max, lat_min, lat_max; cells below 1800 m; medians of annual totals over cells",
+ "metric": "contrast error = mean over pairs of |log(sim lee/sim windward) - log(obs lee/obs windward)|; also the three regions' rain loss and temperature MAE from benchmark_local",
+ "knobs_one_at_a_time": {
+  "lee_drying": [1.2, 2.4],
+  "orographic": [4.0, 6.0],
+  "orographic_gust_ms": [8.0],
+  "eddy_rainout": [1.0],
+  "subgrid_orographic": [1.4, 5.6]
+ },
+ "screen_rule": "A knob passes the screen if contrast error falls by at least 25% AND the three regions' mean rain loss does not rise by more than 2%. Passing knobs (and at most one pairwise combination) go to the unchanged policy_v3 gate: dev49 S<=0.995, T/P<=+1%, fine28 S<=1.01, then one unseen sealed set.",
+ "no_map_changes": "No atlas change from the screen."
+}
