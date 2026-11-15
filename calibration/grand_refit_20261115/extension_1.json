@@ -1,0 +1,18 @@
+{
+ "title": "Grand refit extension 1 (declared after the main search, disclosed)",
+ "made_after": "main search (60-evaluation budget, 58 run): best S49 0.995097 (T -0.16 %, P -0.82 %), missing the 0.995 bar by 0.0001; still improving by ~0.0001 per accepted move.",
+ "known": "the main search log only; fine28 and sealed set j untouched.",
+ "start": "output/grand_refit_20261115/search/best_params.json",
+ "start_set": {},
+ "reference": "output/grand_refit_20261115/ref",
+ "reference_name": "r45",
+ "knobs": {
+  "storm_convection": ["add", 0.15], "ice_saturation": ["add", 0.0], "instability": ["mul", 1.1], "eddy_rate": ["mul", 1.07],
+  "rh_threshold": ["add", 0.01], "precip_tau_days": ["mul", 1.05], "land_recycling": ["add", 0.025], "convective_rain": ["mul", 1.15],
+  "storm_track": ["mul", 1.05], "ocean_rh_warm": ["add", 0.025], "eddy_barrier_km": ["add", 100.0]
+ },
+ "bounds": {"storm_convection": [0.0, 2.0], "eddy_barrier_km": [0.0, 450.0], "ocean_rh_warm": [0.0, 0.24], "ice_saturation": [0.0, 1.0]},
+ "max_evaluations": 20,
+ "search": "Same coordinate descent, half the main search's first-pass steps; at most 20 evaluations; ice_saturation held at its bound 1.0 (step 0 skips it).",
+ "selection": "Unchanged: lowest S49 overall; dev (S49<=0.995, T,P<=+1%) and fine28 against r45, then sealed set j once."
+}
