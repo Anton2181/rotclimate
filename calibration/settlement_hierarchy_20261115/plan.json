@@ -22,6 +22,12 @@
       "made_after": "scoring the A1 conditional form (kept as results_conditional_form.json: 31% of subordinates larger than their capital, median ratio 0.52, fail) and a diagnostic of held-out M1C residuals by distance from capitals",
       "known": "Subordinate size does not follow centre size (coefficient -0.19), and towns near capitals are not smaller than M1C predicts (mean held-out residual -0.12 to +0.03 within 75 km; no shadow). With independent residuals M1C gives 21% of subordinates larger than their capital vs 6% observed.",
       "change": "Centre selection (order statistic): each centre and the towns assigned to it (nearest centre within 75 km) form a cluster; residual draws are generated as before, and the centre takes the largest residual of its cluster (the town that drew it takes the centre's). Means (M1C, with each town's own hinterland and the capital term) are unchanged. Same folds, seeds, metrics and pass rule; post-hoc reformulation on development data, disclosed."
+    },
+    {
+      "id": "A3",
+      "made_after": "scoring A2 (kept as results_selection_with_capital_term.json): 0% of subordinates larger than their capital, median ratio 0.057 (overshoot)",
+      "known": "The M1C capital term was fitted on observed capital sizes, which already contain the selection effect; selection on top of it double-counts.",
+      "change": "Selection alone: means from the published M1 refit WITHOUT a capital term (1.915 + 0.147 lnH, held-out sigma 1.048; fold coefficients refitted on the same folds), residuals generated as before, each centre takes the largest residual of its cluster. Also reported: the implied capital factor (mean generated ln area of capitals minus the M1 mean) against the observed 3.4x. Same pass rule."
     }
   ]
 }

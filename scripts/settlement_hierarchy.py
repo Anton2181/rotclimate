@@ -45,11 +45,11 @@ def main():
     pred_m1c = np.empty(n); pred_delta = np.full(n, np.nan); sd = {}; coefs = []
     for f in range(4):
         tr, te = fold != f, fold == f
-        c = m1c['fold_coefficients'][f]; pred_m1c[te] = c[0] + c[1] * lnH[te] + c[2] * cap[te]
+        c = Z.fit({'lnH': lnH[tr]}, ('lnH',), y[tr]); pred_m1c[te] = c[0] + c[1] * lnH[te]          # A3: M1 means, no capital term
         s_tr = np.flatnonzero(sub & tr); beta, *_ = np.linalg.lstsq(design(s_tr), delta[s_tr], rcond=None); coefs.append([float(b) for b in beta])
         sd[f] = float(np.std(delta[s_tr] - design(s_tr) @ beta))
         BETA = getattr(main, 'BETA', {}); BETA[f] = beta; main.BETA = BETA
-    sig_m1c = m1c['heldout_sigma']; runs = []
+    sig_m1c = float(np.std(y - pred_m1c)); runs = []
     for seed in SEEDS:                                              # A2: the centre takes the largest residual of its cluster
         e = Z.draws(n, seed).copy()
         for c in C:
@@ -57,9 +57,11 @@ def main():
             e[c], e[j] = e[j], e[c]
         gen = np.clip(np.exp(pred_m1c + sig_m1c * e), area.min(), area.max())
         runs.append(dict(seed=seed, ks=float(ks_2samp(gen, area).statistic), total_ratio=float(gen.sum() / area.sum()),
-                         share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]]))))
+                         share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]])),
+                         implied_capital_factor=float(np.exp(np.mean(np.log(gen[cap]) - pred_m1c[cap])))))
     obs = dict(subordinates=int(sub.sum()), share_sub_larger=float(np.mean(area[sub] > area[centre[sub]])), median_ratio=float(np.median(area[sub] / area[centre[sub]])))
     mean = lambda k: float(np.mean([r[k] for r in runs]))
+    implied = mean('implied_capital_factor')
     gate = dict(ks=mean('ks'), total_ratio=mean('total_ratio'), share_sub_larger=mean('share_sub_larger'), median_ratio=mean('median_ratio'))
     passed = bool(gate['ks'] <= 0.10 and 0.80 <= gate['total_ratio'] <= 1.25 and abs(gate['share_sub_larger'] - obs['share_sub_larger']) <= 0.05
                   and abs(np.log(gate['median_ratio'] / obs['median_ratio'])) <= np.log(1.25))
@@ -69,7 +71,7 @@ def main():
     for seed in SEEDS:
         gen = np.clip(np.exp(pred_m1c + sig_m1c * Z.draws(n, seed)), area.min(), area.max())
         ref.append(dict(share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]]))))
-    out = dict(status='settlement_hierarchy_development', plan_sha256=sha(PLAN), producer_sha256=sha(Path(__file__)), cohort=n, centres=int(cap.sum()), radius_km=RADIUS,
+    out = dict(implied_capital_factor=implied, observed_capital_factor=float(np.exp(np.mean(y[cap] - pred_m1c[cap]))), status='settlement_hierarchy_development', plan_sha256=sha(PLAN), producer_sha256=sha(Path(__file__)), cohort=n, centres=int(cap.sum()), radius_km=RADIUS,
                observed=obs, delta_model=dict(terms=['intercept', 'ln area_c', 'lnH_u', 'distance_km / 100'], full_coefficients=[float(b) for b in full], scatter_sd=sd_full,
                fold_coefficients=coefs, fold_scatter=sd), runs=runs, gate=gate, passed=passed,
                m1c_only_reference=dict(share_sub_larger=float(np.mean([r['share_sub_larger'] for r in ref])), median_ratio=float(np.mean([r['median_ratio'] for r in ref]))))
