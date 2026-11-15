@@ -14,7 +14,7 @@ BASE = ROOT / 'output/sizes_greek_walls_20261114/results.json'; DATA = ROOT / 'a
 
 
 def seats(mode):
-    with open(DATA / f'release3/hierarchy/{mode}/hierarchy_links.csv', encoding='utf-8') as h:
+    with open(DATA / ('release3/hierarchy/corrected/hierarchy_links.csv' if mode == 'corrected' else 'release3/hierarchy/hierarchy_links.csv'), encoding='utf-8') as h:
         return sorted({r['province_seat'] for r in csv.DictReader(h)})
 
 
