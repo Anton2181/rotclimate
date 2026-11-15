@@ -2,8 +2,9 @@
 Base: r45 (adopted 15 Nov, Earth only; atlas stays r44 by owner decision). Valid update = policy_v3: dev49 S<=0.995 with T,P <=+1%,
 fine28 S<=1.01, then ONE run on an unseen sealed set (now set j, calibration/sealed_20261115j; release recorded from the owner's
 instruction for the first dev+fine finalist).
-- [running] Step 1 grand refit on r45: 12 settings (all 15-Nov opt-in mechanisms + core rain), 60 evals
-  (calibration/grand_refit_20261115/plan.json; output/grand_refit_20261115; start reproduces r45 exactly).
+- [done, near miss] Step 1 grand refit on r45 (calibration/grand_refit_20261115/plan.json): best S49 0.995097 (T -0.16%, P -0.82%)
+  misses 0.995 by 0.0001. Best: storm_convection 0.52, ice_saturation 1.0, eddy_rate 1.65, instability 1.83, edge_carry ~0.01.
+- [running] Step 1b disclosed extension (extension_1.json): 20 more evals at half steps from the best.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
