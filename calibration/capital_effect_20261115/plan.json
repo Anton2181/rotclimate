@@ -15,5 +15,13 @@
     "without_rome": "The same metrics without Rome."
   },
   "interpretation_declared": "An effect whose interval excludes zero means capitals are systematically larger than the size model gives, and supports giving capitals the largest draws (the map's lore rule). A share of capitals in the top 14% near 1 means the lore allocation is about right; much lower means it over-promotes capitals. Nothing on the map changes in this step.",
-  "outputs": "output/capital_effect_20261115/{results.json, review.json}"
+  "outputs": "output/capital_effect_20261115/{results.json, review.json}",
+  "amendments": [
+    {
+      "id": "A1",
+      "made_after": "listing the province labels on both sides; no metric computed",
+      "known": "Province names only.",
+      "change": "Name matching uses this explicit alias table (Wikidata label -> Hanson Province): Roman Britain, Britannia Inferior, Britannia Superior -> Britannia; Roman Egypt -> Aegyptus; Africa -> Africa Proconsularis; Arabia Petraea -> Arabia; Hispania Baetica -> Baetica; Cappadocia, Galatia -> Cappadocia et Galatia; Cilicia, Cyprus -> Cilicia et Cyprus or Silicia; Corsica and Sardinia -> Corsica et Sardinia; Alpes Poeninae -> Alpes Graiae et Poeninae; Roman Syria -> Syria; Syria Palaestina -> Syria Palestina; Lower Pannonia -> Pannonia Inferior; identical names match directly. Wikidata provinces with no Hanson counterpart (late or Italian regions) are dropped. The capital-to-town match (nearest cohort town within 5 km) is unchanged; the province name only filters which capitals count."
+    }
+  ]
 }
