@@ -7,7 +7,10 @@ upwind (east) once rain shadows are stronger.
 Rain shadows too weak on Earth (lee 1.35-2.05x obs, windward 0.65-0.73x). calibration/rain_shadow_20261115: one-knob screen FAILED
 (25% bar); A1 eddy_rainout candidates E1-E3 FAIL dev49 (S 1.021-1.029; flat humid regions + central Asia/Tibet worse); A2 new opt-in
 physics e74 eddy_rainout_relief_km (crest cap only where ground stands above its eddy-scale surroundings) -> F1/F2 gate
-(scripts/rain_shadow_dev49_f.sh, output/rain_shadow_20261115/gate2). Sealed sets d-h spent; NEW sealed set i declared
+(gate2). ALL FAIL: A1 E1-E3, A2 F1/F2 (1.018-1.019), A3 G1/G2 with e74b padded steps (bug: e3's six separately edge-padded
+Gaussians differ from one kernel by 5% of the field on regional grids; every earlier e3 result carried it), e74c accounted
+crest condensate (screen, worse), A4 e4 eddy height 4/6 km (1.048/1.022). Each lever dries ranges along with the lee; next: accounted
+upslope rainout along the mean wind (new physics). Report section 8. Sealed sets d-h spent; NEW sealed set i declared
 (calibration/sealed_20261115i, 6 mountain boxes, audit scripts/audit_sealed_separation.py); open only with the owner's release.
 WorldClim vapr zip downloaded into data/cache/worldclim (benchmark_local needs it).
 

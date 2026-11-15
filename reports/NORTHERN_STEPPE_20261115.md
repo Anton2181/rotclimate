@@ -107,3 +107,23 @@ The ridge question in §5 led to a check of r44's rain shadows on Earth (56 km c
 The windward sides are too dry and the lee sides up to twice too wet: the model's mountains take too little water out of the
 air. A 3,000 m test ridge on the steppe's upwind side moved its aridity only from 2.95 to 2.70 on the coarse grid, consistent
 with this. The rain-shadow work is declared in `calibration/rain_shadow_20261115/` (screen, then amendment 1 to the dev49 gate).
+
+## 8. Rain-shadow attempts (all development, none adopted)
+
+Plan `calibration/rain_shadow_20261115/` (declared screen, then amendments 1–4, each written before its gate ran). Gate:
+policy v3, 49 development regions, S49 must fall at least 0.5 % (S ≤ 0.995).
+
+| Step | Change | Result |
+|---|---|---|
+| Screen | one knob at a time on three windward/lee pairs | no knob cuts the contrast error 25 % (best orographic ×6: −18 %) — failed as declared |
+| A1 | e3 crest cap (eddy_rainout 1), alone and with lee drying 2.4 or orographic 6 | S49 1.021 / 1.029 / 1.023 — fail |
+| A2 | new e74: the cap only where ground stands above its surroundings | S49 1.019 / 1.018 — fail |
+| — | **bug found**: e3's six edge-padded Gaussian steps differ from one kernel by up to 5 % of the field on regional grids, so every earlier e3 result (including the r42 factorial's crest-rainout profiles) carried an edge artefact | e74b pads once; reproduces r44 when the cap does not bind |
+| A3 | e3 with the padded operator, with and without the relief gate | S49 1.020 / 1.018 — fail: the cap deletes the clipped water, drying the ranges themselves (central Asia above 1,500 m: 243 → 83 mm, observed 374) |
+| screen | e74c: the clipped water rains where it is clipped | too much rain at cap = saturation; no effect at weaker caps |
+| A4 | e4 (eddies mix humidity above the ground) at 4 and 6 km | S49 1.048 / 1.022 — fail: mountains dried (central Asia 243 → 57 mm), lowlands wetted |
+
+Every existing lever dries the lee by drying the mountains as well, while on Earth the windward slopes and ranges are
+themselves too dry. A real fix has to move water from lee to windward: rain on the upslope side out of the low-level flow
+before it crosses (accounted orographic rainout along the mean wind), not a cap or a height-weighting of the eddy mixing. That
+is new physics, recorded as the next rain-shadow step. The opt-in switches e74, e74b and e74c stay in the code, default off.
