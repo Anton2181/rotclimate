@@ -23,7 +23,7 @@ def run(spec_path, mode, only):
         subs = [(a.replace('{root}', root).replace('{reach}', reach_root), b.replace('{root}', stage_root).replace('{reach}', reach_root)) for a, b in st['subs']]
         subs = [(a, b.replace(root, stage_root) if b.startswith(root) else b) for a, b in subs]
         src = (ROOT / st['script']).read_text(); extra = []
-        for text in {root, 'output/capital_term_map_20261115'}:
+        for text in {root, 'output/capital_term_map_20261115', 'output/settlement_hierarchy_map_20261115'}:
             if text in src and all(a != text for a, _ in subs): extra.append((text, stage_root))
         args = [PY, '-I', str(ROOT / 'scripts/exec_with.py'), st['script']] + [f'{a}=>{b}' for a, b in subs + extra]
         print(f'== {st["name"]}: {st["script"]} ({len(subs) + len(extra)} substitutions)', flush=True)
