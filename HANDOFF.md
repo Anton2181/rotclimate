@@ -1,3 +1,11 @@
+# CAPITAL TERM ADOPTED ON THE MAP (OWNER) — PUBLISHED — 15 November 2026
+M1C (2.095 + 0.124 lnH + 1.255 capital), capital = 19 provincial seats (hierarchy_links province_seat). Plan
+calibration/capital_term_map_20261115 (+A1 no top-draw promotion under M1C; +A2 capital & major cities take the 3 largest areas).
+scripts/capital_term_map.py (wrapper over build_settlement_release2/3), review_capital_term_map.py, supply via exec_with,
+reach chain: build_supply_fed_reach -> run_on_release3 build_control_v2/v21 (folders *_supplyfed_captown_20261115; v21 needs
+control_v2 path redirected too); builder images written into data/ moved to release3/reach_fed and originals restored.
+Corrected: 11.26 M residents, capital 208k, 91.2% fed at 34%, 1,041 staffed, 68.1% held. Checks pass (browser 3x8, checkout).
+
 # CAPITAL EFFECT (DEVELOPMENT): ROMAN CAPITALS ~3.4x THE SIZE MODEL — 15 November 2026
 reports/CAPITAL_EFFECT_20261115.md; plan + A1 before output; scripts/capital_effect.py; Wikidata capitals (data/cache/roman_capitals).
 28 matched capitals: factor 3.4 (2.3-5.2), 3.1 without Rome; mean percentile 0.82; 54% in top 14%. Supports lore-rank allocation,

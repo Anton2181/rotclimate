@@ -33,3 +33,30 @@ The capital coefficient is positive in all four folds (1.03–1.42, a factor of 
 adoption rule needed the all-town MAE to fall by 2%; it fell by 1.7%, so **M1C is not adopted**. The rule judged a
 28-town effect on 664 towns. Adopting it on the capital-specific evidence would be a post-hoc change of rule, which is
 the owner's decision and would be declared as such.
+
+## Adopted on the map by owner decision (15 November 2026)
+
+Plan `calibration/capital_term_map_20261115/plan.json`. The owner adopted M1C after it narrowly missed the declared rule:
+ln area = 2.095 + 0.124 ln H + 1.255 × capital. Capital = the 19 recorded provincial seats of the administrative hierarchy,
+all of them marked campaign places, the imperial capital Aēnaha included.
+
+Two amendments were made after seeing builds, both disclosed:
+- **A1.** Under M1C the ranked places no longer receive the largest random draws. The release-2 rule A2 gave capitals
+  both the capital term and the top draws, which counted the capital effect twice: the first build gave 16.3 M town
+  residents and a largest town of 740,000. Under M1C, Roman capitals have a mean residual of +0.03.
+- **A2.** The imperial capital and the two major imperial cities take the largest areas of all towns. This is a
+  permutation of three areas per climate, so totals are unchanged. Your binding rule (strict lore order on final size
+  among marked places) is kept.
+
+| Corrected climate, sliding density | Before (Greek walls) | Capital term |
+|---|---:|---:|
+| Town residents | 12.74 M | 11.26 M |
+| Largest town (imperial capital) | 246,069 | 208,135 |
+| Residents fed at 34% marketed | 89.0% (33 short) | 91.2% (31 short) |
+| Flat option fed at 14% | 99.2% (11 short) | 98.9% (14 short) |
+| Staffed towns, control rule | 1,042 | 1,041 |
+
+One proposed town fell below 150 fed residents, so the supply-fed reach and the control maps v2 and v2.1 were
+rebuilt (corrected climate: 68.1% of land held). The reviewers pass with declared substitutions
+(`scripts/review_capital_term_map.py`): the imperial capital is the largest town in both climates and lore order holds.
+The browser checks (3 × 8) and the Windows checkout check (2,217 assets) pass.
