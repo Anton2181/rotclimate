@@ -17,8 +17,7 @@ PLAN = ROOT / 'calibration/floodplains_blind_20261115/plan.json'; OUT = ROOT / '
 ZIP = ROOT / 'data/cache/floodplains_archiraq/archiraq-master.zip'; MEMBER = 'archiraq-master/docs/papers/1/data_stacked.csv'
 LAT0, LON0, WKM, HKM = 31.8, 45.6, 600., 500.; SEEDS = [1, 7, 19, 43, 97]
 BANDS = {1: (0.1, 4.0), 2: (4.1, 10.0), 3: (10.1, 20.0), 4: (20.1, 40.0), 5: (40.1, 200.0), 6: (201.0, 1783.0)}   # amendment A2: SizeHa is a class code
-SIZES = ROOT / 'output/sizes_greek_walls_20261114/results.json'; OLD_BANDS = {1: (0.1, 4.0), 2: (4.1, 10.0), 3: (10.1, 20.0), 4: (20.1, 40.0), 5: (40.1, 200.0), 6: (201.0, 1783.0)}   # amendment A2: SizeHa is a class code
-SIZES = ROOT / 'output/settlement_release2_20261113/results.json'
+SIZES = ROOT / 'output/sizes_greek_walls_20261114/results.json'; OLD_SIZES = ROOT / 'output/settlement_release2_20261113/results.json'
 
 
 def xyz(lat, lon):
