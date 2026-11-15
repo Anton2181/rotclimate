@@ -127,3 +127,22 @@ Every existing lever dries the lee by drying the mountains as well, while on Ear
 themselves too dry. A real fix has to move water from lee to windward: rain on the upslope side out of the low-level flow
 before it crosses (accounted orographic rainout along the mean wind), not a cap or a height-weighting of the eddy mixing. That
 is new physics, recorded as the next rain-shadow step. The opt-in switches e74, e74b and e74c stay in the code, default off.
+
+## 9. Cold-interior winters (development screen, no gate)
+
+Winter (three coldest observed months) rain, r44 against WorldClim, cells with a coldest month below −10 °C: Kazakh steppe
+3 mm against 51, middle Volga 16 against 93, Hokkaido 28/82, Nova Scotia 115/250; but the East Asian winter-monsoon side is
+too wet (North China Plain 73/11, Korea 158/37, Tibet 49/6). The dry bias is the Eurasian interior's, fed on Earth by Atlantic
+and Mediterranean storms 3,000+ km inland. Screen (`scripts/winter_interior_screen.sh`, output/northern_steppe_20261115/winter_screen):
+
+| Change | Kazakh winter (obs 51) | Volga (93) | Manchuria (14) | Mean loss of 8 cold regions (r44 0.354) |
+|---|---|---|---|---|
+| cold_high_storms 0 (r44 0.13) | 8 | 37 | 100 | 0.363 |
+| cold_high_storms 0.3 | 2 | 11 | 17 | 0.354 |
+| edge_continental_drying 0 | 4 | 17 | 35 | 0.340 (Mongolia better, Kazakh worse) |
+| far_fetch 0 | 2 | 10 | 26 | 0.354 |
+| storm_seasonality 0.4 | 3 | 18 | 33 | 0.378 |
+
+Only trades: the storm suppression under cold highs that keeps Manchuria dry starves the Kazakh and Volga winters. A fix needs
+storms steered around the high (moisture reaching the high's western flank), not weaker or stronger suppression. Recorded as
+an open physics item. It does not bear on the fantasy steppe, whose winter is mild (coldest month 0.6 °C).
