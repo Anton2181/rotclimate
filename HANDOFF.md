@@ -18,7 +18,10 @@ Summer: e76 instability_t0 (J1 18 C: S49 1.014; with C05 1.026/1.045) and e77 st
 (plan_e76.json). Joint refit e75+e77+8 rain settings (joint_refit.json, 40 evals): best S49 0.9986 > 0.995 FAIL; it backed e75 off
 (crest 0.06), rain shadows ~r44. Rain-shadow line closed; r44 stays; sealed set i unopened. Sections 11-12.
 Cold-interior winters: gate binds, not storms (Kazakh Jan W 2.0/Ws 3.6, RH 0.56). e78 ice_saturation (calibration/cold_winter_20261115):
-L1 S49 0.9992, L2 0.9996 FAIL (clean but small). Missing: winter moisture transport far inland. Section 13. Sealed sets d-h spent; NEW sealed set i declared
+L1 S49 0.9992, L2 0.9996 FAIL (clean but small). Missing: winter moisture transport far inland. Section 13.
+Moisture carry e79 edge_carry (land-edge inflow keeps its water, not RH): M1/M2 fail; joint refit (calibration/moisture_carry_20261115/
+joint_refit.json) finalist S49 0.9901, fine28 1.0098 -> PASS dev+fine; 23/49 better, Kazakh/Volga not improved, holdout +3.7%.
+NEXT: sealed set i ONCE, only with owner release (scripts: benchmark finalist_params vs r44 on calibration/sealed_20261115i). Section 14. Sealed sets d-h spent; NEW sealed set i declared
 (calibration/sealed_20261115i, 6 mountain boxes, audit scripts/audit_sealed_separation.py); open only with the owner's release.
 WorldClim vapr zip downloaded into data/cache/worldclim (benchmark_local needs it).
 
