@@ -6,8 +6,11 @@ instruction for the first dev+fine finalist).
   misses 0.995 by 0.0001. Best: storm_convection 0.52, ice_saturation 1.0, eddy_rate 1.65, instability 1.83, edge_carry ~0.01.
 - [done] Step 1b extension: finalist S49 0.99458, fine28 0.982 PASS; sealed set j S 1.016 (rain +4.2%; Java, Cuba, Pilbara,
   Cameroon worse) FAIL. Set j spent. Not adopted. Lesson: dev49 is mid-latitude/subtropical; the free sealed boxes are tropical.
-- [next] Step 3: major rework. Before more refits: (i) add tropical development regions (r45 is unscored in the wet tropics),
-  (ii) declare sealed set k from remaining free boxes, (iii) rework a: South Asian spring circulation.
+- [found] r45 on the spent pool (44 regions): equatorial continental interiors nearly rainless (W Amazon 3 %, Congo 7 %,
+  Angola 5 %, Cameroon 25 % of observed rain); dry-state lock (RH 0.45, soil dry); edge_inner (e81), deeper soil (e82 start
+  share) only reach Congo 38 %. Out of the map's band; recorded as an open problem.
+- [done] Sealed set k declared inside the map's band (six 300 km boxes, 25-55 deg).
+- [running] Step 4 grand refit v2 (plan_v2.json): objective dev49 + 16 extra-tropical spent-pool regions; then fine28, set k.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea

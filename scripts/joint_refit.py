@@ -13,6 +13,7 @@ def main():
     plan = json.loads(Path(sys.argv[1]).read_text()); R.OUT = Path(sys.argv[2]); R.OUT.mkdir(parents=True, exist_ok=True)
     if 'reference' in plan: R.REF = ROOT / plan['reference']
     if 'reference_name' in plan: R.REF_NAME = plan['reference_name']
+    R.PARTS.update(plan.get('extra_parts', {}))      # extra objective regions (spec file per part)
     best = json.loads((ROOT / plan['start'].split(' with ')[0]).read_text())
     best.update(plan['start_set'] if 'start_set' in plan else {'storm_convection': 0.5})
     from dataclasses import asdict

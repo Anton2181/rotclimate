@@ -1057,7 +1057,7 @@ class ClimateModel:
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         rain_prev = None                # e71e: last step's rain, smoothed (rising air)
         soilP = np.full(lat.shape, 1.5)
-        soil_w = np.where(land, 0.5 * p.soil_bucket_mm, 0.0)    # e8: soil water (mm)
+        soil_w = np.where(land, p.soil_init_fraction * p.soil_bucket_mm, 0.0)    # e8: soil water (mm); e82 start share
         soil_ann = soil_w.copy()        # e54e: the soil water's running one-year mean
         swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
         self.t_iterations = []
@@ -2031,6 +2031,19 @@ class ClimateModel:
                 bnd = np.where(ocean, W_ocean, np.minimum(carried, Ws))
             else:
                 bnd = np.where(ocean, W_ocean, edge_rh * Ws)
+            if p.edge_inner > 0 and W_prev is not None:
+                # e81: a fixed edge RH (0.5) pinned land-locked tropical domains
+                # (Congo, western Amazon) at ~45 % RH and 3-25 % of their rain:
+                # the edge now carries the humidity of the model's own nearest
+                # interior column (zero-gradient), so the region's water comes
+                # from its oceans, recycling and transport, not a constant.
+                if not hasattr(self, '_inner_idx'):
+                    brd = np.asarray(self.solver.border, bool)
+                    self._inner_idx = ndi.distance_transform_edt(brd, return_distances=False, return_indices=True)
+                ii, jj = self._inner_idx
+                rh_in = np.clip(W_prev[ii, jj] / np.maximum(Ws[ii, jj], 1e-6), 0.0, 1.0)
+                land_bnd = (1.0 - p.edge_inner) * bnd + p.edge_inner * rh_in * Ws
+                bnd = np.where(ocean, bnd, land_bnd)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             if p.soil_bucket_mm > 0:
