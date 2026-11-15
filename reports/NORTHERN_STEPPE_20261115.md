@@ -146,3 +146,26 @@ and Mediterranean storms 3,000+ km inland. Screen (`scripts/winter_interior_scre
 Only trades: the storm suppression under cold highs that keeps Manchuria dry starves the Kazakh and Volga winters. A fix needs
 storms steered around the high (moisture reaching the high's western flank), not weaker or stronger suppression. Recorded as
 an open physics item. It does not bear on the fantasy steppe, whose winter is mild (coldest month 0.6 °C).
+
+## 10. New physics e75: an upwind barrier on eddy water (development, not adopted)
+
+Budget diagnosis first (`scripts/rain_shadow_budget.py`, California, r44): Nevada's lee rain, 1.08 mm/day against about 0.53
+observed, is fed by eddy exchange 0.80, local evaporation 0.65 and mean-wind advection 0.33, less column drying 0.68. The e3
+cap failed because it also clipped inside the lee's own ranges.
+
+**e75** (`eddy_barrier_km`, `eddy_barrier_dz_km`, `eddy_barrier_crest`; default off, r44 byte-identical): the eddy water reaching
+a cell is capped at saturation at the highest ground within a set distance upwind along the eddy-scale mean wind, wherever
+that barrier stands above the cell. Crest and windward cells are never capped. Plan `calibration/rain_shadow_20261115/plan_e75.json`.
+
+| Step | Result |
+|---|---|
+| Screen, barrier from cell-mean heights (150/300 km) | contrast error −6 to −8 %: fail (56 km cells flatten the ranges) |
+| Amendment 1: barrier from crest heights, C05 / C10 | −23 % / −20 %: fail the 25 % bar; three-region rain loss −10 % / −16 %; Nevada 168 mm (obs 192) |
+| Amendment 2 (disclosed departure): C05 and C10 to the dev49 gate | S49 1.015 / 1.037: **fail**; fine28 0.978 pass |
+| Frozen refit of C05 with storm track, recycling, RH threshold, rain time (14 evaluations) | best S49 **1.012**: fail |
+
+What it shows: e75 fixes the westerly lee basins (Great Basin −32 %, California −21 %, Canadian prairies −16 %, Manchuria −15 %)
+and brings US Midwest winters to the observed level. But several regions' annual totals were already too low (US Midwest
+summers 65 mm against 93; the Alps and central Asia too dry overall), so taking the excess lee water away costs more there
+than it gains. r44's fit uses lee over-wetting to offset summer and inland deficits; e75 can only pass together with a fix
+for those deficits (the summer rain-making gap in `reports/SUMMER_RAIN_20261030.md`). e75 stays in the code, default off.

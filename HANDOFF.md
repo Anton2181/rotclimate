@@ -10,7 +10,10 @@ physics e74 eddy_rainout_relief_km (crest cap only where ground stands above its
 (gate2). ALL FAIL: A1 E1-E3, A2 F1/F2 (1.018-1.019), A3 G1/G2 with e74b padded steps (bug: e3's six separately edge-padded
 Gaussians differ from one kernel by 5% of the field on regional grids; every earlier e3 result carried it), e74c accounted
 crest condensate (screen, worse), A4 e4 eddy height 4/6 km (1.048/1.022). Each lever dries ranges along with the lee; next: accounted
-upslope rainout along the mean wind (new physics). Report section 8. Sealed sets d-h spent; NEW sealed set i declared
+upslope rainout along the mean wind (new physics). Report section 8.
+Then e75 upwind-barrier cap on eddy water (eddy_barrier_km/_dz_km/_crest; plan_e75.json, refit_e75.json): crest-height C05
+fixes westerly lee basins but S49 1.015 (C10 1.037), frozen 4-knob refit best 1.012: FAIL. Blocker: r44 offsets summer/inland
+deficits with lee over-wetting (US Midwest summers 65 vs 93 mm); e75 needs the summer rain-making fix alongside. Section 10. Sealed sets d-h spent; NEW sealed set i declared
 (calibration/sealed_20261115i, 6 mountain boxes, audit scripts/audit_sealed_separation.py); open only with the owner's release.
 WorldClim vapr zip downloaded into data/cache/worldclim (benchmark_local needs it).
 
