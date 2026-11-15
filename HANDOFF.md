@@ -1,3 +1,11 @@
+# SECOND BLIND POOL SEARCH (15 Nov 2026): NO DIRECTLY USABLE OPEN POOL
+Rejected: Chelazzi & Lawrence PLOS One 2026 (zenodo 20172243) ends in the Iron Age; Altinisik 2022 zenodo 7086441 is aDNA;
+Palmisano 2021 / Bunbury Southern Levant are radiocarbon-era; Hartwell CHGIS has no historical populations; Stadester 1.0
+(zenodo 17180328) is pseudonymous, spline-interpolated from Chandler/Modelski/Wikipedia (derived, not observations).
+Candidates needing owner download (login/paywall): Valley of Mexico survey (tDAR project 192; Classic sites with areas;
+caveat: maize not modelled); Reba et al. 2016 Sci Data doi:10.1038/sdata.2016.34 (Chandler/Modelski cities with coordinates;
+SEDAC login); Early Historic South Asian city areas (Smith 1995/2006 tables; book/papers).
+
 # FIRST BLIND TEST OF POSITIONS AND SIZES: SOUTHERN MESOPOTAMIA AD 200 — BOTH FAIL — 15 November 2026
 
 Report reports/FLOODPLAINS_BLIND_20261115.md; plan ae9e2e36 (+A1 swapped lat/lon before scoring, +A2 SizeHa is a class code,
