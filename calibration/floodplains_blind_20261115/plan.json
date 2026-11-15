@@ -1,0 +1,29 @@
+{
+  "date": "2026-11-15",
+  "status": "declared_before_any_value_was_read",
+  "owner_instruction": "Here's the repo. Going forward you are allowed to download anything needed to further develop the model.",
+  "pool": {
+    "source": "FloodPlains Web GIS dataset as published with Marchetti et al., 'Long-Term Urban and Population Trends in the Southern Mesopotamian Floodplains', J Archaeol Res 33 (2025) 117-158, doi:10.1007/s10814-024-09197-3 (CC-BY); repository bnza/archiraq (owner-supplied zip, sha256 16b546ac6a4756a72225bf8e9ebe2bd8669b66dd3c8c3d60aebfcd66ab909c1c), file docs/papers/1/data_stacked.csv",
+    "exposure_before_declaration": "Only the header (Name, Id, Rainfall, StartDate, EndDate, SizeHa, Longitude, Latitude) and the row count (64,980) were read. The paper's results section, figures and tables were not read; only its data-availability and dataset-construction text.",
+    "never_used": "No southern Mesopotamian site positions or areas have been used in any fit; Mesopotamia appeared only as a regional capacity total (regions.json) and in the floodplain-rule constraint (capacity unchanged there)."
+  },
+  "cohort": {
+    "ad200": "Rows with StartDate <= 200 <= EndDate (calendar years, BC negative). If the date columns are not in that convention (checked only by their minimum and maximum), stop and amend before any scoring. One record per Id: its largest SizeHa among rows covering AD 200; rows without a positive SizeHa are dropped.",
+    "towns": "AD 200 sites of at least 10 ha (secondary cohort for positions; the size test uses the N largest).",
+    "surveyed_area": "Land cells within 3 km of any site of any period (all rows), inside the window."
+  },
+  "window": "Earth grid centred 31.8 N, 45.6 E, 600 km x 500 km, at 3 km (positions) and 9 km (sizes), built exactly as scripts/settlement_vidarbha_transfer.py prepare_inputs (Earth harvest people field, WorldClim elevation, Natural Earth rivers, history exp(-D/800) from the cradles + Rome cores).",
+  "test_P_positions": {
+    "models": "environment site score (polity.settlement_locations.site_fields); release-3 rule (score x history800, prior tiling with count matched to production); production (settle.place_towns).",
+    "metrics": "Mean percentile of the distinct site cells within the surveyed-area background (ties half), for environment and release-3 fields; share of sites within 10 km of a placed town, for production and release-3 towns; cohorts ad200 and towns; 3 km grid primary.",
+    "pass": "Release-3 field mean percentile for the towns cohort >= 0.55 AND release-3 10 km capture of towns >= production capture - 0.05."
+  },
+  "test_S_sizes": {
+    "model": "Published size model (refit with Greek walls: M1 1.915 + 0.147 lnH, held-out sigma 1.048, range 1-1783 ha), applied to the release-3 towns placed on the 9 km grid whose cells lie in the surveyed area, H from polity.settlement_sizes.hinterlands on the window's people; five residual seeds (polity.settlement_sizes.draws seeds 1, 7, 19, 43, 97).",
+    "observed": "The N largest ad200 sites, N = number of those model towns.",
+    "metrics": "KS statistic between model areas (each seed) and observed areas; total-area ratio model/observed; medians. The previous published model (release 2: 2.157 + 0.127 lnH, sigma 1.057) is reported alongside.",
+    "pass": "Mean KS <= 0.20 AND mean total-area ratio in [0.67, 1.50]."
+  },
+  "reporting": "Both tests are scored once and reported whatever the outcome; the pool is then marked spent. No parameter is fitted on it. A failure is a finding about the model, not a reason to tune it on this pool.",
+  "outputs": "output/floodplains_blind_20261115/{inputs_*.npz (ignored), results.json, review.json}"
+}
