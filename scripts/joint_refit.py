@@ -13,7 +13,11 @@ def main():
     plan = json.loads(Path(sys.argv[1]).read_text()); R.OUT = Path(sys.argv[2]); R.OUT.mkdir(parents=True, exist_ok=True)
     if 'reference' in plan: R.REF = ROOT / plan['reference']
     best = json.loads((ROOT / plan['start'].split(' with ')[0]).read_text())
-    best.update(plan['start_set'] if 'start_set' in plan else {'storm_convection': 0.5})   # rain-shadow refit: storm_convection 0.5
+    best.update(plan['start_set'] if 'start_set' in plan else {'storm_convection': 0.5})
+    from dataclasses import asdict
+    sys.path.insert(0, str(ROOT)); from rotclimate.config import Params
+    defaults = asdict(Params())
+    for k in plan['knobs']: best.setdefault(k, defaults[k])          # knobs absent from the start file take the code default   # rain-shadow refit: storm_convection 0.5
     bounds = plan.get('bounds', {}); log = []; n = 0
     s = R.evaluate('j00_start', best); bestS = s['S']; log.append(dict(name='j00_start', set={}, **s)); print('start', round(bestS, 4), flush=True)
     for level in range(3):
