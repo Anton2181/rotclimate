@@ -1,0 +1,20 @@
+{
+ "title": "Grand refit on r45: every opt-in mechanism added on 15 Nov plus the core rain settings (declared before any evaluation)",
+ "date": "2026-11-15",
+ "made_after": "r45 adoption; single-mechanism gates on r44/r45 all failed by trading regions (reports/NORTHERN_STEPPE_20261115.md sections 8-14, reports/MONSOON_R45_20261115.md); only the joint refit of e79 passed. Owner: 'Keep going until you get a valid climate update. If needed you can do a major rework'.",
+ "start": "calibration/local_accuracy_20261023/r45_params.json",
+ "start_set": {"eddy_barrier_crest": 0.5, "eddy_barrier_km": 0.0, "storm_convection": 0.0, "ocean_rh_warm": 0.0},
+ "reference": "output/grand_refit_20261115/ref",
+ "reference_name": "r45",
+ "knobs": {
+  "storm_convection": ["add", 0.3], "eddy_barrier_km": ["add", 150.0], "ocean_rh_warm": ["add", 0.05], "edge_carry": ["add", 0.1],
+  "ice_saturation": ["add", 0.25], "instability": ["mul", 1.2], "eddy_rate": ["mul", 1.15], "rh_threshold": ["add", 0.02],
+  "precip_tau_days": ["mul", 1.1], "land_recycling": ["add", 0.05], "convective_rain": ["mul", 1.3], "storm_track": ["mul", 1.1]
+ },
+ "bounds": {"storm_convection": [0.0, 2.0], "eddy_barrier_km": [0.0, 450.0], "ocean_rh_warm": [0.0, 0.24], "edge_carry": [0.0, 1.0], "ice_saturation": [0.0, 1.0]},
+ "max_evaluations": 60,
+ "search": "Coordinate descent (scripts/joint_refit.py): knobs in order, up then down, keep a move only if S49 falls; passes with steps x1, x1/2, x1/4; at most 60 evaluations.",
+ "objective": "S49 against r45 (gate_v3 score over dev31 + retired a, b, c), 56 km.",
+ "selection": "Lowest-S49 point; must pass policy_v3 dev (S49<=0.995, T and P not worse than +1%) and fine28 (S28<=1.01) against r45; then sealed set j once (calibration/sealed_20261115j).",
+ "caveat": "The objective is the development gate itself; only fine28 and sealed set j are independent."
+}

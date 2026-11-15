@@ -12,6 +12,7 @@ import refit_e75 as R
 def main():
     plan = json.loads(Path(sys.argv[1]).read_text()); R.OUT = Path(sys.argv[2]); R.OUT.mkdir(parents=True, exist_ok=True)
     if 'reference' in plan: R.REF = ROOT / plan['reference']
+    if 'reference_name' in plan: R.REF_NAME = plan['reference_name']
     best = json.loads((ROOT / plan['start'].split(' with ')[0]).read_text())
     best.update(plan['start_set'] if 'start_set' in plan else {'storm_convection': 0.5})
     from dataclasses import asdict
@@ -24,7 +25,7 @@ def main():
         for k, (kind, step) in plan['knobs'].items():
             st = step ** (0.5 ** level) if kind == 'mul' else step * 0.5 ** level
             for sign in (1, -1):
-                if n >= 39: break
+                if n >= plan.get('max_evaluations', 40) - 1: break
                 v = best[k] * (st if sign > 0 else 1 / st) if kind == 'mul' else best[k] + sign * st
                 lo, hi = bounds.get(k, (-1e9, 1e9)); v = min(max(v, lo), hi)
                 if v == best[k]: continue

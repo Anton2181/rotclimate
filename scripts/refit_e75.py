@@ -5,7 +5,7 @@ ROOT = Path(__file__).resolve().parents[1]; sys.path.insert(0, str(ROOT / 'scrip
 from gate_v3 import paired, score
 PLAN = json.loads((ROOT / 'calibration/rain_shadow_20261115/refit_e75.json').read_text())
 OUT = ROOT / 'output/rain_shadow_20261115/refit_e75'; REF = ROOT / 'output/rain_shadow_20261115/gate_e75/ref'
-PY = str(ROOT / '.venv/bin/python')
+PY = str(ROOT / '.venv/bin/python'); REF_NAME = 'r44'
 PARTS = {'dev31': None, 'retired_a': 'calibration/sealed_20261031/regions.json', 'retired_b': 'calibration/sealed_20261031b/regions.json', 'retired_c': 'calibration/sealed_20261101c/regions.json'}
 
 
@@ -18,9 +18,9 @@ def evaluate(name, params):
         cmd = [PY, '-I', str(ROOT / 'scripts/benchmark_local.py'), '--fit', str(f), '--regions', *regs, '--workers', '4', '--out', str(o)]
         if spec: cmd += ['--region-specs', str(ROOT / spec)]
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        lk = d / f'r44_{part}'
-        if not lk.exists(): lk.symlink_to(REF / f'r44_{part}')
-    R, C = paired(d, 'r44', None, list(PARTS)); return score(R, C, list(R))
+        lk = d / f'{REF_NAME}_{part}'
+        if not lk.exists(): lk.symlink_to(REF / f'{REF_NAME}_{part}')
+    R, C = paired(d, REF_NAME, None, list(PARTS)); return score(R, C, list(R))
 
 
 def main():
