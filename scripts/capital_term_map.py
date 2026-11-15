@@ -41,7 +41,7 @@ def patched_build():
                       "        biggest = list(np.argsort(-area, kind='stable')[:k]); values = np.sort(area)[::-1][:k].copy()\n"
                       "        freed = sorted([area[i] for i in top if i not in biggest], reverse=True); holders = sorted(i for i in biggest if i not in top)\n"
                       "        area[top] = values\n"
-                      "        for h, v in zip(holders, freed): area[h] = v")]:
+                      "        for _hold, _val in zip(holders, freed): area[_hold] = _val")]:
         assert src.count(old) == 1, old; src = src.replace(old, new)
     mod = types.ModuleType('build_settlement_release2_m1c'); mod.__file__ = str(ROOT / 'scripts/build_settlement_release2.py')
     mod.CAPITAL_SEATS = {m: set(seats(m)) for m in ('raw', 'corrected')}
