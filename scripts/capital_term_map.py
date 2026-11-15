@@ -33,7 +33,15 @@ def patched_build():
                      ("mean = np.full(len(sites), np.nan); mean[valid] = coef[0] + coef[1] * np.log(H[valid])",
                       "mean = np.full(len(sites), np.nan); CAP = np.array([1.0 if (s['marked'] and s['name'] in CAPITAL_SEATS[mode]) else 0.0 for s in sites]); "
                       "mean[valid] = coef[0] + coef[1] * np.log(H[valid]) + (coef[2] * CAP[valid] if len(coef) == 3 else 0.0)"),
-                     ("e = e_new; order = ranked", "order = ranked                                   # capital-term map plan A1: draws stay in site order")]:
+                     ("e = e_new; order = ranked", "order = ranked                                   # capital-term map plan A1: draws stay in site order"),
+                     ("area[ranked] = np.sort(area[ranked])[::-1]",
+                      "area[ranked] = np.sort(area[ranked])[::-1]\n"
+                      "    top = [i for i in ranked if kind[i] in ('imperial capital', 'major imperial city')]; k = len(top)   # capital-term map plan A2\n"
+                      "    if k:\n"
+                      "        biggest = list(np.argsort(-area, kind='stable')[:k]); values = np.sort(area)[::-1][:k].copy()\n"
+                      "        freed = sorted([area[i] for i in top if i not in biggest], reverse=True); holders = sorted(i for i in biggest if i not in top)\n"
+                      "        area[top] = values\n"
+                      "        for h, v in zip(holders, freed): area[h] = v")]:
         assert src.count(old) == 1, old; src = src.replace(old, new)
     mod = types.ModuleType('build_settlement_release2_m1c'); mod.__file__ = str(ROOT / 'scripts/build_settlement_release2.py')
     mod.CAPITAL_SEATS = {m: set(seats(m)) for m in ('raw', 'corrected')}
