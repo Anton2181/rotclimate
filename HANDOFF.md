@@ -1,7 +1,8 @@
 # CAPITAL EFFECT (DEVELOPMENT): ROMAN CAPITALS ~3.4x THE SIZE MODEL — 15 November 2026
 reports/CAPITAL_EFFECT_20261115.md; plan + A1 before output; scripts/capital_effect.py; Wikidata capitals (data/cache/roman_capitals).
 28 matched capitals: factor 3.4 (2.3-5.2), 3.1 without Rome; mean percentile 0.82; 54% in top 14%. Supports lore-rank allocation,
-but reordering cannot create >200 ha cities (Mesopotamia failure). NEXT: declared M1 + capital term refit (province folds, same gate).
+but reordering cannot create >200 ha cities (Mesopotamia failure). M1C REFIT (calibration/size_capital_term_20261115): capital coef >0 in all folds (x2.8-4.1); capital MAE 1.27 -> 0.85;
+all-town MAE -1.7% < declared 2% -> NOT ADOPTED. Owner decision whether to adopt on capital-specific evidence (post-hoc).
 
 # OWNER TO-DO LIST (standing)
 - ADD MAIZE to the crop model (owner request 15 Nov 2026). Unlocks the Valley of Mexico blind pool (data/cache/valley_of_mexico,

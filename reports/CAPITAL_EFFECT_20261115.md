@@ -18,3 +18,18 @@ where the model had no city above 200 ha. A capital term in the size model is th
 declared step.
 
 Checks: a rerun reproduces the results file byte for byte; the matched towns are listed in `results.json`.
+
+## Capital term in the size model: not adopted by the declared rule (narrowly)
+
+Plan `calibration/size_capital_term_20261115/plan.json` (declared before output). M1C = M1 + c × capital, with
+province-blocked folds, so each province's capitals are predicted from other provinces' capitals.
+
+| | Held-out MAE (all 664) | Held-out MAE (28 capitals) | Mean capital residual | Gate (KS, area ratio) |
+|---|---:|---:|---:|---|
+| M1 (published) | 0.822 | 1.273 | +1.17 (about 3× too small) | 0.063, 0.95 pass |
+| M1C | 0.808 | 0.846 | +0.03 | 0.070, 0.98 pass |
+
+The capital coefficient is positive in all four folds (1.03–1.42, a factor of 2.8–4.1×; full fit 1.26 ≈ 3.5×). The declared
+adoption rule needed the all-town MAE to fall by 2%; it fell by 1.7%, so **M1C is not adopted**. The rule judged a
+28-town effect on 664 towns. Adopting it on the capital-specific evidence would be a post-hoc change of rule, which is
+the owner's decision and would be declared as such.
