@@ -270,6 +270,8 @@ class Params:
     marine_reach_km: float = 40.0     # e4: sea-breeze reach of the marine air
     marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental
     marine_contrast: float = 5.0      # e4: land-minus-sea warmth (K) for a full marine layer
+    eddy_barrier_km: float = 0.0      # e75: eddy water reaching a cell is capped at saturation at the highest ground this far upwind (eddy-scale mean wind) when that ground stands above the cell; 0 = off
+    eddy_barrier_dz_km: float = 0.5   # e75: the cap acts fully once the upwind barrier stands this much above the cell (linear below)
     eddy_rainout: float = 0.0         # e3: eddy moisture steps capped at crest saturation / this (0 = off)
     eddy_rainout_padded: bool = False  # e74b: the e3 steps run on one field padded by the full kernel's reach (edge values), then cropped, so an unbinding cap equals the plain eddy mix; False = each step pads its own edges (e3 as run before 15 Nov 2026)
     eddy_rainout_accounted: bool = False  # e74c: with eddy_rainout_padded, the water each step clips at the crest rains there (passed to the solver as storm condensate) instead of vanishing

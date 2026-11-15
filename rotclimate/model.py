@@ -2220,6 +2220,27 @@ class ClimateModel:
                             return cache['out']
                         mix = lambda water, partition=partition: partition(water)[0]
                         condensate = lambda water, partition=partition: partition(water)[1]
+            if p.eddy_rate > 0 and p.eddy_barrier_km > 0 and p.eddy_moisture_scheme == 'legacy':
+                # e75: storm air reaching a basin behind a range has crossed the
+                # range: it holds at most the crest's saturation. Unlike the e3
+                # cap, crest and windward cells are never capped (their upwind
+                # barrier is not above them), so the ranges keep their rain and
+                # only the lee loses the water that could not cross (Nevada,
+                # the Columbia Basin, the Ebro).
+                ub, vb = gauss(u, 0.5 * sigW), gauss(v, 0.5 * sigW)
+                speed = np.maximum(np.hypot(ub, vb), 0.5)
+                er, ec = vb / speed, -ub / speed                       # one cell upwind (rows run south)
+                rows, cols = np.indices(lat.shape, dtype=float)
+                barrier = h_km.copy()
+                for k_step in range(1, int(round(p.eddy_barrier_km / g.cell_km)) + 1):
+                    barrier = np.maximum(barrier, ndi.map_coordinates(h_km, [rows + er * k_step, cols + ec * k_step], order=1, mode='nearest'))
+                rise = np.clip((barrier - h_km) / p.eddy_barrier_dz_km, 0.0, 1.0)
+                crest_b = (w_sat(T_col - column_lapse * barrier) if pressure_saturation is None else pressure_saturation * w_sat(T_col - column_lapse * barrier) / np.maximum(w_sat(T_col - column_lapse * h_km), 1e-9))
+                cap_b = crest_b / np.maximum(rise, 1e-6)
+                plain = mix
+                mix = lambda water, plain=plain, cap_b=cap_b: np.minimum(plain(water), cap_b)
+                if condensate is not None:
+                    raise ValueError('e75 eddy barrier is not combined with accounted crest condensate')
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None

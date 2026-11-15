@@ -1,0 +1,8 @@
+{
+ "title": "e75 upwind-barrier cap on eddy water (declared before any e75 run is scored)",
+ "date": "2026-11-15",
+ "made_after": "amendments 1-4 all failed (they dried the ranges with the lee). Budget diagnosis (scripts/rain_shadow_budget.py, california, r44): Nevada lee rain 1.08 mm/day fed by storm exchange 0.80, evaporation 0.65, advection 0.33, column drying -0.68; the e74c accounted cap dropped the clipped water inside the lee's own ranges (lee 1.03), windward unchanged.",
+ "mechanism": "rotclimate/model.py e75: barrier = highest ground within eddy_barrier_km upwind along the eddy-scale mean wind; the eddy mixing target is capped at the column saturation at barrier height, fully where the barrier stands eddy_barrier_dz_km above the cell. Crest and windward cells are never capped. Default off; r44 byte-identical (checked by the gate's r44 rerun).",
+ "screen": {"regions": "pacific_nw, california, iberia (pairs of plan.json)", "variants": {"B150": {"eddy_barrier_km": 150.0}, "B300": {"eddy_barrier_km": 300.0}, "B300dz1": {"eddy_barrier_km": 300.0, "eddy_barrier_dz_km": 1.0}}},
+ "screen_rule": "Same as plan.json: contrast error -25% and the three regions' mean rain loss not up by more than 2%. Every passing variant goes to the policy_v3 dev49 + fine28 gate against r44 (at most three). A gate passer goes to sealed set i only with the owner's release."
+}
