@@ -84,3 +84,7 @@ identical to the published outputs.
 - 15 Nov: WP0 spec updated to the published hierarchy build (`calibration/settlement_chain/release3_hierarchy.json`); verify **passed**.
 - WP2 (port/road-hub size terms): the release-2 calibration already tested coast, river and road terms (M2): held-out MAE 0.834 vs
   M1 0.831, i.e. no gain. No new Earth role data (a port list) is available, so WP2 is parked until such data exist.
+- 15 Nov: WP5 (village layer) **blocked on evidence, not code**: the Roman rural Britain tables were re-downloaded (snapshot hashes
+  match), but they are excavated sites whose density follows development-led archaeology, not village density; Domesday, the only
+  village-scale census, is spent. A village layer would be untestable. Parked until an unspent rural census-like pool exists.
+  Work switched to the climate model (owner instruction).
