@@ -2047,6 +2047,13 @@ class ClimateModel:
                 instab = 1.0 + p.instability * np.clip((T - p.instability_t0) / 8.0, 0, 1.5) * moist
             else:
                 instab = 1.0
+            if p.storm_convection > 0 and W_prev is not None:
+                # e77: mid-latitude summer showers come from cold air aloft under
+                # troughs and fronts (the storm index), not from surface heat alone:
+                # lowering the v6 onset wetted the subtropical east coasts and the
+                # deserts (East Australia +43 %, Tripolitania +38 %).
+                moist77 = np.clip((W / np.maximum(Ws, 1e-6) - 0.3) / 0.3, 0, 1)
+                instab = instab + p.storm_convection * storm * np.clip((T - 15.0) / 8.0, 0, 1) * moist77
             from .moisture import ocean_rate, solve_moisture
             eddy_w = eddy if tropical is None else eddy + p.eddy_rate * tropical / DAY
             exchange = eddy_w * np.exp(-h_km / 2.5) if p.eddy_rate > 0 else 0.0
