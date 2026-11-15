@@ -1,0 +1,8 @@
+{
+ "title": "e78 rain-making against saturation over ice below 0 C (declared before any e78 run is scored)",
+ "date": "2026-11-15",
+ "made_after": "reports/NORTHERN_STEPPE_20261115.md section 9 (cold-interior winters far too dry: Kazakh steppe winter 3 vs 51 mm, Volga 16 vs 93) and the rain-factor diagnosis (scripts/rain_components.py): Kazakh January W 2.0 mm, Ws 3.6, RH 0.56, gate 0.17; removing the cold-high storm damping restores the storm index (0.19 -> 2.81) but January rain only 1 -> 2 mm (obs 18). The humidity gate, not the storms, binds.",
+ "mechanism": "ice_saturation s: below 0 C the rain coefficient uses Ws x (es_ice/es_water)^s at the column's mid temperature; transport, evaporation and capacity elsewhere unchanged. Default 0: r44 byte-identical.",
+ "candidates": {"L1": {"ice_saturation": 1.0}, "L2": {"ice_saturation": 0.5}},
+ "gate": "policy_v3 dev49 (S49<=0.995, T and P not worse than +1%) + fine28 against r44. A passer goes to sealed set i (calibration/sealed_20261115i) only with the owner's release. No other variants without a new amendment."
+}

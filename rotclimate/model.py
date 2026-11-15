@@ -2289,7 +2289,16 @@ class ClimateModel:
                     maximum_partition_temperature_k=float(capacity_profile.interface_temperature_k.max()),
                     **ocean_target_certificate))
             else:
-                solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws,
+                Ws_rain = Ws
+                if p.ice_saturation > 0 and not p.moisture_reservoirs:
+                    # e78: snow grows on ice crystals at saturation over ice, which
+                    # at -15 C is 0.86 of that over water (Wegener-Bergeron-Findeisen):
+                    # cold winter columns at 56 % RH over water (the Kazakh steppe,
+                    # 1-2 mm a month against 13-20) are near ice saturation.
+                    Tc = np.minimum(T_col - 0.5 * column_lapse * h_km, 0.0)
+                    ratio = np.exp(22.46 * Tc / (Tc + 272.62) - 17.67 * Tc / (Tc + 243.5))
+                    Ws_rain = Ws * ratio ** p.ice_saturation
+                solution = solve_moisture(getattr(self,'moisture_solver',self.solver), p, uq, vq, lamE, W_ocean, E_land, Ws_rain,
                                           A_dyn, instab, bnd, W, exchange, mix, sink=sink, closure=closure, gain=gain,
                                           condensate=condensate)
             W, P = solution.water, solution.rain
