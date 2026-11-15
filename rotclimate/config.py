@@ -125,6 +125,7 @@ class Params:
     heat_low_branch: bool = False     # e80b: apply the e80 damping also to the e70b branch drying
     edge_inner: float = 0.0           # e81: land-edge inflow humidity = blend toward the RH of the nearest interior column (last step): 0 = fixed land_edge_rh (r45), 1 = zero-gradient
     soil_init_fraction: float = 0.5   # e82: starting soil water as a share of the bucket (0.5 = r45)
+    trade_heat_low: float = 0.0       # e83: same-hemisphere trades x (1 - this x clip(poleward pressure fall / monsoon_pressure_hpa, 0, 1)): trades give way to heat-low inflow; 0 = off
     edge_carry: float = 0.0           # e79: land-edge inflow carries the water of a column at T_col + this x max(latitude mean - T_col, 0), capped at local saturation, instead of a fixed RH of the local column; 0 = r44
     ice_saturation: float = 0.0       # e78: below 0 C the rain-maker judges the column against saturation over ice (es_ice/es_water)^this; 0 = water everywhere (r44)
     storm_convection: float = 0.0     # e77: extra rain efficiency x storm index x warmth (15-23 C ramp) x moisture: summer showers under troughs and fronts, not under the subtropical highs; 0 = off

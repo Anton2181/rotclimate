@@ -747,6 +747,19 @@ class ClimateModel:
                 cell = self.g.cell_km
                 fall = np.sign(lat) * np.gradient(ndi.gaussian_filter(last, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
                 w = p.monsoon_westerly * np.clip(fall / p.monsoon_pressure_hpa, 0.0, 1.0)
+        if p.trade_heat_low > 0 and p.monsoon_pressure_hpa > 0 and getattr(self, "last_pres", None) is not None:
+            # e83: trades blow because pressure rises toward the subtropical high
+            # poleward. Where the model's pressure falls poleward instead (a heat
+            # low beyond: India and Bengal in April-May, the Sahara in summer)
+            # the imposed north-east trades kept Bengal under dry northerlies until
+            # June; weaken them so the pressure-driven inflow takes over.
+            cell = self.g.cell_km
+            fall_t = np.sign(lat) * np.gradient(ndi.gaussian_filter(self.last_pres, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
+            keep = 1.0 - p.trade_heat_low * np.clip(fall_t / p.monsoon_pressure_hpa, 0.0, 1.0)
+            north_trades = (lat >= phi_i) & (lat < phi_h)
+            u = np.where(north_trades, u * keep, u)
+            v = np.where(north_trades, v * keep, v)
+            self._trade_keep = keep
         tan_in = np.tan(np.radians(p.cross_isobar_deg))
         if p.monsoon_westerly > 0:
             # e55: trades that cross the equator toward an ITCZ in the other
@@ -766,6 +779,9 @@ class ClimateModel:
         xi = (phi_i - lat) / (phi_i - phi_hs)
         u = np.where(m, -p.trade_speed * np.sin(np.pi * xi), u)
         v = np.where(m, 0.35 * p.trade_speed * np.sin(np.pi * xi), v)
+        if p.trade_heat_low > 0 and getattr(self, "_trade_keep", None) is not None:
+            u = np.where(m, u * self._trade_keep, u)          # e83, southern trades
+            v = np.where(m, v * self._trade_keep, v)
         if p.monsoon_westerly > 0:
             cross = m & (lat > 0) & (phi_i > 0)
             turned = p.trade_speed * np.sin(np.pi * np.clip(lat / np.maximum(phi_i, 1e-6), 0, 1))

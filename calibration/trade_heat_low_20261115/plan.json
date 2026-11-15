@@ -1,0 +1,9 @@
+{
+ "title": "e83: same-hemisphere trades give way under heat lows (declared before any e83 run)",
+ "date": "2026-11-15",
+ "made_after": "Parameter refits on r45 exhausted (grand refits v1-v3; best feasible 0.9960). Bengal diagnosis (reports/MONSOON_R45_20261115.md): imposed north-east trades keep Bengal under northerlies until June; e80/e80b failed (deserts).",
+ "mechanism": "trade_heat_low c: in both trade belts, (u, v) x (1 - c x clip(poleward pressure fall / monsoon_pressure_hpa, 0, 1)), the fall measured as e55b (last pass's pressure smoothed over 500 km). Default 0: r45 byte-identical.",
+ "screen": {"regions": "the 14 regions of calibration/monsoon_r45_20261115 (monsoon, subtropical east coasts, deserts)", "variants": {"T05": {"trade_heat_low": 0.5}, "T10": {"trade_heat_low": 1.0}}},
+ "rule": "A variant goes to the policy_v3 gate (dev49 + fine28 against r45) if the 14 regions' mean rain loss falls by at least 2 % and no desert region's loss rises by more than 10 %. A gate passer then gets the extra-tropical pool check (reported) and sealed set k once.",
+ "joint_refit_option": "If a variant passes the screen but fails dev49 narrowly (S49 <= 1.0), one declared joint refit from it may follow (as grand refit v3, minimax of S49 and S_pool)."
+}
