@@ -2189,6 +2189,18 @@ class ClimateModel:
                     for _ in range(n_steps):
                         water = np.minimum(gauss(water, sigW / np.sqrt(n_steps)), crest)
                     return water
+                if p.eddy_rainout_padded:
+                    # e74b: six separately edge-padded steps are not one kernel near
+                    # the regional grid's edges (sigma ~15 cells on ~70-cell grids),
+                    # which changed flat regions' rain with the cap never binding.
+                    pad = int(4.0 * sigW + 0.5)
+                    crest_pad = np.pad(crest, pad, mode='edge')
+
+                    def mix(water, crest_pad=crest_pad, n_steps=n_steps, pad=pad):
+                        w = np.pad(np.asarray(water, float), pad, mode='edge')
+                        for _ in range(n_steps):
+                            w = np.minimum(gauss(w, sigW / np.sqrt(n_steps)), crest_pad)
+                        return w[pad:-pad, pad:-pad]
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None

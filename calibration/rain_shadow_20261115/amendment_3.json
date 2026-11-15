@@ -1,0 +1,6 @@
+{
+ "made_after": "amendment 2 gate (gate2): F1 S49 1.0192, F2 1.0182, FAIL; r44 rerun byte-identical under the e74 source. Diagnosis: with the cap never binding (relief 1000 km, or eddy_rainout 1e-6) us_midwest 0.284 -> 0.305 and central_asia 0.423 -> 0.469: e3's six separately edge-padded Gaussian steps differ from the single kernel by up to 5% of the field range on regional grids. Every eddy_rainout result so far (E1-E3, F1-F2, and the earlier r42 factorial's crest-rainout profiles) carries this edge artefact.",
+ "known": "all 49 development regions under E1-E3 and F1-F2; three-region checks that the padded operator (e74b eddy_rainout_padded) reproduces r44 when the cap does not bind (0.2842/0.4235/0.2854 vs 0.284/0.423/0.285).",
+ "change": "Numerical fix e74b (opt-in flag, default off so historical e3 runs reproduce). Candidates: G1 eddy_rainout=1 padded; G2 eddy_rainout=1 padded + relief 0.3 km. Same policy_v3 dev49 + fine28 gate against r44 (reference reused from gate2 if the r44 rerun is byte-identical). A passing finalist goes to sealed set i only with the owner's release.",
+ "candidates": {"G1": {"eddy_rainout": 1.0, "eddy_rainout_padded": true}, "G2": {"eddy_rainout": 1.0, "eddy_rainout_padded": true, "eddy_rainout_relief_km": 0.3}}
+}
