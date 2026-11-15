@@ -77,3 +77,4 @@ identical to the published outputs.
 - 15 Nov: owner flagged proposed towns dwarfing nearby marked places. A post-hoc swap rule was tried and **reverted at the
   owner's request** (not published). Replaced by WP1b, declared in `calibration/settlement_hierarchy_20261115/plan.json`, with
   Roman evidence that subordinate towns sit well below their regional centre.
+- 15 Nov: WP1b **published**: settlement hierarchy (marked places lead their 75 km clusters), proposed towns larger than their marked place 43% → 12%; see SETTLEMENT_HIERARCHY_20261115.md.

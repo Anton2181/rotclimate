@@ -1,3 +1,9 @@
+# SETTLEMENT HIERARCHY PUBLISHED (OWNER REQUEST) — 15 November 2026
+reports/SETTLEMENT_HIERARCHY_20261115.md. Swap rule tried and reverted (owner). A4 model: M1 means + 0.8 for the 19 seats; every marked
+place takes the largest residual of itself + half its 75 km cluster (scripts/settlement_hierarchy_soft.py fit; map via
+scripts/settlement_hierarchy_map.py, review_settlement_hierarchy_map.py). Corrected: proposed > marked 43% -> 12%; 13.35 M residents;
+84.8% fed at 34%; staffed set unchanged (reach maps kept). Published; checks pass. A4 held-out exceed share 0.8% vs 6.3% = narrow miss.
+
 # CAPITAL TERM ADOPTED ON THE MAP (OWNER) — PUBLISHED — 15 November 2026
 M1C (2.095 + 0.124 lnH + 1.255 capital), capital = 19 provincial seats (hierarchy_links province_seat). Plan
 calibration/capital_term_map_20261115 (+A1 no top-draw promotion under M1C; +A2 capital & major cities take the 3 largest areas).
