@@ -1,3 +1,17 @@
+# CLIMATE CAMPAIGN — LIVE PLAN / TO-DO (owner: "keep going until you get a valid climate update"; updated as work proceeds)
+Base: r45 (adopted 15 Nov, Earth only; atlas stays r44 by owner decision). Valid update = policy_v3: dev49 S<=0.995 with T,P <=+1%,
+fine28 S<=1.01, then ONE run on an unseen sealed set (now set j, calibration/sealed_20261115j; release recorded from the owner's
+instruction for the first dev+fine finalist).
+- [running] Step 1 grand refit on r45: 12 settings (all 15-Nov opt-in mechanisms + core rain), 60 evals
+  (calibration/grand_refit_20261115/plan.json; output/grand_refit_20261115; start reproduces r45 exactly).
+- [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
+- [if 1 fails] Step 3 major rework candidates, in order:
+  a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
+     pressure/sea-breeze inflow term gated by the sea next to heated land (deserts lack an adjacent warm sea).
+  b. Moisture transport in two levels (low-level water blocked by ranges, upper level passes) for rain shadows and inland winters.
+  c. Summer rain-making season-aware (humid mid-latitude summers 0.5-0.8x).
+- Owner to-do after the campaign: MAIZE (crop model, Valley of Mexico pool).
+
 # r45 ADOPTED (Earth); ATLAS STAYS r44 (OWNER) — 15 November 2026
 r45 = e79 moisture carry + refitted rain settings (calibration/local_accuracy_20261023/r45_adoption.json; dev49 0.9901, fine28 1.0098,
 sealed i 0.9833, set i spent). Owner: skip the atlas rebuild. Next climate iteration (reports/MONSOON_R45_20261115.md): Bengal
