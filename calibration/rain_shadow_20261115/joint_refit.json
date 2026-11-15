@@ -1,0 +1,12 @@
+{
+ "title": "Joint refit: e75 rain shadows + e77 summer showers + rain-making parameters (declared before any evaluation)",
+ "date": "2026-11-15",
+ "made_after": "single-mechanism gates all failed (report sections 8-11): e75 C05 S49 1.015, its 4-knob refit 1.012; e77 K1 1.000, K2 1.002; e76 harmful. e75 fixes westerly lee basins, e77 the humid mid-latitude summers; each unsettles r44's offsetting errors.",
+ "start": "output/rain_shadow_20261115/refit_e75/best_params.json with storm_convection 0.5",
+ "knobs": {"storm_convection": ["add", 0.4], "eddy_barrier_crest": ["add", 0.25], "storm_track": ["mul", 1.12], "rh_threshold": ["add", 0.025], "precip_tau_days": ["mul", 1.12], "land_recycling": ["add", 0.06], "instability": ["mul", 1.25], "eddy_rate": ["mul", 1.2]},
+ "bounds": {"storm_convection": [0.0, 2.0], "eddy_barrier_crest": [0.0, 1.0]},
+ "search": "Coordinate descent over the knobs in the listed order, up then down, keeping a move only if S49 falls; three passes with steps x1, x1/2, x1/4 (multiplicative steps by square roots). At most 40 evaluations.",
+ "objective": "S49 against r44 (gate_v3 score over dev31 + retired a, b, c), 56 km.",
+ "selection": "Lowest-S49 evaluated point. It must pass policy_v3 dev (S49<=0.995, T and P not worse than +1%) and fine28 (S28<=1.01); then sealed set i once, only with the owner's release.",
+ "caveat": "The objective is the development gate itself; only fine28 and sealed set i are independent."
+}
