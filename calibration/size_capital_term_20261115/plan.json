@@ -1,0 +1,10 @@
+{
+  "date": "2026-11-15",
+  "status": "declared_before_output",
+  "kind": "development refit on exposed Roman data",
+  "model": "M1C: ln area = a + b lnH + c * capital, capital = 1 for the 28 towns matched in calibration/capital_effect_20261115 (Rome included), 0 otherwise. Same cohort as the published refit (664 towns, Greek walls at their inhabited share).",
+  "procedure": "As scripts/settlement_release2_earth.py evaluate(): the four province-blocked folds (polity.settlement_sizes.province_fold), held-out predictions, held-out MAE and sigma, full-data coefficients, and the 5-seed generation gate (KS <= 0.10, total-area ratio 0.80-1.25) using held-out predictions. Because folds are by province, each province's capitals are predicted from other provinces' capitals: the capital term is tested out of province.",
+  "adopt_rule": "M1C replaces M1 only if (a) held-out MAE <= 0.98 x M1's on the same folds, (b) the gate passes, and (c) c > 0 in every fold. Also reported: held-out MAE on the capitals alone, M1 vs M1C.",
+  "fantasy_step_not_taken_here": "Applying M1C on the map needs a capital flag for fantasy towns (the administration model's provincial capitals and the lore imperial capital) and would raise their sizes, residents and supply needs. That is a separate declared step, after this result.",
+  "outputs": "output/size_capital_term_20261115/results.json"
+}
