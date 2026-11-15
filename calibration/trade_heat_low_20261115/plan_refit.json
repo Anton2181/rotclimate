@@ -1,0 +1,83 @@
+{
+ "title": "Joint refit v4: grand refit v3's best point + e83 trade_heat_low (minimax), declared before any evaluation",
+ "date": "2026-11-15",
+ "made_after": "T10 vs r45: S49 0.99999 (T -0.05 %, P +0.05 %), extra-tropical pool 1.0093 (T +2.1 %). S49 <= 1.0, so one joint refit is allowed.",
+ "start": "calibration/trade_heat_low_20261115/v3_best_params.json",
+ "start_set": {
+  "trade_heat_low": 0.5
+ },
+ "reference": "output/grand_refit_20261115/ref",
+ "reference_name": "r45",
+ "extra_parts": {
+  "pool_x": "calibration/grand_refit_20261115/pool_extratropical.json"
+ },
+ "objective_mode": "max_dev_pool",
+ "knobs": {
+  "trade_heat_low": [
+   "add",
+   0.25
+  ],
+  "storm_convection": [
+   "add",
+   0.1
+  ],
+  "instability": [
+   "mul",
+   1.07
+  ],
+  "eddy_rate": [
+   "mul",
+   1.05
+  ],
+  "rh_threshold": [
+   "add",
+   0.01
+  ],
+  "precip_tau_days": [
+   "mul",
+   1.05
+  ],
+  "land_recycling": [
+   "add",
+   0.025
+  ],
+  "convective_rain": [
+   "mul",
+   1.1
+  ],
+  "storm_track": [
+   "mul",
+   1.04
+  ],
+  "cold_high_storms": [
+   "add",
+   0.05
+  ],
+  "edge_carry": [
+   "add",
+   0.05
+  ]
+ },
+ "bounds": {
+  "trade_heat_low": [
+   0.0,
+   1.0
+  ],
+  "storm_convection": [
+   0.0,
+   2.0
+  ],
+  "cold_high_storms": [
+   0.0,
+   1.0
+  ],
+  "edge_carry": [
+   0.0,
+   1.0
+  ]
+ },
+ "max_evaluations": 40,
+ "search": "Coordinate descent (scripts/joint_refit.py, max_dev_pool); at most 40 evaluations.",
+ "selection": "Lowest max(S49, S_pool); must pass policy_v3 dev (S49<=0.995, T,P<=+1%) and fine28 against r45; then sealed set k once.",
+ "caveat": "Only fine28 and sealed set k are independent."
+}

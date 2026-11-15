@@ -19,6 +19,11 @@
  "screen_result": "T05 mean 0.6059, T10 0.6066 vs r45 0.6055: FAIL (neutral). T10: Najd 0.667 -> 0.575, Algeria 0.348 -> 0.324, Bengal 1.230 -> 1.172, Japan 0.408 -> 0.391, SE US, E Australia better; Sahel 0.615 -> 0.753, Mexico 0.704 -> 0.762, N Queensland 0.838 -> 0.904 worse. Bengal May winds turn southerly (+1.4 m/s), inflow +3.6 mm/day, but the e70b branch drying still removes 5.1 mm/day.",
  "amendment_1": {
   "made_after": "T05 mean 0.6059, T10 0.6066 vs r45 0.6055: FAIL (neutral). T10: Najd 0.667 -> 0.575, Algeria 0.348 -> 0.324, Bengal 1.230 -> 1.172, Japan 0.408 -> 0.391, SE US, E Australia better; Sahel 0.615 -> 0.753, Mexico 0.704 -> 0.762, N Queensland 0.838 -> 0.904 worse. Bengal May winds turn southerly (+1.4 m/s), inflow +3.6 mm/day, but the e70b branch drying still removes 5.1 mm/day.",
-  "change": "DEPARTURE from the screen rule, disclosed: T10 is measured on dev49 + fine28 + the extra-tropical pool against r45 (information for a joint refit), and if S49 <= 1.0 one declared minimax joint refit from T10 follows (plan_refit.json). No sealed run from this amendment directly."
+  "change": "DEPARTURE from the screen rule, disclosed: T10 is measured on dev49 + fine28 + the extra-tropical pool against r45 (information for a joint refit), and if S49 <= 1.0 one declared minimax joint refit from T10 follows (plan_refit.json). No sealed run from this amendment directly.",
+  "result": "T10 vs r45: S49 0.99999 (T -0.05 %, P +0.05 %), extra-tropical pool 1.0093 (T +2.1 %). S49 <= 1.0, so one joint refit is allowed."
+ },
+ "amendment_2": {
+  "made_after": "T10 vs r45: S49 0.99999 (T -0.05 %, P +0.05 %), extra-tropical pool 1.0093 (T +2.1 %). S49 <= 1.0, so one joint refit is allowed.",
+  "change": "DISCLOSED change of start: the joint refit starts from grand refit v3's best point (output/grand_refit_20261115/search_v3/best_params.json, max(S49, S_pool) 0.9960) with trade_heat_low 0.5 added, not from T10, because v3 already holds the best feasible settings. Plan: calibration/trade_heat_low_20261115/plan_refit.json."
  }
 }

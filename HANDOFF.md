@@ -12,7 +12,9 @@ instruction for the first dev+fine finalist).
 - [done] Sealed set k declared inside the map's band (six 300 km boxes, 25-55 deg).
 - [done] Step 4 grand refit v2: dev49 1.0023 FAIL (pool 0.966, fine 0.999). Trade-off: v1 (dev 0.9946 / pool 1.023) vs v2.
 - [done] Step 5 refit v3 (minimax): best 0.9960 on both sets: FAIL by 0.001. Parameter refits exhausted; set k unopened.
-- [running] Step 6 physics rework: South Asian spring circulation (Bengal northerlies until June; heat-low inflow from the Bay).
+- [done] Step 6 e83 trade_heat_low (trades give way under heat lows): Bengal May winds turn southerly; screen neutral
+  (Najd/Algeria/Bengal better, Sahel/Mexico worse); T10 S49 1.0000, pool 1.009.
+- [running] Step 7 joint refit v4 = v3 best + e83 (trade_heat_low_20261115/plan_refit.json), minimax; then fine28, set k.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea

@@ -13,13 +13,13 @@ def evaluate(name, params):
     d = OUT / name; d.mkdir(parents=True, exist_ok=True); f = d / 'candidate_params.json'; f.write_text(json.dumps(params, indent=1))
     for part, spec in PARTS.items():
         o = d / f'candidate_{part}'
+        lk = d / f'{REF_NAME}_{part}'
+        if not lk.is_symlink(): lk.symlink_to((REF / f'{REF_NAME}_{part}').resolve())
         if (o / 'summary.json').is_file(): continue
         regs = ['dev31'] if spec is None else list(json.loads((ROOT / spec).read_text()))
         cmd = [PY, '-I', str(ROOT / 'scripts/benchmark_local.py'), '--fit', str(f), '--regions', *regs, '--workers', '4', '--out', str(o)]
         if spec: cmd += ['--region-specs', str(ROOT / spec)]
         subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        lk = d / f'{REF_NAME}_{part}'
-        if not lk.exists(): lk.symlink_to(REF / f'{REF_NAME}_{part}')
     R, C = paired(d, REF_NAME, None, list(PARTS)); return score(R, C, list(R))
 
 
