@@ -13,7 +13,7 @@ const sha = b => crypto.createHash('sha256').update(b).digest('hex'); const asse
     await page.goto(base + '#layer=reach_towns&climate=' + mode, { waitUntil: 'domcontentloaded' });
     await page.waitForFunction(() => document.querySelectorAll('#variant option').length > 2, null, { timeout: 120000 });
     assert(await page.locator('#variant').inputValue() === 'release3_central', 'default changed');
-    for (const option of [...towns.packets[mode].options.reach_towns, ...supply.packets[mode].options.reach_towns]) {
+    for (const option of [...towns.packets[mode].options.reach_towns.filter(o => o.value !== 'release3_recurrence'), ...supply.packets[mode].options.reach_towns]) {   // the recurrence map is checked by check_settlement_release3_browser.js
       await page.selectOption('#variant', option.value);
       await page.waitForFunction(f => { const i = document.querySelector('#base'); return i.complete && i.naturalWidth > 0 && new URL(i.src).pathname.endsWith('/data/' + f); }, option.file, { timeout: 120000 });
       const reply = await page.request.get(base + 'data/' + option.file); assert(reply.ok() && sha(await reply.body()) === option.file_sha256, 'bytes ' + option.file);
