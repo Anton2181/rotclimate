@@ -198,3 +198,23 @@ rain shadows are close to r44's: Nevada 316 mm (r44 394, obs 192), Columbia 526 
 So the data (as scored by the 49-region gate) do not reward stronger rain shadows at the cost of the inland balance: the
 refit backed away from e75. The rain-shadow line is closed for now: e75/e76/e77 stay opt-in and unadopted; r44 stays.
 For the fantasy steppe this means the zone remains wet under any Earth-validated physics available today.
+
+## 13. Cold-interior winters: what binds, and e78 (development, not adopted)
+
+Rain-factor trace (`scripts/rain_components.py`), Kazakh steppe January under r44: column water 2.0 mm, saturation 3.6,
+RH 0.56, humidity gate 0.17, storm index 0.19 (eastern Europe 2.9). Removing the cold-high storm damping restores the storm
+index to 2.81 but January rain only rises from 1 to 2 mm (observed 18): **the humidity gate binds, not the storms**. Rain is
+A × gate × W / τ, and a −15 °C column holding 2 mm at 56 % RH yields ≈ 0.08 mm/day against ≈ 0.6 observed.
+
+**e78** (`ice_saturation`, opt-in, default 0): below 0 °C the rain-maker judges the column against saturation over ice
+(0.86 of water's at −15 °C). Plan `calibration/cold_winter_20261115/plan.json`:
+
+| Candidate | S49 (gate ≤ 0.995) | Better | Worse |
+|---|---|---|---|
+| L1 full ice saturation | 0.9992 | middle Volga −4.4 %, Nova Scotia −3.9 %, Kazakh −3.6 %, Mongolia −3.2 % | Manchuria +4.0 % |
+| L2 half | 0.9996 | half of the above | |
+
+Sound and nearly side-effect free, but far too small: the ice ratio is under 2× on a near-zero rate, where the Kazakh winter
+needs about 8×. What is missing is the supply: winter columns in the Eurasian interior hold too little water (2.0 mm against
+about 4 in reanalyses), which points at transport of Atlantic and Mediterranean moisture 3,000+ km inland in winter, the
+same structural limit found for the rain shadows. Not adopted; r44 stays.
