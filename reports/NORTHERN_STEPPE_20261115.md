@@ -93,3 +93,17 @@ On Earth the cold steppes' **winters are too dry** in r44: Kazakh steppe 1–3 m
 4–6 mm against 25–35 (annual 239 vs 307 mm and 351 vs 481 mm). The handoff already lists "winter overflow of
 supersaturated columns" as next physics; this confirms where it matters. It is a real Earth error and the next physics target,
 with the knowledge that fixing it would make the fantasy steppe wetter, not drier.
+
+## 7. A second Earth defect: rain shadows are too weak
+
+The ridge question in §5 led to a check of r44's rain shadows on Earth (56 km cells, lowland medians of annual totals):
+
+| Pair | Windward sim / obs | Lee sim / obs | Lee/windward sim | obs |
+|---|---|---|---|---|
+| Washington coast vs Columbia Basin | 1,193 / 1,637 mm | 561 / 276 mm | 0.47 | 0.17 |
+| California coast/valley vs Nevada | 757 / 617 mm | 394 / 192 mm | 0.52 | 0.31 |
+| Galicia/north Portugal vs Ebro valley | 896 / 1,376 mm | 579 / 430 mm | 0.65 | 0.31 |
+
+The windward sides are too dry and the lee sides up to twice too wet: the model's mountains take too little water out of the
+air. A 3,000 m test ridge on the steppe's upwind side moved its aridity only from 2.95 to 2.70 on the coarse grid, consistent
+with this. The rain-shadow work is declared in `calibration/rain_shadow_20261115/` (screen, then amendment 1 to the dev49 gate).
