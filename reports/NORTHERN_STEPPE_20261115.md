@@ -218,3 +218,28 @@ Sound and nearly side-effect free, but far too small: the ice ratio is under 2×
 needs about 8×. What is missing is the supply: winter columns in the Eurasian interior hold too little water (2.0 mm against
 about 4 in reanalyses), which points at transport of Atlantic and Mediterranean moisture 3,000+ km inland in winter, the
 same structural limit found for the rain shadows. Not adopted; r44 stays.
+
+## 14. Moisture carry at land edges (e79) and its joint refit — passes development, awaiting sealed set i
+
+Kazakh budget (`scripts/budget_region.py`): in January the column water is flat at ~2.1 mm across the whole domain;
+advection and eddy exchange are ~0. The water is not carried in, it is prescribed at the domain's land edge as a fixed
+0.375 of the local column's saturation, which is the rain threshold. **e79** (`edge_carry`, opt-in): air entering across a
+land edge carries the water of a column at a temperature blended toward the latitude mean when that is warmer (air keeps its
+water, not its relative humidity). Plan `calibration/moisture_carry_20261115/`.
+
+| Step | S49 (≤ 0.995) | fine28 (≤ 1.01) |
+|---|---|---|
+| M1 carry 1.0 / M2 carry 0.5, nothing else changed | 1.028 / 1.0065 | fail / fail |
+| Joint refit from M2 (8 settings, 39 evaluations; one restart after a script fix, finished runs reused) | **0.9901** (T −1.7 %, P −0.3 %) | **1.0098** (P +3.5 %) |
+
+Finalist (`calibration/moisture_carry_20261115/finalist_params.json`): edge_carry 0.19, edge_continental_drying 0 (from
+0.25), rh_threshold 0.387, precip_tau 9.3 days, storm_track 4.27, cold_high_storms 0.31, ice_saturation 0.75.
+
+It passes both declared development checks, but read it with care:
+* only 23 of 49 regions improve; the gain is concentrated in Mongolia (S 0.69), the deserts (Tripolitania, Algeria), East
+  Australia and western and eastern Europe;
+* the targeted cold interiors do not improve: Kazakh steppe S 1.036, middle Volga 1.049; Nova Scotia (1.11), South Brazil,
+  New Zealand and Japan are worse; the holdout group is 3.7 % worse;
+* the 28 km check passes by 0.0002.
+
+Under policy v3 the next step is sealed set i, once, with the owner's release. Nothing is adopted until then.
