@@ -23,6 +23,12 @@ const assert = (c, m) => { if (!c) throw new Error(m); };
         await page.selectOption('#variant', option.value);
         await page.waitForFunction(f => { const i = document.querySelector('#base'); return i.complete && i.naturalWidth > 0 && new URL(i.src).pathname.endsWith('/data/' + f); }, option.file, { timeout: 120000 });
         assert(await page.locator('#settled-section').isHidden(), 'legacy ledger panel shown for a size map');
+        if (option.value === 'release3_recurrence') {      // ensemble option: own image and download, own note
+          const t = await page.locator('body').innerText(); assert(t.includes('40') && t.includes('recur'), 'recurrence note missing');
+          let rr = await page.request.get(base + 'data/' + option.file); assert(rr.ok() && sha(await rr.body()) === option.file_sha256, 'recurrence map bytes');
+          rr = await page.request.get(base + 'data/' + option.download); assert(rr.ok(), 'recurrence download');
+          const shot = `${mode}_${option.value}_${tag}.png`; await page.screenshot({ path: path.join(out, shot) }); checks.push({ climate: mode, option: option.value, viewport: tag, screenshot: shot }); continue;
+        }
         const text = await page.locator('body').innerText();
         assert((await page.locator('#variant option:checked').innerText()).includes('Earth-tested positions and sizes'), 'label');
         assert(text.includes('not a blind test') && text.includes('density reading'), 'limits note missing');
