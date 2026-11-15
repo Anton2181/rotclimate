@@ -1,0 +1,11 @@
+{
+ "title": "Frozen small refit of e75 (C05) with four rain-making parameters (declared before any refit evaluation)",
+ "date": "2026-11-15",
+ "made_after": "C05 gate (output/rain_shadow_20261115/gate_e75): S49 1.0146 FAIL, fine28 0.978 pass. Per region: westerly lee basins much better (great_basin -32%, california -21%), but regions whose annual total was already too low got lower (us_midwest +30%: winter now matches observations, summers 65 vs 93 mm; alps +38%, central_asia +34%). e75 removes water the r44 fit used to offset deficits elsewhere.",
+ "start": "calibration/rain_shadow_20261115/C05_params.json",
+ "objective": "S49 against r44 (scripts/gate_v3.py score over dev31 + retired a, b, c), 56 km.",
+ "knobs": {"storm_track": ["mul", 1.15], "land_recycling": ["add", 0.08], "rh_threshold": ["add", 0.03], "precip_tau_days": ["mul", 1.15]},
+ "search": "Coordinate descent: pass 1 tries each knob up and down (inverse step for mul) in the order listed, keeping a move only if S49 falls; pass 2 repeats with half steps. At most 16 evaluations. e75 settings stay fixed.",
+ "selection": "The lowest-S49 evaluated point is the finalist. It must pass policy_v3 dev (S49<=0.995, T and P not worse than +1%) and fine28 (S28<=1.01). Then sealed set i once, only with the owner's release.",
+ "caveat": "The objective is the development gate itself, as in earlier refits (spring, desert, monsoon); only fine28 and sealed set i are independent."
+}
