@@ -169,3 +169,20 @@ and brings US Midwest winters to the observed level. But several regions' annual
 summers 65 mm against 93; the Alps and central Asia too dry overall), so taking the excess lee water away costs more there
 than it gains. r44's fit uses lee over-wetting to offset summer and inland deficits; e75 can only pass together with a fix
 for those deficits (the summer rain-making gap in `reports/SUMMER_RAIN_20261030.md`). e75 stays in the code, default off.
+
+## 11. Summer rain-making alongside e75 (development, not adopted)
+
+e75 failed because summer and inland totals are already too low. Two declared mechanisms for the summer deficit
+(`calibration/rain_shadow_20261115/plan_e76.json`), both opt-in, default off:
+
+| Candidate | S49 (gate ≤ 0.995) | Helps | Hurts |
+|---|---|---|---|
+| J1 e76: convection onset 18 °C instead of 22 | 1.014 | US Midwest −18 %, Japan −19 % (Midwest summer 65 → 82 mm, obs 93) | East Australia +43 %, Tripolitania +38 %, East China +14 % |
+| J2 / J3: e76 at 18 / 15 °C with e75 C05 | 1.026 / 1.045 | | |
+| K1 / K2 e77: summer showers scaled by the storm index | 1.000 / 1.002 | US Midwest −11 %, Japan −9 % | Manchuria, Victoria, East Australia +8–9 % |
+
+e77 is the cleaner mechanism (neutral, where e76 is harmful), but nothing passes, so the e75 combination was not run (declared
+rule). The pattern across sections 8–11: r44 sits in a balance where errors offset each other region by region, and every
+single mechanism (rain shadows, summer convection) improves its target regions while unsettling that balance elsewhere.
+The way forward is a joint refit of e75 + e77 with the rain-making parameters, on the scale of the earlier multistart
+campaigns, declared in advance and checked on sealed set i, not more one-mechanism gates.

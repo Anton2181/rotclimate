@@ -13,7 +13,9 @@ crest condensate (screen, worse), A4 e4 eddy height 4/6 km (1.048/1.022). Each l
 upslope rainout along the mean wind (new physics). Report section 8.
 Then e75 upwind-barrier cap on eddy water (eddy_barrier_km/_dz_km/_crest; plan_e75.json, refit_e75.json): crest-height C05
 fixes westerly lee basins but S49 1.015 (C10 1.037), frozen 4-knob refit best 1.012: FAIL. Blocker: r44 offsets summer/inland
-deficits with lee over-wetting (US Midwest summers 65 vs 93 mm); e75 needs the summer rain-making fix alongside. Section 10. Sealed sets d-h spent; NEW sealed set i declared
+deficits with lee over-wetting (US Midwest summers 65 vs 93 mm); e75 needs the summer rain-making fix alongside. Section 10.
+Summer: e76 instability_t0 (J1 18 C: S49 1.014; with C05 1.026/1.045) and e77 storm_convection (K1/K2 1.000/1.002, neutral): FAIL
+(plan_e76.json). Next: one declared joint refit of e75 + e77 + rain params (multistart scale), then sealed set i with owner release. Section 11. Sealed sets d-h spent; NEW sealed set i declared
 (calibration/sealed_20261115i, 6 mountain boxes, audit scripts/audit_sealed_separation.py); open only with the owner's release.
 WorldClim vapr zip downloaded into data/cache/worldclim (benchmark_local needs it).
 
