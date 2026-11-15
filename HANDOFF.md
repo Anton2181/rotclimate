@@ -1,5 +1,5 @@
 # CLIMATE CAMPAIGN — LIVE PLAN / TO-DO (owner: "keep going until you get a valid climate update"; updated as work proceeds)
-Base: r45 (adopted 15 Nov, Earth only; atlas stays r44 by owner decision). Valid update = policy_v3: dev49 S<=0.995 with T,P <=+1%,
+Base: r46 (adopted 15 Nov, Earth only; atlas stays r44 by owner decision). Valid update = policy_v3: dev49 S<=0.995 with T,P <=+1%,
 fine28 S<=1.01, then ONE run on an unseen sealed set (now set j, calibration/sealed_20261115j; release recorded from the owner's
 instruction for the first dev+fine finalist).
 - [done, near miss] Step 1 grand refit on r45 (calibration/grand_refit_20261115/plan.json): best S49 0.995097 (T -0.16%, P -0.82%)
@@ -15,7 +15,9 @@ instruction for the first dev+fine finalist).
 - [done] Step 6 e83 trade_heat_low (trades give way under heat lows): Bengal May winds turn southerly; screen neutral
   (Najd/Algeria/Bengal better, Sahel/Mexico worse); T10 S49 1.0000, pool 1.009.
 - [done] Step 7 refit v4 (v3 best + e83, minimax): best 0.9956 FAIL; S49 alone reaches 0.9949 (pool 1.006).
-- [running] Step 8 refit v5 (plan_refit_v5.json): minimise pool subject to S49 <= 0.9945; then fine28, set k.
+- [DONE] Step 8 refit v5 finalist: dev49 0.99450, fine28 0.975, sealed k 0.964 -> **r46 ADOPTED** (Earth; atlas stays r44).
+  reports/CLIMATE_R46_20261115.md; calibration/local_accuracy_20261023/r46_adoption.json. Sealed sets i, j, k spent.
+- NEXT: maize (owner). Open climate problems: equatorial interiors, Bengal, rain shadows; a new sealed set is needed first.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea

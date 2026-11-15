@@ -1,0 +1,110 @@
+{
+ "adopted": "r46",
+ "adopted_utc": "2026-11-15T21:51:36.374780+00:00",
+ "reference": "r45",
+ "params": "calibration/local_accuracy_20261023/r46_params.json",
+ "params_sha256": "0ff00f4528e470b6f2f8230f41a5aa94cafb6de34b85ac967f7942cb8d6da719",
+ "validation": "output/trade_heat_low_20261115/finalist",
+ "plans": [
+  "calibration/grand_refit_20261115/plan.json",
+  "calibration/grand_refit_20261115/plan_v2.json",
+  "calibration/grand_refit_20261115/plan_v3.json",
+  "calibration/trade_heat_low_20261115/plan.json",
+  "calibration/trade_heat_low_20261115/plan_refit.json",
+  "calibration/trade_heat_low_20261115/plan_refit_v5.json",
+  "calibration/sealed_20261115k/declaration.json"
+ ],
+ "criteria": "Unchanged policy_v3: dev49 S<=.995; T/P<=+1%; fine28 S<=1.01; unseen sealed S<=1.0 (set k, release recorded from the owner instruction \"keep going until you get a valid climate update\").",
+ "scores": {
+  "dev49": {
+   "S": 0.9944995596402295,
+   "T": -0.006135067851751441,
+   "P": -0.004865812867789643,
+   "n": 49
+  },
+  "dev_pass": true,
+  "fine28": {
+   "S": 0.9749242058870182,
+   "T": -0.026560647035046236,
+   "P": -0.023590941190917203,
+   "n": 4
+  },
+  "fine_pass": true,
+  "sealed_k": {
+   "S": 0.9643024114181837,
+   "T": -0.017020410882827908,
+   "P": -0.05437476628080462,
+   "n": 6
+  },
+  "sealed_pass": true,
+  "outcome": "adopted"
+ },
+ "extra_tropical_pool_reported": {
+  "S": 1.0071,
+  "note": "16 extra-tropical spent-pool regions (development data), slightly worse; reported, not a criterion"
+ },
+ "changed_fields": {
+  "cold_high_storms": {
+   "r45": 0.3082467922762019,
+   "r46": 0.39574679227620185
+  },
+  "convective_rain": {
+   "r45": 0.3647612418951105,
+   "r46": 0.4839489478221275
+  },
+  "eddy_barrier_crest": {
+   "r45": null,
+   "r46": 0.5
+  },
+  "eddy_barrier_km": {
+   "r45": null,
+   "r46": 0.0
+  },
+  "eddy_rate": {
+   "r45": 1.434152674408984,
+   "r46": 1.6744995658922288
+  },
+  "edge_carry": {
+   "r45": 0.1875,
+   "r46": 0.08749999999999998
+  },
+  "ice_saturation": {
+   "r45": 0.75,
+   "r46": 1.0
+  },
+  "instability": {
+   "r45": 2.5204588569083555,
+   "r46": 1.871082011806085
+  },
+  "precip_tau_days": {
+   "r45": 9.316333944757167,
+   "r46": 9.666985821100408
+  },
+  "rh_threshold": {
+   "r45": 0.3864949272550766,
+   "r46": 0.3689949272550766
+  },
+  "storm_convection": {
+   "r45": null,
+   "r46": 0.5125
+  },
+  "storm_track": {
+   "r45": 4.269930766972833,
+   "r46": 4.122644724349927
+  },
+  "trade_heat_low": {
+   "r45": null,
+   "r46": 0.5
+  }
+ },
+ "history": "Grand refits v1 (failed sealed j), v2, v3 (minimax 0.996), e83 trade_heat_low physics (trades give way under heat lows), refit v4 (0.9956), refit v5 (pool subject to S49<=0.9945) -> finalist.",
+ "disclosed_departures": [
+  "grand refit extension 1 after a 0.0001 miss",
+  "e83 sent to refit despite a neutral screen (amendments 1-2)",
+  "refit v4 started from v3 best rather than T10"
+ ],
+ "open_problems": "Equatorial continental interiors nearly rainless (Congo 7 %, W Amazon 3 % of observed rain): out of the map band, not addressed.",
+ "planet_orbit_changed": false,
+ "imposed_observed_wind_or_sst": false,
+ "atlas_served": "r44 (no rebuild unless the owner asks)"
+}
