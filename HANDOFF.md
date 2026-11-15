@@ -1,3 +1,9 @@
+# REBA/MODELSKI CITY TEST: TOO SPARSE (6 CITIES), NOT SCORED — 15 November 2026
+calibration/reba_cities_blind_20261115 (declared before values); scripts/reba_cities_blind.py; output/reba_cities_blind_20261115.
+Only 6 Modelski AD 200 cities outside the Roman/Han pools (+2 Chandler AD 100) < declared minimum 10 -> not scored; pool spent.
+Cliopatria v0.2.1 rebuilt from Zenodo 23128623 (data/cache/cliopatria/geo). Valley of Mexico survey cached and reserved
+(data/cache/valley_of_mexico, 2,052 site-period rows; needs an Earth harvest grid for Mexico; no maize in the crop model).
+
 # SECOND BLIND POOL SEARCH (15 Nov 2026): NO DIRECTLY USABLE OPEN POOL
 Rejected: Chelazzi & Lawrence PLOS One 2026 (zenodo 20172243) ends in the Iron Age; Altinisik 2022 zenodo 7086441 is aDNA;
 Palmisano 2021 / Bunbury Southern Levant are radiocarbon-era; Hartwell CHGIS has no historical populations; Stadester 1.0
