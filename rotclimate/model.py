@@ -2044,7 +2044,7 @@ class ClimateModel:
             # moisture, so hot deserts stay dry)
             if p.instability > 0:
                 moist = np.clip((W / np.maximum(Ws, 1e-6) - 0.3) / 0.3, 0, 1) if W_prev is not None else 0.0
-                instab = 1.0 + p.instability * np.clip((T - 22.0) / 8.0, 0, 1.5) * moist
+                instab = 1.0 + p.instability * np.clip((T - p.instability_t0) / 8.0, 0, 1.5) * moist
             else:
                 instab = 1.0
             from .moisture import ocean_rate, solve_moisture

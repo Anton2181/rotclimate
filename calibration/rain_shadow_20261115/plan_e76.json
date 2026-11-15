@@ -1,0 +1,8 @@
+{
+ "title": "e76 lower onset of summer convection, alone and with e75 C05 (declared before any e76 run)",
+ "date": "2026-11-15",
+ "made_after": "e75 C05 fixes westerly lee basins but fails dev49 (S49 1.015; refit best 1.012) because summer and inland totals are already too low (US Midwest summer 65 vs 93 mm). reports/SUMMER_RAIN_20261030.md: mid-latitude summer convection nearly absent, the v6 instability boost starts at 22 C.",
+ "mechanism": "instability_t0 replaces the fixed 22 C onset of the v6 boost (same 8 C ramp, same moisture gate). Default 22 keeps r44 byte-identical.",
+ "candidates": {"J1": {"instability_t0": 18.0}, "J2": {"eddy_barrier_km": 300.0, "eddy_barrier_crest": 0.5, "instability_t0": 18.0}, "J3": {"eddy_barrier_km": 300.0, "eddy_barrier_crest": 0.5, "instability_t0": 15.0}},
+ "gate": "policy_v3 dev49 (S49<=0.995, T and P not worse than +1%) + fine28 against r44; no further variants without a new amendment. A passer goes to sealed set i only with the owner's release."
+}
