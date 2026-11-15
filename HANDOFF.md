@@ -1,3 +1,16 @@
+# CLIMATE: NORTHERN STEPPE + RAIN SHADOWS — 15 November 2026 (settlement WP5 parked; owner: switch to climate)
+reports/NORTHERN_STEPPE_20261115.md. Painted cold_dry zone (40-46 N): atlas median 830 mm, 2.3x the dry threshold, Csa-like
+(winter rain on easterlies; planet retrograde, tilt 33.5). r44 on Earth steppes is NOT too wet (Caspian lee 167 vs 128 mm; cold
+steppe winters too DRY: Kazakh 239/307, Volga 351/481). World knobs (scripts/probe_steppe_world.py): best 1.9x and it breaks the
+Mediterranean/warm zones; a 3,000 m ridge east of the zone: ds8 2.60 -> 2.26. Owner options: rezone as cold-winter Csa, or a range
+upwind (east) once rain shadows are stronger.
+Rain shadows too weak on Earth (lee 1.35-2.05x obs, windward 0.65-0.73x). calibration/rain_shadow_20261115: one-knob screen FAILED
+(25% bar); A1 eddy_rainout candidates E1-E3 FAIL dev49 (S 1.021-1.029; flat humid regions + central Asia/Tibet worse); A2 new opt-in
+physics e74 eddy_rainout_relief_km (crest cap only where ground stands above its eddy-scale surroundings) -> F1/F2 gate
+(scripts/rain_shadow_dev49_f.sh, output/rain_shadow_20261115/gate2). Sealed sets d-h spent; NEW sealed set i declared
+(calibration/sealed_20261115i, 6 mountain boxes, audit scripts/audit_sealed_separation.py); open only with the owner's release.
+WorldClim vapr zip downloaded into data/cache/worldclim (benchmark_local needs it).
+
 # SETTLEMENT HIERARCHY PUBLISHED (OWNER REQUEST) — 15 November 2026
 reports/SETTLEMENT_HIERARCHY_20261115.md. Swap rule tried and reverted (owner). A4 model: M1 means + 0.8 for the 19 seats; every marked
 place takes the largest residual of itself + half its 75 km cluster (scripts/settlement_hierarchy_soft.py fit; map via
