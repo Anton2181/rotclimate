@@ -1,3 +1,12 @@
+# FIRST BLIND TEST OF POSITIONS AND SIZES: SOUTHERN MESOPOTAMIA AD 200 — BOTH FAIL — 15 November 2026
+
+Report reports/FLOODPLAINS_BLIND_20261115.md; plan ae9e2e36 (+A1 swapped lat/lon before scoring, +A2 SizeHa is a class code,
+after first scoring, disclosed). Source: owner-supplied bnza/archiraq zip (data/cache/floodplains_archiraq, ignored).
+Positions: sites >= 10 ha at percentile 0.48 (pass 0.55); capture 0.19 vs 0.14 previous rule. Sizes (semi-blind): observed 12
+largest = 9 x 40-200 ha + 3 x >200 ha; model none >200 ha, total ~490 ha vs >= 964: FAIL. Likely causes: modern river
+lines vs ancient channels (no canals/palaeochannels); size model cannot make plain-scale megacities. Pool SPENT.
+Review passed (12), fresh exact. Nothing on the map changed.
+
 # BLIND-POOL SEARCH FOR POSITIONS/SIZES: NOTHING USABLE FOUND YET — 14 November 2026
 
 Calibration page updated (reach rule v2.1 blind: CHGIS 1080 0.737 vs 0.697, Pleiades 550 0.774 vs 0.766; population pattern
