@@ -78,5 +78,6 @@
  "search": "Coordinate descent (scripts/joint_refit.py, objective_mode max_dev_pool): minimise max(S49, S_pool) against r45; at most 50 evaluations.",
  "selection": "Lowest max(S49, S_pool). It must pass policy_v3 dev (S49<=0.995, T,P<=+1%) and fine28; then sealed set k once.",
  "caveat": "Only fine28 and sealed set k are independent.",
- "technical_note": "First launch failed before any score: averaging turned integer settings into floats (steps must be an integer); the midpoint now keeps integer settings as integers."
+ "technical_note": "First launch failed before any score: averaging turned integer settings into floats (steps must be an integer); the midpoint now keeps integer settings as integers.",
+ "result": "50 evaluations: best max(S49, S_pool) 0.9960 (S49 0.9960, pool 0.9960; T -0.3 %, P -0.5 %): FAIL the dev gate (0.995). The settings' trade-off frontier between dev49 and the extra-tropical pool sits near 0.996; parameter refits are exhausted. Sealed set k unopened."
 }
