@@ -28,6 +28,12 @@
       "made_after": "scoring A2 (kept as results_selection_with_capital_term.json): 0% of subordinates larger than their capital, median ratio 0.057 (overshoot)",
       "known": "The M1C capital term was fitted on observed capital sizes, which already contain the selection effect; selection on top of it double-counts.",
       "change": "Selection alone: means from the published M1 refit WITHOUT a capital term (1.915 + 0.147 lnH, held-out sigma 1.048; fold coefficients refitted on the same folds), residuals generated as before, each centre takes the largest residual of its cluster. Also reported: the implied capital factor (mean generated ln area of capitals minus the M1 mean) against the observed 3.4x. Same pass rule."
+    },
+    {
+      "id": "A4",
+      "made_after": "scoring A3 (kept as results_selection_only.json): implied capital factor 1.99 vs observed 3.22, 1.3% of subordinates larger than their capital vs 6.3%, median ratio 0.17 vs 0.11; A2 (selection + full capital term) overshot",
+      "known": "Full selection plus the observed capital term overshoots; selection alone undershoots. The truth lies between.",
+      "change": "Two-parameter centre model: ln area_c = M1 mean + c + sigma x (largest of the centre's own residual and those of a fraction phi of its cluster, the cluster members taken in a fixed seeded order); subordinates keep their own M1 draws (the member whose residual the centre took receives the centre's). phi in {0, 0.25, 0.5, 0.75, 1}, c in {0.0, 0.1, ..., 1.3}. For each held-out fold, (phi, c) minimises on the three training folds the sum of squared differences of (share of subordinates larger than their centre, ln median ratio, ln capital factor) between generated (5 seeds) and observed; the held-out fold is then generated with them. Pass rule on the pooled held-out generation unchanged (KS, area ratio, share within 0.05, median ratio within x1.25), plus implied capital factor within x1.25 of observed."
     }
   ]
 }
