@@ -1,0 +1,15 @@
+{
+  "date": "2026-11-15",
+  "status": "declared_before_any_value_was_read",
+  "pool": {
+    "source": "Reba, Reitsma & Seto (2016) Sci Data 3:160034, figshare 10.6084/m9.figshare.2059497 (Modelski Ancient, modelskiAncientV2.csv) and 10.6084/m9.figshare.2059494 (Chandler, chandlerV2.csv), CC BY 4.0; cached in ignored data/cache/reba_2016",
+    "exposure": "Only headers and row counts read (Modelski 154 rows, columns City..Certainty, BC_3700..AD_1000 incl. AD_200; Chandler 1597 rows incl. AD_100, AD_260).",
+    "never_used": "Large-city positions outside the Roman Empire and the Han window have not been used by the settlement model."
+  },
+  "cohort": "Primary: Modelski AD_200 > 0. Secondary: Chandler AD_100 > 0 (cities not already in the primary within 25 km). Kept: inside the Earth harvest window (0-56 N, -12-125 E), on land after snapping to the 9 km grid, and OUTSIDE both development pools: the Cliopatria Roman Empire of AD 150 (polity.earth inside_polygons on a local grid) and the Han window extent (polity_earth_check.load_window('han')). If fewer than 10 primary cities remain, the test is not scored and the plan is amended.",
+  "model": "For each city, a local 9 km grid of 600 x 600 km centred on it, built as scripts/floodplains_blind.py inputs() (Earth harvest people, WorldClim, Natural Earth rivers, history exp(-D/800) from the cradles + Rome cores). Fields: environment site score and release-3 field (score x history800) from polity.settlement_locations.site_fields.",
+  "test_P": "Percentile of the city's cell within all land cells of its local grid (ties half), per field. Pass: mean release-3 percentile over primary cities >= 0.70 (large cities should sit on the best-scoring land; chance is 0.5). Reported: environment percentile, the secondary cohort, and the share of cities above 0.5.",
+  "test_size_signal": "Reported only (no pass rule): Spearman rank correlation between AD_200 population and the local people supported within 50 km (Earth harvest people field), primary cohort.",
+  "reporting": "Scored once and reported whatever the outcome; pool then spent. Nothing fitted.",
+  "outputs": "output/reba_cities_blind_20261115/{results.json, review.json}"
+}
