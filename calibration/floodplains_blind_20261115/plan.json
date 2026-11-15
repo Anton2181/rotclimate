@@ -32,6 +32,12 @@
       "made_after": "a first run matched no site to the window (0 of the AD 200 sites, 1 surveyed cell); no score was computed",
       "known": "Only column ranges were read: \"Latitude\" spans 41.87-49.72 and \"Longitude\" 30.64-34.48, i.e. the two columns are swapped (southern Mesopotamia lies at 30-35 N, 42-50 E). Dates span -4500 to 1600 (calendar years, as declared).",
       "change": "Read latitude from the \"Longitude\" column and longitude from the \"Latitude\" column. Nothing else changes."
+    },
+    {
+      "id": "A2",
+      "made_after": "the declared scoring ran once (results kept as output/floodplains_blind_20261115/results_first_run.json)",
+      "known": "SizeHa in data_stacked.csv is a size-class code 1-6, not hectares: the authors' codesFloodplains.R maps 1 -> 0.1-4 ha, 2 -> 4.1-10, 3 -> 10.1-20, 4 -> 20.1-40, 5 -> 40.1-200, 6 -> >200 ha. The first run treated the codes as hectares, so its towns cohort (>= 10 \"ha\") was empty and its size test compared model hectares with codes; both are void. Its AD 200 positions cohort does not use size and stands. Seen in the first run: the 12 largest AD 200 surveyed codes were 5-6 (40-200 and >200 ha), and the class counts over all rows and periods.",
+      "change": "Codes are read as bands [lo, hi] = [0.1,4], [4.1,10], [10.1,20], [20.1,40], [40.1,200], [201, 1783 (the model ceiling)]. towns = code >= 3 (>= 10.1 ha), never scored before. Size test: N largest AD 200 sites by code; for each seed, model areas binned into the same bands; metrics: share of model towns in the observed band of the same rank (sorted model vs sorted observed), and model total area vs the observed total bounds [sum lo, sum hi]. Pass: mean same-band share >= 0.5 AND mean model total inside [0.67 x sum lo, 1.5 x sum hi]. The size result is semi-blind (the top codes were seen)."
     }
   ]
 }

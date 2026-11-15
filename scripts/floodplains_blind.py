@@ -16,7 +16,9 @@ from settlement_locations_earth import sha, write
 PLAN = ROOT / 'calibration/floodplains_blind_20261115/plan.json'; OUT = ROOT / 'output/floodplains_blind_20261115'
 ZIP = ROOT / 'data/cache/floodplains_archiraq/archiraq-master.zip'; MEMBER = 'archiraq-master/docs/papers/1/data_stacked.csv'
 LAT0, LON0, WKM, HKM = 31.8, 45.6, 600., 500.; SEEDS = [1, 7, 19, 43, 97]
-SIZES = ROOT / 'output/sizes_greek_walls_20261114/results.json'; OLD_SIZES = ROOT / 'output/settlement_release2_20261113/results.json'
+BANDS = {1: (0.1, 4.0), 2: (4.1, 10.0), 3: (10.1, 20.0), 4: (20.1, 40.0), 5: (40.1, 200.0), 6: (201.0, 1783.0)}   # amendment A2: SizeHa is a class code
+SIZES = ROOT / 'output/sizes_greek_walls_20261114/results.json'; OLD_BANDS = {1: (0.1, 4.0), 2: (4.1, 10.0), 3: (10.1, 20.0), 4: (20.1, 40.0), 5: (40.1, 200.0), 6: (201.0, 1783.0)}   # amendment A2: SizeHa is a class code
+SIZES = ROOT / 'output/settlement_release2_20261113/results.json'
 
 
 def xyz(lat, lon):
@@ -61,7 +63,7 @@ def main(out):
         if R['ids'][i] not in best or R['size'][i] > R['size'][best[R['ids'][i]]]: best[R['ids'][i]] = i
     ad = np.array(sorted(best.values())); allsites = np.flatnonzero(np.isfinite(R['lat']) & np.isfinite(R['lon']))
     result = dict(status='floodplains_blind_test', plan_sha256=sha(PLAN), producer_sha256=sha(Path(__file__)), source_zip_sha256=sha(ZIP),
-                  date_range=R['date_range'], rows=int(len(R['ids'])), ad200_sites=int(len(ad)), ad200_towns_ge_10ha=int((R['size'][ad] >= 10).sum()), grids={})
+                  date_range=R['date_range'], rows=int(len(R['ids'])), ad200_sites=int(len(ad)), ad200_towns_class3plus=int((R['size'][ad] >= 3).sum()), grids={})
     size_fit = json.loads(SIZES.read_text())['sizes']['primary']; old_fit = json.loads(OLD_SIZES.read_text())['sizes']['primary']
     arrays = {}
     for cell in (3, 9):
@@ -82,7 +84,7 @@ def main(out):
         bg = surveyed
         g = dict(shape=[ny, nx], land_cells=int(land.sum()), surveyed_cells=int(surveyed.sum()), production_count=count, release3_seat_people=seat,
                  release3_count=len(rel), cohorts={})
-        for name, m in (('ad200', np.ones(len(sel), bool)), ('towns', R['size'][sel] >= 10)):
+        for name, m in (('ad200', np.ones(len(sel), bool)), ('towns', R['size'][sel] >= 3)):
             cells = np.unique(site_cells[m]); c = dict(sites=int(m.sum()), distinct_cells=int(len(cells)))
             if len(cells):
                 c['percentile'] = {k: float(np.mean(relative_ranks(f.ravel()[cells], f[bg]))) for k, f in fields.items()}
@@ -92,18 +94,22 @@ def main(out):
             people = np.where(land, x['density'], 0.) * cell ** 2
             (_, _, _), H = Z.hinterlands(rel, land, people, float(cell))
             keep = surveyed[rel[:, 0], rel[:, 1]] & (H > 0); n = int(keep.sum())
-            observed = np.sort(R['size'][sel])[::-1][:n]
+            codes = np.sort(R['size'][sel].astype(int))[::-1][:n]; lo = np.array([BANDS[c][0] for c in codes]); hi = np.array([BANDS[c][1] for c in codes])
+            band_of = lambda a: np.searchsorted([4.05, 10.05, 20.05, 40.05, 200.5], a) + 1
             sizes = {}
             for label, fit in (('published_refit', size_fit), ('release2_previous', old_fit)):
                 coef = fit['models']['M1']['full_coefficients']; sigma = fit['models']['M1']['heldout_sigma']; lo_ha, hi_ha = fit['area_range_ha']
                 mean = coef[0] + coef[1] * np.log(H[keep]); runs = []
-                for s in SEEDS:
-                    gen = Z.generate_area(mean, sigma, Z.draws(n, s), lo_ha, hi_ha)
-                    runs.append(dict(seed=s, ks=float(ks_2samp(gen, observed).statistic), total_ratio=float(gen.sum() / observed.sum()), median_model=float(np.median(gen))))
-                sizes[label] = dict(runs=runs, mean_ks=float(np.mean([r['ks'] for r in runs])), mean_total_ratio=float(np.mean([r['total_ratio'] for r in runs])),
-                                    passed=bool(np.mean([r['ks'] for r in runs]) <= 0.20 and 0.67 <= np.mean([r['total_ratio'] for r in runs]) <= 1.50))
-            g['sizes'] = dict(model_towns_in_surveyed_area=n, observed_largest_n=dict(median=float(np.median(observed)), total=float(observed.sum()),
-                              quantiles={str(q): float(np.quantile(observed, q)) for q in (.1, .25, .5, .75, .9)}), models=sizes)
+                for s_ in SEEDS:
+                    gen = np.sort(Z.generate_area(mean, sigma, Z.draws(n, s_), lo_ha, hi_ha))[::-1]
+                    runs.append(dict(seed=s_, same_band_share=float(np.mean(band_of(gen) == codes)), model_total=float(gen.sum()),
+                                     model_band_counts={str(b): int((band_of(gen) == b).sum()) for b in BANDS}, median_model=float(np.median(gen))))
+                same = float(np.mean([r['same_band_share'] for r in runs])); tot = float(np.mean([r['model_total'] for r in runs]))
+                sizes[label] = dict(runs=runs, mean_same_band_share=same, mean_model_total=tot,
+                                    passed=bool(same >= 0.5 and 0.67 * lo.sum() <= tot <= 1.5 * hi.sum()))
+            observed_counts = {str(b): int((codes == b).sum()) for b in BANDS}
+            g['sizes'] = dict(model_towns_in_surveyed_area=n, observed_largest_n=dict(band_counts=observed_counts, total_bounds_ha=[float(lo.sum()), float(hi.sum())]),
+                              all_ad200_band_counts={str(b): int((R['size'][sel].astype(int) == b).sum()) for b in BANDS}, models=sizes)
         result['grids'][str(cell)] = g
         arrays.update({f'{cell}km__production': prod, f'{cell}km__release3': rel, f'{cell}km__surveyed': surveyed, f'{cell}km__release3_field': fields['release3']})
         print(cell, json.dumps({k: v for k, v in g.items() if k != 'sizes'}), flush=True)
