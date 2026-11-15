@@ -2201,6 +2201,25 @@ class ClimateModel:
                         for _ in range(n_steps):
                             w = np.minimum(gauss(w, sigW / np.sqrt(n_steps)), crest_pad)
                         return w[pad:-pad, pad:-pad]
+                    if p.eddy_rainout_accounted:
+                        # e74c: the clipped water condenses at the crest it could
+                        # not cross and falls there (windward rain), as in the
+                        # conservative-rainout scheme; before, it simply vanished,
+                        # which dried the ranges themselves (Tien Shan, Tibet).
+                        cache = {}
+
+                        def partition(water, crest_pad=crest_pad, n_steps=n_steps, pad=pad, cache=cache):
+                            water = np.asarray(water, float)
+                            if 'w' in cache and np.array_equal(cache['w'], water):
+                                return cache['out']
+                            w = np.pad(water, pad, mode='edge'); wet = np.zeros_like(w)
+                            for _ in range(n_steps):
+                                w = gauss(w, sigW / np.sqrt(n_steps))
+                                wet += np.maximum(w - crest_pad, 0.0); w = np.minimum(w, crest_pad)
+                            cache['w'] = water.copy(); cache['out'] = (w[pad:-pad, pad:-pad], wet[pad:-pad, pad:-pad])
+                            return cache['out']
+                        mix = lambda water, partition=partition: partition(water)[0]
+                        condensate = lambda water, partition=partition: partition(water)[1]
             if p.eddy_rate > 0 and p.eddy_moisture_scheme == 'conservative':
                 from .storms import conservative_exchange
                 mass = np.exp(-h_km / p.eddy_moisture_height_km) if p.eddy_moisture_height_km > 0 else None
