@@ -2018,7 +2018,19 @@ class ClimateModel:
                 # at half land or less.
                 edge_rh = p.land_edge_rh * (1.0 - p.edge_continental_drying
                                             * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0))
-            bnd = np.where(ocean, W_ocean, edge_rh * Ws)
+            if p.edge_carry > 0:
+                # e79: air carries its water, not its relative humidity. Atlantic
+                # air entering a -16 C interior in January cools on the way, so
+                # its RH rises; pinning RH to the cold edge column (0.375 of a
+                # 3.6 mm saturation, just the rain threshold) left the Kazakh and
+                # Volga winters with 2 mm columns and 1-6 mm a month of snow.
+                # One-sided: the fitted edge RH stays the floor (warm-season inflow,
+                # where a two-sided carry collapsed the Kazakh summer, 1.75 -> 0.63 mm/day).
+                T_src = T_col + p.edge_carry * np.maximum(Tz - T_col, 0.0)
+                carried = edge_rh * Ws * w_sat(T_src) / np.maximum(w_sat(T_col), 1e-6)
+                bnd = np.where(ocean, W_ocean, np.minimum(carried, Ws))
+            else:
+                bnd = np.where(ocean, W_ocean, edge_rh * Ws)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             if p.soil_bucket_mm > 0:

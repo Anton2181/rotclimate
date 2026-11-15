@@ -1,0 +1,10 @@
+{
+ "title": "e79 land-edge inflow carries its water from warmer source air (declared before any dev49 run)",
+ "date": "2026-11-15",
+ "made_after": "reports/NORTHERN_STEPPE_20261115.md section 13 and the Kazakh steppe moisture budget (r44): in January W is flat at ~2.1 mm across the whole domain, advection and storm exchange ~0; the land-edge inflow is fixed at land_edge_rh x (1 - edge_continental_drying x ...) = 0.375 of the local column's saturation, i.e. the rain threshold (0.368).",
+ "probes_disclosed": "kazakh_steppe only (scratch budget script): two-sided carry 1.0 -> Jan P 0.03 -> 0.30 mm/day, W 2.0 -> 3.4 mm, but July P 1.75 -> 0.63; one-sided carry 1.0 -> Jan 0.30, Apr 1.20 (obs 0.62), Jul 2.09 (obs 1.49). The one-sided form was chosen after the two-sided probe.",
+ "mechanism": "edge_carry c: land-edge boundary water = min(Ws, edge_rh x Ws x w_sat(T_col + c x max(Tz - T_col, 0)) / w_sat(T_col)), Tz the latitude-mean temperature of the day. Default 0: r44 byte-identical.",
+ "candidates": {"M1": {"edge_carry": 1.0}, "M2": {"edge_carry": 0.5}},
+ "gate": "policy_v3 dev49 (S49<=0.995, T and P not worse than +1%) + fine28 against r44. A passer goes to sealed set i only with the owner's release. No further variants without an amendment.",
+ "scope_note": "This changes the regional runs' land boundary, i.e. how the world outside a domain supplies water. On the fantasy map the same rule acts at its edges with the beyond bands."
+}
