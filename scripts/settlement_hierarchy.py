@@ -38,8 +38,8 @@ def main():
         d = sphere_distance(lat[C], lon[C], lat[i], lon[i]); j = int(np.argmin(d))
         if d[j] <= RADIUS: centre[i] = C[j]; dist[i] = d[j]
     sub = centre >= 0
-    def design(idx): return np.column_stack([np.ones(len(idx)), lnH[idx] - lnH[centre[idx]], dist[idx] / 100.0])
-    delta = np.zeros(n); delta[sub] = y[sub] - y[centre[sub]]
+    def design(idx, yc=None): return np.column_stack([np.ones(len(idx)), y[centre[idx]] if yc is None else yc, lnH[idx], dist[idx] / 100.0])   # A1: conditional on centre size
+    delta = y.copy()
     m1c = json.loads(M1C.read_text())['models']['M1C']; area = np.exp(y)
     # held-out: M1C fold coefficients for every town; delta model fitted on subordinates of the other folds
     pred_m1c = np.empty(n); pred_delta = np.full(n, np.nan); sd = {}; coefs = []
@@ -48,13 +48,14 @@ def main():
         c = m1c['fold_coefficients'][f]; pred_m1c[te] = c[0] + c[1] * lnH[te] + c[2] * cap[te]
         s_tr = np.flatnonzero(sub & tr); beta, *_ = np.linalg.lstsq(design(s_tr), delta[s_tr], rcond=None); coefs.append([float(b) for b in beta])
         sd[f] = float(np.std(delta[s_tr] - design(s_tr) @ beta))
-        s_te = np.flatnonzero(sub & te); pred_delta[s_te] = design(s_te) @ beta
+        BETA = getattr(main, 'BETA', {}); BETA[f] = beta; main.BETA = BETA
     sig_m1c = m1c['heldout_sigma']; runs = []
     for seed in SEEDS:
         e = Z.draws(n, seed); gen = np.clip(np.exp(pred_m1c + sig_m1c * e), area.min(), area.max())          # centres and towns beyond 75 km
         e2 = Z.draws(n, seed + 1000)
         for i in np.flatnonzero(sub):
-            gen[i] = np.clip(gen[centre[i]] * np.exp(pred_delta[i] + sd[fold[i]] * e2[i]), area.min(), area.max())
+            b = main.BETA[fold[i]]; mu = b[0] + b[1] * np.log(gen[centre[i]]) + b[2] * lnH[i] + b[3] * dist[i] / 100.0
+            gen[i] = np.clip(np.exp(mu + sd[fold[i]] * e2[i]), area.min(), area.max())
         runs.append(dict(seed=seed, ks=float(ks_2samp(gen, area).statistic), total_ratio=float(gen.sum() / area.sum()),
                          share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]]))))
     obs = dict(subordinates=int(sub.sum()), share_sub_larger=float(np.mean(area[sub] > area[centre[sub]])), median_ratio=float(np.median(area[sub] / area[centre[sub]])))
@@ -69,7 +70,7 @@ def main():
         gen = np.clip(np.exp(pred_m1c + sig_m1c * Z.draws(n, seed)), area.min(), area.max())
         ref.append(dict(share_sub_larger=float(np.mean(gen[sub] > gen[centre[sub]])), median_ratio=float(np.median(gen[sub] / gen[centre[sub]]))))
     out = dict(status='settlement_hierarchy_development', plan_sha256=sha(PLAN), producer_sha256=sha(Path(__file__)), cohort=n, centres=int(cap.sum()), radius_km=RADIUS,
-               observed=obs, delta_model=dict(terms=['intercept', 'lnH_u - lnH_c', 'distance_km / 100'], full_coefficients=[float(b) for b in full], scatter_sd=sd_full,
+               observed=obs, delta_model=dict(terms=['intercept', 'ln area_c', 'lnH_u', 'distance_km / 100'], full_coefficients=[float(b) for b in full], scatter_sd=sd_full,
                fold_coefficients=coefs, fold_scatter=sd), runs=runs, gate=gate, passed=passed,
                m1c_only_reference=dict(share_sub_larger=float(np.mean([r['share_sub_larger'] for r in ref])), median_ratio=float(np.mean([r['median_ratio'] for r in ref]))))
     write(OUT / 'results.json', out); print(json.dumps({k: v for k, v in out.items() if k not in ('runs',)}, indent=1))

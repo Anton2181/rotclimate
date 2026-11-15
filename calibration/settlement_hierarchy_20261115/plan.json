@@ -9,5 +9,13 @@
   },
   "validation_declared": "Province-blocked folds on the Roman cohort with capitals as centres: held-out (1) share of subordinate towns larger than their centre within 75 km, (2) median size ratio to the centre, (3) whole-cohort KS and total-area ratio as the size gate (KS <= 0.10, ratio 0.80-1.25). Pass if (3) passes and (1), (2) are within 0.05 and a factor 1.25 of the observed. A generator that passes is applied on the map with marked places as centres (owner rule: lore order among marked places stays binding).",
   "caveat": "On the map, centres include imperial forts, monasteries and fortified towns, a wider set than Roman provincial capitals; a fortified town is a weaker centre. The fit can include centre class only where Earth evidence exists (capitals); other marked classes are treated as centres by owner rule.",
-  "outputs": "output/settlement_hierarchy_20261115/"
+  "outputs": "output/settlement_hierarchy_20261115/",
+  "amendments": [
+    {
+      "id": "A1",
+      "made_after": "scoring the declared delta form (kept as results_delta_form.json): KS 0.096 and area ratio 1.04 pass, but share of subordinates larger than their centre 12.6% vs observed 6.3% and median ratio 0.082 vs 0.11 fail; M1C alone gives 21.5% and 0.37",
+      "known": "The delta form models y_u - y_c; its scatter (sd 1.75) mixes the subordinate's and the centre's residuals, so generating it on top of an already drawn centre double-counts the centre's randomness.",
+      "change": "Conditional form: ln area_u = g0 + g1 ln area_c + g2 lnH_u + g3 distance/100 + scatter, fitted on subordinates (centre size observed as a predictor), generated given the generated centre. Same folds, seeds, metrics and pass rule. Development data; post-hoc reformulation disclosed."
+    }
+  ]
 }
