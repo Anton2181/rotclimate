@@ -186,3 +186,15 @@ rule). The pattern across sections 8–11: r44 sits in a balance where errors of
 single mechanism (rain shadows, summer convection) improves its target regions while unsettling that balance elsewhere.
 The way forward is a joint refit of e75 + e77 with the rain-making parameters, on the scale of the earlier multistart
 campaigns, declared in advance and checked on sealed set i, not more one-mechanism gates.
+
+## 12. Joint refit of e75 + e77 + rain-making (declared; fails)
+
+`calibration/rain_shadow_20261115/joint_refit.json`, `scripts/joint_refit.py`: coordinate descent over eight settings, 40
+evaluations, objective S49 against r44. Start 1.0119; best **0.9986** (gate ≤ 0.995): **fail**, so fine28 and sealed set i were
+not run. The best point turns the rain-shadow barrier nearly off (crest 0.0625, from 0.5) and keeps e77 summer showers at 0.7,
+with a weaker instability boost (1.80), longer rain time (10.3 days), lower RH threshold (0.32) and stronger eddies (1.72). Its
+rain shadows are close to r44's: Nevada 316 mm (r44 394, obs 192), Columbia 526 (561, 276), Ebro 605 (579, 430).
+
+So the data (as scored by the 49-region gate) do not reward stronger rain shadows at the cost of the inland balance: the
+refit backed away from e75. The rain-shadow line is closed for now: e75/e76/e77 stay opt-in and unadopted; r44 stays.
+For the fantasy steppe this means the zone remains wet under any Earth-validated physics available today.
