@@ -32,7 +32,8 @@ def patched_build():
     for old, new in [("if not size['gate']['passed'] or names != ('lnH',):", "if not size['gate']['passed'] or names not in (('lnH',), ('lnH', 'capital')):"),
                      ("mean = np.full(len(sites), np.nan); mean[valid] = coef[0] + coef[1] * np.log(H[valid])",
                       "mean = np.full(len(sites), np.nan); CAP = np.array([1.0 if (s['marked'] and s['name'] in CAPITAL_SEATS[mode]) else 0.0 for s in sites]); "
-                      "mean[valid] = coef[0] + coef[1] * np.log(H[valid]) + (coef[2] * CAP[valid] if len(coef) == 3 else 0.0)")]:
+                      "mean[valid] = coef[0] + coef[1] * np.log(H[valid]) + (coef[2] * CAP[valid] if len(coef) == 3 else 0.0)"),
+                     ("e = e_new; order = ranked", "order = ranked                                   # capital-term map plan A1: draws stay in site order")]:
         assert src.count(old) == 1, old; src = src.replace(old, new)
     mod = types.ModuleType('build_settlement_release2_m1c'); mod.__file__ = str(ROOT / 'scripts/build_settlement_release2.py')
     mod.CAPITAL_SEATS = {m: set(seats(m)) for m in ('raw', 'corrected')}
