@@ -57,6 +57,7 @@ reviewed independently and replayed fresh, and changes the map only on a passed 
 |---|---|---|---|
 | **WP0** | A1 chain runner reproducing release 3 + capital term byte for byte | verify mode: identical sizes, supply and reach outputs | — |
 | WP1 | Administration Earth test: model seat choice vs Roman provincial capitals (Wikidata) and Han commandery seats | declared development test; report | WP0 |
+| **WP1b** | **Settlement hierarchy size model (owner request): centres first, subordinate towns sized relative to their centre from Roman evidence (6% of towns near a capital exceed it; median ratio 0.11). Replaces post-hoc swaps** | province-fold gate (see calibration/settlement_hierarchy_20261115) | WP0 |
 | WP2 | Port and road-hub size terms (Hanson + Itiner-e + coast/river) with province-blocked folds | same rule as the capital term; owner decides adoption | F3 |
 | WP3 | Position factors: route nodes, confluences, coast; development on Han/Rome | quadrant gate as release 3 | F3 |
 | WP4 | Ensembles of positions and sizes (≥20 seeds) → recurring-centre and size-range layers | browser checks; no change to the default draw | WP0 |
@@ -69,3 +70,10 @@ reviewed independently and replayed fresh, and changes the map only on a passed 
 WP0, the chain runner: `scripts/settlement_chain.py` with the spec `calibration/settlement_chain/release3_capital.json`. The
 first milestone is a verify run that rebuilds the published sizes and supply into a staging folder and confirms they are
 identical to the published outputs.
+
+## 7. Progress log
+
+- 15 Nov: WP0 verify **passed**: the chain runner rebuilt the published sizes, supply and staffing packets byte for byte in staging.
+- 15 Nov: owner flagged proposed towns dwarfing nearby marked places. A post-hoc swap rule was tried and **reverted at the
+  owner's request** (not published). Replaced by WP1b, declared in `calibration/settlement_hierarchy_20261115/plan.json`, with
+  Roman evidence that subordinate towns sit well below their regional centre.
