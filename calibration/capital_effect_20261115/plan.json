@@ -1,0 +1,19 @@
+{
+  "date": "2026-11-15",
+  "status": "declared_before_output",
+  "kind": "development check on exposed Roman data (not blind)",
+  "question": "Are Roman provincial capitals larger than the published size model (M1 refit with Greek walls) predicts from their hinterland people? The southern Mesopotamian blind test failed partly because the model cannot produce capital-scale cities; on the fantasy map the lore ranking gives the marked places (151 of 1,053 towns, the top 14%) the largest draws. This checks whether that allocation matches Roman capitals.",
+  "capitals": {
+    "source": "Wikidata SPARQL (instance of Roman province Q182547, capital P36, coordinates P625, inception P571, dissolved P576), saved data/cache/roman_capitals/wikidata.json",
+    "rule": "Keep provinces whose inception is unknown or <= 150 and whose dissolution is unknown or >= 150, and whose English label matches a Hanson Province value after normalising (case, 'Roman ' prefix, 'Hispania '/'Gallia ' prefixes, '&'/'and'). Every listed capital counts (some provinces list two). A capital is matched to the nearest AD 150 cohort town within 5 km. Rome is added as the imperial capital (Italy was not a province). No entry is hand-corrected; Wikidata noise (for example a late or alternative capital) is a stated limitation.",
+    "fallback": "If fewer than 20 capitals match cohort towns, report without interpretation."
+  },
+  "cohort": "Primary size cohort of scripts/sizes_greek_walls.py (664 towns, Greek walls at their inhabited share), with lnH from the same hinterlands.",
+  "metrics": {
+    "capital_effect": "Mean residual ln(area) - (1.915 + 0.147 lnH) for capitals minus that of all other towns; 95% bootstrap interval (10,000 resamples of each group, seed 1). exp(effect) is the size factor.",
+    "rank": "Percentile of each capital's area within the cohort; share of capitals in the top 14% and top 5% of areas.",
+    "without_rome": "The same metrics without Rome."
+  },
+  "interpretation_declared": "An effect whose interval excludes zero means capitals are systematically larger than the size model gives, and supports giving capitals the largest draws (the map's lore rule). A share of capitals in the top 14% near 1 means the lore allocation is about right; much lower means it over-promotes capitals. Nothing on the map changes in this step.",
+  "outputs": "output/capital_effect_20261115/{results.json, review.json}"
+}
