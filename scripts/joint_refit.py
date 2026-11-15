@@ -11,13 +11,17 @@ import refit_e75 as R
 
 def objective(plan, name, params):
     s = R.evaluate(name, params)
-    if plan.get('objective_mode') != 'max_dev_pool':
+    if plan.get('objective_mode') not in ('max_dev_pool', 'pool_given_dev'):
         return s
     from gate_v3 import paired, score
     d = R.OUT / name
     A = score(*paired(d, R.REF_NAME, None, ['dev31', 'retired_a', 'retired_b', 'retired_c']), None) if False else None
     R49, C49 = paired(d, R.REF_NAME, None, ['dev31', 'retired_a', 'retired_b', 'retired_c']); s49 = score(R49, C49, list(R49))
     Rp, Cp = paired(d, R.REF_NAME, None, list(plan['extra_parts'])); sp = score(Rp, Cp, list(Rp))
+    if plan.get('objective_mode') == 'pool_given_dev':
+        cap = plan['dev_cap']
+        val = sp['S'] if s49['S'] <= cap else 10.0 + s49['S']        # feasible: extra-tropical score; else push S49 down
+        return dict(S=val, T=s49['T'], P=s49['P'], S49=s49['S'], S_pool=sp['S'], n=s['n'])
     return dict(S=max(s49['S'], sp['S']), T=s49['T'], P=s49['P'], S49=s49['S'], S_pool=sp['S'], n=s['n'])
 
 
