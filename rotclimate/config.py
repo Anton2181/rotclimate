@@ -271,6 +271,7 @@ class Params:
     marine_inversion_m: float = 700.0  # e4: inversion height: ground above it (or behind a crest above it) is continental
     marine_contrast: float = 5.0      # e4: land-minus-sea warmth (K) for a full marine layer
     eddy_rainout: float = 0.0         # e3: eddy moisture steps capped at crest saturation / this (0 = off)
+    eddy_rainout_relief_km: float = 0.0  # e74: the e3 crest cap acts only where the ground stands above its eddy-scale surroundings, fully at this many km (cap / clip(relief / this, 1e-6, 1)); 0 = everywhere (e3)
     subtropical_high: float = 0.0     # e3: m/s, wind around the subtropical highs that sit over the oceans
     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
     subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge

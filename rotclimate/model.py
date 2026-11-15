@@ -2177,6 +2177,12 @@ class ClimateModel:
                 # The single Gaussian let moisture tunnel through the Sierra
                 # Nevada (Reno 416 mm a year against 241 observed).
                 crest = (w_sat(T_col-column_lapse*h_km) if pressure_saturation is None else pressure_saturation) / p.eddy_rainout
+                if p.eddy_rainout_relief_km > 0:
+                    # e74: only a step that climbs meets a crest. On flat land the
+                    # cap at local saturation removed real humid-air transport
+                    # (US Midwest, Nova Scotia) while drying the lee of ranges.
+                    relief = h_km - gauss(h_km, sigW)
+                    crest = crest / np.clip(relief / p.eddy_rainout_relief_km, 1e-6, 1.0)
                 n_steps = EDDY_RAINOUT_STEPS
 
                 def mix(water, crest=crest, n_steps=n_steps):

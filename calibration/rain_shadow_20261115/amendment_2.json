@@ -1,0 +1,6 @@
+{
+ "made_after": "amendment 1 gate (output/rain_shadow_20261115/gate): E1 S49 1.0212 (P +3.2%), E2 1.0290, E3 1.0233; all FAIL. E1 per-region: lee/mountain-basin regions improve (great_basin -33%, california -21%, iran_plateau -12%), but flat humid regions worsen (us_midwest +16%, nova_scotia +21%) and central_asia +56%, tibet +50%.",
+ "known": "all 49 development regions under E1-E3; the e3 crest cap uses local saturation on flat land as well as at crests.",
+ "change": "New opt-in physics e74 eddy_rainout_relief_km: the e3 cap divided by clip(relief / this, 1e-6, 1), relief = ground minus its eddy-scale Gaussian mean; default 0 keeps e3 and r44 byte-identical. Candidates: F1 eddy_rainout=1, relief 0.3 km; F2 eddy_rainout=1, relief 0.6 km. Same policy_v3 dev49 + fine28 gate against r44; the r44 reference runs of amendment 1 are reused only if the source change leaves r44 byte-identical (checked by rerunning r44 on dev31). A passing finalist goes to sealed set i (calibration/sealed_20261115i) only with the owner's release.",
+ "candidates": {"F1": {"eddy_rainout": 1.0, "eddy_rainout_relief_km": 0.3}, "F2": {"eddy_rainout": 1.0, "eddy_rainout_relief_km": 0.6}}
+}
