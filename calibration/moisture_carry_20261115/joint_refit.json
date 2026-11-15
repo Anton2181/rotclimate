@@ -1,0 +1,14 @@
+{
+ "title": "Joint refit: e79 moisture carry + edge and rain-making settings (declared before any evaluation)",
+ "date": "2026-11-15",
+ "made_after": "e79 gate (output/moisture_carry_20261115/gate): M1 S49 1.0282, M2 1.0065, both FAIL dev and fine28. M2 helps mongolia -22%, nova_scotia -21%, middle_volga -16%, anatolia -12%; hurts manchuria +20%, tripolitania +14%, canadian_prairies +14%, victoria +13%. The r44 rain settings were fitted against the old dry land edge.",
+ "start": "calibration/moisture_carry_20261115/M2_params.json",
+ "start_set": {},
+ "reference": "output/moisture_carry_20261115/gate/ref",
+ "knobs": {"edge_carry": ["add", 0.25], "land_edge_rh": ["add", 0.08], "edge_continental_drying": ["add", 0.15], "rh_threshold": ["add", 0.025], "precip_tau_days": ["mul", 1.12], "storm_track": ["mul", 1.12], "cold_high_storms": ["add", 0.1], "ice_saturation": ["add", 0.5]},
+ "bounds": {"edge_carry": [0.0, 1.0], "edge_continental_drying": [0.0, 1.0], "cold_high_storms": [0.0, 1.0], "ice_saturation": [0.0, 1.0], "land_edge_rh": [0.2, 0.9]},
+ "search": "Coordinate descent as calibration/rain_shadow_20261115/joint_refit.json (scripts/joint_refit.py): knobs in order, up then down, keep a move only if S49 falls; three passes with steps x1, x1/2, x1/4. At most 40 evaluations.",
+ "objective": "S49 against r44 (gate_v3 score over dev31 + retired a, b, c), 56 km.",
+ "selection": "Lowest-S49 point; must pass policy_v3 dev (S49<=0.995, T and P not worse than +1%) and fine28; then sealed set i once, only with the owner's release.",
+ "caveat": "The objective is the development gate itself; only fine28 and sealed set i are independent."
+}
