@@ -2231,9 +2231,10 @@ class ClimateModel:
                 speed = np.maximum(np.hypot(ub, vb), 0.5)
                 er, ec = vb / speed, -ub / speed                       # one cell upwind (rows run south)
                 rows, cols = np.indices(lat.shape, dtype=float)
+                h_bar = h_km + p.eddy_barrier_crest * np.maximum(np.asarray(g.elev_max, float) / 1000.0 - h_km, 0.0) if p.eddy_barrier_crest > 0 else h_km
                 barrier = h_km.copy()
                 for k_step in range(1, int(round(p.eddy_barrier_km / g.cell_km)) + 1):
-                    barrier = np.maximum(barrier, ndi.map_coordinates(h_km, [rows + er * k_step, cols + ec * k_step], order=1, mode='nearest'))
+                    barrier = np.maximum(barrier, ndi.map_coordinates(h_bar, [rows + er * k_step, cols + ec * k_step], order=1, mode='nearest'))
                 rise = np.clip((barrier - h_km) / p.eddy_barrier_dz_km, 0.0, 1.0)
                 crest_b = (w_sat(T_col - column_lapse * barrier) if pressure_saturation is None else pressure_saturation * w_sat(T_col - column_lapse * barrier) / np.maximum(w_sat(T_col - column_lapse * h_km), 1e-9))
                 cap_b = crest_b / np.maximum(rise, 1e-6)
