@@ -1,0 +1,8 @@
+{
+ "title": "Bengal and the pre-monsoon on r45: e80 heat-low damping of subsidence drying (declared before any e80 run)",
+ "date": "2026-11-15",
+ "made_after": "r45 rain-factor trace and budget for Bengal (worst r45 rain loss 1.23): April-May rain 0-5 mm vs 96-218, land 4 C too hot in May, northerly winds until June, subsidence drying 3.5-4.9 mm/day exceeding storm exchange. Screen of existing switches on r45 (10 monsoon/subtropical regions): ocean_rh_warm 0.1/0.2 Bengal 1.23 -> 1.17/1.12 but North Queensland 0.84 -> 1.08/1.34, East Australia 0.37 -> 0.49/0.62; tropical_storms 0.5/1.0 Bengal worse (1.25/1.26).",
+ "mechanism": "heat_low_drying k: the subsidence-drying sink x exp(-k x max(-p, 0) / 100 hPa-units) with p the pressure the model's winds were built from (last pass). Default 0: r45 byte-identical.",
+ "screen": {"regions": "bengal deccan north_india thailand north_queensland east_china southeast_us mexico east_australia japan + algeria_sahara najd_arabia sahel_niger tripolitania", "variants": {"H03": {"heat_low_drying": 0.3}, "H10": {"heat_low_drying": 1.0}, "H30": {"heat_low_drying": 3.0}}},
+ "rule": "A variant goes to the policy_v3 dev49 + fine28 gate against r45 if the 14 screen regions' mean rain loss falls by at least 2 % and no desert region's loss rises by more than 10 %. At most two gated. A passer needs a new sealed set (i is spent) declared before its single run, with the owner's release."
+}

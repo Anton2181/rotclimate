@@ -2072,6 +2072,13 @@ class ClimateModel:
             # physics e1: under the highs, dry air sinking from aloft replaces
             # moist low-level air (the column dries without raining)
             sink = p.subsidence_drying * sub / DAY if p.subsidence_drying > 0 else None
+            if sink is not None and p.heat_low_drying > 0 and getattr(self, "last_pres", None) is not None:
+                # e80: over a heated continent in spring the subtropical sinking
+                # gives way to a heat low with inflow (pre-monsoon Bengal: the
+                # band's drying took 3.5-4.9 mm/day in April-May, more than the
+                # storms brought, and the land ran 4 C too hot); the cold-high
+                # storm damping (e48) is the winter mirror of this
+                sink = sink * np.exp(-p.heat_low_drying * np.maximum(-self.last_pres, 0.0) / 100.0)
             if p.subsidence_branch_drying > 0:
                 # e70b: the descending branch brings down dry air from aloft:
                 # the deserts' rain was a recycling loop (Najd: rain ~ evaporation
