@@ -78,3 +78,9 @@ identical to the published outputs.
   owner's request** (not published). Replaced by WP1b, declared in `calibration/settlement_hierarchy_20261115/plan.json`, with
   Roman evidence that subordinate towns sit well below their regional centre.
 - 15 Nov: WP1b **published**: settlement hierarchy (marked places lead their 75 km clusters), proposed towns larger than their marked place 43% → 12%; see SETTLEMENT_HIERARCHY_20261115.md.
+- 15 Nov: WP4 **published**: 40-draw ensemble (`scripts/settlement_ensemble.py`; replica reproduces the published draw exactly);
+  new Settlements option "where proposed towns recur" (345 positions hold a town in at least half the draws, corrected) and
+  marked-place resident ranges (download). Viewer badges updated (34%/14% shares, hierarchy, failed first blind test).
+- 15 Nov: WP0 spec updated to the published hierarchy build (`calibration/settlement_chain/release3_hierarchy.json`); verify **passed**.
+- WP2 (port/road-hub size terms): the release-2 calibration already tested coast, river and road terms (M2): held-out MAE 0.834 vs
+  M1 0.831, i.e. no gain. No new Earth role data (a port list) is available, so WP2 is parked until such data exist.
