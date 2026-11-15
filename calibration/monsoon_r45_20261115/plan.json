@@ -3,6 +3,38 @@
  "date": "2026-11-15",
  "made_after": "r45 rain-factor trace and budget for Bengal (worst r45 rain loss 1.23): April-May rain 0-5 mm vs 96-218, land 4 C too hot in May, northerly winds until June, subsidence drying 3.5-4.9 mm/day exceeding storm exchange. Screen of existing switches on r45 (10 monsoon/subtropical regions): ocean_rh_warm 0.1/0.2 Bengal 1.23 -> 1.17/1.12 but North Queensland 0.84 -> 1.08/1.34, East Australia 0.37 -> 0.49/0.62; tropical_storms 0.5/1.0 Bengal worse (1.25/1.26).",
  "mechanism": "heat_low_drying k: the subsidence-drying sink x exp(-k x max(-p, 0) / 100 hPa-units) with p the pressure the model's winds were built from (last pass). Default 0: r45 byte-identical.",
- "screen": {"regions": "bengal deccan north_india thailand north_queensland east_china southeast_us mexico east_australia japan + algeria_sahara najd_arabia sahel_niger tripolitania", "variants": {"H03": {"heat_low_drying": 0.3}, "H10": {"heat_low_drying": 1.0}, "H30": {"heat_low_drying": 3.0}}},
- "rule": "A variant goes to the policy_v3 dev49 + fine28 gate against r45 if the 14 screen regions' mean rain loss falls by at least 2 % and no desert region's loss rises by more than 10 %. At most two gated. A passer needs a new sealed set (i is spent) declared before its single run, with the owner's release."
+ "screen": {
+  "regions": "bengal deccan north_india thailand north_queensland east_china southeast_us mexico east_australia japan + algeria_sahara najd_arabia sahel_niger tripolitania",
+  "variants": {
+   "H03": {
+    "heat_low_drying": 0.3
+   },
+   "H10": {
+    "heat_low_drying": 1.0
+   },
+   "H30": {
+    "heat_low_drying": 3.0
+   }
+  }
+ },
+ "rule": "A variant goes to the policy_v3 dev49 + fine28 gate against r45 if the 14 screen regions' mean rain loss falls by at least 2 % and no desert region's loss rises by more than 10 %. At most two gated. A passer needs a new sealed set (i is spent) declared before its single run, with the owner's release.",
+ "screen_result": "H03/H10/H30 mean 0.6081/0.6098/0.6104 vs r45 0.6055; Bengal 1.248/1.257/1.257 (worse): FAIL. The damped term (subsidence_drying 0.0195) is minor; the e70b branch drying (0.278 x core) dominates and its rain gate (e70c) locks a dry pre-monsoon land.",
+ "amendment_1": {
+  "made_after": "H03/H10/H30 mean 0.6081/0.6098/0.6104 vs r45 0.6055; Bengal 1.248/1.257/1.257 (worse): FAIL. The damped term (subsidence_drying 0.0195) is minor; the e70b branch drying (0.278 x core) dominates and its rain gate (e70c) locks a dry pre-monsoon land.",
+  "change": "e80b heat_low_branch: the same heat-low factor on the e70b branch core. Variants B03/B10/B30 = heat_low_drying 0.3/1.0/3.0 with heat_low_branch true; same screen rule.",
+  "variants": {
+   "B03": {
+    "heat_low_drying": 0.3,
+    "heat_low_branch": true
+   },
+   "B10": {
+    "heat_low_drying": 1.0,
+    "heat_low_branch": true
+   },
+   "B30": {
+    "heat_low_drying": 3.0,
+    "heat_low_branch": true
+   }
+  }
+ }
 }

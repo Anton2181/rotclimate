@@ -2092,6 +2092,10 @@ class ClimateModel:
                     # e70c: where it rains the air rises (summer monsoon East
                     # China, the US south): no dry-air descent there
                     core = core * np.exp(-rain_prev / p.subsidence_branch_dry_rain)
+                if p.heat_low_branch and p.heat_low_drying > 0 and getattr(self, "last_pres", None) is not None:
+                    # e80b: the same heat-low damping for the branch's dry descent,
+                    # whose rain gate (e70c) locks a dry pre-monsoon land in place
+                    core = core * np.exp(-p.heat_low_drying * np.maximum(-self.last_pres, 0.0) / 100.0)
                 extra = p.subsidence_branch_drying * core / DAY
                 sink = extra if sink is None else sink + extra
             if p.monsoon_descent > 0:

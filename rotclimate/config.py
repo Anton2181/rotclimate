@@ -122,6 +122,7 @@ class Params:
     land_stable_rate: float = 0.0     # e52: 1/day at which air warmer than the ground's equilibrium cools to it (stable winter layer; 0 = the land's own rate)
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     heat_low_drying: float = 0.0      # e80: subsidence drying x exp(-this x hPa) under the heat lows the pressure winds build (last pass, negative pressure); 0 = off
+    heat_low_branch: bool = False     # e80b: apply the e80 damping also to the e70b branch drying
     edge_carry: float = 0.0           # e79: land-edge inflow carries the water of a column at T_col + this x max(latitude mean - T_col, 0), capped at local saturation, instead of a fixed RH of the local column; 0 = r44
     ice_saturation: float = 0.0       # e78: below 0 C the rain-maker judges the column against saturation over ice (es_ice/es_water)^this; 0 = water everywhere (r44)
     storm_convection: float = 0.0     # e77: extra rain efficiency x storm index x warmth (15-23 C ramp) x moisture: summer showers under troughs and fronts, not under the subtropical highs; 0 = off
