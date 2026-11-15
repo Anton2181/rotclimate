@@ -41,33 +41,10 @@ def patched_build():
                       "        biggest = list(np.argsort(-area, kind='stable')[:k]); values = np.sort(area)[::-1][:k].copy()\n"
                       "        freed = sorted([area[i] for i in top if i not in biggest], reverse=True); holders = sorted(i for i in biggest if i not in top)\n"
                       "        area[top] = values\n"
-                      "        for _hold, _val in zip(holders, freed): area[_hold] = _val"),
-                     ("    x = dict(np.load(LEDGER / f'{mode}_inputs.npz'))",
-                      "    # lore neighbourhood rule (owner, calibration/lore_neighbourhood_20261115): no proposed town larger than its nearest marked place within 75 km\n"
-                      "    _rc = np.array([[s['row'], s['column']] for s in sites]); _mk = np.array([bool(s['marked']) for s in sites])\n"
-                      "    _M = np.flatnonzero(_mk & valid); _U = np.flatnonzero(~_mk & valid)\n"
-                      "    _d = np.sqrt(((_rc[_U][:, None, :] - _rc[_M][None, :, :]) ** 2).sum(2)) * cell\n"
-                      "    _own = np.where(_d.min(1) <= 75.0, _M[_d.argmin(1)], -1); NEIGHBOUR_SWAPS[mode] = 0\n"
-                      "    for _it in range(200):\n"
-                      "        _changed = False\n"
-                      "        for _m in _M:\n"
-                      "            _nb = _U[_own == _m]\n"
-                      "            if len(_nb) and area[_nb].max() > area[_m]:\n"
-                      "                _u = _nb[np.argmax(area[_nb])]; area[_m], area[_u] = area[_u], area[_m]; _changed = True; NEIGHBOUR_SWAPS[mode] += 1\n"
-                      "        area[ranked] = np.sort(area[ranked])[::-1]\n"
-                      "        if k:\n"
-                      "            biggest = list(np.argsort(-area, kind='stable')[:k]); values = np.sort(area)[::-1][:k].copy()\n"
-                      "            freed = sorted([area[i] for i in top if i not in biggest], reverse=True); holders = sorted(i for i in biggest if i not in top)\n"
-                      "            area[top] = values\n"
-                      "            for _hold, _val in zip(holders, freed): area[_hold] = _val\n"
-                      "        if not _changed and not any(len(_U[_own == _m]) and area[_U[_own == _m]].max() > area[_m] for _m in _M): break\n"
-                      "    else:\n"
-                      "        raise ValueError('lore neighbourhood rule did not converge')\n"
-                      "    if any(len(_U[_own == _m]) and area[_U[_own == _m]].max() > area[_m] for _m in _M): raise ValueError('lore neighbourhood rule violated')\n"
-                      "    x = dict(np.load(LEDGER / f'{mode}_inputs.npz'))")]:
+                      "        for _hold, _val in zip(holders, freed): area[_hold] = _val")]:
         assert src.count(old) == 1, old; src = src.replace(old, new)
     mod = types.ModuleType('build_settlement_release2_m1c'); mod.__file__ = str(ROOT / 'scripts/build_settlement_release2.py')
-    mod.CAPITAL_SEATS = {m: set(seats(m)) for m in ('raw', 'corrected')}; mod.NEIGHBOUR_SWAPS = {}
+    mod.CAPITAL_SEATS = {m: set(seats(m)) for m in ('raw', 'corrected')}
     exec(compile(src, 'build_settlement_release2.py', 'exec'), mod.__dict__); return mod
 
 
@@ -76,6 +53,6 @@ if __name__ == '__main__':
     import build_settlement_release3 as B
     mod = patched_build(); B.build = mod.build; B.EARTH = OUT
     (OUT / 'results.json').write_bytes((OUT / 'earth_results.json').read_bytes())     # builder reads EARTH/results.json
-    r = B.run(OUT / 'release3'); print('neighbour swaps', mod.NEIGHBOUR_SWAPS)
+    r = B.run(OUT / 'release3')
     for m, c in r['climates'].items():
         print(m, {k: (round(v['total']), round(v['largest'])) for k, v in c['residents'].items()}, c['area_quantiles_ha'])
