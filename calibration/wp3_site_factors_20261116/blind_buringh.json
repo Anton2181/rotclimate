@@ -8,5 +8,13 @@
  "models": "Release-3 tiling (history prior) with the prior x (1 + k x confluence within 15 km), k = 0 and k = 1.0 (the screened value), count matched to the cohort's count by bisection on seat_people.",
  "metrics": "scripts/settlement_locations_earth.metrics against the cohort cities: composite, F1, recall, precision, block rank, NN KS.",
  "pass": "composite(k=1) - composite(k=0) >= 0.01. Scored once; the pool's position use is then spent (its sizes stay reserved).",
- "map_change_if_pass": "The confluence factor joins the release-3 site prior on the map through the chain runner (declared separately)."
+ "map_change_if_pass": "The confluence factor joins the release-3 site prior on the map through the chain runner (declared separately).",
+ "amendments": [
+  {
+   "id": "A1",
+   "made_after": "the declared minimal reads only (no scoring)",
+   "known": "years 700-2000 (1300 listed); nature of estimate values: '' (source), 'imputed', 'proxied'; coordinates use decimal commas and 494 of 42978 city-year rows have coordinates out of range after parsing (lost separators, e.g. 524029998779297).",
+   "change": "Coordinates parsed with decimal commas; rows still out of range are dropped (count reported). Cohort keeps '' and 'proxied' estimates and excludes 'imputed' (as declared: not marked imputed). Inhabitants parsed with decimal commas (thousands)."
+  }
+ ]
 }
