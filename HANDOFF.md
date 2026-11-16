@@ -1,4 +1,59 @@
-# Paired Earth component work reviewed; fixed-request monthly food next — 16 November 2026
+# Earth monthly meal pilot reviewed; calendar sensitivity next — 16 November 2026
+
+Latest report reports/URBAN_EARTH_MONTHLY_20261116.md;output
+output/urban_earth_monthly_20261116/qualification.json,meal_maps.png,
+monthly_accounting.png,town_model.npz,towns.csv/months.csv/regions.csv.
+Continued AFTER pushing the paired-work stage449824936. Original6annual
+controls and recomputed B600h source work/annual city allocations stay EXACT.
+New fixed-request monthly pilot complete for central/low;independent reviewPASS.
+No research jobs running.
+
+600h physical-work B annual support→MONTHLY MEAL coverage:
+central95.0773→92.4578%,low95.6076→93.5758%.
+Egyptcentral81.6122→76.6582%,low85.2320→80.9950%.
+Urban unmet631378central/260644lowperson-years;monthly rural unmet218953/
+259521person-years(vs annual209624/249148). Both all-rural/all-city mealsFALSE.
+Full-meal city cells1071→1046central,1018→967low. Local redistribution:
+6central city cells gain meal-equivalent supply/32lose;40lowgain/77lose.
+Fixed requests,locations,production and population unchanged. This is NOT
+revised occupancy,actual supported residents,staff or a demographic fixedpoint.
+
+One fixed physical rural population/workforce;factorized uniform global urban
+withdrawal(no people matrix),rural reconstruction error<=3.64e-12people.
+Original two component pulses preserved,including41different base/basin dates.
+365d rural/export stores,90d town stores,5%stockloss,protected overflow-only
+source/town exports,unchanged4actual1981–2010snapshots held3bins,1bin leg delay.
+Unused/unmarketed grain,all stock/freight losses and cyclic transit explicit.
+No demographic allocator/CoupledNetwork invoked. Protected fantasy helper
+functions reused unchanged;new isolated polity/earth_fixed_food.py adapter.
+
+Independent canonical-bisection check on ALL8inventory groups PASS original
+1e-10relative inventory tolerance(maxfraction0.57649);source/town eligibility
+flags match. Independent15896monthlyshipment rows and all source arrivals
+(EXACT),grainledger residual<=1.72e-8person-years.112756physical source-cases,
+2170city rows/26040city-months;7new adapter testsPASS(parent12work testsPASS).
+All prior1103protected sources/assets unchanged;shares not fitted,adoptFalse.
+Food repeatability is not population feasibility or observed seasonal validation.
+
+NEXT FROZEN seasonal_transfer_calendar_sensitivity.json: original crop engine
+may have equally productive windows with different maturity dates. Reproduce
+original full-precision max/first-best masks exactly,then enumerate EXACT-energy
+ties using original inputs/dtypes/parameters. Basin ties must avoid saved
+flow>1growing bins. No energy-tolerance broadening or invented observed dates.
+Two declared timing alternatives:earliest/latest eligible calendar-year boundary
+per component;not network-optimal recipes/probabilities/global outcome bounds.
+Check B600h grain/work unchanged at each timing choice,then four fixed-request
+food cases(2densities×2timings)with SAME frozen food adapter,stores/routes/shares.
+Canonical inventory/physical ledger independent review before interpretation.
+No new calendar catalogue or alternative food run has been made yet.
+
+Completed new science producers frozen;don't edit them and reuse outputs.
+Large cases/*/fields.npz ignored,compacttown packet tracked. Producer refuses
+completed-case overwrite;use isolated OUT for fresh runs;see report commands.
+No main atlas/default adoption,new evidence pool or climate fitting. Buringh
+sizes/climate l unopened;sidequest archived. Previous entries below are history.
+
+# Previous completed annual component-work comparison — 16 November 2026
 
 Latest completed stage: reports/URBAN_COMPONENT_WORK_20261116.md and
 output/urban_component_work_20261116/qualification.json. All6original annual

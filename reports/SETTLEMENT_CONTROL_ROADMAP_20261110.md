@@ -7,7 +7,17 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
-**Latest:** The paired Earth component-work comparison is complete. All six
+**Latest:** The B600h fixed-request Earth monthly-food pilot is complete and
+independently reviewed. Central meal coverage92.4578%vs annualB95.0773%;
+low93.5758%vs95.6076%. Original requests,production,work and policy shares
+stay fixed;no demographic allocator or actual occupancy update. All8inventory
+groups pass original-tolerance canonical checks;15896monthly shipments and
+full grain ledger are reviewed. See
+[URBAN_EARTH_MONTHLY_20261116.md](URBAN_EARTH_MONTHLY_20261116.md).
+Next frozen stage tests exact equal-energy crop-window timing alternatives,
+with unchanged work/grain/stores/routes/shares,before any fit/adoption claim.
+
+The paired Earth component-work comparison is complete. All six
 original annual controls replay byte for byte. Physical component work with
 one shared workforce changes600h central city support95.1267→95.0773%;
 300h central64.2613→63.3162%,with Egypt47.6285→42.9360%.
