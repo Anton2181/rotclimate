@@ -49,7 +49,7 @@ def statics(world):
     st = dict(land=land)
     st["water"] = ~land
     st["coast_km"] = ndi.distance_transform_edt(st["water"]) * world["cell_km"]
-    st["eta"] = C.terrain_coefficient(world["biome"], world.get("swamp", np.zeros(land.shape, bool)), None)
+    st["eta"] = C.terrain_coefficient(world["biome"], world.get("swamp", np.zeros(land.shape, bool)), None, world.get("forest"))
     st["paths"] = C.path_factor(np.where(land, world["density"], 0.0))
     # rotclimate.biomes: temperate and tropical rainforest, boreal and temperate seasonal forest
     st["forest_or_swamp"] = np.isin(np.asarray(world["biome"]), [3, 4, 7, 9]) | world.get("swamp", False)

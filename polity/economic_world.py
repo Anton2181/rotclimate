@@ -39,7 +39,9 @@ def prepare(atlas):
     # Town placement historically includes every painted fill. Trade population
     # includes only recognised named claims, exactly as fields.compute does.
     claimed=land&(ids>0)
-    eta=C.terrain_coefficient(biome,swamp,None)
+    from .forest_travel import enabled,map_forest
+    forest=map_forest(data,meta,'raw',shape) if enabled() else None
+    eta=C.terrain_coefficient(biome,swamp,None,forest)
     bare=C.travel_graph(elev,land,road,eta,cell_km,paths,ferry)
     marked=[(t['row'],t['col']) for t in towns]
     suggested,_,_=F.place_towns(density,land,geo['water_distance'],road,elev,cell_km,marked,allowed=claimed,aridity=hf['aridity'],dry_water_km=F.map_dry_water_km())
@@ -49,6 +51,7 @@ def prepare(atlas):
     world=dict(elev=elev,land=land,biome=biome,swamp=swamp,density=density,cell_km=cell_km,
                tilt=float(meta['world']['tilt']),river=F.navigable_rivers(shape),road=road,ferry=ferry,
                tracks=tracks,**climate)
+    if forest is not None:world['forest']=forest
     st=N.statics(world);cl=N.climate(world,st)
     places=[(t['row'],t['col']) for t in towns]
     river_near=ndi.binary_dilation(st['basin']>0,iterations=1)

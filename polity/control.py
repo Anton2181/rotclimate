@@ -60,10 +60,15 @@ def tobler_km_h(slope, factor=OFF_PATH):
     return 6.0 * factor * np.exp(-3.5 * np.abs(np.asarray(slope) + 0.05))
 
 
-def terrain_coefficient(biome, swamp, snow_share=None):
-    """Soule-Goldman coefficient per cell; snow_share (0-1) of the season under snow."""
-    eta = np.vectorize(lambda b: BIOME_COEFFICIENT.get(int(b), 1.2))(np.asarray(biome))
-    eta = np.where(swamp, np.maximum(eta, SWAMP_COEFFICIENT), eta)
+def terrain_coefficient(biome, swamp, snow_share=None, forest=None):
+    """Soule-Goldman coefficient per cell; snow_share (0-1) of the season under snow.
+    forest (optional): C2 forest share per cell (polity/forest_travel.py) in place of the biome forest classes."""
+    if forest is not None:
+        from .forest_travel import coefficient
+        eta = coefficient(biome, swamp, forest, BIOME_COEFFICIENT, SWAMP_COEFFICIENT)
+    else:
+        eta = np.vectorize(lambda b: BIOME_COEFFICIENT.get(int(b), 1.2))(np.asarray(biome))
+        eta = np.where(swamp, np.maximum(eta, SWAMP_COEFFICIENT), eta)
     if snow_share is not None:
         eta = eta * (1.0 + (SNOW_COEFFICIENT - 1.0) * np.clip(snow_share, 0, 1))
     return eta

@@ -24,7 +24,9 @@ def audit_world(atlas,mode):
     density=np.where(land,hf['settlement_base']*hm['occupation']['scenarios']['central'],0.)
     marked=[dict(t) for t in r['towns'] if 'x_px' in t];positions=[(t['row'],t['col']) for t in marked]
     world=dict(r['world']);world.update(biome=np.asarray(arrays['biome']),density=density)
-    eta=C.terrain_coefficient(world['biome'],world['swamp'],None)
+    from .forest_travel import enabled,map_forest
+    if enabled():world['forest']=map_forest(data,meta,'corrected',shape)
+    eta=C.terrain_coefficient(world['biome'],world['swamp'],None,world.get('forest'))
     bare=C.travel_graph(r['elev'],land,world['road'],eta,r['cell_km'],C.path_factor(density),world['ferry'])
     ids,_=F.polity_fills(shape)
     suggested,_,_=F.place_towns(density,land,geo['water_distance'],world['road'],r['elev'],r['cell_km'],positions,
