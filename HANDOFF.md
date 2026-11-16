@@ -1,3 +1,36 @@
+# Urban measurement pilot complete — 16 November 2026 (climate parked)
+
+Continued beyond the source-audit push and COMPLETED the declared predictive
+pilot. Plan88c9cb042;eligibility/design/support review committedc7aadb5c9 BEFORE
+fit.664legacy rows,153strict exact Inhabited area targets across40provinces;
+folds43/43/31/36,only4capitals. All32support splits pass. Sixfixed alternatives
+(mixed/strict training ×M0/M1/M1C),24outer cases,72inner train-only fits for
+predictive sigma. NOfull-data sigma leakage,no adopted coefficient or map update.
+
+RESULT: strict training doesn't improve any model's pooled MAE/RMSE/NLL. Mixed
+H model improvesMAE2.2%against intercept-only but worsensRMSE/NLL;strict H gain
+~0.1%MAE and worseRMSE/NLL. Capital covariate helps some mixed summaries but
+only4strict targets havecapital status. ALL6 alternatives weak onfold3(36targets/
+10provinces),with undercoverage. Don't discard/reweight fold3 or claim proof
+that extent definitions are equivalent. Models are standalone conditional
+Gaussian regressions,not a full test of joint published hierarchy draws.
+
+Report:reports/URBAN_MEASUREMENT_PILOT_20261116.md;outputs under
+output/urban_measurement_pilot_20261116/. Support review reuses previously
+reviewed unchanged geometry,checks new rawselection/design independently.
+Fit review uses independent GELSYQR/scalar variance+normal densities;all24cases,
+918predictionrows,240provincecases,11610CSVcells,6freshfiles exact;4meaningful
+leakage/accounting tests. No Buringh sizes/climate l/new sources opened.
+
+NEXT frozen geographic_residual_audit.json: NOFIT. Decompose fixed biases,
+variance,NLL and H-support ranges for all6×4foldcases;all40provinces,n<5flags,
+largest1/5/10error mass,all4capitals retained. Independent arithmetic +fresh
+exports. Then formulate a SMALL independently supported hypothesis (broader
+food access,roles,or dated extents) before further fitting. No new exponent grid,
+size-derived role labels or geography exclusion. Appropriate transfer and full
+origin/food/labour rebuild required before map adoption. Climate remains parked.
+Earlier NEXT notes are historical.
+
 # Urban source audit complete — 16 November 2026 (climate parked)
 
 After pushing the negative concentration screen, continued to the declared

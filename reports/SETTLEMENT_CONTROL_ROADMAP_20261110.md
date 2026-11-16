@@ -19,8 +19,13 @@ The source/selection audit is now also independently reviewed: 1,388 cities,
 intervals at AD150, 492 lack an area; extent definitions mix and extent dates
 are not independently supplied as a table field. See
 [URBAN_DEVELOPMENT_EVIDENCE_20261116.md](URBAN_DEVELOPMENT_EVIDENCE_20261116.md).
-The next frozen stage is the exact-inhabited-basis province-blocked predictive
-pilot; prepare and commit support eligibility before fitting. No new
+The exact-inhabited-basis predictive pilot is now also complete and independently
+reviewed: 153 common targets, six alternatives, 24 outer cases, train-only inner
+predictive dispersion. Strict training does not improve pooled scores; H skill
+is weak and fold3 loses accuracy across every alternative. See
+[URBAN_MEASUREMENT_PILOT_20261116.md](URBAN_MEASUREMENT_PILOT_20261116.md).
+Next is the frozen geographic residual/support audit, with no refit or exclusions.
+No new
 size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.
 
