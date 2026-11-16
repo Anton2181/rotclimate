@@ -28,3 +28,18 @@ gave infinite deviance on the full domain), and production still counts in propo
 2. Let the people the removed towns would have held go to the remaining towns' hinterlands (sizes follow).
 3. Validate on an unseen pool: both earlier blind pools are spent; a new one is needed (the bottleneck).
 4. Only then republish the map through the chain runner (proposed towns in the densest provinces would thin out and grow).
+
+## WP8 development fit (calibration/wp8_town_count_20261116; scripts/wp8_town_count.py)
+
+Placement exponent (seats ~ people^beta area^(1-beta)), totals matched to each catalogue:
+
+| beta | Han deviance/record | Rome | Han densest decile | Rome densest decile |
+|---|---|---|---|---|
+| 0.7 (current) | 1.748 | 1.771 | 4.34 | 1.99 |
+| 0.5 | 1.678 | 1.754 | 3.68 | 1.88 |
+| **0.3** | **1.678** | **1.718** | 3.08 | 1.73 |
+| 0.0 | 1.714 | 1.733 | 2.87 | 1.44 |
+
+beta 0.3 fits both pools better (mean deviance -3.5 %) but Han's densest blocks stay ~3x over-placed even at beta 0: the declared
+bar (densest decile within 0.5-2x on both pools) is not met, so nothing is adopted and the Buringh pool stays unread. The
+remaining over-count is in the people field (the model's density in Han's densest blocks), which is the next thing to check.
