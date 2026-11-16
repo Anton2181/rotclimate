@@ -1,3 +1,35 @@
+# Urban programme active — 16 November 2026 (climate parked by owner)
+
+Owner accepted the settlement diagnosis/concentration direction; return to climate
+later. Plans: calibration/urban_diagnosis_20261116/plan.json (2e059c2c5),
+analysis_spec.json (6a362be71), then conditional_sites.json before given-site sizes.
+Report: reports/URBAN_DIAGNOSIS_20261116.md. Existing maps/defaults unchanged.
+
+DONE: restore exact source ZIP and owner-supplied Mexico workbook (SHA matches).
+Both old results.json and model.npz replay BYTE FOR BYTE. New World Earth NPZ
+also matches its old SHA. New inputs/replays isolated under output/urban_diagnosis_20261116/;
+raw workbook in ignored data/cache/valley_of_mexico, not redistributed.
+12 position / 30 seeded size cases independently reviewed, 12 component controls,
+five fresh exports exact. Scripts: prepare_urban_diagnosis.py, urban_diagnosis.py,
+review_urban_diagnosis.py. Source/field/size primitives and published files protected.
+
+FINDINGS: archived size test used subset draws, no marked hierarchy or confluences,
+and topN source ranks despite count/coverage differences. Source class6 is censored;
+1783ha was the MODEL ceiling, not observed upper. Current unmarked confluences do
+not cure the failures. Mexico still has ZERO model towns in the9km proxy, so its
+size distribution is undefined. Its Classic cohort largest is76ha/1000estimated
+people;840ha is from another period. All221 estimates equal PopMax; model/reference
+ratio1.72 at upper estimate,3.57 at lower. This is rural/small-settlement evidence,
+not a complete large-city primacy test. Do not multiply town counts to fit it.
+
+NEXT RUN (declared conditional_sites.json): supply the119/27 observed town points,
+retain fractional coordinates/collisions, allocate model hinterland people once,
+then apply unchanged sizes on3/9km with five seeds. This separates size from
+placement/count effects and is DEVELOPMENT, not an oracle forecast or blind test.
+No capital labels invented; no density or urban fraction fitted; Buringh sizes
+and sealed climate l stay unopened. Climate remains parked. The later entries
+are historical, including the previous proposal-only status.
+
 # Strategy review — 16 November 2026 (proposals; no new direction adopted)
 
 Latest remote checkpoint reviewed: `5b0d03b19` (canonical and wonderful-mayer
