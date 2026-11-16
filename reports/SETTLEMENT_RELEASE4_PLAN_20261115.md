@@ -91,3 +91,5 @@ identical to the published outputs.
 - 16 Nov: WP6 started. Maize added (opt-in, FAO 66 parameters); declared Earth check against MapSPAM 2010 passed (rank 0.42,
   coverage 98 %, June season start). New World runs use a maize-only crop set. Next: New World heartland cores, then the
   declared Valley of Mexico blind test.
+- 16 Nov: WP6 Valley of Mexico blind test scored once: positions pass (0.616), rural people pass (1.72x), sizes fail (no model
+  town in the surveyed area). Second blind size failure: town count/primacy in urban landscapes is the next settlement problem.

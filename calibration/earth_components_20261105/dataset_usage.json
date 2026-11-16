@@ -1,498 +1,499 @@
 {
-  "version": 1,
-  "date": "2026-11-12",
-  "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
-  "datasets": [
-    {
-      "id": "climate_dev49",
-      "status": "development",
-      "evidence": "reports/R43_20261103.md"
-    },
-    {
-      "id": "climate_sealed_a_through_e",
-      "status": "spent_evaluation",
-      "evidence": "reports/R43_20261103.md",
-      "note": "Do not recover unseen status by choosing a different component or subregion."
-    },
-    {
-      "id": "climate_reserved_f",
-      "status": "spent_evaluation",
-      "evidence": "reports/R43_20261103.md",
-      "note": "Scored once 2026-11-07 for r43 + e72c (owner release): S 1.0107, fail. Development use from now on must be explicit."
-    },
-    {
-      "id": "hyde_0_200",
-      "status": "development_and_historical_analogue",
-      "evidence": "reports/POPULATION_20261023.md",
-      "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
-    },
-    {
-      "id": "han_ad2",
-      "status": "used_for_fitting_and_evaluation",
-      "evidence": "reports/POPULATION_20261023.md",
-      "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
-    },
-    {
-      "id": "roman_town_areas",
-      "status": "spent_evaluation",
-      "evidence": "reports/POLITY_V3_20261025.md",
-      "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
-    },
-    {
-      "id": "binford_foragers",
-      "status": "development_and_spent_transfer_evaluation",
-      "evidence": "reports/FORAGING_EARTH_20261031.md",
-      "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
-    },
-    {
-      "id": "sacks_cereal_calendar_pool",
-      "status": "spent_evaluation",
-      "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
-      "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
-    },
-    {
-      "id": "vdsa_8224522_reaping",
-      "status": "development_and_spent_flawed_evaluation",
-      "evidence": "output/earth_components_20261105/reaping/evaluation.json",
-      "training_cases": 603,
-      "training_districts": 8,
-      "evaluation_cases": 1635,
-      "evaluation_districts": 5,
-      "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
-      "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
-      "restricted_diagnostic_cases": 1606,
-      "restricted_diagnostic_districts": 4
-    },
-    {
-      "id": "era_broadbalk_1852_1925",
-      "status": "development_and_spent_temporal_evaluation",
-      "training_years": 20,
-      "evaluation_years": 25,
-      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-      "note": "One physical site/primary plot; 1879–1900 training,1901–1925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
-    },
-    {
-      "id": "era_woburn_wheat_barley_1877_1926",
-      "status": "spent_evaluation",
-      "evidence": "output/woburn_yields_20261106/evaluation.json; reports/CROP_WATER_WOBURN_20261106.md",
-      "note": "Weather is Rothamsted's record as a declared regional proxy (Woburn's own station starts 1928). Other Woburn strata and years were read in the same files and cannot be called unseen for this crop process.",
-      "scored": "unmanured (all nil, no lime) and FYM-only strata, wheat 1879-1900 and barley 1879-1899, 2026-11-06, under the frozen calibration/low_input_yields_20261105/woburn_plan.json and its pre-scoring amendment"
-    },
-    {
-      "id": "era_hoosfield_published_aggregate_means",
-      "status": "source_discovery_exposure",
-      "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
-      "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
-    },
-    {
-      "id": "era_exhaustion_land_phase2_1902_1939",
-      "status": "spent_evaluation",
-      "evidence": "output/soil_fertility_20261106/evaluation.json; reports/SOIL_FERTILITY_20261106.md",
-      "note": "Phase II cereal grain yields (10.23637/REX4-YLD0239-01) unread until the single frozen evaluation. Phase I (10.23637/REX4-YLD5601-01) management columns used as forcing only; Phase I yields not read. Johnston and Poulton (1977) and Warren and Johnston (1960) not opened. The scorer crashed twice before writing output (serialisation, then a path); no value was printed or seen before the completed deterministic run.",
-      "scored": "cereal grain, plots 1-10, 1902-1922 and 1935, 2026-11-06, once, under plan.json + amendment_evaporation.json with selection 66c67e7b"
-    },
-    {
-      "id": "era_alternate_wheat_fallow_rwf3",
-      "status": "seen_aggregate",
-      "evidence": "https://www.era.rothamsted.ac.uk/experiment/rwf3",
-      "note": "The experiment page states aggregate fallow effects (+0.6 t/ha first 10 years, +0.14 t/ha next 60); not usable as a blind test."
-    },
-    {
-      "id": "era_broadbalk_1926_1967",
-      "status": "spent_evaluation",
-      "evidence": "output/soil_fertility_round2_20261106/evaluation.json; reports/SOIL_FERTILITY_ROUND2_20261106.md",
-      "note": "Strips 3, 21, 22 grain are the targets; management columns read. Note 13 quotes one strip-14 1930 grain value (not a target).",
-      "scored": "strips 3, 21, 22 (and N strips 5-8 as secondary), 1926-1967, 2026-11-06, once, under plan_round2.json + amendment_round2.json with selection 4d282c4c"
-    },
-    {
-      "id": "era_broadbalk_soc_1843_2010",
-      "status": "development_partial",
-      "evidence": "calibration/soil_fertility_20261106/plan_round2.json",
-      "note": "Samples 1843-1914 used as development constraints; 1936 and later not printed or used (they fall in or after the 1926-1967 test period)."
-    },
-    {
-      "id": "earth_control_rome150_han2",
-      "status": "development_comparison_on_seen_data",
-      "evidence": "reports/EARTH_CONTROL_20261106.md; calibration/earth_control_20261106/plan.json",
-      "note": "Cliopatria Roman Empire AD 150, Hanson towns AD 150, Itiner-e roads AD 150, Han AD 2 seats and commanderies: already used in POLITY v2/v3 and A2; scored 2026-11-06 for the atlas control-map default (frozen gates). Spent for this question; a blind control test needs unseen polities/years declared first."
-    },
-    {
-      "id": "blind_control_pleiades_cliopatria_bc",
-      "status": "spent_evaluation",
-      "evidence": "calibration/earth_control_20261106/plan_blind.json",
-      "note": "Pleiades Hellenistic (200 BC) and Neo-Assyrian (700 BC) settlements with Cliopatria any-state extents; declared 2026-11-07 before any outcome; one scoring of the round-2 chain and legacy_0, then spent. Scored once 2026-11-07 (results_blind.json): G2 passed for all food cases, G1 failed in B1 (staffed 49-73 %); no default change."
-    },
-    {
-      "id": "climate_sealed_g",
-      "status": "spent_evaluation",
-      "evidence": "calibration/sealed_20261107g/declaration.json",
-      "note": "Declared 2026-11-07 after f was spent; yunnan excluded before any comparative outcome (overlaps the policy-v2 sealed yunnan); five boxes scored once for r43 + e72d: S 0.9785, pass -> r44."
-    },
-    {
-      "id": "blind_control_chgis_280_1580",
-      "status": "spent_evaluation",
-      "evidence": "calibration/earth_control_20261106/plan_blind2.json",
-      "note": "CHGIS V6 county seats (AD 280, 1580) with Cliopatria Western Jin + Eastern Wu / Ming extents in the Han window; declared before any outcome; geography shared with the Han AD 2 development pool. Scored once 2026-11-07 (results_blind2.json): joint365 and fert_legume pass G1 and G2 in both pools, fert_bare fails G2 by <= 0.001; default -> joint365 with L1 + P2."
-    },
-    {
-      "id": "settlement_blind_chgis_610",
-      "status": "spent_evaluation",
-      "evidence": "calibration/settlement_model_20261107/plan.json",
-      "note": "CHGIS V6 county seats alive in AD 610 (Han window); reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
-    },
-    {
-      "id": "settlement_blind_bosker_1300_beyond_limes",
-      "status": "spent_evaluation",
-      "evidence": "calibration/settlement_model_20261107/plan.json",
-      "note": "Bosker et al. cities of 1300 north of 45 N, west of 30 E, outside the Roman Empire of AD 150; reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
-    },
-    {
-      "id": "settlement_blind_chgis_742",
-      "status": "spent",
-      "evidence": "calibration/settlement_model_20261107/plan_round2.json",
-      "note": "CHGIS V6 county seats alive in AD 742 (Tang) in the Han window; reserved 2026-11-07 for the settlement model round-2 blind test, before any round-2 result. Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
-    },
-    {
-      "id": "settlement_blind_bosker_1300_inside_limes",
-      "status": "spent",
-      "evidence": "calibration/settlement_model_20261107/plan_round2.json",
-      "note": "Bosker et al. cities of 1300 inside Cliopatria's Roman Empire AD 150 (Rome window); reserved 2026-11-07 for the settlement model round-2 blind test (site AUC). Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
-    },
-    {
-      "id": "geo_control_blind_chgis_1080",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_A.json",
-      "note": "CHGIS V6 seats alive AD 1080 + Cliopatria polities of 1080 (Han window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
-    },
-    {
-      "id": "geo_control_blind_pleiades_late_antique_550",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_A.json",
-      "note": "Pleiades late-antique settlements + Cliopatria polities of AD 550 (Rome window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
-    },
-    {
-      "id": "geo_a2_blind_chgis_1200",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_A2.json",
-      "note": "CHGIS V6 seats AD 1200 + Cliopatria polities 1200 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-    },
-    {
-      "id": "geo_a2_blind_chgis_1820",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_A2.json",
-      "note": "CHGIS V6 seats AD 1820 + Cliopatria polities 1820 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-    },
-    {
-      "id": "geo_a2_blind_bosker_1500",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_A2.json",
-      "note": "Bosker et al. cities of 1500 + Cliopatria polities 1500 (Rome window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
-    },
-    {
-      "id": "forest_reveals_tw6_blind_blocks",
-      "status": "spent",
-      "evidence": "calibration/geography_control_20261107/plan_C1.json",
-      "note": "REVEALS TW6 (2.2-1.7 ka BP) open land, odd 5-degree checkerboard blocks inside the Earth run (147 cells); scored once 2026-11-07 (output/forest_c1_20261107/blind.json). Even blocks (121) are development."
-    },
-    {
-      "id": "domesday_1086_blind",
-      "status": "spent_evaluation",
-      "evidence": "calibration/population_ledger_20261108/plan.json; output/population_ledger_20261108/blind.json",
-      "note": "Domesday survey of England 1086 (Open Domesday, A. Powell-Smith, from the Hull Domesday Project data, J.J.N. Palmer; CC BY-SA): recorded households and settlement points per place. Reserved 2026-11-08, before any download, for the single blind test of the predicted population ledger (Step 3) and village-scale settlement spread (Step 2). Development uses only seen data (Han AD 2 commanderies/counties, census regions, Roman provinces). The England total (~1.7-2.5 M) is common knowledge; the per-block distribution is the unseen part. Scored once 2026-11-08 (plan P3): 20 km block rank P0 0.395, P1 0.431, P2 0.630; level P0 9.95 M, P2 0.79 M (band 1.2-2.6 M fails). Any later village-scale or population use of Domesday is development on seen data."
-    },
-    {
-      "id": "climate_sealed_h",
-      "status": "spent_evaluation",
-      "evidence": "calibration/maritime_p8_20261108/plan.json",
-      "note": "Released by the owner and scored once 2026-11-08 for P8a finalist C3 (e51 + e51b ceiling + e3): S 1.0014, fail (tropical coasts). Development use from now on must be explicit; the next climate milestone needs a newly declared set."
-    },
-    {
-      "id": "r44_correction_reconstruction",
-      "status": "repeated_development_and_spent_evaluation",
-      "evidence": "reports/R44_RECONSTRUCTION_20261109.md",
-      "note": "Existing dev31 cluster CV and 28/14km pairs plus OLD Norway/SE Africa correction checks replayed to reconstruct missing models. Not new unseen validation. No new sealed pool opened."
-    },
-    {
-      "id": "air_sea_development_audit_20261109",
-      "status": "repeated_development_and_spent_evaluation",
-      "evidence": "calibration/air_sea_audit_20261109/plan.json; reports/AIR_SEA_AUDIT_20261109.md",
-      "note": "Six existing regions, including spent h Top End/New Guinea/Ivory Coast, compared under r44 and rejected C3. NCEP sigma0.995 1991-2020 and WOA SST used separately for diagnostics only. No new pool or adoption. Operator-state cap counts separate numerical residual; twelve climates replayed identically."
-    },
-    {
-      "id": "shared_sst_screen_20261109",
-      "status": "repeated_development_and_spent_evaluation",
-      "evidence": "calibration/shared_sst_screen_20261109/plan.json; reports/SHARED_SST_SCREEN_20261109.md",
-      "note": "Four shared offset/current directions with/without C3, paired fresh r44/C3, 36 verified runs on same six known regions (including three spent-h). No new blind pool, broad qualification, correction refit or adoption."
-    },
-    {
-      "id": "r44_rainfall_sources_20261110",
-      "status": "reused_development_diagnostic",
-      "evidence": "reports/R44_RAINFALL_SOURCES_20261110.md",
-      "note": "Japan, Bengal, North Queensland and Patagonia, unchanged r44 observer controls. No fresh validation, fit or adoption."
-    },
-    {
-      "id": "joint_ocean_land_refit_p8d",
-      "status": "development_and_spent_diagnostics",
-      "evidence": "reports/JOINT_OCEAN_LAND_20261110.md",
-      "note": "49 development regions fitted from three starts. Six known coasts diagnosed; h/f/g remain spent. Any finer-grid and h follow-up is development/stress, not independent validation. No new adoption."
-    },
-    {
-      "id": "moisture_mix_reuse_20261110",
-      "status": "numerical_equivalence_on_development_cases",
-      "evidence": "reports/MOISTURE_MIX_REUSE_20261110.md",
-      "note": "49 known regions used for exact-output/numerical replay; five known profiles for CPU timing. No climate fit, accuracy gain or new independent validation."
-    },
-    {
-      "id": "settlement_locations_20261110",
-      "status": "exposed_development_only",
-      "evidence": "reports/SETTLEMENT_LOCATIONS_20261110.md",
-      "note": "HanAD2 county seats and RomanAD150 urban sites reused for 12 fixed-count location variants/72 evaluations. Newly reconstructed slope/HAND inputs, paired controls. No prospective qualification or production adoption; Sui/Tang/Domesday remain spent."
-    },
-    {
-      "id": "settlement_intensity_20261110",
-      "status": "exposed_development_only",
-      "evidence": "reports/SETTLEMENT_INTENSITY_20261110.md",
-      "note": "108 adaptive-spacing/prior-sensitivity evaluations on previously exposed Han/Roman data. No occupation-age, population or control adoption; old fixed study preserved."
-    },
-    {
-      "id": "vidarbha_2020",
-      "status": "prepared_unscored_source_quality_failure",
-      "evidence": "reports/VIDARBHA_PREPARATION_20261110.md",
-      "note": "Master/settlement CSVs read only for frozen schema/join/axis/chronology audit. Zero joins and conflicting coordinate documentation; no target maps, predictions or model scores. No independent/sealed status granted."
-    },
-    {
-      "id": "rural_roman_britain",
-      "status": "exposed_conditional_context_diagnostic",
-      "evidence": "reports/ROMAN_RURAL_PREPARATION_20261110.md",
-      "note": "Initial preparation remains immutable; source whole-record context labels now scored conditionally against existing Earth predictors. Not sealed/independent; no dated roles, population, institution or control assignment. Public outputs aggregate only."
-    },
-    {
-      "id": "settlement_history_boundary_20261111",
-      "status": "exposed_development_only",
-      "evidence": "reports/SETTLEMENT_HISTORY_BOUNDARY_20261111.md",
-      "note": "100 declared exposed evaluations,20 exact overlap controls. Old lead retained; no global-optimum, occupation-age, transfer or production-adoption claim."
-    },
-    {
-      "id": "settlement_role_contrast_20261111",
-      "status": "exposed_conditional_context_diagnostic",
-      "evidence": "reports/SETTLEMENT_ROLE_CONTRAST_20261111.md",
-      "note": "Selected-archive role-label contrast scored on exposed Roman Earth inputs; no fitting, datedAD200 roles, true-absence census, independent transfer or adoption. Preserve source exposure."
-    },
-    {
-      "id": "settlement_service_demand_20261111",
-      "status": "exposed_service_demand_context_diagnostic",
-      "evidence": "reports/SETTLEMENT_SERVICE_DEMAND_20261111.md",
-      "note": "Finite potential requests and full/strict-nonroadside conditional contrasts scored. No fitting/adoption. Global gains limited by local diagnostics; no dated roles/census/authority or independent transfer."
-    },
-    {
-      "id": "settlement_service_controls_20261111",
-      "status": "exposed_service_opportunity_controls",
-      "evidence": "reports/SETTLEMENT_SERVICE_CONTROLS_20261111.md",
-      "note": "All availability and zero-travel controls scored on exposed full/strict archive contexts; no fitting/adoption/independent transfer or dated roles."
-    },
-    {
-      "id": "settlement_role_composition_20261111",
-      "status": "exposed_source_role_composition",
-      "evidence": "reports/SETTLEMENT_ROLE_COMPOSITION_20261111.md",
-      "note": "Five support-qualified source-context cases scored, five explicitly unscored; no dated role/census,independent transfer,fitting or production adoption."
-    },
-    {
-      "id": "settlement_service_capacity_20261111",
-      "status": "implementation_work_budget_diagnostic_not_calibrated",
-      "evidence": "reports/SETTLEMENT_SERVICE_CAPACITY_20261111.md",
-      "note": "Frozen atlas residents and food support consumed once by shared service hours. Stress rates,identity choice only; no new Earth calibration,role/political adoption or independent transfer."
-    },
-    {
-      "id": "seshat_polaris2026",
-      "status": "prepared_institution_date_scopes_no_model_scores",
-      "evidence": "reports/INSTITUTION_SCOPE_20261111.md",
-      "note": "Explicit versus documented parent-duration scopes prepared. Raw dates,uncertainty/ranges/conflicts retained;no predictions,fitting or independent validation. Raw workbook private;located transfer still open."
-    },
-    {
-      "id": "vidarbha_field_survey2016",
-      "status": "exposed_frozen_regional_transfer_failed_guard",
-      "evidence": "reports/SETTLEMENT_VIDARBHA_TRANSFER_20261111.md",
-      "note": "Primary2016field survey Zenodo3670055,v2;134exactsettlementjoins,74inside-frame EH-Srecords/53primarycell-frameunits. Frozenparameters scored prospectively;source now spent. Partialtargetedcoverage,notcensusabsence;no adoption. Separate from failed3667657catalogue."
-    },
-    {
-      "id": "reba2016_modelski_ad100_200",
-      "status": "exposed_historical_city_checks_20261023",
-      "evidence": "reports/POPULATION_20261023.md",
-      "note": "Exposure register corrected after finding prior great_cities_check.py and population_density_research_20261023.md usage;absence from old register was not evidence of freshness. Includes broadIndia city work. No new untouched transfer claim."
-    },
-    {
-      "id": "settlement_counts_20261111",
-      "status": "exposed_count_development_full_domain_coverage_failure",
-      "evidence": "reports/SETTLEMENT_COUNTS_20261111.md",
-      "note": "OldHan/Rome development records;raw multiplicity recovered and size units audited.13Han records lack frozen population input. Full-domain fit unqualified;covered-only sensitivity explicitly restricted,no new blind claim or productionadoption."
-    },
-    {
-      "id": "earth_population_extension_20261111",
-      "status": "exposed_source_correction_complete_input_count_development",
-      "evidence": "reports/EARTH_POPULATION_EXTENSION_20261111.md",
-      "note": "Official regionalclimate/ETOPOsources,strict original/legacy/correctedoverlap gates,NoDatadecoderfix. FullrequiredHanpopulationcoverage restored;160countcomparisons on exposed records. Originalfailure retained;no blindtransfer,history-point qualification,residentsize fit or fantasy adoption."
-    },
-    {
-      "id": "settlement_joint_locations_20261112",
-      "status": "exposed_development_only",
-      "evidence": "reports/SETTLEMENT_JOINT_LOCATIONS_20261112.md",
-      "note": "224placements on already-spent Han/Roman pools, repaired Han population and supported histories. No fresh geographic qualification, resident-size calibration or fantasy adoption."
-    },
-    {
-      "id": "settlement_residents_20261112",
-      "status": "conditional_population_budget_implementation_not_calibrated",
-      "evidence": "reports/SETTLEMENT_RESIDENTS_20261112.md",
-      "note": "60conditional sensitivities on20existing atlas destination-food cases. Model catchment people and transfer shares are scenarios. Source-food gate verified on manufactured cases; actual rural-food/production feedback remains pending. No new Earth fit or default adoption."
-    },
-    {
-      "id": "settlement_feedback_20261112",
-      "status": "cell_population_work_food_scenario_not_empirically_calibrated",
-      "evidence": "reports/SETTLEMENT_FEEDBACK_20261112.md",
-      "note": "Eight coupled local cereal scenarios; current published map inputs, no new Earth targets. Real cell-level source food/worker feedback and same-cohort reach audited. Rural deficits elsewhere and empirical resident-size/occupation gaps remain. Original defaults unchanged."
-    },
-    {
-      "id": "settlement_size_evidence_20261112",
-      "status": "exposed_housing_measurement_preparation_no_size_scores",
-      "evidence": "reports/SETTLEMENT_SIZE_EVIDENCE_20261112.md",
-      "note": "50 attributed2023housing samples,independent extraction/arithmetic review;allAD150phase/extent/representativeness gates retained. Original52case source and workbook unavailable. No new fit,blind claim or default. Same source now scored in downstream settlement_housing_diagnostic_20261112;preparation checkpoint remains historical."
-    },
-    {
-      "id": "settlement_housing_diagnostic_20261112",
-      "status": "exposed_mixed_period_density_development_scored",
-      "evidence": "reports/SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md",
-      "note": "50 prior housing observations;province-blocked density scores,coverage sensitivities,allphase/extent/sampling gates retained. NoAD150labels,prospective transfer,allocator fit or adoption."
-    },
-    {
-      "id": "settlement_monthly_work_20261112",
-      "status": "model_only_fixed_plan_work_diagnostic_no_new_earth_data",
-      "evidence": "reports/SETTLEMENT_MONTHLY_WORK_20261112.md",
-      "note": "16workscenarios on4existingcoupledfoodplans;explicitloads/monthlyhours,noEarthrates,foodreallocation,patrolfootprints or authorityadoption. All sourcefood and population gates retained."
-    },
-    {
-      "id": "settlement_dispatch_20261112",
-      "status": "model_only_joint_dispatch_food_work_scenarios",
-      "evidence": "reports/SETTLEMENT_DISPATCH_20261112.md",
-      "note": "16same-input proportional-dispatch cases;newoptional settlement/potential-travel maps,no newEarthdata,sizefit,patrolschedule,authority or defaultadoption."
-    },
-    {
-      "id": "settlement_dispatch_search_20261112",
-      "status": "model_only_finite_search_and_staff_threshold_diagnostic",
-      "evidence": "reports/SETTLEMENT_DISPATCH_SEARCH_20261112.md",
-      "note": "396overlaparrays exact;300hsource losses include narrowstaffactivationbranches;no newEarthdata,physicalimpossibility or defaultadoptionclaim."
-    },
-    {
-      "id": "settlement_dispatch_seeded_20261112",
-      "status": "model_only_threshold_checked_joint_resource_maps",
-      "evidence": "reports/SETTLEMENT_DISPATCH_SEEDED_20261112.md",
-      "note": "Knownstaffactivationseed repairs finitegridmisses;all16physicalcases/replays reviewed,no newEarthdata,globaloptimum,geographicpatrol or empiricaladoptionclaim."
-    },
-    {
-      "id": "network_duty_visits_20261112",
-      "status": "model_only_conditional_walking_point_tasks",
-      "evidence": "reports/NETWORK_DUTY_VISITS_20261112.md",
-      "note": "Eightreservedpatrol-slice point-visit scenarios;originalfood/workprovidersandtransportinputs,no newEarthdata,observed demand,territory,rosters ordefaultadoption."
-    },
-    {
-      "id": "network_visit_spare_assignment_20261112",
-      "status": "model_only_constructive_assignment_diagnostic",
-      "evidence": "reports/NETWORK_VISIT_SPARE_ASSIGNMENT_20261112.md",
-      "note": "Eightspare-provider extensions keep alloriginalvisits/maps,spend onlyunusedpatrolslice;no newdata,globaloptimum,observed demand,territory ordefault."
-    },
-    {
-      "id": "network_visit_target_grid_20261112",
-      "status": "model_only_declared_grid_task_sensitivity",
-      "evidence": "reports/NETWORK_VISIT_TARGET_GRID_20261112.md",
-      "note": "All40fixedgridscenarios reported;phase and suppliedtaskdensity distinct,baselinebyteexact,no newdata,empiricaldemand,territory ordefaultadoption."
-    },
-    {
-      "id": "network_visit_calendar_20261112",
-      "status": "model_only_constructive_worker_calendar_diagnostic",
-      "evidence": "reports/NETWORK_VISIT_CALENDAR_20261112.md",
-      "note": "Original four collection/eight visit plans;whole trips and synchronized worker intervals independently reviewed. Per-bin packing does not certify annual deliveries;no new Earth data,observed staffing,authority or default adoption."
-    },
-    {
-      "id": "network_visit_joint_order_20261112",
-      "status": "model_only_fixed_order_and_necessary_delivery_gate_comparison",
-      "evidence": "reports/NETWORK_VISIT_JOINT_ORDER_20261112.md",
-      "note": "Both fixed policies/all16outcomes retained;physical work,bin completion and necessary12bin gate distinct. No new Earth data,annualfood validation,observed staffing ordefault adoption."
-    },
-    {
-      "id": "network_visit_year_complete_20261112",
-      "status": "model_only_coherent_provider_year_point_schedule",
-      "evidence": "reports/NETWORK_VISIT_YEAR_COMPLETE_20261112.md",
-      "note": "One checked calendar per provider/year preserves every baseline gated task;all8point maps retain original jobs/people/food. Necessary delivery gate only,no new Earth observations,annual food validation,roles ordefault adoption."
-    },
-    {
-      "id": "network_visit_delivery_timing_20261112",
-      "status": "model_only_destination_food_inventory_audit",
-      "evidence": "reports/NETWORK_VISIT_DELIVERY_TIMING_20261112.md",
-      "note": "All 24matched accountings retain fixed people/cargo/calendars/lag. Continuous inventories expose small cereal gaps;no source intrabin validation,crew rations/location,observed hunger or map/default adoption."
-    },
-    {
-      "id": "network_visit_meal_headroom_20261112",
-      "status": "model_only_fixed_staff_civilian_meal_bound",
-      "evidence": "reports/NETWORK_VISIT_MEAL_HEADROOM_20261112.md",
-      "note": "All16fixed-shipment meal bounds keep institutional meals and original physical stores. Conditional destination accounting only;source work/exports frozen. No revised population map or calibrated adoption."
-    },
-    {
-      "id": "settlement_continuous_destination_20261112",
-      "status": "model_only_continuous_destination_resident_feedback",
-      "evidence": "reports/SETTLEMENT_CONTINUOUS_DESTINATION_20261112.md",
-      "note": "Four old/four replanned finite-ledger cases;source/work/cargo recomputed. Bin-start destination food only,not new collector-return food or map/empirical adoption."
-    },
-    {
-      "id": "continuous_collection_calendar_20261112",
-      "status": "model_only_new_collector_work_and_food_audit",
-      "evidence": "reports/CONTINUOUS_COLLECTION_CALENDAR_20261112.md",
-      "note": "All12planned/packed/return comparisons retain partial delivery providers. Mandatory work and food flags separate;no new visit-map,source timing/ration/location or calibrated adoption."
-    },
-    {
-      "id": "food_checked_visits_20261112",
-      "status": "model_only_own_destination_food_and_whole_calendar_points",
-      "evidence": "reports/FOOD_CHECKED_VISITS_20261112.md",
-      "note": "All32visit/48food rows;8 optional maps. Necessary calendar/destination-cereal conjunction only. Source timing,crew rations/location,roles,complete diets and calibrated adoption unresolved."
-    },
-    {
-      "id": "source_continuous_meals_20261113",
-      "status": "fixed_model_source_meal_convention_diagnostic",
-      "evidence": "reports/SOURCE_CONTINUOUS_MEALS_20261113.md",
-      "note": "All16local/outside outcomes;all positive-person origins fail immediate physical clip plus continuous meals at original365day capacity. Not observed famine,new export plan or calibrated adoption."
-    },
-    {
-      "id": "source_pickup_calendars_20261113",
-      "status": "fixed_source_event_availability_diagnostic",
-      "evidence": "reports/SOURCE_PICKUP_CALENDARS_20261113.md",
-      "note": "All 24 fixedplans;explicit raw source requests and deficits,quota-only transfers and rural food failures. No destination replacement,capacity/date tuning or calibrated adoption."
-    },
-    {
-      "id": "source_filled_destination_20261113",
-      "status": "fixed_source_filled_destination_food_diagnostic",
-      "evidence": "reports/SOURCE_FILLED_DESTINATION_20261113.md",
-      "note": "All48matched source-filled destination outcomes. Source rural failures retained;zero all-gate providers. Scoped grain conservation,not certified complete provisioning or map/default adoption."
-    },
-    {
-      "id": "hartwell_chgis_v5_schema_only",
-      "status": "schema_inspected_not_usable",
-      "evidence": "https://doi.org/10.7910/DVN/29302 (v5_Hartwell_2010.zip, cached in ignored data/cache/hartwell_chgis)",
-      "note": "Inspected 2026-11-14 for a second blind test of the heartland people pattern: only DBF field names were read, no values. Prefecture files (742, 1080, ...) carry codes and administrative hierarchy only; county files carry a POPULATION field that also appears in the 1990 county layer the historical units are built from (co-location), so it is not a historical count. Not usable for a population test; no values opened, so the pool's geometry stays unexposed."
-    },
-    {
-      "id": "floodplains_southern_mesopotamia_ad200_blind",
-      "status": "spent",
-      "evidence": "calibration/floodplains_blind_20261115/plan.json",
-      "note": "FloodPlains Web GIS survey sites (Marchetti et al. 2025, CC-BY; bnza/archiraq docs/papers/1/data_stacked.csv). Reserved 2026-11-15 before any value was read (header and row count only) for one blind test of release-3 positions and the refitted size model at AD 200. Scored 2026-11-15 (output/floodplains_blind_20261115; amendments A1 swapped coordinates, A2 size classes): positions at chance (percentile 0.48), sizes fail (no modelled city >200 ha)."
-    },
-    {
-      "id": "reba_modelski_chandler_ad100_200_blind",
-      "status": "spent_not_scored",
-      "evidence": "calibration/reba_cities_blind_20261115/plan.json",
-      "note": "Reba et al. 2016 geolocated Modelski/Chandler cities (figshare, CC BY 4.0). Reserved 2026-11-15 after reading headers only, for one blind test of release-3 position fields on large cities outside the Roman and Han pools. Run 2026-11-15: only 6 Modelski AD 200 cities outside the Roman (9 dropped) and Han (2 dropped) pools, plus 2 Chandler AD 100; below the declared minimum of 10, so not scored (seen: mean release-3 percentile 0.70, environment 0.72; Spearman pop vs people -0.03). Too sparse for a test."
-    },
-    {
-      "id": "valley_of_mexico_survey_classic",
-      "status": "reserved_blind",
-      "evidence": "data/cache/valley_of_mexico/site-survey-data.xlsx (owner-supplied, tDAR project 192)",
-      "note": "Parsons/Blanton Valley of Mexico survey, 2,052 site-period rows; reserved 2026-11-15 after reading headers only; needs an Earth grid outside the current window and has no maize in the crop model."
-    }
-  ]
+ "version": 1,
+ "date": "2026-11-12",
+ "rule": "An evaluated pool cannot be relabelled unseen for later model development. Reproduction is allowed; subsequent development use must be explicit.",
+ "datasets": [
+  {
+   "id": "climate_dev49",
+   "status": "development",
+   "evidence": "reports/R43_20261103.md"
+  },
+  {
+   "id": "climate_sealed_a_through_e",
+   "status": "spent_evaluation",
+   "evidence": "reports/R43_20261103.md",
+   "note": "Do not recover unseen status by choosing a different component or subregion."
+  },
+  {
+   "id": "climate_reserved_f",
+   "status": "spent_evaluation",
+   "evidence": "reports/R43_20261103.md",
+   "note": "Scored once 2026-11-07 for r43 + e72c (owner release): S 1.0107, fail. Development use from now on must be explicit."
+  },
+  {
+   "id": "hyde_0_200",
+   "status": "development_and_historical_analogue",
+   "evidence": "reports/POPULATION_20261023.md",
+   "dependence": "Spatial allocation is partly model-derived using environmental proxies; not independent census truth."
+  },
+  {
+   "id": "han_ad2",
+   "status": "used_for_fitting_and_evaluation",
+   "evidence": "reports/POPULATION_20261023.md",
+   "note": "Real census-based counts, but aggregate fitting does not individually identify yields, cropped fraction or food need."
+  },
+  {
+   "id": "roman_town_areas",
+   "status": "spent_evaluation",
+   "evidence": "reports/POLITY_V3_20261025.md",
+   "note": "Imputed/default town footprints require separate treatment; market-access size test failed."
+  },
+  {
+   "id": "binford_foragers",
+   "status": "development_and_spent_transfer_evaluation",
+   "evidence": "reports/FORAGING_EARTH_20261031.md",
+   "note": "North American fitting and repeated outside-continent evaluation; old scored groups cannot be a new unseen test."
+  },
+  {
+   "id": "sacks_cereal_calendar_pool",
+   "status": "spent_evaluation",
+   "evidence": "reports/CEREAL_DEVELOPMENT_20261103.md",
+   "note": "Country-separated evaluation was scored; earlier global summaries also inspected."
+  },
+  {
+   "id": "vdsa_8224522_reaping",
+   "status": "development_and_spent_flawed_evaluation",
+   "evidence": "output/earth_components_20261105/reaping/evaluation.json",
+   "training_cases": 603,
+   "training_districts": 8,
+   "evaluation_cases": 1635,
+   "evaluation_districts": 5,
+   "transfer": "Modern manual-task comparator; zero strict recorded low-input analogues and no held-out barley. No ancient default adoption.",
+   "integrity": "Original district-name split failed the panel audit: MAHARASHTRA / MAHARASTRA aliases caused five cross-fold households. Whole affected district removed for a post-audit diagnostic; no prospective qualification.",
+   "restricted_diagnostic_cases": 1606,
+   "restricted_diagnostic_districts": 4
+  },
+  {
+   "id": "era_broadbalk_1852_1925",
+   "status": "development_and_spent_temporal_evaluation",
+   "training_years": 20,
+   "evaluation_years": 25,
+   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+   "note": "One physical site/primary plot; 1879–1900 training,1901–1925 test. Availability-only amendment committed before outcome scoring; impossible1883 date excluded. Candidate failed annual skill; no AD200 adoption."
+  },
+  {
+   "id": "era_woburn_wheat_barley_1877_1926",
+   "status": "spent_evaluation",
+   "evidence": "output/woburn_yields_20261106/evaluation.json; reports/CROP_WATER_WOBURN_20261106.md",
+   "note": "Weather is Rothamsted's record as a declared regional proxy (Woburn's own station starts 1928). Other Woburn strata and years were read in the same files and cannot be called unseen for this crop process.",
+   "scored": "unmanured (all nil, no lime) and FYM-only strata, wheat 1879-1900 and barley 1879-1899, 2026-11-06, under the frozen calibration/low_input_yields_20261105/woburn_plan.json and its pre-scoring amendment"
+  },
+  {
+   "id": "era_hoosfield_published_aggregate_means",
+   "status": "source_discovery_exposure",
+   "evidence": "reports/HISTORICAL_WHEAT_20261105.md",
+   "note": "Published aggregate means seen in search snippets; cannot claim those targets untouched."
+  },
+  {
+   "id": "era_exhaustion_land_phase2_1902_1939",
+   "status": "spent_evaluation",
+   "evidence": "output/soil_fertility_20261106/evaluation.json; reports/SOIL_FERTILITY_20261106.md",
+   "note": "Phase II cereal grain yields (10.23637/REX4-YLD0239-01) unread until the single frozen evaluation. Phase I (10.23637/REX4-YLD5601-01) management columns used as forcing only; Phase I yields not read. Johnston and Poulton (1977) and Warren and Johnston (1960) not opened. The scorer crashed twice before writing output (serialisation, then a path); no value was printed or seen before the completed deterministic run.",
+   "scored": "cereal grain, plots 1-10, 1902-1922 and 1935, 2026-11-06, once, under plan.json + amendment_evaporation.json with selection 66c67e7b"
+  },
+  {
+   "id": "era_alternate_wheat_fallow_rwf3",
+   "status": "seen_aggregate",
+   "evidence": "https://www.era.rothamsted.ac.uk/experiment/rwf3",
+   "note": "The experiment page states aggregate fallow effects (+0.6 t/ha first 10 years, +0.14 t/ha next 60); not usable as a blind test."
+  },
+  {
+   "id": "era_broadbalk_1926_1967",
+   "status": "spent_evaluation",
+   "evidence": "output/soil_fertility_round2_20261106/evaluation.json; reports/SOIL_FERTILITY_ROUND2_20261106.md",
+   "note": "Strips 3, 21, 22 grain are the targets; management columns read. Note 13 quotes one strip-14 1930 grain value (not a target).",
+   "scored": "strips 3, 21, 22 (and N strips 5-8 as secondary), 1926-1967, 2026-11-06, once, under plan_round2.json + amendment_round2.json with selection 4d282c4c"
+  },
+  {
+   "id": "era_broadbalk_soc_1843_2010",
+   "status": "development_partial",
+   "evidence": "calibration/soil_fertility_20261106/plan_round2.json",
+   "note": "Samples 1843-1914 used as development constraints; 1936 and later not printed or used (they fall in or after the 1926-1967 test period)."
+  },
+  {
+   "id": "earth_control_rome150_han2",
+   "status": "development_comparison_on_seen_data",
+   "evidence": "reports/EARTH_CONTROL_20261106.md; calibration/earth_control_20261106/plan.json",
+   "note": "Cliopatria Roman Empire AD 150, Hanson towns AD 150, Itiner-e roads AD 150, Han AD 2 seats and commanderies: already used in POLITY v2/v3 and A2; scored 2026-11-06 for the atlas control-map default (frozen gates). Spent for this question; a blind control test needs unseen polities/years declared first."
+  },
+  {
+   "id": "blind_control_pleiades_cliopatria_bc",
+   "status": "spent_evaluation",
+   "evidence": "calibration/earth_control_20261106/plan_blind.json",
+   "note": "Pleiades Hellenistic (200 BC) and Neo-Assyrian (700 BC) settlements with Cliopatria any-state extents; declared 2026-11-07 before any outcome; one scoring of the round-2 chain and legacy_0, then spent. Scored once 2026-11-07 (results_blind.json): G2 passed for all food cases, G1 failed in B1 (staffed 49-73 %); no default change."
+  },
+  {
+   "id": "climate_sealed_g",
+   "status": "spent_evaluation",
+   "evidence": "calibration/sealed_20261107g/declaration.json",
+   "note": "Declared 2026-11-07 after f was spent; yunnan excluded before any comparative outcome (overlaps the policy-v2 sealed yunnan); five boxes scored once for r43 + e72d: S 0.9785, pass -> r44."
+  },
+  {
+   "id": "blind_control_chgis_280_1580",
+   "status": "spent_evaluation",
+   "evidence": "calibration/earth_control_20261106/plan_blind2.json",
+   "note": "CHGIS V6 county seats (AD 280, 1580) with Cliopatria Western Jin + Eastern Wu / Ming extents in the Han window; declared before any outcome; geography shared with the Han AD 2 development pool. Scored once 2026-11-07 (results_blind2.json): joint365 and fert_legume pass G1 and G2 in both pools, fert_bare fails G2 by <= 0.001; default -> joint365 with L1 + P2."
+  },
+  {
+   "id": "settlement_blind_chgis_610",
+   "status": "spent_evaluation",
+   "evidence": "calibration/settlement_model_20261107/plan.json",
+   "note": "CHGIS V6 county seats alive in AD 610 (Han window); reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
+  },
+  {
+   "id": "settlement_blind_bosker_1300_beyond_limes",
+   "status": "spent_evaluation",
+   "evidence": "calibration/settlement_model_20261107/plan.json",
+   "note": "Bosker et al. cities of 1300 north of 45 N, west of 30 E, outside the Roman Empire of AD 150; reserved for the settlement model blind test. Scored once 2026-11-07 (output/settlement_model_20261107/blind.json)."
+  },
+  {
+   "id": "settlement_blind_chgis_742",
+   "status": "spent",
+   "evidence": "calibration/settlement_model_20261107/plan_round2.json",
+   "note": "CHGIS V6 county seats alive in AD 742 (Tang) in the Han window; reserved 2026-11-07 for the settlement model round-2 blind test, before any round-2 result. Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
+  },
+  {
+   "id": "settlement_blind_bosker_1300_inside_limes",
+   "status": "spent",
+   "evidence": "calibration/settlement_model_20261107/plan_round2.json",
+   "note": "Bosker et al. cities of 1300 inside Cliopatria's Roman Empire AD 150 (Rome window); reserved 2026-11-07 for the settlement model round-2 blind test (site AUC). Scored once 2026-11-07 (output/settlement_model_20261107/blind2.json): C1 not adopted (G4, G5 fail)."
+  },
+  {
+   "id": "geo_control_blind_chgis_1080",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_A.json",
+   "note": "CHGIS V6 seats alive AD 1080 + Cliopatria polities of 1080 (Han window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
+  },
+  {
+   "id": "geo_control_blind_pleiades_late_antique_550",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_A.json",
+   "note": "Pleiades late-antique settlements + Cliopatria polities of AD 550 (Rome window); reserved 2026-11-07 for the control v2.1 blind test before any result. Scored once 2026-11-07 (output/geography_control_20261107/blind.json): C* fails on 550, F adopted."
+  },
+  {
+   "id": "geo_a2_blind_chgis_1200",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_A2.json",
+   "note": "CHGIS V6 seats AD 1200 + Cliopatria polities 1200 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+  },
+  {
+   "id": "geo_a2_blind_chgis_1820",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_A2.json",
+   "note": "CHGIS V6 seats AD 1820 + Cliopatria polities 1820 (Han window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+  },
+  {
+   "id": "geo_a2_blind_bosker_1500",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_A2.json",
+   "note": "Bosker et al. cities of 1500 + Cliopatria polities 1500 (Rome window); reserved 2026-11-07 for the A2 travel-cost blind test before any result. Released unused 2026-11-07: no A2 candidate qualified on development (beta* = 0); never scored. Re-reserved 2026-11-07 for plan_A3 (desert holes) before any result. Scored once 2026-11-07 for plan_A3 (output/geography_control_a3_20261107/blind.json): A3 adopted."
+  },
+  {
+   "id": "forest_reveals_tw6_blind_blocks",
+   "status": "spent",
+   "evidence": "calibration/geography_control_20261107/plan_C1.json",
+   "note": "REVEALS TW6 (2.2-1.7 ka BP) open land, odd 5-degree checkerboard blocks inside the Earth run (147 cells); scored once 2026-11-07 (output/forest_c1_20261107/blind.json). Even blocks (121) are development."
+  },
+  {
+   "id": "domesday_1086_blind",
+   "status": "spent_evaluation",
+   "evidence": "calibration/population_ledger_20261108/plan.json; output/population_ledger_20261108/blind.json",
+   "note": "Domesday survey of England 1086 (Open Domesday, A. Powell-Smith, from the Hull Domesday Project data, J.J.N. Palmer; CC BY-SA): recorded households and settlement points per place. Reserved 2026-11-08, before any download, for the single blind test of the predicted population ledger (Step 3) and village-scale settlement spread (Step 2). Development uses only seen data (Han AD 2 commanderies/counties, census regions, Roman provinces). The England total (~1.7-2.5 M) is common knowledge; the per-block distribution is the unseen part. Scored once 2026-11-08 (plan P3): 20 km block rank P0 0.395, P1 0.431, P2 0.630; level P0 9.95 M, P2 0.79 M (band 1.2-2.6 M fails). Any later village-scale or population use of Domesday is development on seen data."
+  },
+  {
+   "id": "climate_sealed_h",
+   "status": "spent_evaluation",
+   "evidence": "calibration/maritime_p8_20261108/plan.json",
+   "note": "Released by the owner and scored once 2026-11-08 for P8a finalist C3 (e51 + e51b ceiling + e3): S 1.0014, fail (tropical coasts). Development use from now on must be explicit; the next climate milestone needs a newly declared set."
+  },
+  {
+   "id": "r44_correction_reconstruction",
+   "status": "repeated_development_and_spent_evaluation",
+   "evidence": "reports/R44_RECONSTRUCTION_20261109.md",
+   "note": "Existing dev31 cluster CV and 28/14km pairs plus OLD Norway/SE Africa correction checks replayed to reconstruct missing models. Not new unseen validation. No new sealed pool opened."
+  },
+  {
+   "id": "air_sea_development_audit_20261109",
+   "status": "repeated_development_and_spent_evaluation",
+   "evidence": "calibration/air_sea_audit_20261109/plan.json; reports/AIR_SEA_AUDIT_20261109.md",
+   "note": "Six existing regions, including spent h Top End/New Guinea/Ivory Coast, compared under r44 and rejected C3. NCEP sigma0.995 1991-2020 and WOA SST used separately for diagnostics only. No new pool or adoption. Operator-state cap counts separate numerical residual; twelve climates replayed identically."
+  },
+  {
+   "id": "shared_sst_screen_20261109",
+   "status": "repeated_development_and_spent_evaluation",
+   "evidence": "calibration/shared_sst_screen_20261109/plan.json; reports/SHARED_SST_SCREEN_20261109.md",
+   "note": "Four shared offset/current directions with/without C3, paired fresh r44/C3, 36 verified runs on same six known regions (including three spent-h). No new blind pool, broad qualification, correction refit or adoption."
+  },
+  {
+   "id": "r44_rainfall_sources_20261110",
+   "status": "reused_development_diagnostic",
+   "evidence": "reports/R44_RAINFALL_SOURCES_20261110.md",
+   "note": "Japan, Bengal, North Queensland and Patagonia, unchanged r44 observer controls. No fresh validation, fit or adoption."
+  },
+  {
+   "id": "joint_ocean_land_refit_p8d",
+   "status": "development_and_spent_diagnostics",
+   "evidence": "reports/JOINT_OCEAN_LAND_20261110.md",
+   "note": "49 development regions fitted from three starts. Six known coasts diagnosed; h/f/g remain spent. Any finer-grid and h follow-up is development/stress, not independent validation. No new adoption."
+  },
+  {
+   "id": "moisture_mix_reuse_20261110",
+   "status": "numerical_equivalence_on_development_cases",
+   "evidence": "reports/MOISTURE_MIX_REUSE_20261110.md",
+   "note": "49 known regions used for exact-output/numerical replay; five known profiles for CPU timing. No climate fit, accuracy gain or new independent validation."
+  },
+  {
+   "id": "settlement_locations_20261110",
+   "status": "exposed_development_only",
+   "evidence": "reports/SETTLEMENT_LOCATIONS_20261110.md",
+   "note": "HanAD2 county seats and RomanAD150 urban sites reused for 12 fixed-count location variants/72 evaluations. Newly reconstructed slope/HAND inputs, paired controls. No prospective qualification or production adoption; Sui/Tang/Domesday remain spent."
+  },
+  {
+   "id": "settlement_intensity_20261110",
+   "status": "exposed_development_only",
+   "evidence": "reports/SETTLEMENT_INTENSITY_20261110.md",
+   "note": "108 adaptive-spacing/prior-sensitivity evaluations on previously exposed Han/Roman data. No occupation-age, population or control adoption; old fixed study preserved."
+  },
+  {
+   "id": "vidarbha_2020",
+   "status": "prepared_unscored_source_quality_failure",
+   "evidence": "reports/VIDARBHA_PREPARATION_20261110.md",
+   "note": "Master/settlement CSVs read only for frozen schema/join/axis/chronology audit. Zero joins and conflicting coordinate documentation; no target maps, predictions or model scores. No independent/sealed status granted."
+  },
+  {
+   "id": "rural_roman_britain",
+   "status": "exposed_conditional_context_diagnostic",
+   "evidence": "reports/ROMAN_RURAL_PREPARATION_20261110.md",
+   "note": "Initial preparation remains immutable; source whole-record context labels now scored conditionally against existing Earth predictors. Not sealed/independent; no dated roles, population, institution or control assignment. Public outputs aggregate only."
+  },
+  {
+   "id": "settlement_history_boundary_20261111",
+   "status": "exposed_development_only",
+   "evidence": "reports/SETTLEMENT_HISTORY_BOUNDARY_20261111.md",
+   "note": "100 declared exposed evaluations,20 exact overlap controls. Old lead retained; no global-optimum, occupation-age, transfer or production-adoption claim."
+  },
+  {
+   "id": "settlement_role_contrast_20261111",
+   "status": "exposed_conditional_context_diagnostic",
+   "evidence": "reports/SETTLEMENT_ROLE_CONTRAST_20261111.md",
+   "note": "Selected-archive role-label contrast scored on exposed Roman Earth inputs; no fitting, datedAD200 roles, true-absence census, independent transfer or adoption. Preserve source exposure."
+  },
+  {
+   "id": "settlement_service_demand_20261111",
+   "status": "exposed_service_demand_context_diagnostic",
+   "evidence": "reports/SETTLEMENT_SERVICE_DEMAND_20261111.md",
+   "note": "Finite potential requests and full/strict-nonroadside conditional contrasts scored. No fitting/adoption. Global gains limited by local diagnostics; no dated roles/census/authority or independent transfer."
+  },
+  {
+   "id": "settlement_service_controls_20261111",
+   "status": "exposed_service_opportunity_controls",
+   "evidence": "reports/SETTLEMENT_SERVICE_CONTROLS_20261111.md",
+   "note": "All availability and zero-travel controls scored on exposed full/strict archive contexts; no fitting/adoption/independent transfer or dated roles."
+  },
+  {
+   "id": "settlement_role_composition_20261111",
+   "status": "exposed_source_role_composition",
+   "evidence": "reports/SETTLEMENT_ROLE_COMPOSITION_20261111.md",
+   "note": "Five support-qualified source-context cases scored, five explicitly unscored; no dated role/census,independent transfer,fitting or production adoption."
+  },
+  {
+   "id": "settlement_service_capacity_20261111",
+   "status": "implementation_work_budget_diagnostic_not_calibrated",
+   "evidence": "reports/SETTLEMENT_SERVICE_CAPACITY_20261111.md",
+   "note": "Frozen atlas residents and food support consumed once by shared service hours. Stress rates,identity choice only; no new Earth calibration,role/political adoption or independent transfer."
+  },
+  {
+   "id": "seshat_polaris2026",
+   "status": "prepared_institution_date_scopes_no_model_scores",
+   "evidence": "reports/INSTITUTION_SCOPE_20261111.md",
+   "note": "Explicit versus documented parent-duration scopes prepared. Raw dates,uncertainty/ranges/conflicts retained;no predictions,fitting or independent validation. Raw workbook private;located transfer still open."
+  },
+  {
+   "id": "vidarbha_field_survey2016",
+   "status": "exposed_frozen_regional_transfer_failed_guard",
+   "evidence": "reports/SETTLEMENT_VIDARBHA_TRANSFER_20261111.md",
+   "note": "Primary2016field survey Zenodo3670055,v2;134exactsettlementjoins,74inside-frame EH-Srecords/53primarycell-frameunits. Frozenparameters scored prospectively;source now spent. Partialtargetedcoverage,notcensusabsence;no adoption. Separate from failed3667657catalogue."
+  },
+  {
+   "id": "reba2016_modelski_ad100_200",
+   "status": "exposed_historical_city_checks_20261023",
+   "evidence": "reports/POPULATION_20261023.md",
+   "note": "Exposure register corrected after finding prior great_cities_check.py and population_density_research_20261023.md usage;absence from old register was not evidence of freshness. Includes broadIndia city work. No new untouched transfer claim."
+  },
+  {
+   "id": "settlement_counts_20261111",
+   "status": "exposed_count_development_full_domain_coverage_failure",
+   "evidence": "reports/SETTLEMENT_COUNTS_20261111.md",
+   "note": "OldHan/Rome development records;raw multiplicity recovered and size units audited.13Han records lack frozen population input. Full-domain fit unqualified;covered-only sensitivity explicitly restricted,no new blind claim or productionadoption."
+  },
+  {
+   "id": "earth_population_extension_20261111",
+   "status": "exposed_source_correction_complete_input_count_development",
+   "evidence": "reports/EARTH_POPULATION_EXTENSION_20261111.md",
+   "note": "Official regionalclimate/ETOPOsources,strict original/legacy/correctedoverlap gates,NoDatadecoderfix. FullrequiredHanpopulationcoverage restored;160countcomparisons on exposed records. Originalfailure retained;no blindtransfer,history-point qualification,residentsize fit or fantasy adoption."
+  },
+  {
+   "id": "settlement_joint_locations_20261112",
+   "status": "exposed_development_only",
+   "evidence": "reports/SETTLEMENT_JOINT_LOCATIONS_20261112.md",
+   "note": "224placements on already-spent Han/Roman pools, repaired Han population and supported histories. No fresh geographic qualification, resident-size calibration or fantasy adoption."
+  },
+  {
+   "id": "settlement_residents_20261112",
+   "status": "conditional_population_budget_implementation_not_calibrated",
+   "evidence": "reports/SETTLEMENT_RESIDENTS_20261112.md",
+   "note": "60conditional sensitivities on20existing atlas destination-food cases. Model catchment people and transfer shares are scenarios. Source-food gate verified on manufactured cases; actual rural-food/production feedback remains pending. No new Earth fit or default adoption."
+  },
+  {
+   "id": "settlement_feedback_20261112",
+   "status": "cell_population_work_food_scenario_not_empirically_calibrated",
+   "evidence": "reports/SETTLEMENT_FEEDBACK_20261112.md",
+   "note": "Eight coupled local cereal scenarios; current published map inputs, no new Earth targets. Real cell-level source food/worker feedback and same-cohort reach audited. Rural deficits elsewhere and empirical resident-size/occupation gaps remain. Original defaults unchanged."
+  },
+  {
+   "id": "settlement_size_evidence_20261112",
+   "status": "exposed_housing_measurement_preparation_no_size_scores",
+   "evidence": "reports/SETTLEMENT_SIZE_EVIDENCE_20261112.md",
+   "note": "50 attributed2023housing samples,independent extraction/arithmetic review;allAD150phase/extent/representativeness gates retained. Original52case source and workbook unavailable. No new fit,blind claim or default. Same source now scored in downstream settlement_housing_diagnostic_20261112;preparation checkpoint remains historical."
+  },
+  {
+   "id": "settlement_housing_diagnostic_20261112",
+   "status": "exposed_mixed_period_density_development_scored",
+   "evidence": "reports/SETTLEMENT_HOUSING_DIAGNOSTIC_20261112.md",
+   "note": "50 prior housing observations;province-blocked density scores,coverage sensitivities,allphase/extent/sampling gates retained. NoAD150labels,prospective transfer,allocator fit or adoption."
+  },
+  {
+   "id": "settlement_monthly_work_20261112",
+   "status": "model_only_fixed_plan_work_diagnostic_no_new_earth_data",
+   "evidence": "reports/SETTLEMENT_MONTHLY_WORK_20261112.md",
+   "note": "16workscenarios on4existingcoupledfoodplans;explicitloads/monthlyhours,noEarthrates,foodreallocation,patrolfootprints or authorityadoption. All sourcefood and population gates retained."
+  },
+  {
+   "id": "settlement_dispatch_20261112",
+   "status": "model_only_joint_dispatch_food_work_scenarios",
+   "evidence": "reports/SETTLEMENT_DISPATCH_20261112.md",
+   "note": "16same-input proportional-dispatch cases;newoptional settlement/potential-travel maps,no newEarthdata,sizefit,patrolschedule,authority or defaultadoption."
+  },
+  {
+   "id": "settlement_dispatch_search_20261112",
+   "status": "model_only_finite_search_and_staff_threshold_diagnostic",
+   "evidence": "reports/SETTLEMENT_DISPATCH_SEARCH_20261112.md",
+   "note": "396overlaparrays exact;300hsource losses include narrowstaffactivationbranches;no newEarthdata,physicalimpossibility or defaultadoptionclaim."
+  },
+  {
+   "id": "settlement_dispatch_seeded_20261112",
+   "status": "model_only_threshold_checked_joint_resource_maps",
+   "evidence": "reports/SETTLEMENT_DISPATCH_SEEDED_20261112.md",
+   "note": "Knownstaffactivationseed repairs finitegridmisses;all16physicalcases/replays reviewed,no newEarthdata,globaloptimum,geographicpatrol or empiricaladoptionclaim."
+  },
+  {
+   "id": "network_duty_visits_20261112",
+   "status": "model_only_conditional_walking_point_tasks",
+   "evidence": "reports/NETWORK_DUTY_VISITS_20261112.md",
+   "note": "Eightreservedpatrol-slice point-visit scenarios;originalfood/workprovidersandtransportinputs,no newEarthdata,observed demand,territory,rosters ordefaultadoption."
+  },
+  {
+   "id": "network_visit_spare_assignment_20261112",
+   "status": "model_only_constructive_assignment_diagnostic",
+   "evidence": "reports/NETWORK_VISIT_SPARE_ASSIGNMENT_20261112.md",
+   "note": "Eightspare-provider extensions keep alloriginalvisits/maps,spend onlyunusedpatrolslice;no newdata,globaloptimum,observed demand,territory ordefault."
+  },
+  {
+   "id": "network_visit_target_grid_20261112",
+   "status": "model_only_declared_grid_task_sensitivity",
+   "evidence": "reports/NETWORK_VISIT_TARGET_GRID_20261112.md",
+   "note": "All40fixedgridscenarios reported;phase and suppliedtaskdensity distinct,baselinebyteexact,no newdata,empiricaldemand,territory ordefaultadoption."
+  },
+  {
+   "id": "network_visit_calendar_20261112",
+   "status": "model_only_constructive_worker_calendar_diagnostic",
+   "evidence": "reports/NETWORK_VISIT_CALENDAR_20261112.md",
+   "note": "Original four collection/eight visit plans;whole trips and synchronized worker intervals independently reviewed. Per-bin packing does not certify annual deliveries;no new Earth data,observed staffing,authority or default adoption."
+  },
+  {
+   "id": "network_visit_joint_order_20261112",
+   "status": "model_only_fixed_order_and_necessary_delivery_gate_comparison",
+   "evidence": "reports/NETWORK_VISIT_JOINT_ORDER_20261112.md",
+   "note": "Both fixed policies/all16outcomes retained;physical work,bin completion and necessary12bin gate distinct. No new Earth data,annualfood validation,observed staffing ordefault adoption."
+  },
+  {
+   "id": "network_visit_year_complete_20261112",
+   "status": "model_only_coherent_provider_year_point_schedule",
+   "evidence": "reports/NETWORK_VISIT_YEAR_COMPLETE_20261112.md",
+   "note": "One checked calendar per provider/year preserves every baseline gated task;all8point maps retain original jobs/people/food. Necessary delivery gate only,no new Earth observations,annual food validation,roles ordefault adoption."
+  },
+  {
+   "id": "network_visit_delivery_timing_20261112",
+   "status": "model_only_destination_food_inventory_audit",
+   "evidence": "reports/NETWORK_VISIT_DELIVERY_TIMING_20261112.md",
+   "note": "All 24matched accountings retain fixed people/cargo/calendars/lag. Continuous inventories expose small cereal gaps;no source intrabin validation,crew rations/location,observed hunger or map/default adoption."
+  },
+  {
+   "id": "network_visit_meal_headroom_20261112",
+   "status": "model_only_fixed_staff_civilian_meal_bound",
+   "evidence": "reports/NETWORK_VISIT_MEAL_HEADROOM_20261112.md",
+   "note": "All16fixed-shipment meal bounds keep institutional meals and original physical stores. Conditional destination accounting only;source work/exports frozen. No revised population map or calibrated adoption."
+  },
+  {
+   "id": "settlement_continuous_destination_20261112",
+   "status": "model_only_continuous_destination_resident_feedback",
+   "evidence": "reports/SETTLEMENT_CONTINUOUS_DESTINATION_20261112.md",
+   "note": "Four old/four replanned finite-ledger cases;source/work/cargo recomputed. Bin-start destination food only,not new collector-return food or map/empirical adoption."
+  },
+  {
+   "id": "continuous_collection_calendar_20261112",
+   "status": "model_only_new_collector_work_and_food_audit",
+   "evidence": "reports/CONTINUOUS_COLLECTION_CALENDAR_20261112.md",
+   "note": "All12planned/packed/return comparisons retain partial delivery providers. Mandatory work and food flags separate;no new visit-map,source timing/ration/location or calibrated adoption."
+  },
+  {
+   "id": "food_checked_visits_20261112",
+   "status": "model_only_own_destination_food_and_whole_calendar_points",
+   "evidence": "reports/FOOD_CHECKED_VISITS_20261112.md",
+   "note": "All32visit/48food rows;8 optional maps. Necessary calendar/destination-cereal conjunction only. Source timing,crew rations/location,roles,complete diets and calibrated adoption unresolved."
+  },
+  {
+   "id": "source_continuous_meals_20261113",
+   "status": "fixed_model_source_meal_convention_diagnostic",
+   "evidence": "reports/SOURCE_CONTINUOUS_MEALS_20261113.md",
+   "note": "All16local/outside outcomes;all positive-person origins fail immediate physical clip plus continuous meals at original365day capacity. Not observed famine,new export plan or calibrated adoption."
+  },
+  {
+   "id": "source_pickup_calendars_20261113",
+   "status": "fixed_source_event_availability_diagnostic",
+   "evidence": "reports/SOURCE_PICKUP_CALENDARS_20261113.md",
+   "note": "All 24 fixedplans;explicit raw source requests and deficits,quota-only transfers and rural food failures. No destination replacement,capacity/date tuning or calibrated adoption."
+  },
+  {
+   "id": "source_filled_destination_20261113",
+   "status": "fixed_source_filled_destination_food_diagnostic",
+   "evidence": "reports/SOURCE_FILLED_DESTINATION_20261113.md",
+   "note": "All48matched source-filled destination outcomes. Source rural failures retained;zero all-gate providers. Scoped grain conservation,not certified complete provisioning or map/default adoption."
+  },
+  {
+   "id": "hartwell_chgis_v5_schema_only",
+   "status": "schema_inspected_not_usable",
+   "evidence": "https://doi.org/10.7910/DVN/29302 (v5_Hartwell_2010.zip, cached in ignored data/cache/hartwell_chgis)",
+   "note": "Inspected 2026-11-14 for a second blind test of the heartland people pattern: only DBF field names were read, no values. Prefecture files (742, 1080, ...) carry codes and administrative hierarchy only; county files carry a POPULATION field that also appears in the 1990 county layer the historical units are built from (co-location), so it is not a historical count. Not usable for a population test; no values opened, so the pool's geometry stays unexposed."
+  },
+  {
+   "id": "floodplains_southern_mesopotamia_ad200_blind",
+   "status": "spent",
+   "evidence": "calibration/floodplains_blind_20261115/plan.json",
+   "note": "FloodPlains Web GIS survey sites (Marchetti et al. 2025, CC-BY; bnza/archiraq docs/papers/1/data_stacked.csv). Reserved 2026-11-15 before any value was read (header and row count only) for one blind test of release-3 positions and the refitted size model at AD 200. Scored 2026-11-15 (output/floodplains_blind_20261115; amendments A1 swapped coordinates, A2 size classes): positions at chance (percentile 0.48), sizes fail (no modelled city >200 ha)."
+  },
+  {
+   "id": "reba_modelski_chandler_ad100_200_blind",
+   "status": "spent_not_scored",
+   "evidence": "calibration/reba_cities_blind_20261115/plan.json",
+   "note": "Reba et al. 2016 geolocated Modelski/Chandler cities (figshare, CC BY 4.0). Reserved 2026-11-15 after reading headers only, for one blind test of release-3 position fields on large cities outside the Roman and Han pools. Run 2026-11-15: only 6 Modelski AD 200 cities outside the Roman (9 dropped) and Han (2 dropped) pools, plus 2 Chandler AD 100; below the declared minimum of 10, so not scored (seen: mean release-3 percentile 0.70, environment 0.72; Spearman pop vs people -0.03). Too sparse for a test."
+  },
+  {
+   "id": "valley_of_mexico_survey_classic",
+   "status": "spent",
+   "evidence": "data/cache/valley_of_mexico/site-survey-data.xlsx (owner-supplied, tDAR project 192)",
+   "note": "Parsons/Blanton Valley of Mexico survey, 2,052 site-period rows; reserved 2026-11-15 after reading headers only; needs an Earth grid outside the current window and has no maize in the crop model.",
+   "spent_by": "calibration/valley_of_mexico_blind_20261116 (scored once 2026-11-16: P pass 0.616, N pass ratio 1.72, S fail: no model town in the surveyed area)"
+  }
+ ]
 }

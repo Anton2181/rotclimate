@@ -25,8 +25,10 @@ instruction for the first dev+fine finalist).
   land_people_earth.py --window --extra-crops maize --new-world; ETOPO/slope caches per window. Defaults unchanged (tests pass).
 - [done] Declared Earth check (calibration/maize_20261116/plan.json) vs MapSPAM 2010 rain-fed maize (data/cache/mapspam2010):
   Spearman 0.42 (>=0.30), coverage 0.976 (>=0.80; weak: maize suits 95 % of cells), June start in central Mexico: PASS.
-- [next] New World heartland cores (outside the test basin: Olmec Gulf coast, Oaxaca, Balsas), then DECLARE the reserved Valley
-  of Mexico blind test (data/cache/valley_of_mexico, headers only read) before reading it; maize-only New World crop set.
+- [done] Valley of Mexico blind test (reports/VALLEY_OF_MEXICO_BLIND_20261116.md; cores San Lorenzo, San Jose Mogote, El Mirador):
+  P positions PASS (0.616), N rural people PASS (ratio 1.72; Teotihuacan city not in the survey), S sizes FAIL (no model town in
+  the surveyed area). Pool spent. Same finding as Mesopotamia: too few, too small towns where people were urban.
+- [next] Town count/primacy where populations were urban (both blind failures): investigate before any new fit.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
