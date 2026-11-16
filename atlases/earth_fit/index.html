@@ -1128,9 +1128,9 @@ window.atlasSave = async (filename, blob) => {
     } else {
       stopPlay();
       $("monthctl").hidden = true;
-      const file = "data/" + layerFile(L);
-      // hosted copies keep the tier images in bundles: show the smooth ramp until the bundle is in
-      $("base").src = (tieredOn(L) ? tierImage(file) : fresh(file)) || fresh("data/" + (L.scenario_files?.[scenarioKey()] || L.file));
+      const file = "data/" + layerFile(L), ramp = "data/" + (L.scenario_files?.[scenarioKey()] || L.file);
+      // hosted copies keep layer images in bundles: show the smooth ramp (or keep the current image) until the bundle is in
+      $("base").src = tierImage(file) || tierImage(ramp) || $("base").src;
     }
     $("tiers-control").hidden = !L.tiers;
     for (const b of layerBtns.children) b.setAttribute("aria-pressed", b.id === "layer-" + id ? "true" : "false");

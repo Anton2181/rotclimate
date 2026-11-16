@@ -46,6 +46,33 @@ def bundle_tiers(out: Path) -> dict | None:
     concatenated in a few data/tiers_bundle_<k>.wasm parts; the page cuts each image out by offset
     (atlas/index.html tierImage). Returns the index {parts: [...], files: {"data/...": [part, offset, length]}}."""
     files = sorted(p for p in (out / "data").rglob("*_tiers.webp") if p.is_file())
+    # plain layer images join the bundle too (the host caps an artifact at 511 files; release-4 hosting needed this):
+    # every .webp the page shows through its layer path (setLayer -> tierImage), i.e. any .webp except those named in the
+    # page or a script, animation frames (shown by plain URL) and images opened as links ("image" entries)
+    keep = set()
+
+    def scan(node):
+        if isinstance(node, dict):
+            for k, v in node.items():
+                if k == "frames" and isinstance(v, list):
+                    keep.update(Path(str(x)).name for x in v)
+                elif k in ("image", "check_image") and isinstance(v, str):
+                    keep.add(Path(v).name)
+                else:
+                    scan(v)
+        elif isinstance(node, list):
+            for v in node:
+                scan(v)
+    for m in (out / "data").rglob("*.json"):
+        try:
+            scan(json.loads(m.read_text()))
+        except (ValueError, UnicodeDecodeError):
+            pass
+    code = "".join(p.read_text(errors="ignore") for p in out.rglob("*") if p.is_file() and p.suffix in (".js", ".html"))
+    for p in sorted((out / "data").rglob("*.webp")):
+        if p in files or p.name in keep or p.name in code or "months" in p.parts:
+            continue
+        files.append(p)
     if not files:
         return None
     parts, index, chunks, size = [], {}, [], 0
