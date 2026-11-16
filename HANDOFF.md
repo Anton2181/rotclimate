@@ -22,11 +22,15 @@
 - [done, NOT adopted] River borders (reports/RIVER_BORDERS_20261116.md): crossing cost changes OA by <=0.0005; walking-only
   ownership beats the map's monthly networks in all 7 pools (+0.002..+0.015) but misses G1 (1800 +0.0098). Bosker 1000/1100/1800
   spent. Remaining unused Bosker years: 800, 900 (a walking-ownership test would need them; effect <1 % of contested land).
-- BLOCKED: host release 4. The hosted atlas (atlases/artifact_links.json: earth_fit ABFAoyPzTuMNVWmByPxctF, hub GPxfbcEiUkiWUr9ubYdMaw)
-  is not found from this session's account (Artifact list shows only other projects), so it cannot be updated here. Owner to
-  choose: publish a new hosted atlas from this account (package_atlas_artifact.py; ~500 files in batches), or update from the
-  account that owns it. Untested idea: internal
-  borders between polities need a multi-owner Earth target (none yet).
+- [DONE] Release 4 HOSTED (owner: "Publish new atlas") as a NEW artifact https://claude.ai/artifact/XypoZqva951RWZm4ni6FiP
+  (versions 1-6; 276 files, 232 MB; downloads capability declared). The old earth_fit/hub artifacts are not visible from the
+  account now used; their links moved to atlases/artifact_links_retired.json and the new pack has no hub link.
+  To fit the 511-file cap, scripts/package_atlas_artifact.py now bundles every layer .webp (not month frames, not names used in
+  the page or scripts, not link images) into data/tiers_bundle_<k>.wasm; the page reads all layer images via tierImage (local
+  atlas unchanged: no bundle there). Packed copy browser-checked: 83 layers x 2 climates, no errors.
+  Republish: package to the scratchpad, then publish that same path in <=58 MB / <=240-file batches (or pass the url from a
+  new session after reading it).
+- Climate parked at r46 (set l unopened); remaining ideas need new Earth data or a new direction from the owner.
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
 
