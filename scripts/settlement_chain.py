@@ -27,7 +27,8 @@ def run(spec_path, mode, only):
         src = (ROOT / st['script']).read_text(); extra = []
         for text in {root, 'output/capital_term_map_20261115', 'output/settlement_hierarchy_map_20261115'}:
             if text in src and all(a != text for a, _ in subs): extra.append((text, stage_root))
-        args = [PY, '-I', str(ROOT / 'scripts/exec_with.py'), st['script']] + [f'{a}=>{b}' for a, b in subs + extra]
+        runner = 'scripts/run_on_release3.py' if st.get('install_release3') else 'scripts/exec_with.py'      # install the (staged) release-3 placements
+        args = [PY, '-I', str(ROOT / runner), st['script']] + [f'{a}=>{b}' for a, b in subs + extra]
         print(f'== {st["name"]}: {st["script"]} ({len(subs) + len(extra)} substitutions)', flush=True)
         env = dict(os.environ, **{k: str(v) for k, v in spec.get('env', {}).items()})      # e.g. ROTCLIMATE_CONFLUENCE_K
         p = subprocess.run(args, cwd=ROOT, capture_output=True, text=True, env=env)

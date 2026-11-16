@@ -77,6 +77,52 @@
       ]
     },
     {
+      "name": "integration",
+      "script": "scripts/review_settlement_integration.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_integration_20261104",
+          "{root}/integration"
+        ]
+      ],
+      "outputs": [
+        "integration/summary.json"
+      ]
+    },
+    {
+      "name": "labour",
+      "script": "scripts/extend_settlement_labour.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_labour_20261105",
+          "{root}/labour"
+        ],
+        [
+          "output/settlement_integration_20261104",
+          "{root}/integration"
+        ]
+      ],
+      "outputs": []
+    },
+    {
+      "name": "fertility",
+      "script": "scripts/extend_settlement_fertility.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_fertility_20261106",
+          "{root}/fertility"
+        ],
+        [
+          "output/settlement_labour_20261105",
+          "{root}/labour"
+        ]
+      ],
+      "outputs": []
+    },
+    {
       "name": "staffing",
       "script": "scripts/build_supply_fed_reach_release3.py",
       "subs": [
@@ -99,6 +145,10 @@
         [
           "Earth-calibrated 39% marketed",
           "Earth-calibrated 34% marketed, Egypt included"
+        ],
+        [
+          "output/settlement_fertility_release3_20261113",
+          "{root}/fertility"
         ]
       ],
       "outputs_reach": [
