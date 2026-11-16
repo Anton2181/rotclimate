@@ -93,3 +93,5 @@ identical to the published outputs.
   declared Valley of Mexico blind test.
 - 16 Nov: WP6 Valley of Mexico blind test scored once: positions pass (0.616), rural people pass (1.72x), sizes fail (no model
   town in the surveyed area). Second blind size failure: town count/primacy in urban landscapes is the next settlement problem.
+- 16 Nov: WP1 (administration Earth test) is moot as specified: provincial seats on the map come from the owner's recorded
+  inventory (polity/administrative_hierarchy.py), not from a model rule, so there is no model seat choice to test.
