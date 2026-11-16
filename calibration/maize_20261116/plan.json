@@ -1,0 +1,14 @@
+{
+ "title": "WP6 maize: crop parameters and Earth check (declared before the check data are read)",
+ "date": "2026-11-16",
+ "parameters": "scripts/land_people.py MAIZE (sources in the code comment: FAO Irrigation and Drainage Paper 66 maize chapter, local copy data/cache/maize_sources/fao66_i2800e07.pdf; FAO-33 Ky; USDA kcal). Opt-in only (extra_crops); every default run unchanged (tests pass).",
+ "run": "scripts/land_people_earth.py --window 7,33,-118,-77 --extra-crops maize (WorldClim 1970-2000, the adopted arable/irrigation rules), Mexico and Central America.",
+ "check_data": "MapSPAM 2010 v2.0 (Harvard Dataverse doi:10.7910/DVN/PRFF8V), physical area GeoTIFF, maize rain-fed (all rain-fed systems), 5 arc-min; data/cache/mapspam2010 (not redistributed).",
+ "tests": {
+  "T1_rank": "Spearman correlation across land cells of the window between the model's maize kcal/ha (rain-fed share as modelled) and MapSPAM rain-fed maize physical area as a share of cell area: pass if >= 0.30.",
+  "T2_coverage": "Share of MapSPAM rain-fed maize physical area lying in cells where the model's maize kcal/ha > 0: pass if >= 0.80.",
+  "T3_season": "Median first month of the model's maize season over cells 19-21 N, 101-97 W (central Mexican highlands) with maize > 0: pass if May or June."
+ },
+ "outcome_use": "Pass: maize enters the New World runs (WP6 next step: New World heartland cores, then the reserved Valley of Mexico blind test, declared separately). Fail: report, and revise only by a declared amendment.",
+ "caveat": "MapSPAM is modern (2010) land use: it tests where maize can be grown rain-fed, not ancient yields."
+}

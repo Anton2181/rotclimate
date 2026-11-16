@@ -222,7 +222,7 @@ def arable_from_slope(shape, fallback):
     return np.where(np.isfinite(a), a, fallback).astype(np.float32)
 
 
-def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance"):
+def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance", extra_crops=None):
     t0 = time.time()
     rs, cs = window_slices()
     elev = wc("elev")[rs, cs]
@@ -241,7 +241,7 @@ def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance")
         arable = arable_from_slope(arable.shape, arable)
     print(f"rivers and relief ({time.time() - t0:.0f}s)", flush=True)
     res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land],
-                         margins=margins)
+                         margins=margins, extra_crops=extra_crops)
     print(f"analysis ({time.time() - t0:.0f}s)", flush=True)
     full = {}
     for k, v in res.items():
@@ -262,7 +262,14 @@ def main():
     ap.add_argument("--arable", choices=("relief", "slope"), default="slope", help="arable share rule (slope: plan_D1 D1b, adopted)")
     ap.add_argument("--irrigation", choices=("distance", "hand"), default="hand", help="irrigation rule (hand: plan_D1 D2, adopted)")
     ap.add_argument("--deltas", choices=("none", "observed"), default="none", help="observed: also irrigate inside the observed delta fans (the map's delta rule)")
+    ap.add_argument("--window", help="lat0,lat1,lon0,lon1 (default: the Old World window)")
+    ap.add_argument("--extra-crops", default="", help="comma list of extra crops from land_people (maize: New World tests only)")
     a = ap.parse_args()
+    if a.window:
+        la0, la1, lo0, lo1 = (float(x) for x in a.window.split(","))
+        WINDOW.update(lat=(la0, la1), lon=(lo0, lo1))
+    import land_people as LP
+    extra = {n: getattr(LP, n.upper()) for n in a.extra_crops.split(",") if n}
     global DELTAS, S_FAN
     if a.deltas == "observed":
         DELTAS, S_FAN = observed_deltas()
@@ -277,7 +284,7 @@ def main():
     else:
         cm = [float(x) for x in a.crop_margins.split(",")] if a.crop_margins else None
         margins = ((cm[0], cm[1]), (cm[2], cm[3]) if len(cm) == 4 else None) if cm else None
-        full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation)
+        full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation, extra or None)
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     cell_km2 = (KM_DEG / RES) ** 2 * np.cos(np.radians(LAT))
@@ -293,6 +300,8 @@ def main():
     for name, r in REGIONS.items():
         inside = Poly(r["poly"]).contains_points(pts).reshape(shape) & land
         km2 = float(cell_km2[inside].sum())
+        if km2 <= 0:
+            continue                       # region outside this window
         people = float(cap[inside].sum())
         lo, hi = r["people"] if "people" in r else (d * km2 / 1e6 for d in r["density"])
         rows[name] = dict(area_km2=round(km2), capacity_m=round(people / 1e6, 2),

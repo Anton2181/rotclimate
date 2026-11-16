@@ -67,6 +67,17 @@ CROPS = {
     "rice": dict(window=(19.0, 35.0), base=10.0, heat=1700.0, months=(4, 6), kc=1.15, ky=1.2,
                  grain=1.8, edible=0.68, kcal=3600.0, seed=0.03, need_warm=22.0, flood_mm=300.0),
 }
+# maize (WP6, 16 Nov 2026): a New World crop, NOT part of CROPS, used only where
+# a caller passes extra_crops={"maize": MAIZE} (New World tests); every default run
+# is unchanged. Sources: FAO Irrigation and Drainage Paper 66 (2012), maize chapter:
+# development base 8 C, upper 30 C; 120-135 day cycle (current cultivars, landraces
+# longer); mid-season Kc 1.07-1.12; seasonal ET 500-800 mm; harvest index as low as
+# 0.3 for landraces; low-input yields 1-2 t/ha. FAO-33 seasonal Ky 1.25. USDA raw
+# maize 365 kcal/100 g. Grain 1.0 t/ha rain-fed low-input (the Old World cereals'
+# level; pre-Hispanic chinampa maize ~3 t/ha, Parsons 1976, Sanders 1976). Window:
+# frost-free months (monthly mean >= 12 C: highland landraces grow at 14-18 C).
+MAIZE = dict(window=(12.0, 32.0), base=8.0, heat=1200.0, months=(4, 6), kc=0.85, ky=1.25,
+             grain=1.0, edible=0.85, kcal=3650.0, seed=0.02, need_warm=15.0)
 # date palm: fruit t/ha of an irrigated grove, kcal/kg; it needs a dry
 # climate (the fruit spoils in rain) and water from rivers or wells
 DATES = dict(grain=3.0, kcal=2800.0, dry_mm=(300.0, 500.0))
@@ -212,7 +223,7 @@ def best_crop_mix(kcal, masks, can_double):
     return total, primary, secondary
 
 
-def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None):
+def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None, extra_crops=None):
     """Every product, from monthly T (C), P (mm) and day/night range (C),
     shape (12, ...). margins = (cold, dry) of harvest.models.margin_reliability:
     low-input harvests on cold and dry margins are worth their poor years
@@ -235,7 +246,7 @@ def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None):
         if dry is not None:
             rain_keep = np.clip((out["aridity"] - dry[0]) / (dry[1] - dry[0]), 0.0, 1.0)
     kcal, masks = {}, {}
-    for name, c in CROPS.items():
+    for name, c in {**CROPS, **(extra_crops or {})}.items():         # extra_crops: e.g. maize in New World tests only
         kcal[name], masks[name] = crop_yield(T, P, PET, S0, irr, c, rain_keep, keep)
     # date palm: a hot, frost-free, dry-country crop, watered by rivers
     palm_ok = (T.min(0) >= 7.0) & (np.sum(T >= 24.0, 0) >= 5) & (T.max(0) >= 30.0)
