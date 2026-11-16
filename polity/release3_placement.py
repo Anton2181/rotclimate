@@ -14,7 +14,8 @@ from scipy import ndimage as ndi
 from . import settle
 
 ROOT = Path(__file__).resolve().parents[1]
-OUT = ROOT / 'output/settlement_release3_20261113'
+import os
+OUT = ROOT / os.environ.get('ROTCLIMATE_RELEASE3_DIR', 'output/settlement_release3_20261113')   # override: a staged release (chain build)
 
 
 def _load():
