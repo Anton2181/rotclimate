@@ -1,0 +1,130 @@
+{
+  "name": "release 4 candidate: release 3 + Greek walls + settlement hierarchy + WP3 river confluences (k 1.0)",
+  "output_root": "output/settlement_hierarchy_map_20261115",
+  "stages": [
+    {
+      "name": "sizes",
+      "script": "scripts/settlement_hierarchy_map.py",
+      "subs": [],
+      "outputs": [
+        "release3/fantasy.json",
+        "release3/placed_raw_fields.npz",
+        "release3/placed_corrected_fields.npz",
+        "release3/placed_raw_towns.csv",
+        "release3/placed_corrected_towns.csv",
+        "release3/placed_raw_sites.json",
+        "release3/placed_corrected_sites.json",
+        "earth_results.json"
+      ]
+    },
+    {
+      "name": "review_placement",
+      "script": "scripts/review_settlement_release3.py",
+      "subs": [
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ]
+      ],
+      "outputs": [
+        "release3/placement_review.json"
+      ]
+    },
+    {
+      "name": "review_sizes",
+      "script": "scripts/review_settlement_hierarchy_map.py",
+      "subs": [],
+      "outputs": [
+        "release3/fantasy_review.json"
+      ]
+    },
+    {
+      "name": "supply",
+      "script": "scripts/wide_supply_greek_walls.py",
+      "subs": [
+        [
+          "output/sizes_greek_walls_20261114/release3",
+          "{root}/release3"
+        ],
+        [
+          "output/sizes_greek_walls_20261114/supply",
+          "{root}/supply"
+        ]
+      ],
+      "outputs": [
+        "supply/results.json",
+        "supply/supply_raw.npz",
+        "supply/supply_corrected.npz",
+        "supply/supply_raw_towns.csv",
+        "supply/supply_corrected_towns.csv"
+      ]
+    },
+    {
+      "name": "review_supply",
+      "script": "scripts/review_wide_supply_release3.py",
+      "subs": [
+        [
+          "output/settlement_wide_supply_20261113",
+          "{root}/supply"
+        ],
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ]
+      ],
+      "outputs": [
+        "supply/review.json"
+      ]
+    },
+    {
+      "name": "staffing",
+      "script": "scripts/build_supply_fed_reach_release3.py",
+      "subs": [
+        [
+          "output/settlement_wide_supply_20261113",
+          "{root}/supply"
+        ],
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ],
+        [
+          "output/settlement_supplyfed_release3_20261113",
+          "{reach}/settlement_supplyfed"
+        ],
+        [
+          "'central_x39'",
+          "'central_x34'"
+        ],
+        [
+          "Earth-calibrated 39% marketed",
+          "Earth-calibrated 34% marketed, Egypt included"
+        ]
+      ],
+      "outputs_reach": [
+        "settlement_supplyfed/staffing.json",
+        "settlement_supplyfed/earth_fit_raw/settled_reach.json.gz",
+        "settlement_supplyfed/earth_fit_corrected/settled_reach.json.gz"
+      ],
+      "published_reach_root": "output",
+      "published_reach_map": {
+        "settlement_supplyfed": "settlement_supplyfed_hierarchy_20261115"
+      }
+    },
+    {
+      "name": "ensemble_check",
+      "script": "scripts/settlement_ensemble.py",
+      "subs": [
+        [
+          "output/settlement_ensemble_20261115",
+          "{root}/ensemble"
+        ]
+      ],
+      "outputs": []
+    }
+  ],
+  "note": "Declared 16 Nov 2026 (calibration/wp3_site_factors_20261116/map_integration.json) after the WP3 blind pass; built with settlement_chain.py build into output/chain_staging/release4_confluence. Everything else as release3_hierarchy.",
+  "env": {
+    "ROTCLIMATE_CONFLUENCE_K": "1.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+ "title": "WP3 map integration: river confluences in the release-3 site prior",
+ "date": "2026-11-16",
+ "basis": "reports/WP3_CONFLUENCE_20261116.md: development screen pass (Han +0.019, Rome +0.012) and blind pass on Buringh 1300 (+0.028).",
+ "change": "polity.settlement_locations.prior_tiling_sites multiplies the occupation prior by (1 + 1.0 x exp(-(d / 15 km)^2)), d the distance to a junction of the map's drawn rivers, when ROTCLIMATE_CONFLUENCE_K=1.0. Marked places, the count of proposed towns, sizes, hierarchy and all downstream rules unchanged.",
+ "build": "python -I scripts/settlement_chain.py calibration/settlement_chain/release4_confluence.json build",
+ "checks": "Staged outputs: count of proposed towns unchanged; share of proposed towns moved; marked places unchanged; downstream stages complete. Publication (copy to a new published root, publishers, browser and checkout checks) only after these checks pass.",
+ "owner_authority": "Owner instructions of 15-16 Nov 2026: keep improving the model, continue without pausing; earlier publications of settlement updates were made under the owner's 'I give you permission'."
+}

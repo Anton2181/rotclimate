@@ -10,6 +10,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from numbers import Integral
 
+import os
 import numpy as np
 from scipy import ndimage as ndi
 
@@ -121,6 +122,17 @@ def fixed_count_sites(score, eligible, count, cell_km, *, min_spacing_km=0.0,
     return Placement(tuple(towns), int(count), available)
 
 
+def confluence_field(water_km, cell_km, radius_km=15.0):
+    """exp(-(d / radius)^2), d the distance (km) to a river junction: a river cell (water_km 0) with at least three river cells
+    among its eight neighbours, dilated by one cell (as in the WP3 screen and blind test)."""
+    river = np.nan_to_num(np.asarray(water_km, float), nan=1e9) <= 1e-6
+    nb = ndi.convolve(river.astype(int), np.ones((3, 3), int), mode='constant') - river
+    junc = ndi.binary_dilation(river & (nb >= 3))
+    if not junc.any():
+        return np.zeros(river.shape)
+    return np.exp(-(ndi.distance_transform_edt(~junc) * cell_km / radius_km) ** 2)
+
+
 def prior_tiling_sites(density, land, water_km, road, elev, cell_km, *, prior=None, allowed=None,
                        aridity=None, marked=(), seat_people=None, seed=1, dry_water_km='default'):
     """Production catchment tiling with an optional occupation prior (family B).
@@ -148,6 +160,12 @@ def prior_tiling_sites(density, land, water_km, road, elev, cell_km, *, prior=No
         p = np.asarray(prior, float)
         if p.shape != land.shape or np.any(~np.isfinite(p[ok])) or np.any(p[ok] <= 0):
             raise ValueError('Finite positive prior required on eligible cells')
+        k_conf = float(os.environ.get('ROTCLIMATE_CONFLUENCE_K', '0') or 0)
+        if k_conf > 0:
+            # WP3 (reports/WP3_CONFLUENCE_20261116.md): towns favour river confluences; the prior x (1 + k x
+            # exp(-(d / 15 km)^2)), d the distance to a river junction (a river cell with >= 3 river neighbours).
+            # Development pass on Han and Rome, blind pass on Buringh's 1300 cities. Default off.
+            p = p * (1.0 + k_conf * confluence_field(water_km, cell_km))
         p = np.where(ok, p, 1.0); score = score * p; d_eff = d * p
     catchment = seat_people / settle.SEAT_REF_DENSITY * (settle.SEAT_REF_DENSITY / np.maximum(d_eff, 1e-9)) ** settle.SEAT_BETA
     radius = np.minimum(np.sqrt(catchment / np.pi), settle.MAX_RADIUS_KM) / cell_km * settle.SPACING
