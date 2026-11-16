@@ -1,5 +1,5 @@
 """Forest map (workstream C1b, adopted on Earth 7 Nov 2026: reports via calibration/geography_control_20261107/plan_C1.json):
-forest share = 0.60 x clip((P/PET - 0.3)/0.2, 0, 1) x clip((GDD5 - 300)/300, 0, 1), P/PET with Hargreaves PET and GDD5 the
+forest share = 0.51 (was 0.60; Zanon 2018 blind test) x clip((P/PET - 0.3)/0.2, 0, 1) x clip((GDD5 - 300)/300, 0, 1), P/PET with Hargreaves PET and GDD5 the
 degree days above 5 C, from the atlas's own monthly climate (raw and corrected), on the planet's own tilt and calendar.
 Earth: blind open-land RMSE 0.326 (REVEALS TW6, c. 250 BCE - 250 CE); population clearing not adopted.
 
@@ -14,12 +14,14 @@ from harvest.export import climate_arrays, surface_months
 from rotclimate.geography import source_layers
 import land_people as LP
 DATA = ROOT / 'atlases/earth_fit/data'; OUT = ROOT / 'output/forest_map_20261116'
+LEVEL = 0.51   # Zanon et al. 2018 AD 200 blind test (reports/FOREST_DETAIL_20261116.md): 0.51 RMSE 0.170 vs 0.60 0.184; owner 16 Nov
 STOPS = ['#f7f4e8', '#e4e9c7', '#c3d89e', '#93c07a', '#5f9f58', '#33793d', '#164f28']
 LAYER = dict(id='land_forest', label='Forest (AD 200 potential)', kind='ramp', unit='% of land in forest, Earth-fitted (moisture x warmth)',
              vmin=0, vmax=60, stops=STOPS, group='Harvest',
-             note='Forest share = 60 % x a moisture ramp (rain over potential evaporation 0.3 to 0.5) x a warmth ramp (degree days above 5 C, '
+             note='Forest share = 51 % x a moisture ramp (rain over potential evaporation 0.3 to 0.5) x a warmth ramp (degree days above 5 C, '
                   '300 to 600). Fitted on Earth against pollen-based land cover of the Roman period (REVEALS, Europe, c. 250 BCE - 250 CE; '
-                  'blind open-land error 0.33). Potential cover: clearing for farms is not subtracted (it did not test better on Earth).')
+                  'blind open-land error 0.33); level 51 % and pattern checked blind against pollen-based forest cover of AD 200 (Zanon et al. 2018: '
+                  'rank correlation 0.69, error 0.17). Potential cover: clearing for farms is not subtracted (it did not test better on Earth).')
 
 
 def forest(mode):
@@ -32,7 +34,7 @@ def forest(mode):
     shp = t.shape[1:]
     PET = LP.hargreaves(t.reshape(12, -1), np.maximum(d, 0.1).reshape(12, -1), LP.sunlight_top(np.broadcast_to(lat, shp).ravel(), tilt, ws)).reshape(t.shape)
     ai = p.sum(0) / np.maximum(PET.sum(0), 1.0); gdd = np.sum(np.maximum(t - 5.0, 0.0), 0) * LP.DAYS
-    f = 0.60 * np.clip((ai - 0.3) / 0.2, 0, 1) * np.clip((gdd - 300.0) / 300.0, 0, 1)
+    f = LEVEL * np.clip((ai - 0.3) / 0.2, 0, 1) * np.clip((gdd - 300.0) / 300.0, 0, 1)
     return f, ai, gdd, o
 
 

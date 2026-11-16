@@ -40,25 +40,17 @@ Gates:
 
 Reproduce: `.venv/bin/python -I scripts/forest_detail_earth.py dev` and then `blind`. The blind run has been done once.
 
-## Stage 2: detailed woodland map (scenario)
+## Stage 2: detailed woodland map — discarded
 
-`scripts/forest_detail_map.py` works at the full map resolution: 926 × 2000 pixels of about 1.8 km, on height map v2.1. It writes
-`output/forest_detail_20261116/` (`woodland_mosaic_{raw,corrected}.png`, `forest_detail_*.png`, `detail_summary.json`).
+A full-resolution scenario was built: forest moved within each neighbourhood by people, town clearings, slope, tree line and wet
+floors. The owner discarded it on 16 Nov: "If it can't be earth calibrated, I think we can trash it (at this detail level) — let's
+stick to what's verifiable". Its placement could not be tested on Earth, and stage 1 had shown the model's people do not predict
+where Roman-period clearing was. The script (scripts/forest_detail_map.py) and images were removed; they remain in git history
+(commit 88cf9e2d).
 
-**Regional amount.** It is held at the published layer's values in ~25 km neighbourhoods, which is the Earth-tested scale.
+## Adopted: forest level 0.51
 
-**Placement within each neighbourhood** follows a declared rule. It is not fitted and is untested on Earth:
-- **Rural people** clear gentle land.
-- **Towns:** each town clears about 1 ha per resident, taking the cheapest land nearby (distance × steepness), so clearings follow flat ground and valleys.
-- **Slopes** keep woods.
-- **Cold limit:** the warmth ramp is recomputed with a 6.5 K/km lapse onto the fine terrain, giving a tree line.
-- **Wet valley floors** are flagged as wet woodland or marsh: flat land with large drainage area in a moist climate.
-- **Woodland or open:** the mosaic marks each pixel as one or the other. The choice uses the local preference plus a little smooth, seeded noise, against a threshold that keeps each neighbourhood's share.
-
-Corrected climate:
-- Mean forest is 0.49 (same as the regional layer).
-- 35% of land carries more than 60% forest, and 14% carries less than 10%.
-- 1.9% of land is flagged wet.
-- Forest correlates +0.39 with slope.
-
-**Not yet published to the atlas.** This awaits the owner's choice of level (0.60 or 0.51) and whether to show the scenario.
+On the owner's instruction to keep what is verifiable, the published layer now uses 0.51 × potential (was 0.60). This is the
+blind-tested level from stage 1: RMSE 0.170 vs 0.184, with the same ranks (Spearman 0.69). Mean forest share of land is now 0.41 raw
+and 0.42 corrected (was 0.48 and 0.49). The browser check passes. Forest travel (C2, unpublished) was tested with 0.60; it would be
+rechecked before any use.
