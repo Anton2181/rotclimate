@@ -25,3 +25,12 @@ Notes:
   populations were urban and concentrated; it is a count/primacy problem, not a placement one.
 
 First blind test of the maize crop model and the New World pipeline: positions and rural people pass, towns fail.
+
+## Post-hoc (after scoring; the pool is spent): people per hectare
+
+The survey's Classic sites hold **18.4 people per ha** (20,227 people on 1,099 ha; median 14-20 per ha in every size class).
+The size model and the resident rule were fitted on Roman and Greek walled towns at 100-500 per ha. A "10 ha town" in the
+Classic Basin held ~200 people: Mesoamerican settlements were low-density, with house-lot gardens. The size test therefore
+compares unlike things (area-based Old World towns vs sprawling villages), and its failure says the size and density rules do
+not transfer to Mesoamerica as they stand; a New World density rule would need its own Earth evidence. The positions and
+rural-people results do not depend on this.
