@@ -31,6 +31,22 @@
   Republish: package to the scratchpad, then publish that same path in <=58 MB / <=240-file batches (or pass the url from a
   new session after reading it).
 - Climate parked at r46 (set l unopened); remaining ideas need new Earth data or a new direction from the owner.
+
+# NEW DIRECTIONS — proposed 16 Nov 2026 (owner asked for proposals; none chosen yet; recommended order 1 -> 2, 3 alongside)
+1. **Population history over time** (recommended). Occupancy grows with time since farming and states arrived (a ledger from
+   the Neolithic). Root of several failures: forest clearing not explained by people, too few/small towns in Mesopotamia and
+   Mexico, cores only a partial fix. Earth checks: radiocarbon farming-arrival datasets; Zanon 2018 forest in 250-year slices
+   (most slices unused: forest decline through time = independent people record); HYDE time slices; Han census. Large.
+2. **Cities: where people were urban.** Rule for the largest cities' size from state age, irrigated alluvium and trade nodes.
+   Earth: Chandler / Modelski / Reba, Bosker (check which pools are still unspent). Medium; better after 1.
+3. **Generated road network.** Test the minor-track generator against real networks: Roman towns + terrain -> generated
+   network vs Itiner-e (cached); Han roads as a second check. Medium; independent.
+4. **Where states form.** Predict the number and split of independent polities from towns, terrain and people; Earth:
+   Cliopatria (many unused years). On the map only advisory (painted claims stand). Large, research-like.
+5. **Climate: monsoons and rain shadows.** New physics: separate the African and Asian monsoons (now one itcz_shift), lee-side
+   drying; sealed set l ready. Large and uncertain (four refits stalled).
+6. **Herders and the steppe.** Where mobile herding dominates over farming; Earth: D-PLACE / Ethnographic Atlas, historical
+   farming-herding frontiers. Medium.
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
 
