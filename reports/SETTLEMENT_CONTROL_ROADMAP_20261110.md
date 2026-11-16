@@ -35,8 +35,13 @@ and the three-recipe H comparison independently reviewed. Same-recipe floodplain
 inputs raise median paired H2.55× for the eleven Egyptian strict targets; P2/Frier
 raises it9.19×. All664records retain support. No area score/adoption yet. See
 [URBAN_POPULATION_RECIPE_20261116.md](URBAN_POPULATION_RECIPE_20261116.md).
-Next is the frozen five-alternative legacy-versus-same-recipe input-refresh
-predictive pilot, with legacy numerical controls and nested train-only sigma.
+The frozen five-alternative input-refresh predictive pilot is now complete:
+20 outer cases, three exact legacy controls, train-only uncertainty, independent
+review. Same-recipe refreshed inputs reduce MAE2.7–2.9% and improve log score
+in every fold; Egypt remains underpredicted. See
+[URBAN_POPULATION_REFRESH_20261116.md](URBAN_POPULATION_REFRESH_20261116.md).
+Next is the declared actual-fantasy-input equivalence/full-hierarchy readiness
+audit before a separately declared full-pipeline comparison and transfer gate.
 No new
 size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.

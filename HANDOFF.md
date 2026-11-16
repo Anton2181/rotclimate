@@ -1,3 +1,30 @@
+# Controlled H-input predictive refresh complete — 16 November 2026
+
+Continued AFTER exact-replay push through declared predictive refresh. Plan
+population_refresh_pilot.json committed9e19c70ef before outputs. COMPLETED and
+independently reviewed:5fixedalternatives,20outer/60inner fits,80support splits,
+765predictionrows,200provincecases,40capitalgroups,10070CSVcells,7freshfiles
+byteexact;3legacy/control mean/sigma vectorsBITEXACT;4leakage/accountingtests.
+Report reports/URBAN_POPULATION_REFRESH_20261116.md;outputs
+output/urban_population_refresh_20261116/. No adoptedcoefficients/map/defaults.
+
+POSITIVEbutMODESTdevelopmentresult: samepopulationrecipe on qualifiedfloodplain
+input improves pooledMAE2.89%(M1)/2.72%(M1C),RMSE3.49/3.37%;NLL−0.0373/−0.0357.
+NLL+MAE improveall4folds;RMSEslightlyworsefold2. Fold3stillweak;all11Aegyptus
+targetsSTILLunderpredicted(meanlogresidM1 1.441→1.207,M1C1.466→1.264).
+No cure/independentvalidation claimed. P2/Frier wasn'tfit;wouldchangerecipe.
+Original664mixedtraining/153stricttargets andoldfolds/capitals unchanged.
+
+NEXT FROZEN integration_readiness.json: readonly actualfantasyharvest/population
+equivalence audit +existingfantasyfloodplain-port evidence +FULLhierarchy/ledger
+dependency inventory. StandaloneGaussianM1C isNOTpublishedjoint hierarchy's
+residualselection/lore ordering. Sameformula isn'tphysicalfield equivalence;
+fantasyclimate intentionallyr44,Earthr46. No newclimate rerun,fit,sourcepool,
+map/defaultwrite inthatstage. Then declareoneactualfullpipeline comparison,
+train-only uncertainty andappropriate evidence/transfer before adoption.
+Fullorigin/food/labour checksrequired. Buringhsizes/climate l stayunopened.
+PriorNEXTentriesbelowhistory. See exactreplaynotes for restoredcache and A1.
+
 # Exact population-input replay complete — 16 November 2026 (climate parked)
 
 Continued beyond BOTH audit pushes. Exact isolated floodplain grid replay now
