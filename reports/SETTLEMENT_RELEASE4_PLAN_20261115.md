@@ -100,3 +100,4 @@ identical to the published outputs.
 - 16 Nov: WP8 closed without change: the dense-block over-count belonged to the archived production baseline; the published
   release-3 tiling (history-weighted) already counts towns as well as a history-weighted people field. Next: site factors (WP3)
   with Itiner-e (re-downloaded), and sizes/primacy; the Buringh pool stays reserved for a future size or position test.
+- 16 Nov: WP3 river-confluence site factor passed its development screen and a blind test on Buringh's 1300 cities (+0.028 composite). Map integration next.

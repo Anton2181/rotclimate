@@ -34,6 +34,8 @@ instruction for the first dev+fine finalist).
   the catalogue towns (about right elsewhere); WP8: the over-count is the old production baseline's; the published release-3 tiling (history-weighted) already scores
   Han 0.996 / Rome 1.322 deviance vs 1.75 / 1.77 for production. No change needed. Blind size failures = sizes/primacy.
 - NEW BLIND POOL reserved: Buringh 2021 European urban population 700-2000 (data/cache/buringh2021, CC0; header only read) for WP8.
+- WP3 confluence factor: dev screen pass (k 1.0) and BLIND PASS on Buringh 1300 (+0.028 composite; reports/WP3_CONFLUENCE_20261116.md).
+  Next: declare the map integration and republish via the chain runner.
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
