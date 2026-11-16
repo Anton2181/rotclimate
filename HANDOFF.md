@@ -17,7 +17,16 @@ instruction for the first dev+fine finalist).
 - [done] Step 7 refit v4 (v3 best + e83, minimax): best 0.9956 FAIL; S49 alone reaches 0.9949 (pool 1.006).
 - [DONE] Step 8 refit v5 finalist: dev49 0.99450, fine28 0.975, sealed k 0.964 -> **r46 ADOPTED** (Earth; atlas stays r44).
   reports/CLIMATE_R46_20261115.md; calibration/local_accuracy_20261023/r46_adoption.json. Sealed sets i, j, k spent.
-- NEXT: maize (owner). Open climate problems: equatorial interiors, Bengal, rain shadows; a new sealed set is needed first.
+- Open climate problems: equatorial interiors, Bengal, rain shadows; a new sealed set is needed first.
+
+# WP6 MAIZE — 16 November 2026 (owner to-do)
+- [done] MAIZE in scripts/land_people.py (FAO 66 maize chapter: base 8 C, upper 30, Kc 1.07-1.12, landrace HI 0.3, low-input
+  1-2 t/ha; FAO-33 Ky 1.25; USDA 3650 kcal/kg; grain 1.0 t/ha). Opt-in: analyse(extra_crops=, old_world=False);
+  land_people_earth.py --window --extra-crops maize --new-world; ETOPO/slope caches per window. Defaults unchanged (tests pass).
+- [done] Declared Earth check (calibration/maize_20261116/plan.json) vs MapSPAM 2010 rain-fed maize (data/cache/mapspam2010):
+  Spearman 0.42 (>=0.30), coverage 0.976 (>=0.80; weak: maize suits 95 % of cells), June start in central Mexico: PASS.
+- [next] New World heartland cores (outside the test basin: Olmec Gulf coast, Oaxaca, Balsas), then DECLARE the reserved Valley
+  of Mexico blind test (data/cache/valley_of_mexico, headers only read) before reading it; maize-only New World crop set.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea

@@ -226,7 +226,7 @@ def arable_from_slope(shape, fallback):
     return np.where(np.isfinite(a), a, fallback).astype(np.float32)
 
 
-def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance", extra_crops=None):
+def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance", extra_crops=None, old_world=True):
     t0 = time.time()
     rs, cs = window_slices()
     elev = wc("elev")[rs, cs]
@@ -245,7 +245,7 @@ def compute(out, margins=None, arable_rule="relief", irrigation_rule="distance",
         arable = arable_from_slope(arable.shape, arable)
     print(f"rivers and relief ({time.time() - t0:.0f}s)", flush=True)
     res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land],
-                         margins=margins, extra_crops=extra_crops)
+                         margins=margins, extra_crops=extra_crops, old_world=old_world)
     print(f"analysis ({time.time() - t0:.0f}s)", flush=True)
     full = {}
     for k, v in res.items():
@@ -267,6 +267,7 @@ def main():
     ap.add_argument("--irrigation", choices=("distance", "hand"), default="hand", help="irrigation rule (hand: plan_D1 D2, adopted)")
     ap.add_argument("--deltas", choices=("none", "observed"), default="none", help="observed: also irrigate inside the observed delta fans (the map's delta rule)")
     ap.add_argument("--window", help="lat0,lat1,lon0,lon1 (default: the Old World window)")
+    ap.add_argument("--new-world", action="store_true", help="pre-Columbian New World crop set: only the extra crops (e.g. maize), no Old World cereals or dates")
     ap.add_argument("--extra-crops", default="", help="comma list of extra crops from land_people (maize: New World tests only)")
     a = ap.parse_args()
     if a.window:
@@ -288,7 +289,7 @@ def main():
     else:
         cm = [float(x) for x in a.crop_margins.split(",")] if a.crop_margins else None
         margins = ((cm[0], cm[1]), (cm[2], cm[3]) if len(cm) == 4 else None) if cm else None
-        full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation, extra or None)
+        full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation, extra or None, old_world=not a.new_world)
         shape = land.shape
         LAT = np.broadcast_to(lat[:, None], shape)
     cell_km2 = (KM_DEG / RES) ** 2 * np.cos(np.radians(LAT))

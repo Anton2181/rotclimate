@@ -88,3 +88,6 @@ identical to the published outputs.
   match), but they are excavated sites whose density follows development-led archaeology, not village density; Domesday, the only
   village-scale census, is spent. A village layer would be untestable. Parked until an unspent rural census-like pool exists.
   Work switched to the climate model (owner instruction).
+- 16 Nov: WP6 started. Maize added (opt-in, FAO 66 parameters); declared Earth check against MapSPAM 2010 passed (rank 0.42,
+  coverage 98 %, June season start). New World runs use a maize-only crop set. Next: New World heartland cores, then the
+  declared Valley of Mexico blind test.

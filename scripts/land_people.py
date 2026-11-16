@@ -223,7 +223,7 @@ def best_crop_mix(kcal, masks, can_double):
     return total, primary, secondary
 
 
-def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None, extra_crops=None):
+def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None, extra_crops=None, old_world=True):
     """Every product, from monthly T (C), P (mm) and day/night range (C),
     shape (12, ...). margins = (cold, dry) of harvest.models.margin_reliability:
     low-input harvests on cold and dry margins are worth their poor years
@@ -246,12 +246,14 @@ def analyse(T, P, lat, tilt, ws_day, irr, arable, dtr=None, margins=None, extra_
         if dry is not None:
             rain_keep = np.clip((out["aridity"] - dry[0]) / (dry[1] - dry[0]), 0.0, 1.0)
     kcal, masks = {}, {}
-    for name, c in {**CROPS, **(extra_crops or {})}.items():         # extra_crops: e.g. maize in New World tests only
+    base_crops = CROPS if old_world else {}                         # old_world=False: pre-Columbian New World (no wheat, barley, millet, rice, dates)
+    for name, c in {**base_crops, **(extra_crops or {})}.items():         # extra_crops: e.g. maize in New World tests only
         kcal[name], masks[name] = crop_yield(T, P, PET, S0, irr, c, rain_keep, keep)
     # date palm: a hot, frost-free, dry-country crop, watered by rivers
     palm_ok = (T.min(0) >= 7.0) & (np.sum(T >= 24.0, 0) >= 5) & (T.max(0) >= 30.0)
     palm_water = irr * (1.0 - smoothstep(Pann, *DATES["dry_mm"]))
-    kcal["dates"] = np.where(palm_ok, palm_water, 0.0) * DATES["grain"] * 1000.0 * DATES["kcal"]
+    if old_world:
+        kcal["dates"] = np.where(palm_ok, palm_water, 0.0) * DATES["grain"] * 1000.0 * DATES["kcal"]
     names = list(kcal)
     # a second crop in the months the first leaves free, at half weight, and
     # only where water allows it every year: irrigated land, or a growing
