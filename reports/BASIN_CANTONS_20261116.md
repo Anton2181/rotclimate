@@ -68,9 +68,14 @@ than the rule.
 ## Why this is plausible
 
 The outer edge of the state space at this scale is mostly:
-* **dry edges** (desert edge enrichment ×2–5 in these pools);
 * **coasts**;
-* **the reach limit of the road network.**
+* **the reach limit of the road network**;
+* in some places, **dry edges**. With this test's narrow desert-edge definition (aridity
+  below 0.2 next to wetter land), real borders score ×0.82–1.32, so dry edges are only
+  mildly enriched. The 7 November diagnosis found a stronger desert-edge effect for Rome
+  with a broader definition.
+
+None of these is a simple terrain line the canton rule could follow.
 
 Watersheds are rarely where empires stopped. Kitamura & Lagerlöf's ridge and river effect
 is a finer-scale, internal-border result. These tests score only the outer edge of all
