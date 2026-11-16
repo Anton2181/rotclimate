@@ -1,0 +1,8 @@
+{
+  "status":"technical_correction_after_unreviewed_first_run_before_valid_given_site_results",
+  "known":"The first conditional producer's preliminary aggregates were inspected. It inferred fractional indices from top-left latitude/longitude increments. Input grids actually use an azimuthal-equidistant projection. The mismatch was detected by inspecting cross-row/column grid curvature before independent review. No parameters were fitted or adopted.",
+  "invalid_record":"output/urban_given_sites_20261116/invalid_affine_first_run includes all first outputs,invalid.json hashes and the original draft producer snapshot. These are invalid and excluded from valid comparisons.",
+  "correction":"Use the existing native spherical azimuthal-equidistant forward projection about each grid's stored lat0/lon0; map km x/y to fractional indices from the stored native x/y origins and cell size. Assert native grid round-trip. Keep all source points,cohorts,counts,60km allocation,coefficients and seeds unchanged. Add projection regression controls and an independent PROJ spherical projection check.",
+  "adopt":false,
+  "climate_physics_changed":false
+}
