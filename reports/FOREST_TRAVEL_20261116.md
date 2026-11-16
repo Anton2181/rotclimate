@@ -54,3 +54,17 @@ cells and slightly shrinks territory in forested regions.
 .venv/bin/python -I scripts/forest_travel.py dev
 .venv/bin/python -I scripts/forest_travel.py blind       # run once
 ```
+
+## Map probe (control step only)
+
+`scripts/forest_travel_map_probe.sh` reruns control v2 and v2.1 with `ROTCLIMATE_FOREST_TRAVEL=1`.
+Release-4 towns, supply and staffing are kept fixed; only the control step's walking cost
+changes.
+
+| Climate | Held land, release 4 | Held land, C2 | Owner changed |
+|---|---:|---:|---:|
+| Raw | 66.6% | 66.2% | 1.0% of land |
+| Corrected | 66.8% | 66.4% | 0.8% of land |
+
+The map changes little: under 1% of land changes owner. Republishing waits for the
+owner's decision.
