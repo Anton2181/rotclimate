@@ -41,3 +41,10 @@ if [ "$step" = all ] || [ "$step" = reach ]; then
     "output/settlement_downstream_20261113=>$R/downstream" \
     "(39% of surplus marketed, the Earth-calibrated share)=>(34% of surplus marketed, the Earth-calibrated share with Egypt included)"
 fi
+if [ "$step" = all ] || [ "$step" = layers ]; then
+  # reach and trade layers from the staged atlases (scripts/stage_atlas.py + export_reach_release3.py on the release-4 towns);
+  # controls: unmodified exporter on fresh staged copies (atlas_*_control), which reproduced the published layers
+  S=output/chain_staging/release4_confluence
+  $PY -I scripts/exec_with.py scripts/publish_downstream_release3.py "output/settlement_downstream_20261113=>$R/downstream" -- \
+    $S/atlas_raw $S/atlas_corrected output/polity_map/atlas_raw_control.npz output/polity_map/atlas_corrected_control.npz
+fi
