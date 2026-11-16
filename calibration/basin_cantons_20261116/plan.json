@@ -1,0 +1,37 @@
+{
+ "version": 1,
+ "date": "2026-11-16",
+ "status": "declared before any canton result; owner (16 Nov): 'Sure, let's try' (basin cantons / river frontiers, workstream A3 of reports/GEOGRAPHY_CONTROL_PLAN_20261107.md)",
+ "question": "Do real borders follow watershed divides more than control v2.1 does, and does deciding control per small drainage basin (canton) move the modelled borders onto divides without losing accuracy?",
+ "data": {
+  "basins": "HydroBASINS v1c standard (Lehner & Grill 2013, HydroSHEDS), levels 7 and 8, Europe, Asia and Africa tiles; downloaded 2026-11-16 to data/cache/hydrobasins; not redistributed",
+  "rasterisation": "each window cell takes the HYBAS_ID of the polygon containing its centre (0 = none)",
+  "divide_cells": "land cells with a 4-neighbour land cell of a different basin at the same level"
+ },
+ "rules": {
+  "v21": "control v2.1 territory as in plan_A3 prep (held within 2 year-round days of staffed towns and kept roads, plus every enclosed pocket)",
+  "canton": "every land cell of a basin takes the basin's majority: territory if at least half of the basin's land cells are v2.1 territory, else not; cells in no basin keep v2.1"
+ },
+ "scores": {
+  "accuracy": "balanced accuracy against Cliopatria extents inside the 15-day band (geography_control_a.balanced_accuracy)",
+  "divide_enrichment": "share of border cells on a divide over the share in land within 33 cells of the border (geography_control_a2.enrich); computed for the real extent, v2.1 and the canton rule at the selected level",
+  "divide_distance": "|log(model enrichment / real enrichment)|",
+  "reported_only": "river and desert-edge enrichment (river frontier diagnostic, workstream E), boundary cells per territory cell, small-patch circularity"
+ },
+ "development": {
+  "pools": "rome (Hanson AD 150, Itiner-e roads; Roman empire AD 150) and han (AD 2), both seen",
+  "level_choice": "of levels 7 and 8, the one with the lower mean divide_distance over the two dev pools among those with canton balanced accuracy >= v2.1 - 0.01 in both; if neither qualifies the blind test is not run and the owner is told",
+  "reproduction_note": "the dev windows and the Hanson source were rebuilt in this container (Hanson from the OxREP CSV export); A3 dev scores reproduce within 0.003 (rome v2.1 0.8485 vs 0.849 recorded, han 0.6628 vs 0.664): output/basin_cantons_20261116/a3_dev_reproduction.json"
+ },
+ "blind": {
+  "T6_ming_1400": "CHGIS V6 county seats alive in AD 1400, Han window, no roads; target = every Cliopatria polity alive in 1400",
+  "T7_tang_late_900": "CHGIS V6 county seats alive in AD 900, Han window, no roads; target = every Cliopatria polity alive in 900",
+  "T8_bosker_1200": "Bosker, Buringh & van Zanden (2013) cities with population > 0 in 1200, Rome window with Itiner-e roads (as T5); target = every Cliopatria polity alive in 1200",
+  "note": "none of these years has been used for any control test (used: CHGIS 742, 1080, 1200, 1820; Bosker 1300, 1500); each pool is prepared without scoring and scored once"
+ },
+ "blind_gates": {
+  "G1": "canton balanced accuracy >= v2.1's - 0.01 in all three blind pools",
+  "G2": "canton divide_distance < v2.1's in at least two of the three blind pools",
+  "adopt": "G1 and G2 pass: the canton rule is Earth-validated and is offered for the map, which first needs map drainage basins (map basins from the height map; a separate step reported to the owner). Otherwise v2.1 stays and the result is reported."
+ }
+}
