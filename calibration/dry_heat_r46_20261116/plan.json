@@ -1,0 +1,19 @@
+{
+ "title": "Gated dry heating on r46 (declared before any evaluation)",
+ "date": "2026-11-16",
+ "made_after": "r46 adopted. Hot dry regions remain too cold, mostly in summer (Najd Jul-Sep -6 to -7 C, Sahara Jun-Sep -3 to -4.5 C, Sahel -2.2 C annual, Deccan -2.5 C, Iran -2.2 C). Gated dry heating (e54 with coastal, warm-ground and annual-warmth gates) reached dev31 S 0.9909 on r40 but failed the then policy's no-group-worse rule (mid-latitude 1.0034, reports/TRANSPORT_WIND_20261031.md section 10); policy v3 judges overall accuracy (S49) instead.",
+ "start": "calibration/local_accuracy_20261023/r46_params.json",
+ "start_set": {"dry_heating": 2.7, "dry_heating_chi0": 0.86, "dry_heating_warm_c": 20.0, "dry_heating_mean_c": 8.0},
+ "reference": "output/dry_heat_r46_20261116/ref",
+ "reference_name": "r46",
+ "extra_parts": {"pool_x": "calibration/grand_refit_20261115/pool_extratropical.json"},
+ "objective_mode": "pool_given_dev",
+ "dev_cap": 0.9945,
+ "knobs": {"dry_heating": ["mul", 1.25], "dry_heating_chi0": ["add", 0.1], "dry_heating_warm_c": ["add", 3.0], "dry_heating_mean_c": ["add", 3.0],
+           "subsidence_warming": ["mul", 1.15], "cold_high_storms": ["add", 0.05], "precip_tau_days": ["mul", 1.05], "storm_track": ["mul", 1.04], "rh_threshold": ["add", 0.01]},
+ "bounds": {"dry_heating": [0.0, 8.0], "dry_heating_chi0": [0.0, 0.95], "cold_high_storms": [0.0, 1.0]},
+ "max_evaluations": 40,
+ "search": "Coordinate descent (scripts/joint_refit.py, pool_given_dev): objective = S_pool where S49 <= 0.9945 against r46, else 10 + S49; at most 40 evaluations.",
+ "selection": "Lowest objective; must pass policy_v3 dev (S49<=0.995, T,P<=+1%) and fine28 against r46; then sealed set l once (calibration/sealed_20261116l).",
+ "caveat": "Only fine28 and sealed set l are independent."
+}
