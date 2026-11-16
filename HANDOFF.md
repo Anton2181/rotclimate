@@ -7,7 +7,12 @@
   except Han (x0.27-1.31), so no river-frontier rule was built.
 - [done, ADOPTED narrowly] Forest in travel C2 (reports/FOREST_TRAVEL_20261116.md): walking coefficient from forest share;
   blind T9 Ming 1600, T10 Sui 609, T11 Bosker 1700 (spent): G1 and G2 pass by ~0.002. Effect on Earth about zero.
-- NEXT: measure C2's impact on the map (staged); owner told before any release-5 publication. Untested idea: internal
+- [done] C2 map probe (control step only): held land -0.4 pts, owner changes on 0.8-1.0 % of land; no release yet (owner).
+- [done, NOT adopted] Detailed forest stage 1 (reports/FOREST_DETAIL_20261116.md): farming clearing vs Zanon 2018 AD 200
+  (5'; checkerboard blind): fit k = 0. Climate potential ranks Zanon well (Spearman 0.69); level 0.51 beats 0.60 (blind RMSE
+  0.170 vs 0.184) -> owner decision. Model density correlates POSITIVELY with AD 200 forest (+0.37): people sit on humid land.
+- [done, scenario] Detailed woodland map at 1.8 km (scripts/forest_detail_map.py): regional amounts kept, placement by people,
+  town clearing budgets (1 ha/resident), slope, tree line, wet floors; mosaic view. NOT on the atlas yet (owner to choose). Untested idea: internal
   borders between polities need a multi-owner Earth target (none yet).
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
