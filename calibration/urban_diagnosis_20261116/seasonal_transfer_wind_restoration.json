@@ -1,0 +1,8 @@
+{
+  "status": "declared_before_transport_source_recovery",
+  "parent": "seasonal_transfer_control_adapter.json",
+  "discovery": "The entire ignored data/cache/ncep_ltm directory is absent, so the annual replay cannot yet construct its canonical transport world. No annual result has been produced. Preserve this missing-input fact.",
+  "scope": "Recover only the already exposed uwnd.sig995, vwnd.sig995 and wspd.sig995 monthly long-term means through the exact public NOAA PSL OPeNDAP URLs used by the existing prepare_ncep_reference.fetch and polity.earth fallback. Use the existing float32 parser, preserve raw responses and SHA256 receipts, and create a minimal u/v fallback NPZ. Do not download humidity, pressure or additional source pools; no climate simulation or fitting.",
+  "identity_limit": "The original ignored wind files and their hashes are unavailable. Current remote climatology bytes therefore are not presumed identical to the old inputs. Record source metadata and require the entire existing Greek and central/low annual result JSON bytes to reproduce exactly before qualifying these recovered transport inputs for this audit. A mismatch must remain a failure; do not adjust wind values, thresholds, routes or tolerances to force agreement.",
+  "publication": "No seasonal trial or atlas/default adoption. Existing protected files and canonical producer sources remain unchanged."
+}
