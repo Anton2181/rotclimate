@@ -35,7 +35,9 @@ instruction for the first dev+fine finalist).
   Han 0.996 / Rome 1.322 deviance vs 1.75 / 1.77 for production. No change needed. Blind size failures = sizes/primacy.
 - NEW BLIND POOL reserved: Buringh 2021 European urban population 700-2000 (data/cache/buringh2021, CC0; header only read) for WP8.
 - WP3 confluence factor: dev screen pass (k 1.0) and BLIND PASS on Buringh 1300 (+0.028 composite; reports/WP3_CONFLUENCE_20261116.md).
-  Next: declare the map integration and republish via the chain runner.
+  Map integration declared (calibration/wp3_site_factors_20261116/map_integration.json): ROTCLIMATE_CONFLUENCE_K=1.0 in
+  prior_tiling_sites (default off); spec calibration/settlement_chain/release4_confluence.json; [running] staged build
+  (settlement_chain.py ... build -> output/chain_staging/release4_confluence); then checks, then publication.
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
