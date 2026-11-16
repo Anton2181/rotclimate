@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "date": "2026-11-16",
+ "status": "declared before any C2 result; workstream C2 of calibration/geography_control_20261107/plan_C1.json ('C2 tests it in travel and control'); owner (16 Nov): 'I'm also still interested in the forests'",
+ "question": "Does walking cost from the Earth-fitted forest share (C1b) instead of the Whittaker-biome lookup give control v2.1 territory that matches Earth as well or better, with borders on forest edges as often as real ones?",
+ "rules": {
+  "baseline": "control v2.1 as in plan_A3 prep, walking coefficient from polity.control.terrain_coefficient (Whittaker biome lookup: woodland/shrubland 1.2, temperate seasonal and boreal forest 1.5, temperate rainforest 1.7, tropical rainforest 1.8, desert 1.6, ...)",
+  "C2": "walking coefficient = open x (1 - f) + forest x f, f = C1b forest share 0.60 x clip((P/PET - 0.3)/0.2) x clip((GDD5 - 300)/300) from the window's monthly climate (Hargreaves PET, Earth tilt); open = the biome coefficient with forest biomes (codes 3, 4, 7, 9) set to 1.2; forest = the biome's coefficient for forest biomes, else 1.5 (temperate forest, Soule & Goldman 1972 as already used); swamp and snow rules unchanged. Applied everywhere the chain uses the coefficient (supply, staffing, reach). Nothing fitted.",
+  "scoring_band": "the baseline's 15-day band in both runs"
+ },
+ "scores": {
+  "accuracy": "balanced accuracy against Cliopatria extents",
+  "forest_enrichment": "mean forest share f on border cells over that on land within 33 cells of the border (geography_control_a2.enrich), real vs model; forest_distance = |log(model / real)|",
+  "reported_only": "divide, river and desert-edge enrichment; territory cells; changed cells"
+ },
+ "development": "rome (AD 150) and han (AD 2), seen; reported only, nothing chosen",
+ "blind": {
+  "T9_ming_1600": "CHGIS V6 county seats alive in AD 1600, Han window, no roads; target = every Cliopatria polity alive in 1600",
+  "T10_sui_609": "CHGIS V6 county seats alive in AD 609, Han window, no roads; target = every Cliopatria polity alive in 609",
+  "T11_bosker_1700": "Bosker, Buringh & van Zanden (2013) cities with population > 0 in 1700, Rome window with Itiner-e roads; target = every Cliopatria polity alive in 1700",
+  "note": "years never used for a control test (used: CHGIS 742, 900, 1080, 1200, 1400, 1820; Bosker 1200, 1300, 1500); prepared without scoring and scored once"
+ },
+ "blind_gates": {
+  "G1": "C2 balanced accuracy >= baseline's - 0.01 in all three blind pools",
+  "G2": "C2 forest_distance < baseline's in at least two of the three blind pools",
+  "adopt": "G1 and G2: the map's walking coefficient takes the C1b forest share (land_forest layer), and the downstream reach chain is rebuilt as a new release (owner told before publishing). Else the biome lookup stays."
+ }
+}
