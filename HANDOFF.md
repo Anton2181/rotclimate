@@ -38,6 +38,8 @@ instruction for the first dev+fine finalist).
   Map integration declared (calibration/wp3_site_factors_20261116/map_integration.json): ROTCLIMATE_CONFLUENCE_K=1.0 in
   prior_tiling_sites (default off); spec calibration/settlement_chain/release4_confluence.json; [running] staged build
   (settlement_chain.py ... build -> output/chain_staging/release4_confluence); then checks, then publication.
+  Staged so far: counts unchanged (883/902), marked unchanged, 56-58 % of proposed towns move (median 1 cell, 70 % within 3);
+  placement review passes (reviewer got an independent confluence factor); supply needed ROTCLIMATE_RELEASE3_DIR (added).
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
