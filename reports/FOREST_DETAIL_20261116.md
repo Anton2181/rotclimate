@@ -39,3 +39,26 @@ Gates:
 - **Owner decision:** whether to lower the layer to 0.51 × potential.
 
 Reproduce: `.venv/bin/python -I scripts/forest_detail_earth.py dev` and then `blind`. The blind run has been done once.
+
+## Stage 2: detailed woodland map (scenario)
+
+`scripts/forest_detail_map.py` works at the full map resolution: 926 × 2000 pixels of about 1.8 km, on height map v2.1. It writes
+`output/forest_detail_20261116/` (`woodland_mosaic_{raw,corrected}.png`, `forest_detail_*.png`, `detail_summary.json`).
+
+**Regional amount.** It is held at the published layer's values in ~25 km neighbourhoods, which is the Earth-tested scale.
+
+**Placement within each neighbourhood** follows a declared rule. It is not fitted and is untested on Earth:
+- **Rural people** clear gentle land.
+- **Towns:** each town clears about 1 ha per resident, taking the cheapest land nearby (distance × steepness), so clearings follow flat ground and valleys.
+- **Slopes** keep woods.
+- **Cold limit:** the warmth ramp is recomputed with a 6.5 K/km lapse onto the fine terrain, giving a tree line.
+- **Wet valley floors** are flagged as wet woodland or marsh: flat land with large drainage area in a moist climate.
+- **Woodland or open:** the mosaic marks each pixel as one or the other. The choice uses the local preference plus a little smooth, seeded noise, against a threshold that keeps each neighbourhood's share.
+
+Corrected climate:
+- Mean forest is 0.49 (same as the regional layer).
+- 35% of land carries more than 60% forest, and 14% carries less than 10%.
+- 1.9% of land is flagged wet.
+- Forest correlates +0.39 with slope.
+
+**Not yet published to the atlas.** This awaits the owner's choice of level (0.60 or 0.51) and whether to show the scenario.
