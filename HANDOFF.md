@@ -1,3 +1,13 @@
+# RELEASE 4 PUBLISHED (settlements; WP3 river confluences) — 16 November 2026
+Positions: release-3 tiling x (1 + exp(-(d/15 km)^2)) to river junctions (ROTCLIMATE_CONFLUENCE_K=1.0; dev Han/Rome pass, blind Buringh
+1300 pass +0.028). Build: settlement_chain.py calibration/settlement_chain/release4_confluence.json build -> copied to
+output/settlement_release4_20261116; publication scripts/publish_release4.sh (settlements, note, supply, ensemble, reach, layers) +
+scripts/release4_reach_chain.sh (control v2/v21, supply-fed and 'request') ; images moved to data/release3/reach{,_fed}; originals
+restored. Counts unchanged (883/902 proposed, 151 marked); 56-58 % moved (median 1 cell); staffed 1023/1042; held v2.1 66.6/66.8 %.
+Controls reproduced all published raw/corrected layers. Browser: settlements 12, supply 8, reach/trade 16, supply reach 8, admin 12,
+hierarchy 12; fit hub rebuilt; Windows checkout checked. Imperial access/administration not republished (as release 3).
+NEXT (owner, 16 Nov): basin cantons + river frontiers Earth test (A3/E); forest map (C1b) on the atlas.
+
 # CLIMATE CAMPAIGN — LIVE PLAN / TO-DO (owner: "keep going until you get a valid climate update"; updated as work proceeds)
 Base: r46 (adopted 15 Nov, Earth only; atlas stays r44 by owner decision). Valid update = policy_v3: dev49 S<=0.995 with T,P <=+1%,
 fine28 S<=1.01, then ONE run on an unseen sealed set (now set j, calibration/sealed_20261115j; release recorded from the owner's
