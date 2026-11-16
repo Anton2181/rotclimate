@@ -30,6 +30,11 @@
   atlas unchanged: no bundle there). Packed copy browser-checked: 83 layers x 2 climates, no errors.
   Republish: package to the scratchpad, then publish that same path in <=58 MB / <=240-file batches (or pass the url from a
   new session after reading it).
+- [done] Owner: "tiny roads that lead to nowhere" on the Settlements map. Cause: the image drew minor tracks but not the
+  drawn main roads; 89 of 186 track ends (corrected) meet a main road, none end nowhere. Fix (display only):
+  scripts/redraw_settlement_roads.py redraws the 4 release-4 images with main roads in red (control without roads reproduced
+  the published images byte for byte); legend item added; publish_settlement_release3/publish_wide_supply_release3 now pass
+  roads too. Hosted v7 (4 changed files; packed copy browser-checked, 83 layers x 2 climates).
 - Climate parked at r46 (set l unopened); remaining ideas need new Earth data or a new direction from the owner.
 
 # NEW DIRECTIONS — proposed 16 Nov 2026 (owner asked for proposals; none chosen yet; recommended order 1 -> 2, 3 alongside)
