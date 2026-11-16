@@ -12,7 +12,14 @@
   (5'; checkerboard blind): fit k = 0. Climate potential ranks Zanon well (Spearman 0.69); level 0.51 beats 0.60 (blind RMSE
   0.170 vs 0.184) -> owner decision. Model density correlates POSITIVELY with AD 200 forest (+0.37): people sit on humid land.
 - [DISCARDED by owner] Detailed woodland scenario (untestable placement); script removed (history 88cf9e2d).
-- [ADOPTED] Forest layer level 0.51 (blind-verified vs Zanon AD 200); land_forest republished raw + corrected; browser passes. Untested idea: internal
+- [ADOPTED] Forest layer level 0.51 (blind-verified vs Zanon AD 200); land_forest republished raw + corrected; browser passes.
+- [done] Cores diagnostic: cored density removes the wrong-way people/forest signal (+0.37 -> +0.04) but gives no clearing
+  signal; forest stays climate-only.
+- [done] Internal borders (reports/INTERNAL_BORDERS_20261116.md): map owner rule OA 0.89-0.99 on blind Europe 1400/1600,
+  China 1140 (first Earth test of the owner rule; straight-line null equal). Cantons: OA unchanged (G1 fail, not adopted)
+  but border recall +0.03-0.09 in all six pools. Real internal borders: divides x1.06-1.12; rivers x1.2-2.1 in Europe 1400+,
+  x0.5 in China. Pools spent: Bosker 1400, 1600, CHGIS 1140 (dev reused 1200/1500/1200).
+- NEXT candidates: European river tie-break for internal borders (unused Bosker 1000/1100/1800); host release 4 (mechanical). Untested idea: internal
   borders between polities need a multi-owner Earth target (none yet).
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
