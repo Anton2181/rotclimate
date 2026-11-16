@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "date": "2026-11-16",
+ "status": "declared before any result; follows reports/INTERNAL_BORDERS_20261116.md (real borders between European states lie on rivers x1.2-2.1 from 1400; the map rule x0.6-1.5)",
+ "question": "Between neighbouring European states, does treating a river crossing as costly for ownership put the land on the right side more often?",
+ "scope": "Rome window (Europe and the Mediterranean) only; China's borders avoid rivers (x0.5) and are not tested",
+ "held": "unchanged: control v2.1 held land (internal_borders preparation)",
+ "rules": {
+  "O0_map": "owner by fewest year-round days on the map's monthly networks (boats on rivers, fords)",
+  "R_X": "owner by fewest days on the static walking graph (polity.control.travel_graph: Tobler slope, terrain, paths, roads) with an extra crossing cost of X days on every river cell (Natural Earth rivers, as the windows), paid when stepping onto the river off the roads; X in {0, 0.5, 1, 2, 4}; R_0 is the walking-only reference"
+ },
+ "scores": "owner agreement (OA) and border recall/precision as in calibration/internal_borders_20261116/plan.json; river enrichment of model borders reported",
+ "development": {
+  "pools": "Bosker cities 1200, 1400, 1500, 1600 (all seen), Rome window with Itiner-e roads",
+  "choice": "X > 0 with the highest mean OA over the four dev pools"
+ },
+ "blind": {
+  "B1": "Bosker cities 1000, Rome window with Itiner-e roads",
+  "B2": "Bosker cities 1100, same",
+  "B3": "Bosker cities 1800, same",
+  "note": "years never used in any control test"
+ },
+ "blind_gates": {
+  "G1": "R_X OA >= O0 OA + 0.01 in at least two of three blind pools",
+  "G2": "R_X OA >= O0 OA - 0.01 in every blind pool",
+  "adopt": "G1 and G2: river crossings weigh in the map's ownership between polities (held land unchanged), as a new release after the owner is told. Otherwise O0 stays."
+ }
+}
