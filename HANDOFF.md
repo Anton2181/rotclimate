@@ -1,3 +1,28 @@
+# Strategy review — 16 November 2026 (proposals; no new direction adopted)
+
+Latest remote checkpoint reviewed: `5b0d03b19` (canonical and wonderful-mayer
+branches shared it). Full assessment: `reports/STRATEGY_REVIEW_20261116.md`.
+Release 4 / hosted v7 is current; Earth climate r46, fantasy atlas r44 intentionally;
+Egypt-inclusive supply calibration passes in DEVELOPMENT, published share 34%.
+Older release-3 / Egypt-failure “live” entries are historical, not current status.
+
+Recommendation for owner consideration: first diagnose settlement observation
+definitions and urban concentration on the ACTUAL published pipeline; then a
+fixed-total rural/urban allocation comparison if supported. Tenfold hinterland
+people changes the released size mean by only ~1.40x in area. The area cap is
+~1,783 ha, not 200 ha. The old dense-core count excess is already addressed in
+the published tiling; do not reopen WP8 on that obsolete baseline.
+
+Population history remains promising, but start with a bounded pilot against the
+existing core prior. Forest change is not a direct people count, and ancient HYDE
+allocations are not independent truth. Road-generation testing can proceed as a
+separate workstream if target roads are withheld from the generator/cost inputs.
+Historical channels are a distinct diagnostic for the Mesopotamian position failure.
+State formation and further climate refits are lower-priority proposals; preserve
+the owner's painted claims, model defaults and reserved pools. No new blind values
+or scores were opened/run by this review. The earlier six directions below remain
+proposals; this review does not choose or adopt one for the owner.
+
 # GEOGRAPHY OF CONTROL — 16 November 2026 (owner: natural borders, forests)
 - [done] Forest map: C1b forest share published as atlas layer land_forest ("Forest (AD 200 potential)", raw + corrected;
   scripts/forest_map.py --publish; browser check passes).

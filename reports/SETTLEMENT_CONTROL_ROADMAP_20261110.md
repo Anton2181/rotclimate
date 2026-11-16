@@ -5,7 +5,39 @@ not just its first experiment. Read this alongside the current entry in HANDOFF.
 at every continuation. Physics development has its own queue; neither queue
 silently replaces the other.
 
-## Live review — 14 November 2026
+## Live review — 16 November 2026
+
+Current release: settlement release 4, published and hosted (v7 includes the
+main-road display fix). Confluence placement passed its declared prospective
+position test. Published hierarchy, supply and affected reach/trade stages were
+rebuilt. Marketed share is 34% for the sliding reading; Egypt-inclusive whole-
+empire supply calibration passes on disclosed development evidence. That is
+not independent end-to-end validation. Earth climate r46 is adopted; fantasy
+atlas climate remains r44 by owner decision. Forest level 0.51 is published.
+Forest travel is opt-in/unpublished; its earlier tests used level 0.60. Basin
+cantons and river-crossing changes failed their gates. Detailed woodland was
+discarded by the owner.
+
+Strategy review requested by the owner: see
+[STRATEGY_REVIEW_20261116.md](STRATEGY_REVIEW_20261116.md). Recommended first step
+is a bounded diagnosis of settlement observation definitions and urban
+concentration on the published pipeline, then a fixed-total urban-allocation
+comparison if the evidence supports it. Population history should start as a
+small pilot against the existing core prior; road testing is a separate candidate
+workstream. These remain proposals, not newly adopted work packages.
+
+The archived production town-count excess is not the current release's count
+rule. Mexico's area/density definitions and omitted Teotihuacan differ from the
+Old World city-area calibration. Keep those distinctions and the source-exposure
+register explicit before another fit or prospective test. S3–S5, empirical
+occupancy/roles, rural/mobile/nonstate communities and complete resources/work
+remain open. The latest handoff and current chain spec control resumption.
+
+The earlier live entries and release milestones below preserve their original
+states. Their references to release 3, Egypt failure, missing maize/Tigris and
+pending release-4 publication must not override the newer completed work.
+
+## Historical live review — 14 November 2026
 
 Current completed step: matched meteorology and32paired water maps. Input
 declarationdf1e174c/freeze6e720369;field declaration1189eb46 before new scores.
