@@ -1,3 +1,54 @@
+# Fixed-site candidate map ready — 16 November 2026 (climate parked)
+
+Current deliverable: output/urban_hierarchy_candidate_20261116/index.html,
+standalone interactive published/candidate comparison. Raw/corrected, both
+density readings, search, synchronized pan/zoom/town details, area/change colours
+and CSVs. Static comparison_corrected.png / comparison_raw.png beside it.
+Report reports/URBAN_HIERARCHY_CANDIDATE_20261116.md. Main atlas unchanged.
+
+Candidate build declared dc57b1c5c BEFORE fit. Exact SIX published townCSV,
+siteJSON/fullfieldsNPZ hashes and unrounded numeric control summaries pass.
+Initial control failed ONLY atlas.json receipt: later forest display descriptor.
+Failure/log/producer/old metadata archived failed_metadata_control/. A1 committed
+9e0c7859d BEFORE retry/fit; removes ONLY land_forest descriptors to compare
+metadata, records old/current hashes, every other field/input still exact.
+Do not claim the complete historical input receipt is byte-identical.
+
+Full exposed-source fit:664rows/28caps/95pairs,4foldOOF RMS sigma,70phi/c losses.
+beta=(1.554938767713789,.1826427224092563),sigma=1.0364605311460373,
+phi=.25,c=1.0. This is final TRAINING fit,not another validation result.
+Raw1034/corrected1053 SAME sites/population/roads/marks/lore/climate. Runtime-only
+guard adapter recorded; candidate metadata adopt=False AND gate.passed=False;
+canonical builder untouched. Compact town_model.npz tracked, full fields/prepared
+caches ignored. Reproduction commands and scopes in candidate report.
+
+Corrected area55165.90→55197.28ha, central town people13.4650→13.3146M(-1.117%);
+raw54415.65→54582.29ha,13.2727→13.1705M(-.770%). Low-reading people+.057%/+.306%.
+All requests allocated to floating precision; population residual<7.46e-9people.
+Annual LOCAL cereal support corrected264→262/raw245→242 central; imports still
+needed, no wider supply rerun yet. Source cells below rural annual need6/68.
+Annual population conservation does NOT qualify seasonal source food/work.
+
+Independent review PASS:6 exact controls,70losses,4174site-case rows,8annual
+ledgers; max area diff1.14e-13ha/rural2.28e-13people; fresh numeric/array outputs
+byteexact. Presentation review2087towns/37566values exact. Chromium desktop/mobile
+passes controls,all2087coords,downloads,no exceptions/overflow. Shared painted
+roads only in terrain. Review receipts and screenshots alongside map.
+
+NEXT FROZEN candidate_supply_robustness.json: paired fixed-site seeds1/7/19/43/97,
+20area draws/40annual population cases, seed1 reproduce current. No refit or
+placement. Extreme corrected seed1 changes(.059–50.47×) can arise from residual
+reassignment/lore,NOT specific-town predictions. Quantify persistence/intervals.
+Also reconstruct exact release4 annual wide-supply controls, then candidate
+seed1 on bothmaps/readings,unchanged34%/14% exact calibrated shares and existing
+10%/300h sensitivities,using NEWrural source/work budgets. Supply largeNPZ caches
+currently absent; restore/rebuild exact fixed-node controls first. Existing
+40seed placement ensemble is inappropriate unchanged. Declare adapters,retain
+false gate. Full seasonal settlement_residents allocator/audit,sourcefood/work,
+staff/reach/trade and appropriate transfer STILL required before adoption.
+No climate rerun, Buringh sizes or climate l. Don't redo completed source audits.
+Earlier NEXT entries below are history; the new candidate report/plan control.
+
 # Joint hierarchy refresh trial complete — 16 November 2026 (climate parked)
 
 Continued through integration audit AND joint hierarchy trial after8ede6df38.

@@ -20,6 +20,7 @@ BASE=ROOT/'output/urban_hierarchy_refresh_20261116'
 RELEASE=ROOT/'output/settlement_release4_20261116'
 OUT=ROOT/'output/urban_hierarchy_candidate_20261116'
 PLAN=ROOT/'calibration/urban_diagnosis_20261116/hierarchy_candidate_build.json'
+AMENDMENT=PLAN.parent/'hierarchy_candidate_metadata_a1.json'
 
 
 def sha(p):
@@ -28,6 +29,7 @@ def sha(p):
 
 def main():
     assert subprocess.check_output(['git','show','HEAD:'+str(PLAN.relative_to(ROOT))],cwd=ROOT)==PLAN.read_bytes()
+    assert subprocess.check_output(['git','show','HEAD:'+str(AMENDMENT.relative_to(ROOT))],cwd=ROOT)==AMENDMENT.read_bytes()
     previous=json.loads((BASE/'results.json').read_text());review=json.loads((BASE/'review.json').read_text())
     assert review['status']=='passed' and review['results_sha256']==sha(BASE/'results.json') and review['reviewer_sha256']==sha(ROOT/'scripts/review_urban_hierarchy_refresh.py')
     for name,digest in {**previous['producers'],**previous['protected_sha256']}.items():assert sha(ROOT/name)==digest,name
@@ -37,7 +39,15 @@ def main():
     for name in ['results.json','review.json',*previous['files_sha256']]:protected[str((BASE/name).relative_to(ROOT))]=sha(BASE/name)
     for p in (ROOT/'atlases/earth_fit').rglob('*'):
         if p.is_file():protected[str(p.relative_to(ROOT))]=sha(p)
-    inputs=[Path(__file__),PLAN,ROOT/'scripts/settlement_fantasy_inputs.py',ROOT/'scripts/settlement_hierarchy_map.py',ROOT/'scripts/build_settlement_release2.py',
+    historical=OUT/'failed_metadata_control/archived_atlas.json';current=ROOT/'atlases/earth_fit/data/atlas.json'
+    oldmeta=json.loads(historical.read_text());newmeta=json.loads(current.read_text())
+    for meta in [oldmeta,newmeta]:
+        meta['layers']=[v for v in meta['layers'] if v.get('id')!='land_forest']
+        meta['corrected_climate']['layers']=[v for v in meta['corrected_climate']['layers'] if v.get('id')!='land_forest']
+    assert oldmeta==newmeta,'Metadata changes exceed declared forest display descriptors'
+    assert sha(historical)==original['climates']['raw']['inputs']['atlases/earth_fit/data/atlas.json']
+    metadata_delta=dict(historical_atlas_sha256=sha(historical),current_atlas_sha256=sha(current),only_removed_layer_id='land_forest',exact_after_scoped_removal=True,amendment_sha256=sha(AMENDMENT))
+    inputs=[Path(__file__),PLAN,AMENDMENT,historical,ROOT/'scripts/settlement_fantasy_inputs.py',ROOT/'scripts/settlement_hierarchy_map.py',ROOT/'scripts/build_settlement_release2.py',
             ROOT/'scripts/build_settlement_release3.py',ROOT/'polity/settlement_locations.py',RELEASE/'release3/fantasy.json',RELEASE/'earth_results.json']
     (OUT/'control').mkdir(parents=True,exist_ok=True);(OUT/'prepared').mkdir(parents=True,exist_ok=True)
     module=M.patched_build();Z.MODELS['M1C']=('lnH','capital');controls={};identities={};geometry={}
@@ -67,7 +77,12 @@ def main():
             result=module.build(mode,copy.deepcopy(earth),OUT/'control',custom=custom)
             result['outputs'][source.name]=sha(source)
             expected=original['climates'][mode]
-            for key,value in result.items():assert value==expected[key],f'{mode}:{key} differs from released summary'
+            for key,value in result.items():
+                if key!='inputs':assert value==expected[key],f'{mode}:{key} differs from released summary'
+            actual_inputs=dict(result['inputs']);expected_inputs=dict(expected['inputs'])
+            assert actual_inputs.pop('atlases/earth_fit/data/atlas.json')==sha(current)
+            assert expected_inputs.pop('atlases/earth_fit/data/atlas.json')==sha(historical)
+            assert actual_inputs==expected_inputs,'Computational input receipt differs'
             for name,digest in expected['outputs'].items():
                 assert sha(OUT/'control'/name)==digest,f'{mode}:{name} differs from released bytes'
                 identities[str((OUT/'control'/name).relative_to(ROOT))]=digest
@@ -76,8 +91,8 @@ def main():
             inputs += [source,w['folder']/'harvest.json',w['folder']/'harvest.bin',w['folder']/'administration_grid.npz',ROOT/f'output/settlement_feedback_20261112/{mode}_inputs.npz']
             print(mode,':CSV,site JSON,fields NPZ and unrounded summaries EXACT',flush=True)
         for name,digest in protected.items():assert sha(ROOT/name)==digest,name
-        receipt=dict(status='passed_exact_released_controls',controls=controls,geometry=geometry,sources_sha256={str(p.relative_to(ROOT)):sha(p) for p in inputs},protected_sha256=protected,files_sha256=identities,
-                     placement_changed=False,climate_rerun=False,adopt=False,scope='Published crop/geometry/transport reconstruction reused. Exact six released CSV/site/fields identities plus all unrounded builder summaries. No source fit or candidate interpreted before this control passes.')
+        receipt=dict(status='passed_exact_released_controls',controls=controls,geometry=geometry,metadata_delta=metadata_delta,sources_sha256={str(p.relative_to(ROOT)):sha(p) for p in inputs},protected_sha256=protected,files_sha256=identities,
+                     placement_changed=False,climate_rerun=False,adopt=False,scope='Published crop/geometry/transport reconstruction reused. Exact six released CSV/site/fields identities and unrounded numeric summaries. A1 records later forest-display metadata receipt difference;all other computational inputs exact. No candidate interpreted before this control passes.')
         (OUT/'control.json').write_text(json.dumps(receipt,indent=2)+'\n');print('Both unchanged release controls PASS exact bytes',flush=True)
     except Exception as error:
         failure=dict(status='failed_preserved_control',error=f'{type(error).__name__}: {error}',completed_modes=list(controls),sources_sha256={str(p.relative_to(ROOT)):sha(p) for p in inputs},adopt=False)

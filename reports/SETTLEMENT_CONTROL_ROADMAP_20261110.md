@@ -45,13 +45,21 @@ packets reproduce, old source validation has global scatter/mean and cross-fold
 centre-label leakage risks. The paired joint trial repairs isolation in both
 alternatives. Refreshed H improves empirical CRPS1.08% on all664/3.21% strict153;
 KS worsens slightly. See [URBAN_HIERARCHY_REFRESH_20261116.md](URBAN_HIERARCHY_REFRESH_20261116.md).
-Next is the frozen full-data fit and isolated candidate application on unchanged
-released sites, with exact legacy controls and explicit annual-ledger limits.
+The full-data fit and isolated candidate application are now complete. Six
+published map output hashes and all numerical summaries replay exactly, with
+the later forest display metadata delta explicitly scoped in A1. The candidate
+has a standalone interactive map and static comparisons, reviewed source fit,
+finite annual population movement, annual local cereal deficits, fresh exact
+outputs and desktop/mobile checks. See
+[URBAN_HIERARCHY_CANDIDATE_20261116.md](URBAN_HIERARCHY_CANDIDATE_20261116.md).
+Corrected central town population changes −1.117%, total area +0.057%; large
+individual changes remain single-seed scenarios. Next is the declared paired
+five-seed fixed-site sensitivity and exact annual wider-supply controls/candidate
+comparison using each model's actual rural food/work budget. No refit or placement.
 Seasonal origin/food/labour, full affected-chain and appropriate transfer gates
 still precede adoption. No published population/climate change is needed for
 the existing zero-qualifying-cell fantasy floodplain port.
-No new
-size/default/map adoption; no new exponent search. The proposal status
+No new size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.
 
 Current release: settlement release 4, published and hosted (v7 includes the
