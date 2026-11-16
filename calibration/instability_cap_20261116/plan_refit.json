@@ -1,0 +1,97 @@
+{
+ "title": "Joint refit r46 + e84 instability cap + e54 gated dry heating + e83 (declared before any evaluation)",
+ "date": "2026-11-16",
+ "made_after": "e84 screen FAIL (neutral; deserts better, India worse); dry-heating refit on r46 FAIL (0.9982); r46 = refit v5 of e83. Desert summer rain and cold are the largest remaining in-band errors; the three mechanisms act on them with different side effects.",
+ "start": "calibration/local_accuracy_20261023/r46_params.json",
+ "start_set": {
+  "instability_cap": 0.5,
+  "instability_cap_chi0": 0.5,
+  "dry_heating": 1.5,
+  "dry_heating_chi0": 0.86,
+  "dry_heating_warm_c": 20.0,
+  "dry_heating_mean_c": 8.0
+ },
+ "reference": "output/dry_heat_r46_20261116/ref",
+ "reference_name": "r46",
+ "extra_parts": {
+  "pool_x": "calibration/grand_refit_20261115/pool_extratropical.json"
+ },
+ "objective_mode": "pool_given_dev",
+ "dev_cap": 0.9945,
+ "knobs": {
+  "instability_cap": [
+   "add",
+   0.25
+  ],
+  "instability_cap_chi0": [
+   "add",
+   0.15
+  ],
+  "dry_heating": [
+   "add",
+   0.75
+  ],
+  "trade_heat_low": [
+   "add",
+   0.2
+  ],
+  "storm_convection": [
+   "add",
+   0.15
+  ],
+  "convective_rain": [
+   "mul",
+   1.15
+  ],
+  "rh_threshold": [
+   "add",
+   0.01
+  ],
+  "precip_tau_days": [
+   "mul",
+   1.05
+  ],
+  "cold_high_storms": [
+   "add",
+   0.05
+  ],
+  "eddy_rate": [
+   "mul",
+   1.06
+  ],
+  "instability": [
+   "mul",
+   1.1
+  ]
+ },
+ "bounds": {
+  "instability_cap": [
+   0.0,
+   1.0
+  ],
+  "instability_cap_chi0": [
+   0.0,
+   0.9
+  ],
+  "dry_heating": [
+   0.0,
+   6.0
+  ],
+  "trade_heat_low": [
+   0.0,
+   1.0
+  ],
+  "storm_convection": [
+   0.0,
+   2.0
+  ],
+  "cold_high_storms": [
+   0.0,
+   1.0
+  ]
+ },
+ "max_evaluations": 45,
+ "search": "Coordinate descent (scripts/joint_refit.py, pool_given_dev): S_pool where S49 <= 0.9945 against r46, else 10 + S49; at most 45 evaluations.",
+ "selection": "Lowest objective; policy_v3 dev (S49<=0.995, T,P<=+1%) and fine28 against r46; then sealed set l once.",
+ "caveat": "Only fine28 and sealed set l are independent."
+}
