@@ -15,7 +15,13 @@ def radius(people):
     return 1.2 + np.sqrt(people) / 42.0          # px at 2000 px width: 1k 2.0, 10k 3.6, 100k 8.7, 250k 13.1
 
 
-def render(mode, scenario, sites, actors, f, meta):
+def main_roads(shape):
+    """The map's drawn main roads on the model grid (as polity.economic_world), for drawing under the towns."""
+    from polity import fields as F
+    return F.block_any(F.rgba('roads.png')[..., 3] > 0, shape)
+
+
+def render(mode, scenario, sites, actors, f, meta, roads=None):
     land = f['land']; h, w = land.shape; W, H = meta['width'] * SCALE, meta['height'] * SCALE
     rural = np.divide(f['rural_' + scenario], f['people'], out=np.ones_like(f['people']), where=f['people'] > 0)
     rgb = np.empty((h, w, 3)); rgb[:] = [.84, .89, .94]
@@ -23,6 +29,8 @@ def render(mode, scenario, sites, actors, f, meta):
     rgb[land] = np.array([.90, .88, .82]) * (1 - drawn) + np.array([.80, .66, .52]) * drawn
     if 'tracks' in f:
         rgb[f['tracks'] & land] = rgb[f['tracks'] & land] * .55 + np.array([.42, .33, .24]) * .45
+    if roads is not None:                      # drawn main roads: the minor tracks end on them
+        rgb[roads & land] = np.array([.66, .22, .17])
     image = Image.fromarray(np.rint(rgb * 255).astype('u1')).resize((W, H), Image.Resampling.NEAREST)
     draw = ImageDraw.Draw(image); px = W / w
     people = f['residents_' + scenario]; support = f['local_support_share_' + scenario]

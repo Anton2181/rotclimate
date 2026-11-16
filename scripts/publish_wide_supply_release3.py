@@ -6,7 +6,7 @@ from PIL import Image, ImageDraw
 
 ROOT = Path(__file__).resolve().parents[1]; sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
 from settlement_locations_earth import sha, write
-from publish_settlement_release2 import render, radius, SCALE
+from publish_settlement_release2 import render, radius, SCALE, main_roads
 
 OUT = ROOT / 'output/settlement_wide_supply_20261113'; R3 = ROOT / 'output/settlement_release3_20261113'
 DATA = ROOT / 'atlases/earth_fit/data'; COLORS = {'self': '#3f8f5f', 'imports': '#3f78b4', 'short': '#c8503a'}
@@ -64,7 +64,8 @@ def main():
         for option in towns['packets'][mode]['options']['reach_towns']:
             density = option['value'].split('_')[1]; key = f'{density}_x39'; s = c[key]
             g = dict(f); g['local_support_share_' + density] = z[key + '_fed_share']
-            file = DATA / option['file']; render(mode, density, model['sites'], model['actors'], g, meta).save(file, lossless=True)
+            file = DATA / option['file']
+            render(mode, density, model['sites'], model['actors'], g, meta, roads=main_roads(f['land'].shape)).save(file, lossless=True)
             option['file_sha256'] = sha(file)
             sentence = (f"{s['self_sufficient_towns'] + s['fed_with_imports_towns']} of {s['towns']} towns (white centre) can be fed when grain may travel "
                         f"(39% of surplus marketed, the share that feeds Roman cities; see the grain supply map); " + (f"{s['short_towns']} of the largest stay short. " if s['short_towns'] else "none stay short. "))

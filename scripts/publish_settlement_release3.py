@@ -5,7 +5,8 @@ import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]; sys.path[:0] = [str(ROOT), str(ROOT / 'scripts')]
 from settlement_locations_earth import sha, write
-from publish_settlement_release2 import render
+from publish_settlement_release2 import render, main_roads
+ROADS_ITEM = dict(color='#a8382b', label='Red lines: the map’s drawn main roads (minor tracks end on them)')
 
 OUT = ROOT / 'output/settlement_release3_20261113'; DATA = ROOT / 'atlases/earth_fit/data'
 
@@ -26,7 +27,7 @@ def main():
         csv_file = target / mode / 'towns.csv'; shutil.copyfile(OUT / f'placed_{mode}_towns.csv', csv_file); options = []
         for scenario, label, role in (('central', 'sliding 100–500 people/ha', 'published method'), ('low', 'flat 100 people/ha', 'cautious alternative')):
             r = c['residents'][scenario]; file = target / mode / f'towns_{scenario}.webp'
-            render(mode, scenario, model['sites'], model['actors'], f, meta).save(file, lossless=True)
+            render(mode, scenario, model['sites'], model['actors'], f, meta, roads=main_roads(f['land'].shape)).save(file, lossless=True)
             note = (f"Release 3: town POSITIONS and SIZES both tested on Earth. Positions: the earlier town rule plus a pull towards the old "
                 f"heartlands (800 km) beat the earlier rule in {test['quadrant_wins']} of 8 regions of Han China and the Roman Empire, with the setting chosen on the other "
                 f"pool; {c['placement']['moved']} of {c['placement']['unmarked']} unmarked towns moved, every marked place stays, and the track network is rebuilt. "
@@ -40,7 +41,7 @@ def main():
                 items=[dict(color='#59636b', label='Circle area ∝ town residents (1,000 · 10,000 · 100,000 → radius 2.0 · 3.6 · 8.7 px)'),
                        dict(color='#1d1d1d', label='Dark outline: marked campaign place; white: proposed town'),
                        dict(color='#ffffff', label='White centre: fed by one day’s local grain collection'),
-                       dict(color='#8a7458', label='Brown lines: rebuilt minor tracks'),
+                       dict(color='#8a7458', label='Brown lines: rebuilt minor tracks'), ROADS_ITEM,
                        dict(color='#cca985', label='Darker land: larger share of rural people moved to towns')],
                 caption='Positions and sizes are calibrated patterns; an individual proposed town is one draw, not a prediction.'))
         packets[mode] = dict(shape=list(f['land'].shape), parent_payload_sha256=old['payload_sha256'],
