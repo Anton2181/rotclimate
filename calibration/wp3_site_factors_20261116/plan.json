@@ -1,0 +1,9 @@
+{
+ "title": "WP3 site factors: river confluences (development screen on the Han and Roman pools; declared before any run)",
+ "date": "2026-11-16",
+ "inputs": "output/settlement_locations_20261110/{han,rome}_inputs.npz; river cells = water_km == 0; a confluence = a river cell with at least 3 river cells among its 8 neighbours (junction), dilated by one cell.",
+ "candidates": "Release-3 tiling (prior_tiling_sites with the history prior, count matched to the catalogue) with the history prior multiplied by (1 + k x confluence_within_R), k in {0 (release 3), 0.5, 1.0}, R = 15 km (Gaussian falloff).",
+ "metrics": "scripts/settlement_locations_earth.metrics: composite (F1 within 25 km, block-count rank, nearest-neighbour KS), F1, recall, precision.",
+ "rule": "A k passes the screen if the composite rises by at least 0.01 on BOTH pools. A pass would then need a declared test on an unseen pool (the reserved Buringh pool has positions) before any map change.",
+ "no_map_changes": "None from this screen."
+}
