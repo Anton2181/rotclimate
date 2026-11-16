@@ -1,0 +1,23 @@
+{
+ "date": "2026-11-16",
+ "status": "declared_before_any_value_was_read",
+ "pool": {
+  "source": "Parsons/Blanton Valley of Mexico regional survey, tDAR project 192, owner-supplied data/cache/valley_of_mexico/site-survey-data.xlsx (not redistributed)",
+  "exposure_before_declaration": "Column headers only (62 columns, incl. Period, North, East, Area, Population, PopMin, PopMax, Occ* flags) and the row count (2,052). No value has been read.",
+  "never_used": "No Mesoamerican site, area or population has entered any fit; the New World crop model (maize) was checked only against MapSPAM 2010 land use."
+ },
+ "allowed_minimal_reads_before_scoring": "The distinct values of Period (to pick the cohort label), and the minimum and maximum of North, East and Area (to confirm units). If they do not fit the declared conventions, stop and amend before any scoring.",
+ "cohort": {
+  "classic": "Rows whose Period label denotes the Classic (Teotihuacan) period, which spans AD 200. If the labels split the Classic into early and late parts, the early Classic is used. One record per SiteCode: its largest Area among cohort rows; rows without positive Area are dropped for the size test (kept for positions if coordinates exist).",
+  "towns": "Classic sites of at least 10 ha (positions secondary cohort; the size test uses the N largest).",
+  "surveyed_area": "Land cells within 3 km of any site of any period, inside the window."
+ },
+ "coordinates": "North/East as UTM zone 14N metres (WGS84 datum assumed; NAD27 shifts of ~200 m are below the 3 km cell).",
+ "window": "Earth grid centred 19.6 N, 98.95 W, 160 km x 180 km, at 3 km (positions) and 9 km (sizes), built as scripts/floodplains_blind.py inputs but from the New World Earth run output/maize_20261116/mexico_newworld/earth.npz (maize-only crop set) via polity.earth.EARTH_NPZ.",
+ "history_prior": "exp(-D/800 km), D = travel distance (population_cores.travel_distance, forest 2, sea 1, relief 1) to the New World cores declared here, all OUTSIDE the Basin of Mexico: San Lorenzo (17.75 N, 94.76 W; Olmec), San Jose Mogote (17.20 N, 96.75 W; Oaxaca), El Mirador (17.75 N, 89.92 W; Preclassic Maya).",
+ "test_P_positions": "As calibration/floodplains_blind_20261115 test_P: mean percentile of distinct Classic town cells (>= 10 ha) in the surveyed background for the release-3 field; pass if >= 0.55 AND release-3 10 km capture >= production capture - 0.05 (3 km grid).",
+ "test_S_sizes": "Published size model (M1 1.915 + 0.147 lnH, sigma 1.048, 1-1783 ha) on release-3 towns placed on the 9 km grid inside the surveyed area, five seeds (1, 7, 19, 43, 97); observed = the N largest Classic sites. Pass: mean KS <= 0.20 AND mean total-area ratio model/observed in [0.67, 1.50]. Hierarchy and capital terms are not applied (no marked places on Earth).",
+ "test_N_people": "Sum of the survey's Population estimate over Classic sites in the surveyed area vs the model's people (density x cell area) over the surveyed cells. Pass: ratio model/observed in [0.5, 2.0]. PopMin/PopMax reported.",
+ "reporting": "All three tests scored once and reported whatever the outcome; the pool is then marked spent in dataset_usage. No parameter is fitted on it.",
+ "outputs": "output/valley_of_mexico_blind_20261116/{inputs_*.npz (ignored), results.json}"
+}
