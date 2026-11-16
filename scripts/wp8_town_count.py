@@ -35,16 +35,19 @@ def score(d, towns):
 def main():
     OUT.mkdir(parents=True, exist_ok=True); res = {}
     for pool in ('han', 'rome'):
-        d = dict(np.load(IN / f'{pool}_inputs.npz')); real = d['real']; target = int(d['allowed'].ravel()[real].sum())
-        for beta in (0.7, 0.5, 0.3, 0.0):
+        d0 = dict(np.load(IN / f'{pool}_inputs.npz')); real = d0['real']; target = int(d0['allowed'].ravel()[real].sum())
+        cored = dict(d0); a = d0['allowed']; w = d0['density'] * d0['history']
+        cored['density'] = w * (d0['density'][a].sum() / max(w[a].sum(), 1e-12))          # amendment 1: history-weighted people
+        for variant, d in (('', d0), ('cored_', cored)):
+          for beta in (0.7, 0.5, 0.3, 0.0):
             lo, hi = 2e3, 1e6
             for _ in range(22):                       # bisection on seat_people for the catalogue count
                 sp = np.sqrt(lo * hi); n = len(place(d, beta, sp))
                 if n > target: lo = sp
                 else: hi = sp
             sp = np.sqrt(lo * hi); t = place(d, beta, sp); r = score(d, t); r.update(seat_people=float(sp), target=target)
-            res[f'{pool}_beta{beta}'] = r; print(pool, beta, json.dumps(r), flush=True)
-    sel = {b: float(np.mean([res[f'{p}_beta{b}']['deviance_per_record'] for p in ('han', 'rome')])) for b in (0.7, 0.5, 0.3, 0.0)}
+            res[f'{variant}{pool}_beta{beta}'] = r; print(variant + pool, beta, json.dumps(r), flush=True)
+    sel = {v + str(b): float(np.mean([res[f'{v}{p}_beta{b}']['deviance_per_record'] for p in ('han', 'rome')])) for v in ('', 'cored_') for b in (0.7, 0.5, 0.3, 0.0)}
     res['mean_deviance_per_record'] = sel; (OUT / 'results.json').write_text(json.dumps(res, indent=1) + '\n'); print(sel)
 
 
