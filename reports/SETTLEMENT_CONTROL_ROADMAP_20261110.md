@@ -14,7 +14,14 @@ request concentration screen is complete: 320 cases, 44 tests, independent
 conservation/density/metric checks; no variant survives its primary comparisons.
 See [URBAN_CONCENTRATION_20261116.md](URBAN_CONCENTRATION_20261116.md). Next is
 the declared source/selection eligibility audit, before another predictive fit.
-No new size/default/map adoption; no new exponent search. The proposal status
+The source/selection audit is now also independently reviewed: 1,388 cities,
+885 area records, 332 aggregate cells. Of 1,354 cities present in catalogue
+intervals at AD150, 492 lack an area; extent definitions mix and extent dates
+are not independently supplied as a table field. See
+[URBAN_DEVELOPMENT_EVIDENCE_20261116.md](URBAN_DEVELOPMENT_EVIDENCE_20261116.md).
+The next frozen stage is the exact-inhabited-basis province-blocked predictive
+pilot; prepare and commit support eligibility before fitting. No new
+size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.
 
 Current release: settlement release 4, published and hosted (v7 includes the

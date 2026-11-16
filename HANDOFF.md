@@ -1,3 +1,26 @@
+# Urban source audit complete — 16 November 2026 (climate parked)
+
+After pushing the negative concentration screen, continued to the declared
+source-selection audit. DONE and independently reviewed:1,388cities/885areas,
+332aggregatecells,2freshfiles exact;no new fit/scores.1354cities have catalogue
+intervals containingAD150;492lackarea(36.3%),862havearea,806remain after legacy
+20/30exclusion. Actual geographically filtered/corrected training664. Extents
+mix inhabited areas,walls,urban grids;AreasCSV has NO independent area-date
+field. City existence is not extent-date certification. Report:
+reports/URBAN_DEVELOPMENT_EVIDENCE_20261116.md;outputs/scripts same stem.
+
+NEXT is FROZEN calibration/urban_diagnosis_20261116/measurement_basis_pilot.json:
+source-sensitivity comparison on EXACT Inhabited area subset of the existing
+664row cohort,shared held-out targets,strict versus mixed training. First prepare
+and COMMIT support receipt before any fit:old province4folds,each strict test>=10,
+each inner train>=10 and fullrank M0/M1/M1C. Then all6fixed alternatives with
+outerprovince folds and innertrain-only OOF sigma;all24outerrows,pairedpoint
+errors,proper Gaussian log score and80/95coverage. No new parameter grid,source
+pool,clipping,density or map outputs. Do not change eligibility after seeing
+scores. Exact label is not date certification; report limits. No Buringh sizes
+or climate l. No unqualified urbanprimacy/demographic claims. Plan contains
+full metrics/reviewer/next-transfer gates. Earlier next-run entries are history.
+
 # Urban concentration screen complete — 16 November 2026 (climate parked)
 
 Owner's active direction remains settlement diagnosis/concentration first, climate
