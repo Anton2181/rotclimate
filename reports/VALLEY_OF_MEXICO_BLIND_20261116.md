@@ -1,5 +1,19 @@
 # Valley of Mexico blind test (WP6) — 16 November 2026
 
+> Later audit, 16 November: the selected Classic cohort's largest area is **76 ha**,
+> not 840 ha (the latter is an all-period maximum). Its largest population estimate
+> is 1,000; Teotihuacan's exact exclusion has not been independently established.
+> All 221 population estimates equal PopMax; the model ratio is 1.72 against that
+> upper estimate but 3.57 against PopMin. With no model town in the 9 km survey
+> proxy, the size distribution is **not evaluable**; this is not a measured KS
+> failure or demonstrated primacy deficit. Area-to-population estimation methods
+> are unconfirmed; the derived 18.4 people/ha is not independent density evidence.
+> Old World density readings are scenarios, not a fit to this Mexican population.
+> See [the audited diagnosis](URBAN_DIAGNOSIS_20261116.md) and
+> [the negative concentration screen](URBAN_CONCENTRATION_20261116.md).
+> The original scored report and interpretations below are retained as history;
+> the claims above supersede the corresponding statements below.
+
 Declared in `calibration/valley_of_mexico_blind_20261116/plan.json` before any value of the pool was read (headers only);
 amendment A1 after the declared minimal reads (period labels, coordinate and area ranges), before scoring. Scored once by
 `scripts/valley_of_mexico_blind.py`; the pool is now spent.

@@ -1,3 +1,34 @@
+# Urban concentration screen complete — 16 November 2026 (climate parked)
+
+Owner's active direction remains settlement diagnosis/concentration first, climate
+later. Latest work: reports/URBAN_CONCENTRATION_20261116.md; full320case outputs,
+independent review and plots in output/urban_concentration_20261116/. NO variant
+adopted: all nonidentity3km group means worsen source-CDF gap and paired log
+distance, both readings/families; all60Mesopotamian nonidentity3km draws worsen
+CDF gap. Larger maxima alone are misleading. Keep released settlement4/hostedv7
+and climate/defaults unchanged.
+
+Corrected supplied-site control also complete:119/27points, native AEQD geometry,
+20cases/26tests; report URBAN_GIVEN_SITES_20261116.md. Invalid affine first run
+preserved separately; amendment A1 disclosed.3km is primary(allHpositive),9km
+retains5Iraq/7Mexico zeroH points, not evidence of uninhabited settlements.
+
+Concentration implementation: polity/urban_concentration.py, scripts/
+urban_concentration_screen.py, review_urban_concentration_screen.py and plot script.
+Same requested urban-resident budget perbaseline/reading, bounded scalar allocation,
+no food-feasibility claim. Review320cases,80identitycontrols,44tests,3fresh numeric
+exports; maxbudgeterror5.82e-10people. Prior pinned files unchanged. Don't edit
+earlier pinned producers/components/tests merely to add later work.
+
+NEXT (declared development_evidence.json): source/selection audit of existing
+Roman catalogue area-availability, exact20/30 exclusions, estimate bases, dating
+fields and province folds; compare source versus actual training cohorts and the
+survey town thresholds. No fit/scores in that stage; no further exponent search.
+Then declare any source-aware predictive pilot before fitting; preserve separate
+town-status failure rather than hide it with conditional truncation. Reserved
+Buringh sizes and climate l unopened. Origin/food/labour rebuild and appropriate
+transfer still required before any map adoption. Earlier entries are historical.
+
 # Urban programme active — 16 November 2026 (climate parked by owner)
 
 Owner accepted the settlement diagnosis/concentration direction; return to climate

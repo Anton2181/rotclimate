@@ -1,5 +1,15 @@
 # Blind test on southern Mesopotamia (FloodPlains, AD 200): both tests fail — 15 November 2026
 
+> Later audit, 16 November: the original top-12 comparison mixes counts/coverage
+> with size shape; class 6 is right censored, without an observed 1,783 ha ceiling.
+> Supplying all 119 source town locations permits the unchanged rule to generate
+> 200+ ha towns. The complete size mismatch remains, and stronger fixed-request
+> concentration worsens it. See [the audited diagnosis](URBAN_DIAGNOSIS_20261116.md),
+> [the supplied-site control](URBAN_GIVEN_SITES_20261116.md), and
+> [the concentration screen](URBAN_CONCENTRATION_20261116.md).
+> Original results/interpretations below remain historical; they do not establish
+> a hard size cap or isolate a missing urban-concentration mechanism.
+
 Plan: `calibration/floodplains_blind_20261115/plan.json`, committed (ae9e2e36) after reading only the table's header and row
 count. Source: the FloodPlains Web GIS survey sites published with Marchetti et al., *J. Archaeol. Res.* 33 (2025) 117–158
 (CC-BY), file `docs/papers/1/data_stacked.csv` of the `bnza/archiraq` repository (owner-supplied; kept in the ignored cache).

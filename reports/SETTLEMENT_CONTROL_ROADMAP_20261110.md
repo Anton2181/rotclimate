@@ -7,6 +7,16 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
+Owner has since accepted the urban diagnosis/concentration workstream, with
+climate postponed. Exact old-source replays, current-release diagnosis and the
+native-projection supplied-site control are reviewed. The declared fixed urban-
+request concentration screen is complete: 320 cases, 44 tests, independent
+conservation/density/metric checks; no variant survives its primary comparisons.
+See [URBAN_CONCENTRATION_20261116.md](URBAN_CONCENTRATION_20261116.md). Next is
+the declared source/selection eligibility audit, before another predictive fit.
+No new size/default/map adoption; no new exponent search. The proposal status
+in the strategy-review paragraphs below is historical for this chosen direction.
+
 Current release: settlement release 4, published and hosted (v7 includes the
 main-road display fix). Confluence placement passed its declared prospective
 position test. Published hierarchy, supply and affected reach/trade stages were
@@ -27,8 +37,10 @@ small pilot against the existing core prior; road testing is a separate candidat
 workstream. These remain proposals, not newly adopted work packages.
 
 The archived production town-count excess is not the current release's count
-rule. Mexico's area/density definitions and omitted Teotihuacan differ from the
-Old World city-area calibration. Keep those distinctions and the source-exposure
+rule. Mexico's area/density definitions differ from the Old World city-area
+calibration; Teotihuacan's exact survey exclusion is not independently confirmed.
+The selected cohort has no population estimate above1,000, so cannot test major-
+city primacy. Keep those distinctions and the source-exposure
 register explicit before another fit or prospective test. S3–S5, empirical
 occupancy/roles, rural/mobile/nonstate communities and complete resources/work
 remain open. The latest handoff and current chain spec control resumption.
