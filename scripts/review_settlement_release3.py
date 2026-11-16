@@ -17,20 +17,19 @@ T = ROOT / 'output/settlement_placement_iteration_20261113/family_b'; F3 = ROOT 
 sha = lambda p: hashlib.sha256(Path(p).read_bytes()).hexdigest(); problems = []
 
 
-def tiling(density, land, water_km, road, elev, cell, allowed, aridity, prior, seat, marked=(), dry=settle.DRY_WATER_KM):
+def tiling(density, land, water_km, road, elev, cell, allowed, aridity, prior, seat, marked=(), dry=settle.DRY_WATER_KM, conf=False):
     coast = ndi.distance_transform_edt(land) * cell
     score, d = settle.site_score(density, land, water_km, coast, road, elev, cell)
     q = ndi.gaussian_filter(np.random.default_rng(1).standard_normal(land.shape), 1.5); score = score * np.exp(.25 * q / q.std())
     ok = land & (d >= 2.) & allowed
     near = np.minimum(np.nan_to_num(water_km, nan=1e9), coast); ok &= (aridity >= .35) | (near <= dry)
     k_conf = float(__import__('os').environ.get('ROTCLIMATE_CONFLUENCE_K', '0') or 0)
-    if prior is not None and k_conf > 0:
+    if conf and prior is not None and k_conf > 0:
         # independent re-implementation of the WP3 confluence factor: river cells, neighbour counts by shifts, junctions dilated
         r = np.nan_to_num(water_km, nan=1e9) <= 1e-6; pad = np.pad(r, 1).astype(int); h, w = r.shape
         nb = sum(pad[1 + dy:1 + dy + h, 1 + dx:1 + dx + w] for dy in (-1, 0, 1) for dx in (-1, 0, 1) if dy or dx)
-        j = r & (nb >= 3); jp = np.pad(j, 1); j = np.zeros_like(j)
-        for dy in (-1, 0, 1):
-            for dx in (-1, 0, 1): j |= jp[1 + dy:1 + dy + h, 1 + dx:1 + dx + w]
+        j = r & (nb >= 3); jp = np.pad(j, 1); j = j.copy()
+        for dy, dx in ((-1, 0), (1, 0), (0, -1), (0, 1)): j |= jp[1 + dy:1 + dy + h, 1 + dx:1 + dx + w]    # 4-neighbour dilation, as screened
         prior = prior * (1. + k_conf * (np.exp(-(ndi.distance_transform_edt(~j) * cell / 15.) ** 2) if j.any() else 0.))
     p = np.where(ok, prior, 1.) if prior is not None else np.ones(land.shape)
     rad = np.minimum(np.sqrt(seat / 14.1 * (14.1 / np.maximum(d * p, 1e-9)) ** .7 / np.pi), 60.) / cell * 1.6
@@ -106,7 +105,7 @@ for mode in ('raw', 'corrected'):
     sys.path.insert(0, str(ROOT / 'scripts')); from settlement_fantasy_inputs import world   # water, aridity, relief inputs
     w = world(mode); c = FZ['climates'][mode]['placement']
     marked = [tuple(int(v) for v in m) for m in f['marked_cells']]
-    towns = tiling(f['density'], f['land'], w['water_km'], w['road'], w['elev'], float(f['cell_km']), f['claimed'], w['aridity'], f['prior'], c['seat_people'], marked, w['dry_water_km'])
+    towns = tiling(f['density'], f['land'], w['water_km'], w['road'], w['elev'], float(f['cell_km']), f['claimed'], w['aridity'], f['prior'], c['seat_people'], marked, w['dry_water_km'], conf=True)
     new = {(s['row'], s['column']) for s in sites if not s['marked']}
     if {tuple(t) for t in towns} != new or len(towns) != c['unmarked']: problems.append(mode + ' fantasy positions')
     if {(s['row'], s['column']) for s in sites if s['marked']} != set(marked): problems.append(mode + ' marked places moved')
