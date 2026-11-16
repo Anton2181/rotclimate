@@ -1,4 +1,48 @@
-# Earth annual controls exact; calendar recovery next — 16 November 2026
+# Earth source calendars recovered and reviewed; component work next — 16 November 2026
+
+Latest report: reports/URBAN_EARTH_CALENDARS_20261116.md. Output
+output/urban_earth_calendars_20261116/{qualification,results,review,presentation}.json,
+calendars.npz,monthly_energy.csv,timing.png. Continued AFTER pushing the annual
+audit. Original crop engine timing recovered on56378active sources/54324unique
+5' pixels;53265positive and3113zero production sources retained. All108648
+wheat/barley energies reproduce the original float32 saves BITEXACT; basin
+float64 capacity BITEXACT. Independent reviewer re-read36derived monthly fields,
+re-enumerated windows WITHOUT crop_yield,and reproduced all energies/masks.
+Original calendar source and annual/fantasy controls unchanged. No jobs running.
+
+All455basin sources use barley (no ties/crop mismatch),harvest boundaryApril;
+no selected basin growing window intersects saved catchment high-flow bins.
+This is model consistency,NOT observed flood/harvest validation.285cells have
+both positive base/basin components;41have DIFFERENT harvest boundaries.
+Those41contain7.2748%of basin energy/0.2291%of world potential. Keep both
+harvest pulses with ONE physical population/workforce/land/grain ledger.
+
+NEW FOUND DEPENDENCY: annual blended-yield work charges0.36of arable area,
+while basin energy represents0.95cropping on its fraction. Separate physical
+task areas imply1.066–2.573times the old task area on285both-positive cells,
+median1.721;at full potential the extra listed barley tasks are126Mhours.
+READ-ONLY diagnostic: no work/grain/food totals or shares changed. Current
+timing figure assigns EXISTING annual-work-limited grain to recovered dates;
+it is NOT a seasonal food/dispatch/store calculation. All gates/adoptFalse.
+
+NEXT FROZEN seasonal_transfer_component_work.json: paired annual diagnostic
+A=exact original mixed-work control,B=explicit physical component areas/tasks,
+ONE shared0.4rural workforce,600h annual and30days×8h per harvest bin;sum
+reaping requests on shared boundaries and limit all component activities with
+one common retention. Positive components only;zero-energy sources explicit.
+Keep actual population/city requests/grain potential/routes unchanged. Compare
+at EXISTING central/low shares and270haul limit;no share refit/optimization.
+Only after independent review declare a seasonal food pilot/factorized global
+recruitment adapter. Don't edit the protected fantasy module or hide distinct
+dates/copied workers to fit its one-boundary/sparse-recruitment interface.
+Climate sidequest archived;reserved pools/Buringh sizes/climate l unopened.
+
+All calendar science/producer files frozen now;do not change a producer and
+reuse its output.9.5MBprepared weather ignored;1.6MBcalendar packet tracked.
+Producer refuses to overwrite completed results;use isolated OUT for a fresh
+replay and redirect review/render to it. See report. Prior entries are history.
+
+# Previous completed annual input/control audit — 16 November 2026
 
 Latest completed stage: reports/URBAN_SEASONAL_TRANSFER_20261116.md and
 output/urban_seasonal_transfer_20261116/results.json. Six annual Earth cases

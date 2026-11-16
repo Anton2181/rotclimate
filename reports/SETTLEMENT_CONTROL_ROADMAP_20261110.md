@@ -7,7 +7,17 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
-**Latest:** Earth seasonal transfer readiness is audited. All six annual supply
+**Latest:** Original Earth crop calendars are recovered and independently
+reviewed for all53265positive sources,with108648stored crop energies bit-exact.
+No flood-window overlap/crop mismatch was found;41mixed cells have different
+component dates. The audit exposed a component-work accounting dependency:
+annual blended work charges0.36arable area while basin energy represents0.95
+cropping. Next is the frozen paired annual mixed-work/physical-component-work
+diagnostic before a seasonal food pilot. See
+[URBAN_EARTH_CALENDARS_20261116.md](URBAN_EARTH_CALENDARS_20261116.md).
+No food forecast,share refit or atlas/default adoption follows from timing.
+
+Earth seasonal transfer readiness is audited. All six annual supply
 cases replay byte for byte after restoring the protocol's1981–2010 winds; the
 reader fallback's1991–2020 mismatch and its complete failed outputs remain
 preserved. Independent source/work/demand and100primary flow-setting checks
