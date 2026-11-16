@@ -40,8 +40,16 @@ The frozen five-alternative input-refresh predictive pilot is now complete:
 review. Same-recipe refreshed inputs reduce MAE2.7–2.9% and improve log score
 in every fold; Egypt remains underpredicted. See
 [URBAN_POPULATION_REFRESH_20261116.md](URBAN_POPULATION_REFRESH_20261116.md).
-Next is the declared actual-fantasy-input equivalence/full-hierarchy readiness
-audit before a separately declared full-pipeline comparison and transfer gate.
+Actual fantasy input and hierarchy readiness audit is now reviewed: population
+packets reproduce, old source validation has global scatter/mean and cross-fold
+centre-label leakage risks. The paired joint trial repairs isolation in both
+alternatives. Refreshed H improves empirical CRPS1.08% on all664/3.21% strict153;
+KS worsens slightly. See [URBAN_HIERARCHY_REFRESH_20261116.md](URBAN_HIERARCHY_REFRESH_20261116.md).
+Next is the frozen full-data fit and isolated candidate application on unchanged
+released sites, with exact legacy controls and explicit annual-ledger limits.
+Seasonal origin/food/labour, full affected-chain and appropriate transfer gates
+still precede adoption. No published population/climate change is needed for
+the existing zero-qualifying-cell fantasy floodplain port.
 No new
 size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.

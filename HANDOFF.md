@@ -1,3 +1,45 @@
+# Joint hierarchy refresh trial complete — 16 November 2026 (climate parked)
+
+Continued through integration audit AND joint hierarchy trial after8ede6df38.
+Readiness declaration8ede;completed source/publishedcontrols,report
+URBAN_INTEGRATION_READINESS_20261116.md,outputs urban_integration_readiness.
+Bothpublished463×1000populations EXACTfromharvest;releasedH/areas exact atCSV
+precision(.1person/.01ha),unroundedtotalareasexact.151residualselection centres,
+19capitalshifts,121lore-ranked,3globaltopslots. Raw1034/corrected1053sites fixed.
+Fantasyfloodplainport26basins each,ZEROqualifyingcells:don'tchangeclimate/pop.
+
+FOUND oldvalidation scope issues: globalsigma uses allouterresponses;training
+OOFmeans canincludeoutertestresponses;19/95centreedges crossfold,trainingratios
+couldreadheldoutcentrearea. Preserve old gatefalse/owneradoption;don'trelabel.
+Source664/28caps/95edges,76closedtestedges(29/24/12/11);trainclosed47/66/70/83.
+
+NewJOINTtrial declared3b08f56ab (hierarchy_refresh_trial.json)beforefits. COMPLETE
+andindependently reviewed:8outerfits/24inner,560gridlosses,2five-seed664ensembles,
+all664+strict153area scores,76closedheldoutpairs,6356CSVcells,8freshfilesexact,
+4meaningfullabel-isolation/pairclosure/residualmultiset/CRPStests. Newcomponent
+polity/urban_hierarchy_trial.py;producer/reviewer/plot scripts same stem.
+Report reports/URBAN_HIERARCHY_REFRESH_20261116.md;outputs urban_hierarchy_refresh.
+
+RESULTmodestpositive: same common repairedprotocol,refreshedH CRPS improves1.08%
+all664/3.21%strict153;medianforecastMAE1.12/2.93%. PrimaryCRPSslightlyworsefold0;
+areaKSmean.0536→.0551(slightlyworse),totalarearatio1.0399→1.0332. Closedpair
+exceedshare9.21→8.95%vs6.58%source;medianratio.16806→.16765vs.16770. All11Egypt
+strict targets STILLunderpredicted. Selectedphi/c identicalold/newbyfold:
+(0,1.1),(1,.9),(.75,.6),(1,.6). NO full-data mapfit/adoption. StandaloneGaussian
+andjointscores aredifferent estimands;don'tcompareCRPSnumericvaluestoNLL.
+
+NEXT FROZEN hierarchy_candidate_build.json: finalsourcefit(all664training now,
+4foldOOFselectionmeans/RMSsigma,all95pairs,70existinglosses,finalOLScoeffs),then
+isolated application on SAMEpublishedsites/population,with exactunchanged
+released-model control BEFOREinterpretingcandidate. Rebuild own/wider people
+andlegacyannualcerealledgers,bothreadings. Candidatepreviewonly;metadata
+gate.passed=False/adopt=False;runtime developmentguardadapter explicitlyallowed
+inplan,canonicalfilesimmutable. ControlCSV/JSON/fieldsNPZ identities required;
+missingcache reconstruction frompublished packets,NOclimate rerun/placement.
+Fullseasonalfiniteorigin/food/labour/supply/staff/reach/transfer remainrequired
+beforeadoption. Source28capitalcentres vsfantasy151marked assumption disclosed.
+NoBuringhsizes/climate l. EarlierNEXTentries belowhistory.
+
 # Controlled H-input predictive refresh complete — 16 November 2026
 
 Continued AFTER exact-replay push through declared predictive refresh. Plan
