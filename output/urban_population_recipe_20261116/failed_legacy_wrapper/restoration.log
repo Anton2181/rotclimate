@@ -1,0 +1,20 @@
+candidate land
+qualifying cells 1275
+climate (672, 1644) read (6s)
+rivers and relief (10s)
+Traceback (most recent call last):
+  File "/workspace/rotclimate/scripts/restore_urban_population_inputs.py", line 70, in <module>
+    if __name__=='__main__':main()
+                            ^^^^^^
+  File "/workspace/rotclimate/scripts/restore_urban_population_inputs.py", line 52, in main
+    F.main()
+  File "/workspace/rotclimate/scripts/floodplain_earth.py", line 93, in main
+    sys.argv = ['land_people_earth.py', '--out', str(GRID)]; L.main()
+                                                             ^^^^^^^^
+  File "/workspace/rotclimate/scripts/land_people_earth.py", line 292, in main
+    full, land, irr, arable, lat, lon = compute(out, margins, a.arable, a.irrigation, extra or None, old_world=not a.new_world)
+                                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/workspace/rotclimate/scripts/land_people_earth.py", line 247, in compute
+    res, names = analyse(T[:, land], P[:, land], LAT[land], TILT, WS_DAY, irr[land], arable[land], D[:, land],
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: main.<locals>.analyse() got an unexpected keyword argument 'extra_crops'
