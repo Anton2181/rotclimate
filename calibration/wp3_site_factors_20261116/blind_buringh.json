@@ -1,0 +1,12 @@
+{
+ "title": "WP3 confluence factor: blind position test on the Buringh pool (declared before any value of the pool is read)",
+ "date": "2026-11-16",
+ "pool": "data/cache/buringh2021/buringh.tab (Buringh 2021, CC0), reserved after reading the header and row count only.",
+ "allowed_minimal_reads_before_scoring": "The distinct values of 'year' and of 'nature of estimate', and the minimum and maximum of latitude and longitude. If they do not fit the conventions below, stop and amend before any scoring.",
+ "cohort": "Cities with a population value at year 1300 that is NOT marked as imputed (the 'nature of estimate' value for a source-based estimate; if no such distinction exists, all values are used and this is reported), and at least 5,000 inhabitants, inside the window. If 1300 is not a listed year, the nearest listed year to 1300.",
+ "window": "Earth grid centred 49.0 N, 6.0 E, 1,400 km x 1,000 km (France, the Low Countries, western Germany, northern Italy's edge), 9 km cells as the development pools, built like scripts/settlement_locations_earth.py prepare (WorldClim, the Old World Earth people run, Natural Earth rivers, history exp(-D/800) from the cradles + Rome cores); no roads (medieval roads unknown); allowed = land.",
+ "models": "Release-3 tiling (history prior) with the prior x (1 + k x confluence within 15 km), k = 0 and k = 1.0 (the screened value), count matched to the cohort's count by bisection on seat_people.",
+ "metrics": "scripts/settlement_locations_earth.metrics against the cohort cities: composite, F1, recall, precision, block rank, NN KS.",
+ "pass": "composite(k=1) - composite(k=0) >= 0.01. Scored once; the pool's position use is then spent (its sizes stay reserved).",
+ "map_change_if_pass": "The confluence factor joins the release-3 site prior on the map through the chain runner (declared separately)."
+}

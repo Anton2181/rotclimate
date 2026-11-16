@@ -5,5 +5,6 @@
  "candidates": "Release-3 tiling (prior_tiling_sites with the history prior, count matched to the catalogue) with the history prior multiplied by (1 + k x confluence_within_R), k in {0 (release 3), 0.5, 1.0}, R = 15 km (Gaussian falloff).",
  "metrics": "scripts/settlement_locations_earth.metrics: composite (F1 within 25 km, block-count rank, nearest-neighbour KS), F1, recall, precision.",
  "rule": "A k passes the screen if the composite rises by at least 0.01 on BOTH pools. A pass would then need a declared test on an unseen pool (the reserved Buringh pool has positions) before any map change.",
- "no_map_changes": "None from this screen."
+ "no_map_changes": "None from this screen.",
+ "screen_result": "k 0.5: composite Han +0.005, Rome +0.014 (fail, Han); k 1.0: Han +0.019, Rome +0.012: PASS. The gain is mostly spacing (nearest-neighbour KS); F1 within 25 km Han 0.579 -> 0.587, Rome 0.470 -> 0.468."
 }
