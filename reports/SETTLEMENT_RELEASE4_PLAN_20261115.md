@@ -97,3 +97,6 @@ identical to the published outputs.
   inventory (polity/administrative_hierarchy.py), not from a model rule, so there is no model seat choice to test.
 - 16 Nov: town count vs density (reports/TOWN_COUNT_DENSITY_20261116.md): the model over-places towns 2-7x in the densest
   blocks. Proposed WP8 density-saturating count; blocked on a new blind pool.
+- 16 Nov: WP8 closed without change: the dense-block over-count belonged to the archived production baseline; the published
+  release-3 tiling (history-weighted) already counts towns as well as a history-weighted people field. Next: site factors (WP3)
+  with Itiner-e (re-downloaded), and sizes/primacy; the Buringh pool stays reserved for a future size or position test.

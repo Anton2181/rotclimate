@@ -43,3 +43,12 @@ Placement exponent (seats ~ people^beta area^(1-beta)), totals matched to each c
 beta 0.3 fits both pools better (mean deviance -3.5 %) but Han's densest blocks stay ~3x over-placed even at beta 0: the declared
 bar (densest decile within 0.5-2x on both pools) is not met, so nothing is adopted and the Buringh pool stays unread. The
 remaining over-count is in the people field (the model's density in Han's densest blocks), which is the next thing to check.
+
+## Amendment 1: the people field, and what the published map already does
+
+Han census by commandery (Zheng & Wu, figshare 30518417): in the model's densest decile of commanderies the model holds 4.6x the
+census people (26.8 vs 5.8 per km2: the southern rice lands, a thin frontier in AD 2); in the census-dense decile 0.42x. Weighting
+the people field by the history term (exp(-D/800 km) from the old cores) fixes the block counts: deviance Han 1.008, Rome 1.319
+(plain 1.748, 1.771), densest decile 0.59-0.60. **The published release-3 tiling already does this** (it multiplies the catchment
+density by the same prior): Han 0.996, Rome 1.322. So the 2-7x over-count measured above is a property of the old production
+baseline, not of the map. **No change.** Both blind size failures are about town sizes and primacy, not counts.
