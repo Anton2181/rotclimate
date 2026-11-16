@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
-**Latest:** Exact-energy calendar sensitivity is independently reviewed.
+**Latest:** The read-only evidence/buffer audit is complete. Existing modern
+calendar/conditional phenology/FAO-stage/reserve evidence does not qualify
+ancient dates or universal storage/loss settings;negative chilling findings
+remain. Every baseline exporting origin has recorded peak stock above a
+hypothetical quarter-year commercial capacity;this is a potential-binding
+diagnostic,not an export-loss forecast. See
+[URBAN_EVIDENCE_BUFFERS_20261116.md](URBAN_EVIDENCE_BUFFERS_20261116.md).
+Next frozen stage:loss{5%,0}×commercialcapacity{365,90}days of BASELINE
+annual marketed grain,6newcases+exact original controls,first-best dates and
+all work/grain/requests/shares/routes fixed. No refit or adoption.
+
+Exact-energy calendar sensitivity is independently reviewed.
 67.581%of potential has multiple equal-energy maturity boundaries. Two declared
 earliest/latest recipes change aggregate meals by at most0.018604pp,but local
 city fractions by up to12.7824pp. Neither recipe bounds network outcomes;

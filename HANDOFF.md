@@ -1,4 +1,60 @@
-# Exact-energy calendar sensitivity reviewed; evidence/buffer audit next — 16 November 2026
+# Evidence/buffer audit complete; commercial-store/loss factorial next — 16 November 2026
+
+Latest report reports/URBAN_EVIDENCE_BUFFERS_20261116.md and
+output/urban_evidence_buffers_20261116/qualification.json. Completed AFTER
+pushing exact-energy timing stageeba2c96f3. READ-ONLY:6source/interface contracts,
+6baseline peak vectors reconstructed EXACT,0food-kernel reruns,0raw Sacks
+record reads,0new geographic intersections,0phenology re-scoring. No jobs running.
+
+Evidence bridge:modern calendars constrain duration/context,not ancient dates.
+Old cereal clock predicts physiological maturity GIVEN sowing;heat-only28.56d
+conditional evaluation error vs51.99threshold,trainedchilling68.06d/2nonmaturity
+failures. Its negative adoption and already-scored status remain;not a new
+evaluation. FAO56 supplied-stage rows do not identify ancient Nile barley dates.
+Reserve algebra gives no universal200ADcapacity/loss. No automatic calendar/
+phenology substitution,share fit or atlas/default adoption from these facts.
+
+Baseline store capacity / SAME-TIME peak / SUM of individual peaks (MgrainPY):
+centralrural53.029/35.592/52.757,export30.444/18.484/27.944,town2.064/.800/.801;
+lowrural57.343/38.462/57.022,export13.203/8.048/12.119,town1.000/.508/.509.
+These are grain-energy scenario quantities,not people or observed granaries.
+Never conflate/add class peak statistics as a system simultaneous peak.
+Commercial median peak=11/12capacity. ALL45453central/45442low actually
+exporting origins exceed hypothetical90/365annual-market capacity at their
+RECORDED peaks,associated with100%of existing departures. This is potential
+binding,NOT100%lost exports/meals;no changed-capacity path has been run.
+
+NEXT FROZEN seasonal_transfer_storage_loss_factorial.json:
+originalFIRST-BEST calendars and B600h fixed requests/work/grain/shares/routes.
+2x2loss{.05,0} × commercialcapacity{365,90}days of ORIGINALBASELINE annual
+marketed energy;existing.05/365is control,only3newcombos×2densities=6newcases.
+Referencecapacity saved separately for central/low and fixed ACROSS loss levels;
+do NOT resize stores to each new case's marketed energy. Baseline-zero-capacity
+origins keep0even ifzero loss makes them newly export-eligible. Rural365d and
+town90d capacities unchanged. Recompute overflow/eligibility undereachloss;
+dispatch RULE remains own-case marketed annual/12 withsame routeavailability.
+
+New isolated parameterized adapter MUST reproduce ALL70original monthly food
+arrays EXACT before interpretation;don't edit frozen models/caches. Zero loss
+makes old analytic1/(1-decay)invalid:require supported original-tolerance
+periodic method and explicit smallest repeating-stock/zero-loss controls;
+nofree inherited food/no tolerance relaxation. Independent stock/routes/grain
+ledger for all6newcases. No assumed monotonic city gain or selecting best
+default. No storage/loss counterfactual has been run yet.
+
+Current timing result remains:67.581%potential has exact date ambiguity;
+two recipes change global meals<=.018604pp but individual cities<=12.7824pp,
+and do NOT bound outcomes. Original monthlycentral92.4578%/low93.5758%still
+reference;actual occupancy/demography unchanged,all-rural/all-city mealsfalse.
+All old sources/numeric/atlas identities protected;no new evidence/validation,
+climate run or reserved pools. Buringh sizes/climate l unopened,sidequest archived.
+
+Audit scripts audit_urban_evidence_buffers.py then seal_urban_evidence_buffers.py;
+completed audit refuses overwrite,use isolated OUT for fresh read-only replay.
+Science code/results from earlier stages remain frozen. Prior entries below
+are history.
+
+# Previous completed exact-energy calendar sensitivity — 16 November 2026
 
 Latest report reports/URBAN_CALENDAR_SENSITIVITY_20261116.md and output
 output/urban_calendar_sensitivity_20261116/qualification.json. Catalogue,
