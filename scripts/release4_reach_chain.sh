@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+# Release 4: control v2 / v2.1 on the release-4 supply-fed staffing (placements installed from output/settlement_release4_20261116/release3)
+set -euo pipefail
+cd "$(dirname "$0")/.."
+export ROTCLIMATE_RELEASE3_DIR=output/settlement_release4_20261116/release3
+.venv/bin/python -I scripts/run_on_release3.py scripts/build_control_v2.py "output/settlement_fertility_20261106=>output/settlement_release4_20261116/reach/settlement_supplyfed" "control_v2_20261107=>control_v2_release4_20261116"
+.venv/bin/python -I scripts/run_on_release3.py scripts/build_control_v21.py "output/settlement_fertility_20261106=>output/settlement_release4_20261116/reach/settlement_supplyfed" "control_v21_20261107=>control_v21_release4_20261116" "control_v2_20261107=>control_v2_release4_20261116"
+echo CHAIN-DONE
