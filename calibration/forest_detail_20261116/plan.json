@@ -21,5 +21,23 @@
   "G1": "M blind block RMSE <= B1's",
   "G2": "M blind block Spearman >= 0.30 and >= B1's + 0.10",
   "adopt": "G1 and G2: the map's forest layer becomes M with the map's own density and yield (raw and corrected), and stage 2 (sub-cell allocation by slope, wet valley floors, tree line, declared separately) builds on it. Otherwise the owner is told; a detailed layer could still be drawn as a scenario, labelled untested."
+ },
+ "amendment_1": {
+  "date": "2026-11-16",
+  "when": "after the first dev run, before any blind score",
+  "changes": [
+   "Spearman on block means rounded to 6 decimals: unrounded, floating-point noise broke the many ties of saturated potential (B1 and B2, the same map scaled, scored 0.665 and 0.580)",
+   "k grid extended to 0-0.45 step 0.05 below the declared 0.5-8: the dev fit sat on the lower edge (0.5)"
+  ],
+  "first_dev_run": {
+   "B2_F": 0.51,
+   "M_F": 0.53,
+   "M_k": 0.5,
+   "dev_rmse": {
+    "B1": 0.183,
+    "B2": 0.166,
+    "M": 0.167
+   }
+  }
  }
 }
