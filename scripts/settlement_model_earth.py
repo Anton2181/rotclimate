@@ -259,7 +259,8 @@ def core_field(scale_km):
 
 def sample_earth(field, lat, lon):
     """An Earth-run grid field at window cells, nearest cell, as polity.earth.earth_people samples the density."""
-    z = np.load(ROOT / "output/land_people/earth/earth.npz"); zl, zo = z["lat"], z["lon"]
+    from polity import earth as _E
+    z = np.load(_E.EARTH_NPZ); zl, zo = z["lat"], z["lon"]
     step = float(zl[0] - zl[1])
     r = (zl[0] + step / 2 - lat) / step - 0.5; c = (lon - (zo[0] - step / 2)) / step - 0.5
     return ndi.map_coordinates(np.asarray(field, float), [np.clip(r, 0, len(zl) - 1), np.clip(c, 0, len(zo) - 1)], order=0)

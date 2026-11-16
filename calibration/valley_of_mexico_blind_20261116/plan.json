@@ -19,5 +19,13 @@
  "test_S_sizes": "Published size model (M1 1.915 + 0.147 lnH, sigma 1.048, 1-1783 ha) on release-3 towns placed on the 9 km grid inside the surveyed area, five seeds (1, 7, 19, 43, 97); observed = the N largest Classic sites. Pass: mean KS <= 0.20 AND mean total-area ratio model/observed in [0.67, 1.50]. Hierarchy and capital terms are not applied (no marked places on Earth).",
  "test_N_people": "Sum of the survey's Population estimate over Classic sites in the surveyed area vs the model's people (density x cell area) over the surveyed cells. Pass: ratio model/observed in [0.5, 2.0]. PopMin/PopMax reported.",
  "reporting": "All three tests scored once and reported whatever the outcome; the pool is then marked spent in dataset_usage. No parameter is fitted on it.",
- "outputs": "output/valley_of_mexico_blind_20261116/{inputs_*.npz (ignored), results.json}"
+ "outputs": "output/valley_of_mexico_blind_20261116/{inputs_*.npz (ignored), results.json}",
+ "amendments": [
+  {
+   "id": "A1",
+   "made_after": "the declared minimal reads only (no scoring)",
+   "known": "Period labels: Aztec, Classic, Early Classic, Late Classic, Early/Middle/Late/Terminal Formative, Early/Late Toltec. North 2107.61-2210.85 and East 474.90-528.24 (stored as text), Area 0-840 (text; one empty).",
+   "change": "Cohort = rows labelled 'Classic' or 'Early Classic' (undifferentiated Classic is kept: survey regions differ in how they split the period; 'Late Classic' is after AD 200 and excluded); one record per SiteCode with its largest Area. North/East are UTM zone 14N in KILOMETRES (multiply by 1000). Values are parsed from text. Note: the largest area is 840 ha, so the city of Teotihuacan itself (~2,000 ha, mapped by the separate Teotihuacan Mapping Project) is likely not a row; the size test compares with the survey as it stands."
+  }
+ ]
 }

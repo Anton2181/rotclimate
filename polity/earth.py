@@ -72,13 +72,16 @@ def window(lat0, lon0, width_km, height_km, cell_km):
     return g
 
 
+EARTH_NPZ = ROOT / "output/land_people/earth/earth.npz"   # the Earth harvest run sampled by earth_people (New World tests point it elsewhere)
+
+
 def earth_people(lat, lon):
     """People per km2 (the Earth run's settlement base x the central
     occupation) and the herders' share of the food (grazing over cleared
     crops + grazing), with the share of the window the run covers."""
     from harvest.models import settlement_fields
     from rotclimate import biomes
-    z = np.load(ROOT / "output/land_people/earth/earth.npz")
+    z = np.load(EARTH_NPZ)
     biome = biomes.classify(np.nan_to_num(z["T_ann"]), np.nan_to_num(z["P_ann"]), z["land"])
     # distance to water from the distance-only irrigation rule (plan_D1 D2 gates "irr" by height above the river)
     irr_d = z["irr_distance"] if "irr_distance" in z.files else z["irr"]
