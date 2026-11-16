@@ -169,7 +169,7 @@ def irrigation(shape, gate=True):
     z = None
     if gate:
         from arable_slope_earth import etopo_window
-        z = etopo_window().astype(float)
+        z = etopo_window(dict(WINDOW)).astype(float)
         if z.shape != nav.shape:
             raise ValueError("ETOPO window does not match the river rasters")
         river = nav | stream
@@ -216,7 +216,11 @@ def arable_share(elev):
 
 def arable_from_slope(shape, fallback):
     """plan_D1 D1b: the D1 slope rule on this grid (scripts/arable_slope_earth.py); relief tiers where ETOPO has no land."""
-    a = np.load(ROOT / "data/cache/arable_slope_earth/arable_5m.npz")["arable"]
+    import arable_slope_earth as AS
+    path = ROOT / f"data/cache/arable_slope_earth/arable_5m{AS.suffix(WINDOW)}.npz"
+    if not path.exists():
+        AS.main(dict(WINDOW))                     # another window: build its slope arable share once
+    a = np.load(path)["arable"]
     if a.shape != shape:
         raise ValueError(f"slope arable grid {a.shape} does not match the window {shape}")
     return np.where(np.isfinite(a), a, fallback).astype(np.float32)

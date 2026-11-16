@@ -22,17 +22,26 @@ URL = ("https://www.ngdc.noaa.gov/thredds/dodsC/global/ETOPO2022/60s/60s_surface
        "ETOPO_2022_v1_60s_N90W180_surface.nc.dods")
 CACHE = ROOT / "data/cache/arable_slope_earth"
 WINDOW = dict(lat=(0.0, 56.0), lon=(-12.0, 125.0))
+DEFAULT_WINDOW = dict(WINDOW)
 DEG_M = 111320.0
 log = lambda *a: print(*a, flush=True)  # noqa: E731
 
 
-def etopo_window():
-    path = CACHE / "etopo60_window.npy"
+def suffix(window=None):
+    """'' for the default (Old World) window; a key for any other, so caches never mix."""
+    w = window or WINDOW
+    if w == DEFAULT_WINDOW: return ''
+    return '_' + '_'.join(f'{v:g}' for v in (*w['lat'], *w['lon']))
+
+
+def etopo_window(window=None):
+    W = window or WINDOW
+    path = CACHE / f"etopo60_window{suffix(W)}.npy"
     if path.exists():
         return np.load(path)
     CACHE.mkdir(parents=True, exist_ok=True)
-    i0, i1 = int(round((WINDOW["lat"][0] + 90) * 60)), int(round((WINDOW["lat"][1] + 90) * 60))
-    j0, j1 = int(round((WINDOW["lon"][0] + 180) * 60)), int(round((WINDOW["lon"][1] + 180) * 60))
+    i0, i1 = int(round((W["lat"][0] + 90) * 60)), int(round((W["lat"][1] + 90) * 60))
+    j0, j1 = int(round((W["lon"][0] + 180) * 60)), int(round((W["lon"][1] + 180) * 60))
     rows = []
     for a in range(i0, i1, 120):
         b = min(a + 120, i1)
@@ -47,8 +56,9 @@ def etopo_window():
     np.save(path, z); return z
 
 
-def main():
+def main(window=None):
     t0 = time.time()
+    if window: WINDOW.update(window)
     z = etopo_window().astype(float); log("ETOPO window", z.shape, f"({time.time() - t0:.0f}s)")
     m = json.loads((ROOT / "data/arable_slope_model.json").read_text())["params"]
     ny, nx = z.shape
@@ -61,7 +71,7 @@ def main():
     blk = lambda v: v.reshape(ny // 5, 5, nx // 5, 5).sum((1, 3))
     n = blk(land.astype(float))
     arable = np.where(n > 0, blk(np.where(land, a, 0.0)) / np.maximum(n, 1), np.nan).astype(np.float32)
-    np.savez_compressed(CACHE / "arable_5m.npz", arable=arable, land_subcells=n.astype(np.uint8),
+    np.savez_compressed(CACHE / f"arable_5m{suffix()}.npz", arable=arable, land_subcells=n.astype(np.uint8),
                         params=json.dumps(m))
     log("arable 5'", arable.shape, "land-cell mean", float(np.nanmean(arable)), f"({time.time() - t0:.0f}s)")
 
