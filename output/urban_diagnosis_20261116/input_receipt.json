@@ -1,0 +1,49 @@
+{
+  "status": "both_spent_transfer_baselines_replayed",
+  "preparer_sha256": "04e0a04dd9f74036616432380188a1d30ff433c805b07fea82cd9ad33edff82c",
+  "plan_sha256": "fdcf8bf9869d5d5cc95137217d9fbbfdfe742876c9b2d77c15ac338154e0c05f",
+  "inputs": {
+    "calibration/urban_diagnosis_20261116/plan.json": "fdcf8bf9869d5d5cc95137217d9fbbfdfe742876c9b2d77c15ac338154e0c05f",
+    "data/cache/floodplains_archiraq/archiraq-master.zip": "16b546ac6a4756a72225bf8e9ebe2bd8669b66dd3c8c3d60aebfcd66ab909c1c",
+    "data/cache/valley_of_mexico/site-survey-data.xlsx": "ed3720d8387a69c474c6e373250821a17f2d2518671eb9dfdc33e48781a58b88",
+    "output/land_people/earth_restored_20261113/earth.npz": "341d20568fd6986aa3f0fbddcecd8e0412e2060b857350bacbcb673db4174a7b",
+    "output/urban_diagnosis_20261116/restored_mexico_newworld/earth.npz": "726acb0924b732f214552e4c0d5ec5a7597974fae995653860a988676d3d8742",
+    "output/urban_diagnosis_20261116/archived_replay/floodplains/results.json": "aefb27d8d714560a3751ac4dc1374d375de997fbb1e86376feb4bd4e2db0cc43",
+    "output/urban_diagnosis_20261116/archived_replay/floodplains/model.npz": "5d89d0cdff0eb9831368fbf2e0d5902b68b4433a6b7ef86200fdfdf592a1482b",
+    "output/urban_diagnosis_20261116/archived_replay/floodplains/inputs_3km.npz": "1fe6899cda6345ee5c9171af24d499a7048d00c7b6e734d63fa934256f5650f1",
+    "output/urban_diagnosis_20261116/archived_replay/floodplains/inputs_9km.npz": "62f2a72de2bf53ebb696ede5dc521b997707ca6e46f88e0ca6941af54c2ea219",
+    "scripts/floodplains_blind.py": "26f544c134e713d6eac1f0ebf451dfb66d3435782bb0d290b68f3b4e22823924",
+    "output/urban_diagnosis_20261116/archived_replay/mexico/results.json": "f6a3db51f9e40d402b1789b1abec286bdc601df846c153fec5494cf9ae7dca70",
+    "output/urban_diagnosis_20261116/archived_replay/mexico/model.npz": "7a97da403476bb571b6b4bacbdbb933ba8d01c443a7029df4a2be832dccc97ba",
+    "output/urban_diagnosis_20261116/archived_replay/mexico/inputs_3km.npz": "eab1034080825d9fdf979f7d245177005a68aa0ee45018ad9d26c7d87883cafa",
+    "output/urban_diagnosis_20261116/archived_replay/mexico/inputs_9km.npz": "e50a9c396a93f25c0f36f9158322e69d0457bcc0bcfc14a16c435cead46c76b3",
+    "scripts/valley_of_mexico_blind.py": "ef095680f971e2040728897abe71e28500974d3d6c7754f480a0b8f38df956e2"
+  },
+  "checks": {
+    "floodplains": {
+      "numerical_grids_exact": true,
+      "model_archive_byte_exact": true,
+      "results_byte_exact": true,
+      "archived_results_sha256": "aefb27d8d714560a3751ac4dc1374d375de997fbb1e86376feb4bd4e2db0cc43",
+      "replayed_results_sha256": "aefb27d8d714560a3751ac4dc1374d375de997fbb1e86376feb4bd4e2db0cc43",
+      "path_substitution": {
+        "output/land_people/earth/earth.npz": "output/land_people/earth_restored_20261113/earth.npz"
+      },
+      "producer_sha256": "26f544c134e713d6eac1f0ebf451dfb66d3435782bb0d290b68f3b4e22823924"
+    },
+    "mexico": {
+      "numerical_grids_exact": true,
+      "model_archive_byte_exact": true,
+      "results_byte_exact": true,
+      "archived_results_sha256": "f6a3db51f9e40d402b1789b1abec286bdc601df846c153fec5494cf9ae7dca70",
+      "replayed_results_sha256": "f6a3db51f9e40d402b1789b1abec286bdc601df846c153fec5494cf9ae7dca70",
+      "path_substitution": {
+        "output/maize_20261116/mexico_newworld/earth.npz": "output/urban_diagnosis_20261116/restored_mexico_newworld/earth.npz"
+      },
+      "producer_sha256": "ef095680f971e2040728897abe71e28500974d3d6c7754f480a0b8f38df956e2"
+    }
+  },
+  "archived_results_overwritten": false,
+  "reserved_sources_opened": false,
+  "adopt": false
+}

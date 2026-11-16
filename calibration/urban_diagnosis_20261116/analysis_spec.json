@@ -1,0 +1,14 @@
+{
+  "status":"fixed_after_exact_archived_input_replay_before_new_case_outputs",
+  "known":"Both original results.json and model.npz replay byte for byte. The owner supplied the exact Mexico workbook. Source-method inspection and original producers expose the conventions listed below. No new variant outputs have been inspected.",
+  "cases":["release3_subset_draw","release3_full_draw","release4_full_draw"],
+  "grids_km":[3,9],
+  "size_seeds":[1,7,19,43,97],
+  "placement":"First two cases use identical archived release3 towns. Third uses current confluence k1 with the same production count target, clocks and eligibility, reporting any count mismatch explicitly. Record both source-site count and distinct grid cells. Size seeds affect only 9km sizes.",
+  "size_draws":"Subset case reproduces draws on the selected survey towns; full cases draw for every town in the window before filtering. Empty known-centre/capital sets are explicit: no Earth labels are invented. Verify released base coefficients/sigma/bounds equal the archived M1 when known-centre effects are absent. This is the unmarked Earth transfer of release4, not a validation of the fantasy lore anchors.",
+  "metrics":"Retain original position/topN size metrics for comparison. Separately report complete counts and area-threshold-matched distributions. For interval source areas compute a descriptive KS lower bound from the CDF envelope at all model and interval edges, including left limits; it is neither an exact KS nor a p-value nor a new adoption gate. No distributional inference when there are zero predicted survey towns.",
+  "observation_bounds":"FloodPlains author code maps classes to lower representatives0.1,4.1,10.1,20.1,40.1,201ha. Retain finite class ceilings4,10,20,40,200; last class right-censored with no source-supported finite upper. Use1783 only to reproduce the original test, never as an observed upper limit. Mexico Area is described as hectares rounded to0.1; Population is an estimate, not a census. Report PopMin/PopMax and missingness separately; no density fitted.",
+  "coverage":"The all-period site-buffer mask is a proxy constructed from target sites, not an independent surveyed polygon. Preserve it for replay and report its resolution dependence. TopN size comparisons combine count coverage and size distribution; do not interpret them as shape-only validation. Broad occupation phases are not exact simultaneous census observations.",
+  "outputs":["results.json","observations.json","positions.csv","sizes.csv","model.npz"],
+  "decision":"Development diagnosis only. No default/crop/climate/marketed-share changes and no reserved observations opened. A fixed-total fitted urban allocation comparison needs a subsequent declaration based on the diagnosed evidence."
+}
