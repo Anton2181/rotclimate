@@ -1,0 +1,10 @@
+{
+ "title": "WP8 density-saturating town count: development fit on the Han and Roman pools (declared before any run)",
+ "date": "2026-11-16",
+ "made_after": "reports/TOWN_COUNT_DENSITY_20261116.md: production over-places towns 2.3-6.9x in the densest 10 % of Earth blocks (development pools).",
+ "inputs": "output/settlement_locations_20261110/{han,rome}_inputs.npz (prepared, exposed development data).",
+ "candidates": "settle.place_towns with SEAT_BETA in {0.7 (current), 0.5, 0.3, 0.0}; for each beta and pool, seat_people is solved (bisection) so the pool's total placed count equals its catalogue count inside the allowed area.",
+ "metrics": "100 km blocks with >= 30 % allowed land: Poisson deviance per catalogue record (model count vs catalogue count, zero-model blocks with records floored at 0.5), Spearman rank of block counts, and the model/catalogue ratio in the densest 10 % of blocks by mean model people.",
+ "selection": "Lowest mean (Han, Rome) deviance per record. Adopt for the map only if it beats beta 0.7 on both pools AND brings the densest-decile ratio of both pools within [0.5, 2.0]; then validate once on the reserved Buringh pool (declared separately) before any republication.",
+ "no_map_changes": "No production change from this plan alone."
+}
