@@ -30,6 +30,8 @@ instruction for the first dev+fine finalist).
   the surveyed area). Pool spent. Same finding as Mesopotamia: too few, too small towns where people were urban.
 - Town count/primacy (both blind size failures): an Earth-test artefact in part (no marked places on Earth; the map's lore
   capitals carry the capital and hierarchy terms); Mesoamerican sites hold ~18 people/ha vs 100-500 in the Old World rules.
+- Town count vs density (reports/TOWN_COUNT_DENSITY_20261116.md): in the densest 10 % of Earth blocks the model places 2.3-6.9x
+  the catalogue towns (about right elsewhere); proposed WP: density-saturating count (beta ~0.5), needs a new blind pool.
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
