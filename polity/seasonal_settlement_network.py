@@ -1,0 +1,205 @@
+"""Isolated finite-source seasonal cereal network; no production defaults change.
+
+People use fixed physical-origin recruitment links. Grain and work remain at
+physical cells, independently of that demographic link partition.
+"""
+from dataclasses import dataclass,replace
+import numpy as np
+
+from harvest.field_support import field_support,FixedRuralFood
+from harvest.food_stocks import food_year as replay_food_year
+from .settlement_residents import allocate_residents
+from .wide_supply import ship
+
+KCAL=2500.*365.
+
+
+@dataclass
+class Inputs:
+    people: np.ndarray
+    recruitment: object
+    potential: np.ndarray
+    boundaries: np.ndarray
+    listed: np.ndarray
+    reaping: np.ndarray
+    owner: np.ndarray
+    retention: np.ndarray
+    between: np.ndarray
+    request: np.ndarray
+    affiliated: np.ndarray
+
+
+def food_year(harvest,need,capacity):
+    harvest,need=np.broadcast_arrays(np.asarray(harvest,float),np.asarray(need,float))
+    cap=np.broadcast_to(np.asarray(capacity,float),harvest.shape[1:])
+    days=np.full(12,365./12);decay=np.exp(np.log1p(-.05)/days.sum()*days)
+    A=1.;B=np.zeros_like(cap);lower=np.zeros_like(cap);upper=cap.copy()
+    for supply,demand,d in zip(harvest,need,decay):
+        B=(B+supply-demand)*d;lower=np.minimum(np.maximum(lower+supply-demand,0),cap)*d
+        upper=np.minimum(np.maximum(upper+supply-demand,0),cap)*d;A*=d
+    initial=np.clip(B/(1-A),lower,upper)
+    tolerance=1e-10*np.maximum(1,np.maximum(harvest.sum(0),need.sum(0)))
+    initial=np.where(np.minimum(np.maximum(B,lower),upper)<=tolerance,0.,initial)
+    year=replay_food_year(harvest,need,cap,initial_stock=initial,loss_fraction_year=.05,step_days=365./12,record=True)
+    if not year.periodic_converged.all():raise RuntimeError('Analytic repeating inventory failed canonical convergence')
+    return year
+
+
+def rural_year(produced,boundaries,need):
+    options=np.stack([((boundaries>>m)&1)>0 for m in range(12)]);chosen=options.argmax(0)
+    supply=np.zeros((12,len(produced)));np.put_along_axis(supply,chosen[None],produced[None],axis=0)
+    monthly=np.broadcast_to(need/12,supply.shape)
+    return FixedRuralFood(supply,food_year(supply,monthly,need),monthly,365.,365.)
+
+
+def route_sources(departures,owner,retention,towns):
+    direct=np.zeros((12,towns))
+    for month in range(12):
+        q=month//3;valid=(owner[q]>=0)&(retention[q]>0)
+        direct[(month+1)%12]+=np.bincount(owner[q,valid],weights=departures[month,valid]*retention[q,valid],minlength=towns)
+    return direct
+
+
+def route_towns(direct,target,between):
+    need=np.broadcast_to(target*KCAL/12,direct.shape);capacity=target*2500.*90
+    local=food_year(direct,need,capacity)
+    protected=(target>0)&(local.unmet<=1e-8*np.maximum(1,local.needed))
+    overflow=np.maximum(local.stock_path[:-1]+direct-need-capacity,0)*protected
+    received=np.zeros_like(direct);exported=np.zeros_like(direct);moves=[]
+    for month in range(12):
+        nxt=(month+1)%12
+        flows,got=ship(overflow[month],local.unmet_path[nxt],between[month//3])
+        received[nxt]+=got
+        for (i,j),v in flows.items():
+            exported[month,i]+=v;moves.append((month,i,j,v,v*between[month//3,i,j]))
+    final=food_year(direct+received,need,capacity)
+    return dict(direct_food=local,town_food=final,inter_received=received,inter_exported=exported,
+        shipments=np.array(moves,float).reshape(-1,5),arrivals=direct+received,
+        protected_exporters=protected)
+
+
+class CoupledNetwork:
+    def __init__(self,inputs,*,hours,marketed_share):
+        self.x=inputs;self.hours=hours;self.share=marketed_share;x=inputs
+        M=x.recruitment
+        if M.shape!=(len(x.people),len(x.request)) or np.any(M.data<0):raise ValueError('Aligned nonnegative people links required')
+        if np.any(np.asarray(M.sum(1)).ravel()>x.people+1e-7):raise ValueError('Recruitment duplicates original people')
+        if not np.allclose(np.asarray(M.sum(0)).ravel(),x.request,atol=1e-7,rtol=1e-12):raise ValueError('Recruitment does not reproduce town cap')
+        if inputs.owner.shape!=(4,len(x.people)) or inputs.retention.shape!=inputs.owner.shape:raise ValueError('Four aligned source route seasons required')
+        if inputs.between.shape!=(4,len(x.request),len(x.request)):raise ValueError('Four town route seasons required')
+        if np.any((x.owner< -1)|(x.owner>=len(x.request))) or np.any((x.retention<0)|(x.retention>1)) or np.any((x.between<0)|(x.between>1)):raise ValueError('Invalid routes/retention')
+        if not 0<=marketed_share<=1 or hours not in [600,300]:raise ValueError('Declared work and marketed share required')
+
+    def evaluate(self,target):
+        x=self.x;target=np.asarray(target,float)
+        if target.shape!=x.request.shape or np.any(target<0) or np.any(target>x.request+1e-7):raise ValueError('Trial outside original finite town caps')
+        # Sparse column summation can put a finite budget a few ulps above
+        # its recorded request. Preserve that funded population while keeping
+        # transfer allowances in the allocator's strict fractional domain.
+        fraction=np.clip(np.divide(target,x.request,out=np.zeros_like(target),where=x.request>0),0,1)
+        moved=x.recruitment@fraction;rural=np.maximum(x.people-moved,0);need=rural*KCAL
+        work=field_support(x.potential,x.listed,x.reaping,rural_need_kcal=need,hours_worker_year=self.hours)
+        rural_food=rural_year(work.produced_kcal,x.boundaries,need)
+        marketed=rural_food.exportable*self.share
+        annual=marketed.sum(0);dispatch=np.broadcast_to(annual/12,marketed.shape).copy()
+        for month in range(12):dispatch[month]*=(x.owner[month//3]>=0)&(x.retention[month//3]>0)
+        export_food=food_year(marketed,dispatch,annual)
+        departures=dispatch-export_food.unmet_path
+        direct=route_sources(departures,x.owner,x.retention,len(target))
+        town=route_towns(direct,target,x.between)
+        # Each demographic shard owns only population, never another copy of
+        # its physical cell's land, grain, food need or field workforce.
+        allocation=allocate_residents(town['arrivals'],x.recruitment.data,x.recruitment.indices,
+            x.request,x.affiliated,transfer_fraction=fraction[x.recruitment.indices])
+        return dict(target=target.copy(),moved=moved,rural=rural,work=work,rural_food=rural_food,
+            marketed=marketed,export_food=export_food,departures=departures,direct=direct,
+            allocation=allocation,**town)
+
+    def solve(self,max_iterations=512):
+        target=self.x.request.copy();history=[];initial=None;converged=False;certificate=None
+        for iteration in range(max_iterations):
+            trial=self.evaluate(target);actual=trial['allocation'].settlement.total_people
+            step=np.maximum(target-actual,0)
+            history.append(dict(iteration=iteration,requested_total=float(target.sum()),
+                supported_total=float(actual.sum()),max_step_people=float(step.max()),
+                town_unmet_person_years=float(trial['town_food'].unmet.sum()/KCAL),
+                rural_unmet_person_years=float(trial['rural_food'].year.unmet.sum()/KCAL)))
+            if initial is None:
+                initial=dict(request=target.copy(),food_ceiling=trial['allocation'].settlement.food_ceiling_people.copy(),
+                    supported=actual.copy(),town_unmet=trial['town_food'].unmet.copy(),
+                    rural_unmet_person_years=history[-1]['rural_unmet_person_years'])
+            if iteration>=63:
+                converged=bool(np.all(step<=np.maximum(1e-6,1e-10*self.x.request)))
+                proposed=self.evaluate(actual)
+                proposed['next_allocator_total']=proposed['allocation'].settlement.total_people.copy()
+                frozen=trial['allocation']
+                proposed['allocation']=replace(frozen,settlement=replace(frozen.settlement,food_year=proposed['town_food']),arrivals=proposed['arrivals'].copy())
+                proposed['certificate_from_target']=trial['target'].copy()
+                proposed['certificate_from_arrivals']=trial['arrivals'].copy()
+                proposed['physical_certificate']=True
+                check=audit_network(self,proposed,require_qualified=False)
+                if check['positive_towns_food_supported'] and check['finite_allocator_matches_trial']:
+                    certificate=proposed;break
+                if converged:break
+            target=np.minimum(target,actual)
+        # A distinct fresh evaluation is mandatory even at convergence.
+        final=certificate if certificate is not None else self.evaluate(target)
+        if certificate is None:
+            final.update(physical_certificate=False,certificate_from_target=final['target'].copy(),
+                certificate_from_arrivals=final['arrivals'].copy(),next_allocator_total=final['allocation'].settlement.total_people.copy())
+        final.update(history=history,initial=initial,converged=converged)
+        final['audit']=audit_network(self,final,require_qualified=False)
+        final['qualified']=bool(final['physical_certificate'] and final['audit']['positive_towns_food_supported']
+            and final['audit']['finite_allocator_matches_trial'])
+        return final
+
+
+def audit_network(model,case,*,require_qualified=True):
+    x=model.x;c=case;target=c['target'];year=c['rural_food'].year;export=c['export_food'];town=c['town_food']
+    if any(np.any(~v.periodic_converged) for v in [year,export,town]):raise ValueError('Stocks do not repeat')
+    expected_moved=x.recruitment@np.clip(np.divide(target,x.request,out=np.zeros_like(target),where=x.request>0),0,1)
+    if not np.allclose(c['moved'],expected_moved,atol=1e-8,rtol=1e-12):raise ValueError('Physical recruitment changed')
+    if not np.allclose(c['rural']+c['moved'],x.people,atol=1e-8,rtol=1e-12):raise ValueError('Physical people duplicated')
+    if not np.allclose(c['moved'].sum(),target.sum(),atol=1e-6,rtol=1e-12):raise ValueError('Destination people not funded')
+    if c.get('physical_certificate'):
+        rows=np.repeat(np.arange(len(x.people)),np.diff(x.recruitment.indptr))
+        actual_moved=np.bincount(rows,weights=c['allocation'].transferred_people,minlength=len(x.people))
+        if not np.allclose(actual_moved,c['moved'],atol=1e-8,rtol=1e-12):raise ValueError('Fresh physical people differ from frozen finite allocation')
+    if np.any(c['work'].annual_hours_used>c['work'].annual_hours_available+1e-5) or np.any(c['work'].reaping_hours_used>c['work'].reaping_hours_available+1e-5):raise ValueError('Work exceeds actual rural workers')
+    if not np.allclose(c['work'].rural_reference_people,c['rural'],atol=1e-8,rtol=1e-12):raise ValueError('Old rural work claim reused')
+    bad=year.unmet>1e-8*np.maximum(1,year.needed)
+    if np.any(c['departures'][:,bad]>1e-6):raise ValueError('Food-deficit physical source exports')
+    if np.any(c['marketed']>c['rural_food'].exportable*model.share+1e-3):raise ValueError('Marketed grain duplicates protected rural food')
+    if not np.allclose(export.harvested,c['marketed'].sum(0),atol=.01,rtol=1e-12) or not np.allclose(export.consumed,c['departures'].sum(0),atol=.01,rtol=1e-12):raise ValueError('Origin departures lack store funding')
+    expected_direct=route_sources(c['departures'],x.owner,x.retention,len(target))
+    if not np.allclose(expected_direct,c['direct'],atol=.01,rtol=1e-12):raise ValueError('Source routes duplicate or lose unrecorded grain')
+    exported=np.zeros_like(c['direct']);received=exported.copy()
+    for month,i,j,sent,got in c['shipments']:
+        month,i,j=int(month),int(i),int(j)
+        if not np.isclose(got,sent*x.between[month//3,i,j],atol=.01,rtol=1e-12):raise ValueError('Inter-town link loss changed')
+        exported[month,i]+=sent;received[(month+1)%12,j]+=got
+    if not np.allclose(exported,c['inter_exported'],atol=.01,rtol=1e-12) or not np.allclose(received,c['inter_received'],atol=.01,rtol=1e-12):raise ValueError('Inter-town shipments duplicated')
+    local=c['direct_food'];localneed=np.broadcast_to(target*KCAL/12,c['direct'].shape);capacity=target*2500*90
+    overflow=np.maximum(local.stock_path[:-1]+c['direct']-localneed-capacity,0)*c['protected_exporters']
+    if np.any(exported>overflow+.01):raise ValueError('Town exports borrow meals or nonexistent stocks')
+    if np.any((exported.sum(0)>0)&(received.sum(0)>0)):raise ValueError('Importer re-exports')
+    if not np.allclose(c['arrivals'],c['direct']+received,atol=.01,rtol=1e-12):raise ValueError('Town arrivals changed')
+    source_loss=float(c['departures'].sum()-c['direct'].sum());inter_loss=float(exported.sum()-received.sum())
+    source_unused=float(year.overflow.sum()-c['marketed'].sum()+export.overflow.sum())
+    town_unused=float(town.overflow.sum()-exported.sum())
+    stock_change=float(sum((v.final_stock-v.initial_stock).sum() for v in [year,export,town]))
+    L=dict(produced_kcal=float(c['work'].produced_kcal.sum()),rural_meals_kcal=float(year.consumed.sum()),
+        rural_spoiled_kcal=float(year.spoiled.sum()),export_spoiled_kcal=float(export.spoiled.sum()),
+        town_spoiled_kcal=float(town.spoiled.sum()),source_unused_kcal=source_unused,town_unused_kcal=town_unused,
+        source_transport_loss_kcal=source_loss,intertown_transport_loss_kcal=inter_loss,
+        town_meals_kcal=float(town.consumed.sum()),stock_change_kcal=stock_change)
+    residual=L['produced_kcal']-sum(v for k,v in L.items() if k!='produced_kcal')
+    if min(source_loss,inter_loss,source_unused,town_unused)<-.1:raise ValueError('Negative paid loss/unused food')
+    if abs(residual)>1e-9*max(1,L['produced_kcal']):raise ValueError('Coupled physical grain ledger does not close')
+    matched=bool(np.all(np.abs(c['allocation'].settlement.total_people-target)<=np.maximum(1e-6,1e-10*x.request)))
+    supported=bool(np.all(town.unmet<=1e-8*np.maximum(1,town.needed)))
+    if require_qualified and not (matched and supported):raise ValueError('Trial has not reached seasonal population/food feasibility')
+    return dict(population_residual_people=float(x.people.sum()-c['rural'].sum()-target.sum()),
+        grain_residual_kcal=float(residual),ledger=L,rural_unmet_kcal=float(year.unmet.sum()),
+        rural_deficit_origins=int(bad.sum()),positive_towns_food_supported=supported,
+        finite_allocator_matches_trial=matched,all_world_rural_food_supported=bool(not bad.any()))

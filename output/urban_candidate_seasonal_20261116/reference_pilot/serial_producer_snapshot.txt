@@ -1,0 +1,123 @@
+"""Declared finite-source seasonal allocations and actual supported staff, fixed sites."""
+import argparse
+import csv
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+import sys
+import time
+
+import numpy as np
+from scipy.sparse import load_npz
+
+ROOT=Path(__file__).resolve().parents[1];sys.path[:0]=[str(ROOT),str(ROOT/'scripts')]
+from polity.seasonal_settlement_network import Inputs,CoupledNetwork,KCAL
+
+OUT=ROOT/'output/urban_candidate_seasonal_20261116'
+BASE=ROOT/'output/urban_hierarchy_candidate_20261116'
+PLAN=ROOT/'calibration/urban_diagnosis_20261116/seasonal_coupling.json'
+
+
+def sha(path):
+    with path.open('rb') as f:return hashlib.file_digest(f,'sha256').hexdigest()
+
+
+def write(path,obj):path.write_text(json.dumps(obj,indent=2)+'\n')
+
+
+def table(path,rows):
+    with path.open('w',newline='') as f:
+        w=csv.DictWriter(f,fieldnames=list(rows[0]));w.writeheader();w.writerows(rows)
+
+
+def run_case(mode,model,reading,hours,out):
+    key=f'{mode}_{model}_{reading}_h{hours}';start=time.monotonic();print(key,'coupled solve',flush=True)
+    with np.load(BASE/f'{model}/placed_{mode}_fields.npz') as z:f={k:z[k] for k in z.files}
+    sites=json.loads((BASE/f'{model}/placed_{mode}_sites.json').read_text())['sites'];source=np.flatnonzero(f['land'])
+    with np.load(ROOT/f'output/settlement_feedback_20261112/{mode}_inputs.npz') as z:x={k:z[k] for k in z.files}
+    with np.load(OUT/'prepared'/f'network_{mode}.npz') as z:net={k:z[k] for k in z.files}
+    M=load_npz(OUT/'prepared'/f'people_{mode}_{model}_{reading}.npz')
+    inputs=Inputs(f['people'].ravel()[source],M,x['potential_kcal'][source],x['boundaries'][source],
+        x['listed_hours'][source],x['reaping_hours'][source],net['owner'][:,source],net['share'][:,source],
+        net['between'],f['residents_'+reading],np.array([bool(s.get('actor')) for s in sites]))
+    share=json.loads(PLAN.read_text())['cases']['marketed_share'][reading]
+    engine=CoupledNetwork(inputs,hours=hours,marketed_share=share);result=engine.solve()
+    destination=out/'cases'/key;destination.mkdir(parents=True,exist_ok=True)
+    arrays={k:result[k] for k in ['target','rural','moved','marketed','departures','direct','inter_received','inter_exported','shipments','arrivals']}
+    arrays.update(source=source,people=inputs.people,request=inputs.request,
+        civilian=result['allocation'].settlement.civilian_people,staff=result['allocation'].settlement.institutional_people,
+        active=result['allocation'].settlement.institutional_active,allocator_total=result['allocation'].settlement.total_people,
+        food_ceiling=result['allocation'].settlement.food_ceiling_people,
+        produced=result['work'].produced_kcal,annual_hours_used=result['work'].annual_hours_used,
+        annual_hours_available=result['work'].annual_hours_available,reaping_hours_used=result['work'].reaping_hours_used,
+        reaping_hours_available=result['work'].reaping_hours_available,
+        harvest=result['rural_food'].harvest,initial_supported=result['initial']['supported'],
+        initial_food_ceiling=result['initial']['food_ceiling'],initial_town_unmet=result['initial']['town_unmet'])
+    for prefix,year in [('rural',result['rural_food'].year),('export',result['export_food']),
+                        ('direct',result['direct_food']),('town',result['town_food'])]:
+        for name in ['initial_stock','final_stock','peak_stock','harvested','needed','consumed','unmet','spoiled','overflow','ledger_residual','stock_path','unmet_path']:
+            arrays[prefix+'__'+name]=getattr(year,name)
+    np.savez_compressed(destination/'fields.npz',**arrays)
+    diagnostics=dict(key=key,mode=mode,model=model,reading=reading,hours_worker_year=hours,marketed_share=share,
+        requested=float(inputs.request.sum()),supported=float(result['target'].sum()),
+        supported_share=float(result['target'].sum()/inputs.request.sum()),
+        positive_towns=int((result['target']>1e-6).sum()),zero_towns=int((result['target']<=1e-6).sum()),
+        civilians=float(arrays['civilian'].sum()),staff=float(arrays['staff'].sum()),active_institutions=int(arrays['active'].sum()),
+        world_people=float(inputs.people.sum()),rural_people=float(result['rural'].sum()),
+        first_pass_conditional_supported=float(result['initial']['supported'].sum()),
+        iterations=len(result['history']),converged=result['converged'],qualified=result['qualified'],
+        audit=result['audit'],fields_sha256=sha(destination/'fields.npz'),history=result['history'],
+        seconds=round(time.monotonic()-start,3),
+        limits='Fixed recruitment mix,quarterly sampled travel,earliest eligible harvest,partial cereal/work. Downward certified scenario,not maximum sustainable population or all-world rural feasibility.',adopt=False)
+    # Timings stay in an execution log, not the deterministic scientific manifest.
+    seconds=diagnostics.pop('seconds');write(destination/'results.json',diagnostics)
+    print(key,'supported',round(diagnostics['supported']),'qualified',diagnostics['qualified'],'iterations',diagnostics['iterations'],'seconds',seconds,flush=True)
+    compact={k:arrays[k] for k in ['request','target','civilian','staff','active','allocator_total','food_ceiling','arrivals','initial_supported','initial_food_ceiling','initial_town_unmet']}
+    compact['town_unmet']=arrays['town__unmet'];compact['town_stock']=arrays['town__stock_path']
+    rows=[]
+    for i,s in enumerate(sites):
+        rows.append(dict(case=key,id=s['id'],name=s['name'],row=s['row'],column=s['column'],
+            requested=float(inputs.request[i]),supported=float(result['target'][i]),
+            support_fraction=float(result['target'][i]/inputs.request[i]) if inputs.request[i]>0 else 0.,
+            civilian=float(arrays['civilian'][i]),staff=float(arrays['staff'][i]),active=bool(arrays['active'][i]),
+            conditional_initial_supported=float(result['initial']['supported'][i]),
+            seasonal_unmet_person_years=float(arrays['town__unmet'][i]/KCAL),qualified=result['qualified']))
+    return diagnostics,compact,rows
+
+
+def main(out,only):
+    assert subprocess.check_output(['git','show','HEAD:'+str(PLAN.relative_to(ROOT))],cwd=ROOT)==PLAN.read_bytes()
+    amendments=[PLAN.parent/'seasonal_inventory_kernel_a1.json',PLAN.parent/'seasonal_solver_a2.json']
+    for path in amendments:
+        assert subprocess.check_output(['git','show','HEAD:'+str(path.relative_to(ROOT))],cwd=ROOT)==path.read_bytes()
+    kernel=json.loads((OUT/'kernel_review.json').read_text())
+    assert kernel['status']=='passed' and kernel['module_sha256']==sha(ROOT/'polity/seasonal_settlement_network.py')
+    prep=json.loads((OUT/'preparation.json').read_text());assert prep['status']=='passed_exact_people_and_seasonal_network_controls'
+    for name,digest in {**prep['sources_sha256'],**prep['protected_sha256']}.items():assert sha(ROOT/name)==digest,name
+    sources={**prep['sources_sha256'],str((OUT/'preparation.json').relative_to(ROOT)):sha(OUT/'preparation.json'),
+        str(Path(__file__).relative_to(ROOT)):sha(Path(__file__)),
+        'polity/seasonal_settlement_network.py':sha(ROOT/'polity/seasonal_settlement_network.py')}
+    sources.update({str(p.relative_to(ROOT)):sha(p) for p in [*amendments,OUT/'kernel_review.json']})
+    out.mkdir(parents=True,exist_ok=True);cases=[];compact={};towns=[]
+    for mode in ['raw','corrected']:
+        for model in ['control','candidate']:
+            for reading in ['central','low']:
+                for hours in [600,300]:
+                    key=f'{mode}_{model}_{reading}_h{hours}'
+                    if only and key!=only:continue
+                    c,a,t=run_case(mode,model,reading,hours,out);cases.append(c);towns+=t
+                    compact.update({key+'__'+k:v for k,v in a.items()})
+    table(out/'towns.csv',towns);np.savez_compressed(out/'town_model.npz',**compact)
+    table(out/'summary.csv',[{k:v for k,v in c.items() if k not in ['audit','history']} for c in cases])
+    files=['towns.csv','town_model.npz','summary.csv']+[f'cases/{c["key"]}/results.json' for c in cases]
+    for name,digest in prep['protected_sha256'].items():assert sha(ROOT/name)==digest,name
+    write(out/'results.json',dict(status='seasonal_network_candidate_development_comparison',sources_sha256=sources,
+        protected_sha256=prep['protected_sha256'],files_sha256={n:sha(out/n) for n in files},cases=cases,
+        all_cases_completed=len(cases)==16,all_cases_qualified=all(c['qualified'] for c in cases),
+        all_world_rural_food_supported=all(c['audit']['all_world_rural_food_supported'] for c in cases),
+        main_atlas_published=False,adopt=False,new_validation_claim=False))
+
+
+if __name__=='__main__':
+    p=argparse.ArgumentParser();p.add_argument('--out',type=Path,default=OUT);p.add_argument('--only');a=p.parse_args();main(a.out,a.only)

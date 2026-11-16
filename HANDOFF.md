@@ -1,3 +1,56 @@
+# Seasonal settlement qualification IN PROGRESS — 16 November 2026
+
+USERARCHIVEDclimatesidequest;accepted settlement seasonal food/labour plan and
+saidgoahead. Currentwork output/urban_candidate_seasonal_20261116/. Mainatlas
+unchanged;no newclimate work. Frozen seasonal_coupling.json83442f94b:16cases,
+raw/corrected×control/candidate×central/low×600/300h,actualseed1samefixedtowns,
+originalcalibratedshares. Fixedsparse physicalpeople->town recruitmentmix;shards
+partitionPEOPLEONLY,neverduplicategrain/cellworkers. Actualnewruralpeople drive
+work/food. Firsteligibleharvest,365d rural/exportstores,90dtownstores,5%loss,
+quarterlyfreightmatrixheld3monthbins,1bin perleg delay. Conservativeoverflow-only
+source/town exports,not unrestrictedannualpooling. Staff100withinactualtowncap.
+
+Preparation PASS:8people matrices reproducecanonicalown/wider sourcewithdrawals
+and remainingruralgrids;4seasonfreightmatrices independentlyreconstructed permap
+whosemean +fullprecisionowners/shares are EXACTannualsupplycache. Hugeprepared
+caches ignored. Independentfull-distance/compensatedpeoplelink reviewer alsoPASS.
+Codeprepare_urban_seasonal.py,polity/seasonal_settlement_network.py andbuild scripts.
+10meaningful budget/restriction/legacy-audit/freshcertificate/roundofftests PASS.
+
+Numericalhistory retained explicitly: original64step correctedcandidatepilot
+UNQUALIFIED (reference_pilot/model_snapshot.txt,unqualified_result.json,log).
+A1a41d792ee derives equivalent clipped-affine inventoryroot for speed;canonical
+monthlyfood replay reused. Kernelreview16initialcases/64inventories/5patterns
+PASS originaltolerance(max.582ofallowedtol),sourceflagsunchanged. A2 7bb595bac
+extendscommonbudget512,no tolerancechange. Rawcontrol512stillfailedfixedpoint
+despite actualtownmeals passing because existing foodceiling has1e-8downward
+safety;originalUNQUALIFIEDfullhistory/snapshot retainedreference_pilot/extended512.
+
+A3 36c8579ab declares actualfinite-allocationcertificate,not pretend convergence:
+after>=64steps freeze returned ResidentAllocation,then rebuildALLphysicalrural
+workers/production/food/routes at THATactualpopulation;retainparenttrial/arrivals
+forindependentallocatorreplay. Certifyonlyoriginalfood/work/pop/grainchecks pass.
+Numericalconverged andphysicalcertificate areSEPARATE. Existingruraldeficits
+elsewhereremainvisible; hungryoriginscan'texport;noallworldfoodfeasibleclaim.
+Roundingbugfixed: sparsecolumnsum mayputfinitebudgetsulpaboveoriginalrequest;
+clipallowancefractionto[0,1]withinalreadydeclared1e-7requesttolerance. Regression
+testpass. No physicaltolerance wasrelaxed. Canonicalmodules remainuntouched.
+
+CURRENT:two-worker batch build_urban_seasonal_batch.py computes16cases;log
+/tmp/build_urban_seasonal_batch.log,execsession94973 (also ran tests/kernelchecks).
+Childrenwriteindependentcasefolders;unmodifiedrun_case science shared. Earlier
+serial/batch prototypeprocesses stopped; source snapshots preserved. Don'tstart
+duplicatejobs. OnerrorProcessPoolmaywaitqueuedjobs;job nowprints tracebackearly.
+
+NEXTfinish16cases;review_urban_seasonal.py independently checksallactualphysical
+sourcework,canonicalbisectionstockpaths,sortedlinkroutes,finiteparentallocator
+decision andwholegrainledger. Parent/finalresident distinction isessential.
+Then fresh final/parent/initial pointreplay andexactcompactexports (notclaimall
+512iterations rerun),actual supportmaps,CSV/report anddurablehandoff. Only then
+affectedstaff/reach/trade onqualifiedstates;transfer/diet/work/evidencegatesstill
+blockadoption. Casesmustnotclaimnumericfixedpointwhenonlyphysicalcertificate.
+Mainmodel/sourcedefaultsunchanged. Climateexperimentbelowisarchivedhistory.
+
 # Northern-steppe-only world/planet experiment complete — 16 November 2026
 
 User explicitly requested IN PARALLEL with settlement:sole northernsteppe target,
