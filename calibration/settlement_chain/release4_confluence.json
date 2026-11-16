@@ -84,6 +84,10 @@
         [
           "output/settlement_integration_20261104",
           "{root}/integration"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
         ]
       ],
       "outputs": [
@@ -102,6 +106,10 @@
         [
           "output/settlement_integration_20261104",
           "{root}/integration"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
         ]
       ],
       "outputs": []
@@ -118,6 +126,10 @@
         [
           "output/settlement_labour_20261105",
           "{root}/labour"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
         ]
       ],
       "outputs": []
@@ -173,7 +185,7 @@
       "outputs": []
     }
   ],
-  "note": "Declared 16 Nov 2026 (calibration/wp3_site_factors_20261116/map_integration.json) after the WP3 blind pass; built with settlement_chain.py build into output/chain_staging/release4_confluence. Everything else as release3_hierarchy.",
+  "note": "Declared 16 Nov 2026 (calibration/wp3_site_factors_20261116/map_integration.json) after the WP3 blind pass; built with settlement_chain.py build into output/chain_staging/release4_confluence. Everything else as release3_hierarchy. Downstream stages read the staged atlas output/chain_staging/release4_confluence/atlas_raw (built by scripts/stage_atlas.py and export_reach_release3.py on the staged towns; corrected layers installed under data/corrected; legacy control reproduced all 220 published corrected files).",
   "env": {
     "ROTCLIMATE_CONFLUENCE_K": "1.0",
     "ROTCLIMATE_RELEASE3_DIR": "output/chain_staging/release4_confluence/release3"
