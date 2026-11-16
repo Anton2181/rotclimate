@@ -1,0 +1,34 @@
+{
+ "version": 1,
+ "date": "2026-11-16",
+ "status": "declared before any result; owner (16 Nov): 'continue' (next item: borders between neighbouring states, where natural borders may matter)",
+ "question": "Where states meet, does the model give each piece of land to the right state, and do drainage-basin cantons (borders on watershed divides) do it better?",
+ "target": "Cliopatria v0.2.1 polygons alive in the pool year, rasterised per polity Name (first polygon wins where they overlap; overlap share reported)",
+ "sources": "each pool's towns, labelled with the Cliopatria polity containing them; towns in no polity are dropped",
+ "held": "control v2.1 held land as in plan_A3 preparation (staffed towns and kept roads within 2 year-round days)",
+ "rules": {
+  "O0_map": "owner = the polity whose staffed towns reach the cell in the fewest year-round days (the map's control v2 rule)",
+  "C7, C8": "O0 owner, then each HydroBASINS level-7 (or 8) basin takes the majority owner of its held cells",
+  "E0_null": "owner = polity of the nearest town in straight-line distance (reported only)"
+ },
+ "scores": {
+  "OA": "owner agreement: share of cells held by the model and inside a real polity that has at least one source, where the model owner equals the real polity",
+  "border_recall": "share of real internal border cells (between two polities with sources, inside held land) within 2 cells of a model internal border",
+  "reported_only": "divide and river enrichment of real and model internal borders"
+ },
+ "development": {
+  "pools": "D1 Bosker cities 1200, Rome window with Itiner-e roads; D2 Bosker 1500 (same); D3 CHGIS seats 1200, Han window (all seen in earlier outer-edge tests)",
+  "choice": "the canton level (7 or 8) with the higher mean OA over the dev pools"
+ },
+ "blind": {
+  "B1": "Bosker cities 1400, Rome window with Itiner-e roads",
+  "B2": "Bosker cities 1600, Rome window with Itiner-e roads",
+  "B3": "CHGIS V6 seats 1140 (Southern Song, Jin, Western Xia), Han window",
+  "note": "years never used in any control test; prepared without scoring, scored once"
+ },
+ "blind_gates": {
+  "G1": "chosen canton OA >= O0 OA + 0.01 in at least two of three blind pools",
+  "G2": "chosen canton OA >= O0 OA - 0.01 in every blind pool",
+  "adopt": "G1 and G2: watershed cantons are offered for the map's internal borders (needs map basins from height map v2.1). Otherwise O0 stays; the OA scores stand as the first Earth test of the map's owner rule."
+ }
+}
