@@ -1,0 +1,76 @@
+{
+  "calibration": {
+    "pool": "output/settlement_locations_20261110/rome_inputs.npz",
+    "pool_sha256": "dd98cc76af9aa5e7a68f771647546df1ec2116b5315ec830f6e4b2c9e888ac9e",
+    "shape": [
+      400,
+      600
+    ],
+    "cell_km": 9.0,
+    "density_unit": "people/km2",
+    "H_unit": "people",
+    "density_recipe": "sampled settlement_base * OCCUPATION_CENTRAL",
+    "occupation_central": 0.3245772699601042,
+    "H_recipe": "nearest distinct occupied grid cell within60km; exact ties share. Each catalogue row in a shared cell receives the same H covariate,not a separate conserved population allocation.",
+    "original_global_grid_sha256": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+    "size_fit_still_uses_original_pool": true
+  },
+  "qualified_earth_supply": {
+    "calibration_path": "output/greek_walls_20261114/results.json",
+    "calibration_sha256": "6155cd48c1275ac476198b0f17baf6641e30e799fb0f242180000e85db67477a",
+    "review_path": "output/greek_walls_20261114/review.json",
+    "harvest_grid_sha256": "3b57d0cba03802d3693eb46e661771d6375715dc2f17f8555217ff0ff33fb338",
+    "density_recipe": "sampled floodplain crop capacity * legacy history; normalized to Frier target on allowed Roman land",
+    "density_unit": "people/km2",
+    "empire_people_target": 61400000.0,
+    "marketed_share": 0.3371937035110408,
+    "same_population_recipe_as_size_fit": false,
+    "updated_H_fit_demonstrated": false
+  },
+  "fantasy": {
+    "density_recipe": "published settlement_base * published central occupation on administrative grid",
+    "H_recipe": "same nearest-centre60km primitive on released marked/proposed sites",
+    "earth_supply_Frier_pattern_used": false,
+    "harvest_core_alternative_used": false,
+    "code_paths": [
+      "scripts/settlement_fantasy_inputs.py",
+      "scripts/build_settlement_release3.py",
+      "scripts/build_settlement_release2.py"
+    ],
+    "evidence": "Code dependency trace; no fantasy climate,people or settlement rebuild in this audit."
+  },
+  "artifacts": [
+    {
+      "role": "original_global_grid_recorded_by_preparation",
+      "path": "output/land_people/earth/earth.npz",
+      "recorded_sha256": "bf19bc00188ccb8d1825731d49e7278a09dc971a144749c15db79f66425cdf68",
+      "present_at_audit": false,
+      "local_sha256": null
+    },
+    {
+      "role": "qualified_supply_floodplain_global_grid",
+      "path": "output/land_people/earth_floodplain/earth.npz",
+      "recorded_sha256": "3b57d0cba03802d3693eb46e661771d6375715dc2f17f8555217ff0ff33fb338",
+      "present_at_audit": false,
+      "local_sha256": null
+    },
+    {
+      "role": "qualified_supply_basin_fields",
+      "path": "output/floodplain_rule_20261114/fields.npz",
+      "recorded_sha256": null,
+      "present_at_audit": false,
+      "local_sha256": null
+    },
+    {
+      "role": "separate_restored_baseline",
+      "path": "output/land_people/earth_restored_20261113/earth.npz",
+      "recorded_sha256": null,
+      "present_at_audit": true,
+      "local_sha256": "341d20568fd6986aa3f0fbddcecd8e0412e2060b857350bacbcb673db4174a7b"
+    }
+  ],
+  "numerically_aligned_current_supply_population_field_compared": false,
+  "qualified_grid_available_and_hash_matches": false,
+  "old_new_H_ratio": null,
+  "reason_no_ratio": "Qualified floodplain grid and basin field absent in this checkout; restored baseline has a different identity. The available population recipes also differ,so a field substitution alone would confound recipe and harvest changes."
+}

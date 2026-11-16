@@ -1,3 +1,37 @@
+# Urban geographic/provenance audits complete — 16 November 2026
+
+Continued from9b85fe35e through TWO independently reviewed audits. Geographic
+residuals:24fold/240province/48capital cases,7878CSVcells,5fresh exports exact;
+fold3 combinespositivebias andhigher variance,only2/36Houtside trainrange,top1
+accounts20–22%SSE. No fold/outlier discarded. ReportURBAN_GEOGRAPHIC_RESIDUALS.
+
+Full51province crosswalk now independently reviewed(664row identities,226basis
+aggregates,240named residuals,7873CSVcells,5fresh exports). Province1=AEGYPTUS:
+11strict targets all underpredicted by mixedM1,meanlogresid+1.441,NOcapitals.
+Province40=Moesia Inferior,single opposite large residual. No causal inference.
+Report reports/URBAN_HINTERLAND_PROVENANCE_20261116.md;outputs
+output/urban_hinterland_provenance_20261116/. Code/receipt audit only,not newfit.
+
+KEY: current Earth SIZE H is immutable Nov10rome_inputs dd98cc76,settlement_base
+×occupation0.32457727,9km nearest occupiedcell60km. Current Earth SUPPLY has
+floodplain capacity×history normalized toFRIER61.4M,globalgrid3b57d0cb,Greek-wall
+qualified results6155cd48. Fantasy size APPLICATION uses published base×central
+occupation,NOTP2/Frier/core-alternative. UpdatingEarthfit toP2alone changes its
+relationship to application. Supply success DOESNOT validate unchanged sizeH.
+
+NEXT FROZEN population_recipe_replay.json: exact isolated restore of existing
+floodplain grid expectedSHA3b57d0cba03802d3693eb46e661771d6375715dc2f17f8555217ff0ff33fb338,
+then SAMEoldsourcegeometry/masks/664rows compare immutablelegacy, floodplain
+settlement_base×existingoccupation, floodplainP2/Frier. No newfit/scores/map.
+Sourceglobal/basin arrays missing at audit;restoredbaseline341d2056 is DIFFERENT.
+Never substitute it and claim qualifiedgrid identity. If restoration mismatches,
+preservefailure anddo not adjustparameters. Read exactplanfor conservation,
+paired absoluteH ANDnormalizedHshare,all51province/153strict summaries/review.
+ZeroHrowsstay. Largearrayscache-only,compactHoutputs tracked. This replays
+alreadyexposed observed-weather harvest,NOTnew climate physics/fit. Laterfit
+requires declaredrecipeconsistency and alltransfer/food/origin/labour gates.
+Climateparked,Buringhsizes/climate l unopened. Priorpinnedcode/tests immutable.
+
 # Urban measurement pilot complete — 16 November 2026 (climate parked)
 
 Continued beyond the source-audit push and COMPLETED the declared predictive

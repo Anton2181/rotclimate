@@ -24,7 +24,14 @@ reviewed: 153 common targets, six alternatives, 24 outer cases, train-only inner
 predictive dispersion. Strict training does not improve pooled scores; H skill
 is weak and fold3 loses accuracy across every alternative. See
 [URBAN_MEASUREMENT_PILOT_20261116.md](URBAN_MEASUREMENT_PILOT_20261116.md).
-Next is the frozen geographic residual/support audit, with no refit or exclusions.
+Geographic residual and population-provenance audits are now also reviewed.
+Fold3 combines bias and scatter; Aegyptus supplies eleven consistently
+underpredicted strict targets, none capital-labelled. The Earth size fit,
+qualified Earth supply and fantasy application use different population
+assumptions; supply success does not certify size-H inputs. See
+[URBAN_HINTERLAND_PROVENANCE_20261116.md](URBAN_HINTERLAND_PROVENANCE_20261116.md).
+Next is exact isolated replay of the already-qualified floodplain input and a
+three-recipe H comparison before further fitting. No refit or exclusions yet.
 No new
 size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.
