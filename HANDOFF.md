@@ -19,7 +19,10 @@
   China 1140 (first Earth test of the owner rule; straight-line null equal). Cantons: OA unchanged (G1 fail, not adopted)
   but border recall +0.03-0.09 in all six pools. Real internal borders: divides x1.06-1.12; rivers x1.2-2.1 in Europe 1400+,
   x0.5 in China. Pools spent: Bosker 1400, 1600, CHGIS 1140 (dev reused 1200/1500/1200).
-- NEXT candidates: European river tie-break for internal borders (unused Bosker 1000/1100/1800); host release 4 (mechanical). Untested idea: internal
+- [done, NOT adopted] River borders (reports/RIVER_BORDERS_20261116.md): crossing cost changes OA by <=0.0005; walking-only
+  ownership beats the map's monthly networks in all 7 pools (+0.002..+0.015) but misses G1 (1800 +0.0098). Bosker 1000/1100/1800
+  spent. Remaining unused Bosker years: 800, 900 (a walking-ownership test would need them; effect <1 % of contested land).
+- NEXT: host release 4 (mechanical; hosted artifacts still release 3) unless the owner prefers otherwise. Untested idea: internal
   borders between polities need a multi-owner Earth target (none yet).
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
