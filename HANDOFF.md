@@ -33,7 +33,9 @@ instruction for the first dev+fine finalist).
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
-- [running] Climate: African rain belt vs South Asian monsoon (one shared itcz_shift). Sealed set l ready.
+- [done] e84 instability_cap (desert air caps convection; calibration/instability_cap_20261116): screen neutral, FAIL
+  (Sahara/Najd better, India worse).
+- [running] Joint refit r46 + e84 + gated dry heating + e83 (plan_refit.json, pool_given_dev); then fine28, sealed set l.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
