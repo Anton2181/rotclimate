@@ -54,3 +54,10 @@ On the owner's instruction to keep what is verifiable, the published layer now u
 blind-tested level from stage 1: RMSE 0.170 vs 0.184, with the same ranks (Spearman 0.69). Mean forest share of land is now 0.41 raw
 and 0.42 corrected (was 0.48 and 0.49). The browser check passes. Forest travel (C2, unpublished) was tested with 0.60; it would be
 rechecked before any use.
+
+## Diagnostic: the old-cores population (development only, after the blind run)
+
+The cored density (base × exp(−D/800 km) to the cradles and Rome) was tried in place of the bare density. Within climate-saturated
+land its rank correlation with AD 200 forest falls from +0.37 to +0.04 (development tiles; +0.29 to −0.03 on the spent blind tiles).
+So the cores remove the wrong-way signal but add no clearing signal: refitted, k is still 0. Forest stays climate-only.
+`output/forest_detail_20261116/cores_diagnostic.json`.
