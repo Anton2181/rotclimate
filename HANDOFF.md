@@ -45,7 +45,8 @@ instruction for the first dev+fine finalist).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
 - [done] e84 instability_cap (desert air caps convection; calibration/instability_cap_20261116): screen neutral, FAIL
   (Sahara/Najd better, India worse).
-- [running] Joint refit r46 + e84 + gated dry heating + e83 (plan_refit.json, pool_given_dev); then fine28, sealed set l.
+- [done] Joint refit r46 + e84 + dry heating + e83: FAIL (best S49 0.9979; no feasible point). Four refits around r46 now stall at
+  0.998-0.999: CLIMATE PARKED at r46 until new physics (African rain belt vs South Asian monsoon; equatorial interiors). Set l unopened.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
