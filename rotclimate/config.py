@@ -128,6 +128,8 @@ class Params:
     trade_heat_low: float = 0.0       # e83: same-hemisphere trades x (1 - this x clip(poleward pressure fall / monsoon_pressure_hpa, 0, 1)): trades give way to heat-low inflow; 0 = off
     edge_carry: float = 0.0           # e79: land-edge inflow carries the water of a column at T_col + this x max(latitude mean - T_col, 0), capped at local saturation, instead of a fixed RH of the local column; 0 = r44
     ice_saturation: float = 0.0       # e78: below 0 C the rain-maker judges the column against saturation over ice (es_ice/es_water)^this; 0 = water everywhere (r44)
+    instability_cap: float = 0.0      # e84: the v6 instability boost x (1 - this x clip((chi - instability_cap_chi0) / (1 - chi0), 0, 1)), chi = share of the air that crossed land (desert air aloft caps convection); 0 = off
+    instability_cap_chi0: float = 0.5
     storm_convection: float = 0.0     # e77: extra rain efficiency x storm index x warmth (15-23 C ramp) x moisture: summer showers under troughs and fronts, not under the subtropical highs; 0 = off
     instability_t0: float = 22.0      # e76: surface temperature (C) where the v6 instability boost starts (22 = v6; lower lets mid-latitude summers convect)
     # time-step independence: soil-moisture memory in days (0 = the legacy

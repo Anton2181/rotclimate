@@ -1,0 +1,22 @@
+{
+ "title": "e84 instability cap by continental air (declared before any e84 run)",
+ "date": "2026-11-16",
+ "made_after": "r46 rain-factor trace: the v6 instability boost (1.7-2.1x) makes Najd and the Algerian Sahara rain 12-25 mm a month in summer (1-5 observed) at column RH 0.46-0.51, and opens the Sahel rains in May (boost 1.98; 127 mm vs 19). North India in July has similar RH with ocean air. The dry-heating refit on r46 failed because this rain keeps the desert soil wet.",
+ "mechanism": "instability_cap k, instability_cap_chi0 c: instab = 1 + (instab - 1) x (1 - k x clip((chi - c)/(1 - c), 0, 1)), chi the model's advected land share. Default k 0: r46 byte-identical.",
+ "screen": {
+  "regions": "sahel_niger algeria_sahara najd_arabia bengal deccan north_india iran_plateau morocco texas_plains tripolitania + dev31 east_china mexico levant central_asia",
+  "variants": {
+   "C06": {
+    "instability_cap": 0.6
+   },
+   "C10": {
+    "instability_cap": 1.0
+   },
+   "C10b": {
+    "instability_cap": 1.0,
+    "instability_cap_chi0": 0.3
+   }
+  }
+ },
+ "rule": "A variant goes on if the 14 screen regions' mean rain loss falls by at least 2 %. Then one declared joint refit (pool_given_dev, cap S49 <= 0.9945, against r46) from the best variant, then fine28 and sealed set l once."
+}

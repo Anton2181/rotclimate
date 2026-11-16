@@ -2086,6 +2086,14 @@ class ClimateModel:
             if p.instability > 0:
                 moist = np.clip((W / np.maximum(Ws, 1e-6) - 0.3) / 0.3, 0, 1) if W_prev is not None else 0.0
                 instab = 1.0 + p.instability * np.clip((T - p.instability_t0) / 8.0, 0, 1.5) * moist
+                if p.instability_cap > 0 and chi is not None:
+                    # e84: moist low-level air under a warm dry layer of desert air
+                    # does not convect (the Saharan air layer; Arabia): the boost made
+                    # Najd and the Sahara rain 12-25 mm a month in summer (1-5
+                    # observed) and opened the Sahel's rains in May (127 mm, 19 obs).
+                    # Air off the sea (North India in July) keeps it.
+                    capf = np.clip((chi - p.instability_cap_chi0) / (1.0 - p.instability_cap_chi0), 0.0, 1.0)
+                    instab = 1.0 + (instab - 1.0) * (1.0 - p.instability_cap * capf)
             else:
                 instab = 1.0
             if p.storm_convection > 0 and W_prev is not None:
