@@ -97,9 +97,12 @@ def inspect_case(c):
     protected=ry.unmet<=1e-8*np.maximum(1,ry.needed)
     # Check marketed overflow against saved stocks too, avoiding amplification
     # of the permitted root difference into a different export input.
-    available=a['rural__stock_path'][:-1]+harvest-rn-a['rural']*KCAL
+    # FixedRuralFood protects capacity from its recorded annual demand sum;
+    # retain the same float operations when subtracting nearly equal stocks.
+    rural_capacity=a['rural__needed']*365/365
+    available=a['rural__stock_path'][:-1]+harvest-rn-rural_capacity
     marketed=np.maximum(available,0)*protected*c['marketed_share'];close(a['marketed'],marketed,atol=.001)
-    owner=net['owner'][:,source];share=net['share'][:,source];dispatch=np.broadcast_to(marketed.sum(0)/12,marketed.shape).copy()
+    owner=net['owner'][:,source];share=net['share'][:,source];dispatch=np.broadcast_to(a['marketed'].sum(0)/12,a['marketed'].shape).copy()
     for month in range(12):dispatch[month]*=(owner[month//3]>=0)&(share[month//3]>0)
     ey=check_inventory(a,'export',a['marketed'],dispatch,a['marketed'].sum(0))
     close(a['departures'],dispatch-a['export__unmet_path'],atol=.001)
@@ -163,16 +166,26 @@ def inspect_case(c):
 def main(provenance_only):
     prep=json.loads((OUT/'preparation.json').read_text())
     for name,digest in {**prep['sources_sha256'],**prep['protected_sha256']}.items():assert sha(ROOT/name)==digest,name
+    for mode,v in prep['networks'].items():
+        assert sha(OUT/f'prepared/network_{mode}.npz')==v['sha256']
+        with np.load(OUT/f'prepared/network_{mode}.npz') as z:net={k:z[k] for k in z.files}
+        with np.load(ROOT/f'output/urban_candidate_supply_20261116/network/{mode}.npz') as z:
+            np.testing.assert_array_equal(net['between'].mean(0),z['between'])
+            np.testing.assert_array_equal(net['owner'],z['owner']);np.testing.assert_array_equal(net['share'],z['share'])
+    for key,v in prep['provenance'].items():assert sha(OUT/f'prepared/people_{key}.npz')==v['matrix_sha256']
     provenance=people_review()
+    (OUT/'people_review.json').write_text(json.dumps(dict(status='passed',reviewer_sha256=sha(Path(__file__)),**provenance),indent=2)+'\n')
     if provenance_only:
-        (OUT/'people_review.json').write_text(json.dumps(dict(status='passed',reviewer_sha256=sha(Path(__file__)),**provenance),indent=2)+'\n');return
+        return
     r=json.loads((OUT/'results.json').read_text())
     for name,digest in {**r['sources_sha256'],**r['protected_sha256']}.items():assert sha(ROOT/name)==digest,name
     for name,digest in r['files_sha256'].items():assert sha(OUT/name)==digest,name
     assert len(r['cases'])==16 and r['all_cases_completed']
+    assert r['all_cases_qualified']==all(c['qualified'] for c in r['cases'])
+    assert r['all_world_rural_food_supported']==all(c['audit']['all_world_rural_food_supported'] for c in r['cases'])
     checks=[inspect_case(c) for c in r['cases']]
     with (OUT/'towns.csv').open() as f:rows=list(csv.DictReader(f))
-    assert len(rows)==33392
+    assert len(rows)==sum(c['positive_towns']+c['zero_towns'] for c in r['cases'])==16696
     with np.load(OUT/'town_model.npz') as z:
         for c in r['cases']:
             key=c['key'];group=[t for t in rows if t['case']==key];assert len(group)==len(z[key+'__target'])

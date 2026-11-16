@@ -1,4 +1,59 @@
-# Seasonal settlement qualification IN PROGRESS — 16 November 2026
+# Seasonal resident support and funded staffing complete — 16 November 2026
+
+USERarchivedclimatesidequest;latestacceptedsettlementseasonalplan executed.
+Deliverable output/urban_candidate_seasonal_20261116/presentation/index.html;
+8pairedmaps(raw/corrected×central/lowrequested density×600/300h),CSValltowns,
+actualcivilian/staffbudgets. Report reports/URBAN_SEASONAL_20261116.md. Mainatlas,
+coefficients,seed1locations/climate/totalpeople unchanged;adoptFalse/gateFalse.
+
+ALL16 CONDITIONAL PHYSICALCERTIFICATES PASS. NOT numericalfixedpoints(all0);
+preserved64/512unqualifiedsolverhistories +A1/A2/A3 declarations below/report.
+Existingfiniteallocator returns actualdemographicproposal;A3 freezesit and
+rebuildsALLsource rural/work/food/stocks/routes atthat exactpopulation. Parent
+trial/arrivals saved. No looseningoforiginalphysicaltolerances orfakeconvergence.
+Finitepeople-shards NEVERduplicatecroparea/grain/work. Hungryoriginscannotexport.
+Fixedmix/downwardselectedstates aren'tmaximumsustainablepopulation forecasts.
+
+600h actualtownresidents control→candidate:
+rawcentral9,405,630→9,337,899(−.720%),corrected10,056,808→10,065,607(+.087%).
+rawlow4,877,264→4,879,556,correctedlow5,072,973→5,095,909. 300hcentral candidate
+4,236,505raw/4,433,264corrected;300hlow2,387,228/2,447,631. ExacttablesinCSV.
+Density defines REQUESTS,notfinaloccupancy;thisdoesnotrefit/certifybuiltfootprints.
+Candidate600hcentral localruralshortfall49,344raw/34,263corrected personyears;
+300h382,579/311,716. AllworldruralfoodsupportFALSE. Missingruralimports/otherdiet,
+fullhousehold/draft/transport labour,roles/recruitment rights remainexplicit.
+
+IndependentreviewPASS:8provenance matrices/3,842,205links(maxdiff1.14e-13people),
+16cases/16,696town-case rows/3,870,224physical sourcecases/90,255shipmentrows.
+Canonicalbisectionstockreplay vsisolatedclosedroot;separatefield/trade/budget
+equations;maxgrainresidual1.72e-8personyears. Kernel64initialinventories/5patterns
+PASSoriginaltol(max.582).10meaningfultestsPASS. Fresh48initial/parent/finaltrials
+reproduceallfinalpeople/production/routesandtown_model.npz/towns.csv BYTEEXACT;
+FULL solver histories weren'trerun. See review.json/replay.json/tests.json.
+
+Fundedheadlinecohorts1023raw/1042corrected,EXACT SAME locations/affiliations
+bothmodels aspublishedannualheadline. downstream/reach_identity.json PROVES
+P2/v2.1mapidentity underprotectedfixedtravelinputs;canonicalbuilderfilesexact
+release-reference source. No newmaprenderorindependentreachphysicsclaim. Some
+300hsourcevectorschange;theirpoliticalmaps requireseparaterebuildbeforepublishing
+thoseoptions.16thinactualstaffingpacketsunderdownstream/,allgatesFalse. Monthly
+grain trade itself rebuiltandreviewed. Presentation8348town/scenariopairs,
+33392plottedvalues/8PNGs/16staffpackets checked;desktop/mobileviewerpassed.
+
+Allnewsciencecode/recipesfrozen;largeprepared/caseNPZ/freshignored,compact
+town_modeltracked. Don'talterproducersorcaches/reusecomputedcasesafterchanging
+scientificcode. Reproduction10commandsinreport. EarlierCURRENT/NEXTentriesbelow
+arehistorical;NO jobsneedrestarting. Physicalclosureisconditionalcerealonly,
+notnewEarthvalidation. Adoption_gate.json remainsFALSEwithconcretereasons.
+
+NEXT FROZEN seasonal_transfer_readiness.json: read-only same-recipe portability
+audit/exactALREADYEXPOSED qualified EarthANNUALsupplycontrols andinputcalendar/
+work/population/transport availability,BEFOREdeclaringanynewseasonalEarthpilot.
+Don'trefitshareorchangefantasymap/physics fromthisaudit. No newsourcepool/heldout
+claim. Appropriate independenttransfer andcomplete resource/work/rolegatesstill
+precedeadoption. Buringhsizes/climate l stayunopened. Climate sidequestarchived.
+
+# Seasonal qualification implementation history — 16 November 2026
 
 USERARCHIVEDclimatesidequest;accepted settlement seasonal food/labour plan and
 saidgoahead. Currentwork output/urban_candidate_seasonal_20261116/. Mainatlas

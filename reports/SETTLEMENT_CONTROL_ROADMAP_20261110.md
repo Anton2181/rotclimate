@@ -70,9 +70,17 @@ The declared annual wider-supply comparison is now complete with exact released
 controls and independent32-scenario/33,392town-case review. Corrected central
 support84.24→86.61%, raw81.14→80.99%; rural deficits remain. See
 [URBAN_CANDIDATE_SUPPLY_20261116.md](URBAN_CANDIDATE_SUPPLY_20261116.md).
-Next settlement step is seasonal source/population/food/work coupling with an
-explicit representation of multiple movement and freight owners; annual support
-does not establish that equivalence. No refit or placement.
+Seasonal coupling is now complete as a conditional cereal scenario:all16 actual
+finite-population physical certificates pass independent inventory/work/route
+review,with8provenance controls and48fresh-point replays. Numerical fixed-point
+failures remain preserved; no convergence or optimum is invented. Corrected
+central support10.057→10.066M,raw9.406→9.338M. Rural deficits remain explicit.
+The primary funded source sets are exactly unchanged,so the existing P2/v2.1
+political maps retain their identity under protected fixed travel inputs.
+See [URBAN_SEASONAL_20261116.md](URBAN_SEASONAL_20261116.md).
+Next is the frozen same-recipe Earth portability/readiness audit on already
+exposed annual supply inputs before any new seasonal pilot,refit or evidence pool.
+Accounting closure does not establish independent transfer or complete resources.
 Seasonal origin/food/labour, full affected-chain and appropriate transfer gates
 still precede adoption. No published population/climate change is needed for
 the existing zero-qualifying-cell fantasy floodplain port.
