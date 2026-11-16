@@ -59,8 +59,13 @@ population cases/20,870 site rows, seed1 exact and fresh exports exact. No town
 doubles or halves in all five paired seeds; corrected central resident changes
 range −2.612% to +2.397%. See
 [URBAN_CANDIDATE_SEEDS_20261116.md](URBAN_CANDIDATE_SEEDS_20261116.md).
-Next is the remaining declared annual wider-supply controls/candidate comparison
-using each model's actual rural food/work budget. No refit or placement.
+The declared annual wider-supply comparison is now complete with exact released
+controls and independent32-scenario/33,392town-case review. Corrected central
+support84.24→86.61%, raw81.14→80.99%; rural deficits remain. See
+[URBAN_CANDIDATE_SUPPLY_20261116.md](URBAN_CANDIDATE_SUPPLY_20261116.md).
+Next settlement step is seasonal source/population/food/work coupling with an
+explicit representation of multiple movement and freight owners; annual support
+does not establish that equivalence. No refit or placement.
 Seasonal origin/food/labour, full affected-chain and appropriate transfer gates
 still precede adoption. No published population/climate change is needed for
 the existing zero-qualifying-cell fantasy floodplain port.

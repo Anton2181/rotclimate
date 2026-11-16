@@ -1,3 +1,47 @@
+# Annual candidate wider supply complete — 16 November 2026
+
+Continued frozen candidate_supply_robustness.json after68a590d0f. Report
+reports/URBAN_CANDIDATE_SUPPLY_20261116.md; output/urban_candidate_supply_20261116/.
+Four static comparison PNGs show raw/corrected central_x34 and low_x14 support.
+32 scenarios (2maps×2models×2readings×4existing supply/work alternatives),seed1,
+no refit/placement/climate/population/default/adoption change. EXACT all4 released
+supply CSV/fullNPZ hashes AND whole unrounded results.json control beforecandidate.
+Restored float64 network cache ignored; canonical storedfloat32 insufficientexact.
+
+600h central supply raw81.144→80.994%(47→52short towns);corrected84.245→86.614%
+(43→42). Flat reading at14.049% extraction raw96.705→96.790%(21short both),
+corrected98.197→98.995%(12→9). Shares remain EXACT .3371937035110408 and
+.14049021985082757;10% and300h sensitivities retained. Candidate300h central
+support35.623%raw/36.375%corrected. Annualsupport ≠ allocatedpopulation orseasonal.
+
+OwnNEWrural grids feed production/food/work. Rural600h central deficits40,064raw/
+28,182corrected personyears,4983/4041cells;300h242,239/218,871. All stayvisible,
+no graininvented. Sourcework/hours,ruralneed,graintransport/shipments fullyrecorded.
+Historical supply minor-road recomputation from node-sorted sites differs from
+size-builder's original track order (xor1011raw/932corrected);preserve exact
+released SUPPLY network for bothmodels,not silently replace withsize fields.
+This olddistinction recorded innetwork receipt/report; controls STILLexact.
+
+Independent review PASS32scenarios/33392town-scenario rows;separate field-work,
+compensatedsourcegroups,sortedlinkallocator,fullgrain/source/work ledgers. Max
+deliverydifference1.51e-10personyears,received6.69e-11,grainresidual2.15e-9.
+Fresh compactexports exact,protected assetsmatch. Presentation4174town/scenario
+pairs/4PNGidentities reviewed. Fullsource arrays ignored,compacttown_model tracked.
+Five reproductioncommands inreport. Candidatepacket adoptFalse/gateFalse.
+
+NEXT settlement: seasonal coupling,not another annualfit. Finite movement's
+multi-origin own/wider draws,changing seasonal freight owners,and existing
+one-owner-per-origin settlement_residents interface need explicit nonduplicating
+representation on actual harvest calendars beforeclaiming allocation/audit
+equivalence. Preserve rural deficits. Coupledfood/work,civilian/staff,thenaffected
+reach/trade +appropriatetransfer stillrequired beforeadoption. No newsourcepool.
+
+USER additionally authorized isolated northern-steppe-only climate experiment
+IN PARALLEL. Plan calibration/northern_steppe_only_20261116/plan.json committed
+9abf33e5c before search; current experiment inprogress. This explicitnewrequest
+permits isolated world/planet fitting despite earlier climateparked preference;
+no mainclimate adoption/publication. EarlierNEXTentriesbelowhistorical.
+
 # Five-seed candidate sensitivity complete — 16 November 2026
 
 Continued AFTER map push9f7a65633 into declared paired fixed-site seed component.
