@@ -34,3 +34,10 @@ fi
 if [ "$step" = all ] || [ "$step" = ensemble ]; then
   $PY -I scripts/exec_with.py scripts/publish_settlement_ensemble.py "output/settlement_ensemble_20261115=>$R/ensemble" "output/settlement_hierarchy_map_20261115=>$R"
 fi
+if [ "$step" = all ] || [ "$step" = reach ]; then
+  # after scripts/release4_reach_chain.sh and moving its images to data/release3/reach_fed (originals restored from git)
+  # both option sets: supply-fed (control_*_release4_20261116) and the earlier 7.5% request (control_*_release4req_20261116)
+  $PY -I scripts/exec_with.py scripts/publish_supply_reach_release3.py "supplyfed_release3_20261113=>release4_20261116" "release3_20261113=>release4req_20261116" \
+    "output/settlement_downstream_20261113=>$R/downstream" \
+    "(39% of surplus marketed, the Earth-calibrated share)=>(34% of surplus marketed, the Earth-calibrated share with Egypt included)"
+fi
