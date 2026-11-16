@@ -22,7 +22,10 @@
 - [done, NOT adopted] River borders (reports/RIVER_BORDERS_20261116.md): crossing cost changes OA by <=0.0005; walking-only
   ownership beats the map's monthly networks in all 7 pools (+0.002..+0.015) but misses G1 (1800 +0.0098). Bosker 1000/1100/1800
   spent. Remaining unused Bosker years: 800, 900 (a walking-ownership test would need them; effect <1 % of contested land).
-- NEXT: host release 4 (mechanical; hosted artifacts still release 3) unless the owner prefers otherwise. Untested idea: internal
+- BLOCKED: host release 4. The hosted atlas (atlases/artifact_links.json: earth_fit ABFAoyPzTuMNVWmByPxctF, hub GPxfbcEiUkiWUr9ubYdMaw)
+  is not found from this session's account (Artifact list shows only other projects), so it cannot be updated here. Owner to
+  choose: publish a new hosted atlas from this account (package_atlas_artifact.py; ~500 files in batches), or update from the
+  account that owns it. Untested idea: internal
   borders between polities need a multi-owner Earth target (none yet).
 - Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
   (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
