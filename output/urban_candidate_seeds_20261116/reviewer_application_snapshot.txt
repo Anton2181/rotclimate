@@ -1,0 +1,15 @@
+def application(H,sites,symbols,capital,model,bounds,cell,seed):
+    coords=np.array([[s['row'],s['column']] for s in sites]);marked=np.array([s['marked'] for s in sites]);M=np.flatnonzero(marked);U=np.flatnonzero(~marked)
+    distance=cdist(coords[U],coords[M]);owner=np.where(distance.min(1)*cell<=75,M[distance.argmin(1)],-1)
+    rng=np.random.default_rng(2026);e=np.clip(np.random.default_rng(seed).standard_normal(len(sites)),-2.5,2.5)
+    for m in M:
+        members=rng.permutation(U[owner==m]);pool=[int(m),*map(int,members[:round(model['hierarchy_phi']*len(members))])];winner=max(pool,key=lambda i:e[i]);e[m],e[winner]=e[winner],e[m]
+    beta=model['full_coefficients'];area=np.array([min(bounds[1],max(bounds[0],math.exp(beta[0]+beta[1]*math.log(h)+beta[2]*cp+model['heldout_sigma']*v))) for h,cp,v in zip(H,capital,e)])
+    before=sorted(area);rank={'imperial capital':0,'major imperial city':1,'fortified city':2,'fortified town':3};ranked=sorted([i for i,s in enumerate(symbols) if s in rank],key=lambda i:(rank[symbols[i]],-H[i],i))
+    values=sorted(area[ranked],reverse=True)
+    for i,v in zip(ranked,values):area[i]=v
+    top=[i for i in ranked if symbols[i] in ('imperial capital','major imperial city')];largest=sorted(range(len(area)),key=lambda i:-area[i])[:len(top)]
+    values=sorted(area,reverse=True)[:len(top)];freed=sorted([area[i] for i in top if i not in largest],reverse=True);holders=sorted(i for i in largest if i not in top)
+    for i,v in zip(top,values):area[i]=v
+    for i,v in zip(holders,freed):area[i]=v
+    close(sorted(area),before,atol=1e-9);return area,e

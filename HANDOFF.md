@@ -1,3 +1,38 @@
+# Five-seed candidate sensitivity complete — 16 November 2026
+
+Continued AFTER map push9f7a65633 into declared paired fixed-site seed component.
+Report reports/URBAN_CANDIDATE_SEEDS_20261116.md; outputs
+output/urban_candidate_seeds_20261116/. Seeds1/7/19/43/97,20area draws/40annual
+population cases,20870site-seed rows. No refit/placement/climate change. Canonical
+hierarchy builder, same base draws each old/new pair; unchanged2026memberorder.
+Seed1 ALL8 old/new CSV/fullfields identities reproduce the map-stage outputs.
+
+Key finding: NO town stays>2x or<half in ALL5seeds. Raw majority-seed doubling7,
+halving2;corrected11/1 (counts across ALL sites,not just seed1 outliers).
+Median paired site ratio1.0163raw/1.0154corrected. Central resident change ranges
+raw−.770%to+2.908%,corrected−2.612%to+2.397%;seed1decrease isn'tstable.
+Town p10/p50/p90 and paired ratios/frequencies in town_intervals.csv;these are
+5scenario samplequantiles,NOT calibrated uncertainty intervals or validation.
+Allrequested residents mettofloatingprecision,populationconserved,annual local
+food recomputed. StillNO wider supply orseasonalqualification/adoption.
+
+Independent reviewer PASS:20870rows/40ledgers,full-distanceH/scalarapplication,
+annualrural/food,concentration and explicit quantile interpolation;fresh compact
+artifacts byteexact. Maxdiffarea1.14e-13ha/rural6.83e-13people. Reuses preceding
+independent reviewer with ONLY fixedseed exposed;exactadapter snapshot retained.
+Compactmodel.npz tracked,largecasefields/freshignored. Three reproductioncommands
+inreport. Mapviewer/PNGs below stillcurrent;no mainatlas publication.
+
+NEXT: remaining annual wider-supply component of SAME COMMITTED
+candidate_supply_robustness.json. Exact release4 controls FIRST;missing large
+supplyNPZ caches reconstruct on fixed release4nodes/tracks,not old release3.
+Then seed1 candidate bothmodes/readings at existing exact34%/14% shares and
+declared10%/300h sensitivities;use eachcase's ACTUAL remainingrural people for
+production/work/ruralneed,record allgrain/transport deficits/massbalances.
+No newfit/seedchoice. Later seasonal finite settlement_residents/audit_origin_food,
+civilian/staff demands,reach/trade/transfer still required beforeadoption.
+Earlier NEXT entries below nowhistorical for seedwork;climate staysparked.
+
 # Fixed-site candidate map ready — 16 November 2026 (climate parked)
 
 Current deliverable: output/urban_hierarchy_candidate_20261116/index.html,

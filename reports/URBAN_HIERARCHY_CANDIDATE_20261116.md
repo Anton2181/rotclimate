@@ -145,7 +145,9 @@ compact model, exact output receipts, CSV/site JSON, maps and viewer are tracked
 
 [candidate_supply_robustness.json](../calibration/urban_diagnosis_20261116/candidate_supply_robustness.json)
 declares a five-seed fixed-site comparison and annual work-limited wider-supply
-controls. It does not authorize adoption from annual results. The existing
+controls. The seed component has since completed and is independently reviewed;
+see [URBAN_CANDIDATE_SEEDS_20261116.md](URBAN_CANDIDATE_SEEDS_20261116.md).
+Wider supply remains next. The declaration does not authorize adoption from annual results. The existing
 `settlement_residents.allocate_residents` / `audit_origin_food` seasonal joint
 accounting, affected supply/staff/reach/trade chain and appropriate transfer
 evidence still precede adoption or main-site publication. Do not reopen climate,
