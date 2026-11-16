@@ -30,8 +30,13 @@ underpredicted strict targets, none capital-labelled. The Earth size fit,
 qualified Earth supply and fantasy application use different population
 assumptions; supply success does not certify size-H inputs. See
 [URBAN_HINTERLAND_PROVENANCE_20261116.md](URBAN_HINTERLAND_PROVENANCE_20261116.md).
-Next is exact isolated replay of the already-qualified floodplain input and a
-three-recipe H comparison before further fitting. No refit or exclusions yet.
+The qualified floodplain input has now been restored exactly in isolated cache,
+and the three-recipe H comparison independently reviewed. Same-recipe floodplain
+inputs raise median paired H2.55× for the eleven Egyptian strict targets; P2/Frier
+raises it9.19×. All664records retain support. No area score/adoption yet. See
+[URBAN_POPULATION_RECIPE_20261116.md](URBAN_POPULATION_RECIPE_20261116.md).
+Next is the frozen five-alternative legacy-versus-same-recipe input-refresh
+predictive pilot, with legacy numerical controls and nested train-only sigma.
 No new
 size/default/map adoption; no new exponent search. The proposal status
 in the strategy-review paragraphs below is historical for this chosen direction.

@@ -1,3 +1,44 @@
+# Exact population-input replay complete — 16 November 2026 (climate parked)
+
+Continued beyond BOTH audit pushes. Exact isolated floodplain grid replay now
+PASSES SHA3b57d0cba03802d3693eb46e661771d6375715dc2f17f8555217ff0ff33fb338,
+archivedregionbytes and1275qualifyingcells. Canonicalglobal/basin paths STILL
+missing,unchanged;newarrayscache inoutput/urban_population_recipe_20261116/restored/.
+Theyareignored,notpushed. This is alreadyexposed observed-weather harvest replay,
+NOTclimatefitting. Reproducewithscripts/restore_urban_population_inputs.py.
+
+Replay initiallyfailedTypeError(extra_crops) becauseoldFwrapperprecedes generic
+Earthcaller maizeAPI. Failedreceipt/log/source snapshot preserved under
+failed_legacy_wrapper/. A1(055c6a051)declaredBEFOREretry. Runtimeadapter drops
+ONLYextra_crops=None/empty,old_world=True;nondefaultsrejected;originalscientific
+files/params unchanged. Sixcontrols pass. Never patch pinned canonicalFscript.
+
+THREEfixedpopulationrecipe comparison COMPLETE/independently reviewed:legacy,
+floodplain settlement_base×sameoccupation, floodplaincapacity×history/P2/Frier.
+All664records/153strict retainpositiveH,no source refiltering;1315fixedcentrecells,
+3massbudgets,6cohorts/306provincecases,7503CSVcells,5fresh numericexports exact.
+Review independently derivespopulationeqs/sampler andbruteallcentre ties/radius;
+biomeclassifier andlegacyrowmapping reusedexplicitly. Report:
+reports/URBAN_POPULATION_RECIPE_20261116.md;complete outputs in
+output/urban_population_recipe_20261116/. CompactanonymousHmodel.npz tracked.
+
+KEYRESULT: Aegyptus11strict medianPAIREDHratio2.55(samepopulationrecipe),9.19(P2).
+GroupHmedians8355→38017/124747;ratioofmediansisDIFFERENTfrommedianpairedratio.
+All-windowpeople119.354M→121.021M/103.518M;allowed54.040M→55.211M/61.400M.
+Inputeffectmaterialbut NOarea fit/score/adoption. OppositeMoesiaerrornotexplained.
+
+NEXT FROZEN population_refresh_pilot.json: fivefixedalternatives,M0control,
+legacyM1/M1C exactpriorcontrols,and same-recipefloodplainM1/M1C. Mixed664training,
+same153strict targets/4provincefolds,unchanged nested_fit and train-onlyinnerOOF
+sigma.20outercases/765predictions/200provincecases,allretained. Fullrank/support
+checknewX;no newhyperparams/exclusions. NoP2predictivecandidate becauseit changes
+recipe relativefantasyapplication. Pairedpoint/properlogscores/coverage+folds,
+independentQR/scalarreview,freshfiles,priorcontrolreproduction required.
+SuccessfulEarthrefreshstillneeds actualfantasyharvest/population equivalence,
+appropriatedeclaredtransfer andfullorigin/food/labour rebuild beforeadoption.
+No climate,Buringhsizes/climate l,or population/cityarea multiplier. PriorNEXT
+entriesbelowarehistory. Keep pinnedscientificfiles/tests immutable.
+
 # Urban geographic/provenance audits complete — 16 November 2026
 
 Continued from9b85fe35e through TWO independently reviewed audits. Geographic

@@ -13,6 +13,15 @@ import floodplain_earth as F
 OUT=ROOT/'output/urban_population_recipe_20261116'
 PLAN=ROOT/'calibration/urban_diagnosis_20261116/population_recipe_replay.json'
 RESTORE=OUT/'restored'
+AMENDMENT=PLAN.parent/'population_recipe_compatibility_a1.json'
+
+
+def old_world_default_adapter(function):
+    def adapted(*args,extra_crops=None,old_world=True,**kwargs):
+        if extra_crops not in (None,{}) or old_world is not True:
+            raise ValueError('Legacy replay accepts only default Old World crops')
+        return function(*args,**kwargs)
+    return adapted
 
 
 def sha(p):
@@ -21,6 +30,7 @@ def sha(p):
 
 def main():
     assert subprocess.check_output(['git','show','HEAD:'+str(PLAN.relative_to(ROOT))],cwd=ROOT)==PLAN.read_bytes()
+    assert subprocess.check_output(['git','show','HEAD:'+str(AMENDMENT.relative_to(ROOT))],cwd=ROOT)==AMENDMENT.read_bytes()
     prior=ROOT/'output/urban_hinterland_provenance_20261116';r=json.loads((prior/'results.json').read_text());review=json.loads((prior/'review.json').read_text())
     assert review['status']=='passed' and review['results_sha256']==sha(prior/'results.json')
     assert review['reviewer_sha256']==sha(ROOT/'scripts/review_urban_hinterland_provenance.py')
@@ -34,7 +44,7 @@ def main():
         assert sha(p)==source['sha256'] and p.stat().st_size==source['bytes'],source['path']
     arable=ROOT/'data/cache/arable_slope_earth/arable_5m.npz';assert sha(arable)==public['reference_arable_sha256']
     OUT.mkdir(parents=True,exist_ok=True)
-    paths=[Path(__file__),PLAN,spec,ROOT/'scripts/floodplain_earth.py',ROOT/'scripts/land_people_earth.py',ROOT/'scripts/land_people.py',
+    paths=[Path(__file__),PLAN,AMENDMENT,ROOT/'tests/test_urban_crop_compatibility.py',spec,ROOT/'scripts/floodplain_earth.py',ROOT/'scripts/land_people_earth.py',ROOT/'scripts/land_people.py',
            ROOT/'scripts/arable_slope_earth.py',ROOT/'polity/seasons.py',ROOT/'polity/transport.py',ROOT/'harvest/models.py',
            ROOT/'rotclimate/biomes.py',ROOT/'output/floodplain_rule_20261114/results.json',ROOT/'output/land_people/earth_floodplain/regions.json',
            ROOT/'output/supply_people_level_20261114/results.json']
@@ -49,7 +59,15 @@ def main():
                  public_sources_verified=len(public['sources']),raw_or_model_parameters_changed=False,climate_fit=False,adopt=False)
     try:
         F.OUT=RESTORE/'basin';F.GRID=RESTORE/'grid'
-        F.main()
+        compute=F.L.compute
+        def compatible_compute(*args,**kwargs):
+            legacy=F.L.analyse
+            F.L.analyse=old_world_default_adapter(legacy)
+            try:return compute(*args,**kwargs)
+            finally:F.L.analyse=legacy
+        F.L.compute=compatible_compute
+        try:F.main()
+        finally:F.L.compute=compute
         grid=F.GRID/'earth.npz';regions=F.GRID/'regions.json';fields=F.OUT/'fields.npz'
         receipt['actual_grid_sha256']=sha(grid)
         assert receipt['actual_grid_sha256']==expected,'Restored grid differs from qualified archived identity'
