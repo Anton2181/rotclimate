@@ -1,3 +1,17 @@
+# GEOGRAPHY OF CONTROL — 16 November 2026 (owner: natural borders, forests)
+- [done] Forest map: C1b forest share published as atlas layer land_forest ("Forest (AD 200 potential)", raw + corrected;
+  scripts/forest_map.py --publish; browser check passes).
+- [done, NOT adopted] Basin cantons (A3, reports/BASIN_CANTONS_20261116.md): HydroBASINS L8 majority cantons keep accuracy
+  (G1) but push borders onto watershed divides (x1.10) while real borders avoid them (x0.65-0.94): G2 fails in all three
+  blind pools (T6 Ming 1400, T7 Tang 900, T8 Bosker 1200; now spent). River frontiers diagnostic: real borders avoid rivers
+  except Han (x0.27-1.31), so no river-frontier rule was built.
+- [done, ADOPTED narrowly] Forest in travel C2 (reports/FOREST_TRAVEL_20261116.md): walking coefficient from forest share;
+  blind T9 Ming 1600, T10 Sui 609, T11 Bosker 1700 (spent): G1 and G2 pass by ~0.002. Effect on Earth about zero.
+- NEXT: measure C2's impact on the map (staged); owner told before any release-5 publication. Untested idea: internal
+  borders between polities need a multi-owner Earth target (none yet).
+- Sources re-fetched this session (ignored cache): hydrobasins, chgis_v6_20261107 (sha matches), cliopatria_full_20261107
+  (pinned archive), bosker_cities_20261107 (Dataverse 24747), hanson2016 (rebuilt from OxREP CSV; A3 dev reproduces within 0.002).
+
 # RELEASE 4 PUBLISHED (settlements; WP3 river confluences) — 16 November 2026
 Positions: release-3 tiling x (1 + exp(-(d/15 km)^2)) to river junctions (ROTCLIMATE_CONFLUENCE_K=1.0; dev Han/Rome pass, blind Buringh
 1300 pass +0.028). Build: settlement_chain.py calibration/settlement_chain/release4_confluence.json build -> copied to
