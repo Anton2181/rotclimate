@@ -40,6 +40,11 @@ instruction for the first dev+fine finalist).
   (settlement_chain.py ... build -> output/chain_staging/release4_confluence); then checks, then publication.
   Staged so far: counts unchanged (883/902), marked unchanged, 56-58 % of proposed towns move (median 1 cell, 70 % within 3);
   placement review passes (reviewer got an independent confluence factor); supply needed ROTCLIMATE_RELEASE3_DIR (added).
+  STAGED BUILD COMPLETE (all stages incl. integration/labour/fertility on staged atlases built by scripts/stage_atlas.py +
+  export_reach_release3.py; legacy control reproduced all 220 published corrected files). Staffed raw 1023 = 1023, corrected
+  1042 vs 1041; fed residents raw 10.97 M -> 10.77 M. [next] publication: settlements panel, supply, control v2/v21 reach on the
+  staged staffing, supply reach, reach/trade layers (publish_downstream_release3), imperial access + administration, ensemble,
+  browser checks, fit hub, checkout. Staging: output/chain_staging/release4_confluence (ignored).
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
 - [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
   Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
