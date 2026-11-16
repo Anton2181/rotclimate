@@ -31,8 +31,9 @@ instruction for the first dev+fine finalist).
 - Town count/primacy (both blind size failures): an Earth-test artefact in part (no marked places on Earth; the map's lore
   capitals carry the capital and hierarchy terms); Mesoamerican sites hold ~18 people/ha vs 100-500 in the Old World rules.
 - WP1 moot (seats are lore inventory). r46 on the map (ds8): zonefit 0.175 = r44, strict 31.4 % vs 32.4 %: no rebuild case.
-- [running] Climate: gated dry-heating refit on r46 (calibration/dry_heat_r46_20261116/plan.json; desert summers 3-7 C too cold);
-  sealed set l declared (calibration/sealed_20261116l).
+- [done] Gated dry-heating refit on r46: FAIL (best S49 0.9982; stopped by a container restart at 30/40, disclosed).
+  Cause: the land rain belt reaches ~22.5 N in Africa too (Sahel rains 2 months early, false summer rain in Najd/Sahara).
+- [running] Climate: African rain belt vs South Asian monsoon (one shared itcz_shift). Sealed set l ready.
 - [next if 1 passes dev+fine] Step 2: sealed set j once -> adopt r46 (record like r45_adoption.json); atlas rebuild only if owner asks.
 - [if 1 fails] Step 3 major rework candidates, in order:
   a. South Asian spring circulation (Bengal: northerlies + e70b branch drying until June, land 4 C too hot) - a land-sea
