@@ -7,6 +7,16 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
+**Latest:** Earth seasonal transfer readiness is audited. All six annual supply
+cases replay byte for byte after restoring the protocol's1981–2010 winds; the
+reader fallback's1991–2020 mismatch and its complete failed outputs remain
+preserved. Independent source/work/demand and100primary flow-setting checks
+pass. No harvest calendars were saved. The next frozen stage reconstructs the
+original model calendars and floodplain crop provenance before any seasonal
+Earth pilot. See [URBAN_SEASONAL_TRANSFER_20261116.md](URBAN_SEASONAL_TRANSFER_20261116.md)
+and the current HANDOFF.md entry. Main atlas/defaults unchanged;climate sidequest
+archived. The following entries retain earlier development history.
+
 Owner additionally requested a parallel experiment with only the northern steppe
 as target. It is complete and isolated:97 world/planet evaluations, independent
 review and ds16 three-layout comparisons. The region becomes mostly cold desert,

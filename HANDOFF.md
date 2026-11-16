@@ -1,4 +1,52 @@
-# Seasonal resident support and funded staffing complete — 16 November 2026
+# Earth annual controls exact; calendar recovery next — 16 November 2026
+
+Latest completed stage: reports/URBAN_SEASONAL_TRANSFER_20261116.md and
+output/urban_seasonal_transfer_20261116/results.json. Six annual Earth cases
+reproduce their COMPLETE archived result JSON BYTE FOR BYTE: four Greek-wall
+variants plus central/low density readings. Qualified artifacts live under
+output/urban_seasonal_transfer_20261116/wind_1981/. Independent review passes
+all source population/crop/work/demand checks and all100 primary flow settings
+(300 aggregate checks,max difference2.22e-16). No seasonal Earth simulation,
+share refit,new validation claim or atlas/default change. No jobs running.
+
+Found and resolved a transport INPUT identity problem: original ignored wind
+cache absent; existing fallback URLs serve1991–2020,while annual protocol
+specifies1981–2010. Wrong-period Greek primary e95=.3455135751 vs archived
+.3371937035. Preserve first full failed4case run and independent200setting
+review in TOP-LEVEL output/urban_seasonal_transfer_20261116/{greek,readiness}.
+The old1981-labelled sea calibration is an inadequate identity check:
+fallback actually matches all108 old sea diagnostic scalars; that alone did
+NOT qualify the annual supply inputs. Native1991 arrays equal fallback exactly;
+native1981 named by annual protocol restores every annual result byte. All92
+nonroute arrays across the four period comparisons are EXACT; actual routes
+change. Original ignored wind-file bytes/full route arrays were not retained;
+only full annual output identity is claimed. Canonical reader is protected and
+unchanged; use scripts/replay_urban_transfer_1981.py (asserts actual metadata),
+NOT the unversioned fallback for qualified supply replay.
+
+NEXT FROZEN calibration/urban_diagnosis_20261116/seasonal_transfer_calendar_recovery.json.
+Recover original model crop windows on56378 active sources/their5' source pixels,
+including53265with positive production and3113with zero production.
+No calendars are saved for ANY positive production.455source cells have basin
+share (2.67697%of annual potential). Recover base and fully irrigated winter
+maximum separately,validate exact stored energies/dtypes,and compare sowing
+with saved last-flood month/flow. Do NOT invent dates,use fantasy calendar
+engine,duplicate physical grain/workforce,or alter annual energies to fit flood
+timing. Original crop_yield first-strict-best season is the intended recovery,
+not observed calendar validation. Basin maximum crop identity remains explicit.
+
+Future seasonal port ALSO needs a separate declaration: global rank-one
+recruitment W_ij=people_i*city_request_j/61.4M (factorized,not huge dense/CSR),
+multiple component harvest timing with ONE physical workforce,monthly routes/
+storage/leg delay and annual control. Existing protected fantasy module takes
+one boundary per source and sparse recruitment; don't force Earth into it.
+Primary central annual rural deficit207112person-years already exists.
+403/1115 eligible city areas are q25-filled at15ha; city residents are assumed
+density×area,not observed census. Existing independent-transfer/resource/role
+adoption gates remain. No new evidence pools;Buringh sizes/climate l unopened.
+Climate sidequest archived. Reproduction commands and exact boundaries in report.
+
+# Previous completed fantasy seasonal stage — 16 November 2026
 
 USERarchivedclimatesidequest;latestacceptedsettlementseasonalplan executed.
 Deliverable output/urban_candidate_seasonal_20261116/presentation/index.html;
