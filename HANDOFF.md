@@ -1,3 +1,48 @@
+# Northern-steppe-only world/planet experiment complete — 16 November 2026
+
+User explicitly requested IN PARALLEL with settlement:sole northernsteppe target,
+noothers,actual maps andplanet parameters. This authorizes isolatedclimatefit
+despite olderclimateparked instructions;NO productionchange. Plan9abf33e5c before
+search;exact19gene protocol/source frozen beforefit,preserved dae38cbf1.
+Report reports/NORTHERN_STEPPE_ONLY_20261116.md;localviewer
+output/northern_steppe_only_20261116/presentation/index.html,climate_comparison.png,
+target_seasonal_cycle.png,parameters.csv. Allartifactsisolated,adoptFalse.
+
+EXACTtargetexisting paintedclass2 cold_dry (north-centre),onecomponent498cells
+ds16. ONLYmean fuzzy cold_dry membership loss;allotherclasses/spill/realismZERO.
+Globalphysicsstillcoupled. Existingr44/v22 sharedrecipe,19world/planet genes incl
+latitude/northbearing,tilt,retrograde,offmapland,orbit,flux,radius,greenhouse,
+cross-equatorialtransport,EBMlandscale. Terrain,day/year/gravityfixed.97evals
+(baseline+8×12CMA),ds64/layout1;allnumericsPASS;best96 score.992132vs.002501base.
+Budget exhausted,notconvergence/globaloptimum. NoEarthpoolopened.
+
+FINALds16 layouts1/2/3 BOTHmodels,6numericsPASS,no reselection. Meanfield target
+score.01779→.96221;medianrain878.5→88.5mm,MAT14.53→10.18C,coldest+1.29→−14.52,
+hottest33.01→34.50. BSk16.87%,BWk80.92% vsbothzero baseline. IMPORTANTexisting
+cold_dry ruleacceptsDESERT;do notcall97.79%BSk+BWksharepuresteppe/grassland.
+Allotherpaintedzone memberships collapse becauseunconstrained,reportexplicit.
+
+Planettilt33.5047→44.9411(close45bound),radius.843026Earth(~5371km),flux.965126,
+ecc.007933,perihelion27.935days,greenhouse−.11345W/m²,retrogradestillTRUE.
+Northbearing−8.8137→167.9663(~176.8degflip);latcentre39.8340,drawnnortherntarget
+moves40.34–46.46N→30.16–37.75N. ThisisfreeWORLDconfiguration,notfixedorientation.
+NEoffmapland.0089→.4616,otherlandfractionschange;exact19rowsandboundstable.
+One boundedsearchdoesNOTuniquelyidentifyplanetparameters;radiusfirstorderscaling.
+
+Independent review PASSall97vectors/selection/bounds/lockedparams;separatemonthly
+overlap/aridity/membership/BSk/BWkfrom6savedmembers+2fieldmeans;freshcoarsebase/
+winnerreplayexactscore;adversarialotherzonefieldchanges leaveobjectiveEXACT.
+Protectedmainassets/sourcesmatch;presentation19rows/image/linkschecked;desktop/
+mobile viewer checked. Scriptsnorthern_steppe_only.py,review_northern_steppe_only.py,
+render_northern_steppe_only.py,review_northern_steppe_presentation.py.
+Rawdaily members/checkpointignored,preview.npz tracked. Reproductioninreport.
+
+Nextclimateproposal(notyetnewfit):sameonlyregionwithBSk/grasslandrequirementand
+pairedfree/fixednorthorientation,declarebeforefitting. Don'tretunepriorobjective
+orchooseposthocwinner. SettlementannualsupplyalsoCOMPLETEandpushed94b89a559;
+nextsettlementseasonal same-origin coupling describedbelow/report. Preserveboth
+directions;climateexperimentdoesn't silentlyadoptorreplace settlementprogramme.
+
 # Annual candidate wider supply complete — 16 November 2026
 
 Continued frozen candidate_supply_robustness.json after68a590d0f. Report

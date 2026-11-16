@@ -7,6 +7,13 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
+Owner additionally requested a parallel experiment with only the northern steppe
+as target. It is complete and isolated:97 world/planet evaluations, independent
+review and ds16 three-layout comparisons. The region becomes mostly cold desert,
+with44.94° tilt and nearly reversed north direction; other targets were excluded.
+See [NORTHERN_STEPPE_ONLY_20261116.md](NORTHERN_STEPPE_ONLY_20261116.md).
+No climate adoption or replacement of the settlement queue follows from that fit.
+
 Owner has since accepted the urban diagnosis/concentration workstream, with
 climate postponed. Exact old-source replays, current-release diagnosis and the
 native-projection supplied-site control are reviewed. The declared fixed urban-
