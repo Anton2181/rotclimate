@@ -1,4 +1,59 @@
-# Earth monthly meal pilot reviewed; calendar sensitivity next — 16 November 2026
+# Exact-energy calendar sensitivity reviewed; evidence/buffer audit next — 16 November 2026
+
+Latest report reports/URBAN_CALENDAR_SENSITIVITY_20261116.md and output
+output/urban_calendar_sensitivity_20261116/qualification.json. Catalogue,
+2original monthly controls and4timing cases independently reviewed. Original
+full-precision maxima/first masks and saved energies exact;both original
+monthly cases replay ALL70food arrays exactly. No jobs running.
+
+Exact ties on35156/53550positive source components;67.5810%of annual grain
+potential affected. All455positive basin components have multiple equal-energy
+boundaries avoiding saved high-flow growing bins. No isclose/yield tolerance,
+changed grain/crops or invented observed dates. Earliest/latest use original
+length/start order within the selected boundary. One shared B600h workforce;
+grain,annual work,requests,rural people,shares,stores/routes all unchanged.
+
+City MEAL coverage first→earliest/latest:
+central92.457845→92.471846/92.460095%;
+low93.575793→93.572850/93.557190%.
+Largest aggregate change0.018604percentage points;individual city shifts up
+to12.7824points. Changes in meal-equivalent person-years:
+central+1172earliest/+188latest;low−119/−755. Full-meal city counts:
+central1046→1044/1048,low967→956/967. Actual city requests/occupancy NOT changed.
+Original central is BELOW both alternatives;original low ABOVE both:
+earliest/latest are NOT network outcome bounds or confidence intervals.
+No variant adopted. Local gains/losses can cancel in the aggregate.
+
+Six new exact-window testsPASS(parent7food/12work test identities unchanged).
+Independent catalogue/tie-eligibility/work grouping and225512source-cases,
+16inventory groups/31728shipments PASS original1e-10stock tolerance(maxratio
+0.57741);grain residual<=1.72e-8person-years.4340city difference rows,72monthly/
+30regional rows,3figures,compactcatalogue/windows.npz andtownpacket tracked.
+Large cases/*/fields.npz ignored. All original controls/1103protected identities
+unchanged,adoptFalse;no demography/new validation/mainatlas/default change.
+
+NEXT FROZEN seasonal_transfer_evidence_buffer_audit.json: read-only bridge audit
+of ALREADY EXPOSED reports/plans/implementation contracts plus ORIGINAL monthly
+stock paths. No raw Sacks records,new source queries,country intersections,
+phenology re-scoring,new food scenarios or parameter fitting. Existing docs:
+modern calendars are duration/context constraints,not ancient dates;the isolated
+clock is conditional on supplied sowing and its trained chilling candidate
+FAILED adoption;FAO56 examples do not supply an ancient Nile calendar;reserve
+algebra gives no universal historical capacity/loss. Keep negative results.
+
+Also reconstruct baseline individual stock peaks exactly;report class capacity,
+SIMULTANEOUS peak and SUM OF INDIVIDUAL peaks separately. For export stocks,
+count potential binding at hypothetical90/365annual-market threshold,including
+actually exporting origins/departure weight. This is only a saved-path diagnostic,
+not a forecast under changed capacity. Then declare a bounded next experiment
+or evidence strategy. Calendar stability across TWOrecipes does not qualify
+all timing assignments or isolate buffer causality. No buffer query made yet.
+
+Science producers frozen;no source edits and cache reuse. Report has replay
+commands;completed outputs refuse overwrite,use isolated OUT. Buringh sizes/
+climate l unopened,climate sidequest archived. Prior entries below are history.
+
+# Previous completed fixed-request monthly pilot — 16 November 2026
 
 Latest report reports/URBAN_EARTH_MONTHLY_20261116.md;output
 output/urban_earth_monthly_20261116/qualification.json,meal_maps.png,

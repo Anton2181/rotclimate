@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
-**Latest:** The B600h fixed-request Earth monthly-food pilot is complete and
+**Latest:** Exact-energy calendar sensitivity is independently reviewed.
+67.581%of potential has multiple equal-energy maturity boundaries. Two declared
+earliest/latest recipes change aggregate meals by at most0.018604pp,but local
+city fractions by up to12.7824pp. Neither recipe bounds network outcomes;
+original controls/grain/work/population/policy remain exact and unchanged.
+See [URBAN_CALENDAR_SENSITIVITY_20261116.md](URBAN_CALENDAR_SENSITIVITY_20261116.md).
+Next is the frozen read-only existing-evidence/buffer-usage audit before new
+phenology or loss/storage trials. No main atlas/default adoption or new fit.
+
+The B600h fixed-request Earth monthly-food pilot is complete and
 independently reviewed. Central meal coverage92.4578%vs annualB95.0773%;
 low93.5758%vs95.6076%. Original requests,production,work and policy shares
 stay fixed;no demographic allocator or actual occupancy update. All8inventory
