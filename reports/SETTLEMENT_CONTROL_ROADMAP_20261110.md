@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 16 November 2026
 
-**Latest:** Original Earth crop calendars are recovered and independently
+**Latest:** The paired Earth component-work comparison is complete. All six
+original annual controls replay byte for byte. Physical component work with
+one shared workforce changes600h central city support95.1267→95.0773%;
+300h central64.2613→63.3162%,with Egypt47.6285→42.9360%.
+Both budgets pass independent source/work/flow review and12budget tests.
+Shares,requests,population,grain potential and routes stay fixed.
+See [URBAN_COMPONENT_WORK_20261116.md](URBAN_COMPONENT_WORK_20261116.md).
+Next frozen step is the B600h fixed-request monthly food diagnostic with
+multiple harvest pulses,protected stores/exports and actual seasonal routes;
+no demographic iteration,share refit,atlas/default adoption or climate work.
+
+Original Earth crop calendars are recovered and independently
 reviewed for all53265positive sources,with108648stored crop energies bit-exact.
 No flood-window overlap/crop mismatch was found;41mixed cells have different
 component dates. The audit exposed a component-work accounting dependency:

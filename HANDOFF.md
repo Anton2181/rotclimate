@@ -1,4 +1,55 @@
-# Earth source calendars recovered and reviewed; component work next — 16 November 2026
+# Paired Earth component work reviewed; fixed-request monthly food next — 16 November 2026
+
+Latest completed stage: reports/URBAN_COMPONENT_WORK_20261116.md and
+output/urban_component_work_20261116/qualification.json. All6original annual
+result cases replay BYTE EXACT via unchanged Greek/low runners and verified
+cached1981–2010 routes. Original population/city/crop/work arrays recomputed
+bit-exact before B. No new Dijkstra run or transport physics validation.
+
+Physical component work B uses original positive base/basin crop activities,
+areas0.36nonbasin/0.95basin,ONE0.4rural workforce per physical source and shared
+annual/per-harvest reaping budgets. One common retention scales all components.
+Same potential,crop calendars,city requests,global recruitment/population,actual
+routes,270haul limit and existing central/low marketed shares. No share fit.
+Both600h primary and300h stress PASS independent scalar-work/sorted-flow review.
+
+Annual city request supported,A→B:
+600hcentral95.1267→95.0773%,low95.6390→95.6076%;
+300hcentral64.2613→63.3162%,low68.3038→67.7091%.
+Central600hgrain−18914person-years,citysupport−4140people across4city cells;
+300hgrain−353122person-years,citysupport−79112people across10cells.
+Egyptcentral600h81.7406→81.6122%,300h47.6285→42.9360%;
+low300h55.6504→50.4651%. Actual occupancy/requested populations NOT changed.
+Central600hruralshortfall207112→209624person-years;300h590957→617382.
+All material grain changes on basin sources;nonbasinmax3.14e-12person-years.
+No material city support gains. All reaping peaks slack:annual work binds;
+maxreapingbudget38.46%at600h/19.23%at300h under partial listed task counts.
+
+12 meaningful tests PASS. Independent225512source-cases,8town allocations,
+5963shipment rows,1820basin CSV rows;maxsource residual2.10e-12person-years,
+maxtown residual2.92e-10people.4340city comparison rows/40regional rows,
+3figures,compacttown packets tracked. Larger source case NPZ ignored.
+All protected prior identities/mainatlas/defaults unchanged,adoptFalse.
+This is ANNUAL fixed-request grain support,NOT seasonal meals/new settlement
+occupancy,complete work/diet or new empirical validation. No jobs running.
+
+NEXT FROZEN seasonal_transfer_fixed_request_pilot.json: B600h as work scenario,
+its reviewed exact ANNUAL control,central/low fixed original requests and shares.
+Uniform global withdrawal stays factorized (no huge people matrix); preserve
+exact rural arrays. Two component harvest pulses/one physical worker/grain
+ledger;365d rural/export and90d town stores,5%loss,original4snapshot routes
+held3bins,onebin perleg delay,protected overflow-only exports. Explicit stock/
+freight loss/unused grain. Independent repeating inventory/meal/route audit.
+Report fixed-request monthly shortfalls,NOT demographic feedback/actual city
+caps/coupled fixedpoints/maximum populations or staff. No share fitting.
+
+All new science producers are frozen after these outputs;no editing and cache
+reuse. Scripts urban_component_work.py --control greek/low (separate processes),
+--hours600,review600,then --hours300,review300,render/seal;see report. Completed
+outputs refuse overwrite;use isolated OUT for fresh replay. Prior entries below
+are history. Buringh sizes/climate l unopened;climate sidequest archived.
+
+# Previous completed calendar recovery — 16 November 2026
 
 Latest report: reports/URBAN_EARTH_CALENDARS_20261116.md. Output
 output/urban_earth_calendars_20261116/{qualification,results,review,presentation}.json,
