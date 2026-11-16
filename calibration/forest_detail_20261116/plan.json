@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "date": "2026-11-16",
+ "status": "declared before any result; owner (16 Nov): 'Can't we get a more detailed forest map ... actual borders, impacted by settlements, farming, and topology'",
+ "question": "Does clearing driven by the farmland the model's own people need (people x food need / grain yield) reproduce where Europe was forested around AD 200 better than the current layer (C1b: 0.60 x climate potential)?",
+ "target": "Zanon et al. 2018 (Frontiers in Plant Science 9:253; PANGAEA doi:10.1594/PANGAEA.886656, CC BY 3.0), pollen-based forest cover (%) at 1750 cal BP (c. AD 200), 5 arc-minute grid; downloaded 2026-11-16 to data/cache/zanon2018, not redistributed. Independent of the REVEALS data that C1 was fitted and tested on.",
+ "domain": "Zanon cells with a value, inside the Earth run (output/land_people/earth/earth.npz, 5 arc-min) and on its land: 29-56 N, 11 W - 43 E",
+ "split": "5-degree tiles in a checkerboard: dev = tiles with (floor(lat/5) + floor(lon/5)) even, blind = odd",
+ "scoring": "0.5-degree block means (6 x 6 cells, blocks with >= 50 % valid cells): RMSE of forest share and Spearman rank correlation; 5' cell scores reported only",
+ "inputs": {
+  "potential": "p = clip((P/PET - 0.3)/0.2, 0, 1) x clip((GDD5 - 300)/300, 0, 1) from the Earth run (aridity, gdd5)",
+  "people": "the Earth run's settlement density x central occupation (polity.earth.earth_people), as the map's Harvest density",
+  "yield": "the Earth run's kcal_ha (main crop food per hectare of cropland)"
+ },
+ "models": {
+  "B1_current": "0.60 x p (the published layer; not refitted)",
+  "B2_level": "F x p, F fitted on dev (0.30-1.00 step 0.01)",
+  "M_farming": "F x p x (1 - min(1, k x D x 912,500 / kcal_ha / 100)), D people per km2; cells with kcal_ha <= 0 take no farm clearing; F in 0.30-1.00 step 0.01 and k (cleared land per hectare of cropland needed: fallow, pasture, meadow, wood-lots) in 0.5-8 step 0.1, fitted jointly on dev by block RMSE"
+ },
+ "blind_gates": {
+  "G1": "M blind block RMSE <= B1's",
+  "G2": "M blind block Spearman >= 0.30 and >= B1's + 0.10",
+  "adopt": "G1 and G2: the map's forest layer becomes M with the map's own density and yield (raw and corrected), and stage 2 (sub-cell allocation by slope, wet valley floors, tree line, declared separately) builds on it. Otherwise the owner is told; a detailed layer could still be drawn as a scenario, labelled untested."
+ }
+}
