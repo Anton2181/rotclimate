@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Six fixed-infrastructure storage/loss cases pass independent
+**Latest:** Read-only throughput audit explains the large commercial-store
+effect:98.5%of zero-loss marketed grain follows a checked single-pulse/open-route
+identity,departures=min(annualmarket,annualmarket/12+fixedcapacity). All19local
+city losses have increased annual direct grain;intertown allocation and seasonal
+overflow explain meal losses.451024source-case/19city/228month rows reviewed,
+zero newfood scenarios. See
+[URBAN_STORAGE_THROUGHPUT_20261117.md](URBAN_STORAGE_THROUGHPUT_20261117.md).
+Next frozen control:exactly2zero-loss/90d cases using ORIGINALbaseline monthly
+dispatch quotas,4exact existing controls first;hold all other rules/inputs.
+This isolates quota feedback;no historical policy fit or default adoption.
+
+**Previous:** Six fixed-infrastructure storage/loss cases pass independent
 stock/routes/ledger review; both original70array controls reproduce exactly.
 At5%loss,90day commercial stores reduce central/low meal coverage from
 92.4578/93.5758%to40.0068/45.8106%. Zero loss adds1.435/1.228pp at365days

@@ -1,4 +1,53 @@
-# Storage/loss factorial complete; saved-throughput audit next — 17 November 2026
+# Storage throughput explained; fixed-quota loss control next — 17 November 2026
+
+Latest report reports/URBAN_STORAGE_THROUGHPUT_20261117.md and qualification
+output/urban_storage_throughput_20261117/qualification.json. Completed AFTER
+pushing factoriale217f9709;zero newfood scenarios/kernel calls/observations.
+451024saved source-case ledgers plus ALL19local-loss cities/228months reviewed.
+No jobs running. Parent frozen outputs/code and1103protected identities exact.
+
+Main result:98.5090%central/98.4578%low of0loss marketed grain comes from
+ONE-positive-marketed-pulse origins withALL12routesopen. For these,annual
+departures=min(ownannualmarket,ownannualmarket/12+FIXEDcommercialcapacity)
+holds atoriginal tolerance;exact cohort counts44895central/44888low.
+Identity covers99.2974/99.2770%of90d departures.
+It explains why small commercial stores plus stipulated uniform dispatch
+spill grain before later quotas;NOThistorical capacity calibration,optimal
+dispatch or a food forecast under another policy. Do not apply identity to
+multiple pulses,blocked routes or5%loss.
+
+5%central market30.444MgrainPY fixed,departures29.447→9.901M at365→90days;
+commercial overflow.294→20.477M. Low market13.203M,departures12.765→4.292M,
+overflow.132→8.882M. Distinguish source grain from arrivals/meals/people.
+ALL11central/8low losing cities at0loss/90d have more annualDIRECT arrivals;
+8/6have less intertown receipts,remaining3/2have unchanged intertown receipts
+but additional overflow and lower arrivals in some later bins. No local
+protected-exporter flag flips. Combined city losses−276.520/−107.883mealPY;
+all monthly/annual channels retained. Maxtrace ratio6.37e-6oforiginaltol,
+bound ratio3.70e-6,citymealΔledgerres<=1.37e-12PY. No missing grain invented.
+
+Tracked11.8MBsource_accounting.npz retains ALL451024source-case vectors;
+redundant60MBsources.csv remains local/ignored. Small summary/city/month
+tables tracked. Qualified audit/review/seal refuseoverwrite;redirect OUT
+consistently in fresh process for read-only replay. Don't edit frozen code
+and reuse outputs. All previous food cases remain baseline/sensitivity only.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/fixed_dispatch_loss_control.json:
+exactly2new0loss/90day cases,central/low. Keep commercial capacity references
+and ALLphysical inputs;hold monthly dispatch quota at ORIGINALbaseline
+annualmarket/12 instead of each0loss scenario's ownannualmarket/12. Isolate
+quota feedback,not choose bestfeedingpolicy. New isolated adapter must first
+reproduce ALL70arrays for BOTH5%/90and0%/90own-quota controls at eachdensity
+(4controls),then run2newcases. Reuse qualified0lossendpointmethod/tolerances.
+Zero-reference origins retain0capacity AND0quota,even if newlyeligible.
+Independent fullinventories/routes/grainledgers;compare allcity/month/region
+and previous19losses plus newlosers,departures/spill/unused/transit separate.
+No new365d case,parameter search/sharefit/data/phenology/demography/default
+adoption. Original prototype remains reference;historical/rights/fullwork/
+diet/independent-transfer gaps unresolved. Climate/steppe archived,Buringh
+sizes/climate l unopened. Previous entries below retain historical states.
+
+# Previous completed storage/loss factorial — 17 November 2026
 
 Latest report reports/URBAN_STORAGE_LOSS_20261117.md and qualification
 output/urban_storage_loss_20261117/qualification.json. Six declared new cases
