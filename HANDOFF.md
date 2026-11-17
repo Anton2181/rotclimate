@@ -1,4 +1,55 @@
-# Evidence/buffer audit complete; commercial-store/loss factorial next — 16 November 2026
+# Storage/loss factorial complete; saved-throughput audit next — 17 November 2026
+
+Latest report reports/URBAN_STORAGE_LOSS_20261117.md and qualification
+output/urban_storage_loss_20261117/qualification.json. Six declared new cases
+reviewed; both original controls replay ALL70food arrays EXACT. No food jobs
+running. Original B600h grain,first-best calendars,population/work/requests,
+shares and actual1981-2010 routes unchanged. No atlas/default adoption.
+
+City meal coverage central/low:
+5%loss/365d baseline92.457845/93.575793%;5%/90d40.006758/45.810563%;
+0%/365d93.892804/94.803867%;0%/90d40.336113/46.175795%.
+Commercial capacities use ORIGINAL baseline marketed energy and stay absolute
+across loss levels. Rural365d/town90d capacities fixed. All-rural/all-city
+mealsfalse. These are fixed-request meal equivalents,NOT occupancy forecasts
+or historical granary estimates. Shorter stores cost52.451/47.765pp at5%loss;
+zero-loss gain1.435/1.228pp at365d but only.329/.365pp at90d. Interaction
+−1.105605/−.862842pp. Zero loss at90d HARMS11central/8low city cells despite
+improving aggregate meals. Do not assume local monotonicity.
+
+Important preserved numerical control:generic zero-loss bisection selected
+avoidable inherited reserves in495/1000synthetic noninteger balanced cases.
+Frozen original kernel untouched. New isolated polity/earth_storage_loss.py
+uses supported food_year at0loss and zero-loss map endpoints T(0)/T(cap),
+preferring smallest lower endpoint if it repeats at ORIGINAL1e-10criterion.
+Method declared/committed BEFORE Earth cases;19testsPASS. Five-percent branch
+unchanged. Separate stock-map/ledger review:338268source-cases,24inventory
+groups,23137intertown shipments;maxoriginal tolerance ratio.576484,fullgrain
+residual<=1.72e-8PY.1103protected parent identities unchanged. Zero-reference
+origins keep0commercialcap;15/17newly protected such sources cannot carry
+stock but can immediately dispatch harvest-month quota.
+
+Tracked maps(central/low,factors,monthly),8680city/96month/40region rows,
+2170city/24month/10region factor rows and compact town_model.npz. Large
+cases/*/fields.npz remain local/ignored. Scientific sources/output identities
+frozen;qualified producers/review/render/seal refuseoverwrite,redirect OUT in
+fresh process for replay. Do not modify them then reuse numerical caches.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/storage_throughput_audit.json:
+read-only saved original+sixcase commercial ledgers and ALL19local city-loss
+channels. Independently verify marketed=departures+spoilage+overflow+stockΔ.
+For zero-loss ONE-positive-marketed-pulse,ALL12route-open origins only,
+test departure=min(annualmarket,annualmarket/12+fixedcapacity);report how much
+of the mass/cohort this covers,do not apply to multiharvest/blocked routes.
+Trace direct/intertown/overflow/spoilage/stocks and protection flips for all
+11+8losing cities. Zero new food cases/data/parameter search;no policy change.
+Proceed with this audit after committing/pushing factorial,do not stop there.
+
+Climate/steppe sidequest archived. Buringh sizes/climate l unopened;no new
+evidence/phenology rescoring,share fit,demographic iteration or main atlas
+adoption. Old entries below retain historical state.
+
+# Previous evidence/buffer audit — 16 November 2026
 
 Latest report reports/URBAN_EVIDENCE_BUFFERS_20261116.md and
 output/urban_evidence_buffers_20261116/qualification.json. Completed AFTER

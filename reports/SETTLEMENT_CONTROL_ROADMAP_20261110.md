@@ -5,7 +5,20 @@ not just its first experiment. Read this alongside the current entry in HANDOFF.
 at every continuation. Physics development has its own queue; neither queue
 silently replaces the other.
 
-## Live review — 16 November 2026
+## Live review — 17 November 2026
+
+**Latest:** Six fixed-infrastructure storage/loss cases pass independent
+stock/routes/ledger review; both original70array controls reproduce exactly.
+At5%loss,90day commercial stores reduce central/low meal coverage from
+92.4578/93.5758%to40.0068/45.8106%. Zero loss adds1.435/1.228pp at365days
+and.329/.365pp at90days. It harms11/8local cities at90days despite positive
+aggregate effects. Fixed capacity references,grain/work/requests/policy/routes
+unchanged;no historical granary calibration or default adoption. See
+[URBAN_STORAGE_LOSS_20261117.md](URBAN_STORAGE_LOSS_20261117.md).
+Next:read-only saved-throughput and local-loss channel audit;no new food
+scenarios. The earlier queue entries below retain their historical status.
+
+## Previous live review — 16 November 2026
 
 **Latest:** The read-only evidence/buffer audit is complete. Existing modern
 calendar/conditional phenology/FAO-stage/reserve evidence does not qualify
