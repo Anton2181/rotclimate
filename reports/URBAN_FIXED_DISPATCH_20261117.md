@@ -41,8 +41,8 @@ commercial capacity and zero quota, even if newly eligible for marketing.
 
 ## What the comparison establishes
 
-All 11 central/8 low previously losing city cells now improve against the
-five-percent control, by a combined 563.103/108.681 meal-equivalent person-years.
+All 11 central/8 low previously losing city cells now meet or improve on the
+five-percent control, with combined gains of 563.103/108.681 meal-equivalent person-years.
 There are zero newly losing cells against that control. Their previous
 combined changes had been −276.520/−107.883. The
 [19-cell comparison](../output/urban_fixed_dispatch_20261117/previous_losers.csv)

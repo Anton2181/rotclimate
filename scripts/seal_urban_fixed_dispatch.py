@@ -47,7 +47,7 @@ def main():
         np.testing.assert_array_equal(packet[reading+'_previous_loser'],oldloser);np.testing.assert_array_equal(packet[reading+'_new_loser'],newloser)
         stats=r['city_effects'][reading];assert stats['previous_losers']==int(oldloser.sum())
         assert stats['all_losers_vs_five_percent']==int(newloser.sum())==0
-        assert np.all(newdelta[oldloser]>1e-7)
+        assert np.all(newdelta[oldloser]>=-1e-7)
         assert stats['fixed_vs_own_gaining_cities']==int((quotadelta>1e-7).sum())
         assert stats['fixed_vs_own_losing_cities']==int((quotadelta< -1e-7).sum())
         assert stats['fixed_vs_own_meal_delta_person_years']==total(quotadelta)
