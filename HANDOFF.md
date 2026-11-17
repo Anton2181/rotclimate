@@ -1,3 +1,29 @@
+# ACTIVE: AD200 Earth benchmark — approved realism plan, 17 November 2026
+
+Owner approved the six-stage realism plan. Start with evidence, a simple baseline
+and the current settlement model on the SAME Roman regions. This supersedes
+all older warehouse/handling NEXT targets, including Roman handling research.
+No more mechanism work before assessing added predictive value.
+
+Frozen declaration: calibration/roman_benchmark_20261117/plan.json.
+First deliverable: conditional settlement-area benchmark using existing pinned
+Roman catalogue, explicit AD200 occupation/date and extent-basis audit, M0 versus
+training-isolated current hierarchy family, common regional maps and all-province
+scores. Areas are undated extents; city occupation is not an extent phase. Do not
+claim AD200 demographic validation, survey completeness or location forecasting.
+Same four province-hash folds; no new blind claim. Exact five-seed control before
+256 fixed evaluation draws; no hierarchy refit or new source pool.
+
+Then move to genuinely dated population/settlement observations and simple spatial
+baselines, annual economy, influential uncertainties, seasonal constraints and
+matching atlas chain. Climate stays fixed. Period-specific evidence and unknowns
+remain explicit; modern truck rates remain discontinued.
+
+Preserve current published r5 atlas and all historical scientific receipts.
+Commit/push intermediate stages and continue; do not pause after each push.
+
+# Historical handoff: superseded handling-evidence queue
+
 # Owner steering: AD 200 evidence only for handling calibration — 17 November 2026
 
 The owner challenged the modern truck-handling study: "we're doing 200 AD why
