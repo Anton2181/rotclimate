@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Original route recovery complete: 16 preselected funded legs, four
+**Latest:** No-hold accounting complete: 34 tests, eight manufactured cases and
+exact equality of eight original arrival/export arrays across both baseline
+readings, with zero food/stock/graph solves. Intermediate charge events add no
+funding or bin. See [WAREHOUSE_NO_HOLD_20261117.md](WAREHOUSE_NO_HOLD_20261117.md).
+Next frozen integration joins funded arrivals to a single physical capacity
+across explicit commercial/town roles. Seven manufactured scenarios and seven
+exact aggregate inventory reductions; no Earth case or actual warehouse mapping.
+Capacity/rights/handling evidence and full work remain later gates; climate later.
+
+**Previous:** Original route recovery complete: 16 preselected funded legs, four
 legacy graphs, exact archived source owners/distances and eight exact selected
 intertown costs. Independent direction/edge checks pass all 1148 occurrences;
 inspection map and compact certificates retained. No food solve or warehouse

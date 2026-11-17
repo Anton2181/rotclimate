@@ -1,0 +1,20 @@
+{
+  "status": "declared_after_no_hold_identity_controls_before_shared_role_adapter_execution",
+  "purpose": "Integrate funded no-hold arrivals with one shared physical inventory/capacity across explicit commercial and town roles. This is a finite manufactured engineering exercise, not an Earth warehouse scenario or historical calibration.",
+  "api": "Accept previously funded NoHoldBatch receipts, explicit one-consignment-to-one-store assignments, unique store IDs and physical node IDs, capacities, matching net-edible pool labels and supplied pooling permission. Validate all consignment IDs/timing/charges again without changing funded endpoints; reject duplicate funding across receipts and any endpoint/store mismatch. Convert delivered grain once into monthly deposits at the already-paid endpoint arrival bin. Group role requests into exactly one inventory per physical store; call the qualified shared_warehouse_year once. Each role has a unique ID and explicit physical store. Allocate actual paid withdrawals by a supplied fixed role-priority permutation, never by resizing requests/capacity. Preserve one store-level stock/loss/overflow ledger and expose role-level requested/paid/unmet amounts. No separate commercial/town capacity or duplicate inventory per role.",
+  "finite_manufactured_cases": [
+    "shared_pulse:two origins deliver60+60 in bin0;one store cap20;commercial request8/month,town2;priority commercial then town;zero loss",
+    "priority_ab:same pulse/cap5,roles8+2;commercial then town",
+    "priority_ba:identical funded inputs/cap5/requests;town then commercial;only role allocations may differ",
+    "calendar_wrap:two original one-bin legs arrive in bins11 and0;sent60 each,delivered50 each;one cap30;roles5+3/month;five-percent stored loss",
+    "two_stores:all funded grain goes to first store;both stores cap20;one role per store requesting10/month;second store cannot borrow first-store grain",
+    "zero_capacity:same shared pulse and requests;capacity0 can fund immediate withdrawals only",
+    "zero_delivery:funded sent60+60 but whole-leg delivered0;capacity20;no inherited grain may fund roles"
+  ],
+  "reductions": "For EACH of exactly seven manufactured scenarios, independently compare aggregate deposited grain, single physical capacities, actual paid total and ALL15FoodYear fields against one direct qualified shared_warehouse_year aggregate control. These seven reference calls are reductions of the same scenarios, not extra scenarios. Priority_ab/ba must leave aggregate inventory identical. Observe honest canonical year/annual-map call counts for adapter, reference and reviewer separately.",
+  "invariants_and_rejections": "Role paid<=requested,paid>=0,unmet=requested-paid;role paid sums to actual store departures at existing1e-10 grain tolerance. Whole-ledger grain closes including freight,store spoil,overflow and stock change. No duplication of consignment funding, capacity, grain or inventories across roles/stores. Check invalid mappings, duplicate store/role/consignment IDs, nonmatching endpoints/material, missing permission, negative/nonfinite demands, invalid priority and unsupported inputs. Independently check original-tolerance stock traces/canonical field replay from recorded initial stock,without calling the new shared-role adapter.",
+  "scope": "No Earth baseline replay, new Earth food case, graph/Dijkstra, source fit, physical-day inference, rights/capacity adoption, complete work claim, population/land/recruitment allocation or atlas change. Fixed priority is a declared scenario allocation, not inferred institutional access. Inputs are net edible grain released by an upstream protected-rural/work ledger; the adapter does not itself certify that upstream condition. Raw source capacities and site-survey workbook remain unadopted/unopened. Climate/steppe and reserved pools remain deferred.",
+  "new_fit": false,
+  "new_validation_claim": false,
+  "adopt": false
+}

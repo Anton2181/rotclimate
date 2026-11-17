@@ -1,3 +1,42 @@
+# No-hold accounting complete; shared-role integration next — 17 November 2026
+
+Latest report reports/WAREHOUSE_NO_HOLD_20261117.md and qualification
+output/urban_warehouse_no_hold_20261117/qualification.json. New isolated
+polity/no_hold.py passes34 tests. Eight declared manufactured cases and exactly
+two original baseline accounting reductions completed and independently checked.
+All8 original direct/inter_received/inter_exported/arrivals arrays EXACT.
+1,250,180 consignment records INCLUDING zeros (625315 central,624865 low),
+not that many positive shipments or new routes. Producer8+26 ledger calls,
+reviewer0 new-ledger calls. Zero food/stock solves,graphs,Dijkstra,new Earthcases.
+No jobs at stage completion; all1103 protected identities exact.
+
+Consignment IDs unique within/across calls; invalid batches claim no IDs.
+Original sent/delivered charge and one-bin arrival preserved,including year wrap.
+Explicit event charges annotate one movement,not new funding or time. No physical
+capacity/rights inferred. Charge allocation residual0 in both legacy controls;
+aggregate floating totals residual central-.00390625/low+.001953125kcal retained
+at original grain tolerance,not adjusted. Funding itself still needs upstream
+protected-rural/work evidence; new IDs cannot authenticate external grain.
+Independent scalar arrival accumulation and exact Fraction manufactured checks.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_shared_roles_controls.json:
+connect funded receipts once to one physical inventory/capacity across explicit
+commercial/town roles,with supplied fixed withdrawal priority. Exactly7 finite
+manufactured scenarios and7 direct aggregate reductions,ALL15FoodYear fields
+exact;count canonical year/map calls for each phase separately. Reject duplicate
+funding,endpoint/store mismatch,invalid roles/mappings/priority/material/permission.
+Role paid sums to store departures at original grain tolerance. No cross-store
+borrowing or capacity/stock multiplication. Independent original-tolerance
+inventory replay from recorded initial stock,zero new-role-adapter reviewer calls.
+No Earth cases or realstore mapping/work/rights/capacity adoption. Climate later.
+
+Reserved Buringh size/climate pools and site-survey workbook unopened. No fit,
+actual people/staff/land/recruitment or atlas/default changes. Completed producers
+and packets frozen;isolated OUT and matching test receipts required for replay.
+Previous entries below are history. Continue integration after committing thisstage.
+
+# Previous original-route provenance completion — 17 November 2026
+
 # Original route provenance complete; no-hold contract next — 17 November 2026
 
 Latest report: reports/WAREHOUSE_ROUTE_PROVENANCE_20261117.md. Inspection figure:
