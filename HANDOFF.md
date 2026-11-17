@@ -1,3 +1,38 @@
+# Plough-only completion adapter implemented and checked — 17 November 2026
+
+READ reports/PLOUGH_COMPLETION_ADAPTER_20261117.md and preceding Roman resource
+contract. New harvest/plough_resources.py reuses unchanged harvest.labour:
+plan_plough_package requires ONE explicit physical origin, per-ha total human,
+qualified operator subset and draft-team service, net capacities and boolean
+window. No Roman coefficients, animal supplies, operator fractions or dates
+defaulted. Rejects missing/zero team requirement and operator>totalhuman.
+Zero available team service is valid and completes zero. Human/operator/team
+must coexist in same period; operator column is SUBSET, not extra people.
+Result: completed plough-PACKAGE hectares, used/rawunused hours only. No grain,
+annualcropcompletion or populationoutput. Pass/fieldquality/animalfeed/otherduties
+remain outside; explicit net capacities are caller inputs, not inferred.
+
+Completed output/plough_completion_adapter_20261117/qualification.json:
+passed_supplied_plough_resource_adapter_not_full_farm_or_atlas_feasibility.
+62 tests pass across new tests/test_plough_resources.py and oldtest_farm_labour.py;
+9 manufactured controls independently bounded by sum of per-period minimum
+capacities, fresh CSV/JSON/result byteexact. Tests cover subset/draft/human limits,
+disjoint windows, netotherduties, calendar shift, unitrescaling, fractionalarea
+and invalidinputs. No atlas/crop/climate/food/route/worldpopulation rerun.
+The original scheduler and all prior science/publication identities stay fixed.
+
+NEXT FROZEN calibration/roman_benchmark_20261117/cereal_seed_area_link.json.
+Same cached ColumellaII English witness, sections2.9 and2.12 ONLY: crosswalk
+cereal sowing volumes per iugerum to task-count seed quantities. Keep crop/soil/
+method qualifiers; state which prior area interpretation is supported. No silent
+rate correction, new sourcefamily, operator/animalallocation, food/map/default
+or climate change. OriginalHTML cached/ignored under plough_resource_contract
+source/ with exact historicalsha. No new scan/Latin equivalence claimed.
+Do not infer Earth seasonal feasibility just because the adapter works.
+Commit/push and continue remain authorized; no background jobs at completion.
+
+# Historical handoff: Roman plough resource contract
+
 # Roman plough resource contract complete — 17 November 2026
 
 READ reports/PLOUGH_RESOURCE_CONTRACT_20261117.md.

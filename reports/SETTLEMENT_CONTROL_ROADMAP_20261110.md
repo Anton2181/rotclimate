@@ -7,6 +7,15 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest implementation:** plough-package adapter now requires simultaneous net
+total-human/operator-subset/draft service at one supplied origin; no Roman rate,
+operator fraction or animal supply defaults.62 adapter/existing scheduler tests
+and9 closed-form controls pass; fresh controls exact. Output is partial task
+hectares, not grain or a feasible farm. [Adapter report](PLOUGH_COMPLETION_ADAPTER_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/cereal_seed_area_link.json` —
+close the specific seed-volume/land-area link in the same ColumellaII witness
+(2.9/2.12) before a seasonal activity uses the prior per-hectare task counts.
+
 **Latest primary-source contract:** same original ColumellaII witness recovered
 byteexact;20 paragraphs/10 resource-scope findings checked. Operator time belongs
 to total human time, with separate simultaneous draft service. Estate staffing
