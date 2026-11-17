@@ -7,6 +7,15 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest evidence result:** bounded Karanis screen complete (three searches,
+three bodies); no matched AD200 population/occupied-area observation qualified.
+Tax-collection units lack mapped house links; tax subjects are not all people;
+lettered excavation levels do not synchronize town-wide phases. Preserve density
+alternatives. [Source decision](KARANIS_DENSITY_FEASIBILITY_20261117.md).
+NEXT: `calibration/roman_benchmark_20261117/annual_agricultural_budget.json` —
+trace and quantify the existing annual agricultural budget with compatible units
+before high-impact seasonal work; no new model runs or warehouse detours.
+
 **Latest annual priority assessment:**32 archived cases,48 one-input contrasts,
 16 explicitly unavailable combinations; no new model runs. Density dominates
 town demand (corrected5.520→13.315M); maximum coverage effects are56.521pp density,

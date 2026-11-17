@@ -1,3 +1,32 @@
+# Karanis density feasibility screen complete — 17 November 2026
+
+READ reports/KARANIS_DENSITY_FEASIBILITY_20261117.md.
+Completed output/karanis_density_feasibility_20261117/qualification.json:
+bounded source provenance/scope passed; ZERO matched AD200 density observations.
+Exactly3 targeted searches/3 source bodies: Yiftach2020 pp243-247 (especially
+p246 n36), Motta etal2024 doi10.15184/aqy.2024.69, KelseyMuseum site history.
+Source HTML/text/web-extracted chapter caches ignored under source/; URL/hash/
+retrieval route records tracked. Direct Academia HTML is preview/AI material;
+actual printed chapter text was read through separate web extraction, NOT that
+preview. No facsimile identity or direct papyrus interpretation claimed.
+
+Specific missing link: tax-collection units not located on excavated plans;
+taxpayers not complete inhabitants; census examples cross dates; lettered
+excavation levels do not define town-wide simultaneous occupation. BGU I97 and
+BGU II577 (201/2) are CITED LEADS ONLY, not records opened this session. No town
+population / whole-mound area division, new density, model run or atlas change.
+
+NEXT: calibration/roman_benchmark_20261117/annual_agricultural_budget.json.
+Use existing supply diagnostics + pinned work/production code and already read
+Columella evidence to trace people→workers→listed hours→crop-area/work→production
+→rural retention→marketed surplus→delivered ration equivalents in compatible units.
+Quantify work-limited production without calling it historically recoverable.
+Identify largest missing agricultural definition before seasonal work. No new
+source pool, simulation, fit, warehouse detour or climate development here.
+Both density alternatives stay explicit. Commit/push and continue authorized.
+
+# Historical handoff: annual assumption priorities
+
 # Annual assumption priorities complete — 17 November 2026
 
 READ reports/ANNUAL_ASSUMPTION_IMPACT_20261117.md and
