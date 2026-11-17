@@ -1,3 +1,36 @@
+# Unit crosswalk complete; calibration-entry package is next — 17 November 2026
+
+User: "Go on. How many steps until calibration?" Answered as THREE work
+packages from that question:1units,2one baseline/freeparameter/matchedtarget,
+3fit+comparison. Package1 NOW COMPLETE;2/3 remain. This is NOT a guaranteed
+number of turns or promise that absent empirical observations will materialize.
+Do not count source checks,62 engineeringtests or the old chosen95%-grain fit
+as independent empirical resource calibration. City-area model already fitted;
+new agricultural operator/draft/workavailability targets remain unqualified.
+
+READ reports/CEREAL_SEED_AREA_LINK_20261117.md.
+output/cereal_seed_area_link_20261117/qualification.json passed:
+11 paragraph identities/two arithmetic conversions and conditional unit links;
+fresh exports byteexact, source same original ColumellaII English witness.
+2.9.1/5 wheat4or5modii/iugerum matches2.12.1;2.9.14/15 namedhexastichum barley
+5modii/iugerum matches2.12.2. Distichum/Galatian barley2.9.16 uses6modii, not
+directly matched; no6/5 task rescaling, no universalbarley claim. Daylength8h
+and approximate.25ha conversions remain scenarios. Coefficients/atlas unchanged.
+
+NEXT UNIFIED PLAN calibration/roman_benchmark_20261117/calibration_entry.json.
+Package2: choose one concrete calibration baseline/estimand and match eligible
+area+operation/crewtime or animalservice observations. Fixed hourly allowances,
+operatorfractions/draftstocks remain scenario inputs unless observed targets
+qualify. Max3 searches/2original scholarly/method bodies on one farm-account
+family; exact dates/support/inclusion, no eligibility from snippets or transferring
+another Roman date into exactAD200. If none qualifies, explicit no-fit readiness
+decision; do not manufacture a historical fit or restart generic task audits.
+Package3 runs ONLY after target/baseline/comparison gate. Reserved pools/workbook
+and climate stay deferred; no warehouse/modernhandling return. Commit/push and
+continue authorized. Older NEXT lines below are historical, not parallel queues.
+
+# Historical handoff: plough-only completion adapter
+
 # Plough-only completion adapter implemented and checked — 17 November 2026
 
 READ reports/PLOUGH_COMPLETION_ADAPTER_20261117.md and preceding Roman resource

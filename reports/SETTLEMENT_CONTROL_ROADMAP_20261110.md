@@ -7,6 +7,21 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Current calibration path:** user asked how many steps remain. Three work
+packages from that question:1close units;2freeze one baseline/freeparameter and
+eligible matched target;3fit+compare. Package1 is complete: conditional wheat/
+five-modii barley seed-area links confirmed; six-modii barley variety unmatched,
+no universal coefficient/daylength adoption. [Unit crosswalk](CEREAL_SEED_AREA_LINK_20261117.md).
+
+**Next is package2**, under `calibration/roman_benchmark_20261117/calibration_entry.json`.
+Do one bounded farm-account target screen and a concrete fit-entry decision.
+Existing city areas already support conditional area fits; new operator/draft/
+annual-work capacities have no newly qualified matched observations. Do not
+count engineering tests, prescriptions or chosen grain-coverage targets as those
+observations. Package3 needs eligible targets; the count is not a time guarantee.
+
+## Completed work log — older NEXT entries are superseded
+
 **Latest implementation:** plough-package adapter now requires simultaneous net
 total-human/operator-subset/draft service at one supplied origin; no Roman rate,
 operator fraction or animal supply defaults.62 adapter/existing scheduler tests
