@@ -1,3 +1,32 @@
+# Owner steering: AD 200 evidence only for handling calibration — 17 November 2026
+
+The owner challenged the modern truck-handling study: "we're doing 200 AD why
+are we reading about trucks". That research direction is DISCONTINUED. None of
+its numbers entered any model. Do not resume the modern observation target in
+older handoff entries or promote modern warehouse guidance to Roman work rates.
+
+ACTIVE NEXT: calibration/urban_diagnosis_20261117/roman_handling_evidence.json.
+Seek dated Roman-period documentary evidence (prefer AD100–300, centred on200)
+for grain handling operations/loads/work organisation and any matched quantity,
+crew and time denominator. Keep dates/sites, evidence class and temporal transfer
+explicit. Wages/storage volume/shipping duration are not handler productivity.
+Missing period rates stay unknown; no modern truck/conveyor substitute.
+
+Completed and pushed this continuation: ALL-original Earth handling quantities
+and exact independent review (2170town rows,52080monthly quantities,15896ordered
+shipments), then one FAO guidance screen with no empirical rate qualified.
+Reports: HANDLING_EXPOSURE_20261117.md and HANDLING_RATE_SCREEN_20261117.md.
+The latter is historical conceptual guidance, not AD200 calibration evidence.
+Modern observation PDF was read but no extraction/qualification/integration was
+completed; disposition at output/urban_handling_observation_20261117/disposition.json.
+
+Current live provisional r5 atlas and all original model inputs remain unchanged:
+https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+No new food/work/stock/graph solver, handling coefficients or staff assignment.
+Commit/push and continue authorized; climate/steppe remain deferred.
+
+# Historical handoff: superseded modern evidence direction
+
 # Handling quantities and FAO evidence screen complete — observational paper next
 
 17 November 2026. Live r5 atlas remains unchanged:

@@ -7,6 +7,13 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Owner correction:** The target is AD200. The modern truck-handling study is
+discontinued, with no rates or model adoption. The active next source plan is
+`calibration/urban_diagnosis_20261117/roman_handling_evidence.json`: dated
+Roman-period evidence for grain-handling tasks and matched quantity/crew/time.
+Unknown rates remain unknown. The FAO screen below is conceptual guidance only.
+
+
 **Latest seasonal-work evidence:** all original handling quantities are qualified;
 a bounded direct FAO chapter screen then checks ten located claims and refuses an
 empirical handling rate: guidance describes operations but not a crew/quantity/
