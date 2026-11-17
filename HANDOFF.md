@@ -1,3 +1,42 @@
+# First calibration candidate closed; two planned stages remain
+
+User asks "Go on. How many steps until calibration?" Current truthful answer:
+unit check complete;2PLANNED work packages remain (matched evidence+baseline,
+thenfit/evaluation). This is NOT a promise of2turns/commits or an ETA. Baseline
+and firstestimand proposed, no qualified observation yet; no empirical fit done.
+Avoid another generic source-unit/engineering task as a surrogate for the data.
+
+READ reports/COMPANION_ACCOUNT_TARGET_20261117.md and preceding entry report.
+Completed output/companion_account_target_20261117/qualification.json:
+passed_companion_identity_scope_and_explicit_no_fit_closure.
+ONE additional primarybody+metadata under explicitpostscreenamendment, no new
+search. SBXX14452=TM32187, NOT adjacentTM14882. Initialmetadataadjacencyprobe
+returnedwrongcitation and was rejected; no unrelatededition opened or used.
+Currentpinnedrepo0adcd9651ec240726a5b62028cd5c153bf45ffd0:
+DDbDP/32/32187.xml,HGV_meta_EpiDoc/HGV33/32187.xml. Historicalcitationpath
+sameparent0eec6593... independentlyidentifiesTM32187; old/currentbodyagree;
+3officialGitblob identities exact, CC-BY3DukeDDbDP/HGV attribution retained.
+
+Actualcompanion is BEGINNING OF PERSON LIST, only2survivinglines ofnames/gaps,
+noarea/duration/operatorroles. Namesnot2workers, line/gapcountsnotworkquantities.
+HGVdate lowprecision226–275AD; do NOT inherit versodate20June259. Reciprocity
+metadata identifiesversoSBXX14453. No papyrusimage/independentcriticalGreek
+collation, no fittedquantity. Heroninoscandidate CLOSED withzeroeligiblepairs.
+Earlierinitialscreen/readinesssnapshotpreserved; currentclosureexplicitnofit.
+
+NEXT data-only package2 alternative under
+calibration/roman_benchmark_20261117/documented_task_target.json:
+one RomanEgyptian reaping-contract/performance sourcefamily, max3searches/
+2sourcebodies. Findactualsame-eventarea+operation+crew/exposure/timeunit.
+PrefernearAD200; exactdatescope; contractedminimum != observedrealizedrate.
+No datum from wages/deadline/names alone. If eligibleconstraint appears, declare
+newestimandbeforefit (reaping data CANNOT calibrate plough/draftcapacity). If
+none, finiteclosure; no bibliographyloop. No optimizer/newatlasmodel until
+baseline/target/estimand/evaluationgate passes. No sourceunit/scheduler sidequest.
+Reserved pools/workbook/climate stayclosed. Commit/push andcontinueauthorized.
+
+# Historical handoff: initial calibration entry
+
 # Calibration baseline/estimand recorded; target observation still missing
 
 READ reports/AGRICULTURAL_CALIBRATION_ENTRY_20261117.md.

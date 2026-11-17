@@ -27,6 +27,15 @@ No empirical fit is ready. [Entry decision](AGRICULTURAL_CALIBRATION_ENTRY_20261
 Next is the one directlylinked companion SBXX14452 under an explicit single-body
 post-screen amendment; no extra searches or generic mechanism work.
 
+**Companion result:** SBXX14452/TM32187 is a two-line person-list fragment,
+not a paired area/work account; date226–275AD has low precision. Heroninos
+candidate closed with zero eligible calibration pairs. [Closure](COMPANION_ACCOUNT_TARGET_20261117.md).
+Two planned stages still remain; no empirical-fit ETA is justified. Next is a
+bounded data-only reaping-contract/performance-record alternative under
+`calibration/roman_benchmark_20261117/documented_task_target.json`. A contractual
+minimum is a constraint, not automatically observed realized work. Any changed
+estimand must be explicit before fitting. No further generic adapter task.
+
 ## Completed work log — older NEXT entries are superseded
 
 **Latest implementation:** plough-package adapter now requires simultaneous net
