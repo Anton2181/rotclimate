@@ -7,7 +7,15 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Physical-work readiness audit complete: 10 contracts, four schemas,
+**Latest:** Shared physical task-budget checker complete:24 tests,eight finite
+outcomes (3accept/5reject),independent scalar review. Annual/monthly limits are
+shared across roles and reservations;missing full baseline schedule fails.
+See [WAREHOUSE_TASK_BUDGET_20261117.md](WAREHOUSE_TASK_BUDGET_20261117.md).
+Next frozen bridge converts existing manufactured paid grain to supplied handling
+claims in exactly3 cases,no inventory rerun. Same15grain may differ in work
+feasibility;no new empirical rate or staffing claim. Evidence inputs follow.
+
+**Previous:** Physical-work readiness audit complete: 10 contracts, four schemas,
 112,756 scalar rows. Original unused listed allowance is14.24%/16.16%; it is not
 warehouse staffing.84.62%of listed tasks lack monthly placement; reaping never
 binds by utilization despite absolute-floor near-count artifacts retained.

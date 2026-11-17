@@ -1,3 +1,40 @@
+# Shared task budgets complete; three-case grain/work bridge next — 17 November 2026
+
+Latest report: reports/WAREHOUSE_TASK_BUDGET_20261117.md. Qualification:
+output/urban_warehouse_tasks_20261117/qualification.json. The new isolated
+polity/task_budget.py passes24 tests. Eight finite manufactured outcomes match
+independent scalar checks:3accepted/5rejected,reviewer0checker calls. One physical
+workforce's annual/monthly budget persists across role reservations;failed batches
+claim no IDs/hours. Baseline task IDs cannot be debited again. Complete baseline
+schedule and consistent annual use required;no reaping-only monthly substitute.
+All1103 protected identities exact;zero old work/food/stock/graph/weather solves.
+
+This continuation has completed nohold34tests+2exactbaseline arrival controls,
+sharedroles21tests+7manufactured/7exactaggregate stockcontrols,read-only original
+work-readiness audit,and taskbudget24tests+8outcomes.79new module tests total.
+No Earthwarehouse/staffcase oractualpopulation/atlas/default change. Capacity,
+rights,handlingrates,physicalstaffaffiliation/fullmonthlybaseline still unqualified.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_grain_work_coupling_controls.json:
+exactly3 manufactured claim conversions from EXISTING priority_ab/priority_ba
+shared-role receipts. No inventory/role/food solver rerun. Supplied toy unloading
+rate.01h/deliveredkcal,commercial.2h/paidkcal,town.5h/paidkcal;onecrew annual11h,
+monthly10h,baseline6h inbin0. AB has4.8additional/10.8total→accept;BA has5.4/11.4
+→annualreject despite SAME15grain total;ABwith incompletebaseline→reject.
+Generate named tasks once from actual delivered arrivals/paid withdrawals,never
+requests;explicit IDs/bin/role/workforce,then reserve TaskBudget once. Independent
+receipt/task/hour review. No newgrain dispatch,priorities,staff/ratesadoption,
+newEarthcase orfit. Afterthisfinitebridge,prioritize missingevidence inputsover
+more numerical variants. Continue afterpush,peruser's ongoingwork instruction.
+
+Work-readiness limitation:14.24%/16.16% unspent listed cereal allowance isnot
+logisticsstaff;84.62% oflistedwork hasno monthlytiming. Reaping maxutil38.46%,
+zero relativebinding;absolute-near counts are minute tolerance-floor artifacts.
+Raw counts/diagnostics retained. Reserved Buringh pools/site-survey workbook
+unopened;climate/steppe deferred. Prior entries below are historical.
+
+# Previous work-readiness completion — 17 November 2026
+
 # Physical-work readiness complete; shared task budgets next — 17 November 2026
 
 Latest report reports/WAREHOUSE_WORK_READINESS_20261117.md and qualification
