@@ -52,13 +52,13 @@ window.SettledReachAtlas=(()=>{
       }catch(e){foodCheckedVisits=null;}
     }
     let release2=null;
-    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json'],['data-release3-reach-enabled','data/release3_reach.json'],['data-release3-supply-enabled','data/release3_supply.json']]){
+    for(const [flag,file] of [['data-settlement-release2-enabled','data/settlement_release2.json'],['data-settlement-release3-enabled','data/settlement_release3.json'],['data-release3-reach-enabled','data/release3_reach.json'],['data-release3-supply-enabled','data/release3_supply.json'],['data-settlement-provisional-enabled','data/settlement_provisional.json']]){
       if(!document.querySelector('script['+flag+']'))continue;
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh(file))));
         const candidate=supplement.packets[mode];
         if(!candidate||candidate.parent_payload_sha256!==p.payload_sha256||candidate.expected_harvest_fingerprint!==p.expected_harvest_fingerprint||JSON.stringify(candidate.shape)!==JSON.stringify(p.shape))throw Error('Calibrated settlement parent/climate mismatch');
         release2={options:{reach_towns:[...(release2?.options.reach_towns||[]),...(candidate.options.reach_towns||[])],reach_defacto:[...(candidate.options.reach_defacto||[]),...(release2?.options.reach_defacto||[])]}};
-      }catch(e){}
+      }catch(e){if(flag==='data-settlement-provisional-enabled')throw e;}
     }
     if(document.querySelector('script[data-release3-layers-enabled]')){
       try{const supplement=JSON.parse(new TextDecoder().decode(await bytes(fresh('data/release3_layers.json'))));
@@ -74,6 +74,22 @@ window.SettledReachAtlas=(()=>{
       return {...l,label:l.id==='reach_towns'?'Settlements':'Supply-supported reach',controls:[],variants:{label:'Settlement / supply scenario',default:(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release3_central'))?'release3_central':(l.id==='reach_towns'&&release2?.options.reach_towns?.some(o=>o.value==='release2_central'))?'release2_central':(l.id==='reach_defacto'&&release2?.options.reach_defacto?.some(o=>o.value==='release3_fed_v21'))?'release3_fed_v21':(l.id==='reach_defacto'&&release2?.options.reach_defacto?.some(o=>o.value==='release3_v21'))?'release3_v21':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v21_joint365'))?'v21_joint365':(l.id==='reach_defacto'&&p.options[l.id].some(o=>o.value==='v2_joint365'))?'v2_joint365':(p.options[l.id].some(o=>o.value==='joint365')?'joint365':'legacy_0'),options:[...options.map(o=>({...o,value:'legacy_'+o.value,label:'Legacy · '+o.label,integrated_support:false})),...p.options[l.id],...(seededDispatch?.options[l.id]||[]),...(feedback?.options[l.id]||[]),...(dispatch?.options[l.id]||[])]}};});
     meta.layers=meta.layers.map(l=>changed.find(c=>c.id===l.id)||l);
     for(const l of changed)l.variants.options.push(...(networkVisits?.options[l.id]||[]),...(yearCompleteVisits?.options[l.id]||[]),...(foodCheckedVisits?.options[l.id]||[]),...(release2?.options[l.id]||[]));
+    if(document.querySelector('script[data-settlement-provisional-enabled]')){
+      const towns=changed.find(l=>l.id==='reach_towns');
+      if(!towns.variants.options.some(o=>o.value==='provisional_central'))throw Error('Provisional settlement default missing');
+      towns.variants.default='provisional_central';
+      for(const layer of changed)for(const option of layer.variants.options){
+        if(option.value.startsWith('release3_')){
+          option.label='R4 reference · '+option.label;
+          option.note='Release-4 reference cohort; uses its own town populations. '+(option.note||'');
+        }
+      }
+      const referenceIds=new Set(['reach_defacto','reach_control','reach_control_winter','reach_months','reach_days','reach_capital','reach_cause','reach_polities','reach_trade']);
+      for(const layer of meta.layers)if(referenceIds.has(layer.id)){
+        layer.label+=' · R4 reference';
+        layer.note='Release-4 reference cohort; not recomputed for provisional release 5. '+(layer.note||'');
+      }
+    }
     return {p,feedback,dispatch,seededDispatch,networkVisits,yearCompleteVisits,foodCheckedVisits,fresh,mode,restore:()=>{meta.layers=meta.layers.map(l=>originals.find(c=>c.id===l.id)||l);}};
   }
   async function attach(state,harvest,changed,choosePlace){

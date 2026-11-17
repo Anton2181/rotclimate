@@ -111,6 +111,7 @@
   function of(L, topic, world, option) {
     if (option != null && ["reach_defacto", "reach_towns"].includes(L.id)) {
       const v = typeof option === "string" ? option : option.value;
+      if (v.startsWith("provisional_")) return ["scenario", "Provisional release 5: refreshed hierarchy fitted on exposed Earth development data; no untouched validation claim. Seed 1, fixed locations and climate r44. Residents are conserved transfers from rural cells under a density scenario. Annual grain uses this cohort’s own remaining rural people and field work; seasonal food/work, storage, handling staff and complete diets remain unqualified. Reach, trade and administration retain release-4 or older labelled cohorts."];
       if (v.startsWith("release3_supply")) return ["scenario", "Grain supply scenario for the release-3 towns: transport is paid in grain using the atlas's existing freight costs (Diocletian's Price Edict ratios; road haulage eats a staple's value at about 270 km). The marketed share (34% at the sliding density, 14% at the flat one) and the 270 km limit are calibrated on the whole Roman Empire, Egypt included, after three disclosed fixes (a floodplain rule for the Nile, a people level from Frier, Greek wall circuits at their inhabited share); one exposed pool, development, not a blind test."];
       if (v === "release3_fed_v21" || v === "release3_fed_v2") return ["partial", (v === "release3_fed_v21" ? "Default. " : "") + "The blind-tested control rule on the release-3 towns, with staffing decided by calibrated residents as fed by the wide grain supply scenario (34% of surplus marketed, calibrated on the whole Roman Empire, Egypt included). The rule's Earth tests support the rule; the supply calibration rests on one exposed pool."];
       if (v === "release3_v21" || v === "release3_v2") return ["partial", (v === "release3_v21" ? "Previous default. " : "") + "The blind-tested control rule (v2" + (v === "release3_v21" ? ".1" : "") + ") rerun unchanged on the release-3 town positions; only the unmarked towns and their tracks differ from the earlier default. The rule's Earth tests (Song China, the late-antique Mediterranean, Chinese county seats) were run with the earlier placement rule, so they support the rule, not this exact map."];
@@ -132,6 +133,7 @@
     return e ? pick(e, world) : ["scenario", ""];
   }
   function coreOption(L, value) {
+    if (value.startsWith("provisional_")) return true;
     if (!["reach_defacto", "reach_towns"].includes(L.id)) return true;
     if (!L.variants.options.some(o => o.value === "fert_bare")) return true;   // settlement integration not attached
     return CORE_OPTIONS.includes(value);

@@ -1,4 +1,47 @@
-# Original work-budget inspection map complete — 17 November 2026
+# Provisional settlement atlas r5 built — deployment being finalized, 17 November 2026
+
+The owner accepted a bounded provisional atlas release after asking for the next
+map. This supersedes the old warehouse diagnostic NEXT below. Do not resume
+open-ended source research before completing publication. Commit/push and keep
+working across pushes are explicitly authorized.
+
+Frozen scope: calibration/settlement_provisional_release5_20261117.json.
+Report: reports/SETTLEMENT_PROVISIONAL_RELEASE5_20261117.md.
+New full-atlas Settlements default: provisional_central. New synchronized
+comparison: atlases/earth_fit/provisional/index.html. Four options per climate
+cover central/low settlements and each cohort's annual grain. Existing R4 maps
+are retained and labelled; reach/trade/administration are NOT recomputed.
+Historical adopt=false and scientific gate=false remain unchanged.
+
+Independent Earth/candidate/five-seed/supply reviews reran before publication.
+Fresh candidate: all 13 files exact. Fresh supply: rederived freight network,
+four released files and full unrounded control receipt exact; all ten scientific
+exports exact. New presentation reviewer checks 8,348 added town grain values,
+all earlier viewer values and 1,178 pinned inputs with archived publication
+exceptions. Reviewer timing-only Earth receipt was separately saved and original
+receipt restored. No science source changed. Replays are local/ignored and
+pinned; old historical producers need original publication baseline to rerun.
+
+Publication scripts: scripts/publish_settlement_provisional.py,
+scripts/review_settlement_provisional.py,
+scripts/check_provisional_atlas_browser.cjs. Receipts and archived baseline:
+output/settlement_provisional_release5_20261117/.
+
+Hosted comparison Site registered as appgprj_6afc259a53e4819199e8facba394edf3,
+checkout /workspace/sites/rotclimate-provisional-atlas. Preserve this identity;
+do not create another Site. Owner-only audience confirmed. Deployment not yet
+claimed complete here; finish browser checks, push exact source, package and
+deploy, record returned URL/version and update this header. Sites source helpers
+were absent from this runtime; portable static Git/tar fallback keeps credentials
+only on stdin/in memory. No token is stored in this repository or Site checkout.
+
+Scientific limits remain explicit: exposed Earth development pool, failed older
+southern Mesopotamia blind test, no new blind qualification; seed sensitivity is
+not calibrated uncertainty. Annual grain/work is not seasonal continuous food,
+warehouse/handling staff or complete diets. Climate r44 and northern-steppe
+side quest remain deferred.
+
+# Historical handoff: Original work-budget inspection map complete — 17 November 2026
 
 Latest figure: output/urban_original_work_map_20261117/original_work_budgets.png.
 Report: reports/ORIGINAL_WORK_BUDGET_MAP_20261117.md. Qualification:
