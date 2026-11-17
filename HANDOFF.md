@@ -1,3 +1,48 @@
+# Per-origin cereal activities recovered — 17 November 2026
+
+READ reports/CEREAL_ACTIVITY_PACKET_20261117.md.
+FIGURES output/cereal_activity_packet_20261117/annual_limits.png and
+retained_cereal_area.png (two native-grid four-panel maps, visually inspected).
+Completed qualification.json: passed_fixed_cereal_origin_area_work_packet_not_seasonal_qualification.
+Two TRACKED NPZ climate packets (~54.3MB total), load_packet()/activity() reader
+in scripts/cereal_activity_packet.py. Shared crops/rates/areas, eight rural vectors,
+16 retained-fraction arrays.32 marketed-share scenarios alias16 physical cases;
+never duplicate their hectares/workers by summing share alternatives.
+Stable row*1000+col IDs for all241889 majority-land cells in both climates,
+including crop0 with undefined(NaN) physical cereal area/yield and preserved meals.
+
+All416 original scalar food/work controls EXACT,16 literal unchanged field_support
+replays. Independent scalar min/divide and crop/area/energy/reader checks pass
+3870224origin-case rows/104496048materialized values;224 summary values checked.
+Fresh allscientific exports (including NPZs) byteexact. No climate/crop/route/
+placement calls, new scenario, parameter or live r5 atlas change.
+
+Main findings: EVERY productive origin selects BARLEY under least-listed-work
+objective (raw238796/corrected241391; crop0 raw3093/corrected498; wheat0both).
+Not an observed crop mix or complete diet. ALL work-limited origins bind annual
+allowance; zero reaping/both/zero-worker-limited origins in these16 cases. Relative
+utilization classification has no absolute tiny-budget floor.30day*8h reaping
+allowance is240h/worker vs <=92.31h required at600h annual barley allowance.
+Correctedcandidate600h central retains45.3164Mha/52.335%; low53.3966Mha/61.6667%.
+Area weights differ from calorie weights. Rawcentral44.6033Mha/51.8771%.
+
+Precision: frozen source rates float32 promoted exactly; retain signed differences
+from normative per-ha hours. Maxrelative listed-hour residual5.895e-8; corrected
+central600h signed sum−194.938h (NOT a credit/work pool). Reviewer caught an extra
+rounding from multiplying stored float32 cell area by100; recovery promotes FIRST.
+Original cell snapshot and every old food/work result unchanged. Packet source
+potential reconstructs EXACTLY; no rate replacement/clamping.
+
+NEXT FROZEN calibration/roman_benchmark_20261117/cereal_operation_demands.json.
+Decompose normative operations on same retained hectares (Columella2.12 counts),
+keep rounded-work residual separate, compute required h/worker and full8h-worker
+day equivalents (conditional thresholds, not observed days/calendar). Focus on
+plough/harrow/hoe rather than unbinding reaping. Missing windows/draft/processing
+remain explicit; no invented calendar, workers, crop mix, scenarios, warehouse
+or climate development. Commit/push and continue remain authorized.
+
+# Historical handoff: annual agricultural budget trace
+
 # Annual agricultural budget trace complete — 17 November 2026
 
 READ reports/ANNUAL_AGRICULTURAL_BUDGET_20261117.md and

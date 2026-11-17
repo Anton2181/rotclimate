@@ -7,6 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest crop/work packet:** fixed per-origin cereal activities recovered for all
+32 scenario aliases/16 physical cases.416 old scalars exact;3.87M origin/case rows
+and104.50M reader values independently checked; two tracked compressed packets
+and two native-grid inspection maps. All productive origins select barley under
+the supplied least-work objective; all limited origins bind annual work, none
+reaping. Corrected600h candidate retained area45.32Mha central/53.40Mha flat density.
+[Packet, maps and limits](CEREAL_ACTIVITY_PACKET_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/cereal_operation_demands.json` —
+task-demand decomposition and workforce-day thresholds before actual windows.
+
 **Latest annual agricultural trace:**32 existing cases,288 ledger identities and
 928 independently checked export values. A600h/worker allowance means240 listed
 hours/rural person; corrected central production retains53.59% of the supplied
