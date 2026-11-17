@@ -7,6 +7,14 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest seasonal-work evidence:** all original handling quantities are qualified;
+a bounded direct FAO chapter screen then checks ten located claims and refuses an
+empirical handling rate: guidance describes operations but not a crew/quantity/
+time measurement. No model/atlas change. See [HANDLING_RATE_SCREEN_20261117.md](HANDLING_RATE_SCREEN_20261117.md).
+Next: one original West Godavari grain-handler observation paper, with exact
+operation, crew, load and time-denominator review before any work-rate claim.
+
+
 **Latest:** Provisional settlement atlas r5 is published with before/after maps,
 raw/corrected and central/low scenarios, its own annual supply and downloads.
 [Release report](SETTLEMENT_PROVISIONAL_RELEASE5_20261117.md). Full seasonal

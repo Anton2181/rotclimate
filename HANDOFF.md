@@ -1,3 +1,37 @@
+# Handling quantities and FAO evidence screen complete — observational paper next
+
+17 November 2026. Live r5 atlas remains unchanged:
+https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+
+Two stages completed this continuation, continuing across pushes:
+1. ALL original Earth handling quantities: 2,170 town rows, 52,080 exact monthly
+quantities, 15,896 ordered shipments, 1,363 year wraps; fixed requests and zero
+movements retained. Six outputs + result receipt fresh byte-exact. Rates/work
+hours unknown. Report reports/HANDLING_EXPOSURE_20261117.md; qualification
+output/urban_handling_exposure_20261117/qualification.json.
+2. Bounded 3-query/6-record/ONE-body source screen: first matching direct FAO
+Storage in bags chapter. Ten independent literal/section checks. Guidance on
+manual/equipment work, inspections and storage geometry supplies no measured
+crew/quantity/time denominator. No empirical rate qualified or adopted.
+Report reports/HANDLING_RATE_SCREEN_20261117.md; qualification
+output/urban_handling_rate_screen_20261117/qualification.json.
+Raw source HTML/receipt local/ignored; exact digests in qualification.
+
+NEXT FROZEN: calibration/urban_diagnosis_20261117/handling_observation_primary.json.
+Read the ONE direct-journal original observation paper (Industrial Health45(1),
+p165, West Godavari grain handlers, J-STAGE PDF URL in declaration). Full body
+not yet opened at this handoff stage. Verify operation/material/crew/time,
+measurement/sample and uncertainty. Search snippets are not qualified facts.
+No automatic truck-time/person-hours conversion or modern-to-ancient/fantasy
+transfer. No food/work/stock/graph/warehouse solve, staff/coefficient adoption or
+atlas/default changes. Climate/steppe and reserved sources remain deferred.
+
+Guard: 3,378 historical checks use five exact archived original publication
+exceptions after r5, while 1,197 CURRENT identities remain fixed. Never overwrite
+live r5 files or falsify old receipts. Commit/push and continue are authorized.
+
+# Historical handoff: handling exposure audit
+
 # Original handling exposure complete — bounded rate-evidence screen next, 17 November 2026
 
 The published provisional-r5 atlas remains LIVE and unchanged:
