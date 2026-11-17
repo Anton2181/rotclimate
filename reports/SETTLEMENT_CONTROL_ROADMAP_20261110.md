@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Archived evidence/scheduler audit complete:22source-interface rows,
+**Latest:** One primary calendar witness qualified:Columella11.2,101paragraphs,
+39located claims/90independent literalchecks. Weather/soil/region/development
+conditions andcompetingduties retained;no fulloccupation orhandlingrate supplied.
+EnglishbookXI unavailable;publisher-linked LatinLibrary witness used underfrozen
+adapter,exactcriticaledition unresolved. Two attributedsolstices remainunconverted.
+See [COLUMELLA_CALENDAR_20261117.md](COLUMELLA_CALENDAR_20261117.md).
+Next frozen scope:one separatelyidentified public-domain samechapterwitness,
+sixliteral/editionconcordances only;no dates/rates/modelinputs adopted.Climate later.
+
+**Previous:** Archived evidence/scheduler audit complete:22source-interface rows,
 10archived taskcounts; no fullmonthlybaseline orwarehouse handlingrate supplied.
 Two oldprimarycaches missing;oneoldcereal-map builderidentity mismatch retained,
 wholeoldrecipe not requalified. Existing scheduler/staffinterfaces reusable with

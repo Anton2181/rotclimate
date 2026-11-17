@@ -1,3 +1,55 @@
+# Primary calendar witness complete; six-expression concordance next — 17 November 2026
+
+Latest report reports/COLUMELLA_CALENDAR_20261117.md. Qualification:
+output/urban_columella_calendar_20261117/qualification.json,
+passed_faithful_Latin_calendar_witness_with_edition_and_calendar_transfer_limits.
+Columella De re rustica11.2:101paragraphs,39located task/calendar claims,90
+independent literalanchor/date/numberchecks. Complete sourcecoverage/digests.
+All1103 protected identities exact;zero solver/newEarthfood/staff/modelinput calls.
+
+Source access resolution:declaredLacusCurtius EnglishbookXI404. Publisherindex
+showsBOTH XI Latin/English anchors commentedout/not_online. Committed adapter
+6d4a94708 authorizes SAMEchapter via publisher-linked LatinLibrary publictext,
+notan unavailabletranslation/scan. Exposure BEFORE eachbody. CanonicalURL:
+https://www.thelatinlibrary.com/columella/columella.rr11.shtml ,body80263bytes,
+sha2566df5bdd11e459bb9efa5a8822ba642bbc63bbf31f11156bb5dc1086263e2bc7c.
+Catalogue/book/chapterII1–101boundariesverified. Publishergeneralassertion says
+Lundstrom,butdirectbookpage givesnoeditionmetadata. ExactcriticaleditionNOT
+independentlyestablished. Qualification isfaithfulSITEWITNESS/limits. OurEnglish
+isparaphrase,notattributedtranslation. Rawfullbook/index/catalogue/failureHTML/
+privateparagraphJSON LOCAL/IGNOREDsource/. OtherchaptersI/III incidentally
+retrieved/partlyvisible,notextracted. RestoreURL/digestbeforefreshreplay.
+
+Findings:weather/soil/regional/developmentconditionaltasks,competingweeding/hay/
+threshing/straw/animalfeeding/day/nightwork. No fullmeasured monthlyoccupation,
+warehousehandlingrate,staffaffiliation oroperationalcapacity/rights. §54thirtydays
+isCUTSTRAW handling,notgrainwarehouseresidence. §47solstice deadline explicitfor
+vinework,notrecastasfloorprepdeadline. §94TWOsolsticemarkers XVI Kal.Ian.(Hipparchus)
+andVIIII Kal.Ian.(Chaldean),bothretained/unconverted. §9quattuorfibrarum notmapped
+tomodernstage;§26modiostresunaopera notconvertedtoarea;§46liranturiugeraduobis
+operauna clauseunresolved/unrepaired. §82earlierworknormexplicitlyquestioned.
+Sourceoperæ/horae areNOTassumed8modernhours. NoGregorian/modelbin conversion.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/columella_calendar_concordance.json:
+ONE separatelyidentified public-domain witness ofSAME11.2. BeginWikisource
+De_Re_Rustica_(Gesner)/Liber_XI +linkedscan/index/titlepagemetadata. Verifyeditor/
+edition/year/chaptercorrespondenceBEFOREcomparison. Exactly6alreadyexposed
+locations:3(halfmonth/15days),6(semestrium),9(fibrae),26(modii/opera),46(lira/bis/
+opera),94(twoattributedsolstices). Preserveorthography/numerals/editionsandunknown
+meaning;no silentoldpacket/modelcorrection. No widertextmining,newcohort,sourcefit,
+calendarconversion orsolvers. Allsamechapterwitnessesdevelopment,notindependent
+historicalvalidation. Continueafterpush;userwantsongoingwork.
+
+Also completedthiscontinuation:22-rowarchived evidence/interfaceaudit,10archived
+taskcounts,2missingoldsourcecachesretained. Oneoldcereal-mapreceipt pins earlier
+land_people.py;exactoldwhole-recipeidentityNOTrequalified,currentmodelsunchanged.
+Existing farmLP/monthlystaffinterfaces reusable butwindows/loads/handlingrates
+remainassumptions. No oldsourcecachehash replaced. Reserved Buringh pools/site-
+surveyworkbook unopened;climate/steppe deferred;population/atlasunchanged.
+Previousentriesbelow arehistorical instructions forcompletedstages.
+
+# Previous archived evidence audit completion — 17 November 2026
+
 # Archived work evidence audit complete; primary calendar next — 17 November 2026
 
 Latest report reports/WORK_EVIDENCE_SCOPE_20261117.md. Qualification
