@@ -7,7 +7,19 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** The fixed-baseline dispatch control is complete. Four70array
+**Latest:** Storage/dispatch source scoping is complete:9exact existing
+contracts and3bibliographic leads;zero new food cases or measurements. Existing
+reserve algebra/FAO context does not qualify ancient storage coefficients.
+Next frozen task:ONE open Salido2018 full methods article,source/page verification
+and observation/estimate/analogy/unknown ledger before archaeological conversion.
+VanOyen2020 flow chapter and Rickman1971 monograph remain unread-body leads.
+See [URBAN_STORAGE_SOURCES_20261117.md](URBAN_STORAGE_SOURCES_20261117.md).
+Priority:qualify storage function/location/geometry and dispatch institutions,
+then declare the next physical food/work/finite-occupancy integration. No more
+numerical variants until evidence justifies one;no atlas/default adoption.
+Full diet/work,rights and independent transfer gates remain;climate later.
+
+**Previous:** The fixed-baseline dispatch control is complete. Four70array
 controls are exact;two newzero-loss/90d cases pass independent stock/routes/
 ledger review. All19previous local zero-loss meal declines disappear,withno
 newlosers against5%control. Fixed quota nevertheless feeds6474/3569fewer

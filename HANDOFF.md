@@ -1,4 +1,60 @@
-# Fixed-quota control complete; storage/dispatch evidence next — 17 November 2026
+# Source scoping complete; qualify archaeological capacity methods next — 17 November 2026
+
+Latest: reports/URBAN_STORAGE_SOURCES_20261117.md and
+output/urban_storage_source_scope_20261117/qualification.json. This read-only
+stage followed the completed fixed-quota control (778c6ff0e, sealed34b8f02f5).
+Nine exact existing contracts and three bibliographic leads are recorded.
+No new food cases/kernel calls, phenology scores, archaeological measurement
+extraction, fitting, population change or atlas/default adoption. No jobs running.
+All1103protected identities and parent qualifications remain unchanged.
+
+The plan now moves from numerical variants to evidence at the storage/dispatch
+interface. Reserve algebra and modern FAO store sizing do not identify ancient
+capacity/loss. An older consultation log already separates harvest receipts,
+dispatch schedules and buffer capacity. Existing freight costs are not fleet
+capacity or travel time; physical availability is not entitlement.
+
+Bibliographic leads,all DEVELOPMENT exposure:
+- Salido Domínguez2018,Gerión36(1)79-94,DOI10.5209/GERI.60294. Publisher
+  metadata/abstract read;full article NOT read. Open methods critique is NEXT.
+- Astrid Van Oyen2020,Control(Flow):Warehouses in the Ports of Ostia and Portus,
+  DOI10.1017/9781108850216.006. Cambridge metadata/summary read;chapter body
+  NOT read/access not assumed. Lead for commodity/turnover/institution distinctions.
+- Rickman1971,Roman Granaries and Store Buildings. AGRIS/NationalAgricultural
+  Library catalogue checked;monograph NOT read. Primary-source trail only.
+output/*scope*/exposure.json records both searches and incidental quantitative
+snippet visibility,including excluded unopened military-granary hit. No numeric
+snippet was transcribed/used;do not call these leads an unseen evaluation pool.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/storage_capacity_method_qualification.json:
+obtain lawful full Salido2018 article from journal,verify bytes/DOI/page locators,
+then read ONE source's capacity methods/limits. Distinguish observations,author
+estimates,modern analogies,our bookkeeping and unknowns:usable floor area,
+fill/stack geometry,grain form/packaging,bulk density,working space,function,
+ownership/dating and losses ONLY where stated. No site-level dimension/capacity/
+population/yield table or fit. Record incidental example exposure as development.
+Do not treat unread VanOyen/Rickman bodies or cited papers as authenticated facts.
+Any symbolic volume→energy relation is our unit contract,not an ancient law.
+Days of modeled market flow need separately justified denominator and location.
+Decide whether the physical-origin commercial-store interface itself requires
+institution/location distinctions before calibrating its coefficient.
+
+Broader queue: storage/dispatch source qualification → defensible interface →
+explicitly declared physical food/work/finite-occupancy integration. Full diet,
+resources/work,rights and independent transfer remain separate adoption gates.
+No further numerical sweeps until justified by evidence. Climate remains later;
+steppe archived,Buringh sizes/climate l unopened. Main atlas/population unchanged.
+
+Quota result remains:four70array controls exact;two0loss/90d fixed-quota cases
+40.258773%central/46.087820%low. Eighteen previous local losers improve and one
+returns to equality vs5%control;no newlosers vs5%. Fixed quota still feeds
+6474/3569fewer mealPY than0%OWNquota. Initial seal's overly strict improvement
+assertion was preserved/corrected;scientific arrays unchanged,final seal passes.
+Do not select a rule from totals or use logistics uncertainty for climate fitting.
+All scoped source outputs frozen;scope/seal refuse overwrite,use isolated OUT
+for fresh local replay. Previous entries below retain historical states.
+
+# Previous completed fixed-quota control — 17 November 2026
 
 Latest report reports/URBAN_FIXED_DISPATCH_20261117.md and qualification
 output/urban_fixed_dispatch_20261117/qualification.json. FOUR existing own-quota
