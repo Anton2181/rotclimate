@@ -1,3 +1,70 @@
+# Original work-budget inspection map complete — 17 November 2026
+
+Latest figure: output/urban_original_work_map_20261117/original_work_budgets.png.
+Report: reports/ORIGINAL_WORK_BUDGET_MAP_20261117.md. Qualification:
+output/urban_original_work_map_20261117/qualification.json, status
+passed_original_partial_work_map_all_source_values_and_display_limits.
+No jobs running at completion. This continuation completed the archived evidence
+review, primary calendar witness, six-expression printed concordance and map,
+continuing across commits/pushes. All 1103 protected identities remain unchanged.
+
+The four-panel map uses ONLY original B600 central/low physical-source budgets.
+Independent review checks all 112,756 values, masks, 81 km² cell area and plotting
+formulas. Original unspent fractions are 14.2439% / 16.1581%; annual constraints
+bind at 45,935 / 44,726 positive-workforce sources. Each case has 56,378 sources,
+53,265 positive workforce and 3,113 undefined utilization cells. Same 0–100%
+use and .01–10000 h/km² positive log scales. Exact zero unspent is separately gray.
+All clipping counts retained: negative unused 1610/1459, percent 4027/3837,
+positive under-floor 1569/1471, over-ceiling 364/428. Tiny positive residuals can
+show in the lowest color; they are not meaningful spare staff. Raw budgets and
+original work tolerance unchanged. Derived local_plot_values.npz (~2 MB) is
+LOCAL/IGNORED, pinned and reproducible. Compact PNG/summary/receipts tracked.
+
+No new food/work/climate/graph/phenology/population solver ran. The map is partial
+listed cereal work, not warehouse staffing or an updated settlement atlas.
+84.62% of listed task hours lack monthly placement in these original archives.
+No population/default change or empirical task-rate/capacity/access adoption.
+
+NEXT FROZEN: calibration/urban_diagnosis_20261117/warehouse_handling_exposure.json.
+Use ONLY original monthly central/low arrivals and inter_exported plus matching
+prepared model nodes/geometry/fixed resident requests. Include all original towns,
+including zeros; no selection/raw city tables/new cohorts. Build a RATE-FREE
+incoming/outgoing handling basis qin/qout, preserving original bins/year wrap.
+Required hours remain symbolic qin*h_in+qout*h_out with rates UNKNOWN, not set to1
+or derived from rural unspent time. Exact direct+inter_received=arrivals and
+ordered shipment reconstruction of exported/received first. Annual/peak exposure
+and ratios per fixed resident REQUEST where positive; undefined ratios unknown.
+No actual warehouse mapping, staff assignment, task-budget/handling converter,
+food/stock/route solver, new Earth scenario or numeric rate sweep. One paired
+inspection figure/compact receipts if useful. Continue after push per user intent.
+
+Source findings completed this continuation:
+- Archived work evidence audit:22 exact interface/report statements,10 archived
+  normative task counts. Old Columella2/FAO raw caches missing. One old cereal-map
+  receipt pins earlier land_people.py; exact old whole-recipe identity NOT
+  requalified, mismatch retained. Existing farm LP/monthly staff mechanisms can
+  be reused with explicit inputs; scenario windows/loads/rates are not observations.
+- Columella11.2:101 paragraphs,39 located claims,90 independent literal checks.
+  Declared Chicago EnglishXI404; both language links commented/not_online. Frozen
+  adapter uses publisher-linked LatinLibrary site witness. Its exact critical
+  edition remains unverified; English is our paraphrase. Source dates unconverted.
+- Same chapter concordance:6 selected online paragraphs EXACT across LatinLibrary/
+  Wiki revision134877, but printed p433/scan439 OMITS bis in11.2.46. Digital text
+  includes it. Other5 targets agree in substance with spelling/numeral variants.
+  Titlepage5+six scans visually inspected. Printed title says Gesner recension,
+  volume2, Biponti1787; Wiki index says Pseudo-Gesner/Pseudo-1787, flags UNEXPLAINED.
+  No whole-edition equivalence or independent textual descent proven. Variant
+  UNRECONCILED; old source packet/model coefficients remain unchanged. Primary
+  calendar records two attributed solstices, straw30-day interval, original
+  modii/opera and fibrae markers without modern date/area/stage conversion.
+
+Raw source HTML/images/OCR remain local/ignored under each source packet/source/;
+restore recorded URLs/digests before fresh replay. Qualified producers/outputs
+refuse overwrite. Reserved Buringh size/climate pools and site-survey workbook
+unopened; climate/steppe deferred. Prior entries below are historical instructions.
+
+# Previous six-expression concordance completion — 17 November 2026
+
 # Six-expression concordance complete; original work diagnostic map next — 17 November 2026
 
 Latest report reports/COLUMELLA_CONCORDANCE_20261117.md and qualification

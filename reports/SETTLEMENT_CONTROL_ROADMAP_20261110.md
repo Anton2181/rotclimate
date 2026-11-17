@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Six-expression samechapterconcordance complete. Allsixonlineparagraphs
+**Latest:** Original B600 work-budget inspection map complete:four panels,
+112,756 independently checked source values. Unspent listed allowances remain
+14.24%/16.16%;annual limits bind45,935/44,726sources. Same scales,undefined
+workforce masks and all display clipping counts retained;raw budgets unchanged.
+See [ORIGINAL_WORK_BUDGET_MAP_20261117.md](ORIGINAL_WORK_BUDGET_MAP_20261117.md).
+Next frozen step:rate-free handling exposure from existing original funded town
+arrivals/exports,with unknown work rates and no rural-slack staffing assignment.
+No new food scenario,warehouse/site selection or atlas/default adoption.Climate later.
+
+**Previous:** Six-expression samechapterconcordance complete. Allsixonlineparagraphs
 match,butlinked1787printedpage433 lacksdigitalBISin11.2.46. Variant/orthography/
 metadataPseudo-Gesner/Pseudo-1787 retained;no wholeeditionequivalence,ratecorrection
 ormodeladoption. Title/sixscanpages inspected;oldpacketsunchanged. See
