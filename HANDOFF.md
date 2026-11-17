@@ -1,3 +1,77 @@
+# Regional source contract and spatial diagnostic complete — 17 November 2026
+
+Owner asked to continue the approved AD200 realism programme. This continuation
+screened exactly three source families, qualified a limited new regional
+observation contract, and ran the declared SAME-SUPPORT spatial baseline check.
+It continued across source-preparation commits/pushes; no atlas/model adoption.
+
+READ reports/ROMAN_REGIONAL_SOURCES_20261117.md and
+reports/LEVANT_SPATIAL_DIAGNOSTIC_20261117.md.
+FIGURES: output/roman_regional_sources_20261117/source_support.png and
+output/levant_spatial_diagnostic_20261117/spatial_comparison.png.
+Both output directories have completed qualification.json receipts.
+
+Source screen: Rural Britain remains excavation/report-selected, not a census.
+Potenza official methods acknowledge second/third-century fine-ware dating
+problems; no matching machine-readable support qualified here. Selected third
+candidate: Titolo & Palmisano2025 South Levant, doi10.5334/joad.158, CC-BY4.0,
+pinned GitHub a3537c67cc736fb929291c50a4928a0cd7136dd9. Raw files local/ignored
+under output/roman_regional_sources_20261117/source/, URLs/hashes/Git blobs pinned.
+Current GPKG canonical; CSV discrepancies retained, not repaired. Actual current
+files:14273 phase rows/5557 SiteIDs, versus older paper counts14142/5542.
+
+Frozen phase/type/quality/identity/support rules yield565 unique habitation-site
+IDs (Late Roman70–324AD, Settlement/Fortified Settlement, LocQualA) in EIGHT
+exact-primary-source survey envelopes. Ten identical phase duplicates collapsed,
+six outside-own-polygon sites and200 unmatched-source sites retained as exclusions;
+one mislabelled Late Roman324–638 row excluded, never corrected.69 valid polygons,
+8 named and61 unattributed. Geometry/attributes agree; no phase-specific area or
+population inferred. Most SizeQualC; noA/B. Paper documents unequal detection.
+Source input reviewer checks all14273rows,69areas,571 scalar polygon memberships
+and3955 observation values. Fresh seven exports + result receipt byte exact.
+
+Diagnostic result: fixed legacy/refreshed population-pattern fields are IDENTICAL
+on this support and slightly WORSE than within-source uniform-land opportunity.
+Equal-source mean log gain−0.03949845 nats/site; pooled gain−0.06024747;
+equal-source presence/background AUC0.47701196 vsuniform0.5. Two sources improve
+likelihood, six worsen; all retained. Zertal-Bar2019 is strongest negative case,
+not a new tuning target. Do not relabel this as an absolute population error.
+
+565 observations all on-grid/on-land, but only55 distinct9km model cells and
+93source/cell pairs. Source totals are conditioned separately, not compared as
+regional census density. Uniform observation opportunity and proportional
+population-to-site intensity are explicit UNQUALIFIED assumptions. Source phase
+presence is not simultaneousAD200 occupancy. No p-value/new blind/geographic
+validation claim. This tests fixed occupation-density covariates, not the urban
+town generator against farms. Current hierarchy area-skill result remains separate.
+
+Original centre-H and whole-window population recipe controls exact before new
+scores. Four focused scorer tests pass (optional GIS group); independent closed-
+form grid assignment, cell intersections and scalar probability/likelihood/AUC
+checks cover565assignments,93pairs and120scorevalues. GEOS/canonical density
+recipe reused, not independently rederived. Fresh five exports + receipt exact.
+Optional dependencies: requirements-roman-benchmark.txt (Shapely2.1.2, pyproj).
+No new climate/food/work/route solve, population allocation, hierarchy fit or
+published atlas change. Live r5 stays https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+
+NEXT FROZEN: calibration/roman_benchmark_20261117/annual_assumption_impact.json.
+Use ONLY already reviewed candidate supply/hierarchy packets to rank major
+annual assumptions with MATCHED one-input contrasts: density at fixed extraction/
+work/climate; extraction at fixed density/work/climate; listed field-work hours
+at fixed other inputs. Missing matched cases unavailable. Raw/corrected climate
+separate scenarios. Differences are scenario sensitivity, not empirical uncertainty.
+Keep source evidence class/AD200 relevance and missing complete occupation/diet
+explicit. Return ranked priorities and one period-evidence target; no new food
+runs, rate sweeps, hierarchy tuning, warehouse/truck research or default adoption.
+
+User's wider approved programme: strengthen period observations and simple
+baselines, annual economy, influential uncertainties, high-impact seasonality,
+then matching atlas cohorts. Climate remains deferred. All earlier warehouse
+NEXT targets below are superseded. Commit/push and continue remain authorized.
+No jobs running at completion.
+
+# Historical handoff: first Roman conditional-size benchmark
+
 # Roman benchmark comparison complete — dated regional observations next
 
 17 November 2026. Owner-approved realism plan is now the active programme.

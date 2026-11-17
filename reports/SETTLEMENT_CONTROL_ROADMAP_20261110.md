@@ -7,6 +7,20 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest AD200 realism work:** three-source screen complete; a period-defined
+South Levant habitation contract retains565unique IDs in eight own-source survey
+envelopes. No census/phase-area/detection qualification. [Source report](ROMAN_REGIONAL_SOURCES_20261117.md).
+The same-support native9km spatial diagnostic finds no added fixed-field skill:
+equal-source log gain−0.03950 nats/site, AUC0.4770 vsuniform0.5. Legacy/refreshed
+fields identical locally;565 records reduce to55distinct cells. Four tests and
+independent score/support review pass; no refit or atlas change.
+[Spatial report and figure](LEVANT_SPATIAL_DIAGNOSTIC_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/annual_assumption_impact.json`.
+Rank existing matched annual-scenario effects and their period-evidence support;
+no new simulations or fine warehouse mechanisms. Preserve the earlier modest
+conditional size skill and this spatial limitation as separate findings.
+
+
 **ACTIVE PROGRAMME — approved realism plan:** establish AD200 regional evidence
 and benchmark against simple alternatives before adding more mechanisms. This
 supersedes all warehouse/handling NEXT targets in older entries below.
