@@ -1,0 +1,791 @@
+[
+  {
+    "name": "priority_ab_complete_feasible",
+    "grain_receipt": "priority_ab",
+    "grain_object_sha256": "8cb81860bddb729a29f0bef29a91c6e83e204ecd1d616332cde2df7e27990518",
+    "fixture": {
+      "name": "priority_ab_complete_feasible",
+      "grain_receipt": "priority_ab",
+      "annual_capacity_hours": 11,
+      "monthly_capacity_hours": 10,
+      "baseline_hours_bin0": 6,
+      "baseline_complete": true,
+      "unloading_hours_per_delivered_kcal": 0.01,
+      "commercial_hours_per_paid_kcal": 0.2,
+      "town_hours_per_paid_kcal": 0.5,
+      "expected": "accepted",
+      "expected_additional_hours": 4.8,
+      "expected_total_hours": 10.8
+    },
+    "claims": {
+      "tasks": [
+        {
+          "id": "priority_ab_complete_feasible:unload:leg-a",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-a",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_complete_feasible:unload:leg-b",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-b",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_complete_feasible:withdraw:0:commercial",
+          "workforce": 0,
+          "month": 0,
+          "role": "commercial",
+          "hours": 1.6,
+          "grain": 8.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_complete_feasible:withdraw:0:town",
+          "workforce": 0,
+          "month": 0,
+          "role": "town",
+          "hours": 1.0,
+          "grain": 2.0,
+          "rate": 0.5,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:town",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_complete_feasible:withdraw:1:commercial",
+          "workforce": 0,
+          "month": 1,
+          "role": "commercial",
+          "hours": 1.0,
+          "grain": 5.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:1:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        }
+      ],
+      "reservation": {
+        "task_ids": [
+          "priority_ab_complete_feasible:unload:leg-a",
+          "priority_ab_complete_feasible:unload:leg-b",
+          "priority_ab_complete_feasible:withdraw:0:commercial",
+          "priority_ab_complete_feasible:withdraw:0:town",
+          "priority_ab_complete_feasible:withdraw:1:commercial"
+        ],
+        "workforce": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "month": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "role": [
+          "unloading",
+          "unloading",
+          "commercial",
+          "town",
+          "commercial"
+        ],
+        "hours": [
+          0.6,
+          0.6,
+          1.6,
+          1.0,
+          1.0
+        ]
+      },
+      "funding_revalidation_calls": 1,
+      "grain_unit": "net edible kcal",
+      "rate_unit": "hours/net edible kcal",
+      "handling_rate_qualified": false,
+      "physical_staffing_qualified": false,
+      "grain_dispatch_changed": false
+    },
+    "additional_hours": 4.8,
+    "total_hours": 10.8,
+    "accepted": true,
+    "certificate": {
+      "workforce_ids": [
+        "manufactured-physical-crew"
+      ],
+      "annual_capacity": [
+        11.0
+      ],
+      "monthly_capacity": [
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ]
+      ],
+      "baseline_task_ids": [
+        "already-charged-baseline"
+      ],
+      "baseline_annual": [
+        6.0
+      ],
+      "baseline_monthly": [
+        [
+          6.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ]
+      ],
+      "baseline_schedule_residual": [
+        0.0
+      ],
+      "additional_monthly": [
+        [
+          3.8
+        ],
+        [
+          1.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ]
+      ],
+      "annual_used": [
+        10.8
+      ],
+      "monthly_used": [
+        [
+          9.8
+        ],
+        [
+          1.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ],
+        [
+          0.0
+        ]
+      ],
+      "annual_remaining": [
+        0.1999999999999993
+      ],
+      "monthly_remaining": [
+        [
+          0.1999999999999993
+        ],
+        [
+          9.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ],
+        [
+          10.0
+        ]
+      ],
+      "additional_task_ids": [
+        "priority_ab_complete_feasible:unload:leg-a",
+        "priority_ab_complete_feasible:unload:leg-b",
+        "priority_ab_complete_feasible:withdraw:0:commercial",
+        "priority_ab_complete_feasible:withdraw:0:town",
+        "priority_ab_complete_feasible:withdraw:1:commercial"
+      ],
+      "reserve_calls": 1,
+      "additional_by_role": {
+        "unloading": [
+          [
+            1.2
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ]
+        ],
+        "commercial": [
+          [
+            1.6
+          ],
+          [
+            1.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ]
+        ],
+        "town": [
+          [
+            1.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ],
+          [
+            0.0
+          ]
+        ]
+      },
+      "complete_supplied_schedule": true,
+      "empirical_staffing_qualified": false,
+      "handling_rate_inferred": false,
+      "source_affiliation_inferred": false,
+      "physical_travel_qualified": false
+    },
+    "failure": null,
+    "original_paid_grain": 15.0,
+    "original_grain_unchanged": true
+  },
+  {
+    "name": "priority_ba_same_grain_work_infeasible",
+    "grain_receipt": "priority_ba",
+    "grain_object_sha256": "07442d8a21f86876179f53b0cd7a6b6c8a4a2d2aba39cac9eb7e68d45e24ce8f",
+    "fixture": {
+      "name": "priority_ba_same_grain_work_infeasible",
+      "grain_receipt": "priority_ba",
+      "annual_capacity_hours": 11,
+      "monthly_capacity_hours": 10,
+      "baseline_hours_bin0": 6,
+      "baseline_complete": true,
+      "unloading_hours_per_delivered_kcal": 0.01,
+      "commercial_hours_per_paid_kcal": 0.2,
+      "town_hours_per_paid_kcal": 0.5,
+      "expected": "annual_budget_rejection",
+      "expected_additional_hours": 5.4,
+      "expected_total_hours": 11.4
+    },
+    "claims": {
+      "tasks": [
+        {
+          "id": "priority_ba_same_grain_work_infeasible:unload:leg-a",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-a",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ba_same_grain_work_infeasible:unload:leg-b",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-b",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ba_same_grain_work_infeasible:withdraw:0:commercial",
+          "workforce": 0,
+          "month": 0,
+          "role": "commercial",
+          "hours": 1.6,
+          "grain": 8.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ba_same_grain_work_infeasible:withdraw:0:town",
+          "workforce": 0,
+          "month": 0,
+          "role": "town",
+          "hours": 1.0,
+          "grain": 2.0,
+          "rate": 0.5,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:town",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ba_same_grain_work_infeasible:withdraw:1:commercial",
+          "workforce": 0,
+          "month": 1,
+          "role": "commercial",
+          "hours": 0.6000000000000001,
+          "grain": 3.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:1:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ba_same_grain_work_infeasible:withdraw:1:town",
+          "workforce": 0,
+          "month": 1,
+          "role": "town",
+          "hours": 1.0,
+          "grain": 2.0,
+          "rate": 0.5,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:1:town",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        }
+      ],
+      "reservation": {
+        "task_ids": [
+          "priority_ba_same_grain_work_infeasible:unload:leg-a",
+          "priority_ba_same_grain_work_infeasible:unload:leg-b",
+          "priority_ba_same_grain_work_infeasible:withdraw:0:commercial",
+          "priority_ba_same_grain_work_infeasible:withdraw:0:town",
+          "priority_ba_same_grain_work_infeasible:withdraw:1:commercial",
+          "priority_ba_same_grain_work_infeasible:withdraw:1:town"
+        ],
+        "workforce": [
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "month": [
+          0,
+          0,
+          0,
+          0,
+          1,
+          1
+        ],
+        "role": [
+          "unloading",
+          "unloading",
+          "commercial",
+          "town",
+          "commercial",
+          "town"
+        ],
+        "hours": [
+          0.6,
+          0.6,
+          1.6,
+          1.0,
+          0.6000000000000001,
+          1.0
+        ]
+      },
+      "funding_revalidation_calls": 1,
+      "grain_unit": "net edible kcal",
+      "rate_unit": "hours/net edible kcal",
+      "handling_rate_qualified": false,
+      "physical_staffing_qualified": false,
+      "grain_dispatch_changed": false
+    },
+    "additional_hours": 5.4,
+    "total_hours": 11.4,
+    "accepted": false,
+    "certificate": null,
+    "failure": "Shared annual workforce budget exceeded",
+    "original_paid_grain": 15.0,
+    "original_grain_unchanged": true
+  },
+  {
+    "name": "priority_ab_incomplete_baseline_rejected",
+    "grain_receipt": "priority_ab",
+    "grain_object_sha256": "8cb81860bddb729a29f0bef29a91c6e83e204ecd1d616332cde2df7e27990518",
+    "fixture": {
+      "name": "priority_ab_incomplete_baseline_rejected",
+      "grain_receipt": "priority_ab",
+      "annual_capacity_hours": 11,
+      "monthly_capacity_hours": 10,
+      "baseline_hours_bin0": 6,
+      "baseline_complete": false,
+      "unloading_hours_per_delivered_kcal": 0.01,
+      "commercial_hours_per_paid_kcal": 0.2,
+      "town_hours_per_paid_kcal": 0.5,
+      "expected": "missing_complete_schedule_rejection",
+      "expected_additional_hours": 4.8,
+      "expected_total_hours": 10.8
+    },
+    "claims": {
+      "tasks": [
+        {
+          "id": "priority_ab_incomplete_baseline_rejected:unload:leg-a",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-a",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_incomplete_baseline_rejected:unload:leg-b",
+          "workforce": 0,
+          "month": 0,
+          "role": "unloading",
+          "hours": 0.6,
+          "grain": 60.0,
+          "rate": 0.01,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "leg-b",
+          "kind": "unloading",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_incomplete_baseline_rejected:withdraw:0:commercial",
+          "workforce": 0,
+          "month": 0,
+          "role": "commercial",
+          "hours": 1.6,
+          "grain": 8.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_incomplete_baseline_rejected:withdraw:0:town",
+          "workforce": 0,
+          "month": 0,
+          "role": "town",
+          "hours": 1.0,
+          "grain": 2.0,
+          "rate": 0.5,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:0:town",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        },
+        {
+          "id": "priority_ab_incomplete_baseline_rejected:withdraw:1:commercial",
+          "workforce": 0,
+          "month": 1,
+          "role": "commercial",
+          "hours": 1.0,
+          "grain": 5.0,
+          "rate": 0.2,
+          "store_id": "manufactured-store-a",
+          "grain_reference": "paid:1:commercial",
+          "kind": "withdrawal",
+          "grain_unit": "net edible kcal",
+          "rate_unit": "hours/net edible kcal"
+        }
+      ],
+      "reservation": {
+        "task_ids": [
+          "priority_ab_incomplete_baseline_rejected:unload:leg-a",
+          "priority_ab_incomplete_baseline_rejected:unload:leg-b",
+          "priority_ab_incomplete_baseline_rejected:withdraw:0:commercial",
+          "priority_ab_incomplete_baseline_rejected:withdraw:0:town",
+          "priority_ab_incomplete_baseline_rejected:withdraw:1:commercial"
+        ],
+        "workforce": [
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "month": [
+          0,
+          0,
+          0,
+          0,
+          1
+        ],
+        "role": [
+          "unloading",
+          "unloading",
+          "commercial",
+          "town",
+          "commercial"
+        ],
+        "hours": [
+          0.6,
+          0.6,
+          1.6,
+          1.0,
+          1.0
+        ]
+      },
+      "funding_revalidation_calls": 1,
+      "grain_unit": "net edible kcal",
+      "rate_unit": "hours/net edible kcal",
+      "handling_rate_qualified": false,
+      "physical_staffing_qualified": false,
+      "grain_dispatch_changed": false
+    },
+    "additional_hours": 4.8,
+    "total_hours": 10.8,
+    "accepted": false,
+    "certificate": null,
+    "failure": "Explicit complete baseline monthly schedule required",
+    "original_paid_grain": 15.0,
+    "original_grain_unchanged": true
+  }
+]

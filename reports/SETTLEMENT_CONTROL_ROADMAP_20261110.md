@@ -7,7 +7,17 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Shared physical task-budget checker complete:24 tests,eight finite
+**Latest:** Paid grain and handling-work claims are linked:14 tests and exactly
+three coupling controls from frozen manufactured grain receipts,zero inventory
+reruns. Same15grain requires10.8/11.4h against11h;onepriority passes,otherfails,
+incompletebaseline fails. Sixteen task identities/exactFraction hours reviewed.
+See [WAREHOUSE_GRAIN_WORK_COUPLING_20261117.md](WAREHOUSE_GRAIN_WORK_COUPLING_20261117.md).
+This continuation completed five stages/four modules/93tests,continuingpastpushes.
+Next frozen read-only evidence/scheduler audit distinguishes Columella listedtasks
+from manufactured taskwindows/collector assumptions and identifies one primary
+next evidence target. No further numericvariants/newEarthcase;climate later.
+
+**Previous:** Shared physical task-budget checker complete:24 tests,eight finite
 outcomes (3accept/5reject),independent scalar review. Annual/monthly limits are
 shared across roles and reservations;missing full baseline schedule fails.
 See [WAREHOUSE_TASK_BUDGET_20261117.md](WAREHOUSE_TASK_BUDGET_20261117.md).

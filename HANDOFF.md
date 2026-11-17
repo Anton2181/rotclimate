@@ -1,3 +1,60 @@
+# Grain/work bridge complete; existing evidence and scheduler audit next — 17 November 2026
+
+Latest report: reports/WAREHOUSE_GRAIN_WORK_COUPLING_20261117.md.
+Qualification: output/urban_warehouse_coupling_20261117/qualification.json,
+passed_three_manufactured_paid_grain_and_shared_work_coupling_controls.
+No jobs at completion. This continuation worked across five completed stages
+and their pushes; four new isolated modules pass93 tests (34nohold,21roles,
+24taskbudget,14handlingclaims). All1103 protected identities remain exact.
+
+Completed this continuation:
+- NoHoldLedger:8declared manufactured cases +exactly2original baseline arrival
+  reductions,all8arrays EXACT,1,250,180records INCLUDING zeros. Nofood/stocksolve.
+- Shared physical store acrosscommercial/town roles:7manufactured scenarios,
+  7direct aggregate controls,ALL15FoodYear fields EXACT;one capacity/stock.
+  Adapter13canonicalyears,reference13,reviewer7;all0annual-map advances.
+- Original B600work-readiness:10contracts,4schemas,112756scalar rows;14.24%/
+  16.16%unspent listedallowance isNOTstaff;84.62%listedwork lacksmonthlytiming.
+  Relative reapinglimitneverbinds (max38.46%);absolute nearcounts tinyfloorartifacts
+  retained withdiagnostics. Zero oldmodelcalls.
+- TaskBudget:stateful oneannual/monthlyphysicalworkforce acrossbaseline+roles;
+  8declared outcomes3accept/5reject,independent scalarchecks. Missing complete
+  baseline fails;duplicateIDs/overruns/cross-workforceborrowing cannotfundtasks.
+- handling_claims:EXACTLY3couplings fromfrozen priority_ab/ba receipts;zero role/
+  sharedstore/food/stocksolverreruns. Positive DELIVERED arrivals unload once;
+  actual PAID withdrawals create work,notrequests. Units/rates/crewexplicit.
+
+Latest coupling:one manufactured crew annual11h/monthly10h/baseline6hbin0;
+toyrates unloading.01h/deliveredkcal,commercial.2/town.5h/paidkcal. Same15grain:
+AB13+2pays→4.8additional/10.8totalh PASS;BA11+4→5.4/11.4h annualFAIL;
+ABincompletebaselineFAIL. No priority orrateadoption. Tasks5/6/5 (16total),
+independentlyderived with exact decimalFractions. Initial reviewer fixed-count
+assertion andfollowupmetadata assumed5allcases;bothfailures retained,corrected
+againstsourcecells. Producer/converter/grain/stock notchanged orreexecuted for
+those fixes. Producer3converters,3noholdmaterializations+3revalidations;reviewer
+0newconverter/checker calls. All originalgrainoutputs/capacities unchanged.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_work_evidence_scope.json:
+read-only existingevidence/scheduler audit beforefurther variants. Inspect existing
+research_notes/farm_labour_20261103.json,harvest/labour.py,harvest/work_maps.py,
+polity/monthly_work.py andtheir reports/protocols,newworkcontracts. Distinguish
+Columella's prescriptive listedtasks frommanufactured windows/collectorloads/
+handlingtimes. Existing LP/montlystaffmechanisms maybereusable,buttheir scenario
+coefficients areNOTempirical inputs. Make task/timing observed/prescribed/assumed/
+unknown ledger,interface reusemap,andONEconcrete primaryevidence target/declaration
+ifjustified. No newsourcebody,cohort,LP/work/food/stock/graph/weather/phenologysolve,
+rate/prioritysweep,staffassignment,newEarthcase orfit inthisscope. Afterfinitebridge,
+prioritize missingevidence ratherthanmoretoyvariants. Userrequestedongoingwork.
+
+Earth attachment stillneeds complete non-reaping baseline timing,handler
+sourceaffiliation/travel,task/material/handling evidence,operationalcapacity and
+rights. Currentengineeringpass doesNOTqualifythese. No actualwarehouse/staff,
+population,land,recruitment oratlas/default changes. Reserved Buringh size/climate
+pools andsite-surveyworkbook unopened;climate/steppe deferred. Completed packets
+andproducers frozen;isolated OUT required forreplay. Priorentries arehistorical.
+
+# Previous shared task-budget completion — 17 November 2026
+
 # Shared task budgets complete; three-case grain/work bridge next — 17 November 2026
 
 Latest report: reports/WAREHOUSE_TASK_BUDGET_20261117.md. Qualification:
