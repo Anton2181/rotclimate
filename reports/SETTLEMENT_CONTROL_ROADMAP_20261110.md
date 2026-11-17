@@ -7,7 +7,17 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** ONEprimary Ostia chapter is source-qualified with numeric limits
+**Latest:** Shared physical-store primitive complete:19tests,5manufactured
+pooling cases and4exact legacy export-inventory reductions,ALL15fields and
+departures. Single capacity peruniqueID,explicitpartition/material/pooling
+permission and withdrawals;no rights/location inference. Nine inventorygroups
+reviewed at originaltolerance,maxratio.546307,wholegrainresidual0. See
+[SHARED_WAREHOUSE_20261117.md](SHARED_WAREHOUSE_20261117.md).
+Next frozen read-only audit checks path/port provenance and other contracts
+before actual network attachment. No Dijkstra,newEarthfoodcases or mappings.
+Food/work/people and capacity/rights evidence remain distinct;climate later.
+
+**Previous:** ONEprimary Ostia chapter is source-qualified with numeric limits
 retained:81paragraphs,61numeric claims,18context rows,7capacity estimates and
 10independent column diagnostics. Wheat/piles/upperstorey are conditional;
 destination/operational inputs unresolved. Published north/sack volume columns

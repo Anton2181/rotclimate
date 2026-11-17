@@ -1,4 +1,50 @@
-# Primary Ostia source complete; shared-store primitive next — 17 November 2026
+# Shared warehouse complete; route-coupling readiness next — 17 November 2026
+
+Latest report reports/SHARED_WAREHOUSE_20261117.md and qualification
+output/urban_shared_warehouse_20261117/qualification.json.19tests pass for new
+isolated polity/shared_warehouse.py.5manufactured scenarios+EXACTLY4legacy
+export-store reductions (central/low×5%/0loss,90day cap) completed and reviewed.
+ALL15FoodYear fields AND departures EXACT for eachcontrol,225512origin-store
+rows. No newEarthmeal scenario or actualport assignment. No jobs running.
+
+One unique physicalID/capacity perstore;explicitorigin partition and withdrawals;
+matching netmaterial/pool labels;boolean scenario pooling permission required
+for multiple origins. Unknown/negative/nonfinitecapacity,deposits withoutstore,
+duplicateIDs and incompatiblepools rejected. No automaticquota/capacity resizing.
+Zero capacity can pay immediatefundedwithdrawal butcarry0;zero deposits cannot
+fund inheritedfood. Signed/unsigned integerpartitions supported. Rights/history
+NOT inferred;deposits require upstream protected-rural/work certificate outside
+the primitive. No routing,owner allocation,people/work or default changes.
+
+Independent grouping+original-tolerance stock/physicalledger review PASS9groups;
+maxinventory ratio.546307,compensatedwholegrainresidual0. Count kernel calls
+honestly:producer5manufactured adapters→7canonical_year;4legacy adapters→6years,
+0canonicalannualmap_advances. Reviewer0sharedadaptercalls,5canonicalyears+
+102annualmap_advances. Pytest separate. Completedreceipts pin thiscall scope.
+1103protected identities unchanged;oldfoodadapters/outputs remain frozen.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/shared_store_coupling_readiness.json:
+read-only source/schema contract audit before any sharedwarehouse network.
+Inspect existing prepared/monthly key shapes and code:protected deposits,
+physical ID/capacity,seasonal source→store allocation,chosen-path/predecessor/
+port provenance,paid cost/retention/travel timing,rights,potentialcommercial/town
+capacity overlap,handlingwork and upstream food/work/people. No Dijkstra,food,
+climate or phenologycalls,route rebuild,mapping/clustering,source measurements,
+parameter variants or demographics. Existing source scan suggests prepared
+captures deliberately omit predecessors (assertnotpredecessors) and retain only
+endpointcost/owner matrices;confirm in the declared audit before concluding.
+Do not infer ports from endpoints/nearestcoast or quarterowner asphysicalID.
+
+Continue thisaudit after committing/pushing theprimitive. If paths missing,
+declare tightly bounded original-route reconstruction controls;do not invent an
+Earthwarehouse network. Current-Ostia source arithmetic/commodity/geometry/
+duration/rights remain unqualified for numeric adoption. Rawsourcecache local.
+Reserved Buringh size/climate l andsite-surveyworkbook unopened;climate/steppe
+deferred;atlas/population unchanged. Full diet/work,rights and independent
+transfer gates persist. All completed producers refuseoverwrite;isolated OUT
+and pinnedtestreceipt needed for fresh replay. Previous entries are history.
+
+# Previous completed primary Ostia source — 17 November 2026
 
 Latest report reports/URBAN_OSTIA_STORAGE_20261117.md and qualification
 output/urban_ostia_storage_20261117/qualification.json. This turn continued past
