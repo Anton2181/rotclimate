@@ -1,3 +1,26 @@
+# Reaping screen closed; conditional grain/extent experiment declared
+
+READ reports/REAPING_CONTRACT_TARGET_20261117.md. Its qualification passes;
+three searches/two bodies exhausted, zero paired area/work-time targets.
+P.Sarap.51/TM17068 (12 April125) contracts130 arourai and13 reapers; no job
+work duration. One-day unpaid clause is not the whole-job duration. Howes2023
+quotes54 arourai/6per-worker/5/6artaba but cites this different primary text;
+keep mismatch unresolved. No fit/rate/atlas change. Do not continue this search.
+
+NEXT: calibration/roman_benchmark_20261117/conditional_grain_extent.json.
+Distinct CONDITIONAL CITY-AREA development estimand, not empirical calibration
+of hours/draft/density. Commit declaration BEFORE constructing new grain features.
+Use fixed Earth window, all known sites/hinterlands, exact reference density as
+workforce proxy without area-derived city subtraction. Compare M0, simple lnH,
+potential gross grain, fixed600h and300h gross grain with matched outer folds.
+New alpha/beta fits only; no hour search or hierarchy tuning. Existing hierarchy
+is frozen reference. Work assumptions unmeasured; gross output not exportable.
+Retain dated-extent/survey/population gaps and negative results. Reproduce M0/H,
+independent scalar production/OLS/CRPS, leakage control, fresh export, figures.
+Reserved pools/workbook/climate closed. No atlas adoption. Commit/push/continue.
+
+# Historical handoff: previous target
+
 # First calibration candidate closed; two planned stages remain
 
 User asks "Go on. How many steps until calibration?" Current truthful answer:
