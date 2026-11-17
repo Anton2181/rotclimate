@@ -1,3 +1,44 @@
+# Shared roles complete; read-only physical-work readiness next — 17 November 2026
+
+Latest report reports/WAREHOUSE_SHARED_ROLES_20261117.md and qualification
+output/urban_warehouse_roles_20261117/qualification.json. New isolated adapter
+polity/warehouse_roles.py passes21 tests. Seven finite manufactured scenarios
+and seven direct aggregate shared-store reductions pass ALL15FoodYear fields
+EXACT. Independent canonical replay/physical monthly ledger and priority checks
+pass seven cases,zero adapter calls. Periodic tolerance ratio0,maxgrainresidual
+1.42e-14kcal. All1103 protected identities exact. No jobs at stage completion.
+
+Funded no-hold receipts revalidated/unique;explicit store assignment must match
+physical paid endpoint. Repeat arrivals from same physical origin/store coalesced.
+One capacity/stock perunique store,one distinct supplied node perstore;multiple
+buildings inonegrid unsupported. Role requests share one inventory,then actual
+withdrawals allocated by explicit fixed priority. No role duplicates capacity.
+Cap5 priorityAB pays[13,2],BA[11,4],same15total andidenticalaggregateinventory.
+Dry secondstore gets0;zero deliveredgrain gets0;zerocap carries0. Stored5%loss
+andyearwrap included. Honest kernel counts:adapter7→13canonicalyears;reference
+7→13years;reviewer7years. All0annualmap advances. Pytest counted separately.
+These are7manufactured scenarios,0newEarthcases,0actualwarehouse mappings.
+Upstream rural/work funding,handlingstaff,capacity/rights NOT certified.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_work_readiness.json:
+read-only source/schema and aggregate audit of ORIGINAL B600central/low component
+work + monthly source/rural ordering. Check workers=.4*rural,annual600h allowance,
+harvest-bin min(annual,workers*30*8),listedannualuse,reaping-onlymonthlypeakuse,
+unusedlistedallowance andbinding counts at existing tolerance. No component_work,
+food/stock/graph/weather/crop/population solver calls. Unspent cereal allowance
+is NOT available port labor or complete monthly work. Identify missing task/unit,
+time andstaffaffiliation input contracts before any futurehandling calculation.
+No newlogistics coefficient,recruitment,physicaldays,newEarthcase orfit.
+
+Continue thisaudit afterpush;user requested ongoingwork acrosscommits. No-hold
+stage also completed thiscontinuation (34tests,8manufactured cases,2exactbaseline
+arrival reductions/8arrays,1,250,180records includingzeros,0food/stock solves).
+All old producers/packets frozen. Reserved Buringh size/climate pools andsite-survey
+workbook unopened;climate/steppe deferred;actual population/atlas unchanged.
+Previous entries are history;do not rerun their completed next-stage instructions.
+
+# Previous no-hold accounting completion — 17 November 2026
+
 # No-hold accounting complete; shared-role integration next — 17 November 2026
 
 Latest report reports/WAREHOUSE_NO_HOLD_20261117.md and qualification

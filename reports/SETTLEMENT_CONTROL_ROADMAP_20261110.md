@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** No-hold accounting complete: 34 tests, eight manufactured cases and
+**Latest:** Single physical capacity across commercial/town roles is integrated:
+21 tests, seven manufactured scenarios/seven exact15-field aggregate reductions,
+plus independent grain/priority/canonical replay. Priorities redistribute the
+same total; dry stores cannot borrow grain. See
+[WAREHOUSE_SHARED_ROLES_20261117.md](WAREHOUSE_SHARED_ROLES_20261117.md).
+Next frozen read-only audit checks existing physical-work budgets and missing
+handling inputs. Unspent listed cereal hours do not identify logistics staff.
+No Earth food case, rights/capacity adoption or atlas change; climate later.
+
+**Previous:** No-hold accounting complete: 34 tests, eight manufactured cases and
 exact equality of eight original arrival/export arrays across both baseline
 readings, with zero food/stock/graph solves. Intermediate charge events add no
 funding or bin. See [WAREHOUSE_NO_HOLD_20261117.md](WAREHOUSE_NO_HOLD_20261117.md).
