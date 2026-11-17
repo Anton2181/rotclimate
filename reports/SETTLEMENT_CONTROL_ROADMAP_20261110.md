@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** One primary calendar witness qualified:Columella11.2,101paragraphs,
+**Latest:** Six-expression samechapterconcordance complete. Allsixonlineparagraphs
+match,butlinked1787printedpage433 lacksdigitalBISin11.2.46. Variant/orthography/
+metadataPseudo-Gesner/Pseudo-1787 retained;no wholeeditionequivalence,ratecorrection
+ormodeladoption. Title/sixscanpages inspected;oldpacketsunchanged. See
+[COLUMELLA_CONCORDANCE_20261117.md](COLUMELLA_CONCORDANCE_20261117.md).
+Next frozen work:one read-only originalB600four-panel diagnosticmap withsame
+scales/sourcefields,showingpartialcrop-workbudget use/unspentallowance.Nostaff/
+warehouseassignment,newmodelscenario ordefaultatlasrelease.Climate later.
+
+**Previous:** One primary calendar witness qualified:Columella11.2,101paragraphs,
 39located claims/90independent literalchecks. Weather/soil/region/development
 conditions andcompetingduties retained;no fulloccupation orhandlingrate supplied.
 EnglishbookXI unavailable;publisher-linked LatinLibrary witness used underfrozen

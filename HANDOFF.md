@@ -1,3 +1,46 @@
+# Six-expression concordance complete; original work diagnostic map next — 17 November 2026
+
+Latest report reports/COLUMELLA_CONCORDANCE_20261117.md and qualification
+output/urban_columella_concordance_20261117/qualification.json. Exactly6already-
+exposed11.2locations3/6/9/26/46/94 compared. LatinLibrary andWiki revision134877
+paragraphsEXACT atallsix. Separatelyviewedtitlepage5andsixscannedpages proveone
+SUBSTANTIVEvariant:§46digitalliranturiugeraduoBISoperauna,printedpage433(scan439)
+liranturjugeraduooperauna,NO bis. Bothretained,notreconciled orselectedasmodelrate.
+Other5targetexpressionsagreeinsubstance (quatuor/quattuor,sarit/sarrit spelling,
+spelled/Romannumeralsretained). No modern date/bin conversions oroldpacket edits.
+Independent reviewandall1103protected identities PASS;zero solver/modelinputcalls.
+
+Printedtitle: ScriptoresreirusticaeveteresLatini,erecensioneJo.Matth.Gesneri,
+vol2Columellam,Biponti,ExTypographiaSocietatis,1787. Actualtitleimageinspected.
+WikiindexcallsPseudo-Gesner/Pseudo-1787;Commons/IAdescribe1787. Metadataflags
+UNEXPLAINED,wholecriticaledition/digital-scan equivalenceNOTestablished. Identical
+onlineparagraphsNOTindependentdescentproof. Wiki-link scan isimportant:don'ttreat
+online transcriptionasproofitfaithfullyreproduces everyprintedword. Mainfirst
+LatinLibrarysourceeditionremainsunverified. Publicconcordance/visualreceiptssmall;
+rawWikiHTML/metadata,titleandselectedscanJPEG/OCRLOCAL/IGNOREDsource/. Source
+readingsremainprescriptions,notmeasuredtaskrate/fulloccupation/handleridentity.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_work_diagnostic_map.json:
+read-onlyoriginalB600central/low diagnosticfigure,exactly4panels (annual listed
+crop-workutilization%,unspentlistedallowance hours/km²;tworeadingscolumns).
+Originalcomponentwork+calendar sourceIDs+preparedgeometry/cellareaonly;verify
+qualifiedbytes/sourceorder/ruralalignment. MapatPHYSICALSOURCEcells,nocities/
+ports/warehouseassignment. Same0–100%scaleandfixedpositive log.01–10000h/km²;
+zeroseparate,no-workforceutilizationundefined. Recordplot-onlyroundoff/scaleclipping,
+neverchangesourcebudgets/tolerances. Summary2rows+localplotarrays/digests;independent
+allsourcevalue/mask/formulachecks andold14.24%/16.16%unusedfraction. NoLP/work/
+food/stock/graph/climate/phenology/populationcall/newEarthcase orstaffadoption.
+Labelpartiallistedcerealscenario;unspentallowanceisNOTlogisticsstaff. Continueafter
+push:makeconstraintsvisiblewithoutanothernumericvariant/mainatlasrelease.
+
+Thiscontinuationalsocompleted22-rowarchivedevidenceaudit+oneLatinprimarycalendar
+(101paras,39claims,90literalchecks).EnglishXIunavailable404;frozenLatinadapter
+used. Two oldfarmrawcachesmissing;oneoldcerealmapbuilderidentitydriftretained.
+Nooldscienceoutputs changed. ReservedBuringhpools/site-surveyworkbookunopened;
+climate/steppe deferred;noactualpopulation/atlas/defaultchange. Priorentrieshistory.
+
+# Previous primary calendar completion — 17 November 2026
+
 # Primary calendar witness complete; six-expression concordance next — 17 November 2026
 
 Latest report reports/COLUMELLA_CALENDAR_20261117.md. Qualification:
