@@ -2,7 +2,7 @@
 
 The atlas now offers the frozen refreshed hierarchy and its own rebuilt annual grain supply. Provisional central settlements become the Settlements default. Release-4 settlements and their derived layers remain explicitly labelled reference cohorts. The owner authorized this bounded publication; the historical candidate adoption/validation gates remain false.
 
-Open `atlases/earth_fit/provisional/index.html` through the normal local atlas server for synchronized before/after maps, town search, zoom/pan, raw/corrected climate and both density readings. New publication figures are `comparison_corrected.png` and `comparison_raw.png` in the same folder. Hosted URL and deployment receipt are recorded separately after deployment.
+Open `atlases/earth_fit/provisional/index.html` through the normal local atlas server for synchronized before/after maps, town search, zoom/pan, raw/corrected climate and both density readings. New publication figures are `comparison_corrected.png` and `comparison_raw.png` in the same folder. Published comparison: https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site. Deployment succeeded (owner-private), with source/deployment IDs and hosted file hashes in `output/settlement_provisional_release5_20261117/deployment.json`.
 
 ## Fixed scope
 
@@ -39,4 +39,4 @@ Publication recipe: `scripts/publish_settlement_provisional.py`. Independent pub
 
 ## Next work
 
-The bounded map release is complete when deployment and browser receipts pass. Further science proceeds separately: resolve seasonal food/work and credible handling/staff inputs before claiming annual-to-seasonal feasibility or rebuilding control layers for the candidate; independent transfer qualification remains outstanding. Climate and the abandoned northern-steppe experiment remain deferred.
+The bounded map release is complete: native deployment succeeded and all 24 desktop/mobile comparison and atlas scenarios passed. Further science proceeds separately: resolve seasonal food/work and credible handling/staff inputs before claiming annual-to-seasonal feasibility or rebuilding control layers for the candidate; independent transfer qualification remains outstanding. Climate and the abandoned northern-steppe experiment remain deferred.

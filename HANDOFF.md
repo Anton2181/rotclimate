@@ -1,4 +1,8 @@
-# Provisional settlement atlas r5 built — deployment being finalized, 17 November 2026
+# Provisional settlement atlas r5 published — 17 November 2026
+
+LIVE: https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+Deployment succeeded; owner-private Site. All 24 desktop/mobile scenarios passed.
+Deployment/source IDs and hosted file hashes: output/settlement_provisional_release5_20261117/deployment.json.
 
 The owner accepted a bounded provisional atlas release after asking for the next
 map. This supersedes the old warehouse diagnostic NEXT below. Do not resume
@@ -29,9 +33,10 @@ output/settlement_provisional_release5_20261117/.
 
 Hosted comparison Site registered as appgprj_6afc259a53e4819199e8facba394edf3,
 checkout /workspace/sites/rotclimate-provisional-atlas. Preserve this identity;
-do not create another Site. Owner-only audience confirmed. Deployment not yet
-claimed complete here; finish browser checks, push exact source, package and
-deploy, record returned URL/version and update this header. Sites source helpers
+do not create another Site. Owner-only audience confirmed. Deployment succeeded with saved version
+appgprj_6afc259a53e4819199e8facba394edf3~appgver_8d75782aa4948191a1993ec9be19dbda.
+Site source commit a9a3db0f103e5ba766bd99a051f15c87a6a8eb78; atlas source
+commit 19c004496. Both repositories pushed. No jobs remain at completion. Sites source helpers
 were absent from this runtime; portable static Git/tar fallback keeps credentials
 only on stdin/in memory. No token is stored in this repository or Site checkout.
 
@@ -39,7 +44,9 @@ Scientific limits remain explicit: exposed Earth development pool, failed older
 southern Mesopotamia blind test, no new blind qualification; seed sensitivity is
 not calibrated uncertainty. Annual grain/work is not seasonal continuous food,
 warehouse/handling staff or complete diets. Climate r44 and northern-steppe
-side quest remain deferred.
+side quest remain deferred. NEXT science: the historical rate-free handling
+exposure plan below can resume; do not treat it as a blocker for this published
+provisional map or silently promote the candidate to full scientific adoption.
 
 # Historical handoff: Original work-budget inspection map complete — 17 November 2026
 
