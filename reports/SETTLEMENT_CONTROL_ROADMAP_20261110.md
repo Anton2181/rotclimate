@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Shared physical-store primitive complete:19tests,5manufactured
+**Latest:** Shared-store readiness audit complete: 15 exact source contracts,
+six schemas and independent recipient-change checks. Saved paths are absent;
+4,050 origins change recipient owner across quarters. Splitting a charged leg
+changes retention algebra and adds a bin unless explicitly controlled. Legacy
+parallel-edge semantics must remain intact during route recovery. See
+[SHARED_STORE_READINESS_20261117.md](SHARED_STORE_READINESS_20261117.md).
+Next frozen step: at most 16 deterministic original route certificates, with
+input restoration and exact archived owners/costs before path interpretation.
+No warehouse assignment or new food scenario. Physical capacity, access, work
+and no-hold grain/timing contracts remain; climate later.
+
+**Previous:** Shared physical-store primitive complete:19tests,5manufactured
 pooling cases and4exact legacy export-inventory reductions,ALL15fields and
 departures. Single capacity peruniqueID,explicitpartition/material/pooling
 permission and withdrawals;no rights/location inference. Nine inventorygroups

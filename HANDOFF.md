@@ -1,3 +1,46 @@
+# Shared-store readiness complete; bounded route recovery next — 17 November 2026
+
+Latest report: reports/SHARED_STORE_READINESS_20261117.md. Qualification:
+output/urban_shared_store_readiness_20261117/qualification.json, status
+passed_read_only_shared_store_coupling_contract_and_schema_audit. Fifteen exact
+interface quotes and six archive schemas checked independently; all 1103
+protected identities unchanged. Zero graph rebuilds, Dijkstra, food calls or
+new Earth food scenarios. No jobs running at completion.
+
+Saved costs/owners do not retain chosen paths or warehouse identities. Of
+56,378 origins, 4,050 change recipient across quarters (3,458 central/3,457 low
+actually export). Quarter-varying owner IDs cannot identify fixed stores.
+Transport snapshot omits road, biome and cell size; original road is available,
+but restore all inputs from the exact old 1981–2010 recipe. Do not use the
+1991–2020 fallback. Legacy CSR sums parallel records; the isolated freight
+connector selects alternatives, so substituting it would change the graph.
+
+Two accounting contracts remain before insertion: multiplying subleg retention
+adds ab/L² relative to the current whole-leg rule; an extra ordinary leg adds
+a bin even with zero storage hold. No-hold pass-through must conserve original
+charged grain and arrival timing. Road-km cost is not physical travel days.
+Physical store capacity, rights, role overlap and handling work remain unknown.
+The completed shared ledger (19 tests/four exact reductions) is engineering,
+not historical qualification of a warehouse attachment.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_route_provenance_controls.json:
+freeze at most 16 original positive route selections BEFORE graph calls, one
+source and one intertown leg per quarter/reading, ranked by recorded funded
+quantity with physical-ID ties. Rebuild only the four original legacy graphs;
+verify full original reverse source owners/distances exactly and selected
+forward intertown costs exactly before interpreting paths. Retain directed
+node/edge chains, auxiliary/port provenance and mode/parallel ambiguities.
+Do not infer an unrecorded unique path, physical duration or warehouse site.
+If restoration/identity fails, preserve the failure and stop dependent route
+interpretation; no tuning. No new all-pairs table, dispatch, stock solve,
+capacity/rights adoption, food scenario, fitting, population or atlas changes.
+
+Climate/steppe deferred; reserved Buringh size/climate l and site-survey workbook
+unopened. Existing completed producers and outputs are frozen; isolated OUT
+required for fresh replay. Previous entries below are historical instructions.
+
+# Previous shared warehouse completion — 17 November 2026
+
 # Shared warehouse complete; route-coupling readiness next — 17 November 2026
 
 Latest report reports/SHARED_WAREHOUSE_20261117.md and qualification

@@ -1,0 +1,16 @@
+interface,source,exact_quote,status,interpretation
+protected_deposit,harvest/field_support.py,"protected=self.year.unmet<=1e-8*np.maximum(self.year.needed,1)",available_for_existing_scenario,Upstream protection is explicit;shared primitive alone does not certify rural food/work.
+unique_store_capacity,polity/shared_warehouse.py,Unique nonempty physical store IDs required,primitive_available_mapping_missing,Unique capacity supported;Earth cache has no authenticated warehouse ID/mapping.
+pooling_permission,polity/shared_warehouse.py,Sharing a physical store requires explicit scenario pooling permission,scenario_contract_only,No empirical collective ownership/access inferred.
+source_path_discarded,scripts/settlement_supply_calibration.py,"d, _, src = dijkstra(net.base.T.tocsr(), directed=True, indices=nodes, min_only=True, return_predecessors=True, limit=limit)",not_saved,Directed source→town costs use reverse graph;computed predecessor vector is discarded.
+town_path_capture,scripts/urban_seasonal_transfer_controls.py,assert not predecessors,not_saved,Exact capture retains city-cost columns;no intertown predecessor chains.
+predecessor_API,polity/trade.py,return_predecessors=predecessors,API_available_not_replayed,Original cost API supports predecessor output;no call in this audit.
+whole_leg_retention,scripts/urban_earth_monthly.py,"retention=np.maximum(1-a['dist'][:,source].astype(float)/270,0)",nonmultiplicative_rule,Splitting one charged leg changes paid grain unless the loss accounting is explicitly preserved.
+one_bin_leg,polity/seasonal_settlement_network.py,direct[(month+1)%12]+=np.bincount,declared_lag_not_path_duration,Adding a store must not silently add another one-bin transport delay.
+same_path_cost_days_API,polity/freight_corridors.py,"Keep cost, duration and mode on the SAME directed transport leg/path.",isolated_API_not_legacy_equivalence,Existing connector preserves metadata but its graph construction differs from legacy.
+legacy_parallel_edges,polity/control.py,"self.base = coo_matrix((d, (r, c)), shape=(self.n, self.n)).tocsr()",legacy_semantics_must_remain,CSR sums parallel records;do not silently replace graph while reconstructing old paths.
+isolated_parallel_edges,polity/freight_corridors.py,Sorting before CSR construction prevents its duplicate-entry sum.,different_semantics,Connector selects an alternative;not presumed identical to legacy Earth freight graph.
+graph_road_provenance,scripts/settlement_supply_calibration.py,"world = P.world_of(g, x['road']); st = N.statics(world); cl = N.climate(world, st)",reconstruction_input_required,Prepared transport snapshot alone omits road and other world fields;preserve exact old recipe.
+one_workforce,polity/earth_component_work.py,workers=rural*.4,partial_work_only,"Cereal field/reaping work is budgeted;warehouse handling,transport and complete work are not."
+no_duplicate_people_or_land,polity/seasonal_settlement_network.py,"Each demographic shard owns only population, never another copy of",upstream_rule_preserved,"Pooling food must not duplicate physical land,grain,workers or recruitment."
+physical_store_evidence,reports/URBAN_STORAGE_CONTRACT_20261117.md,The model's grid coordinates are known;,physical_facility_evidence_missing,"Grid cell is not an authenticated building,capacity or historical permission."
