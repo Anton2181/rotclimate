@@ -1,3 +1,63 @@
+# Roman benchmark comparison complete — dated regional observations next
+
+17 November 2026. Owner-approved realism plan is now the active programme.
+This continuation built the first direct evidence/baseline/current-model
+comparison and continued across intermediate commits/pushes. All warehouse and
+handling NEXT instructions below remain superseded; no truck/handling research.
+
+READ: reports/ROMAN_BENCHMARK_20261117.md.
+MAPS: output/roman_benchmark_20261117/roman_comparison.png,
+egypt_comparison.png, evidence_coverage.png.
+QUALIFICATION: output/roman_benchmark_20261117/qualification.json, status
+passed_conditional_Roman_size_baseline_benchmark_not_dated_demographic_validation.
+
+Result: current refreshed-H hierarchy family has modest added size skill versus
+same-training M0. Compatible AD200 targets663: CRPS improves4.40%, median log-area
+MAE5.55%; strict152:7.54%/9.43%. Province wins32/51 and25/40; equal-province
+CRPS improvements2.01%/4.71%. Mean total area ratio is1.118 current vs1.016 M0
+on compatible targets. Egypt strict11 remains badly underpredicted: current
+mean generated area39.76% of reference, all medians low. Do not tune a new
+Egypt correction or declare full realism from a relative score improvement.
+
+Same original664 training records, four province-hash outer folds (not spatial
+blocks), no hierarchy refit. Exact original five-seed control, then predeclared
+256 seeds1000..1255 for both alternatives. Four simple baseline fits only.
+All339968 area draws and2688 aggregate cells independently checked; pairwise
+CRPS agrees within2.67e-15; max area difference7.39e-13ha. Fresh six exports +
+result receipt byte exact. All5312 plot values and six panels checked; all sites
+inside map frames.1108 CURRENT protected identities, including live r5, unchanged.
+
+Evidence gates: catalogue city epochAD150; AD200 compatibility uses old open-end
+convention. Of663 compatible model records only6 have an explicit end date.
+Areas table has NO phase date. Zero dated extent phases, independent survey
+footprints or observed city populations are newly certified.51 provinces have
+coverage counts; availability is not completeness. Known locations/capital
+labels supplied. This is a conditional exposed-source development benchmark,
+not AD200 demographic validation, missing-town prediction or new blind test.
+
+NEXT FROZEN: calibration/roman_benchmark_20261117/dated_regional_evidence.json.
+Inspect metadata/methods for at most THREE scholarly regional survey/census
+sources appropriate toAD100–300. Need independently documented footprint,
+phase/site type/detection limits, and area or population definition. Select on
+support/provenance, not model outcomes. Qualify one regional observation
+contract before comparing simple spatial/fixed-budget population baselines on
+identical support. Preserve unknowns; do not treat excavated-site catalogues as
+complete surveys or household samples as provincial censuses. Reserved Buringh
+pools and site-survey workbook stay closed unless a later explicit scope changes.
+
+Programme after that: period-constrained annual economy, influential uncertainty
+ranges, high-impact seasonality, then matching settlement/supply/reach/trade
+atlas cohorts. Climate fixed for now. Published r5 remains unchanged and LIVE:
+https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+
+Recipes: prepare_roman_benchmark.py, review_roman_benchmark_preparation.py,
+run_roman_benchmark.py, review_roman_benchmark.py, render_roman_benchmark.py,
+seal_roman_benchmark.py under scripts/. Large derived NPZ and fresh/ local/ignored,
+pinned and reproducible. Completed stages refuse overwrite. No jobs running
+at completion; commit/push and continuing across pushes remain authorized.
+
+# Historical handoff: benchmark declaration
+
 # ACTIVE: AD200 Earth benchmark — approved realism plan, 17 November 2026
 
 Owner approved the six-stage realism plan. Start with evidence, a simple baseline

@@ -7,6 +7,23 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**ACTIVE PROGRAMME — approved realism plan:** establish AD200 regional evidence
+and benchmark against simple alternatives before adding more mechanisms. This
+supersedes all warehouse/handling NEXT targets in older entries below.
+
+**Latest:** conditional Roman size benchmark complete. The hierarchy improves
+CRPS4.40% over M0 on663 AD200-compatible records and7.54% on152 strict-basis
+records. Egypt remains underpredicted; compatible-target mean total area is
+1.118 times reference versus M0's1.016. All339968 draws,2688 aggregate cells and
+5312 plot values independently checked; original controls/fresh output exact.
+[Report and comparison maps](ROMAN_BENCHMARK_20261117.md).
+Occupation dates do not certify extent phases; zero new survey footprints or
+observed city populations qualify. Live r5 unchanged. NEXT frozen:
+`calibration/roman_benchmark_20261117/dated_regional_evidence.json` — at most
+three period-appropriate source/method screens and one defensible regional
+observation contract before spatial/demographic baseline evaluation.
+
+
 **Owner correction:** The target is AD200. The modern truck-handling study is
 discontinued, with no rates or model adoption. The active next source plan is
 `calibration/urban_diagnosis_20261117/roman_handling_evidence.json`: dated
