@@ -1,3 +1,34 @@
+# Original handling exposure complete — bounded rate-evidence screen next, 17 November 2026
+
+The published provisional-r5 atlas remains LIVE and unchanged:
+https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site
+
+Completed after the release: all original Earth monthly central/low town handling
+quantities. See reports/HANDLING_EXPOSURE_20261117.md and
+output/urban_handling_exposure_20261117/qualification.json.
+All 2,170 town rows retained, including zero flows; 52,080 monthly quantities and
+15,896 ordered shipments independently reconstructed exactly, including 1,363
+December-to-January records. Fixed requests/geometry unchanged. Separate qin/qout
+annual/peak values, monthly vectors, CSVs and 2x2 inspection map retained.
+Rates and work hours remain UNKNOWN; no rural-slack staffing, warehouse mapping,
+food/stock/work/graph solver or new Earth scenario. Fresh six outputs + receipt
+byte exact. This is the ORIGINAL EARTH cohort, not fantasy r5 towns.
+
+Publication-aware guard: 3,378 historical identity checks; five changed r5 live
+paths resolve to their exact archived original hashes. Separately 1,197 CURRENT
+identities stay pinned, including the live r5 atlas. Never restore old public
+files over the new atlas or falsify old qualification receipts.
+
+NEXT FROZEN: calibration/urban_diagnosis_20261117/handling_rate_evidence_screen.json.
+Bounded search: at most 3 initial queries, 6 candidate records, ONE direct primary
+manual/report body selected for operation/provenance before numeric outcomes.
+Need explicit manual grain loading/unloading/stacking operation, material/crew/
+time; distinguish observed human work from prescribed/design/equipment rates.
+Modern-to-ancient/fantasy transfer and mass-to-net-edible-kcal conversion remain
+unknown. No rates/staff/model adoption or new food run. Continue across pushes.
+
+# Historical handoff: provisional settlement atlas r5 publication
+
 # Provisional settlement atlas r5 published — 17 November 2026
 
 LIVE: https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site

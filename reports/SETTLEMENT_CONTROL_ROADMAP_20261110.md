@@ -7,7 +7,20 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Original B600 work-budget inspection map complete:four panels,
+**Latest:** Provisional settlement atlas r5 is published with before/after maps,
+raw/corrected and central/low scenarios, its own annual supply and downloads.
+[Release report](SETTLEMENT_PROVISIONAL_RELEASE5_20261117.md). Full seasonal
+qualification is still outstanding; reach/trade/administration retain references.
+
+The next seasonal-work stage is complete: all-original Earth handling exposure,
+2,170 town rows, 52,080 exact monthly quantities and 15,896 ordered shipments;
+1,363 year-wrap records preserved. Rates/hours/staff remain unknown; no solver
+or atlas change. [Exposure report](HANDLING_EXPOSURE_20261117.md). Next frozen:
+one bounded primary handling-work evidence screen; at most three searches and
+one source body, with prescriptions distinguished from empirical human timing.
+
+
+**Previous:** Original B600 work-budget inspection map complete:four panels,
 112,756 independently checked source values. Unspent listed allowances remain
 14.24%/16.16%;annual limits bind45,935/44,726sources. Same scales,undefined
 workforce masks and all display clipping counts retained;raw budgets unchanged.
