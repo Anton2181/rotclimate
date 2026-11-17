@@ -1,3 +1,35 @@
+# Roman plough resource contract complete — 17 November 2026
+
+READ reports/PLOUGH_RESOURCE_CONTRACT_20261117.md.
+Completed output/plough_resource_contract_20261117/qualification.json:
+passed_one_witness_plough_resource_scope_no_capacity_adoption.
+One LacusCurtius English bookII witness (site says Loeb1941); fetchedHTMLsha
+c3be3fab... EXACTLY matches original farm-task source.20 paragraphs in2.4/2.12,
+10 located claims; independent streaming paragraph/digest/quantity checks pass;
+fresh exports byteexact. Wholebook fetched but only two chapters analyzed.
+No new Latin/scan collation, resource-rate adoption, model run or atlas change.
+
+Findings: named ploughmen's days are operator work, a subset of total human
+work.2.12.7 conditional tree-free200iugera example has2yokes,2ploughmen,6common
+labourers; not a universal operator/draft fraction.2.4.8 fourday package bundles
+multiple passes plus ridging/sowing (don't charge sowing twice). Soil/moisture/
+terrain/quality qualify work; no numeric global workability threshold.2.12 crop
+list gives seedvolume, not independent area certification for all crops here.
+Previous seed-area conversions remain assumptions; no silent source repair.
+Actual operator pool, teams, feed/endurance/otherduties and windows stay missing.
+
+NEXT FROZEN calibration/roman_benchmark_20261117/plough_completion_adapter.json.
+Existing harvest.labour already supports simultaneous resources. Add small
+single-origin plough-package adapter: explicit per-ha human/operator/team hours,
+explicit NET capacities/window, operator capacity<=same total human capacity.
+No default Roman rates or capacities, no team-free shortcut. Completion reports
+plough-package hectares only, not grain, annualcropcompletion or supportedpeople.
+Manufactured analytical tests for coincident/disjoint resources, subset/draft
+binding, invalid/missing inputs and unit/scope behavior. No Earth scenario.
+Commit/push and continue authorized; climate later, warehouse detour superseded.
+
+# Historical handoff: cereal operation demand preparation
+
 # Cereal operation demand preparation complete — 17 November 2026
 
 READ reports/CEREAL_OPERATION_DEMANDS_20261117.md (and preceding crop packet report).

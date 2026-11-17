@@ -7,6 +7,15 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest primary-source contract:** same original ColumellaII witness recovered
+byteexact;20 paragraphs/10 resource-scope findings checked. Operator time belongs
+to total human time, with separate simultaneous draft service. Estate staffing
+is conditional; soil/moisture/passes and bundled sowing matter. No numeric animal
+capacity or universal calendar adopted. [Resource contract](PLOUGH_RESOURCE_CONTRACT_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/plough_completion_adapter.json` —
+reuse existing scheduler for supplied human/operator/team inputs and manufactured
+controls; plough-package completion only, no new grain/population/atlas claim.
+
 **Latest operation preparation:**64 task/case summaries on the same16 crop/work
 activities;69.66M materialized values checked, four unknown-resource/unit controls
 pass. Ploughing46.15% of listed barley hours; maximum conditional full8h-worker
