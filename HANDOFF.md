@@ -1,3 +1,29 @@
+# Conditional grain/city-area comparison completed; grain feature rejected
+
+READ reports/CONDITIONAL_GRAIN_EXTENT_20261117.md and its qualification.
+Declaration53edba13a preceded new features/fits. Twenty outer mean fits,
+5,010 independent score cells,20held-out perturbation checks, all1315centre
+disks independently reconstructed;9fresh exports byteexact, figures inspected.
+M0 broad/strict CRPS .597820/.582518; simple reference H .580108/.558584;
+potential grain .592324/.588896;600h .592722/.591992;300h .589611/.585539.
+Grain loses to H on both pooled/equalprovince comparisons; retain regional
+mixed results (grain beats M0 in3/4strictfolds despite pooled strict loss).
+300/600features correlate .997334; prediction difference RMS .025265log.
+No actual hours/draft/density inferred; no historical agricultural calibration.
+Reference people ALL used as work proxy; NO area-derived resident subtraction.
+Gross grain is not exportable/diet population. H and M0 archives exact.
+Published r5/climate/parameters unchanged. Reaping target CLOSED; no more search.
+
+NEXT: declare a contiguous geographical transfer test of ONLY M0 and simpleH,
+with shared-centre grouping and120km grid-plane exclusion buffer. Freeze exact
+quadrants/inner fitting before outcome scores. Current provincehash folds are
+not contiguous, so this is a real robustness question, not a grain rescue.
+Do not infer historical work capacities or population from this test. Existing
+extent phases remain undated. Reserved pools/workbook/climate closed.
+Commit/push and continue beyond intermediate pushes remain authorized.
+
+# Historical handoff: grain experiment entry
+
 # Reaping screen closed; conditional grain/extent experiment declared
 
 READ reports/REAPING_CONTRACT_TARGET_20261117.md. Its qualification passes;
