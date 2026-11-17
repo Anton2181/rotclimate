@@ -1,4 +1,52 @@
-# Archaeological methods qualified; explicit store contract next — 17 November 2026
+# Explicit store contract complete; primary Ostia source next — 17 November 2026
+
+Latest report reports/URBAN_STORAGE_CONTRACT_20261117.md and qualification
+output/urban_storage_contract_20261117/qualification.json. Continued AFTER
+pushing methods95993e93c. New isolated polity/storage_capacity.py has23passing
+tests,7manufactured examples,5invalid-input receipts and18independent Decimal
+checks. Six baseline model store-class totals EXACT to existing table;no stock
+reruns,capacity changes,site observations,food/climate/phenology runs or adoption.
+All1103protected identities unchanged. No jobs running.
+
+Quantity records carry explicit unit,evidence kind,source/locator,known value
+or unknown. Single commodity allocated to usable space;gross/mixed unallocated
+space rejected. Density must match commodity/state;already-net material must
+be explicitly net_edible and cannot receive repeated deductions. Known floor
+mass limit rejects excess fill;unknown support/preservation/phase/access stays
+visible. Outputs are GEOMETRIC volume/mass/netenergy,never automatic operational
+or historical capacity. Module always leaves operational_capacity_kcal unset
+and empirically_qualifiedFalse,even if an input is labelledobservation.
+
+Compatible positive explicit365day annualflow only for geometric dayequivalents;
+missing/zero/incompatible flow leaves days undefined. No density/depth/yield/
+energy/load defaults. Example numeric inputs are MANUFACTURED scenarios,not
+Salido/Gentry ancient measurements. Existing rural365d/commercial365dofbaseline
+market/town90d budgets remain scenarios;grid coordinates do not supply physical
+facility location or operational evidence. Frozen food producers untouched.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/ostia_store_source_qualification.json:
+ONEcomplex/primary chapter,Boetto,Bukowiecki,Monteix,Rousse2016,Les Grandi Horrea
+d'Ostie,in Marin/Virlouvet,Entrepôts et trafics annonaires en Méditerranée,
+CollectionEFR522,pp177–226. Citation exposed in Salido;body NOT read yet.
+Register DEVELOPMENT exposure beforebody,authenticate lawful full source bytes/
+title/authors/year/pages/license and retain identity/access failures. Extract all
+explicit relevant function/location/phase/commodity/access/geometry/material/
+support/preservation/duration/flow statements for thiscomplex,with exact locators.
+Separate measurement,reconstruction,author estimate,secondaryclaim,our derivation
+and unknown;never sum incompatible phases or use gross mixed space as grain.
+No plan digitization or inferred unprinted dimensions;no imputed height/density/
+yield/load/rights/duration. No dividing by modeled market or city/network
+attachment. Conditional/indeterminate geometry is valid. Zero newfoodfits.
+Reserved Buringh size/climate l pools AND site-survey workbook unopened.
+
+Proceed after committing/pushing this contract. Primary evidence now precedes
+any numeric capacity/dispatch variant or finite-occupancy integration. Full
+diet/resources/work,rights and independent transfer remain separate adoption
+gates. Climate/steppe deferred;atlas/population unchanged. Previous entries below
+retain historical states. Qualified stages refuseoverwrite;use isolated OUT
+for fresh audit/review/seal replay,do not edit frozen code and reuse outputs.
+
+# Previous completed archaeological methods review — 17 November 2026
 
 Latest report reports/URBAN_STORAGE_METHODS_20261117.md and qualification
 output/urban_storage_methods_20261117/qualification.json. Full Salido2018 source

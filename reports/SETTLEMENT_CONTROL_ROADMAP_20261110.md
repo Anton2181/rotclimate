@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Salido2018 full methods source is read and source-qualified:
+**Latest:** Explicit physical-store contract is implemented and isolated from
+food producers:23tests,7manufactured cases,5invalid inputs and18Decimal checks.
+Units,material/state,usable-space allocation,structural support and compatible
+flow definitions are explicit;unknowns remain unknown. Geometric energy never
+automatically becomes empirical operational capacity. Six existing model budget
+totals remain exact/scenario-only. See
+[URBAN_STORAGE_CONTRACT_20261117.md](URBAN_STORAGE_CONTRACT_20261117.md).
+Next frozen task:ONEprimary archaeological chapter/complex,GrandiHorreaOstia,
+source identity and page-located measurement/estimate/context ledger. No source
+height/density/rights imputation,newfoodrun,fit or networkattachment. Climate later.
+
+**Previous:** Salido2018 full methods source is read and source-qualified:
 16-page PDF identity,12fields/24dual-extraction anchors and page-image checks.
 Capacity proposals depend on material/state,usable space,structural support,
 safe fill,function/phase and turnover. No ancient coefficient or primary site

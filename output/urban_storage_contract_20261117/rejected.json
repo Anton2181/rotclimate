@@ -1,0 +1,317 @@
+[
+  {
+    "name": "gross_area",
+    "store": {
+      "store_id": "manufactured-bulk-store",
+      "role": "commercial",
+      "location": "invented location",
+      "phase": "invented phase",
+      "owner_access": "scenario access",
+      "commodity": "barley",
+      "stored_state": "husked",
+      "energy_pool": "net edible cereal",
+      "material_basis": "stored_material",
+      "area_basis": "gross_footprint",
+      "usable_area": {
+        "value": 100.0,
+        "unit": "m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "effective_depth": {
+        "value": 0.5,
+        "unit": "m",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "bulk_density": {
+        "value": 700.0,
+        "unit": "kg_stored/m3",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "density_commodity": "barley",
+      "density_stored_state": "husked",
+      "net_edible_yield": {
+        "value": 0.8,
+        "unit": "kg_edible/kg_stored",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "edible_energy_density": {
+        "value": 3500.0,
+        "unit": "kcal/kg_edible",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "structural_mass_limit": {
+        "value": 500.0,
+        "unit": "kg_stored/m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "preservation_condition": "scenario ventilation",
+      "duration_condition": "scenario duration"
+    },
+    "status": "rejected",
+    "reason": "Gross footprint/unallocated mixed space cannot fund a cereal conversion"
+  },
+  {
+    "name": "mixed_unallocated",
+    "store": {
+      "store_id": "manufactured-bulk-store",
+      "role": "commercial",
+      "location": "invented location",
+      "phase": "invented phase",
+      "owner_access": "scenario access",
+      "commodity": "barley",
+      "stored_state": "husked",
+      "energy_pool": "net edible cereal",
+      "material_basis": "stored_material",
+      "area_basis": "unallocated_mixed",
+      "usable_area": {
+        "value": 100.0,
+        "unit": "m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "effective_depth": {
+        "value": 0.5,
+        "unit": "m",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "bulk_density": {
+        "value": 700.0,
+        "unit": "kg_stored/m3",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "density_commodity": "barley",
+      "density_stored_state": "husked",
+      "net_edible_yield": {
+        "value": 0.8,
+        "unit": "kg_edible/kg_stored",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "edible_energy_density": {
+        "value": 3500.0,
+        "unit": "kcal/kg_edible",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "structural_mass_limit": {
+        "value": 500.0,
+        "unit": "kg_stored/m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "preservation_condition": "scenario ventilation",
+      "duration_condition": "scenario duration"
+    },
+    "status": "rejected",
+    "reason": "Gross footprint/unallocated mixed space cannot fund a cereal conversion"
+  },
+  {
+    "name": "density_state_mismatch",
+    "store": {
+      "store_id": "manufactured-bulk-store",
+      "role": "commercial",
+      "location": "invented location",
+      "phase": "invented phase",
+      "owner_access": "scenario access",
+      "commodity": "barley",
+      "stored_state": "husked",
+      "energy_pool": "net edible cereal",
+      "material_basis": "stored_material",
+      "area_basis": "single_commodity_allocated_usable",
+      "usable_area": {
+        "value": 100.0,
+        "unit": "m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "effective_depth": {
+        "value": 0.5,
+        "unit": "m",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "bulk_density": {
+        "value": 700.0,
+        "unit": "kg_stored/m3",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "density_commodity": "barley",
+      "density_stored_state": "clean",
+      "net_edible_yield": {
+        "value": 0.8,
+        "unit": "kg_edible/kg_stored",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "edible_energy_density": {
+        "value": 3500.0,
+        "unit": "kcal/kg_edible",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "structural_mass_limit": {
+        "value": 500.0,
+        "unit": "kg_stored/m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "preservation_condition": "scenario ventilation",
+      "duration_condition": "scenario duration"
+    },
+    "status": "rejected",
+    "reason": "density_stored_state mismatches stored material"
+  },
+  {
+    "name": "excess_structural_load",
+    "store": {
+      "store_id": "manufactured-bulk-store",
+      "role": "commercial",
+      "location": "invented location",
+      "phase": "invented phase",
+      "owner_access": "scenario access",
+      "commodity": "barley",
+      "stored_state": "husked",
+      "energy_pool": "net edible cereal",
+      "material_basis": "stored_material",
+      "area_basis": "single_commodity_allocated_usable",
+      "usable_area": {
+        "value": 100.0,
+        "unit": "m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "effective_depth": {
+        "value": 0.5,
+        "unit": "m",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "bulk_density": {
+        "value": 700.0,
+        "unit": "kg_stored/m3",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "density_commodity": "barley",
+      "density_stored_state": "husked",
+      "net_edible_yield": {
+        "value": 0.8,
+        "unit": "kg_edible/kg_stored",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "edible_energy_density": {
+        "value": 3500.0,
+        "unit": "kcal/kg_edible",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "structural_mass_limit": {
+        "value": 300.0,
+        "unit": "kg_stored/m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "preservation_condition": "scenario ventilation",
+      "duration_condition": "scenario duration"
+    },
+    "status": "rejected",
+    "reason": "Proposed fill exceeds the explicit structural mass limit"
+  },
+  {
+    "name": "double_deduction",
+    "store": {
+      "store_id": "manufactured-bulk-store",
+      "role": "commercial",
+      "location": "invented location",
+      "phase": "invented phase",
+      "owner_access": "scenario access",
+      "commodity": "barley",
+      "stored_state": "husked",
+      "energy_pool": "net edible cereal",
+      "material_basis": "already_net_edible",
+      "area_basis": "single_commodity_allocated_usable",
+      "usable_area": {
+        "value": 100.0,
+        "unit": "m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "effective_depth": {
+        "value": 0.5,
+        "unit": "m",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "bulk_density": {
+        "value": 700.0,
+        "unit": "kg_stored/m3",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "density_commodity": "barley",
+      "density_stored_state": "husked",
+      "net_edible_yield": {
+        "value": 0.8,
+        "unit": "kg_edible/kg_stored",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "edible_energy_density": {
+        "value": 3500.0,
+        "unit": "kcal/kg_edible",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "structural_mass_limit": {
+        "value": 500.0,
+        "unit": "kg_stored/m2",
+        "kind": "scenario",
+        "source": "manufactured unit control",
+        "locator": "explicit invented input"
+      },
+      "preservation_condition": "scenario ventilation",
+      "duration_condition": "scenario duration"
+    },
+    "status": "rejected",
+    "reason": "Already-net edible material cannot receive another deduction"
+  }
+]
