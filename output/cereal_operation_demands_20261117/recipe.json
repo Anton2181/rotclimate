@@ -1,0 +1,36 @@
+{
+  "hours_per_cropped_hectare": {
+    "1": {
+      "plough": 128.0,
+      "harrow": 32.0,
+      "hoe_first": 64.0,
+      "hoe_second": 32.0,
+      "weed": 32.0,
+      "reap": 48.0
+    },
+    "2": {
+      "plough": 96.0,
+      "harrow": 32.0,
+      "hoe_first": 48.0,
+      "hoe_second": null,
+      "weed": null,
+      "reap": 32.0
+    }
+  },
+  "assumed_hours_per_workday": 8.0,
+  "iugerum_hectares": 0.25,
+  "missing_prescription": null,
+  "task_order": [
+    "plough",
+    "harrow",
+    "hoe_first",
+    "hoe_second",
+    "weed",
+    "reap"
+  ],
+  "canonical_work": "Unchanged base activity packet; signed rounding differences kept separate.",
+  "day_equivalent": "Task hours / same origin effective workers /8; conditional full-workforce allocation, not observed workdays.",
+  "access": "demands(activity(load_packet(BASE,climate),model,climate,density,hours),task,recipe)",
+  "physical_cases": "Market-share alternatives alias the existing16 physical cases; do not add their workforce/area.",
+  "omissions": "No complete processing, draft animal, irrigation, maintenance, household occupation or dated task windows."
+}

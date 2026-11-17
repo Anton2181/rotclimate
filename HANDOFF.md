@@ -1,3 +1,39 @@
+# Cereal operation demand preparation complete — 17 November 2026
+
+READ reports/CEREAL_OPERATION_DEMANDS_20261117.md (and preceding crop packet report).
+Completed output/cereal_operation_demands_20261117/qualification.json:
+passed_fixed_normative_task_demands_not_dated_resource_schedule.
+64 task/case summaries on16 SAME physical activity cases;15365984defined
+origin/task demands,69664032materialized task values independently checked;
+four missing-prescription/crop/worker/unit controls pass; fresh exports byteexact.
+No new model solve, scenarios, workers, dates or liveatlas changes.
+
+Barley normative plough96, harrow32, firsthoe48, reap32 hours/retained ha,
+using existing Columella2.12 transcription and assumed8h/0.25ha conversions.
+Absent barley second-hoeing/weeding prescriptions stay UNKNOWN(NaN), notzero.
+No-crop demand and worker-day denominators with zero workers stay undefined.
+Reader in scripts/cereal_operation_demands.py materializes from tracked base
+activity packets; no duplicate binaries or market-share workforces.
+
+Plough46.15% of listedwork versus reaping15.38%. Max full8h-worker-day equivalents
+at600h: plough34.62,harrow11.54,firsthoe17.31,reap11.54;300h halves these.
+These are conditional thresholds IF all effective workers devote time to task,
+NOT available dates, actual Roman day lengths, feasible calendars or draftteams.
+Correctedcentral600h normative plough4.3504B,harr1.4501B,hoe2.1752B,reap1.4501Bhours.
+Canonical-minus-normative signed residuals stay separate:annual−194.938h,reap+10.911h;
+no adjustments, clamping or extra availability. Reaping subset notdoublecharged.
+
+NEXT FROZEN calibration/roman_benchmark_20261117/plough_resource_contract.json:
+one bounded Columella bookII source witness, sections2.12 task counts and2.4
+ploughingmethod. Establish meaning of plough-day (human/crew/yoke), soil,
+implement/pass conditions and missing paired human/draft quantities. No new
+source family, numerical search, invented universal dates or resourceallocation.
+Largest task first; no warehouse/modernhandling or climate detour.
+Keep all-barley and density alternatives explicit. Current work committed/pushed;
+continue authorized; no background jobs.
+
+# Historical handoff: per-origin cereal activities
+
 # Per-origin cereal activities recovered — 17 November 2026
 
 READ reports/CEREAL_ACTIVITY_PACKET_20261117.md.

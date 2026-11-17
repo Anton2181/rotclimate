@@ -7,6 +7,15 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest operation preparation:**64 task/case summaries on the same16 crop/work
+activities;69.66M materialized values checked, four unknown-resource/unit controls
+pass. Ploughing46.15% of listed barley hours; maximum conditional full8h-worker
+days34.62 plough versus11.54 reaping at600h allowance. No dates/crews/animals added;
+missing prescriptions remain unknown. [Task demand report](CEREAL_OPERATION_DEMANDS_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/plough_resource_contract.json` —
+one Columella bookII witness,2.12/2.4, human/draft day-unit and method conditions
+before a ploughing-window constraint. No atlas or climate change.
+
 **Latest crop/work packet:** fixed per-origin cereal activities recovered for all
 32 scenario aliases/16 physical cases.416 old scalars exact;3.87M origin/case rows
 and104.50M reader values independently checked; two tracked compressed packets
