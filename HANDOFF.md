@@ -1,4 +1,53 @@
-# Storage throughput explained; fixed-quota loss control next — 17 November 2026
+# Fixed-quota control complete; storage/dispatch evidence next — 17 November 2026
+
+Latest report reports/URBAN_FIXED_DISPATCH_20261117.md and qualification
+output/urban_fixed_dispatch_20261117/qualification.json. FOUR existing own-quota
+controls replay ALL70food arrays EXACT BEFORE exactly2new0loss/90day cases.
+Originalbaseline annualmarket/12 now fixes the quota as well as commercial
+capacityreference. Allwork/grain/firstbest dates/requests/ruralpeople/shares/
+actual1981-2010routes remain fixed. No jobs running;no atlas/default adoption.
+
+City meals central/low at90days:
+5%ownquota40.006758/45.810563%;0%ownquota40.336113/46.175795%;
+0%FIXEDquota40.258773/46.087820%. ALL11central/8low previous local losses
+versus5%control disappear,with NO newlosers versus5%. This isolates quota
+feedback in those declines,not general monotonicity or historical dispatch.
+Versus0%OWNquota,fixed quota feeds6474.384/3569.347FEWERmealPY,
+gains175/193cities but harms399/604. Do not confuse those comparisons or pick
+the rule with a preferred aggregate/local outcome. Fullmeal cells217/131.
+Paid departures fall39158.618/17624.162grainPY versus0%ownquota;commercial
+spill rises bysameamount. Ruralinventories/marketedgrain EXACT to0%owncases.
+Zero-reference origins keep0capacity AND0quota. All-rural/all-citymealsfalse.
+
+10newadaptertestsPASS;qualified0lossendpointmethod/originaltolerances reused.
+Separate stock-map/route/ledger review112756source-cases/8inventorygroups/
+3683shipments;trace differences and compensatedgrainresidual0.1103protected
+parent identities exact.6510cityrecords/2170completechannelrows/19previous
+loserrows/72month/30region rows,3maps and compacttownpacket tracked.
+Large cases/*/fields.npz local/ignored. Frozen producer/review/render/seal
+refuseoverwrite;fresh replay needs consistent runtime OUT and pinnedinputs.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/storage_dispatch_source_scope.json:
+move from parameter variations to STORAGE/DISPATCH EVIDENCE. First read-only
+inventory of exposed reports/citedreferences;separate reservealgebra/scenario
+assumptions/modern context from ancient institutions. Manifest of exactquotes
+and cannot-infer interfaces:ruralretention,commercial staging,townstorage,
+seasonaldispatch. Footprint!=usablevolume!=ediblestock!=capacity!=throughput;
+annualmarket itself is model-dependent. Sourceclasses/ownership/dating matter.
+Public bibliographic discovery allowed only as LEADS ifneeded;no quantitative
+observation extraction/crossing before a later source/measurement declaration
+and exposure registration. No newfoodcases or capacity/dispatchfit. Existing
+sources currently supply no qualified ancient365/90day or5%coefficient.
+
+Broader priority:finish evidence qualification at this interface,then address
+physical food/work and finite occupancy together. Complete diet/resources,
+rights and independent transfer remain separate gates before adopting a new
+atlas. Testedcapacity effect47.8–52.5pp dwarfs quotaaggregateeffect<.1pp;
+don't compensate for logistics uncertainty using climate fitting. Climate/
+steppe deferred;Buringh sizes/climate l unopened. Continue source scoping
+after pushing this completed control. Old entries below are history.
+
+# Previous completed storage-throughput audit — 17 November 2026
 
 Latest report reports/URBAN_STORAGE_THROUGHPUT_20261117.md and qualification
 output/urban_storage_throughput_20261117/qualification.json. Completed AFTER

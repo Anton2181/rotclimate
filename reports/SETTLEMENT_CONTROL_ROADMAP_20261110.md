@@ -7,7 +7,20 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Read-only throughput audit explains the large commercial-store
+**Latest:** The fixed-baseline dispatch control is complete. Four70array
+controls are exact;two newzero-loss/90d cases pass independent stock/routes/
+ledger review. All19previous local zero-loss meal declines disappear,withno
+newlosers against5%control. Fixed quota nevertheless feeds6474/3569fewer
+mealPY than0%ownquota;no rule is adopted. Coverage40.2588/46.0878%still shows
+the much larger commercial-storage dependency. See
+[URBAN_FIXED_DISPATCH_20261117.md](URBAN_FIXED_DISPATCH_20261117.md).
+Next frozen source scoping:existing evidence and bibliographic leads for
+storage location/capacity,ownership and seasonal dispatch;no new measurements,
+food cases or fits. Qualify this interface before coupled occupancy/default
+adoption;full diet/work,rights and independent-transfer gates remain. Climate
+remains deferred. Stop adding numerical variants until evidence justifies one.
+
+**Previous:** Read-only throughput audit explains the large commercial-store
 effect:98.5%of zero-loss marketed grain follows a checked single-pulse/open-route
 identity,departures=min(annualmarket,annualmarket/12+fixedcapacity). All19local
 city losses have increased annual direct grain;intertown allocation and seasonal
