@@ -1,3 +1,33 @@
+# Buffered geographic transfer completed; small signal, unreliable totals
+
+READ reports/GEOGRAPHIC_EXTENT_TRANSFER_20261117.md and qualification.
+Plan e7cec7875 committed before groups/fits. Fixed17E/38N quadrants, shared
+centre grouping, strict>120km PROJECTED-grid exclusion in outer/inner training.
+8outer means/24inner means;32independentmask checks,8heldout perturbations,
+200independent score cells,6fresh exports byteexact; figure visually inspected.
+Outer groups SW69/SE112/NW383/NE100; sourceSE includes1AD200-incompatible row.
+No supportgate failure; no boundary/buffer/feature tuning. Inputs/archivefixed.
+
+M0/H broad CRPS .619987/.606658 (+2.15%); strict .611964/.593771 (+2.97%).
+H wins4/4broad groups but3/4strict: NEstrict17rows loses12.38% vsM0.
+Generated-total/reference-area H1.3265broad/1.3799strict; baseline also high.
+Do NOT call modest individual-score skill reliable regional totals, dated
+AD200 population validation, or calibration of historical household resources.
+Previous grain600/300/potential all lose to H; no feature/hour adoption.
+R5 atlas/climate/defaults unchanged. All plough/reapingtarget screens CLOSED.
+
+NEXT numerical question (proposal, NOT a frozen protocol): predictive dispersion.
+Current sigma=inner residual RMS; normal draws and clipping alter area totals.
+Declare separately BEFORE fits: calibrate dispersion on inner-heldout CITY-AREA
+scores symmetrically forM0/H, preserve same buffered outertest, no outer-total
+fitting, new hour/grain/geographic tuning, all-datafit or automaticatlasadoption.
+Keep the NEfailure and regionaltotals visible. This does NOT unlock historical
+agricultural capacity: actual matched work-time evidence is still absent.
+Dated extent/population evidence remains required for historical validation.
+Reserved pools/workbook/climate closed. Commit/push/continue remain authorized.
+
+# Historical handoff: grain experiment completed
+
 # Conditional grain/city-area comparison completed; grain feature rejected
 
 READ reports/CONDITIONAL_GRAIN_EXTENT_20261117.md and its qualification.
