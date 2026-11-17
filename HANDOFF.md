@@ -1,3 +1,59 @@
+# Original route provenance complete; no-hold contract next — 17 November 2026
+
+Latest report: reports/WAREHOUSE_ROUTE_PROVENANCE_20261117.md. Inspection figure:
+output/urban_warehouse_routes_20261117/original_routes.png. Qualification:
+output/urban_warehouse_routes_20261117/qualification.json, status
+passed_sixteen_original_route_certificates_with_exact_archived_costs_and_owners.
+No jobs running at completion. This continuation completed shared warehouse,
+read-only readiness and route recovery, continuing across their pushes.
+
+Sixteen funded original routes selected and committed BEFORE graph calls in
+cd604ca5e, with no outcome substitutions. Exact original captured world restored
+using original grid/biome/road/strait/sea recipe; no weather reader, wind fallback
+or raw city table. Four canonical legacy graphs, eight Dijkstra calls, zero
+new full all-pairs tables. Full source owners/distances EXACT at archived dtype
+for both readings/all quarters; eight selected forward intertown costs EXACT.
+Independent review: 16 rankings/chains, 1148 directed edge occurrences; max
+cost-sum error 1.14e-13 at existing path tolerance. Reviewer zero canonical graph
+or Dijkstra calls, four independent CSR assemblies from saved raw records.
+All 1103 protected identities unchanged. Zero food/stock solves or new cases.
+
+Six distinct chains among 16 records. Largest source leg is 215876→215276,
+9 road-km, same all quarters/readings. Intertown sender 141127 (western North
+Africa), central destination 105258 (central Italy); low Q0 destination 111271,
+otherwise same central route. Costs central 267.59/224.50/152.47/177.61 road-km.
+These are funded sent-quantity selections, not largest delivered grain or a
+representative atlas sample. Selected edges have no summed parallel records;
+that does NOT prove full graph equivalence to the alternative freight connector.
+Model port/river-landing memberships and auxiliary mappings retained explicitly;
+not authenticated buildings, storage, rights, unique old paths or physical days.
+
+Compact node/edge certificates and inspected map are tracked. Full raw legacy
+CSR/predecessor caches (~130 MB) remain local/ignored under output packet/local,
+pinned in results/qualification. Completed producers refuse overwrite. Initial
+selector was interrupted before output for repeated archive decompression; fixed
+to load once, incident retained, zero graph/food calls in interrupted attempt.
+No route reconstruction failure or identity mismatch occurred.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_no_hold_contract.json:
+implement isolated consignment/event accounting with one funding/whole-leg charge
+and original endpoint arrival bin, including year wrap. Intermediate events cannot
+multiply retention or add an automatic bin. Explicit charge allocation must
+conserve the original charge; exact endpoint grain remains authoritative. Declare
+finite manufactured conservation/timing/rejection controls before execution,
+then EXACTLY TWO original baseline arrival-accounting reductions (central/low),
+no food/stock solve. Require exact original direct/intertown arrival arrays and
+operation order. Duplicate funding, invalid IDs/amounts/holds fail. No Dijkstra,
+new routes, parameter sweep, actual warehouse mapping or food scenario. Positive
+hold, physical capacity/rights/handling work and cross-role capacity deduplication
+require later declarations. A consignment event is not warehouse evidence.
+
+Climate/steppe deferred; reserved Buringh size/climate l and site-survey workbook
+unopened. No new fit, actual population/staff or atlas/default adoption. Prior
+entries below are history; do not execute their completed next-stage instructions.
+
+# Previous readiness completion — 17 November 2026
+
 # Shared-store readiness complete; bounded route recovery next — 17 November 2026
 
 Latest report: reports/SHARED_STORE_READINESS_20261117.md. Qualification:

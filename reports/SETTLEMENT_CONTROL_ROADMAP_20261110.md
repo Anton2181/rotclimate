@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Shared-store readiness audit complete: 15 exact source contracts,
+**Latest:** Original route recovery complete: 16 preselected funded legs, four
+legacy graphs, exact archived source owners/distances and eight exact selected
+intertown costs. Independent direction/edge checks pass all 1148 occurrences;
+inspection map and compact certificates retained. No food solve or warehouse
+assignment. See [WAREHOUSE_ROUTE_PROVENANCE_20261117.md](WAREHOUSE_ROUTE_PROVENANCE_20261117.md).
+Next frozen step: isolated zero-hold consignment accounting, manufactured grain/
+time controls, then two original baseline arrival-only reductions without any
+inventory solve. Keep original whole-leg charges and arrival bins; prevent
+intermediate events from creating food or delay. Physical storage/work/rights
+and one capacity across roles remain later gates; climate later.
+
+**Previous:** Shared-store readiness audit complete: 15 exact source contracts,
 six schemas and independent recipient-change checks. Saved paths are absent;
 4,050 origins change recipient owner across quarters. Splitting a charged leg
 changes retention algebra and adds a bin unless explicitly controlled. Legacy
