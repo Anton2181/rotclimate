@@ -1,0 +1,23 @@
+{
+  "status": "declared_before_no_hold_implementation_or_control_execution",
+  "parent": "calibration/urban_diagnosis_20261117/warehouse_no_hold_contract.json",
+  "api": "A stateful ledger accepts one-dimensional batches with unique nonempty consignment IDs, nonnegative integer physical endpoint IDs, finite nonnegative sent/delivered kcal (delivered<=sent), explicit integer departure/arrival bins and zero hold only. Arrival must equal (departure+1)%12. Ordered event labels with explicitly allocated nonnegative whole-leg charges annotate one movement; they neither fund additional movements nor derive new times. With no intermediate events the charge is recorded as one whole-leg charge. Reject duplicates across and within calls atomically, invalid shapes/values/bins, nonzero holds, incompatible charge totals and cumulative overdraw. Keep original delivered values exactly, defensively copy receipt arrays and expose no capacity/rights inference.",
+  "tolerance": "Retain existing grain accounting scale 1e-10*max(1,sent,delivered) for charge-sum/ledger closure only. Endpoint delivered arrays, original direct/intertown arrival reductions and timing require EXACT equality. Do not relax any food/path tolerance or adjust legacy data.",
+  "manufactured": [
+    {"name":"no_charge","sent":100,"delivered":100,"charges":[0,0,0],"departure":0,"arrival":1},
+    {"name":"full_charge","sent":100,"delivered":0,"charges":[10,20,70],"departure":0,"arrival":1},
+    {"name":"partial_charge","sent":100,"delivered":70,"charges":[10,5,15],"departure":0,"arrival":1},
+    {"name":"zero_funding","sent":0,"delivered":0,"charges":[0,0,0],"departure":0,"arrival":1},
+    {"name":"partition_a","sent":100,"delivered":70,"charges":[20,10,0],"departure":0,"arrival":1},
+    {"name":"partition_b","sent":100,"delivered":70,"charges":[0,15,15],"departure":0,"arrival":1},
+    {"name":"year_wrap","sent":100,"delivered":70,"charges":[10,5,15],"departure":11,"arrival":0},
+    {"name":"split_counterexample","sent":100,"delivered":55,"charges":[25,20,0],"departure":0,"arrival":1}
+  ],
+  "counterexample": "Costs25+20 at L100 preserve delivered55 from sent100; multiplying .75*.80 would deliver60. Event partition cannot change55 into60 or shift original arrival.",
+  "rejections": ["duplicate within batch","duplicate across batches","blank/nonstring IDs","negative or nonfinite amounts","delivered greater than sent","invalid endpoints","invalid monthly bins","extra arrival delay","nonzero hold","invalid event labels or shapes","negative/nonfinite/overdrawn charges","charge sum differs from existing whole-leg charge"],
+  "legacy_reductions": "EXACTLY original central and low monthly baseline cases. Source movements preserve physical source order, recorded departures*retention and original per-month bincount reduction; record all valid source rows including zero amounts so ordering is unchanged. Annotate two intermediate events plus terminal charge with allocation .25*charge,.25*charge,remaining charge. Intertown movements preserve recorded shipment order, sent/got values and original per-destination accumulation. Require original direct/inter_received/inter_exported/arrivals arrays exact. Do not invoke routing, food, stock, climate, phenology or population solvers. Record ledger calls and protected/source hashes. An independent reviewer replays reductions without calling the new ledger.",
+  "exclusions": "No actual warehouse IDs/locations, new routes, physical days, positive hold, storage capacity, rights, workforce allocation, additional Earth food cases, tuning, new fit or atlas/default adoption. Existing route/store outputs remain frozen. Reserved Buringh pools and site-survey workbook unopened; climate/steppe deferred.",
+  "new_fit": false,
+  "new_validation_claim": false,
+  "adopt": false
+}
