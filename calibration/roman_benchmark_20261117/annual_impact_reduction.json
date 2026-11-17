@@ -1,0 +1,11 @@
+{
+  "parent": "calibration/roman_benchmark_20261117/annual_assumption_impact.json",
+  "primary": "candidate",
+  "control": "control, reported separately as a robustness comparison",
+  "availability": "2 models x 2 climates x 2 densities x 3 extraction shares x 2 hour allowances: 48 possible combinations, 32 present. The sixteen 300-hour x10/x14 combinations are unavailable.",
+  "pairs": "Enumerate every unordered pair within model/climate that differs in exactly one of density, extraction or hours_worker_year. Orient low to central density, smaller to larger extraction, and 300 to 600 hours. Never match across climate or model.",
+  "outcomes": ["residents", "coverage_percentage_points", "rural_shortfall_person_years", "town_shortfall_person_years", "short_towns"],
+  "rank": "For each model, climate and outcome separately, rank factors by largest absolute matched difference over the available declared endpoints; also report median absolute difference, pair count and the maximum pair. Ties share rank. No combined-unit score, empirical uncertainty interval or equal-range interpretation. Extraction pairs are overlapping scenario contrasts, not independent samples.",
+  "checks": "Re-read archived result/diagnostic values, check all availability and all allowed/excluded pair combinations independently, recompute reductions, confirm result/review identities and parent qualification protections. Reproduce exports in a separate directory. No model rerun.",
+  "adopt": false
+}
