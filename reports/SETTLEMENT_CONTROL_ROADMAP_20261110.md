@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Paid grain and handling-work claims are linked:14 tests and exactly
+**Latest:** Archived evidence/scheduler audit complete:22source-interface rows,
+10archived taskcounts; no fullmonthlybaseline orwarehouse handlingrate supplied.
+Two oldprimarycaches missing;oneoldcereal-map builderidentity mismatch retained,
+wholeoldrecipe not requalified. Existing scheduler/staffinterfaces reusable with
+explicit inputs. See [WORK_EVIDENCE_SCOPE_20261117.md](WORK_EVIDENCE_SCOPE_20261117.md).
+Next frozen target:ONEprimarycalendar,Columella11.2,identity/exposure andparagraph
+located task/season evidence;no automaticmodelbin conversion orcoefficient adoption.
+Climate later;oldoutputs unchanged.
+
+**Previous:** Paid grain and handling-work claims are linked:14 tests and exactly
 three coupling controls from frozen manufactured grain receipts,zero inventory
 reruns. Same15grain requires10.8/11.4h against11h;onepriority passes,otherfails,
 incompletebaseline fails. Sixteen task identities/exactFraction hours reviewed.

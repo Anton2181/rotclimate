@@ -1,3 +1,42 @@
+# Archived work evidence audit complete; primary calendar next — 17 November 2026
+
+Latest report reports/WORK_EVIDENCE_SCOPE_20261117.md. Qualification
+output/urban_work_evidence_20261117/qualification.json,passed_faithful_work_evidence_audit_with_primary_cache_and_old_recipe_identity_limits.
+22 exact archived/source-interface rows,10prescribed-as-archived taskcounts;
+all1103 protected identities unchanged. Zero newsource bodies/solver calls.
+
+Reusable farm-operation LP and monthly staff mechanisms already exist. Demo
+windows,collectorloads/handlingtimes,workday/area andavailability remain supplied
+scenarios. Columella2.12 counts concern listed tasks tothreshingfloor,notcomplete
+occupation. No fullEarth baseline monthlyschedule orwarehouse handlingintensity
+qualified. Two oldrawcaches absent (Columella2 andFAO);metadatahashes preserved,
+notreplaced orfreshlyverified. Farm/requiredwork/monthlywork codeidentity matches.
+Oldcereal-map receipt instead pins earlier scripts/land_people.py:
+recordedb344faae07f411b125fb09f5838f6d9d893fa6bf4017ab62cd0707bd0025d1ae,
+currentb2c46780c9504f00233afc742c444f8f513431d01bb6b72ce2d55894a6f52bc8.
+Exactold whole-maprecipe NOT requalified;old_receipt_status.json retainsboth.
+Nooldsource/outputchanged,nomaprerun. Quote-gate andoldidentity-gate failures
+retained;newqualification isfaithful reportingoflimits,notoldmapreplayapproval.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/columella_calendar_source.json:
+ONEprimary agriculturalcalendar,Columella De re rustica11.2. Beforefetch,write
+exposure receipt. StartpublicLacusCurtius Chicago bookXI11*.html#2,verifyedition,
+title/book/chapter/paragraphboundaries andeditorialcontext BEFOREtranscription.
+SamechapterLatinallowedforidentity/taskcalendarcrosscheck. RawbookHTMLlocal/
+ignored,analyticalchapter2only;recordincidentalbookretrievalanddevelopmentexposure.
+Ledgercereal landprep,sowing,harrowing/hoeing/weeding,reaping/threshing/processing/
+storage wherepresent,explicitcompetingduties/geographiclimits;paratextseparate.
+Roman/astronomicaldates remainSOURCEIDENTIFIERS,notGregorian/modelbins. Missing
+hours,completeoccupation,handlers/materialunitsremainunknown. NoEarthcase,
+sourcefit,LP/work/stock/food/graph/weather/phenology/demographiccalls oradoption.
+Do not fetcholdmissingcaches aspartofthisnewcalendarcollection. Continueafterpush.
+
+Climate/steppe deferred;reserved Buringh pools/site-surveyworkbook unopened.
+Oldqualifiedproducers/packets frozen;nextstagefaithful sourcequalification isnot
+calibratedwindow/workrate adoption. Priorentriesbelow arehistory.
+
+# Previous grain/work bridge completion — 17 November 2026
+
 # Grain/work bridge complete; existing evidence and scheduler audit next — 17 November 2026
 
 Latest report: reports/WAREHOUSE_GRAIN_WORK_COUPLING_20261117.md.
