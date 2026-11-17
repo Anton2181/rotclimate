@@ -1,0 +1,18 @@
+{
+  "status": "frozen_before_handling_exposure_audit_after_provisional_r5_publication",
+  "parent_scope": "calibration/urban_diagnosis_20261117/warehouse_handling_exposure.json",
+  "starting_commit": "02e186002",
+  "scope": "Execute the declared read-only audit of ALL original 1085 Earth town nodes in each central/low monthly archive. These are original Earth portability cases, not the fantasy r5 towns. No new food, stock, labour, graph, route or warehouse solve.",
+  "historical_guard": "Verify qualified original monthly, no-hold and work-map receipts in full. Only previously authorized r5 publication paths may resolve to the exact archived originals in output/settlement_provisional_release5_20261117/baseline/. Record each path, expected digest, live digest and resolved archive. Every nonpublication input must match its existing digest directly. Also freeze and verify the CURRENT published r5 files throughout this audit.",
+  "inputs": ["output/urban_earth_monthly_20261116/cases/central/fields.npz", "output/urban_earth_monthly_20261116/cases/low/fields.npz", "output/urban_seasonal_transfer_20261116/wind_1981/prepared/low_central.npz", "output/urban_seasonal_transfer_20261116/wind_1981/prepared/low_low.npz"],
+  "units": "Net edible kcal, preserving archived pre-freight export and post-freight incoming quantities. No inferred mass, currency, extra production or physical storage capacity.",
+  "formula": "qin[m,i]=original arrivals[m,i]; qout[m,i]=original inter_exported[m,i]. Annual constant-rate hours=sum(qin)*h_in+sum(qout)*h_out; peak-bin hours=max_m(qin[m]*h_in+qout[m]*h_out). Both rates UNKNOWN hours/net-edible-kcal; do not set them to 0 or 1. Separate peak quantities need not occur in the same bin.",
+  "timing": "Retain all 12 original bins and shipment ordering. Reconstruct each shipment's outgoing amount in departure bin m and incoming amount in (m+1)%12, including December-to-January wrap. No bin interpolation or actual calendar inference.",
+  "output": "Exact full monthly exposure arrays (local/ignored, pinned), all-node annual/peak exposure CSV, 24 monthly aggregate rows, compact checks and one 2x2 map. All original nodes including zero movements remain included. Ratios use FIXED requested residents only; nonpositive denominators remain undefined.",
+  "map": "Central/low annual incoming and outgoing exposure per fixed resident request in annual ration equivalents. Both directions and readings use the same predeclared positive log scale 0.01 to 10; exact zeros shown separately and all under/over scale counts retained. No work-hour or staffing map.",
+  "review": "Separate scalar/compensated-sum reconstruction of every ordered shipment and every town/bin exposure, exact archive equality, independent CSV/summary/plot value checks, source/protected hashes and explicit no-solver import check. Preserve qualification only after numerical and visual checks.",
+  "exclusions": "No raw city-table/new source body, reserved Buringh pools, workbook, new source selection, model refit, empirical handling coefficient, rural-slack recruitment, rate sweep, paid handling task generation, actual warehouse assignment, population/climate change or atlas edit.",
+  "new_fit": false,
+  "new_validation_claim": false,
+  "adopt": false
+}
