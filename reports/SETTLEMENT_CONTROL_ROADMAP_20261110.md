@@ -7,7 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Single physical capacity across commercial/town roles is integrated:
+**Latest:** Physical-work readiness audit complete: 10 contracts, four schemas,
+112,756 scalar rows. Original unused listed allowance is14.24%/16.16%; it is not
+warehouse staffing.84.62%of listed tasks lack monthly placement; reaping never
+binds by utilization despite absolute-floor near-count artifacts retained.
+See [WAREHOUSE_WORK_READINESS_20261117.md](WAREHOUSE_WORK_READINESS_20261117.md).
+Next frozen implementation: one shared physical task budget across roles with
+complete manufactured baseline schedules; eight finite acceptance/rejection cases.
+Missing Earth occupation timing,task rates/affiliation remain explicit; climate later.
+
+**Previous:** Single physical capacity across commercial/town roles is integrated:
 21 tests, seven manufactured scenarios/seven exact15-field aggregate reductions,
 plus independent grain/priority/canonical replay. Priorities redistribute the
 same total; dry stores cannot borrow grain. See

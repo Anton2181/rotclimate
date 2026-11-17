@@ -1,0 +1,20 @@
+{
+  "status": "declared_after_original_work_readiness_before_shared_task_budget_implementation",
+  "purpose": "Make one physical workforce budget explicit across existing and commercial/town handling tasks,without assuming that unspent cereal allowance is available logistics labor. This is a finite manufactured constraint checker,not empirical task-rate calibration or an Earth staffing assignment.",
+  "api": "Require unique physical workforce IDs, explicit finite nonnegative annual and twelve-bin work capacities, complete baseline monthly work plus consistent baseline annual use, and an explicit boolean complete-schedule declaration. Require uniquely named additional tasks, each assigned once to a physical workforce, original monthly bin, role label and finite nonnegative supplied hours. Group additional tasks once by physical workforce/month and check BOTH annual and monthly constraints at the existing work scale1e-8*max(1,capacity). Reaping already included in listed baseline annual work must not be charged again as another baseline. Reject duplicate IDs,unknown/missing timing,incomplete schedule,invalid mapping/values,baseline annual/monthly inconsistency and any budget exceedance. Do not pool unused time between different workforces or issue separate capacity perrole. Return a budget certificate only for the supplied manufactured contract;do not infer source affiliation,physical travel,task hours per grain,staff capacity or empirical qualification.",
+  "finite_cases": [
+    "shared_roles_ok:one workforce annual10/monthly10,baseline6 in bin0,commercial3+town1 in bin0;exact annual10",
+    "duplicate_role_capacity_rejected:same budget/baseline,commercial3+town3;each separately fits unused4 but joint12 exceeds10",
+    "monthly_limit_rejected:annual30/monthly8,baseline6 and task3 in bin0;annual9 fits but monthly9 exceeds8",
+    "annual_limit_rejected:annual10/monthly10,baseline6 in bin0,tasks3 in bin0 and3 in bin1;monthly fits but annual12 exceeds10",
+    "calendar_bins_ok:annual10/monthly8,explicit zero baseline,task6 in bin0 and4 in bin11;no time duplication",
+    "zero_tasks_ok:explicit complete zero baseline and zero additional hours;no automatic recruiting",
+    "cross_workforce_borrowing_rejected:workforceA annual5 baseline4 task2;workforceB annual100 unused cannotfundA",
+    "missing_full_schedule_rejected:do not replace unknown baseline monthly work with the archived reaping-only array or silently fill zeros"
+  ],
+  "review": "Manufactured declared outcomes checked independently by scalar sums,including annual-only and monthly-only violations;all accepted certificates conserve baseline/additional hours and preserve capacities. Unit tests cover duplicate workforce/task IDs and invalid inputs as well. No old component_work,food/stock,graph,Dijkstra,weather,crop or population calls. No Earthcase/replay or newly assignedstaff,logistics rate,demographic update,fit oratlas/default adoption. The existingB600 full monthly non-reaping schedule is still missing after this checker passes.",
+  "limits": "Supplied complete-schedule/task-hour declarations are not authenticated historical evidence. Any later real work attachment needs task/material units,complete baseline occupation schedule,physical source-to-handler affiliation,travel and compatible capacities. Do not reconstruct them from aggregate sparehours. Reserved pools/workbook unopened;climate/steppe deferred.",
+  "new_fit": false,
+  "new_validation_claim": false,
+  "adopt": false
+}

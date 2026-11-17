@@ -1,0 +1,11 @@
+contract,source,exact_quote,interpretation
+one_physical_workforce,polity/earth_component_work.py,workers=rural*.4,One source rural population;not additional warehouse staff.
+listed_annual_allowance,polity/earth_component_work.py,annual_available=workers*hours,"Existing600h is a listed cereal-work scenario,not a complete annual occupation model."
+reaping_peak,polity/earth_component_work.py,"peak_available=np.minimum(annual_available,workers*30*8)","Reaping-window constraint uses the SAME workers,not another additive annual budget."
+listed_includes_reaping,polity/earth_component_work.py,np.any(reaping>listed),Reaping is part of listed work;do not subtract it a second time from the annual allowance.
+one_annual_charge,polity/earth_component_work.py,annual_required=required_listed.sum(0),Annual crop tasks share one physical source budget.
+partial_monthly_timing,polity/earth_component_work.py,"np.add.at(peak_required,(boundary[component,ok],source),required_reaping[component,ok])",Only reaping is timed by the archived monthly peak fields;other listed tasks have no full monthly schedule.
+positional_source_order,scripts/urban_component_work.py,source=cal['source_indices'],Component archive has positional arrays;source ordering requires pinned calendar recipe.
+original_monthly_rural,scripts/urban_earth_monthly.py,rural=a['rural'][source],Monthly source population stays at the original physical source.
+handling_not_certified,polity/warehouse_roles.py,handling_work_certified=False,Shared grain/capacity does not certify handler tasks or staffing.
+deposit_funding_not_certified,polity/warehouse_roles.py,upstream_rural_work_certified=False,A funded consignment receipt alone does not certify rural/work source conditions.

@@ -1,3 +1,39 @@
+# Physical-work readiness complete; shared task budgets next — 17 November 2026
+
+Latest report reports/WAREHOUSE_WORK_READINESS_20261117.md and qualification
+output/urban_warehouse_work_20261117/qualification.json. Read-only originalB600
+central/low audit complete:10 source contracts,4schemas,112756scalar source rows,
+exact original source/rural alignment. Zero component_work/food/stock/graph/
+Dijkstra/weather/crop/population solves. All1103 protected identities exact.
+
+Original listed cereal-work allowance unused14.2439%central/16.1581%low. This is
+NOT logisticsstaff. Annualworkused includesreaping;84.6154%oflistedwork hasNO
+monthlyplacement inarchives. Reaping-only peakarrays cannotserve ascomplete
+monthlyoccupation. No handler affiliation,task/material unit rate ortravelinput.
+Absolute-near reapingcounts4761/4759 are tinyworkforce/tolerancefloor artifacts
+(allowances<2e-8hours,total<9e-7). Relativebindingreapingcount0,maxutil38.461539%.
+Originalcounts plusindependent limit_diagnostics.json retained;no budget/tolerance
+changed. Rawunusedmin-5.82e-11hoursroundoff retained at oldworktolerance.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/warehouse_task_budget_controls.json:
+implement isolated shared task-budget constraint checker with explicit complete
+manufactured baseline monthlyschedule,consistent annualuse,one physical workforce
+budget and supplied taskhours/month/role. Exactly8declared cases:3accept,5reject
+(annual-only,monthly-only,double-rolecapacity,cross-workforceborrowing,incomplete
+schedule). No logisticsrate derived orstaffrecruited;reject unknownmonthlybaseline
+ratherthanfillzero. Samephysicalbudget mustnot be copiedperrole;validate unique
+workforce/task IDs andexisting1e-8worktolerance. Independentscalarchecks;zero old
+work/food/stock/graphsolves. Passing checker doesNOTsupply missingEarth schedule.
+
+Thiscontinuation alreadycompleted nohold34tests+2exactoriginalarrivalreplays and
+sharedroles21tests+7manufactured/7exactaggregateinventorycontrols beforethisaudit,
+continuingpastpushes. Continuefinite task-budget step aftercommitting audit.
+No Earthwarehousecase,physicalstaffassignment,newfit,actualpopulation oratlas
+change. Reserved Buringh pools/site-surveyworkbook unopened;climate/steppe deferred.
+Old producers/packets frozen;priorentries below arehistorical next-step records.
+
+# Previous shared-role completion — 17 November 2026
+
 # Shared roles complete; read-only physical-work readiness next — 17 November 2026
 
 Latest report reports/WAREHOUSE_SHARED_ROLES_20261117.md and qualification
