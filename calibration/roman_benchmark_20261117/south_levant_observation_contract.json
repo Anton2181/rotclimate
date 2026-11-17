@@ -1,0 +1,19 @@
+{
+  "status": "declared_from_source_semantics_before_model_predictions_or_scores",
+  "source": "Titolo and Palmisano2025, Journal of Open Archaeology Data13:10, doi10.5334/joad.158; pinned GitHub commit a3537c67cc736fb929291c50a4928a0cd7136dd9, CC-BY4.0",
+  "claim": "Conditional relative spatial presence of source-recorded habitation sites in the Late Roman70–324AD phase, around the target AD200. Not simultaneous AD200 occupancy, absolute population, town count, urban hierarchy or dated built-up-area calibration.",
+  "phase": "Primary selection: Period exactly Late Roman AND StartDate=70 AND EndDate=324. Preserve all broad Roman/mixed-period and mislabelled spans in exclusion totals. Do not reinterpret missing or inconsistent date fields.",
+  "types": "Primary residential-context subset: Type exactly Settlement or Fortified Settlement. Fortification is a source morphology/type, not political authority. Building and Cave rows remain separately counted, not silently treated as towns.",
+  "identity": "Collapse qualifying rows by source SiteID only if source reference and canonical point geometry agree. Preserve phase duplicates and conflicts; exclude unresolved conflicting identities from scored observations. No coordinate-proximity merge of different IDs.",
+  "location": "Use canonical GPKG point geometry in EPSG32636 with source LocQual=A only. Independently check geometry against declared CRS and WGS84 attributes; retain discrepancies. Source A means recorded site centroid, not independently measured positional accuracy. No buffers or nearest-polygon reassignment.",
+  "support": "Use only valid independently supplied survey polygons with a nonempty reference field, exact-matched to each site's primary Source, and require point covered by its OWN reference polygon union. Deduplicate overlapping polygon area once per reference. Unattributed polygons are not assigned by proximity; unmatched and out-of-own-polygon sites remain exclusion diagnostics.",
+  "meaning_of_polygons": "Published survey extents/envelopes, NOT certified walked-area or uniform detection. Survey methods/intensity vary. Any later uniform-background comparison is conditional on an explicitly assumed within-source observation opportunity; it cannot establish complete census density or calibrated detection.",
+  "areas_and_population": "Ignore SizeHa and AltSizeHa for prediction/weighting. Current phase records overwhelmingly have SizeQual=C or D, so source area is not qualified phase-specific occupied extent. Do not turn area, excavation area or phase presence into inhabitants.",
+  "cross_format": "GPKG is canonical because pinned latest commit explicitly corrects it. Check CSV against GPKG, retain every field discrepancy and version/README count mismatch; no silent source rewrite.",
+  "input_checks": "Record all layers/CRS, source/version counts, date/type/quality exclusions, exact identity reduction, own-source polygon coverage, geometry validity/overlaps/area units and support scale. Independent numerical input review and visual source/support map before any model score.",
+  "score_gate": "A later committed protocol must define model field, common grid/land mask, source-stratified baseline, point/background support, resolution and metrics before reading predictions. Reject unsupported absolute-count/population interpretations even if input checks pass. This contract alone adopts no model or atlas change.",
+  "exposure": "New observation rows are opened only for input qualification. No claim of independent geographic transfer: Roman regional geography was already used in development. Source preparation exposes observations; later scores are declared development/conditional checks unless a stronger separation is explicitly established.",
+  "new_fit": false,
+  "new_validation_claim": false,
+  "adopt": false
+}
