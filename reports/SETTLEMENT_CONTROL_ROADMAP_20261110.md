@@ -20,6 +20,13 @@ annual-work capacities have no newly qualified matched observations. Do not
 count engineering tests, prescriptions or chosen grain-coverage targets as those
 observations. Package3 needs eligible targets; the count is not a time guarantee.
 
+**Package2 update:** exact activity baseline and one proposed plough-days/area
+estimand recorded. Heroninos screen (3searches/2bodies) finds SBXX14453 is a
+team-transfer/payment letter dated20June259, with no matched area/work exposure.
+No empirical fit is ready. [Entry decision](AGRICULTURAL_CALIBRATION_ENTRY_20261117.md).
+Next is the one directlylinked companion SBXX14452 under an explicit single-body
+post-screen amendment; no extra searches or generic mechanism work.
+
 ## Completed work log — older NEXT entries are superseded
 
 **Latest implementation:** plough-package adapter now requires simultaneous net

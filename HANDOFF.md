@@ -1,3 +1,44 @@
+# Calibration baseline/estimand recorded; target observation still missing
+
+READ reports/AGRICULTURAL_CALIBRATION_ENTRY_20261117.md.
+output/agricultural_calibration_entry_20261117/qualification.json passed source/
+baseline identity checks, but readiness explicitly FALSE: no eligible paired
+area/operator-day observation. Unitcheck complete, package2baseline/evidence
+in progress, package3fit/evaluation notstarted. TWO planned workpackages remain;
+no defensible fixed number of source discoveries/turns or ETA while data absent.
+
+Concrete reference: existing candidate/corrected/central/600h activity packet;
+no field changed. First proposed estimand: ploughoperator days per worked area
+for a defined package, baseline3days/iugerum=12days/ha under assumed.25ha.
+Not a new fit or universalvariety rate. Operator/draft STOCKS/annual worker
+allowance/density/marketedshare remain separate; don't fit them all to one outcome.
+
+Bounded Heroninos screen used3queries;2actual bodies read (Rathbone2005pp261-269
+plusSBXX14453 edition+same-recordmetadata). ArchiveDB methods502/503 unavailable,
+notread/qualified. Author's archive249-268AD is later than200; preserve transfer
+limit. Articlep266 cites cross-unit plough servicecost recordSBXX14453.
+OfficialPapyri website botcheck; publicpapyrigitconnector recovered corpus:
+repo papyri/idp.data currentcommit0adcd9651ec240726a5b62028cd5c153bf45ffd0,
+DDbDP/14/14883.xml,HGV_meta_EpiDoc/HGV15/14883.xml. OldDDB_EpiDoc_XMLpath
+migratedJuly2026; priorparent0eec6593ebfb2c0e2e9ae0c1a7988fb83538e9a7.
+All4sourcefiles officialGitblob identities exact; current/historicaledition
+bodies structurallyidentical butheadersdifferent. CC-BY3 attribution retained.
+SBXX14453=TM14883 catalogue0259-06-20. Letterrequeststeamreturn/payment, NO
+matched workedarea/operatoror teamduration. Numerals6/26 areDATES, deadline30
+notobservedjobduration. Modernheader1907/1997 publicationdates NOT papyrusdates.
+No scan/independentcriticalGreekcollation; no targetrate extracted.
+
+NEXT calibration/roman_benchmark_20261117/companion_account_target.json:
+ONE named primary companionSBXX14452, directlyidentifiedinHGV14883 asrecto.
+Explicitpost-screen amendment allows this extra ONE body+metadata, no more
+searches/sourcefamilies; initialtwo-body result is preserved. Record unopened.
+Inspect/extract ONLY if explicit area+definedoperation+crew/duration align; else
+closecandidatewithno-fit. Do not restart generic sourceunit/scheduler work.
+Unifiedmilestonescalibration_entry.json stays governing; no newmodel/atlas/climate.
+Commit/push andcontinueauthorized; oldNEXTlinesbelowhistorical.
+
+# Historical handoff: unit crosswalk
+
 # Unit crosswalk complete; calibration-entry package is next — 17 November 2026
 
 User: "Go on. How many steps until calibration?" Answered as THREE work
