@@ -7,6 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest annual agricultural trace:**32 existing cases,288 ledger identities and
+928 independently checked export values. A600h/worker allowance means240 listed
+hours/rural person; corrected central production retains53.59% of the supplied
+cereal potential. Land/population1.1M kcal and cereal912500kcal ration-years have
+different scopes; a closing grain ledger does not certify draft/processing or
+complete household work. [Budget and next implementation](ANNUAL_AGRICULTURAL_BUDGET_20261117.md).
+NEXT frozen: `calibration/roman_benchmark_20261117/cereal_activity_packet.json`.
+Recover per-origin crop areas/work from archived inputs with exact existing-case
+controls before introducing seasonal tasks. No atlas/default or climate change.
+
 **Latest evidence result:** bounded Karanis screen complete (three searches,
 three bodies); no matched AD200 population/occupied-area observation qualified.
 Tax-collection units lack mapped house links; tax subjects are not all people;

@@ -1,0 +1,33 @@
+{
+  "field_support_defaults": {
+    "worker_fraction": 0.4,
+    "hours_worker_year": 600.0,
+    "harvest_days": 30.0,
+    "hours_worker_day": 8.0,
+    "ration_kcal_day": 2500.0,
+    "year_days": 365.0
+  },
+  "listed_hours_per_cropped_hectare": {
+    "wheat": 336.0,
+    "barley": 208.0
+  },
+  "reaping_hours_per_cropped_hectare": {
+    "wheat": 48.0,
+    "barley": 32.0
+  },
+  "iugerum_hectares": 0.25,
+  "assumed_hours_per_workday": 8.0,
+  "land_people_constants": {
+    "NEED_KCAL": 1100000.0,
+    "FARMED_SHARE": 0.6,
+    "FALLOW": 0.6
+  },
+  "cereal_sown_share_of_arable": 0.36,
+  "annual_grain_ration_kcal": 912500.0,
+  "crop_selection": "Least listed hours per net kcal among wheat/barley; not the broader population crop mix.",
+  "area_recipe": "100 * land_fraction * cell_km**2 * arable * FARMED_SHARE * FALLOW hectares before work limits.",
+  "production_recipe": "Selected cereal net kcal/ha * potential cropped hectares; seed/edible deductions already upstream.",
+  "retained_recipe": "min(1,annual_hours/required_listed_hours,reaping_allowance/required_reaping_hours) per cell.",
+  "area_total": "Not recovered from aggregate work totals; needs cell crop identities and retained area.",
+  "evidence": "Columella task days prescribed; hour conversion, workforce, allowances and crop/land transfer are assumptions. FALLOW is a Han AD2 development calibration, not a Roman observation."
+}

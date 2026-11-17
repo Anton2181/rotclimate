@@ -1,3 +1,43 @@
+# Annual agricultural budget trace complete — 17 November 2026
+
+READ reports/ANNUAL_AGRICULTURAL_BUDGET_20261117.md and
+output/annual_agricultural_budget_20261117/budget.csv / recipe.json.
+Completed qualification.json: passed_scalar_annual_agricultural_trace_not_complete_farm_economy.
+32 existing candidate/control cases;288 ledger identities checked; separate
+reviewer checks928 scalar/string exports with complementary identities; fresh
+budget/recipe/result byte exact. AST checks field-support defaults/land constants.
+No new model run, parameter, source family or atlas change.
+
+Key definitions: workers=.4*rural;600/300h means240/120 listed hours per rural
+person; reaping allowance96h/person in same annual budget. Wheat336/48 and
+barley208/32 listed/reaping hours per cropped hectare use normative Columella
+days and assumed8h/0.25ha conversions. Potential area uses land fraction,
+arable and.6 farmed*.6 sown=.36 of arable; sowing share inherits HanAD2 fit,
+not Roman observation. Work-efficient single wheat/barley activity differs from
+the broader population crop portfolio. Existing land/population denominator
+1.1M kcal/person-year versus cereal ration912500kcal: different scope; neither
+certifies complete draft/feed/processing/storage occupation in this flow model.
+Aggregate retained crop hectares remain unavailable without cell crop identities.
+
+Corrected central600h production128.674M ration-years of240.092M potential
+(53.59%retained); rural actual retention40.086M, positive surplus88.588M,
+marketed29.871M, townconsumed11.532M, transport grain-equivalent cost10.540M,
+leftatorigins6.022M, unusedtownexcess1.777M. Ruraldeficit28182 remains explicit.
+Foregoneunderworklimits111.418M is NOT historically recoverable output.
+
+NEXT FROZEN: calibration/roman_benchmark_20261117/cereal_activity_packet.json.
+Recover per-origin cereal identities, potential/retained cropped area, net yield,
+work/resource units, rural need and surplus from existing fixed archives. Exact
+replay of existing field arithmetic permitted ONLY as control of all32 current
+cases; no new scenario/fit/climate/crop/route/placement solve. Inspect where limits
+bind. Preserve majority-land versus land-fraction masks, source IDs and packet
+precision. Complete human/draft/processing tasks remain unqualified; do not invent
+non-reaping windows or repurpose unused listed work into warehouse staff.
+Both density scenarios stay explicit; climate remains deferred.
+All current work committed/pushed; continue authorized. No background jobs.
+
+# Historical handoff: Karanis density feasibility
+
 # Karanis density feasibility screen complete — 17 November 2026
 
 READ reports/KARANIS_DENSITY_FEASIBILITY_20261117.md.
