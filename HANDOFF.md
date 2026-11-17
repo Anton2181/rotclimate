@@ -1,3 +1,38 @@
+# Annual assumption priorities complete — 17 November 2026
+
+READ reports/ANNUAL_ASSUMPTION_IMPACT_20261117.md and
+output/annual_assumption_impact_20261117/assumption_impacts.png.
+Completed qualification.json: passed_existing_annual_matched_sensitivity_not_empirical_uncertainty.
+Only existing November16 supply/hierarchy outputs were reduced:32 cases,
+48 strictly one-input contrasts,16 unavailable combinations,60 ranking rows.
+Separate exhaustive scalar/Cartesian-pair reviewer passes; all five scientific
+exports fresh-byte-exact;18 figure values checked and visual inspected. No new
+food/work/freight/climate model run or published atlas change.
+
+Candidate corrected maxima: density changes town residents7.795M (5.520→13.315M)
+and grain coverage56.521pp; marketed share50.315pp; listed field allowance50.239pp.
+Hours most affect rural shortfall (226663 ration-years) and short towns (239).
+All outcome-specific factor orders agree across raw/corrected and old controls.
+Ranges are scenario choices, NOT empirical uncertainty; near-tied extraction/hour
+effects do not establish a historical ordering. Density also redistributes rural
+people/workers/production endogenously; it is not a frozen-supply comparison.
+
+Priorities: matched inhabited-area/population evidence; complete agricultural
+work/output budget; marketed fraction with production/retention denominator.
+Unvaried crop/yield/workforce/freight inputs remain UNRANKED, not small effects.
+Earlier housing-phase audit was AD150, not a new AD200 population qualification.
+Keep conditional city-area skill and weak regional spatial result separate.
+
+NEXT DECLARED: calibration/roman_benchmark_20261117/karanis_density_feasibility.json.
+One finite Karanis evidence feasibility screen, max3 searches/3 original bodies:
+approximately AD200 occupied residential area matched to household/person data.
+Do not assume census declarations enumerate the whole settlement, excavated
+area equals occupied area, or village density transfers to large cities.
+No new fit/default/atlas change; reserved pools/workbook stay closed; climate later.
+Commit/push and continue remain authorized. Earlier NEXT entries superseded.
+
+# Historical handoff: regional source contract and spatial diagnostic
+
 # Regional source contract and spatial diagnostic complete — 17 November 2026
 
 Owner asked to continue the approved AD200 realism programme. This continuation

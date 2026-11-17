@@ -7,6 +7,16 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
+**Latest annual priority assessment:**32 archived cases,48 one-input contrasts,
+16 explicitly unavailable combinations; no new model runs. Density dominates
+town demand (corrected5.520→13.315M); maximum coverage effects are56.521pp density,
+50.315pp marketed share and50.239pp listed hours. Hours most affect rural deficits
+and short-town count. Factor orders agree across climates/control cohort, but
+chosen scenario endpoints are not empirical uncertainty. [Report and figure](ANNUAL_ASSUMPTION_IMPACT_20261117.md).
+NEXT: bounded Karanis occupied-area/household-person feasibility screen under
+`calibration/roman_benchmark_20261117/karanis_density_feasibility.json`.
+Constrain population conversion and agricultural budgets before finer logistics.
+
 **Latest AD200 realism work:** three-source screen complete; a period-defined
 South Levant habitation contract retains565unique IDs in eight own-source survey
 envelopes. No census/phase-area/detection qualification. [Source report](ROMAN_REGIONAL_SOURCES_20261117.md).
