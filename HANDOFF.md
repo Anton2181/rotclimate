@@ -1,4 +1,48 @@
-# Source scoping complete; qualify archaeological capacity methods next — 17 November 2026
+# Archaeological methods qualified; explicit store contract next — 17 November 2026
+
+Latest report reports/URBAN_STORAGE_METHODS_20261117.md and qualification
+output/urban_storage_methods_20261117/qualification.json. Full Salido2018 source
+read under the prior committed declaration;16-page publisher PDF retained with
+CC BY4.0 attribution,DOI10.5209/GERI.60294. SHA256a4374b2b23e7cbfea88b3abe2ebb26fd71515a6ea2adb82bedf09c31d4608424.
+Uncookied URL initially looped;locale cookie/session handling resolved access.
+No secondary substitution.12method fields including all9§7factors;24anchors
+match fresh layout/raw extraction,printed88–90 visually checked. No food jobs.
+
+Decision:source supports distinguishing volume/material/function/phase and
+turnover,NOT replacing90/365day or5%coefficients. Gross footprint is not cereal-
+allocated usable volume;species,state,husk/container,working/ventilation space,
+floor support and safe fill matter. §7.5harvest turnover/owner behavior is AUTHOR
+INTERPRETATION,not a measured universal quota. §7.9residence neednot1year.
+Functions change bybuilding phase;germination is not an annual decay coefficient.
+Reported Gentry density/competingheight estimates were NOT adopted/verified.
+
+Fullarticle/examples/figures are DEVELOPMENT exposure now. No numerical site,
+height/density/capacity dataset extracted;raw text/PDF preserve source only.
+No cited primary source opened/verified;VanOyen/Rickman bodies still unread.
+All1103protected parent identities unchanged. No new food cases/climate/
+phenology,fit,actual population/staff or atlas/default changes.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/storage_capacity_contract.json:
+isolated tested physical-store/unit contract,disconnected from food producers.
+Explicit store identity,function/location/phase,access and input provenance.
+Single allocated commodity;usable area×effectivefill→volume×matching-state
+density→mass×net-edibleyield×edibleenergy/kg. OURbookkeeping,not Salido'slaw.
+No defaults for geometry/material/load/edible conversion. Unknown inputs remain
+unknown;gross/mixed allocations/state mismatch/double deductions must not pass.
+Geometric energy≠operational capacity;floor support/preservation/duration and
+rights/location still need evidence. Compatible positive explicitflow only for
+day equivalents;zero/unknown flow leaves undefineddays. Arithmetic never
+automatically qualifies empirical evidence. Meaningful synthetic/Decimal
+controls;optional read-only labeling of six baseline store-class budgets,zero
+stock reruns/capacity changes/source measurement extraction. Continue AFTER
+committing/pushing this source stage. All prior sources/producers stay frozen.
+
+Broader evidence→interface→food/work/finite-occupancy integration queue remains.
+Complete diet/resources/work,rights and independent transfer before adoption.
+Climate/steppe deferred,Buringh sizes/climate l unopened. Previous entries below
+retain historical states;the first methods-body task is now COMPLETE.
+
+# Previous completed storage source scoping — 17 November 2026
 
 Latest: reports/URBAN_STORAGE_SOURCES_20261117.md and
 output/urban_storage_source_scope_20261117/qualification.json. This read-only

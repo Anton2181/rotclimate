@@ -7,7 +7,18 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Storage/dispatch source scoping is complete:9exact existing
+**Latest:** Salido2018 full methods source is read and source-qualified:
+16-page PDF identity,12fields/24dual-extraction anchors and page-image checks.
+Capacity proposals depend on material/state,usable space,structural support,
+safe fill,function/phase and turnover. No ancient coefficient or primary site
+measurement is adopted. See
+[URBAN_STORAGE_METHODS_20261117.md](URBAN_STORAGE_METHODS_20261117.md).
+Next frozen step makes these distinctions operational in an isolated explicit
+store/unit contract with manufactured controls;no food run or capacity change.
+Keep geometric energy,operational capacity,throughput and empirical qualification
+separate. Storage/location/rights evidence remains ahead of population adoption.
+
+**Previous:** Storage/dispatch source scoping is complete:9exact existing
 contracts and3bibliographic leads;zero new food cases or measurements. Existing
 reserve algebra/FAO context does not qualify ancient storage coefficients.
 Next frozen task:ONE open Salido2018 full methods article,source/page verification
