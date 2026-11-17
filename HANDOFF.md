@@ -1,4 +1,63 @@
-# Explicit store contract complete; primary Ostia source next — 17 November 2026
+# Primary Ostia source complete; shared-store primitive next — 17 November 2026
+
+Latest report reports/URBAN_OSTIA_STORAGE_20261117.md and qualification
+output/urban_ostia_storage_20261117/qualification.json. This turn continued past
+methods95993e93c and explicit-contract364e6d11f pushes into ONEprimary source.
+Boetto/Bukowiecki/Monteix/Rousse2016,Les Grandi Horrea d'Ostie,CEFR522,pp177–226,
+chapterDOI10.4000/books.efr.32815. Publisher fullHTML+HALauthor-deposit mirror
+identity checked;81paragraphs/50printedpages,61numeric source claims,18context
+rows,7capacity estimate rows,81numeric token checks/10Decimal column diagnostics.
+No jobs running. Zero newfood/climate/phenology runs,network attachments,fit,
+actualpopulation/staff or atlas/default changes. All1103protected identities exact.
+
+Important retained NEGATIVES:contents not positively identified;wheat is AUTHOR
+CONVENTION. First Severan phase selected,not allphases pooled. Pile/sack heights,
+geometry,upperstorey and preservation months include hypotheses/modernanalogies.
+Destination Rome versus priorityOstia remains unresolved. Model days/rights not
+inferred. Neither new geometric netenergy nor operational capacity qualified.
+
+Source TABLEp217 has unaligned columns under its own8.76L/modius convention:
+Nord349m3vs30772modii implies269.56272m3,difference79.43728m3.
+Central-sack753m3vs83904modii implies734.99904m3,difference18.00096m3.
+Printed formula,n114,p217adds length-cubed prism term to length-squared term;
+confirmed inpublisherHTML/PDFimage,not OCR-only. Original table/formula left
+UNRECONCILED and NOT adopted/corrected. Positive qualification means faithful
+transcription/limits,not approval of numeric capacity. No automatic density,
+height,edibleyield or operational-load imputation. Source740kg/m3is a proposed
+author convention,not a measured input to our model. No source→city/pool crossing.
+
+Provenance:publisher meta citation_doi contains BOOK32730;citation modal verifies
+CHAPTER32815. Booktitlepage522/publisher177–226 override secondary552/322and178
+variants. PublicHTMLordinaryfetch succeeded;someweb/HALrequests hadbotprotection,
+no challengebypass. Mirror carries HAL01441802titlecover;only PDFpages7–56
+(printed177–226)used. Extra frontmatter/bibliography/index not a newcohort.
+Initial page-header-parity gate failure retained before any source-data outputs.
+All chapter/incidentally visible comparison examples are DEVELOPMENT exposure;
+Portus/Vienne/external examples not extracted as additional sites. Initial
+before-reading exposure.json remains unchanged. Raw HTML/PDF/text in source/
+LOCAL/IGNORED;public facts/locators/digests/negativechecks tracked. Restore via
+source_identity.json access URIs/digests before replay;web wrappers may change.
+Qualified extract/review/seal refuseoverwrite,use isolated OUT;old stages frozen.
+
+NEXT FROZEN calibration/urban_diagnosis_20261117/shared_warehouse_primitive.json:
+generic isolated ledger for several permitted origins funding ONEunique store,
+with one explicit capacity and explicit monthly withdrawals. Unique storeIDs,
+oneorigin→onestore partition,homogeneous netpool and explicitpooling permission;
+reject duplicates,unknownnumeric capacity,unassigned positive deposits,invalid
+values. Groupdeposits once,reuse qualified loss0/.05inventory/originaltolerance,
+retain actualwithdrawals/spoil/overflow/stockΔ. Never auto-size capacity/quotas
+or infer ownership. Manufactured sharing/partition/no-freegrain controls first,
+then EXACTLY4existing export-store reduction replays:central/low×5%/0loss at90d
+from output/urban_storage_loss_20261117,ALL15FoodYear fields exact. Count adapter/
+canonical calls honestly;replays are controls,NOT newEarthfoodscenarios.
+No realport mapping,sourcecapacity choice,newcitymeal run or routing/rights
+integration yet. Source evidence motivates a separate storeidentity,not an
+ancient globalcapacity or forced collective right. Buringh sizes/climate l and
+site-survey workbook unopened;climate/steppe deferred. Full diet/work/resources,
+rights and independent transfer gates remain before adoption. Previous entries
+below are historical;all three tasks above are COMPLETE.
+
+# Previous completed explicit capacity contract — 17 November 2026
 
 Latest report reports/URBAN_STORAGE_CONTRACT_20261117.md and qualification
 output/urban_storage_contract_20261117/qualification.json. Continued AFTER

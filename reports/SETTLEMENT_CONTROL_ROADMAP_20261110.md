@@ -7,7 +7,20 @@ silently replaces the other.
 
 ## Live review — 17 November 2026
 
-**Latest:** Explicit physical-store contract is implemented and isolated from
+**Latest:** ONEprimary Ostia chapter is source-qualified with numeric limits
+retained:81paragraphs,61numeric claims,18context rows,7capacity estimates and
+10independent column diagnostics. Wheat/piles/upperstorey are conditional;
+destination/operational inputs unresolved. Published north/sack volume columns
+do not align with modii under the stated conversion,and printed volume formula
+has a dimensional issue. No correction or capacity adoption. See
+[URBAN_OSTIA_STORAGE_20261117.md](URBAN_OSTIA_STORAGE_20261117.md).
+Next frozen implementation:generic shared physical-store ledger,manufactured
+controls and4exact existing export-store reductions. One capacity per store,
+explicit partition/pooling permission/withdrawals;no realport mapping or new
+Earthmeal scenario. This advances structure without inventing historical inputs.
+Climate remains later;full diet/work,rights and independent transfer gates persist.
+
+**Previous:** Explicit physical-store contract is implemented and isolated from
 food producers:23tests,7manufactured cases,5invalid inputs and18Decimal checks.
 Units,material/state,usable-space allocation,structural support and compatible
 flow definitions are explicit;unknowns remain unknown. Geometric energy never
