@@ -1,3 +1,19 @@
+# Fixable / improvable parts — proposed 20 Nov 2026 (owner: drop the population-history line, keep improving the model)
+Ranked by feasibility x visible value; each needs a declared Earth test before adoption.
+1. Herders / pastoral capacity (uncalibrated): test pastoral capacity and herding share against the Ethnographic Atlas
+   (D-PLACE, open, ~1,300 geolocated societies; dependence on animal husbandry) plus modern livestock density (GLW) on
+   non-crop land. Affects steppe/dry-interior lifeways, population, pasture layers.
+2. Malaria suitability (thermal traits sourced, moisture gate + density penalty uncalibrated): test against pre-control
+   endemicity maps (Lysenko & Semashko 1968 as digitised by the Malaria Atlas Project; verify availability first).
+3. Runoff / hydrology (no discharge calibration): compare model water balance on Earth windows with GRUN observation-based
+   runoff (open, Zenodo); feeds irrigation, rivers, floods, mud season.
+4. Already-verified changes not yet on the atlas: r46 climate (owner skipped the rebuild), forest-in-travel C2. Bundle into
+   one rebuild only if the owner wants it (large cascade, modest visible change).
+5. Lower feasibility: travel times vs real journey records (small, scattered data); crop yields (historical wheat failed;
+   Woburn reserved, needs weather matching).
+Already Earth-tested, leave: languages (Glottolog), foraging (Binford), towns/placement, supply share, control v2.1, sailing
+season, terrain, forest level/pattern.
+
 # Two hosted copies, one branch — 20 November 2026 (Claude session)
 * Owner: one branch only, "use the most up to date one" -> claude/friendly-turing-43ygeu (squashed snapshot + GPT-session
   work). claude/wonderful-mayer-uqbwtb is FROZEN (its content is inside this branch's root snapshot; history kept there only).
