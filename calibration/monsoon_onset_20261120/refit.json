@@ -1,0 +1,56 @@
+{
+ "title": "e86 refit (stage B of calibration/monsoon_onset_20261120/plan.json)",
+ "start": "calibration/local_accuracy_20261023/r47_params.json",
+ "start_set": {
+  "onset_suppression": 1.0,
+  "onset_gap_deg": 3.0
+ },
+ "reference": "output/monsoon_onset_20261120/ref",
+ "reference_name": "r47",
+ "knobs": {
+  "onset_suppression": [
+   "add",
+   0.2
+  ],
+  "onset_gap_deg": [
+   "add",
+   1.5
+  ],
+  "instability": [
+   "mul",
+   1.07
+  ],
+  "convective_rain": [
+   "mul",
+   1.1
+  ],
+  "itcz_shift": [
+   "add",
+   1.0
+  ],
+  "circulation_lag_days": [
+   "add",
+   7.5
+  ]
+ },
+ "bounds": {
+  "onset_suppression": [
+   0.0,
+   1.0
+  ],
+  "onset_gap_deg": [
+   0.0,
+   12.0
+  ],
+  "itcz_shift": [
+   4.0,
+   20.0
+  ],
+  "circulation_lag_days": [
+   15.0,
+   90.0
+  ]
+ },
+ "max_evaluations": 40,
+ "screen_choice": "k1.0_g3 (mean 8-region 0.962 vs k1.0_g6 0.963, k0.5_g3 0.981)"
+}

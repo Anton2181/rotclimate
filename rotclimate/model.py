@@ -2115,6 +2115,12 @@ class ClimateModel:
                     # Air off the sea (North India in July) keeps it.
                     capf = np.clip((chi - p.instability_cap_chi0) / (1.0 - p.instability_cap_chi0), 0.0, 1.0)
                     instab = 1.0 + (instab - 1.0) * (1.0 - p.instability_cap * capf)
+                if p.onset_suppression > 0:
+                    # e86: deep convection over land only equatorward of the monsoon belt: poleward of
+                    # (ITCZ - onset_gap_deg) dry air aloft overrides the shallow moist layer (the Sahel's
+                    # rains fired in May-June, before the belt, with obs July-August peaks)
+                    ramp = np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0)
+                    instab = np.where(land, 1.0 + (instab - 1.0) * (1.0 - p.onset_suppression * ramp), instab)
             else:
                 instab = 1.0
             if p.storm_convection > 0 and W_prev is not None:
