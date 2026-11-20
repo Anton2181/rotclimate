@@ -222,6 +222,8 @@ class Params:
     itcz_plateau_m: float = 0.0      # e87: plateau height for the e85 anchor (0 = storm_plateau_m): the Mexican plateau and Rockies (1.5-2.5 km) anchor the North American monsoon
     onset_suppression: float = 0.0   # e86: over land, x (1 - this x ramp) on the v6 warm-moist convective boost, ramp 0 -> 1 from (ITCZ - onset_gap_deg) to 5 deg poleward of it; 0 = off
     onset_gap_deg: float = 5.0        # e86: the rain belt runs this far equatorward of the land ITCZ (Saharan air layer over the shallow monsoon)
+    slope_convection: float = 0.0     # e88: added warm-moist convective boost over sun-heated mountain slopes x clip(subgrid relief / slope_convection_km) x clip((T - 18) / 8) x moisture; 0 = off
+    slope_convection_km: float = 1.0  # e88: subgrid relief (km) for the full slope trigger
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
     warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect

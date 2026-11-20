@@ -2126,6 +2126,13 @@ class ClimateModel:
                     instab = np.where(land, 1.0 + (instab - 1.0) * (1.0 - p.onset_suppression * ramp), instab)
             else:
                 instab = 1.0
+            if p.slope_convection > 0 and W_prev is not None:
+                # e88: afternoon storms triggered over sun-heated mountain slopes (the Sierra Madre
+                # Occidental carries most of the North American monsoon's rain; Jos, Air and Darfur
+                # seed the Sahel's): warm, moist air over high subgrid relief convects
+                moist88 = np.clip((W / np.maximum(Ws, 1e-6) - 0.3) / 0.3, 0, 1)
+                slope = np.clip(self.subgrid_relief / p.slope_convection_km, 0.0, 1.0)
+                instab = instab + p.slope_convection * slope * np.clip((T - 18.0) / 8.0, 0, 1) * moist88
             if p.storm_convection > 0 and W_prev is not None:
                 # e77: mid-latitude summer showers come from cold air aloft under
                 # troughs and fronts (the storm index), not from surface heat alone:
