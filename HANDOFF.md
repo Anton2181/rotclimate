@@ -1,3 +1,10 @@
+# CLIMATE r48 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R48_20261120.md
+* e86 onset suppression (rotclimate: onset_suppression/onset_gap_deg; default off). vs r47: dev49 0.9921, fine28 1.0013,
+  sealed m 0.975 (Oman better, NW Australia rain 1.22 worse). Sets l and m SPENT. Params calibration/local_accuracy_20261023/r48_params.json.
+* Map check running (output/monsoon_onset_20261120/map_r48_ds8). Atlas serves r44; rebuild (r47/r48) is the OWNER decision.
+* Remaining: Sahel Jul-Aug peak too weak; N Australia monsoon margin too wet; original 31 regions ~0.5 % worse in both steps.
+  A new sealed set is needed before the next candidate (band 15-60 has 701 free boxes; scripts/make_sealed_set.py).
+
 # CLIMATE r47 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R47_20261120.md
 * dev49 0.9876, fine28 1.0016, sealed l 0.931 vs r46 (set l now SPENT). Params calibration/local_accuracy_20261023/r47_params.json.
 * On the map (ds8): strict painted-zone agreement 34.9 % vs r44 32.4 % (+2.5); Med recall 60->72 %, Med dry 5.3->8.5 %.
