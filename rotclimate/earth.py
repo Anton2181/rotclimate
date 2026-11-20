@@ -239,6 +239,8 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.plateau_profile = dict(lon=prof["lon"], area=prof["area_" + hem], edge=prof["edge_" + hem], top=prof["top_" + hem],
                              height=float(prof["height"]))
     g.column_lon = lon[lon.shape[0] // 2, :]
+    g.plateau_profile_for = lambda h, _hem=hem: (lambda q: dict(lon=q["lon"], area=q["area_" + _hem], edge=q["edge_" + _hem], top=q["top_" + _hem],
+                                                                 height=float(q["height"])))(plateau_profile(h))   # e87
     return EarthCase(name=name, grid=g, lon=lon, obs_T=obs_T, obs_P=obs_P, coast_km=coast)
 
 

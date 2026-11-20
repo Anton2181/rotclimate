@@ -1,0 +1,13 @@
+south_brazil: verified, rainfall loss 0.7858
+mexico: verified, rainfall loss 0.6146
+southeast_us: verified, rainfall loss 0.3579
+region           T mMAE  T aMAE  T bias  rngErr  <=2C anom r |  P mMAE logRMSE  <=25%   rho   loss
+mexico             1.45    0.95   -0.77   +2.30   92%   0.96 |    36.8   0.557    36%  0.40  0.615
+southeast_us       1.13    0.65   -0.44   -1.76   96%   0.98 |    38.9   0.370    45% -0.07  0.358
+south_brazil       1.04    0.69   +0.59   +0.92  100%   0.95 |    63.3   1.020    12%  0.39  0.786
+[training] T_monthly_mae 1.288 T_annual_mae 0.802 T_within_2C 0.940 T_anomaly_r 0.967 P_monthly_mae 37.820 P_annual_log_rmse 0.464 P_within_25pct 0.405 P_spearman 0.167 P_loss 0.486
+[holdout] T_monthly_mae 1.037 T_annual_mae 0.695 T_within_2C 0.996 T_anomaly_r 0.953 P_monthly_mae 63.281 P_annual_log_rmse 1.020 P_within_25pct 0.119 P_spearman 0.391 P_loss 0.786
+[all] T_monthly_mae 1.204 T_annual_mae 0.766 T_within_2C 0.959 T_anomaly_r 0.962 P_monthly_mae 46.307 P_annual_log_rmse 0.649 P_within_25pct 0.309 P_spearman 0.242 P_loss 0.586
+-- by elevation_m: 0-300 n938 T -0.1/0.6 rng -0.1 P -0.56/0.75 | 300-1000 n281 T -0.2/0.9 rng +0.1 P -0.36/0.58 | 1000-2000 n217 T -1.0/1.1 rng +2.4 P -0.35/0.54 | 2000-9000 n64 T -0.3/0.7 rng +3.6 P -0.63/0.76
+-- by coast_km: 50-200 n429 T -0.7/0.9 rng +0.8 P -0.35/0.50 | 200-500 n644 T -0.2/0.7 rng +0.4 P -0.47/0.62 | 500-1e+09 n427 T +0.1/0.8 rng +0.2 P -0.67/0.92
+-- by relief_m: 0-300 n1207 T -0.1/0.7 rng -0.1 P -0.52/0.71 | 300-1000 n283 T -0.9/1.1 rng +2.6 P -0.37/0.59

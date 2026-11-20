@@ -611,14 +611,17 @@ class ClimateModel:
         # storm_plateau_m, smoothed ~150 km) within a Gaussian of itcz_plateau_lon_deg in longitude (no downwind carry).
         self.itcz_anchor = None
         if self.p.itcz_plateau_gain > 0:
+            h_anchor = self.p.itcz_plateau_m if self.p.itcz_plateau_m > 0 else self.p.storm_plateau_m      # e87
             prof = getattr(g, "plateau_profile", None)
-            if prof is not None and getattr(g, "column_lon", None) is not None and abs(prof["height"] - self.p.storm_plateau_m) < 1e-6:
+            if (prof is None or abs(prof["height"] - h_anchor) > 1e-6) and getattr(g, "plateau_profile_for", None) is not None:
+                prof = g.plateau_profile_for(h_anchor)
+            if prof is not None and getattr(g, "column_lon", None) is not None and abs(prof["height"] - h_anchor) < 1e-6:
                 sig = self.p.itcz_plateau_lon_deg / 0.5
                 A = ndi.gaussian_filter1d(np.asarray(prof["area"], float), sig, mode="wrap") * np.sqrt(2 * np.pi) * sig
                 col = ((np.asarray(g.column_lon) - prof["lon"][0]) % 360.0) / 0.5; L = len(prof["lon"])
                 lo = np.floor(col).astype(int) % L; w = col - np.floor(col); A = A[lo] * (1 - w) + A[(lo + 1) % L] * w
             else:
-                hi = g.land & (ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest") > self.p.storm_plateau_m)
+                hi = g.land & (ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest") > h_anchor)
                 lat_band = (np.abs(g.lat) >= 15) & (np.abs(g.lat) <= 60)
                 per_col = (hi & lat_band).sum(axis=0) * g.cell_km ** 2
                 sig = self.p.itcz_plateau_lon_deg * 111.2 * max(np.cos(np.radians(float(np.mean(np.abs(g.lat))))), 0.1) / g.cell_km

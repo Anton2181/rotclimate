@@ -1,0 +1,55 @@
+{
+ "title": "e87 refit (stage B of calibration/plateau_height_20261120/plan.json)",
+ "start": "calibration/local_accuracy_20261023/r48_params.json",
+ "start_set": {
+  "itcz_plateau_m": 1500.0
+ },
+ "reference": "output/plateau_height_20261120/ref",
+ "reference_name": "r48",
+ "knobs": {
+  "itcz_plateau_m": [
+   "add",
+   250.0
+  ],
+  "itcz_plateau_gain": [
+   "add",
+   2.0
+  ],
+  "itcz_shift": [
+   "add",
+   1.0
+  ],
+  "itcz_plateau_area_km2": [
+   "mul",
+   1.5
+  ],
+  "onset_gap_deg": [
+   "add",
+   1.0
+  ],
+  "convective_rain": [
+   "mul",
+   1.08
+  ]
+ },
+ "bounds": {
+  "itcz_plateau_m": [
+   1000.0,
+   3000.0
+  ],
+  "itcz_plateau_gain": [
+   0.0,
+   25.0
+  ],
+  "itcz_shift": [
+   4.0,
+   20.0
+  ],
+  "onset_gap_deg": [
+   0.0,
+   12.0
+  ]
+ },
+ "max_evaluations": 40,
+ "screen_choice": "h1500 (mean 10-region 0.981 vs h2000 0.986); Najd worse at 1500 (P 1.15), Mexico P 0.76"
+}

@@ -219,6 +219,7 @@ class Params:
     itcz_plateau_gain: float = 0.0    # e85: deg added to the summer ITCZ excursion x the plateau anchor (high plateau directly poleward, within ~itcz_plateau_lon_deg of longitude: Tibet north of India); 0 = off
     itcz_plateau_area_km2: float = 1.5e6  # e85: plateau area for 63 % of the full anchor (1 - exp(-area / this))
     itcz_plateau_lon_deg: float = 10.0  # e85: Gaussian half-width in longitude over which the plateau anchors the belt
+    itcz_plateau_m: float = 0.0      # e87: plateau height for the e85 anchor (0 = storm_plateau_m): the Mexican plateau and Rockies (1.5-2.5 km) anchor the North American monsoon
     onset_suppression: float = 0.0   # e86: over land, x (1 - this x ramp) on the v6 warm-moist convective boost, ramp 0 -> 1 from (ITCZ - onset_gap_deg) to 5 deg poleward of it; 0 = off
     onset_gap_deg: float = 5.0        # e86: the rain belt runs this far equatorward of the land ITCZ (Saharan air layer over the shallow monsoon)
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
