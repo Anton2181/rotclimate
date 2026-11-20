@@ -1,3 +1,12 @@
+# FULL REBUILD ON r49 — owner (20 Nov, away): "do the full rebuild ... handle it yourself ... keep going until you're done"
+* CORRECTION FIRST: earlier map checks of r46-r49 merged only SPACES['e3'] physics (dropped e85-e87 and the r45/r46 additions).
+  Full-physics check (earth_physics_on_map.py --since r44): r49 strict 31.0 % vs r44 32.4 % (warm wet 22 vs 34). The owner's
+  rebuild decision rested on the wrong +2.6.
+* DECISION RULE (fixed before the zone fit result): the release procedure refits the map world to the painted zones
+  (build_atlas_variant --fit-objective zonefit). r49 (or r47/r48 if better on the full map check) replaces r44 on the atlas
+  ONLY IF its zone-fitted strict agreement >= 32.4 %. Otherwise the atlas stays on r44 and the rebuild still carries the
+  malaria rule, forest-in-travel and herding stats on r44.
+
 # CLIMATE r49 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R49_20261120.md  [current best]
 * e87 itcz_plateau_m fitted 1,750 m (Mexican plateau/Rockies now anchor). vs r48: dev49 0.9875 (S31 0.984), fine28 1.0038,
   sealed n 0.978. Sets l, m, n SPENT; draw a new one first (scripts/make_sealed_set.py, band 15-60).

@@ -86,6 +86,8 @@ def main():
     ap.add_argument("--downsample", type=int)
     ap.add_argument("--set", default="{}", help="json of overrides applied to both rows")
     ap.add_argument("--compare", action="store_true", help="also score --world itself")
+    ap.add_argument("--since", help="apply every parameter the --physics file changed relative to this Earth parameter file "
+                    "(the map world carries that earlier physics), instead of the fixed e3 list")
     ap.add_argument("--out", required=True)
     a = ap.parse_args()
     world = load(a.world)
@@ -98,7 +100,15 @@ def main():
     if a.compare:
         rows["world_as_is"] = score(world.replace(**over))
         print(line("world as is", rows["world_as_is"]), flush=True)
-    rows["earth_physics"] = score(merged(world, load(a.physics)).replace(**over))
+    if a.since:
+        # 20 Nov 2026: the fixed list (SPACES['e3']) predates r45-r49 and dropped their new physics on the map
+        new, base = load(a.physics), load(a.since)
+        keys = [k for k in Params.__dataclass_fields__ if getattr(new, k) != getattr(base, k)]
+        cand = world.replace(**{k: getattr(new, k) for k in keys})
+        (out / "applied_keys.json").write_text(json.dumps(keys, indent=1))
+    else:
+        cand = merged(world, load(a.physics))
+    rows["earth_physics"] = score(cand.replace(**over))
     print(line("Earth physics", rows["earth_physics"]), flush=True)
     (out / "summary.json").write_text(json.dumps(dict(physics=a.physics, world=a.world, overrides=over,
                                                       rows=rows), indent=1))
