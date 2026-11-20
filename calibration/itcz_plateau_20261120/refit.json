@@ -1,0 +1,64 @@
+{
+ "title": "e85 refit (stage B of calibration/itcz_plateau_20261120/plan.json)",
+ "start": "calibration/local_accuracy_20261023/r46_params.json",
+ "start_set": {
+  "itcz_shift": 8.0,
+  "itcz_plateau_gain": 12.0
+ },
+ "reference": "output/itcz_plateau_20261120/ref",
+ "reference_name": "r46",
+ "knobs": {
+  "itcz_shift": [
+   "add",
+   1.5
+  ],
+  "itcz_plateau_gain": [
+   "add",
+   2.0
+  ],
+  "itcz_mean": [
+   "add",
+   1.0
+  ],
+  "circulation_lag_days": [
+   "add",
+   7.5
+  ],
+  "monsoon_westerly": [
+   "mul",
+   1.15
+  ],
+  "trade_heat_low": [
+   "add",
+   0.2
+  ],
+  "convective_rain": [
+   "mul",
+   1.1
+  ]
+ },
+ "bounds": {
+  "itcz_shift": [
+   4.0,
+   20.0
+  ],
+  "itcz_plateau_gain": [
+   0.0,
+   20.0
+  ],
+  "itcz_mean": [
+   0.0,
+   12.0
+  ],
+  "circulation_lag_days": [
+   15.0,
+   90.0
+  ],
+  "trade_heat_low": [
+   0.0,
+   1.0
+  ]
+ },
+ "max_evaluations": 40,
+ "screen_choice": "s8_g12 (mean 7-region S 0.924 vs s10_g10 0.928, s12_g6 0.941; output/itcz_plateau_20261120/screen)"
+}
