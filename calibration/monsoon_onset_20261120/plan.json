@@ -1,0 +1,19 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any e86 code or evaluation; sealed set m declared first (calibration/sealed_20261120m)",
+ "problem": "r47 (dev, seen): Sahel-Niger rain still peaks May-June (model ~130/120 mm; obs 40/68), July-August too weak (obs 125/156); land convection fires as soon as heat and moisture allow, before the monsoon belt arrives. e84 (a desert-air cap on the same boost) failed on r46 because India got worse.",
+ "physics": "e86 onset_suppression k, onset_gap_deg g: over land, the v6 warm-moist convective boost (instability) is multiplied by 1 - k x clip((lat - (phi_i - g)) / 5, 0, 1), phi_i the model's (lagged, e85-anchored) ITCZ latitude: deep convection only equatorward of the belt by g, as the West African rain band runs south of the surface convergence under the Saharan air layer (e.g. Nicholson 2009, the ITCZ vs the rain belt). The storm-driven boost (e77) is not touched. Default k = 0 = r47 unchanged.",
+ "reference": "r47 itself: output/monsoon_onset_20261120/ref (links to the r47 finalist output/itcz_plateau_20261120/refit/j32_trade_heat_low_0.35)",
+ "stage_A_screen": {
+  "what": "r47 + (k, g) in {(0.5, 3), (1.0, 3), (1.0, 6)} on dev regions sahel_niger, algeria_sahara, najd_arabia, bengal, deccan, mongolia (retired_b) and ethiopia_highlands, tibet_plateau (retired_c); reported only, chooses the refit start",
+  "start_rule": "lowest mean of (T/r47 + P/r47)/2 over those 8 regions; if none is below 1.0 the refit is not run and the result is reported"
+ },
+ "stage_B_refit": {
+  "tool": "scripts/joint_refit.py, objective S49 against r47",
+  "knobs": {"onset_suppression": ["add", 0.2], "onset_gap_deg": ["add", 1.5], "instability": ["mul", 1.07], "convective_rain": ["mul", 1.1], "itcz_shift": ["add", 1.0], "circulation_lag_days": ["add", 7.5]},
+  "bounds": {"onset_suppression": [0.0, 1.0], "onset_gap_deg": [0.0, 12.0], "itcz_shift": [4.0, 20.0], "circulation_lag_days": [15.0, 90.0]},
+  "max_evaluations": 40
+ },
+ "gates": "policy_v3 against r47: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; then ONE paired run of r47 and the candidate on sealed set m with S <= 1.0. All pass -> r48 on Earth; map rebuild is the owner's decision (map zone agreement reported first)."
+}
