@@ -1,0 +1,23 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any model score; owner (20 Nov): 'Let's do 3' (runoff / hydrology, item 3 of the fixable-parts list)",
+ "question": "Does the model's monthly runoff (polity/seasons.py: snow bucket, 100 mm soil bucket, Hargreaves PET) have the right seasonal shape — the input to the river flood and low-water indices — and does another bucket size or PET method match better?",
+ "target": "GRUN v1 (Ghiggi et al. 2019, ESSD 11:1655; figshare 10.6084/m9.figshare.9228176, CC BY 4.0), observation-based monthly runoff at 0.5 deg, ensemble mean; averaged to a 1970-2000 monthly climatology (the WorldClim period); data/cache/grun, not redistributed",
+ "model": "polity.seasons.fields on WorldClim 2.1 monthly tavg/tmax/tmin/prec at 5 arc-min over the Earth run window (0-56 N, 12 W - 125 E), runoff averaged to 0.5 deg",
+ "variants": "soil bucket SOIL_MM in {25, 50, 100, 150, 200, 300} x PET in {hargreaves, droogers_allen}: 12 variants; current = 100 mm, hargreaves",
+ "domain": "0.5-deg cells with >= 50 % land in both grids; shape scored on 2.5-deg blocks (5 x 5 cells, >= 13 valid) with GRUN annual runoff >= 20 mm",
+ "split": "10-degree checkerboard of block centres: dev even, blind odd",
+ "scores": {
+  "primary_shape": "median over blocks of the Pearson correlation between model and GRUN 12-month runoff, each divided by its own annual mean",
+  "flood_months": "F1 of block-months with relative flow > 1.5 (the map's flood start), model vs GRUN",
+  "annual": "Spearman of annual runoff over 0.5-deg cells (reported; the map uses relative flows only)"
+ },
+ "choice": "variant with the highest dev primary_shape",
+ "blind_gates": {
+  "V": "current blind primary_shape >= 0.6 -> seasonal pattern supported",
+  "G1": "chosen blind primary_shape >= current + 0.05",
+  "G2": "chosen blind flood_months F1 >= current - 0.02",
+  "adopt": "G1 and G2: the river flow and flood indices use the chosen bucket/PET (mud keeps its own adopted setting, tested separately at stations); part of the bundled rebuild. Otherwise current stays and V is reported."
+ }
+}
