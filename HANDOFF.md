@@ -1,4 +1,9 @@
-# CLIMATE — e85 plateau-anchored ITCZ (20 Nov 2026, running)
+# CLIMATE r47 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R47_20261120.md
+* dev49 0.9876, fine28 1.0016, sealed l 0.931 vs r46 (set l now SPENT). Params calibration/local_accuracy_20261023/r47_params.json.
+* On the map (ds8): strict painted-zone agreement 34.9 % vs r44 32.4 % (+2.5); Med recall 60->72 %, Med dry 5.3->8.5 %.
+  -> rebuild case exists (full cascade incl. new world checkpoint + corrections retrain); OWNER DECISION.
+* Next physics: Sahel timing (e86: dry air aloft / pre-onset convection suppression); needs a NEW sealed set first.
+# (history) CLIMATE — e85 plateau-anchored ITCZ (20 Nov 2026)
 * Restored: .venv, WorldClim 5' incl. vapr; r46 Alps rerun reproduces the recorded finalist exactly (only runtime differs).
 * Diagnosis (r46, dev): Sahel rain peaks May-Jun (obs Jul-Aug); JJAS 243 mm at 15-20 N in Najd (obs 26); false summer rain
   20-25 N Algeria-Sahara; land ITCZ reaches 6.7 + 15.8 = 22.5 N everywhere (right for India via Tibet, wrong for Africa).
