@@ -605,6 +605,25 @@ class ClimateModel:
                                           edge=np.where(S > 0, E / np.maximum(S, 1e-12), 0.0),
                                           top=np.where(S > 0, P / np.maximum(S, 1e-12), 0.0),
                                           sign=np.sign(np.where(np.abs(g.lat.mean(axis=0)) > 0, g.lat.mean(axis=0), 1.0)))
+        # e85: the summer ITCZ reaches further poleward where a high plateau lies directly poleward (the Tibetan
+        # plateau anchors the South Asian monsoon trough near 25 N; Africa, with none, keeps its rain belt near
+        # 10-15 N). Anchor per column = 1 - exp(-A / itcz_plateau_area_km2), A = plateau area (land above
+        # storm_plateau_m, smoothed ~150 km) within a Gaussian of itcz_plateau_lon_deg in longitude (no downwind carry).
+        self.itcz_anchor = None
+        if self.p.itcz_plateau_gain > 0:
+            prof = getattr(g, "plateau_profile", None)
+            if prof is not None and getattr(g, "column_lon", None) is not None and abs(prof["height"] - self.p.storm_plateau_m) < 1e-6:
+                sig = self.p.itcz_plateau_lon_deg / 0.5
+                A = ndi.gaussian_filter1d(np.asarray(prof["area"], float), sig, mode="wrap") * np.sqrt(2 * np.pi) * sig
+                col = ((np.asarray(g.column_lon) - prof["lon"][0]) % 360.0) / 0.5; L = len(prof["lon"])
+                lo = np.floor(col).astype(int) % L; w = col - np.floor(col); A = A[lo] * (1 - w) + A[(lo + 1) % L] * w
+            else:
+                hi = g.land & (ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest") > self.p.storm_plateau_m)
+                lat_band = (np.abs(g.lat) >= 15) & (np.abs(g.lat) <= 60)
+                per_col = (hi & lat_band).sum(axis=0) * g.cell_km ** 2
+                sig = self.p.itcz_plateau_lon_deg * 111.2 * max(np.cos(np.radians(float(np.mean(np.abs(g.lat))))), 0.1) / g.cell_km
+                A = ndi.gaussian_filter1d(per_col.astype(float), max(sig, 1e-6), mode="nearest") * np.sqrt(2 * np.pi) * sig
+            self.itcz_anchor = 1.0 - np.exp(-np.maximum(A, 0.0) / self.p.itcz_plateau_area_km2)
         self.col_sigma = 300.0 / g.cell_km
         # coastal upwelling geometry (e1): the offshore direction (map frame,
         # x right / y up) of sea cells near land and how close they are
@@ -719,6 +738,8 @@ class ClimateModel:
             phi_i = (p.itcz_mean + (p.itcz_shift_ocean + (p.itcz_shift - p.itcz_shift_ocean) * broad) * s) * hr
         else:
             phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
+        if self.itcz_anchor is not None and s > 0:
+            phi_i = phi_i + p.itcz_plateau_gain * self.itcz_anchor * s * hr      # e85 (summer only)
         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
         phi_p = phi_h + 30.0
         u = np.zeros_like(lat)

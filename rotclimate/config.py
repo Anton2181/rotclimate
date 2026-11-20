@@ -216,6 +216,9 @@ class Params:
     storm_plateau_season: float = 9.0  # e72b: <= 1 replaces the band-meets-plateau trigger with the cold season: full pull below season index (this - 0.25), none above (this + 0.25); 9 = e72 trigger
     storm_plateau_global: bool = False  # e72c: on Earth regions, take the plateau upwind from the global elevation ring (earth.plateau_profile), not the region's window
     storm_plateau_reach_deg: float = 0.0  # e72d: pull only rows within this many degrees poleward of the plateau's poleward edge (full to reach - 5, none beyond); 0 = whole column (e72c)
+    itcz_plateau_gain: float = 0.0    # e85: deg added to the summer ITCZ excursion x the plateau anchor (high plateau directly poleward, within ~itcz_plateau_lon_deg of longitude: Tibet north of India); 0 = off
+    itcz_plateau_area_km2: float = 1.5e6  # e85: plateau area for 63 % of the full anchor (1 - exp(-area / this))
+    itcz_plateau_lon_deg: float = 10.0  # e85: Gaussian half-width in longitude over which the plateau anchors the belt
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
     warm_current_seasonality: float = 0.0  # e66: warm currents' sea-surface anomaly x (1 - k x season): mostly a winter effect

@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any e85 evaluation; owner (20 Nov): 'Go ahead' (climate: the African rain belt)",
+ "problem": "r46 (dev, seen): Sahel-Niger rain peaks May-June (model 127/119 mm) instead of July-August (obs 125/156); June-September rain 243 mm at 15-20 N in Najd (obs 26) and false summer rain at 20-25 N in Algeria-Sahara; the land ITCZ reaches itcz_mean + itcz_shift = 22.5 N everywhere, right for India (Tibet) but ~8 deg too far for Africa.",
+ "physics": "e85 itcz_plateau_gain: the summer ITCZ excursion = itcz_shift + itcz_plateau_gain x anchor, anchor = 1 - exp(-A / itcz_plateau_area_km2), A = high-plateau area (land above storm_plateau_m, 2,500 m, smoothed ~150 km) within a Gaussian of itcz_plateau_lon_deg (10) in longitude directly poleward; Earth regions read the hemisphere's 0.5-deg plateau ring (earth.plateau_profile), the map its own terrain. Literature: elevated heating / orographic insulation anchoring the South Asian monsoon trough (Flohn 1957; Boos & Kuang 2010). Default 0 = r46 unchanged.",
+ "reference": "r46 itself: output/itcz_plateau_20261120/ref (links to output/trade_heat_low_20261115/finalist, verified identical to r46_params.json; the fresh Alps rerun reproduces it exactly)",
+ "stage_A_screen": {
+  "what": "r46 + (itcz_shift, itcz_plateau_gain) in {(12, 6), (10, 10), (8, 12)} on dev regions sahel_niger, algeria_sahara, najd_arabia, bengal, deccan (retired_b) and ethiopia_highlands, tibet_plateau (retired_c); reported only, chooses the refit start",
+  "start_rule": "the screen point with the lowest mean of (T monthly MAE / r46 + rain loss / r46)/2 over those 7 regions"
+ },
+ "stage_B_refit": {
+  "tool": "scripts/joint_refit.py (default objective = S49 against r46: dev31 + retired a, b, c)",
+  "knobs": {"itcz_shift": ["add", 1.5], "itcz_plateau_gain": ["add", 2.0], "itcz_mean": ["add", 1.0], "circulation_lag_days": ["add", 7.5], "monsoon_westerly": ["mul", 1.15], "trade_heat_low": ["add", 0.2], "convective_rain": ["mul", 1.1]},
+  "bounds": {"itcz_shift": [4.0, 20.0], "itcz_plateau_gain": [0.0, 20.0], "itcz_mean": [0.0, 12.0], "circulation_lag_days": [15.0, 90.0], "trade_heat_low": [0.0, 1.0]},
+  "max_evaluations": 40
+ },
+ "gates": "policy_v3 against r46: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; then ONE run of r46 and the candidate on unseen sealed set l (calibration/sealed_20261116l) with S <= 1.0. All pass -> r47 adopted on Earth; the map rebuild is a separate owner decision (zone agreement reported first).",
+ "caveat": "retired b and c were seen in earlier campaigns; only fine28 and sealed l are independent"
+}
