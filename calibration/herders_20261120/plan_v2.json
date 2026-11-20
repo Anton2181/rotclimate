@@ -1,0 +1,24 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any v2 fit or score; owner (20 Nov): 'Continue this one' after plan.json failed (reports/HERDERS_20261120.md)",
+ "question": "Does a herding share built on crop marginality (short growing season or low plant growth) with a humid-tropics livestock penalty rank where societies herd, on societies never used before?",
+ "development": "all 546 Ethnographic Atlas societies of plan.json (0-56 N, 12 W - 125 E; all seen)",
+ "blind": "Ethnographic Atlas societies in Africa and Madagascar south of the equator (36 S - 0, 8 - 52 E) with both EA004 and EA005: 145 (9 mainly herders); the Earth run is rebuilt on that window with land_people_earth.py --window (same code)",
+ "target": "observed herding share EA004 / (EA004 + EA005) at bin midpoints; mainly herders = EA004 bin > EA005 bin (as plan.json)",
+ "rule": {
+  "form": "H = b + a x M x (1 - p x W); M = marginality ramp, W = humid-hot indicator (growing season > Lw days and annual mean T > 20 C)",
+  "family_L": "M = clip((L1 - LGP) / (L1 - L0), 0, 1), L0 in {0, 30, 60, 90}, L1 in {120, 150, 180, 210, 240, 270, 300}",
+  "family_N": "M = clip((N1 - NPP) / (N1 - N0), 0, 1), N0 in {0, 100, 200}, N1 in {400, 600, 800, 1000, 1200} g/m2/yr",
+  "tsetse": "Lw in {240, 270, 300}, p in {0, 0.25, 0.5, 0.75}",
+  "level": "b, a by least squares on development (a >= 0, H clipped to 0-1); all fields from the Earth run at the 15-arc-min mean, as plan.json",
+  "choice": "the single (family, ramp, Lw, p) with the highest development Spearman; ties -> lower squared error"
+ },
+ "baseline": "the current model share (k = 1, plan.json)",
+ "blind_gates": {
+  "G1": "v2 blind Spearman >= 0.40",
+  "G2": "v2 blind Spearman >= current model's blind Spearman + 0.15",
+  "reported_only": "blind mainly-herders balanced accuracy at H > 0.5 (9 positives: too few to gate), mean levels",
+  "adopt": "G1 and G2: H becomes the map's herding share (a new 'Herders and farmers' layer and the per-polity herding statistics). Grazing capacity, food capacity and population stay unchanged (a separate question). Otherwise the share stays and the result is reported."
+ }
+}
