@@ -12,6 +12,13 @@
   (r41's W2 found none) and was not started unasked.
 * Rebuild continues on r44: malaria rule (harvest -> population -> every add-on), forest-in-travel C2, herding stats.
   Working in place (local atlas under git; revert = git checkout atlases/); hosted copy updated only at the end.
+* [IN PROGRESS, WIP COMMITS] malaria v2 switched on (harvest/export.py + data/malaria_model.json active); harvest/population
+  re-exported raw + corrected (corrected via stage_atlas + fingerprint patch); forest + herding layers re-added; land_malaria_v2
+  retired (main malaria layer is now the validated rule). Add-on driver scripts/release_r44_malaria.sh running
+  (output/rebuild_r49_20261120/stages_done). UNTIL IT FINISHES the atlas's harvest-bound add-ons (21 manifests) may be hidden.
+  Next: settlement chain (release 3/4) build from the top, downstream reach/trade/control, provisional r5, browser checks,
+  Claude copy. Superseded experiment layers (release2, dispatch, seeded dispatch, feedback, network visits x2, year-complete,
+  food-checked visits) stay bound to the old harvest -> hidden by the page; recompute on request.
 
 # CLIMATE r49 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R49_20261120.md  [current best]
 * e87 itcz_plateau_m fitted 1,750 m (Mexican plateau/Rockies now anchor). vs r48: dev49 0.9875 (S31 0.984), fine28 1.0038,

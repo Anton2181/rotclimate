@@ -1,0 +1,82 @@
+{
+  "method": "conditional-surroundings-sample-spread-v1",
+  "layouts": [
+    490101,
+    490211,
+    490307,
+    490401,
+    490503,
+    490601,
+    490709,
+    490801,
+    490907
+  ],
+  "count": 9,
+  "downsample": 16,
+  "ddof": 1,
+  "physical_parameter_key": "78b2195ae139de18d9a5211e3a64378e19ce4b5dedabbedfbf8d3edd1e7ca327",
+  "member_group": "reference",
+  "sources": [
+    {
+      "seed": 490101,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490101.pkl",
+      "sha256": "3058806f81366a3994ee8a3fc61e34f8c6f79bb09f0ba656cfb671321d9050ea"
+    },
+    {
+      "seed": 490211,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490211.pkl",
+      "sha256": "251fc7d7c29386305add555aaa6976de66df08e4c728e8119600c4d46aea79c0"
+    },
+    {
+      "seed": 490307,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490307.pkl",
+      "sha256": "697c138c735ba2edb864abf97cce07329d7b16fbc75bb082f35bd8608d094126"
+    },
+    {
+      "seed": 490401,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490401.pkl",
+      "sha256": "4a8961c40f77a1caf492921a5890f92dcdc1b68b579e2866ad1d0efa24454357"
+    },
+    {
+      "seed": 490503,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490503.pkl",
+      "sha256": "87cabf997848507579237c9b427321805297b8a08cef776780792558dd670233"
+    },
+    {
+      "seed": 490601,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490601.pkl",
+      "sha256": "f9057a3f7e61c01e939cb2d60b5ef61ca50e2e01f54f3b7ba910e913e5c5ef94"
+    },
+    {
+      "seed": 490709,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490709.pkl",
+      "sha256": "f1f9b7f3a7f47f196b1919b00122e5e4ffdee78faf036abf87b67aeeabe18b43"
+    },
+    {
+      "seed": 490801,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490801.pkl",
+      "sha256": "54f1d2d4912d95fcd72555bdc9ee1f20a82537bf1ed1b429770c15614f5a0495"
+    },
+    {
+      "seed": 490907,
+      "file": "output/atlas_v22/diagnostics/sensitivity/members/audit_reference_seed490907.pkl",
+      "sha256": "b659bf09f5d087d7b1c786cfa2b829ae82224206e2d9dc8026b2151f1bd349dc"
+    }
+  ],
+  "summaries": {
+    "rain": {
+      "median": 14.404199215641166,
+      "p90": 22.544879808188174,
+      "maximum": 44.95604227621754
+    },
+    "temperature": {
+      "median": 0.7563519427017041,
+      "p90": 0.907963648928857,
+      "maximum": 1.224754676946228
+    }
+  },
+  "projection": "Interpolate each member to source land pixels before computing moments. Temperature uses sea-level fields before the shared source-terrain lapse correction, which cancels in spread.",
+  "note": "Sample spread across nine new hypothetical surroundings layouts at ds16; the main climate maps still average layouts 1\u20133 at ds8. Only the invented surroundings seed varies. This is conditional boundary sensitivity, not year-to-year weather, total model uncertainty or measured climate error. Standard deviations use n\u22121; colours saturate at the scale maximum.",
+  "exporter_sha256": "b3555a2043b56ddfa4877374b972cded16f0ddcbd565b7d857248daecd18e4ad",
+  "audit_review_sha256": "f87ccb40eeb2ffe4e2fee62faef3659c82de6cf2bcd2207ff225305d1280d861"
+}

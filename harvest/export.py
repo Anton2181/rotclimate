@@ -158,9 +158,14 @@ def derive(meta, arrays, year_days=365.0):
     margins = (tuple(margin['cold_mean_temperature_c']),tuple(margin['dry_rain_over_evaporation'])) if margin else None
     result,names = analyse(t[:,land],p[:,land],latitude[land],meta['world']['tilt'],0,
                            geo['irr'][land],geo['arable'][land],d[:,land],margins=margins)
-    result.update(malaria_fields(t[:,land],p[:,land],geo['irr'][land]))
+    from harvest import malaria_v2
+    if malaria_v2.model():      # adopted 20 Nov 2026 (reports/MALARIA_GENETICS_20261120.md): thermal months, burden-preserving penalty
+        result.update(malaria_v2.malaria_fields(t[:,land]))
+        burden=malaria_v2.penalty_input(result['malaria'])
+    else:
+        result.update(malaria_fields(t[:,land],p[:,land],geo['irr'][land])); burden=result['malaria']
     result.update(settlement_fields(result.pop('capacity'),result['npp'],arrays['biome'][land],
-                                    geo['arable'][land],geo['water_distance'][land],result['malaria']))
+                                    geo['arable'][land],geo['water_distance'][land],burden))
     fields = {}
     for key,value in result.items():
         full = np.full(land.shape,np.nan,dtype=np.float32);full[land]=value
@@ -442,7 +447,7 @@ def export(atlas):
              'scripts/land_people_hexes.py','scripts/vector_rivers.py','data/harvest_model.json',
              'data/harvest_sources.json','data/settlement_reference_regions.json','data/hexgrid.json','ravages/data.json',
              'data/source/elevation.png','data/source/rivers.png','data/source/original/rivers.png',
-             'land/earth.webp','data/arable_slope_model.json','harvest/deltas.py','rotclimate/routing.py']]+[ROOT/'data/delta_fan_model.json']*(ROOT/'data/delta_fan_model.json').exists()
+             'land/earth.webp','data/arable_slope_model.json','harvest/deltas.py','rotclimate/routing.py','harvest/malaria_v2.py','data/malaria_model.json']]+[ROOT/'data/delta_fan_model.json']*(ROOT/'data/delta_fan_model.json').exists()
     identity=dict(climate_sha256=digest(data/'atlas.bin'),metadata=physical_metadata(meta),
                   sources={str(p.relative_to(ROOT)):digest(p) for p in sources})
     fingerprint=hashlib.sha256(json.dumps(identity,sort_keys=True).encode()).hexdigest()

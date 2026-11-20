@@ -1,0 +1,1187 @@
+{
+  "fingerprint": "81ec0386298ec8c3e2333b54cbb1b1f539759712e5c1af2aa27fd755e56356b9",
+  "inputs": {
+    "climate_sha256": "bcbe4c64ec941d6252e3a3c5c0bde2e30cb5d952cddc19ae5a6e9e777af3d5fc",
+    "metadata": {
+      "width": 2000,
+      "height": 926,
+      "mi_per_px": 1.1434000000000002,
+      "km_per_deg": 111.195,
+      "cell_px": 8,
+      "lapse": 4.4142078309475306,
+      "lapse12": [
+        3.8100912254976125,
+        3.760514657772197,
+        3.872653047692218,
+        4.11876485577019,
+        4.437965308762971,
+        4.751288479146197,
+        4.981222400592106,
+        5.07088449287234,
+        4.998093552250188,
+        4.780857084942216,
+        4.4729164906621595,
+        4.0815641939224925
+      ],
+      "lat_center": 38.51479630121221,
+      "north_bearing": -8.813737187253281,
+      "world": {
+        "lat_south": 28.411842416269298,
+        "lat_north": 48.61775018615512,
+        "north_bearing": -8.813737187253281,
+        "tilt": 33.50473580006303,
+        "retrograde": true,
+        "tier_tops": [
+          62,
+          814,
+          1135,
+          2528
+        ],
+        "beyond": {
+          "north": 0.5186348153077821,
+          "south": 0.7228655804361942,
+          "west": 0.3349345889221035,
+          "east": 0.6789270534399199,
+          "northeast": 0.008900208443513257,
+          "southeast": 0.454261923351162
+        },
+        "terrain_file": "output/terrain_erosion_20261107/map_height_v22.npz"
+      },
+      "arrays": {
+        "cls": {
+          "offset": 0,
+          "dtype": "uint8",
+          "shape": [
+            463,
+            1000
+          ]
+        },
+        "elev": {
+          "offset": 463000,
+          "dtype": "uint16",
+          "shape": [
+            463,
+            1000
+          ]
+        },
+        "biome": {
+          "offset": 1389000,
+          "dtype": "uint8",
+          "shape": [
+            463,
+            1000
+          ]
+        },
+        "Tm": {
+          "offset": 1852000,
+          "dtype": "int16",
+          "shape": [
+            11,
+            116,
+            250
+          ]
+        },
+        "Tlo": {
+          "offset": 2490000,
+          "dtype": "int16",
+          "shape": [
+            11,
+            116,
+            250
+          ]
+        },
+        "Thi": {
+          "offset": 3128000,
+          "dtype": "int16",
+          "shape": [
+            11,
+            116,
+            250
+          ]
+        },
+        "P": {
+          "offset": 3766000,
+          "dtype": "uint16",
+          "shape": [
+            11,
+            116,
+            250
+          ]
+        },
+        "snow": {
+          "offset": 4404000,
+          "dtype": "uint16",
+          "shape": [
+            11,
+            116,
+            250
+          ]
+        },
+        "T12": {
+          "offset": 5042000,
+          "dtype": "int16",
+          "shape": [
+            12,
+            116,
+            250
+          ]
+        },
+        "P12": {
+          "offset": 5738000,
+          "dtype": "uint16",
+          "shape": [
+            12,
+            116,
+            250
+          ]
+        },
+        "D12": {
+          "offset": 6434000,
+          "dtype": "int16",
+          "shape": [
+            12,
+            116,
+            250
+          ]
+        }
+      }
+    },
+    "sources": {
+      "harvest/models.py": "06a02977cd72677f9d1fb06b86f966d8f5449331fbddcb280117df7339f83194",
+      "harvest/export.py": "f879cd2a67ead850808e22ef9386e223c2734fb51634bfa139ffe7f18d1a07b7",
+      "scripts/land_people.py": "b2c46780c9504f00233afc742c444f8f513431d01bb6b72ce2d55894a6f52bc8",
+      "scripts/land_people_hexes.py": "8b40924c48b2b8f859e83244633ee0f57f9fbab8477202a063435a90df100588",
+      "scripts/vector_rivers.py": "186c978aaad33f1a1836514c243ca69f056a36b95d3a290033e50af5ad9b87ed",
+      "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3",
+      "data/harvest_sources.json": "b576de06b700e97c5ca0ca2abb8544607d48bd3385f7dcd59ad0d8fe1ccbb446",
+      "data/settlement_reference_regions.json": "4004973f4096c85779d1de0deb90f3010356077c58404442cb385f4e2199e73b",
+      "data/hexgrid.json": "64c3e888f91ba86c65d28b289c8b8898d1bad4b0cb0b895de51148e7dc54180d",
+      "ravages/data.json": "57acb6e174c4c5ce8a54dd1d629625ff47acdd553a5c5e41f20fe954c36094e6",
+      "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
+      "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
+      "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f",
+      "land/earth.webp": "a698370f9b75be65239019ff5d085b6882e58ec58f6c9f6b8cd1d4f832511ee1",
+      "data/arable_slope_model.json": "7022190bd0fb0c0f2c71a823418089e09200655fe8ba7858f78bbfb51980b2be",
+      "harvest/deltas.py": "7f8bf2d415f8b4c4d8209bfcc9ca6df12de6ed4159aa50563403067332acfd00",
+      "rotclimate/routing.py": "95e4ae3cea0c6322a36d123dd41df4158e1c02071cf3da83794439ef3b8a7f41",
+      "harvest/malaria_v2.py": "fdd0fbe440c2d63488a8401debbd2780d5b4e0b5bb6c890eb07bc1ed83edd839",
+      "data/malaria_model.json": "c9249953486e748c87ff88af8b064eaead7cba509361213c1dd212df1ef18b90",
+      "data/delta_fan_model.json": "5fe3f4798255c4812922d1efb6e279a3350d9172b57338652d9adbac461ffda1"
+    }
+  },
+  "geography": {
+    "shape": [
+      463,
+      1000
+    ],
+    "width_km": 3680.2478592000007,
+    "arable": "slope",
+    "irrigation": "hand5",
+    "sources": {
+      "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
+      "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
+      "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f",
+      "output/terrain_erosion_20261107/map_height_v22.npz": "821aaf214659e0c7d7c346ccdd48e89ca8d24c027c3360a2c915551e94efb035",
+      "data/arable_slope_model.json": "7022190bd0fb0c0f2c71a823418089e09200655fe8ba7858f78bbfb51980b2be"
+    },
+    "deltas": [
+      {
+        "x": 715,
+        "y": 41,
+        "q_m3s": 95.8,
+        "basin_km2": 3620,
+        "relief_km": 3.401,
+        "t_c": 7.4,
+        "qs_mt": 1.279,
+        "exposure": 0.0,
+        "area_km2": 12.6,
+        "radius_km": 2.8
+      },
+      {
+        "x": 747,
+        "y": 71,
+        "q_m3s": 64.4,
+        "basin_km2": 4192,
+        "relief_km": 3.227,
+        "t_c": 8.6,
+        "qs_mt": 1.35,
+        "exposure": 0.0,
+        "area_km2": 8.3,
+        "radius_km": 2.3
+      },
+      {
+        "x": 553,
+        "y": 22,
+        "q_m3s": 150.9,
+        "basin_km2": 6478,
+        "relief_km": 1.491,
+        "t_c": 10.3,
+        "qs_mt": 1.199,
+        "exposure": 0.219,
+        "area_km2": 20.3,
+        "radius_km": 3.6
+      },
+      {
+        "x": 802,
+        "y": 81,
+        "q_m3s": 318.2,
+        "basin_km2": 20242,
+        "relief_km": 3.713,
+        "t_c": 10.4,
+        "qs_mt": 6.722,
+        "exposure": 0.0,
+        "area_km2": 44.6,
+        "radius_km": 5.3
+      },
+      {
+        "x": 1422,
+        "y": 58,
+        "q_m3s": 12.9,
+        "basin_km2": 867,
+        "relief_km": 0.328,
+        "t_c": 13.2,
+        "qs_mt": 0.058,
+        "exposure": 0.219,
+        "area_km2": 1.5,
+        "radius_km": 1.0
+      },
+      {
+        "x": 1234,
+        "y": 97,
+        "q_m3s": 157.8,
+        "basin_km2": 16934,
+        "relief_km": 3.629,
+        "t_c": 11.4,
+        "qs_mt": 5.326,
+        "exposure": 0.0,
+        "area_km2": 21.3,
+        "radius_km": 3.7
+      },
+      {
+        "x": 448,
+        "y": 96,
+        "q_m3s": 22.3,
+        "basin_km2": 1476,
+        "relief_km": 1.406,
+        "t_c": 10.5,
+        "qs_mt": 0.306,
+        "exposure": 0.0,
+        "area_km2": 2.7,
+        "radius_km": 1.3
+      },
+      {
+        "x": 607,
+        "y": 101,
+        "q_m3s": 74.5,
+        "basin_km2": 2949,
+        "relief_km": 0.99,
+        "t_c": 11.1,
+        "qs_mt": 0.468,
+        "exposure": 0.0,
+        "area_km2": 9.6,
+        "radius_km": 2.5
+      },
+      {
+        "x": 1201,
+        "y": 152,
+        "q_m3s": 1357.3,
+        "basin_km2": 118163,
+        "relief_km": 3.798,
+        "t_c": 12.1,
+        "qs_mt": 30.304,
+        "exposure": 0.0,
+        "area_km2": 206.3,
+        "radius_km": 11.5
+      },
+      {
+        "x": 1358,
+        "y": 143,
+        "q_m3s": 42.0,
+        "basin_km2": 4531,
+        "relief_km": 1.407,
+        "t_c": 12.7,
+        "qs_mt": 0.786,
+        "exposure": 0.0,
+        "area_km2": 5.3,
+        "radius_km": 1.8
+      },
+      {
+        "x": 284,
+        "y": 152,
+        "q_m3s": 18.2,
+        "basin_km2": 1117,
+        "relief_km": 1.07,
+        "t_c": 10.3,
+        "qs_mt": 0.186,
+        "exposure": 0.312,
+        "area_km2": 2.2,
+        "radius_km": 1.2
+      },
+      {
+        "x": 329,
+        "y": 151,
+        "q_m3s": 25.6,
+        "basin_km2": 985,
+        "relief_km": 1.208,
+        "t_c": 9.2,
+        "qs_mt": 0.196,
+        "exposure": 0.031,
+        "area_km2": 3.1,
+        "radius_km": 1.4
+      },
+      {
+        "x": 353,
+        "y": 162,
+        "q_m3s": 12.9,
+        "basin_km2": 474,
+        "relief_km": 1.145,
+        "t_c": 9.7,
+        "qs_mt": 0.11,
+        "exposure": 0.031,
+        "area_km2": 1.5,
+        "radius_km": 1.0
+      },
+      {
+        "x": 671,
+        "y": 171,
+        "q_m3s": 1905.4,
+        "basin_km2": 163404,
+        "relief_km": 3.066,
+        "t_c": 14.2,
+        "qs_mt": 37.699,
+        "exposure": 0.0,
+        "area_km2": 295.2,
+        "radius_km": 13.7
+      },
+      {
+        "x": 289,
+        "y": 195,
+        "q_m3s": 39.6,
+        "basin_km2": 2214,
+        "relief_km": 1.125,
+        "t_c": 10.1,
+        "qs_mt": 0.345,
+        "exposure": 0.281,
+        "area_km2": 5.0,
+        "radius_km": 1.8
+      },
+      {
+        "x": 383,
+        "y": 209,
+        "q_m3s": 179.3,
+        "basin_km2": 7080,
+        "relief_km": 1.359,
+        "t_c": 10.7,
+        "qs_mt": 1.257,
+        "exposure": 0.0,
+        "area_km2": 24.4,
+        "radius_km": 3.9
+      },
+      {
+        "x": 1428,
+        "y": 205,
+        "q_m3s": 81.1,
+        "basin_km2": 7395,
+        "relief_km": 1.69,
+        "t_c": 14.5,
+        "qs_mt": 1.696,
+        "exposure": 0.031,
+        "area_km2": 10.5,
+        "radius_km": 2.6
+      },
+      {
+        "x": 1448,
+        "y": 213,
+        "q_m3s": 56.5,
+        "basin_km2": 5404,
+        "relief_km": 1.412,
+        "t_c": 15.1,
+        "qs_mt": 1.122,
+        "exposure": 0.0,
+        "area_km2": 7.2,
+        "radius_km": 2.1
+      },
+      {
+        "x": 385,
+        "y": 220,
+        "q_m3s": 31.7,
+        "basin_km2": 1872,
+        "relief_km": 0.984,
+        "t_c": 11.6,
+        "qs_mt": 0.296,
+        "exposure": 0.0,
+        "area_km2": 3.9,
+        "radius_km": 1.6
+      },
+      {
+        "x": 1479,
+        "y": 227,
+        "q_m3s": 193.9,
+        "basin_km2": 26540,
+        "relief_km": 3.354,
+        "t_c": 13.0,
+        "qs_mt": 7.48,
+        "exposure": 0.0,
+        "area_km2": 26.5,
+        "radius_km": 4.1
+      },
+      {
+        "x": 1498,
+        "y": 233,
+        "q_m3s": 81.2,
+        "basin_km2": 9935,
+        "relief_km": 3.126,
+        "t_c": 14.1,
+        "qs_mt": 3.534,
+        "exposure": 0.0,
+        "area_km2": 10.6,
+        "radius_km": 2.6
+      },
+      {
+        "x": 1297,
+        "y": 246,
+        "q_m3s": 95.7,
+        "basin_km2": 19141,
+        "relief_km": 2.894,
+        "t_c": 14.0,
+        "qs_mt": 4.723,
+        "exposure": 0.0,
+        "area_km2": 12.6,
+        "radius_km": 2.8
+      },
+      {
+        "x": 1617,
+        "y": 238,
+        "q_m3s": 238.1,
+        "basin_km2": 22372,
+        "relief_km": 3.229,
+        "t_c": 14.0,
+        "qs_mt": 7.6,
+        "exposure": 0.156,
+        "area_km2": 32.9,
+        "radius_km": 4.6
+      },
+      {
+        "x": 332,
+        "y": 276,
+        "q_m3s": 273.0,
+        "basin_km2": 13920,
+        "relief_km": 1.296,
+        "t_c": 11.2,
+        "qs_mt": 2.004,
+        "exposure": 0.062,
+        "area_km2": 38.0,
+        "radius_km": 4.9
+      },
+      {
+        "x": 476,
+        "y": 265,
+        "q_m3s": 10.6,
+        "basin_km2": 403,
+        "relief_km": 1.38,
+        "t_c": 11.5,
+        "qs_mt": 0.136,
+        "exposure": 0.0,
+        "area_km2": 1.2,
+        "radius_km": 0.9
+      },
+      {
+        "x": 1642,
+        "y": 281,
+        "q_m3s": 47.0,
+        "basin_km2": 6718,
+        "relief_km": 0.978,
+        "t_c": 16.3,
+        "qs_mt": 0.883,
+        "exposure": 0.062,
+        "area_km2": 5.9,
+        "radius_km": 1.9
+      },
+      {
+        "x": 1140,
+        "y": 330,
+        "q_m3s": 61.9,
+        "basin_km2": 6833,
+        "relief_km": 1.359,
+        "t_c": 14.8,
+        "qs_mt": 1.224,
+        "exposure": 0.0,
+        "area_km2": 7.9,
+        "radius_km": 2.2
+      },
+      {
+        "x": 1648,
+        "y": 282,
+        "q_m3s": 124.0,
+        "basin_km2": 19226,
+        "relief_km": 2.637,
+        "t_c": 15.7,
+        "qs_mt": 5.262,
+        "exposure": 0.062,
+        "area_km2": 16.5,
+        "radius_km": 3.2
+      },
+      {
+        "x": 570,
+        "y": 300,
+        "q_m3s": 58.7,
+        "basin_km2": 3318,
+        "relief_km": 0.527,
+        "t_c": 13.1,
+        "qs_mt": 0.289,
+        "exposure": 0.0,
+        "area_km2": 7.5,
+        "radius_km": 2.2
+      },
+      {
+        "x": 642,
+        "y": 303,
+        "q_m3s": 1874.7,
+        "basin_km2": 122450,
+        "relief_km": 3.447,
+        "t_c": 13.0,
+        "qs_mt": 33.372,
+        "exposure": 0.0,
+        "area_km2": 290.2,
+        "radius_km": 13.6
+      },
+      {
+        "x": 332,
+        "y": 339,
+        "q_m3s": 77.0,
+        "basin_km2": 4829,
+        "relief_km": 1.29,
+        "t_c": 11.7,
+        "qs_mt": 0.831,
+        "exposure": 0.0,
+        "area_km2": 10.0,
+        "radius_km": 2.5
+      },
+      {
+        "x": 1256,
+        "y": 342,
+        "q_m3s": 11.9,
+        "basin_km2": 1392,
+        "relief_km": 1.331,
+        "t_c": 15.8,
+        "qs_mt": 0.347,
+        "exposure": 0.0,
+        "area_km2": 1.4,
+        "radius_km": 0.9
+      },
+      {
+        "x": 616,
+        "y": 333,
+        "q_m3s": 547.1,
+        "basin_km2": 35733,
+        "relief_km": 3.476,
+        "t_c": 11.7,
+        "qs_mt": 11.152,
+        "exposure": 0.0,
+        "area_km2": 79.1,
+        "radius_km": 7.1
+      },
+      {
+        "x": 1105,
+        "y": 442,
+        "q_m3s": 839.8,
+        "basin_km2": 76887,
+        "relief_km": 3.201,
+        "t_c": 14.6,
+        "qs_mt": 21.418,
+        "exposure": 0.0,
+        "area_km2": 124.3,
+        "radius_km": 8.9
+      },
+      {
+        "x": 1268,
+        "y": 377,
+        "q_m3s": 31.7,
+        "basin_km2": 10913,
+        "relief_km": 2.928,
+        "t_c": 15.3,
+        "qs_mt": 2.803,
+        "exposure": 0.0,
+        "area_km2": 3.9,
+        "radius_km": 1.6
+      },
+      {
+        "x": 340,
+        "y": 350,
+        "q_m3s": 1110.5,
+        "basin_km2": 69099,
+        "relief_km": 3.43,
+        "t_c": 11.9,
+        "qs_mt": 19.373,
+        "exposure": 0.062,
+        "area_km2": 167.0,
+        "radius_km": 10.3
+      },
+      {
+        "x": 1143,
+        "y": 351,
+        "q_m3s": 19.4,
+        "basin_km2": 2157,
+        "relief_km": 2.549,
+        "t_c": 15.4,
+        "qs_mt": 0.938,
+        "exposure": 0.0,
+        "area_km2": 2.3,
+        "radius_km": 1.2
+      },
+      {
+        "x": 590,
+        "y": 353,
+        "q_m3s": 447.0,
+        "basin_km2": 24264,
+        "relief_km": 2.91,
+        "t_c": 12.7,
+        "qs_mt": 7.833,
+        "exposure": 0.0,
+        "area_km2": 63.9,
+        "radius_km": 6.4
+      },
+      {
+        "x": 1685,
+        "y": 419,
+        "q_m3s": 257.9,
+        "basin_km2": 26008,
+        "relief_km": 3.287,
+        "t_c": 15.1,
+        "qs_mt": 9.172,
+        "exposure": 0.25,
+        "area_km2": 35.8,
+        "radius_km": 4.8
+      },
+      {
+        "x": 337,
+        "y": 357,
+        "q_m3s": 88.1,
+        "basin_km2": 5976,
+        "relief_km": 0.717,
+        "t_c": 13.2,
+        "qs_mt": 0.603,
+        "exposure": 0.031,
+        "area_km2": 11.5,
+        "radius_km": 2.7
+      },
+      {
+        "x": 311,
+        "y": 360,
+        "q_m3s": 1609.1,
+        "basin_km2": 108103,
+        "relief_km": 2.927,
+        "t_c": 13.7,
+        "qs_mt": 26.685,
+        "exposure": 0.031,
+        "area_km2": 247.0,
+        "radius_km": 12.5
+      },
+      {
+        "x": 1249,
+        "y": 368,
+        "q_m3s": 18.5,
+        "basin_km2": 1788,
+        "relief_km": 2.404,
+        "t_c": 15.2,
+        "qs_mt": 0.783,
+        "exposure": 0.0,
+        "area_km2": 2.2,
+        "radius_km": 1.2
+      },
+      {
+        "x": 1259,
+        "y": 399,
+        "q_m3s": 331.3,
+        "basin_km2": 55399,
+        "relief_km": 2.848,
+        "t_c": 17.0,
+        "qs_mt": 14.132,
+        "exposure": 0.0,
+        "area_km2": 46.6,
+        "radius_km": 5.4
+      },
+      {
+        "x": 1121,
+        "y": 447,
+        "q_m3s": 33.3,
+        "basin_km2": 6447,
+        "relief_km": 2.749,
+        "t_c": 15.9,
+        "qs_mt": 2.134,
+        "exposure": 0.0,
+        "area_km2": 4.1,
+        "radius_km": 1.6
+      },
+      {
+        "x": 1483,
+        "y": 488,
+        "q_m3s": 130.0,
+        "basin_km2": 37704,
+        "relief_km": 2.352,
+        "t_c": 17.6,
+        "qs_mt": 7.477,
+        "exposure": 0.0,
+        "area_km2": 17.4,
+        "radius_km": 3.3
+      },
+      {
+        "x": 1588,
+        "y": 500,
+        "q_m3s": 60.4,
+        "basin_km2": 8631,
+        "relief_km": 3.048,
+        "t_c": 17.2,
+        "qs_mt": 3.559,
+        "exposure": 0.125,
+        "area_km2": 7.7,
+        "radius_km": 2.2
+      },
+      {
+        "x": 1618,
+        "y": 494,
+        "q_m3s": 25.8,
+        "basin_km2": 4243,
+        "relief_km": 0.485,
+        "t_c": 18.0,
+        "qs_mt": 0.321,
+        "exposure": 0.156,
+        "area_km2": 3.1,
+        "radius_km": 1.4
+      },
+      {
+        "x": 1096,
+        "y": 459,
+        "q_m3s": 251.7,
+        "basin_km2": 26939,
+        "relief_km": 1.577,
+        "t_c": 16.5,
+        "qs_mt": 4.878,
+        "exposure": 0.0,
+        "area_km2": 34.8,
+        "radius_km": 4.7
+      },
+      {
+        "x": 1291,
+        "y": 553,
+        "q_m3s": 38.0,
+        "basin_km2": 11814,
+        "relief_km": 1.511,
+        "t_c": 17.7,
+        "qs_mt": 1.847,
+        "exposure": 0.0,
+        "area_km2": 4.7,
+        "radius_km": 1.7
+      },
+      {
+        "x": 1490,
+        "y": 488,
+        "q_m3s": 87.7,
+        "basin_km2": 14604,
+        "relief_km": 3.217,
+        "t_c": 13.8,
+        "qs_mt": 4.414,
+        "exposure": 0.0,
+        "area_km2": 11.4,
+        "radius_km": 2.7
+      },
+      {
+        "x": 1487,
+        "y": 521,
+        "q_m3s": 31.9,
+        "basin_km2": 5408,
+        "relief_km": 1.225,
+        "t_c": 18.2,
+        "qs_mt": 0.985,
+        "exposure": 0.0,
+        "area_km2": 3.9,
+        "radius_km": 1.6
+      },
+      {
+        "x": 1440,
+        "y": 566,
+        "q_m3s": 29.3,
+        "basin_km2": 5286,
+        "relief_km": 1.269,
+        "t_c": 17.3,
+        "qs_mt": 0.937,
+        "exposure": 0.0,
+        "area_km2": 3.6,
+        "radius_km": 1.5
+      },
+      {
+        "x": 1333,
+        "y": 607,
+        "q_m3s": 21.3,
+        "basin_km2": 6633,
+        "relief_km": 1.068,
+        "t_c": 18.2,
+        "qs_mt": 0.842,
+        "exposure": 0.0,
+        "area_km2": 2.6,
+        "radius_km": 1.3
+      },
+      {
+        "x": 1167,
+        "y": 523,
+        "q_m3s": 187.6,
+        "basin_km2": 25765,
+        "relief_km": 2.137,
+        "t_c": 16.2,
+        "qs_mt": 5.799,
+        "exposure": 0.0,
+        "area_km2": 25.6,
+        "radius_km": 4.0
+      },
+      {
+        "x": 738,
+        "y": 719,
+        "q_m3s": 1777.8,
+        "basin_km2": 128900,
+        "relief_km": 3.457,
+        "t_c": 13.7,
+        "qs_mt": 35.591,
+        "exposure": 0.312,
+        "area_km2": 274.3,
+        "radius_km": 13.2
+      },
+      {
+        "x": 1025,
+        "y": 668,
+        "q_m3s": 141.9,
+        "basin_km2": 31866,
+        "relief_km": 3.022,
+        "t_c": 16.2,
+        "qs_mt": 8.365,
+        "exposure": 0.0,
+        "area_km2": 19.0,
+        "radius_km": 3.5
+      },
+      {
+        "x": 1018,
+        "y": 662,
+        "q_m3s": 239.2,
+        "basin_km2": 33590,
+        "relief_km": 1.512,
+        "t_c": 16.1,
+        "qs_mt": 5.002,
+        "exposure": 0.031,
+        "area_km2": 33.0,
+        "radius_km": 4.6
+      },
+      {
+        "x": 487,
+        "y": 718,
+        "q_m3s": 494.1,
+        "basin_km2": 37033,
+        "relief_km": 3.029,
+        "t_c": 14.7,
+        "qs_mt": 12.026,
+        "exposure": 0.219,
+        "area_km2": 71.0,
+        "radius_km": 6.7
+      },
+      {
+        "x": 416,
+        "y": 703,
+        "q_m3s": 248.4,
+        "basin_km2": 16260,
+        "relief_km": 1.519,
+        "t_c": 14.9,
+        "qs_mt": 3.268,
+        "exposure": 0.281,
+        "area_km2": 34.4,
+        "radius_km": 4.7
+      },
+      {
+        "x": 858,
+        "y": 692,
+        "q_m3s": 741.5,
+        "basin_km2": 55958,
+        "relief_km": 3.257,
+        "t_c": 13.8,
+        "qs_mt": 16.923,
+        "exposure": 0.062,
+        "area_km2": 109.0,
+        "radius_km": 8.3
+      },
+      {
+        "x": 1258,
+        "y": 583,
+        "q_m3s": 57.8,
+        "basin_km2": 7101,
+        "relief_km": 2.24,
+        "t_c": 16.6,
+        "qs_mt": 2.265,
+        "exposure": 0.0,
+        "area_km2": 7.4,
+        "radius_km": 2.2
+      },
+      {
+        "x": 1078,
+        "y": 747,
+        "q_m3s": 88.5,
+        "basin_km2": 17926,
+        "relief_km": 2.47,
+        "t_c": 16.7,
+        "qs_mt": 4.563,
+        "exposure": 0.031,
+        "area_km2": 11.6,
+        "radius_km": 2.7
+      },
+      {
+        "x": 1551,
+        "y": 605,
+        "q_m3s": 15.0,
+        "basin_km2": 9000,
+        "relief_km": 2.656,
+        "t_c": 17.9,
+        "qs_mt": 2.146,
+        "exposure": 0.0,
+        "area_km2": 1.8,
+        "radius_km": 1.1
+      },
+      {
+        "x": 557,
+        "y": 699,
+        "q_m3s": 191.0,
+        "basin_km2": 16355,
+        "relief_km": 2.558,
+        "t_c": 15.1,
+        "qs_mt": 5.171,
+        "exposure": 0.344,
+        "area_km2": 26.0,
+        "radius_km": 4.1
+      },
+      {
+        "x": 306,
+        "y": 667,
+        "q_m3s": 24.3,
+        "basin_km2": 1348,
+        "relief_km": 1.215,
+        "t_c": 14.5,
+        "qs_mt": 0.357,
+        "exposure": 0.344,
+        "area_km2": 3.0,
+        "radius_km": 1.4
+      },
+      {
+        "x": 944,
+        "y": 675,
+        "q_m3s": 590.0,
+        "basin_km2": 57763,
+        "relief_km": 3.078,
+        "t_c": 15.6,
+        "qs_mt": 17.181,
+        "exposure": 0.0,
+        "area_km2": 85.6,
+        "radius_km": 7.4
+      },
+      {
+        "x": 375,
+        "y": 666,
+        "q_m3s": 25.6,
+        "basin_km2": 1395,
+        "relief_km": 0.892,
+        "t_c": 14.7,
+        "qs_mt": 0.274,
+        "exposure": 0.156,
+        "area_km2": 3.1,
+        "radius_km": 1.4
+      },
+      {
+        "x": 313,
+        "y": 671,
+        "q_m3s": 19.0,
+        "basin_km2": 965,
+        "relief_km": 0.534,
+        "t_c": 15.0,
+        "qs_mt": 0.127,
+        "exposure": 0.312,
+        "area_km2": 2.3,
+        "radius_km": 1.2
+      },
+      {
+        "x": 587,
+        "y": 711,
+        "q_m3s": 100.4,
+        "basin_km2": 7934,
+        "relief_km": 2.619,
+        "t_c": 15.3,
+        "qs_mt": 3.056,
+        "exposure": 0.375,
+        "area_km2": 13.2,
+        "radius_km": 2.9
+      },
+      {
+        "x": 1289,
+        "y": 648,
+        "q_m3s": 137.1,
+        "basin_km2": 15173,
+        "relief_km": 2.713,
+        "t_c": 16.2,
+        "qs_mt": 5.127,
+        "exposure": 0.0,
+        "area_km2": 18.3,
+        "radius_km": 3.4
+      },
+      {
+        "x": 1651,
+        "y": 672,
+        "q_m3s": 21.6,
+        "basin_km2": 3112,
+        "relief_km": 1.8,
+        "t_c": 17.9,
+        "qs_mt": 0.959,
+        "exposure": 0.094,
+        "area_km2": 2.6,
+        "radius_km": 1.3
+      },
+      {
+        "x": 527,
+        "y": 708,
+        "q_m3s": 79.0,
+        "basin_km2": 7090,
+        "relief_km": 0.155,
+        "t_c": 16.1,
+        "qs_mt": 0.168,
+        "exposure": 0.344,
+        "area_km2": 10.3,
+        "radius_km": 2.6
+      },
+      {
+        "x": 394,
+        "y": 690,
+        "q_m3s": 30.4,
+        "basin_km2": 1720,
+        "relief_km": 0.766,
+        "t_c": 15.2,
+        "qs_mt": 0.287,
+        "exposure": 0.219,
+        "area_km2": 3.7,
+        "radius_km": 1.5
+      },
+      {
+        "x": 639,
+        "y": 720,
+        "q_m3s": 69.6,
+        "basin_km2": 5042,
+        "relief_km": 2.642,
+        "t_c": 14.8,
+        "qs_mt": 2.124,
+        "exposure": 0.344,
+        "area_km2": 9.0,
+        "radius_km": 2.4
+      },
+      {
+        "x": 1528,
+        "y": 698,
+        "q_m3s": 11.8,
+        "basin_km2": 8577,
+        "relief_km": 2.576,
+        "t_c": 17.7,
+        "qs_mt": 1.865,
+        "exposure": 0.0,
+        "area_km2": 1.4,
+        "radius_km": 0.9
+      },
+      {
+        "x": 1133,
+        "y": 824,
+        "q_m3s": 229.0,
+        "basin_km2": 49233,
+        "relief_km": 2.711,
+        "t_c": 16.6,
+        "qs_mt": 11.047,
+        "exposure": 0.0,
+        "area_km2": 31.5,
+        "radius_km": 4.5
+      },
+      {
+        "x": 1305,
+        "y": 763,
+        "q_m3s": 91.2,
+        "basin_km2": 12339,
+        "relief_km": 2.81,
+        "t_c": 16.3,
+        "qs_mt": 4.224,
+        "exposure": 0.0,
+        "area_km2": 11.9,
+        "radius_km": 2.8
+      },
+      {
+        "x": 1617,
+        "y": 808,
+        "q_m3s": 26.3,
+        "basin_km2": 10893,
+        "relief_km": 2.03,
+        "t_c": 19.3,
+        "qs_mt": 2.311,
+        "exposure": 0.156,
+        "area_km2": 3.2,
+        "radius_km": 1.4
+      },
+      {
+        "x": 1609,
+        "y": 826,
+        "q_m3s": 21.3,
+        "basin_km2": 15891,
+        "relief_km": 3.302,
+        "t_c": 18.1,
+        "qs_mt": 3.984,
+        "exposure": 0.094,
+        "area_km2": 2.6,
+        "radius_km": 1.3
+      },
+      {
+        "x": 1394,
+        "y": 825,
+        "q_m3s": 28.9,
+        "basin_km2": 28399,
+        "relief_km": 2.073,
+        "t_c": 19.6,
+        "qs_mt": 3.994,
+        "exposure": 0.0,
+        "area_km2": 3.5,
+        "radius_km": 1.5
+      },
+      {
+        "x": 933,
+        "y": 845,
+        "q_m3s": 15.2,
+        "basin_km2": 999,
+        "relief_km": 1.468,
+        "t_c": 16.2,
+        "qs_mt": 0.358,
+        "exposure": 0.125,
+        "area_km2": 1.8,
+        "radius_km": 1.1
+      },
+      {
+        "x": 1158,
+        "y": 875,
+        "q_m3s": 29.6,
+        "basin_km2": 9474,
+        "relief_km": 2.622,
+        "t_c": 18.0,
+        "qs_mt": 2.703,
+        "exposure": 0.0,
+        "area_km2": 3.6,
+        "radius_km": 1.5
+      },
+      {
+        "x": 1599,
+        "y": 925,
+        "q_m3s": 12.8,
+        "basin_km2": 4893,
+        "relief_km": 3.087,
+        "t_c": 17.6,
+        "qs_mt": 1.722,
+        "exposure": 0.0,
+        "area_km2": 1.5,
+        "radius_km": 1.0
+      }
+    ]
+  },
+  "note": "Derived from the exported climate packet; no additional climate simulation. Population values are scenarios."
+}
