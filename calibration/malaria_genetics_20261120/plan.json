@@ -23,5 +23,10 @@
   "G1": "chosen variant blind Spearman vs HbS >= M0 + 0.05",
   "G2": "chosen variant blind Spearman vs G6PD >= M0 - 0.02",
   "adopt": "G1 and G2: the map's malaria field uses the chosen gate (feeds health, livability, population; a rebuild is planned with the owner first). Otherwise M0 stays; V is reported either way. The population penalty (0.35) is NOT tested here."
+ },
+ "amendment_1": {
+  "date": "2026-11-20",
+  "when": "after the dev run, before the blind run; scores unchanged",
+  "change": "The undeclared code control compared M0 with the Earth run's stored 'malaria', which is the older MARA index (land_people.malaria), not the map's Mordecai-based field; it showed max diff 0.76. The control now compares M0 with harvest.models.malaria_fields on the same inputs: max diff 3e-16. Note: the Earth population runs (polity.earth.earth_people) still use the MARA index while the map uses Mordecai; reported, not changed."
  }
 }
