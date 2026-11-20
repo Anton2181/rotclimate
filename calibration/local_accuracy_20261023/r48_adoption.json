@@ -1,0 +1,89 @@
+{
+ "adopted": "r48",
+ "adopted_utc": "2026-11-20T20:54:06.211957+00:00",
+ "reference": "r47",
+ "params": "calibration/local_accuracy_20261023/r48_params.json",
+ "params_sha256": "f7a57c8d665fc07799ed5548156125d01100be3b867a4d15c26c61f7ae47ec8f",
+ "validation": "output/monsoon_onset_20261120/refit/j22_circulation_lag_days_43.37",
+ "plans": [
+  "calibration/monsoon_onset_20261120/plan.json",
+  "calibration/monsoon_onset_20261120/refit.json",
+  "calibration/sealed_20261120m/declaration.json"
+ ],
+ "criteria": "Unchanged policy_v3 against r47: dev49 S<=.995, T/P<=+1%; fine28 S<=1.01; unseen sealed set m S<=1.0 (run once, paired).",
+ "scores": {
+  "dev": {
+   "stage": "dev",
+   "S49": {
+    "S": 0.9921254270226203,
+    "T": 0.0011660936864699156,
+    "P": -0.016915239641229207,
+    "n": 49
+   },
+   "S31": {
+    "S": 1.0052558539452803,
+    "T": 0.004006433030043111,
+    "P": 0.0065052748605176625,
+    "n": 31
+   },
+   "groups_reported": {
+    "training": 1.0003854738944116,
+    "holdout": 1.0068392975914193,
+    "midlatitude": 1.0050647759154885,
+    "dev12": 1.0080899890333797,
+    "retired_a": 0.9728399624869826,
+    "retired_b": 0.9558911537906116,
+    "retired_c": 0.9903350966851733
+   },
+   "passes": true
+  },
+  "fine": {
+   "stage": "fine",
+   "S28": {
+    "S": 1.001281023217702,
+    "T": 0.0006222005663425456,
+    "P": 0.001939845869061596,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed_m": {
+   "stage": "sealed_m",
+   "S": {
+    "S": 0.9746515761622927,
+    "T": -0.005182489874680618,
+    "P": -0.045514357800734095,
+    "n": 6
+   },
+   "passes": true
+  }
+ },
+ "changes": {
+  "convective_rain": [
+   0.5323438426043403,
+   0.6289692798922624
+  ],
+  "circulation_lag_days": [
+   45.248631949284665,
+   43.373631949284665
+  ],
+  "instability": [
+   1.871082011806085,
+   2.1062719033921593
+  ],
+  "itcz_shift": [
+   10.625,
+   12.375
+  ],
+  "onset_suppression": [
+   null,
+   1.0
+  ],
+  "onset_gap_deg": [
+   null,
+   2.625
+  ]
+ },
+ "outcome": "adopted",
+ "atlas_served": "r44 (map rebuild is the owner decision)"
+}
