@@ -1,0 +1,31 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any model score; owner (20 Nov): 'Yes' to item 1 of the fixable-parts list (herders / pastoral capacity)",
+ "question": "Does the model's split between herding and farming (grazing capacity vs cleared crop capacity) match where societies actually relied on herding, and is the grazing level right?",
+ "target": {
+  "data": "Ethnographic Atlas via D-PLACE (dplace-dataset-ea, CLDF, CC BY), downloaded 2026-11-20 to data/cache/dplace_ea; not redistributed",
+  "variables": "EA004 dependence on animal husbandry, EA005 dependence on agriculture (10-point bins, bin midpoints 2.5 ... 93 %)",
+  "observed_share": "EA004 / (EA004 + EA005), bin midpoints",
+  "dominant": "herding-dominant = EA004 bin > EA005 bin",
+  "domain": "societies with both codes inside the Earth run (0-56 N, 12 W - 125 E) on a land cell: 546 at declaration (63 herding-dominant)",
+  "caveat": "ethnographic present (median focal year 1920), not AD 200; the environment-driven herding/farming split is the target, not a dated AD 200 occupation"
+ },
+ "model": {
+  "fields": "the Earth run (output/land_people/earth/earth.npz, rebuilt 20 Nov; regional totals reproduce within 1.5 %) through harvest.models.settlement_fields exactly as polity.earth.earth_people",
+  "share": "model herding share = k x pastoral_capacity / (crop_capacity x clearance + k x pastoral_capacity), mean over the 3 x 3 cells (15 arc-min) around the society",
+  "M0": "k = 1 (current)",
+  "M1": "k fitted on dev from {0.1, 0.15, 0.2, 0.3, 0.5, 0.7, 1, 1.5, 2, 3, 5, 7, 10} by balanced accuracy of herding-dominant (model share > 0.5) vs observed; ties -> k closest to 1"
+ },
+ "split": "10-degree tiles in a checkerboard: dev = (floor(lat/10) + floor(lon/10)) even (268 societies), blind = odd (278)",
+ "scores": {
+  "BA": "balanced accuracy of herding-dominant",
+  "rank": "Spearman correlation of model share vs observed share (same for any k: k shifts the level, not the ranks)",
+  "reported_only": "mean model vs observed share by D-PLACE region; level of grazing capacity implied by k"
+ },
+ "blind_gates": {
+  "G1": "M1 blind BA >= M0 blind BA + 0.05",
+  "G2": "blind Spearman >= 0.30 (the pattern must carry signal before any level change is adopted)",
+  "adopt": "G1 and G2: pastoral capacity on the map is scaled by k (feeds food capacity, population and the pasture layers; a rebuild is planned with the owner first). G2 alone: current level kept, pattern reported as supported. G2 fails: grazing pattern flagged as unsupported, next step is its biome forage table."
+ }
+}
