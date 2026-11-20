@@ -1,3 +1,9 @@
+# Runoff test — 20 Nov 2026: current model VALIDATED, no change (reports/RUNOFF_GRUN_20261120.md)
+* GRUN 1970-2000 vs polity/seasons.py runoff: blind seasonal shape 0.80 (V passes), flood-month F1 0.68; best alternative
+  (Droogers-Allen PET) +0.007 -> not adopted. Runoff amount ~0.4 of observed (map uses relative flows only).
+* NEXT (owner decision): the bundled rebuild — malaria thermal-months rule + forest-in-travel C2 + herding stats [+ r46?],
+  with HYDE/Han population re-checks before publishing. Remaining list items: travel times vs journeys (low odds), crop yields.
+
 # Malaria test — 20 Nov 2026: rule ADOPTED on Earth, map rebuild pending owner (reports/MALARIA_GENETICS_20261120.md)
 * Targets: MAP sickle-cell (HbS, Piel 2013) and G6PDd (Howes 2012) allele frequencies, 1-degree blocks, 10-degree checkerboard.
 * Current field (Mordecai thermal x rain gate 0-80 mm, annual mean): blind HbS 0.11 (V fails). Adopted rule: share of months
