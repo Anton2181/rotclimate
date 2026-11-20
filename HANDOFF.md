@@ -1,3 +1,11 @@
+# Malaria test — 20 Nov 2026: rule ADOPTED on Earth, map rebuild pending owner (reports/MALARIA_GENETICS_20261120.md)
+* Targets: MAP sickle-cell (HbS, Piel 2013) and G6PDd (Howes 2012) allele frequencies, 1-degree blocks, 10-degree checkerboard.
+* Current field (Mordecai thermal x rain gate 0-80 mm, annual mean): blind HbS 0.11 (V fails). Adopted rule: share of months
+  with thermal suitability >= 0.25, no rain gate: HbS 0.55, G6PD 0.55 (G1, G2 pass); better in Africa and outside.
+* NOT yet on the map: malaria feeds health -> population -> towns -> everything. Proposed bundled rebuild (owner decision):
+  malaria rule + r46 climate? + forest-in-travel C2 + herding stats, with HYDE/Han population re-checks before publishing.
+* Note: polity.earth.earth_people uses the older MARA index (z['malaria']); the map uses Mordecai. Data: data/cache/map_genetics.
+
 # Herders test — 20 Nov 2026: NOT adopted (reports/HERDERS_20261120.md)
 * Ethnographic Atlas (D-PLACE) 546 societies in the Earth window; blind Spearman 0.12, grazing x5 no better (G1, G2 fail).
   Dev diagnostic: shorter growing season 0.52 / lower NPP 0.59 rank herding far better; humid-hot (tsetse) lowers herding.
