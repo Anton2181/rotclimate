@@ -1,3 +1,15 @@
+# Two hosted copies, one branch — 20 November 2026 (Claude session)
+* Owner: one branch only, "use the most up to date one" -> claude/friendly-turing-43ygeu (squashed snapshot + GPT-session
+  work). claude/wonderful-mayer-uqbwtb is FROZEN (its content is inside this branch's root snapshot; history kept there only).
+* Owner wants a Claude copy and a GPT copy of the atlas. Claude copy (full atlas incl. provisional r5 viewer at provisional/):
+  https://claude.ai/artifact/XypoZqva951RWZm4ni6FiP v8 (packaged with scripts/package_atlas_artifact.py; 295 files, 244 MB of
+  256 MB cap; only the 25 changed files uploaded; browser-checked 83 layers x 2 climates + provisional page). GPT copy:
+  https://rotclimate-settlement-atlas-r5.stripedapple4.chatgpt.site (hosts the provisional comparison viewer only).
+  atlases/artifact_links.json lists both. Republish the Claude copy after any atlas change (diff packs, upload changed files).
+* Container note: .venv is missing after the rebuild; packaging needs only system python3.
+* Science status: see the owner question "is this worth pursuing?" (answered in chat 20 Nov): recommendation = stop open-ended
+  evidence hunts (plough/reaping/warehouse/handling closed negative); at most ONE bounded, pre-declared test with a kill rule.
+
 # Buffered geographic transfer completed; small signal, unreliable totals
 
 READ reports/GEOGRAPHIC_EXTENT_TRANSFER_20261117.md and qualification.
