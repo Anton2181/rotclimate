@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any e87 code or evaluation; sealed set n declared first (calibration/sealed_20261120n)",
+ "problem": "r48 vs r46 (dev, seen): the Americas lose — texas_plains 1.16, south_brazil 1.12, mexico 1.11, southeast_us 1.05, us_midwest 1.04. Mexico July-September rain r48 8-11 mm (r46 15-24, obs 91-95); Texas summer 4-7 mm (obs 64-86). The North American monsoon is anchored by the Mexican plateau and the Rockies (~1,500-2,500 m), below e85's fixed 2,500 m plateau threshold.",
+ "physics": "e87 itcz_plateau_m: the plateau height for the e85 anchor becomes its own parameter (default 0 = use storm_plateau_m, i.e. r48 unchanged); Earth regions read earth.plateau_profile(itcz_plateau_m), the map its own terrain at that height.",
+ "risk": "lower thresholds also count the Iranian and Anatolian plateaus (1-2 km) poleward of Arabia: najd_arabia, iran_plateau and anatolia (dev) and sealed set n guard against false summer rain returning",
+ "reference": "r48 itself (output/plateau_height_20261120/ref -> the r48 finalist output/monsoon_onset_20261120/refit/j22_circulation_lag_days_43.37)",
+ "stage_A_screen": {
+  "what": "r48 + itcz_plateau_m in {2000, 1500} on texas_plains, iran_plateau, anatolia, north_india (dev12 specs), mexico, southeast_us, south_brazil (built-in), najd_arabia, sahel_niger, bengal (retired_b)",
+  "start_rule": "lowest mean (T/r48 + P/r48)/2 over those 10 regions; if neither is below 1.0, stop and report"
+ },
+ "stage_B_refit": {
+  "tool": "scripts/joint_refit.py, objective S49 against r48",
+  "knobs": {"itcz_plateau_m": ["add", 250.0], "itcz_plateau_gain": ["add", 2.0], "itcz_shift": ["add", 1.0], "itcz_plateau_area_km2": ["mul", 1.5], "onset_gap_deg": ["add", 1.0], "convective_rain": ["mul", 1.08]},
+  "bounds": {"itcz_plateau_m": [1000.0, 3000.0], "itcz_plateau_gain": [0.0, 25.0], "itcz_shift": [4.0, 20.0], "onset_gap_deg": [0.0, 12.0]},
+  "max_evaluations": 40
+ },
+ "gates": "policy_v3 against r48: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run of r48 and the candidate on sealed set n with S <= 1.0. All pass -> r49 on Earth; map zone agreement reported; atlas rebuild is the owner's decision."
+}
