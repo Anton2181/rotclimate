@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any evaluation; sealed set o declared first (calibration/sealed_20261120o)",
+ "problem": "r49 (dev, seen): monsoon peaks too weak — Mexico July-August 20-28 mm (obs 92-95), Sahel 76/74 (obs 125/156), Texas 44/42 (obs 64/68). Belt position was the subject of r47-r49; the remaining error is the amount of water delivered at the peak.",
+ "stage_A_sensitivity": {
+  "what": "r49 with one change each: land_recycling x1.3; soil_bucket_mm x1.6; flux_scale_km 1000; convective_rh -0.05; edge_carry +0.1; monsoon_westerly x1.3. Regions: mexico (built-in), texas_plains (dev12), sahel_niger, najd_arabia, bengal (retired_b), iberia, california (built-in).",
+  "use": "reported; the knobs whose change lowers the mean (T/r49 + P/r49)/2 over mexico, texas_plains, sahel_niger without raising any guard (najd, bengal, iberia, california) above 1.02 form the stage-B refit knob set (plus itcz_shift and convective_rain); if none qualifies, stop and report (new physics needed)."
+ },
+ "stage_B_refit": "scripts/joint_refit.py from r49, objective S49 against r49, steps: x1.15 for multiplicative knobs, flux_scale_km x1.4, convective_rh +-0.03, edge_carry +-0.05, itcz_shift +-1, convective_rain x1.08; max 40 evaluations",
+ "gates": "policy_v3 against r49: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run of r49 and the candidate on sealed set o with S <= 1.0. All pass -> r50 on Earth."
+}
