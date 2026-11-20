@@ -1,0 +1,89 @@
+{
+ "adopted": "r49",
+ "adopted_utc": "2026-11-20T22:25:16.972555+00:00",
+ "reference": "r48",
+ "params": "calibration/local_accuracy_20261023/r49_params.json",
+ "params_sha256": "b77c00a7013dc72945cd32b0ff0fa84bed49376d0dcf2d371bbd45455e72ac55",
+ "validation": "output/plateau_height_20261120/refit/j29_convective_rain_0.5497",
+ "plans": [
+  "calibration/plateau_height_20261120/plan.json",
+  "calibration/plateau_height_20261120/refit.json",
+  "calibration/sealed_20261120n/declaration.json"
+ ],
+ "criteria": "Unchanged policy_v3 against r48: dev49 S<=.995, T/P<=+1%; fine28 S<=1.01; unseen sealed set n S<=1.0 (run once, paired).",
+ "scores": {
+  "dev": {
+   "stage": "dev",
+   "S49": {
+    "S": 0.9874884942943463,
+    "T": 0.006356382998027321,
+    "P": -0.03137939440933479,
+    "n": 49
+   },
+   "S31": {
+    "S": 0.9842594381785986,
+    "T": 0.009465352921941284,
+    "P": -0.04094647656474404,
+    "n": 31
+   },
+   "groups_reported": {
+    "training": 0.9717812486756825,
+    "holdout": 0.9651294388218288,
+    "midlatitude": 0.9965735685677013,
+    "dev12": 0.9936175381263831,
+    "retired_a": 1.000113604587179,
+    "retired_b": 0.9731351466560791,
+    "retired_c": 1.0073882573900563
+   },
+   "passes": true
+  },
+  "fine": {
+   "stage": "fine",
+   "S28": {
+    "S": 1.003808608477154,
+    "T": 0.006888823591565174,
+    "P": 0.0007283933627428851,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed_n": {
+   "stage": "sealed_n",
+   "S": {
+    "S": 0.9779165501049129,
+    "T": -0.011590355592253965,
+    "P": -0.03257654419792033,
+    "n": 6
+   },
+   "passes": true
+  }
+ },
+ "changes": {
+  "convective_rain": [
+   0.6289692798922624,
+   0.5497153473182032
+  ],
+  "itcz_shift": [
+   12.375,
+   11.625
+  ],
+  "itcz_plateau_gain": [
+   15.5,
+   19.0
+  ],
+  "onset_gap_deg": [
+   2.625,
+   4.375
+  ],
+  "itcz_plateau_m": [
+   null,
+   1750.0
+  ],
+  "itcz_plateau_area_km2": [
+   null,
+   737787.9464668812
+  ]
+ },
+ "outcome": "adopted",
+ "atlas_served": "r44 (map rebuild is the owner decision)"
+}

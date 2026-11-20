@@ -1,0 +1,18 @@
+n_20s_28e: verified, rainfall loss 1.5302
+n_17n_24e: verified, rainfall loss 1.7368
+n_23n_11e: verified, rainfall loss 1.5535
+n_22s_134e: verified, rainfall loss 1.0382
+n_59n_156w: verified, rainfall loss 0.2161
+n_23n_10w: verified, rainfall loss 0.2246
+region           T mMAE  T aMAE  T bias  rngErr  <=2C anom r |  P mMAE logRMSE  <=25%   rho   loss
+n_17n_24e          2.50    0.86   +0.86   -1.95  100%   0.88 |    29.5   1.479     0%  0.82  1.737
+n_20s_28e          1.01    0.42   +0.08   -1.92  100%   0.87 |   102.3   1.157     0%  0.54  1.530
+n_22s_134e         2.42    0.86   +0.86   -1.62  100%   0.92 |    48.7   0.738     0%  0.16  1.038
+Traceback (most recent call last):
+  File "/home/user/rotclimate/scripts/benchmark_local.py", line 253, in <module>
+    main()
+    ~~~~^^
+  File "/home/user/rotclimate/scripts/benchmark_local.py", line 242, in main
+    f" {p['annual_within_25pct']:6.0%} {p['annual_spearman']:5.2f} {p['loss']:6.3f}")
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: unsupported format string passed to NoneType.__format__
