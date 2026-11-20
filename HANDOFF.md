@@ -1,3 +1,14 @@
+# CLIMATE — e85 plateau-anchored ITCZ (20 Nov 2026, running)
+* Restored: .venv, WorldClim 5' incl. vapr; r46 Alps rerun reproduces the recorded finalist exactly (only runtime differs).
+* Diagnosis (r46, dev): Sahel rain peaks May-Jun (obs Jul-Aug); JJAS 243 mm at 15-20 N in Najd (obs 26); false summer rain
+  20-25 N Algeria-Sahara; land ITCZ reaches 6.7 + 15.8 = 22.5 N everywhere (right for India via Tibet, wrong for Africa).
+* e85 (rotclimate/config.py itcz_plateau_*, model.py; default off): summer excursion += gain x plateau anchor (plateau directly
+  poleward, Gaussian 10 deg in longitude). Plan calibration/itcz_plateau_20261120/plan.json (reference = r46 itself).
+* Screen (7 dev regions vs r46): s8_g12 mean 0.924 (Algeria T0.56 P0.66, Najd T0.78 P0.93, India/Tibet/Ethiopia ~1.0);
+  Sahel timing NOT fixed (model rain fires before the belt: needs a dry-air-aloft / pre-onset suppression mechanism next).
+* Refit running: scripts/joint_refit.py calibration/itcz_plateau_20261120/refit.json -> output/itcz_plateau_20261120/refit
+  (log refit.log; 40 evaluations of dev49 vs r46). Then fine28 (gate_v3 fine) and sealed l once if dev passes.
+
 # Rebuild without r46 — 20 Nov 2026 (owner: skip r46, rebuild, then back to climate)
 * Malaria: validated field published as its own layer land_malaria_v2 ("Malaria (Earth-validated)", raw + corrected); Claude copy
   v11. Population NOT switched: all add-ons are bound to the harvest fingerprint (switch = full cascade; effect 1.5 % of people,
