@@ -1,3 +1,11 @@
+# Herders test — 20 Nov 2026: NOT adopted (reports/HERDERS_20261120.md)
+* Ethnographic Atlas (D-PLACE) 546 societies in the Earth window; blind Spearman 0.12, grazing x5 no better (G1, G2 fail).
+  Dev diagnostic: shorter growing season 0.52 / lower NPP 0.59 rank herding far better; humid-hot (tsetse) lowers herding.
+* NEXT (proposed, owner to approve): re-specify herding share on crop marginality + humid-tropics penalty, fit on the 546
+  (now seen), blind on Old World societies south of the equator (extend the Earth run south with --window).
+* Container rebuilt 20 Nov: .venv recreated from requirements.txt (+pandas); WorldClim 5', Natural Earth rivers (geojson
+  converted from the shapefile) and D-PLACE EA re-downloaded; Earth run rebuilt (regional totals within 1.5 % of tracked).
+
 # Fixable / improvable parts — proposed 20 Nov 2026 (owner: drop the population-history line, keep improving the model)
 Ranked by feasibility x visible value; each needs a declared Earth test before adoption.
 1. Herders / pastoral capacity (uncalibrated): test pastoral capacity and herding share against the Ethnographic Atlas
