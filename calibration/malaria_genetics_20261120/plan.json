@@ -1,0 +1,27 @@
+{
+ "version": 1,
+ "date": "2026-11-20",
+ "status": "declared before any model score; owner (20 Nov): 'Continue' (item 2 of the fixable-parts list, malaria)",
+ "question": "Does the model's malaria suitability (Mordecai 2013 thermal response x a monthly rain gate, annual mean) match where malaria pressed on people over millennia, and does a different rain gate match better?",
+ "targets": {
+  "primary": "Sickle haemoglobin (HbS) allele frequency, Piel et al. 2013 (Malaria Atlas Project raster Explorer__2013_Sickle_Haemoglobin_HbS_Allele_Freq_Global_5k), a population-genetic footprint of historical P. falciparum pressure (Piel et al. 2010 Nat Commun)",
+  "secondary": "G6PD deficiency allele frequency, Howes et al. 2012 (Explorer__2012_G6PDd_Allele_Frequency_Global_5k); mapped only within 2010 malaria-endemic countries, so it scores only where defined",
+  "download": "MAP GeoServer WCS GetCoverage, subset 0-56 N, 12 W - 125 E, 2.5 arc-min, 2026-11-20, data/cache/map_genetics; not redistributed",
+  "caveat": "allele frequencies also carry population history (migration, drift) and are interpolated from surveys; they rank long-run pressure, not AD 200 prevalence"
+ },
+ "domain": "Earth run window (0-56 N, 12 W - 125 E); 1-degree blocks with >= 50 % land and >= 50 % valid target cells",
+ "split": "10-degree tiles in a checkerboard: dev = (floor(lat/10) + floor(lon/10)) even, blind = odd",
+ "models": {
+  "M0": "current: mean over months of thermal(T) x max(smoothstep(P, 0, 80 mm), 0.75 x irrigation)",
+  "variants": "rain-gate top P1 in {20, 40, 80, 120, 160, 240} mm/month, plus no gate (thermal only); summary = annual mean (as now) or the share of months >= 0.25 (the map's season threshold); 14 variants including M0",
+  "inputs": "WorldClim 2.1 monthly T and P at 5 arc-min (the Earth run's source), Earth run irrigation field",
+  "choice": "variant with the highest dev Spearman against HbS"
+ },
+ "scores": "Spearman of 1-degree block means, model vs target; also reported within Africa and outside Africa",
+ "blind_gates": {
+  "V": "component validation: M0 blind Spearman vs HbS >= 0.30 -> malaria pattern supported",
+  "G1": "chosen variant blind Spearman vs HbS >= M0 + 0.05",
+  "G2": "chosen variant blind Spearman vs G6PD >= M0 - 0.02",
+  "adopt": "G1 and G2: the map's malaria field uses the chosen gate (feeds health, livability, population; a rebuild is planned with the owner first). Otherwise M0 stays; V is reported either way. The population penalty (0.35) is NOT tested here."
+ }
+}
