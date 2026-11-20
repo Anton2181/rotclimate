@@ -3,6 +3,8 @@
   sealed n 0.978. Sets l, m, n SPENT; draw a new one first (scripts/make_sealed_set.py, band 15-60).
 * Map (ds8) strict zone agreement: r44 32.4, r47 34.9, r48 35.1, r49 35.0 -> r49 = atlas rebuild candidate (OWNER decision).
 * Open: Mexican monsoon (Jul-Aug 20-28 mm vs 92-95), Sahel Jul-Aug peak, T +0.6 % in dev.
+* Monsoon-peak sensitivity screen (calibration/monsoon_peak_20261120): NO existing knob qualifies (best Mexico -3 %); new
+  physics needed. Sealed set o (calibration/sealed_20261120o) declared and UNOPENED.
 
 # CLIMATE r48 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R48_20261120.md
 * e86 onset suppression (rotclimate: onset_suppression/onset_gap_deg; default off). vs r47: dev49 0.9921, fine28 1.0013,
