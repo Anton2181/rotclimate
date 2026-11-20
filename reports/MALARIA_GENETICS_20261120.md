@@ -56,3 +56,19 @@ live there.
   the Mordecai field.
 
 Reproduce: `.venv/bin/python -I scripts/malaria_genetics.py dev` and then `blind`. The blind run has been done once.
+
+## On the map (20 Nov 2026): new layer, population not yet switched
+
+- **New layer:** "Malaria (Earth-validated)" (`land_malaria_v2`, raw and corrected) shows the adopted field next to the old one.
+- **Why population was not switched:** every atlas add-on (settlements, reach, administration, coverage, pasture, presence) records
+  the fingerprint of the harvest data it was built from, and the page refuses add-ons whose fingerprint no longer matches. Switching
+  population therefore means rebuilding all of them. The effect would be small:
+  - with the penalty rescaled to keep the mean malaria burden (0.35 → 0.161), totals change by +0.8% (raw) and +0.3% (corrected);
+  - 1.5% of people move.
+- **Ready but switched off:** the rule is ready in `harvest/malaria_v2.py` with `data/malaria_model.json` (`active_in_export: false`).
+  Wire it into `harvest/export.py` at the next full cascade rebuild. Editing the exporter changes the harvest fingerprint by
+  itself, because the exporter is one of its own inputs.
+- **Pre-existing:** some harvest fingerprint inputs (for example `scripts/land_people.py`) changed after the last export, so any
+  future harvest export will invalidate the add-ons regardless. The next harvest export must be a full cascade.
+- **Checks:** with the rule off, the exporter reproduces the published harvest and population bytes exactly. Browser: 85 layers,
+  both climates, no errors.
