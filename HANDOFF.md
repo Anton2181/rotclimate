@@ -1,8 +1,10 @@
 # Herders test — 20 Nov 2026: NOT adopted (reports/HERDERS_20261120.md)
 * Ethnographic Atlas (D-PLACE) 546 societies in the Earth window; blind Spearman 0.12, grazing x5 no better (G1, G2 fail).
   Dev diagnostic: shorter growing season 0.52 / lower NPP 0.59 rank herding far better; humid-hot (tsetse) lowers herding.
-* NEXT (proposed, owner to approve): re-specify herding share on crop marginality + humid-tropics penalty, fit on the 546
-  (now seen), blind on Old World societies south of the equator (extend the Earth run south with --window).
+* [ADOPTED v2] herding share = 0.207 + 0.331 x clip((240 - LGP)/210): dev 0.54, BLIND Africa S of equator (145) Spearman 0.42 vs
+  old -0.06; G1+G2 pass. New atlas layer land_herding ("Herders and farmers", raw+corrected; scripts/herders_layer.py).
+  Grazing allowance/food/population unchanged; per-polity herding stats switch at the next reach rebuild (polity/fields.py).
+  EA pools spent: all 546 north + 145 south. Earth south run: output/land_people/earth_south (window -36,0,8,52).
 * Container rebuilt 20 Nov: .venv recreated from requirements.txt (+pandas); WorldClim 5', Natural Earth rivers (geojson
   converted from the shapefile) and D-PLACE EA re-downloaded; Earth run rebuilt (regional totals within 1.5 % of tracked).
 
