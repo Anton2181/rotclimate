@@ -2101,7 +2101,11 @@ class ClimateModel:
                 slope = 4098.0 * es / (Ts + 237.3) ** 2
                 pet = 1.26 * slope / (slope + 0.066) * np.maximum(0.5 * S_toa - 25.0, 0.0) / 28.4       # mm/day
                 beta = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
-                E_land = np.where(land, np.minimum(p.land_recycling * pet * beta, soil_w / dt_days), 0.0) / DAY
+                recyc = p.land_recycling
+                if p.soil_feedback > 0:
+                    # e90: a wet monsoon land re-evaporates more of its rain (soil moisture - rain feedback)
+                    recyc = p.land_recycling * (1.0 + p.soil_feedback * np.clip((soil_w / p.soil_bucket_mm - 0.5) / 0.5, 0.0, 1.0))
+                E_land = np.where(land, np.minimum(recyc * pet * beta, soil_w / dt_days), 0.0) / DAY
             else:
                 E_land = np.where(land, p.land_recycling * soilP * energy, 0.0) / DAY
             # v6: hot, moist low-level air is convectively unstable, so it rains

@@ -53,5 +53,13 @@
   "when": "after the e88 screen failed, before any e89 code or evaluation",
   "change": "e89 as declared assumed e79 edge_carry is coastal moisture carry; it is the moisture entering at the model domain's edges. The physically matching mechanism already exists: e40 ocean_rh_warm (column humidity over seas warmer than 25 C rises toward 0.80-0.87 of saturation, Stephens 1990), switched off (0) in r49. e89 therefore re-enables e40: screen ocean_rh_warm in {0.04, 0.08, 0.12}; refit knob ocean_rh_warm (add 0.02, bounds 0-0.2) with the declared others. No new code.",
   "e88_result": "screen FAIL: target mean 0.998/0.997/0.996 at slope_convection 0.5/1/2 (Mexico 0.993/0.987/0.980), worst guard najd 1.011/1.023/1.047"
+ },
+ "outcome": {
+  "date": "2026-11-20",
+  "result": "ALL THREE STAGES FAIL at the screen; r49 stays; climate work stops (as declared); sealed set o remains UNOPENED",
+  "e88": "target 0.998/0.997/0.996, Mexico best 0.980, Najd up to 1.047",
+  "e89": "ocean_rh_warm 0.04/0.08/0.12: target 0.999/0.998/0.998, Mexico best 0.991, Najd up to 1.112, Bengal best 0.956",
+  "e90": "soil_feedback 0.25/0.5/1: target 1.010/1.020/1.044 (Sahel up to 1.109), Bengal best 0.928",
+  "reading": "Mexico moves at most 2 % under any of the nine settings or the six knob changes before: the missing North American monsoon water is not a matter of convection triggers, sea humidity or recycling in this model. Likely structural: the 56 km grid cannot resolve the narrow Sierra Madre / Gulf of California corridor that carries the moisture surges, or the Mexico domain's boundary supply. Bengal responds to every moisture change (+), Najd to every one (-)."
  }
 }
