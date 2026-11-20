@@ -6,6 +6,12 @@
   (build_atlas_variant --fit-objective zonefit). r49 (or r47/r48 if better on the full map check) replaces r44 on the atlas
   ONLY IF its zone-fitted strict agreement >= 32.4 %. Otherwise the atlas stays on r44 and the rebuild still carries the
   malaria rule, forest-in-travel and herding stats on r44.
+* RESULT (full physics, existing fitted world, ds8): r47 31.7 %, r48 31.2 %, r49 31.0 % — all below r44's 32.4 % -> the
+  ATLAS STAYS ON r44 (rule + r46 precedent). Amendment to the rule's wording: build_atlas_variant's --fit-objective only
+  labels the score; no zone fit is part of a release (r42-r44 kept the fitted world); a world refit is a separate campaign
+  (r41's W2 found none) and was not started unasked.
+* Rebuild continues on r44: malaria rule (harvest -> population -> every add-on), forest-in-travel C2, herding stats.
+  Working in place (local atlas under git; revert = git checkout atlases/); hosted copy updated only at the end.
 
 # CLIMATE r49 ADOPTED on Earth (20 Nov 2026) — reports/CLIMATE_R49_20261120.md  [current best]
 * e87 itcz_plateau_m fitted 1,750 m (Mexican plateau/Rockies now anchor). vs r48: dev49 0.9875 (S31 0.984), fine28 1.0038,
