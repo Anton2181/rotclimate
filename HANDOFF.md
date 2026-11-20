@@ -1,3 +1,15 @@
+# Rebuild without r46 — 20 Nov 2026 (owner: skip r46, rebuild, then back to climate)
+* Malaria: validated field published as its own layer land_malaria_v2 ("Malaria (Earth-validated)", raw + corrected); Claude copy
+  v11. Population NOT switched: all add-ons are bound to the harvest fingerprint (switch = full cascade; effect 1.5 % of people,
+  totals +0.8/+0.3 % with the burden-preserving penalty 0.161). Rule ready in harvest/malaria_v2.py, data/malaria_model.json
+  (active_in_export false); wire into harvest/export.py at the next full cascade (editing export.py alone changes the fingerprint).
+* PRE-EXISTING: harvest fingerprint inputs changed since the last export (e.g. scripts/land_people.py), so ANY future harvest
+  export orphans the add-ons -> the next harvest export must be a full cascade rebuild (harvest -> all add-ons -> settlements).
+* Deferred to that cascade (tiny effects): forest-in-travel C2 (ROTCLIMATE_FOREST_TRAVEL; <1 % of contested land) and the
+  per-polity herding stats (polity/fields.py -> new herding share).
+* NEXT: climate (owner). Open problems: land rain belt to ~22.5 N in Africa (Sahel rains early, false summer rain Najd/Sahara),
+  equatorial interiors too dry, Bengal, rain shadows; four refits around r46 stalled; sealed set l unopened.
+
 # Runoff test — 20 Nov 2026: current model VALIDATED, no change (reports/RUNOFF_GRUN_20261120.md)
 * GRUN 1970-2000 vs polity/seasons.py runoff: blind seasonal shape 0.80 (V passes), flood-month F1 0.68; best alternative
   (Droogers-Allen PET) +0.007 -> not adopted. Runoff amount ~0.4 of observed (map uses relative flows only).
