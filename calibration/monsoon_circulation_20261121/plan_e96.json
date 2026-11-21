@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "task": "T2 Mexico circulation, second mechanism (after e95 screen FAIL)",
+ "status": "declared before any e96 evaluation (code default off; r50 unchanged); sealed set q unopened",
+ "diagnosis": "scripts/monsoon_trace.py mexico under r50 (output/monsoon_probe_20261121/trace_mexico.json): July u +1.8 m/s (westerly), chi 0.67 (desert-crossed share; e93's chi0 gate 0.675 shuts the heat-lowered threshold), RH 0.49, rain 1.07 mm/day (obs ~3). The plateau anchor (e85, gain 19) pulls the rain belt to ~30 N, so Mexico lies equatorward of it and the e55 cross-equatorial turning gives it India-style monsoon westerlies. On Earth, Mexico's summer low-level flow is the easterly trades from the Caribbean and Gulf.",
+ "physics": "e96 anchor_trades (0-1): between the belt latitude without the plateau anchor (phi_i0) and the anchored belt (phi_i), the e55 monsoon-westerly turning of the trades is reduced by anchor_trades x clip((lat - phi_i0)/(phi_i - phi_i0)); the trades there keep blowing from the east. Where the anchor adds nothing (India's broad-land shift, open ocean) nothing changes.",
+ "stage_A_screen": {
+  "base": "r50; scores against r50's recorded runs (validate94)",
+  "settings": [{"anchor_trades": 0.5}, {"anchor_trades": 1.0}],
+  "targets": ["mexico", "texas_plains"],
+  "guards": ["north_india", "bengal", "deccan", "tibet_plateau", "iran_plateau", "california", "najd_arabia", "great_basin"],
+  "score": "per region 0.5 T-MAE ratio + 0.5 rain-loss ratio vs r50",
+  "pass": "target mean <= 0.98 and worst guard <= 1.02 (scripts/monsoon_e96_screen.py A)"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 against r50, start = best passing setting",
+  "knobs": {"anchor_trades": ["add", 0.15], "convective_rh_chi0": ["add", 0.04], "itcz_plateau_gain": ["mul", 1.15], "convective_rain": ["mul", 1.08], "trade_speed": ["mul", 1.1]},
+  "bounds": {"anchor_trades": [0.0, 1.0], "convective_rh_chi0": [0.4, 0.95]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 against r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q, S<=1.0. Pass -> r51 + full rebuild. Fail at screen -> record, T2 parked, move to T3."
+}
