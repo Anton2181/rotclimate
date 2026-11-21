@@ -7,7 +7,8 @@ cd "$(dirname "$0")/.."
 PY=.venv/bin/python; R=output/settlement_release4_20261116
 step=${1:-all}
 if [ "$step" = all ] || [ "$step" = settlements ]; then
-  $PY -I scripts/exec_with.py scripts/publish_settlement_release3.py "output/settlement_release3_20261113=>$R/release3"
+  $PY -I scripts/exec_with.py scripts/publish_settlement_release3.py "output/settlement_release3_20261113=>$R/release3" \
+    ", DATA / 'settlement_release2.json')}=>)}"  # r49: release-2 manifest retired (superseded)
 fi
 if [ "$step" = all ] || [ "$step" = note ]; then
   $PY - <<'P'
@@ -44,7 +45,8 @@ fi
 if [ "$step" = all ] || [ "$step" = layers ]; then
   # reach and trade layers from the staged atlases (scripts/stage_atlas.py + export_reach_release3.py on the release-4 towns);
   # controls: unmodified exporter on fresh staged copies (atlas_*_control), which reproduced the published layers
-  S=output/chain_staging/release4_confluence
+  # r49 (21 Nov 2026): staging release4_r49; the controls are the release build's own unmodified exports of the live atlas
+  S=output/chain_staging/release4_r49
   $PY -I scripts/exec_with.py scripts/publish_downstream_release3.py "output/settlement_downstream_20261113=>$R/downstream" -- \
-    $S/atlas_raw $S/atlas_corrected output/polity_map/atlas_raw_control.npz output/polity_map/atlas_corrected_control.npz
+    $S/atlas_raw $S/atlas_corrected output/polity_map/earth_fit_r49_stage.npz output/polity_map/earth_fit_r49_stage_corrected.npz
 fi
