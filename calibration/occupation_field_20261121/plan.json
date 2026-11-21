@@ -1,0 +1,27 @@
+{
+ "task": "T8: occupation ratio as a fitted field instead of one median (0.3246) times a renormalised heartland weight exp(-D/800 km)",
+ "declared": "2026-11-21, before any scoring",
+ "owner_rule": "fit on all Earth data; keep cross-validation only (owner 21 Nov: blind sets no longer required)",
+ "response": "y = ln(historical people / model settlement base people) per unit; settlement base = harvest.models.settlement_fields on output/land_people/earth/earth.npz (scripts/harvest_earth_hyde.earth_stages, '+ malaria (settlement base)')",
+ "units": {
+  "han": "Han AD 2 commanderies with >= 90 % of area in the Earth window (Zheng & Wu 2026 ResearchArea polygons, scripts/han_census_check.commanderies; settlement base summed inside each outline)",
+  "west": "the seven non-Han reference regions of scripts/land_people_earth.REGIONS (Egypt, Italy, Gaul, Iberia, Asia Minor, Syria, Mesopotamian alluvium), settlement base recomputed inside the outline; historical people = geometric mean of low and high",
+  "not_used": "HYDE 3.3 (not on disk; it is itself an allocation of country totals by land suitability) and Domesday (AD 1086, a different era of state age); the five Han reference regions duplicate commanderies"
+ },
+ "predictors": {
+  "D": "travel distance to the nearest Earth core (cradles + Rome; travel cost forest x2, relief 1/km, sea as land; scripts/population_cores.travel_distance), settlement-base-weighted mean over the unit",
+  "herd": "pastoral share of food capacity over the unit",
+  "malaria": "settlement-base-weighted malaria index",
+  "arid": "ln(P/PET), settlement-base-weighted"
+ },
+ "models": {
+  "M0": "y = c (today's rule: one level; the heartland weight only redistributes)",
+  "M1": "y = a - D/L  (ratio = A exp(-D/L), level and decay both fitted)",
+  "M2": "M1 + b_herd * herd",
+  "M3": "M2 + b_mal * malaria + b_arid * arid"
+ },
+ "fit": "weighted least squares; each pool (han, west) carries half the weight, units equal within a pool",
+ "cross_validation": "Han in 4 spatial folds (quadrants about the median centroid), west leave-one-out; score = pool-balanced mean |held-out y error| and the held-out pooled people error (sum predicted / sum observed per fold)",
+ "adoption": "the simplest model whose CV score beats M0 by >= 10 % and is within 2 % of the best; no adoption if none beats M0 by 10 %",
+ "application": "fantasy people = settlement base x exp(model) with D from the lore cores (harvest.models.core_term distance), replacing median x renormalised exp(-D/800); low/high scenarios = fitted field x exp(held-out residual quantiles 0.1/0.9); the total then follows from the fit instead of being set by the median"
+}
