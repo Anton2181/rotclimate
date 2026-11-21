@@ -1,0 +1,52 @@
+diff --git a/rotclimate/config.py b/rotclimate/config.py
+index 3a373f103..49f603415 100644
+--- a/rotclimate/config.py
++++ b/rotclimate/config.py
+@@ -313,6 +313,7 @@ class Params:
+     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
+     subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge
+     subtropical_high_seasonality: float = 0.5  # e3: summer strength x (1 + this), winter x (1 - this)
++    anchor_trades: float = 0.0  # e96: 0-1, no monsoon-westerly turning in the band the plateau anchor adds (trades kept)
+     moisture_diffusion: float = 6.0e4  # m^2/s
+     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
+     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)
+diff --git a/rotclimate/joint.py b/rotclimate/joint.py
+index 662011f8c..c905533cc 100644
+--- a/rotclimate/joint.py
++++ b/rotclimate/joint.py
+@@ -47,7 +47,7 @@ slp_local_km slp_scale_km snow_albedo soil_bucket_mm soil_memory_days soil_wet_c
+ sst_offset sst_source wind_source storm_asym storm_reach storm_seasonality storm_track storm_width
+ subcloud_evaporation subgrid_orographic subpolar_current subsidence subsidence_asym
+ subsidence_drying subsidence_summer subsidence_width subtropical_high subtropical_high_scale_km
+-subtropical_high_seasonality subtropical_high_width sverdrup terrain_drag trade_land trade_speed
++subtropical_high_seasonality anchor_trades subtropical_high_width sverdrup terrain_drag trade_land trade_speed
+ tropical_storm_km tropical_storms upslope_free_wind upwelling westerly_speed wet_cooling
+ wind_cap winter_mixing_deep
+ storm_plateau storm_plateau_m storm_plateau_km storm_plateau_offset_deg storm_plateau_area_km2
+diff --git a/rotclimate/model.py b/rotclimate/model.py
+index 0c40d8ee3..f6e6510ba 100644
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -749,6 +749,7 @@ class ClimateModel:
+             phi_i = (p.itcz_mean + (p.itcz_shift_ocean + (p.itcz_shift - p.itcz_shift_ocean) * broad) * s) * hr
+         else:
+             phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
++        phi_i0 = phi_i
+         if self.itcz_anchor is not None and s > 0:
+             phi_i = phi_i + p.itcz_plateau_gain * self.itcz_anchor * s * hr      # e85 (summer only)
+         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
+@@ -816,6 +817,14 @@ class ClimateModel:
+             v = np.where(m, v * self._trade_keep, v)
+         if p.monsoon_westerly > 0:
+             cross = m & (lat > 0) & (phi_i > 0)
++            if p.anchor_trades > 0 and self.itcz_anchor is not None and s > 0:
++                # e96: the band the plateau anchor alone adds (Mexico under a belt
++                # pulled to ~30 N) keeps its easterly trades from the Caribbean
++                # and Gulf; only belts that broad land moves poleward (India)
++                # turn the crossing trades into monsoon westerlies.
++                lift = np.maximum(phi_i - phi_i0, 0.0)
++                zone = np.where(lift > 0.5, np.clip((lat - phi_i0) / np.maximum(lift, 1e-6), 0.0, 1.0), 0.0)
++                w = w * (1.0 - p.anchor_trades * zone)
+             turned = p.trade_speed * np.sin(np.pi * np.clip(lat / np.maximum(phi_i, 1e-6), 0, 1))
+             u = np.where(cross, (1 - w) * u + w * turned, u)
+             v = np.where(cross, (1 - w) * v + w * np.maximum(v, tan_in * turned), v)
