@@ -1,0 +1,1095 @@
+{
+  "version": 1,
+  "status": "conditional_dm_resource_diagnostics",
+  "specification": {
+    "version": 1,
+    "title": "Worldwide seasonal dry-matter feed diagnostics",
+    "reference_liveweight_kg": 250,
+    "reference_intake_kg_dm_day": 6.25,
+    "year_days": 365,
+    "test_demand_fraction_of_annual_supply": 0.5,
+    "test_buffer_days": 90,
+    "stored_feed_loss_fraction_year": 0,
+    "phenology": {
+      "temperature_floor_c": 0,
+      "temperature_span_c": 15,
+      "rain_half_saturation_mm": 50
+    },
+    "interpretation": "Dry-matter resource and storage scenarios, not nutritionally adequate herds, animal products, human population, actual livelihoods or political control.",
+    "annual_supply": "Published Miami NPP; reuse existing Harvest aboveground/edible/usable shares and exclude its assigned cropped area. Coefficients remain model assumptions, not new empirical calibration.",
+    "seasonality": "Uncalibrated temperature-rainfall proxy normalized to conserve annual DM. Positive annual supply without active seasonal weights is unresolved; no uniform-growth fallback.",
+    "storage": "Constant notional demand consumes half of annual usable production. Minimum reserve and 90-day-buffer test are zero-loss references at monthly resolution; standing forage, cut fodder and hay quality are not distinguished.",
+    "water": "Distance to mapped rivers/lakes only; no measured volume, permanence, salinity, wells or animal-specific watering itinerary.",
+    "institutions": "Production is evaluated over all land independently of polity claims. Pilot claim labels describe source-map context only; no society's livelihood is assigned from biome."
+  },
+  "packets": {
+    "raw": {
+      "layers": [
+        {
+          "id": "pasture_annual",
+          "label": "Pasture resources",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "pasture_annual_dm.webp",
+          "items": [
+            {
+              "color": "#eee8d5",
+              "label": "<5 tonnes/km\u00b2"
+            },
+            {
+              "color": "#d2d69b",
+              "label": "5\u201315"
+            },
+            {
+              "color": "#a5c18b",
+              "label": "15\u201330"
+            },
+            {
+              "color": "#73ac94",
+              "label": "30\u201360"
+            },
+            {
+              "color": "#438b87",
+              "label": "60\u2013120"
+            },
+            {
+              "color": "#285f72",
+              "label": "\u2265120"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+          "variants": {
+            "label": "Resource view",
+            "default": "annual_dm",
+            "options": [
+              {
+                "value": "annual_dm",
+                "label": "Usable forage \u00b7 annual dry matter",
+                "file": "pasture_annual_dm.webp",
+                "items": [
+                  {
+                    "color": "#eee8d5",
+                    "label": "<5 tonnes/km\u00b2"
+                  },
+                  {
+                    "color": "#d2d69b",
+                    "label": "5\u201315"
+                  },
+                  {
+                    "color": "#a5c18b",
+                    "label": "15\u201330"
+                  },
+                  {
+                    "color": "#73ac94",
+                    "label": "30\u201360"
+                  },
+                  {
+                    "color": "#438b87",
+                    "label": "60\u2013120"
+                  },
+                  {
+                    "color": "#285f72",
+                    "label": "\u2265120"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added."
+              },
+              {
+                "value": "feed_units",
+                "label": "Annual feed equivalents",
+                "file": "pasture_feed_units.webp",
+                "items": [
+                  {
+                    "color": "#eee8d5",
+                    "label": "<1 reference unit/km\u00b2"
+                  },
+                  {
+                    "color": "#d2d69b",
+                    "label": "1\u20133"
+                  },
+                  {
+                    "color": "#a5c18b",
+                    "label": "3\u201310"
+                  },
+                  {
+                    "color": "#73ac94",
+                    "label": "10\u201325"
+                  },
+                  {
+                    "color": "#438b87",
+                    "label": "25\u201350"
+                  },
+                  {
+                    "color": "#285f72",
+                    "label": "\u226550"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Annual DM divided by 6.25 kg/day \u00d7365 days for a 250 kg reference animal. This is a feed-equivalent unit, not sustainable or nutritionally adequate livestock. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Annual DM divided by 6.25 kg/day \u00d7365 days for a 250 kg reference animal. This is a feed-equivalent unit, not sustainable or nutritionally adequate livestock."
+              }
+            ]
+          }
+        },
+        {
+          "id": "pasture_seasonal",
+          "label": "Seasonal feed",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "pasture_lean_fraction.webp",
+          "items": [
+            {
+              "color": "#824754",
+              "label": "<1% of mean new growth"
+            },
+            {
+              "color": "#b8795a",
+              "label": "1\u201310%"
+            },
+            {
+              "color": "#d5af65",
+              "label": "10\u201325%"
+            },
+            {
+              "color": "#b8bd7d",
+              "label": "25\u201350%"
+            },
+            {
+              "color": "#72a58c",
+              "label": "50\u201375%"
+            },
+            {
+              "color": "#286f70",
+              "label": "\u226575%"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+          "variants": {
+            "label": "Resource view",
+            "default": "lean_fraction",
+            "options": [
+              {
+                "value": "lean_fraction",
+                "label": "Lean-bin new growth",
+                "file": "pasture_lean_fraction.webp",
+                "items": [
+                  {
+                    "color": "#824754",
+                    "label": "<1% of mean new growth"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "1\u201310%"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "10\u201325%"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#286f70",
+                    "label": "\u226575%"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast."
+              },
+              {
+                "value": "reserve_days",
+                "label": "Minimum zero-loss feed reserve",
+                "file": "pasture_reserve_days.webp",
+                "items": [
+                  {
+                    "color": "#286f70",
+                    "label": "<1 demand-day"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "1\u201330"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "30\u201390"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "90\u2013180"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "180\u2013270"
+                  },
+                  {
+                    "color": "#824754",
+                    "label": "\u2265270"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Smallest repeating zero-loss reserve for constant test demand equal to half annual usable DM. Units: days of that declared demand. Standing forage and cut fodder are not distinguished. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Smallest repeating zero-loss reserve for constant test demand equal to half annual usable DM. Units: days of that declared demand. Standing forage and cut fodder are not distinguished."
+              },
+              {
+                "value": "shortfall_bins",
+                "label": "With a 90-demand-day buffer",
+                "file": "pasture_shortfall_bins.webp",
+                "items": [
+                  {
+                    "color": "#286f70",
+                    "label": "No shortfall bins"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "1 bin"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "2\u20133"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "4\u20136"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "7\u20139"
+                  },
+                  {
+                    "color": "#824754",
+                    "label": "10\u201312"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Bins with unmet DM demand in a repeating zero-loss year with a 90-demand-day reserve capacity. Same half-annual test demand; no free inherited food. This is not famine or animal mortality. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Bins with unmet DM demand in a repeating zero-loss year with a 90-demand-day reserve capacity. Same half-annual test demand; no free inherited food. This is not famine or animal mortality."
+              }
+            ]
+          }
+        },
+        {
+          "id": "pasture_water",
+          "label": "Water proximity",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "pasture_water_distance.webp",
+          "items": [
+            {
+              "color": "#286f70",
+              "label": "<1.6 km"
+            },
+            {
+              "color": "#72a58c",
+              "label": "1.6\u20133.2"
+            },
+            {
+              "color": "#b8bd7d",
+              "label": "3.2\u201310"
+            },
+            {
+              "color": "#d5af65",
+              "label": "10\u201325"
+            },
+            {
+              "color": "#b8795a",
+              "label": "25\u201350"
+            },
+            {
+              "color": "#824754",
+              "label": "\u226550"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Mean land distance to mapped rivers/lakes, not a route or measured drinkable water supply. Wells, water permanence, salinity and species-specific watering needs are unknown; no universal grazing exclusion is imposed. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined."
+        }
+      ],
+      "shape": [
+        463,
+        1000
+      ],
+      "cell_px": 2.0,
+      "fields": {
+        "annual_dm": {
+          "offset": 0,
+          "dtype": "float32",
+          "scale": 1.0,
+          "nodata": null
+        },
+        "lean_fraction": {
+          "offset": 1852000,
+          "dtype": "uint16",
+          "scale": 1.6666666666666667e-05,
+          "nodata": 65535
+        },
+        "reserve_days": {
+          "offset": 2778000,
+          "dtype": "uint16",
+          "scale": 0.01,
+          "nodata": 65535
+        },
+        "water_distance": {
+          "offset": 3704000,
+          "dtype": "uint16",
+          "scale": 0.1,
+          "nodata": 65535
+        },
+        "shortfall_bins": {
+          "offset": 4630000,
+          "dtype": "uint8",
+          "scale": 1.0,
+          "nodata": 255
+        },
+        "land": {
+          "offset": 5093000,
+          "dtype": "uint8",
+          "scale": 1.0,
+          "nodata": 0
+        }
+      },
+      "binary": "pasture.bin",
+      "binary_sha256": "08428963dd7139ebdae4600cb1fb3522c266bc049d313bc0e68e08b808c4feea",
+      "grid": "pasture_grid.npz",
+      "grid_sha256": "1db80b3f1de4507c506f316ffbb21a4842d3f0d745fbc56ca0ca124320109544",
+      "image_sha256": {
+        "pasture_annual_dm.webp": "7a4d5893c3753408c76095f9ebe2b16e1a75cb82e4974224efd4cc54bb864168",
+        "pasture_feed_units.webp": "1321b0bf7d57f6083408fd50e9f559c9c9793abcc01fe5a26cf40526edf90246",
+        "pasture_lean_fraction.webp": "2dd688d42489eba14389a94c826b8a9f2c606b2fd93df02bdfc694396c038aca",
+        "pasture_reserve_days.webp": "5e70dff0ea16601dd161553f8c185fa784861f47934fd83c4b7f3b6354154955",
+        "pasture_shortfall_bins.webp": "1485714d212143f4dded946bdac3b33fdd8faa8e2959c6b9b50b65ccb4f3e065",
+        "pasture_water_distance.webp": "d48f7891898db3ceb8ec549da1db2893a681c1be6fb4ddaf6a95826af635c5fa"
+      },
+      "expected_harvest_fingerprint": "c3d7aff6724ac5ddd87c327ba1618cbfc1edc39bd765dc19bc6b88f1f9c5f44a",
+      "expected_harvest_binary_sha256": "39beb07fc813c93e3f385bdac059e56d1bbea42cd4228a10a97ed65b1734a7f5",
+      "inputs_sha256": {
+        "atlases/earth_fit/data/atlas.json": "e5e65f01d5a73f2de13de0b966c6759a6aa959651aad2384ebf64a69c0c96fd0",
+        "atlases/earth_fit/data/atlas.bin": "a15b90e2db367d298fcfeb9f44cafa9aa8d76e67bb6aabc3a60132944fc4cbfc",
+        "atlases/earth_fit/data/harvest.json": "3abc1568847ac90c7b2de3f9200576394e6eac45a1e1e0a2da8369d85df3e52b",
+        "atlases/earth_fit/data/harvest.bin": "39beb07fc813c93e3f385bdac059e56d1bbea42cd4228a10a97ed65b1734a7f5"
+      },
+      "summary": {
+        "land_cells": 245031,
+        "seasonally_unresolved_cells": 0,
+        "median_minimum_reserve_days": 38.7619845478286,
+        "area_share_needing_more_than_90_days": 0.15151943266391754,
+        "maximum_dm_ledger_residual": 4.3655745685100555e-11,
+        "all_land_annual_dm_kg": 107888613378.88599,
+        "annual_dm_outside_named_claims_kg": 25787226294.23612
+      },
+      "pilots": [
+        {
+          "id": "nonimperial_agricultural",
+          "label": "Tarani agricultural resource landscape",
+          "status": "selected",
+          "row": 298,
+          "column": 776,
+          "anchor": [
+            0.2,
+            0.5
+          ],
+          "map_claim": "Kingdom of Tarani",
+          "x": 1553.0,
+          "y": 597.0,
+          "annual_dm": 8133.614020452748,
+          "monthly_dm": [
+            640.5383322700536,
+            642.6461351284198,
+            825.7051237402447,
+            893.5376074293717,
+            700.5875754012593,
+            386.7501401862295,
+            227.63053713704664,
+            265.866349646069,
+            613.0036725326415,
+            984.5202485384568,
+            1071.521954634157,
+            881.3063438087993
+          ],
+          "lean_fraction": 0.3358367435159543,
+          "reserve_days": 16.541493759217257,
+          "shortfall_bins": 0.0,
+          "water_distance": 15.406525611877441
+        },
+        {
+          "id": "seasonal_grassland",
+          "label": "Grassland resource landscape",
+          "status": "selected",
+          "row": 150,
+          "column": 643,
+          "anchor": [
+            0.5,
+            0.18
+          ],
+          "map_claim": null,
+          "x": 1287.0,
+          "y": 301.0,
+          "annual_dm": 26498.801048002548,
+          "monthly_dm": [
+            459.786754058587,
+            541.1932669682855,
+            1669.6447510700236,
+            3314.629572818026,
+            3484.2348489413307,
+            2419.47233805269,
+            1634.5149252290055,
+            1676.7546871508243,
+            2419.47233805269,
+            3676.3248767446767,
+            3604.0498721319973,
+            1598.7228167844085
+          ],
+          "lean_fraction": 0.20821474295037753,
+          "reserve_days": 33.257919108896274,
+          "shortfall_bins": 0.0,
+          "water_distance": 75.30469512939453
+        },
+        {
+          "id": "outside_named_claims",
+          "label": "Mixed resources outside named claims",
+          "status": "selected",
+          "row": 357,
+          "column": 200,
+          "anchor": [
+            0.2,
+            0.7
+          ],
+          "map_claim": null,
+          "x": 401.0,
+          "y": 715.0,
+          "annual_dm": 35350.599157825614,
+          "monthly_dm": [
+            1921.7695054389947,
+            2085.0261454850347,
+            2907.041691143439,
+            3462.175070606371,
+            3151.5435662133514,
+            2912.114446065399,
+            2760.1770096515484,
+            3009.739348014987,
+            3310.973120332825,
+            3585.3466339884167,
+            3526.0052885093523,
+            2718.6873323758996
+          ],
+          "lean_fraction": 0.6523576577106709,
+          "reserve_days": 0.0,
+          "shortfall_bins": 0.0,
+          "water_distance": 32.64599609375
+        },
+        {
+          "id": "tribal_claim",
+          "label": "Tribes of the Neck resource landscape",
+          "status": "selected",
+          "row": 302,
+          "column": 574,
+          "anchor": [
+            0.15,
+            0.4
+          ],
+          "map_claim": "Tribes of the Neck",
+          "x": 1149.0,
+          "y": 605.0,
+          "annual_dm": 46998.44449348545,
+          "monthly_dm": [
+            1286.4277690922008,
+            1605.1855570690145,
+            3164.237118896263,
+            5543.694873784983,
+            5764.411211063451,
+            5108.516294842998,
+            3531.8022623785623,
+            3076.740530305112,
+            4522.741164089129,
+            5713.603956053536,
+            5060.787115693665,
+            2620.2966402165407
+          ],
+          "lean_fraction": 0.32846051386330843,
+          "reserve_days": 15.91955478497563,
+          "shortfall_bins": 0.0,
+          "water_distance": 0.0
+        }
+      ]
+    },
+    "corrected": {
+      "layers": [
+        {
+          "id": "pasture_annual",
+          "label": "Pasture resources",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "corrected/pasture_annual_dm.webp",
+          "items": [
+            {
+              "color": "#eee8d5",
+              "label": "<5 tonnes/km\u00b2"
+            },
+            {
+              "color": "#d2d69b",
+              "label": "5\u201315"
+            },
+            {
+              "color": "#a5c18b",
+              "label": "15\u201330"
+            },
+            {
+              "color": "#73ac94",
+              "label": "30\u201360"
+            },
+            {
+              "color": "#438b87",
+              "label": "60\u2013120"
+            },
+            {
+              "color": "#285f72",
+              "label": "\u2265120"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+          "variants": {
+            "label": "Resource view",
+            "default": "annual_dm",
+            "options": [
+              {
+                "value": "annual_dm",
+                "label": "Usable forage \u00b7 annual dry matter",
+                "file": "corrected/pasture_annual_dm.webp",
+                "items": [
+                  {
+                    "color": "#eee8d5",
+                    "label": "<5 tonnes/km\u00b2"
+                  },
+                  {
+                    "color": "#d2d69b",
+                    "label": "5\u201315"
+                  },
+                  {
+                    "color": "#a5c18b",
+                    "label": "15\u201330"
+                  },
+                  {
+                    "color": "#73ac94",
+                    "label": "30\u201360"
+                  },
+                  {
+                    "color": "#438b87",
+                    "label": "60\u2013120"
+                  },
+                  {
+                    "color": "#285f72",
+                    "label": "\u2265120"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Annual usable forage tonnes DM per km\u00b2 of land, after the assigned cropped area is excluded. No crop residues are added."
+              },
+              {
+                "value": "feed_units",
+                "label": "Annual feed equivalents",
+                "file": "corrected/pasture_feed_units.webp",
+                "items": [
+                  {
+                    "color": "#eee8d5",
+                    "label": "<1 reference unit/km\u00b2"
+                  },
+                  {
+                    "color": "#d2d69b",
+                    "label": "1\u20133"
+                  },
+                  {
+                    "color": "#a5c18b",
+                    "label": "3\u201310"
+                  },
+                  {
+                    "color": "#73ac94",
+                    "label": "10\u201325"
+                  },
+                  {
+                    "color": "#438b87",
+                    "label": "25\u201350"
+                  },
+                  {
+                    "color": "#285f72",
+                    "label": "\u226550"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Annual DM divided by 6.25 kg/day \u00d7365 days for a 250 kg reference animal. This is a feed-equivalent unit, not sustainable or nutritionally adequate livestock. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Annual DM divided by 6.25 kg/day \u00d7365 days for a 250 kg reference animal. This is a feed-equivalent unit, not sustainable or nutritionally adequate livestock."
+              }
+            ]
+          }
+        },
+        {
+          "id": "pasture_seasonal",
+          "label": "Seasonal feed",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "corrected/pasture_lean_fraction.webp",
+          "items": [
+            {
+              "color": "#824754",
+              "label": "<1% of mean new growth"
+            },
+            {
+              "color": "#b8795a",
+              "label": "1\u201310%"
+            },
+            {
+              "color": "#d5af65",
+              "label": "10\u201325%"
+            },
+            {
+              "color": "#b8bd7d",
+              "label": "25\u201350%"
+            },
+            {
+              "color": "#72a58c",
+              "label": "50\u201375%"
+            },
+            {
+              "color": "#286f70",
+              "label": "\u226575%"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+          "variants": {
+            "label": "Resource view",
+            "default": "lean_fraction",
+            "options": [
+              {
+                "value": "lean_fraction",
+                "label": "Lean-bin new growth",
+                "file": "corrected/pasture_lean_fraction.webp",
+                "items": [
+                  {
+                    "color": "#824754",
+                    "label": "<1% of mean new growth"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "1\u201310%"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "10\u201325%"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "25\u201350%"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "50\u201375%"
+                  },
+                  {
+                    "color": "#286f70",
+                    "label": "\u226575%"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Least monthly new forage production as a share of average monthly production. Standing forage and stored feed can bridge a low-growth bin; this is not a starvation forecast."
+              },
+              {
+                "value": "reserve_days",
+                "label": "Minimum zero-loss feed reserve",
+                "file": "corrected/pasture_reserve_days.webp",
+                "items": [
+                  {
+                    "color": "#286f70",
+                    "label": "<1 demand-day"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "1\u201330"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "30\u201390"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "90\u2013180"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "180\u2013270"
+                  },
+                  {
+                    "color": "#824754",
+                    "label": "\u2265270"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Smallest repeating zero-loss reserve for constant test demand equal to half annual usable DM. Units: days of that declared demand. Standing forage and cut fodder are not distinguished. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Smallest repeating zero-loss reserve for constant test demand equal to half annual usable DM. Units: days of that declared demand. Standing forage and cut fodder are not distinguished."
+              },
+              {
+                "value": "shortfall_bins",
+                "label": "With a 90-demand-day buffer",
+                "file": "corrected/pasture_shortfall_bins.webp",
+                "items": [
+                  {
+                    "color": "#286f70",
+                    "label": "No shortfall bins"
+                  },
+                  {
+                    "color": "#72a58c",
+                    "label": "1 bin"
+                  },
+                  {
+                    "color": "#b8bd7d",
+                    "label": "2\u20133"
+                  },
+                  {
+                    "color": "#d5af65",
+                    "label": "4\u20136"
+                  },
+                  {
+                    "color": "#b8795a",
+                    "label": "7\u20139"
+                  },
+                  {
+                    "color": "#824754",
+                    "label": "10\u201312"
+                  },
+                  {
+                    "color": "#b7b4ae",
+                    "label": "Unavailable / undefined"
+                  }
+                ],
+                "note": "Bins with unmet DM demand in a repeating zero-loss year with a 90-demand-day reserve capacity. Same half-annual test demand; no free inherited food. This is not famine or animal mortality. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined.",
+                "caption": "Bins with unmet DM demand in a repeating zero-loss year with a 90-demand-day reserve capacity. Same half-annual test demand; no free inherited food. This is not famine or animal mortality."
+              }
+            ]
+          }
+        },
+        {
+          "id": "pasture_water",
+          "label": "Water proximity",
+          "group": "Livelihoods",
+          "kind": "categories",
+          "controls": [],
+          "file": "corrected/pasture_water_distance.webp",
+          "items": [
+            {
+              "color": "#286f70",
+              "label": "<1.6 km"
+            },
+            {
+              "color": "#72a58c",
+              "label": "1.6\u20133.2"
+            },
+            {
+              "color": "#b8bd7d",
+              "label": "3.2\u201310"
+            },
+            {
+              "color": "#d5af65",
+              "label": "10\u201325"
+            },
+            {
+              "color": "#b8795a",
+              "label": "25\u201350"
+            },
+            {
+              "color": "#824754",
+              "label": "\u226550"
+            },
+            {
+              "color": "#b7b4ae",
+              "label": "Unavailable / undefined"
+            }
+          ],
+          "note": "Mean land distance to mapped rivers/lakes, not a route or measured drinkable water supply. Wells, water permanence, salinity and species-specific watering needs are unknown; no universal grazing exclusion is imposed. Dry-matter resource scenarios across all land, independent of political claims. Annual supply inherits current NPP and forage assumptions; seasonal growth is an uncalibrated proxy. No protein/energy adequacy, herd dynamics, mobility or human population is inferred. Grey is unresolved seasonality or no forage where a ratio is undefined."
+        }
+      ],
+      "shape": [
+        463,
+        1000
+      ],
+      "cell_px": 2.0,
+      "fields": {
+        "annual_dm": {
+          "offset": 0,
+          "dtype": "float32",
+          "scale": 1.0,
+          "nodata": null
+        },
+        "lean_fraction": {
+          "offset": 1852000,
+          "dtype": "uint16",
+          "scale": 1.6666666666666667e-05,
+          "nodata": 65535
+        },
+        "reserve_days": {
+          "offset": 2778000,
+          "dtype": "uint16",
+          "scale": 0.01,
+          "nodata": 65535
+        },
+        "water_distance": {
+          "offset": 3704000,
+          "dtype": "uint16",
+          "scale": 0.1,
+          "nodata": 65535
+        },
+        "shortfall_bins": {
+          "offset": 4630000,
+          "dtype": "uint8",
+          "scale": 1.0,
+          "nodata": 255
+        },
+        "land": {
+          "offset": 5093000,
+          "dtype": "uint8",
+          "scale": 1.0,
+          "nodata": 0
+        }
+      },
+      "binary": "corrected/pasture.bin",
+      "binary_sha256": "4e878033ad0530c7389b900fe52539539f97e97be501699f788ee5ccc242209b",
+      "grid": "corrected/pasture_grid.npz",
+      "grid_sha256": "8e838253b2f3fe68f8a6cb915542e1d77104cb61f36aea273e21dea7cabea36e",
+      "image_sha256": {
+        "corrected/pasture_annual_dm.webp": "662b33caf1a9860310bb4de67485fd18913c2ddd99751121aa77d52d471ea952",
+        "corrected/pasture_feed_units.webp": "421f8ec442efb6508c1b52a5fb09150bba013323a5fda1e2c6d355f86a887224",
+        "corrected/pasture_lean_fraction.webp": "8217683f29504c4160d045aee91c2b0ddf98f81d636737ff08b8f0613b7790ef",
+        "corrected/pasture_reserve_days.webp": "61191ad1fbf9d0b18d124867a6f4620a114b7cc7f1c1cf9a937d6a544d2add55",
+        "corrected/pasture_shortfall_bins.webp": "18eec898a386d3643216b44cc6bb15662b9dac36d8988a44bf3cc81b3ff6ff23",
+        "corrected/pasture_water_distance.webp": "d48f7891898db3ceb8ec549da1db2893a681c1be6fb4ddaf6a95826af635c5fa"
+      },
+      "expected_harvest_fingerprint": "bfd21721ce08c6ac2f5fffdfb644b458123f416dd7f1b5039ef460d2f548c018",
+      "expected_harvest_binary_sha256": "fc8ff532f560f0eeafe6804cf11a7a3008a18acdd6492d2d12cb466b6dd9cbfd",
+      "inputs_sha256": {
+        "atlases/earth_fit/data/atlas.json": "e5e65f01d5a73f2de13de0b966c6759a6aa959651aad2384ebf64a69c0c96fd0",
+        "atlases/earth_fit/data/corrected/atlas.bin": "5b79df5c74c8a67eaeb86a525a04d9c3b4558803c3104ae70f030c2f72bdbdaa",
+        "atlases/earth_fit/data/corrected/harvest.json": "c04b9864c644c79ca00d4196964d80abf9ee38a1011004e8e071477cb0aa9b83",
+        "atlases/earth_fit/data/corrected/harvest.bin": "fc8ff532f560f0eeafe6804cf11a7a3008a18acdd6492d2d12cb466b6dd9cbfd"
+      },
+      "summary": {
+        "land_cells": 245031,
+        "seasonally_unresolved_cells": 0,
+        "median_minimum_reserve_days": 39.84225151946695,
+        "area_share_needing_more_than_90_days": 0.16895732283592224,
+        "maximum_dm_ledger_residual": 4.001776687800884e-11,
+        "all_land_annual_dm_kg": 108990125115.88089,
+        "annual_dm_outside_named_claims_kg": 26018322876.004974
+      },
+      "pilots": [
+        {
+          "id": "nonimperial_agricultural",
+          "label": "Tarani agricultural resource landscape",
+          "status": "selected",
+          "row": 298,
+          "column": 776,
+          "anchor": [
+            0.2,
+            0.5
+          ],
+          "map_claim": "Kingdom of Tarani",
+          "x": 1553.0,
+          "y": 597.0,
+          "annual_dm": 8860.393381541777,
+          "monthly_dm": [
+            869.9674633301704,
+            821.4548619710274,
+            931.1872030018419,
+            917.4579974116845,
+            706.5711632394624,
+            379.4670966286977,
+            193.10394572432156,
+            256.76458717190013,
+            600.4359630446232,
+            978.4736086819955,
+            1111.4409462488068,
+            1094.068545087246
+          ],
+          "lean_fraction": 0.2615287210068138,
+          "reserve_days": 23.769061480755944,
+          "shortfall_bins": 0.0,
+          "water_distance": 15.406525611877441
+        },
+        {
+          "id": "seasonal_grassland",
+          "label": "Grassland resource landscape",
+          "status": "selected",
+          "row": 150,
+          "column": 643,
+          "anchor": [
+            0.5,
+            0.18
+          ],
+          "map_claim": null,
+          "x": 1287.0,
+          "y": 301.0,
+          "annual_dm": 22774.304418410557,
+          "monthly_dm": [
+            517.8845787826872,
+            708.1851010366394,
+            1666.1109512498895,
+            2879.046963823131,
+            2823.9092355812895,
+            2061.101197265444,
+            1393.6689522006875,
+            1373.4956330232694,
+            2014.241907366242,
+            3010.8222374344705,
+            2972.186568910027,
+            1353.6510917367768
+          ],
+          "lean_fraction": 0.272878364634856,
+          "reserve_days": 21.53330248169638,
+          "shortfall_bins": 0.0,
+          "water_distance": 75.30469512939453
+        },
+        {
+          "id": "outside_named_claims",
+          "label": "Mixed resources outside named claims",
+          "status": "selected",
+          "row": 357,
+          "column": 200,
+          "anchor": [
+            0.2,
+            0.7
+          ],
+          "map_claim": null,
+          "x": 401.0,
+          "y": 715.0,
+          "annual_dm": 37956.33885223808,
+          "monthly_dm": [
+            2207.9767423020744,
+            2351.676920014476,
+            3065.119533657892,
+            3598.8184019158507,
+            3371.2458122487237,
+            3151.9243245502207,
+            2989.0855851048186,
+            3156.068212857852,
+            3563.9337778504646,
+            3808.1797372051765,
+            3729.895477790867,
+            2962.4143267396603
+          ],
+          "lean_fraction": 0.6980578661912381,
+          "reserve_days": 0.0,
+          "shortfall_bins": 0.0,
+          "water_distance": 32.64599609375
+        },
+        {
+          "id": "tribal_claim",
+          "label": "Tribes of the Neck resource landscape",
+          "status": "selected",
+          "row": 302,
+          "column": 574,
+          "anchor": [
+            0.15,
+            0.4
+          ],
+          "map_claim": "Tribes of the Neck",
+          "x": 1149.0,
+          "y": 605.0,
+          "annual_dm": 43892.21210024313,
+          "monthly_dm": [
+            1045.4626754615158,
+            1387.8602543686868,
+            2828.616289692111,
+            4992.95694281922,
+            5556.580918893702,
+            4952.975085991385,
+            3401.0935447031397,
+            2950.5681053561266,
+            4291.073522741302,
+            5462.905096591438,
+            4728.0487579550545,
+            2294.0709056694445
+          ],
+          "lean_fraction": 0.2858263802445422,
+          "reserve_days": 20.363153003410787,
+          "shortfall_bins": 0.0,
+          "water_distance": 0.0
+        }
+      ]
+    }
+  },
+  "sources_sha256": {
+    "harvest/pasture.py": "5b36973b3c3537678b2e22d31659aa42778722ae143c806424adcb74081aced8",
+    "harvest/food_stocks.py": "bef0cc24f7401ec2d5a74d742adb9aa771c0eb4f88a354454dd141345f4ba1ef",
+    "harvest/export.py": "f879cd2a67ead850808e22ef9386e223c2734fb51634bfa139ffe7f18d1a07b7",
+    "harvest/models.py": "06a02977cd72677f9d1fb06b86f966d8f5449331fbddcb280117df7339f83194",
+    "population/export.py": "aa472c1a304217baad687a4c80265ff58b50ad8b6555d7fe4a0fb26e4dd746a0",
+    "scripts/land_people.py": "b2c46780c9504f00233afc742c444f8f513431d01bb6b72ce2d55894a6f52bc8",
+    "scripts/build_pasture_maps.py": "300e2a42e6718b7eecee8132bcea7c726be55351e6c8330a81f6e0b3d2b6e79b",
+    "data/pasture_model.json": "389ac27900deac4fe8abd91c80e564984f965bea3b62c9790e2114736f1eff67",
+    "data/harvest_model.json": "2349e56bd14b3dd112f1183e52e7f0919ec5b32d4ad7e227937473ba081e7ea3",
+    "research_notes/pasture_20261104.json": "3438d06223c919ab44d8026261ae97ccea388192cc47c0e360f7f89c9b588351",
+    "polity/fields.py": "dc32513031e8c231246cfdd7f78e0b7a7c23d8e34b993e1407dd7441164980af",
+    "data/source/ravages_v8/polities.json": "aefd343b790eeb5473b30f16528e618661c76ffad0fdb08145386a462a71e50d",
+    "data/source/ravages_v8/borders_fill.png": "377f2477b8f5db7075a38b2274e27ff970a2805b99ba6fb3b0360c125c813289",
+    "data/source/elevation.png": "959a7c78343d241fc954d9e2c419783199da089a6f3c4e0e5e214889248ba3aa",
+    "data/source/rivers.png": "8f80a4e4d803f67bbcf01410743c0c9b26d2701839d5653371d80be94c609a46",
+    "data/source/original/rivers.png": "f0dfe549a3efdb8ca99fae4953ffad45be75dad72cbe95716dcd9e70f578df0f"
+  },
+  "pilot_protocol_sha256": "a1d180f87fa36c229f361e915d3523d436557a5faeeaeb42ba12c8230ec16bc6",
+  "existing_climate_population_ownership_unchanged": true
+}
