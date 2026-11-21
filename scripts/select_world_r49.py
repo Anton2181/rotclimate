@@ -50,7 +50,7 @@ def main():
     start = load_params(FOLDER / 'start.json')
     cand = Params(**best['params']).replace(downsample=8)
     for k in ('retrograde', 'planet_radius', 'year_days', 'map_width_mi', 'map_height_mi', 'beyond_continuity_km', 'winter_solstice_day', 'tier_tops'):
-        assert getattr(cand, k) == getattr(start, k), k
+        assert json.dumps(getattr(cand, k)) == json.dumps(getattr(start, k)), k
     phys = load_params(ROOT / 'calibration/local_accuracy_20261023/r49_params.json')
     from rotclimate.joint import SHARED_FIELDS
     assert all(getattr(cand, k) == getattr(phys, k) for k in SHARED_FIELDS), 'candidate physics is not r49'
