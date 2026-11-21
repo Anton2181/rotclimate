@@ -33,8 +33,8 @@
   - T6: current VALIDATED, no change (G1 fails; blind wheat 0.76). Open finding: wheat and barley grow in the hot humid tropics.
     reports/CROP_YIELD_GAEZ_20261121.md
   - T1: DONE 21 Nov 18:50 UTC. r50 atlas promoted, browser checks pass, Claude copy v19; reports/RELEASE_R50_20261121.md.
-  - T7 (next; scripts/release_r50_t7.sh, r5 size fit merged via calibration/settlement_chain/release4_r50t7.json): wire T3 (rotclimate/routing.py only; hydrology.py is in the simulation
-    identity) and T4 (harvest/pasture.py rain_memory + data/pasture_model.json), then a bundled full rebuild.
+  - T7: DONE 21 Nov ~21:30 UTC. Fu runoff + GPP grazing seasons + r5 town-size fit, full rebuild; browser checks pass;
+    reports/RELEASE_R50_T7_20261121.md. Claude copy v20 (see report). Next: T8.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
