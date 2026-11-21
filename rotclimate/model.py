@@ -638,13 +638,13 @@ class ClimateModel:
                          np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
         sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
         self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
-        if params.inflow_gain > 0:
+        if p.inflow_gain > 0:
             # e91: distance inland, its direction and the nearest sea cell (for that sea's temperature)
             land_km, near = ndi.distance_transform_edt(g.land, return_indices=True)
             land_km = land_km * g.cell_km; smooth_km = ndi.gaussian_filter(land_km, 1.0)
             gy, gx = np.gradient(smooth_km); norm = np.maximum(np.hypot(gx, gy), 1e-9)
             self.inflow_dir = (gx / norm, -gy / norm)          # grid east, grid north (rows run south)
-            self.inflow_reach = np.where(g.land, np.exp(-land_km / params.inflow_km), 0.0)
+            self.inflow_reach = np.where(g.land, np.exp(-land_km / p.inflow_km), 0.0)
             self.inflow_near = (near[0], near[1])
         # e4: sub-grid marine air on coasts under a subtropical inversion
         # (Rahn & Garreaud 2010; Iacobellis & Cayan 2013): the share of each

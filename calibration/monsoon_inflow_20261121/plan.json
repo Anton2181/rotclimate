@@ -6,15 +6,64 @@
  "physics": "e91 warm-sea inflow (rotclimate/model.py, config inflow_*): land columns relax toward marine humidity (ocean_rh x land saturation) at rate inflow_gain / evap_tau x exp(-km inland / inflow_km) x clip((nearest-sea SST - inflow_sst)/3, 0, 1) x clip(onshore wind / 3 m/s, 0, 1).",
  "stage_A_screen": {
   "what": "r49 + inflow_gain in {0.02, 0.05, 0.15} (inflow_km 300, inflow_sst 26) on mexico, iberia, california (built-in), texas_plains (dev12), sahel_niger, najd_arabia, bengal (retired_b); score per region (T/r49 + P/r49)/2 against r49's recorded runs",
-  "targets": ["mexico", "texas_plains", "sahel_niger", "bengal"],
-  "guards": ["najd_arabia", "iberia", "california"],
+  "targets": [
+   "mexico",
+   "texas_plains",
+   "sahel_niger",
+   "bengal"
+  ],
+  "guards": [
+   "najd_arabia",
+   "iberia",
+   "california"
+  ],
   "pass": "target mean <= 0.98 and worst guard <= 1.02; start = the passing setting with the lowest target mean; none -> FAIL, report, then the two-level transport step"
  },
  "stage_B_refit": {
   "tool": "scripts/joint_refit.py, objective S49 against r49",
-  "knobs": {"inflow_gain": ["mul", 1.5], "inflow_km": ["mul", 1.4], "inflow_sst": ["add", 1.0], "convective_rain": ["mul", 1.08], "ocean_rh": ["add", 0.02]},
-  "bounds": {"inflow_gain": [0.005, 1.0], "inflow_km": [100.0, 1200.0], "inflow_sst": [22.0, 29.0]},
+  "knobs": {
+   "inflow_gain": [
+    "mul",
+    1.5
+   ],
+   "inflow_km": [
+    "mul",
+    1.4
+   ],
+   "inflow_sst": [
+    "add",
+    1.0
+   ],
+   "convective_rain": [
+    "mul",
+    1.08
+   ],
+   "ocean_rh": [
+    "add",
+    0.02
+   ]
+  },
+  "bounds": {
+   "inflow_gain": [
+    0.005,
+    1.0
+   ],
+   "inflow_km": [
+    100.0,
+    1200.0
+   ],
+   "inflow_sst": [
+    22.0,
+    29.0
+   ]
+  },
   "max_evaluations": 40
  },
- "gates": "policy_v3 against r49: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run of r49 and the candidate on sealed set o (calibration/sealed_20261120o) with S <= 1.0. All pass -> r50 on Earth; then the atlas is rebuilt with scripts/release_r49.sh adapted (owner standing instruction: use the latest Earth calibration)."
+ "gates": "policy_v3 against r49: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run of r49 and the candidate on sealed set o (calibration/sealed_20261120o) with S <= 1.0. All pass -> r50 on Earth; then the atlas is rebuilt with scripts/release_r49.sh adapted (owner standing instruction: use the latest Earth calibration).",
+ "amendment_1": {
+  "date": "2026-11-21",
+  "before": "any screen evaluation",
+  "disclosure": "One smoke probe (scripts/monsoon_probe.py mexico, inflow_gain 0.05, sst 26) moved Mexico July column water only 30.4 -> 30.5 mm: the model seas next to Mexico peak at 26.8 C (mid-August) so the warm gate stays near 0; onshore averages 0.15-0.2.",
+  "change": "Screen settings become inflow_gain in {0.05, 0.15, 0.5} with inflow_sst 23 (inflow_km 300). Targets, guards, pass rule, refit and gates unchanged."
+ }
 }
