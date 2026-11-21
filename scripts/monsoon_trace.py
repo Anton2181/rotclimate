@@ -11,9 +11,9 @@ from earth_benchmark import load_params
 from rotclimate import earth
 from rotclimate.model import ClimateModel
 
-ap = argparse.ArgumentParser(); ap.add_argument('region'); ap.add_argument('--specs'); ap.add_argument('--set', default='{}'); a = ap.parse_args()
+ap = argparse.ArgumentParser(); ap.add_argument('region'); ap.add_argument('--specs'); ap.add_argument('--set', default='{}'); ap.add_argument('--params', default='calibration/local_accuracy_20261023/r49_params.json'); a = ap.parse_args()
 if a.specs: earth.REGIONS.update(json.loads(Path(a.specs).read_text()))
-base = load_params(ROOT / 'calibration/local_accuracy_20261023/r49_params.json').replace(**json.loads(a.set))
+base = load_params(ROOT / a.params).replace(**json.loads(a.set))
 case = earth.region_case(a.region, 56.0); p = earth.earth_params(base, case).replace(steps_per_year=base.steps_per_year)
 g = case.grid; m = g.inmap & g.land; ti, tj = np.nonzero(m)
 model = ClimateModel(p, grid=g); model.trace_cells = (ti, tj); model.run()
