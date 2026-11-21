@@ -1,4 +1,16 @@
 # FULL REBUILD ON r49 — owner (20 Nov, away): "do the full rebuild ... handle it yourself ... keep going until you're done"
+* OWNER OVERRIDE (20 Nov): "Use the latest model in full, even if the zone agreement falls. Earth calibration is the most
+  important" + "Are you also checking the planetary parameters ... How about the offmap land? Be comprehensive".
+  -> The zone-agreement decision rule below is VOID. The atlas is rebuilt on FULL r49 physics. Painted-zone agreement is
+  reported, never a gate.
+* Plan (21 Nov):
+  W3 world refit on full r49 (calibration/map_world_r49_planet/plan.json; scripts/world_campaign_r49.py search; log
+  output/rebuild_r49_20261120/w3.log): world genes + planet levers + off-map land, guarded zonefit, 241 evals, ds32.
+  Selection per plan (native ds8 check vs the r49 start). The physics stays r49 regardless.
+  Earth corrections retrained for r49 (scripts/retrain_earth_corrections.sh -> calibration/earth_correction_r49_20261121).
+  Then base build -> corrected climate -> harvest (malaria rule) -> population -> all add-ons -> settlement chain
+  (release 3/4, provisional r5) -> browser checks -> Claude copy.
+* Superseded text below (kept for history):
 * CORRECTION FIRST: earlier map checks of r46-r49 merged only SPACES['e3'] physics (dropped e85-e87 and the r45/r46 additions).
   Full-physics check (earth_physics_on_map.py --since r44): r49 strict 31.0 % vs r44 32.4 % (warm wet 22 vs 34). The owner's
   rebuild decision rested on the wrong +2.6.

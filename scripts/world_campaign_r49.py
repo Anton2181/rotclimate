@@ -66,7 +66,7 @@ def search(plan, resume):
     base = load_params(ROOT / plan['start']).replace(downsample=plan['downsample'])
     old = load_params(ROOT / plan['old_atlas_params']).replace(downsample=plan['downsample'])
     physics = load_params(ROOT / plan['physics'])
-    ok = allowed() | {'beyond_continuity_km'}
+    ok = allowed() | {'beyond_continuity_km', 'terrain_file'}
     for key, value in asdict(base).items():
         if key not in ok and value != getattr(physics, key):
             raise ValueError('Shared physics changed: ' + key)
