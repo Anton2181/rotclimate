@@ -1,0 +1,77 @@
+diff --git a/rotclimate/config.py b/rotclimate/config.py
+index 3a373f103..559570971 100644
+--- a/rotclimate/config.py
++++ b/rotclimate/config.py
+@@ -313,6 +313,7 @@ class Params:
+     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
+     subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge
+     subtropical_high_seasonality: float = 0.5  # e3: summer strength x (1 + this), winter x (1 - this)
++    subtropical_high_west: float = 0.0  # e95: m/s, summer poleward western flanks of the ocean highs only (Gulf/East Asian southerlies)
+     moisture_diffusion: float = 6.0e4  # m^2/s
+     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
+     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)
+diff --git a/rotclimate/joint.py b/rotclimate/joint.py
+index 662011f8c..216fc1099 100644
+--- a/rotclimate/joint.py
++++ b/rotclimate/joint.py
+@@ -47,7 +47,7 @@ slp_local_km slp_scale_km snow_albedo soil_bucket_mm soil_memory_days soil_wet_c
+ sst_offset sst_source wind_source storm_asym storm_reach storm_seasonality storm_track storm_width
+ subcloud_evaporation subgrid_orographic subpolar_current subsidence subsidence_asym
+ subsidence_drying subsidence_summer subsidence_width subtropical_high subtropical_high_scale_km
+-subtropical_high_seasonality subtropical_high_width sverdrup terrain_drag trade_land trade_speed
++subtropical_high_seasonality subtropical_high_west subtropical_high_width sverdrup terrain_drag trade_land trade_speed
+ tropical_storm_km tropical_storms upslope_free_wind upwelling westerly_speed wet_cooling
+ wind_cap winter_mixing_deep
+ storm_plateau storm_plateau_m storm_plateau_km storm_plateau_offset_deg storm_plateau_area_km2
+diff --git a/rotclimate/model.py b/rotclimate/model.py
+index 0c40d8ee3..77015f181 100644
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -677,7 +677,7 @@ class ClimateModel:
+         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
+         # e3: ocean basins at the scale of the subtropical highs
+         self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
+-                            if p.subtropical_high > 0 else None)
++                            if (p.subtropical_high > 0 or p.subtropical_high_west > 0) else None)
+ 
+     # ------------------------------------------------------------------ helpers
+     def _subsidence(self, phi_h, s, phi_i=None):
+@@ -882,7 +882,7 @@ class ClimateModel:
+         den = RHO_AIR * (eps ** 2 + f ** 2)
+         return -(eps * px + f * py) / den, (f * px - eps * py) / den
+ 
+-    def subtropical_high_wind(self, s, phi_h):
++    def subtropical_high_wind(self, s, phi_h, speed=None):
+         """e3: the subtropical highs are oceanic cells, not a zonal ridge
+         (Rodwell & Hoskins 2001): pressure ~ ocean basin x a band around the
+         Hadley edge. Their eastern flanks blow equatorward and onshore along
+@@ -895,7 +895,7 @@ class ClimateModel:
+         psi = band * self.ocean_basin * (1.0 + p.subtropical_high_seasonality * s)
+         gx = -np.gradient(psi, axis=1) / g.dx_m            # toward low pressure
+         gy = np.gradient(psi, axis=0) / g.dx_m
+-        k = p.subtropical_high * 2.5 * p.subtropical_high_scale_km * 1000.0
++        k = (p.subtropical_high if speed is None else speed) * 2.5 * p.subtropical_high_scale_km * 1000.0
+         a = np.deg2rad(90.0 - p.cross_isobar_deg) * np.clip(np.abs(self.lat) / 12.0, 0, 1)
+         if p.retrograde:
+             a = -a
+@@ -1495,6 +1495,20 @@ class ClimateModel:
+                 u0, v0 = u0 + us, v0 + vs
+                 if split:
+                     u0h, v0h = u0h + us, v0h + vs
++            if p.subtropical_high_west > 0 and s > 0:
++                # e95: only the summer WESTERN flanks of the ocean highs: the
++                # poleward return flow along east coasts that carries Gulf of
++                # Mexico air into Mexico and Texas and South China Sea air into
++                # East China (Gulf and East Asian summer southerlies). The full
++                # e3 cells also blow equatorward along west coasts and cost
++                # California, Iberia and Chile (reports/earth_mode.md), so the
++                # equatorward flanks are left out.
++                us, vs = self.subtropical_high_wind(s, phi_h, speed=p.subtropical_high_west)
++                pole = (vs * np.sign(self.lat) > 0) * s
++                us, vs = us * pole, vs * pole
++                u0, v0 = u0 + us, v0 + vs
++                if split:
++                    u0h, v0h = u0h + us, v0h + vs
+             uM = vM = None
+             if p.monsoon_heating > 0 and heating_prev is not None:
+                 # e4b: latent heating aloft drives low-level flow toward it by

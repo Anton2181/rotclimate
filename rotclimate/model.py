@@ -677,7 +677,7 @@ class ClimateModel:
         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
         self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
-                            if (p.subtropical_high > 0 or p.subtropical_high_west > 0) else None)
+                            if p.subtropical_high > 0 else None)
 
     # ------------------------------------------------------------------ helpers
     def _subsidence(self, phi_h, s, phi_i=None):
@@ -882,7 +882,7 @@ class ClimateModel:
         den = RHO_AIR * (eps ** 2 + f ** 2)
         return -(eps * px + f * py) / den, (f * px - eps * py) / den
 
-    def subtropical_high_wind(self, s, phi_h, speed=None):
+    def subtropical_high_wind(self, s, phi_h):
         """e3: the subtropical highs are oceanic cells, not a zonal ridge
         (Rodwell & Hoskins 2001): pressure ~ ocean basin x a band around the
         Hadley edge. Their eastern flanks blow equatorward and onshore along
@@ -895,7 +895,7 @@ class ClimateModel:
         psi = band * self.ocean_basin * (1.0 + p.subtropical_high_seasonality * s)
         gx = -np.gradient(psi, axis=1) / g.dx_m            # toward low pressure
         gy = np.gradient(psi, axis=0) / g.dx_m
-        k = (p.subtropical_high if speed is None else speed) * 2.5 * p.subtropical_high_scale_km * 1000.0
+        k = p.subtropical_high * 2.5 * p.subtropical_high_scale_km * 1000.0
         a = np.deg2rad(90.0 - p.cross_isobar_deg) * np.clip(np.abs(self.lat) / 12.0, 0, 1)
         if p.retrograde:
             a = -a
@@ -1492,20 +1492,6 @@ class ClimateModel:
                 u0, v0 = u0 * fw, v0 * fw
             if p.subtropical_high > 0:
                 us, vs = self.subtropical_high_wind(s, phi_h)
-                u0, v0 = u0 + us, v0 + vs
-                if split:
-                    u0h, v0h = u0h + us, v0h + vs
-            if p.subtropical_high_west > 0 and s > 0:
-                # e95: only the summer WESTERN flanks of the ocean highs: the
-                # poleward return flow along east coasts that carries Gulf of
-                # Mexico air into Mexico and Texas and South China Sea air into
-                # East China (Gulf and East Asian summer southerlies). The full
-                # e3 cells also blow equatorward along west coasts and cost
-                # California, Iberia and Chile (reports/earth_mode.md), so the
-                # equatorward flanks are left out.
-                us, vs = self.subtropical_high_wind(s, phi_h, speed=p.subtropical_high_west)
-                pole = (vs * np.sign(self.lat) > 0) * s
-                us, vs = us * pole, vs * pole
                 u0, v0 = u0 + us, v0 + vs
                 if split:
                     u0h, v0h = u0h + us, v0h + vs
