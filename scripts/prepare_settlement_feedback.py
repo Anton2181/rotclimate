@@ -84,6 +84,8 @@ def prepare(mode, out=OUT):
     climate = F.map_climate(DATA, meta, arrays, shape)
     world = dict(elev=elev, land=land, road=road, density=density, cell_km=cell,
         biome=np.asarray(arrays['biome']), swamp=swamp, tilt=meta['world']['tilt'], river=F.navigable_rivers(shape), **climate)
+    from polity.forest_travel import enabled, map_forest          # forest in travel (C2), as polity/administrative_world.py
+    if enabled(): world['forest'] = map_forest(DATA, original, mode, shape)
     st = N.statics(world); cl = N.climate(world, st)
     def graph(month):
         crossing = np.where(st['basin'] > 0, S.CROSS_DAYS * (1 + S.FLOOD_GAIN * S.flood_index(cl['flow'][month][st['basin']])), 0.)

@@ -42,9 +42,11 @@ def world(mode):
     biome = np.asarray(arrays['biome'])
     swamp = np.asarray(Image.fromarray((target_fullres() == 5).astype(np.uint8) * 255).resize((shape[1], shape[0]), Image.Resampling.BOX)) > 127
     prior = core_term(land, biome, elev, cell, lore_cores(meta['width'], meta['height'], shape))
+    from polity.forest_travel import enabled, map_forest          # forest in travel (C2), as polity/administrative_world.py
+    forest = map_forest(DATA, original, mode, shape) if enabled() else None
     return dict(mode=mode, folder=folder, meta=meta, arrays=arrays, shape=shape, land=land, elev=elev, cell=cell, density=density,
         road=road, ferry=ferry, marked=marked, claim_ids=ids, claim_info=info, claimed=land & (ids > 0), biome=biome, swamp=swamp,
-        water_km=geo['water_distance'], aridity=hf['aridity'], dry_water_km=F.map_dry_water_km(), prior=prior)
+        water_km=geo['water_distance'], aridity=hf['aridity'], dry_water_km=F.map_dry_water_km(), prior=prior, forest=forest)
 
 
 def collection_owner(w, nodes, base_bin, max_days):
@@ -53,6 +55,7 @@ def collection_owner(w, nodes, base_bin, max_days):
     climate = F.map_climate(DATA, w['meta'], w['arrays'], shape)
     wd = dict(elev=w['elev'], land=land, road=w['road'], density=w['density'], cell_km=w['cell'], biome=w['biome'],
               swamp=w['swamp'], tilt=w['meta']['world']['tilt'], river=F.navigable_rivers(shape), **climate)
+    if w.get('forest') is not None: wd['forest'] = w['forest']
     st = N.statics(wd); cl = N.climate(wd, st); month = base_bin
     crossing = np.where(st['basin'] > 0, S.CROSS_DAYS * (1 + S.FLOOD_GAIN * S.flood_index(cl['flow'][month][st['basin']])), 0.)
     a, b, d = C.foot_edges(w['elev'], land, w['road'], S.month_terrain(st['eta'], cl, month), w['cell'],
@@ -69,7 +72,7 @@ def collection_owner(w, nodes, base_bin, max_days):
 def tracks(w, suggested):
     from polity.control import path_factor, terrain_coefficient, travel_graph
     from polity.settle import minor_roads
-    bare = travel_graph(w['elev'], w['land'], w['road'], terrain_coefficient(w['biome'], w['swamp'], None), w['cell'],
+    bare = travel_graph(w['elev'], w['land'], w['road'], terrain_coefficient(w['biome'], w['swamp'], None, w.get('forest')), w['cell'],
                         path_factor(w['density']), w['ferry'])
     mask, routes, links = minor_roads(bare, w['shape'], w['road'], suggested, w['marked'])
     return mask
