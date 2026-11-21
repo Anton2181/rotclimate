@@ -80,6 +80,8 @@ def main():
             swamp=np.asarray(Image.fromarray((target_fullres()==5).astype('u1')*255).resize((w,h),Image.Resampling.BOX))>127
             world=dict(elev=z,land=land,biome=np.asarray(arrays['biome']),swamp=swamp,density=np.zeros(shape),cell_km=cell_km,
                 tilt=float(meta['world']['tilt']),river=F.navigable_rivers(shape),road=road,**F.map_climate(data,meta,arrays,shape))
+            from polity.forest_travel import enabled,map_forest     # forest in travel (C2), as polity/administrative_world.py
+            if enabled():world['forest']=map_forest(data,original,mode,shape)
             st=N.statics(world);cl=N.climate(world,st)
             # No density feedback, inferred tracks, ferries, river or sea freight.
             def graph(month):
