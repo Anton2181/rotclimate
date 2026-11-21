@@ -41,6 +41,11 @@
   desert-air share chi (calibration/monsoon_convection_20261121/plan_e93.json). Screen D PASS at heat 0.3 (target 0.948; Sahel
   0.873, Bengal 0.926, Najd 0.993). Stage B joint refit running: refit_e93.json -> output/monsoon_convection_20261121/refit
   (reference r49 = output/monsoon_convection_20261121/ref symlinks). Then policy_v3 gates; sealed set o ONCE.
+* [DONE 21 Nov] e93 refit best j24 (heat 0.31, chi0 0.675, convective_rh 0.708, convective_rain 0.537, onset_gap 4.125):
+  dev49 PASS (S 0.9914, T +0.07 %, P -1.8 %), fine28 PASS (1.003), SEALED SET o FAIL (S 1.040, P +8.8 %): Oman/Dhofar box
+  (17N 53E) 4.20 -> 5.18 — r49 already rains a false monsoon there (245-259 mm Jul-Aug, obs 6-10); e93 doubles it. NOT ADOPTED;
+  set o SPENT. Lesson: sea air off a COLD upwelling sea (Somali jet, Oman) is stable; e93's gates (belt, desert air) miss it.
+  Next: draw sealed set p first, then e94 = e93 + source-sea temperature gate (and/or fix the false Oman monsoon itself).
 * Next lead (Mexico barely moves under e93): scripts/monsoon_trace.py shows Mexico's air counted as land-crossed (chi 0.63-0.86)
   under monsoon WESTERLIES all summer: trade_land = 1.0 removes summer trades over big land masses (no Gulf of Mexico easterly
   supply) and the plateau-anchored belt (e85) puts Mexico on the westerly side. A circulation fix, separate experiment. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
