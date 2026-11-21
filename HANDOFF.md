@@ -30,10 +30,10 @@
   ONE command for the whole rebuild (base -> add-ons -> settlement release 4 chain, staged reach, reach variants, release-3 admin,
   pages, accuracy, hub). In-place files are backed up/restored (no git checkout). Every step ran individually on 21 Nov, but the
   consolidated script has NOT been run end-to-end yet; for a new physics release copy it, change PHYS/WORLD/CK/CAL/REPORT/NOTE.
-* [RUNNING] monsoon resolution diagnostic (calibration/monsoon_resolution_20261121/plan.json; scripts/monsoon_resolution.py):
-  r49 at 56/28/14 km. 56 km peak-season ratios: Mexico 0.28, Texas 0.29, Sahel 0.61 (guards Bengal 0.40, annual 0.30; Najd 0.27).
-  Rule: RESOLUTION if 14 km beats 56 km by >= 0.25 in 2 of 3 targets, else PHYSICS -> two-level moisture transport, then
-  land-sea inflow, each screened on dev and tested once on sealed set o.
+* [DONE 21 Nov] Monsoon peak investigation — calibration/monsoon_inflow_20261121/findings.md. Resolution ruled out (14 km no
+  better), e91 warm-sea inflow FAILED its screen (Najd/Sahel guards), observed SST barely helps. Remaining lever: the rain-production
+  law (heating-driven convection at moderate RH; less rain from cold saturated columns). e91 code stays (default off). Owner
+  decision before more climate physics; sealed set o still UNOPENED. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
 * [OPEN] Provisional r5 NOT carried over: frozen r44 cohort (plan says no climate update; prepare_urban_candidate_control.py and
   successors pin the r44 publication). Absent from the r49 atlas and Claude copy; kept in git history + GPT site. Rebuilding on
   r49 = new cohort declaration + removing r44 identity pins in ~12 scripts (owner decision whether worth it).
