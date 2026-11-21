@@ -23,3 +23,7 @@ central fraction becomes 1.44 x 0.565 = 0.81 instead of 0.32: about 125 M people
 That rests on reading the seven lore cores as equivalent to Earth's cradles (Uruk, Memphis, Harappa, Zhengzhou: about
 3,000 years of states by AD 200) and Rome. Several lore cores are much younger (Arǧos since ~25, present year 486).
 Earth has too few cores to fit an age effect. Owner decision needed before adoption (see HANDOFF).
+
+## Owner decision (21 Nov 2026): keep 50 M
+Today's level (median ratio 0.32 x capacity) stays. The Earth fit is recorded as confirming the 800 km heartland pattern
+(fitted L 811 km); the fitted level is not applied. No rebuild.

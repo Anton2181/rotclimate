@@ -35,6 +35,9 @@
   - T1: DONE 21 Nov 18:50 UTC. r50 atlas promoted, browser checks pass, Claude copy v19; reports/RELEASE_R50_20261121.md.
   - T7: DONE 21 Nov ~21:30 UTC. Fu runoff + GPP grazing seasons + r5 town-size fit, full rebuild; browser checks pass;
     reports/RELEASE_R50_T7_20261121.md. Claude copy v21, all 84 layers x 2 climates load. Next: T8.
+  - T8: DONE, level KEPT by owner. Occupation field M1 (1.42 exp(-D/811 km)) beats the single ratio in CV (0.813 vs 1.050)
+    and confirms the 800 km heartland shape, but applied with the 7 lore cores it gives 125 M; owner chose to keep 50 M.
+    calibration/occupation_field_20261121/findings.md. Next: T9 nomads.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
