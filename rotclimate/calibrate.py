@@ -354,12 +354,8 @@ def evaluate_mean_climate(p, mode, seeds):
              outside_share=coverage['outside_share'], distance_debt=coverage['distance_debt'])) if coverage is not None else {}))
 
 
-AENAHA_PX = (1012.7, 413.1)       # data/lore_cores.json, source map pixels
-AENAHA_RADIUS_KM = 300.0
-
-
 def two_target(result, ev) -> dict:
-    """Side calibration (calibration/two_target_20261121/plan.json): the land within 300 km of Aenaha
+    """Side calibration (calibration/two_target_20261121/plan.json): the painted Mediterranean zone
     classed Mediterranean (Koppen Cs), and the mean chance of pastoral nomads over the painted cold-dry
     zone (Earth-fitted logistic in the Koppen aridity ratio, calibration/two_target_20261121/nomad_rule.json)."""
     from .koppen import CODES, classify
@@ -367,10 +363,7 @@ def two_target(result, ev) -> dict:
     st = ev["monthly"]
     codes = np.array(CODES)[classify(st["Tm"], st["Pm"], st["summer"])]
     land = g.inmap & g.land
-    ii, jj = np.mgrid[:g.ny, :g.nx]
-    x = (jj - g.pad + 0.5) * g.f; y = (ii - g.pad + 0.5) * g.f
-    km = np.hypot(x - AENAHA_PX[0], y - AENAHA_PX[1]) * g.cell_km / g.f
-    near = land & (km <= AENAHA_RADIUS_KM)
+    near = land & (g.target == 4)                     # the painted Mediterranean zone
     cold_dry = land & (g.target == 2)
     cs = float(np.char.startswith(codes[near], "Cs").mean()) if near.any() else 0.0
     rule = json.loads((Path(__file__).resolve().parents[1] / 'calibration/two_target_20261121/nomad_rule.json').read_text())
@@ -378,7 +371,7 @@ def two_target(result, ev) -> dict:
     p = 1.0 / (1.0 + np.exp(-(rule['a'] + rule['b'] * np.log(ratio))))
     nomads = float(p[cold_dry].mean()) if cold_dry.any() else 0.0
     bw = float(np.char.startswith(codes[cold_dry], "BW").mean()) if cold_dry.any() else 0.0
-    return dict(aenaha_cs=cs, cold_dry_nomads=nomads, cold_dry_bw=bw, aenaha_cells=int(near.sum()),
+    return dict(med_cs=cs, cold_dry_nomads=nomads, cold_dry_bw=bw, med_cells=int(near.sum()),
                 cold_dry_cells=int(cold_dry.sum()), score=0.5 * cs + 0.5 * nomads)
 
 
