@@ -1,0 +1,30 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "task": "T6 of the owner-approved autonomous plan: crop yields",
+ "status": "declared before any model-vs-GAEZ comparison (GAEZ rasters downloaded and only their shape/range read)",
+ "question": "Does the Harvest rain-fed cereal response (scripts/land_people.py crop_yield: best season, FAO-33 Ky water line, failure smoothstep(fw, 0.3, 0.5), supply 0.8 P + soil; x margin reliability cold (-2, 10) C, dry (0, 0.35) P/PET) give the observed SPATIAL PATTERN of low-input rain-fed attainable yield? The yield LEVEL (1 t/ha ceiling) is a period assumption and is reported, not fitted.",
+ "target": "FAO/IIASA GAEZ v4, res05, CRUTS32 1971-2000, LOW input, RAIN-FED, without CO2 fertilisation, attainable yield of the best occurring suitability class (yxLr0_whe, yxLr0_brl; kg DW/ha, 5 arc-min; data/cache/gaez, not redistributed)",
+ "model_input": "WorldClim 2.1 1970-2000 tavg, tmax, tmin, prec averaged to 0.5 deg over land (>= 50 % land); Hargreaves PET with the model's top-of-atmosphere radiation (Earth tilt 23.44, 365 days); irrigation 0; wheat and barley separately",
+ "variants": {
+  "rain_efficiency": [0.6, 0.8, 1.0],
+  "failure_band": [[0.2, 0.4], [0.3, 0.5], [0.4, 0.6]],
+  "window_upper_shift_C": [0, 3],
+  "dry_margin_upper": [0.25, 0.35, 0.5],
+  "current": "0.8, [0.3, 0.5], 0, 0.35 (54 variants)"
+ },
+ "domain": "0.5-deg cells in the Earth window (0-56 N, 12 W-125 E) valid in both grids (GAEZ zeros = unsuitable are kept)",
+ "split": "10-degree checkerboard offset by 5 deg: dev 0, blind 1",
+ "scores": {
+  "primary": "mean over wheat and barley of the Spearman correlation between model grain yield and GAEZ yield over cells",
+  "f1": "mean over the two crops of the F1 of 'grows' (model >= 0.05 t/ha vs GAEZ >= 100 kg/ha)",
+  "level": "median model/GAEZ on cells where both grow (reported only)"
+ },
+ "choice": "variant with the highest dev primary",
+ "blind_gates": {
+  "G1": "chosen blind primary >= current blind primary + 0.03",
+  "G2": "chosen blind f1 >= current blind f1 - 0.02",
+  "G3": "if the window shift changes, the observed crop-calendar diagnostic (reports/OBSERVED_CROP_CALENDARS_20261103.md) must not get worse in 'duration outside the model envelope' for winter wheat or barley",
+  "adopt": "G1, G2 and G3: the Harvest crop response takes the chosen setting at the bundled rebuild (the harvest cascade). Otherwise current stays; the pattern agreement is reported."
+ }
+}
