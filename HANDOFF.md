@@ -33,7 +33,10 @@
 * [DONE 21 Nov] Monsoon peak investigation — calibration/monsoon_inflow_20261121/findings.md. Resolution ruled out (14 km no
   better), e91 warm-sea inflow FAILED its screen (Najd/Sahel guards), observed SST barely helps. Remaining lever: the rain-production
   law (heating-driven convection at moderate RH; less rain from cold saturated columns). e91 code stays (default off). Owner
-  decision before more climate physics; sealed set o still UNOPENED. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
+  decision before more climate physics; sealed set o still UNOPENED.
+* [DONE 21 Nov, owner "Let's try"] e92 heating-dependent convective threshold over land: screen FAIL (Najd 1.02-1.15, Sahel
+  1.03-1.11 while Mexico/Bengal gain <= 4 %). CLIMATE PARKED AT r49 (declared rule). e91/e92 code stays, default off.
+  Pattern and the only remaining idea: findings.md item 5. Sealed set o still UNOPENED. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
 * [OPEN] Provisional r5 NOT carried over: frozen r44 cohort (plan says no climate update; prepare_urban_candidate_control.py and
   successors pin the r44 publication). Absent from the r49 atlas and Claude copy; kept in git history + GPT site. Rebuilding on
   r49 = new cohort declaration + removing r44 identity pins in ~12 scripts (owner decision whether worth it).

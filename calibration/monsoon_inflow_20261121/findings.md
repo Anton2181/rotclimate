@@ -13,3 +13,12 @@
 Conclusion: the remaining lever is the rain-production law itself (convection triggered by surface heating / instability at
 moderate column humidity, and less rain from cold stable columns). Two-level transport (the plan's next step) targets rain
 shadows, not this. e88 heated-slope convection already failed its screen. Not pursued further without an owner decision.
+
+5. Rain-production law (e92 heating-dependent convective threshold over land; calibration/monsoon_convection_20261121): FAIL.
+   Threshold drop 0.05/0.10/0.15: Mexico 0.993/0.983/0.971, Bengal 0.992/0.980/0.961, but Sahel 1.025/1.062/1.112 and Najd
+   1.021/1.061/1.146; the target mean never improves (1.002-1.007). Climate PARKED at r49 per the declared plan.
+
+Common pattern of e88, e90, e91, e92: every term that lets hot land rain more also rains on the arid margins (Sahel pre-monsoon,
+Najd), faster than it helps the monsoon cores. What separates them on Earth is the dry, warm layer aloft over the desert
+margins (Saharan/Arabian air layer) that caps convection; e84 instability_cap tried this alone and failed. A future attempt would
+need that discriminator and a monsoon-side term together, declared as one experiment, with sealed set o still unopened.
