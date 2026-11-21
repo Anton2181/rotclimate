@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "status": "declared before any e94 evaluation (code written, default off; r49 unchanged); sealed set p (calibration/sealed_20261121p) declared and unopened",
+ "owner": "'Keep trying, keep going until we get it'",
+ "lesson": "e93 passed dev49 (0.9914) and fine28 (1.003) but failed sealed set o (1.040): the Oman coast's false monsoon (r49 already 245-259 mm Jul-Aug, obs 6-10) doubled. Diagnosis (set o now spent = development data): the box lies 5-7 deg equatorward of the model's land ITCZ, under sea air (chi 0.39), so neither e86 nor e93's gates act; the e49 monsoon-descent field (Rodwell-Hoskins) separates it: July descent Oman 1.13, Najd 2.42, North India 0.09 (May-June 0.75-0.79), Bengal/Sahel/Texas ~0, Mexico 0.01.",
+ "physics": "e94: cap = clip(descent / convective_descent_ref, 0, 1); v6 boost and e2 convective rate x (1 - convective_descent x cap); e93's threshold drop x (1 - cap).",
+ "stage_A_screen": {
+  "base": "the e93 finalist (calibration/monsoon_convection_20261121/candidate_params.json); scores against r49",
+  "settings": [{"convective_descent": 0.5, "convective_descent_ref": 0.5}, {"convective_descent": 1.0, "convective_descent_ref": 0.5}, {"convective_descent": 1.0, "convective_descent_ref": 1.0}],
+  "targets": ["mexico", "texas_plains", "sahel_niger", "bengal"],
+  "guards": ["najd_arabia", "iberia", "california", "o_17n_53e"],
+  "pass": "target mean <= 0.98 and worst guard <= 1.02 (scripts/monsoon_e94_screen.py stage A)"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 against r49, start = passing screen setting",
+  "knobs": {"convective_descent": ["add", 0.15], "convective_descent_ref": ["mul", 1.4], "convective_rh_heat": ["add", 0.03], "monsoon_descent": ["mul", 1.3], "convective_rain": ["mul", 1.08]},
+  "bounds": {"convective_descent": [0.0, 1.0], "convective_descent_ref": [0.1, 3.0], "convective_rh_heat": [0.0, 0.45]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 against r49: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set p with S<=1.0. Pass -> r50 on Earth; atlas rebuilt with scripts/release_r49.sh adapted."
+}

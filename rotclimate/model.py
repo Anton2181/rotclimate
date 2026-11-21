@@ -2212,6 +2212,12 @@ class ClimateModel:
                 else:
                     descent = self._descent(P_last) if P_last is not None else 0.0
                 sink = (0.0 if sink is None else sink) + p.monsoon_descent * descent / DAY
+                if p.convective_descent > 0:
+                    # e94: the monsoon descent also caps convection, not only the column water: r49 rained a false
+                    # 245-259 mm Jul-Aug monsoon on the Oman coast (obs 6-10) and Najd in summer under the Indian monsoon's
+                    # descent (calibration/monsoon_convection_20261121/plan_e94.json)
+                    descent_cap = np.clip(descent / p.convective_descent_ref, 0.0, 1.0)
+                    instab = 1.0 + (instab - 1.0) * (1.0 - p.convective_descent * descent_cap)
             gain = None
             if p.flux_convergence > 0:
                 # e17: moisture moves with u.grad(W), which leaves out -W div(u):
@@ -2237,6 +2243,8 @@ class ClimateModel:
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
+                if p.convective_descent > 0 and p.monsoon_descent > 0:
+                    closure['conv'] = p.convective_rain * (1.0 - p.convective_descent * descent_cap)      # e94
                 if p.convective_rh_heat > 0:
                     # e92: the Bretherton closure (fitted over tropical seas) ties convection to column RH alone. Over land
                     # surface heating supplies the instability, so convection starts at a lower column RH: r49 rains
@@ -2249,6 +2257,8 @@ class ClimateModel:
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
                         heat = heat * (1.0 - np.clip((chi - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
+                    if p.convective_descent > 0 and p.monsoon_descent > 0:
+                        heat = heat * (1.0 - descent_cap)                       # e94
                     closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
             if p.eddy_rate > 0 and p.eddy_upwind_days > 0:
