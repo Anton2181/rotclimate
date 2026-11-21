@@ -1,0 +1,48 @@
+{
+ "title": "e94 refit (stage B of calibration/monsoon_convection_20261121/plan_e94.json)",
+ "start": "calibration/monsoon_convection_20261121/candidate_params.json",
+ "start_set": {
+  "convective_descent": 1.0,
+  "convective_descent_ref": 0.5
+ },
+ "reference": "output/monsoon_convection_20261121/ref",
+ "reference_name": "r49",
+ "knobs": {
+  "convective_descent": [
+   "add",
+   0.15
+  ],
+  "convective_descent_ref": [
+   "mul",
+   1.4
+  ],
+  "convective_rh_heat": [
+   "add",
+   0.03
+  ],
+  "monsoon_descent": [
+   "mul",
+   1.3
+  ],
+  "convective_rain": [
+   "mul",
+   1.08
+  ]
+ },
+ "bounds": {
+  "convective_descent": [
+   0.0,
+   1.0
+  ],
+  "convective_descent_ref": [
+   0.1,
+   3.0
+  ],
+  "convective_rh_heat": [
+   0.0,
+   0.45
+  ]
+ },
+ "max_evaluations": 40,
+ "screen_choice": "A: descent 1.0 / ref 0.5 (target 0.944; Oman 0.844, Bengal 0.917, Sahel 0.873, worst guard iberia 1.000)"
+}
