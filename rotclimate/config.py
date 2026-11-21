@@ -313,6 +313,7 @@ class Params:
     subtropical_high_scale_km: float = 1000.0  # e3: smoothing of the ocean basins those highs fill
     subtropical_high_width: float = 10.0       # e3: deg of latitude around the subtropical ridge
     subtropical_high_seasonality: float = 0.5  # e3: summer strength x (1 + this), winter x (1 - this)
+    subtropical_high_west: float = 0.0  # e95: m/s, summer poleward western flanks of the ocean highs only (Gulf/East Asian southerlies)
     moisture_diffusion: float = 6.0e4  # m^2/s
     eddy_rate: float = 0.0            # 1/day, storm-eddy exchange (0 = off)
     eddy_seasonality: float = 0.0     # extra winter strength / summer weakness (0 preserves existing fits)

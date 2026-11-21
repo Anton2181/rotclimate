@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "task": "T2 (owner-approved autonomous plan): Mexico monsoon circulation",
+ "status": "declared before any e95 evaluation (code written, default off; r50 unchanged); sealed set q (calibration/sealed_20261121q) declared and unopened",
+ "diagnosis": "r50 still under-rains Mexico (screen 0.986): trade_land = 1 removes the summer trades over broad land and the ocean-high circulation (e3 subtropical_high) is off, so no Gulf of Mexico southerly inflow reaches Mexico and Texas. e3 was rejected earlier because its EQUATORWARD eastern flanks hurt west coasts (California, Iberia, Chile; reports/earth_mode.md).",
+ "physics": "e95 subtropical_high_west (m/s): the e3 ocean-high wind, summer only (x season index s>0), kept only where it blows poleward (western flanks), added to both water and heat winds.",
+ "stage_A_screen": {
+  "base": "r50 (calibration/local_accuracy_20261023/r50_params.json); scores against r50's recorded runs output/monsoon_convection_20261121/validate94/candidate_*",
+  "settings": [{"subtropical_high_west": 1.0}, {"subtropical_high_west": 2.0}, {"subtropical_high_west": 4.0}],
+  "targets": ["mexico", "texas_plains", "southeast_us", "east_china"],
+  "guards": ["california", "iberia", "chile", "morocco", "najd_arabia", "sw_australia"],
+  "score": "per region 0.5 T-MAE ratio + 0.5 rain-loss ratio vs r50",
+  "pass": "target mean <= 0.98 and worst guard <= 1.02 (scripts/monsoon_e95_screen.py A)"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 against r50, start = best passing screen setting",
+  "knobs": {"subtropical_high_west": ["mul", 1.4], "subtropical_high_width": ["mul", 1.25], "trade_land": ["add", -0.15], "convective_rain": ["mul", 1.08], "monsoon_westerly": ["mul", 1.2]},
+  "bounds": {"subtropical_high_west": [0.0, 8.0], "subtropical_high_width": [4.0, 20.0], "trade_land": [0.0, 1.0]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 against r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q with S<=1.0. Pass -> r51 and a full atlas rebuild (standing instruction). Fail at the screen -> record and move on to T3; a second mechanism may be declared afterwards."
+}
