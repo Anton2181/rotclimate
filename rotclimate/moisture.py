@@ -27,7 +27,7 @@ def rain_coefficient(W, saturation, dynamics, instability, rh_threshold, tau_day
         # 2004), and rain lost on the way down below high cloud bases,
         # x exp(-evap * z_LCL / 3 km) with z_LCL = (20 + T/5)(100 - RH%) m
         # (Lawrence 2005); the evaporated water stays in the column
-        if closure["conv"] > 0:
+        if np.any(np.asarray(closure["conv"]) > 0):
             rate = rate + (closure["conv"] * np.exp(11.4 * (np.minimum(rh, 1.5) - closure["r0"])) * closure["fT"]
                            / (np.maximum(W, 0.1) * DAY))
         if closure["evap"] > 0:
