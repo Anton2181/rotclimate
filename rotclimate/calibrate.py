@@ -360,8 +360,8 @@ AENAHA_RADIUS_KM = 300.0
 
 def two_target(result, ev) -> dict:
     """Side calibration (calibration/two_target_20261121/plan.json): the land within 300 km of Aenaha
-    classed Mediterranean (Koppen Cs), and the painted cold-dry zone classed cold desert (Koppen BW,
-    aridity ratio < 0.5: on Earth, below it most Ethnographic Atlas societies are pastoral nomads)."""
+    classed Mediterranean (Koppen Cs), and the mean chance of pastoral nomads over the painted cold-dry
+    zone (Earth-fitted logistic in the Koppen aridity ratio, calibration/two_target_20261121/nomad_rule.json)."""
     from .koppen import CODES, classify
     g = result.grid
     st = ev["monthly"]
@@ -373,9 +373,13 @@ def two_target(result, ev) -> dict:
     near = land & (km <= AENAHA_RADIUS_KM)
     cold_dry = land & (g.target == 2)
     cs = float(np.char.startswith(codes[near], "Cs").mean()) if near.any() else 0.0
+    rule = json.loads((Path(__file__).resolve().parents[1] / 'calibration/two_target_20261121/nomad_rule.json').read_text())
+    ratio = np.maximum(np.asarray(ev["indices"]["aridity"], float), 0.01)
+    p = 1.0 / (1.0 + np.exp(-(rule['a'] + rule['b'] * np.log(ratio))))
+    nomads = float(p[cold_dry].mean()) if cold_dry.any() else 0.0
     bw = float(np.char.startswith(codes[cold_dry], "BW").mean()) if cold_dry.any() else 0.0
-    return dict(aenaha_cs=cs, cold_dry_bw=bw, aenaha_cells=int(near.sum()), cold_dry_cells=int(cold_dry.sum()),
-                score=0.5 * cs + 0.5 * bw)
+    return dict(aenaha_cs=cs, cold_dry_nomads=nomads, cold_dry_bw=bw, aenaha_cells=int(near.sum()),
+                cold_dry_cells=int(cold_dry.sum()), score=0.5 * cs + 0.5 * nomads)
 
 
 def mediterranean_shares(result, ev) -> dict:

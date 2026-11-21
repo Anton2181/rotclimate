@@ -1,11 +1,11 @@
 {
  "task": "Side project (owner 21 Nov): a world refit with only two targets",
- "declared": "2026-11-21, before any result",
+ "declared": "2026-11-21, before any result (target 2 revised by owner before the first run)",
  "targets": {
   "aenaha_cs": "share of land cells within 300 km of Aenaha (data/lore_cores.json, x 1012.7, y 413.1) classed Koppen Cs (Mediterranean)",
-  "cold_dry_bw": "share of the painted cold-dry zone classed Koppen BW (aridity ratio < 0.5). Earth grounding: Ethnographic Atlas societies below Koppen ratio 0.5 are 57 % pastoral nomads (30 of 53); above it 3 % (18 of 579)"
+  "cold_dry_nomads": "mean chance of pastoral nomads over the painted cold-dry zone: logistic in ln(Koppen aridity ratio) fitted on 632 Ethnographic Atlas societies (OOF AUC 0.91; nomad_rule.json): 57 % at ratio 0.1, 30 % at 0.25, 15 % at 0.5, 7 % at 1. Owner 21 Nov: maximise nomads, not strictly BW"
  },
- "objective": "0.5 aenaha_cs + 0.5 cold_dry_bw (rotclimate.calibrate.two_target, mode 'twotarget'); no other zone guarded (owner: 'just these two targets')",
+ "objective": "0.5 aenaha_cs + 0.5 cold_dry_nomads (rotclimate.calibrate.two_target, mode twotarget); BW share reported only; no other zone guarded",
  "physics": "calibration/local_accuracy_20261023/r50_params.json (unchanged)",
  "start": "calibration/map_world_r50_planet/start.json",
  "free": "the W4 space: latitude, north bearing, the six surrounding-land shares and their relief, tilt, eccentricity, perihelion, starlight, greenhouse, land by latitude",
