@@ -224,6 +224,8 @@ class Params:
     onset_gap_deg: float = 5.0        # e86: the rain belt runs this far equatorward of the land ITCZ (Saharan air layer over the shallow monsoon)
     slope_convection: float = 0.0     # e88: added warm-moist convective boost over sun-heated mountain slopes x clip(subgrid relief / slope_convection_km) x clip((T - 18) / 8) x moisture; 0 = off
     slope_convection_km: float = 1.0  # e88: subgrid relief (km) for the full slope trigger
+    convective_rh_heat: float = 0.0   # e92: over land the convective closure's critical column RH falls by this x clip((T - 18) / 8, 0, 1):
+                                      # surface heating, not column humidity alone, sets land convection; oceans unchanged; 0 = off
     inflow_gain: float = 0.0          # e91: warm-sea inflow: land columns within reach of a warm sea relax toward marine humidity where the low-level
                                       # wind blows onshore; rate = this x the sea's evaporation rate x exp(-km from sea / inflow_km) x warm x onshore; 0 = off
     inflow_km: float = 300.0          # e91: inland e-folding distance (km)

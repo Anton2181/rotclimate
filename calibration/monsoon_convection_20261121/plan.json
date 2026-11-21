@@ -1,0 +1,21 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "status": "declared before any e92 evaluation (code written, default off; r49 unchanged)",
+ "owner": "'Let's try' (21 Nov) after the findings in calibration/monsoon_inflow_20261121/findings.md",
+ "physics": "e92 convective_rh_heat: over land the e2 convective closure's critical column RH r0 = convective_rh - convective_rh_heat x clip((T - 18)/8, 0, 1); oceans unchanged.",
+ "risk": "hot moderately humid pre-monsoon land (Sahel May, already too wet) and hot deserts with some moisture (Najd) may rain more",
+ "stage_A_screen": {
+  "what": "r49 + convective_rh_heat in {0.05, 0.10, 0.15}, same seven regions and scoring as calibration/monsoon_inflow_20261121 (scripts/monsoon_inflow_screen.py with output stage C)",
+  "targets": ["mexico", "texas_plains", "sahel_niger", "bengal"],
+  "guards": ["najd_arabia", "iberia", "california"],
+  "pass": "target mean <= 0.98 and worst guard <= 1.02; none -> FAIL and climate parked at r49"
+ },
+ "stage_B_refit": {
+  "tool": "scripts/joint_refit.py, objective S49 against r49",
+  "knobs": {"convective_rh_heat": ["add", 0.03], "convective_rh": ["add", 0.02], "convective_rain": ["mul", 1.1], "rh_threshold": ["add", 0.02], "onset_suppression": ["add", 0.1]},
+  "bounds": {"convective_rh_heat": [0.0, 0.35], "convective_rh": [0.4, 0.9], "onset_suppression": [0.0, 1.0]},
+  "max_evaluations": 40
+ },
+ "gates": "policy_v3 against r49: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run on sealed set o (calibration/sealed_20261120o) with S <= 1.0. All pass -> r50 on Earth and the atlas rebuilt (scripts/release_r49.sh adapted)."
+}

@@ -2237,6 +2237,12 @@ class ClimateModel:
             if p.convective_rain > 0 or p.subcloud_evaporation > 0:     # physics e2 rain closure
                 closure = dict(conv=p.convective_rain, r0=p.convective_rh, evap=p.subcloud_evaporation, T=T,
                                fT=np.clip((T_col - 15.0) / 10.0, 0.0, 1.0))
+                if p.convective_rh_heat > 0:
+                    # e92: the Bretherton closure (fitted over tropical seas) ties convection to column RH alone. Over land
+                    # surface heating supplies the instability, so convection starts at a lower column RH: r49 rains
+                    # 0.8 mm/day from Mexico's July column (30 mm, RH 0.60, temperature right) against ~3 observed, and
+                    # readily from cold saturated winter columns (calibration/monsoon_inflow_20261121/findings.md).
+                    closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * np.clip((T - 18.0) / 8.0, 0.0, 1.0), 0.0)
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
             if p.eddy_rate > 0 and p.eddy_upwind_days > 0:
                 # e61: the eddies' water comes from where the air comes from.
