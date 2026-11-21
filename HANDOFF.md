@@ -10,6 +10,13 @@
 * T5 Travel costs (forest/relief/water, hand-set) vs Stanford ORBIS Roman route times; blind route split.
 * T6 Crop yields vs FAO GAEZ low-input rainfed yields; blind split.
 * Not planned: malaria population penalty (needs the dropped population-history line).
+* Settlement / de facto control candidates (owner asked 21 Nov "look for opportunities to calibrate it / the de facto map"):
+  - T8 Town sizes and primacy (both blind size tests failed). Development on Hanson Roman areas; the one unspent pool,
+    Buringh sizes (reserved 16 Nov), scored once. Candidate term: regional primacy / rank-size within the polity.
+  - T9 Ports (WP2 parked for lack of a port list): find a citable ancient-ports catalogue; test port position and size terms.
+  - T10 Control map v2.1 on a fresh blind pool: every CHGIS year and Pleiades window used so far is spent; look for a
+    documented-seat pool outside China and the Mediterranean (Cliopatria polity plus a capital or seat list), declare, score once.
+  - Population level (60.6 M is supplied, not predicted) and villages stay blocked: no unspent census-like pool.
 * PROGRESS 21 Nov 16:20 UTC:
   - T2: PARKED. e95 (summer western flanks of the ocean highs) and e96 (no westerly turning in the plateau-anchored band) both
     FAILED their screens; Mexico is unresponsive to wind fixes. Set q unopened. calibration/monsoon_circulation_20261121/findings.md
