@@ -1,3 +1,16 @@
+# AUTONOMOUS WORK PLAN — owner approved 21 Nov 2026 ("write it down as a list of tasks for you to follow autonomously and keep
+# going"; paste every map/graphic into the chat). Work in order; each Earth test declared before scoring; adopt only on pass.
+* T1 Finish the r50 atlas rebuild: select_world_r50.py + r50 corrections -> scripts/release_r50.sh -> browser checks ->
+  package -> Claude copy -> reports/RELEASE_R50_20261121.md, HANDOFF, push.
+* T2 Mexico monsoon circulation (biggest known climate error): new sealed set q first; summer trades over land (trade_land)
+  so Gulf air reaches Mexico; screen -> refit -> policy_v3 vs r50; if adopted, full rebuild again (standing instruction).
+  Also re-check equatorial interiors (too dry) and rain shadows.
+* T3 River runoff AMOUNT vs GRUN (timing already validated; amount ~0.4 of observed): blind checkerboard test.
+* T4 Grazing capacity (uncalibrated clip(T/15)*P/(P+50)) vs GLW livestock density and MODIS NPP on non-crop land.
+* T5 Travel costs (forest/relief/water, hand-set) vs Stanford ORBIS Roman route times; blind route split.
+* T6 Crop yields vs FAO GAEZ low-input rainfed yields; blind split.
+* Not planned: malaria population penalty (needs the dropped population-history line).
+
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
   0.9854, fine28 1.001, sealed set p 0.922. Sets o and p SPENT (o failed e93 alone). Atlas still on r49 -> rebuild next
