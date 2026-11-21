@@ -25,7 +25,7 @@ def simulate(name, params_file):
     ck = OUT / f'{name}.pkl'
     if not ck.exists():
         cmd = [PY, '-u', '-I', str(ROOT / 'scripts/build_atlas_variant.py'), '--params', str(params_file), '--name', f'_select_r49_{name}',
-               '--downsample', '8', '--seeds', '1,2,3', '--workers', '3', '--require-verified', '--simulate-only', '--checkpoint', str(ck)]
+               '--title', 'selection', '--eyebrow', 'selection', '--downsample', '8', '--seeds', '1,2,3', '--workers', '3', '--require-verified', '--simulate-only', '--checkpoint', str(ck)]
         print('simulating', name, flush=True)
         try:
             subprocess.run(cmd, check=True, cwd=ROOT, env=dict(os.environ, OPENBLAS_NUM_THREADS='1', OMP_NUM_THREADS='1'))
