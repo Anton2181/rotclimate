@@ -19,10 +19,17 @@
 * [DONE 21 Nov] Earth corrections retrained for r49 (calibration/earth_correction_r49_20261121, force-added): cluster-CV
   temperature 1.494 C (r44 1.506), rain loss 0.4238 (r44 0.4318).
 * [DONE] per-polity herding statistics use the adopted growing-season rule (polity/herding.py); forest-in-travel on in the driver.
-* [RUNNING] scripts/release_r49.sh (output/atlas_r49/stages_done): base -> promote (r44 atlas backed up to
-  output/atlas_r49/previous_atlases/earth_fit_r44) -> forest/herding layers -> add-ons. Then: settlement chain release 4
-  (settlement_chain.py ... build, publish_release4.sh, release4_reach_chain.sh), provisional r5, pages, accuracy
-  (publish_current_earth_r49.py), hub, browser checks, Claude copy.
+* [DONE 21 Nov] ATLAS REBUILT ON r49 AND PUBLISHED — reports/RELEASE_R49_20261121.md. Base (scripts/release_r49.sh) ->
+  add-ons -> settlement release 4 on r49 (calibration/settlement_chain/release4_r49.json; publish_release4.sh; release4_reach_chain.sh;
+  admin/hierarchy on release-4 towns via run_on_release3 + scripts/move_release3_admin.py) -> pages (refresh_atlas_pages.py then
+  scripts/enable_release3_page.py) -> accuracy (publish_current_earth_r49.py) -> hub. Browser: smoke + 8 release checks pass.
+  Claude copy v15 (https://claude.ai/artifact/XypoZqva951RWZm4ni6FiP): 219 files, 191 MB; 84 layers x 2 climates checked.
+  Headlines: people 51.4 M corrected (r44 54.0), towns 984/1,017 (r44 1,034/1,053), strict zone agreement 35.9 % (r44 32.4).
+  Fixes: forest-in-travel added to scripts/prepare_settlement_feedback.py and scripts/settlement_fantasy_inputs.py.
+* [OPEN] Provisional r5 NOT carried over: frozen r44 cohort (plan says no climate update; prepare_urban_candidate_control.py and
+  successors pin the r44 publication). Absent from the r49 atlas and Claude copy; kept in git history + GPT site. Rebuilding on
+  r49 = new cohort declaration + removing r44 identity pins in ~12 scripts (owner decision whether worth it).
+* [OPEN] Superseded experiment layers not recomputed (absent). Presence/mobility built without forest-in-travel (no hook).
 * Superseded text below (kept for history):
 * CORRECTION FIRST: earlier map checks of r46-r49 merged only SPACES['e3'] physics (dropped e85-e87 and the r45/r46 additions).
   Full-physics check (earth_physics_on_map.py --since r44): r49 strict 31.0 % vs r44 32.4 % (warm wet 22 vs 34). The owner's
