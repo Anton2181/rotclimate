@@ -38,6 +38,9 @@
   - T8: DONE, level KEPT by owner. Occupation field M1 (1.42 exp(-D/811 km)) beats the single ratio in CV (0.813 vs 1.050)
     and confirms the 800 km heartland shape, but applied with the 7 lore cores it gives 125 M; owner chose to keep 50 M.
     calibration/occupation_field_20261121/findings.md. Next: T9 nomads.
+  - T9 N1: ADOPTED. Pastoral nomads = logistic of the herding share (OOF AUC 0.92, 632 EA societies); new layer
+    land_nomads (scripts/nomads_layer.py, in the release after herding). Map max ~0.30: no Earth-like nomad belts.
+    N2-N4 deferred (little nomad land). calibration/nomads_20261121/findings_n1.md. Claude copy v22. Next: T10.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49

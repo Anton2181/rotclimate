@@ -1,0 +1,11 @@
+{
+ "task": "T9 N1: where herders are mobile (pastoral nomads) on Earth, as a function of the map's climate",
+ "declared": "2026-11-21, before any fit or score",
+ "owner_rule": "fit on all Earth data; cross-validation only",
+ "societies": "Ethnographic Atlas (D-PLACE) societies with EA004, EA005 and EA030 known, in the two Earth runs (0-56 N, 12 W-125 E: output/land_people/earth; 0-36 S, 8-52 E: output/land_people/earth_south)",
+ "target": "pastoral nomad = EA030 in {1 Nomadic, 2 Seminomadic} AND herding dominant (EA004 bin > EA005 bin)",
+ "predictors": "15-arc-min means at each society (scripts/herders_v2.sample): H = adopted herding share (output/herders_20261120/v2_dev.json rule), A = ln(P/PET), T = annual mean temperature, L = growing season days",
+ "models": {"P0": "logit(p) = a + b H", "P1": "P0 + c A", "P2": "P1 + d T + e L"},
+ "cross_validation": "5 folds by 10-degree tiles (tile id = floor(lat/10)*100 + floor(lon/10), folds by tile id mod 5); out-of-fold AUC and log loss; Laplace-free plain logistic regression (unpenalised, sklearn-free Newton)",
+ "adoption": "the simplest model with out-of-fold AUC within 0.01 of the best and AUC >= 0.80; then the map gets a 'pastoral nomads' layer = p on the map's own fields (raw and corrected) and the herding statistics report the nomadic share. Population stays unchanged in N1."
+}

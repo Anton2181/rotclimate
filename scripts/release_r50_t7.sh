@@ -43,6 +43,7 @@ PYEOF
 fi
 run forest_layer $PY -I scripts/forest_map.py --publish
 run herding_layer $PY -I scripts/herders_layer.py --publish
+run nomads_layer $PY -I scripts/nomads_layer.py --publish
 run admin_inventory $PY -I scripts/audit_administrative_inventory.py
 run coverage_review $PY -I scripts/review_world_coverage.py
 run coverage $PY -I scripts/publish_world_coverage.py
