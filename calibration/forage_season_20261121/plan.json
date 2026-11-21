@@ -1,0 +1,23 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "task": "T4 of the owner-approved autonomous plan: grazing / forage seasonality",
+ "status": "declared before any score",
+ "question": "Does the uncalibrated forage-growth proxy harvest/pasture.py seasonal_forage (weight = clip((T - floor)/span, 0, 1) x P/(P + rain_half); floor 0, span 15, rain_half 50) give the observed seasonal cycle of plant productivity, and does a better setting exist? The weights drive the pasture maps and the seasonal circuits of build_presence_mobility.py. The annual budget (Miami NPP) is not tested here.",
+ "target": "FLUXCOM-X monthly GPP, global 0.5 deg, 2001-2021 (ICOS Carbon Portal, CC BY 4.0; data/cache/fluxcom, not redistributed), averaged to a monthly climatology",
+ "model_input": "WorldClim 2.1 monthly tavg and prec (1970-2000), averaged to 0.5 deg over land (>= 50 % land); same Earth window as the runoff tests (0-56 N, 12 W-125 E)",
+ "variants": "floor in {-2, 0, 2, 5} C x span in {10, 15, 20} C x rain_half in {20, 50, 100} mm x rain memory in {0: this month's P, 1: mean of this and the previous month's P}: 72 variants; current = (0, 15, 50, 0)",
+ "domain": "0.5-deg cells valid in both grids with FLUXCOM annual GPP >= 100 gC m-2; cropland is NOT removed (FLUXCOM includes crops; disclosed limitation); shape on 2.5-deg blocks (>= 13 valid cells)",
+ "split": "10-degree checkerboard offset by 5 deg ((floor((lat+5)/10) + floor((lon+5)/10)) mod 2): dev 0, blind 1",
+ "scores": {
+  "primary": "median over blocks of the Pearson correlation of the 12-month cycles (each normalised by its own annual total)",
+  "peak": "share of blocks whose model peak month is within 1 month (circular) of the observed peak"
+ },
+ "choice": "variant with the highest dev primary",
+ "blind_gates": {
+  "V": "current blind primary >= 0.6 -> current seasonal proxy supported",
+  "G1": "chosen blind primary >= current blind primary + 0.03",
+  "G2": "chosen blind peak >= current blind peak - 0.02",
+  "adopt": "G1 and G2: data/pasture_model.json phenology takes the chosen setting (memory added to harvest/pasture.py); the pasture and presence layers change at the next bundled rebuild. Otherwise the current proxy stays and V is reported."
+ }
+}
