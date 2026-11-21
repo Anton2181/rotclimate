@@ -10,13 +10,19 @@
 * T5 Travel costs (forest/relief/water, hand-set) vs Stanford ORBIS Roman route times; blind route split.
 * T6 Crop yields vs FAO GAEZ low-input rainfed yields; blind split.
 * Not planned: malaria population penalty (needs the dropped population-history line).
-* Settlement / de facto control candidates (owner asked 21 Nov "look for opportunities to calibrate it / the de facto map"):
-  - T8 Town sizes and primacy (both blind size tests failed). Development on Hanson Roman areas; the one unspent pool,
-    Buringh sizes (reserved 16 Nov), scored once. Candidate term: regional primacy / rank-size within the polity.
-  - T9 Ports (WP2 parked for lack of a port list): find a citable ancient-ports catalogue; test port position and size terms.
-  - T10 Control map v2.1 on a fresh blind pool: every CHGIS year and Pleiades window used so far is spent; look for a
-    documented-seat pool outside China and the Mediterranean (Cliopatria polity plus a capital or seat list), declare, score once.
-  - Population level (60.6 M is supplied, not predicted) and villages stay blocked: no unspent census-like pool.
+* Owner 21 Nov: "I don't care about keeping data sets blind" -> fit on ALL Earth data, keep only cross-validation; sealed sets
+  no longer required for settlement/population work. Population total is NOT supplied: food capacity x occupation ratio
+  (median 0.32 of 10 AD 1-200 regions, data/settlement_reference_regions.json; ratios span 0.03-1.0) x lore heartland weight.
+  Queue after T7 (suggested order, owner may reorder):
+  - T8 Occupation ratio as a fitted field (state age / distance to old cores, malaria, herding) on all Earth regions: ~100 Han
+    commanderies (Zheng & Wu), the 10 reference regions, HYDE 200, Domesday. Replaces the single median.
+  - T9 Nomads: N1 nomadic/seminomadic probability from Ethnographic Atlas EA030 (data/cache/dplace_ea; ~110 mobile of ~700 in
+    window) vs growing season, aridity, rain reliability, winter cold, with herd animal EA040; N2 nomad density from GPP-tested
+    forage vs historical steppe estimates, own term in the population ledger; N3 seasonal circuits from monthly forage vs
+    documented migration lengths; N4 steppe confederations in the control map vs Cliopatria nomad polities.
+  - T10 Town sizes/primacy fitted on all city data (Hanson, Buringh, Mesopotamia, Valley of Mexico, Reba/Modelski).
+  - T11 Villages (Domesday + Roman rural Britain); T12 control map refit on all pools; T13 grazing allowance refit.
+  - Trade stays untested (no target data).
 * PROGRESS 21 Nov 16:20 UTC:
   - T2: PARKED. e95 (summer western flanks of the ocean highs) and e96 (no westerly turning in the plateau-anchored band) both
     FAILED their screens; Mexico is unresponsive to wind fixes. Set q unopened. calibration/monsoon_circulation_20261121/findings.md
