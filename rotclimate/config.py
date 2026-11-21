@@ -226,6 +226,8 @@ class Params:
     slope_convection_km: float = 1.0  # e88: subgrid relief (km) for the full slope trigger
     convective_rh_heat: float = 0.0   # e92: over land the convective closure's critical column RH falls by this x clip((T - 18) / 8, 0, 1):
                                       # surface heating, not column humidity alone, sets land convection; oceans unchanged; 0 = off
+    convective_rh_gate: float = 0.0   # e93: e92's threshold drop x (1 - this x the e86 ramp): not poleward of the rain belt (dry air aloft); 0 = off
+    convective_rh_chi0: float = 0.0   # e93: e92's threshold drop x (1 - clip((chi - this) / (1 - this), 0, 1)): not in air that crossed land (desert air aloft); 0 = off
     inflow_gain: float = 0.0          # e91: warm-sea inflow: land columns within reach of a warm sea relax toward marine humidity where the low-level
                                       # wind blows onshore; rate = this x the sea's evaporation rate x exp(-km from sea / inflow_km) x warm x onshore; 0 = off
     inflow_km: float = 300.0          # e91: inland e-folding distance (km)

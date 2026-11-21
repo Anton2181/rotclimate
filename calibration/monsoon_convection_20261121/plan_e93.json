@@ -1,0 +1,18 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "status": "declared before any e93 evaluation (code written, default off; r49 unchanged)",
+ "owner": "'Keep trying, keep going until we get it' (21 Nov)",
+ "rationale": "e92 failed because its extra land convection lives in the e2 closure, which neither e84 (desert air) nor e86 (poleward of the belt) caps; those caps act only on the v6 boost. e93 applies the same two discriminators to e92's threshold drop.",
+ "physics": "r0 = convective_rh - convective_rh_heat x clip((T-18)/8,0,1) x (1 - convective_rh_gate x e86 ramp) x (1 - clip((chi - convective_rh_chi0)/(1 - chi0), 0, 1)), land only.",
+ "stage_A_screen": {
+  "what": "r49 + convective_rh_gate 1.0, convective_rh_chi0 0.5, convective_rh_heat in {0.10, 0.20, 0.30}; same seven regions/scoring (scripts/monsoon_inflow_screen.py stage D)",
+  "targets": ["mexico", "texas_plains", "sahel_niger", "bengal"], "guards": ["najd_arabia", "iberia", "california"],
+  "pass": "target mean <= 0.98 and worst guard <= 1.02; none -> FAIL, report, next declared attempt"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 against r49",
+  "knobs": {"convective_rh_heat": ["add", 0.04], "convective_rh_chi0": ["add", 0.1], "convective_rh": ["add", 0.02], "convective_rain": ["mul", 1.1], "onset_gap_deg": ["add", 1.0]},
+  "bounds": {"convective_rh_heat": [0.0, 0.45], "convective_rh_chi0": [0.1, 0.9], "convective_rh": [0.4, 0.9], "onset_gap_deg": [0.0, 12.0]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 against r49 (dev49 S<=0.995, T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set o S<=1.0). Pass -> r50 on Earth; atlas rebuilt."
+}

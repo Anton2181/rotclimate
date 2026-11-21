@@ -2242,7 +2242,14 @@ class ClimateModel:
                     # surface heating supplies the instability, so convection starts at a lower column RH: r49 rains
                     # 0.8 mm/day from Mexico's July column (30 mm, RH 0.60, temperature right) against ~3 observed, and
                     # readily from cold saturated winter columns (calibration/monsoon_inflow_20261121/findings.md).
-                    closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * np.clip((T - 18.0) / 8.0, 0.0, 1.0), 0.0)
+                    heat = np.clip((T - 18.0) / 8.0, 0.0, 1.0)
+                    if p.convective_rh_gate > 0:
+                        # e93: the Saharan/Arabian air layer caps heated-land convection poleward of the rain belt (e86's ramp)
+                        heat = heat * (1.0 - p.convective_rh_gate * np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0))
+                    if p.convective_rh_chi0 > 0 and chi is not None:
+                        # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
+                        heat = heat * (1.0 - np.clip((chi - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
+                    closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
             if p.eddy_rate > 0 and p.eddy_upwind_days > 0:
                 # e61: the eddies' water comes from where the air comes from.
