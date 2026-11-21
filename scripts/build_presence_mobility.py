@@ -181,7 +181,7 @@ def main():
             dm,_,_=forage_allocation(hf['npp'],hf['arable'],edible,farmed_share=FARMED_SHARE,
                 aboveground_share=graze['aboveground_npp_share'],usable_share=graze['sustainable_use'])
             forage,resolved=seasonal_forage(temperature,rain,dm,temperature_floor=phenology['temperature_floor_c'],
-                temperature_span=phenology['temperature_span_c'],rain_half=phenology['rain_half_saturation_mm'])
+                temperature_span=phenology['temperature_span_c'],rain_half=phenology['rain_half_saturation_mm'],rain_memory=phenology.get('rain_memory',0))
             experiments=[]
             for pilot in pilots:
                 print(name,mode,'circuit',pilot['id'],flush=True)

@@ -65,7 +65,7 @@ def main():
             annual,cropped,remaining=forage_allocation(hf['npp'].ravel()[index],hf['arable'].ravel()[index],edible,
                 farmed_share=FARMED_SHARE,aboveground_share=graze['aboveground_npp_share'],usable_share=graze['sustainable_use'])
             ph=spec['phenology'];supply,resolved=seasonal_forage(temperature.reshape(12,-1)[:,index],rain.reshape(12,-1)[:,index],annual,
-                temperature_floor=ph['temperature_floor_c'],temperature_span=ph['temperature_span_c'],rain_half=ph['rain_half_saturation_mm'])
+                temperature_floor=ph['temperature_floor_c'],temperature_span=ph['temperature_span_c'],rain_half=ph['rain_half_saturation_mm'],rain_memory=ph.get('rain_memory',0))
             budget=feed_diagnostics(supply,intake_kg_day=spec['reference_intake_kg_dm_day'],year_days=spec['year_days'],
                 demand_fraction=spec['test_demand_fraction_of_annual_supply'],buffer_days=spec['test_buffer_days'])
             fields={}

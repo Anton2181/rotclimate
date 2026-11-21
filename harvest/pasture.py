@@ -31,7 +31,7 @@ def forage_allocation(npp,arable,edible_share,*,farmed_share=.6,aboveground_shar
     return annual,cropped,remaining
 
 
-def seasonal_forage(temperature,rain,annual,*,temperature_floor=0.,temperature_span=15.,rain_half=50.):
+def seasonal_forage(temperature,rain,annual,*,temperature_floor=0.,temperature_span=15.,rain_half=50.,rain_memory=0):
     """Normalize an explicit climate phenology proxy to the annual DM budget.
 
     Zero active weights with positive annual production remain UNRESOLVED,
@@ -41,6 +41,7 @@ def seasonal_forage(temperature,rain,annual,*,temperature_floor=0.,temperature_s
     if t.shape!=p.shape or t.ndim<2 or t.shape[0]!=12 or annual.shape!=t.shape[1:]:raise ValueError('Twelve matching climate bins and annual budget required')
     if not all(np.isfinite(a).all() for a in [t,p,annual]) or np.any(p<0) or np.any(annual<0):raise ValueError('Finite climate and nonnegative rain/production required')
     if not np.isfinite([temperature_floor,temperature_span,rain_half]).all() or temperature_span<=0 or rain_half<=0:raise ValueError('Valid phenology scales required')
+    if rain_memory:p=.5*(p+np.roll(p,1,axis=0))   # growth follows this and last month's rain (Earth test vs FLUXCOM-X, 21 Nov 2026)
     weight=np.clip((t-temperature_floor)/temperature_span,0,1)*p/(p+rain_half)
     total=weight.sum(0);resolved=(total>0)|(annual==0)
     supply=np.divide(weight,total,out=np.zeros_like(weight),where=total>0)*annual

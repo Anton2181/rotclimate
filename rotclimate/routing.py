@@ -125,10 +125,9 @@ def discharge(runoff_px_mm, tier_tops, terrain_file, map_width_mi):
 def fine_discharge(result):
     """Discharge (m3/s) and receivers at source resolution from the model's annual runoff."""
     from .geography import source_layers
-    from .hydrology import annual_runoff
     g, p = result.grid, result.params
     H, W = source_layers()["land"].shape
-    ro = annual_runoff(result)                                         # mm/yr on the model grid (0 over water)
+    ro = model_runoff(result)                                          # mm/yr on the model grid (0 over water), Fu rule
     gl = g.land & g.inmap                                              # carry the nearest land value over water
     _, (iy, ix) = ndi.distance_transform_edt(~gl, return_indices=True)
     ro_l = ro[iy, ix]
@@ -164,9 +163,29 @@ def river_segments_fine(result, q_min=15.0):
     return segments(q, recv, land, q_min)
 
 
+FU_W = 2.6   # Budyko-Fu shape, adopted on Earth vs GRUN (calibration/runoff_amount_20261121; reports/RUNOFF_AMOUNT_20261121.md)
+
+
+def fu_runoff(P, PET, w=FU_W):
+    """Annual runoff (mm) from annual rain and potential evaporation by the Fu (1981) curve:
+    E / P = 1 + PET/P - (1 + (PET/P)^w)^(1/w)."""
+    P = np.asarray(P, float); phi = np.asarray(PET, float) / np.maximum(P, 1e-6)
+    ratio = 1.0 + phi - (1.0 + phi ** w) ** (1.0 / w)
+    return np.where(P > 0, P * (1.0 - np.clip(ratio, 0.0, 1.0)), 0.0)
+
+
 def runoff_from_months(t, p, days_per_bin):
-    """Annual runoff (mm/yr) from 12 monthly surface temperatures (C) and precipitation totals (mm per bin), with the
-    climate model's rule (rotclimate.hydrology.annual_runoff: evaporation capped by rain and 0.75 x a Hargreaves-like
-    potential)."""
+    """Annual runoff (mm/yr) from 12 monthly surface temperatures (C) and precipitation totals (mm per bin): the
+    Budyko-Fu curve on the climate model's Hargreaves-like potential evaporation. It replaced (21 Nov 2026, Earth
+    test vs GRUN, blind log error 0.872 -> 0.657) the monthly cap rule P - min(P, 0.75 PET) that
+    rotclimate.hydrology.annual_runoff still uses for the climate diagnostics."""
     pet = np.clip(0.0023 * 17.8 * (t + 17.8) * 1.9, 0.1, None) * days_per_bin
-    return np.maximum(p - np.minimum(p, 0.75 * pet), 0.0).sum(0)
+    return fu_runoff(np.asarray(p, float).sum(0), pet.sum(0))
+
+
+def model_runoff(result):
+    """Annual runoff (mm/yr) on the model grid by the adopted Fu rule (0 over water)."""
+    T, P = result.T, result.P
+    scale = result.params.year_days / result.nt
+    pet = np.clip(0.0023 * 17.8 * (T + 17.8) * 1.9, 0.1, None)          # mm/day, Hargreaves-like
+    return np.where(result.grid.land, fu_runoff(P.sum(0) * scale, pet.sum(0) * scale), 0.0)
