@@ -32,7 +32,8 @@
   - T5: DROPPED. ORBIS land times are its authors' fixed mode speeds, not observations; calibration/travel_orbis_20261121.
   - T6: current VALIDATED, no change (G1 fails; blind wheat 0.76). Open finding: wheat and barley grow in the hot humid tropics.
     reports/CROP_YIELD_GAEZ_20261121.md
-  - T7 (next, after the r50 release is published): wire T3 (rotclimate/routing.py only; hydrology.py is in the simulation
+  - T1: DONE 21 Nov 18:50 UTC. r50 atlas promoted, browser checks pass, Claude copy v19; reports/RELEASE_R50_20261121.md.
+  - T7 (next; scripts/release_r50_t7.sh, r5 size fit merged via calibration/settlement_chain/release4_r50t7.json): wire T3 (rotclimate/routing.py only; hydrology.py is in the simulation
     identity) and T4 (harvest/pasture.py rain_memory + data/pasture_model.json), then a bundled full rebuild.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
