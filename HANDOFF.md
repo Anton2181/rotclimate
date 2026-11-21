@@ -1,3 +1,8 @@
+# CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
+* e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
+  0.9854, fine28 1.001, sealed set p 0.922. Sets o and p SPENT (o failed e93 alone). Atlas still on r49 -> rebuild next
+  (owner standing instruction: latest Earth calibration in full). Open: Mexico circulation (trade_land, belt at 30 N).
+
 # FULL REBUILD ON r49 — owner (20 Nov, away): "do the full rebuild ... handle it yourself ... keep going until you're done"
 * OWNER OVERRIDE (20 Nov): "Use the latest model in full, even if the zone agreement falls. Earth calibration is the most
   important" + "Are you also checking the planetary parameters ... How about the offmap land? Be comprehensive".

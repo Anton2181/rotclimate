@@ -1,0 +1,103 @@
+{
+ "adopted": "r50",
+ "adopted_utc": "2026-11-21T13:45:52.556515+00:00",
+ "reference": "r49",
+ "params": "calibration/local_accuracy_20261023/r50_params.json",
+ "params_sha256": "3653328c2ccdc10b951bb4ae9a064497e2479433c83f50bcad54a494afa36a92",
+ "validation": "output/monsoon_convection_20261121/validate94 (refit94 j18)",
+ "plans": [
+  "calibration/monsoon_convection_20261121/plan_e93.json",
+  "calibration/monsoon_convection_20261121/plan_e94.json",
+  "calibration/monsoon_convection_20261121/refit_e94.json",
+  "calibration/sealed_20261121p/declaration.json"
+ ],
+ "criteria": "Unchanged policy_v3 against r49: dev49 S<=.995, T/P<=+1%; fine28 S<=1.01; unseen sealed set p S<=1.0 (run once, paired).",
+ "scores": {
+  "dev": {
+   "stage": "dev",
+   "S49": {
+    "S": 0.9854344648651495,
+    "T": -0.0052696598102959236,
+    "P": -0.02386141045940504,
+    "n": 49
+   },
+   "S31": {
+    "S": 0.9917163926537659,
+    "T": -0.005170262163227912,
+    "P": -0.011396952529240334,
+    "n": 31
+   },
+   "groups_reported": {
+    "training": 0.9933190901026996,
+    "holdout": 0.9962740620480333,
+    "midlatitude": 0.9979901057380348,
+    "dev12": 0.986421444446461,
+    "retired_a": 0.9925863552603367,
+    "retired_b": 0.9318637527643174,
+    "retired_c": 1.0036544737523367
+   },
+   "passes": true
+  },
+  "fine": {
+   "stage": "fine",
+   "S28": {
+    "S": 1.0010441771186878,
+    "T": -0.0013968391640879485,
+    "P": 0.003485193401463471,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed_p": {
+   "stage": "sealed_p",
+   "S": {
+    "S": 0.9216690604486284,
+    "T": -0.02330445963462413,
+    "P": -0.13335741946811897,
+    "n": 6
+   },
+   "passes": true
+  }
+ },
+ "physics": "e93 (heated-land convection threshold, gated by the rain belt and desert air) + e94 (the e49 monsoon descent caps convection). Earlier attempt e93 alone failed sealed set o (1.040, Oman false monsoon).",
+ "changes": {
+  "convective_rain": [
+   0.5497153473182032,
+   0.6289692798922623
+  ],
+  "convective_rh": [
+   0.6829148729649469,
+   0.7079148729649469
+  ],
+  "monsoon_descent": [
+   0.01984074784518624,
+   0.031402115327853364
+  ],
+  "onset_gap_deg": [
+   4.375,
+   4.125
+  ],
+  "convective_rh_heat": [
+   null,
+   0.3625
+  ],
+  "convective_rh_gate": [
+   null,
+   1.0
+  ],
+  "convective_rh_chi0": [
+   null,
+   0.675
+  ],
+  "convective_descent": [
+   null,
+   1.0
+  ],
+  "convective_descent_ref": [
+   null,
+   0.2774891086574687
+  ]
+ },
+ "outcome": "adopted",
+ "atlas_served": "r49 until the atlas is rebuilt on r50 (owner standing instruction: latest Earth calibration)"
+}
