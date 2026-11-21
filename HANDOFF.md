@@ -10,6 +10,17 @@
 * T5 Travel costs (forest/relief/water, hand-set) vs Stanford ORBIS Roman route times; blind route split.
 * T6 Crop yields vs FAO GAEZ low-input rainfed yields; blind split.
 * Not planned: malaria population penalty (needs the dropped population-history line).
+* PROGRESS 21 Nov 16:20 UTC:
+  - T2: PARKED. e95 (summer western flanks of the ocean highs) and e96 (no westerly turning in the plateau-anchored band) both
+    FAILED their screens; Mexico is unresponsive to wind fixes. Set q unopened. calibration/monsoon_circulation_20261121/findings.md
+  - T3: ADOPTED. Budyko-Fu w 2.6 annual runoff, blind log error 0.872->0.657; reports/RUNOFF_AMOUNT_20261121.md.
+  - T4: ADOPTED. Forage phenology span 20 C, rain half-saturation 100 mm, 1-month rain memory; blind r 0.837->0.890;
+    reports/FORAGE_SEASON_20261121.md.
+  - T5: DROPPED. ORBIS land times are its authors' fixed mode speeds, not observations; calibration/travel_orbis_20261121.
+  - T6: current VALIDATED, no change (G1 fails; blind wheat 0.76). Open finding: wheat and barley grow in the hot humid tropics.
+    reports/CROP_YIELD_GAEZ_20261121.md
+  - T7 (next, after the r50 release is published): wire T3 (rotclimate/routing.py only; hydrology.py is in the simulation
+    identity) and T4 (harvest/pasture.py rain_memory + data/pasture_model.json), then a bundled full rebuild.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
