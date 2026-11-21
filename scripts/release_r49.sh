@@ -59,4 +59,63 @@ run settlement_fertility $PY -I scripts/extend_settlement_fertility.py
 run control_v2 $PY -I scripts/build_control_v2.py
 run control_v21 $PY -I scripts/build_control_v21.py
 run settlement_publish $PY -I scripts/publish_settlement_integration.py --origin output/settlement_fertility_20261106
-echo "core add-ons complete (next: settlement chain release 4, provisional r5, pages, accuracy, hub)"
+echo "core add-ons complete"
+
+# ---- settlement release 4 on this climate (reports/RELEASE_R49_20261121.md section 5) ----
+SPEC=calibration/settlement_chain/release4_r49.json; S=output/chain_staging/$(basename $SPEC .json); R=output/settlement_release4_20261116
+D=atlases/earth_fit/data; BK=$OUT/inplace_backup
+export ROTCLIMATE_CONFLUENCE_K=1.0
+stage_links() {   # province seats (lore inventory; identical in every climate) where the chain's first stage reads them
+  mkdir -p $D/release3/hierarchy/corrected; cp $D/hierarchy_links.csv $D/release3/hierarchy/; cp $D/corrected/hierarchy_links.csv $D/release3/hierarchy/corrected/; }
+chain_first() { rm -rf "${S:?}"; $PY -I scripts/settlement_chain.py $SPEC build --stage sizes review_placement review_sizes supply review_supply; }
+staged_reach() {
+  rm -rf output/trade_checkpoints/atlas_raw output/trade_checkpoints/atlas_corrected
+  $PY -I scripts/stage_atlas.py $S/atlas_raw raw; $PY -I scripts/stage_atlas.py $S/atlas_corrected corrected
+  ROTCLIMATE_RELEASE3_DIR=$S/release3 $PY -I scripts/export_reach_release3.py $S/atlas_raw > $OUT/reach_raw.log 2>&1 & local a=$!
+  ROTCLIMATE_RELEASE3_DIR=$S/release3 $PY -I scripts/export_reach_release3.py $S/atlas_corrected > $OUT/reach_corrected.log 2>&1 & local b=$!
+  wait $a && wait $b
+  $PY -I scripts/install_corrected_reach.py $S/atlas_raw $S/atlas_corrected; }
+chain_second() { $PY -I scripts/settlement_chain.py $SPEC build --stage integration labour fertility staffing ensemble_check; }
+install_release() {
+  for d in earth_results.json ensemble fertility integration labour reach release3 results.json supply; do rm -rf "${R:?}"/"${d:?}"; cp -r "$S/$d" "$R/$d"; done
+  rm -rf "${R:?}"/browser "${R:?}"/downstream "${R:?}"/windows_checkout.json; }
+backup_inplace() { rm -rf "${BK:?}"; mkdir -p $BK/corrected; for g in "$@"; do cp $D/$g $BK/ 2>/dev/null || true; cp $D/corrected/$g $BK/corrected/ 2>/dev/null || true; done; }
+restore_inplace() { cp -r $BK/. $D/; }
+reach_variants() {   # supply-fed -> release3/reach_fed, the 7.5 % request -> release3/reach; the in-place images restored after each
+  local F="settled_control_v21_joint365.webp settled_control_v2_joint365.webp"
+  backup_inplace $F
+  for v in fed request; do
+    if [ $v = fed ]; then bash scripts/release4_reach_chain.sh; dst=reach_fed; else bash scripts/release4_reach_chain.sh request; dst=reach; fi
+    mkdir -p $D/release3/$dst/corrected
+    for f in $F; do mv $D/$f $D/release3/$dst/$f; mv $D/corrected/$f $D/release3/$dst/corrected/$f; done
+    restore_inplace
+  done; }
+release3_admin() {   # administration and hierarchy rebuilt on the release-4 towns, moved under release3/, in-place files restored
+  backup_inplace 'administration*' 'hierarchy_*' administrative_access.json administrative_hierarchy.json
+  export ROTCLIMATE_RELEASE3_DIR=$R/release3
+  $PY -I scripts/run_on_release3.py scripts/review_imperial_access.py "'output/imperial_access_20261104'=>'output/imperial_access_release3_20261113'"
+  $PY -I scripts/run_on_release3.py scripts/publish_imperial_access.py "ROOT/'output/imperial_access_20261104'=>ROOT/'output/imperial_access_release3_20261113'"
+  $PY -I scripts/run_on_release3.py scripts/review_administrative_hierarchy.py "'output/administrative_hierarchy_20261104'=>'output/administrative_hierarchy_release3_20261113'"
+  $PY -I scripts/run_on_release3.py scripts/publish_administrative_hierarchy.py "ROOT/'output/administrative_hierarchy_20261104'=>ROOT/'output/administrative_hierarchy_release3_20261113'"
+  $PY -I scripts/move_release3_admin.py
+  restore_inplace; }
+run feedback_raw $PY -I scripts/prepare_settlement_feedback.py --mode raw
+run feedback_corrected $PY -I scripts/prepare_settlement_feedback.py --mode corrected
+run chain_links stage_links
+run chain_first chain_first
+run staged_reach staged_reach
+run chain_second chain_second
+run release4_install install_release
+run reach_variants reach_variants
+run publish_settlements bash scripts/publish_release4.sh settlements
+run publish_note bash scripts/publish_release4.sh note
+run publish_supply bash scripts/publish_release4.sh supply
+run publish_ensemble bash scripts/publish_release4.sh ensemble
+run publish_layers bash scripts/publish_release4.sh layers
+run publish_reach bash scripts/publish_release4.sh reach
+run release3_admin release3_admin
+run pages python3 -I scripts/refresh_atlas_pages.py
+run release3_page $PY -I scripts/enable_release3_page.py
+run accuracy $PY -I scripts/publish_current_earth_r49.py
+run hub $PY -I scripts/build_fit_hub.py
+echo "r49 release complete (next: browser checks, scripts/package_atlas_artifact.py, Claude copy)"
