@@ -224,6 +224,11 @@ class Params:
     onset_gap_deg: float = 5.0        # e86: the rain belt runs this far equatorward of the land ITCZ (Saharan air layer over the shallow monsoon)
     slope_convection: float = 0.0     # e88: added warm-moist convective boost over sun-heated mountain slopes x clip(subgrid relief / slope_convection_km) x clip((T - 18) / 8) x moisture; 0 = off
     slope_convection_km: float = 1.0  # e88: subgrid relief (km) for the full slope trigger
+    inflow_gain: float = 0.0          # e91: warm-sea inflow: land columns within reach of a warm sea relax toward marine humidity where the low-level
+                                      # wind blows onshore; rate = this x the sea's evaporation rate x exp(-km from sea / inflow_km) x warm x onshore; 0 = off
+    inflow_km: float = 300.0          # e91: inland e-folding distance (km)
+    inflow_sst: float = 26.0          # e91: nearest-sea temperature (C) at which inflow starts (full 3 C above)
+    inflow_rh: float = 0.0            # e91: target column humidity (fraction of land saturation); 0 = ocean_rh
     soil_feedback: float = 0.0        # e90: land recycling x (1 + this x clip((soil water / bucket - 0.5) / 0.5, 0, 1)): a wet monsoon land re-evaporates more of its rain; 0 = off
     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air

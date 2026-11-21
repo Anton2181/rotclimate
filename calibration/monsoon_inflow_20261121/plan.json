@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "status": "declared before any e91 evaluation (code written, default off; r49 unchanged)",
+ "context": "Resolution diagnostic (calibration/monsoon_resolution_20261121): verdict PHYSICS. Owner order was two-level transport, then land-sea inflow. AMENDMENT (before any physics evaluation): inflow first. Reason: the probe (scripts/monsoon_probe.py) finds Mexico's July column at 30 mm, RH 0.60 with July temperature right (+0.2 C) and Bengal's at 37 mm, RH 0.69 (obs ~55-60): a summer moisture-supply shortfall next to warm seas, which inflow targets directly; two-level transport targets rain shadows.",
+ "physics": "e91 warm-sea inflow (rotclimate/model.py, config inflow_*): land columns relax toward marine humidity (ocean_rh x land saturation) at rate inflow_gain / evap_tau x exp(-km inland / inflow_km) x clip((nearest-sea SST - inflow_sst)/3, 0, 1) x clip(onshore wind / 3 m/s, 0, 1).",
+ "stage_A_screen": {
+  "what": "r49 + inflow_gain in {0.02, 0.05, 0.15} (inflow_km 300, inflow_sst 26) on mexico, iberia, california (built-in), texas_plains (dev12), sahel_niger, najd_arabia, bengal (retired_b); score per region (T/r49 + P/r49)/2 against r49's recorded runs",
+  "targets": ["mexico", "texas_plains", "sahel_niger", "bengal"],
+  "guards": ["najd_arabia", "iberia", "california"],
+  "pass": "target mean <= 0.98 and worst guard <= 1.02; start = the passing setting with the lowest target mean; none -> FAIL, report, then the two-level transport step"
+ },
+ "stage_B_refit": {
+  "tool": "scripts/joint_refit.py, objective S49 against r49",
+  "knobs": {"inflow_gain": ["mul", 1.5], "inflow_km": ["mul", 1.4], "inflow_sst": ["add", 1.0], "convective_rain": ["mul", 1.08], "ocean_rh": ["add", 0.02]},
+  "bounds": {"inflow_gain": [0.005, 1.0], "inflow_km": [100.0, 1200.0], "inflow_sst": [22.0, 29.0]},
+  "max_evaluations": 40
+ },
+ "gates": "policy_v3 against r49: dev49 S <= 0.995 with T and P each <= +1 %; fine28 S <= 1.01; ONE paired run of r49 and the candidate on sealed set o (calibration/sealed_20261120o) with S <= 1.0. All pass -> r50 on Earth; then the atlas is rebuilt with scripts/release_r49.sh adapted (owner standing instruction: use the latest Earth calibration)."
+}

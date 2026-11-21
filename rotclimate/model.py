@@ -638,6 +638,14 @@ class ClimateModel:
                          np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
         sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
         self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
+        if params.inflow_gain > 0:
+            # e91: distance inland, its direction and the nearest sea cell (for that sea's temperature)
+            land_km, near = ndi.distance_transform_edt(g.land, return_indices=True)
+            land_km = land_km * g.cell_km; smooth_km = ndi.gaussian_filter(land_km, 1.0)
+            gy, gx = np.gradient(smooth_km); norm = np.maximum(np.hypot(gx, gy), 1e-9)
+            self.inflow_dir = (gx / norm, -gy / norm)          # grid east, grid north (rows run south)
+            self.inflow_reach = np.where(g.land, np.exp(-land_km / params.inflow_km), 0.0)
+            self.inflow_near = (near[0], near[1])
         # e4: sub-grid marine air on coasts under a subtropical inversion
         # (Rahn & Garreaud 2010; Iacobellis & Cayan 2013): the share of each
         # land cell within sea-breeze reach of the sea (cell mean of
@@ -2048,6 +2056,17 @@ class ClimateModel:
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
                 A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
+            if p.inflow_gain > 0:
+                # e91: warm-sea inflow. Summer monsoons draw marine air inland: r49 holds Mexico's July column at
+                # 30 mm (RH 0.60; ~0.25 of the observed peak rain) and Bengal's at 37 mm (RH 0.69) with temperatures
+                # right (calibration/monsoon_inflow_20261121). Land within reach of a sea warmer than inflow_sst relaxes
+                # toward marine humidity where the low-level wind blows onshore (winter offshore monsoons stay dry).
+                sst_near = SST[self.inflow_near]
+                warm = np.clip((sst_near - p.inflow_sst) / 3.0, 0.0, 1.0)
+                onshore = np.clip((uq * self.inflow_dir[0] + vq * self.inflow_dir[1]) / 3.0, 0.0, 1.0)
+                land_rate = p.inflow_gain / (p.evap_tau_days * DAY) * self.inflow_reach * warm * onshore
+                lamE = lamE + np.where(ocean, 0.0, land_rate)
+                W_ocean = np.where(ocean, W_ocean, (p.inflow_rh or p.ocean_rh) * Ws)
             edge_rh = p.land_edge_rh
             if p.edge_continental_drying > 0:
                 # e24: air entering over land has lost water on its way across:
