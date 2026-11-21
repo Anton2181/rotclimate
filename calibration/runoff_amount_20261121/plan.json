@@ -1,0 +1,28 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "task": "T3 of the owner-approved autonomous plan: river runoff AMOUNT",
+ "status": "declared before any score of any variant below",
+ "why": "rotclimate/routing.py runoff_from_months (annual runoff: monthly P - min(P, 0.75 x Hargreaves-like PET)) feeds absolute discharge Q for delta fans (harvest/deltas.py; data/delta_fan_model.json was fitted on OBSERVED HydroRIVERS Q, area ~ Q^1.06) and simulated rivers (R.segments). The seasonal runoff test (calibration/runoff_20261120) found the amount ~0.4 of observed for polity/seasons.py; this rule was never tested.",
+ "target": "GRUN v1 1970-2000 annual runoff (data/cache/grun, as calibration/runoff_20261120)",
+ "model_input": "WorldClim 2.1 monthly tavg and prec (the rule's only inputs), Earth window 0-56 N, 12 W-125 E, runoff averaged to 0.5 deg over land (>= 50 % land)",
+ "variants": {
+  "current": "k = 0.75 (current rule)",
+  "cap_k": "same rule, k in {0.3, 0.4, 0.5, 0.6, 0.9}",
+  "budyko_fu": "annual Fu (1981) curve on the rule's annual PET: E = P (1 + PET/P - (1 + (PET/P)^w)^(1/w)), w in {1.5, 2.0, 2.6, 3.5}"
+ },
+ "domain": "0.5-deg cells valid in both grids with GRUN annual >= 5 mm",
+ "split": "NEW 10-degree checkerboard offset by 5 deg from calibration/runoff_20261120 ((floor((lat+5)/10) + floor((lon+5)/10)) mod 2): dev 0, blind 1. Disclosure: the earlier test reported the blind annual ratio for a different runoff rule (polity/seasons.py) on the old split; no score of this rule was ever computed.",
+ "scores": {
+  "primary": "RMSE of ln((model + 10) / (GRUN + 10)) over cells (annual mm)",
+  "bias": "median model/GRUN",
+  "rank": "Spearman of annual runoff over cells"
+ },
+ "choice": "variant with the lowest dev primary",
+ "blind_gates": {
+  "G1": "chosen blind primary <= 0.85 x current blind primary",
+  "G2": "chosen blind rank >= current blind rank - 0.02",
+  "G3": "chosen blind median ratio in [0.8, 1.25]",
+  "adopt": "all three: routing.runoff_from_months uses the chosen rule (the climate model's own physics untouched). Deltas and simulated rivers change at the next full atlas rebuild (deltas feed the harvest cascade), bundled with any later adoption from T4-T6 or the next climate. Otherwise the current rule stays and the bias is reported."
+ }
+}
