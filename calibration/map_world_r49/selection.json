@@ -1,0 +1,46 @@
+{
+ "plan": "calibration/map_world_r49_planet/plan.json",
+ "rule": "the best completed zero-penalty world by raw zonefit; native check at downsample 8, mean layouts 1-3 against the r49 start world at ds8: numerical success and zonefit not below the start. If it fails, the r49 start world (300 km continuation) is used; if that is worse than the 688 km unrefit, the unrefit is used. Whatever the zone agreement, the atlas uses r49 physics (owner).",
+ "coarse_best": {
+  "eval": 231,
+  "score": 0.21194100713115727,
+  "guard_penalty": 0.0,
+  "eligible": 30,
+  "evaluations": 241
+ },
+ "candidate": {
+  "name": "candidate",
+  "params": "calibration/map_world_r49/candidate_231.json",
+  "checkpoint": "output/r49_world/candidate.pkl",
+  "numerics_passed": true,
+  "zonefit": 0.20628654621440004,
+  "strict_accuracy": 0.35900454010425425,
+  "recall": {
+   "cold_wet": 0.8955916473317865,
+   "cold_dry": 0.0,
+   "warm_wet": 0.29109468497008095,
+   "med": 0.6750167000668003,
+   "swamp": 0.0,
+   "tree": 0.0,
+   "hot_dry": 0.6372549019607843
+  }
+ },
+ "start300": {
+  "name": "start300",
+  "params": "calibration/map_world_r49/params_start300.json",
+  "checkpoint": "output/r49_world/start300.pkl",
+  "numerics_passed": true,
+  "zonefit": 0.16919811795858203,
+  "strict_accuracy": 0.2898099882293593,
+  "recall": {
+   "cold_wet": 1.0,
+   "cold_dry": 0.0010111223458038423,
+   "warm_wet": 0.03625483984512495,
+   "med": 0.6356045424181697,
+   "swamp": 0.0,
+   "tree": 0.0,
+   "hot_dry": 0.5656862745098039
+  }
+ },
+ "selected": "candidate"
+}
