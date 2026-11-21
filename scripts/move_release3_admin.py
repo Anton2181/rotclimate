@@ -13,7 +13,7 @@ SETS = {'admin': ('administration', 'administrative_access.json'), 'hierarchy': 
 
 
 def rewrite(x, files, prefix):
-    if isinstance(x, dict): return {k: rewrite(v, files, prefix) for k, v in x.items()}
+    if isinstance(x, dict): return {(prefix + k if k in files else k): rewrite(v, files, prefix) for k, v in x.items()}
     if isinstance(x, list): return [rewrite(v, files, prefix) for v in x]
     return prefix + x if isinstance(x, str) and x in files else x
 
