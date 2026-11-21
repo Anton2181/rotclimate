@@ -42,6 +42,7 @@ RANK = {"imperial capital": 0, "major imperial city": 0, "fortified city": 0, "i
 # Han 0.05 and Rome 0.05 by people; T4 accuracy 0.57), so riding is a matter of the map's lore: name them here.
 MOUNTED = set()          # polity names as in polities.json, without the "(...)" part
 HERDING_SHARE = 0.3      # reported only (F7)
+# Per-polity herding statistics (reported only) use the adopted growing-season rule, polity/herding.py (20 Nov 2026).
 CAMP_DENSITY = 0.5       # a riding polity's reach starts wherever its herds graze (people / km2)
 
 
@@ -212,8 +213,8 @@ def compute(atlas, density=None):
         if d["name"]:
             groups.setdefault(d["name"].split(" (")[0], []).append(i)
     names = sorted(groups)
-    food = hf["crop_capacity"] * hf["clearance"] + hf["pastoral_capacity"]
-    herd = np.divide(hf["pastoral_capacity"], food, out=np.zeros(shape), where=food > 0)
+    from polity.herding import share as herding_share      # adopted growing-season rule (plan_v2), not the grazing share
+    herd = herding_share(hf["lgp_days"], land, cell_km)
     own_src, mobile, herding = [], [], {}
     for name in names:
         own = np.isin(ids, groups[name])

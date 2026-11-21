@@ -24,12 +24,7 @@ LAYER = dict(id='land_herding', label='Herders and farmers', kind='ramp', unit='
                   'present (around 1900), used as the environment-driven split; the grazing allowance and population are unchanged.')
 
 
-def share(lgp, land, cell_km):
-    m = np.clip((SPEC['hi'] - np.nan_to_num(lgp)) / (SPEC['hi'] - SPEC['lo']), 0, 1)
-    k = max(1, int(round(27.0 / cell_km))) | 1
-    w = np.maximum(ndi.uniform_filter(land.astype(float), k, mode='nearest'), 1e-9)
-    m = ndi.uniform_filter(np.where(land, m, 0.0), k, mode='nearest') / w
-    return np.where(land, np.clip(SPEC['b'] + SPEC['a'] * m, 0, 1), 0.0)
+from polity.herding import share  # noqa: E402  (one rule for the layer and the per-polity statistics)
 
 
 def render(h, land, meta, path):
