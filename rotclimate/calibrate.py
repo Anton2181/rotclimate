@@ -328,6 +328,13 @@ def evaluate_mean_climate(p, mode, seeds):
     ev = evaluate(result)
     med = mediterranean_shares(result, ev)
     guarded = mode == 'guarded'
+    if mode == 'twotarget':
+        tt = two_target(result, ev)
+        return dict(score=tt['score'], guard_penalty=0., two_target=tt, mediterranean=med, mean=ev['total'],
+                    accuracy=ev['accuracy'], raced=False, per_class=ev['per_class'], f1=ev['f1'], recall=ev['recall'],
+                    display_accuracy=ev['label_policy_audit']['display_accuracy'], precision=ev['precision'],
+                    realism=ev['realism'], spread=0., ensemble_objective='climate', layouts=len(runs),
+                    observed_numerics=result.numerics, zonefit_score=objective(ev, 'zonefit'))
     if guarded: mode = 'zonefit'
     profile = {'whittaker':'strict', 'whittaker-broad':'broad', 'whittaker-covered':'strict'}.get(mode)
     biome = (biome_targets.evaluate(ev['indices'], result.grid.target,
@@ -345,6 +352,30 @@ def evaluate_mean_climate(p, mode, seeds):
         **(dict(whittaker=biome, zonefit_score=objective(ev, 'zonefit')) if biome else {}),
         **(dict(whittaker_coverage=dict(scope='source_land_pixels', layouts=len(runs),
              outside_share=coverage['outside_share'], distance_debt=coverage['distance_debt'])) if coverage is not None else {}))
+
+
+AENAHA_PX = (1012.7, 413.1)       # data/lore_cores.json, source map pixels
+AENAHA_RADIUS_KM = 300.0
+
+
+def two_target(result, ev) -> dict:
+    """Side calibration (calibration/two_target_20261121/plan.json): the land within 300 km of Aenaha
+    classed Mediterranean (Koppen Cs), and the painted cold-dry zone classed cold desert (Koppen BW,
+    aridity ratio < 0.5: on Earth, below it most Ethnographic Atlas societies are pastoral nomads)."""
+    from .koppen import CODES, classify
+    g = result.grid
+    st = ev["monthly"]
+    codes = np.array(CODES)[classify(st["Tm"], st["Pm"], st["summer"])]
+    land = g.inmap & g.land
+    ii, jj = np.mgrid[:g.ny, :g.nx]
+    x = (jj - g.pad + 0.5) * g.f; y = (ii - g.pad + 0.5) * g.f
+    km = np.hypot(x - AENAHA_PX[0], y - AENAHA_PX[1]) * g.cell_km / g.f
+    near = land & (km <= AENAHA_RADIUS_KM)
+    cold_dry = land & (g.target == 2)
+    cs = float(np.char.startswith(codes[near], "Cs").mean()) if near.any() else 0.0
+    bw = float(np.char.startswith(codes[cold_dry], "BW").mean()) if cold_dry.any() else 0.0
+    return dict(aenaha_cs=cs, cold_dry_bw=bw, aenaha_cells=int(near.sum()), cold_dry_cells=int(cold_dry.sum()),
+                score=0.5 * cs + 0.5 * bw)
 
 
 def mediterranean_shares(result, ev) -> dict:

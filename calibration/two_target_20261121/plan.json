@@ -1,0 +1,28 @@
+{
+ "task": "Side project (owner 21 Nov): a world refit with only two targets",
+ "declared": "2026-11-21, before any result",
+ "targets": {
+  "aenaha_cs": "share of land cells within 300 km of Aenaha (data/lore_cores.json, x 1012.7, y 413.1) classed Koppen Cs (Mediterranean)",
+  "cold_dry_bw": "share of the painted cold-dry zone classed Koppen BW (aridity ratio < 0.5). Earth grounding: Ethnographic Atlas societies below Koppen ratio 0.5 are 57 % pastoral nomads (30 of 53); above it 3 % (18 of 579)"
+ },
+ "objective": "0.5 aenaha_cs + 0.5 cold_dry_bw (rotclimate.calibrate.two_target, mode 'twotarget'); no other zone guarded (owner: 'just these two targets')",
+ "physics": "calibration/local_accuracy_20261023/r50_params.json (unchanged)",
+ "start": "calibration/map_world_r50_planet/start.json",
+ "free": "the W4 space: latitude, north bearing, the six surrounding-land shares and their relief, tilt, eccentricity, perihelion, starlight, greenhouse, land by latitude",
+ "fixed": "retrograde, off-map continuity 300 km, terrain tiers, all physics",
+ "downsample": 32,
+ "layouts": [
+  1,
+  2,
+  3,
+  17,
+  23
+ ],
+ "evaluations": 241,
+ "popsize": 12,
+ "sigma": 0.1,
+ "seed": 51,
+ "workers": 4,
+ "report": "best world's two targets and what it costs every painted zone (recall, strict agreement) vs the current world; a ds8 check of the best; not adopted into the atlas unless the owner decides",
+ "start_note": "the current atlas world"
+}
