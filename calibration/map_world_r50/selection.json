@@ -1,0 +1,46 @@
+{
+ "plan": "calibration/map_world_r50_planet/plan.json",
+ "rule": "the best completed zero-penalty world by raw zonefit; native ds8 check (layouts 1-3) against the start world at ds8: numerical success and zonefit not below the start; otherwise the start world (W3 geometry on r50). Physics r50 regardless.",
+ "coarse_best": {
+  "eval": 153,
+  "score": 0.21356691022144134,
+  "guard_penalty": 0.0,
+  "eligible": 5,
+  "evaluations": 241
+ },
+ "candidate": {
+  "name": "candidate",
+  "params": "calibration/map_world_r50/candidate_153.json",
+  "checkpoint": "output/r50_world/candidate.pkl",
+  "numerics_passed": true,
+  "zonefit": 0.20464688717305854,
+  "strict_accuracy": 0.3616108962502102,
+  "recall": {
+   "cold_wet": 0.777262180974478,
+   "cold_dry": 0.0005055611729019212,
+   "warm_wet": 0.3196057726152763,
+   "med": 0.6933867735470942,
+   "swamp": 0.0,
+   "tree": 0.0,
+   "hot_dry": 0.6333333333333333
+  }
+ },
+ "start": {
+  "name": "start",
+  "params": "calibration/map_world_r50/params_start.json",
+  "checkpoint": "output/r50_world/start.pkl",
+  "numerics_passed": true,
+  "zonefit": 0.2065208528048983,
+  "strict_accuracy": 0.3600134521607533,
+  "recall": {
+   "cold_wet": 0.894431554524362,
+   "cold_dry": 0.0,
+   "warm_wet": 0.2900387187609996,
+   "med": 0.6793587174348698,
+   "swamp": 0.0,
+   "tree": 0.0,
+   "hot_dry": 0.6401960784313725
+  }
+ },
+ "selected": "start"
+}
