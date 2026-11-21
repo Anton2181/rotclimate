@@ -1,0 +1,10 @@
+{
+ "version": 1,
+ "date": "2026-11-21",
+ "status": "declared before any 28/14 km run",
+ "question": "Is r49's weak monsoon peak (Mexico Jul-Aug ~1/4 of observed, Sahel and Texas low) a grid-resolution effect or missing physics?",
+ "runs": "r49 (calibration/local_accuracy_20261023/r49_params.json) unchanged, scripts/benchmark_local.py at --cell-km 56 (existing r49 adoption runs), 28 and 14 on mexico, texas_plains (dev12 specs), sahel_niger (retired_b specs); bengal and najd_arabia as guards (retired_b)",
+ "measure": "peak ratio = region-mean simulated rain / observed rain over the region's three wettest observed months (cells from the run's cells/*.npz); also the annual ratio",
+ "rule": "RESOLUTION if the 14 km peak ratio exceeds the 56 km one by >= 0.25 (absolute) in at least 2 of the 3 target regions -> the finer grid is the lever (report; no physics change). Otherwise PHYSICS -> proceed to the declared physics step (two-level moisture transport, then land-sea inflow), each screened on dev and tested once on sealed set o.",
+ "no_scoring": "diagnostic only; no parameter is fitted and no sealed set is opened"
+}
