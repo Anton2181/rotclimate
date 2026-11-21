@@ -10,6 +10,19 @@
   Earth corrections retrained for r49 (scripts/retrain_earth_corrections.sh -> calibration/earth_correction_r49_20261121).
   Then base build -> corrected climate -> harvest (malaria rule) -> population -> all add-ons -> settlement chain
   (release 3/4, provisional r5) -> browser checks -> Claude copy.
+* [DONE 21 Nov] W3 world refit on full r49: 241 evals, best zero-penalty coarse zonefit 0.212 (start 0.168). Native ds8 check
+  (scripts/select_world_r49.py; calibration/map_world_r49/selection.json): refitted world (eval 231) zonefit 0.206 vs start 0.169,
+  strict agreement 35.9 % vs 29.0 % (r44 atlas 32.4 %) -> SELECTED (calibration/map_world_r49/params.json; checkpoint
+  output/r49_world/candidate_001.pkl, ignored). Changes: tilt 33.5 -> 24.7, solar 1.000 -> 1.039, greenhouse -0.5 W/m2,
+  eccentricity 0.017 -> 0.009, lat_center 38.5 -> 41.3, north bearing -8.8 -> -3.7, ebm_land_scale 0.82, off-map land up on all
+  sides (NE 0.01 -> 0.61, W 0.33 -> 0.64, S 0.72 -> 0.98), off-map relief 176 -> 51 m.
+* [DONE 21 Nov] Earth corrections retrained for r49 (calibration/earth_correction_r49_20261121, force-added): cluster-CV
+  temperature 1.494 C (r44 1.506), rain loss 0.4238 (r44 0.4318).
+* [DONE] per-polity herding statistics use the adopted growing-season rule (polity/herding.py); forest-in-travel on in the driver.
+* [RUNNING] scripts/release_r49.sh (output/atlas_r49/stages_done): base -> promote (r44 atlas backed up to
+  output/atlas_r49/previous_atlases/earth_fit_r44) -> forest/herding layers -> add-ons. Then: settlement chain release 4
+  (settlement_chain.py ... build, publish_release4.sh, release4_reach_chain.sh), provisional r5, pages, accuracy
+  (publish_current_earth_r49.py), hub, browser checks, Claude copy.
 * Superseded text below (kept for history):
 * CORRECTION FIRST: earlier map checks of r46-r49 merged only SPACES['e3'] physics (dropped e85-e87 and the r45/r46 additions).
   Full-physics check (earth_physics_on_map.py --since r44): r49 strict 31.0 % vs r44 32.4 % (warm wet 22 vs 34). The owner's
