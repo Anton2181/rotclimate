@@ -1,0 +1,10 @@
+{
+ "date": "2026-11-21",
+ "owner_request": "\"Can you merge it into the main atlas?\" (the provisional settlement atlas r5)",
+ "what": "The main settlement chain (release 4) draws town sizes with the r5 Earth size fit instead of the release-4 hierarchy fit. Everything else is unchanged: town positions, lore ranks, seed 1, density readings, supply extraction (0.337 central / 0.140 low). Because the sizes stage feeds supply, staffing, reach, control, trade, administration and the ensemble, all of them now follow the r5 populations; the r5 cohort boundary (new populations only in the settlement and grain options) disappears.",
+ "mechanism": "calibration/settlement_chain/release4_r50t7.json: the sizes stage substitutes output/settlement_hierarchy_20261115/results_soft.json with size_fit.json; scripts/settlement_hierarchy_map.py, the reviewer and the ensemble read coefficients, sigma and phi from it. No script is edited.",
+ "evidence": "r5 fit: development comparison on exposed sources (log-area CRPS all-664 -1.08 %, strict-153 -3.21 %; size KS slightly worse; Egyptian subset under-predicted). Not a new blind test; both blind size tests (southern Mesopotamia, Valley of Mexico) remain failed.",
+ "climate": "first built in the T7 rebuild (r50 climate + Budyko-Fu runoff + GPP forage phenology)",
+ "not_carried": "The r5 before/after comparison viewer (atlases/earth_fit/provisional/) is not rebuilt: there is one settlement cohort again.",
+ "size_fit_sha256": "78fe1134047fd73b21020f6946da61c41462257064d9de4afc23992fe1a86faa"
+}

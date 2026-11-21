@@ -63,9 +63,9 @@ run settlement_publish $PY -I scripts/publish_settlement_integration.py --origin
 echo "core add-ons complete"
 
 # ---- settlement release 4 on this climate (reports/RELEASE_R50_20261121.md section 5) ----
-SPEC=calibration/settlement_chain/release4_r50.json; S=output/chain_staging/$(basename $SPEC .json); R=output/settlement_release4_20261116
+SPEC=calibration/settlement_chain/release4_r50t7.json; S=output/chain_staging/$(basename $SPEC .json); R=output/settlement_release4_20261116
 D=atlases/earth_fit/data; BK=$OUT/inplace_backup
-export ROTCLIMATE_CONFLUENCE_K=1.0 RELEASE_TAG=r50
+export ROTCLIMATE_CONFLUENCE_K=1.0 RELEASE_TAG=r50t7
 stage_links() {   # province seats (lore inventory; identical in every climate) where the chain's first stage reads them
   mkdir -p $D/release3/hierarchy/corrected; cp $D/hierarchy_links.csv $D/release3/hierarchy/; cp $D/corrected/hierarchy_links.csv $D/release3/hierarchy/corrected/; }
 chain_first() { rm -rf "${S:?}"; $PY -I scripts/settlement_chain.py $SPEC build --stage sizes review_placement review_sizes supply review_supply; }
