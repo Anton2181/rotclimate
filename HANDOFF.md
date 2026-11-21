@@ -36,7 +36,14 @@
   decision before more climate physics; sealed set o still UNOPENED.
 * [DONE 21 Nov, owner "Let's try"] e92 heating-dependent convective threshold over land: screen FAIL (Najd 1.02-1.15, Sahel
   1.03-1.11 while Mexico/Bengal gain <= 4 %). CLIMATE PARKED AT r49 (declared rule). e91/e92 code stays, default off.
-  Pattern and the only remaining idea: findings.md item 5. Sealed set o still UNOPENED. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
+  Pattern and the only remaining idea: findings.md item 5. Sealed set o still UNOPENED.
+* [RUNNING, owner "Keep trying, keep going until we get it"] e93 = e92's land threshold drop gated by the e86 belt ramp and the
+  desert-air share chi (calibration/monsoon_convection_20261121/plan_e93.json). Screen D PASS at heat 0.3 (target 0.948; Sahel
+  0.873, Bengal 0.926, Najd 0.993). Stage B joint refit running: refit_e93.json -> output/monsoon_convection_20261121/refit
+  (reference r49 = output/monsoon_convection_20261121/ref symlinks). Then policy_v3 gates; sealed set o ONCE.
+* Next lead (Mexico barely moves under e93): scripts/monsoon_trace.py shows Mexico's air counted as land-crossed (chi 0.63-0.86)
+  under monsoon WESTERLIES all summer: trade_land = 1.0 removes summer trades over big land masses (no Gulf of Mexico easterly
+  supply) and the plateau-anchored belt (e85) puts Mexico on the westerly side. A circulation fix, separate experiment. WOA18 SST cache rebuilt (data/cache/earth/woa18_sst_1deg.npz).
 * [OPEN] Provisional r5 NOT carried over: frozen r44 cohort (plan says no climate update; prepare_urban_candidate_control.py and
   successors pin the r44 publication). Absent from the r49 atlas and Claude copy; kept in git history + GPT site. Rebuilding on
   r49 = new cohort declaration + removing r44 identity pins in ~12 scripts (owner decision whether worth it).
