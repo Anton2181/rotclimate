@@ -28,8 +28,13 @@ def rain_coefficient(W, saturation, dynamics, instability, rh_threshold, tau_day
         # x exp(-evap * z_LCL / 3 km) with z_LCL = (20 + T/5)(100 - RH%) m
         # (Lawrence 2005); the evaporated water stays in the column
         if np.any(np.asarray(closure["conv"]) > 0):
-            rate = rate + (closure["conv"] * np.exp(11.4 * (np.minimum(rh, 1.5) - closure["r0"])) * closure["fT"]
-                           / (np.maximum(W, 0.1) * DAY))
+            conv_mm = closure["conv"] * np.exp(11.4 * (np.minimum(rh, 1.5) - closure["r0"])) * closure["fT"]
+            cap = closure.get("cap")
+            if cap is not None:
+                # e104: soft ceiling (mm/day) on the closure where cap > 0
+                capped = cap * np.tanh(conv_mm / np.maximum(cap, 1e-9))
+                conv_mm = np.where(cap > 0, capped, conv_mm)
+            rate = rate + conv_mm / (np.maximum(W, 0.1) * DAY)
         if closure["evap"] > 0:
             z_lcl = (20.0 + closure["T"] / 5.0) * (100.0 - 100.0 * np.clip(rh, 0.0, 1.0))
             rate = rate * np.exp(-closure["evap"] * np.maximum(z_lcl, 0.0) / 3000.0)

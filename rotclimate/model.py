@@ -2282,6 +2282,8 @@ class ClimateModel:
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
                         heat = heat * (1.0 - descent_cap)                       # e94
                     closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)
+                if p.convective_cap_land > 0:
+                    closure['cap'] = np.where(land, p.convective_cap_land, 0.0)          # e104
             mix = (lambda water: gauss(water, sigW)) if p.eddy_rate > 0 else None
             if p.eddy_rate > 0 and p.eddy_upwind_days > 0:
                 # e61: the eddies' water comes from where the air comes from.

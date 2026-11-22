@@ -229,6 +229,7 @@ class Params:
     convective_rh_gate: float = 0.0   # e93: e92's threshold drop x (1 - this x the e86 ramp): not poleward of the rain belt (dry air aloft); 0 = off
     convective_rh_chi0: float = 0.0   # e93: e92's threshold drop x (1 - clip((chi - this) / (1 - this), 0, 1)): not in air that crossed land (desert air aloft); 0 = off
     convective_rh_chi_dry: float = 0.0  # e103: e93's chi blends toward a dry-land chi (land x annual soil dryness, carried the same way): wet forest air is not desert air aloft; 0 = off
+    convective_cap_land: float = 0.0  # e104: over land the e2 closure's rate (mm/day) -> cap x tanh(rate / cap): no coastal 20+ mm/day deluge at column RH 0.64 (Maranhao); 0 = off
     convective_descent: float = 0.0   # e94: the e49 monsoon descent caps convection: cap = clip(descent / convective_descent_ref, 0, 1); the v6 boost and the e2
                                       # convective rate x (1 - this x cap), e93's threshold drop x (1 - cap) (Rodwell-Hoskins deserts: Arabia, Iran); 0 = off
     convective_descent_ref: float = 0.5  # e94: descent (mm/day of driving monsoon heating) at which the cap is full
