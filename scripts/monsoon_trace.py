@@ -17,7 +17,7 @@ base = load_params(ROOT / a.params).replace(**json.loads(a.set))
 case = earth.region_case(a.region, 56.0); p = earth.earth_params(base, case).replace(steps_per_year=base.steps_per_year)
 g = case.grid; m = g.inmap & g.land; ti, tj = np.nonzero(m)
 model = ClimateModel(p, grid=g); model.trace_cells = (ti, tj); model.run()
-keys = ['T', 'W', 'Ws', 'P', 'chi', 'instab', 'conv_rate', 'SST', 'u', 'v']
+keys = ['T', 'W', 'Ws', 'P', 'E', 'bucket', 'chi', 'instab', 'conv_rate', 'SST', 'u', 'v']
 rows = {}
 for rec in model.trace:
     mo = int(rec['day'] // (p.year_days / 12.0)) % 12
