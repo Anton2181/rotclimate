@@ -1,0 +1,24 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared after the stage-A screen (D1 1.0009, D2 0.9998, D3 1.0002) and before any stage-B evaluation; sealed set q unopened",
+ "amendment": "Screen showed the gated heating is weak (Najd Jul-Sep +0.3 C, Sahara +0.4, North India Apr-May +0.3, Deccan/Sahel 0). Steps changed from plan.json before running: dry_heating mul 1.6 (was 1.25), dry_heating_chi0 add 0.1 (was 0.05). Everything else as plan.json.",
+ "start": "calibration/dry_heat_r50_20261122/stageA_D2_params.json",
+ "start_set": {},
+ "reference": "output/hot_tail_20261122/stageA",
+ "reference_name": "r50",
+ "knobs": {
+  "dry_heating": ["mul", 1.6],
+  "dry_heating_chi0": ["add", 0.1],
+  "dry_heating_mean_c": ["add", 3.0],
+  "dry_heating_warm_c": ["add", 3.0],
+  "dry_heating_arid": ["add", 0.1],
+  "subsidence_warming": ["mul", 1.15],
+  "land_offset": ["add", 0.3],
+  "precip_tau_days": ["mul", 1.05],
+  "storm_track": ["mul", 1.04]
+ },
+ "bounds": {"dry_heating": [0.0, 8.0], "dry_heating_chi0": [0.0, 0.95], "dry_heating_arid": [0.0, 0.9]},
+ "max_evaluations": 40,
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park."
+}
