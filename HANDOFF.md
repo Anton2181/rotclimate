@@ -57,6 +57,9 @@
     e102 tropical-only sea warming + heat-low inflow (calibration/warm_season_inflow_20261122): dev49 PASS 0.9925
     (T -1.0 %, P -0.5 %) but fine28 FAIL 1.0112 (California wetter, Japan T): not adopted, sealed q unopened.
     Closest candidate of the campaign; e102 code kept (default off).
+    plan_C (e102, global rain settings frozen): dev49 0.9916, fine28 1.0064, then sealed set q 1.065 FAIL (eastern
+    Brazil hotter and +330 mm wetter on +1400 already; Air +26 mm on +415): NOT adopted; sealed set q SPENT. A fresh
+    sealed set is needed for the next finalist. dev49 lacks tropical South America: consider adding it when drawing.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49

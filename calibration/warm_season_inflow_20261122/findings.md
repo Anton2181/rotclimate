@@ -23,3 +23,17 @@ the refit moved, not from its sea. No upwelling follow-up is declared on that ba
 ## e102b probe (withhold the warming from cold-current seas): rejected on WOA alone, code reverted
 WOA18 annual bias e102 -> e102b: Benguela +1.7 -> +1.1, but Mexico open -3.3 -> -4.9 (the model's cold-current
 mask covers Mexico's Pacific coast, which WOA has warm), Bengal -1.5 -> -1.7. Net worse; not scored.
+
+## plan_C (e102 with global rain settings frozen): dev49 0.9916, fine28 1.0064, sealed set q 1.065 — FAIL, not adopted
+Best: sst_tropical ~1.9 C (fade 25 -> 26 deg), trade_heat_low ~0.46, monsoon_pressure_hpa ~2.7-3.0, monsoon_descent
+~0.037-0.042, subsidence_warming ~5.5, branch drying ~0.27 (plan_C_best.json); rain settings at r50.
+Sealed q (6 regions, single paired run vs r50; declaration updated before and after):
+  q_15s_40w (eastern Brazil interior): T MAE 2.54 -> 3.23 (bias +2.5 -> +3.2), rain 2376 -> 2704 mm vs 959 observed
+  q_15s_60w (Bolivia/Mato Grosso): T 1.52 -> 1.59, rain 608 -> 571 vs 1414
+  q_18s_17e (N Namibia): T 0.99 -> 1.15, rain 9 -> 12 vs 518 (the Kalahari failure, unchanged)
+  q_19n_13e (Niger/Air): T 2.78 -> 2.97, rain 445 -> 471 vs 30
+  q_22n_3w (Sahara): T 1.96 -> 1.84 (better); q_59n_56e (Urals): unchanged.
+Reading: the warmer tropical sea feeds tropical land rain where r50 already rains too much (eastern Brazil +1400 mm,
+the Air +415 mm) and warms land already too warm; dev49 holds few such regions (South America has only S Brazil),
+so the gain there did not transfer. The tropical sea error is real, but r50's tropical land rain and warmth are tuned
+around it, as the mid-latitudes were around the cold sea (e98). Set q is spent. Line parked; r50 stays.
