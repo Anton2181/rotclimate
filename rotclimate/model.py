@@ -720,7 +720,7 @@ class ClimateModel:
 
     def _zonal_sea(self, lat, d):
         p = self.p
-        return self.z.sea(lat, d, p.sst_offset, p.sst_damping, p.sst_damping_lat)
+        return self.z.sea(lat, d, p.sst_offset, p.sst_damping, p.sst_damping_lat, p.sst_tropical, p.sst_tropical_lat)
 
     def _sea_annual_field(self):
         """e28: annual-mean temperature of the nearby sea (its currents included,

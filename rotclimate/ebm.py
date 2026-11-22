@@ -282,7 +282,7 @@ class ZonalClimate:
     def ocean(self, lat, day):
         return self._interp(self.To, lat, day)
 
-    def sea(self, lat, day, offset=0.0, damping=0.0, damping_lat=50.0):
+    def sea(self, lat, day, offset=0.0, damping=0.0, damping_lat=50.0, tropical=0.0, tropical_lat=40.0):
         """The zonal sea the regional model uses: ocean + offset; e98 damps its
         seasonal swing poleward (the deep winter mixed layers of 40-65 deg hold
         the sea at 5-10 C of swing against the column's 13-16) without
@@ -293,6 +293,12 @@ class ZonalClimate:
             mean = np.interp(lat, self.lat, self.To.mean(0)) + offset
             ramp = np.clip((np.abs(lat) - 10.0) / max(damping_lat - 10.0, 1.0), 0.0, 1.0)
             T = mean + (1.0 - damping * ramp) * (T - mean)
+        if tropical != 0.0:
+            # e102: r50's single offset (-4.4 C) leaves the sea 2.7-3.5 C below WOA18 from the equator
+            # to 35 deg but only 1-2 C at 40-50 N; warm the tropical and subtropical sea only, full to
+            # 25 deg, nothing poleward of tropical_lat
+            lat = np.asarray(lat, float)
+            T = T + tropical * np.clip((tropical_lat - np.abs(lat)) / max(tropical_lat - 25.0, 1.0), 0.0, 1.0)
         return T
 
     def zonal(self, lat, day):
