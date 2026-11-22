@@ -676,6 +676,7 @@ class ClimateModel:
         # e4b: land fraction at the scale of continents (summer trade weakening)
         self.land_broad = ndi.gaussian_filter(land, 1500.0 / g.cell_km, mode="nearest") if p.trade_land > 0 else None
         # e3: ocean basins at the scale of the subtropical highs
+        self._eddy_w = None   # e100
         self.ocean_basin = (ndi.gaussian_filter(1.0 - land, p.subtropical_high_scale_km / g.cell_km)
                             if p.subtropical_high > 0 else None)
 
@@ -1732,7 +1733,18 @@ class ClimateModel:
                     heat_inputs = (T_state, lam, uh, vh)
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
-                    Tmix = gauss(T_state, sigE)
+                    if p.eddy_heat_terrain_km > 0:
+                        # e100: a storm moves air along level surfaces; a mountain wall stops the low-level
+                        # exchange. The interior's winter cold pool (BC's plateau, ~1 km) reached the fjord
+                        # coast behind the Coast Mountains as freely as the Pacific air: BC's coast sat at
+                        # -7 C in February against +1. Weight each cell in the eddy mean by
+                        # exp(-elevation / eddy_heat_terrain_km) (sea and lowlands 1).
+                        if self._eddy_w is None:
+                            self._eddy_w = np.exp(-np.maximum(np.where(g.land, g.elev, 0.0), 0.0) / (1000.0 * p.eddy_heat_terrain_km))
+                            self._eddy_wn = np.maximum(gauss(self._eddy_w, sigE), 1e-9)
+                        Tmix = gauss(self._eddy_w * T_state, sigE) / self._eddy_wn
+                    else:
+                        Tmix = gauss(T_state, sigE)
                     eh = eddy if p.eddy_heat == 1.0 else eddy * p.eddy_heat
                     return self.solver.solve(uh, vh, p.heat_diffusion, lam + eh,
                                             lam * T_eq + eh * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
