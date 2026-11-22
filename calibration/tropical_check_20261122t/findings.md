@@ -48,3 +48,11 @@ Dev pool = dev49 + set t (55): S55 <= 0.995 with T,P <= +1 %; guard S49 <= 1.0; 
 scripts/gate_v3.py dev4. plan_T3 (running, declared under v3) will be scored under v4 as well.
 Candidate e103 + e104 cap 12 (candidate_e103_e104_cap12.json): S55 0.9783 (T -0.2 %, P -4.1 %), S49 0.9984,
 S_t 0.872: dev4 PASS. Next: fine28. The sealed-r finalist is chosen after plan_T3 (one sealed run only).
+
+## plan_T3 result (scored under policy v4)
+Best (j37): S55 0.9713 (T -0.4 %, P -5.4 %), S49 0.9960, S_t 0.8437: dev4 PASS, better than the e103+e104
+cap12 candidate (S55 0.9783). Changes vs r50: cap 7.6, instability 2.11->3.28, convective_rain 0.63->0.89,
+convective_rh_chi0 0.675->0.7625, chi_dry 0.625, convective_rh_heat 0.39, subsidence_warming 4.68->5.18,
+trade_heat_low 0.35->0.22, monsoon_descent 0.0314->0.0342, land_recycling 0.365, bucket 69.
+Finalist rule (stated before its result): plan_T3 best goes to sealed r if fine28 <= 1.01, else the cap12 candidate
+(fine28 0.9991 PASS).
