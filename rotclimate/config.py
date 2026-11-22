@@ -273,6 +273,7 @@ class Params:
     subsidence_branch_drying: float = 0.0  # e70b: column drying (1/day) along the descending branch's core, fading over 10 deg to the Hadley edge (0 = off)
     subsidence_branch_dry_rain: float = 0.0  # e70c: e70b x exp(-recent smoothed rain / this, mm/day): no dry-air descent under rising air; 0 = off
     subsidence_branch_gap: float = 8.0  # e70: degrees poleward of the ITCZ where the descending branch's sinking begins
+    subsidence_warming_gap_land: float = -1.0  # e107: e71's warming starts this far poleward of the ITCZ over broad land (land_broad blends from subsidence_branch_gap over sea); < 0 = subsidence_branch_gap everywhere
     dry_coupling: float = 0.0  # e36: dry ground couples the air to the land faster, sunshine coupling x (1 + this x dryness) (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)

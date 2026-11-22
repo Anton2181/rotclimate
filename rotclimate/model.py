@@ -215,6 +215,7 @@ class Result:
 
 
 class ClimateModel:
+    tap = None          # diagnostics: callable(name, day, field) at the land-temperature stages (None = off)
     def __init__(self, params: Params, grid=None):
         if params.eddy_moisture_scheme not in ('legacy', 'conservative', 'conservative-rainout'):
             raise ValueError('Unknown eddy_moisture_scheme')
@@ -1139,6 +1140,7 @@ class ClimateModel:
             Tl = self.z.land(lat, d) + p.land_offset
             if p.land_amplitude != 1.0 or p.wet_cooling > 0 or p.continentality > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
+            if self.tap is not None: self.tap('zonal', d, Tl)
             if p.land_amplitude != 1.0:      # v4: continental seasonality
                 Tl = Tl_mean + p.land_amplitude * (Tl - Tl_mean)
             if p.continentality > 0:
@@ -1231,6 +1233,7 @@ class ClimateModel:
                     centre = centre - p.continental_mean * dark * self.pole_land * np.clip(chi, 0.0, 1.0)
                 Tl = centre + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
                 annual_eq = centre                  # e54d: the cell's annual-mean land equilibrium
+            if self.tap is not None: self.tap('continental', d, Tl)
             if p.subsidence_warming > 0:
                 # e71: air sinking along the Hadley cell's descending branch
                 # warms by compression; the 15-30 N dry belt's deserts and dry
@@ -1241,6 +1244,16 @@ class ClimateModel:
                 # edge), x (1 + subsidence_summer x season).
                 _, _, phi_i_w, phi_h_w = self.zonal_wind(s)
                 start = phi_i_w + p.subsidence_branch_gap
+                if p.subsidence_warming_gap_land >= 0:
+                    # e107: over broad land the ITCZ here is the summer heat
+                    # low, and the rain runs ~4 deg equatorward of it; the
+                    # desert under and just poleward of the heat low is the
+                    # hottest place on Earth (Najd 35 C in August). With the
+                    # sea's gap the warming began at ~24 N over Arabia in
+                    # July-August and fell to +0.5 K there (r51 Najd 5-6 C too
+                    # cold, Jul-Sep). Rain still turns it off (e71e).
+                    broad_w = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(g.land.astype(float), 1500.0 / g.cell_km, mode="nearest")
+                    start = start + (p.subsidence_warming_gap_land - p.subsidence_branch_gap) * broad_w
                 branch = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h_w)
                 if p.subsidence_warming_taper > 0:
                     # e71b: the deepest sinking is in the 15-30 deg core of the
@@ -1271,6 +1284,7 @@ class ClimateModel:
                     # land share chi) carries the sinking air's warmth down
                     warm = warm * np.clip((chi - p.subsidence_warming_chi0) / (1.0 - p.subsidence_warming_chi0), 0.0, 1.0)
                 Tl = Tl + np.where(land, warm, 0.0)
+            if self.tap is not None: self.tap('subsidence', d, Tl)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
                 # on Earth rarely pass 30 C); wetness = recent rain against a
@@ -1283,6 +1297,7 @@ class ClimateModel:
                     # dried by a rainless summer heats)
                     wet = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
+            if self.tap is not None: self.tap('wet_cooling', d, Tl)
             if p.wet_sun > 0:
                 # e69: the latitude-mean land column evaporates like an average
                 # land whatever the season; ground wetter than that spends more
@@ -1298,6 +1313,7 @@ class ClimateModel:
                                                        p.year_days))
                 wet_s = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - np.where(land, p.wet_sun * (wet_s - p.wet_sun_ref) * S_w / LAND_COUPLING_SREF, 0.0)
+            if self.tap is not None: self.tap('wet_sun', d, Tl)
             if p.rain_shading > 0 and rain_prev is not None:
                 # e105: deep rain cloud shades the ground. The humid tropics
                 # (Amazon, Congo, East African coast: 1.2-1.7 C too warm in
@@ -1370,6 +1386,7 @@ class ClimateModel:
                     dry_ann = 1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                     dry = dry * np.clip((dry_ann - p.dry_heating_arid) / (1.0 - p.dry_heating_arid), 0.0, 1.0)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
+            if self.tap is not None: self.tap('dry_heating', d, Tl)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
                 # e4: the latitude-mean land column carries its latitude's mean
                 # cloudiness. Where this step's sky is clearer than that mean,
@@ -1408,6 +1425,7 @@ class ClimateModel:
                     sigT4 = 5.67e-8 * (np.maximum(Tl, -60.0) + 273.15) ** 4
                     dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, self._lat_mean(Wc))) / 10.0
                 Tl = Tl + np.clip(dT, -15.0, 10.0)
+            if self.tap is not None: self.tap('cloud', d, Tl)
             if p.snow_albedo > 0:
                 # e16: the latitude-mean land column has no snow of its own.
                 # Snow on the ground reflects most of the sunshine, so snowy
@@ -1420,6 +1438,7 @@ class ClimateModel:
                                                      p.year_days))
                 cover = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
                 Tl = Tl - p.snow_albedo * cover * S / LAND_COUPLING_SREF
+            if self.tap is not None: self.tap('land_eq', d, Tl)
             if p.land_coupling_insolation > 0:
                 # physics e2: the land surface ties the air to its temperature
                 # through sunshine-driven mixing, strongly in summer and weakly
@@ -2546,6 +2565,7 @@ class ClimateModel:
             if cycle is not None and n>=primer:
                 cycle.update(k,dict(temperature=T_rep,rain=P,water=W,soil_water=soil_w,
                                     recycled_rain=soilP,snow_water=swe))
+            if self.tap is not None: self.tap('air', d, Tsl)
             T_prev2, T_prev, W_prev = T_prev, Tsl, W
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
