@@ -1288,6 +1288,19 @@ class ClimateModel:
                                                        p.year_days))
                 wet_s = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                 Tl = Tl - np.where(land, p.wet_sun * (wet_s - p.wet_sun_ref) * S_w / LAND_COUPLING_SREF, 0.0)
+            if p.rain_shading > 0 and rain_prev is not None:
+                # e105: deep rain cloud shades the ground. The humid tropics
+                # (Amazon, Congo, East African coast: 1.2-1.7 C too warm in
+                # r51) and the summer-monsoon lands (East China, Korea,
+                # Manchuria ~1.5 C too warm) sit under thick convective cloud
+                # for months; the wet_sun term only spends sunshine on
+                # evaporation, the cloud never lets it reach the ground.
+                # Tl -= rain_shading x (1 - exp(-rain / rain_shading_mm)) x sunshine / 480 W m-2.
+                S_r = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                       p.solar_flux * distance_factor(d, p.eccentricity,
+                                                       p.winter_solstice_day + p.perihelion_after_solstice,
+                                                       p.year_days))
+                Tl = Tl - np.where(land, p.rain_shading * (1.0 - np.exp(-rain_prev / p.rain_shading_mm)) * S_r / LAND_COUPLING_SREF, 0.0)
             if p.dry_heating > 0:
                 # e54: the latitude-mean land column evaporates like an average
                 # land. Dry ground puts its sunshine into heating the air
@@ -2520,7 +2533,7 @@ class ClimateModel:
             if p.monsoon_heating > 0:
                 warm = np.clip((Tsl - 20.0) / 5.0, 0.0, 1.0)
                 heating_prev = gauss(P * warm, MONSOON_SMOOTH_KM / g.cell_km)
-            if (p.subsidence_warming > 0 and p.subsidence_warming_rain > 0) or (p.subsidence_branch_drying > 0 and p.subsidence_branch_dry_rain > 0):
+            if (p.subsidence_warming > 0 and p.subsidence_warming_rain > 0) or (p.subsidence_branch_drying > 0 and p.subsidence_branch_dry_rain > 0) or p.rain_shading > 0:
                 rain_prev = gauss(P, 300.0 / g.cell_km)
             if p.cloud_radiation > 0 or p.cloud_longwave > 0:
                 rh = np.clip(W / np.maximum(Ws, 1e-6), 0.0, 1.0)

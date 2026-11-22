@@ -11,13 +11,17 @@ import refit_e75 as R
 
 def objective(plan, name, params):
     s = R.evaluate(name, params)
-    if plan.get('objective_mode') not in ('max_dev_pool', 'pool_given_dev'):
+    if plan.get('objective_mode') not in ('max_dev_pool', 'pool_given_dev', 'v4'):
         return s
     from gate_v3 import paired, score
     d = R.OUT / name
     A = score(*paired(d, R.REF_NAME, None, ['dev31', 'retired_a', 'retired_b', 'retired_c']), None) if False else None
     R49, C49 = paired(d, R.REF_NAME, None, ['dev31', 'retired_a', 'retired_b', 'retired_c']); s49 = score(R49, C49, list(R49))
     Rp, Cp = paired(d, R.REF_NAME, None, list(plan['extra_parts'])); sp = score(Rp, Cp, list(Rp))
+    if plan.get('objective_mode') == 'v4':                         # policy v4: S55 gate, S49 <= 1 guard
+        Ra, Ca = dict(R49, **Rp), dict(C49, **Cp); s55 = score(Ra, Ca, list(Ra))
+        val = s55['S'] if s49['S'] <= 1.0 else 10.0 + s49['S']
+        return dict(S=val, T=s55['T'], P=s55['P'], S49=s49['S'], S_pool=sp['S'], n=len(Ra))
     if plan.get('objective_mode') == 'pool_given_dev':
         cap = plan['dev_cap']
         val = sp['S'] if s49['S'] <= cap else 10.0 + s49['S']        # feasible: extra-tropical score; else push S49 down
