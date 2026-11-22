@@ -81,7 +81,7 @@ def _band_land(lat, profile):
 @lru_cache(maxsize=64)
 def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profile=None, ocean_transport=0.0,
            c_ocean_scale=1.0, c_ocean_season=0.0, cross_transport=0.0, cross_ocean=0.0, solar_flux=1.0,
-           greenhouse=0.0, radius=1.0, land_ice=1.0):
+           greenhouse=0.0, radius=1.0, land_ice=1.0, c_ocean_polar=0.0):
     from types import SimpleNamespace
 
     p = SimpleNamespace(tilt=tilt, eccentricity=ecc, perihelion_after_solstice=peri,
@@ -116,6 +116,12 @@ def _solve(tilt, ecc, peri, ws_day, year_days, years=10, c_land_scale=1.0, profi
     nu = NU * fo / (1 - F_LAND) if profile is not None else np.full(N, NU)
     C_L = C_LAND * c_land_scale     # e1: heat capacity of the land column (seasonal lag)
     C_O = C_OCEAN * c_ocean_scale   # mixed-layer heat capacity (1 = ~26 m; the effective seasonal layer is deeper)
+    if c_ocean_polar > 0:
+        # e97: the sea's seasonal layer deepens poleward (winter storms and
+        # convection mix 100-500 m at 45-65 deg, ~30-50 m in the tropics), so
+        # the zonal sea swung 13-16 C at 40-60 deg against WOA18's 5-10 (N)
+        # and 3-5 (S). Capacity x (1 + c_ocean_polar x sin^2 lat).
+        C_O = C_O * (1.0 + c_ocean_polar * x ** 2)
     dt = 86400.0
     I = np.eye(N)
     Lfl, Lfo = L * fl[None, :], L * fo[None, :]     # diffusion of the zonal mean fl T_l + fo T_o
@@ -232,6 +238,8 @@ class ZonalClimate:
             extra["ocean_transport"] = round(params.ocean_transport, 3)
         if getattr(params, "ocean_heat_capacity", 1.0) != 1.0:
             extra["c_ocean_scale"] = round(params.ocean_heat_capacity, 3)
+        if getattr(params, "ocean_capacity_polar", 0.0) > 0:
+            extra["c_ocean_polar"] = round(params.ocean_capacity_polar, 3)
         if getattr(params, "ocean_mixed_seasonality", 0.0) > 0:
             extra["c_ocean_season"] = round(params.ocean_mixed_seasonality, 3)
         if getattr(params, "cross_equatorial_transport", 0.0) != 0.0:

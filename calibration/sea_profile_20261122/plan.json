@@ -1,0 +1,25 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "task": "C1 (owner 22 Nov: 'go back to iteratively working on the climate model itself, without stopping and asking me for input')",
+ "status": "declared before any stage-0 fit or regional evaluation. e97 code written, default off (r50 unchanged). Sealed set q unopened (its region list was printed once while reading tooling; no scores seen).",
+ "diagnosis": "r50 on dev49 cells: hot cell-months are too cold (observed >=30 C: -2.8; >=35 C: -4.2) and cold ones too warm (<=-15 C: +1.2 to +1.8); cells with an observed annual mean above 24 C are 2.2 C too cold, all year. The zonal sea under it (EBM ocean + sst_offset -4.43) is about 3 C too cold in the tropics (0-20 deg: 24.7-22.8 vs WOA18 27.3-26.2 N) and swings 13-16 C at 40-60 deg against WOA18's 7-10 (N) and 3-5 (S). Regional seas: Mexico -3.4 to -6.7, SW Australia -2 to -6, British Isles/California summers +3, winters -3 (output/hot_tail_20261122/sst_r50.json).",
+ "physics": "e97 ocean_capacity_polar: mixed-layer heat capacity x (1 + k sin^2 lat) (deeper winter mixing poleward).",
+ "stage_0": {
+  "tool": "scripts/sea_profile_fit.py (EBM only)",
+  "target": "WOA18 zonal-mean SST, 0.5-64.5 deg, 12 months, north and mirrored south, cos-lat weights; score = mean of the two hemispheres' RMSE",
+  "fits": {"existing": ["ocean_heat_capacity", "ocean_mixed_seasonality", "ocean_transport", "sst_offset"],
+           "e97": ["ocean_heat_capacity", "ocean_mixed_seasonality", "ocean_capacity_polar", "ocean_transport", "sst_offset"]},
+  "rule": "carry e97 forward only if its fit lowers the zonal RMSE by >= 15 % against the existing-knobs fit; the carried sea values are frozen from here on (observation-fitted)"
+ },
+ "stage_A_screen": {
+  "candidate": "r50 + the stage-0 sea values, nothing else",
+  "run": "dev31 + retired a,b,c (dev49) paired with r50, scripts/gate_v3.py dev",
+  "report": "S49, T, P, and the hot-tail diagnostic (cell-months observed >= 30 C, cells annual >= 24 C)",
+  "pass_to_B": "always go to B (land settings were fitted against the cold sea and must be refitted); stop if S49 > 1.10"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 against r50, start = stage-A candidate, sea values frozen",
+  "knobs": {"subsidence_warming": ["mul", 1.3], "continental_mean": ["mul", 1.3], "land_amplitude": ["mul", 1.15], "wet_sun": ["mul", 1.3], "dry_coupling": ["mul", 1.3], "lapse_rate": ["mul", 1.1], "current_strength": ["mul", 1.3], "subpolar_current": ["mul", 1.3]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 against r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q with S<=1.0. Pass -> r51 on Earth, then the world refit for the map and a full atlas rebuild (standing instruction). Fail -> record, keep r50."
+}
