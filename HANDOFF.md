@@ -3,6 +3,12 @@
 # Adopt climates on the gates as before, but do NOT rebuild the atlas unless the owner asks. r51 rebuild (already running
 # when this was said) is finished lean: commit atlas + short report, no extra packaging work.
 
+# r51 ATLAS LIVE (22 Nov 2026): rebuild done, browser checks pass, reports/RELEASE_R51_20261122.md. No Claude copy (owner).
+# C1 NEXT: sealed set s declared UNOPENED (calibration/sealed_20261122s). e105 rain-cloud shading (rain_shading, _mm) and
+# e105b (rain_shading_wet_pow, wet-all-year gate) in code, default off; screens vs r51 with scripts/screen_v4.py in
+# output/cloud_shade_20261122 (ref = refit_T3 j37 runs). e105 alone: 1.5 K S55 0.997 / S49 1.008; 3 K S55 1.003 / S49
+# 1.021 (Amazon +1.6 -> +0.15 C but Sahel/Burkina/N India/Bengal colder). joint_refit.py has objective_mode 'v4'.
+
 # AUTONOMOUS WORK PLAN — owner approved 21 Nov 2026 ("write it down as a list of tasks for you to follow autonomously and keep
 # going"; paste every map/graphic into the chat). Work in order; each Earth test declared before scoring; adopt only on pass.
 * T1 Finish the r50 atlas rebuild: select_world_r50.py + r50 corrections -> scripts/release_r50.sh -> browser checks ->
