@@ -1,0 +1,55 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "stage B of plan_e98c.json, generated after stage A (S1 1.0012, S2 1.0095) and before any stage-B evaluation; sealed set q unopened",
+ "start": "calibration/sea_profile_20261122/e98c_S1_params.json",
+ "start_set": {},
+ "reference": "output/hot_tail_20261122/stageA",
+ "reference_name": "r50",
+ "knobs": {
+  "sst_damping": [
+   "add",
+   0.1
+  ],
+  "sst_damping_lat": [
+   "add",
+   8.0
+  ],
+  "land_amplitude": [
+   "mul",
+   1.1
+  ],
+  "continental_mean": [
+   "mul",
+   1.2
+  ],
+  "subpolar_current": [
+   "mul",
+   1.2
+  ],
+  "current_strength": [
+   "mul",
+   1.2
+  ],
+  "storm_track": [
+   "mul",
+   1.05
+  ],
+  "precip_tau_days": [
+   "mul",
+   1.05
+  ]
+ },
+ "bounds": {
+  "sst_damping": [
+   0.0,
+   0.95
+  ],
+  "sst_damping_lat": [
+   20,
+   70
+  ]
+ },
+ "max_evaluations": 40,
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park."
+}
