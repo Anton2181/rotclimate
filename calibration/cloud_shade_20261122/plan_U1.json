@@ -1,0 +1,24 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any evaluation of this plan; set t open (training pool); sealed set s unopened",
+ "diagnosis": "r51 residuals over 61 regions: humid tropics +1.2..+1.7 C, hot dry lands -2..-3 C. e105 rain-cloud shading (screens vs r51, policy v4): 1.5 K S55 0.997 / S49 1.008; 3 K 1.003 / 1.021. e105b wet-all-year gate: 3 K pow 2 S55 0.9953 / S49 1.0120; 4 K pow 4 0.9960 / 1.0139. Equatorial biases fall (Amazon +1.6 -> +0.3 C) but every wet land cools, so the wet mid-latitudes (Alps, SE US, E Europe, prairies) go 0.3-0.5 C colder: the global land offset and the wet/dry sunshine split must be refitted with the shading.",
+ "start": "calibration/local_accuracy_20261023/r51_params.json",
+ "start_set": {"rain_shading": 3.0, "rain_shading_wet_pow": 2.0},
+ "reference": "output/cloud_shade_20261122/ref",
+ "reference_name": "r51",
+ "extra_parts": {"tropical_t": "calibration/tropical_check_20261122t/regions.json"},
+ "objective_mode": "v4",
+ "objective": "S55 vs r51 if S49 <= 1.0, else 10 + S49",
+ "knobs": {
+  "land_offset": ["add", 0.25],
+  "rain_shading": ["mul", 1.25],
+  "rain_shading_wet_pow": ["mul", 1.4],
+  "wet_sun": ["mul", 1.15],
+  "subsidence_warming": ["mul", 1.08],
+  "dry_coupling": ["mul", 1.15]
+ },
+ "bounds": {"rain_shading": [0.5, 8], "rain_shading_wet_pow": [0.5, 8]},
+ "max_evaluations": 36,
+ "gates": "policy_v4 vs r51: dev4 S55 <= 0.995, T and P <= +1 %, S49 <= 1.0; fine28 S <= 1.01; ONE paired run on sealed set s S <= 1.0. Pass -> r52 (no atlas rebuild unless the owner asks). Fail -> park e105 default-off."
+}
