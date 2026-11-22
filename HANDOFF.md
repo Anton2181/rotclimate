@@ -9,6 +9,12 @@
 # output/cloud_shade_20261122 (ref = refit_T3 j37 runs). e105 alone: 1.5 K S55 0.997 / S49 1.008; 3 K S55 1.003 / S49
 # 1.021 (Amazon +1.6 -> +0.15 C but Sahel/Burkina/N India/Bengal colder). joint_refit.py has objective_mode 'v4'.
 
+# C1 22 Nov late: e105/e105b (rain shading) and e106 (land ITCZ mean) PARKED, default off; findings in
+# calibration/cloud_shade_20261122/findings.md. Sealed s still UNOPENED. Leads: (1) southern-tropical land rains arrive ~2
+# months late and half-strength (S Amazon, S Congo) - moisture supply/onset, not the belt latitude; (2) Najd/Sahel/Deccan
+# 4-6 C too cold in their hottest months even under full subsidence warming - check the land equilibrium there;
+# (3) Kenya-Tanzania coast rains all year (~200 mm/month in the dry season, obs ~10).
+
 # AUTONOMOUS WORK PLAN — owner approved 21 Nov 2026 ("write it down as a list of tasks for you to follow autonomously and keep
 # going"; paste every map/graphic into the chat). Work in order; each Earth test declared before scoring; adopt only on pass.
 * T1 Finish the r50 atlas rebuild: select_world_r50.py + r50 corrections -> scripts/release_r50.sh -> browser checks ->
