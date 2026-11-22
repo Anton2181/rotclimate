@@ -30,3 +30,11 @@ The search walks the sea straight back toward r50: sst_offset to -2.10 (r50 -4.4
 sst_damping to 0.65 (its lower bound 0.6). Every sea step toward the observed ocean costs score; the rain knobs
 barely move (<= 0.001 each). The sea line is PARKED: r50's cold, over-seasonal regional sea is compensating for
 other errors (land and rain settings), and freeing it does not pay on dev49. Sealed set q unopened.
+
+## e98c (swing damping alone, r50 sea mean kept; plan_e98c.json): FAIL, parked
+Stage A: S1 (damping 0.4) S49 1.0012 (T -1.0 %, P +1.2 %; mid-latitude group 0.985); S2 (0.7) 1.0095.
+Stage B (plan_e98c_B.json, 39 evaluations): best S49 0.9979 (T -1.1 %, P +0.7 %): FAIL (<= 0.995).
+Best: damping 0.25, full at 67 deg, current_strength 5.24, continental_mean 6.58.
+The damped sea helps temperature (British Isles MAE -0.17, W Europe -0.14) but costs coastal rain (BC coast,
+Nova Scotia, California, British Isles each +0.02-0.03 log RMSE). BC coast's Feb-Mar -7 C is NOT the sea swing
+(its MAE does not move): it is a separate land/circulation error. Sealed set q unopened.
