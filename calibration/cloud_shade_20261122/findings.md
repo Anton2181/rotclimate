@@ -16,3 +16,15 @@ down to 2.0 K and S_t back to 0.953. land_offset, wet_sun, subsidence_warming an
 mid-latitudes back. Sealed set s unopened. The tropical warm bias is not a missing shading term alone: the same
 shade over wet extratropical land is wrong, so the tropical excess must come from somewhere tropical-specific
 (the tropical SST / sea-air temperature, or convective heating of the column) — next lead.
+
+# e106 separate land ITCZ annual mean vs r51 (22 Nov) — FAIL, parked default-off
+Diagnosis (r51 monthly, local-season months): West African rains a month early and late (Sahel/Burkina 4-5 C too cold
+May-June), southern Amazon/Congo rains two months late and half the amount (3-4 C too warm before the rains).
+| run | S55 | S49 | S_t |
+|---|---|---|---|
+| itcz_mean_land 3 | 1.0090 | 1.0009 | 1.075 |
+| itcz_mean_land 0 | 1.0292 | 1.0103 | 1.178 |
+Moving the land belt south warms the hot dry north (Najd -2.95 -> -2.08, Sahel -1.93 -> -1.08, Sahara, Iran, N India)
+but DRIES and warms the southern Amazon and Congo: the belt's mean latitude does not set southern-tropical land rain.
+The northern warming likely comes from the Hadley descending branch (subsidence warming starts at ITCZ + gap) moving
+south with it -> next lead: the branch geometry (subsidence_branch_gap, subsidence_warming_taper) on its own.
