@@ -1300,7 +1300,14 @@ class ClimateModel:
                                        p.solar_flux * distance_factor(d, p.eccentricity,
                                                        p.winter_solstice_day + p.perihelion_after_solstice,
                                                        p.year_days))
-                Tl = Tl - np.where(land, p.rain_shading * (1.0 - np.exp(-rain_prev / p.rain_shading_mm)) * S_r / LAND_COUPLING_SREF, 0.0)
+                shade = p.rain_shading * (1.0 - np.exp(-rain_prev / p.rain_shading_mm))
+                if p.rain_shading_wet_pow > 0 and p.soil_bucket_mm > 0:
+                    # e105b: the Sahel, Burkina and north India rain for three
+                    # months and are already 1.4-2.5 C too cold; shading them
+                    # in the wet season made them colder. Only ground wet all
+                    # year (the one-year mean soil water) keeps the full shade.
+                    shade = shade * np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0) ** p.rain_shading_wet_pow
+                Tl = Tl - np.where(land, shade * S_r / LAND_COUPLING_SREF, 0.0)
             if p.dry_heating > 0:
                 # e54: the latitude-mean land column evaporates like an average
                 # land. Dry ground puts its sunshine into heating the air

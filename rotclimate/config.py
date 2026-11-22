@@ -206,6 +206,7 @@ class Params:
     wet_sun_ref: float = 0.5          # e69: the average land's soil wetness (bucket share of 75 %)
     rain_shading: float = 0.0         # e105: K of land cooling under heavy rain cloud at 480 W m-2 of sunshine, x (1 - exp(-recent rain / rain_shading_mm)); 0 = off
     rain_shading_mm: float = 5.0      # e105: mm/day of recent (300 km smoothed) rain at which the shading is 63 % of full
+    rain_shading_wet_pow: float = 0.0 # e105b: x (one-year mean soil wetness) ** this: only lands wet all year sit under cloud for months; 0 = off
     storm_baroclinic: float = 0.0     # e68: storm band centred (by this share) on each meridian's baroclinic zone instead of the planet's latitude
     storm_baroclinic_cold_c: float = -99.0  # e68: count the contrast only where the smoothed air is below this (C; -99 = everywhere)
     storm_baroclinic_max_deg: float = 0.0  # e68: at most this many degrees from the planet's storm latitude (0 = no limit)
