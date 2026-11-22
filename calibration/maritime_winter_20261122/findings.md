@@ -17,3 +17,11 @@ from the sea (median 227 m) model -6.8 C in February against +1.3 observed; July
   storm-borne Pacific air, neither of which the zonal land column + mean-wind advection represents; the land equilibrium
   at 56 N in February (the latitude's mean land, ~-15 C) dominates. A fix needs a barrier-aware cold-air term (the
   interior's cold pool should not reach a coast behind a high crest) — not attempted yet.
+
+## e100 terrain-weighted eddy heat (plan_e100.json): STOP at stage A
+E1 (H 1.0 km) S49 1.078 (T +15.8 %, P -0.2 %); E2 (0.4 km) 1.193 (T +38.7 %). Both over the 1.03 stop.
+Helps Bengal, North India (bias -2.55 -> -1.32), BC coast (-3.21 -> -2.49), Mexico, Victoria; but East Asia warms
+1.3-1.8 C on biases already +1 to +1.6 (Korea +3.4, East China +3.1, North China Plain +2.9, Tibet +2.8, Manchuria
++2.8, Japan +2.0): taking high ground out of the eddy mean removes the Tibetan / Mongolian cold that the eddies
+carry east. A weight on the SOURCE's elevation is not a barrier; a barrier needs the crest BETWEEN the cells
+(directional, as e75 does for eddy water). Code kept, default off; not adopted.
