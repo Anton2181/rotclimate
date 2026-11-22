@@ -1,0 +1,203 @@
+{
+  "name": "release 4 on r51 (full rebuild 22 Nov 2026): as release4_r51 (Budyko-Fu runoff, GPP forage phenology, r5 size fit) on r51 physics",
+  "output_root": "output/settlement_hierarchy_map_20261115",
+  "stages": [
+    {
+      "name": "sizes",
+      "script": "scripts/settlement_hierarchy_map.py",
+      "subs": [
+        [
+          "output/settlement_hierarchy_20261115/results_soft.json",
+          "calibration/settlement_r5_merge_20261121/size_fit.json"
+        ],
+        [
+          "owner_decision='hierarchy model adopted on the owner request; held-out exceed share 0.8% vs 6.3% (limit 5 points) recorded as a narrow miss'",
+          "owner_decision='r5 provisional size fit merged into the main chain on the owner request (calibration/settlement_r5_merge_20261121)'"
+        ]
+      ],
+      "outputs": [
+        "release3/fantasy.json",
+        "release3/placed_raw_fields.npz",
+        "release3/placed_corrected_fields.npz",
+        "release3/placed_raw_towns.csv",
+        "release3/placed_corrected_towns.csv",
+        "release3/placed_raw_sites.json",
+        "release3/placed_corrected_sites.json",
+        "earth_results.json"
+      ]
+    },
+    {
+      "name": "review_placement",
+      "script": "scripts/review_settlement_release3.py",
+      "subs": [
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ]
+      ],
+      "outputs": [
+        "release3/placement_review.json"
+      ]
+    },
+    {
+      "name": "review_sizes",
+      "script": "scripts/review_settlement_hierarchy_map.py",
+      "subs": [],
+      "outputs": [
+        "release3/fantasy_review.json"
+      ]
+    },
+    {
+      "name": "supply",
+      "script": "scripts/wide_supply_greek_walls.py",
+      "subs": [
+        [
+          "output/sizes_greek_walls_20261114/release3",
+          "{root}/release3"
+        ],
+        [
+          "output/sizes_greek_walls_20261114/supply",
+          "{root}/supply"
+        ]
+      ],
+      "outputs": [
+        "supply/results.json",
+        "supply/supply_raw.npz",
+        "supply/supply_corrected.npz",
+        "supply/supply_raw_towns.csv",
+        "supply/supply_corrected_towns.csv"
+      ]
+    },
+    {
+      "name": "review_supply",
+      "script": "scripts/review_wide_supply_release3.py",
+      "subs": [
+        [
+          "output/settlement_wide_supply_20261113",
+          "{root}/supply"
+        ],
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ]
+      ],
+      "outputs": [
+        "supply/review.json"
+      ]
+    },
+    {
+      "name": "integration",
+      "script": "scripts/review_settlement_integration.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_integration_20261104",
+          "{root}/integration"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
+        ]
+      ],
+      "outputs": [
+        "integration/summary.json"
+      ]
+    },
+    {
+      "name": "labour",
+      "script": "scripts/extend_settlement_labour.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_labour_20261105",
+          "{root}/labour"
+        ],
+        [
+          "output/settlement_integration_20261104",
+          "{root}/integration"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
+        ]
+      ],
+      "outputs": []
+    },
+    {
+      "name": "fertility",
+      "script": "scripts/extend_settlement_fertility.py",
+      "install_release3": true,
+      "subs": [
+        [
+          "output/settlement_fertility_20261106",
+          "{root}/fertility"
+        ],
+        [
+          "output/settlement_labour_20261105",
+          "{root}/labour"
+        ],
+        [
+          "ROOT/'atlases'/name/'data'",
+          "ROOT/'{root}/atlas_raw/data'"
+        ]
+      ],
+      "outputs": []
+    },
+    {
+      "name": "staffing",
+      "script": "scripts/build_supply_fed_reach_release3.py",
+      "subs": [
+        [
+          "output/settlement_wide_supply_20261113",
+          "{root}/supply"
+        ],
+        [
+          "output/settlement_release3_20261113",
+          "{root}/release3"
+        ],
+        [
+          "output/settlement_supplyfed_release3_20261113",
+          "{reach}/settlement_supplyfed"
+        ],
+        [
+          "'central_x39'",
+          "'central_x34'"
+        ],
+        [
+          "Earth-calibrated 39% marketed",
+          "Earth-calibrated 34% marketed, Egypt included"
+        ],
+        [
+          "output/settlement_fertility_release3_20261113",
+          "{root}/fertility"
+        ]
+      ],
+      "outputs_reach": [
+        "settlement_supplyfed/staffing.json",
+        "settlement_supplyfed/earth_fit_raw/settled_reach.json.gz",
+        "settlement_supplyfed/earth_fit_corrected/settled_reach.json.gz"
+      ],
+      "published_reach_root": "output",
+      "published_reach_map": {
+        "settlement_supplyfed": "settlement_supplyfed_hierarchy_20261115"
+      }
+    },
+    {
+      "name": "ensemble_check",
+      "script": "scripts/settlement_ensemble.py",
+      "subs": [
+        [
+          "output/settlement_ensemble_20261115",
+          "{root}/ensemble"
+        ]
+      ],
+      "outputs": []
+    }
+  ],
+  "note": "Declared 16 Nov 2026 (calibration/wp3_site_factors_20261116/map_integration.json) after the WP3 blind pass; built with settlement_chain.py build into output/chain_staging/release4_r51. Everything else as release3_hierarchy. Downstream stages read the staged atlas output/chain_staging/release4_r51/atlas_raw (built by scripts/stage_atlas.py and export_reach_release3.py on the staged towns; corrected layers installed under data/corrected; legacy control reproduced all 220 published corrected files). r5 merge: calibration/settlement_r5_merge_20261121/declaration.json.",
+  "env": {
+    "ROTCLIMATE_CONFLUENCE_K": "1.0",
+    "ROTCLIMATE_RELEASE3_DIR": "output/chain_staging/release4_r51/release3",
+    "ROTCLIMATE_FOREST_TRAVEL": "1"
+  }
+}
