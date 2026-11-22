@@ -44,6 +44,10 @@
   - Side project (two targets: painted Med zone Cs + cold-dry nomads), STOPPED by owner before the ds8 check.
     Search (241 evals, ds32): med_cs 0.75 -> 1.00, cold-dry nomads 2.8% -> 2.3% (max any world 4.4%).
     Not adopted. calibration/two_target_20261121/, scripts/two_target_world.py.
+  - C1 climate (owner: iterate on the climate model autonomously): sea-profile line PARKED. WOA shows r50's regional sea
+    ~3 C too cold and 2-5x too seasonal; EBM refit (S49 1.281), e98 sea-only damping (1.097 -> refit 1.082) and e98b
+    joint rain+sea refit (1.024) all FAIL; the search pulls the sea back to r50. Kalahari dry-margin diagnosis parked.
+    calibration/sea_profile_20261122/findings.md, calibration/dry_margins_20261122/findings.md. Sealed q unopened.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49

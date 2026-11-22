@@ -24,3 +24,9 @@ moves (cell-months obs >=30 C: -3.0 -> -2.8): the sea is not the main cause of t
 The observed sea breaks the land and rain settings fitted around the cold sea (offset -4.4); the declared
 temperature-only refit recovers just 0.015. A sea fix needs a joint rain + land refit at a scale (100s of
 evaluations) or a new campaign; parked. Sealed set q unopened.
+
+## e98b (joint rain + sea refit, plan_e98b.json, 45 evaluations from e98 stage-B best): best S49 1.024 (T +3.1 %, P +1.8 %): FAIL.
+The search walks the sea straight back toward r50: sst_offset to -2.10 (r50 -4.43, near its bound -2.23) and
+sst_damping to 0.65 (its lower bound 0.6). Every sea step toward the observed ocean costs score; the rain knobs
+barely move (<= 0.001 each). The sea line is PARKED: r50's cold, over-seasonal regional sea is compensating for
+other errors (land and rain settings), and freeing it does not pay on dev49. Sealed set q unopened.
