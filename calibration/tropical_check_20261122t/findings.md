@@ -34,3 +34,11 @@ that dev49 (4 tropical regions of 49) cannot credit. Under policy v3 it cannot b
 Owner decision (not taken here): whether a tropical pool such as set t should join the dev
 objective (a policy v4). Kept as calibration/tropical_check_20261122t/plan_T2_best.json.
 Sealed set r stays unopened.
+
+## e104: soft ceiling on the land convective closure (rate -> cap tanh(rate/cap)), default off
+Screen vs r50:            S49      S_t
+  r50 + e104 cap 12     0.9992   0.945
+  r50 + e104 cap 8        -      0.920
+  T2 best + cap 12      0.9984   0.872  (T +0.3 %, P -0.7 %; Maranhao Plog 1.30 -> 0.83)
+  T2 best + cap 8         -      0.850
+Joint refit plan_T3 declared (dev-side knobs added; sst_tropical excluded).

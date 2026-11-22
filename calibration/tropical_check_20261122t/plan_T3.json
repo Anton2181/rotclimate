@@ -1,0 +1,68 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any evaluation of this plan; set t OPEN (training pool); sealed set r unopened",
+ "diagnosis": "e104 screen (land convective closure soft cap) on plan_T2 best: cap 12 -> S49 0.9984 (T +0.3 %, P -0.7 %), S_t 0.872 (Maranhao rain loss 1.30 -> 0.83); cap 8 S_t 0.850 (dev49 not run). On r50 alone cap 12: S49 0.9992, S_t 0.945.",
+ "start": "calibration/local_accuracy_20261023/r50_params.json",
+ "start_set": {
+  "convective_rh_chi_dry": 0.625,
+  "convective_rh_chi0": 0.7625000000000001,
+  "convective_rh_heat": 0.33803299298711376,
+  "convective_rain": 0.826801590179454,
+  "convective_rh": 0.7079148729649469,
+  "instability": 2.689897028350926,
+  "land_recycling": 0.3716688515891058,
+  "soil_bucket_mm": 69.23515124085898,
+  "convective_cap_land": 12.0
+ },
+ "reference": "output/tropical_check_20261122/ref",
+ "reference_name": "r50",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json"
+ },
+ "objective_mode": "max_dev_pool",
+ "objective": "max(S49, S_t) vs r50",
+ "knobs": {
+  "convective_cap_land": [
+   "mul",
+   1.3
+  ],
+  "convective_rh_heat": [
+   "mul",
+   1.12
+  ],
+  "convective_rain": [
+   "mul",
+   1.15
+  ],
+  "instability": [
+   "mul",
+   1.12
+  ],
+  "land_recycling": [
+   "mul",
+   1.08
+  ],
+  "subsidence_warming": [
+   "mul",
+   1.06
+  ],
+  "trade_heat_low": [
+   "add",
+   0.075
+  ],
+  "monsoon_descent": [
+   "mul",
+   1.12
+  ]
+ },
+ "bounds": {
+  "convective_cap_land": [
+   4,
+   40
+  ]
+ },
+ "max_evaluations": 40,
+ "risk": "plan_C reached dev49 0.9916 through dev-wide knobs and failed sealed q (1.065); sst_tropical excluded here and S_t must stay below S49 (max objective).",
+ "gates": "policy_v3 vs r50 (unchanged): dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set r S<=1.0. Set t reported. Pass -> r51, map world refit, full atlas rebuild. Fail -> park e103/e104 default-off."
+}
