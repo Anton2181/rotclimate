@@ -1,0 +1,17 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any evaluation of this plan; set t OPEN (training pool by design); sealed set r unopened",
+ "diagnosis": "e103 screen (convective_rh_chi_dry=1 on r50): S49 1.0008 (T -0.03 %, P +0.18 %), S_t 0.9164 (central/SW Amazon and S Congo rain loss -16 to -32 %). The e93 gate treated wet-forest air as desert air aloft. Maranhao's coastal deluge is untouched.",
+ "start": "calibration/local_accuracy_20261023/r50_params.json",
+ "start_set": {"convective_rh_chi_dry": 1.0},
+ "reference": "output/tropical_check_20261122/ref",
+ "reference_name": "r50",
+ "extra_parts": {"tropical_t": "calibration/tropical_check_20261122t/regions.json"},
+ "objective_mode": "max_dev_pool",
+ "objective": "max(S49, S_t) vs r50",
+ "knobs": {"convective_rh_chi_dry": ["add", 0.25], "convective_rh_chi0": ["add", 0.05], "convective_rh_heat": ["mul", 1.15], "convective_rain": ["mul", 1.2], "convective_rh": ["add", 0.02], "instability": ["mul", 1.15], "land_recycling": ["mul", 1.1], "soil_bucket_mm": ["mul", 1.4]},
+ "bounds": {"convective_rh_chi_dry": [0.0, 1.0], "convective_rh_chi0": [0.4, 0.95], "convective_rh": [0.5, 0.9], "soil_bucket_mm": [30, 600]},
+ "max_evaluations": 40,
+ "gates": "policy_v3 vs r50 (unchanged): dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set r S<=1.0. Set t reported, not a gate. Pass -> r51, map world refit, full atlas rebuild. Fail -> park e103 as default-off."
+}

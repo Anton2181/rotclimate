@@ -25,3 +25,4 @@ Screen: dev49 pair + set t at convective_rh_chi_dry = 1. If S49 <= ~1.000 and S_
 joint refit with objective max(S49, S_t) over convective_rh_chi_dry, convective_rh_chi0,
 convective_rh_heat, convective_rain, convective_rh, land_recycling; then policy v3 gates
 (fine28, ONE run on sealed set r).
+Screen result (=1): S49 1.0008 (T -0.03 %, P +0.18 %), S_t 0.9164. Joint refit plan_T2 declared.
