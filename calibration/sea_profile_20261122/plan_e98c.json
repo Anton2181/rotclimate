@@ -1,0 +1,14 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any e98c evaluation; no code change (e98 exists, default off); sealed set q unopened",
+ "diagnosis": "r50 maritime mid-latitude coasts have a spring cold / autumn warm phase error: BC coast Feb-Mar -7, Oct-Nov ~0; British Isles Mar-Jun -3.6 to -4.4, Oct-Nov +1.0 to +1.4; W Europe Mar-Jun -2, Oct-Dec +1.7 to +3.0; New Zealand Apr-May -3, Nov-Dec +2.3 to +2.8. WOA18: r50's zonal sea swings 2-5x too much (swing error +3.4/+3.6 C), i.e. too cold in late winter/spring and too warm in autumn. e98 coupled the swing fix with a +3.2 C mean warming (offset -1.23), which flooded mid-latitude coasts with rain; e98c tests the damping ALONE: r50's sea mean (offset -4.43) kept, only the seasonal swing damped around it.",
+ "stage_A_screen": {"run": "scripts/dev49_pair.sh vs r50 (reference reused from output/hot_tail_20261122/stageA)",
+   "candidates": {"S1": {"sst_damping": 0.4, "sst_damping_lat": 55.0}, "S2": {"sst_damping": 0.7, "sst_damping_lat": 55.0}},
+   "carry": "lowest S49; stop if both > 1.03"},
+ "stage_B_refit": {"tool": "joint_refit vs r50, start = carried candidate",
+   "knobs": {"sst_damping": ["add", 0.1], "sst_damping_lat": ["add", 8.0], "land_amplitude": ["mul", 1.1], "continental_mean": ["mul", 1.2], "subpolar_current": ["mul", 1.2], "current_strength": ["mul", 1.2], "storm_track": ["mul", 1.05], "precip_tau_days": ["mul", 1.05]},
+   "bounds": {"sst_damping": [0.0, 0.95], "sst_damping_lat": [20, 70]},
+   "max_evaluations": 40},
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park."
+}
