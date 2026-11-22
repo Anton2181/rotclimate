@@ -1,3 +1,8 @@
+# OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
+# developing instead of rebuilding". The 'every adopted climate gets a full rebuild' standing instruction is RETIRED.
+# Adopt climates on the gates as before, but do NOT rebuild the atlas unless the owner asks. r51 rebuild (already running
+# when this was said) is finished lean: commit atlas + short report, no extra packaging work.
+
 # AUTONOMOUS WORK PLAN — owner approved 21 Nov 2026 ("write it down as a list of tasks for you to follow autonomously and keep
 # going"; paste every map/graphic into the chat). Work in order; each Earth test declared before scoring; adopt only on pass.
 * T1 Finish the r50 atlas rebuild: select_world_r50.py + r50 corrections -> scripts/release_r50.sh -> browser checks ->
