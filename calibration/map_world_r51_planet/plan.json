@@ -1,0 +1,31 @@
+{
+ "declared_before_world_results": true,
+ "declared": "2026-11-22, before any W5 world result; owner standing instruction: atlas on the latest Earth calibration in full, planet levers and off-map land refitted",
+ "physics": "calibration/local_accuracy_20261023/r51_params.json",
+ "start": "calibration/map_world_r51_planet/start.json",
+ "start_note": "the W4-selected world (calibration/map_world_r50/params.json) with every r51 physical parameter, ds32",
+ "free": "world genes except the terrain tiers: latitude, north bearing, the six surrounding-land shares and their relief; planet levers: axial tilt (8-45), eccentricity (0-0.06), perihelion (-182.5..182.5 d), starlight (0.96-1.04), greenhouse (-2..8 W m-2), land by latitude (ebm_land_scale 0.4-1.8)",
+ "fixed": "retrograde, beyond_continuity_km (300), the terrain tier tops (the eroded height map v2.2 is built on them), year/day/radius, every r51 physical parameter",
+ "downsample": 32,
+ "layouts": [
+  1,
+  2,
+  3,
+  17,
+  23
+ ],
+ "objective": "guarded zonefit (calibrate mode 'guarded'), guard reference = the r51 START world's own coarse control: no painted zone may be traded away against the start (strict -0.01, recall -0.03 each, Med dry +0.01, Cs -0.03)",
+ "evaluations": 241,
+ "popsize": 12,
+ "sigma": 0.1,
+ "seed": 51,
+ "workers": 4,
+ "stds": {
+  "north_bearing": 0.05
+ },
+ "selection": "the best completed zero-penalty world by raw zonefit; native ds8 check (layouts 1-3) against the start world at ds8: numerical success and zonefit not below the start; otherwise the start world (W4 geometry on r51). Physics r51 regardless.",
+ "audit": "nine unseen layouts (590103..590919) at ds16, reported only",
+ "old_atlas_params": "calibration/map_world_r51_planet/start.json",
+ "old_atlas_note": "W5: the coarse control and guard reference are the r51 START world itself.",
+ "physics_note": "r51 (reports/CLIMATE_R51_20261122.md)"
+}
