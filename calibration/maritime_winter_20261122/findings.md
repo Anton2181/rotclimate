@@ -42,3 +42,9 @@ the model compresses each place's departure from the latitude-mean land column. 
 cause of that departure (sea, dry ground, eddies) and none moves it enough. The next design should give the land
 equilibrium its own local departure (cloud / humidity longwave, surface dryness, continentality) fitted as one
 term against this residual, rather than one more gated switch.
+
+## A fitted local-departure term is not recoverable from model fields (checked, not built)
+OLS of the annual bias on model-internal predictors only (|lat|, elevation, log coast distance, the model's own annual
+rain, annual mean and range), fitted on dev31 cells: dev31 MAE 1.18 -> 1.02 (R2 0.23) but retired a/b/c 1.48 -> 1.72
+(R2 -0.39). The departure that matters is carried by the observed climate itself (cloud regimes, local circulation),
+not by anything the model already knows; a statistical term would overfit. Dropped.
