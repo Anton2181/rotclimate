@@ -1,0 +1,26 @@
+{
+ "version": 1,
+ "date": "2026-11-23",
+ "status": "declared before any evaluation of this plan; set t open (training pool); sealed set s unopened",
+ "diagnosis": "scripts/land_budget.py on Najd (r51): the e71 subsidence warming falls to +0.5 K in Jul-Aug because the land ITCZ (summer heat low) + the sea gap puts the branch start at ~24 N over Arabia (bias -5..-6 C). e107 (land gap) screens vs r51: gap 1 S55 0.9996 / S49 0.9975; gap 0 1.0003 / 0.9977 (southern Congo/Amazon dry seasons warmed). e107b floor: 15 deg 1.0051 / 1.0006, 18 deg 1.0054 / 1.0004 (Sahel lost its dry-season warming); 10 deg with gap 0: S55 0.9990 (T -1.1 %, P +0.9 %), S49 0.9982, S_t 0.9985; 11 deg gap 1: 0.9999 / 0.9985.",
+ "start": "calibration/local_accuracy_20261023/r51_params.json",
+ "start_set": {"subsidence_warming_gap_land": 0.0, "subsidence_warming_land_minlat": 10.0},
+ "reference": "output/cloud_shade_20261122/ref",
+ "reference_name": "r51",
+ "extra_parts": {"tropical_t": "calibration/tropical_check_20261122t/regions.json"},
+ "objective_mode": "v4",
+ "objective": "S55 vs r51 if S49 <= 1.0, else 10 + S49",
+ "knobs": {
+  "subsidence_warming_land_minlat": ["add", 1.5],
+  "subsidence_warming": ["mul", 1.08],
+  "subsidence_warming_taper": ["mul", 1.15],
+  "subsidence_summer": ["mul", 1.2],
+  "subsidence_warming_rain": ["mul", 1.25],
+  "subsidence_warming_chi0": ["add", 0.08],
+  "land_offset": ["add", 0.2]
+ },
+ "bounds": {"subsidence_warming_land_minlat": [5, 16], "subsidence_warming_chi0": [0, 0.9]},
+ "max_evaluations": 36,
+ "risk": "P rose +0.9 % at the start (gate limit +1 %); the objective does not penalise P directly, so the finalist's P is checked at the gate.",
+ "gates": "policy_v4 vs r51: dev4 S55 <= 0.995, T and P <= +1 %, S49 <= 1.0; fine28 S <= 1.01; ONE paired run on sealed set s S <= 1.0. Pass -> r52 (no atlas rebuild unless the owner asks). Fail -> park e107 default-off."
+}
