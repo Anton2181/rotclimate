@@ -1102,7 +1102,7 @@ class ClimateModel:
         T_prev = T_prev2 = None
         P_last = None                    # e49: the last step's rain, for a grid's own monsoon descent
         W_prev = None
-        uv_prev = chi = None
+        uv_prev = chi = chi_dry = None
         Tl_sea = None                   # e63: the land equilibrium as the enclosed seas feel it
         air_shelf = None                # e64: the sea-level air over the shelf seas, lagged
         air_cont = None                 # e67: the air over the sea, lagged, for continental outbreaks
@@ -1152,6 +1152,11 @@ class ClimateModel:
                     edge = g.land_frac + p.far_fetch * (g.chi_far - g.land_frac)
                 chi = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * g.land_frac, edge,
                                         guess=edge if chi is None else chi)
+                if p.convective_rh_chi_dry > 0 and p.soil_bucket_mm > 0:
+                    # e103: the land the air crossed, weighted by how dry its soil runs over the year
+                    dryland = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                    chi_dry = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * dryland, edge,
+                                                guess=edge if chi_dry is None else chi_dry)
                 amp = 1.0 + p.continentality * (chi - 0.5)
                 if p.continentality_lat > 0:
                     # e33: as e32 for the advected continentality: land air
@@ -2272,7 +2277,8 @@ class ClimateModel:
                         heat = heat * (1.0 - p.convective_rh_gate * np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0))
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
-                        heat = heat * (1.0 - np.clip((chi - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
+                        chi93 = chi if chi_dry is None else chi - p.convective_rh_chi_dry * (chi - chi_dry)     # e103
+                        heat = heat * (1.0 - np.clip((chi93 - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
                         heat = heat * (1.0 - descent_cap)                       # e94
                     closure['r0'] = p.convective_rh - np.where(land, p.convective_rh_heat * heat, 0.0)

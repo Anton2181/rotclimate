@@ -1,0 +1,27 @@
+# Tropical check (open set t), 2026-11-22
+
+## r50 baseline on set t
+Tropical land runs 1.2-1.9 C too warm (Niger bend t_13n_7w 1.6 C too cold). Rain is misplaced:
+Maranhao coast t_2s_45w 5165 mm (obs 1991), SW Amazon t_10s_66w 436 (1737), central Amazon
+t_1s_63w 1362 (2652), southern Congo t_7s_24e 599 (1362), Tanzania t_8s_36e 2310 (1276).
+
+## plan_T1 (convective closure refit, objective max(S49, S_t)): FAIL, parked
+Best 0.9987 (S49 0.9987, gate 0.995). The global convection knobs trade the tropics against
+dev49: convective_rh_heat 0.2788 brought S_t to 0.9675 but S49 to 1.0017; sst_tropical +1
+gave S49 0.9955 but S_t 1.0139. No retune reaches both.
+
+## Diagnosis (monsoon_trace, r50)
+Maranhao rains 20-24 mm/day for six months (Nov-Apr) at column RH 0.64, instab 2.5, chi 0.28:
+the e92 heated-land threshold drop (convective_rh 0.708 - 0.3625) puts the closure far into
+its exponential. Inland (t_1s_63w) the same heat and RH ~0.55 rain only ~1.2 mm/day: chi 0.8
+there, so the e93 gate (convective_rh_chi0 0.675) cancels the e92 drop as if the forest's air
+were desert air aloft. The soil bucket is near full inland, unlike Najd's.
+
+## e103: dry-land chi for the e93 gate (declared before scoring)
+chi93 = chi - convective_rh_chi_dry x (chi - chi_dry), chi_dry = the same advected land share
+with land weighted by 1 - clip(annual-mean soil water / (0.75 bucket)). Default off.
+Probe (=1): central Amazon wet-season rain +1.5-3 mm/day, Maranhao unchanged.
+Screen: dev49 pair + set t at convective_rh_chi_dry = 1. If S49 <= ~1.000 and S_t improves,
+joint refit with objective max(S49, S_t) over convective_rh_chi_dry, convective_rh_chi0,
+convective_rh_heat, convective_rain, convective_rh, land_recycling; then policy v3 gates
+(fine28, ONE run on sealed set r).
