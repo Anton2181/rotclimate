@@ -754,6 +754,16 @@ class ClimateModel:
             phi_i = (p.itcz_mean + (p.itcz_shift_ocean + (p.itcz_shift - p.itcz_shift_ocean) * broad) * s) * hr
         else:
             phi_i = (p.itcz_mean + p.itcz_shift * s) * hr
+        if p.itcz_mean_land > -90:
+            # e106: the ocean ITCZ sits near 5-7 N all year (the warm pool and
+            # the cold tongues), but over land the rain belt's annual mean
+            # follows the sun about the equator (Congo, Amazon ~0-3 S): one
+            # planet-wide 7 N mean brought West Africa's rains a month early
+            # and kept them a month late, and reached the southern Amazon and
+            # southern Congo two months late (r51: 3-4 C too warm before the
+            # rains, Sahel and Burkina 4-5 C too cold in May-June)
+            broad = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(self.g.land.astype(float), 1500.0 / self.g.cell_km, mode="nearest")
+            phi_i = phi_i + (p.itcz_mean_land - p.itcz_mean) * broad * hr
         if self.itcz_anchor is not None and s > 0:
             phi_i = phi_i + p.itcz_plateau_gain * self.itcz_anchor * s * hr      # e85 (summer only)
         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
