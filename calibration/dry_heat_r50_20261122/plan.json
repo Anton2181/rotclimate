@@ -1,0 +1,20 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any evaluation; no code change (e54 family exists, default off; r50 unchanged); sealed set q unopened",
+ "why": "r50 warm land (annual mean obs > 20 C) is 1.5 C too cold, growing inland (coast 50-200 km -0.9, >500 km -1.6) and in dry cells (P<250 mm warmest month -2.0): Najd Jul-Sep -5 to -6, Sahara Jun-Sep -2 to -3, Sahel May-Jun -4.5, Deccan/North India -3 all year, Iran -2 all year. The sea line is parked (findings in calibration/sea_profile_20261122). Gated dry heating failed on r46 (calibration/dry_heat_r46_20261116: best 0.9982 vs cap 0.9945) because false desert rain kept the soil wet; r50's e93/e94 removed most of that rain (Najd Jul-Sep 6-9 mm, Sahara 2-6 mm), so the blocker named then has changed. This is a re-test on r50, not a new mechanism.",
+ "stage_A_screen": {
+  "run": "scripts/dev49_pair.sh vs r50 (r50 reference runs reused from output/hot_tail_20261122/stageA)",
+  "candidates": {
+   "D1": {"dry_heating": 2.7, "dry_heating_chi0": 0.86, "dry_heating_warm_c": 20.0, "dry_heating_mean_c": 8.0},
+   "D2": {"dry_heating": 2.7, "dry_heating_chi0": 0.86, "dry_heating_warm_c": 20.0, "dry_heating_mean_c": 8.0, "dry_heating_arid": 0.5},
+   "D3": {"dry_heating": 2.7, "dry_heating_chi0": 0.86, "dry_heating_mean_c": 8.0, "dry_heating_arid": 0.5}
+  },
+  "carry": "the lowest S49; stop the line if every candidate has S49 > 1.03"
+ },
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 vs r50, start = carried candidate",
+  "knobs": {"dry_heating": ["mul", 1.25], "dry_heating_chi0": ["add", 0.05], "dry_heating_mean_c": ["add", 3.0], "dry_heating_warm_c or dry_heating_arid (whichever the candidate uses; both if both)": ["add", "3.0 / 0.1"], "subsidence_warming": ["mul", 1.15], "land_offset": ["add", 0.3], "precip_tau_days": ["mul", 1.05], "storm_track": ["mul", 1.04]},
+  "bounds": {"dry_heating": [0, 8], "dry_heating_chi0": [0, 0.95], "dry_heating_arid": [0, 0.9]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park, record why."
+}
