@@ -48,6 +48,10 @@
     ~3 C too cold and 2-5x too seasonal; EBM refit (S49 1.281), e98 sea-only damping (1.097 -> refit 1.082) and e98b
     joint rain+sea refit (1.024) all FAIL; the search pulls the sea back to r50. Kalahari dry-margin diagnosis parked.
     calibration/sea_profile_20261122/findings.md, calibration/dry_margins_20261122/findings.md. Sealed q unopened.
+    Then (22 Nov, all FAIL, r50 stays, sealed q unopened): gated dry heating re-test on r50 (best S49 0.9989,
+    calibration/dry_heat_r50_20261122); e98c sea swing damping alone (0.9979; T -1.1 % but coastal rain +0.7 %).
+    BC coast winter (-7 C, worst T region) diagnosed: not the sea (open sea too warm), continental offshore winter air;
+    candidate next: barrier-aware cold air (calibration/maritime_winter_20261122/findings.md).
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49

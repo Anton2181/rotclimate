@@ -33,6 +33,8 @@ from rotclimate.model import ClimateModel  # noqa: E402
 def one(job):
     region, params_path, changes = job
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
+    for extra in filter(None, os.environ.get('SST_EXTRA_SPECS', '').split(':')):
+        earth.REGIONS.update(json.loads(Path(extra).read_text()))
     case = earth.region_case(region, 56.0)
     g = case.grid
     p = earth.earth_params(load_params(params_path), case)
