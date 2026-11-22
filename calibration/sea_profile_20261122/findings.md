@@ -12,3 +12,10 @@ e97 improves the fit only 7 % (< 15 %): not carried.
 T +44.8 %, P +11.5 %. Land 2.05 C too cold on average (r50 -0.25), every month: the deeper EBM ocean
 changes the energy balance's own land column, which sets the regional land background, so the warmer
 regional sea did not warm the land. Lesson: correct the regional sea without touching the energy balance (e98).
+
+## e98 stage 0: sst_offset -1.23, sst_damping 0.83 (full at 55 deg); WOA RMSE 1.58 (N 1.97, S 1.18)
+## e98 stage A: S49 1.097 (T +8.7 %, P +10.7 %) -> stage B (under the 1.10 stop)
+Better: BC coast T 3.48->2.80, Sahel 2.12->1.47, Mexico 1.46->1.16, Anatolia/Levant rain, N Queensland rain.
+Worse: mid-latitude coasts too warm and too wet with the warmer sea (W Europe rain bias +98->+438 mm,
+California +95->+371, Cape, Victoria, E Australia, Iberia; SW Australia T 0.70->1.78). The hot tail barely
+moves (cell-months obs >=30 C: -3.0 -> -2.8): the sea is not the main cause of the hot land's cold bias.
