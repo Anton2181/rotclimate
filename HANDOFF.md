@@ -54,6 +54,9 @@
     e100 terrain-weighted eddy heat STOP (S49 1.078: East Asia +1.3-1.8 C); e101 directional damming probe ~0 (reverted).
     Remaining large errors sit in the latitude-mean land equilibrium itself (BC winter, North India/Deccan/Najd all year,
     East Asia warm): calibration/maritime_winter_20261122/findings.md.
+    e102 tropical-only sea warming + heat-low inflow (calibration/warm_season_inflow_20261122): dev49 PASS 0.9925
+    (T -1.0 %, P -0.5 %) but fine28 FAIL 1.0112 (California wetter, Japan T): not adopted, sealed q unopened.
+    Closest candidate of the campaign; e102 code kept (default off).
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49
