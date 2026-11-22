@@ -19,3 +19,7 @@ poleward of the 31 deg fade), Chile -0.5 -> -0.3, Morocco -3.8 -> -3.7, Benguela
 (too warm), Bengal -3.3 -> -1.5, Mexico -5.2 -> -3.3. The tropical warming does what it should where it acts, and
 over-warms the Benguela upwelling; but California's extra rain at 28 km comes from the shared rain/inflow settings
 the refit moved, not from its sea. No upwelling follow-up is declared on that basis; the line stays parked.
+
+## e102b probe (withhold the warming from cold-current seas): rejected on WOA alone, code reverted
+WOA18 annual bias e102 -> e102b: Benguela +1.7 -> +1.1, but Mexico open -3.3 -> -4.9 (the model's cold-current
+mask covers Mexico's Pacific coast, which WOA has warm), Bengal -1.5 -> -1.7. Net worse; not scored.

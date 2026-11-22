@@ -1,0 +1,15 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared before any evaluation of this refit; sealed set q unopened",
+ "disclosure": "Made AFTER plan_B's candidate failed fine28 (1.0112: California rain, Japan T) and after the WOA check showed California's sea untouched by e102, i.e. the cost came from the global rain settings plan_B moved. This refit therefore freezes those at r50. fine28 was seen for this line and is not fully independent here; sealed set q is the independent test.",
+ "physics": "A tropical sea correction should be matched by tropical circulation settings only; global rain settings (ocean_rh, convective_rain, precip_tau_days) stay at r50.",
+ "start": "calibration/warm_season_inflow_20261122/stageA_X1_params.json",
+ "start_set": {"sst_tropical": 2.0625, "sst_tropical_lat": 31.25},
+ "reference": "output/hot_tail_20261122/stageA",
+ "reference_name": "r50",
+ "knobs": {"sst_tropical": ["add", 0.5], "sst_tropical_lat": ["add", 3.0], "trade_heat_low": ["add", 0.15], "monsoon_pressure_hpa": ["mul", 1.25], "monsoon_descent": ["mul", 1.25], "subsidence_warming": ["mul", 1.1], "subsidence_branch_drying": ["mul", 1.2]},
+ "bounds": {"sst_tropical": [0, 4.5], "sst_tropical_lat": [26, 45], "trade_heat_low": [0, 1]},
+ "max_evaluations": 35,
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01 (not independent, see disclosure); ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park."
+}
