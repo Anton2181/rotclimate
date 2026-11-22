@@ -1253,7 +1253,14 @@ class ClimateModel:
                     # July-August and fell to +0.5 K there (r51 Najd 5-6 C too
                     # cold, Jul-Sep). Rain still turns it off (e71e).
                     broad_w = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(g.land.astype(float), 1500.0 / g.cell_km, mode="nearest")
-                    start = start + (p.subsidence_warming_gap_land - p.subsidence_branch_gap) * broad_w
+                    start_land = phi_i_w + p.subsidence_warming_gap_land
+                    if p.subsidence_warming_land_minlat > 0:
+                        # e107b: the dry season of the southern Amazon and
+                        # Congo (7-10 S) sits under the trades, not the
+                        # descending branch: e107 warmed them on a bias already
+                        # +1.4-1.7 C. The land start stays poleward of this.
+                        start_land = np.maximum(start_land, p.subsidence_warming_land_minlat)
+                    start = start + (start_land - start) * broad_w
                 branch = np.clip((lat - start) / 5.0, 0.0, 1.0) * (lat <= phi_h_w)
                 if p.subsidence_warming_taper > 0:
                     # e71b: the deepest sinking is in the 15-30 deg core of the
