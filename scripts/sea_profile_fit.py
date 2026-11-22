@@ -16,7 +16,8 @@ OUT = ROOT / 'calibration/sea_profile_20261122'
 MID = np.array([15, 45, 74, 105, 135, 166, 196, 227, 258, 288, 319, 349], float)
 LATS = np.arange(0.5, 65.0, 1.0)
 BOUNDS = dict(ocean_heat_capacity=(0.5, 6.0), ocean_mixed_seasonality=(0.0, 0.8), ocean_capacity_polar=(0.0, 20.0),
-              ocean_transport=(0.0, 2.0), sst_offset=(-8.0, 2.0))
+              ocean_transport=(0.0, 2.0), sst_offset=(-8.0, 2.0),
+              sst_damping=(0.0, 0.95), sst_damping_lat=(20.0, 70.0))
 
 
 def observed(path):
@@ -32,7 +33,7 @@ def model(p):
     out = []
     for land in ('earth', 'earth_mirrored'):
         z = ZonalClimate(p.replace(ebm_land=land))
-        out.append(np.stack([z.ocean(LATS, d) for d in MID]) + p.sst_offset)
+        out.append(np.stack([z.sea(LATS, d, p.sst_offset, p.sst_damping, p.sst_damping_lat) for d in MID]))
     return out
 
 

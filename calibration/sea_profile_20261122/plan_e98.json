@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared after stage A of plan.json stopped (S49 1.281) and before any e98 evaluation; e98 code written, default off (r50 unchanged); sealed set q unopened",
+ "physics": "e98: the regional zonal sea = EBM ocean + sst_offset with its seasonal swing x (1 - sst_damping x ramp(|lat| 10 deg -> sst_damping_lat)); the energy balance (and so the land background) is untouched.",
+ "stage_0": {"tool": "scripts/sea_profile_fit.py --knobs sst_offset,sst_damping,sst_damping_lat (r50 EBM)", "target": "as plan.json", "carry": "the fitted values, frozen"},
+ "stage_A_screen": {"candidate": "r50 + stage-0 values", "run": "scripts/dev49_pair.sh vs r50", "stop_if": "S49 > 1.10"},
+ "stage_B_refit": {"tool": "scripts/joint_refit.py, objective S49 vs r50, start = stage-A candidate, sea values frozen",
+  "knobs": {"subsidence_warming": ["mul", 1.3], "continental_mean": ["mul", 1.3], "land_amplitude": ["mul", 1.15], "wet_sun": ["mul", 1.3], "dry_coupling": ["mul", 1.3], "lapse_rate": ["mul", 1.1], "current_strength": ["mul", 1.3], "subpolar_current": ["mul", 1.3]},
+  "max_evaluations": 40},
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild."
+}

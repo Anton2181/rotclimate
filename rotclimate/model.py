@@ -717,13 +717,17 @@ class ClimateModel:
         return (np.bincount(b.ravel(), weights=field.ravel(), minlength=len(self._lat_count))
                 / self._lat_count)[b]
 
+    def _zonal_sea(self, lat, d):
+        p = self.p
+        return self.z.sea(lat, d, p.sst_offset, p.sst_damping, p.sst_damping_lat)
+
     def _sea_annual_field(self):
         """e28: annual-mean temperature of the nearby sea (its currents included,
         its land-driven seasonal pull excluded), spread onto land over ~400 km;
         NaN where there is too little sea within reach."""
         p, g = self.p, self.g
         days = np.linspace(0.0, p.year_days, 24, endpoint=False)
-        sst = np.mean([self.sst(d, self.z.ocean(self.lat, d) + p.sst_offset, self.z.ocean(self.lat, d) + p.sst_offset)
+        sst = np.mean([self.sst(d, self._zonal_sea(self.lat, d), self._zonal_sea(self.lat, d))
                        for d in days], axis=0)
         sea = (~g.land).astype(float)
         sig = MARITIME_KM / g.cell_km
@@ -1407,7 +1411,7 @@ class ClimateModel:
                     sun = sun * (1.0 + p.dry_coupling * (1.0 - wet_c))
                 lam_land = sun + 1.0 / (p.land_radiative_days * DAY)
                 lamT = np.where(land, lam_land, 1.0 / (p.ocean_tau_days * DAY))
-            To = self.z.ocean(lat, d) + p.sst_offset
+            To = self._zonal_sea(lat, d)
             Tz = self.z.zonal(lat, d)
             if p.inland_sea_lag_days > 0:
                 # e63: an enclosed sea or a lake is a mixed layer of its own,

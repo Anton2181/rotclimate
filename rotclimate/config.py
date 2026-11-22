@@ -245,6 +245,8 @@ class Params:
     ocean_transport: float = 0.0      # e27: the oceans' own poleward heat transport, x the air's diffusion (0 = none)
     ocean_heat_capacity: float = 1.0  # mixed-layer heat capacity x ~26 m of water (the zonal sea's seasonal swing and lag)
     ocean_mixed_seasonality: float = 0.0  # e29: mixed layer shallower in summer, deeper in winter (heat capacity x (1 -/+ this))
+    sst_damping: float = 0.0  # e98: the regional sea's seasonal swing x (1 - this x ramp(|lat| from 10 deg to sst_damping_lat)); EBM untouched
+    sst_damping_lat: float = 50.0  # e98: latitude where sst_damping is full
     ocean_capacity_polar: float = 0.0  # e97: mixed-layer heat capacity x (1 + this x sin^2 lat): deeper winter mixing poleward
     cross_equatorial_transport: float = 0.0  # e30: northward ocean heat transport across the equator, PW (Earth ~0.4; 0 = none)
     cross_transport_ocean: float = 0.0  # e30b: share of that heat released into the sea only (0 = whole column, 1 = sea only)
