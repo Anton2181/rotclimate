@@ -12,3 +12,10 @@ fine28 has now been seen for this line: a follow-up must not be tuned on it. The
 holdout and retired sets improve), and California's extra rain (its southern seas sit inside the 25-31 deg fade)
 is the named cost. A follow-up would need a reason independent of fine28 (e.g. stop the warming at the
 eastern-boundary upwelling coasts, where WOA is cold) and its own declaration.
+
+## Follow-up check: is California's cost the upwelling sea? No.
+WOA18 annual sea bias, r50 -> e102 best (compare_sea_surface.py): California open +0.4 -> +0.4 (unchanged: it lies
+poleward of the 31 deg fade), Chile -0.5 -> -0.3, Morocco -3.8 -> -3.7, Benguela (namibia_kalahari) +0.9 -> +1.7
+(too warm), Bengal -3.3 -> -1.5, Mexico -5.2 -> -3.3. The tropical warming does what it should where it acts, and
+over-warms the Benguela upwelling; but California's extra rain at 28 km comes from the shared rain/inflow settings
+the refit moved, not from its sea. No upwelling follow-up is declared on that basis; the line stays parked.
