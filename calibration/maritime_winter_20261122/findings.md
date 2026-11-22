@@ -25,3 +25,11 @@ Helps Bengal, North India (bias -2.55 -> -1.32), BC coast (-3.21 -> -2.49), Mexi
 +2.8, Japan +2.0): taking high ground out of the eddy mean removes the Tibetan / Mongolian cold that the eddies
 carry east. A weight on the SOURCE's elevation is not a barrier; a barrier needs the crest BETWEEN the cells
 (directional, as e75 does for eddy water). Code kept, default off; not adopted.
+
+## e101 directional cold-air damming (probe only, not scored; code reverted)
+Eddy heat cut where the eddy mean is colder and a crest stands up to 300 km toward the colder side (full at +1 km):
+BC coast in-map land Jan +0.5, Feb +0.2 C; North India +0.2-0.4 C. Too small to matter. So e100's gains in BC and
+North India came from weighting the warm SEA more in the eddy mean, not from blocking a cold source; the eddy mixing
+is not what holds those coasts cold (eddy_rate x2 on BC: +0.5 C). Their cold is the latitude-mean land equilibrium
+itself. Candidate next: a land equilibrium that knows its own setting (coastal/maritime cloud and longwave for
+BC; the dry clear subtropical plains for North India) rather than the latitude's mean land.
