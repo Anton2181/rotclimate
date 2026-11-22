@@ -60,6 +60,12 @@
     plan_C (e102, global rain settings frozen): dev49 0.9916, fine28 1.0064, then sealed set q 1.065 FAIL (eastern
     Brazil hotter and +330 mm wetter on +1400 already; Air +26 mm on +415): NOT adopted; sealed set q SPENT. A fresh
     sealed set is needed for the next finalist. dev49 lacks tropical South America: consider adding it when drawing.
+    New sealed set r drawn (calibration/sealed_20261122r, UNOPENED) and open tropical set t (calibration/
+    tropical_check_20261122t; r50 tropics 1.2-1.9 C too warm, Maranhao coast 5165 mm vs 1991, Amazon interior starved).
+    plan_T1 global convection refit FAIL 0.9987 (tropics trade against dev49). Cause found: the e93 chi gate treats
+    wet-forest air as desert air aloft. e103 (gate on dry-land chi, default off): S_t 0.916 at dev49 1.0008; refit
+    plan_T2 best dev49 0.9992 FAIL -> parked. dev49 cannot credit a tropical-only fix: OWNER DECISION whether set t
+    should join the dev objective (policy v4). Maranhao coastal deluge (20-24 mm/day Nov-Apr) still open.
 
 # CLIMATE r50 ADOPTED on Earth (21 Nov 2026) — reports/CLIMATE_R50_20261121.md  [current best]
 * e93 (heated-land convection threshold, gated by belt and desert air) + e94 (monsoon descent caps convection). vs r49: dev49

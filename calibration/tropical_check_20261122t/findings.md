@@ -26,3 +26,11 @@ joint refit with objective max(S49, S_t) over convective_rh_chi_dry, convective_
 convective_rh_heat, convective_rain, convective_rh, land_recycling; then policy v3 gates
 (fine28, ONE run on sealed set r).
 Screen result (=1): S49 1.0008 (T -0.03 %, P +0.18 %), S_t 0.9164. Joint refit plan_T2 declared.
+
+## plan_T2 (e103 joint refit): FAIL, e103 parked default-off
+Best 0.9992 (S49; T +0.4 %, P -0.5 %), S_t 0.92 throughout (0.904-0.943). Every e103 variant
+leaves dev49 within +-0.2 % of r50 while set t improves by ~8 %: e103 is a tropical-only fix
+that dev49 (4 tropical regions of 49) cannot credit. Under policy v3 it cannot be adopted.
+Owner decision (not taken here): whether a tropical pool such as set t should join the dev
+objective (a policy v4). Kept as calibration/tropical_check_20261122t/plan_T2_best.json.
+Sealed set r stays unopened.
