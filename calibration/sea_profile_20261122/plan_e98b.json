@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-22",
+ "status": "declared after e98 stage B failed (best S49 1.082) and before any e98b evaluation; sealed set q unopened",
+ "diagnosis": "e98 stage A/B: with the WOA-fitted sea the mid-latitude coasts become too wet (W Europe +438 mm, California +371, Cape, Victoria) and some too warm (Victoria +2.5, Chile +2.9, Nova Scotia +2.7): rain and moisture settings were fitted around the -4.4 C sea; the temperature-only refit cannot absorb it.",
+ "start": "calibration/sea_profile_20261122/e98_stageB_best.json",
+ "start_set": {},
+ "reference": "output/hot_tail_20261122/stageA",
+ "reference_name": "r50",
+ "knobs": {
+  "ocean_rh": [
+   "mul",
+   1.06
+  ],
+  "evap_tau_days": [
+   "mul",
+   1.3
+  ],
+  "convective_rain": [
+   "mul",
+   1.1
+  ],
+  "precip_tau_days": [
+   "mul",
+   1.2
+  ],
+  "eddy_rate": [
+   "mul",
+   1.2
+  ],
+  "storm_track": [
+   "mul",
+   1.15
+  ],
+  "subsidence_branch_drying": [
+   "mul",
+   1.3
+  ],
+  "sst_offset": [
+   "add",
+   0.5
+  ],
+  "sst_damping": [
+   "add",
+   0.1
+  ]
+ },
+ "bounds": {
+  "ocean_rh": [
+   0.5,
+   0.95
+  ],
+  "sst_offset": [
+   -2.23,
+   -0.23
+  ],
+  "sst_damping": [
+   0.6,
+   0.95
+  ]
+ },
+ "bounds_note": "sea values may move only +-1 C (offset) and 0.6-0.95 (damping) around the WOA18 fit (-1.23, 0.83)",
+ "max_evaluations": 60,
+ "gates": "policy_v3 vs r50: dev49 S<=0.995 with T,P<=+1%; fine28 S<=1.01; ONE paired run on sealed set q S<=1.0. Pass -> r51, map world refit, full atlas rebuild. Fail -> park the sea line."
+}
