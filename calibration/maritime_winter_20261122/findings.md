@@ -33,3 +33,12 @@ North India came from weighting the warm SEA more in the eddy mean, not from blo
 is not what holds those coasts cold (eddy_rate x2 on BC: +0.5 C). Their cold is the latitude-mean land equilibrium
 itself. Candidate next: a land equilibrium that knows its own setting (coastal/maritime cloud and longwave for
 BC; the dry clear subtropical plains for North India) rather than the latitude's mean land.
+
+## What explains r50's annual temperature bias (all dev49 cells, 15,232)
+OLS on standardised cell features, R2 0.58: Tann_obs -3.56, |lat| -2.75, elevation -1.50, log coast distance -0.33,
+log P_obs -0.29, T range -0.13 (C per s.d.). By observed annual mean: < -5 C +2.0; -5..18 C ~0; 18..24 -0.4; > 24 -2.2.
+Read: at a given latitude and height, cells warmer than their latitude are modelled too cold and colder ones too warm;
+the model compresses each place's departure from the latitude-mean land column. Every campaign today nudged one
+cause of that departure (sea, dry ground, eddies) and none moves it enough. The next design should give the land
+equilibrium its own local departure (cloud / humidity longwave, surface dryness, continentality) fitted as one
+term against this residual, rather than one more gated switch.
