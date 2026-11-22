@@ -42,3 +42,9 @@ Screen vs r50:            S49      S_t
   T2 best + cap 12      0.9984   0.872  (T +0.3 %, P -0.7 %; Maranhao Plog 1.30 -> 0.83)
   T2 best + cap 8         -      0.850
 Joint refit plan_T3 declared (dev-side knobs added; sst_tropical excluded).
+
+## Policy v4 (owner, 22 Nov: "Yes, do policy v4"): calibration/local_accuracy_20261023/policy_v4.json
+Dev pool = dev49 + set t (55): S55 <= 0.995 with T,P <= +1 %; guard S49 <= 1.0; fine28 <= 1.01; ONE run on sealed r.
+scripts/gate_v3.py dev4. plan_T3 (running, declared under v3) will be scored under v4 as well.
+Candidate e103 + e104 cap 12 (candidate_e103_e104_cap12.json): S55 0.9783 (T -0.2 %, P -4.1 %), S49 0.9984,
+S_t 0.872: dev4 PASS. Next: fine28. The sealed-r finalist is chosen after plan_T3 (one sealed run only).

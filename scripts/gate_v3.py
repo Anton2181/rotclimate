@@ -1,6 +1,7 @@
 """Policy v3 checks (calibration/local_accuracy_20261023/policy_v3.json) on paired benchmark runs.
 
     python -I scripts/gate_v3.py dev OUT REF_NAME      # REF/candidate _dev31 + _retired_{a,b,c} -> S49, T, P (and S31)
+    python -I scripts/gate_v3.py dev4 OUT REF_NAME     # policy v4: the above + _tropical_t -> S55 gate, S49 guard
     python -I scripts/gate_v3.py fine OUT REF_NAME     # REF/candidate _fine28 -> S28
     python -I scripts/gate_v3.py sealed OUT REF_NAME [PART]   # REF/candidate _PART (default sealed_d) -> S
 Writes OUT/v3_<stage>.json and exits 0 when the stage passes.
@@ -60,6 +61,13 @@ def main():
             rep[part] = score(R, C, list(load(out / f"{ref}_{part}")))["S"]
         passes = s49["S"] <= 0.995 and s49["T"] <= 0.01 and s49["P"] <= 0.01
         res = dict(stage="dev", S49=s49, S31=s31, groups_reported=rep, passes=bool(passes))
+    elif stage == "dev4":
+        parts = ["dev31", "retired_a", "retired_b", "retired_c", "tropical_t"]
+        R, C = paired(out, ref, None, parts)
+        t_names = list(load(out / f"{ref}_tropical_t"))
+        s55 = score(R, C, list(R)); s49 = score(R, C, [n for n in R if n not in t_names]); st = score(R, C, t_names)
+        passes = s55["S"] <= 0.995 and s55["T"] <= 0.01 and s55["P"] <= 0.01 and s49["S"] <= 1.0
+        res = dict(stage="dev4", policy="policy_v4", S55=s55, S49=s49, S_t=st, passes=bool(passes))
     elif stage == "fine":
         R, C = paired(out, ref, None, ["fine28"])
         s = score(R, C, list(R)); res = dict(stage="fine", S28=s, passes=bool(s["S"] <= 1.01))

@@ -1,0 +1,66 @@
+{
+  "frozen": "2026-11-22, by the map's owner's decision ('Yes, do policy v4'), after e103/e104 (tropical convection fixes) had been screened on dev49 and on the open tropical set t, and before any candidate was run on sealed set r. Reason: dev49 holds 4 tropical regions of 49, so it cannot credit a tropical-only fix.",
+  "supersedes": "policy_v3.json",
+  "benchmark": "scripts/benchmark_local.py --regions dev31 at 56 km: the 19 regions of policy.json plus the 12 predeclared in regions_dev12.json; equal-region means",
+  "development_regions": "the 49 regions of policy v3 (dev31 + retired a, b, c) plus the open tropical set t (calibration/tropical_check_20261122t/regions.json, 6 regions, used as training data since 22 Nov): 55 regions, all development data.",
+  "score": "S = 0.5 * T_monthly_mae / T_ref + 0.5 * P_loss / P_ref, equal-region means, reference = current adopted physics on the same code and sources. S55 over all 55 development regions (the gate); S49 over the policy-v3 regions (guard); S_t over set t (reported).",
+  "adopt_if": [
+    "S55 improves by at least 0.5 % (<= 0.995)",
+    "neither T_monthly_mae nor P_loss over the 55 worsens by more than 1 %",
+    "guard: S49 not worse (<= 1.0), so the tropics cannot be bought against the rest of the world",
+    "paired 28 km check on california, western_europe, japan, new_zealand: S not worse by more than 1 % (<= 1.01)",
+    "the next unseen sealed set (now calibration/sealed_20261122r), run once: S not worse (<= 1.0)"
+  ],
+  "groups": {
+    "training": [
+      "california",
+      "iberia",
+      "southeast_us",
+      "levant",
+      "central_asia",
+      "east_china",
+      "east_australia",
+      "mexico"
+    ],
+    "holdout": [
+      "chile",
+      "cape",
+      "sw_australia",
+      "south_brazil",
+      "japan"
+    ],
+    "midlatitude": [
+      "pacific_nw",
+      "western_europe",
+      "eastern_europe",
+      "us_midwest",
+      "manchuria",
+      "new_zealand"
+    ],
+    "dev12": [
+      "anatolia",
+      "iran_plateau",
+      "north_india",
+      "north_china_plain",
+      "korea",
+      "texas_plains",
+      "great_basin",
+      "british_isles",
+      "alps",
+      "morocco",
+      "patagonia",
+      "victoria"
+    ],
+    "tropical_t": [
+      "t_10s_66w",
+      "t_1s_63w",
+      "t_8s_36e",
+      "t_2s_45w",
+      "t_13n_7w",
+      "t_7s_24e"
+    ]
+  },
+  "group_gate": false,
+  "group_note": "group scores (training, holdout, mid-latitude, dev12, each retired set) are reported but no longer block adoption.",
+  "sealed_regions": "one unseen set per adopted milestone, run once; once run it joins the development regions."
+}
