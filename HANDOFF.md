@@ -1,5 +1,11 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**East Africa / Somalia rain diagnosed, e109 PARKED (24 Nov 2026).** Southern Somalia (S18) rains 3,800 mm/yr
+against 460: the e55 Somali-jet turning is gated on a poleward pressure fall that the 2,500 km region map cannot
+see (heat lows off the map). e109 monsoon_westerly_floor (default 0) fixes the wind partly but S61 1.025 / 1.004
+(floor 1 / 0.5): Sahara, Sahel, east China lose. See calibration/east_africa_20261124/findings.md. Next: soil-moisture
+limit on tropical land evaporation (Somalia E ~70 mm/month all year).
+
 **PPE plan_W3 CLOSED, no adoption (23 Nov 2026).** 81 evaluations over dry heating (e54), terrain-blocked eddy mixing
 (e100c) and five rebalancing knobs around r52. Best w2_013 S61 0.9986, within noise; best points switch dry heating
 nearly off. Regional gains in the dry subtropics and South Asia are cancelled by Namibia, Chile and the Central Asian
