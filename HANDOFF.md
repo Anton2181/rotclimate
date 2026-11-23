@@ -1,4 +1,10 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
+
+**PPE plan_W3 CLOSED, no adoption (23 Nov 2026).** 81 evaluations over dry heating (e54), terrain-blocked eddy mixing
+(e100c) and five rebalancing knobs around r52. Best w2_013 S61 0.9986, within noise; best points switch dry heating
+nearly off. Regional gains in the dry subtropics and South Asia are cancelled by Namibia, Chile and the Central Asian
+basins. Records: calibration/ppe_20261123/W3_records/. r52 stays; U18 UNOPENED. Next lead: southern-tropical land rain
+onset and strength (Congo s_0s_28e).
 # developing instead of rebuilding". The 'every adopted climate gets a full rebuild' standing instruction is RETIRED.
 # Adopt climates on the gates as before, but do NOT rebuild the atlas unless the owner asks. r51 rebuild (already running
 # when this was said) is finished lean: commit atlas + short report, no extra packaging work.
