@@ -2346,7 +2346,15 @@ class ClimateModel:
                 if p.subsidence_branch_dry_rain > 0 and rain_prev is not None:
                     # e70c: where it rains the air rises (summer monsoon East
                     # China, the US south): no dry-air descent there
-                    core = core * np.exp(-rain_prev / p.subsidence_branch_dry_rain)
+                    gate = np.exp(-rain_prev / p.subsidence_branch_dry_rain)
+                    if p.subsidence_branch_gate_winter > 0:
+                        # e110: the rain gate locked false dry-season rain in place on winter-hemisphere tropical land
+                        # (Zambia 50-106 mm a month Dec-Apr, obs 2-11; southern Tanzania 155-180, obs 5-9): once it
+                        # rained the descent stopped, so it kept raining. Rising monsoon air is a summer-hemisphere
+                        # feature; with the ITCZ across the equator the descent applies whatever the recent rain.
+                        wint = np.clip(-phi_i / p.subsidence_branch_gate_winter_deg, 0.0, 1.0)
+                        gate = gate + (1.0 - gate) * p.subsidence_branch_gate_winter * wint
+                    core = core * gate
                 if p.heat_low_branch and p.heat_low_drying > 0 and getattr(self, "last_pres", None) is not None:
                     # e80b: the same heat-low damping for the branch's dry descent,
                     # whose rain gate (e70c) locks a dry pre-monsoon land in place

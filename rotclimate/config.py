@@ -278,6 +278,8 @@ class Params:
     subsidence_warming_top_m: float = 0.0  # e71f: none above this elevation, full 1,000 m below it (summer plateaus rise); 0 = off
     subsidence_branch_drying: float = 0.0  # e70b: column drying (1/day) along the descending branch's core, fading over 10 deg to the Hadley edge (0 = off)
     subsidence_branch_dry_rain: float = 0.0  # e70c: e70b x exp(-recent smoothed rain / this, mm/day): no dry-air descent under rising air; 0 = off
+    subsidence_branch_gate_winter: float = 0.0  # e110: share of the e70c rain gate removed where the ITCZ lies across the equator; 0 = off
+    subsidence_branch_gate_winter_deg: float = 5.0  # e110: ITCZ latitude (deg, other hemisphere) over which the removal ramps in
     subsidence_branch_gap: float = 8.0  # e70: degrees poleward of the ITCZ where the descending branch's sinking begins
     subsidence_warming_gap_land: float = -1.0  # e107: e71's warming starts this far poleward of the ITCZ over broad land (land_broad blends from subsidence_branch_gap over sea); < 0 = subsidence_branch_gap everywhere
     subsidence_warming_land_minlat: float = 0.0  # e107b: the e107 land start never runs equatorward of this latitude (deg; 0 = no floor)
