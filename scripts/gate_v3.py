@@ -2,6 +2,8 @@
 
     python -I scripts/gate_v3.py dev OUT REF_NAME      # REF/candidate _dev31 + _retired_{a,b,c} -> S49, T, P (and S31)
     python -I scripts/gate_v3.py dev4 OUT REF_NAME     # policy v4: the above + _tropical_t -> S55 gate, S49 guard
+    python -I scripts/gate_v3.py dev5 OUT REF_NAME     # policy v5: dev4 parts + _sealed_r; 90 % bootstrap upper bound < 1
+    python -I scripts/gate_v3.py sealed5 OUT REF_NAME [PART]  # policy v5: point S <= 1 and 90 % lower bound < 1 (default sealed_S18)
     python -I scripts/gate_v3.py fine OUT REF_NAME     # REF/candidate _fine28 -> S28
     python -I scripts/gate_v3.py sealed OUT REF_NAME [PART]   # REF/candidate _PART (default sealed_d) -> S
 Writes OUT/v3_<stage>.json and exits 0 when the stage passes.
@@ -68,6 +70,27 @@ def main():
         s55 = score(R, C, list(R)); s49 = score(R, C, [n for n in R if n not in t_names]); st = score(R, C, t_names)
         passes = s55["S"] <= 0.995 and s55["T"] <= 0.01 and s55["P"] <= 0.01 and s49["S"] <= 1.0
         res = dict(stage="dev4", policy="policy_v4", S55=s55, S49=s49, S_t=st, passes=bool(passes))
+    elif stage in ("dev5", "sealed5"):
+        # policy v5 (calibration/local_accuracy_20261023/policy_v5.json): bootstrap over regions
+        import numpy as np
+        from score_ci import ci
+        if stage == "dev5":
+            parts = ["dev31", "retired_a", "retired_b", "retired_c", "tropical_t", "sealed_r"]
+            R, C = paired(out, ref, None, parts)
+            extra = set(load(out / f"{ref}_tropical_t")) | set(load(out / f"{ref}_sealed_r"))
+            s49 = score(R, C, [n for n in R if n not in extra])
+        else:
+            R, C = paired(out, ref, None, [sys.argv[4] if len(sys.argv) > 4 else "sealed_S18"])
+        names = sorted(R)
+        a = np.array([[C[n]["temperature"]["monthly_mae_C"], R[n]["temperature"]["monthly_mae_C"],
+                       C[n]["rain"]["loss"], R[n]["rain"]["loss"]] for n in names])
+        b = ci(a); s_all = score(R, C, names)
+        if stage == "dev5":
+            passes = b["q95"] < 1.0 and s_all["T"] <= 0.01 and s_all["P"] <= 0.01 and s49["S"] <= 1.0
+            res = dict(stage="dev5", policy="policy_v5", S=s_all, bootstrap=b, S49=s49, passes=bool(passes))
+        else:
+            passes = s_all["S"] <= 1.0 and b["q05"] < 1.0
+            res = dict(stage="sealed5", policy="policy_v5", S=s_all, bootstrap=b, passes=bool(passes))
     elif stage == "fine":
         R, C = paired(out, ref, None, ["fine28"])
         s = score(R, C, list(R)); res = dict(stage="fine", S28=s, passes=bool(s["S"] <= 1.01))

@@ -4,33 +4,104 @@
  "status": "declared before any evaluation; sealed set s unopened; owner asked for methodology items 1 (score uncertainty) then 2 (batch + emulator calibration)",
  "method": "scripts/ppe.py: scrambled-Sobol perturbed-parameter ensemble over 16 knobs around r51 (wave 1, 96 points + the r51 base point), Gaussian-process emulators of every development region's temperature MAE and rain loss (log), the v4 objective computed from the emulated regions, then waves of 16 emulator-chosen points (best feasible, spread >= 0.12 apart in the unit cube) until the best evaluated point stops improving for two waves or 4 waves are spent.",
  "base": "calibration/local_accuracy_20261023/r51_params.json",
- "base_set": {"subsidence_warming_gap_land": 5.582784966194307, "subsidence_warming_land_minlat": 0.0},
+ "base_set": {
+  "subsidence_warming_gap_land": 5.582784966194307,
+  "subsidence_warming_land_minlat": 0.0
+ },
  "base_note": "land gap = the sea gap and no floor reproduce r51 exactly; the base point is a reproduction check (S must be 1.0)",
  "reference": "output/cloud_shade_20261122/ref",
  "reference_name": "r51",
- "extra_parts": {"tropical_t": "calibration/tropical_check_20261122t/regions.json"},
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json"
+ },
  "out": "output/ppe_20261123/W1",
  "seed": 20261123,
  "wave1": 96,
  "knobs": {
-  "land_offset": [-1.6, -0.4, "lin"],
-  "subsidence_warming": [3.5, 7.5, "log"],
-  "subsidence_summer": [0.25, 0.8, "lin"],
-  "subsidence_warming_chi0": [0.1, 0.6, "lin"],
-  "subsidence_warming_taper": [10.0, 20.0, "lin"],
-  "subsidence_warming_gap_land": [0.0, 5.6, "lin"],
-  "subsidence_warming_land_minlat": [0.0, 14.0, "lin"],
-  "subsidence_warming_rain": [1.5, 4.5, "log"],
-  "wet_sun": [1.0, 2.5, "lin"],
-  "dry_coupling": [1.5, 3.5, "lin"],
-  "lapse_rate": [3.8, 5.2, "lin"],
-  "convective_cap_land": [5.0, 12.0, "log"],
-  "convective_rain": [0.65, 1.1, "lin"],
-  "land_recycling": [0.3, 0.43, "lin"],
-  "trade_heat_low": [0.1, 0.4, "lin"],
-  "monsoon_descent": [0.02, 0.05, "log"]
+  "land_offset": [
+   -1.6,
+   -0.4,
+   "lin"
+  ],
+  "subsidence_warming": [
+   3.5,
+   7.5,
+   "log"
+  ],
+  "subsidence_summer": [
+   0.25,
+   0.8,
+   "lin"
+  ],
+  "subsidence_warming_chi0": [
+   0.1,
+   0.6,
+   "lin"
+  ],
+  "subsidence_warming_taper": [
+   10.0,
+   20.0,
+   "lin"
+  ],
+  "subsidence_warming_gap_land": [
+   0.0,
+   5.6,
+   "lin"
+  ],
+  "subsidence_warming_land_minlat": [
+   0.0,
+   14.0,
+   "lin"
+  ],
+  "subsidence_warming_rain": [
+   1.5,
+   4.5,
+   "log"
+  ],
+  "wet_sun": [
+   1.0,
+   2.5,
+   "lin"
+  ],
+  "dry_coupling": [
+   1.5,
+   3.5,
+   "lin"
+  ],
+  "lapse_rate": [
+   3.8,
+   5.2,
+   "lin"
+  ],
+  "convective_cap_land": [
+   5.0,
+   12.0,
+   "log"
+  ],
+  "convective_rain": [
+   0.65,
+   1.1,
+   "lin"
+  ],
+  "land_recycling": [
+   0.3,
+   0.43,
+   "lin"
+  ],
+  "trade_heat_low": [
+   0.1,
+   0.4,
+   "lin"
+  ],
+  "monsoon_descent": [
+   0.02,
+   0.05,
+   "log"
+  ]
  },
  "objective": "S55 + 10 x (excess of S49 over 1.0 + excess of T and P over +1 %), all vs r51, from evaluated (not emulated) runs for the finalist",
- "gates": "the policy in force when the finalist is chosen (v4 now; v5 if the owner approves it first): dev, fine28, ONE paired sealed run. Pass -> r52, no atlas rebuild unless the owner asks.",
- "cost": "~1.5 min per evaluation on 4 cores: wave 1 ~2.5 h, each later wave ~25 min"
+ "gates": "policy v5: dev5, fine28, ONE paired run on sealed S18 (sealed5). Pass -> r52, no atlas rebuild unless the owner asks.",
+ "cost": "~1.5 min per evaluation on 4 cores: wave 1 ~2.5 h, each later wave ~25 min",
+ "amendment_2026_11_23": "Before any evaluation: owner approved policy v5; spent sealed set r joins the development regions (61). Objective = S61 + penalties (S49 guard, T, P); the finalist is judged with gate_v3.py dev5 (90 % bootstrap upper bound < 1), fine28, and ONE run on calibration/sealed_20261123S18."
 }

@@ -15,6 +15,13 @@
 # 4-6 C too cold in their hottest months even under full subsidence warming - check the land equilibrium there;
 # (3) Kenya-Tanzania coast rains all year (~200 mm/month in the dry season, obs ~10).
 
+# POLICY v5 IN FORCE (23 Nov, owner approved): calibration/local_accuracy_20261023/policy_v5.json. Dev pool 61 (dev49 + t +
+# spent r); adopt if 90 % bootstrap upper bound of S61 < 1 (gate_v3.py dev5), T/P <= +1 %, S49 <= 1, fine28 <= 1.01, ONE run on
+# the 18-region sealed set calibration/sealed_20261123S18 (s + s2 + s3, unopened; gate_v3.py sealed5: S <= 1, 90 % lower < 1).
+# Evidence: calibration/methodology_20261123/score_uncertainty.md. Calibration now by scripts/ppe.py (PPE + GP emulators):
+# plan calibration/ppe_20261123/plan_W1.json (16 knobs around r51, wave 1 = 97 points, then emulator waves of 16).
+# plan_U3 (e107 coordinate refit) is judged under v5 and may not use S18 unless it passes dev5.
+
 # AUTONOMOUS WORK PLAN — owner approved 21 Nov 2026 ("write it down as a list of tasks for you to follow autonomously and keep
 # going"; paste every map/graphic into the chat). Work in order; each Earth test declared before scoring; adopt only on pass.
 * T1 Finish the r50 atlas rebuild: select_world_r50.py + r50 corrections -> scripts/release_r50.sh -> browser checks ->
