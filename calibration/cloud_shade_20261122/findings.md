@@ -28,3 +28,10 @@ Moving the land belt south warms the hot dry north (Najd -2.95 -> -2.08, Sahel -
 but DRIES and warms the southern Amazon and Congo: the belt's mean latitude does not set southern-tropical land rain.
 The northern warming likely comes from the Hadley descending branch (subsidence warming starts at ITCZ + gap) moving
 south with it -> next lead: the branch geometry (subsidence_branch_gap, subsidence_warming_taper) on its own.
+
+# e107 land subsidence-warming gap + e107b 10-deg floor (22-23 Nov)
+Najd breakdown (scripts/land_budget.py): e71 warming +0.5 K in Jul-Aug (branch start ~24 N over Arabia) vs +2-3 K in
+May/Oct. Screens vs r51 (S55 / S49 / S_t): gap 1 0.9996/0.9975/1.021; gap 0 1.0003/0.9977/1.027; floor 15 1.0051/1.0006;
+floor 18 1.0054/1.0004; gap 0 floor 10 0.9990/0.9982/0.9985; gap 1 floor 11 0.9999/0.9985/1.004.
+plan_U2 (35 evaluations): best S55 0.9953 (T -1.3 %, P +0.3 %), S49 0.9978, S_t 0.969 -> FAIL by 0.0003 (<= 0.995).
+Still descending at the cap; continuation declared separately as plan_U3 (sealed s unopened).

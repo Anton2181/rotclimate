@@ -1,0 +1,58 @@
+{
+ "version": 1,
+ "date": "2026-11-23",
+ "status": "declared after plan_U2 FAILED (best S55 0.9953 vs 0.995) and before any evaluation of this plan; sealed set s unopened",
+ "diagnosis": "continuation of plan_U2 (still descending at its 36-evaluation cap); finer first steps and lapse_rate added",
+ "start": "calibration/cloud_shade_20261122/plan_U2_best.json",
+ "reference": "output/cloud_shade_20261122/ref",
+ "reference_name": "r51",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json"
+ },
+ "objective_mode": "v4",
+ "objective": "S55 vs r51 if S49 <= 1.0, else 10 + S49",
+ "knobs": {
+  "subsidence_warming_land_minlat": [
+   "add",
+   0.75
+  ],
+  "subsidence_warming": [
+   "mul",
+   1.04
+  ],
+  "subsidence_summer": [
+   "mul",
+   1.1
+  ],
+  "subsidence_warming_chi0": [
+   "add",
+   0.04
+  ],
+  "land_offset": [
+   "add",
+   0.1
+  ],
+  "lapse_rate": [
+   "mul",
+   1.06
+  ],
+  "subsidence_warming_taper": [
+   "mul",
+   1.08
+  ]
+ },
+ "bounds": {
+  "subsidence_warming_land_minlat": [
+   5,
+   16
+  ],
+  "subsidence_warming_chi0": [
+   0,
+   0.9
+  ]
+ },
+ "max_evaluations": 28,
+ "risk": "P rose +0.9 % at the start (gate limit +1 %); the objective does not penalise P directly, so the finalist's P is checked at the gate.",
+ "gates": "unchanged from plan_U2: policy_v4 vs r51 dev4, fine28, ONE paired run on sealed set s. Fail -> park e107 default-off, no further continuation.",
+ "start_set": {}
+}
