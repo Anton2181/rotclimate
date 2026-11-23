@@ -1,5 +1,10 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Lead B4b (24 Nov 2026): itcz_mean is not mirrored for southern Earth regions** - the rains end 1-2 months late
+there (Zambia April). Ocean-only flip fixes the tail but weakens the wet peak; needs a joint refit of the land ITCZ
+range (PPE). calibration/itcz_mirror_20261124/findings.md. r53 at pad 2200 (13 regions): neutral (Congo rain loss
+0.28 -> 0.32, Namibia 1.01 -> 1.04), calibration/e110_20261124/r53_pad2200.txt.
+
 **r53 ADOPTED (24 Nov 2026, policy v5, NO atlas rebuild): calibration/local_accuracy_20261023/r53_params.json** =
 r52 + e110 (subsidence_branch_gate_winter 1.0, subsidence_branch_gate_lat 25). Cause (B4): the e70c rain gate
 (no dry descent where it rained) locked false dry-season rain on winter-hemisphere tropical land (Zambia 50-106
