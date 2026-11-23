@@ -154,6 +154,7 @@ class Params:
     itcz_shift: float = 10.0
     itcz_shift_ocean: float = -1.0    # e55: the ITCZ's seasonal shift over open ocean (deg); land_broad blends to itcz_shift over broad land; < 0 = itcz_shift everywhere
     itcz_mean_land: float = -99.0     # e106: the ITCZ's annual-mean latitude over broad land (land_broad blends from itcz_mean over open ocean); -99 = itcz_mean everywhere
+    itcz_mirror_south: bool = False   # e112: Earth cases only - mirror itcz_mean / itcz_mean_land for southern regions run mirrored
     monsoon_westerly: float = 0.0     # e55: share of the trade speed by which air crossing the equator turns westerly before the ITCZ (Coriolis)
     monsoon_pressure_hpa: float = 0.0  # e55b: ... only where the model's own pressure falls poleward, fully at this many hPa per 1,000 km; 0 = everywhere
     monsoon_westerly_floor: float = 0.0  # e109: minimum share of monsoon_westerly applied where the poleward pressure fall is too weak (Coriolis turning without a heat low on the map); 0 = off

@@ -1,0 +1,59 @@
+{
+ "version": 1,
+ "date": "2026-11-24",
+ "status": "declared before any evaluation; plan_20261124 B4 follow-up (lead B4b); sealed V18 declared and unopened",
+ "method": "scripts/ppe.py as W4: scrambled-Sobol wave 1 (64 + base), GP emulators per region, then emulator waves of 16; close early when the predicted gain is within noise (sd ~0.005); at most 4 waves.",
+ "base": "calibration/local_accuracy_20261023/r53_params.json",
+ "base_set": {
+  "itcz_mirror_south": true,
+  "itcz_mean_land": 6.976377335669385,
+  "itcz_shift_ocean": 11.625
+ },
+ "base_note": "r53 + e112 (southern regions get the ocean ITCZ mean mirrored to 7 deg away), land mean and both shifts at r53's values: the base point isolates the mirroring itself",
+ "reference": "output/ppe_20261124/ref53",
+ "reference_name": "r53",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json"
+ },
+ "out": "output/ppe_20261124/W5",
+ "seed": 20261127,
+ "wave1": 64,
+ "knobs": {
+  "itcz_mean_land": [
+   -3.0,
+   8.0,
+   "lin"
+  ],
+  "itcz_shift": [
+   9.0,
+   20.0,
+   "lin"
+  ],
+  "itcz_shift_ocean": [
+   3.0,
+   12.0,
+   "lin"
+  ],
+  "circulation_lag_days": [
+   25.0,
+   50.0,
+   "lin"
+  ],
+  "itcz_mean": [
+   4.0,
+   9.0,
+   "lin"
+  ],
+  "subsidence_branch_gate_lat": [
+   15.0,
+   30.0,
+   "lin"
+  ]
+ },
+ "objective": "S61 + 10 x (excess of S49 over 1.0 + excess of T and P over +1 %), all vs r53 at pad 1,100 km",
+ "gates": "policy v5 against r53: dev5 (90 % bootstrap upper bound < 1), T and P <= +1 %, S49 <= 1, fine28 <= 1.01, ONE paired run on sealed V18 (S <= 1 and 90 % lower bound < 1). Reported, not gating: regime scores (regimes_v1). Pass -> r54, no atlas rebuild unless the owner asks.",
+ "cost": "~2 min per evaluation: wave 1 ~2.2 h, each later wave ~35 min",
+ "include_base": true,
+ "note": "Lead B4b: itcz_mean was never mirrored for southern Earth regions, so their rain belt sat on their own side and their rains ended 1-2 months late (Zambia April 210 mm vs 44). Fixing it alone weakens the southern wet peaks (fitted with the error), so the land ITCZ (mean, shift), the ocean shift (e55), the ocean mean, the circulation lag and e110's latitude are refitted jointly. The atlas world sees itcz_mean_land / itcz_shift_ocean / lag changes too (e112 itself is Earth-only)."
+}

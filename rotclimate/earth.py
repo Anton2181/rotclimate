@@ -674,7 +674,14 @@ def earth_params(base: Params, case: EarthCase) -> Params:
     land = base.ebm_land
     if land == "earth" and lat0 < 0:
         land = "earth_mirrored"
-    return base.replace(ebm_land=land, tilt=23.44, retrograde=False, north_bearing=0.0, eccentricity=0.0167,
+    extra = {}
+    if base.itcz_mirror_south and lat0 < 0:
+        # e112: Earth's ocean ITCZ sits ~7 N; in a mirrored southern region that is 7 deg AWAY from the region
+        # (the unmirrored mean put the rain belt on its side and ended the southern rains 1-2 months late:
+        # Zambia April 210 mm vs 44 observed). itcz_mean_land is likewise a real-world (north-positive) latitude.
+        extra = dict(itcz_mean=-base.itcz_mean,
+                     itcz_mean_land=-base.itcz_mean_land if base.itcz_mean_land > -90 else base.itcz_mean_land)
+    return base.replace(ebm_land=land, **extra, tilt=23.44, retrograde=False, north_bearing=0.0, eccentricity=0.0167,
                         # mirrored southern regions: perihelion falls in their (mirrored) summer
                         perihelion_after_solstice=13.0 if lat0 >= 0 else 13.0 + 365.25 / 2,
                         year_days=365, winter_solstice_day=354.5, lat_center=abs(lat0))
