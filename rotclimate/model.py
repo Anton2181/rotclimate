@@ -1808,7 +1808,18 @@ class ClimateModel:
                     # Isles' winter was 4.5 C too warm. Air colder than the
                     # ground (daytime heating, convective) keeps the land rate.
                     warm = np.clip((T_state - T_eq) / 2.0, 0.0, 1.0) * land
-                    lam = lam + warm * np.maximum(p.land_stable_rate / DAY - lamT, 0.0)
+                    rate_s = p.land_stable_rate
+                    if p.land_stable_inland_rate > 0:
+                        # e52b: the stable layer deepens and cools along a long trajectory over
+                        # winter land; on a coast fresh sea air keeps renewing it. Air reaching the
+                        # prairies across 1,000+ km of land stayed 5-8 C too mild in January (more so
+                        # with the Pacific on the map: -9 C at pad 1,100, -1 C at 2,200, observed -14)
+                        # while one stronger rate everywhere chilled BC's and Britain's coasts. Add
+                        # this rate in proportion to the land share upwind (land_stable_fetch_km).
+                        if getattr(self, '_stable_up', None) is None:
+                            self._stable_up = self._upwind_land(p.land_stable_fetch_km)
+                        rate_s = rate_s + p.land_stable_inland_rate * self._stable_up
+                    lam = lam + warm * np.maximum(rate_s / DAY - lamT, 0.0)
 
                 if self.heat_record is not None:
                     heat_inputs = (T_state, lam, uh, vh)

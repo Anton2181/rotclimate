@@ -120,6 +120,8 @@ class Params:
     ocean_tau_unstable: float = 0.0   # e51: days for air colder than the sea under it to take the sea's temperature (convective; 0 = ocean_tau_days)
     ocean_unstable_cap: float = 0.0   # e51b: K/day ceiling on e51's convective warming (a deep outbreak layer warms slowly; never below ocean_tau_days; 0 = no ceiling)
     land_stable_rate: float = 0.0     # e52: 1/day at which air warmer than the ground's equilibrium cools to it (stable winter layer; 0 = the land's own rate)
+    land_stable_inland_rate: float = 0.0  # e52b: extra 1/day of e52 stable cooling x land share upwind (westerlies) over land_stable_fetch_km; 0 = off
+    land_stable_fetch_km: float = 1000.0  # e52b: memory of the upwind land share
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     heat_low_drying: float = 0.0      # e80: subsidence drying x exp(-this x hPa) under the heat lows the pressure winds build (last pass, negative pressure); 0 = off
     heat_low_branch: bool = False     # e80b: apply the e80 damping also to the e70b branch drying
