@@ -15,6 +15,10 @@
 # 4-6 C too cold in their hottest months even under full subsidence warming - check the land equilibrium there;
 # (3) Kenya-Tanzania coast rains all year (~200 mm/month in the dry season, obs ~10).
 
+# SOUTH ASIA (24 Nov): Ganges plain 3.5 C too cold all year under r52. e108 heat barrier, e100b/e100c relative eddy
+# terrain weighting tried (default off), best e100c S61 0.9994 = neutral -> PARKED. See calibration/south_asia_20261124/
+# findings.md. Next lead there: the local column's pre-monsoon cold (Apr -2.7 C on the plain, Deccan -3 C Jan-May).
+
 # PPE plan_W2 (around r52, wider taper/cap_land, W1 runs imported) CLOSED: best 0.9990 -> r52 is the optimum of the 16
 # knobs; next gains need structure (calibration/ppe_20261123/W2_records/verdict.md). Sealed U18 (calibration/
 # sealed_20261124U18) declared and UNOPENED for the next adoption.
