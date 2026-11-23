@@ -1,5 +1,12 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**PPE plan_W4 CLOSED, no adoption (24 Nov 2026).** e52c (land_stable_barrier_*: extra stable-layer cooling where an
+upwind crest within ~800 km rises above the cell) + 8 neighbours, 81 evaluations. Best = declared base r52+e52c 0.3:
+S 0.9978 [0.9940, 1.0015], fails v5 upper-bound gate; wave 2 best 0.9991. e52c cuts pad-2200 error 4.5-7.7 % (fixes
+the prairie warm drift A1 found) but is flat at pad 1100. Code kept, off by default. Adopting it needs a scoring-domain
+change (pad-2200 gated set) = owner decision. Records calibration/ppe_20261123/W4_records/. r52 stays; U18 UNOPENED.
+Next: plan B2-B5.
+
 **Plan 20261124 approved; A1 + A2 DONE (24 Nov 2026).** A2: frozen observed-climate regimes for 79 regions
 (calibration/regimes_20261124, scripts/regimes.py score): r52's gain over r51 was all tropical-dry (0.947) and arid
 (0.972); highland 1.014, mediterranean 1.006. A1 (calibration/map_edge_20261124): doubling the map pad changes r52's
