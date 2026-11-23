@@ -81,11 +81,11 @@ def temperature_metrics(Ts, To):
 
 
 def one(job):
-    region, params_dict, cell_km, out, specs, run_identity = job
+    region, params_dict, cell_km, out, specs, run_identity, pad_km = job
     started = time.monotonic()
     earth.REGIONS.update(specs)
     p = Params(**params_dict)
-    case = earth.region_case(region, cell_km)
+    case = earth.region_case(region, cell_km, pad_km)
     grid_identity = case_hash(case, observed_sea=p.sst_source == 'observed')
     record_path = Path(out)/'cases'/f'{region}.json'
     cells_path = Path(out)/'cells'/f'{region}.npz'
@@ -180,6 +180,7 @@ def main():
     ap.add_argument("--set", default="{}", help="json parameter overrides")
     ap.add_argument("--regions", nargs="+", default=DEV19, help="region names, or 'dev31' for all 31 development regions")
     ap.add_argument("--cell-km", type=float, default=56.0)
+    ap.add_argument("--pad-km", type=float, default=1100.0, help="map margin around each scored box (A1 map-edge test)")
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--region-specs", help="json of extra region definitions (e.g. the sealed validation regions)")
     ap.add_argument("--out", required=True)
@@ -206,7 +207,7 @@ def main():
     sources += [earth.WORLDCLIM/f'wc2.1_5m_{name}.zip' for name in ['tavg','prec','elev','vapr']]
     if p.sst_source == 'observed': sources.append(earth.WOA_SST)
     protocol = dict(params=asdict(p), regions=a.regions, region_specs={r:definitions[r] for r in a.regions},
-                    cell_km=a.cell_km, pad_km=1100.,
+                    cell_km=a.cell_km, pad_km=a.pad_km,
                     sources={str(path.relative_to(ROOT)):file_hash(path) for path in sources},
                     note='Reused development regions; actual derived model inputs are hashed per case.')
     run_identity = freeze(out/'protocol.json', protocol)
@@ -223,7 +224,7 @@ def main():
     earth.monsoon_descent()
     earth.sea_depth()
     with Pool(a.workers) as pool:
-        recs = {r["region"]: r for r in pool.map(one, [(r, asdict(p), a.cell_km, str(out), specs, run_identity) for r in a.regions],
+        recs = {r["region"]: r for r in pool.map(one, [(r, asdict(p), a.cell_km, str(out), specs, run_identity, a.pad_km) for r in a.regions],
                                                   chunksize=1)}
     failures = [r for r,row in recs.items() if row['status'] != 'passed']
     if failures:
