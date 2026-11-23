@@ -1,5 +1,14 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**r53 ADOPTED (24 Nov 2026, policy v5, NO atlas rebuild): calibration/local_accuracy_20261023/r53_params.json** =
+r52 + e110 (subsidence_branch_gate_winter 1.0, subsidence_branch_gate_lat 25). Cause (B4): the e70c rain gate
+(no dry descent where it rained) locked false dry-season rain on winter-hemisphere tropical land (Zambia 50-106
+mm/mo vs obs 2-11). dev5 S61 0.9836 [0.9686, 0.9965] T 0.0 % P -3.3 % S49 0.9957; fine28 0.99997; sealed U18 (now
+SPENT) S 0.9873 [0.968, 1.002] T +0.9 % P -3.4 %. Regimes: tropical_dry 0.943, rest ~1.00. Records
+calibration/e110_20261124/, r53_adoption.json. Reference runs for r53 on the v5 pool = candidate_* in
+output/ppe_20261124/screen/e110_l25 (ignored output). No unopened sealed set remains: declare a new one before
+the next finalist. Somalia stays wrong (onshore trades; heat lows off its regional map, see east_africa findings).
+
 **PPE plan_W4 CLOSED, no adoption (24 Nov 2026).** e52c (land_stable_barrier_*: extra stable-layer cooling where an
 upwind crest within ~800 km rises above the cell) + 8 neighbours, 81 evaluations. Best = declared base r52+e52c 0.3:
 S 0.9978 [0.9940, 1.0015], fails v5 upper-bound gate; wave 2 best 0.9991. e52c cuts pad-2200 error 4.5-7.7 % (fixes

@@ -1,0 +1,78 @@
+{
+ "adopted": "r53",
+ "adopted_utc": "2026-11-23T21:34:46.559843+00:00",
+ "reference": "r52",
+ "params": "calibration/local_accuracy_20261023/r53_params.json",
+ "params_sha256": "f5dd56a4c9abf596fd276d8807b840561227b1a445099ec3b91fe7e3407565e8",
+ "validation": "output/ppe_20261124/screen/e110_l25",
+ "change": "r52 + e110/e110b: subsidence_branch_gate_winter 1.0, subsidence_branch_gate_lat 25.0 (e70c rain gate lifted in the winter hemisphere and equatorward of 25 deg)",
+ "plans": [
+  "calibration/plan_20261124.md (B4)",
+  "calibration/e110_20261124/plan.md",
+  "calibration/sealed_20261124U18/declaration.json"
+ ],
+ "method": "diagnosis by single-term ablation (Zambia, southern Tanzania); 5 named screens on the v5 pool; finalist = lowest S61 among lat 20/25/30 per the declared plan",
+ "criteria": "policy_v5 against r52: dev5 (61 regions) 90% bootstrap upper < 1, T/P <= +1%, S49 <= 1; fine28 <= 1.01; ONE run on sealed U18: S <= 1 and 90% lower < 1",
+ "scores": {
+  "dev5": {
+   "stage": "dev5",
+   "policy": "policy_v5",
+   "S": {
+    "S": 0.9836350147568163,
+    "T": 0.00048043180040613365,
+    "P": -0.03321040228677363,
+    "n": 61
+   },
+   "bootstrap": {
+    "S": 0.9836350147568165,
+    "q05": 0.9685726193928677,
+    "q95": 0.9964578885329044,
+    "q025": 0.9651402958969658,
+    "q975": 0.9979853603121465,
+    "p_no_gain": 0.00565,
+    "sd": 0.00850943127244881,
+    "n": 61
+   },
+   "S49": {
+    "S": 0.9957278993597576,
+    "T": -0.0014377944734559334,
+    "P": -0.007106406807028898,
+    "n": 49
+   },
+   "passes": true
+  },
+  "fine28": {
+   "stage": "fine",
+   "S28": {
+    "S": 0.9999731969455815,
+    "T": 2.7396330389617418e-05,
+    "P": -8.100243922659622e-05,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed_U18": {
+   "stage": "sealed5",
+   "policy": "policy_v5",
+   "S": {
+    "S": 0.9873267598402351,
+    "T": 0.009055527431755417,
+    "P": -0.0344020077512851,
+    "n": 18
+   },
+   "bootstrap": {
+    "S": 0.9873267598402351,
+    "q05": 0.9678031779128278,
+    "q95": 1.001841194831709,
+    "q025": 0.9627199509763633,
+    "q975": 1.0028939253058746,
+    "p_no_gain": 0.12695,
+    "sd": 0.010936521673925725,
+    "n": 18
+   },
+   "passes": true
+  }
+ },
+ "regimes": "tropical_dry 0.943 (P -12 %); arid 0.994; temperate 1.001; mediterranean / continental / highland 1.000; tropical_wet (n 1) 1.009",
+ "atlas": "not rebuilt (owner rule 22 Nov 2026); atlas remains r51"
+}
