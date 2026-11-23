@@ -1,0 +1,16 @@
+{
+ "status": "PROPOSED 23 Nov 2026 - not in force until the owner approves; policy_v4 governs until then",
+ "evidence": "calibration/methodology_20261123/score_uncertainty.md",
+ "score": "as policy v4 (S over equal-weighted regions, paired against the adopted reference), with a paired region bootstrap (scripts/score_ci.py, 20,000 resamples)",
+ "development_regions": "as v4 (55 regions: dev49 + tropical set t) plus each spent sealed set once spent (r now; s after use)",
+ "adopt_if": [
+  "dev: the 90 % upper bound of S over the development regions is below 1.0 (a real gain, P(no gain) < 5 %), replacing the fixed S <= 0.995",
+  "dev: neither T nor P over the development regions worsens by more than 1 % (point values, as v4)",
+  "guard: S49 point <= 1.0 (as v4)",
+  "fine28: S <= 1.01 (as v4)",
+  "sealed: ONE run on a fresh sealed set of 18 regions (three 6-region draws, 0-60 deg): point S <= 1.0 AND its 90 % lower bound below 1.0 (not clearly worse)"
+ ],
+ "continuations": "a refit that fails may be continued at most once, declared before it runs; its finalist meets the same gates",
+ "why": "the fixed 0.5 % line sits inside the region-sampling noise (sd 0.003-0.005), and 6 sealed regions cannot tell a 1 % gain from none (sd ~0.035); 18 regions cut that to ~0.02",
+ "cost": "sealed runs triple (18 regions, minutes per run); no extra development runs"
+}
