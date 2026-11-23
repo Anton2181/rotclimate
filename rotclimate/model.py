@@ -2353,6 +2353,10 @@ class ClimateModel:
                         # rained the descent stopped, so it kept raining. Rising monsoon air is a summer-hemisphere
                         # feature; with the ITCZ across the equator the descent applies whatever the recent rain.
                         wint = np.clip(-phi_i / p.subsidence_branch_gate_winter_deg, 0.0, 1.0)
+                        if p.subsidence_branch_gate_lat > 0:
+                            # e110b: ... and on the tropical side of the branch at any season (gate kept poleward,
+                            # where the summer monsoons of East China, the US south and south Brazil need it)
+                            wint = np.maximum(wint, np.clip((p.subsidence_branch_gate_lat - np.abs(lat)) / 5.0, 0.0, 1.0))
                         gate = gate + (1.0 - gate) * p.subsidence_branch_gate_winter * wint
                     core = core * gate
                 if p.heat_low_branch and p.heat_low_drying > 0 and getattr(self, "last_pres", None) is not None:
