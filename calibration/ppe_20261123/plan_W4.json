@@ -19,80 +19,53 @@
  "out": "output/ppe_20261124/W4",
  "seed": 20261126,
  "wave1": 64,
- "knobs": [
-  [
-   "land_stable_barrier_rate",
-   [
-    0.0,
-    1.0,
-    "lin"
-   ]
+ "knobs": {
+  "land_stable_barrier_rate": [
+   0.0,
+   1.0,
+   "lin"
   ],
-  [
-   "land_stable_barrier_km",
-   [
-    0.7,
-    2.5,
-    "log"
-   ]
+  "land_stable_barrier_km": [
+   0.7,
+   2.5,
+   "log"
   ],
-  [
-   "land_stable_barrier_fetch_km",
-   [
-    400.0,
-    1500.0,
-    "log"
-   ]
+  "land_stable_barrier_fetch_km": [
+   400.0,
+   1500.0,
+   "log"
   ],
-  [
-   "land_stable_rate",
-   [
-    0.05,
-    0.3,
-    "lin"
-   ]
+  "land_stable_rate": [
+   0.05,
+   0.3,
+   "lin"
   ],
-  [
-   "land_offset",
-   [
-    -1.6,
-    -0.6,
-    "lin"
-   ]
+  "land_offset": [
+   -1.6,
+   -0.6,
+   "lin"
   ],
-  [
-   "lapse_rate",
-   [
-    3.9,
-    4.8,
-    "lin"
-   ]
+  "lapse_rate": [
+   3.9,
+   4.8,
+   "lin"
   ],
-  [
-   "eddy_rate",
-   [
-    1.2,
-    2.2,
-    "log"
-   ]
+  "eddy_rate": [
+   1.2,
+   2.2,
+   "log"
   ],
-  [
-   "eddy_scale_km",
-   [
-    650.0,
-    1100.0,
-    "log"
-   ]
+  "eddy_scale_km": [
+   650.0,
+   1100.0,
+   "log"
   ],
-  [
-   "heat_barrier_km",
-   [
-    0.0,
-    0.4,
-    "lin"
-   ]
+  "heat_barrier_km": [
+   0.0,
+   0.4,
+   "lin"
   ]
- ],
+ },
  "objective": "S61 + 10 x (excess of S49 over 1.0 + excess of T and P over +1 %), all vs r52 at pad 1,100 km (the atlas configuration); evaluated runs for the finalist",
  "gates": "policy v5: dev5 (90 % bootstrap upper bound < 1), T and P <= +1 %, S49 <= 1, fine28 <= 1.01, ONE paired run on sealed U18 (S <= 1 and 90 % lower bound < 1). Also reported, not gating: per-regime scores (regimes_v1; owner-approved A2) and the 12-region pad-2,200 robustness set (A1). Pass -> r53, no atlas rebuild unless the owner asks.",
  "cost": "~2 min per evaluation: wave 1 ~2.2 h, each later wave ~35 min",
