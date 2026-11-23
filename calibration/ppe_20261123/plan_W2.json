@@ -1,0 +1,111 @@
+{
+ "version": 1,
+ "date": "2026-11-23",
+ "status": "declared before any evaluation; sealed set s unopened; owner asked for methodology items 1 (score uncertainty) then 2 (batch + emulator calibration)",
+ "method": "scripts/ppe.py: scrambled-Sobol perturbed-parameter ensemble over 16 knobs around r51 (wave 1, 96 points + the r51 base point), Gaussian-process emulators of every development region's temperature MAE and rain loss (log), the v4 objective computed from the emulated regions, then waves of 16 emulator-chosen points (best feasible, spread >= 0.12 apart in the unit cube) until the best evaluated point stops improving for two waves or 4 waves are spent.",
+ "base": "calibration/local_accuracy_20261023/r52_params.json",
+ "base_set": {},
+ "base_note": "land gap = the sea gap and no floor reproduce r51 exactly; the base point is a reproduction check (S must be 1.0)",
+ "reference": "output/ppe_20261124/ref",
+ "reference_name": "r52",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json"
+ },
+ "out": "output/ppe_20261124/W2",
+ "seed": 20261124,
+ "wave1": 32,
+ "knobs": {
+  "land_offset": [
+   -1.7,
+   -0.5,
+   "lin"
+  ],
+  "subsidence_warming": [
+   4.0,
+   9.0,
+   "log"
+  ],
+  "subsidence_summer": [
+   0.15,
+   0.7,
+   "lin"
+  ],
+  "subsidence_warming_chi0": [
+   0.05,
+   0.5,
+   "lin"
+  ],
+  "subsidence_warming_taper": [
+   12,
+   30,
+   "lin"
+  ],
+  "subsidence_warming_gap_land": [
+   0,
+   4,
+   "lin"
+  ],
+  "subsidence_warming_land_minlat": [
+   0,
+   14,
+   "lin"
+  ],
+  "subsidence_warming_rain": [
+   1.5,
+   6.0,
+   "log"
+  ],
+  "wet_sun": [
+   1.2,
+   2.8,
+   "lin"
+  ],
+  "dry_coupling": [
+   1.2,
+   3.2,
+   "lin"
+  ],
+  "lapse_rate": [
+   3.8,
+   5.0,
+   "lin"
+  ],
+  "convective_cap_land": [
+   2.5,
+   10.0,
+   "log"
+  ],
+  "convective_rain": [
+   0.65,
+   1.05,
+   "lin"
+  ],
+  "land_recycling": [
+   0.32,
+   0.44,
+   "lin"
+  ],
+  "trade_heat_low": [
+   0.05,
+   0.4,
+   "lin"
+  ],
+  "monsoon_descent": [
+   0.02,
+   0.06,
+   "log"
+  ]
+ },
+ "objective": "S55 + 10 x (excess of S49 over 1.0 + excess of T and P over +1 %), all vs r51, from evaluated (not emulated) runs for the finalist",
+ "gates": "policy v5: dev5, fine28, ONE paired run on sealed S18 (sealed5). Pass -> r52, no atlas rebuild unless the owner asks.",
+ "cost": "~1.5 min per evaluation on 4 cores: wave 1 ~2.5 h, each later wave ~25 min",
+ "amendment_2026_11_23": "Before any evaluation: owner approved policy v5; spent sealed set r joins the development regions (61). Objective = S61 + penalties (S49 guard, T, P); the finalist is judged with gate_v3.py dev5 (90 % bootstrap upper bound < 1), fine28, and ONE run on calibration/sealed_20261123S18.",
+ "include_base": false,
+ "import_from": {
+  "results": "output/ppe_20261123/W1/results.jsonl",
+  "reference_run": "output/ppe_20261123/W1/runs/w4_000",
+  "prefix": "W1:"
+ },
+ "note": "Centred on r52; taper and convective_cap_land widened past the W1 box edges they hit. Wave 1 = 32 Sobol points in the new box + 145 imported W1 evaluations re-referenced to r52 (absolute per-region errors are reference-free). Same objective and gates (policy v5); sealed set U18 (unopened) for one finalist."
+}

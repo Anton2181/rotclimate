@@ -6,6 +6,7 @@ waves of emulator-chosen candidates (history-matching style). Replaces one-knob-
     python3 -I scripts/ppe.py fit      PLAN.json      # fit emulators, leave-one-out check, sensitivities -> OUT/emulator.json
     python3 -I scripts/ppe.py propose  PLAN.json K    # K new points from the emulator (best feasible + spread) -> design
     python3 -I scripts/ppe.py report   PLAN.json      # evaluated points ranked by the v4 objective
+    python3 -I scripts/ppe.py import   PLAN.json      # copy an earlier ensemble's results, re-referenced (plan import_from)
 
 Each evaluation runs the candidate on the development parts (refit_e75.evaluate, paired with the plan's reference).
 The emulators predict, for every region, the candidate's temperature MAE and rain loss; S55, S49, T and P are then
@@ -224,6 +225,31 @@ def propose(plan, out, k):
         print(n_["name"], round(n_["predicted_objective"], 4))
 
 
+def import_results(plan, out):
+    """Absolute per-region errors do not depend on the reference: copy an earlier ensemble's evaluations and replace
+    their reference columns with the plan reference's values (read from a run of that reference, e.g. its finalist)."""
+    spec = plan["import_from"]
+    if any(r["name"].startswith(spec["prefix"]) for r in read_results(out)):
+        raise SystemExit("already imported")
+    ref = region_values_at(ROOT / spec["reference_run"])
+    base = base_params(plan)
+    n = 0
+    with (out / "results.jsonl").open("a") as f:
+        for r in (json.loads(l) for l in (ROOT / spec["results"]).read_text().splitlines() if l.strip()):
+            if not r.get("ok"):
+                continue
+            x = {k: r["x"].get(k, base[k]) for k in plan["knobs"]}
+            regs = {k: v[:2] + ref[k] for k, v in r["regions"].items()}
+            f.write(json.dumps(dict(name=spec["prefix"] + r["name"], wave=0, x=x, regions=regs, ok=True, imported=True)) + "\n")
+            n += 1
+    print(n, "imported")
+
+
+def region_values_at(d):
+    Rr, Cc = paired(d, R.REF_NAME if (d / f"{R.REF_NAME}_dev31").exists() else "r51", None, list(R.PARTS))
+    return {n: [Cc[n]["temperature"]["monthly_mae_C"], Cc[n]["rain"]["loss"]] for n in Rr}
+
+
 def report(plan, out):
     res, names, X, Y, Rf = training(plan, out)
     tn = t_names_of(plan)
@@ -245,6 +271,8 @@ def main():
         fit(plan, out)
     elif cmd == "propose":
         propose(plan, out, int(sys.argv[3]))
+    elif cmd == "import":
+        import_results(plan, out)
     elif cmd == "report":
         report(plan, out)
     else:
