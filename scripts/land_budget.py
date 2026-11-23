@@ -1,6 +1,6 @@
 """Break one region's land temperature into the model's stages (diagnostic taps in ClimateModel.run).
 
-    python3 -I scripts/land_budget.py REGION PARAMS.json OUT.json
+    python3 -I scripts/land_budget.py REGION PARAMS.json OUT.json [PAD_KM]
 For each stage the step-to-step change of the land column, averaged over the scored land cells, per calendar month
 (last year of the run), plus the air temperature and the observed monthly mean.
 """
@@ -15,9 +15,9 @@ from rotclimate.model import ClimateModel
 region, pf, out = sys.argv[1], sys.argv[2], Path(sys.argv[3])
 p = Params(**json.loads((ROOT / pf).read_text()))
 for f in ['calibration/local_accuracy_20261023/regions_dev12.json', 'calibration/sealed_20261031/regions.json', 'calibration/sealed_20261031b/regions.json',
-          'calibration/sealed_20261101c/regions.json', 'calibration/tropical_check_20261122t/regions.json']:
+          'calibration/sealed_20261101c/regions.json', 'calibration/tropical_check_20261122t/regions.json', 'calibration/sealed_20261122r/regions.json']:
     earth.REGIONS.update(json.loads((ROOT / f).read_text()))
-case = earth.region_case(region, 56)
+case = earth.region_case(region, 56, float(sys.argv[4]) if len(sys.argv) > 4 else 1100.0)   # optional map margin (A1)
 g = case.grid; m = g.inmap & g.land & np.isfinite(case.obs_T).all(0)
 rec = {}
 ClimateModel.tap = staticmethod(lambda name, d, a: rec.setdefault(name, {}).__setitem__(round(float(d), 3), float(np.mean(np.asarray(a)[m]))))
