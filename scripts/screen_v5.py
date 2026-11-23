@@ -21,7 +21,7 @@ for name, js in zip(args[::2], args[1::2]):
     Rr, Cc = paired(out / name, R.REF_NAME, None, list(R.PARTS))
     s, s49 = score(Rr, Cc, list(Rr)), score(Rr, Cc, [n for n in Rr if n not in t])
     import numpy as np
-    a = np.array([[Cc[n]['temperature']['monthly_mae_C'], Cc[n]['rain']['loss'], Rr[n]['temperature']['monthly_mae_C'], Rr[n]['rain']['loss']] for n in Rr])
+    a = np.array([[Cc[n]['temperature']['monthly_mae_C'], Rr[n]['temperature']['monthly_mae_C'], Cc[n]['rain']['loss'], Rr[n]['rain']['loss']] for n in Rr])
     b = ci(a)
     print(f"== {name}  S61 {s['S']:.4f} [{b['q05']:.4f}, {b['q95']:.4f}] (T {s['T']:+.3f} P {s['P']:+.3f})  S49 {s49['S']:.4f}", flush=True)
     sc = {n: 0.5 * Cc[n]['temperature']['monthly_mae_C'] / Rr[n]['temperature']['monthly_mae_C'] + 0.5 * Cc[n]['rain']['loss'] / Rr[n]['rain']['loss'] for n in Rr}

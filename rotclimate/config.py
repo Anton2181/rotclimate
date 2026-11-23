@@ -282,6 +282,7 @@ class Params:
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
     eddy_heat_terrain_km: float = 0.0  # e100: eddies mix heat through low ground: each cell's weight in the eddy mean x exp(-elevation / this); 0 = off
     eddy_heat_terrain_relative: float = 0.0  # e100b: 1 = eddy_heat_terrain_km blocks only ground above the receiving cell (0 = absolute e100)
+    eddy_heat_terrain_offset_km: float = 0.0  # e100c: relative mode only: ground less than this above the cell does not block
     eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical

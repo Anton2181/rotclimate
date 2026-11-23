@@ -1813,10 +1813,13 @@ class ClimateModel:
                         # cold all year), ground at or below it does not (the plateau still mixes along its own
                         # level; absolute e100 warmed Tibet 2-4 C). Weighted eddy means at reference heights
                         # 0, 0.5, ... km with weight exp(-max(h_j - H, 0) / scale), interpolated at each cell.
+                        # e100c: only ground more than eddy_heat_terrain_offset_km above the cell blocks: the
+                        # Mongolian ramp (1-1.5 km above the North China plain) still sends its winter cold
+                        # down (e100b warmed Korea/Japan/north China 1.5-3 C), the Himalayan wall (4-5 km) not.
                         if self._eddy_w is None:
                             hk = np.maximum(np.where(g.land, g.elev, 0.0), 0.0) / 1000.0
                             levels = np.arange(0.0, max(float(hk.max()), 0.0) + 0.5001, 0.5)
-                            ws = [np.exp(-np.maximum(hk - H, 0.0) / p.eddy_heat_terrain_km) for H in levels]
+                            ws = [np.exp(-np.maximum(hk - H - p.eddy_heat_terrain_offset_km, 0.0) / p.eddy_heat_terrain_km) for H in levels]
                             self._eddy_w = (hk, levels, ws, [np.maximum(gauss(w, sigE), 1e-9) for w in ws])
                         hk, levels, ws, wns = self._eddy_w
                         means = [gauss(w * T_state, sigE) / wn for w, wn in zip(ws, wns)]
