@@ -15,6 +15,10 @@
 # 4-6 C too cold in their hottest months even under full subsidence warming - check the land equilibrium there;
 # (3) Kenya-Tanzania coast rains all year (~200 mm/month in the dry season, obs ~10).
 
+# PPE plan_W2 (around r52, wider taper/cap_land, W1 runs imported) CLOSED: best 0.9990 -> r52 is the optimum of the 16
+# knobs; next gains need structure (calibration/ppe_20261123/W2_records/verdict.md). Sealed U18 (calibration/
+# sealed_20261124U18) declared and UNOPENED for the next adoption.
+
 # r52 ADOPTED (23 Nov 2026, policy v5, NO atlas rebuild - owner rule): calibration/local_accuracy_20261023/r52_params.json,
 # r52_adoption.json. PPE W1 (scripts/ppe.py, 145 runs: Sobol 97 + 3 emulator waves of 16; emulator LOO rmse ~0.001) finalist
 # w4_000: S61 0.9886 (90 % CI 0.979-0.998, T -1.4 %, P -0.9 %), S49 0.9998, fine28 0.997, sealed S18 0.958 (T -5.4 %,
