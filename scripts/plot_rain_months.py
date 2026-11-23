@@ -33,6 +33,6 @@ for ax, (name, fa, fb) in zip(np.atleast_1d(axs), specs):
     ax.set_xticks(mon, names); ax.set_title(name, loc="left", fontsize=9.5, color=INK)
     ax.grid(axis="y", color=GRID, lw=0.6); ax.set_axisbelow(True)
 np.atleast_1d(axs)[0].set_ylabel("rain (mm per month)")
-np.atleast_1d(axs)[0].legend(frameon=False, fontsize=8, loc="upper center")
+h, l = np.atleast_1d(axs)[0].get_legend_handles_labels(); fig.legend(h, l, frameon=False, fontsize=8, loc="upper right", ncol=3)
 fig.suptitle(title, x=0.01, ha="left", fontsize=10, color=INK)
 fig.tight_layout(); fig.savefig(out, dpi=160)
