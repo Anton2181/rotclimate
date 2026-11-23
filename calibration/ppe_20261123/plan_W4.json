@@ -1,0 +1,101 @@
+{
+ "version": 1,
+ "date": "2026-11-24",
+ "status": "declared before any evaluation; plan_20261124 B1 (owner approved); sealed U18 unopened",
+ "method": "scripts/ppe.py: scrambled-Sobol perturbed-parameter ensemble over 16 knobs around r51 (wave 1, 96 points + the r51 base point), Gaussian-process emulators of every development region's temperature MAE and rain loss (log), the v4 objective computed from the emulated regions, then waves of 16 emulator-chosen points (best feasible, spread >= 0.12 apart in the unit cube) until the best evaluated point stops improving for two waves or 4 waves are spent.",
+ "base": "calibration/local_accuracy_20261023/r52_params.json",
+ "base_set": {
+  "land_stable_barrier_rate": 0.3,
+  "land_stable_barrier_km": 1.5,
+  "land_stable_barrier_fetch_km": 800.0
+ },
+ "base_note": "r52 + e52c at 0.3 (S61 0.9978 in the screen); the base point reproduces that screen",
+ "reference": "output/ppe_20261124/ref",
+ "reference_name": "r52",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json"
+ },
+ "out": "output/ppe_20261124/W4",
+ "seed": 20261126,
+ "wave1": 64,
+ "knobs": [
+  [
+   "land_stable_barrier_rate",
+   [
+    0.0,
+    1.0,
+    "lin"
+   ]
+  ],
+  [
+   "land_stable_barrier_km",
+   [
+    0.7,
+    2.5,
+    "log"
+   ]
+  ],
+  [
+   "land_stable_barrier_fetch_km",
+   [
+    400.0,
+    1500.0,
+    "log"
+   ]
+  ],
+  [
+   "land_stable_rate",
+   [
+    0.05,
+    0.3,
+    "lin"
+   ]
+  ],
+  [
+   "land_offset",
+   [
+    -1.6,
+    -0.6,
+    "lin"
+   ]
+  ],
+  [
+   "lapse_rate",
+   [
+    3.9,
+    4.8,
+    "lin"
+   ]
+  ],
+  [
+   "eddy_rate",
+   [
+    1.2,
+    2.2,
+    "log"
+   ]
+  ],
+  [
+   "eddy_scale_km",
+   [
+    650.0,
+    1100.0,
+    "log"
+   ]
+  ],
+  [
+   "heat_barrier_km",
+   [
+    0.0,
+    0.4,
+    "lin"
+   ]
+  ]
+ ],
+ "objective": "S61 + 10 x (excess of S49 over 1.0 + excess of T and P over +1 %), all vs r52 at pad 1,100 km (the atlas configuration); evaluated runs for the finalist",
+ "gates": "policy v5: dev5 (90 % bootstrap upper bound < 1), T and P <= +1 %, S49 <= 1, fine28 <= 1.01, ONE paired run on sealed U18 (S <= 1 and 90 % lower bound < 1). Also reported, not gating: per-regime scores (regimes_v1; owner-approved A2) and the 12-region pad-2,200 robustness set (A1). Pass -> r53, no atlas rebuild unless the owner asks.",
+ "cost": "~2 min per evaluation: wave 1 ~2.2 h, each later wave ~35 min",
+ "include_base": true,
+ "note": "Structural round B1: e52c stable winter cooling behind an upwind crest (prairies, Midwest, Manchuria, north China), which cut the pad-2,200 error 4.5-7.7 % alone; rebalanced with the winter-transport knobs (e52 base rate, eddy rate and scale, e108 heat barrier) and the land offset / lapse rate. e52c and e108 reach off inside the box. Close early if the predicted gain is within noise (sd ~0.005)."
+}
