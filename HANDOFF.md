@@ -1,5 +1,12 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Plan 20261124 approved; A1 + A2 DONE (24 Nov 2026).** A2: frozen observed-climate regimes for 79 regions
+(calibration/regimes_20261124, scripts/regimes.py score): r52's gain over r51 was all tropical-dry (0.947) and arid
+(0.972); highland 1.014, mediterranean 1.006. A1 (calibration/map_edge_20261124): doubling the map pad changes r52's
+scores by ~12 % (prairies T_mae 2.6 -> 4.7 -> 5.3 C at pad 1100/2200/3300; not converged): westerly marine heat crosses
+the Rockies too freely once the Pacific is on the map. The atlas uses the same 1,100 km pad (not a whole world), so
+calibration stays at pad 1,100; A4 dropped; pad 2,200 on 12 regions becomes a robustness diagnostic for B1. Next: B1.
+
 **East Africa / Somalia rain diagnosed, e109 PARKED (24 Nov 2026).** Southern Somalia (S18) rains 3,800 mm/yr
 against 460: the e55 Somali-jet turning is gated on a poleward pressure fall that the 2,500 km region map cannot
 see (heat lows off the map). e109 monsoon_westerly_floor (default 0) fixes the wind partly but S61 1.025 / 1.004
