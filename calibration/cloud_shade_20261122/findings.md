@@ -35,3 +35,8 @@ May/Oct. Screens vs r51 (S55 / S49 / S_t): gap 1 0.9996/0.9975/1.021; gap 0 1.00
 floor 18 1.0054/1.0004; gap 0 floor 10 0.9990/0.9982/0.9985; gap 1 floor 11 0.9999/0.9985/1.004.
 plan_U2 (35 evaluations): best S55 0.9953 (T -1.3 %, P +0.3 %), S49 0.9978, S_t 0.969 -> FAIL by 0.0003 (<= 0.995).
 Still descending at the cap; continuation declared separately as plan_U3 (sealed s unopened).
+
+plan_U3 (continuation, 27 evaluations): best S55 0.9945 (T -1.3 %, P +0.2 %), S49 0.9976, S_t 0.964. Judged under policy
+v5 (in force before its result was used): 90 % bootstrap interval 0.9868-1.0017 (P(no gain) 0.11) -> FAILS the v5 dev
+gate (upper bound must be < 1). Sealed S18 not used. e107/e107b knobs carry into the plan_W1 ensemble rather than being
+parked: they are part of its 16-knob design.
