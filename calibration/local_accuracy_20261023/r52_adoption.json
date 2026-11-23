@@ -1,0 +1,74 @@
+{
+ "adopted": "r52",
+ "adopted_utc": "2026-11-23T06:54:36.885694+00:00",
+ "reference": "r51",
+ "params": "calibration/local_accuracy_20261023/r52_params.json",
+ "params_sha256": "cefdd29911d5ec2659bd2726f4a3d72a8bf0bd43a287e109dd5852464610a848",
+ "validation": "output/ppe_20261123/W1/runs/w4_000",
+ "plans": [
+  "calibration/ppe_20261123/plan_W1.json",
+  "calibration/sealed_20261123S18/declaration.json"
+ ],
+ "method": "PPE + GP emulator (scripts/ppe.py): 97-point Sobol wave + 3 emulator waves of 16 (145 evaluated, 0 failed); finalist = best evaluated (w4_000)",
+ "criteria": "policy_v5 against r51: dev5 (61 regions) 90% bootstrap upper < 1, T/P <= +1%, S49 <= 1; fine28 <= 1.01; ONE run on sealed S18: S <= 1 and 90% lower < 1",
+ "scores": {
+  "dev5": {
+   "stage": "dev5",
+   "policy": "policy_v5",
+   "S": {
+    "S": 0.9886352419433124,
+    "T": -0.013766093491783371,
+    "P": -0.008963422621591666,
+    "n": 61
+   },
+   "bootstrap": {
+    "S": 0.988635241943312,
+    "q05": 0.9787828291096211,
+    "q95": 0.997544009588289,
+    "q025": 0.9766398604534012,
+    "q975": 0.9988185471806522,
+    "p_no_gain": 0.0126,
+    "sd": 0.005681561857385104,
+    "n": 61
+   },
+   "S49": {
+    "S": 0.9997956987520273,
+    "T": -0.0011134648674099301,
+    "P": 0.0007048623714644986,
+    "n": 49
+   },
+   "passes": true
+  },
+  "fine": {
+   "stage": "fine",
+   "S28": {
+    "S": 0.9970139608309132,
+    "T": 0.0028744347373530488,
+    "P": -0.00884651307552664,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed5": {
+   "stage": "sealed5",
+   "policy": "policy_v5",
+   "S": {
+    "S": 0.9577590204026593,
+    "T": -0.054095952988747587,
+    "P": -0.030386006205933902,
+    "n": 18
+   },
+   "bootstrap": {
+    "S": 0.9577590204026596,
+    "q05": 0.9295014991972415,
+    "q95": 0.9944806437198651,
+    "q025": 0.9233905338683552,
+    "q975": 1.0020158153945036,
+    "p_no_gain": 0.0307,
+    "sd": 0.0199031043322967,
+    "n": 18
+   },
+   "passes": true
+  }
+ }
+}

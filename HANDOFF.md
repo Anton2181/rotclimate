@@ -15,6 +15,15 @@
 # 4-6 C too cold in their hottest months even under full subsidence warming - check the land equilibrium there;
 # (3) Kenya-Tanzania coast rains all year (~200 mm/month in the dry season, obs ~10).
 
+# r52 ADOPTED (23 Nov 2026, policy v5, NO atlas rebuild - owner rule): calibration/local_accuracy_20261023/r52_params.json,
+# r52_adoption.json. PPE W1 (scripts/ppe.py, 145 runs: Sobol 97 + 3 emulator waves of 16; emulator LOO rmse ~0.001) finalist
+# w4_000: S61 0.9886 (90 % CI 0.979-0.998, T -1.4 %, P -0.9 %), S49 0.9998, fine28 0.997, sealed S18 0.958 (T -5.4 %,
+# P -3.0 %) -> S18 SPENT. Changes: subsidence warming stronger (6.2) and on land starts closer to ITCZ (gap_land 1.39,
+# floor 8.2 deg), taper 20, wet_sun 2.0, dry_coupling 2.0, cap_land 5.0. Records calibration/ppe_20261123/.
+# Leads: taper (20) and cap_land (5.0) sit on their box edges -> next PPE should widen them; S49 0.9998 is at the guard,
+# so mid-latitude regions are flat (Canadian prairies, Tibet worse by ~3 %); Congo s_0s_28e rain worse. Atlas still r51.
+# A NEW sealed set is needed before the next adoption.
+
 # POLICY v5 IN FORCE (23 Nov, owner approved): calibration/local_accuracy_20261023/policy_v5.json. Dev pool 61 (dev49 + t +
 # spent r); adopt if 90 % bootstrap upper bound of S61 < 1 (gate_v3.py dev5), T/P <= +1 %, S49 <= 1, fine28 <= 1.01, ONE run on
 # the 18-region sealed set calibration/sealed_20261123S18 (s + s2 + s3, unopened; gate_v3.py sealed5: S <= 1, 90 % lower < 1).
