@@ -14,7 +14,7 @@ from rotclimate.model import ClimateModel
 
 region, pf, out = sys.argv[1], sys.argv[2], Path(sys.argv[3])
 p = Params(**json.loads((ROOT / pf).read_text()))
-for f in ['calibration/sealed_20261031/regions.json', 'calibration/sealed_20261031b/regions.json',
+for f in ['calibration/local_accuracy_20261023/regions_dev12.json', 'calibration/sealed_20261031/regions.json', 'calibration/sealed_20261031b/regions.json',
           'calibration/sealed_20261101c/regions.json', 'calibration/tropical_check_20261122t/regions.json']:
     earth.REGIONS.update(json.loads((ROOT / f).read_text()))
 case = earth.region_case(region, 56)

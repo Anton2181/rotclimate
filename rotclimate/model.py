@@ -215,7 +215,20 @@ class Result:
 
 
 class ClimateModel:
-    tap = None          # diagnostics: callable(name, day, field) at the land-temperature stages (None = off)
+    tap = None
+
+    def heat_face(self):
+        """e108: the low air of a plain does not trade heat freely with the air over the plateau or range beside it
+        (north India and the Tibetan side, 3-4 C too cold all year). Each face between neighbours passes
+        exp(-|elevation step| / heat_barrier_km) of its exchange; None when off."""
+        p, g = self.p, self.g
+        if p.heat_barrier_km <= 0:
+            return None
+        if getattr(self, '_heat_face', None) is None:
+            h = np.where(g.land, np.maximum(np.asarray(g.elev, float), 0.0), 0.0) / 1000.0
+            f = lambda a: np.exp(-np.abs(h - a) / p.heat_barrier_km)
+            self._heat_face = (f(np.roll(h, -1, 1)), f(np.roll(h, 1, 1)), f(np.roll(h, -1, 0)), f(np.roll(h, 1, 0)))
+        return self._heat_face          # diagnostics: callable(name, day, field) at the land-temperature stages (None = off)
     def __init__(self, params: Params, grid=None):
         if params.eddy_moisture_scheme not in ('legacy', 'conservative', 'conservative-rainout'):
             raise ValueError('Unknown eddy_moisture_scheme')
@@ -1794,7 +1807,26 @@ class ClimateModel:
                     heat_inputs = (T_state, lam, uh, vh)
                 # ---- temperature (sea-level equivalent), then lapse rate
                 if p.eddy_rate > 0:
-                    if p.eddy_heat_terrain_km > 0:
+                    if p.eddy_heat_terrain_km > 0 and p.eddy_heat_terrain_relative > 0:
+                        # e100b: as e100, but relative to the receiving cell: ground above the cell blocks the
+                        # exchange (the Ganges plain does not take the Tibetan side's air: north India 3 C too
+                        # cold all year), ground at or below it does not (the plateau still mixes along its own
+                        # level; absolute e100 warmed Tibet 2-4 C). Weighted eddy means at reference heights
+                        # 0, 0.5, ... km with weight exp(-max(h_j - H, 0) / scale), interpolated at each cell.
+                        if self._eddy_w is None:
+                            hk = np.maximum(np.where(g.land, g.elev, 0.0), 0.0) / 1000.0
+                            levels = np.arange(0.0, max(float(hk.max()), 0.0) + 0.5001, 0.5)
+                            ws = [np.exp(-np.maximum(hk - H, 0.0) / p.eddy_heat_terrain_km) for H in levels]
+                            self._eddy_w = (hk, levels, ws, [np.maximum(gauss(w, sigE), 1e-9) for w in ws])
+                        hk, levels, ws, wns = self._eddy_w
+                        means = [gauss(w * T_state, sigE) / wn for w, wn in zip(ws, wns)]
+                        pos = np.clip(hk / 0.5, 0.0, len(levels) - 1.0)
+                        i0 = np.minimum(np.floor(pos).astype(int), len(levels) - 2) if len(levels) > 1 else np.zeros_like(pos, int)
+                        fr = pos - i0
+                        stack = np.stack(means)
+                        Tmix = np.take_along_axis(stack, i0[None], 0)[0] * (1.0 - fr) + \
+                            np.take_along_axis(stack, np.minimum(i0 + 1, len(levels) - 1)[None], 0)[0] * fr
+                    elif p.eddy_heat_terrain_km > 0:
                         # e100: a storm moves air along level surfaces; a mountain wall stops the low-level
                         # exchange. The interior's winter cold pool (BC's plateau, ~1 km) reached the fjord
                         # coast behind the Coast Mountains as freely as the Pacific air: BC's coast sat at
@@ -1808,9 +1840,11 @@ class ClimateModel:
                         Tmix = gauss(T_state, sigE)
                     eh = eddy if p.eddy_heat == 1.0 else eddy * p.eddy_heat
                     return self.solver.solve(uh, vh, p.heat_diffusion, lam + eh,
-                                            lam * T_eq + eh * Tmix, T_eq, guess=T_prev if first_iteration else T_state)
+                                            lam * T_eq + eh * Tmix, T_eq, guess=T_prev if first_iteration else T_state,
+                                            face=self.heat_face())
                 else:
-                    return self.solver.solve(uh, vh, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state)
+                    return self.solver.solve(uh, vh, p.heat_diffusion, lam, lam * T_eq, T_eq, guess=T_prev if first_iteration else T_state,
+                                             face=self.heat_face())
             retry_callback=(lambda info:temperature_retry(dict(seasonal_step=n+1,day=float(d),**info))) if temperature_retry else None
             temperature=iterate_temperature(solve_temperature,T_ref,p.t_iters,p.t_relaxation,p.t_adaptive_retries,
                                             on_retry=retry_callback, acceleration=p.t_anderson)

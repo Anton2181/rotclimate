@@ -127,9 +127,15 @@ class AdvectionSolver:
         out[large] = adv[large] * decay / (1 - decay)
         return out
 
-    def solve(self, u, v, K, lam, S, boundary, guess=None, rtol=None, max_iter=None):
-        """u: eastward [m/s], v: northward [m/s] (rows run southward)."""
+    def solve(self, u, v, K, lam, S, boundary, guess=None, rtol=None, max_iter=None, face=None):
+        """u: eastward [m/s], v: northward [m/s] (rows run southward).
+        face: optional (east, west, south, north) factors in [0, 1] scaling each cell's exchange with that neighbour;
+        the diagonal keeps the row sum, so the solution stays a weighted mean (discrete maximum principle)."""
         ce, cw, cs, cn, diag = self.coefficients(u, v, K, lam)
+        if face is not None:
+            s0 = ce + cw + cs + cn
+            ce, cw, cs, cn = ce * face[0], cw * face[1], cs * face[2], cn * face[3]
+            diag = diag + s0 - (ce + cw + cs + cn)
         rtol = self.rtol if rtol is None else rtol
         max_iter = self.max_iter if max_iter is None else max_iter
         if not np.isfinite(rtol) or rtol <= 0 or max_iter < 1:

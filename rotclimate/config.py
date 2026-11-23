@@ -275,11 +275,13 @@ class Params:
     subsidence_branch_gap: float = 8.0  # e70: degrees poleward of the ITCZ where the descending branch's sinking begins
     subsidence_warming_gap_land: float = -1.0  # e107: e71's warming starts this far poleward of the ITCZ over broad land (land_broad blends from subsidence_branch_gap over sea); < 0 = subsidence_branch_gap everywhere
     subsidence_warming_land_minlat: float = 0.0  # e107b: the e107 land start never runs equatorward of this latitude (deg; 0 = no floor)
+    heat_barrier_km: float = 0.0     # e108: heat exchange between neighbouring cells scaled by exp(-|elevation step| / this); 0 = off
     dry_coupling: float = 0.0  # e36: dry ground couples the air to the land faster, sunshine coupling x (1 + this x dryness) (0 = none)
     sea_enclosure: str = "disc"       # inland-sea measure: "disc" (land within 400 km) or "rays" (e3)
     ocean_tau_stable: float = 0.0     # e3: days for air warmer than the sea to cool to it (0 = ocean_tau_days)
     eddy_heat: float = 1.0            # e3: storm-eddy exchange of heat as a share of that of moisture
     eddy_heat_terrain_km: float = 0.0  # e100: eddies mix heat through low ground: each cell's weight in the eddy mean x exp(-elevation / this); 0 = off
+    eddy_heat_terrain_relative: float = 0.0  # e100b: 1 = eddy_heat_terrain_km blocks only ground above the receiving cell (0 = absolute e100)
     eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
