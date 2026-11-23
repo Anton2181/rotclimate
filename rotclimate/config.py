@@ -151,6 +151,7 @@ class Params:
     itcz_mean_land: float = -99.0     # e106: the ITCZ's annual-mean latitude over broad land (land_broad blends from itcz_mean over open ocean); -99 = itcz_mean everywhere
     monsoon_westerly: float = 0.0     # e55: share of the trade speed by which air crossing the equator turns westerly before the ITCZ (Coriolis)
     monsoon_pressure_hpa: float = 0.0  # e55b: ... only where the model's own pressure falls poleward, fully at this many hPa per 1,000 km; 0 = everywhere
+    monsoon_westerly_floor: float = 0.0  # e109: minimum share of monsoon_westerly applied where the poleward pressure fall is too weak (Coriolis turning without a heat low on the map); 0 = off
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0

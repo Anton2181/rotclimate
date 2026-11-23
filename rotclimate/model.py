@@ -808,6 +808,13 @@ class ClimateModel:
                 cell = self.g.cell_km
                 fall = np.sign(lat) * np.gradient(ndi.gaussian_filter(last, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
                 w = p.monsoon_westerly * np.clip(fall / p.monsoon_pressure_hpa, 0.0, 1.0)
+                if p.monsoon_westerly_floor > 0:
+                    # e109: the turning of cross-equatorial air is Coriolis, not
+                    # the heat low; a 2,500 km region map that does not reach
+                    # the low that draws the flow (Somalia: Arabia and India off
+                    # the map, poleward fall ~0) kept the trades as easterlies
+                    # onto the coast in July (8 m/s; 3,800 mm against 460)
+                    w = np.maximum(w, p.monsoon_westerly * p.monsoon_westerly_floor)
         if p.trade_heat_low > 0 and p.monsoon_pressure_hpa > 0 and getattr(self, "last_pres", None) is not None:
             # e83: trades blow because pressure rises toward the subtropical high
             # poleward. Where the model's pressure falls poleward instead (a heat
