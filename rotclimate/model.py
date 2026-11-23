@@ -1007,6 +1007,22 @@ class ClimateModel:
             open_ &= ~hit
         return np.where(g.land, g.lat, reach)
 
+    def _upwind_crest(self, fetch_km):
+        """e52c: height (m) of the highest ground along the westerlies' upwind ray within fetch_km above each
+        cell's own ground (0 where nothing upwind is higher). On-map ground only."""
+        g, p = self.g, self.p
+        th = np.radians(p.north_bearing)
+        sgn = 1.0 if p.retrograde else -1.0
+        dj, di = sgn * np.cos(th), sgn * np.sin(th)
+        L = fetch_km / g.cell_km
+        h = np.where(g.land, np.maximum(np.asarray(g.elev, float), 0.0), 0.0)
+        ii, jj = np.mgrid[0:g.ny, 0:g.nx].astype(float)
+        top = h.copy()
+        for k in range(1, int(L) + 1):
+            ci, cj = np.clip(ii + k * di, 0, g.ny - 1), np.clip(jj + k * dj, 0, g.nx - 1)
+            top = np.maximum(top, ndi.map_coordinates(h, [ci, cj], order=1))
+        return np.maximum(top - h, 0.0)
+
     def _upwind_land(self, fetch_km):
         """Land share along the westerlies' upwind direction (true west; east
         with reversed spin) with an exponential memory of fetch_km; beyond the
@@ -1819,6 +1835,16 @@ class ClimateModel:
                         if getattr(self, '_stable_up', None) is None:
                             self._stable_up = self._upwind_land(p.land_stable_fetch_km)
                         rate_s = rate_s + p.land_stable_inland_rate * self._stable_up
+                    if p.land_stable_barrier_rate > 0:
+                        # e52c: what keeps a winter interior's cold pool is a range upwind that low marine
+                        # air cannot cross (the prairies behind the Rockies), not the land share: Atlantic air
+                        # reaches eastern Europe and the Volga freely (r52 already 0.7-1.6 C too cold there,
+                        # and e52b's land-share weighting chilled them further). Add this rate in proportion
+                        # to the upwind crest's height above the cell, full at land_stable_barrier_km.
+                        if getattr(self, '_stable_bar', None) is None:
+                            self._stable_bar = np.clip(self._upwind_crest(p.land_stable_barrier_fetch_km) / 1000.0
+                                                       / p.land_stable_barrier_km, 0.0, 1.0)
+                        rate_s = rate_s + p.land_stable_barrier_rate * self._stable_bar
                     lam = lam + warm * np.maximum(rate_s / DAY - lamT, 0.0)
 
                 if self.heat_record is not None:

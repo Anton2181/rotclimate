@@ -122,6 +122,9 @@ class Params:
     land_stable_rate: float = 0.0     # e52: 1/day at which air warmer than the ground's equilibrium cools to it (stable winter layer; 0 = the land's own rate)
     land_stable_inland_rate: float = 0.0  # e52b: extra 1/day of e52 stable cooling x land share upwind (westerlies) over land_stable_fetch_km; 0 = off
     land_stable_fetch_km: float = 1000.0  # e52b: memory of the upwind land share
+    land_stable_barrier_rate: float = 0.0  # e52c: extra 1/day of e52 stable cooling x clip(upwind crest above the cell / land_stable_barrier_km); 0 = off
+    land_stable_barrier_km: float = 1.5  # e52c: crest height (km above the cell) for the full rate
+    land_stable_barrier_fetch_km: float = 800.0  # e52c: how far upwind to look for the crest
     instability: float = 0.0          # v6: extra rain efficiency in hot, moist air
     heat_low_drying: float = 0.0      # e80: subsidence drying x exp(-this x hPa) under the heat lows the pressure winds build (last pass, negative pressure); 0 = off
     heat_low_branch: bool = False     # e80b: apply the e80 damping also to the e70b branch drying
