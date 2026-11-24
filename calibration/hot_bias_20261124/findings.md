@@ -20,3 +20,13 @@ short-dry, forested southern tropics and the Kalahari plateau (too warm); soil d
 similar in both. Candidate structural work (not started): a deep-root / forest water store that keeps tropical
 forest evaporating through a short dry season (cools the south), separate from the bucket that gates dry heating.
 e113 stays in the code, default off.
+
+## e114 root-zone depth (probe, 24 Nov 2026) - no effect; the cause is missing rain
+rainprobe r53 (run calendar; mirrored): southern Amazon t_10s_66w rains ~750 mm/yr against ~1,900 observed, so
+e114 (rain above 1,200 mm deepens the bucket) never engages (root_gain 3: Jan T 24.5 -> 23.6 only). Its dry
+season is rainless (0.2 mm/month vs 22-84 obs) and 3-5 C too hot (April 32.1 vs 27.3). Column water is 28-32 mm
+in the wet season and 15 mm in the dry (observed Amazon precipitable water ~45-55 / ~30-35). r_7s_59w the same
+(wet season 110-175 mm/month vs 215-320). The southern-tropics warm bias is a column-moisture deficit in
+continental interiors fed from a sea 1,500-2,500 km upwind (beyond the 1,100 km pad), not a soil or radiation
+term. e114 stays in the code, default off. Lead: moisture supply into deep continental interiors (edge humidity
+for land boundaries, e81 edge_inner, recycling efficiency), tested at pad 1,100 and 2,200.
