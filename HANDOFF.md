@@ -1,5 +1,11 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**PPE plan_W6 CLOSED, no adoption (24 Nov 2026).** Observed lateral column water (e116 edge_obs_pw, NCEP PW) +
+physics refit, 8 knobs, 81 runs. Finalist w2_004 S61 0.9940 [0.983, 1.004] (T +1.0 %, P -2.2 %) FAILS dev5 (upper
+bound >= 1). The fit keeps only 0.36 of the observed edge; arid T still 2.5 % worse. The southern-tropics warm bias
+is internal (land-surface energy balance), not edge moisture. r53 stays; sealed V18 still UNOPENED; edge_obs_pw
+default 0. Records calibration/ppe_20261123/W6_records.
+
 **Interior moisture PARKED (24 Nov 2026).** Southern-tropics warm bias = rain deficit (S Amazon 750 vs 1,900 mm;
 column water half observed): their sea is beyond the map, water enters at land_edge_rh 0.5. More edge moisture
 helps the Amazon/Congo (0.75-0.88) but floods steppes/deserts; e115 (zero-gradient edge on warm wet ground only)

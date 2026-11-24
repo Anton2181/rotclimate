@@ -1,0 +1,16 @@
+{
+ "date": "2026-11-24",
+ "plan": "calibration/ppe_20261123/plan_W6.json (declared before evaluation)",
+ "waves": "wave 1: 64 + base; wave 2: 16 emulator points. Wave 3 was proposed (predicted best 0.9931 vs observed 0.9940, a gain within noise, sd ~0.005) and dropped per the close-early rule.",
+ "emulator": "LOO rmse on S55 ~0.0006 (wave 1), 0.00064 (wave 2); emulator predicted w2_004 at 0.9928 and it scored 0.9940",
+ "finalist": {"name": "w2_004", "x": {"edge_obs_pw": 0.362, "land_recycling": 0.392, "convective_rh": 0.688, "convective_rain": 1.036, "wet_sun": 1.488, "land_offset": -1.168, "storm_track": 4.179, "subsidence_drying": 0.0186}},
+ "dev5": "S61 0.9940, 90% bootstrap [0.9833, 1.0043], p_no_gain 0.17; T +1.0 %, P -2.2 %; S49 0.9994 -> FAILS (upper bound must be < 1). Best of 81 points, so the point estimate also carries selection bias.",
+ "regimes": "all 31 S 1.0013; temperate 0.991, arid 1.004 (T +2.5 %), continental 1.010, highland 1.064",
+ "verdict": "CLOSED, no adoption. r53 stays. Sealed V18 NOT opened.",
+ "findings": [
+  "With the physics refitted, the fit keeps only about a third of the observed column water at the edges (0.36), not the full convention.",
+  "The refit trades wet_sun down (2.01 -> 1.49) and convective_rain up (0.86 -> 1.04): less sunshine-driven land evaporation and more convective rain from the extra moisture.",
+  "Even refitted, observed edges leave land temperature ~1 % worse overall and arid regions 2.5 % worse in T. The interior-moisture gain in the Amazon does not outweigh the drier-interior temperature loss.",
+  "Conclusion: the southern-tropics warm bias is not mainly a lateral-boundary moisture deficit that a column-water edge can fix; the remaining error is internal (land-surface energy balance)."
+ ]
+}
