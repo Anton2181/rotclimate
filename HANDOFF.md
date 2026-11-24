@@ -2,8 +2,9 @@
 
 **e123 maritime finalist FAILS fine28 (24 Nov 2026).** W8 finalist + maritime_mean 0.7 with e123 mid-latitude
 gate (maritime_mean_lat 25): S97 0.9809 [0.967, 0.994], every regime <= 1.009, T -2.5 %: PASSES dev6. fine28
-1.0165: California and NZ (cold-current coasts) cooled and over-damped. V18 UNOPENED. Next: one-sided maritime
-shift (only toward a warmer sea). calibration/maritime_20261124/findings.md.
+1.0165: California and NZ (cold-current coasts) cooled and over-damped. V18 UNOPENED. e124 one-sided shift
+(maritime_mean_warm_only): S97 0.9819 [0.970, 0.994], worst regime 1.005, fine28 1.01007 = FAIL by 0.00007; the
+residual is the W7/W8 global land cooling hurting California/NZ. calibration/maritime_20261124/findings.md.
 
 **PPE plan_W8 CLOSED, no adoption; W7/W8 lineage SPENT (24 Nov 2026).** W8 = the one allowed continuation of W7:
 W7 neighbourhood + e122 (continental_depth faded over high ground, gate 1,000 m), 7 knobs, 49 runs, emulator

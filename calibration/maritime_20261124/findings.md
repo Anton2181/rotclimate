@@ -18,3 +18,15 @@ mean cools them and over-damps their seasons. V18 UNOPENED.
 Next: the maritime centre shift must not cool land beside upwelling / cold currents (California Current,
 Southern Ocean around NZ): shift only toward a WARMER sea mean (one-sided), or weight by the sea-minus-zonal
 anomaly. That is a new declared candidate (the e123 finalist is spent).
+
+## e124 one-sided maritime shift (maritime_mean_warm_only)
+
+| run | S97 [90 %] | worst regime | fine28 |
+|---|---|---|---|
+| mw70l25 (0.7, e123 gate 25 deg, warm only) | 0.9819 [0.970, 0.994] | temperate 1.005 | 1.01007 (FAIL by 0.00007) |
+| mw70 (0.7, everywhere, warm only) | 0.9839 [0.972, 0.995] | temperate 1.006 | 1.01008 (FAIL) |
+
+fine28 per region (mw70l25): California T 1.71 -> 1.77, NZ 1.95 -> 2.01, W Europe 1.85 -> 1.86, Japan 1.77 -> 1.76.
+The residual fine28 loss is the W7/W8 land cooling (land_offset ~-1.6), not the maritime term. Treated as a fail
+(the gate is <= 1.01). Note: fine28 has now been looked at for 4 candidates in this line; the next finalist
+should be chosen on dev evidence only, then gated once.
