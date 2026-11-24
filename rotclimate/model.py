@@ -2273,7 +2273,16 @@ class ClimateModel:
                     self._inner_idx = ndi.distance_transform_edt(brd, return_distances=False, return_indices=True)
                 ii, jj = self._inner_idx
                 rh_in = np.clip(W_prev[ii, jj] / np.maximum(Ws[ii, jj], 1e-6), 0.0, 1.0)
-                land_bnd = (1.0 - p.edge_inner) * bnd + p.edge_inner * rh_in * Ws
+                w_in = p.edge_inner
+                if p.edge_inner_warm_c > -90 and p.soil_bucket_mm > 0:
+                    # e115: the zero-gradient edge wetted the Amazon and Congo interiors (rain loss -0.1 to -0.3)
+                    # but also the steppes and deserts, where the air beyond the map is dry continental air
+                    # (Kazakh steppe x2.6, Mongolia x2.0 at full weight). Only edges whose inner ground is warm
+                    # (5 K ramp above edge_inner_warm_c) and wet over the year (one-year soil water) carry it.
+                    warm_in = np.clip((T[ii, jj] - p.edge_inner_warm_c) / 5.0, 0.0, 1.0)
+                    wet_in = np.clip(soil_ann[ii, jj] / (0.75 * (cap if np.ndim(cap) == 0 else cap[ii, jj])), 0.0, 1.0)
+                    w_in = p.edge_inner * warm_in * wet_in
+                land_bnd = (1.0 - w_in) * bnd + w_in * rh_in * Ws
                 bnd = np.where(ocean, bnd, land_bnd)
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
