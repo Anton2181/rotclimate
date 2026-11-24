@@ -1,5 +1,14 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Maritime lag diagnosed; plan_W10 RUNNING (24 Nov 2026).** e125 (maritime continentality slope) and land
+coupling alone leave the westerly-coast lag (+19..+33 d) in place. Stage breakdown (land_budget.py, new sst tap):
+coastal air ~95 % sea air in winter, and the regional sea ~2x over-seasonal and 4-6 C cold in winter; the two
+compensate (observed SST makes British winters +4 C). 97-region screen on mw70l25: sd40 0.9829, sd40r8 0.9797,
+ho40r8 0.9780 [0.965, 0.990] (sst_damping 0.4 to 55 deg, e126 sst_damping_heat_only = moisture keeps the
+undamped sea, a compensation for rain fitted to the cold sea; land_radiative_days 8). plan_W10 declared on
+ho40r8 (8 knobs incl. land_amplitude, continentality for the fine28 range failure mode), finalist by dev only.
+calibration/range_20261124/findings.md.
+
 **PPE plan_W9 CLOSED, no adoption (24 Nov 2026).** Base mw70l25 (e124), 8 knobs incl. land_offset and the
 maritime shift, 49 runs, emulator LOO rmse 0.0003, predicted optimum 0.9787 vs observed 0.9808 (< 0.005 gain),
 closed after wave 1. Finalist chosen on dev only: w1_011 (land_offset -1.97, maritime_mean 0.88 from 20 deg,
