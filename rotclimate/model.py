@@ -1159,6 +1159,8 @@ class ClimateModel:
         soilP = np.full(lat.shape, 1.5)
         soil_w = np.where(land, p.soil_init_fraction * p.soil_bucket_mm, 0.0)    # e8: soil water (mm); e82 start share
         soil_ann = soil_w.copy()        # e54e: the soil water's running one-year mean
+        cap = p.soil_bucket_mm          # e114: the bucket's capacity (an array once the root store is on)
+        rain_ann = None                 # e114: running one-year mean rain (mm/day)
         swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
         self.t_iterations = []
         self.t_converged = []
@@ -1202,7 +1204,7 @@ class ClimateModel:
                                         guess=edge if chi is None else chi)
                 if p.convective_rh_chi_dry > 0 and p.soil_bucket_mm > 0:
                     # e103: the land the air crossed, weighted by how dry its soil runs over the year
-                    dryland = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                    dryland = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * cap), 0.0, 1.0))
                     chi_dry = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * dryland, edge,
                                                 guess=edge if chi_dry is None else chi_dry)
                 amp = 1.0 + p.continentality * (chi - 0.5)
@@ -1309,7 +1311,7 @@ class ClimateModel:
                     # e71c: where it rains the air rises (monsoon East China,
                     # the North China Plain in summer): no compression warming
                     # on wet ground
-                    warm = warm * (1.0 - p.subsidence_warming_wet * np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0))
+                    warm = warm * (1.0 - p.subsidence_warming_wet * np.clip(soil_w / (0.75 * cap), 0.0, 1.0))
                 if p.subsidence_warming_rain > 0 and rain_prev is not None:
                     # e71e: where the recent (smoothed) rain is heavy the air
                     # rises: the monsoon (East China, north China's summer, the
@@ -1338,7 +1340,7 @@ class ClimateModel:
                     # e8b: wetness is the bucket's own soil water (a wet spring
                     # after a rainy winter evaporates instead of heating; a soil
                     # dried by a rainless summer heats)
-                    wet = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                    wet = np.clip(soil_w / (0.75 * cap), 0.0, 1.0)
                 Tl = Tl - p.wet_cooling * wet * np.maximum(Tl - Tl_mean, 0.0)
             if self.tap is not None: self.tap('wet_cooling', d, Tl)
             if p.wet_sun > 0:
@@ -1354,7 +1356,7 @@ class ClimateModel:
                                        p.solar_flux * distance_factor(d, p.eccentricity,
                                                        p.winter_solstice_day + p.perihelion_after_solstice,
                                                        p.year_days))
-                wet_s = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                wet_s = np.clip(soil_w / (0.75 * cap), 0.0, 1.0)
                 Tl = Tl - np.where(land, p.wet_sun * (wet_s - p.wet_sun_ref) * S_w / LAND_COUPLING_SREF, 0.0)
             if self.tap is not None: self.tap('wet_sun', d, Tl)
             if p.rain_shading > 0 and rain_prev is not None:
@@ -1375,7 +1377,7 @@ class ClimateModel:
                     # months and are already 1.4-2.5 C too cold; shading them
                     # in the wet season made them colder. Only ground wet all
                     # year (the one-year mean soil water) keeps the full shade.
-                    shade = shade * np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0) ** p.rain_shading_wet_pow
+                    shade = shade * np.clip(soil_ann / (0.75 * cap), 0.0, 1.0) ** p.rain_shading_wet_pow
                 Tl = Tl - np.where(land, shade * S_r / LAND_COUPLING_SREF, 0.0)
             if p.dry_heating > 0:
                 # e54: the latitude-mean land column evaporates like an average
@@ -1393,7 +1395,7 @@ class ClimateModel:
                                          p.solar_flux * distance_factor(d, p.eccentricity,
                                                          p.winter_solstice_day + p.perihelion_after_solstice,
                                                          p.year_days))
-                dry = 1.0 - np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                dry = 1.0 - np.clip(soil_w / (0.75 * cap), 0.0, 1.0)
                 if p.dry_heating_chi0 > 0:
                     # e54b: on a coast the sea air keeps replacing the heated
                     # layer (Chile, SW Australia, California stayed mild); only
@@ -1426,7 +1428,7 @@ class ClimateModel:
                     # the North China Plain). Gate on the soil's one-year mean
                     # dryness instead of the month's: full where it is dry all
                     # year, none where the mean dryness is below this.
-                    dry_ann = 1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                    dry_ann = 1.0 - np.clip(soil_ann / (0.75 * cap), 0.0, 1.0)
                     dry = dry * np.clip((dry_ann - p.dry_heating_arid) / (1.0 - p.dry_heating_arid), 0.0, 1.0)
                 if p.dry_heating_cold_sst > -90 and getattr(self, '_sst_last', None) is not None:
                     # e113: deserts on a cold-current coast (the Namib, the Atacama, Baja) sit under a marine layer
@@ -1514,7 +1516,7 @@ class ClimateModel:
                     # equilibrium right). Dryness from the bucket's soil
                     # water, as wet_cooling uses it, or recent rain.
                     if p.soil_wet_cooling and p.soil_bucket_mm > 0:
-                        wet_c = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                        wet_c = np.clip(soil_w / (0.75 * cap), 0.0, 1.0)
                     else:
                         wet_c = np.clip(soilP / (0.5 + 0.2 * np.maximum(Tl, 0.0)), 0.0, 1.0)
                     sun = sun * (1.0 + p.dry_coupling * (1.0 - wet_c))
@@ -2289,7 +2291,7 @@ class ClimateModel:
                 es = 0.6108 * np.exp(17.27 * Ts / (Ts + 237.3))
                 slope = 4098.0 * es / (Ts + 237.3) ** 2
                 pet = 1.26 * slope / (slope + 0.066) * np.maximum(0.5 * S_toa - 25.0, 0.0) / 28.4       # mm/day
-                beta = np.clip(soil_w / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
+                beta = np.clip(soil_w / (0.75 * cap), 0.0, 1.0)
                 recyc = p.land_recycling
                 if p.soil_feedback > 0:
                     # e90: a wet monsoon land re-evaporates more of its rain (soil moisture - rain feedback)
@@ -2668,8 +2670,16 @@ class ClimateModel:
                     A=cell(A_dyn), gain=cell(0.0 if gain is None else gain * DAY), sinkd=cell(0.0 if sink is None else sink * DAY), conv_rate=cell(0.0 if closure is None else closure['conv'] * np.exp(11.4 * (np.minimum(W / np.maximum(Ws, 1e-6), 1.5) - closure['r0'])) * closure['fT'])))
             soilP = soil_keep * soilP + (1 - soil_keep) * P
             if p.soil_bucket_mm > 0:
-                soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, p.soil_bucket_mm), 0.0)
+                soil_w = np.where(land, np.clip(soil_w + (P - E) * dt_days, 0.0, cap), 0.0)
                 soil_ann = soil_ann + (soil_w - soil_ann) * min(dt_days / p.year_days, 1.0)
+                if p.root_gain > 0:
+                    # e114: rain-forest roots reach several metres (Amazon root zones 300-1,000 mm of water;
+                    # Nepstad 1994): the forest keeps evaporating through a dry season of 3-4 months, where the
+                    # one shallow bucket emptied and the southern Amazon, Congo and Zambezi dry seasons ran
+                    # 1-2 C too warm (r53: +1.26 C mean at 5-20 S). The bucket deepens with the land's
+                    # one-year mean rain, by root_gain x its size over root_p0 -> root_p0 + root_p1 mm/yr.
+                    rain_ann = P.copy() if rain_ann is None else rain_ann + (P - rain_ann) * min(dt_days / p.year_days, 1.0)
+                    cap = p.soil_bucket_mm * (1.0 + p.root_gain * np.clip((rain_ann * p.year_days - p.root_p0) / p.root_p1, 0.0, 1.0))
 
             if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
                 swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days

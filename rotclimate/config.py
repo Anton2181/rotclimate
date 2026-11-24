@@ -192,6 +192,9 @@ class Params:
     dry_heating_mean_c: float = -99.0 # e54d: ... only in warm climates: x clip((annual-mean land equilibrium - this) / 8 K, 0, 1); -99 = always
     dry_heating_cold_sst: float = -99.0  # e113: ... not near a sea colder than this (C, 3 K ramp; cold-current deserts); -99 = off
     dry_heating_cold_km: float = 300.0   # e113: inland fade of that exemption (km)
+    root_gain: float = 0.0           # e114: extra bucket depth (x soil_bucket_mm) under rain-forest rain; 0 = off
+    root_p0: float = 1200.0          # e114: annual rain (mm) where the extra depth starts
+    root_p1: float = 800.0           # e114: ... and the rain above root_p0 for the full extra depth
     # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
     # flow toward the pole rises, flow toward the equator sinks: rain x
     # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km
