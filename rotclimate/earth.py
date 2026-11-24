@@ -231,6 +231,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.chi_pole = pole_fetch_at(lat if lat0 >= 0 else -lat, lon)   # e31 (real latitude: south of southern regions)
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
+    g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
@@ -522,6 +523,7 @@ def monsoon_descent_at(lat, lon, mirrored=False):
 
 
 WOA_SST = CACHE / "woa18_sst_1deg.npz"     # scripts/build_woa_sst.py
+NCEP_PW = CACHE / "ncep_pw_2p5.npz"        # scripts/build_ncep_pw.py (e116)
 WOA_PROFILES = CACHE.parent / "woa18"      # woa18_decav_tMMan01.csv.gz, as scripts/build_woa_sst.py
 
 
@@ -591,6 +593,22 @@ def observed_sst(lat, lon, mirrored=False):
     i = np.asarray(lat, float) + 89.5
     j = (np.asarray(lon, float) + 179.5) % 360.0
     wrap = np.concatenate([filled, filled[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+def observed_pw(lat, lon, mirrored=False):
+    """e116: monthly precipitable water [12, ...] (mm) at points from the NCEP/NCAR Reanalysis 1 long-term mean
+    (2.5 deg, bilinear); months shifted by six for mirrored southern regions. None when the cache is absent."""
+    if not NCEP_PW.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(NCEP_PW)
+    pw, plat = z["pw"].astype(float), z["lat"]
+    i = (plat[0] - np.asarray(lat, float)) / (plat[0] - plat[1])
+    j = (np.asarray(lon, float) % 360.0) / 2.5
+    wrap = np.concatenate([pw, pw[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
 

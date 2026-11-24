@@ -2284,6 +2284,16 @@ class ClimateModel:
                     w_in = p.edge_inner * warm_in * wet_in
                 land_bnd = (1.0 - w_in) * bnd + w_in * rh_in * Ws
                 bnd = np.where(ocean, bnd, land_bnd)
+            if p.edge_obs_pw > 0:
+                # e116: a regional model takes its lateral boundaries from observations (reanalysis): the
+                # Amazon's and Congo's seas lie beyond the 1,100 km pad, and a fixed or interior-copied edge
+                # humidity either starved them or flooded the steppes (calibration/edge_moisture_20261124).
+                if g.obs_pw is None:
+                    raise ValueError('edge_obs_pw needs an Earth grid with obs_pw (scripts/build_ncep_pw.py)')
+                mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
+                m0 = int(np.floor(mpos)); fr = mpos - m0
+                pw = (1.0 - fr) * g.obs_pw[m0] + fr * g.obs_pw[(m0 + 1) % 12]
+                bnd = np.where(ocean, bnd, (1.0 - p.edge_obs_pw) * bnd + p.edge_obs_pw * np.minimum(pw, Ws))
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)
             if p.soil_bucket_mm > 0:
