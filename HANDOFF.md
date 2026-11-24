@@ -9,7 +9,9 @@ cold-biased region cools further (Alps, BC coast, Sahel, prairies). Params outpu
 Diagnosis (calibration/land_lag_20261124): annual-harmonic phase lags +20-43 d in maritime temperate (NZ,
 British Isles, Patagonia, W Europe, S Chile), ~+5-10 d continental, -5 to -8 d arid; boreal Canada/Siberia
 autumn-winter 5-9 C too warm. Observed SST does not remove the maritime lag. land_heat_capacity 0.4 cuts inland
-lag ~10 d and 6-region T MAE 2.01 -> 1.68: screening on 97 now. e120 lw_ref_rh stays the W7 base.
+lag ~10 d and 6-region T MAE 2.01 -> 1.68, but on 97 regions land_heat_capacity 0.7/0.5/0.35 gives S97
+0.994/1.024/1.058 (with amplitude compensation 0.996/1.027) and e121 land_phase_days (+-20, 40) 1.02-1.10: PARKED.
+calibration/land_lag_20261124/findings.md. e120 lw_ref_rh stays the W7 base.
 
 **POLICY v6 IN FORCE (24 Nov 2026, owner: "update the policy").** calibration/local_accuracy_20261023/policy_v6.json.
 Dev pool 97 = v5's 61 + spent S18 + spent U18; adopt if S97 90 % upper bound < 1, T/P <= +1 %, every regime
