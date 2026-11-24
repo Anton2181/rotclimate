@@ -13,6 +13,9 @@ lag ~10 d and 6-region T MAE 2.01 -> 1.68, but on 97 regions land_heat_capacity 
 0.994/1.024/1.058 (with amplitude compensation 0.996/1.027) and e121 land_phase_days (+-20, 40) 1.02-1.10: PARKED.
 calibration/land_lag_20261124/findings.md. e120 lw_ref_rh stays the W7 base.
 
+**Boreal screen (24 Nov 2026): noise.** continental_depth 0.5 S97 0.9877 (continental 0.982, highland 1.046),
+0.75 1.0017; snow_albedo 0.32 0.9874. calibration/boreal_20261124/findings.md.
+
 **POLICY v6 IN FORCE (24 Nov 2026, owner: "update the policy").** calibration/local_accuracy_20261023/policy_v6.json.
 Dev pool 97 = v5's 61 + spent S18 + spent U18; adopt if S97 90 % upper bound < 1, T/P <= +1 %, every regime
 (regimes_v2.json, observed-climate Koppen tags) point S <= 1.02, fine28 <= 1.01, ONE sealed V18 run (sealed5).
