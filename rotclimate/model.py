@@ -2456,7 +2456,14 @@ class ClimateModel:
                     heat = np.clip((T - 18.0) / 8.0, 0.0, 1.0)
                     if p.convective_rh_gate > 0:
                         # e93: the Saharan/Arabian air layer caps heated-land convection poleward of the rain belt (e86's ramp)
-                        heat = heat * (1.0 - p.convective_rh_gate * np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0))
+                        ramp93 = np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0)
+                        if p.convective_rh_gate_dry > 0 and chi_dry is not None:
+                            # e117: the dry layer aloft comes off dry land (Sahara, Arabia, the Australian interior);
+                            # spring air over the southern Amazon and Brazil rises from wet forest and convects before
+                            # the rain belt arrives (r53: real Sep-Oct 0-8 mm vs 84-139 observed, +3-5 C). The cap
+                            # scales with the advected share of dry land, full at convective_rh_gate_dry.
+                            ramp93 = ramp93 * np.clip(chi_dry / p.convective_rh_gate_dry, 0.0, 1.0)
+                        heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
                         chi93 = chi if chi_dry is None else chi - p.convective_rh_chi_dry * (chi - chi_dry)     # e103
