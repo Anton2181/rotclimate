@@ -23,7 +23,7 @@ rec = {}
 ClimateModel.tap = staticmethod(lambda name, d, a: rec.setdefault(name, {}).__setitem__(round(float(d), 3), float(np.mean(np.asarray(a)[m]))))
 res = earth.run_case(p, case, steps=p.steps_per_year)
 ClimateModel.tap = None
-names = ['zonal', 'continental', 'subsidence', 'wet_cooling', 'wet_sun', 'dry_heating', 'cloud', 'land_eq', 'air']
+names = ['zonal', 'continental', 'subsidence', 'wet_cooling', 'wet_sun', 'dry_heating', 'cloud', 'land_eq', 'sst', 'air']
 days = sorted(rec['air']); yd = p.year_days
 month = lambda d: int((d % yd) / yd * 12)
 # hemisphere-local months are not used here: calendar months 1-12 for the northern hemisphere

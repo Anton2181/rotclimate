@@ -1644,6 +1644,7 @@ class ClimateModel:
                 SST = (1.0 - fr) * g.obs_sst[m0] + fr * g.obs_sst[(m0 + 1) % 12]
             if self.sst_record is not None:
                 self.sst_record[round(float(d), 6)] = np.array(SST, copy=True)
+            if self.tap is not None: self.tap('sst', d, SST)
             T_eq = np.where(land, Tl, SST)
             self._sst_last = SST       # e113: the nearest sea's temperature for the next step's dry heating
 
