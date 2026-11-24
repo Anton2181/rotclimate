@@ -236,11 +236,13 @@ def main():
     write_json(out/'summary.json', summary)
     print(f"{'region':15s} {'T mMAE':>7s} {'T aMAE':>7s} {'T bias':>7s} {'rngErr':>7s} {'<=2C':>5s} {'anom r':>6s} | "
           f"{'P mMAE':>7s} {'logRMSE':>7s} {'<=25%':>6s} {'rho':>5s} {'loss':>6s}")
+    def _f(x, spec):
+        return format(float('nan') if x is None else x, spec)
     for r in a.regions:
         t, p = recs[r]["temperature"], recs[r]["rain"]
-        print(f"{r:15s} {t['monthly_mae_C']:7.2f} {t['annual_mae_C']:7.2f} {t['annual_bias_C']:+7.2f} {t['range_error_C']:+7.2f}"
-              f" {t['within_2C']:5.0%} {t['anomaly_pattern_r']:6.2f} | {p['monthly_mae_mm']:7.1f} {p['annual_log_rmse']:7.3f}"
-              f" {p['annual_within_25pct']:6.0%} {(p['annual_spearman'] if p['annual_spearman'] is not None else float('nan')):5.2f} {p['loss']:6.3f}")
+        print(f"{r:15s} {_f(t['monthly_mae_C'], '7.2f')} {_f(t['annual_mae_C'], '7.2f')} {_f(t['annual_bias_C'], '+7.2f')} {_f(t['range_error_C'], '+7.2f')}"
+              f" {_f(t['within_2C'], '5.0%')} {_f(t['anomaly_pattern_r'], '6.2f')} | {_f(p['monthly_mae_mm'], '7.1f')} {_f(p['annual_log_rmse'], '7.3f')}"
+              f" {_f(p['annual_within_25pct'], '6.0%')} {_f(p['annual_spearman'], '5.2f')} {_f(p['loss'], '6.3f')}")
     for g, v in summary["groups"].items():
         print(f"[{g}] " + " ".join(f"{k} {x:.3f}" for k, x in v.items() if x is not None))
     print("[all] " + " ".join(f"{k} {x:.3f}" for k, x in summary["all"].items() if x is not None))
