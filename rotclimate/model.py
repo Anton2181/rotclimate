@@ -1294,8 +1294,12 @@ class ClimateModel:
                         # mean is colder than their land (calibration/maritime_20261124). Ramp in from
                         # maritime_mean_lat to +15 deg.
                         w = w * np.clip((np.abs(lat) - p.maritime_mean_lat) / 15.0, 0.0, 1.0)
-                    centre = np.where(np.isfinite(self.sea_annual),
-                                      Tl_mean + w * (np.nan_to_num(self.sea_annual) - Tl_mean), Tl_mean)
+                    gap = np.nan_to_num(self.sea_annual) - Tl_mean
+                    if p.maritime_mean_warm_only:
+                        # e124: only toward a warmer sea: beside cold currents (California, NZ) the cold
+                        # sea mean cooled and over-damped the land (calibration/maritime_20261124)
+                        gap = np.maximum(gap, 0.0)
+                    centre = np.where(np.isfinite(self.sea_annual), Tl_mean + w * gap, Tl_mean)
                 if p.continental_mean > 0:
                     # e31: the long winter night over high-latitude land makes
                     # shallow pools of very cold air (clear skies, snow,
