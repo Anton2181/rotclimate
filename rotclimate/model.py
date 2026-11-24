@@ -2484,7 +2484,9 @@ class ClimateModel:
                             # spring air over the southern Amazon and Brazil rises from wet forest and convects before
                             # the rain belt arrives (r53: real Sep-Oct 0-8 mm vs 84-139 observed, +3-5 C). The cap
                             # scales with the advected share of dry land, full at convective_rh_gate_dry.
-                            ramp93 = ramp93 * np.clip(chi_dry / p.convective_rh_gate_dry, 0.0, 1.0)
+                            f117 = np.clip(chi_dry / p.convective_rh_gate_dry, 0.0, 1.0)
+                            if p.convective_rh_gate_pole <= 0:
+                                ramp93 = ramp93 * f117
                         if p.convective_rh_gate_vwind > 0:
                             # e118: the dry layer aloft rides air coming off the subtropical land toward the equator
                             # (the Harmattan over the Sahel, the south-east trades over the Australian interior).
@@ -2503,7 +2505,12 @@ class ClimateModel:
                             if getattr(self, '_pd_mon', None) != mon:
                                 dryl = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * cap), 0.0, 1.0))
                                 self._pd, self._pd_mon = self._poleward_mean(dryl, 1500.0), mon
-                            ramp93 = ramp93 * np.clip(self._pd / p.convective_rh_gate_pole, 0.0, 1.0)
+                            f119 = np.clip(self._pd / p.convective_rh_gate_pole, 0.0, 1.0)
+                            if p.convective_rh_gate_dry > 0 and chi_dry is not None:
+                                # either source of desert air keeps the cap: the Sahara poleward of the Sahel, the
+                                # interior west of eastern Australia (air that crossed dry land, e117)
+                                f119 = np.maximum(f119, f117)
+                            ramp93 = ramp93 * f119
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
