@@ -1,5 +1,10 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**PPE plan_W5 CLOSED, no adoption (24 Nov 2026).** e112 (mirror itcz_mean for southern Earth regions) + 6 ITCZ
+knobs: base 1.109, best of 65 1.0245, emulator (LOO 0.002) predicts nothing below 1.34 with penalties. One land
+ITCZ can't serve both the Sahel and the southern tropics. e112 default off. Sealed V18 DECLARED, UNOPENED
+(calibration/sealed_20261124V18; all 18 boxes within 23 deg of the equator). Records ppe_20261123/W5_records.
+
 **Lead B4b (24 Nov 2026): itcz_mean is not mirrored for southern Earth regions** - the rains end 1-2 months late
 there (Zambia April). Ocean-only flip fixes the tail but weakens the wet peak; needs a joint refit of the land ITCZ
 range (PPE). calibration/itcz_mirror_20261124/findings.md. r53 at pad 2200 (13 regions): neutral (Congo rain loss
