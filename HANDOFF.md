@@ -1,5 +1,14 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**PPE plan_W8 CLOSED, no adoption; W7/W8 lineage SPENT (24 Nov 2026).** W8 = the one allowed continuation of W7:
+W7 neighbourhood + e122 (continental_depth faded over high ground, gate 1,000 m), 7 knobs, 49 runs, emulator
+LOO rmse 0.0003, predicted optimum 0.9848 vs observed 0.9858 (within noise), closed after wave 1. Finalist
+w1_023: S97 0.9858 [0.974, 0.998], T -1.8 %, P -1.0 %, worst regime mediterranean 1.014: PASSES dev6. FAILS
+fine28: S28 1.0115 (> 1.01), T +2.8 %; all four fine regions (California, W Europe, Japan, NZ) cooler and
+worse except Japan. V18 still UNOPENED. The tropical gain comes with a global land cooling (land_offset ~-1.6)
+that the maritime mid-latitudes pay for; the next refit needs a structural fix for maritime mid-latitude land
+(late phase +20-43 d, cold) rather than more tuning. Records calibration/ppe_20261123/W8_records.
+
 **PPE plan_W7 CLOSED, no adoption yet (24 Nov 2026).** 65 runs; emulator LOO rmse 0.0011, predicted optimum
 0.9866 vs observed best 0.9872 (inside noise), so closed after wave 1. Finalist w1_049 (lw_ref_rh 0.90,
 cloud_longwave 0.257, dry_heating 1.48, land_offset -1.59 [at bound], wet_sun 2.43, subsidence_warming 6.77,
