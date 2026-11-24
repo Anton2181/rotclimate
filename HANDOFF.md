@@ -1,10 +1,15 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
-**e120 + PPE plan_W7 RUNNING (24 Nov 2026, policy v6).** e120 lw_ref_rh: the clear-sky longwave term (e4) now
-compares the column with lw_ref_rh x w_sat(zonal land T) instead of the map's own latitude mean (which cancelled
-for maps dry or wet throughout). Screen S97 0.997-0.999 (tropical_wet 0.93-0.97, highland 0.97; arid 1.006-1.031).
-W7 refits lw_ref_rh, cloud_longwave, dry_heating, land_offset, wet_sun, subsidence_warming, dry_coupling,
-continentality (calibration/ppe_20261123/plan_W7.json; ppe.py now has policy v6 mode). Log output/ppe_20261124/W7_w1.log.
+**PPE plan_W7 CLOSED, no adoption yet (24 Nov 2026).** 65 runs; emulator LOO rmse 0.0011, predicted optimum
+0.9866 vs observed best 0.9872 (inside noise), so closed after wave 1. Finalist w1_049 (lw_ref_rh 0.90,
+cloud_longwave 0.257, dry_heating 1.48, land_offset -1.59 [at bound], wet_sun 2.43, subsidence_warming 6.77,
+dry_coupling 1.78, continentality 0.42): S97 0.9872 [0.972, 1.002], T -1.4 %, P -1.2 %, worst regime temperate
+1.017. FAILS dev6 (upper bound 1.002 >= 1). Wins: wet tropics cooled (tropical_wet 0.918). Losses: every
+cold-biased region cools further (Alps, BC coast, Sahel, prairies). Params output/ppe_20261124/W7/w1_049_params.json.
+Diagnosis (calibration/land_lag_20261124): annual-harmonic phase lags +20-43 d in maritime temperate (NZ,
+British Isles, Patagonia, W Europe, S Chile), ~+5-10 d continental, -5 to -8 d arid; boreal Canada/Siberia
+autumn-winter 5-9 C too warm. Observed SST does not remove the maritime lag. land_heat_capacity 0.4 cuts inland
+lag ~10 d and 6-region T MAE 2.01 -> 1.68: screening on 97 now. e120 lw_ref_rh stays the W7 base.
 
 **POLICY v6 IN FORCE (24 Nov 2026, owner: "update the policy").** calibration/local_accuracy_20261023/policy_v6.json.
 Dev pool 97 = v5's 61 + spent S18 + spent U18; adopt if S97 90 % upper bound < 1, T/P <= +1 %, every regime
