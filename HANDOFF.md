@@ -1,5 +1,11 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Interior moisture PARKED (24 Nov 2026).** Southern-tropics warm bias = rain deficit (S Amazon 750 vs 1,900 mm;
+column water half observed): their sea is beyond the map, water enters at land_edge_rh 0.5. More edge moisture
+helps the Amazon/Congo (0.75-0.88) but floods steppes/deserts; e115 (zero-gradient edge on warm wet ground only)
+nets 0.9985 [0.992, 1.004] - noise. e114 (root depth) no effect. Owner decision proposed: observed lateral
+humidity for Earth regional cases. calibration/edge_moisture_20261124/.
+
 **B5 hot-land bias PARKED (24 Nov 2026).** Northern dry tropics/subtropics too cold (-1 to -2.6 C), southern
 short-dry-season tropics too warm (+1.3 C mean, 5-20 S). Dry heating (+ e113 cold-sea exemption, + arid gate)
 stays within 1.0006-1.019 of r53: no adoption. Lead: a deep-root forest water store. calibration/hot_bias_20261124.
