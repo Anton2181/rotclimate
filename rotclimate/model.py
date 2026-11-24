@@ -2463,6 +2463,14 @@ class ClimateModel:
                             # the rain belt arrives (r53: real Sep-Oct 0-8 mm vs 84-139 observed, +3-5 C). The cap
                             # scales with the advected share of dry land, full at convective_rh_gate_dry.
                             ramp93 = ramp93 * np.clip(chi_dry / p.convective_rh_gate_dry, 0.0, 1.0)
+                        if p.convective_rh_gate_vwind > 0:
+                            # e118: the dry layer aloft rides air coming off the subtropical land toward the equator
+                            # (the Harmattan over the Sahel, the south-east trades over the Australian interior).
+                            # Where the large-scale low-level flow runs poleward (the southern Amazon's spring: trade air
+                            # turning south from the Atlantic) the column is moist to depth and convects early. The cap
+                            # fades from full (still or equatorward flow) to none at poleward speed convective_rh_gate_vwind.
+                            v_pol = gauss(vh * np.where(lat < 0, -1.0, 1.0), 500.0 / g.cell_km)
+                            ramp93 = ramp93 * np.clip(1.0 - v_pol / p.convective_rh_gate_vwind, 0.0, 1.0)
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it

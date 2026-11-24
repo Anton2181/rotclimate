@@ -246,6 +246,7 @@ class Params:
                                       # surface heating, not column humidity alone, sets land convection; oceans unchanged; 0 = off
     convective_rh_gate: float = 0.0   # e93: e92's threshold drop x (1 - this x the e86 ramp): not poleward of the rain belt (dry air aloft); 0 = off
     convective_rh_gate_dry: float = 0.0   # e117: e93's gate x clip(chi_dry / this, 0, 1): the cap only in air off dry land (needs convective_rh_chi_dry); 0 = off
+    convective_rh_gate_vwind: float = 0.0   # e118: e93's gate x clip(1 - poleward low-level wind / this, 0, 1) (m/s, 500 km smoothing); 0 = off
     convective_rh_chi0: float = 0.0   # e93: e92's threshold drop x (1 - clip((chi - this) / (1 - this), 0, 1)): not in air that crossed land (desert air aloft); 0 = off
     convective_rh_chi_dry: float = 0.0  # e103: e93's chi blends toward a dry-land chi (land x annual soil dryness, carried the same way): wet forest air is not desert air aloft; 0 = off
     convective_cap_land: float = 0.0  # e104: over land the e2 closure's rate (mm/day) -> cap x tanh(rate / cap): no coastal 20+ mm/day deluge at column RH 0.64 (Maranhao); 0 = off
