@@ -114,12 +114,20 @@ def gate_terms(C, Rf, names, t_names):
         return 0.5 * c[..., 0] / r[0] + 0.5 * c[..., 1] / r[1], c[..., 0] / r[0] - 1, c[..., 1] / r[1] - 1
     allx = np.arange(len(names))
     s55, t, p = S(allx)
+    if isinstance(t_names, dict):
+        # policy v6: the guard term is the worst regime's S (regimes_v2.json), in place of S49
+        groups = {}
+        for i, n in enumerate(names):
+            groups.setdefault(t_names.get(n, "untagged"), []).append(i)
+        s49 = np.max(np.stack([S(np.array(ix))[0] for ix in groups.values()]), axis=0)
+        return s55, t, p, s49
     s49, _, _ = S(np.array([i for i, n in enumerate(names) if n not in t_names]))
     return s55, t, p, s49
 
 
 def objective(plan, s55, t, p, s49):
-    pen = 10.0 * (np.maximum(s49 - 1.0, 0) + np.maximum(t - 0.01, 0) + np.maximum(p - 0.01, 0))
+    guard = 1.02 if plan.get("policy") == "v6" else 1.0     # v6: worst regime S <= 1.02; v5: S49 <= 1
+    pen = 10.0 * (np.maximum(s49 - guard, 0) + np.maximum(t - 0.01, 0) + np.maximum(p - 0.01, 0))
     return s55 + pen
 
 
@@ -157,6 +165,8 @@ def predict(gps, U):
 
 
 def t_names_of(plan):
+    if plan.get("policy") == "v6":
+        return json.loads((ROOT / "calibration/regimes_20261124/regimes_v2.json").read_text())["regimes"]
     t = []
     for part, spec in plan.get("extra_parts", {}).items():
         t += list(json.loads((ROOT / spec).read_text()))

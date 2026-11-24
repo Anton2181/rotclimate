@@ -1,5 +1,11 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**e120 + PPE plan_W7 RUNNING (24 Nov 2026, policy v6).** e120 lw_ref_rh: the clear-sky longwave term (e4) now
+compares the column with lw_ref_rh x w_sat(zonal land T) instead of the map's own latitude mean (which cancelled
+for maps dry or wet throughout). Screen S97 0.997-0.999 (tropical_wet 0.93-0.97, highland 0.97; arid 1.006-1.031).
+W7 refits lw_ref_rh, cloud_longwave, dry_heating, land_offset, wet_sun, subsidence_warming, dry_coupling,
+continentality (calibration/ppe_20261123/plan_W7.json; ppe.py now has policy v6 mode). Log output/ppe_20261124/W7_w1.log.
+
 **POLICY v6 IN FORCE (24 Nov 2026, owner: "update the policy").** calibration/local_accuracy_20261023/policy_v6.json.
 Dev pool 97 = v5's 61 + spent S18 + spent U18; adopt if S97 90 % upper bound < 1, T/P <= +1 %, every regime
 (regimes_v2.json, observed-climate Koppen tags) point S <= 1.02, fine28 <= 1.01, ONE sealed V18 run (sealed5).
