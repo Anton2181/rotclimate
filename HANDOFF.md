@@ -1,5 +1,10 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Lead B6 (24 Nov 2026): southern-tropics onset.** The e93 convection cap (Saharan dry layer) delays the southern
+Amazon's spring rain 1-2 months (the +3-5 C). Gate off: Amazon/Brazil 0.72-0.79 but Sahel/Sahara/E Australia
+1.56-1.72 (S61 1.033). e117 (cap x dry-land air share) is circular, no gain. Needs a non-soil discriminator
+(static geography or the subsidence field). calibration/onset_20261124/findings.md.
+
 **Deep-root store PARKED (24 Nov 2026).** e114 at low thresholds (p0 500-700): S61 1.0007-1.0087, noise or
 worse; cools cold mid-latitude wet lands. Southern Amazon wet season starts ~2 months late and ends 1 early (real
 Sep-Oct 0-8 mm vs 84-139 obs): the +3-5 C pre-onset heat is a rain-onset error. calibration/root_store_20261124.
