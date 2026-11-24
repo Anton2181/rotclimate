@@ -1,5 +1,10 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**e123 maritime finalist FAILS fine28 (24 Nov 2026).** W8 finalist + maritime_mean 0.7 with e123 mid-latitude
+gate (maritime_mean_lat 25): S97 0.9809 [0.967, 0.994], every regime <= 1.009, T -2.5 %: PASSES dev6. fine28
+1.0165: California and NZ (cold-current coasts) cooled and over-damped. V18 UNOPENED. Next: one-sided maritime
+shift (only toward a warmer sea). calibration/maritime_20261124/findings.md.
+
 **PPE plan_W8 CLOSED, no adoption; W7/W8 lineage SPENT (24 Nov 2026).** W8 = the one allowed continuation of W7:
 W7 neighbourhood + e122 (continental_depth faded over high ground, gate 1,000 m), 7 knobs, 49 runs, emulator
 LOO rmse 0.0003, predicted optimum 0.9848 vs observed 0.9858 (within noise), closed after wave 1. Finalist
