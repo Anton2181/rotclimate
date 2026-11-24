@@ -306,6 +306,7 @@ class Params:
     eddy_moisture_height_km: float = 0.0  # e4: eddies mix W*exp(z/H) (sea-level equivalent), H in km (0 = off)
     cloud_radiation: float = 0.0      # e4: K of land warming per unit of cloud deficit vs the latitude mean at 480 W m-2
     cloud_longwave: float = 0.0       # e4: scale of the clear-sky longwave anomaly (dry, clear air cools), 1 = physical
+    lw_ref_rh: float = 0.0            # e120: cloud_longwave's reference column = this x w_sat(zonal land T) instead of the domain's latitude mean; 0 = off
     cloud_reference: str = "domain"   # e43: cloud_radiation against the domain's own latitude mean ("domain") or the whole globe's land ("earth", Earth grids)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)

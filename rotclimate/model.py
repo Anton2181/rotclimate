@@ -1501,7 +1501,14 @@ class ClimateModel:
                         eps = 1.0 - (1.0 + x) * np.exp(-np.sqrt(1.2 + 3.0 * x))
                         return (1.0 - f) * (1.0 - eps)
                     sigT4 = 5.67e-8 * (np.maximum(Tl, -60.0) + 273.15) ** 4
-                    dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, self._lat_mean(Wc))) / 10.0
+                    W_ref = self._lat_mean(Wc)
+                    if p.lw_ref_rh > 0:
+                        # e120: the reference column is the one the latitude-mean land temperature stands for (the
+                        # EBM's land at this latitude and season at a fixed column RH), not this map's own mean: a map
+                        # whose whole interior is too dry (the southern tropics fed from a sea off the map) or too wet
+                        # (observed edges, e116) was its own reference and felt no water-vapour greenhouse change.
+                        W_ref = p.lw_ref_rh * w_sat(self.z.land(lat, d) + p.land_offset)
+                    dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, W_ref)) / 10.0
                 Tl = Tl + np.clip(dT, -15.0, 10.0)
             if self.tap is not None: self.tap('cloud', d, Tl)
             if p.snow_albedo > 0:
