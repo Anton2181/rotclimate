@@ -1289,6 +1289,11 @@ class ClimateModel:
                     if self.sea_annual is None:
                         self.sea_annual = self._sea_annual_field()
                     w = p.maritime_mean * np.clip(1.0 - chi, 0.0, 1.0)
+                    if p.maritime_mean_lat > 0:
+                        # e123: mid-latitude only; tropical coasts (Gabon, NW Australia) sit by a sea whose
+                        # mean is colder than their land (calibration/maritime_20261124). Ramp in from
+                        # maritime_mean_lat to +15 deg.
+                        w = w * np.clip((np.abs(lat) - p.maritime_mean_lat) / 15.0, 0.0, 1.0)
                     centre = np.where(np.isfinite(self.sea_annual),
                                       Tl_mean + w * (np.nan_to_num(self.sea_annual) - Tl_mean), Tl_mean)
                 if p.continental_mean > 0:

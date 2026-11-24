@@ -309,6 +309,7 @@ class Params:
     lw_ref_rh: float = 0.0            # e120: cloud_longwave's reference column = this x w_sat(zonal land T) instead of the domain's latitude mean; 0 = off
     land_phase_days: float = 0.0  # e121: land seasonal phase shift x (0.5 - advected land share), days (> 0 = maritime earlier)
     continental_depth_highland_m: float = 0.0  # e122: continental_depth fades to 0 from this smoothed elevation to +1,000 m (0 = off)
+    maritime_mean_lat: float = 0.0  # e123: maritime_mean ramps in from this |lat| to +15 deg (0 = everywhere)
     cloud_reference: str = "domain"   # e43: cloud_radiation against the domain's own latitude mean ("domain") or the whole globe's land ("earth", Earth grids)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)
