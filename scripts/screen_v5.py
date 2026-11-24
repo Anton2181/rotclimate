@@ -6,6 +6,7 @@ interval, T, P, S49, and the largest per-region movers.
 """
 import json, sys
 from pathlib import Path
+V6 = Path(__file__).stem == 'screen_v6'
 ROOT = Path(__file__).resolve().parents[1]; sys.path.insert(0, str(ROOT / 'scripts'))
 import refit_e75 as R
 from gate_v3 import paired, score
@@ -14,6 +15,7 @@ from score_ci import ci
 out, R.REF, R.REF_NAME, base = Path(sys.argv[1]), ROOT / sys.argv[2], sys.argv[3], json.loads((ROOT / sys.argv[4]).read_text())
 R.OUT = out; out.mkdir(parents=True, exist_ok=True)
 R.PARTS.update(tropical_t='calibration/tropical_check_20261122t/regions.json', sealed_r='calibration/sealed_20261122r/regions.json')
+if V6: R.PARTS.update(sealed_S18='calibration/sealed_20261123S18/regions.json', sealed_U18='calibration/sealed_20261124U18/regions.json')
 t = set(json.loads((ROOT / R.PARTS['tropical_t']).read_text())) | set(json.loads((ROOT / R.PARTS['sealed_r']).read_text()))
 args = sys.argv[5:]
 for name, js in zip(args[::2], args[1::2]):
@@ -23,7 +25,11 @@ for name, js in zip(args[::2], args[1::2]):
     import numpy as np
     a = np.array([[Cc[n]['temperature']['monthly_mae_C'], Rr[n]['temperature']['monthly_mae_C'], Cc[n]['rain']['loss'], Rr[n]['rain']['loss']] for n in Rr])
     b = ci(a)
-    print(f"== {name}  S61 {s['S']:.4f} [{b['q05']:.4f}, {b['q95']:.4f}] (T {s['T']:+.3f} P {s['P']:+.3f})  S49 {s49['S']:.4f}", flush=True)
+    print(f"== {name}  S{len(Rr)} {s['S']:.4f} [{b['q05']:.4f}, {b['q95']:.4f}] (T {s['T']:+.3f} P {s['P']:+.3f})  S49 {s49['S']:.4f}", flush=True)
+    if V6:
+        tags = json.loads((ROOT / 'calibration/regimes_20261124/regimes_v2.json').read_text())['regimes']
+        reg = {g: score(Rr, Cc, [n for n in Rr if tags.get(n) == g])['S'] for g in sorted(set(tags.get(n, '?') for n in Rr))}
+        print('   regimes ' + '  '.join(f'{g} {v:.3f}' for g, v in reg.items()), flush=True)
     sc = {n: 0.5 * Cc[n]['temperature']['monthly_mae_C'] / Rr[n]['temperature']['monthly_mae_C'] + 0.5 * Cc[n]['rain']['loss'] / Rr[n]['rain']['loss'] for n in Rr}
     for n in sorted(sc, key=sc.get)[:6] + sorted(sc, key=sc.get)[-6:]:
         a_, b_ = Rr[n], Cc[n]

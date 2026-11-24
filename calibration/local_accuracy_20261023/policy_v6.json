@@ -1,0 +1,18 @@
+{
+ "status": "IN FORCE from 24 Nov 2026 (owner: 'update the policy'); supersedes policy_v5.json",
+ "evidence": "calibration/methodology_20261123/score_uncertainty.md; proposal A3 of the 24 Nov plan",
+ "score": "as policy v5 (S over equal-weighted regions, paired against the adopted reference, region bootstrap via scripts/score_ci.py)",
+ "development_regions": "97: the v5 pool of 61 + spent sealed sets S18 (calibration/sealed_20261123S18) and U18 (calibration/sealed_20261124U18); each sealed set joins once spent",
+ "regimes": "calibration/regimes_20261124/regimes_v2.json (Koppen-style, from OBSERVED climate only; tropical_dry 24, arid 22, continental 17, temperate 16, tropical_wet 8, mediterranean 5, highland 5)",
+ "adopt_if": [
+  "dev: the 90 % upper bound of S97 is below 1.0",
+  "dev: neither T nor P over the 97 regions worsens by more than 1 % (point values)",
+  "regime guard: no regime's point S above 1.02 (replaces the v5 S49 guard, which protected the mid-latitudes only)",
+  "fine28: S <= 1.01",
+  "sealed: ONE run on a fresh sealed set of 18 regions: point S <= 1.0 AND its 90 % lower bound below 1.0"
+ ],
+ "sealed_set": "calibration/sealed_20261124V18 (declared 24 Nov, unopened)",
+ "continuations": "as v5",
+ "gate_tool": "scripts/gate_v3.py dev6 OUT REF / sealed5 OUT REF sealed_V18; screening scripts/screen_v6.py",
+ "in_flight": "none (W6 closed under v5)"
+}

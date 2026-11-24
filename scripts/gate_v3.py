@@ -3,6 +3,7 @@
     python -I scripts/gate_v3.py dev OUT REF_NAME      # REF/candidate _dev31 + _retired_{a,b,c} -> S49, T, P (and S31)
     python -I scripts/gate_v3.py dev4 OUT REF_NAME     # policy v4: the above + _tropical_t -> S55 gate, S49 guard
     python -I scripts/gate_v3.py dev5 OUT REF_NAME     # policy v5: dev4 parts + _sealed_r; 90 % bootstrap upper bound < 1
+    python -I scripts/gate_v3.py dev6 OUT REF_NAME     # policy v6: 97 regions (+ sealed_S18, sealed_U18), 90 % upper < 1, regime guard 1.02
     python -I scripts/gate_v3.py sealed5 OUT REF_NAME [PART]  # policy v5: point S <= 1 and 90 % lower bound < 1 (default sealed_S18)
     python -I scripts/gate_v3.py fine OUT REF_NAME     # REF/candidate _fine28 -> S28
     python -I scripts/gate_v3.py sealed OUT REF_NAME [PART]   # REF/candidate _PART (default sealed_d) -> S
@@ -71,6 +72,22 @@ def main():
         s55 = score(R, C, list(R)); s49 = score(R, C, [n for n in R if n not in t_names]); st = score(R, C, t_names)
         passes = s55["S"] <= 0.995 and s55["T"] <= 0.01 and s55["P"] <= 0.01 and s49["S"] <= 1.0
         res = dict(stage="dev4", policy="policy_v4", S55=s55, S49=s49, S_t=st, passes=bool(passes))
+    elif stage == "dev6":
+        # policy v6 (calibration/local_accuracy_20261023/policy_v6.json): 97 regions, bootstrap, regime guard
+        import numpy as np
+        from score_ci import ci
+        parts = ["dev31", "retired_a", "retired_b", "retired_c", "tropical_t", "sealed_r", "sealed_S18", "sealed_U18"]
+        R, C = paired(out, ref, None, parts)
+        names = sorted(R)
+        a = np.array([[C[n]["temperature"]["monthly_mae_C"], R[n]["temperature"]["monthly_mae_C"],
+                       C[n]["rain"]["loss"], R[n]["rain"]["loss"]] for n in names])
+        b = ci(a); s_all = score(R, C, names)
+        tags = json.loads((ROOT / "calibration/regimes_20261124/regimes_v2.json").read_text())["regimes"]
+        reg = {}
+        for g in sorted(set(tags.get(n, "untagged") for n in names)):
+            reg[g] = score(R, C, [n for n in names if tags.get(n, "untagged") == g])["S"]
+        passes = b["q95"] < 1.0 and s_all["T"] <= 0.01 and s_all["P"] <= 0.01 and max(reg.values()) <= 1.02
+        res = dict(stage="dev6", policy="policy_v6", n=len(names), S=s_all, bootstrap=b, regimes=reg, passes=bool(passes))
     elif stage in ("dev5", "sealed5"):
         # policy v5 (calibration/local_accuracy_20261023/policy_v5.json): bootstrap over regions
         import numpy as np

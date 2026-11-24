@@ -1,5 +1,11 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**POLICY v6 IN FORCE (24 Nov 2026, owner: "update the policy").** calibration/local_accuracy_20261023/policy_v6.json.
+Dev pool 97 = v5's 61 + spent S18 + spent U18; adopt if S97 90 % upper bound < 1, T/P <= +1 %, every regime
+(regimes_v2.json, observed-climate Koppen tags) point S <= 1.02, fine28 <= 1.01, ONE sealed V18 run (sealed5).
+Tools: scripts/gate_v3.py dev6, scripts/screen_v6.py (prints per-regime S). r53 refs: output/ppe_20261124/ref53
+(r53_sealed_S18 run 24 Nov; r53_sealed_U18 -> e110_l25 candidate).
+
 **B6 PARKED (24 Nov 2026): southern-tropics onset.** e118 (wind gate) fails; e119 (poleward desert, + e117 max) best 0.998, noise. The e93 convection cap (Saharan dry layer) delays the southern
 Amazon's spring rain 1-2 months (the +3-5 C). Gate off: Amazon/Brazil 0.72-0.79 but Sahel/Sahara/E Australia
 1.56-1.72 (S61 1.033). e117 (cap x dry-land air share) is circular, no gain. Needs a non-soil discriminator
