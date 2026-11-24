@@ -1,5 +1,15 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**PPE plan_W9 CLOSED, no adoption (24 Nov 2026).** Base mw70l25 (e124), 8 knobs incl. land_offset and the
+maritime shift, 49 runs, emulator LOO rmse 0.0003, predicted optimum 0.9787 vs observed 0.9808 (< 0.005 gain),
+closed after wave 1. Finalist chosen on dev only: w1_011 (land_offset -1.97, maritime_mean 0.88 from 20 deg,
+lw_ref_rh 0.82): S97 0.9808 [0.964, 0.998], T -2.6 %, P -1.3 %, worst regime mediterranean 1.015: PASSES dev6.
+FAILS fine28 once: S28 1.0173, T +2.4 %. V18 still UNOPENED. Diagnosis: the fine loss is the seasonal RANGE
+(California range error -0.57 -> -1.09 C, NZ -1.24 -> -1.55), and r53 already under-swings every maritime
+mid-latitude region (W Europe -1.69, Japan -1.33, dev British Isles/Patagonia/Alps -1.0..-1.4) and lags it
+(+20-43 d). Next: e125, a separate maritime-side continentality slope (continentality_maritime, default 1 = off),
+screening in calibration/range_20261124. Records calibration/ppe_20261123/W9_records.
+
 **e123 maritime finalist FAILS fine28 (24 Nov 2026).** W8 finalist + maritime_mean 0.7 with e123 mid-latitude
 gate (maritime_mean_lat 25): S97 0.9809 [0.967, 0.994], every regime <= 1.009, T -2.5 %: PASSES dev6. fine28
 1.0165: California and NZ (cold-current coasts) cooled and over-damped. V18 UNOPENED. e124 one-sided shift

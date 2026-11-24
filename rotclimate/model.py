@@ -1247,6 +1247,11 @@ class ClimateModel:
                     # (chi below 0.5) is unchanged.
                     ramp = np.clip((np.abs(lat) - p.continentality_lat) / 20.0, 0.0, 1.0)
                     amp = 1.0 + p.continentality * (np.minimum(chi - 0.5, 0.0) + ramp * np.maximum(chi - 0.5, 0.0))
+                if p.continentality_maritime != 1.0:
+                    # e125: the maritime damping (chi below 0.5) on its own slope; maritime mid-latitude
+                    # land swung too little (range -1.0..-1.7 C in W Europe, Britain, NZ, Patagonia, Japan)
+                    # and too late (calibration/range_20261124)
+                    amp = amp + p.continentality * (p.continentality_maritime - 1.0) * np.minimum(chi - 0.5, 0.0)
                 if p.continental_depth > 0:
                     # e23: the ~1,700 km memory calls central Spain and
                     # Manchuria equally continental, but Siberian air has
