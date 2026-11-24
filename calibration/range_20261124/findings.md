@@ -43,3 +43,19 @@ Diagnosis: two compensating errors. (1) The air over maritime land is ~95 % sea 
 (2) The regional sea is ~2x too seasonal and 4-6 C too cold in winter, which keeps winters right but makes
 spring 3-4 C cold and the cycle late. e98 (sea alone) failed in Nov because (1) then makes winters too warm.
 Next: grid sst_damping x land_radiative_days on 6 regions.
+
+## 6-region grid (BI, NZ, Patagonia, W Europe, E Europe, Alps): sst_damping (full at 55 deg) x land_radiative_days
+| run | T mMAE | T aMAE | P mMAE | P loss | temperate lag |
+|---|---|---|---|---|---|
+| base sd0 rd26 | 1.884 | 1.007 | 34.7 | 0.394 | 23.2 d |
+| sd0.4 rd26 | 1.792 | 1.016 | 36.1 | 0.401 | 19.2 |
+| sd0.4 rd8 | 1.759 | 1.122 | 36.5 | 0.405 | 17.9 |
+| sd0.7 rd26 | 1.796 | 1.007 | 38.3 | 0.413 | 15.1 |
+| sd0.7 rd4 | 1.731 | 1.331 | 39.6 | | 12.0 |
+| sd0 rd4 | 1.870 | 1.365 | 35.9 | | 19.3 |
+| e126 heat-only 0.4 rd26 | 1.819 | 1.034 | 35.2 | 0.397 | |
+| e126 heat-only 0.4 rd8 | 1.788 | 1.145 | 35.6 | 0.401 | |
+| e126 heat-only 0.7 rd26 | 1.857 | 1.043 | 35.9 | 0.401 | |
+e126 (damped sea for heat only, undamped for moisture; a compensation for rain settings fitted to the cold
+sea, not physics) keeps about half the rain and about two thirds of the temperature gain.
+97-region screen of sd40, sd40r8, ho40r8: screen_sea.log.
