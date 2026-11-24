@@ -36,3 +36,15 @@ The model's spring flow over the southern Amazon is not poleward in Sep-Oct (the
 the Sahel's wet-season monsoon inflow is, so the gate opens in the wrong place. e118 stays, default off.
 Both soil- and wind-based discriminators fail; B6 PARKED. Remaining idea: a static, geography-only measure of the
 desert upwind (the land area under the subtropical descent poleward of the cell), computed once per map.
+
+## e119 poleward-desert gate (screen_e119.log, screen_e119b.log) - no adoption
+Cap x clip(dry land (one-year soil) averaged 1,500 km poleward / pole0, 0, 1); with e117 on too, the larger of the two.
+| pole0 0.3 | 1.0031 [0.988, 1.021] | |
+| pole0 0.5 | 1.0028 [0.986, 1.023] | south Brazil 0.76, central Amazon 0.90; E Australia 1.71 |
+| pole0 0.7 | 1.0057 | |
+| pole0 0.5 + e117 0.35 (max) | 0.9983 [0.988, 1.011] | S49 0.996; E Australia 1.50 |
+| pole0 0.5 + e117 0.6 (max) | 1.0005 | |
+The Sahel / Darfur / Mali are protected (the Sahara lies poleward), but the southern Amazon still does not open:
+the model's Chaco is dry too (the same southern-tropics deficit one step removed). Eastern Australia has the
+Tasman Sea poleward and floods. The small gains (Japan, Korea, SE US, US Midwest 0.89-0.95) are mid-latitude summer
+convection, not the target. Best 0.998 is noise; B6 stays PARKED. e117/e118/e119 in code, default off.
