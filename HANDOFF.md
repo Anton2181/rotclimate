@@ -1,5 +1,9 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**B5 hot-land bias PARKED (24 Nov 2026).** Northern dry tropics/subtropics too cold (-1 to -2.6 C), southern
+short-dry-season tropics too warm (+1.3 C mean, 5-20 S). Dry heating (+ e113 cold-sea exemption, + arid gate)
+stays within 1.0006-1.019 of r53: no adoption. Lead: a deep-root forest water store. calibration/hot_bias_20261124.
+
 **PPE plan_W5 CLOSED, no adoption (24 Nov 2026).** e112 (mirror itcz_mean for southern Earth regions) + 6 ITCZ
 knobs: base 1.109, best of 65 1.0245, emulator (LOO 0.002) predicts nothing below 1.34 with penalties. One land
 ITCZ can't serve both the Sahel and the southern tropics. e112 default off. Sealed V18 DECLARED, UNOPENED
