@@ -1,5 +1,9 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Deep-root store PARKED (24 Nov 2026).** e114 at low thresholds (p0 500-700): S61 1.0007-1.0087, noise or
+worse; cools cold mid-latitude wet lands. Southern Amazon wet season starts ~2 months late and ends 1 early (real
+Sep-Oct 0-8 mm vs 84-139 obs): the +3-5 C pre-onset heat is a rain-onset error. calibration/root_store_20261124.
+
 **PPE plan_W6 CLOSED, no adoption (24 Nov 2026).** Observed lateral column water (e116 edge_obs_pw, NCEP PW) +
 physics refit, 8 knobs, 81 runs. Finalist w2_004 S61 0.9940 [0.983, 1.004] (T +1.0 %, P -2.2 %) FAILS dev5 (upper
 bound >= 1). The fit keeps only 0.36 of the observed edge; arid T still 2.5 % worse. The southern-tropics warm bias
