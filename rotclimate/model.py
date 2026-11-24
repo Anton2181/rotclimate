@@ -1229,6 +1229,13 @@ class ClimateModel:
                     dryland = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * cap), 0.0, 1.0))
                     chi_dry = self.solver.solve(uc, vc, p.heat_diffusion, lamC, lamC * dryland, edge,
                                                 guess=edge if chi_dry is None else chi_dry)
+                if p.land_phase_days != 0.0:
+                    # e121: the land column's seasonal phase by the air's land share. Air off the sea
+                    # peaked 20-43 days late over maritime temperate land (NZ, British Isles, Patagonia,
+                    # W Europe), dry interiors 5-8 days early (calibration/land_lag_20261124). Shift the
+                    # zonal land cycle by land_phase_days x (0.5 - chi) (> 0 = earlier), first order.
+                    dTl = (self.z.land(lat, d + 5.0) - self.z.land(lat, d - 5.0)) / 10.0
+                    Tl = Tl + p.land_amplitude * dTl * p.land_phase_days * (0.5 - np.clip(chi, 0.0, 1.0))
                 amp = 1.0 + p.continentality * (chi - 0.5)
                 if p.continentality_lat > 0:
                     # e33: as e32 for the advected continentality: land air
