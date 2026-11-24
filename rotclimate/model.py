@@ -1267,6 +1267,13 @@ class ClimateModel:
                         # and the Levant too hot in summer). Ramp the
                         # amplification in from continental_depth_lat to +20 deg.
                         depth = depth * np.clip((np.abs(lat) - p.continental_depth_lat) / 20.0, 0.0, 1.0)
+                    if p.continental_depth_highland_m > 0:
+                        # e122: fade the deep-continent widening out over high ground (Tibet, Mongolia,
+                        # the Altiplano already swing as wide as observed; calibration/boreal_20261124):
+                        # full below continental_depth_highland_m (150 km smoothed), none 1,000 m above it
+                        if getattr(self, '_e122_hs', None) is None:
+                            self._e122_hs = ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 150.0 / g.cell_km, mode="nearest")
+                        depth = depth * np.clip(1.0 - (self._e122_hs - p.continental_depth_highland_m) / 1000.0, 0.0, 1.0)
                     amp = amp + depth
                 centre = Tl_mean
                 if p.maritime_mean > 0:
