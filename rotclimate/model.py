@@ -938,6 +938,27 @@ class ClimateModel:
         ca, sa = np.cos(a), np.sin(a)
         return k * (gx * ca + gy * sa), k * (-gx * sa + gy * ca)
 
+    def _poleward_mean(self, field, fetch_km):
+        """e119: field averaged toward the pole with an exponential memory of fetch_km (no barriers; beyond the
+        grid the edge value). Sample coordinates and weights are cached per fetch."""
+        g, p = self.g, self.p
+        key = ('_pm', fetch_km)
+        if getattr(self, '_pm_key', None) != key:
+            th = np.radians(p.north_bearing)
+            di, dj = -np.cos(th), np.sin(th)
+            L = fetch_km / g.cell_km
+            step = max(1.0, L / 30.0)
+            ii, jj = np.mgrid[0:g.ny, 0:g.nx].astype(float)
+            pts = []
+            for k in range(1, int(4.0 * L / step) + 1):
+                pts.append(([np.clip(ii + k * step * di, 0, g.ny - 1), np.clip(jj + k * step * dj, 0, g.nx - 1)],
+                            np.exp(-k * step / L)))
+            self._pm_key, self._pm_pts = key, pts
+        acc = np.zeros((g.ny, g.nx)); wsum = 0.0
+        for cc, w in self._pm_pts:
+            acc += w * ndi.map_coordinates(field, cc, order=1); wsum += w
+        return acc / wsum
+
     def _poleward_land(self, fetch_km):
         """Land share toward the pole (north on the map's bearing; the map is
         a northern-hemisphere one) that shallow cold air can reach: ground
@@ -1159,6 +1180,7 @@ class ClimateModel:
         soilP = np.full(lat.shape, 1.5)
         soil_w = np.where(land, p.soil_init_fraction * p.soil_bucket_mm, 0.0)    # e8: soil water (mm); e82 start share
         soil_ann = soil_w.copy()        # e54e: the soil water's running one-year mean
+        self._pd_mon = None             # e119: poleward dry-land field is recomputed each model month
         cap = p.soil_bucket_mm          # e114: the bucket's capacity (an array once the root store is on)
         rain_ann = None                 # e114: running one-year mean rain (mm/day)
         swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
@@ -2471,6 +2493,17 @@ class ClimateModel:
                             # fades from full (still or equatorward flow) to none at poleward speed convective_rh_gate_vwind.
                             v_pol = gauss(vh * np.where(lat < 0, -1.0, 1.0), 500.0 / g.cell_km)
                             ramp93 = ramp93 * np.clip(1.0 - v_pol / p.convective_rh_gate_vwind, 0.0, 1.0)
+                        if p.convective_rh_gate_pole > 0 and p.soil_bucket_mm > 0:
+                            # e119: the dry layer aloft is made over a desert poleward of the rain belt (the Sahara
+                            # north of the Sahel, the Australian interior). Poleward of the southern Amazon lies the
+                            # Chaco and southern Brazil, which are not deserts, and its spring storms start before the
+                            # belt arrives. The cap scales with the dry land (one-year soil water) averaged 1,500 km
+                            # poleward, full at convective_rh_gate_pole; recomputed once a model month.
+                            mon = int(d / p.year_days * 12.0)
+                            if getattr(self, '_pd_mon', None) != mon:
+                                dryl = g.land_frac * (1.0 - np.clip(soil_ann / (0.75 * cap), 0.0, 1.0))
+                                self._pd, self._pd_mon = self._poleward_mean(dryl, 1500.0), mon
+                            ramp93 = ramp93 * np.clip(self._pd / p.convective_rh_gate_pole, 0.0, 1.0)
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
