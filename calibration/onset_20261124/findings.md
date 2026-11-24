@@ -25,3 +25,14 @@ e117 stays in the code, default off.
 Lead: a non-circular discriminator for the dry layer aloft - static geography (the size / poleward extent of the
 land upwind under the subtropical descent: Sahara, Arabia, the Australian interior vs the Chaco-Amazon), or
 the model's own subsidence field (descent_cap / the subsidence branch) rather than soil water.
+
+## e118 wind-direction gate (screen_e118.log) - no gain
+Cap x clip(1 - poleward low-level wind (500 km smoothed) / v0, 0, 1):
+| v0 1 m/s | 1.0177 [0.999, 1.040] | Sahel 1.75, Darfur 1.44, Mali 1.35 |
+| v0 3 | 1.0137 | |
+| v0 6 | 1.0071 | |
+Southern Amazon rain, run months 4-5 (real Oct-Nov): r53 8 / 50, vw1 9 / 91 (gate off 59 / 154, obs 139 / 196).
+The model's spring flow over the southern Amazon is not poleward in Sep-Oct (the opening only comes in Nov), while
+the Sahel's wet-season monsoon inflow is, so the gate opens in the wrong place. e118 stays, default off.
+Both soil- and wind-based discriminators fail; B6 PARKED. Remaining idea: a static, geography-only measure of the
+desert upwind (the land area under the subtropical descent poleward of the cell), computed once per map.

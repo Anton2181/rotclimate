@@ -1,6 +1,6 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
-**Lead B6 (24 Nov 2026): southern-tropics onset.** The e93 convection cap (Saharan dry layer) delays the southern
+**B6 PARKED (24 Nov 2026): southern-tropics onset.** e118 (wind-direction gate) also fails (Sahel 1.33-1.75). The e93 convection cap (Saharan dry layer) delays the southern
 Amazon's spring rain 1-2 months (the +3-5 C). Gate off: Amazon/Brazil 0.72-0.79 but Sahel/Sahara/E Australia
 1.56-1.72 (S61 1.033). e117 (cap x dry-land air share) is circular, no gain. Needs a non-soil discriminator
 (static geography or the subsidence field). calibration/onset_20261124/findings.md.
