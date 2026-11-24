@@ -1647,6 +1647,11 @@ class ClimateModel:
             if self.tap is not None: self.tap('sst', d, SST)
             T_eq = np.where(land, Tl, SST)
             self._sst_last = SST       # e113: the nearest sea's temperature for the next step's dry heating
+            if p.sst_damping_heat_only and p.sst_damping > 0:
+                # e126: the damped swing sets only the heat the sea gives the air (T_eq above); the moisture,
+                # convection and inflow below keep the undamped sea the rain settings were fitted around
+                # (calibration/range_20261124: damping alone fixed the maritime lag but wetted every west coast)
+                SST = SST + (self.z.sea(lat, d, p.sst_offset, 0.0, p.sst_damping_lat, p.sst_tropical, p.sst_tropical_lat) - To)
 
             # ---- parts of the winds and storms that do not depend on temperature
             u0, v0, phi_i, phi_h = self.zonal_wind(s)
