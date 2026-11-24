@@ -1428,6 +1428,17 @@ class ClimateModel:
                     # year, none where the mean dryness is below this.
                     dry_ann = 1.0 - np.clip(soil_ann / (0.75 * p.soil_bucket_mm), 0.0, 1.0)
                     dry = dry * np.clip((dry_ann - p.dry_heating_arid) / (1.0 - p.dry_heating_arid), 0.0, 1.0)
+                if p.dry_heating_cold_sst > -90 and getattr(self, '_sst_last', None) is not None:
+                    # e113: deserts on a cold-current coast (the Namib, the Atacama, Baja) sit under a marine layer
+                    # of upwelled-water air that the sun on dry ground does not heat: e54 warmed Namibia and Chile,
+                    # already 0.8-1.7 C too warm, by as much as it warmed Najd and Iran (W3). Exempt land near a sea
+                    # colder than dry_heating_cold_sst (3 K ramp), fading inland over dry_heating_cold_km.
+                    if getattr(self, '_dh_near', None) is None:
+                        dk, near = ndi.distance_transform_edt(g.land, return_indices=True)
+                        self._dh_near = (near[0], near[1])
+                        self._dh_prox = np.exp(-dk * g.cell_km / p.dry_heating_cold_km)
+                    cold = np.clip((p.dry_heating_cold_sst - self._sst_last[self._dh_near]) / 3.0, 0.0, 1.0)
+                    dry = dry * (1.0 - self._dh_prox * cold)
                 Tl = Tl + np.where(land, p.dry_heating * dry * S_dry / LAND_COUPLING_SREF, 0.0)
             if self.tap is not None: self.tap('dry_heating', d, Tl)
             if (p.cloud_radiation > 0 or p.cloud_longwave > 0) and cloud_prev is not None:
@@ -1575,6 +1586,7 @@ class ClimateModel:
             if self.sst_record is not None:
                 self.sst_record[round(float(d), 6)] = np.array(SST, copy=True)
             T_eq = np.where(land, Tl, SST)
+            self._sst_last = SST       # e113: the nearest sea's temperature for the next step's dry heating
 
             # ---- parts of the winds and storms that do not depend on temperature
             u0, v0, phi_i, phi_h = self.zonal_wind(s)

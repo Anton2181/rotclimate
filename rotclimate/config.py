@@ -190,6 +190,8 @@ class Params:
     dry_heating_warm_c: float = -99.0 # e54c: ... only on warm ground: x clip((land equilibrium - this) / 8 K, 0, 1); -99 = always
     dry_heating_arid: float = -1.0    # e54e: ... only where the soil is dry all year: x clip((one-year mean dryness - this) / (1 - this), 0, 1); -1 = always
     dry_heating_mean_c: float = -99.0 # e54d: ... only in warm climates: x clip((annual-mean land equilibrium - this) / 8 K, 0, 1); -99 = always
+    dry_heating_cold_sst: float = -99.0  # e113: ... not near a sea colder than this (C, 3 K ramp; cold-current deserts); -99 = off
+    dry_heating_cold_km: float = 300.0   # e113: inland fade of that exemption (km)
     # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
     # flow toward the pole rises, flow toward the equator sinks: rain x
     # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km
