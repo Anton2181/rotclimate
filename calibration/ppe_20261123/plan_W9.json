@@ -1,0 +1,64 @@
+{
+ "version": 1,
+ "date": "2026-11-24",
+ "policy": "v6",
+ "status": "declared before any evaluation; new lineage (W7/W8 spent); owner 24 Nov: 'keep going even doing major stuff by yourself'",
+ "why": "e123/e124 maritime centre shift (mid-latitude, warm-only) on the W8 finalist: S97 0.9819 [0.970, 0.994], all regimes <= 1.005, but fine28 1.01007 (fail by 7e-5): California and NZ still cooled by the W7/W8 global land cooling (land_offset ~-1.6). Refit the land cooling jointly with the new maritime term so it can do the maritime work instead.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators per region, emulator waves of 16; close early within noise (sd ~0.005); at most 3 waves. Objective as W7. The finalist is the best point by the dev objective ONLY (fine28 not consulted before the gate); then dev6, fine28 once, ONE sealed V18 run.",
+ "base": "calibration/maritime_20261124/mw70l25_params.json",
+ "base_set": {},
+ "reference": "output/ppe_20261124/ref53",
+ "reference_name": "r53",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261124/W9",
+ "seed": 20261131,
+ "wave1": 48,
+ "knobs": {
+  "land_offset": [
+   -2.0,
+   -0.8,
+   "lin"
+  ],
+  "maritime_mean": [
+   0.3,
+   1.0,
+   "lin"
+  ],
+  "maritime_mean_lat": [
+   15.0,
+   35.0,
+   "lin"
+  ],
+  "lw_ref_rh": [
+   0.8,
+   0.98,
+   "lin"
+  ],
+  "cloud_longwave": [
+   0.15,
+   0.32,
+   "lin"
+  ],
+  "dry_heating": [
+   0.8,
+   2.0,
+   "lin"
+  ],
+  "wet_sun": [
+   1.7,
+   2.6,
+   "lin"
+  ],
+  "continental_depth": [
+   0.3,
+   0.6,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 (gate_v3.py dev6, fine28, then ONE sealed V18 run with the r53 reference run paired); pass -> r54. No atlas rebuild."
+}
