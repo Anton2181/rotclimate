@@ -1,0 +1,61 @@
+{
+ "version": 1,
+ "date": "2026-11-24",
+ "policy": "v6",
+ "status": "declared before any evaluation; owner 24 Nov: 'keep going even doing major stuff by yourself'",
+ "why": "W7 finalist w1_049 S97 0.9872 [0.972, 1.002] fails dev6 on the upper bound; land_offset sat at its -1.6 bound. e122 (continental_depth faded over high ground) cd50h1000 S97 0.9855 [0.969, 1.001], highland 1.001 -> 0.980, continental 0.988 (calibration/boreal_20261124). Refit the W7 neighbourhood with continental_depth (e122 gate 1,000 m fixed), snow_albedo and a wider land_offset.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators per region, emulator waves of 16; close early when the predicted gain is within noise (sd ~0.005); at most 3 waves. Objective as W7.",
+ "base": "calibration/ppe_20261123/W7_records/w1_049_params.json",
+ "base_set": {
+  "continental_depth_highland_m": 1000.0
+ },
+ "reference": "output/ppe_20261124/ref53",
+ "reference_name": "r53",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261124/W8",
+ "seed": 20261130,
+ "wave1": 48,
+ "knobs": {
+  "land_offset": [
+   -2.4,
+   -1.2,
+   "lin"
+  ],
+  "continental_depth": [
+   0.25,
+   0.75,
+   "lin"
+  ],
+  "lw_ref_rh": [
+   0.75,
+   0.98,
+   "lin"
+  ],
+  "cloud_longwave": [
+   0.18,
+   0.34,
+   "lin"
+  ],
+  "dry_heating": [
+   0.8,
+   2.0,
+   "lin"
+  ],
+  "wet_sun": [
+   1.9,
+   2.6,
+   "lin"
+  ],
+  "snow_albedo": [
+   0.15,
+   0.35,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 (gate_v3.py dev6, fine28, then ONE sealed V18 run with the r53 reference run paired); pass -> r54. No atlas rebuild."
+}
