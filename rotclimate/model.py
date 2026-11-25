@@ -1185,6 +1185,7 @@ class ClimateModel:
         cap = p.soil_bucket_mm          # e114: the bucket's capacity (an array once the root store is on)
         rain_ann = None                 # e114: running one-year mean rain (mm/day)
         swe = np.zeros(lat.shape)       # e16: snow on the ground (mm of water)
+        dinv = 0.0                      # e128: 2 m inversion offset (diagnostic: snowmelt sees the mixed air)
         self.t_iterations = []
         self.t_converged = []
         self.t_update_max = []
@@ -2033,7 +2034,8 @@ class ClimateModel:
                 S_i = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days), p.solar_flux)
                 dark = np.clip(1.0 - S_i / p.snow_inversion_s, 0.0, 1.0)
                 cover_i = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
-                T = T - p.snow_inversion * cover_i * dark
+                dinv = p.snow_inversion * cover_i * dark
+                T = T - dinv
             T_rep, Tsl_rep = T, Tsl
             if self.marine_geom is not None:
                 # e4: a two-tile coast: marine air under the inversion (the
@@ -2829,7 +2831,7 @@ class ClimateModel:
 
             if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
                 swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days
-                swe = np.where(land, np.minimum(swe - np.minimum(swe, 3.5 * np.maximum(T_rep, 0.0) * dt_days), 3000.0), 0.0)
+                swe = np.where(land, np.minimum(swe - np.minimum(swe, 3.5 * np.maximum((T_rep + dinv), 0.0) * dt_days), 3000.0), 0.0)
             if cycle is not None and n>=primer:
                 cycle.update(k,dict(temperature=T_rep,rain=P,water=W,soil_water=soil_w,
                                     recycled_rain=soilP,snow_water=swe))
