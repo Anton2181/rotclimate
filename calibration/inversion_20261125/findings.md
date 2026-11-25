@@ -29,3 +29,18 @@ is a Eurasia-dominated mean; the Shield's lakes and wetlands are counted as land
 W12 CLOSED after wave 1 (49 points): no point beat the r55 base (best w1_001 1.0014); wave-2 proposals predicted
 0.9959 (gain 0.004 < 0.005) with snow_inversion -> 0.2-1.3 and land_coupling_insolation / snow_albedo at the lower
 range edges. e128 is not the binding error; no candidate, sealed X stays UNOPENED. r55 remains adopted.
+
+## Global levers on the dipole (all vs r55, 97 dev regions) — none adoptable
+- land_coupling_insolation 1.2 / 0.9 / 0.6: S97 0.9982 / 0.9994 / 1.0042 (0.6: Hudson/Ontario 0.89-0.90, E Europe
+  1.21, Kazakh 1.19, mediterranean 1.042). screen_lci.log.
+- e129 pole_frozen_sea (WOA-derived winter-frozen sea counts in the poleward cold-air source; Hudson Bay, Foxe,
+  Kara, Okhotsk frozen; Barents SW, Baltic, Labrador, Bering open at the -1.0 C criterion): 0.5 -> 0.9996, 1.0 ->
+  1.0027; Hudson lowlands 0.82, Ontario 0.85, Ungava 0.91; Krasnoyarsk 1.27, Kazakh 1.23, BC coast 1.18. screen_pfs.log.
+- e130 continental_mean_season (cold-pool shift weighted to the dark months, same annual mean): 0.5 -> 1.0073,
+  1.0 -> 1.0320, 1.0 + e129 1.0 -> 1.0575 (Kazakh 1.75, Krasnoyarsk 1.64: winters too cold). REJECTED.
+Middle Volga stage breakdown (r55): April air 0.9 C vs obs 6.7: the continental stage drops April 3.5 -> -0.1;
+wet_cooling takes 5.7-6.7 C off June-July (0.43 x soil wetness x (Tl - annual mean), largest where the swing is
+largest). Every global lever trades the warm east (E Canada, Okhotsk) against the cold west (Volga, Kazakh,
+Krasnoyarsk, BC/Alberta). The dipole needs a regional discriminator that none of chi, pole_land, frozen sea,
+elevation or winter precipitation supplies. Leads not tried: spring snowmelt timing vs observed snow cover;
+wet_cooling energy-limited (sunshine) instead of anomaly-scaled.
