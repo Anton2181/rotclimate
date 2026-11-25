@@ -2358,6 +2358,13 @@ class ClimateModel:
                 # at half land or less.
                 edge_rh = p.land_edge_rh * (1.0 - p.edge_continental_drying
                                             * np.clip(2.0 * (self.deep_land - 0.5), 0.0, 1.0))
+            if p.edge_itcz_rh > 0:
+                # e133: air entering over land inside the rain belt is moist whatever lies beyond: the Amazon's and
+                # Congo's interiors 1,000-1,500 km from the sea got 36-47 % of their rain under r56 with a fixed 0.5 edge
+                # RH, while raising the edge RH everywhere (0.7) parched nothing but flooded the deserts and steppes.
+                # Raise it toward edge_itcz_rh_max by a Gaussian in distance from the model's own seasonal ITCZ.
+                belt = np.exp(-((lat - phi_i) / max(p.edge_itcz_width, 1.0)) ** 2)
+                edge_rh = edge_rh + (p.edge_itcz_rh_max - edge_rh) * np.clip(p.edge_itcz_rh, 0.0, 1.0) * belt
             if p.edge_carry > 0:
                 # e79: air carries its water, not its relative humidity. Atlantic
                 # air entering a -16 C interior in January cools on the way, so
