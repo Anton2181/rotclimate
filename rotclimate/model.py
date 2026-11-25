@@ -2024,6 +2024,16 @@ class ClimateModel:
                 # summer at the fitted 4.4 K/km)
                 lapse = p.lapse_rate * (1.0 + p.lapse_seasonal * s)
             T = Tsl - lapse * h_km
+            if p.snow_inversion > 0:
+                # e128: over snow in the dark half of the year the ground radiates
+                # to space and the lowest tens of metres decouple from the mixed
+                # air above (Yakutia, the Yukon, Hudson Bay lowlands: 2 m air
+                # 5-10 K below 850 hPa). Station air sits in that inversion;
+                # the mixed air the heat solve carries does not.
+                S_i = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days), p.solar_flux)
+                dark = np.clip(1.0 - S_i / p.snow_inversion_s, 0.0, 1.0)
+                cover_i = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
+                T = T - p.snow_inversion * cover_i * dark
             T_rep, Tsl_rep = T, Tsl
             if self.marine_geom is not None:
                 # e4: a two-tile coast: marine air under the inversion (the
