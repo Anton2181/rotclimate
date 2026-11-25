@@ -1324,6 +1324,12 @@ class ClimateModel:
                     # x the continental share of the air (chi) x a ramp from 25
                     # to 45 deg, where the winter sun weakens.
                     dark = np.clip((np.abs(lat) - 25.0) / 20.0, 0.0, 1.0)
+                    if p.continental_mean_season > 0:
+                        # e130: the poleward cold pools exist in the cold season only; by April the snow
+                        # under them is going and the air off them is mild (western Eurasia, western Canada
+                        # 3-7 C too cold in spring). Same annual mean shift, weighted toward the dark months.
+                        s_c = -np.cos(2 * np.pi * (d - p.winter_solstice_day - p.continental_mean_season_lag) / p.year_days)
+                        dark = dark * max(1.0 - p.continental_mean_season * s_c, 0.0)
                     centre = centre - p.continental_mean * dark * self.pole_land * np.clip(chi, 0.0, 1.0)
                 Tl = centre + (Tl - Tl_mean) * np.clip(amp, 0.2, 3.0)
                 annual_eq = centre                  # e54d: the cell's annual-mean land equilibrium
