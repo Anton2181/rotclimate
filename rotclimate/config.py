@@ -324,6 +324,8 @@ class Params:
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)
     snow_inversion_s: float = 200.0   # e128: daily-mean insolation (W m-2) above which no inversion persists
+    snow_melt_sun: float = 0.0       # e138: mm/day of snowmelt per 480 W m-2 of daily sunshine (radiation melt), ramping in from snow_melt_sun_c; 0 = off
+    snow_melt_sun_c: float = -6.0    # e138: air temperature (C) where radiation melt starts (full 3 K above)
     pole_frozen_sea: float = 0.0      # e129: weight of winter-frozen sea in the poleward cold-air source (pole_land); 0 = land only
     continental_mean_season: float = 0.0   # e130: continental_mean shift x (1 - this x season index): more in winter, less in summer (0 = year-round)
     continental_mean_season_lag: float = 0.0   # e130: days after the winter solstice of the strongest shift

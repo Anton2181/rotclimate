@@ -2872,7 +2872,15 @@ class ClimateModel:
 
             if p.snow_albedo > 0:     # e16: degree-day snowpack, as snowpack() below
                 swe = swe + np.clip((1.5 - T_rep) / 3.0, 0.0, 1.0) * P * dt_days
-                swe = np.where(land, np.minimum(swe - np.minimum(swe, 3.5 * np.maximum((T_rep + dinv), 0.0) * dt_days), 3000.0), 0.0)
+                melt = 3.5 * np.maximum((T_rep + dinv), 0.0)
+                if p.snow_melt_sun > 0:
+                    # e138: spring sunshine melts snow with the air near freezing (radiation melt; the steppe's snow
+                    # goes in March-April under a high sun): r57 ran the Volga, Kazakh steppe, prairies and BC
+                    # 3.5-4.6 C cold in April under lingering snow. Add this x (sunshine / 480 W m-2) mm/day, from
+                    # snow_melt_sun_c below freezing (ramp over 3 K).
+                    S_m = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days), p.solar_flux)
+                    melt = melt + p.snow_melt_sun * (S_m / LAND_COUPLING_SREF) * np.clip((T_rep + dinv - p.snow_melt_sun_c) / 3.0, 0.0, 1.0)
+                swe = np.where(land, np.minimum(swe - np.minimum(swe, melt * dt_days), 3000.0), 0.0)
             if cycle is not None and n>=primer:
                 cycle.update(k,dict(temperature=T_rep,rain=P,water=W,soil_water=soil_w,
                                     recycled_rain=soilP,snow_water=swe))
