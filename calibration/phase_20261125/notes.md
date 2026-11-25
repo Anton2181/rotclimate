@@ -15,3 +15,18 @@ e136 probe (not kept): sst_damping x clip(1 + k x basin_side) (less damping off 
 1.84 -> 1.80 / 1.78, Nova Scotia 1.95 -> 1.97, British Isles / NZ unchanged. Next lead: why the east-coast spring land
 equilibrium runs 4-6 C hot (spring cloud: Baiu / sea fog under onshore flow off a cold sea; land_eq has no
 onshore-cold-sea cloud term).
+
+## e136 + e137 probe under r57 (26 Nov 2026), not kept
+e137: coastal land in continental air cools toward a colder nearby sea (model SST, ~400 km): coast_cool x
+exp(-coast/km) x chi x (Tl - sea)+, with e136 (less e98 damping off east coasts). Five-region test (MAE vs r57
+japan 1.84 / korea 1.77 / nova_scotia 1.94 / hokkaido 2.67 / british_isles 1.48):
+| coast_cool, side, km | japan | korea | nova_scotia | hokkaido | british_isles |
+| 0.3, 0, 100 | 1.83 | 1.75 | 1.89 | 2.59 | 1.52 |
+| 0.3, 1, 100 | 1.78 | 1.73 | 1.89 | 2.61 | 1.52 |
+| 0.6, 1, 100 | 1.77 | 1.72 | 1.84 | 2.52 | 1.56 |
+| 2.0, 1, 100 | 1.75 | 1.68 | 1.78 | 2.20 | 1.75 |
+| 3.0, 1, 250 | 1.90 | 1.85 | 2.61 | 2.24 | 2.10 |
+The cooling lands in summer, not spring: in the model's March-April the nearby sea is not colder than the land, so
+there is nothing to cool toward. The east-coast spring error is the land column's spring warming rate there, while
+interiors and west coasts (Volga -4.6, Kazakh -4.0, prairies -3.5, BC -3.7 C in April) run cold in spring: regional,
+opposite signs; no global lever. PARKED.
