@@ -2038,6 +2038,15 @@ class ClimateModel:
                 # summer at the fitted 4.4 K/km)
                 lapse = p.lapse_rate * (1.0 + p.lapse_seasonal * s)
             T = Tsl - lapse * h_km
+            if p.plateau_heating != 0:
+                # e134: a broad high plateau is an elevated heat source in summer and an elevated cold surface in
+                # winter: its air is the plateau's own boundary layer, not free air reduced along a lapse rate
+                # (Tibet r56: winter +2 to +4 C, summer -3 to -4 C at 4.7 km; seasonal range 5 C too small). Add
+                # plateau_heating x season index x a weight from the ground ~300 km around rising over 1.5-3.5 km.
+                if getattr(self, '_plateau_w', None) is None:
+                    sm = ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 300.0 / g.cell_km, mode="nearest") / 1000.0
+                    self._plateau_w = np.clip((sm - p.plateau_heating_km) / 2.0, 0.0, 1.0)
+                T = T + p.plateau_heating * self._plateau_w * s
             if p.snow_inversion > 0:
                 # e128: over snow in the dark half of the year the ground radiates
                 # to space and the lowest tens of metres decouple from the mixed
