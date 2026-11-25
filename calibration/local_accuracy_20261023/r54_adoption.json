@@ -1,0 +1,85 @@
+{
+ "adopted": "r54",
+ "adopted_utc": "2026-11-25T01:21:50.621285+00:00",
+ "reference": "r53",
+ "params": "calibration/local_accuracy_20261023/r54_params.json",
+ "params_sha256": "e8dd2a407bff674386abf4b356503dbe559bb6052c792ac2e15b23371df3b285",
+ "validation": "output/ppe_20261124/W10/runs/w1_base",
+ "change": "r53 + W7/W8 tropical land refit lineage (land_offset ~-1.57, lw_ref_rh, cloud_longwave, dry_heating, wet_sun, continental_depth) + e122 continental_depth_highland_m 1000 + e123/e124 maritime_mean 0.7 from 25 deg warm-only + e126 sea swing damping 0.4 (full at 55 deg) for heat only + land_radiative_days 8",
+ "plans": [
+  "calibration/ppe_20261123/plan_W7.json",
+  "calibration/ppe_20261123/plan_W8.json",
+  "calibration/ppe_20261123/plan_W9.json",
+  "calibration/ppe_20261123/plan_W10.json",
+  "calibration/sealed_20261124V18/declaration.json"
+ ],
+ "method": "maritime lag diagnosis (calibration/range_20261124); plan_W10 PPE 49 runs, closed after wave 1 (predicted gain < 0.005); finalist = best by dev objective (the base point ho40r8)",
+ "criteria": "policy_v6 against r53: dev6 (97) 90% upper < 1, T/P <= +1%, every regime <= 1.02; fine28 <= 1.01; ONE run on sealed V18: S <= 1 and 90% lower < 1",
+ "scores": {
+  "dev6": {
+   "stage": "dev6",
+   "policy": "policy_v6",
+   "n": 97,
+   "S": {
+    "S": 0.9779674445169244,
+    "T": -0.03205048865958138,
+    "P": -0.012014622306569911,
+    "n": 97
+   },
+   "bootstrap": {
+    "S": 0.9779674445169246,
+    "q05": 0.965401394670123,
+    "q95": 0.9903271406024281,
+    "q025": 0.9627454276227077,
+    "q975": 0.9926056037082923,
+    "p_no_gain": 0.00135,
+    "sd": 0.007620902621984053,
+    "n": 97
+   },
+   "regimes": {
+    "arid": 0.9884652931999687,
+    "continental": 0.96855320458056,
+    "highland": 0.9698949985943637,
+    "mediterranean": 1.005111351343849,
+    "temperate": 1.001530151578089,
+    "tropical_dry": 0.9634009700206163,
+    "tropical_wet": 0.9370824033379932
+   },
+   "passes": true
+  },
+  "fine28": {
+   "stage": "fine",
+   "S28": {
+    "S": 0.9979705520433566,
+    "T": -0.021900592831321508,
+    "P": 0.01784169691803461,
+    "n": 4
+   },
+   "passes": true
+  },
+  "sealed_V18": {
+   "stage": "sealed5",
+   "policy": "policy_v5",
+   "S": {
+    "S": 0.9507375387081828,
+    "T": -0.042090378318993205,
+    "P": -0.05643454426464123,
+    "n": 18
+   },
+   "bootstrap": {
+    "S": 0.9507375387081828,
+    "q05": 0.9211766098885376,
+    "q95": 0.9757165290056808,
+    "q025": 0.9150809243218463,
+    "q975": 0.9802925612919342,
+    "p_no_gain": 0.0002,
+    "sd": 0.016587935920037662,
+    "n": 18
+   },
+   "passes": true
+  }
+ },
+ "regimes": "arid 0.988, continental 0.969, highland 0.970, mediterranean 1.005, temperate 1.002, tropical_dry 0.963, tropical_wet 0.937",
+ "notes": "V18 is all-tropical (lat 16 S to 24 N); its gain mostly reflects the W7/W8 tropical land refit. Maritime seasonal range narrower (W Europe range error -1.69 -> -2.68 C at 28 km, NZ -1.24 -> -2.94) while phase and monthly MAE improve: next target.",
+ "atlas": "not rebuilt (owner rule 22 Nov 2026); atlas remains r51"
+}

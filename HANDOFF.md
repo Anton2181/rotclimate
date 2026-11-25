@@ -1,6 +1,17 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
-**Maritime lag diagnosed; plan_W10 RUNNING (24 Nov 2026).** e125 (maritime continentality slope) and land
+**r54 ADOPTED (25 Nov 2026).** plan_W10 closed after wave 1 (49 runs, emulator LOO 0.0006, predicted best
+~0.976 vs observed 0.9780: < 0.005). Finalist = base point ho40r8 (mw70l25 + sst_damping 0.4 full at 55 deg,
+e126 sst_damping_heat_only, land_radiative_days 8). dev6 S97 0.9780 [0.965, 0.990], T -3.2 %, P -1.2 %, regimes
+<= 1.005 (temperate 1.002, mediterranean 1.005); fine28 S28 0.998 (W Europe 1.85 -> 1.65 C); sealed V18 (opened
+once, declared first) S 0.951 [0.921, 0.976], T -4.2 %, P -5.6 %: PASS. Records
+calibration/local_accuracy_20261023/r54_adoption.json, r54_params.json; reference runs output/ppe_20261124/ref54
+(r54_<part>, incl. fine28). V18 SPENT. Atlas NOT rebuilt (remains r51). NEXT: (1) a new sealed set must be
+declared before the next candidate (mid-latitude boxes exhausted; consider a coarser or re-padded mid-latitude
+set); (2) maritime seasonal range is narrower under r54 (28 km W Europe range error -1.69 -> -2.68 C, NZ -1.24 ->
+-2.94) while phase improves: next structural target; (3) boreal autumn warmth.
+
+**Maritime lag diagnosed; plan_W10 (now closed -> r54) (24 Nov 2026).** e125 (maritime continentality slope) and land
 coupling alone leave the westerly-coast lag (+19..+33 d) in place. Stage breakdown (land_budget.py, new sst tap):
 coastal air ~95 % sea air in winter, and the regional sea ~2x over-seasonal and 4-6 C cold in winter; the two
 compensate (observed SST makes British winters +4 C). 97-region screen on mw70l25: sd40 0.9829, sd40r8 0.9797,
