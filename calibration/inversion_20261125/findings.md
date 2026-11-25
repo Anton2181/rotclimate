@@ -13,3 +13,16 @@ v1 (inversion also seen by the snowpack), screen_inv.log:
   Kazakh steppe 1.158, Middle Volga 1.142, Krasnoyarsk 1.141 (already cold-biased; colder air also delays the melt).
   Neither model nor observed winter precipitation separates helped from hurt regions (no clean clear-sky gate).
 v2: the offset is diagnostic (snowmelt sees the mixed air): see screen_inv2.log.
+  v2 result (screen_inv2.log): identical to v1 (dinv3 0.9991, dinv6 1.0032): the melt path was not the cause.
+  The hurt regions are too cold in midwinter too (Middle Volga Jan -1.6), so one inversion strength cannot serve
+  both: e128 alone is not adoptable.
+
+## Canada east-west dipole (r55 annual bias)
+Eastern interior too warm: w1_48n_79w +3.0, u2_49n_93w +2.4, u_53n_92w +3.2, w2_54n_85w +4.7, u2_59n_76w +3.3.
+Western interior too cold: w1_54n_116w -4.3, w2_57n_116w -3.1, canadian_prairies -1.8, bc_coast -3.0.
+Ungava stage breakdown (land_budget, r55): the ZONAL land column is already 22.0 C in July (obs 11.5); the air
+follows land, not the 5 C sea; the summer excess is set before any regional stage. Hudson Bay lowlands: land_eq
+3-4 C too warm in summer and 4-7 C in winter. Candidate structural causes (not yet tested): the zonal land column
+is a Eurasia-dominated mean; the Shield's lakes and wetlands are counted as land.
+
+## W12 (plan_W12.json) declared: e128 jointly with continental-season knobs on r55; gates vs r55, sealed X.
