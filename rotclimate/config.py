@@ -352,6 +352,7 @@ class Params:
     edge_itcz_rh: float = 0.0         # e133: share (0-1) of the way from the edge RH to edge_itcz_rh_max for land-edge inflow at the model's ITCZ, Gaussian in latitude; 0 = off
     edge_itcz_rh_max: float = 0.8     # e133: RH of air entering over land in the rain belt
     edge_itcz_width: float = 10.0     # e133: Gaussian half-width (deg latitude) about the ITCZ
+    edge_itcz_poleward_width: float = 0.0  # e133b: Gaussian half-width (deg) on the poleward side of the ITCZ; 0 = symmetric
     edge_continental_drying: float = 0.0   # e24: land-edge inflow humidity cut by this share where the westerlies crossed ~5,000 km of land
     high_drying: float = 0.0          # e10: rain-making ascent x exp(-this x hPa of the pressure winds' high anomaly)
     marine_layer: float = 0.0         # e4: max share of a coastal cell under marine air (0 = off)

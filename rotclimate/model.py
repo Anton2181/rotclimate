@@ -2363,7 +2363,13 @@ class ClimateModel:
                 # Congo's interiors 1,000-1,500 km from the sea got 36-47 % of their rain under r56 with a fixed 0.5 edge
                 # RH, while raising the edge RH everywhere (0.7) parched nothing but flooded the deserts and steppes.
                 # Raise it toward edge_itcz_rh_max by a Gaussian in distance from the model's own seasonal ITCZ.
-                belt = np.exp(-((lat - phi_i) / max(p.edge_itcz_width, 1.0)) ** 2)
+                wid = max(p.edge_itcz_width, 1.0)
+                if p.edge_itcz_poleward_width > 0:
+                    # e133b: the belt's poleward flank is dry aloft (the Sahara under a 20 N July ITCZ): a narrower
+                    # width on the side of the ITCZ away from the equator
+                    pole_side = (lat - phi_i) * np.sign(lat) > 0
+                    wid = np.where(pole_side, p.edge_itcz_poleward_width, wid)
+                belt = np.exp(-((lat - phi_i) / wid) ** 2)
                 edge_rh = edge_rh + (p.edge_itcz_rh_max - edge_rh) * np.clip(p.edge_itcz_rh, 0.0, 1.0) * belt
             if p.edge_carry > 0:
                 # e79: air carries its water, not its relative humidity. Atlantic
