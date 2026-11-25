@@ -1655,6 +1655,11 @@ class ClimateModel:
                 # lingers sea_ice_melt_days after the water warms (bay ice melts in June-July); the ice
                 # surface is the land equilibrium, capped at 0 C. Moisture keeps the water's temperature.
                 f_ice = np.clip((-1.0 - SST) / 0.8, 0.0, 1.0) * ocean
+                if p.sea_ice_air_c > -90 and T_prev is not None:
+                    # e127b: the open subpolar ocean (Norwegian Sea, the Southern Ocean off Chile) overturns
+                    # and never freezes; ice grows where land-chilled air keeps drawing heat out (Hudson
+                    # Bay air -20 C). None with the air over the sea above sea_ice_air_c, all 10 K below it.
+                    f_ice = f_ice * np.clip((p.sea_ice_air_c - T_prev) / 10.0, 0.0, 1.0)
                 if p.sea_ice_melt_days > 0:
                     keep_i = np.exp(-dt_days / p.sea_ice_melt_days)
                     ice_state = f_ice if ice_state is None else np.maximum(f_ice, keep_i * ice_state)

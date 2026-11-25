@@ -315,6 +315,7 @@ class Params:
     sst_damping_heat_only: bool = False
     sea_ice: float = 0.0
     sea_ice_melt_days: float = 0.0
+    sea_ice_air_c: float = -99.0
     cloud_reference: str = "domain"   # e43: cloud_radiation against the domain's own latitude mean ("domain") or the whole globe's land ("earth", Earth grids)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)
