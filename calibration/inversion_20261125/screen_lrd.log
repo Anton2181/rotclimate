@@ -1,0 +1,25 @@
+== lrd4  S97 0.9982 [0.9931, 1.0036] (T -0.002 P -0.001)  S49 0.9982
+   regimes arid 0.997  continental 0.996  highland 0.998  mediterranean 1.016  temperate 0.995  tropical_dry 0.996  tropical_wet 1.006
+   us_midwest           s 0.929  T 1.47->1.29 bias +0.27->-0.21  Ploss 0.253->0.249
+   s3_56n_124e          s 0.930  T 1.96->1.80 bias +1.23->+0.83  Ploss 0.335->0.315
+   u2_56n_135e          s 0.939  T 2.65->2.42 bias +2.27->+1.92  Ploss 0.383->0.371
+   u_53n_92w            s 0.951  T 3.15->2.89 bias +3.15->+2.89  Ploss 0.784->0.772
+   u2_49n_93w           s 0.955  T 2.42->2.23 bias +2.39->+2.18  Ploss 0.855->0.844
+   u_24s_124e           s 0.957  T 0.70->0.64 bias -0.29->-0.23  Ploss 1.017->1.013
+   southern_italy       s 1.037  T 1.73->1.88 bias -0.63->-0.81  Ploss 0.294->0.290
+   canadian_prairies    s 1.046  T 2.78->2.93 bias -1.75->-2.41  Ploss 0.212->0.220
+   middle_volga         s 1.054  T 2.03->2.36 bias -1.68->-2.17  Ploss 0.328->0.309
+   bc_coast             s 1.078  T 3.26->3.79 bias -3.05->-3.73  Ploss 0.440->0.439
+   eastern_europe       s 1.080  T 1.52->1.73 bias -0.96->-1.62  Ploss 0.250->0.254
+   kazakh_steppe        s 1.084  T 1.25->1.45 bias -0.85->-1.25  Ploss 0.255->0.255
+Traceback (most recent call last):
+  File "/home/user/rotclimate/scripts/screen_v6.py", line 22, in <module>
+    p = dict(base); p.update(json.loads(js)); R.evaluate(name, p)
+                                              ~~~~~~~~~~^^^^^^^^^
+  File "/home/user/rotclimate/scripts/refit_e75.py", line 22, in evaluate
+    subprocess.run(cmd, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/local/lib/python3.13/subprocess.py", line 578, in run
+    raise CalledProcessError(retcode, process.args,
+                             output=stdout, stderr=stderr)
+subprocess.CalledProcessError: Command '['/home/user/rotclimate/.venv/bin/python', '-I', '/home/user/rotclimate/scripts/benchmark_local.py', '--fit', 'output/ppe_20261125/lrd/lrd0/candidate_params.json', '--regions', 'dev31', '--workers', '4', '--out', 'output/ppe_20261125/lrd/lrd0/candidate_dev31']' returned non-zero exit status 1.
