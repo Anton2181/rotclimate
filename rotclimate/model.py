@@ -1174,6 +1174,7 @@ class ClimateModel:
         Tl_sea = None                   # e63: the land equilibrium as the enclosed seas feel it
         air_shelf = None                # e64: the sea-level air over the shelf seas, lagged
         air_cont = None                 # e67: the air over the sea, lagged, for continental outbreaks
+        ice_state = None                # e127: sea-ice cover, with melt memory
         cloud_prev = None               # e4: last step's cloud cover and column water (land radiation)
         heating_prev = None             # e4b: last step's warm-season rain (monsoon inflow)
         rain_prev = None                # e71e: last step's rain, smoothed (rising air)
@@ -1645,7 +1646,22 @@ class ClimateModel:
             if self.sst_record is not None:
                 self.sst_record[round(float(d), 6)] = np.array(SST, copy=True)
             if self.tap is not None: self.tap('sst', d, SST)
-            T_eq = np.where(land, Tl, SST)
+            T_sea_eq = SST
+            if p.sea_ice > 0:
+                # e127: a sea at freezing point grows ice, and the air over ice relaxes to the ice's own
+                # surface (as cold as the land beside it in the polar night), not to -1.8 C water: Hudson Bay,
+                # Ungava, Okhotsk and the Baltic's north held the boreal coasts 5-10 C too warm in winter
+                # (r54 u2_59n_76w January -14 C against -24). Cover = 0 at -1.0 C, full at -1.8 C; it
+                # lingers sea_ice_melt_days after the water warms (bay ice melts in June-July); the ice
+                # surface is the land equilibrium, capped at 0 C. Moisture keeps the water's temperature.
+                f_ice = np.clip((-1.0 - SST) / 0.8, 0.0, 1.0) * ocean
+                if p.sea_ice_melt_days > 0:
+                    keep_i = np.exp(-dt_days / p.sea_ice_melt_days)
+                    ice_state = f_ice if ice_state is None else np.maximum(f_ice, keep_i * ice_state)
+                else:
+                    ice_state = f_ice
+                T_sea_eq = SST + p.sea_ice * ice_state * (np.minimum(Tl, 0.0) - SST)
+            T_eq = np.where(land, Tl, T_sea_eq)
             self._sst_last = SST       # e113: the nearest sea's temperature for the next step's dry heating
             if p.sst_damping_heat_only and p.sst_damping > 0:
                 # e126: the damped swing sets only the heat the sea gives the air (T_eq above); the moisture,
