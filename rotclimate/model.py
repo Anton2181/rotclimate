@@ -2047,7 +2047,11 @@ class ClimateModel:
                     sm = ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), 300.0 / g.cell_km, mode="nearest") / 1000.0
                     self._plateau_w = np.clip((sm - p.plateau_heating_km) / 2.0, 0.0, 1.0)
                     # extratropical plateaus only: the Altiplano's season is weak and its range already too large
-                    self._plateau_w = self._plateau_w * np.clip((np.abs(lat) - 15.0) / 15.0, 0.0, 1.0)
+                    self._plateau_w = self._plateau_w * np.clip((np.abs(lat) - 20.0) / 15.0, 0.0, 1.0)
+                    if p.plateau_heating_cell:
+                        # e134b: on the plateau itself, not in the basins beside it (the Tarim / Hexi corridor took
+                        # the smoothed weight and got a range 1-2 C too large)
+                        self._plateau_w = self._plateau_w * np.clip((h_km - p.plateau_heating_km) / 2.0, 0.0, 1.0)
                 T = T + p.plateau_heating * self._plateau_w * s
             if p.snow_inversion > 0:
                 # e128: over snow in the dark half of the year the ground radiates
