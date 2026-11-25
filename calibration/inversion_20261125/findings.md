@@ -26,3 +26,6 @@ follows land, not the 5 C sea; the summer excess is set before any regional stag
 is a Eurasia-dominated mean; the Shield's lakes and wetlands are counted as land.
 
 ## W12 (plan_W12.json) declared: e128 jointly with continental-season knobs on r55; gates vs r55, sealed X.
+W12 CLOSED after wave 1 (49 points): no point beat the r55 base (best w1_001 1.0014); wave-2 proposals predicted
+0.9959 (gain 0.004 < 0.005) with snow_inversion -> 0.2-1.3 and land_coupling_insolation / snow_albedo at the lower
+range edges. e128 is not the binding error; no candidate, sealed X stays UNOPENED. r55 remains adopted.
