@@ -320,6 +320,7 @@ class Params:
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)
     snow_inversion_s: float = 200.0   # e128: daily-mean insolation (W m-2) above which no inversion persists
+    pole_frozen_sea: float = 0.0      # e129: weight of winter-frozen sea in the poleward cold-air source (pole_land); 0 = land only
     flux_convergence: float = 0.0     # e17: share of column water brought in by low-level convergence into warm columns (0 = off)
     flux_scale_km: float = 300.0      # e44: scale (km) of the low-level convergence that brings water in (e17 used 300)
     slp_large: float = 0.0            # e5: hPa of low pressure per K of warm anomaly, planetary scale (0 with slp_local 0 = off)

@@ -229,6 +229,8 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.chi_far = fetch_at(-lat if lat0 < 0 else lat, lon)     # real-world latitude for mirrored regions
     g.chi_far_long = fetch_at(-lat if lat0 < 0 else lat, lon, fetch_km=3.0 * FETCH_KM)   # e23
     g.chi_pole = pole_fetch_at(lat if lat0 >= 0 else -lat, lon)   # e31 (real latitude: south of southern regions)
+    if (CACHE / "frozen_sea_1deg.npz").exists():   # e129: winter-frozen sea poleward (optional derived field)
+        g.chi_pole_ice = pole_fetch_at(lat if lat0 >= 0 else -lat, lon, frozen=True)
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
@@ -317,7 +319,7 @@ POLE_FETCH_KM = 2000.0  # e31
 BARRIER_M = (1500.0, 1000.0)   # e31: cold air is shallow; ground above 1,500 m passes exp(-excess / 1,000 m) per 0.5 deg
 
 
-def pole_fetch(fetch_km: float = POLE_FETCH_KM) -> tuple:
+def pole_fetch(fetch_km: float = POLE_FETCH_KM, frozen: bool = False) -> tuple:
     """Global land share poleward (north in the northern hemisphere, south in
     the southern) that shallow cold air can reach, with an exponential memory
     of fetch_km on the 0.5-degree WorldClim grid: each 0.5-degree step past
@@ -325,7 +327,7 @@ def pole_fetch(fetch_km: float = POLE_FETCH_KM) -> tuple:
     the Himalaya and Tibet shut north India off from Siberia, the Alborz Iran
     from the Kazakh steppe, while Korea and the US plains lie open to Siberia
     and Canada. (field, lat, lon)."""
-    key = CACHE / f"pole_fetch_{fetch_km:g}km.npz"
+    key = CACHE / (f"pole_fetch_frozen_{fetch_km:g}km.npz" if frozen else f"pole_fetch_{fetch_km:g}km.npz")
     if key.exists():
         z = np.load(key)
         return z["fetch"], z["lat"], z["lon"]
@@ -337,6 +339,12 @@ def pole_fetch(fetch_km: float = POLE_FETCH_KM) -> tuple:
     ev = np.where(land, np.nan_to_num(elev), 0.0)[:H * f, :W * f].reshape(H, f, W, f).mean((1, 3))
     lat = 90 - (np.arange(H) + 0.5) * 0.5
     lon = -180 + (np.arange(W) + 0.5) * 0.5
+    if frozen:
+        # e129: the sea share that freezes over in winter (derived from WOA18 by scripts/make_frozen_sea.py)
+        zf = np.load(CACHE / "frozen_sea_1deg.npz")
+        fi = np.clip(np.round((zf["lat"][0] - lat) / (zf["lat"][0] - zf["lat"][1])).astype(int), 0, len(zf["lat"]) - 1)
+        fj = np.clip(np.round((lon - zf["lon"][0]) / (zf["lon"][1] - zf["lon"][0])).astype(int), 0, len(zf["lon"]) - 1)
+        lf = (1.0 - lf) * zf["frozen"][fi][:, fj]
     trans = np.exp(-np.maximum(ev - BARRIER_M[0], 0.0) / BARRIER_M[1])
     Lc = fetch_km / (111.2 * 0.5)
     out = np.zeros_like(lf)
@@ -356,11 +364,11 @@ def pole_fetch(fetch_km: float = POLE_FETCH_KM) -> tuple:
     return out, lat, lon
 
 
-def pole_fetch_at(lat, lon, fetch_km: float = POLE_FETCH_KM):
+def pole_fetch_at(lat, lon, fetch_km: float = POLE_FETCH_KM, frozen: bool = False):
     """Poleward reachable land (0-1) at points, bilinear on the 0.5-degree grid."""
     from scipy import ndimage as ndi
 
-    F, flat, flon = pole_fetch(fetch_km)
+    F, flat, flon = pole_fetch(fetch_km, frozen)
     i = (flat[0] - np.asarray(lat)) / 0.5
     j = ((np.asarray(lon) - flon[0]) % 360.0) / 0.5
     Fw = np.concatenate([F, F[:, :1]], axis=1)

@@ -544,6 +544,10 @@ class ClimateModel:
         self.pole_land = None
         if p.continental_mean > 0:
             self.pole_land = g.chi_pole if g.chi_pole is not None else self._poleward_land(2000.0)
+            if p.pole_frozen_sea > 0 and getattr(g, 'chi_pole_ice', None) is not None:
+                # e129: a sea that freezes over in winter (Hudson Bay, Foxe Basin, the Kara Sea, Okhotsk)
+                # feeds the cold pools like land: Hudson Bay makes eastern Canada colder than its land share
+                self.pole_land = self.pole_land + p.pole_frozen_sea * g.chi_pole_ice
         # enclosure of seas (fraction of land within ~400 km)
         self.enclosure = np.clip((ndi.gaussian_filter(land, 4 * cells_per_100km) - 0.15) / 0.6, 0, 1)
         if p.sea_enclosure == "rays":

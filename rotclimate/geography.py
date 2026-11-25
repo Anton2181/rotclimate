@@ -247,6 +247,7 @@ class Grid:
     chi_far: np.ndarray | None = None   # e6: upwind land share of the world beyond the grid (Earth mode)
     chi_far_long: np.ndarray | None = None   # e23: westward land share over ~5,100 km (Earth mode; other grids compute their own)
     chi_pole: np.ndarray | None = None       # e31: poleward land reachable by shallow cold air, ~2,000 km (Earth mode; other grids compute their own)
+    chi_pole_ice: np.ndarray | None = None   # e129: poleward winter-frozen sea reachable by cold air (Earth mode)
     sea_reach: np.ndarray | None = None      # e42: latitude where the sea due poleward first meets land (Earth mode; other grids compute their own)
     cloud_ref: np.ndarray | None = None      # e43: [12, ny, nx] the globe's land-mean cloud cover at each cell's latitude, from WorldClim (Earth mode)
     descent: np.ndarray | None = None        # e49: [12, ny, nx] the descent the monsoons drive to their west, from WorldClim's rain (Earth mode; other grids compute their own)
