@@ -2,7 +2,8 @@
 
     python3 -I scripts/land_budget.py REGION PARAMS.json OUT.json [PAD_KM]
 For each stage the step-to-step change of the land column, averaged over the scored land cells, per calendar month
-(last year of the run), plus the air temperature and the observed monthly mean.
+(last year of the run), plus the sea-level air temperature, the observed monthly mean and its sea-level equivalent
+(observed_sl = observed + lapse_rate x elevation; compare with 'air'). LB_MAX_ELEV=800 limits the cells to plains.
 """
 import json, sys
 from pathlib import Path
@@ -21,6 +22,8 @@ for f in ['calibration/local_accuracy_20261023/regions_dev12.json', 'calibration
     earth.REGIONS.update(json.loads((ROOT / f).read_text()))
 case = earth.region_case(region, 56, float(sys.argv[4]) if len(sys.argv) > 4 else 1100.0)   # optional map margin (A1)
 g = case.grid; m = g.inmap & g.land & np.isfinite(case.obs_T).all(0)
+import os
+if os.environ.get('LB_MAX_ELEV'): m = m & (g.elev < float(os.environ['LB_MAX_ELEV']))   # e.g. plains only
 rec = {}
 ClimateModel.tap = staticmethod(lambda name, d, a: rec.setdefault(name, {}).__setitem__(round(float(d), 3), float(np.mean(np.asarray(a)[m]))))
 res = earth.run_case(p, case, steps=p.steps_per_year)
@@ -36,9 +39,10 @@ for n in names:
     res_m[n] = (v / np.maximum(c, 1)).round(2).tolist()
 obs = np.asarray(case.obs_T)[:, m].mean(1).round(2).tolist()
 res_m['observed'] = obs
+res_m['observed_sl'] = (np.asarray(case.obs_T)[:, m] + p.lapse_rate * g.elev[m] / 1000.0).mean(1).round(2).tolist()   # sea-level equivalent, comparable with 'air'
 out.write_text(json.dumps(res_m, indent=1) + '\n')
 hdr = 'stage         ' + ' '.join(f'{i:>6d}' for i in range(1, 13))
 print(hdr)
 prev = None
-for n in names + ['observed']:
+for n in names + ['observed', 'observed_sl']:
     print(f'{n:13s} ' + ' '.join(f'{x:6.1f}' for x in res_m[n]))
