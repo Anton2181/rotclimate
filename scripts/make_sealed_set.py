@@ -1,7 +1,8 @@
 """Draw a sealed region set: 1-degree grid search in a latitude band for 300 km boxes that are >= 80 % land (WorldClim 5')
 and clear (56 km margin) of every known region definition; then 6 boxes drawn with a fixed seed, at least 1,000 km apart.
 
-    python3 -I scripts/make_sealed_set.py OUTDIR PREFIX SEED [LAT_LO LAT_HI]
+    python3 -I scripts/make_sealed_set.py OUTDIR PREFIX SEED [LAT_LO LAT_HI [SIZE_KM]]
+SIZE_KM (default 300) is the box side; 200 km boxes fit between the known regions once 300 km ones run out.
 """
 import json, math, sys
 from pathlib import Path
@@ -24,13 +25,14 @@ def known():
 
 def main():
     out, prefix, seed = Path(sys.argv[1]), sys.argv[2], int(sys.argv[3]); lo, hi = (float(sys.argv[4]), float(sys.argv[5])) if len(sys.argv) > 5 else (25.0, 55.0)
+    size = float(sys.argv[6]) if len(sys.argv) > 6 else 300.0; half = size / 2
     elev = earth._wc('elev'); land = np.isfinite(elev); KB = [A.bounds(r) for r in known().values()]
     cand = []
     for hemi in (1, -1):
         for lat in np.arange(lo + 0.5, hi, 1.0):
             for lon in np.arange(-179.5, 180, 1.0):
-                r = dict(lat0=float(hemi * lat), lon0=float(lon), width_km=300, height_km=300)
-                dlat = 150 / 111.2; dlon = 150 / (111.2 * math.cos(math.radians(lat)))
+                r = dict(lat0=float(hemi * lat), lon0=float(lon), width_km=size, height_km=size)
+                dlat = half / 111.2; dlon = half / (111.2 * math.cos(math.radians(lat)))
                 i0, i1 = int((90 - (r['lat0'] + dlat)) * 12), int((90 - (r['lat0'] - dlat)) * 12)
                 j0, j1 = int((lon - dlon + 180) * 12), int((lon + dlon + 180) * 12)
                 if j0 < 0 or j1 > 4320: continue
