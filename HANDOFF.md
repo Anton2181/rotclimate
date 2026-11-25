@@ -1,5 +1,7 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**r55 ADOPTED (25 Nov 2026).** W11 refit on es3 (e127 sea ice gated by sea air, band snow albedo replaced by cell snowpack) finalist w2_001 (dev objective only): dev6 S97 0.9889 [0.980, 0.996], T -2.0 %, P -0.2 %, every regime <= 1.000 (continental 0.972, tropical_wet 1.000); fine28 S28 0.997; sealed W13 (opened once) S 0.9953 [0.979, 1.013]: PASS. Params calibration/local_accuracy_20261023/r55_params.json, record r55_adoption.json, W11_records/. Reference runs output/ppe_20261125/ref55/r55_<part> (use these as the paired reference now; screen_v6 with ref55 r55). W13 SPENT. Atlas NOT rebuilt (remains r51). NEXT: new sealed set needed before the next adoption (mid-latitude 300 km boxes exhausted; consider southern/maritime/tropical boxes at 200 km); structural leads: Ungava summer land_eq too hot, BC/NE Pacific sea too warm in summer, maritime seasonal range.
+
 **Sea ice e127/e127b + sealed W13 (25 Nov 2026).** New sealed set calibration/sealed_20261125W13 (13 x 200 km
 NH mid-latitude boxes; 300 km boxes exhausted) declared UNOPENED for the next candidate against r54. e127 sea ice
 (air over a freezing sea relaxes to min(land eq, 0 C)) gated by the air over the sea (e127b sea_ice_air_c -5):
