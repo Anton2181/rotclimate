@@ -1,0 +1,64 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "status": "declared before any evaluation; lineage on r55 (adds e128 snow surface inversion as a knob); owner 25 Nov: 'keep on improving the model/metamodel'",
+ "why": "Largest r55 errors are an east-west dipole: NE Asia and eastern Canada interiors too warm Oct-Jan (+4-7 C), western Eurasia and western Canada too cold (spring and winter). e128 alone screens S97 0.9991 (inversion 3) to 1.0032 (6): helps the warm east, hurts the cold west. Refit e128 jointly with the continental-season knobs so they can rebalance.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r55), fine28 once (vs r55), ONE sealed X run (vs r55). A fail may be continued at most once, declared before it runs.",
+ "base": "calibration/local_accuracy_20261023/r55_params.json",
+ "base_set": {},
+ "reference": "output/ppe_20261125/ref55",
+ "reference_name": "r55",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261125/W12",
+ "seed": 20261161,
+ "wave1": 48,
+ "knobs": {
+  "snow_inversion": [
+   0.0,
+   7.0,
+   "lin"
+  ],
+  "snow_inversion_s": [
+   80.0,
+   300.0,
+   "lin"
+  ],
+  "continental_mean": [
+   3.0,
+   9.0,
+   "lin"
+  ],
+  "continentality": [
+   0.25,
+   0.6,
+   "lin"
+  ],
+  "continental_depth": [
+   0.2,
+   0.7,
+   "lin"
+  ],
+  "land_coupling_insolation": [
+   1.2,
+   2.2,
+   "lin"
+  ],
+  "snow_albedo": [
+   1.0,
+   5.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.1,
+   -1.3,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r55 (gate_v3.py dev6, fine28, then ONE sealed X run with the r55 reference run paired: sealed5 part sealed_X, region specs calibration/sealed_20261125X/regions.json); pass -> r56. No atlas rebuild."
+}

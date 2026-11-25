@@ -13,6 +13,8 @@ from rotclimate.config import Params
 from rotclimate.model import ClimateModel
 
 region, pf, out = sys.argv[1], sys.argv[2], Path(sys.argv[3])
+for _f in ["calibration/sealed_20261124U18/regions.json", "calibration/sealed_20261123S18/regions.json", "calibration/local_accuracy_20261023/regions_dev12.json", "calibration/sealed_20261101c/regions.json"]:
+    if (ROOT / _f).exists(): earth.REGIONS.update({k: v for k, v in json.loads((ROOT / _f).read_text()).items() if k not in earth.REGIONS})
 p = Params(**json.loads((ROOT / pf).read_text()))
 for f in ['calibration/local_accuracy_20261023/regions_dev12.json', 'calibration/sealed_20261031/regions.json', 'calibration/sealed_20261031b/regions.json',
           'calibration/sealed_20261101c/regions.json', 'calibration/tropical_check_20261122t/regions.json', 'calibration/sealed_20261122r/regions.json']:
