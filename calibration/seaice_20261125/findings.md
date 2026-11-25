@@ -32,3 +32,15 @@ British Isles r54: land equilibrium April 3.8 C (obs air 7.4), air Mar-May 2-3.5
 BC coast: land equilibrium March -12 C, air Feb-Mar 3-4 C cold, Oct-Nov +3-4 warm; its sea is now 1.5-4 C warm
 in summer (NE Pacific, r54 damping + currents). ebm_land_ice (e65, 0.47) leaves half the latitude band's
 continental snow albedo on every land cell. Screen: screen_eli.log (0, 0.2, 0 + ig5).
+
+## Band snow albedo (ebm_land_ice), reference r54
+| run | S97 [90 %] | continental | temperate | mediterranean | tropical_wet |
+|---|---|---|---|---|---|
+| ig5m60 | 0.9941 [0.9836, 1.0002] | 0.973 | 1.001 | 1.000 | 1.000 |
+| eli0 | 0.9997 [0.9899, 1.0095] | 1.017 | 0.986 | 0.975 | 1.024 |
+| eli20 | 0.9979 [0.9919, 1.0038] | 1.005 | 0.990 | 0.983 | 1.014 |
+| eli0 + ig5 | 0.9936 [0.9832, 1.0040] | 0.990 | 0.986 | 0.975 | 1.024 |
+eli0 helps the cold-biased (Kazakh steppe 1.51 -> 1.08, Middle Volga 2.26 -> 1.80, W Siberia, Alps, BC coast,
+Pacific NW) and hurts the warm-biased snowy lands (US Midwest, Korea, Nova Scotia, N China, Hudson Bay lowlands
++0.5-0.7 C). The cells' own snowpack (e16 snow_albedo 0.21 K per 480 W m-2) is too weak to carry the snow the
+band no longer imposes. Screen eli0 + ig5 + snow_albedo 3 / 6: screen_snow.log.
