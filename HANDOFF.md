@@ -1,5 +1,13 @@
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
+**Sea ice e127/e127b + sealed W13 (25 Nov 2026).** New sealed set calibration/sealed_20261125W13 (13 x 200 km
+NH mid-latitude boxes; 300 km boxes exhausted) declared UNOPENED for the next candidate against r54. e127 sea ice
+(air over a freezing sea relaxes to min(land eq, 0 C)) gated by the air over the sea (e127b sea_ice_air_c -5):
+S97 0.9940 [0.9836, 1.0000] vs r54, continental 0.973, all others 1.000 (Ungava 5.20 -> 3.53 C); carry into the
+next candidate. Next lead: band snow albedo (ebm_land_ice) delaying maritime springs (screen_eli.log).
+HAZARD: never copy the WOA cache into data/cache/earth while a screen runs: cases pick up WOA sea depth and the
+paired-geography check fails (ig5m60 lost once). calibration/seaice_20261125/findings.md.
+
 **r54 ADOPTED (25 Nov 2026).** plan_W10 closed after wave 1 (49 runs, emulator LOO 0.0006, predicted best
 ~0.976 vs observed 0.9780: < 0.005). Finalist = base point ho40r8 (mw70l25 + sst_damping 0.4 full at 55 deg,
 e126 sst_damping_heat_only, land_radiative_days 8). dev6 S97 0.9780 [0.965, 0.990], T -3.2 %, P -1.2 %, regimes
