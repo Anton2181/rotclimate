@@ -34,3 +34,8 @@ None of the existing drying levers holds the Sahara/Sahel dry against moist sout
 transported column water, not from convective triggering. A new mechanism is needed (e.g. a cap on the northward
 moisture flux in the shallow monsoon layer, or edge air whose humidity follows the model's own column RH at that
 latitude band in the same map). Line closed for now.
+
+Onset-gap screen (25 Nov): r56 already rains 45-57 mm/month at 21 N in Jul-Aug (Tibesti, obs ~0) and runs Sudan's
+season flat May-Oct; e133 amplifies that. onset_gap_deg 6 alone 1.0149 (Tibesti worse 1.18); e133 0.5 + gap 6 / 8
+1.0205 / 1.0332; e133 1.0 + gap 8 1.0527. A wider gap makes the Sahara WETTER: its rain is large-scale saturation of
+transported column water, not the convective boost the gap suppresses. Line CLOSED.
