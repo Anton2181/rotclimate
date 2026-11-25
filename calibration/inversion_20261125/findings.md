@@ -44,3 +44,10 @@ largest). Every global lever trades the warm east (E Canada, Okhotsk) against th
 Krasnoyarsk, BC/Alberta). The dipole needs a regional discriminator that none of chi, pole_land, frozen sea,
 elevation or winter precipitation supplies. Leads not tried: spring snowmelt timing vs observed snow cover;
 wet_cooling energy-limited (sunshine) instead of anomaly-scaled.
+- Seasonal phase (phase_lag.py, r55): the cold west runs LATE (British Isles +19.8 d, BC coast +11.6, E Europe +7.7,
+  Middle Volga +5.4, Krasnoyarsk +4.7, Kazakh +3.5); the warm east is on time (u_53n_92w -1.1, u2_49n_93w -2.1).
+- land_radiative_days 4: S97 0.9982 [0.9931, 1.0036]: same trade (east 0.93-0.96, Volga 1.05, Kazakh 1.08, BC 1.08).
+  land_radiative_days 0 crashed in dev31 (benchmark error; not pursued).
+CONCLUSION (25 Nov): six levers (e128, W12, coupling, e129, e130, radiative days) all move the continental interiors
+together. Parked: the dipole needs a regional discriminator. The most specific remaining lead is the west's late
+phase (maritime lag, task C4: British Isles +20 d), i.e. the sea-air share of western coasts/interiors.
