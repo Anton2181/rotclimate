@@ -17,3 +17,18 @@ Diagnosis: the model's zonal sea freezes the open subpolar ocean (Norwegian Sea,
 reality overturns and stays ice-free. e127b gates the cover on the air over the sea (sea_ice_air_c: none above,
 all 10 K below): ice where land-chilled air keeps drawing heat out. Ungava with gate -5: January -21.1,
 November -9.5 (ungated -12.7, obs -7.5). Screen: screen_iceg.log.
+
+## Gated ice (e127b), reference r54
+| run | S97 [90 %] | continental | others |
+|---|---|---|---|
+| ig5 (air gate -5 C, melt 30 d) | 0.9940 [0.9836, 1.0000] | 0.973 | all other regimes 1.000 |
+| ig10 (-10 C) | 0.9945 [0.9849, 1.0000] | 0.976 | 1.000 |
+| ig3 (-3 C) | 0.9943 [0.9843, 1.0001] | 0.974 | 1.000 |
+A clean, local gain (Ungava 5.20 -> 3.53 C, Okhotsk, Hudson Bay lowlands); too concentrated to clear the
+90 % upper bound alone. Carry ig5 into the next candidate. Container restart interrupted ig5m60 (rerun).
+
+## Next lead: band snow albedo in spring (r54)
+British Isles r54: land equilibrium April 3.8 C (obs air 7.4), air Mar-May 2-3.5 C cold, Oct-Nov +1 warm.
+BC coast: land equilibrium March -12 C, air Feb-Mar 3-4 C cold, Oct-Nov +3-4 warm; its sea is now 1.5-4 C warm
+in summer (NE Pacific, r54 damping + currents). ebm_land_ice (e65, 0.47) leaves half the latitude band's
+continental snow albedo on every land cell. Screen: screen_eli.log (0, 0.2, 0 + ig5).
