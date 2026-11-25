@@ -23,3 +23,14 @@ belt, where real air is moist too) and the model carries it too far north; r56's
 edges are dry. A boundary fix therefore needs a matching fix of the northward reach of monsoon moisture over hot
 land (dry air aloft / shallow monsoon layer; cf. e86 onset_suppression, e93 convective_rh_gate) before it can pay.
 Code e133/e133b (edge_itcz_rh, edge_itcz_rh_max, edge_itcz_width, edge_itcz_poleward_width) stays, default off.
+
+Combination screen (e133 0.5 + an existing monsoon-reach lever) vs r56:
+| set | S97 [90 %] | Tibesti u_21n_21e / Sudan s3_17n_34e |
+| + heat_low_drying 0.1 (e80) | 1.0142 | 1.56 / 1.91 |
+| + convective_rh_gate_pole 0.5 (e119) | 1.0117 | 1.42 / 1.91 |
+| + subsidence_branch_drying 0.5 | 1.0135 | 1.51 / 1.76 |
+| + monsoon_descent 0.08 | 1.0096 [0.986, 1.039] | 1.52 / 1.95 |
+None of the existing drying levers holds the Sahara/Sahel dry against moist southern edges: their rain comes from
+transported column water, not from convective triggering. A new mechanism is needed (e.g. a cap on the northward
+moisture flux in the shallow monsoon layer, or edge air whose humidity follows the model's own column RH at that
+latitude band in the same map). Line closed for now.
