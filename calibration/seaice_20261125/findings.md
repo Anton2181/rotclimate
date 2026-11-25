@@ -44,3 +44,11 @@ eli0 helps the cold-biased (Kazakh steppe 1.51 -> 1.08, Middle Volga 2.26 -> 1.8
 Pacific NW) and hurts the warm-biased snowy lands (US Midwest, Korea, Nova Scotia, N China, Hudson Bay lowlands
 +0.5-0.7 C). The cells' own snowpack (e16 snow_albedo 0.21 K per 480 W m-2) is too weak to carry the snow the
 band no longer imposes. Screen eli0 + ig5 + snow_albedo 3 / 6: screen_snow.log.
+
+## Cell snowpack (e16 snow_albedo) with eli0 + ig5, reference r54
+| run | S97 [90 %] | regimes |
+|---|---|---|
+| es3 (snow_albedo 3) | 0.9926 [0.9834, 1.0011] | arid 0.994, continental 0.980, highland 0.995, med 0.988, temperate 0.988, tropical_dry 1.001, tropical_wet 1.024 |
+| es6 | 0.9996 [0.9885, 1.0087] | highland 1.022, med 1.012 |
+es3 = best combination; tropical_wet 1.024 breaks the regime gate (the band column change warms Amazon land
+~0.1 C). plan_W11 declared on es3 (calibration/ppe_20261123/plan_W11.json), gates vs r54, sealed W13.
