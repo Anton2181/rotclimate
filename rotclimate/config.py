@@ -311,6 +311,7 @@ class Params:
     continental_depth_highland_m: float = 0.0  # e122: continental_depth fades to 0 from this smoothed elevation to +1,000 m (0 = off)
     maritime_mean_lat: float = 0.0  # e123: maritime_mean ramps in from this |lat| to +15 deg (0 = everywhere)
     maritime_mean_warm_only: bool = False  # e124: maritime_mean shifts the centre only toward a warmer sea mean
+    maritime_mean_clip: bool = False  # e131: cap the maritime_mean weight at 1 (centre never past the sea mean)
     continentality_maritime: float = 1.0
     sst_damping_heat_only: bool = False
     sea_ice: float = 0.0

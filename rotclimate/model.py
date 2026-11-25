@@ -1305,6 +1305,9 @@ class ClimateModel:
                         # mean is colder than their land (calibration/maritime_20261124). Ramp in from
                         # maritime_mean_lat to +15 deg.
                         w = w * np.clip((np.abs(lat) - p.maritime_mean_lat) / 15.0, 0.0, 1.0)
+                    if p.maritime_mean_clip:
+                        # e131: a maritime land's annual mean moves at most onto the sea's, never past it
+                        w = np.minimum(w, 1.0)
                     gap = np.nan_to_num(self.sea_annual) - Tl_mean
                     if p.maritime_mean_warm_only:
                         # e124: only toward a warmer sea: beside cold currents (California, NZ) the cold
