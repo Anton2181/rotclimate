@@ -41,7 +41,7 @@ def setup_case(tmp_path, monkeypatch, passed=True):
     monkeypatch.setattr(B.earth, 'run_case', run)
     monkeypatch.setattr(B, 'monthly_stats', lambda *a, **kw:dict(Tm=case.obs_T.copy(), Pm=case.obs_P.copy()))
     (tmp_path/'cells').mkdir();(tmp_path/'cases').mkdir()
-    job = ('california',asdict(p),56.,str(tmp_path),{},'frozen-run')
+    job = ('california',asdict(p),56.,str(tmp_path),{},'frozen-run',1100.)
     return case, calls, job
 
 
@@ -78,7 +78,7 @@ def test_grid_identity_tracks_observations_and_fetch_beyond_the_region():
     assert case_hash(case) != before
 
 
-@pytest.mark.parametrize('field',['chi_pole','sea_reach','cloud_ref','descent','sea_depth'])
+@pytest.mark.parametrize('field',['chi_pole','sea_reach','cloud_ref','descent','sea_depth','obs_pw','chi_pole_ice'])
 def test_grid_identity_tracks_newer_physical_forcing(field):
     from test_earth import _toy_case
     case = _toy_case()
@@ -88,3 +88,16 @@ def test_grid_identity_tracks_newer_physical_forcing(field):
     assert populated != before
     getattr(case.grid,field)[0,0] += .1
     assert case_hash(case) != populated
+
+
+@pytest.mark.parametrize('field',['obs_pw','chi_pole_ice'])
+def test_resume_rejects_changed_boundary_water_or_frozen_sea(tmp_path, monkeypatch, field):
+    case, calls, job = setup_case(tmp_path, monkeypatch)
+    shape = ((12,) + case.grid.land.shape) if field == 'obs_pw' else case.grid.land.shape
+    setattr(case.grid, field, np.ones(shape))
+    B.one(job)
+    assert len(calls) == 1
+    getattr(case.grid, field).flat[0] += .1
+    with pytest.raises(ValueError, match='regional inputs differ'):
+        B.one(job)
+    assert len(calls) == 1
