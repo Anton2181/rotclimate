@@ -1,3 +1,46 @@
+# Active goal: W18c live; tested marine-budget correction READY, UNAPPLIED
+
+CHECK current live PID6609/run_w18c_campaign.py and
+output/ppe_20261127/W18c/campaign_status.json. Last13 completed, w1_012 running.
+Old PID1877 is a ZOMBIE after executor disconnect, NOT a live run. At23:35UTC
+resumed original supervisor detached with inherited lock after verifying11
+completed records+31 certified partial regions. NO duplicate/candidate/budget
+change. Receipt calibration/ppe_20261123/W18c_records/executor_resume.json.
+Leader remains w1_005,S97/objective.9842206108,worstregime1.01796884. No
+finalist/gate/adoption claim. r58 adopted, atlasr51, AA unopened.
+
+NEW READY FIX: READ calibration/marine_budget_export_patch_20261126/findings.md
+and marine_budget.patch. Patch only model.py +transport.py export accounting;
+MAIN PHYSICAL SOURCE IS STILL UNCHANGED. Single-column land humidity
+relaxation is solved already but missing from exported local/flux ledgers.
+Add signed marine_exchange beyond surfaceE. Reservoir E ALREADY includes it,
+so its additional component is0 (not a claim physicalexchangeis0). PreserveE
+and every physical field; no solver/rain/temperature/parameter change.
+
+Private validation COMPLETE:3fixedtoy configurations,9paired-validation runs,
+plus4coupledtoy runs in fixed existing regression suites; NO Earth regions.
+430560 byte-exact physical scalar comparisons including reservoirlayerwater;
+28 tests pass(no skips/failures), incl genuine positive/negative source solves
+and ocean_sink1/.4 +signedreportcomponent. Fluxledger .032438->.001593 passes
+existing.01; maxscaledlocal.009580/.008147/.001560. Reservoir residual/cert
+unchanged; old failures retained. Qualified evidence output/marine_budget_export_patch_20261126/.
+Private baseline/ and patched/ are ignored; never edit/reuse their results
+under another source. Additional marine_export_checks.py deliberately has a
+nondefault filename for private-only checks; original testfilename rename
+preserved identicalbytes and is recorded in unit_test_source.json.
+
+NEXT: whileW18cactive, DON'T APPLY PATCH or start prepared padding integrations.
+After terminal+supervisor exit: review W18c finalist/gates before any adoption;
+apply/retest diagnosticpatch as a new source/protocol epoch, preserving old
+qualifications. Promote6functional checks (private-contextguard staysprivate).
+Then activate prepared9-run padding study on its ORIGINAL pinned r58 snapshot;
+main diagnosticpatch does not modify that snapshot. No refitting boundarymode
+or reinterpreting historical flux failures. If executor drops again, exclude
+zombies, verify saved regional receipts, then resume pending work only with
+the /tmp/rotclimate_W18c_campaign.lock advisory lock and detached session.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c resumed; isolated padding experiment READY, not started
 
 Executor disconnected: old PID1877 is a ZOMBIE, not a running campaign.
