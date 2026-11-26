@@ -1,0 +1,71 @@
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -1154,7 +1154,7 @@
+             cropped_shape = (nt,) + g.target[g.map_slice()].shape
+             budget = {key: np.zeros(cropped_shape, np.float32) for key in
+                       ('advection', 'diffusion', 'storm_exchange', 'residual', 'absolute_residual',
+-                       'evaporation', 'column_drying', 'monsoon_drying', 'convergence_import')}
++                       'evaporation', 'marine_exchange', 'column_drying', 'monsoon_drying', 'convergence_import')}
+         land = g.land
+         ocean = ~land
+         lat = self.lat
+@@ -2846,12 +2846,18 @@
+                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
+             E = (solution.evaporation if p.moisture_reservoirs else
+                  np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY))
++            if budget is not None or p.moisture_transport_form == 'flux':
++                # Surface E omits single-column land humidity relaxation.
++                # Independent reservoirs already include it in their E.
++                marine_exchange = (np.zeros_like(W) if p.moisture_reservoirs else
++                    np.where(land, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, 0.0))
+             if p.moisture_transport_form == 'flux':
+                 from .transport import flux_budget
+                 target=mix(W) if mix is not None else W
+                 if condensate is not None:
+                     target=target+condensate(W)
+-                net=E if sink is None else E-sink*W*DAY
++                net=E+marine_exchange
++                if sink is not None:net=net-sink*W*DAY
+                 self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers,mass=tracer_mass,
+                                                    scheme=p.moisture_flux_scheme))
+             if self.trace_cells is not None and n >= spinup:
+@@ -2916,7 +2922,8 @@
+                     mixed = mix(W) if mix is not None else W
+                     if condensate is not None:
+                         mixed = mixed + condensate(W)
+-                    E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
++                    E_net = E + marine_exchange
++                    if sink is not None:E_net = E_net - sink * W * DAY  # subsidence drying as negative evaporation
+                     if gain is not None:
+                         E_net = E_net + gain * W * DAY                    # e17 convergence import
+                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
+@@ -2925,6 +2932,7 @@
+                     # Expose the source/sink pieces already used above. These
+                     # are observations of the local equation, not new physics.
+                     terms['evaporation'] = E
++                    terms['marine_exchange'] = marine_exchange
+                     terms['column_drying'] = np.zeros_like(W) if sink is None else -sink * W * DAY
+                     terms['monsoon_drying'] = (np.zeros_like(W) if p.monsoon_descent <= 0 else
+                                                -(p.monsoon_descent * descent / DAY) * W * DAY)
+--- a/rotclimate/transport.py
++++ b/rotclimate/transport.py
+@@ -175,16 +175,17 @@
+             days = int(months.sum()) * p.year_days / 12
+             rain = mean('rain')
+             components = ['rain', 'evaporation', 'advection', 'diffusion', 'storm_exchange', 'residual']
+-            components += [key for key in ('column_drying', 'convergence_import')
++            components += [key for key in ('marine_exchange', 'column_drying', 'convergence_import')
+                            if f'monthly_{key}_mm_day' in arrays]
+             periods[name] = dict(
+                 mean_total_mm_per_cell={k: mean(k) * days for k in components},
+                 mean_absolute_equation_residual_mm_day=mean('absolute_residual'),
+                 absolute_residual_over_rain=mean('absolute_residual') / max(rain, 1e-9))
+         zones[key] = periods
+-    note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
++    note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + marine_exchange + column_drying + convergence_import + transport sources - rain. Older archives may omit source components and cannot be assumed to reconstruct the full active equation. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
+     if getattr(p,'moisture_transport_form','concentration')=='flux':
+         note='Steady flat-grid regional vapor equation with shared-face conservative mean-wind transport. Column drying is negative, convergence import is disabled. Storm exchange conserves separately only when its scheme does; see the numerical ledger. Fixed borders supply or remove water. This is not a closed planet or transient water budget.'
+         if getattr(p,'moisture_flux_scheme','upwind')=='exponential':
+             note+=' Exponential face fitting is active: the diffusion term is the fitted part of the combined Scharfetter-Gummel flux, not standalone physical Fickian diffusion.'
++    note+=' The optional marine_exchange component is signed single-column land humidity relaxation beyond surface E; independent reservoirs already include it in evaporation, so their additional component is zero.'
+     return dict(note=note,zones=zones)
