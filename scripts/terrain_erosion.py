@@ -56,6 +56,8 @@ def evolve(h0, land, rivers, dx_m, prm=None):
     target = lp(h0)
     rock = np.exp(p["noise_sigma"] * smooth_noise(p["noise_km"]))
     ksn = np.where(land, rock, 0.0)
+    if p.get("ksn_field") is not None:                    # v2.3 (owner, 26 Nov): steering field, e.g. divides resist erosion
+        ksn = ksn * p["ksn_field"]
     # initial surface: the target plus multi-scale roughness to seed the drainage pattern
     z = np.where(land, h0 * (1 + 0.15 * smooth_noise(p["noise_km"] / 2)) + 5 * smooth_noise(p["noise_km"]), 0.0)
     boost = np.where(rivers, p["river_boost_km2"] * 1e6, 0.0)
