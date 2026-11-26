@@ -1,0 +1,22 @@
+{
+  "status": "declared_before_three_instrumented_replays",
+  "follows": "Completed eight-run somalia_mechanism_20261126 diagnostic; this is a separate bounded instrumentation follow-up, not an expanded ablation search.",
+  "question": "Does the Somali wind-turning intervention change the moisture-transport wind as well as the surface wind, and which signed terms of the model's local moisture equation sustain the remaining rainfall? How does the Sahara control's equation differ?",
+  "runs": [
+    {"region": "s_2n_43e", "variant": "control", "overrides": {}},
+    {"region": "s_2n_43e", "variant": "minimum_turning", "overrides": {"monsoon_westerly_floor": 1.0}},
+    {"region": "u_21n_21e", "variant": "control", "overrides": {}}
+  ],
+  "budget": "Exactly three instrumented replays of already completed parameter/region combinations. No new settings, fits, extra candidates, regional exclusions or unopened data. Same fresh r58 parameters,56km grid and1100km pad. All valid scored cells are traced; no favourable-cell selection.",
+  "instrumentation": "Existing ClimateModel.trace_cells and run(diagnose_moisture=True) hooks only; do not edit any physical source or shared cache while W18c runs. Capture actual moisture_u/v alongside surface u/v, water/saturation, rain/evaporation, soil, rain-driver coefficients, damping, source/sink rates and existing moisture_terms outputs. Trace drivers retain their model units and are not turned into rainfall fractions.",
+  "replay_controls": "All three full physical T/P/E/W/u/v outputs, after the production monthly mapping, must exactly match their completed somalia_mechanism counterparts. Case identities must match; all numerical certificates must pass. Demonstrate instrumentation changes no physical results. Preserve failures and do not weaken these checks.",
+  "time_mapping": "Join trace records to the model's stored day coordinates, requiring a complete unique25-step match; do not assume trace append order or assign steps to months by nearest timestamp. Use production monthly_weights with12 equal-length model months. Preserve all25 raw steps and12 monthly summaries.",
+  "equation_scope": "r58 uses stationary concentration-form upwind transport, not conservative flux-form transport. Report signed local advection, diffusion, eddy exchange, evaporation, total column drying and convergence import against rain. Monsoon drying is a SUBSET of total column drying and must not be added twice. This audits the selected discrete local equation; it is not a conservative regional boundary-flux budget or an observed atmospheric attribution.",
+  "closure_check": "Reconstruct local residual from saved component fields and compare stored signed residual, allowing float32 export rounding. Keep mean absolute instantaneous residual before aggregation; report max absolute residual divided by max(rain+abs(evaporation),0.1mm/day) against the existing0.01 equation tolerance. If that corroboration fails, report it explicitly and make no closure claim; do not tune a parameter to fix a diagnostic.",
+  "outputs": "Raw trace/operator packet, complete monthly scalar tables, signed annual equation totals, surface-versus-transport wind comparison, full certificate/source receipts, independently checked diagnostic figure and concise findings. No claim that raw driver coefficients add linearly to rain.",
+  "W18c": "Continues independently on its frozen objective/budget and gates. No effect on finalist selection or sealed-AA access. This prepares the next structural question after W18c closes.",
+  "new_parameter_settings": 0,
+  "new_validation_claim": false,
+  "climate_adopted": false,
+  "atlas_changed": false
+}
