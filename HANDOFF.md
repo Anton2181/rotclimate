@@ -1,3 +1,42 @@
+# Active goal: W18c running; marine-budget bookkeeping defect identified
+
+CHECK existing PID1877 / run_w18c_campaign.py process and live
+output/ppe_20261127/W18c/campaign_status.json before restarting. Log is
+/tmp/rotclimate_w18c_campaign.log. Do NOT modify physical source/shared inputs
+while it runs.49+up to16+16 fixed budget, finalist by dev only, then fine/AA.
+Adopted climate remains r58; atlas r51. AA unopened at this checkpoint.
+
+READ calibration/somalia_transport_trace_20261126/findings.md.
+Original THREE instrumented replays exactly preserved fields, but exported
+local-budget tests failed; KEEP those original failures. Separately declared
+THREE corrective replays (six total) captured actual solve_moisture arguments.
+DEFECT: e91 land marine-humidity relaxation is included by solver but omitted
+from exported E/local budget. It can source OR sink. Original comparison also
+used surfaceE denominator instead of actual net source (incl drying/import).
+External corrected diagnostic passes0.01 unchanged: maxscaled .001696 Somali
+control, .001273 turning, .003952 Sahara. Actual climate arrays ALL EXACT.
+Marine net annual -12.683/+424.487/0mm respectively; seasonal cancellation
+large. Core export patch DEFERRED until W18c closes (source inventory frozen).
+7targetedtests pass incl positive/sink regression of real moisture solver;
+180independentmonthly integral checks; figure inspected. No climate adoption.
+
+In ALL traced cells/steps of these3cases surface and transport u/v EXACTLY
+MATCH. No hidden friction/wind-split cause here. Somali control local terms:
+advection+1585, convergenceimport+1592, landE+853, eddy-372, drying-194mm/yr.
+Turning drops advection/convergence by~861/~986 but marine input offsets~437
+and eddy removal weakens. Local equation is stationary CONCENTRATION form,
+NOT a conservative boundary-flux/global budget or observed causal attribution.
+
+NEXT independent cheap diagnostic: audit e91's nearest-sea onshore gate vs
+upwind marine access using EXISTING saved wind/land-sea fields; no new climate
+integrations needed initially. This is a hypothesis, not proven geometric bug.
+Positive-only convergence import also deserves checking. Do not adopt a
+regional floor (already worsens Sahara). Any physical change waits for W18c
+closure and a separate full-gate plan. Keep all historical source/score
+mismatches explicit; no reopening sealed data or population evidence work.
+
+# Earlier active-goal state follows
+
 # Active climate goal: W18c running; Somali factorial diagnostic complete
 
 CHECK existing run_w18c_campaign.py process and
