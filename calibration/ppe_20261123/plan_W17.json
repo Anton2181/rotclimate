@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "status": "declared before any evaluation; lineage on r57 + e116 edge_obs_pw 1.0 + e75 eddy_barrier_km 500. Named W17.",
+ "why": "W16 (e116 alone) failed the regime cap in the highlands (winter storm moisture into Tibet / Great Basin). Screens vs r57: e75 eddy_barrier 500 alone 1.0052 (highland 0.905); e116 1.0 + e75 500 0.9819 [0.951, 1.013], highland 0.967, continental 0.883, but arid 1.064 / mediterranean 1.043: the observed edges dry the winter storm rain of Iran, Central Asia, Levant, Anatolia, Morocco by 20-60 %. Refit the storm-moisture knobs that were fitted around the 0.5 edge RH.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r57), fine28 once (vs r57), ONE sealed Z run (vs r57). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
+ "base": "calibration/highland_20261126/r57opeb_params.json",
+ "base_set": {},
+ "reference": "output/ppe_20261125/ref57",
+ "reference_name": "r57",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261126/W17",
+ "seed": 20261201,
+ "wave1": 48,
+ "knobs": {
+  "edge_obs_pw": [
+   0.5,
+   1.0,
+   "lin"
+  ],
+  "eddy_barrier_km": [
+   200.0,
+   800.0,
+   "lin"
+  ],
+  "eddy_rate": [
+   1.2,
+   2.8,
+   "lin"
+  ],
+  "eddy_seasonality": [
+   0.0,
+   0.5,
+   "lin"
+  ],
+  "eddy_scale_km": [
+   600.0,
+   1300.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.2,
+   -1.2,
+   "lin"
+  ],
+  "continentality": [
+   0.25,
+   0.6,
+   "lin"
+  ],
+  "inflow_gain": [
+   0.8,
+   2.5,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r57 (gate_v3.py dev6, fine28, then ONE sealed Z run with the r57 reference run paired: sealed5 part sealed_Z, region specs calibration/sealed_20261126Z/regions.json); pass -> r58. No atlas rebuild.",
+ "base_note": "r57 + edge_obs_pw 1.0 (e116) + eddy_barrier_km 500 (e75)"
+}
