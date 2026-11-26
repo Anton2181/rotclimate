@@ -1,0 +1,17 @@
+{
+  "status": "declared_before_boundary_audit_metrics",
+  "question": "How much of the current convergence Gaussian's nominal support lies outside the saved regional domains, and how sensitive is smoothed monthly divergence to explicit boundary extensions?",
+  "prior_information": "Current flux scale is 2000 km, padding is 1100 km and the three saved grids are 45x45 at 56 km. The support mismatch was identified during the separate convergence-import audit; no support-mass or extension-comparison metrics have yet been calculated.",
+  "cases": [
+    {"region": "s_2n_43e", "variant": "control"},
+    {"region": "s_2n_43e", "variant": "minimum_turning"},
+    {"region": "u_21n_21e", "variant": "control"}
+  ],
+  "support": "Use the actual Gaussian sigma=flux_scale_km/56 and SciPy default truncate4. Compare Gaussian filtering of an all-ones domain with constant-zero exterior against explicit normalized 1D Gaussian kernel sums in each dimension at every scored cell. One minus this mass is the nominal kernel weight assigned to exterior continuation; it is not a fraction of false moisture or proven climate error.",
+  "extension_comparison": "On saved full monthly surface winds only, compute centred divergence with the same row-south sign and spacing as production. Filter it with fixed reflect (production), nearest and constant-zero divergence extensions. Retain all three outcomes, raw signed divergence and clipped positive convergence proxy. No temperature gate, water multiplication, inferred instantaneous gain, rainfall prediction or preferred boundary choice. Other extensions are stress cases, not reconstructed off-domain winds.",
+  "checks": "Actual physical parameters must have inactive monsoon heating and column-shear branches so no unrepresented velocity subtraction is claimed. Every scored cell/all12months, exact source hashes, independent manual separable Gaussian convolution at scored cells for all3 extensions, explicit kernel-mass check. Keep the two earlier audits and all failed historical experiments intact.",
+  "outputs": "Complete per-cell/month support and extension table, aggregate metrics, checked scientific figure and findings. No new climate integration, larger-domain proxy masquerading as a rerun, parameter fit, fine/sealed access, physical source/cache change or adoption.",
+  "climate_integrations": 0,
+  "climate_adopted": false,
+  "W18c_changed": false
+}

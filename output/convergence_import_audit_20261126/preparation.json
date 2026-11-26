@@ -1,0 +1,54 @@
+{
+  "plan": {
+    "status": "bounded_exploratory_saved_trace_audit_declared_before_artifact_production",
+    "prior_exploration": "Source reading and simple annual/rate summaries already examined for these three cases. This is exploratory diagnosis, not a preregistered hypothesis test or candidate selection.",
+    "question": "What does the actual positive-only convergence source contribute seasonally, how does it overlap with concentration advection and independent drying, and what do earlier conservative-transport experiments rule out?",
+    "cases": [
+      {
+        "region": "s_2n_43e",
+        "variant": "control"
+      },
+      {
+        "region": "s_2n_43e",
+        "variant": "minimum_turning"
+      },
+      {
+        "region": "u_21n_21e",
+        "variant": "control"
+      }
+    ],
+    "inputs": "Existing qualified somalia_mechanism monthly fields and somalia_transport_trace instantaneous scored-cell packets, with the corrected marine-exchange qualification. Historical review records are separate source epochs, never current-runtime candidate scores.",
+    "checks": "Reconstruct import=gain_per_day*column_water and drying=-sink_per_day*column_water at every saved cell/step, within float32 export rounding. Independently check equal-model-month integration against scalar overlap weights. Verify exact unique cell/step and cell/month coverage and all source/file hashes. Keep original failed budget-export checks, do not reclassify them.",
+    "quantities": "Publish full instantaneous and monthly tables, positive and negative concentration advection separately before averaging, actual import/drying/rain/column-water/rate statistics, simultaneous signed-term overlap and min(import,drying) diagnostic. No significance thresholds or fitted parameters. Co-occurrence is not proof of duplicated physics; min-overlap is not a removable or causal rainfall amount.",
+    "source_analysis": "Document concentration versus flux product rule, positive-only smoothed warm-column gain, monsoon-velocity subtraction before the divergence diagnostic, different scales and separate drying. Existing monthly full winds cannot reconstruct instantaneous full-field divergence or the exact gain-producing winds; do not invent that reconstruction.",
+    "historical_review": "Summarize already exposed r39 vapor_flux, flux_column_wind, column_mass and r43 fitted_flux experiments from their committed complete/failure records, including nonconvergence. Do not rescore, pool epochs, or revive failed campaigns as current candidates.",
+    "outputs": "Full tables, provenance, independent scalar checks, inspected seasonal figure, findings and concrete next-step recommendation. No model/cache mutation, new observations, fine/sealed access, parameter fit, atlas build or adoption.",
+    "climate_integrations": 0,
+    "climate_adopted": false,
+    "W18c_changed": false
+  },
+  "sources_sha256": {
+    "calibration/convergence_import_audit_20261126/plan.json": "a6d2e3cff86754cc5648d0f2739cbc9d02e4e7038adcd9a93118ab07e19ffbd7",
+    "scripts/audit_convergence_import.py": "4fef3742ac1104e3884aca842491052c12ec2cf0ec8d60a0687801c217d97a64",
+    "output/somalia_marine_exchange_trace_20261126/qualification.json": "a0b8606302ccf7177564de72501526d46b796c84054424cbe04994551c4d6aae",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "rotclimate/moisture.py": "48dadae609fd3c7ea5d6bbc679d5638f69ecbe1d4799d3c284312ec71a427dc7",
+    "rotclimate/transport.py": "bdbc527762dd48634a0c0a609c5a8be903ae80fcb983affb194511b4ee11180e",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "output/vapor_flux_20261026/review.json": "9bd91ca9aa76cf34224c1aa7deac6e7c94c0b83a009311b2999fd78850ee768d",
+    "output/flux_column_wind_20261026/review.json": "3d2e226b9157c94217cf5b91b19415d52d591feaa3c66b2812ec3b641ae4e1b9",
+    "output/column_mass_20261026/review.json": "b07ed94dd6a5abea0d5cf80675fd7227e507fd32a2c293cb3554e7b3014eb884",
+    "calibration/vapor_flux_20261026/plan.json": "96a55d64ef372075ffda33194c02e0cbe40a9a9fb11c209ca386d39bad6f703d",
+    "calibration/flux_column_wind_20261026/plan.json": "54841f1ea2c4ffd3be3c7e2e2f0e26b8cbd41fd6c9e5582a22f6226c769da58f",
+    "calibration/column_mass_20261026/plan.json": "a97d74db5a1afabad1cf8d42cb2eb19d4d566e749014e30733095c9c71aaf7e8",
+    "output/fitted_flux_20261103/result.json": "73bd3fd9f61a3e0d16f0e02b493a65fc4d87775b6236b88db99e53e86f5647a9",
+    "calibration/fitted_flux_20261103/plan.json": "4da3c2a60e307cab39460be7b80ca19a2188b78f7cc60e1cc0783bd62104c26d",
+    "output/somalia_transport_trace_20261126/s_2n_43e/control/trace.npz": "ed757282fc20792befcab0fd428214e988da03e5746cb66349c90360056e4f59",
+    "output/somalia_mechanism_20261126/s_2n_43e/control/fields.npz": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+    "output/somalia_transport_trace_20261126/s_2n_43e/minimum_turning/trace.npz": "c23e55c17cbd5400e8e0b91829c3642def266aad2715eee4c4300561c63f5a86",
+    "output/somalia_mechanism_20261126/s_2n_43e/minimum_turning/fields.npz": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+    "output/somalia_transport_trace_20261126/u_21n_21e/control/trace.npz": "771950477f1376e20c8b35365c2164238f8c5ad9ba0840e006d8de87c9f0cedf",
+    "output/somalia_mechanism_20261126/u_21n_21e/control/fields.npz": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36"
+  }
+}

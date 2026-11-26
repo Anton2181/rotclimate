@@ -1,3 +1,31 @@
+# Active goal: W18c running; convergence-import audit complete
+
+CHECK live run_w18c_campaign.py PID1877 and campaign_status.json; do not restart
+or change core source/shared inputs. Last check7 completed, w1_006 running.
+Adoptedr58, atlasr51, AA unopened; development best still fails regime cap.
+
+READ calibration/convergence_import_audit_20261126/findings.md. Zero new climate
+runs.3650 exactfloat32 import/drying reconstructions; independent1825cellsteps,
+16425scalars,396monthlychecks; inspected seasonal figure, pinned provenance.
+Somali baseline import+1591.645mm/yr, positive ALLsteps/cells; advection net
++1585.343,drying-194.164. Gain.0512-.1765/day,mean.0974. Co-occurrence is NOT
+doublecount proof: production concentration advection omits -Wdiv(u). Turning
+reduces import to605.435 but changes other terms too. Sahara import787.724
+and drying-1378.396. Historical r39/r43 flux switches already failed accuracy
+or numerical guards; no point restarting them wholesale. Source branch that
+subtracts monsoon-heating velocities is INACTIVE here (monsoon_heating0).
+
+NEW focused lead: flux_scale_km2000, Gaussian4sigma support8000km vs1100km
+regionalpadding,45x45gridat56km. Support mismatch alone is NOT measured bias.
+NEXT committed calibration/convergence_boundary_audit_20261126/plan.json:
+zero-integration measurement of nominal exterior kernel mass plus fixed
+reflect/nearest/zero-divergence extension sensitivity on saved monthly winds.
+Manual convolution checks, no reconstructing actual instantaneous gain from
+monthly fields, no choosing a boundary rule based on observed rain. Any real
+padding/physical experiment needs separate bounded plan and W18c source freeze.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c running; marine-access audit complete
 
 Latest remote branch checked/pulled: claude/friendly-turing-43ygeu. No newer
