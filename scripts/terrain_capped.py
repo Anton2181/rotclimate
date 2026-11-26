@@ -40,6 +40,7 @@ NB = np.array([(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1,
 CAP_FLOW, WZ, EPS_M = 70, 0.2, 0.01
 import os
 WZ = float(os.environ.get("CAPPED_WZ", WZ)); CAP_FLOW = int(os.environ.get("CAPPED_FLOW", CAP_FLOW))
+MIN_DRAWN_KM2 = float(os.environ.get("CAPPED_C", 0))   # >0: every drawn river collects >= this; undrawn channels stay below it
 log = lambda *a: print(*a, flush=True)  # noqa: E731
 
 
@@ -65,6 +66,28 @@ def drawn_receivers(land, rivers):
     through = ~land & (lv > 0)
     recv, _ = _flood(np.where(land, z, np.where(through, lv, -1e9)), land | through, NB)
     return recv
+
+
+def drawn_branches(land, rivers):
+    """Branch id (1..n) of every drawn map cell: the original drawing's skeleton split at junctions, each drawn cell
+    taking the branch of the nearest skeleton pixel (0 = unassigned)."""
+    from PIL import Image
+    from skimage.morphology import skeletonize
+    H, W = land.shape
+    im = np.array(Image.open(ROOT / "data/source/original/rivers.png").convert("RGBA")); m = im[..., 3] > 60
+    oy, ox = m.shape; sk = skeletonize(m)
+    nbc = ndi.convolve(sk.astype(int), np.ones((3, 3), int), mode="constant") - 1
+    jb = ndi.binary_dilation(sk & (nbc >= 3), structure=np.ones((3, 3)), iterations=2)
+    lab, nb = ndi.label(sk & ~jb, structure=np.ones((3, 3)))
+    ys, xs = np.nonzero(lab)
+    g = np.zeros((H, W), np.int64)
+    gy = np.clip(((ys + 0.5) * H / oy).astype(int), 0, H - 1); gx = np.clip(((xs + 0.5) * W / ox).astype(int), 0, W - 1)
+    g[gy, gx] = lab[ys, xs]
+    _, (iy, ix) = ndi.distance_transform_edt(g == 0, return_indices=True)
+    b = np.where(rivers, g[iy, ix], 0)
+    # renumber 1..n over the branches present on the map
+    u = np.unique(b[b > 0]); ren = np.zeros(int(b.max()) + 1, np.int64); ren[u] = np.arange(1, u.size + 1)
+    return ren[b]
 
 
 # ------------------------------------------------------------------ tree
@@ -163,28 +186,51 @@ def capped_tree():
     A = _accumulate(order, rv, land.ravel().astype(float)).reshape(H, W) * px_km2
     mouths = np.array([A[lab == k].max() for k in range(1, n + 1)])
     cap_km2 = float(mouths.min()); cap = int(np.floor(cap_km2 / px_km2))
-    log(f"drawn rivers {n}; smallest catchment {cap_km2:.0f} km2 -> cap {cap} cells; flow cap {CAP_FLOW}")
+    branch = None; flow_cap = CAP_FLOW
+    if MIN_DRAWN_KM2 > 0:
+        # every drawn river (a branch of the drawing's skeleton) is guaranteed >= C of catchment; undrawn stay below C
+        cap_km2 = MIN_DRAWN_KM2; cap = int(np.floor(cap_km2 / px_km2)) - 1
+        flow_cap = int(0.6 * cap)
+        branch = drawn_branches(land, rivers)
+    log(f"drawn rivers {n}; cap {cap_km2:.0f} km2 -> {cap} cells; flow cap {flow_cap}")
     und = (land & ~rivers).ravel(); zc = h0.ravel().astype(float)
     ids = -np.ones(N, np.int64); ids[und] = np.arange(und.sum()); M = int(und.sum()); SINK = 2 * M
     cells = np.flatnonzero(und); yy, xx = np.divmod(cells, W)
-    T = [np.arange(M)]; Hh = [np.arange(M) + M]; C = [np.full(M, CAP_FLOW)]; Co = [np.zeros(M, np.int64)]
+    T = [np.arange(M)]; Hh = [np.arange(M) + M]; C = [np.full(M, flow_cap)]; Co = [np.zeros(M, np.int64)]
+    nbr = 0 if branch is None else int(branch.max())
+    BNODE = SINK + 1                                                 # branch nodes SINK+1 .. SINK+nbr
+    def sink_of(target):                                             # flat cell index (or -1 off-map) -> sink node
+        if branch is None:
+            return np.full(target.shape, SINK)
+        b = np.where(target >= 0, branch.ravel()[np.maximum(target, 0)], 0)
+        return np.where(b > 0, BNODE + b - 1, SINK)
     for k in range(8):
         dy, dx = NB[k]; ny_, nx_ = yy + dy, xx + dx; step = 14 if dy and dx else 10
         inside = (ny_ >= 0) & (ny_ < H) & (nx_ >= 0) & (nx_ < W)
         j = np.where(inside, ny_ * W + nx_, 0)
         to_out = ~inside | (inside & ~und[j]); to_und = inside & und[j]
-        T.append(ids[cells[to_out]] + M); Hh.append(np.full(to_out.sum(), SINK)); C.append(np.full(to_out.sum(), CAP_FLOW)); Co.append(np.full(to_out.sum(), step, np.int64))
+        tgt = np.where(inside, j, -1)[to_out]
+        T.append(ids[cells[to_out]] + M); Hh.append(sink_of(tgt)); C.append(np.full(to_out.sum(), flow_cap)); Co.append(np.full(to_out.sum(), step, np.int64))
         up = np.maximum(zc[j[to_und]] - zc[cells[to_und]], 0.0)
-        T.append(ids[cells[to_und]] + M); Hh.append(ids[j[to_und]]); C.append(np.full(to_und.sum(), CAP_FLOW)); Co.append((step + np.round(WZ * up)).astype(np.int64))
+        T.append(ids[cells[to_und]] + M); Hh.append(ids[j[to_und]]); C.append(np.full(to_und.sum(), flow_cap)); Co.append((step + np.round(WZ * up)).astype(np.int64))
+    demand = np.zeros(max(nbr, 0), np.int64)
+    if nbr:
+        own = np.bincount(branch.ravel()[branch.ravel() > 0], minlength=nbr + 1)[1:]
+        demand = np.maximum(int(np.ceil(cap_km2 / px_km2)) - own, 0)
+        T.append(BNODE + np.arange(nbr)); Hh.append(np.full(nbr, SINK)); C.append(np.full(nbr, M)); Co.append(np.zeros(nbr, np.int64))
     T, Hh, C, Co = (np.concatenate(a) for a in (T, Hh, C, Co))
     smcf = min_cost_flow.SimpleMinCostFlow()
     arcs = smcf.add_arcs_with_capacity_and_unit_cost(T, Hh, C, Co)
-    sup = np.zeros(2 * M + 1, np.int64); sup[:M] = 1; sup[SINK] = -M
-    smcf.set_nodes_supplies(np.arange(2 * M + 1), sup)
+    sup = np.zeros(2 * M + 1 + nbr, np.int64); sup[:M] = 1
+    if nbr:
+        sup[BNODE:BNODE + nbr] = -demand
+    sup[SINK] = -(M - int(demand.sum()))
+    smcf.set_nodes_supplies(np.arange(2 * M + 1 + nbr), sup)
+    log(f"branch demands: {nbr} drawn rivers, total {int(demand.sum())} cells, max {int(demand.max()) if nbr else 0}")
     t0 = time.time(); st = smcf.solve(); log(f"min-cost flow {st} in {time.time() - t0:.0f}s ({len(T)} arcs)")
     if st != smcf.OPTIMAL:
         raise SystemExit("min-cost flow not optimal: raise CAP_FLOW")
-    f = smcf.flows(arcs)[M:]; t = T[M:] - M; h = Hh[M:]
+    fl_all = smcf.flows(arcs); sel = (T >= M) & (T < 2 * M); f = fl_all[sel]; t = T[sel] - M; h = Hh[sel]
     o = np.argsort(f, kind="stable"); best = np.full(M, -1, np.int64); best[t[o]] = h[o]
     recv = recv_v22.copy(); recv[~(land | through).ravel()] = -1
     for i in range(M):
@@ -342,8 +388,13 @@ def build():
     # elevations fall strictly along the stored tree (undrawn cells only; drawn rivers and lakes as conditioned)
     isbase, order, _ = tree_geometry(recv, land, W)
     und = (land & ~rivers).ravel()
-    zt, raised = _fall_along(np.where(land, zc, 0.0).ravel().astype(float), order, recv, isbase, und, EPS_M)
-    zt = zt.reshape(H, W); dz = (zt - zc)[land]
+    target14 = lp(h0); zt = np.where(land, zc, 0.0).astype(float); raised = 0
+    for it in range(4):
+        zt, raised = _fall_along(zt.ravel(), order, recv, isbase, und, EPS_M); zt = zt.reshape(H, W)
+        if it < 3:                                                   # pull the 14 km scale back onto the tiers, off rivers
+            corr = np.where(land & ~rivers, target14 - lp(zt), 0.0)
+            zt = np.where(land, np.maximum(zt + corr, 0.5), 0.0)
+    dz = (zt - zc)[land]
     z32 = np.where(land, zt, 0.0).astype(np.float32); lv32 = level.astype(np.float32)
     area = accumulate_tree(order, recv, land.ravel().astype(float) * dx * dx).reshape(H, W)
     # gates as v2.2 (terrain_rivers.build) plus the cap
@@ -357,7 +408,7 @@ def build():
                  tier_bands_2_4=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in (2, 3, 4)),
                  climate_scale=c["climate_scale_mean_abs_m"] <= c2["climate_scale_mean_abs_m"] + 5.0,
                  lowland_slope=abs(c["tier1_slope_9km_median_deg"] / 0.167 - 1) <= 0.10,
-                 undrawn_below_smallest_drawn=bool((load[und] <= tj["cap_cells"]).all()))
+                 undrawn_below_cap=bool((load[und] <= tj["cap_cells"]).all()))
     out = dict(tree=tj, gates=gates, strict=strict, tier_bands=(c["tier_band_share"], c2["tier_band_share"]),
                climate_scale=(c["climate_scale_mean_abs_m"], c2["climate_scale_mean_abs_m"]),
                tier1_slope=c["tier1_slope_9km_median_deg"], fall_along_tree_raised_cells=int(raised),
