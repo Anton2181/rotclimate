@@ -1,8 +1,16 @@
-# Active goal: W18c running; isolated padding experiment READY, not started
+# Active goal: W18c resumed; isolated padding experiment READY, not started
 
-CHECK PID1877/run_w18c_campaign.py and live
+Executor disconnected: old PID1877 is a ZOMBIE, not a running campaign.
+Verified11 complete rows +31 saved partial regions; resumed at23:35UTC on
+26Nov with detached PID6609 and inherited advisory lock
+/tmp/rotclimate_W18c_campaign.lock. Receipt W18c_records/executor_resume.json.
+No live workers existed before resuming. Do not mistake stale PIDs/status
+for live progress; inspect /proc state, excluding Z. Existing certified
+regional packets are reused by the original supervisor; budget unchanged.
+
+CHECK PID6609/run_w18c_campaign.py and live
 output/ppe_20261127/W18c/campaign_status.json BEFORE restarting anything.
-Last10 completed, eleventh w1_009 running. Frozen physical source/shared caches
+Last11 completed, twelfth w1_010 resumed. Frozen physical source/shared caches
 unchanged. No new adoption; r58 current, atlasr51, AA unopened. Provisional
 leader NOW w1_005: S97/objective0.9842206108 (~1.58% lower average dev loss),
 worstregime1.01796884 within1.02. Earlier handoff's base/regime failure is
