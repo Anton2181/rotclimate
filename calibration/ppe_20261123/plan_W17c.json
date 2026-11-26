@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "status": "CONTINUATION of W17 (policy: a fail may be continued at most once, declared before it runs). Base = W17 finalist w3_000.",
+ "why": "W17 w3_000 failed dev6 only on the upper bound (S97 0.9851 [0.966, 1.004]): continental/highland/tropical_wet gain 7-8 %, arid/mediterranean/temperate lose 1-2 % (winter storm rain of the dry subtropics drops under observed edges). Add the winter storm-track rain knobs never refit with the observed edges.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r57), fine28 once (vs r57), ONE sealed Z run (vs r57). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
+ "base": "calibration/ppe_20261123/W17_records/w3_000_params.json",
+ "base_set": {},
+ "reference": "output/ppe_20261125/ref57",
+ "reference_name": "r57",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261126/W17c",
+ "seed": 20261211,
+ "wave1": 48,
+ "knobs": {
+  "edge_obs_pw": [
+   0.3,
+   0.8,
+   "lin"
+  ],
+  "eddy_barrier_km": [
+   100.0,
+   500.0,
+   "lin"
+  ],
+  "eddy_rate": [
+   1.2,
+   2.4,
+   "lin"
+  ],
+  "land_offset": [
+   -2.0,
+   -1.3,
+   "lin"
+  ],
+  "storm_track": [
+   1.0,
+   3.0,
+   "lin"
+  ],
+  "storm_width": [
+   6.0,
+   13.0,
+   "lin"
+  ],
+  "rh_threshold": [
+   0.3,
+   0.45,
+   "lin"
+  ],
+  "subsidence": [
+   0.5,
+   0.9,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r57 (gate_v3.py dev6, fine28, then ONE sealed Z run with the r57 reference run paired: sealed5 part sealed_Z, region specs calibration/sealed_20261126Z/regions.json); pass -> r58. No atlas rebuild.",
+ "base_note": "W17 finalist w3_000"
+}
