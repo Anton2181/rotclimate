@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r58), fine28 once (vs r58), ONE sealed AA run (vs r58). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
+ "base_set": {},
+ "reference": "output/ppe_20261126/ref58",
+ "reference_name": "r58",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "wave1": 48,
+ "status": "CONTINUATION of W18 (policy: a fail may be continued at most once, declared before it runs). Base = W18 finalist w3_001 with maritime_mean back to the r58 value 3.0.",
+ "why": "W18 w3_001 passed dev6 (0.9815 [0.969, 0.994]) and failed fine28 (1.028): W Europe annual bias +0.47 -> +0.88 C and rain slightly worse in all four 28 km regions; the finalist raised maritime_mean 3.0 -> 4.1 (maritime land pulled toward its sea's mean). Keep the southern-ocean fix (ocean transport + tropical sea) and limit the maritime pull.",
+ "base": "calibration/ppe_20261123/W18_records/w18c_base_params.json",
+ "out": "output/ppe_20261127/W18c",
+ "seed": 20261231,
+ "base_note": "W18 finalist w3_001 with maritime_mean 3.0",
+ "gates": "policy v6 vs r58 (gate_v3.py dev6, fine28, then ONE sealed AA run with the r58 reference run paired: sealed5 part sealed_AA, region specs calibration/sealed_20261126AA/regions.json); pass -> r59. No atlas rebuild.",
+ "knobs": {
+  "ocean_transport": [
+   0.05,
+   0.4,
+   "lin"
+  ],
+  "sst_offset": [
+   -5.2,
+   -3.8,
+   "lin"
+  ],
+  "sst_tropical": [
+   0.8,
+   3.5,
+   "lin"
+  ],
+  "sst_tropical_lat": [
+   25.0,
+   40.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.4,
+   -1.5,
+   "lin"
+  ],
+  "maritime_mean": [
+   2.0,
+   3.2,
+   "lin"
+  ],
+  "sst_damping": [
+   0.3,
+   0.6,
+   "lin"
+  ],
+  "land_amplitude": [
+   0.85,
+   1.0,
+   "lin"
+  ]
+ }
+}
