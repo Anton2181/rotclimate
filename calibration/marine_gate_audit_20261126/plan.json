@@ -1,0 +1,20 @@
+{
+  "status": "declared_before_saved_field_gate_audit",
+  "question": "How often does e91's smoothed distance-to-sea directional gate disagree with upwind sea access in the saved monthly flow, and how much temporal averaging changes that gate?",
+  "cases": [
+    {"region": "s_2n_43e", "variant": "control"},
+    {"region": "s_2n_43e", "variant": "minimum_turning"},
+    {"region": "u_21n_21e", "variant": "control"}
+  ],
+  "inputs": "Existing somalia_mechanism full monthly fields and six instrumented-replay packets only, with their pinned sources. No new climate integration, observation, parameter setting or fit. Only exposed development regions; no fine or sealed target use.",
+  "production_geometry": "Recreate the current e91 construction exactly: EDT land distance, Gaussian smoothing sigma1cell, gradient toward increasing land distance with rows south, normalized inward normal, exp(-distance/inflow_km) reach and nearest sea index. Verify whether each nearest index actually denotes an in-domain sea cell; an all-land domain must be reported explicitly rather than interpreting the EDT's implicit exterior background as sea.",
+  "proxy_paths": "From every fixed scored land-cell centre, backtrace through the saved full MONTHLY surface-wind field using bilinear velocities, eastward u and northward v. Fixed arc-length steps of quarter-cell (14km) and eighth-cell (7km), horizon3*existing inflow_km. Stop at the first categorical sea cell, domain exit or numerically zero speed(<1e-6m/s), retaining unresolved/calm outcomes. Never count off-domain or calm paths as resolved nonmarine. No virtual sea beyond the saved grid.",
+  "classification": "For local monthly gate>0 and a resolved path, distinguish sea reached from all-land through the finite horizon. Keep the local-gate0 cases too, including upwind-sea paths. These are proxy disagreements, NOT proven errors or a proposed climate correction. Report both step sizes and status agreement; do not tune a threshold or trajectory horizon to observed rain.",
+  "time_aliasing": "Use existing25-step scored-cell moisture winds and production monthly weights to compare the mean of clip(u*normal_x+v*normal_y,0,3)/3 with that gate applied to the monthly mean wind. Require source trace days to match saved coordinates. Preserve both quantities. Actual instantaneous surface/transport winds matched at all scored cells in these cases; the full-domain paths still use saved monthly surface flow, not an asserted time-dependent moisture trajectory.",
+  "exchange_exposure": "Use directly captured signed marine exchange, not rain residuals. Report positive and negative instantaneous exchange separately before monthly averaging. Describe exchange occurring in each monthly proxy class without claiming those amounts are removable rain or observed causal shares. Keep source/sink cancellation and unknown paths visible.",
+  "checks": "Source digests unchanged, exact production-geometry reconstruction, all scored cells/all12months, independent single-path reference, synthetic east/north/onshore/offshore/calm/all-land and boundary tests, both spatial resolutions retained, no physical-model mutation or active W18c interference.",
+  "output": "Full per-cell/month/path table, status/aliasing/exchange summaries, source provenance, checked scientific diagnostic and concise findings. No adoption regardless of apparent agreement/disagreement. Any physical gate redesign needs a later declared experiment after W18c closes.",
+  "climate_integrations": 0,
+  "climate_adopted": false,
+  "W18c_changed": false
+}
