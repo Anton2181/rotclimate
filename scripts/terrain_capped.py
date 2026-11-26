@@ -29,6 +29,8 @@ import sys
 import time
 from pathlib import Path
 
+import heapq
+
 import numba
 import numpy as np
 from scipy import ndimage as ndi
@@ -696,5 +698,112 @@ def build():
                         raised=out["fall_along_tree_raise_m"], over_cap=out["over_cap_cells"]), indent=1, default=float))
 
 
+# ------------------------------------------------------------------ basins (owner chose the basin redesign, 26 Nov 2026)
+@numba.njit(cache=True)
+def _uf_find(par, a):
+    while par[a] != a:
+        par[a] = par[par[a]]; a = par[a]
+    return a
+
+
+@numba.njit(cache=True)
+def _basin_flood(zs, lab, outlet_cell, outlet_recv, ny, nx, NB, recv):
+    """Steepest-descent drainage inside every basin: a Priority-Flood restricted to the basin, seeded at its outlet
+    cell (which keeps its receiver outside the basin)."""
+    N = ny * nx; seen = np.zeros(N, np.bool_)
+    heap = [(0.0, 0, 0)]; heap.pop(); cnt = 0
+    for b in range(outlet_cell.shape[0]):
+        c = outlet_cell[b]
+        if c < 0:
+            continue
+        recv[c] = outlet_recv[b]; seen[c] = True
+        heapq.heappush(heap, (zs[c], cnt, c)); cnt += 1
+    while len(heap) > 0:
+        k0, _, c = heapq.heappop(heap); y = c // nx; x = c % nx; lb = lab[c]
+        for k in range(8):
+            yy = y + NB[k, 0]; xx = x + NB[k, 1]
+            if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                continue
+            j = yy * nx + xx
+            if seen[j] or lab[j] != lb:
+                continue
+            seen[j] = True; recv[j] = c
+            heapq.heappush(heap, (max(zs[j], k0 + 1e-3), cnt, j)); cnt += 1
+    return recv
+
+
+def basins():
+    """Merge the capped tree's undrawn basins (each undrawn channel ending at a drawn river / water / the edge, with
+    everything upstream) into compact basins draining to the same place, up to the cap; then route every basin by
+    steepest descent on a rough natural surface towards a single outlet. Drawn-river catchments are unchanged."""
+    L, tops, h0, land, rivers = layers(); H, W = land.shape; N = H * W
+    px = (1.143 * 1.609344) ** 2; dx_km = 1.143 * 1.609344
+    t = np.load(ERO / "capped_tree.npz"); recv = t["recv"].astype(np.int64).copy()
+    np.savez_compressed(ERO / "capped_tree_post.npz", recv=recv)
+    tj = json.loads((ERO / "capped_tree.json").read_text()); cap = int(tj["cap_cells"])
+    und = (land & ~rivers).ravel()
+    order = tree_geometry(recv, land, W)[1]
+    isroot = und & ~((recv >= 0) & und[np.maximum(recv, 0)])
+    bas = -np.ones(N, np.int64)
+    for c in order:
+        if und[c]:
+            bas[c] = c if isroot[c] else bas[recv[c]]
+    roots = np.flatnonzero(isroot); rid = -np.ones(N, np.int64); rid[roots] = np.arange(roots.size)
+    lab = np.where(und, rid[np.maximum(bas, 0)], -1)
+    nb = roots.size; size = np.bincount(lab[und], minlength=nb).astype(np.int64)
+    # where each basin drains: a drawn branch id, or 0 for the sea / lakes / the map edge
+    bid = drawn_branches(land, rivers).ravel()
+    ent = recv[roots]; dest = np.where((ent >= 0) & rivers.ravel()[np.maximum(ent, 0)], bid[np.maximum(ent, 0)], 0)
+    # adjacency with shared border length
+    lab2 = lab.reshape(H, W); pairs = {}
+    for dy, dxx in ((0, 1), (1, 0), (1, 1), (1, -1)):
+        a = lab2[max(0, -dy):H - max(0, dy), max(0, -dxx):W - max(0, dxx)]
+        b = lab2[max(0, dy):, max(0, dxx):][:a.shape[0], :a.shape[1]] if dxx >= 0 else lab2[dy:, :W + dxx][:a.shape[0], :a.shape[1]]
+        m = (a >= 0) & (b >= 0) & (a != b)
+        aa, bb = np.minimum(a[m], b[m]), np.maximum(a[m], b[m])
+        key = aa.astype(np.int64) * nb + bb
+        u, c = np.unique(key, return_counts=True)
+        for k_, c_ in zip(u.tolist(), c.tolist()):
+            pairs[k_] = pairs.get(k_, 0) + c_
+    keys = np.array(list(pairs.keys()), np.int64); lens = np.array(list(pairs.values()), np.int64)
+    o = np.argsort(-lens); keys = keys[o]
+    par = np.arange(nb); ssz = size.copy()
+    merged = 0
+    for k_ in keys:
+        a, b = int(k_ // nb), int(k_ % nb)
+        if dest[a] != dest[b]:
+            continue
+        ra, rb = _uf_find(par, a), _uf_find(par, b)
+        if ra == rb or ssz[ra] + ssz[rb] > cap:
+            continue
+        par[rb] = ra; ssz[ra] += ssz[rb]; merged += 1
+    rep = np.array([_uf_find(par, i) for i in range(nb)])
+    lab_m = np.where(und, rep[np.maximum(lab, 0)], -1)
+    # each merged basin's outlet: its lowest original root (rough surface)
+    rng = np.random.default_rng(int(os.environ.get("CAPPED_SEED", 7)))
+    def sn(km):
+        n = ndi.gaussian_filter(rng.standard_normal(h0.shape), max(km / dx_km, 0.5)); return n / n.std()
+    zs = np.where(land, h0 * (1 + 0.15 * sn(6.0)) + 25.0 * sn(12.0) + 10.0 * sn(4.0) + 4.0 * sn(2.0), 0.0).ravel()
+    groups = rep[np.arange(nb)]
+    best = {}
+    for i, r in enumerate(roots):
+        g = groups[i]
+        if g not in best or zs[r] < zs[best[g]]:
+            best[g] = r
+    gl = np.array(sorted(best)); oc = np.array([best[g] for g in gl], np.int64); orr = recv[oc]
+    # relabel basins 0..n-1 for the flood
+    remap = -np.ones(nb, np.int64); remap[gl] = np.arange(gl.size)
+    labf = np.where(und, remap[np.maximum(lab_m, 0)], -1).astype(np.int64)
+    recv2 = recv.copy()
+    recv2 = _basin_flood(zs, labf, oc, orr, H, W, NB, recv2)
+    sizes = np.bincount(labf[und], minlength=gl.size)
+    load = subtree_loads(recv2, und)
+    log(f"basins {nb} -> {gl.size} after {merged} merges; size median {np.median(sizes):.0f} p90 {np.percentile(sizes, 90):.0f} max {sizes.max()} cells; "
+        f"undrawn max {load[und].max() * px:.0f} km2 (cap {cap * px:.0f})")
+    np.savez_compressed(ERO / "capped_tree.npz", recv=recv2, load=load.reshape(H, W).astype(np.int32), basin=labf.reshape(H, W).astype(np.int32))
+    tj.update(basins=int(gl.size), basin_merges=int(merged), max_undrawn_km2=float(load[und].max() * px), over_cap_cells=int((load[und] > cap).sum()))
+    (ERO / "capped_tree.json").write_text(json.dumps(tj, indent=1))
+
+
 if __name__ == "__main__":
-    {"tree": capped_tree, "post": post, "build": build}[sys.argv[1]]()
+    {"tree": capped_tree, "post": post, "basins": basins, "build": build}[sys.argv[1]]()
