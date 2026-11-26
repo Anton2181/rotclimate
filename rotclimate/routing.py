@@ -117,14 +117,9 @@ def discharge(runoff_px_mm, tier_tops, terrain_file, map_width_mi):
     through = ~land & (level > 0)
     net = land | through
     src = np.where(land, np.maximum(runoff_px_mm, 0.0), 0.0) / 1000.0 * px_m * px_m / (365.0 * 86400.0)
-    stored = stored_receivers(terrain_file)
-    if stored is not None:
-        # height map v2.3+: the drainage tree is part of the terrain (drawn rivers kept; undrawn channels capped below
-        # the smallest drawn river's catchment, owner 26 Nov 2026), so it is read, not re-derived
-        recv = stored
-        order = _topological(recv, net.ravel())
-    else:
-        recv, order = _flood(np.where(land, z, np.where(through, level, -1e9)), net, NB)
+    # drainage always follows the physics on the height map (owner, 26 Nov 2026: rivers follow unchanging real physics;
+    # the height map is what is calibrated), never a stored tree
+    recv, order = _flood(np.where(land, z, np.where(through, level, -1e9)), net, NB)
     q = _accumulate(order, recv, src.ravel()).reshape(H, W)
     return q, recv, land, rivers
 
