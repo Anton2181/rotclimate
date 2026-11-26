@@ -1,0 +1,1373 @@
+{
+  "status": "completed_fixed_Somali_recycling_turning_diagnostic",
+  "sources_sha256": {
+    "calibration/somalia_mechanism_20261126/plan.json": "25e35a102e9a17525bbadb97f6152f0527dbaf6f44eb93f249888a655c79f8df",
+    "scripts/somalia_mechanism_diagnostic.py": "99d8d2c86132ec60c7fe8dd091cf1dcd5bd801e480b5be3230c6c87d9aa86470",
+    "calibration/local_accuracy_20261023/r58_params.json": "13be84f23d495e3cc956cc3c51f5d810e63000e171ca2de9993f1c7ec3088595",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "scripts/benchmark_local.py": "a9d2dc6d278ad43240badd98368621a110cb293052216cc555ba42d060c335f9",
+    "scripts/rainfall_metrics.py": "d234edcbf34197e0def5c3163cfb09a3e6303352e32d7720108e557e64dcf583",
+    "scripts/earth_benchmark.py": "6aacb873d0f58b7ddd892761ca76b298d6097bbd49c05905a218186eb62b4d80",
+    "output/climate_runtime_20261126/qualification.json": "625fe6e45ab4bdfe5eb398810bd4479e1b7f3c50d0a97b0c8e7d60254642f488",
+    "calibration/sealed_20261123S18/regions.json": "5f4717b3f06709f4e6dc9dbdf3a8d51de0aa18d7bd53d1cc36d40a6a69193e97",
+    "output/ppe_20261126/ref58/r58_sealed_S18/summary.json": "1260a812d5ede533a452cfe8c8f52e40db8f987b0d471b6795ac675c314e01a5",
+    "output/ppe_20261126/ref58/r58_sealed_S18/cells/s_2n_43e.npz": "291f9f0bd900c729daf5cb1fbb9d6910397f73a977b83c8abe5ca24692a41a01",
+    "calibration/sealed_20261124U18/regions.json": "049c2072be31e2266cbd6b94e717b375951424a4923a8d094e77c8e99ddea1a8",
+    "output/ppe_20261126/ref58/r58_sealed_U18/summary.json": "17a9413f3de73093d6353e8a24d771c70ab3bed6880ff52da56ec56f33560b24",
+    "output/ppe_20261126/ref58/r58_sealed_U18/cells/u_21n_21e.npz": "a0913e91e4a2c39029dc26549764c32ea9eb4654838977561a530ebbf1623b3b",
+    "data/cache/earth/frozen_sea_1deg.npz": "099c5b237110f3c1ee495096653c1bdcabc98bf976e09ea3d99ea767af94ecb0",
+    "data/cache/earth/land_cloud.npz": "23ea04f5620611e10d0f589b8a7b45fb2d32fb08f876a5eb717c26bde3b89641",
+    "data/cache/earth/monsoon_descent.npz": "c03b7a6cbcca75899ec96c3bff33b57e9308676fb4cb1bcc7f635e6e5d59205f",
+    "data/cache/earth/ncep_pw_2p5.npz": "1794641ef6fb175e78d00f6b4ad2347b89c4155cda3f3c20cdba1f368e29555a",
+    "data/cache/earth/pole_fetch_2000km.npz": "2fbffeda37cd61bdef88128e343bc15b17c85d5973036279a4d9be6a9c4ba621",
+    "data/cache/earth/pole_fetch_frozen_2000km.npz": "a9f2bc8e252dcbee50073baa73c304cc3bc5df7ab1e6deef885a3e5ac58a9bc8",
+    "data/cache/earth/sea_reach.npz": "cd3bd342fbbf762bfe70286721577a959f8fab16557421071489acab31db71e6",
+    "data/cache/earth/west_fetch_1700km.npz": "2e0fa97888f3420c49eadc7520cd9774c7e00d66dee7826e7e3b2b4eb46850a3",
+    "data/cache/earth/west_fetch_5100km.npz": "b313b3189512905d58b191bc265acd139b70656d736aeb8de7c404c49c69e221",
+    "data/cache/earth/woa18_depth_1deg.npz": "93df1488e64e0e54684bcc079e9c2f6c58e1073231f33f779a9b5ab513de6d95",
+    "data/cache/earth/woa18_sst_1deg.npz": "7d3b497ff42b50531e154e0bd4437a58131fea2209fda7dca3b7818820d5f66d",
+    "rotclimate/__init__.py": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "rotclimate/__main__.py": "26a749d033ae9e6117a486a50afeb4851e6a98412e0962a743b06887903f20ad",
+    "rotclimate/analogs.py": "423f0e98e9097ee335502be03e98762518150a503858672cd5a57d4d81fddc5c",
+    "rotclimate/astronomy.py": "afebd7f10edf412965a30c61d3f9c69f56daba2188f0cfeab63be46f1f83b0d9",
+    "rotclimate/atlas.py": "c14b0749aa4e0bef1faab3f125ad00c855b88443467963e2e82f90da1927ef17",
+    "rotclimate/baroclinic_heating.py": "6427977dc38a5b83ea1eb7e7d96dc576ca8d7595a05648e6176648ada3298132",
+    "rotclimate/baroclinic_mode.py": "518eed7c6149241cab23d2a9e2fe0dbfa2596143f8fa2fdc417ac3a43d3f39b3",
+    "rotclimate/biome_targets.py": "33df6c55fac0329653bc5ece9dc4f64386b15e29796b022cf617aff5d4019fc7",
+    "rotclimate/biomes.py": "ba9c9914b16263b8654bfb5cb3fa83516b46ce8625ee02522510d36705305eea",
+    "rotclimate/calendar.py": "986162670bd0bb4e63044a9a9aaeb871ddd3fc4cd02aaa7163f45bd8eedef1af",
+    "rotclimate/calibrate.py": "0ae26fc6b86aaace0d42494efb30c49cf81f5d6b82792d28b8b44d5f627a529a",
+    "rotclimate/cell_thermal_column.py": "b60043a2b7b12204b8cab145beaaddfca70d67cdb1d6ee431c2fb58ce7376b77",
+    "rotclimate/cell_thermal_wave.py": "4d2da41651091b36d93f14a2b8066699bb99440a23ef8fa57c2fdcfbd6a7e9b4",
+    "rotclimate/climate_fields.py": "f0dee59cf89ae7ae226bd98ecff21bfed8e2832ebfa57b70fe8b7609177cf8ec",
+    "rotclimate/column_forcing.py": "4a07612a7ce5dd45251adf3840b530e200d07c8ebc6cbd58fa1fef1fc268ebda",
+    "rotclimate/column_mass.py": "7705de1e86be183338560280c658342d8f4e842a21e2f7cbe82ee6aea10a53d4",
+    "rotclimate/column_thermodynamics.py": "1dd5565a43e26c7a03beb3d3b2b07a562b23ae36b4b8c697e659db3f2a918356",
+    "rotclimate/config.py": "65edd4abf50342eb2ef81d29ac69816846d7af17f1fbafb12c7d858bdbbf02e4",
+    "rotclimate/convection_observer.py": "3550cc072a0a798992c0ce551b888bf3f0c76afb95faf3dc90dedc05a316f805",
+    "rotclimate/convective_adjustment.py": "35ee37e32e353cea503d09fe961c762aed5eb61f517a3191470225bf7a0c6413",
+    "rotclimate/correction.py": "7e104f22d40ea5fa24e8a08aa9f7b1e83d25e16683ea7ea07670a386b39783e9",
+    "rotclimate/diagnostics.py": "4bfcec442bf286e8d48082cdea103a188ed6a056f417925f5353b9031b6d0b31",
+    "rotclimate/diurnal.py": "161d656cd14abb3acec197a67cd00af50869fc328cb4593d8ba973dd7664be71",
+    "rotclimate/divergent_thermal_winds.py": "0fb4b7321f3bf0f7f734ad4a07311aed10ff15a71445ff7aa2da3d56b803eab6",
+    "rotclimate/earth.py": "1ed8afa02e82e9453ff1e60b5d5409bcbb097ce198f9234bbcabeca7a84603b3",
+    "rotclimate/ebm.py": "ba25ad9e4596cf9326ec4ea51b68d0254f5d45ba0bbf0ee9e3ea2ad16a32883d",
+    "rotclimate/evidence_audit.py": "4040c7d2f22177469d75181c069d9ad08c9bb589261c9233607c807cded5f7c3",
+    "rotclimate/experiments.py": "195c242755b1c0a2de37000074497136f8ce7fbc4ed186ea979d6e240135e99f",
+    "rotclimate/falling_water_energy.py": "1f5412c9f127cf2a7e4e002aeb78c21f5675135da847f76e467139ea20ed6b55",
+    "rotclimate/fast_liquid_phase.py": "15355fa32a10549a270e7d764b6355d4cffdb419ed8abfc2ef90f443ec24a947",
+    "rotclimate/geography.py": "cca2d0fcc1a139f8d7b4b9acbeefb739d6650b2212675043f2dad77047f62733",
+    "rotclimate/heating_projection.py": "5e300fee40c6aef3a3696702dc22f256592de8794d3d512a24c454c89e153d5f",
+    "rotclimate/hydrology.py": "00de6a51d00c19867540e928e935aa46d063077b4f76038ba1769cfa79f222f0",
+    "rotclimate/hydrostatic_wave.py": "8129537ea1bdebed9fc3b51bb624a20cef8fafc65e479f66bb7a16c8cceb7916",
+    "rotclimate/joint.py": "3468a5ff4cbed1d1365e3919f2d31ebaf2d85b7b9953044178a83d0eaf344dba",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/lapse_reference.py": "4321d018d5b549ba384f85670208e1e7f67149eca2162b4b4c38d188cc7f0c81",
+    "rotclimate/layer_transport.py": "f6a0a1619a9b62824585d9301e477824c73943dcf2ef967354f84ba67a26e8d7",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "rotclimate/moist_enthalpy.py": "d4fc73beadd4d1b910124fd8d2c89a09396f544feca51dbcdb177c031614e933",
+    "rotclimate/moisture.py": "48dadae609fd3c7ea5d6bbc679d5638f69ecbe1d4799d3c284312ec71a427dc7",
+    "rotclimate/momentum_initialization.py": "85e2a4c5feebe54e849bb53f498094430eec667b37183c11b5344c7b6fbda4d9",
+    "rotclimate/multilevel_moist.py": "0672d01b306f5f40e3ca939a965f1b62debaa6cbf75891cb66d298642870b24f",
+    "rotclimate/multilevel_phase.py": "3a3c21d255febe49ec4b41c35e3980ee58267138cd7bd3feb818a7186f50fec3",
+    "rotclimate/multilevel_transport.py": "0923c32718fbc213cab0e8518b57418bf061349d0c453748bd47b1414be15119",
+    "rotclimate/numerics.py": "f79950edda5665d1518318236daff1051d5232b6455178a7ffe00ba043ea7821",
+    "rotclimate/open_mean_boundary.py": "e38d3270c7e46a3989ffb979d506e8f2df10c1c88c7d1d2f1046eb0ce93adc15",
+    "rotclimate/orography.py": "a4481b2d72115e078401bab11938147ffb6682b91d64160803b021e87f3cb157",
+    "rotclimate/parcel_stability.py": "845f30e50dc523f7d593589131cf0234dde820457b7c3822cf2b7d76b548edc3",
+    "rotclimate/phase_adjustment.py": "5c3aeeb8e41b7a5c3ef283733d56631ff8b1aeeacfcfa6254e1da4dd4ace50c2",
+    "rotclimate/phase_backend.py": "b8c26b20918229d3166a015299147b3c6b0beecf43d0036e2370f312da0a8ac0",
+    "rotclimate/pressure_boundary.py": "a755f6cc5a8edf65378866f7558a6107410049188960b46cb3407d6afd4ad91e",
+    "rotclimate/pressure_coordinate.py": "f5aba77c4632ace2b0da94a2bd3f25c69cc35c8fb529d136828ef51beab11516",
+    "rotclimate/pressure_initialization.py": "32db6ab33920854941414739ac3965b92f530576790e638113b4734eb00c3dad",
+    "rotclimate/pressure_moist.py": "75f2e0b0406cc15d5c68da8f96fc1c6f2e133449d9c077d734ba151134974f72",
+    "rotclimate/pressure_remap.py": "83fc012ee11662c360841acdec62e5f2b7a5a9f713774d5aaf5c46840ab970da",
+    "rotclimate/rainfall_validation.py": "77267bee0b5fdbe5ca37e2d22115af5be9f0128d5f4fba3380ebf49ba06c08b0",
+    "rotclimate/regional_baroclinic.py": "12ce5d21b95b84b094c19f1e36e3673be86cc7d6b9dc0884202cad01eece9db8",
+    "rotclimate/regional_energy_step.py": "28ff65e09ea4ecf6252fb98f8b32351b55e10929008d7770007945ce53877176",
+    "rotclimate/regional_mode_tracer.py": "26ffad686cf8633e2b410f0992520ce6b409d8738ff0d3b492fade74a20f6f39",
+    "rotclimate/regional_moist_step.py": "71b8e52e5ef9a6ce9fef3ad8a7325112934ef29343c529c0e9900d49ba9fb36e",
+    "rotclimate/render.py": "fa8811672d92cbad39861d7aaf966ddef08747eb927c9eb2ceac5fc672dd1857",
+    "rotclimate/reservoir_moisture.py": "1ac28918b66e50a79a3cc763fcca362c7c095cf4bef7c52fd7f2849a4327539d",
+    "rotclimate/reservoir_transport.py": "b206628d7b21d85a4bf1d2951d5bcaf2977032a59d10ee872956f98468fe376d",
+    "rotclimate/rigid_lid_moist.py": "1bf64674b12535f9247a565b6271dade4578d175ba1a1fdef3c7a8c2341bc550",
+    "rotclimate/rigid_lid_refined.py": "a1938b25464966ef87c44829962b47b806df6b01fc4ac876e4e87aa4814abacc",
+    "rotclimate/routing.py": "579635287daa39ca21aabe8617262e59367bab278bad13406c0d7fc3bff8cc31",
+    "rotclimate/score.py": "3cf4a78026a26d317372cffb356b35fcb08c19be79f9c1d062db99047a40eab4",
+    "rotclimate/seasonal.py": "9cdf6a3f5f5ce80a786e3d0fac7c655f8383ccda46ebb53e0aa2580d8dae8e89",
+    "rotclimate/separated_thermal_profile.py": "cb30906b98a0b628b5f1b2310a1c17023683acc85c07f8be9589193bbdb11a05",
+    "rotclimate/shared_transport_backend.py": "cae5dbd5131f0a989d9036564826b42bff58f4f2b691d3eb337f7be6b1e52cb7",
+    "rotclimate/solver.py": "36e59a2622998f527def61a4241c7f2f802779e0ab140f9e8d64c95b4e33b808",
+    "rotclimate/storms.py": "e38c0182e9e51251b15e4942dbaf4386b5aa07bbda697f79c034510bc30bb235",
+    "rotclimate/sublayer_phase.py": "e9eb8237ddff75f611aea28971c92d6e776d06c095f8903a549e307ff904fa76",
+    "rotclimate/surface_coupling.py": "ba929e93e2b2e1974f9532fd30f77906879a49cec1a8a1becd8b398b4424c147",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/terrain_advective.py": "59db077a502c449f7d4dc9dc32df8f1565a55d5aaa099bf170a015d2a209a604",
+    "rotclimate/terrain_apertures.py": "aac95b5b48eb46a718b0488b77f3662c09a8a1e6fde415da5dc109022abad5b8",
+    "rotclimate/terrain_dry.py": "be703acf3d206e92dc996033b7bb9e6ec61826176c4a0f440426ae4a92da1c5f",
+    "rotclimate/terrain_hydrostatics.py": "104c22c2896b93ef5e5db6a1d23149dbbf513fcc2827ac01b082a47b81192d07",
+    "rotclimate/terrain_momentum_transport.py": "7bb7a13d6c764f7d9d9c875ee58e02d66f41d47a93a3d550ea73a1089474bc5e",
+    "rotclimate/terrain_pressure_gradient.py": "d99a8530f173079d63a0795dc53f3c219c4e9a5e0dd2a2da79a62a7fafeb5424",
+    "rotclimate/terrain_pressure_work.py": "52cb6f1ad857d30d8887db34a9487bcd13cb7955c638c92741476b2ebdc5f270",
+    "rotclimate/terrain_transport.py": "eb205022b90b0859f7f8c52cc941a96a332d01a421111e83d3f694ac212dfeb7",
+    "rotclimate/terrain_work_cache.py": "75b26fd5b632650c35d3339df81b4d56df37d176ede5a05444b1cf23ac963568",
+    "rotclimate/thermal_layer_winds.py": "3dbca70ccaa429eee6f95cdf2c7cec676c88ffa2d4320f218640227cfc89613b",
+    "rotclimate/transport.py": "bdbc527762dd48634a0c0a609c5a8be903ae80fcb983affb194511b4ee11180e",
+    "rotclimate/vertical_state.py": "0972c1cae8c63a070b3a4d13daffbfbcd77d28bd9dd71925b73f389c4bdf2186",
+    "rotclimate/winds.py": "94c15e6684c3e1feb32eacb1c58cc0a196f9c25de521cb2d5d99004a3321a104"
+  },
+  "files_sha256": {
+    "s_2n_43e/control/result.json": "cee8a9deaff31ae423deeae96719e5f44d9a365629e74ee70fd7a42c9d030451",
+    "s_2n_43e/control/fields.npz": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+    "s_2n_43e/no_local_recycling/result.json": "caaf8364640311e277dc6c784645ca9fb9b956ee7b54f8fb023b5b4d19111277",
+    "s_2n_43e/no_local_recycling/fields.npz": "508608a5b520fa5c4c8d0ab5a293b1048285632f80186d4cbf9c1ae6e4ed8130",
+    "s_2n_43e/minimum_turning/result.json": "1287f5218cb3e57d1feb09cb390ddf9580c9393b9df00a8803a53a08598714d4",
+    "s_2n_43e/minimum_turning/fields.npz": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+    "s_2n_43e/both/result.json": "f41e2207e2840c7cea5ebac492d14625181ca242c1b1781810c1c628fe05e505",
+    "s_2n_43e/both/fields.npz": "0a7884ca4b05067ee89b1b605a2ea81cdc8729d181ae6813665077241c04d44b",
+    "u_21n_21e/control/result.json": "da4ac6b7e388a72073d018f5ffef3ed7157e591f464a27a09319c9947abf1216",
+    "u_21n_21e/control/fields.npz": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36",
+    "u_21n_21e/no_local_recycling/result.json": "99c8d79d9d098aed9301303160f01e75a2de675309bd5e1347a75727b65a1e64",
+    "u_21n_21e/no_local_recycling/fields.npz": "8f037f1766d427e1558167e0be06fe04ed6cf0a95ed511a9d4e74f6521547855",
+    "u_21n_21e/minimum_turning/result.json": "f26dd4b1c88405d505a9d751b3d2276ba6c21158726217a4f927008fcbb96b20",
+    "u_21n_21e/minimum_turning/fields.npz": "341a0f2dbade41f27120705bc2842a61510224b875d800a50643047a9cef33b8",
+    "u_21n_21e/both/result.json": "ca1de6b5e3ecbfd173848de1f897134cbeda976d76027d79c6b7c8740d988202",
+    "u_21n_21e/both/fields.npz": "f3d94562b749e75e1c7ca919020a80ee0ba2d3db0169e57995021da560325687",
+    "months.csv": "0add54a02e22a7cf809af9e18e85d812c342bb57aabc93b39310076db11b3c00"
+  },
+  "controls_exact": 2,
+  "strict_numerical_cases": 8,
+  "integrations": 8,
+  "rows": [
+    {
+      "region": "s_2n_43e",
+      "variant": "control",
+      "overrides": {},
+      "case_identity": "568c4cf85d382e126ea5abbf62047c72f02d18f1c15204aa01dee882fa5500c9",
+      "numeric_certificate": {
+        "linear_solves": 1392,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1392
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.0495712362059173,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+      "rain_loss": 3.663438261385216,
+      "annual_temperature_mae_C": 1.2981497465239629,
+      "annual_temperature_bias_C": -0.2164027137226527,
+      "annual_rain_mm": 3556.4096656650304,
+      "observed_annual_rain_mm": 457.3636169433594,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 2.3670284748077393,
+          "simulated_rain_mm": 45.95341586685843,
+          "evaporation_mm": 68.8797145065334,
+          "column_water_mm": 39.00793879191081,
+          "surface_u_ms": -3.54641196012497,
+          "surface_v_ms": -2.0988876346747083,
+          "temperature_bias_C": -1.990813064575194
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.8703705668449402,
+          "simulated_rain_mm": 73.61240120116209,
+          "evaporation_mm": 63.993769550157914,
+          "column_water_mm": 42.529590390523275,
+          "surface_u_ms": -5.1781263613700865,
+          "surface_v_ms": -1.126144515958925,
+          "temperature_bias_C": -1.378795652389526
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 16.394880294799805,
+          "simulated_rain_mm": 120.5117375507951,
+          "evaporation_mm": 74.85944227526585,
+          "column_water_mm": 46.23790288925172,
+          "surface_u_ms": -4.221994541287422,
+          "surface_v_ms": 0.1516784122213723,
+          "temperature_bias_C": -1.405406920115152
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 117.84113311767578,
+          "simulated_rain_mm": 304.51703446524016,
+          "evaporation_mm": 75.48955880072383,
+          "column_water_mm": 45.61547246932984,
+          "surface_u_ms": -1.2554554745306576,
+          "surface_v_ms": 2.138614665766557,
+          "temperature_bias_C": -0.5624133173624667
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 85.67436981201172,
+          "simulated_rain_mm": 465.5354878968663,
+          "evaporation_mm": 71.5044382274151,
+          "column_water_mm": 45.13244458516439,
+          "surface_u_ms": -2.701472611551484,
+          "surface_v_ms": 2.30238234937191,
+          "temperature_bias_C": 0.1543341509501155
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 28.821462631225586,
+          "simulated_rain_mm": 472.9212030159103,
+          "evaporation_mm": 68.65199305050902,
+          "column_water_mm": 45.59860743204752,
+          "surface_u_ms": -5.435774075587591,
+          "surface_v_ms": 1.7673682556549706,
+          "temperature_bias_C": 0.8909292380015055
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 25.425369262695312,
+          "simulated_rain_mm": 455.5345696634716,
+          "evaporation_mm": 69.33082034819655,
+          "column_water_mm": 45.509722607930506,
+          "surface_u_ms": -6.8085598516464225,
+          "surface_v_ms": 1.5119430100917814,
+          "temperature_bias_C": 1.6014117654164626
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 12.529255867004395,
+          "simulated_rain_mm": 450.3872239722146,
+          "evaporation_mm": 72.56511452794076,
+          "column_water_mm": 45.32448253631592,
+          "surface_u_ms": -7.556655213038127,
+          "surface_v_ms": 1.5222691035270692,
+          "temperature_bias_C": 1.4410903771718349
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 12.0313720703125,
+          "simulated_rain_mm": 442.1910069982211,
+          "evaporation_mm": 75.05682609097825,
+          "column_water_mm": 45.521970698038736,
+          "surface_u_ms": -7.2041055281957,
+          "surface_v_ms": 1.412291950881481,
+          "temperature_bias_C": 0.8826286093393959
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 70.2838134765625,
+          "simulated_rain_mm": 395.17853162950934,
+          "evaporation_mm": 74.33092307034467,
+          "column_water_mm": 45.280663884480795,
+          "surface_u_ms": -5.088803776105244,
+          "surface_v_ms": 0.9764862423141795,
+          "temperature_bias_C": 0.3911150773366274
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 69.29523468017578,
+          "simulated_rain_mm": 236.27543699608893,
+          "evaporation_mm": 70.62975298596753,
+          "column_water_mm": 43.86193414052327,
+          "surface_u_ms": -1.3780115870541545,
+          "surface_v_ms": -0.47006181272988706,
+          "temperature_bias_C": -0.8481329154968268
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 15.829340934753418,
+          "simulated_rain_mm": 93.79161640869252,
+          "evaporation_mm": 67.6669586920076,
+          "column_water_mm": 43.30068681081136,
+          "surface_u_ms": -1.603912951620295,
+          "surface_v_ms": -1.564937986433506,
+          "temperature_bias_C": -1.7727799129486084
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "s_2n_43e",
+      "variant": "no_local_recycling",
+      "overrides": {
+        "land_recycling": 0.0
+      },
+      "case_identity": "568c4cf85d382e126ea5abbf62047c72f02d18f1c15204aa01dee882fa5500c9",
+      "numeric_certificate": {
+        "linear_solves": 1468,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1468
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.04965104100322648,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "508608a5b520fa5c4c8d0ab5a293b1048285632f80186d4cbf9c1ae6e4ed8130",
+      "rain_loss": 3.2573765000110204,
+      "annual_temperature_mae_C": 1.442112460931142,
+      "annual_temperature_bias_C": -0.41798455423778935,
+      "annual_rain_mm": 3155.3571568583448,
+      "observed_annual_rain_mm": 457.3636169433594,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 2.3670284748077393,
+          "simulated_rain_mm": 21.238903328114088,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 34.45881143887838,
+          "surface_u_ms": -2.980657852490743,
+          "surface_v_ms": -2.5487343209981916,
+          "temperature_bias_C": -2.4582529703776035
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.8703705668449402,
+          "simulated_rain_mm": 37.0717121768329,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 38.44018541018168,
+          "surface_u_ms": -3.9574524291356403,
+          "surface_v_ms": -2.2746170685688654,
+          "temperature_bias_C": -2.0104136943817132
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 16.394880294799805,
+          "simulated_rain_mm": 78.46834825658136,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 44.555817108154294,
+          "surface_u_ms": -2.9967904851337273,
+          "surface_v_ms": -1.2884210149695476,
+          "temperature_bias_C": -1.8408469009399404
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 117.84113311767578,
+          "simulated_rain_mm": 215.79963594228033,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.31005420684814,
+          "surface_u_ms": -1.230188907037179,
+          "surface_v_ms": 0.19776896618306647,
+          "temperature_bias_C": -0.8596829414367665
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 85.67436981201172,
+          "simulated_rain_mm": 386.50022522277305,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.877386697133396,
+          "surface_u_ms": -3.5967627831300106,
+          "surface_v_ms": 0.9672834292054177,
+          "temperature_bias_C": 0.07262404441833636
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 28.821462631225586,
+          "simulated_rain_mm": 426.4856653365824,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.83493187586466,
+          "surface_u_ms": -5.483878284692765,
+          "surface_v_ms": 1.2171024546027185,
+          "temperature_bias_C": 0.8559883562723795
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 25.425369262695312,
+          "simulated_rain_mm": 443.9103429218133,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.40490399678547,
+          "surface_u_ms": -6.454293042818705,
+          "surface_v_ms": 1.4958204013109206,
+          "temperature_bias_C": 1.583949972788492
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 12.529255867004395,
+          "simulated_rain_mm": 453.7579416149192,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.36281463623047,
+          "surface_u_ms": -7.086671682993571,
+          "surface_v_ms": 1.6771873515844347,
+          "temperature_bias_C": 1.4335785420735678
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 12.0313720703125,
+          "simulated_rain_mm": 444.05335330830684,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.520869223276776,
+          "surface_u_ms": -6.6979079095522565,
+          "surface_v_ms": 1.5790127897262571,
+          "temperature_bias_C": 0.8733982976277672
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 70.2838134765625,
+          "simulated_rain_mm": 372.9487751404443,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 45.22262247085572,
+          "surface_u_ms": -4.514927513599393,
+          "surface_v_ms": 0.8163703759014599,
+          "temperature_bias_C": 0.36155236562093007
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 69.29523468017578,
+          "simulated_rain_mm": 206.2090434423749,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 42.81945609410604,
+          "surface_u_ms": -0.9446649585066638,
+          "surface_v_ms": -0.7911596820255141,
+          "temperature_bias_C": -1.0420414956410733
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 15.829340934753418,
+          "simulated_rain_mm": 68.91321016732194,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 41.039593359629315,
+          "surface_u_ms": -1.335840437406829,
+          "surface_v_ms": -1.8201496113340057,
+          "temperature_bias_C": -1.9856682268778476
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "s_2n_43e",
+      "variant": "minimum_turning",
+      "overrides": {
+        "monsoon_westerly_floor": 1.0
+      },
+      "case_identity": "568c4cf85d382e126ea5abbf62047c72f02d18f1c15204aa01dee882fa5500c9",
+      "numeric_certificate": {
+        "linear_solves": 1401,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1401
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.0497592654203487,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+      "rain_loss": 2.512555398150972,
+      "annual_temperature_mae_C": 1.2516914237870107,
+      "annual_temperature_bias_C": -0.3058795979287889,
+      "annual_rain_mm": 2439.5637630869946,
+      "observed_annual_rain_mm": 457.3636169433594,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 2.3670284748077393,
+          "simulated_rain_mm": 43.288010965784395,
+          "evaporation_mm": 68.63237122024098,
+          "column_water_mm": 38.48456407546997,
+          "surface_u_ms": -3.5351186803976695,
+          "surface_v_ms": -1.915306309858958,
+          "temperature_bias_C": -1.9764168262481683
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.8703705668449402,
+          "simulated_rain_mm": 67.90977727108532,
+          "evaporation_mm": 60.50240963308348,
+          "column_water_mm": 42.31905280431112,
+          "surface_u_ms": -5.226251786152522,
+          "surface_v_ms": -1.0451426822179928,
+          "temperature_bias_C": -1.329335848490397
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 16.394880294799805,
+          "simulated_rain_mm": 115.48995481895076,
+          "evaporation_mm": 73.71950770434405,
+          "column_water_mm": 46.20648159662883,
+          "surface_u_ms": -4.2429336772362385,
+          "surface_v_ms": 0.11442379027061804,
+          "temperature_bias_C": -1.3953482151031487
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 117.84113311767578,
+          "simulated_rain_mm": 292.2652509007189,
+          "evaporation_mm": 75.48633469127947,
+          "column_water_mm": 44.19492219924928,
+          "surface_u_ms": 1.258447462916374,
+          "surface_v_ms": 3.1224444391330084,
+          "temperature_bias_C": -0.5662276109059646
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 85.67436981201172,
+          "simulated_rain_mm": 358.79410242769455,
+          "evaporation_mm": 71.38813955618276,
+          "column_water_mm": 41.26329837799073,
+          "surface_u_ms": 2.381871724029382,
+          "surface_v_ms": 3.048274942040443,
+          "temperature_bias_C": 0.01710920651753837
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 28.821462631225586,
+          "simulated_rain_mm": 261.91894679400656,
+          "evaporation_mm": 68.31892445021207,
+          "column_water_mm": 38.99255180358887,
+          "surface_u_ms": 1.2632353810469306,
+          "surface_v_ms": 1.58122744778792,
+          "temperature_bias_C": 0.4949789110819496
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 25.425369262695312,
+          "simulated_rain_mm": 228.71829773055182,
+          "evaporation_mm": 68.95375608752171,
+          "column_water_mm": 37.949650929768886,
+          "surface_u_ms": 0.6273884610335032,
+          "surface_v_ms": 1.041569713850816,
+          "temperature_bias_C": 1.161216519673665
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 12.529255867004395,
+          "simulated_rain_mm": 265.0236007432143,
+          "evaporation_mm": 72.53377918352685,
+          "column_water_mm": 39.822804349263514,
+          "surface_u_ms": -0.0585178217726449,
+          "surface_v_ms": 1.268684260348479,
+          "temperature_bias_C": 1.4062798945109047
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 12.0313720703125,
+          "simulated_rain_mm": 275.08363263342113,
+          "evaporation_mm": 75.13639390865961,
+          "column_water_mm": 40.37231782277425,
+          "surface_u_ms": 0.10282120986841616,
+          "surface_v_ms": 1.3515938633680344,
+          "temperature_bias_C": 0.9726099427541101
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 70.2838134765625,
+          "simulated_rain_mm": 245.53062404394146,
+          "evaporation_mm": 74.2246834953626,
+          "column_water_mm": 38.60165520985921,
+          "surface_u_ms": 1.9325875167207185,
+          "surface_v_ms": 1.578147399624189,
+          "temperature_bias_C": 0.2711443106333398
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 69.29523468017578,
+          "simulated_rain_mm": 191.90924820353584,
+          "evaporation_mm": 70.5516219627526,
+          "column_water_mm": 39.288926467895514,
+          "surface_u_ms": 3.427657584839037,
+          "surface_v_ms": 1.3214389012629786,
+          "temperature_bias_C": -0.9386417039235441
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 15.829340934753418,
+          "simulated_rain_mm": 93.6323165540894,
+          "evaporation_mm": 67.653616975579,
+          "column_water_mm": 43.190474573771155,
+          "surface_u_ms": -1.4845688798984795,
+          "surface_v_ms": -1.4346988539770233,
+          "temperature_bias_C": -1.7879237556457517
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "s_2n_43e",
+      "variant": "both",
+      "overrides": {
+        "land_recycling": 0.0,
+        "monsoon_westerly_floor": 1.0
+      },
+      "case_identity": "568c4cf85d382e126ea5abbf62047c72f02d18f1c15204aa01dee882fa5500c9",
+      "numeric_certificate": {
+        "linear_solves": 1474,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1474
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.049768277938866845,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "0a7884ca4b05067ee89b1b605a2ea81cdc8729d181ae6813665077241c04d44b",
+      "rain_loss": 1.8671991771725787,
+      "annual_temperature_mae_C": 1.3769416006406145,
+      "annual_temperature_bias_C": -0.6442631867196823,
+      "annual_rain_mm": 1849.974567224582,
+      "observed_annual_rain_mm": 457.3636169433594,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 2.3670284748077393,
+          "simulated_rain_mm": 18.551969778061743,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 33.52536366780599,
+          "surface_u_ms": -2.9594181509812665,
+          "surface_v_ms": -2.4152761058012646,
+          "temperature_bias_C": -2.470864702860514
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.8703705668449402,
+          "simulated_rain_mm": 33.83884052797739,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 37.66900488535563,
+          "surface_u_ms": -3.9024998748302457,
+          "surface_v_ms": -2.10988294839859,
+          "temperature_bias_C": -2.0279066626230873
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 16.394880294799805,
+          "simulated_rain_mm": 74.72384322020743,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 44.219267520904545,
+          "surface_u_ms": -2.9415454897160327,
+          "surface_v_ms": -1.1818184444804984,
+          "temperature_bias_C": -1.8482750352223707
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 117.84113311767578,
+          "simulated_rain_mm": 174.35151206039723,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 41.569535427093506,
+          "surface_u_ms": 2.4245448626453676,
+          "surface_v_ms": 1.5944568713009357,
+          "temperature_bias_C": -0.9959775829315182
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 85.67436981201172,
+          "simulated_rain_mm": 243.76393747793304,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 38.47139069239299,
+          "surface_u_ms": 3.1434448079268136,
+          "surface_v_ms": 1.8810594719896716,
+          "temperature_bias_C": -0.37264111836751085
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 28.821462631225586,
+          "simulated_rain_mm": 199.67907372117043,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 35.75364110310873,
+          "surface_u_ms": 1.6784025172392523,
+          "surface_v_ms": 1.0305961131801207,
+          "temperature_bias_C": 0.08528851509094142
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 25.425369262695312,
+          "simulated_rain_mm": 196.73816679285633,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 35.13869172414144,
+          "surface_u_ms": 0.9673875512027491,
+          "surface_v_ms": 0.9833643568555512,
+          "temperature_bias_C": 0.9138722387949624
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 12.529255867004395,
+          "simulated_rain_mm": 239.79357401033243,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 37.838574899037674,
+          "surface_u_ms": 0.4304126986395567,
+          "surface_v_ms": 1.2993919561306635,
+          "temperature_bias_C": 1.2628102016448979
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 12.0313720703125,
+          "simulated_rain_mm": 248.66099675430192,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 38.28509700139364,
+          "surface_u_ms": 0.6378357029116403,
+          "surface_v_ms": 1.4005280123154324,
+          "temperature_bias_C": 0.8560021082560222
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 70.2838134765625,
+          "simulated_rain_mm": 205.10429649684158,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 35.64908002853394,
+          "surface_u_ms": 2.451218653842808,
+          "surface_v_ms": 1.3930103039741517,
+          "temperature_bias_C": 0.07927530288696143
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 69.29523468017578,
+          "simulated_rain_mm": 149.08165840887355,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 36.770546181996664,
+          "surface_u_ms": 3.810377285382712,
+          "surface_v_ms": 1.0476736445484371,
+          "temperature_bias_C": -1.199802112579346
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 15.829340934753418,
+          "simulated_rain_mm": 65.68669797562892,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 40.641948439280185,
+          "surface_u_ms": -1.2127670657588139,
+          "surface_v_ms": -1.6891327906625022,
+          "temperature_bias_C": -2.0129393927256256
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "u_21n_21e",
+      "variant": "control",
+      "overrides": {},
+      "case_identity": "d65eaee3fd1acb2216118e57aa6981370306410ea53a3932df47be86216c9942",
+      "numeric_certificate": {
+        "linear_solves": 1750,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1750
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.04985105725596384,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36",
+      "rain_loss": 1.685767120830381,
+      "annual_temperature_mae_C": 2.3639006059010823,
+      "annual_temperature_bias_C": 1.078852102279663,
+      "annual_rain_mm": 215.0377011915203,
+      "observed_annual_rain_mm": 2.065779685974121,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.12576580830368525,
+          "evaporation_mm": 0.3299111250952507,
+          "column_water_mm": 10.548155906677248,
+          "surface_u_ms": -3.945588093566895,
+          "surface_v_ms": -2.2517317262649534,
+          "temperature_bias_C": 2.4520341995239257
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.126051853523124,
+          "evaporation_mm": 0.23128635963580263,
+          "column_water_mm": 11.320794377136233,
+          "surface_u_ms": -4.162678926849366,
+          "surface_v_ms": -2.3136891447067263,
+          "temperature_bias_C": 2.7020872421264652
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 0.07804500311613083,
+          "simulated_rain_mm": 0.11584667826366299,
+          "evaporation_mm": 0.17946879019696887,
+          "column_water_mm": 12.714063098144528,
+          "surface_u_ms": -5.292739804840088,
+          "surface_v_ms": -2.6774270206451423,
+          "temperature_bias_C": 2.837702673339844
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08852897594387953,
+          "evaporation_mm": 0.12325787334035462,
+          "column_water_mm": 15.360359500122073,
+          "surface_u_ms": -6.622769158935547,
+          "surface_v_ms": -3.0812415294647217,
+          "temperature_bias_C": 2.628816302490236
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 0.26380661129951477,
+          "simulated_rain_mm": 0.666190328636518,
+          "evaporation_mm": 0.12026310666122787,
+          "column_water_mm": 25.422870935058594,
+          "surface_u_ms": -5.693571813201904,
+          "surface_v_ms": -2.431939816856384,
+          "temperature_bias_C": 3.2188329895019563
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 23.684654779383305,
+          "evaporation_mm": 5.8078760265189615,
+          "column_water_mm": 42.40391105957032,
+          "surface_u_ms": -0.8002849993705727,
+          "surface_v_ms": 1.1455841051101703,
+          "temperature_bias_C": 2.2261003753662094
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 0.2816426157951355,
+          "simulated_rain_mm": 55.641607663472485,
+          "evaporation_mm": 37.5870517162482,
+          "column_water_mm": 46.56534926757812,
+          "surface_u_ms": 1.471623770141602,
+          "surface_v_ms": 2.440119209098816,
+          "temperature_bias_C": -1.8478141479492205
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 1.4233834743499756,
+          "simulated_rain_mm": 75.56336983950933,
+          "evaporation_mm": 59.45200883730253,
+          "column_water_mm": 47.75008214111328,
+          "surface_u_ms": 0.8668229888916015,
+          "surface_v_ms": 1.4511887659072875,
+          "temperature_bias_C": -3.1429715118408192
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 0.018901819363236427,
+          "simulated_rain_mm": 56.43010593481859,
+          "evaporation_mm": 66.08763749718666,
+          "column_water_mm": 41.56818502807618,
+          "surface_u_ms": -0.363098429477215,
+          "surface_v_ms": 0.6175439014852047,
+          "temperature_bias_C": -2.6490749938964844
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 2.3606297998254346,
+          "evaporation_mm": 34.70082375075417,
+          "column_water_mm": 18.690211093139634,
+          "surface_u_ms": -3.54890326395035,
+          "surface_v_ms": -1.3678806210696708,
+          "temperature_bias_C": 0.393824551391601
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.11982971237211798,
+          "evaporation_mm": 6.445468824925505,
+          "column_water_mm": 12.352376391601558,
+          "surface_u_ms": -5.975136487579348,
+          "surface_v_ms": -2.9854239639282243,
+          "temperature_bias_C": 1.9008271301269488
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.1151198174681825,
+          "evaporation_mm": 1.6938011234626182,
+          "column_water_mm": 10.832437338256836,
+          "surface_u_ms": -4.843072229766846,
+          "surface_v_ms": -2.619845543670654,
+          "temperature_bias_C": 2.2258604171752934
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "u_21n_21e",
+      "variant": "no_local_recycling",
+      "overrides": {
+        "land_recycling": 0.0
+      },
+      "case_identity": "d65eaee3fd1acb2216118e57aa6981370306410ea53a3932df47be86216c9942",
+      "numeric_certificate": {
+        "linear_solves": 1734,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1734
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.049901471536390574,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "8f037f1766d427e1558167e0be06fe04ed6cf0a95ed511a9d4e74f6521547855",
+      "rain_loss": 0.7181698773877923,
+      "annual_temperature_mae_C": 2.1494737356821703,
+      "annual_temperature_bias_C": -1.888959762954712,
+      "annual_rain_mm": 72.55395643264801,
+      "observed_annual_rain_mm": 2.065779685974121,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08867158815280225,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 9.581032113647462,
+          "surface_u_ms": -3.241419549560547,
+          "surface_v_ms": -1.6968509635925295,
+          "temperature_bias_C": 0.6427908279418949
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.09359318614176786,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 10.161243072509766,
+          "surface_u_ms": -3.4108596420288086,
+          "surface_v_ms": -1.7013199798583987,
+          "temperature_bias_C": 0.529615538024903
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 0.07804500311613083,
+          "simulated_rain_mm": 0.10274872183520346,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 11.045327883911135,
+          "surface_u_ms": -4.3823544311523435,
+          "surface_v_ms": -1.8652565427780152,
+          "temperature_bias_C": -0.03632734374999913
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.10282712120283395,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 12.456814331054685,
+          "surface_u_ms": -5.540305670166015,
+          "surface_v_ms": -2.100608344459534,
+          "temperature_bias_C": -1.9584400329589835
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 0.26380661129951477,
+          "simulated_rain_mm": 0.6353836181585993,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 19.175531707763675,
+          "surface_u_ms": -4.950472200775146,
+          "surface_v_ms": -1.8835316882133486,
+          "temperature_bias_C": -3.195875662231444
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 11.892971678933758,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 32.17166608276368,
+          "surface_u_ms": -1.8408975023269643,
+          "surface_v_ms": -0.41419598208069736,
+          "temperature_bias_C": -3.7460168884277345
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 0.2816426157951355,
+          "simulated_rain_mm": 22.938870764334997,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 39.00057932128907,
+          "surface_u_ms": -0.26502179562225925,
+          "surface_v_ms": 0.2805452862679959,
+          "temperature_bias_C": -4.4879402038574225
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 1.4233834743499756,
+          "simulated_rain_mm": 25.658925113002457,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 38.43548714599609,
+          "surface_u_ms": -0.3229962100446225,
+          "surface_v_ms": 0.04116562351360915,
+          "temperature_bias_C": -4.483182455444336
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 0.018901819363236427,
+          "simulated_rain_mm": 10.541721702009433,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 28.849921188354493,
+          "surface_u_ms": -1.7498009233474736,
+          "surface_v_ms": -0.7894050290707498,
+          "temperature_bias_C": -3.4685830047607427
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.3025779743281492,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 14.839280023193353,
+          "surface_u_ms": -4.614816164398195,
+          "surface_v_ms": -2.193613595199585,
+          "temperature_bias_C": -2.1978264709472684
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.10792664594793068,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 11.348399894714353,
+          "surface_u_ms": -5.696893589782715,
+          "surface_v_ms": -2.8154980865478523,
+          "temperature_bias_C": -0.4537145172119179
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08773831860007096,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 9.884062223815917,
+          "surface_u_ms": -4.262299064636231,
+          "surface_v_ms": -2.216136915588379,
+          "temperature_bias_C": 0.18798305816650462
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "u_21n_21e",
+      "variant": "minimum_turning",
+      "overrides": {
+        "monsoon_westerly_floor": 1.0
+      },
+      "case_identity": "d65eaee3fd1acb2216118e57aa6981370306410ea53a3932df47be86216c9942",
+      "numeric_certificate": {
+        "linear_solves": 1762,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1762
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.04975321291849255,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "341a0f2dbade41f27120705bc2842a61510224b875d800a50643047a9cef33b8",
+      "rain_loss": 2.482789486539989,
+      "annual_temperature_mae_C": 2.517925875473023,
+      "annual_temperature_bias_C": 0.7274942073822018,
+      "annual_rain_mm": 357.3022162526735,
+      "observed_annual_rain_mm": 2.065779685974121,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.1260807675900869,
+          "evaporation_mm": 0.4022420642419408,
+          "column_water_mm": 10.54949429473877,
+          "surface_u_ms": -3.9390456642150884,
+          "surface_v_ms": -2.2470767395019533,
+          "temperature_bias_C": 2.449120588684082
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.12613397794170306,
+          "evaporation_mm": 0.260468549657613,
+          "column_water_mm": 11.321689857482914,
+          "surface_u_ms": -4.160478485107422,
+          "surface_v_ms": -2.312330033874512,
+          "temperature_bias_C": 2.700996769714356
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 0.07804500311613083,
+          "simulated_rain_mm": 0.11586573811108247,
+          "evaporation_mm": 0.18796014538345238,
+          "column_water_mm": 12.714422676086427,
+          "surface_u_ms": -5.292201762390138,
+          "surface_v_ms": -2.67717685585022,
+          "temperature_bias_C": 2.8373670928955086
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08853086635516957,
+          "evaporation_mm": 0.12459824557167788,
+          "column_water_mm": 15.360349617004397,
+          "surface_u_ms": -6.622682962799072,
+          "surface_v_ms": -3.081237453842163,
+          "temperature_bias_C": 2.6287245941162123
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 0.26380661129951477,
+          "simulated_rain_mm": 1.0150173683489374,
+          "evaporation_mm": 0.1203664544404795,
+          "column_water_mm": 25.851143020629888,
+          "surface_u_ms": -5.693474572753907,
+          "surface_v_ms": -2.4319026473045344,
+          "temperature_bias_C": 3.2187710571289085
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 38.77071878292166,
+          "evaporation_mm": 9.482571215103706,
+          "column_water_mm": 45.81483883972168,
+          "surface_u_ms": -0.690172833573816,
+          "surface_v_ms": 1.32269520711899,
+          "temperature_bias_C": 1.6964519012451142
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 0.2816426157951355,
+          "simulated_rain_mm": 87.22915959946315,
+          "evaporation_mm": 59.12168459033966,
+          "column_water_mm": 51.09314459838867,
+          "surface_u_ms": 1.0501560785770416,
+          "surface_v_ms": 2.152645421600342,
+          "temperature_bias_C": -3.0714231475830087
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 1.4233834743499756,
+          "simulated_rain_mm": 126.15078963343302,
+          "evaporation_mm": 75.97327144813538,
+          "column_water_mm": 52.24885394897461,
+          "surface_u_ms": 0.1473418246746063,
+          "surface_v_ms": 0.932281043624878,
+          "temperature_bias_C": -3.8814079528808594
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 0.018901819363236427,
+          "simulated_rain_mm": 99.24207280753059,
+          "evaporation_mm": 69.31746837806702,
+          "column_water_mm": 45.10495642089843,
+          "surface_u_ms": -0.9716331532001498,
+          "surface_v_ms": 0.14488930015563958,
+          "temperature_bias_C": -3.2456529418945315
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 4.195791052103638,
+          "evaporation_mm": 46.652651334842034,
+          "column_water_mm": 19.824941400146468,
+          "surface_u_ms": -3.6835699710845966,
+          "surface_v_ms": -1.4371646829605114,
+          "temperature_bias_C": -0.5204730316162123
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.12418272876460101,
+          "evaporation_mm": 10.366251877287995,
+          "column_water_mm": 12.422500004577635,
+          "surface_u_ms": -5.942815505218508,
+          "surface_v_ms": -2.972554589843751,
+          "temperature_bias_C": 1.7353547760009727
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.11787293010981131,
+          "evaporation_mm": 2.7142629919946213,
+          "column_water_mm": 10.865006861877442,
+          "surface_u_ms": -4.836321828460694,
+          "surface_v_ms": -2.619301992034912,
+          "temperature_bias_C": 2.18210078277588
+        }
+      ],
+      "counterfactual_not_adopted": true
+    },
+    {
+      "region": "u_21n_21e",
+      "variant": "both",
+      "overrides": {
+        "land_recycling": 0.0,
+        "monsoon_westerly_floor": 1.0
+      },
+      "case_identity": "d65eaee3fd1acb2216118e57aa6981370306410ea53a3932df47be86216c9942",
+      "numeric_certificate": {
+        "linear_solves": 1747,
+        "linear_unconverged": 0,
+        "linear_methods": {
+          "sor": 1747
+        },
+        "temperature_steps": 33,
+        "temperature_unconverged": 0,
+        "temperature_max_update_c": 0.04987169163054617,
+        "accelerated_stages": 0,
+        "moisture_checked": true,
+        "moisture_unconverged": 0,
+        "all_checks_passed": true
+      },
+      "fields_sha256": "f3d94562b749e75e1c7ca919020a80ee0ba2d3db0169e57995021da560325687",
+      "rain_loss": 1.5698589617693357,
+      "annual_temperature_mae_C": 2.1824458049774176,
+      "annual_temperature_bias_C": -1.936314677810669,
+      "annual_rain_mm": 196.56976224961966,
+      "observed_annual_rain_mm": 2.065779685974121,
+      "all_months": [
+        {
+          "month": 1,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08874363942382235,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 9.576899255371094,
+          "surface_u_ms": -3.2382354492187506,
+          "surface_v_ms": -1.6961974285125734,
+          "temperature_bias_C": 0.6120264739990237
+        },
+        {
+          "month": 2,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.09361917922335367,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 10.156548336791992,
+          "surface_u_ms": -3.407749517059327,
+          "surface_v_ms": -1.7010365234375002,
+          "temperature_bias_C": 0.49021867980957085
+        },
+        {
+          "month": 3,
+          "observed_rain_mm": 0.07804500311613083,
+          "simulated_rain_mm": 0.10283916709339247,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 11.039048974609376,
+          "surface_u_ms": -4.3792163753509525,
+          "surface_v_ms": -1.8663370180130006,
+          "temperature_bias_C": -0.0911266876220695
+        },
+        {
+          "month": 4,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.10345846326664711,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 12.442225973510745,
+          "surface_u_ms": -5.53612259941101,
+          "surface_v_ms": -2.1052541131973266,
+          "temperature_bias_C": -2.0404807525634765
+        },
+        {
+          "month": 5,
+          "observed_rain_mm": 0.26380661129951477,
+          "simulated_rain_mm": 0.9450961405324447,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 19.522490695190434,
+          "surface_u_ms": -4.947855870819091,
+          "surface_v_ms": -1.893862130641937,
+          "temperature_bias_C": -3.309023080444335
+        },
+        {
+          "month": 6,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 27.579528536419094,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 37.806709390258796,
+          "surface_u_ms": -1.8888925169944752,
+          "surface_v_ms": -0.48387965402957,
+          "temperature_bias_C": -3.904268511962891
+        },
+        {
+          "month": 7,
+          "observed_rain_mm": 0.2816426157951355,
+          "simulated_rain_mm": 56.520781848430616,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 48.895066058349606,
+          "surface_u_ms": -0.4250364374637602,
+          "surface_v_ms": 0.026657680762559192,
+          "temperature_bias_C": -4.472582525634766
+        },
+        {
+          "month": 8,
+          "observed_rain_mm": 1.4233834743499756,
+          "simulated_rain_mm": 75.01045708052317,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 47.927666278076174,
+          "surface_u_ms": -0.4396637207508088,
+          "surface_v_ms": -0.14364568693097685,
+          "temperature_bias_C": -4.3936233184814455
+        },
+        {
+          "month": 9,
+          "observed_rain_mm": 0.018901819363236427,
+          "simulated_rain_mm": 35.085648338784765,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 35.94245742492676,
+          "surface_u_ms": -1.7453030704498296,
+          "surface_v_ms": -0.8180878421783447,
+          "temperature_bias_C": -3.653706185913087
+        },
+        {
+          "month": 10,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.8437750364678555,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 16.088436581420886,
+          "surface_u_ms": -4.582518137741091,
+          "surface_v_ms": -2.1345253252029424,
+          "temperature_bias_C": -2.2080248596191425
+        },
+        {
+          "month": 11,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.10808267337580517,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 11.353328373718261,
+          "surface_u_ms": -5.698311267852785,
+          "surface_v_ms": -2.81620509223938,
+          "temperature_bias_C": -0.45266708374023806
+        },
+        {
+          "month": 12,
+          "observed_rain_mm": 0.0,
+          "simulated_rain_mm": 0.08773214607872068,
+          "evaporation_mm": 0.0,
+          "column_water_mm": 9.8837901260376,
+          "surface_u_ms": -4.262453179168701,
+          "surface_v_ms": -2.216303715133667,
+          "temperature_bias_C": 0.18748171844482556
+        }
+      ],
+      "counterfactual_not_adopted": true
+    }
+  ],
+  "effects": [
+    {
+      "region": "s_2n_43e",
+      "control_annual_rain_mm": 3556.4096656650304,
+      "observed_annual_rain_mm": 457.3636169433594,
+      "no_recycling_change_mm": -401.05250880668564,
+      "turning_change_mm": -1116.8459025780357,
+      "both_change_mm": -1706.4350984404484,
+      "factorial_interaction_mm": -188.53668705572682
+    },
+    {
+      "region": "u_21n_21e",
+      "control_annual_rain_mm": 215.0377011915203,
+      "observed_annual_rain_mm": 2.065779685974121,
+      "no_recycling_change_mm": -142.48374475887232,
+      "turning_change_mm": 142.26451506115316,
+      "both_change_mm": -18.467938941900655,
+      "factorial_interaction_mm": -18.248709244181526
+    }
+  ],
+  "calibrated_parameter": false,
+  "candidate_adopted": false,
+  "W18c_changed": false,
+  "sealed_AA_opened": false
+}

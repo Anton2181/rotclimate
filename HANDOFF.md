@@ -1,3 +1,38 @@
+# Active climate goal: W18c running; Somali factorial diagnostic complete
+
+CHECK existing run_w18c_campaign.py process and
+output/ppe_20261127/W18c/campaign_status.json BEFORE restarting anything.
+Main log /tmp/rotclimate_w18c_campaign.log. Current process launched PID1877
+(session39071), no need to duplicate it. Process may move candidates while
+this handoff is read. Do NOT edit physical source/shared caches during it.
+
+W18c first point w1_base completed all97 regions; fresh paired development
+S97 .9826256 (T -1.9054%, rain loss -1.5695%). This is a development result,
+NOT a finalist/adoption/fine pass. Full49(+up to16+16) fixed budget/gates remain.
+No new climate release; adopted r58, local atlas r51. Sealed AA still unopened.
+
+READ calibration/somalia_mechanism_20261126/findings.md and reviewed output.
+Eight predeclared integrations, two exact reference controls,672monthlyscalar
+checks,8strict certificates; inspected figure. No parameter fit or adoption.
+Somali observed457.4mm/yr, control3556.4; land-source-off3155.4; globalminimum
+turning2439.6; both1850.0 (still4xobs). Sahara obs2.07, control215.0; source-off
+72.6; turning357.3; both196.6. Turning response larger in Somalia but worsens
+Sahara. Keep global floor OFF. In this model land_recycling scales represented
+landE, so source-off has E=0 and also changes soil P-E: not pure recycling with
+surface evaporation held fixed. Responses are not measured causal shares or
+an audited atmospheric water-budget decomposition. Both effects interact.
+
+NEXT useful independent work while W18c computes: use existing model trace
+hooks to inspect moisture_u/v, condensation drivers and forcing on the same
+exposed regions. Surface wind alone cannot establish the transport wind.
+Declare a bounded diagnostic before any new integrations; do not expand this
+completed eight-run budget or open any new targets. Pressure-gradient/remote
+heat-low forcing is the focused structural lead; original r52 diagnosis had
+remote Arabia/India lows outside the regional map. Any real structural change
+must wait until W18c is closed and use full gates, with desert controls.
+
+# Earlier active-goal setup follows
+
 # Active climate goal: fresh r58 paired reference qualified; W18c ready to run
 
 Owner goal: identify and fix the main outstanding climate issues; continue
