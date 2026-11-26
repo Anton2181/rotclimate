@@ -260,6 +260,258 @@ def capped_tree():
     (ERO / "capped_tree.json").write_text(json.dumps(rec, indent=1))
 
 
+@numba.njit(cache=True)
+def _entry(v, recv, und):
+    """First non-undrawn cell (drawn river, water) on v's path, or -1 (off-map)."""
+    while v >= 0 and und[v]:
+        v = recv[v]
+    return v
+
+
+@numba.njit(cache=True)
+def _add_drawn(v, s, recv, isdrawn, A):
+    """Add s to the catchment of drawn cell v and every drawn cell below it."""
+    while v >= 0 and isdrawn[v]:
+        A[v] += s; v = recv[v]
+
+
+@numba.njit(cache=True)
+def _move(c, w, recv, load, und, isdrawn, A):
+    """Re-route undrawn cell c (with its subtree) to w; keeps undrawn loads and drawn catchments exact."""
+    s = load[c]
+    u = recv[c]
+    while u >= 0 and und[u]:
+        load[u] -= s; u = recv[u]
+    _add_drawn(u, -s, recv, isdrawn, A)
+    recv[c] = w
+    u = w
+    while u >= 0 and und[u]:
+        load[u] += s; u = recv[u]
+    _add_drawn(u, s, recv, isdrawn, A)
+
+
+@numba.njit(cache=True)
+def _fits(w, s, c, recv, load, und, cap):
+    u = w; steps = 0
+    while u >= 0 and und[u]:
+        if u == c or load[u] + s > cap:
+            return False
+        u = recv[u]; steps += 1
+        if steps > 10000000:
+            return False
+    return True
+
+
+@numba.njit(cache=True)
+def _entries(recv, und, order):
+    """Entry cell (first drawn / water cell, -1 off-map) of every cell's path; order = receivers first."""
+    N = recv.shape[0]; ent = -np.ones(N, np.int64)
+    for k in range(order.shape[0]):
+        c = order[k]; r = recv[c]
+        if not und[c]:
+            ent[c] = c
+        elif r < 0:
+            ent[c] = -1
+        else:
+            ent[c] = ent[r] if und[r] else r
+    return ent
+
+
+@numba.njit(cache=True)
+def _boost(recv, load, und, isdrawn, A, bcell, bid, ny, nx, NB, need, cap, protect, ent):
+    """Raise every drawn branch below `need` (end cell bcell[b]) by re-routing undrawn subtrees onto a neighbour whose
+    path already enters that branch (multi-hop), if the path has room and the branch the subtree leaves stays >= protect."""
+    nb = bcell.shape[0]; moves = 0
+    for b in range(nb):
+        e = bcell[b]
+        if e < 0 or A[e] >= need:
+            continue
+        for c in range(ny * nx):
+            if A[e] >= need:
+                break
+            if not und[c]:
+                continue
+            oe = ent[c]
+            if oe >= 0 and isdrawn[oe] and bid[oe] == b + 1:
+                continue
+            s = load[c]
+            if oe >= 0 and isdrawn[oe]:
+                ob = bid[oe]
+                if ob > 0 and bcell[ob - 1] >= 0 and A[bcell[ob - 1]] - s < protect:
+                    continue
+            y = c // nx; x = c % nx; tgt = -1
+            for k in range(8):
+                yy = y + NB[k, 0]; xx = x + NB[k, 1]
+                if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                    continue
+                j = yy * nx + xx
+                ej = ent[j]
+                if ej >= 0 and isdrawn[ej] and bid[ej] == b + 1:
+                    if (not und[j]) or _fits(j, s, c, recv, load, und, cap):
+                        tgt = j; break
+            if tgt < 0:
+                continue
+            _move(c, tgt, recv, load, und, isdrawn, A); moves += 1
+            # c's subtree now enters branch b: mark the moved cell (its donors follow lazily next sweep)
+            ent[c] = ent[tgt]
+    return moves
+
+
+@numba.njit(cache=True)
+def _boost_one(b, need_b, recv, load, und, isdrawn, A, bcell, bid, ny, nx, NB, cap, protect, ent, avoid):
+    """As _boost, for one branch b (0-based) up to need_b; never takes land from branch `avoid` (1-based, 0 = none)."""
+    e = bcell[b]; moves = 0
+    for c in range(ny * nx):
+        if A[e] >= need_b:
+            break
+        if not und[c]:
+            continue
+        oe = ent[c]
+        if oe >= 0 and isdrawn[oe] and bid[oe] == b + 1:
+            continue
+        s = load[c]
+        if oe >= 0 and isdrawn[oe]:
+            ob = bid[oe]
+            if ob == avoid:
+                continue
+            if ob > 0 and bcell[ob - 1] >= 0 and A[bcell[ob - 1]] - s < protect:
+                continue
+        y = c // nx; x = c % nx; tgt = -1
+        for k in range(8):
+            yy = y + NB[k, 0]; xx = x + NB[k, 1]
+            if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                continue
+            j = yy * nx + xx
+            ej = ent[j]
+            if ej >= 0 and isdrawn[ej] and bid[ej] == b + 1:
+                if (not und[j]) or _fits(j, s, c, recv, load, und, cap):
+                    tgt = j; break
+        if tgt < 0:
+            continue
+        _move(c, tgt, recv, load, und, isdrawn, A); moves += 1; ent[c] = ent[tgt]
+    return moves
+
+
+@numba.njit(cache=True)
+def _transfer(recv, load, und, isdrawn, A, from_b, to_b, end_from, end_to, bid, ny, nx, NB, keep_min):
+    """Move undrawn subtrees that drain into branch from_b and touch branch to_b over to to_b until
+    A[end_from] < A[end_to] (thin below thick), keeping A[end_from] >= keep_min."""
+    moves = 0
+    for sweep in range(6):
+        if A[end_from] < A[end_to]:
+            break
+        got = False
+        for c in range(ny * nx):
+            if not und[c]:
+                continue
+            old = _entry(recv[c], recv, und)
+            if old < 0 or not isdrawn[old] or bid[old] != from_b:
+                continue
+            if A[end_from] - load[c] < keep_min:
+                continue
+            y = c // nx; x = c % nx; tgt = -1
+            for k in range(8):
+                yy = y + NB[k, 0]; xx = x + NB[k, 1]
+                if yy < 0 or yy >= ny or xx < 0 or xx >= nx:
+                    continue
+                j = yy * nx + xx
+                if isdrawn[j] and bid[j] == to_b:
+                    tgt = j; break
+            if tgt < 0:
+                continue
+            _move(c, tgt, recv, load, und, isdrawn, A); moves += 1; got = True
+            if A[end_from] < A[end_to]:
+                break
+        if not got:
+            break
+    return moves
+
+
+def post():
+    """Tree post-processing (owner rules): every drawn river >= C; undrawn channels < C; at every confluence a thin
+    river below the thick one it joins. Exact bookkeeping of undrawn loads and drawn catchments (cells)."""
+    import river_order_check as RO
+    L, tops, h0, land, rivers = layers(); H, W = land.shape; N = H * W
+    px = (1.143 * 1.609344) ** 2
+    t = np.load(ERO / "capped_tree.npz"); recv = t["recv"].astype(np.int64).copy()
+    np.savez_compressed(ERO / "capped_tree_raw.npz", recv=recv)
+    und = (land & ~rivers).ravel(); isdrawn = rivers.ravel()
+    C = MIN_DRAWN_KM2 or 800.0; cap = int(np.floor(C / px)) - 1; need = cap + 1
+    bid = drawn_branches(land, rivers).ravel()
+    isbase, order, _ = tree_geometry(recv, land, W)
+    A = accumulate_tree(order, recv, land.ravel().astype(float))           # cells
+    nb = int(bid.max()); bcell = -np.ones(nb, np.int64)
+    for b in range(1, nb + 1):
+        cs = np.flatnonzero(bid == b)
+        if cs.size:
+            bcell[b - 1] = cs[np.argmax(A[cs])]
+    load = subtree_loads(recv, und)
+    def report(tag):
+        sizes = A[bcell[bcell >= 0]]
+        log(f"{tag}: smallest drawn river {sizes.min() * px:.0f} km2 ({(sizes < need).sum()} below {need * px:.0f}); "
+            f"undrawn max {load[und].max() * px:.0f} km2, over cap {(load[und] > cap).sum()} cells")
+    report("start")
+    for rnd in range(3):
+        m1 = 0
+        for sweep in range(40):
+            ent = _entries(recv, und, tree_geometry(recv, land, W)[1])
+            mm = _boost(recv, load, und, isdrawn, A, bcell, bid, H, W, NB, need, cap, need, ent); m1 += mm
+            if mm == 0:
+                break
+        recv[:] = _repair(recv, load, h0.ravel().astype(float), und, H, W, NB, cap, WZ, 30)
+        load = subtree_loads(recv, und)
+        A = accumulate_tree(order := tree_geometry(recv, land, W)[1], recv, land.ravel().astype(float))
+        report(f"round {rnd + 1} (boost moves {m1})")
+    # confluences: thin below the thick stem it joins (river_order_check's junction logic, mapped to the branch ids)
+    br = RO.branches(land, rivers)
+    bid2 = bid.reshape(H, W)
+    for rnd in range(4):
+        A2 = A.reshape(H, W)
+        Atr = ndi.maximum_filter(np.where(rivers, A2, 0.0), size=5)
+        for b in br:
+            a = np.sort(Atr[b["gy"], b["gx"]]); a = a[3:-3] if a.size > 6 else a
+            b["A"] = float(a.max())
+            ids = bid2[b["gy"], b["gx"]]; ids = ids[ids > 0]
+            b["bid"] = int(np.bincount(ids).argmax()) if ids.size else 0
+        byj = {}
+        for b in br:
+            for j in b["junctions"]:
+                byj.setdefault(j, []).append(b)
+        bad = []
+        for j, bs in byj.items():
+            if len(bs) < 2:
+                continue
+            out = max(bs, key=lambda b: b["A"]); inc = [b for b in bs if b is not out]
+            thick_in = [b for b in inc if b["thick"]]; thin_in = [b for b in inc if not b["thick"]]
+            if thick_in and thin_in:
+                k = max(thick_in, key=lambda b: b["A"])
+                for t in thin_in:
+                    if t["A"] >= k["A"] and t["bid"] and k["bid"]:
+                        bad.append((t["bid"], k["bid"]))
+        log(f"confluence round {rnd + 1}: thin not below thick {len(bad)}")
+        if not bad:
+            break
+        for tb, kb in bad:
+            # feed the thick stem's system (never from the thin river) until it out-collects the thin tributary
+            for sweep in range(60):
+                if A[bcell[kb - 1]] > A[bcell[tb - 1]]:
+                    break
+                ent = _entries(recv, und, tree_geometry(recv, land, W)[1])
+                mm = _boost_one(kb - 1, A[bcell[tb - 1]] + 1, recv, load, und, isdrawn, A, bcell, bid, H, W, NB, cap, need, ent, tb)
+                if mm == 0:
+                    break
+            _transfer(recv, load, und, isdrawn, A, tb, kb, bcell[tb - 1], bcell[kb - 1], bid, H, W, NB, need)
+            log(f"   thin {tb} {A[bcell[tb - 1]] * px:.0f} km2 vs thick {kb} {A[bcell[kb - 1]] * px:.0f} km2")
+        A = accumulate_tree(tree_geometry(recv, land, W)[1], recv, land.ravel().astype(float))
+        load = subtree_loads(recv, und)
+    report("final")
+    np.savez_compressed(ERO / "capped_tree.npz", recv=recv, load=load.reshape(H, W).astype(np.int32))
+    tj = json.loads((ERO / "capped_tree.json").read_text())
+    tj.update(min_drawn_km2=C, cap_cells=cap, over_cap_cells=int((load[und] > cap).sum()),
+              smallest_drawn_km2_after=float(A[bcell[bcell >= 0]].min() * px), max_undrawn_km2=float(load[und].max() * px))
+    (ERO / "capped_tree.json").write_text(json.dumps(tj, indent=1))
+
+
 # ------------------------------------------------------------------ erosion on the fixed tree
 @numba.njit(cache=True)
 def _order_from_bases(recv, isbase):
@@ -382,18 +634,32 @@ def build():
         hill = np.where(hill > 0, hf["cap_m"] * np.tanh(hill / hf["cap_m"]), hill)
     hill = hill * TR.tier1_weight(tier)
     detail = z - lp(z); detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)
-    z0 = np.where(land, np.maximum(h0 + detail + hill, 0.5), 0.0)
+    # the hill height was fitted on Earth to the lowland slope target (0.167 deg at 9 km); erosion on this drainage
+    # makes gentler hills, so the hill amplitude is re-fitted to the same target (secant on the composition)
+    def slope_of(f):
+        zz = np.where(land, np.maximum(h0 + detail + f * hill, 0.5), 0.0)
+        return float(np.median(TE.slopes_9km(zz, land, dx, tier, 1)))
+    f0, f1 = 1.0, 2.0; s0, s1 = slope_of(f0), slope_of(f1)
+    for _ in range(6):
+        if abs(s1 - 0.167) < 0.002 or s1 == s0:
+            break
+        f0, f1, s0 = f1, max(0.2, f1 + (0.167 - s1) * (f1 - f0) / (s1 - s0)), s1; s1 = slope_of(f1)
+    hill_factor = f1
+    log(f"hill factor {hill_factor:.2f} -> composition tier-1 slope {s1:.3f}")
+    z0 = np.where(land, np.maximum(h0 + detail + hill_factor * hill, 0.5), 0.0)
     lake = L["lake"].astype(bool) & ~land
-    zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, **form)
-    # elevations fall strictly along the stored tree (undrawn cells only; drawn rivers and lakes as conditioned)
     isbase, order, _ = tree_geometry(recv, land, W)
     und = (land & ~rivers).ravel()
-    target14 = lp(h0); zt = np.where(land, zc, 0.0).astype(float); raised = 0
-    for it in range(4):
-        zt, raised = _fall_along(zt.ravel(), order, recv, isbase, und, EPS_M); zt = zt.reshape(H, W)
-        if it < 3:                                                   # pull the 14 km scale back onto the tiers, off rivers
-            corr = np.where(land & ~rivers, target14 - lp(zt), 0.0)
-            zt = np.where(land, np.maximum(zt + corr, 0.5), 0.0)
+    target14 = lp(h0)
+    # the 14 km scale is corrected on the composition BEFORE the rivers are conditioned (so banks stay above beds),
+    # iterated through the conditioning and the fall-along-tree fill
+    for it in range(3):
+        zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, **form)
+        zt, raised = _fall_along(np.where(land, zc, 0.0).ravel().astype(float), order, recv, isbase, und, EPS_M)
+        zt = zt.reshape(H, W)
+        err = np.abs(lp(zt) - target14)[land].mean(); log(f"   scale iteration {it + 1}: mean |lowpass error| {err:.1f} m")
+        if it < 2:
+            z0 = np.where(land, np.maximum(z0 + (target14 - lp(zt)), 0.5), 0.0)
     dz = (zt - zc)[land]
     z32 = np.where(land, zt, 0.0).astype(np.float32); lv32 = level.astype(np.float32)
     area = accumulate_tree(order, recv, land.ravel().astype(float) * dx * dx).reshape(H, W)
@@ -413,7 +679,7 @@ def build():
                climate_scale=(c["climate_scale_mean_abs_m"], c2["climate_scale_mean_abs_m"]),
                tier1_slope=c["tier1_slope_9km_median_deg"], fall_along_tree_raised_cells=int(raised),
                fall_along_tree_raise_m={q: float(np.percentile(dz, q)) for q in (50, 90, 99, 100)},
-               over_cap_cells=int((load[und] > tj["cap_cells"]).sum()), conditioning=rec)
+               over_cap_cells=int((load[und] > tj["cap_cells"]).sum()), hill_factor=hill_factor, conditioning=rec)
     np.savez_compressed(ERO / "map_height_v23.npz", z=z32, area=area.astype(np.float32), tier_tops=np.asarray(tops, float),
                         lake_level=lv32, recv=recv)
     (ERO / "map_height_v23.json").write_text(json.dumps(out, indent=1, default=float))
@@ -422,4 +688,4 @@ def build():
 
 
 if __name__ == "__main__":
-    {"tree": capped_tree, "build": build}[sys.argv[1]]()
+    {"tree": capped_tree, "post": post, "build": build}[sys.argv[1]]()

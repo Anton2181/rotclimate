@@ -68,12 +68,15 @@ def branches(land, rivers):
 def check(path):
     from terrain_capped import layers
     L, tops, h0, land, rivers = layers()
+    from terrain_capped import drawn_branches
     A = catchment(path, land, rivers)
-    Atr = ndi.maximum_filter(np.where(rivers, A, 0.0), size=5)            # the trunk within 2 cells of the centre line
+    bid = drawn_branches(land, rivers)                                      # canonical drawn-river ids (as the build)
+    size = ndi.maximum(A, bid, np.arange(1, bid.max() + 1))                  # each drawn river's catchment at its end
     br = branches(land, rivers)
     for b in br:
-        a = np.sort(Atr[b["gy"], b["gx"]]); a = a[TRIM:-TRIM] if a.size > 2 * TRIM else a
-        b["A_max"] = float(a.max()); b["A_min"] = float(a.min())
+        ids = bid[b["gy"], b["gx"]]; ids = ids[ids > 0]
+        b["bid"] = int(np.bincount(ids).argmax()) if ids.size else 0
+        b["A_max"] = float(size[b["bid"] - 1]) if b["bid"] else 0.0
     byj = {}
     for b in br:
         for j in b["junctions"]:
@@ -93,7 +96,7 @@ def check(path):
                 bad.append(dict(junction=int(j), thin_km2=round(b["A_max"]), thick_km2=round(t), y=int(b["gy"].mean()), x=int(b["gx"].mean())))
     thin_sizes = [b["A_max"] for b in br if not b["thick"]]
     res = dict(branches=len(br), thin=sum(not b["thick"] for b in br), thick=sum(b["thick"] for b in br),
-               smallest_drawn_river_km2=round(min(b["A_max"] for b in br)), smallest_thin_km2=round(min(thin_sizes)),
+               smallest_drawn_river_km2=round(float(np.min(size))), smallest_thin_km2=round(min(thin_sizes)),
                confluences_checked=checked, thin_not_below_thick=len(bad), examples=sorted(bad, key=lambda r: -r["thin_km2"] / max(r["thick_km2"], 1))[:10])
     print(json.dumps(res, indent=1))
     return res
