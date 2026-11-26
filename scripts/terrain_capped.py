@@ -620,6 +620,65 @@ def _fall_along(z, order, recv, isbase, und, eps):
     return zz, raised
 
 
+@numba.njit(cache=True)
+def _enforce_pass(z, rv, tgt, und, isdrawn, basin, floor, ny, nx, eps):
+    """One pass of minimal height-map edits so the physics receiver (rv, Priority-Flood) becomes the target (tgt):
+    a lower neighbour in another basin is raised into a divide; else the target channel is lowered (not below its
+    floor) and kept falling downstream. Drawn rivers and water are never edited. Returns the number of edits."""
+    N = ny * nx; ed = 0
+    for c in range(N):
+        if not und[c]:
+            continue
+        t = tgt[c]; r = rv[c]
+        if t < 0 or r == t:
+            continue
+        if r >= 0 and und[r] and basin[r] != basin[c]:
+            # fence: the foreign neighbour rises just above the target receiver
+            need = max(z[t], z[c] - eps) + eps
+            if z[r] < need:
+                z[r] = need; ed += 1
+            continue
+        # carve: the target receiver below the physics one, then keep the target path falling
+        if und[t]:
+            lim = (z[r] if r >= 0 else z[c]) - eps
+            nz = max(min(z[t], lim), floor[t])
+            if nz < z[t]:
+                z[t] = nz; ed += 1
+            u = t; steps = 0
+            while u >= 0 and und[u] and steps < 100000:
+                v = tgt[u]
+                if v < 0 or not und[v]:
+                    break
+                if z[v] >= z[u] - 0.5 * eps:
+                    z[v] = max(z[u] - eps, floor[v])
+                u = v; steps += 1
+        elif r >= 0 and und[r]:
+            need = z[t] + eps if z[t] > z[c] else z[c] + eps
+            if z[r] < need:
+                z[r] = need; ed += 1
+    return ed
+
+
+def enforce(z, land, rivers, lv, tgt, basin, floor, max_iter=60):
+    """Height-map edits until steepest descent (Priority-Flood, as rotclimate.routing) follows the target tree."""
+    from rotclimate.routing import _flood
+    H, W = land.shape; und = (land & ~rivers).ravel(); isdrawn = rivers.ravel()
+    through = ~land & (lv > 0); net = land | through
+    zz = np.where(land, z, 0.0).astype(float).ravel().copy(); z_in = zz.copy()
+    for it in range(max_iter):
+        rv, _ = _flood(np.where(land.ravel(), zz, np.where(through.ravel(), lv.ravel(), -1e9)).reshape(H, W), net, NB)
+        match = (rv == tgt)[und].mean()
+        log(f"   enforce {it}: physics follows target for {match:.4f} of undrawn cells")
+        if match > 0.9995:
+            break
+        ed = _enforce_pass(zz, rv, tgt, und, isdrawn, basin.ravel(), floor.ravel(), H, W, 0.05)
+        if ed == 0:
+            break
+    dz = (zz - z_in)[land.ravel()]
+    log(f"   enforce edits: raised {(dz > 0.01).mean():.3f} of land (p99 {np.percentile(dz, 99):.1f} m), lowered {(dz < -0.01).mean():.3f} (p1 {np.percentile(dz, 1):.1f} m)")
+    return zz.reshape(H, W)
+
+
 def build():
     import terrain_erosion as TE
     import terrain_rivers as TR
@@ -671,16 +730,26 @@ def build():
         f2 = max(0.2, f1 + (0.167 - s1) * (f1 - f0) / (s1 - s0))
         f0, s0 = f1, s1; f1 = f2; r1 = pipeline(f1); s1 = sl(r1[0])
     hill_factor = f1; zt, zc, rec, level, raised = r1
+    # rivers follow unchanging physics (owner): shape the height map so Priority-Flood steepest descent reproduces
+    # the target drainage; never below a drawn river's bank floor
+    Rmax = ndi.maximum_filter(np.where(rivers, zt, -1e9), size=3)
+    floor = np.where(land & ~rivers & (Rmax > -1e8), Rmax + 3.0, 0.5)
+    basin = tree["basin"] if "basin" in tree.files else np.zeros((H, W), np.int32)
+    zt = enforce(zt, land, rivers, level, recv, basin, floor)
     dz = (zt - zc)[land]
     z32 = np.where(land, zt, 0.0).astype(np.float32); lv32 = level.astype(np.float32)
-    area = accumulate_tree(order, recv, land.ravel().astype(float) * dx * dx).reshape(H, W)
+    from rotclimate.routing import _flood as _pf
+    through_ = ~land & (lv32 > 0)
+    rv_phys, ord_phys = _pf(np.where(land, z32.astype(float), np.where(through_, lv32, -1e9)), land | through_, NB)
+    from rotclimate.routing import _accumulate as _acc
+    area = (_acc(ord_phys, rv_phys, land.ravel().astype(float) * dx * dx)).reshape(H, W)
     # gates as v2.2 (terrain_rivers.build) plus the cap
     v22 = np.load(ERO / "map_height_v22.npz")
     strict = TR.strict_check(z32, land, rivers, lake=lake, level=lv32)
     c = TE.checks(z32.astype(float), h0, land, rivers, tier, tops, area, dx)
     c2 = TE.checks(np.asarray(v22["z"], float), h0, land, rivers, tier, tops, np.asarray(v22["area"], float), dx)
     c["tier1_slope_9km_median_deg"] = float(np.median(TE.slopes_9km(z32.astype(float), land, dx, tier, 1)))
-    load = subtree_loads(recv, und); tj = json.loads((ERO / "capped_tree.json").read_text())
+    load = subtree_loads(rv_phys, und); tj = json.loads((ERO / "capped_tree.json").read_text())   # physics drainage
     gates = dict(owner_rivers=strict["passes"],
                  tier_bands_2_4=all(c["tier_band_share"][k] >= c2["tier_band_share"][k] - 0.02 for k in (2, 3, 4)),
                  climate_scale=c["climate_scale_mean_abs_m"] <= c2["climate_scale_mean_abs_m"] + 5.0,
@@ -692,7 +761,7 @@ def build():
                fall_along_tree_raise_m={q: float(np.percentile(dz, q)) for q in (50, 90, 99, 100)},
                over_cap_cells=int((load[und] > tj["cap_cells"]).sum()), hill_factor=hill_factor, conditioning=rec)
     np.savez_compressed(ERO / "map_height_v23.npz", z=z32, area=area.astype(np.float32), tier_tops=np.asarray(tops, float),
-                        lake_level=lv32, recv=recv)
+                        lake_level=lv32)
     (ERO / "map_height_v23.json").write_text(json.dumps(out, indent=1, default=float))
     log(json.dumps(dict(gates=gates, tier_bands=out["tier_bands"], climate_scale=out["climate_scale"], tier1_slope=out["tier1_slope"],
                         raised=out["fall_along_tree_raise_m"], over_cap=out["over_cap_cells"]), indent=1, default=float))
