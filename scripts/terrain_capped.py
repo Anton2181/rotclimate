@@ -654,7 +654,7 @@ def build():
     # the 14 km scale is corrected on the composition BEFORE the rivers are conditioned (so banks stay above beds),
     # iterated through the conditioning and the fall-along-tree fill
     for it in range(3):
-        zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, **form)
+        zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, fill=False, **form)
         zt, raised = _fall_along(np.where(land, zc, 0.0).ravel().astype(float), order, recv, isbase, und, EPS_M)
         zt = zt.reshape(H, W)
         err = np.abs(lp(zt) - target14)[land].mean(); log(f"   scale iteration {it + 1}: mean |lowpass error| {err:.1f} m")

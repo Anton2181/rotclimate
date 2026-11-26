@@ -385,7 +385,7 @@ def connected(land, rivers):
     return riv & np.isfinite(_geodesic(riv, outlets(land, riv), NB, ND))
 
 
-def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=0.5, lake=None):
+def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=0.5, lake=None, fill=True):
     """The conditioned height map (float64) and a record of what changed (plan_R1 with amendment 1). With `lake` (plan_R1
     amendment 5), rivers flow through open lakes on to the sea; the record then carries each open lake's level."""
     land = land.astype(bool); riv = rivers.astype(bool) & land
@@ -434,10 +434,14 @@ def condition(z, land, rivers, W=4, p=1.0, b0=3.0, ramp=None, ref="ramp", alpha=
         shore = land & ~riv & (lv > 0) & (zc < lv + b0)
         zc[shore] = (lv + b0)[shore]; shore_raised = int(shore.sum())
     # amendment 4: flats drain towards their lower edges and away from higher ones (Barnes et al. 2014b), then PF + eps
-    zfill = _fill(np.where(land, zc, 0.0), land, NB)
-    inc = _flat_increments(zfill, land, NB)
-    zfl = np.where(riv, zc, zfill + FLAT_EPS * inc)
-    zf, raised = _priority_flood(np.where(land, zfl, 0.0), land, NB, EPS)
+    # (fill=False: height map v2.3 drains along a stored tree, so undrawn land is not filled to steepest descent)
+    if fill:
+        zfill = _fill(np.where(land, zc, 0.0), land, NB)
+        inc = _flat_increments(zfill, land, NB)
+        zfl = np.where(riv, zc, zfill + FLAT_EPS * inc)
+        zf, raised = _priority_flood(np.where(land, zfl, 0.0), land, NB, EPS)
+    else:
+        zf, raised = np.where(land, zc, 0.0), 0
     rec = dict(W=W, p=p, b0=b0, ref=ref, alpha=alpha, river_cells=int(riv.sum()),
                bed_change_m={q: float(np.percentile((R - z)[riv], q)) for q in (1, 10, 50, 90, 99)},
                valley_lowered_cells=int((zv < z - 1e-9).sum()), valley_raised_cells=int((zv > z + 1e-9).sum()),
