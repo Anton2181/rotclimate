@@ -1,3 +1,39 @@
+# Active goal: W18c running; marine-access audit complete
+
+Latest remote branch checked/pulled: claude/friendly-turing-43ygeu. No newer
+remote branch found. CHECK live PID1877 / run_w18c_campaign.py and
+output/ppe_20261127/W18c/campaign_status.json BEFORE any restart. Source and
+shared inputs remain FROZEN. Never duplicate the running campaign.
+
+READ calibration/marine_gate_audit_20261126/findings.md. Zero new climate runs;
+876 saved cell-months,1752 independent scalar paths,4380 scalar field checks,
+8 synthetic tests, exact production geometry, inspected figure and provenance.
+Somali baseline ALL288 monthly paths reach sea at BOTH resolutions; turning
+265/266 reach sea,23/22 land through horizon, no positive monthly gate on those
+land paths. Little support for false marine access explaining Somali rain.
+Sahara185/186 paths EXIT domain: UNKNOWN, not nonmarine.14 land-horizon paths
+have positive gate but actual captured marine exchange is ZERO throughout
+Sahara. All3 domains contain real sea and all scored nearest indices valid;
+generic all-land EDT risk is NOT the actual cause here. Monthly wind proxy
+is not instantaneous transport; retain measured temporal gate aliasing.
+Marine source/sink annual totals: Somali control+230.832/-243.515, turning
++451.036/-26.549, Sahara0/0 mm/yr. No climate improvement/adoption claimed.
+
+Latest checkpoint6 completed dev candidates, seventh w1_005 underway; live
+process may advance. Base still best development objective0.9857234, S97
+0.9826256 (~1.74% lower mean loss), BUT worst-regimeS1.020310 exceeds1.02
+cap. Do NOT describe as passing/adoptable. No finalist selected. Fixed49+
+up to16+16 budget then development/fine/sealed rules remain. r58 adopted,
+atlasr51, AA unopened. Snapshot is for recovery; never overwrite live results.
+
+NEXT: audit positive-only convergence import algebra/signs and overlap with
+advection/column drying using saved traces first. Existing Somali local terms
+~+1592mm/yr import and+1585advection do not by themselves prove double count.
+Declare any further integrations separately; physical changes and core budget
+export fix wait until W18c closes. No marine gate redesign justified yet.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c running; marine-budget bookkeeping defect identified
 
 CHECK existing PID1877 / run_w18c_campaign.py process and live

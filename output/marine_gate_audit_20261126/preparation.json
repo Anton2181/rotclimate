@@ -1,0 +1,50 @@
+{
+  "plan": {
+    "status": "declared_before_saved_field_gate_audit",
+    "question": "How often does e91's smoothed distance-to-sea directional gate disagree with upwind sea access in the saved monthly flow, and how much temporal averaging changes that gate?",
+    "cases": [
+      {
+        "region": "s_2n_43e",
+        "variant": "control"
+      },
+      {
+        "region": "s_2n_43e",
+        "variant": "minimum_turning"
+      },
+      {
+        "region": "u_21n_21e",
+        "variant": "control"
+      }
+    ],
+    "inputs": "Existing somalia_mechanism full monthly fields and six instrumented-replay packets only, with their pinned sources. No new climate integration, observation, parameter setting or fit. Only exposed development regions; no fine or sealed target use.",
+    "production_geometry": "Recreate the current e91 construction exactly: EDT land distance, Gaussian smoothing sigma1cell, gradient toward increasing land distance with rows south, normalized inward normal, exp(-distance/inflow_km) reach and nearest sea index. Verify whether each nearest index actually denotes an in-domain sea cell; an all-land domain must be reported explicitly rather than interpreting the EDT's implicit exterior background as sea.",
+    "proxy_paths": "From every fixed scored land-cell centre, backtrace through the saved full MONTHLY surface-wind field using bilinear velocities, eastward u and northward v. Fixed arc-length steps of quarter-cell (14km) and eighth-cell (7km), horizon3*existing inflow_km. Stop at the first categorical sea cell, domain exit or numerically zero speed(<1e-6m/s), retaining unresolved/calm outcomes. Never count off-domain or calm paths as resolved nonmarine. No virtual sea beyond the saved grid.",
+    "classification": "For local monthly gate>0 and a resolved path, distinguish sea reached from all-land through the finite horizon. Keep the local-gate0 cases too, including upwind-sea paths. These are proxy disagreements, NOT proven errors or a proposed climate correction. Report both step sizes and status agreement; do not tune a threshold or trajectory horizon to observed rain.",
+    "time_aliasing": "Use existing25-step scored-cell moisture winds and production monthly weights to compare the mean of clip(u*normal_x+v*normal_y,0,3)/3 with that gate applied to the monthly mean wind. Require source trace days to match saved coordinates. Preserve both quantities. Actual instantaneous surface/transport winds matched at all scored cells in these cases; the full-domain paths still use saved monthly surface flow, not an asserted time-dependent moisture trajectory.",
+    "exchange_exposure": "Use directly captured signed marine exchange, not rain residuals. Report positive and negative instantaneous exchange separately before monthly averaging. Describe exchange occurring in each monthly proxy class without claiming those amounts are removable rain or observed causal shares. Keep source/sink cancellation and unknown paths visible.",
+    "checks": "Source digests unchanged, exact production-geometry reconstruction, all scored cells/all12months, independent single-path reference, synthetic east/north/onshore/offshore/calm/all-land and boundary tests, both spatial resolutions retained, no physical-model mutation or active W18c interference.",
+    "output": "Full per-cell/month/path table, status/aliasing/exchange summaries, source provenance, checked scientific diagnostic and concise findings. No adoption regardless of apparent agreement/disagreement. Any physical gate redesign needs a later declared experiment after W18c closes.",
+    "climate_integrations": 0,
+    "climate_adopted": false,
+    "W18c_changed": false
+  },
+  "sources_sha256": {
+    "calibration/marine_gate_audit_20261126/plan.json": "d8cadf3559aa22dddfa8263d3db4616d5b2297abd8e4ec3926bc6ab200dd8f3a",
+    "scripts/audit_marine_gate.py": "8d525a420babc10f89d23d4b94a7e5ef930ae000bf6eeecd6843570c9197f0a9",
+    "scripts/marine_access.py": "c08dfff230f4e05e24cd093ce600e929285f82d205fb467616f07ac42d865a49",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "rotclimate/koppen.py": "f828db56e1e03a35c658a2bc58c3de566a058aad85fbe8ad575be1effffeacb4",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "calibration/local_accuracy_20261023/r58_params.json": "13be84f23d495e3cc956cc3c51f5d810e63000e171ca2de9993f1c7ec3088595",
+    "output/somalia_marine_exchange_trace_20261126/qualification.json": "a0b8606302ccf7177564de72501526d46b796c84054424cbe04994551c4d6aae",
+    "output/somalia_mechanism_20261126/s_2n_43e/control/fields.npz": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+    "output/somalia_transport_trace_20261126/s_2n_43e/control/trace.npz": "ed757282fc20792befcab0fd428214e988da03e5746cb66349c90360056e4f59",
+    "output/somalia_marine_exchange_trace_20261126/s_2n_43e/control/capture.npz": "121761c8e0ad9fb64b3b7eb06ce98650d011b5628907ac18f186673e9fa79747",
+    "output/somalia_mechanism_20261126/s_2n_43e/minimum_turning/fields.npz": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+    "output/somalia_transport_trace_20261126/s_2n_43e/minimum_turning/trace.npz": "c23e55c17cbd5400e8e0b91829c3642def266aad2715eee4c4300561c63f5a86",
+    "output/somalia_marine_exchange_trace_20261126/s_2n_43e/minimum_turning/capture.npz": "25d8f401c2668dcd9474eabee932039dff87630a78a68ff1dbffa7594863ba30",
+    "output/somalia_mechanism_20261126/u_21n_21e/control/fields.npz": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36",
+    "output/somalia_transport_trace_20261126/u_21n_21e/control/trace.npz": "771950477f1376e20c8b35365c2164238f8c5ad9ba0840e006d8de87c9f0cedf",
+    "output/somalia_marine_exchange_trace_20261126/u_21n_21e/control/capture.npz": "1104cd890b53cd6df79bfab058ead377fb43b9129bb91ce50038f46498a637eb"
+  }
+}
