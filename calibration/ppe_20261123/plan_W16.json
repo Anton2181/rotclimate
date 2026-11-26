@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "status": "declared before any evaluation; lineage on r57 + e116 edge_obs_pw 1.0. Named W16.",
+ "why": "Inventory (calibration/inventory_20261126): interior rain deficits (Canadian Shield, Congo, Bolivia, Kalahari, NW Australia) are the largest coherent error. Screens vs r57: e116 observed edge column water 0.3 / 0.6 / 1.0 -> S97 0.9910 / 0.9849 / 0.9798 [0.950, 1.010]; continental 0.879, Shield 0.45-0.71; costs highland 1.111, arid 1.047, Kazakh / E Europe / Tarim 1.2-1.35. land_edge_rh + edge_continental_drying 1.019-1.056 (rejected). Refit edge weight with the land / rain / lapse knobs the dry edges were compensating. e116 is an Earth-calibration boundary condition only; the atlas keeps land_edge_rh.",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r57), fine28 once (vs r57), ONE sealed Z run (vs r57). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
+ "base": "calibration/edge_20261126/r57op_params.json",
+ "base_set": {},
+ "reference": "output/ppe_20261125/ref57",
+ "reference_name": "r57",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261126/W16",
+ "seed": 20261191,
+ "wave1": 48,
+ "knobs": {
+  "edge_obs_pw": [
+   0.4,
+   1.0,
+   "lin"
+  ],
+  "lapse_rate": [
+   3.8,
+   5.0,
+   "lin"
+  ],
+  "plateau_heating": [
+   0.0,
+   5.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.2,
+   -1.2,
+   "lin"
+  ],
+  "continentality": [
+   0.25,
+   0.6,
+   "lin"
+  ],
+  "continental_mean": [
+   3.0,
+   9.0,
+   "lin"
+  ],
+  "subsidence_branch_drying": [
+   0.2,
+   0.6,
+   "lin"
+  ],
+  "inflow_gain": [
+   0.8,
+   2.5,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r57 (gate_v3.py dev6, fine28, then ONE sealed Z run with the r57 reference run paired: sealed5 part sealed_Z, region specs calibration/sealed_20261126Z/regions.json); pass -> r58. No atlas rebuild.",
+ "base_note": "r57 + edge_obs_pw 1.0 (e116)"
+}
