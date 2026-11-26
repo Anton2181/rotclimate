@@ -319,6 +319,7 @@ class Params:
     sst_damping_heat_only: bool = False
     sea_ice: float = 0.0
     sea_ice_melt_days: float = 0.0
+    sea_ice_land_gate: float = 0.0   # e139: e127b ice gate air moved toward the air over land within ~400 km (only colder) by this x land share; 0 = off
     sea_ice_air_c: float = -99.0
     cloud_reference: str = "domain"   # e43: cloud_radiation against the domain's own latitude mean ("domain") or the whole globe's land ("earth", Earth grids)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine

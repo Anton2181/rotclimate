@@ -30,6 +30,13 @@ from rotclimate.koppen import monthly_stats  # noqa: E402
 def one(job):
     fit, region, name, overrides, cell_km = job
     earth.REGIONS.update(json.loads(DEV12_SPECS.read_text()))
+    for f in sorted((ROOT / "calibration").glob("*/regions.json")):   # every declared region set (sealed sets only once spent)
+        try:
+            d = json.loads(f.read_text())
+        except Exception:
+            continue
+        if isinstance(d, dict):
+            earth.REGIONS.update({k: v for k, v in d.items() if isinstance(v, dict) and "lat0" in v and k not in earth.REGIONS})
     p = load_params(fit).replace(**overrides)
     case = earth.region_case(region, cell_km)
     res = earth.run_case(p, case, steps=p.steps_per_year)

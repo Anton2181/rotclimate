@@ -1673,7 +1673,19 @@ class ClimateModel:
                     # e127b: the open subpolar ocean (Norwegian Sea, the Southern Ocean off Chile) overturns
                     # and never freezes; ice grows where land-chilled air keeps drawing heat out (Hudson
                     # Bay air -20 C). None with the air over the sea above sea_ice_air_c, all 10 K below it.
-                    f_ice = f_ice * np.clip((p.sea_ice_air_c - T_prev) / 10.0, 0.0, 1.0)
+                    T_gate = T_prev
+                    if p.sea_ice_land_gate > 0:
+                        # e139: an enclosed sea freezes on the cold air poured off the land around it (Hudson Bay,
+                        # Ungava, the Gulf of Bothnia), not on the air over its own water, which that water warms:
+                        # the gate fed back on itself and held r57's Hudson Bay lowland 3-6 C warm in winter. Move
+                        # the gate temperature toward the air over land within ~400 km by this x that land share.
+                        if getattr(self, '_ice_land_share', None) is None:
+                            self._ice_sig = 400.0 / g.cell_km
+                            self._ice_land_share = gauss(land.astype(float), self._ice_sig)
+                        near_land = gauss(np.where(land, T_prev, 0.0), self._ice_sig) / np.maximum(self._ice_land_share, 1e-6)
+                        wg = np.clip(p.sea_ice_land_gate * self._ice_land_share, 0.0, 1.0)
+                        T_gate = T_prev + wg * np.minimum(near_land - T_prev, 0.0)
+                    f_ice = f_ice * np.clip((p.sea_ice_air_c - T_gate) / 10.0, 0.0, 1.0)
                 if p.sea_ice_melt_days > 0:
                     keep_i = np.exp(-dt_days / p.sea_ice_melt_days)
                     ice_state = f_ice if ice_state is None else np.maximum(f_ice, keep_i * ice_state)
