@@ -1,0 +1,65 @@
+{
+ "version": 1,
+ "date": "2026-11-25",
+ "policy": "v6",
+ "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r58), fine28 once (vs r58), ONE sealed AA run (vs r58). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
+ "base_set": {},
+ "reference": "output/ppe_20261126/ref58",
+ "reference_name": "r58",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "wave1": 48,
+ "status": "declared before any evaluation; lineage on r58 + e27 ocean_transport 0.3. Named W18.",
+ "why": "G4: the sea off Tierra del Fuego runs -1.8 to 5 C (real ~4-9): the zonal EBM has no ocean heat transport (ocean_transport 0) and the open Southern Ocean has no warm current. Screens vs r58: ocean_transport 0.3 / 0.6 / 1.0 -> 1.0156 / 1.0538 / 1.1166 (Tierra del Fuego 0.83, BC coast 0.87, warm Amazon interiors 0.77-0.89; but the transport cools the tropics: Gulf of Guinea -3.0 -> -3.9 C, Borneo, and W Europe too warm); ocean_capacity_polar 1 1.0269. Refit with the sea offsets that were fitted without transport (sst_offset -4.43, sst_tropical off).",
+ "base": "calibration/southern_20261126/r58ot_params.json",
+ "out": "output/ppe_20261127/W18",
+ "seed": 20261221,
+ "base_note": "r58 + ocean_transport 0.3 (e27)",
+ "gates": "policy v6 vs r58 (gate_v3.py dev6, fine28, then ONE sealed AA run with the r58 reference run paired: sealed5 part sealed_AA, region specs calibration/sealed_20261126AA/regions.json); pass -> r59. No atlas rebuild.",
+ "knobs": {
+  "ocean_transport": [
+   0.1,
+   0.8,
+   "lin"
+  ],
+  "sst_offset": [
+   -5.5,
+   -2.0,
+   "lin"
+  ],
+  "sst_tropical": [
+   0.0,
+   3.0,
+   "lin"
+  ],
+  "sst_tropical_lat": [
+   30.0,
+   50.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.3,
+   -1.2,
+   "lin"
+  ],
+  "maritime_mean": [
+   1.5,
+   4.5,
+   "lin"
+  ],
+  "sst_damping": [
+   0.2,
+   0.6,
+   "lin"
+  ],
+  "land_amplitude": [
+   0.85,
+   1.05,
+   "lin"
+  ]
+ }
+}
