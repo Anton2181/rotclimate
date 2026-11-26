@@ -193,7 +193,16 @@ def capped_tree():
         flow_cap = int(0.6 * cap)
         branch = drawn_branches(land, rivers)
     log(f"drawn rivers {n}; cap {cap_km2:.0f} km2 -> {cap} cells; flow cap {flow_cap}")
-    und = (land & ~rivers).ravel(); zc = h0.ravel().astype(float)
+    und = (land & ~rivers).ravel()
+    # routing surface: the tier ramps with the erosion model's own multi-scale roughness (terrain_erosion.evolve's
+    # initial surface), so the capped channels meander and branch instead of running along grid lines
+    rng = np.random.default_rng(int(os.environ.get("CAPPED_SEED", 7)))
+    def sn(km):
+        n = ndi.gaussian_filter(rng.standard_normal(h0.shape), max(km / dx_km, 0.5)); return n / n.std()
+    rough = float(os.environ.get("CAPPED_ROUGH", 0))
+    zsurf = h0 * (1 + 0.15 * rough * sn(6.0)) + rough * (25.0 * sn(12.0) + 10.0 * sn(4.0) + 4.0 * sn(2.0))
+    zc = np.where(land, zsurf, 0.0).ravel().astype(float)
+    jit = rng.integers(0, 4, size=N) if rough else np.zeros(N, np.int64)
     ids = -np.ones(N, np.int64); ids[und] = np.arange(und.sum()); M = int(und.sum()); SINK = 2 * M
     cells = np.flatnonzero(und); yy, xx = np.divmod(cells, W)
     T = [np.arange(M)]; Hh = [np.arange(M) + M]; C = [np.full(M, flow_cap)]; Co = [np.zeros(M, np.int64)]
@@ -212,7 +221,7 @@ def capped_tree():
         tgt = np.where(inside, j, -1)[to_out]
         T.append(ids[cells[to_out]] + M); Hh.append(sink_of(tgt)); C.append(np.full(to_out.sum(), flow_cap)); Co.append(np.full(to_out.sum(), step, np.int64))
         up = np.maximum(zc[j[to_und]] - zc[cells[to_und]], 0.0)
-        T.append(ids[cells[to_und]] + M); Hh.append(ids[j[to_und]]); C.append(np.full(to_und.sum(), flow_cap)); Co.append((step + np.round(WZ * up)).astype(np.int64))
+        T.append(ids[cells[to_und]] + M); Hh.append(ids[j[to_und]]); C.append(np.full(to_und.sum(), flow_cap)); Co.append((step + np.round(WZ * up) + jit[cells[to_und]]).astype(np.int64))
     demand = np.zeros(max(nbr, 0), np.int64)
     if nbr:
         own = np.bincount(branch.ravel()[branch.ravel() > 0], minlength=nbr + 1)[1:]
