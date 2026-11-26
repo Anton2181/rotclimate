@@ -117,9 +117,49 @@ def discharge(runoff_px_mm, tier_tops, terrain_file, map_width_mi):
     through = ~land & (level > 0)
     net = land | through
     src = np.where(land, np.maximum(runoff_px_mm, 0.0), 0.0) / 1000.0 * px_m * px_m / (365.0 * 86400.0)
-    recv, order = _flood(np.where(land, z, np.where(through, level, -1e9)), net, NB)
+    stored = stored_receivers(terrain_file)
+    if stored is not None:
+        # height map v2.3+: the drainage tree is part of the terrain (drawn rivers kept; undrawn channels capped below
+        # the smallest drawn river's catchment, owner 26 Nov 2026), so it is read, not re-derived
+        recv = stored
+        order = _topological(recv, net.ravel())
+    else:
+        recv, order = _flood(np.where(land, z, np.where(through, level, -1e9)), net, NB)
     q = _accumulate(order, recv, src.ravel()).reshape(H, W)
     return q, recv, land, rivers
+
+
+def stored_receivers(terrain_file=""):
+    """Flat receiver indices (-1 = outlet) stored with a height map (key 'recv'), or None."""
+    if not terrain_file:
+        return None
+    from .geography import DATA
+    from pathlib import Path
+    path = Path(terrain_file); path = path if path.is_absolute() else DATA.parent / path
+    d = np.load(path)
+    return np.asarray(d["recv"], np.int64) if "recv" in d.files else None
+
+
+@numba.njit(cache=True)
+def _topological(recv, net):
+    """Visiting order with every receiver before its donors (outlets first), as _flood returns it."""
+    N = recv.shape[0]; indeg = np.zeros(N, np.int64)
+    for c in range(N):
+        if net[c] and recv[c] >= 0:
+            indeg[recv[c]] += 1
+    # reverse Kahn: start from donor-less cells, then reverse the list so receivers come first
+    stack = np.empty(N, np.int64); sp = 0; out = np.empty(N, np.int64); no = 0
+    for c in range(N):
+        if net[c] and indeg[c] == 0:
+            stack[sp] = c; sp += 1
+    while sp > 0:
+        sp -= 1; c = stack[sp]; out[no] = c; no += 1
+        r = recv[c]
+        if r >= 0 and net[r]:
+            indeg[r] -= 1
+            if indeg[r] == 0:
+                stack[sp] = r; sp += 1
+    return out[:no][::-1].copy()
 
 
 def fine_discharge(result):
@@ -137,12 +177,16 @@ def fine_discharge(result):
     return discharge(ro_px, p.tier_tops, getattr(p, "terrain_file", ""), p.map_width_mi)
 
 
-def segments(q, recv, land, q_min=15.0):
-    """[x1, y1, x2, y2, q] in map pixels, pixel centre to downstream pixel centre, for land pixels with q > q_min;
-    straight runs of one direction and flow class are merged into one segment."""
+def segments(q, recv, land, q_min=15.0, always=None):
+    """[x1, y1, x2, y2, q] in map pixels, pixel centre to downstream pixel centre, for land pixels with q > q_min
+    and every pixel of `always` (the drawn rivers: owner 26 Nov 2026, every drawn river is shown in full whatever its
+    flow; its width still follows its discharge); straight runs of one direction and flow class are merged."""
     H, W = land.shape
     cls = np.digitize(q, [50.0, 200.0, 800.0]).ravel()
-    sel = np.flatnonzero((q.ravel() > q_min) & land.ravel() & (recv >= 0))
+    shown = q.ravel() > q_min
+    if always is not None:
+        shown = shown | always.ravel()
+    sel = np.flatnonzero(shown & land.ravel() & (recv >= 0))
     keep = np.zeros(H * W, bool); keep[sel] = True
     dirn = np.where(recv >= 0, recv - np.arange(H * W), 0)
     src_idx = np.flatnonzero(keep); r = recv[src_idx]
@@ -159,8 +203,8 @@ def segments(q, recv, land, q_min=15.0):
 
 
 def river_segments_fine(result, q_min=15.0):
-    q, recv, land, _ = fine_discharge(result)
-    return segments(q, recv, land, q_min)
+    q, recv, land, rivers = fine_discharge(result)
+    return segments(q, recv, land, q_min, always=rivers)
 
 
 FU_W = 2.6   # Budyko-Fu shape, adopted on Earth vs GRUN (calibration/runoff_amount_20261121; reports/RUNOFF_AMOUNT_20261121.md)
