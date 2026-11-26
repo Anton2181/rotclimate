@@ -2,7 +2,7 @@
  "version": 1,
  "date": "2026-11-25",
  "policy": "v6",
- "status": "CONTINUATION of W17 (policy: a fail may be continued at most once, declared before it runs). Base = W17 finalist w3_000.",
+ "status": "CONTINUATION of W17 (policy: a fail may be continued at most once, declared before it runs). Base = W17 finalist w3_000. Ranges corrected before any result was read: the first launch used storm_track/storm_width/subsidence ranges that did not contain the base (4.12 / 14.67 / 0.16); it was stopped within a minute and its output deleted unread.",
  "why": "W17 w3_000 failed dev6 only on the upper bound (S97 0.9851 [0.966, 1.004]): continental/highland/tropical_wet gain 7-8 %, arid/mediterranean/temperate lose 1-2 % (winter storm rain of the dry subtropics drops under observed edges). Add the winter storm-track rain knobs never refit with the observed edges.",
  "method": "scripts/ppe.py: Sobol wave 1 (48 + base), GP emulators, emulator waves of 16; close when the predicted gain over the best observed point is < 0.005; at most 3 waves. Finalist = best by dev objective ONLY; then dev6 (vs r57), fine28 once (vs r57), ONE sealed Z run (vs r57). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave (W15 slip).",
  "base": "calibration/ppe_20261123/W17_records/w3_000_params.json",
@@ -40,13 +40,13 @@
    "lin"
   ],
   "storm_track": [
-   1.0,
-   3.0,
+   2.5,
+   6.0,
    "lin"
   ],
   "storm_width": [
-   6.0,
-   13.0,
+   10.0,
+   18.0,
    "lin"
   ],
   "rh_threshold": [
@@ -55,8 +55,8 @@
    "lin"
   ],
   "subsidence": [
-   0.5,
-   0.9,
+   0.0,
+   0.45,
    "lin"
   ]
  },
