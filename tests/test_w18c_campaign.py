@@ -58,6 +58,30 @@ def test_closed_fine_failure_cannot_restart_search(monkeypatch,tmp_path):
     assert not events
 
 
+def test_failed_base_does_not_silently_continue_on_resume(monkeypatch,tmp_path):
+    events,_=harness(monkeypatch,tmp_path)
+    (tmp_path/'campaign_status.json').write_text(json.dumps(dict(stage='base_failed_investigate_before_remaining_budget')))
+    with pytest.raises(RuntimeError,match='failed base'):C.main()
+    assert not events
+
+
+def test_readiness_checks_protocol_files_inside_reference_directories(monkeypatch,tmp_path):
+    ref=tmp_path/'ref/r58_dev31';ref.mkdir(parents=True)
+    protocol=ref/'protocol.json';protocol.write_text('{}')
+    for name in ['source.py','cache.npz','plan.json','amendment.json']:(tmp_path/name).write_text('stable')
+    q=tmp_path/'qualification.json'
+    q.write_text(json.dumps(dict(status='passed_fresh_paired_r58_reference_historical_replay_not_exact',
+        sources_sha256={'source.py':C.file_hash(tmp_path/'source.py')},
+        reference_protocols_sha256={'ref/r58_dev31':C.file_hash(protocol)},
+        shared_inputs_sha256={'cache.npz':C.file_hash(tmp_path/'cache.npz')})))
+    monkeypatch.setattr(C,'ROOT',tmp_path);monkeypatch.setattr(C,'QUALIFICATION',q)
+    monkeypatch.setattr(C,'PLAN',tmp_path/'plan.json');monkeypatch.setattr(C,'AMENDMENT',tmp_path/'amendment.json')
+    monkeypatch.setattr(C.subprocess,'check_output',lambda command,**kw:(tmp_path/command[2].split(':',1)[1]).read_bytes())
+    C.readiness()
+    protocol.write_text('changed')
+    with pytest.raises(AssertionError):C.readiness()
+
+
 @pytest.mark.parametrize('development_passes',[False,True])
 def test_sealed_data_is_never_reached_after_development_or_fine_failure(monkeypatch,tmp_path,development_passes):
     folder=tmp_path/'runs/best';folder.mkdir(parents=True)

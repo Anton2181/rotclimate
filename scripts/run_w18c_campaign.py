@@ -22,7 +22,10 @@ def readiness():
     q=json.loads(QUALIFICATION.read_text())
     assert q['status']=='passed_fresh_paired_r58_reference_historical_replay_not_exact'
     for section in ['sources_sha256','reference_protocols_sha256','shared_inputs_sha256']:
-        for n,h in q[section].items():assert file_hash(ROOT/n)==h,n
+        for n,h in q[section].items():
+            path=ROOT/n
+            if section=='reference_protocols_sha256':path=path/'protocol.json'
+            assert file_hash(path)==h,n
     for path in [PLAN,AMENDMENT]:
         assert subprocess.check_output(['git','show','HEAD:'+str(path.relative_to(ROOT))],cwd=ROOT)==path.read_bytes()
 
@@ -123,6 +126,8 @@ def main():
     status=out/'campaign_status.json'
     if status.exists():
         previous=json.loads(status.read_text())
+        if previous['stage']=='base_failed_investigate_before_remaining_budget':
+            raise RuntimeError('Investigate the failed base before resuming the remaining budget')
         if previous['stage'].startswith('closed_') or previous['stage']=='all_gates_passed_ready_for_review':
             print('Completed campaign preserved:',previous['stage']);return
     if not P.read_design(out):P.design(plan,out)
