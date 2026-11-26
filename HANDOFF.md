@@ -1,3 +1,48 @@
+# Active goal: W18c running; isolated padding experiment READY, not started
+
+CHECK PID1877/run_w18c_campaign.py and live
+output/ppe_20261127/W18c/campaign_status.json BEFORE restarting anything.
+Last10 completed, eleventh w1_009 running. Frozen physical source/shared caches
+unchanged. No new adoption; r58 current, atlasr51, AA unopened. Provisional
+leader NOW w1_005: S97/objective0.9842206108 (~1.58% lower average dev loss),
+worstregime1.01796884 within1.02. Earlier handoff's base/regime failure is
+superseded by this new leader; no finalist/full dev6/fine/sealed pass claimed.
+
+READ calibration/padding_sensitivity_20261126/README.md and plan.json.
+Nine fixed future integration attempts: Somalia s_2n_43e, Sahara u_21n_21e,
+NorthIndia, pads1100/2220/4012km. Integer-cell offsets0/20/52 retain identical
+56km scored cells; round2200/4000 would shift sampling. r58 frozen regardless
+of future adoption. No parameter changes, new targets or candidate selection.
+
+PREPARATION COMPLETE under output/padding_sensitivity_20261126/. Private
+model/ copies89physicalsources+128cachefiles+2helpers=219regularisolatedfiles;
+NEVER edit this pinned snapshot. All9staticfootprints generated. Independent
+45612exactstaticchecks, coords1e-10deg, masks24/25/494cells, actual --run CLI
+refuses activeW18c.17unittests pass. Zero climate integrations/attempts.
+Do not mistake preparation_review.json for physical climate validation.
+
+RUN ONLY AFTER W18c terminal AND supervisor exited (runner enforces both):
+nice -n 10 .venv/bin/python -u -I scripts/padding_sensitivity.py --run
+All3 exact1100controls first, then fixed6expanded cases. No retries or changed
+tolerances; started receipt without result requires recorded recovery review.
+Runfile validates fullprivateinputs, actualcaseIDs, strictnumerics andcontrols.
+Then independently review tracedgain/sink/W/P and monthlyT/P/E/W/u/v. No
+sealing/adoption/atlas. NPZ files are globally ignored; publish explicit
+footprint/fields files with targeted git add -f, NEVER force-add model/.
+
+IMPORTANT historical counterevidence: calibration/map_edge_20261124/README.md
+already found broad r52 domain sensitivity but Somalia nearly unchanged;
+largerpadding worsened pooled scores and did not stabilize at3300. r53
+edge-humidity variants also rejected (edge_moisture_20261124/findings.md).
+Currentr58 test adds exactmatchedcells+instantaneousrates, not a new claim
+that largerdomains fix Somalia. Do not change deployment calibrationmargin or
+introduce observed lateralhumidity as a substitute. Previous epoch scores stay
+separate. Next: monitor/finishW18c and reviewfinalist; activate prepared study
+only when allowed. Core marine-budget export patch remains deferred; an
+unapplied patch can be developed separately without editing frozen snapshots.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c running; convergence boundary dependence identified
 
 CHECK live PID1877/run_w18c_campaign.py, log/tmp/rotclimate_w18c_campaign.log
