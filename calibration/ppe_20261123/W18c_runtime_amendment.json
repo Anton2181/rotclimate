@@ -1,0 +1,15 @@
+{
+  "status": "declared_before_any_W18c_candidate_in_this_runtime",
+  "governing_plan": "calibration/ppe_20261123/plan_W18c.json",
+  "purpose": "Establish a fresh paired reference after restoration, not reinterpret the failed exact historical replay as a pass.",
+  "observation": "The four public WorldClim archive hashes agree with the archived benchmark protocol. Fresh r58 runs nevertheless show changed derived-case identities and nonzero score differences; an older r46 Alps diagnostic also differs. Historical derived grids are unavailable. The precise cause is unresolved; do not attribute the difference to hardware, a particular input or physics without evidence.",
+  "reference": "Unmodified adopted r58 parameters, hash checked against r58_adoption.json, rerun on all97 original development regions under the current frozen code and restored shared inputs. Preserve the historical194-score comparison and its failed strict-replay decision. New candidates are compared only with these fresh regional runs, never with archived scalar scores.",
+  "readiness": "All97 regional runs complete with strict numerical certificates; full expected region set and original specs; identical source inventory across reference parts; exact current source/archive/cache digests; archived r58 parameter identity; a same-runtime California repeat must reproduce case identity and saved Ts/Ps/To/Po arrays exactly. Record old-score deltas descriptively, without choosing a tolerance to declare them reproduced.",
+  "cache_fix": "scripts/local_benchmark_protocol.py now includes obs_pw and chi_pole_ice in case identity. Missing or altered required forcing must not reuse prior results. Existing historical receipts remain unchanged.",
+  "search_and_gates": "Exactly the existing W18c plan: same base, seed, eight knob ranges,49 initial points, at most two further16-point waves, predicted-gain stopping0.005, policy-v6 dev6, fine28 once and then sealed AA once if eligible. This is the same one permitted W18 continuation, not another retry or expanded budget. No candidate selection from fine or sealed outcomes.",
+  "sealed_AA": "Remains unopened. Do not run candidate or reference AA until the development and fine gates pass and a single finalist is frozen. Preserve all results once opened.",
+  "limits": "Exposed development comparison with fresh inputs; not exact reproduction of archived adoption statistics. No new atlas rebuild or historical population/settlement calibration.",
+  "adoption_gates_relaxed": false,
+  "additional_continuation": false,
+  "atlas_rebuilt": false
+}

@@ -1,3 +1,45 @@
+# Active climate goal: fresh r58 paired reference qualified; W18c ready to run
+
+Owner goal: identify and fix the main outstanding climate issues; continue
+trying major/minor mechanisms as warranted. Commit/push remain authorized.
+No atlas rebuild for each improvement. Latest adopted climate stays r58.
+
+READ calibration/ppe_20261123/W18c_runtime_amendment.json BEFORE any search.
+Original W18c plan unchanged:49 initial + at most16+16, fixed seed/ranges,
+close if predicted gain<.005, dev6 then fine28 ONCE then sealed AA ONCE.
+This is W18's one continuation, not another retry. No AA opening before gates.
+
+This restored workspace lost the derived inputs/reference runs. Public WC4
+archives match historical hashes; NCEP PW+WOA/SST/depth/frozen sea restored.
+All97 r58 runs have strict numeric certificates. California repeat arrays
+are EXACT. But historical194 scores NOT exact: mean abs Tdelta .003602C,
+mean rain-loss delta .002568; maxima .05917C/.07053. Precise cause unresolved;
+old derived grids unavailable. r46 Alps also differs. Preserve FAILED exact
+replay output/ppe_20261126/ref58/restoration_review.json; do not relabel pass.
+Fresh paired reference separately qualified in
+output/climate_runtime_20261126/qualification.json. All NEW candidates compare
+only to these fresh r58 runs; policy adoption gates have NOT been relaxed.
+Boundary obs_pw + chi_pole_ice were absent from case identity: FIXED,29tests
+pass; supervisor six budget/sealed/resume tests also pass. No physical model
+change. Restoration tools + references committed for reproducibility.
+
+Fresh inventory output/climate_runtime_20261126/error_inventory.csv/json:
+Somalia rain7.78x, Sahara u_21n_21e104x (small observed denominator), Kalahari
+.08x, NW Australia .07x; north India/Najd cold ~2.7C; southern maritime cold;
+regional spring timing errors have opposite signs. Rank actual loss/burden,
+not rain ratios alone. Phase omitted for weak observed seasonal cycles.
+
+NEXT command .venv/bin/python -u scripts/run_w18c_campaign.py
+Supervised/resumable journal: output/ppe_20261127/W18c/campaign_status.json;
+main log /tmp/rotclimate_w18c_campaign.log if launched by this goal turn.
+Check existing process/status BEFORE starting it again. Finalist picked ONLY
+on development objective; all-gates pass returns READY FOR REVIEW, no automatic
+adoption. If fail, preserve failures; no second W18 continuation. Then address
+Somali circulation/boundary and false desert rain, with a new structural plan.
+Do not edit rotclimate code/shared caches while this campaign is running.
+
+# Historical handoff and owner decisions below
+
 # OWNER 22 Nov 2026: "you don't have to rebuild after each tiny model improvement, I'd rather conserve tokens and focus on
 
 **Rivers / height map outcome (27 Nov 2026): v2.2 STAYS (natural physics).** Owner decisions: rivers follow unchanging physics; the height map is calibrated; undrawn rivers compared to drawn river systems in their region (relative rule); where the painted tiers genuinely drain into large undrawn rivers (329 cases vs drawn systems within 300 km, 40 over 10,000 km2, largest ~88,000 km2) the owner ACCEPTS them. Regional tilts toward drawn rivers within the tier bands (scripts/terrain_tilt.py, alpha 2-10 m/km) did not remove them and broke the tier gates; capped-tree terrains (scripts/terrain_capped.py) only met the cap by overriding physics or with artefacts. Kept: rotclimate/routing draws every drawn river in full (factual rivers already pass the strict check); routing always follows the height map. Thin < thick: 3 of 11 confluences still fail under v2.2's natural drainage. output/terrain_erosion_20261107/map_height_v23.* are NOT adopted prototypes. Records calibration/rivers_cap_20261126/.
