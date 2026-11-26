@@ -1,3 +1,41 @@
+# Active goal: W18c live; provisional-leader regional tradeoffs reviewed
+
+Check live PID 6609 (`run_w18c_campaign.py`) and campaign_status.json. Last
+verified: 14 of 49 initial records complete, w1_013 running. The old PID 1877
+is a zombie. Do not duplicate the run, apply the pending core patch or start
+the padding study while W18c remains active.
+
+Read calibration/ppe_20261123/W18c_records/progress_0013.md and the inspected
+figure output/ppe_20261127/W18c_progress_0013/development_progress.png. This
+is a fixed 13-record snapshot, not a current gate result. The leader remains
+w1_005: S97=0.9842206 (T MAE -1.936%, rain loss -1.220%), worst regime
+S=1.0179688. No finalist or full validation pass has been declared.
+
+The leader improves 52 regions and worsens 45. Nigeria s2_5n_7e and Somalia
+s_2n_43e account for about 59.8% of its net score gain. Somali T MAE rises
+1.298->1.645 C while rain loss falls 3.663->3.188. Western Europe worsens in
+both components: T 1.252->1.409 C, rain loss 0.322->0.373. North India and
+Kalahari are slightly worse in combination; NW Australia's gain is small.
+Arid T MAE worsens 3.51% while rain loss improves 3.79%; temperate rain loss
+worsens 3.90% while T MAE improves 3.15%. The headline does not resolve these
+issues. Do not predict the fine result or invent a retrospective local veto.
+
+Regional contributions use global reference denominators and sum exactly to
+S97-1; they are not mean individual ratios, causal shares or global-area skill.
+Independent checks cover 13 objectives and 194 regional components, a common
+reference epoch, the append-only live prefix, all 97 regions and seven regimes.
+Zero new integrations; the bootstrap gate has not run. Existing selection,
+search budget, proposal sequence and gates are unchanged. Update this report
+only when the leader changes or a stage finishes, not every goal turn.
+
+Next: finish W18c and review its frozen finalist under the original gates.
+Then apply/retest the ready marine-budget diagnostic patch as a new source
+epoch, and run the prepared nine-case padding study on its original r58
+snapshot. r58 remains adopted, atlas r51, AA unopened. Both follow-ups are
+ready; see the immediately preceding handoff below.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c live; tested marine-budget correction READY, UNAPPLIED
 
 CHECK current live PID6609/run_w18c_campaign.py and
