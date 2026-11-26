@@ -1,0 +1,20 @@
+{
+  "status": "declared_before_counterfactual_runs",
+  "question": "On fresh r58, how much do local land-water recycling and the missing monsoon wind turning contribute to the large Somali rain error, separately and together? Does their apparent benefit also dry a desert control?",
+  "reason": "Fresh97-region inventory identifies s_2n_43e (Somalia) as the largest loss burden, annual rain7.78 times observed. The r52 diagnostic found heat lows outside the regional domain suppress e55 turning; e109 globally failed. Do not repeat a global floor search or presume local evaporation is the dominant cause without a current ablation.",
+  "baseline": "Exact adopted r58 parameters and fresh paired reference qualified in output/climate_runtime_20261126/qualification.json. No physical model or shared-cache modification while W18c runs.",
+  "regions": ["s_2n_43e", "u_21n_21e"],
+  "source_scope": "Only these two already-spent development regions from sealed_S18 and sealed_U18. No new region pool, boundary/domain change or unopened AA observation. Same56km cells and1100km pad.",
+  "variants": {
+    "control": {},
+    "no_local_recycling": {"land_recycling": 0.0},
+    "minimum_turning": {"monsoon_westerly_floor": 1.0},
+    "both": {"land_recycling": 0.0, "monsoon_westerly_floor": 1.0}
+  },
+  "budget": "Eight regional integrations total, including two exact baseline controls, under this fixed two-by-two factorial. No parameter fit, extra point, range search or best-variant adoption. Global counterfactuals are diagnostic interventions, not proposed climates.",
+  "measurements": "Monthly observed/simulated rain, exact calendar-integrated evaporation, column water, surface u/v and temperature error, annual rain ratio, existing rainfall loss and strict numerical certificate. Label surface winds; do not conflate with a separately modeled transport wind. Save fields and provenance. Report March/May/July/October and all12 months in tables, without selecting only favourable seasons.",
+  "interpretation": "Ablations establish responses within this model, not observed causal contributions or resource budgets. The coupled wind/temperature/moisture/soil solution may change. Rain minus evaporation is not itself an audited advective flux; no moisture-closure claim without boundary flux accounting. Compare full factorial interaction and region-specific failures. Sahara ratio is unstable under very small observed rain: retain absolute rain and rainfall loss.",
+  "checks": "Plan committed before running. Both control case identities and Ts/Ps/To/Po arrays must exactly match the fresh reference; all eight runs require strict numerical checks. Source/parameter/cache identities pinned and unchanged through completion. Monthly rain uses the production monthly_stats integration, not a30.4-day approximation. No statistical validation or main atlas change.",
+  "W18c_independence": "No change to its parameters, budget, finalist objective or gates; no fine/sealed data used here. Run sequentially in one diagnostic process to limit resource competition. Results inform the next separately declared structural experiment after W18c closes.",
+  "adopt": false
+}
