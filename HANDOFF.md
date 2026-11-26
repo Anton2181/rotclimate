@@ -1,3 +1,34 @@
+# Active goal: W18c running; convergence boundary dependence identified
+
+CHECK live PID1877/run_w18c_campaign.py, log/tmp/rotclimate_w18c_campaign.log
+and output/ppe_20261127/W18c/campaign_status.json BEFORE doing anything.
+Last8completed, w1_007 running. Do not duplicate process, edit physical source
+or shared inputs/caches. Fixed campaign continues; no finalist/adoption yet.
+r58 adopted, atlasr51, AA unopened. Best checkpoint still fails regime cap.
+
+READ calibration/convergence_boundary_audit_20261126/findings.md. Zero new
+climate integrations. Actual2000km Gaussian sigma vs1100km regional padding;
+45x45cellsat56km. Nominal4sigma radius143cells/~8008km. ~77.8% nominalkernel
+weight uses exterior continuation (production reflect). NOT77.8% falsewater.
+FrozenMONTHLY convergenceproxyreflect/nearest/zeroexteriordiv,1/day:
+Somali control .097399/.044400/.025019; turning .039645/.031009/.010534;
+Sahara .055877/.022974/.013334. Other extensions are stress assumptions,
+NOT known outside winds or selected fixes. Actualgain not reconstructed.
+IndependentmanualGaussian/boundarykernel matrices +manualdivergence verify
+2628filtervalues,7884scalars; maxfilterdiff2.55e-21/s;876uniquecellmonths;
+figure inspected, allsourcesunchanged. Scientific support for boundary
+SENSITIVITY, no observed rainfall causality or physical improvement claim.
+
+NEXT after W18c freeze resolved: separately declare bounded padding-sensitivity
+climate experiment, same r58 physics/scoredcells/56km, Somalia+Sahara+exposed
+wetmonsoon protection(NorthIndia), fixedpaddingbudget, freshstrictcontrols,
+traceactualgain/W. Largerpadding also changes other operators, not isolated
+causality. No boundarymode/fluxscale chosen by matching Somali rain. No
+wholesale flux restart (historical accuracy/numeric failures already retained).
+Core marine-budget export patch remains deferred until W18c closes.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c running; convergence-import audit complete
 
 CHECK live run_w18c_campaign.py PID1877 and campaign_status.json; do not restart

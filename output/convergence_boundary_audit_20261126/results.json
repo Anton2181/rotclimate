@@ -1,0 +1,131 @@
+{
+  "status": "completed_saved_field_boundary_stress_audit",
+  "sources_sha256": {
+    "calibration/convergence_boundary_audit_20261126/plan.json": "bbeba84dd7575488d5c583d8336734bcdcf7a363aaa8e5a7e3a6f80639c3ad98",
+    "scripts/audit_convergence_boundary.py": "00f825001b50fcefeb44b756d72fa099d54434502483baa0d9fd30dad204f208",
+    "calibration/local_accuracy_20261023/r58_params.json": "13be84f23d495e3cc956cc3c51f5d810e63000e171ca2de9993f1c7ec3088595",
+    "output/convergence_import_audit_20261126/qualification.json": "2ac0865d60a779568a9b0df4874621e670a6f002804b37559ed77e9f25dab62c",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "output/somalia_mechanism_20261126/s_2n_43e/control/fields.npz": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+    "output/somalia_mechanism_20261126/s_2n_43e/minimum_turning/fields.npz": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+    "output/somalia_mechanism_20261126/u_21n_21e/control/fields.npz": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36"
+  },
+  "files_sha256": {
+    "cell_months.csv": "8fa305003c3786fb8257fc050fdfe9524a105cea51811751a0cca2512f3cebe0"
+  },
+  "summaries": [
+    {
+      "region": "s_2n_43e",
+      "variant": "control",
+      "scored_cells": 24,
+      "grid_shape": [
+        45,
+        45
+      ],
+      "cell_month_rows": 288,
+      "nominal_exterior_kernel_mass": {
+        "min": 0.7778324474615511,
+        "mean": 0.7781241747816284,
+        "max": 0.7784409754118435
+      },
+      "extensions": {
+        "reflect": {
+          "mean_signed_divergence_per_s": -1.1272994469914727e-06,
+          "mean_positive_convergence_proxy_per_day": 0.09739867222006324,
+          "sign_disagreement_cell_months": 0,
+          "mean_absolute_difference_from_reflect_per_s": 0.0
+        },
+        "nearest": {
+          "mean_signed_divergence_per_s": -4.4569777130512127e-07,
+          "mean_positive_convergence_proxy_per_day": 0.04440023901596433,
+          "sign_disagreement_cell_months": 54,
+          "mean_absolute_difference_from_reflect_per_s": 6.818634091809231e-07
+        },
+        "constant": {
+          "mean_signed_divergence_per_s": -2.895768176790947e-07,
+          "mean_positive_convergence_proxy_per_day": 0.025019437047473784,
+          "sign_disagreement_cell_months": 0,
+          "mean_absolute_difference_from_reflect_per_s": 8.37722629312378e-07
+        }
+      }
+    },
+    {
+      "region": "s_2n_43e",
+      "variant": "minimum_turning",
+      "scored_cells": 24,
+      "grid_shape": [
+        45,
+        45
+      ],
+      "cell_month_rows": 288,
+      "nominal_exterior_kernel_mass": {
+        "min": 0.7778324474615511,
+        "mean": 0.7781241747816284,
+        "max": 0.7784409754118435
+      },
+      "extensions": {
+        "reflect": {
+          "mean_signed_divergence_per_s": -4.4867769709009585e-07,
+          "mean_positive_convergence_proxy_per_day": 0.03964494232202053,
+          "sign_disagreement_cell_months": 0,
+          "mean_absolute_difference_from_reflect_per_s": 0.0
+        },
+        "nearest": {
+          "mean_signed_divergence_per_s": -2.695070147218198e-07,
+          "mean_positive_convergence_proxy_per_day": 0.031009477914313438,
+          "sign_disagreement_cell_months": 107,
+          "mean_absolute_difference_from_reflect_per_s": 4.345910146783779e-07
+        },
+        "constant": {
+          "mean_signed_divergence_per_s": -1.2028709931884177e-07,
+          "mean_positive_convergence_proxy_per_day": 0.010533700759367064,
+          "sign_disagreement_cell_months": 18,
+          "mean_absolute_difference_from_reflect_per_s": 3.464470690197608e-07
+        }
+      }
+    },
+    {
+      "region": "u_21n_21e",
+      "variant": "control",
+      "scored_cells": 25,
+      "grid_shape": [
+        45,
+        45
+      ],
+      "cell_month_rows": 300,
+      "nominal_exterior_kernel_mass": {
+        "min": 0.7778324474615511,
+        "mean": 0.778136846806837,
+        "max": 0.7784409754118435
+      },
+      "extensions": {
+        "reflect": {
+          "mean_signed_divergence_per_s": -2.3058416299593213e-07,
+          "mean_positive_convergence_proxy_per_day": 0.05587716539257571,
+          "sign_disagreement_cell_months": 0,
+          "mean_absolute_difference_from_reflect_per_s": 0.0
+        },
+        "nearest": {
+          "mean_signed_divergence_per_s": 2.0824399818263726e-07,
+          "mean_positive_convergence_proxy_per_day": 0.022974308415553594,
+          "sign_disagreement_cell_months": 41,
+          "mean_absolute_difference_from_reflect_per_s": 4.900350499014696e-07
+        },
+        "constant": {
+          "mean_signed_divergence_per_s": -5.4669605361104984e-08,
+          "mean_positive_convergence_proxy_per_day": 0.013333915609354083,
+          "sign_disagreement_cell_months": 0,
+          "mean_absolute_difference_from_reflect_per_s": 8.088828910508586e-07
+        }
+      }
+    }
+  ],
+  "sigma_cells": 35.714285714285715,
+  "radius_cells": 143,
+  "cell_km": 56.0,
+  "truncate": 4.0,
+  "climate_integrations": 0,
+  "climate_adopted": false,
+  "interpretation": "Exterior kernel weight and monthly frozen-field extension sensitivity only. Neither outside-domain winds, actual instantaneous gain nor rainfall bias are established; no boundary mode is selected."
+}

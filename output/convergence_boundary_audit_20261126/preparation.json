@@ -1,0 +1,42 @@
+{
+  "plan": {
+    "status": "declared_before_boundary_audit_metrics",
+    "question": "How much of the current convergence Gaussian's nominal support lies outside the saved regional domains, and how sensitive is smoothed monthly divergence to explicit boundary extensions?",
+    "prior_information": "Current flux scale is 2000 km, padding is 1100 km and the three saved grids are 45x45 at 56 km. The support mismatch was identified during the separate convergence-import audit; no support-mass or extension-comparison metrics have yet been calculated.",
+    "cases": [
+      {
+        "region": "s_2n_43e",
+        "variant": "control"
+      },
+      {
+        "region": "s_2n_43e",
+        "variant": "minimum_turning"
+      },
+      {
+        "region": "u_21n_21e",
+        "variant": "control"
+      }
+    ],
+    "support": "Use the actual Gaussian sigma=flux_scale_km/56 and SciPy default truncate4. Compare Gaussian filtering of an all-ones domain with constant-zero exterior against explicit normalized 1D Gaussian kernel sums in each dimension at every scored cell. One minus this mass is the nominal kernel weight assigned to exterior continuation; it is not a fraction of false moisture or proven climate error.",
+    "extension_comparison": "On saved full monthly surface winds only, compute centred divergence with the same row-south sign and spacing as production. Filter it with fixed reflect (production), nearest and constant-zero divergence extensions. Retain all three outcomes, raw signed divergence and clipped positive convergence proxy. No temperature gate, water multiplication, inferred instantaneous gain, rainfall prediction or preferred boundary choice. Other extensions are stress cases, not reconstructed off-domain winds.",
+    "checks": "Actual physical parameters must have inactive monsoon heating and column-shear branches so no unrepresented velocity subtraction is claimed. Every scored cell/all12months, exact source hashes, independent manual separable Gaussian convolution at scored cells for all3 extensions, explicit kernel-mass check. Keep the two earlier audits and all failed historical experiments intact.",
+    "outputs": "Complete per-cell/month support and extension table, aggregate metrics, checked scientific figure and findings. No new climate integration, larger-domain proxy masquerading as a rerun, parameter fit, fine/sealed access, physical source/cache change or adoption.",
+    "climate_integrations": 0,
+    "climate_adopted": false,
+    "W18c_changed": false
+  },
+  "sources_sha256": {
+    "calibration/convergence_boundary_audit_20261126/plan.json": "bbeba84dd7575488d5c583d8336734bcdcf7a363aaa8e5a7e3a6f80639c3ad98",
+    "scripts/audit_convergence_boundary.py": "00f825001b50fcefeb44b756d72fa099d54434502483baa0d9fd30dad204f208",
+    "calibration/local_accuracy_20261023/r58_params.json": "13be84f23d495e3cc956cc3c51f5d810e63000e171ca2de9993f1c7ec3088595",
+    "output/convergence_import_audit_20261126/qualification.json": "2ac0865d60a779568a9b0df4874621e670a6f002804b37559ed77e9f25dab62c",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "output/somalia_mechanism_20261126/s_2n_43e/control/fields.npz": "0fe581ae7c1317872b3fef78fcff4ee40f39986884774916424db0a929836121",
+    "output/somalia_mechanism_20261126/s_2n_43e/minimum_turning/fields.npz": "c4259ab8cf2b3eedae83d684392c90beabe6876f13b26137da224cf5dcf98c19",
+    "output/somalia_mechanism_20261126/u_21n_21e/control/fields.npz": "c9b6b8efdd2de1902de4e0746c89a74936cdc734e8b496aed26cc35f0a4f0c36"
+  },
+  "sigma_cells": 35.714285714285715,
+  "truncate": 4.0,
+  "scipy_version": "1.18.1"
+}
