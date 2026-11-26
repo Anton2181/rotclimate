@@ -634,32 +634,32 @@ def build():
         hill = np.where(hill > 0, hf["cap_m"] * np.tanh(hill / hf["cap_m"]), hill)
     hill = hill * TR.tier1_weight(tier)
     detail = z - lp(z); detail = np.where(detail > 0, 1500.0 * np.tanh(detail / 1500.0), detail)
-    # the hill height was fitted on Earth to the lowland slope target (0.167 deg at 9 km); erosion on this drainage
-    # makes gentler hills, so the hill amplitude is re-fitted to the same target (secant on the composition)
-    def slope_of(f):
-        zz = np.where(land, np.maximum(h0 + detail + f * hill, 0.5), 0.0)
-        return float(np.median(TE.slopes_9km(zz, land, dx, tier, 1)))
-    f0, f1 = 1.0, 2.0; s0, s1 = slope_of(f0), slope_of(f1)
-    for _ in range(6):
-        if abs(s1 - 0.167) < 0.002 or s1 == s0:
-            break
-        f0, f1, s0 = f1, max(0.2, f1 + (0.167 - s1) * (f1 - f0) / (s1 - s0)), s1; s1 = slope_of(f1)
-    hill_factor = f1
-    log(f"hill factor {hill_factor:.2f} -> composition tier-1 slope {s1:.3f}")
-    z0 = np.where(land, np.maximum(h0 + detail + hill_factor * hill, 0.5), 0.0)
+    # the hill height was fitted on Earth to the lowland slope target (0.167 deg at 9 km); on this drainage the final
+    # surface (after the scale correction, river conditioning and the fall-along-tree fill) is gentler, so the hill
+    # amplitude is re-fitted to the same target on the FINAL surface (secant)
     lake = L["lake"].astype(bool) & ~land
     isbase, order, _ = tree_geometry(recv, land, W)
     und = (land & ~rivers).ravel()
     target14 = lp(h0)
-    # the 14 km scale is corrected on the composition BEFORE the rivers are conditioned (so banks stay above beds),
-    # iterated through the conditioning and the fall-along-tree fill
-    for it in range(3):
-        zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, fill=False, **form)
-        zt, raised = _fall_along(np.where(land, zc, 0.0).ravel().astype(float), order, recv, isbase, und, EPS_M)
-        zt = zt.reshape(H, W)
-        err = np.abs(lp(zt) - target14)[land].mean(); log(f"   scale iteration {it + 1}: mean |lowpass error| {err:.1f} m")
-        if it < 2:
-            z0 = np.where(land, np.maximum(z0 + (target14 - lp(zt)), 0.5), 0.0)
+    sl = lambda a: float(np.median(TE.slopes_9km(np.where(land, a, 0.0), land, dx, tier, 1)))
+    def pipeline(f):
+        z0 = np.where(land, np.maximum(h0 + detail + f * hill, 0.5), 0.0)
+        for it in range(3):          # 14 km scale corrected on the composition BEFORE conditioning (banks stay above beds)
+            zc, rec, level = TR.condition(z0, land, rivers, ramp=h0, lake=lake, fill=False, **form)
+            zt, raised = _fall_along(np.where(land, zc, 0.0).ravel().astype(float), order, recv, isbase, und, EPS_M)
+            zt = zt.reshape(H, W)
+            if it < 2:
+                z0 = np.where(land, np.maximum(z0 + (target14 - lp(zt)), 0.5), 0.0)
+        log(f"   hill factor {f:.2f}: final tier-1 slope {sl(zt):.3f}, mean |lowpass error| {np.abs(lp(zt) - target14)[land].mean():.1f} m")
+        return zt, zc, rec, level, raised
+    f0, f1 = 1.0, 2.5
+    r0 = pipeline(f0); s0 = sl(r0[0]); r1 = pipeline(f1); s1 = sl(r1[0])
+    for _ in range(4):
+        if abs(s1 - 0.167) < 0.003 or s1 == s0:
+            break
+        f2 = max(0.2, f1 + (0.167 - s1) * (f1 - f0) / (s1 - s0))
+        f0, s0 = f1, s1; f1 = f2; r1 = pipeline(f1); s1 = sl(r1[0])
+    hill_factor = f1; zt, zc, rec, level, raised = r1
     dz = (zt - zc)[land]
     z32 = np.where(land, zt, 0.0).astype(np.float32); lv32 = level.astype(np.float32)
     area = accumulate_tree(order, recv, land.ravel().astype(float) * dx * dx).reshape(H, W)
