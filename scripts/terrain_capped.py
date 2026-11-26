@@ -38,6 +38,8 @@ sys.path[:0] = [str(ROOT), str(ROOT / "scripts")]
 ERO = ROOT / "output/terrain_erosion_20261107"
 NB = np.array([(-1, -1), (-1, 0), (-1, 1), (0, -1), (0, 1), (1, -1), (1, 0), (1, 1)], np.int64)
 CAP_FLOW, WZ, EPS_M = 70, 0.2, 0.01
+import os
+WZ = float(os.environ.get("CAPPED_WZ", WZ)); CAP_FLOW = int(os.environ.get("CAPPED_FLOW", CAP_FLOW))
 log = lambda *a: print(*a, flush=True)  # noqa: E731
 
 
