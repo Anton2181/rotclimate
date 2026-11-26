@@ -753,7 +753,14 @@ def basins():
     nb = roots.size; size = np.bincount(lab[und], minlength=nb).astype(np.int64)
     # where each basin drains: a drawn branch id, or 0 for the sea / lakes / the map edge
     bid = drawn_branches(land, rivers).ravel()
-    ent = recv[roots]; dest = np.where((ent >= 0) & rivers.ravel()[np.maximum(ent, 0)], bid[np.maximum(ent, 0)], 0)
+    ent = recv[roots]
+    # destination: the drawn branch, else the water body (each lake its own; lakes rivers flow through feed a river),
+    # else the map edge; only basins with the same destination merge
+    wlab, nw = ndi.label(~land, structure=np.ones((3, 3)))
+    nbr_ = int(bid.max())
+    dest = np.where(ent < 0, -1,
+                    np.where(rivers.ravel()[np.maximum(ent, 0)], bid[np.maximum(ent, 0)],
+                             nbr_ + 1 + wlab.ravel()[np.maximum(ent, 0)]))
     # adjacency with shared border length
     lab2 = lab.reshape(H, W); pairs = {}
     for dy, dxx in ((0, 1), (1, 0), (1, 1), (1, -1)):
