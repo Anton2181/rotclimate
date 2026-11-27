@@ -1,3 +1,4 @@
+**OWNER RULE (28 Nov 2026): always post any new maps/images in the chat too.**
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
