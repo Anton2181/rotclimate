@@ -1,0 +1,57 @@
+{
+ "version": 1,
+ "date": "2026-11-27",
+ "policy": "v6",
+ "status": "NEW wave, declared before any W19 result",
+ "why": "r58 leaves the hot dry lands under the monsoon descent cold (Najd -2.8, Iran -2.3, Sudan -2.3, north India -2.7 C); the e49 descent only dried the column. e131 adds the compression warming of that descending air (Rodwell-Hoskins). One-knob screen vs ref58local (output/ppe_20261127/dw): 0.5/cap4 S97 0.9977 [0.9951, 1.0001]; 1.0/cap4 0.9972 [0.9929, 1.0012]; 1.0/cap2 0.9971 [0.9932, 1.0007]: just short of the dev6 upper bound; costs Anatolia, Levant, Tibet, central Sahara. Refit with the warmth knobs it trades against.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves. Finalist = best by dev objective ONLY; then dev6 (vs r58), fine28 once (vs r58), ONE sealed AA run (vs r58). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave.",
+ "base": "calibration/local_accuracy_20261023/r58_params.json",
+ "base_set": {
+  "descent_warming_cap": 4.0
+ },
+ "reference": "output/ppe_20261127/ref58local",
+ "reference_name": "r58",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W19",
+ "seed": 20261219,
+ "wave1": 24,
+ "knobs": {
+  "descent_warming": [
+   0.0,
+   1.5,
+   "lin"
+  ],
+  "descent_warming_cap": [
+   1.0,
+   5.0,
+   "lin"
+  ],
+  "land_offset": [
+   -2.1,
+   -1.4,
+   "lin"
+  ],
+  "subsidence_warming": [
+   5.0,
+   8.0,
+   "lin"
+  ],
+  "subsidence_warming_chi0": [
+   0.1,
+   0.4,
+   "lin"
+  ],
+  "dry_heating": [
+   0.5,
+   2.5,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r58 (gate_v3.py dev6, fine28, then ONE sealed AA run with the r58 reference run paired: region specs calibration/sealed_20261126AA/regions.json); pass -> r59.",
+ "base_note": "r58 with descent_warming 0 (e131 off); base_set descent_warming_cap 4.0 so the base lies inside the declared range (no effect at descent_warming 0)"
+}
