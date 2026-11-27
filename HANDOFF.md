@@ -1,3 +1,37 @@
+# Current-source97-region reference COMPLETE and qualified
+
+All97 original strict numericalcertificates PASS; inputs/caseIDs/obs/masks/
+coords/terrain exact.3recentnativeSomalia/Sahara/NIndia T/P/obs32repeatbytes
+exact. Newepoch current89physicalfiles+134cache+5helper/spec=228privatefiles;
+no params/source/numericalchange duringrun. PID19885exited. Sourcequalified
+output/climate_reference_20261127/qualification.json;8standard r58_PART folders
+under ref58/, rawcases/cells/protocols/summaries; independentreview and inspected
+error_summary.png. Full findings calibration/current_climate_reference_20261127/
+findings.md. This is now current97baseline, NOT oldclimate_runtime_20261126.
+
+Mean TMAE1.629671C, meanrainloss.461644(dimensionless; exposeddevelopmentpool,
+notindependentglobalskill). Worst rain:Soma3548vs457(loss3.655),Sahara215vs2
+(1.686),Namibia19vs237(1.080),inlandAustralia17vs240(1.043),Bolivia662vs2356
+(.958). WorstT:Okhotsk3.45,NIndia3.21,Nigeria3.05,Ungava2.97,prairies2.88.
+24historicalTParrays changed,73exact;maxscorechanges.0357C/.0270rainloss.
+Oldsourcequalifications immutable/historical; currentreference ready forfuture
+pairedwork. No fit,fine28,AA,W18ccontinuation,candidate,adoption oratlaschange.
+
+Offline shared-convection-cap prototype only: experiments/shared_convective_cap_
+prototype.py,5puretestsPASS, output/shared_convection_cap_20261127/offline_review.json,
+calibration/shared_convection_cap_20261127/README.md.0coupledruns,noproductionimport.
+FrozenstateNI raincut~109mm/yrvs~119fromfailedglobalinstability0, so notconvincing
+monsoonprotection yet; do notpromise/runcampaignjustbecausealgebralimitswork.
+
+NEXT bounded physicallead: thermal-pressure exterior assumption. Current big/
+localpressureTanomalyfilters use nearest extension; finitewindows continueedge
+anomalies outward at2050km scale. Propose separatelydeclared constantZEROANOMALY
+(zonalexterior) for pressurefiltersONLY, fixedparams/grids. Targetsahara circulation,
+guardSomalia/NIndia andothernativecases; no observedforcing/defaultgausschanges.
+Not provenphysicsfix; offdomain anomalies unknown, padding/frozenflow audits
+notcausalproof. No such candidatecode/plan/run yet. Keepinstability0closed,
+W18cCLOSED,AAUNOPENED,r58retained,atlasr51unchanged. Noactiveworkers.
+
 # Current-source97-region reference DECLARED; none started
 
 calibration/current_climate_reference_20261127/{plan.json,regions.json,README.md}.
