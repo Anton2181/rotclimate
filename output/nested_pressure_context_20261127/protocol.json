@@ -1,0 +1,29 @@
+{
+  "plan_sha256": "b3ce5b6f22668c5c96c79b3f6242de9dd361cfeabe2eef9e195b23de6badce0f",
+  "preparation_sha256": "fb7258640e0e3ee27e253eaacc8fa7d1626025458c82994baa924b24bfbd5768",
+  "execution_sources_sha256": {
+    "scripts/prepare_nested_pressure_context_inputs.py": "d1bf85102e1d718b7101c50dce2b68063fc65cb60d2bf719b00578dca465c485",
+    "scripts/run_nested_pressure_context.py": "a0aa6a1784412a3c7fd0b8ac28f1c5a6b408932ecfaac9bb90847aced7e9013f",
+    "scripts/review_nested_pressure_context.py": "14829cf1674957d4d22dd5e924343622ca3561a9dd63a36294c654c675095a81",
+    "experiments/nested_pressure_context.py": "6deec94423097a7f96f4c8d270cfbed066b817ee6ccdba20f7590ad45a660ba1",
+    "tests/test_nested_pressure_context.py": "b88a8e61e5492dd1bcd96fd7db67c7c2f62fa38c903939a14e19d473aabd3575",
+    "scripts/circulation_components.py": "ae869300aa681d3e01df4bfc643abfeb9466165a196c26bd363db4041203407a",
+    "scripts/circulation_reference.py": "6cc320d22e7c1ccafdb46ef1e4d783bfc9895d3e0ab1aaa0653416efc18999b6",
+    "experiments/v10_forcing_audit.py": "116e0d49e50b1491a1c337527e2c1940eeb59fa314a515b8791cd7a0b7fd8cf8",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "scripts/review_current_climate_reference.py": "e3504e14cb75e30d601ff4e5b28be75fdc79ed9ffc2da83b99e6b35bef37ae77",
+    "calibration/nested_pressure_context_20261127/README.md": "8a6a92ba3d731bc2dfac60746b685586ad1ea7c42bb103df3bc16af1e3af31ac"
+  },
+  "intervention": {
+    "parent": "native r58 pressure-input temperature anomaly, fixed4012km padded56km grid",
+    "child": "original1100km padded56km grid",
+    "region_grid_offset_cells": 52,
+    "operation": "replace entire child rectangle with current child anomaly on every pressure call; apply original Gaussians/pressure coefficients on finite parent; crop pressure; original signed momentum",
+    "local_moisture_boundaries_changed": false,
+    "all_six_parents_frozen_before_children": true,
+    "feedback_to_parent": false,
+    "parent_outer_boundary": "original nearest",
+    "projection": "original shared azimuthal equidistant, not spherical dynamics",
+    "code_sha256": "6deec94423097a7f96f4c8d270cfbed066b817ee6ccdba20f7590ad45a660ba1"
+  }
+}

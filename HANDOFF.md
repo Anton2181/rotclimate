@@ -1,3 +1,38 @@
+# Native-parent pressure context COMPLETE:14 pass numerics, candidate rejected
+
+Prospective10a12a43d, output/nested_pressure_context_20261127 complete14/14,
+worker21818 exited. Off2 all saved baseline cell arrays EXACT; all native6
+parents frozen before nested6. Actual full pressure-input/output frames,
+scored T/P/winds/protocols/attempts/certs preserved. DirectGaussian max1.304e-8Pa
+within declared1e-7Pa precision. Root89 source unchanged at completion.
+
+CLOSED/UNAPPLIED: Soma July surface-vector RMSE10.562→8.179m/s (−22.6%, target
+passes), but rain3548→5558mm, loss+53.8%. StillwestwardJuly(−4.834,+2.894).
+Sahara215→779(loss2.708x),Algeria14.6→360(loss10.096x),Najd99→177,Calif491→523
+all rain protections fail; NI547→602/Terror−6.1% useful local gain only.
+No blending/padding/amplitude rescue, no broader extension/adoption.
+Native larger Sahara parent7.16mm vsnested779 and Algeria parent.54vsnested360
+prove large-domain rain change NOTpressurecontext alone. Kernel unknown weight
+79→8.2% geometric only. Frozen offline pressure response also archived; no new
+integrations/selection. Findings calibration/nested_pressure_context_20261127/
+findings.md; raw review+inspected nested_response.png+agent_review complete.
+
+NEXT concrete source gap reproduced: zonal_wind has SHtrades but NO SHwesterly/
+polar belts (45N7m/s vs45S0;75N−3vs75S0 in symmetric equinox). Regression
+tests/test_southern_zonal_belts.py currently11FAIL/1PASS, raw pre-fix before.xml/
+before.log output/southern_zonal_belts_fix_20261127. Not committed failing tests
+yet; source itself UNMODIFIED. Prepare symmetric SHbelts with opposite-season
+strength, flipped meridional signs, unchanged NH bytes; don't alter other
+hemispheric physics or claim full global circulation. Add outer guard for cells
+south of SHHadleyedge. r58 edge33.590636/shift6.027970, radius1 => branch can
+only affect lat<-27.562666 for ANY season. Ordinary97 child domains likely all
+above that: prove actual case IDs/latitudes, don't rerun97 unnecessarily.
+Wide Somalia parent reaches SHmidlatitudes; needs fresh native source check.
+Correction is separate from rejected nested study; DO NOT rerun nested arms
+under revised source or reopen it. Current97 old-source qualification remains
+valid until source changes; then disclose compatibility/new source epoch.
+Goal ACTIVE, AAUNOPENED,W18/W18cCLOSED,r58retained,atlasr51 unchanged.
+
 # Native finite-parent pressure-context pilot DECLARED:14 integrations, unrun
 
 New calibration/nested_pressure_context_20261127/{plan.json,regions.json,README.md}.
