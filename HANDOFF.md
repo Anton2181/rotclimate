@@ -1,3 +1,31 @@
+# Physical instability0 test COMPLETE: Somalia improves33.5%, India guard fails
+
+Four new physical candidates,4 reused exact/current89-source controls. All
+originalnumerics/local0.01 equations pass; pairedactualparams differONLYin
+instability3.27995→0. Explicitexpconv/cap/RHheatgate/storm/slope/transportfixed.
+Somalia nativeP3547.92→2359.41,loss3.6549→2.4290(−33.54%),TMAEimproves1.1%.
+Sahara215→197loss−6.36%,Talsoimproves. NorthIndia547→465loss+11.15%, fails
+original<=1%guard. JointobservedSom2590→2006loss−23.52%(reportonly).
+Fixedzero candidate CLOSED/UNAPPLIED, no amplitude rescue/guardrelaxation.
+
+Somalia stillfalsewetsummer and5.16× observedrain; PW44.38→46.01vs35.42obs.
+Marineexchangechange−928mm explainsmuchofrain−1189,coupledfeedbacknotisolated
+closureeffect. No acceptedclimateimprovement/atlas yet. Full findings calibration/
+instability_consolidation_20261127/findings.md;4raw/certs/review/inspectedfigure/
+agentreview outputparallel. PID19474exited; noactiveworkers. Userquestion about
+progress answeredcandidly, concretephysicsresult reportedinclfailedmonsoon guard.
+
+NEXT required infrastructure: current-source97-region reference understrict
+existingprotocol,source/input/librarymanifest. No such newrefdeclared/started.
+Find latest ref58/readiness/protocol scripts; reuse immutable exposed97case
+specs, avoidsealedAA and spentW18c fine. Oldqualifications historical. Main
+physicslead structuralstability/triggering in legacybase+expconv, NOT simple
+waterremoval orglobalzero boost. Avoid arbitrarycoast/regionmask/amplitude
+rescue of failedcandidate. Need freshglobalreference forbroadercandidatework.
+Optionalheat_record.surface_c diagnosticbug describedbelow remainsunfixed;
+currentanalysesused actualtracedTeq so unaffected. W18cCLOSED,AAUNOPENED,
+r58retained,atlasr51unchanged. No PR.
+
 # Physical candidate DECLARED: instability0, four new runs, none started
 
 calibration/instability_consolidation_20261127/{plan.json,README.md}, new
