@@ -47,6 +47,31 @@ The physical study is deferred until W18c has a terminal campaign status
 nice -n 10 .venv/bin/python -u -I scripts/padding_sensitivity.py --run
 ```
 
+An operational queue, `scripts/run_climate_followups.py`, can perform that
+handoff automatically. It waits for a terminal W18c state and for both its
+supervisor and benchmark workers to exit, then runs this unchanged nine-case
+study and its reviewer. It uses a singleton lock and frozen dependency hashes.
+Its dry check is:
+
+```sh
+.venv/bin/python -I scripts/run_climate_followups.py --check-only
+```
+
+When the queue is live, let it start the study; do not launch a second copy.
+Its state/logs are under `output/climate_followups_20261127/`. It stops for
+agent review if W18c disappears without finishing, a padding attempt is
+interrupted, a dependency changes or a command fails. Failed commands are not
+automatically retried. Preserve the failure state and record a recovery
+review before resuming. Seventeen tests cover these transitions and the live
+dry check starts no children.
+
+This queue changes no scientific budget, parameter, candidate selection or
+gate. It never applies the pending source patch, adopts a climate profile,
+commits results or publishes an atlas. The padding diagnostic may run after
+W18c exits while its finalist awaits agent review: it uses its own frozen r58
+copy and exposed development cases. Inspect the resulting figure and review
+the finalist separately before any source/application or adoption decision.
+
 All three 1,100 km controls run first. They must reproduce strict current-runtime
 r58 monthly temperature/rain arrays exactly at float32; Somalia and Sahara
 also reproduce E/W/u/v. Every numerical criterion is unchanged. A failed
