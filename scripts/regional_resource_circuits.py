@@ -61,6 +61,9 @@ def regional_experiments(pilots,elevation,land,resolved,forage,area,water,meta,s
     # grazing footprint stay fixed, so a decline is an implementation failure.
     if 'regional_sparse' in result and 'regional_dense' in result:
         for sparse,dense in zip(result['regional_sparse'],result['regional_dense']):
+            if 'cases' not in sparse or 'cases' not in dense:
+                if sparse['status']!=dense['status']:raise ValueError('Sampling changed whether a home is traversable')
+                continue
             for a,b in zip(sparse['cases'],dense['cases']):
                 if a['mobile'] is not None and b['mobile']['annual_need_met']+1e-9<a['mobile']['annual_need_met']:raise ValueError('Additional bases reduced optimal support')
                 if a['best_fixed_base_continuous']!=b['best_fixed_base_continuous']:raise ValueError('Sampling changed the stronger fixed-base control')

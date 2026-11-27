@@ -294,7 +294,7 @@ def main():
                 maximum_combined_ledger_relative_residual=max(abs(b['combined_ledger_residual'])/max(1,b['harvested']) for b in balances.values()),
                 regional_circuits={k:[dict(id=e['id'],bases=len(e['patches']),ground_cells=len(e['ground_nodes']),
                     mobile=e['cases'][0]['mobile']['annual_need_met'],fixed=e['cases'][0]['best_fixed_base_continuous']['annual_need_met'],
-                    resource_upper_bound=e['cases'][0]['resource_upper_bound']['annual_need_met']) for e in values] for k,values in regional.items()},
+                    resource_upper_bound=e['cases'][0]['resource_upper_bound']['annual_need_met']) if 'cases' in e else dict(id=e['id'],status=e['status']) for e in values] for k,values in regional.items()},
                 circuits=[dict(id=e['id'],cases=[dict(water=c['id'],status=c['status'],mobile=c['mobile']['annual_need_met'] if c['mobile'] else None,stationary=c['stationary']['annual_need_met'] if c['stationary'] else None) for c in e.get('cases',[])]) for e in experiments])
             public={prefix+payloadpath.name:file_hash(payloadpath),prefix+gridpath.name:file_hash(gridpath),**images}
             write_json(reviewpath,dict(status='complete',inputs_sha256=inputs,sources_sha256=sources,public_sha256=public,packet=packet,summary=summary))
