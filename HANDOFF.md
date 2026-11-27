@@ -1,3 +1,24 @@
+# Rain closure capture COMPLETE: both base and exponential terms too large
+
+All6 exactendpointreplays pass originalnumerics, sharedparentphysical/budget/
+SST fields byteexact. ActualsolvewrappercopiesW/Ws/A/instability/fullclosure;
+independentreconstruction≤1.1e-14mm/day.4helpertestsPASS. PID19223exited.
+Somalia annualbase2300.80+exp1247.13,overflow0. Jointobserved1481.43+1109.00,
+overflow0. Julybaselinebase10.27/exp4.65mm/day; joint4.90/4.36; obs~.84total.
+Julyinstability3.056/2.236, effectiveRHthreshold.321/.366. Both inherited
+warmboost and explicit exponentialconvection active; algebra doesn't prove
+causal duplication. Full findings calibration/rain_closure_capture_20261127/
+findings.md;raw6/fulltrace/closureinputs/review/inspectedfigure outputparallel.
+
+NEXT actualphysics test:fixed instability0 removes inheritedbulktemperature
+boost but keeps explicitconvection/cap/threshold andtransport. Prospectively
+fourcandidate runs:nativeSomalia/Sahara/NIndia plusjointobservedSomalia.
+Reuse alreadyexact/current89source controls (do not re-integrate identical
+controls without need). Fullsource/cache/input/case/params pairing required,
+only instabilitychanges;declareguardcriteria before execution. No candidate
+plan/runyet. Userfrustratedwithdiagnostics:deliverthis physicaltest next.
+W18cCLOSED,AAUNOPENED,r58retained,atlasr51unchanged. Noactiveworkers.
+
 # Rain-closure endpoint capture DECLARED:6 exact replays, none started
 
 calibration/rain_closure_capture_20261127/{plan.json,README.md}, scripts/
