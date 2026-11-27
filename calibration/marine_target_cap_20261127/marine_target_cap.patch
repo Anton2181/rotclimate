@@ -1,0 +1,58 @@
+--- a/rotclimate/config.py
++++ b/rotclimate/config.py
+@@ -262,6 +262,7 @@
+     inflow_km: float = 300.0          # e91: inland e-folding distance (km)
+     inflow_sst: float = 26.0          # e91: nearest-sea temperature (C) at which inflow starts (full 3 C above)
+     inflow_rh: float = 0.0            # e91: target column humidity (fraction of land saturation); 0 = ocean_rh
++    inflow_source_cap: bool = False  # experimental: cap land target at nearest-sea equilibrium column water
+     soil_feedback: float = 0.0        # e90: land recycling x (1 + this x clip((soil water / bucket - 0.5) / 0.5, 0, 1)): a wet monsoon land re-evaporates more of its rain; 0 = off
+     continental_sea_air: float = 0.0  # e67: sea surface follows the (lagged) air over it x the continental share of that air
+     continental_sea_lag_days: float = 60.0  # e67: the mixed layer's memory of that air
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -2373,8 +2373,14 @@
+                 warm = np.clip((sst_near - p.inflow_sst) / 3.0, 0.0, 1.0)
+                 onshore = np.clip((uq * self.inflow_dir[0] + vq * self.inflow_dir[1]) / 3.0, 0.0, 1.0)
+                 land_rate = p.inflow_gain / (p.evap_tau_days * DAY) * self.inflow_reach * warm * onshore
++                if p.inflow_source_cap:
++                    from .marine_inflow import capped_marine_target
++                    W_ocean, land_rate = capped_marine_target(
++                        W_ocean, Ws, ocean, self.inflow_near,
++                        p.inflow_rh or p.ocean_rh, land_rate)
+                 lamE = lamE + np.where(ocean, 0.0, land_rate)
+-                W_ocean = np.where(ocean, W_ocean, (p.inflow_rh or p.ocean_rh) * Ws)
++                if not p.inflow_source_cap:
++                    W_ocean = np.where(ocean, W_ocean, (p.inflow_rh or p.ocean_rh) * Ws)
+             edge_rh = p.land_edge_rh
+             if p.edge_continental_drying > 0:
+                 # e24: air entering over land has lost water on its way across:
+--- /dev/null
++++ b/rotclimate/marine_inflow.py
+@@ -0,0 +1,27 @@
++"""Experimental marine-equilibrium ceiling; no fitted constants or observations."""
++import numpy as np
++
++
++def capped_marine_target(ocean_target, land_saturation, ocean, nearest, rh, land_rate):
++    ocean = np.asarray(ocean, bool)
++    if any(np.shape(a) != ocean.shape for a in [ocean_target, land_saturation, land_rate]):
++        raise ValueError('Marine target fields must share the grid shape')
++    if not np.isfinite(rh) or rh < 0:
++        raise ValueError('Nonnegative finite humidity fraction required')
++    if not ocean.any():
++        # EDT has no valid sea index on all-land domains: no marine exchange.
++        return np.zeros_like(land_saturation), np.zeros_like(land_rate)
++    if (not np.isfinite(ocean_target[ocean]).all() or (ocean_target[ocean] < 0).any()
++            or not np.isfinite(land_saturation).all() or (land_saturation < 0).any()
++            or not np.isfinite(land_rate).all() or (land_rate < 0).any()):
++        raise ValueError('Invalid marine equilibrium, saturation or rate')
++    if ocean.all():
++        return ocean_target.copy(), land_rate
++    if len(nearest) != 2 or any(np.shape(a) != ocean.shape for a in nearest):
++        raise ValueError('Invalid nearest-sea indices')
++    if any((a < 0).any() or (a >= ocean.shape[k]).any() for k, a in enumerate(nearest)):
++        raise ValueError('Nearest-sea index outside the grid')
++    if not ocean[nearest].all():
++        raise ValueError('Nearest source must be an actual sea cell')
++    bounded = np.minimum(rh * land_saturation, ocean_target[nearest])
++    return np.where(ocean, ocean_target, bounded), land_rate

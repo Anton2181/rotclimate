@@ -1,3 +1,31 @@
+# Next physical pilot declared: private marine-equilibrium target cap
+
+UNRUN at this commit: calibration/marine_target_cap_20261127/plan.json,
+README.md, marine_target.py and unapplied marine_target_cap.patch. Six fixed
+integrations:3 exact legacy r58 controls then3 Boolean cap cases (Somalia,
+Sahara,NIndia), all56km/1100km. Main physical source stays at the applied
+diagnostic fix; no cap code or parameter added to main. Seven helper tests pass.
+
+New law caps receiving-land RH target by nearest-sea MODELED EQUILIBRIUM
+column water (not actual source vapor or conservative transport). Existing
+gate formulas/parameters unchanged; realized rates can respond. All-land has
+no marine exchange/drying; sea targets unchanged. Require control physical
+fields, traces and budgets byte-exact to completed archives, original strict
+certificates/local residual0.01. Any failure stops, no auto retry/solver changes.
+
+Prospective local screen: Somalia rain loss at least1% better and all3 regions'
+T/rain-loss ratios <=1.01. Eligibility for further EXPOSED evaluation only,
+not a global qualification. Do not fit a cap strength after a failed screen.
+No fine/AA observations used; W18c stays permanently closed, r58/atlasr51 retained.
+
+Commit this fixed plan before scripts/prepare_marine_target_cap.py, then run
+scripts/run_marine_target_cap.py readiness and --run with all4 thread vars1,
+nice10 (see README). Fresh226 regular private source/helper/cache files;
+singleton lock and per-case hash/attempt guards. Independent reviewer runs
+after6 pass, producing cap_response.png; inspect actual figure/write findings.
+No such physical integrations have started at this commit. Do not confuse
+the completed earlier six budget captures with this new six-case physical pilot.
+
 # W18c permanently CLOSED; main marine diagnostic fix APPLIED and tested
 
 W18c w1_005 FAILED the original fine28 gate: S28=1.0347252704 >1.01,
