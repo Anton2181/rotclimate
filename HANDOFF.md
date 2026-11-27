@@ -1,3 +1,39 @@
+# Southern zonal-belt source correction APPLIED:39 tests pass, two checks declared
+
+Rootmodel.py now adds ONLY guarded SHwesterly/polar belts, opposite seasonal
+strength/meridional sign; existing friction/spin/maprotation retained. Prior
+source lacks these belts: new mechanism tests11FAIL/1PASS before;13PASSafter.
+Combined39regressionsPASS. Twenty PRE-EDIT Northern Hemisphere golden profiles
+on mixed grids match every u/v/phi byte after source change.
+tests/test_southern_zonal_belts.py; tests/fixtures/southern_zonal_belts_northern.npz;
+raw before/after/regressions XML/logs +before_source.json/before_tests.py preserved
+output/southern_zonal_belts_fix_20261127. Source fix is AFTER14-run worker exited,
+never altered/retried its source or outcomes. It is NOT full global circulation.
+
+Strong r58reference compatibility proof COMPLETE:
+scripts/check_southern_belts_reference_scope.py -> reference_scope.json.
+Actual caseIDs ALL97 exact; new guarded branch FALSE on ALL97 FULL grids for
+EVERY s∈[-1,1], includingprimer. Onlymodel.pyinsertedguardedblock changed,88
+other sources exact. Threshold−27.562666deg. Original refs/certs/protocols keep
+old hashes; this is explicit inactive-branch compatibility, NOT97new integrations.
+Only wideSomalia parent among6 can activate (2054potentialcells); Sahara/NI/
+Algeria/Najd/Calif parent domains remain inactive, so this is no desert rescue.
+
+Prospective calibration/southern_zonal_belts_fix_20261127/{plan,regions,README}
+pins exactlyTWO sourcechecks: nativeSoma1100 ALLsavedcells+monthlywinds exact to
+current97/off; nativeSoma4012 originalnumerics/inputs/scorebounds and branchactive,
+reportallchanges, noaccuracyselection. Nativeparent control from CLOSEDnested
+study, NOT a nested rerun. r58params fixed; private231; originaltolerances;
+nice10/all4threads1/literalvenvPython. scripts/run_southern_belts_source_checks.py
+prepare then --run aftercommit; reviewer sameprefix. NONEstarted yet. No retries.
+
+Qualification pendingthese2coupledchecks: don'tlabelold97protocols newsource.
+After pass, write ENGINEERING sourcequalification plus explicit compatibility
+link, notnewclimateadoption. Broad current97 accuracy staysr58; atlasr51unchanged.
+All14native-parent study completed/closed/rejected1d74c8fec (Somwind−22.6% but
+rain+53.8%; Sahara/Algeria severewetting). Broaderpressure and convection/thermal
+issues remain. W18/W18cCLOSED,AAUNOPENED,goalACTIVE.
+
 # Native-parent pressure context COMPLETE:14 pass numerics, candidate rejected
 
 Prospective10a12a43d, output/nested_pressure_context_20261127 complete14/14,

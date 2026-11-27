@@ -1,0 +1,317 @@
+FFFFFFFFFFF.                                                             [100%]
+=================================== FAILURES ===================================
+_________ test_equinox_westerlies_and_polar_belts_in_both_hemispheres __________
+
+    def test_equinox_westerlies_and_polar_belts_in_both_hemispheres():
+        u,v=symmetric_wind([[-75.,-45.,45.,75.]],0.)
+>       np.testing.assert_allclose(u,[[-3.,7.,7.,-3.]],rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 2 / 4 (50%)
+E       Mismatch at indices:
+E        [0, 0]: 0.0 (ACTUAL), -3.0 (DESIRED)
+E        [0, 1]: 0.0 (ACTUAL), 7.0 (DESIRED)
+E       Max absolute difference among violations: 7.
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 0.,  0.,  7., -3.]])
+E        DESIRED: array([[-3.,  7.,  7., -3.]])
+
+tests/test_southern_zonal_belts.py:22: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[False--1.0] _____________
+
+season = -1.0, retrograde = False
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 4 / 9 (44.4%)
+E       Mismatch at indices:
+E        [0, 3]: 0.0 (ACTUAL), 7.577722283113838 (DESIRED)
+E        [0, 4]: 0.0 (ACTUAL), 7.577722283113839 (DESIRED)
+E        [0, 6]: 0.0 (ACTUAL), -2.598076211353316 (DESIRED)
+E        [0, 7]: 0.0 (ACTUAL), -2.598076211353316 (DESIRED)
+E       Max absolute difference among violations: 7.57772228
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[-3.526712, -5.706339,  0.      ,  0.      ,  0.      ,  0.      ,
+E                0.      ,  0.      ,  0.      ]])
+E        DESIRED: array([[-3.526712e+00, -5.706339e+00,  0.000000e+00,  7.577722e+00,
+E                7.577722e+00, -0.000000e+00, -2.598076e+00, -2.598076e+00,
+E               -3.673940e-16]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[False--0.5] _____________
+
+season = -0.5, retrograde = False
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: 0.0 (ACTUAL), 5.568465901844061 (DESIRED)
+E        [0, 4]: 0.0 (ACTUAL), 7.606665882026413 (DESIRED)
+E        [0, 5]: 0.0 (ACTUAL), 2.038199980182353 (DESIRED)
+E        [0, 6]: 0.0 (ACTUAL), -2.1213203435596424 (DESIRED)
+E        [0, 7]: 0.0 (ACTUAL), -2.897777478867205 (DESIRED)
+E       Max absolute difference among violations: 7.60666588
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[-3.243845, -5.938929, -1.690395,  0.      ,  0.      ,  0.      ,
+E                0.      ,  0.      ,  0.      ]])
+E        DESIRED: array([[-3.243845, -5.938929, -1.690395,  5.568466,  7.606666,  2.0382  ,
+E               -2.12132 , -2.897777, -0.776457]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[False-0.0] ______________
+
+season = 0.0, retrograde = False
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: 0.0 (ACTUAL), 3.4999999999999996 (DESIRED)
+E        [0, 4]: 0.0 (ACTUAL), 7.0 (DESIRED)
+E        [0, 5]: 0.0 (ACTUAL), 3.4999999999999996 (DESIRED)
+E        [0, 6]: 0.0 (ACTUAL), -1.4999999999999998 (DESIRED)
+E        [0, 7]: 0.0 (ACTUAL), -3.0 (DESIRED)
+E       Max absolute difference among violations: 7.
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[-3., -6., -3.,  0.,  0.,  0.,  0.,  0.,  0.]])
+E        DESIRED: array([[-3. , -6. , -3. ,  3.5,  7. ,  3.5, -1.5, -3. , -1.5]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[False-0.5] ______________
+
+season = 0.5, retrograde = False
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: 0.0 (ACTUAL), 1.5852666512529394 (DESIRED)
+E        [0, 4]: 0.0 (ACTUAL), 5.916295686020543 (DESIRED)
+E        [0, 5]: 0.0 (ACTUAL), 4.331029034767604 (DESIRED)
+E        [0, 6]: 0.0 (ACTUAL), -0.7764571353075622 (DESIRED)
+E        [0, 7]: 0.0 (ACTUAL), -2.897777478867205 (DESIRED)
+E       Max absolute difference among violations: 5.91629569
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[-2.788339, -5.956253, -3.978736,  0.      ,  0.      ,  0.      ,
+E                0.      ,  0.      ,  0.      ]])
+E        DESIRED: array([[-2.788339, -5.956253, -3.978736,  1.585267,  5.916296,  4.331029,
+E               -0.776457, -2.897777, -2.12132 ]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[False-1.0] ______________
+
+season = 1.0, retrograde = False
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 4 / 9 (44.4%)
+E       Mismatch at indices:
+E        [0, 4]: 0.0 (ACTUAL), 4.546633369868303 (DESIRED)
+E        [0, 5]: 0.0 (ACTUAL), 4.546633369868303 (DESIRED)
+E        [0, 7]: 0.0 (ACTUAL), -2.598076211353316 (DESIRED)
+E        [0, 8]: 0.0 (ACTUAL), -2.598076211353316 (DESIRED)
+E       Max absolute difference among violations: 4.54663337
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[-2.603302, -5.849567, -4.690989,  0.      ,  0.      ,  0.      ,
+E                0.      ,  0.      ,  0.      ]])
+E        DESIRED: array([[-2.603302, -5.849567, -4.690989,  0.      ,  4.546633,  4.546633,
+E               -0.      , -2.598076, -2.598076]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[True--1.0] ______________
+
+season = -1.0, retrograde = True
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 4 / 9 (44.4%)
+E       Mismatch at indices:
+E        [0, 3]: -0.0 (ACTUAL), -7.577722283113838 (DESIRED)
+E        [0, 4]: -0.0 (ACTUAL), -7.577722283113839 (DESIRED)
+E        [0, 6]: -0.0 (ACTUAL), 2.598076211353316 (DESIRED)
+E        [0, 7]: -0.0 (ACTUAL), 2.598076211353316 (DESIRED)
+E       Max absolute difference among violations: 7.57772228
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 3.526712,  5.706339, -0.      , -0.      , -0.      , -0.      ,
+E               -0.      , -0.      , -0.      ]])
+E        DESIRED: array([[ 3.526712e+00,  5.706339e+00, -0.000000e+00, -7.577722e+00,
+E               -7.577722e+00,  0.000000e+00,  2.598076e+00,  2.598076e+00,
+E                3.673940e-16]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+_____________ test_season_reversed_equatorial_symmetry[True--0.5] ______________
+
+season = -0.5, retrograde = True
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: -0.0 (ACTUAL), -5.568465901844061 (DESIRED)
+E        [0, 4]: -0.0 (ACTUAL), -7.606665882026413 (DESIRED)
+E        [0, 5]: -0.0 (ACTUAL), -2.038199980182353 (DESIRED)
+E        [0, 6]: -0.0 (ACTUAL), 2.1213203435596424 (DESIRED)
+E        [0, 7]: -0.0 (ACTUAL), 2.897777478867205 (DESIRED)
+E       Max absolute difference among violations: 7.60666588
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 3.243845,  5.938929,  1.690395, -0.      , -0.      , -0.      ,
+E               -0.      , -0.      , -0.      ]])
+E        DESIRED: array([[ 3.243845,  5.938929,  1.690395, -5.568466, -7.606666, -2.0382  ,
+E                2.12132 ,  2.897777,  0.776457]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+______________ test_season_reversed_equatorial_symmetry[True-0.0] ______________
+
+season = 0.0, retrograde = True
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: -0.0 (ACTUAL), -3.4999999999999996 (DESIRED)
+E        [0, 4]: -0.0 (ACTUAL), -7.0 (DESIRED)
+E        [0, 5]: -0.0 (ACTUAL), -3.4999999999999996 (DESIRED)
+E        [0, 6]: -0.0 (ACTUAL), 1.4999999999999998 (DESIRED)
+E        [0, 7]: -0.0 (ACTUAL), 3.0 (DESIRED)
+E       Max absolute difference among violations: 7.
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 3.,  6.,  3., -0., -0., -0., -0., -0., -0.]])
+E        DESIRED: array([[ 3. ,  6. ,  3. , -3.5, -7. , -3.5,  1.5,  3. ,  1.5]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+______________ test_season_reversed_equatorial_symmetry[True-0.5] ______________
+
+season = 0.5, retrograde = True
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 6 / 9 (66.7%)
+E       First 5 mismatches are at indices:
+E        [0, 3]: -0.0 (ACTUAL), -1.5852666512529394 (DESIRED)
+E        [0, 4]: -0.0 (ACTUAL), -5.916295686020543 (DESIRED)
+E        [0, 5]: -0.0 (ACTUAL), -4.331029034767604 (DESIRED)
+E        [0, 6]: -0.0 (ACTUAL), 0.7764571353075622 (DESIRED)
+E        [0, 7]: -0.0 (ACTUAL), 2.897777478867205 (DESIRED)
+E       Max absolute difference among violations: 5.91629569
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 2.788339,  5.956253,  3.978736, -0.      , -0.      , -0.      ,
+E               -0.      , -0.      , -0.      ]])
+E        DESIRED: array([[ 2.788339,  5.956253,  3.978736, -1.585267, -5.916296, -4.331029,
+E                0.776457,  2.897777,  2.12132 ]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+______________ test_season_reversed_equatorial_symmetry[True-1.0] ______________
+
+season = 1.0, retrograde = True
+
+    @pytest.mark.parametrize('season',[-1.,-.5,0.,.5,1.])
+    @pytest.mark.parametrize('retrograde',[False,True])
+    def test_season_reversed_equatorial_symmetry(season,retrograde):
+        latitude=np.array([[5.,15.,25.,35.,45.,55.,65.,75.,85.]])
+        un,vn=symmetric_wind(latitude,season,retrograde=retrograde)
+        us,vs=symmetric_wind(-latitude,-season,retrograde=retrograde)
+>       np.testing.assert_allclose(us,un,rtol=0.,atol=1e-14)
+E       AssertionError: 
+E       Not equal to tolerance rtol=0, atol=1e-14
+E       
+E       Mismatched elements: 4 / 9 (44.4%)
+E       Mismatch at indices:
+E        [0, 4]: -0.0 (ACTUAL), -4.546633369868303 (DESIRED)
+E        [0, 5]: -0.0 (ACTUAL), -4.546633369868303 (DESIRED)
+E        [0, 7]: -0.0 (ACTUAL), 2.598076211353316 (DESIRED)
+E        [0, 8]: -0.0 (ACTUAL), 2.598076211353316 (DESIRED)
+E       Max absolute difference among violations: 4.54663337
+E       Max relative difference among violations: 1.
+E        ACTUAL: array([[ 2.603302,  5.849567,  4.690989, -0.      , -0.      , -0.      ,
+E               -0.      , -0.      , -0.      ]])
+E        DESIRED: array([[ 2.603302,  5.849567,  4.690989, -0.      , -4.546633, -4.546633,
+E                0.      ,  2.598076,  2.598076]])
+
+tests/test_southern_zonal_belts.py:32: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_southern_zonal_belts.py::test_equinox_westerlies_and_polar_belts_in_both_hemispheres
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[False--1.0]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[False--0.5]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[False-0.0]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[False-0.5]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[False-1.0]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[True--1.0]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[True--0.5]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[True-0.0]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[True-0.5]
+FAILED tests/test_southern_zonal_belts.py::test_season_reversed_equatorial_symmetry[True-1.0]
+11 failed, 1 passed in 0.94s

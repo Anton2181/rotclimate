@@ -873,6 +873,20 @@ class ClimateModel:
         xi = np.clip((lat - phi_p) / 30.0, 0, 1)
         u = np.where(m, -p.polar_speed * np.sin(np.pi * xi), u)
         v = np.where(m, -0.3 * p.polar_speed * np.sin(np.pi * xi), v)
+        if np.any(lat < np.minimum(phi_hs, 0.0)):
+            # Padding can reach the southern extratropics. Its belts have
+            # the opposite season and meridional direction to the north;
+            # retain the original northern fields, including on mixed grids.
+            phi_ps = phi_hs - 30.0
+            m = (lat < 0.0) & (lat <= phi_hs) & (lat > phi_ps)
+            xi = (phi_hs - lat) / (phi_hs - phi_ps)
+            uw_s = p.westerly_speed * (1.0 + 0.25 * s)
+            u = np.where(m, uw_s * np.sin(np.pi * xi), u)
+            v = np.where(m, -0.15 * uw_s * np.sin(np.pi * xi), v)
+            m = (lat < 0.0) & (lat <= phi_ps)
+            xi = np.clip((phi_ps - lat) / 30.0, 0.0, 1.0)
+            u = np.where(m, -p.polar_speed * np.sin(np.pi * xi), u)
+            v = np.where(m, 0.3 * p.polar_speed * np.sin(np.pi * xi), v)
         if p.zonal_land_friction > 0:
             # e57: the belts are the sea's surface winds. Over land the rougher
             # ground slows them (NCEP January surface westerlies 1-2 m/s over
