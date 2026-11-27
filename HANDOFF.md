@@ -1,3 +1,40 @@
+# Observed SST fix +12 wind×SST runs COMPLETE; rain conversion is next lead
+
+Commitad42ff244 declared source/plan before prep/integration. Observed-SST
+mode now bypasses modeled damping addback, actual coupled test reproduced
+oldfailure;58source+6WOA testsPASS.12regionalruns all original numericsPASS,
+6 modeled-SST controls exact all shared monthly/raw/budget fields to parent.
+All observed SST actual heatTeq/preice/moisture exact on EVERY modeled sea
+cell; actualwind exact; source/reference/read-only arrays verified. PID17957
+exited. Full findings calibration/wind_sst_diagnostic_20261127/findings.md.
+All12raw packets/forcing/WOA+PW references/reviews/inspected2figures output/
+wind_sst_diagnostic_20261127; sourcequal output/observed_sst_fix_20261127.
+
+SomaliaPbaseline3548→3356withSSTalone; observedwind4163→2590withSST, versus457
+observed. SSTchangeswindresponse+615→−766,interaction−1381mm/year. Sahara
+jointP2.42vs2.07, butSSTaloneworsens. NIndia modelwindP547→653lossimproves,
+joint877vs761 butmountainerrorspersist: Nepal4219vs519mm/year atonecell.
+
+NEW keydiagnostic: jointSomaliaPW37.15vsNCEP35.42mm(+4.9%), butrain5.66×.
+JulyPW32.90<36.43reference, rain281.93>25.43mm/month. Rain/mean-water proxy
+5.40×(descriptive,notmicrophysicalefficiency/isolatedcausality). Supports
+rainconversion/stability audit, not simplyremovingmoisture. PW1991–2020units/
+axes/scales/raw+cacheverified; boundaryPW alreadyused =>NOTindependentvalidation.
+Raw has5993negatives(min−2.307), existingbuilderclips0, cacheexactlymatches;
+no datachanged. Initialnonnegativeassertassumptionfailed/read-only documented.
+Somalia/Sahara0clipped-corner influence; NIndia4.55% cellmonths involved.
+
+NEXT declare6 exact endpoint rain-closure captures: retainedbaseline vsjoint
+observedwind/SST,3regions. Capture actual solvedW/Ws/dynamics/instability and
+closureconv/r0/cap/evap/T/fT; reconstruct base/expconv/overflow components at
+actual solved state, no physical changes. Fullparentphysical/budgetexact +
+originalstrictnumerics. No nextplan/integration yet;12-run packet immutable.
+Separate optional heat_record.surface_c mislabels postaddbackmoistureSST as
+heatsurface in modelheat-onlymode; currentstudy usedactualTeq/preice instead,
+so unaffected. Verify/fix recorderbeforefuture sensibleheatfluxaudit.
+W18c CLOSED,AAUNOPENED,r58retained,atlasr51unchanged. No current97pairedref,
+no active scientificworker. Do not reopen failedcap/deletion/globalturn lines.
+
 # Observed-SST damping guard FIXED/TESTED;12 wind×SST runs DECLARED
 
 Main model.py anomaly addback now only when sst_source=model. Previously obs
