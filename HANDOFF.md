@@ -1,3 +1,28 @@
+# No-water inflow guard: tests passed, seven regional regressions declared
+
+Current working/source change: ClimateModel only builds/enables warm-sea
+inflow if the existing modeled sea mask has any cell. This fixes fake EDT
+sea indices on all-land grids and is NOT the rejected cap law. Pre-fix test
+reproduced positive marine reach without any real modeled sea.30 focused tests
+PASS (four coupled homogeneous toy runs byte-identical to gain0 controls,
+zero marine exchange, mixed real-source geometry plus existing27 tests).
+
+Static scan of all97 existing full coarse cached domains finds FOUR all-land
+cases: kazakh_steppe,r_12n_22e,r_40n_94e,s2_7n_23e. This can change their physical
+climates, so do not describe it as bookkeeping or claim unchanged97 scores.
+No water-body classification change. All other mixed cases keep the same code
+arithmetic; root r58 params unchanged, no atlas/climate adoption.
+
+calibration/no_sea_inflow_guard_20261127/plan.json and README declare7 new
+56km/1100km regional regression integrations: those4 + Somalia/Sahara/NIndia
+mixed controls, compared with the preserved fresh-current-runtime r58 golden
+fields under an explicitly changed source. Require unchanged case identities,
+observations/coordinates, strict numerical certs, byte-exact float32 mixed
+controls; report affected improvements/degradations without fitting. No fine/
+AA data, retries or new97-region paired qualification. None started at commit.
+Run the documented benchmark ONCE, inspect receipts/any surviving processes
+before recovery, then publish actual outcome and new source-epoch scope.
+
 # Cap pilot COMPLETE: numerical pass, prospective screen FAIL; keep unapplied
 
 Private marine_target_cap_20261127 finished all6 fixed runs/reviewer, PID15167

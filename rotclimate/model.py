@@ -656,7 +656,10 @@ class ClimateModel:
                          np.where(ok, -cy / np.maximum(norm, 1e-12), 0.0))
         sea_dist = ndi.distance_transform_edt(~g.land) * g.cell_km
         self.upwelling_weight = np.where(g.land, 0.0, np.exp(-sea_dist / UPWELLING_KM)) * ok
-        if p.inflow_gain > 0:
+        # An all-land EDT has no sea source; its outside-grid indices must
+        # never create marine relaxation or drying from a land temperature.
+        self.inflow_enabled = p.inflow_gain > 0 and bool(np.any(~g.land))
+        if self.inflow_enabled:
             # e91: distance inland, its direction and the nearest sea cell (for that sea's temperature)
             land_km, near = ndi.distance_transform_edt(g.land, return_indices=True)
             land_km = land_km * g.cell_km; smooth_km = ndi.gaussian_filter(land_km, 1.0)
@@ -2364,7 +2367,7 @@ class ClimateModel:
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
                 A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
-            if p.inflow_gain > 0:
+            if self.inflow_enabled:
                 # e91: warm-sea inflow. Summer monsoons draw marine air inland: r49 holds Mexico's July column at
                 # 30 mm (RH 0.60; ~0.25 of the observed peak rain) and Bengal's at 37 mm (RH 0.69) with temperatures
                 # right (calibration/monsoon_inflow_20261121). Land within reach of a sea warmer than inflow_sst relaxes
