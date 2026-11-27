@@ -1,3 +1,22 @@
+# Pressure zonal-exterior pilot DECLARED:6 native candidates, unrun
+
+calibration/pressure_zonal_exterior_20261127/{plan.json,regions.json,README.md};
+experiments/pressure_zonal_exterior.py;3known-answer testsPASS; runner/reviewer
+run_pressure_zonal_exterior.py/review_pressure_zonal_exterior.py. Only broad/
+local pressureTanom Gaussians nearest→constant0 exterior. Root89productionfiles
+unchanged; hashed private classmethod override; coefficients/otherfilters/
+momentum/numerics fixed. Last_pres couplings respond. Unknown exterior hypothesis,
+not globalpressuretruth; uniformfinitewarm patch getsedgegradients explicitly.
+No observedforcing.
+
+Exactly6:Saharatarget,Somalia,NIndia,Algeria,Najd,California. Reuse6qualified
+current97controls. TargetPloss<=.90; all6T/Ploss ratios<=1.01; failclosesfixed
+alternative/no blendrescue. Passonlybroaderexposedwork,notadoption. Commitfirst,
+prepare/--run,nice10/4threadvars1/private228regularfiles. Restore experiment
+pressure/run methods onfailure; actualwind recorded/geographicreview. None
+started. Current97complete/pushed0e35e8c35. W18cCLOSED,AAUNOPENED,
+instability0closed,r58retained,atlasr51unchanged.
+
 # Current-source97-region reference COMPLETE and qualified
 
 All97 original strict numericalcertificates PASS; inputs/caseIDs/obs/masks/
