@@ -1,3 +1,12 @@
+# r58 ATLAS REBUILD RUNNING (27 Nov 2026, owner choice "Atlas rebuild on r58")
+Driver: scripts/run_r58_atlas.sh (log output/run_r58_atlas.log): W6 world search (scripts/world_campaign_r58.py,
+plan calibration/map_world_r58_planet/plan.json, calibrate mode guarded_rivers = zonefit + 0.2 x drawn-river width
+ranking, 241 evals ds32) -> scripts/select_world_r58.py -> corrections retrained for r58w -> scripts/release_r58.sh
+(resumable via output/atlas_r58/stages_done). World physics r58w = r58 + edge_pw_source "zonal" (e116z: the globe's
+land-mean NCEP column water at each latitude; r58's per-cell observed edge is Earth-only). Earth screen: zonal S97
+1.0098 vs r58, edge off 1.0265 (calibration/map_world_r58_planet/edge_forcing.md). Earth physics stays r58.
+Still to write after the run: reports/RELEASE_R58_20261127.md; then browser checks / package_atlas_artifact.py.
+
 # Southern wind belts FIXED/QUALIFIED; current97 reference explicitly compatible
 
 Main source005827e44 adds guarded SHwesterly/polar belts. Eleven previously

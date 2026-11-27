@@ -1,20 +1,20 @@
 #!/usr/bin/env bash
-# Full atlas rebuild on r58 physics (standing owner instruction). r58 = r50 + e103 (dry-land gate on heated-land convection)
-# + e104 (land convective ceiling), reports/CLIMATE_R51_20261127.md. Chain as scripts/release_r50_t7.sh (T7 rules included).
-# World: W5 selection (calibration/map_world_r58_planet). Corrections retrained for r58.
-# Report: reports/RELEASE_R51_20261127.md. Resumable: output/atlas_r58/stages_done.
+# Full atlas rebuild on r58 physics (owner choice 27 Nov 2026). The world runs r58w = r58 with the world-legal edge forcing e116z
+# (calibration/map_world_r58_planet/edge_forcing.md). Chain as scripts/release_r51.sh; world fit objective zonefit_rivers (drawn-river width ranking).
+# World: W6 selection (calibration/map_world_r58_planet, scripts/select_world_r58.py). Corrections retrained for r58w.
+# Report: reports/RELEASE_R58_20261127.md. Resumable: output/atlas_r58/stages_done.
 
 set -euo pipefail
 cd "$(dirname "$0")/.."
 PY=.venv/bin/python; OUT=output/atlas_r58; STAGE=earth_fit_r58_stage; ATLAS=atlases/$STAGE
 WORLD=${WORLD:-calibration/map_world_r58/params.json}
 CK=output/r58_world/candidate_001.pkl; CAL=calibration/earth_correction_r58_20261127; EVALS=output/earth_correction_r58_20261127
-PHYS=calibration/local_accuracy_20261023/r58_params.json; REPORT=reports/RELEASE_R51_20261127.md
+PHYS=calibration/local_accuracy_20261023/r58w_params.json; REPORT=reports/RELEASE_R58_20261127.md
 mkdir -p "$OUT"; touch "$OUT/stages_done"
 run() { local name=$1; shift; if grep -qx "$name" "$OUT/stages_done"; then echo "skip $name"; return; fi
   echo "== $name $(date -u +%H:%M:%S)"; "$@" > "$OUT/$name.log" 2>&1; echo "$name" >> "$OUT/stages_done"; echo "done $name $(date -u +%H:%M:%S)"; }
 export OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 ROTCLIMATE_FOREST_TRAVEL=1
-NOTE='Earth r58 physics (plateau-anchored rain belt, monsoon onset, heat-driven convection capped by monsoon descent, wet-forest convection and a land convective ceiling) on the world geometry refitted under r58, with the eroded height map v2.2; rivers and deltas from Budyko–Fu runoff, grazing seasons from the GPP-tested phenology; layouts 1–3 and verified numerical checks.'
+NOTE='Earth r58 physics (r51 plus maritime, sea-ice, snowpack and eddy-barrier refits; land edges take the latitude land-mean column water, e116z) on the world geometry refitted under r58 with the drawn-river width ranking, on the eroded height map v2.2 with every drawn river shown in full; rivers and deltas from Budyko–Fu runoff, grazing seasons from the GPP-tested phenology; layouts 1–3 and verified numerical checks.'
 run world $PY -u -I scripts/build_atlas_variant.py --params $WORLD --name $STAGE \
   --title 'Rotclimate Earth-Fit Atlas' --eyebrow 'Climate, farming and settlement · three layouts · c.200 AD' \
   --note "$NOTE" --downsample 8 --image-scale 2 --seeds 1,2,3 --workers 1 --fit-objective zonefit_rivers --require-verified --checkpoint $CK
@@ -33,7 +33,7 @@ if ! grep -qx promote "$OUT/stages_done"; then
 import json
 from pathlib import Path
 p = Path('atlases/pages.json'); pages = json.loads(p.read_text())
-pages['earth_fit']['note'] = ('Earth r58 physics (rain belt anchored by large plateaus, monsoon onset, heat-driven convection held back where monsoon air descends, wet forests convecting and a ceiling on land convective rain) on the world geometry refitted under r58, '
+pages['earth_fit']['note'] = ('Earth r58 physics (r51 plus maritime, sea-ice, snowpack and eddy-barrier refits; land edges take the latitude land-mean column water) on the world geometry refitted under r58 with a drawn-river width target, '
     'with the eroded height map v2.2 (every drawn river a flow path through its lakes to the sea; runoff by the Earth-tested Budyko–Fu rule); arable land from slope, river irrigation and Earth-sized delta fans. '
     'Climate averages surroundings layouts 1–3 with verified numerical checks. The map opens on Earth-trained corrected climate; raw climate remains available. '
     'Food, population and foraging are c.200 AD scenarios, with the Earth-validated malaria rule.')
