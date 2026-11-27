@@ -24,3 +24,11 @@ trade inversion (Horn, Sahara edge) then suppresses rain while the monsoon troug
    Sahara, north India, Bengal, Sahel, Amazon, Congo, Kalahari, inland Australia under r58.
 2. Declare 3-4 candidates (MSE-excess gate on the boost; ascent-gated base rain) with guards (north India, Bengal,
    Sahel, wet tropics no worse than 1 %; target Somalia / Sahara improvement), probe, then dev97 screen, refit, gates.
+
+## Probe 2 (warm-moist boost start temperature instability_t0; same regions + Bengal, Sahel)
+rain loss: Somalia 3.584 -> 3.215 / 2.771 / 2.935 / 2.660 (t0 24 / 26 / 26 + instability 5 / 27 + 6);
+north India 0.491 -> 0.507-0.533; Bengal 0.554 -> 0.593-0.660; Sahel 0.408 -> 0.432-0.442; Sahara 1.686 -> 1.70-1.75;
+Kalahari / NW Australia unchanged. Same trade-off as instability 0: temperature does not separate the Horn from the
+monsoon, because the Horn's MODEL air and sea are themselves too warm (sea ~29 C vs WOA 25-26 in Jun-Sep; missing
+monsoon upwelling). A trigger built on the model's own state cannot fix the Horn until that sea is right; the
+upwelling / Somali-jet circulation is the root (cf. pressure_zonal_exterior, wind_sst_diagnostic).
