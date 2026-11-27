@@ -1,3 +1,29 @@
+# W18c finalist frozen; pre-validation supervisor recovery
+
+W18c finished ALL49 initial evaluations, no numerical failures. The existing
+GP rule closes further search: predicted gain0.0029349234 <0.005. w1_005 is
+FROZEN finalist (objective0.9842206108, params hash4db0b828...0356b).
+Original PID6609 exited/zombie before validation: state(..., **candidate)
+supplied plan_sha256 twice to dict(), raising TypeError. No dev6 gate report,
+fine candidate run or sealed-AA pair existed; AA declaration verified UNOPENED
+with empty seen_by. This is a supervisor serialization error, not a scientific
+gate failure or permission to reopen a failed campaign.
+
+validation_supervisor_recovery.json and validation_supervisor_before_recovery.py
+under calibration/ppe_20261123/W18c_records preserve old source/status/finalist
+and zero-gate evidence. The fix only accepts identical repeated status metadata
+and rejects conflicts; two regression tests pass. Original physical/shared-input
+readiness passes unchanged. Resume the same finalist through existing once-only
+dev6/fine/single-AA rules; no new points, refit, candidate choice or policy change.
+DO NOT apply main diagnostic patch yet: finalist validation requires the original
+physical source. Record actual resumed PID before assuming a process is live.
+
+All SIX private budget captures also FINISHED, PID12025 now zombie. Independent
+review passed, every saved physical state/trace dtype/shape/byte exact and all
+complete local equations within unchanged residual0.01. review.json and plotted
+term_changes.png are present; figure was viewed/readable, full findings pending
+publication. No more physical replays are needed for this six-case protocol.
+
 # Six private budget captures LIVE alongside W18c
 
 New worker PID12025, detached nice10, command scripts/padding_budget_capture.py

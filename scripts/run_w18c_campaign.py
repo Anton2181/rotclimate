@@ -31,9 +31,13 @@ def readiness():
 
 
 def state(out,stage,**more):
-    write_json(out/'campaign_status.json',dict(stage=stage,plan_sha256=file_hash(PLAN),
+    record=dict(stage=stage,plan_sha256=file_hash(PLAN),
         runtime_amendment_sha256=file_hash(AMENDMENT),runtime_qualification_sha256=file_hash(QUALIFICATION),
-        supervisor_sha256=file_hash(Path(__file__)),**more))
+        supervisor_sha256=file_hash(Path(__file__)))
+    for key,value in more.items():
+        if key in record:assert record[key]==value, 'Conflicting status provenance: '+key
+        else:record[key]=value
+    write_json(out/'campaign_status.json',record)
     print(stage,more,flush=True)
 
 

@@ -1,0 +1,35 @@
+{
+  "status": "reviewed_supervisor_status_serialization_failure_before_validation",
+  "old_supervisor_sha256": "13f94edd8730005c0c53177f2fd0c9046fef27b5f637439290a0334cc45e314c",
+  "preserved_old_supervisor": "calibration/ppe_20261123/W18c_records/validation_supervisor_before_recovery.py",
+  "prior_status": {
+    "stage": "search_closed_predicted_gain_below_0.005",
+    "plan_sha256": "97f5391ebfb50bef6adb7a952982b83ec5a511102bacdf5d7e402efcb648ab8c",
+    "runtime_amendment_sha256": "35afd2df1ce1c5223426152d0cb2d1b37f398b8fb548de0e136c0dab3a8db261",
+    "runtime_qualification_sha256": "625fe6e45ab4bdfe5eb398810bd4479e1b7f3c50d0a97b0c8e7d60254642f488",
+    "supervisor_sha256": "13f94edd8730005c0c53177f2fd0c9046fef27b5f637439290a0334cc45e314c",
+    "after_wave": 1,
+    "observed_best": 0.9842206107760899,
+    "predicted_best": 0.9812856873597006,
+    "predicted_gain": 0.0029349234163893456,
+    "continue_search": false
+  },
+  "frozen_finalist": {
+    "name": "w1_005",
+    "dev_objective": 0.9842206107760899,
+    "params_sha256": "4db0b828cea97400de12cd2107a8ea449fa9456c16e3dcd177c2b49e5560356b",
+    "selection": "lowest_development_objective_only",
+    "plan_sha256": "97f5391ebfb50bef6adb7a952982b83ec5a511102bacdf5d7e402efcb648ab8c"
+  },
+  "development_records": 49,
+  "development_failures": 0,
+  "validation_gate_reports_present": 0,
+  "fine_candidate_runs_present": 0,
+  "AA_outcome_before_recovery": "UNOPENED",
+  "AA_seen_by_before_recovery": [],
+  "cause": "validate passed finalist metadata plan_sha256 to state, which also supplied plan_sha256 as a dict keyword. TypeError occurred before the first dev6 gate call.",
+  "recovery_scope": "Permit identical duplicate status provenance, reject conflicting metadata; resume unchanged frozen finalist through original once-only gates. No search point, parameter, physical source, observation, tolerance, selection rule or gate change.",
+  "new_supervisor_sha256": "9befc247f5c829c7b187df4733009a2b531a83380b7c5ae446f912099437d957",
+  "status_regression_tests_passed": 2,
+  "physical_source_and_shared_input_readiness": "passed_unchanged"
+}
