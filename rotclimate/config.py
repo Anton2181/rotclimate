@@ -118,6 +118,8 @@ class Params:
     tropical_storms: float = 0.0      # e47: storms over seas warmer than ~26-28 C (storm-track equivalent; 0 = off)
     tropical_storm_km: float = 600.0  # e47: ... and their reach inland from that sea
     cold_high_storms: float = 0.0     # e48: storms steered around the thermal highs, exp(-k x hPa) (0 = off)
+    descent_warming: float = 0.0      # e131: K of land warming per mm/day of the e49 monsoon descent (compression of the sinking air; 0 = off)
+    descent_warming_cap: float = 8.0  # e131: ceiling on that warming (K)
     monsoon_descent: float = 0.0      # e49: column drying (1/day) per mm/day of the monsoon heating that drives descent here (0 = off)
     winter_mixing_deep: bool = False  # e50: only deep seas overturn in winter (sea_winter_mixing x depth share); shelf seas follow the air
     ocean_tau_unstable: float = 0.0   # e51: days for air colder than the sea under it to take the sea's temperature (convective; 0 = ocean_tau_days)

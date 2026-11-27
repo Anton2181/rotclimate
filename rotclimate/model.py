@@ -1411,6 +1411,17 @@ class ClimateModel:
                     # land share chi) carries the sinking air's warmth down
                     warm = warm * np.clip((chi - p.subsidence_warming_chi0) / (1.0 - p.subsidence_warming_chi0), 0.0, 1.0)
                 Tl = Tl + np.where(land, warm, 0.0)
+            if p.descent_warming > 0:
+                # e131: the air the monsoons drive down to their west and poleward (e49's descent; Rodwell-Hoskins)
+                # warms by compression as well as drying: Najd ran 5.9 C too cold in August, Iran, the Sahel,
+                # Sudan and north India 2-3 C too cold under r58, all beneath that descent
+                if g.descent is not None:
+                    mpos_w = (d / p.year_days * 12.0 - 0.5) % 12.0
+                    m0_w = int(np.floor(mpos_w)); fr_w = mpos_w - m0_w
+                    dsc = (1.0 - fr_w) * g.descent[m0_w] + fr_w * g.descent[(m0_w + 1) % 12]
+                else:
+                    dsc = self._descent(P_last) if P_last is not None else 0.0
+                Tl = Tl + np.where(land, np.minimum(p.descent_warming * dsc, p.descent_warming_cap), 0.0)
             if self.tap is not None: self.tap('subsidence', d, Tl)
             if p.wet_cooling > 0:            # v8: wet ground spends summer sunshine
                 # on evaporation instead of heating the air (why humid summers
