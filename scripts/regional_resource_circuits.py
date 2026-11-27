@@ -13,6 +13,8 @@ def regional_experiments(pilots,elevation,land,resolved,forage,area,water,meta,s
         experiments=[]
         for pilot in pilots:
             print('Regional',scale['id'],pilot['id'],flush=True)
+            if not (land&resolved)[pilot['row'],pilot['column']]:   # as the local circuits: no forage-resolved home, no experiment
+                experiments.append(dict(id=pilot['id'],label=pilot['label'],status='home_not_traversable'));continue
             world=sample_landscape(elevation,land&resolved,(pilot['row'],pilot['column']),radius=scale['radius_cells'],stride=scale['stride_cells'],
                 offsets=scale['offsets'],cell_km=cell_km,level_speed_km_day=ms['reference_level_speed_km_day'],maximum_move_days=ms['maximum_move_days_per_bin'],include_radius=ms['landscape_radius_cells'])
             rows,cols=world.rows,world.columns;ground_supply=forage[:,rows,cols]*area[rows,cols]

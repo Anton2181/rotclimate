@@ -105,6 +105,7 @@ def main():
                         best_fixed_base_continuous=c['best_fixed_base_continuous']['annual_need_met']))
                     print('Refined',e['id'],refinements[-1],flush=True)
             for a,b in zip(groups['regional_sparse'],groups['regional_dense']):
+                if 'scored_resource_landscape' not in (a['status'],b['status']):assert a['status']==b['status'];continue
                 assert a['ground_nodes']==b['ground_nodes']
                 assert {(p['row'],p['column']) for p in a['patches']}.issubset({(p['row'],p['column']) for p in b['patches']})
                 for sparse,dense in zip(a['cases'],b['cases']):
@@ -112,6 +113,7 @@ def main():
                     assert sparse['best_fixed_base_continuous']==dense['best_fixed_base_continuous']
                     assert sparse['resource_upper_bound']==dense['resource_upper_bound']
             for local,regional in zip(groups['local'],groups['regional_sparse']):
+                if local['status']!='scored_resource_landscape' or regional['status']!='scored_resource_landscape':continue
                 available={(p['row'],p['column']) for p in regional['ground_nodes']}
                 assert {(p['row'],p['column']) for p in local['patches']}&available <= {(p['row'],p['column']) for p in regional['patches']}
                 for a,b in zip(local['cases'],regional['cases']):
