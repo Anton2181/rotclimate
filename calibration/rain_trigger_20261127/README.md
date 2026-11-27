@@ -32,3 +32,10 @@ Kalahari / NW Australia unchanged. Same trade-off as instability 0: temperature 
 monsoon, because the Horn's MODEL air and sea are themselves too warm (sea ~29 C vs WOA 25-26 in Jun-Sep; missing
 monsoon upwelling). A trigger built on the model's own state cannot fix the Horn until that sea is right; the
 upwelling / Somali-jet circulation is the root (cf. pressure_zonal_exterior, wind_sst_diagnostic).
+
+## Probe 3 (coastal upwelling after the Ekman hemisphere-sign fix)
+upwelling 0.61 (r58) -> 1.5 / 3.0: Somalia loss 3.655 -> 3.656 / 3.654 (no effect); north India 0.490 -> 0.516 / 0.563;
+Bengal 0.554 -> 0.578 / 0.629; Sahel 0.408 -> 0.399 / 0.388; California / Chile ~unchanged.
+The model's winds over the Horn do not blow along the coast (no Somali low-level jet), so the Ekman upwelling never
+acts there. Root chain: missing cross-equatorial monsoon jet -> no upwelling -> sea 3-4 C too warm -> excess rain.
+The fix is a circulation study (the jet), not a rain-trigger or upwelling-strength change.
