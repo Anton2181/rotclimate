@@ -1,3 +1,28 @@
+# Six surface-wind diagnostic runs DECLARED, not yet started
+
+Prospective plan: calibration/surface_wind_diagnostic_20261127/plan.json and
+README.md. New runner scripts/run_surface_wind_diagnostic.py prepares225
+regular private source/cache files and3 full projected surface-forcing packets,
+then --run executes exactly6 integrations: all3 unchanged model-wind controls
+FIRST, then3 observed-wind interventions on Somalia/Sahara/NIndia at56km,
+1100km pad and identical scored footprints. No physical source edits, SST or
+other coefficient/numerical changes. Existing wind_source observed changes
+heat and moisture velocities together. Controls must reproduce archived fields,
+raw traces/winds and every local source account exactly. Actual observed solver
+winds must equal read-only projected reference monthly interpolation exactly.
+
+Commit plan before preparing or integrating. All4 thread vars1, nice10, literal
+.venv/bin/python (do not resolve its symlink). One worker, fixed budget6; any
+failed/interrupted scientific attempt is preserved and stops, no auto retries.
+Full forcing/coordinates/Jacobian saved and hashed before integrations. Existing
+inverse-Jacobian metric/rotation verified, source surface sigma0.995 not850hPa.
+15 combined geometry/calendar/reference tests pass. Independent array reviewer
+scripts/review_surface_wind_diagnostic.py produces regional T/P/source contrasts
+and figure. Observed forcing is only an Earth diagnostic, not an adoptable
+fictional-world solution. No selection gate on outcomes. W18c CLOSED, AA
+UNOPENED, r58 retained, atlas r51 unchanged. Fresh current-source reference
+still required before future calibration. No scientific worker active yet.
+
 # Circulation components COMPLETE: four exact captures and geographic review
 
 All4 fixed replays passed unchanged numerical certificates and byte-exact
