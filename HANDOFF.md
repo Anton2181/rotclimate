@@ -1,3 +1,21 @@
+# Physical candidate DECLARED: instability0, four new runs, none started
+
+calibration/instability_consolidation_20261127/{plan.json,README.md}, new
+run_instability_consolidation.py/review_instability_consolidation.py. Existing
+instability parameter0 removes inheritedbulk warmboost, explicitexpconv/cap/RH
+heat gate and transport unchanged. No main source/retained profile edits.
+Exactly4 fresh candidates:nativeSomalia/Sahara/NIndia +jointobservedSomalia.
+Reuse4 frozencontrols from six just-completed exact rainclosure replays;
+all89sources225privatefiles/cache/case/params match, onlyinstabilitychanges.
+New prospective control-reuse rule saves identical re-integrations.
+
+Declaredscreen nativeSomlossratio<=.90 and allnativeT/P-loss ratios<=1.01;
+jointSom reportonly. Fail closesfixedzero candidate,noamplituderescue. Pass
+only permits broaderexposeddevelopment,noadoption. Commitfirst/prepare/--run,
+nice10/threadvars1/literalvenvPython. Originalnumerics unchanged; anyfailure
+stops,noautoretry. Alloldworkersfinished,no newworker yet. W18cCLOSED,
+AAUNOPENED,r58retained,atlasr51unchanged,current97reference stillabsent.
+
 # Rain closure capture COMPLETE: both base and exponential terms too large
 
 All6 exactendpointreplays pass originalnumerics, sharedparentphysical/budget/
