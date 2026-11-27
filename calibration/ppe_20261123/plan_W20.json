@@ -1,0 +1,58 @@
+{
+ "version": 1,
+ "date": "2026-11-27",
+ "policy": "v6",
+ "status": "NEW wave, declared before any W20 result",
+ "why": "The Gulf of Guinea ran 4-7 C colder than WOA18 (May 23.1 vs 27.75 C): the cold-current band was clamped at 10 deg, so eastern-boundary currents ran to the equator; the onshore monsoon left the Nigeria coast 3 C too cold all year. e132 fades cold currents toward the equator. Screen vs ref58local (output/ppe_20261127/cc): 3/12 S97 0.9995 [0.9825, 1.0158], T -0.021 P +0.019 (Nigeria coast 3.05 -> 0.95 C MAE) but the Sahel's rain loss doubles (0.41 -> 0.93): the rain settings were fitted around the cold sea (warm-sea inflow starts at 26.5 C). Refit e132 with the West African rain knobs (onset gap: output/ppe_20261127/onset cut Sahel rain loss 0.41 -> 0.32).",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves. Finalist = best by dev objective ONLY; then dev6 (vs r58), fine28 once (vs r58), ONE sealed AA run (vs r58). A fail may be continued at most once, declared before it runs. Propose is called ONCE per wave.",
+ "base": "calibration/local_accuracy_20261023/r58_params.json",
+ "base_set": {
+  "current_cold_lat0": 3.0,
+  "current_cold_lat1": 12.0
+ },
+ "reference": "output/ppe_20261127/ref58local",
+ "reference_name": "r58",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W20",
+ "seed": 20261220,
+ "wave1": 24,
+ "knobs": {
+  "current_cold_lat0": [
+   1.0,
+   8.0,
+   "lin"
+  ],
+  "current_cold_lat1": [
+   10.0,
+   18.0,
+   "lin"
+  ],
+  "inflow_sst": [
+   26.0,
+   29.0,
+   "lin"
+  ],
+  "inflow_gain": [
+   0.6,
+   1.2,
+   "lin"
+  ],
+  "onset_gap_deg": [
+   3.5,
+   6.5,
+   "lin"
+  ],
+  "rh_threshold": [
+   0.28,
+   0.4,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r58 (gate_v3.py dev6, fine28, then ONE sealed AA run with the r58 reference run paired: region specs calibration/sealed_20261126AA/regions.json); pass -> r59.",
+ "base_note": "r58 + e132 at the screened 3/12 (the base is a candidate, not r58; scoring is paired against r58)"
+}
