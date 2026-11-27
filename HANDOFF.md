@@ -1,3 +1,42 @@
+# W18c dev6 PASS; fine validation LIVE; six-capture study complete
+
+Resumed supervisor PID14224 is LIVE (verify actual /proc state), uses the
+inherited singleton lock /tmp/rotclimate_W18c_campaign.lock. Recovery source
+fix committed/pushed d4b4e69d7 before resume. See validation_recovery_launch.json
+under calibration/ppe_20261123/W18c_records. Frozen finalist is still w1_005,
+all49 initial scientific evaluations preserved, no extra wave evaluated.
+
+Original dev6 PASSES: S97 0.9842206108, existing90% bootstrap interval
+[0.9701247546,0.9983828892], T-1.936%, rain loss-1.220%, worst regime1.01796884.
+Fine28 is underway on unchanged physical source/runtime qualification. AA
+remains UNOPENED at this checkpoint and can only open if original fine gate
+passes. Actual live status/output takes precedence over this snapshot. Do not
+repeat gate/benchmark calls independently or tune against these outcomes.
+No adoption/atlas rebuild yet; keep main physical source FROZEN through gates.
+
+All49 results plus finalist metadata/parameter bytes, GP closure prediction,
+design/emulator and dev6 gate are preserved in W18c_records. Predicted remaining
+gain0.0029349<0.005, so the original policy stopped search after initial wave.
+Status-writing repair changed no selection, numerical setting or gate.
+
+All SIX private diagnostic captures FINISHED and independent review PASSES.
+WorkerPID12025 now zombie; do not restart. Full findings:
+calibration/padding_budget_capture_20261127/findings.md. Agent visually inspected
+term_changes.png; review/figure/table/provenance/agent_review.json preserve all
+terms, equations and exact raw fields. All local residuals pass unchanged0.01.
+Somalia import-665.79 is offset mainly by marine+398.59 and advection+302.81;
+Sahara marine0, but drying+260.05/storm+185.59 offset part of import-462.35;
+NIndia import-164.98/storm-165.64 partly offset by advection+198.66/marine+62.74.
+These are coupled local equation changes, not causal/source tags/global fluxes.
+
+Source-based next physical hypothesis in findings: current warm-sea relaxation
+targets a fraction of RECEIVING LAND saturation water, while nearest-sea SST
+gates its rate. An upstream marine-water limit is a different closure to test
+prospectively with desert/monsoon controls, not an established fix or license
+to reduce a coefficient. Do not launch a new physical search before completing
+the present validation and recording its result. The tested main diagnostic
+export patch is still UNAPPLIED until finalist validation/supervisor exit.
+
 # W18c finalist frozen; pre-validation supervisor recovery
 
 W18c finished ALL49 initial evaluations, no numerical failures. The existing
