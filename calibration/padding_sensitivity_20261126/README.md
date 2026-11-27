@@ -1,5 +1,13 @@
 # Fixed r58 padding-sensitivity experiment
 
+**Superseded before any integration:** the scientific design is carried
+forward unchanged under `calibration/padding_sensitivity_parallel_20261127/`.
+Only scheduling, output namespace and private prepared-cache reuse change.
+The former waiting queue was stopped, and this original runner is blocked
+by `superseded_before_run.json` to prevent a second nine-run budget. The
+original plan and preparation/protocol evidence remain preserved below as
+historical context; use the replacement's explicit commands for execution.
+
 This study tests the regional-domain sensitivity identified in
 `calibration/convergence_boundary_audit_20261126/findings.md`. It changes
 padding only, with **no physical coefficient change or candidate selection**.

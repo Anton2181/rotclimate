@@ -3,6 +3,7 @@ from types import SimpleNamespace
 import numpy as np
 import pytest
 
+from scripts import padding_sensitivity as study
 from scripts.padding_sensitivity import check_footprint, copy_checked, footprint, require_closed_campaign
 from scripts.local_benchmark_protocol import file_hash
 
@@ -69,3 +70,43 @@ def test_symlink_private_input_is_rejected(tmp_path):
     destination.symlink_to(source)
     with pytest.raises(ValueError, match='symlinks'):
         copy_checked(source, destination, file_hash(source))
+
+
+@pytest.fixture
+def parallel_plan(monkeypatch, tmp_path):
+    monkeypatch.setattr(study, 'ROOT', tmp_path)
+    parent = tmp_path / 'parent'
+    parent.mkdir()
+    (parent / 'superseded_before_run.json').write_text('{}')
+    source = tmp_path / 'rotclimate/model.py'
+    source.parent.mkdir()
+    source.write_text('original physical source')
+    monkeypatch.setattr(study.os, 'getpriority', lambda *args:10)
+    monkeypatch.setenv('OMP_NUM_THREADS', '1')
+    monkeypatch.setenv('OPENBLAS_NUM_THREADS', '1')
+    return dict(private_parallel_execution=True, supersedes_unrun_output='parent',
+                model_sources_sha256={'rotclimate/model.py':file_hash(source)})
+
+
+def test_prospective_parallel_gate_preserves_active_main_source(parallel_plan):
+    study.require_private_parallel(parallel_plan, {'stage':'evaluating_development'}, True)
+
+
+@pytest.mark.parametrize('change', ['no_amendment', 'parent_attempt', 'not_retired', 'priority', 'threads', 'main_source'])
+def test_parallel_gate_rejects_unqualified_scheduling_or_source_changes(parallel_plan, monkeypatch, change):
+    if change == 'no_amendment':
+        parallel_plan['private_parallel_execution'] = False
+    elif change == 'parent_attempt':
+        path = study.ROOT / 'parent/region/pad_1100/attempt.json'
+        path.parent.mkdir(parents=True)
+        path.write_text('{}')
+    elif change == 'not_retired':
+        (study.ROOT / 'parent/superseded_before_run.json').unlink()
+    elif change == 'priority':
+        monkeypatch.setattr(study.os, 'getpriority', lambda *args:0)
+    elif change == 'threads':
+        monkeypatch.setenv('OMP_NUM_THREADS', '2')
+    else:
+        (study.ROOT / 'rotclimate/model.py').write_text('changed source')
+    with pytest.raises((ValueError, AssertionError)):
+        study.require_private_parallel(parallel_plan, {'stage':'evaluating_development'}, True)

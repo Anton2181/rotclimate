@@ -1,4 +1,4 @@
-"""Prepare isolated r58 domains; run the fixed study only after W18c closes."""
+"""Run a fixed isolated r58 study under its prospectively declared schedule."""
 import argparse
 import fcntl
 import importlib.metadata
@@ -52,6 +52,24 @@ def require_closed_campaign(state, running):
     terminal = state.get('stage', '').startswith('closed_') or state.get('stage') == 'all_gates_passed_ready_for_review'
     if not terminal or running:
         raise RuntimeError('W18c still active or nonterminal; preparation only, no padding integrations permitted')
+
+
+def require_private_parallel(plan, state, running):
+    """A scheduling amendment only: one private, low-priority, unstarted study."""
+    if plan.get('private_parallel_execution') is not True:
+        raise ValueError('Private parallel execution requires a prospective amended plan')
+    parent = ROOT / plan['supersedes_unrun_output']
+    if not (parent / 'superseded_before_run.json').exists() or list(parent.glob('*/pad_*/attempt.json')):
+        raise ValueError('The original study must be retired with zero integration attempts')
+    if os.getpriority(os.PRIO_PROCESS, 0) < 10:
+        raise ValueError('Private parallel execution requires nice priority at least10')
+    if any(os.environ.get(name) != '1' for name in ['OMP_NUM_THREADS', 'OPENBLAS_NUM_THREADS']):
+        raise ValueError('Private parallel execution requires one BLAS/OpenMP thread')
+    terminal = state.get('stage', '').startswith('closed_') or state.get('stage') == 'all_gates_passed_ready_for_review'
+    if running or not terminal:
+        # The independent private study must not change the ongoing campaign.
+        for name, digest in plan['model_sources_sha256'].items():
+            assert file_hash(ROOT / name) == digest, name
 
 
 def supervisor_running():
@@ -165,8 +183,8 @@ def prepare(plan, protocol, earth):
     return records
 
 
-def integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, records):
-    require_closed_campaign(json.loads(W18C.read_text()), supervisor_running())
+def integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, records, execution_gate=require_closed_campaign):
+    execution_gate(json.loads(W18C.read_text()), supervisor_running())
     from rainfall_metrics import local_metrics
     results = []
     for pad in plan['pads_km']:
@@ -174,7 +192,7 @@ def integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, record
             raise RuntimeError('Control failures prohibit expanded-domain integrations')
         for region in plan['regions']:
             validate_private(plan, protocol)
-            require_closed_campaign(json.loads(W18C.read_text()), supervisor_running())
+            execution_gate(json.loads(W18C.read_text()), supervisor_running())
             folder = OUT / region / f'pad_{pad:g}'
             receipt = folder / 'result.json'
             if receipt.exists():
@@ -242,13 +260,21 @@ def integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, record
 
 
 def main():
+    global PLAN, OUT, MODEL
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true', help='After W18c closes, use the fixed nine-attempt integration budget')
+    parser.add_argument('--plan', type=Path, default=PLAN)
+    parser.add_argument('--private-parallel', action='store_true', help='Use only a separately declared prospective private scheduling amendment')
     args = parser.parse_args()
-    if args.run:
-        require_closed_campaign(json.loads(W18C.read_text()), supervisor_running())
-    assert subprocess.check_output(['git', 'show', 'HEAD:' + str(PLAN.relative_to(ROOT))], cwd=ROOT) == PLAN.read_bytes()
+    PLAN = args.plan.resolve()
     plan = json.loads(PLAN.read_text())
+    OUT = ROOT / plan['out']; MODEL = OUT / 'model'
+    gate = (lambda state, running:require_private_parallel(plan, state, running)) if args.private_parallel else require_closed_campaign
+    if args.run:
+        if (OUT / 'superseded_before_run.json').exists():
+            raise SystemExit('This unrun study was superseded; use its explicitly declared replacement plan')
+        gate(json.loads(W18C.read_text()), supervisor_running())
+    assert subprocess.check_output(['git', 'show', 'HEAD:' + str(PLAN.relative_to(ROOT))], cwd=ROOT) == PLAN.read_bytes()
     assert plan['maximum_integrations'] == len(plan['regions']) * len(plan['pads_km']) == 9
     OUT.mkdir(parents=True, exist_ok=True)
     (OUT / '.gitignore').write_text('model/\n.lock\n')
@@ -259,7 +285,8 @@ def main():
                     libraries={name:importlib.metadata.version(name) for name in ['numpy', 'scipy', 'numba', 'Pillow']})
     freeze(OUT / 'protocol.json', protocol)
     for name, digest in {**plan['model_sources_sha256'], **plan['cache_seed_sha256'], **helpers}.items():
-        copy_checked(ROOT / name, MODEL / name, digest)
+        origin = plan.get('cache_seed_origins', {}).get(name, name)
+        copy_checked(ROOT / origin, MODEL / name, digest)
     validate_private(plan, protocol)
     earth, params, ClimateModel, monthly_stats = private_modules(plan)
     try:
@@ -268,7 +295,7 @@ def main():
         write_json(OUT / 'preparation_failure.json', dict(error=repr(error), climate_integrations=0))
         raise
     if args.run:
-        integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, records)
+        integrate(plan, protocol, earth, params, ClimateModel, monthly_stats, records, execution_gate=gate)
     else:
         print('Prepared only. Waiting for terminal W18c and supervisor exit; climate integrations=0.', flush=True)
 

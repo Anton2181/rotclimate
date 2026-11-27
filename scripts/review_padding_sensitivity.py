@@ -1,4 +1,5 @@
-"""Review the fixed padding study after execution; never start integrations."""
+"""Review a fixed padding study after execution; never start integrations."""
+import argparse
 import itertools
 import json
 import math
@@ -120,10 +121,16 @@ def assert_control(region, state, archive_root=ROOT):
 
 
 def main():
+    global PLAN, OUT
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--plan', type=Path, default=PLAN)
+    args = parser.parse_args()
+    PLAN = args.plan.resolve()
+    plan = json.loads(PLAN.read_text())
+    OUT = ROOT / plan['out']
     if not (OUT / 'results.json').exists():
         raise SystemExit('Padding study has not completed; no physical results to review.')
     assert not (OUT / 'review.json').exists(), 'Preserve completed study review'
-    plan = json.loads(PLAN.read_text())
     preparation = json.loads((OUT / 'preparation.json').read_text())
     protocol = json.loads((OUT / 'protocol.json').read_text())
     result = json.loads((OUT / 'results.json').read_text())
