@@ -1,3 +1,31 @@
+# Wind × marine-relaxation ablation COMPLETE; deletion not adopted
+
+All12 declared runs pass original numerics;6 controls reproduce both prior
+wind arms byte-exact (all shared physical/raw/budget fields); forced actual
+wind verified;6 inflow_gain0 arms have zero marine term. No scientific retry,
+source/SST/other coefficient/tolerance changes. PID17070 exited. Full findings
+calibration/wind_marine_ablation_20261127/findings.md; outputs raw12 packets,
+forcing,review,inspected figure,agent_review. Preserve immutable.
+
+Somalia modelwindP3556→3593 whene91off (rainloss+1.0%); observedwind4097→3423
+(loss−16.1%), still vs457observed. Windresponse flips+541→−170mm/year when
+marine source off,−711interaction. Removing1663source only cuts674rain due
+advection+817/storm+139compensation. NIndiaoff loss+16.5%model/+4.2%observed.
+Sahara215→202model/12.31→0.85observed. Deleting e91 is NOT a general fix,
+not adopted or tuned. No additive causal shares/global closure inferred.
+
+Separate next source audit: coastal upwelling rotation at model.py~1625 uses
+spin but omits sign(latitude). Prograde southern westcoast equatorward wind
+should turnLEFT; current code turnsRIGHT. Existing NHtest hardcodes formula
+and misses this. Verify with analytic hemisphere/spin/rotation cases, then
+fix and prospectively declare changed-source regressions. No patch/test or
+source change yet. Check all old workers exited before source edits. No proof
+this is mainSomali error. SSTfuture diagnostic must address heat-only damping
+anomaly addback rather than assume literal observed SST throughout moisture.
+
+W18c CLOSED, AA UNOPENED, r58 retained, atlasr51 unchanged. Fresh current-source
+paired reference still required before calibration/map. All jobs finished.
+
 # Wind × marine-relaxation ablation DECLARED;12 runs not started
 
 New prospective calibration/wind_marine_ablation_20261127/plan.json +README,
