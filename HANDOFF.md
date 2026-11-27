@@ -1,3 +1,42 @@
+# Active goal: W18c live; automatic fixed-padding follow-up queued
+
+Check BOTH live processes before restarting anything:
+- W18c: PID 6609, scripts/run_w18c_campaign.py. Last 18 initial candidates
+  complete, w1_017 underway; consult live campaign_status.json.
+- Follow-up queue: PID 8757, scripts/run_climate_followups.py. Its heartbeat
+  is output/climate_followups_20261127/status.json, stdout queue.log.
+  It was verified alive, waiting, holding its singleton lock; no padding
+  attempts existed at launch/readiness. Both are detached processes, but
+  always recheck after any executor disconnect; zombie PIDs are not live.
+
+The queue will AUTOMATICALLY run the already declared nine-case private r58
+padding study after W18c is terminal AND its supervisor/benchmark workers
+exit, then run review_padding_sensitivity.py. Do not manually launch a
+duplicate padding study. This diagnostic can run while the W18c finalist
+awaits agent review: it uses its own original r58 copy, exposed cases and
+unchanged budget, and cannot change candidate selection or sealed outcomes.
+
+17 queue tests pass: live/nonterminal guards, orphan-worker waiting,
+zombie filtering, interrupted-attempt pauses, command-failure/no-output
+stops, dependency drift and check-only mode. Frozen dependencies are in
+output/climate_followups_20261127/protocol.json. Do not modify those runner,
+reviewer or plan files while queued/running. The queue never applies the
+core patch, adopts physics or commits/pushes results. Its finished state
+still needs figure inspection, scientific findings and finalist review.
+
+If the queue pauses for recovery, preserve its failure state and record the
+agent's investigation before resuming; no automatic scientific retries. If
+it dies while a padding child is alive, restart only the queue after checking
+the existing child; it will wait rather than duplicate it. A dangling padding
+attempt without a result still requires the declared recovery review.
+
+Leader unchanged at 18 completed points: w1_005, S97/objective0.9842206108,
+worst regime1.01796884. Full gates remain outstanding; r58 is adopted,
+atlas r51, sealed AA unopened at this checkpoint. Do not regenerate the
+13-record regional report unless the leader or stage changes.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c live; provisional-leader regional tradeoffs reviewed
 
 Check live PID 6609 (`run_w18c_campaign.py`) and campaign_status.json. Last
