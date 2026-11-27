@@ -1,3 +1,22 @@
+# Wind × marine-relaxation ablation DECLARED;12 runs not started
+
+New prospective calibration/wind_marine_ablation_20261127/plan.json +README,
+new scripts/run_wind_marine_ablation.py and review_wind_marine_ablation.py.
+Exactly12 fixed integrations on same3 regions/56km/1100km:6 byte-exact controls
+replicate BOTH completed modeled/observed wind arms, then6 inflow_gain0
+ablations under both wind types. Other coefficients/SST/numerics unchanged;
+main physical source unchanged. Removing e91 removes moistening AND drying.
+No selection gate/adoption; quantify coupled wind×source interaction.
+
+Commit plan first, prepare then --run with4 thread vars1 and nice10, literal
+.venv/bin/python. New225 regular private files, full read-only projected wind
+packets.6 controls exact all shared raw/monthly/budget fields; forced actual
+winds exact prescribed; marine-off field must be zero. Original0.01 numerical
+criteria remain. Any failure/interruption stops preserved, no auto retries.
+All completed parent packets immutable. W18c CLOSED, AA UNOPENED, r58 retained,
+atlasr51 unchanged. No worker started yet. Parent6 wind study complete/pushed
+737ffac12; full findings and spatial failures documented below.
+
 # Six surface-wind diagnostic runs COMPLETE: compensation defeats Somalia correction
 
 Plan/source/scripts committed4bae4a240 before preparation/integration. All6
