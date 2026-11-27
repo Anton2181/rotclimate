@@ -1,3 +1,29 @@
+# Next fixed diagnostic: six private exact replays declared, not yet started
+
+calibration/padding_budget_capture_20261127/plan.json and README.md declare
+six ADDITIONAL diagnostic integrations (Somalia/Sahara/NIndia,1100/4012km,
+all1100 controls first). This follows the completed9-case study, not a retry,
+new padding choice or extension of its budget. No integration at this commit.
+
+scripts/padding_budget_capture.py prepares fresh225 regular private files,
+then --run uses the validated marine-export-only patch from the older private
+fixture. Only model.py/transport.py hashes differ from r58; main W18c source,
+shared inputs and completed padding packet stay unchanged. One worker nice10,
+OMP/BLAS threads1. Require byte-exact saved physical monthly fields, raw
+gain/sink/W/P traces and calendar plus original strict numerical certificate
+and complete local-equation residual within unchanged0.01+export rounding.
+Six tests pass (failure/interruption/no-retry, dtype/signed-zero equality,
+marine sign, cancellation-resistant residual scaling and fixed plan budget).
+
+Commit prospective plan before preparation/run (CLI enforces git HEAD bytes).
+Prepare then run as documented with all4 thread vars1 and nice10. Singleton
+lock/protocol prevent duplication/drift; failed or dangling attempts require
+recorded recovery, no automatic retry. Status includes per-step timestamps.
+After6 pass, scripts/review_padding_budget.py independently validates raw
+references and complete equation, producing term integrals/endpoint changes.
+Actual findings still need agent review. No main patch application, candidate
+selection/gate changes, new fine/sealed use, climate adoption or atlas rebuild.
+
 # Completed padding study: all9 passed and independently reviewed
 
 Private padding has FINISHED. PID10059 is a zombie, PID10060 exited; do not
