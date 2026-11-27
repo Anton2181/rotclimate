@@ -1,3 +1,32 @@
+# Cap pilot COMPLETE: numerical pass, prospective screen FAIL; keep unapplied
+
+Private marine_target_cap_20261127 finished all6 fixed runs/reviewer, PID15167
+now zombie. No retries/numerical changes. All3 legacy controls byte-exact incl
+physical monthly fields/traces/budgets. Source/targets/rates/equations checked.
+Full findings: calibration/marine_target_cap_20261127/findings.md. Actual figure
+cap_response.png viewed/readable; review.json retains failed screen and18 raw hashes.
+
+Somalia rain3556.41->3556.91mm/year, rain loss+0.0137%; cap binds0% at its
+scored cells despite90% positive marine-rate samples. Sahara215.04->210.34,
+loss-1.6395%, but scored marine rate0 despite lower target. NIndia547.42->538.96,
+rain loss+1.4691% exceeds1% protection; active target actually binds~31.94% of
+its positive-rate samples. Marine source falls32.49mm/year there, partly offset
+by advection/storm response. All capped residuals <unchanged0.01 (NIndia0.009974).
+
+Declared local screen FAILS: noSomali1% gain and NIndia protection fails.
+Do NOT apply cap to main, tune strengths or reinterpret the screen. The cap is
+an unapplied private patch, not a new adopted climate or full validation. All
+current private packets are finished/immutable. Root main source is still the
+applied marine-export diagnostic epoch at d5a86827e; r58/atlasr51 retained,
+AA unopened, W18c permanently closed. No background scientific jobs remain.
+
+Next justified work: circulation/coupled transport behind Somali excess, rather
+than a receiving-land humidity ceiling (not active at scored Somali cells).
+Separate minor correctness issue: legacy inflow computes nearest-sea EDT even
+on all-land grids; no real sea means no marine relaxation/drying. Address with
+a narrow source-presence guard and actual coupled toy tests, not the rejected
+cap or a claim of fixing these mixed-grid Earth errors.
+
 # Next physical pilot declared: private marine-equilibrium target cap
 
 UNRUN at this commit: calibration/marine_target_cap_20261127/plan.json,
