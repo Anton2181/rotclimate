@@ -1,3 +1,23 @@
+# Rain-closure endpoint capture DECLARED:6 exact replays, none started
+
+calibration/rain_closure_capture_20261127/{plan.json,README.md}, scripts/
+trace_rain_closure.py,review_rain_closure.py,rain_closure_components.py.
+Four known-answer helper tests pass. No source/params/numerics change.
+Exactly6:3baseline +3jointobserved endpoints of completedwind×SST study;
+all parentphysical/raw/budget fields must exact. Private solvewrapper copies
+actual W/Ws/A/instability/fullclosure, returns original untouched result, restored
+on exception. Savefullscoredtrace; separate reviewerreconstructs base/expconv/
+overflowactualrain, weightedmonthly/July contributions, figure. No condensate/
+spread in declaredlegacybranch.225regularprivatefiles,nice10/threadvars1.
+Commitfirst,preparethen--run; anyfailure/interruptionstops,noautoretries.
+Prior12wind×SSTpacket complete/pushed d232c4f7d. No active worker yet.
+
+User asks whether any actualprogress: candidly answered no materiallybetter
+validatedatlas yet; priority now actualphysics intervention after this bounded
+closureidentitycheck. JointSomPW only+4.9% butrain5.66×,JulWless thanobs butrain
+11.1×. Do notkeep widening observational-forcing diagnostics without testing
+an identified physical mechanism. W18cCLOSED,AAUNOPENED,r58/atlasr51unchanged.
+
 # Observed SST fix +12 wind×SST runs COMPLETE; rain conversion is next lead
 
 Commitad42ff244 declared source/plan before prep/integration. Observed-SST
