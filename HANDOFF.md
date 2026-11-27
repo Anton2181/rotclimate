@@ -1,3 +1,46 @@
+# W18c permanently CLOSED; main marine diagnostic fix APPLIED and tested
+
+W18c w1_005 FAILED the original fine28 gate: S28=1.0347252704 >1.01,
+T+1.749%, rain loss+5.196%. All8 paired fine numerical certificates passed;
+rain loss worsens in all4 regions. Dev6 had passed, but that does not rescue
+fine failure. SupervisorPID14224 exited/zombie. AA remains UNOPENED, empty
+seen_by. Retainr58 and atlasr51. DO NOT reopen W18/W18c, select another point,
+refit against fine, alter gates or run sealedAA for this finalist.
+
+Complete closure and independent fine-array reconstruction:
+calibration/ppe_20261123/W18c_records/closure.md, final_campaign_status.json,
+gate_fine.json, fine_array_review.json, review_fine_gate.py. Fine NPZ arrays
+are float32 after scoring; explicit propagated ULP bound~1.54e-6 on S28
+is far too small to affect failure. No integrations or gate reruns for review.
+All49 original development results, frozen params and GP closure are retained.
+
+After confirming both workers/supervisors exited and base hashes matched,
+applied the prepared marine-export-only patch to main model.py/transport.py.
+All89 main model hashes exactly match previously validated private patched
+source; no physical parameter/solver changes. Promoted6 functional checks
+into tests/test_marine_budget_exports.py (excluded private import guard).
+27 focused main tests PASS, no failures/errors/skips. Applied source epoch:
+output/marine_budget_export_applied_20261127/qualification.json; findings under
+calibration/marine_budget_export_applied_20261127/. Signed marine exchange
+now enters exported local/flux accounts; independent-reservoir E already
+includes it, so its extra component stays0. Physical outputs remain unchanged
+in paired toys and six exact archived scored regional captures.
+
+IMPORTANT: this is a NEW DIAGNOSTIC SOURCE EPOCH. Old qualifications/protocols
+are immutable historical source-pinned records, not current paired refs.
+Do not restart W18c or claim a new97-region qualification. Any next benchmark
+needs new source/protocol records. Main diagnostic fix does not adopt a new
+climate or rebuild an atlas. Completed private padding/capture packets stay
+unchanged, and all old waiting queues stay retired.
+
+Next distinct physical lead: current marine relaxation uses a fraction of
+receiving LAND saturation water; warm/onshore/distance gates use nearest sea.
+Test a marine-equilibrium source-water cap prospectively with exact legacy
+controls and Sahara/NIndia protections, holding those gates fixed. No such
+new physical integrations have started. This is not a rescue/ocean refit of
+W18c and must not use its fine outcomes to choose parameters. All six budget
+captures are DONE; their full findings/figure were independently/visually reviewed.
+
 # W18c dev6 PASS; fine validation LIVE; six-capture study complete
 
 Resumed supervisor PID14224 is LIVE (verify actual /proc state), uses the

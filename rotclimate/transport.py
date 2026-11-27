@@ -175,16 +175,17 @@ def save_transport(result, evaluation, path):
             days = int(months.sum()) * p.year_days / 12
             rain = mean('rain')
             components = ['rain', 'evaporation', 'advection', 'diffusion', 'storm_exchange', 'residual']
-            components += [key for key in ('column_drying', 'convergence_import')
+            components += [key for key in ('marine_exchange', 'column_drying', 'convergence_import')
                            if f'monthly_{key}_mm_day' in arrays]
             periods[name] = dict(
                 mean_total_mm_per_cell={k: mean(k) * days for k in components},
                 mean_absolute_equation_residual_mm_day=mean('absolute_residual'),
                 absolute_residual_over_rain=mean('absolute_residual') / max(rain, 1e-9))
         zones[key] = periods
-    note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + column_drying + convergence_import + transport sources - rain. Older archives without these two components cannot reconstruct active drying/import. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
+    note='Local nonconservative discrete moisture-equation terms. Positive sources supply water; column_drying is negative. When present, residual = evaporation + marine_exchange + column_drying + convergence_import + transport sources - rain. Older archives may omit source components and cannot be assumed to reconstruct the full active equation. Absolute instantaneous residuals are averaged before seasonal aggregation. Not a conservative global water budget.'
     if getattr(p,'moisture_transport_form','concentration')=='flux':
         note='Steady flat-grid regional vapor equation with shared-face conservative mean-wind transport. Column drying is negative, convergence import is disabled. Storm exchange conserves separately only when its scheme does; see the numerical ledger. Fixed borders supply or remove water. This is not a closed planet or transient water budget.'
         if getattr(p,'moisture_flux_scheme','upwind')=='exponential':
             note+=' Exponential face fitting is active: the diffusion term is the fitted part of the combined Scharfetter-Gummel flux, not standalone physical Fickian diffusion.'
+    note+=' The optional marine_exchange component is signed single-column land humidity relaxation beyond surface E; independent reservoirs already include it in evaporation, so their additional component is zero.'
     return dict(note=note,zones=zones)

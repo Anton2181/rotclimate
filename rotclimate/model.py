@@ -1154,7 +1154,7 @@ class ClimateModel:
             cropped_shape = (nt,) + g.target[g.map_slice()].shape
             budget = {key: np.zeros(cropped_shape, np.float32) for key in
                       ('advection', 'diffusion', 'storm_exchange', 'residual', 'absolute_residual',
-                       'evaporation', 'column_drying', 'monsoon_drying', 'convergence_import')}
+                       'evaporation', 'marine_exchange', 'column_drying', 'monsoon_drying', 'convergence_import')}
         land = g.land
         ocean = ~land
         lat = self.lat
@@ -2846,12 +2846,18 @@ class ClimateModel:
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
             E = (solution.evaporation if p.moisture_reservoirs else
                  np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY))
+            if budget is not None or p.moisture_transport_form == 'flux':
+                # Surface E omits single-column land humidity relaxation.
+                # Independent reservoirs already include it in their E.
+                marine_exchange = (np.zeros_like(W) if p.moisture_reservoirs else
+                    np.where(land, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, 0.0))
             if p.moisture_transport_form == 'flux':
                 from .transport import flux_budget
                 target=mix(W) if mix is not None else W
                 if condensate is not None:
                     target=target+condensate(W)
-                net=E if sink is None else E-sink*W*DAY
+                net=E+marine_exchange
+                if sink is not None:net=net-sink*W*DAY
                 self.flux_budgets.append(flux_budget(W,uq,vq,dx,p.moisture_diffusion,net,P,exchange,target,layers=layers,mass=tracer_mass,
                                                    scheme=p.moisture_flux_scheme))
             if self.trace_cells is not None and n >= spinup:
@@ -2916,7 +2922,8 @@ class ClimateModel:
                     mixed = mix(W) if mix is not None else W
                     if condensate is not None:
                         mixed = mixed + condensate(W)
-                    E_net = E if sink is None else E - sink * W * DAY      # subsidence drying as negative evaporation
+                    E_net = E + marine_exchange
+                    if sink is not None:E_net = E_net - sink * W * DAY  # subsidence drying as negative evaporation
                     if gain is not None:
                         E_net = E_net + gain * W * DAY                    # e17 convergence import
                     terms = moisture_terms(W, uq, vq, dx, p.moisture_diffusion, E_net, P, exchange, mixed,
@@ -2925,6 +2932,7 @@ class ClimateModel:
                     # Expose the source/sink pieces already used above. These
                     # are observations of the local equation, not new physics.
                     terms['evaporation'] = E
+                    terms['marine_exchange'] = marine_exchange
                     terms['column_drying'] = np.zeros_like(W) if sink is None else -sink * W * DAY
                     terms['monsoon_drying'] = (np.zeros_like(W) if p.monsoon_descent <= 0 else
                                                -(p.monsoon_descent * descent / DAY) * W * DAY)
