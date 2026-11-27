@@ -1,3 +1,48 @@
+# Six private budget captures LIVE alongside W18c
+
+New worker PID12025, detached nice10, command scripts/padding_budget_capture.py
+--run. Check actual /proc state, output/padding_budget_capture_20261127/status.json
+(real per-step progress/timestamp), run.log and per-case attempt/result receipts
+before any action. Do not restart a live worker. The first3 original-size
+controls passed with byte-exact saved physical states/traces and strict local
+equation residuals (scaled max Somalia0.001696, Sahara0.003952, NIndia0.009488,
+unchanged limit0.01). Somalia4012km also passed (scaled max0.00001758).
+Sahara4012km now underway at last check. Remaining endpoints
+then independent reviewer run automatically; scientific findings still pending.
+
+The prospective six-case plan/producer/reviewer was committed and pushed as
+b88a0c032 BEFORE preparation or any integration. Preparation verified225 regular
+private files and unchanged main source/inputs.6 guard/accounting tests passed.
+Only the already tested marine diagnostic-export patch differs in private source;
+no physical parameter/source changes, calibration/gate changes or new targets.
+
+PRELIMINARY actual Somali local equation1100->4012: import-665.79mm/year,
+marine exchange+398.59, advection+302.81, diffusion+7.10, storm exchange-7.85,
+surfaceE-2.52, drying+0.41, residual-0.02; rain+32.78. Four of six replays
+complete, full independent study review pending. This splits the earlier
+unpartitioned remainder without changing physical outputs; it does not isolate
+causality or measure a boundary flux. Raw hashes and partial-readout scope are
+in output/padding_budget_capture_20261127/somalia_endpoint_preliminary.json.
+
+Operational launch recovery is preserved: first launch PID12006 exited BEFORE
+ANY physical import/attempt/integration because the launcher dereferenced the
+venv interpreter symlink to system Python. Library guard rejected it. No model
+code/tolerance/plan change. recovery_0001.json records zero attempts and verified
+correct venv libraries; launch_0002.json is the active correct Python launch.
+Old launch.json is preserved as the failed first launch, NOT the live PID.
+
+Freeze new producer/reviewer/plan/private copy until completion. DO NOT apply
+the pending patch to main while W18c OR this six-capture worker is running:
+its per-case source guards also require unchanged main source. Do not edit
+the completed padding source/cache snapshots. An attempted replay without a
+passed receipt requires recorded recovery; no automatic scientific retry.
+
+Main W18c remains live PID6609, now28 completed development records and same
+leader w1_005 S97/objective0.9842206108. Full gates remain outstanding; sealed
+AA not opened by any follow-up. Adoptedr58, atlasr51. No new map/adoption.
+New plot_review.py waits for completed six-case review before producing the
+signed-source change figure; then inspect it and write/commit actual findings.
+
 # Next fixed diagnostic: six private exact replays declared, not yet started
 
 calibration/padding_budget_capture_20261127/plan.json and README.md declare
