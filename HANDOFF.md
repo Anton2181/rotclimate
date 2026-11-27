@@ -1,3 +1,35 @@
+# No-water inflow guard COMPLETE:30 tests +7 matched regional regressions pass
+
+Main source now enables e91 warm-sea inflow only if the existing modeled sea
+mask has a water cell. All-land EDT's false outside-grid source can no longer
+cause marine moistening/drying. This is NOT the rejected cap law and changes
+no water-body classification. Pre-fix regression reproduced positive fake
+marine reach;30 focused tests pass, including4 actual coupled homogeneous
+runs byte-identical to gain0 controls, zero marine term, mixed geometry check.
+
+The prospectively committed seven regional regressions also finished, PID15551
+now zombie. All original numerical criteria pass; all actual case identities,
+params, observations/coordinates unchanged. Somalia/Sahara/NIndia mixed-control
+T/P fields byte-exact atfloat32. Of4 all-land domains in97 cached cases,
+Kazakh is also exact; r_12n_22e,r_40n_94e,s2_7n_23e change slightly: maximum
+annual rain difference~0.093mm/year, T-MAE change~0.000502C, rain-loss increase
+~0.30%. Do not claim an accuracy improvement or unchanged97 source scores.
+
+Full findings/reproducible review: calibration/no_sea_inflow_guard_20261127/
+findings.md, review_regions.py. Actual source-epoch qualification and all7
+raw scored arrays/certs/protocol/summary are under output/no_sea_inflow_guard_20261127/.
+This explicitly changed-source golden regression is NOT a new97-region paired
+reference/global climate qualification. Old protocols remain immutable.
+Before next calibration/atlas, establish current source/protocol references.
+
+All experiments/jobs are FINISHED; no scientific worker to restart. Rejected
+cap pilot stays unapplied, W18/W18c permanently closed, AA UNOPENED. R58 params
+retained; atlasr51 not rebuilt. Next main physics lead: circulation/coupled
+transport behind Somali excess, with desert/monsoon protections; don't tune
+cap strengths or reinstate the rejected global turning floor. No new circulation
+experiment started yet. Source absence fix is generic correctness, not the cause
+of the three studied mixed-grid Earth's large rainfall errors.
+
 # No-water inflow guard: tests passed, seven regional regressions declared
 
 Current working/source change: ClimateModel only builds/enables warm-sea
