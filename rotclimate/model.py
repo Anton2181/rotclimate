@@ -1613,8 +1613,8 @@ class ClimateModel:
             else:
                 SST = self.sst(d, To, Tl)
             if p.upwelling > 0:
-                # e1: wind along a coast drives surface water 90 deg to its right
-                # (left with reversed spin; Ekman); where that is offshore, cold
+                # e1: wind drives surface water right for positive Coriolis,
+                # left for negative (hemisphere AND spin); offshore flow brings cold
                 # water wells up - strongest in summer under the subtropical
                 # highs' equatorward winds on west coasts (California, Iberia,
                 # NW Africa, Chile). Last step's winds; the zonal belts at first.
@@ -1622,7 +1622,8 @@ class ClimateModel:
                     ue, ve, _, _ = self.zonal_wind(s)
                 else:
                     ue, ve = uv_prev
-                ek_x, ek_y = (-ve, ue) if p.retrograde else (ve, -ue)
+                from .winds import ekman_turn
+                ek_x, ek_y = ekman_turn(ue, ve, self.lat, retrograde=p.retrograde)
                 index = gauss(ek_x * self.offshore[0] + ek_y * self.offshore[1], 100.0 / g.cell_km)
                 SST = SST - p.upwelling * np.clip(index / 5.0, 0.0, 2.0) * self.upwelling_weight
             if p.shelf_air_coupling > 0 and T_prev is not None:

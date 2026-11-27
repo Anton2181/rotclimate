@@ -1,0 +1,336 @@
+..FF..FFFF                                                               [100%]
+=================================== FAILURES ===================================
+__ test_west_coast_surface_responds_to_signed_coriolis[-30.0-False-5.0-True] ___
+
+latitude = -30.0, retrograde = False, northward = 5.0, cools = True
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+>           assert surface[0][near].mean() < 19.
+E           assert np.float64(20.0) < 19.0
+E            +  where np.float64(20.0) = <built-in method mean of numpy.ndarray object at 0x7f2d4cf4a310>()
+E            +    where <built-in method mean of numpy.ndarray object at 0x7f2d4cf4a310> = array([20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,\n       20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.]).mean
+
+tests/test_coastal_ekman_hemisphere.py:46: AssertionError
+__ test_west_coast_surface_responds_to_signed_coriolis[-30.0-True--5.0-True] ___
+
+latitude = -30.0, retrograde = True, northward = -5.0, cools = True
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+>           assert surface[0][near].mean() < 19.
+E           assert np.float64(20.0) < 19.0
+E            +  where np.float64(20.0) = <built-in method mean of numpy.ndarray object at 0x7f2d4cf4b390>()
+E            +    where <built-in method mean of numpy.ndarray object at 0x7f2d4cf4b390> = array([20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,\n       20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.]).mean
+
+tests/test_coastal_ekman_hemisphere.py:46: AssertionError
+_ test_west_coast_surface_responds_to_signed_coriolis[-30.0-False--5.0-False] __
+
+latitude = -30.0, retrograde = False, northward = -5.0, cools = False
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+            assert surface[0][near].mean() < 19.
+        else:
+>           np.testing.assert_array_equal(surface[0], np.full_like(zeros, 20.))
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 144 / 720 (20%)
+E           First 5 mismatches are at indices:
+E            [0, 9]: 19.775134404381486 (ACTUAL), 20.0 (DESIRED)
+E            [0, 10]: 19.55630650094848 (ACTUAL), 20.0 (DESIRED)
+E            [0, 11]: 19.24399343895239 (ACTUAL), 20.0 (DESIRED)
+E            [0, 12]: 18.815100062512165 (ACTUAL), 20.0 (DESIRED)
+E            [0, 13]: 18.208186862021815 (ACTUAL), 20.0 (DESIRED)
+E           Max absolute difference among violations: 2.68010612
+E           Max relative difference among violations: 0.13400531
+E            ACTUAL: array([[20.      , 20.      , 20.      , 20.      , 20.      , 20.      ,
+E                   20.      , 20.      , 20.      , 19.775134, 19.556307, 19.243993,
+E                   18.8151  , 18.208187, 17.319894, 20.      , 20.      , 20.      ,...
+E            DESIRED: array([[20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20.],...
+
+tests/test_coastal_ekman_hemisphere.py:48: AssertionError
+__ test_west_coast_surface_responds_to_signed_coriolis[-30.0-True-5.0-False] ___
+
+latitude = -30.0, retrograde = True, northward = 5.0, cools = False
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+            assert surface[0][near].mean() < 19.
+        else:
+>           np.testing.assert_array_equal(surface[0], np.full_like(zeros, 20.))
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 144 / 720 (20%)
+E           First 5 mismatches are at indices:
+E            [0, 9]: 19.775134404381486 (ACTUAL), 20.0 (DESIRED)
+E            [0, 10]: 19.55630650094848 (ACTUAL), 20.0 (DESIRED)
+E            [0, 11]: 19.24399343895239 (ACTUAL), 20.0 (DESIRED)
+E            [0, 12]: 18.815100062512165 (ACTUAL), 20.0 (DESIRED)
+E            [0, 13]: 18.208186862021815 (ACTUAL), 20.0 (DESIRED)
+E           Max absolute difference among violations: 2.68010612
+E           Max relative difference among violations: 0.13400531
+E            ACTUAL: array([[20.      , 20.      , 20.      , 20.      , 20.      , 20.      ,
+E                   20.      , 20.      , 20.      , 19.775134, 19.556307, 19.243993,
+E                   18.8151  , 18.208187, 17.319894, 20.      , 20.      , 20.      ,...
+E            DESIRED: array([[20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20.],...
+
+tests/test_coastal_ekman_hemisphere.py:48: AssertionError
+__ test_west_coast_surface_responds_to_signed_coriolis[0.0-False--5.0-False] ___
+
+latitude = 0.0, retrograde = False, northward = -5.0, cools = False
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+            assert surface[0][near].mean() < 19.
+        else:
+>           np.testing.assert_array_equal(surface[0], np.full_like(zeros, 20.))
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 144 / 720 (20%)
+E           First 5 mismatches are at indices:
+E            [0, 9]: 19.775134404381486 (ACTUAL), 20.0 (DESIRED)
+E            [0, 10]: 19.55630650094848 (ACTUAL), 20.0 (DESIRED)
+E            [0, 11]: 19.24399343895239 (ACTUAL), 20.0 (DESIRED)
+E            [0, 12]: 18.815100062512165 (ACTUAL), 20.0 (DESIRED)
+E            [0, 13]: 18.208186862021815 (ACTUAL), 20.0 (DESIRED)
+E           Max absolute difference among violations: 2.68010612
+E           Max relative difference among violations: 0.13400531
+E            ACTUAL: array([[20.      , 20.      , 20.      , 20.      , 20.      , 20.      ,
+E                   20.      , 20.      , 20.      , 19.775134, 19.556307, 19.243993,
+E                   18.8151  , 18.208187, 17.319894, 20.      , 20.      , 20.      ,...
+E            DESIRED: array([[20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20.],...
+
+tests/test_coastal_ekman_hemisphere.py:48: AssertionError
+___ test_west_coast_surface_responds_to_signed_coriolis[0.0-True-5.0-False] ____
+
+latitude = 0.0, retrograde = True, northward = 5.0, cools = False
+
+    @pytest.mark.parametrize('latitude,retrograde,northward,cools', [
+        (30., False, -5., True), (30., True, 5., True),
+        (-30., False, 5., True), (-30., True, -5., True),
+        (30., False, 5., False), (30., True, -5., False),
+        (-30., False, -5., False), (-30., True, 5., False),
+        (0., False, -5., False), (0., True, 5., False),
+    ])
+    def test_west_coast_surface_responds_to_signed_coriolis(latitude, retrograde, northward, cools):
+        grid = _toy_case().grid
+        grid.land[:] = False
+        grid.land[:, 15:] = True  # west coast: offshore is west
+        grid.land_frac[:] = grid.land
+        grid.elev[:] = 0.
+        grid.elev_max[:] = 0.
+        grid.lat[:] = latitude
+        m = ClimateModel(strict_params().replace(upwelling=4., retrograde=retrograde), grid=grid)
+        # Prescribe a constant known wind and20C uncoupled sea to isolate the first
+        # production SST step. Stop at its existing diagnostic tap BEFORE any heat
+        # or moisture solve. These are ten source snapshots, not climate reruns.
+        zeros = np.zeros_like(grid.lat)
+        m.zonal_wind = lambda season:(zeros, np.full_like(zeros, northward), zeros, zeros)
+        m.sst = lambda day, zonal_sea, land:np.full_like(zeros, 20.)
+        surface = []
+        def capture(stage, day, value):
+            if stage == 'sst':
+                surface.append(value.copy())
+                raise SurfaceCaptured
+        m.tap = capture
+        with pytest.raises(SurfaceCaptured):
+            m.run()
+        near = m.upwelling_weight > .5
+        assert near.any()
+        if cools:
+            assert surface[0][near].mean() < 19.
+        else:
+>           np.testing.assert_array_equal(surface[0], np.full_like(zeros, 20.))
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 144 / 720 (20%)
+E           First 5 mismatches are at indices:
+E            [0, 9]: 19.775134404381486 (ACTUAL), 20.0 (DESIRED)
+E            [0, 10]: 19.55630650094848 (ACTUAL), 20.0 (DESIRED)
+E            [0, 11]: 19.24399343895239 (ACTUAL), 20.0 (DESIRED)
+E            [0, 12]: 18.815100062512165 (ACTUAL), 20.0 (DESIRED)
+E            [0, 13]: 18.208186862021815 (ACTUAL), 20.0 (DESIRED)
+E           Max absolute difference among violations: 2.68010612
+E           Max relative difference among violations: 0.13400531
+E            ACTUAL: array([[20.      , 20.      , 20.      , 20.      , 20.      , 20.      ,
+E                   20.      , 20.      , 20.      , 19.775134, 19.556307, 19.243993,
+E                   18.8151  , 18.208187, 17.319894, 20.      , 20.      , 20.      ,...
+E            DESIRED: array([[20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20., 20.,
+E                   20., 20., 20., 20.],...
+
+tests/test_coastal_ekman_hemisphere.py:48: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[-30.0-False-5.0-True]
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[-30.0-True--5.0-True]
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[-30.0-False--5.0-False]
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[-30.0-True-5.0-False]
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[0.0-False--5.0-False]
+FAILED tests/test_coastal_ekman_hemisphere.py::test_west_coast_surface_responds_to_signed_coriolis[0.0-True-5.0-False]
+6 failed, 4 passed in 1.88s

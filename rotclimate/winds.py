@@ -1,10 +1,22 @@
-"""Opt-in pressure-driven shear between surface and moisture-column flow.
+"""Coriolis geometry and opt-in shear between surface and moisture-column flow.
 
 The Rayleigh/Coriolis balance is the existing surface closure. Changing its
 effective drag turns the flow as well as changing speed; it is not a resolved
 vertical boundary layer or a conservation fix for concentration advection.
 """
 import numpy as np
+
+
+def ekman_turn(u, v, latitude, *, retrograde=False):
+    """Turn map-frame wind right for positive f and left for negative f.
+
+    This supplies direction for the existing empirical coastal cooling law,
+    not dimensional Ekman transport. A proper map rotation commutes with this
+    quarter turn. The law contributes zero at f=0, where a hemisphere-based
+    Ekman direction is undefined; it does not model equatorial upwelling.
+    """
+    handedness = np.sign(np.sin(np.radians(latitude))) * (-1. if retrograde else 1.)
+    return handedness * v, -handedness * u
 
 
 def frictional_response(px, py, coriolis, drag, density=1.2):

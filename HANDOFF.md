@@ -1,3 +1,26 @@
+# Signed-hemisphere upwelling FIX TESTED; six regional checks DECLARED
+
+Main model.py now calls winds.ekman_turn: right for positivef, left for negativef,
+including latitude AND spin; zero at exactequator. Existing empirical magnitude,
+weights, smoothing unchanged. No tuned knob. Production SST known-answer tests
+reproduce6fail/4pass before patch; all10 nowpass, plus NHbyte/rotationcheck.
+Combined56 focused testsPASS/no skip. Logs/XML output/ekman_hemisphere_fix_20261127.
+These10 tests stop before heat/moisture solves, not10climate integrations.
+
+Prospective calibration/ekman_hemisphere_fix_20261127/plan.json+README+patch.
+New runner/reviewer scripts: run_ekman_hemisphere_regression.py and
+review_ekman_hemisphere_regression.py. Exactly6 declared regional integrations
+(3 exposed regions×2wind arms), sameparams/grids/obs/strictnumerics.4NH-only
+Sahara/NIndia cases require all fields/traces/budgets byteexact; Somalia crosses
+equator, actualcoupledchanges allowed/reported. New225regularprivatefiles.
+Commit first, prepare then --run atnice10/threadvars1/literalvenv. No workers
+active yet. Previous17070/16724 confirmedexited BEFORE source edits.
+
+This is a correctness/newsourceepoch, not globalaccuracy claim. Prior89source
+qualifications now historical; never rewrite. W18c CLOSED,AAUNOPENED,r58retained,
+atlasr51unchanged. Current-source97regionreference still needed beforefitting.
+All24? Not yet:18 priorregionalruns complete this turn,6new unstarted.
+
 # Wind × marine-relaxation ablation COMPLETE; deletion not adopted
 
 All12 declared runs pass original numerics;6 controls reproduce both prior

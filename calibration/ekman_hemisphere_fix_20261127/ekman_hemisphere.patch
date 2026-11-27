@@ -1,0 +1,54 @@
+diff --git a/rotclimate/model.py b/rotclimate/model.py
+index 593385ce0..ec030a652 100644
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -1613,8 +1613,8 @@ class ClimateModel:
+             else:
+                 SST = self.sst(d, To, Tl)
+             if p.upwelling > 0:
+-                # e1: wind along a coast drives surface water 90 deg to its right
+-                # (left with reversed spin; Ekman); where that is offshore, cold
++                # e1: wind drives surface water right for positive Coriolis,
++                # left for negative (hemisphere AND spin); offshore flow brings cold
+                 # water wells up - strongest in summer under the subtropical
+                 # highs' equatorward winds on west coasts (California, Iberia,
+                 # NW Africa, Chile). Last step's winds; the zonal belts at first.
+@@ -1622,7 +1622,8 @@ class ClimateModel:
+                     ue, ve, _, _ = self.zonal_wind(s)
+                 else:
+                     ue, ve = uv_prev
+-                ek_x, ek_y = (-ve, ue) if p.retrograde else (ve, -ue)
++                from .winds import ekman_turn
++                ek_x, ek_y = ekman_turn(ue, ve, self.lat, retrograde=p.retrograde)
+                 index = gauss(ek_x * self.offshore[0] + ek_y * self.offshore[1], 100.0 / g.cell_km)
+                 SST = SST - p.upwelling * np.clip(index / 5.0, 0.0, 2.0) * self.upwelling_weight
+             if p.shelf_air_coupling > 0 and T_prev is not None:
+diff --git a/rotclimate/winds.py b/rotclimate/winds.py
+index b7ef4e1d8..408a57856 100644
+--- a/rotclimate/winds.py
++++ b/rotclimate/winds.py
+@@ -1,4 +1,4 @@
+-"""Opt-in pressure-driven shear between surface and moisture-column flow.
++"""Coriolis geometry and opt-in shear between surface and moisture-column flow.
+ 
+ The Rayleigh/Coriolis balance is the existing surface closure. Changing its
+ effective drag turns the flow as well as changing speed; it is not a resolved
+@@ -7,6 +7,18 @@ vertical boundary layer or a conservation fix for concentration advection.
+ import numpy as np
+ 
+ 
++def ekman_turn(u, v, latitude, *, retrograde=False):
++    """Turn map-frame wind right for positive f and left for negative f.
++
++    This supplies direction for the existing empirical coastal cooling law,
++    not dimensional Ekman transport. A proper map rotation commutes with this
++    quarter turn. The law contributes zero at f=0, where a hemisphere-based
++    Ekman direction is undefined; it does not model equatorial upwelling.
++    """
++    handedness = np.sign(np.sin(np.radians(latitude))) * (-1. if retrograde else 1.)
++    return handedness * v, -handedness * u
++
++
+ def frictional_response(px, py, coriolis, drag, density=1.2):
+     """Solve eps*u - f*v = -px/rho, f*u + eps*v = -py/rho.
+ 
