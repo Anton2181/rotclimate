@@ -217,6 +217,8 @@ class Params:
     maritime_mean: float = 0.0        # e28: maritime land swings around the nearby sea's annual mean (share x (1 - chi); 0 = the zonal land mean)
     current_cold_lat0: float = 0.0    # e132: cold currents (cur < 0) fade to nothing at this |latitude| (0 = off) ...
     current_cold_lat1: float = 15.0   # e132: ... and are full from this |latitude| (eastern-boundary currents turn west into the equatorial currents)
+    current_warm_lat0: float = 0.0    # e132b: warm currents (cur > 0) likewise fade to nothing at this |latitude| (0 = off) ...
+    current_warm_lat1: float = 15.0   # e132b: ... and are full from this |latitude|
     upwelling: float = 0.0            # e1: coastal sea cooling (C) per 5 m/s of offshore Ekman transport
     # physics e2 (from the literature review of the remaining Earth failures)
     background_ascent: float = 1.0    # e2: the rain dynamics' baseline (the "1 +"); 0 = rain needs ascent

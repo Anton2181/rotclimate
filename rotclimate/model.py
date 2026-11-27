@@ -1105,6 +1105,12 @@ class ClimateModel:
             # colder than WOA18 in May and its monsoon air left the Nigerian coast 3 C too cold all year.
             fade = np.clip((np.abs(lat) - p.current_cold_lat0) / max(p.current_cold_lat1 - p.current_cold_lat0, 1e-6), 0.0, 1.0)
             cur = np.where(cur < 0, cur * fade, cur)
+        if p.current_warm_lat0 > 0:
+            # e132b: the western-boundary warm currents (Gulf Stream, Kuroshio, Brazil, Agulhas) form poleward of the
+            # trade-wind belt; at the equator the western Indian Ocean upwells in the summer monsoon (the Somali
+            # Current): the clamped band left the sea off Somalia 4-6 C warmer than WOA18 in July
+            fade_w = np.clip((np.abs(lat) - p.current_warm_lat0) / max(p.current_warm_lat1 - p.current_warm_lat0, 1e-6), 0.0, 1.0)
+            cur = np.where(cur > 0, cur * fade_w, cur)
         if self.gyre is not None:      # e42: no gyre, no cold current
             cur = np.where(cur < 0, cur * (1.0 - p.current_gyre * (1.0 - self.gyre)), cur)
         if self.shelf_deep is not None:
