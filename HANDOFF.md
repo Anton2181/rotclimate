@@ -1,3 +1,33 @@
+# Coastal Ekman hemisphere fix COMPLETE:56 tests +6 regional checks
+
+Main source now uses signed latitude AND spin for coastal Ekman direction,
+zero contribution at exactequator, legacyNH arithmetic byteexact. Known-answer
+actual SST snapshots reproduce6fail/4pass before and10pass after; further
+NHbyte/rotation check and combined56 focused testsPASS/no failures/skips.
+All6 prospectively declared regional integrations pass original numerics/local
+0.01 equations;4NH-only Sahara/NIndia arms exact all monthly/raw/budget fields.
+Same actualparams/inputs/obs/coords/calendar; observed actualwind still exact.
+
+Somalia crosses−8.67..+13.49deg,138southern coastal sources. Modelwindrain
+3556.41→3547.92(−8.49),loss−0.233%,TMAE+0.000190C; observedwindrain
+4097.36→4162.73(+65.36),loss+1.531%,TMAE+0.01599C. Mechanically correct
+source retained, NO global accuracy claim or fit. Allfindings/raw6/figure/
+review/agentreview/qualification output+calibration/ekman_hemisphere_fix_20261127.
+PID17445 exited. This turn24regionalruns(6+12+6),allpassed,no scientificretry.
+Current89source hashes in qualification.json; prior sourcequals historical.
+No current-source97pairedref yet; needed before calibration/map use.
+
+NEXT concrete issue (unfixed, no newexperiment yet): sst_source observed with
+sst_damping_heat_only true still adds a MODELED undamped seasonal anomaly to
+SST AFTER literal observed sea set T_eq. Moisture/convection/e91 use obs+anomaly,
+so the old mode is not a clean observedSST diagnostic. Verify/fix this diagnostic
+interaction with actual heat+moisturesea known-answer checks, preserving modeled
+SST arithmetic, BEFORE any wind×SST physical comparison. Do not silently run
+old attribution script. MainSomali physics remains coastalSST/boundary/source
+coupling and rainconversion; Sahara pressureflow and NIndia spatialorographic
+errors separate. Source deletion/globalturn/cap notadopted. W18c CLOSED,
+AA UNOPENED,r58retained,atlasr51unchanged. No scientific jobs active.
+
 # Signed-hemisphere upwelling FIX TESTED; six regional checks DECLARED
 
 Main model.py now calls winds.ekman_turn: right for positivef, left for negativef,
@@ -19,7 +49,7 @@ active yet. Previous17070/16724 confirmedexited BEFORE source edits.
 This is a correctness/newsourceepoch, not globalaccuracy claim. Prior89source
 qualifications now historical; never rewrite. W18c CLOSED,AAUNOPENED,r58retained,
 atlasr51unchanged. Current-source97regionreference still needed beforefitting.
-All24? Not yet:18 priorregionalruns complete this turn,6new unstarted.
+At declaration18 priorregionalruns complete this turn,6new unstarted.
 
 # Wind × marine-relaxation ablation COMPLETE; deletion not adopted
 
