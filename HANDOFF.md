@@ -6,7 +6,7 @@ World physics r58w (r58 + e116z zonal edge PW; Earth screen 1.0098 vs r58), worl
 found nothing better), fit objective zonefit_rivers. Corrections retrained for r58w (calibration/earth_correction_r58_20261127).
 Corrected r58w on dev31: T 1.509 / rain 0.438 vs corrected r51 1.489 / 0.415; plain r58 corrections give 1.511 / 0.432,
 so the edge rule is not the cause. K1 (corrections on all 97 regions) REJECTED by the per-region rule
-(calibration/correction_wide_20261127). Running: r51 vs r58 on the 97-region pool (output/ppe_20261127/r51vs58).
+(calibration/correction_wide_20261127). r51 vs r58 on 97 regions: r51 13.8 % worse (calibration/r51_vs_r58_20261127); atlas stands.
 
 # Southern wind belts FIXED/QUALIFIED; current97 reference explicitly compatible
 
