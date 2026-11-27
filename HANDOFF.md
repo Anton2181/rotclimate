@@ -1,3 +1,6 @@
+**OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
+invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
+
 # r58 ATLAS REBUILD RUNNING (27 Nov 2026, owner choice "Atlas rebuild on r58")
 Driver: scripts/run_r58_atlas.sh (log output/run_r58_atlas.log): W6 world search (scripts/world_campaign_r58.py,
 plan calibration/map_world_r58_planet/plan.json, calibrate mode guarded_rivers = zonefit + 0.2 x drawn-river width
