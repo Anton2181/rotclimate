@@ -1,7 +1,7 @@
 # Active goal: W18c live; provisional-leader regional tradeoffs reviewed
 
 Check live PID 6609 (`run_w18c_campaign.py`) and campaign_status.json. Last
-verified: 14 of 49 initial records complete, w1_013 running. The old PID 1877
+verified: 16 of 49 initial records complete, w1_015 running. The old PID 1877
 is a zombie. Do not duplicate the run, apply the pending core patch or start
 the padding study while W18c remains active.
 
@@ -33,6 +33,18 @@ Then apply/retest the ready marine-budget diagnostic patch as a new source
 epoch, and run the prepared nine-case padding study on its original r58
 snapshot. r58 remains adopted, atlas r51, AA unopened. Both follow-ups are
 ready; see the immediately preceding handoff below.
+
+The post-run padding reviewer is now implemented and ready:
+`.venv/bin/python -I scripts/review_padding_sensitivity.py`.
+It currently refuses because the physical study has not run. Fifteen tests
+pass for seasonal cancellation, instantaneous rate/water covariance, calendar
+and footprint matching, failed-case gaps, and direct archival control arrays.
+It verifies source/file/certificate hashes, reconstructs monthly P/W from raw
+traces, compares all three padding pairs per region, and reports signed,
+absolute, RMS and maximum changes without an aggregate or preferred padding.
+Readiness receipt: output/padding_sensitivity_20261126/reviewer_readiness.json.
+No padding attempts exist. After actual runs, inspect its figure and write
+findings; software readiness does not constitute physical validation.
 
 # Earlier active-goal state follows
 

@@ -64,6 +64,30 @@ No fine/sealed region use, atlas build or climate adoption is authorized by
 this diagnostic plan. Any proposed physical candidate needs a separate
 prospective experiment and all current gates.
 
+The post-run reviewer is ready:
+
+```sh
+.venv/bin/python -I scripts/review_padding_sensitivity.py
+```
+
+It refuses to review preparation-only inputs. Once results exist, it checks
+the original control arrays independently, exact scored observations/calendar,
+integer cell translations, source/certificate/file hashes, and monthly P/W
+against independently integrated instantaneous traces. All three padding
+pairs are compared in each region. Changes retain signed means, monthly
+absolute/RMS/max differences and annual RMS/max differences, so opposite
+seasonal errors cannot disappear in an annual average. Import and drying
+use instantaneous rate×water before averaging. Failures and unavailable pairs
+remain explicit, and no aggregate score or best padding is produced.
+
+Fifteen synthetic-data tests cover those calculations, seasonal cancellation,
+rate/water covariance, moved cells, changed observations/calendar, missing
+cases and archive reproduction. The reviewer readiness receipt is only a
+software check, not a physical result. Inspect its actual figure and write
+findings after the study runs. The larger domains still use regional
+projection and transport assumptions; increasing padding does not turn them
+into a whole-planet simulation.
+
 Seventeen unit tests cover translated footprints, changed observations,
 terrain/coordinates, missing/extra cells, the campaign interlock and private
 copy isolation. Existing r58 qualification and historical replay caveats
