@@ -1,8 +1,8 @@
 # Active goal: W18c live; automatic fixed-padding follow-up queued
 
 Check BOTH live processes before restarting anything:
-- W18c: PID 6609, scripts/run_w18c_campaign.py. Last 18 initial candidates
-  complete, w1_017 underway; consult live campaign_status.json.
+- W18c: PID 6609, scripts/run_w18c_campaign.py. Last 19 initial candidates
+  complete, w1_018 underway; consult live campaign_status.json.
 - Follow-up queue: PID 8757, scripts/run_climate_followups.py. Its heartbeat
   is output/climate_followups_20261127/status.json, stdout queue.log.
   It was verified alive, waiting, holding its singleton lock; no padding
@@ -30,7 +30,7 @@ it dies while a padding child is alive, restart only the queue after checking
 the existing child; it will wait rather than duplicate it. A dangling padding
 attempt without a result still requires the declared recovery review.
 
-Leader unchanged at 18 completed points: w1_005, S97/objective0.9842206108,
+Leader unchanged at 19 completed points: w1_005, S97/objective0.9842206108,
 worst regime1.01796884. Full gates remain outstanding; r58 is adopted,
 atlas r51, sealed AA unopened at this checkpoint. Do not regenerate the
 13-record regional report unless the leader or stage changes.
