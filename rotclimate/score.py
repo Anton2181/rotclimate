@@ -213,8 +213,90 @@ def evaluate(result, land_only=True):
     return dict(total=total, per_class=per, precision=prec, f1=f1, recall=recall,
                 accuracy=acc, confusion=conf,
                 indices=ix, memberships=mem, monthly=st, predicted=pred, label_policy_audit=policy_audit,
-                rivers={**river_check(result, ix), **river_network_check(g, hyd)},
+                rivers={**river_check(result, ix), **river_network_check(g, hyd), **river_width_ranking(g, hyd)},
                 realism=realism, hydrology=hyd)
+
+
+def _thick_source():
+    """Thick drawn-river pixels at source resolution: original drawing (data/source/original/rivers.png) lines >= 4
+    original px wide (thin lines are 2-3, thick ~5), mapped onto the source grid."""
+    from functools import lru_cache
+    return _thick_cached()
+
+
+def _thick_cached(_c={}):
+    if "v" in _c:
+        return _c["v"]
+    from pathlib import Path
+    from PIL import Image
+    from scipy import ndimage as ndi
+    from .geography import source_layers
+    root = Path(__file__).resolve().parents[1]
+    im = np.array(Image.open(root / "data/source/original/rivers.png").convert("RGBA")); m = im[..., 3] > 60
+    dt = ndi.distance_transform_edt(m); thick_o = m & (ndi.maximum_filter(2 * dt - 1, size=3) >= 4)
+    H, W = source_layers()["land"].shape; oy, ox = m.shape
+    yy = np.clip(((np.arange(H) + 0.5) * oy / H).astype(int), 0, oy - 1); xx = np.clip(((np.arange(W) + 0.5) * ox / W).astype(int), 0, ox - 1)
+    _c["v"] = ndi.maximum_filter(thick_o.astype(np.uint8), size=3)[yy][:, xx] > 0
+    return _c["v"]
+
+
+def _auc_below(a, b):
+    """P(x < y) for x in a, y in b (ties count half): 1 = every a below every b."""
+    a = np.asarray(a, float); b = np.asarray(b, float)
+    if a.size == 0 or b.size == 0:
+        return np.nan
+    allv = np.concatenate([a, b]); r = np.empty(allv.size); o = np.argsort(allv, kind="mergesort")
+    r[o] = np.arange(1, allv.size + 1)
+    # average ranks for ties
+    u, inv, cnt = np.unique(allv, return_inverse=True, return_counts=True)
+    csum = np.cumsum(cnt); avg = csum - (cnt - 1) / 2.0; r = avg[inv]
+    rb = r[a.size:].sum() - b.size * (b.size + 1) / 2.0
+    return float(rb / (a.size * b.size))
+
+
+def river_width_ranking(g, hyd):
+    """Owner, 27 Nov 2026: the drawn rivers mark how wide / hard to cross a river is, ranked GLOBALLY:
+    every undrawn river < every thin drawn river < every thick drawn river. Width follows discharge
+    (hydraulic geometry, w ~ Q^0.5), so the ranking is on discharge (model grid). Soft, scale-free scores:
+      undrawn_below_thin = P(Q of one of the K largest undrawn outlets < Q at a thin river's end), K = #thin rivers;
+      thin_below_thick   = P(Q at a thin river's end < Q at a thick stretch's start).
+    NB: optimising this uses the drawn rivers, so score.river_check is no longer an independent validation
+    in fits that use it."""
+    from scipy import ndimage as ndi
+    land = g.inmap & g.land
+    q = hyd["discharge"]; recv = hyd["recv"].ravel() if "recv" in hyd else None
+    drawn = (g.rivers > 0.002) & land
+    th_src = _thick_source()
+    # thick share per model cell (same blocking as the river layer: f px per cell, pad cells around)
+    f, pad = g.f, g.pad
+    Hs, Ws = th_src.shape; hh, ww = (Hs // f) * f, (Ws // f) * f
+    blk = th_src[:hh, :ww].reshape(hh // f, f, ww // f, f).mean(axis=(1, 3))
+    thick_share = np.zeros(drawn.shape)
+    thick_share[pad:pad + blk.shape[0], pad:pad + blk.shape[1]] = blk[:drawn.shape[0] - 2 * pad, :drawn.shape[1] - 2 * pad]
+    thick = drawn & (thick_share > 0.0)
+    thin = drawn & ~thick
+    k = np.ones((3, 3), bool)
+    # the coarse routing runs within about a cell of the drawn line: a drawn river's discharge is the largest within one
+    # cell; fragments shorter than three cells are ignored; a thick stretch starts at its 10th-percentile discharge
+    qn = ndi.maximum_filter(np.where(land, q, 0.0), size=3)
+    lt, nt = ndi.label(thin, structure=k); lk, nk = ndi.label(thick, structure=k)
+    st = ndi.sum(thin, lt, np.arange(1, nt + 1)) if nt else np.array([]); sk = ndi.sum(thick, lk, np.arange(1, nk + 1)) if nk else np.array([])
+    thin_end = np.array([qn[lt == i + 1].max() for i in range(nt) if st[i] >= 3])
+    thick_start = np.array([np.percentile(qn[lk == i + 1], 10) for i in range(nk) if sk[i] >= 3])
+    nt, nk = thin_end.size, thick_start.size
+    und = land & ~ndi.binary_dilation(drawn, structure=k)
+    if recv is not None:
+        r = recv; ok = r >= 0; rr = np.where(ok, r, 0)
+        outlet = und.ravel() & ~(ok & und.ravel()[rr])
+    else:
+        outlet = (und & ndi.binary_dilation(~und, structure=k)).ravel()
+    uq = np.sort(q.ravel()[outlet])[::-1][:max(nt, 1)]
+    s1 = _auc_below(uq, thin_end); s2 = _auc_below(thin_end, thick_start)
+    return dict(undrawn_below_thin=s1, thin_below_thick=s2,
+                width_ranking=float(np.nanmean([s1, s2])), n_thin=int(nt), n_thick=int(nk),
+                largest_undrawn_q=float(uq.max()) if uq.size else np.nan,
+                smallest_thin_end_q=float(thin_end.min()) if nt else np.nan,
+                smallest_thick_start_q=float(thick_start.min()) if nk else np.nan)
 
 
 def river_network_check(g, hyd, q_min=20.0):
@@ -272,15 +354,17 @@ def objective(ev, mode="mean"):
     'zonefit'   equal weight to balanced fuzzy F1 and balanced per-zone strict
                 recall, with the same realism penalties as f1r. Each painted
                 zone has equal weight regardless of area; old objectives stay.
+    'zonefit_rivers'  zonefit + 0.2 x the drawn-river width ranking (owner, 27 Nov 2026:
+                every undrawn < every thin drawn < every thick drawn river, on discharge).
     """
     if mode == "mean":
         return ev["total"]
-    vals = ev["f1"] if mode in ("f1", "f1r", "zonefit") else ev["per_class"]
+    vals = ev["f1"] if mode in ("f1", "f1r", "zonefit", "zonefit_rivers") else ev["per_class"]
     sc = np.array([v for v in vals.values() if np.isfinite(v)])
     tau = 0.08
     softmin = -tau * np.log(np.mean(np.exp(-sc / tau)))
     fit = 0.5 * sc.mean() + 0.5 * softmin
-    if mode == "zonefit":
+    if mode in ("zonefit", "zonefit_rivers"):
         rec = np.array([v for v in ev["recall"].values() if np.isfinite(v)])
         if not rec.size:
             raise ValueError("zonefit requires per-zone strict recall")
@@ -289,9 +373,13 @@ def objective(ev, mode="mean"):
     r = ev["realism"]
     pen = (np.clip((r["map_median"] - 1300) / 800, 0, 1.5)
            + np.clip((r["map_p95"] - 3500) / 2500, 0, 1.5))
-    if mode in ("f1r", "zonefit"):
+    if mode in ("f1r", "zonefit", "zonefit_rivers"):
         pen = pen + np.clip((r.get("wet_summer_hot", 0.0) - 2 * EARTH_WET_SUMMER_HOT) / 0.25, 0, 1.5)
-    return float(fit - 0.2 * pen)
+    out = float(fit - 0.2 * pen)
+    if mode == "zonefit_rivers":
+        wr = ev.get("rivers", {}).get("width_ranking", np.nan)
+        out += 0.2 * (wr if np.isfinite(wr) else 0.0)
+    return out
 
 
 def river_check(result, ix):

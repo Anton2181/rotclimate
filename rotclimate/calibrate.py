@@ -543,7 +543,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                 pickle.dump((es, best, n, n_raced), f)
             (out_dir / "state.tmp").replace(state)
             pc = best[1]["per_class"]
-            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "guarded") else {}
+            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "zonefit_rivers", "guarded") else {}
             print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "
@@ -568,7 +568,7 @@ def main():
     ap.add_argument("--workers", type=int, default=4)
     ap.add_argument("--seed", type=int, default=1)
     ap.add_argument("--fix", default="{}", help='json of genes to hold fixed, e.g. {"retrograde":0.75}')
-    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "guarded",
+    ap.add_argument("--objective", default="mean", choices=["mean", "balanced", "f1", "f1r", "zonefit", "zonefit_rivers", "guarded",
                                                            "whittaker", "whittaker-broad", "whittaker-covered"])
     ap.add_argument("--guards", default=None, help="json of reference guard measures (for --objective guarded)")
     ap.add_argument("--physics", default="v2", choices=["v2", "v3", "v4", "v5", "v6", "v7", "v8", "v9", "e1", "e1new", "e2", "e2new", "e3", "e3new",

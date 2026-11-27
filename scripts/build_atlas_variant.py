@@ -81,7 +81,7 @@ def main():
     ap.add_argument("--note", default="")
     ap.add_argument("--downsample", type=int, default=8)
     ap.add_argument("--set", default='{}', help='explicit overrides; saved numerical requirements are preserved')
-    ap.add_argument('--fit-objective', choices=['zonefit','whittaker','whittaker-broad','whittaker-covered'], default='zonefit')
+    ap.add_argument('--fit-objective', choices=['zonefit','zonefit_rivers','whittaker','whittaker-broad','whittaker-covered'], default='zonefit')
     ap.add_argument('--require-verified', action='store_true', help='refuse exports without successful observed convergence checks')
     ap.add_argument('--max-outside',type=float,help='reject a build whose source land exceeds this outside-diagram fraction')
     ap.add_argument('--minimum-biome-score',type=float,help='minimum strict target-biome objective for publication')
@@ -152,7 +152,7 @@ def main():
     biome_scores = {profile:biome_targets.evaluate(ev['indices'],r.grid.target,valid,profile)
                     for profile in ['strict','broad']}
     profile = 'broad' if a.fit_objective=='whittaker-broad' else 'strict'
-    fit_score = objective(ev,'zonefit') if a.fit_objective=='zonefit' else biome_scores[profile]['score']
+    fit_score = objective(ev, a.fit_objective) if a.fit_objective in ('zonefit', 'zonefit_rivers') else biome_scores[profile]['score']
     coverage = None
     if a.fit_objective == 'whittaker-covered' or a.max_outside is not None:
         coverage = biome_targets.rendered_coverage(r)
