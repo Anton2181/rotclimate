@@ -1,3 +1,39 @@
+# Pressure-exterior physical pilot COMPLETE: target improves, guard failures
+
+All6 nativecoupled candidates pass originalnumerics, current97-control case/
+input/params/obs/masks pairing and independentrawscorebounds. Privatepressure
+filters nearest→constant0exterior ONLY; root89productionfiles/profileunchanged.
+Saharatarget215.04→78.73mm,loss−54.51%,T2.364→2.267. Soma3548→3003,loss−15.16%.
+BUT NIndia547→321loss+47.37%,Algeria14.6→5.15loss+24.43%,CaliforniaT+2.26%/
+rainloss+1.006% allfail original1%guards. Najdloss−.12%. CandidateCLOSED/
+UNAPPLIED,noblendstrengthrescue. No gate/source/defaultGaussian change.
+
+SaharaJulywindstillwrongdirection(+1.917,+2.194) vsobs(−1.423,−4.325); control
+(+1.473,+2.439). Soma retainswestwardJuly(−7.030,+1.583). BettertargetPdoesnot
+provewindfix. Sourcepressure/turning/drying feedbacksallcoupled; missingoutside
+context NOTrecoveredbyzeroor nearestclosure.3kernel/momentumtestsPASS.
+Full findings calibration/pressure_zonal_exterior_20261127/findings.md;6rawcases/
+T/P/winds/certs/protocols/summaries/review/inspectedfigure/agentreview outputsame.
+PID20342exited; noactiveworkers. Current97qual remainsvalid/root89hashesmatch.
+
+CURRENT calibrationreference output/climate_reference_20261127/qualification.json
+and ref58/r58_PART, complete97passed,3recentnativeTP/obs32repeatsexact.
+MeanTMAE1.629671C,rainloss.461644(exposeddevelopment,notindependentvalidation).
+Committed0e35e8c35. Oldclimate_runtime_20261126 qualifications historical.
+Offline sharedconvectivecap prototype5tests/0coupledruns notconvincingNIndia
+protection, do notpresentitascandidatefix. Globalinstability0closedtoo.
+
+NEXT options: usefullcurrent97pool. Mainrainoutliersinclude under-rained
+Namibia19vs237/inlandAustralia17vs240 aswellasover-rainedSom/Sahara; avoid
+broad drying. ExistingRHspread e22 waspreviouslytried(oldr24/26 docs earth_mode
+~786/904), gaveunwanteddesertshowers/fittednearlyoff; don'tre-inventitblindly.
+Distinct untestedthermallead from calibration/inversion_20261125/findings.md:
+wet_cooling scaleswith regional temperature-aboveannualmean, notavailable
+seasonalenergy, and overcoolswesterncontinental summers/latephase. Consider
+physicallyspecifiedenergy/seasonalforcing formulation withbroadguards, not
+globalcoolingknob orspentW18c ocean rescue. No nextstudydeclaredyet.
+W18cCLOSED,AAUNOPENED,r58retained,atlasr51unchanged. NoPR.
+
 # Pressure zonal-exterior pilot DECLARED:6 native candidates, unrun
 
 calibration/pressure_zonal_exterior_20261127/{plan.json,regions.json,README.md};
