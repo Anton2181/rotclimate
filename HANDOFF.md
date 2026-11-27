@@ -1,3 +1,42 @@
+# Circulation components COMPLETE: four exact captures and geographic review
+
+All4 fixed replays passed unchanged numerical certificates and byte-exact
+archived scored physical fields/traces/budgets. PID16192 now zombie; do not
+restart. Full findings: calibration/circulation_components_20261127/findings.md.
+Observed winds/pressure NEVER entered a solver in this completed diagnostic.
+
+July physical geographic east/north vectors:
+- Somalia1100 model(-6.808,+1.512) vsNCEP(+2.498,+6.332). Belt(-7.115,+2.525),
+  pressure(+0.307,-1.012). Crossing eligibility100%, pressure gateonly1.34%max.
+- Somalia4012 model(-4.018,+3.296), gate33.09%max; still wrong eastward sign.
+  Better wind does not fix rain (3556vs3589mm/year; earlier source compensation).
+- Sahara model(+1.473,+2.439) vsobs(-1.423,-4.325): pressure part reverses its
+  weak belt flow. Local crossingmask0 despite pressure gate67.32%max.
+- NIndia model(+4.394,+3.450) vsobs(+1.080,+1.211), pressure gate98.33%max.
+No universal extra turning/pressure strength is justified across these regimes.
+
+Use output/circulation_components_20261127/geographic_review.json and
+geographic_wind_components.png as final comparison. Original grid-frame
+review/figure preserved; supplement uses existing tested projection Jacobian
+including metric factors (no climate rerun). Actual pressure momentum and
+belt+pressure+drag sums reconstruct raw samples; heat/moisture winds equal.
+NCEP is SURFACE sigma0.995,1991-2020,2.5deg,not850hPa; pressure slopes are
+production-grid diagnostics and full/zonal-anomaly SLP are not model thermal
+pressure targets. Do not interpret regridded cells as independent observations.
+All figures viewed/readable. Test filename collision was fixed before runs:
+original tests/test_circulation_reference.py restored byte-exact, new5checks
+in tests/test_surface_wind_reference.py; both files'12 tests pass together.
+
+Next justified experiment: prospectively declare6 model-vs-observed-SURFACE-
+wind runs (three exact baseline controls + three observed-wind diagnostics)
+on same Somalia/Sahara/NIndia footprint, unchanged SST/coefficients/tolerances.
+Project input geographic velocity into model grid with existing Jacobian,
+verify actual raw solver wind against temporal interpolation, retain coupled
+T/P/source changes. This tests whether correcting winds helps rain; it is
+not an adoptable fictional-world law. No such six-run forcing experiment
+has been declared or started yet. Keep W18c closed,AAunopened,atlasr51;
+no background scientific workers currently active.
+
 # Next circulation diagnostic declared: four unchanged exact captures
 
 UNRUN at this commit: calibration/circulation_components_20261127/plan.json,
