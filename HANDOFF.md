@@ -1,3 +1,26 @@
+# Shared wetness solar-bound hypothesis DECLARED:99 integrations, unrun
+
+calibration/wet_energy_budget_20261127/{plan.json,regions.json,README.md};
+experiments/wet_energy_budget.py;4 dimensional/allocation tests PASS;
+scripts/run_wet_energy_budget.py + review_wet_energy_budget.py compiled.
+One unfitted physical hypothesis: TWO positive wetness-cooling terms share
+absorbed ice-free EBM-land daily TOA sunlight bound, using existing EBM column
+capacity * actual regional relaxation coefficient for W/m2/K. Explicit NEW
+effective-column assumption, NOT a closed surface/latent heat budget.
+Dry-soil warming preserved; exact actual lambda/delta_sun identities asserted.
+
+Production89/r58/atlasr51 unchanged. Private229 files: default-off model branch
+plus helper, hashed sources and explicit off/on protocol. Exactly99: Middle
+Volga/Ungava default-off ALL saved arrays byte exact, then fixed candidate ALL97
+current-qualified development regions. No accuracy early stopping/selection,
+no fitted amplitude, no per-region1% gate: existing policy-v6 dev6 (bootstrap
+90%upperS<1, meanT/P<=1% worse, regimeS<=1.02). Individual harms still reported.
+Failure closes THIS fixed candidate; no amplitude rescue. No adoption/fine/AA.
+Original solver criteria, no automatic retry, preserve failures/interruption.
+Commit before prepare then --run, nice10/all4threads1/literalvenvPython.
+No worker started yet; all97 input identities preflight required.
+W18/W18cCLOSED,AAUNOPENED,current97reference qualified and immutable.
+
 # Pressure-exterior physical pilot COMPLETE: target improves, guard failures
 
 All6 nativecoupled candidates pass originalnumerics, current97-control case/
