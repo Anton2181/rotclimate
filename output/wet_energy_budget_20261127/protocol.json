@@ -1,0 +1,29 @@
+{
+  "plan_sha256": "704219c6581eb8e4147c2edc52077d0e7d01b36882431abf1cf4de44a3b44c95",
+  "preparation_sha256": "c79de82e0465bdb044de12858c109433d341554a4252b849fb8b14c9a5ab5756",
+  "execution_sources_sha256": {
+    "experiments/wet_energy_budget.py": "843e515ab88628851443798dcd79b5f11c3861d185d3fea89b19194d85311712",
+    "tests/test_wet_energy_budget.py": "34b65fa51cfc499ffdffb5f23fb9de57eb5095ed2705ce7ab7feeb0c658ea1ee",
+    "scripts/run_wet_energy_budget.py": "6bf9711127c6fc4832d060082e2c943d4d5aabec3bb4a2ab01ab762a00dc0c47",
+    "scripts/review_wet_energy_budget.py": "66a4be24b5912c5947eb6d2866f0fc72428f83a645f22844d0361d325c2d91bb",
+    "scripts/review_current_climate_reference.py": "e3504e14cb75e30d601ff4e5b28be75fdc79ed9ffc2da83b99e6b35bef37ae77",
+    "scripts/gate_v3.py": "1854914d52a4ce5cc1e0a592bf1a85692b7a98c63d873f0a628ee022aec59f07",
+    "scripts/score_ci.py": "a42ec1a0f58bf9b904c877412297bb6cb35029fe6623df71ac8a227851587a3c",
+    "scripts/local_benchmark_protocol.py": "3c22e514384b4408b01bad4e8b6c2af065ab71ebaa81807888cddeb35709076e",
+    "calibration/wet_energy_budget_20261127/README.md": "568d45374bcacda13b1218d4579477c4ee1449c634f461aeff175d2d8cba451f"
+  },
+  "intervention": {
+    "flag": "private rotclimate.model.WET_ENERGY_BUDGET",
+    "control": false,
+    "candidate": true,
+    "heat_capacity": "C_LAND * r58.land_heat_capacity, EBM composite atmosphere+soil",
+    "conductance": "capacity * ACTUAL regional lambda_land [W/m2/K]",
+    "available": "ice-free EBM land absorbed daily TOA sunlight [W/m2]",
+    "allocation": "same min(1,available/(conductance*(positive dw+positive ds))) on both positive terms; preserve negative ds warming",
+    "changed_source": [
+      "private rotclimate/model.py",
+      "private rotclimate/wet_energy.py"
+    ],
+    "limitations": "solar-only upper bound; regional effective column identification is a hypothesis; not closed surface/latent heat budget"
+  }
+}

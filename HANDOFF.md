@@ -1,3 +1,46 @@
+# Solar-bound wetness experiment COMPLETE: full97 rejection; next global context
+
+Committed prospective study9a21d3c1e; output/wet_energy_budget_20261127 now
+complete99 original strict certificates (2 default-off controls +97 candidates).
+Both off controls reproduce ALL saved arrays byte exact. Root89/r58/atlasr51
+unchanged; same229-file private source off/on, all97 actual inputs/masks/obs paired.
+No scientific retry, numerical/gate change, fine28 or AA. Worker20921 exited.
+
+Fixed shared solar cap CLOSED/UNAPPLIED. Full97 S1.004161, 90% upper1.014629
+(FAIL); T mean1.629671→1.633926 C (+.261%), rainloss.461644→.464281 (+.571%).
+Means meet1% limits but continentalS1.042208/highland1.025579 FAIL1.02 guards.
+Unmodified gate_v3 CLI agrees exactly with raw independent review (expected
+accuracy exit1, not numerical failure); gate_inputs summary copies have manifest.
+VolgaT−27.2%,Prairies−21.9%,BritishIsles−24.9%,NIndia−2.4%; BUT Ungava+29.1%,
+Ontario/Hudson+34.5%,multiple rain harms. No capacity/bound/amplitude rescue.
+Full findings calibration/wet_energy_budget_20261127/findings.md; all raw97
+T/P and stepwise energy captures,2off arrays/protocols/certs/attempts/review,
+inspected thermal_response.png and root agent_review preserved in output.
+Effective EBM-column capacity assumption remains unproven; not closed energy.
+
+NEXT structural direction started: experiments/spherical_pressure_context.py,
+tests/test_spherical_pressure_context.py FIVE PASS (output/spherical_pressure_
+context_20261127/tests.xml/log/prototype_review.json). Small dense whole-sphere
+geodesic/area-weighted two-scale pressure reference, <=2048cells, zero climate
+integrations and no production import. Constant/periodic/hemisphere/global-area/
+off-crop influence tests; one l=1 harmonic max error.007559→.002134→.000546 on
+8x16→16x32→32x64 with2500km kernel. Not full3D/all-scale/transport certification.
+No actual global parent thermal field or momentum solved, no skill/adoption.
+Need specify parent physics and nested-domain/scalable/reference agreement
+BEFORE declaring coupled evaluations; don't pass off static EBM landmask as truth.
+Protocol/limits calibration/spherical_pressure_context_20261127/README.md.
+
+Readable main issues/progress/next choices:
+calibration/climate_priorities_20261127/README.md. Major issues: wet cooling/
+thermal dipole, missing off-domain pressure context, active tropical rain triggers,
+under-rained interiors, Earth-only conditioning for world transfer. Old r39
+environmental6/6.5 K/km profiles passed numerics but failed accuracy/humidity;
+don't reinvent as an untested new model. Pressure0/globalinstability0 remain
+closed. Current97reference remains qualified. W18/W18c permanentlyCLOSED,
+AAUNOPENED, retainedr58, atlasr51 unchanged, no active workers, goal ACTIVE.
+User asked if actual progress: candid yes to fixes/local gains, no new broadly
+validated atlas; do not claim a rejected experiment improved retained climate.
+
 # Shared wetness solar-bound hypothesis DECLARED:99 integrations, unrun
 
 calibration/wet_energy_budget_20261127/{plan.json,regions.json,README.md};
