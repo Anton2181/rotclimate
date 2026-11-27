@@ -1,3 +1,29 @@
+# Six surface-wind diagnostic runs COMPLETE: compensation defeats Somalia correction
+
+Plan/source/scripts committed4bae4a240 before preparation/integration. All6
+original numerical certificates pass,3 controls byte-exact monthly/raw/budget,
+3 observed-wind actual heat+moisture samples byte-exact to read-only projected
+reference interpolation. No source/SST/other coefficient/tolerance changes.
+Worker16724 exited. Full findings calibration/surface_wind_diagnostic_20261127/
+findings.md; output contains full forcing,6 captures/certs, independent review,
+spatial_rain_review.json, inspected wind_response.png, agent_review.json.
+
+SomaliaP3556→4097 vs457 observed, TMAE1.298→1.515, rainloss+14.71%.
+Convergence import1592→259 but marine relaxation−12.68→1662.56mm/year;
+source compensation offsets wind correction. SaharaP215→12.31 vs2.07,
+rainloss−91.63%, T improves. NIndiaP547→748 vs761, T improves, but BOTH
+per-cell rain loss components worsen(total+35.80%): several Nepal cells
+3246–3889mm vs366–772obs. Mean seasonal/annual curves hide redistribution;
+do not substitute a regional-mean metric. No observed forcing adoption.
+
+Next proposed: separate prospective fixed wind×e91 marine-relaxation ablation
+on same3 regions; declare own budget and exact controls before any new runs.
+Completed6-run packet immutable. Ablation inflow_gain0 tests source interaction,
+not a selected moisture law. Prior rejected cap stays unapplied; no strength
+tuning or W18c rescue. No next study started yet. W18c CLOSED, AA UNOPENED,
+r58 retained, atlasr51 unchanged; fresh current-source paired reference still
+required for future calibration. No active scientific worker to restart.
+
 # Six surface-wind diagnostic runs DECLARED, not yet started
 
 Prospective plan: calibration/surface_wind_diagnostic_20261127/plan.json and
