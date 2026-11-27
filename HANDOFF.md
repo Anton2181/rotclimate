@@ -1,3 +1,40 @@
+# Native finite-parent pressure-context pilot DECLARED:14 integrations, unrun
+
+New calibration/nested_pressure_context_20261127/{plan.json,regions.json,README.md}.
+Input-only preparation complete: six1100/4012km56km pairs share full overlap
+geography/observations EXACT at52-cell offset;231 private regular files pinned;
+ZERO climate integrations. Input inventory output/nested_pressure_context_20261127/
+input_inventory.json. scripts/prepare_nested_pressure_context_inputs.py generated
+three missing parent caches; no old tree changed.
+
+experiments/nested_pressure_context.py SEVEN known-answer tests PASS: analytic
+outside heat-low contribution/local feedback/constant/native continuation,
+actual wideFFT kernel, exact unchanged-parent sampling across two window sizes,
+bad-alignment rejection. New runner run_nested_pressure_context.py and independent
+review_nested_pressure_context.py compiled. Root89production unchanged.
+No actual global parent is claimed: this is native finite planar parent context,
+distinct from the separate spherical operator reference.
+
+Exactly14: Somalia/NIndia default-off repeats must match ALL saved control cell
+arrays byte exact; six native4012km parents (Sahara,Somalia,NI,Algeria,Najd,Calif),
+THEN six1100km nested children. All6 parents frozen, none selected by accuracy.
+Capture actual last pressure-input anomalies for each native day; child replaces
+ENTIRE local padded rectangle with own CURRENT anomaly on EACH pressure call,
+original pressure Gaussians/coefs on composite parent, crop, original momentum/
+last_pres couplings. Child moisture inputs/boundaries/SST/parameters unchanged.
+One-way/outer nearest/projection/long broad kernel/Earth conditioning remain
+explicit limitations, no global climate or convergence-to-truth claim.
+
+Prospective screen: Sahara rainloss<=.90; Somalia July geographic sigma995
+surface-vector RMSE<=.90 vs default-off; ALL6T/Ploss ratios<=1.01. Original
+numerics/no automatic retry, no accuracy early stopping. Failure closes fixed
+alternative/no pad/blend/amplitude rescue. Pass only broader development,
+NOT adoption. Raw parent/child climate+pressure inputs/winds archived, original
+directGaussian reconstruction<=1e-7Pa operator precision bound (NOT solvertol).
+Commit plan BEFORE preflight; then nice10/all4threads1/literalvenvPython prepare
+and --run. No worker started yet. No fine/AA/W18c reopen; r58/atlasr51 unchanged.
+Solar-bound/pressure0/instability0 alternatives stay CLOSED; current97 qualified.
+
 # Solar-bound wetness experiment COMPLETE: full97 rejection; next global context
 
 Committed prospective study9a21d3c1e; output/wet_energy_budget_20261127 now
