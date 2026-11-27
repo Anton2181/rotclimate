@@ -1098,6 +1098,13 @@ class ClimateModel:
         band = np.cos(np.pi * (np.clip(lat, 10, 75) - 15.0) / 60.0)
         sign = 1.0 if p.retrograde else -1.0
         cur = sign * p.current_strength * self.side * band
+        if p.current_cold_lat0 > 0:
+            # e132: the Canary and Benguela currents leave the coast at 10-20 deg and turn west into the
+            # equatorial currents; the Gulf of Guinea is the warm, eastward Guinea Current. The band above is
+            # clamped at 10 deg, so the full cold current ran to the equator: the Gulf of Guinea sat 4-7 C
+            # colder than WOA18 in May and its monsoon air left the Nigerian coast 3 C too cold all year.
+            fade = np.clip((np.abs(lat) - p.current_cold_lat0) / max(p.current_cold_lat1 - p.current_cold_lat0, 1e-6), 0.0, 1.0)
+            cur = np.where(cur < 0, cur * fade, cur)
         if self.gyre is not None:      # e42: no gyre, no cold current
             cur = np.where(cur < 0, cur * (1.0 - p.current_gyre * (1.0 - self.gyre)), cur)
         if self.shelf_deep is not None:
