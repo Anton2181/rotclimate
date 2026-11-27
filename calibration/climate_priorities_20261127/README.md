@@ -25,12 +25,19 @@ An experimental improvement in one region is not an adopted global improvement.
 Reference: [current qualification](../../output/climate_reference_20261127/qualification.json)
 and [baseline findings](../current_climate_reference_20261127/findings.md).
 
+- Southern westerly and polar background belts are now present. Eleven
+  symmetry checks failed before;39 relevant tests now pass. An ordinary coupled
+  run is byte exact and a wider native run passes unchanged strict criteria.
+  The correction is provably inactive on all97 full r58 reference grids.
+  [Source qualification and compatibility proof](../../output/southern_zonal_belts_fix_20261127/qualification.json)
+  explicitly link the original reference; it was not reintegrated.
+
 ## Outstanding physical issues
 
 | Priority | Evidence | Decision it supports |
 | --- | --- | --- |
 | Wet-land temperature forcing and continental biases | Volga, western Canada and western Europe are too cold or late; parts of eastern Canada are already too warm. The existing summer-anomaly cooling can remove 5–7 K from the land target. | Test physically stated thermal hypotheses across both groups, rather than a global warming/cooling knob. The fixed shared-solar-bound experiment completed all97: local gains but full development rejection. |
-| Circulation depends on unavailable surrounding context | Padding changes Sahara rain from215 to7 mm/year with identical scored geography. Native summer winds have the wrong direction in Somalia and Sahara. Replacing the pressure filters' unknown exterior by zero improves these rain targets but damages North India. | The next substantial circulation direction should supply an explicit wider thermal-pressure context and test nested-domain consistency. A different constant boundary or stronger universal turning floor does not recover the missing context. |
+| Circulation depends on unavailable surrounding context | Padding changes Sahara rain from215 to7 mm/year with identical scored geography. Native summer winds have the wrong direction in Somalia and Sahara. Replacing the pressure filters' unknown exterior by zero improves these rain targets but damages North India. | The completed finite native-parent pilot improved Somali July wind RMSE22.6% but worsened its rain loss53.8% and badly wetted the deserts. That fixed candidate is closed. Work next on precipitation/stability; wider pressure context alone is not the climate fix. |
 | Tropical precipitation triggers are too active | With observed winds and SST, Somalia's water column is close to reanalysis but rain remains2590 versus457 mm/year. Both ordinary and exponential pathways are large; overflow is not the explanation. | A valid convection change must preserve the Indian monsoon and dry interiors. Neither deleting the warm instability boost nor algebraically consolidating its cap is an established solution. |
 | Dry interiors are also too dry | Namibia/Kalahari19 versus237 mm/year; inland Australia17 versus240. | Broad global drying is a poor response to wet Somalia and Sahara. Include these deficits in development assessments. |
 | Calibration depends on Earth-only conditioning | r58 uses observed lateral precipitable water and some observed-rain-derived circulation conditioning. The fantasy world has no such observations. | A separate transfer configuration and matched world validation are required before an Earth gain can become a new atlas. No planetary fit can substitute for this check. |
@@ -62,8 +69,7 @@ Useful records: [instability findings](../instability_consolidation_20261127/fin
 [old environmental result](../../output/environmental_partition_20261027/review.json).
 
 The fixed solar-bound candidate is closed after full development failure.
-Missing large-scale pressure context is a stronger
-next circulation direction than another local boundary blend. The new [small global/context reference](../spherical_pressure_context_20261127/README.md)
+The native-parent test has now isolated wider pressure context and failed its rainfall protections. Further local boundary blends should give way to the precipitation/stability problem. The new [small global/context reference](../spherical_pressure_context_20261127/README.md)
 preserves constants, spherical distances/areas, longitude rotation and hemisphere
 reflection; one spherical harmonic converges under refinement. It still needs
 scalable agreement, a justified global thermal field and nested sampling; it cannot be presented as

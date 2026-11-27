@@ -1,3 +1,50 @@
+# Southern wind belts FIXED/QUALIFIED; current97 reference explicitly compatible
+
+Main source005827e44 adds guarded SHwesterly/polar belts. Eleven previously
+failing symmetry checks nowpass; combined39testsPASS,20pre-edit NHgoldens EXACT
+on mixed grids. Both prospectively declared native sourcechecks complete2/2 with
+original strictnumerics, worker22293 exited. OrdinarySom1100 ALLsavedTP/obs/
+coords+monthlywind bytes EXACT, branchinactive. Wide nativeSom4012 branchactive
+14/25steps up to2051cells; rain3587.62→3579.78, TMAE1.364457→1.363049,
+maxmonthlyΔT.01439C/ΔP3.4885mm/Δwind.06862m/s. Smallsourceeffects, notbroadskill.
+Full findings calibration/southern_zonal_belts_fix_20261127/findings.md.
+
+USE output/southern_zonal_belts_fix_20261127/qualification.json for CURRENT89
+engineering source + EXPLICIT compatibility to original97reference. Rawpaired
+controls remain output/climate_reference_20261127/ref58/r58_PART; originalQ and
+allprotocolsourcehashes remain historical, neverrelabelled. reference_scope.json:
+actualcaseIDs ALL97 exact; guardFALSE on ALL97FULLgrids forEVERY s∈[-1,1],
+includingprimer (threshold−27.562666,minactualgrid−10.489706). Exact model.py
+comparison: onlyguardedblock added; other88sourcehashes unchanged. Thus existing
+r58reference physics is unchanged. ZEROnew97integrations;39tests+2sourcechecks
+qualifyfix. Futureplans mustPIN newQ/compatibilityproof AND rawcontrolprotocols,
+notblindlyassert oldQ.modelhashes equalnewsource. Scope appliesr58Earthparams,
+notarbitrarynewparams/worldgeography.
+
+Raw before/after/regression XML/logs;13regressions+NHgolden;scope/2attempts/
+protocols/certs/TP/windraws/review/inspectedsource_changes.png/agent_review/Q
+allpreserved. Fix isunfitted anddoesNOTcompleteSH/globalthermodynamics. New
+coupled native sourcechecks DO NOT rerun/rescueanynestedchild. Among6large
+parents onlySomreachesnewbelts; Sahara/Algeria failures cannotbeexcused bygap.
+
+NEXT climatepriority: precipitation conversion/stability. The native-parent
+pressure pilot is CLOSED/UNAPPLIED1d74c8fec: SomJulywinderror−22.6% but
+rain+53.8%; Sahara215→779,Algeria14.6→360 severewetting; NIhelps. All14numerics
+passed. Changingpressureexterior alone isn'tfix, no more boundary/blend/padding
+rescue. Read interpretation_note.md: childdata/formulas/locations stayedfixed;
+actual SST/moisture boundarytargets CANrespondcoupled, neverclampedvalues.
+Oldwind×observedSSTjoint stillrain2590vs457 withPWnearref; bothbase+expconv
+active,overflow0. Warm-instability0closedforNIharm; offline sharedcapnotconvincing.
+Before newverticalhypothesis reread r39 environmental6/6.5K/km failures (numerics
+passed, accuracy/humidityfailed). Need defensible vertical stability/moisture
+discriminator, notnew geographicmask/globaldrying/amplitude rescue. Existing
+NCEPpressure-level reference machinery mayhelp; no nextstudy declaredyet.
+Do notsilently treat prescribedobservedPW/descent as standalone-worldskill.
+
+Current readableprioritynote calibration/climate_priorities_20261127/README.md.
+Noactiveworkers. GoalACTIVE, W18/W18c permanentlyCLOSED,AAUNOPENED,
+retainedr58params, atlasr51unchanged, nofine/worldfit/PR.
+
 # Southern zonal-belt source correction APPLIED:39 tests pass, two checks declared
 
 Rootmodel.py now adds ONLY guarded SHwesterly/polar belts, opposite seasonal
