@@ -1,3 +1,57 @@
+# Active goal: W18c and prospectively amended private padding study LIVE
+
+Current processes (always recheck actual /proc state after reconnect):
+- W18c PID6609 remains live on original frozen physics/shared inputs. Last
+  22 initial candidates complete, w1_021 underway; leader still w1_005,
+  S97/objective0.9842206108, worst regime1.01796884. No full gate/adoption.
+- Private padding driver PID10059, worker PID10060, both nice10. New packet:
+  output/padding_sensitivity_parallel_20261127/. Check driver_status.json,
+  integrating.log, driver_failure.json and per-case receipts before any restart.
+
+IMPORTANT scheduling amendment: the old waiting queue PID8757 was stopped
+BEFORE ANY padding integration (old study had0 attempts/results). It is now a
+zombie/retired, not active. Original plans/preparation/protocol remain intact.
+output/padding_sensitivity_20261126/superseded_before_run.json blocks old
+execution, so there is ONE nine-attempt budget, not two. Do not restart the
+old queue or original padding plan. Prospective replacement was committed in
+eeb97f316 before the first run; see calibration/padding_sensitivity_parallel_20261127/README.md.
+
+Why changed: private code/cache isolation permits useful physical evidence
+while the longer W18c campaign computes. Scientific design is IDENTICAL:
+r58 source/parameters,3regions,same scored cells/observations,pads1100/2220/4012,
+same exact controls, tolerances, failure policy and max9 attempts. Only timing,
+namespace and reuse of6 prepared private cache files changed.59 tests pass;
+225 private regular files/source hashes and unchanged main inputs verified.
+W18c source/design/selection/budget/proposals/gates/sealed use are UNCHANGED.
+Pending marine-budget main-source patch remains UNAPPLIED while W18c runs.
+
+All3 1100km controls passed, bit-exact float32 archive reproduction incl
+Somali/Saharan E/W/u/v. All3 2220km cases also passed; the3 large4012km
+cases remain pending at last check. Read actual receipts.
+The driver automatically runs the independent reviewer after its fixed study;
+no automatic source application/adoption/publication. Do not modify current
+runner/reviewer/plan/private sources while active, or retry failed/interrupted
+attempts without the declared recorded recovery review.
+
+PRELIMINARY Somalia1100->2220 (full9-case review still required): rain
+3556.41->3831.87mm/year, convergence import1591.65->1386.39, surfaceE change
+-13.85, drying change+1.55mm/year. The unpartitioned equation remainder rises
+~493.01mm/year. It combines advection/diffusion/storm/marine exchange and
+residual, NOT a measured boundary flux or one-process attribution. Monthly
+state changes RMS T0.20568C, rain38.08564mm/month. Exact cells/observations,
+calendar and independently reconstructed raw traces were checked. This is
+evidence against treating the earlier fixed-field filter proxy as a rainfall
+prediction, not an adopted fix or a reason to change the declared experiment.
+Preliminary JSON packets preserve raw hashes and scope; finish ALL cases.
+
+NEXT: monitor both live jobs. After padding completes, inspect the actual
+figure, verify independent review and publish complete findings/failures.
+Let W18c finish under its original rules, review its finalist/gates, then apply
+and retest the ready diagnostic export patch as a new epoch. r58 remains
+adopted, atlasr51. Do not regenerate regional leader reports unless it changes.
+
+# Earlier active-goal state follows
+
 # Active goal: W18c live; automatic fixed-padding follow-up queued
 
 Check BOTH live processes before restarting anything:
