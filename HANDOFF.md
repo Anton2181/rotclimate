@@ -1,3 +1,17 @@
+# Current-source97-region reference DECLARED; none started
+
+calibration/current_climate_reference_20261127/{plan.json,regions.json,README.md}.
+New scripts/run_current_climate_reference.py and review_current_climate_reference.py.
+Exactly97 coarse r58 baseline runs in8 historical EXPOSED dev parts, no fine/AA.
+Sameparams/actualcaseIDs/obs/masks/grids/numerics. Current89 source files and
+134cache+5helpers=228regularprivatefiles.3recentnativegoldens must byte-exact
+T/P/obs32. Old qualifications remainhistorical,actual physicaldeltas reported.
+No candidate/profile/atlas change. Commit first, prepare then --run atnice10,
+all4threadvars1, literalvenv. All97 actualinputs verifiedbeforeintegrating.
+Anyfailed/interrupted scientificattemptstops,noautoretries/tolerancechanges.
+Raw standard8partprotocols/cases/cells/summaries +independent rawarrayreview.
+No worker startedyet. W18cCLOSED,AAUNOPENED,r58retained,atlasr51unchanged.
+
 # Physical instability0 test COMPLETE: Somalia improves33.5%, India guard fails
 
 Four new physical candidates,4 reused exact/current89-source controls. All
