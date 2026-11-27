@@ -2,6 +2,10 @@
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# r59 ADOPTED (28 Nov 2026): r58 + e132b warm currents fade toward the equator (Somali sea 4-6 C too warm).
+dev6 S97 0.9870 [0.9746, 0.9986], fine28 1.000, sealed AA 0.9996 [0.9967, 1.0028] (AA now SPENT).
+calibration/local_accuracy_20261023/r59_adoption.json; world r59w. Atlas rebuild on r59 next. W19 and W20 closed (records).
+
 # r58 ATLAS LIVE (27 Nov 2026 20:28 UTC): release complete, browser checks pass (smoke + 8 suites), reports/RELEASE_R58_20261127.md
 World physics r58w (r58 + e116z zonal edge PW; Earth screen 1.0098 vs r58), world geometry = r51 world (W6 search
 found nothing better), fit objective zonefit_rivers. Corrections retrained for r58w (calibration/earth_correction_r58_20261127).
