@@ -2457,11 +2457,22 @@ class ClimateModel:
                 # e116: a regional model takes its lateral boundaries from observations (reanalysis): the
                 # Amazon's and Congo's seas lie beyond the 1,100 km pad, and a fixed or interior-copied edge
                 # humidity either starved them or flooded the steppes (calibration/edge_moisture_20261124).
-                if g.obs_pw is None:
+                if p.edge_pw_source == "zonal":
+                    # e116z: the latitude's land-mean column water (no longitude information), so the same rule
+                    # serves an invented world on an Earth-like planet
+                    if g.zonal_pw is None:
+                        from .earth import zonal_land_pw
+                        g.zonal_pw = zonal_land_pw(g.lat)
+                    src = g.zonal_pw
+                elif p.edge_pw_source == "observed":
+                    src = g.obs_pw
+                else:
+                    raise ValueError(f"unknown edge_pw_source {p.edge_pw_source!r}")
+                if src is None:
                     raise ValueError('edge_obs_pw needs an Earth grid with obs_pw (scripts/build_ncep_pw.py)')
                 mpos = (d / p.year_days * 12.0 - 0.5) % 12.0
                 m0 = int(np.floor(mpos)); fr = mpos - m0
-                pw = (1.0 - fr) * g.obs_pw[m0] + fr * g.obs_pw[(m0 + 1) % 12]
+                pw = (1.0 - fr) * src[m0] + fr * src[(m0 + 1) % 12]
                 bnd = np.where(ocean, bnd, (1.0 - p.edge_obs_pw) * bnd + p.edge_obs_pw * np.minimum(pw, Ws))
             W = W_prev if W_prev is not None else bnd
             energy = np.clip((T + 5.0) / 20.0, 0, 1)

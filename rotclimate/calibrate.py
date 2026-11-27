@@ -270,9 +270,9 @@ def evaluate_params(p: Params, mode="mean", seeds=None, cutoff=None, ensemble_ob
     from .model import ClimateModel
     from .score import evaluate, objective
 
-    guarded = mode == "guarded"
+    guarded = mode in ("guarded", "guarded_rivers")
     if guarded:
-        mode = "zonefit"
+        mode = "zonefit_rivers" if mode == "guarded_rivers" else "zonefit"
     biome_profile = {'whittaker': 'strict', 'whittaker-broad': 'broad', 'whittaker-covered':'strict'}.get(mode)
     evs, meds, biome_rows, coverage_rows, covered_scores = [], [], [], [], []
     seeds = seeds or [None]
@@ -327,7 +327,7 @@ def evaluate_mean_climate(p, mode, seeds):
     result = ensemble_mean(runs)
     ev = evaluate(result)
     med = mediterranean_shares(result, ev)
-    guarded = mode == 'guarded'
+    guarded = mode in ('guarded', 'guarded_rivers')
     if mode == 'twotarget':
         tt = two_target(result, ev)
         return dict(score=tt['score'], guard_penalty=0., two_target=tt, mediterranean=med, mean=ev['total'],
@@ -335,7 +335,7 @@ def evaluate_mean_climate(p, mode, seeds):
                     display_accuracy=ev['label_policy_audit']['display_accuracy'], precision=ev['precision'],
                     realism=ev['realism'], spread=0., ensemble_objective='climate', layouts=len(runs),
                     observed_numerics=result.numerics, zonefit_score=objective(ev, 'zonefit'))
-    if guarded: mode = 'zonefit'
+    if guarded: mode = 'zonefit_rivers' if mode == 'guarded_rivers' else 'zonefit'
     profile = {'whittaker':'strict', 'whittaker-broad':'broad', 'whittaker-covered':'strict'}.get(mode)
     biome = (biome_targets.evaluate(ev['indices'], result.grid.target,
              result.grid.inmap & result.grid.land, profile) if profile else None)
@@ -543,7 +543,7 @@ def calibrate(out_dir: Path, evals: int, base: Params, x0=None, sigma0=0.25,
                 pickle.dump((es, best, n, n_raced), f)
             (out_dir / "state.tmp").replace(state)
             pc = best[1]["per_class"]
-            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "zonefit_rivers", "guarded") else {}
+            f1 = best[1].get("f1", {}) if mode in ("f1", "f1r", "zonefit", "zonefit_rivers", "guarded", "guarded_rivers") else {}
             print(f"[{n:5d} evals, {n_raced} raced, {time.time() - t0:6.0f}s] best {best[0]:.3f} "
                   f"(mean {best[1].get('mean', best[0]):.3f})  gen-mean "
                   f"{np.mean([r['score'] for r in res]):.3f}  "

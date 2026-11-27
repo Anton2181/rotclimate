@@ -234,6 +234,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
+    g.zonal_pw = zonal_land_pw(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)     # e116z: latitude-only stand-in
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
@@ -618,6 +619,41 @@ def observed_pw(lat, lon, mirrored=False):
     j = (np.asarray(lon, float) % 360.0) / 2.5
     wrap = np.concatenate([pw, pw[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+NCEP_PW_ZONAL = CACHE / "ncep_pw_zonal_land.npz"   # derived from NCEP_PW and WorldClim land (zonal_land_pw)
+
+
+def zonal_land_pw(lat, mirrored=False):
+    """World-legal stand-in for e116's observed edge column water: the NCEP long-term monthly precipitable water
+    averaged over the globe's land at each latitude (WorldClim land weights per 2.5-degree point; rows with under
+    2 % land take the full zonal mean). Depends on latitude and season only, so an invented world on an
+    Earth-like planet can use it. [12, ...] mm; months shifted by six for mirrored southern regions."""
+    if not NCEP_PW_ZONAL.exists():
+        if not NCEP_PW.exists():
+            return None
+        z = np.load(NCEP_PW); pw, plat = z["pw"].astype(float), z["lat"].astype(float)
+        land = ~np.isnan(_wc("elev"))                                   # 5' grid, 90N..90S, 180W..180E
+        H, W = land.shape; nlat, nlon = pw.shape[1], pw.shape[2]
+        rows = ((90.0 - plat) / 180.0 * H).astype(int)
+        cols = (((np.arange(nlon) * 2.5 + 180.0) % 360.0) / 360.0 * W).astype(int)
+        half = int(round(1.25 / 180.0 * H))
+        w = np.zeros((nlat, nlon))
+        for i, r in enumerate(rows):
+            band = land[max(r - half, 0):min(r + half, H)]
+            if band.size == 0:
+                continue
+            for j, c in enumerate(cols):
+                idx = np.arange(c - half, c + half) % W
+                w[i, j] = band[:, idx].mean()
+        frac = w.mean(axis=1)
+        zl = np.einsum("mij,ij->mi", pw, w) / np.maximum(w.sum(axis=1), 1e-9)
+        table = np.where(frac[None, :] >= 0.02, zl, pw.mean(axis=2))
+        np.savez(NCEP_PW_ZONAL, pw=table, lat=plat, land_share=frac)
+    z = np.load(NCEP_PW_ZONAL); table, plat = z["pw"], z["lat"]
+    o = np.argsort(plat)
+    out = np.stack([np.interp(np.asarray(lat, float), plat[o], table[m][o]) for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
 
 
