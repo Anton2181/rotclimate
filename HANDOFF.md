@@ -1,3 +1,35 @@
+# Completed padding study: all9 passed and independently reviewed
+
+Private padding has FINISHED. PID10059 is a zombie, PID10060 exited; do not
+restart the completed producer/driver or the retired original waiting queue.
+output/padding_sensitivity_parallel_20261127/review.json validates all9 cases,
+all9 pairwise comparisons and36 raw files. All3 controls exactly reproduce
+current-runtime r58. Agent visually inspected padding_changes.png and recorded
+agent_review.json. Full findings and reproducible supplementary partial-source
+accounting: calibration/padding_sensitivity_parallel_20261127/findings.md,
+analyze_completed.py; output completed_accounting.json.
+
+Annual rain1100/2220/4012km (same scored cells/observations):
+- Somalia3556/3832/3589 vs457 observed; larger domains do not fix it.
+- Sahara215/13.3/7.2 vs2.07 observed; strong improvement but still excess.
+- North India547/429/470 vs761 observed; both expanded cases worsen rain loss,
+  although largest-domain T MAE improves3.206->3.029C.
+No pooled score, best padding, source change, climate adoption or atlas rebuild.
+Do NOT deploy larger padding as the solution or translate frozen-wind proxy
+changes into rainfall. Somalia1100->4012 import falls665.79mm/year while rain
+rises32.78; unpartitioned remainder rises700.67. This remainder combines
+unrecorded advection/diffusion/storm/marine exchange and equation residual,
+not a measured boundary flux or isolated causal component/closure certificate.
+
+W18c remains LIVE PID6609 on unchanged frozen source/inputs. Last26 complete
+development evaluations, same leader w1_005 S97/objective0.9842206108. Read
+actual campaign_status.json before action. Full gates outstanding; source
+readiness passed again. Adoptedr58, atlasr51. Pending marine diagnostic patch
+still UNAPPLIED to main; do not edit active sources/helpers/caches. Useful
+next independent work is a separately declared bounded private diagnostic
+capture with corrected export and exact archived physical reproduction, so
+the compensating terms can be split. No such new captures started here.
+
 # Latest review: remote branches checked; Earth conditioning scope recorded
 
 Fetched ALL remote heads (the clone's default refspec fetched only the active
