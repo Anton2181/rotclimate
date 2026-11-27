@@ -1,3 +1,30 @@
+# Next circulation diagnostic declared: four unchanged exact captures
+
+UNRUN at this commit: calibration/circulation_components_20261127/plan.json,
+README.md. Four fixed baseline diagnostic replays (Somalia1100/4012km,
+Sahara1100,NIndia1100,all56km) with pure instance wrappers around zonal_wind
+and pressure_wind. Current root model/source/params/tolerances unchanged.
+Capture actual prior pressure input, current pressure, returned wind parts,
+drag and crossing/gate inputs. Require exact physical monthly fields/traces/
+budgets and original strict numerical certs. No scientific retries.
+
+Restored/validated public NOAA PSL NCEP/NCAR sigma0.995 surface wind+SLP,
+1991-2020,global2.5deg. Raw files/metadata/normalized packet are in
+output/circulation_reference_20261127/. Verified scale/units/grid/period and
+converted SLP millibars toPa. downloads host timed out; fileServer worked,
+one429 recovered with delay. Data retrieval only, no climate integration.
+JulySomalia eastwardwind +2.498m/s observed vsr58-6.809, largepad-4.019.
+This is surface, NOT850hPa; fullSLP differs from thermal anomaly. Five pure
+reference/momentum tests pass. Observations will NOT enter any solver/model.
+
+Commit plan before preparing/running scripts/trace_circulation_components.py
+(all4 thread vars1,nice10). Fresh225 private files, singleton source/attempt
+guards. --run executes exactly4; review_circulation_components.py auto-checks
+Pa/m momentum, actual belt+pressure+drag wind sums and unchanged physical
+fields, then compares surface reference and renders wind_components.png.
+Inspect actual figure/findings. No new wind law, forcing, parameters, gate,
+fine/AA data, W18c rescue or atlas/adoption. None started at this commit.
+
 # No-water inflow guard COMPLETE:30 tests +7 matched regional regressions pass
 
 Main source now enables e91 warm-sea inflow only if the existing modeled sea
