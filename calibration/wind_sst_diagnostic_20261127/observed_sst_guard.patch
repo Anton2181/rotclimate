@@ -1,0 +1,18 @@
+diff --git a/rotclimate/model.py b/rotclimate/model.py
+index ec030a652..370a96988 100644
+--- a/rotclimate/model.py
++++ b/rotclimate/model.py
+@@ -1698,10 +1698,12 @@ class ClimateModel:
+                 T_sea_eq = SST + p.sea_ice * ice_state * (np.minimum(Tl, 0.0) - SST)
+             T_eq = np.where(land, Tl, T_sea_eq)
+             self._sst_last = SST       # e113: the nearest sea's temperature for the next step's dry heating
+-            if p.sst_damping_heat_only and p.sst_damping > 0:
++            if p.sst_source == "model" and p.sst_damping_heat_only and p.sst_damping > 0:
+                 # e126: the damped swing sets only the heat the sea gives the air (T_eq above); the moisture,
+                 # convection and inflow below keep the undamped sea the rain settings were fitted around
+                 # (calibration/range_20261124: damping alone fixed the maritime lag but wetted every west coast)
++                # A prescribed observed sea supplies both uses directly; it has
++                # no modeled damping anomaly to undo.
+                 SST = SST + (self.z.sea(lat, d, p.sst_offset, 0.0, p.sst_damping_lat, p.sst_tropical, p.sst_tropical_lat) - To)
+ 
+             # ---- parts of the winds and storms that do not depend on temperature

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="1" skipped="0" tests="2" time="3.281" timestamp="2026-11-27T08:13:43.947914+00:00" hostname="5536e6bdbb9d"><testcase classname="tests.test_observed_sst_damping" name="test_observed_surface_is_prescribed_for_heat_and_water_despite_model_damping" time="1.055"><failure message="AssertionError: &#10;Arrays are not equal&#10;&#10;Mismatched elements: 2 / 2 (100%)&#10;Mismatch at indices:&#10; [0]: 20.68899457410533 (ACTUAL), 20.94230769230769 (DESIRED)&#10; [1]: 20.68899457410533 (ACTUAL), 20.94230769230769 (DESIRED)&#10;Max absolute difference among violations: 0.25331312&#10;Max relative difference among violations: 0.01209576&#10; ACTUAL: array([20.688995, 20.688995])&#10; DESIRED: array([20.942308, 20.942308])">def test_observed_surface_is_prescribed_for_heat_and_water_despite_model_damping():
+        m = setup_model('observed', True)
+        before = m.g.obs_sst.tobytes()
+        result = m.run(diagnose_moisture=True)
+        assert result.numerics['all_checks_passed']
+        assert m.g.obs_sst.tobytes() == before
+        for record in m.trace:
+            expected = at_day(m.g.obs_sst, record['day'], m.p.year_days)
+            np.testing.assert_array_equal(m.sst_record[round(record['day'], 6)], expected)
+&gt;           np.testing.assert_array_equal(record['SST'], expected[m.trace_cells])
+E           AssertionError: 
+E           Arrays are not equal
+E           
+E           Mismatched elements: 2 / 2 (100%)
+E           Mismatch at indices:
+E            [0]: 20.68899457410533 (ACTUAL), 20.94230769230769 (DESIRED)
+E            [1]: 20.68899457410533 (ACTUAL), 20.94230769230769 (DESIRED)
+E           Max absolute difference among violations: 0.25331312
+E           Max relative difference among violations: 0.01209576
+E            ACTUAL: array([20.688995, 20.688995])
+E            DESIRED: array([20.942308, 20.942308])
+
+tests/test_observed_sst_damping.py:31: AssertionError</failure></testcase><testcase classname="tests.test_observed_sst_damping" name="test_model_surface_keeps_existing_heat_only_undamped_moisture_temperature" time="0.634" /></testsuite></testsuites>

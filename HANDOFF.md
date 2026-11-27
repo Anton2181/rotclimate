@@ -1,3 +1,27 @@
+# Observed-SST damping guard FIXED/TESTED;12 wind×SST runs DECLARED
+
+Main model.py anomaly addback now only when sst_source=model. Previously obs
+heat target was literal SST but moisture/convection/e91 got obs+modeled anomaly.
+Actual coupled test reproduces1fail/1pass before, bothpass after; flags toggled
+under observed SST now allphysical/budget bytes exact. Modeled SST retains old
+heat-only behavior.58combined source tests+6WOA checksPASS. Rawlogs/XML under
+output/observed_sst_fix_20261127. No regional integration started yet.
+
+Prospective calibration/wind_sst_diagnostic_20261127/{plan.json,README.md,patch}.
+New run_wind_sst_diagnostic.py/review_wind_sst_diagnostic.py. Fixed12 integrations:
+6 modeled-SST controls reproduce current Ekman6captures byteexact FIRST, then
+6 observed-SST arms, bothwindtypes×Somalia/Sahara/NIndia,56km/1100km. All coefficients
+and original numerics fixed.225regular privatefiles,oneworker nice10/threadvars1.
+Commit first, prepare then --run. Any failure/interruption stops preserved,
+no automatic retries. No selection/adoption. Preparation validates full WOA
+raw12hashes/cache and archives normalized ref/full forcing packets. Obs sea
+inputs above ice threshold required. Actual SST preice/heatTeq/moisture checked
+on EVERY modeled sea cell, actual wind exact; allinputs read-only unchanged.
+
+W18c CLOSED,AAUNOPENED,r58retained,atlasr51unchanged. Prior sourcequals historical;
+modeled-SST physical arithmetic unchanged but needs these exact regressions.
+No current97pairedreference yet. All earlier workers finished; no new worker.
+
 # Coastal Ekman hemisphere fix COMPLETE:56 tests +6 regional checks
 
 Main source now uses signed latitude AND spin for coastal Ekman direction,
