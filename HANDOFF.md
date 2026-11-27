@@ -7,6 +7,8 @@ found nothing better), fit objective zonefit_rivers. Corrections retrained for r
 Corrected r58w on dev31: T 1.509 / rain 0.438 vs corrected r51 1.489 / 0.415; plain r58 corrections give 1.511 / 0.432,
 so the edge rule is not the cause. K1 (corrections on all 97 regions) REJECTED by the per-region rule
 (calibration/correction_wide_20261127). r51 vs r58 on 97 regions: r51 13.8 % worse (calibration/r51_vs_r58_20261127); atlas stands.
+Claude copy REPUBLISHED 28 Nov (owner: "The atlas isn't updated still"): https://claude.ai/artifact/XypoZqva951RWZm4ni6FiP
+v23-26, 219 files in 4 publishes (.gz files need contentType application/wasm); hosted hashes match output/artifact_pack/earth_fit.
 
 # Southern wind belts FIXED/QUALIFIED; current97 reference explicitly compatible
 
