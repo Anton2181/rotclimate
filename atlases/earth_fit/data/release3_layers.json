@@ -1,0 +1,1166 @@
+{
+  "version": 1,
+  "status": "reach_and_trade_rebuilt_on_release3_towns",
+  "packets": {
+    "raw": {
+      "layers": [
+        {
+          "id": "reach_control",
+          "file": "release3/raw/reach_control.webp",
+          "label": "Effective control",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "% \u00b7 exp(\u2212days / 1 day) from the nearest road, town, fort or monastery, marked or unmarked, averaged over the twelve months",
+          "vmin": 0,
+          "vmax": 100,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). One day out and one day back is the reach a county seat or a fort holds directly; at two days a third of it remains. Places were tested for rank on Han China (commandery against county seats) and the data gave no reason to rank them, so all places count alike. Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              2.0,
+              5.0,
+              13.0,
+              22.0,
+              37.0,
+              50.0,
+              61.0,
+              78.0,
+              100.0
+            ],
+            "colors": [
+              "#4d1a17",
+              "#7e2d22",
+              "#ad4b31",
+              "#d17543",
+              "#e5a658",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "< 2 % \u00b7 4+ days out",
+              "2\u20135 % \u00b7 3\u20134 days",
+              "5\u201313 % \u00b7 2\u20133 days",
+              "13\u201322 % \u00b7 1\u00bd\u20132 days",
+              "22\u201337 % \u00b7 1\u20131\u00bd days",
+              "37\u201350 % \u00b7 17\u201324 h",
+              "50\u201361 % \u00b7 12\u201317 h",
+              "61\u201378 % \u00b7 6\u201312 h",
+              "\u2265 78 % \u00b7 under 6 h"
+            ],
+            "file": "release3/raw/reach_control_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_control_winter",
+          "file": "release3/raw/reach_control_winter.webp",
+          "label": "Control in the hardest month",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "% \u00b7 as above, in each place's own worst month (snow, mud, floods, heat or storms at sea)",
+          "vmin": 0,
+          "vmax": 100,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              2.0,
+              5.0,
+              13.0,
+              22.0,
+              37.0,
+              50.0,
+              61.0,
+              78.0,
+              100.0
+            ],
+            "colors": [
+              "#4d1a17",
+              "#7e2d22",
+              "#ad4b31",
+              "#d17543",
+              "#e5a658",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "< 2 % \u00b7 4+ days out",
+              "2\u20135 % \u00b7 3\u20134 days",
+              "5\u201313 % \u00b7 2\u20133 days",
+              "13\u201322 % \u00b7 1\u00bd\u20132 days",
+              "22\u201337 % \u00b7 1\u20131\u00bd days",
+              "37\u201350 % \u00b7 17\u201324 h",
+              "50\u201361 % \u00b7 12\u201317 h",
+              "61\u201378 % \u00b7 6\u201312 h",
+              "\u2265 78 % \u00b7 under 6 h"
+            ],
+            "file": "release3/raw/reach_control_winter_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_months",
+          "file": "release3/raw/reach_months.webp",
+          "label": "Months within a day",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "months a year within a day of the network (control \u2265 37 %)",
+          "vmin": 0,
+          "vmax": 12,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              1.0,
+              3.0,
+              6.0,
+              9.0,
+              11.0,
+              12.0,
+              12.01
+            ],
+            "colors": [
+              "#4d1a17",
+              "#9f402b",
+              "#d8854a",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "none",
+              "1\u20132 months",
+              "3\u20135",
+              "6\u20138",
+              "9\u201310",
+              "11",
+              "all year"
+            ],
+            "file": "release3/raw/reach_months_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_days",
+          "file": "release3/raw/reach_days.webp",
+          "label": "Days beyond the roads",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "days on foot or by boat to the nearest road, town, fort or monastery, marked or unmarked (year-round: the days of the average control)",
+          "vmin": 0,
+          "vmax": 6,
+          "stops": [
+            "#1f5f3a",
+            "#4f8f4a",
+            "#9fbf5f",
+            "#e8d98a",
+            "#e5a557",
+            "#c8603a",
+            "#8f3426",
+            "#4d1a17"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              0.25,
+              0.5,
+              1.0,
+              1.5,
+              2.0,
+              3.0,
+              4.0,
+              6.0
+            ],
+            "colors": [
+              "#1f5f3a",
+              "#4e8e4a",
+              "#95b95c",
+              "#e8d98a",
+              "#e09a52",
+              "#c45d39",
+              "#8b3325",
+              "#4d1a17"
+            ],
+            "labels": [
+              "under 6 h",
+              "6\u201312 h",
+              "\u00bd\u20131 day",
+              "1\u20131\u00bd days",
+              "1\u00bd\u20132 days",
+              "2\u20133 days",
+              "3\u20134 days",
+              "4+ days"
+            ],
+            "file": "release3/raw/reach_days_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_capital",
+          "file": "release3/raw/reach_capital.webp",
+          "label": "Days from the capital",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "days from the imperial capital by road, track, sea and river, the mean of the twelve months",
+          "vmin": 0,
+          "vmax": 60,
+          "stops": [
+            "#1f5f3a",
+            "#4f8f4a",
+            "#9fbf5f",
+            "#e8d98a",
+            "#e5a557",
+            "#c8603a",
+            "#8f3426",
+            "#4d1a17"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              5.0,
+              10.0,
+              15.0,
+              20.0,
+              30.0,
+              45.0,
+              60.0
+            ],
+            "colors": [
+              "#1f5f3a",
+              "#4e8e4a",
+              "#95b95c",
+              "#e8d98a",
+              "#d8854a",
+              "#9f402b",
+              "#4d1a17"
+            ],
+            "labels": [
+              "under 5 days",
+              "5\u201310 days",
+              "10\u201315 days",
+              "15\u201320 days",
+              "20\u201330 days",
+              "30\u201345 days",
+              "45+ days"
+            ],
+            "file": "release3/raw/reach_capital_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_cause",
+          "file": "release3/raw/reach_cause.webp",
+          "label": "What closes the roads",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#cfcabd",
+              "label": "nothing much: open going \u00b7 5 % of the land"
+            },
+            {
+              "color": "#8fb8de",
+              "label": "lasting snow \u00b7 23 % of the land"
+            },
+            {
+              "color": "#8a6a3f",
+              "label": "mud \u00b7 61 % of the land"
+            },
+            {
+              "color": "#e08a3c",
+              "label": "heat \u00b7 10 % of the land"
+            },
+            {
+              "color": "#3f6fb5",
+              "label": "rivers in flood \u00b7 1 % of the land"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). The strongest of snow, mud, heat and floods in each place's hardest month (the month of its lowest control). The hardest months over the land: Jan 72 %, Feb 13 %, Jul 12 %, Mar 1 % (months from the winter solstice). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025)."
+        },
+        {
+          "id": "reach_polities",
+          "file": "release3/raw/reach_polities.webp",
+          "label": "Who reaches where",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#60bdff",
+              "label": "1st Prince \u00b7 16 k km\u00b2 held"
+            },
+            {
+              "color": "#7fc9ff",
+              "label": "2nd Prince \u00b7 13 k km\u00b2 held"
+            },
+            {
+              "color": "#ffd800",
+              "label": "Anu\u0161iya Cities \u00b7 163 k km\u00b2 held"
+            },
+            {
+              "color": "#f3984f",
+              "label": "Av\u0101d\u0101y\u0101 Tribes \u00b7 47 k km\u00b2 held"
+            },
+            {
+              "color": "#17b7a7",
+              "label": "Bekoni River Cities \u00b7 105 k km\u00b2 held"
+            },
+            {
+              "color": "#842a4b",
+              "label": "Kingdom of Ar\u01e7os \u00b7 54 k km\u00b2 held"
+            },
+            {
+              "color": "#4a7c34",
+              "label": "Kingdom of Kasos \u00b7 67 k km\u00b2 held"
+            },
+            {
+              "color": "#953cc6",
+              "label": "Kingdom of Khurze \u00b7 74 k km\u00b2 held"
+            },
+            {
+              "color": "#ff0000",
+              "label": "Kingdom of Seltar \u00b7 22 k km\u00b2 held"
+            },
+            {
+              "color": "#007f46",
+              "label": "Kingdom of Tarani \u00b7 98 k km\u00b2 held"
+            },
+            {
+              "color": "#6a93b7",
+              "label": "Lasiros \u00b7 81 k km\u00b2 held"
+            },
+            {
+              "color": "#75e3ff",
+              "label": "Ol\u015bkan \u00b7 40 k km\u00b2 held"
+            },
+            {
+              "color": "#7f3300",
+              "label": "Princedom of Olbi \u00b7 27 k km\u00b2 held"
+            },
+            {
+              "color": "#57b3bd",
+              "label": "Selonken \u00b7 56 k km\u00b2 held"
+            },
+            {
+              "color": "#32aaff",
+              "label": "Third Prince \u00b7 19 k km\u00b2 held"
+            },
+            {
+              "color": "#ff6666",
+              "label": "Tribes of the Neck \u00b7 99 k km\u00b2 held"
+            },
+            {
+              "color": "#b200c0",
+              "label": "X\u0161\u0101\u00e7a \u00b7 996 k km\u00b2 held"
+            },
+            {
+              "color": "#21007f",
+              "label": "Yu'e\u017e Tokar \u00b7 65 k km\u00b2 held"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Each place takes the polity whose own roads and towns, marked or unmarked, are nearest in days over the year; the colour fades with the days (exp(\u2212days)). Hatched: contested, a rival within 0.5 day. Held = within 2 days (tested on the Roman empire of AD 150). No polity is set to ride: on Earth the land's herding share did not pick out the steppe peoples, so riding is set by lore. Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025)."
+        },
+        {
+          "id": "reach_trade",
+          "file": "release3/raw/reach_trade.webp",
+          "label": "Trade routes",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#7a2e12",
+              "label": "overland and river routes (width: local, regional, main)"
+            },
+            {
+              "color": "#19467d",
+              "label": "sea lanes (bundled)"
+            },
+            {
+              "color": "#fbf8f0",
+              "label": "towns, by the people they serve (four sizes)"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Goods priced as Diocletian's Price Edict priced them: by sea, river and road about 1 : 5 : 28 per km (upriver twice downriver); a ship's day costs as much as about 8 km of road haulage. Each town serves the people nearest it by that cost; trade between two towns grows with both their people and falls by a factor of e for every 270 road-km of cost (a gravity model), routed along the cheapest paths in each season (sea lanes shut in the storm months) and averaged over the year. Classes: segments carrying at least 5 %, 12 %, 30 % of the busiest one's traffic (land and sea separately); sea traffic is bundled into lanes. The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), so road haulage eats a staple's whole value at about 270 km. Tested on Earth: market access over this network did not explain which Roman towns of AD 150 were large (Hanson 2016; Spearman about 0 in the east), so towns are drawn by the people they serve, not by a predicted size, and the routes are a model of where trade would run, not a reconstruction. Vector files of every layer: data/vectors/. Catchments use the countryside\u2019s cost of bringing goods into town. Shipments are routed in both directions with their own river and sailing costs; relative traffic is not tonnes. Smaller-to-smaller pairs outside the 300 largest markets are omitted. Population occupancy and political control are unchanged.",
+          "variants": {
+            "label": "Trade view",
+            "default": "routes",
+            "options": [
+              {
+                "value": "routes",
+                "label": "Routes and towns",
+                "file": "release3/raw/reach_trade.webp",
+                "items": [
+                  {
+                    "color": "#7a2e12",
+                    "label": "overland and river routes (width: local, regional, main)"
+                  },
+                  {
+                    "color": "#19467d",
+                    "label": "sea lanes (bundled)"
+                  },
+                  {
+                    "color": "#fbf8f0",
+                    "label": "towns, by the people they serve (four sizes)"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Goods priced as Diocletian's Price Edict priced them: by sea, river and road about 1 : 5 : 28 per km (upriver twice downriver); a ship's day costs as much as about 8 km of road haulage. Each town serves the people nearest it by that cost; trade between two towns grows with both their people and falls by a factor of e for every 270 road-km of cost (a gravity model), routed along the cheapest paths in each season (sea lanes shut in the storm months) and averaged over the year. Classes: segments carrying at least 5 %, 12 %, 30 % of the busiest one's traffic (land and sea separately); sea traffic is bundled into lanes. The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), so road haulage eats a staple's whole value at about 270 km. Tested on Earth: market access over this network did not explain which Roman towns of AD 150 were large (Hanson 2016; Spearman about 0 in the east), so towns are drawn by the people they serve, not by a predicted size, and the routes are a model of where trade would run, not a reconstruction. Vector files of every layer: data/vectors/. Catchments use the countryside\u2019s cost of bringing goods into town. Shipments are routed in both directions with their own river and sailing costs; relative traffic is not tonnes. Smaller-to-smaller pairs outside the 300 largest markets are omitted. Population occupancy and political control are unchanged.",
+                "caption": "Relative freight routes and the people each market serves"
+              },
+              {
+                "value": "markets",
+                "label": "Market hinterlands",
+                "file": "release3/raw/reach_market_hinterlands.webp",
+                "items": [
+                  {
+                    "color": "#dfbca9",
+                    "label": "Market 971 \u00b7 112,987 people served"
+                  },
+                  {
+                    "color": "#dfa9ad",
+                    "label": "Market 127 \u00b7 107,668 people served"
+                  },
+                  {
+                    "color": "#dfa9d4",
+                    "label": "Market 974 \u00b7 100,032 people served"
+                  },
+                  {
+                    "color": "#dfa9d4",
+                    "label": "Market 171 \u00b7 97,168 people served"
+                  },
+                  {
+                    "color": "#b7dfa9",
+                    "label": "Market 978 \u00b7 95,518 people served"
+                  },
+                  {
+                    "color": "#caa9df",
+                    "label": "Market 52 \u00b7 89,977 people served"
+                  },
+                  {
+                    "color": "#afdfa9",
+                    "label": "Market 401 \u00b7 85,139 people served"
+                  },
+                  {
+                    "color": "#a9c8df",
+                    "label": "Market 111 \u00b7 83,939 people served"
+                  },
+                  {
+                    "color": "#dddddd",
+                    "label": "Other market territories use individual colours"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Cheapest reachable market for goods coming into town over the midyear freight network, on recognised claimed land. Colours identify market territories, not states. Numbered centres are the eight largest hinterlands; every market is listed in data/market_hinterlands.csv. People served are the existing countryside population assigned to that market, not the town\u2019s inhabitants. Settlement occupancy, population totals and political control do not change.",
+                "caption": "Cheapest inward market; colours are market areas, not polities"
+              },
+              {
+                "value": "market_people",
+                "label": "People served",
+                "file": "release3/raw/reach_market_people.webp",
+                "items": [
+                  {
+                    "color": "#eff3ff",
+                    "label": "under 5,000 people served"
+                  },
+                  {
+                    "color": "#c6dbef",
+                    "label": "5,000\u201310,000 people served"
+                  },
+                  {
+                    "color": "#9ecae1",
+                    "label": "10,000\u201325,000 people served"
+                  },
+                  {
+                    "color": "#6baed6",
+                    "label": "25,000\u201350,000 people served"
+                  },
+                  {
+                    "color": "#4292c6",
+                    "label": "50,000\u2013100,000 people served"
+                  },
+                  {
+                    "color": "#2171b5",
+                    "label": "100,000\u2013250,000 people served"
+                  },
+                  {
+                    "color": "#084594",
+                    "label": "250,000 or more people served"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Cheapest reachable market for goods coming into town over the midyear freight network, on recognised claimed land. Colours identify market territories, not states. Numbered centres are the eight largest hinterlands; every market is listed in data/market_hinterlands.csv. People served are the existing countryside population assigned to that market, not the town\u2019s inhabitants. Settlement occupancy, population totals and political control do not change.",
+                "caption": "Countryside population assigned to each market; not town population"
+              }
+            ]
+          }
+        }
+      ],
+      "unchanged_layers": [
+        "reach_sea"
+      ],
+      "key_differences": {},
+      "downloads": {
+        "polities.csv": {
+          "file": "release3/raw/polities.csv",
+          "sha256": "95c20b385c732716180d230be5b3ad5fd2cebde2c73ea785679f25002919b89c"
+        },
+        "market_hinterlands.csv": {
+          "file": "release3/raw/market_hinterlands.csv",
+          "sha256": "467005fd12353fba55582ce253f766849ea7f94497cd88d914fb405862bafcf5"
+        }
+      },
+      "files": {
+        "market_hinterlands.csv": "467005fd12353fba55582ce253f766849ea7f94497cd88d914fb405862bafcf5",
+        "polities.csv": "95c20b385c732716180d230be5b3ad5fd2cebde2c73ea785679f25002919b89c",
+        "reach_capital.webp": "8cf9eb29d89f7874357b153273fae7bd44a3bdf2c2636143ae2817d42e1cb116",
+        "reach_capital_tiers.webp": "2d664cea32ae5792d71dde7d905484ce044d66bd30895f23ec6e7612939d9437",
+        "reach_cause.webp": "41dbeb3dd93470ee8905100f25fd6c9d423fb70b08d56382a3870a8546a6f049",
+        "reach_control.webp": "d17f40c097b2c20e6b345e37ba0a68c443c4ba8124ccc5ec6495093bcf1d02d4",
+        "reach_control_tiers.webp": "8bd23d0b6bb659500ffe5e3e6d0dce9557c0d8457a42a7ce35cffcfd6d9e5a32",
+        "reach_control_winter.webp": "a8369ef997720724b8c6b110b2b481f2d34c9f77e19c5c03b115d83bc7bc425b",
+        "reach_control_winter_tiers.webp": "a5974bacd652032fb8c18c86e3baf5ada7bede0ec302c7364d11e7e8df275c4b",
+        "reach_days.webp": "f44f0e699ea7fb61164be76c4b9299ee12fce7c863a032bd70f78aa4624ae870",
+        "reach_days_tiers.webp": "298195cc7ed844dd71a72d043fd6a8f2961c3b2dddf65fe5579df2e1733d7080",
+        "reach_market_hinterlands.webp": "d575c087ae88425532b852b420f711ec16c90e1deb50c889df1c274c99bf56dd",
+        "reach_market_people.webp": "80a213e7c5f847fac2e36bd5082a40f323fdb20710bee3c625d35d6332a98006",
+        "reach_months.webp": "e18cc39e9771eb34d5f94a396f466eee06ff734183544b79354eb9a2dd5555a3",
+        "reach_months_tiers.webp": "82e2061de6bb0b693723c32c082807aabbd4130301ac2cfc31c3633975c21261",
+        "reach_polities.webp": "0bd1c61146bdbb03874e381fd5b0e154ee9a9a0903825ecc01526b9bde7c494e",
+        "reach_trade.webp": "dec1088356faf89f92e3ac4c7303a77b6c261178586be3894595f6b5262662bf"
+      },
+      "expected_harvest_fingerprint": "061ed8d2229df0ad2b27fbc3eb6873c55b97c758c9cda42f75ef77948245b0e2",
+      "statistics": {
+        "earlier_towns": {
+          "towns": 992,
+          "claimed_cells": 182171,
+          "claimed_held_share": 0.8265914991958105,
+          "held_by_claimant_share": 0.7949948125662153,
+          "largest_market_share": 0.0025149868492480155,
+          "top10_market_share": 0.02161332042539477
+        },
+        "release3_towns": {
+          "towns": 992,
+          "claimed_cells": 182171,
+          "claimed_held_share": 0.7932327318837795,
+          "held_by_claimant_share": 0.7657859922819769,
+          "largest_market_share": 0.0029989997249445883,
+          "top10_market_share": 0.024738039013131204
+        }
+      }
+    },
+    "corrected": {
+      "layers": [
+        {
+          "id": "reach_control",
+          "file": "release3/corrected/reach_control.webp",
+          "label": "Effective control",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "% \u00b7 exp(\u2212days / 1 day) from the nearest road, town, fort or monastery, marked or unmarked, averaged over the twelve months",
+          "vmin": 0,
+          "vmax": 100,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). One day out and one day back is the reach a county seat or a fort holds directly; at two days a third of it remains. Places were tested for rank on Han China (commandery against county seats) and the data gave no reason to rank them, so all places count alike. Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              2.0,
+              5.0,
+              13.0,
+              22.0,
+              37.0,
+              50.0,
+              61.0,
+              78.0,
+              100.0
+            ],
+            "colors": [
+              "#4d1a17",
+              "#7e2d22",
+              "#ad4b31",
+              "#d17543",
+              "#e5a658",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "< 2 % \u00b7 4+ days out",
+              "2\u20135 % \u00b7 3\u20134 days",
+              "5\u201313 % \u00b7 2\u20133 days",
+              "13\u201322 % \u00b7 1\u00bd\u20132 days",
+              "22\u201337 % \u00b7 1\u20131\u00bd days",
+              "37\u201350 % \u00b7 17\u201324 h",
+              "50\u201361 % \u00b7 12\u201317 h",
+              "61\u201378 % \u00b7 6\u201312 h",
+              "\u2265 78 % \u00b7 under 6 h"
+            ],
+            "file": "release3/corrected/reach_control_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_control_winter",
+          "file": "release3/corrected/reach_control_winter.webp",
+          "label": "Control in the hardest month",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "% \u00b7 as above, in each place's own worst month (snow, mud, floods, heat or storms at sea)",
+          "vmin": 0,
+          "vmax": 100,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              2.0,
+              5.0,
+              13.0,
+              22.0,
+              37.0,
+              50.0,
+              61.0,
+              78.0,
+              100.0
+            ],
+            "colors": [
+              "#4d1a17",
+              "#7e2d22",
+              "#ad4b31",
+              "#d17543",
+              "#e5a658",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "< 2 % \u00b7 4+ days out",
+              "2\u20135 % \u00b7 3\u20134 days",
+              "5\u201313 % \u00b7 2\u20133 days",
+              "13\u201322 % \u00b7 1\u00bd\u20132 days",
+              "22\u201337 % \u00b7 1\u20131\u00bd days",
+              "37\u201350 % \u00b7 17\u201324 h",
+              "50\u201361 % \u00b7 12\u201317 h",
+              "61\u201378 % \u00b7 6\u201312 h",
+              "\u2265 78 % \u00b7 under 6 h"
+            ],
+            "file": "release3/corrected/reach_control_winter_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_months",
+          "file": "release3/corrected/reach_months.webp",
+          "label": "Months within a day",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "months a year within a day of the network (control \u2265 37 %)",
+          "vmin": 0,
+          "vmax": 12,
+          "stops": [
+            "#4d1a17",
+            "#8f3426",
+            "#c8603a",
+            "#e5a557",
+            "#e8d98a",
+            "#9fbf5f",
+            "#4f8f4a",
+            "#1f5f3a"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              1.0,
+              3.0,
+              6.0,
+              9.0,
+              11.0,
+              12.0,
+              12.01
+            ],
+            "colors": [
+              "#4d1a17",
+              "#9f402b",
+              "#d8854a",
+              "#e8d98a",
+              "#95b95c",
+              "#4e8e4a",
+              "#1f5f3a"
+            ],
+            "labels": [
+              "none",
+              "1\u20132 months",
+              "3\u20135",
+              "6\u20138",
+              "9\u201310",
+              "11",
+              "all year"
+            ],
+            "file": "release3/corrected/reach_months_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_days",
+          "file": "release3/corrected/reach_days.webp",
+          "label": "Days beyond the roads",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "days on foot or by boat to the nearest road, town, fort or monastery, marked or unmarked (year-round: the days of the average control)",
+          "vmin": 0,
+          "vmax": 6,
+          "stops": [
+            "#1f5f3a",
+            "#4f8f4a",
+            "#9fbf5f",
+            "#e8d98a",
+            "#e5a557",
+            "#c8603a",
+            "#8f3426",
+            "#4d1a17"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              0.25,
+              0.5,
+              1.0,
+              1.5,
+              2.0,
+              3.0,
+              4.0,
+              6.0
+            ],
+            "colors": [
+              "#1f5f3a",
+              "#4e8e4a",
+              "#95b95c",
+              "#e8d98a",
+              "#e09a52",
+              "#c45d39",
+              "#8b3325",
+              "#4d1a17"
+            ],
+            "labels": [
+              "under 6 h",
+              "6\u201312 h",
+              "\u00bd\u20131 day",
+              "1\u20131\u00bd days",
+              "1\u00bd\u20132 days",
+              "2\u20133 days",
+              "3\u20134 days",
+              "4+ days"
+            ],
+            "file": "release3/corrected/reach_days_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_capital",
+          "file": "release3/corrected/reach_capital.webp",
+          "label": "Days from the capital",
+          "kind": "ramp",
+          "group": "Political reach",
+          "unit": "days from the imperial capital by road, track, sea and river, the mean of the twelve months",
+          "vmin": 0,
+          "vmax": 60,
+          "stops": [
+            "#1f5f3a",
+            "#4f8f4a",
+            "#9fbf5f",
+            "#e8d98a",
+            "#e5a557",
+            "#c8603a",
+            "#8f3426",
+            "#4d1a17"
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025).",
+          "log": false,
+          "tiers": {
+            "bounds": [
+              0.0,
+              5.0,
+              10.0,
+              15.0,
+              20.0,
+              30.0,
+              45.0,
+              60.0
+            ],
+            "colors": [
+              "#1f5f3a",
+              "#4e8e4a",
+              "#95b95c",
+              "#e8d98a",
+              "#d8854a",
+              "#9f402b",
+              "#4d1a17"
+            ],
+            "labels": [
+              "under 5 days",
+              "5\u201310 days",
+              "10\u201315 days",
+              "15\u201320 days",
+              "20\u201330 days",
+              "30\u201345 days",
+              "45+ days"
+            ],
+            "file": "release3/corrected/reach_capital_tiers.webp"
+          }
+        },
+        {
+          "id": "reach_cause",
+          "file": "release3/corrected/reach_cause.webp",
+          "label": "What closes the roads",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#cfcabd",
+              "label": "nothing much: open going \u00b7 4 % of the land"
+            },
+            {
+              "color": "#8fb8de",
+              "label": "lasting snow \u00b7 36 % of the land"
+            },
+            {
+              "color": "#8a6a3f",
+              "label": "mud \u00b7 50 % of the land"
+            },
+            {
+              "color": "#e08a3c",
+              "label": "heat \u00b7 9 % of the land"
+            },
+            {
+              "color": "#3f6fb5",
+              "label": "rivers in flood \u00b7 1 % of the land"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). The strongest of snow, mud, heat and floods in each place's hardest month (the month of its lowest control). The hardest months over the land: Jan 75 %, Feb 11 %, Aug 6 %, Jul 5 % (months from the winter solstice). Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025)."
+        },
+        {
+          "id": "reach_polities",
+          "file": "release3/corrected/reach_polities.webp",
+          "label": "Who reaches where",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#60bdff",
+              "label": "1st Prince \u00b7 16 k km\u00b2 held"
+            },
+            {
+              "color": "#7fc9ff",
+              "label": "2nd Prince \u00b7 14 k km\u00b2 held"
+            },
+            {
+              "color": "#ffd800",
+              "label": "Anu\u0161iya Cities \u00b7 165 k km\u00b2 held"
+            },
+            {
+              "color": "#f3984f",
+              "label": "Av\u0101d\u0101y\u0101 Tribes \u00b7 45 k km\u00b2 held"
+            },
+            {
+              "color": "#17b7a7",
+              "label": "Bekoni River Cities \u00b7 108 k km\u00b2 held"
+            },
+            {
+              "color": "#842a4b",
+              "label": "Kingdom of Ar\u01e7os \u00b7 54 k km\u00b2 held"
+            },
+            {
+              "color": "#4a7c34",
+              "label": "Kingdom of Kasos \u00b7 69 k km\u00b2 held"
+            },
+            {
+              "color": "#953cc6",
+              "label": "Kingdom of Khurze \u00b7 71 k km\u00b2 held"
+            },
+            {
+              "color": "#ff0000",
+              "label": "Kingdom of Seltar \u00b7 22 k km\u00b2 held"
+            },
+            {
+              "color": "#007f46",
+              "label": "Kingdom of Tarani \u00b7 101 k km\u00b2 held"
+            },
+            {
+              "color": "#6a93b7",
+              "label": "Lasiros \u00b7 82 k km\u00b2 held"
+            },
+            {
+              "color": "#75e3ff",
+              "label": "Ol\u015bkan \u00b7 40 k km\u00b2 held"
+            },
+            {
+              "color": "#7f3300",
+              "label": "Princedom of Olbi \u00b7 28 k km\u00b2 held"
+            },
+            {
+              "color": "#57b3bd",
+              "label": "Selonken \u00b7 54 k km\u00b2 held"
+            },
+            {
+              "color": "#32aaff",
+              "label": "Third Prince \u00b7 19 k km\u00b2 held"
+            },
+            {
+              "color": "#ff6666",
+              "label": "Tribes of the Neck \u00b7 109 k km\u00b2 held"
+            },
+            {
+              "color": "#b200c0",
+              "label": "X\u0161\u0101\u00e7a \u00b7 1,004 k km\u00b2 held"
+            },
+            {
+              "color": "#21007f",
+              "label": "Yu'e\u017e Tokar \u00b7 68 k km\u00b2 held"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Each place takes the polity whose own roads and towns, marked or unmarked, are nearest in days over the year; the colour fades with the days (exp(\u2212days)). Hatched: contested, a rival within 0.5 day. Held = within 2 days (tested on the Roman empire of AD 150). No polity is set to ride: on Earth the land's herding share did not pick out the steppe peoples, so riding is set by lore. Days for an official or a patrol, month by month. On foot: roads 30 km a day, Tobler's hiking speed off them for 7 hours a day, slowed by Soule & Goldman terrain coefficients (forest 1.5, swamp 1.8, desert 1.6, lasting snow 2.5, mud up to 1.8, and the midday heat), quickened by footpaths where people farm; fords take longer in floods. By ship: 5 knots before a fair wind (Casson 1951), less along coasts and much less against the wind, by the month's winds from the climate model, halved when the sea is uncertain and nearly shut in the storm months (thresholds fitted to Vegetius); boarding at ports, landing on any shore. By river boat: 70 km a day downstream, 18 up (ORBIS), the upper rivers shut at low water. Unmarked towns (spaced as Chinese county seats were) and their minor roads are added as on the \"Unmarked towns and tracks\" layer. Herding polities ride (50 km a day over open country). Year-round values average the control of the twelve months. Fitted and tested on Han China and the Roman empire (calibration/polity_20261025)."
+        },
+        {
+          "id": "reach_trade",
+          "file": "release3/corrected/reach_trade.webp",
+          "label": "Trade routes",
+          "kind": "categories",
+          "group": "Political reach",
+          "items": [
+            {
+              "color": "#7a2e12",
+              "label": "overland and river routes (width: local, regional, main)"
+            },
+            {
+              "color": "#19467d",
+              "label": "sea lanes (bundled)"
+            },
+            {
+              "color": "#fbf8f0",
+              "label": "towns, by the people they serve (four sizes)"
+            }
+          ],
+          "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Goods priced as Diocletian's Price Edict priced them: by sea, river and road about 1 : 5 : 28 per km (upriver twice downriver); a ship's day costs as much as about 8 km of road haulage. Each town serves the people nearest it by that cost; trade between two towns grows with both their people and falls by a factor of e for every 270 road-km of cost (a gravity model), routed along the cheapest paths in each season (sea lanes shut in the storm months) and averaged over the year. Classes: segments carrying at least 5 %, 12 %, 30 % of the busiest one's traffic (land and sea separately); sea traffic is bundled into lanes. The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), so road haulage eats a staple's whole value at about 270 km. Tested on Earth: market access over this network did not explain which Roman towns of AD 150 were large (Hanson 2016; Spearman about 0 in the east), so towns are drawn by the people they serve, not by a predicted size, and the routes are a model of where trade would run, not a reconstruction. Vector files of every layer: data/vectors/. Catchments use the countryside\u2019s cost of bringing goods into town. Shipments are routed in both directions with their own river and sailing costs; relative traffic is not tonnes. Smaller-to-smaller pairs outside the 300 largest markets are omitted. Population occupancy and political control are unchanged.",
+          "variants": {
+            "label": "Trade view",
+            "default": "routes",
+            "options": [
+              {
+                "value": "routes",
+                "label": "Routes and towns",
+                "file": "release3/corrected/reach_trade.webp",
+                "items": [
+                  {
+                    "color": "#7a2e12",
+                    "label": "overland and river routes (width: local, regional, main)"
+                  },
+                  {
+                    "color": "#19467d",
+                    "label": "sea lanes (bundled)"
+                  },
+                  {
+                    "color": "#fbf8f0",
+                    "label": "towns, by the people they serve (four sizes)"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Goods priced as Diocletian's Price Edict priced them: by sea, river and road about 1 : 5 : 28 per km (upriver twice downriver); a ship's day costs as much as about 8 km of road haulage. Each town serves the people nearest it by that cost; trade between two towns grows with both their people and falls by a factor of e for every 270 road-km of cost (a gravity model), routed along the cheapest paths in each season (sea lanes shut in the storm months) and averaged over the year. Classes: segments carrying at least 5 %, 12 %, 30 % of the busiest one's traffic (land and sea separately); sea traffic is bundled into lanes. The scale is set, not fitted: hauling wheat 148 km by land cost 55 % of its value (Duncan-Jones 1982), so road haulage eats a staple's whole value at about 270 km. Tested on Earth: market access over this network did not explain which Roman towns of AD 150 were large (Hanson 2016; Spearman about 0 in the east), so towns are drawn by the people they serve, not by a predicted size, and the routes are a model of where trade would run, not a reconstruction. Vector files of every layer: data/vectors/. Catchments use the countryside\u2019s cost of bringing goods into town. Shipments are routed in both directions with their own river and sailing costs; relative traffic is not tonnes. Smaller-to-smaller pairs outside the 300 largest markets are omitted. Population occupancy and political control are unchanged.",
+                "caption": "Relative freight routes and the people each market serves"
+              },
+              {
+                "value": "markets",
+                "label": "Market hinterlands",
+                "file": "release3/corrected/reach_market_hinterlands.webp",
+                "items": [
+                  {
+                    "color": "#dfbca9",
+                    "label": "Market 958 \u00b7 116,448 people served"
+                  },
+                  {
+                    "color": "#dfa9ad",
+                    "label": "Market 127 \u00b7 109,826 people served"
+                  },
+                  {
+                    "color": "#caa9df",
+                    "label": "Market 52 \u00b7 100,808 people served"
+                  },
+                  {
+                    "color": "#d7dfa9",
+                    "label": "Market 132 \u00b7 92,214 people served"
+                  },
+                  {
+                    "color": "#dfa9d4",
+                    "label": "Market 961 \u00b7 92,036 people served"
+                  },
+                  {
+                    "color": "#a9dfb7",
+                    "label": "Market 48 \u00b7 91,380 people served"
+                  },
+                  {
+                    "color": "#dbdfa9",
+                    "label": "Market 972 \u00b7 85,913 people served"
+                  },
+                  {
+                    "color": "#dfdea9",
+                    "label": "Market 404 \u00b7 84,445 people served"
+                  },
+                  {
+                    "color": "#dddddd",
+                    "label": "Other market territories use individual colours"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Cheapest reachable market for goods coming into town over the midyear freight network, on recognised claimed land. Colours identify market territories, not states. Numbered centres are the eight largest hinterlands; every market is listed in data/market_hinterlands.csv. People served are the existing countryside population assigned to that market, not the town\u2019s inhabitants. Settlement occupancy, population totals and political control do not change.",
+                "caption": "Cheapest inward market; colours are market areas, not polities"
+              },
+              {
+                "value": "market_people",
+                "label": "People served",
+                "file": "release3/corrected/reach_market_people.webp",
+                "items": [
+                  {
+                    "color": "#eff3ff",
+                    "label": "under 5,000 people served"
+                  },
+                  {
+                    "color": "#c6dbef",
+                    "label": "5,000\u201310,000 people served"
+                  },
+                  {
+                    "color": "#9ecae1",
+                    "label": "10,000\u201325,000 people served"
+                  },
+                  {
+                    "color": "#6baed6",
+                    "label": "25,000\u201350,000 people served"
+                  },
+                  {
+                    "color": "#4292c6",
+                    "label": "50,000\u2013100,000 people served"
+                  },
+                  {
+                    "color": "#2171b5",
+                    "label": "100,000\u2013250,000 people served"
+                  },
+                  {
+                    "color": "#084594",
+                    "label": "250,000 or more people served"
+                  }
+                ],
+                "note": "Rebuilt on the release-3 towns and tracks (same rule, only the unmarked towns changed). Cheapest reachable market for goods coming into town over the midyear freight network, on recognised claimed land. Colours identify market territories, not states. Numbered centres are the eight largest hinterlands; every market is listed in data/market_hinterlands.csv. People served are the existing countryside population assigned to that market, not the town\u2019s inhabitants. Settlement occupancy, population totals and political control do not change.",
+                "caption": "Countryside population assigned to each market; not town population"
+              }
+            ]
+          }
+        }
+      ],
+      "unchanged_layers": [
+        "reach_sea"
+      ],
+      "key_differences": {},
+      "downloads": {
+        "polities.csv": {
+          "file": "release3/corrected/polities.csv",
+          "sha256": "c5b4c1b1c0829d25b5b3388f57a6e8149b1ebcd8a6d916b6155e80f0f43b66cd"
+        },
+        "market_hinterlands.csv": {
+          "file": "release3/corrected/market_hinterlands.csv",
+          "sha256": "a56f7a9b1f655e3ee2c33c75837866d51551fa127dc7422bc9c2ccfd3125f321"
+        }
+      },
+      "files": {
+        "market_hinterlands.csv": "a56f7a9b1f655e3ee2c33c75837866d51551fa127dc7422bc9c2ccfd3125f321",
+        "polities.csv": "c5b4c1b1c0829d25b5b3388f57a6e8149b1ebcd8a6d916b6155e80f0f43b66cd",
+        "reach_capital.webp": "23f6caf7eee90fe7f8b26d4e21b24959c2176d46ec10ddb9df10ad39aec0eed2",
+        "reach_capital_tiers.webp": "5f17637aec3be3987c075716aa1dd336a6b32a27d7460ec516392f757542551a",
+        "reach_cause.webp": "94b4f3df8aaf0d7d935514085c6d4da2b91cf0c2175b1afbfd25c68314d07f8c",
+        "reach_control.webp": "f4045f98943b07daacb290e18eb6500faa9a7517f733bd61b22dc9f9c0dce675",
+        "reach_control_tiers.webp": "ffa8dcf47fc6d5a66c1ef002e8bdb185b5d191a5f2332c0118ce44cad06b8e8c",
+        "reach_control_winter.webp": "a5b23c732e0d6d680daf4b30b106ea9667c359356ee647e65243b1b0fbdb2c29",
+        "reach_control_winter_tiers.webp": "3ad45e006a62acebfd4070e945405e3ab5b1600ce3b2a0e8f58433d3c25380b5",
+        "reach_days.webp": "7896d5593dd8549a701c2116b560d5a1721c2d255624c45b8a00eaf9f2caba33",
+        "reach_days_tiers.webp": "5ee2073ce556c9c32a85542fb15792546d18f8ee8aa40d43d6d2480a3d204d0b",
+        "reach_market_hinterlands.webp": "033667fe822b9e6bd296621ddd2c086ae4f6bc0d26f646d582c64019fd452839",
+        "reach_market_people.webp": "55377719d7d8bc3169c1181d9f944332a11b22911a9f3f43247881bcb0beb3eb",
+        "reach_months.webp": "e1d2fa5d77d6e02fb0bb6e9851e33b4fbbd6f4c91e3248db9b7d70ec63860d06",
+        "reach_months_tiers.webp": "ef73c8dea35a6797834e44cf515807c02115cf8b85ca42bc11302f9449c82290",
+        "reach_polities.webp": "b1bf75564c8b544a84541dc544d3e95af98f7c6e8bb704072556545fe650dc0f",
+        "reach_trade.webp": "f6ae07713cc0eb0a6f78279c2c31bba9224046d83fd07e0d3245d4ded52c14da"
+      },
+      "expected_harvest_fingerprint": "20670249304409b167cf7d98e9fab48043e01ae7d74ca8d90694ab938607610a",
+      "statistics": {
+        "earlier_towns": {
+          "towns": 980,
+          "claimed_cells": 182171,
+          "claimed_held_share": 0.8397384874650741,
+          "held_by_claimant_share": 0.8079002695269829,
+          "largest_market_share": 0.0024298317116318766,
+          "top10_market_share": 0.020967524777966505
+        },
+        "release3_towns": {
+          "towns": 980,
+          "claimed_cells": 182171,
+          "claimed_held_share": 0.8047932986040588,
+          "held_by_claimant_share": 0.7766109863809278,
+          "largest_market_share": 0.0031344470800968296,
+          "top10_market_share": 0.025226556007484198
+        }
+      }
+    }
+  },
+  "publisher_sha256": "4eb26a94e4c44f870a8e2e3f87a959b745f3fa9417a497e5fb0eb7cd42a39884",
+  "declaration": "calibration/settlement_downstream_20261113/plan.json"
+}

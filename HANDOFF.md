@@ -1,14 +1,12 @@
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
-# r58 ATLAS REBUILD RUNNING (27 Nov 2026, owner choice "Atlas rebuild on r58")
-Driver: scripts/run_r58_atlas.sh (log output/run_r58_atlas.log): W6 world search (scripts/world_campaign_r58.py,
-plan calibration/map_world_r58_planet/plan.json, calibrate mode guarded_rivers = zonefit + 0.2 x drawn-river width
-ranking, 241 evals ds32) -> scripts/select_world_r58.py -> corrections retrained for r58w -> scripts/release_r58.sh
-(resumable via output/atlas_r58/stages_done). World physics r58w = r58 + edge_pw_source "zonal" (e116z: the globe's
-land-mean NCEP column water at each latitude; r58's per-cell observed edge is Earth-only). Earth screen: zonal S97
-1.0098 vs r58, edge off 1.0265 (calibration/map_world_r58_planet/edge_forcing.md). Earth physics stays r58.
-Still to write after the run: reports/RELEASE_R58_20261127.md; then browser checks / package_atlas_artifact.py.
+# r58 ATLAS LIVE (27 Nov 2026 20:28 UTC): release complete, browser checks pass (smoke + 8 suites), reports/RELEASE_R58_20261127.md
+World physics r58w (r58 + e116z zonal edge PW; Earth screen 1.0098 vs r58), world geometry = r51 world (W6 search
+found nothing better), fit objective zonefit_rivers. Corrections retrained for r58w (calibration/earth_correction_r58_20261127).
+Corrected r58w on dev31: T 1.509 / rain 0.438 vs corrected r51 1.489 / 0.415; plain r58 corrections give 1.511 / 0.432,
+so the edge rule is not the cause. K1 (corrections on all 97 regions) REJECTED by the per-region rule
+(calibration/correction_wide_20261127). Running: r51 vs r58 on the 97-region pool (output/ppe_20261127/r51vs58).
 
 # Southern wind belts FIXED/QUALIFIED; current97 reference explicitly compatible
 
