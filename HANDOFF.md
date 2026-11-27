@@ -1,3 +1,34 @@
+# Latest review: remote branches checked; Earth conditioning scope recorded
+
+Fetched ALL remote heads (the clone's default refspec fetched only the active
+branch). friendly-turing-43ygeu is the newest; wonderful-mayer-uqbwtb is Nov16
+and project-continuation-a484h1 is Nov12. Active branch was already current.
+
+W18c now24 completed development records, w1_023 underway, same provisional
+leader w1_005. Frozen-source/input readiness passed again. Full gates pending;
+no adoption, no atlas rebuild, no extra validation targets opened by this audit.
+
+Private padding remains LIVE PID10059/10060, now8/9 cases numerically passed.
+Both Somalia and Sahara4012km completed; North India4012km is computing.
+Do not restart either driver. Independent review launches automatically after
+the last case; inspect its figure and write full findings before interpreting
+the completed study. All controls exact; no tolerances/retries/design changed.
+Somalia rain at4012km3589.19mm/year remains far above457.36 observed, despite
+import falling to925.86 from1591.65 at1100km. Sahara215.04->13.33->7.22mm/year
+across pads, observed2.07. These pending-full-review results do not isolate a
+single mechanism and do not select a deployment padding.
+
+NEW read-only scope audit: calibration/earth_conditioning_20261127/findings.md,
+audit_source.py and source_audit.json. r58 Earth boundary uses observed NCEP
+PW; monsoon descent is derived from observed global WorldClim rainfall. SST
+and global observed cloud-reference branches are inactive in r58. The existing
+r58 adoption explicitly documents Earth-only boundary conditioning; atlasr51
+uses the zero edge_obs_pw default. A selected-file static AST scan finds only
+a diagnostic-shape target read in model.py, not a complete dynamic dependency
+proof. No integrations or current-source changes. Treat Earth scores as
+conditional regional skill; validate replacement forcings before world transfer.
+Two identical source-audit executions passed and preserve this source epoch.
+
 # Active goal: W18c and prospectively amended private padding study LIVE
 
 Current processes (always recheck actual /proc state after reconnect):

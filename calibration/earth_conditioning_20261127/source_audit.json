@@ -1,0 +1,90 @@
+{
+  "status": "static_source_scope_audit_not_transfer_validation",
+  "files_sha256": {
+    "rotclimate/config.py": "65edd4abf50342eb2ef81d29ac69816846d7af17f1fbafb12c7d858bdbbf02e4",
+    "rotclimate/model.py": "9b3447ca99c91a78489d26ff9669ed46a9df092d85ad3b029a8ee0e205864038",
+    "rotclimate/earth.py": "1ed8afa02e82e9453ff1e60b5d5409bcbb097ce198f9234bbcabeca7a84603b3",
+    "rotclimate/geography.py": "cca2d0fcc1a139f8d7b4b9acbeefb739d6650b2212675043f2dad77047f62733",
+    "rotclimate/temperature.py": "809e2d4a42d7bbb36753b5402c08fd0b6ead40a3a32d5e3b5bc5ba5954c8454d",
+    "rotclimate/ebm.py": "ba25ad9e4596cf9326ec4ea51b68d0254f5d45ba0bbf0ee9e3ea2ad16a32883d",
+    "rotclimate/solver.py": "36e59a2622998f527def61a4241c7f2f802779e0ab140f9e8d64c95b4e33b808",
+    "calibration/local_accuracy_20261023/r58_params.json": "13be84f23d495e3cc956cc3c51f5d810e63000e171ca2de9993f1c7ec3088595",
+    "calibration/local_accuracy_20261023/r58_adoption.json": "38550768be878b213b85e3f12106e9e354475bbf1a9ce20fae04b2190a15d95c",
+    "calibration/map_world_r51/params.json": "b95d7647b93ae6faeff904cd09dd7ed305b249632ac6fca7879429146396418d"
+  },
+  "producer_sha256": "22d48058b3c65d006291d0ac9fb536c8b71d320109d0850779de2b85500ae868",
+  "profiles": {
+    "calibration/local_accuracy_20261023/r58_params.json": {
+      "edge_obs_pw": {
+        "value": 0.5785060503520072,
+        "explicit": true
+      },
+      "land_edge_rh": {
+        "value": 0.5053273428231477,
+        "explicit": true
+      },
+      "sst_source": {
+        "value": "model",
+        "explicit": true
+      },
+      "cloud_reference": {
+        "value": "domain",
+        "explicit": true
+      },
+      "monsoon_descent": {
+        "value": 0.06087777091190219,
+        "explicit": true
+      },
+      "convective_descent": {
+        "value": 1.0,
+        "explicit": true
+      }
+    },
+    "calibration/map_world_r51/params.json": {
+      "edge_obs_pw": {
+        "value": 0.0,
+        "explicit": false
+      },
+      "land_edge_rh": {
+        "value": 0.5,
+        "explicit": true
+      },
+      "sst_source": {
+        "value": "model",
+        "explicit": true
+      },
+      "cloud_reference": {
+        "value": "domain",
+        "explicit": true
+      },
+      "monsoon_descent": {
+        "value": 0.0341878997079641,
+        "explicit": true
+      },
+      "convective_descent": {
+        "value": 1.0,
+        "explicit": true
+      }
+    }
+  },
+  "target_scanned_files": [
+    "rotclimate/config.py",
+    "rotclimate/model.py",
+    "rotclimate/geography.py",
+    "rotclimate/temperature.py",
+    "rotclimate/ebm.py",
+    "rotclimate/solver.py"
+  ],
+  "target_attribute_occurrences_in_scanned_files": [
+    {
+      "source": "rotclimate/model.py",
+      "line": 1154,
+      "statement": "cropped_shape = (nt,) + g.target[g.map_slice()].shape"
+    }
+  ],
+  "existing_adoption_atlas_note": "edge_obs_pw is an Earth-calibration boundary condition (NCEP column water at map edges); a fantasy-world map has no reanalysis, so the atlas keeps land_edge_rh for its edges.",
+  "integrations": 0,
+  "scope": "Selected source files only; not a complete dynamic dependency or target-leak proof.",
+  "climate_adopted": false,
+  "atlas_changed": false
+}
