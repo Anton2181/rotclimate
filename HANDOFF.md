@@ -10661,3 +10661,8 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   the warm eastern Sahara/Tibesti (+1.8 -> +0.1 C) and Tibet but over-cools Algeria/Najd (tuned warm by other
   knobs). Belongs in the r65 joint recalibration. calibration/albedo_20261128.
 - Kalahari: existing closures (gate off + sverdrup off + plateau capacity + nudge) reach only 1/4 of summer rain.
+
+## W26 (e150 albedo joint refit) — CLOSED 2026-11-28
+33 pts, all worse than r63 (best 1.0025 at albedo≈off); emulator gain 0.0013 < 0.005. No adoption,
+no sealed spend. Records: calibration/ppe_20261123/W26_records. Albedo deferred to r65 with a
+structural partner (clear-sky LW/dust). r63 still adopted.
