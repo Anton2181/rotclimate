@@ -235,6 +235,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
     g.zonal_pw = zonal_land_pw(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)     # e116z: latitude-only stand-in
+    g.obs_slp_fall = observed_slp_fall(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e140
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
@@ -619,6 +620,35 @@ def observed_pw(lat, lon, mirrored=False):
     j = (np.asarray(lon, float) % 360.0) / 2.5
     wrap = np.concatenate([pw, pw[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+NCEP_SLP = CACHE / "ncep_slp_2p5.npz"      # scripts/build_ncep_slp.py (e140)
+
+
+def observed_slp_fall(lat, lon, mirrored=False, smooth_km=500.0):
+    """e140: monthly poleward fall of the NCEP/NCAR long-term-mean sea-level pressure [12, ...] (hPa per 1,000 km;
+    positive where pressure falls toward the pole of the point's own hemisphere), smoothed over smooth_km as the
+    model smooths its own pressure for the e55/e83 gates. A region map sees only its own heat lows; this is what
+    the gates would see on the whole globe (Somalia: the Arabian and Indian lows off the map). lat is the real
+    latitude; months shifted by six for mirrored southern regions. None when the cache is absent."""
+    if not NCEP_SLP.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(NCEP_SLP)
+    slp, plat = z["slp"].astype(float), z["lat"].astype(float)        # rows 90N -> 90S, 2.5 deg
+    sig = smooth_km / 278.0
+    sm = np.stack([ndi.gaussian_filter(slp[m], sig, mode=("nearest", "wrap")) for m in range(12)])
+    dy_km = 2.5 * 111.2
+    dpdn = -np.gradient(sm, axis=1) / dy_km * 1000.0                 # northward rise, hPa / 1000 km (rows go south)
+    fall_n = -dpdn                                                   # fall toward the north pole
+    lat = np.asarray(lat, float)
+    i = (plat[0] - lat) / (plat[0] - plat[1])
+    j = (np.asarray(lon, float) % 360.0) / 2.5
+    wrap = np.concatenate([fall_n, fall_n[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    out = np.sign(np.where(lat == 0, 1.0, lat)) * out                # poleward in the point's own hemisphere
     return np.roll(out, 6, axis=0) if mirrored else out
 
 

@@ -168,6 +168,8 @@ class Params:
     monsoon_westerly: float = 0.0     # e55: share of the trade speed by which air crossing the equator turns westerly before the ITCZ (Coriolis)
     monsoon_pressure_hpa: float = 0.0  # e55b: ... only where the model's own pressure falls poleward, fully at this many hPa per 1,000 km; 0 = everywhere
     monsoon_westerly_floor: float = 0.0  # e109: minimum share of monsoon_westerly applied where the poleward pressure fall is too weak (Coriolis turning without a heat low on the map); 0 = off
+    monsoon_obs_pressure: float = 0.0  # e140: share (0-1) of the e55 gate's poleward pressure fall taken from NCEP sea-level pressure (Earth grids only; region maps miss heat lows off the map); 0 = off
+    trade_obs_pressure: float = 0.0    # e140: the same for the e83 trade weakening
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0

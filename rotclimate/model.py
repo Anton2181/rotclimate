@@ -809,6 +809,16 @@ class ClimateModel:
         p = self.p
         return -np.cos(2 * np.pi * (day - p.winter_solstice_day - lag) / p.year_days)
 
+    def _observed_fall(self, d):
+        """e140: the observed poleward sea-level pressure fall on this grid at day d (None off Earth grids)."""
+        f = getattr(self.g, "obs_slp_fall", None)
+        if f is None:
+            return None
+        p = self.p
+        mpos = ((d - p.winter_solstice_day) / p.year_days * 12.0 + 12.0 - 0.838) % 12.0   # 0 = mid-January (solstice + 25.5 d)
+        m0 = int(np.floor(mpos)); a = mpos - m0
+        return (1.0 - a) * f[m0 % 12] + a * f[(m0 + 1) % 12]
+
     def zonal_wind(self, s):
         p, lat = self.p, self.lat
         hr = self.hadley_scale
@@ -871,6 +881,8 @@ class ClimateModel:
             else:
                 cell = self.g.cell_km
                 fall = np.sign(lat) * np.gradient(ndi.gaussian_filter(last, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
+                if p.monsoon_obs_pressure > 0 and getattr(self, "_obs_fall", None) is not None:
+                    fall = (1.0 - p.monsoon_obs_pressure) * fall + p.monsoon_obs_pressure * self._obs_fall   # e140
                 w = p.monsoon_westerly * np.clip(fall / p.monsoon_pressure_hpa, 0.0, 1.0)
                 if p.monsoon_westerly_floor > 0:
                     # e109: the turning of cross-equatorial air is Coriolis, not
@@ -887,6 +899,8 @@ class ClimateModel:
             # June; weaken them so the pressure-driven inflow takes over.
             cell = self.g.cell_km
             fall_t = np.sign(lat) * np.gradient(ndi.gaussian_filter(self.last_pres, 500.0 / cell, mode="nearest"), axis=0) * 10.0 / cell
+            if p.trade_obs_pressure > 0 and getattr(self, "_obs_fall", None) is not None:
+                fall_t = (1.0 - p.trade_obs_pressure) * fall_t + p.trade_obs_pressure * self._obs_fall   # e140
             keep = 1.0 - p.trade_heat_low * np.clip(fall_t / p.monsoon_pressure_hpa, 0.0, 1.0)
             north_trades = (lat >= phi_i) & (lat < phi_h)
             u = np.where(north_trades, u * keep, u)
@@ -1292,6 +1306,7 @@ class ClimateModel:
             d = days[k]
             s = self.season_index(d, p.circulation_lag_days)
             self._s_land = self.season_index(d, p.itcz_land_lag_days) if p.itcz_land_lag_days >= 0 else None   # e134
+            self._obs_fall = self._observed_fall(d) if (p.monsoon_obs_pressure > 0 or p.trade_obs_pressure > 0) else None   # e140
             Tl = self.z.land(lat, d) + p.land_offset
             if p.land_amplitude != 1.0 or p.wet_cooling > 0 or p.continentality > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
