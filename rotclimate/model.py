@@ -2699,6 +2699,12 @@ class ClimateModel:
                 else:
                     descent = self._descent(P_last) if P_last is not None else 0.0
                 sink = (0.0 if sink is None else sink) + p.monsoon_descent * descent / DAY
+                if p.monsoon_descent_tropics > 0:
+                    # e142: the monsoon descent dries the column more in the tropics, where it caps the shallow monsoon
+                    # inflow at its poleward end (Tibesti/Libyan desert 49 mm of column water in July vs NCEP 17); a global
+                    # increase dried Central Asia, the Kazakh steppe, Iran and North India (S97 neutral)
+                    trop142 = np.clip((p.monsoon_descent_tropics_lat1 - np.abs(lat)) / max(p.monsoon_descent_tropics_lat1 - p.monsoon_descent_tropics_lat0, 1e-6), 0.0, 1.0)
+                    sink = sink + p.monsoon_descent_tropics * trop142 * descent / DAY
                 if p.convective_descent > 0:
                     # e94: the monsoon descent also caps convection, not only the column water: r49 rained a false
                     # 245-259 mm Jul-Aug monsoon on the Oman coast (obs 6-10) and Najd in summer under the Indian monsoon's
