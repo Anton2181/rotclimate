@@ -2897,8 +2897,15 @@ class ClimateModel:
                             m152 = (d / p.year_days * 12.0 - 0.5) % 12.0
                             i152 = int(np.floor(m152)); f152 = m152 - i152
                             rh152 = (1.0 - f152) * g.obs_rh500[i152] + f152 * g.obs_rh500[(i152 + 1) % 12]
-                            ramp93 = ramp93 * np.clip((p.convective_rh_gate_rh500_hi - rh152)
-                                                      / (p.convective_rh_gate_rh500_hi - p.convective_rh_gate_rh500_lo), 0.0, 1.0)
+                            keep152 = np.clip((p.convective_rh_gate_rh500_hi - rh152)
+                                              / (p.convective_rh_gate_rh500_hi - p.convective_rh_gate_rh500_lo), 0.0, 1.0)
+                            if p.convective_rh_gate_rh500_lat1 > p.convective_rh_gate_rh500_lat0:
+                                # e152b: rain-belt margins only; the always-moist equatorial belt (PNG, Borneo, central
+                                # Amazon) kept its cap (sealed JJ: lifting it there wetted them 9-19 %)
+                                w152 = np.clip((np.abs(lat) - p.convective_rh_gate_rh500_lat0)
+                                               / (p.convective_rh_gate_rh500_lat1 - p.convective_rh_gate_rh500_lat0), 0.0, 1.0)
+                                keep152 = 1.0 - w152 * (1.0 - keep152)
+                            ramp93 = ramp93 * keep152
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
