@@ -1672,7 +1672,16 @@ class ClimateModel:
                         # whose whole interior is too dry (the southern tropics fed from a sea off the map) or too wet
                         # (observed edges, e116) was its own reference and felt no water-vapour greenhouse change.
                         W_ref = p.lw_ref_rh * w_sat(self.z.land(lat, d) + p.land_offset)
-                    dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, Wc) - clear_loss(fbar, W_ref)) / 10.0
+                    W_lw = Wc
+                    if p.lw_obs_pw > 0 and getattr(g, 'obs_pw', None) is not None:
+                        # e148: on Earth grids the greenhouse sees the observed column (NCEP PW) blended in: the model's
+                        # dry-season columns over South Asia's plains are 30-40 % short (10-18 vs 13-26 mm) and the
+                        # cloud/longwave step cooled the cloudless pre-monsoon plain by 0.7-1.4 C (r63 land budget).
+                        mpl = (d / p.year_days * 12.0 - 0.5) % 12.0
+                        m0l = int(np.floor(mpl)); fl = mpl - m0l
+                        pwl = (1.0 - fl) * g.obs_pw[m0l] + fl * g.obs_pw[(m0l + 1) % 12]
+                        W_lw = np.where(land & np.isfinite(pwl), (1.0 - p.lw_obs_pw) * Wc + p.lw_obs_pw * np.nan_to_num(pwl), Wc)
+                    dT -= p.cloud_longwave * sigT4 * (clear_loss(fc, W_lw) - clear_loss(fbar, W_ref)) / 10.0
                 Tl = Tl + np.clip(dT, -15.0, 10.0)
             if self.tap is not None: self.tap('cloud', d, Tl)
             if p.snow_albedo > 0:
