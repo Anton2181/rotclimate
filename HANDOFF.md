@@ -10269,6 +10269,8 @@ Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall
 benchmark, terrain research cores, detached jobs of an earlier container that
 no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 
+## e144 omega-damped ascent (S Somalia): CLOSED — W24 finalist dev6 0.9903 q95 1.0010 FAIL; blocked by Zambia/Tanzania warm bias. See calibration/ppe_20261123/e144_records/CLOSED.md
+
 ## r62 ADOPTED (28 Nov 2026) = r61 + e143c observed-PW dry nudge
 - Keys: obs_pw_nudge 1.0, obs_pw_nudge_dry_only 0.3, obs_pw_nudge_excess 0.5, obs_pw_nudge_rh0 0.5, obs_pw_nudge_h0 1.0, obs_pw_nudge_h1 2.0.
   Earth land columns below 2 km, near raining (W/Ws > 0.5) and holding > 1.5x the NCEP monthly PW relax toward it at 1/day.
