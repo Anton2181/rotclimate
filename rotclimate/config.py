@@ -174,6 +174,7 @@ class Params:
     convective_omega_ref: float = 0.03 # e141: omega (Pa/s) of full cap
     convective_omega_lat0: float = 0.0  # e141b: the cap is full equatorward of this latitude...
     convective_omega_lat1: float = 0.0  # ...and gone poleward of this one; lat1 <= lat0 = everywhere
+    convective_omega_sea_chi: float = 0.0  # e141c: the latitude fade acts only on air off the sea (continental fetch chi below this; full at chi 0); 0 = fade everywhere
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0

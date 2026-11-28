@@ -2718,8 +2718,14 @@ class ClimateModel:
                 if p.convective_omega_lat1 > p.convective_omega_lat0:
                     # e141b: only in the deep tropics; subtropical coasts (east Australia, south Brazil) get their
                     # cool-season rain from onshore flow under the subtropical descent, which the cap removed
-                    omega_cap = omega_cap * np.clip((p.convective_omega_lat1 - np.abs(lat))
-                                                    / (p.convective_omega_lat1 - p.convective_omega_lat0), 0.0, 1.0)
+                    fade = np.clip((p.convective_omega_lat1 - np.abs(lat))
+                                   / (p.convective_omega_lat1 - p.convective_omega_lat0), 0.0, 1.0)
+                    if p.convective_omega_sea_chi > 0 and chi is not None:
+                        # e141c: ... and only where the air comes off the sea; the plains inland (North China, Mongolia,
+                        # Texas) gained from the cap and keep it
+                        sea = np.clip(1.0 - chi / p.convective_omega_sea_chi, 0.0, 1.0)
+                        fade = 1.0 - (1.0 - fade) * sea
+                    omega_cap = omega_cap * fade
                 instab = 1.0 + (instab - 1.0) * (1.0 - omega_cap)
             gain = None
             if p.flux_convergence > 0:
