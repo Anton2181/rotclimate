@@ -10681,3 +10681,11 @@ sealed KK 0.9930 [0.981, 1.004] PASS. JJ SPENT (failed the ungated e152 g1525). 
 (screen_v6 with ref64 r64). r64w = r63w + the same keys (no effect on the world). Atlas still r58 (not rebuilt).
 Remaining: southern onset still ~half of observed in Sep; Zambia/Tanzania plateau warmth (+1 C), Kalahari, Ganges/Sahel cold,
 spring timing (e151 rejected), Southern Ocean coasts (r65), Sahara/Tibet albedo (W26 closed).
+
+## r64b ADOPTED (28 Nov 2026): r64 + e152e (rh500-gated subtropical branch drying)
+subsidence_branch_rh500_lo 20, _hi 35: e70b branch drying over land fades where NCEP 500 hPa RH is moist.
+Gates vs r64: dev6 0.9849 [q95 0.9926] (arid 0.981, highland 1.007); fine28 0.9956; sealed LL 0.9884 [0.950, 1.005] PASS.
+Kalahari rain loss 0.99 -> 0.84, inland Australia 0.75 -> 0.43 (but still ~1/2-1/5 of observed rain). Reference runs
+output/ppe_20261127/ref64b/r64b_<part> (screen_v6 with ref64b r64b). Named r64b: r65 stays the big recalibration.
+Also committed, off, no effect in probes: e145c (dry-soil extratropical wet nudge; Kalahari sits above the 1-2 km nudge
+fade), e152d (rh500 release of the chi0 cut).
