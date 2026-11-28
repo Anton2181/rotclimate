@@ -14,3 +14,13 @@ own simulated rain (model._descent). The world-legal mode keeps the Earth field 
 globally computed one (a regional window would miss remote sources: Iran's descent comes from India), but it is a mild
 target leak in the Earth harness (rain input -> rain score). Candidate fix for r65/r70: build the Earth descent field
 from a global model rain climatology (e.g. the r70 world-style run on Earth) instead of WorldClim.
+
+## What r64b rests on (single fields withheld, vs r64b; ROTCLIMATE_WITHHOLD)
+obs_omega 1.0524 [1.017, 1.106] (P +10 %, arid 1.167) > obs_rh500 1.0360 (tropical_wet 1.078) > obs_slp_fall 1.0000 (unused).
+obs_pw: crashed (r64b's edge_pw_source "observed" requires it; measure with the world parameter set instead).
+
+## e154 WTG own-rain omega stand-in: REJECTED (obs_omega withheld; baseline without stand-in 1.0524)
+w30 1.1305, w20p2 1.0599, w30k2 1.1596: a within-run feedback (no rain -> sinking -> no rain) dries the Congo
+(s 3.0-3.7). Lesson: a stand-in must not read the same run's rain. Next design: two-pass - derive a FIXED omega
+climatology from a completed global (world-style) run's rain, then rerun with it, as the Earth descent field is built
+once. Needs a global Earth run (the regional harness has no global rain); natural on the world grid.
