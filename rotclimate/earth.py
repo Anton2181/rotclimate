@@ -235,6 +235,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
+    g.model_omega = model_omega_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # T10: two-pass model omega (world-legal)
     g.obs_om700 = observed_omega700(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e152f: NCEP 700 hPa omega
     g.obs_rh500 = observed_rh500(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e152: NCEP 500 hPa RH
     g.obs_albedo = observed_albedo(-lat if lat0 < 0 else lat, lon)                # e150: NCEP snow-free albedo
@@ -669,6 +670,26 @@ def observed_omega700(lat, lon, mirrored=False):
     om, plat = np.nan_to_num(z["omega"].astype(float)), z["lat"]
     i = (plat[0] - np.asarray(lat, float)) / (plat[0] - plat[1])
     j = (np.asarray(lon, float) % 360.0) / 2.5
+    wrap = np.concatenate([om, om[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+MODEL_RAIN = CACHE / os.environ.get("ROTCLIMATE_MODEL_RAIN", "model_rain_r64bw.npz")   # scripts/global_model_rain.py (T10)
+
+
+def model_omega_at(lat, lon, mirrored=False):
+    """T10 two-pass stand-in: the fixed weak-temperature-gradient 500 hPa sinking [12, ...] (Pa/s) derived from a global
+    MODEL rain climatology (no observed field), 1 deg bilinear; months shifted by six for mirrored regions. None when
+    the cache is absent."""
+    if not MODEL_RAIN.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(MODEL_RAIN)
+    om = np.nan_to_num(z["omega_wtg"].astype(float))
+    i = 89.5 - np.asarray(lat, float)
+    j = (np.asarray(lon, float) + 179.5) % 360.0
     wrap = np.concatenate([om, om[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
