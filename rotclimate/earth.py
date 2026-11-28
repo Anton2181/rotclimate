@@ -249,9 +249,9 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
         # Earth score measures only the skill that transfers to the atlas (scripts/transfer_score.py). Terms
         # gated on these fields drop out; run with the world parameter set (edge_pw_source "zonal").
         g.obs_pw = g.obs_om700 = g.obs_rh500 = g.obs_albedo = g.obs_omega = g.obs_slp_fall = None
-    for name in filter(None, os.environ.get("ROTCLIMATE_WITHHOLD", "").split(",")):
+    for fld in filter(None, os.environ.get("ROTCLIMATE_WITHHOLD", "").split(",")):
         # Meta M1b: withhold single observed fields (e.g. obs_omega,obs_rh500) to rank what an Earth gain rests on
-        setattr(g, name.strip(), None)
+        setattr(g, fld.strip(), None)
     prof = plateau_profile()                                   # e72c (used only with storm_plateau_global)
     hem = "sh" if lat0 < 0 else "nh"
     g.plateau_profile = dict(lon=prof["lon"], area=prof["area_" + hem], edge=prof["edge_" + hem], top=prof["top_" + hem],
