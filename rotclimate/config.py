@@ -252,6 +252,7 @@ class Params:
     onset_base: float = 0.0           # e135: the e86 onset ramp also scales the base rain rate over land by (1 - this x ramp); 0 = off
     itcz_land_lag_days: float = -1.0  # e134: the rain belt over broad land follows the sun with this lag (days) instead of circulation_lag_days; <0 = off
     itcz_land_sharp: float = 1.0      # e136: over broad land the summer half of the belt's swing goes as s**this (>1: the belt holds south, then jumps; the West African 'monsoon jump'); 1 = off
+    onset_base_lat: float = 22.0      # e135: ... only equatorward of this |latitude| (5-degree fade): the cap is the Saharan air layer over the tropical monsoons
     onset_gap_deg: float = 5.0        # e86: the rain belt runs this far equatorward of the land ITCZ (Saharan air layer over the shallow monsoon)
     slope_convection: float = 0.0     # e88: added warm-moist convective boost over sun-heated mountain slopes x clip(subgrid relief / slope_convection_km) x clip((T - 18) / 8) x moisture; 0 = off
     slope_convection_km: float = 1.0  # e88: subgrid relief (km) for the full slope trigger

@@ -2556,7 +2556,8 @@ class ClimateModel:
                         # e135: before the rain belt arrives the Saharan air layer caps the shallow monsoon air,
                         # which is humid but does not rain (Sahel dew points of 20 C in May, 40 mm of rain):
                         # with the Gulf of Guinea at its observed warmth (e132) the Sahel rained 120 mm in May
-                        instab = np.where(land, instab * (1.0 - p.onset_base * ramp), instab)
+                        trop = np.clip((p.onset_base_lat - np.abs(lat)) / 5.0, 0.0, 1.0)
+                        instab = np.where(land, instab * (1.0 - p.onset_base * ramp * trop), instab)
             else:
                 instab = 1.0
             if p.slope_convection > 0 and W_prev is not None:
