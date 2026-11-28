@@ -1,0 +1,10 @@
+{
+ "policy": "v7",
+ "adopted": "28 Nov 2026 (owner: 'Implement now' after the meta-level review)",
+ "replaces": "policy_v6 (dev6 gate unchanged; finalist choice, sealed sets and transfer reporting changed)",
+ "M3_finalist": "Among the screened / PPE candidates, the finalist is the lowest obj = S97 + 0.25 x mean of the five largest max(0, s_i - 1) (scripts/finalist.py), and must have obj < 1.0 besides passing dev6 (q95 < 1, T, P <= +1 %, worst regime <= 1.02). Backtest: g1525 (failed JJ) obj 1.047 would not have been sent; c06 0.9973 over the judgment pick c10 1.0002.",
+ "M2_sentinel": "Every finalist also runs the 15-box global sentinel set (calibration/sealed_bank_20261128/sentinel.json; 3 per latitude band) paired with the reference: S_sentinel <= 1.01 and no sentinel box s_i > 1.25. The sentinel is a harm check, reused, never sealed.",
+ "M2_bank_sealed": "Sealed sets come from the sealed bank (calibration/sealed_bank_20261128/bank.json, 264 boxes in bands B1 0-12, B2 12-25, B3 25-40, B4 40-55, B5 55-70; SHA-256 in commitment.txt) via scripts/bank_draw.py: the declaration (bands where the change acts, N = 12) is committed before the draw; boxes are handed out in bank order, once each (ledger.json); ONE paired run; pass = S <= 1.0 and bootstrap q05 < 1.0 (sealed5).",
+ "M1_transfer": "Every adoption also reports the world-legal score (scripts/transfer_score.py: ROTCLIMATE_WORLD_LEGAL=1 withholds the Earth-only NCEP fields; world parameter sets). Reported, not gated; transferable share = (1 - S_world) / (1 - S_earth). Before the r70 rebuild, the observation-driven terms with the lowest share are to be replaced by model-diagnosed stand-ins.",
+ "bank_relaxation": "The bank may overlap sealed sets spent once and never tuned on (low/mid-latitude land is otherwise exhausted); it excludes the development pool, fine28, the reference regions and JJ."
+}

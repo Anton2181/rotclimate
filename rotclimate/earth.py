@@ -29,6 +29,7 @@ import zipfile
 from dataclasses import dataclass
 from pathlib import Path
 
+import os
 import numpy as np
 
 from .config import DATA, Params
@@ -243,6 +244,11 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.cloud_ref = land_cloud_at(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)    # e43
     g.descent = monsoon_descent_at(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e49
     g.sea_depth = sea_depth_at(-lat if lat0 < 0 else lat, lon)   # e50
+    if os.environ.get("ROTCLIMATE_WORLD_LEGAL") == "1":
+        # Meta M1 (28 Nov 2026): withhold every Earth-only observed field the invented world cannot have, so an
+        # Earth score measures only the skill that transfers to the atlas (scripts/transfer_score.py). Terms
+        # gated on these fields drop out; run with the world parameter set (edge_pw_source "zonal").
+        g.obs_pw = g.obs_om700 = g.obs_rh500 = g.obs_albedo = g.obs_omega = g.obs_slp_fall = None
     prof = plateau_profile()                                   # e72c (used only with storm_plateau_global)
     hem = "sh" if lat0 < 0 else "nh"
     g.plateau_profile = dict(lon=prof["lon"], area=prof["area_" + hem], edge=prof["edge_" + hem], top=prof["top_" + hem],
