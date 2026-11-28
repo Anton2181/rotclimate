@@ -2983,7 +2983,7 @@ class ClimateModel:
             # Mexico's dry season and inland eastern Australia rained their
             # own evaporation back out, and the monsoon carried little inland.
             E_surf143 = None
-            if p.obs_pw_nudge > 0 and getattr(g, "obs_pw", None) is not None:
+            if (p.obs_pw_nudge > 0 or p.obs_pw_nudge_wet > 0) and getattr(g, "obs_pw", None) is not None:
                 # e143 (Earth cases only): land columns relax toward the observed (NCEP) monthly precipitable
                 # water, a reanalysis-style moisture nudge at rate obs_pw_nudge per day; with obs_pw_nudge_dry_only
                 # it acts only where the previous day's column was wetter than observed (Tibesti, S Somalia).
@@ -3002,6 +3002,15 @@ class ClimateModel:
                 if p.obs_pw_nudge_h1 > p.obs_pw_nudge_h0:
                     # e143b: the 2.5-degree reanalysis mixes plateaus with their lowlands; fade out on high ground
                     kn = kn * np.clip((p.obs_pw_nudge_h1 - h_km) / (p.obs_pw_nudge_h1 - p.obs_pw_nudge_h0), 0.0, 1.0)
+                if p.obs_pw_nudge_wet > 0 and W_prev is not None:
+                    # e145 (Earth cases only): the wet-side twin: land columns drier than (1 - wet_excess) x the observed
+                    # PW gain toward it (the Kalahari and inland Australia hold 13-19 mm in their rains against 17-25
+                    # observed and rain a fifteenth of the observed; the southern Amazon column holds half)
+                    kw = np.where(land, p.obs_pw_nudge_wet / DAY, 0.0) * np.clip(
+                        ((1.0 - p.obs_pw_nudge_wet_excess) * pwo - W_prev) / np.maximum(0.2 * pwo, 1e-6), 0.0, 1.0)
+                    if p.obs_pw_nudge_h1 > p.obs_pw_nudge_h0:
+                        kw = kw * np.clip((p.obs_pw_nudge_h1 - h_km) / (p.obs_pw_nudge_h1 - p.obs_pw_nudge_h0), 0.0, 1.0)
+                    kn = kn + kw
                 sink = (0.0 if sink is None else sink) + kn
                 E_surf143 = E_land
                 E_land = E_land + kn * pwo
