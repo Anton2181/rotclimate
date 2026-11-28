@@ -783,7 +783,12 @@ class ClimateModel:
             eday = 354.5 + (d - p.winter_solstice_day) / p.year_days * 365.25 + (365.25 / 2 if south else 0.0)
             obs = zonal_sst(lat_real, (eday / 365.25 * 12.0 - 0.5) % 12.0)
             if obs is not None:
-                T = (1.0 - p.sst_zonal_obs) * T + p.sst_zonal_obs * obs
+                w = p.sst_zonal_obs
+                if p.sst_zonal_obs_lat1 > p.sst_zonal_obs_lat0:
+                    # e138b: only poleward, where the EBM sea is too cold (a uniform blend warmed the tropics)
+                    w = w * np.clip((np.abs(lat_real) - p.sst_zonal_obs_lat0)
+                                    / (p.sst_zonal_obs_lat1 - p.sst_zonal_obs_lat0), 0.0, 1.0)
+                T = (1.0 - w) * T + w * obs
         return T
 
     def _sea_annual_field(self):
