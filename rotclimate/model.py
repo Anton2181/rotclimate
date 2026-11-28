@@ -2492,6 +2492,9 @@ class ClimateModel:
                 if p.dyn_omega_lat1 > p.dyn_omega_lat0:
                     # e144b: poleward the monthly-mean sinking coexists with frontal storms (Korea, Japan, Victoria)
                     ramp = ramp * np.clip((p.dyn_omega_lat1 - np.abs(lat)) / (p.dyn_omega_lat1 - p.dyn_omega_lat0), 0.0, 1.0)
+                if p.dyn_omega_rh0 > 0 and W_prev is not None:
+                    # e144c: only columns near raining; damping a dry-season column only removes its cloud (Zambia warms)
+                    ramp = ramp * np.clip((W_prev / np.maximum(Ws, 1e-6) - p.dyn_omega_rh0) / 0.1, 0.0, 1.0)
                 A_dyn = A_dyn * (1.0 - p.dyn_omega * ramp)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
             if self.inflow_enabled:
