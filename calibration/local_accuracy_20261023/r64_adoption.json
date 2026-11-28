@@ -1,0 +1,34 @@
+{
+ "model": "r64",
+ "base": "r63",
+ "added": {
+  "convective_rh_gate_rh500_lo": 15,
+  "convective_rh_gate_rh500_hi": 25,
+  "convective_rh_gate_rh500_lat0": 5,
+  "convective_rh_gate_rh500_lat1": 10,
+  "convective_rh_gate_rh500_soil": 1.0
+ },
+ "mechanism": "e152/e152b/e152c: the e93 heated-land convection cap (Saharan dry layer aloft) is lifted where observed NCEP 500 hPa RH is moist (full cap <15 %, none >25 %), faded in from 5 to 10 deg latitude, only while the soil is still dry (pre-onset). Fixes the late southern Amazon/Brazil/Angola wet-season onset. Earth cases only (needs data/cache/earth/ncep_rh500.npz from scripts/build_ncep_rh500.py); the world has no obs_rh500, so r64w = r63w in effect.",
+ "gates": {
+  "dev6": {
+   "S": 0.9809,
+   "q95": 0.989,
+   "arid": 0.982,
+   "tropical_dry": 0.969,
+   "tropical_wet": 0.966
+  },
+  "fine28": {
+   "S": 1.0017
+  },
+  "sealed_KK": {
+   "S": 0.993,
+   "q05": 0.9806,
+   "q95": 1.0038,
+   "p_no_gain": 0.153,
+   "T": -0.0104,
+   "P": -0.0037
+  }
+ },
+ "history": "e152 g1525 passed dev6 (0.9698) + fine28 (0.961) but FAILED sealed JJ (1.1195: over-wet equatorial boxes, Zambezi); e152b lat fade + e152c pre-onset soil gate fixed both on dev; finalist c10 chosen over lower-S c15 because c15 re-wet Zimbabwe (JJ failure mode).",
+ "records": "calibration/spring_20261128, calibration/sealed_20261128JJ, calibration/sealed_20261128KK, output/ppe_20261127/e152c/c10"
+}

@@ -10671,3 +10671,13 @@ structural partner (clear-sky LW/dust). r63 still adopted.
 e151 land_phase_cont_days (off by default) REJECTED (S97 1.042-1.130: west interiors better, Mongolia/
 Tibet/Hokkaido/Canadian Shield worse). Volga budget: Apr cold from the zonal column's symmetric phase +
 continental centre; May-Jun cold from wet_cooling under a spring rain excess. calibration/spring_20261128.
+
+## r64 ADOPTED (28 Nov 2026): r63 + e152c (rh500-gated convection cap, pre-onset only)
+convective_rh_gate_rh500_lo 15, _hi 25, _lat0 5, _lat1 10, _soil 1.0. The e93 heated-land convection cap is lifted where
+NCEP 500 hPa RH is moist, 5-10 deg fade-in, only while soil is dry: southern Amazon/Brazil/Angola onset earlier.
+Gates vs r63: dev6 0.9809 [q95 0.9890] (tropical_wet 0.966, tropical_dry 0.969, arid 0.982); fine28 1.0017;
+sealed KK 0.9930 [0.981, 1.004] PASS. JJ SPENT (failed the ungated e152 g1525). Needs data/cache/earth/ncep_rh500.npz
+(scripts/build_ncep_rh500.py from NCEP rhum.mon.ltm.nc). Reference runs output/ppe_20261127/ref64/r64_<part>
+(screen_v6 with ref64 r64). r64w = r63w + the same keys (no effect on the world). Atlas still r58 (not rebuilt).
+Remaining: southern onset still ~half of observed in Sep; Zambia/Tanzania plateau warmth (+1 C), Kalahari, Ganges/Sahel cold,
+spring timing (e151 rejected), Southern Ocean coasts (r65), Sahara/Tibet albedo (W26 closed).
