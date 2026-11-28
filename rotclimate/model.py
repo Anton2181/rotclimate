@@ -2980,7 +2980,7 @@ class ClimateModel:
                     if W_prev is None:
                         kn = kn * 0.0
                     else:
-                        kn = kn * np.clip((W_prev - pwo) / np.maximum(p.obs_pw_nudge_dry_only * pwo, 1e-6), 0.0, 1.0)
+                        kn = kn * np.clip((W_prev - (1.0 + p.obs_pw_nudge_excess) * pwo) / np.maximum(p.obs_pw_nudge_dry_only * pwo, 1e-6), 0.0, 1.0)
                 if p.obs_pw_nudge_rh0 > 0 and W_prev is not None:
                     # e143b: only columns near raining (a dry-season column that does not rain gains nothing but heat)
                     kn = kn * np.clip((W_prev / np.maximum(Ws, 1e-6) - p.obs_pw_nudge_rh0) / 0.1, 0.0, 1.0)

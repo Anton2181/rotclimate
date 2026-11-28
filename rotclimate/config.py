@@ -139,6 +139,7 @@ class Params:
     edge_obs_pw: float = 0.0          # e116 (Earth cases only): land-edge inflow column water blends toward the observed (NCEP) monthly precipitable water; 0 = off
     obs_pw_nudge: float = 0.0        # e143 (Earth cases only): land column water relaxes toward NCEP monthly PW at this rate [1/day]; 0 = off
     obs_pw_nudge_dry_only: float = 0.0  # e143: >0 nudges only columns wetter than observed, ramping in over this fraction of obs PW
+    obs_pw_nudge_excess: float = 0.0  # e143c: dry-only nudge starts where W exceeds (1 + excess) x observed PW
     obs_pw_nudge_rh0: float = 0.0     # e143b: nudge only where previous W/Ws exceeds this (ramping over 0.1); 0 = everywhere
     obs_pw_nudge_h0: float = 0.0      # e143b: nudge fades out between h0 and h1 km elevation; h1 <= h0 = no fade
     obs_pw_nudge_h1: float = 0.0
