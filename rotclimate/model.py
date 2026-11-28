@@ -2932,6 +2932,21 @@ class ClimateModel:
                         if p.convective_rh_gate_chi_hi > p.convective_rh_gate_chi_lo:
                             rel152 = 1.0 - (1.0 - keep152) * np.clip((rh152 - p.convective_rh_gate_chi_lo)
                                                                      / (p.convective_rh_gate_chi_hi - p.convective_rh_gate_chi_lo), 0.0, 1.0)
+                    if p.convective_rh_gate_rh500_chi and keep152 is not None and p.convective_om700_hi > p.convective_om700_lo \
+                            and getattr(g, 'obs_om700', None) is not None:
+                        # e152f: ... only where the observed air at 700 hPa rises (Kalahari, inland Australia in summer:
+                        # -0.02..-0.04 Pa/s); the Sahara's capped air sinks all year (+0.04..+0.08). Full release at
+                        # or below om700_lo, none at or above om700_hi.
+                        om152 = (1.0 - f152) * g.obs_om700[i152] + f152 * g.obs_om700[(i152 + 1) % 12]
+                        rel152 = 1.0 - (1.0 - rel152) * np.clip((p.convective_om700_hi - om152)
+                                                                / (p.convective_om700_hi - p.convective_om700_lo), 0.0, 1.0)
+                    if p.convective_rh_gate_rh500_chi and keep152 is not None and p.convective_om500_hi > p.convective_om500_lo \
+                            and getattr(g, 'obs_omega', None) is not None:
+                        # e152f: ... and not under sinking air at 500 hPa (the Saharan heat low rises at 700 hPa under a
+                        # subsiding layer: Algeria +0.01..+0.04 Pa/s at 500 in summer, Kalahari -0.01..0)
+                        om5 = (1.0 - f152) * g.obs_omega[i152] + f152 * g.obs_omega[(i152 + 1) % 12]
+                        rel152 = 1.0 - (1.0 - rel152) * np.clip((p.convective_om500_hi - om5)
+                                                                / (p.convective_om500_hi - p.convective_om500_lo), 0.0, 1.0)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
                         chi93 = chi if chi_dry is None else chi - p.convective_rh_chi_dry * (chi - chi_dry)     # e103

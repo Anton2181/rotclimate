@@ -395,6 +395,10 @@ class Params:
     subsidence_branch_rh500_hi: float = 0.0   # e152e: ... none above; hi <= lo = off
     convective_rh_gate_chi_lo: float = 0.0   # e152d: own 500 hPa RH ramp: no release below this (%) ...
     convective_rh_gate_chi_hi: float = 0.0   # e152d: ... full e152c-share release above; hi <= lo = e152c's own ramp
+    convective_om700_lo: float = 0.0   # e152f: e152d release full where NCEP 700 hPa omega <= this (Pa/s) ...
+    convective_om700_hi: float = 0.0   # e152f: ... none where >= this; hi <= lo = no omega gate
+    convective_om500_lo: float = 0.0   # e152f: ... and full where NCEP 500 hPa omega <= this (Pa/s), none where >= om500_hi
+    convective_om500_hi: float = 0.0
     land_phase_cont_days: float = 0.0  # e151: deep-continental land cycle earlier by this x clip(2 (chi - 0.5), 0, 1) days (0 = off)
     snow_albedo: float = 0.0          # e16: K of land cooling under full snow cover per 480 W m-2 of sunshine
     snow_inversion: float = 0.0       # e128: K of 2 m cooling under full snow cover in full darkness (surface inversion)

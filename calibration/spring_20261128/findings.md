@@ -53,3 +53,8 @@ Sudan 1.266, Tripolitania 1.258 (arid 1.059). NCEP 500 hPa RH cannot separate th
 Australia 34 %, Libya/Tripolitania spring 33-36 %, Algeria summer 24-26 %. A stricter own ramp (27-33 %) loses the
 Kalahari gain and keeps Sudan/Algeria wet. LINE CLOSED for rh500: needs a discriminator for the Sahara's deep dry
 boundary layer / heat-low capping inversion (e.g. NCEP 700 hPa temperature or omega profile), deferred to r65.
+e152f (off): gate the e152d release by NCEP 700 hPa omega (rising) and 500 hPa omega (not sinking); caches
+ncep_omega700.npz (scripts/build_ncep_omega700.py) + existing omega500. 700 hPa separates the Sahara core (+0.04..+0.08
+Pa/s) from Kalahari/inland Australia summers (-0.02..-0.04), but the southern Sahara heat low also rises at 700 hPa;
+with both gates (700 lo -0.02 hi 0; 500 lo -0.005 hi 0.01) the Kalahari gain vanishes (Dec-Mar 11-9 vs 6-8 mm) while
+Algeria May-Jun stays +4-5 mm. Not screened. Kalahari rain needs a structural heat-low convection term (r65).
