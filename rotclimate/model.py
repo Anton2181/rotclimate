@@ -785,6 +785,15 @@ class ClimateModel:
             # rains, Sahel and Burkina 4-5 C too cold in May-June)
             broad = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(self.g.land.astype(float), 1500.0 / self.g.cell_km, mode="nearest")
             phi_i = phi_i + (p.itcz_mean_land - p.itcz_mean) * broad * hr
+        if getattr(self, '_s_land', None) is not None:
+            # e134: over a broad continent the rain belt answers the land's heating within weeks (the West African
+            # rains peak in August and are gone from the Sahel by October); the ocean's 6-week lag kept the belt
+            # at 16 N in October and the Sahel raining into October once the Gulf of Guinea was warm (W20)
+            broad = self.land_broad if self.land_broad is not None else ndi.gaussian_filter(self.g.land.astype(float), 1500.0 / self.g.cell_km, mode="nearest")
+            s_l = self._s_land
+            if p.itcz_land_sharp != 1.0 and s_l > 0:
+                s_l = s_l ** p.itcz_land_sharp          # e136: hold south, then jump
+            phi_i = phi_i + p.itcz_shift * (s_l - s) * broad * hr
         if self.itcz_anchor is not None and s > 0:
             phi_i = phi_i + p.itcz_plateau_gain * self.itcz_anchor * s * hr      # e85 (summer only)
         phi_h = (p.hadley_edge + p.hadley_shift * s) * hr
@@ -1233,6 +1242,7 @@ class ClimateModel:
         for n, k in enumerate(order):
             d = days[k]
             s = self.season_index(d, p.circulation_lag_days)
+            self._s_land = self.season_index(d, p.itcz_land_lag_days) if p.itcz_land_lag_days >= 0 else None   # e134
             Tl = self.z.land(lat, d) + p.land_offset
             if p.land_amplitude != 1.0 or p.wet_cooling > 0 or p.continentality > 0:
                 Tl_mean = self.z.land_annual(lat) + p.land_offset
@@ -2542,6 +2552,11 @@ class ClimateModel:
                     # rains fired in May-June, before the belt, with obs July-August peaks)
                     ramp = np.clip((lat - (phi_i - p.onset_gap_deg)) / 5.0, 0.0, 1.0)
                     instab = np.where(land, 1.0 + (instab - 1.0) * (1.0 - p.onset_suppression * ramp), instab)
+                    if p.onset_base > 0:
+                        # e135: before the rain belt arrives the Saharan air layer caps the shallow monsoon air,
+                        # which is humid but does not rain (Sahel dew points of 20 C in May, 40 mm of rain):
+                        # with the Gulf of Guinea at its observed warmth (e132) the Sahel rained 120 mm in May
+                        instab = np.where(land, instab * (1.0 - p.onset_base * ramp), instab)
             else:
                 instab = 1.0
             if p.slope_convection > 0 and W_prev is not None:
