@@ -10695,3 +10695,10 @@ fade), e152d (rh500 release of the chi0 cut).
 Progress since the last rebuild (r58): chained dev6 product r59..r64b = 0.884 (-11.6 % loss); sealed product 0.781
 (optimistic: small, targeted sets). r60+ gains rest largely on Earth-only observed fields (omega, rh500, PW): they do
 not reach the world atlas; measure the transferable share before the r70 rebuild.
+
+## Policy v7 in force (28 Nov 2026): calibration/local_accuracy_20261023/policy_v7.json
+M3 finalist = lowest obj (scripts/finalist.py), obj < 1; M2 sentinel (15 boxes, calibration/sealed_bank_20261128/sentinel.json,
+r64b reference output/ppe_20261127/ref64b/r64b_sentinel) S <= 1.01, no box > 1.25; sealed sets from the bank (264 boxes,
+scripts/bank_draw.py, N 12, declared bands); M1 transfer score reported (scripts/transfer_score.py).
+First transfer score r58w -> r64bw world-legal S97 0.9869 vs Earth chain 0.884: ~11 % of the gain reaches the world
+(calibration/transfer_20261128). Next: model-diagnosed stand-ins for the observed omega/RH/PW terms before r70.
