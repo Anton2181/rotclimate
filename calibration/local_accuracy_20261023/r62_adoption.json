@@ -1,0 +1,19 @@
+{
+ "release": "r62",
+ "base": "r61",
+ "adds": {
+  "obs_pw_nudge": 1.0,
+  "obs_pw_nudge_dry_only": 0.3,
+  "obs_pw_nudge_excess": 0.5,
+  "obs_pw_nudge_rh0": 0.5,
+  "obs_pw_nudge_h0": 1.0,
+  "obs_pw_nudge_h1": 2.0
+ },
+ "gates": {
+  "dev6": "S 0.9809 [q05 0.9552, q95 0.9978] worst regime tropical_dry 1.006 PASS",
+  "fine28": "S 0.9794 PASS",
+  "sealed_FF": "S 0.9826 [q05 0.9722, q95 0.9972] n 11 PASS"
+ },
+ "world": "r62w = r61w + same keys; world grids carry no obs_pw, so world output is unchanged",
+ "note": "e143c: land columns below 2 km that are near raining and hold > 1.5x the NCEP monthly PW relax toward it at 1/day (Tibesti Jun-Sep rain removed; S Somalia barely changes)"
+}

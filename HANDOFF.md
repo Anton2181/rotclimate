@@ -10269,6 +10269,16 @@ Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall
 benchmark, terrain research cores, detached jobs of an earlier container that
 no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 
+## r62 ADOPTED (28 Nov 2026) = r61 + e143c observed-PW dry nudge
+- Keys: obs_pw_nudge 1.0, obs_pw_nudge_dry_only 0.3, obs_pw_nudge_excess 0.5, obs_pw_nudge_rh0 0.5, obs_pw_nudge_h0 1.0, obs_pw_nudge_h1 2.0.
+  Earth land columns below 2 km, near raining (W/Ws > 0.5) and holding > 1.5x the NCEP monthly PW relax toward it at 1/day.
+- Gates vs r61: dev6 0.9809 [.9552, .9978] PASS; fine28 0.9794 PASS; sealed FF (11 new boxes, declared first) 0.9826 [.9722, .9972] PASS.
+- Path: e143 plain (1.019/1.039, Tibet plateau 2.25) -> e143b rh/elevation gates (0.9942, S-hemisphere wet seasons hurt) -> e143c excess threshold.
+- Tibesti Jun-Sep rain error 1.85 -> 0.75 (still warm-biased +1.8 C); S Somalia unchanged (not a PW excess; needs another fix).
+- r62w = r61w + same keys (world grids have no obs_pw; world unchanged). Atlas still r58 (not rebuilt; ask first).
+- Records: calibration/obs_pw_nudge_20261128, calibration/local_accuracy_20261023/r62_*.json, calibration/sealed_20261128FF (SPENT). Paired refs: output/ppe_20261127/ref62.
+- Work branch is claude/friendly-turing-43ygeu (claude/wonderful-mayer-uqbwtb holds an unrelated older line).
+
 ## e142 tropics-only descent (W23): CLOSED — dev6 0.9892 q95 1.0048 FAIL; r61 stays. See calibration/ppe_20261123/e142_records/CLOSED.md
 
 ## State
