@@ -19,3 +19,18 @@ e151 land_phase_cont_days (one-sided e121: deep-continental land cycle earlier; 
 Conclusion: the spring error is not a phase or snow-albedo term. Leads: the spring rain excess
 over western Eurasia (storm band too far north in May) and lacking cold advection to east coasts;
 both need transport-level changes, deferred to the r65 recalibration.
+
+## Tropical transition seasons (same session)
+Across r63 references the land rain belt sits too far NORTH in both transition seasons:
+- northern dry tropics (r_11n_2w, Sahel) start early in April and run too wet to October
+  (r_11n_2w Oct 162 vs 47 mm) -> too cold (C1 cold side);
+- southern Amazon/cerrado (s3_15s_65w, gg2_14s_56w, u3_11s_55w, t_10s_66w) start 1-2 months late
+  (Sep-Nov 0/0/18 vs 108/163/237 mm) and end early (May-Jun) -> +3..+8 C pre-onset (C1 hot side).
+Southern pre-onset column water 12-16 vs NCEP 27-35 mm; land evaporation 0 Jul-Oct (bucket empty).
+Probes: obs_pw_nudge_wet lat 10-25 adds wet-season rain only (onset still dry; north floods further).
+Snow-free NCEP albedo does NOT separate the warm-south / cold-north boxes (0.17-0.22 both): no
+vegetation-gated root store. Perihelion is correctly shifted for mirrored regions.
+Diagnosis: a hot-dry-land feedback (no rain -> Ws rises -> rh falls -> no rain) that the model's
+moisture/convection scheme cannot break before the belt arrives; one land ITCZ (W5) cannot be both
+early-north and early-south. Needs a forest-initiated onset term (shallow convection moistening, Wright
+et al. 2017) or hemispheric land belt asymmetry, fitted in r65.
