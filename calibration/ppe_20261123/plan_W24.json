@@ -1,0 +1,52 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared after the e144 screens (output/ppe_20261127/do: dl9a/dl9b/dr5/dr6) and before any W24 run",
+ "why": "S Somalia (s_2n_43e) large-scale rain under observed 500 hPa sinking. e144 tropics-only: dr6 S97 0.9911 [0.9754, 1.0007] vs r62, dr5 0.9906 [.9743, 1.0011], dl9b 0.9906 [.9743,1.0015] (Somalia 0.57, Sahel/Mali/Congo/N Queensland better; Zambia/Tanzania warm-biased boxes warmer). Refit strength, ramp and RH gate.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves; propose ONCE per wave. Finalist = best by dev objective ONLY; dev6 vs r62, fine28 vs r62, ONE sealed run on a NEW set declared before it is drawn.",
+ "base": "calibration/local_accuracy_20261023/r62_params.json",
+ "base_set": {
+  "dyn_omega": 0.9,
+  "dyn_omega_lat0": 15.0,
+  "dyn_omega_lat1": 25.0,
+  "dyn_omega0": 0.015,
+  "dyn_omega1": 0.035,
+  "dyn_omega_rh0": 0.6
+ },
+ "reference": "output/ppe_20261127/ref62",
+ "reference_name": "r62",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W24",
+ "seed": 20261224,
+ "wave1": 24,
+ "knobs": {
+  "dyn_omega": [
+   0.3,
+   1.0,
+   "lin"
+  ],
+  "dyn_omega0": [
+   0.01,
+   0.022,
+   "lin"
+  ],
+  "dyn_omega1": [
+   0.026,
+   0.05,
+   "lin"
+  ],
+  "dyn_omega_rh0": [
+   0.4,
+   0.75,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r62; pass -> r63",
+ "base_note": "r62 + e144c dr6"
+}
