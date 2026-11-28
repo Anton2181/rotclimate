@@ -34,3 +34,12 @@ Diagnosis: a hot-dry-land feedback (no rain -> Ws rises -> rh falls -> no rain) 
 moisture/convection scheme cannot break before the belt arrives; one land ITCZ (W5) cannot be both
 early-north and early-south. Needs a forest-initiated onset term (shallow convection moistening, Wright
 et al. 2017) or hemispheric land belt asymmetry, fitted in r65.
+
+## Sahel May cold under r64b (same session)
+sahel_niger May T 28.3 vs 32.3 C. Budget (lb.py, sea-level): land_eq 32.6 vs observed 33.9 (dry heating falls
+2.3 -> 0.8 C Apr -> May as early rain wets the soil; wet cooling/wet_sun -0.5..-1); air 30.5 = ~half-way from
+land_eq toward the Gulf of Guinea sea air (28.1) 1,000 km inland: the monsoon inflow's sea-air share is the larger
+term. Column water May 39 vs NCEP 29 (early), Jul-Aug 31 vs 38-42 (late).
+Probes with no useful effect: obs_pw_nudge_excess 0.2/0.05 (nudge gated by rh0), e136 itcz_land_sharp alone
+(needs e134), e134 lag 30/43 + sharp 2 (Sahel May-Jun rain -0..-14 mm, T +0.2; southern Amazon onset later).
+Lead: inland heating of monsoon sea air (air-mass modification over hot land), not the rain belt.
