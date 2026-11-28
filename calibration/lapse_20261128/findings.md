@@ -12,3 +12,17 @@ e146 lapse_tropical (uniform extra K/km, latitude fade), screen_e146.log, all FA
 Zambia/Tanzania/Congo rim improve (r_14s_32e +1.09 -> +0.37 C), but whole basins and the Andes cool
 (s2_23s_67w +0.20 -> -1.22/-3.10, r_4s_79w -1.12): the error is relative relief, not absolute height.
 -> e147 relief_lapse: extra K/km on height above the 150 km-smoothed surrounding land.
+
+e147 relief_lapse (extra K/km on height above the smoothed surroundings), screen_e147.log - neutral:
+| rl1 2 K/km, 150 km, 12-40 | S97 1.0009 [0.9971, 1.0051] |
+| rl2 3 K/km                | S97 1.0061 |
+| rl3 2 K/km, 100 km, 20-50 | S97 0.9997 [0.9971, 1.0026] |
+Lowlands beside mountains (negative relief) were warmed: Bolivian lowlands s3_15s_65w +0.64 -> +1.21/+1.95 C.
+e147b relief_positive_only, screen_e147b.log - neutral:
+| rp1 2 K/km | S97 1.0004 [0.9973, 1.0036] |
+| rp2 3 K/km | S97 1.0034 |
+| rp3 2 K/km, 20-55 | S97 1.0007 |
+East African / Zambian plateaus improve (r_14s_32e +1.09 -> +0.79 C, s_19s_32e, Congo rim), but the steep Andes
+(already right) cool 0.6-1.3 C too far (r_4s_79w, s2_23s_67w, s2_3n_65w). LINE CLOSED: the African plateau warmth
+is not a height or relief effect shared with the Andes; candidates left are regional (miombo dry-season energy
+balance, aerosol/biomass-burning haze in Jun-Oct). All keys default off.

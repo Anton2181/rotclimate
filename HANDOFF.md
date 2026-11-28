@@ -10635,3 +10635,14 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   calibration/local_accuracy_20261023/r63_*.json. Paired refs for next screens: output/ppe_20261127/ref63 (r63).
 - Still open: S Somalia (e144 blocked by Zambia/Tanzania dry-season warm bias), Tibesti +1.8 C, Southern Ocean coasts
   cold (r65), spring timing G3, hot dry land too cold C1, Kalahari/interior Australia no rain (convection trigger).
+
+## Southern dry-tropics warm bias (Zambia/Tanzania, blocks S Somalia e144): four lines CLOSED (28 Nov 2026), r63 stays
+- Probe (r63): wet-season column water >= NCEP yet rain ~half (heat raises saturation, RH ~0.6); dry season +2 C.
+- Dry PW nudge loosened: no cooling (not vapour greenhouse). e114b deep roots + tropical fade: S97 1.005-1.009 FAIL
+  (bug found: wetness = soil_w / 0.75 cap, so a deeper cap DRIED the land). e114c (root_abs_beta) S97 1.0024 neutral:
+  cools the south but also the already-cold northern dry tropics (W Africa) at the same rain.
+- r63 within-region bias vs height +1.44 K/km at 0-12 deg -> e146 tropical lapse S97 1.010-1.025 FAIL (Andes, basins
+  cool); e147/e147b relief lapse S97 0.9997-1.0061 neutral (Andes over-cooled). calibration/root_store_20261128,
+  calibration/lapse_20261128. All new keys default off; recent latitude fades registered for tilt scaling.
+- r63 loss map (all 103 regions): worst Namibia/Kalahari 1.89, Patagonia 1.66, S Somalia 1.66, North India 1.65
+  (T MAE 3.2 C), Tibesti 1.64, interior W Australia 1.60, Bolivian lowlands 1.60, S Patagonia 1.56.
