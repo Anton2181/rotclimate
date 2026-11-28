@@ -234,6 +234,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
+    g.obs_rh500 = observed_rh500(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e152: NCEP 500 hPa RH
     g.obs_albedo = observed_albedo(-lat if lat0 < 0 else lat, lon)                # e150: NCEP snow-free albedo
     g.zonal_pw = zonal_land_pw(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)     # e116z: latitude-only stand-in
     g.obs_omega = observed_omega(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e141
@@ -621,6 +622,25 @@ def observed_pw(lat, lon, mirrored=False):
     i = (plat[0] - np.asarray(lat, float)) / (plat[0] - plat[1])
     j = (np.asarray(lon, float) % 360.0) / 2.5
     wrap = np.concatenate([pw, pw[:, :, :1]], axis=2)
+    out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
+    return np.roll(out, 6, axis=0) if mirrored else out
+
+
+NCEP_RH500 = CACHE / "ncep_rh500.npz"   # scripts/build_ncep_rh500.py (e152)
+
+
+def observed_rh500(lat, lon, mirrored=False):
+    """e152: monthly relative humidity at 500 hPa [12, ...] (percent) from the NCEP/NCAR R1 long-term mean
+    (2.5 deg, bilinear); months shifted by six for mirrored southern regions. None when the cache is absent."""
+    if not NCEP_RH500.exists():
+        return None
+    from scipy import ndimage as ndi
+
+    z = np.load(NCEP_RH500)
+    rh, plat = np.nan_to_num(z["rh"].astype(float), nan=30.0), z["lat"]
+    i = (plat[0] - np.asarray(lat, float)) / (plat[0] - plat[1])
+    j = (np.asarray(lon, float) % 360.0) / 2.5
+    wrap = np.concatenate([rh, rh[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
 

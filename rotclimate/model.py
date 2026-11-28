@@ -2888,6 +2888,17 @@ class ClimateModel:
                                 # interior west of eastern Australia (air that crossed dry land, e117)
                                 f119 = np.maximum(f119, f117)
                             ramp93 = ramp93 * f119
+                        if p.convective_rh_gate_rh500_hi > p.convective_rh_gate_rh500_lo and getattr(g, 'obs_rh500', None) is not None:
+                            # e152 (Earth cases only): the cap is the dry layer aloft, so judge it by the observed one.
+                            # NCEP 500 hPa RH in the transition months: Sahel, 11 N West Africa, Sahara, Australia,
+                            # Zambia 15-25 % (cap right), southern Amazon / Brazil 33-65 % (the forest-moistened column
+                            # that convects before the belt; r63 Sep-Nov 0-18 vs 108-237 mm, +3-8 C). Full cap below
+                            # rh500_lo, none above rh500_hi.
+                            m152 = (d / p.year_days * 12.0 - 0.5) % 12.0
+                            i152 = int(np.floor(m152)); f152 = m152 - i152
+                            rh152 = (1.0 - f152) * g.obs_rh500[i152] + f152 * g.obs_rh500[(i152 + 1) % 12]
+                            ramp93 = ramp93 * np.clip((p.convective_rh_gate_rh500_hi - rh152)
+                                                      / (p.convective_rh_gate_rh500_hi - p.convective_rh_gate_rh500_lo), 0.0, 1.0)
                         heat = heat * (1.0 - p.convective_rh_gate * ramp93)
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
