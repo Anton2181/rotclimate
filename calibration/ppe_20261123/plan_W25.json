@@ -1,0 +1,50 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared after the e145 screens (output/ppe_20261127/pwet: pw2, pw5, wl5_12, wl10_20) and before any W25 run",
+ "why": "Wet tropics rain deficit (Congo, Gabon, S Amazon, CAR boxes; column water below NCEP). e145 wet-side PW nudge, tropics fade: wl5_12 S97 0.9772 [0.9576, 0.9957] vs r62 but dev6 worst regime arid 1.030 > 1.02 (Sahel boxes 1.27-1.34x worse); wl10_20 0.9826 [.9596, 1.0059]. Refit strength, fade band and threshold.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves; propose ONCE per wave. Finalist = best by dev objective ONLY; dev6 vs r62, fine28 vs r62, ONE sealed run on a NEW set declared before it is drawn.",
+ "base": "calibration/local_accuracy_20261023/r62_params.json",
+ "base_set": {
+  "obs_pw_nudge_wet": 2.0,
+  "obs_pw_nudge_wet_excess": 0.1,
+  "obs_pw_nudge_wet_lat0": 5.0,
+  "obs_pw_nudge_wet_lat1": 12.0
+ },
+ "reference": "output/ppe_20261127/ref62",
+ "reference_name": "r62",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W25",
+ "seed": 20261225,
+ "wave1": 24,
+ "knobs": {
+  "obs_pw_nudge_wet": [
+   0.5,
+   3.0,
+   "lin"
+  ],
+  "obs_pw_nudge_wet_excess": [
+   0.0,
+   0.35,
+   "lin"
+  ],
+  "obs_pw_nudge_wet_lat0": [
+   0.0,
+   8.0,
+   "lin"
+  ],
+  "obs_pw_nudge_wet_lat1": [
+   8.0,
+   16.0,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r62; pass -> r63",
+ "base_note": "r62 + e145b wl5_12"
+}
