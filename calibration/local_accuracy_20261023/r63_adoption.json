@@ -1,0 +1,31 @@
+{
+ "model": "r63",
+ "base": "r62",
+ "added": {
+  "obs_pw_nudge_wet": 0.9466719808988273,
+  "obs_pw_nudge_wet_excess": 0.04634873694740235,
+  "obs_pw_nudge_wet_lat0": 0.16130591183900833,
+  "obs_pw_nudge_wet_lat1": 11.173780873417854
+ },
+ "mechanism": "e145b wet-tropics PW nudge (adds column water where model is drier than observed, equatorward of ~11 deg)",
+ "gates": {
+  "dev6": {
+   "S": 0.9744,
+   "q95": 0.9887,
+   "arid": 1.012,
+   "tropical_dry": 0.918,
+   "tropical_wet": 0.913
+  },
+  "fine28": {
+   "S": 1.0
+  },
+  "sealed_GG": {
+   "S": 0.9542,
+   "q95": 1.0065,
+   "p_no_gain": 0.077,
+   "passes": true
+  }
+ },
+ "world": "r63w = r62w + same keys; world grids have no obs_pw so the world is unchanged",
+ "atlas": "still r58 (not rebuilt)"
+}

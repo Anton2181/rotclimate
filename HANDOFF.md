@@ -10623,3 +10623,15 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   reports/R42_20261101.md; release output/atlas_r42/release.sh.
 * Sealed set d is spent; declare sealed set e before the next search.
 * Future searches: score on S49 (no group penalty) to match policy v3.
+
+## r63 ADOPTED (28 Nov 2026) = r62 + e145b wet-tropics observed-PW nudge
+- obs_pw_nudge_wet 0.947, wet_excess 0.046, wet_lat0 0.16, wet_lat1 11.17: adds column water toward NCEP PW on land
+  where the model is drier than observed, faded to zero by ~11 deg (spares Sahel, steppes).
+- W25 PPE (25 pts) closed after one propose (predicted gain 0.002). dev6 vs r62 S97 0.9744 [q95 0.9887], arid 1.012,
+  tropical_dry 0.918, tropical_wet 0.913 (Congo, Gabon, S Amazon, CAR rain error halved). fine28 1.000 (no effect >11 deg).
+  Sealed GG (6 boxes, 0-15 deg, 120 km; draw1 150 km gave 0) S 0.9542 [q95 1.0065] PASS. GG SPENT.
+- r63w = r62w + same keys (world unchanged; no obs_pw). Atlas still r58 (ask before rebuilding).
+- Records: calibration/ppe_20261123/plan_W25.json, e145_records, calibration/sealed_20261128GG,
+  calibration/local_accuracy_20261023/r63_*.json. Paired refs for next screens: output/ppe_20261127/ref63 (r63).
+- Still open: S Somalia (e144 blocked by Zambia/Tanzania dry-season warm bias), Tibesti +1.8 C, Southern Ocean coasts
+  cold (r65), spring timing G3, hot dry land too cold C1, Kalahari/interior Australia no rain (convection trigger).
