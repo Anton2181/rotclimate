@@ -1,0 +1,53 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared after the e140 screen (output/ppe_20261127/op) and before any W22 run",
+ "why": "Region maps cannot see heat lows beyond their window, so the e55 monsoon-westerly and e83 trade-weakening gates (poleward pressure fall) stayed shut where the low is off the map (Somalia: Arabia/India). e140 takes the fall from NCEP sea-level pressure on Earth grids (world uses its own pressure). Screen vs r59: op1 (monsoon 1) S97 0.9944 [0.9847, 1.0044]; op1t1 (monsoon 1, trade 1) 0.9925 [0.9824, 1.0028]: Sahel/West Africa/Zambia rain better, Algerian Sahara, Tibesti, Tanzania, Borneo worse. Refit the gate strengths with the observed fall.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves. Finalist = best by dev objective ONLY; then dev6 vs r59, fine28 once vs r59, ONE sealed BB run vs r59. Propose is called ONCE per wave.",
+ "base": "calibration/local_accuracy_20261023/r59_params.json",
+ "base_set": {
+  "monsoon_obs_pressure": 1.0,
+  "trade_obs_pressure": 1.0
+ },
+ "reference": "output/ppe_20261127/ref59",
+ "reference_name": "r59",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W22",
+ "seed": 20261222,
+ "wave1": 24,
+ "knobs": {
+  "monsoon_obs_pressure": [
+   0.3,
+   1.0,
+   "lin"
+  ],
+  "trade_obs_pressure": [
+   0.0,
+   1.0,
+   "lin"
+  ],
+  "monsoon_westerly": [
+   0.4,
+   1.0,
+   "lin"
+  ],
+  "monsoon_pressure_hpa": [
+   2.0,
+   6.0,
+   "lin"
+  ],
+  "trade_heat_low": [
+   0.0,
+   0.6,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r59: gate_v3.py dev6 (ref59), fine28, then ONE sealed run on sealed BB (calibration/sealed_20261128BB, drawn before W21/W22); pass -> r60. Scoring during the wave is paired with r59.",
+ "base_note": "r59 + e140 monsoon 1, trade 1 (op1t1)"
+}
