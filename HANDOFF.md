@@ -10655,3 +10655,5 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   wb2 passed dev6 (0.9911) and fine28 but FAILED sealed HH (1.0115, rain +3.7 %). HH SPENT (AA-HH all spent).
   Kalahari diagnosed: sverdrup suppression + plateau capacity + no heat-low convection trigger
   (calibration/kalahari_20261128). r63 stays current.
+- e149c (dry-only gate) wc1 passed dev6 (0.9920, q95 0.9966) and fine28 but sealed II neutral 1.0016 FAIL. II SPENT
+  (AA-II all spent). r63 stays current. Any further sealed run needs a new set.

@@ -22,3 +22,8 @@ wb3 (0.75) 0.9957. wb2 dev6 PASS vs r63 (arid 1.0015, tropical_dry 0.962), fine2
 [0.998, 1.038] (rain +3.7 %: already-wet boxes wetter). CLOSED, r63 stays. The dev gain is in the drier tropical
 plateaus (Katanga, Zambia, CAR); wet lowland boxes get wetter. A wetness gate (e.g. only where the column is below
 NCEP PW) would be the next variant, but HH is spent and the next run needs a new set.
+
+e149c (dry-only gate), screen_e149c.log: wc1 (10-18) S97 0.9920 [0.9866, 0.9966], worst regime 1.000; dev6 PASS vs r63,
+fine28 1.000, sealed II FAIL S 1.0016 [0.999, 1.013] (neutral: five of six boxes lowland). CLOSED, r63 stays.
+The development gain sits in a handful of tropical plateau boxes (CAR, Katanga, Angola, Ecuador); new sets drawn at
+random in 0-18 deg mostly miss them, so two sealed sets (HH, II) did not confirm it.
