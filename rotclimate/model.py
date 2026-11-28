@@ -1696,6 +1696,14 @@ class ClimateModel:
                                                      p.year_days))
                 cover = np.where(land, 1.0 - np.exp(-swe / SNOW_COVER_MM), 0.0)
                 Tl = Tl - p.snow_albedo * cover * S / LAND_COUPLING_SREF
+            if p.land_albedo > 0 and getattr(g, 'obs_albedo', None) is not None:
+                # e150: the land's own brightness (none before: every snow-free surface absorbed alike). Bright sand
+                # (Sahara, Arabia ~0.32) runs cooler and dark forest (Amazon ~0.16) warmer than the reference surface,
+                # in proportion to the day's sunshine. Earth grids only (NCEP surface shortwave up/down).
+                S_a = daily_insolation(lat, declination(d, p.tilt, p.winter_solstice_day, p.year_days),
+                                       p.solar_flux * distance_factor(d, p.eccentricity,
+                                                       p.winter_solstice_day + p.perihelion_after_solstice, p.year_days))
+                Tl = Tl - np.where(land, p.land_albedo * (g.obs_albedo - p.land_albedo_ref) * S_a / LAND_COUPLING_SREF, 0.0)
             if self.tap is not None: self.tap('land_eq', d, Tl)
             if p.land_coupling_insolation > 0:
                 # physics e2: the land surface ties the air to its temperature

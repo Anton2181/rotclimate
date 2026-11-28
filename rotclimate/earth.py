@@ -234,6 +234,7 @@ def region_case(name: str, cell_km: float = 28.0, pad_km: float = 1100.0) -> Ear
     g.sea_reach = sea_reach_at(lat if lat0 >= 0 else -lat, lon)   # e42 (degrees from the equator)
     g.obs_sst = observed_sst(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # WOA18, for sst_source="observed"
     g.obs_pw = observed_pw(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)     # e116: NCEP column water
+    g.obs_albedo = observed_albedo(-lat if lat0 < 0 else lat, lon)                # e150: NCEP snow-free albedo
     g.zonal_pw = zonal_land_pw(-lat if lat0 < 0 else lat, mirrored=lat0 < 0)     # e116z: latitude-only stand-in
     g.obs_omega = observed_omega(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e141
     g.obs_slp_fall = observed_slp_fall(-lat if lat0 < 0 else lat, lon, mirrored=lat0 < 0)   # e140
@@ -622,6 +623,23 @@ def observed_pw(lat, lon, mirrored=False):
     wrap = np.concatenate([pw, pw[:, :, :1]], axis=2)
     out = np.stack([ndi.map_coordinates(wrap[m], [i, j], order=1, mode="nearest") for m in range(12)])
     return np.roll(out, 6, axis=0) if mirrored else out
+
+
+NCEP_ALB = CACHE / "ncep_albedo_2deg.npz"   # scripts/build_ncep_albedo.py (e150)
+
+
+def observed_albedo(lat, lon):
+    """e150: snow-free land surface albedo at points (NCEP/NCAR R1 surface shortwave up/down, 2 deg, bilinear);
+    lat is the real latitude. None when the cache is absent."""
+    if not NCEP_ALB.exists():
+        return None
+    from scipy import ndimage as ndi
+    z = np.load(NCEP_ALB)
+    a, alat, alon = z["albedo"].astype(float), z["lat"], z["lon"]
+    i = (alat[0] - np.asarray(lat, float)) / (alat[0] - alat[1])
+    j = (np.asarray(lon, float) % 360.0) / (alon[1] - alon[0])
+    wrap = np.concatenate([a, a[:, :1]], axis=1)
+    return ndi.map_coordinates(wrap, [i, j], order=1, mode="nearest")
 
 
 NCEP_SLP = CACHE / "ncep_slp_2p5.npz"      # scripts/build_ncep_slp.py (e140)
