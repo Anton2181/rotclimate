@@ -1,0 +1,47 @@
+{
+ "version": 1,
+ "date": "2026-11-28",
+ "policy": "v6",
+ "status": "NEW wave, declared after the e142 screen (output/ppe_20261127/mt) and before any W23 run",
+ "why": "Tibesti/Libyan desert column water 49 mm in July vs NCEP 17 (monsoon inflow reaching 21 N). e142 extra monsoon-descent drying in the tropics: mt04 S97 0.9914 [0.9787, 1.0014], mt08 0.9892 [0.9690, 1.0049] vs r61 (Sudan 0.68, Tibesti 0.72, Mali, Sahel better; Mexico, Nicaragua, Najd, North India, Algerian Sahara worse). Global monsoon_descent increase was neutral (md02/md05). Refit strength and fade band.",
+ "method": "scripts/ppe.py: Sobol wave 1 (24 + base), GP emulators, emulator waves of 12; close when the predicted gain over the best observed point is < 0.005; at most 2 emulator waves; propose ONCE per wave. Finalist = best by dev objective ONLY; dev6 vs r61, fine28 vs r61, ONE sealed run on a NEW set declared before it is drawn.",
+ "base": "calibration/local_accuracy_20261023/r61_params.json",
+ "base_set": {
+  "monsoon_descent_tropics": 0.8
+ },
+ "reference": "output/ppe_20261127/ref61",
+ "reference_name": "r61",
+ "extra_parts": {
+  "tropical_t": "calibration/tropical_check_20261122t/regions.json",
+  "sealed_r": "calibration/sealed_20261122r/regions.json",
+  "sealed_S18": "calibration/sealed_20261123S18/regions.json",
+  "sealed_U18": "calibration/sealed_20261124U18/regions.json"
+ },
+ "out": "output/ppe_20261127/W23",
+ "seed": 20261223,
+ "wave1": 24,
+ "knobs": {
+  "monsoon_descent_tropics": [
+   0.2,
+   1.5,
+   "lin"
+  ],
+  "monsoon_descent_tropics_lat0": [
+   10.0,
+   22.0,
+   "lin"
+  ],
+  "monsoon_descent_tropics_lat1": [
+   18.0,
+   30.0,
+   "lin"
+  ],
+  "monsoon_descent": [
+   0.02,
+   0.15,
+   "lin"
+  ]
+ },
+ "gates": "policy v6 vs r61; pass -> r62",
+ "base_note": "r61 + e142 0.8 (mt08)"
+}
