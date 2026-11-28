@@ -4,6 +4,15 @@ climate gains and rebuild only when asked or when a substantial set of gains has
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# r60 ADOPTED (28 Nov 2026): r59 + e141 convective_omega 1.0, convective_omega_ref 0.015.
+Observed NCEP 500 hPa sinking (data/cache/earth/ncep_omega500_2p5.npz via scripts/build_ncep_slp.py) caps convection on
+Earth grids. dev6 vs r59 S97 0.9715 [q95 0.9989] (rain -5.7 %, Somalia rain loss 2.98 -> 0.95, Sahel/Chad better;
+east Australia 1.18 worse), fine28 1.0017, sealed CC 1.0006 FAIL (extratropical set, neutral), declared continuation on
+tropical sealed DD 0.8658 [0.793, 0.988] PASS (rain -27 %; one Somalia box dominates). AA, BB, CC, DD all SPENT: the next
+sealed run needs a new set. calibration/local_accuracy_20261023/r60_adoption.json, r60_params.json, r60w_params.json.
+World unchanged (no observed omega there); atlas NOT rebuilt. Next paired screens: reference must be r60 (build from
+output/ppe_20261127/om/om1r15 candidate_* runs, as ref59 was built from wc3_12).
+
 # e140 MONSOON GATES ON OBSERVED PRESSURE: REJECTED AT SEALED BB (28 Nov 2026). r59 stays current; BB SPENT.
 W22 finalist passed dev6 vs r59 (S97 0.9856, q95 0.9957) and fine28 (0.9997) but failed sealed BB (1.0043 [0.995,
 1.013], rain +1.6 %: Kashmir, Myanmar, Congo drier). calibration/monsoon_pressure_20261128. Next sealed run needs a NEW

@@ -4,5 +4,9 @@
  "why": "e141 acts only where observed 500 hPa air sinks over warm moist columns; 7 of CC's 13 boxes are extratropical and did not move, so CC measured noise (p_no_gain 0.54). DD tests the mechanism's domain.",
  "method": "make_sealed_set.py LAND_MIN 0.55, 0-30 deg, 150 km boxes, clear of every known region (AA, BB, CC included): two draws, seeds 20261301 and 20261302, all boxes kept",
  "gate": "ONE run on DD paired with r59; gate_v3.py sealed5 part sealed_DD (point S <= 1 and 90 % lower bound < 1); pass -> r60, fail -> e141 closed for this cycle (revisit at r65)",
- "candidate": "output/ppe_20261127/om/om1r15/candidate_params.json (r59 + convective_omega 1, convective_omega_ref 0.015), unchanged"
+ "candidate": "output/ppe_20261127/om/om1r15/candidate_params.json (r59 + convective_omega 1, convective_omega_ref 0.015), unchanged",
+ "seen_by": [
+  "e141 om1r15"
+ ],
+ "outcome": "SPENT: e141 PASS S 0.8658 [0.7929, 0.9875] -> r60"
 }

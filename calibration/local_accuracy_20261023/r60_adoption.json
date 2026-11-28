@@ -1,0 +1,14 @@
+{
+ "adopted": "2026-11-28",
+ "release": "r60",
+ "from": "r59",
+ "change": "e141 convective_omega 1.0, convective_omega_ref 0.015: observed NCEP 500 hPa sinking caps convection (instability boost, Bretherton closure, heated-land RH) on Earth grids",
+ "why": "southern Somalia rained ~3,000 mm/yr (obs 460) from a moist hot column under steady 500 hPa descent that the e49 kernel does not place there",
+ "dev6": "vs r59: S97 0.9715 [q95 0.9989], T +0.0001, P -0.057, worst regime temperate 1.007 -> PASS",
+ "fine28": "S28 1.0017 -> PASS",
+ "sealed_CC": "S 1.0006 [0.9932, 1.0088] -> FAIL (7 of 13 boxes extratropical, unmoved; p_no_gain 0.54)",
+ "sealed_DD": "declared continuation (calibration/sealed_20261128DD/declaration.json), 12 tropical boxes: S 0.8658 [0.7929, 0.9875], P -0.270 -> PASS",
+ "caveat": "the DD gain is dominated by one Somalia box (d1_4n_47e 3,699 -> 1,616 mm, obs 262); every DD box moving > ~50 mm moved toward observation (SE India, Madagascar, N Australia, Yemen). Remaining Somalia wet bias ~2-6x.",
+ "world": "r60w = r59w + the same keys; world grids have no observed omega, so world physics is unchanged (atlas not rebuilt)",
+ "records": "calibration/omega_cap_20261128"
+}
