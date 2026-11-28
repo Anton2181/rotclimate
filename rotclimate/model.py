@@ -2765,6 +2765,16 @@ class ClimateModel:
                     # e80b: the same heat-low damping for the branch's dry descent,
                     # whose rain gate (e70c) locks a dry pre-monsoon land in place
                     core = core * np.exp(-p.heat_low_drying * np.maximum(-self.last_pres, 0.0) / 100.0)
+                if p.subsidence_branch_rh500_hi > p.subsidence_branch_rh500_lo and getattr(g, 'obs_rh500', None) is not None:
+                    # e152e (Earth cases only): the branch brings down dry air from aloft, so judge it by the observed
+                    # air aloft: where NCEP 500 hPa RH is moist (summer over the Kalahari, inland Australia: 30-35 %)
+                    # nothing dry comes down; the dry-season descent (10-17 %) keeps its drying. Full below rh500_lo,
+                    # none above rh500_hi, over land only.
+                    m152e = (d / p.year_days * 12.0 - 0.5) % 12.0
+                    i152e = int(np.floor(m152e)); f152e = m152e - i152e
+                    rh152e = (1.0 - f152e) * g.obs_rh500[i152e] + f152e * g.obs_rh500[(i152e + 1) % 12]
+                    core = core * np.where(land, np.clip((p.subsidence_branch_rh500_hi - rh152e)
+                                                         / (p.subsidence_branch_rh500_hi - p.subsidence_branch_rh500_lo), 0.0, 1.0), 1.0)
                 extra = p.subsidence_branch_drying * core / DAY
                 sink = extra if sink is None else sink + extra
             if p.monsoon_descent > 0:
@@ -2853,6 +2863,7 @@ class ClimateModel:
                     # 0.8 mm/day from Mexico's July column (30 mm, RH 0.60, temperature right) against ~3 observed, and
                     # readily from cold saturated winter columns (calibration/monsoon_inflow_20261121/findings.md).
                     heat = np.clip((T - 18.0) / 8.0, 0.0, 1.0)
+                    keep152 = None
                     if p.convective_rh_gate > 0:
                         # e93: the Saharan/Arabian air layer caps heated-land convection poleward of the rain belt (e86's ramp)
                         ramp93 = np.clip((lat - (phi_i - p.onset_gap_deg)) / (5.0 * self.f_band), 0.0, 1.0)
@@ -2916,7 +2927,13 @@ class ClimateModel:
                     if p.convective_rh_chi0 > 0 and chi is not None:
                         # e93: ... and in air that has crossed land (desert air aloft; Najd), as e84; sea air (Bengal) keeps it
                         chi93 = chi if chi_dry is None else chi - p.convective_rh_chi_dry * (chi - chi_dry)     # e103
-                        heat = heat * (1.0 - np.clip((chi93 - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0))
+                        cut93 = np.clip((chi93 - p.convective_rh_chi0) / (1.0 - p.convective_rh_chi0), 0.0, 1.0)
+                        if p.convective_rh_gate_rh500_chi and keep152 is not None:
+                            # e152d: the land-air share is the same dry layer aloft by proxy; where NCEP 500 hPa RH says the
+                            # layer is moist, before the rains, release it as e152c (inland Australia: column water at
+                            # NCEP's, rain a tenth of observed)
+                            cut93 = cut93 * keep152
+                        heat = heat * (1.0 - cut93)
                     if p.convective_descent > 0 and p.monsoon_descent > 0:
                         heat = heat * (1.0 - descent_cap)                       # e94
                     if omega_cap is not None:
@@ -3106,7 +3123,17 @@ class ClimateModel:
                         kw = kw * np.clip((p.obs_pw_nudge_h1 - h_km) / (p.obs_pw_nudge_h1 - p.obs_pw_nudge_h0), 0.0, 1.0)
                     if p.obs_pw_nudge_wet_lat1 > p.obs_pw_nudge_wet_lat0:
                         # e145b: tropics only (the Kazakh steppe and middle Volga flood under it)
-                        kw = kw * np.clip((p.obs_pw_nudge_wet_lat1 - np.abs(lat)) / (p.obs_pw_nudge_wet_lat1 - p.obs_pw_nudge_wet_lat0), 0.0, 1.0)
+                        f145 = np.clip((p.obs_pw_nudge_wet_lat1 - np.abs(lat)) / (p.obs_pw_nudge_wet_lat1 - p.obs_pw_nudge_wet_lat0), 0.0, 1.0)
+                        if p.obs_pw_nudge_wet_dry_lat > 0 and p.soil_bucket_mm > 0:
+                            # e145c: poleward of the tropics too, but only over dry soil: the Kalahari and inland Australia
+                            # never get their rains (r64: 28 / 58 mm vs 237 / 240, column 14-20 vs 21-25 mm), while the
+                            # Volga / Kazakh steppe / Sahel that flooded under a wider e145b have wet soil in their rains.
+                            # Full to obs_pw_nudge_wet_dry_lat, none 5 deg beyond; x clip(1 - wetness / _dry_soil, 0, 1).
+                            wet145 = np.clip(soil_w / (0.75 * capb), 0.0, 1.0)
+                            f145c = np.clip((p.obs_pw_nudge_wet_dry_lat + 5.0 - np.abs(lat)) / 5.0, 0.0, 1.0) \
+                                * np.clip(1.0 - wet145 / max(p.obs_pw_nudge_wet_dry_soil, 1e-6), 0.0, 1.0)
+                            f145 = np.maximum(f145, f145c)
+                        kw = kw * f145
                     kn = kn + kw
                 sink = (0.0 if sink is None else sink) + kn
                 E_surf143 = E_land
