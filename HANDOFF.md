@@ -10657,3 +10657,7 @@ zonefit missing `calibration/r19p_earthlike/best_params.json`).
   (calibration/kalahari_20261128). r63 stays current.
 - e149c (dry-only gate) wc1 passed dev6 (0.9920, q95 0.9966) and fine28 but sealed II neutral 1.0016 FAIL. II SPENT
   (AA-II all spent). r63 stays current. Any further sealed run needs a new set.
+- e150 observed land albedo (NCEP, new: the model had none apart from snow) FAILS alone (S97 1.016-1.041): fixes
+  the warm eastern Sahara/Tibesti (+1.8 -> +0.1 C) and Tibet but over-cools Algeria/Najd (tuned warm by other
+  knobs). Belongs in the r65 joint recalibration. calibration/albedo_20261128.
+- Kalahari: existing closures (gate off + sverdrup off + plateau capacity + nudge) reach only 1/4 of summer rain.
