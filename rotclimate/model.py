@@ -2814,14 +2814,25 @@ class ClimateModel:
                     descent_cap = np.clip(descent / p.convective_descent_ref, 0.0, 1.0)
                     instab = 1.0 + (instab - 1.0) * (1.0 - p.convective_descent * descent_cap)
             omega_cap = None
-            if p.convective_omega > 0 and getattr(g, "obs_omega", None) is not None:
+            om_wtg = None
+            if p.convective_omega > 0 and (p.convective_omega_source == "wtg" or getattr(g, "obs_omega", None) is None) \
+                    and p.omega_wtg_max > 0 and P_last is not None:
+                # e154 (world-legal stand-in for e141's observed omega): weak-temperature-gradient balance - in the
+                # tropics the 500 hPa air sinks where the column's latent heating (rain) falls short of its radiative
+                # cooling (~omega_wtg_p0 mm/day of rain). Sinking = omega_wtg_max x clip(1 - smoothed own rain / p0).
+                P_s = gauss(np.maximum(P_last, 0.0), p.omega_wtg_km / g.cell_km)
+                om_wtg = p.omega_wtg_max * np.clip(1.0 - P_s / p.omega_wtg_p0, 0.0, 1.0)
+            if p.convective_omega > 0 and (getattr(g, "obs_omega", None) is not None or om_wtg is not None):
                 # e141: deep convection needs large-scale ascent. Southern Somalia's column is as moist as NCEP's
                 # (36-39 mm) and hot, so the instability boost (x2.5) rained 10 mm/day all summer (obs <1) under
                 # steady 500 hPa sinking (+0.02-0.035 Pa/s, as over the Sahara) that the e49 kernel (descent west and
                 # poleward of monsoon heating) does not place there. Earth grids read the observed omega.
                 mpo = ((d - p.winter_solstice_day) / p.year_days * 12.0 + 12.0 - 0.838) % 12.0
                 m0o = int(np.floor(mpo)); fo = mpo - m0o
-                om = (1.0 - fo) * g.obs_omega[m0o % 12] + fo * g.obs_omega[(m0o + 1) % 12]
+                if om_wtg is not None:
+                    om = om_wtg                                                     # e154
+                else:
+                    om = (1.0 - fo) * g.obs_omega[m0o % 12] + fo * g.obs_omega[(m0o + 1) % 12]
                 omega_cap = p.convective_omega * np.clip(om / p.convective_omega_ref, 0.0, 1.0)
                 if p.convective_omega_lat1 > p.convective_omega_lat0:
                     # e141b: only in the deep tropics; subtropical coasts (east Australia, south Brazil) get their
