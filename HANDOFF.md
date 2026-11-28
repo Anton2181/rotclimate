@@ -4,6 +4,14 @@ climate gains and rebuild only when asked or when a substantial set of gains has
 **OWNER RULE (27 Nov 2026): "It's about earth accuracy first and foremost, always."** Painted-zone agreement on the
 invented world never outweighs Earth accuracy; the r58 atlas stands despite the Mediterranean loss (strict 0.35->0.22).
 
+# SOUTHERN OCEAN / OBSERVED SST LINE CLOSED (28 Nov 2026). r59 stays current.
+e138 (sst_zonal_obs, uniform blend of WOA18 zonal SST) refit W21: finalist w2_001 dev6 vs r59 S97 0.9974
+[0.9887, 1.0063] FAIL (calibration/ppe_20261123/W21_records). e138b (sst_zonal_obs_lat0/lat1, poleward-only blend)
+screens neutral vs r59: S97 1.0008-1.0018 (calibration/ppe_20261123/e138b_records). Both fix Tierra del Fuego/British
+Isles/BC coast but overheat NH coasts (W Europe +1.5 C, Hudson Bay, Nova Scotia, Hokkaido): the local warm-current
+terms already carry the NH sea warmth. Next attempt must refit the current terms against WOA18 regional anomalies -> r65.
+r59 reference for paired screens: output/ppe_20261127/ref59 (links to r59's own gate runs). Sealed BB still UNOPENED.
+
 # e137 TILT SCALING IMPLEMENTED, NOT CALIBRATED (28 Nov 2026, owner: "Implement it for all similar settings but don't
 re-calibrate yet. Let's say we do a big recalibration of all settings at r65")
 Every circulation latitude now follows the axial tilt: seasonal swings (itcz_shift, itcz_shift_ocean, hadley_shift,
