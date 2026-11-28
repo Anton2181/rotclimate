@@ -2715,6 +2715,11 @@ class ClimateModel:
                 m0o = int(np.floor(mpo)); fo = mpo - m0o
                 om = (1.0 - fo) * g.obs_omega[m0o % 12] + fo * g.obs_omega[(m0o + 1) % 12]
                 omega_cap = p.convective_omega * np.clip(om / p.convective_omega_ref, 0.0, 1.0)
+                if p.convective_omega_lat1 > p.convective_omega_lat0:
+                    # e141b: only in the deep tropics; subtropical coasts (east Australia, south Brazil) get their
+                    # cool-season rain from onshore flow under the subtropical descent, which the cap removed
+                    omega_cap = omega_cap * np.clip((p.convective_omega_lat1 - np.abs(lat))
+                                                    / (p.convective_omega_lat1 - p.convective_omega_lat0), 0.0, 1.0)
                 instab = 1.0 + (instab - 1.0) * (1.0 - omega_cap)
             gain = None
             if p.flux_convergence > 0:

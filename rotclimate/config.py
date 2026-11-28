@@ -172,6 +172,8 @@ class Params:
     trade_obs_pressure: float = 0.0    # e140: the same for the e83 trade weakening
     convective_omega: float = 0.0      # e141: share (0-1) by which observed 500 hPa sinking caps convection (instability, closure, heated-land RH) on Earth grids; 0 = off
     convective_omega_ref: float = 0.03 # e141: omega (Pa/s) of full cap
+    convective_omega_lat0: float = 0.0  # e141b: the cap is full equatorward of this latitude...
+    convective_omega_lat1: float = 0.0  # ...and gone poleward of this one; lat1 <= lat0 = everywhere
     trade_speed: float = 6.0          # m/s
     westerly_speed: float = 7.0       # m/s
     polar_speed: float = 3.0
