@@ -139,6 +139,9 @@ class Params:
     edge_obs_pw: float = 0.0          # e116 (Earth cases only): land-edge inflow column water blends toward the observed (NCEP) monthly precipitable water; 0 = off
     obs_pw_nudge: float = 0.0        # e143 (Earth cases only): land column water relaxes toward NCEP monthly PW at this rate [1/day]; 0 = off
     obs_pw_nudge_dry_only: float = 0.0  # e143: >0 nudges only columns wetter than observed, ramping in over this fraction of obs PW
+    obs_pw_nudge_rh0: float = 0.0     # e143b: nudge only where previous W/Ws exceeds this (ramping over 0.1); 0 = everywhere
+    obs_pw_nudge_h0: float = 0.0      # e143b: nudge fades out between h0 and h1 km elevation; h1 <= h0 = no fade
+    obs_pw_nudge_h1: float = 0.0
     soil_init_fraction: float = 0.5   # e82: starting soil water as a share of the bucket (0.5 = r45)
     trade_heat_low: float = 0.0       # e83: same-hemisphere trades x (1 - this x clip(poleward pressure fall / monsoon_pressure_hpa, 0, 1)): trades give way to heat-low inflow; 0 = off
     edge_carry: float = 0.0           # e79: land-edge inflow carries the water of a column at T_col + this x max(latitude mean - T_col, 0), capped at local saturation, instead of a fixed RH of the local column; 0 = r44

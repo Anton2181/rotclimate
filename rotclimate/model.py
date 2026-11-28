@@ -2981,6 +2981,12 @@ class ClimateModel:
                         kn = kn * 0.0
                     else:
                         kn = kn * np.clip((W_prev - pwo) / np.maximum(p.obs_pw_nudge_dry_only * pwo, 1e-6), 0.0, 1.0)
+                if p.obs_pw_nudge_rh0 > 0 and W_prev is not None:
+                    # e143b: only columns near raining (a dry-season column that does not rain gains nothing but heat)
+                    kn = kn * np.clip((W_prev / np.maximum(Ws, 1e-6) - p.obs_pw_nudge_rh0) / 0.1, 0.0, 1.0)
+                if p.obs_pw_nudge_h1 > p.obs_pw_nudge_h0:
+                    # e143b: the 2.5-degree reanalysis mixes plateaus with their lowlands; fade out on high ground
+                    kn = kn * np.clip((p.obs_pw_nudge_h1 - h_km) / (p.obs_pw_nudge_h1 - p.obs_pw_nudge_h0), 0.0, 1.0)
                 sink = (0.0 if sink is None else sink) + kn
                 E_surf143 = E_land
                 E_land = E_land + kn * pwo
