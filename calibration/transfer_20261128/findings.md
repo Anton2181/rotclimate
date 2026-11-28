@@ -45,3 +45,14 @@ OVERALL: no model-internal field (own rain, fixed two-pass rain, low-level diver
 descent that e141 relies on. Remaining world-legal route: Earth ANALOGS - give each world cell the NCEP omega / RH500
 of Earth cells in the same climatic position (latitude, side of continent, distance from coast, elevation, season),
 as rotclimate/analogs.py does for other fields; or accept that the r60-r64b Earth gains do not transfer.
+
+## T10c: Earth-analog omega/RH500 (leave-2,500-km-out) - REJECTED
+r64b with both NCEP fields withheld: S97 1.0723 [1.033, 1.125]. With analog fields instead: 1.1075 [1.066, 1.160] -
+worse than nothing: S Somalia 2.11, Amazon edges 1.49-1.91, Libyan desert 1.67, Tripolitania 1.39; small gains in
+Zambia, Gabon, Kalahari. Position features (|lat|, coast, west/east fetch, elevation) do not carry the remote,
+circulation-set descent (Somali jet / Arabian heat low; the Amazon's own heating).
+CONCLUSION T10: the r60-r64b observed-field gains are Earth-only. Own rain (e154), fixed model rain (two-pass),
+model divergence and Earth analogs all fail to stand in. For r70: the world runs the world-legal subset (as now);
+the Earth-only terms stay in Earth calibration, where they remove confounded errors so the shared knobs fit honestly.
+Policy consequence (proposal): weight future work toward world-legal fixes - report the M1 transfer share with every
+adoption and prefer, at equal Earth gain, the candidate that transfers.
