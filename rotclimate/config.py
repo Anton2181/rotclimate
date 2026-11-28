@@ -231,6 +231,9 @@ class Params:
     root_gain: float = 0.0           # e114: extra bucket depth (x soil_bucket_mm) under rain-forest rain; 0 = off
     root_p0: float = 1200.0          # e114: annual rain (mm) where the extra depth starts
     root_p1: float = 800.0           # e114: ... and the rain above root_p0 for the full extra depth
+    root_lat0: float = 0.0           # e114b: extra depth full equatorward of this |lat| (deg)...
+    root_lat1: float = 0.0           # ...and none poleward of this; lat1 <= lat0 = no fade
+    root_abs_beta: bool = False      # e114c: wetness judged against soil_bucket_mm, not the deepened store
     # physics e1 (fitted on Earth): Sverdrup balance (beta v = f dw/dz) - low-level
     # flow toward the pole rises, flow toward the equator sinks: rain x
     # clip(1 + sverdrup * v_poleward / 5 m/s, 0.05, 3), v smoothed over ~300 km
