@@ -2967,6 +2967,23 @@ class ClimateModel:
             # surface wind left the water near where it evaporated: Iran,
             # Mexico's dry season and inland eastern Australia rained their
             # own evaporation back out, and the monsoon carried little inland.
+            E_surf143 = None
+            if p.obs_pw_nudge > 0 and getattr(g, "obs_pw", None) is not None:
+                # e143 (Earth cases only): land columns relax toward the observed (NCEP) monthly precipitable
+                # water, a reanalysis-style moisture nudge at rate obs_pw_nudge per day; with obs_pw_nudge_dry_only
+                # it acts only where the previous day's column was wetter than observed (Tibesti, S Somalia).
+                mpw = (d / p.year_days * 12.0 - 0.5) % 12.0
+                m0w = int(np.floor(mpw)); fw = mpw - m0w
+                pwo = (1.0 - fw) * g.obs_pw[m0w] + fw * g.obs_pw[(m0w + 1) % 12]
+                kn = np.where(land, p.obs_pw_nudge / DAY, 0.0)
+                if p.obs_pw_nudge_dry_only > 0:
+                    if W_prev is None:
+                        kn = kn * 0.0
+                    else:
+                        kn = kn * np.clip((W_prev - pwo) / np.maximum(p.obs_pw_nudge_dry_only * pwo, 1e-6), 0.0, 1.0)
+                sink = (0.0 if sink is None else sink) + kn
+                E_surf143 = E_land
+                E_land = E_land + kn * pwo
             if p.moisture_reservoirs:
                 from .reservoir_moisture import solve_reservoir_moisture
                 solution=solve_reservoir_moisture(self.moisture_solver,p,uq,vq,lamE,W_ocean,E_land,Ws,
@@ -3012,7 +3029,7 @@ class ClimateModel:
                                    f'{solution.iterations} iterations, scaled residual '
                                    f'{solution.scaled_residual:.6g} > {p.moisture_residual_tol:g}')
             E = (solution.evaporation if p.moisture_reservoirs else
-                 np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, E_land * DAY))
+                 np.where(ocean, ocean_rate(p, lamE, W, W_ocean) * (W_ocean - W) * DAY, (E_land if E_surf143 is None else E_surf143) * DAY))
             if budget is not None or p.moisture_transport_form == 'flux':
                 # Surface E omits single-column land humidity relaxation.
                 # Independent reservoirs already include it in their E.
