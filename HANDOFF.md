@@ -10269,6 +10269,8 @@ Branch `claude/ecstatic-wozniak-rtrwd2`. Previous handoff (regional rainfall
 benchmark, terrain research cores, detached jobs of an earlier container that
 no longer exist): `reports/handoffs/BEFORE_EARTH_CORRECTION_20261030.md`.
 
+## e142 tropics-only descent (W23): CLOSED — dev6 0.9892 q95 1.0048 FAIL; r61 stays. See calibration/ppe_20261123/e142_records/CLOSED.md
+
 ## State
 
 * Adopted Earth physics is now **r40** (`calibration/local_accuracy_20261023/r40_params.json`), also in the Earth-fit atlas:
