@@ -2481,6 +2481,15 @@ class ClimateModel:
                 th = np.radians(p.north_bearing)
                 v_pole = gauss(u * np.sin(th) + v * np.cos(th), self.col_sigma)   # true northward, large scale
                 A_dyn = A_dyn * np.clip(1 + p.sverdrup * v_pole / 5.0, 0.05, 3.0)
+            if p.dyn_omega > 0 and getattr(g, "obs_omega", None) is not None:
+                # e144 (Earth cases only): large-scale ascent weakens where the observed (NCEP) monthly 500 hPa air
+                # sinks harder than dyn_omega0 (Pa/s), by up to dyn_omega at dyn_omega1: southern Somalia sinks at
+                # 0.03-0.04 Pa/s in its dry seasons and 0.018-0.022 in its rains, where e141's cap is already full.
+                mpd = ((d - p.winter_solstice_day) / p.year_days * 12.0 + 12.0 - 0.838) % 12.0
+                m0d = int(np.floor(mpd)); fd = mpd - m0d
+                omd = (1.0 - fd) * g.obs_omega[m0d % 12] + fd * g.obs_omega[(m0d + 1) % 12]
+                ramp = np.clip((omd - p.dyn_omega0) / max(p.dyn_omega1 - p.dyn_omega0, 1e-6), 0.0, 1.0)
+                A_dyn = A_dyn * (1.0 - p.dyn_omega * ramp)
             lamE = np.where(ocean, 1.0 / (p.evap_tau_days * DAY), 0.0)
             if self.inflow_enabled:
                 # e91: warm-sea inflow. Summer monsoons draw marine air inland: r49 holds Mexico's July column at

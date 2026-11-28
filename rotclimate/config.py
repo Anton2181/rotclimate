@@ -137,6 +137,9 @@ class Params:
     edge_inner_warm_c: float = -99.0  # e115: e81 only where the inner ground is warmer than this (5 K ramp) and wet over the year; -99 = everywhere
     edge_pw_source: str = "observed"  # e116z: "observed" (NCEP at each cell, Earth only) or "zonal" (the globe's land mean at the cell's latitude; world-legal)
     edge_obs_pw: float = 0.0          # e116 (Earth cases only): land-edge inflow column water blends toward the observed (NCEP) monthly precipitable water; 0 = off
+    dyn_omega: float = 0.0           # e144 (Earth cases only): large-scale rain ascent falls by up to this fraction under observed 500 hPa sinking; 0 = off
+    dyn_omega0: float = 0.02         # e144: sinking [Pa/s] where the damping starts
+    dyn_omega1: float = 0.04         # e144: sinking [Pa/s] where it is full
     obs_pw_nudge: float = 0.0        # e143 (Earth cases only): land column water relaxes toward NCEP monthly PW at this rate [1/day]; 0 = off
     obs_pw_nudge_dry_only: float = 0.0  # e143: >0 nudges only columns wetter than observed, ramping in over this fraction of obs PW
     obs_pw_nudge_excess: float = 0.0  # e143c: dry-only nudge starts where W exceeds (1 + excess) x observed PW
