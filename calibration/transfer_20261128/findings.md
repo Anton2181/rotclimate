@@ -24,3 +24,14 @@ w30 1.1305, w20p2 1.0599, w30k2 1.1596: a within-run feedback (no rain -> sinkin
 (s 3.0-3.7). Lesson: a stand-in must not read the same run's rain. Next design: two-pass - derive a FIXED omega
 climatology from a completed global (world-style) run's rain, then rerun with it, as the Earth descent field is built
 once. Needs a global Earth run (the regional harness has no global rain); natural on the world grid.
+
+## T10 option A: two-pass omega from a global MODEL rain climatology - REJECTED
+scripts/global_model_rain.py: 27 tiles (6,000 x 5,000 km, 112 km cells, rows 22 S / 0 / 22 N, every 40 deg) run
+world-legal with r64bw -> data/cache/earth/model_rain_r64bw.npz (1 deg, 40 S - 40 N covered; ~8 min). Fixed WTG omega
+from it (0.03 Pa/s x clip(1 - P_1000km / 3 mm/day)). Screen (obs_omega withheld, convective_omega_source "model") vs
+r64b: S97 1.0811 [1.034, 1.138] - worse than no stand-in (1.0524). Sahel/northern boxes improve (0.85-0.92), but S Somalia
+s 2.10 and Congo/Gabon 2.3-2.4: the model's own rain errors (Somalia 11 mm/day in July, Congo 1.8) are exactly what
+the observed omega corrects, so any rain-derived field inherits them.
+Conclusion: a world-legal omega must come from the model's circulation, not its rain (e.g. low-level divergence of the
+model's winds, or the Hadley/monsoon pressure pattern), or the world accepts these terms do not transfer.
+The global model-rain map is still useful: it can replace WorldClim in the Earth e49 descent field (the target leak).
