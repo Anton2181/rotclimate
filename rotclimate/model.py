@@ -106,7 +106,7 @@ BAND_FIELDS = ("hadley_edge", "itcz_mean", "storm_width", "subsidence_width", "c
                "subsidence_branch_gate_winter_deg", "subsidence_branch_gap", "edge_itcz_width", "subtropical_high_width",
                "dyn_omega_lat0", "dyn_omega_lat1", "obs_pw_nudge_wet_lat0", "obs_pw_nudge_wet_lat1",
                "convective_omega_lat0", "convective_omega_lat1", "monsoon_descent_tropics_lat0",
-               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1", "lapse_tropical_lat0", "lapse_tropical_lat1")
+               "monsoon_descent_tropics_lat1", "root_lat0", "root_lat1", "lapse_tropical_lat0", "lapse_tropical_lat1", "relief_lapse_lat0", "relief_lapse_lat1")
 BAND_FIELDS_SENTINEL = {"itcz_shift_ocean": lambda v: v < 0, "itcz_mean_land": lambda v: v <= -90,
                         "current_cold_lat0": lambda v: v <= 0, "current_warm_lat0": lambda v: v <= 0,
                         "storm_baroclinic_max_deg": lambda v: v <= 0, "storm_plateau_reach_deg": lambda v: v <= 0,
@@ -2181,6 +2181,19 @@ class ClimateModel:
                 lapse = lapse + p.lapse_tropical * np.clip((p.lapse_tropical_lat1 - np.abs(lat))
                                                           / max(p.lapse_tropical_lat1 - p.lapse_tropical_lat0, 1e-6), 0.0, 1.0)
             T = Tsl - lapse * h_km
+            if p.relief_lapse != 0:
+                # e147: ground above its broad surroundings (ridges, escarpments, the plateau rims) is ventilated by
+                # free air and follows a steeper lapse than the broad plateau, which heats its own air (r63
+                # within-region bias vs height: +1.44 K/km at 0-12 deg, +0.57 at 12-24, +0.07 at 48-70; a
+                # uniform steeper tropical lapse, e146, cooled the Andes and whole basins instead). Extra K/km on
+                # the height above the ~relief_sigma_km-smoothed land, faded by latitude.
+                if getattr(self, '_relief_w', None) is None:
+                    hs = ndi.gaussian_filter(np.where(g.land, g.elev, 0.0), p.relief_sigma_km / g.cell_km, mode='nearest')
+                    ls = ndi.gaussian_filter(g.land.astype(float), p.relief_sigma_km / g.cell_km, mode='nearest')
+                    rel = np.where(g.land, h_km - hs / np.maximum(ls, 1e-6) / 1000.0, 0.0)
+                    fade = np.clip((p.relief_lapse_lat1 - np.abs(lat)) / max(p.relief_lapse_lat1 - p.relief_lapse_lat0, 1e-6), 0.0, 1.0)
+                    self._relief_w = rel * fade
+                T = T - p.relief_lapse * self._relief_w
             if p.plateau_heating != 0:
                 # e134: a broad high plateau is an elevated heat source in summer and an elevated cold surface in
                 # winter: its air is the plateau's own boundary layer, not free air reduced along a lapse rate
